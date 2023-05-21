@@ -268,9 +268,9 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        this.maxTakeTask = AllOptionHolder.Instance.GetValue<int>(
+        this.maxTakeTask = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(AgencyOption.MaxTaskNum)) + 1;
-        this.takeTaskRange = AllOptionHolder.Instance.GetValue<float>(
+        this.takeTaskRange = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(AgencyOption.TakeTaskRange));
 
         this.RoleAbilityInit();

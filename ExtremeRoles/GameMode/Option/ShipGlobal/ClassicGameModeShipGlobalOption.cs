@@ -126,7 +126,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     {
         foreach (GlobalOption id in Enum.GetValues(typeof(GlobalOption)))
         {
-            string optionStr = AllOptionHolder.Instance.GetHudString((int)id);
+            string optionStr = OptionManager.Instance.GetHudString((int)id);
             if (optionStr != string.Empty)
             {
                 builder.AppendLine(optionStr);

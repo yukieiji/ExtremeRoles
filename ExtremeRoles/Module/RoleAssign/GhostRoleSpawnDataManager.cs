@@ -62,7 +62,7 @@ public sealed class GhostRoleSpawnDataManager :
             },
         };
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
         var tmpUseData = new Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>>();
 
         foreach (ExtremeGhostRoleId roleId in 
@@ -73,7 +73,7 @@ public sealed class GhostRoleSpawnDataManager :
             int spawnRate = ISpawnDataManager.ComputePercentage(
                 allOption.Get<int>(
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate), 
-                    AllOptionHolder.ValueType.Int));
+                    OptionManager.ValueType.Int));
             int roleNum = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
 

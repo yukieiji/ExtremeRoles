@@ -51,8 +51,8 @@ namespace ExtremeRoles
 
             Instance = this;
 
-            AllOptionCreator.Create();
-            AllOptionCreator.UpdateRegion();
+            OptionCreator.Create();
+            CustomRegion.Update();
 
             Harmony.PatchAll();
 

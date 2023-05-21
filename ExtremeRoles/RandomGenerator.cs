@@ -14,8 +14,8 @@ public static class RandomGenerator
         {
             if (instance == null)
             {
-                createGlobalRandomGenerator(AllOptionHolder.Instance.GetValue<bool>(
-                    (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen));
+                createGlobalRandomGenerator(OptionManager.Instance.GetValue<bool>(
+                    (int)OptionCreator.CommonOptionKey.UseStrongRandomGen));
             }
             return instance;
         }
@@ -27,8 +27,8 @@ public static class RandomGenerator
 
     public static void Initialize()
     {
-        bool useStrongGen = AllOptionHolder.Instance.GetValue<bool>(
-            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen);
+        bool useStrongGen = OptionManager.Instance.GetValue<bool>(
+            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen);
         if (instance != null)
         {
             if (useStrongGen != prevValue)
@@ -37,8 +37,8 @@ public static class RandomGenerator
             }
             else
             {
-                int selection = AllOptionHolder.Instance.GetValue<int>(
-                    (int)AllOptionCreator.CommonOptionKey.UsePrngAlgorithm);
+                int selection = OptionManager.Instance.GetValue<int>(
+                    (int)OptionCreator.CommonOptionKey.UsePrngAlgorithm);
                 if (prevSelection != selection)
                 {
                     instance = getAditionalPrng(selection);
@@ -63,8 +63,8 @@ public static class RandomGenerator
 
         if (isStrong)
         {
-            int selection = AllOptionHolder.Instance.GetValue<int>(
-                (int)AllOptionCreator.CommonOptionKey.UsePrngAlgorithm);
+            int selection = OptionManager.Instance.GetValue<int>(
+                (int)OptionCreator.CommonOptionKey.UsePrngAlgorithm);
             instance = getAditionalPrng(selection);
             UnityEngine.Random.InitState(CreateStrongRandomSeed());
             prevSelection = selection;
@@ -80,8 +80,8 @@ public static class RandomGenerator
 
     public static Random GetTempGenerator()
     {
-        bool useStrongGen = AllOptionHolder.Instance.GetValue<bool>(
-            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen);
+        bool useStrongGen = OptionManager.Instance.GetValue<bool>(
+            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen);
 
         if (useStrongGen)
         {

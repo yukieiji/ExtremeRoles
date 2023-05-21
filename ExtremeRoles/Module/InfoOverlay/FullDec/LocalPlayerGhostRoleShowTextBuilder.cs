@@ -26,7 +26,7 @@ internal sealed class LocalPlayerGhostRoleShowTextBuilder : IShowTextBuilder
         }
         string title = $"<size=200%>{Translation.GetString("yourGhostRole")}</size>";
         string anotherRoleText = "<size=200%> </size>\n";
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         string roleOptionString = "";
         string colorRoleName = role.GetColoredRoleName();

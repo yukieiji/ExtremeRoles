@@ -529,7 +529,7 @@ public sealed class BodyGuard :
         if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                AllOptionHolder.Instance.GetValue<int>(GetRoleOptionId(
+                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityCount)));
         }
         this.Button.SetLabelToCrewmate();
@@ -787,7 +787,7 @@ public sealed class BodyGuard :
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.reportStr = string.Empty;
 

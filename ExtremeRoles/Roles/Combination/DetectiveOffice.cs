@@ -305,7 +305,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         this.info = new CrimeInfoContainer();
         this.info.Clear();
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
         this.range = allOption.GetValue<float>(
             GetRoleOptionId(DetectiveOption.SearchRange));
         this.searchTime = allOption.GetValue<float>(
@@ -624,7 +624,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleRepor
                 return optionId + (int)option;
             }
 
-            var allOption = AllOptionHolder.Instance;
+            var allOption = OptionManager.Instance;
 
             return new DetectiveApprenticeOptionHolder()
             {

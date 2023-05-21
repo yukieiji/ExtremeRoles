@@ -203,7 +203,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
     protected override void RoleSpecificInit()
     {
         this.Timer = 0.0f;
-        this.MaxTime = AllOptionHolder.Instance.GetValue<float>(
+        this.MaxTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(FencerOption.ResetTime));
 
         this.RoleAbilityInit();

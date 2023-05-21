@@ -249,7 +249,7 @@ public static class IRoleAbilityMixin
 
         if (self.Button == null) { return; }
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
         self.Button.Behavior.SetCoolTime(
             allOpt.GetValue<float>(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));

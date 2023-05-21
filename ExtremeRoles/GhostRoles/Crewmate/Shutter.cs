@@ -179,9 +179,9 @@ public sealed class Shutter : GhostRoleBase
     public override void Initialize()
     {
         this.photoCreater = new GhostPhotoCamera(
-            AllOptionHolder.Instance.GetValue<float>(
+            OptionManager.Instance.GetValue<float>(
                 GetRoleOptionId(ShutterOption.PhotoRange)),
-            AllOptionHolder.Instance.GetValue<int>(
+            OptionManager.Instance.GetValue<int>(
                 GetRoleOptionId(ShutterOption.RightPlayerNameRate)));
     }
 

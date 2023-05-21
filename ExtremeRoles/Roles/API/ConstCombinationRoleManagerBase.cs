@@ -46,7 +46,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 
             if (checkRole.Id != (ExtremeRoleId)roleId) { continue; }
 
-            checkRole.CanHasAnotherRole = AllOptionHolder.Instance.GetValue<bool>(
+            checkRole.CanHasAnotherRole = OptionManager.Instance.GetValue<bool>(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
             switch (checkRole.Team)
@@ -80,7 +80,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
         var roleSetOption = new SelectionCustomOption(
             GetRoleOptionId(RoleCommonOption.SpawnRate),
             this.optionKey,
-            AllOptionCreator.SpawnRate, null, true,
+            OptionCreator.SpawnRate, null, true,
             tab: OptionTab.Combination);
 
         int thisMaxRoleNum =
@@ -127,7 +127,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     {
         foreach (var role in this.Roles)
         {
-            role.CanHasAnotherRole = AllOptionHolder.Instance.GetValue<bool>(
+            role.CanHasAnotherRole = OptionManager.Instance.GetValue<bool>(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
             role.Initialize();
         }

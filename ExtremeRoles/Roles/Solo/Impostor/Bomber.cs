@@ -131,7 +131,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         this.RoleAbilityInit();
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.timerMinTime = allOption.GetValue<float>(
             GetRoleOptionId(BomberOption.TimerMinTime));

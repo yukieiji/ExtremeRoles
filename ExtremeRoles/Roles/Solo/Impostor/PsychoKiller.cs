@@ -102,7 +102,7 @@ public sealed class PsychoKiller : SingleRoleBase, IRoleResetMeeting
                 FloatOptionNames.KillCooldown);
         }
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.reduceRate = allOption.GetValue<int>(
             GetRoleOptionId(PsychoKillerOption.KillCoolReduceRate));

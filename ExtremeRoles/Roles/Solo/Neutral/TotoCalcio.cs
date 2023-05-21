@@ -210,11 +210,11 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
     protected override void RoleSpecificInit()
     {
         this.betPlayer = null;
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(TotocalcioOption.Range));
-        this.defaultCoolTime = AllOptionHolder.Instance.GetValue<float>(
+        this.defaultCoolTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
-        this.finalCoolTime = AllOptionHolder.Instance.GetValue<float>(
+        this.finalCoolTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(TotocalcioOption.FinalCoolTime));
     }
 }

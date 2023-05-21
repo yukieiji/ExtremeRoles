@@ -162,9 +162,9 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.crackDistance = AllOptionHolder.Instance.GetValue<float>(
+        this.crackDistance = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(CrackerOption.CanCrackDistance));
-        this.IsRemoveDeadBody = AllOptionHolder.Instance.GetValue<bool>(
+        this.IsRemoveDeadBody = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(CrackerOption.RemoveDeadBody));
         this.RoleAbilityInit();
     }

@@ -320,7 +320,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
 
         this.RoleAbilityInit();
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.ActiveNum = allOption.GetValue<int>(
             GetRoleOptionId(MeryOption.ActiveNum));

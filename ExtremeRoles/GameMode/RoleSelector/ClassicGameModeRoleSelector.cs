@@ -75,7 +75,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 
     public void Load()
     {
-        EnableXion = AllOptionHolder.Instance.GetValue<bool>(
+        EnableXion = OptionManager.Instance.GetValue<bool>(
             (int)RoleGlobalOption.UseXion);
     }
 

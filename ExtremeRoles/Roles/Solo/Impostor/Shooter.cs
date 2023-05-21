@@ -438,7 +438,7 @@ public sealed class Shooter :
     
     protected override void RoleSpecificInit()
     {
-        var allOps = AllOptionHolder.Instance;
+        var allOps = OptionManager.Instance;
 
         this.isAwake = allOps.GetValue<bool>(
             GetRoleOptionId(ShooterOption.IsInitAwake));

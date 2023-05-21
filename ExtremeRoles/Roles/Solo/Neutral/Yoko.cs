@@ -111,15 +111,15 @@ public sealed class Yoko :
     }
     protected override void RoleSpecificInit()
     {
-        this.CanRepairSabotage = AllOptionHolder.Instance.GetValue<bool>(
+        this.CanRepairSabotage = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(YokoOption.CanRepairSabo));
-        this.UseVent = AllOptionHolder.Instance.GetValue<bool>(
+        this.UseVent = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(YokoOption.CanUseVent));
-        this.searchRange = AllOptionHolder.Instance.GetValue<float>(
+        this.searchRange = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(YokoOption.SearchRange));
-        this.searchTime = AllOptionHolder.Instance.GetValue<float>(
+        this.searchTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(YokoOption.SearchTime));
-        this.trueInfoGage = AllOptionHolder.Instance.GetValue<int>(
+        this.trueInfoGage = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(YokoOption.TrueInfoRate));
         this.timer = this.searchTime;
     }

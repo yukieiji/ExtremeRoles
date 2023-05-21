@@ -42,7 +42,7 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
     {
         this.Roles.Clear();
         int roleAssignNum = 1;
-        var allOptions = AllOptionHolder.Instance;
+        var allOptions = OptionManager.Instance;
 
         this.BaseRole.CanHasAnotherRole = true;
 
@@ -52,7 +52,7 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
             {
                 allOptions.Get<bool>(GetRoleOptionId(
                     CombinationRoleCommonOption.IsMultiAssign),
-                    AllOptionHolder.ValueType.Bool).UpdateSelection(1);
+                    OptionManager.ValueType.Bool).UpdateSelection(1);
             });
 
         if (allOptions.Contains(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))

@@ -83,7 +83,7 @@ public sealed class Foras : GhostRoleBase
             foras.arrowControler.SetTarget(arrowTargetPlayer.gameObject);
             foras.arrowControler.SetDelayActiveTimer(foras.delayTime);
             foras.arrowControler.SetHideTimer(
-                AllOptionHolder.Instance.GetValue<float>(foras.GetRoleOptionId(
+                OptionManager.Instance.GetValue<float>(foras.GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityActiveTime)));
             foras.arrowControler.gameObject.SetActive(true);
         }
@@ -122,11 +122,11 @@ public sealed class Foras : GhostRoleBase
 
     public override void Initialize()
     {
-        this.delayTime = AllOptionHolder.Instance.GetValue<float>(
+        this.delayTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(ForasOption.DelayTime));
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(ForasOption.Range));
-        this.rate = AllOptionHolder.Instance.GetValue<int>(
+        this.rate = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(ForasOption.MissingTargetRate));
     }
 

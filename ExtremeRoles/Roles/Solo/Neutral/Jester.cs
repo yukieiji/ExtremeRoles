@@ -174,9 +174,9 @@ public sealed class Jester : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.UseSabotage = AllOptionHolder.Instance.GetValue<bool>(
+        this.UseSabotage = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(JesterOption.UseSabotage));
-        this.outburstDistance = AllOptionHolder.Instance.GetValue<float>(
+        this.outburstDistance = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(JesterOption.OutburstDistance));
         this.RoleAbilityInit();
     }

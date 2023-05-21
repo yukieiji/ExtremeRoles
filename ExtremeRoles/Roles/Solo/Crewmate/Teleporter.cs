@@ -319,9 +319,9 @@ public sealed class Teleporter :
 
     protected override void RoleSpecificInit()
     {
-        this.isSharePortal = AllOptionHolder.Instance.GetValue<bool>(
+        this.isSharePortal = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(TeleporterOption.CanUseOtherPlayer));
-        this.partNum = AllOptionHolder.Instance.GetValue<int>(
+        this.partNum = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(RoleAbilityCommonOption.AbilityCount));
         this.abilityInit();
     }
@@ -330,7 +330,7 @@ public sealed class Teleporter :
     {
         if (this.Button == null) { return; }
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
         this.Button.Behavior.SetCoolTime(
             allOpt.GetValue<float>(this.GetRoleOptionId(
                 RoleAbilityCommonOption.AbilityCoolTime)));

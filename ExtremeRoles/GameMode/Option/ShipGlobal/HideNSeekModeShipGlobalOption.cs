@@ -119,7 +119,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     {
         foreach (GlobalOption id in this.useOption)
         {
-            string optionStr = AllOptionHolder.Instance.GetHudString((int)id);
+            string optionStr = OptionManager.Instance.GetHudString((int)id);
             if (optionStr != string.Empty)
             {
                 builder.AppendLine(optionStr);

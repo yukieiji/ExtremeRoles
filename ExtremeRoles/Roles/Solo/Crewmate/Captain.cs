@@ -360,7 +360,7 @@ public sealed class Captain :
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.chargeVoteNum = allOpt.GetValue<float>(
            GetRoleOptionId(CaptainOption.ChargeVoteWhenSkip));

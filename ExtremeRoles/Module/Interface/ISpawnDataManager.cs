@@ -11,7 +11,7 @@ public interface ISpawnDataManager
         RoleGlobalOption minSpawnKey,
         RoleGlobalOption maxSpawnKey)
     {
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         int minSpawnNum = allOption.GetValue<int>((int)minSpawnKey);
         int maxSpawnNum = allOption.GetValue<int>((int)maxSpawnKey);

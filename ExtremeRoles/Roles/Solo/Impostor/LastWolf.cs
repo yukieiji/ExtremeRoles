@@ -292,7 +292,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleType
     {
         this.RoleAbilityInit();
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.awakeImpNum = allOpt.GetValue<int>(
             GetRoleOptionId(LastWolfOption.AwakeImpostorNum));

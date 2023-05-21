@@ -1064,7 +1064,7 @@ public static class PlayerControlRpcSyncSettingsPatch
 {
     public static void Postfix()
     {
-        Module.CustomOption.AllOptionHolder.Instance.ShareOptionSelections();
+        Module.CustomOption.OptionManager.Instance.ShareOptionSelections();
     }
 }
 

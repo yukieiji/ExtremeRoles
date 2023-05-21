@@ -187,7 +187,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
 
         this.defaultKillCoolTime = this.KillCoolTime;
         
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.isEvolvdAnimation = allOption.GetValue<bool>(
             GetRoleOptionId(EvolverOption.IsEvolvedAnimation));

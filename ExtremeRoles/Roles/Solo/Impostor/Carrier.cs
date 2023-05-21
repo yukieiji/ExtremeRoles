@@ -226,9 +226,9 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
     protected override void RoleSpecificInit()
     {
-        this.carryDistance = AllOptionHolder.Instance.GetValue<float>(
+        this.carryDistance = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(CarrierOption.CarryDistance));
-        this.canReportOnCarry = AllOptionHolder.Instance.GetValue<bool>(
+        this.canReportOnCarry = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(CarrierOption.CanReportOnCarry));
         this.RoleAbilityInit();
     }

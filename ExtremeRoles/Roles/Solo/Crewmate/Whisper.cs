@@ -193,7 +193,7 @@ public sealed class Whisper :
 
     protected override void RoleSpecificInit()
     {
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.textPopUp = new TextPopUpper(
             allOption.GetValue<int>(GetRoleOptionId(WhisperOption.MaxTellText)),

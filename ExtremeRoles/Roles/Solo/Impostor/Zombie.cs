@@ -459,7 +459,7 @@ public sealed class Zombie :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.killCount = 0;
 

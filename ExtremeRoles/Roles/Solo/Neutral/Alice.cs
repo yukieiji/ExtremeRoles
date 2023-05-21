@@ -171,7 +171,7 @@ public sealed class Alice : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.UseSabotage = allOption.GetValue<bool>(
             GetRoleOptionId(AliceOption.CanUseSabotage));

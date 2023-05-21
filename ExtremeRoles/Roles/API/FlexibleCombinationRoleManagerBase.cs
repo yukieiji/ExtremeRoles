@@ -36,7 +36,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public override void AssignSetUpInit(int curImpNum)
     {
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         foreach (var role in this.Roles)
         {
@@ -52,7 +52,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
             var spawnOption = allOption.Get<int>(
                 GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
-                AllOptionHolder.ValueType.Int);
+                OptionManager.ValueType.Int);
             isEvil = isEvil && 
                 (UnityEngine.Random.RandomRange(0, 110) < (int)decimal.Multiply(
                     spawnOption.GetValue(), spawnOption.ValueCount)) &&
@@ -89,7 +89,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
         
         if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
 
-        this.BaseRole.CanHasAnotherRole = AllOptionHolder.Instance.GetValue<bool>(
+        this.BaseRole.CanHasAnotherRole = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
         role = (MultiAssignRoleBase)this.BaseRole.Clone();
@@ -122,7 +122,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
                 string.Concat(
                     this.RoleName,
                     RoleCommonOption.SpawnRate.ToString())),
-            AllOptionCreator.SpawnRate, null, true,
+            OptionCreator.SpawnRate, null, true,
             tab: OptionTab.Combination);
 
         int roleAssignNum = this.BaseRole.IsImpostor() ? 
@@ -170,7 +170,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
                 string.Concat(
                     this.RoleName,
                     CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
-                AllOptionCreator.SpawnRate, isImposterAssignOps,
+                OptionCreator.SpawnRate, isImposterAssignOps,
             tab: OptionTab.Combination);
         }
 
@@ -201,7 +201,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     {
         this.Roles.Clear();
         int roleAssignNum = 1;
-        var allOptions = AllOptionHolder.Instance;
+        var allOptions = OptionManager.Instance;
 
         this.BaseRole.CanHasAnotherRole = allOptions.GetValue<bool>(
             GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));

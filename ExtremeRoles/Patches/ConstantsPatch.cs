@@ -14,7 +14,7 @@ public static class ConstantsShouldHorseAroundPatch
         __result =
             ExtremeGameModeManager.Instance is not null &&
             ExtremeGameModeManager.Instance.ShipOption.CanUseHorseMode &&
-            AllOptionHolder.Instance.GetValue<bool>((int)GlobalOption.EnableHorseMode);
+            OptionManager.Instance.GetValue<bool>((int)GlobalOption.EnableHorseMode);
         return false;
     }
 }

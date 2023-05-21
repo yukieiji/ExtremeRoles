@@ -240,7 +240,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.stockMax = allOpt.GetValue<int>(
             GetRoleOptionId(AssaultMasterOption.StockLimit));

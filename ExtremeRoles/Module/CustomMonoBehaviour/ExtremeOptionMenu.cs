@@ -211,7 +211,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         var shipOption = exGmM.ShipOption;
         var roleSelector = exGmM.RoleSelector;
 
-        foreach (var (id, option) in AllOptionHolder.Instance.GetKeyValueAllIOptions())
+        foreach (var (id, option) in OptionManager.Instance.GetKeyValueAllIOptions())
         {
             OptionTab tab = option.Tab;
 
@@ -221,7 +221,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
                 option.SetHeaderTo(id == shipOption.HeadOptionId);
             }
 
-            if (Enum.IsDefined(typeof(AllOptionCreator.CommonOptionKey), id) ||
+            if (Enum.IsDefined(typeof(OptionCreator.CommonOptionKey), id) ||
                 roleSelector.IsValidGlobalRoleOptionId((RoleGlobalOption)id) ||
                 tab switch
                 {

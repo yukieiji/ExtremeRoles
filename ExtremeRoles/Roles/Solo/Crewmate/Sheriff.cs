@@ -221,7 +221,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.shootNum = allOpt.GetValue<int>(
             GetRoleOptionId(SheriffOption.ShootNum));

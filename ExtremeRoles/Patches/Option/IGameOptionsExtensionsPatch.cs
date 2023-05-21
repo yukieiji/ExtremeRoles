@@ -54,7 +54,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
         List<string> allOptionStr = new List<string>()
         {
-            getHudString(AllOptionCreator.CommonOptionKey.PresetSelection),
+            getHudString(OptionCreator.CommonOptionKey.PresetSelection),
             createRNGSetting(),
             createRoleSpawnNumOptions()
         };
@@ -69,13 +69,13 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
         allOptionStr.Add(egmm.ShipOption.ToHudString());
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         foreach (IOptionInfo option in allOption.GetAllIOption())
         {
             int optionId = option.Id;
 
-            if (Enum.IsDefined(typeof(AllOptionCreator.CommonOptionKey), optionId) ||
+            if (Enum.IsDefined(typeof(OptionCreator.CommonOptionKey), optionId) ||
                 Enum.IsDefined(typeof(RoleGlobalOption), optionId) ||
                 Enum.IsDefined(typeof(GlobalOption), optionId))
             {
@@ -200,9 +200,9 @@ public static class IGameOptionsExtensionsToHudStringPatch
     {
         StringBuilder rngOptBuilder = new StringBuilder();
         rngOptBuilder.AppendLine(
-            getHudString(AllOptionCreator.CommonOptionKey.UseStrongRandomGen));
+            getHudString(OptionCreator.CommonOptionKey.UseStrongRandomGen));
         rngOptBuilder.AppendLine(
-            getHudString(AllOptionCreator.CommonOptionKey.UsePrngAlgorithm));
+            getHudString(OptionCreator.CommonOptionKey.UsePrngAlgorithm));
 
         return rngOptBuilder.ToString().Trim('\r', '\n');
     }
@@ -213,8 +213,8 @@ public static class IGameOptionsExtensionsToHudStringPatch
     }
 
     private static string getHudString<T>(T optionKey) where T : struct, IConvertible
-        => AllOptionHolder.Instance.GetHudString(Convert.ToInt32(optionKey));
+        => OptionManager.Instance.GetHudString(Convert.ToInt32(optionKey));
 
     private static int getSpawnOptionValue(RoleGlobalOption optionKey)
-        => AllOptionHolder.Instance.GetValue<int>(Convert.ToInt32(optionKey));
+        => OptionManager.Instance.GetValue<int>(Convert.ToInt32(optionKey));
 }

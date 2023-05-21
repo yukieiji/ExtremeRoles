@@ -678,9 +678,9 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
     {
         this.RoleAbilityInit();
 
-        this.featKillPer = AllOptionHolder.Instance.GetValue<int>(
+        this.featKillPer = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(HeroOption.FeatKillPercentage)) / 100.0f;
-        this.featButtonAbilityPer = AllOptionHolder.Instance.GetValue<int>(
+        this.featButtonAbilityPer = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(HeroOption.FeatButtonAbilityPercentage)) / 100.0f;
 
     }
@@ -863,7 +863,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
-        this.vigilanteArrowTime = AllOptionHolder.Instance.GetValue<float>(
+        this.vigilanteArrowTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(VillanOption.VigilanteSeeTime));
         this.vigilanteArrowTimer = 0.0f;
     }
@@ -1076,7 +1076,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(VigilanteOption.Range));
     }
 

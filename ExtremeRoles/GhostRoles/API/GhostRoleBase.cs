@@ -245,7 +245,7 @@ public abstract class GhostRoleBase
     {
         if (this.Button == null) { return; }
 
-        var allOps = AllOptionHolder.Instance;
+        var allOps = OptionManager.Instance;
         this.Button.Behavior.SetCoolTime(
             allOps.GetValue<float>(this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
 
@@ -267,7 +267,7 @@ public abstract class GhostRoleBase
         this.Button.OnMeetingEnd();
     }
 
-    protected bool isReportAbility() => AllOptionHolder.Instance.GetValue<bool>(
+    protected bool isReportAbility() => OptionManager.Instance.GetValue<bool>(
         this.GetRoleOptionId(GhostRoleOption.IsReportAbility));
 
     protected bool IsCommonUse() => 
@@ -445,7 +445,7 @@ public abstract class GhostRoleBase
     {
         var roleSetOption = CreateSelectionOption(
             RoleCommonOption.SpawnRate,
-            AllOptionCreator.SpawnRate, null, true,
+            OptionCreator.SpawnRate, null, true,
             colored: true);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;

@@ -259,6 +259,6 @@ public interface IShipGlobalOption
 
     public static T GetCommonOptionValue<T>(GlobalOption optionKey)
     {
-        return AllOptionHolder.Instance.GetValue<T>((int)optionKey);
+        return OptionManager.Instance.GetValue<T>((int)optionKey);
     }
 }

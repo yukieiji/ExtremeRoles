@@ -437,7 +437,7 @@ public sealed class Resurrecter :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.awakeTaskGage = allOpt.GetValue<int>(
             GetRoleOptionId(ResurrecterOption.AwakeTaskGage)) / 100.0f;

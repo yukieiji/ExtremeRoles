@@ -155,7 +155,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
                 string.Concat(
                     roleName,
                     SidekickOption.KillRange.ToString()),
-                AllOptionCreator.Range,
+                OptionCreator.Range,
                 killRangeOption,
                 tab: tab);
 
@@ -187,7 +187,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         public void ApplyOption()
         {
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
-            var allOption = AllOptionHolder.Instance;
+            var allOption = OptionManager.Instance;
 
             this.UseSabotage = allOption.GetValue<bool>(
                 GetRoleOptionId(SidekickOption.UseSabotage));
@@ -461,7 +461,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         this.CurRecursion = 0;
         this.SidekickPlayerId = new List<byte>();
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.SidekickRecursionLimit = allOption.GetValue<int>(
             GetRoleOptionId(JackalOption.SidekickLimitNum));
@@ -499,7 +499,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
         CreateSelectionOption(
             JackalOption.RangeSidekickTarget,
-            AllOptionCreator.Range,
+            OptionCreator.Range,
             parentOps);
 
         var loverSkOpt = CreateBoolOption(

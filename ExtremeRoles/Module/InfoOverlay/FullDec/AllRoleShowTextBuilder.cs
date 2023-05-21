@@ -15,7 +15,7 @@ internal sealed class AllRoleShowTextBuilder : PageShowTextBuilderBase
 
         var (roleTextBase, optionId) = this.AllPage[this.Page];
 
-        string roleOption = AllOptionHolder.Instance.GetHudStringWithChildren(
+        string roleOption = OptionManager.Instance.GetHudStringWithChildren(
             optionId + (int)RoleCommonOption.SpawnRate);
 
         string title = string.Concat(

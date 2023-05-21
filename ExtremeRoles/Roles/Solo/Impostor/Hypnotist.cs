@@ -637,7 +637,7 @@ public sealed class Hypnotist :
             this.defaultKillCool = this.KillCoolTime;
         }
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
         this.awakeCheckImpNum = allOpt.GetValue<int>(
             GetRoleOptionId(HypnotistOption.AwakeCheckImpostorNum));
         this.awakeCheckTaskGage = allOpt.GetValue<int>(

@@ -352,7 +352,7 @@ public sealed class CurseMaker :
     {
         this.RoleAbilityInit();
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.additionalKillCool = allOption.GetValue<float>(
             GetRoleOptionId(CurseMakerOption.AdditionalKillCool));

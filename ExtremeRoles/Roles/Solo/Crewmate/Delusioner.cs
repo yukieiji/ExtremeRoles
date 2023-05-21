@@ -368,7 +368,7 @@ public sealed class Delusioner :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
         this.awakeVoteCount = allOpt.GetValue<int>(
             GetRoleOptionId(DelusionerOption.AwakeVoteNum));
         this.isOneTimeAwake = allOpt.GetValue<bool>(

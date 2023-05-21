@@ -67,7 +67,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
             { ExtremeRoleType.Neutral , 0 },
         };
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         foreach (var roleId in ExtremeGameModeManager.Instance.RoleSelector.UseCombRoleType)
         {
@@ -75,7 +75,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
             var role = ExtremeRoleManager.CombRole[combType];
             int spawnRate = ISpawnDataManager.ComputePercentage(allOption.Get<int>(
                 role.GetRoleOptionId(RoleCommonOption.SpawnRate),
-                AllOptionHolder.ValueType.Int));
+                OptionManager.ValueType.Int));
             int roleSet = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
             bool isMultiAssign = allOption.GetValue<bool>(
@@ -109,7 +109,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
             int spawnRate = ISpawnDataManager.ComputePercentage(allOption.Get<int>(
                 role.GetRoleOptionId(RoleCommonOption.SpawnRate),
-                AllOptionHolder.ValueType.Int));
+                OptionManager.ValueType.Int));
             int roleNum = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
 

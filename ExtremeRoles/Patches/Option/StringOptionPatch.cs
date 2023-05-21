@@ -28,7 +28,7 @@ public static class StringOptionSelectionUpdatePatch
 
             if (!int.TryParse(idStr, out int id)) { return true; };
 
-            IOptionInfo option = AllOptionHolder.Instance.GetIOption(id);
+            IOptionInfo option = OptionManager.Instance.GetIOption(id);
 
             int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
             int newSelection = Input.GetKey(maxSelectionKey) ? 0 : option.CurSelection - step;
@@ -48,7 +48,7 @@ public static class StringOptionSelectionUpdatePatch
 
             if (!int.TryParse(idStr, out int id)) { return true; };
 
-            IOptionInfo option = AllOptionHolder.Instance.GetIOption(id);
+            IOptionInfo option = OptionManager.Instance.GetIOption(id);
 
             int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
             int newSelection = Input.GetKey(maxSelectionKey) ? 
@@ -70,7 +70,7 @@ public static class StringOptionOnEnablePatch
 
         if (!int.TryParse(idStr, out int id)) { return true; };
 
-        IOptionInfo option = AllOptionHolder.Instance.GetIOption(id);
+        IOptionInfo option = OptionManager.Instance.GetIOption(id);
 
         __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
         __instance.TitleText.text = option.GetTranslatedName();

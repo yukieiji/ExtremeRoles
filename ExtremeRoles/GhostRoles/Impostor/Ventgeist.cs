@@ -53,7 +53,7 @@ public sealed class Ventgeist : GhostRoleBase
 
     public override void Initialize()
     {
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(Option.Range));
     }
 

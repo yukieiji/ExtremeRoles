@@ -121,7 +121,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
         float rate = 1.0f - ((float)this.reduceRate / 100f);
 
         this.Button.Behavior.SetCoolTime(
-            AllOptionHolder.Instance.GetValue<float>(
+            OptionManager.Instance.GetValue<float>(
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)) * rate);
 
         if (this.Button.Behavior is AbilityCountBehavior countBehavior)
@@ -156,11 +156,11 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         this.RoleAbilityInit();
         this.isUpgraded = false;
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(OpenerOption.Range));
-        this.reduceRate = AllOptionHolder.Instance.GetValue<int>(
+        this.reduceRate = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(OpenerOption.ReduceRate));
-        this.plusAbilityNum = AllOptionHolder.Instance.GetValue<int>(
+        this.plusAbilityNum = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(OpenerOption.PlusAbility));
     }
 }

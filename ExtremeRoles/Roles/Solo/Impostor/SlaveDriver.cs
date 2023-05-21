@@ -216,7 +216,7 @@ public sealed class SlaveDriver :
                 FloatOptionNames.KillCooldown);
         }
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.noneBonusKillTaskRange = allOption.GetValue<int>(
             GetRoleOptionId(SlaveDriverOption.TaskProgressRange)) / 100f;

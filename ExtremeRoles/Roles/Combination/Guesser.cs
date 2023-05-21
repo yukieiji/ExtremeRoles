@@ -155,7 +155,7 @@ public sealed class Guesser :
         {
             assignState = new NormalExRAssignState();
 
-            var allOption = AllOptionHolder.Instance;
+            var allOption = OptionManager.Instance;
 
             foreach (var (id, role) in ExtremeRoleManager.NormalRole)
             {
@@ -256,7 +256,7 @@ public sealed class Guesser :
 
         private void addExRCombRole(NormalExRAssignState assignState)
         {
-            var allOption = AllOptionHolder.Instance;
+            var allOption = OptionManager.Instance;
 
             foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
             {
@@ -556,9 +556,9 @@ public sealed class Guesser :
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
-        var imposterSetting = AllOptionHolder.Instance.Get<bool>(
+        var imposterSetting = OptionManager.Instance.Get<bool>(
             GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter),
-            AllOptionHolder.ValueType.Bool);
+            OptionManager.ValueType.Bool);
         CreateKillerOption(imposterSetting);
 
         CreateBoolOption(
@@ -591,7 +591,7 @@ public sealed class Guesser :
     {
         this.uiPrefab = null;
         this.guesserUi = null;
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.CanCallMeeting = allOption.GetValue<bool>(
             GetRoleOptionId(GuesserOption.CanCallMeeting));

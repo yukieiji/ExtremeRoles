@@ -388,7 +388,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
         history = ExtremeRolesPlugin.ShipState.Status.AddComponent<
             TimeMasterHistory>();
         history.Initialize(
-            AllOptionHolder.Instance.GetValue<float>(GetRoleOptionId(
+            OptionManager.Instance.GetValue<float>(GetRoleOptionId(
                 TimeMasterOption.RewindTime)));
     }
 }

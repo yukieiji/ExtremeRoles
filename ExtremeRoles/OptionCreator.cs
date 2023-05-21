@@ -3,16 +3,13 @@
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles;
 
-public static class AllOptionCreator
+public static class OptionCreator
 {
     private const int singleRoleOptionStartOffset = 256;
     private const int combRoleOptionStartOffset = 5000;
@@ -24,8 +21,6 @@ public static class AllOptionCreator
         "50%", "60%", "70%", "80%", "90%", "100%" };
 
     public static readonly string[] Range = new string[] { "short", "middle", "long" };
-
-    private static IRegionInfo[] defaultRegion;
 
     private static Color defaultOptionColor = new Color(204f / 255f, 204f / 255f, 0, 1f);
 
@@ -39,7 +34,7 @@ public static class AllOptionCreator
 
     public static void Create()
     {
-        defaultRegion = ServerManager.DefaultRegions;
+        CustomRegion.Default = ServerManager.DefaultRegions;
 
         ClientOption.Create();
 
@@ -82,40 +77,5 @@ public static class AllOptionCreator
 
         GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
             ghostRoleOptionStartOffset);
-    }
-
-    public static void UpdateRegion()
-    {
-        ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
-        IRegionInfo[] regions = defaultRegion;
-
-        // Only ExtremeRoles!!
-        var exrOfficialTokyo = new DnsRegionInfo(
-            "168.138.196.31",
-            ServerManagerExtension.ExROfficialServerTokyoManinName,
-            StringNames.NoTranslation,
-            "168.138.196.31",
-            22023,
-            false);
-
-        var opt = ClientOption.Instance;
-
-        var customRegion = new DnsRegionInfo(
-            opt.Ip.Value,
-            ServerManagerExtension.FullCustomServerName,
-            StringNames.NoTranslation,
-            opt.Ip.Value,
-            opt.Port.Value,
-            false);
-
-        regions = regions.Concat(
-            new IRegionInfo[]
-            {
-                exrOfficialTokyo.Cast<IRegionInfo>(),
-                customRegion.Cast<IRegionInfo>()
-            }).ToArray();
-
-        ServerManager.DefaultRegions = regions;
-        serverManager.AvailableRegions = regions;
     }
 }

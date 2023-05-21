@@ -12,10 +12,10 @@ public static class CommonOption
     {
         StringBuilder printOption = new StringBuilder();
 
-        foreach (AllOptionCreator.CommonOptionKey key in Enum.GetValues(
-            typeof(AllOptionCreator.CommonOptionKey)))
+        foreach (OptionCreator.CommonOptionKey key in Enum.GetValues(
+            typeof(OptionCreator.CommonOptionKey)))
         {
-            if (key == AllOptionCreator.CommonOptionKey.PresetSelection) { continue; }
+            if (key == OptionCreator.CommonOptionKey.PresetSelection) { continue; }
 
             addOptionString(ref printOption, key);
         }
@@ -31,7 +31,7 @@ public static class CommonOption
     private static void addOptionString<T>(
         ref StringBuilder builder, T optionKey) where T : struct, IConvertible
     {
-        if (!AllOptionHolder.Instance.TryGetIOption(
+        if (!OptionManager.Instance.TryGetIOption(
                 Convert.ToInt32(optionKey), out IOptionInfo option) ||
             option.IsHidden)
         {

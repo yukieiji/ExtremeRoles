@@ -167,7 +167,7 @@ public sealed class Assassin : MultiAssignRoleBase
     }
     protected override void RoleSpecificInit()
     {
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.HasTask = allOption.GetValue<bool>(
             GetRoleOptionId(AssassinOption.HasTask));
@@ -322,7 +322,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     {
         this.IsAssassinate = false;
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.HasTask = allOption.GetValue<bool>(
             GetRoleOptionId(MarlinOption.HasTask));

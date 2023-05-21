@@ -149,7 +149,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
 
         Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
-        AllOptionHolder.Instance.Add(this.Id, this);
+        OptionManager.Instance.Add(this.Id, this);
     }
 
     public void AddToggleOptionCheckHook(StringNames targetOption)
@@ -248,13 +248,13 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
         {
             if (this.Id == 0)
             {
-                AllOptionHolder.Instance.SwitchPreset(this.CurSelection); // Switch presets
+                OptionManager.Instance.SwitchPreset(this.CurSelection); // Switch presets
             }
             else if (this.entry != null)
             {
                 this.entry.Value = this.CurSelection; // Save selection to config
             }
-            AllOptionHolder.Instance.ShareOptionSelections();// Share all selections
+            OptionManager.Instance.ShareOptionSelections();// Share all selections
         }
     }
 
@@ -309,7 +309,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
     private void bindConfig()
     {
         this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
-            AllOptionHolder.Instance.ConfigPreset,
+            OptionManager.Instance.ConfigPreset,
             this.cleanName(),
             this.defaultSelection);
     }

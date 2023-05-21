@@ -9,7 +9,7 @@ using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.CustomOption;
 
-public sealed class AllOptionHolder
+public sealed class OptionManager
 {
     public enum ValueType : byte
     {
@@ -25,7 +25,7 @@ public sealed class AllOptionHolder
 
     public int OptionPage { get; set; } = 0;
 
-    public readonly static AllOptionHolder Instance = new AllOptionHolder();
+    public readonly static OptionManager Instance = new OptionManager();
 
     private Dictionary<int, ValueType> allOptionId = new Dictionary<int, ValueType>();
     private TypeOptionHolder<int>   intOption   = new TypeOptionHolder<int>();

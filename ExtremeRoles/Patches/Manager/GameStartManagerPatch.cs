@@ -71,7 +71,7 @@ public static class GameStartManagerPatch
 
         ExtremeRolesPlugin.Info.HideInfoOverlay();
         // ホストはここでオプションを読み込み
-        AllOptionHolder.Load();
+        OptionManager.Load();
 
         if (ExtremeGameModeManager.Instance.ShipOption.IsRandomMap)
         {

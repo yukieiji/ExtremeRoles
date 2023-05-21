@@ -44,7 +44,7 @@ public static class CustomOptionCsvProcessor
                     comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
 
 
-                foreach (IOptionInfo option in AllOptionHolder.Instance.GetAllIOption())
+                foreach (IOptionInfo option in OptionManager.Instance.GetAllIOption())
                 {
 
                 if (option.Id == 0) { continue; }
@@ -189,7 +189,7 @@ public static class CustomOptionCsvProcessor
 
             // オプションのインポートデモでネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
 
-            var options = AllOptionHolder.Instance;
+            var options = OptionManager.Instance;
 
             options.ExecuteWithBlockOptionShare(
                 () =>

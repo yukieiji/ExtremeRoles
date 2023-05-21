@@ -149,7 +149,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IR
 
     public void CreateAbility()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         GraphicAndActiveTimeMode featVirusMode = new GraphicAndActiveTimeMode()
         {
@@ -366,7 +366,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IR
         this.timer = new Dictionary<byte, float>();
         this.playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.range = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.Range));
         this.infectRange = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.InfectRange));

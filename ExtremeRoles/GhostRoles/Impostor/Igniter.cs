@@ -93,9 +93,9 @@ public sealed class Igniter : GhostRoleBase
 
     public override void Initialize()
     {
-        isEffectImp = AllOptionHolder.Instance.GetValue<bool>(
+        isEffectImp = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(IgniterOption.IsEffectImpostor));
-        isEffectNeut = AllOptionHolder.Instance.GetValue<bool>(
+        isEffectNeut = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(IgniterOption.IsEffectNeutral));
     }
 

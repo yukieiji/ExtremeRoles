@@ -19,7 +19,7 @@ internal sealed class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
         string title = $"<size=200%>{Translation.GetString("yourRole")}</size>";
         string anotherRoleText = "";
         var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         string roleOptionString = "";
         string colorRoleName;

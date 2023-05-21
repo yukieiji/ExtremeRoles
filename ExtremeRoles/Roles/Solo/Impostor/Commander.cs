@@ -147,7 +147,7 @@ public sealed class Commander : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
         this.killCoolReduceTime = allOpt.GetValue<float>(
             GetRoleOptionId(CommanderOption.KillCoolReduceTime));
         this.killCoolImpNumBonus = allOpt.GetValue<float>(

@@ -12,8 +12,8 @@ public static class HashRandomFastNextPatch
         ref int __result,
         [HarmonyArgument(0)] int maxInt)
     {
-        if (AllOptionHolder.Instance.GetValue<bool>(
-            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen))
+        if (OptionManager.Instance.GetValue<bool>(
+            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen))
         {
             __result = RandomGenerator.Instance.Next(maxInt);
             return false;
@@ -32,8 +32,8 @@ public static class HashRandomNextPatch
         ref int __result,
         [HarmonyArgument(0)] int maxInt)
     {
-        if (AllOptionHolder.Instance.GetValue<bool>(
-            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen))
+        if (OptionManager.Instance.GetValue<bool>(
+            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen))
         {
             __result = RandomGenerator.Instance.Next(maxInt);
             return false;

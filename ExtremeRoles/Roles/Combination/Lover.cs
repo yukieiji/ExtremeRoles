@@ -245,16 +245,16 @@ public sealed class Lover : MultiAssignRoleBase
             LoverOption.BecomeNeutralLoverCanUseVent,
             false, killerSetting);
 
-        AllOptionHolder.Instance.Get<int>(
+        OptionManager.Instance.Get<int>(
             GetManagerOptionId(
                 CombinationRoleCommonOption.AssignsNum),
-            AllOptionHolder.ValueType.Int).SetUpdateOption(deathSetting);
+            OptionManager.ValueType.Int).SetUpdateOption(deathSetting);
 
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         bool isNeutral = allOption.GetValue<bool>(
             GetRoleOptionId(LoverOption.IsNeutral));

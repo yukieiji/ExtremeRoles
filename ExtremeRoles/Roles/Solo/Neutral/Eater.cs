@@ -73,7 +73,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
 
     public void CreateAbility()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         GraphicAndActiveTimeMode deadBodyMode = new GraphicAndActiveTimeMode()
         {
@@ -322,7 +322,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
         this.targetDeadBody = null;
         this.targetPlayer = null;
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.UseVent = allOpt.GetValue<bool>(
             GetRoleOptionId(EaterOption.CanUseVent));

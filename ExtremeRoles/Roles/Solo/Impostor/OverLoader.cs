@@ -288,7 +288,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTy
         this.defaultKillRange = this.KillRange;
         this.IsOverLoad = false;
 
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.awakeImpNum = allOption.GetValue<int>(
             GetRoleOptionId(OverLoaderOption.AwakeImpostorNum));

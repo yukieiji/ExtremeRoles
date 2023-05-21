@@ -478,17 +478,17 @@ public sealed class Queen :
 
     protected override void RoleSpecificInit()
     {
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(QueenOption.Range));
-        this.UseVent = AllOptionHolder.Instance.GetValue<bool>(
+        this.UseVent = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(QueenOption.CanUseVent));
-        this.ServantSelfKillCool = AllOptionHolder.Instance.GetValue<float>(
+        this.ServantSelfKillCool = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(QueenOption.ServantSelfKillCool));
-        this.killKillCoolReduceRate = 1.0f - (AllOptionHolder.Instance.GetValue<int>(
+        this.killKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)) / 100.0f);
-        this.taskKillCoolReduceRate = 1.0f - (AllOptionHolder.Instance.GetValue<int>(
+        this.taskKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)) / 100.0f);
-        this.taskCompKillCoolReduceRate = 1.0f - (AllOptionHolder.Instance.GetValue<int>(
+        this.taskCompKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)) / 100.0f);
 
         this.servantTaskGage = new Dictionary<byte, float>();

@@ -33,7 +33,7 @@ internal sealed class LoverWinChecker : IWinChecker
     {
         if (this.loverNum == 0)
         {
-            this.loverNum = AllOptionHolder.Instance.GetValue<int>(
+            this.loverNum = OptionManager.Instance.GetValue<int>(
                 ((MultiAssignRoleBase)role).GetManagerOptionId(
                     CombinationRoleCommonOption.AssignsNum));
         }

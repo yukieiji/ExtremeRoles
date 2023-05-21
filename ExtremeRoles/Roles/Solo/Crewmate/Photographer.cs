@@ -504,7 +504,7 @@ public sealed class Photographer :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.awakeTaskGage = allOpt.GetValue<int>(
             GetRoleOptionId(PhotographerOption.AwakeTaskGage)) / 100.0f;

@@ -57,7 +57,7 @@ public sealed class Neet : SingleRoleBase
 
     protected override void RoleSpecificInit()
     {
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.CanCallMeeting = allOption.GetValue<bool>(
             GetRoleOptionId(NeetOption.CanCallMeeting));

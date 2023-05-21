@@ -170,7 +170,7 @@ public static class RegionMenuOpenPatch
 
         void onFocusLost()
         {
-            AllOptionCreator.UpdateRegion();
+            CustomRegion.Update();
             __instance.ChooseOption(
                 ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
         }

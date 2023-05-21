@@ -443,7 +443,7 @@ public sealed class Yandere :
 
     protected override void RoleSpecificInit()
     {
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
 
         this.setTargetRange = allOption.GetValue<float>(

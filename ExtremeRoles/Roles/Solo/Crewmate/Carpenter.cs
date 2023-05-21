@@ -499,7 +499,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     public void CreateAbility()
     {
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.Button = new ExtremeAbilityButton(
             new CarpenterAbilityBehavior(
@@ -725,7 +725,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     protected override void RoleSpecificInit()
     {
         this.targetVent = null;
-        this.awakeTaskGage = AllOptionHolder.Instance.GetValue<int>(
+        this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(CarpenterOption.AwakeTaskGage)) / 100.0f;
         
         this.awakeHasOtherVision = this.HasOtherVision;
@@ -769,17 +769,17 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             CarpenterOption.SetCameraStopTime,
             2.5f, 1.0f, 5.0f, 0.5f,
             parentOps, format: OptionUnit.Second);
-        ((IntCustomOption)AllOptionHolder.Instance.Get<int>( 
+        ((IntCustomOption)OptionManager.Instance.Get<int>( 
             GetRoleOptionId(
                 RoleAbilityCommonOption.AbilityCount),
-            AllOptionHolder.ValueType.Int)).SetOptionUnit(OptionUnit.ScrewNum);
+            OptionManager.ValueType.Int)).SetOptionUnit(OptionUnit.ScrewNum);
     }
 
     private void abilityInit()
     {
         if (this.Button == null) { return; }
 
-        var allOps = AllOptionHolder.Instance;
+        var allOps = OptionManager.Instance;
         this.Button.Behavior.SetCoolTime(
             allOps.GetValue<float>(GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
 

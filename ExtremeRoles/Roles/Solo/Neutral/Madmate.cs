@@ -210,7 +210,7 @@ public sealed class Madmate :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
         this.isSeeImpostorNow = false;
         this.isUpdateMadmate = false;
         this.FakeImposter = false;

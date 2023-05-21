@@ -230,7 +230,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.killRange = allOpt.GetValue<float>(
             GetRoleOptionId(MinerOption.MineKillRange));

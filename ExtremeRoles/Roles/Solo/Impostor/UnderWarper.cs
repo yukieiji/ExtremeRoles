@@ -344,7 +344,7 @@ public sealed class UnderWarper :
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         this.awakeKillCount = allOpt.GetValue<int>(
             GetRoleOptionId(UnderWarperOption.AwakeKillCount));

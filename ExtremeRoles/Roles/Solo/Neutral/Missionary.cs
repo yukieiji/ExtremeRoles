@@ -88,13 +88,13 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
         this.lamb = new Queue<byte>();
         this.timer = 0;
 
-        this.tellDeparture = AllOptionHolder.Instance.GetValue<bool>(
+        this.tellDeparture = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(MissionaryOption.TellDeparture));
-        this.maxTimerTime = AllOptionHolder.Instance.GetValue<float>(
+        this.maxTimerTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(MissionaryOption.DepartureMaxTime));
-        this.minTimerTime = AllOptionHolder.Instance.GetValue<float>(
+        this.minTimerTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(MissionaryOption.DepartureMinTime));
-        this.propagateRange = AllOptionHolder.Instance.GetValue<float>(
+        this.propagateRange = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(MissionaryOption.PropagateRange));
 
         resetTimer();

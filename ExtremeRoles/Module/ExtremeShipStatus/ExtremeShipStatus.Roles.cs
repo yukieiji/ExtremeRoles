@@ -28,7 +28,7 @@ public sealed partial class ExtremeShipStatus
 
     public void AddGlobalActionRole(SingleRoleBase role)
     {
-        var allOpt = AllOptionHolder.Instance;
+        var allOpt = OptionManager.Instance;
 
         switch (role.Id)
         {

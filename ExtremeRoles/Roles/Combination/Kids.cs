@@ -332,7 +332,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                AllOptionHolder.Instance.GetValue<int>(GetRoleOptionId(
+                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityCount)));
         }
     }
@@ -404,14 +404,14 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
         this.abilityCount = 0;
 
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(DelinqentOption.Range));
         
         this.RoleAbilityInit();
         if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                AllOptionHolder.Instance.GetValue<int>(GetRoleOptionId(
+                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityCount)));
         }
 
@@ -842,17 +842,17 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public override void Initialize()
     {
-        this.abilityNum = AllOptionHolder.Instance.GetValue<int>(
+        this.abilityNum = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(WispOption.TorchAbilityNum));
-        this.winNum = AllOptionHolder.Instance.GetValue<int>(
+        this.winNum = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(WispOption.WinNum));
-        this.torchNum = AllOptionHolder.Instance.GetValue<int>(
+        this.torchNum = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(WispOption.TorchNum));
-        this.range = AllOptionHolder.Instance.GetValue<float>(
+        this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(WispOption.TorchRange));
-        this.torchActiveTime = AllOptionHolder.Instance.GetValue<float>(
+        this.torchActiveTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(WispOption.TorchActiveTime));
-        this.torchBlackOutTime = AllOptionHolder.Instance.GetValue<float>(
+        this.torchBlackOutTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(WispOption.BlackOutTime));
     }
 

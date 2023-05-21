@@ -120,7 +120,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     protected override void CommonInit()
     {
         var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
-        var allOption = AllOptionHolder.Instance;
+        var allOption = OptionManager.Instance;
 
         this.Vision = this.IsImpostor() ? 
             baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) : 
