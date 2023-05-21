@@ -43,12 +43,12 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
             role.CanHasAnotherRole = allOption.GetValue<bool>(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
-            if (!allOption.GetValue<bool>(
+            if (!allOption.TryGet<bool>(
                     GetRoleOptionId(
-                        CombinationRoleCommonOption.IsAssignImposter))) { continue; }
+                        CombinationRoleCommonOption.IsAssignImposter),
+                    out var impOpt)) { continue; }
 
-            bool isEvil = allOption.GetValue<bool>(
-                GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter));
+            bool isEvil = impOpt.GetValue();
 
             var spawnOption = allOption.Get<int>(
                 GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
