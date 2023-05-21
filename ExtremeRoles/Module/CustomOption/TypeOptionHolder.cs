@@ -9,11 +9,8 @@ public sealed class TypeOptionHolder<T> : IEnumerable<KeyValuePair<int, IValueOp
         struct, IComparable, IConvertible,
         IComparable<T>, IEquatable<T>
 {
-    public Type Type => this.type;
     public ICollection<IValueOption<T>> Values => this.option.Values;
-
     private Dictionary<int, IValueOption<T>> option = new Dictionary<int, IValueOption<T>>();
-    private Type type = typeof(T);
 
     public IValueOption<T> Get(int id) => this.option[id];
 
