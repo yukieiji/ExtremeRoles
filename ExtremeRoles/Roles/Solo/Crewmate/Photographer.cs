@@ -532,7 +532,7 @@ public sealed class Photographer :
             this.upgradeAllSendChatTaskGage <= 0.0f;
 
         this.photoCreater = new PhotoCamera(
-            AllOptionHolder.Instance.GetValue<float>(
+            allOpt.GetValue<float>(
                 GetRoleOptionId(PhotographerOption.PhotoRange)));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
