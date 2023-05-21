@@ -197,8 +197,8 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
     protected override void RoleSpecificInit()
     {
         var allOption = AllOptionHolder.Instance;
-        this.teleportRate = allOption.GetValue<float>(
-            GetRoleOptionId(MagicianOption.TeleportTargetRate));
+        this.teleportRate = (float)allOption.GetValue<int>(
+            GetRoleOptionId(MagicianOption.TeleportTargetRate)) / 100.0f;
         this.dupeTeleportTarget = allOption.GetValue<bool>(
             GetRoleOptionId(MagicianOption.DupeTeleportTargetTo));
         this.includeRolePlayer = allOption.GetValue<bool>(
