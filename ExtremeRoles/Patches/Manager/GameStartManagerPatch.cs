@@ -34,38 +34,31 @@ public static class GameStartManagerPatch
     private static bool prevOptionValue;
     private static TMPro.TextMeshPro customShowText;
 
-
     [HarmonyPrefix]
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.BeginGame))]
-    public static bool BeginGamePrefix(GameStartManager __instance)
+    public static bool BeginGamePrefix()
     {
+        if (!AmongUsClient.Instance.AmHost) { return true; }
 
-        bool continueStart = true;
-
-        if (AmongUsClient.Instance.AmHost)
+        foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
         {
-            foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
+            if (client.Character == null) continue;
+            var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
+            if (dummyComponent != null && dummyComponent.enabled)
             {
-                if (client.Character == null) continue;
-                var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-                if (dummyComponent != null && dummyComponent.enabled)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
-                    client.Id, out Version clientVer))
-                {
-                    continueStart = false;
-                    break;
-                }
-                int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
-                    clientVer);
-                if (diff != 0)
-                {
-                    continueStart = false;
-                    break;
-                }
+            if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
+                client.Id, out Version clientVer))
+            {
+                return false;
+            }
+            int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
+                clientVer);
+            if (diff != 0)
+            {
+                return false;
             }
         }
 
@@ -94,7 +87,7 @@ public static class GameStartManagerPatch
             }
             RPCOperator.ShareMapId(mapId);
         }
-        return continueStart;
+        return true;
     }
 
     [HarmonyPrefix]
