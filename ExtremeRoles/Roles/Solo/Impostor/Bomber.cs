@@ -139,7 +139,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
             GetRoleOptionId(BomberOption.TimerMaxTime));
         this.explosionKillChance = allOption.GetValue<int>(
             GetRoleOptionId(BomberOption.ExplosionKillChance));
-        this.explosionRange = allOption.GetValue<float>(
+        this.explosionRange = allOption.GetValue<int>(
             GetRoleOptionId(BomberOption.ExplosionRange));
         this.tellExplosion = allOption.GetValue<bool>(
             GetRoleOptionId(BomberOption.TellExplosion));
