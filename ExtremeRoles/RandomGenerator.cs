@@ -94,7 +94,7 @@ namespace ExtremeRoles
 
         public static int CreateStrongRandomSeed()
         {
-            var bs = new byte[4];
+            byte[] bs = new byte[4];
             //Int32と同じサイズのバイト配列にランダムな値を設定する
             using (var rng = RandomNumberGenerator.Create())
             {
@@ -109,7 +109,7 @@ namespace ExtremeRoles
 
         public static uint CreateStrongSeed()
         {
-            var bs = new byte[4];
+            byte[] bs = new byte[4];
             //Int32と同じサイズのバイト配列にランダムな値を設定する
             using (var rng = RandomNumberGenerator.Create())
             {
@@ -125,7 +125,7 @@ namespace ExtremeRoles
 
         public static ulong CreateLongStrongSeed()
         {
-            var bs = new byte[8];
+            byte[] bs = new byte[8];
             //Int64と同じサイズのバイト配列にランダムな値を設定する
             using (var rng = RandomNumberGenerator.Create())
             {

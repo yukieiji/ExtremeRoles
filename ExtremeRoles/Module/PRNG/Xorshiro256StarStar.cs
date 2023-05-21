@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+﻿using System.Numerics;
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class Xorshiro256StarStar : RNG64Base
 {
@@ -18,7 +20,7 @@ public sealed class Xorshiro256StarStar : RNG64Base
     {
         ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
 
-        ulong result = LeftOps(s1 * 5, 7) * 9;
+        ulong result = BitOperations.RotateLeft(s1 * 5, 7) * 9;
         ulong t = s1 << 17;
 
         s2 ^= s0;
@@ -27,7 +29,7 @@ public sealed class Xorshiro256StarStar : RNG64Base
         s0 ^= s3;
 
         s2 ^= t;
-        s3 = LeftOps(s3, 45);
+        s3 = BitOperations.RotateLeft(s3, 45);
 
         _s0 = s0;
         _s1 = s1;

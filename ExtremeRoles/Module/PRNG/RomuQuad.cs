@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+﻿using System.Numerics;
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class RomuQuad : RNG64Base
 {
@@ -20,12 +22,12 @@ public sealed class RomuQuad : RNG64Base
 
         wState = a * zp; // a-mult
 
-        xState = zp + LeftOps(wp, 52);  // b-rotl, c-add
+        xState = zp + BitOperations.RotateLeft(wp, 52);  // b-rotl, c-add
 
         yState = yp - xp; // d-sub
 
         zState = yp + wp; // e-add
-        zState = LeftOps(zState, 19); // f-rotl
+        zState = BitOperations.RotateLeft(zState, 19); // f-rotl
 
         return xp;
     }

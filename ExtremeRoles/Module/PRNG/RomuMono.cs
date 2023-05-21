@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+﻿using System.Numerics;
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class RomuMono : RNG32Base
 {
@@ -15,7 +17,8 @@ public sealed class RomuMono : RNG32Base
     public override uint NextUInt()
     {
         uint result = state >> 16;
-        state *= 3611795771u; state = LeftOps(state, 12);
+        state *= 3611795771u;
+        state = BitOperations.RotateLeft(state, 12);
         return result;
     }
 

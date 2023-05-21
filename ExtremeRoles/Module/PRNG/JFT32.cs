@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+﻿using System.Numerics;
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class JFT32 : RNG32Base
 {
@@ -18,9 +20,9 @@ public sealed class JFT32 : RNG32Base
     {
         uint s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
 
-        uint t = s0 - LeftOps(s1, 27);
+        uint t = s0 - BitOperations.RotateLeft(s1, 27);
 
-        _s0 = s1 ^ LeftOps(s2, 17);
+        _s0 = s1 ^ BitOperations.RotateLeft(s2, 17);
         _s1 = s2 + s3;
         _s2 = s3 + t;
         _s3 = t + s0;

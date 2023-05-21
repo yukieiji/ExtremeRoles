@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Module.PRNG;
+﻿using System.Numerics;
+
+namespace ExtremeRoles.Module.PRNG;
 
 public sealed class RomuTrio : RNG64Base
 {
@@ -20,10 +22,10 @@ public sealed class RomuTrio : RNG64Base
         xState = a * zp;
         
         yState = yp - xp;
-        yState = LeftOps(yState, 12);
+        yState = BitOperations.RotateLeft(yState, 12);
 
         zState = zp - yp;
-        zState = LeftOps(zState, 44);
+        zState = BitOperations.RotateLeft(zState, 44);
 
         return xp;
     }
