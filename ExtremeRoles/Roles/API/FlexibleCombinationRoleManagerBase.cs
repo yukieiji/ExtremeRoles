@@ -43,7 +43,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
             role.CanHasAnotherRole = allOption.GetValue<bool>(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
-            if (!allOption.Contains(
+            if (!allOption.GetValue<bool>(
                     GetRoleOptionId(
                         CombinationRoleCommonOption.IsAssignImposter))) { continue; }
 
@@ -201,7 +201,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     {
         this.Roles.Clear();
         int roleAssignNum = 1;
-        var allOptions = OptionHolder.AllOption;
+        var allOptions = AllOptionHolder.Instance;
 
         this.BaseRole.CanHasAnotherRole = allOptions.GetValue<bool>(
             GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));

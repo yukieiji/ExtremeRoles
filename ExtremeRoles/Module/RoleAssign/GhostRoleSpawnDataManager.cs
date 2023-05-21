@@ -62,7 +62,7 @@ public sealed class GhostRoleSpawnDataManager :
             },
         };
 
-        var allOption = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
         var tmpUseData = new Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>>();
 
         foreach (ExtremeGhostRoleId roleId in 

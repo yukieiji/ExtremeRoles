@@ -6,7 +6,6 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -81,7 +80,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
         var roleSetOption = new SelectionCustomOption(
             GetRoleOptionId(RoleCommonOption.SpawnRate),
             this.optionKey,
-            OptionHolder.SpawnRate, null, true,
+            AllOptionCreator.SpawnRate, null, true,
             tab: OptionTab.Combination);
 
         int thisMaxRoleNum =
