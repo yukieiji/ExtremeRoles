@@ -195,7 +195,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
             GetRoleOptionId(EvolverOption.IsEatingEndCleanBody));
         this.eatingRange = allOption.GetValue<float>(
             GetRoleOptionId(EvolverOption.EatingRange));
-        this.reduceRate = allOption.GetValue<float>(
+        this.reduceRate = allOption.GetValue<int>(
             GetRoleOptionId(EvolverOption.KillCoolReduceRate));
         this.reruceMulti = allOption.GetValue<float>(
             GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti));
