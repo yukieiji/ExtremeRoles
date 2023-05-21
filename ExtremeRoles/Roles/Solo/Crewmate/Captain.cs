@@ -363,7 +363,7 @@ public sealed class Captain :
 
         var allOpt = AllOptionHolder.Instance;
 
-        this.chargeVoteNum = allOpt.GetValue<int>(
+        this.chargeVoteNum = allOpt.GetValue<float>(
            GetRoleOptionId(CaptainOption.ChargeVoteWhenSkip));
         this.defaultVote = allOpt.GetValue<float>(
            GetRoleOptionId(CaptainOption.AwakedDefaultVoteNum));
