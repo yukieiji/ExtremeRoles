@@ -23,8 +23,6 @@ public sealed class OptionManager
         get => $"Preset:{selectedPreset}";
     }
 
-    public int OptionPage { get; set; } = 0;
-
     public readonly static OptionManager Instance = new OptionManager();
 
     private Dictionary<int, ValueType> allOptionId = new Dictionary<int, ValueType>();

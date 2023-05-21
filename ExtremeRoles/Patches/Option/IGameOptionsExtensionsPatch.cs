@@ -37,12 +37,16 @@ public static class IGameOptionsExtensionsNumImpostorsPatch
     nameof(IGameOptionsExtensions.ToHudString))]
 public static class IGameOptionsExtensionsToHudStringPatch
 {
-
     private const int maxLines = 28;
+    private static int page = 0;
 
-    private static void Postfix(ref string __result)
+    public static void ChangePage(int num)
     {
+        page += num;
+    }
 
+    public static void Postfix(ref string __result)
+    {
         ExtremeGameModeManager egmm = ExtremeGameModeManager.Instance;
 
         if (egmm == null) { return; }
@@ -55,8 +59,8 @@ public static class IGameOptionsExtensionsToHudStringPatch
         List<string> allOptionStr = new List<string>()
         {
             getHudString(OptionCreator.CommonOptionKey.PresetSelection),
-            createRNGSetting(),
-            createRoleSpawnNumOptions()
+            createRngOptionHudString(),
+            createRoleSpawnNumOptionHudString()
         };
 
         if (egmm.RoleSelector.CanUseXion)
@@ -91,7 +95,6 @@ public static class IGameOptionsExtensionsToHudStringPatch
                 allOptionStr.Add(optionStr.Trim('\r', '\n'));
             }
         }
-
         
         int lineCount = 0;
         StringBuilder pageBuilder = new StringBuilder();
@@ -119,84 +122,73 @@ public static class IGameOptionsExtensionsToHudStringPatch
         }
 
         int numPages = hudOptionPage.Count;
-        int counter = allOption.OptionPage = allOption.OptionPage % numPages;
+        page %= numPages;
 
         __result = string.Concat(
-            hudOptionPage[counter].Trim('\r', '\n'),
+            hudOptionPage[page].Trim('\r', '\n'),
             "\n\n",
             translate("pressTabForMore"),
-            $" ({counter + 1}/{numPages})");
+            $" ({page + 1}/{numPages})");
 
     }
 
-    private static string createRoleSpawnNumOptions()
+    private static string createRoleSpawnNumOptionHudString()
     {
-        StringBuilder entry = new StringBuilder();
+        StringBuilder builder = new StringBuilder(512);
 
         // 生存役職周り
-        string optionName = Design.ColoedString(
-            new Color(204f / 255f, 204f / 255f, 0, 1f),
-            translate("crewmateRoles"));
-        int min = getSpawnOptionValue(RoleGlobalOption.MinCrewmateRoles);
-        int max = getSpawnOptionValue(RoleGlobalOption.MaxCrewmateRoles);
-        if (min > max) { min = max; }
-        string optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-        entry.AppendLine($"{optionName}: {optionValue}");
-
-        optionName = Design.ColoedString(
-            new Color(204f / 255f, 204f / 255f, 0, 1f),
-            translate("neutralRoles"));
-        min = getSpawnOptionValue(RoleGlobalOption.MinNeutralRoles);
-        max = getSpawnOptionValue(RoleGlobalOption.MaxNeutralRoles);
-        if (min > max) { min = max; }
-        optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-        entry.AppendLine($"{optionName}: {optionValue}");
-
-        optionName = Design.ColoedString(
-            new Color(204f / 255f, 204f / 255f, 0, 1f),
-            translate("impostorRoles"));
-        min = getSpawnOptionValue(RoleGlobalOption.MinImpostorRoles);
-        max = getSpawnOptionValue(RoleGlobalOption.MaxImpostorRoles);
-
-        if (min > max) { min = max; }
-        optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-        entry.AppendLine($"{optionName}: {optionValue}");
-
-        entry.AppendLine();
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "crewmateRoles",
+                RoleGlobalOption.MinCrewmateRoles,
+                RoleGlobalOption.MaxCrewmateRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "neutralRoles",
+                RoleGlobalOption.MinNeutralRoles,
+                RoleGlobalOption.MaxNeutralRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "impostorRoles",
+                RoleGlobalOption.MinImpostorRoles,
+                RoleGlobalOption.MaxImpostorRoles));
+        
+        builder.AppendLine();
 
         // 幽霊役職周り
-        optionName = Design.ColoedString(
-            new Color(204f / 255f, 204f / 255f, 0, 1f),
-            translate("crewmateGhostRoles"));
-        min = getSpawnOptionValue(RoleGlobalOption.MinCrewmateGhostRoles);
-        max = getSpawnOptionValue(RoleGlobalOption.MaxCrewmateGhostRoles);
-        if (min > max) { min = max; }
-        optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-        entry.AppendLine($"{optionName}: {optionValue}");
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "crewmateGhostRoles",
+                RoleGlobalOption.MinCrewmateGhostRoles,
+                RoleGlobalOption.MaxCrewmateGhostRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "neutralGhostRoles",
+                RoleGlobalOption.MinNeutralGhostRoles,
+                RoleGlobalOption.MaxNeutralGhostRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "impostorGhostRoles",
+                RoleGlobalOption.MinImpostorGhostRoles,
+                RoleGlobalOption.MaxImpostorGhostRoles));
 
-        optionName = Design.ColoedString(
-            new Color(204f / 255f, 204f / 255f, 0, 1f),
-            translate("neutralGhostRoles"));
-        min = getSpawnOptionValue(RoleGlobalOption.MinNeutralGhostRoles);
-        max = getSpawnOptionValue(RoleGlobalOption.MaxNeutralGhostRoles);
-        if (min > max) { min = max; }
-        optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-        entry.AppendLine($"{optionName}: {optionValue}");
-
-        optionName = Design.ColoedString(
-            new Color(204f / 255f, 204f / 255f, 0, 1f),
-            translate("impostorGhostRoles"));
-        min = getSpawnOptionValue(RoleGlobalOption.MinImpostorGhostRoles);
-        max = getSpawnOptionValue(RoleGlobalOption.MaxImpostorGhostRoles);
-
-        if (min > max) { min = max; }
-        optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-        entry.AppendLine($"{optionName}: {optionValue}");
-
-        return entry.ToString().Trim('\r', '\n');
+        return builder.ToString().Trim('\r', '\n');
     }
 
-    private static string createRNGSetting()
+    private static string createRoleSpawnNumOptionHudStringLine(
+        string transKey, RoleGlobalOption minOptKey, RoleGlobalOption maxOptKey)
+    {
+        string optionName = Design.ColoedString(
+            new Color(204f / 255f, 204f / 255f, 0, 1f),
+            translate(transKey));
+        int min = getSpawnOptionValue(minOptKey);
+        int max = getSpawnOptionValue(maxOptKey);
+        string optionValueStr = (min >= max) ? $"{max}" : $"{min} - {max}";
+
+        return $"{optionName}: {optionValueStr}";
+    }
+
+    private static string createRngOptionHudString()
     {
         StringBuilder rngOptBuilder = new StringBuilder();
         rngOptBuilder.AppendLine(
@@ -207,14 +199,14 @@ public static class IGameOptionsExtensionsToHudStringPatch
         return rngOptBuilder.ToString().Trim('\r', '\n');
     }
 
-    private static string translate(string key)
-    {
-        return Translation.GetString(key);
-    }
-
     private static string getHudString<T>(T optionKey) where T : struct, IConvertible
         => OptionManager.Instance.GetHudString(Convert.ToInt32(optionKey));
 
     private static int getSpawnOptionValue(RoleGlobalOption optionKey)
-        => OptionManager.Instance.GetValue<int>(Convert.ToInt32(optionKey));
+        => OptionManager.Instance.GetValue<int>((int)optionKey);
+
+    private static string translate(string key)
+    {
+        return Translation.GetString(key);
+    }
 }
