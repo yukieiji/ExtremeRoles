@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -14,7 +13,7 @@ namespace ExtremeRoles.GhostRoles.API;
 
 public enum GhostRoleOption
 {
-    IsReportAbility = 40 
+    IsReportAbility = 40
 }
 
 public abstract class GhostRoleBase
@@ -453,6 +452,13 @@ public abstract class GhostRoleBase
         CreateIntOption(
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1, roleSetOption);
+
+        new IntCustomOption(
+            GetRoleOptionId(RoleCommonOption.AssignWeight),
+            RoleCommonOption.AssignWeight.ToString(),
+            1000, 1, 1000, 1,
+            roleSetOption,
+            tab: this.tab);
 
         return roleSetOption;
     }

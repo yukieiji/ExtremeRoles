@@ -74,6 +74,8 @@ public sealed class GhostRoleSpawnDataManager :
                 allOption.Get<int>(
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate), 
                     OptionManager.ValueType.Int));
+            int weight = allOption.GetValue<int>(
+                role.GetRoleOptionId(RoleCommonOption.AssignWeight));
             int roleNum = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
 
@@ -86,7 +88,7 @@ public sealed class GhostRoleSpawnDataManager :
             }
 
             var addData = new GhostRoleSpawnData(
-                roleId, roleNum, spawnRate, role.GetRoleFilter());
+                roleId, roleNum, spawnRate, weight, role.GetRoleFilter());
 
             ExtremeRoleType team = role.Team;
 
@@ -108,8 +110,10 @@ public sealed class GhostRoleSpawnDataManager :
         foreach (var (team, spawnDataList) in tmpUseData)
         {
             Helper.Logging.Debug($"Add {team} ghost role spawn data");
-            this.useGhostRole[team] = spawnDataList.OrderBy(
-                x => RandomGenerator.Instance.Next()).ToList();
+            this.useGhostRole[team] = spawnDataList
+                .OrderBy(x => x.Weight)
+                .ThenBy(x => RandomGenerator.Instance.Next())
+                .ToList();
         }
     }
 
