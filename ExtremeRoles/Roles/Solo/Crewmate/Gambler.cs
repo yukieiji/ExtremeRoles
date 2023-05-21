@@ -88,9 +88,9 @@ public sealed class Gambler :
     {
         this.normalVoteRate = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(GamblerOption.NormalVoteRate));
-        this.minVoteNum = OptionHolder.AllOption[
-            GetRoleOptionId(GamblerOption.MinVoteNum)].GetValue() - 1;
-        this.maxVoteNum = OptionHolder.AllOption[
-            GetRoleOptionId(GamblerOption.MaxVoteNum)].GetValue() - 1;
+        this.minVoteNum = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(GamblerOption.MinVoteNum));
+        this.maxVoteNum = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(GamblerOption.MaxVoteNum));
     }
 }
