@@ -59,6 +59,12 @@
                 _s7 = RandomGenerator.CreateLongStrongSeed();
             } 
             while ((_s2 | _s3 | _s4 | _s5 | _s6 | _s7) == 0); // at least one value must be non-zero
+
+            while ((_s0 | _s1) == 0)
+            {
+                _s0 = RandomGenerator.CreateStrongSeed();
+                _s1 = RandomGenerator.CreateStrongSeed();
+            }
         }
     }
 }

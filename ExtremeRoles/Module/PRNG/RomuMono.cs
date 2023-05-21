@@ -22,6 +22,10 @@
         protected override void Initialize(ulong seed, ulong initStete)
         {
             state = ((uint)(seed >> 32) & 0x1fffffffu) + 1156979152u;
+            while (state == 0)
+            {
+                state = RandomGenerator.CreateStrongSeed();
+            }
         }
     }
 }

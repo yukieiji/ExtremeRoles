@@ -37,6 +37,12 @@
                 zState = RandomGenerator.CreateLongStrongSeed();
             } 
             while (zState == 0); // at least one value must be non-zero
+
+            while ((xState | yState) == 0)
+            {
+                xState = RandomGenerator.CreateLongStrongSeed();
+                yState = RandomGenerator.CreateLongStrongSeed();
+            }
         }
     }
 }
