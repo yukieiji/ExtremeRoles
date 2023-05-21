@@ -155,6 +155,13 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
         roleAssignNumOption.SetUpdateOption(roleSetNumOption);
 
+        new IntCustomOption(
+            GetRoleOptionId(RoleCommonOption.AssignWeight),
+            RoleCommonOption.AssignWeight.ToString(),
+            1000, 1, 1000, 1,
+            roleSetOption,
+            tab: OptionTab.Combination);
+
         if (this.canAssignImposter)
         {
             var isImposterAssignOps = new BoolCustomOption(

@@ -15,13 +15,14 @@ public enum RoleCommonOption
 {
     RoleNum = 20,
     SpawnRate,
+    AssignWeight,
     HasOtherVision,
     Vision,
     ApplyEnvironmentVisionEffect,
 }
 public enum KillerCommonOption
 {
-    HasOtherKillRange = 25,
+    HasOtherKillRange = 40,
     KillRange,
     HasOtherKillCool,
     KillCoolDown,
