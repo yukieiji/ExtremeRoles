@@ -186,13 +186,13 @@ public sealed class AllOptionHolder
         {
             case ValueType.Int:
                 var intOption = this.intOption.Get(id) as IValueOption<T>;
-                return intOption.GetValue();
+                return intOption!.GetValue();
             case ValueType.Float:
                 var floatOption = this.floatOption.Get(id) as IValueOption<T>;
-                return floatOption.GetValue();
+                return floatOption!.GetValue();
             case ValueType.Bool:
                 var boolOption = this.boolOption.Get(id) as IValueOption<T>;
-                return boolOption.GetValue();
+                return boolOption!.GetValue();
             default:
                 return default(T);
         }
