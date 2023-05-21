@@ -78,6 +78,8 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
                 OptionManager.ValueType.Int));
             int roleSet = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
+            int weight = allOption.GetValue<int>(
+                role.GetRoleOptionId(RoleCommonOption.AssignWeight));
             bool isMultiAssign = allOption.GetValue<bool>(
                 role.GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
@@ -94,6 +96,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
                     role: role,
                     spawnSetNum: roleSet,
                     spawnRate: spawnRate,
+                    weight: weight,
                     isMultiAssign: isMultiAssign));
 
             if (role is GhostAndAliveCombinationRoleManagerBase ghostComb)
@@ -110,6 +113,8 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
             int spawnRate = ISpawnDataManager.ComputePercentage(allOption.Get<int>(
                 role.GetRoleOptionId(RoleCommonOption.SpawnRate),
                 OptionManager.ValueType.Int));
+            int weight = allOption.GetValue<int>(
+                role.GetRoleOptionId(RoleCommonOption.AssignWeight));
             int roleNum = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
 
@@ -122,7 +127,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
             }
 
             CurrentSingleRoleSpawnData[role.Team].Add(
-                intedRoleId, new SingleRoleSpawnData(roleNum, spawnRate));
+                intedRoleId, new SingleRoleSpawnData(roleNum, spawnRate, weight));
             CurrentSingleRoleUseNum[role.Team] += roleNum;
         }
     }

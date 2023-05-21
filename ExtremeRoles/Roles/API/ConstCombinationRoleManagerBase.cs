@@ -103,6 +103,13 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
             false, roleSetOption,
             tab: OptionTab.Combination);
 
+        new IntCustomOption(
+            GetRoleOptionId(RoleCommonOption.AssignWeight),
+            RoleCommonOption.AssignWeight.ToString(),
+            1000, 1, 1000, 1,
+            roleSetOption,
+            tab: OptionTab.Combination);
+
         return roleSetOption;
     }
 

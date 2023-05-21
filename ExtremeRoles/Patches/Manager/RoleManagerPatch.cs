@@ -126,7 +126,8 @@ public static class RoleManagerSelectRolesPatch
 
         List<CombinationRoleAssignData> combRoleListData = createCombinationRoleListData(
             assignData, ref spawnData);
-        var shuffledRoleListData = combRoleListData.OrderBy(x => RandomGenerator.Instance.Next());
+        var shuffledRoleListData = combRoleListData.OrderBy(
+            x => RandomGenerator.Instance.Next());
         assignData.Shuffle();
 
         List<PlayerControl> anotherRoleAssignPlayer = new List<PlayerControl>();
@@ -281,12 +282,16 @@ public static class RoleManagerSelectRolesPatch
 
         if (!targetPlayer.Any() || !targetPlayer.Any()) { return; }
 
-        List<int> spawnCheckRoleId = createSingleRoleIdData(teamSpawnData);
+        List<(int intedRoleId, int weight)> spawnCheckRoleId = 
+            createSingleRoleIdData(teamSpawnData);
 
         if (!spawnCheckRoleId.Any()) { return; }
 
-        var shuffledSpawnCheckRoleId = spawnCheckRoleId.OrderBy(
-            x => RandomGenerator.Instance.Next()).ToList();
+        var shuffledSpawnCheckRoleId = spawnCheckRoleId
+            .OrderByDescending(x => x.weight) // まずは重みでソート
+            .ThenBy(x => RandomGenerator.Instance.Next()) //同じ重みをシャッフル
+            .Select(x => x.intedRoleId)
+            .ToList();
         var shuffledTargetPlayer = targetPlayer.OrderBy(x => RandomGenerator.Instance.Next());
 
         foreach (PlayerControl player in shuffledTargetPlayer)
@@ -355,8 +360,10 @@ public static class RoleManagerSelectRolesPatch
             Int32OptionNames.NumImpostors);
         
         NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
-        var shuffleCombRole = spawnData.CurrentCombRoleSpawnData.OrderBy(
-            x => RandomGenerator.Instance.Next());
+        var shuffleCombRole = spawnData.CurrentCombRoleSpawnData
+            .OrderByDescending(x => x.Value.Weight) // まずは重みでソート
+            .ThenBy(x => RandomGenerator.Instance.Next()); //その上で全体のソート
+
         foreach (var (combType, combSpawnData) in shuffleCombRole)
         {
             var roleManager = combSpawnData.Role;
@@ -365,6 +372,7 @@ public static class RoleManagerSelectRolesPatch
             {
                 roleManager.AssignSetUpInit(curImpNum);
                 bool isSpawn = combSpawnData.IsSpawn();
+                
                 int reduceCrewmateRole = 0;
                 int reduceImpostorRole = 0;
                 int reduceNeutralRole = 0;
@@ -430,10 +438,10 @@ public static class RoleManagerSelectRolesPatch
         return roleListData;
     }
 
-    private static List<int> createSingleRoleIdData(
+    private static List<(int intedRoleId, int weight)> createSingleRoleIdData(
         Dictionary<int, SingleRoleSpawnData> spawnData)
     {
-        List<int> result = new List<int>();
+        List<(int, int)> result = new List<(int, int)>();
 
         foreach (var (intedRoleId, data) in spawnData)
         {
@@ -441,7 +449,7 @@ public static class RoleManagerSelectRolesPatch
             {
                 if (!data.IsSpawn()) { continue; }
 
-                result.Add(intedRoleId);
+                result.Add((intedRoleId, data.Weight));
             }
         }
 

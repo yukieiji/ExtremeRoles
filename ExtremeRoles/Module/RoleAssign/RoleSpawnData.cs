@@ -8,6 +8,8 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public abstract class SpawnData
 {
+    public int Weight { get; protected set; } = 1000;
+
     public int SpawnSetNum { get; protected set; }
     public int SpawnRate { get; protected set; }
 
@@ -25,10 +27,11 @@ public abstract class SpawnData
 
 public sealed class SingleRoleSpawnData : SpawnData
 {
-    public SingleRoleSpawnData(int spawnSetNum, int spawnRate)
+    public SingleRoleSpawnData(int spawnSetNum, int spawnRate, int weight)
     {
         SpawnSetNum = spawnSetNum;
         SpawnRate = spawnRate;
+        Weight = weight;
     }
 }
 
@@ -39,11 +42,12 @@ public sealed class CombinationRoleSpawnData : SpawnData
 
     public CombinationRoleSpawnData(
         CombinationRoleManagerBase role,
-        int spawnSetNum, int spawnRate, bool isMultiAssign)
+        int spawnSetNum, int spawnRate, int weight, bool isMultiAssign)
     {
         Role = role;
         SpawnSetNum = spawnSetNum;
         SpawnRate = spawnRate;
+        Weight = weight;
         IsMultiAssign = isMultiAssign;
     }
 }
@@ -56,11 +60,13 @@ public sealed class GhostRoleSpawnData : SpawnData
 
     public GhostRoleSpawnData(
         ExtremeGhostRoleId id, int spawnSetNum,
-        int spawnRate, HashSet<ExtremeRoleId> filter)
+        int spawnRate, int weight,
+        HashSet<ExtremeRoleId> filter)
     {
         Id = id;
         SpawnSetNum = spawnSetNum;
         SpawnRate = spawnRate;
+        Weight = weight;
         this.filter = filter;
     }
 

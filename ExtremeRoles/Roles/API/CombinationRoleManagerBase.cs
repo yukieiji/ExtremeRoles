@@ -3,14 +3,12 @@
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Module.CustomOption;
-
 namespace ExtremeRoles.Roles.API;
 
 
 public enum CombinationRoleCommonOption
 {
-    IsMultiAssign = 30,
+    IsMultiAssign = 50,
     AssignsNum,
     IsAssignImposter,
     ImposterSelectedRate,
