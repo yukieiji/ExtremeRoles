@@ -111,7 +111,7 @@ public sealed class GhostRoleSpawnDataManager :
         {
             Helper.Logging.Debug($"Add {team} ghost role spawn data");
             this.useGhostRole[team] = spawnDataList
-                .OrderBy(x => x.Weight)
+                .OrderByDescending(x => x.Weight)
                 .ThenBy(x => RandomGenerator.Instance.Next())
                 .ToList();
         }

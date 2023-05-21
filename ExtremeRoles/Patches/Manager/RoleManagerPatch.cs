@@ -288,7 +288,7 @@ public static class RoleManagerSelectRolesPatch
         if (!spawnCheckRoleId.Any()) { return; }
 
         var shuffledSpawnCheckRoleId = spawnCheckRoleId
-            .OrderBy(x => x.weight) // まずは重みでソート
+            .OrderByDescending(x => x.weight) // まずは重みでソート
             .ThenBy(x => RandomGenerator.Instance.Next()) //同じ重みをシャッフル
             .Select(x => x.intedRoleId)
             .ToList();
@@ -361,7 +361,7 @@ public static class RoleManagerSelectRolesPatch
         
         NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
         var shuffleCombRole = spawnData.CurrentCombRoleSpawnData
-            .OrderBy(x => x.Value.Weight) // まずは重みでソート
+            .OrderByDescending(x => x.Value.Weight) // まずは重みでソート
             .ThenBy(x => RandomGenerator.Instance.Next()); //その上で全体のソート
 
         foreach (var (combType, combSpawnData) in shuffleCombRole)
