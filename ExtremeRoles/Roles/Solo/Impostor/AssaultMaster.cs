@@ -254,7 +254,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
             GetRoleOptionId(AssaultMasterOption.ReloadReduceKillCoolTimePerStock));
         this.isResetCoolTimeWhenKill = allOpt.GetValue<bool>(
             GetRoleOptionId(AssaultMasterOption.IsResetReloadCoolTimeWhenKill));
-        this.timerReduceRate = 1.0f - allOpt.GetValue<float>(
+        this.timerReduceRate = 1.0f - allOpt.GetValue<int>(
             GetRoleOptionId(AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock)) / 100.0f;
 
         this.stock = 0;
