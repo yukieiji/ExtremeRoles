@@ -5,6 +5,7 @@ using System.Linq;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -233,6 +234,7 @@ public sealed class AllOptionHolder
                 }
             }
         );
+        RoleAssignFilter.Instance.SwitchPreset();
     }
 
     public void ShareOptionSelections()

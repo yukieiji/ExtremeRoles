@@ -91,7 +91,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
             hideObj.SetActive(false);
 
             // アセットバンドルからロード
-            GameObject viewObj = UnityEngine.Object.Instantiate(
+            GameObject viewObj = Object.Instantiate(
                 Loader.GetUnityObjectFromResources<GameObject>(
                     "ExtremeRoles.Resources.Asset.roleassignfilter.asset",
                     "assets/roles/roleassignfilter.prefab"));
