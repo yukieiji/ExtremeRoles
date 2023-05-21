@@ -1,11 +1,8 @@
-﻿using System.Linq;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles;
 
