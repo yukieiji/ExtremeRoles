@@ -16,8 +16,13 @@ public sealed class Xorshift64 : RNG64Base
 
     public override ulong NextUInt64()
     {
-        x = x ^ (x << 7);
-        x = x ^ (x >> 9);
+        ulong x0 = x;
+
+        x0 ^= x0 << 7;
+        x0 ^= x0 >> 9;
+
+        x = x0;
+
         return x;
     }
 
