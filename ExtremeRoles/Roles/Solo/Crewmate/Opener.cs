@@ -158,7 +158,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
         this.isUpgraded = false;
         this.range = AllOptionHolder.Instance.GetValue<float>(
             GetRoleOptionId(OpenerOption.Range));
-        this.reduceRate = AllOptionHolder.Instance.GetValue<float>(
+        this.reduceRate = AllOptionHolder.Instance.GetValue<int>(
             GetRoleOptionId(OpenerOption.ReduceRate));
         this.plusAbilityNum = AllOptionHolder.Instance.GetValue<int>(
             GetRoleOptionId(OpenerOption.PlusAbility));
