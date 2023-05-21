@@ -8,6 +8,8 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public abstract class SpawnData
 {
+    public int Weight { get; protected set; } = 1000;
+
     public int SpawnSetNum { get; protected set; }
     public int SpawnRate { get; protected set; }
 
