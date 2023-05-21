@@ -259,7 +259,7 @@ public interface IShipGlobalOption
 
     public static T GetCommonOptionValue<T>(GlobalOption optionKey)
         where T :
-            notnull, IComparable, IConvertible,
+            struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
         return OptionManager.Instance.GetValue<T>((int)optionKey);

@@ -67,8 +67,8 @@ public interface IOptionInfo
 
 public interface IValueOption<Value>
     : IOptionInfo
-    where Value : 
-        notnull, IComparable, IConvertible,
+    where Value :
+        struct, IComparable, IConvertible,
         IComparable<Value>, IEquatable<Value>
 {
     public Value GetValue();
@@ -79,9 +79,9 @@ public interface IValueOption<Value>
 public abstract class CustomOptionBase<OutType, SelectionType>
     : IValueOption<OutType>
     where OutType :
-        notnull, IComparable, IConvertible,
+        struct, IComparable, IConvertible,
         IComparable<OutType>, IEquatable<OutType>
-    where SelectionType : 
+    where SelectionType :
         notnull, IComparable, IConvertible,
         IComparable<SelectionType>, IEquatable<SelectionType>
 {

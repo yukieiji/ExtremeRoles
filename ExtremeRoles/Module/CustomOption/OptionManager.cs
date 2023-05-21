@@ -55,7 +55,7 @@ public sealed class OptionManager
 
     public void Add<SelectionType>(int id, IValueOption<SelectionType> option)
         where SelectionType :
-            notnull, IComparable, IConvertible,
+            struct, IComparable, IConvertible,
             IComparable<SelectionType>, IEquatable<SelectionType>
     {
         if (option is IValueOption<int> intOption)
@@ -76,7 +76,7 @@ public sealed class OptionManager
 
     public bool TryGet<T>(int id, out IValueOption<T> option)
         where T :
-            notnull, IComparable, IConvertible, 
+            struct, IComparable, IConvertible, 
             IComparable<T>, IEquatable<T>
     {
         bool result = this.allOptionId.TryGetValue(id, out ValueType type);
@@ -112,7 +112,7 @@ public sealed class OptionManager
 
     public IValueOption<T> Get<T>(int id, ValueType type)
         where T :
-            notnull, IComparable, IConvertible,
+            struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
 
         => type switch
@@ -190,7 +190,7 @@ public sealed class OptionManager
 
     public T GetValue<T>(int id)
         where T :
-            notnull, IComparable, IConvertible,
+            struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
         ValueType type = this.allOptionId[id];
@@ -323,7 +323,7 @@ public sealed class OptionManager
 
     private static void shareOption<T>(TypeOptionHolder<T> holder)
         where T :
-            notnull, IComparable, IConvertible,
+            struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
         var splitOption = holder.Select((x, i) =>

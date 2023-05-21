@@ -6,7 +6,7 @@ namespace ExtremeRoles.Module.CustomOption;
 
 public sealed class TypeOptionHolder<T> : IEnumerable<KeyValuePair<int, IValueOption<T>>>
     where T :
-        notnull, IComparable, IConvertible,
+        struct, IComparable, IConvertible,
         IComparable<T>, IEquatable<T>
 {
     public Type Type => this.type;
@@ -26,7 +26,7 @@ public sealed class TypeOptionHolder<T> : IEnumerable<KeyValuePair<int, IValueOp
 
     public bool TryGetValue<GetType>(int id, out IValueOption<GetType> option)
         where GetType :
-            notnull, IComparable, IConvertible,
+            struct, IComparable, IConvertible,
             IComparable<GetType>, IEquatable<GetType>
     {
         bool result = this.option.TryGetValue(id, out var outOption);
