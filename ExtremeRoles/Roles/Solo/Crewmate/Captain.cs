@@ -365,7 +365,7 @@ public sealed class Captain :
 
         this.chargeVoteNum = allOpt.GetValue<int>(
            GetRoleOptionId(CaptainOption.ChargeVoteWhenSkip));
-        this.defaultVote = allOpt.GetValue<int>(
+        this.defaultVote = allOpt.GetValue<float>(
            GetRoleOptionId(CaptainOption.AwakedDefaultVoteNum));
         this.awakeTaskGage = allOpt.GetValue<int>(
            GetRoleOptionId(CaptainOption.AwakeTaskGage)) / 100.0f;
