@@ -5,11 +5,9 @@ using UnityEngine;
 using HarmonyLib;
 using AmongUs.GameOptions;
 
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
