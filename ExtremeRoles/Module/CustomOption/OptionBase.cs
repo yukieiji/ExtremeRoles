@@ -10,6 +10,7 @@ using BepInEx.Configuration;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using static Il2CppSystem.Linq.Expressions.Interpreter.CastInstruction.CastInstructionNoT;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -64,14 +65,25 @@ public interface IOptionInfo
     public string ToHudStringWithChildren(int indent = 0);
 }
 
-public interface IValueOption<Value> : IOptionInfo
+public interface IValueOption<Value>
+    : IOptionInfo
+    where Value : 
+        notnull, IComparable, IConvertible,
+        IComparable<Value>, IEquatable<Value>
 {
     public Value GetValue();
     public void Update(Value newValue);
     public void SetUpdateOption(IValueOption<Value> option);
 }
 
-public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<OutType>
+public abstract class CustomOptionBase<OutType, SelectionType>
+    : IValueOption<OutType>
+    where OutType :
+        notnull, IComparable, IConvertible,
+        IComparable<OutType>, IEquatable<OutType>
+    where SelectionType : 
+        notnull, IComparable, IConvertible,
+        IComparable<SelectionType>, IEquatable<SelectionType>
 {
 
     public int CurSelection { get; private set; }

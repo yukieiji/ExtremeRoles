@@ -5,6 +5,9 @@ using System.Collections.Generic;
 namespace ExtremeRoles.Module.CustomOption;
 
 public sealed class TypeOptionHolder<T> : IEnumerable<KeyValuePair<int, IValueOption<T>>>
+    where T :
+        notnull, IComparable, IConvertible,
+        IComparable<T>, IEquatable<T>
 {
     public Type Type => this.type;
     public ICollection<IValueOption<T>> Values => this.option.Values;
@@ -22,6 +25,9 @@ public sealed class TypeOptionHolder<T> : IEnumerable<KeyValuePair<int, IValueOp
         => this.option[index].GetValue();
 
     public bool TryGetValue<GetType>(int id, out IValueOption<GetType> option)
+        where GetType :
+            notnull, IComparable, IConvertible,
+            IComparable<GetType>, IEquatable<GetType>
     {
         bool result = this.option.TryGetValue(id, out var outOption);
         option = outOption as IValueOption<GetType>;

@@ -54,6 +54,9 @@ public sealed class OptionManager
     }
 
     public void Add<SelectionType>(int id, IValueOption<SelectionType> option)
+        where SelectionType :
+            notnull, IComparable, IConvertible,
+            IComparable<SelectionType>, IEquatable<SelectionType>
     {
         if (option is IValueOption<int> intOption)
         {
@@ -72,6 +75,9 @@ public sealed class OptionManager
     public bool Contains(int id) => this.allOptionId.ContainsKey(id);
 
     public bool TryGet<T>(int id, out IValueOption<T> option)
+        where T :
+            notnull, IComparable, IConvertible, 
+            IComparable<T>, IEquatable<T>
     {
         bool result = this.allOptionId.TryGetValue(id, out ValueType type);
         option = null;
@@ -105,6 +111,10 @@ public sealed class OptionManager
     }
 
     public IValueOption<T> Get<T>(int id, ValueType type)
+        where T :
+            notnull, IComparable, IConvertible,
+            IComparable<T>, IEquatable<T>
+
         => type switch
         {
             ValueType.Int   => this.intOption.Get(id) as IValueOption<T>,
@@ -179,6 +189,9 @@ public sealed class OptionManager
     }
 
     public T GetValue<T>(int id)
+        where T :
+            notnull, IComparable, IConvertible,
+            IComparable<T>, IEquatable<T>
     {
         ValueType type = this.allOptionId[id];
 
@@ -309,6 +322,9 @@ public sealed class OptionManager
     }
 
     private static void shareOption<T>(TypeOptionHolder<T> holder)
+        where T :
+            notnull, IComparable, IConvertible,
+            IComparable<T>, IEquatable<T>
     {
         var splitOption = holder.Select((x, i) =>
             new { data = x, indexgroup = i / chunkSize })
