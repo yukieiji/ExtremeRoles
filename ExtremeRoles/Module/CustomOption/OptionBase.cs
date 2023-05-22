@@ -10,7 +10,6 @@ using BepInEx.Configuration;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
-using static Il2CppSystem.Linq.Expressions.Interpreter.CastInstruction.CastInstructionNoT;
 
 namespace ExtremeRoles.Module.CustomOption;
 
