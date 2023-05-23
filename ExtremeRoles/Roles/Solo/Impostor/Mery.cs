@@ -41,15 +41,14 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             this.img.sprite = Loader.CreateSpriteFromResources(
                Path.MeryNoneActiveVent, 125f);
 
-            this.body.gameObject.SetActive(canSee);
+            this.body.SetActive(canSee);
             this.body.transform.position = new Vector3(
                 pos.x, pos.y, (pos.y / 1000f));
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
                 ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                    this.body.gameObject,
-                    Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                    this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 
             this.activePlayerNum = activeNum;
@@ -136,7 +135,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
             vent.myRend = ventRenderer;           
             vent.name = "MaryVent_" + vent.Id;
-            vent.gameObject.SetActive(this.body.gameObject.active);
+            vent.gameObject.SetActive(this.body.active);
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {

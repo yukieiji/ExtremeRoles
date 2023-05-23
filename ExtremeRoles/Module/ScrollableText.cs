@@ -108,7 +108,7 @@ namespace ExtremeRoles.Module
 
             this.anchorPoint.transform.parent = parent;
             this.anchorPoint.transform.localPosition = pos;
-            this.anchorPoint.gameObject.layer = 5;
+            this.anchorPoint.layer = 5;
             this.body.transform.localPosition += bodyOffset;
         }
 

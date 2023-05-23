@@ -17,7 +17,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
             text.SetFontSize(3.0f);
             text.SetMessage(Translation.GetString("roleAssignNow"));
 
-            roleAssignText.gameObject.SetActive(true);
+            roleAssignText.SetActive(true);
 
             yield return waitRoleAssign();
 

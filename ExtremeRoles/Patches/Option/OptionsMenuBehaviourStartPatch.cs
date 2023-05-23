@@ -152,7 +152,7 @@ public static class OptionsMenuBehaviourStartPatch
         transform.localPosition = pos;
 
         Object.Destroy(popUp.GetComponent<OptionsMenuBehaviour>());
-        foreach (var gObj in popUp.gameObject.getAllChilds())
+        foreach (var gObj in popUp.getAllChilds())
         {
             if (gObj.name != "Background" && gObj.name != "CloseButton")
             {

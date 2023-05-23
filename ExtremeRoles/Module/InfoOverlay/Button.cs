@@ -44,7 +44,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         public static void SetInfoButtonToInGamePositon()
         {
-            Body.gameObject.SetActive(true);
+            Body.SetActive(true);
             Body.transform.localPosition = new Vector3(
                 0.0f, -1.75f, 0.0f);
         }

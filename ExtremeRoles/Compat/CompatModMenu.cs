@@ -45,7 +45,7 @@ internal static class CompatModMenu
             {
                 initMenu();
             }
-            menuBody.gameObject.SetActive(true);
+            menuBody.SetActive(true);
             
         }));
     }

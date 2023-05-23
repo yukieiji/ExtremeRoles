@@ -35,7 +35,7 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
             eosManager.hasRunLoginFlow = true;
             eosManager.loginFlowFinished = true;
 
-            AccountManager.Instance.privacyPolicyBg.gameObject.SetActive(false);
+            AccountManager.Instance.privacyPolicyBg.SetActive(false);
             eosManager.CloseStartupWaitScreen();
             eosManager.HideCallbackWaitAnim();
             eosManager.IsAllowedOnline(true);

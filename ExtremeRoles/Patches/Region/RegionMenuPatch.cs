@@ -70,11 +70,11 @@ public static class RegionMenuOpenPatch
         if (ipField == null || ipText == null)
         {
             ipField = UnityObject.Instantiate(
-                gameIdTextBox.gameObject, __instance.transform);
+                gameIdTextBox, __instance.transform);
             ipText = UnityObject.Instantiate(
                 Module.Prefab.Text);
 
-            ipField.gameObject.name = "ipTextBox";
+            ipField.name = "ipTextBox";
             ipText.gameObject.name = "ipText";
             ipText.fontSize = ipText.fontSizeMin = ipText.fontSizeMax = 2.0f;
 
@@ -118,11 +118,11 @@ public static class RegionMenuOpenPatch
         if (portField == null || portText == null)
         {
             portField = UnityObject.Instantiate(
-                gameIdTextBox.gameObject, __instance.transform);
+                gameIdTextBox, __instance.transform);
             portText = UnityObject.Instantiate(
                 Module.Prefab.Text);
 
-            portField.gameObject.name = "portTextBox";
+            portField.name = "portTextBox";
             portText.gameObject.name = "portText";
             portText.fontSize = portText.fontSizeMin = portText.fontSizeMax = 2.0f;
 

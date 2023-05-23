@@ -31,8 +31,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
                 ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                    this.body.gameObject,
-                    Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                    this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
         }
 
