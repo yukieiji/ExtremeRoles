@@ -41,7 +41,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         this.menu = base.gameObject.GetComponent<GameSettingMenu>();
 
         // ForceEnable Tabs for fixing HideNSeekOptions turnoff tabs
-        this.menu.Tabs.gameObject.SetActive(true);
+        this.menu.Tabs.SetActive(true);
 
         createRoleAssignFilterButton();
 

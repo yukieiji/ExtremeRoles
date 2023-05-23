@@ -7,7 +7,6 @@ using TMPro;
 
 using Il2CppInterop.Runtime.Attributes;
 
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -52,7 +51,7 @@ public sealed class OptionMenuTab : MonoBehaviour
 
         string name = string.Format(menuNameTemplate, tab.ToString());
         
-        obj.gameObject.name = name;
+        obj.name = name;
         menu.menuBody.name = $"{name}_menu";
 
         // どうも中身を消してるテンプレートから作ってるのに生き残りが居るらしい

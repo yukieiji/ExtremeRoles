@@ -198,7 +198,7 @@ internal static class CompatModMenu
             closeButton.OnClick = new Button.ButtonClickedEvent();
             closeButton.OnClick.AddListener((System.Action)(() =>
             {
-                menuBody.gameObject.SetActive(false);
+                menuBody.SetActive(false);
 
             }));
         }

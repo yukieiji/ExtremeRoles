@@ -20,7 +20,7 @@ namespace ExtremeRoles.Module.InfoOverlay
                 GameObject.Find("TopRight/MenuButton").transform);
             Object.DontDestroyOnLoad(Body);
             Body.name = "infoRoleButton";
-            Body.gameObject.SetActive(true);
+            Body.SetActive(true);
             Body.layer = 5;
             Body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 

@@ -200,8 +200,8 @@ public static class OptionsMenuBehaviourStartPatch
 
     private static void refreshOpen()
     {
-        popUp.gameObject.SetActive(false);
-        popUp.gameObject.SetActive(true);
+        popUp.SetActive(false);
+        popUp.SetActive(true);
         setUpOptions();
     }
 
