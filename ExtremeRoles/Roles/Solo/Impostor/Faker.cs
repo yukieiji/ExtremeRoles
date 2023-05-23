@@ -47,7 +47,6 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 
         private const float petOffset = 0.72f;
 
-        private const string defaultPetId = "0";
         private const string defaultPetName = "EmptyPet(Clone)";
         private const string nameTextObjName = "NameText_TMP";
         private const string colorBindTextName = "ColorblindName_TMP";
