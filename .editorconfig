@@ -105,6 +105,7 @@ dotnet_diagnostic.CA1841.severity = warning
 dotnet_diagnostic.CA1845.severity = warning
 dotnet_diagnostic.UNT0018.severity = warning
 dotnet_diagnostic.UNT0002.severity = warning
+dotnet_diagnostic.CA1825.severity = warning
 
 [*.vb]
 #### �����X�^�C�� ####
