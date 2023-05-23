@@ -2,9 +2,6 @@
 using System.Runtime.CompilerServices;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
-using Rewired.Utils.Platforms.Windows;
-using static Il2CppSystem.Xml.Schema.FacetsChecker.FacetsCompiler;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -46,7 +43,7 @@ public abstract partial class SingleRoleBase
         new IntCustomOption(
             GetRoleOptionId(RoleCommonOption.AssignWeight),
             RoleCommonOption.AssignWeight.ToString(),
-            1000, 1, 1000, 1,
+            500, 1, 1000, 1,
             roleSetOption, tab:this.Tab);
 
         return roleSetOption;
