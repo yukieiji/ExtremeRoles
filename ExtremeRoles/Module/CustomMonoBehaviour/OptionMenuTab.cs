@@ -60,7 +60,7 @@ public sealed class OptionMenuTab : MonoBehaviour
         {
             Destroy(option.gameObject);
         }
-        menu.menuBody.Children = new OptionBehaviour[] { };
+        menu.menuBody.Children = Array.Empty<OptionBehaviour>();
 
         return menu;
     }

@@ -246,7 +246,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
             Destroy(option.gameObject);
         }
 
-        menu.Children = new OptionBehaviour[] { };
+        menu.Children = Array.Empty<OptionBehaviour>();
 
         template.name = templateName;
         template.SetActive(false);
