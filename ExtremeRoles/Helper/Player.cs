@@ -226,20 +226,19 @@ public static class Player
             playerPos, range,
             Constants.PlayersOnlyMask))
         {
-            if (collider2D.tag == "DeadBody")
-            {
-                DeadBody component = collider2D.GetComponent<DeadBody>();
+            if (!collider2D.CompareTag("DeadBody")) { continue; }
 
-                if (component && !component.Reported)
+            DeadBody component = collider2D.GetComponent<DeadBody>();
+
+            if (component && !component.Reported)
+            {
+                Vector2 truePosition = component.TruePosition;
+                if ((Vector2.Distance(truePosition, playerPos) <= range) &&
+                    (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
+                    (!PhysicsHelpers.AnythingBetween(
+                        playerPos, truePosition, Constants.ShipAndObjectsMask, false)))
                 {
-                    Vector2 truePosition = component.TruePosition;
-                    if ((Vector2.Distance(truePosition, playerPos) <= range) &&
-                        (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
-                        (!PhysicsHelpers.AnythingBetween(
-                            playerPos, truePosition, Constants.ShipAndObjectsMask, false)))
-                    {
-                        return GameData.Instance.GetPlayerById(component.ParentId);
-                    }
+                    return GameData.Instance.GetPlayerById(component.ParentId);
                 }
             }
         }

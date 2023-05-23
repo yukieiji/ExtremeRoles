@@ -158,22 +158,21 @@ public sealed class Poltergeist : GhostRoleBase
         foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
             truePosition, this.range, Constants.PlayersOnlyMask))
         {
-            if (collider2D.tag == "DeadBody")
-            {
-                DeadBody component = collider2D.GetComponent<DeadBody>();
+            if (!collider2D.CompareTag("DeadBody")) { continue; }
+            
+            DeadBody component = collider2D.GetComponent<DeadBody>();
 
-                if (component && !component.Reported && component.transform.parent == null)
+            if (component && !component.Reported && component.transform.parent == null)
+            {
+                Vector2 truePosition2 = component.TruePosition;
+                if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
+                    (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
+                    (!PhysicsHelpers.AnythingBetween(
+                        truePosition, truePosition2,
+                        Constants.ShipAndObjectsMask, false)))
                 {
-                    Vector2 truePosition2 = component.TruePosition;
-                    if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
-                        (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
-                        (!PhysicsHelpers.AnythingBetween(
-                            truePosition, truePosition2,
-                            Constants.ShipAndObjectsMask, false)))
-                    {
-                        this.targetBody = GameData.Instance.GetPlayerById(component.ParentId);
-                        break;
-                    }
+                    this.targetBody = GameData.Instance.GetPlayerById(component.ParentId);
+                    break;
                 }
             }
         }
