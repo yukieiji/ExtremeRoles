@@ -8,208 +8,205 @@ using UnityEngine;
 using HarmonyLib;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
-namespace ExtremeRoles.Patches.Option
-{
-    [HarmonyPatch(
-        typeof(IGameOptionsExtensions),
-        nameof(IGameOptionsExtensions.GetAdjustedNumImpostors))]
-    public static class IGameOptionsExtensionsNumImpostorsPatch
-    {
-        public static bool Prefix(ref int __result)
-        {
-            if (ExtremeGameModeManager.Instance.RoleSelector.IsAdjustImpostorNum) { return true; }
+namespace ExtremeRoles.Patches.Option;
 
-            __result = Math.Clamp(
-                GameOptionsManager.Instance.CurrentGameOptions.NumImpostors,
-                0, GameData.Instance.PlayerCount);
-            return false;
-        }
+[HarmonyPatch(
+    typeof(IGameOptionsExtensions),
+    nameof(IGameOptionsExtensions.GetAdjustedNumImpostors))]
+public static class IGameOptionsExtensionsNumImpostorsPatch
+{
+    public static bool Prefix(ref int __result)
+    {
+        if (ExtremeGameModeManager.Instance.RoleSelector.IsAdjustImpostorNum) { return true; }
+
+        __result = Math.Clamp(
+            GameOptionsManager.Instance.CurrentGameOptions.NumImpostors,
+            0, GameData.Instance.PlayerCount);
+        return false;
+    }
+}
+
+[HarmonyPatch(
+    typeof(IGameOptionsExtensions),
+    nameof(IGameOptionsExtensions.ToHudString))]
+public static class IGameOptionsExtensionsToHudStringPatch
+{
+    private const int maxLines = 28;
+    private static int page = 0;
+
+    public static void ChangePage(int num)
+    {
+        page += num;
     }
 
-    [HarmonyPatch(
-        typeof(IGameOptionsExtensions),
-        nameof(IGameOptionsExtensions.ToHudString))]
-    public static class IGameOptionsExtensionsToHudStringPatch
+    public static void Postfix(ref string __result)
     {
+        ExtremeGameModeManager egmm = ExtremeGameModeManager.Instance;
 
-        private const int maxLines = 28;
+        if (egmm == null) { return; }
 
-        private static void Postfix(ref string __result)
+        List<string> hudOptionPage = new List<string>()
         {
+            __result
+        };
 
-            ExtremeGameModeManager egmm = ExtremeGameModeManager.Instance;
+        List<string> allOptionStr = new List<string>()
+        {
+            getHudString(OptionCreator.CommonOptionKey.PresetSelection),
+            createRngOptionHudString(),
+            createRoleSpawnNumOptionHudString()
+        };
 
-            if (egmm == null) { return; }
-
-            List<string> hudOptionPage = new List<string>()
-            {
-                __result
-            };
-
-            List<string> allOptionStr = new List<string>()
-            {
-                getOption(OptionHolder.CommonOptionKey.PresetSelection).ToHudString(),
-                createRNGSetting(),
-                createRoleSpawnNumOptions()
-            };
-
-            if (egmm.RoleSelector.CanUseXion)
-            {
-                allOptionStr.Add(
-                    Design.ColoedString(
-                        ColorPalette.XionBlue,
-                        getOption(RoleGlobalOption.UseXion).ToHudString()));
-            }
-
-            allOptionStr.Add(egmm.ShipOption.ToHudString());
-
-            foreach (IOption option in OptionHolder.AllOption.Values)
-            {
-                int optionId = option.Id;
-
-                if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), optionId) ||
-                    Enum.IsDefined(typeof(RoleGlobalOption), optionId) ||
-                    Enum.IsDefined(typeof(GlobalOption), optionId))
-                {
-                    continue;
-                }
-
-
-                if (option.Parent == null &&
-                    option.Enabled &&
-                    egmm.RoleSelector.IsValidRoleOption(option))
-                {
-                    string optionStr = option.ToHudStringWithChildren(option.IsHidden ? 0 : 1);
-                    allOptionStr.Add(optionStr.Trim('\r', '\n'));
-                }
-            }
-
-            
-            int lineCount = 0;
-            StringBuilder pageBuilder = new StringBuilder();
-            foreach (string optionStr in allOptionStr)
-            {
-                int lines = optionStr.Count(c => c == '\n') + 1;
-
-                if (lineCount + lines > maxLines)
-                {
-                    hudOptionPage.Add(pageBuilder.ToString());
-                    pageBuilder.Clear();
-                    lineCount = 0;
-                }
-
-                pageBuilder
-                    .Append(optionStr)
-                    .AppendLine("\n");
-                lineCount += lines + 1;
-            }
-
-            if (pageBuilder.Length != 0)
-            {
-                hudOptionPage.Add(
-                    pageBuilder.ToString().Trim('\r', '\n'));
-            }
-
-            int numPages = hudOptionPage.Count;
-            int counter = OptionHolder.OptionsPage = OptionHolder.OptionsPage % numPages;
-
-            __result = string.Concat(
-                hudOptionPage[counter].Trim('\r', '\n'),
-                "\n\n",
-                translate("pressTabForMore"),
-                $" ({counter + 1}/{numPages})");
-
+        if (egmm.RoleSelector.CanUseXion)
+        {
+            allOptionStr.Add(
+                Design.ColoedString(
+                    ColorPalette.XionBlue,
+                    getHudString(RoleGlobalOption.UseXion)));
         }
 
-        private static string createRoleSpawnNumOptions()
+        allOptionStr.Add(egmm.ShipOption.ToHudString());
+
+        var allOption = OptionManager.Instance;
+
+        foreach (IOptionInfo option in allOption.GetAllIOption())
         {
-            StringBuilder entry = new StringBuilder();
+            int optionId = option.Id;
 
-            // 生存役職周り
-            string optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("crewmateRoles"));
-            int min = getOption(RoleGlobalOption.MinCrewmateRoles).GetValue();
-            int max = getOption(RoleGlobalOption.MaxCrewmateRoles).GetValue();
-            if (min > max) { min = max; }
-            string optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
+            if (Enum.IsDefined(typeof(OptionCreator.CommonOptionKey), optionId) ||
+                Enum.IsDefined(typeof(RoleGlobalOption), optionId) ||
+                Enum.IsDefined(typeof(GlobalOption), optionId))
+            {
+                continue;
+            }
 
-            optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("neutralRoles"));
-            min = getOption(RoleGlobalOption.MinNeutralRoles).GetValue();
-            max = getOption(RoleGlobalOption.MaxNeutralRoles).GetValue();
-            if (min > max) { min = max; }
-            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
 
-            optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("impostorRoles"));
-            min = getOption(RoleGlobalOption.MinImpostorRoles).GetValue();
-            max = getOption(RoleGlobalOption.MaxImpostorRoles).GetValue();
+            if (option.Parent == null &&
+                option.Enabled &&
+                egmm.RoleSelector.IsValidRoleOption(option))
+            {
+                string optionStr = option.ToHudStringWithChildren(option.IsHidden ? 0 : 1);
+                allOptionStr.Add(optionStr.Trim('\r', '\n'));
+            }
+        }
+        
+        int lineCount = 0;
+        StringBuilder pageBuilder = new StringBuilder();
+        foreach (string optionStr in allOptionStr)
+        {
+            int lines = optionStr.Count(c => c == '\n') + 1;
 
-            if (min > max) { min = max; }
-            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
+            if (lineCount + lines > maxLines)
+            {
+                hudOptionPage.Add(pageBuilder.ToString());
+                pageBuilder.Clear();
+                lineCount = 0;
+            }
 
-            entry.AppendLine();
-
-            // 幽霊役職周り
-            optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("crewmateGhostRoles"));
-            min = getOption(RoleGlobalOption.MinCrewmateGhostRoles).GetValue();
-            max = getOption(RoleGlobalOption.MaxCrewmateGhostRoles).GetValue();
-            if (min > max) { min = max; }
-            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
-
-            optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("neutralGhostRoles"));
-            min = getOption(RoleGlobalOption.MinNeutralGhostRoles).GetValue();
-            max = getOption(RoleGlobalOption.MaxNeutralGhostRoles).GetValue();
-            if (min > max) { min = max; }
-            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
-
-            optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("impostorGhostRoles"));
-            min = getOption(RoleGlobalOption.MinImpostorGhostRoles).GetValue();
-            max = getOption(RoleGlobalOption.MaxImpostorGhostRoles).GetValue();
-
-            if (min > max) { min = max; }
-            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
-
-            return entry.ToString().Trim('\r', '\n');
+            pageBuilder
+                .Append(optionStr)
+                .AppendLine("\n");
+            lineCount += lines + 1;
         }
 
-        private static string createRNGSetting()
+        if (pageBuilder.Length != 0)
         {
-            StringBuilder rngOptBuilder = new StringBuilder();
-            rngOptBuilder.AppendLine(
-                getOption(OptionHolder.CommonOptionKey.UseStrongRandomGen).ToHudString());
-            rngOptBuilder.AppendLine(
-                getOption(OptionHolder.CommonOptionKey.UsePrngAlgorithm).ToHudString());
-
-            return rngOptBuilder.ToString().Trim('\r', '\n');
+            hudOptionPage.Add(
+                pageBuilder.ToString().Trim('\r', '\n'));
         }
 
-        private static string translate(string key)
-        {
-            return Translation.GetString(key);
-        }
+        int numPages = hudOptionPage.Count;
+        page %= numPages;
 
-        private static IOption getOption<T>(T optionKey) where T : struct, IConvertible
-            => OptionHolder.AllOption[Convert.ToInt32(optionKey)];
+        __result = string.Concat(
+            hudOptionPage[page].Trim('\r', '\n'),
+            "\n\n",
+            translate("pressTabForMore"),
+            $" ({page + 1}/{numPages})");
+
+    }
+
+    private static string createRoleSpawnNumOptionHudString()
+    {
+        StringBuilder builder = new StringBuilder(512);
+
+        // 生存役職周り
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "crewmateRoles",
+                RoleGlobalOption.MinCrewmateRoles,
+                RoleGlobalOption.MaxCrewmateRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "neutralRoles",
+                RoleGlobalOption.MinNeutralRoles,
+                RoleGlobalOption.MaxNeutralRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "impostorRoles",
+                RoleGlobalOption.MinImpostorRoles,
+                RoleGlobalOption.MaxImpostorRoles));
+        
+        builder.AppendLine();
+
+        // 幽霊役職周り
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "crewmateGhostRoles",
+                RoleGlobalOption.MinCrewmateGhostRoles,
+                RoleGlobalOption.MaxCrewmateGhostRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "neutralGhostRoles",
+                RoleGlobalOption.MinNeutralGhostRoles,
+                RoleGlobalOption.MaxNeutralGhostRoles));
+        builder.AppendLine(
+            createRoleSpawnNumOptionHudStringLine(
+                "impostorGhostRoles",
+                RoleGlobalOption.MinImpostorGhostRoles,
+                RoleGlobalOption.MaxImpostorGhostRoles));
+
+        return builder.ToString().Trim('\r', '\n');
+    }
+
+    private static string createRoleSpawnNumOptionHudStringLine(
+        string transKey, RoleGlobalOption minOptKey, RoleGlobalOption maxOptKey)
+    {
+        string optionName = Design.ColoedString(
+            new Color(204f / 255f, 204f / 255f, 0, 1f),
+            translate(transKey));
+        int min = getSpawnOptionValue(minOptKey);
+        int max = getSpawnOptionValue(maxOptKey);
+        string optionValueStr = (min >= max) ? $"{max}" : $"{min} - {max}";
+
+        return $"{optionName}: {optionValueStr}";
+    }
+
+    private static string createRngOptionHudString()
+    {
+        StringBuilder rngOptBuilder = new StringBuilder();
+        rngOptBuilder.AppendLine(
+            getHudString(OptionCreator.CommonOptionKey.UseStrongRandomGen));
+        rngOptBuilder.AppendLine(
+            getHudString(OptionCreator.CommonOptionKey.UsePrngAlgorithm));
+
+        return rngOptBuilder.ToString().Trim('\r', '\n');
+    }
+
+    private static string getHudString<T>(T optionKey) where T : struct, IConvertible
+        => OptionManager.Instance.GetHudString(Convert.ToInt32(optionKey));
+
+    private static int getSpawnOptionValue(RoleGlobalOption optionKey)
+        => OptionManager.Instance.GetValue<int>((int)optionKey);
+
+    private static string translate(string key)
+    {
+        return Translation.GetString(key);
     }
 }

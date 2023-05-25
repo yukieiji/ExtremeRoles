@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -386,7 +387,7 @@ public sealed class Resurrecter :
          
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateIntOption(
             ResurrecterOption.AwakeTaskGage,
@@ -436,27 +437,27 @@ public sealed class Resurrecter :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = OptionManager.Instance;
 
-        this.awakeTaskGage = (float)allOpt[
-            GetRoleOptionId(ResurrecterOption.AwakeTaskGage)].GetValue() / 100.0f;
-        this.resurrectTaskGage = (float)allOpt[
-            GetRoleOptionId(ResurrecterOption.ResurrectTaskGage)].GetValue() / 100.0f;
-        this.resetTaskGage = (float)allOpt[
-            GetRoleOptionId(ResurrecterOption.ResurrectTaskResetGage)].GetValue() / 100.0f;
+        this.awakeTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(ResurrecterOption.AwakeTaskGage)) / 100.0f;
+        this.resurrectTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(ResurrecterOption.ResurrectTaskGage)) / 100.0f;
+        this.resetTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(ResurrecterOption.ResurrectTaskResetGage)) / 100.0f;
 
-        this.resurrectTimer = allOpt[
-            GetRoleOptionId(ResurrecterOption.ResurrectDelayTime)].GetValue();
-        this.canResurrectAfterDeath = allOpt[
-            GetRoleOptionId(ResurrecterOption.CanResurrectAfterDeath)].GetValue();
-        this.canResurrectOnExil = allOpt[
-            GetRoleOptionId(ResurrecterOption.CanResurrectOnExil)].GetValue();
-        this.maxMeetingCount = allOpt[
-            GetRoleOptionId(ResurrecterOption.ResurrectTaskResetMeetingNum)].GetValue();
-        this.isMeetingCoolResetOnResurrect = allOpt[
-            GetRoleOptionId(ResurrecterOption.IsMeetingCoolResetOnResurrect)].GetValue();
-        this.meetingCoolDown = allOpt[
-            GetRoleOptionId(ResurrecterOption.ResurrectMeetingCooltime)].GetValue();
+        this.resurrectTimer = allOpt.GetValue<float>(
+            GetRoleOptionId(ResurrecterOption.ResurrectDelayTime));
+        this.canResurrectAfterDeath = allOpt.GetValue<bool>(
+            GetRoleOptionId(ResurrecterOption.CanResurrectAfterDeath));
+        this.canResurrectOnExil = allOpt.GetValue<bool>(
+            GetRoleOptionId(ResurrecterOption.CanResurrectOnExil));
+        this.maxMeetingCount = allOpt.GetValue<int>(
+            GetRoleOptionId(ResurrecterOption.ResurrectTaskResetMeetingNum));
+        this.isMeetingCoolResetOnResurrect = allOpt.GetValue<bool>(
+            GetRoleOptionId(ResurrecterOption.IsMeetingCoolResetOnResurrect));
+        this.meetingCoolDown = allOpt.GetValue<float>(
+            GetRoleOptionId(ResurrecterOption.ResurrectMeetingCooltime));
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;

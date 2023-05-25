@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.PRNG;
 
 namespace ExtremeRoles;
@@ -27,8 +28,8 @@ public static class RandomGenerator
 
     public static void Initialize()
     {
-        bool useStrongGen = OptionHolder.AllOption[
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+        bool useStrongGen = OptionManager.Instance.GetValue<bool>(
+            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen);
         if (instance != null)
         {
             if (useStrongGen != prevValue)
@@ -37,8 +38,8 @@ public static class RandomGenerator
             }
             else
             {
-                int selection = OptionHolder.AllOption[
-                    (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
+                int selection = OptionManager.Instance.GetValue<int>(
+                    (int)OptionCreator.CommonOptionKey.UsePrngAlgorithm);
                 if (prevSelection != selection)
                 {
                     instance = getAditionalPrng(selection);
@@ -60,11 +61,11 @@ public static class RandomGenerator
 
     private static void createGlobalRandomGenerator(bool isStrong)
     {
-        Logging.Debug("Initialize RNG");
-        if (isStrong)
+		Logging.Debug("Initialize RNG");
+		if (isStrong)
         {
-            int selection = OptionHolder.AllOption[
-                (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
+            int selection = OptionManager.Instance.GetValue<int>(
+                (int)OptionCreator.CommonOptionKey.UsePrngAlgorithm);
             instance = getAditionalPrng(selection);
             UnityEngine.Random.InitState(CreateStrongRandomSeed());
             prevSelection = selection;
@@ -80,8 +81,8 @@ public static class RandomGenerator
 
     public static Random GetTempGenerator()
     {
-        bool useStrongGen = OptionHolder.AllOption[
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+        bool useStrongGen = OptionManager.Instance.GetValue<bool>(
+            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen);
 
         if (useStrongGen)
         {

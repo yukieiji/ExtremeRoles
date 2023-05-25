@@ -1,4 +1,6 @@
-﻿using System;
+﻿global using ExtremeRoles.Module.CustomOption;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +16,6 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Performance;
-
 
 namespace ExtremeRoles.Roles;
 
@@ -186,7 +187,7 @@ public enum NeutralSeparateTeam
 
 public static class ExtremeRoleManager
 {
-    public const int OptionOffsetPerRole = 50;
+    public const int OptionOffsetPerRole = 75;
 
     public static readonly HashSet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {

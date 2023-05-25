@@ -3,6 +3,8 @@ using HarmonyLib;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using static ExtremeRoles.Extension.Manager.ServerManagerExtension;
+
 namespace ExtremeRoles.Patches.Controller
 {
 
@@ -22,11 +24,18 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(0)] StringNames id,
             [HarmonyArgument(1)] string defaultStr)
         {
-            if (id == StringNames.NoTranslation && 
-                defaultStr.Equals("custom"))
+            if (id != StringNames.NoTranslation)
+            { 
+                return true;
+            }
+            else if (defaultStr.Equals(FullCustomServerName))
             {
-                __result = Helper.Translation.GetString(
-                    "custom");
+                __result = Helper.Translation.GetString(FullCustomServerName);
+                return false;
+            }
+            else if (defaultStr.Equals(ExROfficialServerTokyoManinName))
+            {
+                __result = Helper.Translation.GetString(ExROfficialServerTokyoManinName);
                 return false;
             }
             else

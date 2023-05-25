@@ -5,6 +5,7 @@ using Hazel;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -247,10 +248,11 @@ public sealed class Mover :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
-        var imposterSetting = OptionHolder.AllOption[
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];
+        var imposterSetting = OptionManager.Instance.Get<bool>(
+            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter),
+            OptionManager.ValueType.Bool);
 
         CreateKillerOption(imposterSetting);
 

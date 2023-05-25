@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -185,7 +183,7 @@ public sealed class Slime :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateCommonAbilityOption(
             parentOps, 30.0f);

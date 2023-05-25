@@ -1,27 +1,27 @@
 ﻿using System;
 
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module.CustomOption;
 
-namespace ExtremeRoles.Module.Interface
+namespace ExtremeRoles.Module.Interface;
+
+public interface ISpawnDataManager
 {
-    public interface ISpawnDataManager
+    protected static int ComputeSpawnNum(
+        RoleGlobalOption minSpawnKey,
+        RoleGlobalOption maxSpawnKey)
     {
-        protected static int ComputeSpawnNum(
-            RoleGlobalOption minSpawnKey,
-            RoleGlobalOption maxSpawnKey)
-        {
-            var allOption = OptionHolder.AllOption;
+        var allOption = OptionManager.Instance;
 
-            int minSpawnNum = allOption[(int)minSpawnKey].GetValue();
-            int maxSpawnNum = allOption[(int)maxSpawnKey].GetValue();
+        int minSpawnNum = allOption.GetValue<int>((int)minSpawnKey);
+        int maxSpawnNum = allOption.GetValue<int>((int)maxSpawnKey);
 
-            // 最大値が最小値より小さくならないように
-            maxSpawnNum = Math.Clamp(maxSpawnNum, minSpawnNum, int.MaxValue);
+        // 最大値が最小値より小さくならないように
+        maxSpawnNum = Math.Clamp(maxSpawnNum, minSpawnNum, int.MaxValue);
 
-            return RandomGenerator.Instance.Next(minSpawnNum, maxSpawnNum + 1);
-        }
-
-        protected static int ComputePercentage(IOption self)
-            => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
+        return RandomGenerator.Instance.Next(minSpawnNum, maxSpawnNum + 1);
     }
+
+    protected static int ComputePercentage(IValueOption<int> self)
+        => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
 }

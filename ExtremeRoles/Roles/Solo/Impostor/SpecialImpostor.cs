@@ -1,27 +1,26 @@
-﻿using ExtremeRoles.Module;
+﻿using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Solo.Impostor
+namespace ExtremeRoles.Roles.Solo.Impostor;
+
+public sealed class SpecialImpostor : SingleRoleBase
 {
-    public sealed class SpecialImpostor : SingleRoleBase
+    public SpecialImpostor(): base(
+        ExtremeRoleId.SpecialImpostor,
+        ExtremeRoleType.Impostor,
+        ExtremeRoleId.SpecialImpostor.ToString(),
+        Palette.ImpostorRed,
+        true, false, true, true)
+    {}
+
+    protected override void CreateSpecificOption(IOptionInfo parentOps)
     {
-        public SpecialImpostor(): base(
-            ExtremeRoleId.SpecialImpostor,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.SpecialImpostor.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
-        {}
-
-        protected override void CreateSpecificOption(IOption parentOps)
-        {
-            return;
-        }
-        
-        protected override void RoleSpecificInit()
-        {
-            return;
-        }
-
+        return;
     }
+    
+    protected override void RoleSpecificInit()
+    {
+        return;
+    }
+
 }

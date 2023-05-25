@@ -15,6 +15,7 @@ using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -331,8 +332,8 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                OptionHolder.AllOption[GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].GetValue());
+                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)));
         }
     }
 
@@ -388,7 +389,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(IOption parentOps)
+    protected override void CreateSpecificOption(IOptionInfo parentOps)
     {
         this.CreateAbilityCountOption(parentOps, 7, 20);
         CreateFloatOption(
@@ -403,15 +404,15 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
         this.abilityCount = 0;
 
-        this.range = OptionHolder.AllOption[
-            GetRoleOptionId(DelinqentOption.Range)].GetValue();
+        this.range = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(DelinqentOption.Range));
         
         this.RoleAbilityInit();
         if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                OptionHolder.AllOption[GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].GetValue());
+                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)));
         }
 
         this.canAssignWisp = true;
@@ -841,18 +842,18 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public override void Initialize()
     {
-        this.abilityNum = OptionHolder.AllOption[
-            GetRoleOptionId(WispOption.TorchAbilityNum)].GetValue();
-        this.winNum = OptionHolder.AllOption[
-            GetRoleOptionId(WispOption.WinNum)].GetValue();
-        this.torchNum = OptionHolder.AllOption[
-            GetRoleOptionId(WispOption.TorchNum)].GetValue();
-        this.range = OptionHolder.AllOption[
-            GetRoleOptionId(WispOption.TorchRange)].GetValue();
-        this.torchActiveTime = OptionHolder.AllOption[
-            GetRoleOptionId(WispOption.TorchActiveTime)].GetValue();
-        this.torchBlackOutTime = OptionHolder.AllOption[
-            GetRoleOptionId(WispOption.BlackOutTime)].GetValue();
+        this.abilityNum = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(WispOption.TorchAbilityNum));
+        this.winNum = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(WispOption.WinNum));
+        this.torchNum = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(WispOption.TorchNum));
+        this.range = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(WispOption.TorchRange));
+        this.torchActiveTime = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(WispOption.TorchActiveTime));
+        this.torchBlackOutTime = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(WispOption.BlackOutTime));
     }
 
     protected override void OnMeetingEndHook()
@@ -869,7 +870,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
         }
     }
 
-    protected override void CreateSpecificOption(IOption parentOps)
+    protected override void CreateSpecificOption(IOptionInfo parentOps)
     {
         CreateIntOption(
             WispOption.WinNum,

@@ -22,7 +22,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
             "IntroCutscene :: CoBegin() :: Game Mode: Hide and Seek", null);
         instance.LogPlayerRoleData();
 
-        roleAssignText.gameObject.SetActive(false);
+        roleAssignText.SetActive(false);
         Object.Destroy(roleAssignText);
         roleAssignText = null;
 

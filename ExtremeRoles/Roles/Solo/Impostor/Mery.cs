@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -40,15 +41,14 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             this.img.sprite = Loader.CreateSpriteFromResources(
                Path.MeryNoneActiveVent, 125f);
 
-            this.body.gameObject.SetActive(canSee);
+            this.body.SetActive(canSee);
             this.body.transform.position = new Vector3(
                 pos.x, pos.y, (pos.y / 1000f));
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
                 ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                    this.body.gameObject,
-                    Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                    this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 
             this.activePlayerNum = activeNum;
@@ -135,7 +135,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
             vent.myRend = ventRenderer;           
             vent.name = "MaryVent_" + vent.Id;
-            vent.gameObject.SetActive(this.body.gameObject.active);
+            vent.gameObject.SetActive(this.body.active);
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
@@ -301,7 +301,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateAbilityCountOption(
             parentOps, 3, 5);
@@ -319,12 +319,12 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
 
         this.RoleAbilityInit();
 
-        var allOption = OptionHolder.AllOption;
+        var allOption = OptionManager.Instance;
 
-        this.ActiveNum = allOption[
-            GetRoleOptionId(MeryOption.ActiveNum)].GetValue();
-        this.ActiveRange = allOption[
-            GetRoleOptionId(MeryOption.ActiveRange)].GetValue();
+        this.ActiveNum = allOption.GetValue<int>(
+            GetRoleOptionId(MeryOption.ActiveNum));
+        this.ActiveRange = allOption.GetValue<float>(
+            GetRoleOptionId(MeryOption.ActiveRange));
 
     }
 

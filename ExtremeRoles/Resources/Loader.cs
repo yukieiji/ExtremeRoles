@@ -174,13 +174,11 @@ public static class Loader
         Assembly assembly = Assembly.GetExecutingAssembly();
         foreach (string path in new string[]
         {
-            "ExtremeRoles.Resources.Asset.closebutton.asset",
-            "ExtremeRoles.Resources.Asset.confirmmenu.asset",
-            "ExtremeRoles.Resources.Asset.fonts.asset",
-            "ExtremeRoles.Resources.Asset.eventsystem.asset",
+            "texture", "fonts", "eventsystem",
+            "simplebutton", "closebutton", "confirmmenu"
         })
         {
-            getAssetBundleFromAssembly(path, assembly);
+            getAssetBundleFromAssembly($"ExtremeRoles.Resources.Asset.{path}.asset", assembly);
         }
     }
 

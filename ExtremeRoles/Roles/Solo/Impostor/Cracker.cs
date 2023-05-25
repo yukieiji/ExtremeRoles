@@ -4,168 +4,167 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Roles.Solo.Impostor
+namespace ExtremeRoles.Roles.Solo.Impostor;
+
+public sealed class Cracker : SingleRoleBase, IRoleAbility
 {
-    public sealed class Cracker : SingleRoleBase, IRoleAbility
+    public sealed class CrackTrace : IMeetingResetObject
     {
-        public sealed class CrackTrace : IMeetingResetObject
+        private SpriteRenderer image;
+        private GameObject body;
+
+        public CrackTrace(Vector3 pos)
         {
-            private SpriteRenderer image;
-            private GameObject body;
+            this.body = new GameObject("CrackTrace");
+            this.image = this.body.AddComponent<SpriteRenderer>();
+            this.image.sprite = Loader.CreateSpriteFromResources(
+               Path.CrackerCrackTrace, 300f);
 
-            public CrackTrace(Vector3 pos)
+            this.body.transform.position = pos;
+
+            if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-                this.body = new GameObject("CrackTrace");
-                this.image = this.body.AddComponent<SpriteRenderer>();
-                this.image.sprite = Loader.CreateSpriteFromResources(
-                   Path.CrackerCrackTrace, 300f);
+                ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                    this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+            }
+        }
 
-                this.body.transform.position = pos;
+        public void Clear()
+        {
+            Object.Destroy(this.image);
+            Object.Destroy(this.body);
+        }
+    }
+    public enum CrackerOption
+    {
+        RemoveDeadBody,
+        CanCrackDistance,
+    }
 
-                if (ExtremeRolesPlugin.Compat.IsModMap)
+    public bool IsRemoveDeadBody;
+    private float crackDistance;
+    private byte targetDeadBodyId;
+
+    public ExtremeAbilityButton Button
+    {
+        get => this.crackButton;
+        set
+        {
+            this.crackButton = value;
+        }
+    }
+
+    private ExtremeAbilityButton crackButton;
+
+    public Cracker() : base(
+        ExtremeRoleId.Cracker,
+        ExtremeRoleType.Impostor,
+        ExtremeRoleId.Cracker.ToString(),
+        Palette.ImpostorRed,
+        true, false, true, true)
+    { }
+
+    public static void CrackDeadBody(
+        byte rolePlayerId, byte targetPlayerId)
+    {
+        var role = ExtremeRoleManager.GetSafeCastedRole<Cracker>(rolePlayerId);
+        if (role == null) { return; }
+
+        DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
+        for (int i = 0; i < array.Length; ++i)
+        {
+            if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
+            {
+
+                if (role.IsRemoveDeadBody)
                 {
-                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                        this.body.gameObject,
-                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                    ExtremeRolesPlugin.ShipState.AddMeetingResetObject(
+                        new CrackTrace(array[i].gameObject.transform.position));
+                    Object.Destroy(array[i].gameObject);
                 }
-            }
-
-            public void Clear()
-            {
-                Object.Destroy(this.image);
-                Object.Destroy(this.body);
-            }
-        }
-        public enum CrackerOption
-        {
-            RemoveDeadBody,
-            CanCrackDistance,
-        }
-
-        public bool IsRemoveDeadBody;
-        private float crackDistance;
-        private byte targetDeadBodyId;
-
-        public ExtremeAbilityButton Button
-        {
-            get => this.crackButton;
-            set
-            {
-                this.crackButton = value;
-            }
-        }
-
-        private ExtremeAbilityButton crackButton;
-
-        public Cracker() : base(
-            ExtremeRoleId.Cracker,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Cracker.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
-        { }
-
-        public static void CrackDeadBody(
-            byte rolePlayerId, byte targetPlayerId)
-        {
-            var role = ExtremeRoleManager.GetSafeCastedRole<Cracker>(rolePlayerId);
-            if (role == null) { return; }
-
-            DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
-            for (int i = 0; i < array.Length; ++i)
-            {
-                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
+                else
                 {
-
-                    if (role.IsRemoveDeadBody)
-                    {
-                        ExtremeRolesPlugin.ShipState.AddMeetingResetObject(
-                            new CrackTrace(array[i].gameObject.transform.position));
-                        Object.Destroy(array[i].gameObject);
-                    }
-                    else
-                    {
-                        array[i].GetComponentInChildren<BoxCollider2D>().enabled = false;
-                    }
-                    break;
+                    array[i].GetComponentInChildren<BoxCollider2D>().enabled = false;
                 }
+                break;
             }
         }
+    }
+    
+    public void CreateAbility()
+    {
+        this.CreateAbilityCountButton(
+            "crack",
+            Loader.CreateSpriteFromResources(
+               Path.CrackerCrack));
+    }
+
+    public bool IsAbilityUse()
+    {
+        this.targetDeadBodyId = byte.MaxValue;
+        GameData.PlayerInfo info = Player.GetDeadBodyInfo(
+            this.crackDistance);
         
-        public void CreateAbility()
+        if (info != null)
         {
-            this.CreateAbilityCountButton(
-                "crack",
-                Loader.CreateSpriteFromResources(
-                   Path.CrackerCrack));
+            this.targetDeadBodyId = info.PlayerId;
         }
 
-        public bool IsAbilityUse()
+        return this.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
+    }
+
+    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    {
+        return;
+    }
+
+    public void ResetOnMeetingStart()
+    {
+        return;
+    }
+
+    public bool UseAbility()
+    {
+        byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+
+        using (var caller = RPCOperator.CreateCaller(
+            RPCOperator.Command.CrackerCrackDeadBody))
         {
-            this.targetDeadBodyId = byte.MaxValue;
-            GameData.PlayerInfo info = Player.GetDeadBodyInfo(
-                this.crackDistance);
-            
-            if (info != null)
-            {
-                this.targetDeadBodyId = info.PlayerId;
-            }
-
-            return this.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
+            caller.WriteByte(localPlayerId);
+            caller.WriteByte(this.targetDeadBodyId);
         }
+        CrackDeadBody(localPlayerId, this.targetDeadBodyId);
+        return true;
+    }
 
-        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
-        {
-            return;
-        }
+    protected override void CreateSpecificOption(
+        IOptionInfo parentOps)
+    {
+        this.CreateAbilityCountOption(
+            parentOps, 2, 5);
 
-        public void ResetOnMeetingStart()
-        {
-            return;
-        }
+        CreateFloatOption(
+            CrackerOption.CanCrackDistance,
+            1.0f, 1.0f, 5.0f, 0.5f,
+            parentOps);
 
-        public bool UseAbility()
-        {
-            byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        CreateBoolOption(
+            CrackerOption.RemoveDeadBody,
+            false, parentOps);
+    }
 
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.CrackerCrackDeadBody))
-            {
-                caller.WriteByte(localPlayerId);
-                caller.WriteByte(this.targetDeadBodyId);
-            }
-            CrackDeadBody(localPlayerId, this.targetDeadBodyId);
-            return true;
-        }
-
-        protected override void CreateSpecificOption(
-            IOption parentOps)
-        {
-            this.CreateAbilityCountOption(
-                parentOps, 2, 5);
-
-            CreateFloatOption(
-                CrackerOption.CanCrackDistance,
-                1.0f, 1.0f, 5.0f, 0.5f,
-                parentOps);
-
-            CreateBoolOption(
-                CrackerOption.RemoveDeadBody,
-                false, parentOps);
-        }
-
-        protected override void RoleSpecificInit()
-        {
-            this.crackDistance = OptionHolder.AllOption[
-                GetRoleOptionId(CrackerOption.CanCrackDistance)].GetValue();
-            this.IsRemoveDeadBody = OptionHolder.AllOption[
-                GetRoleOptionId(CrackerOption.RemoveDeadBody)].GetValue();
-            this.RoleAbilityInit();
-        }
+    protected override void RoleSpecificInit()
+    {
+        this.crackDistance = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(CrackerOption.CanCrackDistance));
+        this.IsRemoveDeadBody = OptionManager.Instance.GetValue<bool>(
+            GetRoleOptionId(CrackerOption.RemoveDeadBody));
+        this.RoleAbilityInit();
     }
 }

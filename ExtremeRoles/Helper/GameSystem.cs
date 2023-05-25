@@ -539,7 +539,7 @@ public static class GameSystem
         playerControl.SetPet(hatMng.allPets[pet].ProdId, color);
         playerControl.SetVisor(hatMng.allVisors[visor].ProdId, color);
         playerControl.SetSkin(hatMng.allSkins[skin].ProdId, color);
-        GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
+        GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
     }
 
 

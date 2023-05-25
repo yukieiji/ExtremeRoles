@@ -9,6 +9,7 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -82,8 +83,8 @@ public sealed class Foras : GhostRoleBase
             foras.arrowControler.SetTarget(arrowTargetPlayer.gameObject);
             foras.arrowControler.SetDelayActiveTimer(foras.delayTime);
             foras.arrowControler.SetHideTimer(
-                OptionHolder.AllOption[foras.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityActiveTime)].GetValue());
+                OptionManager.Instance.GetValue<float>(foras.GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityActiveTime)));
             foras.arrowControler.gameObject.SetActive(true);
         }
     }
@@ -121,12 +122,12 @@ public sealed class Foras : GhostRoleBase
 
     public override void Initialize()
     {
-        this.delayTime = OptionHolder.AllOption[
-            GetRoleOptionId(ForasOption.DelayTime)].GetValue();
-        this.range = OptionHolder.AllOption[
-            GetRoleOptionId(ForasOption.Range)].GetValue();
-        this.rate = OptionHolder.AllOption[
-            GetRoleOptionId(ForasOption.MissingTargetRate)].GetValue();
+        this.delayTime = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(ForasOption.DelayTime));
+        this.range = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(ForasOption.Range));
+        this.rate = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(ForasOption.MissingTargetRate));
     }
 
     protected override void OnMeetingEndHook()
@@ -140,7 +141,7 @@ public sealed class Foras : GhostRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateCountButtonOption(
             parentOps, 3, 10, 25.0f);

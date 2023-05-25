@@ -33,8 +33,10 @@ using UnityEngine.Events;
 
 using ExtremeRoles.Extension.UnityEvent;
 
+using ExtremeRoles.Module.CustomOption;
+
 using UnityObject = UnityEngine.Object;
-using Config = ExtremeRoles.OptionHolder.ConfigParser;
+using UIButton = UnityEngine.UI.Button;
 
 namespace ExtremeRoles.Patches.Region;
 
@@ -63,14 +65,16 @@ public static class RegionMenuOpenPatch
                 new Vector3(-2.0f, 2f - 0.5f * (float)i, 0f);
         }
 
+        var clientOpt = ClientOption.Instance;
+
         if (ipField == null || ipText == null)
         {
             ipField = UnityObject.Instantiate(
-                gameIdTextBox.gameObject, __instance.transform);
+                gameIdTextBox, __instance.transform);
             ipText = UnityObject.Instantiate(
                 Module.Prefab.Text);
 
-            ipField.gameObject.name = "ipTextBox";
+            ipField.name = "ipTextBox";
             ipText.gameObject.name = "ipText";
             ipText.fontSize = ipText.fontSizeMin = ipText.fontSizeMax = 2.0f;
 
@@ -85,13 +89,13 @@ public static class RegionMenuOpenPatch
             ipTextBox.characterLimit = 30;
             ipTextBox.AllowSymbols = true;
             ipTextBox.ForceUppercase = false;
-            ipTextBox.SetText(Config.Ip.Value);
+            ipTextBox.SetText(clientOpt.Ip.Value);
             __instance.StartCoroutine(
                 Effects.Lerp(0.1f, new Action<float>(
                     (p) =>
                     {
-                        ipTextBox.outputText.SetText(Config.Ip.Value);
-                        ipTextBox.SetText(Config.Ip.Value);
+                        ipTextBox.outputText.SetText(clientOpt.Ip.Value);
+                        ipTextBox.SetText(clientOpt.Ip.Value);
                     })));
 
             ipTextBox.ClearOnFocus = false;
@@ -114,11 +118,11 @@ public static class RegionMenuOpenPatch
         if (portField == null || portText == null)
         {
             portField = UnityObject.Instantiate(
-                gameIdTextBox.gameObject, __instance.transform);
+                gameIdTextBox, __instance.transform);
             portText = UnityObject.Instantiate(
                 Module.Prefab.Text);
 
-            portField.gameObject.name = "portTextBox";
+            portField.name = "portTextBox";
             portText.gameObject.name = "portText";
             portText.fontSize = portText.fontSizeMin = portText.fontSizeMax = 2.0f;
 
@@ -131,13 +135,13 @@ public static class RegionMenuOpenPatch
             var portTextBox = portField.GetComponent<TextBoxTMP>();
 
             portTextBox.characterLimit = 5;
-            portTextBox.SetText(Config.Port.Value.ToString());
+            portTextBox.SetText(clientOpt.Port.Value.ToString());
             __instance.StartCoroutine(
                 Effects.Lerp(0.1f, new Action<float>(
                     (p) =>
                     {
-                        portTextBox.outputText.SetText(Config.Port.Value.ToString());
-                        portTextBox.SetText(Config.Port.Value.ToString()); 
+                        portTextBox.outputText.SetText(clientOpt.Port.Value.ToString());
+                        portTextBox.SetText(clientOpt.Port.Value.ToString()); 
                     })));
 
 
@@ -161,12 +165,12 @@ public static class RegionMenuOpenPatch
 
         void onEnterOrIpChange()
         {
-            Config.Ip.Value = ipField.GetComponent<TextBoxTMP>().text;
+            clientOpt.Ip.Value = ipField.GetComponent<TextBoxTMP>().text;
         }
 
         void onFocusLost()
         {
-            OptionHolder.UpdateRegion();
+            CustomRegion.Update();
             __instance.ChooseOption(
                 ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
         }
@@ -179,7 +183,7 @@ public static class RegionMenuOpenPatch
 
             if (ushort.TryParse(portTextBox.text, out port))
             {
-                Config.Port.Value = port;
+                clientOpt.Port.Value = port;
                 portTextBox.outputText.color = Color.white;
             }
             else

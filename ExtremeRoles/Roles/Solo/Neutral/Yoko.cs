@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -86,7 +87,7 @@ public sealed class Yoko :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateBoolOption(
             YokoOption.CanRepairSabo,
@@ -110,16 +111,16 @@ public sealed class Yoko :
     }
     protected override void RoleSpecificInit()
     {
-        this.CanRepairSabotage = OptionHolder.AllOption[
-            GetRoleOptionId(YokoOption.CanRepairSabo)].GetValue();
-        this.UseVent = OptionHolder.AllOption[
-            GetRoleOptionId(YokoOption.CanUseVent)].GetValue();
-        this.searchRange = OptionHolder.AllOption[
-            GetRoleOptionId(YokoOption.SearchRange)].GetValue();
-        this.searchTime = OptionHolder.AllOption[
-            GetRoleOptionId(YokoOption.SearchTime)].GetValue();
-        this.trueInfoGage = OptionHolder.AllOption[
-            GetRoleOptionId(YokoOption.TrueInfoRate)].GetValue();
+        this.CanRepairSabotage = OptionManager.Instance.GetValue<bool>(
+            GetRoleOptionId(YokoOption.CanRepairSabo));
+        this.UseVent = OptionManager.Instance.GetValue<bool>(
+            GetRoleOptionId(YokoOption.CanUseVent));
+        this.searchRange = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(YokoOption.SearchRange));
+        this.searchTime = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(YokoOption.SearchTime));
+        this.trueInfoGage = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(YokoOption.TrueInfoRate));
         this.timer = this.searchTime;
     }
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)

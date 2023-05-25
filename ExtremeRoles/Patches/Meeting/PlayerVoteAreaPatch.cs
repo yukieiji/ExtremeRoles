@@ -10,6 +10,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GhostRoles;
@@ -36,7 +37,7 @@ public static class NamePlateHelper
                 hatMng.GetNamePlateById(
 				blankNamePlateId).viewData.viewData.Image;
 		var nameplate = blankNameplate;
-		if (!OptionHolder.Client.HideNamePlate)
+		if (!ClientOption.Instance.HideNamePlate.Value)
 		{
 			var player = Helper.Player.GetPlayerControlById(
 				playerId != byte.MaxValue ? 

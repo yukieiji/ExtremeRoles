@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -395,7 +396,7 @@ public sealed class Yandere :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateIntOption(
             YandereOption.TargetKilledKillCoolReduceRate,
@@ -442,34 +443,34 @@ public sealed class Yandere :
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionHolder.AllOption;
+        var allOption = OptionManager.Instance;
 
 
-        this.setTargetRange = allOption[
-            GetRoleOptionId(YandereOption.SetTargetRange)].GetValue();
-        this.setTargetTime = allOption[
-            GetRoleOptionId(YandereOption.SetTargetTime)].GetValue();
+        this.setTargetRange = allOption.GetValue<float>(
+            GetRoleOptionId(YandereOption.SetTargetRange));
+        this.setTargetTime = allOption.GetValue<float>(
+            GetRoleOptionId(YandereOption.SetTargetTime));
 
-        this.targetKillReduceRate = allOption[
-            GetRoleOptionId(YandereOption.TargetKilledKillCoolReduceRate)].GetValue();
-        this.noneTargetKillMultiplier = allOption[
-            GetRoleOptionId(YandereOption.NoneTargetKilledKillCoolMultiplier)].GetValue();
+        this.targetKillReduceRate = allOption.GetValue<int>(
+            GetRoleOptionId(YandereOption.TargetKilledKillCoolReduceRate));
+        this.noneTargetKillMultiplier = allOption.GetValue<float>(
+            GetRoleOptionId(YandereOption.NoneTargetKilledKillCoolMultiplier));
         
-        this.maxTargetNum = allOption[
-            GetRoleOptionId(YandereOption.MaxTargetNum)].GetValue();
+        this.maxTargetNum = allOption.GetValue<int>(
+            GetRoleOptionId(YandereOption.MaxTargetNum));
 
         this.timer = 0.0f;
-        this.timeLimit = allOption[
-            GetRoleOptionId(YandereOption.RunawayTime)].GetValue();
+        this.timeLimit = allOption.GetValue<float>(
+            GetRoleOptionId(YandereOption.RunawayTime));
         
         this.blockTimer = 0.0f;
-        this.blockTargetTime = allOption[
-            GetRoleOptionId(YandereOption.BlockTargetTime)].GetValue();
+        this.blockTargetTime = allOption.GetValue<float>(
+            GetRoleOptionId(YandereOption.BlockTargetTime));
 
-        this.hasOneSidedArrow = allOption[
-            GetRoleOptionId(YandereOption.HasOneSidedArrow)].GetValue();
+        this.hasOneSidedArrow = allOption.GetValue<bool>(
+            GetRoleOptionId(YandereOption.HasOneSidedArrow));
         this.target = new KillTarget(
-            allOption[GetRoleOptionId(YandereOption.HasTargetArrow)].GetValue());
+            allOption.GetValue<bool>(GetRoleOptionId(YandereOption.HasTargetArrow)));
 
         this.progress = new Dictionary<byte, float>();
 
