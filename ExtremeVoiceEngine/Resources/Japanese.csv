@@ -25,4 +25,5 @@ speedValue,速度(数値)
 speedExpression,読み上げの速度を設定します
 voicevoxParam,キャラ：{0}  スタイル:{1}  ボリューム:{2}　話速:{3}
 voicevoxParamSetLog,VOICEVOXのエンジンを以下の設定に変更しました<br>{0}
+cannotFindVoicevoxParam,以下のパラメータでの設定変更に失敗しました<br>{0}
 voicevoxEngineToString,エンジン名:VOICEVOX<br>パラメータ:{0}
