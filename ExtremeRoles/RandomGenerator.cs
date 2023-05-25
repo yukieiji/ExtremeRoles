@@ -15,8 +15,8 @@ public static class RandomGenerator
         {
             if (instance == null)
             {
-                createGlobalRandomGenerator(OptionHolder.AllOption[
-                    (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue());
+                createGlobalRandomGenerator(OptionManager.Instance.GetValue<bool>(
+                    (int)OptionCreator.CommonOptionKey.UseStrongRandomGen));
             }
             return instance;
         }
