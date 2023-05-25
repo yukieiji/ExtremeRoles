@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.PRNG;
 
 namespace ExtremeRoles;
