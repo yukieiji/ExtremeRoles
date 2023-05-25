@@ -19,7 +19,7 @@ public static class ChatControllerAddChatPatch
             chatText.StartsWith(Command.CommandManager.CmdChar) ||
 			localPlayerData == null ||
 			sourcePlayerData == null ||
-			(sourcePlayer.Data.IsDead && !localPlayerData.IsDead))
+			(sourcePlayerData.IsDead && !localPlayerData.IsDead))
 		{
 			return;
 		}
