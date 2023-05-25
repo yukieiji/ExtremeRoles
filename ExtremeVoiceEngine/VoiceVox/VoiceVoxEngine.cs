@@ -117,7 +117,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 
         for (int i = 0; i < json.Count; ++i)
         {
-            JObject? speakerInfo = json.ChildrenTokens[i].TryCast<JObject>();
+            JObject? speakerInfo = json.Get<JObject>(i);
             if (speakerInfo == null) { continue; }
 
             JToken? nameToken = speakerInfo["name"];
@@ -132,7 +132,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 
             for (int j = 0; j < styles.Count; ++j)
             {
-                JObject? styleData = styles.ChildrenTokens[i].TryCast<JObject>();
+				JObject? styleData = styles.Get<JObject>(j);
                 if (styleData == null) { continue; }
 
                 JToken styleNameToken = styleData["name"];
@@ -163,7 +163,8 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 	}
 
     public override string ToString()
-        => TranslationControllerExtension.GetString("voicevoxEngineToString", this.param.ToString());
+        => TranslationControllerExtension.GetString(
+			"voicevoxEngineToString", this.param.ToString());
 
     public IEnumerator Speek(string text)
     {
