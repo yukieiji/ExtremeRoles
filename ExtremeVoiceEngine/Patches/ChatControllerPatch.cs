@@ -12,9 +12,14 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(0)] PlayerControl sourcePlayer,
         [HarmonyArgument(1)] string chatText)
     {
-        if (VoiceEngine.Instance == null ||
+		GameData.PlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
+		GameData.PlayerInfo sourcePlayerData = sourcePlayer.Data;
+
+		if (VoiceEngine.Instance == null ||
             chatText.StartsWith(Command.CommandManager.CmdChar) ||
-			!CachedPlayerControl.LocalPlayer.Data.IsDead && sourcePlayer.Data.IsDead)
+			localPlayerData == null ||
+			sourcePlayerData == null ||
+			(sourcePlayer.Data.IsDead && !localPlayerData.IsDead))
 		{
 			return;
 		}
