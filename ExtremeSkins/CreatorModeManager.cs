@@ -76,7 +76,7 @@ public sealed class CreatorModeManager
 
             CreatorMode.CreateCreatorModeFolder(amongUsPath);
             tryImportTestTransData(amongUsPath);
-            
+
             tryImportTestColor(string.Concat(
                 Path.GetDirectoryName(Application.dataPath),
                 slash, folder));
@@ -96,7 +96,7 @@ public sealed class CreatorModeManager
             {
                 string[] transInfo = transInfoLine.Split(',');
 
-                Dictionary<SupportedLangs, string> transData = 
+                Dictionary<SupportedLangs, string> transData =
                     new Dictionary<SupportedLangs, string>();
 
                 foreach (var (str, index) in transInfo.Select(
