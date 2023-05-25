@@ -14,7 +14,7 @@ public static class ChatControllerAddChatPatch
     {
         if (VoiceEngine.Instance == null ||
             chatText.StartsWith(Command.CommandManager.CmdChar) ||
-			CachedPlayerControl.LocalPlayer.Data.IsDead == sourcePlayer.Data.IsDead)
+			CachedPlayerControl.LocalPlayer.Data.IsDead != sourcePlayer.Data.IsDead)
 		{
 			return;
 		}
