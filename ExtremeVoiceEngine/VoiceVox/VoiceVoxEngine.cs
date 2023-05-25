@@ -154,7 +154,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
             }
         }
 		string errorLog = TranslationController.Instance.GetString(
-			"voicevoxParamSetLog", parts: this.param.ToString());
+			"cannotFindVoicevoxParam", parts: this.param.ToString());
 		ExtremeVoiceEnginePlugin.Logger.LogInfo(errorLog);
 		if (FastDestroyableSingleton<HudManager>.Instance != null)
 		{
