@@ -1,52 +1,59 @@
-﻿namespace ExtremeRoles.Module.PRNG
+﻿using System.Numerics;
+
+namespace ExtremeRoles.Module.PRNG;
+
+public sealed class Xorshiro256StarStar : RNG64Base
 {
-    public sealed class Xorshiro256StarStar : RNG64Base
+    /*
+        以下のURLの実装を元に実装
+         https://source.dot.net/#System.Private.CoreLib/Random.Xoshiro256StarStarImpl.cs,bb77e610694e64ca
+        
+    */
+
+    private ulong _s0, _s1, _s2, _s3;
+
+    public Xorshiro256StarStar(
+        ulong seed, ulong state) : base(seed, state)
+    { }
+
+    public override ulong NextUInt64()
     {
-        /*
-            以下のURLの実装を元に実装
-             https://source.dot.net/#System.Private.CoreLib/Random.Xoshiro256StarStarImpl.cs,bb77e610694e64ca
-            
-        */
+        ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
 
-        private ulong _s0, _s1, _s2, _s3;
+        ulong result = BitOperations.RotateLeft(s1 * 5, 7) * 9;
+        ulong t = s1 << 17;
 
-        public Xorshiro256StarStar(
-            ulong seed, ulong state) : base(seed, state)
-        { }
+        s2 ^= s0;
+        s3 ^= s1;
+        s1 ^= s2;
+        s0 ^= s3;
 
-        public override ulong NextUInt64()
+        s2 ^= t;
+        s3 = BitOperations.RotateLeft(s3, 45);
+
+        _s0 = s0;
+        _s1 = s1;
+        _s2 = s2;
+        _s3 = s3;
+
+        return result;
+    }
+
+    protected override void Initialize(ulong seed, ulong initStete)
+    {
+        _s0 = seed;
+        _s1 = initStete;
+        do
         {
-            ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
+            _s2 = RandomGenerator.CreateLongStrongSeed();
+            _s3 = RandomGenerator.CreateLongStrongSeed();
+        } 
+        while ((_s2 | _s3) == 0); // at least one value must be non-zero
 
-            ulong result = LeftOps(s1 * 5, 7) * 9;
-            ulong t = s1 << 17;
-
-            s2 ^= s0;
-            s3 ^= s1;
-            s1 ^= s2;
-            s0 ^= s3;
-
-            s2 ^= t;
-            s3 = LeftOps(s3, 45);
-
-            _s0 = s0;
-            _s1 = s1;
-            _s2 = s2;
-            _s3 = s3;
-
-            return result;
-        }
-
-        protected override void Initialize(ulong seed, ulong initStete)
+        while ((_s0 | _s1) == 0)
         {
-            _s0 = seed;
-            _s1 = initStete;
-            do
-            {
-                _s2 = RandomGenerator.CreateLongStrongSeed();
-                _s3 = RandomGenerator.CreateLongStrongSeed();
-            } 
-            while ((_s2 | _s3) == 0); // at least one value must be non-zero
+            _s0 = RandomGenerator.CreateStrongSeed();
+            _s1 = RandomGenerator.CreateStrongSeed();
         }
     }
 }

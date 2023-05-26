@@ -54,7 +54,7 @@ public sealed class ClassicIntroRunner : IIntroRunner
             instance.ImpostorText.text = instance.ImpostorText.text.Replace("[]", "</color>");
         }
 
-        roleAssignText.gameObject.SetActive(false);
+        roleAssignText.SetActive(false);
         Object.Destroy(roleAssignText);
         roleAssignText = null;
 

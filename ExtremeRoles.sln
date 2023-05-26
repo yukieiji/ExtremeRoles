@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeSkins", "ExtremeSkin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExtremeBepInExInstaller", "ExtremeBepInExInstaller\ExtremeBepInExInstaller.vcxproj", "{2DC77B62-C0AF-4C7A-BF6A-436B466BEA4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeVoiceEngine", "ExtremeVoiceEngine\ExtremeVoiceEngine.csproj", "{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeVoiceEngine", "ExtremeVoiceEngine\ExtremeVoiceEngine.csproj", "{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

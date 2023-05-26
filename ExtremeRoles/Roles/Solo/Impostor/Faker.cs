@@ -6,6 +6,7 @@ using PowerTools;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -46,7 +47,6 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 
         private const float petOffset = 0.72f;
 
-        private const string defaultPetId = "0";
         private const string defaultPetName = "EmptyPet(Clone)";
         private const string nameTextObjName = "NameText_TMP";
         private const string colorBindTextName = "ColorblindName_TMP";
@@ -433,7 +433,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateCommonAbilityOption(
             parentOps);

@@ -12,6 +12,7 @@ using ExtremeVoiceEngine.Command;
 using ExtremeVoiceEngine.Extension;
 using ExtremeVoiceEngine.Interface;
 using ExtremeVoiceEngine.Utility;
+using static Il2CppSystem.Net.Http.Headers.Parser;
 
 namespace ExtremeVoiceEngine.VoiceVox;
 
@@ -19,7 +20,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 {
     public float Wait { get; set; }
     public AudioSource? Source { get; set; }
-    
+
     private VoiceVoxParameter param;
     private CancellationTokenSource cts = new CancellationTokenSource();
     private int speakerId
@@ -103,20 +104,20 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     public void SetParameter(VoiceVoxParameter param)
     {
         var linkedToken = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken).Token;
-        
+
         string jsonStr = VoiceVoxBridge.GetVoice(linkedToken).GetAwaiter().GetResult();
 
         if (string.IsNullOrEmpty(jsonStr)) { return; }
 
         string cleanedStr = @"{""Result"":" + jsonStr + @"}";
-        
+
         JObject resultJson = JObject.Parse(cleanedStr);
         JArray? json = resultJson.Get<JArray>("Result");
         if (json == null) { return; }
 
         for (int i = 0; i < json.Count; ++i)
         {
-            JObject? speakerInfo = json.ChildrenTokens[i].TryCast<JObject>();
+            JObject? speakerInfo = json.Get<JObject>(i);
             if (speakerInfo == null) { continue; }
 
             JToken? nameToken = speakerInfo["name"];
@@ -131,7 +132,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 
             for (int j = 0; j < styles.Count; ++j)
             {
-                JObject? styleData = styles.ChildrenTokens[i].TryCast<JObject>();
+				JObject? styleData = styles.Get<JObject>(j);
                 if (styleData == null) { continue; }
 
                 JToken styleNameToken = styleData["name"];
@@ -152,10 +153,18 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
                 return;
             }
         }
-    }
+		string errorLog = TranslationController.Instance.GetString(
+			"cannotFindVoicevoxParam", parts: this.param.ToString());
+		ExtremeVoiceEnginePlugin.Logger.LogInfo(errorLog);
+		if (FastDestroyableSingleton<HudManager>.Instance != null)
+		{
+			FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat(errorLog);
+		}
+	}
 
     public override string ToString()
-        => TranslationControllerExtension.GetString("voicevoxEngineToString", this.param.ToString());
+        => TranslationControllerExtension.GetString(
+			"voicevoxEngineToString", this.param.ToString());
 
     public IEnumerator Speek(string text)
     {
@@ -200,7 +209,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         yield return TaskHelper.CoRunWaitAsync(audioClipTask);
 
         Source.PlayOneShot(audioClipTask.Result, 1.0f);
-        
+
         while (Source.isPlaying)
         {
             yield return null;

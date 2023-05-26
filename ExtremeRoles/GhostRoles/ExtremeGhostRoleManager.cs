@@ -123,17 +123,21 @@ public static class ExtremeGhostRoleManager
 
         foreach (var spawnData in sameTeamRoleAssignData)
         {
+            var ghostRoleId = spawnData.Id;
             if (!spawnData.IsFilterContain(baseRole) || 
-                !spawnData.IsSpawn()) { continue; }
+                !spawnData.IsSpawn() ||
+                RoleAssignFilter.Instance.IsBlock(ghostRoleId)) { continue; }
             
             rpcSetSingleGhostRoleToPlayerId(
-                player, controlId, roleType, spawnData.Id);
+                player, controlId, roleType, ghostRoleId);
 
             // その役職のスポーン数をへらす処理
             spawnData.ReduceSpawnNum();
             // 全体の役職減少処理
             spawnDataMng.ReduceGlobalSpawnLimit(team);
- 
+
+            RoleAssignFilter.Instance.Update(ghostRoleId);
+            
             return;
         }
     }
@@ -286,18 +290,6 @@ public static class ExtremeGhostRoleManager
                 Helper.Translation.GetString(callAbility.ToString()));
         }
     }
-
-    private static bool isRoleSpawn(
-        int roleNum, int spawnRate)
-    {
-        if (roleNum <= 0) { return false; }
-        if (spawnRate < UnityEngine.Random.RandomRange(0, 110)) { return false; }
-
-        return true;
-    }
-
-    private static int computePercentage(Module.IOption self)
-        => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
 
     private static void rpcSetSingleGhostRoleToPlayerId(
         PlayerControl player,

@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -101,7 +102,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateAbilityCountOption(
             parentOps, 2, 5, 2.5f);
@@ -130,18 +131,18 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         this.RoleAbilityInit();
 
-        var allOption = OptionHolder.AllOption;
+        var allOption = OptionManager.Instance;
 
-        this.timerMinTime = allOption[
-            GetRoleOptionId(BomberOption.TimerMinTime)].GetValue();
-        this.timerMaxTime = allOption[
-            GetRoleOptionId(BomberOption.TimerMaxTime)].GetValue();
-        this.explosionKillChance = allOption[
-            GetRoleOptionId(BomberOption.ExplosionKillChance)].GetValue();
-        this.explosionRange = allOption[
-            GetRoleOptionId(BomberOption.ExplosionRange)].GetValue();
-        this.tellExplosion = allOption[
-            GetRoleOptionId(BomberOption.TellExplosion)].GetValue();
+        this.timerMinTime = allOption.GetValue<float>(
+            GetRoleOptionId(BomberOption.TimerMinTime));
+        this.timerMaxTime = allOption.GetValue<float>(
+            GetRoleOptionId(BomberOption.TimerMaxTime));
+        this.explosionKillChance = allOption.GetValue<int>(
+            GetRoleOptionId(BomberOption.ExplosionKillChance));
+        this.explosionRange = allOption.GetValue<int>(
+            GetRoleOptionId(BomberOption.ExplosionRange));
+        this.tellExplosion = allOption.GetValue<bool>(
+            GetRoleOptionId(BomberOption.TellExplosion));
 
         this.bombPlayerId = new Queue<byte>();
         resetTimer();

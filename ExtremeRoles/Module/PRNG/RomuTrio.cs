@@ -1,42 +1,49 @@
-﻿namespace ExtremeRoles.Module.PRNG
+﻿using System.Numerics;
+
+namespace ExtremeRoles.Module.PRNG;
+
+public sealed class RomuTrio : RNG64Base
 {
-    public sealed class RomuTrio : RNG64Base
+    /*
+        以下のURLの実装を元に実装
+         https://arxiv.org/pdf/2002.11331.pdf
+        
+    */
+    private const ulong a = 15241094284759029579ul;
+    private ulong xState, yState, zState;
+
+    public RomuTrio(ulong seed, ulong state) : base(seed, state)
+    { }
+
+    public override ulong NextUInt64()
     {
-        /*
-            以下のURLの実装を元に実装
-             https://arxiv.org/pdf/2002.11331.pdf
-            
-        */
-        private const ulong a = 15241094284759029579ul;
-        private ulong xState, yState, zState;
+        ulong xp = xState, yp = yState, zp = zState;
 
-        public RomuTrio(ulong seed, ulong state) : base(seed, state)
-        { }
+        xState = a * zp;
+        
+        yState = yp - xp;
+        yState = BitOperations.RotateLeft(yState, 12);
 
-        public override ulong NextUInt64()
+        zState = zp - yp;
+        zState = BitOperations.RotateLeft(zState, 44);
+
+        return xp;
+    }
+
+    protected override void Initialize(ulong seed, ulong initStete)
+    {
+        xState = seed;
+        yState = initStete;
+        do
         {
-            ulong xp = xState, yp = yState, zp = zState;
+            zState = RandomGenerator.CreateLongStrongSeed();
+        } 
+        while (zState == 0); // at least one value must be non-zero
 
-            xState = a * zp;
-            
-            yState = yp - xp;
-            yState = LeftOps(yState, 12);
-
-            zState = zp - yp;
-            zState = LeftOps(zState, 44);
-
-            return xp;
-        }
-
-        protected override void Initialize(ulong seed, ulong initStete)
+        while ((xState | yState) == 0)
         {
-            xState = seed;
-            yState = initStete;
-            do
-            {
-                zState = RandomGenerator.CreateLongStrongSeed();
-            } 
-            while (zState == 0); // at least one value must be non-zero
+            xState = RandomGenerator.CreateLongStrongSeed();
+            yState = RandomGenerator.CreateLongStrongSeed();
         }
     }
 }

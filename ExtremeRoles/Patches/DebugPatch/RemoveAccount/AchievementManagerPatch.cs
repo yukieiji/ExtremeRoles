@@ -1,7 +1,7 @@
 ﻿#if DEBUG
 using HarmonyLib;
 
-namespace ExtremeRoles.Patches.RemoveAccount
+namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
 {
     [HarmonyPatch(
         typeof(AchievementManager),

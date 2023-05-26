@@ -14,6 +14,7 @@ using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
@@ -307,7 +308,7 @@ public sealed class Teleporter :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateBoolOption(
             TeleporterOption.CanUseOtherPlayer,
@@ -318,10 +319,10 @@ public sealed class Teleporter :
 
     protected override void RoleSpecificInit()
     {
-        this.isSharePortal = OptionHolder.AllOption[
-            GetRoleOptionId(TeleporterOption.CanUseOtherPlayer)].GetValue();
-        this.partNum = OptionHolder.AllOption[
-            GetRoleOptionId(RoleAbilityCommonOption.AbilityCount)].GetValue();
+        this.isSharePortal = OptionManager.Instance.GetValue<bool>(
+            GetRoleOptionId(TeleporterOption.CanUseOtherPlayer));
+        this.partNum = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(RoleAbilityCommonOption.AbilityCount));
         this.abilityInit();
     }
 
@@ -329,10 +330,10 @@ public sealed class Teleporter :
     {
         if (this.Button == null) { return; }
 
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = OptionManager.Instance;
         this.Button.Behavior.SetCoolTime(
-            allOpt[this.GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+            allOpt.GetValue<float>(this.GetRoleOptionId(
+                RoleAbilityCommonOption.AbilityCoolTime)));
         
         this.behavior.SetAbilityCount(0);
 

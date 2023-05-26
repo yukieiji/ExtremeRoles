@@ -27,7 +27,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
 * 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
-### 追加役職一覧(Extreme Roles v7.1.1.5時点、今後も追加予定)
+### 追加役職一覧(Extreme Roles v7.1.2.0時点、今後も追加予定)
 #### ホスト役職
 - シオン
 #### 通常役職
@@ -104,8 +104,8 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
   - この不具合はExtremeVoiceEngineとExtremeRolesで別々のコマンド処理を実装した関係で発生している表示上の問題であるため動作に一切の影響はありません
 
 ## リリーススケジュール
-- Extreme Roles v7.1.2.0
-  - 春の超大型アップデートPart2「Spring Next Update」
+- Extreme Roles v7.1.3.0 RoadToExtremeModeアップデート
+  - ExtremeMode実装に向けた準備と一部役職のリワークを行います
 
 ## 現在実装検討中の役職及び機能
 - 死亡時役職が持つ固有の情報を表示出来るようにする
@@ -146,7 +146,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.1.5 |
+|  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
 |  v2023.2.28s/v2023.2.28e  | v6.0.0.0 ～ v6.0.0.6 |
 |  v2022.12.08s/v2022.12.08e/v2022.12.14s/v2022.12.14e  |  v5.0.0.0 ～ v5.1.1.1 |
 |  v2022.10.25s/v2022.10.25e  |  v4.0.0.0 ～ v4.0.1.4 |

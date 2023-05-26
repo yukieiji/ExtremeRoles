@@ -3,6 +3,7 @@
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -92,10 +93,10 @@ public sealed class Igniter : GhostRoleBase
 
     public override void Initialize()
     {
-        isEffectImp = OptionHolder.AllOption[
-            GetRoleOptionId(IgniterOption.IsEffectImpostor)].GetValue();
-        isEffectNeut = OptionHolder.AllOption[
-            GetRoleOptionId(IgniterOption.IsEffectNeutral)].GetValue();
+        isEffectImp = OptionManager.Instance.GetValue<bool>(
+            GetRoleOptionId(IgniterOption.IsEffectImpostor));
+        isEffectNeut = OptionManager.Instance.GetValue<bool>(
+            GetRoleOptionId(IgniterOption.IsEffectNeutral));
     }
 
     protected override void OnMeetingEndHook()
@@ -109,7 +110,7 @@ public sealed class Igniter : GhostRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateCountButtonOption(
             parentOps, 3, 10, 15.0f);

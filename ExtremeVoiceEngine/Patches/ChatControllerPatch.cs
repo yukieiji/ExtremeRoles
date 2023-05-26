@@ -1,5 +1,6 @@
-﻿using ExtremeRoles.GameMode;
-using HarmonyLib;
+﻿using HarmonyLib;
+
+using ExtremeRoles.Performance;
 
 namespace ExtremeVoiceEngine.Patches;
 
@@ -11,8 +12,17 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(0)] PlayerControl sourcePlayer,
         [HarmonyArgument(1)] string chatText)
     {
-        if (VoiceEngine.Instance == null ||
-            chatText.StartsWith(Command.CommandManager.CmdChar)) { return; }
+		GameData.PlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
+		GameData.PlayerInfo sourcePlayerData = sourcePlayer.Data;
+
+		if (VoiceEngine.Instance == null ||
+            chatText.StartsWith(Command.CommandManager.CmdChar) ||
+			localPlayerData == null ||
+			sourcePlayerData == null ||
+			(sourcePlayerData.IsDead && !localPlayerData.IsDead))
+		{
+			return;
+		}
 
         VoiceEngine.Instance.AddQueue(chatText);
     }

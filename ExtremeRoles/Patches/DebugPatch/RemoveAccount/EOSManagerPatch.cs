@@ -9,7 +9,7 @@ using InnerNet;
 
 // From Reactor.RemoveAccounts by MIT License : https://github.com/NuclearPowered/Reactor.RemoveAccounts
 
-namespace ExtremeRoles.Patches.RemoveAccount
+namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
 {
     [HarmonyPatch]
     public static class EOSManagerRunLoginPatch
@@ -27,7 +27,7 @@ namespace ExtremeRoles.Patches.RemoveAccount
 
             DataManager.Player.Account.LoginStatus = EOSManager.AccountLoginStatus.LoggedIn;
             DataManager.Settings.Multiplayer.ChatMode = QuickChatModes.FreeChatOrQuickChat;
-            DataManager.Player.Onboarding.LastAcceptedPrivacyPolicyVersion = 
+            DataManager.Player.Onboarding.LastAcceptedPrivacyPolicyVersion =
                 Constants.PrivacyPolicyVersion;
 
             eosManager.userId = new ProductUserId();
@@ -35,7 +35,7 @@ namespace ExtremeRoles.Patches.RemoveAccount
             eosManager.hasRunLoginFlow = true;
             eosManager.loginFlowFinished = true;
 
-            AccountManager.Instance.privacyPolicyBg.gameObject.SetActive(false);
+            AccountManager.Instance.privacyPolicyBg.SetActive(false);
             eosManager.CloseStartupWaitScreen();
             eosManager.HideCallbackWaitAnim();
             eosManager.IsAllowedOnline(true);
@@ -48,7 +48,7 @@ namespace ExtremeRoles.Patches.RemoveAccount
     [HarmonyPatch(typeof(EOSManager), nameof(EOSManager.Awake))]
     public static class EOSManagerAwakePatch
     {
-        private static readonly PropertyInfo localUserIdProperty = 
+        private static readonly PropertyInfo localUserIdProperty =
             typeof(EpicManager).GetProperty(
                 "localUserId", BindingFlags.Static | BindingFlags.Public);
 
@@ -57,7 +57,7 @@ namespace ExtremeRoles.Patches.RemoveAccount
             new DestroyableSingleton<EOSManager>(__instance.Pointer).Awake();
 
             __instance.platformInitialized = true;
-            
+
             localUserIdProperty?.SetValue(null, new EpicAccountId());
             return false;
         }

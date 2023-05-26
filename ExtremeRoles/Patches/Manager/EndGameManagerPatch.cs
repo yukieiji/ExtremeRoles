@@ -15,6 +15,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -116,7 +117,7 @@ namespace ExtremeRoles.Patches.Manager
 
         private static void setRoleSummary(EndGameManager manager)
         {
-            if (!OptionHolder.Client.ShowRoleSummary) { return; }
+            if (!ClientOption.Instance.ShowRoleSummary.Value) { return; }
 
             var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
             GameObject summaryObj = Object.Instantiate(

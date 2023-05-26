@@ -4,6 +4,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -61,7 +62,7 @@ public sealed class GhostRoleSpawnDataManager :
             },
         };
 
-        var allOption = OptionHolder.AllOption;
+        var allOption = OptionManager.Instance;
         var tmpUseData = new Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>>();
 
         foreach (ExtremeGhostRoleId roleId in 
@@ -70,9 +71,13 @@ public sealed class GhostRoleSpawnDataManager :
             var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
             int spawnRate = ISpawnDataManager.ComputePercentage(
-                allOption[role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
-            int roleNum = allOption[
-                role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+                allOption.Get<int>(
+                    role.GetRoleOptionId(RoleCommonOption.SpawnRate), 
+                    OptionManager.ValueType.Int));
+            int weight = allOption.GetValue<int>(
+                role.GetRoleOptionId(RoleCommonOption.AssignWeight));
+            int roleNum = allOption.GetValue<int>(
+                role.GetRoleOptionId(RoleCommonOption.RoleNum));
 
             Helper.Logging.Debug(
                 $"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
@@ -83,7 +88,7 @@ public sealed class GhostRoleSpawnDataManager :
             }
 
             var addData = new GhostRoleSpawnData(
-                roleId, roleNum, spawnRate, role.GetRoleFilter());
+                roleId, roleNum, spawnRate, weight, role.GetRoleFilter());
 
             ExtremeRoleType team = role.Team;
 
@@ -105,8 +110,10 @@ public sealed class GhostRoleSpawnDataManager :
         foreach (var (team, spawnDataList) in tmpUseData)
         {
             Helper.Logging.Debug($"Add {team} ghost role spawn data");
-            this.useGhostRole[team] = spawnDataList.OrderBy(
-                x => RandomGenerator.Instance.Next()).ToList();
+            this.useGhostRole[team] = spawnDataList
+                .OrderByDescending(x => x.Weight)
+                .ThenBy(x => RandomGenerator.Instance.Next())
+                .ToList();
         }
     }
 

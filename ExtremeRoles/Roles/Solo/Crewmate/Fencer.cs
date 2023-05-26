@@ -3,6 +3,7 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -189,7 +190,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateAbilityCountOption(
             parentOps, 2, 7, 3.0f);
@@ -202,8 +203,8 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
     protected override void RoleSpecificInit()
     {
         this.Timer = 0.0f;
-        this.MaxTime = OptionHolder.AllOption[
-            GetRoleOptionId(FencerOption.ResetTime)].GetValue();
+        this.MaxTime = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(FencerOption.ResetTime));
 
         this.RoleAbilityInit();
     }

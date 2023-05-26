@@ -8,6 +8,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -440,7 +441,7 @@ public sealed class Queen :
         }
     }
 
-    protected override void CreateSpecificOption(IOption parentOps)
+    protected override void CreateSpecificOption(IOptionInfo parentOps)
     {
         CreateBoolOption(
             QueenOption.CanUseVent,
@@ -477,18 +478,18 @@ public sealed class Queen :
 
     protected override void RoleSpecificInit()
     {
-        this.range = OptionHolder.AllOption[
-            GetRoleOptionId(QueenOption.Range)].GetValue();
-        this.UseVent = OptionHolder.AllOption[
-            GetRoleOptionId(QueenOption.CanUseVent)].GetValue();
-        this.ServantSelfKillCool = OptionHolder.AllOption[
-            GetRoleOptionId(QueenOption.ServantSelfKillCool)].GetValue();
-        this.killKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
-            GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)].GetValue() / 100.0f);
-        this.taskKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
-            GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)].GetValue() / 100.0f);
-        this.taskCompKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
-            GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)].GetValue() / 100.0f);
+        this.range = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(QueenOption.Range));
+        this.UseVent = OptionManager.Instance.GetValue<bool>(
+            GetRoleOptionId(QueenOption.CanUseVent));
+        this.ServantSelfKillCool = OptionManager.Instance.GetValue<float>(
+            GetRoleOptionId(QueenOption.ServantSelfKillCool));
+        this.killKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)) / 100.0f);
+        this.taskKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)) / 100.0f);
+        this.taskCompKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)) / 100.0f);
 
         this.servantTaskGage = new Dictionary<byte, float>();
         this.servantPlayerId = new HashSet<byte>();
@@ -728,7 +729,7 @@ public sealed class Servant :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         throw new Exception("Don't call this class method!!");
     }

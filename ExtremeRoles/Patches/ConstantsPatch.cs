@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.GameMode;
+﻿using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 using HarmonyLib;
@@ -13,7 +14,7 @@ public static class ConstantsShouldHorseAroundPatch
         __result =
             ExtremeGameModeManager.Instance is not null &&
             ExtremeGameModeManager.Instance.ShipOption.CanUseHorseMode &&
-            OptionHolder.AllOption[(int)GlobalOption.EnableHorseMode].GetValue();
+            OptionManager.Instance.GetValue<bool>((int)GlobalOption.EnableHorseMode);
         return false;
     }
 }
