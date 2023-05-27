@@ -108,7 +108,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 			string.Concat(
 				this.RoleName,
 				RoleCommonOption.AssignWeight.ToString()),
-			1000, 1, 1000, 1,
+			500, 1, 1000, 1,
             roleSetOption,
             tab: OptionTab.Combination);
 

@@ -42,7 +42,7 @@ public abstract partial class SingleRoleBase
 
 		CreateIntOption(
 			RoleCommonOption.AssignWeight,
-			500, 1, 1000, 11, roleSetOption);
+			500, 1, 1000, 1, roleSetOption);
 
         return roleSetOption;
     }
