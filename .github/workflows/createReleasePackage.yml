@@ -12,7 +12,7 @@ jobs:
   packing:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: true
       - name: SetupNuget
@@ -20,18 +20,18 @@ jobs:
       - name: RestoreNugetPackage
         run: nuget restore ExtremeRoles.sln
       - name: SetupPython
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           architecture: 'x64'
       - name: InstallPythonLibrary
         run: pip install -r requirements.txt
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
       - name: AddMsBuildToPATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v1
       - name: RunBuild
         run: ./packing.ps1
 
