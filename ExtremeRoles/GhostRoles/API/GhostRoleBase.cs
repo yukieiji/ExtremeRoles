@@ -453,11 +453,14 @@ public abstract class GhostRoleBase
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1, roleSetOption);
 
-		CreateIntOption(
-			RoleCommonOption.AssignWeight,
-			500, 1, 1000, 1, roleSetOption);
+		new IntCustomOption(
+			GetRoleOptionId(RoleCommonOption.AssignWeight),
+			$"|{this.RoleName}|{RoleCommonOption.AssignWeight}",
+			500, 1, 1000, 1,
+			roleSetOption,
+			tab: this.tab);
 
-        return roleSetOption;
+		return roleSetOption;
     }
 
     public abstract void CreateAbility();

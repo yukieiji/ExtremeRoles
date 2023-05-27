@@ -21,12 +21,22 @@ public static class CustomOptionCsvProcessor
     private const string vanilaOptionKey = "BytedVanillaOptions";
 
     private const string comma = ",";
-
     private const int curVersion = 7;
+
+	private sealed class StringCleaner
+	{
+		private Regex regex = new Regex("(\\|)|(<.*?>)|(\\\n)");
+
+		public string Clean(string value)
+			=> regex.Replace(value, string.Empty).Trim();
+	}
 
     public static bool Export()
     {
         Helper.Logging.Debug("Export Start!!!!!!");
+
+		var cleaner = new StringCleaner();
+
         try
         {
             using var csv = new StreamWriter(csvName, false, new UTF8Encoding(true));
@@ -52,9 +62,9 @@ public static class CustomOptionCsvProcessor
                 csv.WriteLine(
                     string.Format("{1}{0}{2}{0}{3}{0}{4}",
                         comma,
-                        clean(option.GetTranslatedName()),
-                        clean(option.GetTranslatedValue()),
-                        clean(option.Name),
+						cleaner.Clean(option.GetTranslatedName()),
+						cleaner.Clean(option.GetTranslatedValue()),
+						cleaner.Clean(option.Name),
                         option.CurSelection));
             }
 
@@ -97,15 +107,14 @@ public static class CustomOptionCsvProcessor
 
     public static bool Import()
     {
-        try
+		ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
+
+		Dictionary<string, int> importedOption = new Dictionary<string, int>();
+		Dictionary<GameModes, List<byte>> importedVanillaOptions =
+			new Dictionary<GameModes, List<byte>>();
+
+		try
         {
-
-            ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
-
-            Dictionary<string, int> importedOption = new Dictionary<string, int>();
-            Dictionary<GameModes, List<byte>> importedVanillaOptions =
-                new Dictionary<GameModes, List<byte>>();
-
             using var csv = new StreamReader(csvName, new UTF8Encoding(true));
 
             string infoData = csv.ReadLine(); // verHeader
@@ -187,16 +196,15 @@ public static class CustomOptionCsvProcessor
                 }
             }
 
-            // オプションのインポートデモでネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
-
             var options = OptionManager.Instance;
+			var cleaner = new StringCleaner();
 
 			foreach (IOptionInfo option in options.GetAllIOption())
 			{
 				if (option.Id == 0) { continue; }
 
 				if (importedOption.TryGetValue(
-					clean(option.Name),
+					cleaner.Clean(option.Name),
 					out int selection))
 				{
 					ExtremeRolesPlugin.Logger.LogInfo(
@@ -240,14 +248,5 @@ public static class CustomOptionCsvProcessor
                     mode.ToString(),
                     bytedOption));
         }
-    }
-
-    private static string clean(string value)
-    {
-        value = Regex.Replace(value, "<.*?>", string.Empty);
-        value = Regex.Replace(value, "^-\\s*", string.Empty);
-        value = Regex.Replace(value, "\\\n", string.Empty);
-
-        return value.Trim();
     }
 }
