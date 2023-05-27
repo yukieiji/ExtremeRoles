@@ -111,9 +111,10 @@ public abstract class CustomOptionBase<OutType, SelectionType>
     private OptionUnit format = OptionUnit.None;
 
     private const string IndentStr = "    ";
-	private string transKey = string.Empty;
 
-    public CustomOptionBase(
+	private static Regex nameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
+
+	public CustomOptionBase(
         int id,
         string name,
         SelectionType[] selections,
@@ -135,9 +136,6 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
         this.Id = id;
         this.Name = name;
-
-		// thisIsHotFix
-		this.transKey = this.Name.Contains("AssignWeight") ? "AssignWeight" : this.Name;
 
         this.format = format;
         this.defaultSelection = Mathf.Clamp(index, 0, index);
@@ -178,7 +176,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
         return;
     }
 
-    public string GetTranslatedName() => Translation.GetString(this.transKey);
+    public string GetTranslatedName() => Translation.GetString(this.Name);
 
     public string GetTranslatedValue()
     {
@@ -323,13 +321,9 @@ public abstract class CustomOptionBase<OutType, SelectionType>
     }
 
     private string cleanName()
-    {
-        string nameClean = Regex.Replace(this.Name, "<.*?>", "");
-        nameClean = Regex.Replace(nameClean, "^-\\s*", "");
-        return nameClean.Trim();
-    }
+		=> nameCleaner.Replace(this.Name, string.Empty).Trim();
 
-    private static void addChildrenOptionHudString(
+	private static void addChildrenOptionHudString(
         ref StringBuilder builder,
         IOptionInfo parentOption,
         int prefixIndentCount)

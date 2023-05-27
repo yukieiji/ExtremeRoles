@@ -10,13 +10,18 @@ namespace ExtremeRoles.Helper
 {
     public static class Translation
     {
-        private static Dictionary<string, Dictionary<SupportedLangs, string>> stringData = 
+        private static Dictionary<string, Dictionary<SupportedLangs, string>> stringData =
             new Dictionary<string, Dictionary<SupportedLangs, string>>();
 
         private const SupportedLangs defaultLanguage = SupportedLangs.Japanese;
         private const string dataPath = "ExtremeRoles.Resources.JsonData.Language.json";
 
-        public static void Load()
+		private static readonly Regex keyCleaner = new Regex(
+			@"(<.*?>)|(^-\s*)", RegexOptions.Compiled);
+		private static readonly Regex ignoreTransKeyRemover = new Regex(
+			@"\|.*?\|", RegexOptions.Compiled);
+
+		public static void Load()
         {
             stringData.Clear();
             JObject parsed = JsonParser.GetJObjectFromAssembly(dataPath);
@@ -56,9 +61,8 @@ namespace ExtremeRoles.Helper
                 return key;
             }
 
-            string keyClean = Regex.Replace(key, "<.*?>", "");
-            keyClean = Regex.Replace(keyClean, "^-\\s*", "");
-            keyClean = keyClean.Trim();
+			key = ignoreTransKeyRemover.Replace(key, string.Empty);
+            string keyClean = keyCleaner.Replace(key, string.Empty).Trim();
 
             if (!stringData.TryGetValue(keyClean, out var data))
             {
