@@ -1,9 +1,13 @@
 msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
 mkdir -Path workspace -Force
 
+Write-Host "Build Complete!!"
+
+Write-Host "Download BepInEx...."
 Invoke-WebRequest "https://builds.bepinex.dev/projects/bepinex_be/667/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.667%2B6b500b3.zip" -OutFile workspace/bepinex.zip
 Expand-Archive -Path workspace/bepinex.zip -DestinationPath workspace/bepinex -Force
 
+Write-Host "Create Packing..."
 mkdir -Path workspace/bepinex/BepInEx/config -Force
 mkdir -Path workspace/bepinex/BepInEx/plugins -Force
 
