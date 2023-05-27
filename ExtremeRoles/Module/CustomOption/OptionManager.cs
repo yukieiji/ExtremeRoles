@@ -74,12 +74,12 @@ public sealed class OptionManager
 
     public bool TryGet<T>(int id, out IValueOption<T> option)
         where T :
-            struct, IComparable, IConvertible, 
+            struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
         bool result = this.allOptionId.TryGetValue(id, out ValueType type);
         option = null;
-        
+
         if (!result) { return false; }
 
         return type switch
@@ -230,17 +230,9 @@ public sealed class OptionManager
         this.ExecuteWithBlockOptionShare(
             () =>
             {
-                foreach (var option in this.intOption.Values)
+                foreach (var (id, option) in this.GetKeyValueAllIOptions())
                 {
-                    if (option.Id != 0) { continue; }
-                    option.SwitchPreset();
-                }
-                foreach (var option in this.floatOption.Values)
-                {
-                    option.SwitchPreset();
-                }
-                foreach (var option in this.boolOption.Values)
-                {
+					if (id == 0) { continue; }
                     option.SwitchPreset();
                 }
             }
