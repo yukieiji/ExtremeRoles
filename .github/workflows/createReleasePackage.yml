@@ -1,0 +1,61 @@
+name: CreateReleasePackage
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: 'PackageVersion'
+        required: true
+
+jobs:
+  build_check:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: SetupNuget
+        uses: nuget/setup-nuget@v1
+      - name: RestoreNugetPackage
+        run: nuget restore ExtremeRoles.sln
+      - name: SetupPython
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
+      - name: InstallPythonLibrary
+        run: pip install -r requirements.txt
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.x
+      - name: AddMsBuildToPATH
+        uses: microsoft/setup-msbuild@v1.1
+      - name: RunBuild
+        run: ./packing.ps1
+
+      # ExtremeRoles.zip
+      - uses: actions/upload-artifact@v3
+        with:
+          name: "ExtremeRoles-v${{ github.event.inputs.versions }}.zip"
+          path: .release/ExtremeRoles.zip
+      # ExtremeRoles-v with skins.zip
+      - uses: actions/upload-artifact@v3
+        with:
+          name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins.zip"
+          path: .release/ExtremeRolesWithSkin.zip
+      # Mod Only
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ExtremeRoles.dll
+          path: .release/ExtremeRoles.dll
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ExtremeSkins.dll
+          path: .release/ExtremeSkins.dll
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ExtremeVoiceEngine.dll
+          path: .release/ExtremeVoiceEngine.dll
+
