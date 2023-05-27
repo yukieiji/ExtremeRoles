@@ -111,6 +111,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
     private OptionUnit format = OptionUnit.None;
 
     private const string IndentStr = "    ";
+	private string transKey = string.Empty;
 
     public CustomOptionBase(
         int id,
@@ -134,6 +135,9 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
         this.Id = id;
         this.Name = name;
+
+		// thisIsHotFix
+		this.transKey = this.Name.Contains("AssignWeight") ? "AssignWeight" : this.Name;
 
         this.format = format;
         this.defaultSelection = Mathf.Clamp(index, 0, index);
@@ -174,7 +178,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
         return;
     }
 
-    public string GetTranslatedName() => Translation.GetString(this.Name);
+    public string GetTranslatedName() => Translation.GetString(this.transKey);
 
     public string GetTranslatedValue()
     {
