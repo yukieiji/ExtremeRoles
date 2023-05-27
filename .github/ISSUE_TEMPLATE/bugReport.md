@@ -37,6 +37,7 @@ Extreme Roles v
 - [ ] :欧州/Europa
 - [ ] :アジア/Asia
 - [ ] :カスタム/Custom
+- [ ] :ExR専用(東京)
 
 ### プレイヤー人数/Player Num
 <!-- バグを確認した時のプレイヤーの人数 / Number of players at the time the bug was identified -->
