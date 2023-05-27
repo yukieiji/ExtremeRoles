@@ -3,20 +3,19 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <!--<Version>7.1.2.0</Version>-->
-    <VersionPrefix>7.1.2</VersionPrefix>
-    <VersionSuffix>SpringNext</VersionSuffix> 
+    <Version>7.1.2.1</Version>
+    <!--<VersionPrefix>7.1.2</VersionPrefix>-->
+    <VersionSuffix>SpringNext</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>embedded</DebugType>
   </PropertyGroup>
-  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
   </PropertyGroup>
@@ -38,7 +37,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 	</ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
     <EmbeddedResource Include="Resources\Asset\*.asset" />
@@ -49,7 +48,7 @@
 	  <EmbeddedResource Include="Resources\JsonData\*.json" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>

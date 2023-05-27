@@ -59,7 +59,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
                     }
                     break;
                 case ExtremeRoleType.Impostor:
-                    if ((playerRoleType == RoleTypes.Impostor) || 
+                    if ((playerRoleType == RoleTypes.Impostor) ||
                         (playerRoleType == RoleTypes.Shapeshifter))
                     {
                         return checkRole;
@@ -84,7 +84,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
             tab: OptionTab.Combination);
 
         int thisMaxRoleNum =
-            this.maxSetNum == int.MaxValue ? 
+            this.maxSetNum == int.MaxValue ?
             (int)Math.Floor((decimal)GameSystem.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
 
         new IntCustomOption(
@@ -105,8 +105,10 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 
         new IntCustomOption(
             GetRoleOptionId(RoleCommonOption.AssignWeight),
-            RoleCommonOption.AssignWeight.ToString(),
-            1000, 1, 1000, 1,
+			string.Concat(
+				this.RoleName,
+				RoleCommonOption.AssignWeight.ToString()),
+			500, 1, 1000, 1,
             roleSetOption,
             tab: OptionTab.Combination);
 

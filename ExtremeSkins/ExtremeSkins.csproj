@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>7.1.1.6</Version>
+    <Version>7.1.1.7</Version>
     <!--<VersionPrefix>7.1.1</VersionPrefix>-->
     <VersionSuffix>SpringJump</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
@@ -21,7 +21,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
   </PropertyGroup>
-	
+
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
@@ -40,13 +40,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="Resources\LangData\stringData.json" />
     <EmbeddedResource Include="Resources\Asset\*.asset" />
     <EmbeddedResource Include="Resources\*.png" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\CreatorMode.cs" Link="Core\CreatorMode.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\Config.cs" Link="Core\Config.cs" />
@@ -65,7 +65,7 @@
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
-  
+
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="if not exist $(SolutionDir)ExtremeSkins\Resources\Asset mkdir $(SolutionDir)ExtremeSkins\Resources\Asset" />
     <Exec Command="robocopy /mir $(SolutionDir)UnityAsset\ExtremeSkins $(SolutionDir)ExtremeSkins\Resources\Asset &amp; if errorlevel 8 (exit 1) else (exit 0)" />

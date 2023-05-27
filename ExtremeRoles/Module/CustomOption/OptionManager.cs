@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -30,12 +33,17 @@ public sealed class OptionManager
     private TypeOptionHolder<float> floatOption = new TypeOptionHolder<float>();
     private TypeOptionHolder<bool>  boolOption  = new TypeOptionHolder<bool>();
 
-    private bool isBlockShare = false;
     private int selectedPreset = 0;
 
     private const int chunkSize = 50;
 
-    public void Add(int id, IValueOption<float> option)
+	private const KeyCode maxSelectionKey = KeyCode.LeftControl;
+	private const KeyCode skipSelectionKey = KeyCode.LeftShift;
+
+	private const int defaultStep = 1;
+	private const int skipStep = 10;
+
+	public void Add(int id, IValueOption<float> option)
     {
         this.floatOption.Add(id, option);
         this.allOptionId.Add(id, ValueType.Float);
@@ -74,12 +82,12 @@ public sealed class OptionManager
 
     public bool TryGet<T>(int id, out IValueOption<T> option)
         where T :
-            struct, IComparable, IConvertible, 
+            struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
         bool result = this.allOptionId.TryGetValue(id, out ValueType type);
         option = null;
-        
+
         if (!result) { return false; }
 
         return type switch
@@ -209,49 +217,35 @@ public sealed class OptionManager
         }
     }
 
-    public void ExecuteWithBlockOptionShare(Action func)
-    {
-        this.isBlockShare = true;
-        try
-        {
-            func.Invoke();
-        }
-        catch (Exception e)
-        {
-            ExtremeRolesPlugin.Logger.LogInfo($"BlockShareExcuteFailed!!:{e}");
-        }
-        this.isBlockShare = false;
-    }
+	public void ChangeOptionValue(int id, bool isIncrese)
+	{
+		var option = GetIOption(id);
 
-    public void SwitchPreset(int newPreset)
-    {
-        this.selectedPreset = newPreset;
+		int curSelection = option.CurSelection;
+		int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
+		int newSelection = isIncrese ? curSelection + step : curSelection - step;
+		if (Input.GetKey(maxSelectionKey))
+		{
+			newSelection = isIncrese ? option.ValueCount - 1 : 0;
+		}
 
-        this.ExecuteWithBlockOptionShare(
-            () =>
-            {
-                foreach (var option in this.intOption.Values)
-                {
-                    if (option.Id != 0) { continue; }
-                    option.SwitchPreset();
-                }
-                foreach (var option in this.floatOption.Values)
-                {
-                    option.SwitchPreset();
-                }
-                foreach (var option in this.boolOption.Values)
-                {
-                    option.SwitchPreset();
-                }
-            }
-        );
-        RoleAssignFilter.Instance.SwitchPreset();
-    }
+		option.UpdateSelection(newSelection);
+
+		if (id == 0)
+		{
+			switchPreset(newSelection);
+		}
+
+		if (AmongUsClient.Instance &&
+			AmongUsClient.Instance.AmHost &&
+			CachedPlayerControl.LocalPlayer)
+		{
+			ShareOptionSelections();// Share all selections
+		}
+	}
 
     public void ShareOptionSelections()
     {
-        if (this.isBlockShare) { return; }
-
         if (PlayerControl.AllPlayerControls.Count <= 1 ||
             !AmongUsClient.Instance ||
             !AmongUsClient.Instance.AmHost ||
@@ -262,27 +256,41 @@ public sealed class OptionManager
         shareOption(this.boolOption);
     }
 
-    public void Update(int id, int selection)
-    {
-        if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return; }
+	private void switchPreset(int newPreset)
+	{
+		this.selectedPreset = newPreset;
 
-        switch (type)
-        {
-            case ValueType.Int:
-                this.intOption.Update(id, selection);
-                break;
-            case ValueType.Float:
-                this.floatOption.Update(id, selection);
-                break;
-            case ValueType.Bool:
-                this.boolOption.Update(id, selection);
-                break;
-            default:
-                break;
-        };
-    }
+		foreach (var (_, option) in this.GetKeyValueAllIOptions())
+		{
+			if (option.Id == 0) { continue; }
+			option.SwitchPreset();
+		}
 
-    public static void Load()
+		ShareOptionSelections();
+		RoleAssignFilter.Instance.SwitchPreset();
+	}
+
+	private void rpcValueSync(int id, int selection)
+	{
+		if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return; }
+
+		switch (type)
+		{
+			case ValueType.Int:
+				this.intOption.Update(id, selection);
+				break;
+			case ValueType.Float:
+				this.floatOption.Update(id, selection);
+				break;
+			case ValueType.Bool:
+				this.boolOption.Update(id, selection);
+				break;
+			default:
+				break;
+		};
+	}
+
+	public static void Load()
     {
         // ランダム生成機を設定を読み込んで作成
         RandomGenerator.Initialize();
@@ -310,7 +318,7 @@ public sealed class OptionManager
             {
                 int optionId = reader.ReadPackedInt32();
                 int selection = reader.ReadPackedInt32();
-                Instance.Update(optionId, selection);
+                Instance.rpcValueSync(optionId, selection);
             }
         }
         catch (Exception e)

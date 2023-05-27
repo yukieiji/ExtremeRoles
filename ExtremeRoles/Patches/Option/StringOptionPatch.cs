@@ -8,58 +8,38 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Patches.Option;
 
-[HarmonyPatch]
-public static class StringOptionSelectionUpdatePatch
+[HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
+public static class StringOptionDecreasePatch
 {
-    private const KeyCode maxSelectionKey = KeyCode.LeftControl;
-    private const KeyCode skipSelectionKey = KeyCode.LeftShift;
-    
-    private const int defaultStep = 1;
-    private const int skipStep = 10;
+	public static bool Prefix(StringOption __instance)
+	{
 
-    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
-    public static class StringOptionDecreasePatch
-    {
-        public static bool Prefix(StringOption __instance)
-        {
+		string idStr = __instance.gameObject.name.Replace(
+			OptionMenuTab.StringOptionName, string.Empty);
 
-            string idStr = __instance.gameObject.name.Replace(
-                OptionMenuTab.StringOptionName, string.Empty);
+		if (!int.TryParse(idStr, out int id)) { return true; };
 
-            if (!int.TryParse(idStr, out int id)) { return true; };
+		OptionManager.Instance.ChangeOptionValue(id, false);
 
-            IOptionInfo option = OptionManager.Instance.GetIOption(id);
-
-            int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
-            int newSelection = Input.GetKey(maxSelectionKey) ? 0 : option.CurSelection - step;
-            option.UpdateSelection(newSelection);
-            
-            return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
-    public static class StringOptionIncreasePatch
-    {
-        public static bool Prefix(StringOption __instance)
-        {
-            string idStr = __instance.gameObject.name.Replace(
-                OptionMenuTab.StringOptionName, string.Empty);
-
-            if (!int.TryParse(idStr, out int id)) { return true; };
-
-            IOptionInfo option = OptionManager.Instance.GetIOption(id);
-
-            int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
-            int newSelection = Input.GetKey(maxSelectionKey) ? 
-                option.ValueCount - 1 : option.CurSelection + step;
-            option.UpdateSelection(newSelection);
-
-            return false;
-        }
-    }
+		return false;
+	}
 }
 
+[HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
+public static class StringOptionIncreasePatch
+{
+	public static bool Prefix(StringOption __instance)
+	{
+		string idStr = __instance.gameObject.name.Replace(
+			OptionMenuTab.StringOptionName, string.Empty);
+
+		if (!int.TryParse(idStr, out int id)) { return true; };
+
+		OptionManager.Instance.ChangeOptionValue(id, true);
+
+		return false;
+	}
+}
 [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
 public static class StringOptionOnEnablePatch
 {

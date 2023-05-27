@@ -72,7 +72,7 @@ public sealed class GhostRoleSpawnDataManager :
 
             int spawnRate = ISpawnDataManager.ComputePercentage(
                 allOption.Get<int>(
-                    role.GetRoleOptionId(RoleCommonOption.SpawnRate), 
+                    role.GetRoleOptionId(RoleCommonOption.SpawnRate),
                     OptionManager.ValueType.Int));
             int weight = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.AssignWeight));

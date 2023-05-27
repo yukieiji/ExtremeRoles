@@ -64,7 +64,7 @@ public abstract class GhostRoleBase
         this.RoleId = id;
         this.RoleName = roleName;
         this.NameColor = color;
-        
+
         if (tab == OptionTab.General)
         {
             switch (team)
@@ -136,7 +136,7 @@ public abstract class GhostRoleBase
     public virtual string GetFullDescription() => Translation.GetString(
        $"{this.Id}FullDescription");
 
-    public virtual string GetImportantText() => 
+    public virtual string GetImportantText() =>
         Design.ColoedString(
             this.NameColor,
             string.Format("{0}: {1}",
@@ -269,9 +269,9 @@ public abstract class GhostRoleBase
     protected bool isReportAbility() => OptionManager.Instance.GetValue<bool>(
         this.GetRoleOptionId(GhostRoleOption.IsReportAbility));
 
-    protected bool IsCommonUse() => 
-        PlayerControl.LocalPlayer && 
-        PlayerControl.LocalPlayer.Data.IsDead && 
+    protected bool IsCommonUse() =>
+        PlayerControl.LocalPlayer &&
+        PlayerControl.LocalPlayer.Data.IsDead &&
         PlayerControl.LocalPlayer.CanMove;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -453,12 +453,9 @@ public abstract class GhostRoleBase
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1, roleSetOption);
 
-        new IntCustomOption(
-            GetRoleOptionId(RoleCommonOption.AssignWeight),
-            RoleCommonOption.AssignWeight.ToString(),
-            1000, 1, 1000, 1,
-            roleSetOption,
-            tab: this.tab);
+		CreateIntOption(
+			RoleCommonOption.AssignWeight,
+			500, 1, 1000, 1, roleSetOption);
 
         return roleSetOption;
     }
