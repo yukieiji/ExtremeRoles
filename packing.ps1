@@ -19,12 +19,10 @@ Copy-Item -Path workspace/bepinex -Destination workspace/ExtremeRolesWithSkins -
 mkdir -Path release -Force
 
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/ExtremeRoles/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
-Compress-Archive -DestinationPath release/ExtremeRoles.zip -Path workspace/ExtremeRoles
 
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/ExtremeRolesWithSkins/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
 Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination workspace/ExtremeRolesWithSkins/BepInEx/plugins/ExtremeSkins.dll -Force -Recurse
-Compress-Archive -DestinationPath release/ExtremeRolesWithSkin.zip -Path workspace/ExtremeRolesWithSkins
 
-Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination release/ExtremeRoles.dll -Force -Recurse
-Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination release/ExtremeSkins.dll -Force -Recurse
-Copy-Item -Path ExtremeVoiceEngine/bin/Release/net6.0/ExtremeVoiceEngine.dll -Destination release/ExtremeVoiceEngine.dll -Force -Recurse
+Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/dll/ExtremeRoles.dll -Force -Recurse
+Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination workspace/dll/ExtremeSkins.dll -Force -Recurse
+Copy-Item -Path ExtremeVoiceEngine/bin/Release/net6.0/ExtremeVoiceEngine.dll -Destination workspace/dll/ExtremeVoiceEngine.dll -Force -Recurse
