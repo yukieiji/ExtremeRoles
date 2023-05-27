@@ -259,17 +259,10 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
         if (AmongUsClient.Instance &&
             AmongUsClient.Instance.AmHost &&
-            CachedPlayerControl.LocalPlayer)
+            CachedPlayerControl.LocalPlayer &&
+			this.entry != null)
         {
-            if (this.Id == 0)
-            {
-                OptionManager.Instance.SwitchPreset(this.CurSelection); // Switch presets
-            }
-            else if (this.entry != null)
-            {
-                this.entry.Value = this.CurSelection; // Save selection to config
-            }
-            OptionManager.Instance.ShareOptionSelections();// Share all selections
+			this.entry.Value = this.CurSelection; // Save selection to config
         }
     }
 

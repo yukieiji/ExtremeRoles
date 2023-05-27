@@ -30,7 +30,7 @@ public static class CustomOptionCsvProcessor
         try
         {
             using var csv = new StreamWriter(csvName, false, new UTF8Encoding(true));
-            
+
             csv.WriteLine(
                 string.Format("{1}{0}{2}{0}{3}{0}{4}",
                     comma,
@@ -103,11 +103,11 @@ public static class CustomOptionCsvProcessor
             ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
 
             Dictionary<string, int> importedOption = new Dictionary<string, int>();
-            Dictionary<GameModes, List<byte>> importedVanillaOptions = 
+            Dictionary<GameModes, List<byte>> importedVanillaOptions =
                 new Dictionary<GameModes, List<byte>>();
 
             using var csv = new StreamReader(csvName, new UTF8Encoding(true));
-            
+
             string infoData = csv.ReadLine(); // verHeader
             string[] info = infoData.Split(',');
 
@@ -152,7 +152,7 @@ public static class CustomOptionCsvProcessor
                     bytedOptions.ToArray());
 
                 if (option == null) { continue; }
-                
+
                 switch (mode)
                 {
                     case GameModes.Normal:
@@ -163,7 +163,7 @@ public static class CustomOptionCsvProcessor
                         {
                             normalOption = gameOptionManager.MigrateNormalGameOptions(option);
                         }
-                        
+
                         if (normalOption == null) { continue; }
 
                         gameOptionManager.normalGameHostOptions = normalOption;
@@ -191,27 +191,23 @@ public static class CustomOptionCsvProcessor
 
             var options = OptionManager.Instance;
 
-            options.ExecuteWithBlockOptionShare(
-                () =>
-                {
-                    foreach (IOptionInfo option in options.GetAllIOption())
-                    {
-                        if (option.Id == 0) { continue; }
+			foreach (IOptionInfo option in options.GetAllIOption())
+			{
+				if (option.Id == 0) { continue; }
 
-                        if (importedOption.TryGetValue(
-                            clean(option.Name),
-                            out int selection))
-                        {
-                            ExtremeRolesPlugin.Logger.LogInfo(
-                                $"Update Option : {option.Name} to Selection:{selection}");
-                            option.UpdateSelection(selection);
-                            option.SaveConfigValue();
-                        }
-                    }
-                });
+				if (importedOption.TryGetValue(
+					clean(option.Name),
+					out int selection))
+				{
+					ExtremeRolesPlugin.Logger.LogInfo(
+						$"Update Option : {option.Name} to Selection:{selection}");
+					option.UpdateSelection(selection);
+					option.SaveConfigValue();
+				}
+			}
 
-            if (AmongUsClient.Instance &&
-                AmongUsClient.Instance.AmHost && 
+			if (AmongUsClient.Instance &&
+                AmongUsClient.Instance.AmHost &&
                 CachedPlayerControl.LocalPlayer)
             {
                 options.ShareOptionSelections();// Share all selections

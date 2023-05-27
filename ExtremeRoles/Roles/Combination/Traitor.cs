@@ -46,16 +46,12 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 
         this.BaseRole.CanHasAnotherRole = true;
 
-        // 0:オフ、1:オン
-        allOptions.ExecuteWithBlockOptionShare(
-            () =>
-            {
-                allOptions.Get<bool>(GetRoleOptionId(
-                    CombinationRoleCommonOption.IsMultiAssign),
-                    OptionManager.ValueType.Bool).UpdateSelection(1);
-            });
+		// 0:オフ、1:オン
+		allOptions.Get<bool>(GetRoleOptionId(
+			CombinationRoleCommonOption.IsMultiAssign),
+			OptionManager.ValueType.Bool).UpdateSelection(1);
 
-        if (allOptions.Contains(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
+		if (allOptions.Contains(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
         {
             roleAssignNum = allOptions.GetValue<int>(
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum));
@@ -90,7 +86,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     private Sprite vitalSprite;
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.crackButton;
         set
         {
@@ -211,7 +207,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     public bool IsAbilityUse()
     {
         if (!this.canUseButton) { return false; }
-     
+
         switch (this.nextUseAbilityType)
         {
             case AbilityType.Admin:
@@ -323,7 +319,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
             this.crewRoleStr = this.AnotherRole.RoleName;
         }
         Logging.Debug($"Traitor Get Role:{this.crewRoleStr}");
-        
+
         byte rolePlayerId = byte.MaxValue;
 
         foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
