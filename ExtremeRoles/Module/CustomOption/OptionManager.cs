@@ -237,14 +237,15 @@ public sealed class OptionManager
                 }
             }
         );
+
+		ShareOptionSelections();
         RoleAssignFilter.Instance.SwitchPreset();
     }
 
     public void ShareOptionSelections()
     {
-        if (this.isBlockShare) { return; }
-
-        if (PlayerControl.AllPlayerControls.Count <= 1 ||
+        if (this.isBlockShare ||
+			PlayerControl.AllPlayerControls.Count <= 1 ||
             !AmongUsClient.Instance ||
             !AmongUsClient.Instance.AmHost ||
             !PlayerControl.LocalPlayer) { return; }
