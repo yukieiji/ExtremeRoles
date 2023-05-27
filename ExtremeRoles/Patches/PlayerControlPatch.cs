@@ -66,9 +66,9 @@ public static class PlayerControlAwakePatch
 #if DEBUG
         foreach (var cachedPlayer in CachedPlayerControl.AllPlayerControls)
         {
-            if (!cachedPlayer.PlayerControl || 
-                !cachedPlayer.PlayerPhysics || 
-                !cachedPlayer.NetTransform || 
+            if (!cachedPlayer.PlayerControl ||
+                !cachedPlayer.PlayerPhysics ||
+                !cachedPlayer.NetTransform ||
                 !cachedPlayer.transform)
             {
                 Logging.Debug($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
@@ -168,7 +168,7 @@ public static class PlayerControlFixedUpdatePatch
 
     public static void Postfix(PlayerControl __instance)
     {
-        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
+        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
         { return; }
         if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
@@ -225,7 +225,7 @@ public static class PlayerControlFixedUpdatePatch
     {
         if (!player.AmOwner) { return; }
 
-        bool enable = 
+        bool enable =
             (player.IsKillTimerEnabled || player.ForceKillTimerContinue) &&
             (MeetingHud.Instance == null && ExileController.Instance == null);
 
@@ -303,7 +303,7 @@ public static class PlayerControlFixedUpdatePatch
         HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
         if (!role.CanUseVent() || player.Data.IsDead)
-        { 
+        {
             hudManager.ImpostorVentButton.Hide();
             return;
         }
@@ -363,7 +363,7 @@ public static class PlayerControlFixedUpdatePatch
             case RoleTypes.CrewmateGhost:
             case RoleTypes.ImpostorGhost:
                 if (playerGhostRole.IsVanillaRole() &&
-                    MeetingHud.Instance == null && 
+                    MeetingHud.Instance == null &&
                     ExileController.Instance == null)
                 {
                     abilityButton.Show();
@@ -405,7 +405,7 @@ public static class PlayerControlHandleRpcPatch
                 RPCOperator.SetUpReady(readyPlayerId);
                 break;
             case RPCOperator.Command.SetRoleToAllPlayer:
-                List<Module.Interface.IPlayerToExRoleAssignData> assignData = 
+                List<Module.Interface.IPlayerToExRoleAssignData> assignData =
                     new List<Module.Interface.IPlayerToExRoleAssignData>();
                 int assignDataNum = reader.ReadPackedInt32();
                 for (int i = 0; i < assignDataNum; ++i)
@@ -571,7 +571,7 @@ public static class PlayerControlHandleRpcPatch
                 int getTaskNum = reader.ReadInt32();
 
                 List<int> getTaskId = new List<int> ();
-                
+
                 for (int i = 0; i < getTaskNum; ++i)
                 {
                     getTaskId.Add(reader.ReadInt32());
@@ -750,7 +750,7 @@ public static class PlayerControlMurderPlayerPatch
         if (role.Id == ExtremeRoleId.Villain)
         {
             guardBreakKill(__instance, target, killCool);
-            return false; 
+            return false;
         }
         if (!hasOtherKillCool) { return true; }
 
@@ -890,7 +890,7 @@ public static class PlayerControlMurderPlayerPatch
             }
             instance.SetKillTimer(killCool);
         }
-        
+
         FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
 
         target.gameObject.layer = LayerMask.NameToLayer("Ghost");
@@ -946,7 +946,7 @@ public static class PlayerControlSetCoolDownPatch
 
         var role = roles[__instance.PlayerId];
 
-        var killCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+        float killCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.KillCooldown);
         if (killCool <= 0f) { return false; }
         float maxTime = killCool;
