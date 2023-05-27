@@ -33,18 +33,16 @@ public abstract partial class SingleRoleBase
             OptionCreator.SpawnRate, null, true,
             colored: true);
 
-        int spawnNum = this.IsImpostor() ? 
+        int spawnNum = this.IsImpostor() ?
             GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
         CreateIntOption(
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1, roleSetOption);
 
-        new IntCustomOption(
-            GetRoleOptionId(RoleCommonOption.AssignWeight),
-            RoleCommonOption.AssignWeight.ToString(),
-            500, 1, 1000, 1,
-            roleSetOption, tab:this.Tab);
+		CreateIntOption(
+			RoleCommonOption.AssignWeight,
+			500, 1, 1000, 11, roleSetOption);
 
         return roleSetOption;
     }

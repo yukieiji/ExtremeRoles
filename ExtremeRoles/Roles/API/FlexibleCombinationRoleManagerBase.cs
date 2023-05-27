@@ -15,7 +15,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public FlexibleCombinationRoleManagerBase(
         MultiAssignRoleBase role,
         int minimumRoleNum = 2,
-        bool canAssignImposter = true) : 
+        bool canAssignImposter = true) :
             base(role.Id.ToString(), role.GetNameColor(true))
     {
         this.BaseRole = role;
@@ -30,7 +30,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
     public int GetOptionIdOffset() => this.OptionIdOffset;
 
-    public string GetBaseRoleFullDescription() => 
+    public string GetBaseRoleFullDescription() =>
         Translation.GetString($"{BaseRole.Id}FullDescription");
 
     public override void AssignSetUpInit(int curImpNum)
@@ -53,7 +53,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
             var spawnOption = allOption.Get<int>(
                 GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
                 OptionManager.ValueType.Int);
-            isEvil = isEvil && 
+            isEvil = isEvil &&
                 (UnityEngine.Random.RandomRange(0, 110) < (int)decimal.Multiply(
                     spawnOption.GetValue(), spawnOption.ValueCount)) &&
                 curImpNum < GameOptionsManager.Instance.CurrentGameOptions.GetInt(
@@ -86,7 +86,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     {
 
         MultiAssignRoleBase role = null;
-        
+
         if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
 
         this.BaseRole.CanHasAnotherRole = OptionManager.Instance.GetValue<bool>(
@@ -125,8 +125,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
             OptionCreator.SpawnRate, null, true,
             tab: OptionTab.Combination);
 
-        int roleAssignNum = this.BaseRole.IsImpostor() ? 
-            GameSystem.MaxImposterNum : 
+        int roleAssignNum = this.BaseRole.IsImpostor() ?
+            GameSystem.MaxImposterNum :
             GameSystem.VanillaMaxPlayerNum - 1;
 
         var roleAssignNumOption = new IntCustomOption(
@@ -157,10 +157,12 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
         new IntCustomOption(
             GetRoleOptionId(RoleCommonOption.AssignWeight),
-            RoleCommonOption.AssignWeight.ToString(),
-            1000, 1, 1000, 1,
+			string.Concat(
+				this.RoleName,
+				RoleCommonOption.AssignWeight.ToString()),
+            500, 1, 1000, 1,
             roleSetOption,
-            tab: OptionTab.Combination);
+			tab: OptionTab.Combination);
 
         if (this.canAssignImposter)
         {

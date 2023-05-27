@@ -35,7 +35,7 @@ public enum OptionUnit : byte
     Multiplier,
     Percentage,
     ScrewNum,
-    VoteNum
+    VoteNum,
 }
 
 public interface IOptionInfo
@@ -109,7 +109,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
     private List<IValueOption<OutType>> withUpdateOption = new List<IValueOption<OutType>>();
     private IOptionInfo forceEnableCheckOption = null;
     private OptionUnit format = OptionUnit.None;
-    
+
     private const string IndentStr = "    ";
 
     public CustomOptionBase(
