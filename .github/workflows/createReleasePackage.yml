@@ -9,7 +9,7 @@ on:
         required: true
 
 jobs:
-  build_check:
+  packing:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,23 +39,23 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }}.zip"
-          path: .release/ExtremeRoles.zip
+          path: ./release/ExtremeRoles.zip
       # ExtremeRoles-v with skins.zip
       - uses: actions/upload-artifact@v3
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins.zip"
-          path: .release/ExtremeRolesWithSkin.zip
+          path: ./release/ExtremeRolesWithSkin.zip
       # Mod Only
       - uses: actions/upload-artifact@v3
         with:
           name: ExtremeRoles.dll
-          path: .release/ExtremeRoles.dll
+          path: ./release/ExtremeRoles.dll
       - uses: actions/upload-artifact@v3
         with:
           name: ExtremeSkins.dll
-          path: .release/ExtremeSkins.dll
+          path: ./release/ExtremeSkins.dll
       - uses: actions/upload-artifact@v3
         with:
           name: ExtremeVoiceEngine.dll
-          path: .release/ExtremeVoiceEngine.dll
+          path: ./release/ExtremeVoiceEngine.dll
 
