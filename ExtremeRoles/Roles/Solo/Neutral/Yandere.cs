@@ -15,11 +15,13 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Yandere : 
-    SingleRoleBase, 
-    IRoleUpdate, 
-    IRoleMurderPlayerHook, 
-    IRoleResetMeeting, 
+// TODO: 復活しても問題ないようにする #281
+
+public sealed class Yandere :
+    SingleRoleBase,
+    IRoleUpdate,
+    IRoleMurderPlayerHook,
+    IRoleResetMeeting,
     IRoleSpecialSetUp
 {
     public PlayerControl OneSidedLover = null;
@@ -123,7 +125,7 @@ public sealed class Yandere :
             foreach (var (playerId, playerControl) in this.targetPlayer)
             {
                 if (playerControl == null ||
-                    playerControl.Data.Disconnected || 
+                    playerControl.Data.Disconnected ||
                     playerControl.Data.IsDead)
                 {
                     remove.Add(playerId);
@@ -250,7 +252,7 @@ public sealed class Yandere :
             {
                 this.oneSidedArrow.SetActive(false);
             }
-            return; 
+            return;
         }
 
         if (this.OneSidedLover == null)
@@ -287,7 +289,7 @@ public sealed class Yandere :
         if (this.blockTimer > this.blockTargetTime)
         {
             // 片思いびとが生きてる時の処理
-            if (!this.OneSidedLover.Data.Disconnected && 
+            if (!this.OneSidedLover.Data.Disconnected &&
                 !this.OneSidedLover.Data.IsDead)
             {
                 searchTarget(rolePlayer, oneSideLoverPos);
@@ -455,14 +457,14 @@ public sealed class Yandere :
             GetRoleOptionId(YandereOption.TargetKilledKillCoolReduceRate));
         this.noneTargetKillMultiplier = allOption.GetValue<float>(
             GetRoleOptionId(YandereOption.NoneTargetKilledKillCoolMultiplier));
-        
+
         this.maxTargetNum = allOption.GetValue<int>(
             GetRoleOptionId(YandereOption.MaxTargetNum));
 
         this.timer = 0.0f;
         this.timeLimit = allOption.GetValue<float>(
             GetRoleOptionId(YandereOption.RunawayTime));
-        
+
         this.blockTimer = 0.0f;
         this.blockTargetTime = allOption.GetValue<float>(
             GetRoleOptionId(YandereOption.BlockTargetTime));
@@ -512,7 +514,7 @@ public sealed class Yandere :
         PlayerControl rolePlayer,
         Vector2 pos)
     {
-        foreach (GameData.PlayerInfo playerInfo in 
+        foreach (GameData.PlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 
@@ -521,7 +523,7 @@ public sealed class Yandere :
             float playerProgress = this.progress[playerInfo.PlayerId];
 
             if (!playerInfo.Disconnected &&
-                !playerInfo.IsDead && 
+                !playerInfo.IsDead &&
                 rolePlayer.PlayerId != playerInfo.PlayerId &&
                 this.OneSidedLover.PlayerId != playerInfo.PlayerId &&
                 !playerInfo.Object.inVent)
@@ -550,7 +552,7 @@ public sealed class Yandere :
                 playerProgress = 0.0f;
             }
 
-            if (playerProgress >= this.setTargetTime && 
+            if (playerProgress >= this.setTargetTime &&
                 !this.target.IsContain(playerInfo.PlayerId) &&
                 this.target.Count() < this.maxTargetNum)
             {
@@ -569,7 +571,7 @@ public sealed class Yandere :
         if (this.isRunaway)
         {
             this.CanKill = true;
-            return; 
+            return;
         }
 
         this.CanKill = this.target.Count() > 0;
