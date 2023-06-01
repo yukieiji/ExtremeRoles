@@ -17,7 +17,7 @@ public static class KeyboardJoystickPatch
 {
     public static void Postfix()
     {
-        if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) 
+        if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null)
         { return; }
 
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
@@ -73,7 +73,6 @@ public static class KeyboardJoystickPatch
             ExtremeRolesPlugin.Info.ChangePage(-1);
         }
 
-       
         // キルとベントボタン
         if (CachedPlayerControl.LocalPlayer.Data == null ||
             CachedPlayerControl.LocalPlayer.Data.Role == null ||
@@ -95,7 +94,7 @@ public static class KeyboardJoystickPatch
         {
             if (role.TryGetVanillaRoleId(out RoleTypes roleId))
             {
-                if (roleId != RoleTypes.Engineer || 
+                if (roleId != RoleTypes.Engineer ||
                     ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                 {
                     hudManager.ImpostorVentButton.DoClick();
