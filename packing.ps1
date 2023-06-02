@@ -18,7 +18,6 @@ Copy-Item -Path workspace/bepinex -Destination workspace/ExtremeRolesWithSkins -
 mkdir -Path workspace/dll -Force
 
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/ExtremeRoles/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
-Compress-Archive -DestinationPath release/ExtremeRoles.zip -Path workspace/ExtremeRoles
 
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/ExtremeRolesWithSkins/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
 Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination workspace/ExtremeRolesWithSkins/BepInEx/plugins/ExtremeSkins.dll -Force -Recurse
