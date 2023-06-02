@@ -15,8 +15,7 @@ Copy-Item -Path ExtremeRoles/Resources/Config -Destination workspace/bepinex/Bep
 
 Copy-Item -Path workspace/bepinex -Destination workspace/ExtremeRoles -Force -Recurse
 Copy-Item -Path workspace/bepinex -Destination workspace/ExtremeRolesWithSkins -Force -Recurse
-
-mkdir -Path release -Force
+mkdir -Path workspace/dll -Force
 
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/ExtremeRoles/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
 
