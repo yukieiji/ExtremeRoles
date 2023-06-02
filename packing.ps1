@@ -1,3 +1,13 @@
+Write-Host "Init Env..."
+
+python makelanguagejson.py
+mkdir -Path ExtremeRoles\Resources\Asset -Force
+Copy-Item -Path UnityAsset\ExtremeRoles -Destination ExtremeRoles\Resources\Asset -Force -Recurse
+mkdir -Path ExtremeSkins\Resources\Asset -Force
+Copy-Item -Path UnityAsset\ExtremeSkins -Destination ExtremeSkins\Resources\Asset -Force -Recurse
+
+Write-Host "Start Build!!"
+
 msbuild ExtremeRoles.sln -t:restore,rebuild -p:Configuration=Release -p:RestorePackagesConfig=true
 mkdir -Path workspace -Force
 
