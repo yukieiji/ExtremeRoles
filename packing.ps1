@@ -11,7 +11,7 @@ Write-Host "Create Packing..."
 mkdir -Path workspace/bepinex/BepInEx/config -Force
 mkdir -Path workspace/bepinex/BepInEx/plugins -Force
 
-Copy-Item -Path ExtremeRoles/Resources/Config -Destination workspace/bepinex/BepInEx/config -Force -Recurse
+Copy-Item -Path ExtremeRoles/Resources/Config/*.cfg -Destination workspace/bepinex/BepInEx/config -Force -Recurse
 
 Copy-Item -Path workspace/bepinex -Destination workspace/ExtremeRoles -Force -Recurse
 Copy-Item -Path workspace/bepinex -Destination workspace/ExtremeRolesWithSkins -Force -Recurse
