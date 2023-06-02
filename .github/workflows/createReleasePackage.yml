@@ -39,7 +39,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }}.zip"
-          path: ./release/ExtremeRoles/
+          path: ./workspace/ExtremeRoles/
       # ExtremeRoles-v with skins.zip
       - uses: actions/upload-artifact@v3
         with:
@@ -48,6 +48,6 @@ jobs:
       # Mod zip Only
       - uses: actions/upload-artifact@v3
         with:
-          name: ExtremeRoles.dll
+          name: ExtremeRolesModOnly
           path: ./workspace/dll/
 
