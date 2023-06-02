@@ -1,4 +1,4 @@
-msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
+msbuild ExtremeRoles.sln -t:restore,rebuild -p:Configuration=Release -p:RestorePackagesConfig=true
 mkdir -Path workspace -Force
 
 Write-Host "Build Complete!!"
