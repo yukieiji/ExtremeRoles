@@ -24,14 +24,14 @@ jobs:
         with:
           python-version: '3.10'
           architecture: 'x64'
-      - name: InstallPythonLibrary
-        run: pip install -r requirements.txt
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1
+      - name: InitEnv
+        run: MakeEnb.bat
       - name: RunBuild
         run: ./packing.ps1
 
