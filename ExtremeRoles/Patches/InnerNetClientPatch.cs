@@ -9,13 +9,21 @@ using InnerNet;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Manager;
 
-
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.GetConnectionData))]
 public static class InnerNetClientGetConnectionDataPatch
 {
-    [HarmonyPostfix, HarmonyPriority(Priority.First)]
+	// FromReactor
+	public static void Prefix(ref bool useDtlsLayout)
+	{
+		// Due to reasons currently unknown, the useDtlsLayout parameter sometimes doesn't reflect whether DTLS
+		// is actually supposed to be enabled. This causes a bad handshake message and a quick disconnect.
+		// The field on AmongUsClient appears to be more reliable, so override this parameter with what it is supposed to be.
+		useDtlsLayout = AmongUsClient.Instance.useDtls;
+	}
+
+	[HarmonyPostfix, HarmonyPriority(Priority.First)]
     public static void Postfix(ref Il2CppStructArray<byte> __result)
     {
         var serverMng = FastDestroyableSingleton<ServerManager>.Instance;

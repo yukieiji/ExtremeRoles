@@ -157,10 +157,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
         new IntCustomOption(
             GetRoleOptionId(RoleCommonOption.AssignWeight),
-			string.Concat(
-				this.RoleName,
-				RoleCommonOption.AssignWeight.ToString()),
-            500, 1, 1000, 1,
+			$"|{this.RoleName}|{RoleCommonOption.AssignWeight}",
+			500, 1, 1000, 1,
             roleSetOption,
 			tab: OptionTab.Combination);
 

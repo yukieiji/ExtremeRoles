@@ -9,11 +9,9 @@ namespace ExtremeRoles.Patches
 	{
 		public static void Postfix(TextBoxTMP __instance)
 		{
-			bool flag =
-				DataManager.Settings.Gameplay.StreamerMode && 
-				(__instance.name == "ipTextBox" || 
-					__instance.name == "portTextBox");
-			if (flag)
+			if (DataManager.Settings.Gameplay.StreamerMode &&
+				(__instance.name == "ipTextBox" ||
+				 __instance.name == "portTextBox"))
 			{
 				__instance.outputText.text = new string('*', __instance.text.Length);
 			}

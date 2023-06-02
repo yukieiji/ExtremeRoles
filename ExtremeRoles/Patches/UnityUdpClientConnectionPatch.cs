@@ -12,14 +12,6 @@ public static class UnityUdpClientConnectionConnectAsyncPatch
 {
     public static void Prefix(UnityUdpClientConnection __instance)
     {
-		// Ignore Auth when Custom servers, for set timeout 0ms
-		if (__instance.TryCast<DtlsUnityConnection> != null &&
-			FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer())
-		{
-			__instance.DisconnectTimeoutMs = 128;
-			return;
-		}
-
         __instance.KeepAliveInterval = 2000;
         __instance.DisconnectTimeoutMs = 15000;
     }
