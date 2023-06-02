@@ -30,9 +30,7 @@ jobs:
           dotnet-version: 6.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1
-      - name: InitEnv
-        run: MakeEnv.bat
-      - name: RunBuild
+      - name: RunBuildAndPacking
         run: ./packing.ps1
 
       # ExtremeRoles.zip
