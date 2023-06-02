@@ -1,5 +1,6 @@
 Write-Host "Init Env..."
 
+pip install -r requirements.txt
 python makelanguagejson.py
 mkdir -Path ExtremeRoles\Resources\Asset -Force
 Copy-Item -Path UnityAsset\ExtremeRoles -Destination ExtremeRoles\Resources\Asset -Force -Recurse
