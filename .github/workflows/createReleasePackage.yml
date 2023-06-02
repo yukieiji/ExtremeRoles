@@ -31,7 +31,7 @@ jobs:
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1
       - name: InitEnv
-        run: MakeEnb.bat
+        run: MakeEnv.bat
       - name: RunBuild
         run: ./packing.ps1
 
