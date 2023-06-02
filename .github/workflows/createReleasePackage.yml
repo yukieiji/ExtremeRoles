@@ -38,12 +38,12 @@ jobs:
       # ExtremeRoles.zip
       - uses: actions/upload-artifact@v3
         with:
-          name: "ExtremeRoles-v${{ github.event.inputs.versions }}.zip"
+          name: "ExtremeRoles-v${{ github.event.inputs.versions }}"
           path: ./workspace/ExtremeRoles/
       # ExtremeRoles-v with skins.zip
       - uses: actions/upload-artifact@v3
         with:
-          name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins.zip"
+          name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
           path: ./workspace/ExtremeRolesWithSkins/
       # Mod zip Only
       - uses: actions/upload-artifact@v3
