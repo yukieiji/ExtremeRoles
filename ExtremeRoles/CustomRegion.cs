@@ -13,33 +13,39 @@ public static class CustomRegion
         ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
         IRegionInfo[] regions = Default;
 
-        // Only ExtremeRoles!!
-        var exrOfficialTokyo = new DnsRegionInfo(
-            "168.138.196.31",
-            ServerManagerExtension.ExROfficialServerTokyoManinName,
-            StringNames.NoTranslation,
-            "168.138.196.31",
-            22023,
-            false);
-
         var opt = ClientOption.Instance;
-
-        var customRegion = new DnsRegionInfo(
-            opt.Ip.Value,
-            ServerManagerExtension.FullCustomServerName,
-            StringNames.NoTranslation,
-            opt.Ip.Value,
-            opt.Port.Value,
-            false);
 
         regions = regions.Concat(
             new IRegionInfo[]
             {
-                exrOfficialTokyo.Cast<IRegionInfo>(),
-                customRegion.Cast<IRegionInfo>()
-            }).ToArray();
+				createStaticRegion(
+					ServerManagerExtension.ExROfficialServerTokyoManinName,
+					"168.138.196.31", 22023, false), // Only ExtremeRoles!!
+				createStaticRegion(
+					ServerManagerExtension.FullCustomServerName,
+					opt.Ip.Value, opt.Port.Value, false),
+			}).ToArray();
 
         ServerManager.DefaultRegions = regions;
         serverManager.AvailableRegions = regions;
     }
+
+	private static IRegionInfo createStaticRegion(
+		string name, string ip, ushort port, bool useDtls)
+		=> new StaticHttpRegionInfo(
+			name, StringNames.NoTranslation, ip,
+			createServerInfo(name, ip, port, useDtls)).Cast<IRegionInfo>();
+
+	private static ServerInfo[] createServerInfo(string name, string ip, ushort port, bool useDtls)
+	{
+		if (!ip.StartsWith("http"))
+		{
+			ip = $"http://{ip}";
+		}
+
+		return new ServerInfo[]
+		{
+			new ServerInfo(name, ip, port, useDtls)
+		};
+	}
 }
