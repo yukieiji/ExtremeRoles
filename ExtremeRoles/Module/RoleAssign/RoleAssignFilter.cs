@@ -44,38 +44,43 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 
     public void Initialize()
     {
-        Logging.Debug($" -------- Initialize RoleAssignFilter -------- ");
+		var logger = ExtremeRolesPlugin.Logger;
 
-        foreach (var (guid, filterModel) in model.FilterSet)
+		logger.LogInfo($" -------- Initialize RoleAssignFilter -------- ");
+
+		// フィルターをリセット
+		this.filter.Clear();
+
+		foreach (var (guid, filterModel) in model.FilterSet)
         {
-            Logging.Debug($" ---- Filter:{guid} ---- ");
+			logger.LogInfo($" ---- Filter:{guid} ---- ");
 
             int assignNum = filterModel.AssignNum;
 
-            Logging.Debug($"AssignNum:{assignNum}");
+			logger.LogInfo($"AssignNum:{assignNum}");
 
             var filterSet = new RoleFilterSet();
             filterSet.AssignNum = assignNum;
 
             foreach (var extremeRoleId in filterModel.FilterNormalId.Values)
             {
-                Logging.Debug($"NormalRoleId:{extremeRoleId}");
+                logger.LogInfo($"NormalRoleId:{extremeRoleId}");
                 filterSet.Add(extremeRoleId);
             }
             foreach (var extremeRoleId in filterModel.FilterCombinationId.Values)
             {
-                Logging.Debug($"CombinationRoleId:{extremeRoleId}");
+                logger.LogInfo($"CombinationRoleId:{extremeRoleId}");
                 filterSet.Add(extremeRoleId);
             }
             foreach (var extremeRoleId in filterModel.FilterGhostRole.Values)
             {
-                Logging.Debug($"GhostRoleId:{extremeRoleId}");
+                logger.LogInfo($"GhostRoleId:{extremeRoleId}");
                 filterSet.Add(extremeRoleId);
             }
 
             this.filter.Add(filterSet);
         }
-        Logging.Debug($" -------- Initialize Complete!! -------- ");
+        logger.LogInfo($" -------- Initialize Complete!! -------- ");
     }
 
     public bool IsBlock(int intedRoleId) => this.filter.Any(x => x.IsBlock(intedRoleId));
@@ -95,9 +100,9 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
                 Loader.GetUnityObjectFromResources<GameObject>(
                     "ExtremeRoles.Resources.Asset.roleassignfilter.asset",
                     "assets/roles/roleassignfilter.prefab"));
-            
+
             viewObj.SetActive(false);
-            
+
             this.view = viewObj.GetComponent<RoleAssignFilterView>();
             this.view.HideObject = hideObj;
             this.view.Model = this.model;
