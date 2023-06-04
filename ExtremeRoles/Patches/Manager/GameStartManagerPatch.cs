@@ -15,13 +15,70 @@ using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles.Patches.Manager;
 
+[HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.BeginGame))]
+public static class GameStartManagerBeginGamePatch
+{
+	public static bool Prefix()
+	{
+		if (!AmongUsClient.Instance.AmHost) { return true; }
+
+		foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
+		{
+			if (client.Character == null)
+			{
+				continue;
+			}
+			var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
+			if (dummyComponent != null && dummyComponent.enabled)
+			{
+				continue;
+			}
+
+			if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
+				client.Id, out Version clientVer) &&
+				Assembly.GetExecutingAssembly().GetName().Version != clientVer)
+			{
+				return false;
+			}
+		}
+
+		ExtremeRolesPlugin.Info.HideInfoOverlay();
+		// ホストはここでオプションを読み込み
+		OptionManager.Load();
+
+		if (ExtremeGameModeManager.Instance.ShipOption.IsRandomMap)
+		{
+			// 0 = Skeld
+			// 1 = Mira HQ
+			// 2 = Polus
+			// 3 = Dleks - deactivated
+			// 4 = Airship
+
+			var rng = RandomGenerator.GetTempGenerator();
+
+			List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
+			byte mapId = possibleMaps[
+				rng.Next(possibleMaps.Count)];
+
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.ShareMapId))
+			{
+				caller.WriteByte(mapId);
+			}
+			RPCOperator.ShareMapId(mapId);
+		}
+		return true;
+	}
+}
+
+
 [HarmonyPatch]
 public static class GameStartManagerPatch
 {
     private const float kickTime = 30f;
     private const float timerMaxValue = 600f;
     private const string errorColorPlaceHolder = "<color=#FF0000FF>{0}\n</color>";
-    
+
     private static bool isCustomServer;
 
     private static float timer;
@@ -35,62 +92,6 @@ public static class GameStartManagerPatch
     private static TMPro.TextMeshPro customShowText;
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.BeginGame))]
-    public static bool BeginGamePrefix()
-    {
-        if (!AmongUsClient.Instance.AmHost) { return true; }
-
-        foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
-        {
-            if (client.Character == null) continue;
-            var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-            if (dummyComponent != null && dummyComponent.enabled)
-            {
-                continue;
-            }
-
-            if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
-                client.Id, out Version clientVer))
-            {
-                return false;
-            }
-            int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
-                clientVer);
-            if (diff != 0)
-            {
-                return false;
-            }
-        }
-
-        ExtremeRolesPlugin.Info.HideInfoOverlay();
-        // ホストはここでオプションを読み込み
-        OptionManager.Load();
-
-        if (ExtremeGameModeManager.Instance.ShipOption.IsRandomMap)
-        {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
-
-            var rng = RandomGenerator.GetTempGenerator();
-
-            List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
-            byte mapId = possibleMaps[
-                rng.Next(possibleMaps.Count)];
-
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.ShareMapId))
-            {
-                caller.WriteByte(mapId);
-            }
-            RPCOperator.ShareMapId(mapId);
-        }
-        return true;
-    }
-
-    [HarmonyPrefix]
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
     public static void StartPrefix(GameStartManager __instance)
     {
@@ -98,10 +99,10 @@ public static class GameStartManagerPatch
         GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(
             AmongUsClient.Instance.GameId);
 
-            isVersionSent = false;
-            timer = timerMaxValue;
-            kickingTimer = 0f;
-            isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
+        isVersionSent = false;
+        timer = timerMaxValue;
+        kickingTimer = 0f;
+        isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
 
         prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
 
@@ -169,15 +170,15 @@ public static class GameStartManagerPatch
                     SceneChanger.ChangeScene("MainMenu");
                 }
 
-                __instance.GameStartText.text = string.Format(
+				__instance.GameStartText.text = string.Format(
                     Translation.GetString("errorDiffHostVersion"),
                     Mathf.Round(kickTime - kickingTimer));
-                __instance.GameStartText.transform.localPosition = 
+                __instance.GameStartText.transform.localPosition =
                     __instance.StartButton.transform.localPosition + Vector3.up * 2;
             }
             else
             {
-                __instance.GameStartText.transform.localPosition = 
+                __instance.GameStartText.transform.localPosition =
                     __instance.StartButton.transform.localPosition;
                 if (__instance.startState != GameStartManager.StartingStates.Countdown)
                 {
@@ -191,7 +192,7 @@ public static class GameStartManagerPatch
         string message = string.Format(
             errorColorPlaceHolder,
             Translation.GetString("errorCannotGameStart"));
-        foreach (InnerNet.ClientData client in 
+        foreach (InnerNet.ClientData client in
             AmongUsClient.Instance.allClients.GetFastEnumerator())
         {
             if (client.Character == null) { continue; }
@@ -230,18 +231,18 @@ public static class GameStartManagerPatch
 
         if (blockStart)
         {
-            __instance.StartButton.color = 
+            __instance.StartButton.color =
                 __instance.startLabelText.color = Palette.DisabledClear;
             __instance.GameStartText.text = message;
-            __instance.GameStartText.transform.localPosition = 
+            __instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition + Vector3.up * 2;
         }
         else
         {
             __instance.StartButton.color = __instance.startLabelText.color = (
-                (__instance.LastPlayerCount >= __instance.MinPlayers) ? 
+                (__instance.LastPlayerCount >= __instance.MinPlayers) ?
                 Palette.EnabledColor : Palette.DisabledClear);
-            __instance.GameStartText.transform.localPosition = 
+            __instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition;
         }
 
