@@ -21,7 +21,7 @@ public static class GameStartManagerPatch
     private const float kickTime = 30f;
     private const float timerMaxValue = 600f;
     private const string errorColorPlaceHolder = "<color=#FF0000FF>{0}\n</color>";
-    
+
     private static bool isCustomServer;
 
     private static float timer;
@@ -98,10 +98,10 @@ public static class GameStartManagerPatch
         GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(
             AmongUsClient.Instance.GameId);
 
-            isVersionSent = false;
-            timer = timerMaxValue;
-            kickingTimer = 0f;
-            isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
+        isVersionSent = false;
+        timer = timerMaxValue;
+        kickingTimer = 0f;
+        isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
 
         prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
 
@@ -172,12 +172,12 @@ public static class GameStartManagerPatch
                 __instance.GameStartText.text = string.Format(
                     Translation.GetString("errorDiffHostVersion"),
                     Mathf.Round(kickTime - kickingTimer));
-                __instance.GameStartText.transform.localPosition = 
+                __instance.GameStartText.transform.localPosition =
                     __instance.StartButton.transform.localPosition + Vector3.up * 2;
             }
             else
             {
-                __instance.GameStartText.transform.localPosition = 
+                __instance.GameStartText.transform.localPosition =
                     __instance.StartButton.transform.localPosition;
                 if (__instance.startState != GameStartManager.StartingStates.Countdown)
                 {
@@ -191,7 +191,7 @@ public static class GameStartManagerPatch
         string message = string.Format(
             errorColorPlaceHolder,
             Translation.GetString("errorCannotGameStart"));
-        foreach (InnerNet.ClientData client in 
+        foreach (InnerNet.ClientData client in
             AmongUsClient.Instance.allClients.GetFastEnumerator())
         {
             if (client.Character == null) { continue; }
@@ -230,18 +230,18 @@ public static class GameStartManagerPatch
 
         if (blockStart)
         {
-            __instance.StartButton.color = 
+            __instance.StartButton.color =
                 __instance.startLabelText.color = Palette.DisabledClear;
             __instance.GameStartText.text = message;
-            __instance.GameStartText.transform.localPosition = 
+            __instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition + Vector3.up * 2;
         }
         else
         {
             __instance.StartButton.color = __instance.startLabelText.color = (
-                (__instance.LastPlayerCount >= __instance.MinPlayers) ? 
+                (__instance.LastPlayerCount >= __instance.MinPlayers) ?
                 Palette.EnabledColor : Palette.DisabledClear);
-            __instance.GameStartText.transform.localPosition = 
+            __instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition;
         }
 
