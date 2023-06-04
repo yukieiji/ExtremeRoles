@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Text;
 using ExtremeRoles.GameMode.Option.MapModule;
-using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 {
-    public int HeadOptionId => (int)GlobalOption.NumMeating; 
+    public int HeadOptionId => (int)GlobalOption.NumMeating;
 
     public bool IsEnableImpostorVent => true;
     public bool CanUseHorseMode => true;
@@ -126,7 +125,8 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     {
         foreach (GlobalOption id in Enum.GetValues(typeof(GlobalOption)))
         {
-            string optionStr = OptionManager.Instance.GetHudString((int)id);
+            var option = OptionManager.Instance.GetIOption((int)id);
+			string optionStr = option.ToHudString();
             if (optionStr != string.Empty)
             {
                 builder.AppendLine(optionStr);

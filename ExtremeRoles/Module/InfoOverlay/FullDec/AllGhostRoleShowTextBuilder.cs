@@ -16,8 +16,9 @@ internal sealed class AllGhostRoleShowTextBuilder : PageShowTextBuilderBase
 
         var (roleTextBase, optionId) = this.AllPage[this.Page];
 
-        string roleOption = OptionManager.Instance.GetHudStringWithChildren(
-            optionId + (int)IShowTextBuilder.SpawnOptionKey);
+		var option = OptionManager.Instance.GetIOption(
+			optionId + (int)IShowTextBuilder.SpawnOptionKey);
+		string roleOption = option.ToHudStringWithChildren();
 
         string title = string.Concat(
             $"<size=200%>{Translation.GetString("ghostRoleDesc")}</size>",
