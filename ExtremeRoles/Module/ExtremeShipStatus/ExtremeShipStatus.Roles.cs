@@ -60,7 +60,7 @@ public sealed partial class ExtremeShipStatus
     public bool TryGetDeadAssasin(out byte playerId)
     {
         playerId = default(byte);
-        
+
         if (this.deadedAssassin.Count == 0) { return false; }
 
         playerId = this.deadedAssassin.Dequeue();
@@ -101,7 +101,7 @@ public sealed partial class ExtremeShipStatus
 
         return this.union.IsEstablish();
     }
-    
+
     private void resetOnMeetingGlobalAction()
     {
         if (this.union)
