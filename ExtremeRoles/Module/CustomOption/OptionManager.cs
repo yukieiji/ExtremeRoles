@@ -187,10 +187,10 @@ public sealed class OptionManager
 
         return type switch
         {
-            ValueType.Int => this.intOption.Get(id).ToHudString(),
-            ValueType.Float => this.floatOption.Get(id).ToHudString(),
-            ValueType.Bool => this.boolOption.Get(id).ToHudString(),
-            _ => string.Empty,
+            ValueType.Int => this.intOption.Get(id).ToHudStringWithChildren(),
+            ValueType.Float => this.floatOption.Get(id).ToHudStringWithChildren(),
+			ValueType.Bool => this.boolOption.Get(id).ToHudStringWithChildren(),
+			_ => string.Empty,
         };
     }
 
