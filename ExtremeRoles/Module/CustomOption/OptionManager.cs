@@ -13,6 +13,8 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomOption;
 
+#nullable enable
+
 public sealed class OptionManager
 {
     public enum ValueType : byte
@@ -81,26 +83,34 @@ public sealed class OptionManager
 
     public bool Contains(int id) => this.allOptionId.ContainsKey(id);
 
-    public bool TryGet<T>(int id, out IValueOption<T> option)
+    public bool TryGet<T>(int id, out IValueOption<T>? option)
         where T :
             struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
-        bool result = this.allOptionId.TryGetValue(id, out ValueType type);
         option = null;
+        if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return false; }
 
-        if (!result) { return false; }
+		switch (type)
+		{
+			case ValueType.Int:
+				var intOption = this.intOption.Get(id);
+				option = Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+				return true;
+			case ValueType.Float:
+				var floatOption = this.floatOption.Get(id);
+				option = Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+				return true;
+			case ValueType.Bool:
+				var boolOption = this.boolOption.Get(id);
+				option = Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+				return true;
+			default:
+				return false;
+		}
+	}
 
-        return type switch
-        {
-            ValueType.Int => this.intOption.TryGetValue(id, out option),
-            ValueType.Float => this.floatOption.TryGetValue(id, out option),
-            ValueType.Bool => this.boolOption.TryGetValue(id, out option),
-            _ => false
-        };
-    }
-
-    public bool TryGetIOption(int id, out IOptionInfo option)
+    public bool TryGetIOption(int id, out IOptionInfo? option)
     {
         bool result = this.allOptionId.TryGetValue(id, out ValueType type);
         option = null;
@@ -134,7 +144,7 @@ public sealed class OptionManager
 				var boolOption = this.boolOption.Get(id);
 				return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
 			default:
-				return null;
+				throw new ArgumentException("Cannot Find Options");
 		}
 	}
 
@@ -147,7 +157,7 @@ public sealed class OptionManager
                 ValueType.Int => this.intOption.Get(id),
                 ValueType.Float => this.floatOption.Get(id),
                 ValueType.Bool => this.boolOption.Get(id),
-                _ => null
+                _ => throw new ArgumentException("Invalided Option Id"),
             };
             yield return new KeyValuePair<int, IOptionInfo>(id, info);
         }
@@ -162,8 +172,8 @@ public sealed class OptionManager
                 ValueType.Int => this.intOption.Get(id),
                 ValueType.Float => this.floatOption.Get(id),
                 ValueType.Bool => this.boolOption.Get(id),
-                _ => null
-            };
+                _ => throw new ArgumentException("Invalided Option Id"),
+			};
         }
     }
 
@@ -173,8 +183,8 @@ public sealed class OptionManager
             ValueType.Int => this.intOption.Get(id),
             ValueType.Float => this.floatOption.Get(id),
             ValueType.Bool => this.boolOption.Get(id),
-            _ => null
-        };
+            _ => throw new ArgumentException("Invalided Option Id"),
+		};
 
     public T GetValue<T>(int id)
         where T :
