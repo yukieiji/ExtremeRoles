@@ -1,6 +1,7 @@
 ﻿using Hazel;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Linq;
 
 using UnityEngine;
@@ -116,24 +117,31 @@ public sealed class OptionManager
         return true;
     }
 
-    public IValueOption<T> Get<T>(int id, ValueType type)
-        where T :
-            struct, IComparable, IConvertible,
-            IComparable<T>, IEquatable<T>
-
-        => type switch
-        {
-            ValueType.Int   => this.intOption.Get(id) as IValueOption<T>,
-            ValueType.Float => this.floatOption.Get(id) as IValueOption<T>,
-            ValueType.Bool  => this.boolOption.Get(id) as IValueOption<T>,
-            _ => null
-        };
+	public IValueOption<T> Get<T>(int id, ValueType type)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
+		switch (type)
+		{
+			case ValueType.Int:
+				var intOption = this.intOption.Get(id);
+				return Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+			case ValueType.Float:
+				var floatOption = this.floatOption.Get(id);
+				return Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+			case ValueType.Bool:
+				var boolOption = this.boolOption.Get(id);
+				return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+			default:
+				return null;
+		}
+	}
 
     public IEnumerable<KeyValuePair<int, IOptionInfo>> GetKeyValueAllIOptions()
     {
         foreach (var (id, key) in this.allOptionId)
         {
-
             IOptionInfo info = key switch
             {
                 ValueType.Int => this.intOption.Get(id),
@@ -178,15 +186,18 @@ public sealed class OptionManager
         switch (type)
         {
             case ValueType.Int:
-                var intOption = this.intOption.Get(id) as IValueOption<T>;
-                return intOption!.GetValue();
+				var intOption = this.intOption.Get(id);
+				int intValue = intOption.GetValue();
+				return Unsafe.As<int, T>(ref intValue);
             case ValueType.Float:
-                var floatOption = this.floatOption.Get(id) as IValueOption<T>;
-                return floatOption!.GetValue();
-            case ValueType.Bool:
-                var boolOption = this.boolOption.Get(id) as IValueOption<T>;
-                return boolOption!.GetValue();
-            default:
+				var floatOption = this.floatOption.Get(id);
+				float floatValue = floatOption.GetValue();
+				return Unsafe.As<float, T>(ref floatValue);
+			case ValueType.Bool:
+                var boolOption = this.boolOption.Get(id);
+				bool boolValue = boolOption.GetValue();
+				return Unsafe.As<bool, T>(ref boolValue);
+			default:
                 return default(T);
         }
     }

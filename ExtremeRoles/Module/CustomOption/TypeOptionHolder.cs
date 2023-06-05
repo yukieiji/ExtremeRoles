@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -27,7 +28,7 @@ public sealed class TypeOptionHolder<T> : IEnumerable<KeyValuePair<int, IValueOp
             IComparable<GetType>, IEquatable<GetType>
     {
         bool result = this.option.TryGetValue(id, out var outOption);
-        option = outOption as IValueOption<GetType>;
+        option = Unsafe.As<IValueOption<T>, IValueOption<GetType>>(ref outOption);
         return result;
     }
 
@@ -39,7 +40,7 @@ public sealed class TypeOptionHolder<T> : IEnumerable<KeyValuePair<int, IValueOp
         }
     }
 
-    public IEnumerator<KeyValuePair<int, IValueOption<T>>> GetEnumerator() => 
+    public IEnumerator<KeyValuePair<int, IValueOption<T>>> GetEnumerator() =>
         this.option.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator()
