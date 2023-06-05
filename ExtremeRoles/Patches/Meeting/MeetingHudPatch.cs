@@ -39,9 +39,9 @@ public static class MeetingHudBloopAVoteIconPatch
             __instance.PlayerVotePrefab);
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
-        
+
         bool canSeeVote = false;
-        
+
         var mariln = role as Roles.Combination.Marlin;
         var assassin = role as Roles.Combination.Assassin;
 
@@ -55,10 +55,10 @@ public static class MeetingHudBloopAVoteIconPatch
         }
 
 
-        if (!GameManager.Instance.LogicOptions.GetAnonymousVotes() || 
+        if (!GameManager.Instance.LogicOptions.GetAnonymousVotes() ||
             canSeeVote ||
             (
-                CachedPlayerControl.LocalPlayer.Data.IsDead && 
+                CachedPlayerControl.LocalPlayer.Data.IsDead &&
                 ClientOption.Instance.GhostsSeeRole.Value &&
                 !isVoteSeeBlock(role)
             ))
@@ -263,14 +263,14 @@ public static class MeetingHudCheckForEndVotingPatch
 
         foreach (PlayerVoteArea playerVoteArea in instance.playerStates)
         {
-            
+
             byte playerId = playerVoteArea.TargetPlayerId;
 
             // 切断されたプレイヤーは残っている状態で役職を持たない状態になるのでキーチェックはしておく
             if (ExtremeRoleManager.GameRole.ContainsKey(playerId))
             {
                 // 投票をいじる役職か？
-                var (voteModRole, voteAnotherRole) = 
+                var (voteModRole, voteAnotherRole) =
                     ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(playerId);
                 addVoteModRole(voteModRole, playerId, ref voteModifier);
                 addVoteModRole(voteAnotherRole, playerId, ref voteModifier);
@@ -279,8 +279,8 @@ public static class MeetingHudCheckForEndVotingPatch
             // 投票先を全格納
             voteTarget.Add(playerId, playerVoteArea.VotedFor);
 
-            if (playerVoteArea.VotedFor != 252 && 
-                playerVoteArea.VotedFor != 255 && 
+            if (playerVoteArea.VotedFor != 252 &&
+                playerVoteArea.VotedFor != 255 &&
                 playerVoteArea.VotedFor != 254)
             {
                 int currentVotes;
@@ -310,7 +310,7 @@ public static class MeetingHudCheckForEndVotingPatch
             Dictionary<byte, int> result = calculateVote(instance);
 
             bool isExiled = true;
-            
+
             KeyValuePair<byte, int> exiledResult = new KeyValuePair<byte, int>(
                 byte.MaxValue, int.MinValue);
             foreach (KeyValuePair<byte, int> item in result)
@@ -328,7 +328,7 @@ public static class MeetingHudCheckForEndVotingPatch
 
             GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
                 (GameData.PlayerInfo v) => !isExiled && v.PlayerId == exiledResult.Key);
-            
+
             MeetingHud.VoterState[] array = new MeetingHud.VoterState[instance.playerStates.Length];
             for (int i = 0; i < instance.playerStates.Length; i++)
             {
@@ -339,7 +339,7 @@ public static class MeetingHudCheckForEndVotingPatch
                     VotedForId = playerVoteArea.VotedFor
                 };
             }
-            
+
             instance.RpcVotingComplete(array, exiled, isExiled);
         }
     }
@@ -421,10 +421,10 @@ public static class MeetingHudSetForegroundForDeadPatch
 
         if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
-        if (CachedPlayerControl.LocalPlayer.PlayerId != 
+        if (CachedPlayerControl.LocalPlayer.PlayerId !=
             ExtremeRolesPlugin.ShipState.ExiledAssassinId)
-        { 
-            return true; 
+        {
+            return true;
         }
         else
         {
@@ -669,12 +669,12 @@ public static class MeetingHudSortButtonsPatch
             VoteAreaInfo playerInfoUpdater;
             if (playerVoteArea.TargetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
-                playerInfoUpdater = 
+                playerInfoUpdater =
                     __instance.gameObject.AddComponent<LocalPlayerVoteAreaInfo>();
             }
             else
             {
-                playerInfoUpdater = 
+                playerInfoUpdater =
                     __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
             }
             playerInfoUpdater.Init(playerVoteArea, isHudOverrideTaskActive);
@@ -715,7 +715,7 @@ public static class MeetingHudPopulateResultsPatch
 
         if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-        __instance.TitleText.text = 
+        __instance.TitleText.text =
             FastDestroyableSingleton<TranslationController>.Instance.GetString(
                 StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
 
@@ -725,47 +725,47 @@ public static class MeetingHudPopulateResultsPatch
 
         int num = 0;
         // それぞれの人に対してどんな投票があったか
-		    for (int i = 0; i < __instance.playerStates.Length; i++)
-		    {
-			    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-			    playerVoteArea.ClearForResults();
+		for (int i = 0; i < __instance.playerStates.Length; i++)
+		{
+			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+			playerVoteArea.ClearForResults();
 
-            byte checkPlayerId = playerVoteArea.TargetPlayerId;
+			byte checkPlayerId = playerVoteArea.TargetPlayerId;
 
-            // 切断されたプレイヤーは残っている状態で役職を持たない状態になるのでキーチェックはしておく
-            if (ExtremeRoleManager.GameRole.ContainsKey(checkPlayerId))
-            {
-                // 投票をいじる役職か？
-                var (voteModRole, voteAnotherRole) = 
-                    ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(checkPlayerId);
-                addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
-                addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
-            }
+			// 切断されたプレイヤーは残っている状態で役職を持たない状態になるのでキーチェックはしておく
+			if (ExtremeRoleManager.GameRole.ContainsKey(checkPlayerId))
+			{
+				// 投票をいじる役職か？
+				var (voteModRole, voteAnotherRole) =
+					ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(checkPlayerId);
+				addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
+				addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
+			}
 
-            int num2 = 0;
-			    foreach (MeetingHud.VoterState voterState in states)
-			    {
-                GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
-				    if (playerById == null)
-				    {
-					    Debug.LogError(
-                        string.Format("Couldn't find player info for voter: {0}",
-                        voterState.VoterId));
-				    }
-				    else if (i == 0 && voterState.SkippedVote)
-				    {
-                    // スキップのアニメーション
-                    __instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
-					    num++;
-                }
-				    else if (voterState.VotedForId == checkPlayerId)
-				    {
-                    // 投票された人のアニメーション
-                    __instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
-					    num2++;
-                }
-			    }
-            voteIndex.Add(playerVoteArea.TargetPlayerId, num2);
+			int num2 = 0;
+			foreach (MeetingHud.VoterState voterState in states)
+			{
+				GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
+				if (playerById == null)
+				{
+					Debug.LogError(
+					string.Format("Couldn't find player info for voter: {0}",
+					voterState.VoterId));
+				}
+				else if (i == 0 && voterState.SkippedVote)
+				{
+					// スキップのアニメーション
+					__instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
+						num++;
+				}
+				else if (voterState.VotedForId == checkPlayerId)
+				{
+					// 投票された人のアニメーション
+					__instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
+						num2++;
+				}
+			}
+			voteIndex.Add(playerVoteArea.TargetPlayerId, num2);
         }
 
         voteIndex[ __instance.playerStates[0].TargetPlayerId] = num;
@@ -826,7 +826,7 @@ public static class MeetingHudUpdateButtonsPatch
 
         return false;
     }
-    
+
 }
 
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
