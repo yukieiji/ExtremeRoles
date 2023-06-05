@@ -120,6 +120,7 @@ public sealed class Missionary :
     protected override void RoleSpecificInit()
     {
         this.lamb = new Queue<byte>();
+		this.judgementTarget = new HashSet<byte>();
         this.timer = 0;
 
         this.tellDeparture = OptionManager.Instance.GetValue<bool>(
