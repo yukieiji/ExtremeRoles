@@ -57,6 +57,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 		{
 			caller.WriteByte((byte)RpcOpType.TargetChatReport);
 			caller.WriteStr(report);
+			caller.WriteByte(targetPlayer);
 		}
 		Instance.AddMeetingChatReport(report);
 	}

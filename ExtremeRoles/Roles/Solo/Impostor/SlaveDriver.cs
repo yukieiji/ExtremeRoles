@@ -41,7 +41,7 @@ public sealed class SlaveDriver :
 	{
 		if (this.effectPlayer.Contains(targetPlayerId))
 		{
-			return Design.ColoedString(this.NameColor, "★");
+			return Design.ColoedString(this.NameColor, " ★");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
@@ -92,7 +92,7 @@ public sealed class SlaveDriver :
 			foreach (var task in player.Tasks.ToArray().OrderBy(
 				x => RandomGenerator.Instance.Next()))
 			{
-				if (replacedTaskNum > this.revartTaskNum) { break; }
+				if (replacedTaskNum >= this.revartTaskNum) { break; }
 				if (!task.Complete) { continue; }
 
 				int newTaskId = 0;
