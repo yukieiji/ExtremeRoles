@@ -51,8 +51,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
             bool isEvil = impOpt.GetValue();
 
             var spawnOption = allOption.Get<int>(
-                GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
-                OptionManager.ValueType.Int);
+                GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate));
             isEvil = isEvil &&
                 (UnityEngine.Random.RandomRange(0, 110) < (int)decimal.Multiply(
                     spawnOption.GetValue(), spawnOption.ValueCount)) &&

@@ -154,8 +154,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
         IOptionInfo parentOps)
     {
         var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter),
-            OptionManager.ValueType.Bool);
+            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
 
         CreateKillerOption(imposterSetting);
 
