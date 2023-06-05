@@ -19,8 +19,9 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
     public enum RpcOpType : byte
     {
-        ChatReport
-    }
+        ChatReport,
+		TargetChatReport
+	}
 
     public MeetingReporter()
     {
@@ -49,16 +50,32 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
         Instance.AddMeetingChatReport(report);
     }
 
-    public static void RpcOp(ref MessageReader reader)
+	public static void RpcAddTargetMeetingChatReport(byte targetPlayer, string report)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.MeetingReporterRpc))
+		{
+			caller.WriteByte((byte)RpcOpType.TargetChatReport);
+			caller.WriteStr(report);
+		}
+		Instance.AddMeetingChatReport(report);
+	}
+
+	public static void RpcOp(ref MessageReader reader)
     {
         RpcOpType ops = (RpcOpType)reader.ReadByte();
         string report = reader.ReadString();
-        
+
         switch (ops)
         {
             case RpcOpType.ChatReport:
                 Instance.AddMeetingChatReport(report);
                 break;
+			case RpcOpType.TargetChatReport:
+				byte targetPlayer = reader.ReadByte();
+				if (CachedPlayerControl.LocalPlayer.PlayerId != targetPlayer) { return; }
+				Instance.AddMeetingChatReport(report);
+				break;
         }
     }
 
