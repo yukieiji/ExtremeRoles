@@ -135,6 +135,17 @@ public static class MeetingHudConfirmPatch
 
         return false;
     }
+	public static void Postfix(
+		MeetingHud __instance,
+		[HarmonyArgument(0)] byte suspectStateIdx)
+	{
+		if (__instance.state != MeetingHud.VoteStates.Voted) { return; }
+
+		var (voteCheckRole, anotherVoteCheckRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
+			IRoleVoteCheck>();
+		voteCheckRole?.VoteTo(suspectStateIdx);
+		anotherVoteCheckRole?.VoteTo(suspectStateIdx);
+	}
 }
 
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]

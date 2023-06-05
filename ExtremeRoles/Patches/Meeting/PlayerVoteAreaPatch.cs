@@ -32,15 +32,15 @@ public static class NamePlateHelper
 
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
-		blankNameplate = blankNameplate != null ? 
+		blankNameplate = blankNameplate != null ?
 			blankNameplate :
-                hatMng.GetNamePlateById(
-				blankNamePlateId).viewData.viewData.Image;
+            hatMng.GetNamePlateById(
+			blankNamePlateId).viewData.viewData.Image;
 		var nameplate = blankNameplate;
 		if (!ClientOption.Instance.HideNamePlate.Value)
 		{
 			var player = Helper.Player.GetPlayerControlById(
-				playerId != byte.MaxValue ? 
+				playerId != byte.MaxValue ?
 				playerId : pva.TargetPlayerId);
 
 			if (!player) { return; }
@@ -66,14 +66,13 @@ public static class PlayerVoteAreaCosmetics
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
 public static class PlayerVoteAreaSelectPatch
 {
-
-	private static Dictionary<byte, UiElement> meetingAbilityButton = 
+	private static Dictionary<byte, UiElement> meetingAbilityButton =
 		new Dictionary<byte, UiElement>();
 
 	public static void Reset()
-        {
+    {
 		meetingAbilityButton.Clear();
-        }
+    }
 
 	public static bool Prefix(PlayerVoteArea __instance)
 	{
@@ -87,11 +86,11 @@ public static class PlayerVoteAreaSelectPatch
 		if (!state.AssassinMeetingTrigger)
 		{
 			if (buttonRole != null && anotherButtonRole != null)
-                {
+            {
 				return true; // TODO:Can use both role ability
-                }
+            }
 			else if (buttonRole != null && anotherButtonRole == null)
-                {
+            {
 				return meetingButtonAbility(__instance, buttonRole);
 			}
 			else if (buttonRole == null && anotherButtonRole != null)
@@ -139,7 +138,7 @@ public static class PlayerVoteAreaSelectPatch
 						}
 					).WrapToIl2Cpp()
 				);
-		
+
 			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<
 				UiElement>();
 			selectableElements.Add(__instance.CancelButton);
@@ -210,7 +209,7 @@ public static class PlayerVoteAreaSelectPatch
 	{
 		byte target = instance.TargetPlayerId;
 
-            if (instance.AmDead)
+        if (instance.AmDead)
 		{
 			return true;
 		}
@@ -219,9 +218,9 @@ public static class PlayerVoteAreaSelectPatch
 			return false;
 		}
 		if (role.IsBlockMeetingButtonAbility(instance))
-            {
+        {
 			return true;
-            }
+        }
 
 		if (!instance.voteComplete &&
 			instance.Parent.Select((int)target))
@@ -245,7 +244,7 @@ public static class PlayerVoteAreaSelectPatch
                         (UnityEngine.Events.UnityAction)(
                             () => { newAbilitybutton.gameObject.SetActive(false); }));
 
-                    var render = newAbilitybutton.GetComponent<SpriteRenderer>();
+                var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
 				role.ButtonMod(instance, newAbilitybutton);
 				role.SetSprite(render);
@@ -312,7 +311,7 @@ public static class PlayerVoteAreaSetCosmeticsPatch
 	public static void Postfix(PlayerVoteArea __instance)
 	{
 		if (ExtremeGameModeManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
-            {
+        {
 			__instance.LevelNumberText.text = "99";
 		}
 	}
@@ -329,7 +328,6 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(2)] bool isGuardian = false)
 	{
 		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
-
 
 		__instance.AmDead = false;
 		__instance.DidReport = didReport;

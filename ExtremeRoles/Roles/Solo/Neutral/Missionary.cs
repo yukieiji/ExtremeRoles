@@ -20,7 +20,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 public sealed class Missionary :
 	SingleRoleBase,
 	IRoleAbility,
-	IRoleUpdate
+	IRoleUpdate,
+	IRoleVoteCheck
 {
 
     public enum MissionaryOption
@@ -42,8 +43,6 @@ public sealed class Missionary :
         }
     }
 
-	public int Order => throw new System.NotImplementedException();
-
 	public byte TargetPlayer = byte.MaxValue;
 
     private Queue<byte> lamb;
@@ -54,8 +53,10 @@ public sealed class Missionary :
     private float minTimerTime;
     private float maxTimerTime;
     private bool tellDeparture;
+	private bool isUseSolemnJudgment;
+	private int maxJudgementTarget;
 
-    private TMPro.TextMeshPro tellText;
+	private TMPro.TextMeshPro tellText;
 
     private ExtremeAbilityButton propagate;
 
@@ -106,7 +107,15 @@ public sealed class Missionary :
             parentOps);
 
         this.CreateCommonAbilityOption(parentOps);
-    }
+
+		var useOpt = CreateBoolOption(
+			MissionaryOption.IsUseSolemnJudgment,
+			false, parentOps);
+		CreateIntOption(
+			MissionaryOption.MaxJudgementNum,
+			3, 1, GameSystem.VanillaMaxPlayerNum, 1,
+			useOpt);
+	}
 
     protected override void RoleSpecificInit()
     {
@@ -121,8 +130,12 @@ public sealed class Missionary :
             GetRoleOptionId(MissionaryOption.DepartureMinTime));
         this.propagateRange = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(MissionaryOption.PropagateRange));
+		this.isUseSolemnJudgment = OptionManager.Instance.GetValue<bool>(
+		   GetRoleOptionId(MissionaryOption.IsUseSolemnJudgment));
+		this.maxJudgementTarget = OptionManager.Instance.GetValue<int>(
+		   GetRoleOptionId(MissionaryOption.MaxJudgementNum));
 
-        resetTimer();
+		resetTimer();
         this.RoleAbilityInit();
 
     }
@@ -222,7 +235,7 @@ public sealed class Missionary :
 
 		if (this.judgementTarget.Contains(this.TargetPlayer))
 		{
-			Helper.Player.RpcUncheckMurderPlayer(
+			Player.RpcUncheckMurderPlayer(
 				this.TargetPlayer,
 				this.TargetPlayer,
 				byte.MaxValue);
@@ -262,4 +275,16 @@ public sealed class Missionary :
         this.tellText.gameObject.SetActive(false);
 
     }
+
+	public void VoteTo(byte target)
+	{
+		if (!this.isUseSolemnJudgment ||
+			target == 252 ||
+			target == 253 ||
+			target == 254 ||
+			target == byte.MaxValue ||
+			this.judgementTarget.Count > this.maxJudgementTarget) { return; }
+
+		this.judgementTarget.Add(target);
+	}
 }
