@@ -23,7 +23,8 @@ public static class ProgressTrackerFixedUpdatePatch
 		SlaveDriver slaveDriver = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<SlaveDriver>();
 
 		if ((agency is null && slaveDriver is null) ||
-			!agency.CanSeeTaskBar || !slaveDriver.CanSeeTaskBar) { return; }
+			(agency is not null && !agency.CanSeeTaskBar) ||
+			(slaveDriver is not null && !slaveDriver.CanSeeTaskBar)) { return; }
 
         if (!__instance.TileParent.enabled)
         {
