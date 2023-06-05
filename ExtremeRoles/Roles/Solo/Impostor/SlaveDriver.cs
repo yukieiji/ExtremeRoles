@@ -149,7 +149,7 @@ public sealed class SlaveDriver :
 		var target = Player.GetClosestPlayerInRange(
 			CachedPlayerControl.LocalPlayer, this, this.range);
 
-		if (target != null) { return false; }
+		if (target == null) { return false; }
 
 		this.target = target.PlayerId;
 
