@@ -68,7 +68,7 @@ public sealed class OptionManager
         this.allOptionId.Add(id, ValueType.Bool);
     }
 
-    public void Add<SelectionType>(int id, IValueOption<SelectionType> option)
+    public void AddOption<SelectionType>(int id, IValueOption<SelectionType> option)
         where SelectionType :
             struct, IComparable, IConvertible,
             IComparable<SelectionType>, IEquatable<SelectionType>
