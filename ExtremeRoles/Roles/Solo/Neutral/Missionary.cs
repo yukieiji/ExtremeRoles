@@ -13,10 +13,14 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Missionary :
+	SingleRoleBase,
+	IRoleAbility,
+	IRoleUpdate
 {
 
     public enum MissionaryOption
@@ -24,8 +28,10 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
         TellDeparture,
         DepartureMinTime,
         DepartureMaxTime,
-        PropagateRange
-    }
+        PropagateRange,
+		IsUseSolemnJudgment,
+		MaxJudgementNum,
+	}
 
     public ExtremeAbilityButton Button
     {
@@ -36,10 +42,13 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
         }
     }
 
-    public byte TargetPlayer = byte.MaxValue;
+	public int Order => throw new System.NotImplementedException();
+
+	public byte TargetPlayer = byte.MaxValue;
 
     private Queue<byte> lamb;
-    private float timer;
+	private HashSet<byte> judgementTarget;
+	private float timer;
 
     private float propagateRange;
     private float minTimerTime;
@@ -58,7 +67,23 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
         false, false, false, false)
     { }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
+	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
+	{
+		if (this.lamb.Contains(targetPlayerId))
+		{
+			return Design.ColoedString(this.NameColor, " ✔");
+		}
+		else if (this.judgementTarget.Contains(targetPlayerId))
+		{
+			return Design.ColoedString(this.NameColor, " ★");
+		}
+		else
+		{
+			return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+		}
+	}
+
+	public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
@@ -112,18 +137,20 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
     public bool IsAbilityUse()
     {
         this.TargetPlayer = byte.MaxValue;
-        PlayerControl target = Helper.Player.GetClosestPlayerInRange(
+        PlayerControl target = Player.GetClosestPlayerInRange(
             CachedPlayerControl.LocalPlayer, this,
             this.propagateRange);
-        
+
         if (target != null)
         {
-            if (!this.lamb.Contains(target.PlayerId))
+			byte playerId = target.PlayerId;
+
+            if (!this.lamb.Contains(playerId))
             {
-                this.TargetPlayer = target.PlayerId;
+                this.TargetPlayer = playerId;
             }
         }
-        
+
         return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
     }
 
@@ -147,9 +174,9 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         if (this.lamb.Count == 0) { return; }
 
-        if (CachedShipStatus.Instance == null || 
+        if (CachedShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled || 
+        if (!CachedShipStatus.Instance.enabled ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
         this.timer -= Time.deltaTime;
@@ -158,12 +185,12 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
         resetTimer();
 
         byte targetPlayerId = this.lamb.Dequeue();
-        PlayerControl targetPlayer = Helper.Player.GetPlayerControlById(targetPlayerId);
+        PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
 
         if (targetPlayer == null) { return; }
         if (targetPlayer.Data.IsDead || targetPlayer.Data.Disconnected) { return; }
 
-        Helper.Player.RpcUncheckMurderPlayer(
+        Player.RpcUncheckMurderPlayer(
             targetPlayer.PlayerId,
             targetPlayer.PlayerId,
             byte.MaxValue);
@@ -192,7 +219,19 @@ public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
                 return false;
             }
         }
-        this.lamb.Enqueue(this.TargetPlayer);
+
+		if (this.judgementTarget.Contains(this.TargetPlayer))
+		{
+			Helper.Player.RpcUncheckMurderPlayer(
+				this.TargetPlayer,
+				this.TargetPlayer,
+				byte.MaxValue);
+			this.judgementTarget.Remove(this.TargetPlayer);
+		}
+		else
+		{
+			this.lamb.Enqueue(this.TargetPlayer);
+		}
         this.TargetPlayer = byte.MaxValue;
         return true;
     }
