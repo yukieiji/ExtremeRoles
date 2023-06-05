@@ -15,8 +15,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
 {
+	public bool CanSeeTaskBar { get; private set; }
+
     public enum AgencyOption
     {
+		CanSeeTaskBar,
         MaxTaskNum,
         TakeTaskRange
     }
@@ -96,11 +99,10 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public bool UseAbility()
     {
-
         var targetRole = ExtremeRoleManager.GameRole[this.TargetPlayer];
 
         int takeNum = UnityEngine.Random.RandomRange(1, this.maxTakeTask);
-        
+
         if (!targetRole.HasTask())
         {
             int totakTaskNum = GameData.Instance.TotalTasks;
@@ -253,8 +255,10 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
-
-        CreateIntOption(
+		CreateBoolOption(
+			AgencyOption.CanSeeTaskBar,
+			true, parentOps);
+		CreateIntOption(
             AgencyOption.MaxTaskNum,
             2, 1, 3, 1, parentOps);
         CreateFloatOption(
@@ -268,7 +272,9 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        this.maxTakeTask = OptionManager.Instance.GetValue<int>(
+		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
+			GetRoleOptionId(AgencyOption.CanSeeTaskBar));
+		this.maxTakeTask = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(AgencyOption.MaxTaskNum)) + 1;
         this.takeTaskRange = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(AgencyOption.TakeTaskRange));
