@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using AmongUs.GameOptions;
 using UnityEngine;
 using HarmonyLib;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
@@ -95,7 +93,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
                 allOptionStr.Add(optionStr.Trim('\r', '\n'));
             }
         }
-        
+
         int lineCount = 0;
         StringBuilder pageBuilder = new StringBuilder();
         foreach (string optionStr in allOptionStr)
@@ -152,7 +150,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
                 "impostorRoles",
                 RoleGlobalOption.MinImpostorRoles,
                 RoleGlobalOption.MaxImpostorRoles));
-        
+
         builder.AppendLine();
 
         // 幽霊役職周り
@@ -200,7 +198,10 @@ public static class IGameOptionsExtensionsToHudStringPatch
     }
 
     private static string getHudString<T>(T optionKey) where T : struct, IConvertible
-        => OptionManager.Instance.GetHudString(Convert.ToInt32(optionKey));
+	{
+		var option = OptionManager.Instance.GetIOption(Convert.ToInt32(optionKey));
+		return option.ToHudString();
+	}
 
     private static int getSpawnOptionValue(RoleGlobalOption optionKey)
         => OptionManager.Instance.GetValue<int>((int)optionKey);

@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Collections.Generic;
 
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
@@ -119,8 +118,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     {
         foreach (GlobalOption id in this.useOption)
         {
-            string optionStr = OptionManager.Instance.GetHudString((int)id);
-            if (optionStr != string.Empty)
+			var option = OptionManager.Instance.GetIOption((int)id);
+			string optionStr = option.ToHudString();
+			if (optionStr != string.Empty)
             {
                 builder.AppendLine(optionStr);
             }

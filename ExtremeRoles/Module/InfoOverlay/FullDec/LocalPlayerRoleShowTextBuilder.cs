@@ -2,7 +2,6 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -30,9 +29,9 @@ internal sealed class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
         {
             if (!role.IsVanillaRole())
             {
-                roleOptionString = allOption.GetHudStringWithChildren(
-                    multiAssignRole.GetManagerOptionId(
-                        RoleCommonOption.SpawnRate));
+				var option = allOption.GetIOption(
+					multiAssignRole.GetManagerOptionId(RoleCommonOption.SpawnRate));
+				roleOptionString = option.ToHudStringWithChildren();
             }
             colorRoleName = Design.ColoedString(
                 multiAssignRole.GetNameColor(),
@@ -40,9 +39,9 @@ internal sealed class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
         }
         else
         {
-            roleOptionString =
-                allOption.GetHudStringWithChildren(role.GetRoleOptionId(
-                    RoleCommonOption.SpawnRate));
+			var option = allOption.GetIOption(
+				role.GetRoleOptionId(RoleCommonOption.SpawnRate));
+			roleOptionString = option.ToHudStringWithChildren();
             colorRoleName = role.GetColoredRoleName();
         }
 
@@ -65,10 +64,9 @@ internal sealed class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
 
                 if (!anotherRole.IsVanillaRole())
                 {
-                    anotherRoleOptionString =
-                        allOption.GetHudStringWithChildren(
-                            multiAssignRole.AnotherRole.GetRoleOptionId(
-                                RoleCommonOption.SpawnRate));
+					var option = allOption.GetIOption(
+						multiAssignRole.AnotherRole.GetRoleOptionId(RoleCommonOption.SpawnRate));
+					anotherRoleOptionString = option.ToHudStringWithChildren();
                 }
                 string anotherRoleFullDesc = anotherRole.GetFullDescription();
                 replaceAwakeRoleOptionString(
@@ -91,13 +89,13 @@ internal sealed class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
     private static void replaceAwakeRoleOptionString(
         ref string roleOptionString, SingleRoleBase role)
     {
-        if (role is IRoleAwake<RoleTypes> awakeFromVaniraRole && 
+        if (role is IRoleAwake<RoleTypes> awakeFromVaniraRole &&
             !awakeFromVaniraRole.IsAwake)
         {
             roleOptionString = "";
         }
         else if (
-            role is IRoleAwake<Roles.ExtremeRoleId> awakeFromExRole && 
+            role is IRoleAwake<Roles.ExtremeRoleId> awakeFromExRole &&
             !awakeFromExRole.IsAwake)
         {
             roleOptionString = awakeFromExRole.GetFakeOptionString();

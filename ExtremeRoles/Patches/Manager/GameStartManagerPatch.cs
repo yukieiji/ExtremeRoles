@@ -21,7 +21,7 @@ public static class GameStartManagerPatch
     private const float kickTime = 30f;
     private const float timerMaxValue = 600f;
     private const string errorColorPlaceHolder = "<color=#FF0000FF>{0}\n</color>";
-    
+
     private static bool isCustomServer;
 
     private static float timer;
@@ -34,38 +34,31 @@ public static class GameStartManagerPatch
     private static bool prevOptionValue;
     private static TMPro.TextMeshPro customShowText;
 
-
     [HarmonyPrefix]
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.BeginGame))]
-    public static bool BeginGamePrefix(GameStartManager __instance)
+    public static bool BeginGamePrefix()
     {
+        if (!AmongUsClient.Instance.AmHost) { return true; }
 
-        bool continueStart = true;
-
-        if (AmongUsClient.Instance.AmHost)
+        foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
         {
-            foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
+            if (client.Character == null) continue;
+            var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
+            if (dummyComponent != null && dummyComponent.enabled)
             {
-                if (client.Character == null) continue;
-                var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-                if (dummyComponent != null && dummyComponent.enabled)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
-                    client.Id, out Version clientVer))
-                {
-                    continueStart = false;
-                    break;
-                }
-                int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
-                    clientVer);
-                if (diff != 0)
-                {
-                    continueStart = false;
-                    break;
-                }
+            if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
+                client.Id, out Version clientVer))
+            {
+                return false;
+            }
+            int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
+                clientVer);
+            if (diff != 0)
+            {
+                return false;
             }
         }
 
@@ -94,7 +87,7 @@ public static class GameStartManagerPatch
             }
             RPCOperator.ShareMapId(mapId);
         }
-        return continueStart;
+        return true;
     }
 
     [HarmonyPrefix]
@@ -105,10 +98,10 @@ public static class GameStartManagerPatch
         GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(
             AmongUsClient.Instance.GameId);
 
-            isVersionSent = false;
-            timer = timerMaxValue;
-            kickingTimer = 0f;
-            isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
+        isVersionSent = false;
+        timer = timerMaxValue;
+        kickingTimer = 0f;
+        isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
 
         prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
 
@@ -179,12 +172,12 @@ public static class GameStartManagerPatch
                 __instance.GameStartText.text = string.Format(
                     Translation.GetString("errorDiffHostVersion"),
                     Mathf.Round(kickTime - kickingTimer));
-                __instance.GameStartText.transform.localPosition = 
+                __instance.GameStartText.transform.localPosition =
                     __instance.StartButton.transform.localPosition + Vector3.up * 2;
             }
             else
             {
-                __instance.GameStartText.transform.localPosition = 
+                __instance.GameStartText.transform.localPosition =
                     __instance.StartButton.transform.localPosition;
                 if (__instance.startState != GameStartManager.StartingStates.Countdown)
                 {
@@ -198,7 +191,7 @@ public static class GameStartManagerPatch
         string message = string.Format(
             errorColorPlaceHolder,
             Translation.GetString("errorCannotGameStart"));
-        foreach (InnerNet.ClientData client in 
+        foreach (InnerNet.ClientData client in
             AmongUsClient.Instance.allClients.GetFastEnumerator())
         {
             if (client.Character == null) { continue; }
@@ -237,18 +230,18 @@ public static class GameStartManagerPatch
 
         if (blockStart)
         {
-            __instance.StartButton.color = 
+            __instance.StartButton.color =
                 __instance.startLabelText.color = Palette.DisabledClear;
             __instance.GameStartText.text = message;
-            __instance.GameStartText.transform.localPosition = 
+            __instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition + Vector3.up * 2;
         }
         else
         {
             __instance.StartButton.color = __instance.startLabelText.color = (
-                (__instance.LastPlayerCount >= __instance.MinPlayers) ? 
+                (__instance.LastPlayerCount >= __instance.MinPlayers) ?
                 Palette.EnabledColor : Palette.DisabledClear);
-            __instance.GameStartText.transform.localPosition = 
+            __instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition;
         }
 

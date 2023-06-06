@@ -42,11 +42,11 @@ public static class ExileControllerBeginePatch
     {
 
         var state = ExtremeRolesPlugin.ShipState;
-        
+
         if (state.AssassinMeetingTrigger)
         {
             assassinMeetingEndBegin(__instance, state);
-            return false; 
+            return false;
         }
         else if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
         {
@@ -65,7 +65,7 @@ public static class ExileControllerBeginePatch
     {
         if (!ExtremeRolesPlugin.ShipState.IsShowAditionalInfo() ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
-        
+
         TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
             __instance.ImpostorText,
             __instance.Text.transform);
@@ -88,7 +88,7 @@ public static class ExileControllerBeginePatch
         GameData.PlayerInfo player = GameData.Instance.GetPlayerById(
             state.IsMarinPlayerId);
 
-        string transKey = state.IsAssassinAssign ?
+        string transKey = state.IsAssassinateMarin ?
             "assassinateMarinSucsess" : "assassinateMarinFail";
         string printStr = $"{player?.PlayerName}{Helper.Translation.GetString(transKey)}";
 
@@ -153,7 +153,7 @@ public static class ExileControllerBeginePatch
                     completeString = isShowRole ?
                         string.Format(
                             Helper.Translation.GetString("ExileTextAllTeamWithRole"),
-                            playerName, team, exiledPlayerRole.GetColoredRoleName()) : 
+                            playerName, team, exiledPlayerRole.GetColoredRoleName()) :
                         string.Format(
                             Helper.Translation.GetString("ExileTextAllTeam"),
                             playerName, team);
@@ -181,7 +181,7 @@ public static class ExileControllerBeginePatch
                 Array.Empty<Il2CppObject>());
             instance.Player.gameObject.SetActive(false);
         }
-        
+
         instance.completeString = completeString;
         instance.ImpostorText.text = mode switch
         {
@@ -273,7 +273,7 @@ public static class ExileControllerBeginePatch
         };
         string suffix = getSuffix(isExiledSameMode, modeTeamAlive > 1);
         string transKey = $"{TransKeyBase}{suffix}{teamSuffix}";
-        
+
         if (Enum.TryParse(transKey, out StringNames sn))
         {
             return FastDestroyableSingleton<TranslationController>.Instance.GetString(

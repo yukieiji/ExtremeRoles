@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>7.1.1.9</Version>
+    <Version>7.1.1.10</Version>
     <!--<VersionPrefix>7.1.1</VersionPrefix>-->
     <VersionSuffix>SpringJump</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
@@ -13,15 +13,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">

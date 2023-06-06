@@ -57,7 +57,7 @@ public static class RoleManagerSelectRolesPatch
                 il2CppListPlayer, currentOption, RoleTeamTypes.Impostor,
                 adjustedNumImpostors,
                 new Il2CppSystem.Nullable<RoleTypes>()
-                { 
+                {
                     value = RoleTypes.Impostor,
                     has_value = true
                 });
@@ -282,7 +282,7 @@ public static class RoleManagerSelectRolesPatch
 
         if (!targetPlayer.Any() || !targetPlayer.Any()) { return; }
 
-        List<(int intedRoleId, int weight)> spawnCheckRoleId = 
+        List<(int intedRoleId, int weight)> spawnCheckRoleId =
             createSingleRoleIdData(teamSpawnData);
 
         if (!spawnCheckRoleId.Any()) { return; }
@@ -323,21 +323,27 @@ public static class RoleManagerSelectRolesPatch
 
             if (spawnData.IsCanSpawnTeam(team) &&
                 shuffledSpawnCheckRoleId.Any() &&
-                removePlayer == null &&
-                !RoleAssignFilter.Instance.IsBlock(shuffledSpawnCheckRoleId[0]))
+                removePlayer == null)
             {
-                removePlayer = player;
-                int intedRoleId = shuffledSpawnCheckRoleId[0];
-                shuffledSpawnCheckRoleId.RemoveAt(0);
+				for (int i = 0; i < shuffledSpawnCheckRoleId.Count; ++i)
+				{
+					int intedRoleId = shuffledSpawnCheckRoleId[i];
 
-                Logging.Debug($"---AssignRole:{intedRoleId}---");
+					if (RoleAssignFilter.Instance.IsBlock(intedRoleId)) { continue; }
 
-                spawnData.ReduceSpawnLimit(team);
-                assignData.AddAssignData(
-                    new PlayerToSingleRoleAssignData(
-                        player.PlayerId, intedRoleId, assignData.GetControlId()));
+					removePlayer = player;
+					shuffledSpawnCheckRoleId.RemoveAt(i);
 
-                RoleAssignFilter.Instance.Update(intedRoleId);
+					Logging.Debug($"---AssignRole:{intedRoleId}---");
+
+					spawnData.ReduceSpawnLimit(team);
+					assignData.AddAssignData(
+						new PlayerToSingleRoleAssignData(
+							player.PlayerId, intedRoleId, assignData.GetControlId()));
+
+					RoleAssignFilter.Instance.Update(intedRoleId);
+					break;
+				}
             }
 
             Logging.Debug($"-------------------AssignEnd-------------------");
@@ -358,7 +364,7 @@ public static class RoleManagerSelectRolesPatch
         int curCrewNum = 0;
         int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
             Int32OptionNames.NumImpostors);
-        
+
         NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
         var shuffleCombRole = spawnData.CurrentCombRoleSpawnData
             .OrderByDescending(x => x.Value.Weight) // まずは重みでソート
@@ -372,7 +378,7 @@ public static class RoleManagerSelectRolesPatch
             {
                 roleManager.AssignSetUpInit(curImpNum);
                 bool isSpawn = combSpawnData.IsSpawn();
-                
+
                 int reduceCrewmateRole = 0;
                 int reduceImpostorRole = 0;
                 int reduceNeutralRole = 0;
@@ -424,7 +430,7 @@ public static class RoleManagerSelectRolesPatch
                 {
                     spawnRoles.Add((MultiAssignRoleBase)role.Clone());
                 }
-                
+
                 notAssignPlayer.ReduceImpostorAssignNum(reduceImpostorRole);
                 roleListData.Add(
                     new CombinationRoleAssignData(
@@ -569,7 +575,7 @@ public static class RoleManagerAssignRoleOnDeathPatch
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
         if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
             !ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
-        
+
         ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
     }
 }
@@ -596,8 +602,8 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
         RoleTypes roleTypes = RoleTypes.GuardianAngel;
 
         int num = CachedPlayerControl.AllPlayerControls.Count(
-            (CachedPlayerControl pc) => 
-                pc.Data.IsDead && 
+            (CachedPlayerControl pc) =>
+                pc.Data.IsDead &&
                 !pc.Data.Role.IsImpostor &&
                 ExtremeRoleManager.GameRole[pc.PlayerId].IsCrewmate());
 
@@ -611,9 +617,9 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
         {
             return false;
         }
-        
+
         int chancePerGame = roleOptions.GetChancePerGame(roleTypes);
-        
+
         if (HashRandom.Next(101) < chancePerGame)
         {
             player.RpcSetRole(roleTypes);

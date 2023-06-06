@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>7.1.2.3</Version>
+    <Version>7.1.2.4</Version>
     <!--<VersionPrefix>7.1.2</VersionPrefix>-->
     <VersionSuffix>SpringNext</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
@@ -11,13 +11,6 @@
     <Configurations>Debug;Release</Configurations>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>embedded</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

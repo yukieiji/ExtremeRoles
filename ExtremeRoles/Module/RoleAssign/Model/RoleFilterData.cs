@@ -18,6 +18,6 @@ public sealed class RoleFilterData
     [DataMember]
     public Dictionary<int, CombinationRoleType> FilterCombinationId { get; set; }
 
-    [DataMember] 
+    [DataMember]
     public Dictionary<int, ExtremeGhostRoleId> FilterGhostRole { get; set; }
 }

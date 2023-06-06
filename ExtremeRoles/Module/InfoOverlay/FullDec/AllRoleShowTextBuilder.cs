@@ -1,6 +1,7 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec;
 
@@ -15,10 +16,11 @@ internal sealed class AllRoleShowTextBuilder : PageShowTextBuilderBase
 
         var (roleTextBase, optionId) = this.AllPage[this.Page];
 
-        string roleOption = OptionManager.Instance.GetHudStringWithChildren(
-            optionId + (int)RoleCommonOption.SpawnRate);
+		var option = OptionManager.Instance.GetIOption(
+			optionId + (int)IShowTextBuilder.SpawnOptionKey);
+		string roleOption = option.ToHudStringWithChildren();
 
-        string title = string.Concat(
+		string title = string.Concat(
             $"<size=200%>{Translation.GetString("roleDesc")}</size>",
             $"           {Translation.GetString("changeRoleMore")}",
             $"({this.Page + 1}/{this.AllPage.Count})");
@@ -26,6 +28,7 @@ internal sealed class AllRoleShowTextBuilder : PageShowTextBuilderBase
 
         return (title, string.Format(roleTextBase, roleOption != "" ? $"{roleOption}" : ""), "");
     }
+
     private void createAllRoleText()
     {
         int optionId;

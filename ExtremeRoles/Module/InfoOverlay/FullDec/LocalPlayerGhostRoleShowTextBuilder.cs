@@ -40,7 +40,9 @@ internal sealed class LocalPlayerGhostRoleShowTextBuilder : IShowTextBuilder
                 var aliveRole = (MultiAssignRoleBase)ExtremeRoleManager.GetLocalPlayerRole();
                 useId = aliveRole.GetManagerOptionId(RoleCommonOption.SpawnRate);
             }
-            roleOptionString = allOption.GetHudStringWithChildren(useId);
+
+			var option = OptionManager.Instance.GetIOption(useId);
+			roleOptionString = option.ToHudStringWithChildren();
         }
 
         string roleFullDesc = role.GetFullDescription();
