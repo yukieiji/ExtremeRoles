@@ -13,6 +13,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Helper;
+
 
 #nullable enable
 
@@ -24,9 +27,11 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	public int Id { private get; set; }
 
 	private bool isActive = false;
+	private static AudioClip? cacheedClip;
 
 #pragma warning disable CS8618
 	private SpriteRenderer rend;
+	private AudioSource audioSource;
 
 	public MinerMineEffect(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -34,6 +39,20 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	public void Awake()
 	{
 		this.rend = base.gameObject.AddComponent<SpriteRenderer>();
+		this.audioSource = base.gameObject.AddComponent<AudioSource>();
+		this.audioSource.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
+
+		this.audioSource.loop = true;
+
+		if (cacheedClip == null)
+		{
+			cacheedClip = Loader.GetUnityObjectFromResources<AudioClip>(
+				Path.SoundEffect, string.Format(
+					Sound.SoundPlaceHolder, "Mine"));
+		}
+
+		this.audioSource.clip = cacheedClip;
+		this.audioSource.Play();
 	}
 
 	public void SwithAcitve()
@@ -53,6 +72,10 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
 			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+
+		Vector2 pos = base.transform.position;
+		Vector2 diff = player.PlayerControl.GetTruePosition() - pos;
+
 	}
 
 	public void Clear()
