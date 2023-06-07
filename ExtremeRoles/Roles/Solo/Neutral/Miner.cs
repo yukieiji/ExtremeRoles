@@ -24,7 +24,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.setMine;
         set
         {
@@ -98,25 +98,26 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected) { return; }
-        
-        if (CachedShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+        if (rolePlayer.Data.IsDead ||
+			rolePlayer.Data.Disconnected ||
+			CachedShipStatus.Instance == null ||
+			GameData.Instance == null ||
+			!CachedShipStatus.Instance.enabled ||
+			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+
         if (MeetingHud.Instance || ExileController.Instance)
         {
             this.timer = this.nonActiveTime;
             return;
         }
 
-            if (this.timer > 0.0f)
-            {
-                this.timer -= Time.deltaTime;
-                return;
-            }
-            
-            if (this.mines.Count == 0) { return; }
+        if (this.timer > 0.0f)
+        {
+            this.timer -= Time.deltaTime;
+            return;
+        }
+
+        if (this.mines.Count == 0) { return; }
 
         HashSet<int> activateMine = new HashSet<int>();
         HashSet<byte> killedPlayer = new HashSet<byte>();
@@ -128,42 +129,35 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
             foreach (GameData.PlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (playerInfo == null) { continue; }
+                if (playerInfo == null ||
+					killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
 
-                if (killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
-                
                 var assassin = ExtremeRoleManager.GameRole[
                     playerInfo.PlayerId] as Combination.Assassin;
 
-                if (assassin != null)
+                if (assassin != null &&
+					(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
                 {
-                    if (!assassin.CanKilled || !assassin.CanKilledFromNeutral)
-                    {
-                        continue;
-                    }
-                }
+					continue;
+				}
 
                 if (!playerInfo.Disconnected &&
                     !playerInfo.IsDead &&
                     playerInfo.Object != null &&
                     !playerInfo.Object.inVent)
                 {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object)
-                    {
-                        Vector2 vector = @object.GetTruePosition() - pos;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= this.killRange &&
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                pos, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            activateMine.Add(i);
-                            killedPlayer.Add(playerInfo.PlayerId);
-                            break;
-                        }
-                    }
-                }
+					Vector2 vector = playerInfo.Object.GetTruePosition() - pos;
+					float magnitude = vector.magnitude;
+					if (magnitude <= this.killRange &&
+						!PhysicsHelpers.AnyNonTriggersBetween(
+							pos, vector.normalized,
+							magnitude, Constants.ShipAndObjectsMask))
+					{
+						activateMine.Add(i);
+						killedPlayer.Add(playerInfo.PlayerId);
+						break;
+					}
+				}
             }
         }
 
@@ -171,6 +165,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         {
             this.mines.RemoveAt(index);
         }
+
         foreach (byte player in killedPlayer)
         {
             Helper.Player.RpcUncheckMurderPlayer(
@@ -181,7 +176,6 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
             if (this.isShowKillLog)
             {
-
                 GameData.PlayerInfo killPlayer = GameData.Instance.GetPlayerById(player);
 
                 if (killPlayer != null)
@@ -213,7 +207,6 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
-        
         this.CreateCommonAbilityOption(
             parentOps, 2.0f);
         CreateFloatOption(
