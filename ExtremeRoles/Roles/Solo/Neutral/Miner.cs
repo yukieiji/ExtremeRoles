@@ -39,7 +39,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
     private float nonActiveTime;
     private float timer;
     private bool isShowKillLog;
-    private Vector2? setPos;
+    private Vector2 setPos = new Vector2(100.0f, 100.0f);
     private TextPopUpper killLogger = null;
 
     public Miner() : base(
@@ -62,19 +62,15 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public bool UseAbility()
     {
-
         this.setPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
         return true;
     }
 
     public void CleanUp()
     {
-        if (this.setPos.HasValue)
-        {
-            this.mines.Add(this.setPos.Value);
-        }
-        this.setPos = null;
-    }
+		this.mines.Add(this.setPos);
+		this.resetPos();
+	}
 
     public bool IsAbilityUse() => this.IsCommonUse();
 
@@ -234,9 +230,16 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
         this.mines = new List<Vector2>();
         this.timer = this.nonActiveTime;
-        this.setPos = null;
-        this.killLogger = new TextPopUpper(
+
+		resetPos();
+
+		this.killLogger = new TextPopUpper(
             2, 3.5f, new Vector3(0, -1.2f, 0.0f),
             TMPro.TextAlignmentOptions.Center, false);
     }
+
+	private void resetPos()
+	{
+		this.setPos = new Vector2(100.0f, 100.0f);
+	}
 }
