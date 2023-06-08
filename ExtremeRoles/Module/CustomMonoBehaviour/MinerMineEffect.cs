@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.Combination;
-using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Helper;
 
@@ -24,10 +15,12 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 {
-	public int Id { private get; set; }
-
 	private bool isActive = false;
 	private static AudioClip? cacheedClip;
+
+	private float minDistance;
+	private float maxDistance;
+	private float range;
 
 #pragma warning disable CS8618
 	private SpriteRenderer rend;
@@ -55,6 +48,13 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 		this.audioSource.Play();
 	}
 
+	public void SetParameter(float activeRange)
+	{
+		this.minDistance = activeRange + 0.5f;
+		this.maxDistance = this.minDistance * 1.5f;
+		this.range = this.minDistance - this.maxDistance;
+	}
+
 	public void SwithAcitve()
 	{
 		this.isActive = true;
@@ -73,13 +73,32 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 			ExileController.Instance != null ||
 			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
-		Vector2 pos = base.transform.position;
-		Vector2 diff = player.PlayerControl.GetTruePosition() - pos;
+		if (!this.isActive)
+		{
+			return;
+		}
 
+		this.audioSource.volume = 1.0f - calculateNormalizedDistance(
+			base.transform.position,
+			player.PlayerControl.GetTruePosition(),
+			this.range, this.minDistance, this.maxDistance);
 	}
 
 	public void Clear()
 	{
 		Destroy(base.gameObject);
+	}
+
+	private static float calculateNormalizedDistance(
+		Vector2 objPos, Vector2 targetPos,
+		float volumeRange, float minDistance, float maxDistance)
+	{
+		Vector2 diff = objPos - targetPos;
+		float distance = diff.magnitude;
+
+		float clampDistance = Mathf.Clamp(distance, minDistance, maxDistance);
+		float normalizedDistance = (clampDistance - minDistance) / volumeRange;
+
+		return normalizedDistance;
 	}
 }
