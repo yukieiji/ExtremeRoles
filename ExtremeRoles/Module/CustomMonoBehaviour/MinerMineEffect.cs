@@ -6,6 +6,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles.Solo.Neutral;
 
 
 #nullable enable
@@ -21,6 +22,10 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	private float minDistance;
 	private float maxDistance;
 	private float range;
+
+	private bool isUseEffect = false;
+	private Miner.ShowMode showMode;
+	private bool isShowNoneActiveImg;
 
 #pragma warning disable CS8618
 	private SpriteRenderer rend;
@@ -47,8 +52,16 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 		this.audioSource.Play();
 	}
 
-	public void SetParameter(float activeRange)
+	public void SetParameter(
+		bool isRolePlayer,
+		float activeRange,
+		Miner.MineEffectParameter param)
 	{
+		this.isUseEffect = param.RolePlayerShowMode == Miner.ShowMode.None;
+		this.isShowNoneActiveImg = isRolePlayer || param.CanShowNoneActiveAtherPlayer;
+		this.showMode = isRolePlayer ?
+			param.RolePlayerShowMode : param.AnotherPlayerShowMode;
+
 		this.minDistance = activeRange + 0.5f;
 		this.maxDistance = this.minDistance * 2.0f;
 		this.range = this.maxDistance - this.minDistance;
@@ -63,7 +76,8 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	{
 		var player = CachedPlayerControl.LocalPlayer;
 
-		if (player == null ||
+		if (!this.isUseEffect ||
+			player == null ||
 			player.Data == null ||
 			CachedShipStatus.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
@@ -72,24 +86,58 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 			ExileController.Instance != null ||
 			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
-		if (!this.isActive)
-		{
-			return;
-		}
-
-
-		if (player.Data.IsDead ||
-			player.Data.Disconnected) { return; }
-
-		this.audioSource.volume = 1.0f - calculateNormalizedDistance(
-			base.transform.position,
-			player.PlayerControl.GetTruePosition(),
-			this.range, this.minDistance, this.maxDistance);
+		playerUpdate(player);
 	}
 
 	public void Clear()
 	{
 		Destroy(base.gameObject);
+	}
+
+	private void playerUpdate(PlayerControl localPlayer)
+	{
+		switch (showMode)
+		{
+			case Miner.ShowMode.OnlySe:
+				if (!this.isActive) { return; }
+				updateVolume(localPlayer);
+				break;
+			case Miner.ShowMode.OnlyImg:
+				if (this.isActive)
+				{
+					//アクティブ画像の処理
+				}
+				else if (this.isShowNoneActiveImg)
+				{
+					//非アクティブの処理
+				}
+				return;
+			case Miner.ShowMode.Both:
+				if (this.isActive)
+				{
+					updateVolume(localPlayer);
+					//アクティブ画像の処理
+					//非アクティブの処理
+				}
+				else if (this.isShowNoneActiveImg)
+				{
+					//非アクティブの処理
+				}
+				return;
+			default:
+				return;
+		}
+	}
+
+	private void updateVolume(PlayerControl localPlayer)
+	{
+		var data = localPlayer.Data;
+		if (data.IsDead || data.Disconnected) { return; }
+
+		this.audioSource.volume = 1.0f - calculateNormalizedDistance(
+			base.transform.position,
+			localPlayer.GetTruePosition(),
+			this.range, this.minDistance, this.maxDistance);
 	}
 
 	private static float calculateNormalizedDistance(

@@ -81,6 +81,7 @@ public static class RPCOperator
         // ニュートラル
         AliceShipBroken,
         JesterOutburstKill,
+		MinerHandle,
         YandereSetOneSidedLover,
         TotocalcioSetBetPlayer,
         MadmateToFakeImpostor,
@@ -200,7 +201,7 @@ public static class RPCOperator
         Helper.Player.ResetTarget();
         ExtremeRolesPlugin.ShipState.Initialize();
         ExtremeRolesPlugin.Info.ResetOverlays();
-        
+
         // チェックポイントリセット
         Helper.Logging.ResetCkpt();
 
@@ -304,7 +305,7 @@ public static class RPCOperator
         if (player == null) { return; }
 
         MessageReader reader = new MessageReader();
-        
+
         byte[] bytes = BitConverter.GetBytes(ventId);
         if (!BitConverter.IsLittleEndian)
         {
@@ -345,7 +346,7 @@ public static class RPCOperator
 
         HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
         ShipStatus ship = CachedShipStatus.Instance;
-        
+
         if (ship.IsCustomVent(ventId))
         {
             if (hudManager == null) { return; }
@@ -362,7 +363,7 @@ public static class RPCOperator
                                 vent.myRend.sprite = ship.GetCustomVentSprite(
                                     ventId, 0);
                             }
-                        }   
+                        }
                     })
                 )
             );
@@ -370,7 +371,7 @@ public static class RPCOperator
         else
         {
             var anim = vent.GetComponent<PowerTools.SpriteAnim>();
-            
+
             if (!anim) { return; }
             anim.Play(vent.ExitVentAnim, 1f);
         }
@@ -427,8 +428,8 @@ public static class RPCOperator
             target.Revive();
 
             // なんか起きて失敗
-            if (target.Data == null || 
-                target.Data.IsDead || 
+            if (target.Data == null ||
+                target.Data.IsDead ||
                 target.Data.Disconnected) { return; }
 
             // 死体は消しておく
@@ -675,7 +676,11 @@ public static class RPCOperator
         Roles.Solo.Neutral.Jester.OutburstKill(
             killerId, targetId);
     }
-    public static void YandereSetOneSidedLover(
+	public static void MinerHandle(ref MessageReader reader)
+	{
+		Roles.Solo.Neutral.Miner.RpcHandle(ref reader);
+	}
+	public static void YandereSetOneSidedLover(
         byte playerId, byte loverId)
     {
         Roles.Solo.Neutral.Yandere.SetOneSidedLover(
