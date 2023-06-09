@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
+using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -23,17 +23,14 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         NoneActiveTime,
         ShowKillLog
     }
+	public enum MinerRpc
+	{
+		SetMine,
+		ActiveMine,
+		RemoveMine,
+	}
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.setMine;
-        set
-        {
-            this.setMine = value;
-        }
-    }
-
-    private ExtremeAbilityButton setMine;
+    public ExtremeAbilityButton Button { get; set; }
 
     private List<MinerMineEffect> mines;
     private float killRange;
@@ -51,7 +48,55 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         false, false, true, false)
     { }
 
-    public void CreateAbility()
+	public static void RpcHandle(ref MessageReader reader)
+	{
+		byte playerId = reader.ReadByte();
+		Miner miner = ExtremeRoleManager.GetSafeCastedRole<Miner>(playerId);
+		MinerRpc rpc = (MinerRpc)reader.ReadByte();
+		switch (rpc)
+		{
+			case MinerRpc.SetMine:
+				float x = reader.ReadSingle();
+				float y = reader.ReadSingle();
+				if (miner == null) { return; }
+				setMine(miner, new(x, y));
+				break;
+			case MinerRpc.ActiveMine:
+				if (miner == null) { return; }
+				activateMine(miner);
+				break;
+			case MinerRpc.RemoveMine:
+				if (miner == null) { return; }
+				int index =reader.ReadInt32();
+				removeMine(miner, index);
+				break;
+		}
+	}
+
+	private static void setMine(Miner miner, Vector2 pos)
+	{
+		GameObject obj = new GameObject($"Miner{miner.GameControlId}_Mine{miner.mines.Count}");
+		obj.transform.position = pos;
+		var mine = obj.AddComponent<MinerMineEffect>();
+		miner.noneActiveMine = mine;
+		miner.noneActiveMine.SetParameter(miner.killRange);
+		ExtremeRolesPlugin.ShipState.AddMeetingResetObject(miner.noneActiveMine);
+	}
+
+	private static void activateMine(Miner miner)
+	{
+		if (miner.noneActiveMine == null) { return; }
+		miner.noneActiveMine.SwithAcitve();
+		miner.mines.Add(miner.noneActiveMine);
+	}
+
+	private static void removeMine(Miner miner, int index)
+	{
+		miner.mines[index].Clear();
+		miner.mines.RemoveAt(index);
+	}
+
+	public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
             "setMine",
@@ -63,20 +108,13 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public bool UseAbility()
     {
-		GameObject obj = new GameObject($"Miner{this.GameControlId}_Mine{this.mines.Count}");
-		obj.transform.position = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
-		this.noneActiveMine = obj.AddComponent<MinerMineEffect>();
-		this.noneActiveMine.SetParameter(this.killRange);
+		setMine(this, CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition());
 		return true;
     }
 
     public void CleanUp()
     {
-		if (this.noneActiveMine == null) { return; }
-
-		this.noneActiveMine.SwithAcitve();
-		this.mines.Add(this.noneActiveMine);
-		this.noneActiveMine = null;
+		activateMine(this);
 	}
 
     public bool IsAbilityUse() => this.IsCommonUse();
@@ -166,7 +204,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
         foreach (int index in activateMine)
         {
-            this.mines.RemoveAt(index);
+			removeMine(this, index);
         }
 
         foreach (byte player in killedPlayer)
