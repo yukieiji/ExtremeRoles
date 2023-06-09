@@ -110,7 +110,11 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
 	private static void removeMine(Miner miner, int index)
 	{
-		miner.mines[index].Clear();
+		var mine = miner.mines[index];
+		if (mine != null)
+		{
+			mine.Clear();
+		}
 		miner.mines.RemoveAt(index);
 	}
 
@@ -204,7 +208,13 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
         for (int i = 0; i < this.mines.Count; ++i)
         {
-            Vector2 pos = this.mines[i].transform.position;
+			MinerMineEffect mine = this.mines[i];
+			if (mine == null)
+			{
+				activateMine.Add(i);
+				continue;
+			}
+            Vector2 pos = mine.transform.position;
 
             foreach (GameData.PlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())

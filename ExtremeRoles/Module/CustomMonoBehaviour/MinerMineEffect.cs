@@ -59,7 +59,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 		float activeRange,
 		Miner.MineEffectParameter param)
 	{
-		this.isUseEffect = param.RolePlayerShowMode == Miner.ShowMode.None;
+		this.isUseEffect = param.RolePlayerShowMode != Miner.ShowMode.None;
 		this.isShowNoneActiveImg = isRolePlayer || param.CanShowNoneActiveAtherPlayer;
 		this.showMode = isRolePlayer ?
 			param.RolePlayerShowMode : param.AnotherPlayerShowMode;
@@ -93,7 +93,10 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 
 	public void Clear()
 	{
-		Destroy(base.gameObject);
+		if (this != null)
+		{
+			Destroy(this.gameObject);
+		}
 	}
 
 	private void playerUpdate(PlayerControl localPlayer)
