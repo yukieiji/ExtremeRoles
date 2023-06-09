@@ -698,7 +698,10 @@ public static class PlayerControlHandleRpcPatch
                 RPCOperator.JesterOutburstKill(
                     outburstKillerId, killTargetId);
                 break;
-            case RPCOperator.Command.YandereSetOneSidedLover:
+			case RPCOperator.Command.MinerHandle:
+				RPCOperator.MinerHandle(ref reader);
+				break;
+			case RPCOperator.Command.YandereSetOneSidedLover:
                 byte yanderePlayerId = reader.ReadByte();
                 byte loverPlayerId = reader.ReadByte();
                 RPCOperator.YandereSetOneSidedLover(
