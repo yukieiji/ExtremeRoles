@@ -47,7 +47,8 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public ExtremeAbilityButton Button { get; set; }
 
-    private List<MinerMineEffect> mines;
+	private int mineId = 0;
+    private Dictionary<int, MinerMineEffect> mines;
     private float killRange;
     private float nonActiveTime;
     private float timer;
@@ -70,30 +71,29 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 		MinerRpc rpc = (MinerRpc)reader.ReadByte();
 		byte playerId = reader.ReadByte();
 		Miner miner = ExtremeRoleManager.GetSafeCastedRole<Miner>(playerId);
-
+		int id = reader.ReadInt32();
 		switch (rpc)
 		{
 			case MinerRpc.SetMine:
 				float x = reader.ReadSingle();
 				float y = reader.ReadSingle();
 				if (miner == null) { return; }
-				setMine(miner, new(x, y));
+				setMine(miner, new(x, y), id);
 				break;
 			case MinerRpc.ActiveMine:
 				if (miner == null) { return; }
-				activateMine(miner);
+				activateMine(miner, id);
 				break;
 			case MinerRpc.RemoveMine:
 				if (miner == null) { return; }
-				int index = reader.ReadInt32();
-				removeMine(miner, index);
+				removeMine(miner, id);
 				break;
 		}
 	}
 
-	private static void setMine(Miner miner, Vector2 pos, bool isRolePlayer=false)
+	private static void setMine(Miner miner, Vector2 pos, int id, bool isRolePlayer=false)
 	{
-		GameObject obj = new GameObject($"Miner{miner.GameControlId}_Mine{miner.mines.Count}");
+		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
 		obj.transform.position = pos;
 		var mine = obj.AddComponent<MinerMineEffect>();
 		miner.noneActiveMine = mine;
@@ -101,21 +101,24 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 		ExtremeRolesPlugin.ShipState.AddMeetingResetObject(miner.noneActiveMine);
 	}
 
-	private static void activateMine(Miner miner)
+	private static void activateMine(Miner miner, int id)
 	{
 		if (miner.noneActiveMine == null) { return; }
 		miner.noneActiveMine.SwithAcitve();
-		miner.mines.Add(miner.noneActiveMine);
+		miner.mines.Add(id, miner.noneActiveMine);
 	}
 
-	private static void removeMine(Miner miner, int index)
+	private static void removeMine(Miner miner, int id)
 	{
-		var mine = miner.mines[index];
+		if (!miner.mines.TryGetValue(id, out var mine))
+		{
+			return;
+		}
 		if (mine != null)
 		{
 			mine.Clear();
 		}
-		miner.mines.RemoveAt(index);
+		miner.mines.Remove(id);
 	}
 
 	public void CreateAbility()
@@ -138,12 +141,13 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 			{
 				caller.WriteByte((byte)MinerRpc.SetMine);
 				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteInt(this.mineId);
 				caller.WriteFloat(pos.x);
 				caller.WriteFloat(pos.y);
 			}
 		}
 
-		setMine(this, pos, true);
+		setMine(this, pos, this.mineId, true);
 		return true;
     }
 
@@ -155,9 +159,11 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 			{
 				caller.WriteByte((byte)MinerRpc.ActiveMine);
 				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteInt(this.mineId);
 			}
 		}
-		activateMine(this);
+		activateMine(this, this.mineId);
+		++this.mineId;
 	}
 
     public bool IsAbilityUse() => this.IsCommonUse();
@@ -206,12 +212,11 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         HashSet<int> activateMine = new HashSet<int>();
         HashSet<byte> killedPlayer = new HashSet<byte>();
 
-        for (int i = 0; i < this.mines.Count; ++i)
+        foreach (var (id, mine) in this.mines)
         {
-			MinerMineEffect mine = this.mines[i];
 			if (mine == null)
 			{
-				activateMine.Add(i);
+				activateMine.Add(id);
 				continue;
 			}
             Vector2 pos = mine.transform.position;
@@ -243,7 +248,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 							pos, vector.normalized,
 							magnitude, Constants.ShipAndObjectsMask))
 					{
-						activateMine.Add(i);
+						activateMine.Add(id);
 						killedPlayer.Add(playerInfo.PlayerId);
 						break;
 					}
@@ -251,7 +256,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
             }
         }
 
-        foreach (int index in activateMine)
+        foreach (int id in activateMine)
         {
 			if (this.isShowAnotherPlayer)
 			{
@@ -259,10 +264,10 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 				{
 					caller.WriteByte((byte)MinerRpc.RemoveMine);
 					caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
-					caller.WriteInt(index);
+					caller.WriteInt(id);
 				}
 			}
-			removeMine(this, index);
+			removeMine(this, id);
         }
 
         foreach (byte player in killedPlayer)
@@ -354,8 +359,9 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         this.isShowKillLog = allOpt.GetValue<bool>(
             GetRoleOptionId(MinerOption.ShowKillLog));
 
-        this.mines = new List<MinerMineEffect>();
+        this.mines = new Dictionary<int, MinerMineEffect>();
         this.timer = this.nonActiveTime;
+		this.mineId = 0;
 
 		bool isShowMine = allOpt.GetValue<bool>(
 			GetRoleOptionId(MinerOption.CanShowMine));
