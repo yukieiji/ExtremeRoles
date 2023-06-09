@@ -18,6 +18,8 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 {
 	private bool isActive = false;
 	private static AudioClip? cacheedClip;
+	private static Sprite? cachedActiveSprite;
+	private static Sprite? cachedDeactiveSprite;
 
 	private float minDistance;
 	private float maxDistance;
@@ -96,37 +98,61 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 
 	private void playerUpdate(PlayerControl localPlayer)
 	{
-		switch (showMode)
+		switch (this.showMode)
 		{
 			case Miner.ShowMode.OnlySe:
-				if (!this.isActive) { return; }
-				updateVolume(localPlayer);
-				break;
+				if (!this.isActive)
+				{
+					setDeactivateSprite();
+				}
+				else
+				{
+					updateVolume(localPlayer);
+				}
+				return;
 			case Miner.ShowMode.OnlyImg:
 				if (this.isActive)
 				{
-					//アクティブ画像の処理
+					setActivateSprite();
 				}
 				else if (this.isShowNoneActiveImg)
 				{
-					//非アクティブの処理
+					setDeactivateSprite();
 				}
 				return;
 			case Miner.ShowMode.Both:
 				if (this.isActive)
 				{
+					setActivateSprite();
 					updateVolume(localPlayer);
-					//アクティブ画像の処理
-					//非アクティブの処理
 				}
 				else if (this.isShowNoneActiveImg)
 				{
-					//非アクティブの処理
+					setDeactivateSprite();
 				}
 				return;
 			default:
 				return;
 		}
+	}
+
+	private void setActivateSprite()
+	{
+		if (cachedActiveSprite == null)
+		{
+			cachedActiveSprite = Loader.CreateSpriteFromResources(
+				Path.MinerActiveMineImg);
+		}
+		this.rend.sprite = cachedActiveSprite;
+	}
+	private void setDeactivateSprite()
+	{
+		if (cachedDeactiveSprite == null)
+		{
+			cachedDeactiveSprite = Loader.CreateSpriteFromResources(
+				Path.MinerDeactivateMineImg);
+		}
+		this.rend.sprite = cachedDeactiveSprite;
 	}
 
 	private void updateVolume(PlayerControl localPlayer)
