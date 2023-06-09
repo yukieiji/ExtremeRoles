@@ -8,16 +8,20 @@ namespace ExtremeRoles.Helper;
 
 public static class Sound
 {
-	public const string SoundPlaceHolder = "assets/soundeffect/{0}.mp3";
+	private const string soundPlaceHolder = "assets/soundeffect/{0}.mp3";
 
 	public enum SoundType : byte
     {
         Kill,
         GuardianAngleGuard,
         AgencyTakeTask,
+
         CommanderReduceKillCool,
         CurseMakerCurse,
-        ReplaceNewTask,
+
+		MinerMineSE,
+
+		ReplaceNewTask,
     }
 
     private static Dictionary<SoundType, AudioClip> cachedAudio =
@@ -37,14 +41,14 @@ public static class Sound
     public static void PlaySound(
         SoundType soundType, float volume)
     {
-        AudioClip clip = getAudio(soundType);
+        AudioClip clip = GetAudio(soundType);
         if (Constants.ShouldPlaySfx() && clip != null)
         {
             SoundManager.Instance.PlaySound(clip, false, volume);
         }
     }
 
-    private static AudioClip getAudio(SoundType soundType)
+    public static AudioClip GetAudio(SoundType soundType)
     {
         if (cachedAudio.TryGetValue(soundType, out AudioClip clip))
         {
@@ -60,18 +64,17 @@ public static class Sound
                 case SoundType.GuardianAngleGuard:
                     clip = FastDestroyableSingleton<RoleManager>.Instance.protectAnim.UseSound;
                     break;
-                case SoundType.AgencyTakeTask:
-                case SoundType.CommanderReduceKillCool:
-                case SoundType.CurseMakerCurse:
-                case SoundType.ReplaceNewTask:
-                    clip = Loader.GetUnityObjectFromResources<AudioClip>(
-                        Path.SoundEffect, string.Format(
-                            SoundPlaceHolder, soundType.ToString()));
-                    clip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-                    break;
                 default:
-                    return null;
-            }
+					clip = Loader.GetUnityObjectFromResources<AudioClip>(
+						Path.SoundEffect, string.Format(
+							soundPlaceHolder, soundType.ToString()));
+					clip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+					break;
+			}
+			if (!clip)
+			{
+				Logging.Debug("Can't load AudioClip");
+			}
             cachedAudio.Add(soundType, clip);
             return clip;
         }

@@ -39,20 +39,19 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 
 		if (cacheedClip == null)
 		{
-			cacheedClip = Loader.GetUnityObjectFromResources<AudioClip>(
-				Path.SoundEffect, string.Format(
-					Sound.SoundPlaceHolder, "Mine"));
+			cacheedClip = Sound.GetAudio(Sound.SoundType.MinerMineSE);
 		}
 
 		this.audioSource.clip = cacheedClip;
+		this.audioSource.volume = 0.0f;
 		this.audioSource.Play();
 	}
 
 	public void SetParameter(float activeRange)
 	{
 		this.minDistance = activeRange + 0.5f;
-		this.maxDistance = this.minDistance * 1.5f;
-		this.range = this.minDistance - this.maxDistance;
+		this.maxDistance = this.minDistance * 2.0f;
+		this.range = this.maxDistance - this.minDistance;
 	}
 
 	public void SwithAcitve()
@@ -77,6 +76,10 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 		{
 			return;
 		}
+
+
+		if (player.Data.IsDead ||
+			player.Data.Disconnected) { return; }
 
 		this.audioSource.volume = 1.0f - calculateNormalizedDistance(
 			base.transform.position,

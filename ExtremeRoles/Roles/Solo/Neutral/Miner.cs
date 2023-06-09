@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -34,12 +35,12 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     private ExtremeAbilityButton setMine;
 
-    private List<Vector2> mines;
+    private List<MinerMineEffect> mines;
     private float killRange;
     private float nonActiveTime;
     private float timer;
     private bool isShowKillLog;
-    private Vector2 setPos = new Vector2(100.0f, 100.0f);
+	private MinerMineEffect noneActiveMine = null;
     private TextPopUpper killLogger = null;
 
     public Miner() : base(
@@ -62,14 +63,20 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public bool UseAbility()
     {
-        this.setPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
-        return true;
+		GameObject obj = new GameObject($"Miner{this.GameControlId}_Mine{this.mines.Count}");
+		obj.transform.position = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+		this.noneActiveMine = obj.AddComponent<MinerMineEffect>();
+		this.noneActiveMine.SetParameter(this.killRange);
+		return true;
     }
 
     public void CleanUp()
     {
-		this.mines.Add(this.setPos);
-		this.resetPos();
+		if (this.noneActiveMine == null) { return; }
+
+		this.noneActiveMine.SwithAcitve();
+		this.mines.Add(this.noneActiveMine);
+		this.noneActiveMine = null;
 	}
 
     public bool IsAbilityUse() => this.IsCommonUse();
@@ -120,7 +127,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
         for (int i = 0; i < this.mines.Count; ++i)
         {
-            Vector2 pos = this.mines[i];
+            Vector2 pos = this.mines[i].transform.position;
 
             foreach (GameData.PlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -228,18 +235,11 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         this.isShowKillLog = allOpt.GetValue<bool>(
             GetRoleOptionId(MinerOption.ShowKillLog));
 
-        this.mines = new List<Vector2>();
+        this.mines = new List<MinerMineEffect>();
         this.timer = this.nonActiveTime;
-
-		resetPos();
 
 		this.killLogger = new TextPopUpper(
             2, 3.5f, new Vector3(0, -1.2f, 0.0f),
             TMPro.TextAlignmentOptions.Center, false);
     }
-
-	private void resetPos()
-	{
-		this.setPos = new Vector2(100.0f, 100.0f);
-	}
 }
