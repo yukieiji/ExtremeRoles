@@ -135,6 +135,8 @@ public sealed class Missionary :
 		this.maxJudgementTarget = OptionManager.Instance.GetValue<int>(
 		   GetRoleOptionId(MissionaryOption.MaxJudgementNum));
 
+		this.judgementTarget = new HashSet<byte>();
+
 		resetTimer();
         this.RoleAbilityInit();
 
