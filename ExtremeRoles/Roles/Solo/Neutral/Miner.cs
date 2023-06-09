@@ -20,6 +20,10 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
     public enum MinerOption
     {
         MineKillRange,
+		CanShowMine,
+		RolePlayerShowMode,
+		AtherPlayerShowMode,
+		CanShowNoneActiveAtherPlayer,
         NoneActiveTime,
         ShowKillLog
     }
@@ -28,6 +32,13 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 		SetMine,
 		ActiveMine,
 		RemoveMine,
+	}
+	public enum ShowMode
+	{
+		None,
+		OnlySe,
+		OnlyImg,
+		Both
 	}
 
     public ExtremeAbilityButton Button { get; set; }
@@ -253,7 +264,30 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         CreateFloatOption(
             MinerOption.MineKillRange,
             1.8f, 0.5f, 5f, 0.1f, parentOps);
-        CreateFloatOption(
+		var showOpt = CreateBoolOption(
+			MinerOption.CanShowMine,
+			false, parentOps);
+		CreateSelectionOption(
+			MinerOption.RolePlayerShowMode,
+			new string[]
+			{
+				ShowMode.OnlySe.ToString(),
+				ShowMode.OnlyImg.ToString(),
+				ShowMode.Both.ToString(),
+			}, showOpt);
+		var atherPlayerShowMode = CreateSelectionOption(
+			MinerOption.AtherPlayerShowMode,
+			new string[]
+			{
+				ShowMode.None.ToString(),
+				ShowMode.OnlySe.ToString(),
+				ShowMode.OnlyImg.ToString(),
+				ShowMode.Both.ToString(),
+			}, showOpt);
+		CreateBoolOption(
+			MinerOption.CanShowNoneActiveAtherPlayer,
+			false, atherPlayerShowMode);
+		CreateFloatOption(
             MinerOption.NoneActiveTime,
             20.0f, 1.0f, 45f, 0.5f,
             parentOps, format: OptionUnit.Second);
