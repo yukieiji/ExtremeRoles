@@ -40,6 +40,7 @@ public static class MainMenuManagerStartPatch
         GameObject updateButtonObj = UnityObject.Instantiate(template, template.transform);
         UnityObject.Destroy(updateButtonObj.GetComponent<AspectPosition>());
         UnityObject.Destroy(updateButtonObj.GetComponent<ConditionalHide>());
+		UnityObject.Destroy(updateButtonObj.GetComponent<SceneChanger>());
         UnityObject.Destroy(updateButtonObj.GetComponentInChildren<TextTranslatorTMP>());
 
         MenuButton updateButton = updateButtonObj.AddComponent<MenuButton>();
