@@ -132,8 +132,8 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
             this.TargetPlayer);
 
         var shuffleTaskIndex = Enumerable.Range(
-            0, targetPlayerInfo.Tasks.Count).ToList().OrderBy(
-                item => RandomGenerator.Instance.Next()).ToList();
+            0, targetPlayerInfo.Tasks.Count).OrderBy(
+                item => RandomGenerator.Instance.Next());
         int takeTask = 0;
         List<int> getTaskId = new List<int>();
 

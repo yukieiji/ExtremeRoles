@@ -133,7 +133,7 @@ public sealed class SlaveDriver :
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			"NewTask", Resources.Loader.CreateSpriteFromResources(
+			"Harassment", Resources.Loader.CreateSpriteFromResources(
 				Resources.Path.TestButton));
 	}
 
