@@ -42,10 +42,10 @@ public sealed class Miner :
 	}
 	public enum ShowMode : byte
 	{
-		None,
-		OnlySe,
-		OnlyImg,
-		Both
+		MineSeeNone,
+		MineSeeOnlySe,
+		MineSeeOnlyImg,
+		MineSeeBoth
 	}
 	public record MineEffectParameter(
 		ShowMode RolePlayerShowMode,
@@ -347,18 +347,18 @@ public sealed class Miner :
 			MinerOption.RolePlayerShowMode,
 			new string[]
 			{
-				ShowMode.OnlySe.ToString(),
-				ShowMode.OnlyImg.ToString(),
-				ShowMode.Both.ToString(),
+				ShowMode.MineSeeOnlySe.ToString(),
+				ShowMode.MineSeeOnlyImg.ToString(),
+				ShowMode.MineSeeBoth.ToString(),
 			}, showOpt);
 		var anotherPlayerShowMode = CreateSelectionOption(
 			MinerOption.AnotherPlayerShowMode,
 			new string[]
 			{
-				ShowMode.None.ToString(),
-				ShowMode.OnlySe.ToString(),
-				ShowMode.OnlyImg.ToString(),
-				ShowMode.Both.ToString(),
+				ShowMode.MineSeeNone.ToString(),
+				ShowMode.MineSeeOnlySe.ToString(),
+				ShowMode.MineSeeOnlyImg.ToString(),
+				ShowMode.MineSeeBoth.ToString(),
 			}, showOpt);
 		CreateBoolOption(
 			MinerOption.CanShowNoneActiveAnotherPlayer,
@@ -397,9 +397,9 @@ public sealed class Miner :
 			GetRoleOptionId(MinerOption.RolePlayerShowMode)) + 1);
 		var anotherPlayerShowMode = (ShowMode)allOpt.GetValue<int>(
 			GetRoleOptionId(MinerOption.AnotherPlayerShowMode));
-		this.isShowAnotherPlayer = anotherPlayerShowMode != ShowMode.None && isShowMine;
+		this.isShowAnotherPlayer = anotherPlayerShowMode != ShowMode.MineSeeNone && isShowMine;
 		this.parameter = new MineEffectParameter(
-			RolePlayerShowMode: isShowMine ? rolePlayerShowMode : ShowMode.None,
+			RolePlayerShowMode: isShowMine ? rolePlayerShowMode : ShowMode.MineSeeNone,
 			AnotherPlayerShowMode: anotherPlayerShowMode,
 			CanShowNoneActiveAtherPlayer:
 				allOpt.GetValue<bool>(

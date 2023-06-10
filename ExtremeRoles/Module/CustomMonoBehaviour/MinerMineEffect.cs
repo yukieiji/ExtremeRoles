@@ -59,7 +59,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 		float activeRange,
 		Miner.MineEffectParameter param)
 	{
-		this.isUseEffect = param.RolePlayerShowMode != Miner.ShowMode.None;
+		this.isUseEffect = param.RolePlayerShowMode != Miner.ShowMode.MineSeeNone;
 		this.isShowNoneActiveImg = isRolePlayer || param.CanShowNoneActiveAtherPlayer;
 		this.showMode = isRolePlayer ?
 			param.RolePlayerShowMode : param.AnotherPlayerShowMode;
@@ -103,7 +103,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	{
 		switch (this.showMode)
 		{
-			case Miner.ShowMode.OnlySe:
+			case Miner.ShowMode.MineSeeOnlySe:
 				if (!this.isActive)
 				{
 					setDeactivateSprite();
@@ -113,7 +113,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 					updateVolume(localPlayer);
 				}
 				break;
-			case Miner.ShowMode.OnlyImg:
+			case Miner.ShowMode.MineSeeOnlyImg:
 				if (this.isActive)
 				{
 					setActivateSprite();
@@ -123,7 +123,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 					setDeactivateSprite();
 				}
 				break;
-			case Miner.ShowMode.Both:
+			case Miner.ShowMode.MineSeeBoth:
 				if (this.isActive)
 				{
 					setActivateSprite();

@@ -698,9 +698,6 @@ public static class PlayerControlHandleRpcPatch
                 RPCOperator.JesterOutburstKill(
                     outburstKillerId, killTargetId);
                 break;
-			case RPCOperator.Command.MinerHandle:
-				RPCOperator.MinerHandle(ref reader);
-				break;
 			case RPCOperator.Command.YandereSetOneSidedLover:
                 byte yanderePlayerId = reader.ReadByte();
                 byte loverPlayerId = reader.ReadByte();
@@ -713,7 +710,10 @@ public static class PlayerControlHandleRpcPatch
                 RPCOperator.TotocalcioSetBetPlayer(
                     totocalcioPlayerId, betPlayerId);
                 break;
-            case RPCOperator.Command.MadmateToFakeImpostor:
+			case RPCOperator.Command.MinerHandle:
+				RPCOperator.MinerHandle(ref reader);
+				break;
+			case RPCOperator.Command.MadmateToFakeImpostor:
                 byte madmatePlayerId = reader.ReadByte();
                 RPCOperator.MadmateToFakeImpostor(
                     madmatePlayerId);

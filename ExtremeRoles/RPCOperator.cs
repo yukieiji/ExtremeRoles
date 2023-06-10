@@ -81,10 +81,10 @@ public static class RPCOperator
         // ニュートラル
         AliceShipBroken,
         JesterOutburstKill,
-		MinerHandle,
         YandereSetOneSidedLover,
         TotocalcioSetBetPlayer,
-        MadmateToFakeImpostor,
+		MinerHandle,
+		MadmateToFakeImpostor,
 
         // 幽霊役職
         SetGhostRole,
