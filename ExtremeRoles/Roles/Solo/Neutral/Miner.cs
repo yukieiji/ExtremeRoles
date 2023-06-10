@@ -370,7 +370,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 			GetRoleOptionId(MinerOption.RolePlayerShowMode)) + 1);
 		var anotherPlayerShowMode = (ShowMode)allOpt.GetValue<int>(
 			GetRoleOptionId(MinerOption.AnotherPlayerShowMode));
-		this.isShowAnotherPlayer = anotherPlayerShowMode != ShowMode.None;
+		this.isShowAnotherPlayer = anotherPlayerShowMode != ShowMode.None && isShowMine;
 		this.parameter = new MineEffectParameter(
 			RolePlayerShowMode: isShowMine ? rolePlayerShowMode : ShowMode.None,
 			AnotherPlayerShowMode: anotherPlayerShowMode,

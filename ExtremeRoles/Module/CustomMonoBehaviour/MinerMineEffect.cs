@@ -112,7 +112,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 				{
 					updateVolume(localPlayer);
 				}
-				return;
+				break;
 			case Miner.ShowMode.OnlyImg:
 				if (this.isActive)
 				{
@@ -122,7 +122,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 				{
 					setDeactivateSprite();
 				}
-				return;
+				break;
 			case Miner.ShowMode.Both:
 				if (this.isActive)
 				{
@@ -133,9 +133,9 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 				{
 					setDeactivateSprite();
 				}
-				return;
+				break;
 			default:
-				return;
+				break;
 		}
 	}
 
