@@ -25,6 +25,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.Mods;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Patches;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -335,7 +336,7 @@ public sealed class Hypnotist :
     {
         updateAwakeCheck(exiledPlayer);
 
-        if (!this.isAwake &&
+		if (!this.isAwake &&
             this.canAwakeNow &&
             this.killCount >= this.awakeKillCount)
         {
@@ -905,14 +906,16 @@ public sealed class Hypnotist :
 
         GameData gameData = GameData.Instance;
 
-        if ((
-                this.awakeCheckImpNum >= impNum &&
-                this.awakeCheckTaskGage <=
-                    (gameData.CompletedTasks / gameData.TotalTasks)
-            ))
-        {
-            this.canAwakeNow = true;
-        }
+		float compTask = gameData.CompletedTasks;
+		float totalTask = gameData.TotalTasks;
+
+		this.canAwakeNow = (
+			this.awakeCheckImpNum >= impNum &&
+			(
+				GameDataRecomputeTaskCountsPatch.IsDisableTaskWin ||
+				this.awakeCheckTaskGage <= ((float)compTask / (float)totalTask)
+			)
+		);
     }
 
     private static int computeRedPartNum(Type[] interfaces)
