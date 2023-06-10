@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -172,7 +173,8 @@ public sealed class Missionary :
 
     public void ResetOnMeetingStart()
     {
-        if (this.tellText != null)
+		updateJudgementTarget();
+		if (this.tellText != null)
         {
             this.tellText.gameObject.SetActive(false);
         }
@@ -180,7 +182,10 @@ public sealed class Missionary :
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
-        if (this.tellText != null)
+		this.judgementTarget.Remove(exiledPlayer.PlayerId);
+		updateJudgementTarget();
+
+		if (this.tellText != null)
         {
             this.tellText.gameObject.SetActive(false);
         }
@@ -289,5 +294,18 @@ public sealed class Missionary :
 			this.judgementTarget.Count > this.maxJudgementTarget) { return; }
 
 		this.judgementTarget.Add(target);
+	}
+
+	private void updateJudgementTarget()
+	{
+		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (player == null ||
+				player.Disconnected ||
+				player.IsDead)
+			{
+				this.judgementTarget.Remove(player.PlayerId);
+			}
+		}
 	}
 }
