@@ -72,7 +72,7 @@ public sealed class Missionary :
 	{
 		if (this.lamb.Contains(targetPlayerId))
 		{
-			return Design.ColoedString(this.NameColor, " ✔");
+			return Design.ColoedString(this.NameColor, " ×");
 		}
 		else if (this.judgementTarget.Contains(targetPlayerId))
 		{
