@@ -3,6 +3,7 @@
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
@@ -15,11 +16,17 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Miner :
+	SingleRoleBase,
+	IRoleAbility,
+	IRoleUpdate,
+	IRoleSpecialSetUp,
+	IRoleSpecialReset
 {
     public enum MinerOption
     {
-        MineKillRange,
+		LinkingAllVent,
+		MineKillRange,
 		CanShowMine,
 		RolePlayerShowMode,
 		AnotherPlayerShowMode,
@@ -47,6 +54,7 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public ExtremeAbilityButton Button { get; set; }
 
+	private bool isLinkingVent = false;
 	private int mineId = 0;
     private Dictionary<int, MinerMineEffect> mines;
     private float killRange;
@@ -119,6 +127,19 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 			mine.Clear();
 		}
 		miner.mines.Remove(id);
+	}
+
+	public void IntroBeginSetUp()
+	{
+		return;
+	}
+
+	public void IntroEndSetUp()
+	{
+		if (this.isLinkingVent)
+		{
+			GameSystem.RelinkVent();
+		}
 	}
 
 	public void CreateAbility()
@@ -311,7 +332,10 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
-        this.CreateCommonAbilityOption(
+		CreateBoolOption(
+			MinerOption.LinkingAllVent,
+			false, parentOps);
+		this.CreateCommonAbilityOption(
             parentOps, 2.0f);
         CreateFloatOption(
             MinerOption.MineKillRange,
@@ -346,11 +370,14 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         CreateBoolOption(
             MinerOption.ShowKillLog,
             true, parentOps);
-    }
+	}
 
     protected override void RoleSpecificInit()
     {
         var allOpt = OptionManager.Instance;
+
+		this.isLinkingVent = allOpt.GetValue<bool>(
+			GetRoleOptionId(MinerOption.LinkingAllVent));
 
         this.killRange = allOpt.GetValue<float>(
             GetRoleOptionId(MinerOption.MineKillRange));
