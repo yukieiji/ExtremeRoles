@@ -1,0 +1,3 @@
+[diff "xlsx"]
+    binary = true
+    textconv = $GOPATH/bin/git-xlsx-textconv
