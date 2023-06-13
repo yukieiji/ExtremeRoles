@@ -7,7 +7,10 @@ using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class PsychoKiller : SingleRoleBase, IRoleResetMeeting
+public sealed class PsychoKiller :
+	SingleRoleBase,
+	IRoleUpdate,
+	IRoleResetMeeting
 {
     private bool isResetMeeting;
     private float reduceRate;
@@ -20,8 +23,13 @@ public sealed class PsychoKiller : SingleRoleBase, IRoleResetMeeting
     {
         KillCoolReduceRate,
         CombMax,
-        CombResetWhenMeeting
-    }
+        CombResetWhenMeeting,
+		HasSelfKillTimer,
+		SelfKillTimerTime,
+		IsRestartWhenMeetingEnd,
+		IsCombSyncSelfKillTimer,
+		SelfKillTimerModRate,
+	}
 
     public PsychoKiller() : base(
         ExtremeRoleId.PsychoKiller,
@@ -31,7 +39,12 @@ public sealed class PsychoKiller : SingleRoleBase, IRoleResetMeeting
         true, false, true, true)
     {}
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+	public void Update(PlayerControl rolePlayer)
+	{
+
+	}
+
+	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -90,7 +103,27 @@ public sealed class PsychoKiller : SingleRoleBase, IRoleResetMeeting
         CreateBoolOption(
             PsychoKillerOption.CombResetWhenMeeting,
             true, parentOps);
-    }
+
+		var hasSelfKillTimer = CreateBoolOption(
+			PsychoKillerOption.HasSelfKillTimer,
+			false, parentOps);
+		CreateFloatOption(
+			PsychoKillerOption.SelfKillTimerTime,
+			30.0f, 5.0f, 120.0f, 0.5f,
+			hasSelfKillTimer,
+			format: OptionUnit.Second);
+		CreateBoolOption(
+			PsychoKillerOption.IsRestartWhenMeetingEnd,
+			true, hasSelfKillTimer);
+		var isCombSyncKillTimer = CreateBoolOption(
+			PsychoKillerOption.IsCombSyncSelfKillTimer,
+			false, hasSelfKillTimer);
+		CreateIntOption(
+			PsychoKillerOption.SelfKillTimerModRate,
+			-25, -50, 50, 1, isCombSyncKillTimer,
+			format: OptionUnit.Percentage);
+
+	}
 
     protected override void RoleSpecificInit()
     {
