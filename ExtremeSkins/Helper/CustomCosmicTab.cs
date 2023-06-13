@@ -62,24 +62,30 @@ public static class CustomCosmicTab
 
     public static void RemoveAllTabs()
     {
-        if (HatsTabPatch.Tab != null)
+#if WITHHAT
+		if (HatsTabPatch.Tab != null)
         {
             Object.DestroyImmediate(HatsTabPatch.Tab.gameObject);
             HatsTabPatch.Tab = null;
         }
-        if (NameplatesTabPatch.Tab != null)
+#endif
+#if WITHNAMEPLATE
+		if (NameplatesTabPatch.Tab != null)
         {
             Object.DestroyImmediate(NameplatesTabPatch.Tab.gameObject);
             NameplatesTabPatch.Tab = null;
         }
-        if (VisorsTabPatch.Tab != null)
+#endif
+#if WITHVISOR
+		if (VisorsTabPatch.Tab != null)
         {
             Object.DestroyImmediate(VisorsTabPatch.Tab.gameObject);
             VisorsTabPatch.Tab = null;
         }
-    }
+#endif
+	}
 
-    public static void DestoryList<T>(List<T> items) where T : Object
+	public static void DestoryList<T>(List<T> items) where T : Object
     {
         if (items == null) { return; }
         foreach (T item in items)
