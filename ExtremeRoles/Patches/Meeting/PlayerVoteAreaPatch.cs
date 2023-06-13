@@ -31,24 +31,11 @@ public static class NamePlateHelper
 		var playerInfo = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
 		if (playerInfo == null) { return; }
 
-		AddressableAsset<NamePlateViewData> np = null;
 		var cache = CachedShipStatus.Instance.CosmeticsCache;
-
-		if (!ClientOption.Instance.HideNamePlate.Value)
-		{
-			string id = playerInfo.DefaultOutfit.NamePlateId;
-			if (!cache.nameplates.TryGetValue(id, out np) ||
-				np == null)
-			{
-				np = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById(
-					id).CreateAddressableAsset();
-				np.handle = Addressables.LoadAssetAsync<NamePlateViewData>(np.assetRef);
-				np.AttachOnCompleteCallback();
-				// 終了まで待つ
-				np.handle.Task.GetAwaiter().GetResult();
-			}
-		}
-		else
+		string id = playerInfo.DefaultOutfit.NamePlateId;
+		if (ClientOption.Instance.HideNamePlate.Value ||
+			!cache.nameplates.TryGetValue(id, out var np) ||
+			np == null)
 		{
 			np = cache.nameplates["nameplate_NoPlate"];
 		}
