@@ -156,12 +156,9 @@ public sealed class PsychoKiller :
 		CreateBoolOption(
 			PsychoKillerOption.IsRestartWhenMeetingEnd,
 			true, hasSelfKillTimer);
-		var isCombSyncKillTimer = CreateBoolOption(
-			PsychoKillerOption.IsCombSyncSelfKillTimer,
-			false, hasSelfKillTimer);
 		CreateIntOption(
 			PsychoKillerOption.SelfKillTimerModRate,
-			-25, -50, 50, 1, isCombSyncKillTimer,
+			0, -50, 50, 1, hasSelfKillTimer,
 			format: OptionUnit.Percentage);
 
 	}
