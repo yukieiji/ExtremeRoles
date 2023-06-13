@@ -63,8 +63,9 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             }
 
+			CustomCosmicTab.EnableTab(__instance);
 
-            foreach (VisorData viData in unlockedVisor)
+			foreach (VisorData viData in unlockedVisor)
             {
                 CustomVisor vi;
                 bool result = ExtremeVisorManager.VisorData.TryGetValue(
@@ -110,7 +111,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             }
 
             __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + CustomCosmicTab.HeaderSize);
-            
+
             Tab.gameObject.SetActive(true);
             Tab.SetUpButtons(__instance.scroller, visorsTabCustomText);
 
@@ -168,16 +169,13 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 colorChip.ProductId = vi.ProductId;
                 colorChip.Button.ClickMask = __instance.scroller.Hitbox;
                 colorChip.Tag = vi.ProdId;
-                
-                int color = __instance.HasLocalPlayer() ? 
-                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : 
-                    playerSkinData.colorID;
 
-                __instance.StartCoroutine(
-                    vi.CoLoadViewData((Il2CppSystem.Action<VisorViewData>)((v) => {
-                        colorChip.Inner.FrontLayer.sprite = v.IdleFrame;
-                        __instance.UpdateSpriteMaterialColor(colorChip, v, color);
-                })));
+                int color = __instance.HasLocalPlayer() ?
+                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
+					DataManager.Player.Customization.Color;
+
+				__instance.UpdateMaterials(colorChip.Inner.FrontLayer, vi);
+				vi.SetPreview(colorChip.Inner.FrontLayer, color);
 
                 __instance.ColorChips.Add(colorChip);
             }

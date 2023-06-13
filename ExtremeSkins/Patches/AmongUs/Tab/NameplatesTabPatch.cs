@@ -64,7 +64,11 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             }
 
-            foreach (NamePlateData hatBehaviour in unlockedNamePlate)
+			CustomCosmicTab.EnableTab(__instance);
+			__instance.PlayerPreview.gameObject.SetActive(false);
+			__instance.StartCoroutine(__instance.CoLoadNameplatePreview());
+
+			foreach (NamePlateData hatBehaviour in unlockedNamePlate)
             {
                 CustomNamePlate np;
                 bool result = ExtremeNamePlateManager.NamePlateData.TryGetValue(
@@ -109,8 +113,15 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     (namePlatePackage[key].Count - 1) / __instance.NumPerRow) * __instance.YOffset - CustomCosmicTab.HeaderSize;
             }
 
-            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + CustomCosmicTab.HeaderSize);
-            
+			if (unlockedNamePlate.Length != 0)
+			{
+				__instance.GetDefaultSelectable().PlayerEquippedForeground.SetActive(true);
+			}
+			__instance.plateId = DataManager.Player.Customization.NamePlate;
+			__instance.currentNameplateIsEquipped = true;
+
+			__instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + CustomCosmicTab.HeaderSize);
+
             Tab.gameObject.SetActive(true);
             Tab.SetUpButtons(__instance.scroller, namePlateTabCustomText);
 
@@ -145,7 +156,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
                 ColorChip colorChip = CustomCosmicTab.SetColorChip(
                     __instance, i, offset);
-                
+
                 colorChip.Button.ClickMask = __instance.scroller.Hitbox;
 
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
@@ -167,7 +178,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 }
 
                 __instance.StartCoroutine(
-                    np.CoLoadViewData((Il2CppSystem.Action<NamePlateViewData>)((n) => {
+					__instance.CoLoadAssetAsync(np, (Il2CppSystem.Action<NamePlateViewData>)((n) => {
                         colorChip.GetComponent<NameplateChip>().image.sprite = n.Image;
                 })));
                 colorChip.ProductId = np.ProdId;
