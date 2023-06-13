@@ -1,5 +1,6 @@
-﻿using ExtremeSkins.SkinManager;
-using HarmonyLib;
+﻿using HarmonyLib;
+
+using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs;
 
