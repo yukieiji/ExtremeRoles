@@ -16,10 +16,16 @@ public sealed class PsychoKiller :
 	IRoleResetMeeting
 {
 	private TextMeshPro combCountText;
+	private TextMeshPro timerInfoText;
+	private TextMeshPro timerText;
 
     private bool isResetMeeting;
     private float reduceRate;
     private float defaultKillCoolTime;
+
+	private bool hasSelfTimer;
+	private bool isStartTimer = false;
+	private float timer = float.MaxValue;
 
     private int combMax;
     private int combCount;
@@ -60,6 +66,23 @@ public sealed class PsychoKiller :
 
 		updateCombText();
 
+		if (!this.hasSelfTimer || !this.isStartTimer) { return; }
+
+		if (this.timerText == null)
+		{
+			createTimerText();
+		}
+
+		this.timerText.text = $"{Mathf.CeilToInt(this.timer)}";
+		this.timer -= Time.deltaTime;
+
+		if (this.timer > 0.0f) { return; }
+
+		// 自爆！！
+		Helper.Player.RpcUncheckMurderPlayer(
+			rolePlayer.PlayerId,
+			rolePlayer.PlayerId,
+			byte.MaxValue);
 	}
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -183,6 +206,30 @@ public sealed class PsychoKiller :
 		this.combCountText.transform.localScale = Vector3.one * 0.5f;
 		this.combCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
 		this.combCountText.gameObject.SetActive(true);
+	}
+
+	private void createTimerText()
+	{
+		if (FastDestroyableSingleton<HudManager>.Instance == null) { return; }
+
+		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		var killButton = FastDestroyableSingleton<HudManager>.Instance.KillButton;
+
+		this.timerText = Object.Instantiate(
+			killButton.cooldownTimerText,
+			killButton.transform.parent);
+		this.timerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+		this.timerText.transform.localPosition =
+			hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
+		this.timerText.gameObject.SetActive(true);
+
+		this.timerInfoText = Object.Instantiate(
+			hudManager.KillButton.cooldownTimerText,
+			this.timerText.transform);
+		this.timerInfoText.enableWordWrapping = false;
+		this.timerInfoText.transform.localScale = Vector3.one * 0.5f;
+		this.timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
+		this.timerInfoText.gameObject.SetActive(true);
 	}
 
 	private void updateCombText()
