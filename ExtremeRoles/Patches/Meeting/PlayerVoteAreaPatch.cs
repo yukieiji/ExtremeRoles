@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using HarmonyLib;
 
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using Innersloth.Assets;
+
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GhostRoles;
@@ -22,33 +24,36 @@ namespace ExtremeRoles.Patches.Meeting;
 public static class NamePlateHelper
 {
 	public static bool NameplateChange = true;
-	private static Sprite blankNameplate = null;
-
-	private const string blankNamePlateId = "nameplate_NoPlate";
 
 	public static void UpdateNameplate(
 		PlayerVoteArea pva, byte playerId = byte.MaxValue)
 	{
+		var playerInfo = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
+		if (playerInfo == null) { return; }
 
-		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
+		AddressableAsset<NamePlateViewData> np = null;
+		var cache = CachedShipStatus.Instance.CosmeticsCache;
 
-		blankNameplate = blankNameplate != null ?
-			blankNameplate :
-            hatMng.GetNamePlateById(
-			blankNamePlateId).viewData.viewData.Image;
-		var nameplate = blankNameplate;
 		if (!ClientOption.Instance.HideNamePlate.Value)
 		{
-			var player = Helper.Player.GetPlayerControlById(
-				playerId != byte.MaxValue ?
-				playerId : pva.TargetPlayerId);
-
-			if (!player) { return; }
-
-			string nameplateId = player.CurrentOutfit?.NamePlateId;
-			nameplate = hatMng.GetNamePlateById(nameplateId).viewData.viewData.Image;
+			string id = playerInfo.DefaultOutfit.NamePlateId;
+			if (!cache.nameplates.TryGetValue(id, out np) ||
+				np == null)
+			{
+				np = FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById(
+					id).CreateAddressableAsset();
+				np.handle = Addressables.LoadAssetAsync<NamePlateViewData>(np.assetRef);
+				np.AttachOnCompleteCallback();
+				// 終了まで待つ
+				np.handle.Task.GetAwaiter().GetResult();
+			}
 		}
-		pva.Background.sprite = nameplate;
+		else
+		{
+			np = cache.nameplates["nameplate_NoPlate"];
+		}
+		if (np == null) { return; }
+		pva.Background.sprite = np.GetAsset().Image;
 	}
 }
 
