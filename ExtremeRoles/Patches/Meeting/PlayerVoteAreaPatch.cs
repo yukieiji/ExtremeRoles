@@ -28,7 +28,9 @@ public static class NamePlateHelper
 	public static void UpdateNameplate(
 		PlayerVoteArea pva, byte playerId = byte.MaxValue)
 	{
-		var playerInfo = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
+		var playerInfo = GameData.Instance.GetPlayerById(
+			playerId != byte.MaxValue ?
+			playerId : pva.TargetPlayerId);
 		if (playerInfo == null) { return; }
 
 		var cache = CachedShipStatus.Instance.CosmeticsCache;
