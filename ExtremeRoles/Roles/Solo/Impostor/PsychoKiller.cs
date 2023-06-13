@@ -27,6 +27,10 @@ public sealed class PsychoKiller :
 	private bool isStartTimer = false;
 	private float timer = float.MaxValue;
 
+	private float timerModRate;
+	private float defaultTimer;
+	private bool isRestartWhenMeetingStart;
+
     private int combMax;
     private int combCount;
 
@@ -87,11 +91,19 @@ public sealed class PsychoKiller :
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
-        return;
+		if (this.hasSelfTimer)
+		{
+			this.isStartTimer = this.isRestartWhenMeetingStart;
+			resetTimer();
+		}
     }
 
     public void ResetOnMeetingStart()
     {
+		if (this.hasSelfTimer)
+		{
+			this.timer = float.MaxValue;
+		}
         this.KillCoolTime = this.defaultKillCoolTime;
         if (this.isResetMeeting)
         {
@@ -125,6 +137,11 @@ public sealed class PsychoKiller :
                 this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
             ++this.combCount;
         }
+		if (this.hasSelfTimer)
+		{
+			this.isStartTimer = true;
+			resetTimer();
+		}
         return true;
     }
 
@@ -160,7 +177,6 @@ public sealed class PsychoKiller :
 			PsychoKillerOption.SelfKillTimerModRate,
 			0, -50, 50, 1, hasSelfKillTimer,
 			format: OptionUnit.Percentage);
-
 	}
 
     protected override void RoleSpecificInit()
@@ -182,7 +198,21 @@ public sealed class PsychoKiller :
         this.combMax= allOption.GetValue<int>(
             GetRoleOptionId(PsychoKillerOption.CombMax));
 
-        this.combCount = 1;
+		this.hasSelfTimer = allOption.GetValue<bool>(
+			GetRoleOptionId(PsychoKillerOption.HasSelfKillTimer));
+		this.defaultTimer = allOption.GetValue<float>(
+			GetRoleOptionId(PsychoKillerOption.SelfKillTimerTime));
+		this.isRestartWhenMeetingStart = allOption.GetValue<bool>(
+			GetRoleOptionId(PsychoKillerOption.IsRestartWhenMeetingEnd));
+
+		this.timerModRate = (100.0f - (float)allOption.GetValue<int>(
+			GetRoleOptionId(PsychoKillerOption.SelfKillTimerModRate))) / 100.0f;
+		if (this.hasSelfTimer)
+		{
+			this.timer = this.defaultTimer;
+		}
+
+		this.combCount = 1;
         this.defaultKillCoolTime = this.KillCoolTime;
     }
 
@@ -233,5 +263,10 @@ public sealed class PsychoKiller :
 	{
 		this.combCountText.text = string.Format(
 			"現在：{0}コンボ", this.combCount - 1);
+	}
+
+	private void resetTimer()
+	{
+		this.timer = this.defaultTimer * Mathf.Pow(this.timerModRate, this.combCount);
 	}
 }
