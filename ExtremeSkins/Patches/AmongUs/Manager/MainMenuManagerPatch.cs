@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager;
 
+/*
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
 public static class MainMenuManagerStartPatch
 {
@@ -15,3 +16,4 @@ public static class MainMenuManagerStartPatch
         renderer.sprite = Module.Loader.GetTitleLog();
     }
 }
+*/

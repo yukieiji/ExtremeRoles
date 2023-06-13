@@ -19,7 +19,7 @@ using MenuButton = ExtremeRoles.Module.CustomMonoBehaviour.MenuButton;
 using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Patches.Manager;
-
+/*
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
 public static class MainMenuManagerStartPatch
 {
@@ -122,5 +122,8 @@ public static class MainMenuManagerStartPatch
 
         }
         Compat.CompatModMenu.CreateMenuButton();
-    }
+
+		// CustomRegion.Update();
+	}
 }
+*/
