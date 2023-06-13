@@ -430,7 +430,8 @@ public static class MeetingHudSetForegroundForDeadPatch
         MeetingHud __instance)
     {
 
-        if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+        if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
+			FastDestroyableSingleton<HudManager>.Instance == null) { return true; }
 
         if (CachedPlayerControl.LocalPlayer.PlayerId !=
             ExtremeRolesPlugin.ShipState.ExiledAssassinId)
@@ -439,8 +440,12 @@ public static class MeetingHudSetForegroundForDeadPatch
         }
         else
         {
+			var meeting = FastDestroyableSingleton<HudManager>.Instance.MeetingPrefab;
+
             __instance.amDead = false;
-            return false;
+			__instance.Glass.sprite = meeting.Glass.sprite;
+			__instance.Glass.color = meeting.Glass.color;
+			return false;
         }
     }
 }
