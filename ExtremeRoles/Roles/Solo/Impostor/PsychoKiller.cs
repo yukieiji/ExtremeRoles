@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using AmongUs.GameOptions;
 
-using ExtremeRoles.Module.CustomOption;
+using UnityEngine;
+using TMPro;
+
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using AmongUs.GameOptions;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -12,6 +15,8 @@ public sealed class PsychoKiller :
 	IRoleUpdate,
 	IRoleResetMeeting
 {
+	private TextMeshPro combCountText;
+
     private bool isResetMeeting;
     private float reduceRate;
     private float defaultKillCoolTime;
@@ -41,6 +46,19 @@ public sealed class PsychoKiller :
 
 	public void Update(PlayerControl rolePlayer)
 	{
+		if (rolePlayer == null ||
+			GameData.Instance == null ||
+			CachedShipStatus.Instance == null ||
+			!CachedShipStatus.Instance.enabled ||
+			ExileController.Instance ||
+			MeetingHud.Instance) { return; }
+
+		if (this.combCountText == null)
+		{
+			createCombText();
+		}
+
+		updateCombText();
 
 	}
 
@@ -147,4 +165,29 @@ public sealed class PsychoKiller :
         this.combCount = 1;
         this.defaultKillCoolTime = this.KillCoolTime;
     }
+
+	private void createCombText()
+	{
+		if (FastDestroyableSingleton<HudManager>.Instance == null) { return; }
+
+		var killButton = FastDestroyableSingleton<HudManager>.Instance.KillButton;
+
+		this.combCountText = Object.Instantiate(
+			killButton.cooldownTimerText,
+			killButton.cooldownTimerText.transform.parent);
+
+		updateCombText();
+
+		this.combCountText.name = ExtremeAbilityButton.AditionalInfoName;
+		this.combCountText.enableWordWrapping = false;
+		this.combCountText.transform.localScale = Vector3.one * 0.5f;
+		this.combCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+		this.combCountText.gameObject.SetActive(true);
+	}
+
+	private void updateCombText()
+	{
+		this.combCountText.text = string.Format(
+			"現在：{0}コンボ", this.combCount - 1);
+	}
 }
