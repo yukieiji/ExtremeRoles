@@ -18,14 +18,14 @@ public static class VersionShowerPatch
 
         var modTitle = Object.Instantiate(
             __instance.text, burner.transform);
-        modTitle.transform.localPosition = new Vector3(0, -0.9f, 0);
+        modTitle.transform.localPosition = new Vector3(0, -1.4f, 0);
         modTitle.transform.localScale = new Vector3(1.075f, 1.075f, 1.0f);
         modTitle.SetText(
             string.Concat(
                 Helper.Translation.GetString("version"),
                 Assembly.GetExecutingAssembly().GetName().Version));
         modTitle.alignment = TMPro.TextAlignmentOptions.Center;
-		modTitle.fontSize = modTitle.fontSizeMax = modTitle.fontSizeMin = 4.75f;
+		modTitle.fontSize = modTitle.fontSizeMax = modTitle.fontSizeMin = 4.0f;
 
 
 		var credentials = Object.Instantiate(
@@ -34,7 +34,7 @@ public static class VersionShowerPatch
             string.Concat(
                 Helper.Translation.GetString("developer"),"yukieiji"));
         credentials.alignment = TMPro.TextAlignmentOptions.Center;
-		credentials.fontSize = credentials.fontSizeMax = credentials.fontSizeMin = 4.0f;
+		credentials.fontSize = credentials.fontSizeMax = credentials.fontSizeMin = 3.5f;
 		credentials.transform.localPosition = new Vector3(0, -0.5f, 0);
 
         if (DataManager.Settings.Language.CurrentLanguage != SupportedLangs.Japanese)
@@ -49,7 +49,7 @@ public static class VersionShowerPatch
                     Helper.Translation.GetString("langTranslate"),
                     Helper.Translation.GetString("translatorMember")));
             translator.alignment = TMPro.TextAlignmentOptions.Center;
-			translator.fontSize = translator.fontSizeMax = translator.fontSizeMin = 4.0f;
+			translator.fontSize = translator.fontSizeMax = translator.fontSizeMin = 3.5f;
 
 			translator.transform.localPosition = new Vector3(0, -0.5f, 0);
             credentials.transform.localScale = new Vector3(0.8f, 0.8f, 1.0f);

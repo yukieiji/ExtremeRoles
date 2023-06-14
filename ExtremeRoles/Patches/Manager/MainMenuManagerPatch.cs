@@ -93,10 +93,10 @@ public static class MainMenuManagerStartPatch
 
         var exrLogo = new GameObject("bannerLogoExtremeRoles");
 		exrLogo.transform.parent = __instance.mainMenuUI.transform;
-		exrLogo.transform.position = new Vector3(2.0f, 1.0f, 1.0f);
+		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
         renderer.sprite = Loader.CreateSpriteFromResources(
-            Resources.Path.TitleBurner, 275f);
+            Resources.Path.TitleBurner, 300f);
 
         if (Module.Prefab.Prop == null || Module.Prefab.Text == null)
         {
