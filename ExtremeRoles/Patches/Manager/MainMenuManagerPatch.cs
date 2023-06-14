@@ -17,9 +17,11 @@ using ExtremeRoles.Performance;
 
 using MenuButton = ExtremeRoles.Module.CustomMonoBehaviour.MenuButton;
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using UnityEngine.Events;
 
 namespace ExtremeRoles.Patches.Manager;
-/*
+
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
 public static class MainMenuManagerStartPatch
 {
@@ -27,44 +29,47 @@ public static class MainMenuManagerStartPatch
 
     public static void Prefix(MainMenuManager __instance)
     {
+		// Mod ExitButton
+		__instance.quitButton.OnClick.AddListener(
+			(UnityAction)(() => Logging.BackupCurrentLog()));
 
-        var template = GameObject.Find("ExitGameButton");
-        if (template == null) { return; }
+		// UpdateButton
+		GameObject updateButtonObj = UnityObject.Instantiate(
+		   Loader.GetUnityObjectFromResources<GameObject>(
+			   "ExtremeRoles.Resources.Asset.simplebutton.asset",
+			   "assets/common/simplebutton.prefab"),
+		   __instance.quitButton.transform);
+		var updateButton = updateButtonObj.GetComponent<SimpleButton>();
 
-        // Mod ExitButton
-        PassiveButton passiveExitButton = template.GetComponent<PassiveButton>();
-        passiveExitButton.OnClick.AddListener(
-            (UnityEngine.Events.UnityAction)(() => Logging.BackupCurrentLog()));
+		updateButton.Layer = __instance.gameObject.layer;
+		updateButton.Scale = new Vector3(0.5f, 0.5f, 1.0f);
 
-        // UpdateButton
-        GameObject updateButtonObj = UnityObject.Instantiate(template, template.transform);
-        UnityObject.Destroy(updateButtonObj.GetComponent<AspectPosition>());
-        UnityObject.Destroy(updateButtonObj.GetComponent<ConditionalHide>());
-        UnityObject.Destroy(updateButtonObj.GetComponentInChildren<TextTranslatorTMP>());
+		updateButton.gameObject.transform.localPosition = new Vector2(10.25f, 0.5f);
+		updateButton.Text.text = Translation.GetString(Translation.GetString("UpdateButton"));
+		updateButton.Text.fontSize =
+			updateButton.Text.fontSizeMax =
+			updateButton.Text.fontSizeMin = 1.9f;
+		updateButton.name = "ExtremeRolesUpdateButton";
+		updateButton.ClickedEvent.AddListener(
+			(UnityAction)(async() => await Module.Updater.Instance.CheckAndUpdate()));
 
-        MenuButton updateButton = updateButtonObj.AddComponent<MenuButton>();
-        updateButton.name = "ExtremeRolesUpdateButton";
-        updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
-        updateButton.gameObject.SetActive(true);
-        updateButton.AddAction(async () => await Module.Updater.Instance.CheckAndUpdate());
-        updateButton.SetText(Translation.GetString("UpdateButton"));
 
-        // DiscordButton
-        MenuButton discordButton = UnityObject.Instantiate(
-            updateButton, template.transform);
-        discordButton.name = "ExtremeRolesDiscordButton";
-        discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
-        discordButton.gameObject.SetActive(true);
-        discordButton.AddAction(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS"));
-        discordButton.SetText("Discord");
+		// DiscordButton
+		var discordButton = UnityObject.Instantiate(
+		   updateButton, updateButton.transform);
+		discordButton.name = "ExtremeRolesDiscordButton";
+		discordButton.Scale = new Vector3(1.0f, 1.0f, 1.0f);
+		discordButton.transform.localPosition = new Vector3(0.0f, 1.75f, 0.0f);
+		discordButton.ClickedEvent.AddListener(
+			(UnityAction)(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS")));
+		discordButton.Text.text = "Discord";
+		discordButton.Text.fontSize =
+			discordButton.Text.fontSizeMax =
+			discordButton.Text.fontSizeMin = 2.4f;
+		discordButton.Image.color = discordButton.Text.color = discordColor;
+		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
 
-        SpriteRenderer buttonSpriteDiscord = discordButton.GetComponent<SpriteRenderer>();
-        buttonSpriteDiscord.color = discordButton.Text.color = discordColor;
-        discordButton.Button.OnMouseOut.AddListener((Action)delegate
-        {
-            buttonSpriteDiscord.color = discordButton.Text.color = discordColor;
-        });
-
+		/*
         if (!Module.Updater.Instance.IsInit)
         {
             TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
@@ -73,8 +78,9 @@ public static class MainMenuManagerStartPatch
             infoPop.TextAreaTMP.enableAutoSizing = false;
             Module.Updater.Instance.InfoPopup = infoPop;
         }
-    }
-
+		*/
+	}
+/*
     public static void Postfix(MainMenuManager __instance)
     {
         FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
@@ -125,5 +131,5 @@ public static class MainMenuManagerStartPatch
 
 		// CustomRegion.Update();
 	}
-}
 */
+}
