@@ -9,16 +9,14 @@ using TMPro;
 using Twitch;
 
 using UnityEngine;
+using UnityEngine.Events;
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
-using MenuButton = ExtremeRoles.Module.CustomMonoBehaviour.MenuButton;
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
-using UnityEngine.Events;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -44,7 +42,7 @@ public static class MainMenuManagerStartPatch
 		updateButton.Layer = __instance.gameObject.layer;
 		updateButton.Scale = new Vector3(0.5f, 0.5f, 1.0f);
 
-		updateButton.gameObject.transform.localPosition = new Vector2(10.25f, 0.5f);
+		updateButton.gameObject.transform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
 		updateButton.Text.text = Translation.GetString(Translation.GetString("UpdateButton"));
 		updateButton.Text.fontSize =
 			updateButton.Text.fontSizeMax =
@@ -69,8 +67,7 @@ public static class MainMenuManagerStartPatch
 		discordButton.Image.color = discordButton.Text.color = discordColor;
 		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
 
-		/*
-        if (!Module.Updater.Instance.IsInit)
+		if (!Module.Updater.Instance.IsInit)
         {
             TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
             var infoPop = UnityObject.Instantiate(man.TwitchPopup);
@@ -78,9 +75,8 @@ public static class MainMenuManagerStartPatch
             infoPop.TextAreaTMP.enableAutoSizing = false;
             Module.Updater.Instance.InfoPopup = infoPop;
         }
-		*/
 	}
-/*
+
     public static void Postfix(MainMenuManager __instance)
     {
         FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
@@ -95,18 +91,12 @@ public static class MainMenuManagerStartPatch
         }
 #endif
 
-        var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
-        if (amongUsLogo != null)
-        {
-            amongUsLogo.transform.localScale *= 0.9f;
-            amongUsLogo.transform.position += Vector3.up * 0.25f;
-        }
-
         var exrLogo = new GameObject("bannerLogoExtremeRoles");
-        exrLogo.transform.position = Vector3.up;
+		exrLogo.transform.parent = __instance.mainMenuUI.transform;
+		exrLogo.transform.position = new Vector3(2.0f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
         renderer.sprite = Loader.CreateSpriteFromResources(
-            Resources.Path.TitleBurner, 300f);
+            Resources.Path.TitleBurner, 275f);
 
         if (Module.Prefab.Prop == null || Module.Prefab.Text == null)
         {
@@ -127,9 +117,8 @@ public static class MainMenuManagerStartPatch
             UnityObject.DontDestroyOnLoad(Module.Prefab.Text);
 
         }
-        Compat.CompatModMenu.CreateMenuButton();
+        // Compat.CompatModMenu.CreateMenuButton();
 
-		// CustomRegion.Update();
+		CustomRegion.Update();
 	}
-*/
 }
