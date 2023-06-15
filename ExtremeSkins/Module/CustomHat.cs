@@ -12,7 +12,7 @@ namespace ExtremeSkins.Module;
 
 
 #if WITHHAT
-public sealed class CustomHat : ICustomCosmicData<HatData>
+public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 {
     public HatData Data
     {

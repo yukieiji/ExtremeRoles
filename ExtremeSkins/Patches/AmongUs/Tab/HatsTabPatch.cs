@@ -51,6 +51,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     PlayerCustomizationMenu.Instance.itemName);
                 CustomCosmicTab.textTemplate.gameObject.SetActive(false);
             }
+
             if (Tab == null)
             {
                 GameObject obj = Object.Instantiate(
