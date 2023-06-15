@@ -37,6 +37,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	private HatInfo info;
 
     private HatData hat;
+	private HatViewData hatView;
 
     public CustomHat(string folderPath, HatInfo info)
     {
@@ -58,42 +59,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 	public HatViewData GetViewData()
 	{
-		HatViewData viewData = ScriptableObject.CreateInstance<HatViewData>();
-		viewData.MainImage = loadHatSprite(
-			Path.Combine(this.folderPath, DataStructure.FrontImageName));
-
-        if (this.info.FrontFlip)
-        {
-			viewData.LeftMainImage = loadHatSprite(
-                Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
-        }
-
-        if (this.info.Back)
-        {
-            viewData.BackImage = loadHatSprite(
-                Path.Combine(this.folderPath, DataStructure.BackImageName));
-        }
-        if (this.info.BackFlip)
-        {
-            viewData.LeftBackImage = loadHatSprite(
-                Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
-        }
-
-        if (this.info.Climb)
-        {
-            viewData.ClimbImage = loadHatSprite(
-                Path.Combine(this.folderPath, DataStructure.ClimbImageName));
-        }
-
-        if (this.info.Shader)
-        {
-            Material altShader = new Material(
-                FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
-            altShader.shader = Shader.Find("Unlit/PlayerShader");
-
-            viewData.AltShader = altShader;
-        }
-		return viewData;
+		return this.hatView;
 	}
 
 	public HatData GetData()
@@ -113,6 +79,43 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
         this.hat.SpritePreview = loadHatSprite(
             Path.Combine(this.folderPath, DataStructure.FrontImageName));
+
+		this.hatView = ScriptableObject.CreateInstance<HatViewData>();
+
+		this.hatView.MainImage = loadHatSprite(
+			Path.Combine(this.folderPath, DataStructure.FrontImageName));
+
+		if (this.info.FrontFlip)
+		{
+			this.hatView.LeftMainImage = loadHatSprite(
+				Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
+		}
+
+		if (this.info.Back)
+		{
+			this.hatView.BackImage = loadHatSprite(
+				Path.Combine(this.folderPath, DataStructure.BackImageName));
+		}
+		if (this.info.BackFlip)
+		{
+			this.hatView.LeftBackImage = loadHatSprite(
+				Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
+		}
+
+		if (this.info.Climb)
+		{
+			this.hatView.ClimbImage = loadHatSprite(
+				Path.Combine(this.folderPath, DataStructure.ClimbImageName));
+		}
+
+		if (this.info.Shader)
+		{
+			Material altShader = new Material(
+				FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
+			altShader.shader = Shader.Find("Unlit/PlayerShader");
+
+			this.hatView.AltShader = altShader;
+		}
 
 		return this.hat;
 
