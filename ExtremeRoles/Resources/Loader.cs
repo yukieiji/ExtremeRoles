@@ -139,7 +139,7 @@ public static class Loader
 			   "ExtremeRoles.Resources.Asset.simplebutton.asset",
 			   "assets/common/simplebutton.prefab"),
 		   parent);
-		if (buuttonObj != null)
+		if (buuttonObj == null)
 		{
 			return null;
 		}
