@@ -32,12 +32,8 @@ public static class MainMenuManagerStartPatch
 			(UnityAction)(() => Logging.BackupCurrentLog()));
 
 		// UpdateButton
-		GameObject updateButtonObj = UnityObject.Instantiate(
-		   Loader.GetUnityObjectFromResources<GameObject>(
-			   "ExtremeRoles.Resources.Asset.simplebutton.asset",
-			   "assets/common/simplebutton.prefab"),
-		   __instance.quitButton.transform);
-		var updateButton = updateButtonObj.GetComponent<SimpleButton>();
+		var updateButton = Loader.CreateSimpleButton(
+			__instance.quitButton.transform);
 
 		updateButton.Layer = __instance.gameObject.layer;
 		updateButton.Scale = new Vector3(0.5f, 0.5f, 1.0f);

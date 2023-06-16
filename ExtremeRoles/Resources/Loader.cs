@@ -10,6 +10,8 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Resources;
 
@@ -130,6 +132,20 @@ public static class Loader
     private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
     private static Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
+	public static SimpleButton CreateSimpleButton(Transform parent)
+	{
+		GameObject buuttonObj = UnityObject.Instantiate(
+		   GetUnityObjectFromResources<GameObject>(
+			   "ExtremeRoles.Resources.Asset.simplebutton.asset",
+			   "assets/common/simplebutton.prefab"),
+		   parent);
+		if (buuttonObj != null)
+		{
+			return null;
+		}
+		return buuttonObj.GetComponent<SimpleButton>();
+	}
+
     public static Sprite CreateSpriteFromResources(
         string path, float pixelsPerUnit=115f)
     {
@@ -157,19 +173,19 @@ public static class Loader
         return null;
     }
 
-        public static T GetUnityObjectFromResources<T>(
-            string bundleName, string objName) where T : UnityObject
-        {
-            AssetBundle bundle = getAssetBundleFromAssembly(
-                bundleName, Assembly.GetCallingAssembly());
+    public static T GetUnityObjectFromResources<T>(
+        string bundleName, string objName) where T : UnityObject
+    {
+        AssetBundle bundle = getAssetBundleFromAssembly(
+            bundleName, Assembly.GetCallingAssembly());
 
-            var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
-            if (!obj)
-            {
-                return null;
-            }
-            return obj.TryCast<T>();
+        var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
+        if (!obj)
+        {
+            return null;
         }
+        return obj.TryCast<T>();
+    }
 
     public static void LoadCommonAsset()
     {
