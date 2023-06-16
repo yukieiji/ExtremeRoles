@@ -168,7 +168,7 @@ public static class ExileControllerBeginePatch
 				exiled, PlayerOutfitType.Default,
 				PlayerMaterial.MaskType.Exile, false, (Il2CppSystem.Action)(() =>
 			{
-				SkinViewData skin = ShipStatus.Instance.CosmeticsCache.GetSkin(
+				SkinViewData skin = CachedShipStatus.Instance.CosmeticsCache.GetSkin(
 					exiled.Outfits[PlayerOutfitType.Default].SkinId);
 				instance.Player.FixSkinSprite(skin.EjectFrame);
 			}));
