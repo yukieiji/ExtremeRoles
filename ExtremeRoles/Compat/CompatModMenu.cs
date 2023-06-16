@@ -34,6 +34,7 @@ internal static class CompatModMenu
 		   template, parent);
 		mngButton.name = "ExtremeRolesModManagerButton";
 		mngButton.transform.localPosition = new Vector3(0.0f, 1.6f, 0.0f);
+		mngButton.Text.text = Helper.Translation.GetString("compatModMenuButton");
 
 		mngButton.ClickedEvent.AddListener((System.Action)(() =>
         {
