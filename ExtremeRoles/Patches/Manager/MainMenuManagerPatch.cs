@@ -35,10 +35,12 @@ public static class MainMenuManagerStartPatch
 		var updateButton = Loader.CreateSimpleButton(
 			__instance.quitButton.transform);
 
+		updateButton.gameObject.SetActive(true);
+
 		updateButton.Layer = __instance.gameObject.layer;
 		updateButton.Scale = new Vector3(0.5f, 0.5f, 1.0f);
 
-		updateButton.gameObject.transform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
+		updateButton.transform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
 		updateButton.Text.text = Translation.GetString(Translation.GetString("UpdateButton"));
 		updateButton.Text.fontSize =
 			updateButton.Text.fontSizeMax =
@@ -62,6 +64,9 @@ public static class MainMenuManagerStartPatch
 			discordButton.Text.fontSizeMin = 2.4f;
 		discordButton.Image.color = discordButton.Text.color = discordColor;
 		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
+
+		// ModManagerButton
+		Compat.CompatModMenu.CreateMenuButton(updateButton);
 
 		if (!Module.Updater.Instance.IsInit)
         {

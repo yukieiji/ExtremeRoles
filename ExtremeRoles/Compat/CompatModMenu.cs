@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 using TMPro;
 using ExtremeRoles.Performance;
-
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Compat;
 
@@ -26,27 +26,23 @@ internal static class CompatModMenu
     private static Dictionary<CompatModType,(TextMeshPro, Dictionary<ButtonType, GameObject>)> compatModMenuLine = new Dictionary<
         CompatModType, (TextMeshPro, Dictionary<ButtonType, GameObject>)>();
 
-    public static void CreateMenuButton()
+    public static void CreateMenuButton(SimpleButton template)
     {
         compatModMenuLine.Clear();
-        GameObject buttonTemplate = GameObject.Find("AnnounceButton");
-        GameObject compatModMenuButton = Object.Instantiate<GameObject>(
-            buttonTemplate, buttonTemplate.transform.parent);
-        compatModMenuButton.name = "CompatModMenuButton";
-        compatModMenuButton.transform.SetSiblingIndex(7);
-        PassiveButton compatModButton = compatModMenuButton.GetComponent<PassiveButton>();
-        SpriteRenderer compatModSprite = compatModMenuButton.GetComponent<SpriteRenderer>();
-        compatModSprite.sprite = Resources.Loader.CreateSpriteFromResources(
-            Resources.Path.CompatModMenuImage, 200f);
-        compatModButton.OnClick = new Button.ButtonClickedEvent();
-        compatModButton.OnClick.AddListener((System.Action)(() =>
+
+		var mngButton = Object.Instantiate(
+		   template, template.transform);
+		mngButton.name = "ExtremeRolesModManagerButton";
+		mngButton.Scale = new Vector3(1.0f, 1.0f, 1.0f);
+		mngButton.transform.localPosition = new Vector3(0.0f, 3.5f, 0.0f);
+
+		mngButton.ClickedEvent.AddListener((System.Action)(() =>
         {
             if (!menuBody)
             {
                 initMenu();
             }
             menuBody.SetActive(true);
-            
         }));
     }
 
@@ -95,7 +91,7 @@ internal static class CompatModMenu
     private static void createCompatModLines()
     {
         var buttonTemplate = GameObject.Find("ExitGameButton/ExtremeRolesUpdateButton");
-        
+
         if (buttonTemplate == null) { return; }
 
         string pluginPath = string.Concat(
@@ -107,7 +103,7 @@ internal static class CompatModMenu
         {
             string modName = mod.ToString();
 
-            if (mod == CompatModType.ExtremeSkins || 
+            if (mod == CompatModType.ExtremeSkins ||
                 mod == CompatModType.ExtremeVoiceEngine)
             {
                 createAddonButtons(index, pluginPath, mod, buttonTemplate);
