@@ -10,7 +10,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Resources;
@@ -146,7 +145,7 @@ public static class Loader
 		return buuttonObj.GetComponent<SimpleButton>();
 	}
 
-    public static Sprite CreateSpriteFromResources(
+	public static Sprite CreateSpriteFromResources(
         string path, float pixelsPerUnit=115f)
     {
         try

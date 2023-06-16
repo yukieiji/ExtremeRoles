@@ -31,42 +31,32 @@ public static class MainMenuManagerStartPatch
 		__instance.quitButton.OnClick.AddListener(
 			(UnityAction)(() => Logging.BackupCurrentLog()));
 
+		var leftButtonAnchor = new GameObject("LeftModButton");
+		leftButtonAnchor.transform.parent = __instance.quitButton.transform;
+		leftButtonAnchor.SetActive(true);
+		leftButtonAnchor.layer = __instance.gameObject.layer;
+
+		Transform anchorTransform =leftButtonAnchor.transform;
+		anchorTransform.localScale = Vector3.one;
+		anchorTransform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
+
 		// UpdateButton
-		var updateButton = Loader.CreateSimpleButton(
-			__instance.quitButton.transform);
-
-		updateButton.gameObject.SetActive(true);
-
-		updateButton.Layer = __instance.gameObject.layer;
-		updateButton.Scale = new Vector3(0.5f, 0.5f, 1.0f);
-
-		updateButton.transform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
-		updateButton.Text.text = Translation.GetString(Translation.GetString("UpdateButton"));
-		updateButton.Text.fontSize =
-			updateButton.Text.fontSizeMax =
-			updateButton.Text.fontSizeMin = 1.9f;
-		updateButton.name = "ExtremeRolesUpdateButton";
-		updateButton.ClickedEvent.AddListener(
-			(UnityAction)(async() => await Module.Updater.Instance.CheckAndUpdate()));
-
-
-		// DiscordButton
-		var discordButton = UnityObject.Instantiate(
-		   updateButton, updateButton.transform);
-		discordButton.name = "ExtremeRolesDiscordButton";
-		discordButton.Scale = new Vector3(1.0f, 1.0f, 1.0f);
-		discordButton.transform.localPosition = new Vector3(0.0f, 1.75f, 0.0f);
-		discordButton.ClickedEvent.AddListener(
-			(UnityAction)(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS")));
-		discordButton.Text.text = "Discord";
-		discordButton.Text.fontSize =
-			discordButton.Text.fontSizeMax =
-			discordButton.Text.fontSizeMin = 2.4f;
-		discordButton.Image.color = discordButton.Text.color = discordColor;
-		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
+		var updateButton = createButton(
+			__instance, "ExtremeRolesUpdateButton",
+			Translation.GetString(Translation.GetString("UpdateButton")),
+			1.9f, async () => await Module.Updater.Instance.CheckAndUpdate(),
+			Vector3.zero, anchorTransform);
 
 		// ModManagerButton
-		Compat.CompatModMenu.CreateMenuButton(updateButton);
+		Compat.CompatModMenu.CreateMenuButton(updateButton, anchorTransform);
+
+		// DiscordButton
+		var discordButton = createButton(
+			__instance, "ExtremeRolesDiscordButton",
+			"Discord", 2.4f, () => Application.OpenURL("https://discord.gg/UzJcfBYcyS"),
+			new Vector3(0.0f, 0.8f, 0.0f), anchorTransform);
+		discordButton.Image.color = discordButton.Text.color = discordColor;
+		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
 
 		if (!Module.Updater.Instance.IsInit)
         {
@@ -116,10 +106,29 @@ public static class MainMenuManagerStartPatch
             UnityObject.Destroy(Module.Prefab.Text.GetComponent<TextTranslatorTMP>());
             Module.Prefab.Text.gameObject.SetActive(false);
             UnityObject.DontDestroyOnLoad(Module.Prefab.Text);
-
         }
-        // Compat.CompatModMenu.CreateMenuButton();
 
 		CustomRegion.Update();
+	}
+
+	private static SimpleButton createButton(
+		MainMenuManager instance,
+		string name, string text, float fontSize,
+		Action action, Vector3 pos, Transform parent)
+	{
+		var button = Loader.CreateSimpleButton(parent);
+		button.gameObject.SetActive(true);
+		button.Layer = instance.gameObject.layer;
+		button.Scale = new Vector3(0.5f, 0.5f, 1.0f);
+		button.name = name;
+
+		button.Text.text = text;
+		button.Text.fontSize =
+			button.Text.fontSizeMax =
+			button.Text.fontSizeMin = fontSize;
+		button.ClickedEvent.AddListener((UnityAction)action);
+		button.transform.localPosition = pos;
+
+		return button;
 	}
 }
