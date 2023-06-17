@@ -15,7 +15,7 @@ using TMPro;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Shooter : 
+public sealed class Shooter :
     SingleRoleBase,
     IRoleMeetingButtonAbility,
     IRoleReportHook,
@@ -53,7 +53,7 @@ public sealed class Shooter :
     private bool isAwakedHasOtherKillRange;
 
     private float killCoolPenalty = 0.0f;
-    
+
     private float chargeTime = 0.0f;
     private int chargeKillNum = 0;
 
@@ -88,12 +88,12 @@ public sealed class Shooter :
     {
         byte target = instance.TargetPlayerId;
 
-        return 
-            this.curShootNum <= 0 || 
+        return
+            this.curShootNum <= 0 ||
             !(
-                this.shootCounter < this.maxMeetingShootNum && 
+                this.shootCounter < this.maxMeetingShootNum &&
                 this.canShootThisMeeting
-            ) || 
+            ) ||
             target == 253 ||
             ExtremeRoleManager.GameRole[target].Id == ExtremeRoleId.Assassin;
     }
@@ -273,12 +273,13 @@ public sealed class Shooter :
                 this.timer -= Time.deltaTime;
             }
 
-            if (this.timer <= 0.0f && 
+            if (this.timer <= 0.0f &&
                 this.curKillCount >= this.chargeKillNum)
             {
                 this.curShootNum = Math.Clamp(
                     this.curShootNum + 1, 0, this.maxShootNum);
                 this.curKillCount = 0;
+				this.timer = this.chargeTime;
             }
         }
 
@@ -435,7 +436,7 @@ public sealed class Shooter :
         maxShootOps.SetUpdateOption(maxMeetingShootOps);
 
     }
-    
+
     protected override void RoleSpecificInit()
     {
         var allOps = OptionManager.Instance;
@@ -469,7 +470,7 @@ public sealed class Shooter :
         this.killCoolPenalty = allOps.GetValue<float>(
             GetRoleOptionId(ShooterOption.ShootKillCoolPenalty));
 
-        this.isNoneAwakeWhenShoot = 
+        this.isNoneAwakeWhenShoot =
 
         this.isAwake = this.isAwake ||
             (
@@ -542,7 +543,7 @@ public sealed class Shooter :
             hudManager.KillButton.transform.parent);
 
         this.chargeTimerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
-        this.chargeTimerText.transform.localPosition = 
+        this.chargeTimerText.transform.localPosition =
             hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
         this.chargeTimerText.gameObject.SetActive(true);
 
