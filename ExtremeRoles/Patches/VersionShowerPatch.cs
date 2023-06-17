@@ -24,7 +24,7 @@ public static class MainMenuTextInfoPatch
 		InfoText.name = "ExtremeRoles_InfoText";
 		InfoText.text = string.Empty;
 		InfoText.alignment = TextAlignmentOptions.TopRight;
-		InfoText.fontSize = InfoText.fontSizeMax = InfoText.fontSizeMin = 1.8f;
+		InfoText.fontSize = InfoText.fontSizeMax = InfoText.fontSizeMin = 1.9f;
 
 		AspectPosition aspectPosition = InfoText.gameObject.AddComponent<AspectPosition>();
 		aspectPosition.Alignment = AspectPosition.EdgeAlignments.RightTop;

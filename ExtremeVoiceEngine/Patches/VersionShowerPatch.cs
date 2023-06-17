@@ -8,7 +8,7 @@ namespace ExtremeVoiceEngine.Patches;
 [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
 public static class VersionShowerStartPatch
 {
-    public static void Postfix(VersionShower __instance)
+    public static void Postfix()
     {
 		if (MainMenuTextInfoPatch.InfoText)
 		{
