@@ -62,6 +62,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             }
 
+			CustomCosmicTab.EnableTab(__instance);
+
             foreach (HatData hatBehaviour in unlockedHats)
             {
                 CustomHat hat;
@@ -108,8 +110,10 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     (hatPackage[key].Count - 1) / __instance.NumPerRow) * __instance.YOffset - CustomCosmicTab.HeaderSize;
             }
 
-            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + CustomCosmicTab.HeaderSize);
-            Tab.gameObject.SetActive(true);
+			__instance.currentHatIsEquipped = true;
+			__instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + CustomCosmicTab.HeaderSize);
+
+			Tab.gameObject.SetActive(true);
             Tab.SetUpButtons(__instance.scroller, hatsTabCustomText);
             return false;
         }
@@ -141,10 +145,6 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
                 ColorChip colorChip = CustomCosmicTab.SetColorChip(__instance, i, offset);
 
-                int color = __instance.HasLocalPlayer() ?
-                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
-                    playerSkinData.colorID;
-
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                 {
                     colorChip.Button.OnMouseOver.AddListener(
@@ -166,13 +166,19 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                         (UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
                 }
 
-                colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.ScrollingUI);
-                colorChip.Inner.SetHat(hat, color);
-                colorChip.Inner.transform.localPosition = hat.ChipOffset;
-                colorChip.Tag = hat;
-                colorChip.Button.ClickMask = __instance.scroller.Hitbox;
-                __instance.ColorChips.Add(colorChip);
-            }
+				colorChip.Button.ClickMask = __instance.scroller.Hitbox;
+				colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.ScrollingUI);
+				colorChip.Tag = hat;
+
+				int color = __instance.HasLocalPlayer() ?
+					CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
+					DataManager.Player.Customization.Color;
+				__instance.UpdateMaterials(colorChip.Inner.FrontLayer, hat);
+				hat.SetPreview(colorChip.Inner.FrontLayer,color);
+
+				colorChip.SelectionHighlight.gameObject.SetActive(false);
+				__instance.ColorChips.Add(colorChip);
+			}
         }
     }
 #endif

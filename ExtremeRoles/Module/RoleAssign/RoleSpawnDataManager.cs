@@ -16,14 +16,14 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
     public Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>> CurrentSingleRoleSpawnData
     { get; private set; }
-    
-    public Dictionary<byte, CombinationRoleSpawnData> CurrentCombRoleSpawnData 
+
+    public Dictionary<byte, CombinationRoleSpawnData> CurrentCombRoleSpawnData
     { get; private set; }
 
-    public List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> UseGhostCombRole 
+    public List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> UseGhostCombRole
     { get; private set; }
 
-    public Dictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum 
+    public Dictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum
     { get; private set; }
 
     public RoleSpawnDataManager()
@@ -74,8 +74,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
             byte combType = (byte)roleId;
             var role = ExtremeRoleManager.CombRole[combType];
             int spawnRate = ISpawnDataManager.ComputePercentage(allOption.Get<int>(
-                role.GetRoleOptionId(RoleCommonOption.SpawnRate),
-                OptionManager.ValueType.Int));
+                role.GetRoleOptionId(RoleCommonOption.SpawnRate)));
             int roleSet = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
             int weight = allOption.GetValue<int>(
@@ -111,8 +110,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
             SingleRoleBase role = ExtremeRoleManager.NormalRole[intedRoleId];
 
             int spawnRate = ISpawnDataManager.ComputePercentage(allOption.Get<int>(
-                role.GetRoleOptionId(RoleCommonOption.SpawnRate),
-                OptionManager.ValueType.Int));
+                role.GetRoleOptionId(RoleCommonOption.SpawnRate)));
             int weight = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.AssignWeight));
             int roleNum = allOption.GetValue<int>(

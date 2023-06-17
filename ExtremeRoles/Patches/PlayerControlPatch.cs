@@ -77,6 +77,22 @@ public static class PlayerControlAwakePatch
 #endif
     }
 }
+
+// 死人のペットが普通に見えるバグ修正、もうペットだけ消す
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
+public static class PlayerControlDiePatch
+{
+	public static void Postfix(
+		PlayerControl __instance)
+	{
+		if (__instance.Data.IsDead &&
+			__instance.cosmetics.CurrentPet != null)
+		{
+			__instance.cosmetics.currentPet.gameObject.SetActive(false);
+		}
+	}
+}
+
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
 public static class PlayerControlExiledPatch
 {
@@ -698,7 +714,7 @@ public static class PlayerControlHandleRpcPatch
                 RPCOperator.JesterOutburstKill(
                     outburstKillerId, killTargetId);
                 break;
-            case RPCOperator.Command.YandereSetOneSidedLover:
+			case RPCOperator.Command.YandereSetOneSidedLover:
                 byte yanderePlayerId = reader.ReadByte();
                 byte loverPlayerId = reader.ReadByte();
                 RPCOperator.YandereSetOneSidedLover(
@@ -710,7 +726,10 @@ public static class PlayerControlHandleRpcPatch
                 RPCOperator.TotocalcioSetBetPlayer(
                     totocalcioPlayerId, betPlayerId);
                 break;
-            case RPCOperator.Command.MadmateToFakeImpostor:
+			case RPCOperator.Command.MinerHandle:
+				RPCOperator.MinerHandle(ref reader);
+				break;
+			case RPCOperator.Command.MadmateToFakeImpostor:
                 byte madmatePlayerId = reader.ReadByte();
                 RPCOperator.MadmateToFakeImpostor(
                     madmatePlayerId);
@@ -1090,7 +1109,15 @@ public static class PlayerControlRevivePatch
 
         ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
 
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+		// 消したペットをもとに戻しておく
+		if (!__instance.Data.IsDead &&
+			__instance.cosmetics.CurrentPet != null)
+		{
+			__instance.cosmetics.currentPet.gameObject.SetActive(true);
+			__instance.cosmetics.currentPet.SetIdle();
+		}
+
+		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
         if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
         var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<

@@ -1,59 +1,32 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
 
-using Hazel;
-
-using UnityEngine;
-
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
+
+using ExtremeRoles.Module;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class SlaveDriver : 
-    SingleRoleBase, 
-    IRoleUpdate, 
-    IRoleResetMeeting, 
-    IRoleMurderPlayerHook
+public sealed class SlaveDriver :
+    SingleRoleBase,
+    IRoleAbility
 {
+	public bool CanSeeTaskBar { get; private set; }
+	public ExtremeAbilityButton Button { get; set; }
 
-    private List<(byte, List<int>)> specialAttackResult;
-
-    private int noneTaskPlayerAttakBonusChance;
-    private int noneTaskPlayerSpecialAttackChance;
-
-    private int setNormalTaskNum;
-    private int setLongTaskNum;
-    private int setCommonTaskNum;
-
-    private float reduceRate;
-    private float specialAttackReduceRate;
-    private float defaultKillCoolTime;
-    private float noneBonusKillTaskRange;
-    private float aliveCheckTime;
-    private float specialAttackStartTime;
-    private float timer;
-
-    private byte rolePlayerId;
-    private byte specialAttackPlayerId;
+	private HashSet<byte> effectPlayer = new HashSet<byte>();
+	private int revartTaskNum;
+	private float range;
+	private byte target = byte.MinValue;
 
     public enum SlaveDriverOption
     {
-        TaskProgressRange,
-        KillCoolReduceRate,
-        SpecialAttackTimer,
-        SpecialAttackKillCoolReduceRate,
-        SpecialAttackAliveTimer,
-        NoneTaskPlayerAttakBonusChance,
-        NoneTaskPlayerSpecialAttackChance,
-        AdditionalNormalTaskNum,
-        AdditionalLongTaskNum,
-        AdditionalCommonTaskNum,
+		CanSeeTaskBar,
+		Range,
+		RevartTaskNum
     }
 
     public SlaveDriver() : base(
@@ -64,216 +37,39 @@ public sealed class SlaveDriver :
         true, false, true, true)
     { }
 
+	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
+	{
+		if (this.effectPlayer.Contains(targetPlayerId))
+		{
+			return Design.ColoedString(this.NameColor, " ★");
+		}
+		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+	}
 
-    public override bool TryRolePlayerKillTo(
-        PlayerControl rolePlayer,
-        PlayerControl targetPlayer)
-    {
-
-        this.rolePlayerId = rolePlayer.PlayerId;
-
-        var targetRole = ExtremeRoleManager.GameRole[targetPlayer.PlayerId];
-
-        this.specialAttackPlayerId = byte.MaxValue;
-        this.KillCoolTime = this.defaultKillCoolTime;
-
-        if (targetRole.HasTask())
-        {
-            int targetPlayerTaskNum = targetPlayer.Data.Tasks.Count;
-            int targetPlayerCompTask = 0;
-
-            foreach (var task in targetPlayer.Data.Tasks.GetFastEnumerator())
-            {
-                if (task.Complete)
-                {
-                    ++targetPlayerCompTask;
-                }
-            }
-
-            int taskHasPlayerNum = 0;
-            int taskHasDeadPlayerNum = 0;
-
-            foreach (var playerInfo in 
-                GameData.Instance.AllPlayers.GetFastEnumerator())
-            {
-                var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-
-                if (!playerInfo.Disconnected && role.HasTask())
-                {
-                    ++taskHasPlayerNum;
-
-                    if (playerInfo.IsDead)
-                    {
-                        ++taskHasDeadPlayerNum;
-                    }
-                }
-            }
-
-            float approximateTaskGage = (float)taskHasDeadPlayerNum / (float)taskHasPlayerNum;
-            float targetPlayerTaskGage = (float)targetPlayerCompTask / (float)targetPlayerTaskNum;
-
-            int totalTaskNum = GameData.Instance.TotalTasks;
-            int compTaskNum = GameData.Instance.CompletedTasks;
-            float totalTaskGauge = (float)compTaskNum / (float)totalTaskNum;
-
-            float diff = totalTaskGauge - targetPlayerTaskGage;
-
-            // ゲーム開始時から一定時間経過後、全体のタスク進捗が生存者に対して少ない(この時、誤差許容は行わない)
-            if (approximateTaskGage > totalTaskGauge &&
-                this.timer >= this.aliveCheckTime)
-            {
-                setSpecialAttackPlayerKillCool();
-                this.specialAttackPlayerId = targetPlayer.PlayerId;
-            }
-            // ゲーム開始時から一定時間経過後、全体のタスク進捗から大きく離れてる(50％以上) or タスク完了数が0～2
-            else if ((0.5f < diff || (0 <= targetPlayerCompTask && targetPlayerCompTask <= 2)) && 
-                this.timer >= this.specialAttackStartTime)
-            {
-                setSpecialAttackPlayerKillCool();
-                this.specialAttackPlayerId = targetPlayer.PlayerId;
-            }
-            else if (totalTaskGauge > (targetPlayerTaskGage + this.noneBonusKillTaskRange))
-            {
-                setBonusPlayerKillCool();
-            }
-        }
-        else
-        {
-            int chance = UnityEngine.Random.Range(0, 100);
-            if (chance < this.noneTaskPlayerSpecialAttackChance)
-            {
-                setSpecialAttackPlayerKillCool();
-            }
-            else if (chance < this.noneTaskPlayerAttakBonusChance)
-            {
-                setBonusPlayerKillCool();
-            }
-        }
-
-        return true;
-    }
-
-    protected override void CreateSpecificOption(
+	protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
-
-        CreateIntOption(
-            SlaveDriverOption.TaskProgressRange,
-            10, 5, 20, 1, parentOps,
-            format: OptionUnit.Percentage);
-
-        CreateIntOption(
-            SlaveDriverOption.KillCoolReduceRate,
-            25, 1, 50, 1, parentOps,
-            format: OptionUnit.Percentage);
-
-        CreateFloatOption(
-            SlaveDriverOption.SpecialAttackTimer,
-            60f, 30f, 120f, 0.5f, parentOps,
-            format: OptionUnit.Second);
-
-        CreateFloatOption(
-            SlaveDriverOption.SpecialAttackAliveTimer,
-            600f, 300f, 900f, 30.0f, parentOps,
-            format: OptionUnit.Second);
-
-        CreateIntOption(
-            SlaveDriverOption.SpecialAttackKillCoolReduceRate,
-            50, 25, 75, 1, parentOps,
-            format: OptionUnit.Percentage);
-
-        CreateIntOption(
-            SlaveDriverOption.NoneTaskPlayerAttakBonusChance,
-            50, 20, 100, 1, parentOps,
-            format: OptionUnit.Percentage);
-
-        CreateIntOption(
-            SlaveDriverOption.NoneTaskPlayerSpecialAttackChance,
-            10, 5, 25, 1, parentOps,
-            format: OptionUnit.Percentage);
-
-        CreateIntOption(
-            SlaveDriverOption.AdditionalCommonTaskNum,
-            1, 0, 5, 1, parentOps);
-
-        CreateIntOption(
-            SlaveDriverOption.AdditionalNormalTaskNum,
-            1, 0, 5, 1, parentOps);
-
-        CreateIntOption(
-            SlaveDriverOption.AdditionalLongTaskNum,
-            1, 0, 5, 1, parentOps);
-
-    }
+		CreateBoolOption(
+			SlaveDriverOption.CanSeeTaskBar,
+			true, parentOps);
+		this.CreateAbilityCountOption(parentOps, 2, 10);
+		CreateIntOption(
+			SlaveDriverOption.RevartTaskNum,
+			2, 1, 5, 1, parentOps);
+		CreateFloatOption(
+			SlaveDriverOption.Range,
+			0.75f, 0.25f, 3.5f, 0.25f, parentOps);
+	}
 
     protected override void RoleSpecificInit()
     {
-
-        if (!this.HasOtherKillCool)
-        {
-            this.HasOtherKillCool = true;
-            this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                FloatOptionNames.KillCooldown);
-        }
-
-        var allOption = OptionManager.Instance;
-
-        this.noneBonusKillTaskRange = allOption.GetValue<int>(
-            GetRoleOptionId(SlaveDriverOption.TaskProgressRange)) / 100f;
-
-        this.reduceRate = allOption.GetValue<int>(
-            GetRoleOptionId(SlaveDriverOption.KillCoolReduceRate));
-        this.specialAttackReduceRate = allOption.GetValue<int>(
-            GetRoleOptionId(SlaveDriverOption.SpecialAttackKillCoolReduceRate));
-        this.specialAttackStartTime = allOption.GetValue<float>(
-            GetRoleOptionId(SlaveDriverOption.SpecialAttackTimer));
-        this.aliveCheckTime = allOption.GetValue<float>(
-            GetRoleOptionId(SlaveDriverOption.SpecialAttackAliveTimer));
-
-        this.noneTaskPlayerAttakBonusChance = allOption.GetValue<int>(
-            GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerAttakBonusChance));
-        this.noneTaskPlayerSpecialAttackChance = allOption.GetValue<int>(
-            GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerSpecialAttackChance));
-
-        this.setNormalTaskNum = allOption.GetValue<int>(
-           GetRoleOptionId(SlaveDriverOption.AdditionalNormalTaskNum));
-        this.setLongTaskNum = allOption.GetValue<int>(
-            GetRoleOptionId(SlaveDriverOption.AdditionalLongTaskNum));
-        this.setCommonTaskNum = allOption.GetValue<int>(
-            GetRoleOptionId(SlaveDriverOption.AdditionalCommonTaskNum));
-
-
-        this.defaultKillCoolTime = this.KillCoolTime;
-        this.specialAttackResult = new List<(byte, List<int>)>();
-    }
-
-    public void HookMuderPlayer(PlayerControl source, PlayerControl target)
-    {
-        if (source.PlayerId == this.rolePlayerId &&
-            target.PlayerId == this.specialAttackPlayerId)
-        {
-            List<int> newTaskId = new List<int>();
-
-            for (int i = 0; i < this.setLongTaskNum; ++i)
-            {
-                newTaskId.Add(Helper.GameSystem.GetRandomLongTask());
-            }
-            for (int i = 0; i < this.setCommonTaskNum; ++i)
-            {
-                newTaskId.Add(Helper.GameSystem.GetRandomCommonTaskId());
-            }
-            for (int i = 0; i < this.setNormalTaskNum; ++i)
-            {
-                newTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
-            }
-
-            var shuffled = newTaskId.OrderBy(
-                item => RandomGenerator.Instance.Next()).ToList();
-
-            this.specialAttackResult.Add(
-                (target.PlayerId, shuffled));
-            this.specialAttackPlayerId = byte.MaxValue;
-        }
+		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
+			GetRoleOptionId(SlaveDriverOption.CanSeeTaskBar));
+		this.revartTaskNum= OptionManager.Instance.GetValue<int>(
+			GetRoleOptionId(SlaveDriverOption.RevartTaskNum));
+		this.range = OptionManager.Instance.GetValue<float>(
+			GetRoleOptionId(SlaveDriverOption.Range));
+		this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -283,61 +79,80 @@ public sealed class SlaveDriver :
 
     public void ResetOnMeetingStart()
     {
-        this.KillCoolTime = this.defaultKillCoolTime;
-        this.specialAttackPlayerId = byte.MaxValue;
-    }
+		this.target = byte.MaxValue;
+		string reportMessage = Translation.GetString("SlaveDriverReportMessage");
+		foreach (byte playerId in this.effectPlayer)
+		{
+			GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
-    public void Update(PlayerControl rolePlayer)
-    {
-        if (CachedShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled) { return; }
+			if (player == null) { continue; }
 
-            if (MeetingHud.Instance == null && this.timer < this.aliveCheckTime)
-            {
-                this.timer += Time.deltaTime;
-            }
+			int replacedTaskNum = 0;
 
-        if (this.specialAttackResult.Count == 0) { return; }
+			foreach (var task in player.Tasks.ToArray().OrderBy(
+				x => RandomGenerator.Instance.Next()))
+			{
+				if (replacedTaskNum >= this.revartTaskNum) { break; }
+				if (!task.Complete) { continue; }
 
-        List<(byte, List<int>)> removeResult = new List<(byte, List<int>)>();
+				int newTaskId = 0;
+				byte taskId = task.TypeId;
 
-        foreach (var (playerId, newTask) in this.specialAttackResult)
-        {
-            var playerInfo = GameData.Instance.GetPlayerById(
-                playerId);
+				if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
+				(NormalPlayerTask t) => t.Index == taskId) != null)
+				{
+					newTaskId = GameSystem.GetRandomCommonTaskId();
+				}
+				else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
+					(NormalPlayerTask t) => t.Index == taskId) != null)
+				{
+					newTaskId = GameSystem.GetRandomLongTask();
+				}
+				else if (CachedShipStatus.Instance.NormalTasks.FirstOrDefault(
+					(NormalPlayerTask t) => t.Index == taskId) != null)
+				{
+					newTaskId = GameSystem.GetRandomNormalTaskId();
+				}
+				else
+				{
+					continue;
+				}
 
-            for (int i = 0; i < playerInfo.Tasks.Count; ++i)
-            {
-                if (playerInfo.Tasks[i].Complete)
-                {
-                    int taskIndex = newTask[0];
-                    newTask.RemoveAt(0);
-                    Helper.Logging.Debug($"SetTaskId:{taskIndex}");
-                    Helper.GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
+				GameSystem.RpcReplaceNewTask(
+					playerId, (int)task.Id, newTaskId);
+				replacedTaskNum++;
+			}
+			if (replacedTaskNum > 0)
+			{
+				MeetingReporter.RpcAddTargetMeetingChatReport(playerId, reportMessage);
+			}
+		}
+		this.effectPlayer.Clear();
+	}
 
-                    if (newTask.Count == 0)
-                    {
-                        removeResult.Add((playerId, newTask));
-                    }
-                    break;
-                }
-            }
-        }
+	public void CreateAbility()
+	{
+		this.CreateAbilityCountButton(
+			"Harassment", Resources.Loader.CreateSpriteFromResources(
+				Resources.Path.SlaveDriverHarassment));
+	}
 
-        foreach (var item in removeResult)
-        {
-            this.specialAttackResult.Remove(item);
-        }
+	public bool UseAbility()
+	{
+		this.effectPlayer.Add(this.target);
+		this.target = byte.MaxValue;
+		return true;
+	}
 
-    }
+	public bool IsAbilityUse()
+	{
+		var target = Player.GetClosestPlayerInRange(
+			CachedPlayerControl.LocalPlayer, this, this.range);
 
-    private void setBonusPlayerKillCool()
-    {
-        this.KillCoolTime = this.defaultKillCoolTime * ((100f - this.reduceRate) / 100f);
-    }
-    private void setSpecialAttackPlayerKillCool()
-    {
-        this.KillCoolTime = this.defaultKillCoolTime * ((100f - this.specialAttackReduceRate) / 100f);
-    }
+		if (target == null) { return false; }
+
+		this.target = target.PlayerId;
+
+		return this.IsCommonUse() && !this.effectPlayer.Contains(this.target);
+	}
 }

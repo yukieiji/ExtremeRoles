@@ -162,7 +162,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
         Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
-        OptionManager.Instance.Add(this.Id, this);
+        OptionManager.Instance.AddOption(this.Id, this);
     }
 
     public void AddToggleOptionCheckHook(StringNames targetOption)

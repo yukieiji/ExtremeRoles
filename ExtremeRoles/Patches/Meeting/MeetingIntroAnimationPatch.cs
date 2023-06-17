@@ -12,6 +12,23 @@ namespace ExtremeRoles.Patches.Meeting;
 [HarmonyPatch(typeof(MeetingIntroAnimation), nameof(MeetingIntroAnimation.Init))]
 public static class MeetingIntroAnimationInitPatch
 {
+	// バニラのベント掃除が残り続けるバグの修正
+	// これより前だとベントに入ってる状態が残ってる可能性があるのでここでやる
+	public static void Prefix()
+	{
+		if (CachedShipStatus.Instance == null ||
+			!CachedShipStatus.Instance.enabled ||
+			!CachedShipStatus.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType system))
+		{
+			return;
+		}
+		var ventSystem = system.TryCast<VentilationSystem>();
+		if (ventSystem == null) { return; }
+
+		ventSystem.PlayersCleaningVents.Clear();
+		ventSystem.PlayersInsideVents.Clear();
+	}
+
     public static void Postfix(
         MeetingIntroAnimation __instance)
     {

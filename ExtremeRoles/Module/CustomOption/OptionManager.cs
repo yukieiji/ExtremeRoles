@@ -1,6 +1,7 @@
 ﻿using Hazel;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Linq;
 
 using UnityEngine;
@@ -11,6 +12,8 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomOption;
+
+#nullable enable
 
 public sealed class OptionManager
 {
@@ -43,6 +46,12 @@ public sealed class OptionManager
 	private const int defaultStep = 1;
 	private const int skipStep = 10;
 
+	// ジェネリック化をJIT化する時にtypeofの比較がどうやら定数比較になり必ずtrueになる部分とfalseになる部分が決定するらしい
+	// それによってメソッドが特殊化されfalseの部分がJITの最適化時に削除、常にtrueの部分はifが消されるので非常に簡潔なILになる(ここはまぁコンパイラの授業で習った)
+	// https://qiita.com/aka-nse/items/2f45f056262d2d5c6df7#comment-a8e1c1c3e9e7a0208068
+	// 実際に測ったらUnsafe.Asを使わないas キャストを使ってるのに2倍近く早かった・・・・
+
+
 	public void Add(int id, IValueOption<float> option)
     {
         this.floatOption.Add(id, option);
@@ -59,52 +68,67 @@ public sealed class OptionManager
         this.allOptionId.Add(id, ValueType.Bool);
     }
 
-    public void Add<SelectionType>(int id, IValueOption<SelectionType> option)
+    public void AddOption<SelectionType>(int id, IValueOption<SelectionType> option)
         where SelectionType :
             struct, IComparable, IConvertible,
             IComparable<SelectionType>, IEquatable<SelectionType>
     {
-        if (option is IValueOption<int> intOption)
-        {
-            Add(id, intOption);
-        }
-        else if (option is IValueOption<bool> boolOption)
-        {
-            Add(id, boolOption);
-        }
-        else if (option is IValueOption<float> floatOption)
-        {
-            Add(id, floatOption);
-        }
-    }
+		if (typeof(SelectionType) == typeof(int))
+		{
+			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<int>>(ref option));
+		}
+		else if (typeof(SelectionType) == typeof(float))
+		{
+			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<float>>(ref option));
+		}
+		else if (typeof(SelectionType) == typeof(bool))
+		{
+			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<bool>>(ref option));
+		}
+		else
+		{
+			throw new ArgumentException("Cannot Add Options");
+		}
+	}
 
     public bool Contains(int id) => this.allOptionId.ContainsKey(id);
 
-    public bool TryGet<T>(int id, out IValueOption<T> option)
+    public bool TryGet<T>(int id, out IValueOption<T>? option)
         where T :
             struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
-        bool result = this.allOptionId.TryGetValue(id, out ValueType type);
         option = null;
+        if (!this.allOptionId.ContainsKey(id)) { return false; }
 
-        if (!result) { return false; }
+		if (typeof(T) == typeof(int))
+		{
+			var intOption = this.intOption.Get(id);
+			option = Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+			return true;
+		}
+		else if (typeof(T) == typeof(float))
+		{
+			var floatOption = this.floatOption.Get(id);
+			option = Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+			return true;
+		}
+		else if(typeof(T) == typeof(bool))
+		{
+			var boolOption = this.boolOption.Get(id);
+			option = Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+			return true;
+		}
+		else
+		{
+			throw new ArgumentException("Cannot Find Options");
+		}
+	}
 
-        return type switch
-        {
-            ValueType.Int => this.intOption.TryGetValue(id, out option),
-            ValueType.Float => this.floatOption.TryGetValue(id, out option),
-            ValueType.Bool => this.boolOption.TryGetValue(id, out option),
-            _ => false
-        };
-    }
-
-    public bool TryGetIOption(int id, out IOptionInfo option)
+    public bool TryGetIOption(int id, out IOptionInfo? option)
     {
-        bool result = this.allOptionId.TryGetValue(id, out ValueType type);
         option = null;
-
-        if (!result) { return false; }
+        if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return false; }
 
         option = type switch
         {
@@ -116,30 +140,42 @@ public sealed class OptionManager
         return true;
     }
 
-    public IValueOption<T> Get<T>(int id, ValueType type)
-        where T :
-            struct, IComparable, IConvertible,
-            IComparable<T>, IEquatable<T>
-
-        => type switch
-        {
-            ValueType.Int   => this.intOption.Get(id) as IValueOption<T>,
-            ValueType.Float => this.floatOption.Get(id) as IValueOption<T>,
-            ValueType.Bool  => this.boolOption.Get(id) as IValueOption<T>,
-            _ => null
-        };
+	public IValueOption<T> Get<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
+		if (typeof(T) == typeof(int))
+		{
+			var intOption = this.intOption.Get(id);
+			return Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+		}
+		else if (typeof(T) == typeof(float))
+		{
+			var floatOption = this.floatOption.Get(id);
+			return Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+		}
+		else if (typeof(T) == typeof(bool))
+		{
+			var boolOption = this.boolOption.Get(id);
+			return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+		}
+		else
+		{
+			throw new ArgumentException("Cannot Find Options");
+		}
+	}
 
     public IEnumerable<KeyValuePair<int, IOptionInfo>> GetKeyValueAllIOptions()
     {
         foreach (var (id, key) in this.allOptionId)
         {
-
             IOptionInfo info = key switch
             {
                 ValueType.Int => this.intOption.Get(id),
                 ValueType.Float => this.floatOption.Get(id),
                 ValueType.Bool => this.boolOption.Get(id),
-                _ => null
+                _ => throw new ArgumentException("Invalided Option Id"),
             };
             yield return new KeyValuePair<int, IOptionInfo>(id, info);
         }
@@ -149,13 +185,13 @@ public sealed class OptionManager
     {
         foreach (var (id, key) in this.allOptionId)
         {
-            yield return  key switch
+            yield return key switch
             {
                 ValueType.Int => this.intOption.Get(id),
                 ValueType.Float => this.floatOption.Get(id),
                 ValueType.Bool => this.boolOption.Get(id),
-                _ => null
-            };
+                _ => throw new ArgumentException("Invalided Option Id"),
+			};
         }
     }
 
@@ -165,31 +201,37 @@ public sealed class OptionManager
             ValueType.Int => this.intOption.Get(id),
             ValueType.Float => this.floatOption.Get(id),
             ValueType.Bool => this.boolOption.Get(id),
-            _ => null
-        };
+            _ => throw new ArgumentException("Invalided Option Id"),
+		};
 
     public T GetValue<T>(int id)
         where T :
             struct, IComparable, IConvertible,
             IComparable<T>, IEquatable<T>
     {
-        ValueType type = this.allOptionId[id];
-
-        switch (type)
-        {
-            case ValueType.Int:
-                var intOption = this.intOption.Get(id) as IValueOption<T>;
-                return intOption!.GetValue();
-            case ValueType.Float:
-                var floatOption = this.floatOption.Get(id) as IValueOption<T>;
-                return floatOption!.GetValue();
-            case ValueType.Bool:
-                var boolOption = this.boolOption.Get(id) as IValueOption<T>;
-                return boolOption!.GetValue();
-            default:
-                return default(T);
-        }
-    }
+		if (typeof(T) == typeof(int))
+		{
+			var intOption = this.intOption.Get(id);
+			int intValue = intOption.GetValue();
+			return Unsafe.As<int, T>(ref intValue);
+		}
+		else if (typeof(T) == typeof(float))
+		{
+			var floatOption = this.floatOption.Get(id);
+			float floatValue = floatOption.GetValue();
+			return Unsafe.As<float, T>(ref floatValue);
+		}
+		else if (typeof(T) == typeof(bool))
+		{
+			var boolOption = this.boolOption.Get(id);
+			bool boolValue = boolOption.GetValue();
+			return Unsafe.As<bool, T>(ref boolValue);
+		}
+		else
+		{
+			return default(T);
+		}
+	}
 
 	public void ChangeOptionValue(int id, bool isIncrese)
 	{

@@ -69,18 +69,18 @@ public sealed class Mover :
         {
             this.Console.transform.SetParent(this.parent);
             this.Console.Image.enabled = true;
-            this.Console.transform.position = 
+            this.Console.transform.position =
                 new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
             this.Console = null;
             this.parent = null;
         }
-        
+
         public bool IsValid() => this.Console != null;
     }
 
     private Console targetConsole;
-    
+
     private ConsoleData hasConsole;
 
     private string roleNamePrefix;
@@ -156,7 +156,7 @@ public sealed class Mover :
             Object.Destroy(syncer);
         }
         GameSystem.SetColliderActive(mover.hasConsole.Object, true);
-        
+
         mover.hasConsole.Put(player.GetTruePosition());
     }
 
@@ -251,8 +251,7 @@ public sealed class Mover :
         IOptionInfo parentOps)
     {
         var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter),
-            OptionManager.ValueType.Bool);
+            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
 
         CreateKillerOption(imposterSetting);
 
@@ -267,7 +266,7 @@ public sealed class Mover :
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
         this.hasConsole = new ConsoleData();
-        
+
         this.EnableVentButton = true;
         this.EnableUseButton = true;
     }

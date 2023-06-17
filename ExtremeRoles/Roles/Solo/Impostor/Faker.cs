@@ -11,6 +11,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using Innersloth.Assets;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -84,7 +85,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
                     this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 
-            DataManager.Settings.Accessibility.OnChangedEvent += 
+            DataManager.Settings.Accessibility.OnChangedEvent +=
                 (Il2CppSystem.Action)SwitchColorName;
 
             decorateDummy(cosmetics, cosmicInfo);
@@ -170,12 +171,13 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
                 Object.Destroy(emptyPet.gameObject);
             }
             string petId = cosmicInfo.OutfitInfo.PetId;
-            if (petId != PetData.EmptyId)
+            if (petId != PetData.EmptyId &&
+				CachedShipStatus.Instance.CosmeticsCache.pets.TryGetValue(
+					petId, out var targetPet) &&
+				targetPet != null)
             {
-                PetBehaviour pet = Object.Instantiate(
-                    FastDestroyableSingleton<HatManager>.Instance.GetPetById(
-                        petId).viewData.viewData,
-                    this.body.transform);
+				PetBehaviour pet = Object.Instantiate(
+					targetPet.GetAsset(), this.body.transform);
                 pet.SetColor(colorId);
                 pet.transform.localPosition =
                     Vector2.zero + (
@@ -228,7 +230,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 
             nameObj.transform.localScale = player.gameObject.transform.localScale;
             nameObj.transform.localPosition = baseObject.transform.localPosition;
-            nameObj.transform.localPosition -= new Vector3(0.0f, 0.3f, 0.0f); 
+            nameObj.transform.localPosition -= new Vector3(0.0f, 0.3f, 0.0f);
 
             TextMeshPro nameText = nameObj.transform.FindChild(
                 nameTextObjName).GetComponent<TextMeshPro>();
@@ -347,7 +349,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
                 return;
         }
 
-        ExtremeRolesPlugin.ShipState.AddMeetingResetObject(fake);            
+        ExtremeRolesPlugin.ShipState.AddMeetingResetObject(fake);
     }
 
     public void CreateAbility()

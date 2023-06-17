@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using HarmonyLib;
 
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using Innersloth.Assets;
+
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GhostRoles;
@@ -22,33 +24,25 @@ namespace ExtremeRoles.Patches.Meeting;
 public static class NamePlateHelper
 {
 	public static bool NameplateChange = true;
-	private static Sprite blankNameplate = null;
-
-	private const string blankNamePlateId = "nameplate_NoPlate";
 
 	public static void UpdateNameplate(
 		PlayerVoteArea pva, byte playerId = byte.MaxValue)
 	{
+		var playerInfo = GameData.Instance.GetPlayerById(
+			playerId != byte.MaxValue ?
+			playerId : pva.TargetPlayerId);
+		if (playerInfo == null) { return; }
 
-		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
-
-		blankNameplate = blankNameplate != null ? 
-			blankNameplate :
-                hatMng.GetNamePlateById(
-				blankNamePlateId).viewData.viewData.Image;
-		var nameplate = blankNameplate;
-		if (!ClientOption.Instance.HideNamePlate.Value)
+		var cache = CachedShipStatus.Instance.CosmeticsCache;
+		string id = playerInfo.DefaultOutfit.NamePlateId;
+		if (ClientOption.Instance.HideNamePlate.Value ||
+			!cache.nameplates.TryGetValue(id, out var np) ||
+			np == null)
 		{
-			var player = Helper.Player.GetPlayerControlById(
-				playerId != byte.MaxValue ? 
-				playerId : pva.TargetPlayerId);
-
-			if (!player) { return; }
-
-			string nameplateId = player.CurrentOutfit?.NamePlateId;
-			nameplate = hatMng.GetNamePlateById(nameplateId).viewData.viewData.Image;
+			np = cache.nameplates["nameplate_NoPlate"];
 		}
-		pva.Background.sprite = nameplate;
+		if (np == null) { return; }
+		pva.Background.sprite = np.GetAsset().Image;
 	}
 }
 
@@ -66,14 +60,13 @@ public static class PlayerVoteAreaCosmetics
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
 public static class PlayerVoteAreaSelectPatch
 {
-
-	private static Dictionary<byte, UiElement> meetingAbilityButton = 
+	private static Dictionary<byte, UiElement> meetingAbilityButton =
 		new Dictionary<byte, UiElement>();
 
 	public static void Reset()
-        {
+    {
 		meetingAbilityButton.Clear();
-        }
+    }
 
 	public static bool Prefix(PlayerVoteArea __instance)
 	{
@@ -87,11 +80,11 @@ public static class PlayerVoteAreaSelectPatch
 		if (!state.AssassinMeetingTrigger)
 		{
 			if (buttonRole != null && anotherButtonRole != null)
-                {
+            {
 				return true; // TODO:Can use both role ability
-                }
+            }
 			else if (buttonRole != null && anotherButtonRole == null)
-                {
+            {
 				return meetingButtonAbility(__instance, buttonRole);
 			}
 			else if (buttonRole == null && anotherButtonRole != null)
@@ -139,7 +132,7 @@ public static class PlayerVoteAreaSelectPatch
 						}
 					).WrapToIl2Cpp()
 				);
-		
+
 			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<
 				UiElement>();
 			selectableElements.Add(__instance.CancelButton);
@@ -210,7 +203,7 @@ public static class PlayerVoteAreaSelectPatch
 	{
 		byte target = instance.TargetPlayerId;
 
-            if (instance.AmDead)
+        if (instance.AmDead)
 		{
 			return true;
 		}
@@ -219,9 +212,9 @@ public static class PlayerVoteAreaSelectPatch
 			return false;
 		}
 		if (role.IsBlockMeetingButtonAbility(instance))
-            {
+        {
 			return true;
-            }
+        }
 
 		if (!instance.voteComplete &&
 			instance.Parent.Select((int)target))
@@ -245,7 +238,7 @@ public static class PlayerVoteAreaSelectPatch
                         (UnityEngine.Events.UnityAction)(
                             () => { newAbilitybutton.gameObject.SetActive(false); }));
 
-                    var render = newAbilitybutton.GetComponent<SpriteRenderer>();
+                var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
 				role.ButtonMod(instance, newAbilitybutton);
 				role.SetSprite(render);
@@ -312,7 +305,7 @@ public static class PlayerVoteAreaSetCosmeticsPatch
 	public static void Postfix(PlayerVoteArea __instance)
 	{
 		if (ExtremeGameModeManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
-            {
+        {
 			__instance.LevelNumberText.text = "99";
 		}
 	}
@@ -329,7 +322,6 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(2)] bool isGuardian = false)
 	{
 		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
-
 
 		__instance.AmDead = false;
 		__instance.DidReport = didReport;

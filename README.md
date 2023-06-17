@@ -6,7 +6,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.3.28-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.6.14-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -28,7 +28,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
 * 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
-### 追加役職一覧(Extreme Roles v7.1.2.4時点、今後も追加予定)
+### 追加役職一覧(Extreme Roles v8.0.0.0時点、今後も追加予定)
 #### ホスト役職
 - シオン
 #### 通常役職
@@ -101,14 +101,13 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 
 ## 現在確認されている不具合
-- Extreme Roles MODマネージャーの各種ボタンが動作しない不具合
-  - Extreme Roles v7.1.2.0 SpringNextにて改善したボタンによって引き起こされている不具合であり、開発版にて修正済み
+- タイトル画面等でExtremeVoiceEngineやCreatorModeの有効の表示が小さく分かりにくい(表示上の問題) 
 - ExtremeVoiceEngineをインストールし、シオンを使用している状態でシオンのコマンドを使用すると動作しているのに「不正なコマンドである」と表示されてしまう問題
   - この不具合はExtremeVoiceEngineとExtremeRolesで別々のコマンド処理を実装した関係で発生している表示上の問題であるため動作に一切の影響はありません
 
 ## リリーススケジュール
-- Extreme Roles v7.1.3.0 RoadToExtremeModeアップデート
-  - ExtremeMode実装に向けた準備と一部役職のリワークを行います
+- Extreme Roles v8.1.0.0 RebootSubmargedアップデート
+  - サブマージド復活に伴いサブマージドが再度遊べるように調整します
 
 ## 現在実装検討中の役職及び機能
 - 死亡時役職が持つ固有の情報を表示出来るようにする
@@ -149,7 +148,8 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.4 |
+|  v2023.6.14s/v2023.6.14e  | v8.0.0.0 |
+|  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
 |  v2023.2.28s/v2023.2.28e  | v6.0.0.0 ～ v6.0.0.6 |
 |  v2022.12.08s/v2022.12.08e/v2022.12.14s/v2022.12.14e  |  v5.0.0.0 ～ v5.1.1.1 |
 |  v2022.10.25s/v2022.10.25e  |  v4.0.0.0 ～ v4.0.1.4 |
@@ -215,4 +215,4 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 | ---- | ---- |
 |  英語/English  |  部分的に翻訳済み/Fully Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
-|  简体中文/SChinese  |  完全翻訳済み/Mostly Translated  |
+|  简体中文/SChinese  |   完全翻訳済み/Fully Translated  |

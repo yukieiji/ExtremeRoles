@@ -14,6 +14,7 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
     [HarmonyPatch]
     public static class EOSManagerRunLoginPatch
     {
+
         public static MethodBase TargetMethod()
         {
             var type = typeof(EOSManager).GetNestedTypes(AccessTools.all).FirstOrDefault(
@@ -54,7 +55,11 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
 
         public static bool Prefix(EOSManager __instance)
         {
-            new DestroyableSingleton<EOSManager>(__instance.Pointer).Awake();
+			DestroyableSingleton<EOSManager>._instance = __instance;
+			if (__instance.DontDestroy)
+			{
+				UnityEngine.Object.DontDestroyOnLoad(__instance.gameObject);
+			}
 
             __instance.platformInitialized = true;
 

@@ -164,15 +164,17 @@ public static class ExileControllerBeginePatch
                     break;
             }
 
-            instance.Player.UpdateFromEitherPlayerDataOrCache(
-                exiled, PlayerOutfitType.Default, PlayerMaterial.MaskType.Exile, false);
-            instance.Player.ToggleName(false);
+			instance.Player.UpdateFromEitherPlayerDataOrCache(
+				exiled, PlayerOutfitType.Default,
+				PlayerMaterial.MaskType.Exile, false, (Il2CppSystem.Action)(() =>
+			{
+				SkinViewData skin = CachedShipStatus.Instance.CosmeticsCache.GetSkin(
+					exiled.Outfits[PlayerOutfitType.Default].SkinId);
+				instance.Player.FixSkinSprite(skin.EjectFrame);
+			}));
+			instance.Player.ToggleName(false);
             instance.Player.SetCustomHatPosition(instance.exileHatPosition);
             instance.Player.SetCustomVisorPosition(instance.exileVisorPosition);
-
-            SkinViewData skin = ShipStatus.Instance.CosmeticsCache.GetSkin(
-                exiled.Outfits[PlayerOutfitType.Default].SkinId);
-            instance.Player.FixSkinSprite(skin.EjectFrame);
         }
         else
         {

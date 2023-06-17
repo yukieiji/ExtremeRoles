@@ -13,9 +13,10 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         }
         public void ClearMeetingResetObject()
         {
-            foreach (IMeetingResetObject clerObject in this.resetObject)
+            foreach (var clerObject in this.resetObject)
             {
-                clerObject?.Clear();
+				if (clerObject == null) { continue; }
+                clerObject.Clear();
             }
             this.resetObject.Clear();
         }
