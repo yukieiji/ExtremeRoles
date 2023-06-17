@@ -32,7 +32,6 @@ public static class MainMenuManagerStartPatch
 			(UnityAction)(() => Logging.BackupCurrentLog()));
 
 		var leftButtonAnchor = new GameObject("LeftModButton");
-		// ExitButton => BottomButtonBounds => Main Buttons => LeftPanel => Aspect Scaler
 		leftButtonAnchor.transform.parent = __instance.mainMenuUI.transform;
 		leftButtonAnchor.SetActive(true);
 		leftButtonAnchor.layer = __instance.gameObject.layer;
