@@ -78,7 +78,7 @@ public static class PlayerControlAwakePatch
     }
 }
 
-// 死人のペットが普通に見えるバグ修正
+// 死人のペットが普通に見えるバグ修正、もうペットだけ消す
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
 public static class PlayerControlDiePatch
 {
@@ -88,7 +88,7 @@ public static class PlayerControlDiePatch
 		if (__instance.Data.IsDead &&
 			__instance.cosmetics.CurrentPet != null)
 		{
-			__instance.cosmetics.CurrentPet.gameObject.layer = LayerMask.NameToLayer("Ghost");
+			__instance.cosmetics.currentPet.gameObject.SetActive(false);
 		}
 	}
 }
@@ -1109,11 +1109,12 @@ public static class PlayerControlRevivePatch
 
         ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
 
-		// 外していたレイヤーマスクをもとに戻しておく
+		// 消したペットをもとに戻しておく
 		if (!__instance.Data.IsDead &&
 			__instance.cosmetics.CurrentPet != null)
 		{
-			__instance.cosmetics.CurrentPet.gameObject.layer = LayerMask.NameToLayer("Players");
+			__instance.cosmetics.currentPet.gameObject.SetActive(true);
+			__instance.cosmetics.currentPet.SetIdle();
 		}
 
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
