@@ -48,8 +48,7 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 
 		// 0:オフ、1:オン
 		allOptions.Get<bool>(GetRoleOptionId(
-			CombinationRoleCommonOption.IsMultiAssign),
-			OptionManager.ValueType.Bool).UpdateSelection(1);
+			CombinationRoleCommonOption.IsMultiAssign)).UpdateSelection(1);
 
 		if (allOptions.Contains(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
         {

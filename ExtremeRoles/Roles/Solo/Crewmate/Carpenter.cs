@@ -42,7 +42,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         private Func<bool> abilityCheck;
         private Action updateMapObj;
         private Func<bool> ventRemoveModeCheck;
-        
+
         private int ventRemoveScrewNum;
         private int cameraSetScrewNum;
 
@@ -85,7 +85,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         public override void AbilityOff()
         {
             this.AbilityCount = this.isVentRemoveMode ?
-                this.AbilityCount - this.ventRemoveScrewNum : 
+                this.AbilityCount - this.ventRemoveScrewNum :
                 this.AbilityCount - this.cameraSetScrewNum;
             updateAbilityCountText();
             this.updateMapObj.Invoke();
@@ -109,7 +109,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         public override bool IsCanAbilityActiving() => this.abilityCheck.Invoke();
 
         public override bool IsUse() =>
-            this.canUse.Invoke() && 
+            this.canUse.Invoke() &&
             this.AbilityCount > 0 && screwCheck();
 
         public override bool TryUseAbility(
@@ -188,7 +188,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.abilityButton;
         set
         {
@@ -399,7 +399,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
                 newName = StringNames.ViewingDeck;
                 break;
             case SystemTypes.HallOfPortraits:
-                newName = StringNames.HallOfPortraits; 
+                newName = StringNames.HallOfPortraits;
                 break;
             case SystemTypes.CargoBay:
                 newName = StringNames.CargoBay;
@@ -543,8 +543,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
             var ventilationSystem = CachedShipStatus.Systems[SystemTypes.Ventilation].TryCast<VentilationSystem>();
 
-            if (!PlayerControl.LocalPlayer.Data.IsDead && 
-                ventilationSystem != null && 
+            if (!PlayerControl.LocalPlayer.Data.IsDead &&
+                ventilationSystem != null &&
                 ventilationSystem.IsImpostorInsideVent(this.targetVent.Id))
             {
                 VentilationSystem.Update(VentilationSystem.Operation.BootImpostors, this.targetVent.Id);
@@ -555,16 +555,16 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         return true;
     }
 
-    public bool IsAbilityUse() => 
+    public bool IsAbilityUse() =>
         this.IsAwake &&
-        this.IsCommonUse() && 
+        this.IsCommonUse() &&
         !(GameOptionsManager.Instance.CurrentGameOptions.GetByte(
             ByteOptionNames.MapId) == 1 && this.targetVent == null) &&
-        !(this.targetVent == null && 
-            ExtremeRolesPlugin.Compat.IsModMap && 
+        !(this.targetVent == null &&
+            ExtremeRolesPlugin.Compat.IsModMap &&
             !ExtremeRolesPlugin.Compat.ModMap.CanPlaceCamera);
 
-    public bool IsAbilityCheck() => 
+    public bool IsAbilityCheck() =>
         this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
     public bool IsVentMode()
@@ -576,7 +576,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         if (ship == null || !ship.enabled) { return false; }
 
         Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
-        
+
         foreach (Vent vent in ship.AllVents)
         {
             if (vent == null) { continue; }
@@ -636,7 +636,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     public void ResetOnMeetingStart()
     {
-        return;     
+        return;
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -727,9 +727,9 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         this.targetVent = null;
         this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(CarpenterOption.AwakeTaskGage)) / 100.0f;
-        
+
         this.awakeHasOtherVision = this.HasOtherVision;
-        
+
         if (this.awakeTaskGage <= 0.0f)
         {
             this.awakeRole = true;
@@ -769,10 +769,10 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             CarpenterOption.SetCameraStopTime,
             2.5f, 1.0f, 5.0f, 0.5f,
             parentOps, format: OptionUnit.Second);
-        ((IntCustomOption)OptionManager.Instance.Get<int>( 
+        ((IntCustomOption)OptionManager.Instance.Get<int>(
             GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCount),
-            OptionManager.ValueType.Int)).SetOptionUnit(OptionUnit.ScrewNum);
+                RoleAbilityCommonOption.AbilityCount))
+			).SetOptionUnit(OptionUnit.ScrewNum);
     }
 
     private void abilityInit()

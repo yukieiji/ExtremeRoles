@@ -25,10 +25,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.Mods;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Patches;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Hypnotist : 
+public sealed class Hypnotist :
     SingleRoleBase,
     IRoleAbility,
     IRoleAwake<RoleTypes>,
@@ -335,7 +336,7 @@ public sealed class Hypnotist :
     {
         updateAwakeCheck(exiledPlayer);
 
-        if (!this.isAwake &&
+		if (!this.isAwake &&
             this.canAwakeNow &&
             this.killCount >= this.awakeKillCount)
         {
@@ -392,7 +393,7 @@ public sealed class Hypnotist :
     public void Update(PlayerControl rolePlayer)
     {
         // 追放中は処理をブロックする
-        if (rolePlayer == null || 
+        if (rolePlayer == null ||
             ExileController.Instance) { return; }
 
         if (!this.canAwakeNow)
@@ -723,7 +724,7 @@ public sealed class Hypnotist :
             }
         }
         else
-        { 
+        {
             switch (mapId)
             {
                 case 0:
@@ -751,7 +752,7 @@ public sealed class Hypnotist :
         JToken json, int redNum)
     {
         JArray jsonRedPos = json.Get<JArray>("Red");
-        
+
         List<Vector3> redPos = new List<Vector3>();
         for (int i = 0; i < jsonRedPos.Count; ++i)
         {
@@ -873,7 +874,7 @@ public sealed class Hypnotist :
             if (this.addedPos.Contains(pos))
             {
                 ++checkIndex;
-                continue; 
+                continue;
             }
 
             GameObject obj = new GameObject("RedAbilityPart");
@@ -905,14 +906,16 @@ public sealed class Hypnotist :
 
         GameData gameData = GameData.Instance;
 
-        if ((
-                this.awakeCheckImpNum >= impNum ||
-                this.awakeCheckTaskGage <=
-                    (gameData.CompletedTasks / gameData.TotalTasks)
-            ))
-        {
-            this.canAwakeNow = true;
-        }
+		float compTask = gameData.CompletedTasks;
+		float totalTask = gameData.TotalTasks;
+
+		this.canAwakeNow = (
+			this.awakeCheckImpNum >= impNum &&
+			(
+				GameDataRecomputeTaskCountsPatch.IsDisableTaskWin ||
+				this.awakeCheckTaskGage <= ((float)compTask / (float)totalTask)
+			)
+		);
     }
 
     private static int computeRedPartNum(Type[] interfaces)
@@ -962,7 +965,7 @@ public sealed class Hypnotist :
     }
 }
 
-public sealed class Doll : 
+public sealed class Doll :
     SingleRoleBase,
     IRoleAbility,
     IRoleUpdate,
@@ -977,7 +980,7 @@ public sealed class Doll :
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.crakingButton;
         set
         {
@@ -1055,8 +1058,8 @@ public sealed class Doll :
             showText(string.Format(
                 Translation.GetString("FeatAccess"),
                 consoleName));
-            this.accessModule = 
-                this.accessModule == string.Empty ? 
+            this.accessModule =
+                this.accessModule == string.Empty ?
                 consoleName : $"{this.accessModule}, {consoleName}";
         }
     }
@@ -1083,7 +1086,7 @@ public sealed class Doll :
             this.nextUseAbilityType = addType;
         }
         this.canUseCrakingModule.Add(addType);
-        
+
         if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
             string consoleName = Translation.GetString(consoleType.ToString());
@@ -1283,7 +1286,7 @@ public sealed class Doll :
                 rolePlayer.PlayerId, 0);
         }
 
-        if (this.canUseCrakingModule.Count == 0 && 
+        if (this.canUseCrakingModule.Count == 0 &&
             this.Button != null)
         {
             this.Button.SetButtonShow(false);

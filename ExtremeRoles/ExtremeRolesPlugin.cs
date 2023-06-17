@@ -53,7 +53,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
         Instance = this;
 
         OptionCreator.Create();
-        CustomRegion.Update();
 
         Harmony.PatchAll();
 

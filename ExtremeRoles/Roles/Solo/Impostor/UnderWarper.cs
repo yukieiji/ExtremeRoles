@@ -17,7 +17,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class UnderWarper : 
+public sealed class UnderWarper :
     SingleRoleBase,
     IRoleAwake<RoleTypes>,
     IRoleResetMeeting,
@@ -62,16 +62,6 @@ public sealed class UnderWarper :
     private bool isAwakedHasOtherKillCool;
     private bool isAwakedHasOtherKillRange;
 
-    private const string ventInfoJson =
-        "ExtremeRoles.Resources.JsonData.UnderWarperVentInfo.json";
-
-    private const string skeldKey = "Skeld";
-    private const string polusKey = "Polus";
-    private const string airShipKey = "AirShip";
-    private const string submergedKey = "Submerged";
-
-    private Dictionary<int, Vent> cachedVent;
-
     public UnderWarper() : base(
         ExtremeRoleId.UnderWarper,
         ExtremeRoleType.Impostor,
@@ -86,7 +76,7 @@ public sealed class UnderWarper :
         PlayerControl targetPlayer = Player.GetPlayerControlById(playerId);
         Vent vent = CachedShipStatus.Instance.AllVents.First(
             (Vent v) => v.Id == ventId);
-        
+
         if (targetPlayer == null || vent == null) { return; }
 
         if (isEnter)
@@ -131,7 +121,7 @@ public sealed class UnderWarper :
             Vent.currentVent = vent;
             ConsoleJoystick.SetMode_Vent();
         }
-        
+
         targetPlayer.moveable = false;
         targetPlayer.NetTransform.SnapTo(vent.transform.position + vent.Offset);
         targetPlayer.cosmetics.AnimateSkinIdle();
@@ -140,7 +130,7 @@ public sealed class UnderWarper :
         targetPlayer.currentRoleAnimations.ForEach(
             (Il2CppSystem.Action<RoleEffectAnimation>)(
                 (RoleEffectAnimation an) =>
-                { 
+                {
                     an.ToggleRenderer(false);
                 })
             );
@@ -195,15 +185,9 @@ public sealed class UnderWarper :
 
     public void IntroEndSetUp()
     {
-        this.cachedVent = new Dictionary<int, Vent>();
-        foreach (Vent vent in CachedShipStatus.Instance.AllVents)
-        {
-            this.cachedVent.Add(vent.Id, vent);
-        }
-
         if (this.isVentLink)
         {
-            this.relinkMapVent();
+			GameSystem.RelinkVent();
         }
     }
 
@@ -218,8 +202,8 @@ public sealed class UnderWarper :
             this.killCount >= this.ventLinkKillCout)
         {
             this.isVentLink = true;
-            relinkMapVent();
-        }
+			GameSystem.RelinkVent();
+		}
         if (!this.isNoVentAnime &&
             this.killCount >= this.noVentAnimeKillCout)
         {
@@ -312,7 +296,7 @@ public sealed class UnderWarper :
     public override bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
-        if (!this.isAwake || 
+        if (!this.isAwake ||
             !this.isVentLink ||
             !this.isNoVentAnime)
         {
@@ -393,84 +377,6 @@ public sealed class UnderWarper :
         if (this.noVentAnimeKillCout <= 0)
         {
             this.isNoVentAnime = true;
-        }
-    }
-
-    private void relinkMapVent()
-    {
-        JObject linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
-
-        string ventKey;
-        byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
-
-        if (ExtremeRolesPlugin.Compat.IsModMap)
-        {
-            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
-            {
-                ventKey = submergedKey;
-            }
-            else
-            {
-                return;
-            }
-        }
-        else
-        {
-            switch (mapId)
-            {
-                case 0:
-                    ventKey = skeldKey;
-                    break;
-                case 2:
-                    ventKey = polusKey;
-                    break;
-                case 4:
-                    ventKey = airShipKey;
-                    break;
-                default:
-                    return;
-            }
-        }
-
-        JArray linkInfo = linkInfoJson.Get<JArray>(ventKey);
-        
-        for (int i = 0; i < linkInfo.Count; ++i )
-        {
-            JArray ventLinkedId = linkInfo.Get<JArray>(i);
-
-            if (this.cachedVent.TryGetValue((int)ventLinkedId[0], out Vent from) &&
-                this.cachedVent.TryGetValue((int)ventLinkedId[1], out Vent target))
-            {
-                linkVent(from, target);
-            }
-        }
-    }
-
-    private static void linkVent(Vent from, Vent target)
-    {
-        if (from == null || target == null) { return; }
-
-        linkVentToEmptyTarget(from, target);
-        linkVentToEmptyTarget(target, from);
-    }
-
-    private static void linkVentToEmptyTarget(Vent from, Vent target)
-    {
-        if (from.Right == null)
-        {
-            from.Right = target;
-        }
-        else if (from.Center == null)
-        {
-            from.Center = target;
-        }
-        else if (from.Left == null)
-        {
-            from.Left = target;
-        }
-        else
-        {
-            ExtremeRolesPlugin.Logger.LogInfo("Vent Link fail!!");
         }
     }
 }

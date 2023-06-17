@@ -14,7 +14,7 @@ namespace ExtremeRoles.Patches.Button;
 [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
 public static class KillButtonDoClickPatch
 {
-    
+
     public static bool Prefix(KillButton __instance)
     {
         if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
@@ -22,11 +22,11 @@ public static class KillButtonDoClickPatch
         PlayerControl killer = CachedPlayerControl.LocalPlayer;
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-        if (__instance.isActiveAndEnabled &&
+        if (__instance.enabled &&
             __instance.currentTarget &&
             !__instance.isCoolingDown &&
             !killer.Data.IsDead &&
-            killer.CanMove && 
+            killer.CanMove &&
             role.CanKill())
         {
             PlayerControl target = __instance.currentTarget;
@@ -77,7 +77,7 @@ public static class KillButtonDoClickPatch
             }
 
             var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>();
-            
+
             excuteKill(
                 __instance, killer, target,
                 lastWolf == null || !lastWolf.IsAwake);

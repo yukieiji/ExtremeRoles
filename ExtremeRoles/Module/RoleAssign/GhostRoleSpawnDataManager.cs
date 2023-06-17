@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
-public sealed class GhostRoleSpawnDataManager : 
+public sealed class GhostRoleSpawnDataManager :
     NullableSingleton<GhostRoleSpawnDataManager>,
     ISpawnDataManager
 {
@@ -65,15 +65,14 @@ public sealed class GhostRoleSpawnDataManager :
         var allOption = OptionManager.Instance;
         var tmpUseData = new Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>>();
 
-        foreach (ExtremeGhostRoleId roleId in 
+        foreach (ExtremeGhostRoleId roleId in
             ExtremeGameModeManager.Instance.RoleSelector.UseGhostRoleId)
         {
             var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
             int spawnRate = ISpawnDataManager.ComputePercentage(
                 allOption.Get<int>(
-                    role.GetRoleOptionId(RoleCommonOption.SpawnRate),
-                    OptionManager.ValueType.Int));
+                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)));
             int weight = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.AssignWeight));
             int roleNum = allOption.GetValue<int>(
@@ -117,7 +116,7 @@ public sealed class GhostRoleSpawnDataManager :
         }
     }
 
-    public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) => 
+    public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) =>
         this.combRole[roleId];
 
     public int GetGlobalSpawnLimit(ExtremeRoleType team)

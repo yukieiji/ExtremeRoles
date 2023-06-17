@@ -36,8 +36,9 @@ public sealed class SimpleButton : MonoBehaviour
     public TextMeshPro Text { get; private set; }
     public Button.ButtonClickedEvent ClickedEvent { get; set; }
 
-    private Color defaultImgColor;
-    private Color defaultTextColor;
+	public Color DefaultImgColor { get; set; }
+	public Color DefaultTextColor { get; set; }
+
     private Color overColor = Color.green;
 
     public void Awake()
@@ -47,14 +48,14 @@ public sealed class SimpleButton : MonoBehaviour
 
         this.ClickedEvent = new Button.ButtonClickedEvent();
 
-        this.defaultImgColor = this.Image.color;
-        this.defaultTextColor = this.Text.color;
+        this.DefaultImgColor = this.Image.color;
+        this.DefaultTextColor = this.Text.color;
     }
 
     public void OnMouseDown()
     {
-        this.Image.color = defaultImgColor;
-        this.Text.color = defaultTextColor;
+        this.Image.color = DefaultImgColor;
+        this.Text.color = DefaultTextColor;
 
         if (this.ClickedEvent != null)
         {
@@ -64,8 +65,8 @@ public sealed class SimpleButton : MonoBehaviour
 
     public void OnMouseExit()
     {
-        this.Image.color = defaultImgColor;
-        this.Text.color = defaultTextColor;
+        this.Image.color = DefaultImgColor;
+        this.Text.color = DefaultTextColor;
     }
 
     public void OnMouseOver()

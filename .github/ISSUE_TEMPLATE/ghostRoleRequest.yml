@@ -1,0 +1,47 @@
+name: "幽霊役職追加要求/New GhostRole Request"
+description: "新しい幽霊役職追加用のテンプレート/Template of New GhostRole Request"
+title: "[陣営/Team] : 幽霊役職名/RoleName (このカッコ内に任意で役職の説明を1文で)"
+labels:
+  - "新幽霊役職/New Ghost Role"
+  - "提案/Suggestion"
+  - "未確認/Unconfirmed"
+body:
+  - type: markdown
+    attributes:
+      value: "新しく実装して欲しい幽霊役職の詳細を記載して下さい/Please tell me detail that you want new role<br>幽霊役職の基礎仕様等はWikiのこのページを確認して下さい URL:https://github.com/yukieiji/ExtremeRoles/wiki/%E3%82%B4%E3%83%BC%E3%82%B9%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB"
+  - type: input
+    attributes:
+      label: "幽霊役職名 / Role Name"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "幽霊役職の色 / Role color"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "幽霊役職の説明 / Role description"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "幽霊役職の能力 / Role ability"
+      placeholder: "第三陣営以外は能力に関しての説明だけではなく、その能力の発動コストやリスク等も記載して下さい / Except for the third team, please include not only a description of the ability, but also the cost and risk of activating that ability."
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "死亡前の役職 / Role befor Dead"
+  - type: textarea
+    attributes:
+      label: "他陣営への影響 / Effect on other teams"
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: "陣営 / Team"
+      options:
+        - label: クルー/Crewmate
+        - label: インポスター/Impostor
+        - label: ニュートラル/Neutral

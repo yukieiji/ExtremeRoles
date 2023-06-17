@@ -10,6 +10,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Resources;
 
@@ -45,22 +46,22 @@ public static class Path
     public const string FencerCounter = "ExtremeRoles.Resources.Counter.png";
     public const string CurseMakerCurse = "ExtremeRoles.Resources.Curse.png";
     public const string OpenerOpenDoor = "ExtremeRoles.Resources.OpenDoor.png";
-    public const string DetectiveApprenticeEmergencyMeeting = 
+    public const string DetectiveApprenticeEmergencyMeeting =
         "ExtremeRoles.Resources.EmergencyMeeting.png";
     public const string CarpenterSetCamera = "ExtremeRoles.Resources.SetCamera.png";
     public const string CarpenterVentSeal = "ExtremeRoles.Resources.VentSeal.png";
     public const string CaptainSpecialVote = "ExtremeRoles.Resources.SpecialVote.png";
-    public const string CaptainSpecialVoteCheck = 
+    public const string CaptainSpecialVoteCheck =
         "ExtremeRoles.Resources.SpecialVoteCheck.png";
     public const string PhotographerPhotoCamera = "ExtremeRoles.Resources.PhotoCamera.png";
     public const string DelusionerDeflectDamage = "ExtremeRoles.Resources.DeflectDamage.png";
     public const string TeleporterPortalBase =
         "ExtremeRoles.Resources.TeleporterPortalBase.png";
-    public const string TeleporterNoneActivatePortal = 
+    public const string TeleporterNoneActivatePortal =
         "ExtremeRoles.Resources.TeleportNoneActivatePortal.png";
     public const string TeleporterFirstPortal =
         "ExtremeRoles.Resources.TeleporterFirstPortal.png";
-    public const string TeleporterSecondPortal = 
+    public const string TeleporterSecondPortal =
         "ExtremeRoles.Resources.TeleporterSecondPortal.png";
 
     public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
@@ -74,13 +75,14 @@ public static class Path
     public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
     public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
     public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
-    public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
-    public const string MeryCustomVentAnime = 
+	public const string SlaveDriverHarassment = "ExtremeRoles.Resources.Harassment.png";
+	public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
+    public const string MeryCustomVentAnime =
         "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
     public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
     public const string LastWolfLightOff = "ExtremeRoles.Resources.LightOff.png";
     public const string HypnotistHypnosis = "ExtremeRoles.Resources.Hypnosis.png";
-    public const string CommanderAttackCommand = 
+    public const string CommanderAttackCommand =
         "ExtremeRoles.Resources.AttackCommand.png";
     public const string HypnotistRedAbilityPart =
         "ExtremeRoles.Resources.RedAbilityPart.png";
@@ -90,12 +92,12 @@ public static class Path
         "ExtremeRoles.Resources.GrayAbilityPart.png";
     public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
     public const string ZombieMagicCircle = "ExtremeRoles.Resources.ZombieMagicCircle.png";
-    public const string ZombieMagicCircleButton = 
+    public const string ZombieMagicCircleButton =
         "ExtremeRoles.Resources.ZombieMagicCircleButton.png";
     public const string ZombieMagicCircleVideo = "zombiemagiccircle";
     public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
 
-    public const string VigilanteEmergencyCall = 
+    public const string VigilanteEmergencyCall =
         "ExtremeRoles.Resources.EmergencyCall.png";
     public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
     public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
@@ -104,7 +106,9 @@ public static class Path
     public const string EaterDeadBodyEat = "ExtremeRoles.Resources.DeadBodyEat.png";
     public const string EaterEatKill = "ExtremeRoles.Resources.EatKil.png";
     public const string MinerSetMine = "ExtremeRoles.Resources.SetMine.png";
-    public const string TotocalcioBetPlayer = "ExtremeRoles.Resources.BedPlayer.png";
+	public const string MinerActiveMineImg = "ExtremeRoles.Resources.MinerMineActive.png";
+	public const string MinerDeactivateMineImg = "ExtremeRoles.Resources.MinerMineDeactive.png";
+	public const string TotocalcioBetPlayer = "ExtremeRoles.Resources.BedPlayer.png";
     public const string QueenCharm = "ExtremeRoles.Resources.Charm.png";
     public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
     public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
@@ -128,7 +132,21 @@ public static class Loader
     private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
     private static Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
-    public static Sprite CreateSpriteFromResources(
+	public static SimpleButton CreateSimpleButton(Transform parent)
+	{
+		GameObject buuttonObj = UnityObject.Instantiate(
+		   GetUnityObjectFromResources<GameObject>(
+			   "ExtremeRoles.Resources.Asset.simplebutton.asset",
+			   "assets/common/simplebutton.prefab"),
+		   parent);
+		if (buuttonObj == null)
+		{
+			return null;
+		}
+		return buuttonObj.GetComponent<SimpleButton>();
+	}
+
+	public static Sprite CreateSpriteFromResources(
         string path, float pixelsPerUnit=115f)
     {
         try
@@ -155,19 +173,19 @@ public static class Loader
         return null;
     }
 
-        public static T GetUnityObjectFromResources<T>(
-            string bundleName, string objName) where T : UnityObject
-        {
-            AssetBundle bundle = getAssetBundleFromAssembly(
-                bundleName, Assembly.GetCallingAssembly());
+    public static T GetUnityObjectFromResources<T>(
+        string bundleName, string objName) where T : UnityObject
+    {
+        AssetBundle bundle = getAssetBundleFromAssembly(
+            bundleName, Assembly.GetCallingAssembly());
 
-            var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
-            if (!obj)
-            {
-                return null;
-            }
-            return obj.TryCast<T>();
+        var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
+        if (!obj)
+        {
+            return null;
         }
+        return obj.TryCast<T>();
+    }
 
     public static void LoadCommonAsset()
     {

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 using TMPro;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Compat;
 
@@ -23,30 +23,26 @@ internal static class CompatModMenu
 
     private const string titleName = "compatModMenu";
 
-    private static Dictionary<CompatModType,(TextMeshPro, Dictionary<ButtonType, MenuButton>)> compatModMenuLine = new Dictionary<
-        CompatModType, (TextMeshPro, Dictionary<ButtonType, MenuButton>)>();
+    private static Dictionary<CompatModType,(TextMeshPro, Dictionary<ButtonType, SimpleButton>)> compatModMenuLine = new Dictionary<
+        CompatModType, (TextMeshPro, Dictionary<ButtonType, SimpleButton>)>();
 
-    public static void CreateMenuButton()
+    public static void CreateMenuButton(SimpleButton template, Transform parent)
     {
         compatModMenuLine.Clear();
-        GameObject buttonTemplate = GameObject.Find("AnnounceButton");
-        GameObject compatModMenuButton = Object.Instantiate<GameObject>(
-            buttonTemplate, buttonTemplate.transform.parent);
-        compatModMenuButton.name = "CompatModMenuButton";
-        compatModMenuButton.transform.SetSiblingIndex(7);
-        PassiveButton compatModButton = compatModMenuButton.GetComponent<PassiveButton>();
-        SpriteRenderer compatModSprite = compatModMenuButton.GetComponent<SpriteRenderer>();
-        compatModSprite.sprite = Resources.Loader.CreateSpriteFromResources(
-            Resources.Path.CompatModMenuImage, 200f);
-        compatModButton.OnClick = new Button.ButtonClickedEvent();
-        compatModButton.OnClick.AddListener((System.Action)(() =>
+
+		var mngButton = Object.Instantiate(
+		   template, parent);
+		mngButton.name = "ExtremeRolesModManagerButton";
+		mngButton.transform.localPosition = new Vector3(0.0f, 1.6f, 0.0f);
+		mngButton.Text.text = Helper.Translation.GetString("compatModMenuButton");
+
+		mngButton.ClickedEvent.AddListener((System.Action)(() =>
         {
             if (!menuBody)
             {
-                initMenu();
+                initMenu(mngButton);
             }
             menuBody.SetActive(true);
-
         }));
     }
 
@@ -69,7 +65,7 @@ internal static class CompatModMenu
 
     }
 
-    private static void initMenu()
+    private static void initMenu(SimpleButton template)
     {
         menuBody = Object.Instantiate(
             FastDestroyableSingleton<EOSManager>.Instance.TimeOutPopup);
@@ -90,14 +86,11 @@ internal static class CompatModMenu
 
         removeUnnecessaryComponent();
         setTransfoms();
-        createCompatModLines();
+        createCompatModLines(template);
     }
 
-    private static void createCompatModLines()
+    private static void createCompatModLines(SimpleButton template)
     {
-        var buttonTemplate = GameObject.Find("ExitGameButton/ExtremeRolesUpdateButton");
-
-        if (buttonTemplate == null) { return; }
 
         string pluginPath = string.Concat(
             Path.GetDirectoryName(Application.dataPath),
@@ -111,7 +104,7 @@ internal static class CompatModMenu
             if (mod == CompatModType.ExtremeSkins ||
                 mod == CompatModType.ExtremeVoiceEngine)
             {
-                createAddonButtons(index, pluginPath, mod, buttonTemplate);
+                createAddonButtons(index, pluginPath, mod, template);
                 ++index;
             }
 
@@ -119,35 +112,34 @@ internal static class CompatModMenu
 
             TextMeshPro modText = createButtonText(modName, index);
 
-            var button = new Dictionary<ButtonType, MenuButton>();
+            var button = new Dictionary<ButtonType, SimpleButton>();
             var (dllName, repoURI) = CompatModManager.ModInfo[mod];
 
             if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod) ||
                 File.Exists($"{pluginPath}{dllName}.dll"))
             {
-				var uninstallButton = createButton(
-                    buttonTemplate, modText,
-					ButtonType.UninstallButton,
-					createUnInstallAction(dllName),
-					new Vector3(1.85f, 0.0f, -5.0f));
+                var uninstallButton = createButton(template, modText);
+                uninstallButton.transform.localPosition = new Vector3(1.85f, 0.0f, -5.0f);
+				uninstallButton.ClickedEvent.AddListener(
+                    createUnInstallAction(dllName));
+                updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
-				var updateButton = createButton(
-					buttonTemplate, modText,
-					ButtonType.UpdateButton,
-					createUpdateAction(mod, dllName, repoURI),
-					new Vector3(0.35f, 0.0f, -5.0f));
+                var updateButton = createButton(template, modText);
+                updateButton.transform.localPosition = new Vector3(0.35f, 0.0f, -5.0f);
+				updateButton.ClickedEvent.AddListener(
+                    createUpdateAction(mod, dllName, repoURI));
+                updateButtonTextAndName(ButtonType.UpdateButton, updateButton);
 
                 button.Add(ButtonType.UninstallButton, uninstallButton);
                 button.Add(ButtonType.UpdateButton, updateButton);
             }
             else
             {
-				var installButton = createButton(
-					buttonTemplate, modText,
-					ButtonType.InstallButton,
-					createInstallAction(dllName, repoURI),
-					new Vector3(1.1f, 0.0f, -5.0f));
-
+                var installButton = createButton(template, modText);
+                installButton.transform.localPosition = new Vector3(1.1f, 0.0f, -5.0f);
+				installButton.ClickedEvent.AddListener(
+                    createInstallAction(dllName, repoURI));
+                updateButtonTextAndName(ButtonType.InstallButton, installButton);
                 button.Add(ButtonType.InstallButton, installButton);
             }
 
@@ -157,24 +149,18 @@ internal static class CompatModMenu
         }
     }
 
-    private static MenuButton createButton(
-        GameObject template,
-		TextMeshPro textParent,
-		ButtonType button,
-		System.Action buttonEvent,
-		Vector3 pos)
+    private static SimpleButton createButton(
+        SimpleButton template, TextMeshPro text)
     {
-        GameObject buttonObj = Object.Instantiate(
-            template, textParent.transform);
-
-		MenuButton menuButton = buttonObj.GetComponent<MenuButton>();
-		menuButton.transform.localPosition = pos;
-		menuButton.AddAction(buttonEvent);
-
-		updateButtonTextAndName(button, menuButton);
-
-		return menuButton;
-	}
+		var button = Object.Instantiate(
+		   template, text.transform);
+		button.name = $"{text.text}Button";
+		button.Scale = new Vector3(0.45f, 0.325f, 1.0f);
+		button.Text.fontSize =
+			button.Text.fontSizeMax =
+			button.Text.fontSizeMin = 0.9f;
+		return button;
+    }
 
     private static void removeUnnecessaryComponent()
     {
@@ -220,50 +206,55 @@ internal static class CompatModMenu
     }
 
     private static void updateButtonTextAndName(
-        ButtonType buttonType, MenuButton button)
+        ButtonType buttonType, SimpleButton button)
     {
         button.name = buttonType.ToString();
-		button.SetText(Helper.Translation.GetString(buttonType.ToString()));
+        updateButtonText(buttonType, button);
+    }
+
+    private static void updateButtonText(ButtonType buttonType, SimpleButton button)
+    {
+		button.Text.text = Helper.Translation.GetString(buttonType.ToString());
     }
 
     private static void createAddonButtons(
         int posIndex,
         string pluginPath,
         CompatModType modType,
-        GameObject buttonTemplate)
+		SimpleButton template)
     {
-
         string addonName = modType.ToString();
 
         TextMeshPro addonText = createButtonText(addonName, posIndex);
 
         if (!File.Exists($"{pluginPath}{addonName}.dll"))
         {
-			var installButton = createButton(
-				buttonTemplate, addonText,
-				ButtonType.InstallButton,
-				createInstallAction(
-					addonName,
-					"https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest"),
-				new Vector3(1.1f, 0.0f, -5.0f));
+            var installButton = createButton(template, addonText);
+            installButton.transform.localPosition = new Vector3(
+                1.1f, 0.0f, -5.0f);
+			installButton.ClickedEvent.AddListener(createInstallAction(
+                addonName,
+                "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest"));
+            updateButtonTextAndName(ButtonType.InstallButton, installButton);
 
             compatModMenuLine.Add(
                 modType,
-                (addonText, new Dictionary<ButtonType, MenuButton>()
-                { {ButtonType.InstallButton, installButton}, }));
+                (addonText, new Dictionary<ButtonType, SimpleButton>()
+                { {ButtonType.UninstallButton, installButton}, }));
 
         }
         else
         {
-			var uninstallButton = createButton(
-				buttonTemplate, addonText,
-				ButtonType.UninstallButton,
-				createUnInstallAction(addonName),
-				new Vector3(1.1f, 0.0f, -5.0f));
+            var uninstallButton = createButton(template, addonText);
+            uninstallButton.transform.localPosition = new Vector3(
+                1.1f, 0.0f, -5.0f);
+			uninstallButton.ClickedEvent.AddListener(
+                createUnInstallAction(addonName));
+            updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
             compatModMenuLine.Add(
                 modType,
-                (addonText, new Dictionary<ButtonType, MenuButton>()
+                (addonText, new Dictionary<ButtonType, SimpleButton>()
                 { {ButtonType.UninstallButton, uninstallButton}, }));
         }
     }

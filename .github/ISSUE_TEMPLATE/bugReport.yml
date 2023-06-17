@@ -1,0 +1,68 @@
+name: "バグレポート/Bug Report"
+description: "MODのバグ報告用テンプレート/Template of mod bugs"
+title: "バグの内容を一言で/The bug in a nutshell"
+labels:
+  - "バグ/Bug"
+  - "未確認/Unconfirmed"
+body:
+  - type: markdown
+    attributes:
+      value: "バグに関する情報を以下の各項目に記載してください / Please provide information about the bug in each of the following fields"
+  - type: textarea
+    attributes:
+      label: "期待される動作 / Your Expectation"
+      placeholder: "どのようなことをやろうとしたのか、そして何が起きたのか、必要であれば画像等を添付してください(その動作を元に再現を行います、これがないと色々と困ります) / What did you try to do, and what did you expect to happen? Attach screenshots if needed.<br><br>1. <br>2. <br>3. <br>4. <br>5. "
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "実際の動作 / The Reality"
+      placeholder: "期待する動作に対して、実際の動作はどうなのか。バグを再現しただけの動画(数分程度)のURLや画像があるとわかりやすいです / How does the actual behavior compare to the expected behavior? (A video URL or image would be helpful for clarification"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "バグ発生時のログやエラー / log when issue occur"
+      placeholder: "バグが発生した瞬間のF8で出力されるログ(log形式かZip形式のファイル)やエラーのメッセージを記載して下さい / Dumped log by F8 at the issue occurs(log or zip)"
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: "## バグが発生した環境"
+  - type: input
+    attributes:
+      label: "Among Usバージョン/ Among Us Version"
+      value: Among Us v
+      description: 右上や左下に表示されているバージョン / Version shown in the upper right corner
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Modバージョン / Mod Version"
+      value: Extreme Roles v
+      description: タイトル画面もしくは設定に表示されているMODバージョン / MOD version shown on the title screen or in the settings
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: "リージョン/Region"
+      description: バグが発生したサーバーリージョン / The region where the bug occurred
+      options:
+        - label: 北アメリア/Noth America
+        - label: 欧州/Europa
+        - label: アジア/Asia
+        - label: カスタム/Custom
+        - label: ExR専用(東京)
+  - type: input
+    attributes:
+      label: "プレイヤー人数/Player Num"
+      placeholder: バグを確認した時のプレイヤーの人数 / Number of players at the time the bug was identified
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "使用したオプション/Use Option"
+      placeholder: "バグが発生したときのオプション設定、設定よりエクスポートしたcsvを添付してください。無い場合は覚えている範囲で記載して下さい / Please attach the option settings when the bug occurs, exported from the settings"
+    validations:
+      required: true
+

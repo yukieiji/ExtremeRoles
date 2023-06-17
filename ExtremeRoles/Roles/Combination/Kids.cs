@@ -224,8 +224,8 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
     }
 
     public ExtremeAbilityButton Button
-    { 
-        get => this.abilityButton; 
+    {
+        get => this.abilityButton;
         set
         {
             this.abilityButton = value;
@@ -265,7 +265,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
     public static void Ability(Kids.AbilityType abilityType, PlayerControl player)
     {
-        Delinquent delinquent = 
+        Delinquent delinquent =
             ExtremeRoleManager.GetSafeCastedRole<Delinquent>(player.PlayerId);
         switch (abilityType)
         {
@@ -406,7 +406,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
         this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(DelinqentOption.Range));
-        
+
         this.RoleAbilityInit();
         if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
         {
@@ -417,7 +417,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
         this.canAssignWisp = true;
     }
-    
+
 }
 
 public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
@@ -486,6 +486,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
                 }
                 RemoveTorch(this.id, this.placedControlId, this.blackOutTime);
                 ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(index);
+				this.timer = float.MaxValue;
             }
         }
 
@@ -496,7 +497,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             int playerNum = CachedPlayerControl.AllPlayerControls.Count;
             int clampedNum = Math.Clamp(num, 0, playerNum);
             ShipStatus ship = CachedShipStatus.Instance;
-            IEnumerable<CachedPlayerControl> target =   
+            IEnumerable<CachedPlayerControl> target =
                 CachedPlayerControl.AllPlayerControls.OrderBy(
                     x => RandomGenerator.Instance.Next()).Take(clampedNum);
 
@@ -650,7 +651,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             if (this.placedTorch.TryGetValue(id, out TorchManager torch))
             {
                 torch.Clear();
-               
+
                 if (this.blackOuter == null)
                 {
                     this.blackOuter = new WispBlackOuter(time);
@@ -681,7 +682,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             int playerNum = 0;
             foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player.IsDead || 
+                if (player.IsDead ||
                     player.Disconnected ||
                     HasTorch(player.PlayerId)) { continue; }
                 ++playerNum;
@@ -692,8 +693,8 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
                 gameControlId = PlayerStatistics.SameNeutralGameControlId;
             }
 
-            this.affectedPlayerNum[gameControlId] = 
-                this.affectedPlayerNum.TryGetValue(gameControlId, out int result) ? 
+            this.affectedPlayerNum[gameControlId] =
+                this.affectedPlayerNum.TryGetValue(gameControlId, out int result) ?
                 result + playerNum : playerNum;
         }
 
@@ -801,7 +802,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public void SetWinPlayerNum(byte rolePlayerId)
     {
-        foreach (GameData.PlayerInfo player in 
+        foreach (GameData.PlayerInfo player in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (player == null ||

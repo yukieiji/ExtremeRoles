@@ -22,7 +22,7 @@ public sealed class LoverManager : FlexibleCombinationRoleManagerBase
 public sealed class Lover : MultiAssignRoleBase
 {
 
-    public enum LoverOption 
+    public enum LoverOption
     {
         IsNeutral,
         BecomNeutral,
@@ -247,8 +247,8 @@ public sealed class Lover : MultiAssignRoleBase
 
         OptionManager.Instance.Get<int>(
             GetManagerOptionId(
-                CombinationRoleCommonOption.AssignsNum),
-            OptionManager.ValueType.Int).SetUpdateOption(deathSetting);
+                CombinationRoleCommonOption.AssignsNum)
+			).SetUpdateOption(deathSetting);
 
     }
 
@@ -348,7 +348,7 @@ public sealed class Lover : MultiAssignRoleBase
         else
         {
             if (alive.Count > limit) { return; }
-            
+
             foreach (byte playerId in alive)
             {
                 var player = Player.GetPlayerControlById(playerId);
@@ -369,7 +369,7 @@ public sealed class Lover : MultiAssignRoleBase
         {
             if (alive.Count != 1) { return; }
             forceReplaceToNeutral(alive[0]);
-        
+
         }
         else
         {
@@ -423,8 +423,8 @@ public sealed class Lover : MultiAssignRoleBase
         foreach(var (playerId, role) in ExtremeRoleManager.GameRole)
         {
             var player = GameData.Instance.GetPlayerById(playerId);
-            if (this.IsSameControlId(role) && 
-                !player.IsDead && 
+            if (this.IsSameControlId(role) &&
+                !player.IsDead &&
                 !player.Disconnected)
             {
                 alive.Add(playerId);

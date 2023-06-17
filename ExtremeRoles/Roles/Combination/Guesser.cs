@@ -26,8 +26,8 @@ public sealed class GuesserManager : FlexibleCombinationRoleManagerBase
 
 }
 
-public sealed class Guesser : 
-    MultiAssignRoleBase, 
+public sealed class Guesser :
+    MultiAssignRoleBase,
     IRoleResetMeeting,
     IRoleMeetingButtonAbility,
     IRoleUpdate
@@ -48,7 +48,7 @@ public sealed class Guesser :
         EvilGuesserOnly,
     }
 
-    public override string RoleName => 
+    public override string RoleName =>
         string.Concat(this.roleNamePrefix, this.RawRoleName);
 
     private bool canGuessNoneRole;
@@ -205,7 +205,7 @@ public sealed class Guesser :
             {
                 add(ExtremeRoleId.Jackal, ExtremeRoleType.Neutral);
                 add(ExtremeRoleId.Sidekick, ExtremeRoleType.Neutral);
-                
+
                 this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Jackal);
                 this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Sidekick);
             }
@@ -215,7 +215,7 @@ public sealed class Guesser :
             {
                 ExtremeRoleType queenTeam = ExtremeRoleType.Neutral;
                 add(ExtremeRoleId.Queen, queenTeam);
-                
+
                 ExtremeRoleId servantId = ExtremeRoleId.Servant;
                 if (this.separetedRoleId[queenTeam].Count > 1)
                 {
@@ -379,13 +379,13 @@ public sealed class Guesser :
     public void GuessAction(GuessBehaviour.RoleInfo roleInfo, byte playerId)
     {
         ExtremeRolesPlugin.Logger.LogDebug($"TargetPlayerId:{playerId}  GuessTo:{roleInfo}");
-        
+
         // まず弾をへらす
         this.bulletNum = this.bulletNum - 1;
         this.curGuessNum = this.curGuessNum + 1;
 
         var targetRole = ExtremeRoleManager.GameRole[playerId];
-        
+
         ExtremeRoleId roleId = targetRole.Id;
         ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
 
@@ -406,16 +406,16 @@ public sealed class Guesser :
                 anotherRoleId = multiRole.AnotherRole.Id;
             }
         }
-        
+
         if ((
-                BodyGuard.IsBlockMeetingKill && 
+                BodyGuard.IsBlockMeetingKill &&
                 BodyGuard.TryGetShiledPlayerId(playerId, out byte _)
             ) || alwaysMissRole.Contains(targetRole.Id))
         {
             missGuess();
         }
         else if (
-            roleInfo.Id == roleId && 
+            roleInfo.Id == roleId &&
             roleInfo.AnothorId == anotherRoleId)
         {
             Player.RpcUncheckMurderPlayer(
@@ -447,7 +447,7 @@ public sealed class Guesser :
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
     {
-        
+
     }
 
     public Action CreateAbilityAction(PlayerVoteArea instance)
@@ -557,8 +557,7 @@ public sealed class Guesser :
         IOptionInfo parentOps)
     {
         var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter),
-            OptionManager.ValueType.Bool);
+            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
         CreateKillerOption(imposterSetting);
 
         CreateBoolOption(

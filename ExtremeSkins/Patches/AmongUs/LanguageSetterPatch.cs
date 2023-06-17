@@ -1,20 +1,22 @@
-﻿using ExtremeSkins.SkinManager;
+﻿using HarmonyLib;
 
-namespace ExtremeSkins.Patches.AmongUs
+using ExtremeSkins.SkinManager;
+
+namespace ExtremeSkins.Patches.AmongUs;
+
+[HarmonyPatch(typeof(LanguageSetter), nameof(LanguageSetter.SetLanguage))]
+public static class LanguageSetterPatch
 {
-    public static class LanguageSetterPatch
+    public static void Postfix()
     {
-        public static void Postfix()
-        {
 #if WITHHAT
-            ExtremeHatManager.UpdateTranslation();
+        ExtremeHatManager.UpdateTranslation();
 #endif
 #if WITHNAMEPLATE
-            ExtremeNamePlateManager.UpdateTranslation();
+        ExtremeNamePlateManager.UpdateTranslation();
 #endif
 #if WITHNAMEPLATE
-            ExtremeVisorManager.UpdateTranslation();
+        ExtremeVisorManager.UpdateTranslation();
 #endif
-        }
     }
 }

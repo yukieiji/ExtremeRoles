@@ -9,13 +9,13 @@ using TMPro;
 using Twitch;
 
 using UnityEngine;
+using UnityEngine.Events;
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
-using MenuButton = ExtremeRoles.Module.CustomMonoBehaviour.MenuButton;
 using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Patches.Manager;
@@ -27,46 +27,38 @@ public static class MainMenuManagerStartPatch
 
     public static void Prefix(MainMenuManager __instance)
     {
+		// Mod ExitButton
+		__instance.quitButton.OnClick.AddListener(
+			(UnityAction)(() => Logging.BackupCurrentLog()));
 
-        var template = GameObject.Find("ExitGameButton");
-        if (template == null) { return; }
+		var leftButtonAnchor = new GameObject("LeftModButton");
+		leftButtonAnchor.transform.parent = __instance.quitButton.transform;
+		leftButtonAnchor.SetActive(true);
+		leftButtonAnchor.layer = __instance.gameObject.layer;
 
-        // Mod ExitButton
-        PassiveButton passiveExitButton = template.GetComponent<PassiveButton>();
-        passiveExitButton.OnClick.AddListener(
-            (UnityEngine.Events.UnityAction)(() => Logging.BackupCurrentLog()));
+		Transform anchorTransform =leftButtonAnchor.transform;
+		anchorTransform.localScale = Vector3.one;
+		anchorTransform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
 
-        // UpdateButton
-        GameObject updateButtonObj = UnityObject.Instantiate(template, template.transform);
-        UnityObject.Destroy(updateButtonObj.GetComponent<AspectPosition>());
-        UnityObject.Destroy(updateButtonObj.GetComponent<ConditionalHide>());
-		UnityObject.Destroy(updateButtonObj.GetComponent<SceneChanger>());
-        UnityObject.Destroy(updateButtonObj.GetComponentInChildren<TextTranslatorTMP>());
+		// UpdateButton
+		var updateButton = createButton(
+			__instance, "ExtremeRolesUpdateButton",
+			Translation.GetString(Translation.GetString("UpdateButton")),
+			1.9f, async () => await Module.Updater.Instance.CheckAndUpdate(),
+			Vector3.zero, anchorTransform);
 
-        MenuButton updateButton = updateButtonObj.AddComponent<MenuButton>();
-        updateButton.name = "ExtremeRolesUpdateButton";
-        updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
-        updateButton.gameObject.SetActive(true);
-        updateButton.AddAction(async () => await Module.Updater.Instance.CheckAndUpdate());
-        updateButton.SetText(Translation.GetString("UpdateButton"));
+		// ModManagerButton
+		Compat.CompatModMenu.CreateMenuButton(updateButton, anchorTransform);
 
-        // DiscordButton
-        MenuButton discordButton = UnityObject.Instantiate(
-            updateButton, template.transform);
-        discordButton.name = "ExtremeRolesDiscordButton";
-        discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
-        discordButton.gameObject.SetActive(true);
-        discordButton.AddAction(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS"));
-        discordButton.SetText("Discord");
+		// DiscordButton
+		var discordButton = createButton(
+			__instance, "ExtremeRolesDiscordButton",
+			"Discord", 2.4f, () => Application.OpenURL("https://discord.gg/UzJcfBYcyS"),
+			new Vector3(0.0f, 0.8f, 0.0f), anchorTransform);
+		discordButton.Image.color = discordButton.Text.color = discordColor;
+		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
 
-        SpriteRenderer buttonSpriteDiscord = discordButton.GetComponent<SpriteRenderer>();
-        buttonSpriteDiscord.color = discordButton.Text.color = discordColor;
-        discordButton.Button.OnMouseOut.AddListener((Action)delegate
-        {
-            buttonSpriteDiscord.color = discordButton.Text.color = discordColor;
-        });
-
-        if (!Module.Updater.Instance.IsInit)
+		if (!Module.Updater.Instance.IsInit)
         {
             TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
             var infoPop = UnityObject.Instantiate(man.TwitchPopup);
@@ -74,7 +66,7 @@ public static class MainMenuManagerStartPatch
             infoPop.TextAreaTMP.enableAutoSizing = false;
             Module.Updater.Instance.InfoPopup = infoPop;
         }
-    }
+	}
 
     public static void Postfix(MainMenuManager __instance)
     {
@@ -90,15 +82,9 @@ public static class MainMenuManagerStartPatch
         }
 #endif
 
-        var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
-        if (amongUsLogo != null)
-        {
-            amongUsLogo.transform.localScale *= 0.9f;
-            amongUsLogo.transform.position += Vector3.up * 0.25f;
-        }
-
         var exrLogo = new GameObject("bannerLogoExtremeRoles");
-        exrLogo.transform.position = Vector3.up;
+		exrLogo.transform.parent = __instance.mainMenuUI.transform;
+		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
         renderer.sprite = Loader.CreateSpriteFromResources(
             Resources.Path.TitleBurner, 300f);
@@ -120,8 +106,29 @@ public static class MainMenuManagerStartPatch
             UnityObject.Destroy(Module.Prefab.Text.GetComponent<TextTranslatorTMP>());
             Module.Prefab.Text.gameObject.SetActive(false);
             UnityObject.DontDestroyOnLoad(Module.Prefab.Text);
-
         }
-        Compat.CompatModMenu.CreateMenuButton();
-    }
+
+		CustomRegion.Update();
+	}
+
+	private static SimpleButton createButton(
+		MainMenuManager instance,
+		string name, string text, float fontSize,
+		Action action, Vector3 pos, Transform parent)
+	{
+		var button = Loader.CreateSimpleButton(parent);
+		button.gameObject.SetActive(true);
+		button.Layer = instance.gameObject.layer;
+		button.Scale = new Vector3(0.5f, 0.5f, 1.0f);
+		button.name = name;
+
+		button.Text.text = text;
+		button.Text.fontSize =
+			button.Text.fontSizeMax =
+			button.Text.fontSizeMin = fontSize;
+		button.ClickedEvent.AddListener((UnityAction)action);
+		button.transform.localPosition = pos;
+
+		return button;
+	}
 }

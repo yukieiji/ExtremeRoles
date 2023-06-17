@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 
+using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -11,35 +12,58 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Miner :
+	SingleRoleBase,
+	IRoleAbility,
+	IRoleUpdate,
+	IRoleSpecialSetUp,
+	IRoleSpecialReset
 {
     public enum MinerOption
     {
-        MineKillRange,
+		LinkingAllVent,
+		MineKillRange,
+		CanShowMine,
+		RolePlayerShowMode,
+		AnotherPlayerShowMode,
+		CanShowNoneActiveAnotherPlayer,
         NoneActiveTime,
         ShowKillLog
     }
+	public enum MinerRpc : byte
+	{
+		SetMine,
+		ActiveMine,
+		RemoveMine,
+	}
+	public enum ShowMode : byte
+	{
+		MineSeeNone,
+		MineSeeOnlySe,
+		MineSeeOnlyImg,
+		MineSeeBoth
+	}
+	public record MineEffectParameter(
+		ShowMode RolePlayerShowMode,
+		ShowMode AnotherPlayerShowMode,
+		bool CanShowNoneActiveAtherPlayer);
 
-    public ExtremeAbilityButton Button
-    { 
-        get => this.setMine;
-        set
-        {
-            this.setMine = value;
-        }
-    }
+    public ExtremeAbilityButton Button { get; set; }
 
-    private ExtremeAbilityButton setMine;
-
-    private List<Vector2> mines;
+	private bool isLinkingVent = false;
+	private int mineId = 0;
+    private Dictionary<int, MinerMineEffect> mines;
     private float killRange;
     private float nonActiveTime;
     private float timer;
     private bool isShowKillLog;
-    private Vector2? setPos;
+	private bool isShowAnotherPlayer;
+	private MinerMineEffect noneActiveMine = null;
+	private MineEffectParameter parameter = null;
     private TextPopUpper killLogger = null;
 
     public Miner() : base(
@@ -50,7 +74,75 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         false, false, true, false)
     { }
 
-    public void CreateAbility()
+	public static void RpcHandle(ref MessageReader reader)
+	{
+		MinerRpc rpc = (MinerRpc)reader.ReadByte();
+		byte playerId = reader.ReadByte();
+		Miner miner = ExtremeRoleManager.GetSafeCastedRole<Miner>(playerId);
+		int id = reader.ReadInt32();
+		switch (rpc)
+		{
+			case MinerRpc.SetMine:
+				float x = reader.ReadSingle();
+				float y = reader.ReadSingle();
+				if (miner == null) { return; }
+				setMine(miner, new(x, y), id);
+				break;
+			case MinerRpc.ActiveMine:
+				if (miner == null) { return; }
+				activateMine(miner, id);
+				break;
+			case MinerRpc.RemoveMine:
+				if (miner == null) { return; }
+				removeMine(miner, id);
+				break;
+		}
+	}
+
+	private static void setMine(Miner miner, Vector2 pos, int id, bool isRolePlayer=false)
+	{
+		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
+		obj.transform.position = pos;
+		var mine = obj.AddComponent<MinerMineEffect>();
+		miner.noneActiveMine = mine;
+		miner.noneActiveMine.SetParameter(isRolePlayer, miner.killRange, miner.parameter);
+		ExtremeRolesPlugin.ShipState.AddMeetingResetObject(miner.noneActiveMine);
+	}
+
+	private static void activateMine(Miner miner, int id)
+	{
+		if (miner.noneActiveMine == null) { return; }
+		miner.noneActiveMine.SwithAcitve();
+		miner.mines.Add(id, miner.noneActiveMine);
+	}
+
+	private static void removeMine(Miner miner, int id)
+	{
+		if (!miner.mines.TryGetValue(id, out var mine))
+		{
+			return;
+		}
+		if (mine != null)
+		{
+			mine.Clear();
+		}
+		miner.mines.Remove(id);
+	}
+
+	public void IntroBeginSetUp()
+	{
+		return;
+	}
+
+	public void IntroEndSetUp()
+	{
+		if (this.isLinkingVent)
+		{
+			GameSystem.RelinkVent();
+		}
+	}
+
+	public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
             "setMine",
@@ -62,19 +154,38 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public bool UseAbility()
     {
+		var pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
-        this.setPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
-        return true;
+		if (this.isShowAnotherPlayer)
+		{
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MinerHandle))
+			{
+				caller.WriteByte((byte)MinerRpc.SetMine);
+				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteInt(this.mineId);
+				caller.WriteFloat(pos.x);
+				caller.WriteFloat(pos.y);
+			}
+		}
+
+		setMine(this, pos, this.mineId, true);
+		return true;
     }
 
     public void CleanUp()
     {
-        if (this.setPos.HasValue)
-        {
-            this.mines.Add(this.setPos.Value);
-        }
-        this.setPos = null;
-    }
+		if (this.isShowAnotherPlayer)
+		{
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MinerHandle))
+			{
+				caller.WriteByte((byte)MinerRpc.ActiveMine);
+				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteInt(this.mineId);
+			}
+		}
+		activateMine(this, this.mineId);
+		++this.mineId;
+	}
 
     public bool IsAbilityUse() => this.IsCommonUse();
 
@@ -98,79 +209,88 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected) { return; }
-        
-        if (CachedShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+        if (rolePlayer.Data.IsDead ||
+			rolePlayer.Data.Disconnected ||
+			CachedShipStatus.Instance == null ||
+			GameData.Instance == null ||
+			!CachedShipStatus.Instance.enabled ||
+			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+
         if (MeetingHud.Instance || ExileController.Instance)
         {
             this.timer = this.nonActiveTime;
             return;
         }
 
-            if (this.timer > 0.0f)
-            {
-                this.timer -= Time.deltaTime;
-                return;
-            }
-            
-            if (this.mines.Count == 0) { return; }
+        if (this.timer > 0.0f)
+        {
+            this.timer -= Time.deltaTime;
+            return;
+        }
+
+        if (this.mines.Count == 0) { return; }
 
         HashSet<int> activateMine = new HashSet<int>();
         HashSet<byte> killedPlayer = new HashSet<byte>();
 
-        for (int i = 0; i < this.mines.Count; ++i)
+        foreach (var (id, mine) in this.mines)
         {
-            Vector2 pos = this.mines[i];
+			if (mine == null)
+			{
+				activateMine.Add(id);
+				continue;
+			}
+            Vector2 pos = mine.transform.position;
 
             foreach (GameData.PlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (playerInfo == null) { continue; }
+                if (playerInfo == null ||
+					killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
 
-                if (killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
-                
                 var assassin = ExtremeRoleManager.GameRole[
                     playerInfo.PlayerId] as Combination.Assassin;
 
-                if (assassin != null)
+                if (assassin != null &&
+					(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
                 {
-                    if (!assassin.CanKilled || !assassin.CanKilledFromNeutral)
-                    {
-                        continue;
-                    }
-                }
+					continue;
+				}
 
                 if (!playerInfo.Disconnected &&
                     !playerInfo.IsDead &&
                     playerInfo.Object != null &&
                     !playerInfo.Object.inVent)
                 {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object)
-                    {
-                        Vector2 vector = @object.GetTruePosition() - pos;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= this.killRange &&
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                pos, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            activateMine.Add(i);
-                            killedPlayer.Add(playerInfo.PlayerId);
-                            break;
-                        }
-                    }
-                }
+					Vector2 vector = playerInfo.Object.GetTruePosition() - pos;
+					float magnitude = vector.magnitude;
+					if (magnitude <= this.killRange &&
+						!PhysicsHelpers.AnyNonTriggersBetween(
+							pos, vector.normalized,
+							magnitude, Constants.ShipAndObjectsMask))
+					{
+						activateMine.Add(id);
+						killedPlayer.Add(playerInfo.PlayerId);
+						break;
+					}
+				}
             }
         }
 
-        foreach (int index in activateMine)
+        foreach (int id in activateMine)
         {
-            this.mines.RemoveAt(index);
+			if (this.isShowAnotherPlayer)
+			{
+				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MinerHandle))
+				{
+					caller.WriteByte((byte)MinerRpc.RemoveMine);
+					caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+					caller.WriteInt(id);
+				}
+			}
+			removeMine(this, id);
         }
+
         foreach (byte player in killedPlayer)
         {
             Helper.Player.RpcUncheckMurderPlayer(
@@ -181,7 +301,6 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
 
             if (this.isShowKillLog)
             {
-
                 GameData.PlayerInfo killPlayer = GameData.Instance.GetPlayerById(player);
 
                 if (killPlayer != null)
@@ -213,24 +332,52 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
-        
-        this.CreateCommonAbilityOption(
+		CreateBoolOption(
+			MinerOption.LinkingAllVent,
+			false, parentOps);
+		this.CreateCommonAbilityOption(
             parentOps, 2.0f);
         CreateFloatOption(
             MinerOption.MineKillRange,
             1.8f, 0.5f, 5f, 0.1f, parentOps);
-        CreateFloatOption(
+		var showOpt = CreateBoolOption(
+			MinerOption.CanShowMine,
+			false, parentOps);
+		CreateSelectionOption(
+			MinerOption.RolePlayerShowMode,
+			new string[]
+			{
+				ShowMode.MineSeeOnlySe.ToString(),
+				ShowMode.MineSeeOnlyImg.ToString(),
+				ShowMode.MineSeeBoth.ToString(),
+			}, showOpt);
+		var anotherPlayerShowMode = CreateSelectionOption(
+			MinerOption.AnotherPlayerShowMode,
+			new string[]
+			{
+				ShowMode.MineSeeNone.ToString(),
+				ShowMode.MineSeeOnlySe.ToString(),
+				ShowMode.MineSeeOnlyImg.ToString(),
+				ShowMode.MineSeeBoth.ToString(),
+			}, showOpt);
+		CreateBoolOption(
+			MinerOption.CanShowNoneActiveAnotherPlayer,
+			false, anotherPlayerShowMode);
+		CreateFloatOption(
             MinerOption.NoneActiveTime,
             20.0f, 1.0f, 45f, 0.5f,
             parentOps, format: OptionUnit.Second);
         CreateBoolOption(
             MinerOption.ShowKillLog,
             true, parentOps);
-    }
+	}
 
     protected override void RoleSpecificInit()
     {
         var allOpt = OptionManager.Instance;
+
+		this.isLinkingVent = allOpt.GetValue<bool>(
+			GetRoleOptionId(MinerOption.LinkingAllVent));
 
         this.killRange = allOpt.GetValue<float>(
             GetRoleOptionId(MinerOption.MineKillRange));
@@ -239,10 +386,27 @@ public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpec
         this.isShowKillLog = allOpt.GetValue<bool>(
             GetRoleOptionId(MinerOption.ShowKillLog));
 
-        this.mines = new List<Vector2>();
+        this.mines = new Dictionary<int, MinerMineEffect>();
         this.timer = this.nonActiveTime;
-        this.setPos = null;
-        this.killLogger = new TextPopUpper(
+		this.mineId = 0;
+
+		bool isShowMine = allOpt.GetValue<bool>(
+			GetRoleOptionId(MinerOption.CanShowMine));
+
+		var rolePlayerShowMode = (ShowMode)(allOpt.GetValue<int>(
+			GetRoleOptionId(MinerOption.RolePlayerShowMode)) + 1);
+		var anotherPlayerShowMode = (ShowMode)allOpt.GetValue<int>(
+			GetRoleOptionId(MinerOption.AnotherPlayerShowMode));
+		this.isShowAnotherPlayer = anotherPlayerShowMode != ShowMode.MineSeeNone && isShowMine;
+		this.parameter = new MineEffectParameter(
+			RolePlayerShowMode: isShowMine ? rolePlayerShowMode : ShowMode.MineSeeNone,
+			AnotherPlayerShowMode: anotherPlayerShowMode,
+			CanShowNoneActiveAtherPlayer:
+				allOpt.GetValue<bool>(
+					GetRoleOptionId(MinerOption.CanShowNoneActiveAnotherPlayer)) &&
+				this.isShowAnotherPlayer);
+
+		this.killLogger = new TextPopUpper(
             2, 3.5f, new Vector3(0, -1.2f, 0.0f),
             TMPro.TextAlignmentOptions.Center, false);
     }

@@ -14,6 +14,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Compat.Mods;
 
 namespace ExtremeRoles.Helper;
 
@@ -42,9 +43,16 @@ public static class GameSystem
 
     private const string airShipSpawnJson =
         "ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
-    private const string airShipKey = "VanillaRandomSpawn";
+    private const string airShipRandomSpawnKey = "VanillaRandomSpawn";
 
-    private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	private const string ventInfoJson =
+		"ExtremeRoles.Resources.JsonData.AllVentLinkInfo.json";
+	private const string skeldKey = "Skeld";
+	private const string polusKey = "Polus";
+	private const string airShipKey = "AirShip";
+	private const string submergedKey = "Submerged";
+
+	private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     public static HashSet<TaskTypes> SaboTask = new HashSet<TaskTypes>()
     {
@@ -152,7 +160,7 @@ public static class GameSystem
              (playerInfo.Role) &&
              (playerInfo.Role.TasksCountTowardProgress) &&
              (
-                GameOptionsManager.Instance.CurrentGameOptions.GetBool(BoolOptionNames.GhostsDoTasks) || 
+                GameOptionsManager.Instance.CurrentGameOptions.GetBool(BoolOptionNames.GhostsDoTasks) ||
                 !playerInfo.IsDead
             ) &&
               ExtremeRoleManager.GameRole[playerInfo.PlayerId].HasTask()
@@ -237,7 +245,7 @@ public static class GameSystem
                 return imageDict[ImageNames.CamsButton].Image;
         }
     }
-    public static Sprite GetVitalImage() => 
+    public static Sprite GetVitalImage() =>
         FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
             ImageNames.VitalsButton].Image;
 
@@ -315,6 +323,62 @@ public static class GameSystem
         return minigame;
     }
 
+	public static void RelinkVent()
+	{
+		var allVent = new Dictionary<int, Vent>();
+		foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+		{
+			allVent.Add(vent.Id, vent);
+		}
+
+		JObject linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
+
+		string ventKey;
+		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
+
+		if (ExtremeRolesPlugin.Compat.IsModMap)
+		{
+			if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+			{
+				ventKey = submergedKey;
+			}
+			else
+			{
+				return;
+			}
+		}
+		else
+		{
+			switch (mapId)
+			{
+				case 0:
+					ventKey = skeldKey;
+					break;
+				case 2:
+					ventKey = polusKey;
+					break;
+				case 4:
+					ventKey = airShipKey;
+					break;
+				default:
+					return;
+			}
+		}
+
+		JArray linkInfo = linkInfoJson.Get<JArray>(ventKey);
+
+		for (int i = 0; i < linkInfo.Count; ++i)
+		{
+			JArray ventLinkedId = linkInfo.Get<JArray>(i);
+
+			if (allVent.TryGetValue((int)ventLinkedId[0], out Vent from) &&
+				allVent.TryGetValue((int)ventLinkedId[1], out Vent target))
+			{
+				linkVent(from, target);
+			}
+		}
+	}
+
     public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
     {
         var player = Player.GetPlayerControlById(
@@ -353,7 +417,7 @@ public static class GameSystem
 
     public static void RpcRepairAllSabotage()
     {
-        foreach (PlayerTask task in 
+        foreach (PlayerTask task in
             CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
         {
             if (task == null) { continue; }
@@ -476,7 +540,7 @@ public static class GameSystem
     public static List<Vector2> GetAirShipRandomSpawn()
     {
         JObject json = JsonParser.GetJObjectFromAssembly(airShipSpawnJson);
-        JArray airShipSpawn = json.Get<JArray>(airShipKey);
+        JArray airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
 
         List<Vector2> result = new List<Vector2>();
 
@@ -531,7 +595,7 @@ public static class GameSystem
         playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
         playerControl.GetComponent<DummyBehaviour>().enabled = true;
         playerControl.NetTransform.enabled = false;
-        playerControl.SetName(string.IsNullOrEmpty(name) ? 
+        playerControl.SetName(string.IsNullOrEmpty(name) ?
             new string(Enumerable.Repeat(chars, 10).Select(s => s[rng.Next(s.Length)]).ToArray()) :
             name);
         playerControl.SetColor(color);
@@ -629,4 +693,31 @@ public static class GameSystem
         }
     }
 
+	private static void linkVent(Vent from, Vent target)
+	{
+		if (from == null || target == null) { return; }
+
+		linkVentToEmptyTarget(from, target);
+		linkVentToEmptyTarget(target, from);
+	}
+
+	private static void linkVentToEmptyTarget(Vent from, Vent target)
+	{
+		if (from.Right == null)
+		{
+			from.Right = target;
+		}
+		else if (from.Center == null)
+		{
+			from.Center = target;
+		}
+		else if (from.Left == null)
+		{
+			from.Left = target;
+		}
+		else
+		{
+			ExtremeRolesPlugin.Logger.LogInfo("Vent Link fail!!");
+		}
+	}
 }
