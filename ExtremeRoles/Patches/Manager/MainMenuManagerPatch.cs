@@ -41,7 +41,7 @@ public static class MainMenuManagerStartPatch
 		AspectPosition aspectPosition = leftButtonAnchor.AddComponent<AspectPosition>();
 		aspectPosition.Alignment = AspectPosition.EdgeAlignments.RightBottom;
 		aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
-		aspectPosition.DistanceFromEdge = new Vector3(0.8f, 0.85f);
+		aspectPosition.DistanceFromEdge = new Vector3(0.8f, 0.85f, -10.0f);
 		aspectPosition.AdjustPosition();
 
 		Transform anchorTransform = leftButtonAnchor.transform;
