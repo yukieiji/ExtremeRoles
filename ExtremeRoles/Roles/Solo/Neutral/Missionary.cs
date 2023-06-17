@@ -16,6 +16,8 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance.Il2Cpp;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Missionary :
@@ -35,39 +37,31 @@ public sealed class Missionary :
 		MaxJudgementNum,
 	}
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.propagate;
-        set
-        {
-            this.propagate = value;
-        }
-    }
-
 	public byte TargetPlayer = byte.MaxValue;
 
-    private Queue<byte> lamb;
-	private HashSet<byte> judgementTarget;
 	private float timer;
 
-    private float propagateRange;
-    private float minTimerTime;
-    private float maxTimerTime;
-    private bool tellDeparture;
+	private float propagateRange;
+	private float minTimerTime;
+	private float maxTimerTime;
+	private bool tellDeparture;
 	private bool isUseSolemnJudgment;
 	private int maxJudgementTarget;
 
+#pragma warning disable CS8618
+	public ExtremeAbilityButton Button { get; set; }
+	private Queue<byte> lamb;
+	private HashSet<byte> judgementTarget;
 	private TMPro.TextMeshPro tellText;
 
-    private ExtremeAbilityButton propagate;
-
-    public Missionary() : base(
-        ExtremeRoleId.Missionary,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Missionary.ToString(),
-        ColorPalette.MissionaryBlue,
-        false, false, false, false)
-    { }
+	public Missionary() : base(
+		ExtremeRoleId.Missionary,
+		ExtremeRoleType.Neutral,
+		ExtremeRoleId.Missionary.ToString(),
+		ColorPalette.MissionaryBlue,
+		false, false, false, false)
+	{ }
+#pragma warning restore CS8618
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
@@ -121,7 +115,6 @@ public sealed class Missionary :
     protected override void RoleSpecificInit()
     {
         this.lamb = new Queue<byte>();
-		this.judgementTarget = new HashSet<byte>();
         this.timer = 0;
 
         this.tellDeparture = OptionManager.Instance.GetValue<bool>(
@@ -180,9 +173,12 @@ public sealed class Missionary :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
-		this.judgementTarget.Remove(exiledPlayer.PlayerId);
+		if (exiledPlayer != null)
+		{
+			this.judgementTarget.Remove(exiledPlayer.PlayerId);
+		}
 		updateJudgementTarget();
 
 		if (this.tellText != null)
@@ -300,8 +296,9 @@ public sealed class Missionary :
 	{
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (player == null ||
-				player.Disconnected ||
+			if (player == null) { continue; }
+
+			if (player.Disconnected ||
 				player.IsDead)
 			{
 				this.judgementTarget.Remove(player.PlayerId);
