@@ -75,7 +75,8 @@ public static class Path
     public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
     public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
     public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
-    public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
+	public const string SlaveDriverHarassment = "ExtremeRoles.Resources.Harassment.png";
+	public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
     public const string MeryCustomVentAnime =
         "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
     public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";

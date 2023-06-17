@@ -80,7 +80,7 @@ public sealed class SlaveDriver :
     public void ResetOnMeetingStart()
     {
 		this.target = byte.MaxValue;
-		string reportMessage = Translation.GetString("Message");
+		string reportMessage = Translation.GetString("SlaveDriverReportMessage");
 		foreach (byte playerId in this.effectPlayer)
 		{
 			GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
@@ -124,7 +124,8 @@ public sealed class SlaveDriver :
 			}
 			if (replacedTaskNum > 0)
 			{
-				MeetingReporter.RpcAddTargetMeetingChatReport(playerId, reportMessage);
+				MeetingReporter.RpcAddTargetMeetingChatReport(
+					playerId, string.Format(reportMessage, replacedTaskNum));
 			}
 		}
 		this.effectPlayer.Clear();
