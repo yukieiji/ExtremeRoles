@@ -1,16 +1,22 @@
-﻿using HarmonyLib;
-using TMPro;
+﻿
+using HarmonyLib;
+
+using ExtremeRoles.Patches;
 
 namespace ExtremeVoiceEngine.Patches;
 
 [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
 public static class VersionShowerStartPatch
 {
-    [HarmonyPriority(Priority.Last)]
     public static void Postfix(VersionShower __instance)
     {
-        __instance.text.alignment = TextAlignmentOptions.TopLeft;
-        __instance.text.text = string.Concat(
-           __instance.text.text, "\n", ExtremeVoiceEnginePlugin.Instance.ToString());
-    }
+		if (MainMenuTextInfoPatch.InfoText)
+		{
+			string stateStr = ExtremeVoiceEnginePlugin.Instance.ToString();
+			string curStr = MainMenuTextInfoPatch.InfoText.text;
+			MainMenuTextInfoPatch.InfoText.text =
+				MainMenuTextInfoPatch.InfoText.text == string.Empty ?
+				stateStr : $"{curStr}\n{stateStr}";
+		}
+	}
 }

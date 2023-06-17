@@ -31,6 +31,7 @@ public static class MainMenuManagerStartPatch
 		__instance.quitButton.OnClick.AddListener(
 			(UnityAction)(() => Logging.BackupCurrentLog()));
 
+		// 以下独自ボタン
 		var leftButtonAnchor = new GameObject("LeftModButton");
 		leftButtonAnchor.transform.parent = __instance.mainMenuUI.transform;
 		leftButtonAnchor.SetActive(true);

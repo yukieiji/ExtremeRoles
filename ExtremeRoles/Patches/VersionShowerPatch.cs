@@ -5,18 +5,35 @@ using UnityEngine;
 using HarmonyLib;
 
 using AmongUs.Data;
+using TMPro;
 
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
-public static class VersionShowerPatch
+public static class MainMenuTextInfoPatch
 {
+	public static TextMeshPro InfoText { get; private set; }
+
+	[HarmonyPostfix, HarmonyPriority(Priority.First)]
     public static void Postfix(VersionShower __instance)
     {
         var burner = GameObject.Find("bannerLogoExtremeRoles");
         if (burner == null) { return; }
 
-        var modTitle = Object.Instantiate(
+		InfoText = Object.Instantiate(__instance.text);
+		InfoText.name = "ExtremeRoles_InfoText";
+		InfoText.text = string.Empty;
+		InfoText.alignment = TextAlignmentOptions.TopRight;
+		InfoText.fontSize = InfoText.fontSizeMax = InfoText.fontSizeMin = 1.8f;
+
+		AspectPosition aspectPosition = InfoText.gameObject.AddComponent<AspectPosition>();
+		aspectPosition.Alignment = AspectPosition.EdgeAlignments.RightTop;
+		aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
+		aspectPosition.DistanceFromEdge = new Vector3(2.1f, 1.225f, - 10f);
+		aspectPosition.AdjustPosition();
+
+
+		var modTitle = Object.Instantiate(
             __instance.text, burner.transform);
         modTitle.transform.localPosition = new Vector3(0, -1.4f, 0);
         modTitle.transform.localScale = new Vector3(1.075f, 1.075f, 1.0f);
