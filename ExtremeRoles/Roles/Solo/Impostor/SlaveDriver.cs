@@ -124,8 +124,7 @@ public sealed class SlaveDriver :
 			}
 			if (replacedTaskNum > 0)
 			{
-				MeetingReporter.RpcAddTargetMeetingChatReport(
-					playerId, string.Format(reportMessage, replacedTaskNum));
+				MeetingReporter.RpcAddTargetMeetingChatReport(playerId, reportMessage);
 			}
 		}
 		this.effectPlayer.Clear();
@@ -135,7 +134,7 @@ public sealed class SlaveDriver :
 	{
 		this.CreateAbilityCountButton(
 			"Harassment", Resources.Loader.CreateSpriteFromResources(
-				Resources.Path.TestButton));
+				Resources.Path.SlaveDriverHarassment));
 	}
 
 	public bool UseAbility()
