@@ -336,18 +336,7 @@ public static class EndGameManagerSetUpPatch
         public bool IsChangeBk;
 
         internal static WinTextInfo Create(
-            System.Enum textEnum, Color color)
-        {
-            return new WinTextInfo
-            {
-                Text = Translation.GetString(textEnum.ToString()),
-                Color = color,
-                IsChangeBk = true,
-            };
-        }
-
-        internal static WinTextInfo Create(
-            System.Enum textEnum, Color color, bool isChangeBk)
+            System.Enum textEnum, Color color, bool isChangeBk = true)
         {
             return new WinTextInfo
             {
