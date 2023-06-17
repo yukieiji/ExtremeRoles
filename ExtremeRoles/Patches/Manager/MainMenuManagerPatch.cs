@@ -32,13 +32,19 @@ public static class MainMenuManagerStartPatch
 			(UnityAction)(() => Logging.BackupCurrentLog()));
 
 		var leftButtonAnchor = new GameObject("LeftModButton");
-		leftButtonAnchor.transform.parent = __instance.quitButton.transform;
+		// ExitButton => BottomButtonBounds => Main Buttons => LeftPanel => Aspect Scaler
+		leftButtonAnchor.transform.parent = __instance.mainMenuUI.transform;
 		leftButtonAnchor.SetActive(true);
 		leftButtonAnchor.layer = __instance.gameObject.layer;
+		leftButtonAnchor.transform.localScale = Vector3.one * 0.75f;
 
-		Transform anchorTransform =leftButtonAnchor.transform;
-		anchorTransform.localScale = Vector3.one;
-		anchorTransform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
+		AspectPosition aspectPosition = leftButtonAnchor.AddComponent<AspectPosition>();
+		aspectPosition.Alignment = AspectPosition.EdgeAlignments.RightBottom;
+		aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
+		aspectPosition.DistanceFromEdge = new Vector3(0.8f, 0.85f);
+		aspectPosition.AdjustPosition();
+
+		Transform anchorTransform = leftButtonAnchor.transform;
 
 		// UpdateButton
 		var updateButton = createButton(
