@@ -39,59 +39,58 @@ public static class MeetingHudCheckForEndVotingPatch
 	{
 		var (isVoteEnd, voteFor) = assassinVoteState(instance);
 
-		if (isVoteEnd)
+		if (!isVoteEnd) { return; }
+
+		//GameData.PlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
+		Il2CppStructArray<MeetingHud.VoterState> array =
+			new Il2CppStructArray<MeetingHud.VoterState>(
+				instance.playerStates.Length);
+
+		if (voteFor == 254 || voteFor == byte.MaxValue)
 		{
-			//GameData.PlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
-			Il2CppStructArray<MeetingHud.VoterState> array =
-				new Il2CppStructArray<MeetingHud.VoterState>(
-					instance.playerStates.Length);
-
-			if (voteFor == 254 || voteFor == byte.MaxValue)
+			bool targetImposter;
+			do
 			{
-				bool targetImposter;
-				do
-				{
-					int randomPlayerIndex = UnityEngine.Random.RandomRange(
-						0, instance.playerStates.Length);
-					voteFor = instance.playerStates[randomPlayerIndex].TargetPlayerId;
+				int randomPlayerIndex = UnityEngine.Random.RandomRange(
+					0, instance.playerStates.Length);
+				voteFor = instance.playerStates[randomPlayerIndex].TargetPlayerId;
 
-					targetImposter = ExtremeRoleManager.GameRole[voteFor].IsImpostor();
-
-				}
-				while (targetImposter);
-			}
-
-			Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
-
-			using (var caller = RPCOperator.CreateCaller(
-				RPCOperator.Command.AssasinVoteFor))
-			{
-				caller.WriteByte(voteFor);
-			}
-			RPCOperator.AssasinVoteFor(voteFor);
-
-			for (int i = 0; i < instance.playerStates.Length; i++)
-			{
-				PlayerVoteArea playerVoteArea = instance.playerStates[i];
-				if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
-				{
-					playerVoteArea.VotedFor = voteFor;
-				}
-				else
-				{
-					playerVoteArea.VotedFor = 254;
-				}
-				instance.SetDirtyBit(1U);
-
-				array[i] = new MeetingHud.VoterState
-				{
-					VoterId = playerVoteArea.TargetPlayerId,
-					VotedForId = playerVoteArea.VotedFor
-				};
+				targetImposter = ExtremeRoleManager.GameRole[voteFor].IsImpostor();
 
 			}
-			instance.RpcVotingComplete(array, null, true);
+			while (targetImposter);
 		}
+
+		Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
+
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.AssasinVoteFor))
+		{
+			caller.WriteByte(voteFor);
+		}
+		RPCOperator.AssasinVoteFor(voteFor);
+
+		for (int i = 0; i < instance.playerStates.Length; i++)
+		{
+			PlayerVoteArea playerVoteArea = instance.playerStates[i];
+			if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+			{
+				playerVoteArea.VotedFor = voteFor;
+			}
+			else
+			{
+				playerVoteArea.VotedFor = 254;
+			}
+			instance.SetDirtyBit(1U);
+
+			array[i] = new MeetingHud.VoterState
+			{
+				VoterId = playerVoteArea.TargetPlayerId,
+				VotedForId = playerVoteArea.VotedFor
+			};
+
+		}
+		instance.RpcVotingComplete(array, null, true);
 	}
 
 	private static (bool, byte) assassinVoteState(MeetingHud instance)
@@ -116,16 +115,15 @@ public static class MeetingHudCheckForEndVotingPatch
 		IRoleVoteModifier role, byte rolePlayerId,
 		ref SortedList<int, (IRoleVoteModifier, byte)> voteModifier)
 	{
-		if (role != null)
+		if (role == null) { return; }
+
+		int order = role.Order;
+		// 同じ役職は同じ優先度になるので次の優先度になるようにセット
+		while (voteModifier.ContainsKey(order))
 		{
-			int order = role.Order;
-			// 同じ役職は同じ優先度になるので次の優先度になるようにセット
-			while (voteModifier.ContainsKey(order))
-			{
-				++order;
-			}
-			voteModifier.Add(order, (role, rolePlayerId));
+			++order;
 		}
+		voteModifier.Add(order, (role, rolePlayerId));
 	}
 
 	private static Dictionary<byte, int> calculateVote(MeetingHud instance)
@@ -183,42 +181,41 @@ public static class MeetingHudCheckForEndVotingPatch
 
 	private static void normalMeetingVote(MeetingHud instance)
 	{
-		if (instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote))
+		if (!instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote)) { return; }
+
+		Dictionary<byte, int> result = calculateVote(instance);
+
+		bool isExiled = true;
+
+		KeyValuePair<byte, int> exiledResult = new KeyValuePair<byte, int>(
+			byte.MaxValue, int.MinValue);
+		foreach (KeyValuePair<byte, int> item in result)
 		{
-			Dictionary<byte, int> result = calculateVote(instance);
-
-			bool isExiled = true;
-
-			KeyValuePair<byte, int> exiledResult = new KeyValuePair<byte, int>(
-				byte.MaxValue, int.MinValue);
-			foreach (KeyValuePair<byte, int> item in result)
+			if (item.Value > exiledResult.Value)
 			{
-				if (item.Value > exiledResult.Value)
-				{
-					exiledResult = item;
-					isExiled = false;
-				}
-				else if (item.Value == exiledResult.Value)
-				{
-					isExiled = true;
-				}
+				exiledResult = item;
+				isExiled = false;
 			}
-
-			GameData.PlayerInfo? exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
-				(GameData.PlayerInfo v) => !isExiled && v.PlayerId == exiledResult.Key);
-
-			MeetingHud.VoterState[] array = new MeetingHud.VoterState[instance.playerStates.Length];
-			for (int i = 0; i < instance.playerStates.Length; i++)
+			else if (item.Value == exiledResult.Value)
 			{
-				PlayerVoteArea playerVoteArea = instance.playerStates[i];
-				array[i] = new MeetingHud.VoterState
-				{
-					VoterId = playerVoteArea.TargetPlayerId,
-					VotedForId = playerVoteArea.VotedFor
-				};
+				isExiled = true;
 			}
-
-			instance.RpcVotingComplete(array, exiled, isExiled);
 		}
+
+		GameData.PlayerInfo? exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
+			(GameData.PlayerInfo v) => !isExiled && v.PlayerId == exiledResult.Key);
+
+		MeetingHud.VoterState[] array = new MeetingHud.VoterState[instance.playerStates.Length];
+		for (int i = 0; i < instance.playerStates.Length; i++)
+		{
+			PlayerVoteArea playerVoteArea = instance.playerStates[i];
+			array[i] = new MeetingHud.VoterState
+			{
+				VoterId = playerVoteArea.TargetPlayerId,
+				VotedForId = playerVoteArea.VotedFor
+			};
+		}
+
+		instance.RpcVotingComplete(array, exiled, isExiled);
 	}
 }
