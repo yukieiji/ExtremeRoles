@@ -293,7 +293,8 @@ public static class ExtremeRoleManager
         ExtremeRoleId.Jackal,
         ExtremeRoleId.Assassin,
         ExtremeRoleId.Hero,
-        ExtremeRoleId.Villain
+        ExtremeRoleId.Villain,
+		ExtremeRoleId.Yoko,
     };
 
     public enum ReplaceOperation : byte
