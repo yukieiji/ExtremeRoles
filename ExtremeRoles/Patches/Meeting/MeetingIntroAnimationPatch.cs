@@ -12,10 +12,20 @@ namespace ExtremeRoles.Patches.Meeting;
 [HarmonyPatch(typeof(MeetingIntroAnimation), nameof(MeetingIntroAnimation.Init))]
 public static class MeetingIntroAnimationInitPatch
 {
-	// バニラのベント掃除が残り続けるバグの修正
-	// これより前だとベントに入ってる状態が残ってる可能性があるのでここでやる
 	public static void Prefix()
 	{
+		// 以下の2つのバニラの不具合の修正
+		// 1. ぷるぷるとはしご使用時にキルクールタイムを強制的に進めるフラグがリセットされず、その後ベントを使用してもキルクールが進む不具合
+		// 2. はしごを登っている状態がリセットされない不具合
+		if (CachedPlayerControl.LocalPlayer != null)
+		{
+			var player = CachedPlayerControl.LocalPlayer.PlayerControl;
+			player.ForceKillTimerContinue = false;
+			player.onLadder = false;
+		}
+
+		// バニラのベント掃除が残り続けるバグの修正
+		// これより前だとベントに入ってる状態が残ってる可能性があるのでここでやる
 		if (CachedShipStatus.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
 			!CachedShipStatus.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType system))
