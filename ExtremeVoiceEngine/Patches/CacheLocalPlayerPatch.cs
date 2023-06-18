@@ -1,12 +1,12 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles.Patches;
+using ExtremeRoles.Patches.Player;
 using ExtremeRoles.Performance;
 using ExtremeVoiceEngine.Extension;
 
 namespace ExtremeVoiceEngine.Patches;
 
-[HarmonyPatch(typeof(CacheLocalPlayerPatch), nameof(CacheLocalPlayerPatch.SetLocalPlayer))]
+[HarmonyPatch(typeof(SetCachedLocalPlayerControl), nameof(SetCachedLocalPlayerControl.SetLocalPlayer))]
 public static class ChatCurrentSettingPatch
 {
     public static bool Chated { get; set; } = false;
