@@ -373,7 +373,7 @@ public static class ExileControllerWrapUpPatch
     {
         ExtremeRolesPlugin.Info.BlockShow(false);
         ExtremeRolesPlugin.ShipState.ResetOnMeeting();
-        Meeting.MeetingHudSelectPatch.SetSelectBlock(false);
+        Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
