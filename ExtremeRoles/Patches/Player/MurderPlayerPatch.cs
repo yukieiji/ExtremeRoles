@@ -41,7 +41,7 @@ public static class PlayerControlMurderPlayerPatch
 		if (target.protectedByGuardian)
 		{
 			target.protectedByGuardianThisRound = true;
-			bool flag = Performance.CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+			bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
 			if (__instance.AmOwner || flag)
 			{
 				target.ShowFailedMurder();
