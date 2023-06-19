@@ -24,8 +24,10 @@ namespace ExtremeRoles.Patches.Manager;
 public static class MainMenuManagerStartPatch
 {
     private static Color discordColor => new Color32(88, 101, 242, byte.MaxValue);
+	private const float defaultWidthSize = 1280.0f;
+	private const float defaultHighSize = 720.0f;
 
-    public static void Prefix(MainMenuManager __instance)
+	public static void Prefix(MainMenuManager __instance)
     {
 		// Mod ExitButton
 		__instance.quitButton.OnClick.AddListener(
@@ -33,18 +35,16 @@ public static class MainMenuManagerStartPatch
 
 		// 以下独自ボタン
 		var leftButtonAnchor = new GameObject("LeftModButton");
-		leftButtonAnchor.transform.parent = __instance.mainMenuUI.transform;
+		leftButtonAnchor.transform.parent = __instance.quitButton.transform;
 		leftButtonAnchor.SetActive(true);
 		leftButtonAnchor.layer = __instance.gameObject.layer;
-		leftButtonAnchor.transform.localScale = Vector3.one * 0.75f;
-
-		AspectPosition aspectPosition = leftButtonAnchor.AddComponent<AspectPosition>();
-		aspectPosition.Alignment = AspectPosition.EdgeAlignments.RightBottom;
-		aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
-		aspectPosition.DistanceFromEdge = new Vector3(0.8f, 0.85f, -10.0f);
-		aspectPosition.AdjustPosition();
 
 		Transform anchorTransform = leftButtonAnchor.transform;
+		anchorTransform.localScale = Vector3.one;
+		anchorTransform.localPosition = new Vector3(
+			10.25f * Screen.width / defaultWidthSize,
+			0.5f   * Screen.height / defaultHighSize,
+			10.0f);
 
 		// UpdateButton
 		var updateButton = createButton(
