@@ -8,7 +8,7 @@ namespace ExtremeRoles.Patches.Player;
 #nullable enable
 
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
-public static class CreateCachedPlayerControl
+public static class PlayerControlAwakePatch
 {
 	public static void Postfix(PlayerControl __instance)
 	{
