@@ -24,8 +24,6 @@ namespace ExtremeRoles.Patches.Manager;
 public static class MainMenuManagerStartPatch
 {
     private static Color discordColor => new Color32(88, 101, 242, byte.MaxValue);
-	private const float defaultWidthSize = 1280.0f;
-	private const float defaultHighSize = 720.0f;
 
 	public static void Prefix(MainMenuManager __instance)
     {
@@ -41,10 +39,7 @@ public static class MainMenuManagerStartPatch
 
 		Transform anchorTransform = leftButtonAnchor.transform;
 		anchorTransform.localScale = Vector3.one;
-		anchorTransform.localPosition = new Vector3(
-			10.25f * Screen.width / defaultWidthSize,
-			0.5f   * Screen.height / defaultHighSize,
-			10.0f);
+		anchorTransform.localPosition = new Vector3(10.25f, 0.5f, 10.0f);
 
 		// UpdateButton
 		var updateButton = createButton(
