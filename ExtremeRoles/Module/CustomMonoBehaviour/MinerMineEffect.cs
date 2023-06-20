@@ -1,6 +1,7 @@
 ﻿using System;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
@@ -54,6 +55,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 		this.audioSource.Play();
 	}
 
+	[HideFromIl2Cpp]
 	public void SetParameter(
 		bool isRolePlayer,
 		float activeRange,
