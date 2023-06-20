@@ -99,7 +99,7 @@ namespace ExtremeRoles.Compat.Mods
                 submarineStatus = component.TryCast(
                     submarineStatusType) as MonoBehaviour;
             }
-       
+
             // 毎回毎回取得すると重いのでキャッシュ化
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
             crewVision = curOption.GetFloat(FloatOptionNames.CrewLightMod);
@@ -196,7 +196,7 @@ namespace ExtremeRoles.Compat.Mods
             Vector2 baseVec = Vector2.up;
             baseVec = baseVec.Rotate(
                 (float)(playerId - 1) * (360f / (float)GameData.Instance.PlayerCount));
-            Vector2 defaultSpawn = ship.InitialSpawnCenter + 
+            Vector2 defaultSpawn = ship.InitialSpawnCenter +
                 baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
 
             List<Vector2> spawnPos = new List<Vector2>();
@@ -270,8 +270,8 @@ namespace ExtremeRoles.Compat.Mods
             {
                 case 9:  // Cannot enter vent 9 (Engine Room Exit Only Vent)!
                     if (CachedPlayerControl.LocalPlayer.PlayerControl.inVent)
-                    { 
-                        return false; 
+                    {
+                        return false;
                     }
                     return true;
                 case 0:
@@ -408,9 +408,9 @@ namespace ExtremeRoles.Compat.Mods
                 () => Patches.SubmarineSelectOnDestroyPatch.Prefix());
 
             Type hudManagerUpdatePatch = ClassType.First(
-                t => t.Name == "HudManager_Update_Patch");
+                t => t.Name == "ChangeFloorButtonPatches");
             MethodInfo hudManagerUpdatePatchPostfix = AccessTools.Method(
-                hudManagerUpdatePatch, "Postfix");
+                hudManagerUpdatePatch, "HudUpdatePatch");
             object hudManagerUpdatePatchInstance = null;
             Patches.HudManagerUpdatePatchPostfixPatch.SetType(
                 hudManagerUpdatePatch);
@@ -445,7 +445,7 @@ namespace ExtremeRoles.Compat.Mods
             harmony.Patch(wrapUpAndSpawn,
                 new HarmonyMethod(wrapUpAndSpawnPrefix),
                 new HarmonyMethod(wrapUpAndSpawnPostfix));
-            
+
             // アサシン会議発動するとスポーン画面が出ないように
             harmony.Patch(prespawnStep,
                 new HarmonyMethod(prespawnStepPrefix));
