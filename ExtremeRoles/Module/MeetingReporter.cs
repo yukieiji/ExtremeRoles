@@ -52,14 +52,20 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 	public static void RpcAddTargetMeetingChatReport(byte targetPlayer, string report)
 	{
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.MeetingReporterRpc))
+		if (targetPlayer == CachedPlayerControl.LocalPlayer.PlayerId)
 		{
-			caller.WriteByte((byte)RpcOpType.TargetChatReport);
-			caller.WriteStr(report);
-			caller.WriteByte(targetPlayer);
+			Instance.AddMeetingChatReport(report);
 		}
-		Instance.AddMeetingChatReport(report);
+		else
+		{
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.MeetingReporterRpc))
+			{
+				caller.WriteByte((byte)RpcOpType.TargetChatReport);
+				caller.WriteStr(report);
+				caller.WriteByte(targetPlayer);
+			}
+		}
 	}
 
 	public static void RpcOp(ref MessageReader reader)
