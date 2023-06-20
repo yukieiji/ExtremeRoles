@@ -99,7 +99,7 @@ public sealed class SlaveDriver :
 				byte taskId = task.TypeId;
 
 				if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
-				(NormalPlayerTask t) => t.Index == taskId) != null)
+					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
 					newTaskId = GameSystem.GetRandomCommonTaskId();
 				}
