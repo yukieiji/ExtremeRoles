@@ -191,7 +191,7 @@ public sealed class Miner :
 
     public void AllReset(PlayerControl rolePlayer)
     {
-        this.mines.Clear();
+        this.resetAllMine();
     }
 
     public void ResetOnMeetingStart()
@@ -318,12 +318,12 @@ public sealed class Miner :
 
     public override void ExiledAction(PlayerControl rolePlayer)
     {
-        this.mines.Clear();
-    }
+		this.resetAllMine();
+	}
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-        this.mines.Clear();
+        this.resetAllMine();
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -410,4 +410,11 @@ public sealed class Miner :
             2, 3.5f, new Vector3(0, -1.2f, 0.0f),
             TMPro.TextAlignmentOptions.Center, false);
     }
+	private void resetAllMine()
+	{
+		foreach (int id in this.mines.Keys)
+		{
+			removeMine(this, id);
+		}
+	}
 }

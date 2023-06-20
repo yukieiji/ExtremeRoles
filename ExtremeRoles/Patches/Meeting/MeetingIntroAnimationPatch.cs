@@ -8,17 +8,18 @@ using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Meeting;
 
+#nullable enable
 
 [HarmonyPatch(typeof(MeetingIntroAnimation), nameof(MeetingIntroAnimation.Init))]
 public static class MeetingIntroAnimationInitPatch
 {
-	// バニラのベント掃除が残り続けるバグの修正
-	// これより前だとベントに入ってる状態が残ってる可能性があるのでここでやる
 	public static void Prefix()
 	{
+		// バニラのベント掃除が残り続けるバグの修正
+		// これより前だとベントに入ってる状態が残ってる可能性があるのでここでやる
 		if (CachedShipStatus.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
-			!CachedShipStatus.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType system))
+			!CachedShipStatus.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType? system))
 		{
 			return;
 		}

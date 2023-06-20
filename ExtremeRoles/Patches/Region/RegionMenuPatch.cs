@@ -52,7 +52,7 @@ public static class RegionMenuOpenPatch
     public static void Postfix(RegionMenu __instance)
     {
         var gameIdTextBox = GameObject.Find(
-            "NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
+            "NormalMenu/Buttons/JoinGameButton/JoinGameMenu/GameIdText");
         if (gameIdTextBox == null) { return; }
 
         var allButton = __instance.controllerSelectable;
@@ -141,7 +141,7 @@ public static class RegionMenuOpenPatch
                     (p) =>
                     {
                         portTextBox.outputText.SetText(clientOpt.Port.Value.ToString());
-                        portTextBox.SetText(clientOpt.Port.Value.ToString()); 
+                        portTextBox.SetText(clientOpt.Port.Value.ToString());
                     })));
 
 

@@ -214,7 +214,7 @@ public static class RPCOperator
 
         // ミーティング能力リセット
         Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
-        Patches.Meeting.MeetingHudSelectPatch.SetSelectBlock(false);
+        Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         // 各種システムコンソールリセット
         Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
@@ -494,7 +494,7 @@ public static class RPCOperator
     public static void CloseMeetingButton()
     {
         if (MeetingHud.Instance == null) { return; }
-        Patches.Meeting.MeetingHudSelectPatch.SetSelectBlock(true);
+        Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(true);
         foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
         {
             if (pva == null) { continue; }

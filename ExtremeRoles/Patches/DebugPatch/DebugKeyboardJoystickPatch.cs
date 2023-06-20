@@ -24,8 +24,8 @@ public static class DebugTool
     {
         // ExtremeRolesPlugin.Logger.LogInfo($"DebugMode: {ExtremeRolesPlugin.DebugMode.Value}");
 
-        if (!ExtremeRolesPlugin.DebugMode.Value || 
-            AmongUsClient.Instance == null || 
+        if (!ExtremeRolesPlugin.DebugMode.Value ||
+            AmongUsClient.Instance == null ||
             PlayerControl.LocalPlayer == null) { return; }
         if (!AmongUsClient.Instance.AmHost) { return; }
 
