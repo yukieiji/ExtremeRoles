@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using BepInEx;
+using UnityEngine;
+using Il2CppInterop.Runtime;
+using AmongUs.GameOptions;
+using HarmonyLib;
+
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-
-using BepInEx;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Injection;
-
-using HarmonyLib;
-using Hazel;
-using UnityEngine;
-using AmongUs.GameOptions;
 
 #nullable enable
 
@@ -381,14 +378,15 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
 
     protected override void PatchAll(Harmony harmony)
     {
-        Type exileCont = ClassType.First(
+#pragma warning disable CS8604
+		Type exileCont = ClassType.First(
             t => t.Name == "SubmergedExileController");
         MethodInfo wrapUpAndSpawn = AccessTools.Method(
             exileCont, "WrapUpAndSpawn");
         ExileController? cont = null;
         MethodInfo wrapUpAndSpawnPrefix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Prefix());
-        MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
+		MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
 
         System.Collections.IEnumerator? enumerator = null;
@@ -396,10 +394,11 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
             t => t.Name == "SubmarineSelectSpawn");
         MethodInfo prespawnStep = AccessTools.Method(
             submarineSelectSpawn, "PrespawnStep");
-        MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
+#pragma warning disable CS8601
+		MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmarineSelectSpawnPrespawnStepPatch.Prefix(ref enumerator));
-
-        MethodInfo onDestroy = AccessTools.Method(
+#pragma warning restore CS8601
+		MethodInfo onDestroy = AccessTools.Method(
             submarineSelectSpawn, "OnDestroy");
         MethodInfo onDestroyPrefix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmarineSelectOnDestroyPatch.Prefix());
@@ -436,10 +435,10 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
             () => Patches.SubmarineSurvillanceMinigamePatch.Prefix(game));
         MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
+#pragma warning restore CS8604
 
-
-        // 会議終了時のリセット処理を呼び出せるように
-        harmony.Patch(wrapUpAndSpawn,
+		// 会議終了時のリセット処理を呼び出せるように
+		harmony.Patch(wrapUpAndSpawn,
             new HarmonyMethod(wrapUpAndSpawnPrefix),
             new HarmonyMethod(wrapUpAndSpawnPostfix));
 
