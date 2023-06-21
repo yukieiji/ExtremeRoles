@@ -14,7 +14,6 @@ using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
@@ -22,10 +21,10 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Teleporter : 
+public sealed class Teleporter :
     SingleRoleBase, IRoleAbility, IRoleSpecialSetUp
 {
-    public sealed class TeleporterAbilityBehavior : 
+    public sealed class TeleporterAbilityBehavior :
         AbilityBehaviorBase, ICountBehavior
     {
         public int AbilityCount { get; private set; }
@@ -59,7 +58,7 @@ public sealed class Teleporter :
                 coolTimerText, coolTimerText.transform.parent);
             this.abilityCountText.enableWordWrapping = false;
             this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
-            this.abilityCountText.transform.localPosition += 
+            this.abilityCountText.transform.localPosition +=
                 new Vector3(-0.05f, 0.65f, 0);
             updateAbilityCountText();
         }
@@ -192,7 +191,7 @@ public sealed class Teleporter :
         if (ExtremeRolesPlugin.Compat.IsModMap)
         {
             ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                obj, 
+                obj,
                 Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
         }
 
@@ -334,7 +333,7 @@ public sealed class Teleporter :
         this.Button.Behavior.SetCoolTime(
             allOpt.GetValue<float>(this.GetRoleOptionId(
                 RoleAbilityCommonOption.AbilityCoolTime)));
-        
+
         this.behavior.SetAbilityCount(0);
 
         this.Button.OnMeetingEnd();

@@ -431,7 +431,13 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             this.body = new GameObject("Torch");
             this.body.transform.position = new Vector3(
                 pos.x, pos.y, (pos.y / 1000f));
-            TorchBehavior torch = this.body.AddComponent<TorchBehavior>();
+			if (ExtremeRolesPlugin.Compat.IsModMap)
+			{
+				ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+					this.body,
+					Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+			}
+			TorchBehavior torch = this.body.AddComponent<TorchBehavior>();
             torch.SetRange(range);
             this.body.SetActive(true);
         }

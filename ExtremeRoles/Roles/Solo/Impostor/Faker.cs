@@ -6,12 +6,10 @@ using PowerTools;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using Innersloth.Assets;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -75,6 +73,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
             };
 
             this.body = new GameObject("DummyPlayer");
+
             createNameTextParentObj(targetPlayer, this.body, cosmicInfo, canSeeFake);
             SpriteRenderer baseImage = createBodyImage(cosmicInfo);
             CosmeticsLayer cosmetics = createCosmetics(baseImage, cosmicInfo);
