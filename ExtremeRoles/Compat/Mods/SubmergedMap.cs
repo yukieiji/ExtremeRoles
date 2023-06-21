@@ -86,7 +86,7 @@ namespace ExtremeRoles.Compat.Mods
                 submarineStatusType, "CalculateLightRadius");
 
 
-            Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "Vent_MoveToVent_Patch");
+            Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentMoveToVentPatch");
             inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "InTransition");
         }
         public void Awake(ShipStatus map)
