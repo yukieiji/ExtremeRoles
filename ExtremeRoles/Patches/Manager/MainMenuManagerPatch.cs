@@ -27,6 +27,12 @@ public static class MainMenuManagerStartPatch
 
 	public static void Prefix(MainMenuManager __instance)
     {
+		// Mod DoNotPressButton
+		DoNotPressButton doNotPressButton = __instance.GetComponentInChildren<DoNotPressButton>(true);
+		AspectPosition asspectPos = doNotPressButton.GetComponent<AspectPosition>();
+		Vector3 distanceFromEdge = asspectPos.DistanceFromEdge;
+		asspectPos.DistanceFromEdge = new Vector3(1.5f, distanceFromEdge.y, distanceFromEdge.z);
+
 		// Mod ExitButton
 		__instance.quitButton.OnClick.AddListener(
 			(UnityAction)(() => Logging.BackupCurrentLog()));
