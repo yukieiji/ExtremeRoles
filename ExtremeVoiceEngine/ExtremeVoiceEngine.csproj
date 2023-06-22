@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>1.1.0.1</Version>
+    <Version>1.1.0.2</Version>
     <!--<VersionPrefix>1.1.0</VersionPrefix>-->
     <VersionSuffix>AmongUsV20230613</VersionSuffix>
     <Description>Extreme Voice Engine for bridging Extreme Roles and Voice Engine</Description>
@@ -47,7 +47,7 @@
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
 
-  <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
+  <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs_submerged)' != ''">
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs_submerged)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
   </Target>
 </Project>

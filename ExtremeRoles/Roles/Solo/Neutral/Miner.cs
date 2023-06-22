@@ -102,6 +102,12 @@ public sealed class Miner :
 	private static void setMine(Miner miner, Vector2 pos, int id, bool isRolePlayer=false)
 	{
 		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
+		if (ExtremeRolesPlugin.Compat.IsModMap)
+		{
+			ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+				obj,
+				Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+		}
 		obj.transform.position = pos;
 		var mine = obj.AddComponent<MinerMineEffect>();
 		miner.noneActiveMine = mine;

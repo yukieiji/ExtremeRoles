@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "SingleInstance": {
+      "commandName": "Executable",
+      "executablePath": "$(AmongUs)\\Among Us.exe"
+    },
+    "MultiInstance": {
+      "commandName": "Executable",
+      "executablePath": "$(AmongUs)\\..\\boot_amongUs_4.bat"
+    }
+  }
+}

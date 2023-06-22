@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.State;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
@@ -85,7 +86,8 @@ public sealed class SlaveDriver :
 		{
 			GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
-			if (player == null) { continue; }
+			if (player == null ||
+				!ExtremeRoleManager.GameRole[player.PlayerId].HasTask()) { continue; }
 
 			int replacedTaskNum = 0;
 
@@ -99,7 +101,7 @@ public sealed class SlaveDriver :
 				byte taskId = task.TypeId;
 
 				if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
-				(NormalPlayerTask t) => t.Index == taskId) != null)
+					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
 					newTaskId = GameSystem.GetRandomCommonTaskId();
 				}

@@ -205,30 +205,26 @@ public static class Loader
     {
         if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
         {
-            using (var stream = assembly.GetManifestResourceStream(
-                bundleName))
-            {
-                bundle = AssetBundle.LoadFromStream(stream.ToIl2Cpp());
-                bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-                cachedBundle.Add(bundleName, bundle);
-            }
-        }
+			using var stream = assembly.GetManifestResourceStream(bundleName);
+			var byteTexture = getBytedArryFrom(stream);
+
+			bundle = AssetBundle.LoadFromMemory(byteTexture);
+			bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+			cachedBundle.Add(bundleName, bundle);
+		}
         return bundle;
     }
 
-    private static unsafe Texture2D createTextureFromResources(string path)
+    private static Texture2D createTextureFromResources(string path)
     {
         try
         {
-            Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream stream = assembly.GetManifestResourceStream(path);
-            long length = stream.Length;
-            var byteTexture = new Il2CppStructArray<byte>(length);
-            int read = stream.Read(new Span<byte>(
-                IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
-                (int)length));
-            ImageConversion.LoadImage(texture, byteTexture, false);
+            using Stream stream = assembly.GetManifestResourceStream(path);
+            var byteTexture = getBytedArryFrom(stream);
+
+			Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+			ImageConversion.LoadImage(texture, byteTexture, false);
             return texture;
         }
         catch
@@ -237,5 +233,18 @@ public static class Loader
         }
         return null;
     }
+
+	private static unsafe Il2CppStructArray<byte> getBytedArryFrom(Stream stream)
+	{
+		long length = stream.Length;
+		var byteTexture = new Il2CppStructArray<byte>(length);
+		var span = new Span<byte>(
+			IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
+			(int)length);
+
+		stream.Read(span);
+
+		return byteTexture;
+	}
 }
 
