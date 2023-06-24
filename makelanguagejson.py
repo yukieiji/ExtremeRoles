@@ -99,8 +99,8 @@ def xlsx_to_lang_csv(file_name : str, output_dir : str):
 
         if not (header in all_trans_data):
           all_trans_data[header] = {}
-
-        all_trans_data[header][value] = data
+        cleaned_data = data.replace("\r", "").replace("_x000D_", "").replace("\\n", "<br>")
+        all_trans_data[header][value] = cleaned_data
 
   for lang, data in all_trans_data.items():
 

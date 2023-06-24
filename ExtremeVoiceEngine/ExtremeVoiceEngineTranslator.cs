@@ -6,13 +6,13 @@ using ExtremeRoles.Module.NewTranslation;
 
 namespace ExtremeVoiceEngine;
 
-public sealed class ExtremeVoiceEngineTranslator : Translator
+public sealed class ExtremeVoiceEngineTranslator : ITranslator
 {
-	public override int Priority => 1;
+	public int Priority => 1;
 
-	public override SupportedLangs DefaultLang => SupportedLangs.Japanese;
+	public SupportedLangs DefaultLang => SupportedLangs.Japanese;
 
-	public override Dictionary<string, string> GetTranslation(SupportedLangs languageId)
+	public Dictionary<string, string> GetTranslation(SupportedLangs languageId)
 	{
 		Dictionary<string, string> transData = new Dictionary<string, string>();
 
@@ -21,7 +21,6 @@ public sealed class ExtremeVoiceEngineTranslator : Translator
 			$"ExtremeVoiceEngine.Resources.{languageId}.csv");
 		if (stream is null) { return transData; }
 		using StreamReader transCsv = new StreamReader(stream, Encoding.UTF8);
-		if (transCsv is null) { return transData; }
 
 		string? transInfoLine;
 		while ((transInfoLine = transCsv.ReadLine()) != null)

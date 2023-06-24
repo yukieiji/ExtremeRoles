@@ -8,9 +8,9 @@ namespace ExtremeRoles.Module.NewTranslation;
 
 public static class TranslatorManager
 {
-    private static SortedList<int, Translator> translators = new SortedList<int, Translator>();
+    private static SortedList<int, ITranslator> translators = new SortedList<int, ITranslator>();
 
-	public static void Register(Translator translator)
+	public static void Register(ITranslator translator)
 	{
 		int priority = translator.Priority;
 		while(!translators.TryAdd(priority, translator))

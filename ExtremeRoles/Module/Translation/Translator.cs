@@ -4,14 +4,14 @@
 
 namespace ExtremeRoles.Module.NewTranslation;
 
-public abstract class Translator
+public interface ITranslator
 {
-	public abstract int Priority { get; }
+	public int Priority { get; }
 
-    public abstract SupportedLangs DefaultLang { get; }
+    public SupportedLangs DefaultLang { get; }
 
     public bool IsSupport(SupportedLangs languageId)
         => languageId == DefaultLang;
 
-	public abstract Dictionary<string, string> GetTranslation(SupportedLangs languageId);
+	public Dictionary<string, string> GetTranslation(SupportedLangs languageId);
 }

@@ -8,13 +8,22 @@ namespace ExtremeSkins;
 
 #nullable enable
 
-public sealed class ExtremeSkinsTranslator : Translator
+public sealed class ExtremeSkinsTranslator : ITranslator
 {
-	public override int Priority => 0;
+	public int Priority => 0;
 
-	public override SupportedLangs DefaultLang => SupportedLangs.Japanese;
+	public SupportedLangs DefaultLang => SupportedLangs.Japanese;
 
-	public override Dictionary<string, string> GetTranslation(SupportedLangs languageId)
+	public bool IsSupport(SupportedLangs languageId)
+		=> (languageId) switch
+		{
+			SupportedLangs.English  or
+			SupportedLangs.Japanese or
+			SupportedLangs.SChinese => true,
+			_ => false,
+		};
+
+	public Dictionary<string, string> GetTranslation(SupportedLangs languageId)
 	{
 		Dictionary<string, string> transData = new Dictionary<string, string>();
 
@@ -23,7 +32,6 @@ public sealed class ExtremeSkinsTranslator : Translator
 			$"ExtremeSkins.Resources.LangData.{languageId}.csv");
 		if (stream is null) { return transData; }
 		using StreamReader transCsv = new StreamReader(stream, Encoding.UTF8);
-		if (transCsv is null) { return transData; }
 
 		string? transInfoLine;
 		while ((transInfoLine = transCsv.ReadLine()) != null)
