@@ -3,9 +3,9 @@ using HarmonyLib;
 
 using AmongUs.Data;
 
-using ExtremeVoiceEngine.Translation;
+using ExtremeRoles.Module.NewTranslation;
 
-namespace ExtremeVoiceEngine.Patches;
+namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(LanguageUnit), nameof(LanguageUnit.ParseTSV))]
 public static class LanguageUnitParseTSVPatch

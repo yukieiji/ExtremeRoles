@@ -1,10 +1,13 @@
-﻿using BepInEx;
+﻿global using ExtremeRoles.Extension.Translation;
+
+using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
 using ExtremeRoles.Module;
+using ExtremeVoiceEngine.Translation;
 
 namespace ExtremeVoiceEngine;
 
@@ -37,6 +40,8 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
         this.assemblyName = assembly?.GetName().Name;
         this.version = assembly?.GetName().Version;
+
+		ExtremeRoles.Module.NewTranslation.TranslatorManager.Register(new EvETranslator());
         Updater.Instance.AddMod<ExRRepositoryInfo>($"{assemblyName}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
     }

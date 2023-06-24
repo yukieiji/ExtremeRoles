@@ -5,6 +5,7 @@ using System.Threading;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 
+
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Performance;
 
@@ -12,7 +13,6 @@ using ExtremeVoiceEngine.Command;
 using ExtremeVoiceEngine.Extension;
 using ExtremeVoiceEngine.Interface;
 using ExtremeVoiceEngine.Utility;
-using static Il2CppSystem.Net.Http.Headers.Parser;
 
 namespace ExtremeVoiceEngine.VoiceVox;
 

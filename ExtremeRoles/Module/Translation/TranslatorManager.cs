@@ -4,18 +4,23 @@ using Il2CppCollection = Il2CppSystem.Collections.Generic;
 
 using ExtremeRoles.Performance;
 
-namespace ExtremeVoiceEngine.Translation;
+namespace ExtremeRoles.Module.NewTranslation;
 
 public static class TranslatorManager
 {
-    private static Translator translator = new Translator();
+    private static SortedList<int, Translator> translators = new SortedList<int, Translator>();
+
+	public static void Register(Translator translator)
+	{
+		translators.Add(translator.Priority, translator);
+	}
 
     public static void AddAditionalTransData(
         Dictionary<string, string> newData)
     {
         if (!TranslationController.InstanceExists)
         {
-            ExtremeVoiceEnginePlugin.Logger.LogError($"Can't Add new data");
+            ExtremeRolesPlugin.Logger.LogError($"Can't Add new data");
         }
         AddData(
             FastDestroyableSingleton<TranslationController>.Instance.currentLanguage.AllStrings,
@@ -26,11 +31,15 @@ public static class TranslatorManager
         SupportedLangs languageId,
         Il2CppCollection.Dictionary<string, string> allData)
     {
-        SupportedLangs useLang =
-            translator.IsSupport(languageId) ? languageId : translator.DefaultLang;
-        AddData(
-            allData,
-            translator.GetTranslation(useLang));
+
+		foreach (var translator in translators.Values)
+		{
+			SupportedLangs useLang =
+				translator.IsSupport(languageId) ? languageId : translator.DefaultLang;
+			AddData(
+				allData,
+				translator.GetTranslation(useLang));
+		}
     }
 
     private static void AddData(
@@ -41,7 +50,7 @@ public static class TranslatorManager
         {
             if (allData.ContainsKey(key))
             {
-                ExtremeVoiceEnginePlugin.Logger.LogError(
+				ExtremeRolesPlugin.Logger.LogError(
                     $"Detect:Translation Data conflict!!  Key:{key} Data:{data}");
             }
             else

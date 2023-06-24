@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 using Il2CppObject = Il2CppSystem.Object;
 
-namespace ExtremeRoles.Extension;
+namespace ExtremeRoles.Extension.Translation;
 
 public static class TranslationControllerExtension
 {

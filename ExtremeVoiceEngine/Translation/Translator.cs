@@ -2,16 +2,17 @@
 using System.IO;
 using System.Text;
 
+using ExtremeRoles.Module.NewTranslation;
+
 namespace ExtremeVoiceEngine.Translation;
 
-public sealed class Translator
+public sealed class EvETranslator : Translator
 {
-    public SupportedLangs DefaultLang => SupportedLangs.Japanese;
+	public override int Priority => 0;
 
-    public bool IsSupport(SupportedLangs languageId)
-        => languageId == DefaultLang;
+	public override SupportedLangs DefaultLang => SupportedLangs.Japanese;
 
-    public Dictionary<string, string> GetTranslation(SupportedLangs languageId)
+    public override Dictionary<string, string> GetTranslation(SupportedLangs languageId)
     {
         Dictionary<string, string> transData = new Dictionary<string, string>();
 
