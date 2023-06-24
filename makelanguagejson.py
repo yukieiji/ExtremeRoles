@@ -141,6 +141,8 @@ def xlsx_to_lang_csv(file_name : str, output_dir : str) -> None:
 
   is_update = False
 
+  os.makedirs(output_dir, exist_ok=True)
+
   for lang, data in all_trans_data.items():
 
     file = os.path.join(output_dir, f'{lang}.csv')
