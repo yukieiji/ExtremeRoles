@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.NewTranslation;
 
 namespace ExtremeSkins;
 
 #nullable enable
 
-public sealed class ExtremeSkinsTranslator : ITranslator
+public sealed class ExtremeSkinsTranslator :
+	NullableSingleton<ExtremeSkinsTranslator>, ITranslator
 {
 	public int Priority => 0;
 
