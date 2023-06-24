@@ -15,6 +15,9 @@ public sealed class ExtremeSkinsTranslator :
 
 	public SupportedLangs DefaultLang => SupportedLangs.Japanese;
 
+	internal IReadOnlyDictionary<SupportedLangs, Dictionary<string, string>>? CreatorModeTransData
+	{ private get; set; }
+
 	public bool IsSupport(SupportedLangs languageId)
 		=> (languageId) switch
 		{
@@ -41,6 +44,15 @@ public sealed class ExtremeSkinsTranslator :
 			string key = transInfo[0];
 			string value = transInfo[1].Replace("<br>", System.Environment.NewLine);
 			transData.Add(key, value);
+		}
+
+		if (CreatorModeTransData is not null &&
+			CreatorModeTransData.TryGetValue(languageId, out var creatorModeTransData))
+		{
+			foreach (var (key, data) in creatorModeTransData)
+			{
+				transData[key] = data;
+			}
 		}
 
 		// HatとバイザーとNamePlateの翻訳を取ってくる

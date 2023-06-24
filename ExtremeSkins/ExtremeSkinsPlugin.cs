@@ -40,6 +40,8 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
         Instance = this;
 
+		CreatorModeManager.Initialize();
+
 #if WITHHAT
         ExtremeHatManager.Initialize();
 #endif
@@ -50,9 +52,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
         ExtremeVisorManager.Initialize();
 #endif
 
-        CreatorModeManager.Initialize();
-
-        ExtremeColorManager.Initialize();
+		ExtremeColorManager.Initialize();
 
         VersionManager.PlayerVersion.Clear();
 
@@ -78,14 +78,13 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 #endif
 		}
 
-		ExtremeRoles.Module.NewTranslation.TranslatorManager.Register(
-			new ExtremeSkinsTranslator());
+		var translator = ExtremeSkinsTranslator.Instance;
+		ExtremeRoles.Module.NewTranslation.TranslatorManager.Register(translator);
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 
 		if (assembly is null) { return; }
 
-        Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
 		Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
     }
