@@ -26,8 +26,18 @@ public sealed class CreatorModeManager
 	public static CreatorModeManager Instance { get; private set; }
 #pragma warning restore CS8618
 
-	public bool IsEnable => this.creatorModeConfig.Value;
-    public string StatusString => this.statusString;
+    public bool IsEnable => this.creatorModeConfig.Value;
+    public string StatusString
+	{
+		get
+		{
+			if (string.IsNullOrEmpty(this.statusString))
+			{
+				updateStatusString();
+			}
+			return this.statusString;
+		}
+	}
 
     private ConfigEntry<bool> creatorModeConfig;
     private Mode mode;
@@ -46,8 +56,6 @@ public sealed class CreatorModeManager
             "CreateNewSkin", "CreatorMode", false);
 
         this.mode = this.IsEnable ? Mode.Enable : Mode.Disable;
-        updateStatusString();
-
     }
 
     public void SwitchMode()
@@ -62,9 +70,9 @@ public sealed class CreatorModeManager
     {
         this.statusString = this.mode switch
         {
-            Mode.Enable       => Helper.Translation.GetString("enableCreatorMode"),
-            Mode.DisableReady => Helper.Translation.GetString("disableReadyCreatorMode"),
-            Mode.EnableReady  => Helper.Translation.GetString("enableReadyCreatorMode"),
+            Mode.Enable       => TranslationControllerExtension.GetString("enableCreatorMode"),
+            Mode.DisableReady => TranslationControllerExtension.GetString("disableReadyCreatorMode"),
+            Mode.EnableReady  => TranslationControllerExtension.GetString("enableReadyCreatorMode"),
             _ => string.Empty
         };
     }
@@ -108,8 +116,10 @@ public sealed class CreatorModeManager
                     transData.Add((SupportedLangs)(index - 1), str);
                 }
 
+				/*
                 Helper.Translation.AddKeyTransdata(
                     transInfo[0], transData);
+				*/
             }
         }
         else

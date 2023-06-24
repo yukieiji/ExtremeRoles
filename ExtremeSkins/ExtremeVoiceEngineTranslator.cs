@@ -4,11 +4,13 @@ using System.Text;
 
 using ExtremeRoles.Module.NewTranslation;
 
-namespace ExtremeVoiceEngine;
+namespace ExtremeSkins;
 
-public sealed class ExtremeVoiceEngineTranslator : Translator
+#nullable enable
+
+public sealed class ExtremeSkinsTranslator : Translator
 {
-	public override int Priority => 1;
+	public override int Priority => 0;
 
 	public override SupportedLangs DefaultLang => SupportedLangs.Japanese;
 
@@ -18,7 +20,7 @@ public sealed class ExtremeVoiceEngineTranslator : Translator
 
 		var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 		using Stream? stream = assembly.GetManifestResourceStream(
-			$"ExtremeVoiceEngine.Resources.{languageId}.csv");
+			$"ExtremeSkins.Resources.LangData.{languageId}.csv");
 		if (stream is null) { return transData; }
 		using StreamReader transCsv = new StreamReader(stream, Encoding.UTF8);
 		if (transCsv is null) { return transData; }
@@ -31,6 +33,9 @@ public sealed class ExtremeVoiceEngineTranslator : Translator
 			string value = transInfo[1].Replace("<br>", System.Environment.NewLine);
 			transData.Add(key, value);
 		}
+
+		// HatとバイザーとNamePlateの翻訳を取ってくる
+
 		return transData;
 	}
 }

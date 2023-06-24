@@ -7,7 +7,7 @@ using ExtremeSkins.SkinManager;
 namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(
-        typeof(TranslationController), 
+        typeof(TranslationController),
         nameof(TranslationController.GetString),
         new[]
         {
@@ -20,7 +20,7 @@ namespace ExtremeSkins.Patches.AmongUs
         {
             if ((int)name >= 50000)
             {
-                __result = Helper.Translation.GetString(
+                __result = TranslationControllerExtension.GetString(
                     ExtremeColorManager.LangData[name]);
                 return false;
             }

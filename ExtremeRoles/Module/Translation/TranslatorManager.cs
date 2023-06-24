@@ -12,7 +12,11 @@ public static class TranslatorManager
 
 	public static void Register(Translator translator)
 	{
-		translators.Add(translator.Priority, translator);
+		int priority = translator.Priority;
+		while(!translators.TryAdd(priority, translator))
+		{
+			priority++;
+		}
 	}
 
     public static void AddAditionalTransData(

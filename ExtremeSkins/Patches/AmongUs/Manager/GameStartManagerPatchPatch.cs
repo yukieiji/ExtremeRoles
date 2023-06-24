@@ -95,7 +95,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     }
 
                     __instance.GameStartText.text = string.Format(
-                        Helper.Translation.GetString("errorDiffHostVersion"),
+                        TranslationControllerExtension.GetString("errorDiffHostVersion"),
                         Mathf.Round(kickTime - kickingTimer));
                     __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
                 }
@@ -113,7 +113,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             bool blockStart = false;
             string message = string.Format(
                 errorColorPlaceHolder,
-                Helper.Translation.GetString("errorCannotGameStart"));
+                TranslationControllerExtension.GetString("errorCannotGameStart"));
             foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray())
             {
                 if (client.Character == null) { continue; }
@@ -128,7 +128,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     blockStart = true;
                     message += string.Format(
                         errorColorPlaceHolder,
-                        $"{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorNotInstalled")}");
+                        $"{client.Character.Data.PlayerName}:  {TranslationControllerExtension.GetString("errorNotInstalled")}");
                 }
                 else
                 {
@@ -138,14 +138,14 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     {
                         message += string.Format(
                             errorColorPlaceHolder,
-                            $"{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorOldInstalled")}");
+                            $"{client.Character.Data.PlayerName}:  {TranslationControllerExtension.GetString("errorOldInstalled")}");
                         blockStart = true;
                     }
                     else if (diff < 0)
                     {
                         message += string.Format(
                             errorColorPlaceHolder,
-                            $"{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorNewInstalled")}");
+                            $"{client.Character.Data.PlayerName}:  {TranslationControllerExtension.GetString("errorNewInstalled")}");
                         blockStart = true;
                     }
                 }

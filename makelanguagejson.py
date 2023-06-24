@@ -92,7 +92,7 @@ def xlsx_to_lang_csv(file_name : str, output_dir : str):
 
       lang_data = df[header]
 
-      for index, value in enumerate(key_data):
+      for index, value in key_data.items():
         data = lang_data[index]
         if pd.isnull(data):
           continue
@@ -115,5 +115,5 @@ def xlsx_to_lang_csv(file_name : str, output_dir : str):
 
 if __name__ == "__main__":
   xlsx_to_json(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)
-  xlsx_to_json(EXTREMESKIN_IN_FILE, EXTREMESKIN_OUT_FILE)
-  # xlsx_to_lang_csv(EXTREMESKIN_IN_FILE, os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData"))
+  # xlsx_to_json(EXTREMESKIN_IN_FILE, EXTREMESKIN_OUT_FILE)
+  xlsx_to_lang_csv(EXTREMESKIN_IN_FILE, os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData"))

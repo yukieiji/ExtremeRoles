@@ -53,7 +53,7 @@ public static class CustomCosmicTab
             title.fontWeight = FontWeight.Thin;
             title.enableAutoSizing = false;
             title.autoSizeTextContainer = true;
-            title.text = Translation.GetString(packageName);
+            title.text = TranslationControllerExtension.GetString(packageName);
             title.gameObject.SetActive(true);
             offset -= HeaderSize * instance.YOffset;
             textList.Add(title);

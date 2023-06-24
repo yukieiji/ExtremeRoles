@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿global using ExtremeRoles.Extension.Translation;
+
+using System.Net.Http;
 
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
@@ -34,8 +36,6 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
     public override void Load()
     {
-        Helper.Translation.LoadTransData();
-
         Logger = Log;
 
         Instance = this;
@@ -78,11 +78,15 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 #endif
 		}
 
+		ExtremeRoles.Module.NewTranslation.TranslatorManager.Register(
+			new ExtremeSkinsTranslator());
+
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 
 		if (assembly is null) { return; }
 
         Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
+		Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
     }
 }
