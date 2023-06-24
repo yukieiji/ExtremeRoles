@@ -370,6 +370,7 @@ ExtremeRoles/Resources/Asset
 ExtremeRoles/Resources/TESTBUTTON.png
 ExtremeRoles/Resources/Installer/ExtremeBepInExInstaller.exe
 ExtremeRoles/Resources/JsonData/Language.json
-ExtremeSkins/Resources/LangData/stringData.json
+ExtremeSkins/Resources/LangData/*.csv
+ExtremeSkins/Resources/LangData/*.json
 ExtremeSkins/Resources/Asset
 /workspace
