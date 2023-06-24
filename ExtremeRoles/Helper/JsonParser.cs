@@ -4,18 +4,22 @@ using System.Reflection;
 
 using Newtonsoft.Json.Linq;
 
-namespace ExtremeRoles.Helper
-{
-    public static class JsonParser
-    {
-        public static JObject GetJObjectFromAssembly(string path)
-        {
-            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
-                path);
-            byte[] byteArray = new byte[stream.Length];
-            stream.Read(byteArray, 0, (int)stream.Length);
+#nullable enable
 
-            return JObject.Parse(Encoding.UTF8.GetString(byteArray));
-        }
+namespace ExtremeRoles.Helper;
+
+public static class JsonParser
+{
+    public static JObject? GetJObjectFromAssembly(string path)
+    {
+		var assembly = Assembly.GetCallingAssembly();
+		using Stream? stream = assembly.GetManifestResourceStream(path);
+
+		if (stream is null) { return null; }
+
+        byte[] byteArray = new byte[stream.Length];
+        stream.Read(byteArray, 0, (int)stream.Length);
+
+        return JObject.Parse(Encoding.UTF8.GetString(byteArray));
     }
 }
