@@ -28,7 +28,7 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
 
     public TaskTypes RetrieveOxygenMask;
 
-	private Type? elevatorMover;
+				private Type? elevatorMover;
 
     private Type? submarineOxygenSystem;
     private PropertyInfo? submarineOxygenSystemInstanceGetter;
@@ -49,43 +49,45 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
 
     public SubmergedMap(PluginInfo plugin) : base(Guid, plugin)
     {
+
         // カスタムサボのタスクタイプ取得
         Type taskType = this.ClassType.First(
             t => t.Name == "CustomTaskTypes");
         var retrieveOxigenMaskField = AccessTools.Field(taskType, "RetrieveOxygenMask");
-		object? taskTypeObj = retrieveOxigenMaskField.GetValue(null);
-		var retrieveOxigenMaskTaskTypeField = AccessTools.Field(taskTypeObj?.GetType(), "taskType");
+								object? taskTypeObj = retrieveOxigenMaskField.GetValue(null);
+								var retrieveOxigenMaskTaskTypeField = AccessTools.Field(taskTypeObj?.GetType(), "taskType");
 
-		object? oxygenTaskType = retrieveOxigenMaskTaskTypeField.GetValue(taskTypeObj);
-		if (oxygenTaskType == null) { return; }
-		this.RetrieveOxygenMask = (TaskTypes)oxygenTaskType;
+								object? oxygenTaskType = retrieveOxigenMaskTaskTypeField.GetValue(taskTypeObj);
+								if (oxygenTaskType == null) { return; }
+								this.RetrieveOxygenMask = (TaskTypes)oxygenTaskType;
 
         // サブマージドの酸素妨害の修理用
         this.submarineOxygenSystemInstanceGetter = AccessTools.Property(
-			this.submarineOxygenSystem, "Instance");
-		this.submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
-			this.submarineOxygenSystem, "RepairDamage");
+								this.submarineOxygenSystem, "Instance");
+								this.submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
+								this.submarineOxygenSystem, "RepairDamage");
 
-		// サブマージドのカスタムMonoを取ってくる
-		this.elevatorMover = this.ClassType.First(t => t.Name == "ElevatorMover");
+								// サブマージドのカスタムMonoを取ってくる
+								this.elevatorMover = this.ClassType.First(t => t.Name == "ElevatorMover");
 
-		// フロアを変える用
-		Type floorHandlerType = this.ClassType.First(t => t.Name == "FloorHandler");
-		this.getFloorHandlerInfo = AccessTools.Method(
-            floorHandlerType, "GetFloorHandler", new Type[] { typeof(PlayerControl) });
-		this.rpcRequestChangeFloorMethod = AccessTools.Method(
-            floorHandlerType, "RpcRequestChangeFloor");
-		this.onUpperField = AccessTools.Field(floorHandlerType, "onUpper");
+								// フロアを変える用
+								Type floorHandlerType = this.ClassType.First(t => t.Name == "FloorHandler");
+								this.getFloorHandlerInfo = AccessTools.Method(
+																floorHandlerType, "GetFloorHandler", new Type[] { typeof(PlayerControl) });
+								this.rpcRequestChangeFloorMethod = AccessTools.Method(
+																floorHandlerType, "RpcRequestChangeFloor");
+								this.onUpperField = AccessTools.Field(floorHandlerType, "onUpper");
 
-		this.submarineStatusType = ClassType.First(
-            t => t.Name == "SubmarineStatus");
-		this.calculateLightRadiusMethod = AccessTools.Method(
-            submarineStatusType, "CalculateLightRadius");
+								this.submarineStatusType = ClassType.First(
+																t => t.Name == "SubmarineStatus");
+								this.calculateLightRadiusMethod = AccessTools.Method(
+																submarineStatusType, "CalculateLightRadius");
 
 
         Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentMoveToVentPatch");
-		this.inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "inTransition");
+								this.inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "inTransition");
     }
+
     public void Awake(ShipStatus map)
     {
         Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
@@ -115,9 +117,9 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
 
     public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
     {
-		object? value = calculateLightRadiusMethod?.Invoke(
-			submarineStatus, new object?[] { null, neutral, neutralImpostor });
-		return value != null ? (float)value : 1.0f;
+								object? value = calculateLightRadiusMethod?.Invoke(
+								submarineStatus, new object?[] { null, neutral, neutralImpostor });
+								return value != null ? (float)value : 1.0f;
     }
 
     public float CalculateLightRadius(
@@ -141,13 +143,15 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
     }
 
     public int GetLocalPlayerFloor() => GetFloor(CachedPlayerControl.LocalPlayer);
+
     public int GetFloor(PlayerControl player)
     {
         MonoBehaviour? floorHandler = getFloorHandler(player);
         if (floorHandler == null) { return int.MaxValue; }
-		object? valueObj = onUpperField?.GetValue(floorHandler);
+								object? valueObj = onUpperField?.GetValue(floorHandler);
         return valueObj != null && (bool)valueObj ? 1 : 0;
     }
+
     public void ChangeLocalPlayerFloor(int floor)
     {
         ChangeFloor(CachedPlayerControl.LocalPlayer, floor);
@@ -197,10 +201,10 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
         Vector2 defaultSpawn = ship.InitialSpawnCenter +
             baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
 
-		List<Vector2> spawnPos = new List<Vector2>()
-		{
-			defaultSpawn, defaultSpawn + new Vector2(0.0f, 48.119f)
-		};
+								List<Vector2> spawnPos = new List<Vector2>()
+								{
+												defaultSpawn, defaultSpawn + new Vector2(0.0f, 48.119f)
+								};
 
         return spawnPos;
     }
@@ -284,9 +288,9 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
     public (float, bool, bool) IsCustomVentUseResult(
         Vent vent, GameData.PlayerInfo player, bool isVentUse)
     {
-		object? valueObj = inTransitionField?.GetValue(null);
+								object? valueObj = inTransitionField?.GetValue(null);
 
-		if (valueObj == null || (bool)valueObj)
+								if (valueObj == null || (bool)valueObj)
         {
             return (float.MaxValue, false, false);
         }
@@ -354,9 +358,9 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
         switch (customMonoType)
         {
             case CustomMonoBehaviourType.MovableFloorBehaviour:
-				addObject.AddComponent(
-					Il2CppType.From(this.elevatorMover)).TryCast<MonoBehaviour>();
-				break;
+																addObject.AddComponent(
+																				Il2CppType.From(this.elevatorMover)).TryCast<MonoBehaviour>();
+																break;
             default:
                 break;
 
@@ -379,14 +383,14 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
     protected override void PatchAll(Harmony harmony)
     {
 #pragma warning disable CS8604
-		Type exileCont = ClassType.First(
+								Type exileCont = ClassType.First(
             t => t.Name == "SubmergedExileController");
         MethodInfo wrapUpAndSpawn = AccessTools.Method(
             exileCont, "WrapUpAndSpawn");
         ExileController? cont = null;
         MethodInfo wrapUpAndSpawnPrefix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Prefix());
-		MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
+								MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
 
         System.Collections.IEnumerator? enumerator = null;
@@ -395,10 +399,10 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
         MethodInfo prespawnStep = AccessTools.Method(
             submarineSelectSpawn, "PrespawnStep");
 #pragma warning disable CS8601
-		MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
+								MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmarineSelectSpawnPrespawnStepPatch.Prefix(ref enumerator));
 #pragma warning restore CS8601
-		MethodInfo onDestroy = AccessTools.Method(
+								MethodInfo onDestroy = AccessTools.Method(
             submarineSelectSpawn, "OnDestroy");
         MethodInfo onDestroyPrefix = SymbolExtensions.GetMethodInfo(
             () => Patches.SubmarineSelectOnDestroyPatch.Prefix());
@@ -437,8 +441,8 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
             () => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
 #pragma warning restore CS8604
 
-		// 会議終了時のリセット処理を呼び出せるように
-		harmony.Patch(wrapUpAndSpawn,
+								// 会議終了時のリセット処理を呼び出せるように
+								harmony.Patch(wrapUpAndSpawn,
             new HarmonyMethod(wrapUpAndSpawnPrefix),
             new HarmonyMethod(wrapUpAndSpawnPostfix));
 
@@ -464,12 +468,12 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
             new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
     }
 
-	private MonoBehaviour? getFloorHandler(PlayerControl player)
-	{
-		object? handlerObj = this.getFloorHandlerInfo?.Invoke(null, new object[] { player });
+				private MonoBehaviour? getFloorHandler(PlayerControl player)
+				{
+								object? handlerObj = this.getFloorHandlerInfo?.Invoke(null, new object[] { player });
 
-		if (handlerObj == null) { return null; }
+								if (handlerObj == null) { return null; }
 
-		return ((Component)handlerObj).TryCast<MonoBehaviour>();
-	}
+								return ((Component)handlerObj).TryCast<MonoBehaviour>();
+				}
 }
