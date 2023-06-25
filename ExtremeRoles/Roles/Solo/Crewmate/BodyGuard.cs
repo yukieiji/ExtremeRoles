@@ -208,6 +208,7 @@ public sealed class BodyGuard :
 												}
 
 								}
+
 								public bool TryGetBodyGuardPlayerId(
 												byte targetPlayerId, out byte bodyGuardPlayerId)
 								{
@@ -472,13 +473,10 @@ public sealed class BodyGuard :
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (!shilded.TryGetBodyGuardPlayerId(
-            targetPlayerId, out byte bodyGuardPlayerId)) { return string.Empty; }
-
-        if (bodyGuardPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (shilded.IsShielding(
+																CachedPlayerControl.LocalPlayer.PlayerId, targetPlayerId))
         {
-            return Design.ColoedString(
-                this.NameColor, $" ■");
+            return Design.ColoedString(this.NameColor, $" ■");
         }
 
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
@@ -624,12 +622,8 @@ public sealed class BodyGuard :
         byte bodyGuardPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
         byte targetPlayerId = instance.TargetPlayerId;
 
-        if (targetPlayerId == bodyGuardPlayerId) { return true; }
-
-        bool isProtected = shilded.TryGetBodyGuardPlayerId(
-            targetPlayerId, out byte featShildBodyGuardPlayerId);
-        if (featShildBodyGuardPlayerId == bodyGuardPlayerId &&
-            isProtected)
+        if (targetPlayerId == bodyGuardPlayerId ||
+												shilded.IsShielding(bodyGuardPlayerId, targetPlayerId))
         {
             return true;
         }
