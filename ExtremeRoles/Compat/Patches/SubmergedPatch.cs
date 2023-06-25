@@ -9,6 +9,8 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
+using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
+
 #nullable enable
 
 namespace ExtremeRoles.Compat.Patches;
@@ -65,7 +67,7 @@ public static class HudManagerUpdatePatchPostfixPatch
 
     public static void Postfix(object __instance)
     {
-        var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.SubmergedMap;
+        var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Submerged;
         if (submergedMod == null) { return; }
 
         object? buttonOjb = floorButtonInfo?.GetValue(__instance);
@@ -99,7 +101,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
 
     public static void Postfix(object __instance)
     {
-        var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.SubmergedMap;
+        var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Submerged;
         if (submergedMod == null) { return; }
 
         if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }

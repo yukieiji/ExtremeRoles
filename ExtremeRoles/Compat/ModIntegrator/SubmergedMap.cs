@@ -16,9 +16,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 #nullable enable
 
-namespace ExtremeRoles.Compat.Mods;
+namespace ExtremeRoles.Compat.ModIntegrator;
 
-public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
+public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 {
     public const string Guid = "Submerged";
 
@@ -47,7 +47,7 @@ public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
     private float crewVision;
     private float impostorVision;
 
-    public SubmergedMap(PluginInfo plugin) : base(Guid, plugin)
+    public SubmergedIntegrator(PluginInfo plugin) : base(Guid, plugin)
     {
 
         // カスタムサボのタスクタイプ取得

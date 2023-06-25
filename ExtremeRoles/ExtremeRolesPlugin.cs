@@ -20,7 +20,7 @@ namespace ExtremeRoles;
     "gg.reactor.api",
     BepInDependency.DependencyFlags.SoftDependency)] // Reactorとのパッチの兼ね合いで入れておく
 [BepInDependency(
-    ExtremeRoles.Compat.Mods.SubmergedMap.Guid,
+    ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator.Guid,
     BepInDependency.DependencyFlags.SoftDependency)]
 [BepInProcess("Among Us.exe")]
 public partial class ExtremeRolesPlugin : BasePlugin

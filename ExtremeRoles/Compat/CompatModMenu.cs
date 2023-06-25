@@ -106,17 +106,20 @@ internal static class CompatModMenu
             {
                 createAddonButtons(index, pluginPath, mod, template);
                 ++index;
-            }
+				continue;
+			}
 
-            if (!CompatModManager.ModInfo.ContainsKey(mod)) { continue; }
+            if (!CompatModManager.ModInfo.TryGetValue(mod, out var modInfo)) { continue; }
 
             TextMeshPro modText = createButtonText(modName, index);
 
             var button = new Dictionary<ButtonType, SimpleButton>();
-            var (dllName, repoURI) = CompatModManager.ModInfo[mod];
 
-            if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod) ||
-                File.Exists($"{pluginPath}{dllName}.dll"))
+			string dllName = modInfo.Name;
+			string repoUrl = modInfo.RepoUrl;
+
+			if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod) ||
+                File.Exists($"{pluginPath}{modInfo.Name}.dll"))
             {
                 var uninstallButton = createButton(template, modText);
                 uninstallButton.transform.localPosition = new Vector3(1.85f, 0.0f, -5.0f);
@@ -127,7 +130,7 @@ internal static class CompatModMenu
                 var updateButton = createButton(template, modText);
                 updateButton.transform.localPosition = new Vector3(0.35f, 0.0f, -5.0f);
 				updateButton.ClickedEvent.AddListener(
-                    createUpdateAction(mod, dllName, repoURI));
+                    createUpdateAction(mod, dllName, repoUrl));
                 updateButtonTextAndName(ButtonType.UpdateButton, updateButton);
 
                 button.Add(ButtonType.UninstallButton, uninstallButton);
@@ -138,7 +141,7 @@ internal static class CompatModMenu
                 var installButton = createButton(template, modText);
                 installButton.transform.localPosition = new Vector3(1.1f, 0.0f, -5.0f);
 				installButton.ClickedEvent.AddListener(
-                    createInstallAction(dllName, repoURI));
+                    createInstallAction(dllName, repoUrl));
                 updateButtonTextAndName(ButtonType.InstallButton, installButton);
                 button.Add(ButtonType.InstallButton, installButton);
             }

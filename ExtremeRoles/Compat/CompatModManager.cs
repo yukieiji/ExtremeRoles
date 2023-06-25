@@ -7,118 +7,129 @@ using BepInEx.Unity.IL2CPP;
 using Hazel;
 
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Compat.ModIntegrator;
 
-namespace ExtremeRoles.Compat
+namespace ExtremeRoles.Compat;
+
+#nullable enable
+
+internal enum CompatModType
 {
+    ExtremeSkins,
+    ExtremeVoiceEngine,
+    Submerged,
+}
 
-    internal enum CompatModType
+internal sealed class CompatModManager
+{
+	public bool IsModMap => this.map != null;
+    public IMapMod? ModMap => this.map;
+
+    public readonly Dictionary<CompatModType, ModIntegratorBase> LoadedMod = new Dictionary<CompatModType, ModIntegratorBase>();
+
+    private IMapMod? map;
+
+    public static readonly Dictionary<CompatModType, CompatModInfo> ModInfo = new Dictionary<CompatModType, CompatModInfo>
     {
-        ExtremeSkins,
-        ExtremeVoiceEngine,
-        Submerged,
+        {
+			CompatModType.Submerged,
+			new CompatModInfo(
+				CompatModType.Submerged.ToString(),
+				SubmergedIntegrator.Guid,
+				"https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest",
+				true,
+				typeof(SubmergedIntegrator))
+		},
+    };
+
+#pragma warning disable CS8618
+	public static CompatModManager Instance { get; private set; }
+#pragma warning restore CS8618
+
+	internal CompatModManager()
+    {
+        RemoveMap();
+
+        ExtremeRolesPlugin.Logger.LogInfo(
+            $"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
+
+        foreach (var (modType, modInfo) in ModInfo)
+        {
+            PluginInfo? plugin;
+
+			string guid = modInfo.Guid;
+
+			if (!IL2CPPChainloader.Instance.Plugins.TryGetValue(guid, out plugin))
+			{ continue;  }
+
+
+			ExtremeRolesPlugin.Logger.LogInfo(
+					$"---- CompatMod:{guid} integrater Start!! ----");
+
+			object? instance = Activator.CreateInstance(
+				modInfo.ModIntegratorType, new object[] { plugin });
+			if (instance == null) { continue; }
+
+			this.LoadedMod.Add(modType, (ModIntegratorBase)instance);
+
+			ExtremeRolesPlugin.Logger.LogInfo(
+				$"---- CompatMod:{guid} integrated!! ----");
+
+		}
+        ExtremeRolesPlugin.Logger.LogInfo(
+            $"---------- CompatModManager Initialize End!! ----------");
+		Instance = this;
+	}
+
+    internal void SetUpMap(ShipStatus shipStatus)
+    {
+        this.map = null;
+
+        foreach (var mod in LoadedMod.Values)
+        {
+            if (mod is IMapMod mapMod &&
+                mapMod.MapType == shipStatus.Type)
+            {
+                ExtremeRolesPlugin.Logger.LogInfo(
+                    $"Awake modmap:{mapMod}");
+                mapMod.Awake(shipStatus);
+                this.map = mapMod;
+                break;
+            }
+        }
+    }
+    internal void RemoveMap()
+    {
+        if (this.map == null) { return; }
+
+        this.map.Destroy();
+        this.map = null;
     }
 
-    internal sealed class CompatModManager
+    internal void IntegrateModCall(ref MessageReader reader)
     {
-        public bool IsModMap => this.map != null;
-        public IMapMod ModMap => this.map;
+        byte callType = reader.ReadByte();
 
-        public readonly Dictionary<CompatModType, CompatModBase> LoadedMod = new Dictionary<CompatModType, CompatModBase>();
-
-        private IMapMod map;
-
-        public static readonly Dictionary<CompatModType, (string, string)> ModInfo = new Dictionary<CompatModType, (string, string)>
+        switch (callType)
         {
-            { CompatModType.Submerged, ("Submerged", "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest") },
-        };
-
-        private static HashSet<(string, CompatModType, Type)> compatMod = new HashSet<(string, CompatModType, Type)>()
-        {
-            (SubmergedMap.Guid, CompatModType.Submerged, typeof(SubmergedMap)),
-        };
-
-        internal CompatModManager()
-        {
-            RemoveMap();
-
-            ExtremeRolesPlugin.Logger.LogInfo(
-                $"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
-
-            foreach (var (guid, modType, mod) in compatMod)
-            {
-                PluginInfo plugin;
-
-                if (IL2CPPChainloader.Instance.Plugins.TryGetValue(guid, out plugin))
+            case IMapMod.RpcCallType:
+                byte mapRpcType = reader.ReadByte();
+                switch ((MapRpcCall)mapRpcType)
                 {
-                    ExtremeRolesPlugin.Logger.LogInfo(
-                        $"---- CompatMod:{guid} integrater Start!! ----");
-                    this.LoadedMod.Add(
-                        modType,
-                        (CompatModBase)Activator.CreateInstance(
-                            mod, new object[] { plugin }));
-
-                    ExtremeRolesPlugin.Logger.LogInfo(
-                        $"---- CompatMod:{guid} integrated!! ----");
+                    case MapRpcCall.RepairAllSabo:
+                        this.ModMap?.RepairCustomSabotage();
+                        break;
+                    case MapRpcCall.RepairCustomSaboType:
+                        int repairSaboType = reader.ReadInt32();
+                        this.ModMap?.RepairCustomSabotage(
+                            (TaskTypes)repairSaboType);
+                        break;
+                    default:
+                        break;
                 }
-            }
-            ExtremeRolesPlugin.Logger.LogInfo(
-                $"---------- CompatModManager Initialize End!! ----------");
+                break;
+            default:
+                break;
         }
-
-        internal void SetUpMap(ShipStatus shipStatus)
-        {
-            this.map = null;
-
-            foreach (var mod in LoadedMod.Values)
-            {
-                IMapMod mapMod = mod as IMapMod;
-                if (mapMod != null && 
-                    mapMod.MapType == shipStatus.Type)
-                {
-                    ExtremeRolesPlugin.Logger.LogInfo(
-                        $"Awake modmap:{mapMod}");
-                    mapMod.Awake(shipStatus);
-                    this.map = mapMod;
-                    break;
-                }
-            }
-        }
-        internal void RemoveMap()
-        {
-            if (this.map == null) { return; }
-
-            this.map.Destroy();
-            this.map = null;
-        }
-
-        internal void IntegrateModCall(ref MessageReader reader)
-        {
-            byte callType = reader.ReadByte();
-
-            switch (callType)
-            {
-                case IMapMod.RpcCallType:
-                    byte mapRpcType = reader.ReadByte();
-                    switch ((MapRpcCall)mapRpcType)
-                    {
-                        case MapRpcCall.RepairAllSabo:
-                            this.ModMap.RepairCustomSabotage();
-                            break;
-                        case MapRpcCall.RepairCustomSaboType:
-                            int repairSaboType = reader.ReadInt32();
-                            this.ModMap.RepairCustomSabotage(
-                                (TaskTypes)repairSaboType);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-        }
-
     }
 }

@@ -7,7 +7,7 @@ using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
 
-using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
@@ -104,7 +104,7 @@ public sealed class UnderWarper :
 
         if (ExtremeRolesPlugin.Compat.IsModMap)
         {
-            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedIntegrator)
             {
                 FastDestroyableSingleton<HudManager>.Instance.PlayerCam.Locked = false;
             }

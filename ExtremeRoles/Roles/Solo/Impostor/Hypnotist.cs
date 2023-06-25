@@ -23,7 +23,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
 
@@ -717,7 +717,7 @@ public sealed class Hypnotist :
 
         if (ExtremeRolesPlugin.Compat.IsModMap)
         {
-            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedIntegrator)
             {
                 setAbilityPartFromMapJsonInfo(
                     this.position["Submerged"], redModuleNum);

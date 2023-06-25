@@ -6,7 +6,7 @@ using UnityEngine;
 
 using Newtonsoft.Json.Linq;
 
-using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -225,7 +225,7 @@ public sealed class Teleporter :
         if (ExtremeRolesPlugin.Compat.IsModMap)
         {
 
-            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedIntegrator)
             {
                 key = "Submerged";
             }

@@ -14,7 +14,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Compat.ModIntegrator;
 
 namespace ExtremeRoles.Helper;
 
@@ -338,7 +338,7 @@ public static class GameSystem
 
 		if (ExtremeRolesPlugin.Compat.IsModMap)
 		{
-			if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+			if (ExtremeRolesPlugin.Compat.ModMap is SubmergedIntegrator)
 			{
 				ventKey = submergedKey;
 			}
