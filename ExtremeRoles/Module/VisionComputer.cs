@@ -10,7 +10,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Impostor;
-
+using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.Interface;
 
 namespace ExtremeRoles.Module;
 
@@ -79,37 +80,31 @@ public class VisionComputer
             default:
                 break;
         }
-        bool isRequireCustomVision = requireCustomCustomCalculateLightRadius();
+		bool isRequireCustomVision =
+			CompatModManager.Instance.TryGetModMap(out var modMap) &&
+			modMap!.IsCustomCalculateLightRadius;
 
         if (!RoleAssignState.Instance.IsRoleSetUpEnd)
         {
-            return checkNormalOrCustomCalculateLightRadius(isRequireCustomVision, playerInfo, ref vision);
+            return checkNormalOrCustomCalculateLightRadius(
+				modMap, isRequireCustomVision, playerInfo, ref vision);
         }
         var systems = shipStatus.Systems;
-        ISystemType systemType = systems.ContainsKey(electrical) ? systems[electrical] : null;
-        if (systemType == null)
+        ISystemType electricalSystem = systems.ContainsKey(electrical) ? systems[electrical] : null;
+        if (electricalSystem == null)
         {
-            return checkNormalOrCustomCalculateLightRadius(isRequireCustomVision, playerInfo, ref vision);
+            return checkNormalOrCustomCalculateLightRadius(
+				modMap, isRequireCustomVision, playerInfo, ref vision);
         }
 
-        SwitchSystem switchSystem = systemType.TryCast<SwitchSystem>();
+        SwitchSystem switchSystem = electricalSystem.TryCast<SwitchSystem>();
         if (switchSystem == null)
         {
-            return checkNormalOrCustomCalculateLightRadius(isRequireCustomVision, playerInfo, ref vision);
+            return checkNormalOrCustomCalculateLightRadius(
+				modMap, isRequireCustomVision, playerInfo, ref vision);
         }
 
         var allRole = ExtremeRoleManager.GameRole;
-
-        if (allRole.Count == 0)
-        {
-            if (isRequireCustomVision)
-            {
-                vision = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
-                    playerInfo, false, playerInfo.Role.IsImpostor);
-                return false;
-            }
-            return true;
-        }
 
         SingleRoleBase role = allRole[playerInfo.PlayerId];
 
@@ -131,8 +126,7 @@ public class VisionComputer
                 visionMulti = CrewmateLightVision;
             }
 
-            vision = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
-                playerInfo, visionMulti, applayVisionEffects);
+            vision = modMap!.CalculateLightRadius(playerInfo, visionMulti, applayVisionEffects);
 
             return false;
         }
@@ -167,20 +161,13 @@ public class VisionComputer
         return false;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static bool requireCustomCustomCalculateLightRadius() =>
-        ExtremeRolesPlugin.Compat.IsModMap &&
-        ExtremeRolesPlugin.Compat.ModMap.IsCustomCalculateLightRadius;
-
     private static bool checkNormalOrCustomCalculateLightRadius(
+		IMapMod modMap,
         bool isRequireCustomVision, GameData.PlayerInfo player, ref float result)
     {
-        if (isRequireCustomVision)
-        {
-            result = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
-                player, false, player.Role.IsImpostor);
-            return false;
-        }
-        return true;
-    }
+		if (!isRequireCustomVision) { return true; }
+
+		result = modMap.CalculateLightRadius(player, false, player.Role.IsImpostor);
+		return false;
+	}
 }
