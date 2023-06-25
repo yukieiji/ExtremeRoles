@@ -12,7 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
-
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -86,7 +86,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         public CrimeInfo? GetCrimeInfo(byte playerId)
         {
             if (!this.deadBodyInfo.ContainsKey(playerId))
-            { 
+            {
                 return null;
             }
 
@@ -205,7 +205,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
     {
 
         if (this.prevPlayerPos == defaultPos)
-        { 
+        {
             this.prevPlayerPos = rolePlayer.GetTruePosition();
         }
         if (this.info != null)
@@ -353,7 +353,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
     private void showSearchResultText(CrimeInfo info)
     {
         if (this.textPopUp == null) { return; }
-        
+
         string showStr = "";
         switch (this.cond)
         {
@@ -391,7 +391,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         }
 
         this.textPopUp.AddText(showStr);
-        
+
     }
 
     private void updateSearchText()
@@ -505,7 +505,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
         {
             if (role.Id != ExtremeRoleId.Detective) { continue; }
             if (!this.IsSameControlId(role)) { continue; }
-            
+
             var playerInfo = GameData.Instance.GetPlayerById(playerId);
             if (!playerInfo.IsDead && !playerInfo.Disconnected)
             {
@@ -645,7 +645,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleRepor
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.meetingButton;
         set
         {
@@ -762,7 +762,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleRepor
         this.Button.SetLabelToCrewmate();
     }
 
-    public bool IsAbilityUse() => 
+    public bool IsAbilityUse() =>
         this.IsCommonUse() && Minigame.Instance == null;
 
     public bool IsOpen() => Minigame.Instance != null;
@@ -786,9 +786,9 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleRepor
     {
         this.useAbility = false;
         SystemConsole emergencyConsole;
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            emergencyConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+            emergencyConsole = modMap!.GetSystemConsole(
                 Compat.Interface.SystemConsoleType.EmergencyButton);
         }
         else

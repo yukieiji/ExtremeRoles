@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -20,7 +21,7 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
 {
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.jugglingButton;
         set
         {
@@ -79,9 +80,9 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
     {
         // まずはテレポート先とかにも設定できるプレヤーを取得
         var allPlayer = CachedPlayerControl.AllPlayerControls;
-        var validPlayer = allPlayer.Where(x => 
-            x != null && 
-            x.Data != null && 
+        var validPlayer = allPlayer.Where(x =>
+            x != null &&
+            x.Data != null &&
             !x.Data.IsDead &&
             !x.Data.Disconnected &&
             !x.PlayerControl.inVent && // ベント入ってない
@@ -120,10 +121,9 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
         {
             var ship = CachedShipStatus.Instance;
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                additionalPos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
-                    randomPlayer);
+                additionalPos = modMap!.GetSpawnPos(randomPlayer);
             }
             else
             {

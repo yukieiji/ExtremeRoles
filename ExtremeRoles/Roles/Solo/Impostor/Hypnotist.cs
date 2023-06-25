@@ -26,6 +26,7 @@ using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -715,9 +716,9 @@ public sealed class Hypnotist :
         byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
             ByteOptionNames.MapId);
 
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedIntegrator)
+            if (modMap is SubmergedIntegrator)
             {
                 setAbilityPartFromMapJsonInfo(
                     this.position["Submerged"], redModuleNum);

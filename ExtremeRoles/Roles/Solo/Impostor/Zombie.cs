@@ -8,10 +8,10 @@ using AmongUs.GameOptions;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -529,13 +529,11 @@ public sealed class Zombie :
 
         var allPlayer = GameData.Instance.AllPlayers;
         ShipStatus ship = CachedShipStatus.Instance;
+		List<Vector2> randomPos = new List<Vector2>();
 
-        List<Vector2> randomPos = new List<Vector2>();
-
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            randomPos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
-                playerId);
+            randomPos = modMap!.GetSpawnPos(playerId);
         }
         else
         {

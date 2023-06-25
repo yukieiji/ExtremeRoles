@@ -118,7 +118,7 @@ internal static class CompatModMenu
 			string dllName = modInfo.Name;
 			string repoUrl = modInfo.RepoUrl;
 
-			if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod) ||
+			if (CompatModManager.Instance.LoadedMod.ContainsKey(mod) ||
                 File.Exists($"{pluginPath}{modInfo.Name}.dll"))
             {
                 var uninstallButton = createButton(template, modText);

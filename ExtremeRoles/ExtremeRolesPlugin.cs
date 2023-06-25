@@ -20,7 +20,7 @@ namespace ExtremeRoles;
     "gg.reactor.api",
     BepInDependency.DependencyFlags.SoftDependency)] // Reactorとのパッチの兼ね合いで入れておく
 [BepInDependency(
-    ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator.Guid,
+    Compat.ModIntegrator.SubmergedIntegrator.Guid,
     BepInDependency.DependencyFlags.SoftDependency)]
 [BepInProcess("Among Us.exe")]
 public partial class ExtremeRolesPlugin : BasePlugin
@@ -33,7 +33,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public static InfoOverlay Info = new InfoOverlay();
 
     internal static BepInEx.Logging.ManualLogSource Logger;
-    internal static CompatModManager Compat;
 
     public static ConfigEntry<bool> DebugMode { get; private set; }
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
@@ -56,7 +55,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
         Harmony.PatchAll();
 
-        Compat = new CompatModManager();
+		new CompatModManager();
 
         AddComponent<ExtremeRolePluginBehavior>();
 

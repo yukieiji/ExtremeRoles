@@ -19,6 +19,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Patches
 {
@@ -259,7 +260,7 @@ namespace ExtremeRoles.Patches
                         var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
                         if (totalTask == 0)
                         {
-                            GameSystem.SetTask(playerInfo, 
+                            GameSystem.SetTask(playerInfo,
                                 GameSystem.GetRandomCommonTaskId());
                         }
                     }
@@ -298,26 +299,24 @@ namespace ExtremeRoles.Patches
             bool isRemoveSecurity = shipOpt.Security.DisableSecurity;
             bool isRemoveVital = shipOpt.Vital.DisableVital;
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                var modMap = ExtremeRolesPlugin.Compat.ModMap;
-
                 if (isRemoveAdmin)
                 {
                     disableObjectName.UnionWith(
-                        modMap.GetSystemObjectName(
+                        modMap!.GetSystemObjectName(
                             Compat.Interface.SystemConsoleType.Admin));
                 }
                 if (isRemoveSecurity)
                 {
                     disableObjectName.UnionWith(
-                        modMap.GetSystemObjectName(
+                        modMap!.GetSystemObjectName(
                             Compat.Interface.SystemConsoleType.SecurityCamera));
                 }
                 if (isRemoveVital)
                 {
                     disableObjectName.UnionWith(
-                        modMap.GetSystemObjectName(
+                        modMap!.GetSystemObjectName(
                             Compat.Interface.SystemConsoleType.Vital));
                 }
             }

@@ -10,6 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -25,9 +26,9 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
             this.body = GameSystem.CreateNoneReportableDeadbody(
                 targetPlayer, rolePlayer.transform.position);
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+				modMap!.AddCustomComponent(
                     this.body,
                     Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
@@ -78,9 +79,9 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
             SpriteRenderer baseImage = createBodyImage(cosmicInfo);
             CosmeticsLayer cosmetics = createCosmetics(baseImage, cosmicInfo);
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+				modMap!.AddCustomComponent(
                     this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 

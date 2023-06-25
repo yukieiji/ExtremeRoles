@@ -67,8 +67,7 @@ public static class HudManagerUpdatePatchPostfixPatch
 
     public static void Postfix(object __instance)
     {
-        var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Submerged;
-        if (submergedMod == null) { return; }
+        if (!CompatModManager.Instance.IsModMap<Submerged>()) { return; }
 
         object? buttonOjb = floorButtonInfo?.GetValue(__instance);
 
@@ -101,8 +100,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
 
     public static void Postfix(object __instance)
     {
-        var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Submerged;
-        if (submergedMod == null) { return; }
+        if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod)) { return; }
 
         if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
         if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
@@ -116,7 +114,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
         if (playersWithMask != null &&
             !playersWithMask.Contains(CachedPlayerControl.LocalPlayer.PlayerId))
         {
-            submergedMod.RepairCustomSabotage(
+            submergedMod!.RepairCustomSabotage(
                 submergedMod.RetrieveOxygenMask);
         }
     }

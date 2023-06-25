@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -188,10 +189,9 @@ public sealed class Teleporter :
         GameObject obj = new GameObject("portal");
         obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                obj,
+			modMap!.AddCustomComponent(obj,
                 Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
         }
 
@@ -222,10 +222,10 @@ public sealed class Teleporter :
     {
         string key = skeldKey;
 
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
 
-            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedIntegrator)
+            if (modMap is SubmergedIntegrator)
             {
                 key = "Submerged";
             }

@@ -11,13 +11,14 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Patches.MapOverlay;
 
 [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
 public static class MapCountOverlayUpdatePatch
 {
-    public static Dictionary<SystemTypes, List<Color>> PlayerColor = 
+    public static Dictionary<SystemTypes, List<Color>> PlayerColor =
         new Dictionary<SystemTypes, List<Color>>();
 
     private static float adminTimer = 0.0f;
@@ -88,7 +89,7 @@ public static class MapCountOverlayUpdatePatch
 
             if (CachedShipStatus.FastRoom.TryGetValue(
                     counterArea.RoomType,
-                    out PlainShipRoom plainShipRoom) && 
+                    out PlainShipRoom plainShipRoom) &&
                 plainShipRoom.roomArea)
             {
                 HashSet<int> alreadyShowPlayerIds = new HashSet<int>();
@@ -232,10 +233,9 @@ public static class MapCountOverlayUpdatePatch
     private static void disableVital()
     {
         HashSet<string> vitalObj = new HashSet<string>();
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            vitalObj = ExtremeRolesPlugin.Compat.ModMap.GetSystemObjectName(
-                Compat.Interface.SystemConsoleType.Admin);
+            vitalObj = modMap!.GetSystemObjectName(Compat.Interface.SystemConsoleType.Admin);
         }
         else
         {

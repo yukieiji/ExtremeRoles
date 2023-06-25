@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -22,7 +23,7 @@ namespace ExtremeRoles.Patches.MiniGame
         private static bool isRemoveSecurity = false;
         private static TMPro.TextMeshPro timerText;
 
-        private static readonly HashSet<ExtremeRoleId> securityUseRole = 
+        private static readonly HashSet<ExtremeRoleId> securityUseRole =
             new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Traitor,
@@ -116,9 +117,9 @@ namespace ExtremeRoles.Patches.MiniGame
         private static void disableSecurity()
         {
             HashSet<string> vitalObj = new HashSet<string>();
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                vitalObj = ExtremeRolesPlugin.Compat.ModMap.GetSystemObjectName(
+                vitalObj = modMap!.GetSystemObjectName(
                     Compat.Interface.SystemConsoleType.SecurityCamera);
             }
             else
@@ -193,7 +194,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() || 
+            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
                 SecurityHelper.IsAbilityUse())
             {
                 updateCamera(__instance);
@@ -231,7 +232,7 @@ namespace ExtremeRoles.Patches.MiniGame
                 Timer = ChangeTime;
             }
 
-            if ((instance.isStatic || update) && 
+            if ((instance.isStatic || update) &&
                 !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
                     CachedPlayerControl.LocalPlayer))
             {
@@ -251,7 +252,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     }
                 }
             }
-            else if (!instance.isStatic && 
+            else if (!instance.isStatic &&
                 PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(
                     CachedPlayerControl.LocalPlayer))
             {

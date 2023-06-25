@@ -44,7 +44,7 @@ internal sealed class Updater : ButtonExcuterBase
         this.dllName = $"{dllName}.dll";
         this.repoUrl = repoUrl;
         this.updateTask = null;
-        this.installVersion = ExtremeRolesPlugin.Compat.LoadedMod[mod].Version;
+        this.installVersion = CompatModManager.Instance.LoadedMod[mod].Version;
     }
 
     public override void Excute()

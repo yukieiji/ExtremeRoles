@@ -488,7 +488,7 @@ public static class RPCOperator
     public static void IntegrateModCall(
         ref MessageReader readeer)
     {
-        ExtremeRolesPlugin.Compat.IntegrateModCall(ref readeer);
+		Compat.CompatModManager.Instance.IntegrateModCall(ref readeer);
     }
 
     public static void CloseMeetingButton()

@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat.ModIntegrator;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Helper;
 
@@ -252,10 +253,9 @@ public static class GameSystem
     public static SystemConsole GetSecuritySystemConsole()
     {
         SystemConsole watchConsole;
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
-                SystemConsoleType.SecurityCamera);
+            watchConsole = modMap!.GetSystemConsole(SystemConsoleType.SecurityCamera);
         }
         else
         {
@@ -266,10 +266,9 @@ public static class GameSystem
     public static SystemConsole GetVitalSystemConsole()
     {
         SystemConsole vitalConsole;
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            vitalConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
-                SystemConsoleType.Vital);
+            vitalConsole = modMap!.GetSystemConsole(SystemConsoleType.Vital);
         }
         else
         {
@@ -336,9 +335,9 @@ public static class GameSystem
 		string ventKey;
 		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
 
-		if (ExtremeRolesPlugin.Compat.IsModMap)
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			if (ExtremeRolesPlugin.Compat.ModMap is SubmergedIntegrator)
+			if (modMap is SubmergedIntegrator)
 			{
 				ventKey = submergedKey;
 			}
@@ -424,12 +423,11 @@ public static class GameSystem
 
             TaskTypes taskType = task.TaskType;
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+                if (modMap!.IsCustomSabotageTask(taskType))
                 {
-                    ExtremeRolesPlugin.Compat.ModMap.RpcRepairCustomSabotage(
-                        taskType);
+                    modMap!.RpcRepairCustomSabotage(taskType);
                     continue;
                 }
             }
@@ -502,17 +500,19 @@ public static class GameSystem
 
         for (int i = 0; i < player.myTasks.Count; ++i)
         {
-            var textTask = player.myTasks[i].gameObject.GetComponent<ImportantTextTask>();
-            if (textTask != null) { continue; }
+			var task = player.myTasks[i];
+            var textTask = task.gameObject.GetComponent<ImportantTextTask>();
 
-            if (SaboTask.Contains(player.myTasks[i].TaskType)) { continue; }
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (textTask != null ||
+				SaboTask.Contains(task.TaskType)) { continue; }
+
+            if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
+				modMap!.IsCustomSabotageTask(task.TaskType))
             {
-                if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(
-                        player.myTasks[i].TaskType)) { continue; }
-            }
+				continue;
+			}
 
-            if (player.myTasks[i].IsComplete)
+            if (task.IsComplete)
             {
                 NormalPlayerTask normalPlayerTask = UnityEngine.Object.Instantiate(
                     addTask, player.transform);

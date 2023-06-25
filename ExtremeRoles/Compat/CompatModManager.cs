@@ -22,12 +22,7 @@ internal enum CompatModType
 
 internal sealed class CompatModManager
 {
-	public bool IsModMap => this.map != null;
-    public IMapMod? ModMap => this.map;
-
     public readonly Dictionary<CompatModType, ModIntegratorBase> LoadedMod = new Dictionary<CompatModType, ModIntegratorBase>();
-
-    private IMapMod? map;
 
     public static readonly Dictionary<CompatModType, CompatModInfo> ModInfo = new Dictionary<CompatModType, CompatModInfo>
     {
@@ -41,6 +36,8 @@ internal sealed class CompatModManager
 				typeof(SubmergedIntegrator))
 		},
     };
+
+	private IMapMod? map;
 
 #pragma warning disable CS8618
 	public static CompatModManager Instance { get; private set; }
@@ -81,7 +78,26 @@ internal sealed class CompatModManager
 		Instance = this;
 	}
 
-    internal void SetUpMap(ShipStatus shipStatus)
+	internal bool IsModMap<T>()
+		where T : ModIntegratorBase
+		=> this.map is T;
+
+	// ここでtrueが返ってきてる時点でIMapModはNullではない
+	internal bool TryGetModMap(out IMapMod? mapMod)
+	{
+		mapMod = this.map;
+		return mapMod != null;
+	}
+
+	// ここでtrueが返ってきてる時点でT?はNullではない
+	internal bool TryGetModMap<T>(out T? mapMod)
+		where T : ModIntegratorBase
+	{
+		mapMod = this.map as T;
+		return mapMod != null;
+	}
+
+	internal void SetUpMap(ShipStatus shipStatus)
     {
         this.map = null;
 
@@ -98,6 +114,7 @@ internal sealed class CompatModManager
             }
         }
     }
+
     internal void RemoveMap()
     {
         if (this.map == null) { return; }
@@ -117,11 +134,11 @@ internal sealed class CompatModManager
                 switch ((MapRpcCall)mapRpcType)
                 {
                     case MapRpcCall.RepairAllSabo:
-                        this.ModMap?.RepairCustomSabotage();
+						this.map?.RepairCustomSabotage();
                         break;
                     case MapRpcCall.RepairCustomSaboType:
                         int repairSaboType = reader.ReadInt32();
-                        this.ModMap?.RepairCustomSabotage(
+                        this.map?.RepairCustomSabotage(
                             (TaskTypes)repairSaboType);
                         break;
                     default:
