@@ -31,7 +31,7 @@ public static class MainMenuManagerStartPatch
 		DoNotPressButton doNotPressButton = __instance.GetComponentInChildren<DoNotPressButton>(true);
 		AspectPosition asspectPos = doNotPressButton.GetComponent<AspectPosition>();
 		Vector3 distanceFromEdge = asspectPos.DistanceFromEdge;
-		asspectPos.DistanceFromEdge = new Vector3(1.5f, distanceFromEdge.y, distanceFromEdge.z);
+		asspectPos.DistanceFromEdge = new Vector3(1.5f, distanceFromEdge.y - 0.15f, distanceFromEdge.z);
 
 		// Mod ExitButton
 		__instance.quitButton.OnClick.AddListener(

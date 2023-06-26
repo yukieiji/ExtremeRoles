@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>8.0.0.2</Version>
+    <Version>8.0.0.3</Version>
     <!--<VersionPrefix>8.0.0</VersionPrefix>-->
     <VersionSuffix>RoadToExtremeMode</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
