@@ -26,8 +26,8 @@ internal sealed class CompatModManager
 
 				private Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
 
-				public static readonly Dictionary<CompatModType, CompatModInfo> ModInfo = new Dictionary<
-								CompatModType, CompatModInfo>
+				public static readonly Dictionary<CompatModType, CompatModInfo> ModInfo =
+								new Dictionary<CompatModType, CompatModInfo>
     {
         {
 											CompatModType.Submerged,
@@ -82,7 +82,8 @@ internal sealed class CompatModManager
 								Instance = this;
 				}
 
-				internal bool IsModMap<T>() where T : ModIntegratorBase
+				internal bool IsModMap<T>()
+								where T : ModIntegratorBase
 								=> this.map is T;
 
 				// ここでtrueが返ってきてる時点でIMapModはNullではない
@@ -94,7 +95,7 @@ internal sealed class CompatModManager
 
 				// ここでtrueが返ってきてる時点でT?はNullではない
 				internal bool TryGetModMap<T>(out T? mapMod)
-				where T : ModIntegratorBase
+								where T : ModIntegratorBase
 				{
 								mapMod = this.map as T;
 								return mapMod != null;
