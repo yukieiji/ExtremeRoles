@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -11,26 +13,28 @@ public static class MeetingHudUpdateButtonsPatch
 	{
 		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
-		if (AmongUsClient.Instance.AmHost)
+		var meeting = FastDestroyableSingleton<HudManager>.Instance.MeetingPrefab;
+
+		__instance.amDead = false;
+		__instance.Glass.sprite = meeting.Glass.sprite;
+		__instance.Glass.color = meeting.Glass.color;
+
+		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
-			for (int i = 0; i < __instance.playerStates.Length; i++)
+			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+			GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(
+				playerVoteArea.TargetPlayerId);
+			if (playerById == null)
 			{
-				PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-				GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(
-					playerVoteArea.TargetPlayerId);
-				if (playerById == null)
-				{
-					playerVoteArea.SetDisabled();
-				}
-				else
-				{
-					playerVoteArea.SetDead(
-						__instance.reporterId == playerById.PlayerId, false, false);
-					__instance.SetDirtyBit(1U);
-				}
+				playerVoteArea.SetDisabled();
+			}
+			else if (
+				(playerById.Disconnected || playerById.IsDead) &&
+				!playerVoteArea.XMark.gameObject.activeSelf)
+			{
+				playerVoteArea.XMark.gameObject.SetActive(true);
 			}
 		}
-
 		return false;
 	}
 
