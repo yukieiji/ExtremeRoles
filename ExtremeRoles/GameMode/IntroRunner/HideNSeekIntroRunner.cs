@@ -38,13 +38,18 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
             instance.ImpostorRules.SetActive(false);
         }
 
-        IntroCutscene.SelectTeamToShow(
+        var teams = IntroCutscene.SelectTeamToShow(
             (Il2CppSystem.Func<GameData.PlayerInfo, bool>)(
                 (GameData.PlayerInfo pcd) =>
                     localPlayer.Data.Role.IsImpostor != pcd.Role.IsImpostor
             ));
+		if (teams == null || teams.Count < 1)
+		{
+			Logger.GlobalInstance.Error(
+				"IntroCutscene :: CoBegin() :: teamToShow is EMPTY or NULL", null);
+		}
 
-        PlayerControl impostor =
+		PlayerControl impostor =
             CachedPlayerControl.AllPlayerControls.Find(
                 (CachedPlayerControl pc) => pc.Data.Role.IsImpostor);
 
@@ -53,41 +58,33 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
             Logger.GlobalInstance.Error(
                 "IntroCutscene :: CoBegin() :: impostor is NULL", null);
         }
-        
+
         GameManager.Instance.SetSpecialCosmetics(impostor);
         instance.ImpostorName.gameObject.SetActive(true);
         instance.ImpostorTitle.gameObject.SetActive(true);
         instance.BackgroundBar.enabled = false;
         instance.TeamTitle.gameObject.SetActive(false);
-        instance.ImpostorName.text = impostor.Data.PlayerName;
-
-        if (impostor != null)
-        {
-            instance.ImpostorName.text = impostor.Data.PlayerName;
-        }
-        else
-        {
-            instance.ImpostorName.text = "???";
-        }
+		instance.ImpostorName.text =
+			impostor != null ?
+			impostor.Data.PlayerName : "???";
 
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         TextMeshPro roleText = Object.Instantiate(
             instance.ImpostorName,
             instance.ImpostorName.gameObject.transform);
-
         roleText.gameObject.SetActive(true);
         roleText.color = role.GetNameColor();
-        roleText.text = 
+        roleText.text =
             $"{Translation.GetString("youAreRoleIntro")}\n{role.GetColoredRoleName()}\n{role.GetIntroDescription()}";
         roleText.gameObject.transform.localPosition =
             new Vector3(-2.5f, -5.15f, 0.0f);
-        
+
         yield return new WaitForSecondsRealtime(0.1f);
 
         PoolablePlayer playerSlot = null;
         if (impostor != null)
         {
-            playerSlot = instance.CreatePlayer(0, 1, impostor.Data, false);
+            playerSlot = instance.CreatePlayer(1, 1, impostor.Data, false);
             playerSlot.SetBodyType(PlayerBodyTypes.Normal);
             playerSlot.SetFlipX(false);
             playerSlot.transform.localPosition = instance.impostorPos;
@@ -96,18 +93,18 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 
         yield return CachedShipStatus.Instance.CosmeticsCache.PopulateFromPlayers();
         yield return new WaitForSecondsRealtime(6f);
-        
+
         if (playerSlot != null)
         {
             playerSlot.gameObject.SetActive(false);
         }
-        
+
         instance.HideAndSeekPanels.SetActive(false);
         instance.CrewmateRules.SetActive(false);
         instance.ImpostorRules.SetActive(false);
         roleText.gameObject.SetActive(false);
 
-        LogicOptionsHnS logicOptionsHnS = 
+        LogicOptionsHnS logicOptionsHnS =
             GameManager.Instance.LogicOptions.Cast<LogicOptionsHnS>();
         LogicHnSMusic logicHnSMusic =
             GameManager.Instance.GetLogicComponent<LogicHnSMusic>() as LogicHnSMusic;
@@ -147,19 +144,19 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 
             poolablePlayer.UpdateFromPlayerData(
                 localPlayer.Data,
-                localPlayer.CurrentOutfitType, 
+                localPlayer.CurrentOutfitType,
                 PlayerMaterial.MaskType.None, false);
 
             SpriteAnim component = poolablePlayer.GetComponent<SpriteAnim>();
             poolablePlayer.gameObject.SetActive(true);
             poolablePlayer.SetBodyCosmeticsVisible(false);
             poolablePlayer.ToggleName(false);
-            
+
             component.Play(animationClip, 1f);
 
             while (crewmateLeadTime > 0f)
             {
-                instance.HideAndSeekTimerText.text = 
+                instance.HideAndSeekTimerText.text =
                     Mathf.RoundToInt(crewmateLeadTime).ToString();
                 crewmateLeadTime -= Time.deltaTime;
                 yield return null;
