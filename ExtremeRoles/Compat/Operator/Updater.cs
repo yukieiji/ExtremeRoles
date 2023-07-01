@@ -1,51 +1,43 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-
-using Newtonsoft.Json.Linq;
-
+using System.Linq;
 using System.Threading.Tasks;
+
+using BepInEx.Unity.IL2CPP;
+using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Compat.Operator;
 
+#nullable enable
+
 internal sealed class Updater : OperatorBase
 {
-
-    private struct ReleaseData
-    {
-        public JObject Request;
-        private string tag;
-
-        public ReleaseData(JObject data)
-        {
-            Request = data;
-            tag = data["tag_name"]?.ToString().TrimStart('v');
-        }
-        public bool IsNewer(SemanticVersioning.Version version)
-        {
-            if (!SemanticVersioning.Version.TryParse(tag, out var myVersion)) { return false; }
-
-            return myVersion.BaseVersion() > version.BaseVersion();
-        }
-    }
-
     private const string agentName = "ExtremeRoles CompatModUpdater";
-    private Task updateTask = null;
-    private SemanticVersioning.Version installVersion;
+				private const string reactorGuid = "Reactor";
+
+				private Task? updateTask = null;
+
     private string dllName;
     private string repoUrl;
+				private string guid;
+				private bool isRequireReactor;
 
-    internal Updater(
-        CompatModType mod, string dllName, string repoUrl) : base()
+				private HttpClient client;
+
+    internal Updater(CompatModInfo modInfo) : base()
     {
         this.dllName = $"{dllName}.dll";
-        this.repoUrl = repoUrl;
-        this.updateTask = null;
-        this.installVersion = CompatModManager.Instance.LoadedMod[mod].Version;
-    }
+        this.repoUrl = modInfo.RepoUrl;
+								this.guid = modInfo.Guid;
+
+								this.client = new HttpClient();
+								this.client.DefaultRequestHeaders.Add("User-Agent", agentName);
+				}
 
     public override void Excute()
     {
@@ -59,106 +51,100 @@ internal sealed class Updater : OperatorBase
         string info = Translation.GetString("checkUpdateNow");
         Popup.Show(info);
 
-        ReleaseData? repoData = getGithubUpdate().GetAwaiter().GetResult();
+								Dictionary<string, CompatModRepoData> repoData = getGithubUpdate().GetAwaiter().GetResult();
 
-        if (repoData.HasValue)
+        if (repoData.Count == 0 ||
+												repoData.Count == 1 && this.isRequireReactor)
         {
-
-            ReleaseData release = repoData.Value;
-
-            if (release.IsNewer(this.installVersion))
-            {
-                info = Translation.GetString("updateNow");
-
-                if (updateTask == null)
-                {
-                    info = Translation.GetString("updateInProgress");
-                    updateTask = downloadAndUpdate(release);
-                }
-            }
-            else
-            {
-                info = Translation.GetString("latestNow");
-            }
-
-            this.Popup.StartCoroutine(
-                Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
-
+												SetPopupText(Translation.GetString("updateManual"));
         }
         else
         {
-            SetPopupText(Translation.GetString("updateManual"));
-        }
+												var requireUpdate = repoData.Where(
+																x =>
+																{
+																				if (IL2CPPChainloader.Instance.Plugins.TryGetValue(x.Key, out var plugin) &&
+																								plugin != null)
+																				{
+																								return x.Value.IsNewer(plugin.Metadata.Version);
+																				}
+																				return false;
+																}).Select(x => x.Value);
+
+												if (requireUpdate.Any())
+												{
+																info = Translation.GetString("updateNow");
+
+																if (updateTask == null)
+																{
+																				info = Translation.GetString("updateInProgress");
+																				updateTask = downloadAndUpdate(requireUpdate);
+																}
+												}
+												else
+												{
+																info = Translation.GetString("latestNow");
+												}
+
+												this.Popup.StartCoroutine(
+																Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
+								}
     }
 
-    private async Task<ReleaseData?> getGithubUpdate()
+				private async Task<Dictionary<string, CompatModRepoData>> getGithubUpdate()
+				{
+								Dictionary<string, CompatModRepoData> result = new Dictionary<string, CompatModRepoData>();
+								if (this.isRequireReactor)
+								{
+												var reactorData = await GetRestApiDataAsync(this.client, ReactorURL);
+												if (reactorData == null)
+												{
+																return result;
+												}
+
+												result.Add(reactorGuid, new CompatModRepoData(reactorData, ReactorDll));
+								}
+
+								var modData = await GetRestApiDataAsync(this.client, this.repoUrl);
+								if (modData == null)
+								{
+												return result;
+								}
+								result.Add(this.guid, new CompatModRepoData(modData, this.dllName));
+								return result;
+				}
+
+    private async Task<bool> downloadAndUpdate(IEnumerable<CompatModRepoData> data)
     {
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", agentName);
+								foreach (CompatModRepoData repoData in data)
+								{
+												string downloadUri = repoData.GetDownloadUrl();
 
-        var req = await client.GetAsync(
-            new Uri(this.repoUrl),
-            HttpCompletionOption.ResponseContentRead);
-        if (req.StatusCode != HttpStatusCode.OK || req.Content == null)
-        {
-            Logging.Error($"Server returned no data: {req.StatusCode}");
-            return null;
-        }
+												if (string.IsNullOrEmpty(downloadUri)) { return false; }
 
-        string dataString = await req.Content.ReadAsStringAsync();
-        JObject data = JObject.Parse(dataString);
-        return new ReleaseData(data);
-    }
+												var res = await this.client.GetAsync(
+																downloadUri, HttpCompletionOption.ResponseContentRead);
 
-    private async Task<bool> downloadAndUpdate(ReleaseData data)
-    {
-        HttpClient http = new HttpClient();
-        http.DefaultRequestHeaders.Add("User-Agent", agentName);
-        var response = await http.GetAsync(
-            new Uri(this.repoUrl),
-            HttpCompletionOption.ResponseContentRead);
-        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
-        {
-            Logging.Error($"Server returned no data: {response.StatusCode}");
-            return false;
-        }
+												if (res.StatusCode != HttpStatusCode.OK || res.Content == null)
+												{
+																Logging.Error($"Server returned no data: {res.StatusCode}");
+																return false;
+												}
 
-        JToken assets = data.Request["assets"];
-        string downloadURI = "";
-
-        for (JToken current = assets.First; current != null; current = current.Next)
-        {
-            string browser_download_url = current["browser_download_url"]?.ToString();
-            if (browser_download_url == null ||
-                current["content_type"] == null ||
-                current["content_type"].ToString().Equals("application/x-zip-compressed") ||
-                !browser_download_url.EndsWith(this.dllName))
-            {
-                continue;
-            }
-
-            downloadURI = browser_download_url;
-            break;
-        }
-
-        if (downloadURI.Length == 0) { return false; }
-
-        var res = await http.GetAsync(
-            downloadURI, HttpCompletionOption.ResponseContentRead);
-        string filePath = Path.Combine(this.ModFolderPath, this.dllName);
-
-        string oldMod = $"{filePath}.old";
-        if (File.Exists(oldMod))
-        {
-            File.Delete(oldMod);
-        }
-        if (File.Exists(filePath))
-        {
-            File.Move(filePath, oldMod);
-        }
-        await using var responseStream = await res.Content.ReadAsStreamAsync();
-        await using var fileStream = File.Create(filePath);
-        await responseStream.CopyToAsync(fileStream);
+												string filePath = Path.Combine(this.ModFolderPath, repoData.DllName);
+												string oldMod = $"{filePath}.old";
+												if (File.Exists(oldMod))
+												{
+																File.Delete(oldMod);
+												}
+												if (File.Exists(filePath))
+												{
+																File.Move(filePath, oldMod);
+												}
+												await using var responseStream = await res.Content.ReadAsStreamAsync();
+												await using var fileStream = File.Create(filePath);
+												await responseStream.CopyToAsync(fileStream);
+								}
 
         ShowPopup(Translation.GetString("updateRestart"));
 
