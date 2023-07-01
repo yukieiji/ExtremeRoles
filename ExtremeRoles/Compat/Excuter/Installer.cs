@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 using ExtremeRoles.Helper;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.Compat.Excuter;
 
@@ -16,21 +17,42 @@ namespace ExtremeRoles.Compat.Excuter;
 internal sealed class Installer : ButtonExcuterBase
 {
 
-    private struct RepoData
+    private sealed record RepoData(JObject Request, string DllName)
     {
-        public JObject Request;
+								private const string contentType = "content_type";
 
-        public RepoData(JObject data)
-        {
-            Request = data;
-        }
+								public string GetDownloadUrl()
+								{
+												JToken assets = this.Request["assets"];
+
+												for (JToken current = assets.First; current != null; current = current.Next)
+												{
+																string? browser_download_url = current["browser_download_url"]?.ToString();
+																if (string.IsNullOrEmpty(browser_download_url) ||
+																				current[contentType] == null ||
+																				current[contentType].ToString().Equals("application/x-zip-compressed") ||
+																				!browser_download_url.EndsWith(this.DllName))
+																{
+																				continue;
+																}
+
+																return browser_download_url;
+												}
+												return string.Empty;
+								}
     }
 
     private const string agentName = "ExtremeRoles CompatModInstaller";
+
+				private const string reactorURL = "https://api.github.com/repos/NuclearPowered/Reactor/releases/latest";
+				private const string reactorDll = "Reactor.dll";
+
     private Task? installTask = null;
     private string dllName;
     private string repoUrl;
 				private bool isRequireReactor = false;
+
+				private HttpClient client;
 
     internal Installer(CompatModInfo modInfo) : base()
     {
@@ -38,7 +60,10 @@ internal sealed class Installer : ButtonExcuterBase
         this.repoUrl = modInfo.RepoUrl;
         this.installTask = null;
 								this.isRequireReactor = modInfo.IsRequireReactor;
-    }
+
+								this.client = new HttpClient();
+								this.client.DefaultRequestHeaders.Add("User-Agent", agentName);
+				}
 
     public override void Excute()
     {
@@ -65,91 +90,92 @@ internal sealed class Installer : ButtonExcuterBase
 								string info = Translation.GetString("checkInstallNow");
 								Popup.Show(info);
 
-								RepoData? repoData = getGithubUpdate().GetAwaiter().GetResult();
+								List<RepoData> repoData = getGithubUpdate().GetAwaiter().GetResult();
 
-								if (repoData.HasValue)
+								if (repoData.Count == 0 ||
+												repoData.Count == 1 && this.isRequireReactor)
+								{
+												SetPopupText(Translation.GetString("installManual"));
+								}
+								else
 								{
 												info = Translation.GetString("installNow");
 
 												if (installTask == null)
 												{
 																info = Translation.GetString("installInProgress");
-																installTask = downloadAndInstall(repoData.Value);
+																installTask = downloadAndInstall(repoData);
 												}
 
 												this.Popup.StartCoroutine(
 																Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
-
-								}
-								else
-								{
-												SetPopupText(Translation.GetString("installManual"));
 								}
 				}
 
 
-    private async Task<RepoData?> getGithubUpdate()
+    private async Task<List<RepoData>> getGithubUpdate()
     {
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", agentName);
+								List<RepoData> result = new List<RepoData>();
+								if (this.isRequireReactor)
+								{
+												var reactorData = await getRestApiData(reactorURL);
+												if (reactorData == null)
+												{
+																return result;
+												}
+												result.Add(new RepoData(reactorData, reactorDll));
+								}
 
-        var req = await client.GetAsync(
-            new Uri(this.repoUrl),
-            HttpCompletionOption.ResponseContentRead);
-        if (req.StatusCode != HttpStatusCode.OK || req.Content == null)
-        {
-            Logging.Error($"Server returned no data: {req.StatusCode}");
-            return null;
-        }
+								var modData = await getRestApiData(this.repoUrl);
+								if (modData == null)
+								{
+												return result;
+								}
+								result.Add(new RepoData(modData, this.dllName));
+								return result;
+				}
 
-        string dataString = await req.Content.ReadAsStringAsync();
-        JObject data = JObject.Parse(dataString);
-        return new RepoData(data);
-    }
-
-    private async Task<bool> downloadAndInstall(RepoData data)
+    private async Task<bool> downloadAndInstall(List<RepoData> data)
     {
-        HttpClient http = new HttpClient();
-        http.DefaultRequestHeaders.Add("User-Agent", agentName);
-        var response = await http.GetAsync(
-            new Uri(this.repoUrl),
-            HttpCompletionOption.ResponseContentRead);
-        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
-        {
-            Logging.Error($"Server returned no data: {response.StatusCode}");
-            return false;
-        }
 
-        JToken assets = data.Request["assets"];
-        string downloadURI = "";
+								foreach (var repoData in data)
+								{
+												string downloadUri = repoData.GetDownloadUrl();
 
-        for (JToken current = assets.First; current != null; current = current.Next)
-        {
-            string? browser_download_url = current["browser_download_url"]?.ToString();
-            if (browser_download_url == null ||
-                current["content_type"] == null ||
-                current["content_type"].ToString().Equals("application/x-zip-compressed") ||
-                !browser_download_url.EndsWith(this.dllName))
-            {
-                continue;
-            }
+												if (string.IsNullOrEmpty(downloadUri)) { return false; }
 
-            downloadURI = browser_download_url;
-            break;
-        }
+												var res = await this.client.GetAsync(
+																downloadUri, HttpCompletionOption.ResponseContentRead);
 
-        if (downloadURI.Length == 0) { return false; }
+												if (res.StatusCode != HttpStatusCode.OK || res.Content == null)
+												{
+																Logging.Error($"Server returned no data: {res.StatusCode}");
+																return false;
+												}
 
-        var res = await http.GetAsync(
-            downloadURI, HttpCompletionOption.ResponseContentRead);
-        string filePath = Path.Combine(this.modFolderPath, this.dllName);
-        await using var responseStream = await res.Content.ReadAsStreamAsync();
-        await using var fileStream = File.Create(filePath);
-        await responseStream.CopyToAsync(fileStream);
+												string filePath = Path.Combine(this.modFolderPath, repoData.DllName);
+												await using var responseStream = await res.Content.ReadAsStreamAsync();
+												await using var fileStream = File.Create(filePath);
+												await responseStream.CopyToAsync(fileStream);
+								}
 
         ShowPopup(Translation.GetString("installRestart"));
 
         return true;
     }
+
+				private async Task<JObject?> getRestApiData(string url)
+				{
+								var req = await this.client.GetAsync(new Uri(url),
+												HttpCompletionOption.ResponseContentRead);
+								if (req.StatusCode != HttpStatusCode.OK || req.Content == null)
+								{
+												Logging.Error($"Server returned no data: {req.StatusCode}");
+												return null;
+								}
+								string dataString = await req.Content.ReadAsStringAsync();
+								JObject data = JObject.Parse(dataString);
+								return data;
+				}
 
 }
