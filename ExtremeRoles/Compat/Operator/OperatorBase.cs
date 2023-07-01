@@ -15,7 +15,10 @@ namespace ExtremeRoles.Compat.Operator;
 
 internal abstract class OperatorBase
 {
-    protected string ModFolderPath;
+				protected const string ReactorURL = "https://api.github.com/repos/NuclearPowered/Reactor/releases/latest";
+				protected const string ReactorDll = "Reactor.dll";
+
+				protected string ModFolderPath;
     protected GenericPopup Popup;
 
     internal OperatorBase()

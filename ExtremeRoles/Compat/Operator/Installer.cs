@@ -5,8 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json.Linq;
-
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Compat.Operator;
@@ -15,36 +13,7 @@ namespace ExtremeRoles.Compat.Operator;
 
 internal sealed class Installer : OperatorBase
 {
-
-    private sealed record RepoData(JObject Request, string DllName)
-    {
-								private const string contentType = "content_type";
-
-								public string GetDownloadUrl()
-								{
-												JToken assets = this.Request["assets"];
-
-												for (JToken current = assets.First; current != null; current = current.Next)
-												{
-																string? browser_download_url = current["browser_download_url"]?.ToString();
-																if (string.IsNullOrEmpty(browser_download_url) ||
-																				current[contentType] == null ||
-																				current[contentType].ToString().Equals("application/x-zip-compressed") ||
-																				!browser_download_url.EndsWith(this.DllName))
-																{
-																				continue;
-																}
-
-																return browser_download_url;
-												}
-												return string.Empty;
-								}
-    }
-
     private const string agentName = "ExtremeRoles CompatModInstaller";
-
-				private const string reactorURL = "https://api.github.com/repos/NuclearPowered/Reactor/releases/latest";
-				private const string reactorDll = "Reactor.dll";
 
     private Task? installTask = null;
     private string dllName;
@@ -89,7 +58,7 @@ internal sealed class Installer : OperatorBase
 								string info = Translation.GetString("checkInstallNow");
 								Popup.Show(info);
 
-								List<RepoData> repoData = getGithubUpdate().GetAwaiter().GetResult();
+								List<CompatModRepoData> repoData = getGithubUpdate().GetAwaiter().GetResult();
 
 								if (repoData.Count == 0 ||
 												repoData.Count == 1 && this.isRequireReactor)
@@ -112,17 +81,17 @@ internal sealed class Installer : OperatorBase
 				}
 
 
-    private async Task<List<RepoData>> getGithubUpdate()
+    private async Task<List<CompatModRepoData>> getGithubUpdate()
     {
-								List<RepoData> result = new List<RepoData>();
+								List<CompatModRepoData> result = new List<CompatModRepoData>();
 								if (this.isRequireReactor)
 								{
-												var reactorData = await GetRestApiDataAsync(this.client, reactorURL);
+												var reactorData = await GetRestApiDataAsync(this.client, ReactorURL);
 												if (reactorData == null)
 												{
 																return result;
 												}
-												result.Add(new RepoData(reactorData, reactorDll));
+												result.Add(new CompatModRepoData(reactorData, ReactorDll));
 								}
 
 								var modData = await GetRestApiDataAsync(this.client, this.repoUrl);
@@ -130,11 +99,11 @@ internal sealed class Installer : OperatorBase
 								{
 												return result;
 								}
-								result.Add(new RepoData(modData, this.dllName));
+								result.Add(new CompatModRepoData(modData, this.dllName));
 								return result;
 				}
 
-    private async Task<bool> downloadAndInstall(List<RepoData> data)
+    private async Task<bool> downloadAndInstall(List<CompatModRepoData> data)
     {
 
 								foreach (var repoData in data)

@@ -37,7 +37,7 @@ internal sealed class Uninstaller : OperatorBase
             SetPopupText(Translation.GetString("uninstallNow"));
 												if (!isNotRemoveReactor())
 												{
-																string reactorPath = Path.Combine(this.ModFolderPath, "Reactor.dll");
+																string reactorPath = Path.Combine(this.ModFolderPath, ReactorDll);
 																File.Move(reactorPath, $"{reactorPath}{uninstallName}");
 												}
             File.Move(this.modDllPath, $"{this.modDllPath}{uninstallName}");
@@ -71,6 +71,7 @@ internal sealed class Uninstaller : OperatorBase
 												{
 																return
 																				CompatModManager.ModInfo.TryGetValue(x, out var modInfo) &&
+																				modInfo != null &&
 																				modInfo.IsRequireReactor &&
 																				modInfo.Guid != this.guid;
 												});
