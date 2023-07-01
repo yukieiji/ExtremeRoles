@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Compat.Excuter;
+namespace ExtremeRoles.Compat.Operator;
 
-internal sealed class Updater : ButtonExcuterBase
+internal sealed class Updater : OperatorBase
 {
 
     private struct ReleaseData
@@ -27,7 +27,7 @@ internal sealed class Updater : ButtonExcuterBase
         public bool IsNewer(SemanticVersioning.Version version)
         {
             if (!SemanticVersioning.Version.TryParse(tag, out var myVersion)) { return false; }
-            
+
             return myVersion.BaseVersion() > version.BaseVersion();
         }
     }
@@ -49,8 +49,8 @@ internal sealed class Updater : ButtonExcuterBase
 
     public override void Excute()
     {
-        
-        if (!File.Exists(Path.Combine(this.modFolderPath, this.dllName)))
+
+        if (!File.Exists(Path.Combine(this.ModFolderPath, this.dllName)))
         {
             Popup.Show(Translation.GetString("alreadyUninstallAfterInstall"));
             return;
@@ -145,7 +145,7 @@ internal sealed class Updater : ButtonExcuterBase
 
         var res = await http.GetAsync(
             downloadURI, HttpCompletionOption.ResponseContentRead);
-        string filePath = Path.Combine(this.modFolderPath, this.dllName);
+        string filePath = Path.Combine(this.ModFolderPath, this.dllName);
 
         string oldMod = $"{filePath}.old";
         if (File.Exists(oldMod))
@@ -161,7 +161,7 @@ internal sealed class Updater : ButtonExcuterBase
         await responseStream.CopyToAsync(fileStream);
 
         ShowPopup(Translation.GetString("updateRestart"));
-        
+
         return true;
     }
 

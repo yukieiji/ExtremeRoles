@@ -284,7 +284,7 @@ internal static class CompatModMenu
     {
 								return () =>
 								{
-											var installer = new Excuter.Installer(modInfo);
+											var installer = new Operator.Installer(modInfo);
 											installer.Excute();
         };
     }
@@ -293,7 +293,7 @@ internal static class CompatModMenu
     {
 								return () =>
         {
-            var uninstaller = new Excuter.Uninstaller(dllName);
+            var uninstaller = new Operator.Uninstaller(dllName);
             uninstaller.Excute();
         };
     }
@@ -303,7 +303,7 @@ internal static class CompatModMenu
     {
         return () =>
         {
-            var updater = new Excuter.Updater(mod, dllName, url);
+            var updater = new Operator.Updater(mod, dllName, url);
             updater.Excute();
         };
     }

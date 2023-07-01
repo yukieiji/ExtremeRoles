@@ -1,20 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json.Linq;
 
-using System.Threading.Tasks;
-
 using ExtremeRoles.Helper;
-using System.Collections.Generic;
 
-namespace ExtremeRoles.Compat.Excuter;
+namespace ExtremeRoles.Compat.Operator;
 
 #nullable enable
 
-internal sealed class Installer : ButtonExcuterBase
+internal sealed class Installer : OperatorBase
 {
 
     private sealed record RepoData(JObject Request, string DllName)
@@ -67,7 +66,7 @@ internal sealed class Installer : ButtonExcuterBase
 
     public override void Excute()
     {
-        if (File.Exists(Path.Combine(this.modFolderPath, this.dllName)))
+        if (File.Exists(Path.Combine(this.ModFolderPath, this.dllName)))
         {
             Popup.Show(Translation.GetString("alreadyInstall"));
             return;
@@ -118,7 +117,7 @@ internal sealed class Installer : ButtonExcuterBase
 								List<RepoData> result = new List<RepoData>();
 								if (this.isRequireReactor)
 								{
-												var reactorData = await getRestApiData(reactorURL);
+												var reactorData = await GetRestApiDataAsync(this.client, reactorURL);
 												if (reactorData == null)
 												{
 																return result;
@@ -126,7 +125,7 @@ internal sealed class Installer : ButtonExcuterBase
 												result.Add(new RepoData(reactorData, reactorDll));
 								}
 
-								var modData = await getRestApiData(this.repoUrl);
+								var modData = await GetRestApiDataAsync(this.client, this.repoUrl);
 								if (modData == null)
 								{
 												return result;
@@ -153,7 +152,7 @@ internal sealed class Installer : ButtonExcuterBase
 																return false;
 												}
 
-												string filePath = Path.Combine(this.modFolderPath, repoData.DllName);
+												string filePath = Path.Combine(this.ModFolderPath, repoData.DllName);
 												await using var responseStream = await res.Content.ReadAsStreamAsync();
 												await using var fileStream = File.Create(filePath);
 												await responseStream.CopyToAsync(fileStream);
@@ -163,19 +162,4 @@ internal sealed class Installer : ButtonExcuterBase
 
         return true;
     }
-
-				private async Task<JObject?> getRestApiData(string url)
-				{
-								var req = await this.client.GetAsync(new Uri(url),
-												HttpCompletionOption.ResponseContentRead);
-								if (req.StatusCode != HttpStatusCode.OK || req.Content == null)
-								{
-												Logging.Error($"Server returned no data: {req.StatusCode}");
-												return null;
-								}
-								string dataString = await req.Content.ReadAsStringAsync();
-								JObject data = JObject.Parse(dataString);
-								return data;
-				}
-
 }

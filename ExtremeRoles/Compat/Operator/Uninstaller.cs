@@ -4,16 +4,16 @@ using System.Linq;
 
 using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Compat.Excuter
+namespace ExtremeRoles.Compat.Operator
 {
-    internal sealed class Uninstaller : ButtonExcuterBase
-    {
+    internal sealed class Uninstaller : OperatorBase
+				{
         private const string uninstallName = ".uninstalled";
         private string modDllPath;
 
         internal Uninstaller(string dllName) : base()
         {
-            this.modDllPath = Path.Combine(this.modFolderPath, $"{dllName}.dll");
+            this.modDllPath = Path.Combine(this.ModFolderPath, $"{dllName}.dll");
         }
 
         public override void Excute()
@@ -44,7 +44,7 @@ namespace ExtremeRoles.Compat.Excuter
         {
             try
             {
-                DirectoryInfo d = new DirectoryInfo(this.modFolderPath);
+                DirectoryInfo d = new DirectoryInfo(this.ModFolderPath);
                 string[] files = d.GetFiles($"*{uninstallName}").Select(x => x.FullName).ToArray(); // Remove uninstall versions
                 foreach (string f in files)
                 {
