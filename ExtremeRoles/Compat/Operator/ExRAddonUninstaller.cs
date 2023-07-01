@@ -6,6 +6,8 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Compat.Operator;
 
+#nullable enable
+
 internal sealed class ExRAddonUninstaller : OperatorBase
 {
     private const string uninstallName = ".uninstalled";
