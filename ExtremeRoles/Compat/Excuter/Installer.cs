@@ -50,7 +50,9 @@ internal sealed class Installer : ButtonExcuterBase
 
 								if (this.isRequireReactor)
 								{
-
+												ShowConfirmMenu(
+																Translation.GetString("isReactorInstall"),
+																excuteInstall);
 								}
         else
 								{
