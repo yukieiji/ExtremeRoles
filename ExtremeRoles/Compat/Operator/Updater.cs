@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using BepInEx.Unity.IL2CPP;
-using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Helper;
 
@@ -29,11 +28,12 @@ internal sealed class Updater : OperatorBase
 
 				private HttpClient client;
 
-    internal Updater(CompatModInfo modInfo) : base()
+				internal Updater(CompatModInfo modInfo) : base()
     {
-        this.dllName = $"{dllName}.dll";
+        this.dllName = $"{modInfo.Name}.dll";
         this.repoUrl = modInfo.RepoUrl;
 								this.guid = modInfo.Guid;
+								this.isRequireReactor = modInfo.IsRequireReactor;
 
 								this.client = new HttpClient();
 								this.client.DefaultRequestHeaders.Add("User-Agent", agentName);

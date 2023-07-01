@@ -1,20 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 using TMPro;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat.Operator;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Compat;
 
+#nullable enable
+
 internal static class CompatModMenu
 {
-    private static GameObject menuBody;
-
-    private enum ButtonType
+#pragma warning disable CS8618
+				private static GameObject menuBody;
+#pragma warning restore CS8618
+				private enum ButtonType
     {
         InstallButton,
         UpdateButton,
@@ -124,13 +129,13 @@ internal static class CompatModMenu
                 var uninstallButton = createButton(template, modText);
                 uninstallButton.transform.localPosition = new Vector3(1.65f, 0.0f, -5.0f);
 																uninstallButton.ClickedEvent.AddListener(
-                    createUnInstallAction(dllName));
+																				createOperator<Uninstaller>(modInfo));
                 updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
                 var updateButton = createButton(template, modText);
                 updateButton.transform.localPosition = new Vector3(0.15f, 0.0f, -5.0f);
 																updateButton.ClickedEvent.AddListener(
-                    createUpdateAction(mod, dllName, repoUrl));
+																				createOperator<Updater>(modInfo));
                 updateButtonTextAndName(ButtonType.UpdateButton, updateButton);
 
                 button.Add(ButtonType.UninstallButton, uninstallButton);
@@ -141,7 +146,7 @@ internal static class CompatModMenu
                 var installButton = createButton(template, modText);
                 installButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
 																installButton.ClickedEvent.AddListener(
-                    createInstallAction(modInfo));
+																				createOperator<Installer>(modInfo));
                 updateButtonTextAndName(ButtonType.InstallButton, installButton);
                 button.Add(ButtonType.InstallButton, installButton);
             }
@@ -235,9 +240,8 @@ internal static class CompatModMenu
             var installButton = createButton(template, addonText);
             installButton.transform.localPosition = new Vector3(
                 0.9f, 0.0f, -5.0f);
-												installButton.ClickedEvent.AddListener(createInstallAction(
-																new CompatModInfo(
-																				addonName, "", "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest")));
+												installButton.ClickedEvent.AddListener(
+																createOperator<ExRAddonInstaller>(modType));
             updateButtonTextAndName(ButtonType.InstallButton, installButton);
 
             compatModMenuLine.Add(
@@ -252,7 +256,7 @@ internal static class CompatModMenu
             uninstallButton.transform.localPosition = new Vector3(
 																0.9f, 0.0f, -5.0f);
 												uninstallButton.ClickedEvent.AddListener(
-                createUnInstallAction(addonName));
+																createOperator<ExRAddonUninstaller>(modType));
             updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
             compatModMenuLine.Add(
@@ -280,31 +284,21 @@ internal static class CompatModMenu
         return modText;
     }
 
-    private static System.Action createInstallAction(CompatModInfo modInfo)
-    {
-								return () =>
-								{
-											var installer = new Operator.Installer(modInfo);
-											installer.Excute();
-        };
-    }
-
-    private static System.Action createUnInstallAction(string dllName)
-    {
-								return () =>
-        {
-            var uninstaller = new Operator.Uninstaller(dllName);
-            uninstaller.Excute();
-        };
-    }
-
-    private static System.Action createUpdateAction(
-        CompatModType mod, string dllName, string url)
+				private static System.Action createOperator<T>(object parm)
+								where T : OperatorBase
     {
         return () =>
         {
-            var updater = new Operator.Updater(mod, dllName, url);
-            updater.Excute();
+												object? instance = System.Activator.CreateInstance(
+																typeof(T),
+																BindingFlags.CreateInstance | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.OptionalParamBinding,
+																null,
+																new object[] { parm },
+																null);
+												if (instance is T curOperator)
+												{
+																curOperator.Excute();
+												}
         };
     }
 

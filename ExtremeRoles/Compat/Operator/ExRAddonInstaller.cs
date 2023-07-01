@@ -12,7 +12,7 @@ namespace ExtremeRoles.Compat.Operator;
 
 #nullable enable
 
-internal class ExRAddonInstaller : OperatorBase
+internal sealed class ExRAddonInstaller : OperatorBase
 {
 				private string addonDll;
 				private string url = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest";
@@ -21,7 +21,7 @@ internal class ExRAddonInstaller : OperatorBase
 				private HttpClient client;
 				private Task? installTask = null;
 
-				public ExRAddonInstaller(CompatModType addonType) : base()
+				internal ExRAddonInstaller(CompatModType addonType) : base()
 				{
 								this.addonDll = $"{addonType}.dll";
 
