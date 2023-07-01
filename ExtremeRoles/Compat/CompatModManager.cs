@@ -23,13 +23,10 @@ internal enum CompatModType
 internal sealed class CompatModManager
 {
 				public IReadOnlyDictionary<CompatModType, ModIntegratorBase> LoadedMod => this.loadedMod;
-
-				private Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
-
-				public static readonly Dictionary<CompatModType, CompatModInfo> ModInfo =
+				public static IReadOnlyDictionary<CompatModType, CompatModInfo> ModInfo =>
 								new Dictionary<CompatModType, CompatModInfo>
-    {
-        {
+				{
+								{
 											CompatModType.Submerged,
 											new CompatModInfo(
 																CompatModType.Submerged.ToString(),
@@ -39,7 +36,9 @@ internal sealed class CompatModManager
 																typeof(SubmergedIntegrator)
 												)
 								},
-    };
+				};
+
+				private Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
 
 				private IMapMod? map;
 
@@ -47,7 +46,12 @@ internal sealed class CompatModManager
 				public static CompatModManager Instance { get; private set; }
 #pragma warning restore CS8618
 
-				internal CompatModManager()
+				public static void Initialize()
+				{
+								Instance = new CompatModManager();
+				}
+
+				private CompatModManager()
     {
         RemoveMap();
 
@@ -79,7 +83,6 @@ internal sealed class CompatModManager
 								}
         ExtremeRolesPlugin.Logger.LogInfo(
             $"---------- CompatModManager Initialize End!! ----------");
-								Instance = this;
 				}
 
 				internal bool IsModMap<T>()

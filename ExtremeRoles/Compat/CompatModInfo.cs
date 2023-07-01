@@ -6,5 +6,5 @@ sealed internal record CompatModInfo(
 				string Name,
 				string Guid,
 				string RepoUrl,
-				bool IsRequireReactor,
-				Type ModIntegratorType);
+				bool IsRequireReactor = false,
+				Type ModIntegratorType = null);

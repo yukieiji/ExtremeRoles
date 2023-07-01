@@ -109,7 +109,7 @@ internal static class CompatModMenu
 																continue;
 												}
 
-            if (!CompatModManager.ModInfo.TryGetValue(mod, out var modInfo)) { continue; }
+												if (!CompatModManager.ModInfo.TryGetValue(mod, out var modInfo)) { continue; }
 
             TextMeshPro modText = createButtonText(modName, index);
 
@@ -141,7 +141,7 @@ internal static class CompatModMenu
                 var installButton = createButton(template, modText);
                 installButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
 																installButton.ClickedEvent.AddListener(
-                    createInstallAction(dllName, repoUrl));
+                    createInstallAction(modInfo));
                 updateButtonTextAndName(ButtonType.InstallButton, installButton);
                 button.Add(ButtonType.InstallButton, installButton);
             }
@@ -236,8 +236,8 @@ internal static class CompatModMenu
             installButton.transform.localPosition = new Vector3(
                 0.9f, 0.0f, -5.0f);
 												installButton.ClickedEvent.AddListener(createInstallAction(
-                addonName,
-                "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest"));
+																new CompatModInfo(
+																				addonName, "", "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest")));
             updateButtonTextAndName(ButtonType.InstallButton, installButton);
 
             compatModMenuLine.Add(
@@ -280,12 +280,11 @@ internal static class CompatModMenu
         return modText;
     }
 
-    private static System.Action createInstallAction(
-        string dllName, string url)
+    private static System.Action createInstallAction(CompatModInfo modInfo)
     {
 								return () =>
 								{
-											var installer = new Excuter.Installer(dllName, url);
+											var installer = new Excuter.Installer(modInfo);
 											installer.Excute();
         };
     }

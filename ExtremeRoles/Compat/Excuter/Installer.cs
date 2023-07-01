@@ -11,6 +11,8 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Compat.Excuter;
 
+#nullable enable
+
 internal sealed class Installer : ButtonExcuterBase
 {
 
@@ -25,15 +27,17 @@ internal sealed class Installer : ButtonExcuterBase
     }
 
     private const string agentName = "ExtremeRoles CompatModInstaller";
-    private Task installTask = null;
+    private Task? installTask = null;
     private string dllName;
     private string repoUrl;
+				private bool isRequireReactor = false;
 
-    internal Installer(string dllName, string repoUrl) : base()
+    internal Installer(CompatModInfo modInfo) : base()
     {
-        this.dllName = $"{dllName}.dll";
-        this.repoUrl = repoUrl;
+        this.dllName = $"{modInfo.Name}.dll";
+        this.repoUrl = modInfo.RepoUrl;
         this.installTask = null;
+								this.isRequireReactor = modInfo.IsRequireReactor;
     }
 
     public override void Excute()
@@ -44,30 +48,43 @@ internal sealed class Installer : ButtonExcuterBase
             return;
         }
 
-        string info = Translation.GetString("checkInstallNow");
-        Popup.Show(info);
+								if (this.isRequireReactor)
+								{
 
-        RepoData? repoData = getGithubUpdate().GetAwaiter().GetResult();
-
-        if (repoData.HasValue)
-        {
-            info = Translation.GetString("installNow");
-
-            if (installTask == null)
-            {
-                info = Translation.GetString("installInProgress");
-                installTask = downloadAndInstall(repoData.Value);
-            }
-
-            this.Popup.StartCoroutine(
-                Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
-
-        }
+								}
         else
-        {
-            SetPopupText(Translation.GetString("installManual"));
-        }
+								{
+												excuteInstall();
+								}
     }
+
+				private void excuteInstall()
+				{
+								string info = Translation.GetString("checkInstallNow");
+								Popup.Show(info);
+
+								RepoData? repoData = getGithubUpdate().GetAwaiter().GetResult();
+
+								if (repoData.HasValue)
+								{
+												info = Translation.GetString("installNow");
+
+												if (installTask == null)
+												{
+																info = Translation.GetString("installInProgress");
+																installTask = downloadAndInstall(repoData.Value);
+												}
+
+												this.Popup.StartCoroutine(
+																Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
+
+								}
+								else
+								{
+												SetPopupText(Translation.GetString("installManual"));
+								}
+				}
+
 
     private async Task<RepoData?> getGithubUpdate()
     {
@@ -106,7 +123,7 @@ internal sealed class Installer : ButtonExcuterBase
 
         for (JToken current = assets.First; current != null; current = current.Next)
         {
-            string browser_download_url = current["browser_download_url"]?.ToString();
+            string? browser_download_url = current["browser_download_url"]?.ToString();
             if (browser_download_url == null ||
                 current["content_type"] == null ||
                 current["content_type"].ToString().Equals("application/x-zip-compressed") ||
@@ -129,7 +146,7 @@ internal sealed class Installer : ButtonExcuterBase
         await responseStream.CopyToAsync(fileStream);
 
         ShowPopup(Translation.GetString("installRestart"));
-        
+
         return true;
     }
 

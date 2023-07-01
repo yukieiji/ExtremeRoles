@@ -55,7 +55,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
         Harmony.PatchAll();
 
-		new CompatModManager();
+								CompatModManager.Initialize();
 
         AddComponent<ExtremeRolePluginBehavior>();
 
