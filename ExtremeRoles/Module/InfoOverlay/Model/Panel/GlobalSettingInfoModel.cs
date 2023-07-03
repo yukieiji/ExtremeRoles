@@ -31,8 +31,8 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 								}
 
 								return (
-												IGameOptionsExtensions.SettingsStringBuilder.ToString(),
-												printOption.ToString()
+												$"<size=125%>{Translation.GetString("vanilaOptions")}</size>\n{IGameOptionsExtensions.SettingsStringBuilder}",
+												$"<size=125%>{Translation.GetString("gameOption")}</size>\n{printOption}"
 								);
 				}
 
