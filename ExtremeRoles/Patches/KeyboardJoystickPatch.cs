@@ -27,51 +27,12 @@ public static class KeyboardJoystickPatch
             Roles.Solo.Host.Xion.SpecialKeyShortCut();
         }
 
-        if (GameSystem.IsLobby)
+        if (GameSystem.IsLobby && Input.GetKeyDown(KeyCode.Tab))
         {
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                Option.IGameOptionsExtensionsToHudStringPatch.ChangePage(1);
-            }
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay(
-                    Module.InfoOverlay.InfoOverlay.ShowType.AllRole);
-            }
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay(
-                    Module.InfoOverlay.InfoOverlay.ShowType.AllGhostRole);
-            }
-        }
+												Option.IGameOptionsExtensionsToHudStringPatch.ChangePage(1);
+								}
 
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            ExtremeRolesPlugin.Info.ToggleInfoOverlay(
-                Module.InfoOverlay.InfoOverlay.ShowType.LocalPlayerRole);
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            ExtremeRolesPlugin.Info.ToggleInfoOverlay(
-                Module.InfoOverlay.InfoOverlay.ShowType.LocalPlayerGhostRole);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            ExtremeRolesPlugin.Info.ToggleInfoOverlay(
-                Module.InfoOverlay.InfoOverlay.ShowType.VanilaOption);
-        }
-
-        if (Input.GetKeyDown(KeyCode.PageDown))
-        {
-            ExtremeRolesPlugin.Info.ChangePage(1);
-        }
-        if (Input.GetKeyDown(KeyCode.PageUp))
-        {
-            ExtremeRolesPlugin.Info.ChangePage(-1);
-        }
+								InfoOverlay.Instance.Update();
 
         // キルとベントボタン
         if (CachedPlayerControl.LocalPlayer.Data == null ||
