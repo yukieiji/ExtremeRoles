@@ -2,8 +2,10 @@
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Module.InfoOverlay.Model;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using UnityEngine;
+
 using UpdateFunc = ExtremeRoles.Module.InfoOverlay.Update;
 
 #nullable enable
@@ -45,6 +47,14 @@ public sealed class Controller : NullableSingleton<Controller>
 
 				public void Show(InfoOverlayModel.Type showTyep)
 				{
+								var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+								if (hudManager == null) { return; }
+								if (MeetingHud.Instance == null)
+								{
+												hudManager.SetHudActive(true);
+								}
+
 								UpdateFunc.SwithTo(this.model, showTyep);
 
 								if (this.view == null)
@@ -53,6 +63,11 @@ public sealed class Controller : NullableSingleton<Controller>
 								}
 								if (this.view != null)
 								{
+												Transform parent = MeetingHud.Instance == null ?
+																hudManager.transform : MeetingHud.Instance.transform;
+
+												this.view.transform.localPosition = new Vector3(0f, 0f, -900f);
+												this.view.transform.SetParent(parent);
 												this.view.gameObject.SetActive(true);
 								}
 				}
@@ -72,6 +87,7 @@ public sealed class Controller : NullableSingleton<Controller>
 								if (this.model.IsDuty &&
 												this.view != null)
 								{
+												this.model.IsDuty = false;
 												this.view.UpdateFromModel(this.model);
 								}
 				}
@@ -121,5 +137,6 @@ public sealed class Controller : NullableSingleton<Controller>
 																Path.InfoOverlayResources,
 																Path.InfoOverlayPrefab));
 								this.view = obj.GetComponent<InfoOverlayView>();
+								this.view.Awake();
 				}
 }
