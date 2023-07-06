@@ -9,15 +9,15 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
 public static class MeetingHudVotingCompletedPatch
 {
-				public static void Postfix()
-				{
-								InfoOverlay.Instance.Hide();
+	public static void Postfix()
+	{
+		InfoOverlay.Instance.Hide();
 
-								foreach (DeadBody body in Object.FindObjectsOfType<DeadBody>())
-								{
-												if (!body) { continue; }
+		foreach (DeadBody body in Object.FindObjectsOfType<DeadBody>())
+		{
+			if (!body) { continue; }
 
-												Object.Destroy(body.gameObject);
-								}
-				}
+			Object.Destroy(body.gameObject);
+		}
+	}
 }

@@ -43,8 +43,8 @@ public static class HudManagerStartPatch
     {
         if (GameSystem.IsFreePlay) { return; }
 
-								InfoOverlay.Instance.InitializeToLobby();
-				}
+		InfoOverlay.Instance.InitializeToLobby();
+	}
 }
 
 

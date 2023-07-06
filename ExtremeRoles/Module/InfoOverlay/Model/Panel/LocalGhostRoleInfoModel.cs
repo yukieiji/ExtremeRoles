@@ -11,45 +11,45 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 {
-				public string Title => Translation.GetString("yourGhostRole");
+	public string Title => Translation.GetString("yourGhostRole");
 
-				public (string, string) GetInfoText()
-				{
-								if (!CachedPlayerControl.LocalPlayer.Data.IsDead)
-								{
-												return ($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", string.Empty);
-								}
-								
-								var role = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-								if (role == null)
-								{
-												return ($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
-								}
+	public (string, string) GetInfoText()
+	{
+		if (!CachedPlayerControl.LocalPlayer.Data.IsDead)
+		{
+			return ($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", string.Empty);
+		}
 
-								var allOption = OptionManager.Instance;
+		var role = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+		if (role == null)
+		{
+			return ($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
+		}
 
-								string roleOptionString = "";
-								string colorRoleName = role.GetColoredRoleName();
+		var allOption = OptionManager.Instance;
 
-								if (!role.IsVanillaRole())
-								{
-												int useId = role.GetRoleOptionId(RoleCommonOption.SpawnRate);
+		string roleOptionString = "";
+		string colorRoleName = role.GetColoredRoleName();
 
-												if (!allOption.Contains(useId))
-												{
-																var aliveRole = (MultiAssignRoleBase)ExtremeRoleManager.GetLocalPlayerRole();
-																useId = aliveRole.GetManagerOptionId(RoleCommonOption.SpawnRate);
-												}
+		if (!role.IsVanillaRole())
+		{
+			int useId = role.GetRoleOptionId(RoleCommonOption.SpawnRate);
 
-												var option = allOption.GetIOption(useId);
-												roleOptionString = option.ToHudStringWithChildren();
-								}
+			if (!allOption.Contains(useId))
+			{
+				var aliveRole = (MultiAssignRoleBase)ExtremeRoleManager.GetLocalPlayerRole();
+				useId = aliveRole.GetManagerOptionId(RoleCommonOption.SpawnRate);
+			}
 
-								string roleFullDesc = role.GetFullDescription();
+			var option = allOption.GetIOption(useId);
+			roleOptionString = option.ToHudStringWithChildren();
+		}
 
-								return (
-												$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}\n",
-												$"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n{roleOptionString}"
-								);
-				}
+		string roleFullDesc = role.GetFullDescription();
+
+		return (
+			$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}\n",
+			$"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n{roleOptionString}"
+		);
+	}
 }

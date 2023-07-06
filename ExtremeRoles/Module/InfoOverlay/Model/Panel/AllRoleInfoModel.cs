@@ -9,52 +9,52 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class AllRoleInfoModel : PanelPageModelBase
 {
-				public override string Info => Translation.GetString("changeRoleMore");
+	public override string Info => Translation.GetString("changeRoleMore");
 
-				public override string Title => Translation.GetString("roleDesc");
+	public override string Title => Translation.GetString("roleDesc");
 
-				protected override void CreateAllRoleText()
+	protected override void CreateAllRoleText()
+	{
+		int optionId;
+		string colorRoleName;
+		string roleFullDesc;
+
+		foreach (var role in Roles.ExtremeRoleManager.NormalRole.Values)
+		{
+			optionId = role.GetRoleOptionOffset();
+			colorRoleName = role.GetColoredRoleName(true);
+
+			roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+			roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
+
+			AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
+		}
+
+		foreach (var combRole in Roles.ExtremeRoleManager.CombRole.Values)
+		{
+			if (combRole is ConstCombinationRoleManagerBase)
+			{
+				foreach (var role in combRole.Roles)
 				{
-								int optionId;
-								string colorRoleName;
-								string roleFullDesc;
+					optionId = role.GetManagerOptionOffset();
+					colorRoleName = role.GetColoredRoleName(true);
 
-								foreach (var role in Roles.ExtremeRoleManager.NormalRole.Values)
-								{
-												optionId = role.GetRoleOptionOffset();
-												colorRoleName = role.GetColoredRoleName(true);
+					roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+					roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-												roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
-												roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
-
-												AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
-								}
-
-								foreach (var combRole in Roles.ExtremeRoleManager.CombRole.Values)
-								{
-												if (combRole is ConstCombinationRoleManagerBase)
-												{
-																foreach (var role in combRole.Roles)
-																{
-																				optionId = role.GetManagerOptionOffset();
-																				colorRoleName = role.GetColoredRoleName(true);
-
-																				roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
-																				roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
-
-																				AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
-																}
-												}
-												else if (combRole is FlexibleCombinationRoleManagerBase flexCombRole)
-												{
-																optionId = flexCombRole.GetOptionIdOffset();
-																colorRoleName = flexCombRole.GetOptionName();
-
-																roleFullDesc = flexCombRole.GetBaseRoleFullDescription();
-																roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
-
-																AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
-												}
-								}
+					AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
 				}
+			}
+			else if (combRole is FlexibleCombinationRoleManagerBase flexCombRole)
+			{
+				optionId = flexCombRole.GetOptionIdOffset();
+				colorRoleName = flexCombRole.GetOptionName();
+
+				roleFullDesc = flexCombRole.GetBaseRoleFullDescription();
+				roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
+
+				AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
+			}
+		}
+	}
 }

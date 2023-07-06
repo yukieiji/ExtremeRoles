@@ -5,8 +5,8 @@ namespace ExtremeRoles.Patches.MapOverlay;
 [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow))]
 public static class MapBehaviourShowNormalMapPatch
 {
-    static void Prefix(MapBehaviour __instance)
+    static void Prefix()
     {
-								InfoOverlay.Instance.Hide();
-				}
+		InfoOverlay.Instance.Hide();
+	}
 }

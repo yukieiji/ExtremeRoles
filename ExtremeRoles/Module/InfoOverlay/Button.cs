@@ -11,9 +11,9 @@ namespace ExtremeRoles.Module.InfoOverlay;
 
 public sealed class HelpButton
 {
-				public bool IsInitialized => this.body != null;
+	public bool IsInitialized => this.body != null;
 
-				private GameObject? body = null;
+	private GameObject? body = null;
 
     public void CreateInfoButton()
     {
@@ -22,10 +22,10 @@ public sealed class HelpButton
             GameObject.Find("TopRight/MenuButton").transform);
         Object.DontDestroyOnLoad(this.body);
 
-								this.body.name = "infoRoleButton";
-								this.body.SetActive(true);
-								this.body.layer = 5;
-								this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+		this.body.name = "infoRoleButton";
+		this.body.SetActive(true);
+		this.body.layer = 5;
+		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
         SetInfoButtonToGameStartShipPositon();
 
@@ -41,16 +41,16 @@ public sealed class HelpButton
 
     public void SetInfoButtonToGameStartShipPositon()
     {
-								if (this.body == null) { return; }
-								this.body.transform.localPosition = new Vector3(
+		if (this.body == null) { return; }
+		this.body.transform.localPosition = new Vector3(
             0.0f, -0.825f, 0.0f);
     }
 
     public void SetInfoButtonToInGamePositon()
     {
-								if (this.body == null) { return; }
-								this.body.SetActive(true);
-								this.body.transform.localPosition = new Vector3(
+		if (this.body == null) { return; }
+		this.body.SetActive(true);
+		this.body.transform.localPosition = new Vector3(
             0.0f, -1.75f, 0.0f);
     }
 }

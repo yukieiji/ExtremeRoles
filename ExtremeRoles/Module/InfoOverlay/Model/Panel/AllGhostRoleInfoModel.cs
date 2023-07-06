@@ -11,44 +11,44 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 {
-				public override string Info => Translation.GetString("changeGhostRoleMore");
+	public override string Info => Translation.GetString("changeGhostRoleMore");
 
-				public override string Title => Translation.GetString("ghostRoleDesc");
+	public override string Title => Translation.GetString("ghostRoleDesc");
 
-				protected override void CreateAllRoleText()
-				{
-								int optionId;
-								string colorRoleName;
-								string roleFullDesc;
+	protected override void CreateAllRoleText()
+	{
+		int optionId;
+		string colorRoleName;
+		string roleFullDesc;
 
-								foreach (var combRole in Roles.ExtremeRoleManager.CombRole.Values)
-								{
-												var ghostCombRole = combRole as GhostAndAliveCombinationRoleManagerBase;
+		foreach (var combRole in Roles.ExtremeRoleManager.CombRole.Values)
+		{
+			var ghostCombRole = combRole as GhostAndAliveCombinationRoleManagerBase;
 
-												if (ghostCombRole == null) { continue; }
+			if (ghostCombRole == null) { continue; }
 
-												foreach (var role in ghostCombRole.CombGhostRole.Values)
-												{
-																optionId = ghostCombRole.GetOptionIdOffset();
-																colorRoleName = role.GetColoredRoleName();
+			foreach (var role in ghostCombRole.CombGhostRole.Values)
+			{
+				optionId = ghostCombRole.GetOptionIdOffset();
+				colorRoleName = role.GetColoredRoleName();
 
-																roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
-																roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
+				roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+				roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-																AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
-												}
-								}
+				AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
+			}
+		}
 
 
-								foreach (var role in GhostRoles.ExtremeGhostRoleManager.AllGhostRole.Values)
-								{
-												optionId = role.OptionOffset;
-												colorRoleName = role.GetColoredRoleName();
+		foreach (var role in GhostRoles.ExtremeGhostRoleManager.AllGhostRole.Values)
+		{
+			optionId = role.OptionOffset;
+			colorRoleName = role.GetColoredRoleName();
 
-												roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
-												roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
+			roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+			roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-												AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
-								}
-				}
+			AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
+		}
+	}
 }
