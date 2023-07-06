@@ -198,10 +198,10 @@ public static class IGameOptionsExtensionsToHudStringPatch
     }
 
     private static string getHudString<T>(T optionKey) where T : struct, IConvertible
-	{
-		var option = OptionManager.Instance.GetIOption(Convert.ToInt32(optionKey));
-		return option.ToHudString();
-	}
+				{
+								var option = OptionManager.Instance.GetIOption(Convert.ToInt32(optionKey));
+								return option.ToHudString();
+				}
 
     private static int getSpawnOptionValue(RoleGlobalOption optionKey)
         => OptionManager.Instance.GetValue<int>((int)optionKey);
