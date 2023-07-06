@@ -19,6 +19,7 @@ using ExtremeRoles.Module.InfoOverlay.Model;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 
+[Il2CppRegister]
 public sealed class InfoOverlayView : MonoBehaviour
 {
 #pragma warning disable CS8618
@@ -38,6 +39,8 @@ public sealed class InfoOverlayView : MonoBehaviour
 				private SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
 								new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
 
+				private int curButtonNum = 0;
+
 				public void Awake()
 				{
 								Transform trans = base.transform;
@@ -53,47 +56,53 @@ public sealed class InfoOverlayView : MonoBehaviour
 
 								this.mainText = trans.Find("InfoMain/Viewport/Content").GetComponent<TextMeshProUGUI>();
 								this.subText = trans.Find("InfoSub/Viewport/Content").GetComponent<TextMeshProUGUI>();
+
+								this.curButtonNum = 0;
 				}
 
 
 				public void UpdateFromModel(InfoOverlayModel model)
 				{
-								foreach (var (button, index) in this.menu.Values.Select((value, index) => (value, index)))
+								if (this.menu.Count != model.PanelModel.Count)
 								{
-												if (index == 0) { continue; }
-
-												if (button != null)
+												foreach (var (button, index) in this.menu.Values.Select((value, index) => (value, index)))
 												{
-																DestroyImmediate(button.gameObject);
-												}
-								}
+																if (index == 0) { continue; }
 
-								this.menu.Clear();
-								this.button.Awake();
-								this.button.ResetButtonAction();
-								this.button.SetEnable(true);
-
-								foreach (var (panel, index) in model.PanelModel.Select((value, index) => (value, index)))
-								{
-												ButtonWrapper newButton;
-												if (index == 0)
-												{
-																newButton = this.button;
-												}
-												else
-												{
-																newButton = Instantiate(this.button, this.button.transform.parent);
-																newButton.transform.localPosition = new Vector3(0.0f, index * -55.0f);
-
-												}
-												newButton.Awake();
-												newButton.SetButtonText(panel.Key.ToString());
-												newButton.SetButtonClickAction(
-																(UnityAction)(() =>
+																if (button != null)
 																{
-																				Update.SwithTo(model, panel.Key);
-																}));
-												this.menu.Add(panel.Key, newButton);
+																				DestroyImmediate(button.gameObject);
+																}
+												}
+
+												this.menu.Clear();
+												this.button.Awake();
+												this.button.ResetButtonAction();
+												this.button.SetEnable(true);
+
+												foreach (var (panel, index) in model.PanelModel.Select((value, index) => (value, index)))
+												{
+																ButtonWrapper newButton;
+																if (index == 0)
+																{
+																				newButton = this.button;
+																}
+																else
+																{
+																				newButton = Instantiate(this.button, this.button.transform.parent);
+																				newButton.transform.localPosition = new Vector3(0.0f, index * -55.0f);
+
+																}
+																newButton.Awake();
+																newButton.SetButtonText(panel.Key.ToString());
+																newButton.SetButtonClickAction(
+																				(UnityAction)(() =>
+																				{
+																								Update.SwithTo(model, panel.Key);
+																				}));
+																this.menu.Add(panel.Key, newButton);
+												}
+
 								}
 
 								if (this.menu.TryGetValue(model.CurShow, out var selectedButton))
@@ -110,12 +119,16 @@ public sealed class InfoOverlayView : MonoBehaviour
 												this.mainText.text = main;
 												this.subText.text = sub;
 
+												this.pageButtonParent.SetActive(false);
+												this.leftButton.onClick.RemoveAllListeners();
+												this.rightButton.onClick.RemoveAllListeners();
+
 												switch (panelModel)
 												{
 																case PanelPageModelBase pageModel:
 																				this.pageButtonParent.SetActive(true);
-																				this.info.text = $"({pageModel.CurPage}/{pageModel.PageNum})   {Translation.GetString("changePageMore")}";
-																				this.leftButton.onClick.AddListener(
+																				this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {Translation.GetString("changePageMore")}";
+																				this.rightButton.onClick.AddListener(
 																								(UnityAction)(() =>
 																								{
 																												Update.DecreasePage(model);
@@ -127,9 +140,6 @@ public sealed class InfoOverlayView : MonoBehaviour
 																								}));
 																				break;
 																default:
-																				this.pageButtonParent.SetActive(false);
-																				this.leftButton.onClick.RemoveAllListeners();
-																				this.rightButton.onClick.RemoveAllListeners();
 																				break;
 												}
 								}
