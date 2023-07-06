@@ -17,8 +17,8 @@ namespace ExtremeRoles.Resources;
 
 public static class Path
 {
-				public const string InfoOverlayResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
-				public const string InfoOverlayPrefab = "assets/roles/guesserui.prefab";
+				public const string InfoOverlayResources = "ExtremeRoles.Resources.Asset.infooverlay.asset";
+				public const string InfoOverlayPrefab = "assets/roles/infooverlay.prefab";
 
 				public const string VideoAsset = "ExtremeRoles.Resources.Asset.video.asset";
     public const string VideoAssetPlaceHolder = "assets/video/{0}.webm";
