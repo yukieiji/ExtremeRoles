@@ -17,7 +17,7 @@ public abstract class PanelPageModelBase : IInfoOverlayPanelModel
 
 				public int CurPage
 				{
-								get => this.curPage + 1;
+								get => this.curPage;
 								set
 								{
 												this.curPage = value % this.PageNum;
