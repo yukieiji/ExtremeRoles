@@ -1,10 +1,10 @@
-﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomMonoBehaviour;
+﻿using UnityEngine;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Module.InfoOverlay.Model;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
-using UnityEngine;
 
 using UpdateFunc = ExtremeRoles.Module.InfoOverlay.Update;
 

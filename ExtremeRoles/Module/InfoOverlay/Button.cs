@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module.InfoOverlay
     {
         public static GameObject Body = null;
 
-        private static InfoOverlay.ShowType buttonShowType = 0;
+        // private static InfoOverlay.ShowType buttonShowType = 0;
 
         public static void CreateInfoButton()
         {
@@ -49,8 +49,10 @@ namespace ExtremeRoles.Module.InfoOverlay
                 0.0f, -1.75f, 0.0f);
         }
 
-        private static void toggleInfoOverlay()
-        {
+								private static void toggleInfoOverlay()
+								{
+								}
+												/*
             if (RoleAssignState.Instance.IsRoleSetUpEnd)
             {
                 show(InfoOverlay.ShowType.AllGhostRole);
@@ -63,6 +65,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         private static void show(InfoOverlay.ShowType block)
         {
+
             if (buttonShowType >= block + 1)
             {
                 ExtremeRolesPlugin.Info.HideInfoOverlay();
@@ -74,7 +77,9 @@ namespace ExtremeRoles.Module.InfoOverlay
                     buttonShowType);
                 buttonShowType++;
             }
-        }
 
-    }
+												*/
+								}
+
+				}
 }
