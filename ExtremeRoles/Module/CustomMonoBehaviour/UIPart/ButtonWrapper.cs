@@ -1,8 +1,11 @@
 ﻿using System;
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
+
+using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
@@ -36,6 +39,7 @@ public sealed class ButtonWrapper : MonoBehaviour
         this.text.text = showText;
     }
 
+				[HideFromIl2Cpp]
 				public void SetButtonClickAction(Action act)
 				{
 								SetButtonClickAction((UnityAction)act);

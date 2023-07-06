@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Il2CppInterop.Runtime.Attributes;
 
 using TMPro;
 
@@ -55,7 +56,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 								this.subText = trans.Find("InfoSub/Viewport/Content").GetComponent<TextMeshProUGUI>();
 				}
 
-
+				[HideFromIl2Cpp]
 				public void UpdateFromModel(InfoOverlayModel model)
 				{
 								if (this.menu.Count != model.PanelModel.Count)
