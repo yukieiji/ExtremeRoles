@@ -52,34 +52,34 @@ namespace ExtremeRoles.Module.InfoOverlay
 								private static void toggleInfoOverlay()
 								{
 								}
-												/*
-            if (RoleAssignState.Instance.IsRoleSetUpEnd)
-            {
-                show(InfoOverlay.ShowType.AllGhostRole);
-            }
-            else
-            {
-                show(InfoOverlay.ShowType.VanilaOption);
-            }
-        }
+								/*
+								if (RoleAssignState.Instance.IsRoleSetUpEnd)
+								{
+												show(InfoOverlay.ShowType.AllGhostRole);
+								}
+								else
+								{
+												show(InfoOverlay.ShowType.VanilaOption);
+								}
+				}
 
-        private static void show(InfoOverlay.ShowType block)
-        {
+				private static void show(InfoOverlay.ShowType block)
+				{
 
-            if (buttonShowType >= block + 1)
-            {
-                ExtremeRolesPlugin.Info.HideInfoOverlay();
-                buttonShowType = 0;
-            }
-            else
-            {
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay(
-                    buttonShowType);
-                buttonShowType++;
-            }
-
-												*/
+								if (buttonShowType >= block + 1)
+								{
+												ExtremeRolesPlugin.Info.HideInfoOverlay();
+												buttonShowType = 0;
+								}
+								else
+								{
+												ExtremeRolesPlugin.Info.ToggleInfoOverlay(
+																buttonShowType);
+												buttonShowType++;
 								}
 
+
+				}
+								*/
 				}
 }
