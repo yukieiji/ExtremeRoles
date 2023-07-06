@@ -9,6 +9,8 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class AllRoleInfoModel : PanelPageModelBase
 {
+				public override string Info => Translation.GetString("changeRoleMore");
+
 				public override string Title => Translation.GetString("roleDesc");
 
 				protected override void CreateAllRoleText()
