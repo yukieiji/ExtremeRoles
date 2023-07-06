@@ -57,7 +57,7 @@ public static class Player
 
     public static PlayerControl GetClosestPlayerInKillRange()
     {
-        var playersInAbilityRangeSorted = 
+        var playersInAbilityRangeSorted =
             CachedPlayerControl.LocalPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
                 RoleBehaviour.GetTempPlayerList());
         if (playersInAbilityRangeSorted.Count <= 0)
@@ -134,7 +134,7 @@ public static class Player
             (Il2CppSystem.Predicate<PlayerTask>)(
                 (PlayerTask task) =>
                     task && task.TaskType == taskType));
-        
+
         if (!playerTask) { return false; }
         task = playerTask.TryCast<NormalPlayerTask>();
 
@@ -155,7 +155,7 @@ public static class Player
 
         Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-        foreach (GameData.PlayerInfo playerInfo in 
+        foreach (GameData.PlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (isValidPlayer(role, sourcePlayer, playerInfo))
@@ -295,7 +295,7 @@ public static class Player
 
     public static void SetPlayerOutLine(PlayerControl target, Color color)
     {
-        
+
         if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }
 
         target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
@@ -316,21 +316,25 @@ public static class Player
 
         foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
         {
-            PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
+            PoolablePlayer poolPlayer = Object.Instantiate(
                 Module.Prefab.PlayerPrefab, parent);
 
             poolPlayer.gameObject.SetActive(true);
-            poolPlayer.UpdateFromPlayerData(
-                player.Data, PlayerOutfitType.Default,
-                PlayerMaterial.MaskType.None, true);
-            poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
+
+			poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
             poolPlayer.cosmetics.nameText.transform.localPosition = new Vector3(
                 poolPlayer.cosmetics.nameText.transform.localPosition.x,
                 poolPlayer.cosmetics.nameText.transform.localPosition.y - 1.0f,
                 poolPlayer.cosmetics.nameText.transform.localPosition.z);
-            poolPlayer.name = $"poolable_{player.PlayerId}";
-            poolPlayer.SetFlipX(true);
-            poolPlayer.gameObject.SetActive(false);
+
+			poolPlayer.name = $"poolable_{player.PlayerId}";
+
+			poolPlayer.SetFlipX(true);
+			poolPlayer.UpdateFromPlayerData(
+				player.Data, PlayerOutfitType.Default,
+				PlayerMaterial.MaskType.None, true);
+
+			poolPlayer.gameObject.SetActive(false);
             poolPlayer.transform.localScale = newScale;
             playerIcon.Add(player.PlayerId, poolPlayer);
         }
