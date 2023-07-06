@@ -24,7 +24,7 @@ public static class Update
 																switch (value)
 																{
 																				case InfoOverlayModel.Type.AllRole:
-																				case InfoOverlayModel.Type.GhostRole:
+																				case InfoOverlayModel.Type.AllGhostRole:
 																				case InfoOverlayModel.Type.GlobalSetting:
 																								continue;
 																				default:
@@ -86,7 +86,7 @@ public static class Update
 																new AllRoleInfoModel()
 												},
 												{
-																InfoOverlayModel.Type.GhostRole,
+																InfoOverlayModel.Type.AllGhostRole,
 																new AllGhostRoleInfoModel()
 												},
 												{
