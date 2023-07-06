@@ -98,6 +98,10 @@ public sealed class Controller : NullableSingleton<Controller>
 								{
 												Show(showTyep);
 								}
+								else if (this.model.CurShow != showTyep)
+								{
+												Show(showTyep);
+								}
 								else
 								{
 												Hide();
@@ -151,6 +155,19 @@ public sealed class Controller : NullableSingleton<Controller>
 								if (Input.GetKeyDown(KeyCode.O))
 								{
 												ToggleView(InfoOverlayModel.Type.GlobalSetting);
+								}
+
+								if (this.view != null &&
+												this.view.isActiveAndEnabled)
+								{
+												if (Input.GetKeyDown(KeyCode.PageDown))
+												{
+																UpdateFunc.IncreasePage(this.model);
+												}
+												if (Input.GetKeyDown(KeyCode.PageUp))
+												{
+																UpdateFunc.DecreasePage(this.model);
+												}
 								}
 				}
 
