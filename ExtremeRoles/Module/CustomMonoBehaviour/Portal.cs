@@ -50,27 +50,27 @@ public class PortalBase : MonoBehaviour
 	public void Awake()
 	{
 		var collider = base.gameObject.AddComponent<CircleCollider2D>();
-        collider.radius = 0.1f;
-        collider.isTrigger = true;
+		collider.radius = 0.1f;
+		collider.isTrigger = true;
 
-        this.img = base.gameObject.AddComponent<SpriteRenderer>();
+		this.img = base.gameObject.AddComponent<SpriteRenderer>();
 		this.linkPortal = null;
 
 		this.img.sprite = Loader.CreateSpriteFromResources(
-            Path.TeleporterNoneActivatePortal);
-    }
+			Path.TeleporterNoneActivatePortal);
+	}
 
 	public static void Link(PortalBase a, PortalBase b)
-    {
+	{
 		a.SetTarget(b.gameObject.transform.position);
-        b.SetTarget(a.gameObject.transform.position);
+		b.SetTarget(a.gameObject.transform.position);
 
 		a.img.sprite = a.GetSprite();
 		b.img.sprite = b.GetSprite();
 
 		a.linkPortal = b;
 		b.linkPortal = a;
-    }
+	}
 
 	public void SetTarget(Vector2 pos)
 	{
@@ -80,10 +80,10 @@ public class PortalBase : MonoBehaviour
 	public float CanUse(
 		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
 	{
-		float num = this.linkPortal && this.timer <= 0.0f ? 
+		float num = this.linkPortal && this.timer <= 0.0f ?
 			Vector2.Distance(
 				pc.Object.GetTruePosition(),
-				base.transform.position) : 
+				base.transform.position) :
 			float.MaxValue;
 
 		couldUse = pc.IsDead ? false : true;
@@ -98,19 +98,19 @@ public class PortalBase : MonoBehaviour
 	{
 		PlayerControl player = CachedPlayerControl.LocalPlayer;
 
-        Player.RpcUncheckSnap(
-            player.PlayerId, this.pos - player.Collider.offset);
+		Player.RpcUncheckSnap(
+			player.PlayerId, this.pos - player.Collider.offset);
 
 		this.timer = NoneUsePortalTime;
 		this.linkPortal.timer = NoneUsePortalTime;
-    }
+	}
 
 	public void FixedUpdate()
 	{
 		if (this.timer <= 0.0f) { return; }
 
-        this.timer -= Time.fixedDeltaTime;
-    }
+		this.timer -= Time.fixedDeltaTime;
+	}
 
 	protected virtual Sprite GetSprite() => Loader.CreateSpriteFromResources(
 		Path.TestButton);

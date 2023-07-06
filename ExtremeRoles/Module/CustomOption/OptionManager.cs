@@ -17,28 +17,28 @@ namespace ExtremeRoles.Module.CustomOption;
 
 public sealed class OptionManager
 {
-    public enum ValueType : byte
-    {
-        Int,
-        Float,
-        Bool
-    }
+	public enum ValueType : byte
+	{
+		Int,
+		Float,
+		Bool
+	}
 
-    public string ConfigPreset
-    {
-        get => $"Preset:{selectedPreset}";
-    }
+	public string ConfigPreset
+	{
+		get => $"Preset:{selectedPreset}";
+	}
 
-    public readonly static OptionManager Instance = new OptionManager();
+	public readonly static OptionManager Instance = new OptionManager();
 
-    private Dictionary<int, ValueType> allOptionId = new Dictionary<int, ValueType>();
-    private TypeOptionHolder<int>   intOption   = new TypeOptionHolder<int>();
-    private TypeOptionHolder<float> floatOption = new TypeOptionHolder<float>();
-    private TypeOptionHolder<bool>  boolOption  = new TypeOptionHolder<bool>();
+	private Dictionary<int, ValueType> allOptionId = new Dictionary<int, ValueType>();
+	private TypeOptionHolder<int> intOption = new TypeOptionHolder<int>();
+	private TypeOptionHolder<float> floatOption = new TypeOptionHolder<float>();
+	private TypeOptionHolder<bool> boolOption = new TypeOptionHolder<bool>();
 
-    private int selectedPreset = 0;
+	private int selectedPreset = 0;
 
-    private const int chunkSize = 50;
+	private const int chunkSize = 50;
 
 	private const KeyCode maxSelectionKey = KeyCode.LeftControl;
 	private const KeyCode skipSelectionKey = KeyCode.LeftShift;
@@ -53,26 +53,26 @@ public sealed class OptionManager
 
 
 	public void Add(int id, IValueOption<float> option)
-    {
-        this.floatOption.Add(id, option);
-        this.allOptionId.Add(id, ValueType.Float);
-    }
-    public void Add(int id, IValueOption<int> option)
-    {
-        this.intOption.Add(id, option);
-        this.allOptionId.Add(id, ValueType.Int);
-    }
-    public void Add(int id, IValueOption<bool> option)
-    {
-        this.boolOption.Add(id, option);
-        this.allOptionId.Add(id, ValueType.Bool);
-    }
+	{
+		this.floatOption.Add(id, option);
+		this.allOptionId.Add(id, ValueType.Float);
+	}
+	public void Add(int id, IValueOption<int> option)
+	{
+		this.intOption.Add(id, option);
+		this.allOptionId.Add(id, ValueType.Int);
+	}
+	public void Add(int id, IValueOption<bool> option)
+	{
+		this.boolOption.Add(id, option);
+		this.allOptionId.Add(id, ValueType.Bool);
+	}
 
-    public void AddOption<SelectionType>(int id, IValueOption<SelectionType> option)
-        where SelectionType :
-            struct, IComparable, IConvertible,
-            IComparable<SelectionType>, IEquatable<SelectionType>
-    {
+	public void AddOption<SelectionType>(int id, IValueOption<SelectionType> option)
+		where SelectionType :
+			struct, IComparable, IConvertible,
+			IComparable<SelectionType>, IEquatable<SelectionType>
+	{
 		if (typeof(SelectionType) == typeof(int))
 		{
 			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<int>>(ref option));
@@ -91,15 +91,15 @@ public sealed class OptionManager
 		}
 	}
 
-    public bool Contains(int id) => this.allOptionId.ContainsKey(id);
+	public bool Contains(int id) => this.allOptionId.ContainsKey(id);
 
-    public bool TryGet<T>(int id, out IValueOption<T>? option)
-        where T :
-            struct, IComparable, IConvertible,
-            IComparable<T>, IEquatable<T>
-    {
-        option = null;
-        if (!this.allOptionId.ContainsKey(id)) { return false; }
+	public bool TryGet<T>(int id, out IValueOption<T>? option)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
+		option = null;
+		if (!this.allOptionId.ContainsKey(id)) { return false; }
 
 		if (typeof(T) == typeof(int))
 		{
@@ -113,7 +113,7 @@ public sealed class OptionManager
 			option = Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
 			return true;
 		}
-		else if(typeof(T) == typeof(bool))
+		else if (typeof(T) == typeof(bool))
 		{
 			var boolOption = this.boolOption.Get(id);
 			option = Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
@@ -125,20 +125,20 @@ public sealed class OptionManager
 		}
 	}
 
-    public bool TryGetIOption(int id, out IOptionInfo? option)
-    {
-        option = null;
-        if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return false; }
+	public bool TryGetIOption(int id, out IOptionInfo? option)
+	{
+		option = null;
+		if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return false; }
 
-        option = type switch
-        {
-            ValueType.Int => this.intOption.Get(id),
-            ValueType.Float => this.floatOption.Get(id),
-            ValueType.Bool => this.boolOption.Get(id),
-            _ => null
-        };
-        return true;
-    }
+		option = type switch
+		{
+			ValueType.Int => this.intOption.Get(id),
+			ValueType.Float => this.floatOption.Get(id),
+			ValueType.Bool => this.boolOption.Get(id),
+			_ => null
+		};
+		return true;
+	}
 
 	public IValueOption<T> Get<T>(int id)
 		where T :
@@ -166,49 +166,49 @@ public sealed class OptionManager
 		}
 	}
 
-    public IEnumerable<KeyValuePair<int, IOptionInfo>> GetKeyValueAllIOptions()
-    {
-        foreach (var (id, key) in this.allOptionId)
-        {
-            IOptionInfo info = key switch
-            {
-                ValueType.Int => this.intOption.Get(id),
-                ValueType.Float => this.floatOption.Get(id),
-                ValueType.Bool => this.boolOption.Get(id),
-                _ => throw new ArgumentException("Invalided Option Id"),
-            };
-            yield return new KeyValuePair<int, IOptionInfo>(id, info);
-        }
-    }
-
-    public IEnumerable<IOptionInfo> GetAllIOption()
-    {
-        foreach (var (id, key) in this.allOptionId)
-        {
-            yield return key switch
-            {
-                ValueType.Int => this.intOption.Get(id),
-                ValueType.Float => this.floatOption.Get(id),
-                ValueType.Bool => this.boolOption.Get(id),
-                _ => throw new ArgumentException("Invalided Option Id"),
+	public IEnumerable<KeyValuePair<int, IOptionInfo>> GetKeyValueAllIOptions()
+	{
+		foreach (var (id, key) in this.allOptionId)
+		{
+			IOptionInfo info = key switch
+			{
+				ValueType.Int => this.intOption.Get(id),
+				ValueType.Float => this.floatOption.Get(id),
+				ValueType.Bool => this.boolOption.Get(id),
+				_ => throw new ArgumentException("Invalided Option Id"),
 			};
-        }
-    }
+			yield return new KeyValuePair<int, IOptionInfo>(id, info);
+		}
+	}
 
-    public IOptionInfo GetIOption(int id)
-        => this.allOptionId[id] switch
-        {
-            ValueType.Int => this.intOption.Get(id),
-            ValueType.Float => this.floatOption.Get(id),
-            ValueType.Bool => this.boolOption.Get(id),
-            _ => throw new ArgumentException("Invalided Option Id"),
+	public IEnumerable<IOptionInfo> GetAllIOption()
+	{
+		foreach (var (id, key) in this.allOptionId)
+		{
+			yield return key switch
+			{
+				ValueType.Int => this.intOption.Get(id),
+				ValueType.Float => this.floatOption.Get(id),
+				ValueType.Bool => this.boolOption.Get(id),
+				_ => throw new ArgumentException("Invalided Option Id"),
+			};
+		}
+	}
+
+	public IOptionInfo GetIOption(int id)
+		=> this.allOptionId[id] switch
+		{
+			ValueType.Int => this.intOption.Get(id),
+			ValueType.Float => this.floatOption.Get(id),
+			ValueType.Bool => this.boolOption.Get(id),
+			_ => throw new ArgumentException("Invalided Option Id"),
 		};
 
-    public T GetValue<T>(int id)
-        where T :
-            struct, IComparable, IConvertible,
-            IComparable<T>, IEquatable<T>
-    {
+	public T GetValue<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
 		if (typeof(T) == typeof(int))
 		{
 			var intOption = this.intOption.Get(id);
@@ -260,17 +260,17 @@ public sealed class OptionManager
 		}
 	}
 
-    public void ShareOptionSelections()
-    {
-        if (PlayerControl.AllPlayerControls.Count <= 1 ||
-            !AmongUsClient.Instance ||
-            !AmongUsClient.Instance.AmHost ||
-            !PlayerControl.LocalPlayer) { return; }
+	public void ShareOptionSelections()
+	{
+		if (PlayerControl.AllPlayerControls.Count <= 1 ||
+			!AmongUsClient.Instance ||
+			!AmongUsClient.Instance.AmHost ||
+			!PlayerControl.LocalPlayer) { return; }
 
-        shareOption(this.intOption);
-        shareOption(this.floatOption);
-        shareOption(this.boolOption);
-    }
+		shareOption(this.intOption);
+		shareOption(this.floatOption);
+		shareOption(this.boolOption);
+	}
 
 	private void switchPreset(int newPreset)
 	{
@@ -307,64 +307,64 @@ public sealed class OptionManager
 	}
 
 	public static void Load()
-    {
-        // ランダム生成機を設定を読み込んで作成
-        RandomGenerator.Initialize();
+	{
+		// ランダム生成機を設定を読み込んで作成
+		RandomGenerator.Initialize();
 
-        // ゲームモードのオプションロード
-        ExtremeGameModeManager.Instance.Load();
+		// ゲームモードのオプションロード
+		ExtremeGameModeManager.Instance.Load();
 
-        // 各役職を設定を読み込んで初期化する
-        Roles.ExtremeRoleManager.Initialize();
-        GhostRoles.ExtremeGhostRoleManager.Initialize();
+		// 各役職を設定を読み込んで初期化する
+		Roles.ExtremeRoleManager.Initialize();
+		GhostRoles.ExtremeGhostRoleManager.Initialize();
 
-        // 各種マップモジュール等のオプション値を読み込む
-        Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
-        Patches.MiniGame.SecurityHelper.LoadOptionValue();
-        Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
+		// 各種マップモジュール等のオプション値を読み込む
+		Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
+		Patches.MiniGame.SecurityHelper.LoadOptionValue();
+		Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
 
-        MeetingReporter.Reset();
-    }
+		MeetingReporter.Reset();
+	}
 
-    public static void ShareOption(int numberOfOptions, MessageReader reader)
-    {
-        try
-        {
-            for (int i = 0; i < numberOfOptions; i++)
-            {
-                int optionId = reader.ReadPackedInt32();
-                int selection = reader.ReadPackedInt32();
-                Instance.rpcValueSync(optionId, selection);
-            }
-        }
-        catch (Exception e)
-        {
-            Logging.Error($"Error while deserializing options:{e.Message}");
-        }
-    }
+	public static void ShareOption(int numberOfOptions, MessageReader reader)
+	{
+		try
+		{
+			for (int i = 0; i < numberOfOptions; i++)
+			{
+				int optionId = reader.ReadPackedInt32();
+				int selection = reader.ReadPackedInt32();
+				Instance.rpcValueSync(optionId, selection);
+			}
+		}
+		catch (Exception e)
+		{
+			Logging.Error($"Error while deserializing options:{e.Message}");
+		}
+	}
 
-    private static void shareOption<T>(TypeOptionHolder<T> holder)
-        where T :
-            struct, IComparable, IConvertible,
-            IComparable<T>, IEquatable<T>
-    {
-        var splitOption = holder.Select((x, i) =>
-            new { data = x, indexgroup = i / chunkSize })
-            .GroupBy(x => x.indexgroup, x => x.data)
-            .Select(y => y.Select(x => x));
+	private static void shareOption<T>(TypeOptionHolder<T> holder)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
+		var splitOption = holder.Select((x, i) =>
+			new { data = x, indexgroup = i / chunkSize })
+			.GroupBy(x => x.indexgroup, x => x.data)
+			.Select(y => y.Select(x => x));
 
-        foreach (var chunkedOption in splitOption)
-        {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.ShareOption))
-            {
-                caller.WriteByte((byte)chunkedOption.Count());
-                foreach (var (id, option) in chunkedOption)
-                {
-                    caller.WritePackedInt(id);
-                    caller.WritePackedInt(option.CurSelection);
-                }
-            }
-        }
-    }
+		foreach (var chunkedOption in splitOption)
+		{
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.ShareOption))
+			{
+				caller.WriteByte((byte)chunkedOption.Count());
+				foreach (var (id, option) in chunkedOption)
+				{
+					caller.WritePackedInt(id);
+					caller.WritePackedInt(option.CurSelection);
+				}
+			}
+		}
+	}
 }

@@ -12,41 +12,41 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 [Il2CppRegister]
 public sealed class ButtonWrapper : MonoBehaviour
 {
-    private Button button;
+	private Button button;
 
-    private TextMeshProUGUI text;
+	private TextMeshProUGUI text;
 
-    public ButtonWrapper(IntPtr ptr) : base(ptr) { }
+	public ButtonWrapper(IntPtr ptr) : base(ptr) { }
 
-    public void Awake()
-    {
-        this.button = base.GetComponent<Button>();
-        this.text = base.GetComponentInChildren<TextMeshProUGUI>();
-    }
+	public void Awake()
+	{
+		this.button = base.GetComponent<Button>();
+		this.text = base.GetComponentInChildren<TextMeshProUGUI>();
+	}
 
-				public void SetEnable(bool enable)
-				{
-								this.button.interactable = enable;
-				}
+	public void SetEnable(bool enable)
+	{
+		this.button.interactable = enable;
+	}
 
-				public void ResetButtonAction()
-    {
-        this.button.onClick.RemoveAllListeners();
-    }
+	public void ResetButtonAction()
+	{
+		this.button.onClick.RemoveAllListeners();
+	}
 
-    public void SetButtonText(string showText)
-    {
-        this.text.text = showText;
-    }
+	public void SetButtonText(string showText)
+	{
+		this.text.text = showText;
+	}
 
-				[HideFromIl2Cpp]
-				public void SetButtonClickAction(Action act)
-				{
-								SetButtonClickAction((UnityAction)act);
-				}
+	[HideFromIl2Cpp]
+	public void SetButtonClickAction(Action act)
+	{
+		SetButtonClickAction((UnityAction)act);
+	}
 
-				public void SetButtonClickAction(UnityAction act)
-    {
-        this.button.onClick.AddListener(act);
-    }
+	public void SetButtonClickAction(UnityAction act)
+	{
+		this.button.onClick.AddListener(act);
+	}
 }

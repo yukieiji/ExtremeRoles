@@ -15,42 +15,42 @@ public sealed class HelpButton
 
 	private GameObject? body = null;
 
-    public void CreateInfoButton()
-    {
-        this.body = Object.Instantiate(
-            GameObject.Find("MenuButton"),
-            GameObject.Find("TopRight/MenuButton").transform);
-        Object.DontDestroyOnLoad(this.body);
+	public void CreateInfoButton()
+	{
+		this.body = Object.Instantiate(
+			GameObject.Find("MenuButton"),
+			GameObject.Find("TopRight/MenuButton").transform);
+		Object.DontDestroyOnLoad(this.body);
 
 		this.body.name = "infoRoleButton";
 		this.body.SetActive(true);
 		this.body.layer = 5;
 		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-        SetInfoButtonToGameStartShipPositon();
+		SetInfoButtonToGameStartShipPositon();
 
-        var passiveButton = this.body.GetComponent<PassiveButton>();
-        passiveButton.OnClick.RemoveAllPersistentAndListeners();
-        passiveButton.OnClick.AddListener(
-            (UnityAction)Controller.Instance.ToggleView);
+		var passiveButton = this.body.GetComponent<PassiveButton>();
+		passiveButton.OnClick.RemoveAllPersistentAndListeners();
+		passiveButton.OnClick.AddListener(
+			(UnityAction)Controller.Instance.ToggleView);
 
-        var render = this.body.GetComponent<SpriteRenderer>();
-        render.sprite = Loader.CreateSpriteFromResources(
-            Path.HelpImage, 230f);
-    }
+		var render = this.body.GetComponent<SpriteRenderer>();
+		render.sprite = Loader.CreateSpriteFromResources(
+			Path.HelpImage, 230f);
+	}
 
-    public void SetInfoButtonToGameStartShipPositon()
-    {
+	public void SetInfoButtonToGameStartShipPositon()
+	{
 		if (this.body == null) { return; }
 		this.body.transform.localPosition = new Vector3(
-            0.0f, -0.825f, 0.0f);
-    }
+			0.0f, -0.825f, 0.0f);
+	}
 
-    public void SetInfoButtonToInGamePositon()
-    {
+	public void SetInfoButtonToInGamePositon()
+	{
 		if (this.body == null) { return; }
 		this.body.SetActive(true);
 		this.body.transform.localPosition = new Vector3(
-            0.0f, -1.75f, 0.0f);
-    }
+			0.0f, -1.75f, 0.0f);
+	}
 }

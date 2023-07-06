@@ -6,21 +6,21 @@ namespace ExtremeRoles.Module.AbilityModeSwitcher;
 
 public struct GraphicAndActiveTimeMode : IAbilityMode
 {
-    public ButtonGraphic Graphic { get; set; }
-    public float Time { get; set; }
+	public ButtonGraphic Graphic { get; set; }
+	public float Time { get; set; }
 }
 
-public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> : 
-    ModeSwitcherBase<SwithEnum, GraphicAndActiveTimeMode>
-    where SwithEnum : struct, Enum
+public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> :
+	ModeSwitcherBase<SwithEnum, GraphicAndActiveTimeMode>
+	where SwithEnum : struct, Enum
 {
-    public GraphicAndActiveTimeSwitcher(AbilityBehaviorBase behavior) : base(behavior)
-    { }
+	public GraphicAndActiveTimeSwitcher(AbilityBehaviorBase behavior) : base(behavior)
+	{ }
 
-    public override void Switch(SwithEnum type)
-    {
-        base.Switch(type);
-        GraphicAndActiveTimeMode mode = this.Mode[type];
-        this.Behavior.SetActiveTime(mode.Time);
-    }
+	public override void Switch(SwithEnum type)
+	{
+		base.Switch(type);
+		GraphicAndActiveTimeMode mode = this.Mode[type];
+		this.Behavior.SetActiveTime(mode.Time);
+	}
 }

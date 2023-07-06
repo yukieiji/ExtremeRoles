@@ -8,48 +8,48 @@ using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
-    [Il2CppRegister]
-    public sealed class HostObjectUpdater : MonoBehaviour
-    {
-        private List<IUpdatableObject> updateObject = new List<IUpdatableObject>();
+	[Il2CppRegister]
+	public sealed class HostObjectUpdater : MonoBehaviour
+	{
+		private List<IUpdatableObject> updateObject = new List<IUpdatableObject>();
 
-        public HostObjectUpdater(IntPtr ptr) : base(ptr) { }
+		public HostObjectUpdater(IntPtr ptr) : base(ptr) { }
 
-        public void Awake()
-        {
-            updateObject.Clear();
-        }
+		public void Awake()
+		{
+			updateObject.Clear();
+		}
 
-        [HideFromIl2Cpp]
-        public void AddObject(IUpdatableObject obj)
-        {
-            updateObject.Add(obj);
-        }
+		[HideFromIl2Cpp]
+		public void AddObject(IUpdatableObject obj)
+		{
+			updateObject.Add(obj);
+		}
 
-        public void RemoveObject(int index)
-        {
-            updateObject[index].Clear();
-            updateObject.RemoveAt(index);
-        }
+		public void RemoveObject(int index)
+		{
+			updateObject[index].Clear();
+			updateObject.RemoveAt(index);
+		}
 
-        [HideFromIl2Cpp]
-        public void RemoveObject(IUpdatableObject obj)
-        {
-            obj.Clear();
-            updateObject.Remove(obj);
-        }
+		[HideFromIl2Cpp]
+		public void RemoveObject(IUpdatableObject obj)
+		{
+			obj.Clear();
+			updateObject.Remove(obj);
+		}
 
-        [HideFromIl2Cpp]
-        public IUpdatableObject GetObject(int index) => updateObject[index];
+		[HideFromIl2Cpp]
+		public IUpdatableObject GetObject(int index) => updateObject[index];
 
-        public void Update()
-        {
-            if (!AmongUsClient.Instance.AmHost) { return; }
+		public void Update()
+		{
+			if (!AmongUsClient.Instance.AmHost) { return; }
 
-            for (int i = 0; i < updateObject.Count; i++)
-            {
-                updateObject[i].Update(i);
-            }
-        }
-    }
+			for (int i = 0; i < updateObject.Count; i++)
+			{
+				updateObject[i].Update(i);
+			}
+		}
+	}
 }

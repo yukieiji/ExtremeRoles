@@ -2,7 +2,7 @@
 
 public interface IInfoOverlayPanelModel
 {
-				public string Title { get; }
+	public string Title { get; }
 
-				public (string, string) GetInfoText();
+	public (string, string) GetInfoText();
 }

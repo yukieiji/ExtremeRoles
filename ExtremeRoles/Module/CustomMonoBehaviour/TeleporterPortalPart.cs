@@ -44,24 +44,24 @@ public class TeleporterPortalPart : MonoBehaviour
 	public void Awake()
 	{
 		var collider = base.gameObject.AddComponent<CircleCollider2D>();
-        collider.radius = 0.01f;
-        collider.isTrigger = true;
+		collider.radius = 0.01f;
+		collider.isTrigger = true;
 
-        var img = base.gameObject.AddComponent<SpriteRenderer>();
-        img.sprite = Loader.CreateSpriteFromResources(
-            Path.TeleporterPortalBase);
-    }
+		var img = base.gameObject.AddComponent<SpriteRenderer>();
+		img.sprite = Loader.CreateSpriteFromResources(
+			Path.TeleporterPortalBase);
+	}
 
 	public float CanUse(
 		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
 	{
-        if (!tryGetTeleporter(out var _))
-        {
+		if (!tryGetTeleporter(out var _))
+		{
 			canUse = couldUse = false;
-            return float.MaxValue;
-        }
+			return float.MaxValue;
+		}
 
-        float num = Vector2.Distance(
+		float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),
 			base.transform.position);
 		couldUse = pc.IsDead ? false : true;
@@ -79,9 +79,9 @@ public class TeleporterPortalPart : MonoBehaviour
 			return;
 		}
 		teleporter.IncreaseAbilityCount();
-        Destroy(base.gameObject);
-    }
-	
+		Destroy(base.gameObject);
+	}
+
 	private static bool tryGetTeleporter(out Teleporter teleporter)
 	{
 		teleporter = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Teleporter>();
