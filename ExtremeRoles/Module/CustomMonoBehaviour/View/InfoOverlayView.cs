@@ -39,8 +39,6 @@ public sealed class InfoOverlayView : MonoBehaviour
 				private SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
 								new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
 
-				private int curButtonNum = 0;
-
 				public void Awake()
 				{
 								Transform trans = base.transform;
@@ -56,8 +54,6 @@ public sealed class InfoOverlayView : MonoBehaviour
 
 								this.mainText = trans.Find("InfoMain/Viewport/Content").GetComponent<TextMeshProUGUI>();
 								this.subText = trans.Find("InfoSub/Viewport/Content").GetComponent<TextMeshProUGUI>();
-
-								this.curButtonNum = 0;
 				}
 
 
@@ -78,7 +74,6 @@ public sealed class InfoOverlayView : MonoBehaviour
 												this.menu.Clear();
 												this.button.Awake();
 												this.button.ResetButtonAction();
-												this.button.SetEnable(true);
 
 												foreach (var (panel, index) in model.PanelModel.Select((value, index) => (value, index)))
 												{
@@ -104,6 +99,8 @@ public sealed class InfoOverlayView : MonoBehaviour
 												}
 
 								}
+
+								this.button.SetEnable(true);
 
 								if (this.menu.TryGetValue(model.CurShow, out var selectedButton))
 								{

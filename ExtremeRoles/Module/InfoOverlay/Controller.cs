@@ -17,19 +17,36 @@ public sealed class Controller : NullableSingleton<Controller>
 {
 				private InfoOverlayView? view;
 				private InfoOverlayModel model;
+				private HelpButton button;
 
 				public Controller()
 				{
 								this.model = new InfoOverlayModel();
+								this.button = new HelpButton();
 				}
 
-				public void SetLobbyView()
+				public void InitializeToLobby()
 				{
+								if (!this.button.IsInitialized)
+								{
+												this.button.CreateInfoButton();
+								}
+								else
+								{
+												this.button.SetInfoButtonToGameStartShipPositon();
+								}
 								UpdateFunc.InitializeLobby(this.model);
 				}
-				public void SetGameView()
+
+				public void InitializeToGame()
 				{
+								this.button.SetInfoButtonToInGamePositon();
 								UpdateFunc.InitializeGame(this.model);
+				}
+
+				public void ToggleView()
+				{
+								ToggleView(this.model.CurShow);
 				}
 
 				public void ToggleView(InfoOverlayModel.Type showTyep)
