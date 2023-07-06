@@ -97,14 +97,18 @@ public sealed class InfoOverlayView : MonoBehaviour
 																				}));
 																this.menu.Add(panel.Key, newButton);
 												}
-
+												this.button.SetEnable(true);
+												if (this.menu.TryGetValue(model.CurShow, out var selectedButton))
+												{
+																selectedButton.SetEnable(false);
+												}
 								}
-
-								this.button.SetEnable(true);
-
-								if (this.menu.TryGetValue(model.CurShow, out var selectedButton))
+								else
 								{
-												selectedButton.SetEnable(false);
+												foreach (var (showType, button) in this.menu)
+												{
+																button.SetEnable(showType != model.CurShow);
+												}
 								}
 
 								if (model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
