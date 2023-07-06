@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -91,10 +90,10 @@ public sealed class InfoOverlayView : MonoBehaviour
 																newButton.Awake();
 																newButton.SetButtonText(panel.Key.ToString());
 																newButton.SetButtonClickAction(
-																				(UnityAction)(() =>
+																				() =>
 																				{
 																								Update.SwithTo(model, panel.Key);
-																				}));
+																				});
 																this.menu.Add(panel.Key, newButton);
 												}
 												this.button.SetEnable(true);
