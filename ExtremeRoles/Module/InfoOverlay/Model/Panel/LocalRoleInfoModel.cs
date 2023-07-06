@@ -21,8 +21,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 				{
 								var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
-								if (role is MultiAssignRoleBase multiAssignRole &&
-												multiAssignRole.AnotherRole is not null)
+								if (role is MultiAssignRoleBase multiAssignRole)
 								{
 												return createMultiAssignRoleInfo(multiAssignRole);
 								}
@@ -42,22 +41,29 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 								(string colorRoleName, string roleFullDesc, string roleOptionString) = getMultiRoleInfoAndOption(
 												multiAssignRole);
-								(string anotherColorRoleName, string anotherRoleFullDesc, string anotherRoleOptionString) =					
-												getRoleInfoAndOption(multiAssignRole.AnotherRole);
-
 								string roleOptionStr = Translation.GetString("roleOption");
 
-								return (
-												string.Format(
-																oneLineRoleInfoPlaceholder,
-																colorRoleName, roleFullDesc,
-																roleOptionString, roleOptionStr),
-												string.Format(
-																oneLineRoleInfoPlaceholder,
-																anotherColorRoleName, anotherRoleFullDesc,
-																roleOptionString, anotherRoleOptionString)
+								if (multiAssignRole.AnotherRole is not null)
+								{
+												(string anotherColorRoleName, string anotherRoleFullDesc, string anotherRoleOptionString) =
+																getRoleInfoAndOption(multiAssignRole.AnotherRole);
+												return (
+																string.Format(
+																				oneLineRoleInfoPlaceholder,
+																				colorRoleName, roleFullDesc,
+																				roleOptionString, roleOptionStr),
+																string.Format(
+																				oneLineRoleInfoPlaceholder,
+																				anotherColorRoleName, anotherRoleFullDesc,
+																				roleOptionString, anotherRoleOptionString));
+								}
+								else
+								{
+												return (
+																$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}",
+																$"<size=115%>・{colorRoleName}{Translation.GetString("roleOption")}</size>\n{roleOptionString}"
 								);
-
+								}
 				}
 
 				private static (string, string, string) getRoleInfoAndOption(SingleRoleBase role)
