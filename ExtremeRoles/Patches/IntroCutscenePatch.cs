@@ -267,7 +267,7 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
+            Module.InfoOverlay.HelpButton.SetInfoButtonToInGamePositon();
 
             var localRole = ExtremeRoleManager.GetLocalPlayerRole();
 

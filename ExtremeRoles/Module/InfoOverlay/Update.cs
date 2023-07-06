@@ -66,6 +66,7 @@ public static class Update
 								if (!model.PanelModel.TryGetValue(model.CurShow, out var panel) ||
 												panel is not PanelPageModelBase pagePanel) { return; }
 								pagePanel.CurPage = pagePanel.CurPage + 1;
+								model.IsDuty = true;
 				}
 
 				public static void DecreasePage(InfoOverlayModel model)
@@ -73,6 +74,7 @@ public static class Update
 								if (!model.PanelModel.TryGetValue(model.CurShow, out var panel) ||
 												panel is not PanelPageModelBase pagePanel) { return; }
 								pagePanel.CurPage = pagePanel.CurPage - 1;
+								model.IsDuty = true;
 				}
 
 				private static void initializeModel(InfoOverlayModel model)

@@ -7,7 +7,7 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
-    public static class Button
+    public static class HelpButton
     {
         public static GameObject Body = null;
 
