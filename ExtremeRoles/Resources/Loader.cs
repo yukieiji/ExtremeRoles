@@ -78,8 +78,8 @@ public static class Path
     public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
     public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
     public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
-	public const string SlaveDriverHarassment = "ExtremeRoles.Resources.Harassment.png";
-	public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
+				public const string SlaveDriverHarassment = "ExtremeRoles.Resources.Harassment.png";
+				public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
     public const string MeryCustomVentAnime =
         "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
     public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
@@ -109,9 +109,9 @@ public static class Path
     public const string EaterDeadBodyEat = "ExtremeRoles.Resources.DeadBodyEat.png";
     public const string EaterEatKill = "ExtremeRoles.Resources.EatKil.png";
     public const string MinerSetMine = "ExtremeRoles.Resources.SetMine.png";
-	public const string MinerActiveMineImg = "ExtremeRoles.Resources.MinerMineActive.png";
-	public const string MinerDeactivateMineImg = "ExtremeRoles.Resources.MinerMineDeactive.png";
-	public const string TotocalcioBetPlayer = "ExtremeRoles.Resources.BedPlayer.png";
+				public const string MinerActiveMineImg = "ExtremeRoles.Resources.MinerMineActive.png";
+				public const string MinerDeactivateMineImg = "ExtremeRoles.Resources.MinerMineDeactive.png";
+				public const string TotocalcioBetPlayer = "ExtremeRoles.Resources.BedPlayer.png";
     public const string QueenCharm = "ExtremeRoles.Resources.Charm.png";
     public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
     public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
@@ -135,119 +135,120 @@ public static class Loader
     private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
     private static Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
-	public static SimpleButton CreateSimpleButton(Transform parent)
-	{
-		GameObject buuttonObj = UnityObject.Instantiate(
-		   GetUnityObjectFromResources<GameObject>(
-			   "ExtremeRoles.Resources.Asset.simplebutton.asset",
-			   "assets/common/simplebutton.prefab"),
-		   parent);
-		if (buuttonObj == null)
-		{
-			return null;
-		}
-		return buuttonObj.GetComponent<SimpleButton>();
-	}
+					public static SimpleButton CreateSimpleButton(Transform parent)
+					{
+								GameObject buuttonObj = UnityObject.Instantiate(
+												GetUnityObjectFromResources<GameObject>(
+												"ExtremeRoles.Resources.Asset.simplebutton.asset",
+												"assets/common/simplebutton.prefab"),
+												parent);
 
-	public static Sprite CreateSpriteFromResources(
-        string path, float pixelsPerUnit=115f)
-    {
-        try
-        {
-            string key = $"{path}{pixelsPerUnit}";
+								if (buuttonObj == null)
+								{
+												return null;
+								}
+								return buuttonObj.GetComponent<SimpleButton>();
+				}
 
-            if (cachedSprite.TryGetValue(key, out Sprite sprite)) { return sprite; }
+				public static Sprite CreateSpriteFromResources(
+								string path, float pixelsPerUnit=115f)
+				{
+								try
+								{
+												string key = $"{path}{pixelsPerUnit}";
 
-            Texture2D texture = createTextureFromResources(path);
-            sprite = Sprite.Create(
-                texture,
-                new Rect(0, 0, texture.width, texture.height),
-                new Vector2(0.5f, 0.5f), pixelsPerUnit);
+												if (cachedSprite.TryGetValue(key, out Sprite sprite)) { return sprite; }
 
-            sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-            cachedSprite.Add(key, sprite);
+												Texture2D texture = createTextureFromResources(path);
+												sprite = Sprite.Create(
+																texture,
+																new Rect(0, 0, texture.width, texture.height),
+																new Vector2(0.5f, 0.5f), pixelsPerUnit);
 
-            return sprite;
-        }
-        catch
-        {
-            Logging.Debug($"Error loading sprite from path: {path}");
-        }
-        return null;
-    }
+												sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+												cachedSprite.Add(key, sprite);
 
-    public static T GetUnityObjectFromResources<T>(
-        string bundleName, string objName) where T : UnityObject
-    {
-        AssetBundle bundle = getAssetBundleFromAssembly(
-            bundleName, Assembly.GetCallingAssembly());
+												return sprite;
+								}
+								catch
+								{
+												Logging.Debug($"Error loading sprite from path: {path}");
+								}
+								return null;
+				}
 
-        var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
-        if (!obj)
-        {
-            return null;
-        }
-        return obj.TryCast<T>();
-    }
+				public static T GetUnityObjectFromResources<T>(
+								string bundleName, string objName) where T : UnityObject
+				{
+								AssetBundle bundle = getAssetBundleFromAssembly(
+												bundleName, Assembly.GetCallingAssembly());
 
-    public static void LoadCommonAsset()
-    {
-        Assembly assembly = Assembly.GetExecutingAssembly();
-        foreach (string path in new string[]
-        {
-            "texture", "fonts", "eventsystem",
-            "simplebutton", "closebutton", "confirmmenu"
-        })
-        {
-            getAssetBundleFromAssembly($"ExtremeRoles.Resources.Asset.{path}.asset", assembly);
-        }
-    }
+								var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
+								if (!obj)
+								{
+												return null;
+								}
+								return obj.TryCast<T>();
+				}
 
-    private static AssetBundle getAssetBundleFromAssembly(
-        string bundleName, Assembly assembly)
-    {
-        if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
-        {
-			using var stream = assembly.GetManifestResourceStream(bundleName);
-			var byteTexture = getBytedArryFrom(stream);
+				public static void LoadCommonAsset()
+				{
+								Assembly assembly = Assembly.GetExecutingAssembly();
+								foreach (string path in new string[]
+								{
+												"texture", "fonts", "eventsystem",
+												"simplebutton", "closebutton", "confirmmenu"
+								})
+								{
+												getAssetBundleFromAssembly($"ExtremeRoles.Resources.Asset.{path}.asset", assembly);
+								}
+				}
 
-			bundle = AssetBundle.LoadFromMemory(byteTexture);
-			bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-			cachedBundle.Add(bundleName, bundle);
-		}
-        return bundle;
-    }
+				private static AssetBundle getAssetBundleFromAssembly(
+								string bundleName, Assembly assembly)
+				{
+								if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
+								{
+												using var stream = assembly.GetManifestResourceStream(bundleName);
+												var byteArray = getBytedArryFrom(stream);
 
-    private static Texture2D createTextureFromResources(string path)
-    {
-        try
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            using Stream stream = assembly.GetManifestResourceStream(path);
-            var byteTexture = getBytedArryFrom(stream);
+												bundle = AssetBundle.LoadFromMemory(byteArray);
+												bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+												cachedBundle.Add(bundleName, bundle);
+								}
+								return bundle;
+				}
 
-			Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-			ImageConversion.LoadImage(texture, byteTexture, false);
-            return texture;
-        }
-        catch
-        {
-            Logging.Debug($"Error loading texture from resources: {path}");
-        }
-        return null;
-    }
+				private static Texture2D createTextureFromResources(string path)
+				{
+								try
+								{
+												Assembly assembly = Assembly.GetExecutingAssembly();
+												using Stream stream = assembly.GetManifestResourceStream(path);
+												var byteTexture = getBytedArryFrom(stream);
 
-	private static unsafe Il2CppStructArray<byte> getBytedArryFrom(Stream stream)
-	{
-		long length = stream.Length;
-		var byteTexture = new Il2CppStructArray<byte>(length);
-		var span = new Span<byte>(
-			IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
-			(int)length);
+												Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+												ImageConversion.LoadImage(texture, byteTexture, false);
+												return texture;
+								}
+								catch
+								{
+												Logging.Debug($"Error loading texture from resources: {path}");
+								}
+								return null;
+				}
 
-		stream.Read(span);
+				private static unsafe Il2CppStructArray<byte> getBytedArryFrom(Stream stream)
+				{
+								long length = stream.Length;
+								var byteTexture = new Il2CppStructArray<byte>(length);
+								var span = new Span<byte>(
+												IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
+												(int)length);
 
-		return byteTexture;
-	}
+								stream.Read(span);
+
+								return byteTexture;
+				}
 }
 
