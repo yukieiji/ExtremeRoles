@@ -1,4 +1,5 @@
 ﻿global using ExtremeRoles.Module.CustomOption;
+global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 
 using BepInEx;
 using BepInEx.Configuration;
@@ -8,7 +9,6 @@ using HarmonyLib;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.InfoOverlay;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 
@@ -29,8 +29,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
     public static ExtremeRolesPlugin Instance;
     public static ExtremeShipStatus ShipState = new ExtremeShipStatus();
-
-    public static InfoOverlay Info = new InfoOverlay();
 
     internal static BepInEx.Logging.ManualLogSource Logger;
 

@@ -372,7 +372,7 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPostfix(GameData.PlayerInfo exiled)
     {
-        ExtremeRolesPlugin.Info.BlockShow(false);
+        InfoOverlay.Instance.BlockShow(false);
         ExtremeRolesPlugin.ShipState.ResetOnMeeting();
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 

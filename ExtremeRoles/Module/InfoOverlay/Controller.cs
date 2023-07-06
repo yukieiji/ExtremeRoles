@@ -15,6 +15,7 @@ namespace ExtremeRoles.Module.InfoOverlay;
 
 public sealed class Controller : NullableSingleton<Controller>
 {
+				public bool IsBlock { get; private set; } = false;
 				private InfoOverlayView? view;
 				private InfoOverlayModel model;
 				private HelpButton button;
@@ -23,6 +24,20 @@ public sealed class Controller : NullableSingleton<Controller>
 				{
 								this.model = new InfoOverlayModel();
 								this.button = new HelpButton();
+				}
+
+				public void BlockShow(bool isBlock)
+				{
+								this.IsBlock = isBlock;
+								this.Hide();
+				}
+
+				public void Hide()
+				{
+								if (this.view != null)
+								{
+												this.view.gameObject.SetActive(false);
+								}
 				}
 
 				public void InitializeToLobby()
@@ -44,29 +59,11 @@ public sealed class Controller : NullableSingleton<Controller>
 								UpdateFunc.InitializeGame(this.model);
 				}
 
-				public void ToggleView()
-				{
-								ToggleView(this.model.CurShow);
-				}
-
-				public void ToggleView(InfoOverlayModel.Type showTyep)
-				{
-								if (this.view == null ||
-												this.view.isActiveAndEnabled)
-								{
-												Show(showTyep);
-								}
-								else
-								{
-												Hide();
-								}
-				}
-
 				public void Show(InfoOverlayModel.Type showTyep)
 				{
 								var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-								if (hudManager == null) { return; }
+								if (hudManager == null || this.IsBlock) { return; }
 								if (MeetingHud.Instance == null)
 								{
 												hudManager.SetHudActive(true);
@@ -89,11 +86,21 @@ public sealed class Controller : NullableSingleton<Controller>
 								}
 				}
 
-				public void Hide()
+				public void ToggleView()
 				{
-								if (this.view != null)
+								ToggleView(this.model.CurShow);
+				}
+
+				public void ToggleView(InfoOverlayModel.Type showTyep)
+				{
+								if (this.view == null ||
+												!this.view.isActiveAndEnabled)
 								{
-												this.view.gameObject.SetActive(false);
+												Show(showTyep);
+								}
+								else
+								{
+												Hide();
 								}
 				}
 

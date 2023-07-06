@@ -53,10 +53,10 @@ public static class EnableUdpMatchmakingPatch
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
 public static class AmongUsClientCoStartGamePatch
 {
-    public static void Prefix(AmongUsClient __instance)
+    public static void Prefix()
     {
-        ExtremeRolesPlugin.Info.HideInfoOverlay();
-    }
+								InfoOverlay.Instance.Hide();
+				}
 }
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
@@ -77,8 +77,8 @@ public static class AmongUsClientOnGameEndPatch
 {
     public static void Prefix([HarmonyArgument(0)] ref EndGameResult endGameResult)
     {
-        ExtremeRolesPlugin.Info.HideInfoOverlay();
-        ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
+								InfoOverlay.Instance.Hide();
+								ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
         if ((int)endGameResult.GameOverReason >= 20)
         {
             endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
@@ -136,7 +136,7 @@ public static class AmongUsClientOnGameEndPatch
                 }
             }
 
-            if (hasGhostRole && 
+            if (hasGhostRole &&
                 ghostRole.IsNeutral() &&
                 ghostRole is IGhostRoleWinable winCheckGhostRole)
             {
@@ -174,7 +174,7 @@ public static class AmongUsClientOnGameEndPatch
                 foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
                 {
                     if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor())
-                    { 
+                    {
                         addWinner(player);
                     }
                 }

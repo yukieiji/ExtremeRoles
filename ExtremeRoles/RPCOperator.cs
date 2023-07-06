@@ -200,7 +200,6 @@ public static class RPCOperator
     {
         Helper.Player.ResetTarget();
         ExtremeRolesPlugin.ShipState.Initialize();
-        ExtremeRolesPlugin.Info.ResetOverlays();
 
         // チェックポイントリセット
         Helper.Logging.ResetCkpt();

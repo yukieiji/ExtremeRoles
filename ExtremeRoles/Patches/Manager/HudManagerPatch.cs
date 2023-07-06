@@ -39,19 +39,12 @@ public static class HudManagerToggleMapVisibletPatch
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
 public static class HudManagerStartPatch
 {
-    public static void Postfix(HudManager __instance)
+    public static void Postfix()
     {
         if (GameSystem.IsFreePlay) { return; }
 
-        if (Module.InfoOverlay.HelpButton.Body == null)
-        {
-            Module.InfoOverlay.HelpButton.CreateInfoButton();
-        }
-        else
-        {
-            Module.InfoOverlay.HelpButton.SetInfoButtonToGameStartShipPositon();
-        }
-    }
+								InfoOverlay.Instance.InitializeToLobby();
+				}
 }
 
 

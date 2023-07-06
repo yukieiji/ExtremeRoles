@@ -7,6 +7,6 @@ public static class MapBehaviourShowNormalMapPatch
 {
     static void Prefix(MapBehaviour __instance)
     {
-        ExtremeRolesPlugin.Info.HideInfoOverlay();
-    }
+								InfoOverlay.Instance.Hide();
+				}
 }

@@ -7,8 +7,8 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Close))]
 public static class MeetingHudClosePatch
 {
-	public static void Prefix()
-	{
-		ExtremeRolesPlugin.Info.HideInfoOverlay();
-	}
+				public static void Prefix()
+				{
+								InfoOverlay.Instance.Hide();
+				}
 }
