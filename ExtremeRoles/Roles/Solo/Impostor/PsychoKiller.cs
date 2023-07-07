@@ -3,6 +3,7 @@
 using UnityEngine;
 using TMPro;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -16,7 +17,6 @@ public sealed class PsychoKiller :
 	IRoleResetMeeting
 {
 	private TextMeshPro combCountText;
-	private TextMeshPro timerInfoText;
 	private TextMeshPro timerText;
 
     private bool isResetMeeting;
@@ -57,11 +57,20 @@ public sealed class PsychoKiller :
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (rolePlayer == null ||
+			rolePlayer.Data.IsDead ||
 			GameData.Instance == null ||
 			CachedShipStatus.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
 			ExileController.Instance ||
-			MeetingHud.Instance) { return; }
+			MeetingHud.Instance ||
+			!this.isStartTimer)
+		{
+			if (this.timerText != null)
+			{
+				this.timerText.gameObject.SetActive(false);
+			}
+			return;
+		}
 
 		if (this.combCountText == null)
 		{
@@ -70,20 +79,22 @@ public sealed class PsychoKiller :
 
 		updateCombText();
 
-		if (!this.hasSelfTimer || !this.isStartTimer) { return; }
+		if (!this.hasSelfTimer) { return; }
 
 		if (this.timerText == null)
 		{
 			createTimerText();
 		}
 
+		this.timerText.gameObject.SetActive(true);
 		this.timerText.text = $"{Mathf.CeilToInt(this.timer)}";
 		this.timer -= Time.deltaTime;
 
 		if (this.timer > 0.0f) { return; }
 
+		this.timer = float.MaxValue;
 		// 自爆！！
-		Helper.Player.RpcUncheckMurderPlayer(
+		Player.RpcUncheckMurderPlayer(
 			rolePlayer.PlayerId,
 			rolePlayer.PlayerId,
 			byte.MaxValue);
@@ -250,13 +261,15 @@ public sealed class PsychoKiller :
 			hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
 		this.timerText.gameObject.SetActive(true);
 
-		this.timerInfoText = Object.Instantiate(
+		var timerInfoText = Object.Instantiate(
 			hudManager.KillButton.cooldownTimerText,
 			this.timerText.transform);
-		this.timerInfoText.enableWordWrapping = false;
-		this.timerInfoText.transform.localScale = Vector3.one * 0.5f;
-		this.timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
-		this.timerInfoText.gameObject.SetActive(true);
+		timerInfoText.enableWordWrapping = false;
+		timerInfoText.transform.localScale = Vector3.one * 0.5f;
+		timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
+		timerInfoText.gameObject.SetActive(true);
+
+		timerInfoText.text = Translation.GetString("untilSelfKill");
 	}
 
 	private void updateCombText()
@@ -267,6 +280,6 @@ public sealed class PsychoKiller :
 
 	private void resetTimer()
 	{
-		this.timer = this.defaultTimer * Mathf.Pow(this.timerModRate, this.combCount);
+		this.timer = this.defaultTimer * Mathf.Pow(this.timerModRate, this.combCount - 1);
 	}
 }
