@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+
 using ExtremeRoles.Extension.UnityEvent;
-using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 
 #nullable enable
@@ -15,7 +15,7 @@ public sealed class HelpButton
 
 	private GameObject? body = null;
 
-	public void CreateInfoButton()
+	public void CreateInfoButton(System.Action openAct)
 	{
 		this.body = Object.Instantiate(
 			GameObject.Find("MenuButton"),
@@ -32,7 +32,7 @@ public sealed class HelpButton
 		var passiveButton = this.body.GetComponent<PassiveButton>();
 		passiveButton.OnClick.RemoveAllPersistentAndListeners();
 		passiveButton.OnClick.AddListener(
-			(UnityAction)Controller.Instance.ToggleView);
+			(UnityAction)openAct);
 
 		var render = this.body.GetComponent<SpriteRenderer>();
 		render.sprite = Loader.CreateSpriteFromResources(

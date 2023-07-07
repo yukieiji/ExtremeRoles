@@ -44,7 +44,7 @@ public sealed class Controller : NullableSingleton<Controller>
 	{
 		if (!this.button.IsInitialized)
 		{
-			this.button.CreateInfoButton();
+			this.button.CreateInfoButton(toggleView);
 		}
 		else
 		{
@@ -59,7 +59,80 @@ public sealed class Controller : NullableSingleton<Controller>
 		UpdateFunc.InitializeGame(this.model);
 	}
 
-	public void Show(InfoOverlayModel.Type showTyep)
+	public void Update()
+	{
+		keyUpdate();
+
+		if (this.model.IsDuty &&
+			this.view != null)
+		{
+			this.model.IsDuty = false;
+			this.view.UpdateFromModel(this.model);
+		}
+	}
+
+	private void keyUpdate()
+	{
+		if (GameSystem.IsLobby)
+		{
+			if (Input.GetKeyDown(KeyCode.H))
+			{
+				toggleView(InfoOverlayModel.Type.AllRole);
+			}
+			if (Input.GetKeyDown(KeyCode.G))
+			{
+				toggleView(InfoOverlayModel.Type.AllGhostRole);
+			}
+		}
+		else
+		{
+			if (Input.GetKeyDown(KeyCode.H))
+			{
+				toggleView(InfoOverlayModel.Type.MyRole);
+			}
+			if (Input.GetKeyDown(KeyCode.G))
+			{
+				toggleView(InfoOverlayModel.Type.MyGhostRole);
+			}
+			if (Input.GetKeyDown(KeyCode.I))
+			{
+				toggleView(InfoOverlayModel.Type.AllRole);
+			}
+			if (Input.GetKeyDown(KeyCode.U))
+			{
+				toggleView(InfoOverlayModel.Type.AllGhostRole);
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.O))
+		{
+			toggleView(InfoOverlayModel.Type.GlobalSetting);
+		}
+
+		if (this.view != null &&
+			this.view.isActiveAndEnabled)
+		{
+			if (Input.GetKeyDown(KeyCode.PageDown))
+			{
+				UpdateFunc.IncreasePage(this.model);
+			}
+			if (Input.GetKeyDown(KeyCode.PageUp))
+			{
+				UpdateFunc.DecreasePage(this.model);
+			}
+		}
+	}
+
+	private void setView()
+	{
+		GameObject obj = Object.Instantiate(
+			Loader.GetUnityObjectFromResources<GameObject>(
+				Path.InfoOverlayResources,
+				Path.InfoOverlayPrefab));
+		this.view = obj.GetComponent<InfoOverlayView>();
+		this.view.Awake();
+	}
+
+	private void show(InfoOverlayModel.Type showTyep)
 	{
 		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
@@ -86,95 +159,22 @@ public sealed class Controller : NullableSingleton<Controller>
 		}
 	}
 
-	public void ToggleView()
+	private void toggleView()
 	{
-		ToggleView(this.model.CurShow);
+		toggleView(this.model.CurShow);
 	}
 
-	public void ToggleView(InfoOverlayModel.Type showTyep)
+	private void toggleView(InfoOverlayModel.Type showTyep)
 	{
 		if (this.view == null ||
 			!this.view.isActiveAndEnabled ||
 			this.model.CurShow != showTyep)
 		{
-			Show(showTyep);
+			show(showTyep);
 		}
 		else
 		{
 			Hide();
 		}
-	}
-
-	public void Update()
-	{
-		keyUpdate();
-
-		if (this.model.IsDuty &&
-			this.view != null)
-		{
-			this.model.IsDuty = false;
-			this.view.UpdateFromModel(this.model);
-		}
-	}
-
-	private void keyUpdate()
-	{
-		if (GameSystem.IsLobby)
-		{
-			if (Input.GetKeyDown(KeyCode.H))
-			{
-				ToggleView(InfoOverlayModel.Type.AllRole);
-			}
-			if (Input.GetKeyDown(KeyCode.G))
-			{
-				ToggleView(InfoOverlayModel.Type.AllGhostRole);
-			}
-		}
-		else
-		{
-			if (Input.GetKeyDown(KeyCode.H))
-			{
-				ToggleView(InfoOverlayModel.Type.MyRole);
-			}
-			if (Input.GetKeyDown(KeyCode.G))
-			{
-				ToggleView(InfoOverlayModel.Type.MyGhostRole);
-			}
-			if (Input.GetKeyDown(KeyCode.I))
-			{
-				ToggleView(InfoOverlayModel.Type.AllRole);
-			}
-			if (Input.GetKeyDown(KeyCode.U))
-			{
-				ToggleView(InfoOverlayModel.Type.AllGhostRole);
-			}
-		}
-		if (Input.GetKeyDown(KeyCode.O))
-		{
-			ToggleView(InfoOverlayModel.Type.GlobalSetting);
-		}
-
-		if (this.view != null &&
-			this.view.isActiveAndEnabled)
-		{
-			if (Input.GetKeyDown(KeyCode.PageDown))
-			{
-				UpdateFunc.IncreasePage(this.model);
-			}
-			if (Input.GetKeyDown(KeyCode.PageUp))
-			{
-				UpdateFunc.DecreasePage(this.model);
-			}
-		}
-	}
-
-	private void setView()
-	{
-		GameObject obj = Object.Instantiate(
-			Loader.GetUnityObjectFromResources<GameObject>(
-				Path.InfoOverlayResources,
-				Path.InfoOverlayPrefab));
-		this.view = obj.GetComponent<InfoOverlayView>();
-		this.view.Awake();
 	}
 }
