@@ -220,23 +220,19 @@ public static class PlayerVoteAreaSelectPatch
 			instance.Parent.Select((int)target))
 		{
 
-			UiElement abilitybutton = null;
-
-			meetingAbilityButton.TryGetValue(target, out abilitybutton);
-
-			if (abilitybutton == null)
+			if (!meetingAbilityButton.TryGetValue(target, out UiElement abilitybutton))
 			{
 				UiElement newAbilitybutton = GameObject.Instantiate(
 					instance.CancelButton, instance.ConfirmButton.transform.parent);
 				var passiveButton = newAbilitybutton.GetComponent<PassiveButton>();
 				passiveButton.OnClick.RemoveAllPersistentAndListeners();
-                passiveButton.OnClick.AddListener(
-					(UnityEngine.Events.UnityAction)role.CreateAbilityAction(instance));
 				passiveButton.OnClick.AddListener(
 					(UnityEngine.Events.UnityAction)instance.Cancel);
-                    passiveButton.OnClick.AddListener(
-                        (UnityEngine.Events.UnityAction)(
-                            () => { newAbilitybutton.gameObject.SetActive(false); }));
+                passiveButton.OnClick.AddListener(
+                    (UnityEngine.Events.UnityAction)(
+                        () => { newAbilitybutton.gameObject.SetActive(false); }));
+				passiveButton.OnClick.AddListener(
+					(UnityEngine.Events.UnityAction)role.CreateAbilityAction(instance));
 
                 var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
