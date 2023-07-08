@@ -118,7 +118,7 @@ public static class CustomOptionCsvProcessor
 			using var csv = new StreamReader(csvName, new UTF8Encoding(true));
 
 			string infoData = csv.ReadLine(); // verHeader
-			string[] info = infoData.Split(',');
+			string[] info = infoData.Split(comma);
 
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"Loading from {info[1]} with {info[2]} {info[3]} Data");
@@ -126,7 +126,7 @@ public static class CustomOptionCsvProcessor
 			string line = csv.ReadLine(); // ヘッダー
 			while ((line = csv.ReadLine()) != null)
 			{
-				string[] option = line.Split(',');
+				string[] option = line.Split(comma);
 
 				switch (option[0])
 				{
