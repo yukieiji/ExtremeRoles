@@ -49,11 +49,11 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
         Instance = this;
 
-        OptionCreator.Create();
-
-        Harmony.PatchAll();
+		Harmony.PatchAll();
 
 		CompatModManager.Initialize();
+
+		OptionCreator.Create();
 
         AddComponent<ExtremeRolePluginBehavior>();
 
