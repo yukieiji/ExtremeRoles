@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Linq;
 
 using ExtremeRoles.Helper;
 
@@ -34,6 +35,13 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		foreach (GlobalOption key in Enum.GetValues(typeof(GlobalOption)))
 		{
 			addOptionString(ref this.printOption, key);
+		}
+
+		foreach (int optionId in Enumerable.Range(
+			OptionCreator.IntegrateOptionStartOffset,
+			OptionManager.Instance.Count))
+		{
+			addOptionString(ref this.printOption, optionId);
 		}
 
 		return (

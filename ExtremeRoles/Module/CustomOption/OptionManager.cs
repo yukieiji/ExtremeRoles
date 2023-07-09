@@ -29,6 +29,8 @@ public sealed class OptionManager
 		get => $"Preset:{selectedPreset}";
 	}
 
+	public int Count => this.allOptionId.Count;
+
 	public readonly static OptionManager Instance = new OptionManager();
 
 	private Dictionary<int, ValueType> allOptionId = new Dictionary<int, ValueType>();

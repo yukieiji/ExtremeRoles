@@ -9,10 +9,11 @@ namespace ExtremeRoles;
 
 public static class OptionCreator
 {
-    private const int singleRoleOptionStartOffset = 256;
+	public const int IntegrateOptionStartOffset = 15000;
+
+	private const int singleRoleOptionStartOffset = 256;
     private const int combRoleOptionStartOffset = 5000;
     private const int ghostRoleOptionStartOffset = 10000;
-	private const int integrateOptionStartOffset = 15000;
     private const int maxPresetNum = 20;
 
     public static readonly string[] SpawnRate = new string[] {
@@ -76,6 +77,6 @@ public static class OptionCreator
             ghostRoleOptionStartOffset);
 
 
-		CompatModManager.Instance.CreateIntegrateOption(integrateOptionStartOffset);
+		CompatModManager.Instance.CreateIntegrateOption(IntegrateOptionStartOffset);
     }
 }
