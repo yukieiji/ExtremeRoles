@@ -54,8 +54,10 @@ internal sealed class CompatModManager
 	private CompatModManager()
 	{
 		RemoveMap();
+		var logger = ExtremeRolesPlugin.Logger;
 
-		ExtremeRolesPlugin.Logger.LogInfo(
+
+		logger.LogInfo(
 			$"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
 
 		foreach (var (modType, modInfo) in ModInfo)
@@ -68,7 +70,7 @@ internal sealed class CompatModManager
 			{ continue; }
 
 
-			ExtremeRolesPlugin.Logger.LogInfo(
+			logger.LogInfo(
 				$"---- CompatMod:{guid} integrater Start!! ----");
 
 			object? instance = Activator.CreateInstance(
@@ -77,11 +79,11 @@ internal sealed class CompatModManager
 
 			this.loadedMod.Add(modType, (ModIntegratorBase)instance);
 
-			ExtremeRolesPlugin.Logger.LogInfo(
+			logger.LogInfo(
 				$"---- CompatMod:{guid} integrated!! ----");
 
 		}
-		ExtremeRolesPlugin.Logger.LogInfo(
+		logger.LogInfo(
 			$"---------- CompatModManager Initialize End!! ----------");
 	}
 
