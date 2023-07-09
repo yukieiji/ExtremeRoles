@@ -11,8 +11,7 @@ namespace ExtremeRoles.Module.CustomOption;
 
 public sealed class Factory
 {
-	public int IdOffset { private get; set; }
-
+	private int idOffset = 0;
 	private string namePrefix;
 	private OptionTab tab;
 
@@ -21,7 +20,7 @@ public sealed class Factory
 		string namePrefix = "",
 		OptionTab tab = OptionTab.General)
 	{
-		this.IdOffset = idOffset;
+		this.idOffset = idOffset;
 		this.namePrefix = namePrefix;
 		this.tab = tab;
 	}
@@ -152,7 +151,7 @@ public sealed class Factory
 		return GetOptionId(Convert.ToInt32(option));
 	}
 
-	public int GetOptionId(int option) => this.IdOffset + option;
+	public int GetOptionId(int option) => this.idOffset + option;
 
 	private string getOptionName<T>(T option, Color? color) where T : struct, IConvertible
 	{

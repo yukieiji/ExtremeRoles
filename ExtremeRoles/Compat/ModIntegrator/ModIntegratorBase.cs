@@ -7,6 +7,8 @@ using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Compat.ModIntegrator;
 
 #nullable enable
@@ -14,6 +16,8 @@ namespace ExtremeRoles.Compat.ModIntegrator;
 public abstract class ModIntegratorBase
 {
     public readonly SemanticVersioning.Version Version;
+	public string Name => MetadataHelper.GetMetadata(Plugin).GUID;
+
     protected BasePlugin? Plugin;
     protected Assembly Dll;
     protected Type[] ClassType;
@@ -21,7 +25,7 @@ public abstract class ModIntegratorBase
 	internal ModIntegratorBase(
 		string guid, PluginInfo plugin)
 	{
-		this.Plugin = plugin!.Instance as BasePlugin;
+		this.Plugin = plugin.Instance as BasePlugin;
 		this.Version = plugin.Metadata.Version;
 		this.Dll = Plugin!.GetType().Assembly;
 		this.ClassType = AccessTools.GetTypesFromAssembly(this.Dll);
@@ -29,7 +33,7 @@ public abstract class ModIntegratorBase
 		this.PatchAll(new Harmony($"ExR.{guid}.Patch"));
 	}
 
-	public virtual void CreateIntegrateOption(int startOption) { }
+	public virtual void CreateIntegrateOption(OptionFactory factory) { }
 
     protected abstract void PatchAll(Harmony harmony);
 

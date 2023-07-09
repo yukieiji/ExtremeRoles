@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
@@ -8,6 +9,8 @@ using Hazel;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Compat;
 
@@ -42,9 +45,14 @@ internal sealed class CompatModManager
 
 	private IMapMod? map;
 
+	private int startOptionId;
+	private int endOptionId;
+
 #pragma warning disable CS8618
 	public static CompatModManager Instance { get; private set; }
 #pragma warning restore CS8618
+
+	private const int optionOffset = 100;
 
 	public static void Initialize()
 	{
@@ -87,10 +95,21 @@ internal sealed class CompatModManager
 			$"---------- CompatModManager Initialize End!! ----------");
 	}
 
-	internal void CreateIntegrateOption()
+	internal void CreateIntegrateOption(int startId)
 	{
+		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
+		{
+			var optionFactory = new OptionFactory(
+				startId + index * optionOffset, mod.Name);
+			mod.CreateIntegrateOption(optionFactory);
+		}
 
+		this.startOptionId = startId;
+		this.endOptionId = startOptionId * this.loadedMod.Count;
 	}
+
+	internal bool IsIntegrateOption(int optionId)
+		=> this.startOptionId <= optionId && optionId <= this.endOptionId;
 
 	internal bool IsModMap<T>()
 		where T : ModIntegratorBase

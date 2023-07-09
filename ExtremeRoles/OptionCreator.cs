@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 
@@ -11,6 +12,7 @@ public static class OptionCreator
     private const int singleRoleOptionStartOffset = 256;
     private const int combRoleOptionStartOffset = 5000;
     private const int ghostRoleOptionStartOffset = 10000;
+	private const int integrateOptionStartOffset = 15000;
     private const int maxPresetNum = 20;
 
     public static readonly string[] SpawnRate = new string[] {
@@ -74,5 +76,8 @@ public static class OptionCreator
 
         GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
             ghostRoleOptionStartOffset);
+
+
+		CompatModManager.Instance.CreateIntegrateOption(integrateOptionStartOffset);
     }
 }

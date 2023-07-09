@@ -20,6 +20,11 @@ namespace ExtremeRoles.Compat.ModIntegrator;
 
 public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 {
+	public enum SubmargedOption
+	{
+		
+	}
+
 	public const string Guid = "Submerged";
 
 	public ShipStatus.MapType MapType => (ShipStatus.MapType)5;
@@ -102,6 +107,10 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 		crewVision = curOption.GetFloat(FloatOptionNames.CrewLightMod);
 		impostorVision = curOption.GetFloat(FloatOptionNames.ImpostorLightMod);
+	}
+
+	public override void CreateIntegrateOption(Factory factory)
+	{
 	}
 
 	public void Destroy()

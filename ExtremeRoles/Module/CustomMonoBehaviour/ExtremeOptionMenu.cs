@@ -7,16 +7,17 @@ using AmongUs.GameOptions;
 using UnityEngine;
 using UnityEngine.Events;
 
-using ExtremeRoles.Module.CustomOption;
+using Il2CppInterop.Runtime.Attributes;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign;
-using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -221,7 +222,9 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 				roleSelector.IsValidGlobalRoleOptionId((RoleGlobalOption)id) ||
 				tab switch
 				{
-					OptionTab.General => shipOption.IsValidOption(id),
+					OptionTab.General =>
+						shipOption.IsValidOption(id) ||
+						CompatModManager.Instance.IsIntegrateOption(id),
 					_ => roleSelector.IsValidRoleOption(option),
 				})
 			{
