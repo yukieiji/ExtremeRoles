@@ -127,7 +127,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
         {
             var option = OptionManager.Instance.GetIOption((int)id);
 
-												string optionStr = option.ToHudString();
+			string optionStr = option.ToHudString();
             if (optionStr != string.Empty)
             {
                 builder.AppendLine(optionStr);
