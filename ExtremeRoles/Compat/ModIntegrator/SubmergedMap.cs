@@ -22,8 +22,33 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 {
 	public enum SubmargedOption
 	{
-		
+		EnableElevator
 	}
+
+	public enum Elevator
+	{
+		All,
+		CentralOnly,
+		LobbyOnly,
+		ServiceOnly,
+		CentralAndLobbyOnly,
+		CentralAndServiceOnly,
+		LobbyAndServiceOnly
+	}
+
+	// Submerged(Clone)/Elevators/
+	//  Central
+	//   WestLeftElevator
+	//   WestRightElevator
+	// Lobby
+	//   EastLeftElevator
+	//   EastRightElevator
+	// ServiceElevator
+	private const string centralLeftElevator = "Elevators/WestLeftElevator";
+	private const string centralRightElevator = "Elevators/WestRightElevator";
+	private const string lobbyLeftElevator = "Elevators/EastLeftElevator";
+	private const string lobbyRightElevator = "Elevators/EastRightElevator";
+	private const string serviceElevator = "Elevators/ServiceElevator";
 
 	public const string Guid = "Submerged";
 
@@ -51,6 +76,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	private float crewVision;
 	private float impostorVision;
+
+#pragma warning disable CS8618
+	private SelectionCustomOption elevatorOption;
 
 	public SubmergedIntegrator(PluginInfo plugin) : base(Guid, plugin)
 	{
@@ -91,6 +119,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentMoveToVentPatch");
 		this.inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "inTransition");
 	}
+#pragma warning restore CS8618
 
 	public void Awake(ShipStatus map)
 	{
@@ -107,10 +136,49 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 		crewVision = curOption.GetFloat(FloatOptionNames.CrewLightMod);
 		impostorVision = curOption.GetFloat(FloatOptionNames.ImpostorLightMod);
+
+		// オプション周りの処理
+		var useElevator = (Elevator)this.elevatorOption.GetValue();
+
+		switch (useElevator)
+		{
+			case Elevator.CentralOnly:
+				disableSubmargedObj(lobbyRightElevator);
+				disableSubmargedObj(lobbyLeftElevator);
+				disableSubmargedObj(serviceElevator);
+				break;
+			case Elevator.LobbyOnly:
+				disableSubmargedObj(centralRightElevator);
+				disableSubmargedObj(centralLeftElevator);
+				disableSubmargedObj(serviceElevator);
+				break;
+			case Elevator.ServiceOnly:
+				disableSubmargedObj(lobbyRightElevator);
+				disableSubmargedObj(lobbyLeftElevator);
+				disableSubmargedObj(centralRightElevator);
+				disableSubmargedObj(centralLeftElevator);
+				break;
+			case Elevator.CentralAndLobbyOnly:
+				disableSubmargedObj(serviceElevator);
+				break;
+			case Elevator.CentralAndServiceOnly:
+				disableSubmargedObj(lobbyRightElevator);
+				disableSubmargedObj(lobbyLeftElevator);
+				break;
+			case Elevator.LobbyAndServiceOnly:
+				disableSubmargedObj(centralRightElevator);
+				disableSubmargedObj(centralLeftElevator);
+				break;
+			default:
+				break;
+		}
 	}
 
 	public override void CreateIntegrateOption(Factory factory)
 	{
+		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
+		this.elevatorOption = factory.CreateSelectionOption<SubmargedOption, Elevator>(
+			SubmargedOption.EnableElevator);
 	}
 
 	public void Destroy()
@@ -483,5 +551,14 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (handlerObj == null) { return null; }
 
 		return ((Component)handlerObj).TryCast<MonoBehaviour>();
+	}
+
+	private static void disableSubmargedObj(string name)
+	{
+		GameObject obj = GameObject.Find($"Submerged(Clone)/{name}");
+		if (obj != null)
+		{
+			obj.SetActive(false);
+		}
 	}
 }

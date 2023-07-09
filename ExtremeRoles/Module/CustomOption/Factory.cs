@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using System.Linq;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -145,6 +147,25 @@ public sealed class Factory
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption, this.tab);
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public SelectionCustomOption CreateSelectionOption<T, W>(
+		T option,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null)
+		where T : struct, IConvertible
+		where W : struct, IConvertible
+		=> new SelectionCustomOption(
+			GetOptionId(option),
+			getOptionName(option, color),
+			getEnumString<W>().ToArray(),
+			parent, isHeader, isHidden,
+			format, invert, enableCheckOption, this.tab);
+
 	public int GetOptionId<T>(T option) where T : struct, IConvertible
 	{
 		enumCheck(option);
@@ -165,6 +186,17 @@ public sealed class Factory
 		if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
 		{
 			throw new ArgumentException(nameof(T));
+		}
+	}
+
+	private static IEnumerable<string> getEnumString<T>()
+	{
+		foreach (object enumValue in Enum.GetValues(typeof(T)))
+		{
+			string? valuse = enumValue.ToString();
+			if (string.IsNullOrEmpty(valuse)) { continue; }
+
+			yield return valuse;
 		}
 	}
 }
