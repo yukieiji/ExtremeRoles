@@ -98,7 +98,7 @@ internal sealed class CompatModManager
 
 	// ここでtrueが返ってきてる時点でT?はNullではない
 	internal bool TryGetModMap<T>(out T? mapMod)
-					where T : ModIntegratorBase
+		where T : ModIntegratorBase
 	{
 		mapMod = this.map as T;
 		return mapMod != null;
