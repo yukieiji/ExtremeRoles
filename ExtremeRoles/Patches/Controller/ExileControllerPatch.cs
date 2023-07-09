@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -40,10 +41,10 @@ public static class ExileControllerBeginePatch
         [HarmonyArgument(0)] GameData.PlayerInfo exiled,
         [HarmonyArgument(1)] bool tie)
     {
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-        var state = ExtremeRolesPlugin.ShipState;
-
-        if (state.AssassinMeetingTrigger)
+		var state = ExtremeRolesPlugin.ShipState;
+		if (state.AssassinMeetingTrigger)
         {
             assassinMeetingEndBegin(__instance, state);
             return false;
