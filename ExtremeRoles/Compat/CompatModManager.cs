@@ -87,6 +87,11 @@ internal sealed class CompatModManager
 			$"---------- CompatModManager Initialize End!! ----------");
 	}
 
+	internal void CreateIntegrateOption()
+	{
+
+	}
+
 	internal bool IsModMap<T>()
 		where T : ModIntegratorBase
 		=> this.map is T;
