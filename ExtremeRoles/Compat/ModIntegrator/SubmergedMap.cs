@@ -504,6 +504,16 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			() => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
 				submarineOxygenSystemInstance));
 
+		Type submarineSpawnInSystem = ClassType.First(
+			t => t.Name == "SubmarineSpawnInSystem");
+		MethodInfo submarineSpawnInSystemDetoriorate = AccessTools.Method(
+			submarineSpawnInSystem, "Detoriorate");
+		object? submarineSpawnInSystemInstance = null;
+		Patches.SubmarineSpawnInSystemDetorioratePatch.SetType(submarineSpawnInSystem);
+		MethodInfo submarineSpawnInSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
+			() => Patches.SubmarineSpawnInSystemDetorioratePatch.Postfix(
+				submarineSpawnInSystemInstance));
+
 		Minigame? game = null;
 
 		Type submarineSurvillanceMinigame = ClassType.First(
@@ -537,6 +547,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		// 酸素枯渇発動時アサシンは常にマスクを持つパッチ
 		harmony.Patch(submarineOxygenSystemDetoriorate,
 			postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
+
+		harmony.Patch(submarineSpawnInSystemDetoriorate,
+			postfix: new HarmonyMethod(submarineSpawnInSystemDetorioratePostfixPatch));
 
 		// サブマージドのセキュリティカメラの制限をつけるパッチ
 		harmony.Patch(submarineSurvillanceMinigameSystemUpdate,

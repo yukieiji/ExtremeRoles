@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-using HarmonyLib;
-
 using UnityEngine;
+
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
@@ -93,9 +93,25 @@ public static class HudManagerUpdatePatchPostfixPatch
 	}
 }
 
+public static class SubmarineSpawnInSystemDetorioratePatch
+{
+	private static FieldInfo? submarineSpawnInSystemTimer;
+
+	public static void Postfix(object __instance)
+	{
+		if (!CompatModManager.Instance.IsModMap<Submerged>() ||
+			!ExtremeGameModeManager.Instance.ShipOption.IsAutoSelectRandomSpawn) { return; }
+
+		submarineSpawnInSystemTimer?.SetValue(__instance, 0.0f);
+	}
+	public static void SetType(System.Type type)
+	{
+		submarineSpawnInSystemTimer = type.GetField("timer");
+	}
+}
+
 public static class SubmarineOxygenSystemDetorioratePatch
 {
-	private static PropertyInfo? submarineOxygenSystemInstance;
 	private static FieldInfo? submarineOxygenSystemPlayersWithMask;
 
 	public static void Postfix(object __instance)
@@ -103,9 +119,6 @@ public static class SubmarineOxygenSystemDetorioratePatch
 		if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod) ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
-
-		object? instance = submarineOxygenSystemInstance?.GetValue(null);
-		if (instance == null) { return; }
 
 		HashSet<byte>? playersWithMask =
 			submarineOxygenSystemPlayersWithMask?.GetValue(__instance) as HashSet<byte>;
@@ -119,10 +132,8 @@ public static class SubmarineOxygenSystemDetorioratePatch
 	}
 	public static void SetType(System.Type type)
 	{
-		submarineOxygenSystemInstance = AccessTools.Property(type, "Instance");
 		submarineOxygenSystemPlayersWithMask = type.GetField("playersWithMask");
 	}
-
 }
 
 public static class SubmarineSurvillanceMinigamePatch
