@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;

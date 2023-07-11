@@ -10,7 +10,7 @@ using UnityEngine.Events;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;

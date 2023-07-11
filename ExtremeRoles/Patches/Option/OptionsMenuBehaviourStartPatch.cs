@@ -12,7 +12,7 @@ using AmongUs.Data;
 
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;

@@ -11,7 +11,7 @@ using Innersloth.Assets;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;

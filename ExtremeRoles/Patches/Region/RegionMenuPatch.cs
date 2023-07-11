@@ -31,7 +31,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 
 using ExtremeRoles.Module.CustomOption;
 

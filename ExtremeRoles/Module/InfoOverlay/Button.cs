@@ -2,7 +2,7 @@
 using UnityEngine.Events;
 
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Resources;
 
 #nullable enable

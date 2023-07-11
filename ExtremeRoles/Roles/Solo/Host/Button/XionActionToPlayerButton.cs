@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Host.Button;
