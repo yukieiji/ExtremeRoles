@@ -1,9 +1,10 @@
 ﻿using System;
+
 using UnityEngine;
 using UnityEngine.Events;
-using TMPro;
 
-using ExtremeRoles.Helper;
+using TMPro;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
@@ -65,11 +66,13 @@ public sealed class ConfirmMenu : MonoBehaviour
 		this.text.text = text;
 	}
 
+	[HideFromIl2Cpp]
 	public void SetOkButtonClickAction(Delegate act)
 	{
 		this.okButton.SetButtonClickAction((UnityAction)act);
 	}
 
+	[HideFromIl2Cpp]
 	public void SetOkButtonClickAction(Action act)
 	{
 		this.okButton.SetButtonClickAction((UnityAction)act);
@@ -80,6 +83,7 @@ public sealed class ConfirmMenu : MonoBehaviour
 		this.okButton.SetButtonClickAction(act);
 	}
 
+	[HideFromIl2Cpp]
 	public void SetCancelButtonClickAction(Delegate act)
 	{
 		this.cancelButton.SetButtonClickAction((UnityAction)act);
