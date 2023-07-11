@@ -392,7 +392,7 @@ public sealed class Shooter :
             true, parentOps);
         CreateFloatOption(
             ShooterOption.ShootKillCoolPenalty,
-            5.0f, 0.0f, 10.0f, 0.5f,
+            5.0f, 0.0f, 30.0f, 0.5f,
             parentOps, format: OptionUnit.Second);
 
         var meetingOps = CreateBoolOption(
