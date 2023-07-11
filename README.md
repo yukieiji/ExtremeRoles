@@ -147,7 +147,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.3 |
+|  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.4 |
 |  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
 |  v2023.2.28s/v2023.2.28e  | v6.0.0.0 ～ v6.0.0.6 |
 |  v2022.12.08s/v2022.12.08e/v2022.12.14s/v2022.12.14e  |  v5.0.0.0 ～ v5.1.1.1 |
@@ -212,6 +212,6 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status |
 | ---- | ---- |
-|  英語/English  |  部分的に翻訳済み/Fully Translated  |
+|  英語/English  |   完全翻訳済み/Fully Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
 |  简体中文/SChinese  |   完全翻訳済み/Fully Translated  |
