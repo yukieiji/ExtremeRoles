@@ -32,9 +32,8 @@ public sealed class BodyGuard :
     {
         public int AbilityCount { get; private set; }
 
-        private bool isUpdate;
-
-        private Func<bool> featShield;
+		private bool isUpdate;
+		private Func<bool> featShield;
         private Func<bool> canUse;
         private Action resetShield;
         private Func<bool> resetModeCheck;
@@ -43,9 +42,9 @@ public sealed class BodyGuard :
 
         private GraphicSwitcher<BodyGuardAbilityMode> switcher;
 #pragma warning disable CS8618
-								private TextMeshPro abilityCountText;
+		private TextMeshPro abilityCountText;
 
-								public BodyGuardAbilityBehavior(
+		public BodyGuardAbilityBehavior(
             GraphicMode featShieldMode,
             GraphicMode resetMode,
             Func<bool> featShield,
@@ -65,7 +64,7 @@ public sealed class BodyGuard :
             this.switcher.Add(BodyGuardAbilityMode.FeatShield, featShieldMode);
         }
 #pragma warning restore CS8618
-								public void SetAbilityCount(int newAbilityNum)
+		public void SetAbilityCount(int newAbilityNum)
         {
             this.AbilityCount = newAbilityNum;
             this.isUpdate = true;
@@ -94,7 +93,7 @@ public sealed class BodyGuard :
 
         public override bool IsUse() =>
             (this.AbilityCount > 0 && this.canUse.Invoke()) ||
-												this.isReset;
+			this.isReset;
 
         public override bool TryUseAbility(
             float timer, AbilityState curState, out AbilityState newState)
@@ -164,76 +163,76 @@ public sealed class BodyGuard :
 
     }
 
-				private sealed class ShildFeatedPlayer
+	private sealed class ShildFeatedPlayer
+	{
+		private List<(byte, byte)> shield = new List<(byte, byte)>();
+
+		public ShildFeatedPlayer()
+		{
+			Clear();
+		}
+
+		public void Clear()
+		{
+			this.shield.Clear();
+		}
+
+		public void Add(byte rolePlayerId, byte targetPlayerId)
+		{
+			this.shield.Add((rolePlayerId, targetPlayerId));
+		}
+
+		public bool IsGuard(byte checkRolePlayerId)
+		{
+			foreach (var (rolePlayerId, _) in shield)
+			{
+				if (rolePlayerId == checkRolePlayerId) { return true; }
+			}
+			return false;
+		}
+
+		public void Remove(byte removeRolePlayerId)
+		{
+			List<(byte, byte)> remove = new List<(byte, byte)>();
+
+			foreach (var (rolePlayerId, targetPlayerId) in shield)
+			{
+				if (rolePlayerId != removeRolePlayerId) { continue; }
+				remove.Add((rolePlayerId, targetPlayerId));
+			}
+
+			foreach (var val in remove)
+			{
+				this.shield.Remove(val);
+			}
+
+		}
+
+		public bool TryGetBodyGuardPlayerId(
+			byte targetPlayerId, out byte bodyGuardPlayerId)
+		{
+
+			bodyGuardPlayerId = default(byte);
+			if (this.shield.Count == 0) { return false; }
+
+			foreach (var (rolePlayerId, shieldPlayerId) in this.shield)
+			{
+				if (shieldPlayerId == targetPlayerId)
 				{
-								private List<(byte, byte)> shield = new List<(byte, byte)>();
-
-								public ShildFeatedPlayer()
-								{
-												Clear();
-								}
-
-								public void Clear()
-								{
-												this.shield.Clear();
-								}
-
-								public void Add(byte rolePlayerId, byte targetPlayerId)
-								{
-												this.shield.Add((rolePlayerId, targetPlayerId));
-								}
-
-								public bool IsGuard(byte checkRolePlayerId)
-								{
-												foreach (var (rolePlayerId, _) in shield)
-												{
-																if (rolePlayerId == checkRolePlayerId) { return true; }
-												}
-												return false;
-								}
-
-								public void Remove(byte removeRolePlayerId)
-								{
-												List<(byte, byte)> remove = new List<(byte, byte)>();
-
-												foreach (var (rolePlayerId, targetPlayerId) in shield)
-												{
-																if (rolePlayerId != removeRolePlayerId) { continue; }
-																remove.Add((rolePlayerId, targetPlayerId));
-												}
-
-												foreach (var val in remove)
-												{
-																this.shield.Remove(val);
-												}
-
-								}
-
-								public bool TryGetBodyGuardPlayerId(
-												byte targetPlayerId, out byte bodyGuardPlayerId)
-								{
-
-												bodyGuardPlayerId = default(byte);
-												if (this.shield.Count == 0) { return false; }
-
-												foreach (var (rolePlayerId, shieldPlayerId) in this.shield)
-												{
-																if (shieldPlayerId == targetPlayerId)
-																{
-																				bodyGuardPlayerId = rolePlayerId;
-																				return true;
-																}
-												}
-												return false;
-								}
-								public bool IsShielding(byte rolePlayerId, byte targetPlayerId)
-								{
-												if (this.shield.Count == 0) { return false; }
-												return this.shield.Contains((rolePlayerId, targetPlayerId));
-								}
+					bodyGuardPlayerId = rolePlayerId;
+					return true;
 				}
+			}
+			return false;
+		}
+		public bool IsShielding(byte rolePlayerId, byte targetPlayerId)
+		{
+			if (this.shield.Count == 0) { return false; }
+			return this.shield.Contains((rolePlayerId, targetPlayerId));
+		}
+	}
 
-				public enum BodyGuardOption
+	public enum BodyGuardOption
     {
         ShieldRange,
         FeatMeetingAbilityTaskGage,
@@ -285,10 +284,10 @@ public sealed class BodyGuard :
     private static ShildFeatedPlayer shilded = new ShildFeatedPlayer();
 
 #pragma warning disable CS8618
-				public ExtremeAbilityButton Button { get; set; }
-				private Sprite shildButtonImage;
+	public ExtremeAbilityButton Button { get; set; }
+	private Sprite shildButtonImage;
 
-				public BodyGuard() : base(
+	public BodyGuard() : base(
         ExtremeRoleId.BodyGuard,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.BodyGuard.ToString(),
@@ -297,7 +296,7 @@ public sealed class BodyGuard :
     { }
 #pragma warning restore CS8618
 
-				public static void ResetAllShild()
+	public static void ResetAllShild()
     {
         shilded.Clear();
     }
@@ -474,7 +473,7 @@ public sealed class BodyGuard :
         SingleRoleBase targetRole, byte targetPlayerId)
     {
         if (shilded.IsShielding(
-																CachedPlayerControl.LocalPlayer.PlayerId, targetPlayerId))
+			CachedPlayerControl.LocalPlayer.PlayerId, targetPlayerId))
         {
             return Design.ColoedString(this.NameColor, $" ■");
         }
@@ -578,8 +577,8 @@ public sealed class BodyGuard :
     }
 
     public bool IsResetMode() =>
-								this.targetPlayer == byte.MaxValue &&
-								shilded.IsGuard(CachedPlayerControl.LocalPlayer.PlayerId);
+		this.targetPlayer == byte.MaxValue &&
+		shilded.IsGuard(CachedPlayerControl.LocalPlayer.PlayerId);
 
     public bool IsAbilityUse()
     {
@@ -589,18 +588,18 @@ public sealed class BodyGuard :
             CachedPlayerControl.LocalPlayer, this,
             this.shieldRange);
 
-								if (target != null)
-								{
-												byte targetId = target.PlayerId;
+		if (target != null)
+		{
+			byte targetId = target.PlayerId;
 
-												if (!shilded.IsShielding(
-																CachedPlayerControl.LocalPlayer.PlayerId, targetId))
-												{
-																this.targetPlayer = targetId;
-												}
-								}
+			if (!shilded.IsShielding(
+				CachedPlayerControl.LocalPlayer.PlayerId, targetId))
+			{
+				this.targetPlayer = targetId;
+			}
+		}
 
-								return this.IsCommonUse() && this.targetPlayer != byte.MaxValue;
+		return this.IsCommonUse() && this.targetPlayer != byte.MaxValue;
     }
 
     public void ResetOnMeetingStart()
@@ -623,12 +622,11 @@ public sealed class BodyGuard :
         byte targetPlayerId = instance.TargetPlayerId;
 
         if (targetPlayerId == bodyGuardPlayerId ||
-												shilded.IsShielding(bodyGuardPlayerId, targetPlayerId))
+			shilded.IsShielding(bodyGuardPlayerId, targetPlayerId))
         {
             return true;
         }
-
-        if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
+        else if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
         {
             return
                 !this.awakeMeetingAbility ||
@@ -808,10 +806,11 @@ public sealed class BodyGuard :
         this.RoleAbilityInit();
         if (this.Button?.Behavior is BodyGuardAbilityBehavior behavior)
         {
-            this.shildNum = behavior.AbilityCount;
-            behavior.SetAbilityCount(
-                allOpt.GetValue<int>(GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)));
+			int abilityNum = allOpt.GetValue<int>(GetRoleOptionId(
+				RoleAbilityCommonOption.AbilityCount));
+
+			this.shildNum = abilityNum;
+            behavior.SetAbilityCount(abilityNum);
         }
     }
 }

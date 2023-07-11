@@ -6,7 +6,6 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -14,6 +13,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -28,7 +29,7 @@ internal sealed class AllPlayerArrows
         this.player.Clear();
         this.arrow.Clear();
         this.distance.Clear();
-        
+
         foreach (var player in CachedPlayerControl.AllPlayerControls)
         {
             if (player.PlayerId != rolePlayerId)
@@ -77,7 +78,7 @@ internal sealed class AllPlayerArrows
             this.arrow[playerId].SetActive(active);
             this.distance[playerId].gameObject.SetActive(active);
 
-            if (playerCont.Data.IsDead || 
+            if (playerCont.Data.IsDead ||
                 playerCont.Data.Disconnected)
             {
                 this.arrow[playerId].SetActive(false);
@@ -100,7 +101,7 @@ internal sealed class AllPlayerArrows
         foreach(var (playerId, playerCont) in this.player)
         {
             float diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
-            
+
             this.distance[playerId].text = Design.ColoedString(
                 Color.black, $"{diss:F1}");
             this.arrow[playerId].UpdateTarget(playerCont.transform.position);
@@ -112,7 +113,7 @@ internal sealed class PlayerTargetArrow
 {
     public bool isActive;
     private Arrow arrow;
-    private PlayerControl targetPlayer;
+    private PlayerControl? targetPlayer;
     public PlayerTargetArrow(Color color)
     {
         this.arrow = new Arrow(color);
@@ -252,7 +253,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
             caller.WriteByte((byte)newCond);
         }
         updateHero(hero.PlayerId, (byte)newCond);
-   
+
     }
     public static void RpcUpdateVigilante(
         Condition cond, byte downPlayerId)
@@ -274,11 +275,11 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
         int crewNum = 0;
         int impNum = 0;
 
-        foreach (GameData.PlayerInfo player in 
+        foreach (GameData.PlayerInfo player in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
-            if (!player.IsDead && 
+            if (!player.IsDead &&
                 !player.Disconnected &&
                 player.PlayerId != downPlayerId)
             {
@@ -430,23 +431,15 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
         FeatButtonAbilityPercentage,
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.searchButton;
-        set
-        {
-            this.searchButton = value;
-        }
-    }
-
-    private ExtremeAbilityButton searchButton;
-    private AllPlayerArrows arrow;
-    private PlayerTargetArrow callTargetArrow;
+	private AllPlayerArrows? arrow;
+    private PlayerTargetArrow? callTargetArrow;
     private OneForAllCondition cond;
     private float featKillPer;
     private float featButtonAbilityPer;
 
-    public Hero(
+#pragma warning disable CS8618
+	public ExtremeAbilityButton Button { get; set; }
+	public Hero(
         ) : base(
             ExtremeRoleId.Hero,
             ExtremeRoleType.Crewmate,
@@ -455,7 +448,9 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
             false, true, false, false,
             tab: OptionTab.Combination)
     { }
-    public void SetCondition(
+#pragma warning restore CS8618
+
+	public void SetCondition(
         OneForAllCondition cond)
     {
         this.cond = cond;
@@ -471,11 +466,11 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
         this.Button.SetLabelToCrewmate();
     }
 
-    public bool IsAbilityUse() => 
-        this.cond == OneForAllCondition.FeatButtonAbility && 
+    public bool IsAbilityUse() =>
+        this.cond == OneForAllCondition.FeatButtonAbility &&
         this.IsCommonUse();
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -521,7 +516,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
                 this.CanKill = true;
                 if (this.Button != null)
                 {
-                    if (this.Button.IsAbilityActive() && 
+                    if (this.Button.IsAbilityActive() &&
                         this.arrow != null)
                     {
                         this.arrow.Update(rolePlayer.GetTruePosition());
@@ -578,7 +573,10 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
 
     public void CleanUp()
     {
-        this.arrow.SetActive(false);
+		if (this.arrow != null)
+		{
+			this.arrow.SetActive(false);
+		}
     }
 
     public void SetEmergencyCallTarget(PlayerControl target)
@@ -607,7 +605,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
 
     public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
-        Assassin assassin = ExtremeRoleManager.GameRole[targetPlayer.PlayerId] as Assassin;
+        Assassin? assassin = ExtremeRoleManager.GameRole[targetPlayer.PlayerId] as Assassin;
 
         if (assassin != null && !assassin.CanKilledFromCrew)
         {
@@ -699,22 +697,14 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
         VigilanteSeeTime,
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.searchButton;
-        set
-        {
-            this.searchButton = value;
-        }
-    }
-
-    private ExtremeAbilityButton searchButton;
-    private AllPlayerArrows arrow;
-    private Arrow vigilanteArrow;
+    private AllPlayerArrows? arrow;
+    private Arrow? vigilanteArrow;
     private float vigilanteArrowTimer = 0.0f;
     private float vigilanteArrowTime = 0.0f;
 
-    public Villain(
+#pragma warning disable CS8618
+	public ExtremeAbilityButton Button { get; set; }
+	public Villain(
         ) : base(
             ExtremeRoleId.Villain,
             ExtremeRoleType.Impostor,
@@ -723,8 +713,9 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
             true, false, true, true,
             tab: OptionTab.Combination)
     { }
+#pragma warning restore CS8618
 
-    public void CreateAbility()
+	public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
             "search",
@@ -735,7 +726,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
 
     public bool IsAbilityUse() => this.IsCommonUse();
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -790,7 +781,10 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
 
     public void CleanUp()
     {
-        this.arrow.SetActive(false);
+		if (this.arrow != null)
+		{
+			this.arrow.SetActive(false);
+		}
     }
 
     public void SetVigilante(PlayerControl target)
@@ -871,9 +865,9 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
 }
 public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
 {
-    public enum VigilanteCondition
+    public enum VigilanteCondition : byte
     {
-        None = byte.MinValue,
+        None,
         NewLawInTheShip,
         NewHeroForTheShip,
         NewVillainForTheShip,
@@ -885,23 +879,14 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
         Range,
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.callButton;
-        set
-        {
-            this.callButton = value;
-        }
-    }
-
     public VigilanteCondition Condition => this.condition;
-
-    private ExtremeAbilityButton callButton;
     private VigilanteCondition condition = VigilanteCondition.None;
     private float range;
     private byte target;
 
-    public Vigilante(
+#pragma warning disable CS8618
+	public ExtremeAbilityButton Button { get; set; }
+	public Vigilante(
         ) : base(
             ExtremeRoleId.Vigilante,
             ExtremeRoleType.Neutral,
@@ -910,8 +895,8 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
             false, false, false, false,
             tab: OptionTab.Combination)
     { }
-
-    public void SetCondition(
+#pragma warning restore CS8618
+	public void SetCondition(
         VigilanteCondition cond)
     {
         if (this.condition == VigilanteCondition.None ||
@@ -984,7 +969,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -1007,7 +992,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
-        if (fromRole.Id == ExtremeRoleId.Hero && 
+        if (fromRole.Id == ExtremeRoleId.Hero &&
             this.condition != VigilanteCondition.NewEnemyNeutralForTheShip)
         {
             return false;
@@ -1015,7 +1000,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
         return true;
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) => 
+    public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
     public override string GetFullDescription()

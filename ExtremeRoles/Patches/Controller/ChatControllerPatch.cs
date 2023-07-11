@@ -20,7 +20,7 @@ namespace ExtremeRoles.Patches.Controller
 			[HarmonyArgument(0)] GameData.PlayerInfo srcPlayer,
 			[HarmonyArgument(1)] ChatNoteTypes noteType)
 		{
-			
+
 			if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 			if (noteType == ChatNoteTypes.DidVote) { return false; }
 
@@ -36,7 +36,9 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(0)] PlayerControl sourcePlayer,
             [HarmonyArgument(1)] string chatText)
         {
-            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+			var roleDict = ExtremeRoleManager.GameRole;
+
+			if (roleDict.Count == 0) { return true; }
 
 			if (!sourcePlayer || !CachedPlayerControl.LocalPlayer)
 			{
@@ -46,9 +48,6 @@ namespace ExtremeRoles.Patches.Controller
 			GameData.PlayerInfo data = CachedPlayerControl.LocalPlayer.Data;
 			GameData.PlayerInfo data2 = sourcePlayer.Data;
 
-			var role = ExtremeRoleManager.GameRole[data.PlayerId];
-			var role2 = ExtremeRoleManager.GameRole[data2.PlayerId];
-
 			bool assassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
 
 			if (!assassinMeeting)
@@ -57,7 +56,12 @@ namespace ExtremeRoles.Patches.Controller
 				{
 					return false;
 				}
+			}
 
+			if (!roleDict.TryGetValue(data.PlayerId, out var role) ||
+				!roleDict.TryGetValue(data2.PlayerId, out var role2))
+			{
+				return true;
 			}
 
 			if (assassinMeeting && (!role.IsImpostor() || !role2.IsImpostor()))
@@ -65,7 +69,7 @@ namespace ExtremeRoles.Patches.Controller
 				return false;
             }
 
-			
+
 			if (__instance.chatBubPool.NotInUse == 0)
 			{
 				__instance.chatBubPool.ReclaimOldest();
@@ -97,9 +101,9 @@ namespace ExtremeRoles.Patches.Controller
 				}
 
 				bool didVote = MeetingHud.Instance && MeetingHud.Instance.DidVote(sourcePlayer.PlayerId);
-				
+
 				chatBubble.SetCosmetics(data2);
-				
+
 				__instance.SetChatBubbleName(
 					chatBubble, data2, data2.IsDead,
 					didVote, seeColor, null);

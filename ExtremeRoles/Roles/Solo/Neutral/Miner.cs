@@ -14,6 +14,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Miner :
@@ -52,19 +54,21 @@ public sealed class Miner :
 		ShowMode AnotherPlayerShowMode,
 		bool CanShowNoneActiveAtherPlayer);
 
-    public ExtremeAbilityButton Button { get; set; }
-
 	private bool isLinkingVent = false;
 	private int mineId = 0;
-    private Dictionary<int, MinerMineEffect> mines;
+
     private float killRange;
     private float nonActiveTime;
     private float timer;
     private bool isShowKillLog;
 	private bool isShowAnotherPlayer;
-	private MinerMineEffect noneActiveMine = null;
-	private MineEffectParameter parameter = null;
-    private TextPopUpper killLogger = null;
+	private MinerMineEffect? noneActiveMine = null;
+
+#pragma warning disable CS8618
+	public ExtremeAbilityButton Button { get; set; }
+	private Dictionary<int, MinerMineEffect> mines;
+	private MineEffectParameter parameter;
+    private TextPopUpper killLogger;
 
     public Miner() : base(
         ExtremeRoleId.Miner,
@@ -73,7 +77,7 @@ public sealed class Miner :
         ColorPalette.MinerIvyGreen,
         false, false, true, false)
     { }
-
+#pragma warning restore CS8618
 	public static void RpcHandle(ref MessageReader reader)
 	{
 		MinerRpc rpc = (MinerRpc)reader.ReadByte();
@@ -208,7 +212,7 @@ public sealed class Miner :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
