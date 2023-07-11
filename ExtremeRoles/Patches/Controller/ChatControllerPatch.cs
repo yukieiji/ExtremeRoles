@@ -145,16 +145,4 @@ namespace ExtremeRoles.Patches.Controller
             }
 		}
 	}
-
-	[HarmonyPatch(typeof(ChatController), nameof(ChatController.Toggle))]
-	public static class ChatControllerTogglePatch
-	{
-		public static void Prefix(ChatController __instance)
-		{
-			if (__instance.IsOpen && !__instance.animating)
-			{
-				__instance.BanButton.SetVisible(false);
-			}
-		}
-	}
 }
