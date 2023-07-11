@@ -1,10 +1,13 @@
 ﻿using System;
 
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
@@ -13,7 +16,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
 using ExtremeRoles.Performance;
-using TMPro;
 
 #nullable enable
 
@@ -72,8 +74,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
 		var closeButton = trans.Find(
 			"Body/CloseButton").gameObject.GetComponent<Button>();
-		closeButton.onClick.AddListener(
-			(UnityAction)(() => base.gameObject.SetActive(false)));
+		closeButton.onClick.AddListener(() => base.gameObject.SetActive(false));
 
 		// Create Actions
 		this.addFilterButton.ResetButtonAction();
@@ -163,39 +164,39 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 			Translation.GetString("RoleAssignFilterAddRole"));
 
 		filterSet.DeleteThisButton.SetButtonClickAction(
-			(UnityAction)(() =>
+			() =>
 			{
 				RoleAssignFilterModelUpdater.RemoveFilter(this.Model, id);
 				Destroy(filterSet.gameObject);
-			}));
+			});
 		filterSet.DeleteAllRoleButton.SetButtonClickAction(
-			(UnityAction)(() =>
+			() =>
 			{
 				RoleAssignFilterModelUpdater.ResetFilter(this.Model, id);
 				foreach (var child in filterSet.Layout.rectChildren)
 				{
 					Destroy(child.gameObject);
 				}
-			}));
+			});
 		filterSet.AddRoleButton.SetButtonClickAction(
-			(UnityAction)(() =>
+			() =>
 			{
 				this.addRoleMenu.gameObject.SetActive(true);
 				this.addRoleMenu.UpdateView(
 					this.Model, id, filterSet.Layout.transform);
-			}));
+			});
 		filterSet.IncreseButton.onClick.AddListener(
-			(UnityAction)(() =>
+			() =>
 			{
 				RoleAssignFilterModelUpdater.IncreseFilterAssignNum(this.Model, id);
 				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
-			}));
+			});
 		filterSet.DecreseButton.onClick.AddListener(
-			(UnityAction)(() =>
+			() =>
 			{
 				RoleAssignFilterModelUpdater.DecreseFilterAssignNum(this.Model, id);
 				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
-			}));
+			});
 		return filterSet;
 	}
 
@@ -244,10 +245,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		item.gameObject.SetActive(true);
 		item.Text.text = name;
 		item.RemoveButton.onClick.AddListener(
-			(UnityAction)(() =>
+			() =>
 			{
 				RoleAssignFilterModelUpdater.RemoveFilterRole(this.Model, filterId, id);
 				Destroy(item.gameObject);
-			}));
+			});
 	}
 }

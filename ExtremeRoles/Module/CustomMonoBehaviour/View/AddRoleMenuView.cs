@@ -7,9 +7,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
-
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
@@ -44,8 +44,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 		this.layout = trans.Find("Scroll/Viewport/Content").gameObject.GetComponent<GridLayoutGroup>();
 
 		var closeButton = trans.Find("CloseButton").gameObject.GetComponent<Button>();
-		closeButton.onClick.AddListener(
-			(UnityAction)(() => base.gameObject.SetActive(false)));
+		closeButton.onClick.AddListener(() => base.gameObject.SetActive(false));
 	}
 
 	public void Update()
@@ -76,7 +75,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 			button.gameObject.SetActive(true);
 			button.ResetButtonAction();
 			button.SetButtonClickAction(
-				(UnityAction)createButton(
+				createButton(
 					button, model, filterId,
 					id, targetFilterTransform));
 		}
@@ -145,10 +144,10 @@ public sealed class AddRoleMenuView : MonoBehaviour
 		item.gameObject.SetActive(true);
 		item.Text.text = name;
 		item.RemoveButton.onClick.AddListener(
-			(UnityAction)(() =>
+			() =>
 			{
 				RoleAssignFilterModelUpdater.RemoveFilterRole(model, targetFilter, id);
 				Destroy(item.gameObject);
-			}));
+			});
 	}
 }

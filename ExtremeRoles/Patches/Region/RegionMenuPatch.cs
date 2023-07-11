@@ -33,10 +33,7 @@ using UnityEngine.Events;
 
 using ExtremeRoles.Extension.UnityEvents;
 
-using ExtremeRoles.Module.CustomOption;
-
 using UnityObject = UnityEngine.Object;
-using UIButton = UnityEngine.UI.Button;
 
 namespace ExtremeRoles.Patches.Region;
 
@@ -104,8 +101,8 @@ public static class RegionMenuOpenPatch
             ipTextBox.OnChange.RemoveAllPersistentAndListeners();
             ipTextBox.OnFocusLost.RemoveAllPersistentAndListeners();
 
-            ipTextBox.OnChange.AddListener((UnityAction)onEnterOrIpChange);
-            ipTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
+            ipTextBox.OnChange.AddListener(onEnterOrIpChange);
+            ipTextBox.OnFocusLost.AddListener(onFocusLost);
 
             ipText.text =  Helper.Translation.GetString(
                 "customServerIp");
@@ -151,8 +148,8 @@ public static class RegionMenuOpenPatch
             portTextBox.OnChange.RemoveAllPersistentAndListeners();
             portTextBox.OnFocusLost.RemoveAllPersistentAndListeners();
 
-            portTextBox.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
-            portTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
+            portTextBox.OnChange.AddListener(onEnterOrPortFieldChange);
+            portTextBox.OnFocusLost.AddListener(onFocusLost);
 
             portText.text = Helper.Translation.GetString(
                 "customServerPort");

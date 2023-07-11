@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using TMPro;
+
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.Operator;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
@@ -36,19 +38,19 @@ internal static class CompatModMenu
 		compatModMenuLine.Clear();
 
 		var mngButton = Object.Instantiate(
-						template, parent);
+			template, parent);
 		mngButton.name = "ExtremeRolesModManagerButton";
 		mngButton.transform.localPosition = new Vector3(0.0f, 1.6f, 0.0f);
 		mngButton.Text.text = Helper.Translation.GetString("compatModMenuButton");
 
-		mngButton.ClickedEvent.AddListener((System.Action)(() =>
+		mngButton.ClickedEvent.AddListener(() =>
 		{
 			if (!menuBody)
 			{
 				initMenu(mngButton);
 			}
 			menuBody.SetActive(true);
-		}));
+		});
 	}
 
 	public static void UpdateTranslation()
@@ -129,13 +131,13 @@ internal static class CompatModMenu
 				var uninstallButton = createButton(template, modText);
 				uninstallButton.transform.localPosition = new Vector3(1.65f, 0.0f, -5.0f);
 				uninstallButton.ClickedEvent.AddListener(
-								createOperator<Uninstaller>(modInfo));
+					createOperator<Uninstaller>(modInfo));
 				updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
 				var updateButton = createButton(template, modText);
 				updateButton.transform.localPosition = new Vector3(0.15f, 0.0f, -5.0f);
 				updateButton.ClickedEvent.AddListener(
-								createOperator<Updater>(modInfo));
+					createOperator<Updater>(modInfo));
 				updateButtonTextAndName(ButtonType.UpdateButton, updateButton);
 
 				button.Add(ButtonType.UninstallButton, uninstallButton);
@@ -146,7 +148,7 @@ internal static class CompatModMenu
 				var installButton = createButton(template, modText);
 				installButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
 				installButton.ClickedEvent.AddListener(
-								createOperator<Installer>(modInfo));
+					createOperator<Installer>(modInfo));
 				updateButtonTextAndName(ButtonType.InstallButton, installButton);
 				button.Add(ButtonType.InstallButton, installButton);
 			}
@@ -161,12 +163,12 @@ internal static class CompatModMenu
 		SimpleButton template, TextMeshPro text)
 	{
 		var button = Object.Instantiate(
-						template, text.transform);
+			template, text.transform);
 		button.name = $"{text.text}Button";
 		button.Scale = new Vector3(0.375f, 0.275f, 1.0f);
 		button.Text.fontSize =
-						button.Text.fontSizeMax =
-						button.Text.fontSizeMin = 0.75f;
+			button.Text.fontSizeMax =
+			button.Text.fontSizeMin = 0.75f;
 		return button;
 	}
 
@@ -197,12 +199,12 @@ internal static class CompatModMenu
 			closeButtonTransform.localPosition = new Vector3(-3.25f, 2.5f, 0.0f);
 
 			PassiveButton closeButton = closeButtonTransform.gameObject.GetComponent<PassiveButton>();
-			closeButton.OnClick = new Button.ButtonClickedEvent();
-			closeButton.OnClick.AddListener((System.Action)(() =>
+			closeButton.OnClick.RemoveAllPersistentAndListeners();
+			closeButton.OnClick.AddListener(() =>
 			{
 				menuBody.SetActive(false);
 
-			}));
+			});
 		}
 
 		Transform bkSprite = menuBody.transform.FindChild("BackgroundSprite");
@@ -238,10 +240,9 @@ internal static class CompatModMenu
 		if (!File.Exists($"{pluginPath}{addonName}.dll"))
 		{
 			var installButton = createButton(template, addonText);
-			installButton.transform.localPosition = new Vector3(
-				0.9f, 0.0f, -5.0f);
+			installButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
 			installButton.ClickedEvent.AddListener(
-							createOperator<ExRAddonInstaller>(modType));
+				createOperator<ExRAddonInstaller>(modType));
 			updateButtonTextAndName(ButtonType.InstallButton, installButton);
 
 			compatModMenuLine.Add(
@@ -253,10 +254,9 @@ internal static class CompatModMenu
 		else
 		{
 			var uninstallButton = createButton(template, addonText);
-			uninstallButton.transform.localPosition = new Vector3(
-																0.9f, 0.0f, -5.0f);
+			uninstallButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
 			uninstallButton.ClickedEvent.AddListener(
-							createOperator<ExRAddonUninstaller>(modType));
+				createOperator<ExRAddonUninstaller>(modType));
 			updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
 			compatModMenuLine.Add(
@@ -285,7 +285,7 @@ internal static class CompatModMenu
 	}
 
 	private static System.Action createOperator<T>(object parm)
-					where T : OperatorBase
+		where T : OperatorBase
 	{
 		return () =>
 		{

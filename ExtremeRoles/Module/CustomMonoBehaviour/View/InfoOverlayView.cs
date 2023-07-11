@@ -2,12 +2,12 @@
 using System.Linq;
 
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using Il2CppInterop.Runtime.Attributes;
 
 using TMPro;
 
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.Interface;
@@ -37,7 +37,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 #pragma warning restore CS8618
 
 	private SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
-					new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
+		new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
 
 	public void Awake()
 	{
@@ -112,7 +112,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 		}
 
 		if (model.PanelModel.TryGetValue(model.CurShow, out var panelModel) &&
-						panelModel is not null)
+			panelModel is not null)
 		{
 			var (main, sub) = panelModel.GetInfoText();
 
@@ -130,15 +130,15 @@ public sealed class InfoOverlayView : MonoBehaviour
 					this.pageButtonParent.SetActive(true);
 					this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {Translation.GetString("changePageMore")}";
 					this.rightButton.onClick.AddListener(
-						(UnityAction)(() =>
+						() =>
 						{
 							Update.DecreasePage(model);
-						}));
+						});
 					this.leftButton.onClick.AddListener(
-						(UnityAction)(() =>
+						() =>
 						{
 							Update.IncreasePage(model);
-						}));
+						});
 					break;
 				default:
 					break;

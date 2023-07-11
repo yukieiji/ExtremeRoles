@@ -79,10 +79,10 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 			this.button.Text.fontSizeMax =
 			this.button.Text.fontSizeMin = 1.9f;
 		this.button.ClickedEvent.AddListener(
-			(UnityAction)(() =>
+			() =>
 			{
 				RoleAssignFilter.Instance.OpenEditor(base.gameObject);
-			}));
+			});
 	}
 
 	private OptionMenuTab createMenu(OptionTab tab, StringOption optionTemplate)
@@ -101,7 +101,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 		PassiveButton button = tabButtonObject.GetComponentInChildren<PassiveButton>();
 		button.OnClick.RemoveAllPersistentAndListeners();
 		button.OnClick.AddListener(
-			(UnityAction)(() =>
+			() =>
 			{
 
 				this.button.gameObject.SetActive(true);
@@ -117,8 +117,8 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 				{
 					menu.SetActive(false);
 				}
-			}));
-		button.OnClick.AddListener((UnityAction)newAction);
+			});
+		button.OnClick.AddListener(newAction);
 	}
 
 	public void recreateTabButtonFunction()

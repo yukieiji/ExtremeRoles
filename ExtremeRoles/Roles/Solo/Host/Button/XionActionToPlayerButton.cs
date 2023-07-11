@@ -20,7 +20,7 @@ internal sealed class XionActionToPlayerButton
                 hudManager.KillButton, parent);
             PassiveButton button = Body.GetComponent<PassiveButton>();
             button.OnClick.RemoveAllPersistentAndListeners();
-            button.OnClick.AddListener((UnityEngine.Events.UnityAction)OnClickEvent);
+            button.OnClick.AddListener(OnClickEvent);
             SetActive(false);
 
             var useButton = hudManager.UseButton;

@@ -227,11 +227,9 @@ public static class PlayerVoteAreaSelectPatch
 					instance.CancelButton, instance.ConfirmButton.transform.parent);
 				var passiveButton = newAbilitybutton.GetComponent<PassiveButton>();
 				passiveButton.OnClick.RemoveAllPersistentAndListeners();
-				passiveButton.OnClick.AddListener(
-					(UnityEngine.Events.UnityAction)instance.Cancel);
+				passiveButton.OnClick.AddListener(instance.Cancel);
                 passiveButton.OnClick.AddListener(
-                    (UnityEngine.Events.UnityAction)(
-                        () => { newAbilitybutton.gameObject.SetActive(false); }));
+                        () => { newAbilitybutton.gameObject.SetActive(false); });
 				passiveButton.OnClick.AddListener(role.CreateAbilityAction(instance));
 
                 var render = newAbilitybutton.GetComponent<SpriteRenderer>();

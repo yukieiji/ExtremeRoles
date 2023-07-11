@@ -57,8 +57,7 @@ public sealed class ExtremeAbilityButton
 			killButton, killButton.transform.parent);
 		PassiveButton passiveButton = button.GetComponent<PassiveButton>();
 		passiveButton.OnClick.RemoveAllPersistentAndListeners();
-		passiveButton.OnClick.AddListener(
-			(UnityEngine.Events.UnityAction)onClick);
+		passiveButton.OnClick.AddListener(onClick);
 		passiveButton.name = Name;
 
 		Transform info = this.button.transform.FindChild(AditionalInfoName);

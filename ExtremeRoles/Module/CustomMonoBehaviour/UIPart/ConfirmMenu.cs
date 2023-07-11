@@ -5,74 +5,88 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart
+namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+
+[Il2CppRegister]
+public sealed class ConfirmMenu : MonoBehaviour
 {
-	[Il2CppRegister]
-	public sealed class ConfirmMenu : MonoBehaviour
+	private ButtonWrapper okButton;
+
+	private ButtonWrapper cancelButton;
+
+	private TextMeshProUGUI text;
+
+	public ConfirmMenu(IntPtr ptr) : base(ptr) { }
+
+	public void Awake()
 	{
-		private ButtonWrapper okButton;
+		Transform trans = base.gameObject.transform;
+		this.okButton = trans.Find(
+			"OkButton").gameObject.GetComponent<ButtonWrapper>();
+		this.cancelButton = trans.Find(
+			"CancelButton").gameObject.GetComponent<ButtonWrapper>();
+		this.text = trans.Find(
+			"BodyText").gameObject.GetComponent<TextMeshProUGUI>();
 
-		private ButtonWrapper cancelButton;
+		this.okButton.Awake();
+		this.cancelButton.Awake();
 
-		private TextMeshProUGUI text;
+		this.okButton.SetButtonText(
+			TranslationController.Instance.GetString(StringNames.OK));
+		this.cancelButton.SetButtonText(
+			TranslationController.Instance.GetString(StringNames.Cancel));
+	}
 
-		public ConfirmMenu(IntPtr ptr) : base(ptr) { }
+	public void ResetButtonAction()
+	{
+		ResetOkButtonAction();
+		this.cancelButton.ResetButtonAction();
+	}
 
-		public void Awake()
+	public void ResetOkButtonAction()
+	{
+		this.okButton.ResetButtonAction();
+	}
+
+	public void Update()
+	{
+		var meetingHud = MeetingHud.Instance;
+
+		if (!meetingHud ||
+			meetingHud.state == MeetingHud.VoteStates.Results ||
+			Input.GetKeyDown(KeyCode.Escape))
 		{
-			Transform trans = base.gameObject.transform;
-			this.okButton = trans.Find(
-				"OkButton").gameObject.GetComponent<ButtonWrapper>();
-			this.cancelButton = trans.Find(
-				"CancelButton").gameObject.GetComponent<ButtonWrapper>();
-			this.text = trans.Find(
-				"BodyText").gameObject.GetComponent<TextMeshProUGUI>();
-
-			this.okButton.Awake();
-			this.cancelButton.Awake();
-
-			this.okButton.SetButtonText(
-				TranslationController.Instance.GetString(StringNames.OK));
-			this.cancelButton.SetButtonText(
-				TranslationController.Instance.GetString(StringNames.Cancel));
+			this.gameObject.SetActive(false);
 		}
+	}
 
-		public void ResetButtonAction()
-		{
-			ResetOkButtonAction();
-			this.cancelButton.ResetButtonAction();
-		}
+	public void SetMenuText(string text)
+	{
+		this.text.text = text;
+	}
 
-		public void ResetOkButtonAction()
-		{
-			this.okButton.ResetButtonAction();
-		}
+	public void SetOkButtonClickAction(Delegate act)
+	{
+		this.okButton.SetButtonClickAction((UnityAction)act);
+	}
 
-		public void Update()
-		{
-			var meetingHud = MeetingHud.Instance;
+	public void SetOkButtonClickAction(Action act)
+	{
+		this.okButton.SetButtonClickAction((UnityAction)act);
+	}
 
-			if (!meetingHud ||
-				meetingHud.state == MeetingHud.VoteStates.Results ||
-				Input.GetKeyDown(KeyCode.Escape))
-			{
-				this.gameObject.SetActive(false);
-			}
-		}
+	public void SetOkButtonClickAction(UnityAction act)
+	{
+		this.okButton.SetButtonClickAction(act);
+	}
 
-		public void SetMenuText(string text)
-		{
-			this.text.text = text;
-		}
+	public void SetCancelButtonClickAction(Delegate act)
+	{
+		this.cancelButton.SetButtonClickAction((UnityAction)act);
+	}
 
-		public void SetOkButtonClickAction(UnityAction act)
-		{
-			this.okButton.SetButtonClickAction(act);
-		}
-
-		public void SetCancelButtonClickAction(UnityAction act)
-		{
-			this.cancelButton.SetButtonClickAction(act);
-		}
+	public void SetCancelButtonClickAction(UnityAction act)
+	{
+		this.cancelButton.SetButtonClickAction(act);
 	}
 }
