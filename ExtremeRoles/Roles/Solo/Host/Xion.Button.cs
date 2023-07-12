@@ -159,7 +159,7 @@ public sealed partial class Xion
 		int width = Screen.width;
 		int height = Screen.height;
 
-		ResolutionManager.ResolutionChanged.Invoke(width / height, width, height, Screen.fullScreen);
+		ResolutionManager.SetResolution(width, height, Screen.fullScreen);
         // This will move button positions to the correct position.
     }
 
