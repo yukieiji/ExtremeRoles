@@ -73,6 +73,10 @@ public sealed class Controller : NullableSingleton<Controller>
 
 	private void keyUpdate()
 	{
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+
+		if (hud == null || hud.Chat.IsOpenOrOpening) { return; }
+
 		if (GameSystem.IsLobby)
 		{
 			if (Input.GetKeyDown(KeyCode.H))
