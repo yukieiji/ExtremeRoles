@@ -61,7 +61,7 @@ internal sealed class Installer : OperatorBase
 		List<CompatModRepoData> repoData = getGithubUpdate().GetAwaiter().GetResult();
 
 		if (repoData.Count == 0 ||
-						repoData.Count == 1 && this.isRequireReactor)
+			repoData.Count == 1 && this.isRequireReactor)
 		{
 			SetPopupText(Translation.GetString("installManual"));
 		}

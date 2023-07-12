@@ -67,12 +67,12 @@ internal sealed class Uninstaller : OperatorBase
 	}
 	private bool isNotRemoveReactor()
 		=> CompatModManager.Instance.LoadedMod.Keys.Any(
-		x =>
-		{
-			return
-				CompatModManager.ModInfo.TryGetValue(x, out var modInfo) &&
-				modInfo != null &&
-				modInfo.IsRequireReactor &&
-				modInfo.Guid != this.guid;
-		});
+			x =>
+			{
+				return
+					CompatModManager.ModInfo.TryGetValue(x, out var modInfo) &&
+					modInfo != null &&
+					modInfo.IsRequireReactor &&
+					modInfo.Guid != this.guid;
+			});
 }
