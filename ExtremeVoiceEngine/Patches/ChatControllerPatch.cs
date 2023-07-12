@@ -37,12 +37,12 @@ public static class ChatControllerSendChatPatch
 
         bool isRpcSend = true;
         VoiceEngine.Instance.WaitExecute(
-            () => isRpcSend = !Command.CommandManager.Instance.ExcuteCmd(__instance.TextArea.text));
+            () => isRpcSend = !Command.CommandManager.Instance.ExcuteCmd(__instance.freeChatField.Text));
         if (isRpcSend)
         {
             return true;
         }
-        __instance.TextArea.Clear();
+        __instance.freeChatField.Clear();
         return false;
     }
 }
