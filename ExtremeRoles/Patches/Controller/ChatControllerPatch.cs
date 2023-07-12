@@ -69,12 +69,7 @@ namespace ExtremeRoles.Patches.Controller
 				return false;
             }
 
-
-			if (__instance.chatBubPool.NotInUse == 0)
-			{
-				__instance.chatBubPool.ReclaimOldest();
-			}
-			ChatBubble chatBubble = __instance.chatBubPool.Get<ChatBubble>();
+			ChatBubble chatBubble = __instance.GetPooledBubble();
 			try
 			{
 				chatBubble.transform.SetParent(__instance.scroller.Inner);
@@ -112,21 +107,21 @@ namespace ExtremeRoles.Patches.Controller
                     BlockedWords.CensorWords(chatText) : chatText);
 				chatBubble.AlignChildren();
 				__instance.AlignAllBubbles();
-				if (!__instance.IsOpen && __instance.notificationRoutine == null)
+				if (!__instance.IsOpenOrOpening && __instance.notificationRoutine == null)
 				{
 					__instance.notificationRoutine = __instance.StartCoroutine(__instance.BounceDot());
 				}
 				if (!flag)
 				{
 					SoundManager.Instance.PlaySound(
-						__instance.MessageSound, false, 1f).pitch = 0.5f + (float)sourcePlayer.PlayerId / 15f;
+						__instance.messageSound, false, 1f).pitch = 0.5f + (float)sourcePlayer.PlayerId / 15f;
 				}
 				return false;
 			}
 			catch (Exception ex)
 			{
 				ExtremeRolesPlugin.Logger.LogError(ex);
-				__instance.chatBubPool.Reclaim(chatBubble);
+				__instance.chatBubblePool.Reclaim(chatBubble);
 				return false;
 			}
 
@@ -141,7 +136,7 @@ namespace ExtremeRoles.Patches.Controller
             if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
             {
 				Roles.Solo.Host.Xion.ParseCommand(
-					__instance.TextArea.text);
+					__instance.freeChatField.Text);
             }
 		}
 	}
