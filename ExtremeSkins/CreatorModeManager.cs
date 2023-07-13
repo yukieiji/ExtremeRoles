@@ -68,14 +68,18 @@ public sealed class CreatorModeManager
 
     private void updateStatusString()
     {
-        this.statusString = this.mode switch
+        string key = this.mode switch
         {
-            Mode.Enable       => TranslationControllerExtension.GetString("enableCreatorMode"),
-            Mode.DisableReady => TranslationControllerExtension.GetString("disableReadyCreatorMode"),
-            Mode.EnableReady  => TranslationControllerExtension.GetString("enableReadyCreatorMode"),
+            Mode.Enable       => "enableCreatorMode",
+            Mode.DisableReady => "disableReadyCreatorMode",
+            Mode.EnableReady  => "enableReadyCreatorMode",
             _ => string.Empty
         };
-    }
+
+		if (string.IsNullOrEmpty(key)) { return; }
+
+		this.statusString = TranslationControllerExtension.GetString(key);
+	}
 
     public static void Initialize()
     {
