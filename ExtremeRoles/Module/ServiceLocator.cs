@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace ExtremeRoles.Module;
 
+#nullable enable
+
 public sealed class ServiceLocator<TInterface>
 {
 	private Dictionary<Type, TInterface> service = new Dictionary<Type, TInterface>();
@@ -21,9 +23,10 @@ public sealed class ServiceLocator<TInterface>
 
 	public TTarget Resolve<TTarget>() where TTarget : class, TInterface, new()
 	{
-		if (this.service.TryGetValue(typeof(TTarget), out TInterface instance))
+		if (this.service.TryGetValue(typeof(TTarget), out TInterface? instance) &&
+			instance is TTarget castedInstance)
 		{
-			return instance as TTarget;
+			return castedInstance;
 		}
 		else
 		{
