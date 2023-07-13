@@ -1,12 +1,12 @@
 
 <div><img src="./doc/img/burner.png" /></div>
 
-<div align="center"><h1>Extreme Roles, Extreme Skins and EngineVoiceEngine</h1></div>
+<div align="center"><h1>Extreme Roles, Extreme Skins and Engine Voice Engine</h1></div>
 
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.6.14-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.7.11-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -20,6 +20,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 80を超えるユニークな役職の追加
 * AmongUs公式役職とMODの役職の併用可能(HideNSeekにも完全対応)
 * すべてのMOD役職が複数人アサイン可能
+* 「ロールアサインフィルター」や「アサインウェイト」を使った高度な役職割り当て機能
 * すべての役職に対して、細かい設定(視界、視界効果、キルクールなど)が可能
 * 多彩なゲームオプション(シャッフルの強度、エンジニアのベント調整など)
 * MODオプションのインポート/エクスポート機能
@@ -146,7 +147,8 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.6.13s/v2023.6.13e  | v8.0.0.0 ～ v8.0.0.1 |
+|  v2023.7.11s/v2023.7.11e  | v8.1.0.0 |
+|  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.4 |
 |  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
 |  v2023.2.28s/v2023.2.28e  | v6.0.0.0 ～ v6.0.0.6 |
 |  v2022.12.08s/v2022.12.08e/v2022.12.14s/v2022.12.14e  |  v5.0.0.0 ～ v5.1.1.1 |
@@ -211,6 +213,6 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status |
 | ---- | ---- |
-|  英語/English  |  部分的に翻訳済み/Mostly Translated  |
+|  英語/English  |   完全翻訳済み/Fully Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
 |  简体中文/SChinese  |   完全翻訳済み/Fully Translated  |
