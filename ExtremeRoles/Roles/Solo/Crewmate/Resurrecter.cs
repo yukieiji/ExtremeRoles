@@ -15,7 +15,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Resurrecter : 
+public sealed class Resurrecter :
     SingleRoleBase,
     IRoleAwake<RoleTypes>,
     IRoleResetMeeting,
@@ -219,7 +219,7 @@ public sealed class Resurrecter :
             return;
         }
 
-        if ((!this.awakeRole || 
+        if ((!this.awakeRole ||
             (!this.canResurrect && !this.isResurrected)) &&
             rolePlayer.myTasks.Count != 0)
         {
@@ -230,7 +230,7 @@ public sealed class Resurrecter :
                 this.awakeRole = true;
                 this.HasOtherVision = this.awakeHasOtherVision;
             }
-            if (taskGage >= this.resurrectTaskGage && 
+            if (taskGage >= this.resurrectTaskGage &&
                 !this.canResurrect)
             {
                 if (this.canResurrectAfterDeath &&
@@ -370,7 +370,7 @@ public sealed class Resurrecter :
         if (this.isResurrected) { return; }
 
         this.isExild = false;
-        
+
         if (this.canResurrect)
         {
             this.activateResurrectTimer = true;
@@ -384,7 +384,7 @@ public sealed class Resurrecter :
     public override bool IsBlockShowMeetingRoleInfo() => this.infoBlock();
 
     public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
-         
+
 
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
@@ -408,7 +408,7 @@ public sealed class Resurrecter :
         var meetingResetOpt = CreateBoolOption(
             ResurrecterOption.IsMeetingCoolResetOnResurrect,
             true, parentOps);
-         
+
         CreateFloatOption(
             ResurrecterOption.ResurrectMeetingCooltime,
             20.0f, 5.0f, 60.0f, 0.25f,
@@ -557,7 +557,7 @@ public sealed class Resurrecter :
         }
         UseResurrect(this);
 
-        FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubPool.ReclaimAll();
+        FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
         if (this.resurrectText != null)
         {
             this.resurrectText.gameObject.SetActive(false);
@@ -581,7 +581,7 @@ public sealed class Resurrecter :
 
             if (playerInfo.Tasks[i].Complete)
             {
-                
+
                 int taskIndex;
                 int replaceTaskId = playerInfo.Tasks[i].TypeId;
 
@@ -607,7 +607,7 @@ public sealed class Resurrecter :
 
                 GameSystem.RpcReplaceNewTask(
                     rolePlayer.PlayerId, i, taskIndex);
-                
+
                 ++replaceTaskNum;
             }
         }

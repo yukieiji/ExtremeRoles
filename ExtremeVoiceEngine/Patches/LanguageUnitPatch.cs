@@ -13,8 +13,7 @@ public static class LanguageUnitParseTSVPatch
     public static void Postfix(
         LanguageUnit __instance,
         [HarmonyArgument(0)] string tsvText,
-        [HarmonyArgument(1)] ref Dictionary<string, string> allStrings,
-        [HarmonyArgument(2)] ref Dictionary<StringNames, QuickChatSentenceVariantSet> allQuickChatVariantSets)
+        [HarmonyArgument(1)] ref Dictionary<string, string> allStrings)
     {
         TranslatorManager.AddTranslationData(
             DataManager.Settings.Language.CurrentLanguage, allStrings);

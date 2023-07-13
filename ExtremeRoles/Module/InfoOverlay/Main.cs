@@ -64,7 +64,7 @@ public sealed class InfoOverlay
     {
         if (!ExtremeRolesPlugin.Info.OverlayShown) { return; }
         var pageBuilder = this.showText[this.CurShowInfo] as PageShowTextBuilderBase;
-        
+
         if (pageBuilder == null) { return; }
 
         pageBuilder.ChangePage(add);
@@ -130,7 +130,7 @@ public sealed class InfoOverlay
 
     public void ToggleInfoOverlay(ShowType showType)
     {
-        if (FastDestroyableSingleton<HudManager>.Instance.Chat.IsOpen) { return; }
+        if (FastDestroyableSingleton<HudManager>.Instance.Chat.IsOpenOrOpening) { return; }
 
         if (!RoleAssignState.Instance.IsRoleSetUpEnd)
         {
@@ -213,7 +213,7 @@ public sealed class InfoOverlay
             hudManager == null ||
             hudManager.IsIntroDisplayed ||
             (
-                !CachedPlayerControl.LocalPlayer.PlayerControl.CanMove && 
+                !CachedPlayerControl.LocalPlayer.PlayerControl.CanMove &&
                 MeetingHud.Instance == null
             ) ||
             !this.initializeOverlays())

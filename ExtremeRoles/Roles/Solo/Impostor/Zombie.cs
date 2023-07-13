@@ -23,7 +23,7 @@ using SystemArray = System.Array;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Zombie : 
+public sealed class Zombie :
     SingleRoleBase,
     IRoleAbility,
     IRoleAwake<RoleTypes>,
@@ -183,7 +183,7 @@ public sealed class Zombie :
         if (!tryGetPlayerInRoom(out SystemTypes room) ||
             !this.setRooms.ContainsKey(room)) { return false; }
 
-        this.targetRoom = room; 
+        this.targetRoom = room;
         return true;
     }
 
@@ -229,7 +229,7 @@ public sealed class Zombie :
 
     public void ReviveAction(PlayerControl player)
     {
-        
+
     }
 
     public string GetFakeOptionString() => "";
@@ -413,7 +413,7 @@ public sealed class Zombie :
         PlayerControl killerPlayer)
     {
         if (this.isResurrected) { return; }
-        
+
         if (this.canResurrect)
         {
             this.activateResurrectTimer = true;
@@ -423,7 +423,7 @@ public sealed class Zombie :
     public override bool IsBlockShowMeetingRoleInfo() => this.infoBlock();
 
     public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
-         
+
 
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
@@ -572,7 +572,7 @@ public sealed class Zombie :
         }
         UseResurrect(this);
 
-        FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubPool.ReclaimAll();
+        FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
         if (this.resurrectText != null)
         {
             this.resurrectText.gameObject.SetActive(false);

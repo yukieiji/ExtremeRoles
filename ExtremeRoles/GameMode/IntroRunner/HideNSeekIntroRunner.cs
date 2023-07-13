@@ -107,7 +107,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
         LogicOptionsHnS logicOptionsHnS =
             GameManager.Instance.LogicOptions.Cast<LogicOptionsHnS>();
         LogicHnSMusic logicHnSMusic =
-            GameManager.Instance.GetLogicComponent<LogicHnSMusic>() as LogicHnSMusic;
+            GameManager.Instance.GetLogicComponent<LogicHnSMusic>().TryCast<LogicHnSMusic>();
 
         if (logicHnSMusic != null)
         {
