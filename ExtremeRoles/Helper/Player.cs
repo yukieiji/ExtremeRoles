@@ -360,13 +360,24 @@ public static class Player
 		}
 
 		Collider2D collider = player.GetComponent<Collider2D>();
+		return TryGetPlayerColiderRoom(collider, out roomeId);
+	}
+
+	public static bool TryGetPlayerColiderRoom(Collider2D playerCollider, out SystemTypes? roomeId)
+	{
+		roomeId = null;
+
+		if (playerCollider == null)
+		{
+			return false;
+		}
 
 		foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
 		{
 			if (room != null && room.roomArea)
 			{
 				int hitCount = room.roomArea.OverlapCollider(playerHitFilter, hitBuffer);
-				if (isHit(collider, hitBuffer, hitCount))
+				if (isHit(playerCollider, hitBuffer, hitCount))
 				{
 					roomeId = room.RoomId;
 					return true;
@@ -376,7 +387,7 @@ public static class Player
 		return false;
 	}
 
-    private static bool isPlayerInRange(
+	private static bool isPlayerInRange(
         PlayerControl sourcePlayer,
         PlayerControl targetPlayer,
         SingleRoleBase role, float range)
