@@ -4,6 +4,8 @@ using Il2CppCollection = Il2CppSystem.Collections.Generic;
 
 using ExtremeRoles.Performance;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.NewTranslation;
 
 public static class TranslatorManager
