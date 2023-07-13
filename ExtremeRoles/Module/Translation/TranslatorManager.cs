@@ -54,14 +54,10 @@ public static class TranslatorManager
     {
         foreach (var (key, data) in newData)
         {
-            if (allData.ContainsKey(key))
+            if (!allData.TryAdd(key, data))
             {
 				ExtremeRolesPlugin.Logger.LogError(
                     $"Detect:Translation Data conflict!!  Key:{key} Data:{data}");
-            }
-            else
-            {
-                allData.Add(key, data);
             }
         }
     }
