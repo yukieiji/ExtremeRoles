@@ -23,9 +23,17 @@ public sealed class Il2CppRegisterAttribute : Attribute
 		this.Interfaces = interfaces;
 	}
 
-	public static void Registration(Assembly dll)
+	public static void Registration(Assembly? dll)
 	{
-		ExtremeRolesPlugin.Logger.LogInfo(
+		var logger = ExtremeRolesPlugin.Logger;
+
+		if (dll == null)
+		{
+			logger.LogInfo("This dll is NULL!!");
+			return;
+		}
+
+		logger.LogInfo(
 			"---------- Il2CppRegister: Start Registration ----------");
 
 		foreach (Type type in dll.GetTypes())
@@ -38,7 +46,7 @@ public sealed class Il2CppRegisterAttribute : Attribute
 			}
 		}
 
-		ExtremeRolesPlugin.Logger.LogInfo(
+		logger.LogInfo(
 			"---------- Il2CppRegister: Complete Registration ----------");
 
 	}
