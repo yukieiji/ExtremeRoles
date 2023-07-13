@@ -65,35 +65,19 @@ public static class GameSystem
         TaskTypes.StopCharles
     };
 
-    private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
+	public static bool IsLobby => AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started;
+	public static bool IsFreePlay => AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
+
+	private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
     {
         TaskTypes.FixWiring,
         TaskTypes.VentCleaning,
     };
 
     private static GridArrange cachedArrange = null;
-
     private static List<PlayerControl> bots = new List<PlayerControl>();
 
-    public static bool IsLobby
-    {
-        get
-        {
-            return (
-                AmongUsClient.Instance.GameState !=
-                InnerNet.InnerNetClient.GameStates.Started
-            );
-        }
-    }
-    public static bool IsFreePlay
-    {
-        get
-        {
-            return AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
-        }
-    }
-
-    public static void ReGridButtons()
+	public static void ReGridButtons()
     {
         if (!FastDestroyableSingleton<HudManager>.Instance) { return; }
 
@@ -263,6 +247,7 @@ public static class GameSystem
         }
         return watchConsole;
     }
+
     public static SystemConsole GetVitalSystemConsole()
     {
         SystemConsole vitalConsole;
@@ -283,7 +268,7 @@ public static class GameSystem
         RPCOperator.ForceEnd();
     }
 
-    public static bool IsValidConsole(PlayerControl player, Console console)
+	public static bool IsValidConsole(PlayerControl player, Console console)
     {
         if (player == null || console == null) { return false; }
 
@@ -684,7 +669,7 @@ public static class GameSystem
         }
     }
 
-    private static void destroyComponent<T>(GameObject obj) where T : Behaviour
+	private static void destroyComponent<T>(GameObject obj) where T : Behaviour
     {
         T collider = obj.GetComponent<T>();
         if (collider != null)

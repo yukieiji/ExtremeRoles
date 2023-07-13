@@ -26,7 +26,7 @@ public sealed class Shutter : GhostRoleBase
         private DateTime takeTime;
         private int rate;
 
-        public GhostPhoto(int rate, float range, ContactFilter2D filter)
+        public GhostPhoto(int rate, float range)
         {
             this.rate = rate;
             this.takeTime = DateTime.UtcNow;
@@ -44,7 +44,7 @@ public sealed class Shutter : GhostRoleBase
                 Vector3 position = player.Object.transform.position;
                 if (range >= Vector2.Distance(photoCenter, position))
                 {
-                    this.player.Add(new PlayerPosInfo(player, filter));
+                    this.player.Add(new PlayerPosInfo(player));
                 }
 
             }
@@ -69,7 +69,7 @@ public sealed class Shutter : GhostRoleBase
                 {
                     string addInfo =
                         this.rate < RandomGenerator.Instance.Next(100) ?
-                        Translation.GetString("smokingThisName") : 
+                        Translation.GetString("smokingThisName") :
                         playerInfo.PlayerName;
 
                     photoInfoBuilder.AppendLine(addInfo);
@@ -87,17 +87,11 @@ public sealed class Shutter : GhostRoleBase
         private float range;
         private int rate;
         private List<GhostPhoto> film = new List<GhostPhoto>();
-        private ContactFilter2D filter;
 
         public GhostPhotoCamera(float range, int rate)
         {
             this.range = range;
             this.rate = rate;
-
-            this.filter = default(ContactFilter2D);
-            this.filter.layerMask = Constants.PlayersOnlyMask;
-            this.filter.useLayerMask = true;
-            this.filter.useTriggers = false;
 
             this.film.Clear();
         }
@@ -108,7 +102,7 @@ public sealed class Shutter : GhostRoleBase
 
         public void TakePhoto()
         {
-            this.film.Add(new GhostPhoto(this.rate, this.range, this.filter));
+            this.film.Add(new GhostPhoto(this.rate, this.range));
         }
         public override string ToString()
         {
@@ -194,7 +188,7 @@ public sealed class Shutter : GhostRoleBase
     {
         string photoInfo = this.photoCreater.ToString();
         this.photoCreater.Reset();
-        
+
         if (string.IsNullOrEmpty(photoInfo)) { return; }
 
         MeetingReporter.RpcAddMeetingChatReport(

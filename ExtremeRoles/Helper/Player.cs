@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -15,13 +16,55 @@ public static class Player
 {
     private static PlayerControl prevTarget;
 
-    public static void ResetTarget()
-    {
-        resetPlayerOutLine();
-        prevTarget = null;
-    }
+	private static Il2CppReferenceArray<Collider2D> hitBuffer = new Il2CppReferenceArray<Collider2D>(20);
+	private static ContactFilter2D playerHitFilter = new ContactFilter2D()
+	{
+		layerMask = Constants.PlayersOnlyMask,
+		useLayerMask = true,
+		useTriggers = false,
+	};
 
-    public static PlayerControl GetPlayerControlById(byte id)
+	public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon(
+		Transform parent = null, Vector3? scale = null)
+	{
+		if (parent == null)
+		{
+			parent = FastDestroyableSingleton<HudManager>.Instance.transform;
+		}
+		Vector3 newScale = scale.HasValue ? scale.Value : Vector3.one;
+
+		Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
+
+		foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+		{
+			PoolablePlayer poolPlayer = Object.Instantiate(
+				Module.Prefab.PlayerPrefab, parent);
+
+			poolPlayer.gameObject.SetActive(true);
+
+			poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
+			poolPlayer.cosmetics.nameText.transform.localPosition = new Vector3(
+				poolPlayer.cosmetics.nameText.transform.localPosition.x,
+				poolPlayer.cosmetics.nameText.transform.localPosition.y - 1.0f,
+				poolPlayer.cosmetics.nameText.transform.localPosition.z);
+
+			poolPlayer.name = $"poolable_{player.PlayerId}";
+
+			poolPlayer.SetFlipX(true);
+			poolPlayer.UpdateFromPlayerData(
+				player.Data, PlayerOutfitType.Default,
+				PlayerMaterial.MaskType.None, true);
+
+			poolPlayer.gameObject.SetActive(false);
+			poolPlayer.transform.localScale = newScale;
+			playerIcon.Add(player.PlayerId, poolPlayer);
+		}
+
+		return playerIcon;
+
+	}
+
+	public static PlayerControl GetPlayerControlById(byte id)
     {
         foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
         {
@@ -219,7 +262,6 @@ public static class Player
 
     public static GameData.PlayerInfo GetDeadBodyInfo(float range)
     {
-
         Vector2 playerPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
         foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
@@ -245,7 +287,13 @@ public static class Player
         return null;
     }
 
-    public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos)
+	public static void ResetTarget()
+	{
+		resetPlayerOutLine();
+		prevTarget = null;
+	}
+
+	public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos)
     {
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.UncheckedSnapTo))
@@ -295,7 +343,6 @@ public static class Player
 
     public static void SetPlayerOutLine(PlayerControl target, Color color)
     {
-
         if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }
 
         target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
@@ -303,45 +350,31 @@ public static class Player
         prevTarget = target;
     }
 
-    public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon(
-        Transform parent = null, Vector3? scale = null)
-    {
-        if (parent == null)
-        {
-            parent = FastDestroyableSingleton<HudManager>.Instance.transform;
-        }
-        Vector3 newScale = scale.HasValue ? scale.Value : Vector3.one;
+	public static bool TryGetPlayerRoom(PlayerControl player, out SystemTypes? roomeId)
+	{
+		roomeId = null;
 
-        Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
+		if (player == null)
+		{
+			return false;
+		}
 
-        foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
-        {
-            PoolablePlayer poolPlayer = Object.Instantiate(
-                Module.Prefab.PlayerPrefab, parent);
+		Collider2D collider = player.GetComponent<Collider2D>();
 
-            poolPlayer.gameObject.SetActive(true);
-
-			poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
-            poolPlayer.cosmetics.nameText.transform.localPosition = new Vector3(
-                poolPlayer.cosmetics.nameText.transform.localPosition.x,
-                poolPlayer.cosmetics.nameText.transform.localPosition.y - 1.0f,
-                poolPlayer.cosmetics.nameText.transform.localPosition.z);
-
-			poolPlayer.name = $"poolable_{player.PlayerId}";
-
-			poolPlayer.SetFlipX(true);
-			poolPlayer.UpdateFromPlayerData(
-				player.Data, PlayerOutfitType.Default,
-				PlayerMaterial.MaskType.None, true);
-
-			poolPlayer.gameObject.SetActive(false);
-            poolPlayer.transform.localScale = newScale;
-            playerIcon.Add(player.PlayerId, poolPlayer);
-        }
-
-        return playerIcon;
-
-    }
+		foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
+		{
+			if (room != null && room.roomArea)
+			{
+				int hitCount = room.roomArea.OverlapCollider(playerHitFilter, hitBuffer);
+				if (isHit(collider, hitBuffer, hitCount))
+				{
+					roomeId = room.RoomId;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
     private static bool isPlayerInRange(
         PlayerControl sourcePlayer,
@@ -380,7 +413,22 @@ public static class Player
         }
     }
 
-    private static bool isValidPlayer(
+	private static bool isHit(
+		Collider2D playerCollinder,
+		Collider2D[] buffer,
+		int hitCount)
+	{
+		for (int i = 0; i < hitCount; i++)
+		{
+			if (buffer[i] == playerCollinder)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static bool isValidPlayer(
         SingleRoleBase role,
         PlayerControl sourcePlayer,
         GameData.PlayerInfo targetPlayer)
