@@ -11,8 +11,6 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 {
-	public string Title => Translation.GetString("yourGhostRole");
-
 	public (string, string) GetInfoText()
 	{
 		if (!CachedPlayerControl.LocalPlayer.Data.IsDead)

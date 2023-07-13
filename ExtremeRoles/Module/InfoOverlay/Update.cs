@@ -23,9 +23,9 @@ public static class Update
 			{
 				switch (value)
 				{
-					case InfoOverlayModel.Type.AllRole:
-					case InfoOverlayModel.Type.AllGhostRole:
-					case InfoOverlayModel.Type.GlobalSetting:
+					case InfoOverlayModel.Type.AllRolePanel:
+					case InfoOverlayModel.Type.AllGhostRolePanel:
+					case InfoOverlayModel.Type.GlobalSettingPanel:
 						continue;
 					default:
 						break;
@@ -33,7 +33,7 @@ public static class Update
 				model.PanelModel.Remove(value);
 			}
 		}
-		model.CurShow = InfoOverlayModel.Type.AllRole;
+		model.CurShow = InfoOverlayModel.Type.AllRolePanel;
 		model.IsDuty = true;
 	}
 
@@ -46,10 +46,10 @@ public static class Update
 		}
 		else
 		{
-			model.PanelModel[InfoOverlayModel.Type.MyRole] = new LocalRoleInfoModel();
-			model.PanelModel[InfoOverlayModel.Type.MyGhostRole] = new LocalGhostRoleInfoModel();
+			model.PanelModel[InfoOverlayModel.Type.YourRolePanel] = new LocalRoleInfoModel();
+			model.PanelModel[InfoOverlayModel.Type.YourGhostRolePanel] = new LocalGhostRoleInfoModel();
 		}
-		model.CurShow = InfoOverlayModel.Type.MyRole;
+		model.CurShow = InfoOverlayModel.Type.YourRolePanel;
 		model.IsDuty = true;
 	}
 
@@ -82,15 +82,15 @@ public static class Update
 		model.PanelModel = new SortedDictionary<InfoOverlayModel.Type, IInfoOverlayPanelModel>()
 		{
 			{
-				InfoOverlayModel.Type.AllRole,
+				InfoOverlayModel.Type.AllRolePanel,
 				new AllRoleInfoModel()
 			},
 			{
-				InfoOverlayModel.Type.AllGhostRole,
+				InfoOverlayModel.Type.AllGhostRolePanel,
 				new AllGhostRoleInfoModel()
 			},
 			{
-				InfoOverlayModel.Type.GlobalSetting,
+				InfoOverlayModel.Type.GlobalSettingPanel,
 				new GlobalSettingInfoModel()
 			}
 		};

@@ -89,7 +89,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 
 				}
 				newButton.Awake();
-				newButton.SetButtonText(panel.Key.ToString());
+				newButton.SetButtonText(Translation.GetString(panel.Key.ToString()));
 				newButton.SetButtonClickAction(
 					() =>
 					{
@@ -116,7 +116,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 		{
 			var (main, sub) = panelModel.GetInfoText();
 
-			this.title.text = panelModel.Title;
+			this.title.text = Translation.GetString(model.CurShow.ToString());
 			this.mainText.text = main;
 			this.subText.text = sub;
 

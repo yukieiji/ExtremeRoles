@@ -9,11 +9,11 @@ public sealed class InfoOverlayModel
 {
 	public enum Type
 	{
-		MyRole,
-		MyGhostRole,
-		AllRole,
-		AllGhostRole,
-		GlobalSetting
+		YourRolePanel,
+		YourGhostRolePanel,
+		AllRolePanel,
+		AllGhostRolePanel,
+		GlobalSettingPanel
 	}
 
 	public bool IsDuty { get; set; }
@@ -25,6 +25,6 @@ public sealed class InfoOverlayModel
 	{
 		this.PanelModel = new SortedDictionary<Type, IInfoOverlayPanelModel>();
 		this.IsDuty = false;
-		this.CurShow = Type.MyRole;
+		this.CurShow = Type.YourRolePanel;
 	}
 }

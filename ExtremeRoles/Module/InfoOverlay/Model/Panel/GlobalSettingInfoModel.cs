@@ -14,7 +14,6 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 {
-	public string Title => Translation.GetString("yourGhostRole");
 	private StringBuilder printOption = new StringBuilder();
 
 	public (string, string) GetInfoText()

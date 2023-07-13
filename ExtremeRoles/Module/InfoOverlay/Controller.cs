@@ -88,35 +88,35 @@ public sealed class Controller : NullableSingleton<Controller>
 		{
 			if (Input.GetKeyDown(KeyCode.H))
 			{
-				toggleView(InfoOverlayModel.Type.AllRole);
+				toggleView(InfoOverlayModel.Type.AllRolePanel);
 			}
 			if (Input.GetKeyDown(KeyCode.G))
 			{
-				toggleView(InfoOverlayModel.Type.AllGhostRole);
+				toggleView(InfoOverlayModel.Type.AllGhostRolePanel);
 			}
 		}
 		else
 		{
 			if (Input.GetKeyDown(KeyCode.H))
 			{
-				toggleView(InfoOverlayModel.Type.MyRole);
+				toggleView(InfoOverlayModel.Type.YourRolePanel);
 			}
 			if (Input.GetKeyDown(KeyCode.G))
 			{
-				toggleView(InfoOverlayModel.Type.MyGhostRole);
+				toggleView(InfoOverlayModel.Type.YourGhostRolePanel);
 			}
 			if (Input.GetKeyDown(KeyCode.I))
 			{
-				toggleView(InfoOverlayModel.Type.AllRole);
+				toggleView(InfoOverlayModel.Type.AllRolePanel);
 			}
 			if (Input.GetKeyDown(KeyCode.U))
 			{
-				toggleView(InfoOverlayModel.Type.AllGhostRole);
+				toggleView(InfoOverlayModel.Type.AllGhostRolePanel);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.O))
 		{
-			toggleView(InfoOverlayModel.Type.GlobalSetting);
+			toggleView(InfoOverlayModel.Type.GlobalSettingPanel);
 		}
 
 		if (this.view != null &&

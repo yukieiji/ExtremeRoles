@@ -10,9 +10,6 @@ public abstract class PanelPageModelBase : IInfoOverlayPanelModel
 {
 	protected sealed record RoleInfo(string RoleName, string FullDec, int OptionId);
 
-	public abstract string Title { get; }
-	public abstract string Info { get; }
-
 	public int PageNum => this.allPage.Count;
 
 	public int CurPage

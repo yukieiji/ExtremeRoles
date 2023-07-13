@@ -11,10 +11,6 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 {
-	public override string Info => Translation.GetString("changeGhostRoleMore");
-
-	public override string Title => Translation.GetString("ghostRoleDesc");
-
 	protected override void CreateAllRoleText()
 	{
 		int optionId;
