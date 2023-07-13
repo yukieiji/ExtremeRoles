@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 
 using Il2CppObject = Il2CppSystem.Object;
 
+#nullable enable
+
 namespace ExtremeRoles.Extension.Translation;
 
 public static class TranslationControllerExtension
@@ -23,11 +25,9 @@ public static class TranslationControllerExtension
     public static string GetString(this TranslationController cont, string id)
 		=> cont.GetString(cleanStringId(id), string.Empty, Array.Empty<Il2CppObject>());
 
-#pragma warning disable CS8619
-    public static unsafe string GetString(
+    public static string GetString(
         this TranslationController cont, string id, params Il2CppObject[] parts)
 		=> cont.GetString(cleanStringId(id), defaultStr: string.Empty, parts: parts);
-#pragma warning restore CS8619
 
 	private static string cleanStringId(string id)
 	{
