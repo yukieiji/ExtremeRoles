@@ -223,7 +223,7 @@ public sealed class Whisper :
 			WhisperOption.EnableAwakeAbility,
 			false, parentOps);
 		CreateIntOption(
-			WhisperOption.EnableAwakeAbility,
+			WhisperOption.AbilityTaskGage,
 			70, 0, 100, 10,
 			awakeOpt,
 			format: OptionUnit.Percentage);
