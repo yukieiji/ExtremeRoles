@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using static UnityEngine.GraphicsBuffer;
 
 namespace ExtremeRoles.Module;
 
@@ -7,7 +9,7 @@ namespace ExtremeRoles.Module;
 
 public sealed class ServiceLocator<TInterface>
 {
-	private Dictionary<Type, TInterface> service = new Dictionary<Type, TInterface>();
+	private ConcurrentDictionary<Type, TInterface> service = new ConcurrentDictionary<Type, TInterface>();
 
 	public ServiceLocator()
 	{
@@ -16,9 +18,17 @@ public sealed class ServiceLocator<TInterface>
 
 	public IEnumerable<TInterface> GetAllService() => this.service.Values;
 
+	public void Register<TInstance>() where TInstance : TInterface, new()
+	{
+		Register(new TInstance());
+	}
+
 	public void Register<TInstance>(TInstance instance) where TInstance : TInterface, new()
 	{
-		this.service.Add(typeof(TInstance), instance);
+		if (!this.service.TryAdd(typeof(TInstance), instance))
+		{
+			ExtremeRolesPlugin.Logger.LogError("This instance already added!!");
+		}
 	}
 
 	public TTarget Resolve<TTarget>() where TTarget : class, TInterface, new()
