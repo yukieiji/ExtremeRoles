@@ -306,9 +306,15 @@ public static class OptionsMenuBehaviourStartPatch
             });
 
             passiveButton.OnMouseOver.AddListener(
-				() => button.Background.color = new Color32(34, 139, 34, byte.MaxValue));
+				() =>
+				{
+					button.Background.color = new Color32(34, 139, 34, byte.MaxValue);
+				});
             passiveButton.OnMouseOut.AddListener(
-				() => button.Background.color = button.onState ? Color.green : Palette.ImpostorRed);
+				() =>
+				{
+					button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+				});
 
             foreach (var spr in button.gameObject.GetComponentsInChildren<SpriteRenderer>())
             {
