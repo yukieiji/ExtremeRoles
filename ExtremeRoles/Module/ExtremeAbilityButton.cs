@@ -16,6 +16,8 @@ public enum AbilityState : byte
 	Activating,
 }
 
+#nullable enable
+
 public sealed class ExtremeAbilityButton
 {
 	public const string Name = "ExRAbilityButton";
@@ -39,7 +41,7 @@ public sealed class ExtremeAbilityButton
 
 	private readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
 
-	private static GridArrange cachedArrange = null;
+	private static GridArrange? cachedArrange = null;
 
 	public ExtremeAbilityButton(
 		AbilityBehaviorBase behavior,

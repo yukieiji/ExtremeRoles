@@ -5,6 +5,8 @@ using Hazel;
 
 using ExtremeRoles.Performance;
 
+#nullable enable
+
 namespace ExtremeRoles.Module;
 
 public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
