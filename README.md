@@ -105,7 +105,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
   - この不具合はExtremeVoiceEngineとExtremeRolesで別々のコマンド処理を実装した関係で発生している表示上の問題であるため動作に一切の影響はありません
 
 ## リリーススケジュール
-- Extreme Roles v8.1.0.0 RebootSubmargedアップデート
+- Extreme Roles v8.1.0.0 RebootSubmergedアップデート
   - サブマージド復活に伴いサブマージドが再度遊べるように調整します
 
 ## 現在実装検討中の役職及び機能
