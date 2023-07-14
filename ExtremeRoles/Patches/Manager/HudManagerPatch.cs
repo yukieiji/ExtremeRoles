@@ -41,8 +41,6 @@ public static class HudManagerStartPatch
 {
     public static void Postfix()
     {
-        if (GameSystem.IsFreePlay) { return; }
-
 		InfoOverlay.Instance.InitializeToLobby();
 	}
 }
