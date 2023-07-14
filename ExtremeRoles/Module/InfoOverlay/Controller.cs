@@ -75,7 +75,9 @@ public sealed class Controller : NullableSingleton<Controller>
 	{
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
 
-		if (hud == null || hud.Chat.IsOpenOrOpening)
+		if (hud == null ||
+			hud.Chat.IsOpenOrOpening ||
+			Minigame.Instance != null)
 		{
 			if (this.view != null && this.view.isActiveAndEnabled)
 			{
