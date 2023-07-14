@@ -20,7 +20,7 @@ namespace ExtremeRoles.Compat.ModIntegrator;
 
 public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 {
-	public enum SubmargedOption
+	public enum SubmergedOption
 	{
 		EnableElevator
 	}
@@ -143,31 +143,31 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		switch (useElevator)
 		{
 			case ElevatorSelection.OnlyCentralElevator:
-				disableSubmargedObj(lobbyRightElevator);
-				disableSubmargedObj(lobbyLeftElevator);
-				disableSubmargedObj(serviceElevator);
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				disableSubmergedObj(serviceElevator);
 				break;
 			case ElevatorSelection.OnlyLobbyElevator:
-				disableSubmargedObj(centralRightElevator);
-				disableSubmargedObj(centralLeftElevator);
-				disableSubmargedObj(serviceElevator);
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
+				disableSubmergedObj(serviceElevator);
 				break;
 			case ElevatorSelection.OnlyServiceElevator:
-				disableSubmargedObj(lobbyRightElevator);
-				disableSubmargedObj(lobbyLeftElevator);
-				disableSubmargedObj(centralRightElevator);
-				disableSubmargedObj(centralLeftElevator);
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
 				break;
 			case ElevatorSelection.CentralAndLobbyElevator:
-				disableSubmargedObj(serviceElevator);
+				disableSubmergedObj(serviceElevator);
 				break;
 			case ElevatorSelection.CentralAndServiceElevator:
-				disableSubmargedObj(lobbyRightElevator);
-				disableSubmargedObj(lobbyLeftElevator);
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
 				break;
 			case ElevatorSelection.LobbyAndServiceElevator:
-				disableSubmargedObj(centralRightElevator);
-				disableSubmargedObj(centralLeftElevator);
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
 				break;
 			default:
 				break;
@@ -177,8 +177,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public override void CreateIntegrateOption(Factory factory)
 	{
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
-		this.elevatorOption = factory.CreateSelectionOption<SubmargedOption, ElevatorSelection>(
-			SubmargedOption.EnableElevator);
+		this.elevatorOption = factory.CreateSelectionOption<SubmergedOption, ElevatorSelection>(
+			SubmergedOption.EnableElevator);
 	}
 
 	public void Destroy()
@@ -566,7 +566,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		return ((Component)handlerObj).TryCast<MonoBehaviour>();
 	}
 
-	private static void disableSubmargedObj(string name)
+	private static void disableSubmergedObj(string name)
 	{
 		GameObject obj = GameObject.Find($"Submerged(Clone)/{name}");
 		if (obj != null)

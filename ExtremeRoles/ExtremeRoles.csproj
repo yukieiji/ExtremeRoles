@@ -5,7 +5,7 @@
     <WarningLevel>7</WarningLevel>
     <!--<Version>8.0.0.4</Version>-->
     <VersionPrefix>8.1.0</VersionPrefix>
-    <VersionSuffix>RebootSubmarged</VersionSuffix>
+    <VersionSuffix>RebootSubmerged</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
