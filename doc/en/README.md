@@ -1,5 +1,5 @@
 
-<div><img src="./img/burner.png" /></div>
+<div><img src="../img/burner.png" /></div>
 
 <div align="center"><h1>Extreme Roles, Extreme Skins and EngineVoiceEngine</h1></div>
 
