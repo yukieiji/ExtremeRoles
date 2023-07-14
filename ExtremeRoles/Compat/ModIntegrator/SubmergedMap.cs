@@ -27,7 +27,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 {
 	public enum SubmergedOption
 	{
-		EnableElevator
+		EnableElevator,
+		ReplaceDoorMinigame
 	}
 
 	public enum ElevatorSelection
@@ -85,6 +86,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 #pragma warning disable CS8618
 	private SelectionCustomOption elevatorOption;
+	private BoolCustomOption replaceDoorMinigameOption;
 
 	public SubmergedIntegrator(PluginInfo plugin) : base(Guid, plugin)
 	{
@@ -145,84 +147,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		impostorVision = curOption.GetFloat(FloatOptionNames.ImpostorLightMod);
 
 		// オプション周りの処理
-		var useElevator = (ElevatorSelection)this.elevatorOption.GetValue();
-
-		switch (useElevator)
-		{
-			case ElevatorSelection.OnlyCentralElevator:
-				disableSubmergedObj(lobbyRightElevator);
-				disableSubmergedObj(lobbyLeftElevator);
-				disableSubmergedObj(serviceElevator);
-				break;
-			case ElevatorSelection.OnlyLobbyElevator:
-				disableSubmergedObj(centralRightElevator);
-				disableSubmergedObj(centralLeftElevator);
-				disableSubmergedObj(serviceElevator);
-				break;
-			case ElevatorSelection.OnlyServiceElevator:
-				disableSubmergedObj(lobbyRightElevator);
-				disableSubmergedObj(lobbyLeftElevator);
-				disableSubmergedObj(centralRightElevator);
-				disableSubmergedObj(centralLeftElevator);
-				break;
-			case ElevatorSelection.CentralAndLobbyElevator:
-				disableSubmergedObj(serviceElevator);
-				break;
-			case ElevatorSelection.CentralAndServiceElevator:
-				disableSubmergedObj(lobbyRightElevator);
-				disableSubmergedObj(lobbyLeftElevator);
-				break;
-			case ElevatorSelection.LobbyAndServiceElevator:
-				disableSubmergedObj(centralRightElevator);
-				disableSubmergedObj(centralLeftElevator);
-				break;
-			default:
-				break;
-		}
-
-		if (CachedShipStatus.Instance != null)
-		{
-			object? transformValue = this.submarineStatusReference?.GetValue(this.submarineStatus);
-			if (transformValue == null ||
-				transformValue is not Transform transform) { return; }
-
-			AssetReference airshipAsset = AmongUsClient.Instance.ShipPrefabs[4];
-
-			if (!airshipAsset.IsValid()) { return; }
-
-			ShipStatus ship = airshipAsset
-				.OperationHandle
-				.Result
-				.Cast<GameObject>()
-				.GetComponent<ShipStatus>();
-			Minigame? doorMinigame = ship.AllDoors
-				.Select(x =>
-				{
-					var door = x.gameObject.GetComponent<DoorConsole>();
-					if (door != null && door.MinigamePrefab != null)
-					{
-						return door.MinigamePrefab;
-					}
-					else
-					{
-						return null;
-					}
-				})
-				.FirstOrDefault(x => x != null);
-
-			if (doorMinigame == null) { return; }
-
-			foreach (var doorConsole in CachedShipStatus.Instance.GetComponentsInChildren<DoorConsole>())
-			{
-				if (doorConsole == null)
-				{
-					continue;
-				}
-
-				doorConsole.MinigamePrefab = UnityObject.Instantiate(
-					doorMinigame, transform);
-			}
-		}
+		disableElevator();
+		replaceDoorMinigame();
 	}
 
 	public override void CreateIntegrateOption(Factory factory)
@@ -230,6 +156,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
 		this.elevatorOption = factory.CreateSelectionOption<SubmergedOption, ElevatorSelection>(
 			SubmergedOption.EnableElevator);
+		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
 	}
 
 	public void Destroy()
@@ -615,6 +542,91 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (handlerObj == null) { return null; }
 
 		return ((Component)handlerObj).TryCast<MonoBehaviour>();
+	}
+
+	private void disableElevator()
+	{
+		var useElevator = (ElevatorSelection)this.elevatorOption.GetValue();
+
+		switch (useElevator)
+		{
+			case ElevatorSelection.OnlyCentralElevator:
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				disableSubmergedObj(serviceElevator);
+				break;
+			case ElevatorSelection.OnlyLobbyElevator:
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
+				disableSubmergedObj(serviceElevator);
+				break;
+			case ElevatorSelection.OnlyServiceElevator:
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
+				break;
+			case ElevatorSelection.CentralAndLobbyElevator:
+				disableSubmergedObj(serviceElevator);
+				break;
+			case ElevatorSelection.CentralAndServiceElevator:
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				break;
+			case ElevatorSelection.LobbyAndServiceElevator:
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void replaceDoorMinigame()
+	{
+		if (this.replaceDoorMinigameOption.GetValue() || CachedShipStatus.Instance == null)
+		{ return; }
+
+		object? transformValue = this.submarineStatusReference?.GetValue(this.submarineStatus);
+		if (transformValue == null ||
+			transformValue is not Transform transform) { return; }
+
+		AssetReference airshipAsset = AmongUsClient.Instance.ShipPrefabs[4];
+
+		if (!airshipAsset.IsValid()) { return; }
+
+		ShipStatus ship = airshipAsset
+			.OperationHandle
+			.Result
+			.Cast<GameObject>()
+			.GetComponent<ShipStatus>();
+		Minigame? doorMinigame = ship.AllDoors
+			.Select(x =>
+			{
+				var door = x.gameObject.GetComponent<DoorConsole>();
+				if (door != null && door.MinigamePrefab != null)
+				{
+					return door.MinigamePrefab;
+				}
+				else
+				{
+					return null;
+				}
+			})
+			.FirstOrDefault(x => x != null);
+
+		if (doorMinigame == null) { return; }
+
+		foreach (var doorConsole in CachedShipStatus.Instance.GetComponentsInChildren<DoorConsole>())
+		{
+			if (doorConsole == null)
+			{
+				continue;
+			}
+
+			doorConsole.MinigamePrefab = UnityObject.Instantiate(
+				doorMinigame, transform);
+		}
 	}
 
 	private static void disableSubmergedObj(string name)
