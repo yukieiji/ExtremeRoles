@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
@@ -12,7 +13,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 	{
 		typeof(IUsable)
 	})]
-public class PortalBase : MonoBehaviour
+public class PortalBase : MonoBehaviour, IAmongUs.IUsable
 {
 
 	public ImageNames UseIcon

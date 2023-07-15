@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using static ExtremeRoles.Roles.Solo.Impostor.Hypnotist;
 
 using Il2CppInterop.Runtime.Attributes;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -18,7 +19,7 @@ new Type[]
 {
 	typeof(IUsable)
 })]
-public class AbilityPartBase : MonoBehaviour
+public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 {
 
 	public ImageNames UseIcon

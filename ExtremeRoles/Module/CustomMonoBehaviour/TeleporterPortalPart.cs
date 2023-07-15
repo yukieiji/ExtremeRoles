@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -12,7 +13,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 	{
 		typeof(IUsable)
 	})]
-public class TeleporterPortalPart : MonoBehaviour
+public class TeleporterPortalPart : MonoBehaviour, IAmongUs.IUsable
 {
 
 	public ImageNames UseIcon
