@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using Il2CppInterop.Runtime;
+using HarmonyLib;
+
 using BepInEx;
 using UnityEngine;
-using Il2CppInterop.Runtime;
+using UnityEngine.AddressableAssets;
 using AmongUs.GameOptions;
-using HarmonyLib;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+
+
+using UnityObject = UnityEngine.Object;
 
 #nullable enable
 
@@ -22,7 +27,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 {
 	public enum SubmergedOption
 	{
-		EnableElevator
+		EnableElevator,
+		ReplaceDoorMinigame
 	}
 
 	public enum ElevatorSelection
@@ -73,12 +79,14 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	private Type? submarineStatusType;
 	private MethodInfo? calculateLightRadiusMethod;
 	private MonoBehaviour? submarineStatus;
+	private FieldInfo? submarineStatusReference;
 
 	private float crewVision;
 	private float impostorVision;
 
 #pragma warning disable CS8618
 	private SelectionCustomOption elevatorOption;
+	private BoolCustomOption replaceDoorMinigameOption;
 
 	public SubmergedIntegrator(PluginInfo plugin) : base(Guid, plugin)
 	{
@@ -113,8 +121,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.submarineStatusType = ClassType.First(
 			t => t.Name == "SubmarineStatus");
 		this.calculateLightRadiusMethod = AccessTools.Method(
-			submarineStatusType, "CalculateLightRadius");
-
+			this.submarineStatusType, "CalculateLightRadius");
+		this.submarineStatusReference = AccessTools.Field(
+			this.submarineStatusType, "referenceHolder");
 
 		Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentMoveToVentPatch");
 		this.inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "inTransition");
@@ -125,11 +134,11 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	{
 		Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
 
-		var component = map.GetComponent(Il2CppType.From(submarineStatusType));
+		var component = map.GetComponent(Il2CppType.From(this.submarineStatusType));
 		if (component)
 		{
-			submarineStatus = component.TryCast(
-				submarineStatusType) as MonoBehaviour;
+			this.submarineStatus = component.TryCast(
+				this.submarineStatusType) as MonoBehaviour;
 		}
 
 		// 毎回毎回取得すると重いのでキャッシュ化
@@ -138,40 +147,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		impostorVision = curOption.GetFloat(FloatOptionNames.ImpostorLightMod);
 
 		// オプション周りの処理
-		var useElevator = (ElevatorSelection)this.elevatorOption.GetValue();
-
-		switch (useElevator)
-		{
-			case ElevatorSelection.OnlyCentralElevator:
-				disableSubmergedObj(lobbyRightElevator);
-				disableSubmergedObj(lobbyLeftElevator);
-				disableSubmergedObj(serviceElevator);
-				break;
-			case ElevatorSelection.OnlyLobbyElevator:
-				disableSubmergedObj(centralRightElevator);
-				disableSubmergedObj(centralLeftElevator);
-				disableSubmergedObj(serviceElevator);
-				break;
-			case ElevatorSelection.OnlyServiceElevator:
-				disableSubmergedObj(lobbyRightElevator);
-				disableSubmergedObj(lobbyLeftElevator);
-				disableSubmergedObj(centralRightElevator);
-				disableSubmergedObj(centralLeftElevator);
-				break;
-			case ElevatorSelection.CentralAndLobbyElevator:
-				disableSubmergedObj(serviceElevator);
-				break;
-			case ElevatorSelection.CentralAndServiceElevator:
-				disableSubmergedObj(lobbyRightElevator);
-				disableSubmergedObj(lobbyLeftElevator);
-				break;
-			case ElevatorSelection.LobbyAndServiceElevator:
-				disableSubmergedObj(centralRightElevator);
-				disableSubmergedObj(centralLeftElevator);
-				break;
-			default:
-				break;
-		}
+		disableElevator();
+		replaceDoorMinigame();
 	}
 
 	public override void CreateIntegrateOption(Factory factory)
@@ -179,6 +156,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
 		this.elevatorOption = factory.CreateSelectionOption<SubmergedOption, ElevatorSelection>(
 			SubmergedOption.EnableElevator);
+		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
 	}
 
 	public void Destroy()
@@ -194,7 +172,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
 	{
 		object? value = calculateLightRadiusMethod?.Invoke(
-		submarineStatus, new object?[] { null, neutral, neutralImpostor });
+			this.submarineStatus, new object?[] { null, neutral, neutralImpostor });
 		return value != null ? (float)value : 1.0f;
 	}
 
@@ -564,6 +542,91 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (handlerObj == null) { return null; }
 
 		return ((Component)handlerObj).TryCast<MonoBehaviour>();
+	}
+
+	private void disableElevator()
+	{
+		var useElevator = (ElevatorSelection)this.elevatorOption.GetValue();
+
+		switch (useElevator)
+		{
+			case ElevatorSelection.OnlyCentralElevator:
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				disableSubmergedObj(serviceElevator);
+				break;
+			case ElevatorSelection.OnlyLobbyElevator:
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
+				disableSubmergedObj(serviceElevator);
+				break;
+			case ElevatorSelection.OnlyServiceElevator:
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
+				break;
+			case ElevatorSelection.CentralAndLobbyElevator:
+				disableSubmergedObj(serviceElevator);
+				break;
+			case ElevatorSelection.CentralAndServiceElevator:
+				disableSubmergedObj(lobbyRightElevator);
+				disableSubmergedObj(lobbyLeftElevator);
+				break;
+			case ElevatorSelection.LobbyAndServiceElevator:
+				disableSubmergedObj(centralRightElevator);
+				disableSubmergedObj(centralLeftElevator);
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void replaceDoorMinigame()
+	{
+		if (this.replaceDoorMinigameOption.GetValue() || CachedShipStatus.Instance == null)
+		{ return; }
+
+		object? transformValue = this.submarineStatusReference?.GetValue(this.submarineStatus);
+		if (transformValue == null ||
+			transformValue is not Transform transform) { return; }
+
+		AssetReference airshipAsset = AmongUsClient.Instance.ShipPrefabs[4];
+
+		if (!airshipAsset.IsValid()) { return; }
+
+		ShipStatus ship = airshipAsset
+			.OperationHandle
+			.Result
+			.Cast<GameObject>()
+			.GetComponent<ShipStatus>();
+		Minigame? doorMinigame = ship.AllDoors
+			.Select(x =>
+			{
+				var door = x.gameObject.GetComponent<DoorConsole>();
+				if (door != null && door.MinigamePrefab != null)
+				{
+					return door.MinigamePrefab;
+				}
+				else
+				{
+					return null;
+				}
+			})
+			.FirstOrDefault(x => x != null);
+
+		if (doorMinigame == null) { return; }
+
+		foreach (var doorConsole in CachedShipStatus.Instance.GetComponentsInChildren<DoorConsole>())
+		{
+			if (doorConsole == null)
+			{
+				continue;
+			}
+
+			doorConsole.MinigamePrefab = UnityObject.Instantiate(
+				doorMinigame, transform);
+		}
 	}
 
 	private static void disableSubmergedObj(string name)
