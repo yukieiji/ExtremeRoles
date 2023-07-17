@@ -25,8 +25,8 @@ namespace ExtremeRoles.Compat;
 
 public sealed class BepInExUpdater : MonoBehaviour
 {
-	private const string minimumBepInExVersion = "6.0.0-be.670";
-	private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/670/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.670%2B42a6727.zip";
+	private const string minimumBepInExVersion = "6.0.0-be.671";
+	private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.671%2B9caf61d.zip";
 
 	private const string exeFileName = "ExtremeBepInExInstaller.exe";
 
