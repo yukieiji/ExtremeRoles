@@ -55,8 +55,8 @@ public static class AmongUsClientCoStartGamePatch
 {
     public static void Prefix()
     {
-								InfoOverlay.Instance.Hide();
-				}
+		InfoOverlay.Instance.Hide();
+	}
 }
 
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
@@ -77,13 +77,14 @@ public static class AmongUsClientOnGameEndPatch
 {
     public static void Prefix([HarmonyArgument(0)] ref EndGameResult endGameResult)
     {
-								InfoOverlay.Instance.Hide();
-								ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
+		InfoOverlay.Instance.Hide();
+		ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
         if ((int)endGameResult.GameOverReason >= 20)
         {
             endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
         }
     }
+
     public static void Postfix()
     {
         List<GameData.PlayerInfo> noWinner = new List<GameData.PlayerInfo>();
