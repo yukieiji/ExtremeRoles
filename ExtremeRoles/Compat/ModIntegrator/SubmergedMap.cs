@@ -220,7 +220,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public Console? GetConsole(TaskTypes task)
 	{
-		var console = UnityEngine.Object.FindObjectsOfType<Console>();
+		var console = UnityObject.FindObjectsOfType<Console>();
 		switch (task)
 		{
 			case TaskTypes.FixLights:
@@ -290,7 +290,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public SystemConsole? GetSystemConsole(SystemConsoleType sysConsole)
 	{
-		var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
 		switch (sysConsole)
 		{
 			case SystemConsoleType.SecurityCamera:
@@ -429,7 +429,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			var boxCollider = fixConsole.GetComponent<BoxCollider2D>();
 			if (boxCollider != null)
 			{
-				UnityEngine.Object.Destroy(boxCollider);
+				UnityObject.Destroy(boxCollider);
 			}
 		}
 	}
