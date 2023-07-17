@@ -76,7 +76,7 @@ public sealed class BepInExUpdater : MonoBehaviour
 			Path.Combine(Paths.GameRootPath, "tmp", exeFileName),
 			$"{Paths.GameRootPath} {extractPath} {(uint)DataManager.Settings.Language.CurrentLanguage}");
 
-		Application.Quit();
+		Application.Quit(0);
 	}
 
 	private static IEnumerator dlBepInExZip(string saveZipPath)
