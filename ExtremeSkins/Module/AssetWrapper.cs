@@ -47,7 +47,9 @@ public sealed class HatAddressableAset : AddressableAsset<HatViewData>
 	}
 
 	public override void Unload()
-	{ }
+	{
+		this.data.Release();
+	}
 
 	public override void Destroy()
 	{ }

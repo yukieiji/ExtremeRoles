@@ -2,6 +2,7 @@
 using System.Text;
 
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module.Interface;
@@ -10,14 +11,12 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeSkins.Module;
 
+#nullable enable
 
 #if WITHHAT
 public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 {
-    public HatData Data
-    {
-        get => this.hat;
-    }
+    public HatData? Data { get; private set; }
 
     public string Author
     {
@@ -35,9 +34,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
     private string folderPath;
 	private HatInfo info;
-
-    private HatData hat;
-	private HatViewData hatView;
+	private HatViewData? hatView;
 
     public CustomHat(string folderPath, HatInfo info)
     {
@@ -59,52 +56,70 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 	public HatViewData GetViewData()
 	{
+		if (this.hatView == null)
+		{
+			this.hatView = this.loadViewData();
+		}
 		return this.hatView;
 	}
 
 	public HatData GetData()
     {
-        if (this.hat != null) { return this.hat; }
+        if (this.Data != null) { return this.Data; }
 
-        this.hat = ScriptableObject.CreateInstance<HatData>();
+        this.Data = ScriptableObject.CreateInstance<HatData>();
 
-        this.hat.name = Helper.Translation.GetString(this.Name);
-        this.hat.displayOrder = 99;
-        this.hat.ProductId = this.Id;
-        this.hat.InFront = !this.info.Back;
-        this.hat.NoBounce = !this.info.Bound;
-        this.hat.ChipOffset = new Vector2(0f, 0.2f);
-        this.hat.Free = true;
-        this.hat.NotInStore = true;
+        this.Data.name = Helper.Translation.GetString(this.Name);
+        this.Data.displayOrder = 99;
+        this.Data.ProductId = this.Id;
+        this.Data.InFront = !this.info.Back;
+        this.Data.NoBounce = !this.info.Bound;
+        this.Data.ChipOffset = new Vector2(0f, 0.2f);
+        this.Data.Free = true;
+        this.Data.NotInStore = true;
+		this.Data.PreviewCrewmateColor = this.info.Shader;
 
-        this.hat.SpritePreview = loadHatSprite(
+        this.Data.SpritePreview = loadHatSprite(
             Path.Combine(this.folderPath, DataStructure.FrontImageName));
 
-		this.hatView = ScriptableObject.CreateInstance<HatViewData>();
+		this.hatView = loadViewData();
+		this.Data.ViewDataRef = new AssetReference(this.hatView.Pointer);
 
-		this.hatView.MainImage = loadHatSprite(
+		return this.Data;
+    }
+
+	public void Release()
+	{
+		this.hatView = null;
+	}
+
+	private HatViewData loadViewData()
+	{
+		var hatView = ScriptableObject.CreateInstance<HatViewData>();
+
+		hatView.MainImage = loadHatSprite(
 			Path.Combine(this.folderPath, DataStructure.FrontImageName));
 
 		if (this.info.FrontFlip)
 		{
-			this.hatView.LeftMainImage = loadHatSprite(
+			hatView.LeftMainImage = loadHatSprite(
 				Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
 		}
 
 		if (this.info.Back)
 		{
-			this.hatView.BackImage = loadHatSprite(
+			hatView.BackImage = loadHatSprite(
 				Path.Combine(this.folderPath, DataStructure.BackImageName));
 		}
 		if (this.info.BackFlip)
 		{
-			this.hatView.LeftBackImage = loadHatSprite(
+			hatView.LeftBackImage = loadHatSprite(
 				Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
 		}
 
 		if (this.info.Climb)
 		{
-			this.hatView.ClimbImage = loadHatSprite(
+			hatView.ClimbImage = loadHatSprite(
 				Path.Combine(this.folderPath, DataStructure.ClimbImageName));
 		}
 
@@ -114,14 +129,16 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 				FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
 			altShader.shader = Shader.Find("Unlit/PlayerShader");
 
-			this.hatView.AltShader = altShader;
+			hatView.AltShader = altShader;
 		}
 
-		return this.hat;
+		this.Data!.ViewDataRef = new AssetReference(hatView.Pointer);
 
-    }
+		return hatView;
+	}
 
-    private Sprite loadHatSprite(
+
+    private Sprite? loadHatSprite(
         string path)
     {
         Texture2D texture = Loader.LoadTextureFromDisk(path);
