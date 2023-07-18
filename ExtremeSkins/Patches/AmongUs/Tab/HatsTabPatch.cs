@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using HarmonyLib;
 
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
@@ -147,28 +148,26 @@ public static class HatsTabPatch
 
             ColorChip colorChip = CustomCosmicTab.SetColorChip(__instance, i, offset);
 
-            if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
+			var button = colorChip.Button;
+
+			if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
             {
-                colorChip.Button.OnMouseOver.AddListener(
-                    (UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
-                colorChip.Button.OnMouseOut.AddListener(
-                    (UnityEngine.Events.UnityAction)(
-                        () =>
-                        {
-                            __instance.SelectHat(
-                                FastDestroyableSingleton<HatManager>.Instance.GetHatById(
-                                    playerSkinData.Hat));
-                        }));
-                colorChip.Button.OnClick.AddListener(
-                    (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
+				button.OnMouseOver.AddListener(() => __instance.SelectHat(hat));
+				button.OnMouseOut.AddListener(
+                    () =>
+                    {
+                        __instance.SelectHat(
+                            FastDestroyableSingleton<HatManager>.Instance.GetHatById(
+                                playerSkinData.Hat));
+                    });
+				button.OnClick.AddListener(() => __instance.ClickEquip());
             }
             else
             {
-                colorChip.Button.OnClick.AddListener(
-                    (UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+				button.OnClick.AddListener(() => __instance.SelectHat(hat));
             }
 
-			colorChip.Button.ClickMask = __instance.scroller.Hitbox;
+			button.ClickMask = __instance.scroller.Hitbox;
 			colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.ScrollingUI);
 			colorChip.Tag = hat;
 
