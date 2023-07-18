@@ -15,7 +15,7 @@ public static class LanguageSetterPatch
 #if WITHNAMEPLATE
         ExtremeNamePlateManager.UpdateTranslation();
 #endif
-#if WITHNAMEPLATE
+#if WITHVISOR
         ExtremeVisorManager.UpdateTranslation();
 #endif
     }

@@ -11,7 +11,7 @@
     <Configurations>Debug;Release</Configurations>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>$(DefineConstants)TRACE;WITHHAT</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE</DefineConstants>
     <DebugType>embedded</DebugType>
     <Nullable>enable</Nullable>
   </PropertyGroup>

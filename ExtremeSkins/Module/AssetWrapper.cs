@@ -9,15 +9,15 @@ using Il2CppSystem;
 namespace ExtremeSkins.Module;
 
 [Il2CppRegister]
-public sealed class HatAddressableAset : AddressableAsset<HatViewData>
+public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 {
 	private CustomHat data;
 
-	public HatAddressableAset(System.IntPtr ptr) : base(ptr)
+	public HatAddressableAsset(System.IntPtr ptr) : base(ptr)
 	{ }
 
-	public HatAddressableAset() : base(
-		ClassInjector.DerivedConstructorPointer<HatAddressableAset>())
+	public HatAddressableAsset() : base(
+		ClassInjector.DerivedConstructorPointer<HatAddressableAsset>())
 	{
 		ClassInjector.DerivedConstructorBody(this);
 	}
@@ -28,6 +28,55 @@ public sealed class HatAddressableAset : AddressableAsset<HatViewData>
 	}
 
 	public override HatViewData GetAsset()
+	{
+		return this.data.GetViewData();
+	}
+	public override void LoadAsync(
+		Action onSuccessCb = null,
+		Action onErrorcb = null,
+		Action onFinishedcb = null)
+	{
+		if (onSuccessCb != null)
+		{
+			onSuccessCb.Invoke();
+		}
+		if (onFinishedcb != null)
+		{
+			onFinishedcb.Invoke();
+		}
+	}
+
+	public override void Unload()
+	{
+		this.data.Release();
+	}
+
+	public override void Destroy()
+	{ }
+
+	public override AssetLoadState GetState() => AssetLoadState.Success;
+}
+
+[Il2CppRegister]
+public sealed class NamePlateAddressableAsset : AddressableAsset<NamePlateViewData>
+{
+	private CustomNamePlate data;
+
+	public NamePlateAddressableAsset(System.IntPtr ptr) : base(ptr)
+	{ }
+
+	public NamePlateAddressableAsset() : base(
+		ClassInjector.DerivedConstructorPointer<NamePlateAddressableAsset>())
+	{
+		ClassInjector.DerivedConstructorBody(this);
+	}
+
+	public void Init(CustomNamePlate data)
+	{
+		this.data = data;
+	}
+
+	public override NamePlateViewData GetAsset()
 	{
 		return this.data.GetViewData();
 	}

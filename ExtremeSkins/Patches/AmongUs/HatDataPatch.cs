@@ -16,7 +16,7 @@ public static class HatDataCreateAddressableAssetPatch
 	{
 		if (ExtremeHatManager.HatData.TryGetValue(__instance.ProductId, out var value))
 		{
-			var asset = new HatAddressableAset();
+			var asset = new HatAddressableAsset();
 			asset.Init(value);
 			__result = asset.Cast<AddressableAsset<HatViewData>>();
 			return false;

@@ -12,6 +12,7 @@ using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
+using Innersloth.Assets;
 
 using ExRLoader = ExtremeRoles.Resources.Loader;
 
@@ -178,9 +179,11 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 }
 
                 __instance.StartCoroutine(
-					__instance.CoLoadAssetAsync(np, (Il2CppSystem.Action<NamePlateViewData>)((n) => {
-                        colorChip.GetComponent<NameplateChip>().image.sprite = n.Image;
-                })));
+					__instance.CoLoadAssetAsync(
+						np.Cast<IAddressableAssetProvider<NamePlateViewData>>(),
+						(Il2CppSystem.Action<NamePlateViewData>)((n) => {
+							colorChip.GetComponent<NameplateChip>().image.sprite = n.Image;
+						})));
                 colorChip.ProductId = np.ProdId;
                 __instance.ColorChips.Add(colorChip);
             }
