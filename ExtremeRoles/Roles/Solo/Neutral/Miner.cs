@@ -13,6 +13,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Compat;
 
 #nullable enable
 
@@ -106,11 +107,10 @@ public sealed class Miner :
 	private static void setMine(Miner miner, Vector2 pos, int id, bool isRolePlayer=false)
 	{
 		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
-		if (ExtremeRolesPlugin.Compat.IsModMap)
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-				obj,
-				Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+			modMap!.AddCustomComponent(
+				obj, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 		}
 		obj.transform.position = pos;
 		var mine = obj.AddComponent<MinerMineEffect>();

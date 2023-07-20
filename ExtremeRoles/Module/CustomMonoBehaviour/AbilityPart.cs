@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using static ExtremeRoles.Roles.Solo.Impostor.Hypnotist;
 
 using Il2CppInterop.Runtime.Attributes;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -18,7 +19,7 @@ new Type[]
 {
 	typeof(IUsable)
 })]
-public class AbilityPartBase : MonoBehaviour
+public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 {
 
 	public ImageNames UseIcon
@@ -102,15 +103,15 @@ public class AbilityPartBase : MonoBehaviour
 			localPlayer.GetTruePosition(),
 			base.transform.position);
 
-		bool isActive = 
-			distance <= this.hideDistance && 
+		bool isActive =
+			distance <= this.hideDistance &&
 			!localPlayer.Data.IsDead &&
 			!MeetingHud.Instance &&
 			!ExileController.Instance;
 
 		this.arrow.SetActive(isActive);
 	}
-	
+
 	[HideFromIl2Cpp]
 	protected virtual void Pickup(Hypnotist role)
 	{
@@ -131,7 +132,7 @@ public sealed class RedAbilityPart : AbilityPartBase
 
 	[HideFromIl2Cpp]
 	protected override void Pickup(Hypnotist hypnotist)
-    {
+	{
 		Helper.Logging.Debug("pickUp:RedPart");
 
 		using (var caller = RPCOperator.CreateCaller(
@@ -191,9 +192,9 @@ public sealed class GrayAbilityPart : AbilityPartBase
 	public GrayAbilityPart(IntPtr ptr) : base(ptr) { }
 
 	public void SetConsoleType(SystemConsoleType console)
-    {
+	{
 		this.console = console;
-    }
+	}
 
 	[HideFromIl2Cpp]
 	protected override void Pickup(Hypnotist hypnotist)

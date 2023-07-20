@@ -4,6 +4,7 @@ using HarmonyLib;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -55,8 +56,8 @@ namespace ExtremeRoles.Patches.MiniGame
             if (isRemoveVital || // バイタル無効化してる
                 !enableVitalLimit || //バイタル制限あるか
                 __instance.BatteryText.gameObject.active) //科学者の能力使用か
-            { 
-                return; 
+            {
+                return;
             }
 
             if (isUseAbility())
@@ -137,9 +138,9 @@ namespace ExtremeRoles.Patches.MiniGame
         private static void disableVital()
         {
             HashSet<string> vitalObj = new HashSet<string>();
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                vitalObj = ExtremeRolesPlugin.Compat.ModMap.GetSystemObjectName(
+                vitalObj = modMap!.GetSystemObjectName(
                     Compat.Interface.SystemConsoleType.Vital);
             }
             else

@@ -9,6 +9,6 @@ public static class MeetingHudClosePatch
 {
 	public static void Prefix()
 	{
-		ExtremeRolesPlugin.Info.HideInfoOverlay();
+		InfoOverlay.Instance.Hide();
 	}
 }

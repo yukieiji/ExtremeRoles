@@ -26,6 +26,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -431,9 +432,9 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             this.body = new GameObject("Torch");
             this.body.transform.position = new Vector3(
                 pos.x, pos.y, (pos.y / 1000f));
-			if (ExtremeRolesPlugin.Compat.IsModMap)
+			if (CompatModManager.Instance.TryGetModMap(out var modMap))
 			{
-				ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+				modMap!.AddCustomComponent(
 					this.body,
 					Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 			}
@@ -513,10 +514,9 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
                 List<Vector2> placePos = new List<Vector2>();
 
-                if (ExtremeRolesPlugin.Compat.IsModMap)
+                if (CompatModManager.Instance.TryGetModMap(out var modMap))
                 {
-                    placePos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
-                        playerId);
+                    placePos = modMap!.GetSpawnPos(playerId);
                 }
                 else
                 {

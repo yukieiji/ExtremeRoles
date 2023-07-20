@@ -8,6 +8,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
@@ -84,10 +85,12 @@ public static class IGameOptionsExtensionsToHudStringPatch
                 continue;
             }
 
-
-            if (option.Parent == null &&
+			if (option.Parent == null &&
                 option.Enabled &&
-                egmm.RoleSelector.IsValidRoleOption(option))
+                (
+					egmm.RoleSelector.IsValidRoleOption(option) ||
+					CompatModManager.Instance.IsIntegrateOption(optionId)
+				))
             {
                 string optionStr = option.ToHudStringWithChildren(option.IsHidden ? 0 : 1);
                 allOptionStr.Add(optionStr.Trim('\r', '\n'));

@@ -1,80 +1,53 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 
-using ExtremeRoles.Extension.UnityEvent;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Resources;
 
-namespace ExtremeRoles.Module.InfoOverlay
+#nullable enable
+
+namespace ExtremeRoles.Module.InfoOverlay;
+
+public sealed class HelpButton
 {
-    public static class Button
-    {
-        public static GameObject Body = null;
+	public bool IsInitialized => this.body != null;
 
-        private static InfoOverlay.ShowType buttonShowType = 0;
+	private GameObject? body = null;
 
-        public static void CreateInfoButton()
-        {
-            Body = Object.Instantiate(
-                GameObject.Find("MenuButton"),
-                GameObject.Find("TopRight/MenuButton").transform);
-            Object.DontDestroyOnLoad(Body);
-            Body.name = "infoRoleButton";
-            Body.SetActive(true);
-            Body.layer = 5;
-            Body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+	public void CreateInfoButton(System.Action openAct)
+	{
+		this.body = Object.Instantiate(
+			GameObject.Find("MenuButton"),
+			GameObject.Find("TopRight/MenuButton").transform);
+		Object.DontDestroyOnLoad(this.body);
 
-            SetInfoButtonToGameStartShipPositon();
+		this.body.name = "infoRoleButton";
+		this.body.SetActive(true);
+		this.body.layer = 5;
+		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-            var passiveButton = Body.GetComponent<PassiveButton>();
-            passiveButton.OnClick.RemoveAllPersistentAndListeners();
-            passiveButton.OnClick.AddListener(
-                (UnityAction)toggleInfoOverlay);
+		SetInfoButtonToGameStartShipPositon();
 
-            var render = Body.GetComponent<SpriteRenderer>();
-            render.sprite = Loader.CreateSpriteFromResources(
-                Path.HelpImage, 230f);
-        }
+		var passiveButton = this.body.GetComponent<PassiveButton>();
+		passiveButton.OnClick.RemoveAllPersistentAndListeners();
+		passiveButton.OnClick.AddListener(openAct);
 
-        public static void SetInfoButtonToGameStartShipPositon()
-        {
-            Body.transform.localPosition = new Vector3(
-                0.0f, -0.825f, 0.0f);
-        }
+		var render = this.body.GetComponent<SpriteRenderer>();
+		render.sprite = Loader.CreateSpriteFromResources(
+			Path.HelpImage, 230f);
+	}
 
-        public static void SetInfoButtonToInGamePositon()
-        {
-            Body.SetActive(true);
-            Body.transform.localPosition = new Vector3(
-                0.0f, -1.75f, 0.0f);
-        }
+	public void SetInfoButtonToGameStartShipPositon()
+	{
+		if (this.body == null) { return; }
+		this.body.transform.localPosition = new Vector3(
+			0.0f, -0.825f, 0.0f);
+	}
 
-        private static void toggleInfoOverlay()
-        {
-            if (RoleAssignState.Instance.IsRoleSetUpEnd)
-            {
-                show(InfoOverlay.ShowType.AllGhostRole);
-            }
-            else
-            {
-                show(InfoOverlay.ShowType.VanilaOption);
-            }
-        }
-
-        private static void show(InfoOverlay.ShowType block)
-        {
-            if (buttonShowType >= block + 1)
-            {
-                ExtremeRolesPlugin.Info.HideInfoOverlay();
-                buttonShowType = 0;
-            }
-            else
-            {
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay(
-                    buttonShowType);
-                buttonShowType++;
-            }
-        }
-
-    }
+	public void SetInfoButtonToInGamePositon()
+	{
+		if (this.body == null) { return; }
+		this.body.SetActive(true);
+		this.body.transform.localPosition = new Vector3(
+			0.0f, -1.75f, 0.0f);
+	}
 }

@@ -3,22 +3,22 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.ButtonAutoActivator
 {
-    public sealed class GhostRoleButtonActivator : IButtonAutoActivator
-    {
-        public bool IsActive()
-        {
-            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+	public sealed class GhostRoleButtonActivator : IButtonAutoActivator
+	{
+		public bool IsActive()
+		{
+			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-            return
-                (
-                    localPlayer.IsKillTimerEnabled ||
-                    localPlayer.ForceKillTimerContinue ||
-                    FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
-                ) &&
-                localPlayer.Data != null &&
-                MeetingHud.Instance == null &&
-                ExileController.Instance == null &&
-                localPlayer.Data.IsDead;
-        }
-    }
+			return
+				(
+					localPlayer.IsKillTimerEnabled ||
+					localPlayer.ForceKillTimerContinue ||
+					FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
+				) &&
+				localPlayer.Data != null &&
+				MeetingHud.Instance == null &&
+				ExileController.Instance == null &&
+				localPlayer.Data.IsDead;
+		}
+	}
 }

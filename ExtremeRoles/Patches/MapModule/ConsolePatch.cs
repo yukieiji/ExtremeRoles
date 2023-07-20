@@ -3,6 +3,7 @@
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Patches.MapModule
 {
@@ -27,8 +28,8 @@ namespace ExtremeRoles.Patches.MapModule
             TaskTypes taskType = task.TaskType;
             var role = ExtremeRoleManager.GameRole[pc.PlayerId];
 
-            if (ExtremeRolesPlugin.Compat.IsModMap &&
-                ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+            if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
+				modMap!.IsCustomSabotageTask(taskType))
             {
                 return role.CanRepairSabotage();
             }

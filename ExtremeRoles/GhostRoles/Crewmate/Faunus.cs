@@ -15,6 +15,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 
@@ -90,9 +91,9 @@ public sealed class Faunus : GhostRoleBase
     {
         this.isOpen = false;
         Console console;
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            console = ExtremeRolesPlugin.Compat.ModMap.GetConsole(this.saboTask);
+            console = modMap!.GetConsole(this.saboTask);
         }
         else
         {
@@ -150,7 +151,7 @@ public sealed class Faunus : GhostRoleBase
     {
         this.saboActive = false;
 
-        foreach (PlayerTask task in 
+        foreach (PlayerTask task in
             CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
         {
             if (!task) { continue; }

@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>7.99.999.0</Version>
+    <Version>7.99.999.1</Version>
     <!--<VersionPrefix>7.1.1</VersionPrefix>-->
     <VersionSuffix>SpringJump</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
@@ -21,8 +21,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BepInEx.Il2Cpp.TlsAdapter" Version="1.0.1" />
-    <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.670" />
-    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.670" />
+    <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.671" />
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.671" />
     <PackageReference Include="HarmonyX" Version="2.10.1" />
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2023.7.11" PrivateAssets="all" />
     <PackageReference Include="BepInEx.AutoPlugin" Version="1.1.0" PrivateAssets="all" />

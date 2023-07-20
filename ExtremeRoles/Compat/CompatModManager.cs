@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
@@ -7,118 +8,178 @@ using BepInEx.Unity.IL2CPP;
 using Hazel;
 
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Compat.ModIntegrator;
 
-namespace ExtremeRoles.Compat
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory;
+
+namespace ExtremeRoles.Compat;
+
+#nullable enable
+
+internal enum CompatModType
 {
+	ExtremeSkins,
+	ExtremeVoiceEngine,
+	Submerged,
+}
 
-    internal enum CompatModType
-    {
-        ExtremeSkins,
-        ExtremeVoiceEngine,
-        Submerged,
-    }
+internal sealed class CompatModManager
+{
+	public IReadOnlyDictionary<CompatModType, ModIntegratorBase> LoadedMod => this.loadedMod;
+	public static IReadOnlyDictionary<CompatModType, CompatModInfo> ModInfo =>
+		new Dictionary<CompatModType, CompatModInfo>
+	{
+		{
+			CompatModType.Submerged,
+			new CompatModInfo(
+				CompatModType.Submerged.ToString(),
+				SubmergedIntegrator.Guid,
+				"https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest",
+				true,
+				typeof(SubmergedIntegrator)
+			)
+		},
+	};
 
-    internal sealed class CompatModManager
-    {
-        public bool IsModMap => this.map != null;
-        public IMapMod ModMap => this.map;
+	private Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
 
-        public readonly Dictionary<CompatModType, CompatModBase> LoadedMod = new Dictionary<CompatModType, CompatModBase>();
+	private IMapMod? map;
 
-        private IMapMod map;
+	private int startOptionId;
+	private int endOptionId;
 
-        public static readonly Dictionary<CompatModType, (string, string)> ModInfo = new Dictionary<CompatModType, (string, string)>
-        {
-            { CompatModType.Submerged, ("Submerged", "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest") },
-        };
+#pragma warning disable CS8618
+	public static CompatModManager Instance { get; private set; }
+#pragma warning restore CS8618
 
-        private static HashSet<(string, CompatModType, Type)> compatMod = new HashSet<(string, CompatModType, Type)>()
-        {
-            (SubmergedMap.Guid, CompatModType.Submerged, typeof(SubmergedMap)),
-        };
+	private const int optionOffset = 100;
 
-        internal CompatModManager()
-        {
-            RemoveMap();
+	public static void Initialize()
+	{
+		Instance = new CompatModManager();
+	}
 
-            ExtremeRolesPlugin.Logger.LogInfo(
-                $"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
+	private CompatModManager()
+	{
+		RemoveMap();
+		var logger = ExtremeRolesPlugin.Logger;
 
-            foreach (var (guid, modType, mod) in compatMod)
-            {
-                PluginInfo plugin;
 
-                if (IL2CPPChainloader.Instance.Plugins.TryGetValue(guid, out plugin))
-                {
-                    ExtremeRolesPlugin.Logger.LogInfo(
-                        $"---- CompatMod:{guid} integrater Start!! ----");
-                    this.LoadedMod.Add(
-                        modType,
-                        (CompatModBase)Activator.CreateInstance(
-                            mod, new object[] { plugin }));
+		logger.LogInfo(
+			$"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
 
-                    ExtremeRolesPlugin.Logger.LogInfo(
-                        $"---- CompatMod:{guid} integrated!! ----");
-                }
-            }
-            ExtremeRolesPlugin.Logger.LogInfo(
-                $"---------- CompatModManager Initialize End!! ----------");
-        }
+		foreach (var (modType, modInfo) in ModInfo)
+		{
+			PluginInfo? plugin;
 
-        internal void SetUpMap(ShipStatus shipStatus)
-        {
-            this.map = null;
+			string guid = modInfo.Guid;
 
-            foreach (var mod in LoadedMod.Values)
-            {
-                IMapMod mapMod = mod as IMapMod;
-                if (mapMod != null && 
-                    mapMod.MapType == shipStatus.Type)
-                {
-                    ExtremeRolesPlugin.Logger.LogInfo(
-                        $"Awake modmap:{mapMod}");
-                    mapMod.Awake(shipStatus);
-                    this.map = mapMod;
-                    break;
-                }
-            }
-        }
-        internal void RemoveMap()
-        {
-            if (this.map == null) { return; }
+			if (!IL2CPPChainloader.Instance.Plugins.TryGetValue(guid, out plugin))
+			{ continue; }
 
-            this.map.Destroy();
-            this.map = null;
-        }
 
-        internal void IntegrateModCall(ref MessageReader reader)
-        {
-            byte callType = reader.ReadByte();
+			logger.LogInfo(
+				$"---- CompatMod:{guid} integrater Start!! ----");
 
-            switch (callType)
-            {
-                case IMapMod.RpcCallType:
-                    byte mapRpcType = reader.ReadByte();
-                    switch ((MapRpcCall)mapRpcType)
-                    {
-                        case MapRpcCall.RepairAllSabo:
-                            this.ModMap.RepairCustomSabotage();
-                            break;
-                        case MapRpcCall.RepairCustomSaboType:
-                            int repairSaboType = reader.ReadInt32();
-                            this.ModMap.RepairCustomSabotage(
-                                (TaskTypes)repairSaboType);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    break;
-            }
+			object? instance = Activator.CreateInstance(
+							modInfo.ModIntegratorType, new object[] { plugin });
+			if (instance == null) { continue; }
 
-        }
+			this.loadedMod.Add(modType, (ModIntegratorBase)instance);
 
-    }
+			logger.LogInfo(
+				$"---- CompatMod:{guid} integrated!! ----");
+
+		}
+		logger.LogInfo(
+			$"---------- CompatModManager Initialize End!! ----------");
+	}
+
+	internal void CreateIntegrateOption(int startId)
+	{
+		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
+		{
+			var optionFactory = new OptionFactory(
+				startId + index * optionOffset, mod.Name);
+			mod.CreateIntegrateOption(optionFactory);
+		}
+
+		this.startOptionId = startId;
+		this.endOptionId = startOptionId * this.loadedMod.Count;
+	}
+
+	internal bool IsIntegrateOption(int optionId)
+		=> this.startOptionId <= optionId && optionId <= this.endOptionId;
+
+	internal bool IsModMap<T>()
+		where T : ModIntegratorBase
+		=> this.map is T;
+
+	// ここでtrueが返ってきてる時点でIMapModはNullではない
+	internal bool TryGetModMap(out IMapMod? mapMod)
+	{
+		mapMod = this.map;
+		return mapMod != null;
+	}
+
+	// ここでtrueが返ってきてる時点でT?はNullではない
+	internal bool TryGetModMap<T>(out T? mapMod)
+		where T : ModIntegratorBase
+	{
+		mapMod = this.map as T;
+		return mapMod != null;
+	}
+
+	internal void SetUpMap(ShipStatus shipStatus)
+	{
+		this.map = null;
+
+		foreach (var mod in LoadedMod.Values)
+		{
+			if (mod is IMapMod mapMod &&
+				mapMod.MapType == shipStatus.Type)
+			{
+				ExtremeRolesPlugin.Logger.LogInfo(
+					$"Awake modmap:{mapMod}");
+				mapMod.Awake(shipStatus);
+				this.map = mapMod;
+				break;
+			}
+		}
+	}
+
+	internal void RemoveMap()
+	{
+		if (this.map == null) { return; }
+
+		this.map.Destroy();
+		this.map = null;
+	}
+
+	internal void IntegrateModCall(ref MessageReader reader)
+	{
+		byte callType = reader.ReadByte();
+
+		switch (callType)
+		{
+			case IMapMod.RpcCallType:
+				byte mapRpcType = reader.ReadByte();
+				switch ((MapRpcCall)mapRpcType)
+				{
+					case MapRpcCall.RepairAllSabo:
+						this.map?.RepairCustomSabotage();
+						break;
+					case MapRpcCall.RepairCustomSaboType:
+						int repairSaboType = reader.ReadInt32();
+						this.map?.RepairCustomSabotage(
+							(TaskTypes)repairSaboType);
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+		}
+	}
 }

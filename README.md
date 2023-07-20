@@ -28,7 +28,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
 * 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
-### 追加役職一覧(Extreme Roles v8.0.0.1時点、今後も追加予定)
+### 追加役職一覧(Extreme Roles v8.2.0.0時点、今後も追加予定)
 #### ホスト役職
 - シオン
 #### 通常役職
@@ -105,8 +105,6 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
   - この不具合はExtremeVoiceEngineとExtremeRolesで別々のコマンド処理を実装した関係で発生している表示上の問題であるため動作に一切の影響はありません
 
 ## リリーススケジュール
-- Extreme Roles v8.1.0.0 RebootSubmargedアップデート
-  - サブマージド復活に伴いサブマージドが再度遊べるように調整します
 
 ## 現在実装検討中の役職及び機能
 - 死亡時役職が持つ固有の情報を表示出来るようにする
@@ -147,7 +145,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.7.11s/v2023.7.11e  | v8.1.0.0 |
+|  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.0.0 |
 |  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.4 |
 |  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
 |  v2023.2.28s/v2023.2.28e  | v6.0.0.0 ～ v6.0.0.6 |
@@ -215,4 +213,4 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 | ---- | ---- |
 |  英語/English  |   完全翻訳済み/Fully Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
-|  简体中文/SChinese  |   完全翻訳済み/Fully Translated  |
+|  简体中文/SChinese  |   部分的に翻訳済み/Mostly Translated  |

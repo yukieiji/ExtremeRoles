@@ -1,4 +1,5 @@
 ﻿global using ExtremeRoles.Module.CustomOption;
+global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 
 using BepInEx;
 using BepInEx.Configuration;
@@ -8,7 +9,6 @@ using HarmonyLib;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.InfoOverlay;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 
@@ -20,7 +20,7 @@ namespace ExtremeRoles;
     "gg.reactor.api",
     BepInDependency.DependencyFlags.SoftDependency)] // Reactorとのパッチの兼ね合いで入れておく
 [BepInDependency(
-    ExtremeRoles.Compat.Mods.SubmergedMap.Guid,
+    Compat.ModIntegrator.SubmergedIntegrator.Guid,
     BepInDependency.DependencyFlags.SoftDependency)]
 [BepInProcess("Among Us.exe")]
 public partial class ExtremeRolesPlugin : BasePlugin
@@ -30,10 +30,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public static ExtremeRolesPlugin Instance;
     public static ExtremeShipStatus ShipState = new ExtremeShipStatus();
 
-    public static InfoOverlay Info = new InfoOverlay();
-
     internal static BepInEx.Logging.ManualLogSource Logger;
-    internal static CompatModManager Compat;
 
     public static ConfigEntry<bool> DebugMode { get; private set; }
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
@@ -52,11 +49,11 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
         Instance = this;
 
-        OptionCreator.Create();
+		Harmony.PatchAll();
 
-        Harmony.PatchAll();
+		CompatModManager.Initialize();
 
-        Compat = new CompatModManager();
+		OptionCreator.Create();
 
         AddComponent<ExtremeRolePluginBehavior>();
 

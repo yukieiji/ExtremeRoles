@@ -11,7 +11,7 @@ public static class MeetingHudVotingCompletedPatch
 {
 	public static void Postfix()
 	{
-		ExtremeRolesPlugin.Info.HideInfoOverlay();
+		InfoOverlay.Instance.Hide();
 
 		foreach (DeadBody body in Object.FindObjectsOfType<DeadBody>())
 		{

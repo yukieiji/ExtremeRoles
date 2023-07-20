@@ -4,58 +4,58 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module.RoleAssign
 {
-    public sealed class NotAssignPlayerData
-    {
-        public int CrewmateSingleAssignPlayerNum { get; private set; }
-        public int ImpostorSingleAssignPlayerNum { get; private set; }
-        
-        public int CrewmateMultiAssignPlayerNum { get; private set; }
-        public int ImpostorMultiAssignPlayerNum { get; private set; }
+	public sealed class NotAssignPlayerData
+	{
+		public int CrewmateSingleAssignPlayerNum { get; private set; }
+		public int ImpostorSingleAssignPlayerNum { get; private set; }
 
-        public NotAssignPlayerData()
-        {
-            int crewSingleAssignNum = 0;
-            int impSingleAssignNum = 0;
+		public int CrewmateMultiAssignPlayerNum { get; private set; }
+		public int ImpostorMultiAssignPlayerNum { get; private set; }
 
-            int crewMultiAssignNum = 0;
-            int impMultiAssignNum = 0;
+		public NotAssignPlayerData()
+		{
+			int crewSingleAssignNum = 0;
+			int impSingleAssignNum = 0;
 
-            foreach (PlayerControl player in
-                PlayerControl.AllPlayerControls.GetFastEnumerator())
-            {
-                switch (player.Data.Role.Role)
-                {
-                    case RoleTypes.Crewmate:
-                        ++crewSingleAssignNum;
-                        ++crewMultiAssignNum;
-                        break;
-                    case RoleTypes.Scientist:
-                    case RoleTypes.Engineer:
-                        ++crewMultiAssignNum;
-                        break;
-                    case RoleTypes.Impostor:
-                        ++impMultiAssignNum;
-                        ++impSingleAssignNum;
-                        break;
-                    case RoleTypes.Shapeshifter:
-                        ++impMultiAssignNum;
-                        ++impSingleAssignNum;
-                        break;
-                    default:
-                        break;
-                }
-            }
+			int crewMultiAssignNum = 0;
+			int impMultiAssignNum = 0;
 
-            CrewmateSingleAssignPlayerNum = crewSingleAssignNum;
-            ImpostorSingleAssignPlayerNum = impSingleAssignNum;
+			foreach (PlayerControl player in
+				PlayerControl.AllPlayerControls.GetFastEnumerator())
+			{
+				switch (player.Data.Role.Role)
+				{
+					case RoleTypes.Crewmate:
+						++crewSingleAssignNum;
+						++crewMultiAssignNum;
+						break;
+					case RoleTypes.Scientist:
+					case RoleTypes.Engineer:
+						++crewMultiAssignNum;
+						break;
+					case RoleTypes.Impostor:
+						++impMultiAssignNum;
+						++impSingleAssignNum;
+						break;
+					case RoleTypes.Shapeshifter:
+						++impMultiAssignNum;
+						++impSingleAssignNum;
+						break;
+					default:
+						break;
+				}
+			}
 
-            CrewmateMultiAssignPlayerNum = crewMultiAssignNum;
-            ImpostorMultiAssignPlayerNum = impMultiAssignNum;
-        }
-        public void ReduceImpostorAssignNum(int reduceNum = 1)
-        {
-            ImpostorMultiAssignPlayerNum  -= reduceNum;
-            ImpostorSingleAssignPlayerNum -= reduceNum;
-        }
-    }
+			CrewmateSingleAssignPlayerNum = crewSingleAssignNum;
+			ImpostorSingleAssignPlayerNum = impSingleAssignNum;
+
+			CrewmateMultiAssignPlayerNum = crewMultiAssignNum;
+			ImpostorMultiAssignPlayerNum = impMultiAssignNum;
+		}
+		public void ReduceImpostorAssignNum(int reduceNum = 1)
+		{
+			ImpostorMultiAssignPlayerNum -= reduceNum;
+			ImpostorSingleAssignPlayerNum -= reduceNum;
+		}
+	}
 }

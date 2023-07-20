@@ -1,10 +1,13 @@
 ﻿using System;
 
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
@@ -13,7 +16,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
 using ExtremeRoles.Performance;
-using TMPro;
 
 #nullable enable
 
@@ -22,232 +24,231 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 [Il2CppRegister]
 public sealed class RoleAssignFilterView : MonoBehaviour
 {
-    [HideFromIl2Cpp]
-    public RoleAssignFilterModel Model
-    {
-        private get => this.model;
-        set
-        {
-            this.initialize(value);
-            this.model = value;
-        }
-    }
-    [HideFromIl2Cpp]
-    public GameObject HideObject { private get; set; }
+	[HideFromIl2Cpp]
+	public RoleAssignFilterModel Model
+	{
+		private get => this.model;
+		set
+		{
+			this.initialize(value);
+			this.model = value;
+		}
+	}
+	[HideFromIl2Cpp]
+	public GameObject HideObject { private get; set; }
 
 #pragma warning disable CS8618
-    private ButtonWrapper addFilterButton;
-    private RoleFilterSetProperty filterSetPrefab;
+	private ButtonWrapper addFilterButton;
+	private RoleFilterSetProperty filterSetPrefab;
 
-    private VerticalLayoutGroup layout;
+	private VerticalLayoutGroup layout;
 
-    private AddRoleMenuView addRoleMenu;
+	private AddRoleMenuView addRoleMenu;
 
-    private RoleAssignFilterModel model;
+	private RoleAssignFilterModel model;
 
-    public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
+	public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
-    public void Awake()
-    {
-        Transform trans = base.transform;
+	public void Awake()
+	{
+		Transform trans = base.transform;
 
-        this.addFilterButton = trans.Find(
-            "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
-        this.addFilterButton.Awake();
-        this.addFilterButton.SetButtonText(
-            Translation.GetString("RoleAssignFilterAddFilter"));
+		this.addFilterButton = trans.Find(
+			"Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
+		this.addFilterButton.Awake();
+		this.addFilterButton.SetButtonText(
+			Translation.GetString("RoleAssignFilterAddFilter"));
 
-        this.layout = trans.Find(
-            "Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
-        this.filterSetPrefab = trans.Find(
-            "Body/FillterSet").gameObject.GetComponent<RoleFilterSetProperty>();
-        
-        this.addRoleMenu = trans.Find(
-            "Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
-        this.addRoleMenu.Awake();
-        this.addRoleMenu.Title.text = Translation.GetString("RoleAssignFilterAddRoleMenuTitle");
+		this.layout = trans.Find(
+			"Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
+		this.filterSetPrefab = trans.Find(
+			"Body/FillterSet").gameObject.GetComponent<RoleFilterSetProperty>();
 
-        var title = trans.Find("Body/Title").gameObject.GetComponent<TextMeshProUGUI>();
-        title.text = Translation.GetString("RoleAssignFilter");
+		this.addRoleMenu = trans.Find(
+			"Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
+		this.addRoleMenu.Awake();
+		this.addRoleMenu.Title.text = Translation.GetString("RoleAssignFilterAddRoleMenuTitle");
 
-        var closeButton = trans.Find(
-            "Body/CloseButton").gameObject.GetComponent<Button>();
-        closeButton.onClick.AddListener(
-            (UnityAction)(() => base.gameObject.SetActive(false)));
+		var title = trans.Find("Body/Title").gameObject.GetComponent<TextMeshProUGUI>();
+		title.text = Translation.GetString("RoleAssignFilter");
 
-        // Create Actions
-        this.addFilterButton.ResetButtonAction();
-        this.addFilterButton.SetButtonClickAction((UnityAction)addNewFilterSet);
-    }
+		var closeButton = trans.Find(
+			"Body/CloseButton").gameObject.GetComponent<Button>();
+		closeButton.onClick.AddListener(() => base.gameObject.SetActive(false));
 
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            base.gameObject.SetActive(false);
-        }
-    }
+		// Create Actions
+		this.addFilterButton.ResetButtonAction();
+		this.addFilterButton.SetButtonClickAction((UnityAction)addNewFilterSet);
+	}
 
-    public void OnEnable()
-    {
-        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
-        if (this.HideObject != null)
-        {
-            this.HideObject.SetActive(false);
-        }
-        this.addRoleMenu.gameObject.SetActive(false);
+	public void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			base.gameObject.SetActive(false);
+		}
+	}
 
-        if (this.Model == null) { return; }
+	public void OnEnable()
+	{
+		FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
+		if (this.HideObject != null)
+		{
+			this.HideObject.SetActive(false);
+		}
+		this.addRoleMenu.gameObject.SetActive(false);
 
-        this.Model.Id.Clear();
-        this.Model.NormalRole.Clear();
-        this.Model.CombRole.Clear();
-        this.Model.GhostRole.Clear();
+		if (this.Model == null) { return; }
 
-        var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
-        int id = 0;
-        foreach (var roleId in roleSelector.UseNormalRoleId)
-        {
-            this.Model.Id.Add(id);
-            this.Model.NormalRole.Add(id, roleId);
-            id++;
-        }
-        foreach (var roleId in roleSelector.UseCombRoleType)
-        {
-            this.Model.Id.Add(id);
-            this.Model.CombRole.Add(id, roleId);
-            id++;
-        }
-        foreach (var roleId in roleSelector.UseGhostRoleId)
-        {
-            this.Model.Id.Add(id);
-            this.Model.GhostRole.Add(id, roleId);
-            id++;
-        }
-    }
+		this.Model.Id.Clear();
+		this.Model.NormalRole.Clear();
+		this.Model.CombRole.Clear();
+		this.Model.GhostRole.Clear();
 
-    public void OnDisable()
-    {
-        if (this.HideObject != null)
-        {
-            this.HideObject.SetActive(true);
-        }
-        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(true);
-    }
+		var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
+		int id = 0;
+		foreach (var roleId in roleSelector.UseNormalRoleId)
+		{
+			this.Model.Id.Add(id);
+			this.Model.NormalRole.Add(id, roleId);
+			id++;
+		}
+		foreach (var roleId in roleSelector.UseCombRoleType)
+		{
+			this.Model.Id.Add(id);
+			this.Model.CombRole.Add(id, roleId);
+			id++;
+		}
+		foreach (var roleId in roleSelector.UseGhostRoleId)
+		{
+			this.Model.Id.Add(id);
+			this.Model.GhostRole.Add(id, roleId);
+			id++;
+		}
+	}
 
-    [HideFromIl2Cpp]
-    private void addNewFilterSet()
-    {
-        if (this.Model == null) { return; }
+	public void OnDisable()
+	{
+		if (this.HideObject != null)
+		{
+			this.HideObject.SetActive(true);
+		}
+		FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(true);
+	}
 
-        Guid id = Guid.NewGuid();
+	[HideFromIl2Cpp]
+	private void addNewFilterSet()
+	{
+		if (this.Model == null) { return; }
 
-        // Update model
-        RoleAssignFilterModelUpdater.AddFilter(this.Model, id);
-        this.createFilterSet(id);
-    }
+		Guid id = Guid.NewGuid();
 
-    [HideFromIl2Cpp]
-    private RoleFilterSetProperty createFilterSet(Guid id)
-    {
-        var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
-        filterSet.Awake();
-        filterSet.gameObject.SetActive(true);
+		// Update model
+		RoleAssignFilterModelUpdater.AddFilter(this.Model, id);
+		this.createFilterSet(id);
+	}
 
-        filterSet.AssignText.text = Translation.GetString("RoleAssignFilterAssignNum");
-        filterSet.DeleteThisButton.SetButtonText(
-            Translation.GetString("RoleAssignFilterDeleteThis"));
-        filterSet.DeleteAllRoleButton.SetButtonText(
-            Translation.GetString("RoleAssignFilterDeleteAllRole"));
-        filterSet.AddRoleButton.SetButtonText(
-            Translation.GetString("RoleAssignFilterAddRole"));
+	[HideFromIl2Cpp]
+	private RoleFilterSetProperty createFilterSet(Guid id)
+	{
+		var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
+		filterSet.Awake();
+		filterSet.gameObject.SetActive(true);
 
-        filterSet.DeleteThisButton.SetButtonClickAction(
-            (UnityAction)(() =>
-            {
-                RoleAssignFilterModelUpdater.RemoveFilter(this.Model, id);
-                Destroy(filterSet.gameObject);
-            }));
-        filterSet.DeleteAllRoleButton.SetButtonClickAction(
-            (UnityAction)(() =>
-            {
-                RoleAssignFilterModelUpdater.ResetFilter(this.Model, id);
-                foreach (var child in filterSet.Layout.rectChildren)
-                {
-                    Destroy(child.gameObject);
-                }
-            }));
-        filterSet.AddRoleButton.SetButtonClickAction(
-            (UnityAction)(() =>
-            {
-                this.addRoleMenu.gameObject.SetActive(true);
-                this.addRoleMenu.UpdateView(
-                    this.Model, id, filterSet.Layout.transform);
-            }));
-        filterSet.IncreseButton.onClick.AddListener(
-            (UnityAction)(() =>
-            {
-                RoleAssignFilterModelUpdater.IncreseFilterAssignNum(this.Model, id);
-                filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
-            }));
-        filterSet.DecreseButton.onClick.AddListener(
-            (UnityAction)(() =>
-            {
-                RoleAssignFilterModelUpdater.DecreseFilterAssignNum(this.Model, id);
-                filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
-            }));
-        return filterSet;
-    }
+		filterSet.AssignText.text = Translation.GetString("RoleAssignFilterAssignNum");
+		filterSet.DeleteThisButton.SetButtonText(
+			Translation.GetString("RoleAssignFilterDeleteThis"));
+		filterSet.DeleteAllRoleButton.SetButtonText(
+			Translation.GetString("RoleAssignFilterDeleteAllRole"));
+		filterSet.AddRoleButton.SetButtonText(
+			Translation.GetString("RoleAssignFilterAddRole"));
 
-    [HideFromIl2Cpp]
-    private void initialize(RoleAssignFilterModel model)
-    {
-        if (this.layout != null)
-        {
-            this.layout.DestroyChildren();
-        }
+		filterSet.DeleteThisButton.SetButtonClickAction(
+			() =>
+			{
+				RoleAssignFilterModelUpdater.RemoveFilter(this.Model, id);
+				Destroy(filterSet.gameObject);
+			});
+		filterSet.DeleteAllRoleButton.SetButtonClickAction(
+			() =>
+			{
+				RoleAssignFilterModelUpdater.ResetFilter(this.Model, id);
+				foreach (var child in filterSet.Layout.rectChildren)
+				{
+					Destroy(child.gameObject);
+				}
+			});
+		filterSet.AddRoleButton.SetButtonClickAction(
+			() =>
+			{
+				this.addRoleMenu.gameObject.SetActive(true);
+				this.addRoleMenu.UpdateView(
+					this.Model, id, filterSet.Layout.transform);
+			});
+		filterSet.IncreseButton.onClick.AddListener(
+			() =>
+			{
+				RoleAssignFilterModelUpdater.IncreseFilterAssignNum(this.Model, id);
+				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
+			});
+		filterSet.DecreseButton.onClick.AddListener(
+			() =>
+			{
+				RoleAssignFilterModelUpdater.DecreseFilterAssignNum(this.Model, id);
+				filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
+			});
+		return filterSet;
+	}
 
-        foreach (var (filterId, filter) in model.FilterSet)
-        {
-            var filterProp = this.createFilterSet(filterId);
-            var parent = filterProp.Layout.transform;
-            filterProp.AssignNumText.text = $"{filter.AssignNum}";
+	[HideFromIl2Cpp]
+	private void initialize(RoleAssignFilterModel model)
+	{
+		if (this.layout != null)
+		{
+			this.layout.DestroyChildren();
+		}
 
-            foreach (var (id, roleId) in filter.FilterNormalId)
-            {
-                string roleName = ExtremeRoleManager.NormalRole[
-                    (int)roleId].GetColoredRoleName(true);
-                createFilterItem(parent, roleName, filterId, id);
-            }
-            foreach (var (id, roleId) in filter.FilterCombinationId)
-            {
-                string combRoleName = ExtremeRoleManager.CombRole[
-                    (byte)roleId].GetOptionName();
-                createFilterItem(parent, combRoleName, filterId, id);
-            }
-            foreach (var (id, roleId) in filter.FilterGhostRole)
-            {
-                string ghostRoleName = ExtremeGhostRoleManager.AllGhostRole[
-                    roleId].GetColoredRoleName();
-                createFilterItem(parent, ghostRoleName, filterId, id);
-            }
-        }
-    }
+		foreach (var (filterId, filter) in model.FilterSet)
+		{
+			var filterProp = this.createFilterSet(filterId);
+			var parent = filterProp.Layout.transform;
+			filterProp.AssignNumText.text = $"{filter.AssignNum}";
 
-    [HideFromIl2Cpp]
-    private void createFilterItem(
-        Transform parent, string name, Guid filterId, int id)
-    {
-        FilterItemProperty item = Instantiate(
-            this.addRoleMenu.FilterItemPrefab, parent);
-        item.Awake();
-        item.gameObject.SetActive(true);
-        item.Text.text = name;
-        item.RemoveButton.onClick.AddListener(
-            (UnityAction)(() =>
-            {
-                RoleAssignFilterModelUpdater.RemoveFilterRole(this.Model, filterId, id);
-                Destroy(item.gameObject);
-            }));
-    }
+			foreach (var (id, roleId) in filter.FilterNormalId)
+			{
+				string roleName = ExtremeRoleManager.NormalRole[
+					(int)roleId].GetColoredRoleName(true);
+				createFilterItem(parent, roleName, filterId, id);
+			}
+			foreach (var (id, roleId) in filter.FilterCombinationId)
+			{
+				string combRoleName = ExtremeRoleManager.CombRole[
+					(byte)roleId].GetOptionName();
+				createFilterItem(parent, combRoleName, filterId, id);
+			}
+			foreach (var (id, roleId) in filter.FilterGhostRole)
+			{
+				string ghostRoleName = ExtremeGhostRoleManager.AllGhostRole[
+					roleId].GetColoredRoleName();
+				createFilterItem(parent, ghostRoleName, filterId, id);
+			}
+		}
+	}
+
+	[HideFromIl2Cpp]
+	private void createFilterItem(
+		Transform parent, string name, Guid filterId, int id)
+	{
+		FilterItemProperty item = Instantiate(
+			this.addRoleMenu.FilterItemPrefab, parent);
+		item.Awake();
+		item.gameObject.SetActive(true);
+		item.Text.text = name;
+		item.RemoveButton.onClick.AddListener(
+			() =>
+			{
+				RoleAssignFilterModelUpdater.RemoveFilterRole(this.Model, filterId, id);
+				Destroy(item.gameObject);
+			});
+	}
 }

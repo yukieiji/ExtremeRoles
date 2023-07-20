@@ -6,9 +6,11 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 
+using Il2CppInterop.Runtime.Attributes;
+
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
-using Il2CppInterop.Runtime.Attributes;
 
 #nullable enable
 
@@ -64,20 +66,20 @@ public sealed class GuesserUi : MonoBehaviour
 
         this.confirmMenu.ResetButtonAction();
         this.confirmMenu.SetCancelButtonClickAction(
-            (UnityAction)(() =>
+            () =>
             {
                 this.isActive = true;
                 this.confirmMenu.gameObject.SetActive(false);
-            }));
+            });
 
         this.closeButton.onClick.RemoveAllListeners();
         this.closeButton.onClick.AddListener(
-            (UnityAction)(() =>
+            () =>
             {
                 this.isActive = false;
                 this.confirmMenu.gameObject.SetActive(false);
                 base.gameObject.SetActive(false);
-            }));
+            });
         this.confirmMenu.gameObject.SetActive(false);
     }
 
@@ -147,7 +149,7 @@ public sealed class GuesserUi : MonoBehaviour
             GuessBehaviour guess = button.gameObject.AddComponent<GuessBehaviour>();
             guess.Create(roleInfo, gussAction);
             button.SetButtonClickAction(
-                (UnityAction)(() =>
+                () =>
                 {
                     this.isActive = false;
                     this.confirmMenu.gameObject.SetActive(true);
@@ -160,15 +162,15 @@ public sealed class GuesserUi : MonoBehaviour
                     // Okボタンの処理は毎回変える
                     this.confirmMenu.ResetOkButtonAction();
                     this.confirmMenu.SetOkButtonClickAction(
-                        (UnityAction)(() =>
+                        () =>
                         {
                             this.isActive = false;
                             this.confirmMenu.gameObject.SetActive(false);
                             base.gameObject.SetActive(false);
-                        }));
+                        });
                     this.confirmMenu.SetOkButtonClickAction(
                         guess.GetGuessAction());
-                }));
+                });
             button.SetButtonText(guess.GetRoleName());
             this.infos.Add(guess);
             this.buttons.Add(button);

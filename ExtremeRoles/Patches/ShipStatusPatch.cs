@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
 
@@ -12,7 +13,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(ShipStatus __instance)
         {
             CachedShipStatus.SetUp(__instance);
-            ExtremeRolesPlugin.Compat.SetUpMap(__instance);   
+            CompatModManager.Instance.SetUpMap(__instance);
         }
     }
 
@@ -37,7 +38,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix()
         {
             CachedShipStatus.Destroy();
-            ExtremeRolesPlugin.Compat.RemoveMap();
+			CompatModManager.Instance.RemoveMap();
         }
     }
 }

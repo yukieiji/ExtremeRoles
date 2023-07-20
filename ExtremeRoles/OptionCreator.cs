@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 
@@ -8,7 +9,9 @@ namespace ExtremeRoles;
 
 public static class OptionCreator
 {
-    private const int singleRoleOptionStartOffset = 256;
+	public const int IntegrateOptionStartOffset = 15000;
+
+	private const int singleRoleOptionStartOffset = 256;
     private const int combRoleOptionStartOffset = 5000;
     private const int ghostRoleOptionStartOffset = 10000;
     private const int maxPresetNum = 20;
@@ -19,7 +22,7 @@ public static class OptionCreator
 
     public static readonly string[] Range = new string[] { "short", "middle", "long" };
 
-    private static Color defaultOptionColor = new Color(204f / 255f, 204f / 255f, 0, 1f);
+    private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
     public enum CommonOptionKey : int
     {
@@ -37,31 +40,29 @@ public static class OptionCreator
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
-        new IntCustomOption(
-            (int)CommonOptionKey.PresetSelection, Design.ColoedString(
-                defaultOptionColor,
-                CommonOptionKey.PresetSelection.ToString()),
-            1, 1, maxPresetNum, 1, null, true,
-            format: OptionUnit.Preset);
+		var commonOptionFactory = new ColorSyncFactory(defaultOptionColor);
 
-        var strongGen = new BoolCustomOption(
-            (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
-                defaultOptionColor,
-                CommonOptionKey.UseStrongRandomGen.ToString()), true);
-        new SelectionCustomOption(
-            (int)CommonOptionKey.UsePrngAlgorithm, Design.ColoedString(
-                defaultOptionColor,
-                CommonOptionKey.UsePrngAlgorithm.ToString()),
-            new string[]
-            {
-                "Pcg32XshRr", "Pcg64RxsMXs",
-                "Xorshift64", "Xorshift128",
-                "Xorshiro256StarStar",
-                "Xorshiro512StarStar",
-                "RomuMono", "RomuTrio", "RomuQuad",
-                "Seiran128", "Shioi128", "JFT32",
-            },
-            strongGen, invert: true);
+		commonOptionFactory.CreateIntOption(
+			CommonOptionKey.PresetSelection,
+			1, 1, maxPresetNum, 1,
+			isHeader: true,
+			format: OptionUnit.Preset);
+
+		var strongGen = commonOptionFactory.CreateBoolOption(
+			CommonOptionKey.UseStrongRandomGen,
+			true);
+		commonOptionFactory.CreateSelectionOption(
+			CommonOptionKey.UsePrngAlgorithm,
+			new string[]
+			{
+				"Pcg32XshRr", "Pcg64RxsMXs",
+				"Xorshift64", "Xorshift128",
+				"Xorshiro256StarStar",
+				"Xorshiro512StarStar",
+				"RomuMono", "RomuTrio", "RomuQuad",
+				"Seiran128", "Shioi128", "JFT32",
+			},
+			strongGen, invert: true);
 
         IRoleSelector.CreateRoleGlobalOption();
         IShipGlobalOption.Create();
@@ -74,5 +75,8 @@ public static class OptionCreator
 
         GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
             ghostRoleOptionStartOffset);
+
+
+		CompatModManager.Instance.CreateIntegrateOption(IntegrateOptionStartOffset);
     }
 }

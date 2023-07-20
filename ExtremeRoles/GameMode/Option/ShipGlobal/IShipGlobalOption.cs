@@ -3,6 +3,8 @@ using System.Text;
 
 using ExtremeRoles.GameMode.Option.MapModule;
 
+using static ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public enum GlobalOption : int
@@ -62,7 +64,7 @@ public interface IShipGlobalOption
     public bool IsEnableImpostorVent { get; }
 
     public bool IsRandomMap { get; }
-    
+
     public int MaxMeetingCount { get; }
 
     public bool CanUseHorseMode { get; }
@@ -108,153 +110,68 @@ public interface IShipGlobalOption
 
     public static void Create()
     {
-        new IntCustomOption(
-            (int)GlobalOption.NumMeating,
-            GlobalOption.NumMeating.ToString(),
-            10, 0, 100, 1, null);
-        new BoolCustomOption(
-          (int)GlobalOption.ChangeMeetingVoteAreaSort,
-          GlobalOption.ChangeMeetingVoteAreaSort.ToString(),
-          false);
-        new BoolCustomOption(
-           (int)GlobalOption.FixedMeetingPlayerLevel,
-           GlobalOption.FixedMeetingPlayerLevel.ToString(),
-           false);
-        new BoolCustomOption(
-            (int)GlobalOption.DisableSkipInEmergencyMeeting,
-            GlobalOption.DisableSkipInEmergencyMeeting.ToString(),
-            false);
-        new BoolCustomOption(
-            (int)GlobalOption.DisableSelfVote,
-            GlobalOption.DisableSelfVote.ToString(),
-            false);
+		CreateIntOption(GlobalOption.NumMeating, 10, 0, 100, 1);
+		CreateBoolOption(GlobalOption.ChangeMeetingVoteAreaSort, false);
+		CreateBoolOption(GlobalOption.FixedMeetingPlayerLevel, false);
+		CreateBoolOption(GlobalOption.DisableSkipInEmergencyMeeting, false);
+		CreateBoolOption(GlobalOption.DisableSelfVote, false);
 
-        var confirmOpt = new SelectionCustomOption(
-            (int)GlobalOption.ConfirmExilMode,
-            GlobalOption.ConfirmExilMode.ToString(),
-            typeof(ConfirmExilMode));
+        var confirmOpt = CreateSelectionOption<GlobalOption, ConfirmExilMode>(
+			GlobalOption.ConfirmExilMode);
         confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
-        var confirmRoleOpt = new BoolCustomOption(
-            (int)GlobalOption.IsConfirmRole,
-            GlobalOption.IsConfirmRole.ToString(),
-            false);
+		var confirmRoleOpt = CreateBoolOption(GlobalOption.IsConfirmRole, false);
         confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 
-        var ventOption = new BoolCustomOption(
-            (int)GlobalOption.DisableVent,
-            GlobalOption.DisableVent.ToString(),
-            false);
-        new BoolCustomOption(
-            (int)GlobalOption.CanKillVentInPlayer,
-            GlobalOption.CanKillVentInPlayer.ToString(),
-            false, ventOption, invert: true);
-        new BoolCustomOption(
-            (int)GlobalOption.EngineerUseImpostorVent,
-            GlobalOption.EngineerUseImpostorVent.ToString(),
-            false, ventOption, invert: true);
+        var ventOption = CreateBoolOption(GlobalOption.DisableVent, false);
+		CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
+		CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
 
-        new BoolCustomOption(
-            (int)GlobalOption.ParallelMedBayScans,
-            GlobalOption.ParallelMedBayScans.ToString(), false);
+		CreateBoolOption(GlobalOption.ParallelMedBayScans, false);
 
-        new BoolCustomOption(
-            (int)GlobalOption.IsAutoSelectRandomSpawn,
-            GlobalOption.IsAutoSelectRandomSpawn.ToString(), false);
+		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false);
 
-        var adminOpt = new BoolCustomOption(
-            (int)GlobalOption.IsRemoveAdmin,
-            GlobalOption.IsRemoveAdmin.ToString(),
-            false);
-        new SelectionCustomOption(
-            (int)GlobalOption.AirShipEnableAdmin,
-            GlobalOption.AirShipEnableAdmin.ToString(),
-            typeof(AirShipAdminMode),
-            adminOpt, invert: true);
-        var adminLimitOpt = new BoolCustomOption(
-            (int)GlobalOption.EnableAdminLimit,
-            GlobalOption.EnableAdminLimit.ToString(),
-            false, adminOpt,
-            invert: true);
-        new FloatCustomOption(
-            (int)GlobalOption.AdminLimitTime,
-            GlobalOption.AdminLimitTime.ToString(),
-            30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
-            format: OptionUnit.Second,
-            invert: true,
-            enableCheckOption: adminLimitOpt);
+        var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false);
+		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
+			GlobalOption.AirShipEnableAdmin, adminOpt, invert: true);
+		var adminLimitOpt = CreateBoolOption(GlobalOption.EnableAdminLimit, false, adminOpt, invert: true);
+		CreateFloatOption(
+			GlobalOption.AdminLimitTime,
+			30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
+			format: OptionUnit.Second,
+			invert: true,
+			enableCheckOption: adminLimitOpt);
 
-        var secOpt = new BoolCustomOption(
-            (int)GlobalOption.IsRemoveSecurity,
-            GlobalOption.IsRemoveSecurity.ToString(),
-            false);
-        var secLimitOpt = new BoolCustomOption(
-            (int)GlobalOption.EnableSecurityLimit,
-            GlobalOption.EnableSecurityLimit.ToString(),
-            false, secOpt,
-            invert: true);
-        new FloatCustomOption(
-            (int)GlobalOption.SecurityLimitTime,
-            GlobalOption.SecurityLimitTime.ToString(),
-            30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
-            format: OptionUnit.Second,
-            invert: true,
-            enableCheckOption: secLimitOpt);
+        var secOpt = CreateBoolOption(GlobalOption.IsRemoveSecurity, false);
+		var secLimitOpt = CreateBoolOption(GlobalOption.EnableSecurityLimit, false, secOpt, invert: true);
+		CreateFloatOption(
+			GlobalOption.SecurityLimitTime,
+			30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
+			format: OptionUnit.Second,
+			invert: true,
+			enableCheckOption: secLimitOpt);
 
-        var vitalOpt = new BoolCustomOption(
-            (int)GlobalOption.IsRemoveVital,
-            GlobalOption.IsRemoveVital.ToString(),
-            false);
-        var vitalLimitOpt = new BoolCustomOption(
-            (int)GlobalOption.EnableVitalLimit,
-            GlobalOption.EnableVitalLimit.ToString(),
-            false, vitalOpt,
-            invert: true);
-        new FloatCustomOption(
-            (int)GlobalOption.VitalLimitTime,
-            GlobalOption.VitalLimitTime.ToString(),
-            30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
-            format: OptionUnit.Second,
-            invert: true,
-            enableCheckOption: vitalLimitOpt);
+        var vitalOpt = CreateBoolOption(GlobalOption.IsRemoveVital, false);
+        var vitalLimitOpt = CreateBoolOption(GlobalOption.EnableVitalLimit, false, vitalOpt, invert: true);
+		CreateFloatOption(
+			GlobalOption.VitalLimitTime,
+			30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
+			format: OptionUnit.Second,
+			invert: true,
+			enableCheckOption: vitalLimitOpt);
 
-        new BoolCustomOption(
-            (int)GlobalOption.RandomMap,
-            GlobalOption.RandomMap.ToString(), false);
+		CreateBoolOption(GlobalOption.RandomMap, false);
 
-        var taskDisableOpt = new BoolCustomOption(
-            (int)GlobalOption.DisableTaskWinWhenNoneTaskCrew,
-            GlobalOption.DisableTaskWinWhenNoneTaskCrew.ToString(),
-            false);
-        new BoolCustomOption(
-            (int)GlobalOption.DisableTaskWin,
-            GlobalOption.DisableTaskWin.ToString(),
-            false, taskDisableOpt);
+        var taskDisableOpt = CreateBoolOption(GlobalOption.DisableTaskWinWhenNoneTaskCrew, false);
+		CreateBoolOption(GlobalOption.DisableTaskWin, false, taskDisableOpt);
 
-        new BoolCustomOption(
-            (int)GlobalOption.IsSameNeutralSameWin,
-            GlobalOption.IsSameNeutralSameWin.ToString(),
-            true);
-        new BoolCustomOption(
-            (int)GlobalOption.DisableNeutralSpecialForceEnd,
-            GlobalOption.DisableNeutralSpecialForceEnd.ToString(),
-            false);
+		CreateBoolOption(GlobalOption.IsSameNeutralSameWin, true);
+		CreateBoolOption(GlobalOption.DisableNeutralSpecialForceEnd, false);
 
-        new BoolCustomOption(
-            (int)GlobalOption.IsAssignNeutralToVanillaCrewGhostRole, GlobalOption.IsAssignNeutralToVanillaCrewGhostRole.ToString(),
-            true);
-        new BoolCustomOption(
-            (int)GlobalOption.IsRemoveAngleIcon,
-            GlobalOption.IsRemoveAngleIcon.ToString(),
-            false);
-        new BoolCustomOption(
-            (int)GlobalOption.IsBlockGAAbilityReport,
-            GlobalOption.IsBlockGAAbilityReport.ToString(),
-            false);
+		CreateBoolOption(GlobalOption.IsAssignNeutralToVanillaCrewGhostRole, true);
+		CreateBoolOption(GlobalOption.IsRemoveAngleIcon, false);
+		CreateBoolOption(GlobalOption.IsBlockGAAbilityReport, false);
 
-        new BoolCustomOption(
-            (int)GlobalOption.EnableHorseMode,
-            GlobalOption.EnableHorseMode.ToString(),
-            false);
+		CreateBoolOption(GlobalOption.EnableHorseMode, false);
     }
 
     public static T GetCommonOptionValue<T>(GlobalOption optionKey)

@@ -9,6 +9,7 @@ using AmongUs.Data;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Patches.Controller
 {
@@ -36,9 +37,7 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(0)] PlayerControl sourcePlayer,
             [HarmonyArgument(1)] string chatText)
         {
-			var roleDict = ExtremeRoleManager.GameRole;
-
-			if (roleDict.Count == 0) { return true; }
+			if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
 			if (!sourcePlayer || !CachedPlayerControl.LocalPlayer)
 			{
@@ -57,6 +56,8 @@ namespace ExtremeRoles.Patches.Controller
 					return false;
 				}
 			}
+
+			var roleDict = ExtremeRoleManager.GameRole;
 
 			if (!roleDict.TryGetValue(data.PlayerId, out var role) ||
 				!roleDict.TryGetValue(data2.PlayerId, out var role2))

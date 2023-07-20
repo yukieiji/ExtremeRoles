@@ -3,6 +3,7 @@
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -26,7 +27,7 @@ public static class VentUsableDistancePatch
 
         if (underWarper == null ||
             !underWarper.IsAwake) { return true; }
-        
+
         __result = underWarper.VentUseRange;
 
         return false;
@@ -59,14 +60,15 @@ public static class VentCanUsePatch
             return false;
         }
 
-        bool isCustomMapVent = ExtremeRolesPlugin.Compat.IsModMap &&
-            ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance);
+        bool isCustomMapVent =
+			CompatModManager.Instance.TryGetModMap(out var modMap) &&
+			modMap!.IsCustomVentUse(__instance);
 
         if (ExtremeRoleManager.GameRole.Count == 0)
         {
             if (isCustomMapVent)
             {
-                (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
+                (__result, canUse, couldUse) = modMap.IsCustomVentUseResult(
                     __instance, playerInfo,
                     playerInfo.Role.IsImpostor || playerInfo.Role.Role == RoleTypes.Engineer);
                 return false;
@@ -80,7 +82,7 @@ public static class VentCanUsePatch
 
         if (isCustomMapVent)
         {
-            (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
+            (__result, canUse, couldUse) = modMap.IsCustomVentUseResult(
                 __instance, playerInfo, roleCouldUse);
             return false;
         }
@@ -100,19 +102,19 @@ public static class VentCanUsePatch
                 (
                     !(task != null && task.Data[0] == __instance.Id)
                 )
-                || 
+                ||
                 (
                     inVent && Vent.currentVent == __instance
                 )
-            ) && 
+            ) &&
             ExtremeGameModeManager.Instance.Usable.CanUseVent(role) &&
             (player.CanMove || inVent)
         );
 
         if (role.TryGetVanillaRoleId(out _))
         {
-            couldUse = 
-                couldUse && 
+            couldUse =
+                couldUse &&
                 playerInfo.Role.CanUse(__instance.Cast<IUsable>());
         }
 
@@ -120,7 +122,7 @@ public static class VentCanUsePatch
                 SystemTypes.Ventilation, out ISystemType systemType))
         {
             VentilationSystem ventilationSystem = systemType.TryCast<VentilationSystem>();
-            if (ventilationSystem != null && 
+            if (ventilationSystem != null &&
                 ventilationSystem.IsVentCurrentlyBeingCleaned(__instance.Id))
             {
                 couldUse = false;
@@ -161,7 +163,7 @@ public static class VentSetOutlinePatch
         if (role.IsVanillaRole() || role.IsImpostor()) { return true; }
 
         Color color = role.GetNameColor();
-        
+
         __instance.myRend.material.SetFloat("_Outline", (float)(on ? 1 : 0));
         __instance.myRend.material.SetColor("_OutlineColor", color);
         __instance.myRend.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
@@ -185,7 +187,7 @@ public static class VentUsePatch
             out canUse, out couldUse);
 
         // No need to execute the native method as using is disallowed anyways
-        if (!canUse || localPlayer.walkingToVent) { return false; }; 
+        if (!canUse || localPlayer.walkingToVent) { return false; };
 
         bool isEnter = !localPlayer.inVent;
 
@@ -205,7 +207,7 @@ public static class VentUsePatch
                 __instance.Id,
                 localPlayer.PlayerId,
                 isEnter ? byte.MaxValue : (byte)0);
-            
+
             __instance.SetButtons(isEnter);
 
             return false;

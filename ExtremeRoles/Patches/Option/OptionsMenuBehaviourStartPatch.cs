@@ -12,7 +12,7 @@ using AmongUs.Data;
 
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
@@ -176,12 +176,12 @@ public static class OptionsMenuBehaviourStartPatch
         moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
         var moreOptionsButton = moreOptionButton.GetComponent<PassiveButton>();
         moreOptionsButton.OnClick.RemoveAllPersistentAndListeners();
-        moreOptionsButton.OnClick.AddListener((Action)(() =>
+        moreOptionsButton.OnClick.AddListener(() =>
         {
             if (!popUp) { return; }
 
             if (DestroyableSingleton<HudManager>.InstanceExists &&
-                __instance.transform.parent && 
+                __instance.transform.parent &&
                 __instance.transform.parent == FastDestroyableSingleton<HudManager>.Instance.transform)
             {
                 popUp.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
@@ -195,7 +195,7 @@ public static class OptionsMenuBehaviourStartPatch
 
             checkSetTitle();
             refreshOpen();
-        }));
+        });
     }
 
     private static void refreshOpen()
@@ -230,7 +230,7 @@ public static class OptionsMenuBehaviourStartPatch
         creditText.name = "credit";
 
         StringBuilder showTextBuilder = new StringBuilder();
-        
+
         showTextBuilder
             .Append("<size=175%>Extreme Roles<space=0.9em>")
             .Append(Helper.Translation.GetString("version"))
@@ -299,16 +299,22 @@ public static class OptionsMenuBehaviourStartPatch
             passiveButton.OnMouseOut.RemoveAllPersistentAndListeners();
             passiveButton.OnMouseOver.RemoveAllPersistentAndListeners();
 
-            passiveButton.OnClick.AddListener((Action)(() =>
+            passiveButton.OnClick.AddListener(() =>
             {
                 button.onState = info.OnClick();
                 button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
-            }));
+            });
 
             passiveButton.OnMouseOver.AddListener(
-                (Action)(() => button.Background.color = new Color32(34, 139, 34, byte.MaxValue)));
+				() =>
+				{
+					button.Background.color = new Color32(34, 139, 34, byte.MaxValue);
+				});
             passiveButton.OnMouseOut.AddListener(
-                (Action)(() => button.Background.color = button.onState ? Color.green : Palette.ImpostorRed));
+				() =>
+				{
+					button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+				});
 
             foreach (var spr in button.gameObject.GetComponentsInChildren<SpriteRenderer>())
             {
@@ -342,13 +348,11 @@ public static class OptionsMenuBehaviourStartPatch
 
         var passiveImportButton = importButton.GetComponent<PassiveButton>();
         passiveImportButton.OnClick.RemoveAllPersistentAndListeners();
-        passiveImportButton.OnClick.AddListener(
-            (UnityAction)CsvImport.Excute);
+        passiveImportButton.OnClick.AddListener(CsvImport.Excute);
 
         var passiveExportButton = exportButton.GetComponent<PassiveButton>();
         passiveExportButton.OnClick.RemoveAllPersistentAndListeners();
-        passiveExportButton.OnClick.AddListener(
-            (UnityAction)CsvExport.Excute);
+        passiveExportButton.OnClick.AddListener(CsvExport.Excute);
 
         passiveImportButton.gameObject.SetActive(true);
         passiveExportButton.gameObject.SetActive(true);

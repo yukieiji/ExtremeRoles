@@ -31,7 +31,7 @@ public static class HudManagerToggleMapVisibletPatch
            ExtremeRoleManager.GameRole.Count == 0 ||
            ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin() ||
            MapCountOverlayUpdatePatch.IsAbilityUse()) { return; }
-        
+
         options.Mode = MapOptions.Modes.Normal;
     }
 }
@@ -39,19 +39,10 @@ public static class HudManagerToggleMapVisibletPatch
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
 public static class HudManagerStartPatch
 {
-    public static void Postfix(HudManager __instance)
+    public static void Postfix()
     {
-        if (GameSystem.IsFreePlay) { return; }
-
-        if (Module.InfoOverlay.Button.Body == null)
-        {
-            Module.InfoOverlay.Button.CreateInfoButton();
-        }
-        else
-        {
-            Module.InfoOverlay.Button.SetInfoButtonToGameStartShipPositon();
-        }
-    }
+		InfoOverlay.Instance.InitializeToLobby();
+	}
 }
 
 
@@ -60,7 +51,7 @@ public static class HudManagerUpdatePatch
 {
     public const string RoleInfoObjectName = "Info";
     private const float infoScale = 0.25f;
-    
+
     private static bool buttonCreated = false;
     private static bool isActiveUpdate = true;
 
@@ -97,7 +88,7 @@ public static class HudManagerUpdatePatch
             __instance.ImpostorVentButton.ToggleVisible(false);
             __instance.TaskPanel.gameObject.SetActive(false);
             __instance.roomTracker.gameObject.SetActive(false);
-            
+
             IVirtualJoystick virtualJoystick = __instance.joystick;
 
             if (virtualJoystick != null)
@@ -110,7 +101,7 @@ public static class HudManagerUpdatePatch
 
     public static void Postfix()
     {
-        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
+        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
         { return; }
         if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
@@ -158,7 +149,7 @@ public static class HudManagerUpdatePatch
                 multiAssignRole.OverrideAnotherRoleSetting();
             }
         }
-        
+
         /* TODO:幽霊役職タスク
         if (ghostRole != null)
         {
@@ -178,7 +169,7 @@ public static class HudManagerUpdatePatch
             if (abilityRole.Button == null)
             {
                 buttonCreated = true; //一時的にブロック
-                
+
                 abilityRole.CreateAbility();
                 abilityRole.RoleAbilityInit();
 
@@ -211,14 +202,14 @@ public static class HudManagerUpdatePatch
         if (localPlayer.Data.Role.IsImpostor)
         {
             List<CachedPlayerControl> impostors = CachedPlayerControl.AllPlayerControls.ToArray().ToList();
-            impostors.RemoveAll((CachedPlayerControl x) => 
+            impostors.RemoveAll((CachedPlayerControl x) =>
             {
-                if (x == null || 
+                if (x == null ||
                     x.Data == null ||
                     x.Data.Role == null ||
                     !x.Data.Role.IsImpostor)
                 {
-                    return true; 
+                    return true;
                 }
                 else
                 {
@@ -343,7 +334,7 @@ public static class HudManagerUpdatePatch
                 allPlayerInfo[player.PlayerId] = playerInfo;
             }
 
-            playerInfo.transform.localPosition = 
+            playerInfo.transform.localPosition =
                 player.cosmetics.nameText.transform.localPosition + Vector3.up * infoScale;
             string playerInfoText = getRoleInfo(localPlayer, player, commsActive);
             playerInfo.text = playerInfoText;
@@ -371,7 +362,7 @@ public static class HudManagerUpdatePatch
             return true;
         }
         else if (
-            role.IsImpostor() || 
+            role.IsImpostor() ||
             role.Id == ExtremeRoleId.Madmate ||
             role.Id == ExtremeRoleId.Doll)
         {

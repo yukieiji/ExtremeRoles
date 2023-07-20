@@ -62,7 +62,7 @@ public static class GameStartManagerPatch
             }
         }
 
-        ExtremeRolesPlugin.Info.HideInfoOverlay();
+        InfoOverlay.Instance.Hide();
         // ホストはここでオプションを読み込み
         OptionManager.Load();
 

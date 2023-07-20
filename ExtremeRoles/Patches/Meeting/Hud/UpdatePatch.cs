@@ -16,12 +16,12 @@ public static class MeetingHudUpdatePatch
 {
 	public static void Postfix(MeetingHud __instance)
 	{
-		if (ExtremeRolesPlugin.Info.IsBlock &&
+
+		if (InfoOverlay.Instance.IsBlock &&
 			__instance.state != MeetingHud.VoteStates.Animating)
 		{
-			ExtremeRolesPlugin.Info.BlockShow(false);
+			InfoOverlay.Instance.BlockShow(false);
 		}
-
 		if (NamePlateHelper.NameplateChange)
 		{
 			foreach (var pva in __instance.playerStates)

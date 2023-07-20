@@ -2,10 +2,10 @@
 
 public interface ICountBehavior
 {
-    public const string DefaultButtonCountText = "buttonCountText";
-    public int AbilityCount { get; }
+	public const string DefaultButtonCountText = "buttonCountText";
+	public int AbilityCount { get; }
 
-    public void SetAbilityCount(int newAbilityNum);
+	public void SetAbilityCount(int newAbilityNum);
 
-    public void SetButtonTextFormat(string newTextFormat);
+	public void SetButtonTextFormat(string newTextFormat);
 }

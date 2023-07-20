@@ -14,167 +14,167 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class OptionMenuTab : MonoBehaviour
 {
-    public const string StringOptionName = "ExROptionId_";
-    public GameObject Tab { get; private set; }
+	public const string StringOptionName = "ExROptionId_";
+	public GameObject Tab { get; private set; }
 
-    private SpriteRenderer tabHighLight;
-    private GameOptionsMenu menuBody;
-    private TextMeshPro tabName;
-    private Scroller scroller;
-    private StringOption template;
+	private SpriteRenderer tabHighLight;
+	private GameOptionsMenu menuBody;
+	private TextMeshPro tabName;
+	private Scroller scroller;
+	private StringOption template;
 
-    private OptionTab tabType;
-    private List<IOptionInfo> useOption = new List<IOptionInfo>();
+	private OptionTab tabType;
+	private List<IOptionInfo> useOption = new List<IOptionInfo>();
 
-    private Memory<ValueTuple<IOptionInfo, OptionBehaviour>> childrenBody;
-    
-    private float blockTimer = -10.0f;
+	private Memory<ValueTuple<IOptionInfo, OptionBehaviour>> childrenBody;
 
-    private const float posOffsetInit = 2.75f;
-    private const string menuNameTemplate = "ExtremeRoles_{0}Settings";
+	private float blockTimer = -10.0f;
 
-    public OptionMenuTab(IntPtr ptr) : base(ptr) { }
+	private const float posOffsetInit = 2.75f;
+	private const string menuNameTemplate = "ExtremeRoles_{0}Settings";
 
-    public static OptionMenuTab Create(OptionTab tab, GameObject template)
-    {
-        GameObject obj = Instantiate(
-            template, template.transform.parent);
+	public OptionMenuTab(IntPtr ptr) : base(ptr) { }
 
-        OptionMenuTab menu = obj.AddComponent<OptionMenuTab>();
-        Transform gameGroupTrans = obj.transform.FindChild("GameGroup");
+	public static OptionMenuTab Create(OptionTab tab, GameObject template)
+	{
+		GameObject obj = Instantiate(
+			template, template.transform.parent);
 
-        menu.menuBody = gameGroupTrans.FindChild("SliderInner").GetComponent<GameOptionsMenu>();
-        menu.scroller = gameGroupTrans.GetComponent<Scroller>();
-        menu.tabType = tab;
-        menu.useOption.Clear();
-        menu.tabName = gameGroupTrans.FindChild("Text").GetComponent<TextMeshPro>();
+		OptionMenuTab menu = obj.AddComponent<OptionMenuTab>();
+		Transform gameGroupTrans = obj.transform.FindChild("GameGroup");
 
-        string name = string.Format(menuNameTemplate, tab.ToString());
-        
-        obj.name = name;
-        menu.menuBody.name = $"{name}_menu";
+		menu.menuBody = gameGroupTrans.FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+		menu.scroller = gameGroupTrans.GetComponent<Scroller>();
+		menu.tabType = tab;
+		menu.useOption.Clear();
+		menu.tabName = gameGroupTrans.FindChild("Text").GetComponent<TextMeshPro>();
 
-        // どうも中身を消してるテンプレートから作ってるのに生き残りが居るらしい
-        foreach (OptionBehaviour option in menu.menuBody.GetComponentsInChildren<OptionBehaviour>())
-        {
-            Destroy(option.gameObject);
-        }
-        menu.menuBody.Children = Array.Empty<OptionBehaviour>();
+		string name = string.Format(menuNameTemplate, tab.ToString());
 
-        return menu;
-    }
+		obj.name = name;
+		menu.menuBody.name = $"{name}_menu";
 
-    public void OnEnable()
-    {
-        if (this.menuBody.Children.Length != 0) { return; }
+		// どうも中身を消してるテンプレートから作ってるのに生き残りが居るらしい
+		foreach (OptionBehaviour option in menu.menuBody.GetComponentsInChildren<OptionBehaviour>())
+		{
+			Destroy(option.gameObject);
+		}
+		menu.menuBody.Children = Array.Empty<OptionBehaviour>();
 
-        this.menuBody.Children = new OptionBehaviour[this.useOption.Count];
+		return menu;
+	}
 
-        for (int index = 0; index < this.menuBody.Children.Length; ++index)
-        {
-            IOptionInfo option = this.useOption[index];
+	public void OnEnable()
+	{
+		if (this.menuBody.Children.Length != 0) { return; }
 
-            if (option.Body != null) { continue; }
-            
-            StringOption stringOption = Instantiate(
-                this.template, this.menuBody.transform);
-            stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-            stringOption.TitleText.text = option.GetTranslatedName();
-            stringOption.Value = stringOption.oldValue = option.CurSelection;
-            stringOption.ValueText.text = option.GetTranslatedValue();
-            stringOption.gameObject.name = string.Concat(
-                StringOptionName, option.Id);
-            stringOption.gameObject.SetActive(true);
+		this.menuBody.Children = new OptionBehaviour[this.useOption.Count];
 
-            this.menuBody.Children[index] = stringOption;
-            option.SetOptionBehaviour(stringOption);
-            
-            this.blockTimer = 1.0f;
-        }
+		for (int index = 0; index < this.menuBody.Children.Length; ++index)
+		{
+			IOptionInfo option = this.useOption[index];
 
-        this.childrenBody = this.useOption.Zip(this.menuBody.Children, ValueTuple.Create).ToArray();
-    }
+			if (option.Body != null) { continue; }
 
-    public void Start()
-    {
-        this.tabName.SetText(
-            Helper.Translation.GetString(this.gameObject.name));
-    }
+			StringOption stringOption = Instantiate(
+				this.template, this.menuBody.transform);
+			stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
+			stringOption.TitleText.text = option.GetTranslatedName();
+			stringOption.Value = stringOption.oldValue = option.CurSelection;
+			stringOption.ValueText.text = option.GetTranslatedValue();
+			stringOption.gameObject.name = string.Concat(
+				StringOptionName, option.Id);
+			stringOption.gameObject.SetActive(true);
 
-    public void FixedUpdate()
-    {
+			this.menuBody.Children[index] = stringOption;
+			option.SetOptionBehaviour(stringOption);
 
-        this.blockTimer += Time.fixedDeltaTime;
-        int itemLength = this.menuBody.Children.Length;
+			this.blockTimer = 1.0f;
+		}
 
-        if (itemLength == 0 || this.blockTimer < 0.1f) { return; }
+		this.childrenBody = this.useOption.Zip(this.menuBody.Children, ValueTuple.Create).ToArray();
+	}
 
-            this.blockTimer = 0.0f;
+	public void Start()
+	{
+		this.tabName.SetText(
+			Helper.Translation.GetString(this.gameObject.name));
+	}
 
-            float itemOffset = (float)itemLength;
-            float posOffset = posOffsetInit;
+	public void FixedUpdate()
+	{
 
-        foreach (var (option, optionBody) in this.childrenBody.Span)
-        {
-            if (optionBody == null) { continue; }
+		this.blockTimer += Time.fixedDeltaTime;
+		int itemLength = this.menuBody.Children.Length;
 
-            bool enabled = option.IsActive();
+		if (itemLength == 0 || this.blockTimer < 0.1f) { return; }
 
-            optionBody.gameObject.SetActive(enabled);
+		this.blockTimer = 0.0f;
 
-            if (enabled)
-            {
-                bool isHeader = option.IsHeader;
-                posOffset -= isHeader ? 0.75f : 0.5f;
-                optionBody.transform.localPosition = new Vector3(
-                    optionBody.transform.localPosition.x, posOffset,
-                    optionBody.transform.localPosition.z);
+		float itemOffset = (float)itemLength;
+		float posOffset = posOffsetInit;
 
-                if (isHeader)
-                {
-                    itemOffset += 0.5f;
-                }
-            }
-            else
-            {
-                itemOffset--;
-            }
-        }
+		foreach (var (option, optionBody) in this.childrenBody.Span)
+		{
+			if (optionBody == null) { continue; }
 
-        this.scroller.ContentYBounds.max = -4.0f + itemOffset * 0.5f;
-    }
+			bool enabled = option.IsActive();
 
-    [HideFromIl2Cpp]
-    public void AddOption(IOptionInfo option)
-    {
-        this.useOption.Add(option);
-    }
+			optionBody.gameObject.SetActive(enabled);
 
-    public void CreateTabButton(GameObject template, GameObject parent)
-    {
-        GameObject tabParent = Instantiate(template, parent.transform);
-        tabParent.name = $"{this.tabType}_Tab";
+			if (enabled)
+			{
+				bool isHeader = option.IsHeader;
+				posOffset -= isHeader ? 0.75f : 0.5f;
+				optionBody.transform.localPosition = new Vector3(
+					optionBody.transform.localPosition.x, posOffset,
+					optionBody.transform.localPosition.z);
 
-        // Tabの構造はGameTab => ColorButton（こいつだけ）なので一個だけ取得
-        Transform colorButtonTrans = tabParent.transform.GetChild(0);
+				if (isHeader)
+				{
+					itemOffset += 0.5f;
+				}
+			}
+			else
+			{
+				itemOffset--;
+			}
+		}
 
-        this.Tab = colorButtonTrans.gameObject;
-        this.tabHighLight = colorButtonTrans.FindChild(
-            "Tab Background").GetComponentInChildren<SpriteRenderer>();
+		this.scroller.ContentYBounds.max = -4.0f + itemOffset * 0.5f;
+	}
 
-        colorButtonTrans.FindChild("Icon").GetComponent<SpriteRenderer>().sprite =
-            Loader.CreateSpriteFromResources(
-                string.Format(Path.TabImagePathFormat, this.tabType), 150f);
-        this.tabHighLight.enabled = false;
-    }
+	[HideFromIl2Cpp]
+	public void AddOption(IOptionInfo option)
+	{
+		this.useOption.Add(option);
+	}
 
-    public void SetActive(bool activate)
-    {
-        this.gameObject.SetActive(activate);
-        this.tabHighLight.enabled = activate;
-    }
-    public void SetOptionTemplate(StringOption option)
-    {
-        this.template = option;
-    }
+	public void CreateTabButton(GameObject template, GameObject parent)
+	{
+		GameObject tabParent = Instantiate(template, parent.transform);
+		tabParent.name = $"{this.tabType}_Tab";
+
+		// Tabの構造はGameTab => ColorButton（こいつだけ）なので一個だけ取得
+		Transform colorButtonTrans = tabParent.transform.GetChild(0);
+
+		this.Tab = colorButtonTrans.gameObject;
+		this.tabHighLight = colorButtonTrans.FindChild(
+			"Tab Background").GetComponentInChildren<SpriteRenderer>();
+
+		colorButtonTrans.FindChild("Icon").GetComponent<SpriteRenderer>().sprite =
+			Loader.CreateSpriteFromResources(
+				string.Format(Path.TabImagePathFormat, this.tabType), 150f);
+		this.tabHighLight.enabled = false;
+	}
+
+	public void SetActive(bool activate)
+	{
+		this.gameObject.SetActive(activate);
+		this.tabHighLight.enabled = activate;
+	}
+	public void SetOptionTemplate(StringOption option)
+	{
+		this.template = option;
+	}
 }
