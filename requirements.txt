@@ -1,1 +1,1 @@
-openpyxl==3.0.3
+pylightxl==1.61
