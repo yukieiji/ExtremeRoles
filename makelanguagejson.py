@@ -59,7 +59,7 @@ def xlsx_to_json(file_name : str, output_file : str) -> None:
           data[str(j - 2)] = cell_data.replace("\r", "").replace("_x000D_", "").replace("\\n", "\n")
 
       if data != {}:
-        xlsx_data[sheat.index(i, 1)] = data
+        xlsx_data[key] = data
 
   if is_require_update(xlsx_data, output_file):
 
