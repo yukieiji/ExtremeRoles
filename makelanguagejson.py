@@ -37,17 +37,18 @@ def xlsx_to_json(file_name : str, output_file : str) -> None:
     sheat = wb.ws(name)
 
     row, col = sheat.size
-    print(row, col)
 
-    for i in range(1, row + 1):
-      if i == 1:
-        continue
+    # 行を回す
+    for i in range(2, row + 1):
 
       data = {}
+
+      # i行目の1列目はキー
       key = sheat.index(i, 1)
       if key == "":
         continue
 
+      # i行目j列がデータ、jは2以上であり2が0(英語)である
       for j in range(2, col + 1):
           cell_data = sheat.index(i, j)
 
