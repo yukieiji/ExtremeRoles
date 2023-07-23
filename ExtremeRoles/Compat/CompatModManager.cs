@@ -105,7 +105,7 @@ internal sealed class CompatModManager
 		}
 
 		this.startOptionId = startId;
-		this.endOptionId = startOptionId * this.loadedMod.Count;
+		this.endOptionId = this.startOptionId + optionOffset * this.loadedMod.Count;
 	}
 
 	internal bool IsIntegrateOption(int optionId)
