@@ -68,6 +68,90 @@ public sealed class Unexpected<E>
 	}
 }
 
+public sealed class Expected<T> : IEquatable<Expected<T>>
+{
+	public T Value
+	{
+		get
+		{
+			if (this.value == null)
+			{
+				throw new InvalidOperationException();
+			}
+			return this.value;
+		}
+	}
+
+	private T? value;
+
+	public Expected(T? value)
+	{
+		this.value = value;
+	}
+
+	public bool HasValue()
+		=> this.value != null;
+
+	public Expected<T> AndThen(Action<T> lamda)
+	{
+		if (this.value != null)
+		{
+			lamda.Invoke(this.value);
+		}
+		return this;
+	}
+
+	public Expected<T, E> AndThen<E>(Func<T, Expected<T, E>> lamda) where E : new()
+		=> this.value != null ?
+		lamda.Invoke(this.value) :
+		new Expected<T, E>(new E());
+
+	public Expected<X> Transform<X>(Func<T, X> lamda)
+		=> this.value != null ?
+		new Expected<X>(lamda.Invoke(this.Value)) :
+		new Expected<X>(default(X));
+
+	public Expected<X, E> Transform<X, E>(Func<T, X> lamda) where E : new()
+		=> this.value != null ?
+		new Expected<X, E>(lamda.Invoke(this.Value)) :
+		new Expected<X, E>(new E());
+
+	public bool Equals(Expected<T>? other)
+	{
+		if (other is null) { return false; }
+
+		bool rightHasValue = this.HasValue();
+		bool leftHasValue = other.HasValue();
+
+		if (rightHasValue && leftHasValue)
+		{
+			return EqualityComparer<T>.Default.Equals(other.Value, this.Value);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public static bool operator ==(Expected<T> left, Expected<T>? right)
+		=> left.Equals(right);
+
+	public static bool operator !=(Expected<T> left, Expected<T>? right)
+		=> !left.Equals(right);
+
+	public static implicit operator Expected<T>(T? v)
+	{
+		return new Expected<T>(v);
+	}
+
+	public override int GetHashCode()
+		=> this.value == null ? 0 : EqualityComparer<T>.Default.GetHashCode(this.value);
+
+	public override bool Equals(object? obj)
+	{
+		return Equals(obj as Expected<T>);
+	}
+}
 
 public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 	where E : new()
@@ -85,7 +169,7 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 	}
 	public Unexpected<E> Error { get; init; }
 
-	private T? value;
+	private readonly T? value;
 
 	public Expected(T? value)
 	{
@@ -102,15 +186,14 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 	public bool HasValue()
 		=> this.value != null;
 
-	public Expected<U, E> AndThen<U>(Func<T, Expected<U, E>> lamda)
+	public Expected<T, E> AndThen(Func<T, Expected<T, E>> lamda)
 		=> this.value != null ?
 		lamda.Invoke(this.value) :
-		new Expected<U, E>(this.Error);
+		new Expected<T, E>(this.Error);
 
-	public Expected<T, X> OrElse<X>(Func<Unexpected<E>, Expected<T, X>> lamda)
-		where X : new()
+	public Expected<T, E> OrElse(Func<Unexpected<E>, Expected<T, E>> lamda)
 		=> this.value != null ?
-		new Expected<T, X>(this.Value) :
+		new Expected<T, E>(this.Value) :
 		lamda.Invoke(this.Error);
 
 	public Expected<X, E> Transform<X>(Func<T, X> lamda)
@@ -144,6 +227,64 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 			return EqualityComparer<E>.Default.Equals(other.Error, this.Error);
 		}
 	}
+
+	public bool Equals(Expected<T>? other)
+	{
+		if (other is null) { return false; }
+
+		bool rightHasValue = this.HasValue();
+		bool leftHasValue = other.HasValue();
+
+		if (rightHasValue && leftHasValue)
+		{
+			return EqualityComparer<T>.Default.Equals(other.Value, this.Value);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public bool Equals(Expected<E>? other)
+	{
+		if (other is null) { return false; }
+
+		bool rightHasValue = this.HasValue();
+		bool leftHasValue = other.HasValue();
+
+		if (!rightHasValue && leftHasValue)
+		{
+			return EqualityComparer<E>.Default.Equals(other.Value, this.Error);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	// 特殊テンプレート
+	public static bool operator ==(Expected<T>? left, Expected<T, E> right)
+		=> right.Equals(left);
+	public static bool operator !=(Expected<T>? left, Expected<T, E> right)
+		=> !right.Equals(left);
+
+	// 特殊テンプレート
+	public static bool operator ==(Expected<E>? left, Expected<T, E> right)
+		=> right.Equals(left);
+	public static bool operator !=(Expected<E>? left, Expected<T, E> right)
+		=> !right.Equals(left);
+
+	// 特殊テンプレート
+	public static bool operator ==(Expected<T, E> left, Expected<E>? right)
+		=> left.Equals(right);
+	public static bool operator !=(Expected<T, E> left, Expected<E>? right)
+		=> !left.Equals(right);
+
+	// 特殊テンプレート
+	public static bool operator ==(Expected<T, E> left, Expected<T>? right)
+		=> left.Equals(right);
+	public static bool operator !=(Expected<T, E> left, Expected<T>? right)
+		=> !left.Equals(right);
 
 	public static bool operator ==(Expected<T, E> left, Expected<T, E>? right)
 		=> left.Equals(right);
