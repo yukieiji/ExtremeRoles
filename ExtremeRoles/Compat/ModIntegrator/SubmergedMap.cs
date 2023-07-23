@@ -436,7 +436,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	protected override void PatchAll(Harmony harmony)
 	{
-#pragma warning disable CS8604
 		Type exileCont = ClassType.First(
 			t => t.Name == "SubmergedExileController");
 		MethodInfo wrapUpAndSpawn = AccessTools.Method(
@@ -444,15 +443,20 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		ExileController? cont = null;
 		MethodInfo wrapUpAndSpawnPrefix = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Prefix());
+#pragma warning disable CS8604
 		MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
+#pragma warning restore CS8604
 
+		System.Collections.IEnumerator? enumerator = null;
 		Type displayPrespawnStepPatchesType = ClassType.First(
 			t => t.Name == "DisplayPrespawnStepPatches");
 		MethodInfo displayPrespawnStepPatchesPostfix = AccessTools.Method(
-			displayPrespawnStepPatchesType, "Postfix");
+			displayPrespawnStepPatchesType, "CustomPrespawnStep");
+#pragma warning disable CS8601
 		MethodInfo displayPrespawnStepPatchesPostfixPrefix = SymbolExtensions.GetMethodInfo(
-			() => Patches.DisplayPrespawnStepPatchesPatch.Prefix());
+			() => Patches.DisplayPrespawnStepPatchesCustomPrespawnStepPatch.Prefix(ref enumerator));
+#pragma warning restore CS8601
 
 		Type submarineSelectSpawn = ClassType.First(
 			t => t.Name == "SubmarineSelectSpawn");
@@ -468,9 +472,11 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		object? hudManagerUpdatePatchInstance = null;
 		Patches.HudManagerUpdatePatchPostfixPatch.SetType(
 			hudManagerUpdatePatch);
+#pragma warning disable CS8604
 		MethodInfo hubManagerUpdatePatchPostfixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.HudManagerUpdatePatchPostfixPatch.Postfix(
 				hudManagerUpdatePatchInstance));
+#pragma warning restore CS8604
 
 		this.submarineOxygenSystem = ClassType.First(
 			t => t.Name == "SubmarineOxygenSystem");
@@ -478,9 +484,11 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			submarineOxygenSystem, "Detoriorate");
 		object? submarineOxygenSystemInstance = null;
 		Patches.SubmarineOxygenSystemDetorioratePatch.SetType(this.submarineOxygenSystem);
+#pragma warning disable CS8604
 		MethodInfo submarineOxygenSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
 				submarineOxygenSystemInstance));
+#pragma warning restore CS8604
 
 		Type submarineSpawnInSystem = ClassType.First(
 			t => t.Name == "SubmarineSpawnInSystem");
@@ -488,9 +496,11 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			submarineSpawnInSystem, "Detoriorate");
 		object? submarineSpawnInSystemInstance = null;
 		Patches.SubmarineSpawnInSystemDetorioratePatch.SetType(submarineSpawnInSystem);
+#pragma warning disable CS8604
 		MethodInfo submarineSpawnInSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmarineSpawnInSystemDetorioratePatch.Postfix(
 				submarineSpawnInSystemInstance));
+#pragma warning restore CS8604
 
 		Minigame? game = null;
 
@@ -499,6 +509,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MethodInfo submarineSurvillanceMinigameSystemUpdate = AccessTools.Method(
 			submarineSurvillanceMinigame, "Update");
 		Patches.SubmarineSurvillanceMinigamePatch.SetType(submarineSurvillanceMinigame);
+#pragma warning disable CS8604
 		MethodInfo submarineSurvillanceMinigameSystemUpdatePrefixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmarineSurvillanceMinigamePatch.Prefix(game));
 		MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(

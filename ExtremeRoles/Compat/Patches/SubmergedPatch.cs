@@ -15,11 +15,20 @@ using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
 
 namespace ExtremeRoles.Compat.Patches;
 
-public static class DisplayPrespawnStepPatchesPatch
+public static class DisplayPrespawnStepPatchesCustomPrespawnStepPatch
 {
-	public static bool Prefix()
+	public static bool Prefix(ref IEnumerator __result)
 	{
-		return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		__result = assassinMeetingEnumerator();
+		return false;
+	}
+	public static IEnumerator assassinMeetingEnumerator()
+	{
+		// 真っ暗になるのでそれを解除する
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		hud.StartCoroutine(hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f));
+		yield break;
 	}
 }
 
