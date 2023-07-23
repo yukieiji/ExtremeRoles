@@ -125,7 +125,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.submarineStatusReference = AccessTools.Field(
 			this.submarineStatusType, "referenceHolder");
 
-		Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentMoveToVentPatch");
+		Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentPatchData");
 		this.inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "inTransition");
 	}
 #pragma warning restore CS8618
@@ -447,15 +447,15 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
 
-		System.Collections.IEnumerator? enumerator = null;
+		Type displayPrespawnStepPatchesType = ClassType.First(
+			t => t.Name == "DisplayPrespawnStepPatches");
+		MethodInfo displayPrespawnStepPatchesPostfix = AccessTools.Method(
+			displayPrespawnStepPatchesType, "Postfix");
+		MethodInfo displayPrespawnStepPatchesPostfixPrefix = SymbolExtensions.GetMethodInfo(
+			() => Patches.DisplayPrespawnStepPatchesPatch.Prefix());
+
 		Type submarineSelectSpawn = ClassType.First(
 			t => t.Name == "SubmarineSelectSpawn");
-		MethodInfo prespawnStep = AccessTools.Method(
-			submarineSelectSpawn, "PrespawnStep");
-#pragma warning disable CS8601
-		MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmarineSelectSpawnPrespawnStepPatch.Prefix(ref enumerator));
-#pragma warning restore CS8601
 		MethodInfo onDestroy = AccessTools.Method(
 			submarineSelectSpawn, "OnDestroy");
 		MethodInfo onDestroyPrefix = SymbolExtensions.GetMethodInfo(
@@ -511,8 +511,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			new HarmonyMethod(wrapUpAndSpawnPostfix));
 
 		// アサシン会議発動するとスポーン画面が出ないように
-		harmony.Patch(prespawnStep,
-			new HarmonyMethod(prespawnStepPrefix));
+		harmony.Patch(displayPrespawnStepPatchesPostfix,
+			new HarmonyMethod(displayPrespawnStepPatchesPostfixPrefix));
 
 		// キルクール周りが上書きされているのでそれの調整
 		harmony.Patch(onDestroy,
