@@ -1,7 +1,8 @@
 import os
 import sys
 from typing import Dict, List
-from openpyxl import load_workbook
+
+from pylightxl import readxl
 
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -14,34 +15,46 @@ EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "L
 SUPPORT_LANG = {0:'English', 11:'Japanese', 13: 'SChinese'}
 TAG = 'report'
 
-def get_trans_data_check(filename:str)-> Dict[str, List[str]]:
-  wb = load_workbook(filename, read_only = True)
+def get_trans_data_check(file_name:str)-> Dict[str, List[str]]:
+  wb = readxl(file_name)
 
-  data = {}
-  for s in wb:
-    rows = s.iter_rows(min_col = 1, min_row = 2, max_col = 17, max_row = None)
-    for row in rows:
-      name = row[0].value
+  missing_data = {}
 
-      if not name:
+  for name in wb.ws_names:
+
+    sheat = wb.ws(name)
+
+    row, col = sheat.size
+    # 行を回す
+    for i in range(2, row + 1):
+
+      # i行目の1列目はキー
+      key = sheat.index(i, 1)
+      if key == "":
         continue
 
-      for i, string in enumerate(row[1:]):
+      # i行目j列がデータ、jは2以上であり2が0(英語)である
+      for j in range(2, col + 1):
 
-        # 日本語の翻訳者は要らないのですきっぽー
-        if (not (i in SUPPORT_LANG) or
-            (i == 11 and (name == 'langTranslate' or name == 'translatorMember'))):
-          continue
+          lang_enm = j - 2
+          if (not (lang_enm in SUPPORT_LANG) or
+            (lang_enm == 11 and (key == 'langTranslate' or key == 'translatorMember'))):
+            continue
 
-        key = SUPPORT_LANG[i]
+          cell_data = sheat.index(i, j)
+          if type(cell_data) != str:
+            continue
 
-        if not (key in data):
-          data[key] = []
+          lang = SUPPORT_LANG[lang_enm]
 
-        if not string.value:
-          data[key].append(name)
 
-  return data
+          if not (lang in missing_data):
+            missing_data[lang] = []
+
+          if cell_data == '':
+            missing_data[lang].append(name)
+
+  return missing_data
 
 def convert_md_table(data: Dict[str, List[str]]) -> str:
   result = '| Languages | Missing TransKeys |\n| --- | --- |'
