@@ -87,7 +87,7 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 
 	private T? value;
 
-	public Expected(T value)
+	public Expected(T? value)
 	{
 		this.value = value;
 		Error = new Unexpected<E>();
@@ -151,7 +151,7 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 	public static bool operator !=(Expected<T, E> left, Expected<T, E>? right)
 		=> !left.Equals(right);
 
-	public static implicit operator Expected<T, E>(T v)
+	public static implicit operator Expected<T, E>(T? v)
 	{
 		return new Expected<T, E>(v);
 	}
