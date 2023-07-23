@@ -94,7 +94,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
             }
         }
 
-		string integrateOption = CompatModManager.Instance.GetHudIntegrateOption();
+		string integrateOption = CompatModManager.Instance.GetIntegrateOptionHudString();
 		if (!string.IsNullOrEmpty(integrateOption))
 		{
 			allOptionStr.Add(integrateOption);

@@ -5,6 +5,7 @@ using System.Linq;
 using ExtremeRoles.Helper;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -36,11 +37,10 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 			addOptionString(ref this.printOption, key);
 		}
 
-		foreach (int optionId in Enumerable.Range(
-			OptionCreator.IntegrateOptionStartOffset,
-			OptionManager.Instance.Count))
+		string integrateOption = CompatModManager.Instance.GetIntegrateOptionHudString();
+		if (!string.IsNullOrEmpty(integrateOption))
 		{
-			addOptionString(ref this.printOption, optionId);
+			this.printOption.Append(integrateOption);
 		}
 
 		return (

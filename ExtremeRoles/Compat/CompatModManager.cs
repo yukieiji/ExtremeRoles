@@ -110,7 +110,7 @@ internal sealed class CompatModManager
 		this.endOptionId = optionFactory.EndId;
 	}
 
-	internal string GetHudIntegrateOption()
+	internal string GetIntegrateOptionHudString()
 	{
 		StringBuilder builder = new StringBuilder();
 		for (int id = this.startOptionId; id <= this.endOptionId; ++id)
