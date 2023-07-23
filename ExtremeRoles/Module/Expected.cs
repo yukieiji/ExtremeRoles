@@ -82,7 +82,7 @@ public sealed class Expected<T> : IEquatable<Expected<T>>
 		}
 	}
 
-	private T? value;
+	private readonly T? value;
 
 	public Expected(T? value)
 	{
@@ -186,15 +186,23 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 	public bool HasValue()
 		=> this.value != null;
 
-	public Expected<T, E> AndThen(Func<T, Expected<T, E>> lamda)
-		=> this.value != null ?
-		lamda.Invoke(this.value) :
-		new Expected<T, E>(this.Error);
+	public Expected<T, E> AndThen(Action<T> lamda)
+	{
+		if (this.value != null)
+		{
+			lamda.Invoke(this.value);
+		}
+		return this;
+	}
 
-	public Expected<T, E> OrElse(Func<Unexpected<E>, Expected<T, E>> lamda)
-		=> this.value != null ?
-		new Expected<T, E>(this.Value) :
-		lamda.Invoke(this.Error);
+	public Expected<T, E> OrElse(Action<E> lamda)
+	{
+		if (this.value == null)
+		{
+			lamda.Invoke(this.Error);
+		}
+		return this;
+	}
 
 	public Expected<X, E> Transform<X>(Func<T, X> lamda)
 		=> this.value != null ?
