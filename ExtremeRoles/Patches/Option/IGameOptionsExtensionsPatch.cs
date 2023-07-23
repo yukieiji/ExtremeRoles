@@ -87,15 +87,18 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
 			if (option.Parent == null &&
                 option.Enabled &&
-                (
-					egmm.RoleSelector.IsValidRoleOption(option) ||
-					CompatModManager.Instance.IsIntegrateOption(optionId)
-				))
+				egmm.RoleSelector.IsValidRoleOption(option))
             {
                 string optionStr = option.ToHudStringWithChildren(option.IsHidden ? 0 : 1);
                 allOptionStr.Add(optionStr.Trim('\r', '\n'));
             }
         }
+
+		string integrateOption = CompatModManager.Instance.GetHudIntegrateOption();
+		if (!string.IsNullOrEmpty(integrateOption))
+		{
+			allOptionStr.Add(integrateOption);
+		}
 
         int lineCount = 0;
         StringBuilder pageBuilder = new StringBuilder();

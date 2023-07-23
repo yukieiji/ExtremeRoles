@@ -7,7 +7,7 @@ using BepInEx;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.SequentialFactory;
 
 namespace ExtremeRoles.Compat.ModIntegrator;
 

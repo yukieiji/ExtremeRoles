@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using System.Linq;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -165,12 +165,185 @@ public sealed class ColorSyncFactory : Factory
 }
 
 
+public class SequentialFactory : Factory
+{
+	public int StartId => GetOptionId(0);
+	public int EndId => GetOptionId(this.counter - 1);
+
+	private int counter = 0;
+
+	public SequentialFactory(
+		int idOffset = 0,
+		string namePrefix = "",
+		OptionTab tab = OptionTab.General) : base(idOffset, namePrefix, tab)
+	{
+		this.counter = 0;
+	}
+
+	public void SetNamePrefix(string newPrefix)
+	{
+		this.NamePrefix = newPrefix;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public FloatCustomOption CreateFloatOption(
+		object option,
+		float defaultValue,
+		float min, float max, float step,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null)
+		=> new FloatCustomOption(
+				getOptionIdAndUpdate(),
+				getOptionName(option, color),
+				defaultValue,
+				min, max, step,
+				parent, isHeader, isHidden,
+				format, invert, enableCheckOption, this.Tab);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public FloatDynamicCustomOption CreateFloatDynamicOption(
+		object option,
+		float defaultValue,
+		float min, float step,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null,
+		float tempMaxValue = 0.0f)
+		=> new FloatDynamicCustomOption(
+			getOptionIdAndUpdate(),
+			getOptionName(option, color),
+			defaultValue,
+			min, step,
+			parent, isHeader, isHidden,
+			format, invert, enableCheckOption,
+			this.Tab, tempMaxValue);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public IntCustomOption CreateIntOption(
+		object option,
+		int defaultValue,
+		int min, int max, int step,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null)
+		=> new IntCustomOption(
+			getOptionIdAndUpdate(),
+			getOptionName(option, color),
+			defaultValue,
+			min, max, step,
+			parent, isHeader, isHidden,
+			format, invert, enableCheckOption, this.Tab);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public IntDynamicCustomOption CreateIntDynamicOption(
+		object option,
+		int defaultValue,
+		int min, int step,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null,
+		int tempMaxValue = 0)
+		=> new IntDynamicCustomOption(
+			getOptionIdAndUpdate(),
+			getOptionName(option, color),
+			defaultValue,
+			min, step,
+			parent, isHeader, isHidden,
+			format, invert, enableCheckOption,
+			this.Tab, tempMaxValue);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public BoolCustomOption CreateBoolOption(
+		object option,
+		bool defaultValue,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null)
+		=> new BoolCustomOption(
+			getOptionIdAndUpdate(),
+			getOptionName(option, color),
+			defaultValue,
+			parent, isHeader, isHidden,
+			format, invert, enableCheckOption, this.Tab);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public SelectionCustomOption CreateSelectionOption(
+		object option,
+		string[] selections,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null)
+		=> new SelectionCustomOption(
+			getOptionIdAndUpdate(),
+			getOptionName(option, color),
+			selections,
+			parent, isHeader, isHidden,
+			format, invert, enableCheckOption, this.Tab);
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public SelectionCustomOption CreateSelectionOption<W>(
+		object option,
+		IOptionInfo? parent = null,
+		bool isHeader = false,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		IOptionInfo? enableCheckOption = null,
+		Color? color = null)
+		where W : struct, IConvertible
+		=> new SelectionCustomOption(
+				getOptionIdAndUpdate(),
+				getOptionName(option, color),
+				GetEnumString<W>().ToArray(),
+				parent, isHeader, isHidden,
+				format, invert, enableCheckOption, this.Tab);
+
+	private string getOptionName(object option, Color? color)
+	{
+		string optionName = string.Concat(this.NamePrefix, option.ToString());
+
+		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
+	}
+	private int getOptionIdAndUpdate()
+	{
+		int optionId = GetOptionId(this.counter);
+		this.counter++;
+		return optionId;
+	}
+}
+
 
 public class Factory
 {
 	protected OptionTab Tab;
+	protected string NamePrefix;
+
 	private int idOffset = 0;
-	private string namePrefix;
 
 	public Factory(
 		int idOffset = 0,
@@ -178,7 +351,7 @@ public class Factory
 		OptionTab tab = OptionTab.General)
 	{
 		this.idOffset = idOffset;
-		this.namePrefix = namePrefix;
+		this.NamePrefix = namePrefix;
 		this.Tab = tab;
 	}
 
@@ -431,7 +604,7 @@ public class Factory
 
 	protected string GetOptionName<T>(T option, Color? color) where T : struct, IConvertible
 	{
-		string optionName = string.Concat(this.namePrefix, option.ToString());
+		string optionName = string.Concat(this.NamePrefix, option.ToString());
 
 		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
 	}

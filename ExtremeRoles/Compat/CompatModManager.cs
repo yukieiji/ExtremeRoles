@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
@@ -10,7 +11,7 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.SequentialFactory;
 
 namespace ExtremeRoles.Compat;
 
@@ -97,15 +98,31 @@ internal sealed class CompatModManager
 
 	internal void CreateIntegrateOption(int startId)
 	{
+		var optionFactory = new OptionFactory(startId);
+
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
-			var optionFactory = new OptionFactory(
-				startId + index * optionOffset, mod.Name);
+			optionFactory.SetNamePrefix(mod.Name);
 			mod.CreateIntegrateOption(optionFactory);
 		}
 
 		this.startOptionId = startId;
-		this.endOptionId = this.startOptionId + optionOffset * this.loadedMod.Count;
+		this.endOptionId = optionFactory.EndId;
+	}
+
+	internal string GetHudIntegrateOption()
+	{
+		StringBuilder builder = new StringBuilder();
+		for (int id = this.startOptionId; id <= this.endOptionId; ++id)
+		{
+			var option = OptionManager.Instance.GetIOption(id);
+			string optionStr = option.ToHudString();
+			if (optionStr != string.Empty)
+			{
+				builder.AppendLine(optionStr);
+			}
+		}
+		return builder.ToString().Trim('\r', '\n');
 	}
 
 	internal bool IsIntegrateOption(int optionId)
