@@ -15,7 +15,7 @@ mkdir -Path workspace -Force
 Write-Host "Build Complete!!"
 
 Write-Host "Download BepInEx...."
-Invoke-WebRequest "https://builds.bepinex.dev/projects/bepinex_be/670/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.670%2B42a6727.zip" -OutFile workspace/bepinex.zip
+Invoke-WebRequest "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.671%2B9caf61d.zip" -OutFile workspace/bepinex.zip
 Expand-Archive -Path workspace/bepinex.zip -DestinationPath workspace/bepinex -Force
 
 Write-Host "Create Packing..."
