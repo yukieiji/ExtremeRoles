@@ -9,8 +9,8 @@ using TMPro;
 using Twitch;
 
 using UnityEngine;
-using UnityEngine.Events;
 
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -34,8 +34,7 @@ public static class MainMenuManagerStartPatch
 		asspectPos.DistanceFromEdge = new Vector3(1.5f, distanceFromEdge.y - 0.15f, distanceFromEdge.z);
 
 		// Mod ExitButton
-		__instance.quitButton.OnClick.AddListener(
-			(UnityAction)(() => Logging.BackupCurrentLog()));
+		__instance.quitButton.OnClick.AddListener(() => Logging.BackupCurrentLog());
 
 		// 以下独自ボタン
 		var leftButtonAnchor = new GameObject("LeftModButton");
@@ -66,13 +65,13 @@ public static class MainMenuManagerStartPatch
 		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
 
 		if (!Module.Updater.Instance.IsInit)
-        {
-            TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
-            var infoPop = UnityObject.Instantiate(man.TwitchPopup);
-            infoPop.TextAreaTMP.fontSize *= 0.7f;
-            infoPop.TextAreaTMP.enableAutoSizing = false;
-            Module.Updater.Instance.InfoPopup = infoPop;
-        }
+		{
+			TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
+			var infoPop = UnityObject.Instantiate(man.TwitchPopup);
+			infoPop.TextAreaTMP.fontSize *= 0.7f;
+			infoPop.TextAreaTMP.enableAutoSizing = false;
+			Module.Updater.Instance.InfoPopup = infoPop;
+		}
 	}
 
     public static void Postfix(MainMenuManager __instance)
@@ -94,7 +93,7 @@ public static class MainMenuManagerStartPatch
 		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
         renderer.sprite = Loader.CreateSpriteFromResources(
-            Resources.Path.TitleBurner, 300f);
+            Path.TitleBurner, 300f);
 
         if (Module.Prefab.Prop == null || Module.Prefab.Text == null)
         {
@@ -124,6 +123,7 @@ public static class MainMenuManagerStartPatch
 		Action action, Vector3 pos, Transform parent)
 	{
 		var button = Loader.CreateSimpleButton(parent);
+
 		button.gameObject.SetActive(true);
 		button.Layer = instance.gameObject.layer;
 		button.Scale = new Vector3(0.5f, 0.5f, 1.0f);
@@ -131,9 +131,9 @@ public static class MainMenuManagerStartPatch
 
 		button.Text.text = text;
 		button.Text.fontSize =
-			button.Text.fontSizeMax =
-			button.Text.fontSizeMin = fontSize;
-		button.ClickedEvent.AddListener((UnityAction)action);
+		button.Text.fontSizeMax =
+		button.Text.fontSizeMin = fontSize;
+		button.ClickedEvent.AddListener(action);
 		button.transform.localPosition = pos;
 
 		return button;

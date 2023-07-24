@@ -10,11 +10,12 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Delusioner : 
-    SingleRoleBase, 
+public sealed class Delusioner :
+    SingleRoleBase,
     IRoleAbility,
     IRoleAwake<RoleTypes>,
     IRoleVoteModifier
@@ -32,8 +33,8 @@ public sealed class Delusioner :
     public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
     public ExtremeAbilityButton Button
-    { 
-        get => this.deflectDamageButton; 
+    {
+        get => this.deflectDamageButton;
         set
         {
             this.deflectDamageButton = value;
@@ -68,7 +69,7 @@ public sealed class Delusioner :
 
     private float defaultCoolTime;
     private float curCoolTime;
-    
+
     private int voteCoolTimeReduceRate;
     private float deflectDamagePenaltyMod;
 
@@ -189,11 +190,10 @@ public sealed class Delusioner :
 
         if (this.includeSpawnPoint)
         {
-            
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                randomPos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
-                    teloportTarget);
+                randomPos = modMap!.GetSpawnPos(teloportTarget);
             }
             else
             {
@@ -223,7 +223,7 @@ public sealed class Delusioner :
         {
             if (player == null) { continue; }
             if (!player.Disconnected &&
-                player.PlayerId != localPlayer.PlayerId && 
+                player.PlayerId != localPlayer.PlayerId &&
                 player.PlayerId != teloportTarget &&
                 !player.IsDead &&
                 player.Object != null &&
@@ -245,8 +245,8 @@ public sealed class Delusioner :
         }
 
         if (randomPos.Count == 0)
-        { 
-            return false; 
+        {
+            return false;
         }
 
         Player.RpcUncheckSnap(teloportTarget, randomPos[
@@ -390,7 +390,7 @@ public sealed class Delusioner :
             GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
         this.curCoolTime = this.defaultCoolTime;
         this.isAwakeRole = this.awakeVoteCount == 0;
-        
+
         this.curVoteCount = 0;
 
         if (this.isAwakeRole)

@@ -4,104 +4,104 @@ namespace ExtremeRoles.Module.AbilityBehavior;
 
 public sealed class PassiveAbilityBehavior : AbilityBehaviorBase
 {
-    private Func<bool> ability;
-    private Func<bool> canUse;
-    private Func<bool> canActivating;
-    private Action abilityOff;
+	private Func<bool> ability;
+	private Func<bool> canUse;
+	private Func<bool> canActivating;
+	private Action abilityOff;
 
-    private bool isActive;
+	private bool isActive;
 
-    private float baseCoolTime;
-    private float baseActiveTime;
+	private float baseCoolTime;
+	private float baseActiveTime;
 
-    private ButtonGraphic activeGraphic;
-    private ButtonGraphic deactiveGraphic;
+	private ButtonGraphic activeGraphic;
+	private ButtonGraphic deactiveGraphic;
 
-    public PassiveAbilityBehavior(
-        ButtonGraphic activeGraphic,
-        ButtonGraphic deactiveGraphic,
-        Func<bool> canUse,
-        Func<bool> ability,
-        Func<bool> canActivating = null,
-        Action abilityOff = null) : base(activeGraphic)
-    {
-        this.activeGraphic = activeGraphic;
-        this.deactiveGraphic = deactiveGraphic;
+	public PassiveAbilityBehavior(
+		ButtonGraphic activeGraphic,
+		ButtonGraphic deactiveGraphic,
+		Func<bool> canUse,
+		Func<bool> ability,
+		Func<bool> canActivating = null,
+		Action abilityOff = null) : base(activeGraphic)
+	{
+		this.activeGraphic = activeGraphic;
+		this.deactiveGraphic = deactiveGraphic;
 
-        this.ability =  ability;
-        this.canUse = canUse;
+		this.ability = ability;
+		this.canUse = canUse;
 
-        this.abilityOff = abilityOff;
-        this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
+		this.abilityOff = abilityOff;
+		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 
-        this.isActive = false;
-    }
+		this.isActive = false;
+	}
 
-    public override void SetActiveTime(float newTime)
-    {
-        base.SetActiveTime(newTime);
-        this.baseActiveTime = newTime;
-    }
+	public override void SetActiveTime(float newTime)
+	{
+		base.SetActiveTime(newTime);
+		this.baseActiveTime = newTime;
+	}
 
-    public override void SetCoolTime(float newTime)
-    {
-        base.SetCoolTime(newTime);
-        this.baseCoolTime = newTime;
-    }
+	public override void SetCoolTime(float newTime)
+	{
+		base.SetCoolTime(newTime);
+		this.baseCoolTime = newTime;
+	}
 
-    public override void Initialize(ActionButton button)
-    {
-        return;
-    }
+	public override void Initialize(ActionButton button)
+	{
+		return;
+	}
 
-    public override void AbilityOff()
-    { }
+	public override void AbilityOff()
+	{ }
 
-    public override void ForceAbilityOff()
-    {
-        this.isActive = false;
-        this.abilityOff?.Invoke();
-        this.SetGraphic(this.activeGraphic);
-        base.SetCoolTime(this.baseCoolTime);
-    }
+	public override void ForceAbilityOff()
+	{
+		this.isActive = false;
+		this.abilityOff?.Invoke();
+		this.SetGraphic(this.activeGraphic);
+		base.SetCoolTime(this.baseCoolTime);
+	}
 
-    public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+	public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
 
-    public override bool IsUse()  => this.canUse.Invoke();
+	public override bool IsUse() => this.canUse.Invoke();
 
-    public override bool TryUseAbility(
-        float timer, AbilityState curState, out AbilityState newState)
-    {
-        newState = curState;
+	public override bool TryUseAbility(
+		float timer, AbilityState curState, out AbilityState newState)
+	{
+		newState = curState;
 
-        if (timer > 0 || curState != AbilityState.Ready)
-        {
-            return false;
-        }
+		if (timer > 0 || curState != AbilityState.Ready)
+		{
+			return false;
+		}
 
-        if (this.isActive)
-        {
-            this.ForceAbilityOff();
-        }
-        else
-        {
-            if (!this.ability.Invoke())
-            {
-                return false;
-            }
-            this.SetGraphic(this.deactiveGraphic);
-            this.isActive = true;
-        }
+		if (this.isActive)
+		{
+			this.ForceAbilityOff();
+		}
+		else
+		{
+			if (!this.ability.Invoke())
+			{
+				return false;
+			}
+			this.SetGraphic(this.deactiveGraphic);
+			this.isActive = true;
+		}
 
-        base.SetCoolTime(this.isActive ? this.baseActiveTime : this.baseCoolTime);
-        
-        newState = AbilityState.CoolDown;
+		base.SetCoolTime(this.isActive ? this.baseActiveTime : this.baseCoolTime);
 
-        return true;
-    }
+		newState = AbilityState.CoolDown;
 
-    public override AbilityState Update(AbilityState curState)
-    {
-        return curState;
-    }
+		return true;
+	}
+
+	public override AbilityState Update(AbilityState curState)
+	{
+		return curState;
+	}
 }

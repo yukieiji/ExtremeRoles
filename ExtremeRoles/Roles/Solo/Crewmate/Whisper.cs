@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Whisper : 
-    SingleRoleBase, 
-    IRoleUpdate, 
-    IRoleMurderPlayerHook, 
+public sealed class Whisper :
+    SingleRoleBase,
+    IRoleUpdate,
+    IRoleMurderPlayerHook,
     IRoleResetMeeting
 {
 
@@ -21,6 +23,8 @@ public sealed class Whisper :
         AbilityOnTime,
         TellTextTime,
         MaxTellText,
+		EnableAwakeAbility,
+		AbilityTaskGage,
     }
 
     private string curText = string.Empty;
@@ -28,12 +32,17 @@ public sealed class Whisper :
     private float abilityOnTime;
     private float abilityOffTime;
     private float timer = 0f;
-    private TMPro.TextMeshPro abilityText;
-    private Vector2 prevPlayerPos;
-    private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
-    private TextPopUpper textPopUp;
+	private bool isEnableAwakeAbility = false;
+	private bool isAwake = false;
+	private float awakeTaskGage;
 
+	private Vector2 prevPlayerPos;
+    private static Vector2 defaultPos => new Vector2(100.0f, 100.0f);
+
+#pragma warning disable CS8618
+	private TMPro.TextMeshPro abilityText;
+	private TextPopUpper textPopUp;
     public Whisper() : base(
         ExtremeRoleId.Whisper,
         ExtremeRoleType.Crewmate,
@@ -41,8 +50,9 @@ public sealed class Whisper :
         ColorPalette.WhisperMagenta,
         false, true, false, false)
     { }
+#pragma warning restore CS8618
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -72,34 +82,44 @@ public sealed class Whisper :
             float deg = rad * (360 / ((float)System.Math.PI * 2));
 
             string direction;
-            
+
             if (-45.0f < deg && deg <= 45.0f )
             {
-                direction = Helper.Translation.GetString(
-                    "right");
+                direction = Translation.GetString("right");
             }
             else if (45.0f < deg && deg <= 135.0f)
             {
-                direction = Helper.Translation.GetString(
-                    "up");
+                direction = Translation.GetString("up");
             }
             else if (-135.0f < deg && deg <= -45.0f)
             {
-                direction = Helper.Translation.GetString(
-                    "down");
+                direction = Translation.GetString("down");
             }
             else
             {
-                direction = Helper.Translation.GetString(
-                    "left");
+                direction = Translation.GetString("left");
             }
 
-            this.textPopUp.AddText(
-                string.Format(
-                    Helper.Translation.GetString("killedText"),
-                    direction, System.DateTime.Now));
-            Helper.Sound.PlaySound(
-                Helper.Sound.SoundType.Kill, 0.3f);
+			string showText;
+			if (this.isEnableAwakeAbility &&
+				this.isAwake &&
+				Player.TryGetPlayerRoom(target, out SystemTypes? room) &&
+				room.HasValue)
+			{
+				showText = string.Format(
+					Translation.GetString("killedTextWithRoom"),
+					direction,
+					TranslationController.Instance.GetString(room.Value),
+					System.DateTime.Now);
+			}
+			else
+			{
+				showText = string.Format(
+					Translation.GetString("killedText"),
+					direction, System.DateTime.Now);
+			}
+            this.textPopUp.AddText(showText);
+			Sound.PlaySound(Sound.SoundType.Kill, 0.3f);
         }
     }
 
@@ -124,24 +144,34 @@ public sealed class Whisper :
             !rolePlayer.CanMove)
         {
             resetAbility(rolePlayer);
-            return; 
+            return;
         }
         if (!CachedShipStatus.Instance.enabled ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
         {
             resetAbility(rolePlayer);
-            return; 
+            return;
         }
 
+		if (this.isEnableAwakeAbility &&
+			!this.isAwake)
+		{
+			float curTaskGage = Player.GetPlayerTaskGage(rolePlayer);
+			if (curTaskGage >= this.awakeTaskGage)
+			{
+				this.isAwake = true;
+			}
+		}
+
         if (this.prevPlayerPos == defaultPos)
-        { 
+        {
             this.prevPlayerPos = rolePlayer.GetTruePosition();
         }
 
         if (this.prevPlayerPos != rolePlayer.GetTruePosition())
         {
             resetAbility(rolePlayer);
-            return; 
+            return;
         }
 
         this.timer -= Time.deltaTime;
@@ -189,7 +219,15 @@ public sealed class Whisper :
             WhisperOption.MaxTellText,
             3, 1, 10, 1,
             parentOps);
-    }
+		var awakeOpt = CreateBoolOption(
+			WhisperOption.EnableAwakeAbility,
+			false, parentOps);
+		CreateIntOption(
+			WhisperOption.AbilityTaskGage,
+			70, 0, 100, 10,
+			awakeOpt,
+			format: OptionUnit.Percentage);
+	}
 
     protected override void RoleSpecificInit()
     {
@@ -205,6 +243,12 @@ public sealed class Whisper :
             GetRoleOptionId(WhisperOption.AbilityOffTime));
         this.abilityOnTime = allOption.GetValue<float>(GetRoleOptionId(WhisperOption.AbilityOnTime));
 
+		this.isEnableAwakeAbility = allOption.GetValue<bool>(
+			GetRoleOptionId(WhisperOption.EnableAwakeAbility));
+		this.awakeTaskGage = allOption.GetValue<int>(
+			GetRoleOptionId(WhisperOption.AbilityTaskGage)) / 100.0f;
+		this.isAwake = this.isEnableAwakeAbility && this.awakeTaskGage <= 0.0f;
+
         this.prevPlayerPos = defaultPos;
     }
 
@@ -212,15 +256,13 @@ public sealed class Whisper :
     {
         this.prevPlayerPos = rolePlayer.GetTruePosition();
         this.abilityText.color = Palette.EnabledColor;
-        this.curText = Helper.Translation.GetString(
-            "abilityRemain");
+        this.curText = Translation.GetString("abilityRemain");
         this.isAbilityOn = false;
         this.timer = this.abilityOffTime;
     }
     private void abilityOn()
     {
-        this.curText = Helper.Translation.GetString(
-            "abilityOnText");
+        this.curText = Translation.GetString("abilityOnText");
         this.abilityText.color = new Color(0F, 0.8F, 0F);
         this.isAbilityOn = true;
         this.timer = this.abilityOnTime;

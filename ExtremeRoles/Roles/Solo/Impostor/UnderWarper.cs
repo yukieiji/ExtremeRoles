@@ -7,13 +7,14 @@ using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
 
-using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -102,9 +103,9 @@ public sealed class UnderWarper :
         UseVentWithNoAnimation(
             localPlayer.PlayerId, ventId, isEnter);
 
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+            if (modMap is SubmergedIntegrator)
             {
                 FastDestroyableSingleton<HudManager>.Instance.PlayerCam.Locked = false;
             }

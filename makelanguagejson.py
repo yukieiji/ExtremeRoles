@@ -1,7 +1,8 @@
 import os
 import json
 from typing import Dict
-from openpyxl import load_workbook
+
+from pylightxl import readxl
 
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -27,32 +28,38 @@ def is_require_update(new_json : Dict[str, str], output_file : str) -> bool:
 
 def xlsx_to_json(file_name : str, output_file : str) -> None:
 
-  wb = load_workbook(file_name, read_only = True)
+  wb = readxl(file_name)
 
   xlsx_data = {}
 
-  for s in wb:
-    rows = s.iter_rows(min_col=1, min_row=2, max_col=17, max_row=None)
-    headers = []
-    for header in s[1]:
-      if header.value:
-        headers.append(header.value)
+  for name in wb.ws_names:
 
-    for row in rows:
-      name = row[0].value
+    sheat = wb.ws(name)
 
-      if not name:
-        continue
+    row, col = sheat.size
+
+    # 行を回す
+    for i in range(2, row + 1):
 
       data = {}
 
-      for i, cell in enumerate(row[1:]):
-        if cell.value:
-          # I hate excel why did I do this to myself
-          data[str(i)] = cell.value.replace("\r", "").replace("_x000D_", "").replace("\\n", "\n")
+      # i行目の1列目はキー
+      key = sheat.index(i, 1)
+      if key == "":
+        continue
 
-      if data:
-        xlsx_data[name] = data
+      # i行目j列がデータ、jは2以上であり2が0(英語)である
+      for j in range(2, col + 1):
+          cell_data = sheat.index(i, j)
+
+          if type(cell_data) != str or cell_data == "":
+            continue
+
+          # I hate excel why did I do this to myself
+          data[str(j - 2)] = cell_data.replace("\r", "").replace("_x000D_", "").replace("\\n", "\n")
+
+      if data != {}:
+        xlsx_data[key] = data
 
   if is_require_update(xlsx_data, output_file):
 

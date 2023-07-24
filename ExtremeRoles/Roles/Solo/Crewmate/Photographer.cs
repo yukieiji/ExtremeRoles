@@ -18,10 +18,10 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Photographer : 
-    SingleRoleBase, 
-    IRoleAbility, 
-    IRoleAwake<RoleTypes>, 
+public sealed class Photographer :
+    SingleRoleBase,
+    IRoleAbility,
+    IRoleAwake<RoleTypes>,
     IRoleReportHook
 {
     public struct PlayerPosInfo
@@ -30,42 +30,11 @@ public sealed class Photographer :
         public SystemTypes? Room;
 
         public PlayerPosInfo(
-            GameData.PlayerInfo player,
-            ContactFilter2D filter)
+            GameData.PlayerInfo player)
         {
             this.PlayerName = player.PlayerName;
-            this.Room = null;
-
-            Il2CppReferenceArray<Collider2D> buffer = 
-                new Il2CppReferenceArray<Collider2D>(10);
-            Collider2D playerCollinder = player.Object.GetComponent<Collider2D>();
-
-            foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
-            {
-                if (room != null && room.roomArea)
-                {
-                    int hitCount = room.roomArea.OverlapCollider(filter, buffer);
-                    if (isHit(playerCollinder, buffer, hitCount))
-                    {
-                        this.Room = room.RoomId;
-                    }
-                }
-            }
-        }
-
-        private bool isHit(
-            Collider2D playerCollinder,
-            Collider2D[] buffer,
-            int hitCount)
-        {
-            for (int i = 0; i < hitCount; i++)
-            {
-                if (buffer[i] == playerCollinder)
-                {
-                    return true;
-                }
-            }
-            return false;
+			this.Room = null;
+			Player.TryGetPlayerRoom(player.Object, out this.Room);
         }
     }
 
@@ -75,7 +44,7 @@ public sealed class Photographer :
         private DateTime takeTime;
 
         private static readonly string[] randomStr = new string[]
-        { 
+        {
             "NoName",
             "NewFile",
             "NewPhoto",
@@ -91,8 +60,8 @@ public sealed class Photographer :
             "ExR", "ExS","ExV",
             "ExH", "ExN"
         };
-        
-        public Photo(float range, ContactFilter2D filter)
+
+        public Photo(float range)
         {
             this.takeTime = DateTime.UtcNow;
             this.player = new List<PlayerPosInfo>();
@@ -109,7 +78,7 @@ public sealed class Photographer :
                 Vector3 position = player.Object.transform.position;
                 if (range >= Vector2.Distance(photoCenter, position))
                 {
-                    this.player.Add(new PlayerPosInfo(player, filter));
+                    this.player.Add(new PlayerPosInfo(player));
                 }
 
             }
@@ -153,7 +122,7 @@ public sealed class Photographer :
             }
             return photoInfoBuilder.ToString().Trim('\r', '\n');
         }
-        
+
         public static string GetRandomPhotoName()
         {
             // 適当な役職名とかを写真名にする
@@ -171,7 +140,7 @@ public sealed class Photographer :
             ExtremeRoleId roleId = (ExtremeRoleId)RandomGenerator.Instance.Next(
                 maxRoleId + 1);
 
-            if (roleId != ExtremeRoleId.Null || 
+            if (roleId != ExtremeRoleId.Null ||
                 roleId != ExtremeRoleId.VanillaRole)
             {
                 photoName.Add(Translation.GetString(roleId.ToString()));
@@ -184,7 +153,7 @@ public sealed class Photographer :
 
                 photoName.Add(Translation.GetString(amongUsRoleId.ToString()));
             }
-            
+
             photoName.Add(randomStr[RandomGenerator.Instance.Next(randomStr.Length)]);
             return string.Concat(photoName.OrderBy(
                 item => RandomGenerator.Instance.Next()));
@@ -198,17 +167,10 @@ public sealed class Photographer :
         private const string separateLine = "---------------------------------";
         private float range;
         private List<Photo> film = new List<Photo>();
-        private ContactFilter2D filter;
 
         public PhotoCamera(float range)
         {
             this.range = range;
-            
-            this.filter = default(ContactFilter2D);
-            this.filter.layerMask = Constants.PlayersOnlyMask;
-            this.filter.useLayerMask = true;
-            this.filter.useTriggers = false;
-
             this.film.Clear();
         }
         public void Reset()
@@ -218,7 +180,7 @@ public sealed class Photographer :
 
         public void TakePhoto()
         {
-            this.film.Add(new Photo(this.range, this.filter));
+            this.film.Add(new Photo(this.range));
         }
         public override string ToString()
         {
@@ -277,7 +239,7 @@ public sealed class Photographer :
     private bool isUpgradeChat;
     private PhotoCamera photoCreater;
     private SpriteRenderer flash;
-    public const float FlashTime = 1.0f; 
+    public const float FlashTime = 1.0f;
 
     public Photographer() : base(
         ExtremeRoleId.Photographer,
@@ -311,7 +273,7 @@ public sealed class Photographer :
         }
 
         this.flash.enabled = true;
-        
+
         this.photoCreater.TakePhoto();
 
         hudManager.StartCoroutine(
@@ -482,7 +444,7 @@ public sealed class Photographer :
             60, 0, 100, 10,
             parentOps,
             format: OptionUnit.Percentage);
-        
+
         var chatUpgradeOpt = CreateBoolOption(
             PhotographerOption.EnableAllSendChat,
             false, parentOps);
@@ -528,7 +490,7 @@ public sealed class Photographer :
             this.HasOtherVision = false;
         }
 
-        this.isUpgradeChat = this.enableAllSend && 
+        this.isUpgradeChat = this.enableAllSend &&
             this.upgradeAllSendChatTaskGage <= 0.0f;
 
         this.photoCreater = new PhotoCamera(

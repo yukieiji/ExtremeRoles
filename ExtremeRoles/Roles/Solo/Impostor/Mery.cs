@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -45,9 +46,9 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             this.body.transform.position = new Vector3(
                 pos.x, pos.y, (pos.y / 1000f));
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+				modMap!.AddCustomComponent(
                     this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 
@@ -65,7 +66,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
                 this.body.transform.position.x,
                 this.body.transform.position.y);
 
-            foreach (GameData.PlayerInfo playerInfo in 
+            foreach (GameData.PlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null) { continue; }
@@ -133,13 +134,13 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
             ventRenderer.sprite = Loader.CreateSpriteFromResources(
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
-            vent.myRend = ventRenderer;           
+            vent.myRend = ventRenderer;
             vent.name = "MaryVent_" + vent.Id;
             vent.gameObject.SetActive(this.body.active);
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                modMap!.AddCustomComponent(
                     vent.gameObject, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 

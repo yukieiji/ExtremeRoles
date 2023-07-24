@@ -5,9 +5,9 @@ using UnityEngine;
 using Hazel;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -517,10 +517,9 @@ public sealed class Resurrecter :
 
         List<Vector2> randomPos = new List<Vector2>();
 
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            randomPos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
-                playerId);
+            randomPos = modMap!.GetSpawnPos(playerId);
         }
         else
         {

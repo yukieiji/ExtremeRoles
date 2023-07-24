@@ -9,6 +9,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -28,9 +29,9 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
 
             this.body.transform.position = pos;
 
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+				modMap!.AddCustomComponent(
                     this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
         }
@@ -96,7 +97,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
             }
         }
     }
-    
+
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
@@ -110,7 +111,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
         this.targetDeadBodyId = byte.MaxValue;
         GameData.PlayerInfo info = Player.GetDeadBodyInfo(
             this.crackDistance);
-        
+
         if (info != null)
         {
             this.targetDeadBodyId = info.PlayerId;

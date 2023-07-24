@@ -8,90 +8,90 @@ using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.Module.SpecialWinChecker
 {
-    internal sealed class KidsWinChecker : IWinChecker
-    {
-        public RoleGameOverReason Reason => RoleGameOverReason.KidsTooBigHomeAlone;
+	internal sealed class KidsWinChecker : IWinChecker
+	{
+		public RoleGameOverReason Reason => RoleGameOverReason.KidsTooBigHomeAlone;
 
-        private Dictionary<byte, Delinquent> aliveDelinquent = new Dictionary<byte, Delinquent>();
+		private Dictionary<byte, Delinquent> aliveDelinquent = new Dictionary<byte, Delinquent>();
 
-        public KidsWinChecker()
-        {
-            aliveDelinquent.Clear();
-        }
+		public KidsWinChecker()
+		{
+			aliveDelinquent.Clear();
+		}
 
-        public void AddAliveRole(
-            byte playerId, SingleRoleBase role)
-        {
-            aliveDelinquent.Add(playerId, (Delinquent)role);
-        }
+		public void AddAliveRole(
+			byte playerId, SingleRoleBase role)
+		{
+			aliveDelinquent.Add(playerId, (Delinquent)role);
+		}
 
-        public bool IsWin(PlayerStatistics statistics)
-        {
-            byte checkPlayerId = byte.MaxValue;
-            float range = float.MinValue;
-            Delinquent checkRole = null;
-            foreach (var (playerId, role) in aliveDelinquent)
-            {
-                if (role.WinCheckEnable)
-                {
-                    checkPlayerId = playerId;
-                    range = role.Range;
-                    checkRole = role;
-                    break;
-                }
-            }
-            
-            if (checkPlayerId == byte.MaxValue) { return false; }
+		public bool IsWin(PlayerStatistics statistics)
+		{
+			byte checkPlayerId = byte.MaxValue;
+			float range = float.MinValue;
+			Delinquent checkRole = null;
+			foreach (var (playerId, role) in aliveDelinquent)
+			{
+				if (role.WinCheckEnable)
+				{
+					checkPlayerId = playerId;
+					range = role.Range;
+					checkRole = role;
+					break;
+				}
+			}
 
-            PlayerControl player = Player.GetPlayerControlById(checkPlayerId);
-            if (player == null) { return false; }
+			if (checkPlayerId == byte.MaxValue) { return false; }
 
-            List<PlayerControl> rangeInPlayer = Player.GetAllPlayerInRange(
-                player, checkRole, range);
+			PlayerControl player = Player.GetPlayerControlById(checkPlayerId);
+			if (player == null) { return false; }
 
-            int gameControlId = checkRole.GameControlId;
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                gameControlId = PlayerStatistics.SameNeutralGameControlId;
-            }
+			List<PlayerControl> rangeInPlayer = Player.GetAllPlayerInRange(
+				player, checkRole, range);
 
-            int teamAlive = statistics.SeparatedNeutralAlive[
-                (NeutralSeparateTeam.Kids, gameControlId)];
-            int allAlive = statistics.TotalAlive;
+			int gameControlId = checkRole.GameControlId;
+			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
+			{
+				gameControlId = PlayerStatistics.SameNeutralGameControlId;
+			}
 
-            // 全生存者からアサシンと範囲内にいるプレイヤー、同じチームの人を除く
-            bool isWin = (allAlive - statistics.AssassinAlive - rangeInPlayer.Count - teamAlive) <= 0;
-            if (isWin)
-            {
-                checkRole.BlockWispAssign();
-            }
+			int teamAlive = statistics.SeparatedNeutralAlive[
+				(NeutralSeparateTeam.Kids, gameControlId)];
+			int allAlive = statistics.TotalAlive;
 
-            HashSet<byte> deadPlayerId = new HashSet<byte>();
-            foreach (PlayerControl target in rangeInPlayer)
-            {
-                byte targetId = target.PlayerId;
-                
-                // アサシンと既にキルした人は除く
-                if (deadPlayerId.Contains(targetId) ||
-                    ExtremeRoleManager.GameRole[targetId].Id == ExtremeRoleId.Assassin ||
-                    targetId == checkPlayerId)
-                { 
-                    continue; 
-                }
-                
-                Player.RpcUncheckMurderPlayer(
-                    checkPlayerId, targetId, byte.MinValue);
-                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-                    targetId, ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Explosion);
-                deadPlayerId.Add(targetId);
-            }
+			// 全生存者からアサシンと範囲内にいるプレイヤー、同じチームの人を除く
+			bool isWin = (allAlive - statistics.AssassinAlive - rangeInPlayer.Count - teamAlive) <= 0;
+			if (isWin)
+			{
+				checkRole.BlockWispAssign();
+			}
 
-            Player.RpcUncheckMurderPlayer(
-                checkPlayerId, checkPlayerId, byte.MinValue);
-            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-                checkPlayerId, ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Explosion);
+			HashSet<byte> deadPlayerId = new HashSet<byte>();
+			foreach (PlayerControl target in rangeInPlayer)
+			{
+				byte targetId = target.PlayerId;
 
-            return isWin;
-        }
-    }
+				// アサシンと既にキルした人は除く
+				if (deadPlayerId.Contains(targetId) ||
+					ExtremeRoleManager.GameRole[targetId].Id == ExtremeRoleId.Assassin ||
+					targetId == checkPlayerId)
+				{
+					continue;
+				}
+
+				Player.RpcUncheckMurderPlayer(
+					checkPlayerId, targetId, byte.MinValue);
+				ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+					targetId, ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Explosion);
+				deadPlayerId.Add(targetId);
+			}
+
+			Player.RpcUncheckMurderPlayer(
+				checkPlayerId, checkPlayerId, byte.MinValue);
+			ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+				checkPlayerId, ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Explosion);
+
+			return isWin;
+		}
+	}
 }

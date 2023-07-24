@@ -1,6 +1,6 @@
-﻿using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Compat;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -60,15 +60,15 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
     public bool IsAbilityUse()
     {
         bool sabotageActive = false;
-        foreach (PlayerTask task in 
+        foreach (PlayerTask task in
             CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
         {
             if (task == null) { continue; }
 
             TaskTypes taskType = task.TaskType;
-            if (ExtremeRolesPlugin.Compat.IsModMap)
+            if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+                if (modMap!.IsCustomSabotageTask(taskType))
                 {
                     sabotageActive = true;
                     break;

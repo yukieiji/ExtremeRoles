@@ -3,43 +3,43 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.ExtremeShipStatus
 {
-    public sealed partial class ExtremeShipStatus
-    {
-        public GameObject Status => this.status;
-        private GameObject status;
+	public sealed partial class ExtremeShipStatus
+	{
+		public GameObject Status => this.status;
+		private GameObject status;
 
-        public ExtremeShipStatus()
-        {
-            Initialize(false);
-            this.playerVersion.Clear();
-        }
+		public ExtremeShipStatus()
+		{
+			Initialize(false);
+			this.playerVersion.Clear();
+		}
 
-        public void Initialize(
-            bool includeGameObject = true)
-        {
-            // 以下リファクタ済み
-            
-            this.resetDeadPlayerInfo();
-            this.resetGlobalAction();
-            // this.resetPlayerSummary();
-            this.resetMeetingCount();
-            RoleAssignState.Instance.Reset();
-            
-            this.resetWins();
+		public void Initialize(
+			bool includeGameObject = true)
+		{
+			// 以下リファクタ済み
 
-            this.ClearMeetingResetObject();
+			this.resetDeadPlayerInfo();
+			this.resetGlobalAction();
+			// this.resetPlayerSummary();
+			this.resetMeetingCount();
+			RoleAssignState.Instance.Reset();
 
-            if (!includeGameObject) { return; }
+			this.resetWins();
 
-            if (this.status != null)
-            {
-                Object.Destroy(this.status);
-                this.status = null;
-                this.union = null;
-            }
-            this.status = new GameObject("ExtremeShipStatus");
+			this.ClearMeetingResetObject();
 
-            this.resetUpdateObject();
-        }
-    }
+			if (!includeGameObject) { return; }
+
+			if (this.status != null)
+			{
+				Object.Destroy(this.status);
+				this.status = null;
+				this.union = null;
+			}
+			this.status = new GameObject("ExtremeShipStatus");
+
+			this.resetUpdateObject();
+		}
+	}
 }

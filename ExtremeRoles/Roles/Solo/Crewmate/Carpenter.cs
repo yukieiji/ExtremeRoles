@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -446,9 +447,9 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         {
             camera.transform.localRotation = new Quaternion(0, 0, 1, 1);
         }
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            ExtremeRolesPlugin.Compat.ModMap.SetUpNewCamera(camera);
+			modMap!.SetUpNewCamera(camera);
         }
 
         var allCameras = CachedShipStatus.Instance.AllCameras.ToList();
@@ -558,11 +559,16 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     public bool IsAbilityUse() =>
         this.IsAwake &&
         this.IsCommonUse() &&
-        !(GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId) == 1 && this.targetVent == null) &&
-        !(this.targetVent == null &&
-            ExtremeRolesPlugin.Compat.IsModMap &&
-            !ExtremeRolesPlugin.Compat.ModMap.CanPlaceCamera);
+        !(
+			this.targetVent == null &&
+			GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId) == 1
+		)
+		&&
+        !(
+			this.targetVent == null &&
+			CompatModManager.Instance.TryGetModMap(out var modMap) &&
+            !modMap!.CanPlaceCamera
+		);
 
     public bool IsAbilityCheck() =>
         this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();

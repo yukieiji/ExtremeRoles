@@ -2,10 +2,10 @@
 
 namespace ExtremeRoles.Module.Interface
 {
-    internal interface IShowTextBuilder
-    {
-        protected const RoleCommonOption SpawnOptionKey = RoleCommonOption.SpawnRate;
+	internal interface IShowTextBuilder
+	{
+		protected const RoleCommonOption SpawnOptionKey = RoleCommonOption.SpawnRate;
 
-        (string, string, string) GetShowText();
-    }
+		(string, string, string) GetShowText();
+	}
 }

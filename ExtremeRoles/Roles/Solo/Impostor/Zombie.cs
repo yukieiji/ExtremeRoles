@@ -8,10 +8,10 @@ using AmongUs.GameOptions;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -83,9 +83,6 @@ public sealed class Zombie :
     private SystemTypes targetRoom;
 
     private Collider2D cachedColider = null;
-
-    private Il2CppReferenceArray<Collider2D> buffer;
-    private ContactFilter2D filter = default(ContactFilter2D);
 
     public Zombie() : base(
         ExtremeRoleId.Zombie,
@@ -180,17 +177,19 @@ public sealed class Zombie :
     {
         this.curPos = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
 
-        if (!tryGetPlayerInRoom(out SystemTypes room) ||
-            !this.setRooms.ContainsKey(room)) { return false; }
+        if (!tryGetPlayerInRoom(out SystemTypes? room) ||
+			!room.HasValue ||
+            !this.setRooms.ContainsKey(room.Value)) { return false; }
 
-        this.targetRoom = room;
+        this.targetRoom = room.Value;
         return true;
     }
 
     public bool IsAbilityUse()
-        => this.IsCommonUse() &&
-           tryGetPlayerInRoom(out SystemTypes room) &&
-           this.setRooms.ContainsKey(room);
+		=> this.IsCommonUse() &&
+			tryGetPlayerInRoom(out SystemTypes? room) &&
+			room.HasValue &&
+			this.setRooms.ContainsKey(room.Value);
 
     public void SetMagicCircle()
     {
@@ -481,7 +480,6 @@ public sealed class Zombie :
         this.activateResurrectTimer = false;
 
         this.cachedColider = null;
-        this.buffer = null;
 
         if (this.awakeKillCount <= 0)
         {
@@ -529,13 +527,11 @@ public sealed class Zombie :
 
         var allPlayer = GameData.Instance.AllPlayers;
         ShipStatus ship = CachedShipStatus.Instance;
+		List<Vector2> randomPos = new List<Vector2>();
 
-        List<Vector2> randomPos = new List<Vector2>();
-
-        if (ExtremeRolesPlugin.Compat.IsModMap)
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            randomPos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
-                playerId);
+            randomPos = modMap!.GetSpawnPos(playerId);
         }
         else
         {
@@ -591,46 +587,13 @@ public sealed class Zombie :
         }
     }
 
-    private bool tryGetPlayerInRoom(out SystemTypes playerRoom)
+    private bool tryGetPlayerInRoom(out SystemTypes? playerRoom)
     {
-        playerRoom = SystemTypes.Hallway;
-
         if (this.cachedColider == null)
         {
             this.cachedColider = CachedPlayerControl.LocalPlayer.PlayerControl.GetComponent<Collider2D>();
         }
-        if (this.buffer == null)
-        {
-            this.buffer = new Il2CppReferenceArray<Collider2D>(20);
-        }
 
-        foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
-        {
-            if (room == null || !room.roomArea) { continue; }
-
-            int hitCount = room.roomArea.OverlapCollider(this.filter, this.buffer);
-            if (isHit(this.cachedColider, buffer, hitCount))
-            {
-                playerRoom = room.RoomId;
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private static bool isHit(
-        Collider2D playerCollinder,
-        Collider2D[] buffer,
-        int hitCount)
-    {
-        for (int i = 0; i < hitCount; i++)
-        {
-            if (buffer[i] == playerCollinder)
-            {
-                return true;
-            }
-        }
-        return false;
+        return Player.TryGetPlayerColiderRoom(this.cachedColider, out playerRoom);
     }
 }

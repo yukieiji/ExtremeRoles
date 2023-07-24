@@ -1,7 +1,7 @@
 ﻿namespace ExtremeRoles.Module.Interface
 {
-    public interface IMeetingResetObject
-    {
-        void Clear();
-    }
+	public interface IMeetingResetObject
+	{
+		void Clear();
+	}
 }

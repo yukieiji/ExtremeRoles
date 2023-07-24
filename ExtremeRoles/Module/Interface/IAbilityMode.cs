@@ -2,8 +2,8 @@
 
 namespace ExtremeRoles.Module.Interface
 {
-    public interface IAbilityMode
-    {
-        public ButtonGraphic Graphic { get; }
-    }
+	public interface IAbilityMode
+	{
+		public ButtonGraphic Graphic { get; }
+	}
 }

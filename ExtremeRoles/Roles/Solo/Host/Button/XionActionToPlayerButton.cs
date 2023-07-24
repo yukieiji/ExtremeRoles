@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Host.Button;
@@ -20,7 +20,7 @@ internal sealed class XionActionToPlayerButton
                 hudManager.KillButton, parent);
             PassiveButton button = Body.GetComponent<PassiveButton>();
             button.OnClick.RemoveAllPersistentAndListeners();
-            button.OnClick.AddListener((UnityEngine.Events.UnityAction)OnClickEvent);
+            button.OnClick.AddListener(OnClickEvent);
             SetActive(false);
 
             var useButton = hudManager.UseButton;
