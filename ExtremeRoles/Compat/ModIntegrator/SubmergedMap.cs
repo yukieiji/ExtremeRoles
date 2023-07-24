@@ -64,27 +64,28 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public TaskTypes RetrieveOxygenMask;
 
-	private Type? elevatorMover;
-
-	private Type? submarineOxygenSystem;
-	private PropertyInfo? submarineOxygenSystemInstanceGetter;
-	private MethodInfo? submarineOxygenSystemRepairDamageMethod;
-
-	private MethodInfo? getFloorHandlerInfo;
-	private MethodInfo? rpcRequestChangeFloorMethod;
-	private FieldInfo? onUpperField;
-
-	private FieldInfo? inTransitionField;
-
-	private Type? submarineStatusType;
-	private MethodInfo? calculateLightRadiusMethod;
-	private MonoBehaviour? submarineStatus;
-	private FieldInfo? submarineStatusReference;
-
 	private float crewVision;
 	private float impostorVision;
 
+	private Type submarineStatusType;
+	private FieldInfo submarineStatusReference;
+	private FieldInfo inTransitionField;
+
+	private MethodInfo calculateLightRadiusMethod;
+
+	private MethodInfo rpcRequestChangeFloorMethod;
+	private FieldInfo onUpperField;
+	private MethodInfo getFloorHandlerInfo;
+
+	private Type submarineOxygenSystem;
+	private PropertyInfo submarineOxygenSystemInstanceGetter;
+	private MethodInfo submarineOxygenSystemRepairDamageMethod;
+
+	private Type elevatorMover;
+
+	private MonoBehaviour? submarineStatus;
 #pragma warning disable CS8618
+
 	private SelectionCustomOption elevatorOption;
 	private BoolCustomOption replaceDoorMinigameOption;
 
@@ -105,7 +106,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.submarineOxygenSystemInstanceGetter = AccessTools.Property(
 			this.submarineOxygenSystem, "Instance");
 		this.submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
-		this.submarineOxygenSystem, "RepairDamage");
+			this.submarineOxygenSystem, "RepairDamage");
 
 		// サブマージドのカスタムMonoを取ってくる
 		this.elevatorMover = this.ClassType.First(t => t.Name == "ElevatorMover");
@@ -170,7 +171,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
 	{
-		object? value = calculateLightRadiusMethod?.Invoke(
+		object? value = calculateLightRadiusMethod.Invoke(
 			this.submarineStatus, new object?[] { null, neutral, neutralImpostor });
 		return value != null ? (float)value : 1.0f;
 	}
@@ -201,7 +202,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	{
 		MonoBehaviour? floorHandler = getFloorHandler(player);
 		if (floorHandler == null) { return int.MaxValue; }
-		object? valueObj = onUpperField?.GetValue(floorHandler);
+
+		object? valueObj = this.onUpperField.GetValue(floorHandler);
 		return valueObj != null && (bool)valueObj ? 1 : 0;
 	}
 
@@ -214,7 +216,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (floor > 1) { return; }
 		MonoBehaviour? floorHandler = getFloorHandler(player);
 		if (floorHandler == null) { return; }
-		rpcRequestChangeFloorMethod?.Invoke(floorHandler, new object[] { floor == 1 });
+
+		this.rpcRequestChangeFloorMethod.Invoke(floorHandler, new object[] { floor == 1 });
 	}
 
 	public Console? GetConsole(TaskTypes task)
@@ -341,7 +344,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public (float, bool, bool) IsCustomVentUseResult(
 		Vent vent, GameData.PlayerInfo player, bool isVentUse)
 	{
-		object? valueObj = inTransitionField?.GetValue(null);
+		object? valueObj = inTransitionField.GetValue(null);
 
 		if (valueObj == null || (bool)valueObj)
 		{
@@ -400,8 +403,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (saboTask == this.RetrieveOxygenMask)
 		{
 			CachedShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
-			submarineOxygenSystemRepairDamageMethod?.Invoke(
-				submarineOxygenSystemInstanceGetter?.GetValue(null),
+			this.submarineOxygenSystemRepairDamageMethod.Invoke(
+				this.submarineOxygenSystemInstanceGetter.GetValue(null),
 				new object[] { PlayerControl.LocalPlayer, (byte)64 });
 		}
 	}
@@ -547,7 +550,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	private MonoBehaviour? getFloorHandler(PlayerControl player)
 	{
-		object? handlerObj = this.getFloorHandlerInfo?.Invoke(null, new object[] { player });
+		object? handlerObj = this.getFloorHandlerInfo.Invoke(null, new object[] { player });
 
 		if (handlerObj == null) { return null; }
 
@@ -597,7 +600,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (this.replaceDoorMinigameOption.GetValue() || CachedShipStatus.Instance == null)
 		{ return; }
 
-		object? transformValue = this.submarineStatusReference?.GetValue(this.submarineStatus);
+		object? transformValue = this.submarineStatusReference.GetValue(this.submarineStatus);
 		if (transformValue == null ||
 			transformValue is not Transform transform) { return; }
 

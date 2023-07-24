@@ -58,5 +58,4 @@ internal sealed class ExRAddonUninstaller : OperatorBase
 			Logging.Error($"Exception occured when clearing old versions:\n{e}");
 		}
 	}
-
 }

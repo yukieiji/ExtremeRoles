@@ -231,7 +231,7 @@ internal static class CompatModMenu
 		int posIndex,
 		string pluginPath,
 		CompatModType modType,
-								SimpleButton template)
+		SimpleButton template)
 	{
 		string addonName = modType.ToString();
 
