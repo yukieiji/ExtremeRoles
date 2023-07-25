@@ -226,6 +226,6 @@ public static class CustomColorPalette
 
 	public static void AddCustomColor(ColorData data)
     {
-	AddColor.Add(data);
+		AddColor.Add(data);
     }
 }

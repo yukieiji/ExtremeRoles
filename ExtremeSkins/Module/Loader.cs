@@ -37,7 +37,7 @@ public static class Loader
 				_ => string.Empty,
 			};
 
-			return $"ErrorCode:{(int)Code}   {errorMessage} FromTarget:{LoadPath}";
+			return $"ErrorCode:{(int)Code},{this.Code}   {errorMessage} FromTarget:{LoadPath}";
 		}
 	}
 
