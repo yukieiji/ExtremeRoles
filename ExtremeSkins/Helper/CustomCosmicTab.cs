@@ -10,7 +10,7 @@ namespace ExtremeSkins.Helper;
 
 public static class CustomCosmicTab
 {
-    public static TMP_Text textTemplate;
+    public static TMP_Text? TextTemplate;
 
     public const string InnerslothPackageName = "innerslothMake";
 
@@ -42,10 +42,10 @@ public static class CustomCosmicTab
         ref List<TMP_Text> textList,
         ref float offset)
     {
-        if (textTemplate != null)
+        if (TextTemplate != null)
         {
             TMP_Text title = Object.Instantiate(
-                textTemplate, instance.scroller.Inner);
+				TextTemplate, instance.scroller.Inner);
             title.transform.SetParent(instance.scroller.Inner);
             title.transform.localPosition = new Vector3(headerX, yPos, inventoryZ);
             title.alignment = TextAlignmentOptions.Center;
@@ -126,7 +126,7 @@ public static class CustomCosmicTab
         float xPos = instance.XRange.Lerp(
                 (setIndex % instance.NumPerRow) / (instance.NumPerRow - 1f));
         float yPos = offset - (setIndex / instance.NumPerRow) * instance.YOffset;
-        ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(
+        ColorChip colorChip = Object.Instantiate(
             instance.ColorTabPrefab, instance.scroller.Inner);
 
         colorChip.transform.localPosition = new Vector3(xPos, yPos, inventoryZ);
