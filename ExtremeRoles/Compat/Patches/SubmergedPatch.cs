@@ -39,6 +39,11 @@ public static class SubmarineSelectOnDestroyPatch
 	public static void Prefix()
 	{
 		ExtremeRoles.Patches.Controller.ExileControllerReEnableGameplayPatch.ReEnablePostfix();
+
+		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		{
+			HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+		}
 	}
 }
 
@@ -54,11 +59,6 @@ public static class SubmergedExileControllerWrapUpAndSpawnPatch
 	{
 		ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
 			__instance.exiled);
-
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-		{
-			HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
-		}
 	}
 }
 
@@ -79,8 +79,8 @@ public static class HudManagerUpdatePatchPostfixPatch
 			buttonOjb is GameObject floorButton &&
 			floorButton != null && !changed)
 		{
-			changed = true;
 			floorButton.transform.localPosition -= new Vector3(0.0f, 0.75f, 0.0f);
+			changed = true;
 		}
 
 	}
