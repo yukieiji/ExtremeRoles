@@ -8,7 +8,6 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -22,18 +21,16 @@ using ExtremeRoles.Roles.API.Extension.State;
 namespace ExtremeRoles.Patches.Manager;
 
 
-[HarmonyPatch(typeof(HudManager), nameof(HudManager.ToggleMapVisible))]
-public static class HudManagerToggleMapVisibletPatch
+[HarmonyPatch(typeof(HudManager), nameof(HudManager.SetTouchType))]
+public static class HudManagerSetTouchTypePatch
 {
-    public static void Prefix([HarmonyArgument(0)] ref MapOptions options)
-    {
-        if(options.Mode != MapOptions.Modes.CountOverlay ||
-           ExtremeRoleManager.GameRole.Count == 0 ||
-           ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin() ||
-           MapCountOverlayUpdatePatch.IsAbilityUse()) { return; }
-
-        options.Mode = MapOptions.Modes.Normal;
-    }
+	public static void Postfix()
+	{
+		if (GameSystem.IsFreePlay)
+		{
+			InfoOverlay.Instance.InitializeToGame();
+		}
+	}
 }
 
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
@@ -42,6 +39,21 @@ public static class HudManagerStartPatch
     public static void Postfix()
     {
 		InfoOverlay.Instance.InitializeToLobby();
+	}
+}
+
+
+[HarmonyPatch(typeof(HudManager), nameof(HudManager.ToggleMapVisible))]
+public static class HudManagerToggleMapVisibletPatch
+{
+	public static void Prefix([HarmonyArgument(0)] ref MapOptions options)
+	{
+		if (options.Mode != MapOptions.Modes.CountOverlay ||
+		   ExtremeRoleManager.GameRole.Count == 0 ||
+		   ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin() ||
+		   MapCountOverlayUpdatePatch.IsAbilityUse()) { return; }
+
+		options.Mode = MapOptions.Modes.Normal;
 	}
 }
 
