@@ -7,42 +7,43 @@ using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module;
 
-namespace ExtremeSkins.Module
+namespace ExtremeSkins.Module;
+
+[Il2CppRegister]
+public sealed class CreatorButton : MonoBehaviour
 {
-    [Il2CppRegister]
-    public sealed class CreatorButton : MonoBehaviour
+    private Scroller? tabScroller;
+    private TMP_Text? creatorText;
+
+    [HideFromIl2Cpp]
+    public void Initialize(Scroller scroller, TMP_Text text)
     {
-        private Scroller tabScroller;
-        private TMP_Text creatorText;
+        this.tabScroller = scroller;
+        this.creatorText = text;
+    }
 
-        [HideFromIl2Cpp]
-        public void Initialize(Scroller scroller, TMP_Text text)
+    [HideFromIl2Cpp]
+    public Action GetClickAction()
+    {
+        return () =>
         {
-            this.tabScroller = scroller;
-            this.creatorText = text;
-        }
+			if (this.tabScroller == null || this.creatorText == null) { return; }
 
-        [HideFromIl2Cpp]
-        public Action GetClickAction()
-        {
-            return () =>
-            {
-                Vector3 curScrollPos = this.tabScroller.Inner.transform.localPosition;
-                Vector3 textPos = this.creatorText.transform.position;
-                ExtremeSkinsPlugin.Logger.LogInfo($"Scroll from:{curScrollPos} to:{textPos}");
+            Vector3 curScrollPos = this.tabScroller.Inner.transform.localPosition;
+            Vector3 textPos = this.creatorText.transform.position;
+            ExtremeSkinsPlugin.Logger.LogInfo($"Scroll from:{curScrollPos} to:{textPos}");
 
-                float scrollerMin = this.tabScroller.ContentYBounds.min;
-                float scrollerMax = this.tabScroller.ContentYBounds.max;
+            float scrollerMin = this.tabScroller.ContentYBounds.min;
+            float scrollerMax = this.tabScroller.ContentYBounds.max;
 
-                this.tabScroller.Inner.transform.localPosition = new Vector3(
-                    curScrollPos.x,
-                    Mathf.Clamp(
-                        curScrollPos.y - textPos.y + 1.0f, // オフセット値
-                        scrollerMin,
-                        Mathf.Max(scrollerMin, scrollerMax)),
-                    curScrollPos.z);
-                this.tabScroller.UpdateScrollBars();
-            };
-        }
+            this.tabScroller.Inner.transform.localPosition = new Vector3(
+                curScrollPos.x,
+                Mathf.Clamp(
+                    curScrollPos.y - textPos.y + 1.0f, // オフセット値
+                    scrollerMin,
+                    Mathf.Max(scrollerMin, scrollerMax)),
+                curScrollPos.z);
+            this.tabScroller.UpdateScrollBars();
+        };
     }
 }

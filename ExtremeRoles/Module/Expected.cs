@@ -36,37 +36,13 @@ public static class ErrorCodeMaker
 		}
 	}
 
-	public static Unexpected<ErrorCode<E>> MakeErrorCode<E>(E code)
+	public static ErrorCode<E> MakeErrorCode<E>(E code)
 		where E :
 			struct, IComparable, IConvertible,
 			IComparable<E>, IEquatable<E>
-		=> new Unexpected<ErrorCode<E>>(new ErrorCode<E>(code));
+		=> new ErrorCode<E>(code);
 }
 
-public sealed class Unexpected<E>
-	where E : new()
-{
-	private readonly E e;
-
-	public Unexpected()
-	{
-		this.e = new E();
-	}
-	public Unexpected(E e)
-	{
-		this.e = e;
-	}
-
-	public static implicit operator E(Unexpected<E> exp)
-	{
-		return exp.e;
-	}
-
-	public static implicit operator Unexpected<E>(E e)
-	{
-		return new Unexpected<E>(e);
-	}
-}
 
 public sealed class Expected<T> : IEquatable<Expected<T>>
 {
@@ -167,17 +143,17 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 			return this.value;
 		}
 	}
-	public Unexpected<E> Error { get; init; }
+	public E Error { get; init; }
 
 	private readonly T? value;
 
 	public Expected(T? value)
 	{
 		this.value = value;
-		Error = new Unexpected<E>();
+		Error = new E();
 	}
 
-	public Expected(Unexpected<E> error)
+	public Expected(E error)
 	{
 		this.value = default(T);
 		Error = error;
