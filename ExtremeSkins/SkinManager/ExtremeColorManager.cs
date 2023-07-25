@@ -6,8 +6,6 @@ using UnityEngine;
 
 using ExtremeSkins.Module;
 
-#nullable enable
-
 namespace ExtremeSkins.SkinManager;
 
 public static class ExtremeColorManager

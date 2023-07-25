@@ -12,8 +12,6 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins;
 
-#nullable enable
-
 public sealed class CreatorModeManager
 {
     public enum Mode

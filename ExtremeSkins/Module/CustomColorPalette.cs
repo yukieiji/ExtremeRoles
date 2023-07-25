@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-#nullable enable
-
 namespace ExtremeSkins.Module;
 
 public static class CustomColorPalette
