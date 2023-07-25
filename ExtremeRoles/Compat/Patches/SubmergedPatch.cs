@@ -75,8 +75,7 @@ public static class HudManagerUpdatePatchPostfixPatch
 
 		object? buttonOjb = floorButtonInfo.GetValue(__instance);
 
-		if (!Helper.GameSystem.IsFreePlay &&
-			buttonOjb is GameObject floorButton &&
+		if (buttonOjb is GameObject floorButton &&
 			floorButton != null && !changed)
 		{
 			floorButton.transform.localPosition -= new Vector3(0.0f, 0.75f, 0.0f);

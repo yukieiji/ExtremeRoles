@@ -539,6 +539,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		harmony.Patch(submarineOxygenSystemDetoriorate,
 			postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
 
+		// アサシン会議時の暗転を防ぐパッチ
 		harmony.Patch(submarineSpawnInSystemDetoriorate,
 			postfix: new HarmonyMethod(submarineSpawnInSystemDetorioratePostfixPatch));
 

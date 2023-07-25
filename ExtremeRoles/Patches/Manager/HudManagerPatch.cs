@@ -13,10 +13,10 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Patches.MapOverlay;
-using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.Manager;
 
