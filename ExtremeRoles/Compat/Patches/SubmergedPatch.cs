@@ -63,13 +63,15 @@ public static class SubmergedExileControllerWrapUpAndSpawnPatch
 public static class HudManagerUpdatePatchPostfixPatch
 {
 	private static bool changed = false;
-	private static FieldInfo? floorButtonInfo;
+#pragma warning disable CS8618
+	private static FieldInfo floorButtonInfo;
+#pragma warning restore CS8618
 
 	public static void Postfix(object __instance)
 	{
 		if (!CompatModManager.Instance.IsModMap<Submerged>()) { return; }
 
-		object? buttonOjb = floorButtonInfo?.GetValue(__instance);
+		object? buttonOjb = floorButtonInfo.GetValue(__instance);
 
 
 		if (!Helper.GameSystem.IsFreePlay &&
@@ -84,7 +86,7 @@ public static class HudManagerUpdatePatchPostfixPatch
 	public static void SetType(System.Type type)
 	{
 		changed = false;
-		floorButtonInfo = type.GetField("floorButton");
+		floorButtonInfo = AccessTools.Field(type, "_floorButton");
 	}
 
 	public static void ButtonTriggerReset()
