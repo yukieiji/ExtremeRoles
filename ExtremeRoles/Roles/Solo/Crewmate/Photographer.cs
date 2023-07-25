@@ -18,6 +18,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
+#nullable enable
+
 public sealed class Photographer :
     SingleRoleBase,
     IRoleAbility,
@@ -104,8 +106,7 @@ public sealed class Photographer :
 
                     string roomInfo = string.Empty;
 
-                    if (isUpgrade &&
-                        playerInfo.Room != null)
+                    if (isUpgrade && playerInfo.Room != null)
                     {
                         roomInfo =
                             FastDestroyableSingleton<TranslationController>.Instance.GetString(
@@ -208,15 +209,6 @@ public sealed class Photographer :
         UpgradeAllSendChatTaskGage,
         PhotoRange,
     }
-
-    public ExtremeAbilityButton Button
-    {
-        get => this.takePhotoButton;
-        set
-        {
-            this.takePhotoButton = value;
-        }
-    }
     public bool IsAwake
     {
         get
@@ -226,9 +218,6 @@ public sealed class Photographer :
     }
 
     public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
-
-    private ExtremeAbilityButton takePhotoButton;
-
     private bool awakeRole;
     private float awakeTaskGage;
     private bool awakeHasOtherVision;
@@ -237,20 +226,23 @@ public sealed class Photographer :
     private bool enableAllSend;
     private float upgradeAllSendChatTaskGage;
     private bool isUpgradeChat;
-    private PhotoCamera photoCreater;
-    private SpriteRenderer flash;
+
+    private SpriteRenderer? flash;
     public const float FlashTime = 1.0f;
 
-    public Photographer() : base(
+#pragma warning disable CS8618
+	public ExtremeAbilityButton Button { get; set; }
+	private PhotoCamera photoCreater;
+	public Photographer() : base(
         ExtremeRoleId.Photographer,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Photographer.ToString(),
         ColorPalette.PhotographerVerdeSiena,
         false, true, false, false)
     { }
+#pragma warning restore CS8618
 
-
-    public void CreateAbility()
+	public void CreateAbility()
     {
         this.CreateAbilityCountButton(
             "takePhoto",
@@ -327,7 +319,7 @@ public sealed class Photographer :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         this.photoCreater.Reset();
     }
@@ -342,11 +334,11 @@ public sealed class Photographer :
             {
                 this.awakeRole = true;
                 this.HasOtherVision = this.awakeHasOtherVision;
-                this.takePhotoButton.SetButtonShow(true);
+                this.Button.SetButtonShow(true);
             }
             else
             {
-                this.takePhotoButton.SetButtonShow(false);
+                this.Button.SetButtonShow(false);
             }
         }
 
@@ -513,7 +505,7 @@ public sealed class Photographer :
 
         if (photoInfo == string.Empty ||
             !AmongUsClient.Instance.AmClient ||
-            !hud) { return; }
+            hud == null) { return; }
 
         string chatText = string.Format(
             Translation.GetString("photoChat"),
