@@ -69,7 +69,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	private Type submarineStatusType;
 	private FieldInfo submarineStatusReference;
-	private FieldInfo inTransitionField;
+	private PropertyInfo inTransitionField;
 
 	private MethodInfo calculateLightRadiusMethod;
 
@@ -127,7 +127,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			this.submarineStatusType, "referenceHolder");
 
 		Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentPatchData");
-		this.inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "inTransition");
+		this.inTransitionField = AccessTools.Property(ventMoveToVentPatchType, "InTransition");
 	}
 #pragma warning restore CS8618
 
@@ -597,7 +597,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	private void replaceDoorMinigame()
 	{
-		if (this.replaceDoorMinigameOption.GetValue() || CachedShipStatus.Instance == null)
+		if (!this.replaceDoorMinigameOption.GetValue() || CachedShipStatus.Instance == null)
 		{ return; }
 
 		object? transformValue = this.submarineStatusReference.GetValue(this.submarineStatus);
