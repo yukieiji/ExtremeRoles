@@ -113,10 +113,9 @@ public static class HudManagerUpdatePatch
 
     public static void Postfix()
     {
-        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
-        { return; }
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
+			ExtremeRoleManager.GameRole.Count == 0 ||
+			!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
