@@ -26,7 +26,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         private static float inventoryTop = 1.5f;
         private static float inventoryBottom = -2.5f;
 
-        public static CreatorTab Tab = null;
+        public static CreatorTab? Tab = null;
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(VisorsTab), nameof(VisorsTab.OnEnable))]
@@ -45,11 +45,11 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             visorsTabCustomText.Clear();
             __instance.ColorChips.Clear();
 
-            if (CustomCosmicTab.textTemplate == null)
+            if (CustomCosmicTab.TextTemplate == null)
             {
-                CustomCosmicTab.textTemplate = Object.Instantiate(
+                CustomCosmicTab.TextTemplate = Object.Instantiate(
                     PlayerCustomizationMenu.Instance.itemName);
-                CustomCosmicTab.textTemplate.gameObject.SetActive(false);
+                CustomCosmicTab.TextTemplate.gameObject.SetActive(false);
             }
 
             if (Tab == null)

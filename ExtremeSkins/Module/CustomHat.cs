@@ -30,7 +30,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
     public string Id
     {
-        get => $"hat_{new DirectoryInfo(this.folderPath).Name}_{this.info.Author}_{this.info.Name}";
+        get => $"hat_{new DirectoryInfo(this.folderPath).Name}_{this.Author}_{this.Name}";
     }
 
     private string folderPath;
@@ -47,8 +47,8 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
     {
         StringBuilder builder = new StringBuilder();
         builder
-            .AppendLine($" - Name      : {this.info.Name}")
-            .AppendLine($" - Author    : {this.info.Author}")
+            .AppendLine($" - Name      : {this.Name}")
+            .AppendLine($" - Author    : {this.Author}")
             .AppendLine($" - Load from : {this.folderPath}")
             .Append    ($" - Id        : {this.Id}");
 
