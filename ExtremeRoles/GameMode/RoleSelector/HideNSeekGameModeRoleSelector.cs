@@ -13,7 +13,7 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
 
     public bool CanUseXion => false;
     public bool EnableXion => false;
-    
+
     public bool IsVanillaRoleToMultiAssign => true;
 
     public IEnumerable<ExtremeRoleId> UseNormalRoleId
@@ -76,8 +76,8 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
 
         return this.useNormalRoleSpawnOption.Contains(id);
     }
-    
-    private static ExtremeRoleId[] getUseNormalId() => 
+
+    private static ExtremeRoleId[] getUseNormalId() =>
         new ExtremeRoleId[]
         {
             ExtremeRoleId.SpecialCrew,

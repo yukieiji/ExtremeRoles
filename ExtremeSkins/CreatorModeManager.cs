@@ -22,9 +22,11 @@ public sealed class CreatorModeManager
         DisableReady
     }
 
-    public static CreatorModeManager Instance { get; private set; }
+#pragma warning disable CS8618
+	public static CreatorModeManager Instance { get; private set; }
+#pragma warning restore CS8618
 
-    public bool IsEnable => this.creatorModeConfig.Value;
+	public bool IsEnable => this.creatorModeConfig.Value;
     public string StatusString => this.statusString;
 
     private ConfigEntry<bool> creatorModeConfig;
@@ -38,13 +40,14 @@ public sealed class CreatorModeManager
 
     private const string comma = ",";
 
-    public CreatorModeManager()
+    private CreatorModeManager()
     {
         this.creatorModeConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
             "CreateNewSkin", "CreatorMode", false);
 
         this.mode = this.IsEnable ? Mode.Enable : Mode.Disable;
         updateStatusString();
+
     }
 
     public void SwitchMode()
@@ -69,11 +72,10 @@ public sealed class CreatorModeManager
     public static void Initialize()
     {
         Instance = new CreatorModeManager();
+		string? amongUsPath = Path.GetDirectoryName(Application.dataPath);
 
-        if (Instance.IsEnable)
+		if (Instance.IsEnable && !string.IsNullOrEmpty(amongUsPath))
         {
-            string amongUsPath = Path.GetDirectoryName(Application.dataPath);
-
             CreatorMode.CreateCreatorModeFolder(amongUsPath);
             tryImportTestTransData(amongUsPath);
 
@@ -91,7 +93,7 @@ public sealed class CreatorModeManager
 
             transCsv.ReadLine(); // verHeader
 
-            string transInfoLine;
+            string? transInfoLine;
             while ((transInfoLine = transCsv.ReadLine()) != null)
             {
                 string[] transInfo = transInfoLine.Split(',');
@@ -127,7 +129,7 @@ public sealed class CreatorModeManager
                 colorCsvPath, new UTF8Encoding(true));
             colorCsv.ReadLine(); // verHeader
 
-            string colorInfoLine;
+            string? colorInfoLine;
             while ((colorInfoLine = colorCsv.ReadLine()) != null)
             {
                 string[] colorInfo = colorInfoLine.Split(',');

@@ -16,6 +16,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 
+#nullable enable
+
 namespace ExtremeRoles.GhostRoles.Crewmate;
 
 public sealed class Shutter : GhostRoleBase
@@ -137,18 +139,19 @@ public sealed class Shutter : GhostRoleBase
         RightPlayerNameRate
     }
 
-    private GhostPhotoCamera photoCreater;
-    private SpriteRenderer flash;
-
-    public Shutter() : base(
+    private SpriteRenderer? flash;
+#pragma warning disable CS8618
+	private GhostPhotoCamera photoCreater;
+	public Shutter() : base(
         true,
         ExtremeRoleType.Crewmate,
         ExtremeGhostRoleId.Shutter,
         ExtremeGhostRoleId.Shutter.ToString(),
         ColorPalette.PhotographerVerdeSiena)
     { }
+#pragma warning restore CS8618
 
-    public override void CreateAbility()
+	public override void CreateAbility()
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.ShutterTakePhoto,

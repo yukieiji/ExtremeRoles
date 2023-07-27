@@ -18,18 +18,19 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new Harmony(Id);
 
-    public static ExtremeSkinsPlugin Instance;
+#pragma warning disable CS8618
+	public static ExtremeSkinsPlugin Instance;
+	internal static BepInEx.Logging.ManualLogSource Logger;
+#pragma warning restore CS8618
 
-    internal static BepInEx.Logging.ManualLogSource Logger;
-
-    public const string SkinComitCategory = "SkinComit";
+	public const string SkinComitCategory = "SkinComit";
 
     public override void Load()
     {
         Helper.Translation.LoadTransData();
 
         Logger = Log;
-        
+
         Instance = this;
 
 #if WITHHAT
@@ -50,7 +51,10 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
         Harmony.PatchAll();
 
+
         var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
+
+		if (assembly is null) { return; }
 
         Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
         Il2CppRegisterAttribute.Registration(assembly);

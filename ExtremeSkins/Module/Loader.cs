@@ -6,74 +6,114 @@ using UnityEngine;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
-namespace ExtremeSkins.Module
+using ExtremeRoles.Module;
+
+namespace ExtremeSkins.Module;
+
+public static class Loader
 {
-    public static class Loader
+	public enum ErrorCode : byte
+	{
+		UnKnown,
+		CannotFindResource,
+		CannotFindImgFromDisk,
+		CannotCreateTexture,
+		CannotCreateSprite
+	}
+
+	public record LoadError(ErrorCode Code, string LoadPath)
+	{
+		public LoadError() : this(ErrorCode.UnKnown, "")
+		{ }
+
+		public override string ToString()
+		{
+			string errorMessage = Code switch
+			{
+				ErrorCode.CannotFindResource    => "Cannot find item in embemded resource",
+				ErrorCode.CannotFindImgFromDisk => "Cannot find img in Disk",
+				ErrorCode.CannotCreateTexture   => "Cannot create Texture2D",
+				ErrorCode.CannotCreateSprite    => "Cannot create Sprite",
+				_ => string.Empty,
+			};
+
+			return $"ErrorCode:{(int)Code},{this.Code}   {errorMessage} FromTarget:{LoadPath}";
+		}
+	}
+
+    private static Sprite? titleLog = null;
+
+    private const string titleLogPath = "ExtremeSkins.Resources.TitleBurner.png";
+    private const float titlePixelPerUnit = 425f;
+
+    public static Expected<Sprite, LoadError> GetTitleLog()
     {
-        private static Sprite titleLog = null;
-
-        private const string titleLogPath = "ExtremeSkins.Resources.TitleBurner.png";
-        private const float titlePixelPerUnit = 425f;
-
-        public static Sprite GetTitleLog()
+        try
         {
-            try
+            if (titleLog == null)
             {
-                if (titleLog == null)
-                {
-                    Texture2D texture = createTextureFromResources(titleLogPath);
-                    titleLog = Sprite.Create(
-                        texture,
-                        new Rect(0, 0, texture.width, texture.height),
-                        new Vector2(0.5f, 0.5f), titlePixelPerUnit);
-                    titleLog.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-                }
+                var result = createTextureFromResources(titleLogPath);
 
-                return titleLog;
+				if (!result.HasValue())
+				{
+					return result.Error;
+				}
+
+				var texture = result.Value;
+
+				titleLog = Sprite.Create(
+					texture,
+                    new Rect(0, 0, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f), titlePixelPerUnit);
+                titleLog.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             }
-            catch
-            {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Error loading sprite from path: {titleLogPath}");
-            }
-            return null;
+
+            return titleLog;
         }
-
-        public static Texture2D LoadTextureFromDisk(string path)
+        catch
         {
-            try
-            {
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                byte[] byteTexture = File.ReadAllBytes(path);
-                ImageConversion.LoadImage(texture, byteTexture, false);
+			return new LoadError(ErrorCode.CannotCreateSprite, titleLogPath);
+		}
+    }
 
-                return texture;
-            }
-            catch
-            {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Error loading texture from disk: {path}");
-            }
-            return null;
-        }
-
-        private static unsafe Texture2D createTextureFromResources(string path)
+    public static Expected<Texture2D, LoadError> LoadTextureFromDisk(string path)
+    {
+        try
         {
-            try
-            {
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                Stream stream = assembly.GetManifestResourceStream(path);
-                long length = stream.Length;
-                var byteTexture = new Il2CppStructArray<byte>(length);
-                var read = stream.Read(new Span<byte>(
-                    IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length));
-                ImageConversion.LoadImage(texture, byteTexture, false);
-                return texture;
-            }
-            catch
-            {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Error loading texture from resources: {path}");
-            }
-            return null;
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+            byte[] byteTexture = File.ReadAllBytes(path);
+            ImageConversion.LoadImage(texture, byteTexture, false);
+
+            return texture;
         }
+        catch
+        {
+			return new LoadError(ErrorCode.CannotFindImgFromDisk, path);
+		}
+	}
+
+    private static unsafe Expected<Texture2D, LoadError> createTextureFromResources(string path)
+    {
+        try
+        {
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream? stream = assembly.GetManifestResourceStream(path);
+            if (stream is null)
+			{
+				return new LoadError(ErrorCode.CannotFindResource, path);
+			}
+			long length = stream.Length;
+            var byteTexture = new Il2CppStructArray<byte>(length);
+
+			stream.Read(new Span<byte>(
+                IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length));
+            ImageConversion.LoadImage(texture, byteTexture, false);
+            return texture;
+        }
+        catch
+        {
+			return new LoadError(ErrorCode.CannotCreateTexture, path);
+		}
     }
 }

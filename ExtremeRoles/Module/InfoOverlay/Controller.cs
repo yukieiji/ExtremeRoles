@@ -56,7 +56,14 @@ public sealed class Controller : NullableSingleton<Controller>
 	public void InitializeToGame()
 	{
 		this.button.SetInfoButtonToInGamePositon();
-		UpdateFunc.InitializeGame(this.model);
+		if (!GameSystem.IsFreePlay)
+		{
+			UpdateFunc.InitializeGame(this.model);
+		}
+		else
+		{
+			UpdateFunc.InitializeLobby(this.model);
+		}
 	}
 
 	public void Update()

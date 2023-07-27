@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
+using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
@@ -10,6 +11,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
+
 
 #nullable enable
 
@@ -37,6 +39,11 @@ public static class SubmarineSelectOnDestroyPatch
 	public static void Prefix()
 	{
 		ExtremeRoles.Patches.Controller.ExileControllerReEnableGameplayPatch.ReEnablePostfix();
+
+		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		{
+			HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+		}
 	}
 }
 
@@ -52,39 +59,34 @@ public static class SubmergedExileControllerWrapUpAndSpawnPatch
 	{
 		ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
 			__instance.exiled);
-
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-		{
-			HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
-		}
 	}
 }
 
 public static class HudManagerUpdatePatchPostfixPatch
 {
 	private static bool changed = false;
-	private static FieldInfo? floorButtonInfo;
+#pragma warning disable CS8618
+	private static FieldInfo floorButtonInfo;
+#pragma warning restore CS8618
 
 	public static void Postfix(object __instance)
 	{
 		if (!CompatModManager.Instance.IsModMap<Submerged>()) { return; }
 
-		object? buttonOjb = floorButtonInfo?.GetValue(__instance);
+		object? buttonOjb = floorButtonInfo.GetValue(__instance);
 
-
-		if (!Helper.GameSystem.IsFreePlay &&
-			buttonOjb is GameObject floorButton &&
+		if (buttonOjb is GameObject floorButton &&
 			floorButton != null && !changed)
 		{
-			changed = true;
 			floorButton.transform.localPosition -= new Vector3(0.0f, 0.75f, 0.0f);
+			changed = true;
 		}
 
 	}
 	public static void SetType(System.Type type)
 	{
 		changed = false;
-		floorButtonInfo = type.GetField("floorButton");
+		floorButtonInfo = AccessTools.Field(type, "_floorButton");
 	}
 
 	public static void ButtonTriggerReset()
@@ -95,24 +97,28 @@ public static class HudManagerUpdatePatchPostfixPatch
 
 public static class SubmarineSpawnInSystemDetorioratePatch
 {
-	private static FieldInfo? submarineSpawnInSystemTimer;
+#pragma warning disable CS8618
+	private static FieldInfo submarineSpawnInSystemTimer;
+#pragma warning restore CS8618
 
 	public static void Postfix(object __instance)
 	{
 		if (!CompatModManager.Instance.IsModMap<Submerged>() ||
 			!ExtremeGameModeManager.Instance.ShipOption.IsAutoSelectRandomSpawn) { return; }
 
-		submarineSpawnInSystemTimer?.SetValue(__instance, 0.0f);
+		submarineSpawnInSystemTimer.SetValue(__instance, 0.0f);
 	}
 	public static void SetType(System.Type type)
 	{
-		submarineSpawnInSystemTimer = type.GetField("timer");
+		submarineSpawnInSystemTimer = AccessTools.Field(type, "timer");
 	}
 }
 
 public static class SubmarineOxygenSystemDetorioratePatch
 {
-	private static FieldInfo? submarineOxygenSystemPlayersWithMask;
+#pragma warning disable CS8618
+	private static FieldInfo submarineOxygenSystemPlayersWithMask;
+#pragma warning restore CS8618
 
 	public static void Postfix(object __instance)
 	{
@@ -121,7 +127,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
 
 		HashSet<byte>? playersWithMask =
-			submarineOxygenSystemPlayersWithMask?.GetValue(__instance) as HashSet<byte>;
+			submarineOxygenSystemPlayersWithMask.GetValue(__instance) as HashSet<byte>;
 
 		if (playersWithMask != null &&
 			!playersWithMask.Contains(CachedPlayerControl.LocalPlayer.PlayerId))
@@ -132,14 +138,16 @@ public static class SubmarineOxygenSystemDetorioratePatch
 	}
 	public static void SetType(System.Type type)
 	{
-		submarineOxygenSystemPlayersWithMask = type.GetField("playersWithMask");
+		submarineOxygenSystemPlayersWithMask = AccessTools.Field(type, "playersWithMask");
 	}
 }
 
 public static class SubmarineSurvillanceMinigamePatch
 {
-	private static FieldInfo? screenStaticInfo;
-	private static FieldInfo? screenTextInfo;
+#pragma warning disable CS8618
+	private static FieldInfo screenStaticInfo;
+	private static FieldInfo screenTextInfo;
+#pragma warning restore CS8618
 
 	public static bool Prefix(Minigame __instance)
 	{
@@ -147,8 +155,8 @@ public static class SubmarineSurvillanceMinigamePatch
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
 
 
-		GameObject? screenStatic = screenStaticInfo?.GetValue(__instance) as GameObject;
-		GameObject? screenText = screenTextInfo?.GetValue(__instance) as GameObject;
+		GameObject? screenStatic = screenStaticInfo.GetValue(__instance) as GameObject;
+		GameObject? screenText = screenTextInfo.GetValue(__instance) as GameObject;
 
 		if (screenStatic != null)
 		{
@@ -183,7 +191,7 @@ public static class SubmarineSurvillanceMinigamePatch
 
 	public static void SetType(System.Type type)
 	{
-		screenStaticInfo = type.GetField("screenStatic");
-		screenTextInfo = type.GetField("screenText");
+		screenStaticInfo = AccessTools.Field(type, "screenStatic");
+		screenTextInfo = AccessTools.Field(type, "screenText");
 	}
 }

@@ -41,9 +41,9 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                         continueStart = false;
                         break;
                     }
-                    int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
+                    int? diff = Assembly.GetExecutingAssembly().GetName().Version?.CompareTo(
                         allPlayerVersion[client.Id]);
-                    if (diff != 0)
+                    if (!diff.HasValue || diff != 0)
                     {
                         continueStart = false;
                         break;
@@ -78,8 +78,10 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             var localGameVersion = Assembly.GetExecutingAssembly().GetName().Version;
             var allPlayerVersion = VersionManager.PlayerVersion;
 
-            // ホスト以外
-            if (!AmongUsClient.Instance.AmHost)
+			if (localGameVersion == null)　{　return;　}
+
+			// ホスト以外
+			if (!AmongUsClient.Instance.AmHost)
             {
                 if (!allPlayerVersion.ContainsKey(AmongUsClient.Instance.HostId) ||
                     localGameVersion.CompareTo(allPlayerVersion[AmongUsClient.Instance.HostId]) != 0)

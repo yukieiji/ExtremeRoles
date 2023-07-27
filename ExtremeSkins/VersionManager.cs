@@ -13,11 +13,12 @@ namespace ExtremeSkins
 
         public static void ShareVersion()
         {
-            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+            Version? ver = Assembly.GetExecutingAssembly().GetName().Version;
+			if (ver is null) { return; }
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                RpcCommand, Hazel.SendOption.Reliable, -1);
+                RpcCommand, SendOption.Reliable, -1);
             writer.WritePacked(ver.Major);
             writer.WritePacked(ver.Minor);
             writer.WritePacked(ver.Build);
@@ -34,8 +35,7 @@ namespace ExtremeSkins
             int major, int minor,
             int build, int revision, int clientId)
         {
-            PlayerVersion[clientId] = new System.Version(
-                    major, minor, build, revision);
+            PlayerVersion[clientId] = new Version(major, minor, build, revision);
         }
 
     }

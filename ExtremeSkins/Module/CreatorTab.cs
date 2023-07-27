@@ -8,48 +8,49 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Il2CppInterop.Runtime.Attributes;
 
-namespace ExtremeSkins.Module
+namespace ExtremeSkins.Module;
+
+[Il2CppRegister]
+public sealed class CreatorTab : MonoBehaviour
 {
-    [Il2CppRegister]
-    public sealed class CreatorTab : MonoBehaviour
+#pragma warning disable CS8618
+	private ButtonWrapper buttonPrefab;
+	private VerticalLayoutGroup layout;
+#pragma warning restore CS8618
+
+	private List<ButtonWrapper> selectButton = new List<ButtonWrapper>();
+
+
+    public void Awake()
     {
-        private ButtonWrapper buttonPrefab;
-        private VerticalLayoutGroup layout;
+        Transform trans = base.transform;
 
-        private List<ButtonWrapper> selectButton = new List<ButtonWrapper>();
+        this.buttonPrefab = trans.Find(
+            "Body/Button").gameObject.GetComponent<ButtonWrapper>();
+        this.layout = trans.Find(
+            "Body/ScrollView/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
+        this.buttonPrefab.Awake();
 
-        
-        public void Awake()
+        this.selectButton.Clear();
+    }
+
+    [HideFromIl2Cpp]
+    public void SetUpButtons(Scroller scroller, List<TMP_Text> creatorText)
+    {
+        foreach (TMP_Text text in creatorText)
         {
-            Transform trans = base.transform;
+            ButtonWrapper newButton = Instantiate(
+                this.buttonPrefab,
+                this.layout.transform);
+            CreatorButton creator = newButton.gameObject.AddComponent<CreatorButton>();
+            creator.Initialize(scroller, text);
+            newButton.gameObject.SetActive(true);
+            newButton.SetButtonText(text.text);
+            newButton.ResetButtonAction();
 
-            this.buttonPrefab = trans.Find(
-                "Body/Button").gameObject.GetComponent<ButtonWrapper>();
-            this.layout = trans.Find(
-                "Body/ScrollView/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
-            this.buttonPrefab.Awake();
-
-            this.selectButton.Clear();
-        }
-
-        [HideFromIl2Cpp]
-        public void SetUpButtons(Scroller scroller, List<TMP_Text> creatorText)
-        {
-            foreach (TMP_Text text in creatorText)
-            {
-                ButtonWrapper newButton = Instantiate(
-                    this.buttonPrefab,
-                    this.layout.transform);
-                CreatorButton creator = newButton.gameObject.AddComponent<CreatorButton>();
-                creator.Initialize(scroller, text);
-                newButton.gameObject.SetActive(true);
-                newButton.SetButtonText(text.text);
-                newButton.ResetButtonAction();
-
-                newButton.SetButtonClickAction(
-                    (UnityAction)creator.GetClickAction());
-                this.selectButton.Add(newButton);
-            }
+            newButton.SetButtonClickAction(
+                (UnityAction)creator.GetClickAction());
+            this.selectButton.Add(newButton);
         }
     }
 }
