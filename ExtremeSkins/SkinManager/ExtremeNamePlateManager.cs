@@ -37,11 +37,14 @@ public static class ExtremeNamePlateManager
     private const string namePlateRepoData = "namePlateData.json";
     private const string namePlateTransData = "namePlateTransData.json";
 
-    private static ConfigEntry<string> curUpdateHash;
     private const string updateComitKey = "ExNUpdateComitHash";
     private const string jsonUpdateComitKey = "updateComitHash";
 
-    public static void Initialize()
+#pragma warning disable CS8618
+	private static ConfigEntry<string> curUpdateHash;
+#pragma warning restore CS8618
+
+	public static void Initialize()
     {
         curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
             ExtremeSkinsPlugin.SkinComitCategory,
@@ -59,17 +62,17 @@ public static class ExtremeNamePlateManager
             Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
         getJsonData(namePlateRepoData).GetAwaiter().GetResult();
-        
+
         byte[] byteNamePlateArray = File.ReadAllBytes(
             string.Concat(
                 Path.GetDirectoryName(Application.dataPath),
                 FolderPath, namePlateRepoData));
         string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
         JObject namePlateFolder = JObject.Parse(namePlateJsonString);
-        
+
         for(int i = 0; i < namePlateFolder.Count; ++i)
         {
-            JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
+            JProperty? token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
             if (token == null) { continue; }
 
             string author = token.Name;
@@ -98,13 +101,19 @@ public static class ExtremeNamePlateManager
             if (!File.Exists(string.Concat(
                 checkNamePlateFolder, @"\", LicenseFileName))) { return true; }
 
-            JArray namePlateImage = token.Value.TryCast<JArray>();
+            JArray? namePlateImage = token.Value.TryCast<JArray>();
+
+			if (namePlateImage == null) { return true; }
+
             for (int j = 0; j < namePlateImage.Count; ++j)
             {
 
-                if (!File.Exists(string.Concat(
-                        checkNamePlateFolder, @"\",
-                        namePlateImage[j].TryCast<JValue>().Value.ToString(),
+				JValue? value = namePlateImage[j].TryCast<JValue>();
+				if (value == null) { continue; }
+
+				if (!File.Exists(string.Concat(
+						checkNamePlateFolder, @"\",
+						value.Value.ToString(),
                         ".png"))) { return true; }
             }
 
@@ -138,7 +147,7 @@ public static class ExtremeNamePlateManager
         foreach (string authorPath in namePlateFolder)
         {
             if (string.IsNullOrEmpty(authorPath)) { continue; }
-            
+
             string[] authorDirs = authorPath.Split(@"\");
             string author = authorDirs[^1];
 
@@ -153,14 +162,14 @@ public static class ExtremeNamePlateManager
                 CustomNamePlate customNamePlate = new CustomNamePlate(
                     namePlate, author,
                     imageName.Substring(0, imageName.Length - 4));
-                
+
                 if (NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
                 {
                     ExtremeSkinsPlugin.Logger.LogInfo(
                         $"NamePlate Loaded:\n{customNamePlate}");
                 }
             }
-            
+
         }
 
         IsLoaded = true;
@@ -173,7 +182,12 @@ public static class ExtremeNamePlateManager
 
         ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Start!! ---------- ");
 
-        string ausFolder = Path.GetDirectoryName(Application.dataPath);
+        string? ausFolder = Path.GetDirectoryName(Application.dataPath);
+		if (string.IsNullOrEmpty(ausFolder))
+		{
+			yield break;
+		}
+
         string dataSaveFolder = string.Concat(ausFolder, FolderPath);
 
         cleanUpCurSkinData(dataSaveFolder);
@@ -228,6 +242,7 @@ public static class ExtremeNamePlateManager
             {
                 ExtremeSkinsPlugin.Logger.LogInfo(
                     $"Server returned no data: {response.StatusCode}");
+				return;
             }
 
             using (var responseStream = await response.Content.ReadAsStreamAsync())
@@ -264,7 +279,7 @@ public static class ExtremeNamePlateManager
 
         for (int i = 0; i < visorFolder.Count; ++i)
         {
-            JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
+            JProperty? token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
             if (token == null) { continue; }
 
             string author = token.Name;
@@ -307,7 +322,7 @@ public static class ExtremeNamePlateManager
 
         for (int i = 0; i < namePlateFolder.Count; ++i)
         {
-            JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
+            JProperty? token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
             if (token == null) { continue; }
 
             string author = token.Name;
