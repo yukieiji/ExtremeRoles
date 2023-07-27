@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 using ExtremeSkins.Module.Interface;
+using ExtremeRoles.Module;
+using System.IO;
 
 namespace ExtremeSkins.Module;
-
-#nullable enable
 
 #if WITHNAMEPLATE
 public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlateViewData>
@@ -61,7 +61,7 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
 		if (this.viewData == null)
 		{
 			this.viewData = ScriptableObject.CreateInstance<NamePlateViewData>();
-			this.viewData.Image = loadNamePlateSprite(this.imgPath);
+			this.viewData.Image = getSprite(this.imgPath);
 		}
 		return this.viewData;
 	}
@@ -85,7 +85,7 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
 		this.Data.PreviewCrewmateColor = false;
 
 		this.viewData = ScriptableObject.CreateInstance<NamePlateViewData>();
-		var img = loadNamePlateSprite(this.imgPath);
+		var img = getSprite(this.imgPath);
 		this.viewData.Image = img;
 		this.Data.SpritePreview = img;
 		this.Data.ViewDataRef = new AssetReference(this.viewData.Pointer);
@@ -93,22 +93,30 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
         return this.Data;
     }
 
-    private Sprite? loadNamePlateSprite(
+	private static Sprite? getSprite(string path)
+	{
+		var result = loadNamePlateSprite(path);
+		if (!result.HasValue())
+		{
+			ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
+		}
+		return result.GetRawValue();
+	}
+
+	private static Expected<Sprite, Loader.LoadError> loadNamePlateSprite(
         string path)
     {
-        Texture2D texture = Loader.LoadTextureFromDisk(path);
-        if (texture == null)
+        var result = Loader.LoadTextureFromDisk(path);
+        if (!result.HasValue())
         {
-            return null;
+            return result.Error;
         }
+
+		Texture2D texture = result.Value;
         Sprite sprite = Sprite.Create(
             texture,
             new Rect(0, 0, texture.width, texture.height),
             new Vector2(0.5f, 0.5f), 100f);
-        if (sprite == null)
-        {
-            return null;
-        }
         texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
         sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
         return sprite;

@@ -160,10 +160,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
         Sprite sprite = Sprite.Create(
             texture, new Rect(0, 0, texture.width, texture.height),
             new Vector2(0.53f, 0.575f), texture.width * 0.375f);
-        if (sprite == null)
-        {
-            return new Loader.LoadError(Loader.ErrorCode.CannotCreateSprite, path);
-        }
+
         texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
         sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
 
