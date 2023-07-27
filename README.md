@@ -176,6 +176,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 - ビルド
   1. VisualStudio 2022で「ExtremeRoles.sln」を開いてビルドする
      - 初回のビルドはNugetパッケージの復元が入るので時間がかかります
+     - アセット周りがうまく読み込まれない場合は再度ビルドしてみてください
 
 ## クレジット&Thanks
 - TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンター、カーペンター、シューター、キャプテンのアイディア元
