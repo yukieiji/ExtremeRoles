@@ -1,10 +1,8 @@
-﻿using ExtremeRoles.Performance;
-using Innersloth.Assets;
-using UnityEngine;
-using ExtremeSkins.Module.Interface;
-using ExtremeRoles.Module;
+﻿using Innersloth.Assets;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppSystem;
+
+using ExtremeRoles.Module;
 
 namespace ExtremeSkins.Module;
 
@@ -13,6 +11,7 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 {
 	private CustomHat data;
 
+#pragma warning disable CS8618
 	public HatAddressableAsset(System.IntPtr ptr) : base(ptr)
 	{ }
 
@@ -21,6 +20,7 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 	{
 		ClassInjector.DerivedConstructorBody(this);
 	}
+#pragma warning restore CS8618
 
 	public void Init(CustomHat data)
 	{
@@ -32,9 +32,9 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 		return this.data.GetViewData();
 	}
 	public override void LoadAsync(
-		Action onSuccessCb = null,
-		Action onErrorcb = null,
-		Action onFinishedcb = null)
+		Action? onSuccessCb = null,
+		Action? onErrorcb = null,
+		Action? onFinishedcb = null)
 	{
 		if (onSuccessCb != null)
 		{
@@ -60,8 +60,10 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 [Il2CppRegister]
 public sealed class NamePlateAddressableAsset : AddressableAsset<NamePlateViewData>
 {
+
 	private CustomNamePlate data;
 
+#pragma warning disable CS8618
 	public NamePlateAddressableAsset(System.IntPtr ptr) : base(ptr)
 	{ }
 
@@ -70,6 +72,7 @@ public sealed class NamePlateAddressableAsset : AddressableAsset<NamePlateViewDa
 	{
 		ClassInjector.DerivedConstructorBody(this);
 	}
+#pragma warning restore CS8618
 
 	public void Init(CustomNamePlate data)
 	{
@@ -81,9 +84,9 @@ public sealed class NamePlateAddressableAsset : AddressableAsset<NamePlateViewDa
 		return this.data.GetViewData();
 	}
 	public override void LoadAsync(
-		Action onSuccessCb = null,
-		Action onErrorcb = null,
-		Action onFinishedcb = null)
+		Action? onSuccessCb = null,
+		Action? onErrorcb = null,
+		Action? onFinishedcb = null)
 	{
 		if (onSuccessCb != null)
 		{
