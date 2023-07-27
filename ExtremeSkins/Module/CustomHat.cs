@@ -57,7 +57,8 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 	public HatViewData GetViewData()
 	{
-		if (this.hatView == null)
+		if (this.hatView == null ||
+			this.hatView.MainImage == null)
 		{
 			this.hatView = this.loadViewData();
 		}
@@ -82,7 +83,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 		this.Data.SpritePreview = getSprite(Path.Combine(this.folderPath, DataStructure.FrontImageName));
 
-		this.hatView = loadViewData();
+		this.hatView = ScriptableObject.CreateInstance<HatViewData>();
 		this.Data.ViewDataRef = new AssetReference(this.hatView.Pointer);
 
 		return this.Data;
