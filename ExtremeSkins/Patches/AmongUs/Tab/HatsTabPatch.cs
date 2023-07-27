@@ -48,11 +48,11 @@ public static class HatsTabPatch
         hatsTabCustomText.Clear();
         __instance.ColorChips.Clear();
 
-        if (CustomCosmicTab.textTemplate == null)
+        if (CustomCosmicTab.TextTemplate == null)
         {
-            CustomCosmicTab.textTemplate = Object.Instantiate(
+            CustomCosmicTab.TextTemplate = Object.Instantiate(
                 PlayerCustomizationMenu.Instance.itemName);
-            CustomCosmicTab.textTemplate.gameObject.SetActive(false);
+            CustomCosmicTab.TextTemplate.gameObject.SetActive(false);
         }
 
         if (Tab == null)
