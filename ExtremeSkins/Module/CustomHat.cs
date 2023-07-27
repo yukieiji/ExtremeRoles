@@ -8,6 +8,7 @@ using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module.Interface;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module;
 
 namespace ExtremeSkins.Module;
 
@@ -79,8 +80,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
         this.Data.NotInStore = true;
 		this.Data.PreviewCrewmateColor = this.info.Shader;
 
-        this.Data.SpritePreview = loadHatSprite(
-            Path.Combine(this.folderPath, DataStructure.FrontImageName));
+		this.Data.SpritePreview = getSprite(Path.Combine(this.folderPath, DataStructure.FrontImageName));
 
 		this.hatView = loadViewData();
 		this.Data.ViewDataRef = new AssetReference(this.hatView.Pointer);
@@ -97,29 +97,28 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	{
 		var hatView = ScriptableObject.CreateInstance<HatViewData>();
 
-		hatView.MainImage = loadHatSprite(
-			Path.Combine(this.folderPath, DataStructure.FrontImageName));
+		hatView.MainImage = getSprite(Path.Combine(this.folderPath, DataStructure.FrontImageName));
 
 		if (this.info.FrontFlip)
 		{
-			hatView.LeftMainImage = loadHatSprite(
+			hatView.LeftMainImage = getSprite(
 				Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
 		}
 
 		if (this.info.Back)
 		{
-			hatView.BackImage = loadHatSprite(
+			hatView.BackImage = getSprite(
 				Path.Combine(this.folderPath, DataStructure.BackImageName));
 		}
 		if (this.info.BackFlip)
 		{
-			hatView.LeftBackImage = loadHatSprite(
+			hatView.LeftBackImage = getSprite(
 				Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
 		}
 
 		if (this.info.Climb)
 		{
-			hatView.ClimbImage = loadHatSprite(
+			hatView.ClimbImage = getSprite(
 				Path.Combine(this.folderPath, DataStructure.ClimbImageName));
 		}
 
@@ -137,24 +136,37 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 		return hatView;
 	}
 
+	private static Sprite? getSprite(string path)
+	{
+		var result = loadHatSprite(path);
+		if (!result.HasValue())
+		{
+			ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
+		}
+		return result.GetRawValue();
+	}
 
-    private Sprite? loadHatSprite(
+
+    private static Expected<Sprite, Loader.LoadError> loadHatSprite(
         string path)
     {
-        Texture2D texture = Loader.LoadTextureFromDisk(path);
-        if (texture == null)
+        var result = Loader.LoadTextureFromDisk(path);
+        if (!result.HasValue())
         {
-            return null;
+            return result.Error;
         }
+
+		Texture2D texture = result.Value;
         Sprite sprite = Sprite.Create(
             texture, new Rect(0, 0, texture.width, texture.height),
             new Vector2(0.53f, 0.575f), texture.width * 0.375f);
         if (sprite == null)
         {
-            return null;
+            return new Loader.LoadError(Loader.ErrorCode.CannotCreateSprite, path);
         }
         texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
         sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+
         return sprite;
     }
 }
