@@ -39,11 +39,6 @@ public static class SubmarineSelectOnDestroyPatch
 	public static void Prefix()
 	{
 		ExtremeRoles.Patches.Controller.ExileControllerReEnableGameplayPatch.ReEnablePostfix();
-
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-		{
-			HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
-		}
 	}
 }
 
@@ -64,10 +59,10 @@ public static class SubmergedExileControllerWrapUpAndSpawnPatch
 
 public static class HudManagerUpdatePatchPostfixPatch
 {
-	private static bool changed = false;
 #pragma warning disable CS8618
 	private static FieldInfo floorButtonInfo;
 #pragma warning restore CS8618
+	private static AspectPosition? posSetter;
 
 	public static void Postfix(object __instance)
 	{
@@ -76,22 +71,19 @@ public static class HudManagerUpdatePatchPostfixPatch
 		object? buttonOjb = floorButtonInfo.GetValue(__instance);
 
 		if (buttonOjb is GameObject floorButton &&
-			floorButton != null && !changed)
+			posSetter == null)
 		{
-			floorButton.transform.localPosition -= new Vector3(0.0f, 0.75f, 0.0f);
-			changed = true;
+			posSetter = floorButton.GetComponent<AspectPosition>();
+			Vector3 distanceFromEdge = posSetter.DistanceFromEdge;
+			distanceFromEdge.y = 2.4f;
+			posSetter.DistanceFromEdge = distanceFromEdge;
+			posSetter.AdjustPosition();
 		}
 
 	}
 	public static void SetType(System.Type type)
 	{
-		changed = false;
 		floorButtonInfo = AccessTools.Field(type, "_floorButton");
-	}
-
-	public static void ButtonTriggerReset()
-	{
-		changed = false;
 	}
 }
 
