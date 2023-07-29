@@ -71,6 +71,7 @@ public static class HudManagerUpdatePatchPostfixPatch
 		object? buttonOjb = floorButtonInfo.GetValue(__instance);
 
 		if (buttonOjb is GameObject floorButton &&
+			floorButton != null &&
 			posSetter == null)
 		{
 			posSetter = floorButton.GetComponent<AspectPosition>();
