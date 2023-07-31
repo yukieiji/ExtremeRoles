@@ -41,12 +41,4 @@ public static class CreateAddressableAssetPatch
 		return true;
 	}
 #endif
-
-	[HarmonyPrefix]
-	[HarmonyPatch(typeof(VisorData), nameof(VisorData.CreateAddressableAsset))]
-	public static bool VisorPrefix()
-	{
-		ExtremeSkinsPlugin.Logger.LogInfo("aaaaaaaaa");
-		return true;
-	}
 }

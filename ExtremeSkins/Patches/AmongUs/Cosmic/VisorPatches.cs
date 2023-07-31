@@ -6,6 +6,7 @@ using Innersloth.Assets;
 using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Performance;
 using ExtremeSkins.Module;
 using ExtremeSkins.SkinManager;
 
@@ -61,6 +62,34 @@ public static class VisorPatch
 			return false;
 		}
 		return true;
+	}
+
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(CosmeticsCache), nameof(CosmeticsCache.CoAddVisor))]
+	public static bool CoAddVisorPrefix(
+		CosmeticsCache __instance,
+		[HarmonyArgument(0)] string visorId,
+		ref Il2CppEnumerator __result)
+	{
+		__result = patchedCoAddVisor(__instance, visorId).WrapToIl2Cpp();
+		return false;
+	}
+
+	private static Enumerator patchedCoAddVisor(CosmeticsCache instance, string visorId)
+	{
+		if (instance.visors.ContainsKey(visorId)) { yield break; }
+
+		AddressableAsset<VisorViewData>? asset =
+			ExtremeVisorManager.VisorData.TryGetValue(visorId, out var visor) ?
+			VisorAddressableAsset.CreateAsset(visor) :
+			FastDestroyableSingleton<HatManager>.Instance.GetVisorById(visorId).CreateAddressableAsset();
+		instance.allCachedAssets.Add(asset);
+		yield return asset.CoLoadAsync(null);
+		instance.visors[visorId] = asset;
+
+		asset = null;
+
+		yield break;
 	}
 
 #pragma warning disable CS8600, CS8604
