@@ -1,5 +1,7 @@
 ﻿using Innersloth.Assets;
+
 using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.Attributes;
 using Il2CppSystem;
 
 using ExtremeRoles.Module;
@@ -29,6 +31,7 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 		return asset.Cast<AddressableAsset<HatViewData>>();
 	}
 
+	[HideFromIl2Cpp]
 	public void Init(CustomHat data)
 	{
 		this.data = data;
@@ -88,6 +91,7 @@ public sealed class NamePlateAddressableAsset : AddressableAsset<NamePlateViewDa
 		return asset.Cast<AddressableAsset<NamePlateViewData>>();
 	}
 
+	[HideFromIl2Cpp]
 	public void Init(CustomNamePlate data)
 	{
 		this.data = data;
@@ -147,6 +151,7 @@ public sealed class VisorAddressableAsset : AddressableAsset<VisorViewData>
 		return asset.Cast<AddressableAsset<VisorViewData>>();
 	}
 
+	[HideFromIl2Cpp]
 	public void Init(CustomVisor data)
 	{
 		this.data = data;
