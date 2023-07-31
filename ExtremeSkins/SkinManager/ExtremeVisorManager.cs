@@ -38,11 +38,14 @@ public static class ExtremeVisorManager
     private const string visorRepoData = "visorData.json";
     private const string visorTransData = "visorTransData.json";
 
-    private static ConfigEntry<string> curUpdateHash;
     private const string updateComitKey = "ExVUpdateComitHash";
     private const string jsonUpdateComitKey = "updateComitHash";
 
-    public static void Initialize()
+#pragma warning disable CS8618
+	private static ConfigEntry<string> curUpdateHash;
+#pragma warning restore CS8618
+
+	public static void Initialize()
     {
         curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
             ExtremeSkinsPlugin.SkinComitCategory,
@@ -57,8 +60,10 @@ public static class ExtremeVisorManager
         ExtremeSkinsPlugin.Logger.LogInfo(
             "Extreme Visor Manager : Checking Update....");
 
-        string exvFolder = Path.Combine(
-            Path.GetDirectoryName(Application.dataPath), DataStructure.FolderName);
+		string? auPath =Path.GetDirectoryName(Application.dataPath);
+		if (string.IsNullOrEmpty(auPath)) { return true; }
+
+		string exvFolder = Path.Combine(auPath, DataStructure.FolderName);
 
         if (!Directory.Exists(exvFolder)) { return true; }
 
@@ -74,13 +79,15 @@ public static class ExtremeVisorManager
 
         if ((string)newHash != curUpdateHash.Value) { return true; }
 
-        JArray visorArray = visorFolder.TryCast<JArray>();
+        JArray? visorArray = visorFolder.TryCast<JArray>();
+
+		if (visorArray == null) { return true; }
 
         for (int i = 0; i < visorArray.Count; ++i)
         {
             string visorData = visorArray[i].ToString();
 
-            if (visorData == visorRepoData || 
+            if (visorData == visorRepoData ||
                 visorData == visorTransData) { continue; }
 
             string checkVisorFolder = Path.Combine(exvFolder, visorData);
@@ -91,13 +98,15 @@ public static class ExtremeVisorManager
                 !File.Exists(jsonPath) ||
                 !File.Exists(Path.Combine(
                     checkVisorFolder, DataStructure.IdleImageName)))
-            { 
-                return true; 
+            {
+                return true;
             }
 
             using var jsonReader = new StreamReader(jsonPath);
-            VisorInfo info = JsonSerializer.Deserialize<VisorInfo>(
+            VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(
                 jsonReader.ReadToEnd());
+
+			if (info is null) { return true; }
 
             if (info.LeftIdle &&
                 !File.Exists(Path.Combine(
@@ -118,8 +127,10 @@ public static class ExtremeVisorManager
 
         getJsonData(visorTransData).GetAwaiter().GetResult();
 
-        string exvFolder = Path.Combine(
-            Path.GetDirectoryName(Application.dataPath), DataStructure.FolderName);
+		string? auPath = Path.GetDirectoryName(Application.dataPath);
+		if (string.IsNullOrEmpty(auPath)) { return; }
+
+		string exvFolder = Path.Combine(auPath, DataStructure.FolderName);
 
         Helper.Translation.UpdateHatsTransData(
             Path.Combine(exvFolder, visorTransData));
@@ -146,8 +157,10 @@ public static class ExtremeVisorManager
             }
 
             using var jsonReader = new StreamReader(infoJsonFile);
-            VisorInfo info = JsonSerializer.Deserialize<VisorInfo>(
+            VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(
                 jsonReader.ReadToEnd());
+
+			if (info is null) { continue; }
 
             CustomVisor customVisor = new CustomVisor(visor, info);
 
@@ -169,8 +182,13 @@ public static class ExtremeVisorManager
         ExtremeSkinsPlugin.Logger.LogInfo(
             "---------- Extreme Visor Manager : VisorData Download Start!! ---------- ");
 
-        string ausFolder = Path.GetDirectoryName(Application.dataPath);
-        string dataSaveFolder = Path.Combine(ausFolder, DataStructure.FolderName);
+        string? ausFolder = Path.GetDirectoryName(Application.dataPath);
+		if (string.IsNullOrEmpty(ausFolder))
+		{
+			yield break;
+		}
+
+		string dataSaveFolder = Path.Combine(ausFolder, DataStructure.FolderName);
 
         cleanUpCurSkinData(dataSaveFolder);
 
@@ -213,10 +231,13 @@ public static class ExtremeVisorManager
     {
         try
         {
-            HttpClient http = new HttpClient();
-            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue 
-            { 
-                NoCache = true 
+			string? auPath = Path.GetDirectoryName(Application.dataPath);
+			if (string.IsNullOrEmpty(auPath)) { return; }
+
+			HttpClient http = new HttpClient();
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
             };
             var response = await http.GetAsync(
                 new System.Uri($"{repo}/{visorDataFolderPath}/{fileName}"),
@@ -229,14 +250,14 @@ public static class ExtremeVisorManager
             {
                 ExtremeSkinsPlugin.Logger.LogInfo(
                     $"Server returned no data: {response.StatusCode}");
+				return;
             }
 
             using (var responseStream = await response.Content.ReadAsStreamAsync())
             {
                 using (var fileStream = File.Create(
                     Path.Combine(
-                        Path.GetDirectoryName(Application.dataPath),
-                        DataStructure.FolderName, fileName)))
+						auPath, DataStructure.FolderName, fileName)))
                 {
                     responseStream.CopyTo(fileStream);
                 }
@@ -266,7 +287,7 @@ public static class ExtremeVisorManager
 
         for (int i = 0; i < visorFolder.Count; ++i)
         {
-            JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
+            JProperty? token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
             if (token == null) { continue; }
 
             string author = token.Name;
@@ -302,15 +323,17 @@ public static class ExtremeVisorManager
         string visorJsonString = Encoding.UTF8.GetString(byteVisorArray);
 
         JToken visorFolder = JObject.Parse(visorJsonString)["data"];
-        JArray visorArray = visorFolder.TryCast<JArray>();
+        JArray? visorArray = visorFolder.TryCast<JArray>();
+
+		if (visorArray == null) { return; }
 
         for (int i = 0; i < visorArray.Count; ++i)
         {
             string visorData = visorArray[i].ToString();
 
-            if (visorData == visorRepoData || visorData == visorTransData) 
-            { 
-                continue; 
+            if (visorData == visorRepoData || visorData == visorTransData)
+            {
+                continue;
             }
 
             string visorMoveToFolder = Path.Combine(

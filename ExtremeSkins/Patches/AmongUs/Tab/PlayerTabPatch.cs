@@ -15,7 +15,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         }
 
         public static void Postfix(PlayerTab __instance)
-        {   
+        {
             // Replace instead
             Il2CppArrayBase<ColorChip> chips = __instance.ColorChips.ToArray();
 

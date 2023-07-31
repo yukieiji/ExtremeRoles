@@ -8,26 +8,26 @@ using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
-    [HarmonyPatch(typeof(HatManager), nameof(HatManager.Initialize))]
-    public static class HatManagerInitializePatch
-    {
-        public static void Postfix(HatManager __instance)
-        {
+	[HarmonyPatch(typeof(HatManager), nameof(HatManager.Initialize))]
+	public static class HatManagerInitializePatch
+	{
+		public static void Postfix(HatManager __instance)
+		{
 #if WITHHAT
-            try
-            {
-                List<HatData> hatData = __instance.allHats.ToList();
-                foreach (CustomHat hat in ExtremeHatManager.HatData.Values)
-                {
-                    hatData.Add(hat.GetData());
-                }
-                __instance.allHats = hatData.ToArray();
-            }
-            catch (Exception e)
-            {
-                ExtremeSkinsPlugin.Logger.LogInfo(
-                    $"Unable to add Custom Hats\n{e}");
-            }
+			try
+			{
+				List<HatData> hatData = __instance.allHats.ToList();
+				foreach (CustomHat hat in ExtremeHatManager.HatData.Values)
+				{
+					hatData.Add(hat.GetData());
+				}
+				__instance.allHats = hatData.ToArray();
+			}
+			catch (Exception e)
+			{
+				ExtremeSkinsPlugin.Logger.LogInfo(
+					$"Unable to add Custom Hats\n{e}");
+			}
 #endif
 #if WITHNAMEPLATE
             try
@@ -61,6 +61,6 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     $"Unable to add Custom Visor\n{e}");
             }
 #endif
-        }
-    }
+		}
+	}
 }

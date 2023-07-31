@@ -1,15 +1,23 @@
-﻿namespace ExtremeSkins.Module.Interface
+﻿using UnityEngine;
+
+namespace ExtremeSkins.Module.Interface;
+
+#nullable enable
+
+public interface ICustomCosmicData<T, C>
+	where C : ScriptableObject
+	where T : CosmeticData
 {
-    public interface ICustomCosmicData<T>
-        where T : CosmeticData
-    {
-        public T Data { get; }
+    public T? Data { get; }
 
-        public string Author { get; }
-        public string Name { get; }
+    public string Author { get; }
+    public string Name { get; }
 
-        public string Id { get; }
+    public string Id { get; }
 
-        public T GetData();
-    }
+	public C GetViewData();
+
+    public T GetData();
+
+	public void Release();
 }
