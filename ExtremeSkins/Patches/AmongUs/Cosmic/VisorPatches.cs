@@ -14,37 +14,10 @@ using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
 
 namespace ExtremeSkins.Patches.AmongUs.Cosmic;
 
-[HarmonyPatch(typeof(VisorData), nameof(VisorData.CoLoadIcon))]
-public static class VisorDataCoLoadIconPatch
-{
-#pragma warning disable CS8600, CS8604
-	public static Enumerator CoLoadIcon(Il2CppSystem.Action<Sprite, AddressableAsset> onLoaded, CustomVisor visor)
-	{
-		AddressableAsset<VisorViewData> asset = VisorAddressableAsset.CreateAsset(visor);
-		yield return asset.CoLoadAsync(null);
-		VisorViewData asset2 = asset.GetAsset();
-		Sprite sprite = ((asset2 != null) ? asset2.IdleFrame : null);
-		onLoaded.Invoke(sprite, asset);
-		yield break;
-	}
-#pragma warning restore CS8600, CS8604
-
-	public static bool Prefix(
-		VisorData __instance,
-		[HarmonyArgument(0)] Il2CppSystem.Action<Sprite, AddressableAsset> onLoaded,
-		ref Il2CppEnumerator __result)
-	{
-		if (ExtremeVisorManager.VisorData.TryGetValue(__instance.ProductId, out var value))
-		{
-			__result = CoLoadIcon(onLoaded, value).WrapToIl2Cpp();
-			return false;
-		}
-		return true;
-	}
-}
+#if WITHVISOR
 
 [HarmonyPatch]
-public static class VisorLayerPatch
+public static class VisorPatch
 {
 	[HarmonyPrefix]
 	[HarmonyPatch(typeof(VisorLayer), nameof(VisorLayer.SetVisor), new Type[] { typeof(VisorData), typeof(int) })]
@@ -74,4 +47,33 @@ public static class VisorLayerPatch
 		}
 		return true;
 	}
+
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(VisorData), nameof(VisorData.CoLoadIcon))]
+	public static bool CoLoadIconPrefix(
+		VisorData __instance,
+		[HarmonyArgument(0)] Il2CppSystem.Action<Sprite, AddressableAsset> onLoaded,
+		ref Il2CppEnumerator __result)
+	{
+		if (ExtremeVisorManager.VisorData.TryGetValue(__instance.ProductId, out var value))
+		{
+			__result = patchedCoLoadIcon(onLoaded, value).WrapToIl2Cpp();
+			return false;
+		}
+		return true;
+	}
+
+#pragma warning disable CS8600, CS8604
+	private static Enumerator patchedCoLoadIcon(Il2CppSystem.Action<Sprite, AddressableAsset> onLoaded, CustomVisor visor)
+	{
+		AddressableAsset<VisorViewData> asset = VisorAddressableAsset.CreateAsset(visor);
+		yield return asset.CoLoadAsync(null);
+		VisorViewData asset2 = asset.GetAsset();
+		Sprite sprite = ((asset2 != null) ? asset2.IdleFrame : null);
+		onLoaded.Invoke(sprite, asset);
+		yield break;
+	}
+#pragma warning restore CS8600, CS8604
+
 }
+#endif
