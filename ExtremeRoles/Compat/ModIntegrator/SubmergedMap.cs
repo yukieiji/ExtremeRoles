@@ -133,8 +133,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public void Awake(ShipStatus map)
 	{
-		Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
-
 		var component = map.GetComponent(Il2CppType.From(this.submarineStatusType));
 		if (component)
 		{

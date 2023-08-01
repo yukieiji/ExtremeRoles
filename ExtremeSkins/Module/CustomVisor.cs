@@ -2,122 +2,144 @@
 using System.Text;
 
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.Module.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module;
 
 namespace ExtremeSkins.Module;
 
 #if WITHVISOR
-public sealed class CustomVisor : ICustomCosmicData<VisorData>
+public sealed class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
 {
-    public VisorData Data
-    {
-        get => this.visor;
-    }
+    public VisorData? Data { get; private set; }
 
     public string Author
     {
-        get => this.author;
+        get => this.info.Author;
     }
     public string Name
     {
-        get => this.name;
+        get => this.info.Name;
     }
 
     public string Id
     {
-        get => $"visor_{new DirectoryInfo(this.folderPath).Name}_{this.author}_{this.name}";
+        get => $"visor_{new DirectoryInfo(this.folderPath).Name}_{this.Author}_{this.Name}";
     }
 
-    private VisorData visor;
+	private string folderPath;
+	private VisorInfo info;
+	private VisorViewData? view;
 
-    private string name;
-    private string author;
-    private string folderPath;
-
-    private bool isBehindHat;
-    private bool hasShader;
-    private bool hasLeftImg;
-
-    public CustomVisor(
+	public CustomVisor(
         string folderPath,
         VisorInfo info)
     {
         this.folderPath = folderPath;
-        this.author = info.Author;
-        this.name = info.Name;
-
-        this.isBehindHat = info.BehindHat;
-        this.hasLeftImg = info.LeftIdle;
-        this.hasShader = info.Shader;
+        this.info = info;
     }
 
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder();
         builder
-            .AppendLine($" - Name      : {this.name}")
-            .AppendLine($" - Author    : {this.author}")
+            .AppendLine($" - Name      : {this.Name}")
+            .AppendLine($" - Author    : {this.Author}")
             .AppendLine($" - Load from : {this.folderPath}")
             .Append    ($" - Id        : {this.Id}");
 
         return builder.ToString();
     }
 
-    public VisorData GetData()
+	public VisorViewData GetViewData()
+	{
+		if (this.view == null ||
+			this.view.IdleFrame == null)
+		{
+			this.view = this.loadViewData();
+		}
+		return this.view;
+	}
+
+	public void Release()
+	{
+		this.view = null;
+	}
+
+	public VisorData GetData()
     {
-        if (this.visor != null) { return this.visor; }
+        if (this.Data != null) { return this.Data; }
 
-        this.visor = ScriptableObject.CreateInstance<VisorData>();
-        this.visor.name = Helper.Translation.GetString(this.Name);
-        this.visor.displayOrder = 99;
-        this.visor.ProductId = this.Id;
-        this.visor.ChipOffset = new Vector2(0f, 0.2f);
-        this.visor.Free = true;
-        this.visor.NotInStore = true;
+		this.Data = ScriptableObject.CreateInstance<VisorData>();
+		this.Data.name = Helper.Translation.GetString(this.Name);
+		this.Data.displayOrder = 99;
+		this.Data.ProductId = this.Id;
+		this.Data.ChipOffset = new Vector2(0f, 0.2f);
+		this.Data.Free = true;
+		this.Data.NotInStore = true;
 
-        // 256×144の画像
-        this.visor.viewData.viewData = ScriptableObject.CreateInstance<VisorViewData>();
-        this.visor.viewData.viewData.IdleFrame = loadVisorSprite(
-            Path.Combine(this.folderPath, DataStructure.IdleImageName));
+		this.Data.SpritePreview = getSprite(Path.Combine(this.folderPath, DataStructure.IdleImageName));
+		this.Data.behindHats = this.info.BehindHat;
+		this.Data.PreviewCrewmateColor = this.info.Shader;
 
-        if (this.hasLeftImg)
-        {
-            this.visor.viewData.viewData.LeftIdleFrame = loadVisorSprite(
-                Path.Combine(this.folderPath, DataStructure.FlipIdleImageName));
-        }
-        if (this.hasShader)
-        {
-            Material altShader = new Material(
-                FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
-            altShader.shader = Shader.Find("Unlit/PlayerShader");
+		this.view = ScriptableObject.CreateInstance<VisorViewData>();
+		this.Data.ViewDataRef = new AssetReference(this.view.Pointer);
 
-            this.visor.viewData.viewData.AltShader = altShader;
-        }
-
-        this.visor.behindHats = this.isBehindHat;
-
-        return this.visor;
+        return this.Data;
 
     }
 
-    private Sprite loadVisorSprite(
+	private VisorViewData loadViewData()
+	{
+		var view = ScriptableObject.CreateInstance<VisorViewData>();
+
+		view.IdleFrame = getSprite(
+			Path.Combine(this.folderPath, DataStructure.IdleImageName));
+
+		if (this.info.LeftIdle)
+		{
+			view.LeftIdleFrame = getSprite(
+				Path.Combine(this.folderPath, DataStructure.FlipIdleImageName));
+		}
+		if (this.info.Shader)
+		{
+			Material altShader = new Material(
+				FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
+			altShader.shader = Shader.Find("Unlit/PlayerShader");
+
+			view.AltShader = altShader;
+		}
+
+		return view;
+	}
+
+
+	private static Sprite? getSprite(string path)
+	{
+		var result = loadVisorSprite(path);
+		if (!result.HasValue())
+		{
+			ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
+		}
+		return result.GetRawValue();
+	}
+
+	private static Expected<Sprite, Loader.LoadError> loadVisorSprite(
         string path)
     {
-        Texture2D texture = Loader.LoadTextureFromDisk(path);
-        if (texture == null)
-        {
-            return null;
-        }
-        Sprite sprite = Sprite.Create(
+		var result = Loader.LoadTextureFromDisk(path);
+		if (!result.HasValue())
+		{
+			return result.Error;
+		}
+
+		Texture2D texture = result.Value;
+		Sprite sprite = Sprite.Create(
             texture, new Rect(0, 0, texture.width, texture.height),
             new Vector2(0.53f, 0.575f), texture.width * 0.375f);
-        if (sprite == null)
-        {
-            return null;
-        }
         texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
         sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
         return sprite;

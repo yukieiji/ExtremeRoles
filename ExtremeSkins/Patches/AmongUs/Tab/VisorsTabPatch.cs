@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using HarmonyLib;
 
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
@@ -26,7 +27,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         private static float inventoryTop = 1.5f;
         private static float inventoryBottom = -2.5f;
 
-        public static CreatorTab Tab = null;
+        public static CreatorTab? Tab = null;
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(VisorsTab), nameof(VisorsTab.OnEnable))]
@@ -45,11 +46,11 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             visorsTabCustomText.Clear();
             __instance.ColorChips.Clear();
 
-            if (CustomCosmicTab.textTemplate == null)
+            if (CustomCosmicTab.TextTemplate == null)
             {
-                CustomCosmicTab.textTemplate = Object.Instantiate(
+                CustomCosmicTab.TextTemplate = Object.Instantiate(
                     PlayerCustomizationMenu.Instance.itemName);
-                CustomCosmicTab.textTemplate.gameObject.SetActive(false);
+                CustomCosmicTab.TextTemplate.gameObject.SetActive(false);
             }
 
             if (Tab == null)
@@ -67,10 +68,9 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
 			foreach (VisorData viData in unlockedVisor)
             {
-                CustomVisor vi;
-                bool result = ExtremeVisorManager.VisorData.TryGetValue(
-                    viData.ProductId, out vi);
-                if (result)
+                if (ExtremeVisorManager.VisorData.TryGetValue(
+						viData.ProductId, out var vi) &&
+					vi != null)
                 {
                     if (!visorPackage.ContainsKey(vi.Author))
                     {
@@ -149,20 +149,16 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                 {
-                    colorChip.Button.OnMouseOver.AddListener(
-                        (UnityEngine.Events.UnityAction)(() => __instance.SelectVisor(vi)));
+                    colorChip.Button.OnMouseOver.AddListener(() => __instance.SelectVisor(vi));
                     colorChip.Button.OnMouseOut.AddListener(
-                        (UnityEngine.Events.UnityAction)(
                             () => __instance.SelectVisor(
                                 DestroyableSingleton<HatManager>.Instance.GetVisorById(
-                                    playerSkinData.Visor))));
-                    colorChip.Button.OnClick.AddListener(
-                        (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
+                                    playerSkinData.Visor)));
+                    colorChip.Button.OnClick.AddListener(() => __instance.ClickEquip());
                 }
                 else
                 {
-                    colorChip.Button.OnClick.AddListener(
-                        (UnityEngine.Events.UnityAction)(() => __instance.SelectVisor(vi)));
+                    colorChip.Button.OnClick.AddListener(() => __instance.SelectVisor(vi));
                 }
 
                 colorChip.Inner.transform.localPosition = vi.ChipOffset;

@@ -143,6 +143,7 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 			return this.value;
 		}
 	}
+
 	public E Error { get; init; }
 
 	private readonly T? value;
@@ -158,6 +159,8 @@ public sealed class Expected<T, E> : IEquatable<Expected<T, E>>
 		this.value = default(T);
 		Error = error;
 	}
+
+	public T? GetRawValue() => this.value;
 
 	public bool HasValue()
 		=> this.value != null;

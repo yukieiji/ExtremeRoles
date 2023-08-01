@@ -35,15 +35,18 @@ public static class ExtremeHatManager
     private const string dlZipName = "ExtremeHats-main.zip";
     private const string hatDataPath = "ExtremeHats-main";
     private const string hatDataFolderPath = "hat";
-    
+
     private const string hatRepoData = "hatData.json";
     private const string hatTransData = "hatTranData.json";
 
-    private static ConfigEntry<string> curUpdateHash;
-    private const string updateComitKey = "ExHUpdateComitHash";
+	private const string updateComitKey = "ExHUpdateComitHash";
     private const string jsonUpdateComitKey = "updateComitHash";
 
-    public static void Initialize()
+#pragma warning disable CS8618
+	private static ConfigEntry<string> curUpdateHash;
+#pragma warning restore CS8618
+
+	public static void Initialize()
     {
         curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
             ExtremeSkinsPlugin.SkinComitCategory,
@@ -59,17 +62,19 @@ public static class ExtremeHatManager
         ExtremeSkinsPlugin.Logger.LogInfo(
             "Extreme Hat Manager : Checking Update....");
 
-        if (!Directory.Exists(Path.Combine(
-                Path.GetDirectoryName(Application.dataPath),
+		string? appPath = Path.GetDirectoryName(Application.dataPath);
+
+		if (string.IsNullOrEmpty(appPath) ||
+			!Directory.Exists(Path.Combine(
+				appPath,
                 DataStructure.FolderName)))
-        { 
-            return true; 
+        {
+            return true;
         }
 
         getJsonData(hatRepoData).GetAwaiter().GetResult();
 
-        string exhFolder = Path.Combine(
-            Path.GetDirectoryName(Application.dataPath), DataStructure.FolderName);
+        string exhFolder = Path.Combine(appPath, DataStructure.FolderName);
 
         byte[] byteHatArray = File.ReadAllBytes(Path.Combine(exhFolder, hatRepoData));
         string hatJsonString = Encoding.UTF8.GetString(byteHatArray);
@@ -80,7 +85,9 @@ public static class ExtremeHatManager
 
         if ((string)newHash != curUpdateHash.Value) { return true; }
 
-        JArray hatArray = hatFolder.TryCast<JArray>();
+        JArray? hatArray = hatFolder.TryCast<JArray>();
+
+		if (hatArray == null) { return true; }
 
         for (int i = 0; i < hatArray.Count; ++i)
         {
@@ -97,14 +104,16 @@ public static class ExtremeHatManager
                 !File.Exists(jsonPath) ||
                 !File.Exists(Path.Combine(
                     checkHatFolder, DataStructure.FrontImageName)))
-            { 
-                return true; 
+            {
+                return true;
             }
 
             using var jsonReader = new StreamReader(jsonPath);
-            HatInfo info = JsonSerializer.Deserialize<HatInfo>(
+            HatInfo? info = JsonSerializer.Deserialize<HatInfo>(
                 jsonReader.ReadToEnd());
-                
+
+			if (info == null) { return true; }
+
             if (info.FrontFlip &&
                 !File.Exists(Path.Combine(checkHatFolder, DataStructure.FrontFlipImageName)))
             {
@@ -137,14 +146,16 @@ public static class ExtremeHatManager
 
         getJsonData(hatTransData).GetAwaiter().GetResult();
 
-        string exhFolder = Path.Combine(
-            Path.GetDirectoryName(Application.dataPath), DataStructure.FolderName);
+		string? appPath = Path.GetDirectoryName(Application.dataPath);
+		if (string.IsNullOrEmpty(appPath)) { return; }
+
+		string exhFolder = Path.Combine(appPath, DataStructure.FolderName);
 
         Helper.Translation.UpdateHatsTransData(Path.Combine(exhFolder, hatTransData));
 
         // UpdateComitHash
         byte[] byteHatArray = File.ReadAllBytes(Path.Combine(exhFolder, hatRepoData));
-        
+
         curUpdateHash.Value = (string)(JObject.Parse(
             Encoding.UTF8.GetString(byteHatArray))[jsonUpdateComitKey]);
 
@@ -164,8 +175,10 @@ public static class ExtremeHatManager
             }
 
             using var jsonReader = new StreamReader(hatJsonPath);
-            HatInfo info = JsonSerializer.Deserialize<HatInfo>(
+            HatInfo? info = JsonSerializer.Deserialize<HatInfo>(
                 jsonReader.ReadToEnd());
+
+			if (info is null) { continue; }
 
             CustomHat customHat = new CustomHat(hat, info);
 
@@ -186,13 +199,19 @@ public static class ExtremeHatManager
         ExtremeSkinsPlugin.Logger.LogInfo(
             "---------- Extreme Hat Manager : HatData Download Start!! ---------- ");
 
-        string ausFolder = Path.GetDirectoryName(Application.dataPath);
+        string? ausFolder = Path.GetDirectoryName(Application.dataPath);
+
+		if (string.IsNullOrEmpty(ausFolder))
+		{
+			yield break;
+		}
+
         string dataSaveFolder = Path.Combine(ausFolder, DataStructure.FolderName);
 
         cleanUpCurSkinData(dataSaveFolder);
 
         string dlFolder = Path.Combine(ausFolder, workingFolder);
-        
+
         Helper.FileUtility.DeleteDir(dlFolder);
         Directory.CreateDirectory(dlFolder);
 
@@ -202,7 +221,7 @@ public static class ExtremeHatManager
 
         ExtremeSkinsPlugin.Logger.LogInfo(
             "---------- Extreme Hat Manager : HatData Download Complete!! ---------- ");
-        
+
         ExtremeSkinsPlugin.Logger.LogInfo(
             "---------- Extreme Hat Manager : HatData Install Start!! ---------- ");
 
@@ -231,10 +250,14 @@ public static class ExtremeHatManager
     {
         try
         {
-            HttpClient http = new HttpClient();
+			string? auPath = Path.GetDirectoryName(Application.dataPath);
+
+			if (string.IsNullOrEmpty(auPath)) { return; }
+
+			HttpClient http = new HttpClient();
             http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
-            { 
-                NoCache = true 
+            {
+                NoCache = true
             };
 
             var response = await http.GetAsync(
@@ -248,14 +271,13 @@ public static class ExtremeHatManager
             {
                 ExtremeSkinsPlugin.Logger.LogInfo(
                     $"Server returned no data: {response.StatusCode}");
+				return;
             }
 
             using (var responseStream = await response.Content.ReadAsStreamAsync())
             {
                 using (var fileStream = File.Create(
-                    Path.Combine(
-                        Path.GetDirectoryName(Application.dataPath),
-                        DataStructure.FolderName, fileName)))
+                    Path.Combine(auPath, DataStructure.FolderName, fileName)))
                 {
                     responseStream.CopyTo(fileStream);
                 }
@@ -281,7 +303,9 @@ public static class ExtremeHatManager
         string hatJsonString = Encoding.UTF8.GetString(byteHatArray);
 
         JToken hatFolder = JObject.Parse(hatJsonString)["data"];
-        JArray hatArray = hatFolder.TryCast<JArray>();
+        JArray?hatArray = hatFolder.TryCast<JArray>();
+
+		if (hatArray == null ) { return; }
 
         for (int i = 0; i < hatArray.Count; ++i)
         {
@@ -315,7 +339,9 @@ public static class ExtremeHatManager
         string hatJsonString = Encoding.UTF8.GetString(byteHatArray);
 
         JToken hatFolder = JObject.Parse(hatJsonString)["data"];
-        JArray hatArray = hatFolder.TryCast<JArray>();
+        JArray? hatArray = hatFolder.TryCast<JArray>();
+
+		if (hatArray == null) { return; }
 
         for (int i = 0; i < hatArray.Count; ++i)
         {
@@ -326,7 +352,7 @@ public static class ExtremeHatManager
             string hatMoveToFolder = Path.Combine(installFolder, hatData);
             string hatSourceFolder = Path.Combine(
                 extractPath, hatDataPath, hatDataFolderPath, hatData);
-            
+
             ExtremeSkinsPlugin.Logger.LogInfo($"Installing Hat:{hatData}");
 
             Directory.Move(hatSourceFolder, hatMoveToFolder);

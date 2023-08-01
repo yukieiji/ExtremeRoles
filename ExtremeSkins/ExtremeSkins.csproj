@@ -3,15 +3,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <!--<Version>7.99.9999.0</Version>-->
-    <VersionPrefix>7.99.9999</VersionPrefix>
-    <VersionSuffix>SpringJump</VersionSuffix>
+    <!--<Version>8.0.0.0</Version>-->
+    <VersionPrefix>8.0.0</VersionPrefix>
+    <VersionSuffix>Reboot</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+    <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     <DebugType>embedded</DebugType>
     <Nullable>enable</Nullable>
   </PropertyGroup>
