@@ -3,8 +3,8 @@ using System.IO;
 using System.Reflection;
 
 using UnityEngine;
-
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppFile = Il2CppSystem.IO.File;
 
 using ExtremeRoles.Module;
 
@@ -81,7 +81,7 @@ public static class Loader
         try
         {
             Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-            byte[] byteTexture = File.ReadAllBytes(path);
+            Il2CppStructArray<byte> byteTexture = Il2CppFile.ReadAllBytes(path);
             ImageConversion.LoadImage(texture, byteTexture, false);
 
             return texture;
