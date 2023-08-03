@@ -91,7 +91,10 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 	public void Release()
 	{
-		this.hatView = null;
+		if (this.hatView != null)
+		{
+			Object.Destroy(this.hatView);
+		}
 	}
 
 	private HatViewData loadViewData()
