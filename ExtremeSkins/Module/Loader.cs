@@ -98,16 +98,17 @@ public static class Loader
         {
             Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream? stream = assembly.GetManifestResourceStream(path);
+            using Stream? stream = assembly.GetManifestResourceStream(path);
             if (stream is null)
 			{
 				return new LoadError(ErrorCode.CannotFindResource, path);
 			}
 			long length = stream.Length;
             var byteTexture = new Il2CppStructArray<byte>(length);
+			Span<byte> span = new Span<byte>(
+				IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length);
 
-			stream.Read(new Span<byte>(
-                IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length));
+			stream.Read(span);
             ImageConversion.LoadImage(texture, byteTexture, false);
             return texture;
         }
