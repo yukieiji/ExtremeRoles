@@ -58,7 +58,6 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 
 	public override void Unload()
 	{
-		this.data.Release();
 	}
 
 	public override void Destroy()
@@ -118,7 +117,6 @@ public sealed class NamePlateAddressableAsset : AddressableAsset<NamePlateViewDa
 
 	public override void Unload()
 	{
-		this.data.Release();
 	}
 
 	public override void Destroy()
@@ -178,7 +176,6 @@ public sealed class VisorAddressableAsset : AddressableAsset<VisorViewData>
 
 	public override void Unload()
 	{
-		this.data.Release();
 	}
 
 	public override void Destroy()

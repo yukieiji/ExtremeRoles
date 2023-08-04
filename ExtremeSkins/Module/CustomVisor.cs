@@ -64,14 +64,6 @@ public sealed class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
 		return this.view;
 	}
 
-	public void Release()
-	{
-		if (this.view != null)
-		{
-			Object.Destroy(this.view);
-		}
-	}
-
 	public VisorData GetData()
     {
         if (this.Data != null) { return this.Data; }

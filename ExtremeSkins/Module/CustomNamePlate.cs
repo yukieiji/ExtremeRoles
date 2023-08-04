@@ -66,14 +66,6 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
 		return this.viewData;
 	}
 
-	public void Release()
-	{
-		if (this.viewData != null)
-		{
-			Object.Destroy(this.viewData);
-		}
-	}
-
 	public NamePlateData GetData()
     {
         if (this.Data != null) { return this.Data; }

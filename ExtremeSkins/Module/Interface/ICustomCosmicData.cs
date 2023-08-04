@@ -2,8 +2,6 @@
 
 namespace ExtremeSkins.Module.Interface;
 
-#nullable enable
-
 public interface ICustomCosmicData<T, C>
 	where C : ScriptableObject
 	where T : CosmeticData
@@ -18,6 +16,4 @@ public interface ICustomCosmicData<T, C>
 	public C GetViewData();
 
     public T GetData();
-
-	public void Release();
 }
