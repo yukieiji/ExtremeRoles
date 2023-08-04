@@ -46,11 +46,15 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder();
-        builder
-            .AppendLine($" - Name      : {this.Name}")
-            .AppendLine($" - Author    : {this.Author}")
-            .AppendLine($" - Load from : {this.folderPath}")
-            .Append    ($" - Id        : {this.Id}");
+		builder
+			.Append(" - Name      : ")
+			.AppendLine(this.Name)
+			.Append(" - Author    : ")
+			.AppendLine(this.Author)
+			.Append("- Load from : ")
+			.AppendLine(this.folderPath)
+			.Append(" - Id        : ")
+			.Append(this.Id);
 
         return builder.ToString();
     }
