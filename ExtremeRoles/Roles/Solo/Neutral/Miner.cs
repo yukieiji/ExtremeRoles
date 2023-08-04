@@ -115,7 +115,7 @@ public sealed class Miner :
 		obj.transform.position = pos;
 		var mine = obj.AddComponent<MinerMineEffect>();
 		miner.noneActiveMine = mine;
-		miner.noneActiveMine.SetParameter(isRolePlayer, miner.killRange, miner.parameter);
+		miner.noneActiveMine.SetParameter(isRolePlayer, miner.killRange, in miner.parameter);
 		ExtremeRolesPlugin.ShipState.AddMeetingResetObject(miner.noneActiveMine);
 	}
 
