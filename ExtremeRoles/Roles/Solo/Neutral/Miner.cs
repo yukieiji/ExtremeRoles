@@ -50,7 +50,7 @@ public sealed class Miner :
 		MineSeeOnlyImg,
 		MineSeeBoth
 	}
-	public record struct MineEffectParameter(
+	public readonly record struct MineEffectParameter(
 		ShowMode RolePlayerShowMode,
 		ShowMode AnotherPlayerShowMode,
 		bool CanShowNoneActiveAtherPlayer);

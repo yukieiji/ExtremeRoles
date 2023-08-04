@@ -21,7 +21,7 @@ public static class Loader
 		CannotCreateSprite
 	}
 
-	public record struct LoadError(ErrorCode Code, string LoadPath)
+	public readonly record struct LoadError(ErrorCode Code, string LoadPath)
 	{
 		public LoadError() : this(ErrorCode.UnKnown, "")
 		{ }
