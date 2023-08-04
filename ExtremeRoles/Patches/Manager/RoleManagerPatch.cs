@@ -21,7 +21,24 @@ namespace ExtremeRoles.Patches.Manager;
 [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
 public static class RoleManagerSelectRolesPatch
 {
-    public static void Prefix()
+	private readonly struct CombinationRoleAssignData
+	{
+		public readonly byte CombType;
+		public readonly IReadOnlyList<MultiAssignRoleBase> RoleList;
+		public readonly int GameControlId;
+
+		public CombinationRoleAssignData(
+			int controlId, byte combType,
+			IReadOnlyList<MultiAssignRoleBase> roleList)
+		{
+			CombType = combType;
+			RoleList = roleList;
+			GameControlId = controlId;
+		}
+	}
+
+
+	public static void Prefix()
     {
         if (!ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion()) { return; }
 
@@ -29,12 +46,12 @@ public static class RoleManagerSelectRolesPatch
 
         PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
 
-            assignData.AddAssignData(
-                new PlayerToSingleRoleAssignData(
-                    loaclPlayer.PlayerId,
-                    (int)ExtremeRoleId.Xion,
-                    assignData.GetControlId()));
-            assignData.RemvePlayer(loaclPlayer);
+        assignData.AddAssignData(
+            new PlayerToSingleRoleAssignData(
+                loaclPlayer.PlayerId,
+                (int)ExtremeRoleId.Xion,
+                assignData.GetControlId()));
+        assignData.RemvePlayer(loaclPlayer);
 
         if (Xion.IsAllPlyerDummy())
         {
@@ -274,7 +291,7 @@ public static class RoleManagerSelectRolesPatch
         ref RoleSpawnDataManager spawnData,
         ref PlayerRoleAssignData assignData,
         ExtremeRoleType team,
-        List<PlayerControl> targetPlayer,
+        IReadOnlyList<PlayerControl> targetPlayer,
         HashSet<RoleTypes> vanilaTeams)
     {
 
