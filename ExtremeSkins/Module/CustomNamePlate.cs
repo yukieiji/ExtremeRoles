@@ -47,11 +47,15 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
     public override string ToString()
     {
         StringBuilder builder = new StringBuilder();
-        builder
-            .AppendLine($" - Name       : {this.name}")
-            .AppendLine($" - Author     : {this.author}")
-            .AppendLine($" - Image Path : {this.imgPath}")
-            .Append    ($" - Id         : {this.Id}");
+		builder
+			.Append(" - Name      : ")
+			.AppendLine(this.Name)
+			.Append(" - Author    : ")
+			.AppendLine(this.Author)
+			.Append("- Load from : ")
+			.AppendLine(this.imgPath)
+			.Append(" - Id        : ")
+			.Append(this.Id);
 
         return builder.ToString();
     }
