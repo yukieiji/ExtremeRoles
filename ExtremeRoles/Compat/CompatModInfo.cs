@@ -4,7 +4,7 @@ namespace ExtremeRoles.Compat;
 
 #nullable enable
 
-sealed internal record CompatModInfo(
+internal record struct CompatModInfo(
 	string Name,
 	string Guid,
 	string RepoUrl,

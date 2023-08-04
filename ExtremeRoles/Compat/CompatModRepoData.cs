@@ -7,7 +7,7 @@ using SemanticVersioning;
 
 namespace ExtremeRoles.Compat;
 
-internal sealed record CompatModRepoData(JObject Request, string DllName)
+internal record struct CompatModRepoData(JObject Request, string DllName)
 {
 	private const string contentType = "content_type";
 

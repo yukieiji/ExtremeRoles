@@ -101,7 +101,7 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 
 public sealed class Updater
 {
-	public record ModUpdateData(string DownloadUrl, string DllName);
+	public record struct ModUpdateData(string DownloadUrl, string DllName);
 
 	public interface IRepositoryInfo
 	{

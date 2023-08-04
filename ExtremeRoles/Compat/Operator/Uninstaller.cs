@@ -71,7 +71,6 @@ internal sealed class Uninstaller : OperatorBase
 			{
 				return
 					CompatModManager.ModInfo.TryGetValue(x, out var modInfo) &&
-					modInfo != null &&
 					modInfo.IsRequireReactor &&
 					modInfo.Guid != this.guid;
 			});
