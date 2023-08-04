@@ -147,8 +147,6 @@ public static class ExtremeHatManager
 
 		string exhFolder = Path.Combine(appPath, DataStructure.FolderName);
 
-        Helper.Translation.UpdateHatsTransData(Path.Combine(exhFolder, hatTransData));
-
         // UpdateComitHash
         byte[] byteHatArray = File.ReadAllBytes(Path.Combine(exhFolder, hatRepoData));
 
@@ -234,18 +232,6 @@ public static class ExtremeHatManager
 #if RELEASE
         Helper.FileUtility.DeleteDir(dlFolder);
 # endif
-    }
-
-    public static void UpdateTranslation()
-    {
-        foreach (var hat in HatData.Values)
-        {
-           if (hat.Data != null)
-           {
-                hat.Data.name = Helper.Translation.GetString(
-                    hat.Name);
-           }
-        }
     }
 
     private static async Task getJsonData(string fileName)

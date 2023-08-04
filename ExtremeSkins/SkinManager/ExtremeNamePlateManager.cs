@@ -214,18 +214,6 @@ public static class ExtremeNamePlateManager
 # endif
     }
 
-    public static void UpdateTranslation()
-    {
-        foreach (var np in NamePlateData.Values)
-        {
-           if (np.Data != null)
-           {
-                np.Data.name = Helper.Translation.GetString(
-                    np.Name);
-           }
-        }
-    }
-
     private static async Task getJsonData(string fileName)
     {
         try

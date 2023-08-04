@@ -6,11 +6,13 @@ using ExtremeRoles.Module.NewTranslation;
 
 namespace ExtremeSkins;
 
-#nullable enable
-
 public sealed class ExtremeSkinsTranslator :
 	NullableSingleton<ExtremeSkinsTranslator>, ITranslator
 {
+	public bool EnableHat   { set; private get; }
+	public bool EnableVisor { set; private get; }
+	public bool EnableSkins { set; private get; }
+
 	public int Priority => 0;
 
 	public SupportedLangs DefaultLang => SupportedLangs.Japanese;

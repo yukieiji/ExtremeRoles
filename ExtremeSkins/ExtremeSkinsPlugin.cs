@@ -40,6 +40,9 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
         Instance = this;
 
+		var translator = ExtremeSkinsTranslator.Instance;
+		ExtremeRoles.Module.NewTranslation.TranslatorManager.Register(translator);
+
 		CreatorModeManager.Initialize();
 
 #if WITHHAT
@@ -77,9 +80,6 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 			ApiServer.Register("/exs/nameplate/", HttpMethod.Post, new PostNewNamePlateHandler());
 #endif
 		}
-
-		var translator = ExtremeSkinsTranslator.Instance;
-		ExtremeRoles.Module.NewTranslation.TranslatorManager.Register(translator);
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 

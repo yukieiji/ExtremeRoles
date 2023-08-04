@@ -132,9 +132,6 @@ public static class ExtremeVisorManager
 
 		string exvFolder = Path.Combine(auPath, DataStructure.FolderName);
 
-        Helper.Translation.UpdateHatsTransData(
-            Path.Combine(exvFolder, visorTransData));
-
         // UpdateComitHash
         byte[] byteVisorArray = File.ReadAllBytes(
             Path.Combine(exvFolder, visorRepoData));
@@ -215,18 +212,6 @@ public static class ExtremeVisorManager
 #if RELEASE
         Helper.FileUtility.DeleteDir(dlFolder);
 # endif
-    }
-
-    public static void UpdateTranslation()
-    {
-        foreach (var vi in VisorData.Values)
-        {
-            if (vi.Data != null)
-            {
-                vi.Data.name = Helper.Translation.GetString(
-                    vi.Name);
-            }
-        }
     }
 
     private static async Task getJsonData(string fileName)
