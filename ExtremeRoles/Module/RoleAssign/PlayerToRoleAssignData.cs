@@ -1,74 +1,44 @@
 ﻿using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.RoleAssign
+namespace ExtremeRoles.Module.RoleAssign;
+
+public readonly struct PlayerToSingleRoleAssignData : IPlayerToExRoleAssignData
 {
-	public struct PlayerToSingleRoleAssignData : IPlayerToExRoleAssignData
+	public byte PlayerId { get; init; }
+	public int RoleId { get; init; }
+	public int ControlId { get; init; }
+
+	public byte RoleType => (byte)IPlayerToExRoleAssignData.ExRoleType.Single;
+
+	public PlayerToSingleRoleAssignData(
+		byte playerId, int roleId, int controlId)
 	{
-		public byte PlayerId
-		{
-			get => playerId;
-		}
-		public int RoleId
-		{
-			get => roleId;
-		}
-		public int ControlId
-		{
-			get => controlId;
-		}
-
-		public byte RoleType { get => (byte)IPlayerToExRoleAssignData.ExRoleType.Single; }
-
-		private byte playerId;
-		private int roleId;
-		private int controlId;
-
-		public PlayerToSingleRoleAssignData(
-			byte playerId, int roleId, int controlId)
-		{
-			this.playerId = playerId;
-			this.roleId = roleId;
-			this.controlId = controlId;
-		}
+		this.PlayerId = playerId;
+		this.RoleId = roleId;
+		this.ControlId = controlId;
 	}
+}
 
-	public struct PlayerToCombRoleAssignData : IPlayerToExRoleAssignData
+public readonly struct PlayerToCombRoleAssignData : IPlayerToExRoleAssignData
+{
+	public byte PlayerId { get; init; }
+	public int RoleId { get; init; }
+	public int ControlId { get; init; }
+
+	public byte RoleType => (byte)IPlayerToExRoleAssignData.ExRoleType.Comb;
+
+	public byte CombTypeId { get; init; }
+	public byte AmongUsRoleId { get; init; }
+
+	public PlayerToCombRoleAssignData(
+		byte playerId, int roleId,
+		byte combType, int gameContId,
+		byte amongUsRoleId)
 	{
-		public byte PlayerId
-		{
-			get => playerId;
-		}
-		public int RoleId
-		{
-			get => roleId;
-		}
-		public int ControlId
-		{
-			get => gameContId;
-		}
-
-		public byte RoleType { get => (byte)IPlayerToExRoleAssignData.ExRoleType.Comb; }
-
-		public byte CombTypeId => combTypeId;
-		public byte AmongUsRoleId => amongUsRoleId;
-
-		private int roleId;
-		private int gameContId;
-
-		private byte playerId;
-		private byte combTypeId;
-		private byte amongUsRoleId;
-
-		public PlayerToCombRoleAssignData(
-			byte playerId, int roleId,
-			byte combType, int gameContId,
-			byte amongUsRoleId)
-		{
-			this.playerId = playerId;
-			this.roleId = roleId;
-			this.combTypeId = combType;
-			this.gameContId = gameContId;
-			this.amongUsRoleId = amongUsRoleId;
-		}
+		this.PlayerId = playerId;
+		this.RoleId = roleId;
+		this.CombTypeId = combType;
+		this.ControlId = gameContId;
+		this.AmongUsRoleId = amongUsRoleId;
 	}
 }
