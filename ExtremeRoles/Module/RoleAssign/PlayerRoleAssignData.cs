@@ -8,11 +8,13 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
+#nullable enable
 
 public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignData>
 {
-	public List<PlayerControl> NeedRoleAssignPlayer { get; private set; }
+	public IReadOnlyList<PlayerControl> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 
+	private List<PlayerControl> needRoleAssignPlayer;
 	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
 	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
@@ -22,7 +24,7 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 	{
 		this.assignData.Clear();
 
-		this.NeedRoleAssignPlayer = new List<PlayerControl>(
+		this.needRoleAssignPlayer = new List<PlayerControl>(
 			PlayerControl.AllPlayerControls.ToArray());
 		this.gameControlId = 0;
 	}
@@ -55,9 +57,9 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 		Destroy();
 	}
 
-	public List<PlayerControl> GetCanImpostorAssignPlayer()
+	public IReadOnlyList<PlayerControl> GetCanImpostorAssignPlayer()
 	{
-		return this.NeedRoleAssignPlayer.FindAll(
+		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
 				return x.Data.Role.Role switch
@@ -68,9 +70,9 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 			});
 	}
 
-	public List<PlayerControl> GetCanCrewmateAssignPlayer()
+	public IReadOnlyList<PlayerControl> GetCanCrewmateAssignPlayer()
 	{
-		return this.NeedRoleAssignPlayer.FindAll(
+		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
 				return x.Data.Role.Role switch
@@ -112,17 +114,17 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 
 	public void AddPlayer(PlayerControl player)
 	{
-		this.NeedRoleAssignPlayer.Add(player);
+		this.needRoleAssignPlayer.Add(player);
 	}
 
 	public void RemvePlayer(PlayerControl player)
 	{
-		this.NeedRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
+		this.needRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
 	}
 
 	public void Shuffle()
 	{
-		this.NeedRoleAssignPlayer = this.NeedRoleAssignPlayer.OrderBy(
+		this.needRoleAssignPlayer = this.needRoleAssignPlayer.OrderBy(
 			x => RandomGenerator.Instance.Next()).ToList();
 	}
 }
