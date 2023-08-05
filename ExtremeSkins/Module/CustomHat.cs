@@ -10,6 +10,8 @@ using ExtremeSkins.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
 using ExtremeSkins.SkinManager;
+using ExtremeRoles;
+using System.Collections.Generic;
 
 namespace ExtremeSkins.Module;
 
@@ -33,6 +35,8 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
     {
         get => $"hat_{new DirectoryInfo(this.folderPath).Name}_{this.Author}_{this.Name}";
     }
+
+	private static Dictionary<string, Sprite?> spriteCache = new Dictionary<string, Sprite?>();
 
     private string folderPath;
 	private NewHatInfo info;
@@ -63,7 +67,8 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	public HatViewData GetViewData()
 	{
 		if (this.hatView == null ||
-			this.hatView.MainImage == null)
+			this.hatView.MainImage == null ||
+			this.info.Variation != null)
 		{
 			this.hatView = this.loadViewData();
 		}
@@ -96,34 +101,21 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 	private HatViewData loadViewData()
 	{
-		var hatView = ScriptableObject.CreateInstance<HatViewData>();
+		var hatView = this.hatView == null ?
+			ScriptableObject.CreateInstance<HatViewData>() :
+			this.hatView;
 
-		hatView.MainImage = getSprite(Path.Combine(this.folderPath, DataStructure.FrontImageName));
-
-		if (this.info.FrontFlip)
+		if (this.info.Variation == null)
 		{
-			hatView.LeftMainImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
+			createNormalView(ref hatView);
+		}
+		else
+		{
+			createVariationView(ref hatView, this.info.Variation);
 		}
 
-		if (this.info.Back)
-		{
-			hatView.BackImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.BackImageName));
-		}
-		if (this.info.BackFlip)
-		{
-			hatView.LeftBackImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
-		}
-
-		if (this.info.Climb)
-		{
-			hatView.ClimbImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.ClimbImageName));
-		}
-
-		if (this.info.Shader)
+		if (this.info.Shader &&
+			hatView.AltShader == null)
 		{
 			Material altShader = new Material(
 				FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
@@ -137,14 +129,98 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 		return hatView;
 	}
 
+	private void createNormalView(ref HatViewData view)
+	{
+		view.MainImage = getSprite(Path.Combine(this.folderPath, DataStructure.FrontImageName));
+
+		if (this.info.FrontFlip)
+		{
+			view.LeftMainImage = getSprite(
+				Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
+		}
+
+		if (this.info.Back)
+		{
+			view.BackImage = getSprite(
+				Path.Combine(this.folderPath, DataStructure.BackImageName));
+		}
+		if (this.info.BackFlip)
+		{
+			view.LeftBackImage = getSprite(
+				Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
+		}
+
+		if (this.info.Climb)
+		{
+			view.ClimbImage = getSprite(
+				Path.Combine(this.folderPath, DataStructure.ClimbImageName));
+		}
+	}
+
+	private void createVariationView(ref HatViewData view, HatVariation variation)
+	{
+		if (variation.Front != null)
+		{
+			view.MainImage = getSprite(
+				Path.Combine(
+					this.folderPath,
+					getVariationImgPath(variation.Front, NewHatInfo.VariationType.Random)));
+		}
+
+		if (variation.FrontFlip != null)
+		{
+			view.LeftMainImage = getSprite(
+				Path.Combine(
+					this.folderPath,
+					getVariationImgPath(variation.FrontFlip, NewHatInfo.VariationType.Random)));
+		}
+
+		if (variation.Back != null)
+		{
+			view.BackImage = getSprite(
+				Path.Combine(
+					this.folderPath,
+					getVariationImgPath(variation.Back, NewHatInfo.VariationType.Random)));
+		}
+		if (variation.BackFlip != null)
+		{
+			view.LeftBackImage = getSprite(
+				Path.Combine(
+					this.folderPath,
+					getVariationImgPath(variation.BackFlip, NewHatInfo.VariationType.Random)));
+		}
+
+		if (variation.Climb != null)
+		{
+			view.ClimbImage = getSprite(
+				Path.Combine(
+					this.folderPath,
+					getVariationImgPath(variation.Climb, NewHatInfo.VariationType.Random)));
+		}
+	}
+
+	private static string getVariationImgPath(string[] imgArr, NewHatInfo.VariationType type)
+	{
+		return imgArr[RandomGenerator.Instance.Next(imgArr.Length)];
+	}
+
 	private static Sprite? getSprite(string path)
 	{
-		var result = loadHatSprite(path);
-		if (!result.HasValue())
+		if (spriteCache.TryGetValue(path, out var sprite))
 		{
-			ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
+			return sprite;
 		}
-		return result.GetRawValue();
+		else
+		{
+			var result = loadHatSprite(path);
+			if (!result.HasValue())
+			{
+				ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
+			}
+			sprite = result.GetRawValue();
+			spriteCache.Add(path, sprite);
+		}
+		return sprite;
 	}
 
 
