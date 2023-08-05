@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using BepInEx.Configuration;
 
@@ -19,10 +20,26 @@ using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module;
 
-
 namespace ExtremeSkins.SkinManager;
 
 #if WITHHAT
+public record NewHatInfo(
+	string Name, string Author,
+	bool Bound = false,
+	bool Shader = false,
+	bool Climb = false,
+	bool FrontFlip = false,
+	bool Back = false,
+	bool BackFlip = false,
+	string comitHash = "",
+	HatVariation? Variation = null) : InfoBase(Name, Author)
+{
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public HatVariation? Variation { get; set; } = Variation;
+}
+
+public record HatVariation(string[]? Front = null, string[]? FrontFlip = null, string[]? Back = null, string[]? BackFlip = null);
+
 public static class ExtremeHatManager
 {
     public static readonly Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
@@ -161,7 +178,12 @@ public static class ExtremeHatManager
 
         string[] hatsFolder = Directory.GetDirectories(exhFolder);
 
-        foreach (string hat in hatsFolder)
+		JsonSerializerOptions options = new()
+		{
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+		};
+
+		foreach (string hat in hatsFolder)
         {
             if (string.IsNullOrEmpty(hat)) { continue; }
 
@@ -175,8 +197,8 @@ public static class ExtremeHatManager
             }
 
             using var jsonReader = new StreamReader(hatJsonPath);
-            HatInfo? info = JsonSerializer.Deserialize<HatInfo>(
-                jsonReader.ReadToEnd());
+			NewHatInfo? info = JsonSerializer.Deserialize<NewHatInfo>(
+                jsonReader.ReadToEnd(), options);
 
 			if (info is null) { continue; }
 

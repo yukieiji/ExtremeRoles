@@ -9,6 +9,7 @@ using ExtremeSkins.Module.Interface;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
+using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module;
 
@@ -34,10 +35,10 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
     }
 
     private string folderPath;
-	private HatInfo info;
+	private NewHatInfo info;
 	private HatViewData? hatView;
 
-    public CustomHat(string folderPath, HatInfo info)
+    public CustomHat(string folderPath, NewHatInfo info)
     {
         this.folderPath = folderPath;
 		this.info = info;
