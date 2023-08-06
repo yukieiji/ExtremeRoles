@@ -13,7 +13,7 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 {
-	private const string oneLineRoleInfoPlaceholder = "<size=150%>・{0}</size>\n{1}\n<size=115%>・{0}{3}</size>\n{4}";
+	private const string oneLineRoleInfoPlaceholder = "<size=150%>・{0}</size>\n{1}\n<size=115%>・{0}{2}</size>\n{3}";
 
 	public (string, string) GetInfoText()
 	{
