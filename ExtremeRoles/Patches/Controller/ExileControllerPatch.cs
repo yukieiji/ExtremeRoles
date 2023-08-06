@@ -24,18 +24,19 @@ public static class ExileControllerBeginePatch
 {
     private const string TransKeyBase = "ExileText";
 
-/* JAJPs
-[Info   :Extreme Roles] TransKey:ExileTextSP    Value:{0}がインポスターだった。
-[Info   :Extreme Roles] TransKey:ExileTextSN    Value:{0}はインポスターではなかった。
-[Info   :Extreme Roles] TransKey:ExileTextPP    Value:{0}はインポスターだった。
-[Info   :Extreme Roles] TransKey:ExileTextPN    Value:{0}はインポスターではなかった。
-[Info   :Extreme Roles] TransKey:NoExileSkip    Value:誰も追放されなかった。（投票スキップ）
-[Info   :Extreme Roles] TransKey:NoExileTie    Value:誰も追放されなかった。（同数投票）
-[Info   :Extreme Roles] TransKey:ExileTextNonConfirm    Value:{0}が追放された。
-[Info   :Extreme Roles] TransKey:ImpostorsRemainS    Value:インポスターが{0}人残っている。
-[Info   :Extreme Roles] TransKey:ImpostorsRemainP    Value:インポスターが{0}人残っている。
-*/
+	/* JAJPs
+	[Info   :Extreme Roles] TransKey:ExileTextSP    Value:{0}がインポスターだった。
+	[Info   :Extreme Roles] TransKey:ExileTextSN    Value:{0}はインポスターではなかった。
+	[Info   :Extreme Roles] TransKey:ExileTextPP    Value:{0}はインポスターだった。
+	[Info   :Extreme Roles] TransKey:ExileTextPN    Value:{0}はインポスターではなかった。
+	[Info   :Extreme Roles] TransKey:NoExileSkip    Value:誰も追放されなかった。（投票スキップ）
+	[Info   :Extreme Roles] TransKey:NoExileTie    Value:誰も追放されなかった。（同数投票）
+	[Info   :Extreme Roles] TransKey:ExileTextNonConfirm    Value:{0}が追放された。
+	[Info   :Extreme Roles] TransKey:ImpostorsRemainS    Value:インポスターが{0}人残っている。
+	[Info   :Extreme Roles] TransKey:ImpostorsRemainP    Value:インポスターが{0}人残っている。
+	*/
 
+	[HarmonyPrefix, HarmonyPriority(Priority.Last)]
     public static bool Prefix(
         ExileController __instance,
         [HarmonyArgument(0)] GameData.PlayerInfo exiled,
