@@ -71,7 +71,7 @@ public sealed record AnimationInfo(
 
 public static class ExtremeHatManager
 {
-    public static readonly Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
+    public static readonly Dictionary<string, CustomHatProvider> HatData = new Dictionary<string, CustomHatProvider>();
     public static bool IsLoaded = false;
 
     private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
@@ -231,7 +231,7 @@ public static class ExtremeHatManager
 
 			if (info is null) { continue; }
 
-            CustomHat customHat = new CustomHat(hat, info);
+			NoAnimationHat customHat = new NoAnimationHat(hat, info);
 
             if (HatData.TryAdd(customHat.Id, customHat))
             {

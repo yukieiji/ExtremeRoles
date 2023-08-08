@@ -71,7 +71,7 @@ public static class HatsTabPatch
         foreach (HatData hatBehaviour in unlockedHats)
         {
             if (ExtremeHatManager.HatData.TryGetValue(
-				hatBehaviour.ProductId, out CustomHat? hat) &&
+				hatBehaviour.ProductId, out CustomHatProvider? hat) &&
 				hat != null)
             {
                 if (!hatPackage.ContainsKey(hat.Author))

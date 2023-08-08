@@ -11,7 +11,7 @@ namespace ExtremeSkins.Module;
 [Il2CppRegister]
 public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 {
-	private CustomHat data;
+	private CustomHatProvider data;
 
 #pragma warning disable CS8618
 	public HatAddressableAsset(System.IntPtr ptr) : base(ptr)
@@ -24,7 +24,7 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 	}
 #pragma warning restore CS8618
 
-	public static AddressableAsset<HatViewData> CreateAsset(CustomHat data)
+	public static AddressableAsset<HatViewData> CreateAsset(CustomHatProvider data)
 	{
 		var asset = new HatAddressableAsset();
 		asset.Init(data);
@@ -32,7 +32,7 @@ public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 	}
 
 	[HideFromIl2Cpp]
-	public void Init(CustomHat data)
+	public void Init(CustomHatProvider data)
 	{
 		this.data = data;
 	}
