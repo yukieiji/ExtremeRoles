@@ -124,11 +124,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 		if (this.info.Shader)
 		{
-			Material altShader = new Material(
-				FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
-			altShader.shader = Shader.Find("Unlit/PlayerShader");
-
-			hatView.AltShader = altShader;
+			hatView.AltShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
 		}
 
 		this.Data!.ViewDataRef = new AssetReference(hatView.Pointer);

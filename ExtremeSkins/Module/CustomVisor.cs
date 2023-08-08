@@ -105,11 +105,7 @@ public sealed class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
 		}
 		if (this.info.Shader)
 		{
-			Material altShader = new Material(
-				FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
-			altShader.shader = Shader.Find("Unlit/PlayerShader");
-
-			view.AltShader = altShader;
+			view.AltShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
 		}
 
 		return view;
