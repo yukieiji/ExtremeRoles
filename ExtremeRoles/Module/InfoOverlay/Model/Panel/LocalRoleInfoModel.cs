@@ -13,7 +13,7 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 {
-	private const string oneLineRoleInfoPlaceholder = "<size=150%>・{0}</size>\n{1}\n<size=115%>・{0}{2}</size>\n{3}";
+	private const string oneLineRoleInfoPlaceholder = "<size=150%>・{0}</size>\n{1}\n\n<size=115%>・{0}{2}</size>\n{3}";
 
 	public (string, string) GetInfoText()
 	{
@@ -39,7 +39,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 		(string colorRoleName, string roleFullDesc, string roleOptionString) = getMultiRoleInfoAndOption(
 			multiAssignRole);
-		string roleOptionStr = Translation.GetString("roleOption");
+		string settingTransStr = Translation.GetString("roleOption");
 
 		if (multiAssignRole.AnotherRole is not null)
 		{
@@ -48,12 +48,12 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			return (
 				string.Format(
 					oneLineRoleInfoPlaceholder,
-					colorRoleName, roleFullDesc,
-					roleOptionString, roleOptionStr),
+					colorRoleName, roleFullDesc, settingTransStr,
+					roleOptionString),
 				string.Format(
 					oneLineRoleInfoPlaceholder,
-					anotherColorRoleName, anotherRoleFullDesc,
-					roleOptionString, anotherRoleOptionString));
+					anotherColorRoleName, anotherRoleFullDesc, settingTransStr,
+					anotherRoleOptionString));
 		}
 		else
 		{
@@ -94,7 +94,10 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 			var option = allOption.GetIOption(role.GetManagerOptionId(RoleCommonOption.SpawnRate));
 			roleOptionString = option.ToHudStringWithChildren();
 		}
-		string colorRoleName = role.GetColoredRoleName();
+
+		string colorRoleName = Design.ColoedString(
+			role.GetNameColor(),
+			Translation.GetString(role.RoleName));
 		string roleFullDesc = role.GetFullDescription();
 
 		replaceAwakeRoleOptionString(ref roleOptionString, role);
