@@ -34,7 +34,10 @@ public static class ChatControllerAddChatPatch
     {
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-		if (!sourcePlayer || !CachedPlayerControl.LocalPlayer)
+		if (sourcePlayer == null ||
+			sourcePlayer.Data == null ||
+			CachedPlayerControl.LocalPlayer == null ||
+			CachedPlayerControl.LocalPlayer.Data == null)
 		{
 			return false;
 		}
@@ -42,40 +45,40 @@ public static class ChatControllerAddChatPatch
 		GameData.PlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
 		GameData.PlayerInfo sourcePlayerData = sourcePlayer.Data;
 
-		bool assassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
-
-		if (!assassinMeeting)
-		{
-			if (localPlayerData == null || sourcePlayerData == null ||
-				(sourcePlayerData.IsDead && !localPlayerData.IsDead))
-			{
-				return false;
-			}
-		}
-
 		var roleDict = ExtremeRoleManager.GameRole;
 
 		byte localPlayerId = localPlayerData.PlayerId;
 		byte sourcePlayerId = sourcePlayerData.PlayerId;
 
-		if (!roleDict.TryGetValue(localPlayerId, out var role) ||
-			!roleDict.TryGetValue(sourcePlayerId, out var role2))
+		if (!roleDict.TryGetValue(localPlayerId , out var localPlayerRole) ||
+			!roleDict.TryGetValue(sourcePlayerId, out var sourcePlayerRole))
 		{
 			return true;
 		}
 
-		if (assassinMeeting && (!role.IsImpostor() || !role2.IsImpostor()))
-        {
+		bool assassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+		bool islocalPlayerDead = localPlayerData.IsDead;
+		bool isSourcePlayerDead = sourcePlayerData.IsDead;
+
+		if ((
+				!assassinMeeting || (isSourcePlayerDead && !islocalPlayerDead)
+			)
+			||
+			(
+				assassinMeeting && (!localPlayerRole.IsImpostor() || !sourcePlayerRole.IsImpostor())
+			))
+
+		{
 			return false;
-        }
+		}
 
 		ChatBubble chatBubble = __instance.GetPooledBubble();
 		try
 		{
 			chatBubble.transform.SetParent(__instance.scroller.Inner);
 			chatBubble.transform.localScale = Vector3.one;
-			bool isLocalPlayer = sourcePlayer.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId;
-			if (isLocalPlayer)
+			bool isSamePlayer = sourcePlayerId == CachedPlayerControl.LocalPlayer.PlayerId;
+			if (isSamePlayer)
 			{
 				chatBubble.SetRight();
 			}
@@ -84,16 +87,16 @@ public static class ChatControllerAddChatPatch
 				chatBubble.SetLeft();
 			}
 
-			Color seeColor = isLocalPlayer ?
-				role.GetNameColor(CachedPlayerControl.LocalPlayer.Data.IsDead) :
-				role.GetTargetRoleSeeColor(role2, sourcePlayerId);
+			Color seeColor = isSamePlayer ?
+				localPlayerRole.GetNameColor(islocalPlayerDead) :
+				localPlayerRole.GetTargetRoleSeeColor(sourcePlayerRole, sourcePlayerId);
 
 			bool didVote = MeetingHud.Instance && MeetingHud.Instance.DidVote(sourcePlayerId);
 
 			chatBubble.SetCosmetics(sourcePlayerData);
 
 			__instance.SetChatBubbleName(
-				chatBubble, sourcePlayerData, sourcePlayerData.IsDead,
+				chatBubble, sourcePlayerData, isSourcePlayerDead,
 				didVote, seeColor, null);
 			chatBubble.SetText(
 				DataManager.Settings.Multiplayer.CensorChat ?
@@ -104,20 +107,18 @@ public static class ChatControllerAddChatPatch
 			{
 				__instance.notificationRoutine = __instance.StartCoroutine(__instance.BounceDot());
 			}
-			if (!isLocalPlayer)
+			if (!isSamePlayer)
 			{
 				SoundManager.Instance.PlaySound(
 					__instance.messageSound, false, 1f).pitch = 0.5f + (float)sourcePlayer.PlayerId / 15f;
 			}
-			return false;
 		}
 		catch (Exception ex)
 		{
 			ExtremeRolesPlugin.Logger.LogError(ex);
 			__instance.chatBubblePool.Reclaim(chatBubble);
-			return false;
 		}
-
+		return false;
 	}
 }
 
