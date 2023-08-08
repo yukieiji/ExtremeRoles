@@ -21,11 +21,11 @@ public static class ChatControllerAddChatNotePatch
 		[HarmonyArgument(0)] GameData.PlayerInfo srcPlayer,
 		[HarmonyArgument(1)] ChatNoteTypes noteType)
 	{
-
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
-		if (noteType == ChatNoteTypes.DidVote) { return false; }
-
-		return true;
+		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		{
+			return true;
+		}
+		return noteType != ChatNoteTypes.DidVote;
 	}
 }
 
