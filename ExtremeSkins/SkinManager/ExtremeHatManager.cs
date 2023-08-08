@@ -19,7 +19,6 @@ using Newtonsoft.Json.Linq;
 using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module;
-using System;
 
 namespace ExtremeSkins.SkinManager;
 
@@ -33,51 +32,41 @@ public record NewHatInfo(
 	bool Back = false,
 	bool BackFlip = false,
 	string comitHash = "",
-	HatVariation? Variation = null) : InfoBase(Name, Author)
+	HatAnimation? Animation = null) : InfoBase(Name, Author)
 {
-	public enum VariationType : byte
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public HatAnimation? Animation { get; set; } = Animation;
+}
+
+public record HatAnimation(
+	AnimationInfo? Front = null,
+	AnimationInfo? FrontFlip = null,
+	AnimationInfo? Back = null,
+	AnimationInfo? BackFlip = null,
+	AnimationInfo? Climb = null)
+{
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public AnimationInfo? Front { get; set; } = Front;
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public AnimationInfo? FrontFlip { get; set; } = FrontFlip;
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public AnimationInfo? Back { get; set; } = Back;
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public AnimationInfo? BackFlip { get; set; } = BackFlip;
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public AnimationInfo? Climb { get; set; } = Climb;
+}
+
+public sealed record AnimationInfo(
+	string[] Img,
+	uint FrameCount = 1,
+	AnimationInfo.ImageSelection Type = AnimationInfo.ImageSelection.Sequential)
+{
+	public enum ImageSelection : byte
 	{
 		Sequential,
 		Random,
 	}
-
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public HatVariation? Variation { get; set; } = Variation;
-}
-
-public record HatVariation(
-	string[]? Front = null,
-	NewHatInfo.VariationType? FrontType = null,
-	string[]? FrontFlip = null,
-	NewHatInfo.VariationType? FrontFlipType = null,
-	string[]? Back = null,
-	NewHatInfo.VariationType? BackType = null,
-	string[]? BackFlip = null,
-	NewHatInfo.VariationType? BackFlipType = null,
-	string[]? Climb = null,
-	NewHatInfo.VariationType? ClimbType = null)
-{
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string[]? Front { get; set; } = Front;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string[]? FrontFlip { get; set; } = FrontFlip;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string[]? Back { get; set; } = Back;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string[]? BackFlip { get; set; } = BackFlip;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string[]? Climb { get; set; } = Climb;
-
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public NewHatInfo.VariationType? FrontType { get; set; } = FrontType;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public NewHatInfo.VariationType? FrontFlipType { get; set; } = FrontFlipType;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public NewHatInfo.VariationType? BackType { get; set; } = BackType;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public NewHatInfo.VariationType? BackFlipType { get; set; } = BackFlipType;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public NewHatInfo.VariationType? ClimbType { get; set; } = ClimbType;
 }
 
 public static class ExtremeHatManager
