@@ -68,7 +68,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	{
 		if (this.hatView == null ||
 			this.hatView.MainImage == null ||
-			this.info.Variation != null)
+			this.info.Animation != null)
 		{
 			this.hatView = this.loadViewData();
 		}
@@ -105,13 +105,13 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 			ScriptableObject.CreateInstance<HatViewData>() :
 			this.hatView;
 
-		if (this.info.Variation == null)
+		if (this.info.Animation == null)
 		{
 			createNormalView(ref hatView);
 		}
 		else
 		{
-			createVariationView(ref hatView, this.info.Variation);
+			createVariationView(ref hatView, this.info.Animation);
 		}
 
 		if (this.info.Shader &&
@@ -157,9 +157,9 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 		}
 	}
 
-	private void createVariationView(ref HatViewData view, HatVariation variation)
+	private void createVariationView(ref HatViewData view, HatAnimation animation)
 	{
-		if (variation.Front != null)
+		if (animation.Front != null)
 		{
 			view.MainImage = getSprite(
 				Path.Combine(
@@ -167,7 +167,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 					getVariationImgPath(variation.Front, NewHatInfo.VariationType.Random)));
 		}
 
-		if (variation.FrontFlip != null)
+		if (animation.FrontFlip != null)
 		{
 			view.LeftMainImage = getSprite(
 				Path.Combine(
@@ -175,14 +175,14 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 					getVariationImgPath(variation.FrontFlip, NewHatInfo.VariationType.Random)));
 		}
 
-		if (variation.Back != null)
+		if (animation.Back != null)
 		{
 			view.BackImage = getSprite(
 				Path.Combine(
 					this.folderPath,
 					getVariationImgPath(variation.Back, NewHatInfo.VariationType.Random)));
 		}
-		if (variation.BackFlip != null)
+		if (animation.BackFlip != null)
 		{
 			view.LeftBackImage = getSprite(
 				Path.Combine(
@@ -190,7 +190,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
 					getVariationImgPath(variation.BackFlip, NewHatInfo.VariationType.Random)));
 		}
 
-		if (variation.Climb != null)
+		if (animation.Climb != null)
 		{
 			view.ClimbImage = getSprite(
 				Path.Combine(
