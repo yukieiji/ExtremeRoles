@@ -17,15 +17,10 @@ namespace ExtremeRoles.Patches.Controller;
 public static class ChatControllerAddChatNotePatch
 {
 	public static bool Prefix(
-		ChatController __instance,
 		[HarmonyArgument(0)] GameData.PlayerInfo srcPlayer,
 		[HarmonyArgument(1)] ChatNoteTypes noteType)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-		{
-			return true;
-		}
-		return noteType != ChatNoteTypes.DidVote;
+		return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger || noteType != ChatNoteTypes.DidVote;
 	}
 }
 
