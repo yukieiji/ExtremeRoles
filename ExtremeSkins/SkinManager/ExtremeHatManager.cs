@@ -233,7 +233,8 @@ public static class ExtremeHatManager
 
 			if (info is null) { continue; }
 
-			CustomHat customHat = new CustomHat(hat, info);
+			CustomHat customHat = info.Animation == null ?
+				new CustomHat(hat, info) : new AnimationHat(hat, info);
 
             if (HatData.TryAdd(customHat.Id, customHat))
             {
