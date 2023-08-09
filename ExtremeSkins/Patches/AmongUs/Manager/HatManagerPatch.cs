@@ -17,7 +17,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 			try
 			{
 				List<HatData> hatData = __instance.allHats.ToList();
-				foreach (CustomHatProvider hat in ExtremeHatManager.HatData.Values)
+				foreach (CustomHat hat in ExtremeHatManager.HatData.Values)
 				{
 					hatData.Add(hat.Data);
 				}
