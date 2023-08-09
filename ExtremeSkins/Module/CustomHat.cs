@@ -50,8 +50,6 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 	private HatData? data;
 
-	private static Dictionary<string, Sprite?> spriteCache = new Dictionary<string, Sprite?>();
-
 	public CustomHat(string folderPath, NewHatInfo info)
 	{
 		this.FolderPath = folderPath;
@@ -142,24 +140,16 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 
 	protected static Sprite? GetSprite(string path)
 	{
-		if (spriteCache.TryGetValue(path, out var sprite))
+		var result = loadHatSprite(path);
+		if (!result.HasValue())
 		{
-			return sprite;
+			ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
 		}
-		else
-		{
-			var result = LoadHatSprite(path);
-			if (!result.HasValue())
-			{
-				ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
-			}
-			sprite = result.GetRawValue();
-			spriteCache.Add(path, sprite);
-		}
+		var sprite = result.GetRawValue();
 		return sprite;
 	}
 
-	protected static Expected<Sprite, Loader.LoadError> LoadHatSprite(
+	private static Expected<Sprite, Loader.LoadError> loadHatSprite(
 		string path)
 	{
 		var result = Loader.LoadTextureFromDisk(path);
