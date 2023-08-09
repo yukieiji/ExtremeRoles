@@ -11,13 +11,19 @@ body:
   - type: textarea
     attributes:
       label: "期待される動作 / Your Expectation"
-      placeholder: "どのようなことをやろうとしたのか、そして何が起きたのか、必要であれば画像等を添付してください(その動作を元に再現を行います、これがないと色々と困ります) / What did you try to do, and what did you expect to happen? Attach screenshots if needed.<br><br>1. <br>2. <br>3. <br>4. <br>5. "
+      placeholder: "どのようなことをやろうとしたのか、そして何が起きたのか、必要であれば画像等を添付してください(その動作を元に再現を行います、これがないと色々と困ります) / What did you try to do, and what did you expect to happen? Attach screenshots if needed. "
     validations:
       required: true
   - type: textarea
     attributes:
       label: "実際の動作 / The Reality"
       placeholder: "期待する動作に対して、実際の動作はどうなのか。バグを再現しただけの動画(数分程度)のURLや画像があるとわかりやすいです / How does the actual behavior compare to the expected behavior? (A video URL or image would be helpful for clarification"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "あなたの意見 / Your Proposal"
+      placeholder: "報告しようとしているバグ/未定義動作(バグではなければ仕様)に対してどうしてほしいのか。どういう風に修正してほしいのか、こういう仕様にしてほしいのかを記載して下さい / What do you want us to do about the bug/undefined behavior (or specification if not a bug) you are reporting? Please describe how you would like it to be fixed, or what you would like the specification to look like."
     validations:
       required: true
   - type: textarea
