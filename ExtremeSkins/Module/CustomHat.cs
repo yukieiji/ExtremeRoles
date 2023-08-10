@@ -1,17 +1,17 @@
 ﻿using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
+using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module.Interface;
 
+using ExtremeRoles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
-using ExtremeSkins.SkinManager;
-using ExtremeRoles;
-using System.Collections.Generic;
 
 namespace ExtremeSkins.Module;
 
@@ -45,12 +45,12 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	}
 
 	protected readonly string FolderPath;
-	protected readonly NewHatInfo Info;
+	protected readonly HatInfo Info;
 	protected HatViewData? HatView;
 
 	private HatData? data;
 
-	public CustomHat(string folderPath, NewHatInfo info)
+	public CustomHat(string folderPath, HatInfo info)
 	{
 		this.FolderPath = folderPath;
 		this.Info = info;
@@ -176,7 +176,7 @@ public sealed class AnimationHat : CustomHat
 	private int counter = 0;
 	private Dictionary<string, Sprite?> cacheSprite = new Dictionary<string, Sprite?>();
 
-	public AnimationHat(string folderPath, NewHatInfo info)
+	public AnimationHat(string folderPath, HatInfo info)
 		: base(folderPath, info)
 	{ }
 

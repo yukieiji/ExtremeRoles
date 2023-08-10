@@ -23,53 +23,6 @@ using ExtremeSkins.Module;
 namespace ExtremeSkins.SkinManager;
 
 #if WITHHAT
-public record NewHatInfo(
-	string Name, string Author,
-	bool Bound = false,
-	bool Shader = false,
-	bool Climb = false,
-	bool FrontFlip = false,
-	bool Back = false,
-	bool BackFlip = false,
-	string comitHash = "",
-	HatAnimation? Animation = null) : InfoBase(Name, Author)
-{
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public HatAnimation? Animation { get; set; } = Animation;
-}
-
-public record HatAnimation(
-	AnimationInfo? Front = null,
-	AnimationInfo? FrontFlip = null,
-	AnimationInfo? Back = null,
-	AnimationInfo? BackFlip = null,
-	AnimationInfo? Climb = null)
-{
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public AnimationInfo? Front { get; set; } = Front;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public AnimationInfo? FrontFlip { get; set; } = FrontFlip;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public AnimationInfo? Back { get; set; } = Back;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public AnimationInfo? BackFlip { get; set; } = BackFlip;
-	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public AnimationInfo? Climb { get; set; } = Climb;
-}
-
-public sealed record AnimationInfo(
-	string[] Img,
-	uint FrameCount = 1,
-	AnimationInfo.ImageSelection Type = AnimationInfo.ImageSelection.Sequential)
-{
-	public enum ImageSelection : byte
-	{
-		Sequential,
-		Random,
-	}
-	[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-	public int CurIndex { get; set; } = 0;
-}
 
 public static class ExtremeHatManager
 {
@@ -228,7 +181,7 @@ public static class ExtremeHatManager
             }
 
             using var jsonReader = new StreamReader(hatJsonPath);
-			NewHatInfo? info = JsonSerializer.Deserialize<NewHatInfo>(
+			HatInfo? info = JsonSerializer.Deserialize<HatInfo>(
                 jsonReader.ReadToEnd(), options);
 
 			if (info is null) { continue; }
