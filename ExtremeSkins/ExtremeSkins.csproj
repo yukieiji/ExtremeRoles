@@ -3,9 +3,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>8.0.0.1</Version>
-    <!--<VersionPrefix>8.0.0</VersionPrefix>-->
-    <VersionSuffix>Reboot</VersionSuffix>
+    <!--<Version>8.1.0.1</Version>-->
+    <VersionPrefix>8.1.0</VersionPrefix>
+    <VersionSuffix>Animation</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
