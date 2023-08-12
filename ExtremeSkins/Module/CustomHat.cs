@@ -247,7 +247,7 @@ public sealed class AnimationHat : CustomHat
 		string path = animation.Img[animation.CurIndex];
 		if (!this.cacheSprite.TryGetValue(path, out var sprite))
 		{
-			sprite = GetSprite(path);
+			sprite = GetSprite(Path.Combine(this.FolderPath, path));
 			this.cacheSprite.Add(path, sprite);
 		}
 		return sprite;
