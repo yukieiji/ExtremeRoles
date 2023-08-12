@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using BepInEx.Configuration;
 
@@ -19,10 +20,10 @@ using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module;
 
-
 namespace ExtremeSkins.SkinManager;
 
 #if WITHHAT
+
 public static class ExtremeHatManager
 {
     public static readonly Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
@@ -161,7 +162,12 @@ public static class ExtremeHatManager
 
         string[] hatsFolder = Directory.GetDirectories(exhFolder);
 
-        foreach (string hat in hatsFolder)
+		JsonSerializerOptions options = new()
+		{
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+		};
+
+		foreach (string hat in hatsFolder)
         {
             if (string.IsNullOrEmpty(hat)) { continue; }
 
@@ -175,12 +181,13 @@ public static class ExtremeHatManager
             }
 
             using var jsonReader = new StreamReader(hatJsonPath);
-            HatInfo? info = JsonSerializer.Deserialize<HatInfo>(
-                jsonReader.ReadToEnd());
+			HatInfo? info = JsonSerializer.Deserialize<HatInfo>(
+                jsonReader.ReadToEnd(), options);
 
 			if (info is null) { continue; }
 
-            CustomHat customHat = new CustomHat(hat, info);
+			CustomHat customHat = info.Animation == null ?
+				new CustomHat(hat, info) : new AnimationHat(hat, info);
 
             if (HatData.TryAdd(customHat.Id, customHat))
             {

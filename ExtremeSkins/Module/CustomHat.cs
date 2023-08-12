@@ -1,166 +1,260 @@
 ﻿using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
+using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module.Interface;
 
+using ExtremeRoles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
 
 namespace ExtremeSkins.Module;
 
-#nullable enable
-
 #if WITHHAT
-public sealed class CustomHat : ICustomCosmicData<HatData, HatViewData>
+public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 {
-    public HatData? Data { get; private set; }
+	public HatData Data
+	{
+		get
+		{
+			if (this.data == null)
+			{
+				this.data = this.crateData();
+			}
+			return this.data!;
+		}
+	}
 
-    public string Author
-    {
-        get => this.info.Author;
-    }
-    public string Name
-    {
-        get => this.info.Name;
-    }
+	public string Author
+	{
+		get => this.Info.Author;
+	}
+	public string Name
+	{
+		get => this.Info.Name;
+	}
 
-    public string Id
-    {
-        get => $"hat_{new DirectoryInfo(this.folderPath).Name}_{this.Author}_{this.Name}";
-    }
+	public string Id
+	{
+		get => $"hat_{new DirectoryInfo(this.FolderPath).Name}_{this.Author}_{this.Name}";
+	}
 
-    private string folderPath;
-	private HatInfo info;
-	private HatViewData? hatView;
+	protected readonly string FolderPath;
+	protected readonly HatInfo Info;
+	protected HatViewData? HatView;
 
-    public CustomHat(string folderPath, HatInfo info)
-    {
-        this.folderPath = folderPath;
-		this.info = info;
-    }
+	private HatData? data;
 
-    public override string ToString()
-    {
-        StringBuilder builder = new StringBuilder();
+	public CustomHat(string folderPath, HatInfo info)
+	{
+		this.FolderPath = folderPath;
+		this.Info = info;
+	}
+
+	public override string ToString()
+	{
+		StringBuilder builder = new StringBuilder();
 		builder
 			.Append(" - Name      : ")
 			.AppendLine(this.Name)
 			.Append(" - Author    : ")
 			.AppendLine(this.Author)
 			.Append("- Load from : ")
-			.AppendLine(this.folderPath)
+			.AppendLine(this.FolderPath)
 			.Append(" - Id        : ")
 			.Append(this.Id);
 
-        return builder.ToString();
-    }
-
-	public HatViewData GetViewData()
-	{
-		if (this.hatView == null ||
-			this.hatView.MainImage == null)
-		{
-			this.hatView = this.loadViewData();
-		}
-		return this.hatView;
+		return builder.ToString();
 	}
 
-	public HatData GetData()
-    {
-        if (this.Data != null) { return this.Data; }
-
-        this.Data = ScriptableObject.CreateInstance<HatData>();
-
-        this.Data.name = Helper.Translation.GetString(this.Name);
-        this.Data.displayOrder = 99;
-        this.Data.ProductId = this.Id;
-        this.Data.InFront = !this.info.Back;
-        this.Data.NoBounce = !this.info.Bound;
-        this.Data.ChipOffset = new Vector2(0f, 0.2f);
-        this.Data.Free = true;
-        this.Data.NotInStore = true;
-		this.Data.PreviewCrewmateColor = this.info.Shader;
-
-		this.Data.SpritePreview = getSprite(Path.Combine(this.folderPath, DataStructure.FrontImageName));
-
-		this.hatView = ScriptableObject.CreateInstance<HatViewData>();
-		this.Data.ViewDataRef = new AssetReference(this.hatView.Pointer);
-
-		return this.Data;
-    }
-
-	private HatViewData loadViewData()
+	public virtual HatViewData GetViewData()
 	{
-		var hatView = ScriptableObject.CreateInstance<HatViewData>();
-
-		hatView.MainImage = getSprite(Path.Combine(this.folderPath, DataStructure.FrontImageName));
-
-		if (this.info.FrontFlip)
+		if (this.HatView == null ||
+			this.HatView.MainImage == null)
 		{
-			hatView.LeftMainImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
+			this.HatView = this.createView();
 		}
-
-		if (this.info.Back)
-		{
-			hatView.BackImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.BackImageName));
-		}
-		if (this.info.BackFlip)
-		{
-			hatView.LeftBackImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
-		}
-
-		if (this.info.Climb)
-		{
-			hatView.ClimbImage = getSprite(
-				Path.Combine(this.folderPath, DataStructure.ClimbImageName));
-		}
-
-		if (this.info.Shader)
-		{
-			hatView.AltShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
-		}
-
-		this.Data!.ViewDataRef = new AssetReference(hatView.Pointer);
-
-		return hatView;
+		return this.HatView;
 	}
 
-	private static Sprite? getSprite(string path)
+	private HatViewData createView()
+	{
+		var view = ScriptableObject.CreateInstance<HatViewData>();
+		view.MainImage = GetSprite(Path.Combine(this.FolderPath, DataStructure.FrontImageName));
+
+		if (this.Info.FrontFlip)
+		{
+			view.LeftMainImage = GetSprite(
+				Path.Combine(this.FolderPath, DataStructure.FrontFlipImageName));
+		}
+
+		if (this.Info.Back)
+		{
+			view.BackImage = GetSprite(
+				Path.Combine(this.FolderPath, DataStructure.BackImageName));
+		}
+		if (this.Info.BackFlip)
+		{
+			view.LeftBackImage = GetSprite(
+				Path.Combine(this.FolderPath, DataStructure.BackFlipImageName));
+		}
+
+		if (this.Info.Climb)
+		{
+			view.ClimbImage = GetSprite(
+				Path.Combine(this.FolderPath, DataStructure.ClimbImageName));
+		}
+		if (this.Info.Shader)
+		{
+			view.AltShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
+		}
+		return view;
+	}
+
+	private HatData crateData()
+	{
+		var data = ScriptableObject.CreateInstance<HatData>();
+
+		data.name = Helper.Translation.GetString(this.Name);
+		data.displayOrder = 99;
+		data.ProductId = this.Id;
+		data.InFront = !this.Info.Back;
+		data.NoBounce = !this.Info.Bound;
+		data.ChipOffset = new Vector2(0f, 0.2f);
+		data.Free = true;
+		data.NotInStore = true;
+		data.PreviewCrewmateColor = this.Info.Shader;
+
+		data.SpritePreview = GetSprite(Path.Combine(this.FolderPath, DataStructure.FrontImageName));
+
+		this.HatView = ScriptableObject.CreateInstance<HatViewData>();
+		data.ViewDataRef = new AssetReference(this.HatView.Pointer);
+
+		return data;
+	}
+
+	protected static Sprite? GetSprite(string path)
 	{
 		var result = loadHatSprite(path);
 		if (!result.HasValue())
 		{
 			ExtremeSkinsPlugin.Logger.LogError(result.Error.ToString());
 		}
-		return result.GetRawValue();
+		var sprite = result.GetRawValue();
+		return sprite;
 	}
 
-
-    private static Expected<Sprite, Loader.LoadError> loadHatSprite(
-        string path)
-    {
-        var result = Loader.LoadTextureFromDisk(path);
-        if (!result.HasValue())
-        {
-            return result.Error;
-        }
+	private static Expected<Sprite, Loader.LoadError> loadHatSprite(
+		string path)
+	{
+		var result = Loader.LoadTextureFromDisk(path);
+		if (!result.HasValue())
+		{
+			return result.Error;
+		}
 
 		Texture2D texture = result.Value;
-        Sprite sprite = Sprite.Create(
-            texture, new Rect(0, 0, texture.width, texture.height),
-            new Vector2(0.53f, 0.575f), texture.width * 0.375f);
+		Sprite sprite = Sprite.Create(
+			texture, new Rect(0, 0, texture.width, texture.height),
+			new Vector2(0.53f, 0.575f), texture.width * 0.375f);
 
-        texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-        sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+		texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+		sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
 
-        return sprite;
-    }
+		return sprite;
+	}
+}
+
+public sealed class AnimationHat : CustomHat
+{
+	private const int MaxInt = 60 * 30;
+	private int counter = 0;
+	private Dictionary<string, Sprite?> cacheSprite = new Dictionary<string, Sprite?>();
+
+	public AnimationHat(string folderPath, HatInfo info)
+		: base(folderPath, info)
+	{ }
+
+	public override HatViewData GetViewData()
+	{
+		this.HatView = base.GetViewData();
+		updateHatView();
+		return this.HatView;
+	}
+
+	private void updateHatView()
+	{
+		if (CachedPlayerControl.LocalPlayer == null ||
+			CachedPlayerControl.LocalPlayer.PlayerPhysics == null ||
+			CachedPlayerControl.LocalPlayer.PlayerPhysics.Animations == null) { return; }
+
+		bool isFlip = CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX;
+		var animationGroup = CachedPlayerControl.LocalPlayer.PlayerPhysics.Animations;
+		var animation = this.Info.Animation!;
+
+		if (!isFlip)
+		{
+			if (animation.Front != null &&
+				this.counter % animation.Front.FrameCount == 0)
+			{
+				this.HatView!.MainImage = getNextSprite(animation.Front);
+			}
+			if (animation.FrontFlip != null &&
+				this.counter % animation.FrontFlip.FrameCount == 0)
+			{
+				this.HatView!.LeftMainImage = getNextSprite(animation.FrontFlip);
+			}
+		}
+		if (isFlip)
+		{
+			if (animation.Back != null &&
+				this.counter % animation.Back.FrameCount == 0)
+			{
+				this.HatView!.BackImage = getNextSprite(animation.Back);
+			}
+			if (animation.BackFlip != null &&
+				this.counter % animation.BackFlip.FrameCount == 0)
+			{
+				this.HatView!.LeftBackImage = getNextSprite(animation.BackFlip);
+			}
+		}
+		if (animationGroup.IsPlayingClimbAnimation() &&
+			animation.Climb != null &&
+			this.counter % animation.Climb.FrameCount == 0)
+		{
+			this.HatView!.ClimbImage = getNextSprite(animation.Climb);
+		}
+
+		this.counter = (this.counter + 1) % MaxInt;
+	}
+
+	private Sprite? getNextSprite(AnimationInfo animation)
+	{
+		int length = animation.Img.Length;
+		animation.CurIndex = animation.Type switch
+		{
+			AnimationInfo.ImageSelection.Sequential => (animation.CurIndex + 1) % length,
+			AnimationInfo.ImageSelection.Random =>
+				RandomGenerator.Instance.Next(length),
+			_ => 0
+		};
+
+		string path = animation.Img[animation.CurIndex];
+		if (!this.cacheSprite.TryGetValue(path, out var sprite))
+		{
+			sprite = GetSprite(Path.Combine(this.FolderPath, path));
+			if (sprite == null)
+			{
+				sprite = this.Data.SpritePreview;
+			}
+			this.cacheSprite.Add(path, sprite);
+		}
+		return sprite;
+	}
 }
 #endif
