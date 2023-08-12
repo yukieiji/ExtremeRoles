@@ -61,7 +61,7 @@ public static class ChatControllerAddChatPatch
 		bool isSourcePlayerDead = sourcePlayerData.IsDead;
 
 		if ((
-				!assassinMeeting || (isSourcePlayerDead && !islocalPlayerDead)
+				!assassinMeeting && (isSourcePlayerDead && !islocalPlayerDead)
 			)
 			||
 			(
