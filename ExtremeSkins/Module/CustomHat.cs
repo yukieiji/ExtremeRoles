@@ -248,6 +248,10 @@ public sealed class AnimationHat : CustomHat
 		if (!this.cacheSprite.TryGetValue(path, out var sprite))
 		{
 			sprite = GetSprite(Path.Combine(this.FolderPath, path));
+			if (sprite == null)
+			{
+				sprite = this.Data.SpritePreview;
+			}
 			this.cacheSprite.Add(path, sprite);
 		}
 		return sprite;
