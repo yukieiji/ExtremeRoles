@@ -14,6 +14,4 @@ public interface ICustomCosmicData<T, C>
     public string Id { get; }
 
 	public C GetViewData();
-
-    public T GetData();
 }
