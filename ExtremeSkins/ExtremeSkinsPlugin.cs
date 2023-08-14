@@ -5,7 +5,7 @@ using HarmonyLib;
 
 using ExtremeSkins.SkinManager;
 using ExtremeRoles.Module;
-
+using ExtremeSkins.Module;
 
 namespace ExtremeSkins;
 
@@ -51,6 +51,11 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
         Harmony.PatchAll();
 
+		if (CreatorModeManager.Instance.IsEnable)
+		{
+			AddComponent<UnityMainThreadDispatcher>();
+			var server = ApiServer.Instance;
+		}
 
         var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 
