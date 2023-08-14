@@ -1,4 +1,8 @@
 
+##### Other Languages README
+- [English README(WIP)](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/en/README.md)
+- [SChinese README(WIP)](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/ch_s/README.md)
+
 <div><img src="./doc/img/burner.png" /></div>
 
 <div align="center"><h1>Extreme Roles, Extreme Skins and Engine Voice Engine</h1></div>
