@@ -197,7 +197,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		return result;
 	}
 
-	public int GetLocalPlayerFloor() => GetFloor(CachedPlayerControl.LocalPlayer);
+	public int GetFloor(Vector3 pos) => pos.y > -6.19f ? 1 : 0;
 
 	public int GetFloor(PlayerControl player)
 	{
@@ -208,10 +208,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		return valueObj != null && (bool)valueObj ? 1 : 0;
 	}
 
-	public void ChangeLocalPlayerFloor(int floor)
-	{
-		ChangeFloor(CachedPlayerControl.LocalPlayer, floor);
-	}
 	public void ChangeFloor(PlayerControl player, int floor)
 	{
 		if (floor > 1) { return; }

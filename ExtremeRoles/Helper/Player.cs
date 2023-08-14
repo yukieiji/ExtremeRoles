@@ -3,12 +3,13 @@
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-
 
 namespace ExtremeRoles.Helper;
 
@@ -295,6 +296,18 @@ public static class Player
 
 	public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos)
     {
+		if (CompatModManager.Instance.TryGetModMap(out var mapMod) &&
+			mapMod is IMultiFloorModMap floorModMap)
+		{
+			int getFloor = floorModMap.GetFloor(targetPlayerId);
+			int targetFloor = floorModMap.GetFloor(pos);
+			if (getFloor != targetFloor)
+			{
+				floorModMap.ChangeFloor(targetPlayerId, targetFloor);
+			}
+		}
+
+
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.UncheckedSnapTo))
         {
