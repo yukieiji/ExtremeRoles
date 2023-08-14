@@ -104,7 +104,7 @@ public class ApiServer : NullableSingleton<ApiServer>, IDisposable
 	private bool isHttpMethod(HttpMethod expected, string requested) =>
 		string.Equals(expected.Method, requested, StringComparison.CurrentCultureIgnoreCase);
 
-	private bool processGetRequest(HttpListenerContext context, IRequestHandler handle)
+	private void processGetRequest(HttpListenerContext context, IRequestHandler handle)
 	{
 		HttpListenerResponse response = context.Response;
 
@@ -112,15 +112,13 @@ public class ApiServer : NullableSingleton<ApiServer>, IDisposable
 		{
 			response.StatusCode = (int)HttpStatusCode.BadRequest;
 			response.Abort();
-			return false;
 		}
 
 		//メインスレッドでGetリクエストイベントを呼び出し
 		UnityMainThreadDispatcher.Instance().Enqueue(() => handle.Request.Invoke(context));
-		return true;
 	}
 
-	private bool processPostRequest(HttpListenerContext context, IRequestHandler handle)
+	private void processPostRequest(HttpListenerContext context, IRequestHandler handle)
 	{
 		HttpListenerResponse response = context.Response;
 		HttpListenerRequest request = context.Request;
@@ -132,12 +130,11 @@ public class ApiServer : NullableSingleton<ApiServer>, IDisposable
 		{
 			response.StatusCode = (int)HttpStatusCode.BadRequest;
 			response.Abort();
-			return false;
+			return;
 		}
 
 		//メインスレッドでGetリクエストイベントを呼び出し
 		UnityMainThreadDispatcher.Instance().Enqueue(() => handle.Request.Invoke(context));
-		return true;
 	}
 
 	private void returnInternalError(HttpListenerResponse response, Exception cause)
