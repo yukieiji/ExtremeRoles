@@ -122,7 +122,6 @@ public class ApiServer : NullableSingleton<ApiServer>, IDisposable
 	{
 		HttpListenerResponse response = context.Response;
 		HttpListenerRequest request = context.Request;
-		response.ContentType = IRequestHandler.JsonContent;
 
 		if (!isHttpMethod(HttpMethod.Post, request.HttpMethod) ||
 			request.IsWebSocketRequest ||
