@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace ExtremeSkins.Module.ApiHandler;
 
-public sealed class GetStatusHandler : ApiServer.IRequestHandler
+public sealed class GetStatusHandler : IRequestHandler
 {
 	private enum CurExSStatus
 	{
@@ -28,16 +28,11 @@ public sealed class GetStatusHandler : ApiServer.IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		ApiServer.IRequestHandler.SetStatusOK(response);
-		ApiServer.IRequestHandler.SetContentsType(response);
+		IRequestHandler.SetStatusOK(response);
+		IRequestHandler.SetContentsType(response);
 
 		var curState = new ExSStatus(Patches.AmongUs.SplashManagerUpdatePatch.IsSkinLoad ? CurExSStatus.Booting : CurExSStatus.OK);
 
-		using var stream = new MemoryStream();
-		JsonSerializer.Serialize(stream, curState);
-		stream.GetBuffer();
-
-		// message の内容をバイト配列に変換してレスポンスを返す
-		response.Close(stream.ToArray(), false);
+		IRequestHandler.Write(response, curState);
 	}
 }

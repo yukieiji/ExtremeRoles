@@ -18,35 +18,6 @@ public class ApiServer : NullableSingleton<ApiServer>, IDisposable
 	private Thread listenerThread;
 
 	private const string url = "http://localhost:57700";
-	private const string jsonContent = "application/json";
-
-	public interface IRequestHandler
-	{
-		public RequestType Type { get; }
-
-		public Action<HttpListenerContext> Request { get; }
-
-		protected static void SetStatusOK(HttpListenerResponse response)
-		{
-			response.StatusCode = (int)HttpStatusCode.OK;
-		}
-		protected static void SetContentsType(HttpListenerResponse response)
-		{
-			response.ContentType = jsonContent;
-			response.ContentEncoding = Encoding.UTF8;
-		}
-
-		protected static string GetJsonString(HttpListenerRequest request)
-		{
-			string jsonStr;
-			using (var reader = new StreamReader(
-				request.InputStream, request.ContentEncoding))
-			{
-				jsonStr = reader.ReadToEnd();
-			}
-			return jsonStr;
-		}
-	}
 
 	public enum RequestType
 	{
@@ -153,11 +124,11 @@ public class ApiServer : NullableSingleton<ApiServer>, IDisposable
 	{
 		HttpListenerResponse response = context.Response;
 		HttpListenerRequest request = context.Request;
-		response.ContentType = jsonContent;
+		response.ContentType = IRequestHandler.JsonContent;
 
 		if (!isHttpMethod(HttpMethod.Post, request.HttpMethod) ||
 			request.IsWebSocketRequest ||
-			request.ContentType != jsonContent)
+			request.ContentType != IRequestHandler.JsonContent)
 		{
 			response.StatusCode = (int)HttpStatusCode.BadRequest;
 			response.Abort();
