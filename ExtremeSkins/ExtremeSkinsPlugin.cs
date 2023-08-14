@@ -3,9 +3,10 @@ using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
-using ExtremeSkins.SkinManager;
 using ExtremeRoles.Module;
-using ExtremeSkins.Module;
+
+using ExtremeSkins.SkinManager;
+using ExtremeSkins.Module.ApiHandler;
 
 namespace ExtremeSkins;
 
@@ -53,8 +54,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		if (CreatorModeManager.Instance.IsEnable)
 		{
-			AddComponent<UnityMainThreadDispatcher>();
-			var server = ApiServer.Instance;
+			ApiServer.Register("/exs/status/", new GetStatusHandler());
 		}
 
         var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());

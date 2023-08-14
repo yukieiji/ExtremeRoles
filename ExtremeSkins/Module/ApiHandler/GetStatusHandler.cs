@@ -4,6 +4,9 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Interface;
+
 namespace ExtremeSkins.Module.ApiHandler;
 
 public sealed class GetStatusHandler : IRequestHandler

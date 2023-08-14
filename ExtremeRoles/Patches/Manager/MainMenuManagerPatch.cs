@@ -11,6 +11,7 @@ using Twitch;
 using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -27,6 +28,8 @@ public static class MainMenuManagerStartPatch
 
 	public static void Prefix(MainMenuManager __instance)
     {
+		ApiServer.Create();
+
 		// Mod DoNotPressButton
 		DoNotPressButton doNotPressButton = __instance.GetComponentInChildren<DoNotPressButton>(true);
 		AspectPosition asspectPos = doNotPressButton.GetComponent<AspectPosition>();

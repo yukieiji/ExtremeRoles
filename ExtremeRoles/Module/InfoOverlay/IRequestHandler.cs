@@ -4,9 +4,9 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-using static ExtremeSkins.Module.ApiServer;
+using static ExtremeRoles.Module.ApiServer;
 
-namespace ExtremeSkins.Module.ApiHandler;
+namespace ExtremeRoles.Module.Interface;
 
 public interface IRequestHandler
 {
