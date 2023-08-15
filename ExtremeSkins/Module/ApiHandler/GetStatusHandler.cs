@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Text.Json;
+using System.Net.Http;
 using System.Text.Json.Serialization;
 
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
 
 namespace ExtremeSkins.Module.ApiHandler;
@@ -23,8 +21,6 @@ public sealed class GetStatusHandler : IRequestHandler
 		public CurExSStatus RowStatus = RowStatus;
 		public string Status => RowStatus.ToString();
 	}
-
-	public ApiServer.RequestType Type => ApiServer.RequestType.Get;
 
 	public Action<HttpListenerContext> Request => this.requestAction;
 

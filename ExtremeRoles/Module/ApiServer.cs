@@ -7,6 +7,7 @@ using System.Threading;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module.Interface;
+using static ExtremeRoles.Module.ApiServer;
 
 namespace ExtremeRoles.Module;
 
@@ -36,17 +37,20 @@ public class ApiServer : IDisposable
 		Get,
 		Post,
 	}
-	private readonly IReadOnlyDictionary<string, IRequestHandler> registedHandler = handler;
+
+	public record RequestKey(string Url, string Method);
+
+	private readonly IReadOnlyDictionary<RequestKey, IRequestHandler> registedHandler = handler;
 
 	private static ApiServer? instance;
-	private static Dictionary<string, IRequestHandler> handler = new Dictionary<string, IRequestHandler>();
+	private static Dictionary<RequestKey, IRequestHandler> handler = new Dictionary<RequestKey, IRequestHandler>();
 
 	private ApiServer()
 	{
 		this.listener = new HttpListener();
-		foreach (string rawUrl in this.registedHandler.Keys)
+		foreach (RequestKey key in this.registedHandler.Keys)
 		{
-			this.listener.Prefixes.Add($"{url}{rawUrl}");
+			this.listener.Prefixes.Add($"{url}{key.Url}");
 		}
 		this.listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
 		this.listener.Start();
@@ -64,7 +68,7 @@ public class ApiServer : IDisposable
 		instance = new ApiServer();
 	}
 
-	public static void Register(string url, IRequestHandler handle)
+	public static void Register(string url, HttpMethod method, IRequestHandler handle)
 	{
 		if (!url.EndsWith('/'))
 		{
@@ -74,7 +78,7 @@ public class ApiServer : IDisposable
 		{
 			url = $"/{url}";
 		}
-		handler.Add(url, handle);
+		handler.Add(new(url, method.Method), handle);
 	}
 
 	public void Dispose()
@@ -104,25 +108,19 @@ public class ApiServer : IDisposable
 			return;
 		}
 
+		RequestKey key = new RequestKey(url, context.Request.HttpMethod);
+
 		try
 		{
-			if (this.registedHandler.TryGetValue(url, out var handle) ||
+			if (this.registedHandler.TryGetValue(key, out var handle) ||
 				handle != null)
 			{
-				switch (handle.Type)
-				{
-					case RequestType.Get:
-						processGetRequest(context, handle);
-						break;
-					case RequestType.Post:
-						processPostRequest(context, handle);
-						break;
-					default:
-						return;
-				}
+				UnityMainThreadDispatcher.Instance.Enqueue(
+					() => handle.Request.Invoke(context));
 			}
 			else
 			{
+				context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 				context.Response.Abort();
 			}
 		}
@@ -130,41 +128,6 @@ public class ApiServer : IDisposable
 		{
 			returnInternalError(context.Response, e);
 		}
-	}
-
-	private bool isHttpMethod(HttpMethod expected, string requested) =>
-		string.Equals(expected.Method, requested, StringComparison.CurrentCultureIgnoreCase);
-
-	private void processGetRequest(HttpListenerContext context, IRequestHandler handle)
-	{
-		HttpListenerResponse response = context.Response;
-
-		if (!isHttpMethod(HttpMethod.Get, context.Request.HttpMethod) || context.Request.IsWebSocketRequest)
-		{
-			response.StatusCode = (int)HttpStatusCode.BadRequest;
-			response.Abort();
-		}
-
-		//メインスレッドでGetリクエストイベントを呼び出し
-		UnityMainThreadDispatcher.Instance.Enqueue(() => handle.Request.Invoke(context));
-	}
-
-	private void processPostRequest(HttpListenerContext context, IRequestHandler handle)
-	{
-		HttpListenerResponse response = context.Response;
-		HttpListenerRequest request = context.Request;
-
-		if (!isHttpMethod(HttpMethod.Post, request.HttpMethod) ||
-			request.IsWebSocketRequest ||
-			request.ContentType != IRequestHandler.JsonContent)
-		{
-			response.StatusCode = (int)HttpStatusCode.BadRequest;
-			response.Abort();
-			return;
-		}
-
-		//メインスレッドでGetリクエストイベントを呼び出し
-		UnityMainThreadDispatcher.Instance.Enqueue(() => handle.Request.Invoke(context));
 	}
 
 	private void returnInternalError(HttpListenerResponse response, Exception cause)

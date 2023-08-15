@@ -1,4 +1,6 @@
-﻿using BepInEx;
+﻿using System.Net.Http;
+
+using BepInEx;
 using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
@@ -54,7 +56,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		if (CreatorModeManager.Instance.IsEnable)
 		{
-			ApiServer.Register("/exs/status/", new GetStatusHandler());
+			ApiServer.Register("/exs/status/", HttpMethod.Get, new GetStatusHandler());
 		}
 
         var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());

@@ -1,18 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-
-using static ExtremeRoles.Module.ApiServer;
 
 namespace ExtremeRoles.Module.Interface;
 
 public interface IRequestHandler
 {
 	public const string JsonContent = "application/json";
-
-	public RequestType Type { get; }
 
 	public Action<HttpListenerContext> Request { get; }
 
