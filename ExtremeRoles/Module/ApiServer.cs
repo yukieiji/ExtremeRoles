@@ -32,12 +32,6 @@ public class ApiServer : IDisposable
 
 	private const string url = "http://localhost:57700";
 
-	public enum RequestType
-	{
-		Get,
-		Post,
-	}
-
 	public record RequestKey(string Url, string Method);
 
 	private readonly IReadOnlyDictionary<RequestKey, IRequestHandler> registedHandler = handler;
