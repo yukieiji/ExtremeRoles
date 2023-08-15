@@ -7,7 +7,6 @@ using System.Threading;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module.Interface;
-using static ExtremeRoles.Module.ApiServer;
 
 namespace ExtremeRoles.Module;
 
