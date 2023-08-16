@@ -57,7 +57,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		if (CreatorModeManager.Instance.IsEnable)
 		{
-			ApiServer.Register("/exs/hat/"   , HttpMethod.Get  , new GetHatHandler());
+			ApiServer.Register("/exs/hat/"   , HttpMethod.Get , new GetHatHandler());
 			ApiServer.Register("/exs/hat/"   , HttpMethod.Put , new PutHatHandler());
 			ApiServer.Register("/exs/hat/"   , HttpMethod.Post, new PostNewHatHandler());
 			ApiServer.Register("/exs/status/", HttpMethod.Get , new GetStatusHandler());
