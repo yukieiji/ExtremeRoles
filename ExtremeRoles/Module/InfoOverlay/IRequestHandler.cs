@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ExtremeRoles.Module.Interface;
 
@@ -28,6 +29,11 @@ public interface IRequestHandler
 		response.StatusCode = (int)HttpStatusCode.OK;
 	}
 
+	protected static void SetStatusNG(HttpListenerResponse response)
+	{
+		response.StatusCode = (int)HttpStatusCode.BadRequest;
+	}
+
 	protected static void SetContentsType(HttpListenerResponse response)
 	{
 		response.ContentType = JsonContent;
@@ -37,7 +43,13 @@ public interface IRequestHandler
 	protected static void Write<T>(HttpListenerResponse response, T writeObject)
 	{
 		using var stream = new MemoryStream();
-		JsonSerializer.Serialize(stream, writeObject);
+		JsonSerializer.Serialize(
+			stream, writeObject,
+			new JsonSerializerOptions()
+			{
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+				WriteIndented = true
+			});
 		stream.GetBuffer();
 
 		response.Close(stream.ToArray(), false);

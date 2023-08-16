@@ -15,10 +15,10 @@ public sealed class GetStatusHandler : IRequestHandler
 		OK,
 	}
 
-	private record struct ExSStatus(CurExSStatus RowStatus)
+	private readonly record struct ExSStatus(CurExSStatus RowStatus)
 	{
 		[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-		public CurExSStatus RowStatus = RowStatus;
+		public readonly CurExSStatus RowStatus = RowStatus;
 		public string Status => RowStatus.ToString();
 	}
 
