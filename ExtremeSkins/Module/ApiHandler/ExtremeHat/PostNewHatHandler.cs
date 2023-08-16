@@ -16,11 +16,10 @@ using DataStructure = ExtremeSkins.Core.ExtremeHats.DataStructure;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
-public sealed class PutNewHatHandler : IRequestHandler
+public sealed class PostNewHatHandler : IRequestHandler
 {
 	private readonly record struct NewExHData(string ParentPath, string SkinName)
 	{
-
 		[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
 		public string FolderPath => DataStructure.GetHatPath(ParentPath, SkinName);
 
@@ -33,14 +32,13 @@ public sealed class PutNewHatHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		string jsonString = IRequestHandler.GetJsonString(context.Request);
-		NewExHData newHat = JsonSerializer.Deserialize<NewExHData>(jsonString);
+		NewExHData newHat = IRequestHandler.DeserializeJson<NewExHData>(context.Request);
 
-		using var jsonStream = new StreamReader(newHat.InfoJsonPath);
 		JsonSerializerOptions options = new()
 		{
-			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 		};
+		using var jsonStream = new StreamReader(newHat.InfoJsonPath);
 		HatInfo? info = JsonSerializer.Deserialize<HatInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
@@ -68,5 +66,6 @@ public sealed class PutNewHatHandler : IRequestHandler
 		hatMng.allHats = hatData.ToArray();
 
 		IRequestHandler.SetStatusOK(response);
+		response.Close();
 	}
 }

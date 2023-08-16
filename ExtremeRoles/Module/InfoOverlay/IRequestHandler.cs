@@ -13,7 +13,7 @@ public interface IRequestHandler
 
 	public Action<HttpListenerContext> Request { get; }
 
-	protected static string GetJsonString(HttpListenerRequest request)
+	protected static T DeserializeJson<T>(HttpListenerRequest request)
 	{
 		string jsonStr;
 		using (var reader = new StreamReader(
@@ -21,7 +21,16 @@ public interface IRequestHandler
 		{
 			jsonStr = reader.ReadToEnd();
 		}
-		return jsonStr;
+
+		var options = new JsonSerializerOptions()
+		{
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+			// Pythonで作ったREST APIの呼び出しが成功しない[不具合](https://github.com/dotnet/runtime/issues/76130)があるらしいのでこれを付ける必要がある
+			PropertyNameCaseInsensitive = true
+		};
+		T newHat = JsonSerializer.Deserialize<T>(jsonStr, options);
+
+		return newHat;
 	}
 
 	protected static void SetStatusOK(HttpListenerResponse response)

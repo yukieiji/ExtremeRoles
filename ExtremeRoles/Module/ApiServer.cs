@@ -89,6 +89,7 @@ public class ApiServer : IDisposable
 		}
 	}
 
+	// REST APIを呼び出す際、パスは「\」ではなく「/」を使い、ヘッダーの「Contents-Type」は常につける
 	private void listenerCallback(IAsyncResult result)
 	{
 		if (!this.listener.IsListening) { return; }
