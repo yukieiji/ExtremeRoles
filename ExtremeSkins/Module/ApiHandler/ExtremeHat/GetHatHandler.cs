@@ -1,9 +1,8 @@
-﻿using ExtremeRoles.Module.Interface;
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Net;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeSkins.SkinManager;
 
 
