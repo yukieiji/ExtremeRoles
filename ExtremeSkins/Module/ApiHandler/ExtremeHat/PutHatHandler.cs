@@ -15,7 +15,7 @@ using DataStructure = ExtremeSkins.Core.ExtremeHats.DataStructure;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
-public sealed class UpdateHatHandler : IRequestHandler
+public sealed class PutHatHandler : IRequestHandler
 {
 	private readonly record struct NewExHData(string ParentPath, string SkinName)
 	{
