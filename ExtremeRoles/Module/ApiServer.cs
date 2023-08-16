@@ -104,39 +104,38 @@ public class ApiServer : IDisposable
 
 		RequestKey key = new RequestKey(url, context.Request.HttpMethod);
 
-		try
+		if (this.registedHandler.TryGetValue(key, out var handle) ||
+			handle != null)
 		{
-			if (this.registedHandler.TryGetValue(key, out var handle) ||
-				handle != null)
-			{
-				UnityMainThreadDispatcher.Instance.Enqueue(
-					() => handle.Request.Invoke(context));
-			}
-			else
-			{
-				context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-				context.Response.Abort();
-			}
+			UnityMainThreadDispatcher.Instance.Enqueue(
+				() =>
+				{
+					try
+					{
+						handle.Request.Invoke(context);
+					}
+					catch (Exception e)
+					{
+						ExtremeRolesPlugin.Logger.LogError(e);
+						returnInternalError(context.Response, e);
+					}
+				});
 		}
-		catch (Exception e)
+		else
 		{
-			returnInternalError(context.Response, e);
+			context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+			context.Response.Abort();
 		}
 	}
 
-	private void returnInternalError(HttpListenerResponse response, Exception cause)
+	private static void returnInternalError(HttpListenerResponse response, Exception cause)
 	{
 		response.StatusCode = (int)HttpStatusCode.InternalServerError;
 		response.ContentType = "text/plain";
-		try
-		{
-			using (var writer = new StreamWriter(response.OutputStream, Encoding.UTF8))
-				writer.Write(cause.ToString());
-			response.Close();
-		}
-		catch
-		{
-			response.Abort();
-		}
+
+		using var writer = new StreamWriter(response.OutputStream, Encoding.UTF8);
+		writer.Write(cause.ToString());
+
+		response.Close();
 	}
 }
