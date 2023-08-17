@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
-using ExtremeSkins.Core;
+using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
 

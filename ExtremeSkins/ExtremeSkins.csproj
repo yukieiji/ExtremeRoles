@@ -45,7 +45,8 @@
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\Config.cs" Link="Core\Config.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\License.cs" Link="Core\License.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\InfoBase.cs" Link="Core\InfoBase.cs" />
-    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\InfoData.cs" Link="Core\InfoData.cs" />
+    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\API\InfoData.cs" Link="Core\API\InfoData.cs" />
+    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\API\ExportData.cs" Link="Core\API\ExportData.cs" />
 
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\AnimationInfo.cs" Link="Core\AnimationInfo.cs" />
 

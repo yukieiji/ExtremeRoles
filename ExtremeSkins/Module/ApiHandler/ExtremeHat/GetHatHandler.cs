@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Net;
 
+
 using ExtremeRoles.Module.Interface;
+using ExtremeSkins.Core.API;
 using ExtremeSkins.SkinManager;
 
 
@@ -10,9 +12,6 @@ namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
 public sealed class GetHatHandler : IRequestHandler
 {
-	private readonly record struct HatExportData(string Id, string Name, string Author);
-	private readonly record struct ExHData(HatExportData[] AllHats);
-
 	public Action<HttpListenerContext> Request => this.requestAction;
 
 	private void requestAction(HttpListenerContext context)
@@ -21,10 +20,9 @@ public sealed class GetHatHandler : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 
-		var curState = new ExHData(
-			ExtremeHatManager.HatData.Values.Select(
-				x => new HatExportData(x.Id, x.Name, x.Author)).ToArray());
+		var curData = ExtremeHatManager.HatData.Values.Select(
+			x => new ExportData(x.Id, x.Name, x.Author)).ToArray();
 
-		IRequestHandler.Write(response, curState);
+		IRequestHandler.Write(response, curData);
 	}
 }
