@@ -57,6 +57,7 @@ public interface IRequestHandler
 			new JsonSerializerOptions()
 			{
 				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+				Converters = { new JsonStringEnumConverter() },
 				WriteIndented = true
 			});
 		stream.GetBuffer();
