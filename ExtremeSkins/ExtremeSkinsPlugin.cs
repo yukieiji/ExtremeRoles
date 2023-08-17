@@ -58,6 +58,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		if (CreatorModeManager.Instance.IsEnable)
 		{
+			ApiServer.Register("/exs/"       , HttpMethod.Get , new GetStatusHandler());
 #if WITHHAT
 			ApiServer.Register("/exs/hat/"   , HttpMethod.Get , new GetHatHandler());
 			ApiServer.Register("/exs/hat/"   , HttpMethod.Put , new PutHatHandler());
@@ -68,7 +69,6 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 			ApiServer.Register("/exs/visor/", HttpMethod.Put , new PutVisorHandler());
 			ApiServer.Register("/exs/visor/", HttpMethod.Post, new PostNewVisorHandler());
 #endif
-			ApiServer.Register("/exs/status/", HttpMethod.Get , new GetStatusHandler());
 		}
 
         var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
