@@ -18,8 +18,8 @@ namespace ExtremeRoles.Patches.MapOverlay;
 [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
 public static class MapCountOverlayUpdatePatch
 {
-    public static Dictionary<SystemTypes, List<Color>> PlayerColor =
-        new Dictionary<SystemTypes, List<Color>>();
+    public static Dictionary<SystemTypes, int?[]> PlayerColor =
+        new Dictionary<SystemTypes, int?[]>();
 
     private static float adminTimer = 0.0f;
     private static bool enableAdminLimit = false;
@@ -43,8 +43,6 @@ public static class MapCountOverlayUpdatePatch
         var admin = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
             Roles.Solo.Crewmate.Supervisor>();
 
-		PlayerColor.Clear();
-
 		if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
         {
             return true;
@@ -57,7 +55,9 @@ public static class MapCountOverlayUpdatePatch
 		}
 		__instance.timer = 0f;
 
-        bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
+		PlayerColor.Clear();
+
+		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
             CachedPlayerControl.LocalPlayer);
 
         if (!__instance.isSab && isHudOverrideTaskActive)
@@ -78,8 +78,6 @@ public static class MapCountOverlayUpdatePatch
 		for (int i = 0; i < __instance.CountAreas.Length; i++)
 		{
 			CounterArea counterArea = __instance.CountAreas[i];
-			List<Color> roomPlayerColor = new List<Color>();
-			PlayerColor.Add(counterArea.RoomType, roomPlayerColor);
 
 			if (isHudOverrideTaskActive)
             {
@@ -92,32 +90,30 @@ public static class MapCountOverlayUpdatePatch
                     out PlainShipRoom plainShipRoom) &&
                 plainShipRoom.roomArea)
             {
-                HashSet<int> alreadyShowPlayerIds = new HashSet<int>();
+                HashSet<byte> alreadyShowPlayerIds = new HashSet<byte>();
                 int hitNum = plainShipRoom.roomArea.OverlapCollider(
                     __instance.filter, __instance.buffer);
                 int showNum = 0;
 
-                Color addColor = Palette.EnabledColor;
+                int?[] addColor = new int?[hitNum];
 
                 for (int j = 0; j < hitNum; j++)
                 {
                     Collider2D collider2D = __instance.buffer[j];
                     if (collider2D.CompareTag("DeadBody") && __instance.includeDeadBodies)
                     {
-                        showNum++;
                         DeadBody component = collider2D.GetComponent<DeadBody>();
-                        if (component)
+                        if (component && alreadyShowPlayerIds.Add(component.ParentId))
                         {
                             GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(
                                 component.ParentId);
                             if (playerInfo != null)
                             {
-                                addColor = Palette.PlayerColors[
-                                    playerInfo.Object.CurrentOutfit.ColorId];
+								addColor[j] = playerInfo.DefaultOutfit.ColorId;
                             }
                         }
                     }
-                    else
+                    else if (!collider2D.isTrigger)
                     {
                         PlayerControl component = collider2D.GetComponent<PlayerControl>();
 
@@ -126,16 +122,15 @@ public static class MapCountOverlayUpdatePatch
                             !component.Data.Disconnected &&
                             !component.Data.IsDead &&
                             (__instance.showLivePlayerPosition || !component.AmOwner) &&
-                            alreadyShowPlayerIds.Add((int)component.PlayerId))
+                            alreadyShowPlayerIds.Add(component.PlayerId))
                         {
                             showNum++;
-                            addColor = Palette.PlayerColors[
-                                component.Data.DefaultOutfit.ColorId];
+							addColor[j] = component.Data.DefaultOutfit.ColorId;
                         }
                     }
-                    roomPlayerColor.Add(addColor);
                 }
-                counterArea.UpdateCount(showNum);
+				PlayerColor.Add(counterArea.RoomType, addColor);
+				counterArea.UpdateCount(showNum);
             }
             else
             {
