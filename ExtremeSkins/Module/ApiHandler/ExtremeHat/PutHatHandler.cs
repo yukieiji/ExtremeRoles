@@ -8,30 +8,20 @@ using System.Text.Json.Serialization;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
+using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.SkinManager;
-
-using DataStructure = ExtremeSkins.Core.ExtremeHats.DataStructure;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
 public sealed class PutHatHandler : IRequestHandler
 {
-	private readonly record struct NewExHData(string ParentPath, string SkinName)
-	{
-		[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-		public string FolderPath => DataStructure.GetHatPath(ParentPath, SkinName);
-
-		[JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-		public string InfoJsonPath => DataStructure.GetHatInfoPath(ParentPath, SkinName);
-	}
-
 	public Action<HttpListenerContext> Request => this.requestAction;
 
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		NewExHData newHat = IRequestHandler.DeserializeJson<NewExHData>(context.Request);
+		InfoData newHat = IRequestHandler.DeserializeJson<InfoData>(context.Request);
 
 		JsonSerializerOptions options = new()
 		{
