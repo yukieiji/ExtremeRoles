@@ -39,7 +39,7 @@ public static class CounterAreaUpdateCountPatch
         }
 
         if (!MapCountOverlayUpdatePatch.PlayerColor.TryGetValue(
-                __instance.RoomType, out int?[] colors))
+                __instance.RoomType, out List<int> colors))
         {
             return;
         }
@@ -48,11 +48,11 @@ public static class CounterAreaUpdateCountPatch
         {
             PoolableBehavior icon = __instance.myIcons[i];
             SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
-			int? color = colors[i];
-			if (renderer != null && color.HasValue)
+
+            if (renderer != null && colors.Count > i)
             {
                 renderer.material = Object.Instantiate(defaultMat);
-				PlayerMaterial.SetColors(color.Value, renderer);
+				PlayerMaterial.SetColors(colors[i], renderer);
             }
         }
     }

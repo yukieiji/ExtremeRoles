@@ -18,8 +18,8 @@ namespace ExtremeRoles.Patches.MapOverlay;
 [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
 public static class MapCountOverlayUpdatePatch
 {
-    public static Dictionary<SystemTypes, int?[]> PlayerColor =
-        new Dictionary<SystemTypes, int?[]>();
+    public static Dictionary<SystemTypes, List<int>> PlayerColor =
+        new Dictionary<SystemTypes, List<int>>();
 
     private static float adminTimer = 0.0f;
     private static bool enableAdminLimit = false;
@@ -95,7 +95,7 @@ public static class MapCountOverlayUpdatePatch
                     __instance.filter, __instance.buffer);
                 int showNum = 0;
 
-                int?[] addColor = new int?[hitNum];
+                List<int> addColor = new List<int>(hitNum);
 
                 for (int j = 0; j < hitNum; j++)
                 {
@@ -109,7 +109,7 @@ public static class MapCountOverlayUpdatePatch
                                 component.ParentId);
                             if (playerInfo != null)
                             {
-								addColor[j] = playerInfo.DefaultOutfit.ColorId;
+								addColor.Add(playerInfo.DefaultOutfit.ColorId);
                             }
                         }
                     }
@@ -125,7 +125,7 @@ public static class MapCountOverlayUpdatePatch
                             alreadyShowPlayerIds.Add(component.PlayerId))
                         {
                             showNum++;
-							addColor[j] = component.Data.DefaultOutfit.ColorId;
+							addColor.Add(component.Data.DefaultOutfit.ColorId);
                         }
                     }
                 }
