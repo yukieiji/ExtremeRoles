@@ -47,18 +47,32 @@ public sealed class PutHatHandler : IRequestHandler
 			response.Abort();
 			return;
 		}
+
 		string folderPath = newHat.FolderPath;
+
 		CustomHat customHat = info.Animation == null ?
 			new CustomHat(folderPath, info) : new AnimationHat(folderPath, info);
-		if (!ExtremeHatManager.HatData.TryGetValue(customHat.Id, out var hat))
+		string id = customHat.Id;
+
+		if (!ExtremeHatManager.HatData.TryGetValue(id, out var hat))
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
 			return;
 		}
 
+		bool hasReloadHat =
+			CachedPlayerControl.LocalPlayer != null &&
+			CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.hat.Hat.ProductId == id;
 
-		ExtremeHatManager.HatData[customHat.Id] = customHat;
+		if (hasReloadHat)
+		{
+			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
+			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetHat(
+				HatData.EmptyId, colorId);
+		}
+
+		ExtremeHatManager.HatData[id] = customHat;
 
 		List<HatData> hatData = hatMng.allHats.ToList();
 		hatData.RemoveAll(x => x.ProductId == hat.Id);
@@ -66,6 +80,11 @@ public sealed class PutHatHandler : IRequestHandler
 		hatMng.allHats = hatData.ToArray();
 
 		ExtremeSkinsPlugin.Logger.LogInfo($"Hat Reloaded :\n{customHat}");
+		if (hasReloadHat)
+		{
+			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
+			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetHat(id, colorId);
+		}
 
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
