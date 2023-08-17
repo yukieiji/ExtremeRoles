@@ -21,7 +21,8 @@ public static class DisplayPrespawnStepPatchesCustomPrespawnStepPatch
 {
 	public static bool Prefix(ref IEnumerator __result)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!CompatModManager.Instance.IsModMap<Submerged>() ||
+			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 		__result = assassinMeetingEnumerator();
 		return false;
 	}
