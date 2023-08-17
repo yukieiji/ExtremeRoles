@@ -10,6 +10,7 @@ using ExtremeRoles.Module;
 using ExtremeSkins.SkinManager;
 using ExtremeSkins.Module.ApiHandler;
 using ExtremeSkins.Module.ApiHandler.ExtremeHat;
+using ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 
 namespace ExtremeSkins;
 
@@ -57,9 +58,16 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		if (CreatorModeManager.Instance.IsEnable)
 		{
+#if WITHHAT
 			ApiServer.Register("/exs/hat/"   , HttpMethod.Get , new GetHatHandler());
 			ApiServer.Register("/exs/hat/"   , HttpMethod.Put , new PutHatHandler());
 			ApiServer.Register("/exs/hat/"   , HttpMethod.Post, new PostNewHatHandler());
+#endif
+#if WITHHAT
+			ApiServer.Register("/exs/visor/", HttpMethod.Get , new GetVisorHandler());
+			ApiServer.Register("/exs/visor/", HttpMethod.Put , new PutVisorHandler());
+			ApiServer.Register("/exs/visor/", HttpMethod.Post, new PostNewVisorHandler());
+#endif
 			ApiServer.Register("/exs/status/", HttpMethod.Get , new GetStatusHandler());
 		}
 
