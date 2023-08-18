@@ -17,6 +17,18 @@ using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
 
 namespace ExtremeRoles.Compat.Patches;
 
+public static class ExileControllerPatchesBeginPatchPatch
+{
+	public static bool Prefix()
+	{
+		return
+			!(
+				GameManager.Instance.LogicOptions.GetConfirmImpostor() ||
+				ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger
+			);
+	}
+}
+
 public static class DisplayPrespawnStepPatchesCustomPrespawnStepPatch
 {
 	public static bool Prefix(ref IEnumerator __result)

@@ -516,6 +516,15 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			() => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
 #pragma warning restore CS8604
 
+
+		Type exileControllerPatches = ClassType.First(
+			t => t.Name == "ExileControllerPatches");
+		MethodInfo exileControllerPatchesBeginPatch = AccessTools.Method(
+			exileControllerPatches, "BeginPatch");
+		MethodInfo exileControllerPatchesBeginPatchPatch = SymbolExtensions.GetMethodInfo(
+			() => Patches.ExileControllerPatchesBeginPatchPatch.Prefix());
+
+
 		// 会議終了時のリセット処理を呼び出せるように
 		harmony.Patch(wrapUpAndSpawn,
 			new HarmonyMethod(wrapUpAndSpawnPrefix),
@@ -545,6 +554,10 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		harmony.Patch(submarineSurvillanceMinigameSystemUpdate,
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePrefixPatch),
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
+
+		// 追放が2度発生する不具合の修正
+		harmony.Patch(exileControllerPatchesBeginPatch,
+			new HarmonyMethod(exileControllerPatchesBeginPatchPatch));
 	}
 
 	private MonoBehaviour? getFloorHandler(PlayerControl player)
