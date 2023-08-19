@@ -16,6 +16,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -318,10 +319,8 @@ public static class ExileControllerBeginePatch
 [HarmonyPatch(typeof(ExileController), nameof(ExileController.ReEnableGameplay))]
 public static class ExileControllerReEnableGameplayPatch
 {
-    public static void Postfix(
-        ExileController __instance)
+    public static void Postfix()
     {
-
         ReEnablePostfix();
     }
 
@@ -333,10 +332,9 @@ public static class ExileControllerReEnableGameplayPatch
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-        if (!role.HasOtherKillCool) { return; }
+        if (!role.TryGetKillCool(out float killCool)) { return; }
 
-        CachedPlayerControl.LocalPlayer.PlayerControl.SetKillTimer(
-            role.KillCoolTime);
+        CachedPlayerControl.LocalPlayer.PlayerControl.SetKillTimer(killCool);
     }
 
 }
@@ -348,7 +346,7 @@ public static class ExileControllerWrapUpPatch
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
     public static class BaseExileControllerPatch
     {
-        public static void Prefix(ExileController __instance)
+        public static void Prefix()
         {
             WrapUpPrefix();
         }
@@ -361,7 +359,7 @@ public static class ExileControllerWrapUpPatch
     [HarmonyPatch(typeof(AirshipExileController), nameof(AirshipExileController.WrapUpAndSpawn))]
     public static class AirshipExileControllerPatch
     {
-        public static void Prefix(AirshipExileController __instance)
+        public static void Prefix()
         {
             WrapUpPrefix();
         }
