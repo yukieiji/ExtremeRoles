@@ -381,6 +381,13 @@ public static class RPCOperator
         PlayerControl teleportPlayer = Helper.Player.GetPlayerControlById(teleporterId);
         if (teleportPlayer != null)
         {
+			if (CompatModManager.Instance.TryGetModMap<SubmergedIntegrator>(out var mapMod) &&
+				AmongUsClient.Instance.AmHost)
+			{
+				bool isUpper = pos.y > -6.19;
+				mapMod.ChangeFloorTo(teleporterId, isUpper);
+			}
+
             teleportPlayer.NetTransform.SnapTo(pos);
         }
     }

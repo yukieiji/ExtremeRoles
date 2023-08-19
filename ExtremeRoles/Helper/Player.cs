@@ -296,6 +296,7 @@ public static class Player
 
 	public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos)
     {
+		/*
 		if (CompatModManager.Instance.TryGetModMap(out var mapMod) &&
 			mapMod is IMultiFloorModMap floorModMap)
 		{
@@ -306,7 +307,7 @@ public static class Player
 				floorModMap.ChangeFloor(targetPlayerId, targetFloor);
 			}
 		}
-
+		*/
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.UncheckedSnapTo))
