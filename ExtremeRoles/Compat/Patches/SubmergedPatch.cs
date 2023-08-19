@@ -17,11 +17,24 @@ using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
 
 namespace ExtremeRoles.Compat.Patches;
 
+public static class ExileControllerPatchesBeginPatchPatch
+{
+	public static bool Prefix()
+	{
+		return
+			!(
+				GameManager.Instance.LogicOptions.GetConfirmImpostor() ||
+				ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger
+			);
+	}
+}
+
 public static class DisplayPrespawnStepPatchesCustomPrespawnStepPatch
 {
 	public static bool Prefix(ref IEnumerator __result)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!CompatModManager.Instance.IsModMap<Submerged>() ||
+			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 		__result = assassinMeetingEnumerator();
 		return false;
 	}

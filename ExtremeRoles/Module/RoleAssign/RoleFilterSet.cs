@@ -62,7 +62,7 @@ public sealed class RoleFilterSet
 
 	public void Update(byte bytedRoleId)
 	{
-		if (this.isBlock || !this.normalRoleFilter.Contains(bytedRoleId))
+		if (this.isBlock || !this.combRoleFilter.Contains(bytedRoleId))
 		{
 			return;
 		}

@@ -35,11 +35,11 @@ public static class CounterAreaUpdateCountPatch
                     renderer.material = defaultMat;
                 }
             }
-            return; 
+            return;
         }
 
         if (!MapCountOverlayUpdatePatch.PlayerColor.TryGetValue(
-                __instance.RoomType, out List<Color> colors))
+                __instance.RoomType, out List<int> colors))
         {
             return;
         }
@@ -52,18 +52,7 @@ public static class CounterAreaUpdateCountPatch
             if (renderer != null && colors.Count > i)
             {
                 renderer.material = Object.Instantiate(defaultMat);
-                var color = colors[i];
-                renderer.material.SetColor("_BodyColor", color);
-                var id = Palette.PlayerColors.IndexOf(color);
-                if (id < 0)
-                {
-                    renderer.material.SetColor("_BackColor", color);
-                }
-                else
-                {
-                    renderer.material.SetColor("_BackColor", Palette.ShadowColors[id]);
-                }
-                renderer.material.SetColor("_VisorColor", Palette.VisorColor);
+				PlayerMaterial.SetColors(colors[i], renderer);
             }
         }
     }
