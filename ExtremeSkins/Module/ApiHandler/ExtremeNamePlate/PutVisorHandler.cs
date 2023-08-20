@@ -12,9 +12,9 @@ using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
 
-namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
+namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
-public sealed class PutVisorHandler : IRequestHandler
+public sealed class PutNamePlateHandler : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
 

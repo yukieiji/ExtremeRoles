@@ -12,7 +12,7 @@ using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
 
-namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
+namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 
 public sealed class PostNewVisorHandler : IRequestHandler
 {
@@ -21,13 +21,13 @@ public sealed class PostNewVisorHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		InfoData newHat = IRequestHandler.DeserializeJson<InfoData>(context.Request);
+		InfoData newVisor = IRequestHandler.DeserializeJson<InfoData>(context.Request);
 
 		JsonSerializerOptions options = new()
 		{
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 		};
-		using var jsonStream = new StreamReader(newHat.InfoJsonPath);
+		using var jsonStream = new StreamReader(newVisor.InfoJsonPath);
 		VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
@@ -37,7 +37,7 @@ public sealed class PostNewVisorHandler : IRequestHandler
 			response.Abort();
 			return;
 		}
-		string folderPath = newHat.FolderPath;
+		string folderPath = newVisor.FolderPath;
 		CustomVisor customVisor = new CustomVisor(folderPath, info);
 		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
 		{

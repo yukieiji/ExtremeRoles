@@ -12,9 +12,9 @@ using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
 
-namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
+namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
-public sealed class PutVisorHandler : IRequestHandler
+public sealed class PostNewNamePlateHandler : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
 
@@ -37,43 +37,21 @@ public sealed class PutVisorHandler : IRequestHandler
 			response.Abort();
 			return;
 		}
-
 		string folderPath = newHat.FolderPath;
-
 		CustomVisor customVisor = new CustomVisor(folderPath, info);
-		string id = customVisor.Id;
-
-		if (!ExtremeVisorManager.VisorData.TryGetValue(id, out var visor))
+		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
+		{
+			ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
+		}
+		else
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
 			return;
 		}
-
-		bool hasReloadVisor =
-			CachedPlayerControl.LocalPlayer != null &&
-			CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.visor.currentVisor.ProductId == id;
-
-		if (hasReloadVisor)
-		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetHat(
-				HatData.EmptyId, colorId);
-		}
-
-		ExtremeVisorManager.VisorData[id] = customVisor;
-
 		List<VisorData> visorData = hatMng.allVisors.ToList();
-		visorData.RemoveAll(x => x.ProductId == visor.Id);
 		visorData.Add(customVisor.GetData());
 		hatMng.allVisors = visorData.ToArray();
-
-		ExtremeSkinsPlugin.Logger.LogInfo($"Visor Reloaded :\n{customVisor}");
-		if (hasReloadVisor)
-		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetVisor(id, colorId);
-		}
 
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
