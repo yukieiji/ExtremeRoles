@@ -3,9 +3,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>8.2.0.7</Version>
-    <!--<VersionPrefix>8.2.0</VersionPrefix>-->
-    <VersionSuffix>RebootSubmerged</VersionSuffix>
+    <!--<Version>8.2.1.0</Version>-->
+    <VersionPrefix>8.2.1</VersionPrefix>
+    <VersionSuffix>RESTAPI</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
