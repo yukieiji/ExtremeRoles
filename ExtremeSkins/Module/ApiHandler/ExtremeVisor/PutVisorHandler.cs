@@ -40,7 +40,8 @@ public sealed class PutVisorHandler : IRequestHandler
 
 		string folderPath = newHat.GetSkinFolderPath();
 
-		CustomVisor customVisor = new CustomVisor(folderPath, info);
+		CustomVisor customVisor = info.Animation == null ?
+			new CustomVisor(folderPath, info) : new AnimationVisor(folderPath, info);
 		string id = customVisor.Id;
 
 		if (!ExtremeVisorManager.VisorData.TryGetValue(id, out var visor))
@@ -63,7 +64,7 @@ public sealed class PutVisorHandler : IRequestHandler
 
 		List<VisorData> visorData = hatMng.allVisors.ToList();
 		visorData.RemoveAll(x => x.ProductId == id);
-		visorData.Add(customVisor.GetData());
+		visorData.Add(customVisor.Data);
 		hatMng.allVisors = visorData.ToArray();
 
 		ExtremeSkinsPlugin.Logger.LogInfo($"Visor Reloaded :\n{customVisor}");
