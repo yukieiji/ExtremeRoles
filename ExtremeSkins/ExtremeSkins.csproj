@@ -45,7 +45,7 @@
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\Config.cs" Link="Core\Config.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\License.cs" Link="Core\License.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\InfoBase.cs" Link="Core\InfoBase.cs" />
-    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\API\InfoData.cs" Link="Core\API\InfoData.cs" />
+    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\API\NewCosmicData.cs" Link="Core\API\NewCosmicData.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\API\ExportData.cs" Link="Core\API\ExportData.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\API\ModuleStatusData.cs" Link="Core\API\ModuleStatusData.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\API\StatusData.cs" Link="Core\API\StatusData.cs" />

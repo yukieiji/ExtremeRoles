@@ -21,13 +21,13 @@ public sealed class PutVisorHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		InfoData newHat = IRequestHandler.DeserializeJson<InfoData>(context.Request);
+		NewCosmicData newHat = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
 
 		JsonSerializerOptions options = new()
 		{
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 		};
-		using var jsonStream = new StreamReader(newHat.InfoJsonPath);
+		using var jsonStream = new StreamReader(newHat.GetInfoJsonPath());
 		VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
@@ -38,7 +38,7 @@ public sealed class PutVisorHandler : IRequestHandler
 			return;
 		}
 
-		string folderPath = newHat.FolderPath;
+		string folderPath = newHat.GetSkinFolderPath();
 
 		CustomVisor customVisor = new CustomVisor(folderPath, info);
 		string id = customVisor.Id;

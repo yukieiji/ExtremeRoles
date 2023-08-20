@@ -21,13 +21,13 @@ public sealed class PutHatHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		InfoData newHat = IRequestHandler.DeserializeJson<InfoData>(context.Request);
+		NewCosmicData newHat = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
 
 		JsonSerializerOptions options = new()
 		{
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 		};
-		using var jsonStream = new StreamReader(newHat.InfoJsonPath);
+		using var jsonStream = new StreamReader(newHat.GetInfoJsonPath());
 		HatInfo? info = JsonSerializer.Deserialize<HatInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
@@ -38,7 +38,7 @@ public sealed class PutHatHandler : IRequestHandler
 			return;
 		}
 
-		string folderPath = newHat.FolderPath;
+		string folderPath = newHat.GetSkinFolderPath();
 
 		CustomHat customHat = info.Animation == null ?
 			new CustomHat(folderPath, info) : new AnimationHat(folderPath, info);

@@ -21,13 +21,13 @@ public sealed class PostNewVisorHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		InfoData newVisor = IRequestHandler.DeserializeJson<InfoData>(context.Request);
+		NewCosmicData newVisor = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
 
 		JsonSerializerOptions options = new()
 		{
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 		};
-		using var jsonStream = new StreamReader(newVisor.InfoJsonPath);
+		using var jsonStream = new StreamReader(newVisor.GetInfoJsonPath());
 		VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
@@ -37,7 +37,7 @@ public sealed class PostNewVisorHandler : IRequestHandler
 			response.Abort();
 			return;
 		}
-		string folderPath = newVisor.FolderPath;
+		string folderPath = newVisor.GetSkinFolderPath();
 		CustomVisor customVisor = new CustomVisor(folderPath, info);
 		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
 		{
