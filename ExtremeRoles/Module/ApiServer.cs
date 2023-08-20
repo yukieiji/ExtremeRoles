@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 using ExtremeRoles.Module.Interface;
+using System.Linq;
 
 namespace ExtremeRoles.Module;
 
@@ -29,7 +31,8 @@ public class ApiServer : IDisposable
 	private HttpListener listener;
 	private Thread listenerThread;
 
-	private const string url = "http://localhost:57700";
+	private const int port = 57700;
+	private static string url => $"http://localhost:{port}";
 
 	public record RequestKey(string Url, string Method);
 
@@ -56,8 +59,18 @@ public class ApiServer : IDisposable
 	{
 		if (handler.Count == 0)
 		{
+			ExtremeRolesPlugin.Logger.LogWarning($"ExR ApiServer: Disable, Register URL is ZERO");
 			return;
 		}
+
+		var ips = IPGlobalProperties.GetIPGlobalProperties();
+		IPEndPoint[] tcpConnInfoArray = ips.GetActiveTcpListeners();
+		if (tcpConnInfoArray.Any(x => x.Port == port))
+		{
+			ExtremeRolesPlugin.Logger.LogError($"ExR ApiServer: Can't boot. port:{port} used already!!");
+			return;
+		}
+
 		instance = new ApiServer();
 	}
 
