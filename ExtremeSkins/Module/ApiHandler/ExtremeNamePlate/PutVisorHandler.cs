@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
-using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
@@ -21,58 +18,50 @@ public sealed class PutNamePlateHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		InfoData newHat = IRequestHandler.DeserializeJson<InfoData>(context.Request);
+		NewCosmicData newNamePate = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
 
-		JsonSerializerOptions options = new()
-		{
-			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-		};
-		using var jsonStream = new StreamReader(newHat.InfoJsonPath);
-		VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
-		if (info == null || hatMng == null)
+		if (hatMng == null)
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
 			return;
 		}
 
-		string folderPath = newHat.FolderPath;
+		CustomNamePlate customNamePlate = new CustomNamePlate(
+			Path.Combine(newNamePate.ParentPath, newNamePate.AutherName),
+			newNamePate.AutherName, newNamePate.SkinName);
 
-		CustomVisor customVisor = new CustomVisor(folderPath, info);
-		string id = customVisor.Id;
+		string id = customNamePlate.Id;
 
-		if (!ExtremeVisorManager.VisorData.TryGetValue(id, out var visor))
+		if (!ExtremeNamePlateManager.NamePlateData.TryGetValue(id, out var np))
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
 			return;
 		}
 
-		bool hasReloadVisor =
+		bool hasReloadNamePlate =
 			CachedPlayerControl.LocalPlayer != null &&
-			CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.visor.currentVisor.ProductId == id;
+			CachedPlayerControl.LocalPlayer.PlayerControl.Data.DefaultOutfit.NamePlateId == id;
 
-		if (hasReloadVisor)
+		if (hasReloadNamePlate)
 		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetHat(
-				HatData.EmptyId, colorId);
+			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetNamePlate(NamePlateData.EmptyId);
 		}
 
-		ExtremeVisorManager.VisorData[id] = customVisor;
+		ExtremeNamePlateManager.NamePlateData[id] = customNamePlate;
 
-		List<VisorData> visorData = hatMng.allVisors.ToList();
-		visorData.RemoveAll(x => x.ProductId == visor.Id);
-		visorData.Add(customVisor.GetData());
-		hatMng.allVisors = visorData.ToArray();
+		List<NamePlateData> namePlateData = hatMng.allNamePlates.ToList();
+		namePlateData.RemoveAll(x => x.ProductId == np.Id);
+		namePlateData.Add(customNamePlate.GetData());
+		hatMng.allNamePlates = namePlateData.ToArray();
 
-		ExtremeSkinsPlugin.Logger.LogInfo($"Visor Reloaded :\n{customVisor}");
-		if (hasReloadVisor)
+		ExtremeSkinsPlugin.Logger.LogInfo($"NamePlate Reloaded :\n{customNamePlate}");
+		if (hasReloadNamePlate)
 		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetVisor(id, colorId);
+			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetNamePlate(customNamePlate.Id);
 		}
 
 		IRequestHandler.SetStatusOK(response);

@@ -21,27 +21,23 @@ public sealed class PostNewNamePlateHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		InfoData newHat = IRequestHandler.DeserializeJson<InfoData>(context.Request);
+		NewCosmicData newNamePate = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
 
-		JsonSerializerOptions options = new()
-		{
-			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-		};
-		using var jsonStream = new StreamReader(newHat.InfoJsonPath);
-		VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
-		if (info == null || hatMng == null)
+		if (hatMng == null)
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
 			return;
 		}
-		string folderPath = newHat.FolderPath;
-		CustomVisor customVisor = new CustomVisor(folderPath, info);
-		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
+
+		CustomNamePlate customNamePlate = new CustomNamePlate(
+			Path.Combine(newNamePate.ParentPath, newNamePate.AutherName),
+			newNamePate.AutherName, newNamePate.SkinName);
+		if (ExtremeNamePlateManager.NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
 		{
-			ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
+			ExtremeSkinsPlugin.Logger.LogInfo($"NamePlate Loaded :\n{customNamePlate}");
 		}
 		else
 		{
@@ -49,9 +45,9 @@ public sealed class PostNewNamePlateHandler : IRequestHandler
 			response.Abort();
 			return;
 		}
-		List<VisorData> visorData = hatMng.allVisors.ToList();
-		visorData.Add(customVisor.GetData());
-		hatMng.allVisors = visorData.ToArray();
+		List<NamePlateData> namePlateData = hatMng.allNamePlates.ToList();
+		namePlateData.Add(customNamePlate.GetData());
+		hatMng.allNamePlates = namePlateData.ToArray();
 
 		IRequestHandler.SetStatusOK(response);
 		response.Close();
