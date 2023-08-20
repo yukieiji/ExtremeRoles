@@ -204,18 +204,18 @@ public sealed class AnimationHat : CustomHat
 			{
 				this.HatView!.MainImage = getNextSprite(animation.Front);
 			}
-			if (animation.FrontFlip != null &&
-				this.counter % animation.FrontFlip.FrameCount == 0)
-			{
-				this.HatView!.LeftMainImage = getNextSprite(animation.FrontFlip);
-			}
-		}
-		if (isFlip)
-		{
 			if (animation.Back != null &&
 				this.counter % animation.Back.FrameCount == 0)
 			{
 				this.HatView!.BackImage = getNextSprite(animation.Back);
+			}
+		}
+		if (isFlip)
+		{
+			if (animation.FrontFlip != null &&
+				this.counter % animation.FrontFlip.FrameCount == 0)
+			{
+				this.HatView!.LeftMainImage = getNextSprite(animation.FrontFlip);
 			}
 			if (animation.BackFlip != null &&
 				this.counter % animation.BackFlip.FrameCount == 0)
