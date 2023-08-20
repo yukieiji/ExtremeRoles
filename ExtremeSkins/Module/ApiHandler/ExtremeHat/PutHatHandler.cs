@@ -57,23 +57,20 @@ public sealed class PutHatHandler : IRequestHandler
 
 		if (hasReloadHat)
 		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetHat(
-				HatData.EmptyId, colorId);
+			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetHat(HatData.EmptyId);
 		}
 
 		ExtremeHatManager.HatData[id] = customHat;
 
 		List<HatData> hatData = hatMng.allHats.ToList();
-		hatData.RemoveAll(x => x.ProductId == hat.Id);
+		hatData.RemoveAll(x => x.ProductId == id);
 		hatData.Add(customHat.Data);
 		hatMng.allHats = hatData.ToArray();
 
 		ExtremeSkinsPlugin.Logger.LogInfo($"Hat Reloaded :\n{customHat}");
 		if (hasReloadHat)
 		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetHat(id, colorId);
+			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetHat(id);
 		}
 
 		IRequestHandler.SetStatusOK(response);

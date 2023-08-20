@@ -56,23 +56,20 @@ public sealed class PutVisorHandler : IRequestHandler
 
 		if (hasReloadVisor)
 		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetHat(
-				HatData.EmptyId, colorId);
+			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetVisor(VisorData.EmptyId);
 		}
 
 		ExtremeVisorManager.VisorData[id] = customVisor;
 
 		List<VisorData> visorData = hatMng.allVisors.ToList();
-		visorData.RemoveAll(x => x.ProductId == visor.Id);
+		visorData.RemoveAll(x => x.ProductId == id);
 		visorData.Add(customVisor.GetData());
 		hatMng.allVisors = visorData.ToArray();
 
 		ExtremeSkinsPlugin.Logger.LogInfo($"Visor Reloaded :\n{customVisor}");
 		if (hasReloadVisor)
 		{
-			int colorId = CachedPlayerControl.LocalPlayer!.Data.DefaultOutfit.ColorId;
-			CachedPlayerControl.LocalPlayer!.PlayerControl.cosmetics.SetVisor(id, colorId);
+			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetVisor(id);
 		}
 
 		IRequestHandler.SetStatusOK(response);

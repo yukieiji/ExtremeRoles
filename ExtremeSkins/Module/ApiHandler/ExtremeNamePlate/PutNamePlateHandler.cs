@@ -54,14 +54,14 @@ public sealed class PutNamePlateHandler : IRequestHandler
 		ExtremeNamePlateManager.NamePlateData[id] = customNamePlate;
 
 		List<NamePlateData> namePlateData = hatMng.allNamePlates.ToList();
-		namePlateData.RemoveAll(x => x.ProductId == np.Id);
+		namePlateData.RemoveAll(x => x.ProductId == id);
 		namePlateData.Add(customNamePlate.GetData());
 		hatMng.allNamePlates = namePlateData.ToArray();
 
 		ExtremeSkinsPlugin.Logger.LogInfo($"NamePlate Reloaded :\n{customNamePlate}");
 		if (hasReloadNamePlate)
 		{
-			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetNamePlate(customNamePlate.Id);
+			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetNamePlate(id);
 		}
 
 		IRequestHandler.SetStatusOK(response);
