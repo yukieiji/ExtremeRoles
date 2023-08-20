@@ -38,7 +38,8 @@ public sealed class PostNewVisorHandler : IRequestHandler
 			return;
 		}
 		string folderPath = newVisor.GetSkinFolderPath();
-		CustomVisor customVisor = new CustomVisor(folderPath, info);
+		CustomVisor customVisor = info.Animation == null ?
+			new CustomVisor(folderPath, info) : new AnimationVisor(folderPath, info);
 		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
@@ -50,7 +51,7 @@ public sealed class PostNewVisorHandler : IRequestHandler
 			return;
 		}
 		List<VisorData> visorData = hatMng.allVisors.ToList();
-		visorData.Add(customVisor.GetData());
+		visorData.Add(customVisor.Data);
 		hatMng.allVisors = visorData.ToArray();
 
 		IRequestHandler.SetStatusOK(response);
