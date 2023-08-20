@@ -56,6 +56,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		OptionCreator.Create();
 
         AddComponent<ExtremeRolePluginBehavior>();
+		AddComponent<UnityMainThreadDispatcher>();
 
         if (BepInExUpdater.IsUpdateRquire())
         {
