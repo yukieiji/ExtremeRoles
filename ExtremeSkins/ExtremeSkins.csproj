@@ -58,6 +58,8 @@
 
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\ExtremeVisor\DataStructure.cs" Link="Core\ExtremeVisor\DataStructure.cs" />
     <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\ExtremeVisor\VisorInfo.cs" Link="Core\ExtremeVisor\VisorInfo.cs" />
+
+    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\ExtremeNamePlate\DataStructure.cs" Link="Core\ExtremeNamePlate\DataStructure.cs" />
   </ItemGroup>
 
   <ItemGroup>
