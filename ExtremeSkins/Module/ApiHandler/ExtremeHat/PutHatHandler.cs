@@ -44,8 +44,8 @@ public sealed class PutHatHandler : IRequestHandler
 		CustomHat customHat = info.Animation == null ?
 			new CustomHat(folderPath, info) : new AnimationHat(folderPath, info);
 
-		Translation.AddTransData(customHat.Author, newHat.TransedAutherName);
-		Translation.AddTransData(customHat.Name, newHat.TransedSkinName);
+		Translation.AddTransData(newHat.AutherName, newHat.TransedAutherName);
+		Translation.AddTransData(newHat.SkinName, newHat.TransedSkinName);
 
 		string id = customHat.Id;
 

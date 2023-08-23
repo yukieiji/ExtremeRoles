@@ -42,8 +42,8 @@ public sealed class PostNewVisorHandler : IRequestHandler
 		CustomVisor customVisor = info.Animation == null ?
 			new CustomVisor(folderPath, info) : new AnimationVisor(folderPath, info);
 
-		Translation.AddTransData(customVisor.Author, newVisor.TransedAutherName);
-		Translation.AddTransData(customVisor.Name  , newVisor.TransedSkinName);
+		Translation.AddTransData(newVisor.AutherName, newVisor.TransedAutherName);
+		Translation.AddTransData(newVisor.SkinName  , newVisor.TransedSkinName);
 
 		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
 		{
