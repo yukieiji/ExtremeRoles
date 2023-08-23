@@ -180,15 +180,17 @@ public sealed class AnimationVisor : CustomVisor
 
 		bool isFlip = CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX;
 		var animation = this.Info.Animation!;
+		bool hasLeftIdle = this.Info.LeftIdle;
 
-		if (!isFlip &&
-			animation.Idle != null &&
+		if (animation.Idle is not null &&
+			(!isFlip || !hasLeftIdle) &&
 			this.counter % animation.Idle.FrameCount == 0)
 		{
 			this.View!.IdleFrame = getNextSprite(animation.Idle);
 		}
-		if (isFlip &&
-			animation.LeftIdle != null &&
+		if (hasLeftIdle &&
+			animation.LeftIdle is not null &&
+			isFlip &&
 			this.counter % animation.LeftIdle.FrameCount == 0)
 		{
 			this.View!.LeftIdleFrame = getNextSprite(animation.LeftIdle);
