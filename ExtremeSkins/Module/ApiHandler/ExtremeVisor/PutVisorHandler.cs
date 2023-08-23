@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
+using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 
@@ -21,13 +22,13 @@ public sealed class PutVisorHandler : IRequestHandler
 	private void requestAction(HttpListenerContext context)
 	{
 		var response = context.Response;
-		NewCosmicData newHat = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
+		NewCosmicData newVisor = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
 
 		JsonSerializerOptions options = new()
 		{
 			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 		};
-		using var jsonStream = new StreamReader(newHat.GetInfoJsonPath());
+		using var jsonStream = new StreamReader(newVisor.GetInfoJsonPath());
 		VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(jsonStream.ReadToEnd(), options);
 		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
 
@@ -38,10 +39,14 @@ public sealed class PutVisorHandler : IRequestHandler
 			return;
 		}
 
-		string folderPath = newHat.GetSkinFolderPath();
+		string folderPath = newVisor.GetSkinFolderPath();
 
 		CustomVisor customVisor = info.Animation == null ?
 			new CustomVisor(folderPath, info) : new AnimationVisor(folderPath, info);
+
+		Translation.AddTransData(customVisor.Author, newVisor.TransedAutherName);
+		Translation.AddTransData(customVisor.Name, newVisor.TransedSkinName);
+
 		string id = customVisor.Id;
 
 		if (!ExtremeVisorManager.VisorData.TryGetValue(id, out var visor))

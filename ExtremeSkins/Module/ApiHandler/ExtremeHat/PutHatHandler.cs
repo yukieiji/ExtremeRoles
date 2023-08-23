@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.SkinManager;
+using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
@@ -42,6 +43,10 @@ public sealed class PutHatHandler : IRequestHandler
 
 		CustomHat customHat = info.Animation == null ?
 			new CustomHat(folderPath, info) : new AnimationHat(folderPath, info);
+
+		Translation.AddTransData(customHat.Author, newHat.TransedAutherName);
+		Translation.AddTransData(customHat.Name, newHat.TransedSkinName);
+
 		string id = customHat.Id;
 
 		if (!ExtremeHatManager.HatData.TryGetValue(id, out var hat))

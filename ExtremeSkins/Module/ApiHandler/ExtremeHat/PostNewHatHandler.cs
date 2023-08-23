@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.SkinManager;
+using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
@@ -37,9 +38,14 @@ public sealed class PostNewHatHandler : IRequestHandler
 			response.Abort();
 			return;
 		}
+
 		string folderPath = newHat.GetSkinFolderPath();
 		CustomHat customHat = info.Animation == null ?
 			new CustomHat(folderPath, info) : new AnimationHat(folderPath, info);
+
+		Translation.AddTransData(customHat.Author, newHat.TransedAutherName);
+		Translation.AddTransData(customHat.Name, newHat.TransedSkinName);
+
 		if (ExtremeHatManager.HatData.TryAdd(customHat.Id, customHat))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"Hat Loaded :\n{customHat}");

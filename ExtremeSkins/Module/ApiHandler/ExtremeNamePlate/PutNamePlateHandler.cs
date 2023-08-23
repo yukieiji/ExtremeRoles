@@ -8,6 +8,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.SkinManager;
+using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
@@ -32,6 +33,9 @@ public sealed class PutNamePlateHandler : IRequestHandler
 		CustomNamePlate customNamePlate = new CustomNamePlate(
 			Path.Combine(newNamePate.ParentPath, newNamePate.AutherName),
 			newNamePate.AutherName, newNamePate.SkinName);
+
+		Translation.AddTransData(customNamePlate.Author, newNamePate.TransedAutherName);
+		Translation.AddTransData(customNamePlate.Name, newNamePate.TransedSkinName);
 
 		string id = customNamePlate.Id;
 

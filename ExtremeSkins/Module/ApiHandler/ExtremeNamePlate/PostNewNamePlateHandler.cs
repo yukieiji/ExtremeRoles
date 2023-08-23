@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
-using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
+using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
@@ -35,6 +33,10 @@ public sealed class PostNewNamePlateHandler : IRequestHandler
 		CustomNamePlate customNamePlate = new CustomNamePlate(
 			Path.Combine(newNamePate.ParentPath, newNamePate.AutherName),
 			newNamePate.AutherName, newNamePate.SkinName);
+
+		Translation.AddTransData(customNamePlate.Author, newNamePate.TransedAutherName);
+		Translation.AddTransData(customNamePlate.Name  , newNamePate.TransedSkinName);
+
 		if (ExtremeNamePlateManager.NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"NamePlate Loaded :\n{customNamePlate}");

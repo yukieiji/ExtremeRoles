@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.SkinManager;
+using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 
@@ -40,6 +41,10 @@ public sealed class PostNewVisorHandler : IRequestHandler
 		string folderPath = newVisor.GetSkinFolderPath();
 		CustomVisor customVisor = info.Animation == null ?
 			new CustomVisor(folderPath, info) : new AnimationVisor(folderPath, info);
+
+		Translation.AddTransData(customVisor.Author, newVisor.TransedAutherName);
+		Translation.AddTransData(customVisor.Name  , newVisor.TransedSkinName);
+
 		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
