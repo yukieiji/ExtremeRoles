@@ -37,8 +37,9 @@ public enum ExtremeRoleId : int
     Delinquent,
     Buddy,
     Mover,
+	Accelerator,
 
-    SpecialCrew,
+	SpecialCrew,
     Sheriff,
     Maintainer,
     Neet,
@@ -124,8 +125,9 @@ public enum CombinationRoleType : byte
     Supporter,
     Guesser,
     Mover,
+	Accelerator,
 
-    Traitor,
+	Traitor,
 }
 
 public enum RoleGameOverReason

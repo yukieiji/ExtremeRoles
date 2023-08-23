@@ -55,9 +55,10 @@ public static class RPCOperator
         HeroHeroAcademia,
         KidsAbility,
         MoverAbility,
+		AcceleratorAbility,
 
-        // クルーメイト
-        BodyGuardAbility,
+		// クルーメイト
+		BodyGuardAbility,
         TimeMasterAbility,
         AgencyTakeTask,
         FencerAbility,
