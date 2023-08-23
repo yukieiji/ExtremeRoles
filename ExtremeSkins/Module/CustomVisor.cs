@@ -182,16 +182,16 @@ public sealed class AnimationVisor : CustomVisor
 		var animation = this.Info.Animation!;
 
 		if (!isFlip &&
-			animation.Front != null &&
-			this.counter % animation.Front.FrameCount == 0)
+			animation.Idle != null &&
+			this.counter % animation.Idle.FrameCount == 0)
 		{
-			this.View!.FloorFrame = getNextSprite(animation.Front);
+			this.View!.FloorFrame = getNextSprite(animation.Idle);
 		}
 		if (isFlip &&
-			animation.FrontFlip != null &&
-			this.counter % animation.FrontFlip.FrameCount == 0)
+			animation.LeftIdle != null &&
+			this.counter % animation.LeftIdle.FrameCount == 0)
 		{
-			this.View!.LeftIdleFrame = getNextSprite(animation.FrontFlip);
+			this.View!.LeftIdleFrame = getNextSprite(animation.LeftIdle);
 		}
 		this.counter = (this.counter + 1) % MaxInt;
 	}
