@@ -185,7 +185,7 @@ public sealed class AnimationVisor : CustomVisor
 			animation.Idle != null &&
 			this.counter % animation.Idle.FrameCount == 0)
 		{
-			this.View!.FloorFrame = getNextSprite(animation.Idle);
+			this.View!.IdleFrame = getNextSprite(animation.Idle);
 		}
 		if (isFlip &&
 			animation.LeftIdle != null &&
