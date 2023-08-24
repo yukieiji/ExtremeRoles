@@ -73,8 +73,8 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 #endif
 #if WITHVISOR
 			ApiServer.Register("/exs/nameplate/", HttpMethod.Get , new GetNamePlateHandler());
-			// ApiServer.Register("/exs/nameplate/", HttpMethod.Put , new PutVisorHandler());
-			// ApiServer.Register("/exs/nameplate/", HttpMethod.Post, new PostNewVisorHandler());
+			ApiServer.Register("/exs/nameplate/", HttpMethod.Put , new PutNamePlateHandler());
+			ApiServer.Register("/exs/nameplate/", HttpMethod.Post, new PostNewNamePlateHandler());
 #endif
 		}
 
