@@ -5,7 +5,7 @@
     <WarningLevel>7</WarningLevel>
     <!--<Version>8.2.0.0</Version>-->
     <VersionPrefix>8.2.0</VersionPrefix>
-    <VersionSuffix>VisorAnimation</VersionSuffix>
+    <VersionSuffix>AnimationVisor</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
