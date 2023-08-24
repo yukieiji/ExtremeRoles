@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using UnityEngine;
 
+using Il2CppInterop.Runtime.Attributes;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 #nullable enable
@@ -37,6 +38,7 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 	/// Locks the queue and adds the IEnumerator to the queue
 	/// </summary>
 	/// <param name="action">IEnumerator function that will be executed from the main thread.</param>
+	[HideFromIl2Cpp]
 	public void Enqueue(IEnumerator action)
 	{
 		lock (_executionQueue)
@@ -51,6 +53,7 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 	/// Locks the queue and adds the Action to the queue
 	/// </summary>
 	/// <param name="action">function that will be executed from the main thread.</param>
+	[HideFromIl2Cpp]
 	public void Enqueue(Action action)
 	{
 		Enqueue(ActionWrapper(action));
@@ -61,6 +64,7 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 	/// </summary>
 	/// <param name="action">function that will be executed from the main thread.</param>
 	/// <returns>A Task that can be awaited until the action completes</returns>
+	[HideFromIl2Cpp]
 	public Task EnqueueAsync(Action action)
 	{
 		var tcs = new TaskCompletionSource<bool>();
@@ -69,7 +73,7 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 		{
 			try
 			{
-				action();
+				action.Invoke();
 				tcs.TrySetResult(true);
 			}
 			catch (Exception ex)
@@ -82,10 +86,10 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 		return tcs.Task;
 	}
 
-
+	[HideFromIl2Cpp]
 	IEnumerator ActionWrapper(Action a)
 	{
-		a();
+		a.Invoke();
 		yield return null;
 	}
 
