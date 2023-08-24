@@ -26,26 +26,26 @@ public sealed class Photographer :
     IRoleAwake<RoleTypes>,
     IRoleReportHook
 {
-    public struct PlayerPosInfo
+    public readonly struct PlayerPosInfo
     {
-        public string PlayerName;
-        public SystemTypes? Room;
+		public readonly string PlayerName;
+		public readonly SystemTypes? Room;
 
-        public PlayerPosInfo(
+		public PlayerPosInfo(
             GameData.PlayerInfo player)
         {
             this.PlayerName = player.PlayerName;
-			this.Room = null;
-			Player.TryGetPlayerRoom(player.Object, out this.Room);
-        }
+			Player.TryGetPlayerRoom(player.Object, out var room);
+			this.Room = room;
+		}
     }
 
-    public struct Photo
+    public readonly struct Photo
     {
-        private List<PlayerPosInfo> player;
-        private DateTime takeTime;
+		private readonly List<PlayerPosInfo> player;
+		private readonly DateTime takeTime;
 
-        private static readonly string[] randomStr = new string[]
+		private static readonly string[] randomStr = new string[]
         {
             "NoName",
             "NewFile",
