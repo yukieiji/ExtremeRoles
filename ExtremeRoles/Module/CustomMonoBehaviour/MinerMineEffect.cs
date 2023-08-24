@@ -59,7 +59,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	public void SetParameter(
 		bool isRolePlayer,
 		float activeRange,
-		Miner.MineEffectParameter param)
+		in Miner.MineEffectParameter param)
 	{
 		this.isUseEffect = param.RolePlayerShowMode != Miner.ShowMode.MineSeeNone;
 		this.isShowNoneActiveImg = isRolePlayer || param.CanShowNoneActiveAtherPlayer;

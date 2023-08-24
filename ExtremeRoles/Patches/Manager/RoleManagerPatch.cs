@@ -56,7 +56,7 @@ public static class RoleManagerSelectRolesPatch
         if (Xion.IsAllPlyerDummy())
         {
             // ダミープレイヤーは役職がアサインされてないので無理やりアサインする
-            List<PlayerControl> allPlayer = assignData.NeedRoleAssignPlayer;
+            var allPlayer = assignData.NeedRoleAssignPlayer;
 
             var gameOption = GameOptionsManager.Instance;
             var currentOption = gameOption.CurrentGameOptions;
