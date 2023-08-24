@@ -22,11 +22,11 @@ namespace ExtremeRoles.GhostRoles.Crewmate;
 
 public sealed class Shutter : GhostRoleBase
 {
-    private struct GhostPhoto
+    private readonly struct GhostPhoto
     {
-        private List<PlayerPosInfo> player;
-        private DateTime takeTime;
-        private int rate;
+        private readonly List<PlayerPosInfo> player;
+		private readonly DateTime takeTime;
+		private readonly int rate;
 
         public GhostPhoto(int rate, float range)
         {

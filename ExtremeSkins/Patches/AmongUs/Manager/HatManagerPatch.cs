@@ -51,7 +51,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 List<VisorData> visorData = __instance.allVisors.ToList();
                 foreach (CustomVisor vi in ExtremeVisorManager.VisorData.Values)
                 {
-                    visorData.Add(vi.GetData());
+                    visorData.Add(vi.Data);
                 }
                 __instance.allVisors = visorData.ToArray();
             }

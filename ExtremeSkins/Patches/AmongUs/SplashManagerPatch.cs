@@ -8,107 +8,106 @@ using ExtremeSkins.SkinManager;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
-namespace ExtremeSkins.Patches.AmongUs
+namespace ExtremeSkins.Patches.AmongUs;
+
+[HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Start))]
+public static class SplashManagerStartPatch
 {
-    [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Start))]
-    public static class SplashManagerStartPatch
+    public static void Postfix(SplashManager __instance)
     {
-        public static void Postfix(SplashManager __instance)
-        {
 
-            if (ExtremeRoles.Compat.BepInExUpdater.IsUpdateRquire()) { return; }
+        if (ExtremeRoles.Compat.BepInExUpdater.IsUpdateRquire()) { return; }
 
-            bool creatorMode = CreatorModeManager.Instance.IsEnable;
+        bool creatorMode = CreatorModeManager.Instance.IsEnable;
 
-            List<IEnumerator> dlTask = new List<IEnumerator>();
+        List<IEnumerator> dlTask = new List<IEnumerator>();
 
 #if WITHHAT
-            if (!ExtremeHatManager.IsLoaded)
+        if (!ExtremeHatManager.IsLoaded)
+        {
+            if (!creatorMode && ExtremeHatManager.IsUpdate())
             {
-                if (!creatorMode && ExtremeHatManager.IsUpdate())
-                {
-                    dlTask.Add(ExtremeHatManager.InstallData());
-                }
+                dlTask.Add(ExtremeHatManager.InstallData());
             }
+        }
 #endif
 #if WITHNAMEPLATE
-            if (!ExtremeNamePlateManager.IsLoaded)
+        if (!ExtremeNamePlateManager.IsLoaded)
+        {
+            if (!creatorMode && ExtremeNamePlateManager.IsUpdate())
             {
-                if (!creatorMode && ExtremeNamePlateManager.IsUpdate())
-                {
-                    dlTask.Add(ExtremeNamePlateManager.InstallData());
-                }
+                dlTask.Add(ExtremeNamePlateManager.InstallData());
             }
+        }
 #endif
 #if WITHVISOR
-            if (!ExtremeVisorManager.IsLoaded)
-            {
-
-                if (!creatorMode && ExtremeVisorManager.IsUpdate())
-                {
-                    dlTask.Add(ExtremeVisorManager.InstallData());
-                }
-            }
-#endif
-            __instance.StartCoroutine(
-                loadSkin(dlTask).WrapToIl2Cpp());
-        }
-
-        private static IEnumerator loadSkin(List<IEnumerator> dlTask)
+        if (!ExtremeVisorManager.IsLoaded)
         {
-            SplashManagerUpdatePatch.SetSkinLoadMode(true);
 
-            foreach (IEnumerator task in dlTask)
+            if (!creatorMode && ExtremeVisorManager.IsUpdate())
             {
-                yield return task;
+                dlTask.Add(ExtremeVisorManager.InstallData());
             }
-
-            ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ Skin Load Start!! ------------------------------");
-#if WITHHAT
-            if (!ExtremeHatManager.IsLoaded)
-            {
-                ExtremeHatManager.Load();
-            }
-#endif
-#if WITHNAMEPLATE
-            if (!ExtremeNamePlateManager.IsLoaded)
-            {
-                ExtremeNamePlateManager.Load();
-            }
-#endif
-#if WITHVISOR
-            if (!ExtremeVisorManager.IsLoaded)
-            {
-                ExtremeVisorManager.Load();
-            }
-#endif
-            ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
-            SplashManagerUpdatePatch.SetSkinLoadMode(false);
         }
-
-        private static bool isDlEnd(List<Task> dlTask)
-        {
-            foreach (Task task in dlTask)
-            {
-                if (!task.IsCompleted) { return false; }
-            }
-            return true;
-        }
+#endif
+        __instance.StartCoroutine(
+            loadSkin(dlTask).WrapToIl2Cpp());
     }
-    [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
-    public static class SplashManagerUpdatePatch
+
+    private static IEnumerator loadSkin(List<IEnumerator> dlTask)
     {
-        private static bool isSkinLoad = true;
+        SplashManagerUpdatePatch.SetSkinLoadMode(true);
 
-        public static void SetSkinLoadMode(bool modeOn)
+        foreach (IEnumerator task in dlTask)
         {
-            isSkinLoad = modeOn;
+            yield return task;
         }
 
-        public static bool Prefix()
+        ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ Skin Load Start!! ------------------------------");
+#if WITHHAT
+        if (!ExtremeHatManager.IsLoaded)
         {
-            return !isSkinLoad;
+            ExtremeHatManager.Load();
         }
+#endif
+#if WITHNAMEPLATE
+        if (!ExtremeNamePlateManager.IsLoaded)
+        {
+            ExtremeNamePlateManager.Load();
+        }
+#endif
+#if WITHVISOR
+        if (!ExtremeVisorManager.IsLoaded)
+        {
+            ExtremeVisorManager.Load();
+        }
+#endif
+        ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
+        SplashManagerUpdatePatch.SetSkinLoadMode(false);
+    }
+
+    private static bool isDlEnd(List<Task> dlTask)
+    {
+        foreach (Task task in dlTask)
+        {
+            if (!task.IsCompleted) { return false; }
+        }
+        return true;
+    }
+}
+[HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]
+public static class SplashManagerUpdatePatch
+{
+    public static bool IsSkinLoad = true;
+
+    public static void SetSkinLoadMode(bool modeOn)
+    {
+		IsSkinLoad = modeOn;
+    }
+
+    public static bool Prefix()
+    {
+        return !IsSkinLoad;
     }
 }
 

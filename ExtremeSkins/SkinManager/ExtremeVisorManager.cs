@@ -162,7 +162,9 @@ public static class ExtremeVisorManager
 
 			if (info is null) { continue; }
 
-            CustomVisor customVisor = new CustomVisor(visor, info);
+            CustomVisor customVisor =
+				info.Animation == null ?
+				new CustomVisor(visor, info) : new AnimationVisor(visor, info);
 
             if (VisorData.TryAdd(customVisor.Id, customVisor))
             {

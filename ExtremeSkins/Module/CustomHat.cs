@@ -197,34 +197,45 @@ public sealed class AnimationHat : CustomHat
 		var animationGroup = CachedPlayerControl.LocalPlayer.PlayerPhysics.Animations;
 		var animation = this.Info.Animation!;
 
-		if (!isFlip)
+		bool hasFrontFlip = this.Info.FrontFlip;
+
+		// フロントがあってノットフリップ or フロントフリップなし
+		if (animation.Front is not null &&
+			(!isFlip || !hasFrontFlip) &&
+			this.counter % animation.Front.FrameCount == 0)
 		{
-			if (animation.Front != null &&
-				this.counter % animation.Front.FrameCount == 0)
-			{
-				this.HatView!.MainImage = getNextSprite(animation.Front);
-			}
-			if (animation.FrontFlip != null &&
-				this.counter % animation.FrontFlip.FrameCount == 0)
-			{
-				this.HatView!.LeftMainImage = getNextSprite(animation.FrontFlip);
-			}
+			this.HatView!.MainImage = getNextSprite(animation.Front);
 		}
-		if (isFlip)
+		// フロントのフリップがあってフリップ状態
+		if (hasFrontFlip &&
+			animation.FrontFlip is not null &&
+			isFlip &&
+			this.counter % animation.FrontFlip.FrameCount == 0)
 		{
-			if (animation.Back != null &&
-				this.counter % animation.Back.FrameCount == 0)
-			{
-				this.HatView!.BackImage = getNextSprite(animation.Back);
-			}
-			if (animation.BackFlip != null &&
-				this.counter % animation.BackFlip.FrameCount == 0)
-			{
-				this.HatView!.LeftBackImage = getNextSprite(animation.BackFlip);
-			}
+			this.HatView!.LeftMainImage = getNextSprite(animation.FrontFlip);
 		}
-		if (animationGroup.IsPlayingClimbAnimation() &&
+
+		bool hasBackFlip = this.Info.BackFlip;
+		// バックがあってノットフリップ or バックフリップなし
+		if (this.Info.Back &&
+			animation.Back is not null &&
+			(!isFlip || !hasBackFlip) &&
+			this.counter % animation.Back.FrameCount == 0)
+		{
+			this.HatView!.BackImage = getNextSprite(animation.Back);
+		}
+		// バックのフリップがあってフリップ状態
+		if (hasBackFlip &&
+			animation.BackFlip is not null &&
+			isFlip &&
+			this.counter % animation.BackFlip.FrameCount == 0)
+		{
+			this.HatView!.LeftBackImage = getNextSprite(animation.BackFlip);
+		}
+
+		if (this.Info.Climb &&
 			animation.Climb != null &&
+			animationGroup.IsPlayingClimbAnimation() &&
 			this.counter % animation.Climb.FrameCount == 0)
 		{
 			this.HatView!.ClimbImage = getNextSprite(animation.Climb);

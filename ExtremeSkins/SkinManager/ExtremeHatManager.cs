@@ -65,19 +65,14 @@ public static class ExtremeHatManager
 
 		string? appPath = Path.GetDirectoryName(Application.dataPath);
 
-		if (string.IsNullOrEmpty(appPath) ||
-			!Directory.Exists(Path.Combine(
-				appPath,
-                DataStructure.FolderName)))
-        {
-            return true;
-        }
+		if (string.IsNullOrEmpty(appPath)) { return true; }
 
-        getJsonData(hatRepoData).GetAwaiter().GetResult();
+		string exhFolder = Path.Combine(appPath, DataStructure.FolderName);
+		if (!Directory.Exists(exhFolder)) { return true; }
 
-        string exhFolder = Path.Combine(appPath, DataStructure.FolderName);
+		getJsonData(hatRepoData).GetAwaiter().GetResult();
 
-        byte[] byteHatArray = File.ReadAllBytes(Path.Combine(exhFolder, hatRepoData));
+		byte[] byteHatArray = File.ReadAllBytes(Path.Combine(exhFolder, hatRepoData));
         string hatJsonString = Encoding.UTF8.GetString(byteHatArray);
 
         JObject hatJObject = JObject.Parse(hatJsonString);

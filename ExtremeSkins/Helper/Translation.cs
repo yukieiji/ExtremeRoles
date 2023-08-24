@@ -76,6 +76,19 @@ public static class Translation
     {
         stringData[key] = newData;
     }
+	public static void AddTransData(string key, string newData)
+	{
+		if (string.IsNullOrEmpty(key) ||
+			string.IsNullOrEmpty(newData))
+		{
+			return;
+		}
+
+		stringData[key] = new Dictionary<SupportedLangs, string>()
+		{
+			{ DataManager.Settings.Language.CurrentLanguage, newData }
+		};
+	}
 
     private static void addJsonToTransData(JObject parsed)
     {

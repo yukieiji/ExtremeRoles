@@ -45,12 +45,12 @@ public static class PlayerControlHandleRpcPatch
 					int controlId = reader.ReadPackedInt32();
 					switch (assignRoleType)
 					{
-						case (byte)Module.IAssignedPlayer.ExRoleType.Single:
+						case (byte)Module.Interface.IPlayerToExRoleAssignData.ExRoleType.Single:
 							assignData.Add(new
 								PlayerToSingleRoleAssignData(
 									assignedPlayerId, exRoleId, controlId));
 							break;
-						case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
+						case (byte)Module.Interface.IPlayerToExRoleAssignData.ExRoleType.Comb:
 							byte assignCombType = reader.ReadByte(); // combTypeId
 							byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
 							assignData.Add(new

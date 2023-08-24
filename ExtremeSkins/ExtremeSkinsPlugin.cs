@@ -1,11 +1,18 @@
-﻿using BepInEx;
+﻿using System.Net.Http;
+
+using BepInEx;
 using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
-using ExtremeSkins.SkinManager;
 using ExtremeRoles.Module;
 
+using ExtremeSkins.SkinManager;
+
+using ExtremeSkins.Module.ApiHandler;
+using ExtremeSkins.Module.ApiHandler.ExtremeHat;
+using ExtremeSkins.Module.ApiHandler.ExtremeVisor;
+using ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
 namespace ExtremeSkins;
 
@@ -51,8 +58,27 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
         Harmony.PatchAll();
 
+		if (CreatorModeManager.Instance.IsEnable)
+		{
+			ApiServer.Register("/exs/"       , HttpMethod.Get , new GetStatusHandler());
+#if WITHHAT
+			ApiServer.Register("/exs/hat/", HttpMethod.Get , new GetHatHandler());
+			ApiServer.Register("/exs/hat/", HttpMethod.Put , new PutHatHandler());
+			ApiServer.Register("/exs/hat/", HttpMethod.Post, new PostNewHatHandler());
+#endif
+#if WITHVISOR
+			ApiServer.Register("/exs/visor/", HttpMethod.Get , new GetVisorHandler());
+			ApiServer.Register("/exs/visor/", HttpMethod.Put , new PutVisorHandler());
+			ApiServer.Register("/exs/visor/", HttpMethod.Post, new PostNewVisorHandler());
+#endif
+#if WITHVISOR
+			ApiServer.Register("/exs/nameplate/", HttpMethod.Get , new GetNamePlateHandler());
+			ApiServer.Register("/exs/nameplate/", HttpMethod.Put , new PutNamePlateHandler());
+			ApiServer.Register("/exs/nameplate/", HttpMethod.Post, new PostNewNamePlateHandler());
+#endif
+		}
 
-        var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
+		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 
 		if (assembly is null) { return; }
 
