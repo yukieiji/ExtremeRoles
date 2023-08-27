@@ -47,10 +47,6 @@
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Module\ApiHandler\" />
-  </ItemGroup>
-
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="python $(SolutionDir)\makelanguagejson.py" />
     <Exec Command="if not exist $(SolutionDir)ExtremeRoles\Resources\Asset mkdir $(SolutionDir)ExtremeRoles\Resources\Asset" />
