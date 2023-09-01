@@ -8,6 +8,8 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 public sealed class PostChat : IRequestHandler
 {
+	public const string Path = "/exr/chat/";
+
 	public readonly record struct Data(string Body);
 
 	public Action<HttpListenerContext> Request => this.requestAction;

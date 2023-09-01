@@ -6,6 +6,7 @@ using System.Threading;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text.Json;
+using ExtremeRoles.Module.ApiHandler;
 
 namespace ExtremeRoles.Module;
 
@@ -14,6 +15,9 @@ namespace ExtremeRoles.Module;
 public sealed class ChatWebUI :
 	NullableSingleton<ChatWebUI>
 {
+	public static string Path => $"{PostChat.Path}ui/";
+	public static string SocketUrl => $"{ApiServer.Url}{Path}ws/";
+
 	public readonly record struct WebUIChat(
 		string PlayerName, string Chat, bool isRight);
 
@@ -23,7 +27,7 @@ public sealed class ChatWebUI :
 	public ChatWebUI()
 	{
 		this.listener = new HttpListener();
-		this.listener.Prefixes.Add("http://localhost:57700/chat/ui/ws/");
+		this.listener.Prefixes.Add(SocketUrl);
 		this.listener.Start();
 	}
 

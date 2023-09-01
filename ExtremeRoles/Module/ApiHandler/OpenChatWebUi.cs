@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Text;
-
-using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
@@ -156,7 +153,7 @@ public sealed class OpenChatWebUi : IRequestHandler
             const chatData = {
                 "Body" : chat
             }
-            const result = await fetch("http://localhost:57700/exr/chat/", {
+            const result = await fetch("|POST_URL|", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -170,7 +167,7 @@ public sealed class OpenChatWebUi : IRequestHandler
             }
         }
 
-        var connection = new WebSocket("ws://localhost:57700/chat/ui/ws/");
+        var connection = new WebSocket("ws://|SOCKET_URL|");
 
         //接続通知
         connection.onopen = function(event) {
@@ -222,7 +219,16 @@ public sealed class OpenChatWebUi : IRequestHandler
 
 		response.ContentType = "text/html";
 		response.ContentEncoding = Encoding.UTF8;
-		byte[] buffer = Encoding.UTF8.GetBytes(page);
+
+		string postChatPath = PostChat.Path;
+		string socketUrl = ChatWebUI.SocketUrl;
+		socketUrl = socketUrl.Replace("http://", "");
+
+		string showPage = page
+			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
+			.Replace("|SOCKET_URL|", socketUrl);
+
+		byte[] buffer = Encoding.UTF8.GetBytes(showPage);
 		response.Close(buffer, false);
 
 		var chat = ChatWebUI.Instance;
