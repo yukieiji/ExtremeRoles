@@ -207,14 +207,6 @@ public sealed class OpenChatWebUi : IRequestHandler
 			return;
 		}
 
-		var curChat = FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.activeChildren;
-		var chatInfo = curChat
-			.ToArray()
-			.Where(x => x != null && x.TryCast<ChatBubble>() != null)
-			.Select(x => ChatInfo.Create(x.Cast<ChatBubble>()));
-
-		var result = new GetChatResult(MeetingHud.Instance != null, chatInfo.ToArray());
-
 		IRequestHandler.SetStatusOK(response);
 
 		response.ContentType = "text/html";
