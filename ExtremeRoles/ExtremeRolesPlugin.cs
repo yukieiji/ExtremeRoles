@@ -65,8 +65,9 @@ public partial class ExtremeRolesPlugin : BasePlugin
             AddComponent<BepInExUpdater>();
         }
 
-		ApiServer.Register("/exr/chat/"   , HttpMethod.Get, new GetChat());
-		ApiServer.Register("/exr/chat/ui/", HttpMethod.Get, new OpenChatWebUi());
+		ApiServer.Register("/exr/chat/"   , HttpMethod.Get , new GetChat());
+		ApiServer.Register("/exr/chat/"   , HttpMethod.Post, new PostChat());
+		ApiServer.Register("/exr/chat/ui/", HttpMethod.Get , new OpenChatWebUi());
 
 		Il2CppRegisterAttribute.Registration(
             System.Reflection.Assembly.GetAssembly(this.GetType()));

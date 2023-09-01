@@ -20,7 +20,7 @@ public sealed class OpenChatWebUi : IRequestHandler
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Chat Bot</title>
+        <title>AmongUs Chat WebUI</title>
         <style>
             body, html {
                 height: 100%;
@@ -148,16 +148,26 @@ public sealed class OpenChatWebUi : IRequestHandler
             messageItem.appendChild(itemBody)
 
             chatHistory.appendChild(messageItem);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
         }
 
-        function handleUserInput() {
-            const userMessage = userInput.value;
-            addMessage("ユーザー", userMessage, true);
+        async function handleUserInput() {
+            const chat = userInput.value;
+            const chatData = {
+                "Body" : chat
+            }
+            const result = await fetch("http://localhost:57700/exr/chat/", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(chatData),
+            });
 
-            userInput.value = "";
-
-            // メッセージが追加されたら、チャットメッセージのコンテナを最下部にスクロール
-            chatHistory.scrollTop = chatHistory.scrollHeight;
+            if (result.ok)
+            {
+                userInput.value = "";
+            }
         }
 
         var connection = new WebSocket("ws://localhost:57700/chat/ui/ws/");
@@ -193,6 +203,7 @@ public sealed class OpenChatWebUi : IRequestHandler
     </script>
 </body>
 </html>
+
 """;
 
 	private async void requestAction(HttpListenerContext context)
