@@ -40,7 +40,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
     public override void Load()
     {
-
         Helper.Translation.Load();
 
         Logger = Log;
@@ -66,7 +65,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
             AddComponent<BepInExUpdater>();
         }
 
-		ApiServer.Register("/exr/chat/", HttpMethod.Get, new GetChat());
+		ApiServer.Register("/exr/chat/"   , HttpMethod.Get, new GetChat());
+		ApiServer.Register("/exr/chat/ui/", HttpMethod.Get, new OpenChatWebUi());
 
 		Il2CppRegisterAttribute.Registration(
             System.Reflection.Assembly.GetAssembly(this.GetType()));
