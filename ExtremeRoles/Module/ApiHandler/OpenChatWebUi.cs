@@ -222,11 +222,10 @@ public sealed class OpenChatWebUi : IRequestHandler
 
 		string postChatPath = PostChat.Path;
 		string socketUrl = ChatWebUI.SocketUrl;
-		socketUrl = socketUrl.Replace("http://", "");
 
 		string showPage = page
 			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
-			.Replace("|SOCKET_URL|", socketUrl);
+			.Replace("|SOCKET_URL|", socketUrl.Replace("http://", ""));
 
 		byte[] buffer = Encoding.UTF8.GetBytes(showPage);
 		response.Close(buffer, false);
