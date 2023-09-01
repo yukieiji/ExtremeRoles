@@ -11,7 +11,7 @@ public sealed class OpenChatWebUi : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
 
-	private static string page =>
+	private const string page =
 """
 <!DOCTYPE html>
 <html>
