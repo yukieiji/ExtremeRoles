@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 
@@ -103,7 +104,7 @@ public sealed class OpenChatWebUi : IRequestHandler
     <div id="chat-container">
         <div id="chat-history"></div>
         <div id="user-input-container">
-            <input type="text" id="user-input" placeholder="メッセージを入力">
+            <input type="text" id="user-input" placeholder="|INPUT_MESSAGE|">
             <button id="send-button">▶</button>
         </div>
     </div>
@@ -171,12 +172,12 @@ public sealed class OpenChatWebUi : IRequestHandler
 
         //接続通知
         connection.onopen = function(event) {
-            addMessage("System", "SocketConnecting");
+            addMessage("|SYSTEM_MESSAGE|", "|ESTABLISH_CONNECT_MESSAGE|");
         };
 
         //エラー発生
         connection.onerror = function(error) {
-            addMessage("System", error.data);
+            addMessage("|SYSTEM_MESSAGE|", error.data);
         };
 
         //メッセージ受信
@@ -194,7 +195,7 @@ public sealed class OpenChatWebUi : IRequestHandler
 
         //切断
         connection.onclose = function() {
-            addMessage("System", "Disconnect");
+            addMessage("|SYSTEM_MESSAGE|", "|DISCONNECT_MESSAGE|");
         };
 
         sendButton.addEventListener("click", handleUserInput);
@@ -231,6 +232,10 @@ public sealed class OpenChatWebUi : IRequestHandler
 		string socketUrl = ChatWebUI.SocketUrl;
 
 		string showPage = page
+			.Replace("|ESTABLISH_CONNECT_MESSAGE|", Translation.GetString("ConectSocket"))
+			.Replace("|DISCONNECT_MESSAGE|", Translation.GetString("DisconectAmongUs"))
+			.Replace("|SYSTEM_MESSAGE|", Translation.GetString("SystemMessage"))
+			.Replace("|INPUT_MESSAGE|", Translation.GetString("InputMessage"))
 			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
 			.Replace("|SOCKET_URL|", socketUrl.Replace("http://", ""));
 

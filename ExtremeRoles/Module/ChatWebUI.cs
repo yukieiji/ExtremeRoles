@@ -1,11 +1,12 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using System.Text;
-using System.Threading;
 using System.Net.WebSockets;
-using System.Threading.Tasks;
+using System.Text;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.ApiHandler;
 
 namespace ExtremeRoles.Module;
@@ -49,7 +50,10 @@ public sealed class ChatWebUI :
 		this.socket = wsc.WebSocket;
 
 		this.AddChatToWebUI(
-			new WebUIChat("System", "SuccessAmongUsConnect", false));
+			new WebUIChat(
+				Translation.GetString("SystemMessage"),
+				Translation.GetString("SuccessAmongUsConnect"),
+			false));
 	}
 
 	public void ResetChat()
