@@ -8,7 +8,7 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 public sealed class PostChat : IRequestHandler
 {
-	public const string Path = "/exr/chat/";
+	public const string Path = "/au/chat/";
 
 	public readonly record struct Data(string Body);
 
