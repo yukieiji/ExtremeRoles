@@ -12,9 +12,9 @@ namespace ExtremeRoles.Module.ApiHandler;
 public readonly record struct ChatSenderInfo(
 	PlayerNameInfo PlayerName,
 	PlayerCosmicInfo CosmicInfo,
-	bool isSameSender,
-	bool isDead,
-	bool isVoted)
+	bool IsSameSender,
+	bool IsDead,
+	bool IsVoted)
 {
 	public static ChatSenderInfo Create(ChatBubble chatBubble)
 	{
@@ -33,7 +33,7 @@ public readonly record struct ChatSenderInfo(
 	}
 }
 
-public readonly record struct ChatInfo(ChatSenderInfo sender, string body)
+public readonly record struct ChatInfo(ChatSenderInfo Sender, string Body)
 {
 	public static ChatInfo Create(ChatBubble chatBubble)
 		=> new ChatInfo(
@@ -41,7 +41,7 @@ public readonly record struct ChatInfo(ChatSenderInfo sender, string body)
 			chatBubble.TextArea.text);
 }
 
-public readonly record struct GetChatResult(bool isMeeting, ChatInfo[] AllChat);
+public readonly record struct GetChatResult(bool IsMeeting, ChatInfo[] AllChat);
 
 public sealed class GetChat : IRequestHandler
 {
