@@ -154,9 +154,9 @@ public static class Logging
 
     private static string getTimeStmp() => DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss");
 
-    private static string getLogPath() => string.Concat(
-        Path.GetDirectoryName(Application.dataPath), @"\BepInEx/LogOutput.log");
+    private static string getLogPath() => Path.Combine(
+        Path.GetDirectoryName(Application.dataPath), "BepInEx", "LogOutput.log");
 
-    private static string getLogBackupPath() => string.Concat(
-        Path.GetDirectoryName(Application.dataPath), @"\BepInEx/BackupLog");
+    private static string getLogBackupPath() => Path.Combine(
+		Path.GetDirectoryName(Application.dataPath), "BepInEx","BackupLog");
 }
