@@ -137,17 +137,16 @@ public sealed class PsychoKiller :
     public override bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
-		++this.combCount;
-
 		if (this.combCount < this.combMax)
 		{
+			++this.combCount;
+			clampCombCount();
+
 			this.KillCoolTime = this.KillCoolTime * (
 				(100f - (this.reduceRate * this.combCount)) / 100f);
 			this.KillCoolTime = Mathf.Clamp(
 				this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
 		}
-
-		clampCombCount();
 
 		if (this.hasSelfTimer)
 		{
