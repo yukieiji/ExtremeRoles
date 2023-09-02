@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using UnityEngine;
 
@@ -12,8 +13,9 @@ namespace ExtremeRoles.Helper;
 public static class Logging
 {
     private static int ckpt = 0;
-    
-    public static void CheckPointDebugLog()
+	private const string replaceStr = "***.***.***.***";
+
+	public static void CheckPointDebugLog()
     {
         Debug($"ckpt:{ckpt}");
         ++ckpt;
@@ -100,7 +102,7 @@ public static class Logging
             if (Directory.Exists(logBackupPath))
             {
                 dumpedZipFile.CreateEntry("BackupLog/");
-                
+
                 string[] logFile = Directory
                     //logのバックアップディレクトリ内の全ファイルを取得
                     .GetFiles(logBackupPath)
@@ -135,19 +137,26 @@ public static class Logging
             losStr = prevLog.ReadToEnd();
         }
 
-        losStr = losStr.Replace(
-            Module.CustomOption.ClientOption.Instance.Ip.Value,
-            "***.***.***.***");
+		string configIp = ClientOption.Instance.Ip.Value;
 
-        using StreamWriter newLog = new StreamWriter(targetFileName, true, Encoding.UTF8);
+		if (configIp.StartsWith("http"))
+		{
+			losStr = Regex.Replace(losStr, @"[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}", replaceStr);
+		}
+		else
+		{
+			losStr = losStr.Replace(configIp, replaceStr);
+		}
+
+		using StreamWriter newLog = new StreamWriter(targetFileName, true, Encoding.UTF8);
         newLog.Write(losStr);
     }
 
     private static string getTimeStmp() => DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss");
 
-    private static string getLogPath() => string.Concat(
-        Path.GetDirectoryName(Application.dataPath), @"\BepInEx/LogOutput.log");
+    private static string getLogPath() => Path.Combine(
+        Path.GetDirectoryName(Application.dataPath), "BepInEx", "LogOutput.log");
 
-    private static string getLogBackupPath() => string.Concat(
-        Path.GetDirectoryName(Application.dataPath), @"\BepInEx/BackupLog");
+    private static string getLogBackupPath() => Path.Combine(
+		Path.GetDirectoryName(Application.dataPath), "BepInEx","BackupLog");
 }

@@ -16,6 +16,8 @@ namespace ExtremeRoles.Module;
 
 public class ApiServer : IDisposable
 {
+	public static string Url => $"http://localhost:{port}";
+
 	public static ApiServer Instance
 	{
 		get
@@ -32,7 +34,6 @@ public class ApiServer : IDisposable
 	private Thread listenerThread;
 
 	private const int port = 57700;
-	private static string url => $"http://localhost:{port}";
 
 	public record RequestKey(string Url, string Method);
 
@@ -46,13 +47,14 @@ public class ApiServer : IDisposable
 		this.listener = new HttpListener();
 		foreach (RequestKey key in this.registedHandler.Keys)
 		{
-			this.listener.Prefixes.Add($"{url}{key.Url}");
+			this.listener.Prefixes.Add($"{Url}{key.Url}");
 		}
 		this.listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
 		this.listener.Start();
 
 		this.listenerThread = new Thread(startListener);
 		this.listenerThread.Start();
+		this.listenerThread.IsBackground = true;
 	}
 
 	public static void Create()
@@ -106,7 +108,7 @@ public class ApiServer : IDisposable
 	private void listenerCallback(IAsyncResult result)
 	{
 		if (!this.listener.IsListening) { return; }
-		HttpListenerContext context = listener.EndGetContext(result);
+		HttpListenerContext context = this.listener.EndGetContext(result);
 
 		string? url = context.Request.RawUrl;
 

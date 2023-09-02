@@ -7,9 +7,12 @@ using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
+using System.Net.Http;
+
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
 
 
@@ -37,7 +40,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
     public override void Load()
     {
-
         Helper.Translation.Load();
 
         Logger = Log;
@@ -63,7 +65,11 @@ public partial class ExtremeRolesPlugin : BasePlugin
             AddComponent<BepInExUpdater>();
         }
 
-        Il2CppRegisterAttribute.Registration(
+		ApiServer.Register("/au/chat/"  , HttpMethod.Get , new GetChat());
+		ApiServer.Register(PostChat.Path , HttpMethod.Post, new PostChat());
+		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get , new OpenChatWebUi());
+
+		Il2CppRegisterAttribute.Registration(
             System.Reflection.Assembly.GetAssembly(this.GetType()));
 
         Loader.LoadCommonAsset();

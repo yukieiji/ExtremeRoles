@@ -118,36 +118,36 @@ public sealed class PsychoKiller :
         this.KillCoolTime = this.defaultKillCoolTime;
         if (this.isResetMeeting)
         {
-            this.combCount = 1;
+            this.combCount = 0;
         }
         else
         {
-            if(this.combCount >= this.combMax)
-            {
-                this.combCount = this.combMax;
-            }
-        }
+			clampCombCount();
+		}
     }
 
     public override string GetFullDescription()
     {
         return string.Format(
             base.GetFullDescription(),
-            this.combCount - 1);
+            this.combCount);
     }
 
 
     public override bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
-        if (this.combMax >= this.combCount)
-        {
-            this.KillCoolTime = this.KillCoolTime * (
-                (100f - (this.reduceRate * this.combCount)) / 100f);
-            this.KillCoolTime = Mathf.Clamp(
-                this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
-            ++this.combCount;
-        }
+		if (this.combCount < this.combMax)
+		{
+			++this.combCount;
+			clampCombCount();
+
+			this.KillCoolTime = this.KillCoolTime * (
+				(100f - (this.reduceRate * this.combCount)) / 100f);
+			this.KillCoolTime = Mathf.Clamp(
+				this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
+		}
+
 		if (this.hasSelfTimer)
 		{
 			this.isStartTimer = true;
@@ -223,7 +223,7 @@ public sealed class PsychoKiller :
 			this.timer = this.defaultTimer;
 		}
 
-		this.combCount = 1;
+		this.combCount = 0;
         this.defaultKillCoolTime = this.KillCoolTime;
     }
 
@@ -236,8 +236,6 @@ public sealed class PsychoKiller :
 		this.combCountText = Object.Instantiate(
 			killButton.cooldownTimerText,
 			killButton.cooldownTimerText.transform.parent);
-
-		updateCombText();
 
 		this.combCountText.name = ExtremeAbilityButton.AditionalInfoName;
 		this.combCountText.enableWordWrapping = false;
@@ -275,11 +273,16 @@ public sealed class PsychoKiller :
 	private void updateCombText()
 	{
 		this.combCountText.text = string.Format(
-			Translation.GetString("curCombNum"), this.combCount - 1);
+			Translation.GetString("curCombNum"), this.combCount);
 	}
 
 	private void resetTimer()
 	{
-		this.timer = this.defaultTimer * Mathf.Pow(this.timerModRate, this.combCount - 1);
+		this.timer = this.defaultTimer * Mathf.Pow(this.timerModRate, this.combCount);
+	}
+
+	private void clampCombCount()
+	{
+		this.combCount = Mathf.Clamp(this.combCount, 0, this.combMax);
 	}
 }

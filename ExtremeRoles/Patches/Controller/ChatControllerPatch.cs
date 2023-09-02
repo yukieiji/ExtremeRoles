@@ -10,6 +10,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -132,5 +133,18 @@ public static class ChatControllerSendChatPatch
 			Roles.Solo.Host.Xion.ParseCommand(
 				__instance.freeChatField.Text);
         }
+	}
+}
+
+[HarmonyPatch(typeof(ChatController), nameof(ChatController.GetPooledBubble))]
+public static class ChatControllerSetVisiblePatch
+{
+	public static void Prefix(ChatController __instance)
+	{
+		if (ChatWebUI.IsExist &&
+			__instance.chatBubblePool.NotInUse == 0)
+		{
+			ChatWebUI.Instance.ResetChat();
+		}
 	}
 }
