@@ -52,6 +52,11 @@ public sealed class ChatWebUI :
 			new WebUIChat("System", "SuccessAmongUsConnect", false));
 	}
 
+	public void ResetChat()
+	{
+		this.sendData(Array.Empty<byte>());
+	}
+
 	public void AddChatToWebUI(ChatBubble bubble)
 	{
 		var chat = new WebUIChat(
@@ -66,7 +71,12 @@ public sealed class ChatWebUI :
 		string jsonText = JsonSerializer.Serialize(chat);
 
 		byte[] buffer = Encoding.UTF8.GetBytes(jsonText);
-		var segment = new ArraySegment<byte>(buffer);
+		this.sendData(buffer);
+	}
+
+	private void sendData(byte[] data)
+	{
+		var segment = new ArraySegment<byte>(data);
 
 		this.socket?.SendAsync(
 			segment,

@@ -142,7 +142,7 @@ public sealed class OpenChatWebUi : IRequestHandler
             itemBody.appendChild(senderElement);
             itemBody.appendChild(messageDiv);
 
-            messageItem.appendChild(itemBody)
+            messageItem.appendChild(itemBody);
 
             chatHistory.appendChild(messageItem);
             chatHistory.scrollTop = chatHistory.scrollHeight;
@@ -171,23 +171,30 @@ public sealed class OpenChatWebUi : IRequestHandler
 
         //接続通知
         connection.onopen = function(event) {
-            addMessage("System", "SocketConnecting")
+            addMessage("System", "SocketConnecting");
         };
 
         //エラー発生
         connection.onerror = function(error) {
-            addMessage("System", error.data)
+            addMessage("System", error.data);
         };
 
         //メッセージ受信
         connection.onmessage = function(event) {
-            const chat = JSON.parse(event.data);
-            addMessage(chat.PlayerName, chat.Chat, chat.isRight)
+			if (event.data == null || event.data == "")
+			{
+				resetMessage();
+			}
+			else
+			{
+				const chat = JSON.parse(event.data);
+				addMessage(chat.PlayerName, chat.Chat, chat.isRight);
+			}
         };
 
         //切断
         connection.onclose = function() {
-            addMessage("System", "Disconnect")
+            addMessage("System", "Disconnect");
         };
 
         sendButton.addEventListener("click", handleUserInput);
