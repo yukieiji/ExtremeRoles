@@ -109,7 +109,7 @@ public static class ExtremeNamePlateManager
 
 				string namePlateName = value.Value.ToString();
 
-				if (!File.Exists(Path.Combine(checkNamePlateFolder, $"{namePlateName}.png")) ||
+				if (!File.Exists(Path.Combine(checkNamePlateFolder, $"{namePlateName}.png")) &&
 					!Directory.Exists(Path.Combine(checkNamePlateFolder, namePlateName)))
 				{
 					return true;
