@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <!--<Version>8.2.1.0</Version>-->
-    <VersionPrefix>8.2.2</VersionPrefix>
+    <Version>8.2.2.1</Version>
+    <!--<VersionPrefix>8.2.2</VersionPrefix>-->
     <VersionSuffix>ChatWebUI</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
