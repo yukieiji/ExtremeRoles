@@ -50,7 +50,8 @@ public static class RegionMenuOpenPatch
     {
         var gameIdTextBox = GameObject.Find(
             "NormalMenu/Buttons/JoinGameButton/JoinGameMenu/GameIdText");
-        if (gameIdTextBox == null) { return; }
+        if (gameIdTextBox == null ||
+			__instance.gameObject.name != "RegionMenu") { return; }
 
         var allButton = __instance.controllerSelectable;
 
