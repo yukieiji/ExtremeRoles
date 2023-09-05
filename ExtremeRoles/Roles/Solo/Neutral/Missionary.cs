@@ -3,18 +3,17 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Performance;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Performance.Il2Cpp;
+using BepInEx.Unity.IL2CPP.Utils;
 
 #nullable enable
 
@@ -217,7 +216,7 @@ public sealed class Missionary :
 
         if (this.tellDeparture)
         {
-            rolePlayer.StartCoroutine(showText().WrapToIl2Cpp());
+            rolePlayer.StartCoroutine(showText());
         }
     }
 

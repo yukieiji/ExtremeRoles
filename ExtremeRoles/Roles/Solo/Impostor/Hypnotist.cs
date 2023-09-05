@@ -9,14 +9,13 @@ using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -1422,8 +1421,7 @@ public sealed class Doll :
 
     private void showText(string text)
     {
-        CachedPlayerControl.LocalPlayer.PlayerControl.StartCoroutine(
-            coShowText(text).WrapToIl2Cpp());
+        CachedPlayerControl.LocalPlayer.PlayerControl.StartCoroutine(coShowText(text));
     }
 
     private IEnumerator coShowText(string text)

@@ -11,7 +11,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -68,8 +68,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         else
         {
             rolePlayer.StartCoroutine(
-                deadBodyToReportablePosition(
-                    role, rolePlayer).WrapToIl2Cpp());
+                deadBodyToReportablePosition(role, rolePlayer));
         }
     }
 
@@ -141,7 +140,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         }
         role.carringBody = null;
     }
-    
+
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
@@ -204,8 +203,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             caller.WriteBoolean(false);
         }
         player.StartCoroutine(
-            deadBodyToReportablePosition(
-                this, player).WrapToIl2Cpp());
+            deadBodyToReportablePosition(this, player));
     }
 
     protected override void CreateSpecificOption(

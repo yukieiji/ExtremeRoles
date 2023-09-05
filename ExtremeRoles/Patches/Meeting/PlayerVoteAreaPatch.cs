@@ -5,11 +5,8 @@ using System.Collections.Generic;
 using HarmonyLib;
 
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using Innersloth.Assets;
 
-
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.GameMode;
@@ -130,7 +127,7 @@ public static class PlayerVoteAreaSelectPatch
 									Effects.ExpOut(t));
 							})
 						}
-					).WrapToIl2Cpp()
+					)
 				);
 
 			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<
@@ -229,7 +226,7 @@ public static class PlayerVoteAreaSelectPatch
 				passiveButton.OnClick.RemoveAllPersistentAndListeners();
 				passiveButton.OnClick.AddListener(instance.Cancel);
                 passiveButton.OnClick.AddListener(
-                        () => { newAbilitybutton.gameObject.SetActive(false); });
+                    () => { newAbilitybutton.gameObject.SetActive(false); });
 				passiveButton.OnClick.AddListener(role.CreateAbilityAction(instance));
 
                 var render = newAbilitybutton.GetComponent<SpriteRenderer>();
@@ -274,7 +271,7 @@ public static class PlayerVoteAreaSelectPatch
 									Effects.ExpOut(t));
 							})
 						}
-					).WrapToIl2Cpp()
+					)
 				);
 
 			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();

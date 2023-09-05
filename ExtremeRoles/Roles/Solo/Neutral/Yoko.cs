@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -12,15 +11,15 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Yoko : 
-    SingleRoleBase, 
-    IRoleUpdate, 
-    IRoleResetMeeting, 
+public sealed class Yoko :
+    SingleRoleBase,
+    IRoleUpdate,
+    IRoleResetMeeting,
     IRoleWinPlayerModifier
 {
     public enum YokoOption
@@ -140,7 +139,7 @@ public sealed class Yoko :
 
         if (CachedShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
-        
+
         if (!CachedShipStatus.Instance.enabled ||
             MeetingHud.Instance != null ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
@@ -152,12 +151,12 @@ public sealed class Yoko :
             this.timer -= Time.deltaTime;
             return;
         }
-        
+
         Vector2 truePosition = rolePlayer.GetTruePosition();
-        
+
         this.timer = this.searchTime;
         bool isEnemy = false;
-        
+
         foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
@@ -192,8 +191,7 @@ public sealed class Yoko :
             text = Helper.Translation.GetString("findEnemy");
         }
 
-        rolePlayer.StartCoroutine(
-            showText(text).WrapToIl2Cpp());
+        rolePlayer.StartCoroutine(showText(text));
     }
 
     private IEnumerator showText(string text)
@@ -202,8 +200,8 @@ public sealed class Yoko :
         {
             this.tellText = Object.Instantiate(
                 Prefab.Text, Camera.main.transform, false);
-            this.tellText.fontSize = 
-                this.tellText.fontSizeMax = 
+            this.tellText.fontSize =
+                this.tellText.fontSizeMax =
                 this.tellText.fontSizeMin = 2.25f;
             this.tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
             this.tellText.alignment = TMPro.TextAlignmentOptions.Center;
@@ -226,11 +224,11 @@ public sealed class Yoko :
         }
         else if (
             role.IsImpostor() ||
-            role.CanKill() || 
+            role.CanKill() ||
             role.Id == ExtremeRoleId.Fencer)
         {
             return true;
-            
+
         }
         else if (this.isYoko(role))
         {

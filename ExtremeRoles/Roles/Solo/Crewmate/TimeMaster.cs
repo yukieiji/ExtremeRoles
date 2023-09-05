@@ -9,10 +9,9 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -32,7 +31,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.timeShieldButton;
         set
         {
@@ -87,8 +86,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
     {
         if (history.BlockAddHistory) { return; }
 
-        history.StartCoroutine(
-            coRewind(playerId, CachedPlayerControl.LocalPlayer).WrapToIl2Cpp());
+        history.StartCoroutine(coRewind(playerId, CachedPlayerControl.LocalPlayer));
     }
 
     private static IEnumerator coRewind(
@@ -243,10 +241,10 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
     private static void shieldOn(byte playerId)
     {
         TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(playerId);
-        
+
         if (timeMaster != null)
         {
-            timeMaster.isShieldOn = true; 
+            timeMaster.isShieldOn = true;
         }
     }
 

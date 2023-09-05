@@ -14,7 +14,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -183,7 +183,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
 
         if (bombPlayer == null) { return; }
         if (bombPlayer.Data.IsDead || bombPlayer.Data.Disconnected) { return; }
-        
+
         HashSet<PlayerControl> target = getAllPlayerInExplosion(
             rolePlayer, bombPlayer);
         foreach (PlayerControl player in target)
@@ -196,8 +196,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
         explosionKill(bombPlayer, bombPlayer);
         if (this.tellExplosion)
         {
-            rolePlayer.StartCoroutine(
-                showText().WrapToIl2Cpp());
+            rolePlayer.StartCoroutine(showText());
         }
     }
 
@@ -215,7 +214,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
 
         Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-        foreach (GameData.PlayerInfo playerInfo in 
+        foreach (GameData.PlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 

@@ -19,11 +19,11 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Queen : 
-    SingleRoleBase, 
-    IRoleAbility, 
-    IRoleSpecialReset, 
-    IRoleMurderPlayerHook, 
+public sealed class Queen :
+    SingleRoleBase,
+    IRoleAbility,
+    IRoleSpecialReset,
+    IRoleMurderPlayerHook,
     IRoleUpdate
 {
     public const string RoleShowTag = "<b>Ⓠ</b>";
@@ -120,7 +120,7 @@ public sealed class Queen :
 
                 multiAssignRole.CanHasAnotherRole = true;
                 servant.CanHasAnotherRole = false;
-                
+
                 ExtremeRoleManager.SetNewAnothorRole(targetPlayerId, servant);
             }
             else
@@ -181,7 +181,7 @@ public sealed class Queen :
                 return;
             }
         }
-        
+
         switch (targetPlayer.Data.Role.Role)
         {
             case RoleTypes.Crewmate:
@@ -410,10 +410,10 @@ public sealed class Queen :
         foreach (byte playerId in this.servantPlayerId)
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
-            
+
             if (player == null) { continue; }
 
-            if (player.Data.IsDead || 
+            if (player.Data.IsDead ||
                 player.Data.Disconnected) { continue; }
 
             RPCOperator.UncheckedMurderPlayer(
@@ -449,7 +449,7 @@ public sealed class Queen :
 
         this.CreateAbilityCountOption(
             parentOps, 1, 3);
-        
+
         CreateFloatOption(
             QueenOption.Range,
             1.0f, 0.5f, 2.6f, 0.1f,
@@ -502,10 +502,10 @@ public sealed class Queen :
     }
 }
 
-public sealed class Servant : 
-    MultiAssignRoleBase, 
-    IRoleAbility, 
-    IRoleMurderPlayerHook, 
+public sealed class Servant :
+    MultiAssignRoleBase,
+    IRoleAbility,
+    IRoleMurderPlayerHook,
     IRoleHasParent
 {
     public byte Parent => this.queenPlayerId;
@@ -528,7 +528,7 @@ public sealed class Servant :
     public Servant(
         byte queenPlayerId,
         Queen queen,
-        SingleRoleBase baseRole) : 
+        SingleRoleBase baseRole) :
         base(
             ExtremeRoleId.Servant,
             ExtremeRoleType.Neutral,
@@ -576,7 +576,7 @@ public sealed class Servant :
     public void HookMuderPlayer(
         PlayerControl source, PlayerControl target)
     {
-        
+
         if (MeetingHud.Instance ||
             source.PlayerId == target.PlayerId ||
             ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
@@ -598,7 +598,7 @@ public sealed class Servant :
         {
             color = this.NameColor;
         }
-        
+
         this.killFlash.enabled = true;
 
         hudManager.StartCoroutine(
@@ -638,7 +638,7 @@ public sealed class Servant :
     {
         if (this.killFlash != null)
         {
-            this.killFlash.enabled = false; 
+            this.killFlash.enabled = false;
         }
     }
 

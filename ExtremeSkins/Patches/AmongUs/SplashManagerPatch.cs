@@ -6,7 +6,7 @@ using HarmonyLib;
 
 using ExtremeSkins.SkinManager;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeSkins.Patches.AmongUs;
 
@@ -50,8 +50,7 @@ public static class SplashManagerStartPatch
             }
         }
 #endif
-        __instance.StartCoroutine(
-            loadSkin(dlTask).WrapToIl2Cpp());
+        __instance.StartCoroutine(loadSkin(dlTask));
     }
 
     private static IEnumerator loadSkin(List<IEnumerator> dlTask)
