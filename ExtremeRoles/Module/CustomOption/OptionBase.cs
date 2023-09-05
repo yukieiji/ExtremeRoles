@@ -113,9 +113,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 	private readonly List<IValueOption<OutType>> withUpdateOption = new List<IValueOption<OutType>>();
 	private readonly IOptionInfo? forceEnableCheckOption = null;
 
-	private const string IndentStr = "    ";
-
-	private static Regex nameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
+	private static readonly Regex nameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
 
 	public CustomOptionBase(
 		int id,
@@ -331,18 +329,14 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 		IOptionInfo parentOption,
 		int prefixIndentCount)
 	{
-		string prefixIndent = prefixIndentCount != 0 ?
-			string.Concat(Enumerable.Repeat(IndentStr, prefixIndentCount)) :
-			string.Empty;
-
 		foreach (var child in parentOption.Children)
 		{
 			string childOptionStr = child.ToHudString();
 
 			if (childOptionStr != string.Empty)
 			{
-				builder.AppendLine(
-					string.Concat(prefixIndent, childOptionStr));
+				builder.Append(' ', prefixIndentCount * 4);
+				builder.AppendLine(childOptionStr);
 			}
 
 			addChildrenOptionHudString(ref builder, child, prefixIndentCount + 1);
