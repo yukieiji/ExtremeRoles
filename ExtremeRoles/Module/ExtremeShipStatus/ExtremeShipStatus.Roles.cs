@@ -24,8 +24,6 @@ public sealed partial class ExtremeShipStatus
 
 	private Queue<byte> deadedAssassin = new Queue<byte>();
 
-	private BakeryUnion union;
-
 	public void AddGlobalActionRole(SingleRoleBase role)
 	{
 		var allOpt = OptionManager.Instance;
@@ -34,17 +32,6 @@ public sealed partial class ExtremeShipStatus
 		{
 			case ExtremeRoleId.Assassin:
 				this.isAssignAssassin = true;
-				break;
-			case ExtremeRoleId.Bakary:
-				if (this.union != null) { return; }
-				this.union = this.status.AddComponent<BakeryUnion>();
-				this.union.SetCookingCondition(
-					allOpt.GetValue<float>(
-						role.GetRoleOptionId(Bakary.BakaryOption.GoodBakeTime)),
-					allOpt.GetValue<float>(
-						role.GetRoleOptionId(Bakary.BakaryOption.BadBakeTime)),
-					allOpt.GetValue<bool>(
-						role.GetRoleOptionId(Bakary.BakaryOption.ChangeCooking)));
 				break;
 			default:
 				break;
@@ -87,28 +74,6 @@ public sealed partial class ExtremeShipStatus
 	}
 
 	public bool isMarinPlayer(byte playerId) => playerId == this.isTargetPlayerId;
-
-	private string getRoleAditionalInfo()
-	{
-		if (this.union == null) { return string.Empty; }
-
-		return this.union.GetBreadBakingCondition();
-	}
-
-	private bool isShowRoleAditionalInfo()
-	{
-		if (this.union == null) { return false; }
-
-		return this.union.IsEstablish();
-	}
-
-	private void resetOnMeetingGlobalAction()
-	{
-		if (this.union)
-		{
-			this.union.ResetTimer();
-		}
-	}
 
 	private void resetGlobalAction()
 	{

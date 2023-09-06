@@ -35,7 +35,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 			{
 				Object.Destroy(this.status);
 				this.status = null;
-				this.union = null;
 			}
 			this.status = new GameObject("ExtremeShipStatus");
 
