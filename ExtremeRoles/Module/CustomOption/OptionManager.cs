@@ -42,9 +42,6 @@ public sealed class OptionManager
 
 	private const int chunkSize = 50;
 
-	private const KeyCode maxSelectionKey = KeyCode.LeftControl;
-	private const KeyCode skipSelectionKey = KeyCode.LeftShift;
-
 	private const int defaultStep = 1;
 	private const int skipStep = 10;
 
@@ -240,9 +237,9 @@ public sealed class OptionManager
 		var option = GetIOption(id);
 
 		int curSelection = option.CurSelection;
-		int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
+		int step = Key.IsShift() ? skipStep : defaultStep;
 		int newSelection = isIncrese ? curSelection + step : curSelection - step;
-		if (Input.GetKey(maxSelectionKey))
+		if (Key.IsControlDown())
 		{
 			newSelection = isIncrese ? option.ValueCount - 1 : 0;
 		}

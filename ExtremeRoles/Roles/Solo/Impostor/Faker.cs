@@ -369,7 +369,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 
     public bool IsAbilityUse()
     {
-        bool isPlayerDummy = Input.GetKey(KeyCode.LeftShift);
+        bool isPlayerDummy = Key.IsShift();
 
         this.Button.Behavior.SetGraphic(
             isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr,
@@ -393,11 +393,11 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 
         var allPlayer = GameData.Instance.AllPlayers;
 
-        bool isPlayerMode = Input.GetKey(KeyCode.LeftShift);
-        bool excludeImp = Input.GetKey(KeyCode.LeftControl);
-        bool excludeMe = Input.GetKey(KeyCode.LeftAlt);
+        bool isPlayerMode = Key.IsShift();
+		bool excludeImp = Key.IsControlDown();
+		bool excludeMe = Key.IsAltDown();
 
-        byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
         bool contine;
         byte targetPlayerId;
