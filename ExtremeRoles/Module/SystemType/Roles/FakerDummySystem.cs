@@ -63,7 +63,9 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		private GameObject body;
 		private GameObject colorBindText;
 
-		private const float petOffset = 0.25f;
+		// v2023.07.12で確認
+		private static Vector3 scale => new Vector3(0.35f, 0.35f, 0.35f);
+		private static Vector2 posOffset => new Vector2(-0.04f, 0.575f);
 
 		private const string defaultPetName = "EmptyPet(Clone)";
 		private const string nameTextObjName = "NameText_TMP";
@@ -142,7 +144,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 				info.Cosmetics.currentBodySprite.BodySprite,
 				this.body.transform);
 			playerImage.flipX = info.FlipX;
-			playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+			playerImage.transform.localScale = scale;
 			return playerImage;
 		}
 
@@ -163,7 +165,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			cosmetic.currentBodySprite = playerBodySprite;
 			cosmetic.hat.Parent = playerImage;
 			cosmetic.petParent = this.body.transform;
-			cosmetic.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+			cosmetic.transform.localScale = scale;
 			cosmetic.ResetCosmetics();
 
 			return cosmetic;
@@ -197,15 +199,14 @@ public sealed class FakerDummySystem : IExtremeSystemType
 				pet.SetColor(colorId);
 				pet.transform.localPosition =
 					new Vector2(flipX ? 0.5f : -0.5f, -0.15f);
-				pet.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+				pet.transform.localScale = scale;
 				pet.FlipX = flipX;
 				destroyAllColider(pet.gameObject);
 			}
 			cosmetics.SetColor(colorId);
 
-			// v2023.07.12で確認
-			cosmetics.hat.transform.localPosition = new Vector2(-0.04f, 0.575f);
-			cosmetics.visor.transform.localPosition = new Vector2(-0.04f, 0.575f);
+			cosmetics.hat.transform.localPosition = posOffset;
+			cosmetics.visor.transform.localPosition = posOffset;
 		}
 
 		private void removeRoleInfo(GameObject nameTextObjct)
