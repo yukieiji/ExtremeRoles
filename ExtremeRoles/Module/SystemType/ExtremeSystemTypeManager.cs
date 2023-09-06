@@ -1,12 +1,9 @@
-﻿using ExtremeRoles.Module.Interface;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Hazel;
+
+using ExtremeRoles.Module.Interface;
 
 #nullable enable
 
