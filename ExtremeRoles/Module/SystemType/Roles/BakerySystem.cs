@@ -41,15 +41,15 @@ public sealed class BakerySystem : IExtremeSystemType
 	public void Detoriorate(float deltaTime)
 	{
 		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+			!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			MeetingHud.Instance != null) { return; }
 
 		if (!this.isUnion)
 		{
 			this.isUnion = true;
 			organize();
 		}
-		if (this.aliveBakary.Count == 0 ||
-			MeetingHud.Instance != null) { return; }
+		if (this.aliveBakary.Count == 0) { return; }
 
 		this.timer += deltaTime;
 	}
