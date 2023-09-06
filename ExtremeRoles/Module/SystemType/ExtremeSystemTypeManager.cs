@@ -49,6 +49,9 @@ public sealed class ExtremeSystemTypeManager :
 		}
 	}
 
+	public bool TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
+		=> this.systems.TryAdd(systemType, system);
+
 	public void Add(ExtremeSystemType systemType, IExtremeSystemType system)
 	{
 		this.systems.Add(systemType, system);
