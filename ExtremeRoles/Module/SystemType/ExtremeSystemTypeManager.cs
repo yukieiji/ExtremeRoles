@@ -88,6 +88,20 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
+	public bool TryGet(ExtremeSystemType systemType, out IExtremeSystemType? system)
+		=> this.systems.TryGetValue(systemType, out system);
+
+	public bool TryGet<T>(ExtremeSystemType systemType, out T? system) where T : class, IExtremeSystemType
+	{
+		system = default(T);
+		if (!this.systems.TryGetValue(systemType, out IExtremeSystemType? iSystem))
+		{
+			return false;
+		}
+		system = iSystem as T;
+		return iSystem is not null;
+	}
+
 	public void TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
 		=> this.systems.TryAdd(systemType, system);
 
