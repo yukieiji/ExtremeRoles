@@ -39,7 +39,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			PlayerControl targetPlayer)
 		{
 			this.body = GameSystem.CreateNoneReportableDeadbody(
-				targetPlayer, rolePlayer.transform.position);
+				targetPlayer, rolePlayer.GetTruePosition());
 
 			this.ColorId = targetPlayer.Data.DefaultOutfit.ColorId;
 
@@ -118,7 +118,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 					Object.Destroy(sync);
 				}
 			}
-			this.body.transform.position = rolePlayer.transform.position;
+			this.body.transform.position = rolePlayer.GetTruePosition();
 		}
 
 		public void SwitchColorName()

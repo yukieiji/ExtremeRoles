@@ -8,7 +8,8 @@ using ExtremeRoles.Module.Interface;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppInterop.Runtime.Injection;
-
+using InnerNet;
+using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -45,6 +46,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public bool IsDirty { get; private set; }
 
+	private const byte callId = 35;
 	private static ExtremeSystemTypeManager? instance = null;
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> systems = new Dictionary<ExtremeSystemType, IExtremeSystemType>();
 
@@ -62,13 +64,34 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		SystemTypeHelpers.AllTypes = SystemTypeHelpers.AllTypes.Concat(new List<SystemTypes> { Type }).ToArray();
 	}
 
-	public static void RpcUpdateSystem(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
+	public static void RpcUpdateSystemOnlyHost(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
 	{
 		MessageWriter messageWriter = MessageWriter.Get(SendOption.Reliable);
 		messageWriter.Write((byte)targetSystem);
 		writeAction.Invoke(messageWriter);
-		ShipStatus.Instance.RpcUpdateSystem(Type, messageWriter);
+		CachedShipStatus.Instance.RpcUpdateSystem(Type, messageWriter);
 		messageWriter.Recycle();
+	}
+
+	public static void RpcUpdateSystem(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
+	{
+		// TODO: ライターが2つと冗長すぎるのでどうにかする
+		MessageWriter writerForReader = MessageWriter.Get(SendOption.Reliable);
+		writerForReader.Write((byte)targetSystem);
+		writeAction.Invoke(writerForReader);
+		var data = writerForReader.ToByteArray(false);
+
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(
+			CachedShipStatus.Instance.NetId, callId, SendOption.Reliable, -1);
+		messageWriter.Write((byte)Type);
+		messageWriter.WriteNetObject(localPlayer);
+		messageWriter.Write(writerForReader, false);
+		AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
+
+		var reader = MessageReader.Get(data);
+		CachedShipStatus.Instance.UpdateSystem(Type, localPlayer, reader);
+		writerForReader.Recycle();
 	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
