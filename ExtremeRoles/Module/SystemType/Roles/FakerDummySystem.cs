@@ -38,7 +38,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			PlayerControl targetPlayer)
 		{
 			this.body = GameSystem.CreateNoneReportableDeadbody(
-				targetPlayer, rolePlayer.GetTruePosition());
+				targetPlayer, rolePlayer.transform.position);
 
 			this.ColorId = targetPlayer.Data.DefaultOutfit.ColorId;
 
@@ -117,7 +117,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 					Object.Destroy(sync);
 				}
 			}
-			this.body.transform.position = rolePlayer.GetTruePosition();
+			this.body.transform.position = rolePlayer.transform.position;
 		}
 
 		public void SwitchColorName()
@@ -203,8 +203,8 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			}
 			cosmetics.SetColor(colorId);
 
-			cosmetics.hat.transform.localPosition = cosmicInfo.Cosmetics.hat.transform.localPosition;
-			cosmetics.visor.transform.localPosition = cosmicInfo.Cosmetics.visor.transform.localPosition;
+			cosmetics.hat.transform.localPosition = new Vector2(-0.04f, 0.575f);
+			cosmetics.visor.transform.localPosition = new Vector2(-0.04f, 0.575f);
 		}
 
 		private void removeRoleInfo(GameObject nameTextObjct)
