@@ -203,6 +203,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			}
 			cosmetics.SetColor(colorId);
 
+			// v2023.07.12で確認
 			cosmetics.hat.transform.localPosition = new Vector2(-0.04f, 0.575f);
 			cosmetics.visor.transform.localPosition = new Vector2(-0.04f, 0.575f);
 		}
