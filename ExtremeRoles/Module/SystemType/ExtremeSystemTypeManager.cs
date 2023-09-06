@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Hazel;
 
 using ExtremeRoles.Module.Interface;
+
+using Il2CppObject = Il2CppSystem.Object;
+using Il2CppInterop.Runtime.Injection;
+
 
 #nullable enable
 
@@ -21,16 +26,28 @@ public enum ResetTiming : byte
 	MeetingEnd,
 }
 
-public sealed class ExtremeSystemTypeManager :
-	NullableSingleton<ExtremeSystemTypeManager>,
-	IAmongUs.ISystemType
+[Il2CppRegister(new Type[] { typeof(ISystemType) })]
+public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemType
 {
-
 	public static SystemTypes Type => (SystemTypes)60;
 
 	public bool IsDirty { get; private set; }
 
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> systems = new Dictionary<ExtremeSystemType, IExtremeSystemType>();
+
+	public ExtremeSystemTypeManager()
+		: base(ClassInjector.DerivedConstructorPointer<ExtremeSystemTypeManager>())
+	{
+		ClassInjector.DerivedConstructorBody(this);
+	}
+
+	public ExtremeSystemTypeManager(IntPtr ptr) : base(ptr)
+	{ }
+
+	public static void ModInitialize()
+	{
+		SystemTypeHelpers.AllTypes = SystemTypeHelpers.AllTypes.Concat(new List<SystemTypes> { Type }).ToArray();
+	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{

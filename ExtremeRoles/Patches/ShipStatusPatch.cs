@@ -3,42 +3,52 @@
 using ExtremeRoles.Compat;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches;
+
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
+public static class ShipStatusAwakePatch
 {
-    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
-    public static class ShipStatusAwakePatch
+    [HarmonyPostfix, HarmonyPriority(Priority.Last)]
+    public static void Postfix(ShipStatus __instance)
     {
-        [HarmonyPostfix, HarmonyPriority(Priority.Last)]
-        public static void Postfix(ShipStatus __instance)
-        {
-            CachedShipStatus.SetUp(__instance);
-            CompatModManager.Instance.SetUpMap(__instance);
-        }
+		CachedShipStatus.SetUp(__instance);
+        CompatModManager.Instance.SetUpMap(__instance);
+    }
+}
+
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnEnable))]
+public static class ShipStatusOnEnablePatch
+{
+	[HarmonyPostfix, HarmonyPriority(Priority.Last)]
+	public static void Postfix(ShipStatus __instance)
+	{
+		__instance.Systems.Add(ExtremeSystemTypeManager.Type, new ExtremeSystemTypeManager().Cast<ISystemType>());
+	}
+}
+
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
+public static class ShipStatusCalculateLightRadiusPatch
+{
+    public static bool Prefix(
+        ref float __result,
+        ShipStatus __instance,
+        [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
+    {
+        return VisionComputer.Instance.IsVanillaVisionAndGetVision(
+            __instance, playerInfo, out __result);
     }
 
-    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
-    public static class ShipStatusCalculateLightRadiusPatch
-    {
-        public static bool Prefix(
-            ref float __result,
-            ShipStatus __instance,
-            [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
-        {
-            return VisionComputer.Instance.IsVanillaVisionAndGetVision(
-                __instance, playerInfo, out __result);
-        }
+}
 
-    }
-
-    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnDestroy))]
-    public static class ShipStatusOnDestroyPatch
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnDestroy))]
+public static class ShipStatusOnDestroyPatch
+{
+    [HarmonyPostfix, HarmonyPriority(Priority.Last)]
+    public static void Postfix()
     {
-        [HarmonyPostfix, HarmonyPriority(Priority.Last)]
-        public static void Postfix()
-        {
-            CachedShipStatus.Destroy();
-			CompatModManager.Instance.RemoveMap();
-        }
+        CachedShipStatus.Destroy();
+	CompatModManager.Instance.RemoveMap();
     }
 }
