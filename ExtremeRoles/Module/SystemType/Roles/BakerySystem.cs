@@ -36,7 +36,6 @@ public sealed class BakerySystem : IExtremeSystemType
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
 		this.timer = reader.ReadSingle();
-
 	}
 
 	public void Detoriorate(float deltaTime)
@@ -49,7 +48,7 @@ public sealed class BakerySystem : IExtremeSystemType
 			this.isUnion = true;
 			organize();
 		}
-		if (aliveBakary.Count == 0 ||
+		if (this.aliveBakary.Count == 0 ||
 			MeetingHud.Instance != null) { return; }
 
 		this.timer += deltaTime;
