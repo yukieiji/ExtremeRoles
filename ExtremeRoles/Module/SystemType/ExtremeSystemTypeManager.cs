@@ -50,6 +50,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	private const byte callId = 35;
 	private static ExtremeSystemTypeManager? instance = null;
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> systems = new Dictionary<ExtremeSystemType, IExtremeSystemType>();
+	private readonly List<ExtremeSystemType> dirtySystem = new List<ExtremeSystemType>();
 
 	public ExtremeSystemTypeManager()
 		: base(ClassInjector.DerivedConstructorPointer<ExtremeSystemTypeManager>())
@@ -97,18 +98,25 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
-		foreach (var system in systems.Values)
+		int sysmtemNum = reader.ReadPackedInt32();
+		for (int i = 0; i < sysmtemNum; ++i)
 		{
-			system.Deserialize(reader, initialState);
+			ExtremeSystemType systemType = (ExtremeSystemType)reader.ReadByte();
+			this.systems[systemType].Deserialize(reader, initialState);
 		}
 	}
 
 	public void Detoriorate(float deltaTime)
 	{
-		foreach (var system in systems.Values)
+		this.dirtySystem.Clear();
+		foreach (var (systemTypes, system) in systems)
 		{
 			system.Detoriorate(deltaTime);
-			this.IsDirty = this.IsDirty || system.IsDirty;
+			if (system.IsDirty)
+			{
+				this.IsDirty = this.IsDirty || system.IsDirty;
+				this.dirtySystem.Add(systemTypes);
+			}
 		}
 	}
 
@@ -151,9 +159,11 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
-		foreach (var system in systems.Values)
+		writer.WritePacked(this.dirtySystem.Count);
+		foreach (var systemType in this.dirtySystem)
 		{
-			system.Serialize(writer, initialState);
+			writer.Write((byte)systemType);
+			this.systems[systemType].Serialize(writer, initialState);
 		}
 	}
 
