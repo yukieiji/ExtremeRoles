@@ -40,13 +40,10 @@ public static class MapCountOverlayUpdatePatch
             return true;
         }
 
-        var admin = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
+        var supervisor = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
             Roles.Solo.Crewmate.Supervisor>();
 
-		if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
-        {
-            return true;
-        }
+		bool isSupervisorEnhance = supervisor is not null && supervisor.Boosted && supervisor.IsAbilityActive;
 
         __instance.timer += Time.deltaTime;
 		if (__instance.timer < 0.1f)
@@ -129,7 +126,10 @@ public static class MapCountOverlayUpdatePatch
                         }
                     }
                 }
-				PlayerColor.Add(counterArea.RoomType, addColor);
+				if (isSupervisorEnhance)
+				{
+					PlayerColor.Add(counterArea.RoomType, addColor);
+				}
 				counterArea.UpdateCount(showNum);
             }
             else
