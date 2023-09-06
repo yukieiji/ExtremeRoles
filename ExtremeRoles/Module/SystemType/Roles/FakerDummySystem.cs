@@ -16,7 +16,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
-using Epic.OnlineServices.Presence;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 

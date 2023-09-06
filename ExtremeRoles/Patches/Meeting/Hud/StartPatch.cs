@@ -8,6 +8,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -19,6 +20,7 @@ public static class MeetingHudStartPatch
 	public static void Postfix()
 	{
 		ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
+		ExtremeSystemTypeManager.Instance.RepairDamage(null, (byte)ResetTiming.MeetingStart);
 		PlayerHeler.ResetTarget();
 		MeetingHudSelectPatch.SetSelectBlock(false);
 
