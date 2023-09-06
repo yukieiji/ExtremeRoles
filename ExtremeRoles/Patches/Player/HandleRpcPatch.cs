@@ -262,13 +262,6 @@ public static class PlayerControlHandleRpcPatch
 					painterPlayerId,
 					isRandomModeMessage);
 				break;
-			case RPCOperator.Command.FakerCreateDummy:
-				byte fakerPlayerId = reader.ReadByte();
-				byte dummyTargetId = reader.ReadByte();
-				byte fakerOps = reader.ReadByte();
-				RPCOperator.FakerCreateDummy(
-					fakerPlayerId, dummyTargetId, fakerOps);
-				break;
 			case RPCOperator.Command.OverLoaderSwitchAbility:
 				byte overLoaderPlayerId = reader.ReadByte();
 				byte activate = reader.ReadByte();

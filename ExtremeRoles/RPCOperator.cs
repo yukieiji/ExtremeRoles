@@ -67,7 +67,6 @@ public static class RPCOperator
         AssasinVoteFor,
         CarrierAbility,
         PainterPaintBody,
-        FakerCreateDummy,
         OverLoaderSwitchAbility,
         CrackerCrackDeadBody,
         MeryAbility,
@@ -606,12 +605,6 @@ public static class RPCOperator
     {
         Roles.Solo.Impostor.Painter.PaintDeadBody(
             targetId, isRandomModeMessage);
-    }
-    public static void FakerCreateDummy(
-        byte callerId, byte targetId, byte ops)
-    {
-        Roles.Solo.Impostor.Faker.CreateDummy(
-            callerId, targetId, ops);
     }
     public static void OverLoaderSwitchAbility(
         byte callerId, byte activate)

@@ -16,7 +16,7 @@ namespace ExtremeRoles.Module.SystemType;
 
 public enum ExtremeSystemType : byte
 {
-
+	FakerDummy
 }
 
 public enum ResetTiming : byte
@@ -29,10 +29,23 @@ public enum ResetTiming : byte
 [Il2CppRegister(new Type[] { typeof(ISystemType) })]
 public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemType
 {
+	public static ExtremeSystemTypeManager Instance
+	{
+		get
+		{
+			if (instance == null)
+			{
+				instance = new ExtremeSystemTypeManager();
+			}
+			return instance;
+		}
+	}
+
 	public static SystemTypes Type => (SystemTypes)60;
 
 	public bool IsDirty { get; private set; }
 
+	private static ExtremeSystemTypeManager? instance = null;
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> systems = new Dictionary<ExtremeSystemType, IExtremeSystemType>();
 
 	public ExtremeSystemTypeManager()
@@ -47,6 +60,15 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public static void ModInitialize()
 	{
 		SystemTypeHelpers.AllTypes = SystemTypeHelpers.AllTypes.Concat(new List<SystemTypes> { Type }).ToArray();
+	}
+
+	public static void RpcUpdateSystem(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
+	{
+		MessageWriter messageWriter = MessageWriter.Get(SendOption.Reliable);
+		messageWriter.Write((byte)targetSystem);
+		writeAction.Invoke(messageWriter);
+		ShipStatus.Instance.RpcUpdateSystem(Type, messageWriter);
+		messageWriter.Recycle();
 	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
@@ -66,7 +88,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	public bool TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
+	public void TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
 		=> this.systems.TryAdd(systemType, system);
 
 	public void Add(ExtremeSystemType systemType, IExtremeSystemType system)
@@ -87,15 +109,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		{
 			system.Reset(timing, resetPlayer);
 		}
-	}
-
-	public void RpcUpdateSystem(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
-	{
-		MessageWriter messageWriter = MessageWriter.Get(SendOption.Reliable);
-		messageWriter.Write((byte)targetSystem);
-		writeAction.Invoke(messageWriter);
-		ShipStatus.Instance.RpcUpdateSystem(Type, messageWriter);
-		messageWriter.Recycle();
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)

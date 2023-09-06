@@ -24,7 +24,8 @@ public static class ShipStatusOnEnablePatch
 	[HarmonyPostfix, HarmonyPriority(Priority.Last)]
 	public static void Postfix(ShipStatus __instance)
 	{
-		__instance.Systems.Add(ExtremeSystemTypeManager.Type, new ExtremeSystemTypeManager().Cast<ISystemType>());
+		var system = ExtremeSystemTypeManager.Instance;
+		__instance.Systems.Add(ExtremeSystemTypeManager.Type, system.Cast<ISystemType>());
 	}
 }
 
@@ -49,6 +50,7 @@ public static class ShipStatusOnDestroyPatch
     public static void Postfix()
     {
         CachedShipStatus.Destroy();
-	CompatModManager.Instance.RemoveMap();
-    }
+		CompatModManager.Instance.RemoveMap();
+		ExtremeSystemTypeManager.Instance.Reset();
+	}
 }
