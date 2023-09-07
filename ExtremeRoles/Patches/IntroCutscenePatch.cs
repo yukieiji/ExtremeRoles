@@ -249,9 +249,8 @@ public static class IntroCutsceneOnDestroyPatch
             {
                 foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
                 {
-                    if (player == null) { continue; }
-
-                    if (!player.GetComponent<DummyBehaviour>().enabled) { continue; }
+                    if (player == null ||
+						!player.GetComponent<DummyBehaviour>().enabled) { continue; }
 
                     var role = ExtremeRoleManager.GameRole[player.PlayerId];
                     if (!role.HasTask())
@@ -274,22 +273,16 @@ public static class IntroCutsceneOnDestroyPatch
 		InfoOverlay.Instance.InitializeToGame();
 
         var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-
-        var setUpRole = localRole as IRoleSpecialSetUp;
-        if (setUpRole != null)
+        if (localRole is IRoleSpecialSetUp setUpRole)
         {
             setUpRole.IntroEndSetUp();
         }
 
-        var multiAssignRole = localRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
+        if (localRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is IRoleSpecialSetUp multiSetUpRole)
         {
-            setUpRole = multiAssignRole.AnotherRole as IRoleSpecialSetUp;
-            if (setUpRole != null)
-            {
-                setUpRole.IntroEndSetUp();
-            }
-        }
+			multiSetUpRole.IntroEndSetUp();
+		}
         disableMapObject();
     }
 
