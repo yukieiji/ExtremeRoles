@@ -18,400 +18,384 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.SystemType;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches;
+
+public static class IntroCutscenceHelper
 {
-    public static class IntroCutscenceHelper
+
+    public static void SetupIntroTeam(
+        IntroCutscene __instance)
     {
+        var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-        public static void SetupIntroTeam(
-            IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+        if (role.IsNeutral())
         {
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-
-            if (role.IsNeutral())
-            {
-                __instance.BackgroundBar.material.color = ColorPalette.NeutralColor;
-                __instance.TeamTitle.text = Translation.GetString("Neutral");
-                __instance.TeamTitle.color = ColorPalette.NeutralColor;
-                __instance.ImpostorText.text = Translation.GetString("neutralIntro");
-            }
-            else if (role.Id == ExtremeRoleId.Xion)
-            {
-                __instance.BackgroundBar.material.color = ColorPalette.XionBlue;
-                __instance.TeamTitle.text = Translation.GetString("yourHost");
-                __instance.TeamTitle.color = ColorPalette.XionBlue;
-                __instance.ImpostorText.text = Translation.GetString("youAreNewRuleEditor");
-            }
+            __instance.BackgroundBar.material.color = ColorPalette.NeutralColor;
+            __instance.TeamTitle.text = Translation.GetString("Neutral");
+            __instance.TeamTitle.color = ColorPalette.NeutralColor;
+            __instance.ImpostorText.text = Translation.GetString("neutralIntro");
         }
-
-        public static void SetupIntroTeamIcons(
-            IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+        else if (role.Id == ExtremeRoleId.Xion)
         {
-
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-
-            // Intro solo teams
-            if (role.IsNeutral() || role.Id == ExtremeRoleId.Xion)
-            {
-                var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                soloTeam.Add(CachedPlayerControl.LocalPlayer);
-                yourTeam = soloTeam;
-            }
-        }
-
-        public static void SetupPlayerPrefab(IntroCutscene __instance)
-        {
-            Prefab.PlayerPrefab = Object.Instantiate(
-                __instance.PlayerPrefab);
-            Object.DontDestroyOnLoad(Prefab.PlayerPrefab);
-            Prefab.PlayerPrefab.name = "poolablePlayerPrefab";
-            Prefab.PlayerPrefab.gameObject.SetActive(false);
-        }
-
-        public static void SetupRole()
-        {
-            var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-
-            var setUpRole = localRole as IRoleSpecialSetUp;
-            if (setUpRole != null)
-            {
-                setUpRole.IntroBeginSetUp();
-            }
-
-            var multiAssignRole = localRole as Roles.API.MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                setUpRole = multiAssignRole.AnotherRole as IRoleSpecialSetUp;
-                if (setUpRole != null)
-                {
-                    setUpRole.IntroBeginSetUp();
-                }
-            }
-        }
-
-    }
-
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
-    public static class IntroCutsceneBeginImpostorPatch
-    {
-        public static void Prefix(
-            IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
-        {
-            IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref yourTeam);
-            IntroCutscenceHelper.SetupPlayerPrefab(__instance);
-        }
-
-        public static void Postfix(
-            IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
-        {
-            IntroCutscenceHelper.SetupIntroTeam(__instance, ref yourTeam);
-            IntroCutscenceHelper.SetupRole();
-        }
-
-    }
-
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
-    public static class BeginCrewmatePatch
-    {
-        public static void Prefix(
-            IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
-        {
-            IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref teamToDisplay);
-            IntroCutscenceHelper.SetupPlayerPrefab(__instance);
-        }
-
-        public static void Postfix(
-            IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
-        {
-            IntroCutscenceHelper.SetupIntroTeam(__instance, ref teamToDisplay);
-            IntroCutscenceHelper.SetupRole();
-        }
-    }
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
-    public static class IntroCutsceneCoBeginPatch
-    {
-        public static bool Prefix(
-            IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
-        {
-            IIntroRunner runnner = ExtremeGameModeManager.Instance.GetIntroRunner();
-            if (runnner == null) { return true; }
-
-            __result = runnner.CoRunIntro(__instance).WrapToIl2Cpp();
-            return false;
+            __instance.BackgroundBar.material.color = ColorPalette.XionBlue;
+            __instance.TeamTitle.text = Translation.GetString("yourHost");
+            __instance.TeamTitle.color = ColorPalette.XionBlue;
+            __instance.ImpostorText.text = Translation.GetString("youAreNewRuleEditor");
         }
     }
 
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
-    public static class IntroCutsceneSetUpRoleTextPatch
+    public static void SetupIntroTeamIcons(
+        ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
     {
-        private static IEnumerator showRoleText(
-            SingleRoleBase role,
-            IntroCutscene __instance)
+
+        var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+        // Intro solo teams
+        if (role.IsNeutral() || role.Id == ExtremeRoleId.Xion)
         {
-            __instance.YouAreText.color = role.GetNameColor();
-            __instance.RoleText.text = role.GetColoredRoleName();
-            __instance.RoleText.color = role.GetNameColor();
-            __instance.RoleBlurbText.text = role.GetIntroDescription();
-            __instance.RoleBlurbText.color = role.GetNameColor();
+            var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+            soloTeam.Add(CachedPlayerControl.LocalPlayer);
+            yourTeam = soloTeam;
+        }
+    }
 
-            if (role.Id != ExtremeRoleId.Lover ||
-                role.Id != ExtremeRoleId.Sharer ||
-                role.Id != ExtremeRoleId.Buddy)
+    public static void SetupPlayerPrefab(IntroCutscene __instance)
+    {
+        Prefab.PlayerPrefab = Object.Instantiate(
+            __instance.PlayerPrefab);
+        Object.DontDestroyOnLoad(Prefab.PlayerPrefab);
+        Prefab.PlayerPrefab.name = "poolablePlayerPrefab";
+        Prefab.PlayerPrefab.gameObject.SetActive(false);
+    }
+
+    public static void SetupRole()
+    {
+		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+		if (localRole is IRoleSpecialSetUp setUpRole)
+		{
+			setUpRole.IntroBeginSetUp();
+		}
+
+		if (localRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is IRoleSpecialSetUp multiSetUpRole)
+		{
+			multiSetUpRole.IntroBeginSetUp();
+		}
+    }
+}
+
+[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
+public static class IntroCutsceneBeginImpostorPatch
+{
+    public static void Prefix(
+        IntroCutscene __instance,
+        ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+    {
+        IntroCutscenceHelper.SetupIntroTeamIcons(ref yourTeam);
+        IntroCutscenceHelper.SetupPlayerPrefab(__instance);
+    }
+
+    public static void Postfix(
+        IntroCutscene __instance,
+        ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+    {
+        IntroCutscenceHelper.SetupIntroTeam(__instance);
+        IntroCutscenceHelper.SetupRole();
+    }
+
+}
+
+[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
+public static class BeginCrewmatePatch
+{
+    public static void Prefix(
+        IntroCutscene __instance,
+        ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
+    {
+        IntroCutscenceHelper.SetupIntroTeamIcons(ref teamToDisplay);
+        IntroCutscenceHelper.SetupPlayerPrefab(__instance);
+    }
+
+    public static void Postfix(
+        IntroCutscene __instance,
+        ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
+    {
+        IntroCutscenceHelper.SetupIntroTeam(__instance);
+        IntroCutscenceHelper.SetupRole();
+    }
+}
+[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
+public static class IntroCutsceneCoBeginPatch
+{
+    public static bool Prefix(
+        IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
+    {
+        IIntroRunner runnner = ExtremeGameModeManager.Instance.GetIntroRunner();
+        if (runnner == null) { return true; }
+
+        __result = runnner.CoRunIntro(__instance).WrapToIl2Cpp();
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
+public static class IntroCutsceneSetUpRoleTextPatch
+{
+    private static IEnumerator showRoleText(
+        SingleRoleBase role,
+        IntroCutscene __instance)
+    {
+        __instance.YouAreText.color = role.GetNameColor();
+        __instance.RoleText.text = role.GetColoredRoleName();
+        __instance.RoleText.color = role.GetNameColor();
+        __instance.RoleBlurbText.text = role.GetIntroDescription();
+        __instance.RoleBlurbText.color = role.GetNameColor();
+
+        if (role.Id != ExtremeRoleId.Lover ||
+            role.Id != ExtremeRoleId.Sharer ||
+            role.Id != ExtremeRoleId.Buddy)
+        {
+            if (role is MultiAssignRoleBase multiAssignRole &&
+				multiAssignRole.AnotherRole != null)
             {
-                if (role is MultiAssignRoleBase)
-                {
-                    if (((MultiAssignRoleBase)role).AnotherRole != null)
-                    {
-                        __instance.RoleBlurbText.fontSize *= 0.45f;
-                    }
-                }
+				__instance.RoleBlurbText.fontSize *= 0.45f;
+			}
 
 
-                if (role.IsImpostor())
-                {
-                    __instance.RoleBlurbText.text +=
-                        $"\n{Translation.GetString("impostorIntroText")}";
-                }
-                else if (role.IsCrewmate() && role.HasTask())
-                {
-                    __instance.RoleBlurbText.text +=
-                        $"\n{Translation.GetString("crewIntroText")}";
-                }
-            }
-
-            SoundManager.Instance.PlaySound(
-                CachedPlayerControl.LocalPlayer.Data.Role.IntroSound, false, 1f);
-
-            __instance.YouAreText.gameObject.SetActive(true);
-            __instance.RoleText.gameObject.SetActive(true);
-            __instance.RoleBlurbText.gameObject.SetActive(true);
-
-            if (__instance.ourCrewmate == null)
+            if (role.IsImpostor())
             {
-                __instance.ourCrewmate = __instance.CreatePlayer(
-                    0, 1, CachedPlayerControl.LocalPlayer.Data, false);
-                __instance.ourCrewmate.gameObject.SetActive(false);
+                __instance.RoleBlurbText.text +=
+                    $"\n{Translation.GetString("impostorIntroText")}";
             }
-            __instance.ourCrewmate.gameObject.SetActive(true);
-            __instance.ourCrewmate.transform.localPosition = new Vector3(0f, -1.05f, -18f);
-            __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
+            else if (role.IsCrewmate() && role.HasTask())
+            {
+                __instance.RoleBlurbText.text +=
+                    $"\n{Translation.GetString("crewIntroText")}";
+            }
+        }
 
-            yield return new WaitForSeconds(2.5f);
+        SoundManager.Instance.PlaySound(
+            CachedPlayerControl.LocalPlayer.Data.Role.IntroSound, false, 1f);
 
-            __instance.YouAreText.gameObject.SetActive(false);
-            __instance.RoleText.gameObject.SetActive(false);
-            __instance.RoleBlurbText.gameObject.SetActive(false);
+        __instance.YouAreText.gameObject.SetActive(true);
+        __instance.RoleText.gameObject.SetActive(true);
+        __instance.RoleBlurbText.gameObject.SetActive(true);
+
+        if (__instance.ourCrewmate == null)
+        {
+            __instance.ourCrewmate = __instance.CreatePlayer(
+                0, 1, CachedPlayerControl.LocalPlayer.Data, false);
             __instance.ourCrewmate.gameObject.SetActive(false);
-
-            yield break;
         }
+        __instance.ourCrewmate.gameObject.SetActive(true);
+        __instance.ourCrewmate.transform.localPosition = new Vector3(0f, -1.05f, -18f);
+        __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
 
-        public static bool Prefix(
-            IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
-        {
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-            if (role.IsVanillaRole()) { return true; }
-            var awakeVanillaRole = role as IRoleAwake<RoleTypes>;
-            if (awakeVanillaRole != null && !awakeVanillaRole.IsAwake)
-            {
-                return true;
-            }
+        yield return new WaitForSeconds(2.5f);
 
-            __result = showRoleText(role, __instance).WrapToIl2Cpp();
-            return false;
-        }
+        __instance.YouAreText.gameObject.SetActive(false);
+        __instance.RoleText.gameObject.SetActive(false);
+        __instance.RoleBlurbText.gameObject.SetActive(false);
+        __instance.ourCrewmate.gameObject.SetActive(false);
+
+        yield break;
     }
 
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-    public static class IntroCutsceneOnDestroyPatch
+    public static bool Prefix(
+        IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
     {
-        public static void Prefix()
+        var role = ExtremeRoleManager.GetLocalPlayerRole();
+        if (role.IsVanillaRole()) { return true; }
+        var awakeVanillaRole = role as IRoleAwake<RoleTypes>;
+        if (awakeVanillaRole != null && !awakeVanillaRole.IsAwake)
         {
-            if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
+            return true;
+        }
+
+        __result = showRoleText(role, __instance).WrapToIl2Cpp();
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+public static class IntroCutsceneOnDestroyPatch
+{
+    public static void Prefix()
+    {
+		var system = ExtremeSystemTypeManager.Instance;
+		CachedShipStatus.Instance.Systems.Add(ExtremeSystemTypeManager.Type, system.Cast<ISystemType>());
+
+		if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
+        {
+            Xion.XionPlayerToGhostLayer();
+            Xion.RemoveXionPlayerToAllPlayerControl();
+
+            if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame)
             {
-                Xion.XionPlayerToGhostLayer();
-                Xion.RemoveXionPlayerToAllPlayerControl();
-
-                if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame)
+                foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
                 {
-                    foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+                    if (player == null ||
+						!player.GetComponent<DummyBehaviour>().enabled) { continue; }
+
+                    var role = ExtremeRoleManager.GameRole[player.PlayerId];
+                    if (!role.HasTask())
                     {
-                        if (player == null) { continue; }
+                        continue;
+                    }
 
-                        if (!player.GetComponent<DummyBehaviour>().enabled) { continue; }
+                    GameData.PlayerInfo playerInfo = player.Data;
 
-                        var role = ExtremeRoleManager.GameRole[player.PlayerId];
-                        if (!role.HasTask())
-                        {
-                            continue;
-                        }
-
-                        GameData.PlayerInfo playerInfo = player.Data;
-
-                        var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
-                        if (totalTask == 0)
-                        {
-                            GameSystem.SetTask(playerInfo,
-                                GameSystem.GetRandomCommonTaskId());
-                        }
+                    var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
+                    if (totalTask == 0)
+                    {
+                        GameSystem.SetTask(playerInfo,
+                            GameSystem.GetRandomCommonTaskId());
                     }
                 }
             }
-
-			InfoOverlay.Instance.InitializeToGame();
-
-            var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-
-            var setUpRole = localRole as IRoleSpecialSetUp;
-            if (setUpRole != null)
-            {
-                setUpRole.IntroEndSetUp();
-            }
-
-            var multiAssignRole = localRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                setUpRole = multiAssignRole.AnotherRole as IRoleSpecialSetUp;
-                if (setUpRole != null)
-                {
-                    setUpRole.IntroEndSetUp();
-                }
-            }
-            disableMapObject();
         }
 
-        private static void disableMapObject()
+		InfoOverlay.Instance.InitializeToGame();
+
+        var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+        if (localRole is IRoleSpecialSetUp setUpRole)
         {
-            HashSet<string> disableObjectName = new HashSet<string>();
+            setUpRole.IntroEndSetUp();
+        }
 
-            var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
+        if (localRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is IRoleSpecialSetUp multiSetUpRole)
+        {
+			multiSetUpRole.IntroEndSetUp();
+		}
+        disableMapObject();
+    }
 
-            bool isRemoveAdmin = shipOpt.Admin.DisableAdmin;
-            bool isRemoveSecurity = shipOpt.Security.DisableSecurity;
-            bool isRemoveVital = shipOpt.Vital.DisableVital;
+    private static void disableMapObject()
+    {
+        HashSet<string> disableObjectName = new HashSet<string>();
 
-            if (CompatModManager.Instance.TryGetModMap(out var modMap))
+        var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
+
+        bool isRemoveAdmin = shipOpt.Admin.DisableAdmin;
+        bool isRemoveSecurity = shipOpt.Security.DisableSecurity;
+        bool isRemoveVital = shipOpt.Vital.DisableVital;
+
+        if (CompatModManager.Instance.TryGetModMap(out var modMap))
+        {
+            if (isRemoveAdmin)
             {
-                if (isRemoveAdmin)
-                {
-                    disableObjectName.UnionWith(
-                        modMap!.GetSystemObjectName(
-                            Compat.Interface.SystemConsoleType.Admin));
-                }
-                if (isRemoveSecurity)
-                {
-                    disableObjectName.UnionWith(
-                        modMap!.GetSystemObjectName(
-                            Compat.Interface.SystemConsoleType.SecurityCamera));
-                }
-                if (isRemoveVital)
-                {
-                    disableObjectName.UnionWith(
-                        modMap!.GetSystemObjectName(
-                            Compat.Interface.SystemConsoleType.Vital));
-                }
+                disableObjectName.UnionWith(
+                    modMap!.GetSystemObjectName(
+                        Compat.Interface.SystemConsoleType.Admin));
             }
-            else
+            if (isRemoveSecurity)
             {
-                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                    ByteOptionNames.MapId))
-                {
-                    case 0:
-                        if (isRemoveAdmin)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.SkeldAdmin);
-                        }
-                        if (isRemoveSecurity)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.SkeldSecurity);
-                        }
-                        break;
-                    case 1:
-                        if (isRemoveAdmin)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.MiraHqAdmin);
-                        }
-                        if (isRemoveSecurity)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.MiraHqSecurity);
-                        }
-                        break;
-                    case 2:
-                        if (isRemoveAdmin)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.PolusAdmin1);
-                            disableObjectName.Add(
-                                GameSystem.PolusAdmin2);
-                        }
-                        if (isRemoveSecurity)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.PolusSecurity);
-                        }
-                        if (isRemoveVital)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.PolusVital);
-                        }
-                        break;
-                    case 4:
-                        if (isRemoveAdmin)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.AirShipArchiveAdmin);
-                            disableObjectName.Add(
-                                GameSystem.AirShipCockpitAdmin);
-                        }
-                        else
-                        {
-                            switch (shipOpt.Admin.AirShipEnable)
-                            {
-                                case AirShipAdminMode.ModeCockpitOnly:
-                                    disableObjectName.Add(
-                                        GameSystem.AirShipArchiveAdmin);
-                                    break;
-                                case AirShipAdminMode.ModeArchiveOnly:
-                                    disableObjectName.Add(
-                                        GameSystem.AirShipCockpitAdmin);
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        if (isRemoveSecurity)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.AirShipSecurity);
-                        }
-                        if (isRemoveVital)
-                        {
-                            disableObjectName.Add(
-                                GameSystem.AirShipVital);
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                disableObjectName.UnionWith(
+                    modMap!.GetSystemObjectName(
+                        Compat.Interface.SystemConsoleType.SecurityCamera));
             }
+            if (isRemoveVital)
+            {
+                disableObjectName.UnionWith(
+                    modMap!.GetSystemObjectName(
+                        Compat.Interface.SystemConsoleType.Vital));
+            }
+        }
+        else
+        {
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
+            {
+                case 0:
+                    if (isRemoveAdmin)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.SkeldAdmin);
+                    }
+                    if (isRemoveSecurity)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.SkeldSecurity);
+                    }
+                    break;
+                case 1:
+                    if (isRemoveAdmin)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.MiraHqAdmin);
+                    }
+                    if (isRemoveSecurity)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.MiraHqSecurity);
+                    }
+                    break;
+                case 2:
+                    if (isRemoveAdmin)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.PolusAdmin1);
+                        disableObjectName.Add(
+                            GameSystem.PolusAdmin2);
+                    }
+                    if (isRemoveSecurity)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.PolusSecurity);
+                    }
+                    if (isRemoveVital)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.PolusVital);
+                    }
+                    break;
+                case 4:
+                    if (isRemoveAdmin)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.AirShipArchiveAdmin);
+                        disableObjectName.Add(
+                            GameSystem.AirShipCockpitAdmin);
+                    }
+                    else
+                    {
+                        switch (shipOpt.Admin.AirShipEnable)
+                        {
+                            case AirShipAdminMode.ModeCockpitOnly:
+                                disableObjectName.Add(
+                                    GameSystem.AirShipArchiveAdmin);
+                                break;
+                            case AirShipAdminMode.ModeArchiveOnly:
+                                disableObjectName.Add(
+                                    GameSystem.AirShipCockpitAdmin);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    if (isRemoveSecurity)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.AirShipSecurity);
+                    }
+                    if (isRemoveVital)
+                    {
+                        disableObjectName.Add(
+                            GameSystem.AirShipVital);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
 
-            foreach (string objectName in disableObjectName)
-            {
-                GameSystem.DisableMapModule(objectName);
-            }
+        foreach (string objectName in disableObjectName)
+        {
+            GameSystem.DisableMapModule(objectName);
         }
     }
 }

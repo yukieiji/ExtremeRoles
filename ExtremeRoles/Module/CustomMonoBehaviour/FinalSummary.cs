@@ -8,7 +8,6 @@ using Il2CppInterop.Runtime.Attributes;
 using TMPro;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -152,7 +151,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				this.curPage = (this.curPage + 1) % this.maxPage;
 				updateShowText();
 			}
-			if (Input.GetKeyDown(KeyCode.LeftShift))
+			if (Key.IsShiftDown())
 			{
 				if (this.isHide)
 				{
@@ -162,7 +161,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				else
 				{
 					this.isHide = true;
-					this.showText.text = Translation.GetString("liftShiftShowSummary");
+					this.showText.text = Translation.GetString("shiftShowSummary");
 				}
 			}
 		}
@@ -227,8 +226,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 								tagColor[index], randomTag[index]);
 						}
 
-						tag = string.Concat(
-							tag, " + ", anotherTag);
+						tag = $"{tag} + {anotherTag}";
 
 					}
 				}
@@ -252,10 +250,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			foreach (StringBuilder builder in finalSummary.Values)
 			{
 				++page;
-				builder.AppendLine("");
+				builder.AppendLine();
 				builder.AppendLine(string.Format(
 					Translation.GetString("tabMoreSummary"), page, allSummary));
-				builder.AppendLine(Translation.GetString("liftShiftHideSummary"));
+				builder.AppendLine(Translation.GetString("shiftHideSummary"));
 				this.summaryText.Add(builder.ToString());
 			}
 			this.maxPage = page;

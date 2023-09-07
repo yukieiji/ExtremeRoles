@@ -11,6 +11,8 @@ using BepInEx.Configuration;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.CustomOption;
 
 public enum OptionTab : byte
@@ -50,7 +52,7 @@ public interface IOptionInfo
 	public OptionTab Tab { get; }
 	public IOptionInfo Parent { get; }
 	public List<IOptionInfo> Children { get; }
-	public OptionBehaviour Body { get; }
+	public OptionBehaviour? Body { get; }
 
 	public bool IsActive();
 	public void SetHeaderTo(bool enable);
@@ -88,9 +90,9 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 	public int CurSelection { get; private set; }
 	public bool IsHidden { get; private set; }
 	public bool IsHeader { get; private set; }
-	public List<IOptionInfo> Children { get; private set; }
-	public OptionBehaviour Body { get; private set; }
+	public OptionBehaviour? Body { get; private set; }
 
+	public List<IOptionInfo> Children { get; init; }
 	public OptionTab Tab { get; init; }
 	public IOptionInfo Parent { get; init; }
 	public int Id { get; init; }
@@ -105,14 +107,13 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 	private bool enableInvert = false;
 	private int defaultSelection = 0;
 
-	private ConfigEntry<int> entry = null;
-	private List<IValueOption<OutType>> withUpdateOption = new List<IValueOption<OutType>>();
-	private IOptionInfo forceEnableCheckOption = null;
-	private OptionUnit format = OptionUnit.None;
+	private ConfigEntry<int>? entry = null;
+	private string formatStr = string.Empty;
 
-	private const string IndentStr = "    ";
+	private readonly List<IValueOption<OutType>> withUpdateOption = new List<IValueOption<OutType>>();
+	private readonly IOptionInfo? forceEnableCheckOption = null;
 
-	private static Regex nameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
+	private static readonly Regex nameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
 
 	public CustomOptionBase(
 		int id,
@@ -137,7 +138,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 		this.Id = id;
 		this.Name = name;
 
-		this.format = format;
+		this.formatStr = format == OptionUnit.None ? string.Empty : format.ToString();
 		this.defaultSelection = Mathf.Clamp(index, 0, index);
 
 		this.IsHeader = isHeader;
@@ -157,13 +158,16 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 		if (id > 0)
 		{
 			bindConfig();
-			this.CurSelection = Mathf.Clamp(this.entry.Value, 0, selections.Length - 1);
+			this.CurSelection = Mathf.Clamp(this.entry!.Value, 0, selections.Length - 1);
 		}
 
-		Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
+		Logging.Debug($"Register Options:  {this}");
 
 		OptionManager.Instance.AddOption(this.Id, this);
 	}
+
+	public override string ToString()
+		=> $"ID:{this.Id} Name:{this.Name} CurValue:{this.GetValue()}";
 
 	public void AddToggleOptionCheckHook(StringNames targetOption)
 	{
@@ -180,14 +184,11 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
 	public string GetTranslatedValue()
 	{
-		string sel = this.Option[this.CurSelection].ToString();
-		if (this.format != OptionUnit.None)
-		{
-			return string.Format(
-				Translation.GetString(
-					this.format.ToString()), sel);
-		}
-		return Translation.GetString(sel);
+		string? sel = this.Option[this.CurSelection].ToString();
+
+		return string.IsNullOrEmpty(this.formatStr) ?
+			Translation.GetString(sel) :
+			string.Format(Translation.GetString(this.formatStr), sel);
 	}
 
 	public bool IsActive()
@@ -276,7 +277,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 	{
 		bindConfig();
 		this.UpdateSelection(Mathf.Clamp(
-			this.entry.Value, 0,
+			this.entry!.Value, 0,
 			this.ValueCount - 1));
 	}
 
@@ -292,7 +293,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
 	public void SetOptionUnit(OptionUnit unit)
 	{
-		this.format = unit;
+		this.formatStr = unit.ToString();
 	}
 
 	public string ToHudString() =>
@@ -328,18 +329,14 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 		IOptionInfo parentOption,
 		int prefixIndentCount)
 	{
-		string prefixIndent = prefixIndentCount != 0 ?
-			string.Concat(Enumerable.Repeat(IndentStr, prefixIndentCount)) :
-			string.Empty;
-
 		foreach (var child in parentOption.Children)
 		{
 			string childOptionStr = child.ToHudString();
 
 			if (childOptionStr != string.Empty)
 			{
-				builder.AppendLine(
-					string.Concat(prefixIndent, childOptionStr));
+				builder.Append(' ', prefixIndentCount * 4);
+				builder.AppendLine(childOptionStr);
 			}
 
 			addChildrenOptionHudString(ref builder, child, prefixIndentCount + 1);

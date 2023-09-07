@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using BepInEx.Unity.IL2CPP.Utils;
+
 using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 #nullable enable
 
@@ -44,7 +45,7 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 		lock (_executionQueue)
 		{
 			_executionQueue.Enqueue(() => {
-				StartCoroutine(action.WrapToIl2Cpp());
+				this.StartCoroutine(action);
 			});
 		}
 	}
@@ -56,7 +57,7 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 	[HideFromIl2Cpp]
 	public void Enqueue(Action action)
 	{
-		Enqueue(ActionWrapper(action));
+		this.Enqueue(this.ActionWrapper(action));
 	}
 
 	/// <summary>
@@ -82,7 +83,7 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 			}
 		}
 
-		Enqueue(ActionWrapper(WrappedAction));
+		this.Enqueue(this.ActionWrapper(WrappedAction));
 		return tcs.Task;
 	}
 

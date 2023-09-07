@@ -37,7 +37,7 @@ public static class DebugTool
             }
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.F2))
+        if (Key.IsShift() && Input.GetKeyDown(KeyCode.F2))
         {
             Logging.Debug("Set Wide Resolution");
             ResolutionManager.SetResolution(1680, 720, false);

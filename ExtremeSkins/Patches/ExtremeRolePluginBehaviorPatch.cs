@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using ExtremeRoles;
+using ExtremeRoles.Helper;
 using ExtremeSkins.Patches.AmongUs;
 
 namespace ExtremeSkins.Patches
@@ -13,7 +14,7 @@ namespace ExtremeSkins.Patches
     {
         public static void Postfix()
         {
-            if (Input.GetKey(KeyCode.LeftAlt) &&
+            if (Key.IsAltDown() &&
                 Input.GetKeyDown(KeyCode.F12))
             {
                 CreatorModeManager.Instance.SwitchMode();

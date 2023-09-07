@@ -14,7 +14,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
-
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles;
 
@@ -73,5 +73,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
             System.Reflection.Assembly.GetAssembly(this.GetType()));
 
         Loader.LoadCommonAsset();
+
+		ExtremeSystemTypeManager.ModInitialize();
     }
 }

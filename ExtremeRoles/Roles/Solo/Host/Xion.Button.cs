@@ -170,7 +170,7 @@ public sealed partial class Xion
             GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
             if (player == null || player.Disconnected) { return; }
 
-            if (Input.GetKey(ops))
+            if (Key.IsAltDown())
             {
                 if (player.IsDead)
                 {

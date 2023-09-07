@@ -2,7 +2,6 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -78,7 +77,7 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
             break;
         }
     }
-    
+
     public void CreateAbility()
     {
 
@@ -98,7 +97,7 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
             this.paintDistance);
 
         this.Button.Behavior.SetButtonImage(
-            Input.GetKey(KeyCode.LeftShift) ?
+            Key.IsShift() ?
             this.randomColorPaintImage : this.transColorPaintImage);
 
         if (info != null)
@@ -121,7 +120,7 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
 
     public bool UseAbility()
     {
-        byte message = Input.GetKey(KeyCode.LeftShift) ? byte.MaxValue : byte.MinValue;
+        byte message = Key.IsShift() ? byte.MaxValue : byte.MinValue;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.PainterPaintBody))

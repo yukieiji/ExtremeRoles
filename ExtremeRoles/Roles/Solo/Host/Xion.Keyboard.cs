@@ -12,10 +12,6 @@ public sealed partial class Xion
 
     private const KeyCode reset = KeyCode.R;
 
-    private const KeyCode ops = KeyCode.LeftAlt;
-    private const KeyCode changeSpeed = KeyCode.LeftShift;
-    private const KeyCode cameraMod = KeyCode.LeftControl;
-
     private const KeyCode down = KeyCode.PageDown;
     private const KeyCode up = KeyCode.PageUp;
 
@@ -42,73 +38,73 @@ public sealed partial class Xion
     {
 
         // ゲーム終了
-        if (Input.GetKey(ops) &&
+        if (Key.IsAltDown() &&
             Input.GetKeyDown(endGame))
         {
             RpcForceEndGame();
         }
 
-        if (MeetingHud.Instance)
+
+		// 会議強制終了
+		if (MeetingHud.Instance &&
+			Key.IsAltDown() &&
+			Input.GetKeyDown(forceMeetingEnd))
         {
-            // 会議強制終了
-            if (Input.GetKey(ops) && Input.GetKeyDown(forceMeetingEnd))
-            {
-                MeetingHud.Instance.ForceSkipAll();
-            }
-            return;
+			MeetingHud.Instance.ForceSkipAll();
+			return;
         }
 
         // GUI非表示
-        if (Input.GetKey(ops) &&
+        if (Key.IsAltDown() &&
             Input.GetKeyDown(hideGUI))
         {
             this.isHideGUI = !this.isHideGUI;
         }
 
         // 高速移動
-        if (Input.GetKey(changeSpeed) &&
+        if (Key.IsShift() &&
             Input.GetKeyDown(up))
         {
             this.RpcSpeedUp();
         }
 
         // 低速移動
-        if (Input.GetKey(changeSpeed) &&
+        if (Key.IsShift() &&
             Input.GetKeyDown(down))
         {
             this.RpcSpeedDown();
         }
 
         // 移動速度リセット
-        if (Input.GetKey(changeSpeed) &&
+        if (Key.IsShift() &&
             Input.GetKeyDown(reset))
         {
             this.RpcResetSpeed();
         }
 
         // ズームイン
-        if (Input.GetKey(cameraMod) &&
+        if (Key.IsControlDown() &&
             Input.GetKeyDown(up))
         {
             this.cameraZoomIn();
         }
 
         // ズームアウト
-        if (Input.GetKey(cameraMod) &&
+        if (Key.IsControlDown() &&
             Input.GetKeyDown(down))
         {
             this.cameraZoomOut();
         }
 
         // カメラリセット
-        if (Input.GetKey(cameraMod) &&
+        if (Key.IsControlDown() &&
             Input.GetKeyDown(reset))
         {
             this.resetCamera();
         }
 
-        // カメラリセット
-        if (Input.GetKey(ops) &&
+        // ダミー召喚
+        if (Key.IsAltDown() &&
             Input.GetKeyDown(spawnDeadBody) &&
             isLocalGame())
         {
@@ -117,7 +113,7 @@ public sealed partial class Xion
 
 # if DEBUG
         // テスト用能力
-        if (Input.GetKey(ops) &&
+        if (Key.IsAltDown() &&
             Input.GetKeyDown(functionCall))
         {
             this.RpcTestAbilityCall();

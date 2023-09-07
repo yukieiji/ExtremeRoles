@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module;
@@ -21,7 +21,7 @@ public sealed class VoiceEngine : MonoBehaviour
     public bool IsWait { get; set; } = false;
 
     public static VoiceEngine? Instance { get; private set; }
-    
+
     [HideFromIl2Cpp]
     public ISpeakEngine? Engine { get; set; }
 
@@ -104,7 +104,7 @@ public sealed class VoiceEngine : MonoBehaviour
             string engineState = this.Engine.IsValid() ? "active" : "diactive";
             ExtremeVoiceEnginePlugin.Logger.LogInfo($"InitTo:{engineType}, status:{engineState}");
         }
-        
+
     }
 
     [HideFromIl2Cpp]
@@ -135,7 +135,7 @@ public sealed class VoiceEngine : MonoBehaviour
             textQueue.Count == 0) { return; }
 
         string text = textQueue.Dequeue();
-        StartCoroutine(coSpeek(text).WrapToIl2Cpp());
+        this.StartCoroutine(this.coSpeek(text));
     }
 
 

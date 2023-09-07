@@ -6,14 +6,13 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityModeSwitcher;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
-using BepInEx.Unity.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -37,7 +36,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.eatButton;
         set
         {
@@ -49,7 +48,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
     private PlayerControl tmpTarget;
     private PlayerControl targetPlayer;
     private GameData.PlayerInfo targetDeadBody;
-    
+
     private float range;
     private float deadBodyEatActiveCoolTimePenalty;
     private float killEatCoolTimePenalty;
@@ -107,7 +106,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
     public void HookMuderPlayer(
         PlayerControl source, PlayerControl target)
     {
-        if (MeetingHud.Instance || 
+        if (MeetingHud.Instance ||
             source.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId ||
             !this.isShowArrow) { return; }
 
@@ -141,10 +140,10 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
         bool hasDedBodyTarget = this.targetDeadBody != null;
 
         this.modeFactory.Switch(
-            !hasDedBodyTarget && hasPlayerTarget ? 
+            !hasDedBodyTarget && hasPlayerTarget ?
             EaterAbilityMode.Kill : EaterAbilityMode.DeadBody);
 
-        return this.IsCommonUse() && 
+        return this.IsCommonUse() &&
             (hasPlayerTarget || hasDedBodyTarget);
     }
 
@@ -264,12 +263,11 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
             if (!this.targetPlayer.Data.IsDead) { return; }
 
             FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
-                this.cleanDeadBodyOps(
-                    this.targetPlayer.PlayerId).WrapToIl2Cpp());
-            
+                this.cleanDeadBodyOps(this.targetPlayer.PlayerId));
+
             this.isActivated = true;
         }
-        
+
     }
 
     public bool IsAbilityCheck()
@@ -384,7 +382,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
         yield return null;
 
         Player.RpcCleanDeadBody(targetPlayerId);
-        
+
         this.targetPlayer = null;
 
         if (this.Button == null) { yield break; }

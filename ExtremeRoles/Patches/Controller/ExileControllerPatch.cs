@@ -66,8 +66,12 @@ public static class ExileControllerBeginePatch
         [HarmonyArgument(0)] GameData.PlayerInfo exiled,
         [HarmonyArgument(1)] bool tie)
     {
-        if (!ExtremeRolesPlugin.ShipState.IsShowAditionalInfo() ||
+        if (!MeetingReporter.IsExist ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+
+		string reports = MeetingReporter.Instance.GetMeetingEndReport();
+
+		if (string.IsNullOrEmpty(reports)) { return; }
 
         TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
             __instance.ImpostorText,
@@ -78,7 +82,7 @@ public static class ExileControllerBeginePatch
 
         infoText.transform.localPosition += new UnityEngine.Vector3(0f, textOffset, 0f);
         infoText.gameObject.SetActive(true);
-        infoText.text = ExtremeRolesPlugin.ShipState.GetAditionalInfo();
+        infoText.text = reports;
 
         __instance.StartCoroutine(
             Effects.Bloop(0.25f, infoText.transform, 1f, 0.5f));
@@ -372,7 +376,6 @@ public static class ExileControllerWrapUpPatch
     public static void WrapUpPostfix(GameData.PlayerInfo exiled)
     {
         InfoOverlay.Instance.BlockShow(false);
-        ExtremeRolesPlugin.ShipState.ResetOnMeeting();
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
