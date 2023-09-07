@@ -58,11 +58,11 @@ public sealed class BakerySystem : IExtremeSystemType
 	{
 		if (timing == ResetTiming.MeetingEnd)
 		{
-			this.timer = 0;
 			if (this.isEstablish())
 			{
 				MeetingReporter.Instance.AddMeetingEndReport(getBreadBakingCondition());
 			}
+			this.timer = 0;
 		}
 		if (AmongUsClient.Instance.AmHost &&
 			timing == ResetTiming.MeetingStart)
