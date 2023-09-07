@@ -64,7 +64,8 @@ public sealed class BakerySystem : IExtremeSystemType
 				MeetingReporter.Instance.AddMeetingEndReport(getBreadBakingCondition());
 			}
 		}
-		if (timing == ResetTiming.MeetingStart)
+		if (AmongUsClient.Instance.AmHost &&
+			timing == ResetTiming.MeetingStart)
 		{
 			this.IsDirty = true;
 		}
