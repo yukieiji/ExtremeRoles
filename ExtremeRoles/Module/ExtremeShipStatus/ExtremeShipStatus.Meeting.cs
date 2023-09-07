@@ -10,21 +10,6 @@
 			++this.meetingCount;
 		}
 
-		public void ResetOnMeeting()
-		{
-			resetOnMeetingGlobalAction();
-		}
-
-		public string GetAditionalInfo()
-		{
-			return this.getRoleAditionalInfo();
-		}
-
-		public bool IsShowAditionalInfo()
-		{
-			return this.isShowRoleAditionalInfo();
-		}
-
 		private void resetMeetingCount()
 		{
 			meetingCount = 0;

@@ -12,6 +12,10 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.MapOverlay;
 
@@ -24,7 +28,7 @@ public static class MapCountOverlayUpdatePatch
     private static float adminTimer = 0.0f;
     private static bool enableAdminLimit = false;
     private static bool isRemoveAdmin = false;
-    private static TMPro.TextMeshPro timerText;
+    private static TMPro.TextMeshPro? timerText;
 
     private static readonly HashSet<ExtremeRoleId> adminUseRole = new HashSet<ExtremeRoleId>()
     {
@@ -40,13 +44,10 @@ public static class MapCountOverlayUpdatePatch
             return true;
         }
 
-        var admin = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
+        var supervisor = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
             Roles.Solo.Crewmate.Supervisor>();
 
-		if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
-        {
-            return true;
-        }
+		bool isSupervisorEnhance = supervisor is not null && supervisor.Boosted && supervisor.IsAbilityActive;
 
         __instance.timer += Time.deltaTime;
 		if (__instance.timer < 0.1f)
@@ -75,6 +76,8 @@ public static class MapCountOverlayUpdatePatch
 			__instance.SabotageText.gameObject.SetActive(false);
 		}
 
+		bool inFaker = ExtremeSystemTypeManager.Instance.TryGet<FakerDummySystem>(ExtremeSystemType.FakerDummy, out var system);
+
 		for (int i = 0; i < __instance.CountAreas.Length; i++)
 		{
 			CounterArea counterArea = __instance.CountAreas[i];
@@ -87,7 +90,8 @@ public static class MapCountOverlayUpdatePatch
 
             if (CachedShipStatus.FastRoom.TryGetValue(
                     counterArea.RoomType,
-                    out PlainShipRoom plainShipRoom) &&
+                    out PlainShipRoom? plainShipRoom) &&
+				plainShipRoom != null &&
                 plainShipRoom.roomArea)
             {
                 HashSet<byte> alreadyShowPlayerIds = new HashSet<byte>();
@@ -129,7 +133,18 @@ public static class MapCountOverlayUpdatePatch
                         }
                     }
                 }
-				PlayerColor.Add(counterArea.RoomType, addColor);
+				if (inFaker &&
+					system!.TryGetDummyColors(counterArea.RoomType, out var dummyColor) &&
+					dummyColor.Count != 0)
+				{
+					addColor.AddRange(dummyColor);
+					showNum += dummyColor.Count;
+				}
+
+				if (isSupervisorEnhance)
+				{
+					PlayerColor.Add(counterArea.RoomType, addColor);
+				}
 				counterArea.UpdateCount(showNum);
             }
             else
@@ -202,7 +217,7 @@ public static class MapCountOverlayUpdatePatch
     public static bool IsAbilityUse()
     {
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-        MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
+        MultiAssignRoleBase? multiAssignRole = role as MultiAssignRoleBase;
 
         if (adminUseRole.Contains(role.Id))
         {

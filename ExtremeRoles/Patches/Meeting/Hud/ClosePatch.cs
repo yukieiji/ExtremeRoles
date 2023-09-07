@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.Module.SystemType;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -10,5 +11,6 @@ public static class MeetingHudClosePatch
 	public static void Prefix()
 	{
 		InfoOverlay.Instance.Hide();
+		ExtremeSystemTypeManager.Instance.RepairDamage(null, (byte)ResetTiming.MeetingEnd);
 	}
 }
