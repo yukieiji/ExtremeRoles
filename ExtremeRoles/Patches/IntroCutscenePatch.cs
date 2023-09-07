@@ -18,7 +18,6 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.SystemType;
 
@@ -28,8 +27,7 @@ public static class IntroCutscenceHelper
 {
 
     public static void SetupIntroTeam(
-        IntroCutscene __instance,
-        ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+        IntroCutscene __instance)
     {
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
@@ -50,7 +48,6 @@ public static class IntroCutscenceHelper
     }
 
     public static void SetupIntroTeamIcons(
-        IntroCutscene __instance,
         ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
     {
 
@@ -76,25 +73,18 @@ public static class IntroCutscenceHelper
 
     public static void SetupRole()
     {
-        var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+		if (localRole is IRoleSpecialSetUp setUpRole)
+		{
+			setUpRole.IntroBeginSetUp();
+		}
 
-        var setUpRole = localRole as IRoleSpecialSetUp;
-        if (setUpRole != null)
-        {
-            setUpRole.IntroBeginSetUp();
-        }
-
-        var multiAssignRole = localRole as Roles.API.MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            setUpRole = multiAssignRole.AnotherRole as IRoleSpecialSetUp;
-            if (setUpRole != null)
-            {
-                setUpRole.IntroBeginSetUp();
-            }
-        }
+		if (localRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is IRoleSpecialSetUp multiSetUpRole)
+		{
+			multiSetUpRole.IntroBeginSetUp();
+		}
     }
-
 }
 
 [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
@@ -104,7 +94,7 @@ public static class IntroCutsceneBeginImpostorPatch
         IntroCutscene __instance,
         ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
     {
-        IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref yourTeam);
+        IntroCutscenceHelper.SetupIntroTeamIcons(ref yourTeam);
         IntroCutscenceHelper.SetupPlayerPrefab(__instance);
     }
 
@@ -112,7 +102,7 @@ public static class IntroCutsceneBeginImpostorPatch
         IntroCutscene __instance,
         ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
     {
-        IntroCutscenceHelper.SetupIntroTeam(__instance, ref yourTeam);
+        IntroCutscenceHelper.SetupIntroTeam(__instance);
         IntroCutscenceHelper.SetupRole();
     }
 
@@ -125,7 +115,7 @@ public static class BeginCrewmatePatch
         IntroCutscene __instance,
         ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
     {
-        IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref teamToDisplay);
+        IntroCutscenceHelper.SetupIntroTeamIcons(ref teamToDisplay);
         IntroCutscenceHelper.SetupPlayerPrefab(__instance);
     }
 
@@ -133,7 +123,7 @@ public static class BeginCrewmatePatch
         IntroCutscene __instance,
         ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
     {
-        IntroCutscenceHelper.SetupIntroTeam(__instance, ref teamToDisplay);
+        IntroCutscenceHelper.SetupIntroTeam(__instance);
         IntroCutscenceHelper.SetupRole();
     }
 }
@@ -168,13 +158,11 @@ public static class IntroCutsceneSetUpRoleTextPatch
             role.Id != ExtremeRoleId.Sharer ||
             role.Id != ExtremeRoleId.Buddy)
         {
-            if (role is MultiAssignRoleBase)
+            if (role is MultiAssignRoleBase multiAssignRole &&
+				multiAssignRole.AnotherRole != null)
             {
-                if (((MultiAssignRoleBase)role).AnotherRole != null)
-                {
-                    __instance.RoleBlurbText.fontSize *= 0.45f;
-                }
-            }
+				__instance.RoleBlurbText.fontSize *= 0.45f;
+			}
 
 
             if (role.IsImpostor())
