@@ -42,7 +42,8 @@ public sealed class BakerySystem : IExtremeSystemType
 	{
 		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			MeetingHud.Instance != null) { return; }
+			MeetingHud.Instance != null ||
+			ExileController.Instance != null) { return; }
 
 		if (!this.isUnion)
 		{
