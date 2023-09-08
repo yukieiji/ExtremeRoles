@@ -86,7 +86,7 @@ public sealed class Faunus : GhostRoleBase
     protected override void CreateSpecificOption(
 		OptionFactory factory)
     {
-        CreateCountButtonOption(factory, 1, 5, 3.0f);
+        GhostRoleAbilityFactory.CreateCountButtonOption(factory, 1, 5, 3.0f);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
