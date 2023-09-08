@@ -16,14 +16,14 @@ public class SimpleFactory
 	protected OptionTab Tab;
 	protected string NamePrefix;
 
-	private int idOffset = 0;
+	public int IdOffset { private get; set; }
 
 	public SimpleFactory(
 		int idOffset = 0,
 		string namePrefix = "",
 		OptionTab tab = OptionTab.General)
 	{
-		this.idOffset = idOffset;
+		this.IdOffset = idOffset;
 		this.NamePrefix = namePrefix;
 		this.Tab = tab;
 	}
@@ -273,7 +273,7 @@ public class SimpleFactory
 		return GetOptionId(Convert.ToInt32(option));
 	}
 
-	public int GetOptionId(int option) => this.idOffset + option;
+	public int GetOptionId(int option) => this.IdOffset + option;
 
 	protected string GetOptionName<T>(T option, Color? color) where T : struct, IConvertible
 	{
