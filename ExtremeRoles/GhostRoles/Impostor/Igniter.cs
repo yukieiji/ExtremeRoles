@@ -3,12 +3,12 @@
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
 
@@ -38,8 +38,8 @@ public sealed class Igniter : GhostRoleBase
         bool hasOtherVison = role.TryGetVisionMod(
             out float modVison, out bool isApplyVisonMod);
         float minVison = CachedShipStatus.Instance.MinLightRadius;
-        
-        if ((hasOtherVison && !isApplyVisonMod) || 
+
+        if ((hasOtherVison && !isApplyVisonMod) ||
             (role.IsImpostor() && !isEffectImp) ||
             (role.IsNeutral() && !isEffectNeut))
         {
@@ -109,17 +109,11 @@ public sealed class Igniter : GhostRoleBase
 
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateCountButtonOption(
-            parentOps, 3, 10, 15.0f);
-        CreateBoolOption(
-            IgniterOption.IsEffectImpostor,
-            false, parent: parentOps);
-        CreateBoolOption(
-            IgniterOption.IsEffectNeutral,
-            false, parent: parentOps);
+        CreateCountButtonOption(factory, 3, 10, 15.0f);
+		factory.CreateBoolOption(IgniterOption.IsEffectImpostor, false);
+		factory.CreateBoolOption(IgniterOption.IsEffectNeutral, false);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
@@ -127,10 +121,10 @@ public sealed class Igniter : GhostRoleBase
         caller.WriteBoolean(true);
     }
 
-    private bool isAbilityUse() => 
-        this.IsCommonUse() &&
+    private bool isAbilityUse() =>
+        IsCommonUse() &&
         VisionComputer.Instance.IsModifierResetted();
-    
+
     private void abilityCall()
     {
         VisionComputer.Instance.SetModifier(
