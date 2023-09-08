@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
@@ -16,6 +15,10 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
+
+#nullable enable
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 
@@ -33,7 +36,7 @@ public sealed class Faunus : GhostRoleBase
 
     private TaskTypes saboTask;
     private bool saboActive;
-    private Minigame saboGame;
+    private Minigame? saboGame;
     private bool isOpen = false;
 
     public Faunus() : base(
@@ -81,16 +84,15 @@ public sealed class Faunus : GhostRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+		OptionFactory factory)
     {
-        CreateCountButtonOption(
-            parentOps, 1, 5, 3.0f);
+        CreateCountButtonOption(factory, 1, 5, 3.0f);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
         this.isOpen = false;
-        Console console;
+        Console? console;
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
             console = modMap!.GetConsole(this.saboTask);
@@ -172,10 +174,10 @@ public sealed class Faunus : GhostRoleBase
             if (this.saboActive) { break; }
         }
 
-        return this.IsCommonUse() && this.saboActive;
+        return IsCommonUse() && this.saboActive;
     }
 
-    private Console getLightConsole()
+    private Console? getLightConsole()
     {
         var console = Object.FindObjectsOfType<Console>();
         switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
@@ -221,13 +223,13 @@ public sealed class Faunus : GhostRoleBase
             case 4:
                 // AirShipは昇降が酸素コンソール
                 List<Console> res = new List<Console>(2);
-                Console leftConsole = console.FirstOrDefault(
+                Console? leftConsole = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("NoOxyConsoleLeft"));
                 if (leftConsole != null)
                 {
                     res.Add(leftConsole);
                 }
-                Console rightConsole = console.FirstOrDefault(
+                Console? rightConsole = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("NoOxyConsoleRight"));
                 if (rightConsole != null)
                 {
@@ -252,13 +254,13 @@ public sealed class Faunus : GhostRoleBase
             case 0:
             case 3:
                 List<Console> skeldsHand = new List<Console>(2);
-                Console upperConsole = console.FirstOrDefault(
+                Console? upperConsole = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("UpperHandConsole"));
                 if (upperConsole != null)
                 {
                     skeldsHand.Add(upperConsole);
                 }
-                Console lowerConsole = console.FirstOrDefault(
+                Console? lowerConsole = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("LowerHandConsole"));
                 if (lowerConsole != null)
                 {
@@ -267,13 +269,13 @@ public sealed class Faunus : GhostRoleBase
                 return skeldsHand;
             case 1:
                 List<Console> miraHqHand = new List<Console>(2);
-                Console leftConsole = console.FirstOrDefault(
+                Console? leftConsole = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("LeftHandConsole"));
                 if (leftConsole != null)
                 {
                     miraHqHand.Add(leftConsole);
                 }
-                Console rightConsole = console.FirstOrDefault(
+                Console? rightConsole = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("RightHandConsole"));
                 if (rightConsole != null)
                 {
@@ -283,13 +285,13 @@ public sealed class Faunus : GhostRoleBase
             case 2:
                 // ポーラスは耐震がハンドコンソール
                 List<Console> polusConsole = new List<Console>(2);
-                Console leftPanel = console.FirstOrDefault(
+                Console? leftPanel = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("panel_hand_left"));
                 if (leftPanel != null)
                 {
                     polusConsole.Add(leftPanel);
                 }
-                Console rightPanel = console.FirstOrDefault(
+                Console? rightPanel = console.FirstOrDefault(
                     x => x.gameObject.name.Contains("panel_hand_right"));
                 if (rightPanel != null)
                 {
