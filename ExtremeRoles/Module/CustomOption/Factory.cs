@@ -185,6 +185,11 @@ public class SequentialFactory : Factory
 		this.NamePrefix = newPrefix;
 	}
 
+	public void SetTab(OptionTab tab)
+	{
+		this.Tab = tab;
+	}
+
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public FloatCustomOption CreateFloatOption(
 		object option,
