@@ -11,6 +11,8 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using AmongUs.GameOptions;
 
+
+using ExtremeRoles.Module.CustomOption.Factorys;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
@@ -150,7 +152,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		replaceDoorMinigame();
 	}
 
-	public override void CreateIntegrateOption(SequentialFactory factory)
+	public override void CreateIntegrateOption(SequentialOptionFactory factory)
 	{
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
 		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator);

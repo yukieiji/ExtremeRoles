@@ -11,7 +11,7 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.SequentialFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequentialOptionFactory;
 
 namespace ExtremeRoles.Compat;
 

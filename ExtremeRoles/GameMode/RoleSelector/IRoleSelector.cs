@@ -6,6 +6,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Module.CustomOption.Factorys;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
