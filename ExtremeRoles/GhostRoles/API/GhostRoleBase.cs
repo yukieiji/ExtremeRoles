@@ -12,6 +12,8 @@ using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoPar
 
 namespace ExtremeRoles.GhostRoles.API;
 
+#nullable enable
+
 public enum GhostRoleOption
 {
     IsReportAbility = 40
@@ -34,7 +36,7 @@ public abstract class GhostRoleBase
 
     public string Name => this.RoleName;
 
-    public Module.ExtremeAbilityButton Button { get; protected set; }
+    public Module.ExtremeAbilityButton? Button { get; protected set; }
 
     public Color RoleColor => this.NameColor;
     public bool HasTask => this.Task;
@@ -208,7 +210,8 @@ public abstract class GhostRoleBase
 
         if (allOps.TryGet<float>(
                 this.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityActiveTime), out var activeTimeOtion))
+                    RoleAbilityCommonOption.AbilityActiveTime), out var activeTimeOtion) &&
+			activeTimeOtion is not null)
         {
             this.Button.Behavior.SetActiveTime(activeTimeOtion.GetValue());
         }
@@ -217,7 +220,8 @@ public abstract class GhostRoleBase
             allOps.TryGet<int>(
                 this.GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityCount),
-                out var countOption))
+                out var countOption) &&
+			countOption is not null)
         {
             behavior.SetAbilityCount(countOption.GetValue());
         }
