@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.Factorys;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -43,7 +43,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
     {
         string addText = this.vanillaRoleId switch
         {
-            RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost => 
+            RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost =>
                 Helper.Translation.GetString("crewImportantText"),
             RoleTypes.ImpostorGhost =>
                 Helper.Translation.GetString("impImportantText"),
@@ -83,8 +83,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(SequntialAutoParentSetFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }
