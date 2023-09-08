@@ -10,9 +10,12 @@ using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption;
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
+
+#nullable enable
 
 public sealed class Poltergeist : GhostRoleBase
 {
@@ -21,10 +24,10 @@ public sealed class Poltergeist : GhostRoleBase
         Range,
     }
 
-    public DeadBody CarringBody;
-
     private float range;
-    private GameData.PlayerInfo targetBody;
+
+	private DeadBody? carringBody;
+	private GameData.PlayerInfo? targetBody;
 
     public Poltergeist() : base(
         true,
@@ -60,14 +63,14 @@ public sealed class Poltergeist : GhostRoleBase
         byte targetPlayerId)
     {
 
-        DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+        DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
         for (int i = 0; i < array.Length; ++i)
         {
             if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
             {
-                role.CarringBody = array[i];
-                role.CarringBody.transform.position = rolePlayer.transform.position;
-                role.CarringBody.transform.SetParent(rolePlayer.transform);
+                role.carringBody = array[i];
+                role.carringBody.transform.position = rolePlayer.transform.position;
+                role.carringBody.transform.SetParent(rolePlayer.transform);
                 break;
             }
         }
@@ -77,13 +80,13 @@ public sealed class Poltergeist : GhostRoleBase
         PlayerControl rolePlayer,
         Poltergeist role)
     {
-        if (role.CarringBody == null) { return; }
-        if (role.CarringBody.transform.parent != rolePlayer.transform) { return; }
+        if (role.carringBody == null) { return; }
+        if (role.carringBody.transform.parent != rolePlayer.transform) { return; }
 
         Vector2 pos = rolePlayer.GetTruePosition();
-        role.CarringBody.transform.SetParent(null);
-        role.CarringBody.transform.position = new Vector3(pos.x, pos.y, (pos.y / 1000f));
-        role.CarringBody = null;
+        role.carringBody.transform.SetParent(null);
+        role.carringBody.transform.position = new Vector3(pos.x, pos.y, (pos.y / 1000f));
+        role.carringBody = null;
     }
 
     public override void CreateAbility()
@@ -121,15 +124,12 @@ public sealed class Poltergeist : GhostRoleBase
         this.targetBody = null;
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateFloatOption(
+		factory.CreateFloatOption(
             Option.Range, 1.0f,
-            0.2f, 3.0f, 0.1f,
-            parentOps);
-        CreateCountButtonOption(
-            parentOps, 1, 5, 3.0f);
+            0.2f, 3.0f, 0.1f);
+        CreateCountButtonOption(factory, 1, 5, 3.0f);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
@@ -138,7 +138,7 @@ public sealed class Poltergeist : GhostRoleBase
         Vector3 pos = player.transform.position;
 
         caller.WriteByte(player.PlayerId);
-        caller.WriteByte(this.targetBody.PlayerId);
+        caller.WriteByte(this.targetBody!.PlayerId);
         caller.WriteFloat(pos.x);
         caller.WriteFloat(pos.y);
         caller.WriteBoolean(true);
@@ -159,7 +159,7 @@ public sealed class Poltergeist : GhostRoleBase
             truePosition, this.range, Constants.PlayersOnlyMask))
         {
             if (!collider2D.CompareTag("DeadBody")) { continue; }
-            
+
             DeadBody component = collider2D.GetComponent<DeadBody>();
 
             if (component && !component.Reported && component.transform.parent == null)
@@ -177,11 +177,11 @@ public sealed class Poltergeist : GhostRoleBase
             }
         }
 
-        return this.IsCommonUse() && this.targetBody != null;
+        return IsCommonUse() && this.targetBody != null;
     }
     private void abilityCall()
     {
-        pickUpDeadBody(CachedPlayerControl.LocalPlayer, this, this.targetBody.PlayerId);
+        pickUpDeadBody(CachedPlayerControl.LocalPlayer, this, this.targetBody!.PlayerId);
         this.targetBody = null;
     }
     private void cleanUp()
