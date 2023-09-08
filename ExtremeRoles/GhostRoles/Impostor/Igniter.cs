@@ -10,6 +10,8 @@ using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
 
+#nullable enable
+
 namespace ExtremeRoles.GhostRoles.Impostor;
 
 public sealed class Igniter : GhostRoleBase
