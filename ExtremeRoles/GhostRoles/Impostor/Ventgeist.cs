@@ -4,12 +4,14 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
+#nullable enable
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
 
@@ -21,7 +23,7 @@ public sealed class Ventgeist : GhostRoleBase
     }
 
     private float range;
-    private Vent targetVent;
+    private Vent? targetVent;
 
     public Ventgeist() : base(
         false,
@@ -67,20 +69,17 @@ public sealed class Ventgeist : GhostRoleBase
         this.targetVent = null;
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateFloatOption(
+		factory.CreateFloatOption(
             Option.Range, 1.0f,
-            0.2f, 3.0f, 0.1f,
-            parentOps);
-        CreateCountButtonOption(
-            parentOps, 2, 10);
+            0.2f, 3.0f, 0.1f);
+        CreateCountButtonOption(factory, 2, 10);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
-        caller.WriteInt(targetVent.Id);
+        caller.WriteInt(targetVent!.Id);
     }
 
     private bool isPreCheck() => this.targetVent != null;
@@ -112,11 +111,11 @@ public sealed class Ventgeist : GhostRoleBase
             }
         }
 
-        return this.IsCommonUse() && this.targetVent != null;
+        return IsCommonUse() && this.targetVent != null;
     }
     private void abilityCall()
     {
-        RPCOperator.StartVentAnimation(this.targetVent.Id);
+        RPCOperator.StartVentAnimation(this.targetVent!.Id);
         this.targetVent = null;
     }
 }
