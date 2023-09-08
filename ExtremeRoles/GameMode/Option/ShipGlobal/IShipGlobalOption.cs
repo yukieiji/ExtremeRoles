@@ -3,7 +3,7 @@ using System.Text;
 
 using ExtremeRoles.GameMode.Option.MapModule;
 
-using static ExtremeRoles.Module.CustomOption.Factory;
+using static ExtremeRoles.Module.CustomOption.Factorys.SimpleFactory;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
