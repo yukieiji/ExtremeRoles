@@ -62,7 +62,7 @@ public sealed class SaboEvil : GhostRoleBase
 
     protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateCountButtonOption(factory, 3, 20);
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 20);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
