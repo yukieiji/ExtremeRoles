@@ -11,7 +11,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 

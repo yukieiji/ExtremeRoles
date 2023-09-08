@@ -13,7 +13,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 

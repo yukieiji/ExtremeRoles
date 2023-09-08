@@ -83,7 +83,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(SequntialAutoParentSetFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }

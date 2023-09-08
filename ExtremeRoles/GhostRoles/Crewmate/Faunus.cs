@@ -16,7 +16,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
 
 #nullable enable
 

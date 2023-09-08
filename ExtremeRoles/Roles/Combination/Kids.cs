@@ -27,7 +27,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Compat;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
 
 namespace ExtremeRoles.Roles.Combination;
 
