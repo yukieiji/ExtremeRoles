@@ -74,7 +74,7 @@ public sealed class Ventgeist : GhostRoleBase
 		factory.CreateFloatOption(
             Option.Range, 1.0f,
             0.2f, 3.0f, 0.1f);
-        CreateCountButtonOption(factory, 2, 10);
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
