@@ -196,10 +196,11 @@ public class SequentialFactory : Factory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null)
+		Color? color = null,
+		bool ignorePrefix = false)
 		=> new FloatCustomOption(
 				getOptionIdAndUpdate(),
-				getOptionName(option, color),
+				getOptionName(option, color, ignorePrefix),
 				defaultValue,
 				min, max, step,
 				parent, isHeader, isHidden,
@@ -217,10 +218,11 @@ public class SequentialFactory : Factory
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
-		float tempMaxValue = 0.0f)
+		float tempMaxValue = 0.0f,
+		bool ignorePrefix = false)
 		=> new FloatDynamicCustomOption(
 			getOptionIdAndUpdate(),
-			getOptionName(option, color),
+			getOptionName(option, color, ignorePrefix),
 			defaultValue,
 			min, step,
 			parent, isHeader, isHidden,
@@ -238,10 +240,11 @@ public class SequentialFactory : Factory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null)
+		Color? color = null,
+		bool ignorePrefix = false)
 		=> new IntCustomOption(
 			getOptionIdAndUpdate(),
-			getOptionName(option, color),
+			getOptionName(option, color, ignorePrefix),
 			defaultValue,
 			min, max, step,
 			parent, isHeader, isHidden,
@@ -259,10 +262,11 @@ public class SequentialFactory : Factory
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
-		int tempMaxValue = 0)
+		int tempMaxValue = 0,
+		bool ignorePrefix = false)
 		=> new IntDynamicCustomOption(
 			getOptionIdAndUpdate(),
-			getOptionName(option, color),
+			getOptionName(option, color, ignorePrefix),
 			defaultValue,
 			min, step,
 			parent, isHeader, isHidden,
@@ -279,10 +283,11 @@ public class SequentialFactory : Factory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null)
+		Color? color = null,
+		bool ignorePrefix = false)
 		=> new BoolCustomOption(
 			getOptionIdAndUpdate(),
-			getOptionName(option, color),
+			getOptionName(option, color, ignorePrefix),
 			defaultValue,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption, this.Tab);
@@ -297,10 +302,11 @@ public class SequentialFactory : Factory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null)
+		Color? color = null,
+		bool ignorePrefix = false)
 		=> new SelectionCustomOption(
 			getOptionIdAndUpdate(),
-			getOptionName(option, color),
+			getOptionName(option, color, ignorePrefix),
 			selections,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption, this.Tab);
@@ -314,18 +320,19 @@ public class SequentialFactory : Factory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null)
+		Color? color = null,
+		bool ignorePrefix = false)
 		where W : struct, IConvertible
 		=> new SelectionCustomOption(
 				getOptionIdAndUpdate(),
-				getOptionName(option, color),
+				getOptionName(option, color, ignorePrefix),
 				GetEnumString<W>().ToArray(),
 				parent, isHeader, isHidden,
 				format, invert, enableCheckOption, this.Tab);
 
-	private string getOptionName(object option, Color? color)
+	private string getOptionName(object option, Color? color, bool ignorePrefix = false)
 	{
-		string optionName = string.Concat(this.NamePrefix, option.ToString());
+		string optionName = ignorePrefix ? $"|{this.NamePrefix}|{option}" : $"{this.NamePrefix}{option}";
 
 		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
 	}
