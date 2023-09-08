@@ -85,7 +85,7 @@ public sealed class LocalPlayerVoteAreaInfo : VoteAreaInfo
 			this.LocalPlayer.Data.IsDead);
 		if (ghostRole != null)
 		{
-			Color ghostRoleColor = ghostRole.RoleColor;
+			Color ghostRoleColor = ghostRole.Color;
 			paintColor = (paintColor / 2.0f) + (ghostRoleColor / 2.0f);
 		}
 		if (paintColor == Palette.ClearWhite) { return; }

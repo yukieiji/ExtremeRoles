@@ -19,6 +19,15 @@ public sealed class AutoParentSetFactory
 		}
 	}
 
+	public string NamePrefix
+	{
+		get => this.internalFactory.NamePrefix;
+		set
+		{
+			this.internalFactory.NamePrefix = value;
+		}
+	}
+
 	public AutoParentSetFactory(
 		int idOffset = 0,
 		string namePrefix = "",

@@ -28,28 +28,18 @@ public abstract class GhostRoleBase
     private const float maxActiveTime = 30.0f;
     private const float step = 0.5f;
 
-    public ExtremeRoleType Team => this.TeamType;
+	public Color Color { get; protected set; }
 
-    public ExtremeGhostRoleId Id => this.RoleId;
+	public ExtremeRoleType Team { get; protected set; }
+	public ExtremeGhostRoleId Id { get; protected set; }
 
-    public int OptionOffset => this.OptionIdOffset;
+	public int OptionIdOffset { get; protected set; }
+	public int GameControlId { get; protected set; }
 
-    public string Name => this.RoleName;
+	public string Name { get; protected set; }
+	public bool HasTask { get; protected set; }
 
-    public Module.ExtremeAbilityButton? Button { get; protected set; }
-
-    public Color RoleColor => this.NameColor;
-    public bool HasTask => this.Task;
-
-    public int GameControlId => this.controlId;
-
-    protected ExtremeRoleType TeamType;
-    protected ExtremeGhostRoleId RoleId;
-    protected string RoleName;
-    protected Color NameColor;
-    protected int OptionIdOffset;
-
-    protected bool Task;
+	public Module.ExtremeAbilityButton? Button { get; protected set; }
 
     private OptionTab tab = OptionTab.General;
     private int controlId;
@@ -62,11 +52,11 @@ public abstract class GhostRoleBase
         Color color,
         OptionTab tab = OptionTab.General)
     {
-        this.Task = hasTask;
-        this.TeamType = team;
-        this.RoleId = id;
-        this.RoleName = roleName;
-        this.NameColor = color;
+        this.HasTask = hasTask;
+        this.Team = team;
+        this.Id = id;
+        this.Name = roleName;
+        this.Color = color;
 
         if (tab == OptionTab.General)
         {
@@ -92,9 +82,9 @@ public abstract class GhostRoleBase
     public virtual GhostRoleBase Clone()
     {
         GhostRoleBase copy = (GhostRoleBase)this.MemberwiseClone();
-        Color baseColor = this.NameColor;
+        Color baseColor = this.Color;
 
-        copy.NameColor = new Color(
+        copy.Color = new Color(
             baseColor.r,
             baseColor.g,
             baseColor.b,
@@ -125,27 +115,27 @@ public abstract class GhostRoleBase
 
     public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
 
-    public bool IsCrewmate() => this.TeamType == ExtremeRoleType.Crewmate;
+    public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
 
-    public bool IsImpostor() => this.TeamType == ExtremeRoleType.Impostor;
+    public bool IsImpostor() => this.Team == ExtremeRoleType.Impostor;
 
-    public bool IsNeutral() => this.TeamType == ExtremeRoleType.Neutral;
+    public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
 
-    public bool IsVanillaRole() => this.RoleId == ExtremeGhostRoleId.VanillaRole;
+    public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
 
     public virtual string GetColoredRoleName() => Design.ColoedString(
-        this.NameColor, Translation.GetString(this.RoleName));
+        this.Color, Translation.GetString(this.Name));
 
     public virtual string GetFullDescription() => Translation.GetString(
        $"{this.Id}FullDescription");
 
     public virtual string GetImportantText() =>
         Design.ColoedString(
-            this.NameColor,
+            this.Color,
             string.Format("{0}: {1}",
                 Design.ColoedString(
-                    this.NameColor,
-                    Translation.GetString(this.RoleName)),
+                    this.Color,
+                    Translation.GetString(this.Name)),
                 Translation.GetString(
                     $"{this.Id}ShortDescription")));
 
@@ -237,7 +227,7 @@ public abstract class GhostRoleBase
 		factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
 			OptionCreator.SpawnRate, null, true,
-			color: this.NameColor);
+			color: this.Color);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 

@@ -13,9 +13,9 @@ namespace ExtremeRoles.Module.CustomOption.Factorys;
 
 public class SimpleFactory
 {
-	protected OptionTab Tab;
-	protected string NamePrefix;
+	protected readonly OptionTab Tab;
 
+	public string NamePrefix { get; set; }
 	public int IdOffset { private get; set; }
 
 	public SimpleFactory(

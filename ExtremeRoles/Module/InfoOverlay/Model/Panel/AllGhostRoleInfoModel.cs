@@ -38,7 +38,7 @@ public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 
 		foreach (var role in GhostRoles.ExtremeGhostRoleManager.AllGhostRole.Values)
 		{
-			optionId = role.OptionOffset;
+			optionId = role.OptionIdOffset;
 			colorRoleName = role.GetColoredRoleName();
 
 			roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
