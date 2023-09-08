@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -255,9 +256,10 @@ public abstract class GhostRoleBase
     protected abstract void UseAbility(RPCOperator.RpcCaller caller);
 
 	protected static bool IsCommonUse() =>
-		PlayerControl.LocalPlayer &&
-		PlayerControl.LocalPlayer.Data.IsDead &&
-		PlayerControl.LocalPlayer.CanMove;
+		CachedPlayerControl.LocalPlayer != null &&
+		CachedPlayerControl.LocalPlayer.Data != null &&
+		CachedPlayerControl.LocalPlayer.Data.IsDead &&
+		CachedPlayerControl.LocalPlayer.PlayerControl.CanMove;
 
 	protected static void CreateButtonOption(
 		OptionFactory factory,
