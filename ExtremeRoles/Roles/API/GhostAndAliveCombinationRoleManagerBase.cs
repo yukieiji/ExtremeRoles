@@ -41,7 +41,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
         base.CreateSpecificOption(parentOps);
 
         IEnumerable<GhostRoleBase> collection = this.CombGhostRole.Values;
-		var factory = new SequntialAutoParentSetFactory(
+		var factory = new AutoParentSetFactory(
 			namePrefix: this.RoleName, tab: OptionTab.Combination, parent: parentOps);
 
 		foreach (var item in collection.Select(

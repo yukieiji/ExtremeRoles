@@ -8,7 +8,7 @@ using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
 
 namespace ExtremeRoles.GhostRoles.API;
 

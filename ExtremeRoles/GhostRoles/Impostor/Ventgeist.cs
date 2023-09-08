@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 #nullable enable
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.SequntialAutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
 

@@ -139,10 +139,11 @@ public class SimpleFactory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null) where T : struct, IConvertible
+		Color? color = null,
+		bool ignorePrefix = false) where T : struct, IConvertible
 		=> new FloatCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, color),
+			GetOptionName(option, color, ignorePrefix),
 			defaultValue,
 			min, max, step,
 			parent, isHeader, isHidden,
@@ -160,10 +161,11 @@ public class SimpleFactory
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
-		float tempMaxValue = 0.0f) where T : struct, IConvertible
+		float tempMaxValue = 0.0f,
+		bool ignorePrefix = false) where T : struct, IConvertible
 		=> new FloatDynamicCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, color),
+			GetOptionName(option, color, ignorePrefix),
 			defaultValue,
 			min, step,
 			parent, isHeader, isHidden,
@@ -181,10 +183,11 @@ public class SimpleFactory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null) where T : struct, IConvertible
+		Color? color = null,
+		bool ignorePrefix = false) where T : struct, IConvertible
 		=> new IntCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, color),
+			GetOptionName(option, color, ignorePrefix),
 			defaultValue,
 			min, max, step,
 			parent, isHeader, isHidden,
@@ -202,10 +205,11 @@ public class SimpleFactory
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
-		int tempMaxValue = 0) where T : struct, IConvertible
+		int tempMaxValue = 0,
+		bool ignorePrefix = false) where T : struct, IConvertible
 		=> new IntDynamicCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, color),
+			GetOptionName(option, color, ignorePrefix),
 			defaultValue,
 			min, step,
 			parent, isHeader, isHidden,
@@ -222,10 +226,11 @@ public class SimpleFactory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null) where T : struct, IConvertible
+		Color? color = null,
+		bool ignorePrefix = false) where T : struct, IConvertible
 		=> new BoolCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, color),
+			GetOptionName(option, color, ignorePrefix),
 			defaultValue,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption, this.Tab);
@@ -240,10 +245,11 @@ public class SimpleFactory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null) where T : struct, IConvertible
+		Color? color = null,
+		bool ignorePrefix = false) where T : struct, IConvertible
 		=> new SelectionCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, color),
+			GetOptionName(option, color, ignorePrefix),
 			selections,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption, this.Tab);
@@ -257,12 +263,13 @@ public class SimpleFactory
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
 		IOptionInfo? enableCheckOption = null,
-		Color? color = null)
+		Color? color = null,
+		bool ignorePrefix = false)
 		where T : struct, IConvertible
 		where W : struct, IConvertible
 		=> new SelectionCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, color),
+			GetOptionName(option, color, ignorePrefix),
 			GetEnumString<W>().ToArray(),
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption, this.Tab);
@@ -275,9 +282,9 @@ public class SimpleFactory
 
 	public int GetOptionId(int option) => this.IdOffset + option;
 
-	protected string GetOptionName<T>(T option, Color? color) where T : struct, IConvertible
+	protected string GetOptionName<T>(T option, Color? color, bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		string optionName = string.Concat(this.NamePrefix, option.ToString());
+		string optionName = ignorePrefix ? $"|{this.NamePrefix}|{option}" : $"{this.NamePrefix}{option}";
 
 		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
 	}
