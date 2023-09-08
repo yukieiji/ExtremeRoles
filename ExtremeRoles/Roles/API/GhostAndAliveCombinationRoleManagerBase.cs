@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption.Factorys;
+using ExtremeRoles.Module.CustomOption.Factories;
 
 namespace ExtremeRoles.Roles.API;
 

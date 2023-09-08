@@ -12,7 +12,7 @@ using UnityEngine.AddressableAssets;
 using AmongUs.GameOptions;
 
 
-using ExtremeRoles.Module.CustomOption.Factorys;
+using ExtremeRoles.Module.CustomOption.Factories;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;

@@ -6,7 +6,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factorys;
+namespace ExtremeRoles.Module.CustomOption.Factories;
 
 public sealed class ColorSyncFactory : SimpleFactory
 {
