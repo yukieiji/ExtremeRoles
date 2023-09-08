@@ -26,11 +26,6 @@ public class SequentialOptionFactory : SimpleFactory
 		this.Offset = 0;
 	}
 
-	public void SetNamePrefix(string newPrefix)
-	{
-		this.NamePrefix = newPrefix;
-	}
-
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public FloatCustomOption CreateFloatOption(
 		object option,

@@ -81,7 +81,7 @@ public sealed class Foras : GhostRoleBase
             {
                 GameObject obj = new GameObject("Foras Arrow");
                 foras.arrowControler = obj.AddComponent<ArrowControler>();
-                foras.arrowControler.SetColor(foras.NameColor);
+                foras.arrowControler.SetColor(foras.Color);
             }
             foras.arrowControler.SetTarget(arrowTargetPlayer.gameObject);
             foras.arrowControler.SetDelayActiveTimer(foras.delayTime);

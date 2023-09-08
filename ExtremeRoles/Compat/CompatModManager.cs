@@ -102,7 +102,7 @@ internal sealed class CompatModManager
 
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
-			optionFactory.SetNamePrefix(mod.Name);
+			optionFactory.NamePrefix = mod.Name;
 			mod.CreateIntegrateOption(optionFactory);
 		}
 

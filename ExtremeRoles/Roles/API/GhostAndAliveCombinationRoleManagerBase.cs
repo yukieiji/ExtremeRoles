@@ -41,8 +41,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
         base.CreateSpecificOption(parentOps);
 
         IEnumerable<GhostRoleBase> collection = this.CombGhostRole.Values;
-		var factory = new AutoParentSetFactory(
-			namePrefix: this.RoleName, tab: OptionTab.Combination, parent: parentOps);
+		var factory = new AutoParentSetFactory(tab: OptionTab.Combination, parent: parentOps);
 
 		foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
@@ -51,6 +50,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
                 ExtremeRoleManager.OptionOffsetPerRole * (
                 item.Index + 1 + this.Roles.Count));
 			factory.IdOffset = optionOffset;
+			factory.NamePrefix = item.Value.Name;
 			item.Value.CreateRoleSpecificOption(factory, optionOffset);
         }
     }
