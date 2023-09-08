@@ -245,7 +245,7 @@ public abstract class GhostRoleBase
             RoleCommonOption.RoleNum,
             1, 1, spawnNum, 1);
 
-		factory.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1);
+		factory.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
 
 		return factory;
     }
