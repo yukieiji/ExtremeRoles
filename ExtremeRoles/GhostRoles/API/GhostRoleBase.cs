@@ -7,9 +7,9 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factorys.AutoParentSetFactory;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -22,13 +22,6 @@ public enum GhostRoleOption
 
 public abstract class GhostRoleBase
 {
-    private const float defaultCoolTime = 60.0f;
-    private const float minCoolTime = 5.0f;
-    private const float maxCoolTime = 120.0f;
-    private const float minActiveTime = 0.5f;
-    private const float maxActiveTime = 30.0f;
-    private const float step = 0.5f;
-
 	public Color Color { get; protected set; }
 
 	public ExtremeRoleType Team { get; protected set; }
@@ -260,49 +253,6 @@ public abstract class GhostRoleBase
 		CachedPlayerControl.LocalPlayer.Data != null &&
 		CachedPlayerControl.LocalPlayer.Data.IsDead &&
 		CachedPlayerControl.LocalPlayer.PlayerControl.CanMove;
-
-	protected static void CreateButtonOption(
-		OptionFactory factory,
-		float defaultActiveTime = float.MaxValue)
-	{
-
-		factory.CreateFloatOption(
-			RoleAbilityCommonOption.AbilityCoolTime,
-			defaultCoolTime, minCoolTime,
-			maxCoolTime, step,
-			format: OptionUnit.Second);
-
-		if (defaultActiveTime != float.MaxValue)
-		{
-			defaultActiveTime = Mathf.Clamp(
-				defaultActiveTime, minActiveTime, maxActiveTime);
-
-			factory.CreateFloatOption(
-				RoleAbilityCommonOption.AbilityActiveTime,
-				defaultActiveTime, minActiveTime, maxActiveTime, step,
-				format: OptionUnit.Second);
-		}
-
-		factory.CreateBoolOption(
-		   GhostRoleOption.IsReportAbility,
-		   true);
-	}
-
-	protected static void CreateCountButtonOption(
-		OptionFactory factory,
-		int defaultAbilityCount,
-		int maxAbilityCount,
-		float defaultActiveTime = float.MaxValue)
-	{
-		CreateButtonOption(factory, defaultActiveTime);
-
-		factory.CreateIntOption(
-			RoleAbilityCommonOption.AbilityCount,
-			defaultAbilityCount, 1,
-			maxAbilityCount, 1,
-			format: OptionUnit.Shot);
-	}
-
 
 	protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
     {

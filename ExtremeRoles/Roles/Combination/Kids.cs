@@ -900,7 +900,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             WispOption.BlackOutTime,
             10.0f, 2.5f, 30.0f, 0.1f,
             format: OptionUnit.Second);
-        CreateButtonOption(factory);
+		GhostRoleAbilityFactory.CreateButtonOption(factory);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

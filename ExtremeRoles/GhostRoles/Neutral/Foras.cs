@@ -145,7 +145,7 @@ public sealed class Foras : GhostRoleBase
 
     protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateCountButtonOption(factory, 3, 10, 25.0f);
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 25.0f);
 		factory.CreateFloatOption(
             ForasOption.Range,
             1.0f, 0.1f, 3.6f, 0.1f);

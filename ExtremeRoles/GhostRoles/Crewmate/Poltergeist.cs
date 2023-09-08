@@ -129,7 +129,7 @@ public sealed class Poltergeist : GhostRoleBase
 		factory.CreateFloatOption(
             Option.Range, 1.0f,
             0.2f, 3.0f, 0.1f);
-        CreateCountButtonOption(factory, 1, 5, 3.0f);
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 1, 5, 3.0f);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

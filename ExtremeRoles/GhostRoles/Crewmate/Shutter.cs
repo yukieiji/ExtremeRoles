@@ -203,7 +203,7 @@ public sealed class Shutter : GhostRoleBase
 
     protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateCountButtonOption(factory, 3, 10);
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10);
 		factory.CreateFloatOption(
             ShutterOption.PhotoRange,
             7.5f, 0.5f, 25f, 0.5f);
