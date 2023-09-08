@@ -16,7 +16,7 @@ public class SequentialOptionFactory : SimpleFactory
 	public int StartId => GetOptionId(0);
 	public int EndId => GetOptionId(this.Offset - 1);
 
-	public int Offset { get; private set; }
+	public int Offset { private get; set; }
 
 	public SequentialOptionFactory(
 		int idOffset = 0,

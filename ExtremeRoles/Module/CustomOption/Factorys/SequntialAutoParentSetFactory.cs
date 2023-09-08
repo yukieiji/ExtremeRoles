@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 using UnityEngine;
-
-using ExtremeRoles.Helper;
-using static Il2CppSystem.Xml.Schema.FacetsChecker.FacetsCompiler;
-using Rewired.Utils.Platforms.Windows;
-
-
 
 #nullable enable
 
@@ -19,11 +11,21 @@ public sealed class SequntialAutoParentSetFactory
 	private IOptionInfo? parent;
 	private readonly SequentialOptionFactory internalFactory;
 
+	public int IdOffset
+	{
+		set
+		{
+			this.internalFactory.IdOffset = value;
+		}
+	}
+
 	public SequntialAutoParentSetFactory(
 		int idOffset = 0,
 		string namePrefix = "",
-		OptionTab tab = OptionTab.General)
+		OptionTab tab = OptionTab.General,
+		IOptionInfo? parent = null)
 	{
+		this.parent = parent;
 		this.internalFactory = new SequentialOptionFactory(idOffset, namePrefix, tab);
 	}
 
