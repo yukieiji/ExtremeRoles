@@ -141,13 +141,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	}
 
 	[HideFromIl2Cpp]
-	public void TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
-		=> this.systems.TryAdd(systemType, system);
-
-	[HideFromIl2Cpp]
-	public void Add(ExtremeSystemType systemType, IExtremeSystemType system)
+	public bool TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
 	{
-		this.systems.Add(systemType, system);
+		lock (this.systems)
+		{
+			return this.systems.TryAdd(systemType, system);
+		}
 	}
 
 	public void Reset()
