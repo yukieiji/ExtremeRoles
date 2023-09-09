@@ -14,5 +14,6 @@ public static class UnityUdpClientConnectionConnectAsyncPatch
     {
         __instance.KeepAliveInterval = 2000;
         __instance.DisconnectTimeoutMs = 15000;
+		__instance.ResendPingMultiplier = 1.4f;
     }
 }
