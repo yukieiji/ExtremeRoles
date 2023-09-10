@@ -28,7 +28,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	private readonly float pickUpTimeOffset;
 
 	private readonly Dictionary<int, GameObject> timeParts = new Dictionary<int, GameObject>();
-	private readonly MeetingTimeOffsetSystem internalSystem;
+	private readonly MeetingTimeChangeSystem internalSystem;
 
 	public ThiefMeetingTimeStealSystem(int setNum, float setTimeOffset, float pickUpTimeOffset)
 	{
@@ -36,11 +36,11 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		this.setTimeOffset = setTimeOffset;
 		this.pickUpTimeOffset = pickUpTimeOffset;
 
-		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeOffsetSystem>(
+		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
 				meetingSystemType, out var system) ||
 			system is null)
 		{
-			system = new MeetingTimeOffsetSystem();
+			system = new MeetingTimeChangeSystem();
 			ExtremeSystemTypeManager.Instance.TryAdd(meetingSystemType, system);
 		}
 
@@ -126,8 +126,8 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			meetingSystemType,
 			(x) =>
 			{
-				x.Write((byte)MeetingTimeOffsetSystem.Ops.ChangeMeetingHudOffset);
-				x.Write(this.internalSystem.MeetingHudTimerOffset + value);
+				x.Write((byte)MeetingTimeChangeSystem.Ops.ChangeMeetingHudPermOffset);
+				x.Write(this.internalSystem.PermOffset + value);
 			});
 	}
 
