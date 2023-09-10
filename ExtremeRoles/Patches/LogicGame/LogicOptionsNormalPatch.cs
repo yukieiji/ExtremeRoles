@@ -26,13 +26,13 @@ public static class MeetingHudTimerOffsetPatch
 	public static void GetDiscussionTimePostfix(ref float __result)
 	{
 		// 議論時間が投票時間より長いのでそちらの秒数を変更する
-		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeOffsetSystem>(
+		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
 			ExtremeSystemType.MeetingTimeOffset, out var system) ||
 			system is null)
 		{
 			return;
 		}
-		__result = system.DiscussionTimeOffset;
+		__result = system.HudTimerOffset.Discussion;
 	}
 
 	[HarmonyPostfix]
@@ -40,12 +40,12 @@ public static class MeetingHudTimerOffsetPatch
 	public static void GetVotingTimePostfix(ref float __result)
 	{
 		// 投票時間が議論時間より長いのでそちらの秒数を変更する
-		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeOffsetSystem>(
+		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
 			ExtremeSystemType.MeetingTimeOffset, out var system) ||
 			system is null)
 		{
 			return;
 		}
-		__result = system.VotingTimeOffset;
+		__result = system.HudTimerOffset.Voting;
 	}
 }
