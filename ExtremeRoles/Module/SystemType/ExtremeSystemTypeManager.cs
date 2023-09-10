@@ -20,6 +20,8 @@ namespace ExtremeRoles.Module.SystemType;
 
 public enum ExtremeSystemType : byte
 {
+	MeetingTimeOffset,
+
 	BakeryReport,
 	FakerDummy
 }
