@@ -73,7 +73,15 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 	{ }
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
-	{ }
+	{
+		if (timing == ResetTiming.MeetingEnd &&
+			AmongUsClient.Instance.AmHost)
+		{
+			this.TempOffset = 0.0f;
+			this.IsDirty = true;
+			this.updateMeetingOffset();
+		}
+	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
