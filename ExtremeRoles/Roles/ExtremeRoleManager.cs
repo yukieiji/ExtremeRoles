@@ -60,8 +60,9 @@ public enum ExtremeRoleId : int
     Resurrecter,
     Gambler,
     Teleporter,
+	Moderator,
 
-    SpecialImpostor,
+	SpecialImpostor,
     Evolver,
     Carrier,
     PsychoKiller,
@@ -102,8 +103,8 @@ public enum ExtremeRoleId : int
     Madmate,
     Umbrer,
     Doll,
-    
-    Xion, 
+
+    Xion,
 }
 
 public enum CombinationRoleType : byte
@@ -112,12 +113,12 @@ public enum CombinationRoleType : byte
     HeroAca,
     DetectiveOffice,
     Kids,
-    
+
     Lover,
     Buddy,
 
     Sharer,
-    
+
     Supporter,
     Guesser,
     Mover,
@@ -128,7 +129,7 @@ public enum CombinationRoleType : byte
 public enum RoleGameOverReason
 {
     AssassinationMarin = 20,
-    
+
     AliceKilledByImposter,
     AliceKillAllOther,
 
@@ -140,9 +141,9 @@ public enum RoleGameOverReason
     TaskMasterGoHome,
 
     MissionaryAllAgainstGod,
-    
+
     JesterMeetingFavorite,
-    
+
     YandereKillAllOther,
     YandereShipJustForTwo,
 
@@ -220,8 +221,9 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Resurrecter , new Resurrecter()},
             {(int)ExtremeRoleId.Gambler     , new Gambler()},
             {(int)ExtremeRoleId.Teleporter  , new Teleporter()},
+			{(int)ExtremeRoleId.Moderator   , new Moderator()},
 
-            {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
+			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
             {(int)ExtremeRoleId.Carrier        , new Carrier()},
             {(int)ExtremeRoleId.PsychoKiller   , new PsychoKiller()},
@@ -414,7 +416,7 @@ public static class ExtremeRoleManager
 
             SingleRoleBase addRole = role.Clone();
 
-            if (addRole is IRoleAbility abilityRole && 
+            if (addRole is IRoleAbility abilityRole &&
                 CachedPlayerControl.LocalPlayer.PlayerId == playerId)
             {
                 Helper.Logging.Debug("Try Create Ability NOW!!!");
@@ -505,7 +507,7 @@ public static class ExtremeRoleManager
 
         SingleRoleBase addRole = role.Clone();
 
-        if (addRole is IRoleAbility abilityRole && 
+        if (addRole is IRoleAbility abilityRole &&
             CachedPlayerControl.LocalPlayer.PlayerId == playerId)
         {
             Helper.Logging.Debug("Try Create Ability NOW!!!");
@@ -540,7 +542,7 @@ public static class ExtremeRoleManager
         var checRole = GameRole[playerId];
 
         var role = checRole as T;
-        
+
         if (role != null)
         {
             return role;
