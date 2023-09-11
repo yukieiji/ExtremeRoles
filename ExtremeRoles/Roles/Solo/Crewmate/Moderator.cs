@@ -147,11 +147,17 @@ public sealed class Moderator :
 
 	public bool UseAbility()
 	{
+		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(ExtremeSystemType.MeetingTimeOffset, out var system) ||
+			system is null)
+		{
+			return false;
+		}
+
 		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(ExtremeSystemType.MeetingTimeOffset,
 			(x) =>
 			{
 				x.Write((byte)MeetingTimeChangeSystem.Ops.ChangeMeetingHudTempOffset);
-				x.Write(this.offset);
+				x.Write(system.TempOffset + this.offset);
 			});
 
 		this.textPopUp?.AddText(
