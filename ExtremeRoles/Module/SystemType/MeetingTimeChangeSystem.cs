@@ -8,10 +8,11 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 {
-	public record struct MeetingHudTimerOffset(
-		int Discussion = 0,
-		int Voting = 0)
+	public class MeetingHudTimerOffset
 	{
+		public int Discussion { get; private set; } = 0;
+		public int Voting { get; private set; } = 0;
+
 		public void Update(int newOffset)
 		{
 			this.Voting = 0;
@@ -36,6 +37,9 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 			this.Discussion = 0;
 			this.Voting = 0;
 		}
+
+		public override string ToString()
+			=> $"Discussion:{this.Discussion}   Voting:{this.Voting}";
 	}
 
 	public enum Ops : byte
