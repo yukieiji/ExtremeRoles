@@ -130,6 +130,11 @@ public sealed class Moderator :
 			{
 				this.awakeRole = true;
 				this.HasOtherVision = this.awakeHasOtherVision;
+				this.Button?.SetButtonShow(true);
+			}
+			else
+			{
+				this.Button?.SetButtonShow(false);
 			}
 		}
 	}
