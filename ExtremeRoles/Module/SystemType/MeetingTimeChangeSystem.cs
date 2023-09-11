@@ -19,14 +19,14 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 
 			int discussionTime = MeetingHudTimerOffsetPatch.NoModDiscussionTime;
 			// オフセット値が+もしくは、オフセット値が負でも議論時間が残る場合は議論時間だけ変更する
-			if (newOffset > 0.0f || (discussionTime > 0.0f && discussionTime + newOffset >= 0.0f))
+			if (newOffset > 0 || (discussionTime > 0 && discussionTime + newOffset >= 0))
 			{
 				this.Discussion = newOffset;
 				this.Voting = 0;
 			}
 			else
 			{
-				this.Discussion = discussionTime;
+				this.Discussion -= discussionTime;
 				this.Voting = newOffset + discussionTime;
 			}
 		}
