@@ -9,20 +9,20 @@ namespace ExtremeRoles.Module.SystemType;
 public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 {
 	public record struct MeetingHudTimerOffset(
-		float Discussion = 0.0f,
-		float Voting = 0.0f)
+		int Discussion = 0,
+		int Voting = 0)
 	{
-		public void Update(float newOffset)
+		public void Update(int newOffset)
 		{
-			this.Voting = 0.0f;
-			this.Discussion = 0.0f;
+			this.Voting = 0;
+			this.Discussion = 0;
 
-			float discussionTime = MeetingHudTimerOffsetPatch.NoModDiscussionTime;
+			int discussionTime = MeetingHudTimerOffsetPatch.NoModDiscussionTime;
 			// オフセット値が+もしくは、オフセット値が負でも議論時間が残る場合は議論時間だけ変更する
 			if (newOffset > 0.0f || (discussionTime > 0.0f && discussionTime + newOffset >= 0.0f))
 			{
 				this.Discussion = newOffset;
-				this.Voting = 0.0f;
+				this.Voting = 0;
 			}
 			else
 			{
@@ -33,8 +33,8 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 
 		public void Reset()
 		{
-			this.Discussion = 0.0f;
-			this.Voting = 0.0f;
+			this.Discussion = 0;
+			this.Voting = 0;
 		}
 	}
 
@@ -48,10 +48,10 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 
 	public MeetingHudTimerOffset HudTimerOffset { get; }
 
-	public float PermOffset { get; private set; } = 0.0f;
-	public float TempOffset { get; private set; } = 0.0f;
+	public int PermOffset { get; private set; } = 0;
+	public int TempOffset { get; private set; } = 0;
 
-	public float ButtonTimeOffset { get; private set; } = 0.0f;
+	public int ButtonTimeOffset { get; private set; } = 0;
 
 	public bool IsDirty { get; set; }
 
@@ -62,9 +62,9 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
-		this.PermOffset = reader.ReadSingle();
-		this.TempOffset = reader.ReadSingle();
-		this.ButtonTimeOffset = reader.ReadSingle();
+		this.PermOffset = reader.ReadPackedInt32();
+		this.TempOffset = reader.ReadPackedInt32();
+		this.ButtonTimeOffset = reader.ReadPackedInt32();
 
 		this.updateMeetingOffset();
 	}
@@ -77,7 +77,7 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 		if (timing == ResetTiming.MeetingEnd &&
 			AmongUsClient.Instance.AmHost)
 		{
-			this.TempOffset = 0.0f;
+			this.TempOffset = 0;
 			this.IsDirty = true;
 			this.updateMeetingOffset();
 		}
@@ -85,9 +85,9 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
-		writer.Write(this.PermOffset);
-		writer.Write(this.TempOffset);
-		writer.Write(this.ButtonTimeOffset);
+		writer.WritePacked(this.PermOffset);
+		writer.WritePacked(this.TempOffset);
+		writer.WritePacked(this.ButtonTimeOffset);
 		this.IsDirty = initialState;
 	}
 
@@ -97,20 +97,20 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 		switch (ops)
 		{
 			case Ops.ChangeMeetingHudPermOffset:
-				this.PermOffset = msgReader.ReadSingle();
+				this.PermOffset = msgReader.ReadPackedInt32();
 				updateMeetingOffset();
 				break;
 			case Ops.ChangeMeetingHudTempOffset:
-				this.TempOffset = msgReader.ReadSingle();
+				this.TempOffset = msgReader.ReadPackedInt32();
 				updateMeetingOffset();
 				break;
 			case Ops.ChangeButtonTime:
-				this.ButtonTimeOffset = msgReader.ReadSingle();
+				this.ButtonTimeOffset = msgReader.ReadPackedInt32();
 				break;
 			case Ops.Reset:
-				this.ButtonTimeOffset = 0.0f;
-				this.TempOffset = 0.0f;
-				this.PermOffset = 0.0f;
+				this.ButtonTimeOffset = 0;
+				this.TempOffset = 0;
+				this.PermOffset = 0;
 				this.updateMeetingOffset();
 				break;
 			default:

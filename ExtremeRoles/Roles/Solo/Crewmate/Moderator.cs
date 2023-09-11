@@ -40,7 +40,7 @@ public sealed class Moderator :
 
 	private TextPopUpper? textPopUp;
 
-	private float offset = 0.0f;
+	private int offset = 0;
 
 	private bool awakeRole;
 	private float awakeTaskGage;
@@ -157,7 +157,7 @@ public sealed class Moderator :
 			(x) =>
 			{
 				x.Write((byte)MeetingTimeChangeSystem.Ops.ChangeMeetingHudTempOffset);
-				x.Write(system.TempOffset + this.offset);
+				x.WritePacked(system.TempOffset + this.offset);
 			});
 
 		this.textPopUp?.AddText(
@@ -190,7 +190,7 @@ public sealed class Moderator :
 			format: OptionUnit.Percentage);
 		this.CreateAbilityCountOption(
 			parentOps, 1, 5);
-		CreateFloatOption(ModeratorOption.MeetingTimerOffset, 30.0f, 5.0f, 360f, 1.0f, parentOps);
+		CreateIntOption(ModeratorOption.MeetingTimerOffset, 30, 5, 360, 5, parentOps, format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
@@ -216,8 +216,10 @@ public sealed class Moderator :
 			this.HasOtherVision = false;
 		}
 
-		this.offset = OptionManager.Instance.GetValue<float>(
+		this.offset = OptionManager.Instance.GetValue<int>(
 			this.GetRoleOptionId(ModeratorOption.MeetingTimerOffset));
 		this.RoleAbilityInit();
+
+		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.MeetingTimeOffset, new MeetingTimeChangeSystem());
 	}
 }
