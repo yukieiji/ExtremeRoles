@@ -23,7 +23,9 @@ public enum ExtremeSystemType : byte
 	MeetingTimeOffset,
 
 	BakeryReport,
-	FakerDummy
+
+	FakerDummy,
+	ThiefMeetingTimeChange
 }
 
 public enum ResetTiming : byte

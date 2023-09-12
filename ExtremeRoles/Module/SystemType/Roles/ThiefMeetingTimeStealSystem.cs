@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 #nullable enable
 
@@ -14,6 +15,8 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 // 死体の絵変更はここでは行わない
 public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 {
+	private record VectorId(int Id, Vector2 pos);
+
 	public enum Ops
 	{
 		PickUp,
@@ -21,13 +24,16 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	}
 
 	public bool IsDirty { get; set; }
+
+	private int curActiveNum = 0;
+
 	private const ExtremeSystemType meetingSystemType = ExtremeSystemType.MeetingTimeOffset;
 
 	private readonly int setNum;
 	private readonly float setTimeOffset;
 	private readonly float pickUpTimeOffset;
 
-	private readonly Dictionary<int, GameObject> timeParts = new Dictionary<int, GameObject>();
+	private readonly Dictionary<int, TimeParts> timeParts = new Dictionary<int, TimeParts>();
 	private readonly MeetingTimeChangeSystem internalSystem;
 
 	public ThiefMeetingTimeStealSystem(int setNum, float setTimeOffset, float pickUpTimeOffset)
@@ -45,6 +51,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		}
 
 		this.internalSystem = system;
+		this.curActiveNum = 0;
 	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
@@ -58,7 +65,9 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			if (!this.timeParts.ContainsKey(id))
 			{
 				// オブジェクト設置
-				setPart(id);
+				var posId = getSetPosIndex().FirstOrDefault(x => x.Id == id);
+				if (posId is null) { continue; }
+				setPart(posId);
 			}
 		}
 
@@ -72,8 +81,9 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		}
 		foreach (int id in removeIndex)
 		{
-			// 削除処理
+			var part = this.timeParts[id];
 			this.timeParts.Remove(id);
+			Object.Destroy(part.gameObject);
 		}
 	}
 
@@ -81,7 +91,19 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	{ }
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
-	{ }
+	{
+		if (timing == ResetTiming.MeetingEnd &&
+			AmongUsClient.Instance.AmHost &&
+			this.curActiveNum >= 1)
+		{
+			for (int i = this.curActiveNum; i > 0; --i)
+			{
+				setPartToRandomPos();
+			}
+			this.curActiveNum = 0;
+			this.IsDirty = true;
+		}
+	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
@@ -99,25 +121,25 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		switch (ops)
 		{
 			case Ops.Set:
+				this.curActiveNum++;
 				changeMeetingTimeOffsetValue(this.setTimeOffset);
-				setPartToRandomPos();
 				break;
 			case Ops.PickUp:
-				changeMeetingTimeOffsetValue(this.pickUpTimeOffset);
+				changeMeetingTimeOffsetValue(-this.pickUpTimeOffset);
 				int picUpId = msgReader.ReadInt32();
 				lock (this.timeParts)
 				{
 					if (this.timeParts.TryGetValue(picUpId, out var value))
 					{
 						this.timeParts.Remove(picUpId);
-						// 削除処理
+						Object.Destroy(value.gameObject);
 					}
 				}
+				this.IsDirty = true;
 				break;
 			default:
 				return;
 		}
-		this.IsDirty = true;
 	}
 
 	private void changeMeetingTimeOffsetValue(float value)
@@ -134,7 +156,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	private void setPartToRandomPos()
 	{
 		var setPos = getSetPosIndex();
-		setPos.RemoveAll(x => !this.timeParts.ContainsKey(x));
+		setPos.RemoveAll(x => !this.timeParts.ContainsKey(x.Id));
 
 		var randomPos = setPos.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 
@@ -143,20 +165,26 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			setNum < this.setNum &&
 			randomPos.Count > 0)
 		{
-			int id = randomPos[0];
-
+			VectorId posId = randomPos[0];
 			randomPos.RemoveAt(0);
-			// 追加処理
-			setPart(id);
+			setPart(posId);
 		}
 	}
 
-	private void setPart(int id)
+	private void setPart(VectorId posId)
 	{
-		this.timeParts.Add(id, new GameObject());
+		int id = posId.Id;
+		Vector2 pos = posId.pos;
+		GameObject obj = new GameObject($"TimePart_{id}");
+		var part = obj.AddComponent<TimeParts>();
+		part.SetTimeOffset(id);
+
+		obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+
+		this.timeParts.Add(id, part);
 	}
 
 	// マップの設置箇所のIDを返す
-	private static List<int> getSetPosIndex()
-		=> new List<int>();
+	private static List<VectorId> getSetPosIndex()
+		=> new List<VectorId>();
 }
