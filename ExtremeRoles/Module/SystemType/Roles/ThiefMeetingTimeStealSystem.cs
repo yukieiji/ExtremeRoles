@@ -125,7 +125,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 				changeMeetingTimeOffsetValue(this.setTimeOffset);
 				break;
 			case Ops.PickUp:
-				changeMeetingTimeOffsetValue(-this.pickUpTimeOffset);
+				changeMeetingTimeOffsetValue(this.pickUpTimeOffset);
 				int picUpId = msgReader.ReadInt32();
 				lock (this.timeParts)
 				{
@@ -168,6 +168,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			VectorId posId = randomPos[0];
 			randomPos.RemoveAt(0);
 			setPart(posId);
+			setNum++;
 		}
 	}
 

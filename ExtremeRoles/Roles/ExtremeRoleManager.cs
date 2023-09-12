@@ -85,6 +85,7 @@ public enum ExtremeRoleId : int
     Magician,
     Slime,
     Zombie,
+	Thief,
 
     Alice,
     Jackal,
@@ -246,8 +247,9 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Magician       , new Magician()},
             {(int)ExtremeRoleId.Slime          , new Slime()},
             {(int)ExtremeRoleId.Zombie         , new Zombie()},
+			{(int)ExtremeRoleId.Thief          , new Thief()},
 
-            {(int)ExtremeRoleId.Alice     , new Alice()},
+			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},
             {(int)ExtremeRoleId.TaskMaster, new TaskMaster()},
             {(int)ExtremeRoleId.Missionary, new Missionary()},
