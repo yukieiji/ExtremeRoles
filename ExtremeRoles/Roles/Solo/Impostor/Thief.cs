@@ -115,8 +115,8 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 			ExtremeSystemType.ThiefMeetingTimeChange,
 			new ThiefMeetingTimeStealSystem(
 				allOption.GetValue<int>(GetRoleOptionId(ThiefOption.SetNum)),
-				allOption.GetValue<int>(GetRoleOptionId(ThiefOption.SetTimeOffset)),
-				-allOption.GetValue<int>(GetRoleOptionId(ThiefOption.PickUpTimeOffset))));
+				-allOption.GetValue<int>(GetRoleOptionId(ThiefOption.SetTimeOffset)),
+				allOption.GetValue<int>(GetRoleOptionId(ThiefOption.PickUpTimeOffset))));
     }
 
     public void ResetOnMeetingStart()
