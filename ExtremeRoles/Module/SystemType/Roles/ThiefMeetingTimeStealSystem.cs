@@ -30,13 +30,13 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	private const ExtremeSystemType meetingSystemType = ExtremeSystemType.MeetingTimeOffset;
 
 	private readonly int setNum;
-	private readonly float setTimeOffset;
-	private readonly float pickUpTimeOffset;
+	private readonly int setTimeOffset;
+	private readonly int pickUpTimeOffset;
 
 	private readonly Dictionary<int, TimeParts> timeParts = new Dictionary<int, TimeParts>();
 	private readonly MeetingTimeChangeSystem internalSystem;
 
-	public ThiefMeetingTimeStealSystem(int setNum, float setTimeOffset, float pickUpTimeOffset)
+	public ThiefMeetingTimeStealSystem(int setNum, int setTimeOffset, int pickUpTimeOffset)
 	{
 		this.setNum = setNum;
 		this.setTimeOffset = setTimeOffset;
@@ -142,7 +142,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		}
 	}
 
-	private void changeMeetingTimeOffsetValue(float value)
+	private void changeMeetingTimeOffsetValue(int value)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
 			meetingSystemType,
