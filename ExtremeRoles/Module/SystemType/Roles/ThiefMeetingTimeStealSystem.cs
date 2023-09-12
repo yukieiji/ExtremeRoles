@@ -149,7 +149,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			(x) =>
 			{
 				x.Write((byte)MeetingTimeChangeSystem.Ops.ChangeMeetingHudPermOffset);
-				x.Write(this.internalSystem.PermOffset + value);
+				x.WritePacked(this.internalSystem.PermOffset + value);
 			});
 	}
 
