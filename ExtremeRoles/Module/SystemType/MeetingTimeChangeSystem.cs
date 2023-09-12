@@ -8,7 +8,7 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 {
-	public class MeetingHudTimerOffset
+	public sealed class MeetingHudTimerOffset
 	{
 		public int Discussion { get; private set; } = 0;
 		public int Voting { get; private set; } = 0;
