@@ -3,10 +3,17 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using AmongUs.GameOptions;
+using ExtremeRoles.Compat.ModIntegrator;
+using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.Json;
+
 
 #nullable enable
 
@@ -35,6 +42,8 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 
 	private readonly Dictionary<int, TimeParts> timeParts = new Dictionary<int, TimeParts>();
 	private readonly MeetingTimeChangeSystem internalSystem;
+
+	private static JObject? json = null;
 
 	public ThiefMeetingTimeStealSystem(int setNum, int setTimeOffset, int pickUpTimeOffset)
 	{
@@ -186,6 +195,58 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	}
 
 	// マップの設置箇所のIDを返す
-	private static List<VectorId> getSetPosIndex()
-		=> new List<VectorId>();
+	private List<VectorId> getSetPosIndex()
+	{
+		if (json == null)
+		{
+			json = JsonParser.GetJObjectFromAssembly(
+				"ExtremeRoles.Resources.JsonData.ThiefTimePartPoint.json");
+		}
+		string ventKey;
+		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
+
+		var result = new List<VectorId>(10);
+
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			if (modMap is SubmergedIntegrator)
+			{
+				ventKey = GameSystem.SubmergedKey;
+			}
+			else
+			{
+				return result;
+			}
+		}
+		else
+		{
+			switch (mapId)
+			{
+				case 0:
+					ventKey = GameSystem.SkeldKey;
+					break;
+				case 2:
+					ventKey = GameSystem.PolusKey;
+					break;
+				case 4:
+					ventKey = GameSystem.AirShipKey;
+					break;
+				default:
+					return result;
+			}
+		}
+		JArray posInfo = json.Get<JArray>(ventKey);
+
+		for (int i = 0; i < posInfo.Count; ++i)
+		{
+			JArray ventLinkedId = posInfo.Get<JArray>(i);
+
+			result.Add(
+				new VectorId(
+					i, new Vector2(
+						(float)(ventLinkedId[0]),
+						(float)(ventLinkedId[1]))));
+		}
+		return result;
+	}
 }

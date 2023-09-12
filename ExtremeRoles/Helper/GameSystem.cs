@@ -24,7 +24,12 @@ public static class GameSystem
     public const int VanillaMaxPlayerNum = 15;
     public const int MaxImposterNum = 14;
 
-    public const string BottomRightButtonGroupObjectName = "BottomRight";
+	public const string SkeldKey = "Skeld";
+	public const string PolusKey = "Polus";
+	public const string AirShipKey = "AirShip";
+	public const string SubmergedKey = "Submerged";
+
+	public const string BottomRightButtonGroupObjectName = "BottomRight";
 
     public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
     public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
@@ -48,10 +53,6 @@ public static class GameSystem
 
 	private const string ventInfoJson =
 		"ExtremeRoles.Resources.JsonData.AllVentLinkInfo.json";
-	private const string skeldKey = "Skeld";
-	private const string polusKey = "Polus";
-	private const string airShipKey = "AirShip";
-	private const string submergedKey = "Submerged";
 
 	private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -324,7 +325,7 @@ public static class GameSystem
 		{
 			if (modMap is SubmergedIntegrator)
 			{
-				ventKey = submergedKey;
+				ventKey = SubmergedKey;
 			}
 			else
 			{
@@ -336,13 +337,13 @@ public static class GameSystem
 			switch (mapId)
 			{
 				case 0:
-					ventKey = skeldKey;
+					ventKey = SkeldKey;
 					break;
 				case 2:
-					ventKey = polusKey;
+					ventKey = PolusKey;
 					break;
 				case 4:
-					ventKey = airShipKey;
+					ventKey = AirShipKey;
 					break;
 				default:
 					return;
