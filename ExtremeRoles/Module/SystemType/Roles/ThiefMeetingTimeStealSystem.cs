@@ -67,6 +67,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	{
 		int newNum = reader.ReadPackedInt32();
 		var hostId = new HashSet<int>();
+		var pos = getSetPosIndex();
 		for (int i = 0; i < newNum; ++i)
 		{
 			int id = reader.ReadPackedInt32();
@@ -74,7 +75,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			if (!this.timeParts.ContainsKey(id))
 			{
 				// オブジェクト設置
-				var posId = getSetPosIndex().FirstOrDefault(x => x.Id == id);
+				var posId = pos.FirstOrDefault(x => x.Id == id);
 				if (posId is null) { continue; }
 				setPart(posId);
 			}
@@ -121,6 +122,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		{
 			writer.WritePacked(id);
 		}
+		this.IsDirty = initialState;
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
@@ -129,10 +131,6 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		Ops ops = (Ops)msgReader.ReadByte();
 		switch (ops)
 		{
-			case Ops.Set:
-				this.curActiveNum++;
-				changeMeetingTimeOffsetValue(this.setTimeOffset);
-				break;
 			case Ops.PickUp:
 				changeMeetingTimeOffsetValue(this.pickUpTimeOffset);
 				int picUpId = msgReader.ReadInt32();
@@ -145,6 +143,10 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 					}
 				}
 				this.IsDirty = true;
+				break;
+			case Ops.Set:
+				this.curActiveNum++;
+				changeMeetingTimeOffsetValue(this.setTimeOffset);
 				break;
 			default:
 				return;
@@ -165,7 +167,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	private void setPartToRandomPos()
 	{
 		var setPos = getSetPosIndex();
-		setPos.RemoveAll(x => !this.timeParts.ContainsKey(x.Id));
+		setPos.RemoveAll(x => this.timeParts.ContainsKey(x.Id));
 
 		var randomPos = setPos.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 
