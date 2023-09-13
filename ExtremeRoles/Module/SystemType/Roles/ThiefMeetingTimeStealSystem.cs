@@ -197,7 +197,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	}
 
 	// マップの設置箇所のIDを返す
-	private List<VectorId> getSetPosIndex()
+	private static List<VectorId> getSetPosIndex()
 	{
 		if (json == null)
 		{
