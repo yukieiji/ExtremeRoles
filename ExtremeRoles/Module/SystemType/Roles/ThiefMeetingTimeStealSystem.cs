@@ -19,7 +19,6 @@ using ExtremeRoles.Extension.Json;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-// 死体の絵変更はここでは行わない
 public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 {
 	private record VectorId(int Id, Vector2 pos);
