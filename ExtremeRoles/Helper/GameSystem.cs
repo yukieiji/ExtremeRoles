@@ -17,6 +17,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
+#nullable enable
+
 namespace ExtremeRoles.Helper;
 
 public static class GameSystem
@@ -75,7 +77,7 @@ public static class GameSystem
         TaskTypes.VentCleaning,
     };
 
-    private static GridArrange cachedArrange = null;
+    private static GridArrange? cachedArrange = null;
     private static List<PlayerControl> bots = new List<PlayerControl>();
 
 	public static void ReGridButtons()
@@ -134,6 +136,14 @@ public static class GameSystem
         setColliderEnable<BoxCollider2D>(obj, active);
         setColliderEnable<CircleCollider2D>(obj, active);
     }
+
+	public static DeadBody? GetDeadBody(byte playerId)
+	{
+		DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+		DeadBody? body = array.FirstOrDefault(
+			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId != playerId);
+		return body;
+	}
 
     public static (int, int) GetTaskInfo(
         GameData.PlayerInfo playerInfo)
@@ -235,9 +245,9 @@ public static class GameSystem
         FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
             ImageNames.VitalsButton].Image;
 
-    public static SystemConsole GetSecuritySystemConsole()
+    public static SystemConsole? GetSecuritySystemConsole()
     {
-        SystemConsole watchConsole;
+        SystemConsole? watchConsole;
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
             watchConsole = modMap!.GetSystemConsole(SystemConsoleType.SecurityCamera);
@@ -249,9 +259,9 @@ public static class GameSystem
         return watchConsole;
     }
 
-    public static SystemConsole GetVitalSystemConsole()
+    public static SystemConsole? GetVitalSystemConsole()
     {
-        SystemConsole vitalConsole;
+        SystemConsole? vitalConsole;
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
             vitalConsole = modMap!.GetSystemConsole(SystemConsoleType.Vital);
@@ -292,8 +302,8 @@ public static class GameSystem
 
     public static Minigame OpenMinigame(
         Minigame prefab,
-        PlayerTask task = null,
-        Console console = null)
+        PlayerTask? task = null,
+        Console? console = null)
     {
         Minigame minigame = UnityEngine.Object.Instantiate(
             prefab, Camera.main.transform, false);
@@ -316,7 +326,9 @@ public static class GameSystem
 			allVent.Add(vent.Id, vent);
 		}
 
-		JObject linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
+		JObject? linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
+
+		if (linkInfoJson == null) { return; }
 
 		string ventKey;
 		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
@@ -356,8 +368,9 @@ public static class GameSystem
 		{
 			JArray ventLinkedId = linkInfo.Get<JArray>(i);
 
-			if (allVent.TryGetValue((int)ventLinkedId[0], out Vent from) &&
-				allVent.TryGetValue((int)ventLinkedId[1], out Vent target))
+			if (allVent.TryGetValue((int)ventLinkedId[0], out Vent? from) &&
+				allVent.TryGetValue((int)ventLinkedId[1], out Vent? target) &&
+				from != null && target != null)
 			{
 				linkVent(from, target);
 			}
@@ -525,10 +538,13 @@ public static class GameSystem
 
     public static List<Vector2> GetAirShipRandomSpawn()
     {
-        JObject json = JsonParser.GetJObjectFromAssembly(airShipSpawnJson);
-        JArray airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
+        JObject? json = JsonParser.GetJObjectFromAssembly(airShipSpawnJson);
 
-        List<Vector2> result = new List<Vector2>();
+		List<Vector2> result = new List<Vector2>();
+
+		if (json == null) { return result; }
+
+        JArray airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
 
         for (int i = 0; i < airShipSpawn.Count; ++i)
         {
@@ -541,7 +557,9 @@ public static class GameSystem
 
     public static void ShareVersion()
     {
-        Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+        Version? ver = Assembly.GetExecutingAssembly().GetName().Version;
+
+		if (ver is null) { return; }
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.ShareVersion))
@@ -617,7 +635,7 @@ public static class GameSystem
         return index;
     }
 
-    private static SystemConsole getVanillaSecurityConsole()
+    private static SystemConsole? getVanillaSecurityConsole()
     {
         // 0 = Skeld
         // 1 = Mira HQ
@@ -646,7 +664,7 @@ public static class GameSystem
         }
     }
 
-    private static SystemConsole getVanillaVitalConsole()
+    private static SystemConsole? getVanillaVitalConsole()
     {
         // 0 = Skeld
         // 1 = Mira HQ

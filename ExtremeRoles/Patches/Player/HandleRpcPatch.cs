@@ -300,6 +300,10 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.ZombieRpc:
 				RPCOperator.ZombieRpc(ref reader);
 				break;
+			case RPCOperator.Command.ThiefAddDeadbodyEffect:
+				byte addEffectTargetDeadBody = reader.ReadByte();
+				RPCOperator.ThiefAddEffect(addEffectTargetDeadBody);
+				break;
 			case RPCOperator.Command.AliceShipBroken:
 				byte alicePlayerId = reader.ReadByte();
 				byte newTaskSetPlayerId = reader.ReadByte();

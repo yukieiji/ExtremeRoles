@@ -76,6 +76,7 @@ public static class RPCOperator
         UnderWarperUseVentWithNoAnime,
         SlimeAbility,
         ZombieRpc,
+		ThiefAddDeadbodyEffect,
 
         // ニュートラル
         AliceShipBroken,
@@ -656,7 +657,12 @@ public static class RPCOperator
         Roles.Solo.Impostor.Zombie.RpcAbility(ref reader);
     }
 
-    public static void AliceShipBroken(
+	public static void ThiefAddEffect(byte addEffectTargetDeadBody)
+	{
+		Roles.Solo.Impostor.Thief.AddEffect(addEffectTargetDeadBody);
+	}
+
+	public static void AliceShipBroken(
         byte callerId, byte targetPlayerId, List<int> taskId)
     {
         Roles.Solo.Neutral.Alice.ShipBroken(
