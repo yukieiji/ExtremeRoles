@@ -49,6 +49,7 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 		var effect = new GameObject("ThiefEffect");
 		effect.transform.position = body.transform.position;
 		effect.transform.SetParent(body.transform);
+		effect.transform.localPosition = new Vector2(-0.25f, -0.15f);
 		var player = effect.AddComponent<DlayableVideoPlayer>();
 
 		player.SetThum(Loader.CreateSpriteFromResources(
