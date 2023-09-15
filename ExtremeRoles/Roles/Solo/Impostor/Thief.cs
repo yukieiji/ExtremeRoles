@@ -64,7 +64,7 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
         this.CreateAbilityCountButton(
             "evolve",
             Loader.CreateSpriteFromResources(
-                Path.ThiefMagicCircleButton),
+                Path.TheifMagicCircle),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: ForceCleanUp);
