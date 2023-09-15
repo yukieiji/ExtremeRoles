@@ -100,8 +100,6 @@ public static class Path
     public const string ZombieMagicCircleVideo = "zombiemagiccircle";
     public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
 	public const string TheifMagicCircle = "ExtremeRoles.Resources.TheifeMagicCircle.png";
-	public const string ThiefMagicCircleButton =
-		"ExtremeRoles.Resources.TheifMagicCircleButton.png";
 	public const string TheifMagicCircleVideo = "theifmagiccircle";
 
 	public const string VigilanteEmergencyCall =
