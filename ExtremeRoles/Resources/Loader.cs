@@ -99,8 +99,12 @@ public static class Path
         "ExtremeRoles.Resources.ZombieMagicCircleButton.png";
     public const string ZombieMagicCircleVideo = "zombiemagiccircle";
     public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
+	public const string TheifMagicCircle = "ExtremeRoles.Resources.TheifeMagicCircle.png";
+	public const string ThiefMagicCircleButton =
+		"ExtremeRoles.Resources.TheifMagicCircleButton.png";
+	public const string TheifMagicCircleVideo = "theifmagiccircle";
 
-    public const string VigilanteEmergencyCall =
+	public const string VigilanteEmergencyCall =
         "ExtremeRoles.Resources.EmergencyCall.png";
     public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
     public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
