@@ -56,7 +56,6 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 		player.SetVideo(Loader.GetUnityObjectFromResources<VideoClip>(
 			Path.VideoAsset, string.Format(
 				Path.VideoAssetPlaceHolder, Path.TheifMagicCircleVideo)));
-		player.SetTimer(0.0f);
 	}
 
     public void CreateAbility()
