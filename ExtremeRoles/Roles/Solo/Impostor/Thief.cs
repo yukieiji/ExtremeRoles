@@ -52,10 +52,10 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 		var player = effect.AddComponent<DlayableVideoPlayer>();
 
 		player.SetThum(Loader.CreateSpriteFromResources(
-			Path.ZombieMagicCircle));
+			Path.TheifMagicCircle));
 		player.SetVideo(Loader.GetUnityObjectFromResources<VideoClip>(
 			Path.VideoAsset, string.Format(
-				Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
+				Path.VideoAssetPlaceHolder, Path.TheifMagicCircleVideo)));
 		player.SetTimer(0.0f);
 	}
 
@@ -64,7 +64,7 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
         this.CreateAbilityCountButton(
             "evolve",
             Loader.CreateSpriteFromResources(
-                Path.EvolverEvolved),
+                Path.ThiefMagicCircleButton),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: ForceCleanUp);
