@@ -141,7 +141,7 @@ public static class GameSystem
 	{
 		DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
 		DeadBody? body = array.FirstOrDefault(
-			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId != playerId);
+			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId == playerId);
 		return body;
 	}
 
