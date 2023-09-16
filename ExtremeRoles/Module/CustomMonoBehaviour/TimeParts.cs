@@ -55,7 +55,7 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 		var img = base.gameObject.AddComponent<SpriteRenderer>();
 
 		img.sprite = Loader.CreateSpriteFromResources(
-			Path.TeleporterNoneActivatePortal);
+			Path.TheifTimeParts);
 	}
 
 	public void SetTimeOffset(int id)
