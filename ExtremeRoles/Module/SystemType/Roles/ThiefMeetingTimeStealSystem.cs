@@ -132,7 +132,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		{
 			case Ops.PickUp:
 				changeMeetingTimeOffsetValue(this.pickUpTimeOffset);
-				int picUpId = msgReader.ReadInt32();
+				int picUpId = msgReader.ReadPackedInt32();
 				lock (this.timeParts)
 				{
 					if (this.timeParts.TryGetValue(picUpId, out var value))
