@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Module.SystemType;
 using UnityEngine;
+using ExtremeRoles.Extension;
 
 #nullable enable
 
@@ -12,38 +13,20 @@ namespace ExtremeRoles.Patches.LogicGame;
 public static class MeetingHudTimerOffsetPatch
 {
 	public static int NoModDiscussionTime
-	{
-		get
-		{
-			var gm = GameManager.Instance;
-			if (gm == null)
-			{
-				return 0;
-			}
-			var normalOption = GameManager.Instance.LogicOptions.TryCast<LogicOptionsNormal>();
-			if (normalOption == null)
-			{
-				return 0;
-			}
-			return normalOption.GameOptions.DiscussionTime;
-		}
-	}
+		=> tryGetNormalOption(out var normalOption) ?
+		 normalOption!.GameOptions.DiscussionTime : 0;
+	
 	public static int NoModVotingTime
+		=> tryGetNormalOption(out var normalOption) ?
+		 normalOption!.GameOptions.VotingTime : 0;
+
+	private static bool tryGetNormalOption(out LogicOptionsNormal? normalOption)
 	{
-		get
-		{
-			var gm = GameManager.Instance;
-			if (gm == null)
-			{
-				return 0;
-			}
-			var normalOption = GameManager.Instance.LogicOptions.TryCast<LogicOptionsNormal>();
-			if (normalOption == null)
-			{
-				return 0;
-			}
-			return normalOption.GameOptions.VotingTime;
-		}
+		normalOption = null;
+		
+		return 
+			GameManager.Instance != null &&
+			GameManager.Instance.LogicOptions.IsTryCast(out normalOption);
 	}
 
 	[HarmonyPostfix]
