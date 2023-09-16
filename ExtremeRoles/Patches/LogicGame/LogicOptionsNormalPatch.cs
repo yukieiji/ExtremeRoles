@@ -27,8 +27,9 @@ public static class MeetingHudTimerOffsetPatch
 		{
 			return;
 		}
-		__result += system.HudTimerOffset.Discussion;
-		__result = Mathf.Clamp(__result, 0, int.MaxValue);
+		__result = Mathf.Clamp(
+			__result + system.HudTimerOffset.Discussion,
+			0, int.MaxValue);
 	}
 
 	[HarmonyPostfix]
@@ -41,7 +42,8 @@ public static class MeetingHudTimerOffsetPatch
 		{
 			return;
 		}
-		__result += system.HudTimerOffset.Voting;
-		__result = Mathf.Clamp(__result, 0, int.MaxValue);
+		__result = Mathf.Clamp(
+			__result + system.HudTimerOffset.Voting,
+			0, int.MaxValue);
 	}
 }
