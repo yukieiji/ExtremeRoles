@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using ExtremeRoles.Module.SystemType;
+using UnityEngine;
 
 #nullable enable
 
@@ -27,6 +28,7 @@ public static class MeetingHudTimerOffsetPatch
 			return;
 		}
 		__result += system.HudTimerOffset.Discussion;
+		__result = Mathf.Clamp(__result, 0, int.MaxValue);
 	}
 
 	[HarmonyPostfix]
@@ -40,5 +42,6 @@ public static class MeetingHudTimerOffsetPatch
 			return;
 		}
 		__result += system.HudTimerOffset.Voting;
+		__result = Mathf.Clamp(__result, 0, int.MaxValue);
 	}
 }
