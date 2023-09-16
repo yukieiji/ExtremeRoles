@@ -4,6 +4,7 @@ using UnityEngine;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -58,7 +59,7 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 			Path.TheifTimeParts);
 	}
 
-	public void SetTimeOffset(int id)
+	public void SetId(int id)
 	{
 		this.id = id;
 	}
@@ -85,6 +86,7 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 			ExtremeSystemType.ThiefMeetingTimeChange,
 			x =>
 			{
+				x.Write((byte)ThiefMeetingTimeStealSystem.Ops.PickUp);
 				x.WritePacked(this.id);
 			});
 	}
