@@ -12,10 +12,39 @@ namespace ExtremeRoles.Patches.LogicGame;
 public static class MeetingHudTimerOffsetPatch
 {
 	public static int NoModDiscussionTime
-		=> GameManager.Instance.LogicOptions is LogicOptionsNormal normalOption ? normalOption.GameOptions.DiscussionTime : 0;
+	{
+		get
+		{
+			var gm = GameManager.Instance;
+			if (gm == null)
+			{
+				return 0;
+			}
+			var normalOption = GameManager.Instance.LogicOptions.TryCast<LogicOptionsNormal>();
+			if (normalOption == null)
+			{
+				return 0;
+			}
+			return normalOption.GameOptions.DiscussionTime;
+		}
+	}
 	public static int NoModVotingTime
-		=> GameManager.Instance.LogicOptions is LogicOptionsNormal normalOption ? normalOption.GameOptions.VotingTime : 0;
-
+	{
+		get
+		{
+			var gm = GameManager.Instance;
+			if (gm == null)
+			{
+				return 0;
+			}
+			var normalOption = GameManager.Instance.LogicOptions.TryCast<LogicOptionsNormal>();
+			if (normalOption == null)
+			{
+				return 0;
+			}
+			return normalOption.GameOptions.VotingTime;
+		}
+	}
 
 	[HarmonyPostfix]
 	[HarmonyPatch(typeof(LogicOptionsNormal), nameof(LogicOptionsNormal.GetDiscussionTime))]
