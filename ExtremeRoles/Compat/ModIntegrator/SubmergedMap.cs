@@ -14,12 +14,12 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Module.CustomOption.Factories;
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Extension;
 
 #nullable enable
 
