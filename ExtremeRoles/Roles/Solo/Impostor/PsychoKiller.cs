@@ -104,7 +104,7 @@ public sealed class PsychoKiller :
     {
 		if (this.hasSelfTimer)
 		{
-			this.isStartTimer = this.isRestartWhenMeetingStart;
+			this.isStartTimer = this.isRestartWhenMeetingStart && this.isStartTimer;
 			resetTimer();
 		}
     }
