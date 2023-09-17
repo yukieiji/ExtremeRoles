@@ -412,8 +412,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		switch (customMonoType)
 		{
 			case CustomMonoBehaviourType.MovableFloorBehaviour:
-				addObject.AddComponent(
-					Il2CppType.From(this.elevatorMover)).TryCast<MonoBehaviour>();
+				addObject.TryAddComponent(Il2CppType.From(this.elevatorMover));
 				break;
 			default:
 				break;
