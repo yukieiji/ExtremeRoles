@@ -19,8 +19,8 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
     public enum ThiefOption
 	{
 		Range,
-        SetNum,
 		SetTimeOffset,
+		SetNum,
 		PickUpTimeOffset,
 		IsAddEffect
     }
@@ -62,7 +62,7 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "evolve",
+            "steal",
             Loader.CreateSpriteFromResources(
                 Path.TheifMagicCircle),
             checkAbility: CheckAbility,
@@ -133,9 +133,9 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 		this.CreateAbilityCountOption(
             parentOps, 2, 5, 2.0f);
 		CreateFloatOption(ThiefOption.Range, 0.1f, 1.8f, 3.6f, 0.1f, parentOps);
+		CreateIntOption(ThiefOption.SetTimeOffset, 30, 10, 360, 5, parentOps, format: OptionUnit.Second);
 		CreateIntOption(ThiefOption.SetNum, 5, 1, 10, 1, parentOps);
-		CreateIntOption(ThiefOption.SetTimeOffset, 30, 10, 360, 5, parentOps);
-		CreateIntOption(ThiefOption.PickUpTimeOffset, 6, 1, 60, 1, parentOps);
+		CreateIntOption(ThiefOption.PickUpTimeOffset, 6, 1, 60, 1, parentOps, format: OptionUnit.Second);
 		CreateBoolOption(ThiefOption.IsAddEffect, true, parentOps);
 	}
 
