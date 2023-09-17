@@ -52,7 +52,7 @@ def get_trans_data_check(file_name:str)-> Dict[str, List[str]]:
             missing_data[lang] = []
 
           if cell_data == '':
-            missing_data[lang].append(name)
+            missing_data[lang].append(key)
 
   return missing_data
 
