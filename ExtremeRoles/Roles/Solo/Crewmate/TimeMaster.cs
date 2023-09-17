@@ -276,12 +276,15 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
         // ヒストリーブロック解除
         history.SetAddHistoryBlock(false);
 
-        // 会議開始後リウィンドのコルーチンが止まるまでポジションがバグるので
-        // ここでポジションを上書きする => TMが発動してなくても通るが問題なし
-        // それ以外でコードを追加してもいいが最も被害が少ない変更がここ
-        CachedShipStatus.Instance.SpawnPlayer(
-            CachedPlayerControl.LocalPlayer,
-            GameData.Instance.PlayerCount, false);
+		if (MeetingHud.Instance != null)
+		{
+			// 会議開始後リウィンドのコルーチンが止まるまでポジションがバグるので
+			// ここでポジションを上書きする => TMが発動してなくても通るが問題なし
+			// それ以外でコードを追加してもいいが最も被害が少ない変更がここ
+			CachedShipStatus.Instance.SpawnPlayer(
+				CachedPlayerControl.LocalPlayer,
+				GameData.Instance.PlayerCount, false);
+		}
 
         CachedPlayerControl.LocalPlayer.PlayerControl.moveable = true;
     }
