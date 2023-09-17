@@ -50,7 +50,7 @@ public sealed class Moderator :
 		ExtremeRoleId.Moderator,
 		ExtremeRoleType.Crewmate,
 		ExtremeRoleId.Moderator.ToString(),
-		ColorPalette.OpenerSpringGreen,
+		ColorPalette.ModeratorByakuroku,
 		false, true, false, false)
 	{ }
 
