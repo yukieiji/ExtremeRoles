@@ -29,6 +29,7 @@ public sealed class PsychoKiller :
 
 	private float timerModRate;
 	private float defaultTimer;
+	private bool isForceRestartWhenMeetingEnd;
 	private bool isRestartWhenMeetingStart;
 
     private int combMax;
@@ -104,7 +105,13 @@ public sealed class PsychoKiller :
     {
 		if (this.hasSelfTimer)
 		{
-			this.isStartTimer = this.isRestartWhenMeetingStart && this.isStartTimer;
+			this.isStartTimer =
+			(
+				this.isForceRestartWhenMeetingEnd ||
+				(
+					this.isRestartWhenMeetingStart && this.isStartTimer
+				)
+			);
 			resetTimer();
 		}
     }
@@ -218,6 +225,8 @@ public sealed class PsychoKiller :
 			GetRoleOptionId(PsychoKillerOption.HasSelfKillTimer));
 		this.defaultTimer = allOption.GetValue<float>(
 			GetRoleOptionId(PsychoKillerOption.SelfKillTimerTime));
+		this.isForceRestartWhenMeetingEnd = allOption.GetValue<bool>(
+			GetRoleOptionId(PsychoKillerOption.IsForceRestartWhenMeetingEnd));
 		this.isRestartWhenMeetingStart = allOption.GetValue<bool>(
 			GetRoleOptionId(PsychoKillerOption.IsRestartWhenMeetingEnd));
 
