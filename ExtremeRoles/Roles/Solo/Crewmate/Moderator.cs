@@ -146,7 +146,7 @@ public sealed class Moderator :
 		this.CreateAbilityCountButton(
 			"moderate",
 			Loader.CreateSpriteFromResources(
-				Path.OpenerOpenDoor));
+				Path.ModeratorModerate));
 		this.Button?.SetLabelToCrewmate();
 	}
 
