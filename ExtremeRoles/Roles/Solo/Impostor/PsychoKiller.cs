@@ -41,6 +41,7 @@ public sealed class PsychoKiller :
         CombResetWhenMeeting,
 		HasSelfKillTimer,
 		SelfKillTimerTime,
+		IsForceRestartWhenMeetingEnd,
 		IsRestartWhenMeetingEnd,
 		SelfKillTimerModRate,
 	}
@@ -180,9 +181,14 @@ public sealed class PsychoKiller :
 			30.0f, 5.0f, 120.0f, 0.5f,
 			hasSelfKillTimer,
 			format: OptionUnit.Second);
+		var timerOpt = CreateBoolOption(
+			PsychoKillerOption.IsForceRestartWhenMeetingEnd,
+			false, hasSelfKillTimer);
 		CreateBoolOption(
 			PsychoKillerOption.IsRestartWhenMeetingEnd,
-			true, hasSelfKillTimer);
+			true, timerOpt,
+			invert: true,
+			enableCheckOption: parentOps);
 		CreateIntOption(
 			PsychoKillerOption.SelfKillTimerModRate,
 			0, -50, 50, 1, hasSelfKillTimer,
