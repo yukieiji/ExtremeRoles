@@ -42,7 +42,6 @@ public sealed class PsychoKiller :
 		HasSelfKillTimer,
 		SelfKillTimerTime,
 		IsRestartWhenMeetingEnd,
-		IsCombSyncSelfKillTimer,
 		SelfKillTimerModRate,
 	}
 
