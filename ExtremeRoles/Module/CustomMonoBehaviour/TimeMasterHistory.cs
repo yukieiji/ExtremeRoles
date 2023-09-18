@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
-
 using ExtremeRoles.Module.RoleAssign;
 
 using ExtremeRoles.Performance;
@@ -15,14 +14,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 	[Il2CppRegister]
 	public sealed class TimeMasterHistory : MonoBehaviour
 	{
-		public bool BlockAddHistory => this.isBlockAdd;
+		public readonly record struct History(Vector3 Pos, bool CanMove, bool InVent, bool IsUsed);
+
+		public bool BlockAddHistory { get; set; }
+		public int Size { get; private set; }
 
 		// 座標、動けるか、ベント内か, 何か使ってるか
-		private Queue<(Vector3, bool, bool, bool)> history = new Queue<
-			(Vector3, bool, bool, bool)>();
+		private Queue<History> history = new Queue<History>();
 		private bool init = false;
-		private int size = 0;
-		private bool isBlockAdd;
 
 		public TimeMasterHistory(IntPtr ptr) : base(ptr) { }
 
@@ -33,61 +32,57 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 		public void FixedUpdate()
 		{
-			if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
+			if (!this.init || this.BlockAddHistory ||
+				!RoleAssignState.Instance.IsRoleSetUpEnd ||
+				AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
 				MeetingHud.Instance ||
 				ExileController.Instance)
 			{
 				return;
 			}
-			if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
-			if (!init || BlockAddHistory) { return; }
 
 			PlayerControl player = CachedPlayerControl.LocalPlayer;
 
-			int overflow = this.history.Count - size;
+			int overflow = this.history.Count - this.Size;
 			for (int i = 0; i < overflow; ++i)
 			{
 				this.history.Dequeue();
 			}
 
 			this.history.Enqueue(
-				(
+				new History(
 					player.transform.position,
 					player.CanMove,
 					player.inVent,
-					!player.Collider.enabled && !player.NetTransform.enabled && !player.moveable
+					!(
+						player.Collider.enabled ||
+						player.NetTransform.enabled ||
+						player.moveable
+					)
 				)
 			);
-		}
-
-		public void SetAddHistoryBlock(bool active)
-		{
-			this.isBlockAdd = active;
 		}
 
 		public void Clear()
 		{
 			ResetAfterRewind();
 			this.init = false;
-			this.size = 0;
+			this.Size = 0;
 		}
 
 		public void ResetAfterRewind()
 		{
 			this.history.Clear();
-			SetAddHistoryBlock(false);
+			this.BlockAddHistory = false;
 		}
 
 		public void Initialize(float historySecond)
 		{
-			this.size = (int)Mathf.Round(historySecond / Time.fixedDeltaTime);
+			this.Size = (int)Mathf.Round(historySecond / Time.fixedDeltaTime);
 			this.init = true;
 		}
 
 		[HideFromIl2Cpp]
-		public IEnumerable<
-			(Vector3, bool, bool, bool)> GetAllHistory() => history.Reverse();
-
-		public int GetSize() => this.size;
+		public IEnumerable<History> GetAllHistory() => history.Reverse();
 	}
 }

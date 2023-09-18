@@ -98,7 +98,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
         if (timeMaster == null) { yield break; }
         timeMaster.isRewindTime = true;
 
-        history.SetAddHistoryBlock(true);
+        history.BlockAddHistory = true;
 
         // Screen Initialize
         if (timeMaster.rewindScreen == null)
@@ -140,9 +140,9 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
             while (!localPlayer.moveable);
         }
 
-        int rewindFrame = history.GetSize() - skipFrame;
+        int rewindFrame = history.Size - skipFrame;
 
-        Logging.Debug($"History Size:{history.GetSize()}   SkipFrame:{skipFrame}");
+        Logging.Debug($"History Size:{history.Size}   SkipFrame:{skipFrame}");
 
         Vector3 prevPos = localPlayer.transform.position;
         Vector3 sefePos = prevPos;
@@ -150,7 +150,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
         int frameCount = 0;
 
         // Rewind Main Process
-        foreach ((Vector3, bool, bool, bool) hist in history.GetAllHistory())
+        foreach (var hist in history.GetAllHistory())
         {
             if (rewindFrame == frameCount) { break; }
 
@@ -162,9 +162,11 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
 
             localPlayer.moveable = false;
 
-            if (localPlayer.Data.IsDead)
+			Vector3 newPos = hist.Pos;
+
+			if (localPlayer.Data.IsDead)
             {
-                localPlayer.transform.position = hist.Item1;
+                localPlayer.transform.position = newPos;
             }
             else
             {
@@ -185,7 +187,6 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
                     }
                 }
 
-                Vector3 newPos = hist.Item1;
                 Vector2 offset = localPlayer.Collider.offset;
                 Vector3 newTruePos = new Vector3(
                     newPos.x + offset.x,
@@ -203,7 +204,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
 
                 // (間に何もない and 動ける) or ベント内だったの座標だった場合
                 // => 巻き戻しかつ、安全な座標を更新
-                if ((!isAnythingBetween && hist.Item2) || hist.Item3)
+                if ((!isAnythingBetween && hist.CanMove) || hist.InVent)
                 {
                     localPlayer.transform.position = newPos;
                     prevPos = newPos;
@@ -212,7 +213,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
                 }
                 // 何か使っている時の座標(梯子、移動床等)
                 // => 巻き戻すが、安全ではない(壁抜けする)座標として記録
-                else if (hist.Item4)
+                else if (hist.IsUsed)
                 {
                     localPlayer.transform.position = newPos;
                     prevPos = newPos;
@@ -274,7 +275,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
         }
 
         // ヒストリーブロック解除
-        history.SetAddHistoryBlock(false);
+        history.BlockAddHistory = false;
 
 		if (MeetingHud.Instance != null)
 		{
@@ -384,9 +385,9 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
     {
         this.RoleAbilityInit();
 
-        if (history != null) { return; }
+        if (history != null || CachedPlayerControl.LocalPlayer == null) { return; }
 
-        history = ExtremeRolesPlugin.ShipState.Status.AddComponent<
+        history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<
             TimeMasterHistory>();
         history.Initialize(
             OptionManager.Instance.GetValue<float>(GetRoleOptionId(
