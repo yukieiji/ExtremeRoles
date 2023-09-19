@@ -29,7 +29,8 @@ public sealed class PsychoKiller :
 
 	private float timerModRate;
 	private float defaultTimer;
-	private bool isRestartWhenMeetingStart;
+	private bool isForceRestartWhenMeetingEnd;
+	private bool isDiactiveUntilKillWhenMeetingEnd;
 
     private int combMax;
     private int combCount;
@@ -41,8 +42,8 @@ public sealed class PsychoKiller :
         CombResetWhenMeeting,
 		HasSelfKillTimer,
 		SelfKillTimerTime,
-		IsRestartWhenMeetingEnd,
-		IsCombSyncSelfKillTimer,
+		IsForceRestartWhenMeetingEnd,
+		IsDiactiveUntilKillWhenMeetingEnd,
 		SelfKillTimerModRate,
 	}
 
@@ -104,7 +105,13 @@ public sealed class PsychoKiller :
     {
 		if (this.hasSelfTimer)
 		{
-			this.isStartTimer = this.isRestartWhenMeetingStart;
+			this.isStartTimer =
+			(
+				this.isForceRestartWhenMeetingEnd ||
+				(
+					!this.isDiactiveUntilKillWhenMeetingEnd && this.isStartTimer
+				)
+			);
 			resetTimer();
 		}
     }
@@ -181,9 +188,14 @@ public sealed class PsychoKiller :
 			30.0f, 5.0f, 120.0f, 0.5f,
 			hasSelfKillTimer,
 			format: OptionUnit.Second);
+		var timerOpt = CreateBoolOption(
+			PsychoKillerOption.IsForceRestartWhenMeetingEnd,
+			false, hasSelfKillTimer);
 		CreateBoolOption(
-			PsychoKillerOption.IsRestartWhenMeetingEnd,
-			true, hasSelfKillTimer);
+			PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd,
+			false, timerOpt,
+			invert: true,
+			enableCheckOption: parentOps);
 		CreateIntOption(
 			PsychoKillerOption.SelfKillTimerModRate,
 			0, -50, 50, 1, hasSelfKillTimer,
@@ -213,8 +225,10 @@ public sealed class PsychoKiller :
 			GetRoleOptionId(PsychoKillerOption.HasSelfKillTimer));
 		this.defaultTimer = allOption.GetValue<float>(
 			GetRoleOptionId(PsychoKillerOption.SelfKillTimerTime));
-		this.isRestartWhenMeetingStart = allOption.GetValue<bool>(
-			GetRoleOptionId(PsychoKillerOption.IsRestartWhenMeetingEnd));
+		this.isForceRestartWhenMeetingEnd = allOption.GetValue<bool>(
+			GetRoleOptionId(PsychoKillerOption.IsForceRestartWhenMeetingEnd));
+		this.isDiactiveUntilKillWhenMeetingEnd = allOption.GetValue<bool>(
+			GetRoleOptionId(PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd));
 
 		this.timerModRate = (100.0f - (float)allOption.GetValue<int>(
 			GetRoleOptionId(PsychoKillerOption.SelfKillTimerModRate))) / 100.0f;

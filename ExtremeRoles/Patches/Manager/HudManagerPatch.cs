@@ -252,7 +252,7 @@ public static class HudManagerUpdatePatch
 
         if (playerGhostRole != null)
         {
-            Color ghostRoleColor = playerGhostRole.RoleColor;
+            Color ghostRoleColor = playerGhostRole.Color;
             localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
         }
         localPlayer.cosmetics.SetNameColor(localRoleColor);

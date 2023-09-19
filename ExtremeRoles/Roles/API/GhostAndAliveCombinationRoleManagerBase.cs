@@ -2,15 +2,15 @@
 using System.Linq;
 using UnityEngine;
 
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.Module.CustomOption.Factories;
 
 namespace ExtremeRoles.Roles.API;
 
-public abstract class GhostAndAliveCombinationRoleManagerBase : 
+public abstract class GhostAndAliveCombinationRoleManagerBase :
     ConstCombinationRoleManagerBase
 {
-    public Dictionary<ExtremeRoleId, GhostRoleBase> CombGhostRole = new 
+    public Dictionary<ExtremeRoleId, GhostRoleBase> CombGhostRole = new
         Dictionary<ExtremeRoleId, GhostRoleBase> ();
 
     public GhostAndAliveCombinationRoleManagerBase(
@@ -31,7 +31,7 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 
     public int GetOptionIdOffset() => this.OptionIdOffset;
 
-    public GhostRoleBase GetGhostRole(ExtremeRoleId id) => 
+    public GhostRoleBase GetGhostRole(ExtremeRoleId id) =>
         this.CombGhostRole[id];
 
     protected override void CreateSpecificOption(
@@ -41,15 +41,17 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
         base.CreateSpecificOption(parentOps);
 
         IEnumerable<GhostRoleBase> collection = this.CombGhostRole.Values;
+		var factory = new AutoParentSetFactory(tab: OptionTab.Combination, parent: parentOps);
 
-        foreach (var item in collection.Select(
+		foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
             int optionOffset = this.OptionIdOffset + (
                 ExtremeRoleManager.OptionOffsetPerRole * (
                 item.Index + 1 + this.Roles.Count));
-            item.Value.CreateRoleSpecificOption(
-                parentOps, optionOffset);
+			factory.IdOffset = optionOffset;
+			factory.NamePrefix = item.Value.Name;
+			item.Value.CreateRoleSpecificOption(factory, optionOffset);
         }
     }
     protected override void CommonInit()

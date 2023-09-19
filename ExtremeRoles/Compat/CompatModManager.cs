@@ -11,7 +11,7 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.SequentialFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.SequentialOptionFactory;
 
 namespace ExtremeRoles.Compat;
 
@@ -102,7 +102,7 @@ internal sealed class CompatModManager
 
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
-			optionFactory.SetNamePrefix(mod.Name);
+			optionFactory.NamePrefix = mod.Name;
 			mod.CreateIntegrateOption(optionFactory);
 		}
 

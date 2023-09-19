@@ -7,12 +7,13 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 
@@ -200,19 +201,16 @@ public sealed class Shutter : GhostRoleBase
                 photoInfo));
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateCountButtonOption(
-            parentOps, 3, 10);
-        CreateFloatOption(
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10);
+		factory.CreateFloatOption(
             ShutterOption.PhotoRange,
-            7.5f, 0.5f, 25f, 0.5f,
-            parentOps);
-        CreateIntOption(
+            7.5f, 0.5f, 25f, 0.5f);
+
+		factory.CreateIntOption(
             ShutterOption.RightPlayerNameRate,
             50, 25, 100, 5,
-            parentOps,
             format: OptionUnit.Percentage);
     }
 
@@ -256,5 +254,5 @@ public sealed class Shutter : GhostRoleBase
         );
     }
 
-    private bool isAbilityUse() => this.IsCommonUse();
+    private bool isAbilityUse() => IsCommonUse();
 }

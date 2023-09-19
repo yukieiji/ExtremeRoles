@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
@@ -8,8 +7,13 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
 namespace ExtremeRoles.GhostRoles.API;
+
+#nullable enable
 
 public enum GhostRoleOption
 {
@@ -18,35 +22,18 @@ public enum GhostRoleOption
 
 public abstract class GhostRoleBase
 {
-    private const float defaultCoolTime = 60.0f;
-    private const float minCoolTime = 5.0f;
-    private const float maxCoolTime = 120.0f;
-    private const float minActiveTime = 0.5f;
-    private const float maxActiveTime = 30.0f;
-    private const float step = 0.5f;
+	public Color Color { get; protected set; }
 
-    public ExtremeRoleType Team => this.TeamType;
+	public ExtremeRoleType Team { get; protected set; }
+	public ExtremeGhostRoleId Id { get; protected set; }
 
-    public ExtremeGhostRoleId Id => this.RoleId;
+	public int OptionIdOffset { get; protected set; }
+	public int GameControlId { get; protected set; }
 
-    public int OptionOffset => this.OptionIdOffset;
+	public string Name { get; protected set; }
+	public bool HasTask { get; protected set; }
 
-    public string Name => this.RoleName;
-
-    public Module.ExtremeAbilityButton Button { get; protected set; }
-
-    public Color RoleColor => this.NameColor;
-    public bool HasTask => this.Task;
-
-    public int GameControlId => this.controlId;
-
-    protected ExtremeRoleType TeamType;
-    protected ExtremeGhostRoleId RoleId;
-    protected string RoleName;
-    protected Color NameColor;
-    protected int OptionIdOffset;
-
-    protected bool Task;
+	public Module.ExtremeAbilityButton? Button { get; protected set; }
 
     private OptionTab tab = OptionTab.General;
     private int controlId;
@@ -59,11 +46,11 @@ public abstract class GhostRoleBase
         Color color,
         OptionTab tab = OptionTab.General)
     {
-        this.Task = hasTask;
-        this.TeamType = team;
-        this.RoleId = id;
-        this.RoleName = roleName;
-        this.NameColor = color;
+        this.HasTask = hasTask;
+        this.Team = team;
+        this.Id = id;
+        this.Name = roleName;
+        this.Color = color;
 
         if (tab == OptionTab.General)
         {
@@ -89,9 +76,9 @@ public abstract class GhostRoleBase
     public virtual GhostRoleBase Clone()
     {
         GhostRoleBase copy = (GhostRoleBase)this.MemberwiseClone();
-        Color baseColor = this.NameColor;
+        Color baseColor = this.Color;
 
-        copy.NameColor = new Color(
+        copy.Color = new Color(
             baseColor.r,
             baseColor.g,
             baseColor.b,
@@ -103,15 +90,15 @@ public abstract class GhostRoleBase
     public void CreateRoleAllOption(int optionIdOffset)
     {
         this.OptionIdOffset = optionIdOffset;
-        var parentOps = createSpawnOption();
+        var parentOps = createOptionFactory(optionIdOffset);
         CreateSpecificOption(parentOps);
     }
 
     public void CreateRoleSpecificOption(
-        IOptionInfo parentOps, int optionIdOffset)
+		OptionFactory factory, int optionIdOffset)
     {
         this.OptionIdOffset = optionIdOffset;
-        CreateSpecificOption(parentOps);
+        CreateSpecificOption(factory);
     }
 
     public int GetRoleOptionId<T>(T option) where T : struct, IConvertible
@@ -122,27 +109,27 @@ public abstract class GhostRoleBase
 
     public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
 
-    public bool IsCrewmate() => this.TeamType == ExtremeRoleType.Crewmate;
+    public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
 
-    public bool IsImpostor() => this.TeamType == ExtremeRoleType.Impostor;
+    public bool IsImpostor() => this.Team == ExtremeRoleType.Impostor;
 
-    public bool IsNeutral() => this.TeamType == ExtremeRoleType.Neutral;
+    public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
 
-    public bool IsVanillaRole() => this.RoleId == ExtremeGhostRoleId.VanillaRole;
+    public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
 
     public virtual string GetColoredRoleName() => Design.ColoedString(
-        this.NameColor, Translation.GetString(this.RoleName));
+        this.Color, Translation.GetString(this.Name));
 
     public virtual string GetFullDescription() => Translation.GetString(
        $"{this.Id}FullDescription");
 
     public virtual string GetImportantText() =>
         Design.ColoedString(
-            this.NameColor,
+            this.Color,
             string.Format("{0}: {1}",
                 Design.ColoedString(
-                    this.NameColor,
-                    Translation.GetString(this.RoleName)),
+                    this.Color,
+                    Translation.GetString(this.Name)),
                 Translation.GetString(
                     $"{this.Id}ShortDescription")));
 
@@ -197,49 +184,6 @@ public abstract class GhostRoleBase
         this.OnMeetingStartHook();
     }
 
-    protected void CreateButtonOption(
-        IOptionInfo parentOps,
-        float defaultActiveTime = float.MaxValue)
-    {
-
-        CreateFloatOption(
-            RoleAbilityCommonOption.AbilityCoolTime,
-            defaultCoolTime, minCoolTime,
-            maxCoolTime, step,
-            parentOps, format: OptionUnit.Second);
-
-        if (defaultActiveTime != float.MaxValue)
-        {
-            defaultActiveTime = Mathf.Clamp(
-                defaultActiveTime, minActiveTime, maxActiveTime);
-
-            CreateFloatOption(
-                RoleAbilityCommonOption.AbilityActiveTime,
-                defaultActiveTime, minActiveTime, maxActiveTime, step,
-                parentOps, format: OptionUnit.Second);
-        }
-
-        CreateBoolOption(
-           GhostRoleOption.IsReportAbility,
-           true, parentOps);
-    }
-
-    protected void CreateCountButtonOption(
-        IOptionInfo parentOps,
-        int defaultAbilityCount,
-        int maxAbilityCount,
-        float defaultActiveTime = float.MaxValue)
-    {
-        CreateButtonOption(
-            parentOps, defaultActiveTime);
-
-        CreateIntOption(
-            RoleAbilityCommonOption.AbilityCount,
-            defaultAbilityCount, 1,
-            maxAbilityCount, 1,
-            parentOps, format: OptionUnit.Shot);
-    }
-
     protected void ButtonInit()
     {
         if (this.Button == null) { return; }
@@ -250,7 +194,8 @@ public abstract class GhostRoleBase
 
         if (allOps.TryGet<float>(
                 this.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityActiveTime), out var activeTimeOtion))
+                    RoleAbilityCommonOption.AbilityActiveTime), out var activeTimeOtion) &&
+			activeTimeOtion is not null)
         {
             this.Button.Behavior.SetActiveTime(activeTimeOtion.GetValue());
         }
@@ -259,7 +204,8 @@ public abstract class GhostRoleBase
             allOps.TryGet<int>(
                 this.GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityCount),
-                out var countOption))
+                out var countOption) &&
+			countOption is not null)
         {
             behavior.SetAbilityCount(countOption.GetValue());
         }
@@ -269,198 +215,23 @@ public abstract class GhostRoleBase
     protected bool isReportAbility() => OptionManager.Instance.GetValue<bool>(
         this.GetRoleOptionId(GhostRoleOption.IsReportAbility));
 
-    protected bool IsCommonUse() =>
-        PlayerControl.LocalPlayer &&
-        PlayerControl.LocalPlayer.Data.IsDead &&
-        PlayerControl.LocalPlayer.CanMove;
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected FloatCustomOption CreateFloatOption<T>(
-        T option,
-        float defaultValue,
-        float min, float max, float step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
+    private OptionFactory createOptionFactory(int offset)
     {
-        EnumCheck(option);
-
-        return new FloatCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, max, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            tab: this.tab);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected FloatDynamicCustomOption CreateFloatDynamicOption<T>(
-        T option,
-        float defaultValue,
-        float min, float step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false,
-        float tempMaxValue = 0.0f) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new FloatDynamicCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            this.tab, tempMaxValue);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected IntCustomOption CreateIntOption<T>(
-        T option,
-        int defaultValue,
-        int min, int max, int step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new IntCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, max, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            tab: this.tab);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected IntDynamicCustomOption CreateIntDynamicOption<T>(
-        T option,
-        int defaultValue,
-        int min, int step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false,
-        int tempMaxValue = 0) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new IntDynamicCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            this.tab, tempMaxValue);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected BoolCustomOption CreateBoolOption<T>(
-        T option,
-        bool defaultValue,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new BoolCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            tab: this.tab);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected SelectionCustomOption CreateSelectionOption<T>(
-        T option,
-        string[] selections,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new SelectionCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            selections,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            tab: this.tab);
-    }
-
-    private string createAutoOptionString<T>(
-        T option, bool colored) where T : struct, IConvertible
-    {
-        if (!colored)
-        {
-            return string.Concat(
-                this.RoleName, option.ToString());
-        }
-        else
-        {
-            return Design.ColoedString(
-                this.NameColor,
-                string.Concat(
-                    this.RoleName,
-                    RoleCommonOption.SpawnRate.ToString()));
-        }
-    }
-
-    private IOptionInfo createSpawnOption()
-    {
-        var roleSetOption = CreateSelectionOption(
-            RoleCommonOption.SpawnRate,
-            OptionCreator.SpawnRate, null, true,
-            colored: true);
+		var factory = new OptionFactory(offset, this.Name, this.tab);
+		factory.CreateSelectionOption(
+			RoleCommonOption.SpawnRate,
+			OptionCreator.SpawnRate, null, true,
+			color: this.Color);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
-        CreateIntOption(
+		factory.CreateIntOption(
             RoleCommonOption.RoleNum,
-            1, 1, spawnNum, 1, roleSetOption);
+            1, 1, spawnNum, 1);
 
-		new IntCustomOption(
-			GetRoleOptionId(RoleCommonOption.AssignWeight),
-			$"|{this.RoleName}|{RoleCommonOption.AssignWeight}",
-			500, 1, 1000, 1,
-			roleSetOption,
-			tab: this.tab);
+		factory.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
 
-		return roleSetOption;
+		return factory;
     }
 
     public abstract void CreateAbility();
@@ -473,11 +244,17 @@ public abstract class GhostRoleBase
 
     protected abstract void OnMeetingStartHook();
 
-    protected abstract void CreateSpecificOption(IOptionInfo parentOps);
+    protected abstract void CreateSpecificOption(OptionFactory parentOps);
 
     protected abstract void UseAbility(RPCOperator.RpcCaller caller);
 
-    protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
+	protected static bool IsCommonUse() =>
+		CachedPlayerControl.LocalPlayer != null &&
+		CachedPlayerControl.LocalPlayer.Data != null &&
+		CachedPlayerControl.LocalPlayer.Data.IsDead &&
+		CachedPlayerControl.LocalPlayer.PlayerControl.CanMove;
+
+	protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
     {
         if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
         {

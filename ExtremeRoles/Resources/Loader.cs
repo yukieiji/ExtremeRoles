@@ -66,8 +66,9 @@ public static class Path
         "ExtremeRoles.Resources.TeleporterFirstPortal.png";
     public const string TeleporterSecondPortal =
         "ExtremeRoles.Resources.TeleporterSecondPortal.png";
+	public const string ModeratorModerate = "ExtremeRoles.Resources.Moderate.png";
 
-    public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
+	public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
     public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
     public const string PainterPaintRandom = "ExtremeRoles.Resources.PaintRandom.png";
     public const string PainterPaintTrans = "ExtremeRoles.Resources.PaintTrans.png";
@@ -99,8 +100,11 @@ public static class Path
         "ExtremeRoles.Resources.ZombieMagicCircleButton.png";
     public const string ZombieMagicCircleVideo = "zombiemagiccircle";
     public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
+	public const string TheifTimeParts = "ExtremeRoles.Resources.TheifTimePart.png";
+	public const string TheifMagicCircle = "ExtremeRoles.Resources.TheifMagicCircle.png";
+	public const string TheifMagicCircleVideo = "theifmagiccircle";
 
-    public const string VigilanteEmergencyCall =
+	public const string VigilanteEmergencyCall =
         "ExtremeRoles.Resources.EmergencyCall.png";
     public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
     public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";

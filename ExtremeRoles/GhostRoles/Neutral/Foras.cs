@@ -9,18 +9,21 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+
 namespace ExtremeRoles.GhostRoles.Neutal;
+
+#nullable enable
 
 public sealed class Foras : GhostRoleBase
 {
-    private ArrowControler arrowControler;
-    private PlayerControl targetPlayer;
+    private ArrowControler? arrowControler;
+    private PlayerControl? targetPlayer;
 
     private float range;
     private float delayTime;
@@ -74,11 +77,11 @@ public sealed class Foras : GhostRoleBase
             localPlayerId == role?.Parent ||
             localPlayerId == anotherRole?.Parent)
         {
-            if (!foras.arrowControler)
+            if (foras.arrowControler == null)
             {
                 GameObject obj = new GameObject("Foras Arrow");
                 foras.arrowControler = obj.AddComponent<ArrowControler>();
-                foras.arrowControler.SetColor(foras.NameColor);
+                foras.arrowControler.SetColor(foras.Color);
             }
             foras.arrowControler.SetTarget(arrowTargetPlayer.gameObject);
             foras.arrowControler.SetDelayActiveTimer(foras.delayTime);
@@ -91,7 +94,7 @@ public sealed class Foras : GhostRoleBase
     private static void hideArrow(byte forasPlayerId)
     {
         Foras foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Foras>(forasPlayerId);
-        if (foras.arrowControler)
+        if (foras.arrowControler != null)
         {
             foras.arrowControler.Hide();
         }
@@ -140,21 +143,19 @@ public sealed class Foras : GhostRoleBase
 
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateCountButtonOption(
-            parentOps, 3, 10, 25.0f);
-        CreateFloatOption(
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 10, 25.0f);
+		factory.CreateFloatOption(
             ForasOption.Range,
-            1.0f, 0.1f, 3.6f, 0.1f, parentOps);
-        CreateFloatOption(
+            1.0f, 0.1f, 3.6f, 0.1f);
+		factory.CreateFloatOption(
             ForasOption.DelayTime,
-            3.0f, 0.0f, 10.0f, 0.5f, parentOps,
+            3.0f, 0.0f, 10.0f, 0.5f,
             format: OptionUnit.Second);
-        CreateIntOption(
+		factory.CreateIntOption(
             ForasOption.MissingTargetRate,
-            10, 0, 90, 5, parentOps,
+            10, 0, 90, 5,
             format: OptionUnit.Percentage);
     }
 
@@ -167,19 +168,19 @@ public sealed class Foras : GhostRoleBase
             this.targetPlayer = CachedPlayerControl.AllPlayerControls
                 .Where(x =>
                 {
-                    return 
+                    return
                         x != null &&
                         !x.Data.IsDead &&
                         !x.Data.Disconnected &&
                         x.PlayerId != rolePlayerId &&
-                        x.PlayerId != this.targetPlayer.PlayerId;
+                        x.PlayerId != this.targetPlayer!.PlayerId;
                 })
                 .OrderBy(x => RandomGenerator.Instance.Next())
                 .First();
         }
         caller.WriteBoolean(true);
         caller.WriteByte(rolePlayerId);
-        caller.WriteByte(this.targetPlayer.PlayerId);
+        caller.WriteByte(this.targetPlayer!.PlayerId);
     }
 
     private bool isAbilityUse()
@@ -193,12 +194,12 @@ public sealed class Foras : GhostRoleBase
             ExtremeRoleManager.GetLocalPlayerRole(),
             this.range);
 
-        return this.IsCommonUse() && this.targetPlayer != null;
+        return IsCommonUse() && this.targetPlayer != null;
     }
 
     private void abilityCall()
     {
-        showArrow(CachedPlayerControl.LocalPlayer.PlayerId, this.targetPlayer.PlayerId);
+        showArrow(CachedPlayerControl.LocalPlayer.PlayerId, this.targetPlayer!.PlayerId);
         this.targetPlayer = null;
     }
 

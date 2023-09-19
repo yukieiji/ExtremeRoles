@@ -124,6 +124,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Resurrecter,
             ExtremeRoleId.Gambler,
             ExtremeRoleId.Teleporter,
+			ExtremeRoleId.Moderator,
 
             ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
@@ -148,8 +149,9 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Magician,
             ExtremeRoleId.Slime,
             ExtremeRoleId.Zombie,
+			ExtremeRoleId.Thief,
 
-            ExtremeRoleId.Alice,
+			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
             ExtremeRoleId.TaskMaster,
             ExtremeRoleId.Missionary,

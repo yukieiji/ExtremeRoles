@@ -15,7 +15,6 @@ using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -27,6 +26,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Compat;
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -877,29 +878,29 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
         }
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateIntOption(
+		factory.CreateIntOption(
             WispOption.WinNum,
-            0, -5, 5, 1, parentOps);
-        CreateIntOption(
+            0, -5, 5, 1);
+		factory.CreateIntOption(
             WispOption.TorchAbilityNum,
-            1, 0, 5, 1, parentOps);
-        CreateIntOption(
+            1, 0, 5, 1);
+		factory.CreateIntOption(
             WispOption.TorchNum,
-            1, 1, 5, 1, parentOps);
-        CreateFloatOption(
+            1, 1, 5, 1);
+		factory.CreateFloatOption(
             WispOption.TorchRange,
-            1.6f, 1.0f, 5.0f, 0.1f, parentOps);
-        CreateFloatOption(
+            1.6f, 1.0f, 5.0f, 0.1f);
+		factory.CreateFloatOption(
             WispOption.TorchActiveTime,
-            10.0f, 5.0f, 60.0f, 0.1f, parentOps,
+            10.0f, 5.0f, 60.0f, 0.1f,
             format: OptionUnit.Second);
-        CreateFloatOption(
+		factory.CreateFloatOption(
             WispOption.BlackOutTime,
-            10.0f, 2.5f, 30.0f, 0.1f, parentOps,
+            10.0f, 2.5f, 30.0f, 0.1f,
             format: OptionUnit.Second);
-        this.CreateButtonOption(parentOps);
+		GhostRoleAbilityFactory.CreateButtonOption(factory);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

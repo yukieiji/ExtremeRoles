@@ -10,6 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -155,6 +156,12 @@ public sealed class Mover :
         {
             Object.Destroy(syncer);
         }
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			modMap.AddCustomComponent(
+				mover.hasConsole.Console.gameObject,
+				Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+		}
         GameSystem.SetColliderActive(mover.hasConsole.Object, true);
 
         mover.hasConsole.Put(player.GetTruePosition());

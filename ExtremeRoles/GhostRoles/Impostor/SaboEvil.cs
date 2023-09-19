@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+
+#nullable enable
 
 namespace ExtremeRoles.GhostRoles.Impostor;
 
@@ -58,20 +60,18 @@ public sealed class SaboEvil : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(OptionFactory factory)
     {
-        CreateCountButtonOption(
-            parentOps, 3, 20);
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 3, 20);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     { }
 
-    private bool isPreCheck() => this.IsCommonUse();
+    private bool isPreCheck() => IsCommonUse();
 
-    private bool isAbilityUse() => this.IsCommonUse();
-    
+    private bool isAbilityUse() => IsCommonUse();
+
     private void abilityCall()
     {
         ResetCool();

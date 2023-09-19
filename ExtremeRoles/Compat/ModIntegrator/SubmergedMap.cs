@@ -11,13 +11,15 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using AmongUs.GameOptions;
 
+
+using ExtremeRoles.Module.CustomOption.Factories;
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Extension;
 
 #nullable enable
 
@@ -150,7 +152,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		replaceDoorMinigame();
 	}
 
-	public override void CreateIntegrateOption(SequentialFactory factory)
+	public override void CreateIntegrateOption(SequentialOptionFactory factory)
 	{
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
 		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator);
@@ -412,8 +414,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		switch (customMonoType)
 		{
 			case CustomMonoBehaviourType.MovableFloorBehaviour:
-				addObject.AddComponent(
-					Il2CppType.From(this.elevatorMover)).TryCast<MonoBehaviour>();
+				addObject.TryAddComponent(Il2CppType.From(this.elevatorMover));
 				break;
 			default:
 				break;

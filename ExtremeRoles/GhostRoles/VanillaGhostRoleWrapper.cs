@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomOption.Factories;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -16,23 +16,23 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         RoleTypes vanillaRoleId) : base(
             true, Roles.API.ExtremeRoleType.Crewmate,
             ExtremeGhostRoleId.VanillaRole,
-            "", Color.white)
+            "", UnityEngine.Color.white)
     {
         this.vanillaRoleId = vanillaRoleId;
-        this.RoleName = vanillaRoleId.ToString();
+        this.Name = vanillaRoleId.ToString();
 
         switch (vanillaRoleId)
         {
             case RoleTypes.GuardianAngel:
             case RoleTypes.CrewmateGhost:
-                this.Task = true;
-                this.TeamType = Roles.API.ExtremeRoleType.Crewmate;
-                this.NameColor = Palette.White;
+                this.HasTask = true;
+                this.Team = Roles.API.ExtremeRoleType.Crewmate;
+                this.Color = Palette.White;
                 break;
             case RoleTypes.ImpostorGhost:
-                this.Task = false;
-                this.TeamType = Roles.API.ExtremeRoleType.Impostor;
-                this.NameColor = Palette.ImpostorRed;
+                this.HasTask = false;
+                this.Team = Roles.API.ExtremeRoleType.Impostor;
+                this.Color = Palette.ImpostorRed;
                 break;
             default:
                 break;
@@ -43,14 +43,14 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
     {
         string addText = this.vanillaRoleId switch
         {
-            RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost => 
+            RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost =>
                 Helper.Translation.GetString("crewImportantText"),
             RoleTypes.ImpostorGhost =>
                 Helper.Translation.GetString("impImportantText"),
             _ => string.Empty,
         };
         return Helper.Design.ColoedString(
-            this.NameColor,
+            this.Color,
             $"{this.GetColoredRoleName()}: {addText}");
     }
 
@@ -83,8 +83,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }

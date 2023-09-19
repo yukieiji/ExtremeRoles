@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Hazel;
+using InnerNet;
+
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.Attributes;
+
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
-using Il2CppInterop.Runtime.Injection;
-using InnerNet;
-using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -17,8 +20,12 @@ namespace ExtremeRoles.Module.SystemType;
 
 public enum ExtremeSystemType : byte
 {
+	MeetingTimeOffset,
+
 	BakeryReport,
-	FakerDummy
+
+	FakerDummy,
+	ThiefMeetingTimeChange
 }
 
 public enum ResetTiming : byte
@@ -120,9 +127,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
+
+	[HideFromIl2Cpp]
 	public bool TryGet(ExtremeSystemType systemType, out IExtremeSystemType? system)
 		=> this.systems.TryGetValue(systemType, out system);
 
+	[HideFromIl2Cpp]
 	public bool TryGet<T>(ExtremeSystemType systemType, out T? system) where T : class, IExtremeSystemType
 	{
 		system = default(T);
@@ -134,12 +144,13 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		return iSystem is not null;
 	}
 
-	public void TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
-		=> this.systems.TryAdd(systemType, system);
-
-	public void Add(ExtremeSystemType systemType, IExtremeSystemType system)
+	[HideFromIl2Cpp]
+	public bool TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
 	{
-		this.systems.Add(systemType, system);
+		lock (this.systems)
+		{
+			return this.systems.TryAdd(systemType, system);
+		}
 	}
 
 	public void Reset()
