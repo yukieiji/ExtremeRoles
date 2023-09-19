@@ -14,6 +14,7 @@ public enum AbilityState : byte
 	CoolDown,
 	Ready,
 	Activating,
+	Reset,
 }
 
 #nullable enable
@@ -102,7 +103,7 @@ public sealed class ExtremeAbilityButton
 
 	public void OnMeetingEnd()
 	{
-		this.setStatus(AbilityState.CoolDown);
+		this.setStatus(AbilityState.Reset);
 		this.SetButtonShow(true);
 	}
 
@@ -243,6 +244,10 @@ public sealed class ExtremeAbilityButton
 				break;
 			case AbilityState.Activating:
 				this.Timer = this.Behavior.ActiveTime;
+				break;
+			case AbilityState.Reset:
+				newState = AbilityState.CoolDown;
+				this.Timer = this.Behavior.CoolTime;
 				break;
 			default:
 				break;
