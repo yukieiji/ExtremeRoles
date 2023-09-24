@@ -12,5 +12,6 @@ public static class MeetingHudClosePatch
 	{
 		InfoOverlay.Instance.Hide();
 		ExtremeSystemTypeManager.Instance.RepairDamage(null, (byte)ResetTiming.MeetingEnd);
+		ExtremeRolesPlugin.Logger.LogInfo(" ----- MeetingHud Closed ----- ");
 	}
 }
