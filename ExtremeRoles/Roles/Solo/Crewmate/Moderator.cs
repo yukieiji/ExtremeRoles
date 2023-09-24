@@ -195,7 +195,7 @@ public sealed class Moderator :
 			parentOps,
 			format: OptionUnit.Percentage);
 		this.CreateAbilityCountOption(
-			parentOps, 1, 5);
+			parentOps, 2, 10);
 		CreateIntOption(ModeratorOption.MeetingTimerOffset, 30, 5, 360, 5, parentOps, format: OptionUnit.Second);
 	}
 
