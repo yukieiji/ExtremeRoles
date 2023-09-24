@@ -22,22 +22,24 @@ public static class MeetingHudStartPatch
 {
 	public static void Postfix()
 	{
-		var builder = new StringBuilder();
-		builder.AppendLine("------ MeetingHud Start!! -----");
-		builder.AppendLine(" - meeting info:");
 
 		var state = ExtremeRolesPlugin.ShipState;
 		bool trigger = state.AssassinMeetingTrigger;
+		var builder = new StringBuilder();
 
 		builder
+			.AppendLine("------ MeetingHud Start!! -----")
+			.AppendLine(" - meeting info:")
+
 			.Append("   - Discussion Time:")
 			.Append(MeetingHudTimerOffsetPatch.NoModDiscussionTime)
-			.AppendLine();
-		builder
+			.AppendLine()
+
 			.Append("   - Voting Time:")
 			.Append(MeetingHudTimerOffsetPatch.NoModDiscussionTime)
-			.AppendLine();
-		builder.Append("   - Assassin　Meeting:")
+			.AppendLine()
+
+			.Append("   - Assassin　Meeting:")
 			.Append(trigger)
 			.AppendLine();
 

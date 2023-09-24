@@ -9,7 +9,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAssign;
-
+using System.Text;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -18,6 +18,8 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
 public static class MeetingHudCheckForEndVotingPatch
 {
+	private readonly record struct ExiledPlayer(byte PlayerId = byte.MaxValue, int VoteNum = int.MinValue);
+
 	public static bool Prefix(
 		MeetingHud __instance)
 	{
@@ -41,6 +43,9 @@ public static class MeetingHudCheckForEndVotingPatch
 
 		if (!isVoteEnd) { return; }
 
+		var logger = ExtremeRolesPlugin.Logger;
+		logger.LogInfo(" ----- AssassinMeeting Target selecting is End ----- ");
+
 		//GameData.PlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
 		Il2CppStructArray<MeetingHud.VoterState> array =
 			new Il2CppStructArray<MeetingHud.VoterState>(
@@ -48,6 +53,8 @@ public static class MeetingHudCheckForEndVotingPatch
 
 		if (voteFor == 254 || voteFor == byte.MaxValue)
 		{
+			logger.LogWarning("Target is None!! start auto targeting");
+
 			bool targetImposter;
 			do
 			{
@@ -61,7 +68,12 @@ public static class MeetingHudCheckForEndVotingPatch
 			while (targetImposter);
 		}
 
-		Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
+		var builder = new StringBuilder();
+		builder
+			.AppendLine("---　AssassinMeeting Target Player Info ---")
+			.Append(" - PlayerId:").Append(voteFor).AppendLine()
+			.Append(" - IsSuccess:").Append(ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin).AppendLine();
+		logger.LogInfo(builder.ToString());
 
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.AssasinVoteFor))
@@ -183,27 +195,44 @@ public static class MeetingHudCheckForEndVotingPatch
 	{
 		if (!instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote)) { return; }
 
-		Dictionary<byte, int> result = calculateVote(instance);
+		var logger = ExtremeRolesPlugin.Logger;
+		logger.LogInfo(" ----- Voteing is End ----- ");
 
-		bool isExiled = true;
+		Dictionary<byte, int> voteResult = calculateVote(instance);
 
-		KeyValuePair<byte, int> exiledResult = new KeyValuePair<byte, int>(
-			byte.MaxValue, int.MinValue);
-		foreach (KeyValuePair<byte, int> item in result)
+		bool isTie = true;
+		var result = new ExiledPlayer();
+		foreach (var (playerId, voteNum) in voteResult)
 		{
-			if (item.Value > exiledResult.Value)
+			if (voteNum > result.VoteNum)
 			{
-				exiledResult = item;
-				isExiled = false;
+				result = new ExiledPlayer(playerId, voteNum);
+				isTie = false;
 			}
-			else if (item.Value == exiledResult.Value)
+			else if (voteNum == result.VoteNum)
 			{
-				isExiled = true;
+				isTie = true;
 			}
 		}
 
 		GameData.PlayerInfo? exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
-			(GameData.PlayerInfo v) => !isExiled && v.PlayerId == exiledResult.Key);
+			(GameData.PlayerInfo v) => !isTie && v.PlayerId == result.PlayerId);
+
+		if (exiled != null)
+		{
+			var builder = new StringBuilder();
+			builder
+				.AppendLine("--- Exiled Player Info ---")
+				.Append(" - PlayerId:").Append(result.PlayerId).AppendLine()
+				.Append(" - PlayerName:").AppendLine(exiled.PlayerName)
+				.Append(" - IsDead:").Append(exiled.IsDead).AppendLine()
+				.Append(" - VoteNum:").Append(result.VoteNum).AppendLine();
+			logger.LogInfo(builder.ToString());
+		}
+		else
+		{
+			logger.LogInfo("Exiled Player is None!!");
+		}
 
 		MeetingHud.VoterState[] array = new MeetingHud.VoterState[instance.playerStates.Length];
 		for (int i = 0; i < instance.playerStates.Length; i++)
@@ -216,6 +245,6 @@ public static class MeetingHudCheckForEndVotingPatch
 			};
 		}
 
-		instance.RpcVotingComplete(array, exiled, isExiled);
+		instance.RpcVotingComplete(array, exiled, isTie);
 	}
 }
