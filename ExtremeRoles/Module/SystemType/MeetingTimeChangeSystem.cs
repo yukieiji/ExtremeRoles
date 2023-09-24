@@ -79,7 +79,8 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
 	{
 		if (timing == ResetTiming.MeetingEnd &&
-			AmongUsClient.Instance.AmHost)
+			AmongUsClient.Instance.AmHost &&
+			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
 		{
 			this.TempOffset = 0;
 			this.IsDirty = true;
