@@ -1,5 +1,9 @@
-﻿using HarmonyLib;
+﻿using System.Text;
 
+using HarmonyLib;
+
+using ExtremeRoles.Patches.LogicGame;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -8,7 +12,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -19,13 +22,61 @@ public static class MeetingHudStartPatch
 {
 	public static void Postfix()
 	{
+		var builder = new StringBuilder();
+		builder.AppendLine("------ MeetingHud Start!! -----");
+		builder.AppendLine(" - meeting info:");
+
+		var state = ExtremeRolesPlugin.ShipState;
+		bool trigger = state.AssassinMeetingTrigger;
+
+		builder
+			.Append("   - Discussion Time:")
+			.Append(MeetingHudTimerOffsetPatch.NoModDiscussionTime)
+			.AppendLine();
+		builder
+			.Append("   - Voting Time:")
+			.Append(MeetingHudTimerOffsetPatch.NoModDiscussionTime)
+			.AppendLine();
+		builder.Append("   - Assassin　Meeting:")
+			.Append(trigger)
+			.AppendLine();
+
+		if (ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
+				ExtremeSystemType.MeetingTimeOffset, out var system) &&
+			system is not null)
+		{
+			builder
+				.AppendLine("   - TimeOffset System: Enable")
+				.Append("     - System Info:")
+				.Append(system.ToString());
+		}
+		else
+		{
+			builder.Append("   - TimeOffset System: Disable");
+		}
+
+		var logger = ExtremeRolesPlugin.Logger;
+
+		logger.LogInfo(builder.ToString());
+
+		logger.LogInfo(" --- Start Meeting Start Reseting --- ");
+
+		logger.LogInfo("Resetting Start: ShipStatus Systems");
 		ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
 		ExtremeSystemTypeManager.Instance.RepairDamage(null, (byte)ResetTiming.MeetingStart);
+		logger.LogInfo("Resetting End: ShipStatus Systems");
+
+		logger.LogInfo("Resetting Start: PlayerControl");
 		PlayerHeler.ResetTarget();
+		logger.LogInfo("Resetting End: PlayerControl");
+
+		logger.LogInfo("Resetting Start: Modding MeetingHud system");
 		MeetingHudSelectPatch.SetSelectBlock(false);
+		logger.LogInfo("Resetting End: Modding MeetingHud system");
 
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
+		logger.LogInfo("Resetting Start: ExR Normal and Combination Roles");
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 
 		if (role is IRoleAbility abilityRole)
@@ -36,9 +87,7 @@ public static class MeetingHudStartPatch
 		{
 			resetRole.ResetOnMeetingStart();
 		}
-
-		var multiAssignRole = role as MultiAssignRoleBase;
-		if (multiAssignRole != null)
+		if (role is MultiAssignRoleBase multiAssignRole)
 		{
 			if (multiAssignRole.AnotherRole is IRoleAbility multiAssignAbilityRole)
 			{
@@ -49,14 +98,17 @@ public static class MeetingHudStartPatch
 				multiAssignResetRole.ResetOnMeetingStart();
 			}
 		}
+		logger.LogInfo("Resetting End: ExR Normal and Combination Roles");
 
+		logger.LogInfo("Resetting Start: ExR Ghost Roles");
 		var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 		if (ghostRole != null)
 		{
 			ghostRole.ResetOnMeetingStart();
 		}
+		logger.LogInfo("Resetting End: ExR Ghost Roles");
 
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+		if (!trigger) { return; }
 
 		FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
 	}
