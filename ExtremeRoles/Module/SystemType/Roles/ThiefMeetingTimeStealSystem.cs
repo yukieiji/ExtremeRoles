@@ -203,7 +203,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			json = JsonParser.GetJObjectFromAssembly(
 				"ExtremeRoles.Resources.JsonData.ThiefTimePartPoint.json");
 		}
-		string ventKey;
+		string key;
 		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
 
 		var result = new List<VectorId>(10);
@@ -212,7 +212,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		{
 			if (modMap is SubmergedIntegrator)
 			{
-				ventKey = GameSystem.SubmergedKey;
+				key = GameSystem.SubmergedKey;
 			}
 			else
 			{
@@ -224,19 +224,19 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			switch (mapId)
 			{
 				case 0:
-					ventKey = GameSystem.SkeldKey;
+					key = GameSystem.SkeldKey;
 					break;
 				case 2:
-					ventKey = GameSystem.PolusKey;
+					key = GameSystem.PolusKey;
 					break;
 				case 4:
-					ventKey = GameSystem.AirShipKey;
+					key = GameSystem.AirShipKey;
 					break;
 				default:
 					return result;
 			}
 		}
-		JArray posInfo = json.Get<JArray>(ventKey);
+		JArray posInfo = json.Get<JArray>(key);
 
 		for (int i = 0; i < posInfo.Count; ++i)
 		{
