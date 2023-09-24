@@ -9,6 +9,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Performance;
 
+using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
@@ -77,10 +79,7 @@ public static class MeetingHudBloopAVoteIconPatch
 		{
 			return true;
 		}
-		else if (
-			(role.IsImpostor() && role.Id != ExtremeRoleId.Assassin) ||
-			role.Id == ExtremeRoleId.Madmate ||
-			role.Id == ExtremeRoleId.Doll)
+		else if (CommomSystem.IsForceInfoBlockRoleWithoutAssassin(role))
 		{
 			return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
 		}

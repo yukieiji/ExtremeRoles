@@ -18,6 +18,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Patches.MapOverlay;
 
+using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+
 namespace ExtremeRoles.Patches.Manager;
 
 
@@ -372,10 +374,7 @@ public static class HudManagerUpdatePatch
         {
             return true;
         }
-        else if (
-            role.IsImpostor() ||
-            role.Id == ExtremeRoleId.Madmate ||
-            role.Id == ExtremeRoleId.Doll)
+        else if (CommomSystem.IsForceInfoBlockRole(role))
         {
             return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
         }
