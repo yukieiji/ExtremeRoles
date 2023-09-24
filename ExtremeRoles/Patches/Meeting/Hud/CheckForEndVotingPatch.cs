@@ -226,7 +226,7 @@ public static class MeetingHudCheckForEndVotingPatch
 				.Append(" - PlayerId:").Append(result.PlayerId).AppendLine()
 				.Append(" - PlayerName:").AppendLine(exiled.PlayerName)
 				.Append(" - IsDead:").Append(exiled.IsDead).AppendLine()
-				.Append(" - VoteNum:").Append(result.VoteNum).AppendLine();
+				.Append(" - VoteNum:").Append(result.VoteNum);
 			logger.LogInfo(builder.ToString());
 		}
 		else
