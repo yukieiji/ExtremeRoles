@@ -50,7 +50,7 @@ public static class MeetingHudStartPatch
 			builder
 				.AppendLine("   - TimeOffset System: Enable")
 				.Append("     - System Info:")
-				.Append(system.ToString());
+				.Append(system.HudTimerOffset.ToString());
 		}
 		else
 		{
