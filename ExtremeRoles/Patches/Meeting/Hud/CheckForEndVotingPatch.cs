@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Text;
+using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAssign;
-using System.Text;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
