@@ -74,8 +74,8 @@ public class ApiServer : IDisposable
 		}
 		try
 		{
-		instance = new ApiServer();
-	}
+			instance = new ApiServer();
+		}
 		catch (Exception ex)
 		{
 			ExtremeRolesPlugin.Logger.LogError($"ExR ApiServer: Can't boot: {ex}");
