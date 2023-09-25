@@ -99,6 +99,7 @@ public class ApiServer : IDisposable
 	public void Dispose()
 	{
 		this.listener.Stop();
+		this.listener.Close();
 		this.listenerThread.Join();
 	}
 
