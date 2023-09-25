@@ -161,7 +161,7 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 			this.CurSelection = Mathf.Clamp(this.entry!.Value, 0, selections.Length - 1);
 		}
 
-		Logging.Debug($"Register Options:  {this}");
+		ExtremeRolesPlugin.Logger.LogInfo($"Register Options:  {this}");
 
 		OptionManager.Instance.AddOption(this.Id, this);
 	}
