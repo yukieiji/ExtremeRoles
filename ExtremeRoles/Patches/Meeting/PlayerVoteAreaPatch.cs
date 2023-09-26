@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 using HarmonyLib;
 
 using UnityEngine;
-
-using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.GameMode;
@@ -15,6 +12,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+
+using Il2CppActionFloat = Il2CppSystem.Action<float>;
+using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 
 namespace ExtremeRoles.Patches.Meeting;
 
@@ -67,8 +67,8 @@ public static class PlayerVoteAreaSelectPatch
 
 	public static bool Prefix(PlayerVoteArea __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
-		if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 		var state = ExtremeRolesPlugin.ShipState;
 		var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
@@ -109,26 +109,23 @@ public static class PlayerVoteAreaSelectPatch
 			__instance.Buttons.SetActive(true);
 			float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 			__instance.StartCoroutine(
-				effectsAllWrap(
-					new IEnumerator[]
-						{
-							effectsLerpWrap(0.25f, delegate(float t)
-							{
-								__instance.CancelButton.transform.localPosition = Vector2.Lerp(
-									Vector2.right * startPos,
-									Vector2.right * 1.3f,
-									Effects.ExpOut(t));
-							}),
-							effectsLerpWrap(0.35f, delegate(float t)
-							{
-								__instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
-									Vector2.right * startPos,
-									Vector2.right * 0.65f,
-									Effects.ExpOut(t));
-							})
-						}
-					)
-				);
+				Effects.All(
+					wrappedEffectsLerp(0.25f, (float t) =>
+					{
+						__instance.CancelButton.transform.localPosition = Vector2.Lerp(
+							Vector2.right * startPos,
+							Vector2.right * 1.3f,
+							Effects.ExpOut(t));
+					}),
+					wrappedEffectsLerp(0.35f, (float t) =>
+					{
+						__instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
+							Vector2.right * startPos,
+							Vector2.right * 0.65f,
+							Effects.ExpOut(t));
+					})
+				)
+			);
 
 			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<
 				UiElement>();
@@ -141,57 +138,6 @@ public static class PlayerVoteAreaSelectPatch
 		}
 
 		return false;
-	}
-	private static IEnumerator effectsLerpWrap(
-		float duration, Action<float> action)
-	{
-		for (float t = 0f; t < duration; t += Time.deltaTime)
-		{
-			action(t / duration);
-			yield return null;
-		}
-		action(1f);
-		yield break;
-	}
-	private static IEnumerator effectsAllWrap(IEnumerator[] items)
-	{
-		Stack<IEnumerator>[] enums = new Stack<IEnumerator>[items.Length];
-		for (int i = 0; i < items.Length; i++)
-		{
-			enums[i] = new Stack<IEnumerator>();
-			enums[i].Push(items[i]);
-		}
-		int num;
-		for (int cap = 0; cap < 100000; cap = num)
-		{
-			bool flag = false;
-			for (int j = 0; j < enums.Length; j++)
-			{
-				if (enums[j].Count > 0)
-				{
-					flag = true;
-					IEnumerator enumerator = enums[j].Peek();
-					if (enumerator.MoveNext())
-					{
-						if (enumerator.Current is IEnumerator)
-						{
-							enums[j].Push((IEnumerator)enumerator.Current);
-						}
-					}
-					else
-					{
-						enums[j].Pop();
-					}
-				}
-			}
-			if (!flag)
-			{
-				break;
-			}
-			yield return null;
-			num = cap + 1;
-		}
-		yield break;
 	}
 
 	private static bool meetingButtonAbility(
@@ -246,33 +192,30 @@ public static class PlayerVoteAreaSelectPatch
 			float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 
 			instance.StartCoroutine(
-				effectsAllWrap(
-					new IEnumerator[]
-						{
-							effectsLerpWrap(0.25f, delegate(float t)
-							{
-								instance.CancelButton.transform.localPosition = Vector2.Lerp(
-									Vector2.right * startPos,
-									Vector2.right * 1.3f,
-									Effects.ExpOut(t));
-							}),
-							effectsLerpWrap(0.35f, delegate(float t)
-							{
-								instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
-									Vector2.right * startPos,
-									Vector2.right * 0.65f,
-									Effects.ExpOut(t));
-							}),
-							effectsLerpWrap(0.45f, delegate(float t)
-							{
-								abilitybutton.transform.localPosition = Vector2.Lerp(
-									Vector2.right * startPos,
-									Vector2.right * -0.01f,
-									Effects.ExpOut(t));
-							})
-						}
-					)
-				);
+				Effects.All(
+					wrappedEffectsLerp(0.25f, (float t) =>
+					{
+						instance.CancelButton.transform.localPosition = Vector2.Lerp(
+							Vector2.right * startPos,
+							Vector2.right * 1.3f,
+							Effects.ExpOut(t));
+					}),
+					wrappedEffectsLerp(0.35f, (float t) =>
+					{
+						instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
+							Vector2.right * startPos,
+							Vector2.right * 0.65f,
+							Effects.ExpOut(t));
+					}),
+					wrappedEffectsLerp(0.45f, (float t) =>
+					{
+						abilitybutton.transform.localPosition = Vector2.Lerp(
+							Vector2.right * startPos,
+							Vector2.right * -0.01f,
+							Effects.ExpOut(t));
+					})
+				)
+			);
 
 			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
 			selectableElements.Add(instance.CancelButton);
@@ -288,6 +231,9 @@ public static class PlayerVoteAreaSelectPatch
 		return false;
 
 	}
+
+	private static Il2CppIEnumerator wrappedEffectsLerp(float t, Delegate del)
+		=> Effects.Lerp(t, (Il2CppActionFloat)(del));
 }
 
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]

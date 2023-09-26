@@ -4,7 +4,6 @@ using UnityEngine;
 using TMPro;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -13,6 +12,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
 using Il2CppInterop.Runtime.Attributes;
+
+using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -328,10 +329,7 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 		{
 			return true;
 		}
-		else if (
-			role.IsImpostor() ||
-			role.Id == ExtremeRoleId.Madmate ||
-			role.Id == ExtremeRoleId.Doll)
+		else if (CommomSystem.IsForceInfoBlockRole(role))
 		{
 			return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
 		}

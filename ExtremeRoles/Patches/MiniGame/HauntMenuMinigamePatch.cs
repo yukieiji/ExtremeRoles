@@ -3,6 +3,8 @@
 using ExtremeRoles.Roles;
 using ExtremeRoles.GhostRoles;
 
+using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(HauntMenuMinigame), nameof(HauntMenuMinigame.SetFilterText))]
@@ -14,7 +16,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-            
+
             bool isBlocked = role.IsBlockShowPlayingRoleInfo();
             if (ghostRole != null)
             {
@@ -28,13 +30,9 @@ namespace ExtremeRoles.Patches.MiniGame
                 isBlocked ||
                 (
                     ExtremeRolesPlugin.ShipState.IsAssassinAssign &&
-                    (   
-                        role.IsImpostor() || 
-                        role.Id == ExtremeRoleId.Madmate ||
-                        role.Id == ExtremeRoleId.Doll
-                    )
-                ) ? 
-                    "？？？" : 
+					CommomSystem.IsForceInfoBlockRole(role)
+				) ?
+                    "？？？" :
                     Helper.Translation.GetString(targetRoleTeam.ToString());
 
             return false;

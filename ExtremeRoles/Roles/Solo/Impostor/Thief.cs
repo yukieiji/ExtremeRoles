@@ -92,13 +92,14 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 			});
 
 
-		if (!this.isAddEffect) { return; }
-
-		using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ThiefAddDeadbodyEffect))
+		if (this.isAddEffect)
 		{
-			caller.WriteByte(this.targetPlayerId);
+			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.ThiefAddDeadbodyEffect))
+			{
+				caller.WriteByte(this.targetPlayerId);
+			}
+			AddEffect(this.targetPlayerId);
 		}
-		AddEffect(this.targetPlayerId);
 		this.targetPlayerId = byte.MaxValue;
 	}
 

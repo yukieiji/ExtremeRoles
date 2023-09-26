@@ -72,8 +72,15 @@ public class ApiServer : IDisposable
 			ExtremeRolesPlugin.Logger.LogError($"ExR ApiServer: Can't boot. port:{port} used already!!");
 			return;
 		}
-
-		instance = new ApiServer();
+		try
+		{
+			instance = new ApiServer();
+		}
+		catch (Exception ex)
+		{
+			ExtremeRolesPlugin.Logger.LogError($"ExR ApiServer: Can't boot: {ex}");
+			instance = null;
+		}
 	}
 
 	public static void Register(string url, HttpMethod method, IRequestHandler handle)
@@ -91,8 +98,9 @@ public class ApiServer : IDisposable
 
 	public void Dispose()
 	{
-		this.listener.Stop();
 		this.listenerThread.Join();
+		this.listener.Stop();
+		this.listener.Close();
 	}
 
 	private void startListener()
