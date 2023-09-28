@@ -7,6 +7,8 @@
 
 <div align="center"><h1>Extreme Roles, Extreme Skins and Engine Voice Engine</h1></div>
 
+**Wukiはこちら => [https://github.com/yukieiji/ExtremeRoles/wiki](https://github.com/yukieiji/ExtremeRoles/wiki)**
+
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
@@ -85,7 +87,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 「ラバーズ」、「サポーター」、「ゲッサー」と「ムーバー」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
 * 「サイドキック」と「見習い探偵」、「サーヴァント」、「ドール」はゲーム開始時にはアサインされず、条件を満たした時にアサインされます
 * 「マーリン」と「アサシン」、「ヒーロー」と「ヴィラン」と「ヴィジランテ」、「探偵」と「助手」、「ワルガキ」と「ウィスプ」は一対の関係です
-* 詳しくは[Wiki](https://github.com/yukieiji/ExtremeRoles/wiki/%E3%83%AD%E3%83%BC%E3%83%AB)を参照
+* 詳しくは[Wikiのロール](https://github.com/yukieiji/ExtremeRoles/wiki/%E3%83%AD%E3%83%BC%E3%83%AB)を参照
 
 ## Extreme Skins
 Extreme Rolesのコズミック追加用アドオン、主な特徴として以下があります<br>
