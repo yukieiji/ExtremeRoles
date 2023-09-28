@@ -36,7 +36,7 @@ public static class MeetingHudStartPatch
 			.AppendLine()
 
 			.Append("   - Voting Time:")
-			.Append(MeetingHudTimerOffsetPatch.NoModDiscussionTime)
+			.Append(MeetingHudTimerOffsetPatch.NoModVotingTime)
 			.AppendLine()
 
 			.Append("   - Assassin　Meeting:")
