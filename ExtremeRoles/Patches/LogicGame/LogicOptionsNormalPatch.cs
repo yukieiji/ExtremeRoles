@@ -3,7 +3,6 @@
 using ExtremeRoles.Module.SystemType;
 using UnityEngine;
 using ExtremeRoles.Extension;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 #nullable enable
 
@@ -30,35 +29,41 @@ public static class MeetingHudTimerOffsetPatch
 			GameManager.Instance.LogicOptions.IsTryCast(out normalOption);
 	}
 
-	[HarmonyPostfix]
+	[HarmonyPrefix]
 	[HarmonyPatch(typeof(LogicOptionsNormal), nameof(LogicOptionsNormal.GetDiscussionTime))]
-	public static void GetDiscussionTimePostfix(ref int __result)
+	public static bool GetDiscussionTimePostfix(LogicOptionsNormal __instance, ref int __result)
 	{
-		if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
-			!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
-			ExtremeSystemType.MeetingTimeOffset, out var system) ||
-			system is null)
+		__result = __instance.GameOptions.DiscussionTime;
+
+		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger &&
+			ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
+				ExtremeSystemType.MeetingTimeOffset, out var system) &&
+			system is not null)
 		{
-			return;
+			__result = Mathf.Clamp(
+				__result + system.HudTimerOffset.Discussion,
+				0, int.MaxValue);
 		}
-		__result = Mathf.Clamp(
-			__result + system.HudTimerOffset.Discussion,
-			0, int.MaxValue);
+
+		return false;
 	}
 
-	[HarmonyPostfix]
+	[HarmonyPrefix]
 	[HarmonyPatch(typeof(LogicOptionsNormal), nameof(LogicOptionsNormal.GetVotingTime))]
-	public static void GetVotingTimePostfix(ref int __result)
+	public static bool GetVotingTimePostfix(LogicOptionsNormal __instance, ref int __result)
 	{
-		if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
-			!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
-			ExtremeSystemType.MeetingTimeOffset, out var system) ||
-			system is null)
+		__result = __instance.GameOptions.VotingTime;
+
+		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger &&
+			ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
+				ExtremeSystemType.MeetingTimeOffset, out var system) &&
+			system is not null)
 		{
-			return;
+			__result = Mathf.Clamp(
+				__result + system.HudTimerOffset.Voting,
+				0, int.MaxValue);
 		}
-		__result = Mathf.Clamp(
-			__result + system.HudTimerOffset.Voting,
-			0, int.MaxValue);
+
+		return false;
 	}
 }
