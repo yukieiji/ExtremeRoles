@@ -8,11 +8,11 @@ using InnerNet;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.Attributes;
 
-
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
+using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
 
 #nullable enable
 
@@ -54,7 +54,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public bool IsDirty { get; private set; }
 
-	private const byte callId = 35;
 	private static ExtremeSystemTypeManager? instance = null;
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> systems = new Dictionary<ExtremeSystemType, IExtremeSystemType>();
 	private readonly List<ExtremeSystemType> dirtySystem = new List<ExtremeSystemType>();
@@ -75,31 +74,36 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public static void RpcUpdateSystemOnlyHost(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
 	{
-		MessageWriter messageWriter = MessageWriter.Get(SendOption.Reliable);
-		messageWriter.Write((byte)targetSystem);
-		writeAction.Invoke(messageWriter);
-		CachedShipStatus.Instance.RpcUpdateSystem(Type, messageWriter);
-		messageWriter.Recycle();
+		MessageWriter writerForReader = createWriter(targetSystem, writeAction);
+		var data = writerForReader.ToByteArray(false);
+
+		if (!AmongUsClient.Instance || AmongUsClient.Instance.AmHost)
+		{
+			Instance.UpdateSystem(data);
+			writerForReader.Recycle();
+			return;
+		}
+
+		callRpc(writerForReader, AmongUsClient.Instance.HostId);
+
+		writerForReader.Recycle();
+	}
+
+	public static void UpdateSystem(MessageReader reader)
+	{
+		Instance.UpdateSystem(
+			reader.ReadNetObject<PlayerControl>(),
+			reader);
 	}
 
 	public static void RpcUpdateSystem(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
 	{
-		// TODO: ライターが2つと冗長すぎるのでどうにかする
-		MessageWriter writerForReader = MessageWriter.Get(SendOption.Reliable);
-		writerForReader.Write((byte)targetSystem);
-		writeAction.Invoke(writerForReader);
+		MessageWriter writerForReader = createWriter(targetSystem, writeAction);
 		var data = writerForReader.ToByteArray(false);
+		callRpc(writerForReader, -1);
 
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-		MessageWriter messageWriter = AmongUsClient.Instance.StartRpcImmediately(
-			CachedShipStatus.Instance.NetId, callId, SendOption.Reliable, -1);
-		messageWriter.Write((byte)Type);
-		messageWriter.WriteNetObject(localPlayer);
-		messageWriter.Write(writerForReader, false);
-		AmongUsClient.Instance.FinishRpcImmediately(messageWriter);
+		Instance.UpdateSystem(data);
 
-		var reader = MessageReader.Get(data);
-		CachedShipStatus.Instance.UpdateSystem(Type, localPlayer, reader);
 		writerForReader.Recycle();
 	}
 
@@ -178,9 +182,33 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
+	public void UpdateSystem(Il2CppByteArry data)
+		=> UpdateSystem(
+			CachedPlayerControl.LocalPlayer,
+			MessageReader.Get(data));
+
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 	 	ExtremeSystemType systemType = (ExtremeSystemType)msgReader.ReadByte();
 		this.systems[systemType].UpdateSystem(player, msgReader);
+	}
+
+	private static void callRpc(MessageWriter writer, int target)
+	{
+		using var caller = new RPCOperator.RpcCaller(
+			CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+			RPCOperator.Command.UpdateExtremeSystemType,
+			target: target);
+		caller.WriteNetObject(CachedPlayerControl.LocalPlayer.PlayerControl);
+		caller.WriteWriter(writer, false);
+	}
+
+	private static MessageWriter createWriter(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
+	{
+		MessageWriter writerForReader = MessageWriter.Get(SendOption.Reliable);
+		writerForReader.Write((byte)targetSystem);
+		writeAction.Invoke(writerForReader);
+
+		return writerForReader;
 	}
 }
