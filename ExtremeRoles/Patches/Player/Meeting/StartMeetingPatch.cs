@@ -9,7 +9,7 @@ public static class PlayerControlCoStartMeetingPatch
 {
 	public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
 	{
-		InfoOverlay.Instance.BlockShow(true);
+		InfoOverlay.Instance.IsBlock = true;
 
 		var state = ExtremeRolesPlugin.ShipState;
 
