@@ -28,26 +28,29 @@ public static class MeetingHudStartPatch
 		bool trigger = state.AssassinMeetingTrigger;
 		var builder = new StringBuilder();
 
+		builder
+			.AppendLine("------ MeetingHud Start!! -----")
+			.AppendLine(" - Meeting info:");
+
 		if (GameManager.Instance.LogicOptions.IsTryCast<LogicOptionsNormal>(out var opt))
 		{
 			builder
-				.AppendLine("------ MeetingHud Start!! -----")
-				.AppendLine(" - Meeting info:")
-
 				.Append("   - Discussion Time:")
 				.Append(opt!.GetDiscussionTime())
 				.AppendLine()
 
 				.Append("   - Voting Time:")
 				.Append(opt!.GetVotingTime())
-				.AppendLine()
-
-				.Append("   - Assassin　Meeting:")
-				.Append(trigger)
 				.AppendLine();
 		}
 
-		if (ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
+		builder
+			.Append("   - Assassin Meeting:")
+			.Append(trigger)
+			.AppendLine();
+
+		if (!trigger &&
+			ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
 				ExtremeSystemType.MeetingTimeOffset, out var system) &&
 			system is not null)
 		{
