@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
+using ExtremeRoles.Extension;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -20,37 +21,43 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
 public static class MeetingHudStartPatch
 {
-	public static void Postfix()
+	public static void Postfix(MeetingHud __instance)
 	{
 
 		var state = ExtremeRolesPlugin.ShipState;
 		bool trigger = state.AssassinMeetingTrigger;
 		var builder = new StringBuilder();
 
-		builder
-			.AppendLine("------ MeetingHud Start!! -----")
-			.AppendLine(" - meeting info:")
+		if (GameManager.Instance.LogicOptions.IsTryCast<LogicOptionsNormal>(out var opt))
+		{
+			builder
+				.AppendLine("------ MeetingHud Start!! -----")
+				.AppendLine(" - Meeting info:")
 
-			.Append("   - Discussion Time:")
-			.Append(MeetingHudTimerOffsetPatch.NoModDiscussionTime)
-			.AppendLine()
+				.Append("   - Discussion Time:")
+				.Append(opt!.GetDiscussionTime())
+				.AppendLine()
 
-			.Append("   - Voting Time:")
-			.Append(MeetingHudTimerOffsetPatch.NoModVotingTime)
-			.AppendLine()
+				.Append("   - Voting Time:")
+				.Append(opt!.GetVotingTime())
+				.AppendLine()
 
-			.Append("   - Assassin　Meeting:")
-			.Append(trigger)
-			.AppendLine();
+				.Append("   - Assassin　Meeting:")
+				.Append(trigger)
+				.AppendLine();
+		}
 
 		if (ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
 				ExtremeSystemType.MeetingTimeOffset, out var system) &&
 			system is not null)
 		{
+
+			__instance.discussionTimer -= system.HudTimerStartOffset;
+
 			builder
 				.AppendLine("   - TimeOffset System: Enable")
-				.Append("     - System Info:")
-				.Append(system.HudTimerOffset.ToString());
+				.Append("     - DiscussionTimer start at:").Append(__instance.discussionTimer);
+
 		}
 		else
 		{
