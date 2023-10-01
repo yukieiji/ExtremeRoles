@@ -15,7 +15,20 @@ namespace ExtremeRoles.Module.InfoOverlay;
 
 public sealed class Controller : NullableSingleton<Controller>
 {
-	public bool IsBlock { get; private set; } = false;
+	public bool IsBlock
+	{
+		get => this.isBlock;
+		set
+		{
+			if (value)
+			{
+				this.Hide();
+			}
+			this.isBlock = value;
+		}
+
+	}
+	private bool isBlock = false;
 	private InfoOverlayView? view;
 	private InfoOverlayModel model;
 	private HelpButton button;
@@ -24,12 +37,6 @@ public sealed class Controller : NullableSingleton<Controller>
 	{
 		this.model = new InfoOverlayModel();
 		this.button = new HelpButton();
-	}
-
-	public void BlockShow(bool isBlock)
-	{
-		this.IsBlock = isBlock;
-		this.Hide();
 	}
 
 	public void Hide()

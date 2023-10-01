@@ -20,7 +20,7 @@ public static class MeetingHudUpdatePatch
 		if (InfoOverlay.Instance.IsBlock &&
 			__instance.state != MeetingHud.VoteStates.Animating)
 		{
-			InfoOverlay.Instance.BlockShow(false);
+			InfoOverlay.Instance.IsBlock = false;
 		}
 		if (NamePlateHelper.NameplateChange)
 		{

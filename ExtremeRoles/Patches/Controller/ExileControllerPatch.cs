@@ -375,7 +375,7 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPostfix(GameData.PlayerInfo exiled)
     {
-        InfoOverlay.Instance.BlockShow(false);
+        InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }

@@ -173,6 +173,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.MeetingReporterRpc:
 				RPCOperator.MeetingReporterRpcOp(ref reader);
 				break;
+			case RPCOperator.Command.UpdateExtremeSystemType:
+				RPCOperator.UpdateExtremeSystemType(ref reader);
+				break;
 			case RPCOperator.Command.ReplaceRole:
 				byte targetPlayerId = reader.ReadByte();
 				byte replaceTarget = reader.ReadByte();

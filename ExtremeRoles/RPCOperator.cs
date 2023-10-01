@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using InnerNet;
 using Hazel;
 using AmongUs.GameOptions;
 
@@ -41,6 +42,7 @@ public static class RPCOperator
         IntegrateModCall,
         CloseMeetingVoteButton,
         MeetingReporterRpc,
+		UpdateExtremeSystemType,
 
         // 役職関連
         // 役職メインコントール
@@ -154,7 +156,17 @@ public static class RPCOperator
             this.writer.WritePacked(value);
         }
 
-        public void Dispose()
+		public void WriteNetObject(InnerNetObject obj)
+		{
+			this.writer.WriteNetObject(obj);
+		}
+
+		public void WriteWriter(MessageWriter writer, bool includeHeader)
+		{
+			this.writer.Write(writer, includeHeader);
+		}
+
+		public void Dispose()
         {
             AmongUsClient.Instance.FinishRpcImmediately(this.writer);
         }
@@ -514,7 +526,12 @@ public static class RPCOperator
         Module.MeetingReporter.RpcOp(ref reader);
     }
 
-    public static void HeroHeroAcademiaCommand(
+	public static void UpdateExtremeSystemType(ref MessageReader reader)
+	{
+		Module.SystemType.ExtremeSystemTypeManager.UpdateSystem(reader);
+	}
+
+	public static void HeroHeroAcademiaCommand(
         ref MessageReader reader)
     {
         Roles.Combination.HeroAcademia.RpcCommand(
