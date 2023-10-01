@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
     <!--<Version>8.2.5.</Version>-->
-    <VersionPrefix>8.2.4</VersionPrefix>
+    <VersionPrefix>8.2.5</VersionPrefix>
     <VersionSuffix>EmergencyMeeting</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
