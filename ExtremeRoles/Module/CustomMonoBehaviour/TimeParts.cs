@@ -40,8 +40,9 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 		}
 	}
 
+	public int Id { private get; set; }
+
 	private bool used = false;
-	private int id = 0;
 
 	public TimeParts(IntPtr ptr) : base(ptr) { }
 
@@ -57,11 +58,6 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 
 		img.sprite = Loader.CreateSpriteFromResources(
 			Path.TheifTimeParts);
-	}
-
-	public void SetId(int id)
-	{
-		this.id = id;
 	}
 
 	public float CanUse(
@@ -87,7 +83,7 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 			x =>
 			{
 				x.Write((byte)ThiefMeetingTimeStealSystem.Ops.PickUp);
-				x.WritePacked(this.id);
+				x.WritePacked(this.Id);
 			});
 	}
 }
