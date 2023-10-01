@@ -180,6 +180,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 			writer.Write((byte)systemType);
 			this.systems[systemType].Serialize(writer, initialState);
 		}
+		this.IsDirty = initialState;
 	}
 
 	public void UpdateSystem(Il2CppByteArry data)
