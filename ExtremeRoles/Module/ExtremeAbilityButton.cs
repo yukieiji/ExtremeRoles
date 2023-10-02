@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
+using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
@@ -42,8 +43,6 @@ public sealed class ExtremeAbilityButton
 
 	private readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
 
-	private static GridArrange? cachedArrange = null;
-
 	public ExtremeAbilityButton(
 		AbilityBehaviorBase behavior,
 		IButtonAutoActivator activator,
@@ -54,7 +53,8 @@ public sealed class ExtremeAbilityButton
 		this.Behavior = behavior;
 		this.hotKey = hotKey;
 
-		var killButton = FastDestroyableSingleton<HudManager>.Instance.KillButton;
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var killButton = hud.KillButton;
 
 		this.button = Object.Instantiate(
 			killButton, killButton.transform.parent);
@@ -74,20 +74,7 @@ public sealed class ExtremeAbilityButton
 		this.Behavior.Initialize(this.button);
 		this.button.graphic.sprite = this.Behavior.Graphic.Img;
 
-		ReGridButtons();
-	}
-
-
-	public static void ReGridButtons()
-	{
-		if (!FastDestroyableSingleton<HudManager>.Instance) { return; }
-
-		if (cachedArrange == null)
-		{
-			var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
-			cachedArrange = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
-		}
-		cachedArrange.ArrangeChilds();
+		hud.ReGridButtons();
 	}
 
 	public bool IsAbilityActive() =>
