@@ -12,6 +12,7 @@ using UnityEngine.AddressableAssets;
 using AmongUs.GameOptions;
 
 
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factories;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Performance;
@@ -19,7 +20,6 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Extension;
 
 #nullable enable
 

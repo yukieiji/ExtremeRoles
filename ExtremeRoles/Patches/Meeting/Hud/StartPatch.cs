@@ -2,7 +2,7 @@
 
 using HarmonyLib;
 
-using ExtremeRoles.Patches.LogicGame;
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -12,7 +12,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
-using ExtremeRoles.Extension;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 

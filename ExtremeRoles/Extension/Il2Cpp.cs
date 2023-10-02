@@ -9,9 +9,9 @@ using Il2CppType = Il2CppSystem.Type;
 
 #nullable enable
 
-namespace ExtremeRoles.Extension;
+namespace ExtremeRoles.Extension.Il2Cpp;
 
-public static class Il2Cpp
+public static class Il2CppExtension
 {
 	public static object? TryCast(this Il2CppObjectBase self, Type type)
 	{
