@@ -8,6 +8,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Host.Button;
 
+using ExtremeRoles.Extension.Manager;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Host;
@@ -64,11 +66,11 @@ public sealed partial class Xion
                 Translation.GetString("speedUp")),
         };
 
-        var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
-        GridArrange grid = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+        GridArrange grid = hud.UseButton.transform.parent.gameObject.GetComponent<GridArrange>();
         grid.MaxColumns = 4;
 
-        GameSystem.ReGridButtons();
+		hud.ReGridButtons();
 
         // プレイヤーに関する能力周り
         this.playerActionButton = new XionActionToPlayerButton(PlayerId);

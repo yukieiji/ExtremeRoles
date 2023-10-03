@@ -5,10 +5,10 @@ using UnityEngine;
 
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -93,7 +93,7 @@ public sealed class Queen :
             {
                 servant.Button.SetHotKey(KeyCode.C);
             }
-            ExtremeAbilityButton.ReGridButtons();
+            FastDestroyableSingleton<HudManager>.Instance.ReGridButtons();
         }
 
         if (targetRole.Team != ExtremeRoleType.Neutral)

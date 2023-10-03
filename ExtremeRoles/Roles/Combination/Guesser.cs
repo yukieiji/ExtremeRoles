@@ -177,7 +177,7 @@ public sealed class Guesser :
                     exId != ExtremeRoleId.Jackal)
                 {
                     add(exId, team);
-                    separetedRoleId[team].Add(exId);
+                    this.separetedRoleId[team].Add(exId);
                 }
                 switch (exId)
                 {
@@ -244,7 +244,12 @@ public sealed class Guesser :
                     {
                         foreach (var role in roleMng.Roles)
                         {
-                            add(role.Id, queenTeam, servantId);
+							if (role.IsNeutral())
+							{
+								continue;
+							}
+
+							add(role.Id, queenTeam, servantId);
                         }
                     }
                 }

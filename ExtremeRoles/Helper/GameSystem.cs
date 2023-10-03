@@ -77,20 +77,7 @@ public static class GameSystem
         TaskTypes.VentCleaning,
     };
 
-    private static GridArrange? cachedArrange = null;
     private static List<PlayerControl> bots = new List<PlayerControl>();
-
-	public static void ReGridButtons()
-    {
-        if (!FastDestroyableSingleton<HudManager>.Instance) { return; }
-
-        if (cachedArrange == null)
-        {
-            var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
-            cachedArrange = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
-        }
-        cachedArrange.ArrangeChilds();
-    }
 
     public static GameObject CreateNoneReportableDeadbody(
         PlayerControl targetPlayer, Vector3 pos)
