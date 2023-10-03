@@ -18,7 +18,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 
 ---
 
-## Wukiはこちら => [https://github.com/yukieiji/ExtremeRoles/wiki](https://github.com/yukieiji/ExtremeRoles/wiki)
+## Wikiはこちら => [https://github.com/yukieiji/ExtremeRoles/wiki](https://github.com/yukieiji/ExtremeRoles/wiki)
 
 --- 
 
