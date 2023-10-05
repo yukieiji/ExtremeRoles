@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>8.2.5.1</Version>
+    <Version>8.2.5.2</Version>
     <!--<VersionPrefix>8.2.5</VersionPrefix>-->
     <VersionSuffix>EmergencyMeeting</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
