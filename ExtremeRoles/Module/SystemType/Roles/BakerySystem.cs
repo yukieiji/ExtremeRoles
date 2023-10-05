@@ -112,19 +112,17 @@ public sealed class BakerySystem : IExtremeSystemType
 	{
 		if (this.aliveBakary.Count == 0) { return; }
 
-		this.aliveBakary.Clear();
-
-		foreach (byte playerId in aliveBakary)
-		{
-			PlayerControl player = Player.GetPlayerControlById(playerId);
-			if (player != null &&
-				player.Data != null &&
-				!player.Data.IsDead &&
-				!player.Data.Disconnected)
+		this.aliveBakary.RemoveWhere(
+			x =>
 			{
-				this.aliveBakary.Add(playerId);
-			}
-		}
+				PlayerControl player = Player.GetPlayerControlById(x);
+
+				return
+					player == null ||
+					player.Data == null ||
+					player.Data.IsDead ||
+					player.Data.Disconnected;
+			});
 	}
 
 	private void organize()
