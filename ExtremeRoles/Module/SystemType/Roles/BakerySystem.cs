@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class BakerySystem : IExtremeSystemType
 {
-	public bool IsDirty { get; private set; }
+	public bool IsDirty { get; private set; } = false;
 
 	private readonly bool isChangeCooking = false;
 	private readonly float goodTime = 0.0f;

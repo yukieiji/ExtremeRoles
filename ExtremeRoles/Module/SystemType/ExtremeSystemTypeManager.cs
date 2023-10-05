@@ -52,7 +52,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public static SystemTypes Type => (SystemTypes)60;
 
-	public bool IsDirty { get; private set; }
+	public bool IsDirty { get; private set; } = false;
 
 	private static ExtremeSystemTypeManager? instance = null;
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> systems = new Dictionary<ExtremeSystemType, IExtremeSystemType>();
