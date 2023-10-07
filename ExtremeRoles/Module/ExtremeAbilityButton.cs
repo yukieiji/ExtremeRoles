@@ -116,7 +116,9 @@ public sealed class ExtremeAbilityButton
 	{
 		if (!this.isShow || this.button == null) { return; }
 
-		setActive(this.activator.IsActive());
+		bool isActive = this.activator.IsActive();
+
+		setActive(isActive);
 		if (!this.button.isActiveAndEnabled) { return; }
 
 		AbilityState newState = this.Behavior.Update(this.State);
