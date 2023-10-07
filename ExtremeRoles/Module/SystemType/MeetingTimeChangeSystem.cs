@@ -19,7 +19,7 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 
 	public int ButtonTimeOffset { get; private set; } = 0;
 
-	public bool IsDirty { get; set; }
+	public bool IsDirty { get; set; } = false;
 
 	public int HudTimerStartOffset => this.PermOffset + this.TempOffset;
 

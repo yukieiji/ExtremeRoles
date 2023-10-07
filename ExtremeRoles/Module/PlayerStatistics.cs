@@ -24,9 +24,9 @@ namespace ExtremeRoles.Module
 		public int TotalAlive { get; set; }
 		public int AssassinAlive { get; set; }
 
-		public Dictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
+		public IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
 
-		public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
+		public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
 
 		public override string ToString()
 		{
@@ -76,16 +76,27 @@ namespace ExtremeRoles.Module
 			foreach (GameData.PlayerInfo playerInfo in
 				GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
-				if (playerInfo.Disconnected) { continue; }
+				if (playerInfo == null ||
+					playerInfo.Disconnected)
+				{
+					continue;
+				}
+
 				SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
 				ExtremeRoleType team = role.Team;
 				ExtremeRoleId roleId = role.Id;
 
 				// クルーのカウントを数える
-				if (team == ExtremeRoleType.Crewmate) { ++numCrew; }
+				if (team == ExtremeRoleType.Crewmate)
+				{
+					++numCrew;
+				}
 
 				// 死んでたら次のプレイヤーへ
-				if (playerInfo.IsDead) { continue; };
+				if (playerInfo.IsDead)
+				{
+					continue;
+				};
 
 				// マッドメイトの生存をカウントしないオプション
 				if (roleId == ExtremeRoleId.Madmate)
@@ -101,7 +112,6 @@ namespace ExtremeRoles.Module
 				}
 
 				++numTotalAlive;
-
 				int gameControlId = role.GameControlId;
 
 				if (roleId == ExtremeRoleId.Assassin &&
@@ -251,16 +261,13 @@ namespace ExtremeRoles.Module
 			int gameControlId,
 			SingleRoleBase role)
 		{
-			var multiAssignRole = role as MultiAssignRoleBase;
-			if (multiAssignRole != null)
+			if (role is MultiAssignRoleBase multiAssignRole &&
+				multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
 			{
-				if (multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
-				{
-					addNeutralTeams(
-						ref neutralTeam,
-						gameControlId,
-						NeutralSeparateTeam.Queen);
-				}
+				addNeutralTeams(
+					ref neutralTeam,
+					gameControlId,
+					NeutralSeparateTeam.Queen);
 			}
 		}
 

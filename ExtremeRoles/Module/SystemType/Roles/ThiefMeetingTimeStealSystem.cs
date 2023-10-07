@@ -29,7 +29,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		Set,
 	}
 
-	public bool IsDirty { get; set; }
+	public bool IsDirty { get; set; } = false;
 
 	private int curActiveNum = 0;
 

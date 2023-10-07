@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class BakerySystem : IExtremeSystemType
 {
-	public bool IsDirty { get; private set; }
+	public bool IsDirty { get; private set; } = false;
 
 	private readonly bool isChangeCooking = false;
 	private readonly float goodTime = 0.0f;
@@ -112,19 +112,17 @@ public sealed class BakerySystem : IExtremeSystemType
 	{
 		if (this.aliveBakary.Count == 0) { return; }
 
-		this.aliveBakary.Clear();
-
-		foreach (byte playerId in aliveBakary)
-		{
-			PlayerControl player = Player.GetPlayerControlById(playerId);
-			if (player != null &&
-				player.Data != null &&
-				!player.Data.IsDead &&
-				!player.Data.Disconnected)
+		this.aliveBakary.RemoveWhere(
+			x =>
 			{
-				this.aliveBakary.Add(playerId);
-			}
-		}
+				PlayerControl player = Player.GetPlayerControlById(x);
+
+				return
+					player == null ||
+					player.Data == null ||
+					player.Data.IsDead ||
+					player.Data.Disconnected;
+			});
 	}
 
 	private void organize()

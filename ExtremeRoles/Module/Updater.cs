@@ -4,12 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading.Tasks;
 
 using UnityEngine;
 using Newtonsoft.Json.Linq;
-
 
 using ExtremeRoles.Helper;
 
@@ -121,7 +121,8 @@ public sealed class Updater
 	public bool IsInit => InfoPopup != null;
 	public GenericPopup? InfoPopup { private get; set; }
 	private HttpClient client = new HttpClient();
-	private ServiceLocator<IRepositoryInfo> repoData = new ServiceLocator<IRepositoryInfo>();
+
+	private readonly ConcurrentDictionary<Type, IRepositoryInfo> service = new ConcurrentDictionary<Type, IRepositoryInfo>();
 
 	private static string pluginFolder
 	{
@@ -139,17 +140,37 @@ public sealed class Updater
 		this.client = new HttpClient();
 		this.client.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
 
-		this.AddRepository(new ExRRepositoryInfo());
+		this.AddRepository<ExRRepositoryInfo>();
 	}
 
-	public void AddRepository<T>(T repository) where T : class, IRepositoryInfo, new()
+	public void AddRepository<TRepoType>() where TRepoType : class, IRepositoryInfo, new()
 	{
-		this.repoData.Register(repository);
+		AddRepository(new TRepoType());
+	}
+
+	public void AddRepository<TRepoType>(TRepoType repository) where TRepoType : class, IRepositoryInfo, new()
+	{
+		if (!this.service.TryAdd(typeof(TRepoType), repository))
+		{
+			ExtremeRolesPlugin.Logger.LogError("This instance already added!!");
+		}
 	}
 
 	public void AddMod<TRepoType>(string dllName) where TRepoType : class, IRepositoryInfo, new()
 	{
-		IRepositoryInfo repo = this.repoData.Resolve<TRepoType>();
+		TRepoType? repo;
+
+		if (this.service.TryGetValue(typeof(TRepoType), out var instance) &&
+			instance is TRepoType castedInstance)
+		{
+			repo = castedInstance;
+		}
+		else
+		{
+			repo = new TRepoType();
+			AddRepository(repo);
+		}
+
 		repo.DllName.Add(dllName);
 	}
 
@@ -164,7 +185,7 @@ public sealed class Updater
 		{
 			List<ModUpdateData> updatingData = new List<ModUpdateData>();
 
-			foreach (var repo in this.repoData.GetAllService())
+			foreach (var repo in this.service.Values)
 			{
 				bool hasUpdate = await repo.HasUpdate(this.client);
 				if (!hasUpdate) { continue; }
