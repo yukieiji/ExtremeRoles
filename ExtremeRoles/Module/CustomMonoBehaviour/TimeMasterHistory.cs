@@ -54,11 +54,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 					player.transform.position,
 					player.CanMove,
 					player.inVent,
-					!(
-						player.Collider.enabled ||
-						player.NetTransform.enabled ||
-						player.moveable
-					)
+					player.inMovingPlat || player.onLadder
 				)
 			);
 		}
