@@ -91,7 +91,7 @@ public sealed class Queen :
             servant.SelfKillAbility(queen.ServantSelfKillCool);
             if (targetRole.Team != ExtremeRoleType.Neutral)
             {
-                servant.Button.SetHotKey(KeyCode.C);
+                servant.Button.HotKey = KeyCode.C;
             }
             FastDestroyableSingleton<HudManager>.Instance.ReGridButtons();
         }

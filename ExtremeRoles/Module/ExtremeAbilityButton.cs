@@ -31,11 +31,11 @@ public sealed class ExtremeAbilityButton
 
 	public float Timer { get; private set; } = 10.0f;
 
+	public KeyCode HotKey { private get; set; } = KeyCode.F;
+
 	public Transform Transform => this.button.transform;
 
 	private ActionButton button;
-
-	private KeyCode hotKey = KeyCode.F;
 
 	private bool isShow = true;
 
@@ -51,7 +51,7 @@ public sealed class ExtremeAbilityButton
 		this.State = AbilityState.CoolDown;
 		this.activator = activator;
 		this.Behavior = behavior;
-		this.hotKey = hotKey;
+		this.HotKey = hotKey;
 
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
 		var killButton = hud.KillButton;
@@ -98,11 +98,6 @@ public sealed class ExtremeAbilityButton
 	{
 		this.isShow = isShow;
 		setActive(isShow);
-	}
-
-	public void SetHotKey(KeyCode newKey)
-	{
-		this.hotKey = newKey;
 	}
 
 	public void SetLabelToCrewmate()
@@ -181,7 +176,7 @@ public sealed class ExtremeAbilityButton
 				break;
 			case AbilityState.Ready:
 				this.Timer = 0.0f;
-				if (Input.GetKeyDown(this.hotKey))
+				if (Input.GetKeyDown(this.HotKey))
 				{
 					onClick();
 				}
