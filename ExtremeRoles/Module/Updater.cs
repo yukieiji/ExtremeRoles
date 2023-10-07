@@ -192,10 +192,10 @@ public sealed class Updater
 		repo.DllName.Add(dllName);
 	}
 
-	public async Task<bool> CheckAndUpdate()
+	public async Task CheckAndUpdate()
 	{
 		// TODO: 二重アプデを防ぐ
-		if (this.InfoPopup == null) { return false; }
+		if (this.InfoPopup == null) { return; }
 
 		this.InfoPopup.Show(Translation.GetString("chekUpdateWait"));
 
@@ -216,7 +216,7 @@ public sealed class Updater
 			if (updatingData.Count == 0)
 			{
 				setPopupText(Translation.GetString("latestNow"));
-				return false;
+				return;
 			}
 
 			setPopupText(Translation.GetString("updateNow"));
@@ -228,22 +228,23 @@ public sealed class Updater
 
 			foreach (ModUpdateData data in updatingData)
 			{
-				using (var stream = getStreamFromUrl(data.DownloadUrl).GetAwaiter().GetResult())
+				var result = getStreamFromUrl(data.DownloadUrl).GetAwaiter().GetResult();
+
+				if (!result.HasValue()) { continue; }
+
+				using (var stream = result.Value)
 				{
-					if (stream is null) { continue; }
 					installModFromStream(stream, data.DllName);
 				}
 			}
 			this.InfoPopup.StartCoroutine(
 				Effects.Lerp(0.01f, new Action<float>(
 					(p) => { this.showPopup(Translation.GetString("updateRestart")); })));
-			return true;
 		}
 		catch (Exception ex)
 		{
 			Logging.Error(ex.ToString());
 			this.showPopup(Translation.GetString("updateManually"));
-			return false;
 		}
 	}
 
@@ -267,7 +268,7 @@ public sealed class Updater
 		}
 	}
 
-	private async Task<Stream?> getStreamFromUrl(string url)
+	private async Task<Expected<Stream>> getStreamFromUrl(string url)
 	{
 		var response = await this.client.GetAsync(
 			new Uri(url),
@@ -275,7 +276,7 @@ public sealed class Updater
 		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
 		{
 			Logging.Error("Server returned no data: " + response.StatusCode.ToString());
-			return null;
+			return null!;
 		}
 
 		var responseStream = await response.Content.ReadAsStreamAsync();
