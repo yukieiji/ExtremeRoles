@@ -237,7 +237,6 @@ public sealed class ExtremeAbilityButton
 			default:
 				break;
 		}
-		ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Change To {this.State} => {newState}");
 		this.State = newState;
 	}
 }
