@@ -196,7 +196,7 @@ public sealed class ExtremeAbilityButton
 		if (this.Behavior.IsUse() &&
 			this.Behavior.TryUseAbility(this.Timer, this.State, out AbilityState newState))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo($"Ability Use : {this.Behavior.Graphic.Text}");
+			ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Using {this.Behavior.Graphic.Text}");
 			if (newState == AbilityState.CoolDown)
 			{
 				this.Behavior.AbilityOff();
@@ -235,7 +235,7 @@ public sealed class ExtremeAbilityButton
 			default:
 				break;
 		}
-		ExtremeRolesPlugin.Logger.LogInfo($"Button State Change To {this.State} => {newState}");
+		ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Change To {this.State} => {newState}");
 		this.State = newState;
 	}
 }
