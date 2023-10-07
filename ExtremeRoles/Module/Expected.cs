@@ -6,40 +6,31 @@ using System.Collections.Generic;
 
 namespace ExtremeRoles.Module;
 
-public static class ErrorCodeMaker
+public class ErrorCode<E>
 {
-	public class ErrorCode<E>
-		where E :
-			struct, IComparable, IConvertible,
-			IComparable<E>, IEquatable<E>
+	private readonly E? code;
+
+	// 基本的にこいつを呼ばない
+	public ErrorCode()
 	{
-		private readonly E? code;
-
-		// 基本的にこいつを呼ばない
-		public ErrorCode()
-		{
-			code = default(E);
-		}
-
-		public ErrorCode(E code)
-		{
-			this.code = code;
-		}
-		public string GetMessage()
-		{
-			if (this.code == null) { return ""; }
-			string? message = this.code.ToString();
-
-			if (string.IsNullOrEmpty(message)) { return ""; }
-
-			return message;
-		}
+		code = default(E);
 	}
 
-	public static ErrorCode<E> MakeErrorCode<E>(E code)
-		where E :
-			struct, IComparable, IConvertible,
-			IComparable<E>, IEquatable<E>
+	public ErrorCode(E code)
+	{
+		this.code = code;
+	}
+	public string GetMessage()
+	{
+		if (this.code == null) { return ""; }
+		string? message = this.code.ToString();
+
+		if (string.IsNullOrEmpty(message)) { return ""; }
+
+		return message;
+	}
+
+	public static ErrorCode<E> Make(E code)
 		=> new ErrorCode<E>(code);
 }
 
@@ -59,6 +50,9 @@ public sealed class Expected<T> : IEquatable<Expected<T>>
 	}
 
 	private readonly T? value;
+
+	public Expected()
+	{}
 
 	public Expected(T? value)
 	{
