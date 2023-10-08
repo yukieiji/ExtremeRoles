@@ -67,7 +67,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
 
         public override bool IsCanAbilityActiving() => true;
 
-        public override bool IsUse() => 
+        public override bool IsUse() =>
             this.canUse.Invoke();
 
         public override bool TryUseAbility(
@@ -150,7 +150,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         }
 
         this.KillCoolTime = Mathf.Clamp(this.KillCoolTime, 0.1f, float.MaxValue);
-        
+
         return true;
     }
 
@@ -189,8 +189,8 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
 
     public bool UseAbility()
     {
-
-        float prevTime = PlayerControl.LocalPlayer.killTimer;
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        float prevTime = localPlayer.killTimer;
         Helper.Logging.Debug($"PrevKillCool:{prevTime}");
 
         using (var caller = RPCOperator.CreateCaller(
@@ -202,16 +202,20 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         RPCOperator.StartVentAnimation(
             Vent.currentVent.Id);
 
-        Player.RpcUncheckMurderPlayer(
-            CachedPlayerControl.LocalPlayer.PlayerId,
-            this.targetPlayer.PlayerId,
-            byte.MinValue);
+		byte targetPlayerId = this.targetPlayer.PlayerId;
+		byte killerId = localPlayer.PlayerId;
+
+		if (!Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(killerId, targetPlayerId))
+		{
+			Player.RpcUncheckMurderPlayer(
+				killerId, targetPlayerId, byte.MinValue);
+		}
 
         this.KillCoolTime = this.KillCoolTime - this.killBonus;
         this.KillCoolTime = Mathf.Clamp(this.KillCoolTime, 0.1f, float.MaxValue);
 
         this.targetPlayer = null;
-        CachedPlayerControl.LocalPlayer.PlayerControl.SetKillTimer(prevTime);
+		localPlayer.SetKillTimer(prevTime);
 
         return true;
     }
