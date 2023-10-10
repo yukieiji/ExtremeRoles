@@ -111,14 +111,10 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         if (role.carringBody == null) { yield break; }
 
-        if (!rolePlayer.inVent && !rolePlayer.moveable)
-        {
-            do
-            {
-                yield return null;
-            }
-            while (!rolePlayer.moveable);
-        }
+		while (rolePlayer.inMovingPlat || rolePlayer.onLadder)
+		{
+			yield return null;
+		}
 
         role.carringBody.transform.SetParent(null);
 

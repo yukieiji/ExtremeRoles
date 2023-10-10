@@ -231,7 +231,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
 
     public void IntroEndSetUp()
     {
-        this.Button.SetHotKey(KeyCode.F);
+        this.Button.HotKey = KeyCode.F;
 
         byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 

@@ -532,7 +532,7 @@ public static class ExtremeRoleManager
             {
                 if (multiAssignAbilityRole.Button != null)
                 {
-                    multiAssignAbilityRole.Button.SetHotKey(UnityEngine.KeyCode.C);
+                    multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;
                 }
             }
         }

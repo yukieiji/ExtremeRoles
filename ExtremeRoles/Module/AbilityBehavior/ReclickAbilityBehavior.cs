@@ -69,7 +69,8 @@ public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 				}
 				break;
 			case AbilityState.Activating:
-				if (this.isActive)
+				if (this.isActive &&
+					timer <= this.ActiveTime - 0.25f)
 				{
 					newState = AbilityState.CoolDown;
 				}

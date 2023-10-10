@@ -25,21 +25,20 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 	{
 		"ExtremeRoles.dll"
 	};
+	private JObject? releaseData = null;
 
 	public async Task<List<Updater.ModUpdateData>> GetModUpdateData(HttpClient client)
 	{
 		var result = new List<Updater.ModUpdateData>();
 
-		var response = await client.GetAsync(
-			Url, HttpCompletionOption.ResponseContentRead);
-		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+		var releaseDataResult = await getReleaseData(client);
+
+		if (!releaseDataResult.HasValue())
 		{
-			Logging.Error(
-				$"Server returned no data: {response.StatusCode}");
 			return result;
 		}
-		string json = await response.Content.ReadAsStringAsync();
-		JObject data = JObject.Parse(json);
+
+		var data = releaseDataResult.Value;
 
 		string? tagname = data["tag_name"]?.ToString();
 		if (tagname == null)
@@ -76,15 +75,14 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 
 	public async Task<bool> HasUpdate(HttpClient client)
 	{
-		var response = await client.GetAsync(
-			Url, HttpCompletionOption.ResponseContentRead);
-		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+		var result = await getReleaseData(client);
+
+		if (!result.HasValue())
 		{
-			Logging.Error($"Server returned no data: {response.StatusCode}");
 			return false;
 		}
-		string json = await response.Content.ReadAsStringAsync();
-		JObject data = JObject.Parse(json);
+
+		var data = result.Value;
 
 		string? tagname = data["tag_name"]?.ToString();
 		if (tagname == null)
@@ -95,6 +93,26 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 		Version ver = Version.Parse(tagname.Replace("v", ""));
 		int? diff = Assembly.GetExecutingAssembly().GetName().Version?.CompareTo(ver);
 		return diff < 0;
+	}
+
+	private async Task<Expected<JObject>> getReleaseData(HttpClient client)
+	{
+		if (this.releaseData != null) { return this.releaseData; }
+
+		var response = await client.GetAsync(
+			Url, HttpCompletionOption.ResponseContentRead);
+		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+		{
+			Logging.Error($"Server returned no data: {response.StatusCode}");
+			return null!;
+		}
+
+		string json = await response.Content.ReadAsStringAsync();
+		JObject data = JObject.Parse(json);
+
+		this.releaseData = data;
+
+		return data;
 	}
 }
 
@@ -174,10 +192,10 @@ public sealed class Updater
 		repo.DllName.Add(dllName);
 	}
 
-	public async Task<bool> CheckAndUpdate()
+	public async Task CheckAndUpdate()
 	{
 		// TODO: 二重アプデを防ぐ
-		if (this.InfoPopup == null) { return false; }
+		if (this.InfoPopup == null) { return; }
 
 		this.InfoPopup.Show(Translation.GetString("chekUpdateWait"));
 
@@ -198,7 +216,7 @@ public sealed class Updater
 			if (updatingData.Count == 0)
 			{
 				setPopupText(Translation.GetString("latestNow"));
-				return false;
+				return;
 			}
 
 			setPopupText(Translation.GetString("updateNow"));
@@ -210,22 +228,23 @@ public sealed class Updater
 
 			foreach (ModUpdateData data in updatingData)
 			{
-				using (var stream = getStreamFromUrl(data.DownloadUrl).GetAwaiter().GetResult())
+				var result = getStreamFromUrl(data.DownloadUrl).GetAwaiter().GetResult();
+
+				if (!result.HasValue()) { continue; }
+
+				using (var stream = result.Value)
 				{
-					if (stream is null) { continue; }
 					installModFromStream(stream, data.DllName);
 				}
 			}
 			this.InfoPopup.StartCoroutine(
 				Effects.Lerp(0.01f, new Action<float>(
 					(p) => { this.showPopup(Translation.GetString("updateRestart")); })));
-			return true;
 		}
 		catch (Exception ex)
 		{
 			Logging.Error(ex.ToString());
 			this.showPopup(Translation.GetString("updateManually"));
-			return false;
 		}
 	}
 
@@ -249,7 +268,7 @@ public sealed class Updater
 		}
 	}
 
-	private async Task<Stream?> getStreamFromUrl(string url)
+	private async Task<Expected<Stream>> getStreamFromUrl(string url)
 	{
 		var response = await this.client.GetAsync(
 			new Uri(url),
@@ -257,7 +276,7 @@ public sealed class Updater
 		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
 		{
 			Logging.Error("Server returned no data: " + response.StatusCode.ToString());
-			return null;
+			return null!;
 		}
 
 		var responseStream = await response.Content.ReadAsStreamAsync();

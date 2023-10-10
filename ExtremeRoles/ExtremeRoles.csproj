@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>8.2.5.2</Version>
-    <!--<VersionPrefix>8.2.5</VersionPrefix>-->
+    <!--<Version>8.2.6.0</Version>-->
+    <VersionPrefix>8.2.6</VersionPrefix>
     <VersionSuffix>EmergencyMeeting</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
