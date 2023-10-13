@@ -18,6 +18,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
+using Il2CppInterop.Generator.Extensions;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -181,7 +182,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	{
 		int gameControlId = replaceGameControlId(wisp.GameControlId);
 		return this.effectPlayer.TryGetValue(gameControlId, out int playerNum) ?
-			playerNum > this.winPlayerNum : false;
+			playerNum >= this.winPlayerNum : false;
 	}
 
 
@@ -191,8 +192,11 @@ public sealed class WispTorchSystem : IExtremeSystemType
 		for (int i = 0; i < removeNum; ++i)
 		{
 			int groupId = reader.ReadPackedInt32();
-			this.torchGroups[groupId].Remove();
-			this.torchGroups.Remove(groupId);
+			if (this.torchGroups.ContainsKey(groupId))
+			{
+				this.torchGroups[groupId].Remove();
+				this.torchGroups.Remove(groupId);
+			}
 		}
 
 		this.effectPlayer.Clear();
@@ -224,7 +228,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 			}
 		}
 
-		if (!AmongUsClient.Instance.AmHost) { return; }
+		if (!AmongUsClient.Instance.AmHost || this.IsDirty) { return; }
 
 		this.removeTorch.Clear();
 
@@ -254,6 +258,11 @@ public sealed class WispTorchSystem : IExtremeSystemType
 		}
 
 		if (this.removeTorch.Count == 0) { return; }
+
+		foreach (int id in this.removeTorch)
+		{
+			this.torchGroups.Remove(id);
+		}
 
 		this.IsDirty = true;
 	}
