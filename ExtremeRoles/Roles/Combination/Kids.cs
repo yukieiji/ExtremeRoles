@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Hazel;
 using UnityEngine;
 
-using AmongUs.GameOptions;
 using TMPro;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityModeSwitcher;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
@@ -25,26 +20,18 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
-using ExtremeRoles.Compat;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class Kids : GhostAndAliveCombinationRoleManagerBase
 {
     public const string Name = "Kids";
-
-    public enum AbilityType : byte
-    {
-        Scribe,
-        SelfBomb,
-        SetTorch,
-        PickUpTorch,
-        RemoveTorch,
-        RepairTorchVision,
-        ResetMeeting
-    }
 
     public Kids() : base(
         Name, ColorPalette.KidsYellowGreen, 2,
@@ -69,55 +56,30 @@ public sealed class Kids : GhostAndAliveCombinationRoleManagerBase
             wisp.SetWinPlayerNum(rolePlayerId);
         }
     }
-
-    protected override void CommonInit()
-    {
-        base.CommonInit();
-        Wisp.StateInit();
-    }
-
-    public static void Ability(ref MessageReader reader)
-    {
-        AbilityType abilityType = (AbilityType)reader.ReadByte();
-
-        switch (abilityType)
-        {
-            case AbilityType.Scribe:
-            case AbilityType.SelfBomb:
-                byte playerId = reader.ReadByte();
-                PlayerControl rolePlayer = Player.GetPlayerControlById(playerId);
-                Delinquent.Ability(abilityType, rolePlayer);
-                break;
-            case AbilityType.SetTorch:
-            case AbilityType.PickUpTorch:
-            case AbilityType.RemoveTorch:
-            case AbilityType.RepairTorchVision:
-            case AbilityType.ResetMeeting:
-                Wisp.Ability(ref reader, abilityType);
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 {
-    public override bool IsAssignGhostRole => this.canAssignWisp;
+	public enum AbilityType : byte
+	{
+		Scribe,
+		SelfBomb,
+	}
 
+	public override bool IsAssignGhostRole => this.canAssignWisp;
 
     public sealed class DelinquentAbilityBehavior : AbilityBehaviorBase
     {
         public int AbilityCount { get; private set; }
-        public Kids.AbilityType CurAbility { get; private set; }
+        public AbilityType CurAbility { get; private set; }
 
         private bool isUpdate;
 
-        private TextMeshPro abilityCountText;
+        private TextMeshPro? abilityCountText;
         private Func<bool> useAbility;
         private Func<bool> canUse;
 
-        private GraphicSwitcher<Kids.AbilityType> switcher;
+        private GraphicSwitcher<AbilityType> switcher;
 
         public DelinquentAbilityBehavior(
             GraphicMode scribeMode,
@@ -130,9 +92,9 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
             this.useAbility = useAbility;
             this.canUse = canUse;
 
-            this.switcher = new GraphicSwitcher<Kids.AbilityType>(this);
-            this.switcher.Add(Kids.AbilityType.Scribe, scribeMode);
-            this.switcher.Add(Kids.AbilityType.SelfBomb, bombMode);
+            this.switcher = new GraphicSwitcher<AbilityType>(this);
+            this.switcher.Add(AbilityType.Scribe, scribeMode);
+            this.switcher.Add(AbilityType.SelfBomb, bombMode);
         }
 
         public void SetAbilityCount(int newAbilityNum)
@@ -184,10 +146,10 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
             --this.AbilityCount;
             bool updateBomb = this.AbilityCount <= 0;
-            if (updateBomb && this.CurAbility == Kids.AbilityType.Scribe)
+            if (updateBomb && this.CurAbility == AbilityType.Scribe)
             {
                 this.AbilityCount = 1;
-                this.CurAbility = Kids.AbilityType.SelfBomb;
+                this.CurAbility = AbilityType.SelfBomb;
             }
             if (this.abilityCountText != null)
             {
@@ -220,19 +182,12 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
         private void updateAbilityInfoText()
         {
-            this.abilityCountText.text = string.Format(
+            this.abilityCountText!.text = string.Format(
                 Translation.GetString("scribeText"), this.AbilityCount);
         }
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.abilityButton;
-        set
-        {
-            this.abilityButton = value;
-        }
-    }
+    public ExtremeAbilityButton? Button { get; set; }
 
     public bool WinCheckEnable => this.isWinCheck;
     public float Range => this.range;
@@ -244,14 +199,11 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
     public int WispAbilityNum => this.abilityCount;
 
-    private Kids.AbilityType curAbilityType;
+    private AbilityType curAbilityType;
     private float range;
     private bool isWinCheck;
 
     private int abilityCount = 0;
-
-    private ExtremeAbilityButton abilityButton;
-
     private const int maxImageNum = 10;
 
     private bool canAssignWisp = true;
@@ -265,16 +217,20 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         tab: OptionTab.Combination)
     { }
 
-    public static void Ability(Kids.AbilityType abilityType, PlayerControl player)
+    public static void Ability(ref MessageReader reader)
     {
-        Delinquent delinquent =
-            ExtremeRoleManager.GetSafeCastedRole<Delinquent>(player.PlayerId);
+		AbilityType abilityType = (AbilityType)reader.ReadByte();
+		byte playerId = reader.ReadByte();
+
+		Delinquent delinquent =
+            ExtremeRoleManager.GetSafeCastedRole<Delinquent>(playerId);
         switch (abilityType)
         {
-            case Kids.AbilityType.Scribe:
-                setScibe(player, delinquent);
+            case AbilityType.Scribe:
+				PlayerControl rolePlayer = Player.GetPlayerControlById(playerId);
+				setScibe(rolePlayer, delinquent);
                 break;
-            case Kids.AbilityType.SelfBomb:
+            case AbilityType.SelfBomb:
                 setBomb(delinquent);
                 break;
         }
@@ -331,7 +287,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
         this.RoleAbilityInit();
 
-        if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
+        if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
                 OptionManager.Instance.GetValue<int>(GetRoleOptionId(
@@ -341,7 +297,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
     public bool IsAbilityUse()
     {
-        if (!(this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior))
+        if (!(this.Button?.Behavior is DelinquentAbilityBehavior behavior))
         {
             return false;
         }
@@ -350,16 +306,16 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
         return this.curAbilityType switch
         {
-            Kids.AbilityType.Scribe =>
+            AbilityType.Scribe =>
                 this.IsCommonUse(),
-            Kids.AbilityType.SelfBomb =>
+            AbilityType.SelfBomb =>
                 Player.GetClosestPlayerInRange(
                     CachedPlayerControl.LocalPlayer, this, this.range) != null,
             _ => true
         };
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -379,10 +335,10 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         }
         switch (this.curAbilityType)
         {
-            case Kids.AbilityType.Scribe:
+            case AbilityType.Scribe:
                 setScibe(CachedPlayerControl.LocalPlayer, this);
                 break;
-            case Kids.AbilityType.SelfBomb:
+            case AbilityType.SelfBomb:
                 setBomb(this);
                 break;
             default:
@@ -402,7 +358,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.curAbilityType = Kids.AbilityType.Scribe;
+        this.curAbilityType = AbilityType.Scribe;
 
         this.abilityCount = 0;
 
@@ -410,7 +366,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
             GetRoleOptionId(DelinqentOption.Range));
 
         this.RoleAbilityInit();
-        if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
+        if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
                 OptionManager.Instance.GetValue<int>(GetRoleOptionId(
@@ -424,294 +380,6 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
 
 public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 {
-    public sealed class Torch : IMeetingResetObject
-    {
-        private GameObject body;
-
-        public Torch(float range, Vector2 pos)
-        {
-            this.body = new GameObject("Torch");
-            this.body.transform.position = new Vector3(
-                pos.x, pos.y, (pos.y / 1000f));
-			if (CompatModManager.Instance.TryGetModMap(out var modMap))
-			{
-				modMap!.AddCustomComponent(
-					this.body,
-					Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
-			}
-			OldTorchBehavior torch = this.body.AddComponent<OldTorchBehavior>();
-            torch.SetRange(range);
-            this.body.SetActive(true);
-        }
-
-        public void Clear()
-        {
-            GameObject.Destroy(this.body);
-        }
-    }
-
-    public sealed class TorchManager : IMeetingResetObject, IUpdatableObject
-    {
-        private uint id = 0;
-        private int placedControlId = 0;
-        private float timer = float.MaxValue;
-        private float blackOutTime = float.MinValue;
-        private List<Torch> torch = new List<Torch>();
-
-        public TorchManager(
-            uint id,
-            Wisp wisp)
-        {
-            this.id = id;
-            this.placedControlId = wisp.GameControlId;
-            this.timer = wisp.torchActiveTime;
-            this.blackOutTime = wisp.torchBlackOutTime;
-            this.torch.Clear();
-            this.SetTorch(wisp.torchNum, wisp.range);
-        }
-
-        public void Clear()
-        {
-            foreach (var torch in this.torch)
-            {
-                torch.Clear();
-            }
-            this.torch.Clear();
-        }
-
-        public void Update(int index)
-        {
-            this.timer -= Time.deltaTime;
-            if (this.timer <= 0.0f)
-            {
-                using (var caller = RPCOperator.CreateCaller(
-                    RPCOperator.Command.KidsAbility))
-                {
-                    caller.WriteByte((byte)Kids.AbilityType.RemoveTorch);
-                    caller.WriteUInt(this.id);
-                    caller.WriteInt(this.placedControlId);
-                    caller.WriteFloat(this.blackOutTime);
-                }
-                RemoveTorch(this.id, this.placedControlId, this.blackOutTime);
-                ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(index);
-				this.timer = float.MaxValue;
-            }
-        }
-
-        public void SetTorch(int num, float range)
-        {
-            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId);
-            int playerNum = CachedPlayerControl.AllPlayerControls.Count;
-            int clampedNum = Math.Clamp(num, 0, playerNum);
-            ShipStatus ship = CachedShipStatus.Instance;
-            IEnumerable<CachedPlayerControl> target =
-                CachedPlayerControl.AllPlayerControls.OrderBy(
-                    x => RandomGenerator.Instance.Next()).Take(clampedNum);
-
-            foreach (CachedPlayerControl player in target)
-            {
-                byte playerId = player.PlayerId;
-
-                List<Vector2> placePos = new List<Vector2>();
-
-                if (CompatModManager.Instance.TryGetModMap(out var modMap))
-                {
-                    placePos = modMap!.GetSpawnPos(playerId);
-                }
-                else
-                {
-                    switch (mapId)
-                    {
-                        case 0:
-                        case 1:
-                        case 2:
-                        case 3:
-                            Vector2 baseVec = Vector2.up;
-                            baseVec = baseVec.Rotate(
-                                (float)(playerId - 1) * (360f / (float)playerNum));
-                            Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(
-                                0f, 0.3636f);
-                            placePos.Add(ship.InitialSpawnCenter + offset);
-                            placePos.Add(ship.MeetingSpawnCenter + offset);
-                            break;
-                        case 4:
-                            placePos = GameSystem.GetAirShipRandomSpawn();
-                            break;
-                    }
-                }
-                var newTorch = new Torch(range, placePos[
-                    RandomGenerator.Instance.Next(0, placePos.Count)]);
-                ExtremeRolesPlugin.ShipState.AddMeetingResetObject(newTorch);
-                this.torch.Add(newTorch);
-            }
-        }
-    }
-
-    public sealed class WispBlackOuter : IMeetingResetObject, IUpdatableObject
-    {
-        private float timer = float.MaxValue;
-        private float maxTime = float.MaxValue;
-
-        public WispBlackOuter(float time)
-        {
-            // ここは全員呼ばれる
-            VisionComputer.Instance.SetModifier(
-                VisionComputer.Modifier.WispLightOff);
-            this.maxTime = time;
-            this.timer = time;
-        }
-
-        public void ResetTimer()
-        {
-            this.timer = this.maxTime;
-        }
-
-        public void Clear()
-        {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.KidsAbility))
-            {
-                caller.WriteByte((byte)Kids.AbilityType.RepairTorchVision);
-            }
-            RepairVision();
-        }
-
-        public void Update(int index)
-        {
-            this.timer -= Time.deltaTime;
-            if (this.timer <= 0.0f)
-            {
-                ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(index);
-            }
-        }
-    }
-
-    public sealed class WispState
-    {
-        private uint torchId;
-        private Dictionary<uint, TorchManager> placedTorch = new Dictionary<uint, TorchManager>();
-        private WispBlackOuter blackOuter = null;
-        private HashSet<byte> torchHavePlayer = new HashSet<byte>();
-        private Dictionary<int, int> affectedPlayerNum = new Dictionary<int, int>();
-
-        public WispState()
-        {
-            this.torchId = 0;
-            this.blackOuter = null;
-        }
-
-        public bool IsWin(Wisp wisp)
-        {
-            int gameControlId = wisp.GameControlId;
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                gameControlId = PlayerStatistics.SameNeutralGameControlId;
-            }
-            if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
-            {
-                return playerNum >= wisp.winNum;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public int CurAffectedPlayerNum(Wisp wisp)
-        {
-            int gameControlId = wisp.GameControlId;
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                gameControlId = PlayerStatistics.SameNeutralGameControlId;
-            }
-
-            if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
-            {
-                return playerNum;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public void SetTorch(Wisp wisp)
-        {
-            var torch = new TorchManager(this.torchId, wisp);
-            ExtremeRolesPlugin.ShipState.AddUpdateObject(torch);
-            ExtremeRolesPlugin.ShipState.AddMeetingResetObject(torch);
-            this.placedTorch.Add(
-                this.torchId, torch);
-            this.torchId++;
-        }
-
-        public bool HasTorch(byte playerId) => this.torchHavePlayer.Contains(playerId);
-
-        public void PickUpTorch(byte playerId)
-        {
-            this.torchHavePlayer.Add(playerId);
-        }
-
-        public void RemoveTorch(uint id, int gameControlId, float time)
-        {
-            if (this.placedTorch.TryGetValue(id, out TorchManager torch))
-            {
-                torch.Clear();
-
-                if (this.blackOuter == null)
-                {
-                    this.blackOuter = new WispBlackOuter(time);
-                    ExtremeRolesPlugin.ShipState.AddUpdateObject(this.blackOuter);
-                    ExtremeRolesPlugin.ShipState.AddMeetingResetObject(this.blackOuter);
-                }
-                this.blackOuter.ResetTimer();
-                UpdateAffectedPlayerNum(gameControlId);
-            }
-        }
-
-        public void RepairVision()
-        {
-            VisionComputer.Instance.ResetModifier();
-            this.blackOuter = null;
-        }
-
-        public void ResetMeeting()
-        {
-            this.torchHavePlayer.Clear();
-            this.blackOuter?.Clear();
-            this.placedTorch.Clear();
-            RepairVision();
-        }
-
-        public void UpdateAffectedPlayerNum(int gameControlId)
-        {
-            int playerNum = 0;
-            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
-            {
-                if (player.IsDead ||
-                    player.Disconnected ||
-                    HasTorch(player.PlayerId)) { continue; }
-                ++playerNum;
-            }
-
-            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-            {
-                gameControlId = PlayerStatistics.SameNeutralGameControlId;
-            }
-
-            this.affectedPlayerNum[gameControlId] =
-                this.affectedPlayerNum.TryGetValue(gameControlId, out int result) ?
-                result + playerNum : playerNum;
-        }
-
-        public void Initialize()
-        {
-            this.torchId = 0;
-            this.affectedPlayerNum.Clear();
-            ResetMeeting();
-        }
-    }
 
     public enum WispOption
     {
@@ -729,7 +397,8 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
     private float range;
     private float torchActiveTime;
     private float torchBlackOutTime;
-    private static WispState state = new WispState();
+
+	private WispTorchSystem? system;
 
     public Wisp() : base(
         false, ExtremeRoleType.Neutral,
@@ -739,73 +408,18 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
         OptionTab.Combination)
     { }
 
-    public static void StateInit()
-    {
-        state.Initialize();
-    }
-
-    public static void Ability(ref MessageReader reader, Kids.AbilityType abilityType)
-    {
-        switch (abilityType)
-        {
-            case Kids.AbilityType.PickUpTorch:
-                PickUpTorch(reader.ReadByte());
-                break;
-            case Kids.AbilityType.RemoveTorch:
-                uint id = reader.ReadUInt32();
-                int controlId = reader.ReadInt32();
-                float time = reader.ReadSingle();
-                RemoveTorch(id, controlId, time);
-                break;
-            case Kids.AbilityType.RepairTorchVision:
-                RepairVision();
-                break;
-            case Kids.AbilityType.ResetMeeting:
-                resetMeeting();
-                break;
-            default:
-                break;
-        }
-    }
-
-    public static bool HasTorch(byte playerId) => state.HasTorch(playerId);
-
-    public static void RepairVision()
-    {
-        state.RepairVision();
-    }
-
-    public static void SetTorch(byte playerId)
-    {
-        Wisp wisp = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Wisp>(playerId);
-        if (wisp != null)
-        {
-            state.SetTorch(wisp);
-        }
-    }
-
-    public static void PickUpTorch(byte playerId)
-    {
-        state.PickUpTorch(playerId);
-    }
-
-    public static void RemoveTorch(uint id, int controlId, float blackOutTime)
-    {
-        state.RemoveTorch(id, controlId, blackOutTime);
-    }
-
     public void SetAbilityNum(int abilityNum)
     {
-        ((AbilityCountBehavior)this.Button.Behavior).SetAbilityCount(abilityNum + this.abilityNum);
+		if (this.Button?.Behavior is AbilityCountBehavior behavior)
+		{
+			behavior.SetAbilityCount(abilityNum + this.abilityNum);
+		}
     }
-    private static void resetMeeting()
-    {
-        state.ResetMeeting();
-    }
+
 
     public bool IsWin(
         GameOverReason reason,
-        GameData.PlayerInfo ghostRolePlayer) => state.IsWin(this);
+        GameData.PlayerInfo ghostRolePlayer) => this.system != null && this.system.IsWin(this);
 
     public void SetWinPlayerNum(byte rolePlayerId)
     {
@@ -821,14 +435,22 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
         }
         // 負の値にならないようにする
         this.winNum = Math.Clamp(this.winNum, 1, int.MaxValue);
-    }
+
+		var systemMng = ExtremeSystemTypeManager.Instance;
+		if (!systemMng.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system))
+		{
+			system = new WispTorchSystem(winNum, this.torchNum, this.range, this.torchActiveTime, this.torchBlackOutTime);
+			systemMng.TryAdd(ExtremeSystemType.WispTorch, system);
+		}
+		this.system = system;
+	}
 
     public override string GetFullDescription()
     {
         return string.Format(
             base.GetFullDescription(),
             this.winNum,
-            state.CurAffectedPlayerNum(this));
+			this.system?.CurEffectPlayerNum(this));
     }
 
     public override void CreateAbility()
@@ -841,7 +463,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             () => true,
             () => true,
             this.UseAbility,
-            abilityCall, true);
+            () => { }, true);
         this.ButtonInit();
         this.Button.SetLabelToCrewmate();
     }
@@ -871,11 +493,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     protected override void OnMeetingStartHook()
     {
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.KidsAbility))
-        {
-            caller.WriteByte((byte)Kids.AbilityType.ResetMeeting);
-        }
+		return;
     }
 
     protected override void CreateSpecificOption(OptionFactory factory)
@@ -905,11 +523,12 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
-        caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
-    }
-
-    private void abilityCall()
-    {
-        state.SetTorch(this);
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			ExtremeSystemType.WispTorch,
+			(writer) =>
+			{
+				writer.Write((byte)WispTorchSystem.Ops.SetTorch);
+				writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+			});
     }
 }

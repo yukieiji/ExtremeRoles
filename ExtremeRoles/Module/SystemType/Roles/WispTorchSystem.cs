@@ -168,21 +168,20 @@ public sealed class WispTorchSystem : IExtremeSystemType
 		this.blackOutTime = blackOutTime;
 	}
 
+	public int CurEffectPlayerNum(Wisp wisp)
+	{
+		int gameControlId = replaceGameControlId(wisp.GameControlId);
+		return this.effectPlayer.TryGetValue(gameControlId, out int result) ? result : 0;
+	}
+
 	public bool HasTorch(byte playerId)
 		=> this.torchGroups.Values.Any(x => x.HasPlayer.Contains(playerId));
-
 
 	public bool IsWin(Wisp wisp)
 	{
 		int gameControlId = replaceGameControlId(wisp.GameControlId);
-		if (this.effectPlayer.TryGetValue(gameControlId, out int playerNum))
-		{
-			return playerNum >= this.winPlayerNum;
-		}
-		else
-		{
-			return false;
-		}
+		return this.effectPlayer.TryGetValue(gameControlId, out int playerNum) ?
+			playerNum > this.winPlayerNum : false;
 	}
 
 

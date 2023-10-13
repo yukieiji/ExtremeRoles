@@ -57,6 +57,8 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 
 		this.collider.isTrigger = true;
 		this.collider.radius = 0.1f;
+
+
 	}
 
 	public void FixedUpdate()
@@ -76,7 +78,10 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 		float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),
 			base.transform.position);
-		couldUse = !pc.IsDead && !Wisp.HasTorch(pc.PlayerId);
+		couldUse =
+			!pc.IsDead &&
+			ExtremeSystemTypeManager.Instance.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system) &&
+			!system!.HasTorch(pc.PlayerId);
 		canUse = (couldUse && num <= this.UsableDistance);
 		return num;
 	}
@@ -93,102 +98,5 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 				writer.Write((byte)WispTorchSystem.Ops.PickUpTorch);
 				writer.WritePacked(this.GroupId);
 			});
-	}
-}
-
-
-[Il2CppRegister(
-   new Type[]
-   {
-		typeof(IUsable)
-   })]
-public sealed class OldTorchBehavior : MonoBehaviour, IAmongUs.IUsable
-{
-	public ImageNames UseIcon
-	{
-		get
-		{
-			return ImageNames.UseButton;
-		}
-	}
-
-	public float UsableDistance
-	{
-		get
-		{
-			return this.distance;
-		}
-	}
-
-	public float PercentCool
-	{
-		get
-		{
-			return 0.1f;
-		}
-	}
-
-	private float distance = 1.3f;
-
-	private CircleCollider2D collider;
-	private SpriteRenderer img;
-	private Arrow arrow;
-
-	public OldTorchBehavior(IntPtr ptr) : base(ptr) { }
-
-	public void Awake()
-	{
-		this.collider = base.gameObject.AddComponent<CircleCollider2D>();
-		this.img = base.gameObject.AddComponent<SpriteRenderer>();
-		this.img.sprite = Loader.CreateSpriteFromResources(
-			Path.WispTorch);
-
-		this.arrow = new Arrow(ColorPalette.KidsYellowGreen);
-		this.arrow.SetActive(true);
-		this.arrow.UpdateTarget(
-			this.gameObject.transform.position);
-
-		this.collider.radius = 0.1f;
-	}
-
-	public void FixedUpdate()
-	{
-		this.arrow.SetActive(
-			!MeetingHud.Instance && !ExileController.Instance);
-	}
-
-	public void OnDestroy()
-	{
-		this.arrow.Clear();
-	}
-
-	public float CanUse(
-		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
-	{
-		float num = Vector2.Distance(
-			pc.Object.GetTruePosition(),
-			base.transform.position);
-		couldUse = !pc.IsDead && !Wisp.HasTorch(pc.PlayerId);
-		canUse = (couldUse && num <= this.UsableDistance);
-		return num;
-	}
-
-	public void SetOutline(bool on, bool mainTarget)
-	{ }
-
-	public void Use()
-	{
-		byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.KidsAbility))
-		{
-			caller.WriteByte((byte)Kids.AbilityType.PickUpTorch);
-			caller.WriteByte(playerId);
-		}
-		Wisp.PickUpTorch(playerId);
-	}
-	public void SetRange(float range)
-	{
-		this.distance = range;
 	}
 }
