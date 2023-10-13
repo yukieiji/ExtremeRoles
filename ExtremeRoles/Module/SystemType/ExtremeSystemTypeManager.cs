@@ -22,6 +22,8 @@ public enum ExtremeSystemType : byte
 {
 	MeetingTimeOffset,
 
+	WispTorch,
+
 	BakeryReport,
 
 	FakerDummy,

@@ -439,7 +439,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 					this.body,
 					Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 			}
-			TorchBehavior torch = this.body.AddComponent<TorchBehavior>();
+			OldTorchBehavior torch = this.body.AddComponent<OldTorchBehavior>();
             torch.SetRange(range);
             this.body.SetActive(true);
         }
