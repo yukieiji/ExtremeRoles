@@ -27,11 +27,10 @@ public static class PlayerControlFixedUpdatePatch
 {
 	public static void Postfix(PlayerControl __instance)
 	{
-		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
-		{ return; }
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
-		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-		if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
+		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
+			!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			ExtremeRoleManager.GameRole.Count == 0 ||
+			CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
@@ -46,23 +45,21 @@ public static class PlayerControlFixedUpdatePatch
 		GhostRoleBase playerGhostRole)
 	{
 
-		var removedTask = new List<PlayerTask>();
+		var removedTask = new List<ImportantTextTask>();
 		foreach (PlayerTask task in player.myTasks.GetFastEnumerator())
 		{
 			if (task == null) { return; }
-
-			var textTask = task.gameObject.GetComponent<ImportantTextTask>();
-			if (textTask != null)
+			if (task.gameObject.TryGetComponent<ImportantTextTask>(out var importantTask))
 			{
-				removedTask.Add(task); // TextTask does not have a corresponding RoleInfo and will hence be deleted
+				removedTask.Add(importantTask); // TextTask does not have a corresponding RoleInfo and will hence be deleted
 			}
 		}
 
-		foreach (PlayerTask task in removedTask)
+		foreach (ImportantTextTask task in removedTask)
 		{
 			task.OnRemove();
 			player.myTasks.Remove(task);
-			UnityEngine.Object.Destroy(task.gameObject);
+			Object.Destroy(task.gameObject);
 		}
 
 		var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
@@ -168,12 +165,12 @@ public static class PlayerControlFixedUpdatePatch
 		}
 
 		bool ventButtonShow = enable || player.inVent;
+		var ship = ExtremeGameModeManager.Instance.ShipOption;
 
 		if (!role.TryGetVanillaRoleId(out RoleTypes roleId) ||
 			roleId is RoleTypes.Shapeshifter or RoleTypes.Impostor)
 		{
-			if (ventButtonShow &&
-				ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
+			if (ventButtonShow && ship.IsEnableImpostorVent)
 			{
 				hudManager.ImpostorVentButton.Show();
 			}
@@ -188,7 +185,7 @@ public static class PlayerControlFixedUpdatePatch
 		{
 			if (ventButtonShow)
 			{
-				if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
+				if (!ship.EngineerUseImpostorVent)
 				{
 					hudManager.AbilityButton.Show();
 				}
@@ -212,7 +209,7 @@ public static class PlayerControlFixedUpdatePatch
 
 		var abilityButton = FastDestroyableSingleton<HudManager>.Instance.AbilityButton;
 
-		switch (Performance.CachedPlayerControl.LocalPlayer.Data.Role.Role)
+		switch (CachedPlayerControl.LocalPlayer.Data.Role.Role)
 		{
 			case RoleTypes.Engineer:
 			case RoleTypes.Scientist:

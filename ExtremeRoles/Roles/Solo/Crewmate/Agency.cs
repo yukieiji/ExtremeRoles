@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -64,10 +63,9 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
 
         foreach (PlayerTask task in targetPlayer.myTasks.GetFastEnumerator())
         {
-            if (task == null) { continue; }
-
-            var textTask = task.gameObject.GetComponent<ImportantTextTask>();
-            if (textTask != null || PlayerTask.TaskIsEmergency(task)) { continue; }
+            if (task == null ||
+				task.gameObject.TryGetComponent<ImportantTextTask>(out var _) ||
+				PlayerTask.TaskIsEmergency(task)) { continue; }
 
             if (removeTaskId.Contains((int)task.Id))
             {
