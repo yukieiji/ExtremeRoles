@@ -58,16 +58,6 @@ public static class GameSystem
 
 	private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    public static HashSet<TaskTypes> SaboTask = new HashSet<TaskTypes>()
-    {
-        TaskTypes.FixLights,
-        TaskTypes.RestoreOxy,
-        TaskTypes.ResetReactor,
-        TaskTypes.ResetSeismic,
-        TaskTypes.FixComms,
-        TaskTypes.StopCharles
-    };
-
 	public static bool IsLobby => AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started;
 	public static bool IsFreePlay => AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
 
@@ -489,8 +479,7 @@ public static class GameSystem
 			var task = player.myTasks[i];
             var textTask = task.gameObject.GetComponent<ImportantTextTask>();
 
-            if (textTask != null ||
-				SaboTask.Contains(task.TaskType)) { continue; }
+            if (textTask != null || PlayerTask.TaskIsEmergency(task)) { continue; }
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
 				modMap!.IsCustomSabotageTask(task.TaskType))

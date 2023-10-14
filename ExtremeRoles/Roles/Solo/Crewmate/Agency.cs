@@ -67,8 +67,7 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
             if (task == null) { continue; }
 
             var textTask = task.gameObject.GetComponent<ImportantTextTask>();
-            if (textTask != null) { continue; }
-            if (GameSystem.SaboTask.Contains(task.TaskType))  { continue; }
+            if (textTask != null || PlayerTask.TaskIsEmergency(task)) { continue; }
 
             if (removeTaskId.Contains((int)task.Id))
             {
