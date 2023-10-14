@@ -503,6 +503,8 @@ public static class GameSystem
                     removeTask.gameObject);
                 if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
+					ExtremeRolesPlugin.Logger.LogInfo(
+						$"Adding New Task\n - Task:{task.TaskType}\n - Id:{gameControlTaskId}\n - Index:{i}");
                     Sound.PlaySound(
                         Sound.SoundType.ReplaceNewTask, 1.2f);
                 }
