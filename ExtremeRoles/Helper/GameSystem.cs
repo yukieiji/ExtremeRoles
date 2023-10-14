@@ -477,9 +477,10 @@ public static class GameSystem
         for (int i = 0; i < player.myTasks.Count; ++i)
         {
 			var task = player.myTasks[i];
-            var textTask = task.gameObject.GetComponent<ImportantTextTask>();
 
-            if (textTask != null || PlayerTask.TaskIsEmergency(task)) { continue; }
+            if (task == null ||
+				task.gameObject.TryGetComponent<ImportantTextTask>(out var _) ||
+				PlayerTask.TaskIsEmergency(task)) { continue; }
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
 				modMap!.IsCustomSabotageTask(task.TaskType))
