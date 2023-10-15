@@ -29,6 +29,8 @@ using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
+#nullable enable
+
 public sealed class Hypnotist :
     SingleRoleBase,
     IRoleAbility,
@@ -65,15 +67,6 @@ public sealed class Hypnotist :
         Glay
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.lightOffButton;
-        set
-        {
-            this.lightOffButton = value;
-        }
-    }
-
     public bool IsAwake
     {
         get
@@ -83,10 +76,6 @@ public sealed class Hypnotist :
     }
 
     public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
-
-    private ExtremeAbilityButton lightOffButton;
-
-    private HashSet<byte> doll;
 
     private float dollKillCoolReduceRate;
 
@@ -108,11 +97,7 @@ public sealed class Hypnotist :
     private float defaultKillCool;
     private float range;
 
-    private PlayerControl target;
-
-    private JObject position;
-    private const string postionJson =
-        "ExtremeRoles.Resources.JsonData.HypnotistAbilityPartPosition.json";
+    private PlayerControl? target;
 
     private const string adminKey = "Admin";
     private const string securityKey = "Security";
@@ -123,31 +108,37 @@ public sealed class Hypnotist :
     private const string polusKey = "Polus";
     private const string airShipKey = "AirShip";
 
-    private List<Vector3> addedPos;
-    private List<Vector3> addRedPos;
     private int addRedPosNum;
 
     private float hideDistance = 7.5f;
 
-    public float DollCrakingCoolTime => this.dollCrakingCoolTime;
-    public float DollCrakingActiveTime => this.dollCrakingActiveTime;
-
-    private float dollCrakingCoolTime;
-    private float dollCrakingActiveTime;
+    public float DollCrakingCoolTime { get; private set; }
+    public float DollCrakingActiveTime { get; private set; }
 
     private bool isActiveTimer;
     private float timer;
     private float defaultTimer;
 
-    public Hypnotist() : base(
+#pragma warning disable CS8618
+	private List<Vector3> addedPos;
+	private List<Vector3> addRedPos;
+	public ExtremeAbilityButton Button { get; set; }
+	private HashSet<byte> doll;
+
+	private JObject position;
+	private const string postionJson =
+		"ExtremeRoles.Resources.JsonData.HypnotistAbilityPartPosition.json";
+
+	public Hypnotist() : base(
         ExtremeRoleId.Hypnotist,
         ExtremeRoleType.Impostor,
         ExtremeRoleId.Hypnotist.ToString(),
         Palette.ImpostorRed,
         true, false, true, true)
     { }
+#pragma warning restore CS8618
 
-    public static void Ability(ref MessageReader reader)
+	public static void Ability(ref MessageReader reader)
     {
         byte rolePlayerId = reader.ReadByte();
         Hypnotist role = ExtremeRoleManager.GetSafeCastedRole<Hypnotist>(rolePlayerId);
@@ -303,8 +294,15 @@ public sealed class Hypnotist :
             Resources.Loader.CreateSpriteFromResources(
                Resources.Path.HypnotistHypnosis));
 
-        this.position = JsonParser.GetJObjectFromAssembly(postionJson);
-    }
+		var json = JsonParser.GetJObjectFromAssembly(postionJson);
+		if (json == null)
+		{
+			throw new InvalidOperationException("Can't find json file");
+		}
+
+		this.position = json;
+
+	}
 
     public bool IsAbilityUse()
     {
@@ -332,7 +330,7 @@ public sealed class Hypnotist :
         this.isActiveTimer = false;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         updateAwakeCheck(exiledPlayer);
 
@@ -355,10 +353,9 @@ public sealed class Hypnotist :
     public bool UseAbility()
     {
         PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-        byte targetPlayerId = this.target.PlayerId;
+        byte targetPlayerId = this.target!.PlayerId;
 
         SingleRoleBase role = ExtremeRoleManager.GameRole[targetPlayerId];
-        MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
 
         int redPartNum = this.defaultRedAbilityPartNum;
         Type roleType = role.GetType();
@@ -366,15 +363,13 @@ public sealed class Hypnotist :
 
         redPartNum += computeRedPartNum(interfaces);
 
-        if (multiAssignRole != null)
+        if (role is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole != null)
         {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                Type anotherRoleType = multiAssignRole.AnotherRole.GetType();
-                Type[] anotherInterface = anotherRoleType.GetInterfaces();
-                redPartNum += computeRedPartNum(anotherInterface);
-            }
-        }
+			Type anotherRoleType = multiAssignRole.AnotherRole.GetType();
+			Type[] anotherInterface = anotherRoleType.GetInterfaces();
+			redPartNum += computeRedPartNum(anotherInterface);
+		}
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.HypnotistAbility))
@@ -406,23 +401,23 @@ public sealed class Hypnotist :
             this.Button.SetButtonShow(false);
         }
 
-            if (this.isActiveTimer)
+        if (this.isActiveTimer)
+        {
+            this.timer -= Time.deltaTime;
+            if (this.timer <= 0.0f)
             {
-                this.timer -= Time.deltaTime;
-                if (this.timer <= 0.0f)
+                Logging.Debug("ResetKillButton");
+                this.isActiveTimer = false;
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.HypnotistAbility))
                 {
-                    Logging.Debug("ResetKillButton");
-                    this.isActiveTimer = false;
-                    using (var caller = RPCOperator.CreateCaller(
-                        RPCOperator.Command.HypnotistAbility))
-                    {
-                        caller.WriteByte(rolePlayer.PlayerId);
-                        caller.WriteByte((byte)RpcOps.ResetDollKillButton);
-                    }
-                    resetDollKillButton(this);
+                    caller.WriteByte(rolePlayer.PlayerId);
+                    caller.WriteByte((byte)RpcOps.ResetDollKillButton);
                 }
+                resetDollKillButton(this);
             }
         }
+    }
 
     public void HookMuderPlayer(
         PlayerControl source, PlayerControl target)
@@ -658,9 +653,9 @@ public sealed class Hypnotist :
         this.defaultRedAbilityPartNum = allOpt.GetValue<int>(
             GetRoleOptionId(HypnotistOption.DefaultRedAbilityPart));
 
-        this.dollCrakingActiveTime = allOpt.GetValue<float>(
+        this.DollCrakingActiveTime = allOpt.GetValue<float>(
             GetRoleOptionId(HypnotistOption.DollCrakingActiveTime));
-        this.dollCrakingCoolTime = allOpt.GetValue<float>(
+        this.DollCrakingCoolTime = allOpt.GetValue<float>(
             GetRoleOptionId(HypnotistOption.DollCrakingCoolTime));
 
         this.defaultTimer = allOpt.GetValue<float>(
@@ -710,129 +705,72 @@ public sealed class Hypnotist :
         this.isActiveTimer = false;
     }
 
-    private void setAbilityPart(int redModuleNum)
+	private void addJsonValeToConsoleType(in JObject json, in List<(Vector3, SystemConsoleType)> result, in string key, SystemConsoleType type)
+	{
+		if (!json.TryGetValue(key, out JToken token))
+		{
+			return;
+		}
+		JArray? pos = token.TryCast<JArray>();
+		if (pos == null) { return; }
+		Vector3 vecPos = new Vector3(
+			(float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+
+		if (this.addedPos.Contains(vecPos))
+		{
+			return;
+		}
+
+		result.Add((vecPos, type));
+	}
+
+	private IReadOnlyList<(Vector3, SystemConsoleType)> getSystemConsolePartPos(in JToken json, in string key)
+	{
+		List<(Vector3, SystemConsoleType)> result = new List<(Vector3, SystemConsoleType)>();
+		JObject keyJson = json.Get<JObject>(key);
+
+		addJsonValeToConsoleType(keyJson, result, adminKey, SystemConsoleType.Admin);
+		addJsonValeToConsoleType(keyJson, result, securityKey, SystemConsoleType.SecurityCamera);
+		addJsonValeToConsoleType(keyJson, result, vitalKey, SystemConsoleType.Vital);
+
+		return result;
+	}
+
+	private void setAbilityPart(int redModuleNum)
     {
         byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
             ByteOptionNames.MapId);
+
+		string key = string.Empty;
 
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
             if (modMap is SubmergedIntegrator)
             {
-                setAbilityPartFromMapJsonInfo(
-                    this.position["Submerged"], redModuleNum);
+				key = "Submerged";
             }
         }
         else
         {
-            switch (mapId)
-            {
-                case 0:
-                    setAbilityPartFromMapJsonInfo(
-                        this.position[skeldKey], redModuleNum);
-                    break;
-                case 1:
-                    setAbilityPartFromMapJsonInfo(
-                        this.position[miraHqKey], redModuleNum);
-                    break;
-                case 2:
-                    setAbilityPartFromMapJsonInfo(
-                        this.position[polusKey], redModuleNum);
-                    break;
-                case 4:
-                    setAbilityPartFromMapJsonInfo(
-                        this.position[airShipKey], redModuleNum);
-                    break;
-                default:
-                    break;
-            }
+			key = mapId switch
+			{
+				0 => skeldKey,
+				1 => miraHqKey,
+				2 => polusKey,
+				4 => airShipKey,
+				_ => string.Empty,
+			};
         }
-    }
+		setAbilityPartFromMapJsonInfo(this.position[key], redModuleNum);
+	}
     private void setAbilityPartFromMapJsonInfo(
         JToken json, int redNum)
     {
-        JArray jsonRedPos = json.Get<JArray>("Red");
+		var redPos = getRedPartPos(json);
+		this.addRedPosNum = redPos.Count;
 
-        List<Vector3> redPos = new List<Vector3>();
-        for (int i = 0; i < jsonRedPos.Count; ++i)
-        {
-           JArray pos = jsonRedPos.Get<JArray>(i);
-           redPos.Add(new Vector3((float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f)));
-        }
-
-        this.addRedPosNum = jsonRedPos.Count;
-
-        JToken adminPos;
-        JToken securiPos;
-        JToken vitalPos;
-
-        List<(Vector3, SystemConsoleType)> bluePos = new List<(Vector3, SystemConsoleType)>();
-        JObject jsonBluePos = json.Get<JObject>("Blue");
-
-        if (jsonBluePos.TryGetValue(adminKey, out adminPos))
-        {
-            JArray pos = adminPos.TryCast<JArray>();
-            Vector3 vecPos = new Vector3(
-                (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
-            if (!this.addedPos.Contains(vecPos))
-            {
-                bluePos.Add((vecPos, SystemConsoleType.Admin));
-            }
-        }
-        if (jsonBluePos.TryGetValue(securityKey, out securiPos))
-        {
-            JArray pos = securiPos.TryCast<JArray>();
-            Vector3 vecPos = new Vector3(
-                (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
-            if (!this.addedPos.Contains(vecPos))
-            {
-                bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
-            }
-        }
-        if (jsonBluePos.TryGetValue(vitalKey, out vitalPos))
-        {
-            JArray pos = vitalPos.TryCast<JArray>();
-            Vector3 vecPos = new Vector3(
-                (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
-            if (!this.addedPos.Contains(vecPos))
-            {
-                bluePos.Add((vecPos, SystemConsoleType.Vital));
-            }
-        }
-
-        List<(Vector3, SystemConsoleType)> grayPos = new List<(Vector3, SystemConsoleType)>();
-        JObject jsonGrayPos = json.Get<JObject>("Gray");
-
-        if (jsonGrayPos.TryGetValue(adminKey, out adminPos))
-        {
-            JArray pos = adminPos.TryCast<JArray>();
-            Vector3 vecPos = new Vector3(
-                (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
-            if (!this.addedPos.Contains(vecPos))
-            {
-                grayPos.Add((vecPos, SystemConsoleType.Admin));
-            }
-        }
-        if (jsonGrayPos.TryGetValue(securityKey, out securiPos))
-        {
-            JArray pos = securiPos.TryCast<JArray>();
-            Vector3 vecPos = new Vector3(
-                (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
-            if (!this.addedPos.Contains(vecPos))
-            {
-                grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
-            }
-        }
-        if (jsonGrayPos.TryGetValue(vitalKey, out vitalPos))
-        {
-            JArray pos = vitalPos.TryCast<JArray>();
-            Vector3 vecPos = new Vector3(
-                 (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
-            if (!this.addedPos.Contains(vecPos))
-            {
-                grayPos.Add((vecPos, SystemConsoleType.Vital));
-            }
-        }
+		var bluePos = getSystemConsolePartPos(json, "Blue");
+		var grayPos = getSystemConsolePartPos(json, "Gray");
 
         List<Vector3> noneSortedAddPos = new List<Vector3>();
 
@@ -848,21 +786,16 @@ public sealed class Hypnotist :
 
         foreach (var (pos, console) in grayPos)
         {
-            GameObject obj = new GameObject("GrayAbilityPart");
-            obj.transform.position = pos;
-            GrayAbilityPart grayAbilityPart = obj.AddComponent<GrayAbilityPart>();
-            grayAbilityPart.SetHideArrowDistance(this.hideDistance);
-            grayAbilityPart.SetConsoleType(console);
-        }
+			setParts<BlueAbilityPart>(pos, "GrayAbilityPart")
+				.SetConsoleType(console);
+		}
         foreach (var (pos, console) in bluePos)
         {
-            GameObject obj = new GameObject("BlueAbilityPart");
-            obj.transform.position = pos;
-            BlueAbilityPart blueAbilityPart = obj.AddComponent<BlueAbilityPart>();
-            blueAbilityPart.SetHideArrowDistance(this.hideDistance);
-            blueAbilityPart.SetConsoleType(console);
+			setParts<BlueAbilityPart>(pos, "BlueAbilityPart")
+				.SetConsoleType(console);
         }
     }
+
     private void setRedAbilityPart(int maxSetNum)
     {
         int setNum = Math.Min(this.addRedPosNum, maxSetNum);
@@ -877,16 +810,22 @@ public sealed class Hypnotist :
                 continue;
             }
 
-            GameObject obj = new GameObject("RedAbilityPart");
-            obj.transform.position = pos;
-            RedAbilityPart redAbilityPart = obj.AddComponent<RedAbilityPart>();
-            redAbilityPart.SetHideArrowDistance(this.hideDistance);
+			setParts<RedAbilityPart>(pos, "RedAbilityPart");
+
             this.addRedPos.RemoveAt(checkIndex);
             this.addedPos.Add(pos);
         }
     }
+	private T setParts<T>(in Vector3 pos, string name) where T : AbilityPartBase
+	{
+		GameObject obj = new GameObject(name);
+		obj.transform.position = pos;
+		T abilityPart = obj.AddComponent<T>();
+		abilityPart.SetHideArrowDistance(this.hideDistance);
+		return abilityPart;
+	}
 
-    private void updateAwakeCheck(GameData.PlayerInfo ignorePlayer)
+    private void updateAwakeCheck(GameData.PlayerInfo? ignorePlayer)
     {
         int impNum = 0;
 
@@ -925,33 +864,34 @@ public sealed class Hypnotist :
         foreach (Type @interface in interfaces)
         {
             int addNum;
-            string name = @interface.FullName;
-            name = name.Replace("ExtremeRoles.Roles.API.Interface.","");
+            string? name = @interface.FullName;
+            name = name?.Replace("ExtremeRoles.Roles.API.Interface.","");
             switch (name)
             {
-                case "IRoleVoteModifier":
+				case nameof(IRoleVoteModifier):
                     addNum = 9;
                     break;
-                case "IRoleMeetingButtonAbility":
+                case nameof(IRoleMeetingButtonAbility):
                     addNum = 8;
                     break;
-                case "IRoleAwake":
+                case nameof(IRoleAwake<RoleTypes>):
                     addNum = 7;
                     break;
-                case "IRoleOnRevive":
+                case nameof(IRoleOnRevive):
                     addNum = 6;
                     break;
-                case "IRoleAbility":
-                    addNum = 5;
+				case nameof(IRoleAbility):
+				case nameof(IRoleUsableOverride):
+					addNum = 5;
                     break;
-                case "IRoleMurderPlayerHook":
+                case nameof(IRoleMurderPlayerHook):
                     addNum = 4;
                     break;
-                case "IRoleUpdate":
+                case nameof(IRoleUpdate):
                     addNum = 3;
                     break;
-                case "IRoleExilHook":
-                case "IRoleReportHook":
+                case nameof(IRoleExilHook):
+                case nameof(IRoleReportHook):
                     addNum = 2;
                     break;
                 default:
@@ -963,6 +903,19 @@ public sealed class Hypnotist :
 
         return num;
     }
+
+	private static IReadOnlyList<Vector3> getRedPartPos(in JToken json)
+	{
+		JArray jsonRedPos = json.Get<JArray>("Red");
+
+		List<Vector3> redPos = new List<Vector3>(jsonRedPos.Count);
+		for (int i = 0; i < jsonRedPos.Count; ++i)
+		{
+			JArray pos = jsonRedPos.Get<JArray>(i);
+			redPos.Add(new Vector3((float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f)));
+		}
+		return redPos;
+	}
 }
 
 public sealed class Doll :
@@ -979,39 +932,31 @@ public sealed class Doll :
         Vital,
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.crakingButton;
-        set
-        {
-            this.crakingButton = value;
-        }
-    }
+    public ExtremeAbilityButton Button { get; set; }
 
     public byte Parent => this.hypnotistPlayerId;
 
     private byte hypnotistPlayerId;
-    private Hypnotist hypnotist;
     private byte dollPlayerId;
 
     private AbilityType curAbilityType;
     private AbilityType nextUseAbilityType;
-    private TMPro.TextMeshPro chargeTime;
 
-    private Sprite adminSprite;
-    private Sprite securitySprite;
-    private Sprite vitalSprite;
-
-    private Minigame minigame;
-    private HashSet<AbilityType> canUseCrakingModule;
     private string accessModule = string.Empty;
     private string crakingModule = string.Empty;
 
-    private ExtremeAbilityButton crakingButton;
+	private Minigame? minigame;
+	private readonly HashSet<AbilityType> canUseCrakingModule;
+	private readonly Hypnotist hypnotist;
+#pragma warning disable CS8618
+	private TMPro.TextMeshPro chargeTime;
+	private TMPro.TextMeshPro tellText;
 
-    private TMPro.TextMeshPro tellText;
+	private Sprite adminSprite;
+    private Sprite securitySprite;
+	private Sprite vitalSprite;
 
-    private bool prevKillState;
+	private bool prevKillState;
 
     public Doll(
         byte dollPlayerId,
@@ -1034,8 +979,9 @@ public sealed class Doll :
 
         this.SetControlId(parent.GameControlId);
     }
+#pragma warning restore CS8618
 
-    public void FeatMapModuleAccess(SystemConsoleType consoleType)
+	public void FeatMapModuleAccess(SystemConsoleType consoleType)
     {
         switch (consoleType)
         {
@@ -1162,7 +1108,7 @@ public sealed class Doll :
                     });
                 break;
             case AbilityType.Security:
-                SystemConsole watchConsole = GameSystem.GetSecuritySystemConsole();
+                SystemConsole? watchConsole = GameSystem.GetSecuritySystemConsole();
                 if (watchConsole == null || Camera.main == null)
                 {
                     return false;
@@ -1171,7 +1117,7 @@ public sealed class Doll :
                     watchConsole.MinigamePrefab);
                 break;
             case AbilityType.Vital:
-                SystemConsole vitalConsole = GameSystem.GetVitalSystemConsole();
+                SystemConsole? vitalConsole = GameSystem.GetVitalSystemConsole();
                 if (vitalConsole == null || Camera.main == null)
                 {
                     return false;
@@ -1270,7 +1216,7 @@ public sealed class Doll :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -1286,8 +1232,9 @@ public sealed class Doll :
                 rolePlayer.PlayerId, 0);
         }
 
-        if (this.canUseCrakingModule.Count == 0 &&
-            this.Button != null)
+		if (this.Button == null) { return; }
+
+        if (this.canUseCrakingModule.Count == 0)
         {
             this.Button.SetButtonShow(false);
         }
