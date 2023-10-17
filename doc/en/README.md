@@ -33,8 +33,48 @@ As a main characteristic, there are the following:
 - Xion
 
 #### Normal Role
+|  Crewmate  |  Impostor  | Neutral |
+| ---- | ---- | ---- |
+|  Special Crew  |  Special Impostor  | Alice |
+|  Sheriff  |  Evolver  | Jackal |
+|  Maintainer  |  Carrier  | Sidekick |
+|  Neet  |  Psycho Killer  | Task Master |
+|  Watchdog  |  Bounty Hunter  | Missionary |
+|  Supervisor  |  Painter  | Jester |
+|  Bodyguard  |  Faker  | Yandere |
+|  Whisperer  |  Overloader  | Youko |
+|  Time Master  |  Cracker  | Miner |
+|  Agency  |  Bomber  | Eater |
+|  Baker  |  Merry  | Queen |
+|  Cursemaker  |  Slavedriver  | Servant |
+|  Fencer  |  Sandworm  | Totocalcio |
+|  Opener |  Smasher  | Madmate |
+|  Carpenter |  Assault Master  | Umbreyer |
+|  Survivor |  Shooter  | Doll |
+|  Captain |  Last Wolf  | Vigilante |
+|  Photographer |  Commander  | Delinquent |
+|  Delusioner |  Hypnotist  | Traitor |
+|  Resurrecter |  Underwarper  |  |
+|  Gambler |  Magician  |  |
+|  Teleporter |  Zombie  |  |
+|  Moderator |  Slime  |  |
+|  Merlin  |  Theif  |  |
+|  Hero  |  Assasin  |  |
+|  Detective  | Villain  |   |
+|  Assistant  | Shares  |   |
+|  Apperentice  |   |   |
+|  Buddies  |  |  |
+|  Lovers  |  |  |
+|  Supporter |  |  |
+|  Guesser |  |  |
+|  Mover |  |  |
 
 #### Ghost Role
+|  Crewmate  |  Impostor  | Neutral |
+| ---- | ---- | ---- |
+|  Faunus  |  Sabota-geist  | Forus |
+|  Poltergeist  |  Vent-geist  | Wisp |
+|  Shutter  |  Igniter  |  |
 
 
 - “Neet” and “Lovers” can also be Neutral by optional options(Default is crewmate)
@@ -102,118 +142,32 @@ Client add-ons that add readability to ExtremeRoles, the main features are:
   - Python
 
 ## Credit and thanks
-- TheOtherRoles - TheOtherRoles(TOR) has been developing and modifying code (with the exception of reference, citation, patch, etc.) since the time of development.It was impossible to develop this MOD without TOR.The idea of the bounty hunter, carpenter, shooter, captain was also originated.
+- TheOtherRoles - [TOR](https://github.com/Eisbison/TheOtherRoles) and [TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM) has been developing and modifying code (with the exception of reference, citation, patch, etc.) since the time of development.It was impossible to develop this MOD without TOR. Idea for the Bounty Hunter, Carpenter, Shooter, Captain.
+- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Original idea for the Jackal and Sidekick came from **Dhalucard**
+- [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Original idea for the Sheriff came from **Woodi-dev**
+- [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - Original idea for the Lovers came from **Woodi-dev**
+- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Original idea for the TimeMaster came from **Hardel-DW**
+- [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - Idea for the Umbreyer came from **Slushiegoose**
+- [Jester](https://github.com/Maartii/Jester) - Idea for the Jester role came from **Maartii**
+- [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) -  Idea for the Eater role came from **Slushiegoose**
+- [PropHunt](https://github.com/ugackMiner53/PropHunt) - Idea for the Slime and Mover role came from **ugackMiner53**
 
+- [Unity VOICEVOX Bridge](https://github.com/mikito/unity-voicevox-bridge) - Idea for EVE VOICEVOX come from **mikito**, The library that VOICEVOX using from Unity.
+- [CuiCommandParser](https://github.com/oika/CuiCommandParser) - Idea for EVE Command Parser come from **oika**, The library that command parser.
 
-Result:['The OtherRoles has been developing and modifying code (with the exception of reference, citation, patch, etc.) since the time of development.It was impossible to develop this MOD without TOR.The idea of the bounty hunter, carpenter, shooter, captain was also originated.']
---- OneLine TransComplete!! ---
-Prev:Dhalucard氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
+- Resistance: Avalon - Assassin and Marlin
+- Shadow Hunters - Original idea for Alice and Overloader
 
-Result:['MOD created by Dhalucard, the origin of the idea of the jackals and sidekicks']
---- OneLine TransComplete!! ---
-Prev:Woodidev氏によって作成されたMOD、シェリフのアイディア元
+- GAHAG : https://gahag.net/, Used when creating the button
+- Google Font Icons : https://fonts.google.com/icons, ApacheLicenceV2, used to add some modifications to create some icons
+- 効果音ラボ：https://soundeffect-lab.info/, Use SE for some roles
+- 無料効果音で遊ぼう：https://taira-komori.jpn.org/welcome.html, Use SE for some roles
 
-Result:['MOD, created by Mr. Woodidev, originated from Sheriff’s idea']
---- OneLine TransComplete!! ---
-Prev:Woodidev氏によって作成されたMOD、ラバーズのアイディア元
+## Multilingual
+It is possible to support multiple languages, but Japanese is the language that is being developed with implementation speed priority. If you want to translate or have translated into another language, please contact us.
 
-Result:["MOD was created by Mr. Woodidev, the origin of Lovers' idea."]
---- OneLine TransComplete!! ---
-Prev:HardelDW氏によって作成されたMOD、タイムマスターのアイディア元
-
-Result:['MOD, created by HardelDW, the origin of the idea of time masters']
---- OneLine TransComplete!! ---
-Prev:Slushiegoose氏によって作成されたMOD、アンブレイヤーのアイディア元
-
-Result:['MOD created by Mr. Slushiegoose, the origin of the idea of the Ambraer']
---- OneLine TransComplete!! ---
-Prev:Maartii氏によって作成されたMOD、ジェスターのアイディア元
-
-Result:['MOD created by Maartii, the origin of the gesture idea']
---- OneLine TransComplete!! ---
-Prev:Slushygoose氏によって作成されたMOD、イーターのアイディア元
-
-Result:['MOD, created by Slushygoose, originated from the idea of the ether.']
---- OneLine TransComplete!! ---
-Prev:ugackMiner53氏によって作成されたMOD、スライムとムーバーのコード参考に使用
-
-Result:['Used for MOD, slime and movers code reference created by ugackMiner53']
---- OneLine TransComplete!! ---
-Prev:mikito氏作成のUnityからボイボを呼び出すライブラリ、EVEのボイボ周りの参考に使用
-
-Result:['The library that calls Boybo from Unity created by Mikito, used for reference around EVE Boybo']
---- OneLine TransComplete!! ---
-Prev:oika氏作成のCUIのオプションパーサーライブラリ、EVEのコマンドライン解析の参考に使用
-
-Result:['The optional part server library of CUI created by Oika, used as a reference for the analysis of the command line of EVE']
---- OneLine TransComplete!! ---
-Prev:レジスタンス:アヴァロンマーリン、アサシンのアイディア元
-
-Result:['Resistance: Avalon Marlin, the origin of Assassin’s Idea']
---- OneLine TransComplete!! ---
-Prev:シャドウハンターズアリス、オーバーローダーのアイディア元
-
-Result:['Shadow Hunters Alice, the original idea of the overloader']
---- OneLine TransComplete!! ---
-Prev:Microsoft.CSharp:dynamic型を使用するために使用
-
-Result:['Microsoft.CSharp: Used to use dynamic types']
---- OneLine TransComplete!! ---
-Prev:GAHAG:https://gahag.net/ボタンを作る際に使用
-
-Result:['GAHAG:https://gahag.net/ Used when creating the button']
---- OneLine TransComplete!! ---
-Prev:GoogleFontIcons:https://fonts.google.com/iconsApacheLicenceV2、いくつかのアイコンを作るためにいくつか改変を加え て使用
-
-Result:['GoogleFontIcons:https://fonts.google.com/iconsApacheLicenceV2 is used to add some modifications to create some icons']
---- OneLine TransComplete!! ---
-Prev:効果音ラボ：https://soundeffectlab.info/いくつかの役職のSEを使用
-
-Result:['Effect Sound Lab: HTTPS://soundeffectlab.info/ Use SE for some functions']
---- OneLine TransComplete!! ---
-Prev:無料効果音で遊ぼう：https://tairakomori.jpn.org/welcome.htmlいくつかの役職のSEを使用
-
-Result:['Play with free effects sound: https://tairakomori.jpn.org/welcome.html Use some role SE']
---- OneLine TransComplete!! ---
-Prev:ボタンのアイコンについて
-
-Result:['The icon button.']
---- OneLine TransComplete!! ---
-Prev:ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
-
-Result:['The icon image on the button is created from material that has been given up copyright in the public domain. If you are not interested in replacing it, please contact us.']
---- OneLine TransComplete!! ---
-Prev:多言語対応について
-
-Result:['The multilingual response.']
---- OneLine TransComplete!! ---
-Prev:多言語対応は出来ますが、実装速度優先で開発しているため日本語が優先的に実装。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい
-
-Result:['It is possible to support multiple languages, but Japanese is the language that is being developed with implementation speed priority. If you want to translate or have translated into another language, please contact us.']
---- OneLine TransComplete!! ---
-Prev:EXRolecansupportmultiplelanguages,butonlyJapaneseisimplementedbecauseIprioritizethespeedofimplementation.Pleasecontactmeifyouwouldliketotranslateintoanotherlanguageorifyouhavetranslatedintoanotherlanguage.
-
-Result:['Please contact meifyouwouldliketotranslateintoanotherlanguageorifyouhavetranslatedintoanotherlanguage.']
---- OneLine TransComplete!! ---
-Prev:言語対応状況
-
-Result:['Language response situation']
---- OneLine TransComplete!! ---
-Prev: 言語名/Languages 対応状況/Status
-
-Result:['Language Name/Languages Status and Support']
---- OneLine TransComplete!! ---
-Prev:
-
-Result:['Their work is to']
---- OneLine TransComplete!! ---
-Prev: 英語/English 完全翻訳済み/FullyTranslated
-
-Result:['English / English / Fully translated']
---- OneLine TransComplete!! ---
-Prev: 日本語/Japanese 完全翻訳済み/FullyTranslated
-
-Result:['Japanese/Japanese Full translation']
---- OneLine TransComplete!! ---
-Prev: 简体中文/SChinese 部分的に翻訳済み/MostlyTranslated
-Result:['Summary Chinese/Schinese Partially Translated/MostlyTranslated']
+| Language | Status |
+| ---- | ---- |
+|  English  |   Fully Translated  |
+|  Japanese  |  Fully Translated  |
+|  SChinese  |   Mostly Translated  |
