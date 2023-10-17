@@ -18,7 +18,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
-using Il2CppInterop.Generator.Extensions;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
