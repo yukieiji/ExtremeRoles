@@ -8,10 +8,11 @@ using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Module;
 
@@ -64,7 +65,8 @@ public class VisionComputer
 				}
 				break;
 			case Modifier.WispLightOff:
-				if (!Wisp.HasTorch(playerInfo.PlayerId))
+				if (ExtremeSystemTypeManager.Instance.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system) &&
+					!system!.HasTorch(playerInfo.PlayerId))
 				{
 					vision = shipStatus.MinLightRadius * CrewmateLightVision;
 					return false;

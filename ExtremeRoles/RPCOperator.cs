@@ -541,7 +541,7 @@ public static class RPCOperator
     public static void KidsAbilityCommand(
         ref MessageReader reader)
     {
-        Roles.Combination.Kids.Ability(
+        Roles.Combination.Delinquent.Ability(
             ref reader);
     }
 

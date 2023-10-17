@@ -71,7 +71,7 @@ public static class ExtremeGhostRoleManager
         };
 
     private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
-    { 
+    {
         RoleTypes.GuardianAngel,
     };
 
@@ -124,10 +124,10 @@ public static class ExtremeGhostRoleManager
         foreach (var spawnData in sameTeamRoleAssignData)
         {
             var ghostRoleId = spawnData.Id;
-            if (!spawnData.IsFilterContain(baseRole) || 
+            if (!spawnData.IsFilterContain(baseRole) ||
                 !spawnData.IsSpawn() ||
                 RoleAssignFilter.Instance.IsBlock(ghostRoleId)) { continue; }
-            
+
             rpcSetSingleGhostRoleToPlayerId(
                 player, controlId, roleType, ghostRoleId);
 
@@ -137,7 +137,7 @@ public static class ExtremeGhostRoleManager
             spawnDataMng.ReduceGlobalSpawnLimit(team);
 
             RoleAssignFilter.Instance.Update(ghostRoleId);
-            
+
             return;
         }
     }
@@ -223,7 +223,7 @@ public static class ExtremeGhostRoleManager
         ref MessageReader reader)
     {
         bool isComb = reader.ReadBoolean();
-        
+
         byte playerId = reader.ReadByte();
         int controlId = reader.ReadPackedInt32();
 
@@ -253,9 +253,6 @@ public static class ExtremeGhostRoleManager
 
         switch (callAbility)
         {
-            case AbilityType.WispSetTorch:
-                Wisp.SetTorch(reader.ReadByte());
-                break;
             case AbilityType.VentgeistVentAnime:
                 int ventId = reader.ReadInt32();
                 Ventgeist.VentAnime(ventId);
@@ -333,7 +330,7 @@ public static class ExtremeGhostRoleManager
         }
 
         GhostRoleBase role = AllGhostRole[ghostRoleId].Clone();
-        
+
         role.SetGameControlId(gameControlId);
         role.Initialize();
         if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)

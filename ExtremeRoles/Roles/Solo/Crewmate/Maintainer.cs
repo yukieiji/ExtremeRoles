@@ -75,7 +75,7 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
                 }
             }
 
-            if (GameSystem.SaboTask.Contains(taskType))
+            if (PlayerTask.TaskIsEmergency(task))
             {
                 sabotageActive = true;
                 break;

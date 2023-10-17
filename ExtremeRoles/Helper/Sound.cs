@@ -44,6 +44,7 @@ public static class Sound
         AudioClip clip = GetAudio(soundType);
         if (Constants.ShouldPlaySfx() && clip != null)
         {
+			ExtremeRolesPlugin.Logger.LogInfo($"Play Sound:{soundType}");
             SoundManager.Instance.PlaySound(clip, false, volume);
         }
     }

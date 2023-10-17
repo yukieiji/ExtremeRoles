@@ -5,6 +5,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -23,13 +25,9 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 		}
 	}
 
-	public float UsableDistance
-	{
-		get
-		{
-			return this.distance;
-		}
-	}
+	public float UsableDistance { get; set; }
+
+	public int GroupId { private get; set; }
 
 	public float PercentCool
 	{
@@ -38,8 +36,6 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 			return 0.1f;
 		}
 	}
-
-	private float distance = 1.3f;
 
 	private CircleCollider2D collider;
 	private SpriteRenderer img;
@@ -59,7 +55,10 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 		this.arrow.UpdateTarget(
 			this.gameObject.transform.position);
 
+		this.collider.isTrigger = true;
 		this.collider.radius = 0.1f;
+
+
 	}
 
 	public void FixedUpdate()
@@ -79,7 +78,10 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 		float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),
 			base.transform.position);
-		couldUse = !pc.IsDead && !Wisp.HasTorch(pc.PlayerId);
+		couldUse =
+			!pc.IsDead &&
+			ExtremeSystemTypeManager.Instance.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system) &&
+			!system!.HasTorch(pc.PlayerId);
 		canUse = (couldUse && num <= this.UsableDistance);
 		return num;
 	}
@@ -89,17 +91,12 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 
 	public void Use()
 	{
-		byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.KidsAbility))
-		{
-			caller.WriteByte((byte)Kids.AbilityType.PickUpTorch);
-			caller.WriteByte(playerId);
-		}
-		Wisp.PickUpTorch(playerId);
-	}
-	public void SetRange(float range)
-	{
-		this.distance = range;
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			ExtremeSystemType.WispTorch,
+			(writer) =>
+			{
+				writer.Write((byte)WispTorchSystem.Ops.PickUpTorch);
+				writer.WritePacked(this.GroupId);
+			});
 	}
 }
