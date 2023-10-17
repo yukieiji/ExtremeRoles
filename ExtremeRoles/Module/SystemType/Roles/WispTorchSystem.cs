@@ -146,9 +146,9 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	private readonly float blackOutTime;
 	private readonly float range;
 	private readonly int setNum;
-	private readonly int winPlayerNum;
 
 	private readonly HashSet<int> removeTorch = new HashSet<int>();
+	private readonly Dictionary<int, int> winPlayerNum = new Dictionary<int, int>();
 	private readonly Dictionary<int, TorchGroup> torchGroups = new Dictionary<int, TorchGroup>();
 	private readonly Dictionary<int, int> effectPlayer = new Dictionary<int, int>();
 	private int groupId = 0;
@@ -156,11 +156,9 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	private float blackOutTimer = 0.0f;
 
 	public WispTorchSystem(
-		int winPlayerNum,
 		int setNum, float range,
 		float activeTime, float blackOutTime)
 	{
-		this.winPlayerNum = winPlayerNum;
 		this.groupId = 0;
 		this.setNum = setNum;
 		this.range = range;
@@ -177,11 +175,19 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	public bool HasTorch(byte playerId)
 		=> this.torchGroups.Values.Any(x => x.HasPlayer.Contains(playerId));
 
+	public void SetWinPlayerNum(Wisp wisp, int num)
+	{
+		int gameControlId = replaceGameControlId(wisp.GameControlId);
+		this.winPlayerNum[gameControlId] = num;
+	}
+
 	public bool IsWin(Wisp wisp)
 	{
 		int gameControlId = replaceGameControlId(wisp.GameControlId);
-		return this.effectPlayer.TryGetValue(gameControlId, out int playerNum) ?
-			playerNum >= this.winPlayerNum : false;
+		return
+			this.effectPlayer.TryGetValue(gameControlId, out int playerNum) &&
+			this.winPlayerNum.TryGetValue(gameControlId, out int winPlayerNum)?
+			playerNum >= winPlayerNum : false;
 	}
 
 

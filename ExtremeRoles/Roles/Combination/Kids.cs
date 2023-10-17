@@ -436,13 +436,11 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
         // 負の値にならないようにする
         this.winNum = Math.Clamp(this.winNum, 1, int.MaxValue);
 
-		var systemMng = ExtremeSystemTypeManager.Instance;
-		if (!systemMng.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system))
+		if (this.system is null)
 		{
-			system = new WispTorchSystem(winNum, this.torchNum, this.range, this.torchActiveTime, this.torchBlackOutTime);
-			systemMng.TryAdd(ExtremeSystemType.WispTorch, system);
+			tryAddWispSystem();
 		}
-		this.system = system;
+		this.system!.SetWinPlayerNum(this, this.winNum);
 	}
 
     public override string GetFullDescription()
@@ -519,7 +517,8 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             10.0f, 2.5f, 30.0f, 0.1f,
             format: OptionUnit.Second);
 		GhostRoleAbilityFactory.CreateButtonOption(factory);
-    }
+		tryAddWispSystem();
+	}
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
@@ -531,4 +530,15 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 				writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
 			});
     }
+
+	private void tryAddWispSystem()
+	{
+		var systemMng = ExtremeSystemTypeManager.Instance;
+		if (!systemMng.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system))
+		{
+			system = new WispTorchSystem(this.torchNum, this.range, this.torchActiveTime, this.torchBlackOutTime);
+			systemMng.TryAdd(ExtremeSystemType.WispTorch, system);
+		}
+		this.system = system;
+	}
 }
