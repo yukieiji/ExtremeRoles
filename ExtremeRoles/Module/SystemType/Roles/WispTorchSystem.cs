@@ -222,7 +222,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 		}
 
 
-		if (removeNum > 0 && islocalPlayerHasTorch)
+		if (removeNum > 0 && !islocalPlayerHasTorch)
 		{
 			this.blackOutTimer = this.blackOutTime;
 			VisionComputer.Instance.SetModifier(
@@ -316,7 +316,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 			writer.WritePacked(num);
 		}
 
-		if (removeNum > 0 && this.hasTorchHostPlayer)
+		if (removeNum > 0 && !this.hasTorchHostPlayer)
 		{
 			this.blackOutTimer = this.blackOutTime;
 			VisionComputer.Instance.SetModifier(
