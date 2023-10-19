@@ -482,7 +482,8 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             GetRoleOptionId(WispOption.TorchActiveTime));
         this.torchBlackOutTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(WispOption.BlackOutTime));
-    }
+		tryAddWispSystem();
+	}
 
     protected override void OnMeetingEndHook()
     {
@@ -517,7 +518,6 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             10.0f, 2.5f, 30.0f, 0.1f,
             format: OptionUnit.Second);
 		GhostRoleAbilityFactory.CreateButtonOption(factory);
-		tryAddWispSystem();
 	}
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
