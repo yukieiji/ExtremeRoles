@@ -154,6 +154,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	private int groupId = 0;
 
 	private float blackOutTimer = 0.0f;
+	private bool hasTorchHostPlayer = false;
 
 	public WispTorchSystem(
 		int setNum, float range,
@@ -194,12 +195,19 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
 		int removeNum = reader.ReadPackedInt32();
+		bool islocalPlayerHasTorch = false;
+		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+
 		for (int i = 0; i < removeNum; ++i)
 		{
 			int groupId = reader.ReadPackedInt32();
-			if (this.torchGroups.ContainsKey(groupId))
+			if (this.torchGroups.TryGetValue(groupId, out var group))
 			{
-				this.torchGroups[groupId].Remove();
+				islocalPlayerHasTorch =
+					islocalPlayerHasTorch ||
+					group.HasPlayer.Contains(localPlayerId);
+
+				group.Remove();
 				this.torchGroups.Remove(groupId);
 			}
 		}
@@ -214,7 +222,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 		}
 
 
-		if (removeNum > 0)
+		if (removeNum > 0 && islocalPlayerHasTorch)
 		{
 			this.blackOutTimer = this.blackOutTime;
 			VisionComputer.Instance.SetModifier(
@@ -264,8 +272,15 @@ public sealed class WispTorchSystem : IExtremeSystemType
 
 		if (this.removeTorch.Count == 0) { return; }
 
+		this.hasTorchHostPlayer = false;
+		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId; ;
+
 		foreach (int id in this.removeTorch)
 		{
+			this.hasTorchHostPlayer =
+				this.hasTorchHostPlayer ||
+				this.torchGroups[id].HasPlayer.Contains(localPlayerId);
+
 			this.torchGroups.Remove(id);
 		}
 
@@ -301,12 +316,13 @@ public sealed class WispTorchSystem : IExtremeSystemType
 			writer.WritePacked(num);
 		}
 
-		if (removeNum > 0)
+		if (removeNum > 0 && this.hasTorchHostPlayer)
 		{
 			this.blackOutTimer = this.blackOutTime;
 			VisionComputer.Instance.SetModifier(
 				VisionComputer.Modifier.WispLightOff);
 		}
+		this.hasTorchHostPlayer = false;
 		this.IsDirty = initialState;
 	}
 
