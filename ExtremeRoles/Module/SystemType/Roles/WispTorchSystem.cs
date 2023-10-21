@@ -146,21 +146,20 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	private readonly float blackOutTime;
 	private readonly float range;
 	private readonly int setNum;
-	private readonly int winPlayerNum;
 
 	private readonly HashSet<int> removeTorch = new HashSet<int>();
+	private readonly Dictionary<int, int> winPlayerNum = new Dictionary<int, int>();
 	private readonly Dictionary<int, TorchGroup> torchGroups = new Dictionary<int, TorchGroup>();
 	private readonly Dictionary<int, int> effectPlayer = new Dictionary<int, int>();
 	private int groupId = 0;
 
 	private float blackOutTimer = 0.0f;
+	private bool hasTorchHostPlayer = false;
 
 	public WispTorchSystem(
-		int winPlayerNum,
 		int setNum, float range,
 		float activeTime, float blackOutTime)
 	{
-		this.winPlayerNum = winPlayerNum;
 		this.groupId = 0;
 		this.setNum = setNum;
 		this.range = range;
@@ -177,23 +176,38 @@ public sealed class WispTorchSystem : IExtremeSystemType
 	public bool HasTorch(byte playerId)
 		=> this.torchGroups.Values.Any(x => x.HasPlayer.Contains(playerId));
 
+	public void SetWinPlayerNum(Wisp wisp, int num)
+	{
+		int gameControlId = replaceGameControlId(wisp.GameControlId);
+		this.winPlayerNum[gameControlId] = num;
+	}
+
 	public bool IsWin(Wisp wisp)
 	{
 		int gameControlId = replaceGameControlId(wisp.GameControlId);
-		return this.effectPlayer.TryGetValue(gameControlId, out int playerNum) ?
-			playerNum >= this.winPlayerNum : false;
+		return
+			this.effectPlayer.TryGetValue(gameControlId, out int playerNum) &&
+			this.winPlayerNum.TryGetValue(gameControlId, out int winPlayerNum)?
+			playerNum >= winPlayerNum : false;
 	}
 
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
 		int removeNum = reader.ReadPackedInt32();
+		bool islocalPlayerHasTorch = false;
+		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+
 		for (int i = 0; i < removeNum; ++i)
 		{
 			int groupId = reader.ReadPackedInt32();
-			if (this.torchGroups.ContainsKey(groupId))
+			if (this.torchGroups.TryGetValue(groupId, out var group))
 			{
-				this.torchGroups[groupId].Remove();
+				islocalPlayerHasTorch =
+					islocalPlayerHasTorch ||
+					group.HasPlayer.Contains(localPlayerId);
+
+				group.Remove();
 				this.torchGroups.Remove(groupId);
 			}
 		}
@@ -208,7 +222,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 		}
 
 
-		if (removeNum > 0)
+		if (removeNum > 0 && !islocalPlayerHasTorch)
 		{
 			this.blackOutTimer = this.blackOutTime;
 			VisionComputer.Instance.SetModifier(
@@ -258,8 +272,15 @@ public sealed class WispTorchSystem : IExtremeSystemType
 
 		if (this.removeTorch.Count == 0) { return; }
 
+		this.hasTorchHostPlayer = false;
+		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId; ;
+
 		foreach (int id in this.removeTorch)
 		{
+			this.hasTorchHostPlayer =
+				this.hasTorchHostPlayer ||
+				this.torchGroups[id].HasPlayer.Contains(localPlayerId);
+
 			this.torchGroups.Remove(id);
 		}
 
@@ -295,12 +316,13 @@ public sealed class WispTorchSystem : IExtremeSystemType
 			writer.WritePacked(num);
 		}
 
-		if (removeNum > 0)
+		if (removeNum > 0 && !this.hasTorchHostPlayer)
 		{
 			this.blackOutTimer = this.blackOutTime;
 			VisionComputer.Instance.SetModifier(
 				VisionComputer.Modifier.WispLightOff);
 		}
+		this.hasTorchHostPlayer = false;
 		this.IsDirty = initialState;
 	}
 
