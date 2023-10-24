@@ -13,6 +13,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
@@ -378,11 +379,11 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
             ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
 
-            if (heroPlayer.protectedByGuardian)
+            if (heroPlayer.protectedByGuardianId > -1)
             {
                 heroPlayer.RemoveProtection();
             }
-            if (villanPlayer.protectedByGuardian)
+            if (villanPlayer.protectedByGuardianId > -1)
             {
                 villanPlayer.RemoveProtection();
             }

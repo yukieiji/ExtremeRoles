@@ -10,6 +10,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Player;
 
 namespace ExtremeRoles;
 
