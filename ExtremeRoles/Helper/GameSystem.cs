@@ -181,7 +181,7 @@ public static class GameSystem
         if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
         List<int> taskIndex = getTaskIndex(
-            CachedShipStatus.Instance.NormalTasks);
+            CachedShipStatus.Instance.ShortTasks);
 
         int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
