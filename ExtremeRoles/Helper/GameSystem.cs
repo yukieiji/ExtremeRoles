@@ -9,6 +9,7 @@ using AmongUs.GameOptions;
 using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -413,10 +414,7 @@ public static class GameSystem
 					CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Reactor, 16);
 					break;
 				case TaskTypes.FixLights:
-					RPCOperator.Call(
-						CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-						RPCOperator.Command.FixLightOff);
-					RPCOperator.FixLightOff();
+					RpcForceRepairSpecialSabotage(SystemTypes.Electrical);
 					break;
 				case TaskTypes.FixComms:
 					CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 0);
@@ -433,11 +431,60 @@ public static class GameSystem
                     CachedShipStatus.Instance.RpcUpdateSystem(
                         SystemTypes.HeliSabotage, 1 | 16);
                     break;
-                default:
+				case TaskTypes.MushroomMixupSabotage:
+					RpcForceRepairSpecialSabotage(SystemTypes.MushroomMixupSabotage);
+					break;
+				default:
                     break;
             }
         }
     }
+
+	public static void RpcForceRepairSpecialSabotage(SystemTypes sabSystem)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.FixForceRepairSpecialSabotage))
+		{
+			caller.WriteByte((byte)sabSystem);
+		}
+		ForceRepairrSpecialSabotage(sabSystem);
+	}
+
+	public static void ForceRepairrSpecialSabotage(SystemTypes sabSystem)
+	{
+		if (!CachedShipStatus.Systems.TryGetValue(sabSystem, out var system))
+		{
+			return;
+		}
+		switch (sabSystem)
+		{
+			case SystemTypes.Electrical:
+
+				if (!system.IsTryCast<SwitchSystem>(out var switchSystem) ||
+					switchSystem == null)
+				{
+					return;
+				}
+
+				var minigame = Minigame.Instance;
+				if (minigame != null && minigame.TryCast<SwitchMinigame>() != null)
+				{
+					minigame.ForceClose();
+				}
+				switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+				break;
+			case SystemTypes.MushroomMixupSabotage:
+				if (!system.IsTryCast<MushroomMixupSabotageSystem>(out var mixupSystem) ||
+					mixupSystem == null)
+				{
+					return;
+				}
+				mixupSystem.currentSecondsUntilHeal = 0.0f;
+				break;
+			default:
+				break;
+		}
+	}
 
     public static void SetTask(
         GameData.PlayerInfo playerInfo,
