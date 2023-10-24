@@ -164,16 +164,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		this.systems.Clear();
 	}
 
-	public void RepairDamage(PlayerControl? player, byte amount)
-	{
-		ResetTiming timing = (ResetTiming)amount;
-		PlayerControl? resetPlayer = timing == ResetTiming.OnPlayer ? player : null;
-		foreach (var system in systems.Values)
-		{
-			system.Reset(timing, resetPlayer);
-		}
-	}
-
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
 		writer.WritePacked(this.dirtySystem.Count);
