@@ -30,6 +30,7 @@ public static class GameSystem
 	public const string SkeldKey = "Skeld";
 	public const string PolusKey = "Polus";
 	public const string AirShipKey = "AirShip";
+	public const string FungleKey = "Fungle";
 	public const string SubmergedKey = "Submerged";
 
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
@@ -334,6 +335,9 @@ public static class GameSystem
 					break;
 				case 4:
 					ventKey = AirShipKey;
+					break;
+				case 5:
+					ventKey = FungleKey;
 					break;
 				default:
 					return;
