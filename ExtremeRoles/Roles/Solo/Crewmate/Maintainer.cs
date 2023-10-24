@@ -49,8 +49,8 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
 
-            CachedShipStatus.Instance.RpcRepairSystem(
-                SystemTypes.Doors, door.Id | 64);
+            CachedShipStatus.Instance.RpcUpdateSystem(
+                SystemTypes.Doors, (byte)(door.Id | 64));
             door.SetDoorway(true);
         }
 

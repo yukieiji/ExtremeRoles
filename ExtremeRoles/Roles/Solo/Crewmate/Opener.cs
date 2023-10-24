@@ -54,9 +54,9 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
     public bool UseAbility()
     {
         if (this.targetDoor == null) { return false; }
-        
-        CachedShipStatus.Instance.RpcRepairSystem(
-            SystemTypes.Doors, this.targetDoor.Id | 64);
+
+        CachedShipStatus.Instance.RpcUpdateSystem(
+            SystemTypes.Doors, (byte)(this.targetDoor.Id | 64));
         this.targetDoor.SetDoorway(true);
         this.targetDoor = null;
 
@@ -66,7 +66,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
     public bool IsAbilityUse()
     {
         if (CachedShipStatus.Instance == null) { return false; }
-        
+
         this.targetDoor = null;
 
         foreach (PlainDoor door in CachedShipStatus.Instance.AllDoors)
@@ -85,7 +85,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
         }
         if (this.targetDoor == null)
         {
-            return false; 
+            return false;
         }
 
         return this.IsCommonUse() && !this.targetDoor.Open;

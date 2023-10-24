@@ -409,37 +409,29 @@ public static class GameSystem
             }
             switch (taskType)
             {
-                case TaskTypes.FixLights:
-                    RPCOperator.Call(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        RPCOperator.Command.FixLightOff);
-                    RPCOperator.FixLightOff();
+				case TaskTypes.ResetReactor:
+					CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Reactor, 16);
+					break;
+				case TaskTypes.FixLights:
+					RPCOperator.Call(
+						CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+						RPCOperator.Command.FixLightOff);
+					RPCOperator.FixLightOff();
+					break;
+				case TaskTypes.FixComms:
+					CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 0);
+					break;
+				case TaskTypes.RestoreOxy:
+                    CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.LifeSupp, 16);
                     break;
-                case TaskTypes.RestoreOxy:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.LifeSupp, 0 | 64);
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.LifeSupp, 1 | 64);
-                    break;
-                case TaskTypes.ResetReactor:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Reactor, 16);
-                    break;
-                case TaskTypes.ResetSeismic:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Laboratory, 16);
-                    break;
-                case TaskTypes.FixComms:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Comms, 16 | 0);
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Comms, 16 | 1);
+				case TaskTypes.ResetSeismic:
+                    CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Laboratory, 16);
                     break;
                 case TaskTypes.StopCharles:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Reactor, 0 | 16);
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Reactor, 1 | 16);
+                    CachedShipStatus.Instance.RpcUpdateSystem(
+                        SystemTypes.HeliSabotage, 0 | 16);
+                    CachedShipStatus.Instance.RpcUpdateSystem(
+                        SystemTypes.HeliSabotage, 1 | 16);
                     break;
                 default:
                     break;

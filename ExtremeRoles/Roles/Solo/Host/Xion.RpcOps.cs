@@ -115,8 +115,8 @@ public sealed partial class Xion
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
 
-            CachedShipStatus.Instance.RpcRepairSystem(
-                SystemTypes.Doors, door.Id | 64);
+            CachedShipStatus.Instance.RpcUpdateSystem(
+                SystemTypes.Doors, (byte)(door.Id | 64));
             door.SetDoorway(true);
         }
     }

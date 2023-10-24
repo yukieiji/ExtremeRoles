@@ -402,7 +402,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	{
 		if (saboTask == this.RetrieveOxygenMask)
 		{
-			CachedShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
+			// TODO: Update Submarged
+			// CachedShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
 			this.submarineOxygenSystemRepairDamageMethod.Invoke(
 				this.submarineOxygenSystemInstanceGetter.GetValue(null),
 				new object[] { PlayerControl.LocalPlayer, (byte)64 });
