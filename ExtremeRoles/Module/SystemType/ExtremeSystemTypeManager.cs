@@ -159,6 +159,16 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
+	public void Reset(PlayerControl? player, byte amount)
+	{
+		ResetTiming timing = (ResetTiming)amount;
+		PlayerControl? resetPlayer = timing == ResetTiming.OnPlayer ? player : null;
+		foreach (var system in systems.Values)
+		{
+			system.Reset(timing, resetPlayer);
+		}
+	}
+
 	public void Reset()
 	{
 		this.systems.Clear();
