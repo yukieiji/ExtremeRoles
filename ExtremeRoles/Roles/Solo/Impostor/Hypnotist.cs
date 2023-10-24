@@ -103,11 +103,6 @@ public sealed class Hypnotist :
     private const string securityKey = "Security";
     private const string vitalKey = "Vital";
 
-    private const string skeldKey = "Skeld";
-    private const string miraHqKey = "MiraHQ";
-    private const string polusKey = "Polus";
-    private const string airShipKey = "AirShip";
-
     private int addRedPosNum;
 
     private float hideDistance = 7.5f;
@@ -741,26 +736,7 @@ public sealed class Hypnotist :
         byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
             ByteOptionNames.MapId);
 
-		string key = string.Empty;
-
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-            if (modMap is SubmergedIntegrator)
-            {
-				key = "Submerged";
-            }
-        }
-        else
-        {
-			key = mapId switch
-			{
-				0 => skeldKey,
-				1 => miraHqKey,
-				2 => polusKey,
-				4 => airShipKey,
-				_ => string.Empty,
-			};
-        }
+		string key = GameSystem.CurMapKey;
 		setAbilityPartFromMapJsonInfo(this.position[key], redModuleNum);
 	}
     private void setAbilityPartFromMapJsonInfo(

@@ -18,16 +18,18 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
+
 #nullable enable
 
 namespace ExtremeRoles.Helper;
 
 public static class GameSystem
 {
-    public const int VanillaMaxPlayerNum = 15;
-    public const int MaxImposterNum = 14;
+	public const int VanillaMaxPlayerNum = 15;
+	public const int MaxImposterNum = 14;
 
 	public const string SkeldKey = "Skeld";
+	public const string MiraHqKey = "MiraHQ";
 	public const string PolusKey = "Polus";
 	public const string AirShipKey = "AirShip";
 	public const string FungleKey = "Fungle";
@@ -35,25 +37,25 @@ public static class GameSystem
 
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
 
-    public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
-    public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
+	public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
+	public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
 
-    public const string MiraHqAdmin = "MiraShip(Clone)/Admin/MapTable/AdminMapConsole";
-    public const string MiraHqSecurity = "MiraShip(Clone)/Comms/comms-top/SurvLogConsole";
+	public const string MiraHqAdmin = "MiraShip(Clone)/Admin/MapTable/AdminMapConsole";
+	public const string MiraHqSecurity = "MiraShip(Clone)/Comms/comms-top/SurvLogConsole";
 
-    public const string PolusAdmin1 = "PolusShip(Clone)/Admin/mapTable/panel_map";
-    public const string PolusAdmin2 = "PolusShip(Clone)/Admin/mapTable/panel_map (1)";
-    public const string PolusSecurity = "PolusShip(Clone)/Electrical/Surv_Panel";
-    public const string PolusVital = "PolusShip(Clone)/Office/panel_vitals";
+	public const string PolusAdmin1 = "PolusShip(Clone)/Admin/mapTable/panel_map";
+	public const string PolusAdmin2 = "PolusShip(Clone)/Admin/mapTable/panel_map (1)";
+	public const string PolusSecurity = "PolusShip(Clone)/Electrical/Surv_Panel";
+	public const string PolusVital = "PolusShip(Clone)/Office/panel_vitals";
 
-    public const string AirShipSecurity = "Airship(Clone)/Security/task_cams";
-    public const string AirShipVital = "Airship(Clone)/Medbay/panel_vitals";
-    public const string AirShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
-    public const string AirShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
+	public const string AirShipSecurity = "Airship(Clone)/Security/task_cams";
+	public const string AirShipVital = "Airship(Clone)/Medbay/panel_vitals";
+	public const string AirShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
+	public const string AirShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
 
-    private const string airShipSpawnJson =
-        "ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
-    private const string airShipRandomSpawnKey = "VanillaRandomSpawn";
+	private const string airShipSpawnJson =
+		"ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
+	private const string airShipRandomSpawnKey = "VanillaRandomSpawn";
 
 	private const string ventInfoJson =
 		"ExtremeRoles.Resources.JsonData.AllVentLinkInfo.json";
@@ -62,6 +64,37 @@ public static class GameSystem
 
 	public static bool IsLobby => AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started;
 	public static bool IsFreePlay => AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
+
+	public static string CurMapKey
+	{
+		get
+		{
+			string key = string.Empty;
+
+			if (CompatModManager.Instance.TryGetModMap(out var modMap))
+			{
+				if (modMap is SubmergedIntegrator)
+				{
+					key = "Submerged";
+				}
+			}
+			else
+			{
+				byte mapId =  GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+					ByteOptionNames.MapId);
+				key = mapId switch
+				{
+					0 => SkeldKey,
+					1 => MiraHqKey,
+					2 => PolusKey,
+					4 => AirShipKey,
+					5 => FungleKey,
+					_ => string.Empty,
+				};
+			}
+			return key;
+		}
+	}
 
 	private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
     {
@@ -306,45 +339,10 @@ public static class GameSystem
 		}
 
 		JObject? linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
+		string key = CurMapKey;
+		if (linkInfoJson == null || key == MiraHqKey) { return; }
 
-		if (linkInfoJson == null) { return; }
-
-		string ventKey;
-		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
-
-		if (CompatModManager.Instance.TryGetModMap(out var modMap))
-		{
-			if (modMap is SubmergedIntegrator)
-			{
-				ventKey = SubmergedKey;
-			}
-			else
-			{
-				return;
-			}
-		}
-		else
-		{
-			switch (mapId)
-			{
-				case 0:
-					ventKey = SkeldKey;
-					break;
-				case 2:
-					ventKey = PolusKey;
-					break;
-				case 4:
-					ventKey = AirShipKey;
-					break;
-				case 5:
-					ventKey = FungleKey;
-					break;
-				default:
-					return;
-			}
-		}
-
-		JArray linkInfo = linkInfoJson.Get<JArray>(ventKey);
+		JArray linkInfo = linkInfoJson.Get<JArray>(key);
 
 		for (int i = 0; i < linkInfo.Count; ++i)
 		{
