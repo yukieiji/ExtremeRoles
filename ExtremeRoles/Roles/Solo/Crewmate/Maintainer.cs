@@ -44,7 +44,7 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
     {
         GameSystem.RpcRepairAllSabotage();
 
-        foreach (PlainDoor door in CachedShipStatus.Instance.AllDoors)
+        foreach (OpenableDoor door in CachedShipStatus.Instance.AllDoors)
         {
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }

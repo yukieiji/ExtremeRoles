@@ -29,7 +29,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
     }
 
     private ExtremeAbilityButton open;
-    private PlainDoor targetDoor;
+    private OpenableDoor targetDoor;
     private bool isUpgraded = false;
     private float range;
     private float reduceRate;
@@ -69,7 +69,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
 
         this.targetDoor = null;
 
-        foreach (PlainDoor door in CachedShipStatus.Instance.AllDoors)
+        foreach (OpenableDoor door in CachedShipStatus.Instance.AllDoors)
         {
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
@@ -88,7 +88,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
             return false;
         }
 
-        return this.IsCommonUse() && !this.targetDoor.Open;
+        return this.IsCommonUse() && !this.targetDoor.IsOpen;
     }
 
     public void ResetOnMeetingStart()
