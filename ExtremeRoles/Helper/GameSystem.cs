@@ -19,6 +19,7 @@ using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
 using UnityObject = UnityEngine.Object;
+using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
 
 #nullable enable
 
@@ -68,6 +69,9 @@ public static class GameSystem
 
 	public static bool IsLobby => AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started;
 	public static bool IsFreePlay => AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
+
+
+	private static UseButtonDict useButtonSetting => FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
 
 	public static string CurMapKey
 	{
@@ -236,37 +240,30 @@ public static class GameSystem
 
     public static Sprite GetAdminButtonImage()
     {
-        var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 0:
-            case 3:
-                return imageDict[ImageNames.AdminMapButton].Image;
-            case 1:
-                return imageDict[ImageNames.MIRAAdminButton].Image;
-            case 2:
-                return imageDict[ImageNames.PolusAdminButton].Image;
-            default:
-                return imageDict[ImageNames.AirshipAdminButton].Image;
-        }
-    }
+		var useButtonKey = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			0 or 3 => ImageNames.AdminMapButton,
+			1 => ImageNames.MIRAAdminButton,
+			2 => ImageNames.PolusAdminButton,
+			_ => ImageNames.AirshipAdminButton
+		};
+		return useButtonSetting[useButtonKey].Image;
+
+	}
 
     public static Sprite GetSecurityImage()
     {
-        var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 1:
-                return imageDict[ImageNames.DoorLogsButton].Image;
-            default:
-                return imageDict[ImageNames.CamsButton].Image;
-        }
+		var useButtonKey = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			1 => ImageNames.DoorLogsButton,
+			_ => ImageNames.CamsButton,
+		};
+		return useButtonSetting[useButtonKey].Image;
     }
     public static Sprite GetVitalImage() =>
-        FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
-            ImageNames.VitalsButton].Image;
+		useButtonSetting[ImageNames.VitalsButton].Image;
 
     public static SystemConsole? GetSecuritySystemConsole()
     {
@@ -327,7 +324,7 @@ public static class GameSystem
         PlayerTask? task = null,
         Console? console = null)
     {
-        Minigame minigame = UnityEngine.Object.Instantiate(
+        Minigame minigame = UnityObject.Instantiate(
             prefab, Camera.main.transform, false);
         minigame.transform.SetParent(Camera.main.transform, false);
         minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
@@ -420,28 +417,29 @@ public static class GameSystem
                     continue;
                 }
             }
-            switch (taskType)
+
+			var ship = CachedShipStatus.Instance;
+
+			switch (taskType)
             {
 				case TaskTypes.ResetReactor:
-					CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Reactor, 16);
+					ship.RpcUpdateSystem(SystemTypes.Reactor, 16);
 					break;
 				case TaskTypes.FixLights:
 					RpcForceRepairSpecialSabotage(SystemTypes.Electrical);
 					break;
 				case TaskTypes.FixComms:
-					CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Comms, 0);
+					ship.RpcUpdateSystem(SystemTypes.Comms, 0);
 					break;
 				case TaskTypes.RestoreOxy:
-                    CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.LifeSupp, 16);
+                    ship.RpcUpdateSystem(SystemTypes.LifeSupp, 16);
                     break;
 				case TaskTypes.ResetSeismic:
-                    CachedShipStatus.Instance.RpcUpdateSystem(SystemTypes.Laboratory, 16);
+                    ship.RpcUpdateSystem(SystemTypes.Laboratory, 16);
                     break;
                 case TaskTypes.StopCharles:
-                    CachedShipStatus.Instance.RpcUpdateSystem(
-                        SystemTypes.HeliSabotage, 0 | 16);
-                    CachedShipStatus.Instance.RpcUpdateSystem(
-                        SystemTypes.HeliSabotage, 1 | 16);
+                    ship.RpcUpdateSystem(SystemTypes.HeliSabotage, 0 | 16);
+                    ship.RpcUpdateSystem(SystemTypes.HeliSabotage, 1 | 16);
                     break;
 				case TaskTypes.MushroomMixupSabotage:
 					RpcForceRepairSpecialSabotage(SystemTypes.MushroomMixupSabotage);
@@ -541,7 +539,7 @@ public static class GameSystem
 
             if (task.IsComplete)
             {
-                NormalPlayerTask normalPlayerTask = UnityEngine.Object.Instantiate(
+                NormalPlayerTask normalPlayerTask = UnityObject.Instantiate(
                     addTask, player.transform);
                 normalPlayerTask.Id = gameControlTaskId;
                 normalPlayerTask.Owner = player;
@@ -551,8 +549,7 @@ public static class GameSystem
                 player.myTasks[i] = normalPlayerTask;
 
                 removeTask.OnRemove();
-                UnityEngine.Object.Destroy(
-                    removeTask.gameObject);
+                UnityObject.Destroy(removeTask.gameObject);
                 if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
 					ExtremeRolesPlugin.Logger.LogInfo(
