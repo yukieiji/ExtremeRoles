@@ -75,7 +75,8 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
                 }
             }
 
-            if (PlayerTask.TaskIsEmergency(task))
+            if (PlayerTask.TaskIsEmergency(task) ||
+				task.TaskType == TaskTypes.MushroomMixupSabotage)
             {
                 sabotageActive = true;
                 break;
