@@ -50,8 +50,16 @@ public static class MeetingHudUpdatePatch
 				{
 					continue;
 				}
-				pva.SetDead(pva.DidReport, true);
-				pva.Overlay.gameObject.SetActive(true);
+
+				if (pva.TargetPlayerId == b.ParentId)
+				{
+					pva.SetDead(pva.DidReport, true);
+					pva.Overlay.gameObject.SetActive(true);
+				}
+				else if (pva.VotedFor == b.ParentId)
+				{
+					pva.UnsetVote();
+				}
 			}
 			Object.Destroy(b.gameObject);
 		}
