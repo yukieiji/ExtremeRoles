@@ -1093,13 +1093,12 @@ public sealed class Doll :
                     watchConsole.MinigamePrefab);
                 break;
             case AbilityType.Vital:
-                SystemConsole? vitalConsole = GameSystem.GetVitalSystemConsole();
-                if (vitalConsole == null || Camera.main == null)
+                VitalsMinigame? vital = GameSystem.GetVitalMinigame();
+                if (vital == null || Camera.main == null)
                 {
                     return false;
                 }
-                this.minigame = GameSystem.OpenMinigame(
-                    vitalConsole.MinigamePrefab);
+                this.minigame = GameSystem.OpenMinigame(vital);
                 break;
             default:
                 return false;
@@ -1303,19 +1302,6 @@ public sealed class Doll :
         {
             ++this.nextUseAbilityType;
             this.nextUseAbilityType = (AbilityType)((int)this.nextUseAbilityType % 3);
-
-            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId);
-
-            if (this.nextUseAbilityType == AbilityType.Vital &&
-                (
-                    mapId == 0 ||
-                    mapId == 1 ||
-                    mapId == 3
-                ))
-            {
-                this.nextUseAbilityType = AbilityType.Admin;
-            }
         }
         while (!this.canUseCrakingModule.Contains(this.nextUseAbilityType));
     }

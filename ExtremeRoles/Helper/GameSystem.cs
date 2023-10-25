@@ -271,18 +271,17 @@ public static class GameSystem
         return watchConsole;
     }
 
-    public static SystemConsole? GetVitalSystemConsole()
+    public static VitalsMinigame? GetVitalMinigame()
     {
-        SystemConsole? vitalConsole;
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-            vitalConsole = modMap!.GetSystemConsole(SystemConsoleType.Vital);
-        }
-        else
-        {
-            vitalConsole = getVanillaVitalConsole();
-        }
-        return vitalConsole;
+		var role = FastDestroyableSingleton<RoleManager>.Instance.GetRole(RoleTypes.Scientist);
+
+		if (!role.IsTryCast<ScientistRole>(out var scientist) ||
+			scientist == null)
+		{
+			return null;
+		}
+
+        return scientist.VitalsPrefab;
     }
 
     public static void ForceEndGame()
