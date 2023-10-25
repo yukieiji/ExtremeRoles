@@ -96,7 +96,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 		}
 	}
 
-	public void Detoriorate(float deltaTime)
+	public void Deteriorate(float deltaTime)
 	{ }
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)

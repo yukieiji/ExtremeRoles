@@ -38,7 +38,7 @@ public sealed class BakerySystem : IExtremeSystemType
 		this.timer = reader.ReadSingle();
 	}
 
-	public void Detoriorate(float deltaTime)
+	public void Deteriorate(float deltaTime)
 	{
 		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||

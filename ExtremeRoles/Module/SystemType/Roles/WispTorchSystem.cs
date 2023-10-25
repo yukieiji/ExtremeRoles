@@ -230,7 +230,7 @@ public sealed class WispTorchSystem : IExtremeSystemType
 		}
 	}
 
-	public void Detoriorate(float deltaTime)
+	public void Deteriorate(float deltaTime)
 	{
 		if (this.blackOutTimer > 0.0f)
 		{

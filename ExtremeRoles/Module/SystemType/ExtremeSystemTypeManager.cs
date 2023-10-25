@@ -119,12 +119,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	public void Detoriorate(float deltaTime)
+	public void Deteriorate(float deltaTime)
 	{
 		this.dirtySystem.Clear();
 		foreach (var (systemTypes, system) in systems)
 		{
-			system.Detoriorate(deltaTime);
+			system.Deteriorate(deltaTime);
 			if (system.IsDirty)
 			{
 				this.IsDirty = this.IsDirty || system.IsDirty;

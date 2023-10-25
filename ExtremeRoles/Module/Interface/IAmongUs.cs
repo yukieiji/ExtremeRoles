@@ -29,7 +29,7 @@ public static class IAmongUs
 	{
 		public bool IsDirty { get; }
 
-		public void Detoriorate(float deltaTime);
+		public void Deteriorate(float deltaTime);
 
 		public void UpdateSystem(PlayerControl player, MessageReader msgReader);
 

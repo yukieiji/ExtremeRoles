@@ -326,7 +326,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 	public void Deserialize(MessageReader reader, bool initialState)
 	{ }
 
-	public void Detoriorate(float deltaTime)
+	public void Deteriorate(float deltaTime)
 	{ }
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
