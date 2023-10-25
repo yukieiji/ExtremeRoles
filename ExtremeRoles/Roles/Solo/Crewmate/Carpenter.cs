@@ -277,13 +277,15 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         vent.EnterVentAnim = null;
         vent.ExitVentAnim = null;
 
-        var anim = vent.GetComponent<PowerTools.SpriteAnim>();
+		if (!vent.TryGetComponent<SpriteRenderer>(out var ventRenderer))
+		{
+			ventRenderer = vent.myRend;
+		}
+		var anim = ventRenderer.gameObject.GetComponent<PowerTools.SpriteAnim>();
         if (anim)
         {
             anim.Stop();
         }
-
-        var ventRenderer = vent.GetComponent<SpriteRenderer>();
         ventRenderer.sprite = null;
         vent.myRend = ventRenderer;
     }

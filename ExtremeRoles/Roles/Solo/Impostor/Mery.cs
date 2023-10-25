@@ -15,6 +15,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Compat;
+using AmongUs.GameOptions;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -110,7 +112,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
         public Vent GetConvertedVent()
         {
             var referenceVent = Object.FindObjectOfType<Vent>();
-            var vent = Object.Instantiate<Vent>(referenceVent);
+            var vent = Object.Instantiate(referenceVent);
             vent.transform.position = this.body.transform.position;
             vent.Left = null;
             vent.Right = null;
@@ -119,11 +121,6 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             vent.ExitVentAnim = null;
             vent.Offset = new Vector3(0f, 0.25f, 0f);
 
-            var anim = vent.GetComponent<PowerTools.SpriteAnim>();
-            if (anim)
-            {
-                anim.Stop();
-            }
             vent.Id = CachedShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
 
             var console = vent.GetComponent<Console>();
@@ -131,7 +128,13 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             {
                 Object.Destroy(console);
             }
-            var ventRenderer = vent.GetComponent<SpriteRenderer>();
+
+			if (!vent.TryGetComponent<SpriteRenderer>(out var ventRenderer))
+			{
+				ventRenderer = vent.myRend;
+			}
+			stopAnim(ventRenderer.gameObject);
+
             ventRenderer.sprite = Loader.CreateSpriteFromResources(
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
             vent.myRend = ventRenderer;
@@ -152,6 +155,15 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             Object.Destroy(this.img);
             Object.Destroy(this.body);
         }
+		private static void stopAnim(GameObject obj)
+		{
+			var anim = obj.GetComponent<PowerTools.SpriteAnim>();
+			if (anim != null)
+			{
+				anim.Stop();
+				anim.enabled = false;
+			}
+		}
     }
 
 
