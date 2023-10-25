@@ -205,7 +205,7 @@ public sealed class Faunus : GhostRoleBase
 			0 or 3 => new List<string> { "UpperHandConsole", "LowerHandConsole" },
 			1 => new List<string> { "LeftHandConsole", "RightHandConsole" },
 			2 => new List<string> { "panel_hand_left", "panel_hand_right" },
-			5 => new List<string> { "ResetReactor (1)/ResetReactorConsole", "ResetReactor (2)/ResetReactorConsole" },
+			5 => new List<string> { "ResetReactorConsole" },
 			_ => new List<string>(),
 		};
 
