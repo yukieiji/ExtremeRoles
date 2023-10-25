@@ -99,30 +99,32 @@ public sealed class Faunus : GhostRoleBase
         }
         else
         {
+			string consoleName;
             switch (this.saboTask)
             {
                 case TaskTypes.FixLights:
-                    console = getLightConsole();
+                    consoleName = getLightConsoleName();
                     break;
                 case TaskTypes.RestoreOxy:
                 case TaskTypes.StopCharles:
-                    List<Console> oxyConsole = getOxyConsole();
+					IReadOnlyList<string> oxyConsole = getOxyConsole();
                     int oxyCount = oxyConsole.Count;
                     if (oxyCount == 0) { return; }
                     int oxyIndex = RandomGenerator.Instance.Next(oxyCount);
-                    console = oxyConsole[oxyIndex];
+					consoleName = oxyConsole[oxyIndex];
                     break;
                 case TaskTypes.ResetReactor:
                 case TaskTypes.ResetSeismic:
-                    List<Console> handConsole = getHandConsole();
+					IReadOnlyList<string> handConsole = getHandConsole();
                     int handCount = handConsole.Count;
                     if (handCount == 0) { return; }
                     int seismicIndex = RandomGenerator.Instance.Next(handCount);
-                    console = handConsole[seismicIndex];
+					consoleName = handConsole[seismicIndex];
                     break;
                 default:
                     return;
             }
+			console = findConsole(consoleName);
         }
 
         if (console == null || Camera.main == null)
@@ -177,131 +179,36 @@ public sealed class Faunus : GhostRoleBase
         return IsCommonUse() && this.saboActive;
     }
 
-    private Console? getLightConsole()
-    {
-        var console = Object.FindObjectsOfType<Console>();
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
-            case 0:
-            case 1:
-            case 3:
-                return console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("SwitchConsole"));
-            case 2:
-                return console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("panel_switches"));
-            case 4:
-                return console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("task_lightssabotage"));
-            default:
-                return null;
-        }
-    }
+	private string getLightConsoleName()
+		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			0 or 1 or 3 => "SwitchConsole",
+			2 => "panel_switches",
+			4 => "task_lightssabotage",
+			_ => string.Empty,
+		};
 
-    private List<Console> getOxyConsole()
-    {
-        var console = Object.FindObjectsOfType<Console>().ToList();
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
-            case 0:
-            case 1:
-            case 3:
-                return console.FindAll(
-                    x => x.gameObject.name.Contains("NoOxyConsole"));
-            case 4:
-                // AirShipは昇降が酸素コンソール
-                List<Console> res = new List<Console>(2);
-                Console? leftConsole = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("NoOxyConsoleLeft"));
-                if (leftConsole != null)
-                {
-                    res.Add(leftConsole);
-                }
-                Console? rightConsole = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("NoOxyConsoleRight"));
-                if (rightConsole != null)
-                {
-                    res.Add(rightConsole);
-                }
-                return res;
-            default:
-                return new List<Console> ();
-        }
-    }
-    private List<Console> getHandConsole()
-    {
-        var console = Object.FindObjectsOfType<Console>().ToList();
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
-            case 0:
-            case 3:
-                List<Console> skeldsHand = new List<Console>(2);
-                Console? upperConsole = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("UpperHandConsole"));
-                if (upperConsole != null)
-                {
-                    skeldsHand.Add(upperConsole);
-                }
-                Console? lowerConsole = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("LowerHandConsole"));
-                if (lowerConsole != null)
-                {
-                    skeldsHand.Add(lowerConsole);
-                }
-                return skeldsHand;
-            case 1:
-                List<Console> miraHqHand = new List<Console>(2);
-                Console? leftConsole = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("LeftHandConsole"));
-                if (leftConsole != null)
-                {
-                    miraHqHand.Add(leftConsole);
-                }
-                Console? rightConsole = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("RightHandConsole"));
-                if (rightConsole != null)
-                {
-                    miraHqHand.Add(rightConsole);
-                }
-                return miraHqHand;
-            case 2:
-                // ポーラスは耐震がハンドコンソール
-                List<Console> polusConsole = new List<Console>(2);
-                Console? leftPanel = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("panel_hand_left"));
-                if (leftPanel != null)
-                {
-                    polusConsole.Add(leftPanel);
-                }
-                Console? rightPanel = console.FirstOrDefault(
-                    x => x.gameObject.name.Contains("panel_hand_right"));
-                if (rightPanel != null)
-                {
-                    polusConsole.Add(rightPanel);
-                }
-                return polusConsole;
-            default:
-                return new List<Console>();
-        }
-    }
+    private IReadOnlyList<string> getOxyConsole()
+		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			0 or 1 or 3 => new List<string> { "NoOxyConsole" },
+			4 => new List<string> { "NoOxyConsoleLeft", "NoOxyConsoleRight" },
+			_ => new List<string>(),
+		};
+
+    private IReadOnlyList<string> getHandConsole()
+		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			0 or 3 => new List<string> { "UpperHandConsole", "LowerHandConsole" },
+			1 => new List<string> { "LeftHandConsole", "RightHandConsole" },
+			2 => new List<string> { "panel_hand_left", "panel_hand_right" },
+			5 => new List<string> { "ResetReactor (1)/ResetReactorConsole", "ResetReactor (2)/ResetReactorConsole" },
+			_ => new List<string>(),
+		};
+
     private void cleanUp()
     {
         if (this.isOpen && this.saboGame != null)
@@ -310,5 +217,12 @@ public sealed class Faunus : GhostRoleBase
             this.saboGame.Close();
         }
     }
+
+	private static Console? findConsole(string consoleName)
+	{
+		var console = Object.FindObjectsOfType<Console>();
+		Console? conole = console.FirstOrDefault(x => x.gameObject.name.Contains(consoleName));
+		return conole;
+	}
 
 }
