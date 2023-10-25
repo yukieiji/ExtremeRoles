@@ -481,7 +481,7 @@ public static class GameSystem
 				{
 					return;
 				}
-				mixupSystem.currentSecondsUntilHeal = 0.0f;
+				mixupSystem.currentSecondsUntilHeal = 0.001f;
 				break;
 			default:
 				break;
