@@ -18,6 +18,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
+using UnityObject = UnityEngine.Object;
 
 #nullable enable
 
@@ -37,21 +38,24 @@ public static class GameSystem
 
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
 
-	public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
-	public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
+	public const string SkeldAdmin = "SMapRoomConsole";
+	public const string SkeldSecurity = "SurvConsole";
 
-	public const string MiraHqAdmin = "MiraShip(Clone)/Admin/MapTable/AdminMapConsole";
-	public const string MiraHqSecurity = "MiraShip(Clone)/Comms/comms-top/SurvLogConsole";
+	public const string MiraHqAdmin = "AdminMapConsole";
+	public const string MiraHqSecurity = "SurvLogConsole";
 
-	public const string PolusAdmin1 = "PolusShip(Clone)/Admin/mapTable/panel_map";
-	public const string PolusAdmin2 = "PolusShip(Clone)/Admin/mapTable/panel_map (1)";
-	public const string PolusSecurity = "PolusShip(Clone)/Electrical/Surv_Panel";
-	public const string PolusVital = "PolusShip(Clone)/Office/panel_vitals";
+	public const string PolusAdmin1 = "panel_map";
+	public const string PolusAdmin2 = "panel_map (1)";
+	public const string PolusSecurity = "Surv_Panel";
+	public const string PolusVital = "panel_vitals";
 
-	public const string AirShipSecurity = "Airship(Clone)/Security/task_cams";
-	public const string AirShipVital = "Airship(Clone)/Medbay/panel_vitals";
-	public const string AirShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
-	public const string AirShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
+	public const string AirShipSecurity = "task_cams";
+	public const string AirShipVital = "panel_vitals";
+	public const string AirShipArchiveAdmin = "records_admin_map";
+	public const string AirShipCockpitAdmin = "panel_cockpit_map";
+
+	public const string FangleSecurity = "BinocularsSecurityConsole";
+	public const string FangleVital = "VitalsConsole";
 
 	private const string airShipSpawnJson =
 		"ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
@@ -127,21 +131,28 @@ public static class GameSystem
         vector.z = vector.y / 1000f;
         body.transform.position = vector;
 
-        UnityEngine.Object.Destroy(deadbody);
+		UnityObject.Destroy(deadbody);
 
         return body;
     }
 
-    public static void DisableMapModule(string mapModuleName)
-    {
-        GameObject obj = GameObject.Find(mapModuleName);
-        if (obj != null)
-        {
-            SetColliderActive(obj, false);
-        }
-    }
+	public static void DisableMapModule(HashSet<string> mapModuleName)
+	{
+		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
 
-    public static void SetColliderActive(GameObject obj, bool active)
+		foreach (string key in mapModuleName)
+		{
+			SystemConsole? target = systemConsoleArray.FirstOrDefault(
+				x => x.gameObject.name.Contains(key));
+
+			if (target != null)
+			{
+				SetColliderActive(target.gameObject, false);
+			}
+		}
+	}
+
+	public static void SetColliderActive(GameObject obj, bool active)
     {
         setColliderEnable<Collider2D>(obj, active);
         setColliderEnable<PolygonCollider2D>(obj, active);
@@ -151,7 +162,7 @@ public static class GameSystem
 
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
-		DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+		DeadBody[] array = UnityObject.FindObjectsOfType<DeadBody>();
 		DeadBody? body = array.FirstOrDefault(
 			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId == playerId);
 		return body;
@@ -661,58 +672,30 @@ public static class GameSystem
         // 2 = Polus
         // 3 = Dleks - deactivated
         // 4 = Airship
-        var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 0:
-            case 3:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("SurvConsole"));
-            case 1:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("SurvLogConsole"));
-            case 2:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("Surv_Panel"));
-            case 4:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("task_cams"));
-            default:
-                return null;
-        }
-    }
+		string key = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			0 or 3 => SkeldSecurity,
+			1 => MiraHqSecurity,
+			2 => PolusSecurity,
+			4 => AirShipSecurity,
+			5 => FangleSecurity,
+			_ => string.Empty,
+		};
 
-    private static SystemConsole? getVanillaVitalConsole()
-    {
-        // 0 = Skeld
-        // 1 = Mira HQ
-        // 2 = Polus
-        // 3 = Dleks - deactivated
-        // 4 = Airship
-        var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 0:
-            case 1:
-            case 3:
-                return null;
-            case 2:
-            case 4:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("panel_vitals"));
-            default:
-                return null;
-        }
-    }
+		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
+
+		return systemConsoleArray.FirstOrDefault(
+			x => x.gameObject.name.Contains(key));
+
+	}
 
 	private static void destroyComponent<T>(GameObject obj) where T : Behaviour
     {
         T collider = obj.GetComponent<T>();
         if (collider != null)
         {
-            UnityEngine.Object.Destroy(collider);
+			UnityObject.Destroy(collider);
         }
     }
 

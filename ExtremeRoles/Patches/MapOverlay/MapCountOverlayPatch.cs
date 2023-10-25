@@ -190,7 +190,7 @@ public static class MapCountOverlayUpdatePatch
 
         if (adminTimer <= 0.0f)
         {
-            disableVital();
+            disableAdmin();
             MapBehaviour.Instance.Close();
         }
     }
@@ -240,12 +240,12 @@ public static class MapCountOverlayUpdatePatch
         return false;
     }
 
-    private static void disableVital()
+    private static void disableAdmin()
     {
-        HashSet<string> vitalObj = new HashSet<string>();
+        HashSet<string> adminObj = new HashSet<string>();
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            vitalObj = modMap!.GetSystemObjectName(Compat.Interface.SystemConsoleType.Admin);
+			adminObj = modMap!.GetSystemObjectName(Compat.Interface.SystemConsoleType.Admin);
         }
         else
         {
@@ -253,27 +253,24 @@ public static class MapCountOverlayUpdatePatch
                 ByteOptionNames.MapId))
             {
                 case 0:
-                    vitalObj.Add(GameSystem.SkeldAdmin);
+					adminObj.Add(GameSystem.SkeldAdmin);
                     break;
                 case 1:
-                    vitalObj.Add(GameSystem.MiraHqAdmin);
+					adminObj.Add(GameSystem.MiraHqAdmin);
                     break;
                 case 2:
-                    vitalObj.Add(GameSystem.PolusAdmin1);
-                    vitalObj.Add(GameSystem.PolusAdmin2);
+                    adminObj.Add(GameSystem.PolusAdmin1);
+                    adminObj.Add(GameSystem.PolusAdmin2);
                     break;
                 case 4:
-                    vitalObj.Add(GameSystem.AirShipArchiveAdmin);
-                    vitalObj.Add(GameSystem.AirShipCockpitAdmin);
+                    adminObj.Add(GameSystem.AirShipArchiveAdmin);
+                    adminObj.Add(GameSystem.AirShipCockpitAdmin);
                     break;
                 default:
                     break;
             }
         }
 
-        foreach (string objectName in vitalObj)
-        {
-            GameSystem.DisableMapModule(objectName);
-        }
-    }
+		GameSystem.DisableMapModule(adminObj);
+	}
 }
