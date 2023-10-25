@@ -733,9 +733,6 @@ public sealed class Hypnotist :
 
 	private void setAbilityPart(int redModuleNum)
     {
-        byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId);
-
 		string key = GameSystem.CurMapKey;
 		setAbilityPartFromMapJsonInfo(this.position[key], redModuleNum);
 	}
@@ -762,12 +759,12 @@ public sealed class Hypnotist :
 
         foreach (var (pos, console) in grayPos)
         {
-			setParts<BlueAbilityPart>(pos, "GrayAbilityPart")
+			setParts<GrayAbilityPart>(pos)
 				.SetConsoleType(console);
 		}
         foreach (var (pos, console) in bluePos)
         {
-			setParts<BlueAbilityPart>(pos, "BlueAbilityPart")
+			setParts<BlueAbilityPart>(pos)
 				.SetConsoleType(console);
         }
     }
@@ -786,15 +783,15 @@ public sealed class Hypnotist :
                 continue;
             }
 
-			setParts<RedAbilityPart>(pos, "RedAbilityPart");
+			setParts<RedAbilityPart>(pos);
 
             this.addRedPos.RemoveAt(checkIndex);
             this.addedPos.Add(pos);
         }
     }
-	private T setParts<T>(in Vector3 pos, string name) where T : AbilityPartBase
+	private T setParts<T>(in Vector3 pos) where T : AbilityPartBase
 	{
-		GameObject obj = new GameObject(name);
+		GameObject obj = new GameObject(nameof(T));
 		obj.transform.position = pos;
 		T abilityPart = obj.AddComponent<T>();
 		abilityPart.SetHideArrowDistance(this.hideDistance);
