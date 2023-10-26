@@ -12,6 +12,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.Interface;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -73,10 +75,20 @@ public static class GameStartManagerPatch
             // 2 = Polus
             // 3 = Dleks - deactivated
             // 4 = Airship
+			// 5 = Fungle
 
             var rng = RandomGenerator.GetTempGenerator();
 
             List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4, 5 };
+
+			foreach (var mod in CompatModManager.Instance.LoadedMod.Values)
+			{
+				if (mod is IMapMod mapMod)
+				{
+					possibleMaps.Add(mapMod.MapId);
+				}
+			}
+
             byte mapId = possibleMaps[
                 rng.Next(possibleMaps.Count)];
 
