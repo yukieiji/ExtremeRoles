@@ -86,8 +86,9 @@ public enum ExtremeRoleId : int
     Slime,
     Zombie,
 	Thief,
+	Crewshroom,
 
-    Alice,
+	Alice,
     Jackal,
     Sidekick,
     TaskMaster,

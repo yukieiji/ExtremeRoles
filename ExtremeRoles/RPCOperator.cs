@@ -82,9 +82,10 @@ public static class RPCOperator
         SlimeAbility,
         ZombieRpc,
 		ThiefAddDeadbodyEffect,
+		CrewshroomSetMushroom,
 
-        // ニュートラル
-        AliceShipBroken,
+		// ニュートラル
+		AliceShipBroken,
         JesterOutburstKill,
         YandereSetOneSidedLover,
         TotocalcioSetBetPlayer,
