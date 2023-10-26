@@ -116,7 +116,7 @@ public static class GameSystem
         PlayerControl targetPlayer, Vector3 pos)
     {
         var killAnimation = targetPlayer.KillAnimations[0];
-        DeadBody deadbody = UnityEngine.Object.Instantiate(
+        DeadBody deadbody = UnityObject.Instantiate(
             GameManager.Instance.DeadBodyPrefab);
         deadbody.enabled = false;
 
@@ -163,6 +163,46 @@ public static class GameSystem
         setColliderEnable<BoxCollider2D>(obj, active);
         setColliderEnable<CircleCollider2D>(obj, active);
     }
+
+	public static void AddSpawnPoint(in IEnumerable<Vector2> pos, in byte playerId)
+	{
+		var spawnPoint = new List<Vector2>();
+		AddSpawnPoint(spawnPoint, playerId);
+		pos.Concat(spawnPoint);
+	}
+
+	public static void AddSpawnPoint(in List<Vector2> pos, in byte playerId)
+	{
+		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId);
+
+		int playerNum = CachedPlayerControl.AllPlayerControls.Count;
+
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			pos.AddRange(modMap!.GetSpawnPos(playerId));
+		}
+		else
+		{
+			var ship = CachedShipStatus.Instance;
+
+			switch (mapId)
+			{
+				case 4:
+					pos.AddRange(GetAirShipRandomSpawn());
+					break;
+				default:
+					Vector2 baseVec = Vector2.up;
+					baseVec = baseVec.Rotate(
+						(float)(playerId - 1) * (360f / (float)playerNum));
+					Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(
+						0f, 0.3636f);
+					pos.Add(ship.InitialSpawnCenter + offset);
+					pos.Add(ship.MeetingSpawnCenter + offset);
+					break;
+			}
+		}
+	}
 
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
