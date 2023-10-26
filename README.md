@@ -1,4 +1,8 @@
 
+##### Other Languages README
+- [English README](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/en/README.md)
+- [SChinese README(WIP)](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/ch_s/README.md)
+
 <div><img src="./doc/img/burner.png" /></div>
 
 <div align="center"><h1>Extreme Roles, Extreme Skins and Engine Voice Engine</h1></div>
@@ -6,7 +10,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.7.11-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.10.24-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -14,24 +18,30 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 
 ---
 
-## Extreme Roles
-主な特徴として以下があります<br>
-* 第三陣営「ニュートラル」と幽霊役職の追加
-* 80を超えるユニークな役職の追加
-* AmongUs公式役職とMODの役職の併用可能(HideNSeekにも完全対応)
-* すべてのMOD役職が複数人アサイン可能
-* 「ロールアサインフィルター」や「アサインウェイト」を使った高度な役職割り当て機能
-* すべての役職に対して、細かい設定(視界、視界効果、キルクールなど)が可能
-* 多彩なゲームオプション(シャッフルの強度、エンジニアのベント調整など)
-* MODオプションのインポート/エクスポート機能
-* MODの更新/バージョンチェック機能
-* 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
-* 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
+## Wikiはこちら => [https://yukieiji.github.io/ExtremeRoles.Docs/](https://yukieiji.github.io/ExtremeRoles.Docs/)
 
-### 追加役職一覧(Extreme Roles v8.2.0.0時点、今後も追加予定)
-#### ホスト役職
+--- 
+
+# Extreme Roles
+主な特徴として以下があります<br>
+- 第三陣営「ニュートラル」と幽霊役職の追加
+- 80を超えるユニークな役職の追加
+- AmongUs公式役職とMODの役職の併用可能(HideNSeekにも完全対応)
+- すべてのMOD役職が複数人アサイン可能
+- 「ロールアサインフィルター」や「アサインウェイト」を使った高度な役職割り当て機能
+- すべての役職に対して、細かい設定(視界、視界効果、キルクールなど)が可能
+- 多彩なゲームオプション(シャッフルの強度、エンジニアのベント調整など)
+- MODオプションのインポート/エクスポート機能
+- MODの更新/バージョンチェック機能
+- 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
+- 互換性のあるMODとの専用オプションの実装 
+- 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
+- 多種多様の情報を取得できるREST APIを搭載(欲しいAPIがある場合は連絡をお願いします)
+
+## 追加役職一覧(Extreme Roles v9.0.0.0時点、今後も追加予定)
+### ホスト役職
 - シオン
-#### 通常役職
+### 通常役職
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
 |  スペシャルクルー  |  スペシャルインポスター  | アリス |
@@ -68,7 +78,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  ゲッサー |  |  |
 |  ムーバー |  |  |
 
-#### 幽霊役職
+### 幽霊役職
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
 |  ファウヌス  |  サボり魔  | フォラス |
@@ -79,19 +89,20 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 「ラバーズ」、「サポーター」、「ゲッサー」と「ムーバー」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
 * 「サイドキック」と「見習い探偵」、「サーヴァント」、「ドール」はゲーム開始時にはアサインされず、条件を満たした時にアサインされます
 * 「マーリン」と「アサシン」、「ヒーロー」と「ヴィラン」と「ヴィジランテ」、「探偵」と「助手」、「ワルガキ」と「ウィスプ」は一対の関係です
-* 詳しくは[Wiki](https://github.com/yukieiji/ExtremeRoles/wiki/%E3%83%AD%E3%83%BC%E3%83%AB)を参照
+* 詳しくは[Wikiのロール](https://github.com/yukieiji/ExtremeRoles/wiki/%E3%83%AD%E3%83%BC%E3%83%AB)を参照
 
-## Extreme Skins
+# Extreme Skins
 Extreme Rolesのコズミック追加用アドオン、主な特徴として以下があります<br>
-* MODの更新/バージョンチェック機能
-* 誰でも簡単にハットを追加、テスト可能
-* 誰でも簡単にバイザーを追加、テスト可能
-* 誰でも簡単にネームプレートを追加、テスト可能
-* 誰でも簡単に色の追加テストを可能
+- MODの更新/バージョンチェック機能
+- 通常スキンに加えてアニメーション可能なスキン「アニメーションスキン」の追加（ハット、バイザーのみ対応）
+- 誰でも簡単にハットを追加、テスト可能
+- 誰でも簡単にバイザーを追加、テスト可能
+- 誰でも簡単にネームプレートを追加、テスト可能
+- 誰でも簡単に色の追加テストを可能
 
-#### 自分のハットやバイザーを作りたい、作ったハットやバイザーを公開したいという方はTwitter等に連絡下さい！！
+### 自分のハットやバイザーを作りたい、作ったハットやバイザーを公開したいという方はTwitter等に連絡下さい！！
 
-## Extreme Voice Engine
+# Extreme Voice Engine
 Extreme Rolesに読み上げ機能を追加するクライアントアドオン、主な特徴として以下があります<br>
 - 使いたい人だけインストールすれば動作するクライアントアドオン
 - 合成音声ソフトを使用した会議チャット等の読み上げ
@@ -101,11 +112,11 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
    - 詳細はWikiを確認してください
 
 
-## 現在確認されている不具合
+# 現在確認されている不具合
 - ExtremeVoiceEngineをインストールし、シオンを使用している状態でシオンのコマンドを使用すると動作しているのに「不正なコマンドである」と表示されてしまう問題
   - この不具合はExtremeVoiceEngineとExtremeRolesで別々のコマンド処理を実装した関係で発生している表示上の問題であるため動作に一切の影響はありません
 
-## リリーススケジュール
+# リリーススケジュール
 
 ## 現在実装検討中の役職及び機能
 - 死亡時役職が持つ固有の情報を表示出来るようにする
@@ -121,7 +132,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
    - 第三陣営らしくクルーとインポスター両方に害がある能力を追加します
 
 
-## 実装済み機能と役職
+# 実装済み機能と役職
 
 |  機能/役職  |  詳細 |  提案者 |  実装バージョン |
 | ---- | ---- | ---- | ---- |
@@ -140,13 +151,14 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 |  ゾンビ  |  復活できるインポスター  |  甘造さん |  v7.1.0.0 |
 |  テレポーター  |  2点間を瞬間移動できる「ポータル」を設置できるクルー |  wigさん |  v7.1.0.0 |
 
-## AmongUsとの対応バージョンと最新版のダウンロード
+# AmongUsとの対応バージョンと最新版のダウンロード
 - 最新版のダウンロードは[こちら](https://github.com/yukieiji/ExtremeRoles/releases/latest)から出来ます
 - Extreme Roles v(バージョン番号)がスキンなし、Extreme Roles v(バージョン番号) with Extreme Skinsがスキン込みのものになります
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.0.0 |
+|  v2023.10.24s/v2023.10.24e  | v9.0.0.0 |
+|  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.6.2 |
 |  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.4 |
 |  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
 |  v2023.2.28s/v2023.2.28e  | v6.0.0.0 ～ v6.0.0.6 |
@@ -162,7 +174,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 |  v2021.12.15s/v2022.02.08s/v2021.12.15e  |  v1.17.0.0 ～ v1.18.1.0  |
 |  v2021.12.15s/v2021.12.15e  |  v1.11.1.1 ～ v1.16.1.0  |
 
-## ビルド方法
+# ビルド方法
 - エラー等でビルドできない場合は連絡していただければ対応いたします
 - 要求環境
   - Git
@@ -177,8 +189,9 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 - ビルド
   1. VisualStudio 2022で「ExtremeRoles.sln」を開いてビルドする
      - 初回のビルドはNugetパッケージの復元が入るので時間がかかります
+     - アセット周りがうまく読み込まれない場合は再度ビルドしてみてください
 
-## クレジット&Thanks
+# クレジット&Thanks
 - TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンター、カーペンター、シューター、キャプテンのアイディア元
 - [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - **Dhalucard**氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
 - [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - **Woodi-dev**氏によって作成されたMOD、シェリフのアイディア元
@@ -191,6 +204,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 - [Unity VOICEVOX Bridge](https://github.com/mikito/unity-voicevox-bridge) - **mikito**氏作成のUnityからボイボを呼び出すライブラリ、EVEのボイボ周りの参考に使用
 - [CuiCommandParser](https://github.com/oika/CuiCommandParser) - **oika**氏作成のCUIのオプションパーサーライブラリ、EVEのコマンドライン解析の参考に使用
+- [UnityMainThreadDispatcher](https://github.com/PimDeWitte/UnityMainThreadDispatcher) - **PimDeWitte**氏作成のUnityのメインスレッド処理をスレッドセーフに行うためのライブラリ、REST APIの処理の参考に使用
 
 - レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリス、オーバーローダーのアイディア元
@@ -201,10 +215,10 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 - 効果音ラボ：https://soundeffect-lab.info/ いくつかの役職のSEを使用
 - 無料効果音で遊ぼう：https://taira-komori.jpn.org/welcome.html いくつかの役職のSEを使用
 
-### ボタンのアイコンについて
+## ボタンのアイコンについて
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
 
-### 多言語対応について
+## 多言語対応について
 多言語対応は出来ますが、実装速度優先で開発しているため日本語が優先的に実装。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい<br>
 EXRole can support multiple languages, but only Japanese is implemented because I prioritize the speed of implementation. Please contact me if you would like to translate into another language or if you have translated into another language.
 
@@ -214,4 +228,4 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 | ---- | ---- |
 |  英語/English  |   完全翻訳済み/Fully Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
-|  简体中文/SChinese  |   部分的に翻訳済み/Mostly Translated  |
+|  简体中文/SChinese  |   ほぼ翻訳済み/Mostly Translated  |
