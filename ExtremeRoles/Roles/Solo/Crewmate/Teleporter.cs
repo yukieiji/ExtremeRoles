@@ -168,11 +168,6 @@ public sealed class Teleporter :
     private const string postionJson =
         "ExtremeRoles.Resources.JsonData.TeleporterTeleportPartPosition.json";
 
-    private const string skeldKey = "Skeld";
-    private const string miraHqKey = "MiraHQ";
-    private const string polusKey = "Polus";
-    private const string airShipKey = "AirShip";
-
     public Teleporter() : base(
         ExtremeRoleId.Teleporter,
         ExtremeRoleType.Crewmate,
@@ -220,31 +215,10 @@ public sealed class Teleporter :
 
     public void IntroEndSetUp()
     {
-        string key = skeldKey;
-
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-
-            if (modMap is SubmergedIntegrator)
-            {
-                key = "Submerged";
-            }
-        }
-        else
-        {
-            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId);
-            key = mapId switch
-            {
-                0 => skeldKey,
-                1 => miraHqKey,
-                2 => polusKey,
-                4 => airShipKey,
-                _ => skeldKey,
-            };
-        }
         var position = JsonParser.GetJObjectFromAssembly(postionJson);
-        setPartFromMapJsonInfo(position.Get<JArray>(key), this.partNum);
+        setPartFromMapJsonInfo(
+			position.Get<JArray>(GameSystem.CurMapKey),
+			this.partNum);
     }
 
     public void CreateAbility()
