@@ -397,7 +397,7 @@ public static class IntroCutsceneOnDestroyPatch
 					if (isRemoveVital)
 					{
 						disableObjectName.Add(
-							GameSystem.AirShipVital);
+							GameSystem.FangleVital);
 					}
 					break;
 				default:
