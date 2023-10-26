@@ -373,11 +373,8 @@ public static class RPCOperator
         }
         else
         {
-            var anim = vent.GetComponent<PowerTools.SpriteAnim>();
-
-            if (!anim) { return; }
-            anim.Play(vent.ExitVentAnim, 1f);
-        }
+			vent.myAnim.Play(vent.ExitVentAnim, 1f);
+		}
     }
 
     public static void UncheckedSnapTo(
