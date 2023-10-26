@@ -129,15 +129,18 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
                 Object.Destroy(console);
             }
 
-			if (!vent.TryGetComponent<SpriteRenderer>(out var ventRenderer))
-			{
-				ventRenderer = vent.myRend;
-			}
-			stopAnim(ventRenderer.gameObject);
+			var ventRenderer = vent.myRend;
 
-            ventRenderer.sprite = Loader.CreateSpriteFromResources(
+			if (vent.myAnim != null)
+			{
+				vent.myAnim.Stop();
+				vent.myAnim.enabled = false;
+			}
+
+			ventRenderer.sprite = Loader.CreateSpriteFromResources(
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
-            vent.myRend = ventRenderer;
+
+			vent.myRend = ventRenderer;
             vent.name = "MaryVent_" + vent.Id;
             vent.gameObject.SetActive(this.body.active);
 
@@ -155,15 +158,6 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             Object.Destroy(this.img);
             Object.Destroy(this.body);
         }
-		private static void stopAnim(GameObject obj)
-		{
-			var anim = obj.GetComponent<PowerTools.SpriteAnim>();
-			if (anim != null)
-			{
-				anim.Stop();
-				anim.enabled = false;
-			}
-		}
     }
 
 

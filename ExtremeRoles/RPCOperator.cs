@@ -350,28 +350,26 @@ public static class RPCOperator
         HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
         ShipStatus ship = CachedShipStatus.Instance;
 
-        if (ship.IsCustomVent(ventId))
+        if (ship.IsCustomVent(ventId) &&
+			hudManager != null)
         {
-            if (hudManager == null) { return; }
-
             hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
-                        if (vent.myRend != null)
-                        {
-                            vent.myRend.sprite = ship.GetCustomVentSprite(
-                                ventId, (int)(p * 17));
-                            if (p == 1f)
-                            {
-                                vent.myRend.sprite = ship.GetCustomVentSprite(
-                                    ventId, 0);
-                            }
-                        }
-                    })
+						if (vent.myRend == null) { return; }
+
+						vent.myRend.sprite = ship.GetCustomVentSprite(
+								ventId, (int)(p * 17));
+						if (p == 1f)
+						{
+							vent.myRend.sprite = ship.GetCustomVentSprite(
+								ventId, 0);
+						}
+					})
                 )
             );
         }
-        else
+        else if (vent.myAnim != null)
         {
 			vent.myAnim.Play(vent.ExitVentAnim, 1f);
 		}
