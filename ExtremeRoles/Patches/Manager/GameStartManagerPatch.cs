@@ -76,7 +76,7 @@ public static class GameStartManagerPatch
 
             var rng = RandomGenerator.GetTempGenerator();
 
-            List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
+            List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4, 5 };
             byte mapId = possibleMaps[
                 rng.Next(possibleMaps.Count)];
 
