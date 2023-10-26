@@ -22,22 +22,29 @@ public static class PlayerControlShapeshiftPatch
 		[HarmonyArgument(1)] bool animate)
 	{
 		var roles = ExtremeRoleManager.GameRole;
-		if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
+		if (roles.Count == 0 ||
+			!roles.ContainsKey(__instance.PlayerId))
+		{
+			return true;
+		}
 
 		var role = roles[__instance.PlayerId];
 		if (role.TryGetVanillaRoleId(out RoleTypes roleId) &&
 			roleId == RoleTypes.Shapeshifter) { return true; }
 
+		if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup) { return false; }
 
 		GameData.PlayerInfo targetPlayerInfo = targetPlayer.Data;
 		GameData.PlayerOutfit newOutfit;
+
+		var outfits = __instance.Data.Outfits;
 		if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
 		{
-			newOutfit = __instance.Data.Outfits[PlayerOutfitType.Default];
+			newOutfit = outfits[PlayerOutfitType.Default];
 		}
 		else
 		{
-			newOutfit = targetPlayer.Data.Outfits[PlayerOutfitType.Default];
+			newOutfit = outfits[PlayerOutfitType.Default];
 		}
 		Action changeOutfit = delegate ()
 		{
@@ -61,14 +68,17 @@ public static class PlayerControlShapeshiftPatch
 		if (animate)
 		{
 			__instance.shapeshifting = true;
-			if (__instance.AmOwner)
+			__instance.MyPhysics.SetNormalizedVelocity(Vector2.zero);
+			bool amOwner = __instance.AmOwner;
+			if (amOwner)
 			{
 				PlayerControl.HideCursorTemporarily();
 			}
 			RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate(
-				FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
-			roleEffectAnimation.SetMaterialColor(
-				__instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
+				FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim,
+				__instance.gameObject.transform);
+			roleEffectAnimation.SetMaskLayerBasedOnWhoShouldSee(amOwner);
+			roleEffectAnimation.SetMaterialColor(outfits[PlayerOutfitType.Default].ColorId);
 			if (__instance.cosmetics.FlipX)
 			{
 				roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);

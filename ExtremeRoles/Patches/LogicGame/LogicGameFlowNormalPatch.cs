@@ -263,12 +263,14 @@ namespace ExtremeRoles.Patches.LogicGame
                 }
             }
 
-            if (systems.TryGetValue(SystemTypes.Reactor, out systemType) || 
-                systems.TryGetValue(SystemTypes.Laboratory, out systemType))
+			// 公式だとFor文を回してるけどO(n)かかるのはちょっとってことで直接
+            if (systems.TryGetValue(SystemTypes.Reactor, out systemType) ||
+                systems.TryGetValue(SystemTypes.Laboratory, out systemType) ||
+				systems.TryGetValue(SystemTypes.HeliSabotage, out systemType))
             {
                 ICriticalSabotage criticalSystem = systemType.TryCast<ICriticalSabotage>();
 
-                if (criticalSystem != null && 
+                if (criticalSystem != null &&
                     criticalSystem.Countdown < 0f)
                 {
                     gameIsEnd(gameOverReason);

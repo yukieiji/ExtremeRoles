@@ -10,6 +10,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Player;
 
 namespace ExtremeRoles;
 
@@ -30,7 +31,7 @@ public static class RPCOperator
         UncheckedMurderPlayer,
         UncheckedRevive,
         CleanDeadBody,
-        FixLightOff,
+        FixForceRepairSpecialSabotage,
         ReplaceDeadReason,
         SetRoleWin,
         SetWinGameControlId,
@@ -249,18 +250,9 @@ public static class RPCOperator
             }
         }
     }
-    public static void FixLightOff()
+    public static void FixForceRepairSpecialSabotage(byte systemType)
     {
-        var minigame = Minigame.Instance;
-
-        if (minigame != null && minigame.TryCast<SwitchMinigame>() != null)
-        {
-            minigame.ForceClose();
-        }
-
-        SwitchSystem switchSystem = CachedShipStatus.Systems[
-            SystemTypes.Electrical].Cast<SwitchSystem>();
-        switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+		Helper.GameSystem.ForceRepairrSpecialSabotage((SystemTypes)systemType);
     }
 
     public static void SetUpReady(byte playerId)

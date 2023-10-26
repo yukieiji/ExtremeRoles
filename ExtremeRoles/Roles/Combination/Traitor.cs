@@ -4,7 +4,6 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -146,13 +145,12 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
                     watchConsole.MinigamePrefab);
                 break;
             case AbilityType.Vital:
-                SystemConsole vitalConsole = GameSystem.GetVitalSystemConsole();
-                if (vitalConsole == null || Camera.main == null)
+				VitalsMinigame vital = GameSystem.GetVitalMinigame();
+				if (vital == null || Camera.main == null)
                 {
                     return false;
                 }
-                this.minigame = GameSystem.OpenMinigame(
-                    vitalConsole.MinigamePrefab);
+                this.minigame = GameSystem.OpenMinigame(vital);
                 break;
             default:
                 return false;
@@ -383,19 +381,6 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     {
         ++this.nextUseAbilityType;
         this.nextUseAbilityType = (AbilityType)((int)this.nextUseAbilityType % 3);
-
-        byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId);
-
-        if (this.nextUseAbilityType == AbilityType.Vital &&
-            (
-                mapId == 0 ||
-                mapId == 1 ||
-                mapId == 3
-            ))
-        {
-            this.nextUseAbilityType = AbilityType.Admin;
-        }
     }
     private void updateButtonSprite()
     {

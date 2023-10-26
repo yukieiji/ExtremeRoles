@@ -15,14 +15,18 @@ namespace ExtremeRoles.Patches.Player;
 
 #nullable enable
 
+#pragma warning disable Harmony003
+
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
 public static class PlayerControlMurderPlayerPatch
 {
 	public static bool Prefix(
 		PlayerControl __instance,
-		[HarmonyArgument(0)] PlayerControl target)
+		[HarmonyArgument(0)] PlayerControl target,
+		[HarmonyArgument(1)] MurderResultFlags resultFlags)
 	{
-		if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+		if (ExtremeRoleManager.GameRole.Count == 0 ||
+			resultFlags.HasFlag(MurderResultFlags.FailedError)) { return true; }
 
 		var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
 
@@ -38,7 +42,11 @@ public static class PlayerControlMurderPlayerPatch
 		__instance.logger.Debug(
 			$"{__instance.PlayerId} trying to murder {target.PlayerId}", null);
 
-		if (target.protectedByGuardian)
+		if (resultFlags.HasFlag(MurderResultFlags.FailedProtected) ||
+			(
+				resultFlags.HasFlag(MurderResultFlags.DecisionByHost) &&
+				target.protectedByGuardianId > -1
+			))
 		{
 			target.protectedByGuardianThisRound = true;
 			bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
@@ -62,7 +70,10 @@ public static class PlayerControlMurderPlayerPatch
 			return false;
 		}
 
-		murderPlayerBody(__instance, target, killCool);
+		if (resultFlags.HasFlag(MurderResultFlags.Succeeded) || resultFlags.HasFlag(MurderResultFlags.DecisionByHost))
+		{
+			murderPlayerBody(__instance, target, killCool);
+		}
 		return false;
 	}
 
@@ -137,7 +148,7 @@ public static class PlayerControlMurderPlayerPatch
 		PlayerControl target,
 		float killCool)
 	{
-		if (target.protectedByGuardian)
+		if (target.protectedByGuardianId > -1)
 		{
 			target.RemoveProtection();
 		}
@@ -149,6 +160,9 @@ public static class PlayerControlMurderPlayerPatch
 		PlayerControl target,
 		float killCool)
 	{
+
+		FastDestroyableSingleton<DebugAnalytics>.Instance.Analytics.Kill(target.Data, instance.Data);
+
 		if (instance.AmOwner)
 		{
 			if (GameManager.Instance.IsHideAndSeek())
@@ -172,7 +186,7 @@ public static class PlayerControlMurderPlayerPatch
 			instance.SetKillTimer(killCool);
 		}
 
-		FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
+		FastDestroyableSingleton<UnityTelemetry>.Instance.WriteMurder();
 
 		target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 		if (target.AmOwner)
@@ -191,7 +205,6 @@ public static class PlayerControlMurderPlayerPatch
 			}
 			FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
 				instance.Data, target.Data);
-			FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
 			target.cosmetics.SetNameMask(false);
 			target.RpcSetScanner(false);
 		}
@@ -211,3 +224,4 @@ public static class PlayerControlMurderPlayerPatch
 			string.Format("{0} succeeded in murdering {1}", instance.PlayerId, target.PlayerId), null);
 	}
 }
+#pragma warning restore Harmony003 // Harmony non-ref patch parameters modified

@@ -9,7 +9,7 @@ public interface IExtremeSystemType
 {
 	public bool IsDirty { get; }
 
-	public void Detoriorate(float deltaTime);
+	public void Deteriorate(float deltaTime);
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null);
 

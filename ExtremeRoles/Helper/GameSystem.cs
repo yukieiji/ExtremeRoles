@@ -9,6 +9,7 @@ using AmongUs.GameOptions;
 using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -17,41 +18,49 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
+using UnityObject = UnityEngine.Object;
+using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
+
 #nullable enable
 
 namespace ExtremeRoles.Helper;
 
 public static class GameSystem
 {
-    public const int VanillaMaxPlayerNum = 15;
-    public const int MaxImposterNum = 14;
+	public const int VanillaMaxPlayerNum = 15;
+	public const int MaxImposterNum = 14;
 
 	public const string SkeldKey = "Skeld";
+	public const string MiraHqKey = "MiraHQ";
 	public const string PolusKey = "Polus";
 	public const string AirShipKey = "AirShip";
+	public const string FungleKey = "Fungle";
 	public const string SubmergedKey = "Submerged";
 
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
 
-    public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
-    public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
+	public const string SkeldAdmin = "SMapRoomConsole";
+	public const string SkeldSecurity = "SurvConsole";
 
-    public const string MiraHqAdmin = "MiraShip(Clone)/Admin/MapTable/AdminMapConsole";
-    public const string MiraHqSecurity = "MiraShip(Clone)/Comms/comms-top/SurvLogConsole";
+	public const string MiraHqAdmin = "AdminMapConsole";
+	public const string MiraHqSecurity = "SurvLogConsole";
 
-    public const string PolusAdmin1 = "PolusShip(Clone)/Admin/mapTable/panel_map";
-    public const string PolusAdmin2 = "PolusShip(Clone)/Admin/mapTable/panel_map (1)";
-    public const string PolusSecurity = "PolusShip(Clone)/Electrical/Surv_Panel";
-    public const string PolusVital = "PolusShip(Clone)/Office/panel_vitals";
+	public const string PolusAdmin1 = "panel_map";
+	public const string PolusAdmin2 = "panel_map (1)";
+	public const string PolusSecurity = "Surv_Panel";
+	public const string PolusVital = "panel_vitals";
 
-    public const string AirShipSecurity = "Airship(Clone)/Security/task_cams";
-    public const string AirShipVital = "Airship(Clone)/Medbay/panel_vitals";
-    public const string AirShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
-    public const string AirShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
+	public const string AirShipSecurity = "task_cams";
+	public const string AirShipVital = "panel_vitals";
+	public const string AirShipArchiveAdmin = "records_admin_map";
+	public const string AirShipCockpitAdmin = "panel_cockpit_map";
 
-    private const string airShipSpawnJson =
-        "ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
-    private const string airShipRandomSpawnKey = "VanillaRandomSpawn";
+	public const string FangleSecurity = "BinocularsSecurityConsole";
+	public const string FangleVital = "VitalsConsole";
+
+	private const string airShipSpawnJson =
+		"ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
+	private const string airShipRandomSpawnKey = "VanillaRandomSpawn";
 
 	private const string ventInfoJson =
 		"ExtremeRoles.Resources.JsonData.AllVentLinkInfo.json";
@@ -60,6 +69,40 @@ public static class GameSystem
 
 	public static bool IsLobby => AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started;
 	public static bool IsFreePlay => AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
+
+
+	private static UseButtonDict useButtonSetting => FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+
+	public static string CurMapKey
+	{
+		get
+		{
+			string key = string.Empty;
+
+			if (CompatModManager.Instance.TryGetModMap(out var modMap))
+			{
+				if (modMap is SubmergedIntegrator)
+				{
+					key = "Submerged";
+				}
+			}
+			else
+			{
+				byte mapId =  GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+					ByteOptionNames.MapId);
+				key = mapId switch
+				{
+					0 => SkeldKey,
+					1 => MiraHqKey,
+					2 => PolusKey,
+					4 => AirShipKey,
+					5 => FungleKey,
+					_ => string.Empty,
+				};
+			}
+			return key;
+		}
+	}
 
 	private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
     {
@@ -92,21 +135,28 @@ public static class GameSystem
         vector.z = vector.y / 1000f;
         body.transform.position = vector;
 
-        UnityEngine.Object.Destroy(deadbody);
+		UnityObject.Destroy(deadbody);
 
         return body;
     }
 
-    public static void DisableMapModule(string mapModuleName)
-    {
-        GameObject obj = GameObject.Find(mapModuleName);
-        if (obj != null)
-        {
-            SetColliderActive(obj, false);
-        }
-    }
+	public static void DisableMapModule(HashSet<string> mapModuleName)
+	{
+		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
 
-    public static void SetColliderActive(GameObject obj, bool active)
+		foreach (string key in mapModuleName)
+		{
+			SystemConsole? target = systemConsoleArray.FirstOrDefault(
+				x => x.gameObject.name.Contains(key));
+
+			if (target != null)
+			{
+				SetColliderActive(target.gameObject, false);
+			}
+		}
+	}
+
+	public static void SetColliderActive(GameObject obj, bool active)
     {
         setColliderEnable<Collider2D>(obj, active);
         setColliderEnable<PolygonCollider2D>(obj, active);
@@ -116,7 +166,7 @@ public static class GameSystem
 
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
-		DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+		DeadBody[] array = UnityObject.FindObjectsOfType<DeadBody>();
 		DeadBody? body = array.FirstOrDefault(
 			x => GameData.Instance.GetPlayerById(x.ParentId).PlayerId == playerId);
 		return body;
@@ -181,7 +231,7 @@ public static class GameSystem
         if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
         List<int> taskIndex = getTaskIndex(
-            CachedShipStatus.Instance.NormalTasks);
+            CachedShipStatus.Instance.ShortTasks);
 
         int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -190,37 +240,30 @@ public static class GameSystem
 
     public static Sprite GetAdminButtonImage()
     {
-        var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 0:
-            case 3:
-                return imageDict[ImageNames.AdminMapButton].Image;
-            case 1:
-                return imageDict[ImageNames.MIRAAdminButton].Image;
-            case 2:
-                return imageDict[ImageNames.PolusAdminButton].Image;
-            default:
-                return imageDict[ImageNames.AirshipAdminButton].Image;
-        }
-    }
+		var useButtonKey = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			0 or 3 => ImageNames.AdminMapButton,
+			1 => ImageNames.MIRAAdminButton,
+			2 => ImageNames.PolusAdminButton,
+			_ => ImageNames.AirshipAdminButton
+		};
+		return useButtonSetting[useButtonKey].Image;
+
+	}
 
     public static Sprite GetSecurityImage()
     {
-        var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 1:
-                return imageDict[ImageNames.DoorLogsButton].Image;
-            default:
-                return imageDict[ImageNames.CamsButton].Image;
-        }
+		var useButtonKey = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			1 => ImageNames.DoorLogsButton,
+			_ => ImageNames.CamsButton,
+		};
+		return useButtonSetting[useButtonKey].Image;
     }
     public static Sprite GetVitalImage() =>
-        FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
-            ImageNames.VitalsButton].Image;
+		useButtonSetting[ImageNames.VitalsButton].Image;
 
     public static SystemConsole? GetSecuritySystemConsole()
     {
@@ -236,18 +279,17 @@ public static class GameSystem
         return watchConsole;
     }
 
-    public static SystemConsole? GetVitalSystemConsole()
+    public static VitalsMinigame? GetVitalMinigame()
     {
-        SystemConsole? vitalConsole;
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-            vitalConsole = modMap!.GetSystemConsole(SystemConsoleType.Vital);
-        }
-        else
-        {
-            vitalConsole = getVanillaVitalConsole();
-        }
-        return vitalConsole;
+		var role = FastDestroyableSingleton<RoleManager>.Instance.GetRole(RoleTypes.Scientist);
+
+		if (!role.IsTryCast<ScientistRole>(out var scientist) ||
+			scientist == null)
+		{
+			return null;
+		}
+
+        return scientist.VitalsPrefab;
     }
 
     public static void ForceEndGame()
@@ -282,7 +324,7 @@ public static class GameSystem
         PlayerTask? task = null,
         Console? console = null)
     {
-        Minigame minigame = UnityEngine.Object.Instantiate(
+        Minigame minigame = UnityObject.Instantiate(
             prefab, Camera.main.transform, false);
         minigame.transform.SetParent(Camera.main.transform, false);
         minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
@@ -304,42 +346,10 @@ public static class GameSystem
 		}
 
 		JObject? linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
+		string key = CurMapKey;
+		if (linkInfoJson == null || key == MiraHqKey) { return; }
 
-		if (linkInfoJson == null) { return; }
-
-		string ventKey;
-		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
-
-		if (CompatModManager.Instance.TryGetModMap(out var modMap))
-		{
-			if (modMap is SubmergedIntegrator)
-			{
-				ventKey = SubmergedKey;
-			}
-			else
-			{
-				return;
-			}
-		}
-		else
-		{
-			switch (mapId)
-			{
-				case 0:
-					ventKey = SkeldKey;
-					break;
-				case 2:
-					ventKey = PolusKey;
-					break;
-				case 4:
-					ventKey = AirShipKey;
-					break;
-				default:
-					return;
-			}
-		}
-
-		JArray linkInfo = linkInfoJson.Get<JArray>(ventKey);
+		JArray linkInfo = linkInfoJson.Get<JArray>(key);
 
 		for (int i = 0; i < linkInfo.Count; ++i)
 		{
@@ -407,45 +417,84 @@ public static class GameSystem
                     continue;
                 }
             }
-            switch (taskType)
+
+			var ship = CachedShipStatus.Instance;
+
+			switch (taskType)
             {
-                case TaskTypes.FixLights:
-                    RPCOperator.Call(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        RPCOperator.Command.FixLightOff);
-                    RPCOperator.FixLightOff();
+				case TaskTypes.ResetReactor:
+					ship.RpcUpdateSystem(SystemTypes.Reactor, 16);
+					break;
+				case TaskTypes.FixLights:
+					RpcForceRepairSpecialSabotage(SystemTypes.Electrical);
+					break;
+				case TaskTypes.FixComms:
+					ship.RpcUpdateSystem(SystemTypes.Comms, 0);
+					break;
+				case TaskTypes.RestoreOxy:
+                    ship.RpcUpdateSystem(SystemTypes.LifeSupp, 16);
                     break;
-                case TaskTypes.RestoreOxy:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.LifeSupp, 0 | 64);
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.LifeSupp, 1 | 64);
-                    break;
-                case TaskTypes.ResetReactor:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Reactor, 16);
-                    break;
-                case TaskTypes.ResetSeismic:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Laboratory, 16);
-                    break;
-                case TaskTypes.FixComms:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Comms, 16 | 0);
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Comms, 16 | 1);
+				case TaskTypes.ResetSeismic:
+                    ship.RpcUpdateSystem(SystemTypes.Laboratory, 16);
                     break;
                 case TaskTypes.StopCharles:
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Reactor, 0 | 16);
-                    CachedShipStatus.Instance.RpcRepairSystem(
-                        SystemTypes.Reactor, 1 | 16);
+                    ship.RpcUpdateSystem(SystemTypes.HeliSabotage, 0 | 16);
+                    ship.RpcUpdateSystem(SystemTypes.HeliSabotage, 1 | 16);
                     break;
-                default:
+				case TaskTypes.MushroomMixupSabotage:
+					RpcForceRepairSpecialSabotage(SystemTypes.MushroomMixupSabotage);
+					break;
+				default:
                     break;
             }
         }
     }
+
+	public static void RpcForceRepairSpecialSabotage(SystemTypes sabSystem)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.FixForceRepairSpecialSabotage))
+		{
+			caller.WriteByte((byte)sabSystem);
+		}
+		ForceRepairrSpecialSabotage(sabSystem);
+	}
+
+	public static void ForceRepairrSpecialSabotage(SystemTypes sabSystem)
+	{
+		if (!CachedShipStatus.Systems.TryGetValue(sabSystem, out var system))
+		{
+			return;
+		}
+		switch (sabSystem)
+		{
+			case SystemTypes.Electrical:
+
+				if (!system.IsTryCast<SwitchSystem>(out var switchSystem) ||
+					switchSystem == null)
+				{
+					return;
+				}
+
+				var minigame = Minigame.Instance;
+				if (minigame != null && minigame.TryCast<SwitchMinigame>() != null)
+				{
+					minigame.ForceClose();
+				}
+				switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+				break;
+			case SystemTypes.MushroomMixupSabotage:
+				if (!system.IsTryCast<MushroomMixupSabotageSystem>(out var mixupSystem) ||
+					mixupSystem == null)
+				{
+					return;
+				}
+				mixupSystem.currentSecondsUntilHeal = 0.001f;
+				break;
+			default:
+				break;
+		}
+	}
 
     public static void SetTask(
         GameData.PlayerInfo playerInfo,
@@ -490,7 +539,7 @@ public static class GameSystem
 
             if (task.IsComplete)
             {
-                NormalPlayerTask normalPlayerTask = UnityEngine.Object.Instantiate(
+                NormalPlayerTask normalPlayerTask = UnityObject.Instantiate(
                     addTask, player.transform);
                 normalPlayerTask.Id = gameControlTaskId;
                 normalPlayerTask.Owner = player;
@@ -500,8 +549,7 @@ public static class GameSystem
                 player.myTasks[i] = normalPlayerTask;
 
                 removeTask.OnRemove();
-                UnityEngine.Object.Destroy(
-                    removeTask.gameObject);
+                UnityObject.Destroy(removeTask.gameObject);
                 if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
 					ExtremeRolesPlugin.Logger.LogInfo(
@@ -621,58 +669,30 @@ public static class GameSystem
         // 2 = Polus
         // 3 = Dleks - deactivated
         // 4 = Airship
-        var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 0:
-            case 3:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("SurvConsole"));
-            case 1:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("SurvLogConsole"));
-            case 2:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("Surv_Panel"));
-            case 4:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("task_cams"));
-            default:
-                return null;
-        }
-    }
+		string key = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			0 or 3 => SkeldSecurity,
+			1 => MiraHqSecurity,
+			2 => PolusSecurity,
+			4 => AirShipSecurity,
+			5 => FangleSecurity,
+			_ => string.Empty,
+		};
 
-    private static SystemConsole? getVanillaVitalConsole()
-    {
-        // 0 = Skeld
-        // 1 = Mira HQ
-        // 2 = Polus
-        // 3 = Dleks - deactivated
-        // 4 = Airship
-        var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
-        {
-            case 0:
-            case 1:
-            case 3:
-                return null;
-            case 2:
-            case 4:
-                return systemConsoleArray.FirstOrDefault(
-                    x => x.gameObject.name.Contains("panel_vitals"));
-            default:
-                return null;
-        }
-    }
+		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
+
+		return systemConsoleArray.FirstOrDefault(
+			x => x.gameObject.name.Contains(key));
+
+	}
 
 	private static void destroyComponent<T>(GameObject obj) where T : Behaviour
     {
         T collider = obj.GetComponent<T>();
         if (collider != null)
         {
-            UnityEngine.Object.Destroy(collider);
+			UnityObject.Destroy(collider);
         }
     }
 

@@ -594,7 +594,7 @@ public sealed class Resurrecter :
                 {
                     taskIndex = GameSystem.GetRandomLongTask();
                 }
-                else if (CachedShipStatus.Instance.NormalTasks.FirstOrDefault(
+                else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
                     taskIndex = GameSystem.GetRandomNormalTaskId();

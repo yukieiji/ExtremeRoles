@@ -152,7 +152,7 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
             {
                 this.TakeTask.Add(TakeTaskType.Long);
             }
-            else if (CachedShipStatus.Instance.NormalTasks.FirstOrDefault(
+            else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
                 (NormalPlayerTask t) => t.Index == taskId) != null)
             {
                 this.TakeTask.Add(TakeTaskType.Normal);

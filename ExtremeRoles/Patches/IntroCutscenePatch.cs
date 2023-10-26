@@ -388,14 +388,23 @@ public static class IntroCutsceneOnDestroyPatch
                             GameSystem.AirShipVital);
                     }
                     break;
-                default:
+				case 5:
+					if (isRemoveSecurity)
+					{
+						disableObjectName.Add(
+							GameSystem.FangleSecurity);
+					}
+					if (isRemoveVital)
+					{
+						disableObjectName.Add(
+							GameSystem.AirShipVital);
+					}
+					break;
+				default:
                     break;
             }
         }
 
-        foreach (string objectName in disableObjectName)
-        {
-            GameSystem.DisableMapModule(objectName);
-        }
+		GameSystem.DisableMapModule(disableObjectName);
     }
 }

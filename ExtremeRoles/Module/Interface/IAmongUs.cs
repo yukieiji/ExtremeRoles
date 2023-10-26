@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ExtremeRoles.Module.Interface;
 
-// AmonUs Interfaces: v2023.7.11
+// AmonUs Interfaces: v2023.10.24
 public static class IAmongUs
 {
 	public interface IUsable
@@ -29,9 +29,7 @@ public static class IAmongUs
 	{
 		public bool IsDirty { get; }
 
-		public void Detoriorate(float deltaTime);
-
-		public void RepairDamage(PlayerControl player, byte amount);
+		public void Deteriorate(float deltaTime);
 
 		public void UpdateSystem(PlayerControl player, MessageReader msgReader);
 

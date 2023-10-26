@@ -119,12 +119,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	public void Detoriorate(float deltaTime)
+	public void Deteriorate(float deltaTime)
 	{
 		this.dirtySystem.Clear();
 		foreach (var (systemTypes, system) in systems)
 		{
-			system.Detoriorate(deltaTime);
+			system.Deteriorate(deltaTime);
 			if (system.IsDirty)
 			{
 				this.IsDirty = this.IsDirty || system.IsDirty;
@@ -159,12 +159,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	public void Reset()
-	{
-		this.systems.Clear();
-	}
-
-	public void RepairDamage(PlayerControl? player, byte amount)
+	public void Reset(PlayerControl? player, byte amount)
 	{
 		ResetTiming timing = (ResetTiming)amount;
 		PlayerControl? resetPlayer = timing == ResetTiming.OnPlayer ? player : null;
@@ -172,6 +167,11 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		{
 			system.Reset(timing, resetPlayer);
 		}
+	}
+
+	public void Reset()
+	{
+		this.systems.Clear();
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)

@@ -44,13 +44,13 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
     {
         GameSystem.RpcRepairAllSabotage();
 
-        foreach (PlainDoor door in CachedShipStatus.Instance.AllDoors)
+        foreach (OpenableDoor door in CachedShipStatus.Instance.AllDoors)
         {
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
 
-            CachedShipStatus.Instance.RpcRepairSystem(
-                SystemTypes.Doors, door.Id | 64);
+            CachedShipStatus.Instance.RpcUpdateSystem(
+                SystemTypes.Doors, (byte)(door.Id | 64));
             door.SetDoorway(true);
         }
 
@@ -75,7 +75,8 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
                 }
             }
 
-            if (PlayerTask.TaskIsEmergency(task))
+            if (PlayerTask.TaskIsEmergency(task) ||
+				task.TaskType == TaskTypes.MushroomMixupSabotage)
             {
                 sabotageActive = true;
                 break;

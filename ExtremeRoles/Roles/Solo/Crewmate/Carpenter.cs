@@ -277,13 +277,15 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         vent.EnterVentAnim = null;
         vent.ExitVentAnim = null;
 
-        var anim = vent.GetComponent<PowerTools.SpriteAnim>();
+		if (!vent.TryGetComponent<SpriteRenderer>(out var ventRenderer))
+		{
+			ventRenderer = vent.myRend;
+		}
+		var anim = ventRenderer.gameObject.GetComponent<PowerTools.SpriteAnim>();
         if (anim)
         {
             anim.Stop();
         }
-
-        var ventRenderer = vent.GetComponent<SpriteRenderer>();
         ventRenderer.sprite = null;
         vent.myRend = ventRenderer;
     }
@@ -556,19 +558,24 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         return true;
     }
 
-    public bool IsAbilityUse() =>
-        this.IsAwake &&
-        this.IsCommonUse() &&
-        !(
-			this.targetVent == null &&
-			GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId) == 1
-		)
-		&&
-        !(
-			this.targetVent == null &&
-			CompatModManager.Instance.TryGetModMap(out var modMap) &&
-            !modMap!.CanPlaceCamera
-		);
+    public bool IsAbilityUse()
+	{
+		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
+
+		return
+			this.IsAwake &&
+			this.IsCommonUse() &&
+			!(
+				// Miraとファングルはカメラ設置できない, TODO:ファングルはカメラ設置できるか調査
+				this.targetVent == null && (mapId == 1 || mapId == 5)
+			)
+			&&
+			!(
+				this.targetVent == null &&
+				CompatModManager.Instance.TryGetModMap(out var modMap) &&
+				!modMap!.CanPlaceCamera
+			);
+	}
 
     public bool IsAbilityCheck() =>
         this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();

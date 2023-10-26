@@ -110,7 +110,7 @@ public sealed class SlaveDriver :
 				{
 					newTaskId = GameSystem.GetRandomLongTask();
 				}
-				else if (CachedShipStatus.Instance.NormalTasks.FirstOrDefault(
+				else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
 					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
 					newTaskId = GameSystem.GetRandomNormalTaskId();

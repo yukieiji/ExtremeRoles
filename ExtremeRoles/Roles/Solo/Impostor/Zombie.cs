@@ -163,7 +163,7 @@ public sealed class Zombie :
         this.setRooms = new Dictionary<SystemTypes, Arrow>();
         foreach (var(roomId, room) in useRoom)
         {
-            var arrow = new Arrow(Palette.ImpostorRed * 0.5f);
+            var arrow = new Arrow(new Color32(255, 25, 25, 200));
             arrow.UpdateTarget(room.roomArea.bounds.center);
             this.setRooms.Add(roomId, arrow);
         }

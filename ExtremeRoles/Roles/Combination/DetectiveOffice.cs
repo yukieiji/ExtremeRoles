@@ -798,28 +798,19 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleRepor
             // 2 = Polus
             // 3 = Dleks - deactivated
             // 4 = Airship
-            var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 0:
-                case 1:
-                case 3:
-                    emergencyConsole = systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("EmergencyConsole"));
-                    break;
-                case 2:
-                    emergencyConsole = systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("EmergencyButton"));
-                    break;
-                case 4:
-                    emergencyConsole = systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("task_emergency"));
-                    break;
-                default:
-                    return false;
-            }
-        }
+			string key = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+				ByteOptionNames.MapId) switch
+			{
+				0 or 1 or 3 => "EmergencyConsole",
+				2 => "EmergencyButton",
+				4 => "task_emergency",
+				5 => "ConchEmergencyButton",
+				_ => string.Empty,
+			};
+			var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+			emergencyConsole = systemConsoleArray.FirstOrDefault(x => x.gameObject.name.Contains(key));
+
+		}
 
         if (emergencyConsole == null || Camera.main == null)
         {

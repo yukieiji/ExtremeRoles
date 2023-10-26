@@ -74,7 +74,7 @@ public static class MeetingHudStartPatch
 
 		logger.LogInfo("Resetting Start: ShipStatus Systems");
 		ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
-		ExtremeSystemTypeManager.Instance.RepairDamage(null, (byte)ResetTiming.MeetingStart);
+		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.MeetingStart);
 		logger.LogInfo("Resetting End: ShipStatus Systems");
 
 		logger.LogInfo("Resetting Start: PlayerControl");

@@ -112,8 +112,9 @@ public static class PlayerControlHandleRpcPatch
 				byte deadBodyPlayerId = reader.ReadByte();
 				RPCOperator.CleanDeadBody(deadBodyPlayerId);
 				break;
-			case RPCOperator.Command.FixLightOff:
-				RPCOperator.FixLightOff();
+			case RPCOperator.Command.FixForceRepairSpecialSabotage:
+				RPCOperator.FixForceRepairSpecialSabotage(
+					reader.ReadByte());
 				break;
 			case RPCOperator.Command.ReplaceDeadReason:
 				byte changePlayerId = reader.ReadByte();

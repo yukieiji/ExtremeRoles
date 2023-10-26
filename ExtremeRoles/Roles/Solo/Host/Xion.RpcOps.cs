@@ -115,8 +115,8 @@ public sealed partial class Xion
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
 
-            CachedShipStatus.Instance.RpcRepairSystem(
-                SystemTypes.Doors, door.Id | 64);
+            CachedShipStatus.Instance.RpcUpdateSystem(
+                SystemTypes.Doors, (byte)(door.Id | 64));
             door.SetDoorway(true);
         }
     }
@@ -256,7 +256,7 @@ public sealed partial class Xion
         }
 
         RemoveXionPlayerToAllPlayerControl();
-        
+
         xionBuffer = null;
     }
 
@@ -269,7 +269,7 @@ public sealed partial class Xion
             $"targetPlayerId:{targetPlayerId}   roleId:{roleId}");
 
         PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-        
+
         // 見つからなかったので探して追加
         if (targetPlayer == null)
         {
@@ -298,7 +298,7 @@ public sealed partial class Xion
         }
 
         resetRole(targetPlayer, targetPlayerId);
-        
+
         SingleRoleBase role = ExtremeRoleManager.NormalRole[roleId];
         SingleRoleBase addRole = role.Clone();
 
@@ -313,7 +313,7 @@ public sealed partial class Xion
             roleManager.SetRole(targetPlayer, RoleTypes.Crewmate);
         }
 
-        if (addRole is IRoleAbility abilityRole && 
+        if (addRole is IRoleAbility abilityRole &&
             CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
         {
             Logging.Debug("Try Create Ability NOW!!!");
@@ -326,7 +326,7 @@ public sealed partial class Xion
         setNewRole(targetPlayerId, addRole);
 
         Logging.Debug($"PlayerId:{targetPlayerId}   AssignTo:{addRole.RoleName}");
-        
+
         if (isXion)
         {
             xionBuffer = (Xion)baseRole;
