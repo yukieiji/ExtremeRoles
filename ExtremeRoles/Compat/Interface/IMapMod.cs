@@ -25,6 +25,7 @@ public enum CustomMonoBehaviourType
 public interface IMapMod
 {
 	public const byte RpcCallType = 1;
+	public byte MapId { get; }
 	public ShipStatus.MapType MapType { get; }
 	public bool CanPlaceCamera { get; }
 	public bool IsCustomCalculateLightRadius { get; }

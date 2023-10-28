@@ -525,37 +525,9 @@ public sealed class Zombie :
             rolePlayer.Data.IsDead ||
             rolePlayer.Data.Disconnected) { return; }
 
-        var allPlayer = GameData.Instance.AllPlayers;
-        ShipStatus ship = CachedShipStatus.Instance;
 		List<Vector2> randomPos = new List<Vector2>();
 
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-            randomPos = modMap!.GetSpawnPos(playerId);
-        }
-        else
-        {
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    Vector2 baseVec = Vector2.up;
-                    baseVec = baseVec.Rotate(
-                        (float)(playerId - 1) * (360f / (float)allPlayer.Count));
-                    Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
-                    randomPos.Add(ship.InitialSpawnCenter + offset);
-                    randomPos.Add(ship.MeetingSpawnCenter + offset);
-                    break;
-                case 4:
-                    randomPos.AddRange(GameSystem.GetAirShipRandomSpawn());
-                    break;
-                default:
-                    break;
-            }
-        }
+		GameSystem.AddSpawnPoint(randomPos, playerId);
 
         Player.RpcUncheckSnap(playerId, randomPos[
             RandomGenerator.Instance.Next(randomPos.Count)]);

@@ -66,8 +66,6 @@ public sealed class WispTorchSystem : IExtremeSystemType
 			this.GroupId = groupId;
 			this.WispId = callWispId;
 
-			byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-				ByteOptionNames.MapId);
 			int playerNum = CachedPlayerControl.AllPlayerControls.Count;
 
 			int clampedNum = Math.Clamp(num, 0, playerNum);
@@ -84,32 +82,8 @@ public sealed class WispTorchSystem : IExtremeSystemType
 				byte playerId = player.PlayerId;
 
 				List<Vector2> placePos = new List<Vector2>();
+				GameSystem.AddSpawnPoint(placePos, playerId);
 
-				if (CompatModManager.Instance.TryGetModMap(out var modMap))
-				{
-					placePos = modMap!.GetSpawnPos(playerId);
-				}
-				else
-				{
-					switch (mapId)
-					{
-						case 0:
-						case 1:
-						case 2:
-						case 3:
-							Vector2 baseVec = Vector2.up;
-							baseVec = baseVec.Rotate(
-								(float)(playerId - 1) * (360f / (float)playerNum));
-							Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(
-								0f, 0.3636f);
-							placePos.Add(ship.InitialSpawnCenter + offset);
-							placePos.Add(ship.MeetingSpawnCenter + offset);
-							break;
-						case 4:
-							placePos = GameSystem.GetAirShipRandomSpawn();
-							break;
-					}
-				}
 				var newTorch = new Torch(groupId, range, placePos[
 					RandomGenerator.Instance.Next(0, placePos.Count)]);
 				placeTorch.Add(newTorch);

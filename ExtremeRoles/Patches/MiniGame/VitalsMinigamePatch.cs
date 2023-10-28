@@ -148,15 +148,15 @@ public static class VitalsMinigameUpdatePatch
             switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
                 ByteOptionNames.MapId))
             {
-                case 0:
-                case 1:
-                    break;
                 case 2:
                     vitalObj.Add(GameSystem.PolusVital);
                     break;
                 case 4:
                     vitalObj.Add(GameSystem.AirShipVital);
                     break;
+				case 5:
+					vitalObj.Add(GameSystem.FangleVital);
+					break;
                 default:
                     break;
             }

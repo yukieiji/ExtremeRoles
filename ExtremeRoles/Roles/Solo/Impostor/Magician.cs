@@ -105,7 +105,6 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
         byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
             ByteOptionNames.MapId);
 
-        List<Vector2> additionalPos = new List<Vector2>();
 
         if (mapId == 4)
         {
@@ -119,35 +118,7 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
 
         if (this.includeSpawnPoint)
         {
-            var ship = CachedShipStatus.Instance;
-
-            if (CompatModManager.Instance.TryGetModMap(out var modMap))
-            {
-                additionalPos = modMap!.GetSpawnPos(randomPlayer);
-            }
-            else
-            {
-                switch (mapId)
-                {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                        Vector2 baseVec = Vector2.up;
-                        baseVec = baseVec.Rotate(
-                            (float)(randomPlayer - 1) * (360f / (float)allPlayer.Count));
-                        Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
-                        additionalPos.Add(ship.InitialSpawnCenter + offset);
-                        additionalPos.Add(ship.MeetingSpawnCenter + offset);
-                        break;
-                    case 4:
-                        additionalPos.AddRange(this.airShipSpawn);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            targetPos = targetPos.Concat(additionalPos);
+			GameSystem.AddSpawnPoint(targetPos, randomPlayer);
         }
 
         if (!targetPos.Any()) { return false; }

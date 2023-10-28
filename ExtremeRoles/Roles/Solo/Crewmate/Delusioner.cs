@@ -179,9 +179,6 @@ public sealed class Delusioner :
 
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
         var allPlayer = GameData.Instance.AllPlayers;
-        ShipStatus ship = CachedShipStatus.Instance;
-        byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId);
 
         if (this.includeLocalPlayer)
         {
@@ -190,36 +187,13 @@ public sealed class Delusioner :
 
         if (this.includeSpawnPoint)
         {
-
-            if (CompatModManager.Instance.TryGetModMap(out var modMap))
-            {
-                randomPos = modMap!.GetSpawnPos(teloportTarget);
-            }
-            else
-            {
-                switch (mapId)
-                {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                        Vector2 baseVec = Vector2.up;
-                        baseVec = baseVec.Rotate(
-                            (float)(teloportTarget - 1) * (360f / (float)allPlayer.Count));
-                        Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
-                        randomPos.Add(ship.InitialSpawnCenter + offset);
-                        randomPos.Add(ship.MeetingSpawnCenter + offset);
-                        break;
-                    case 4:
-                        randomPos.AddRange(this.airShipSpawn);
-                        break;
-                    default:
-                        break;
-                }
-            }
+			GameSystem.AddSpawnPoint(randomPos, teloportTarget);
         }
 
-        foreach (GameData.PlayerInfo player in allPlayer.GetFastEnumerator())
+		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId);
+
+		foreach (GameData.PlayerInfo player in allPlayer.GetFastEnumerator())
         {
             if (player == null) { continue; }
             if (!player.Disconnected &&

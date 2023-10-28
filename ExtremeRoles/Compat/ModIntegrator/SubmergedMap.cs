@@ -60,7 +60,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public const string Guid = "Submerged";
 
-	public ShipStatus.MapType MapType => (ShipStatus.MapType)5;
+	public byte MapId => 5;
+	public ShipStatus.MapType MapType => (ShipStatus.MapType)MapId;
 	public bool CanPlaceCamera => false;
 	public bool IsCustomCalculateLightRadius => true;
 
