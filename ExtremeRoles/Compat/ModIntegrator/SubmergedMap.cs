@@ -60,7 +60,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public const string Guid = "Submerged";
 
-	public byte MapId => 5;
+	public byte MapId => 6;
 	public ShipStatus.MapType MapType => (ShipStatus.MapType)MapId;
 	public bool CanPlaceCamera => false;
 	public bool IsCustomCalculateLightRadius => true;
@@ -478,12 +478,14 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MethodInfo hubManagerUpdatePatchPostfixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.HudManagerUpdatePatchPostfixPatch.Postfix(
 				hudManagerUpdatePatchInstance));
+
+		string deteriorateFunction = nameof(ExtremeRoles.Module.Interface.IAmongUs.ISystemType.Deteriorate);
 #pragma warning restore CS8604
 
 		this.submarineOxygenSystem = ClassType.First(
 			t => t.Name == "SubmarineOxygenSystem");
 		MethodInfo submarineOxygenSystemDetoriorate = AccessTools.Method(
-			submarineOxygenSystem, "Detoriorate");
+			submarineOxygenSystem, deteriorateFunction);
 		object? submarineOxygenSystemInstance = null;
 		Patches.SubmarineOxygenSystemDetorioratePatch.SetType(this.submarineOxygenSystem);
 #pragma warning disable CS8604
@@ -495,7 +497,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		Type submarineSpawnInSystem = ClassType.First(
 			t => t.Name == "SubmarineSpawnInSystem");
 		MethodInfo submarineSpawnInSystemDetoriorate = AccessTools.Method(
-			submarineSpawnInSystem, "Detoriorate");
+			submarineSpawnInSystem, deteriorateFunction);
 		object? submarineSpawnInSystemInstance = null;
 		Patches.SubmarineSpawnInSystemDetorioratePatch.SetType(submarineSpawnInSystem);
 #pragma warning disable CS8604
