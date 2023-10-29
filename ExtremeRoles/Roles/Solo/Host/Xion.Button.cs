@@ -6,7 +6,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles.Solo.Host.Button;
 
 using ExtremeRoles.Extension.Manager;
@@ -48,8 +47,8 @@ public sealed partial class Xion
                 Translation.GetString("speedDown")),
         };
 
-		int numMeetingNum = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
-		if (numMeetingNum != 0)
+		bool enableMeeting = CachedShipStatus.Instance.EmergencyButton.enabled;
+		if (enableMeeting)
 		{
 			this.funcButton.Add(
 				new XionActionButton(
@@ -82,7 +81,7 @@ public sealed partial class Xion
 
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
         GridArrange grid = hud.UseButton.transform.parent.gameObject.GetComponent<GridArrange>();
-        grid.MaxColumns = numMeetingNum == 0 ? 3 : 4;
+        grid.MaxColumns = enableMeeting ? 3 : 4;
 
 		hud.ReGridButtons();
 
