@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -50,9 +49,6 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
                 ExtremeRoleManager.NormalRole[(int)id].GetRoleOptionId(RoleCommonOption.SpawnRate));
         }
     }
-
-	public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
-		=> Enum.IsDefined(typeof(RoleGlobalOption), optionId);
 
 	public bool IsValidRoleOption(IOptionInfo option)
     {

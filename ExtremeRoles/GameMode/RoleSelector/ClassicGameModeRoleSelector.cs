@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -70,11 +69,6 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             this.useGhostRoleSpawnOption.Add(
                 role.GetRoleOptionId(RoleCommonOption.SpawnRate));
         }
-    }
-
-    public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
-    {
-        return System.Enum.IsDefined(typeof(RoleGlobalOption), optionId);
     }
 
     public bool IsValidRoleOption(IOptionInfo option)

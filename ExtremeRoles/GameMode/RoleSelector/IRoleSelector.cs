@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -42,9 +43,10 @@ public interface IRoleSelector
 
     private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
-    public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId);
+	public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
+		=> Enum.IsDefined(typeof(RoleGlobalOption), optionId);
 
-    public bool IsValidRoleOption(IOptionInfo option);
+	public bool IsValidRoleOption(IOptionInfo option);
 
     public static void CreateRoleGlobalOption()
     {
