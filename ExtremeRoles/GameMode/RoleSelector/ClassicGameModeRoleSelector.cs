@@ -12,7 +12,6 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
     public bool IsAdjustImpostorNum => false;
 
     public bool CanUseXion => true;
-    public bool EnableXion { get; private set; }
 
     public bool IsVanillaRoleToMultiAssign => false;
 
@@ -71,12 +70,6 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             this.useGhostRoleSpawnOption.Add(
                 role.GetRoleOptionId(RoleCommonOption.SpawnRate));
         }
-    }
-
-    public void Load()
-    {
-        EnableXion = OptionManager.Instance.GetValue<bool>(
-            (int)RoleGlobalOption.UseXion);
     }
 
     public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)

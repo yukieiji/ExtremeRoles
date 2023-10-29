@@ -128,7 +128,7 @@ public static class ChatControllerSendChatPatch
 {
 	public static void Prefix(ChatController __instance)
 	{
-        if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
+        if (ExtremeGameModeManager.Instance.EnableXion)
         {
 			Roles.Solo.Host.Xion.ParseCommand(
 				__instance.freeChatField.Text);

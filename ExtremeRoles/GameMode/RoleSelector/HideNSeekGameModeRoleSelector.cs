@@ -12,7 +12,6 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
     public bool IsAdjustImpostorNum => true;
 
     public bool CanUseXion => true;
-	public bool EnableXion { get; private set; }
 
 	public bool IsVanillaRoleToMultiAssign => true;
 
@@ -51,12 +50,6 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
                 ExtremeRoleManager.NormalRole[(int)id].GetRoleOptionId(RoleCommonOption.SpawnRate));
         }
     }
-
-	public void Load()
-	{
-		EnableXion = OptionManager.Instance.GetValue<bool>(
-			(int)RoleGlobalOption.UseXion);
-	}
 
 	public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
 		=> Enum.IsDefined(typeof(RoleGlobalOption), optionId);

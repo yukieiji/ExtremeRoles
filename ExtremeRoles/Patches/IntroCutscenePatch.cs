@@ -228,7 +228,7 @@ public static class IntroCutsceneOnDestroyPatch
 		var system = ExtremeSystemTypeManager.Instance;
 		CachedShipStatus.Instance.Systems.Add(ExtremeSystemTypeManager.Type, system.Cast<ISystemType>());
 
-		if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
+		if (ExtremeGameModeManager.Instance.EnableXion)
         {
             Xion.XionPlayerToGhostLayer();
             Xion.RemoveXionPlayerToAllPlayerControl();
