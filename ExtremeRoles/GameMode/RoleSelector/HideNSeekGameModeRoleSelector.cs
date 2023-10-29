@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -11,10 +11,10 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
 {
     public bool IsAdjustImpostorNum => true;
 
-    public bool CanUseXion => false;
-    public bool EnableXion => false;
+    public bool CanUseXion => true;
+	public bool EnableXion { get; private set; }
 
-    public bool IsVanillaRoleToMultiAssign => true;
+	public bool IsVanillaRoleToMultiAssign => true;
 
     public IEnumerable<ExtremeRoleId> UseNormalRoleId
     {
@@ -52,20 +52,16 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
         }
     }
 
-    public void Load() { }
+	public void Load()
+	{
+		EnableXion = OptionManager.Instance.GetValue<bool>(
+			(int)RoleGlobalOption.UseXion);
+	}
 
-    public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
-    {
-        return
-            System.Enum.IsDefined(typeof(RoleGlobalOption), optionId) &&
-            optionId switch
-            {
-                RoleGlobalOption.UseXion => false,
-                _ => true,
-            };
-    }
+	public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
+		=> Enum.IsDefined(typeof(RoleGlobalOption), optionId);
 
-    public bool IsValidRoleOption(IOptionInfo option)
+	public bool IsValidRoleOption(IOptionInfo option)
     {
         while (option.Parent != null)
         {
