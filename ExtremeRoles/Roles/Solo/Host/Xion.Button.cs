@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles.Solo.Host.Button;
 
 using ExtremeRoles.Extension.Manager;
@@ -32,7 +33,8 @@ public sealed partial class Xion
 
     public void CreateButton()
     {
-        this.funcButton = new List<XionActionButton>()
+		// デフォルトで必要なボタン
+        this.funcButton = new List<XionActionButton>(6)
         {
             new XionActionButton(
                 Loader.CreateSpriteFromResources(
@@ -44,31 +46,43 @@ public sealed partial class Xion
                     Path.XionSpeedDown),
                 this.RpcSpeedDown,
                 Translation.GetString("speedDown")),
-            new XionActionButton(
-                Loader.CreateSpriteFromResources(
-                    Path.DetectiveApprenticeEmergencyMeeting),
-                this.RpcCallMeeting,
-                Translation.GetString("emergencyMeeting")),
-            new XionActionButton(
-                Loader.CreateSpriteFromResources(
-                    Path.MaintainerRepair),
-                this.RpcRepairSabotage,
-                Translation.GetString("maintenance")),
-            new XionActionButton(
-                Loader.CreateSpriteFromResources(
-                    Path.XionMapZoomOut),
-                this.cameraZoomOut,
-                Translation.GetString("zoomOut")),
-            new XionActionButton(
-                Loader.CreateSpriteFromResources(
-                    Path.XionSpeedUp),
-                this.RpcSpeedUp,
-                Translation.GetString("speedUp")),
         };
+
+		int numMeetingNum = GameManager.Instance.LogicOptions.GetNumEmergencyMeetings();
+		if (numMeetingNum != 0)
+		{
+			this.funcButton.Add(
+				new XionActionButton(
+				Loader.CreateSpriteFromResources(
+					Path.DetectiveApprenticeEmergencyMeeting),
+				this.RpcCallMeeting,
+				Translation.GetString("emergencyMeeting")));
+		}
+
+		// 残りのボタン
+		this.funcButton.Add(
+			new XionActionButton(
+				Loader.CreateSpriteFromResources(
+					Path.MaintainerRepair),
+				this.RpcRepairSabotage,
+				Translation.GetString("maintenance")));
+		this.funcButton.Add(
+			new XionActionButton(
+				Loader.CreateSpriteFromResources(
+					Path.XionMapZoomOut),
+				this.cameraZoomOut,
+				Translation.GetString("zoomOut")));
+		this.funcButton.Add(
+			new XionActionButton(
+				Loader.CreateSpriteFromResources(
+					Path.XionSpeedUp),
+				this.RpcSpeedUp,
+				Translation.GetString("speedUp")));
+
 
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
         GridArrange grid = hud.UseButton.transform.parent.gameObject.GetComponent<GridArrange>();
-        grid.MaxColumns = 4;
+        grid.MaxColumns = numMeetingNum == 0 ? 3 : 4;
 
 		hud.ReGridButtons();
 
