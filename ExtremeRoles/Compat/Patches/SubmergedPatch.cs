@@ -17,15 +17,11 @@ using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
 
 namespace ExtremeRoles.Compat.Patches;
 
-public static class ExileControllerPatchesBeginPatchPatch
+public static class ExileControllerPatchesPatch
 {
-	public static bool Prefix()
+	public static bool ExileController_BeginPrefix(ExileController __instance, GameData.PlayerInfo exiled, bool tie)
 	{
-		return
-			!(
-				GameManager.Instance.LogicOptions.GetConfirmImpostor() ||
-				ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger
-			);
+		return ExtremeRoles.Patches.Controller.ExileControllerBeginePatch.PrefixRun(__instance, exiled, tie);
 	}
 }
 
