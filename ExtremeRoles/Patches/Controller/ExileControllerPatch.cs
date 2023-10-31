@@ -4,11 +4,14 @@ using HarmonyLib;
 
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -16,7 +19,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
-using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -43,28 +45,17 @@ public static class ExileControllerBeginePatch
         [HarmonyArgument(0)] GameData.PlayerInfo exiled,
         [HarmonyArgument(1)] bool tie)
     {
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
-
-		var state = ExtremeRolesPlugin.ShipState;
-		if (state.AssassinMeetingTrigger)
-        {
-            assassinMeetingEndBegin(__instance, state);
-            return false;
-        }
-        else if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
-        {
-            var shipOption = ExtremeGameModeManager.Instance.ShipOption;
-            confirmExil(
-                __instance, exiled, shipOption.ExilMode, shipOption.IsConfirmRole, tie);
-            return false;
-        }
-        return true;
+		if (CompatModManager.Instance.IsModMap<SubmergedIntegrator>())
+		{
+			return true;
+		}
+		else
+		{
+			return PrefixRun(__instance, exiled, tie);
+		}
     }
 
-    public static void Postfix(
-        ExileController __instance,
-        [HarmonyArgument(0)] GameData.PlayerInfo exiled,
-        [HarmonyArgument(1)] bool tie)
+    public static void Postfix(ExileController __instance)
     {
         if (!MeetingReporter.IsExist ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
@@ -87,6 +78,29 @@ public static class ExileControllerBeginePatch
         __instance.StartCoroutine(
             Effects.Bloop(0.25f, infoText.transform, 1f, 0.5f));
     }
+
+	public static bool PrefixRun(
+		ExileController __instance,
+		GameData.PlayerInfo exiled,
+		bool tie)
+	{
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+
+		var state = ExtremeRolesPlugin.ShipState;
+		if (state.AssassinMeetingTrigger)
+		{
+			assassinMeetingEndBegin(__instance, state);
+			return false;
+		}
+		else if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
+		{
+			var shipOption = ExtremeGameModeManager.Instance.ShipOption;
+			confirmExil(
+				__instance, exiled, shipOption.ExilMode, shipOption.IsConfirmRole, tie);
+			return false;
+		}
+		return true;
+	}
 
     private static void assassinMeetingEndBegin(
         ExileController instance, ExtremeShipStatus state)

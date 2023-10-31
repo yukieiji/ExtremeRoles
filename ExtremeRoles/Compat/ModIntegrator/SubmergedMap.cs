@@ -60,7 +60,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public const string Guid = "Submerged";
 
-	public byte MapId => 5;
+	public byte MapId => 6;
 	public ShipStatus.MapType MapType => (ShipStatus.MapType)MapId;
 	public bool CanPlaceCamera => false;
 	public bool IsCustomCalculateLightRadius => true;
@@ -403,8 +403,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	{
 		if (saboTask == this.RetrieveOxygenMask)
 		{
-			// TODO: Update Submarged
-			// CachedShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
+			CachedShipStatus.Instance.RpcUpdateSystem((SystemTypes)130, 64);
 			this.submarineOxygenSystemRepairDamageMethod.Invoke(
 				this.submarineOxygenSystemInstanceGetter.GetValue(null),
 				new object[] { PlayerControl.LocalPlayer, (byte)64 });
@@ -479,12 +478,14 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MethodInfo hubManagerUpdatePatchPostfixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.HudManagerUpdatePatchPostfixPatch.Postfix(
 				hudManagerUpdatePatchInstance));
+
+		string deteriorateFunction = nameof(ExtremeRoles.Module.Interface.IAmongUs.ISystemType.Deteriorate);
 #pragma warning restore CS8604
 
 		this.submarineOxygenSystem = ClassType.First(
 			t => t.Name == "SubmarineOxygenSystem");
 		MethodInfo submarineOxygenSystemDetoriorate = AccessTools.Method(
-			submarineOxygenSystem, "Detoriorate");
+			submarineOxygenSystem, deteriorateFunction);
 		object? submarineOxygenSystemInstance = null;
 		Patches.SubmarineOxygenSystemDetorioratePatch.SetType(this.submarineOxygenSystem);
 #pragma warning disable CS8604
@@ -496,7 +497,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		Type submarineSpawnInSystem = ClassType.First(
 			t => t.Name == "SubmarineSpawnInSystem");
 		MethodInfo submarineSpawnInSystemDetoriorate = AccessTools.Method(
-			submarineSpawnInSystem, "Detoriorate");
+			submarineSpawnInSystem, deteriorateFunction);
 		object? submarineSpawnInSystemInstance = null;
 		Patches.SubmarineSpawnInSystemDetorioratePatch.SetType(submarineSpawnInSystem);
 #pragma warning disable CS8604
@@ -519,13 +520,17 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			() => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
 #pragma warning restore CS8604
 
-
+		// このコメントに沿って関数調整：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
+		GameData.PlayerInfo? info = null;
+		bool tie = false;
 		Type exileControllerPatches = ClassType.First(
 			t => t.Name == "ExileControllerPatches");
-		MethodInfo exileControllerPatchesBeginPatch = AccessTools.Method(
-			exileControllerPatches, "BeginPatch");
-		MethodInfo exileControllerPatchesBeginPatchPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.ExileControllerPatchesBeginPatchPatch.Prefix());
+		MethodInfo exileControllerPatchesExileControllerBegin = AccessTools.Method(
+			exileControllerPatches, "ExileController_Begin");
+#pragma warning disable CS8604
+		MethodInfo exileControllerPatchesExileControllerBeginPatch = SymbolExtensions.GetMethodInfo(
+			() => Patches.ExileControllerPatchesPatch.ExileController_BeginPrefix(cont, info, tie));
+#pragma warning restore CS8604
 
 
 		// 会議終了時のリセット処理を呼び出せるように
@@ -559,8 +564,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
 
 		// 追放が2度発生する不具合の修正
-		harmony.Patch(exileControllerPatchesBeginPatch,
-			new HarmonyMethod(exileControllerPatchesBeginPatchPatch));
+		// このコメントに沿って修正：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
+		harmony.Patch(exileControllerPatchesExileControllerBegin,
+			new HarmonyMethod(exileControllerPatchesExileControllerBeginPatch));
 	}
 
 	private MonoBehaviour? getFloorHandler(PlayerControl player)
