@@ -520,13 +520,17 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			() => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
 #pragma warning restore CS8604
 
-
+		// このコメントに沿って関数調整：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
+		GameData.PlayerInfo? info = null;
+		bool tie = false;
 		Type exileControllerPatches = ClassType.First(
 			t => t.Name == "ExileControllerPatches");
-		MethodInfo exileControllerPatchesBeginPatch = AccessTools.Method(
-			exileControllerPatches, "BeginPatch");
-		MethodInfo exileControllerPatchesBeginPatchPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.ExileControllerPatchesBeginPatchPatch.Prefix());
+		MethodInfo exileControllerPatchesExileControllerBegin = AccessTools.Method(
+			exileControllerPatches, "ExileController_Begin");
+#pragma warning disable CS8604
+		MethodInfo exileControllerPatchesExileControllerBeginPatch = SymbolExtensions.GetMethodInfo(
+			() => Patches.ExileControllerPatchesPatch.ExileController_BeginPrefix(cont, info, tie));
+#pragma warning restore CS8604
 
 
 		// 会議終了時のリセット処理を呼び出せるように
@@ -560,8 +564,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
 
 		// 追放が2度発生する不具合の修正
-		harmony.Patch(exileControllerPatchesBeginPatch,
-			new HarmonyMethod(exileControllerPatchesBeginPatchPatch));
+		// このコメントに沿って修正：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
+		harmony.Patch(exileControllerPatchesExileControllerBegin,
+			new HarmonyMethod(exileControllerPatchesExileControllerBeginPatch));
 	}
 
 	private MonoBehaviour? getFloorHandler(PlayerControl player)
