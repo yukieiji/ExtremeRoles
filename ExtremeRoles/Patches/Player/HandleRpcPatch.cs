@@ -132,7 +132,7 @@ public static class PlayerControlHandleRpcPatch
 				break;
 			case RPCOperator.Command.SetWinPlayer:
 				int playerNum = reader.ReadInt32();
-				List<byte> winPlayerId = new List<byte>();
+				List<byte> winPlayerId = new List<byte>(playerNum);
 				for (int i = 0; i < playerNum; ++i)
 				{
 					winPlayerId.Add(reader.ReadByte());
@@ -203,7 +203,7 @@ public static class PlayerControlHandleRpcPatch
 				byte agencyTargetPlayerId = reader.ReadByte();
 				int getTaskNum = reader.ReadInt32();
 
-				List<int> getTaskId = new List<int>();
+				List<int> getTaskId = new List<int>(getTaskNum);
 
 				for (int i = 0; i < getTaskNum; ++i)
 				{
@@ -313,7 +313,7 @@ public static class PlayerControlHandleRpcPatch
 				byte newTaskSetPlayerId = reader.ReadByte();
 				int newTaskNum = reader.ReadInt32();
 
-				List<int> task = new List<int>();
+				List<int> task = new List<int>(newTaskNum);
 
 				for (int i = 0; i < newTaskNum; ++i)
 				{
