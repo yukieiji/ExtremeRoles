@@ -34,21 +34,24 @@ public static class PlayerControlShapeshiftPatch
 
 		if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup) { return false; }
 
+
 		GameData.PlayerInfo targetPlayerInfo = targetPlayer.Data;
-		GameData.PlayerOutfit newOutfit;
+
+		bool isSame = targetPlayerInfo.PlayerId == __instance.Data.PlayerId;
 
 		var outfits = __instance.Data.Outfits;
-		if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+
+		GameData.PlayerOutfit instancePlayerOutfit = outfits[PlayerOutfitType.Default];
+		GameData.PlayerOutfit newOutfit = instancePlayerOutfit;
+
+		if (!isSame)
 		{
-			newOutfit = outfits[PlayerOutfitType.Default];
+			newOutfit = targetPlayerInfo.Outfits[PlayerOutfitType.Default];
 		}
-		else
-		{
-			newOutfit = outfits[PlayerOutfitType.Default];
-		}
+
 		Action changeOutfit = delegate ()
 		{
-			if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+			if (isSame)
 			{
 				__instance.RawSetOutfit(newOutfit, PlayerOutfitType.Default);
 				__instance.logger.Info(
@@ -68,7 +71,11 @@ public static class PlayerControlShapeshiftPatch
 		if (animate)
 		{
 			__instance.shapeshifting = true;
-			__instance.MyPhysics.SetNormalizedVelocity(Vector2.zero);
+
+			var myPhysics = __instance.MyPhysics;
+			var anim = myPhysics.Animations;
+
+			myPhysics.SetNormalizedVelocity(Vector2.zero);
 			bool amOwner = __instance.AmOwner;
 			if (amOwner)
 			{
@@ -78,7 +85,7 @@ public static class PlayerControlShapeshiftPatch
 				FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim,
 				__instance.gameObject.transform);
 			roleEffectAnimation.SetMaskLayerBasedOnWhoShouldSee(amOwner);
-			roleEffectAnimation.SetMaterialColor(outfits[PlayerOutfitType.Default].ColorId);
+			roleEffectAnimation.SetMaterialColor(instancePlayerOutfit.ColorId);
 			if (__instance.cosmetics.FlipX)
 			{
 				roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
@@ -88,14 +95,14 @@ public static class PlayerControlShapeshiftPatch
 			{
 				changeOutfit.Invoke();
 				__instance.cosmetics.SetScale(
-					__instance.MyPhysics.Animations.DefaultPlayerScale,
+					anim.DefaultPlayerScale,
 					__instance.defaultCosmeticsScale);
 			};
 
 			roleEffectAnimation.MidAnimCB = changeAction;
 
-			__instance.StartCoroutine(__instance.ScalePlayer(
-				__instance.MyPhysics.Animations.ShapeshiftScale, 0.25f));
+			__instance.StartCoroutine(
+				__instance.ScalePlayer(anim.ShapeshiftScale, 0.25f));
 
 			Action roleAnimation = () =>
 			{

@@ -20,19 +20,13 @@ public static class PlayerControlSetKillTimernPatch
 		var roles = ExtremeRoleManager.GameRole;
 		if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
 
-		var role = roles[__instance.PlayerId];
-
 		float killCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
 			FloatOptionNames.KillCooldown);
-		if (killCool <= 0f) { return false; }
-		float maxTime = killCool;
+		var role = roles[__instance.PlayerId];
 
-		if (!role.CanKill()) { return false; }
+		if (killCool <= 0f || !role.CanKill()) { return false; }
 
-		if (role.TryGetKillCool(out float otherKillCool))
-		{
-			maxTime = otherKillCool;
-		}
+		float maxTime = role.TryGetKillCool(out float otherKillCool) ? otherKillCool : killCool;
 
 		__instance.killTimer = Mathf.Clamp(
 			time, 0f, maxTime);

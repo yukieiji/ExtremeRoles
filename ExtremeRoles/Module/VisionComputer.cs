@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Module.RoleAssign;
@@ -13,6 +11,7 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Extension.Il2Cpp;
 
 namespace ExtremeRoles.Module;
 
@@ -82,25 +81,12 @@ public class VisionComputer
 			default:
 				break;
 		}
+
 		bool isRequireCustomVision =
 			CompatModManager.Instance.TryGetModMap(out var modMap) &&
 			modMap!.IsCustomCalculateLightRadius;
 
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
-		{
-			return checkNormalOrCustomCalculateLightRadius(
-				modMap, isRequireCustomVision, playerInfo, ref vision);
-		}
-		var systems = shipStatus.Systems;
-		ISystemType electricalSystem = systems.ContainsKey(electrical) ? systems[electrical] : null;
-		if (electricalSystem == null)
-		{
-			return checkNormalOrCustomCalculateLightRadius(
-				modMap, isRequireCustomVision, playerInfo, ref vision);
-		}
-
-		SwitchSystem switchSystem = electricalSystem.TryCast<SwitchSystem>();
-		if (switchSystem == null)
 		{
 			return checkNormalOrCustomCalculateLightRadius(
 				modMap, isRequireCustomVision, playerInfo, ref vision);
@@ -133,12 +119,17 @@ public class VisionComputer
 			return false;
 		}
 
-		float num = (float)switchSystem.Value / 255f;
-		float switchVisionMulti = Mathf.Lerp(
-			shipStatus.MinLightRadius,
-			shipStatus.MaxLightRadius, num);
+		float value =
+			shipStatus.Systems.TryGetValue(electrical, out var electricalSystem) &&
+			electricalSystem.IsTryCast<SwitchSystem>(out var switchSystem) ? switchSystem!.Value : 1;
 
-		float baseVision = shipStatus.MaxLightRadius;
+		float maxLightRadius = shipStatus.MaxLightRadius;
+		float minLightRadius = shipStatus.MinLightRadius;
+
+		float switchVisionMulti = Mathf.Lerp(
+			minLightRadius, maxLightRadius, value);
+
+		float baseVision = maxLightRadius;
 
 		if (playerInfo == null || playerInfo.IsDead) // IsDead
 		{

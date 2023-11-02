@@ -33,22 +33,18 @@ public static class MeetingIntroAnimationInitPatch
     public static void Postfix(
         MeetingIntroAnimation __instance)
     {
-
 		__instance.ProtectedRecently.SetActive(false);
 		SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
 
 		bool someoneWasProtected = false;
 		foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
 		{
-			if (pc == null) { continue; }
+			if (pc == null || !pc.protectedByGuardianThisRound) { continue; }
 
-			if (pc.protectedByGuardianThisRound)
+			pc.protectedByGuardianThisRound = false;
+			if (pc.Data != null && !pc.Data.IsDead)
 			{
-				pc.protectedByGuardianThisRound = false;
-				if (pc.Data != null && !pc.Data.IsDead)
-				{
-					someoneWasProtected = true;
-				}
+				someoneWasProtected = true;
 			}
 		}
 
