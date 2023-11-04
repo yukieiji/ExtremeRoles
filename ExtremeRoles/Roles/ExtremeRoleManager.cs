@@ -249,6 +249,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Slime          , new Slime()},
             {(int)ExtremeRoleId.Zombie         , new Zombie()},
 			{(int)ExtremeRoleId.Thief          , new Thief()},
+			{(int)ExtremeRoleId.Crewshroom     , new Crewshroom()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},
