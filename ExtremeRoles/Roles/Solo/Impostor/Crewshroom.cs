@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.Module;
+﻿using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -38,18 +39,23 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 
 		if (role.prefab == null)
 		{
-			AssetReference fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
+			if (!CachedShipStatus.Instance.IsTryCast<FungleShipStatus>(out var ship))
+			{
+				var fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
 
-			if (!fungleAsset.IsValid()) { return; }
+				if (!fungleAsset.IsValid()) { return; }
 
-			FungleShipStatus obj = fungleAsset
-				.OperationHandle
-				.Result
-				.Cast<FungleShipStatus>();
-			role.prefab = obj.GetComponentInChildren<Mushroom>();
+				ship = fungleAsset
+					.OperationHandle
+					.Result
+					.Cast<GameObject>()
+					.GetComponent<FungleShipStatus>();
+			}
+			role.prefab = ship!.GetComponentInChildren<Mushroom>();
 		}
 
 		var newMushroom = Object.Instantiate(role.prefab, CachedShipStatus.Instance.transform);
+		newMushroom.name = "NewMushroom";
 		newMushroom.transform.localPosition = pos;
 	}
 
