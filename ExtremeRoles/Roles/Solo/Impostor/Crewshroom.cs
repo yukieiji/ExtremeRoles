@@ -6,7 +6,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -16,6 +15,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 {
 	public ExtremeAbilityButton Button { get; set; }
 	private Mushroom? prefab = null;
+	private static uint id = 0;
 
 #pragma warning disable CS8618
 	public Crewshroom() : base(
@@ -55,8 +55,9 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 		}
 
 		var newMushroom = Object.Instantiate(role.prefab, CachedShipStatus.Instance.transform);
-		newMushroom.name = "NewMushroom";
+		newMushroom.name = $"NewMushroom_{id}";
 		newMushroom.transform.localPosition = pos;
+		++id;
 	}
 
 	public void CreateAbility()
