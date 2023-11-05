@@ -3,7 +3,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using System;
 
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -35,23 +34,28 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 	}
 	private static void setMushroom(Crewshroom role, Vector2 pos)
 	{
-		if (role.prefab != null)
+		if (CachedShipStatus.Instance == null) { return; }
+
+		if (role.prefab == null)
 		{
 			AssetReference fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
 
 			if (!fungleAsset.IsValid()) { return; }
 
-			GameObject obj = fungleAsset
+			FungleShipStatus obj = fungleAsset
 				.OperationHandle
 				.Result
-				.Cast<GameObject>();
+				.Cast<FungleShipStatus>();
 			role.prefab = obj.GetComponentInChildren<Mushroom>();
 		}
+
+		var newMushroom = Object.Instantiate(role.prefab, CachedShipStatus.Instance.transform);
+		newMushroom.transform.localPosition = pos;
 	}
 
 	public void CreateAbility()
 	{
-		this.CreateAbilityCountButton(
+		this.CreateNormalAbilityButton(
 			"crack",
 			Loader.CreateSpriteFromResources(
 			   Path.CrackerCrack));
