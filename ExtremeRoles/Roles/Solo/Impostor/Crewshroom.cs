@@ -55,7 +55,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 		}
 
 		var newMushroom = Object.Instantiate(role.prefab, CachedShipStatus.Instance.transform);
-		newMushroom.name = $"NewMushroom_{id}";
+		newMushroom.name = $"Crewshroom_Mushroom_{id}";
 		newMushroom.transform.localPosition = pos;
 		++id;
 	}
