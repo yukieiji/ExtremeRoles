@@ -86,7 +86,7 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 	{
 		if (MeetingHud.Instance != null ||
 			AmongUsClient.Instance.IsGameOver ||
-			!modMushroom.TryGetValue(id, out var mushroom) ||
+			!this.modMushroom.TryGetValue(id, out var mushroom) ||
 			mushroom == null)
 		{
 			return;
@@ -98,7 +98,7 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 	{
 		if (CachedShipStatus.Instance == null) { return; }
 
-		if (prefab == null)
+		if (this.prefab == null)
 		{
 			if (!CachedShipStatus.Instance.IsTryCast<FungleShipStatus>(out var ship))
 			{
@@ -116,9 +116,10 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 		}
 
 		var newMushroom = Object.Instantiate(prefab, CachedShipStatus.Instance.transform);
-		newMushroom.name = $"{MushroomName}_{id}";
-		newMushroom.transform.localPosition = pos;
-		modMushroom.Add(id, newMushroom);
-		++id;
+		newMushroom.name = $"{MushroomName}_{this.id}";
+		newMushroom.transform.position = pos;
+		newMushroom.origPosition = pos;
+		this.modMushroom.Add(this.id, newMushroom);
+		++this.id;
 	}
 }
