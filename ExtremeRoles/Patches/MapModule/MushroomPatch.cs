@@ -15,10 +15,10 @@ public static class MushroomStartSporeTriggerPatch
 		if (name.StartsWith(ModedMushroomSystem.MushroomName)) { return true; }
 
 		string idStr = name.Split('_')[^1];
-		if (ExtremeSystemTypeManager.Instance.ExistSystem(ModedMushroomSystem.Type) ||
+		if (!ExtremeSystemTypeManager.Instance.ExistSystem(ModedMushroomSystem.Type) ||
 			!int.TryParse(idStr, out int id))
 		{
-			return true;
+			return false;
 		}
 
 		__instance.mushroomCollider.enabled = false;

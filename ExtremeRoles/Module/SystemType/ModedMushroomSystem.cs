@@ -84,7 +84,7 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 
 	private void sporeModMushroom(int id)
 	{
-		if (MeetingHud.Instance == null ||
+		if (MeetingHud.Instance != null ||
 			AmongUsClient.Instance.IsGameOver ||
 			!modMushroom.TryGetValue(id, out var mushroom) ||
 			mushroom == null)
