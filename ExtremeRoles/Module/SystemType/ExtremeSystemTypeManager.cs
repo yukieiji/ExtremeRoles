@@ -21,6 +21,7 @@ namespace ExtremeRoles.Module.SystemType;
 public enum ExtremeSystemType : byte
 {
 	MeetingTimeOffset,
+	ModedModedMushroom,
 
 	WispTorch,
 
@@ -108,6 +109,8 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 		writerForReader.Recycle();
 	}
+
+	public bool ExistSystem(ExtremeSystemType type) => this.systems.ContainsKey(type);
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{

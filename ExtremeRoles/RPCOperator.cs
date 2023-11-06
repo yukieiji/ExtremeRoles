@@ -82,7 +82,6 @@ public static class RPCOperator
         SlimeAbility,
         ZombieRpc,
 		ThiefAddDeadbodyEffect,
-		CrewshroomSetMushroom,
 
 		// ニュートラル
 		AliceShipBroken,
