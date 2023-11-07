@@ -16,16 +16,12 @@ namespace ExtremeRoles.Patches.Player;
 #nullable enable
 
 // HotFix : 死人のペットが普通に見えるバグ修正、もうペットだけ消す
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Die))]
+[HarmonyPatch(typeof(PetBehaviour), nameof(PetBehaviour.SetMourning))]
 public static class PlayerControlDiePatch
 {
-	public static void Postfix(
-		PlayerControl __instance)
+	public static void Postfix(PetBehaviour __instance)
 	{
-		if (__instance.cosmetics.currentPet != null)
-		{
-			__instance.cosmetics.currentPet.gameObject.SetActive(false);
-		}
+		__instance.gameObject.SetActive(false);
 	}
 }
 
@@ -38,7 +34,8 @@ public static class PlayerControlRevivePatch
 		ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
 
 		// 消したペットをもとに戻しておく
-		if (__instance.cosmetics.currentPet != null)
+		if (!__instance.Data.IsDead &&
+			__instance.cosmetics.currentPet != null)
 		{
 			__instance.cosmetics.currentPet.gameObject.SetActive(true);
 			__instance.cosmetics.currentPet.SetIdle();
