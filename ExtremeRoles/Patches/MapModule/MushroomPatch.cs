@@ -1,23 +1,32 @@
 ﻿using ExtremeRoles.Module.SystemType;
-
+using ExtremeRoles.Performance;
 using HarmonyLib;
 
 namespace ExtremeRoles.Patches.MapModule;
 
+#nullable enable
 
-[HarmonyPatch(typeof(Mushroom), nameof(Mushroom.StartSporeTrigger))]
+[HarmonyPatch(typeof(Mushroom), nameof(Mushroom.FixedUpdate))]
 public static class MushroomStartSporeTriggerPatch
 {
 	public static bool Prefix(Mushroom __instance)
 	{
 		string name = __instance.name;
 
-		Helper.Logging.Debug(name);
-
 		if (!name.StartsWith(ModedMushroomSystem.MushroomName)) { return true; }
 
+
+		PlayerControl? localPlayer = CachedPlayerControl.LocalPlayer;
+
+		if (!__instance.mushroomCollider.enabled ||
+			localPlayer == null ||
+			!__instance.mushroomCollider.IsTouching(localPlayer.Collider))
+		{
+			return false;
+		}
+
 		string idStr = name.Split('_')[^1];
-		Helper.Logging.Debug(idStr);
+
 		if (!ExtremeSystemTypeManager.Instance.ExistSystem(ModedMushroomSystem.Type) ||
 			!int.TryParse(idStr, out int id))
 		{
