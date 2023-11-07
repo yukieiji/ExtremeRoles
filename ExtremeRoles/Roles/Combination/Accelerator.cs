@@ -43,7 +43,7 @@ public sealed class Accelerator :
 
     private string roleNamePrefix;
 
-	private GameObject? panelBody;
+	private AutoTransformer? transformer;
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
@@ -72,6 +72,18 @@ public sealed class Accelerator :
 
         rolePlayer.NetTransform.SnapTo(new Vector2(x, y));
 
+		switch (rpcId)
+		{
+			case AcceleratorRpc.Setup:
+				setupPanel(role, rolePlayer);
+				break;
+			case AcceleratorRpc.End:
+				endPanel(role);
+				break;
+			default:
+				break;
+		}
+
     }
 
     private static void setupPanel(Accelerator accelerator, PlayerControl player)
@@ -83,13 +95,29 @@ public sealed class Accelerator :
 		var obj = new GameObject("accelerate_panel");
 		obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
-		var trans = obj.AddComponent<AutoTransformer>();
-		trans.Initialize(obj.transform, player.transform);
+		var rend = obj.AddComponent<SpriteRenderer>();
+		rend.sprite = Loader.CreateSpriteFromResources(
+			 Path.MoverMove);
+
+		accelerator.transformer = obj.AddComponent<AutoTransformer>();
+		accelerator.transformer.Initialize(obj.transform, player.transform);
     }
 
-    private static void removeConsole(Accelerator accelerator, PlayerControl player)
+    private static void endPanel(Accelerator accelerator)
     {
+		if (accelerator.transformer == null) { return; }
+
 		accelerator.EnableUseButton = true;
+
+		GameObject obj = accelerator.transformer.gameObject;
+		Object.Destroy(accelerator.transformer);
+
+		accelerator.transformer = null;
+
+		// panel追加;
+		var panel = obj.AddComponent<AcceleratorPanel>();
+		panel.AddSpeed = 1.0f;
+		panel.MaxSpeed = 20.0f;
     }
 
     public void CreateAbility()
@@ -123,18 +151,21 @@ public sealed class Accelerator :
 
     public bool UseAbility()
     {
-
+		rpcAcceleratorPanelOps(CachedPlayerControl.LocalPlayer, false);
 		return true;
 	}
 
     public void CleanUp()
     {
-    }
+		rpcAcceleratorPanelOps(CachedPlayerControl.LocalPlayer, true);
+	}
 
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-    }
+		if (this.transformer == null) { return; }
+		endPanel(this);
+	}
 
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
@@ -160,16 +191,30 @@ public sealed class Accelerator :
 
     public void AllReset(PlayerControl rolePlayer)
     {
+		if (this.transformer == null) { return; }
+		endPanel(this);
     }
 
-	private static void RpcAcceleratorPanelOps(Vector2 pos, bool isEnd)
+	private void rpcAcceleratorPanelOps(PlayerControl playerControl, bool isEnd)
 	{
+		Vector2 pos = playerControl.GetTruePosition();
+
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.AcceleratorAbility))
 		{
 			caller.WriteByte((byte)(isEnd ? AcceleratorRpc.Setup : AcceleratorRpc.End));
+			caller.WriteByte(playerControl.PlayerId);
 			caller.WriteFloat(pos.x);
 			caller.WriteFloat(pos.y);
+		}
+
+		if (isEnd)
+		{
+			endPanel(this);
+		}
+		else
+		{
+			setupPanel(this, playerControl);
 		}
 	}
 }
