@@ -8,6 +8,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -42,6 +43,8 @@ public sealed class Accelerator :
 
     private string roleNamePrefix;
 
+	private GameObject? panelBody;
+
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
 
@@ -71,11 +74,17 @@ public sealed class Accelerator :
 
     }
 
-    private static void setupPanelConsole(Accelerator accelerator, PlayerControl player)
+    private static void setupPanel(Accelerator accelerator, PlayerControl player)
     {
 		accelerator.EnableUseButton = false;
 
+		Vector2 pos = player.GetTruePosition();
+
 		var obj = new GameObject("accelerate_panel");
+		obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+
+		var trans = obj.AddComponent<AutoTransformer>();
+		trans.Initialize(obj.transform, player.transform);
     }
 
     private static void removeConsole(Accelerator accelerator, PlayerControl player)
