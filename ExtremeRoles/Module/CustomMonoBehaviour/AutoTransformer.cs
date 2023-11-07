@@ -11,7 +11,7 @@ public sealed class AutoTransformer : MonoBehaviour
 	private Transform? start;
 	private Transform? end;
 
-	private float timer;
+	private float timer = 0.0f;
 
 	public AutoTransformer(IntPtr ptr) : base(ptr) { }
 
@@ -30,13 +30,13 @@ public sealed class AutoTransformer : MonoBehaviour
 		if (this.timer < 0.15f) { return; }
 
 		// 始点と終点の中間点を求める
-		Vector2 middlePoint = (start.position + end.position) / 2f;
+		Vector2 middlePoint = (this.start.position + this.end.position) / 2f;
 
 		// 対象オブジェクトを中間点に配置する
 		base.transform.position = middlePoint;
 
 		// 始点から終点への方向ベクトルを求める
-		Vector3 direction = end.position - start.position;
+		Vector3 direction = this.end.position - this.start.position;
 
 		// オブジェクトの拡大率を設定する（始点から終点までの距離に基づく）
 		float scaleFactor = direction.magnitude;

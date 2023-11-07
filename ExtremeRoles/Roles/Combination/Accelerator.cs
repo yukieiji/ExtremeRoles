@@ -93,6 +93,7 @@ public sealed class Accelerator :
 		Vector2 pos = player.GetTruePosition();
 
 		var obj = new GameObject("accelerate_panel");
+		obj.AddComponent<RectTransform>();
 		obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 
 		var rend = obj.AddComponent<SpriteRenderer>();
@@ -110,15 +111,15 @@ public sealed class Accelerator :
 		accelerator.EnableUseButton = true;
 
 		GameObject obj = accelerator.transformer.gameObject;
+		accelerator.transformer = null;
 		Object.Destroy(accelerator.transformer);
 
-		accelerator.transformer = null;
 
 		// panel追加;
 		var panel = obj.AddComponent<AcceleratorPanel>();
 		panel.AddSpeed = 1.0f;
 		panel.MaxSpeed = 20.0f;
-    }
+	}
 
     public void CreateAbility()
     {
