@@ -22,8 +22,7 @@ public static class PlayerControlDiePatch
 	public static void Postfix(
 		PlayerControl __instance)
 	{
-		if (__instance.Data.IsDead &&
-			__instance.cosmetics.CurrentPet != null)
+		if (__instance.cosmetics.currentPet != null)
 		{
 			__instance.cosmetics.currentPet.gameObject.SetActive(false);
 		}
@@ -39,8 +38,7 @@ public static class PlayerControlRevivePatch
 		ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
 
 		// 消したペットをもとに戻しておく
-		if (!__instance.Data.IsDead &&
-			__instance.cosmetics.CurrentPet != null)
+		if (__instance.cosmetics.currentPet != null)
 		{
 			__instance.cosmetics.currentPet.gameObject.SetActive(true);
 			__instance.cosmetics.currentPet.SetIdle();
