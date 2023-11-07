@@ -53,7 +53,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	public static SystemTypes Type => (SystemTypes)60;
+	public const SystemTypes Type = (SystemTypes)60;
 
 	public bool IsDirty { get; private set; } = false;
 
