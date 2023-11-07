@@ -16,6 +16,11 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 {
 	public ExtremeAbilityButton Button { get; set; }
 
+	public enum Option
+	{
+		DelaySecond
+	}
+
 #pragma warning disable CS8618
 	public Crewshroom() : base(
 		ExtremeRoleId.Crewshroom,
@@ -58,14 +63,18 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 	protected override void CreateSpecificOption(
 		IOptionInfo parentOps)
 	{
-		this.CreateCommonAbilityOption(parentOps);
+		this.CreateAbilityCountOption(parentOps, 3, 50);
+		CreateFloatOption(Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, parentOps, format:OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
 	{
 		this.RoleAbilityInit();
+
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ModedMushroomSystem.Type,
-			new ModedMushroomSystem());
+			new ModedMushroomSystem(
+				OptionManager.Instance.GetValue<float>(
+					GetRoleOptionId(Option.DelaySecond))));
 	}
 }

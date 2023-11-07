@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 #nullable enable
 
@@ -19,6 +20,8 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 
 	private Mushroom? prefab;
 	private readonly Dictionary<int, Mushroom> modMushroom = new Dictionary<int, Mushroom>();
+
+	private readonly float delaySecond;
 	private int id = 0;
 
 	public enum Ops
@@ -28,6 +31,11 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 	}
 
 	public bool IsDirty => false;
+
+	public ModedMushroomSystem(float delaySecond)
+	{
+		this.delaySecond = delaySecond;
+	}
 
 	public static void RpcSetModMushroom(Vector2 pos)
 	{
@@ -119,6 +127,10 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 		newMushroom.name = $"{MushroomName}_{this.id}";
 		newMushroom.transform.position = pos;
 		newMushroom.origPosition = pos;
+
+		var enabler = newMushroom.gameObject.AddComponent<DelayableEnabler>();
+		enabler.Initialize(newMushroom, this.delaySecond);
+
 		this.modMushroom.Add(this.id, newMushroom);
 		++this.id;
 	}
