@@ -8,9 +8,9 @@ using HarmonyLib;
 
 using BepInEx;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Helper;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factories;
@@ -629,15 +629,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (transformValue == null ||
 			transformValue is not Transform transform) { return; }
 
-		AssetReference airshipAsset = AmongUsClient.Instance.ShipPrefabs[4];
+		// AirShip持ってくる
+		ShipStatus ship = GameSystem.GetShipObj(4);
 
-		if (!airshipAsset.IsValid()) { return; }
-
-		ShipStatus ship = airshipAsset
-			.OperationHandle
-			.Result
-			.Cast<GameObject>()
-			.GetComponent<ShipStatus>();
 		Minigame? doorMinigame = ship.AllDoors
 			.Select(x =>
 			{

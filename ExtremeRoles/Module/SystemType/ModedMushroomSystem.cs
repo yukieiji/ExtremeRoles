@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -36,26 +36,9 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 	{
 		this.delaySecond = delaySecond;
 
-		if (!CachedShipStatus.Instance.IsTryCast<FungleShipStatus>(out var ship))
-		{
-			var fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
-
-			if (fungleAsset.IsValid())
-			{
-				ship = fungleAsset
-					.OperationHandle
-					.Result
-					.Cast<GameObject>()
-					.GetComponent<FungleShipStatus>();
-			}
-			else
-			{
-				var asset = fungleAsset.LoadAsset<GameObject>();
-				ship = asset.WaitForCompletion().GetComponent<FungleShipStatus>();
-			}
-
-		}
-		this.prefab = ship!.GetComponentInChildren<Mushroom>();
+		// ファングル持ってくる
+		ShipStatus ship = GameSystem.GetShipObj(5);
+		this.prefab = ship.GetComponentInChildren<Mushroom>();
 	}
 
 	public static void RpcSetModMushroom(Vector2 pos)

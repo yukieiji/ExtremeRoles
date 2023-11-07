@@ -205,6 +205,43 @@ public static class GameSystem
 		}
 	}
 
+	public static ShipStatus GetShipObj(byte mapId)
+	{
+		byte optionMapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId);
+
+		if (optionMapId == mapId)
+		{
+			return CachedShipStatus.Instance;
+		}
+
+		if (mapId > 5)
+		{
+			throw new ArgumentException("mapId is 5 over");
+		}
+
+		var fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
+
+		GameObject obj;
+
+		if (fungleAsset.IsValid())
+		{
+			obj = fungleAsset
+				.OperationHandle
+				.Result
+				.Cast<GameObject>();
+		}
+		else
+		{
+			var asset = fungleAsset.LoadAsset<GameObject>();
+			obj = asset.WaitForCompletion();
+		}
+
+		ShipStatus result = obj.GetComponent<ShipStatus>();
+
+		return result;
+	}
+
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
 		DeadBody[] array = UnityObject.FindObjectsOfType<DeadBody>();
