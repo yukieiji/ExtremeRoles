@@ -18,7 +18,7 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 
 	public const string MushroomName = "ModdedMushroom";
 
-	private Mushroom? prefab;
+	private Mushroom prefab;
 	private readonly Dictionary<int, Mushroom> modMushroom = new Dictionary<int, Mushroom>();
 
 	private readonly float delaySecond;
@@ -35,6 +35,27 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 	public ModedMushroomSystem(float delaySecond)
 	{
 		this.delaySecond = delaySecond;
+
+		if (!CachedShipStatus.Instance.IsTryCast<FungleShipStatus>(out var ship))
+		{
+			var fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
+
+			if (fungleAsset.IsValid())
+			{
+				ship = fungleAsset
+					.OperationHandle
+					.Result
+					.Cast<GameObject>()
+					.GetComponent<FungleShipStatus>();
+			}
+			else
+			{
+				var asset = fungleAsset.LoadAsset<GameObject>();
+				ship = asset.WaitForCompletion().GetComponent<FungleShipStatus>();
+			}
+
+		}
+		this.prefab = ship!.GetComponentInChildren<Mushroom>();
 	}
 
 	public static void RpcSetModMushroom(Vector2 pos)
@@ -106,27 +127,13 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 	{
 		if (CachedShipStatus.Instance == null) { return; }
 
-		if (this.prefab == null)
-		{
-			if (!CachedShipStatus.Instance.IsTryCast<FungleShipStatus>(out var ship))
-			{
-				var fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
-
-				if (!fungleAsset.IsValid()) { return; }
-
-				ship = fungleAsset
-					.OperationHandle
-					.Result
-					.Cast<GameObject>()
-					.GetComponent<FungleShipStatus>();
-			}
-			prefab = ship!.GetComponentInChildren<Mushroom>();
-		}
-
 		var newMushroom = Object.Instantiate(prefab, CachedShipStatus.Instance.transform);
 		newMushroom.name = $"{MushroomName}_{this.id}";
-		newMushroom.transform.position = pos;
-		newMushroom.origPosition = pos;
+
+		var setPos = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+
+		newMushroom.transform.position = setPos;
+		newMushroom.origPosition = setPos;
 
 		var enabler = newMushroom.gameObject.AddComponent<DelayableEnabler>();
 		enabler.Initialize(newMushroom, this.delaySecond);
