@@ -21,7 +21,7 @@ namespace ExtremeRoles.Module.SystemType;
 public enum ExtremeSystemType : byte
 {
 	MeetingTimeOffset,
-	ModedModedMushroom,
+	ModedMushroom,
 
 	WispTorch,
 

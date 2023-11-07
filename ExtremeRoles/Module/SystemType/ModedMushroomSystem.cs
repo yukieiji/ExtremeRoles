@@ -14,7 +14,7 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class ModedMushroomSystem : IExtremeSystemType
 {
-	public const ExtremeSystemType Type = ExtremeSystemType.ModedModedMushroom;
+	public const ExtremeSystemType Type = ExtremeSystemType.ModedMushroom;
 
 	public const string MushroomName = "ModdedMushroom";
 
