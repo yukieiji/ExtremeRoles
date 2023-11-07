@@ -281,7 +281,8 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
             {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
             {(byte)CombinationRoleType.Mover          , new MoverManager()},
-            {(byte)CombinationRoleType.Traitor        , new TraitorManager()},
+			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
+			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         };
 
     public static Dictionary<

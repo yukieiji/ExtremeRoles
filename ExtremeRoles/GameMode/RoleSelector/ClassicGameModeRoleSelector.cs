@@ -170,8 +170,9 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             CombinationRoleType.Supporter,
             CombinationRoleType.Guesser,
             CombinationRoleType.Mover,
+			CombinationRoleType.Accelerator,
 
-            CombinationRoleType.Traitor,
+			CombinationRoleType.Traitor,
         };
 
     private ExtremeGhostRoleId[] getUseGhostRoleId() =>
