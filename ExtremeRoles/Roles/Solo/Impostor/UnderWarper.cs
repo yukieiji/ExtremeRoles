@@ -38,8 +38,8 @@ public sealed class UnderWarper :
     }
 
 
-    public float VentUseRange => this.range;
-    public bool IsNoVentAnime => this.isNoVentAnime;
+    public float VentUseRange { get; private set; }
+    public bool IsNoVentAnime { get; private set; }
 
     public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
@@ -51,10 +51,7 @@ public sealed class UnderWarper :
     private bool isVentLink;
     private int ventLinkKillCout;
 
-    private bool isNoVentAnime;
     private int noVentAnimeKillCout;
-
-    private float range;
 
     private bool isAwakedHasOtherVision;
     private bool isAwakedHasOtherKillCool;
@@ -202,10 +199,10 @@ public sealed class UnderWarper :
             this.isVentLink = true;
 			GameSystem.RelinkVent();
 		}
-        if (!this.isNoVentAnime &&
+        if (!this.IsNoVentAnime &&
             this.killCount >= this.noVentAnimeKillCout)
         {
-            this.isNoVentAnime = true;
+            this.IsNoVentAnime = true;
         }
     }
 
@@ -296,7 +293,7 @@ public sealed class UnderWarper :
     {
         if (!this.isAwake ||
             !this.isVentLink ||
-            !this.isNoVentAnime)
+            !this.IsNoVentAnime)
         {
             ++this.killCount;
         }
@@ -335,7 +332,7 @@ public sealed class UnderWarper :
         this.noVentAnimeKillCout = allOpt.GetValue<int>(
             GetRoleOptionId(UnderWarperOption.NoVentAnimeKillCout));
 
-        this.range = allOpt.GetValue<float>(
+        this.VentUseRange = allOpt.GetValue<float>(
             GetRoleOptionId(UnderWarperOption.Range));
 
         this.isAwakedHasOtherVision = false;
@@ -374,7 +371,7 @@ public sealed class UnderWarper :
 
         if (this.noVentAnimeKillCout <= 0)
         {
-            this.isNoVentAnime = true;
+            this.IsNoVentAnime = true;
         }
     }
 }
