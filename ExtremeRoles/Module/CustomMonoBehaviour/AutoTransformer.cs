@@ -45,8 +45,12 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 
 		// 指定した方向に回転
 		var directionNorm = direction.normalized;
-		float rot = Mathf.Atan2(directionNorm.x, directionNorm.y) * Mathf.Rad2Deg;
-		this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rot);
+		float num = Mathf.Atan2(directionNorm.y, directionNorm.x);
+		if (this.transform.lossyScale.x < 0f)
+		{
+			num += 3.1415927f;
+		}
+		this.transform.rotation = Quaternion.Euler(0f, 0f, num * 57.29578f);
 
 		this.timer = 0.0f;
 	}
