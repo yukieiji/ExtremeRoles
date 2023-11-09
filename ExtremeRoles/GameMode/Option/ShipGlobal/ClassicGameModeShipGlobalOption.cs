@@ -25,7 +25,9 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool DisableVent { get; private set; }
     public bool EngineerUseImpostorVent { get; private set; }
     public bool CanKillVentInPlayer { get; private set; }
-    public bool IsAllowParallelMedbayScan { get; private set; }
+	public VentAnimationMode VentAnimationMode { get; private set; }
+
+	public bool IsAllowParallelMedbayScan { get; private set; }
     public bool IsAutoSelectRandomSpawn { get; private set; }
 
     public AdminOption Admin { get; private set; }

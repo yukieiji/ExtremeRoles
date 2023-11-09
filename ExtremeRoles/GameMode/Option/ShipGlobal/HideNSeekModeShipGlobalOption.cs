@@ -14,7 +14,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public bool IsRandomMap { get; private set; }
 
     public bool DisableVent { get; private set; }
-    public bool IsAllowParallelMedbayScan { get; private set; }
+	public VentAnimationMode VentAnimationMode { get; private set; }
+
+	public bool IsAllowParallelMedbayScan { get; private set; }
     public bool IsSameNeutralSameWin { get; private set; }
     public bool DisableNeutralSpecialForceEnd { get; private set; }
 
@@ -48,6 +50,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 	private HashSet<GlobalOption> useOption = new HashSet<GlobalOption>()
     {
         GlobalOption.DisableVent,
+		GlobalOption.VentAnimationModeInVison,
 
         GlobalOption.IsRemoveAdmin,
         GlobalOption.AirShipEnableAdmin,

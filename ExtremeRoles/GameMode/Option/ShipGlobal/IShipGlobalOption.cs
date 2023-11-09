@@ -16,10 +16,13 @@ public enum GlobalOption : int
     DisableSelfVote,
     ConfirmExilMode,
     IsConfirmRole,
+
     DisableVent,
     EngineerUseImpostorVent,
     CanKillVentInPlayer,
-    ParallelMedBayScans,
+	VentAnimationModeInVison,
+
+	ParallelMedBayScans,
     IsAutoSelectRandomSpawn,
 
     IsRemoveAdmin,
@@ -57,6 +60,13 @@ public enum ConfirmExilMode
     AllTeam
 }
 
+public enum VentAnimationMode
+{
+	All,
+	DonotWallHack,
+	DonotVison,
+}
+
 public interface IShipGlobalOption
 {
     public bool IsEnableImpostorVent { get; }
@@ -74,14 +84,17 @@ public interface IShipGlobalOption
     public bool IsBlockSkipInMeeting { get; }
     public bool DisableSelfVote { get; }
 
-    public ConfirmExilMode ExilMode { get; }
+	public ConfirmExilMode ExilMode { get; }
     public bool IsConfirmRole { get; }
 
     public bool DisableVent { get; }
     public bool EngineerUseImpostorVent { get; }
     public bool CanKillVentInPlayer { get; }
     public bool IsAllowParallelMedbayScan { get; }
-    public bool IsAutoSelectRandomSpawn { get; }
+	public VentAnimationMode VentAnimationMode { get; }
+
+
+	public bool IsAutoSelectRandomSpawn { get; }
 
     public AdminOption Admin { get; }
     public SecurityOption Security { get; }
@@ -125,6 +138,7 @@ public interface IShipGlobalOption
         var ventOption = CreateBoolOption(GlobalOption.DisableVent, false, isHeader: true);
 		CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
 		CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
+		CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption);
 
 		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
 		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false);
