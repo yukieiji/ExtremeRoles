@@ -64,7 +64,7 @@ public enum VentAnimationMode
 {
 	All,
 	DonotWallHack,
-	DonotVison,
+	DonotInVison,
 }
 
 public interface IShipGlobalOption
@@ -138,7 +138,7 @@ public interface IShipGlobalOption
         var ventOption = CreateBoolOption(GlobalOption.DisableVent, false, isHeader: true);
 		CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
 		CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
-		CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption);
+		CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption, invert: true);
 
 		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
 		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false);
