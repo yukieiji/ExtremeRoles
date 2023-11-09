@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -12,7 +11,6 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
     public bool IsAdjustImpostorNum => false;
 
     public bool CanUseXion => true;
-    public bool EnableXion { get; private set; }
 
     public bool IsVanillaRoleToMultiAssign => false;
 
@@ -71,17 +69,6 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             this.useGhostRoleSpawnOption.Add(
                 role.GetRoleOptionId(RoleCommonOption.SpawnRate));
         }
-    }
-
-    public void Load()
-    {
-        EnableXion = OptionManager.Instance.GetValue<bool>(
-            (int)RoleGlobalOption.UseXion);
-    }
-
-    public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
-    {
-        return System.Enum.IsDefined(typeof(RoleGlobalOption), optionId);
     }
 
     public bool IsValidRoleOption(IOptionInfo option)

@@ -40,7 +40,7 @@ public static class RoleManagerSelectRolesPatch
 
 	public static void Prefix()
     {
-        if (!ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion()) { return; }
+        if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
 
         PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
 
