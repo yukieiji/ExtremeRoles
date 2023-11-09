@@ -245,7 +245,10 @@ public static class VentCanUsePatch
 			couldUse = false;
 		}
 
-        canUse = couldUse;
+		var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
+		bool isWallHackVent = underWarper != null && underWarper.IsAwake && underWarper.IsWallHackVent;
+
+		canUse = couldUse;
         if (canUse)
         {
             Vector2 playerPos = player.Collider.bounds.center;
@@ -254,9 +257,12 @@ public static class VentCanUsePatch
 
             canUse &= (
                 num <= __instance.UsableDistance &&
-                !PhysicsHelpers.AnythingBetween(
-                    player.Collider, playerPos, position,
-                    Constants.ShipOnlyMask, false));
+				(
+					!PhysicsHelpers.AnythingBetween(
+						player.Collider, playerPos, position,
+						Constants.ShipOnlyMask, false) ||
+					isWallHackVent
+				));
         }
 
         __result = num;
