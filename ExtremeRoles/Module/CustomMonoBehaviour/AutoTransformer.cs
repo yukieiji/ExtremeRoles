@@ -6,44 +6,42 @@ using UnityEngine;
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
-public sealed class AutoTransformer : MonoBehaviour
+public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 {
-	private Transform? start;
+	private Vector3 start;
 	private Transform? end;
+	private Rect rect;
 
 	private float timer = 0.0f;
 
-	public AutoTransformer(IntPtr ptr) : base(ptr) { }
+	public AutoTransformerWithFixedFirstPoint(IntPtr ptr) : base(ptr) { }
 
-	public void Initialize(Transform start, Transform end)
+	public void Initialize(Vector3 start, Transform end, SpriteRenderer rend)
 	{
 		this.start = start;
 		this.end = end;
+
+		this.rect = rend.sprite.textureRect;
+		float unit = rend.sprite.pixelsPerUnit;
+
+		this.rect.width  /= unit;
+		this.rect.height /= unit;
 	}
 
 	public void FixedUpdate()
 	{
-		if (this.start == null || this.end == null) { return; }
+		if (this.end == null) { return; }
 
 		this.timer += Time.fixedDeltaTime;
 
 		if (this.timer < 0.15f) { return; }
 
-		// 始点と終点の中間点を求める
-		Vector2 middlePoint = (this.start.position + this.end.position) / 2f;
+		// 始点から終点への方向ベクトルを求める
+		Vector3 direction = this.end.position - this.start;
+		this.transform.localScale = new Vector3(direction.x / this.rect.width, direction.y / this.rect.height, 1.0f);
 
 		// 対象オブジェクトを中間点に配置する
-		base.transform.position = middlePoint;
-
-		// 始点から終点への方向ベクトルを求める
-		Vector3 direction = this.end.position - this.start.position;
-
-		// オブジェクトの拡大率を設定する（始点から終点までの距離に基づく）
-		float scaleFactor = direction.magnitude;
-		base.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
-
-		// オブジェクトの回転を設定する（方向ベクトルに基づく）
-		base.transform.rotation = Quaternion.LookRotation(direction.normalized);
+		this.transform.position = Vector2.Lerp(this.start, this.end.position, 0.5f);
 
 		this.timer = 0.0f;
 	}

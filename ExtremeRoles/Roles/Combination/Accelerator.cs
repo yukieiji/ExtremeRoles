@@ -43,7 +43,7 @@ public sealed class Accelerator :
 
     private string roleNamePrefix;
 
-	private AutoTransformer? transformer;
+	private AutoTransformerWithFixedFirstPoint? transformer;
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
@@ -94,14 +94,15 @@ public sealed class Accelerator :
 
 		var obj = new GameObject("accelerate_panel");
 		obj.AddComponent<RectTransform>();
-		obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+		var firstPoint = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+		obj.transform.position = firstPoint;
 
 		var rend = obj.AddComponent<SpriteRenderer>();
 		rend.sprite = Loader.CreateSpriteFromResources(
 			 Path.MoverMove);
 
-		accelerator.transformer = obj.AddComponent<AutoTransformer>();
-		accelerator.transformer.Initialize(obj.transform, player.transform);
+		accelerator.transformer = obj.AddComponent<AutoTransformerWithFixedFirstPoint>();
+		accelerator.transformer.Initialize(firstPoint, player.transform, rend);
     }
 
     private static void endPanel(Accelerator accelerator)
@@ -111,8 +112,8 @@ public sealed class Accelerator :
 		accelerator.EnableUseButton = true;
 
 		GameObject obj = accelerator.transformer.gameObject;
-		accelerator.transformer = null;
 		Object.Destroy(accelerator.transformer);
+		accelerator.transformer = null;
 
 
 		// panel追加;
