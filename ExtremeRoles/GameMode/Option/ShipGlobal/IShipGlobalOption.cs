@@ -110,7 +110,7 @@ public interface IShipGlobalOption
 
     public static void Create()
     {
-		CreateIntOption(GlobalOption.NumMeating, 10, 0, 100, 1);
+		CreateIntOption(GlobalOption.NumMeating, 10, 0, 100, 1, isHeader: true);
 		CreateBoolOption(GlobalOption.ChangeMeetingVoteAreaSort, false);
 		CreateBoolOption(GlobalOption.FixedMeetingPlayerLevel, false);
 		CreateBoolOption(GlobalOption.DisableSkipInEmergencyMeeting, false);
@@ -122,15 +122,14 @@ public interface IShipGlobalOption
 		var confirmRoleOpt = CreateBoolOption(GlobalOption.IsConfirmRole, false);
         confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 
-        var ventOption = CreateBoolOption(GlobalOption.DisableVent, false);
+        var ventOption = CreateBoolOption(GlobalOption.DisableVent, false, isHeader: true);
 		CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
 		CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
 
-		CreateBoolOption(GlobalOption.ParallelMedBayScans, false);
-
+		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
 		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false);
 
-        var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false);
+        var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
 		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
 			GlobalOption.AirShipEnableAdmin, adminOpt, invert: true);
 		var adminLimitOpt = CreateBoolOption(GlobalOption.EnableAdminLimit, false, adminOpt, invert: true);
@@ -141,7 +140,7 @@ public interface IShipGlobalOption
 			invert: true,
 			enableCheckOption: adminLimitOpt);
 
-        var secOpt = CreateBoolOption(GlobalOption.IsRemoveSecurity, false);
+        var secOpt = CreateBoolOption(GlobalOption.IsRemoveSecurity, false, isHeader: true);
 		var secLimitOpt = CreateBoolOption(GlobalOption.EnableSecurityLimit, false, secOpt, invert: true);
 		CreateFloatOption(
 			GlobalOption.SecurityLimitTime,
@@ -150,7 +149,7 @@ public interface IShipGlobalOption
 			invert: true,
 			enableCheckOption: secLimitOpt);
 
-        var vitalOpt = CreateBoolOption(GlobalOption.IsRemoveVital, false);
+        var vitalOpt = CreateBoolOption(GlobalOption.IsRemoveVital, false, isHeader: true);
         var vitalLimitOpt = CreateBoolOption(GlobalOption.EnableVitalLimit, false, vitalOpt, invert: true);
 		CreateFloatOption(
 			GlobalOption.VitalLimitTime,
@@ -159,19 +158,19 @@ public interface IShipGlobalOption
 			invert: true,
 			enableCheckOption: vitalLimitOpt);
 
-		CreateBoolOption(GlobalOption.RandomMap, false);
+		CreateBoolOption(GlobalOption.RandomMap, false, isHeader: true);
 
-        var taskDisableOpt = CreateBoolOption(GlobalOption.DisableTaskWinWhenNoneTaskCrew, false);
+        var taskDisableOpt = CreateBoolOption(GlobalOption.DisableTaskWinWhenNoneTaskCrew, false, isHeader: true);
 		CreateBoolOption(GlobalOption.DisableTaskWin, false, taskDisableOpt);
 
-		CreateBoolOption(GlobalOption.IsSameNeutralSameWin, true);
+		CreateBoolOption(GlobalOption.IsSameNeutralSameWin, true, isHeader: true);
 		CreateBoolOption(GlobalOption.DisableNeutralSpecialForceEnd, false);
 
-		CreateBoolOption(GlobalOption.IsAssignNeutralToVanillaCrewGhostRole, true);
+		CreateBoolOption(GlobalOption.IsAssignNeutralToVanillaCrewGhostRole, true, isHeader: true);
 		CreateBoolOption(GlobalOption.IsRemoveAngleIcon, false);
 		CreateBoolOption(GlobalOption.IsBlockGAAbilityReport, false);
 
-		CreateBoolOption(GlobalOption.EnableHorseMode, false);
+		CreateBoolOption(GlobalOption.EnableHorseMode, false, isHeader: true);
     }
 
     public static T GetCommonOptionValue<T>(GlobalOption optionKey)
