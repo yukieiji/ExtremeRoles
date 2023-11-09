@@ -20,6 +20,7 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.SystemType;
+using System.Linq;
 
 namespace ExtremeRoles.Patches;
 
@@ -271,8 +272,34 @@ public static class IntroCutsceneOnDestroyPatch
         {
 			multiSetUpRole.IntroEndSetUp();
 		}
+
         disableMapObject();
-    }
+		changeWallHackTask();
+
+	}
+
+	private static void changeWallHackTask()
+	{
+		var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
+		if (!shipOpt.ChangeForceWallCheck) { return; }
+
+		var changeWallCheckTask = shipOpt.ChangeTask;
+		var wallCheckTasks = shipOpt.WallCheckTask;
+
+		var allConsole = Object.FindObjectsOfType<Console>();
+
+		foreach (Console console in allConsole)
+		{
+			foreach (var taskType in console.TaskTypes)
+			{
+				if (wallCheckTasks.Contains(taskType))
+				{
+					console.checkWalls = changeWallCheckTask.Contains(taskType);
+					break;
+				}
+			}
+		}
+	}
 
     private static void disableMapObject()
     {

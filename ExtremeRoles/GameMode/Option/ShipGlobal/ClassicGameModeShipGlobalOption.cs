@@ -10,7 +10,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool CanUseHorseMode => true;
 	public bool IsBreakEmergencyButton => false;
 
-	public bool IsFixWallHackTask { get; private set; }
+	public bool ChangeForceWallCheck { get; private set; }
 
 	public bool IsRandomMap { get; private set; }
 

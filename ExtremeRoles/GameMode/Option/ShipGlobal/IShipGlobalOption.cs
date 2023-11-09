@@ -101,9 +101,16 @@ public interface IShipGlobalOption
 
 	public bool IsAllowParallelMedbayScan { get; }
 	public bool IsAutoSelectRandomSpawn { get; }
-	public bool IsFixWallHackTask { get; }
+	public bool ChangeForceWallCheck { get; }
 
-	public IReadOnlySet<TaskTypes> FixTask
+	public IReadOnlySet<TaskTypes> WallCheckTask => new HashSet<TaskTypes>()
+	{
+		TaskTypes.EmptyGarbage,
+		TaskTypes.FixShower,
+		TaskTypes.DevelopPhotos,
+		TaskTypes.DivertPower,
+	};
+	public IReadOnlySet<TaskTypes> ChangeTask
 	{
 		get
 		{
