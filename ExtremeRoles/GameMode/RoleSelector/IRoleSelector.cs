@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -34,7 +35,6 @@ public interface IRoleSelector
     public bool IsAdjustImpostorNum { get; }
 
     public bool CanUseXion { get; }
-    public bool EnableXion { get; }
     public bool IsVanillaRoleToMultiAssign { get; }
 
     public IEnumerable<ExtremeRoleId> UseNormalRoleId { get; }
@@ -43,13 +43,10 @@ public interface IRoleSelector
 
     private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
-    public void Load();
+	public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
+		=> Enum.IsDefined(typeof(RoleGlobalOption), optionId);
 
-    public bool IsCanUseAndEnableXion() => CanUseXion && EnableXion;
-
-    public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId);
-
-    public bool IsValidRoleOption(IOptionInfo option);
+	public bool IsValidRoleOption(IOptionInfo option);
 
     public static void CreateRoleGlobalOption()
     {
