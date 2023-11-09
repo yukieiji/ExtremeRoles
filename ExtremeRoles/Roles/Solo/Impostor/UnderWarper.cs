@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using Newtonsoft.Json.Linq;
-
 using ExtremeRoles.Compat.ModIntegrator;
-using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+
+using RoleEffectAction = Il2CppSystem.Action<RoleEffectAnimation>;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -129,7 +126,7 @@ public sealed class UnderWarper :
         targetPlayer.Visible = false;
         targetPlayer.inVent = true;
         targetPlayer.currentRoleAnimations.ForEach(
-            (Il2CppSystem.Action<RoleEffectAnimation>)(
+            (RoleEffectAction)(
                 (RoleEffectAnimation an) =>
                 {
                     an.ToggleRenderer(false);
@@ -164,7 +161,7 @@ public sealed class UnderWarper :
         targetPlayer.cosmetics.AnimateSkinIdle();
         targetPlayer.moveable = true;
         targetPlayer.currentRoleAnimations.ForEach(
-            (Il2CppSystem.Action<RoleEffectAnimation>)(
+            (RoleEffectAction)(
                 (RoleEffectAnimation an) =>
                 {
                     an.ToggleRenderer(true);
