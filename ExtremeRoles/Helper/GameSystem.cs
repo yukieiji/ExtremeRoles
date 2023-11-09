@@ -442,7 +442,10 @@ public static class GameSystem
 
     public static void RpcRepairAllSabotage()
     {
-        foreach (PlayerTask task in
+		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId);
+
+		foreach (PlayerTask task in
             CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
         {
             if (task == null) { continue; }
@@ -469,7 +472,17 @@ public static class GameSystem
 					RpcForceRepairSpecialSabotage(SystemTypes.Electrical);
 					break;
 				case TaskTypes.FixComms:
-					ship.RpcUpdateSystem(SystemTypes.Comms, 0);
+					switch (mapId)
+					{
+						case 1:
+						case 5:
+							ship.RpcUpdateSystem(SystemTypes.Comms, 0 | 32);
+							ship.RpcUpdateSystem(SystemTypes.Comms, 1 | 32);
+							break;
+						default:
+							ship.RpcUpdateSystem(SystemTypes.Comms, 0);
+							break;
+					}
 					break;
 				case TaskTypes.RestoreOxy:
                     ship.RpcUpdateSystem(SystemTypes.LifeSupp, 16);
