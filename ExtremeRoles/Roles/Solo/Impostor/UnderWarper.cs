@@ -320,7 +320,7 @@ public sealed class UnderWarper :
             format: OptionUnit.Shot);
         CreateFloatOption(
             UnderWarperOption.Range,
-            1.75f, 0.75f, 4.0f, 0.25f, parentOps);
+            2.75f, 0.75f, 10.0f, 0.25f, parentOps);
     }
 
     protected override void RoleSpecificInit()
