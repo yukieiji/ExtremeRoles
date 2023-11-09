@@ -15,7 +15,7 @@ using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles.Patches.MapModule;
 
-[HarmonyPatch(typeof(Vent), "UsableDistance", MethodType.Getter)]
+[HarmonyPatch(typeof(Vent), nameof(Vent.UsableDistance), MethodType.Getter)]
 public static class VentUsableDistancePatch
 {
     public static bool Prefix(
