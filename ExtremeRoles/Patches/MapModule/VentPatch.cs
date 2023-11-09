@@ -1,17 +1,25 @@
 ﻿using HarmonyLib;
+using System.Collections;
 
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Extension.Il2Cpp;
 
+using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.MapModule;
 
@@ -32,6 +40,117 @@ public static class VentUsableDistancePatch
 
         return false;
     }
+}
+
+[HarmonyPatch]
+public static class VentAnimationRemovePatch
+{
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(Vent), nameof(Vent.EnterVent))]
+	public static bool VentEnterVentPrefix(
+		Vent __instance,
+		[HarmonyArgument(0)] PlayerControl pc)
+	{
+		if (isRunOriginal(__instance, pc))
+		{
+			return true;
+		}
+		if (!__instance.EnterVentAnim)
+		{
+			return false;
+		}
+		if (pc.AmOwner)
+		{
+			Vent.currentVent =__instance;
+			ConsoleJoystick.SetMode_Vent();
+			if (Constants.ShouldPlaySfx())
+			{
+				SoundManager.Instance.StopSound(ShipStatus.Instance.VentEnterSound);
+				SoundManager.Instance.PlaySound(ShipStatus.Instance.VentEnterSound, false, 1f, null).pitch = FloatRange.Next(0.8f, 1.2f);
+				VibrationManager.Vibrate(
+					0.4f, __instance.transform.position, 3.5f, 0.2f,
+					VibrationManager.VibrationFalloff.None, null, false);
+			}
+		}
+		return false;
+	}
+
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(Vent), nameof(Vent.ExitVent))]
+	public static bool VentExitVentPrefix(
+		Vent __instance,
+		ref Il2CppEnumerator __result,
+		[HarmonyArgument(0)] PlayerControl pc)
+	{
+		if (isRunOriginal(__instance, pc))
+		{
+			return true;
+		}
+		__result = noExitVentAnim(__instance, pc).WrapToIl2Cpp();
+		return false;
+	}
+
+	private static IEnumerator noExitVentAnim(Vent vent, PlayerControl pc)
+	{
+		if (pc.AmOwner)
+		{
+			Vent.currentVent = null;
+		}
+		if (!vent.ExitVentAnim)
+		{
+			yield break;
+		}
+		if (pc.AmOwner && Constants.ShouldPlaySfx())
+		{
+			AudioClip audioClip = ShipStatus.Instance.VentEnterSound;
+			if (ShipStatus.Instance.VentExitSound)
+			{
+				audioClip = ShipStatus.Instance.VentExitSound;
+			}
+			else
+			{
+				SoundManager.Instance.StopSound(ShipStatus.Instance.VentEnterSound);
+			}
+			SoundManager.Instance.PlaySound(audioClip, false, 1f, null).pitch = FloatRange.Next(0.8f, 1.2f);
+			VibrationManager.Vibrate(0.4f, vent.transform.position, 3.5f, 0.2f,
+				VibrationManager.VibrationFalloff.None, null, false);
+		}
+		yield break;
+	}
+
+	private static bool isRunOriginal(Vent vent, PlayerControl pc)
+	{
+		var ventAnimationMode = ExtremeGameModeManager.Instance.ShipOption.VentAnimationMode;
+
+		PlayerControl? localPlayer = CachedPlayerControl.LocalPlayer;
+		if (localPlayer == null ||
+			localPlayer.PlayerId == pc.PlayerId)
+		{
+			return true;
+		}
+
+		var ventPos = vent.transform.position;
+		var playerPos = localPlayer.transform.position;
+
+		switch (ventAnimationMode)
+		{
+			case VentAnimationMode.DonotWallHack:
+				return !PhysicsHelpers.AnythingBetween(
+					localPlayer.Collider, playerPos, ventPos,
+					Constants.ShipOnlyMask, false);
+			case VentAnimationMode.DonotInVison:
+
+				// 視界端ギリギリが見えないのは困るのでライトオフセットとか言う値で調整しておく
+				float distance = Vector2.Distance(playerPos, ventPos) - 0.18f;
+
+				return !PhysicsHelpers.AnythingBetween(
+					localPlayer.Collider, playerPos, ventPos,
+					Constants.ShipOnlyMask, false) &&
+					localPlayer.lightSource.viewDistance >= distance;
+			default:
+				return true;
+		};
+	}
 }
 
 [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
@@ -68,7 +187,7 @@ public static class VentCanUsePatch
         {
             if (isCustomMapVent)
             {
-                (__result, canUse, couldUse) = modMap.IsCustomVentUseResult(
+                (__result, canUse, couldUse) = modMap!.IsCustomVentUseResult(
                     __instance, playerInfo,
                     playerInfo.Role.IsImpostor || playerInfo.Role.Role == RoleTypes.Engineer);
                 return false;
@@ -82,7 +201,7 @@ public static class VentCanUsePatch
 
         if (isCustomMapVent)
         {
-            (__result, canUse, couldUse) = modMap.IsCustomVentUseResult(
+            (__result, canUse, couldUse) = modMap!.IsCustomVentUseResult(
                 __instance, playerInfo, roleCouldUse);
             return false;
         }
@@ -119,15 +238,12 @@ public static class VentCanUsePatch
         }
 
         if (CachedShipStatus.Instance.Systems.TryGetValue(
-                SystemTypes.Ventilation, out ISystemType systemType))
+                SystemTypes.Ventilation, out var systemType) &&
+			systemType.IsTryCast<VentilationSystem>(out var ventilationSystem) &&
+			ventilationSystem!.IsVentCurrentlyBeingCleaned(__instance.Id))
         {
-            VentilationSystem ventilationSystem = systemType.TryCast<VentilationSystem>();
-            if (ventilationSystem != null &&
-                ventilationSystem.IsVentCurrentlyBeingCleaned(__instance.Id))
-            {
-                couldUse = false;
-            }
-        }
+			couldUse = false;
+		}
 
         canUse = couldUse;
         if (canUse)
