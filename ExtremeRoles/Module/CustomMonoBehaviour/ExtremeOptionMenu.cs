@@ -212,12 +212,6 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 		{
 			OptionTab tab = option.Tab;
 
-			if (tab == OptionTab.General &&
-				Enum.IsDefined(typeof(GlobalOption), id))
-			{
-				option.SetHeaderTo(id == shipOption.HeadOptionId);
-			}
-
 			if (Enum.IsDefined(typeof(OptionCreator.CommonOptionKey), id) ||
 				roleSelector.IsValidGlobalRoleOptionId((RoleGlobalOption)id) ||
 				tab switch

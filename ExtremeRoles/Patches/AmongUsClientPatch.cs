@@ -50,6 +50,16 @@ public static class EnableUdpMatchmakingPatch
     }
 }
 
+[HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.Awake))]
+public static class AmongUsClientAwakePatch
+{
+	public static void Prefix(AmongUsClient __instance)
+	{
+		// MODなので待ち時間をとりあえず +5秒しておく、デフォルトは10秒
+		__instance.MAX_CLIENT_WAIT_TIME = 15;
+	}
+}
+
 [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
 public static class AmongUsClientCoStartGamePatch
 {
