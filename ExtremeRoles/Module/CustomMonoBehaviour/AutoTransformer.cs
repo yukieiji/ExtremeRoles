@@ -43,6 +43,11 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 		// 対象オブジェクトを中間点に配置する
 		this.transform.position = Vector3.Lerp(this.start, this.end.position, 0.5f);
 
+		// 指定した方向に回転
+		var directionNorm = direction.normalized;
+		float rot = Mathf.Atan2(directionNorm.x, directionNorm.y) * Mathf.Rad2Deg;
+		this.transform.rotation = Quaternion.Euler(0.0f, 0.0f, rot);
+
 		this.timer = 0.0f;
 	}
 }
