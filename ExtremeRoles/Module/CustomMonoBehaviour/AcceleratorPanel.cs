@@ -23,6 +23,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 		if (CachedPlayerControl.LocalPlayer == null) { return; }
 
 		this.collider = base.gameObject.AddComponent<BoxCollider2D>();
+		this.collider.isTrigger = true;
 
 		RectTransform rectTransform = GetComponent<RectTransform>();
 		var rect = rectTransform.rect;
