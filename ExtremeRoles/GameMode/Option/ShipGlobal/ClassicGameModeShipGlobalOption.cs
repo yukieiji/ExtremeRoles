@@ -70,7 +70,10 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
             GlobalOption.EngineerUseImpostorVent);
         CanKillVentInPlayer = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.CanKillVentInPlayer);
-        IsAllowParallelMedbayScan = IShipGlobalOption.GetCommonOptionValue<bool>(
+		this.VentAnimationMode = (VentAnimationMode)IShipGlobalOption.GetCommonOptionValue<int>(
+			GlobalOption.VentAnimationModeInVison);
+
+		IsAllowParallelMedbayScan = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.ParallelMedBayScans);
         IsAutoSelectRandomSpawn = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.IsAutoSelectRandomSpawn);

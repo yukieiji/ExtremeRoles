@@ -77,8 +77,10 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     {
         DisableVent = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.DisableVent);
+		this.VentAnimationMode = (VentAnimationMode)IShipGlobalOption.GetCommonOptionValue<int>(
+			GlobalOption.VentAnimationModeInVison);
 
-        IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
+		IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.RandomMap);
 
         Admin = new AdminOption()
