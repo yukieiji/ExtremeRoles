@@ -10,6 +10,8 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool CanUseHorseMode => true;
 	public bool IsBreakEmergencyButton => false;
 
+	public bool IsFixWallHackTask { get; private set; }
+
 	public bool IsRandomMap { get; private set; }
 
     public int MaxMeetingCount { get; private set; }
@@ -43,7 +45,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool IsRemoveAngleIcon { get; private set; }
     public bool IsBlockGAAbilityReport { get; private set; }
 
-    public void Load()
+	public void Load()
     {
         MaxMeetingCount = IShipGlobalOption.GetCommonOptionValue<int>(
             GlobalOption.NumMeating);

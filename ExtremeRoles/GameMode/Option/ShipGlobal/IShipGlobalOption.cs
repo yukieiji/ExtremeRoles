@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using ExtremeRoles.GameMode.Option.MapModule;
@@ -25,7 +26,13 @@ public enum GlobalOption : int
 	ParallelMedBayScans,
     IsAutoSelectRandomSpawn,
 
-    IsRemoveAdmin,
+	IsFixWallHaskTask,
+	GarbageTask,
+	ShowerTask,
+	DevelopPhotosTask,
+	DivertPowerTask,
+
+	IsRemoveAdmin,
     AirShipEnableAdmin,
     EnableAdminLimit,
     AdminLimitTime,
@@ -71,30 +78,56 @@ public interface IShipGlobalOption
 {
     public bool IsEnableImpostorVent { get; }
 
-    public bool IsRandomMap { get; }
+	public bool IsRandomMap { get; }
 
-    public int MaxMeetingCount { get; }
+	public int MaxMeetingCount { get; }
 
 	public bool IsBreakEmergencyButton { get; }
 
 	public bool CanUseHorseMode { get; }
 
-    public bool IsChangeVoteAreaButtonSortArg { get; }
-    public bool IsFixedVoteAreaPlayerLevel { get; }
-    public bool IsBlockSkipInMeeting { get; }
-    public bool DisableSelfVote { get; }
+	public bool IsChangeVoteAreaButtonSortArg { get; }
+	public bool IsFixedVoteAreaPlayerLevel { get; }
+	public bool IsBlockSkipInMeeting { get; }
+	public bool DisableSelfVote { get; }
 
 	public ConfirmExilMode ExilMode { get; }
-    public bool IsConfirmRole { get; }
+	public bool IsConfirmRole { get; }
 
-    public bool DisableVent { get; }
-    public bool EngineerUseImpostorVent { get; }
-    public bool CanKillVentInPlayer { get; }
-    public bool IsAllowParallelMedbayScan { get; }
+	public bool DisableVent { get; }
+	public bool EngineerUseImpostorVent { get; }
+	public bool CanKillVentInPlayer { get; }
 	public VentAnimationMode VentAnimationMode { get; }
 
-
+	public bool IsAllowParallelMedbayScan { get; }
 	public bool IsAutoSelectRandomSpawn { get; }
+	public bool IsFixWallHackTask { get; }
+
+	public IReadOnlySet<TaskTypes> FixTask
+	{
+		get
+		{
+			var fixTask = new HashSet<TaskTypes>();
+			for (int i = (int)GlobalOption.GarbageTask; i < (int)GlobalOption.IsRemoveAdmin; ++i)
+			{
+				var opt = (GlobalOption)i;
+
+				if (GetCommonOptionValue<bool>(opt))
+				{
+					var fixTaskType = opt switch
+					{
+						GlobalOption.GarbageTask => TaskTypes.EmptyGarbage,
+						GlobalOption.ShowerTask => TaskTypes.FixShower,
+						GlobalOption.DevelopPhotosTask => TaskTypes.DevelopPhotos,
+						GlobalOption.DivertPowerTask => TaskTypes.DivertPower,
+						_ => throw new KeyNotFoundException()
+					};
+					fixTask.Add(fixTaskType);
+				}
+			}
+			return fixTask;
+		}
+	}
 
     public AdminOption Admin { get; }
     public SecurityOption Security { get; }
@@ -142,8 +175,15 @@ public interface IShipGlobalOption
 
 		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
 		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false);
+		var fixTaskOpt = CreateBoolOption(GlobalOption.IsFixWallHaskTask, false);
 
-        var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
+		for (int i = (int)GlobalOption.GarbageTask; i < (int)GlobalOption.IsRemoveAdmin; ++i)
+		{
+			CreateBoolOption((GlobalOption)i, false, parent: fixTaskOpt);
+		}
+
+
+		var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
 		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
 			GlobalOption.AirShipEnableAdmin, adminOpt, invert: true);
 		var adminLimitOpt = CreateBoolOption(GlobalOption.EnableAdminLimit, false, adminOpt, invert: true);

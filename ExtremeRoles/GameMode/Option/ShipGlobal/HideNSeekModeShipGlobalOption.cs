@@ -12,8 +12,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public bool IsEnableImpostorVent => false;
 
     public bool IsRandomMap { get; private set; }
+	public bool IsFixWallHackTask { get; private set; }
 
-    public bool DisableVent { get; private set; }
+	public bool DisableVent { get; private set; }
 	public VentAnimationMode VentAnimationMode { get; private set; }
 
 	public bool IsAllowParallelMedbayScan { get; private set; }
@@ -52,7 +53,13 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
         GlobalOption.DisableVent,
 		GlobalOption.VentAnimationModeInVison,
 
-        GlobalOption.IsRemoveAdmin,
+		GlobalOption.IsFixWallHaskTask,
+		GlobalOption.GarbageTask,
+		GlobalOption.ShowerTask,
+		GlobalOption.DevelopPhotosTask,
+		GlobalOption.DivertPowerTask,
+
+		GlobalOption.IsRemoveAdmin,
         GlobalOption.AirShipEnableAdmin,
         GlobalOption.EnableAdminLimit,
         GlobalOption.AdminLimitTime,
@@ -79,6 +86,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
             GlobalOption.DisableVent);
 		this.VentAnimationMode = (VentAnimationMode)IShipGlobalOption.GetCommonOptionValue<int>(
 			GlobalOption.VentAnimationModeInVison);
+
+		IsFixWallHackTask = IShipGlobalOption.GetCommonOptionValue<bool>(
+			GlobalOption.IsFixWallHaskTask);
 
 		IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.RandomMap);
