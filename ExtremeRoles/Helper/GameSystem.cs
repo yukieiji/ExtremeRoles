@@ -472,17 +472,8 @@ public static class GameSystem
 					RpcForceRepairSpecialSabotage(SystemTypes.Electrical);
 					break;
 				case TaskTypes.FixComms:
-					switch (mapId)
-					{
-						case 1:
-						case 5:
-							ship.RpcUpdateSystem(SystemTypes.Comms, 0 | 32);
-							ship.RpcUpdateSystem(SystemTypes.Comms, 1 | 32);
-							break;
-						default:
-							ship.RpcUpdateSystem(SystemTypes.Comms, 0);
-							break;
-					}
+					ship.RpcUpdateSystem(SystemTypes.Comms, 0 | 16);
+					ship.RpcUpdateSystem(SystemTypes.Comms, 1 | 16);
 					break;
 				case TaskTypes.RestoreOxy:
                     ship.RpcUpdateSystem(SystemTypes.LifeSupp, 16);
