@@ -55,7 +55,6 @@ public interface IOptionInfo
 	public OptionBehaviour? Body { get; }
 
 	public bool IsActive();
-	public void SetHeaderTo(bool enable);
 	public void SetOptionBehaviour(OptionBehaviour newBehaviour);
 	public string GetTranslatedValue();
 	public string GetTranslatedName();
@@ -279,11 +278,6 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 		this.UpdateSelection(Mathf.Clamp(
 			this.entry!.Value, 0,
 			this.ValueCount - 1));
-	}
-
-	public void SetHeaderTo(bool enable)
-	{
-		this.IsHeader = enable;
 	}
 
 	public void SetOptionBehaviour(OptionBehaviour newBehaviour)
