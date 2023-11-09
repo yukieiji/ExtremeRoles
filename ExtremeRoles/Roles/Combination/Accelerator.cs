@@ -94,7 +94,7 @@ public sealed class Accelerator :
 
 		var obj = new GameObject("accelerate_panel");
 		obj.AddComponent<RectTransform>();
-		var firstPoint = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+		var firstPoint = new Vector3(pos.x, pos.y, player.transform.position.z);
 		obj.transform.position = firstPoint;
 
 		var rend = obj.AddComponent<SpriteRenderer>();

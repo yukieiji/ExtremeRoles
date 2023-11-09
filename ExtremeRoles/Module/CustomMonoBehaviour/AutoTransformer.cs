@@ -41,7 +41,7 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 		this.transform.localScale = new Vector3(direction.x / this.rect.width, direction.y / this.rect.height, 1.0f);
 
 		// 対象オブジェクトを中間点に配置する
-		this.transform.position = Vector2.Lerp(this.start, this.end.position, 0.5f);
+		this.transform.position = Vector3.Lerp(this.start, this.end.position, 0.5f);
 
 		this.timer = 0.0f;
 	}
