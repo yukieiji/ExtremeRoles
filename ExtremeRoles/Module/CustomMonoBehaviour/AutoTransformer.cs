@@ -51,7 +51,9 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 
 		// 始点から終点への方向ベクトルを求める
 		Vector3 direction = this.end.position - this.start;
-		this.transform.localScale = new Vector3(direction.x / this.rect.width, direction.y / this.rect.height, 1.0f);
+		this.transform.localScale = new Vector3(
+			Mathf.Abs(direction.x) / this.rect.width,
+			Mathf.Abs(direction.y) / this.rect.height, 1.0f);
 
 		// 対象オブジェクトを中間点に配置する
 		this.transform.position = Vector3.Lerp(this.start, this.end.position, 0.5f);
@@ -59,6 +61,10 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 		// 指定した方向に回転
 		var directionNorm = direction.normalized;
 		float num = Mathf.Atan2(directionNorm.y, directionNorm.x);
+		if (this.transform.lossyScale.x < 0f)
+		{
+			num += 3.1415927f;
+		}
 		this.transform.rotation = Quaternion.Euler(0f, 0f, num);
 
 		this.timer = 0.0f;
