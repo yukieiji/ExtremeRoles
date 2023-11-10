@@ -99,7 +99,7 @@ public sealed class Accelerator :
 
 		var rend = obj.AddComponent<SpriteRenderer>();
 		rend.sprite = Loader.CreateSpriteFromResources(
-			 Path.MoverMove);
+			 Path.AcceleratorAcceleratePanel, 100.0f);
 
 		accelerator.transformer = obj.AddComponent<AutoTransformerWithFixedFirstPoint>();
 		accelerator.transformer.Initialize(firstPoint, player.transform, rend);
