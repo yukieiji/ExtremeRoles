@@ -24,6 +24,8 @@ public sealed class AcceleratorPanel : MonoBehaviour
 
 		this.collider = base.gameObject.AddComponent<BoxCollider2D>();
 		this.collider.isTrigger = true;
+		this.collider.size = new Vector2(1.5f, 1.15f);
+		this.collider.isTrigger = true;
 
 		RectTransform rectTransform = GetComponent<RectTransform>();
 		var rect = rectTransform.rect;
