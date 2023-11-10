@@ -8,6 +8,19 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 {
+	public Vector2 Vector
+	{
+		get
+		{
+			if (this.end == null)
+			{
+				return Vector2.zero;
+			}
+			Vector2 diff = this.end.position - this.start;
+			return diff.normalized;
+		}
+	}
+
 	private Vector3 start;
 	private Transform? end;
 	private Rect rect;

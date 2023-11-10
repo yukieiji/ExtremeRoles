@@ -9,12 +9,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class AcceleratorPanel : MonoBehaviour
 {
-	public float MaxSpeed { private get; set; }
-	public float AddSpeed { private get; set; }
-
-	private Vector3 angle;
+	private Rigidbody2D? body;
 	private BoxCollider2D? collider;
-	private Rigidbody2D? rigidbody;
+	private Vector2 forceVec;
 
 	public AcceleratorPanel(IntPtr ptr) : base(ptr) { }
 
@@ -27,28 +24,22 @@ public sealed class AcceleratorPanel : MonoBehaviour
 		this.collider.size = new Vector2(1.5f, 1.15f);
 		this.collider.isTrigger = true;
 
-		RectTransform rectTransform = GetComponent<RectTransform>();
-		var rect = rectTransform.rect;
-
-		this.collider.size = new Vector2(rect.width, rect.height);
-		this.angle = base.transform.rotation.eulerAngles;
-		this.rigidbody = CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D;
+		this.body = CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D;
 	}
-	public void FixUpdate()
+
+	public void Initialize(Vector2 vector, float speed)
+	{
+		this.forceVec = vector * speed;
+	}
+
+	public void FixedUpdate()
 	{
 		if (CachedPlayerControl.LocalPlayer == null ||
-			this.rigidbody == null ||
-			this.collider == null) { return; }
+			this.body == null ||
+			this.collider == null ||
+			!this.body.IsTouching(this.collider)) { return; }
 
-		//物体の移動速度のベルトコンベア方向の成分だけを取り出す
-		float objectSpeed = Vector3.Dot(
-			this.rigidbody.velocity,
-			this.angle);
+		this.body.velocity += this.forceVec;
 
-		//目標値以下なら加速する
-		if (objectSpeed < Mathf.Abs(this.MaxSpeed))
-		{
-			this.rigidbody.AddForce(this.angle * this.AddSpeed, ForceMode2D.Impulse);
-		}
 	}
 }
