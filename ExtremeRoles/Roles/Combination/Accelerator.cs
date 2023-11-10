@@ -93,8 +93,7 @@ public sealed class Accelerator :
 		Vector2 pos = player.GetTruePosition();
 
 		var obj = new GameObject("accelerate_panel");
-		obj.AddComponent<RectTransform>();
-		var firstPoint = new Vector3(pos.x, pos.y, player.transform.position.z);
+		var firstPoint = new Vector3(pos.x, pos.y, pos.y / 100.0f);
 		obj.transform.position = firstPoint;
 
 		var rend = obj.AddComponent<SpriteRenderer>();
@@ -116,8 +115,6 @@ public sealed class Accelerator :
 		Object.Destroy(accelerator.transformer);
 		accelerator.transformer = null;
 
-
-		// panel追加;
 		var panel = obj.AddComponent<AcceleratorPanel>();
 		panel.Initialize(vec, 2.0f);
 	}
