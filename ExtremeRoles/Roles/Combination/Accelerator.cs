@@ -33,6 +33,12 @@ public sealed class Accelerator :
         End,
     }
 
+	public enum Option
+	{
+		Speed,
+		UseOtherPlayer
+	}
+
     public override string RoleName =>
         string.Concat(this.roleNamePrefix, this.RawRoleName);
 
@@ -40,7 +46,8 @@ public sealed class Accelerator :
 
     public bool EnableVentButton { get; private set; } = true;
 
-
+	private float speed;
+	private bool canUseOtherPlayer = false;
     private string roleNamePrefix;
 
 	private AutoTransformerWithFixedFirstPoint? transformer;
@@ -116,7 +123,7 @@ public sealed class Accelerator :
 		accelerator.transformer = null;
 
 		var panel = obj.AddComponent<AcceleratorPanel>();
-		panel.Initialize(vec, 2.0f);
+		panel.Initialize(vec, accelerator.speed);
 	}
 
     public void CreateAbility()
@@ -150,13 +157,13 @@ public sealed class Accelerator :
 
     public bool UseAbility()
     {
-		rpcAcceleratorPanelOps(CachedPlayerControl.LocalPlayer, false);
+		acceleratorPanelOps(CachedPlayerControl.LocalPlayer, false);
 		return true;
 	}
 
     public void CleanUp()
     {
-		rpcAcceleratorPanelOps(CachedPlayerControl.LocalPlayer, true);
+		acceleratorPanelOps(CachedPlayerControl.LocalPlayer, true);
 	}
 
     public override void RolePlayerKilledAction(
@@ -176,6 +183,12 @@ public sealed class Accelerator :
 
         this.CreateAbilityCountOption(
             parentOps, 3, 10, 30.0f);
+		CreateFloatOption(
+			Option.Speed, 1.0f, 0.1f,
+			3.0f, 0.1f, parentOps);
+		CreateBoolOption(
+			Option.UseOtherPlayer,
+			true, parentOps);
     }
 
     protected override void RoleSpecificInit()
@@ -184,7 +197,12 @@ public sealed class Accelerator :
 
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
-        this.EnableVentButton = true;
+		this.canUseOtherPlayer = OptionManager.Instance.GetValue<bool>(
+			GetRoleOptionId(Option.UseOtherPlayer));
+		this.speed = OptionManager.Instance.GetValue<float>(
+			GetRoleOptionId(Option.Speed));
+
+		this.EnableVentButton = true;
         this.EnableUseButton = true;
     }
 
@@ -194,17 +212,20 @@ public sealed class Accelerator :
 		endPanel(this);
     }
 
-	private void rpcAcceleratorPanelOps(PlayerControl playerControl, bool isEnd)
+	private void acceleratorPanelOps(PlayerControl playerControl, bool isEnd)
 	{
 		Vector2 pos = playerControl.GetTruePosition();
 
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.AcceleratorAbility))
+		if (this.canUseOtherPlayer)
 		{
-			caller.WriteByte((byte)(isEnd ? AcceleratorRpc.Setup : AcceleratorRpc.End));
-			caller.WriteByte(playerControl.PlayerId);
-			caller.WriteFloat(pos.x);
-			caller.WriteFloat(pos.y);
+			using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.AcceleratorAbility))
+			{
+				caller.WriteByte((byte)(isEnd ? AcceleratorRpc.Setup : AcceleratorRpc.End));
+				caller.WriteByte(playerControl.PlayerId);
+				caller.WriteFloat(pos.x);
+				caller.WriteFloat(pos.y);
+			}
 		}
 
 		if (isEnd)

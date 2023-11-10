@@ -289,7 +289,7 @@ public static class RPCOperator
 
     public static void ShareOption(int numOptions, MessageReader reader)
     {
-        Module.CustomOption.OptionManager.ShareOption(numOptions, reader);
+		OptionManager.ShareOption(numOptions, reader);
     }
 
     public static void ReplaceDeadReason(byte playerId, byte reason)
@@ -552,7 +552,12 @@ public static class RPCOperator
         Roles.Combination.Mover.Ability(ref reader);
     }
 
-    public static void BodyGuardAbility(ref MessageReader reader)
+	public static void AcceleratorAbility(ref MessageReader reader)
+	{
+		Roles.Combination.Accelerator.Ability(ref reader);
+	}
+
+	public static void BodyGuardAbility(ref MessageReader reader)
     {
         Roles.Solo.Crewmate.BodyGuard.Ability(ref reader);
     }
