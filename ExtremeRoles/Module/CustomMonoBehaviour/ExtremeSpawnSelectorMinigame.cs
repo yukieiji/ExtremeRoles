@@ -38,7 +38,8 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		this.text = Instantiate(Prefab.Text, base.transform);
 		this.text.alignment = TextAlignmentOptions.Center;
 		this.text.gameObject.SetActive(true);
-		this.text.transform.localPosition = new Vector3(0.0f, 0.0f);
+		this.text.transform.localPosition = new Vector3(0.0f, -1.0f);
+		this.text.fontSize = this.text.fontSizeMin = this.text.fontSizeMax = 3.5f;
 
 		this.MyTask = null;
 		this.multistageMinigameChecked = true;
@@ -59,7 +60,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	public override void Close()
 	{
-		ControllerManager.Instance.CloseOverlayMenu(base.name);
+		// ControllerManager.Instance.CloseOverlayMenu(base.name);
 		if (!this.gotButton)
 		{
 
