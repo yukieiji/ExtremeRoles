@@ -70,6 +70,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			{
 				if (playerInfo != null &&
 					playerInfo.Object != null &&
+					!playerInfo.Object.isDummy &&
 					!playerInfo.Disconnected)
 				{
 					var player = playerInfo.Object.NetTransform;
