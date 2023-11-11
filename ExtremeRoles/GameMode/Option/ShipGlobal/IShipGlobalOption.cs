@@ -202,13 +202,13 @@ public interface IShipGlobalOption
 
 
 		var randomSpawnOpt = CreateBoolOption(GlobalOption.EnableRandomSpawn , true);
-		CreateBoolOption(GlobalOption.SkeldRandomSpawn  , false, randomSpawnOpt);
-		CreateBoolOption(GlobalOption.MiraHqRandomSpawn , false, randomSpawnOpt);
-		CreateBoolOption(GlobalOption.PolusRandomSpawn  , false, randomSpawnOpt);
-		CreateBoolOption(GlobalOption.AirShipRandomSpawn, true , randomSpawnOpt);
-		CreateBoolOption(GlobalOption.FungleRandomSpawn , true , randomSpawnOpt);
+		CreateBoolOption(GlobalOption.SkeldRandomSpawn  , false, randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.MiraHqRandomSpawn , false, randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.PolusRandomSpawn  , false, randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.AirShipRandomSpawn, true , randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.FungleRandomSpawn , true , randomSpawnOpt, invert: true);
 
-		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false, randomSpawnOpt);
+		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false, randomSpawnOpt, invert: true);
 
 		var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
 		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
