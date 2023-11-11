@@ -69,7 +69,7 @@ public enum ConfirmExilMode
 
 public enum VentAnimationMode
 {
-	All,
+	VanillaAnimation,
 	DonotWallHack,
 	DonotInVison,
 }
