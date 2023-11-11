@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Reflection;
 
@@ -11,13 +12,15 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Task;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
+using ExtremeRoles.Patches.Controller;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
 using Il2CppObject = Il2CppSystem.Object;
-using System.Linq;
+
 
 #nullable enable
 
@@ -230,5 +233,48 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	{
 		int index = RandomGenerator.Instance.Next(0, this.button.Count);
 		this.button[index].OnClick?.Invoke();
+	}
+
+	public static IEnumerator WrapUpAndSpawn(ExileController instance)
+	{
+		ExileControllerWrapUpPatch.WrapUpPrefix();
+		if (instance.exiled != null)
+		{
+			PlayerControl @object = instance.exiled.Object;
+			if (@object != null)
+			{
+				@object.Exiled();
+			}
+			instance.exiled.IsDead = true;
+		}
+		ExileControllerWrapUpPatch.WrapUpPostfix(instance.exiled);
+
+		bool meeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+		if (meeting)
+		{
+			yield break;
+		}
+
+		if (DestroyableSingleton<TutorialManager>.InstanceExists ||
+			!GameManager.Instance.LogicFlow.IsGameOverDueToDeath())
+		{
+			yield return WaiteSpawn();
+			instance.ReEnableGameplay();
+		}
+		Destroy(instance.gameObject);
+		yield break;
+	}
+
+	private static IEnumerator WaiteSpawn()
+	{
+		GameObject obj = new GameObject("SpawnSelector");
+		var spawnSelector = obj.AddComponent<ExtremeSpawnSelectorMinigame>();
+		spawnSelector.transform.SetParent(Camera.main.transform, false);
+		spawnSelector.transform.localPosition = new Vector3(0f, 0f, -600f);
+
+		spawnSelector.Begin(null);
+
+		yield return spawnSelector.WaitForFinish();
+		yield break;
 	}
 }
