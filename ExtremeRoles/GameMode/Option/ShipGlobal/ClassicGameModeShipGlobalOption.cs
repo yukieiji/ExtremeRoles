@@ -81,6 +81,8 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 
 		Spawn = new SpawnOption()
 		{
+			AirShip = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.AirShipRandomSpawn),
 			IsAutoSelectRandom = IShipGlobalOption.GetCommonOptionValue<bool>(
 				GlobalOption.IsAutoSelectRandomSpawn),
 		};
