@@ -45,9 +45,9 @@ public static class MinigameSystem
 	}
 
 	public static Minigame Open(
-	   Minigame prefab,
-	   PlayerTask? task = null,
-	   Console? console = null)
+		Minigame prefab,
+		PlayerTask? task = null,
+		Console? console = null)
 	{
 		Minigame minigame = Create(prefab, console);
 		minigame.Begin(task);
