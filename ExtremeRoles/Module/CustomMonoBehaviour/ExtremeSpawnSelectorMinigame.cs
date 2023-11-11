@@ -39,7 +39,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		this.text.alignment = TextAlignmentOptions.Center;
 		this.text.gameObject.SetActive(true);
 		this.text.transform.localPosition = new Vector3(0.0f, -1.0f);
-		this.text.fontSize = this.text.fontSizeMin = this.text.fontSizeMax = 3.5f;
+		this.text.fontSize = this.text.fontSizeMin = this.text.fontSizeMax = 4.0f;
 
 		this.MyTask = null;
 		this.multistageMinigameChecked = true;
