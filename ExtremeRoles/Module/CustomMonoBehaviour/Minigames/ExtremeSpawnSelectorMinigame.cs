@@ -16,7 +16,7 @@ using Il2CppObject = Il2CppSystem.Object;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomMonoBehaviour;
+namespace ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 [Il2CppRegister]
 public sealed class ExtremeSpawnSelectorMinigame : Minigame
@@ -37,11 +37,11 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	public void Awake()
 	{
-		this.text = Instantiate(Prefab.Text, base.transform);
-		this.text.alignment = TextAlignmentOptions.Center;
-		this.text.gameObject.SetActive(true);
-		this.text.transform.localPosition = new Vector3(0.0f, -1.0f);
-		this.text.fontSize = this.text.fontSizeMin = this.text.fontSizeMax = 4.0f;
+		text = Instantiate(Prefab.Text, base.transform);
+		text.alignment = TextAlignmentOptions.Center;
+		text.gameObject.SetActive(true);
+		text.transform.localPosition = new Vector3(0.0f, -1.0f);
+		text.fontSize = text.fontSizeMin = text.fontSizeMax = 4.0f;
 
 		this.MyTask = null;
 		this.multistageMinigameChecked = true;
@@ -52,7 +52,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	{
 		this.AbstractBegin(task);
 
-		base.StartCoroutine(this.runTimer().WrapToIl2Cpp());
+		base.StartCoroutine(runTimer().WrapToIl2Cpp());
 
 		// ControllerManager.Instance.OpenOverlayMenu(base.name, null, this.DefaultButtonSelected, this.ControllerSelectable, false);
 
@@ -63,7 +63,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	public override void Close()
 	{
 		// ControllerManager.Instance.CloseOverlayMenu(base.name);
-		if (!this.gotButton)
+		if (!gotButton)
 		{
 
 		}
@@ -85,7 +85,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	{
 		for (float time = 128f; time >= 0f; time -= Time.deltaTime)
 		{
-			this.text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+			text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
 				StringNames.TimeRemaining, new Il2CppObject[] { Mathf.CeilToInt(time) });
 			yield return null;
 		}
@@ -99,7 +99,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			return;
 		}
 		Logger.GlobalInstance.Info(string.Format("Player selected spawn point {0}", spawnPoint.Name), null);
-		this.gotButton = true;
+		gotButton = true;
 		PlayerControl.LocalPlayer.SetKinematic(true);
 		PlayerControl.LocalPlayer.NetTransform.SetPaused(true);
 		PlayerControl.LocalPlayer.NetTransform.RpcSnapTo(spawnPoint.Location);
@@ -107,7 +107,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 		base.StopAllCoroutines();
 		base.StartCoroutine(
-			this.coSpawnAt(CachedPlayerControl.LocalPlayer, spawnPoint).WrapToIl2Cpp());
+			coSpawnAt(CachedPlayerControl.LocalPlayer, spawnPoint).WrapToIl2Cpp());
 	}
 
 	private IEnumerator coSpawnAt(PlayerControl playerControl, SpawnInMinigame.SpawnLocation spawnLocation)
@@ -118,7 +118,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 		playerControl.SetKinematic(false);
 		playerControl.NetTransform.SetPaused(false);
-		this.Close();
+		Close();
 
 		yield break;
 	}

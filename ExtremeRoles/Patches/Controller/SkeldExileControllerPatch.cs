@@ -4,10 +4,10 @@ using System.Collections;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
 using HarmonyLib;
+using ExtremeRoles.Module.CustomMonoBehaviour.Minigame;
 
 namespace ExtremeRoles.Patches.Controller;
 
