@@ -7,7 +7,7 @@ using ExtremeRoles.Performance;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
 using HarmonyLib;
-using ExtremeRoles.Module.CustomMonoBehaviour.Minigame;
+using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 namespace ExtremeRoles.Patches.Controller;
 
