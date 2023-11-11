@@ -25,7 +25,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public SecurityOption Security { get; private set; }
     public VitalOption Vital { get; private set; }
 
-    public int MaxMeetingCount => 0;
+	public SpawnOption Spawn { get; private set; }
+
+	public int MaxMeetingCount => 0;
 
     public bool IsChangeVoteAreaButtonSortArg => false;
     public bool IsFixedVoteAreaPlayerLevel => false;
@@ -37,7 +39,6 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
     public bool EngineerUseImpostorVent => false;
     public bool CanKillVentInPlayer => false;
-    public bool IsAutoSelectRandomSpawn => false;
 
     public bool DisableTaskWinWhenNoneTaskCrew => false;
     public bool DisableTaskWin => false;
@@ -89,6 +90,11 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 		ChangeForceWallCheck = IShipGlobalOption.GetCommonOptionValue<bool>(
 			GlobalOption.IsFixWallHaskTask);
+
+		Spawn = new SpawnOption()
+		{
+			IsAutoSelectRandom = false,
+		};
 
 		IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.RandomMap);

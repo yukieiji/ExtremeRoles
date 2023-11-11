@@ -30,7 +30,8 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 	public VentAnimationMode VentAnimationMode { get; private set; }
 
 	public bool IsAllowParallelMedbayScan { get; private set; }
-    public bool IsAutoSelectRandomSpawn { get; private set; }
+
+	public SpawnOption Spawn { get; private set; }
 
     public AdminOption Admin { get; private set; }
     public SecurityOption Security { get; private set; }
@@ -77,8 +78,12 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 
 		IsAllowParallelMedbayScan = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.ParallelMedBayScans);
-        IsAutoSelectRandomSpawn = IShipGlobalOption.GetCommonOptionValue<bool>(
-            GlobalOption.IsAutoSelectRandomSpawn);
+
+		Spawn = new SpawnOption()
+		{
+			IsAutoSelectRandom = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.IsAutoSelectRandomSpawn),
+		};
 
 		ChangeForceWallCheck = IShipGlobalOption.GetCommonOptionValue<bool>(
 			GlobalOption.IsFixWallHaskTask);

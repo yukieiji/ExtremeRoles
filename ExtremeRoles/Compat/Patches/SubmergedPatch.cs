@@ -106,7 +106,7 @@ public static class SubmarineSpawnInSystemDetorioratePatch
 	public static void Postfix(object __instance)
 	{
 		if (!CompatModManager.Instance.IsModMap<Submerged>() ||
-			!ExtremeGameModeManager.Instance.ShipOption.IsAutoSelectRandomSpawn) { return; }
+			!ExtremeGameModeManager.Instance.ShipOption.Spawn.IsAutoSelectRandom) { return; }
 
 		submarineSpawnInSystemTimer.SetValue(__instance, 0.0f);
 	}

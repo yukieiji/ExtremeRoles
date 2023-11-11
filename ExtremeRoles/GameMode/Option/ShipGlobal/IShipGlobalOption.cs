@@ -15,6 +15,7 @@ public enum GlobalOption : int
     FixedMeetingPlayerLevel,
     DisableSkipInEmergencyMeeting,
     DisableSelfVote,
+
     ConfirmExilMode,
     IsConfirmRole,
 
@@ -24,7 +25,15 @@ public enum GlobalOption : int
 	VentAnimationModeInVison,
 
 	ParallelMedBayScans,
-    IsAutoSelectRandomSpawn,
+
+	EnableRandomSpawn,
+	SkeldRandomSpawn,
+	MiraHqRandomSpawn,
+	PolusRandomSpawn,
+	AirShipRandomSpawn,
+	FungleRandomSpawn,
+
+	IsAutoSelectRandomSpawn,
 
 	IsFixWallHaskTask,
 	GarbageTask,
@@ -99,6 +108,7 @@ public interface IShipGlobalOption
 	public bool CanKillVentInPlayer { get; }
 	public VentAnimationMode VentAnimationMode { get; }
 
+	public SpawnOption Spawn { get; }
 	public bool IsAllowParallelMedbayScan { get; }
 	public bool IsAutoSelectRandomSpawn { get; }
 	public bool ChangeForceWallCheck { get; }
@@ -170,8 +180,8 @@ public interface IShipGlobalOption
 		CreateBoolOption(GlobalOption.DisableSkipInEmergencyMeeting, false);
 		CreateBoolOption(GlobalOption.DisableSelfVote, false);
 
-        var confirmOpt = CreateSelectionOption<GlobalOption, ConfirmExilMode>(
-			GlobalOption.ConfirmExilMode);
+		var confirmOpt = CreateSelectionOption<GlobalOption, ConfirmExilMode>(
+			GlobalOption.ConfirmExilMode, isHeader: true);
         confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 		var confirmRoleOpt = CreateBoolOption(GlobalOption.IsConfirmRole, false);
         confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
@@ -190,6 +200,15 @@ public interface IShipGlobalOption
 			CreateBoolOption((GlobalOption)i, false, parent: fixTaskOpt);
 		}
 
+
+		var randomSpawnOpt = CreateBoolOption(GlobalOption.EnableRandomSpawn , true);
+		CreateBoolOption(GlobalOption.SkeldRandomSpawn  , false, randomSpawnOpt);
+		CreateBoolOption(GlobalOption.MiraHqRandomSpawn , false, randomSpawnOpt);
+		CreateBoolOption(GlobalOption.PolusRandomSpawn  , false, randomSpawnOpt);
+		CreateBoolOption(GlobalOption.AirShipRandomSpawn, true , randomSpawnOpt);
+		CreateBoolOption(GlobalOption.FungleRandomSpawn , true , randomSpawnOpt);
+
+		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false, randomSpawnOpt);
 
 		var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
 		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
