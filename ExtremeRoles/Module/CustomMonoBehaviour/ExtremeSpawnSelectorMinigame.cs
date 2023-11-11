@@ -8,10 +8,11 @@ using UnityEngine;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Task;
 
 using Il2CppObject = Il2CppSystem.Object;
-using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -46,7 +47,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	public override void Begin(PlayerTask? task)
 	{
-		MinigameSystem.DefaultMinigameBegin(this, task);
+		this.AbstractBegin(task);
 
 		base.StartCoroutine(this.runTimer().WrapToIl2Cpp());
 
