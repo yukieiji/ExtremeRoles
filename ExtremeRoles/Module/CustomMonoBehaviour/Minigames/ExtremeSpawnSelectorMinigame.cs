@@ -49,7 +49,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 		for (int i = -1; i <= 1; ++i)
 		{
-			GameObject obj = new GameObject("selector");
+			GameObject obj = new GameObject("selector_button");
 			obj.transform.SetParent(base.transform);
 			obj.transform.localPosition = new Vector3(2.5f * i, buttonYOffset);
 			obj.SetActive(true);
