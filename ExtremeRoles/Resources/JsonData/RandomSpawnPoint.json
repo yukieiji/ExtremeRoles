@@ -1,0 +1,118 @@
+{
+  "Skeld": [
+    {
+      "RoomName": "Cafeteria",
+      "ImgName": "",
+      "X": -0.85,
+      "Y": 2.5
+    },
+    {
+      "RoomName": "Nav",
+      "ImgName": "",
+      "X": 16.0,
+      "Y": -4.5
+    },
+    {
+      "RoomName": "Storage",
+      "ImgName": "",
+      "X": -1.25,
+      "Y": -10.0
+    },
+    {
+      "RoomName": "LowerEngine",
+      "ImgName": "",
+      "X": -16.5,
+      "Y": -13.0
+    }
+  ],
+  "MiraHQ": [
+    {
+      "RoomName": "Cafeteria",
+      "ImgName": "",
+      "X": 25.0,
+      "Y": 4.5
+    },
+    {
+      "RoomName": "Launchpad",
+      "ImgName": "",
+      "X": -4.0,
+      "Y": 3.0
+    },
+    {
+      "RoomName": "Greenhouse",
+      "ImgName": "",
+      "X": 17.9,
+      "Y": 23.5
+    },
+    {
+      "RoomName": "Laboratory",
+      "ImgName": "",
+      "X": 9.0,
+      "Y": 12.75
+    }
+  ],
+  "Polus": [
+    {
+      "RoomName": "Office",
+      "ImgName": "",
+      "X": 17.25,
+      "Y": -17.0
+    },
+    {
+      "RoomName": "LifeSupp",
+      "ImgName": "",
+      "X": 3.25,
+      "Y": -21.0
+    },
+    {
+      "RoomName": "Dropship",
+      "ImgName": "",
+      "X": 16.75,
+      "Y": -2.0
+    },
+    {
+      "RoomName": "Laboratory",
+      "ImgName": "",
+      "X": 31.5,
+      "Y": 7.5
+    },
+    {
+      "RoomName": "Specimens",
+      "ImgName": "",
+      "X": 36.5,
+      "Y": -21.5
+    }
+  ],
+  "Fungle": [
+    {
+      "RoomName": "MeetingRoom",
+      "ImgName": "",
+      "X": -3.0,
+      "Y": 0.25
+    },
+    {
+      "RoomName": "Greenhouse",
+      "ImgName": "",
+      "X": 9.75,
+      "Y": -12.0
+    },
+    {
+      "RoomName": "MiningPit",
+      "ImgName": "",
+      "X": 12.75,
+      "Y": 10.0
+    },
+    {
+      "RoomName": "Kitchen",
+      "ImgName": "",
+      "X": -15.75,
+      "Y": -7.5
+    },
+    {
+      "RoomName": "Dropship",
+      "ImgName": "",
+      "X": -8.0,
+      "Y": -10.0
+    }
+  ]
+}

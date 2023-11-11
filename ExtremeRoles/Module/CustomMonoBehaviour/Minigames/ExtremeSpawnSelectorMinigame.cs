@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using System.Reflection;
 
 using TMPro;
 using UnityEngine;
-using Newtonsoft.Json.Linq;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
@@ -33,6 +35,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	private readonly record struct SpawnPointInfo(string RoomName, string ImgName, float X, float Y);
 
 	private static Dictionary<string, SpawnPointInfo[]>? spawnInfo;
+	private const string jsonPath = "ExtremeRoles.Resources.JsonData.RandomSpawnPoint.json";
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	private TextMeshPro text;
@@ -49,9 +52,18 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			return;
 		}
 
-		// infoLoad
+		if (spawnInfo == null)
+		{
+			var assembly = Assembly.GetCallingAssembly();
+			using Stream? stream = assembly.GetManifestResourceStream(jsonPath);
+
+			if (stream is null) { return; }
+
+			spawnInfo = JsonSerializer.Deserialize<Dictionary<string, SpawnPointInfo[]>>(stream);
+		}
+
 		if (spawnInfo == null||
-			spawnInfo.TryGetValue(mapKey, out var usePoints) ||
+			!spawnInfo.TryGetValue(mapKey, out var usePoints) ||
 			usePoints == null)
 		{
 			return;
