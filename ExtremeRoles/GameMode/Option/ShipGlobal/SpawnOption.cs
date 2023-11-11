@@ -2,7 +2,7 @@
 
 public sealed class SpawnOption
 {
-	public bool IsEnableRandom { get; init; } = true;
+	public bool EnableRandom { get; init; } = true;
 
 	public bool Skeld   { get; init; } = false;
 	public bool MiraHq  { get; init; } = false;

@@ -105,8 +105,13 @@ public static class SubmarineSpawnInSystemDetorioratePatch
 
 	public static void Postfix(object __instance)
 	{
-		if (!CompatModManager.Instance.IsModMap<Submerged>() ||
-			!ExtremeGameModeManager.Instance.ShipOption.Spawn.IsAutoSelectRandom) { return; }
+		if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod)) { return; }
+
+		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
+
+		// ランダムスポーンが有効かつ自動選択がオフだけ処理飛ばす
+		if (spawnOpt == null ||
+			(spawnOpt.EnableRandom && submergedMod!.EnableRandomSpawn && !spawnOpt.IsAutoSelectRandom)) { return; }
 
 		submarineSpawnInSystemTimer.SetValue(__instance, 0.0f);
 	}
@@ -195,5 +200,20 @@ public static class SubmarineSurvillanceMinigamePatch
 	{
 		screenStaticInfo = AccessTools.Field(type, "screenStatic");
 		screenTextInfo = AccessTools.Field(type, "screenText");
+	}
+}
+
+public static class SubmarineSelectSpawnCoSelectLevelPatch
+{
+	public static void Prefix(ref bool upperSelected)
+	{
+		if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod)) { return; }
+
+		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
+
+		if (spawnOpt == null ||
+			(spawnOpt.EnableRandom && submergedMod!.EnableRandomSpawn)) { return; }
+
+		upperSelected = false;
 	}
 }

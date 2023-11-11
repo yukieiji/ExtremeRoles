@@ -16,7 +16,7 @@ public static class SpawnInMinigameBeginPatch
 
 		if (spawnOpt == null) { return; }
 
-		if (!(spawnOpt.IsEnableRandom && spawnOpt.AirShip))
+		if (!(spawnOpt.EnableRandom && spawnOpt.AirShip))
 		{
 			__instance.gotButton = true;
 
