@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
+using SpawnPoint = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator.RandomSpawnPoint;
 
 
 #nullable enable
@@ -111,7 +112,7 @@ public static class SubmarineSpawnInSystemDetorioratePatch
 
 		// ランダムスポーンが有効かつ自動選択がオフだけ処理飛ばす
 		if (spawnOpt == null ||
-			(spawnOpt.EnableRandom && submergedMod!.EnableRandomSpawn && !spawnOpt.IsAutoSelectRandom)) { return; }
+			(spawnOpt.EnableRandom && submergedMod!.SpawnPoint is SpawnPoint.DefaultSpawn && !spawnOpt.IsAutoSelectRandom)) { return; }
 
 		submarineSpawnInSystemTimer.SetValue(__instance, 0.0f);
 	}
@@ -210,10 +211,19 @@ public static class SubmarineSelectSpawnCoSelectLevelPatch
 		if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod)) { return; }
 
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
+		var spawnPoint = submergedMod!.SpawnPoint;
 
-		if (spawnOpt == null ||
-			(spawnOpt.EnableRandom && submergedMod!.EnableRandomSpawn)) { return; }
-
-		upperSelected = false;
+		if (spawnOpt == null || spawnPoint is SpawnPoint.DefaultSpawn)
+		{
+			return;
+		}
+		else if (!spawnOpt.EnableRandom || spawnPoint is SpawnPoint.LowerCentralOnly)
+		{
+			upperSelected = false;
+		}
+		else if (spawnPoint is SpawnPoint.UpperCentralOnly)
+		{
+			upperSelected = true;
+		}
 	}
 }
