@@ -85,7 +85,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	{
 		for (float time = 128f; time >= 0f; time -= Time.deltaTime)
 		{
-			this.text.text = DestroyableSingleton<TranslationController>.Instance.GetString(
+			this.text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
 				StringNames.TimeRemaining, new Il2CppObject[] { Mathf.CeilToInt(time) });
 			yield return null;
 		}
