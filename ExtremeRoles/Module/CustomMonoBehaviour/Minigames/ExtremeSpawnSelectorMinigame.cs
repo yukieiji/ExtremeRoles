@@ -15,6 +15,7 @@ using ExtremeRoles.Extension.Task;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using Il2CppObject = Il2CppSystem.Object;
+using System.Linq;
 
 #nullable enable
 
@@ -28,7 +29,10 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	private readonly List<SpriteButton> button = new List<SpriteButton>(3);
 
 	private const float buttonYOffset = 0.25f;
-	private static JObject? json;
+
+	private readonly record struct SpawnPointInfo(string RoomName, string ImgName, float X, float Y);
+
+	private static Dictionary<string, SpawnPointInfo[]>? spawnInfo;
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	private TextMeshPro text;
@@ -45,21 +49,41 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			return;
 		}
 
+		// infoLoad
+		if (spawnInfo == null||
+			spawnInfo.TryGetValue(mapKey, out var usePoints) ||
+			usePoints == null)
+		{
+			return;
+		}
+
 		this.AbstractBegin(task);
 
-		for (int i = -1; i <= 1; ++i)
+		var shuffleedPoint = usePoints.OrderBy(x => RandomGenerator.Instance.Next()).ToArray();
+
+		for (int i = 0; i < 3; ++i)
 		{
+			var point = shuffleedPoint[i];
+
 			GameObject obj = new GameObject("selector_button");
 			obj.transform.SetParent(base.transform);
-			obj.transform.localPosition = new Vector3(2.5f * i, buttonYOffset);
+			obj.transform.localPosition = new Vector3(2.5f * (i - 1), buttonYOffset);
 			obj.SetActive(true);
 			obj.layer = 5;
 
 			var button = obj.AddComponent<SpriteButton>();
-			button.Text.text = "Test";
+
+			string roomName = point.RoomName;
+			string text =
+				Enum.TryParse<SystemTypes>(roomName, true, out var systemRoomName) ?
+				FastDestroyableSingleton<TranslationController>.Instance.GetString(systemRoomName) :
+				Translation.GetString(roomName);
+
+			button.Text.text = text;
 			button.Rend.sprite = Resources.Loader.CreateSpriteFromResources(
 				Resources.Path.MoverMove);
 			button.Colider.size = new Vector2(1.25f, 1.25f);
+			button.OnClick = createSpawnAtAction(new Vector2(point.X, point.Y), text);
 
 			this.button.Add(button);
 		}
