@@ -7,20 +7,19 @@ using AmongUs.GameOptions;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.GameMode.Option.MapModule;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Compat;
-using ExtremeRoles.Module.SystemType;
-using System.Linq;
 
 namespace ExtremeRoles.Patches;
 
