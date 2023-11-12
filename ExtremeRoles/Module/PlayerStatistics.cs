@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 using ExtremeRoles.Module.Interface;
@@ -10,6 +9,8 @@ using ExtremeRoles.Roles.Combination;
 
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.GameMode;
+
+using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
 
 namespace ExtremeRoles.Module
 {
@@ -87,7 +88,7 @@ namespace ExtremeRoles.Module
 				ExtremeRoleId roleId = role.Id;
 
 				// クルーのカウントを数える
-				if (team == ExtremeRoleType.Crewmate)
+				if (role.IsCrewmate())
 				{
 					++numCrew;
 				}
@@ -99,31 +100,25 @@ namespace ExtremeRoles.Module
 				};
 
 				// マッドメイトの生存をカウントしないオプション
-				if (roleId == ExtremeRoleId.Madmate)
+				if (roleId == ExtremeRoleId.Madmate &&
+					role is NeutralMad madmate &&
+					madmate.IsDontCountAliveCrew)
 				{
-					Roles.Solo.Neutral.Madmate madmate = role as Roles.Solo.Neutral.Madmate;
-					if (madmate != null)
-					{
-						if (madmate.IsDontCountAliveCrew)
-						{
-							continue;
-						}
-					}
+					continue;
 				}
 
 				++numTotalAlive;
 				int gameControlId = role.GameControlId;
 
+				// アサシンがニュートラルを切れない時
 				if (roleId == ExtremeRoleId.Assassin &&
-					role.IsImpostor())
+					role.IsImpostor() &&
+					role is Assassin assassin)
 				{
-					Assassin assassin = role as Assassin;
-					if (assassin != null)
+					bool canNeutralKill = assassin.CanKilledFromNeutral;
+					if (!canNeutralKill || (canNeutralKill && !assassin.CanKilled))
 					{
-						if (!assassin.CanKilled && !assassin.CanKilledFromNeutral)
-						{
-							++numAssassinAlive;
-						}
+						++numAssassinAlive;
 					}
 				}
 
