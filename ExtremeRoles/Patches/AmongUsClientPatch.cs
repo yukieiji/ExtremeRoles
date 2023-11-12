@@ -97,12 +97,11 @@ public static class AmongUsClientOnGameEndPatch
 
     public static void Postfix()
     {
-        List<GameData.PlayerInfo> noWinner = new List<GameData.PlayerInfo>();
-        List<(GameData.PlayerInfo, IRoleWinPlayerModifier)> modRole = new List<
-            (GameData.PlayerInfo, IRoleWinPlayerModifier)> ();
+		int playerNum = GameData.Instance.AllPlayers.Count;
 
-        List<(GameData.PlayerInfo, IGhostRoleWinable)> ghostWinCheckRole = new List<
-           (GameData.PlayerInfo, IGhostRoleWinable)>();
+		var noWinner = new List<GameData.PlayerInfo>(playerNum);
+        var modRole = new List<(GameData.PlayerInfo, IRoleWinPlayerModifier)> (playerNum);
+        var ghostWinCheckRole = new List<(GameData.PlayerInfo, IGhostRoleWinable)>(playerNum);
 
         var roleData = ExtremeRoleManager.GameRole;
         var gameData = ExtremeRolesPlugin.ShipState;
@@ -133,19 +132,16 @@ public static class AmongUsClientOnGameEndPatch
                 noWinner.Add(playerInfo);
             }
 
-            var multiAssignRole = role as MultiAssignRoleBase;
-
             if (role is IRoleWinPlayerModifier winModRole)
             {
                 modRole.Add((playerInfo, winModRole));
             }
-            if (multiAssignRole != null)
+
+            if (role is MultiAssignRoleBase multiAssignRole &&
+				multiAssignRole.AnotherRole is IRoleWinPlayerModifier multiWinModRole)
             {
-                if (multiAssignRole.AnotherRole is IRoleWinPlayerModifier multiWinModRole)
-                {
-                    modRole.Add((playerInfo, multiWinModRole));
-                }
-            }
+				modRole.Add((playerInfo, multiWinModRole));
+			}
 
             if (hasGhostRole &&
                 ghostRole.IsNeutral() &&
@@ -155,7 +151,7 @@ public static class AmongUsClientOnGameEndPatch
             }
         }
 
-        List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
+        List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>(playerNum);
         List<GameData.PlayerInfo> plusWinner = gameData.GetPlusWinner();
         foreach (WinningPlayerData winner in TempData.winners.GetFastEnumerator())
         {
