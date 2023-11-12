@@ -80,7 +80,10 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
         IsAutoSelectRandomSpawn = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.IsAutoSelectRandomSpawn);
 
-        Admin = new AdminOption()
+		ChangeForceWallCheck = IShipGlobalOption.GetCommonOptionValue<bool>(
+			GlobalOption.IsFixWallHaskTask);
+
+		Admin = new AdminOption()
         {
             DisableAdmin = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveAdmin),
