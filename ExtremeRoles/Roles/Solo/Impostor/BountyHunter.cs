@@ -54,8 +54,6 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
-        this.KillCoolTime = this.defaultKillCool;
-        
         this.setNewTarget();
 
         if (this.targetArrow != null)
@@ -67,6 +65,8 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
     public void ResetOnMeetingStart()
     {
+		this.KillCoolTime = this.defaultKillCool;
+
         if (this.targetArrow != null)
         {
             this.targetArrow.SetActive(false);
@@ -238,11 +238,11 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         foreach (var player in allPlayer)
         {
             if (player.Data.IsDead || player.Data.Disconnected) { continue; }
-            
+
             SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
-            
-            if (role.IsImpostor() || 
-                role.FakeImposter || 
+
+            if (role.IsImpostor() ||
+                role.FakeImposter ||
                 this.targetId == player.PlayerId) { continue; }
 
             this.targetId = player.PlayerId;
