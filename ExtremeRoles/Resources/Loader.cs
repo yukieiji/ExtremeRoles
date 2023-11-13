@@ -8,9 +8,11 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using Il2CppFile = Il2CppSystem.IO.File;
 
 namespace ExtremeRoles.Resources;
 
@@ -150,7 +152,7 @@ public static class Loader
 
 		if (buuttonObj == null)
 		{
-				return null;
+			return null;
 		}
 		return buuttonObj.GetComponent<SimpleButton>();
 	}
@@ -177,7 +179,7 @@ public static class Loader
 		}
 		catch
 		{
-			Logging.Debug($"Error loading sprite from path: {path}");
+			Logging.Error($"Error loading sprite from path: {path}");
 		}
 		return null;
 	}
@@ -188,12 +190,18 @@ public static class Loader
 		AssetBundle bundle = getAssetBundleFromAssembly(
 			bundleName, Assembly.GetCallingAssembly());
 
-		var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
-		if (!obj)
-		{
-			return null;
-		}
-		return obj.TryCast<T>();
+		T result = getObjectFromAsset<T>(bundle, objName);
+
+		return result;
+	}
+
+	public static T GetUnityObjectFromPath<T>(
+		string path, string objName) where T : UnityObject
+	{
+		AssetBundle bundle = getAssetBundleFromFilePath(path);
+		T result = getObjectFromAsset<T>(bundle, objName);
+
+		return result;
 	}
 
 	public static void LoadCommonAsset()
@@ -209,6 +217,26 @@ public static class Loader
 		}
 	}
 
+	private static T getObjectFromAsset<T>(AssetBundle bundle, string objName) where T : UnityObject
+	{
+		var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
+		if (!obj.IsTryCast(out T resutlt))
+		{
+			Logging.Error($"Can't find {nameof(T)} in bundle");
+			return null;
+		}
+		return resutlt;
+	}
+
+	private static AssetBundle getAssetBundleFromFilePath(
+		string filePath)
+	{
+		var byteArray = Il2CppFile.ReadAllBytes(filePath);
+		AssetBundle bundle = loadAssetFromByteArray(byteArray);
+
+		return bundle;
+	}
+
 	private static AssetBundle getAssetBundleFromAssembly(
 		string bundleName, Assembly assembly)
 	{
@@ -216,11 +244,17 @@ public static class Loader
 		{
 			using var stream = assembly.GetManifestResourceStream(bundleName);
 			var byteArray = getBytedArryFrom(stream);
+			bundle = loadAssetFromByteArray(byteArray);
 
-			bundle = AssetBundle.LoadFromMemory(byteArray);
-			bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
 			cachedBundle.Add(bundleName, bundle);
 		}
+		return bundle;
+	}
+
+	private static AssetBundle loadAssetFromByteArray(Il2CppStructArray<byte> byteArray)
+	{
+		AssetBundle bundle = AssetBundle.LoadFromMemory(byteArray);
+		bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
 		return bundle;
 	}
 
@@ -238,7 +272,7 @@ public static class Loader
 		}
 		catch
 		{
-			Logging.Debug($"Error loading texture from resources: {path}");
+			Logging.Error($"loading texture from resources: {path}");
 		}
 		return null;
 	}
