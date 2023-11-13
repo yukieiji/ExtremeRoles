@@ -361,13 +361,12 @@ public static class GameSystem
     {
 		var role = FastDestroyableSingleton<RoleManager>.Instance.GetRole(RoleTypes.Scientist);
 
-		if (!role.IsTryCast<ScientistRole>(out var scientist) ||
-			scientist == null)
+		if (!role.IsTryCast<ScientistRole>(out var scientist))
 		{
 			return null;
 		}
 
-        return scientist.VitalsPrefab;
+        return scientist!.VitalsPrefab;
     }
 
     public static void ForceEndGame()
@@ -549,8 +548,7 @@ public static class GameSystem
 		{
 			case SystemTypes.Electrical:
 
-				if (!system.IsTryCast<SwitchSystem>(out var switchSystem) ||
-					switchSystem == null)
+				if (!system.IsTryCast<SwitchSystem>(out var switchSystem))
 				{
 					return;
 				}
@@ -560,15 +558,14 @@ public static class GameSystem
 				{
 					minigame.ForceClose();
 				}
-				switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+				switchSystem!.ActualSwitches = switchSystem!.ExpectedSwitches;
 				break;
 			case SystemTypes.MushroomMixupSabotage:
-				if (!system.IsTryCast<MushroomMixupSabotageSystem>(out var mixupSystem) ||
-					mixupSystem == null)
+				if (!system.IsTryCast<MushroomMixupSabotageSystem>(out var mixupSystem))
 				{
 					return;
 				}
-				mixupSystem.currentSecondsUntilHeal = 0.001f;
+				mixupSystem!.currentSecondsUntilHeal = 0.001f;
 				break;
 			default:
 				break;
