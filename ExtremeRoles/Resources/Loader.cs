@@ -7,8 +7,6 @@ using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 
-using ExtremeRoles.Helper;
-using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using UnityObject = UnityEngine.Object;
@@ -16,6 +14,7 @@ using Il2CppFile = Il2CppSystem.IO.File;
 
 namespace ExtremeRoles.Resources;
 
+#nullable enable
 
 public static class Path
 {
@@ -150,38 +149,27 @@ public static class Loader
 			"assets/common/simplebutton.prefab"),
 			parent);
 
-		if (buuttonObj == null)
-		{
-			return null;
-		}
 		return buuttonObj.GetComponent<SimpleButton>();
 	}
 
 	public static Sprite CreateSpriteFromResources(
 		string path, float pixelsPerUnit=115f)
 	{
-		try
-		{
-			string key = $"{path}{pixelsPerUnit}";
+		string key = $"{path}{pixelsPerUnit}";
 
-			if (cachedSprite.TryGetValue(key, out Sprite sprite)) { return sprite; }
+		if (cachedSprite.TryGetValue(key, out Sprite? sprite) ||
+			sprite != null) { return sprite; }
 
-			Texture2D texture = createTextureFromResources(path);
-			sprite = Sprite.Create(
-				texture,
-				new Rect(0, 0, texture.width, texture.height),
-				new Vector2(0.5f, 0.5f), pixelsPerUnit);
+		Texture2D texture = createTextureFromResources(path);
+		sprite = Sprite.Create(
+			texture,
+			new Rect(0, 0, texture.width, texture.height),
+			new Vector2(0.5f, 0.5f), pixelsPerUnit);
 
-			sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-			cachedSprite.Add(key, sprite);
+		sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+		cachedSprite.Add(key, sprite);
 
-			return sprite;
-		}
-		catch
-		{
-			Logging.Error($"Error loading sprite from path: {path}");
-		}
-		return null;
+		return sprite;
 	}
 
 	public static T GetUnityObjectFromResources<T>(
@@ -189,7 +177,6 @@ public static class Loader
 	{
 		AssetBundle bundle = getAssetBundleFromAssembly(
 			bundleName, Assembly.GetCallingAssembly());
-
 		T result = getObjectFromAsset<T>(bundle, objName);
 
 		return result;
@@ -220,12 +207,7 @@ public static class Loader
 	private static T getObjectFromAsset<T>(AssetBundle bundle, string objName) where T : UnityObject
 	{
 		var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
-		if (!obj.IsTryCast(out T resutlt))
-		{
-			Logging.Error($"Can't find {nameof(T)} in bundle");
-			return null;
-		}
-		return resutlt;
+		return obj.Cast<T>();
 	}
 
 	private static AssetBundle getAssetBundleFromFilePath(
@@ -240,9 +222,10 @@ public static class Loader
 	private static AssetBundle getAssetBundleFromAssembly(
 		string bundleName, Assembly assembly)
 	{
-		if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
+		if (!cachedBundle.TryGetValue(bundleName, out AssetBundle? bundle) ||
+			bundle == null)
 		{
-			using var stream = assembly.GetManifestResourceStream(bundleName);
+			using var stream = getStreamFromResource(assembly, bundleName);
 			var byteArray = getBytedArryFrom(stream);
 			bundle = loadAssetFromByteArray(byteArray);
 
@@ -260,21 +243,25 @@ public static class Loader
 
 	private static Texture2D createTextureFromResources(string path)
 	{
-		try
-		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			using Stream stream = assembly.GetManifestResourceStream(path);
-			var byteTexture = getBytedArryFrom(stream);
+		Assembly assembly = Assembly.GetExecutingAssembly();
+		using Stream stream = getStreamFromResource(assembly, path);
 
-			Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-			ImageConversion.LoadImage(texture, byteTexture, false);
-			return texture;
-		}
-		catch
+		var byteTexture = getBytedArryFrom(stream);
+
+		Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+		ImageConversion.LoadImage(texture, byteTexture, false);
+		return texture;
+	}
+
+	private static Stream getStreamFromResource(Assembly assembly, string path)
+	{
+		using Stream? stream = assembly.GetManifestResourceStream(path);
+
+		if (stream is null)
 		{
-			Logging.Error($"loading texture from resources: {path}");
+			throw new ArgumentException($"Can't find {path} in resorces");
 		}
-		return null;
+		return stream;
 	}
 
 	private static unsafe Il2CppStructArray<byte> getBytedArryFrom(Stream stream)
