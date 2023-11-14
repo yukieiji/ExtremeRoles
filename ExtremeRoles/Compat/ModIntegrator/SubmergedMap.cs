@@ -43,15 +43,16 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		CentralAndServiceElevator,
 		LobbyAndServiceElevator
 	}
-
-	// Submerged(Clone)/Elevators/
-	//  Central
-	//   WestLeftElevator
-	//   WestRightElevator
-	// Lobby
-	//   EastLeftElevator
-	//   EastRightElevator
-	// ServiceElevator
+	/*
+	 Submerged(Clone)/Elevators/
+	  Central
+	   WestLeftElevator
+	   WestRightElevator
+	 Lobby
+	   EastLeftElevator
+	   EastRightElevator
+	 ServiceElevator
+	*/
 	private const string centralLeftElevator = "Elevators/WestLeftElevator";
 	private const string centralRightElevator = "Elevators/WestRightElevator";
 	private const string lobbyLeftElevator = "Elevators/EastLeftElevator";
@@ -77,6 +78,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	private MethodInfo calculateLightRadiusMethod;
 
 	private MethodInfo rpcRequestChangeFloorMethod;
+	private MethodInfo registerFloorOverrideMethod;
 	private FieldInfo onUpperField;
 	private MethodInfo getFloorHandlerInfo;
 
@@ -120,6 +122,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			floorHandlerType, "GetFloorHandler", new Type[] { typeof(PlayerControl) });
 		this.rpcRequestChangeFloorMethod = AccessTools.Method(
 			floorHandlerType, "RpcRequestChangeFloor");
+		this.registerFloorOverrideMethod = AccessTools.Method(
+			floorHandlerType, "RegisterFloorOverride");
+
 		this.onUpperField = AccessTools.Field(floorHandlerType, "onUpper");
 
 		this.submarineStatusType = ClassType.First(
@@ -197,7 +202,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		return result;
 	}
 
-	public int GetLocalPlayerFloor() => GetFloor(CachedPlayerControl.LocalPlayer);
+	public int GetFloor(Vector3 pos) => pos.y > -6.19f ? 1 : 0;
 
 	public int GetFloor(PlayerControl player)
 	{
@@ -208,17 +213,16 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		return valueObj != null && (bool)valueObj ? 1 : 0;
 	}
 
-	public void ChangeLocalPlayerFloor(int floor)
-	{
-		ChangeFloor(CachedPlayerControl.LocalPlayer, floor);
-	}
 	public void ChangeFloor(PlayerControl player, int floor)
 	{
 		if (floor > 1) { return; }
 		MonoBehaviour? floorHandler = getFloorHandler(player);
 		if (floorHandler == null) { return; }
 
-		this.rpcRequestChangeFloorMethod.Invoke(floorHandler, new object[] { floor == 1 });
+		object[] args = new object[] { floor == 1 };
+
+		this.rpcRequestChangeFloorMethod.Invoke(floorHandler, args);
+		this.registerFloorOverrideMethod.Invoke(floorHandler, args);
 	}
 
 	public Console? GetConsole(TaskTypes task)

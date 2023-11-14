@@ -11,6 +11,8 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Compat.ModIntegrator;
+using ExtremeRoles.Compat;
 
 namespace ExtremeRoles;
 
@@ -379,11 +381,23 @@ public static class RPCOperator
         byte teleporterId, UnityEngine.Vector2 pos)
     {
         PlayerControl teleportPlayer = Helper.Player.GetPlayerControlById(teleporterId);
-        if (teleportPlayer != null)
-        {
-            teleportPlayer.NetTransform.SnapTo(pos);
-        }
-    }
+		if (teleportPlayer == null) { return; }
+
+		var curPos = teleportPlayer.GetTruePosition();
+		teleportPlayer.NetTransform.SnapTo(pos);
+
+		if (CompatModManager.Instance.TryGetModMap<SubmergedIntegrator>(out var mapMod) &&
+			CachedPlayerControl.LocalPlayer.PlayerId == teleporterId)
+		{
+			int targetFloor = pos.y > -6.19f ? 1 : 0;
+			int prevFloor = curPos.y > -6.19f ? 1 : 0;
+			if (targetFloor != prevFloor)
+			{
+				mapMod.ChangeFloor(teleportPlayer, targetFloor);
+			}
+		}
+
+	}
 
     public static void UncheckedShapeShift(
         byte sourceId, byte targetId, byte useAnimation)
