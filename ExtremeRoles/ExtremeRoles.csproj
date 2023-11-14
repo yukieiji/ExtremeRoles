@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>9.0.1.2</Version>
-    <!--<VersionPrefix>9.0.1</VersionPrefix>-->
+    <!--<Version>9.0.1.2</Version>-->
+    <VersionPrefix>9.0.2</VersionPrefix>
     <VersionSuffix>HideNSeekXion</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
