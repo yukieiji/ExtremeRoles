@@ -85,6 +85,7 @@ public static class PlayerControlMurderPlayerPatch
 
 		byte targetPlayerId = target.PlayerId;
 
+		// 会議中に発生したキルでキルされた人が開いてたボタンとキルされた人へ投票しようとしていたボタンを閉じる
 		if (MeetingHud.Instance != null)
 		{
 			byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
