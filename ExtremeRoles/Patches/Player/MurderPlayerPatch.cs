@@ -81,15 +81,17 @@ public static class PlayerControlMurderPlayerPatch
 		PlayerControl __instance,
 		[HarmonyArgument(0)] PlayerControl target)
 	{
+		if (!target.Data.IsDead) { return; }
 
 		byte targetPlayerId = target.PlayerId;
 
 		if (MeetingHud.Instance != null)
 		{
+			byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 			foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
 			{
 				if ((
-						CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId &&
+						localPlayerId == targetPlayerId &&
 						pva.Buttons.activeSelf
 					) ||
 					pva.TargetPlayerId == targetPlayerId)
@@ -100,8 +102,6 @@ public static class PlayerControlMurderPlayerPatch
 		}
 
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-		if (!target.Data.IsDead) { return; }
 
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			target, DeathReason.Kill, __instance);
