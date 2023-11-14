@@ -82,14 +82,29 @@ public static class PlayerControlMurderPlayerPatch
 		[HarmonyArgument(0)] PlayerControl target)
 	{
 
+		byte targetPlayerId = target.PlayerId;
+
+		if (MeetingHud.Instance != null)
+		{
+			foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
+			{
+				if ((
+						CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId &&
+						pva.Buttons.activeSelf
+					) ||
+					pva.TargetPlayerId == targetPlayerId)
+				{
+					pva.Cancel();
+				}
+			}
+		}
+
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
 		if (!target.Data.IsDead) { return; }
 
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			target, DeathReason.Kill, __instance);
-
-		byte targetPlayerId = target.PlayerId;
 
 		var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
