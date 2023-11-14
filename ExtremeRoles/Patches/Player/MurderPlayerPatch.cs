@@ -81,14 +81,18 @@ public static class PlayerControlMurderPlayerPatch
 		PlayerControl __instance,
 		[HarmonyArgument(0)] PlayerControl target)
 	{
-		if (!target.Data.IsDead) { return; }
+
+		PlayerControl player = CachedPlayerControl.LocalPlayer;
+
+		if (!target.Data.IsDead ||
+			player == null) { return; }
 
 		byte targetPlayerId = target.PlayerId;
+		byte localPlayerId = player.PlayerId;
 
 		// 会議中に発生したキルでキルされた人が開いてたボタンとキルされた人へ投票しようとしていたボタンを閉じる
 		if (MeetingHud.Instance != null)
 		{
-			byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 			foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
 			{
 				if ((
@@ -134,14 +138,12 @@ public static class PlayerControlMurderPlayerPatch
 
 		ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
 
-		var player = CachedPlayerControl.LocalPlayer;
-
-		if (player.PlayerId != targetPlayerId)
+		if (localPlayerId != targetPlayerId)
 		{
 			var hookRole = ExtremeRoleManager.GameRole[
-				player.PlayerId] as IRoleMurderPlayerHook;
+				localPlayerId] as IRoleMurderPlayerHook;
 			multiAssignRole = ExtremeRoleManager.GameRole[
-				player.PlayerId] as MultiAssignRoleBase;
+				localPlayerId] as MultiAssignRoleBase;
 
 			if (hookRole != null)
 			{
