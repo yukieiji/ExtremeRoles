@@ -42,15 +42,17 @@ public static class PlayerControlMurderPlayerPatch
 		__instance.logger.Debug(
 			$"{__instance.PlayerId} trying to murder {target.PlayerId}", null);
 
+		bool hasDecisionByHost = resultFlags.HasFlag(MurderResultFlags.DecisionByHost);
+
 		if (resultFlags.HasFlag(MurderResultFlags.FailedProtected) ||
 			(
-				resultFlags.HasFlag(MurderResultFlags.DecisionByHost) &&
+				hasDecisionByHost &&
 				target.protectedByGuardianId > -1
 			))
 		{
 			target.protectedByGuardianThisRound = true;
-			bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
-			if (__instance.AmOwner || flag)
+			bool isGuardianAngel = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+			if (__instance.AmOwner || isGuardianAngel)
 			{
 				target.ShowFailedMurder();
 				__instance.SetKillTimer(killCool / 2f);
@@ -59,7 +61,7 @@ public static class PlayerControlMurderPlayerPatch
 			{
 				target.RemoveProtection();
 			}
-			if (flag)
+			if (isGuardianAngel)
 			{
 				StatsManager.Instance.IncrementStat(
 					StringNames.StatsGuardianAngelCrewmatesProtected);
@@ -70,7 +72,7 @@ public static class PlayerControlMurderPlayerPatch
 			return false;
 		}
 
-		if (resultFlags.HasFlag(MurderResultFlags.Succeeded) || resultFlags.HasFlag(MurderResultFlags.DecisionByHost))
+		if (resultFlags.HasFlag(MurderResultFlags.Succeeded) || hasDecisionByHost)
 		{
 			murderPlayerBody(__instance, target, killCool);
 		}
@@ -180,21 +182,22 @@ public static class PlayerControlMurderPlayerPatch
 	{
 
 		FastDestroyableSingleton<DebugAnalytics>.Instance.Analytics.Kill(target.Data, instance.Data);
+		var statsMng = StatsManager.Instance;
 
 		if (instance.AmOwner)
 		{
 			if (GameManager.Instance.IsHideAndSeek())
 			{
-				StatsManager.Instance.IncrementStat(
+				statsMng.IncrementStat(
 					StringNames.StatsImpostorKills_HideAndSeek);
 			}
 			else
 			{
-				StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
+				statsMng.IncrementStat(StringNames.StatsImpostorKills);
 			}
 			if (instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
 			{
-				StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
+				statsMng.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
 			}
 			if (Constants.ShouldPlaySfx())
 			{
@@ -209,7 +212,7 @@ public static class PlayerControlMurderPlayerPatch
 		target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 		if (target.AmOwner)
 		{
-			StatsManager.Instance.IncrementStat(StringNames.StatsTimesMurdered);
+			statsMng.IncrementStat(StringNames.StatsTimesMurdered);
 			if (Minigame.Instance)
 			{
 				try
