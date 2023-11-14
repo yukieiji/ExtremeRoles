@@ -10,6 +10,7 @@ namespace ExtremeRoles.Module.ButtonAutoActivator
 			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
 			return
+				localPlayer != null &&
 				(
 					localPlayer.IsKillTimerEnabled ||
 					localPlayer.ForceKillTimerContinue ||

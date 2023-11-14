@@ -5,6 +5,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.API.Interface;
 
@@ -70,7 +71,7 @@ public static class IRoleAbilityMixin
         Action forceAbilityOff = null,
         bool isReduceOnActive = false,
         KeyCode hotkey = KeyCode.F)
-    {   
+    {
         self.Button = RoleAbilityFactory.CreateCountAbility(
             textKey: textKey,
             img: sprite,
@@ -241,8 +242,17 @@ public static class IRoleAbilityMixin
 
     public static bool IsCommonUse(this IRoleAbility _)
     {
-        return PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove;
-    }
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+        return
+			localPlayer != null &&
+			localPlayer.Data != null &&
+			!localPlayer.Data.IsDead &&
+			localPlayer.CanMove &&
+			MeetingHud.Instance == null &&
+			ExileController.Instance == null &&
+			IntroCutscene.Instance == null;
+	}
 
     public static void RoleAbilityInit(this IRoleAbility self)
     {
