@@ -61,6 +61,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		public int ColorId { get; init; }
 
 		private GameObject body;
+		private SpriteRenderer rend;
 		private GameObject colorBindText;
 
 		// v2023.07.12で確認
@@ -96,8 +97,8 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			this.body = new GameObject("DummyPlayer");
 
 			createNameTextParentObj(targetPlayer, this.body, in cosmicInfo, canSeeFake);
-			SpriteRenderer baseImage = createBodyImage(in cosmicInfo);
-			CosmeticsLayer cosmetics = createCosmetics(baseImage, in cosmicInfo);
+			this.rend = createBodyImage(in cosmicInfo);
+			CosmeticsLayer cosmetics = createCosmetics(in this.rend, in cosmicInfo);
 
 			if (CompatModManager.Instance.TryGetModMap(out var modMap))
 			{
@@ -133,6 +134,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 
 		public void Clear()
 		{
+			Object.Destroy(this.rend);
 			Object.Destroy(this.body);
 			DataManager.Settings.Accessibility.OnChangedEvent -=
 				(Il2CppSystem.Action)SwitchColorName;
@@ -149,7 +151,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		}
 
 		private CosmeticsLayer createCosmetics(
-			SpriteRenderer playerImage, in PlayerCosmicInfo info)
+			in SpriteRenderer playerImage, in PlayerCosmicInfo info)
 		{
 			CosmeticsLayer cosmetic = Object.Instantiate(
 				info.Cosmetics,
@@ -172,7 +174,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		}
 
 		private void decorateDummy(
-			CosmeticsLayer cosmetics, in PlayerCosmicInfo cosmicInfo)
+			in CosmeticsLayer cosmetics, in PlayerCosmicInfo cosmicInfo)
 		{
 			int colorId = cosmicInfo.ColorInfo;
 			bool flipX = cosmicInfo.FlipX;
