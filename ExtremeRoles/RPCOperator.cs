@@ -383,14 +383,14 @@ public static class RPCOperator
         PlayerControl teleportPlayer = Helper.Player.GetPlayerControlById(teleporterId);
 		if (teleportPlayer == null) { return; }
 
-		var curPos = teleportPlayer.GetTruePosition();
+		var prevPos = teleportPlayer.GetTruePosition();
 		teleportPlayer.NetTransform.SnapTo(pos);
 
 		if (CompatModManager.Instance.TryGetModMap<SubmergedIntegrator>(out var mapMod) &&
 			CachedPlayerControl.LocalPlayer.PlayerId == teleporterId)
 		{
-			int targetFloor = pos.y > -6.19f ? 1 : 0;
-			int prevFloor = curPos.y > -6.19f ? 1 : 0;
+			int targetFloor = mapMod.GetFloor(pos);
+			int prevFloor   = mapMod.GetFloor(prevPos);
 			if (targetFloor != prevFloor)
 			{
 				mapMod.ChangeFloor(teleportPlayer, targetFloor);
