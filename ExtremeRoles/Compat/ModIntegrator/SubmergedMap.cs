@@ -78,15 +78,13 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	private MethodInfo calculateLightRadiusMethod;
 
 	private MethodInfo rpcRequestChangeFloorMethod;
+	private MethodInfo registerFloorOverrideMethod;
 	private FieldInfo onUpperField;
 	private MethodInfo getFloorHandlerInfo;
 
 	private Type submarineOxygenSystem;
 	private PropertyInfo submarineOxygenSystemInstanceGetter;
 	private MethodInfo submarineOxygenSystemRepairDamageMethod;
-
-	private PropertyInfo submarinePlayerFloorSystemInstanceGetter;
-	private MethodInfo submarinePlayerFloorSystemChangePlayerFloorStateMethod;
 
 	private Type elevatorMover;
 
@@ -115,13 +113,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
 			this.submarineOxygenSystem, "RepairDamage");
 
-		Type floorSubmarinePlayerFloorSystem = this.ClassType.First(
-			t => t.Name == "SubmarinePlayerFloorSystem");
-		this.submarinePlayerFloorSystemInstanceGetter = AccessTools.Property(
-			floorSubmarinePlayerFloorSystem, "Instance");
-		this.submarinePlayerFloorSystemChangePlayerFloorStateMethod = AccessTools.Method(
-			floorSubmarinePlayerFloorSystem, "ChangePlayerFloorState");
-
 		// サブマージドのカスタムMonoを取ってくる
 		this.elevatorMover = this.ClassType.First(t => t.Name == "ElevatorMover");
 
@@ -131,6 +122,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			floorHandlerType, "GetFloorHandler", new Type[] { typeof(PlayerControl) });
 		this.rpcRequestChangeFloorMethod = AccessTools.Method(
 			floorHandlerType, "RpcRequestChangeFloor");
+		this.registerFloorOverrideMethod = AccessTools.Method(
+			floorHandlerType, "RegisterFloorOverride");
+
 		this.onUpperField = AccessTools.Field(floorHandlerType, "onUpper");
 
 		this.submarineStatusType = ClassType.First(
@@ -144,13 +138,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.inTransitionField = AccessTools.Property(ventMoveToVentPatchType, "InTransition");
 	}
 #pragma warning restore CS8618
-
-	public void ChangeFloorTo(byte playerId, bool isUpper)
-	{
-		this.submarinePlayerFloorSystemChangePlayerFloorStateMethod.Invoke(
-			this.submarinePlayerFloorSystemInstanceGetter.GetValue(null),
-			new object[] { playerId, isUpper });
-	}
 
 	public void Awake(ShipStatus map)
 	{
@@ -232,7 +219,10 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MonoBehaviour? floorHandler = getFloorHandler(player);
 		if (floorHandler == null) { return; }
 
-		this.rpcRequestChangeFloorMethod.Invoke(floorHandler, new object[] { floor == 1 });
+		object[] args = new object[] { floor == 1 };
+
+		this.rpcRequestChangeFloorMethod.Invoke(floorHandler, args);
+		this.registerFloorOverrideMethod.Invoke(floorHandler, args);
 	}
 
 	public Console? GetConsole(TaskTypes task)
