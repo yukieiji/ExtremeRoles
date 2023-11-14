@@ -40,9 +40,9 @@ public sealed class Assassin : MultiAssignRoleBase
     public bool CanSeeRoleBeforeFirstMeeting = false;
     public bool CanSeeVote = false;
 
-    public bool CanKilled = false;
-    public bool CanKilledFromCrew = false;
-    public bool CanKilledFromNeutral = false;
+    public bool CanKilled { get; private set; } = false;
+    public bool CanKilledFromCrew { get; private set; } = false;
+    public bool CanKilledFromNeutral { get; private set; } = false;
     private bool isDeadForceMeeting = true;
 
     public Assassin(
@@ -104,7 +104,7 @@ public sealed class Assassin : MultiAssignRoleBase
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-        
+
         if (isServant()) { return; }
 
         assassinMeetingTriggerOn(rolePlayer.PlayerId);
@@ -128,7 +128,7 @@ public sealed class Assassin : MultiAssignRoleBase
         if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
         {
             AddDead(rolePlayer.PlayerId);
-            return; 
+            return;
         }
 
         assassinMeetingTriggerOn(rolePlayer.PlayerId);
@@ -154,8 +154,8 @@ public sealed class Assassin : MultiAssignRoleBase
     public override bool IsBlockShowMeetingRoleInfo()
     {
         if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-        { 
-            return true; 
+        {
+            return true;
         }
         else if (this.CanSeeRoleBeforeFirstMeeting)
         {

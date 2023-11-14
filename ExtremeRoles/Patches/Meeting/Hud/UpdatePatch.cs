@@ -44,14 +44,26 @@ public static class MeetingHudUpdatePatch
 
 			foreach (PlayerVoteArea pva in __instance.playerStates)
 			{
-				if (pva == null ||
-					pva.TargetPlayerId != b.ParentId ||
-					pva.AmDead)
+				if (pva == null || pva.AmDead) { continue; }
+
+				if (pva.DidVote && pva.VotedFor == b.ParentId)
 				{
-					continue;
+					pva.UnsetVote();
+					if (CachedPlayerControl.LocalPlayer.PlayerId == pva.TargetPlayerId)
+					{
+						__instance.ClearVote();
+					}
+					if (AmongUsClient.Instance.AmHost)
+					{
+						__instance.SetDirtyBit(1U);
+					}
 				}
-				pva.SetDead(pva.DidReport, true);
-				pva.Overlay.gameObject.SetActive(true);
+
+				if (pva.TargetPlayerId == b.ParentId)
+				{
+					pva.SetDead(pva.DidReport, true);
+					pva.Overlay.gameObject.SetActive(true);
+				}
 			}
 			Object.Destroy(b.gameObject);
 		}
