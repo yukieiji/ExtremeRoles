@@ -138,8 +138,8 @@ public static class Path
 public static class Loader
 {
 
-    private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
-    private static Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
+    private static readonly Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
+    private static readonly Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
 	public static SimpleButton CreateSimpleButton(Transform parent)
 	{
@@ -255,7 +255,7 @@ public static class Loader
 
 	private static Stream getStreamFromResource(Assembly assembly, string path)
 	{
-		using Stream? stream = assembly.GetManifestResourceStream(path);
+		Stream? stream = assembly.GetManifestResourceStream(path);
 
 		if (stream is null)
 		{
