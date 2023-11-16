@@ -110,12 +110,13 @@ public interface IShipGlobalOption
 		TaskTypes.DevelopPhotos,
 		TaskTypes.DivertPower,
 	};
+
 	public IReadOnlySet<TaskTypes> ChangeTask
 	{
 		get
 		{
 			var fixTask = new HashSet<TaskTypes>();
-			for (int i = (int)GlobalOption.GarbageTask; i < (int)GlobalOption.IsRemoveAdmin; ++i)
+			for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
 			{
 				var opt = (GlobalOption)i;
 
