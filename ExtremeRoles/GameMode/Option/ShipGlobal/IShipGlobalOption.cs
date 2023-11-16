@@ -26,6 +26,12 @@ public enum GlobalOption : int
 
 	ParallelMedBayScans,
 
+	IsFixWallHaskTask,
+	GarbageTask,
+	ShowerTask,
+	DevelopPhotosTask,
+	DivertPowerTask,
+
 	EnableRandomSpawn,
 	SkeldRandomSpawn,
 	MiraHqRandomSpawn,
@@ -34,12 +40,6 @@ public enum GlobalOption : int
 	FungleRandomSpawn,
 
 	IsAutoSelectRandomSpawn,
-
-	IsFixWallHaskTask,
-	GarbageTask,
-	ShowerTask,
-	DevelopPhotosTask,
-	DivertPowerTask,
 
 	IsRemoveAdmin,
     AirShipEnableAdmin,
@@ -191,10 +191,9 @@ public interface IShipGlobalOption
 		CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption, invert: true);
 
 		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
-		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false);
-		var fixTaskOpt = CreateBoolOption(GlobalOption.IsFixWallHaskTask, false);
 
-		for (int i = (int)GlobalOption.GarbageTask; i < (int)GlobalOption.IsRemoveAdmin; ++i)
+		var fixTaskOpt = CreateBoolOption(GlobalOption.IsFixWallHaskTask, false);
+		for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
 		{
 			CreateBoolOption((GlobalOption)i, false, parent: fixTaskOpt);
 		}
