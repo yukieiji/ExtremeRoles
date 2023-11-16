@@ -42,15 +42,17 @@ public static class PlayerControlMurderPlayerPatch
 		__instance.logger.Debug(
 			$"{__instance.PlayerId} trying to murder {target.PlayerId}", null);
 
+		bool hasDecisionByHost = resultFlags.HasFlag(MurderResultFlags.DecisionByHost);
+
 		if (resultFlags.HasFlag(MurderResultFlags.FailedProtected) ||
 			(
-				resultFlags.HasFlag(MurderResultFlags.DecisionByHost) &&
+				hasDecisionByHost &&
 				target.protectedByGuardianId > -1
 			))
 		{
 			target.protectedByGuardianThisRound = true;
-			bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
-			if (__instance.AmOwner || flag)
+			bool isGuardianAngel = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+			if (__instance.AmOwner || isGuardianAngel)
 			{
 				target.ShowFailedMurder();
 				__instance.SetKillTimer(killCool / 2f);
@@ -59,7 +61,7 @@ public static class PlayerControlMurderPlayerPatch
 			{
 				target.RemoveProtection();
 			}
-			if (flag)
+			if (isGuardianAngel)
 			{
 				StatsManager.Instance.IncrementStat(
 					StringNames.StatsGuardianAngelCrewmatesProtected);
@@ -70,7 +72,7 @@ public static class PlayerControlMurderPlayerPatch
 			return false;
 		}
 
-		if (resultFlags.HasFlag(MurderResultFlags.Succeeded) || resultFlags.HasFlag(MurderResultFlags.DecisionByHost))
+		if (resultFlags.HasFlag(MurderResultFlags.Succeeded) || hasDecisionByHost)
 		{
 			murderPlayerBody(__instance, target, killCool);
 		}
@@ -82,14 +84,34 @@ public static class PlayerControlMurderPlayerPatch
 		[HarmonyArgument(0)] PlayerControl target)
 	{
 
-		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+		PlayerControl player = CachedPlayerControl.LocalPlayer;
 
-		if (!target.Data.IsDead) { return; }
+		if (!target.Data.IsDead ||
+			player == null) { return; }
+
+		byte targetPlayerId = target.PlayerId;
+		byte localPlayerId = player.PlayerId;
+
+		// 会議中に発生したキルでキルされた人が開いてたボタンとキルされた人へ投票しようとしていたボタンを閉じる
+		if (MeetingHud.Instance != null)
+		{
+			foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
+			{
+				if ((
+						localPlayerId == targetPlayerId &&
+						pva.Buttons.activeSelf
+					) ||
+					pva.TargetPlayerId == targetPlayerId)
+				{
+					pva.Cancel();
+				}
+			}
+		}
+
+		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			target, DeathReason.Kill, __instance);
-
-		byte targetPlayerId = target.PlayerId;
 
 		var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
@@ -118,14 +140,12 @@ public static class PlayerControlMurderPlayerPatch
 
 		ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
 
-		var player = CachedPlayerControl.LocalPlayer;
-
-		if (player.PlayerId != targetPlayerId)
+		if (localPlayerId != targetPlayerId)
 		{
 			var hookRole = ExtremeRoleManager.GameRole[
-				player.PlayerId] as IRoleMurderPlayerHook;
+				localPlayerId] as IRoleMurderPlayerHook;
 			multiAssignRole = ExtremeRoleManager.GameRole[
-				player.PlayerId] as MultiAssignRoleBase;
+				localPlayerId] as MultiAssignRoleBase;
 
 			if (hookRole != null)
 			{
@@ -162,21 +182,22 @@ public static class PlayerControlMurderPlayerPatch
 	{
 
 		FastDestroyableSingleton<DebugAnalytics>.Instance.Analytics.Kill(target.Data, instance.Data);
+		var statsMng = StatsManager.Instance;
 
 		if (instance.AmOwner)
 		{
 			if (GameManager.Instance.IsHideAndSeek())
 			{
-				StatsManager.Instance.IncrementStat(
+				statsMng.IncrementStat(
 					StringNames.StatsImpostorKills_HideAndSeek);
 			}
 			else
 			{
-				StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
+				statsMng.IncrementStat(StringNames.StatsImpostorKills);
 			}
 			if (instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
 			{
-				StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
+				statsMng.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
 			}
 			if (Constants.ShouldPlaySfx())
 			{
@@ -191,7 +212,7 @@ public static class PlayerControlMurderPlayerPatch
 		target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 		if (target.AmOwner)
 		{
-			StatsManager.Instance.IncrementStat(StringNames.StatsTimesMurdered);
+			statsMng.IncrementStat(StringNames.StatsTimesMurdered);
 			if (Minigame.Instance)
 			{
 				try
