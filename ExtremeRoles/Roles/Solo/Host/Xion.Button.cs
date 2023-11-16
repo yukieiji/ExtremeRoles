@@ -81,7 +81,7 @@ public sealed partial class Xion
 
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
         GridArrange grid = hud.UseButton.transform.parent.gameObject.GetComponent<GridArrange>();
-        grid.MaxColumns = enableMeeting ? 3 : 4;
+        grid.MaxColumns = enableMeeting ? 4 : 3;
 
 		hud.ReGridButtons();
 
