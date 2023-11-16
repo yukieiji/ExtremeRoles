@@ -110,7 +110,6 @@ public interface IShipGlobalOption
 
 	public SpawnOption Spawn { get; }
 	public bool IsAllowParallelMedbayScan { get; }
-	public bool IsAutoSelectRandomSpawn { get; }
 	public bool ChangeForceWallCheck { get; }
 
 	public IReadOnlySet<TaskTypes> WallCheckTask => new HashSet<TaskTypes>()
