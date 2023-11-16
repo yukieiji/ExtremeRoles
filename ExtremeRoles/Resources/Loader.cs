@@ -213,8 +213,16 @@ public static class Loader
 	private static AssetBundle getAssetBundleFromFilePath(
 		string filePath)
 	{
+		if (cachedBundle.TryGetValue(filePath, out AssetBundle? bundle) ||
+			bundle != null)
+		{
+			bundle.Unload(true);
+			cachedBundle.Remove(filePath);
+		}
 		var byteArray = Il2CppFile.ReadAllBytes(filePath);
-		AssetBundle bundle = loadAssetFromByteArray(byteArray);
+		bundle = loadAssetFromByteArray(byteArray);
+
+		cachedBundle.Add(filePath, bundle);
 
 		return bundle;
 	}
