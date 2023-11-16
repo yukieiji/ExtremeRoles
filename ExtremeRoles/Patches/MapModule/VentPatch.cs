@@ -245,8 +245,7 @@ public static class VentCanUsePatch
 			couldUse = false;
 		}
 
-		var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
-		bool isWallHackVent = underWarper != null && underWarper.IsAwake && underWarper.IsWallHackVent;
+		bool isWallHackVent = UnderWarper.IsWallHackVent;
 
 		canUse = couldUse;
         if (canUse)
@@ -337,10 +336,7 @@ public static class VentUsePatch
 
         if (RoleAssignState.Instance.IsRoleSetUpEnd)
         {
-            var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
-            if (underWarper != null &&
-                underWarper.IsAwake &&
-                underWarper.IsNoVentAnime)
+            if (UnderWarper.IsNoAnimateVent)
             {
                 UnderWarper.RpcUseVentWithNoAnimation(
                     localPlayer, __instance.Id, isEnter);

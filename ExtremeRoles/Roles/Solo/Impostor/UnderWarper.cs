@@ -13,6 +13,8 @@ using ExtremeRoles.Compat;
 
 using RoleEffectAction = Il2CppSystem.Action<RoleEffectAnimation>;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class UnderWarper :
@@ -26,8 +28,8 @@ public sealed class UnderWarper :
         AwakeKillCount,
         VentLinkKillCout,
         NoVentAnimeKillCout,
-        Range,
-		WallHackVent
+		WallHackVent,
+		Range
     }
 
     public bool IsAwake
@@ -41,9 +43,35 @@ public sealed class UnderWarper :
 
     public float VentUseRange { get; private set; }
     public bool IsNoVentAnime { get; private set; }
-	public bool IsWallHackVent { get; private set; }
 
-    public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
+	public static bool IsWallHackVent
+	{
+		get
+		{
+			var underWarper = localUnderWarper;
+			return
+				underWarper != null &&
+				underWarper.IsAwake &&
+				underWarper.IsNoVentAnime &&
+				underWarper.isWallHackVent;
+		}
+	}
+
+	public static bool IsNoAnimateVent
+	{
+		get
+		{
+			var underWarper = localUnderWarper;
+			return
+				underWarper != null &&
+				underWarper.IsAwake &&
+				underWarper.IsNoVentAnime;
+		}
+	}
+
+	private static UnderWarper? localUnderWarper => ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
+
+	public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
     private int killCount;
 
@@ -54,6 +82,7 @@ public sealed class UnderWarper :
     private int ventLinkKillCout;
 
     private int noVentAnimeKillCout;
+	private bool isWallHackVent;
 
     private bool isAwakedHasOtherVision;
     private bool isAwakedHasOtherKillCool;
@@ -188,7 +217,7 @@ public sealed class UnderWarper :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         if (!this.isAwake &&
             this.killCount >= this.awakeKillCount)
@@ -317,12 +346,12 @@ public sealed class UnderWarper :
             UnderWarperOption.NoVentAnimeKillCout,
             2, 0, 5, 1, parentOps,
             format: OptionUnit.Shot);
-        CreateFloatOption(
-            UnderWarperOption.Range,
-            2.75f, 0.75f, 10.0f, 0.25f, parentOps);
 		CreateBoolOption(
 			UnderWarperOption.WallHackVent,
 			true, parentOps);
+		CreateFloatOption(
+            UnderWarperOption.Range,
+            2.75f, 0.75f, 10.0f, 0.25f, parentOps);
 	}
 
     protected override void RoleSpecificInit()
@@ -337,7 +366,7 @@ public sealed class UnderWarper :
         this.noVentAnimeKillCout = allOpt.GetValue<int>(
             GetRoleOptionId(UnderWarperOption.NoVentAnimeKillCout));
 
-		this.IsWallHackVent = allOpt.GetValue<bool>(
+		this.isWallHackVent = allOpt.GetValue<bool>(
 			GetRoleOptionId(UnderWarperOption.WallHackVent));
 
         this.VentUseRange = allOpt.GetValue<float>(
