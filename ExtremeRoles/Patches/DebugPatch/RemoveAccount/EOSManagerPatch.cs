@@ -18,30 +18,15 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
         public static MethodBase TargetMethod()
         {
             var type = typeof(EOSManager).GetNestedTypes(AccessTools.all).FirstOrDefault(
-                t => t.Name.Contains("RunLogin"));
+                t => t.Name.Contains(nameof(EOSManager.RunLogin)));
             return AccessTools.Method(type, nameof(Il2CppSystem.Collections.IEnumerator.MoveNext));
         }
 
         public static bool Prefix(ref bool __result)
         {
-            var eosManager = EOSManager.Instance;
+			EOSManager.Instance.IsAllowedOnline(true);
 
-            DataManager.Player.Account.LoginStatus = EOSManager.AccountLoginStatus.LoggedIn;
-            DataManager.Settings.Multiplayer.ChatMode = QuickChatModes.FreeChatOrQuickChat;
-            DataManager.Player.Onboarding.LastAcceptedPrivacyPolicyVersion =
-                Constants.PrivacyPolicyVersion;
-
-            eosManager.userId = new ProductUserId();
-
-            eosManager.hasRunLoginFlow = true;
-            eosManager.loginFlowFinished = true;
-
-            AccountManager.Instance.privacyPolicyBg.SetActive(false);
-            eosManager.CloseStartupWaitScreen();
-            eosManager.HideCallbackWaitAnim();
-            eosManager.IsAllowedOnline(true);
-
-            __result = false;
+			__result = false;
             return false;
         }
     }
@@ -64,11 +49,49 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
             __instance.platformInitialized = true;
 
             localUserIdProperty?.SetValue(null, new EpicAccountId());
-            return false;
+
+			DataManager.Player.Account.LoginStatus = EOSManager.AccountLoginStatus.LoggedIn;
+			DataManager.Settings.Multiplayer.ChatMode = QuickChatModes.FreeChatOrQuickChat;
+			DataManager.Player.Onboarding.LastAcceptedPrivacyPolicyVersion = Constants.PrivacyPolicyVersion;
+
+			__instance.userId = new ProductUserId();
+
+			__instance.hasRunLoginFlow = true;
+			__instance.loginFlowFinished = true;
+
+			return false;
         }
     }
 
-    [HarmonyPatch(typeof(EOSManager), nameof(EOSManager.ProductUserId), MethodType.Getter)]
+	[HarmonyPatch(typeof(EOSManager), nameof(EOSManager.HasFinishedLoginFlow))]
+	public static class EOSManagerHasFinishedLoginFlowPatch
+	{
+		public static bool Prefix(out bool __result)
+		{
+			__result = true;
+			return false;
+		}
+	}
+
+	[HarmonyPatch(typeof(EOSManager), nameof(EOSManager.ContinueInOfflineMode))]
+	public static class EOSManagerContinueInOfflineModePatch
+	{
+		public static bool Prefix()
+		{
+			return false;
+		}
+	}
+
+	[HarmonyPatch(typeof(EOSManager), nameof(EOSManager.LoginWithCorrectPlatform))]
+	public static class EOSManagerLoginWithCorrectPlatformPatch
+	{
+		public static bool Prefix()
+		{
+			return false;
+		}
+	}
+
+	[HarmonyPatch(typeof(EOSManager), nameof(EOSManager.ProductUserId), MethodType.Getter)]
     public static class EOSManagerProductUserIdPatch
     {
         public static bool Prefix(out string __result)

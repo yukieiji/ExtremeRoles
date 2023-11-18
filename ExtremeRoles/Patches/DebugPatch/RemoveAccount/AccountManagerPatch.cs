@@ -14,5 +14,16 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
             return false;
         }
     }
+
+	[HarmonyPatch(typeof(AccountManager), nameof(AccountManager.OnSceneLoaded))]
+	public static class AccountManagerOnSceneLoadedPatch
+	{
+		public static void Postfix(AccountManager __instance)
+		{
+			__instance.privacyPolicyBg.SetActive(false);
+			__instance.waitingText.SetActive(false);
+			__instance.postLoadWaiting.SetActive(false);
+		}
+	}
 }
 #endif
