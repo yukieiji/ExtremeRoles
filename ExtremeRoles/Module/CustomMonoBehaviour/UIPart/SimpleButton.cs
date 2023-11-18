@@ -69,7 +69,7 @@ public sealed class SimpleButton : MonoBehaviour
 		this.Text.color = DefaultTextColor;
 	}
 
-	public void OnMouseOver()
+	public void OnMouseEnter()
 	{
 		this.Text.color = overColor;
 		this.Image.color = overColor;
