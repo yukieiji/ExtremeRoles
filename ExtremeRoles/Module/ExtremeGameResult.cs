@@ -30,7 +30,7 @@ public sealed class ExtremeGameResult
 	{
 		public TempWinData DefaultWinPlayer { get; init; }
 
-		public List<WinningPlayerData> finalWinPlayer;
+		private List<WinningPlayerData> finalWinPlayer;
 		private List<Player> plusWinPlayr;
 
 		public WinnerTempData()
@@ -72,6 +72,27 @@ public sealed class ExtremeGameResult
 		{
 			this.plusWinPlayr.Add(player);
 		}
+
+		public bool Contains(string name)
+		{
+			foreach (var win in this.finalWinPlayer)
+			{
+				if (win.PlayerName == name)
+				{
+					return true;
+				}
+			}
+
+			foreach (var win in this.plusWinPlayr)
+			{
+				if (win.PlayerName == name)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public void SetPlusWinner(List<Player> plusWinner)
 		{
 			this.plusWinPlayr = plusWinner;
