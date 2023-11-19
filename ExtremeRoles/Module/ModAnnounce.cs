@@ -63,6 +63,7 @@ public static class ModAnnounce
 #endif
 	private const string endPoint = $"https://raw.githubusercontent.com/yukieiji/ExtremeRoles.Announce/{branch}/Announce";
 	private const string allannounceData = $"{endPoint}/allInfo.json";
+	private const int startId = 10000;
 
 	private static JsonSerializerOptions jsonSerializeOption => new JsonSerializerOptions
 	{
@@ -159,7 +160,7 @@ public static class ModAnnounce
 	private static IEnumerator coSaveToAnnounce(HttpClient client, List<DateTime> datas)
 	{
 		var saveAnnounce = new Stack<SavedAnnounce>();
-		int id = 10000;
+		int id = startId;
 
 		if (File.Exists(saveFile))
 		{
@@ -238,7 +239,7 @@ public static class ModAnnounce
 			yield return streamReadTask.Wait();
 
 			ValueTaskWaiter<WebAnnounce> jsonReadTask =
-			JsonSerializer.DeserializeAsync<WebAnnounce>(streamReadTask.Result);
+				JsonSerializer.DeserializeAsync<WebAnnounce>(streamReadTask.Result);
 			yield return jsonReadTask.Wait();
 
 			++id;
