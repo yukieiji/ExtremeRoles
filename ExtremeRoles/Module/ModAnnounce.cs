@@ -7,37 +7,79 @@ using System.Net;
 using System.Net.Http;
 
 using System.Text.Json;
-
+using Assets.InnerNet;
 using ExtremeRoles.Helper;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using UnityEngine.Networking.Match;
+using static ExtremeRoles.Module.ModAnnounce;
 
 namespace ExtremeRoles.Module;
 
-public sealed class ModAnnounce
+public static class ModAnnounce
 {
 	public readonly record struct WebAnnounce(
 		string Title,
-		string SubTitle,
+		string ShortTitle,
 		string Bio,
 		string Body)
 	{
 		public SavedAnnounce Convert(int id, DateTime time)
-			=> new(id, time, this.Title, this.SubTitle, this.Bio, this.Body);
+			=> new(id, time, this.Title, this.ShortTitle, this.Bio, this.Body);
 	}
 
 	public readonly record struct SavedAnnounce(
 		int Id,
 		DateTime OpenTime,
 		string Title,
-		string SubTitle,
+		string ShortTitle,
 		string Bio,
-		string Body);
+		string Body)
+	{
+		public Announcement Announcement
+			=> new Announcement()
+			{
+				Number = this.Id,
+				Title = this.Title,
+				ShortTitle = this.ShortTitle,
+				SubTitle = this.Bio,
+				Text = this.Body,
+				Date = this.OpenTime.ToString(),
+				Id = "ExtremeRolesAnnounce",
+			};
+	}
 
 	public const string targetURL = "";
 	public const string SaveDirectoryPath = "ExtremeRoles/Cache";
 	public const string fileName = "Announce.json";
 	public const string SaveFile = $"{SaveDirectoryPath}/{fileName}";
 
-	public static IEnumerator CoLoadAnnounce()
+	public static Il2CppReferenceArray<Announcement> AddModAnnounce(
+		Il2CppReferenceArray<Announcement> vanillaAnnounce)
+	{
+		try
+		{
+			using var stream = new FileStream(SaveFile, FileMode.Open, FileAccess.Read);
+			SavedAnnounce[] modAnnounce = JsonSerializer.Deserialize<SavedAnnounce[]>(stream);
+
+			var allAnnounce = modAnnounce
+				.Select(x => x.Announcement)
+				.Concat(vanillaAnnounce.ToArray())
+				.ToArray();
+
+			Array.Sort(allAnnounce,
+				(x, y) => DateTime.Compare(
+					DateTime.Parse(x.Date),
+					DateTime.Parse(y.Date)));
+			return allAnnounce;
+		}
+		catch (Exception ex)
+		{
+			Logging.Error($"Can't add ModAnnounce : {ex.Message}");
+			return vanillaAnnounce;
+		}
+	}
+
+	public static IEnumerator CoGetAnnounce()
 	{
 		var client = new HttpClient();
 		client.DefaultRequestHeaders.Add(
@@ -70,15 +112,15 @@ public sealed class ModAnnounce
 
 	private static IEnumerator coSaveToAnnounce(HttpClient client, List<DateTime> datas)
 	{
-		var saveAnnounce = new List<SavedAnnounce>();
+		var saveAnnounce = new Stack<SavedAnnounce>();
 		int id = 10000;
 
 		if (File.Exists(SaveFile))
 		{
 			using (var stream = new FileStream(SaveFile, FileMode.Open, FileAccess.Read))
 			{
-				ValueTaskWaiter<List<SavedAnnounce>> cacheAnnounce =
-					JsonSerializer.DeserializeAsync<List<SavedAnnounce>>(stream);
+				ValueTaskWaiter<Stack<SavedAnnounce>> cacheAnnounce =
+					JsonSerializer.DeserializeAsync<Stack<SavedAnnounce>>(stream);
 
 				yield return cacheAnnounce.Wait();
 
@@ -97,6 +139,11 @@ public sealed class ModAnnounce
 			}
 		}
 
+		var jstTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+		var curJst = TimeZoneInfo.ConvertTime(DateTime.Now, jstTimeZoneInfo);
+		// 公開していいやつだけ
+		datas = datas.Where(x => x <= curJst).ToList();
+
 		yield return coGetAnnounce(client, datas, id, saveAnnounce);
 		yield return coSaveAnnounce(saveAnnounce);
 	}
@@ -105,7 +152,7 @@ public sealed class ModAnnounce
 		HttpClient client,
 		IReadOnlyList<DateTime> dlList,
 		int id,
-		List<SavedAnnounce> dlResult)
+		Stack<SavedAnnounce> dlResult)
 	{
 		foreach (var time in dlList)
 		{
@@ -131,12 +178,12 @@ public sealed class ModAnnounce
 
 			++id;
 
-			dlResult.Add(
+			dlResult.Push(
 				jsonReadTask.Result.Convert(id, time));
 		}
 	}
 
-	private static IEnumerator coSaveAnnounce(List<SavedAnnounce> announce)
+	private static IEnumerator coSaveAnnounce(Stack<SavedAnnounce> announce)
 	{
 		if (!Directory.Exists(SaveDirectoryPath))
 		{
