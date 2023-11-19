@@ -42,14 +42,15 @@ namespace ExtremeRoles.Patches.Role
 
             if (!role.CanKill()) { return true; }
 
-            __result = 
-                target != null && 
-                !target.Disconnected && 
-                !target.IsDead && 
-                target.PlayerId !=  __instance.Player.PlayerId && 
-                !(target.Role == null) && 
-                !(target.Object == null) && 
+            __result =
+                target != null &&
+                !target.Disconnected &&
+                !target.IsDead &&
+                target.PlayerId !=  __instance.Player.PlayerId &&
+                target.Role != null &&
+                target.Object != null &&
                 (!target.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer) &&
+				!target.Object.inMovingPlat &&
                 !role.IsSameTeam(gameRoles[target.PlayerId]);
 
             return false;
