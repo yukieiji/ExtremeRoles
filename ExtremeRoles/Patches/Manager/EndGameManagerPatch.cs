@@ -26,7 +26,10 @@ public static class EndGameManagerSetUpPatch
 
     public static void Postfix(EndGameManager __instance)
     {
-        setPlayerNameAndRole(__instance);
+		var builder = new Module.WinnerBuilder();
+		builder.Build();
+
+		setPlayerNameAndRole(__instance);
         setWinDetailText(__instance);
         setRoleSummary(__instance);
         RPCOperator.Initialize();

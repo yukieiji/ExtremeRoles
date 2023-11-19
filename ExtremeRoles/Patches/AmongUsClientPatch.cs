@@ -80,10 +80,4 @@ public static class AmongUsClientOnGameEndPatch
             endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
         }
     }
-
-    public static void Postfix()
-    {
-		var builder = new Module.WinnerBuilder();
-		builder.Build();
-    }
 }
