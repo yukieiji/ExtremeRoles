@@ -72,6 +72,7 @@ public sealed class YokoYasiroSystem : IDeterioratableExtremeSystemType
 
 	private readonly Dictionary<int, YasiroInfo> info = new Dictionary<int, YasiroInfo>();
 	private readonly float range;
+	private readonly ExtremeConsoleSystem consoleSystem;
 
 	private int id = 0;
 
@@ -79,7 +80,8 @@ public sealed class YokoYasiroSystem : IDeterioratableExtremeSystemType
 
 	public YokoYasiroSystem(float yasiroRange)
 	{
-		this.range = yasiroRange;
+		this.consoleSystem = ExtremeConsoleSystem.Create();
+		this.range = range;
 	}
 
 	public bool IsPlayerProtected(SingleRoleBase role, Vector2 pos)
@@ -145,8 +147,8 @@ public sealed class YokoYasiroSystem : IDeterioratableExtremeSystemType
 	}
 	private void createYasiro(in Vector2 pos)
 	{
-		var newYasiro = new GameObject($"YokoYasiro_{this.id}");
-		newYasiro.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+		var newYasiro = this.consoleSystem.CreateConsoleObj(
+			new Vector3(pos.x, pos.y, pos.y / 1000.0f), "YokoYasiro");
 
 		var newInfo = new YasiroInfo(this.id, newYasiro.transform.position);
 		// コンソール追加

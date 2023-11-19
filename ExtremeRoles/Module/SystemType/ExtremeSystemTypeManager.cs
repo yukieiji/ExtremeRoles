@@ -22,6 +22,7 @@ public enum ExtremeSystemType : byte
 {
 	MeetingTimeOffset,
 	ModedMushroom,
+	ExtremeConsoleSystem,
 
 	WispTorch,
 
