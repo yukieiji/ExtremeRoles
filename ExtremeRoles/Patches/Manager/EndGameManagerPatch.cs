@@ -182,7 +182,7 @@ public static class EndGameManagerSetUpPatch
         HashSet<ExtremeGhostRoleId> textAddedGhostRole = new HashSet<ExtremeGhostRoleId>();
         HashSet<byte> winPlayer = new HashSet<byte>();
 
-        foreach (var player in state.GetPlusWinner())
+        foreach (var player in plusWinner)
         {
             bool isGhost = ExtremeGhostRoleManager.GameRole.TryGetValue(
                 player.PlayerId, out GhostRoleBase ghostRole);

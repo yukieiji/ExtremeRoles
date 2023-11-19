@@ -31,6 +31,8 @@ public sealed class ExtremeGameResult
 	{
 		public TempWinData DefaultWinPlayer { get; init; }
 
+		public IReadOnlyList<Player> PlusedWinner => this.plusWinPlayr;
+
 		private List<WinningPlayerData> finalWinPlayer;
 		private List<Player> plusWinPlayr;
 
@@ -102,10 +104,11 @@ public sealed class ExtremeGameResult
 			return false;
 		}
 	}
-	private readonly int winGameControlId;
+
 	public WinnerResult Winner => this.winner.Convert();
 	public List<FinalSummary.PlayerSummary> PlayerSummaries { get; init; }
 
+	private readonly int winGameControlId;
 	private WinnerTempData winner;
 
 	public ExtremeGameResult()
@@ -176,11 +179,10 @@ public sealed class ExtremeGameResult
 		}
 
 		List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>(playerNum);
-		List<Player> plusWinner = gameData.GetPlusWinner();
 		foreach (WinningPlayerData winner in this.winner.DefaultWinPlayer.GetFastEnumerator())
 		{
 			if (noWinner.Any(x => x.PlayerName == winner.PlayerName) ||
-				plusWinner.Any(x => x.PlayerName == winner.PlayerName))
+				this.winner.PlusedWinner.Any(x => x.PlayerName == winner.PlayerName))
 			{
 				this.winner.Remove(winner);
 			}
@@ -274,7 +276,7 @@ public sealed class ExtremeGameResult
 				break;
 		}
 
-		foreach (var player in gameData.GetPlusWinner())
+		foreach (var player in this.winner.PlusedWinner)
 		{
 			this.winner.Add(player);
 		}
