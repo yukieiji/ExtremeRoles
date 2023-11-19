@@ -85,10 +85,10 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
             x.Data != null &&
             !x.Data.IsDead &&
             !x.Data.Disconnected &&
-            !x.PlayerControl.inVent && // ベント入ってない
-            x.PlayerControl.moveable &&  // 移動できる状態か
-            (CachedPlayerControl.LocalPlayer.PlayerId != x.PlayerId ||
-            this.includeRolePlayer));
+			!x.PlayerControl.inVent && // ベント入ってない
+			x.PlayerControl.moveable &&  // 移動できる状態か
+			!x.PlayerControl.inMovingPlat && // なんか乗ってないか
+			(CachedPlayerControl.LocalPlayer.PlayerId != x.PlayerId || this.includeRolePlayer));
 
         var teleportPlayer = validPlayer.OrderBy(
             x => RandomGenerator.Instance.Next()).Take(
