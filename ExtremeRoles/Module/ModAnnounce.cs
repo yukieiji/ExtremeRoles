@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 
 using System.Text.Json;
+using AmongUs.Data;
 using Assets.InnerNet;
 using ExtremeRoles.Helper;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -43,20 +44,47 @@ public static class ModAnnounce
 				Text = this.Body,
 				Date = this.OpenTime.ToString(),
 				Id = "ExtremeRolesAnnounce",
+				Language = (uint)curLang,
 			};
 	}
 
-	public const string targetURL = "";
-	public const string SaveDirectoryPath = "ExtremeRoles/Cache";
-	public const string fileName = "Announce.json";
-	public const string SaveFile = $"{SaveDirectoryPath}/{fileName}";
+	private const string saveDirectoryPath = "ExtremeRoles/Cache";
+	private const string fileName = "Announce_{0}.json";
+
+	private static SupportedLangs curLang => DataManager.Settings.Language.CurrentLanguage;
+
+
+	private const string endPoint = "";
+	private const string allannounceData = $"{endPoint}/dataTime.json";
+	/*
+	 *	Announce/
+	 *		dateTime.json
+	 *		{Lang}
+	 *			{dateTime_1}.json
+	 *			{dateTime_2}.json
+	 */
+
+	private static string saveFile
+	{
+		get
+		{
+			string langAnnounce = string.Format(
+				fileName, curLang);
+			return $"{saveDirectoryPath}/{langAnnounce}";
+		}
+	}
 
 	public static Il2CppReferenceArray<Announcement> AddModAnnounce(
 		Il2CppReferenceArray<Announcement> vanillaAnnounce)
 	{
+		if (!File.Exists(saveFile))
+		{
+			return vanillaAnnounce;
+		}
+
 		try
 		{
-			using var stream = new FileStream(SaveFile, FileMode.Open, FileAccess.Read);
+			using var stream = new FileStream(saveFile, FileMode.Open, FileAccess.Read);
 			SavedAnnounce[] modAnnounce = JsonSerializer.Deserialize<SavedAnnounce[]>(stream);
 
 			var allAnnounce = modAnnounce
@@ -88,7 +116,7 @@ public static class ModAnnounce
 	private static IEnumerator coFetchAnnounce(HttpClient client)
 	{
 		TaskWaiter<HttpResponseMessage> task = client.GetAsync(
-			targetURL, HttpCompletionOption.ResponseContentRead);
+			allannounceData, HttpCompletionOption.ResponseContentRead);
 		yield return task.Wait();
 
 		var response = task.Result;
@@ -113,9 +141,9 @@ public static class ModAnnounce
 		var saveAnnounce = new Stack<SavedAnnounce>();
 		int id = 10000;
 
-		if (File.Exists(SaveFile))
+		if (File.Exists(saveFile))
 		{
-			using (var stream = new FileStream(SaveFile, FileMode.Open, FileAccess.Read))
+			using (var stream = new FileStream(saveFile, FileMode.Open, FileAccess.Read))
 			{
 				ValueTaskWaiter<Stack<SavedAnnounce>> cacheAnnounce =
 					JsonSerializer.DeserializeAsync<Stack<SavedAnnounce>>(stream);
@@ -155,7 +183,8 @@ public static class ModAnnounce
 		foreach (var time in dlList)
 		{
 			TaskWaiter<HttpResponseMessage> task = client.GetAsync(
-				$"{targetURL}/{time}", HttpCompletionOption.ResponseContentRead);
+				createDLUrl(time.ToString()),
+				HttpCompletionOption.ResponseContentRead);
 			yield return task.Wait();
 
 			var response = task.Result;
@@ -163,8 +192,9 @@ public static class ModAnnounce
 			if (response.StatusCode != HttpStatusCode.OK ||
 				response.Content == null)
 			{
-				Logging.Error($"Server returned no data: {response.StatusCode}");
-				continue;
+				Logging.Error(
+					$"Server returned no data: {response.StatusCode}, Maybe can't find currentLanguage announce");
+				yield break;
 			}
 
 			TaskWaiter<Stream> streamReadTask = response.Content.ReadAsStreamAsync();
@@ -183,13 +213,16 @@ public static class ModAnnounce
 
 	private static IEnumerator coSaveAnnounce(Stack<SavedAnnounce> announce)
 	{
-		if (!Directory.Exists(SaveDirectoryPath))
+		if (!Directory.Exists(saveDirectoryPath))
 		{
-			Directory.CreateDirectory(SaveDirectoryPath);
+			Directory.CreateDirectory(saveDirectoryPath);
 		}
-		using var stream = new FileStream(SaveFile, FileMode.OpenOrCreate, FileAccess.Write);
+		using var stream = new FileStream(saveFile, FileMode.OpenOrCreate, FileAccess.Write);
 
 		TaskWaiter serializeWaiter = JsonSerializer.SerializeAsync(stream, announce);
 		yield return serializeWaiter.Wait();
 	}
+
+	private static string createDLUrl(string dateTime)
+		=> $"{endPoint}/{curLang}/{dateTime}.json";
 }
