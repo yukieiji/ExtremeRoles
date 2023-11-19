@@ -235,9 +235,6 @@ public static class RPCOperator
         Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
         Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
 
-        // 最終結果リセット
-        Module.CustomMonoBehaviour.FinalSummary.Reset();
-
         VentExtension.ResetCustomVent();
     }
 

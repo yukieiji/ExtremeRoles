@@ -27,14 +27,19 @@ public static class EndGameManagerSetUpPatch
 		var gameResult = new ExtremeGameResult();
 		var winner = gameResult.Winner;
 
-		var winNeutral = setPlayerNameAndRole(__instance, winner.Winner);
+		var winNeutral = setPlayerNameAndRole(
+			__instance,
+			gameResult.PlayerSummaries,
+			winner.Winner);
         setWinDetailText(__instance, winNeutral, winner.PlusedWinner);
-        setRoleSummary(__instance);
+        setRoleSummary(__instance, gameResult.PlayerSummaries);
         RPCOperator.Initialize();
     }
 
     private static List<(SingleRoleBase, byte)> setPlayerNameAndRole(
-        EndGameManager manager, IReadOnlyList<WinningPlayerData> winner)
+        EndGameManager manager,
+		IReadOnlyList<FinalSummary.PlayerSummary> summaries,
+		IReadOnlyList<WinningPlayerData> winner)
     {
 		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
 
@@ -103,7 +108,7 @@ public static class EndGameManagerSetUpPatch
 			string name = winningPlayerData.PlayerName;
 			text.text = name;
 
-            foreach (var data in FinalSummary.GetSummary())
+            foreach (var data in summaries)
             {
                 if (data.PlayerName != name) { continue; }
 				text.text +=
@@ -119,7 +124,9 @@ public static class EndGameManagerSetUpPatch
 		return winNeutral;
     }
 
-    private static void setRoleSummary(EndGameManager manager)
+    private static void setRoleSummary(
+		EndGameManager manager,
+		List<FinalSummary.PlayerSummary> summaries)
     {
         if (!ClientOption.Instance.ShowRoleSummary.Value) { return; }
 
@@ -134,7 +141,7 @@ public static class EndGameManagerSetUpPatch
 
         FinalSummary summary = summaryObj.AddComponent<FinalSummary>();
         summary.SetAnchorPoint(position);
-        summary.Create();
+        summary.Create(summaries);
     }
 
     private static void setWinDetailText(

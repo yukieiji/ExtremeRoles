@@ -44,86 +44,6 @@ public sealed class FinalSummary : MonoBehaviour
 
 	public FinalSummary(IntPtr ptr) : base(ptr) { }
 
-	private static List<PlayerSummary> playerSummary = new List<PlayerSummary>();
-
-	public static void Add(
-		GameData.PlayerInfo playerInfo,
-		SingleRoleBase role, GhostRoleBase ghostRole)
-	{
-		byte playerId = playerInfo.PlayerId;
-		var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
-		// IsImpostor
-
-		PlayerStatus finalStatus = PlayerStatus.Alive;
-		GameOverReason reson = ExtremeRolesPlugin.ShipState.EndReason;
-		var info = ExtremeRolesPlugin.ShipState.DeadPlayerInfo;
-
-		if (playerInfo.IsDead &&
-			info.TryGetValue(playerId, out DeadInfo deadInfo))
-		{
-			finalStatus = deadInfo.Reason;
-		}
-
-		if (reson == GameOverReason.ImpostorBySabotage &&
-			!role.IsImpostor())
-		{
-			finalStatus = PlayerStatus.Dead;
-		}
-		else if (reson == (GameOverReason)RoleGameOverReason.AssassinationMarin)
-		{
-			if (ExtremeRolesPlugin.ShipState.isMarinPlayer(playerId))
-			{
-				if (playerInfo.IsDead || playerInfo.Disconnected)
-				{
-					finalStatus = PlayerStatus.DeadAssassinate;
-				}
-				else
-				{
-					finalStatus = PlayerStatus.Assassinate;
-				}
-			}
-			else if (
-				!role.IsImpostor() &&
-				!playerInfo.IsDead &&
-				!playerInfo.Disconnected)
-			{
-				finalStatus = PlayerStatus.Surrender;
-			}
-		}
-		else if (reson == (GameOverReason)RoleGameOverReason.UmbrerBiohazard)
-		{
-			if (role.Id != ExtremeRoleId.Umbrer &&
-				!playerInfo.IsDead &&
-				!playerInfo.Disconnected)
-			{
-				finalStatus = PlayerStatus.Zombied;
-			}
-		}
-		else if (playerInfo.Disconnected)
-		{
-			finalStatus = PlayerStatus.Disconnected;
-		}
-
-		playerSummary.Add(
-			new PlayerSummary
-			{
-				PlayerId = playerId,
-				PlayerName = playerInfo.PlayerName,
-				Role = role,
-				GhostRole = ghostRole,
-				StatusInfo = finalStatus,
-				TotalTask = totalTask,
-				CompletedTask = reson == GameOverReason.HumansByTask ? totalTask : completedTask,
-			});
-	}
-
-	public static List<PlayerSummary> GetSummary() => playerSummary;
-
-	public static void Reset()
-	{
-		playerSummary.Clear();
-	}
-
 	public void Awake()
 	{
 		this.showText = GetComponent<TMP_Text>();
@@ -166,7 +86,7 @@ public sealed class FinalSummary : MonoBehaviour
 		}
 	}
 
-	public void Create()
+	public void Create(List<PlayerSummary> summaries)
 	{
 		List<Color> tagColor = new List<Color>();
 
@@ -181,9 +101,9 @@ public sealed class FinalSummary : MonoBehaviour
 		List<string> randomTag = tags.OrderBy(
 			item => RandomGenerator.Instance.Next()).ToList();
 
-		sortedSummary();
+		sortedSummary(summaries);
 
-		foreach (PlayerSummary summary in playerSummary)
+		foreach (PlayerSummary summary in summaries)
 		{
 			string taskInfo = summary.TotalTask > 0 ?
 				$"<color=#FAD934FF>{summary.CompletedTask}/{summary.TotalTask}</color>" : "";
@@ -267,9 +187,9 @@ public sealed class FinalSummary : MonoBehaviour
 			position.x + 3.5f, position.y - 0.1f);
 	}
 
-	private void sortedSummary()
+	private void sortedSummary(List<PlayerSummary> summaries)
 	{
-		playerSummary.Sort((x, y) =>
+		summaries.Sort((x, y) =>
 		{
 			if (x.StatusInfo != y.StatusInfo)
 			{
@@ -330,12 +250,83 @@ public sealed class FinalSummary : MonoBehaviour
 
 	public struct PlayerSummary
 	{
-		public byte PlayerId { get; set; }
-		public string PlayerName { get; set; }
-		public SingleRoleBase Role { get; set; }
-		public GhostRoleBase GhostRole { get; set; }
-		public int CompletedTask { get; set; }
-		public int TotalTask { get; set; }
-		public PlayerStatus StatusInfo { get; set; }
+		public byte PlayerId { get; init; }
+		public string PlayerName { get; init; }
+		public SingleRoleBase Role { get; init; }
+		public GhostRoleBase GhostRole { get; init; }
+		public int CompletedTask { get; init; }
+		public int TotalTask { get; init; }
+		public PlayerStatus StatusInfo { get; init; }
+
+		public static PlayerSummary Create(
+			GameData.PlayerInfo playerInfo,
+			SingleRoleBase role, GhostRoleBase ghostRole)
+		{
+			byte playerId = playerInfo.PlayerId;
+			var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
+			// IsImpostor
+
+			PlayerStatus finalStatus = PlayerStatus.Alive;
+			GameOverReason reson = ExtremeRolesPlugin.ShipState.EndReason;
+			var info = ExtremeRolesPlugin.ShipState.DeadPlayerInfo;
+
+			if (playerInfo.IsDead &&
+				info.TryGetValue(playerId, out DeadInfo deadInfo))
+			{
+				finalStatus = deadInfo.Reason;
+			}
+
+			if (reson == GameOverReason.ImpostorBySabotage &&
+				!role.IsImpostor())
+			{
+				finalStatus = PlayerStatus.Dead;
+			}
+			else if (reson == (GameOverReason)RoleGameOverReason.AssassinationMarin)
+			{
+				if (ExtremeRolesPlugin.ShipState.isMarinPlayer(playerId))
+				{
+					if (playerInfo.IsDead || playerInfo.Disconnected)
+					{
+						finalStatus = PlayerStatus.DeadAssassinate;
+					}
+					else
+					{
+						finalStatus = PlayerStatus.Assassinate;
+					}
+				}
+				else if (
+					!role.IsImpostor() &&
+					!playerInfo.IsDead &&
+					!playerInfo.Disconnected)
+				{
+					finalStatus = PlayerStatus.Surrender;
+				}
+			}
+			else if (reson == (GameOverReason)RoleGameOverReason.UmbrerBiohazard)
+			{
+				if (role.Id != ExtremeRoleId.Umbrer &&
+					!playerInfo.IsDead &&
+					!playerInfo.Disconnected)
+				{
+					finalStatus = PlayerStatus.Zombied;
+				}
+			}
+			else if (playerInfo.Disconnected)
+			{
+				finalStatus = PlayerStatus.Disconnected;
+			}
+
+			return
+				new PlayerSummary
+				{
+					PlayerId = playerId,
+					PlayerName = playerInfo.PlayerName,
+					Role = role,
+					GhostRole = ghostRole,
+					StatusInfo = finalStatus,
+					TotalTask = totalTask,
+					CompletedTask = reson == GameOverReason.HumansByTask ? totalTask : completedTask,
+				};
+		}
 	}
 }

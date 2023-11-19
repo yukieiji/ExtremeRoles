@@ -14,6 +14,7 @@ using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 
 #nullable enable
@@ -103,11 +104,13 @@ public sealed class ExtremeGameResult
 	}
 	private readonly int winGameControlId;
 	public WinnerResult Winner => this.winner.Convert();
+	public List<FinalSummary.PlayerSummary> PlayerSummaries { get; init; }
 
 	private WinnerTempData winner;
 
 	public ExtremeGameResult()
 	{
+		this.PlayerSummaries = new List<FinalSummary.PlayerSummary>();
 		this.winner = new WinnerTempData();
 		this.winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
 		this.Build();
@@ -115,6 +118,8 @@ public sealed class ExtremeGameResult
 
 	public void Build()
 	{
+		this.PlayerSummaries.Clear();
+
 		int playerNum = GameData.Instance.AllPlayers.Count;
 
 		var noWinner = new List<Player>(playerNum);
@@ -165,8 +170,9 @@ public sealed class ExtremeGameResult
 				ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
 			}
 
-			Module.CustomMonoBehaviour.FinalSummary.Add(
-				playerInfo, role, ghostRole);
+			this.PlayerSummaries.Add(
+				FinalSummary.PlayerSummary.Create(
+					playerInfo, role, ghostRole));
 		}
 
 		List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>(playerNum);
