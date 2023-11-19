@@ -110,6 +110,7 @@ public sealed class ExtremeGameResult
 	{
 		this.winner = new WinnerTempData();
 		this.winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
+		this.Build();
 	}
 
 	public void Build()
