@@ -56,9 +56,12 @@ public static class ModAnnounce
 	private const string fileName = "Announce_{0}.json";
 
 	private static SupportedLangs curLang => DataManager.Settings.Language.CurrentLanguage;
-
-
-	private const string endPoint = "http://localhost:5000/Announce";
+#if DEBUG
+	private const string branch = "develop";
+#else
+	private const string branch = "main";
+#endif
+	private const string endPoint = $"https://raw.githubusercontent.com/yukieiji/ExtremeRoles.Announce/{branch}/Announce";
 	private const string allannounceData = $"{endPoint}/allInfo.json";
 
 	private static JsonSerializerOptions jsonSerializeOption => new JsonSerializerOptions
