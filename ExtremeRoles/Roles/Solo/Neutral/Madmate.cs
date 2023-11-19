@@ -129,7 +129,7 @@ public sealed class Madmate :
             case GameOverReason.ImpostorDisconnect:
             case GameOverReason.HideAndSeek_ByKills:
             case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-				winner.AddPlusWinner(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				break;
             default:
                 break;
