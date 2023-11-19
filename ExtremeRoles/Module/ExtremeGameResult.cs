@@ -100,11 +100,6 @@ public sealed class ExtremeGameResult
 			}
 			return false;
 		}
-
-		public void SetPlusWinner(List<Player> plusWinner)
-		{
-			this.plusWinPlayr = plusWinner;
-		}
 	}
 	private readonly int winGameControlId;
 	public WinnerResult Result => this.winner.Convert();
@@ -281,8 +276,7 @@ public sealed class ExtremeGameResult
 		{
 			if (winCheckRole.IsWin(reason, playerInfo))
 			{
-				this.winner.Add(playerInfo);
-				plusWinner.Add(playerInfo);
+				this.winner.AddPlusWinner(playerInfo);
 			}
 		}
 
@@ -293,8 +287,6 @@ public sealed class ExtremeGameResult
 				gameData.EndReason,
 				ref this.winner);
 		}
-
-		this.winner.SetPlusWinner(plusWinner);
 	}
 
 	private void replaceWinnerToSpecificRolePlayer(
