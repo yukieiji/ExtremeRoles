@@ -67,8 +67,7 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     public void ModifiedWinPlayer(
         GameData.PlayerInfo rolePlayerInfo,
         GameOverReason reason,
-        ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-        ref List<GameData.PlayerInfo> pulsWinner)
+		ref ExtremeGameResult.WinnerTempData winner)
     {
 
         if (!rolePlayerInfo.IsDead || this.isDeadWin) { return; }
@@ -79,7 +78,7 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
             case GameOverReason.HumansByVote:
             case GameOverReason.HumansDisconnect:
             case GameOverReason.HideAndSeek_ByTimer:
-                this.RemoveWinner(rolePlayerInfo, winner, pulsWinner);
+                winner.RemoveAll(rolePlayerInfo);
                 break;
             default:
                 break;
@@ -87,12 +86,12 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     }
     public void Update(PlayerControl rolePlayer)
     {
-        if ((!this.awakeRole || !this.isDeadWin) && 
+        if ((!this.awakeRole || !this.isDeadWin) &&
             rolePlayer.myTasks.Count != 0)
         {
             float taskGage = Player.GetPlayerTaskGage(rolePlayer);
-            
-            if (!this.isDeadWin && 
+
+            if (!this.isDeadWin &&
                 !rolePlayer.Data.IsDead &&
                 taskGage >= this.deadWinTaskGage)
             {

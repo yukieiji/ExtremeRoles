@@ -52,6 +52,14 @@ public sealed class ExtremeGameResult
 		{
 			this.finalWinPlayer.Clear();
 		}
+
+		public void RemoveAll(Player playerInfo)
+		{
+			this.plusWinPlayr.Remove(playerInfo);
+			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
+			this.finalWinPlayer.Remove(wpd);
+		}
+
 		public void Remove(WinningPlayerData player)
 		{
 			this.finalWinPlayer.Remove(player);
