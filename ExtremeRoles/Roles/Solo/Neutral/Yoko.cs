@@ -58,8 +58,7 @@ public sealed class Yoko :
     public void ModifiedWinPlayer(
         GameData.PlayerInfo rolePlayerInfo,
         GameOverReason reason,
-        ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-        ref List<GameData.PlayerInfo> pulsWinner)
+		ref ExtremeGameResult.WinnerTempData winner)
     {
         if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected) { return; }
 
@@ -70,12 +69,12 @@ public sealed class Yoko :
             case RoleGameOverReason.AssassinationMarin:
                 break;
             case RoleGameOverReason.YokoAllDeceive:
-                this.AddWinner(rolePlayerInfo, winner, pulsWinner);
+				winner.Add(rolePlayerInfo);
+				winner.AddPlusWinner(rolePlayerInfo);
                 break;
             default:
-                pulsWinner.Clear();
-                winner.Clear();
-                winner.Add(new WinningPlayerData(rolePlayerInfo));
+				winner.AllClear();
+                winner.Add(rolePlayerInfo);
                 ExtremeRolesPlugin.ShipState.SetGameOverReason(
                     (GameOverReason)RoleGameOverReason.YokoAllDeceive);
                 break;

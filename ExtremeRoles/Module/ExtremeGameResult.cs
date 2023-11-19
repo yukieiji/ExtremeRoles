@@ -42,6 +42,12 @@ public sealed class ExtremeGameResult
 
 		public WinnerResult Convert() => new WinnerResult(this.finalWinPlayer, plusWinPlayr);
 
+		public void AllClear()
+		{
+			this.finalWinPlayer.Clear();
+			this.plusWinPlayr.Clear();
+		}
+
 		public void Clear()
 		{
 			this.finalWinPlayer.Clear();
