@@ -7,8 +7,6 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 {
-    public int HeadOptionId => (int)GlobalOption.DisableVent;
-
     public bool CanUseHorseMode => true;
 
     public bool IsEnableImpostorVent => false;
@@ -45,7 +43,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public bool IsRemoveAngleIcon => false;
     public bool IsBlockGAAbilityReport => false;
 
-    private HashSet<GlobalOption> useOption = new HashSet<GlobalOption>()
+	public bool IsBreakEmergencyButton => true;
+
+	private HashSet<GlobalOption> useOption = new HashSet<GlobalOption>()
     {
         GlobalOption.DisableVent,
 

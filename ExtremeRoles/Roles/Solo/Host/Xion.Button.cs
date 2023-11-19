@@ -9,6 +9,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Host.Button;
 
 using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.GameMode;
 
 #nullable enable
 
@@ -47,7 +48,7 @@ public sealed partial class Xion
                 Translation.GetString("speedDown")),
         };
 
-		bool enableMeeting = CachedShipStatus.Instance.EmergencyButton.enabled;
+		bool enableMeeting = !ExtremeGameModeManager.Instance.ShipOption.IsBreakEmergencyButton;
 		if (enableMeeting)
 		{
 			this.funcButton.Add(
