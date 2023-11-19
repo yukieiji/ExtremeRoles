@@ -26,7 +26,7 @@ public static class EndGameManagerSetUpPatch
 
     public static void Postfix(EndGameManager __instance)
     {
-		var builder = new Module.GameResultBuilder();
+		var builder = new Module.ExtremeGameResult();
 		builder.Build();
 
 		setPlayerNameAndRole(__instance);

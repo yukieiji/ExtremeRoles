@@ -20,7 +20,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Module;
 
-public sealed class GameResultBuilder
+public sealed class ExtremeGameResult
 {
 	public readonly record struct WinnerResult(
 		IReadOnlyList<WinningPlayerData> Winner,
@@ -70,7 +70,7 @@ public sealed class GameResultBuilder
 
 	private WinnerTempData winner;
 
-	public GameResultBuilder()
+	public ExtremeGameResult()
 	{
 		this.winner = new WinnerTempData();
 		this.winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
