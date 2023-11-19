@@ -22,31 +22,29 @@ namespace ExtremeRoles.Patches.Manager;
 [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
 public static class EndGameManagerSetUpPatch
 {
-    private static List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
-
     public static void Postfix(EndGameManager __instance)
     {
-		var builder = new Module.ExtremeGameResult();
-		builder.Build();
+		var gameResult = new ExtremeGameResult();
+		var winner = gameResult.Winner;
 
-		setPlayerNameAndRole(__instance);
-        setWinDetailText(__instance);
+		var winNeutral = setPlayerNameAndRole(__instance, winner.Winner);
+        setWinDetailText(__instance, winNeutral, winner.PlusedWinner);
         setRoleSummary(__instance);
         RPCOperator.Initialize();
     }
 
-    private static void setPlayerNameAndRole(
-        EndGameManager manager)
+    private static List<(SingleRoleBase, byte)> setPlayerNameAndRole(
+        EndGameManager manager, IReadOnlyList<WinningPlayerData> winner)
     {
-        winNeutral.Clear();
+		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
 
-        // Delete and readd PoolablePlayers always showing the name and role of the player
-        foreach (PoolablePlayer pb in manager.transform.GetComponentsInChildren<PoolablePlayer>())
+		// Delete and readd PoolablePlayers always showing the name and role of the player
+		foreach (PoolablePlayer pb in manager.transform.GetComponentsInChildren<PoolablePlayer>())
         {
             Object.Destroy(pb.gameObject);
         }
         int num = Mathf.CeilToInt(7.5f);
-        List<WinningPlayerData> winnerList = TempData.winners.ToArray().OrderBy(
+        List<WinningPlayerData> winnerList = winner.OrderBy(
             delegate (WinningPlayerData b)
             {
                 if (!b.IsYou)
@@ -118,6 +116,7 @@ public static class EndGameManagerSetUpPatch
 
             }
         }
+		return winNeutral;
     }
 
     private static void setRoleSummary(EndGameManager manager)
@@ -139,7 +138,9 @@ public static class EndGameManagerSetUpPatch
     }
 
     private static void setWinDetailText(
-        EndGameManager manager)
+        EndGameManager manager,
+		List<(SingleRoleBase, byte)> winNeutral,
+		IReadOnlyList<GameData.PlayerInfo> plusWinner)
     {
 		var winText = manager.WinText;
 
@@ -228,7 +229,7 @@ public static class EndGameManagerSetUpPatch
         }
 
         // ニュートラルの追加処理
-        foreach (var player in state.GetPlusWinner())
+        foreach (var player in plusWinner)
         {
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 

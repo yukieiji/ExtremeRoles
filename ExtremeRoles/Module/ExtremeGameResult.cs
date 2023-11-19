@@ -102,7 +102,7 @@ public sealed class ExtremeGameResult
 		}
 	}
 	private readonly int winGameControlId;
-	public WinnerResult Result => this.winner.Convert();
+	public WinnerResult Winner => this.winner.Convert();
 
 	private WinnerTempData winner;
 
