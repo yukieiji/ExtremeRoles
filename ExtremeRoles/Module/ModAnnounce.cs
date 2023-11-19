@@ -10,8 +10,6 @@ using System.Text.Json;
 using Assets.InnerNet;
 using ExtremeRoles.Helper;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using UnityEngine.Networking.Match;
-using static ExtremeRoles.Module.ModAnnounce;
 
 namespace ExtremeRoles.Module;
 
