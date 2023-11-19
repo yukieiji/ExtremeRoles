@@ -1,4 +1,5 @@
-﻿using Il2CppSystem.Collections.Generic;
+﻿using ExtremeRoles.Module;
+using Il2CppSystem.Collections.Generic;
 
 namespace ExtremeRoles.Roles.API.Interface
 {
@@ -7,8 +8,7 @@ namespace ExtremeRoles.Roles.API.Interface
         public void ModifiedWinPlayer(
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
-            ref List<WinningPlayerData> winner,
-            ref System.Collections.Generic.List<GameData.PlayerInfo> pulsWinner);
+			ref ExtremeGameResult.WinnerTempData winner);
     }
 
     public static class RoleWinPlayerModifierMixin

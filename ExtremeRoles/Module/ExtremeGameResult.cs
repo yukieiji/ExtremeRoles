@@ -250,8 +250,7 @@ public sealed class ExtremeGameResult
 			winModRole.ModifiedWinPlayer(
 				playerInfo,
 				reason,
-				ref this.winner,
-				ref plusWinner);
+				ref this.winner);
 		}
 
 		this.winner.SetPlusWinner(plusWinner);
