@@ -5,12 +5,16 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-
 using System.Text.Json;
+using System.Text.Json.Serialization;
+
 using AmongUs.Data;
 using Assets.InnerNet;
-using ExtremeRoles.Helper;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
+using ExtremeRoles.Helper;
+
+#nullable enable
 
 namespace ExtremeRoles.Module;
 
@@ -34,7 +38,7 @@ public static class ModAnnounce
 		string Bio,
 		string Body)
 	{
-		public Announcement Announcement
+		public Announcement Convert()
 			=> new Announcement()
 			{
 				Number = this.Id,
@@ -54,8 +58,15 @@ public static class ModAnnounce
 	private static SupportedLangs curLang => DataManager.Settings.Language.CurrentLanguage;
 
 
-	private const string endPoint = "";
-	private const string allannounceData = $"{endPoint}/dataTime.json";
+	private const string endPoint = "http://localhost:5000/Announce";
+	private const string allannounceData = $"{endPoint}/allInfo.json";
+
+	private static JsonSerializerOptions jsonSerializeOption => new JsonSerializerOptions
+	{
+		DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+		WriteIndented = true,
+	};
+
 	/*
 	 *	Announce/
 	 *		dateTime.json
@@ -85,17 +96,20 @@ public static class ModAnnounce
 		try
 		{
 			using var stream = new FileStream(saveFile, FileMode.Open, FileAccess.Read);
-			SavedAnnounce[] modAnnounce = JsonSerializer.Deserialize<SavedAnnounce[]>(stream);
+			SavedAnnounce[]? modAnnounce = JsonSerializer.Deserialize<SavedAnnounce[]>(
+				stream, jsonSerializeOption);
+
+			if (modAnnounce is null) { return vanillaAnnounce; }
 
 			var allAnnounce = modAnnounce
-				.Select(x => x.Announcement)
+				.Select(x => x.Convert())
 				.Concat(vanillaAnnounce.ToArray())
 				.ToArray();
 
 			Array.Sort(allAnnounce,
 				(x, y) => DateTime.Compare(
-					DateTime.Parse(x.Date),
-					DateTime.Parse(y.Date)));
+					DateTime.Parse(y.Date),
+					DateTime.Parse(x.Date)));
 			return allAnnounce;
 		}
 		catch (Exception ex)
@@ -129,11 +143,14 @@ public static class ModAnnounce
 		TaskWaiter<Stream> streamReadTask  = response.Content.ReadAsStreamAsync();
 		yield return streamReadTask.Wait();
 
-		ValueTaskWaiter<List<DateTime>> jsonReadTask =
+		ValueTaskWaiter<List<DateTime>?> jsonReadTask =
 			JsonSerializer.DeserializeAsync<List<DateTime>>(streamReadTask.Result);
 		yield return jsonReadTask.Wait();
 
-		yield return coSaveToAnnounce(client, jsonReadTask.Result);
+		var data = jsonReadTask.Result;
+		if (data is null) { yield break; }
+
+		yield return coSaveToAnnounce(client, data);
 	}
 
 	private static IEnumerator coSaveToAnnounce(HttpClient client, List<DateTime> datas)
@@ -143,25 +160,37 @@ public static class ModAnnounce
 
 		if (File.Exists(saveFile))
 		{
-			using (var stream = new FileStream(saveFile, FileMode.Open, FileAccess.Read))
+			ValueTaskWaiter<Stack<SavedAnnounce>?>? cacheAnnounce = null;
+			try
 			{
-				ValueTaskWaiter<Stack<SavedAnnounce>> cacheAnnounce =
-					JsonSerializer.DeserializeAsync<Stack<SavedAnnounce>>(stream);
+				using var stream = new FileStream(saveFile, FileMode.Open, FileAccess.Read);
+				cacheAnnounce = JsonSerializer.DeserializeAsync<Stack<SavedAnnounce>>(stream);
+			}
+			catch (Exception ex)
+			{
+				Logging.Error($"Can't serialize announce : {ex.Message}");
+			}
 
+			if (cacheAnnounce is not null)
+			{
 				yield return cacheAnnounce.Wait();
 
 				saveAnnounce = cacheAnnounce.Result;
-			}
-			id += saveAnnounce.Count;
 
-			var result = saveAnnounce.Select(
-				x => x.OpenTime).ToHashSet();
+				if (saveAnnounce is not null)
+				{
+					id += saveAnnounce.Count;
 
-			datas = datas.Where(x => !result.Contains(x)).ToList();
+					var result = saveAnnounce.Select(
+						x => x.OpenTime).ToHashSet();
 
-			if (datas.Count == 0)
-			{
-				yield break;
+					datas = datas.Where(x => !result.Contains(x)).ToList();
+
+					if (datas.Count == 0)
+					{
+						yield break;
+					}
+				}
 			}
 		}
 
@@ -171,19 +200,24 @@ public static class ModAnnounce
 		datas = datas.Where(x => x <= curJst).ToList();
 
 		yield return coGetAnnounce(client, datas, id, saveAnnounce);
+
 		yield return coSaveAnnounce(saveAnnounce);
+
+		yield break;
 	}
 
 	private static IEnumerator coGetAnnounce(
 		HttpClient client,
 		IReadOnlyList<DateTime> dlList,
 		int id,
-		Stack<SavedAnnounce> dlResult)
+		Stack<SavedAnnounce>? dlResult)
 	{
+		if (dlResult is null) { yield break; }
+
 		foreach (var time in dlList)
 		{
 			TaskWaiter<HttpResponseMessage> task = client.GetAsync(
-				createDLUrl(time.ToString()),
+				createDLUrl(convertToString(time)),
 				HttpCompletionOption.ResponseContentRead);
 			yield return task.Wait();
 
@@ -211,16 +245,23 @@ public static class ModAnnounce
 		}
 	}
 
-	private static IEnumerator coSaveAnnounce(Stack<SavedAnnounce> announce)
+	private static string convertToString(DateTime time) => time.ToString("yyyyMMddTHHmmss");
+
+	private static IEnumerator coSaveAnnounce(Stack<SavedAnnounce>? announce)
 	{
+		if (announce is null || announce.Count == 0) { yield break; }
+
 		if (!Directory.Exists(saveDirectoryPath))
 		{
 			Directory.CreateDirectory(saveDirectoryPath);
 		}
 		using var stream = new FileStream(saveFile, FileMode.OpenOrCreate, FileAccess.Write);
+		TaskWaiter waiter = JsonSerializer.SerializeAsync(
+			stream, announce.ToArray(),
+			jsonSerializeOption);
 
-		TaskWaiter serializeWaiter = JsonSerializer.SerializeAsync(stream, announce);
-		yield return serializeWaiter.Wait();
+		yield return waiter.Wait();
+		yield break;
 	}
 
 	private static string createDLUrl(string dateTime)
