@@ -57,6 +57,12 @@ public sealed class ExtremeGameResult
 			this.finalWinPlayer.Remove(player);
 		}
 
+		public void AddWithPlus(Player playerInfo)
+		{
+			this.Add(playerInfo);
+			this.AddPlusWinner(playerInfo);
+		}
+
 		public void Add(Player playerInfo)
 		{
 			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
@@ -255,7 +261,7 @@ public sealed class ExtremeGameResult
 		{
 			winModRole.ModifiedWinPlayer(
 				playerInfo,
-				reason,
+				gameData.EndReason,
 				ref this.winner);
 		}
 

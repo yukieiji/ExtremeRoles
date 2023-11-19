@@ -938,20 +938,19 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
     public void ModifiedWinPlayer(
         GameData.PlayerInfo rolePlayerInfo,
         GameOverReason reason,
-        ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-        ref List<GameData.PlayerInfo> pulsWinner)
+		ref ExtremeGameResult.WinnerTempData winner)
     {
         switch (this.condition)
         {
             case VigilanteCondition.NewLawInTheShip:
-                this.AddWinner(rolePlayerInfo, winner, pulsWinner);
+                winner.AddPlusWinner(rolePlayerInfo);
                 break;
             case VigilanteCondition.NewHeroForTheShip:
                 if (reason == GameOverReason.HumansByTask ||
                     reason == GameOverReason.HumansByVote ||
                     reason == GameOverReason.HumansDisconnect)
                 {
-                    this.AddWinner(rolePlayerInfo, winner, pulsWinner);
+                    winner.AddPlusWinner(rolePlayerInfo);
                 }
                 break;
             case VigilanteCondition.NewVillainForTheShip:
@@ -961,7 +960,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
                     reason == GameOverReason.ImpostorDisconnect ||
                     reason == (GameOverReason)RoleGameOverReason.AssassinationMarin)
                 {
-                    this.AddWinner(rolePlayerInfo, winner, pulsWinner);
+					winner.AddPlusWinner(rolePlayerInfo);
                 }
                 break;
             default:

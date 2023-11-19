@@ -69,8 +69,7 @@ public sealed class Yoko :
             case RoleGameOverReason.AssassinationMarin:
                 break;
             case RoleGameOverReason.YokoAllDeceive:
-				winner.Add(rolePlayerInfo);
-				winner.AddPlusWinner(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
                 break;
             default:
 				winner.AllClear();
