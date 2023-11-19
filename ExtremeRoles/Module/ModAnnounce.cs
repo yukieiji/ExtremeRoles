@@ -90,6 +90,11 @@ public sealed class ModAnnounce
 				x => x.OpenTime).ToHashSet();
 
 			datas = datas.Where(x => !result.Contains(x)).ToList();
+
+			if (datas.Count == 0)
+			{
+				yield break;
+			}
 		}
 
 		yield return coGetAnnounce(client, datas, id, saveAnnounce);
