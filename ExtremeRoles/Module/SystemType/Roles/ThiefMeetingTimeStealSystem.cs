@@ -9,9 +9,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using AmongUs.GameOptions;
-using ExtremeRoles.Compat.ModIntegrator;
-using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Json;
 
 
@@ -95,9 +92,6 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			Object.Destroy(part.gameObject);
 		}
 	}
-
-	public void Deteriorate(float deltaTime)
-	{ }
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{

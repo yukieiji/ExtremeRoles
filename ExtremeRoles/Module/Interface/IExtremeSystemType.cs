@@ -5,11 +5,15 @@ using Hazel;
 
 namespace ExtremeRoles.Module.Interface;
 
+public interface IDeterioratableExtremeSystemType : IExtremeSystemType
+{
+	public void Deteriorate(float deltaTime);
+}
+
+
 public interface IExtremeSystemType
 {
 	public bool IsDirty { get; }
-
-	public void Deteriorate(float deltaTime);
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null);
 

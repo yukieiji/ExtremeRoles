@@ -9,11 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static UnityEngine.GraphicsBuffer;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class YokoYasiroSystem : IExtremeSystemType
+public sealed class YokoYasiroSystem : IDeterioratableExtremeSystemType
 {
 	public enum Ops : byte
 	{
