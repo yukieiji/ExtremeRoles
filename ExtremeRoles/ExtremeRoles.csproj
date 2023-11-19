@@ -3,9 +3,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>9.0.2.2</Version>
-    <!--<VersionPrefix>9.0.2</VersionPrefix>-->
-    <VersionSuffix>HideNSeekXion</VersionSuffix>
+    <!--<Version>9.0.3.0</Version>-->
+    <VersionPrefix>9.0.3</VersionPrefix>
+    <VersionSuffix>ExtremeAnnounce</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
