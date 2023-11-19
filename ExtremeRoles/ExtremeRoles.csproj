@@ -5,7 +5,7 @@
     <WarningLevel>7</WarningLevel>
     <!--<Version>9.0.3.0</Version>-->
     <VersionPrefix>9.0.3</VersionPrefix>
-    <VersionSuffix>ExtremeAnnounce</VersionSuffix>
+    <VersionSuffix>ExtremeRolesAnnounce</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
