@@ -1028,8 +1028,7 @@ public sealed class Doll :
     public void ModifiedWinPlayer(
         GameData.PlayerInfo rolePlayerInfo,
         GameOverReason reason,
-        ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-        ref List<GameData.PlayerInfo> pulsWinner)
+		ref ExtremeGameResult.WinnerTempData winner)
     {
         switch (reason)
         {
@@ -1039,8 +1038,8 @@ public sealed class Doll :
             case GameOverReason.ImpostorDisconnect:
             case GameOverReason.HideAndSeek_ByKills:
             case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-                this.AddWinner(rolePlayerInfo, winner, pulsWinner);
-                break;
+				winner.AddPlusWinner(rolePlayerInfo);
+				break;
             default:
                 break;
         }
