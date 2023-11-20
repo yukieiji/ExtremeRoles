@@ -15,6 +15,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Patches.MapOverlay;
 
@@ -22,6 +23,20 @@ using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 
 namespace ExtremeRoles.Patches.Manager;
 
+[HarmonyPatch(typeof(HudManager), nameof(HudManager.SetAlertOverlay))]
+public static class HudManagerSetAlertOverlayPatch
+{
+	public static bool Prefix()
+	{
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		if (localPlayer == null ||
+			!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
+		return Xion.PlayerId != localPlayer.PlayerId;
+	}
+}
 
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.SetTouchType))]
 public static class HudManagerSetTouchTypePatch
