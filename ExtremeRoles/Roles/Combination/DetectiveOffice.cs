@@ -817,7 +817,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleRepor
             return false;
         }
 
-        this.meeting = GameSystem.OpenMinigame(
+        this.meeting = MinigameSystem.Open(
             emergencyConsole.MinigamePrefab);
         this.useAbility = true;
 

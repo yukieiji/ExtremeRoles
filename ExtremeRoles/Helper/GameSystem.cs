@@ -357,18 +357,6 @@ public static class GameSystem
         return watchConsole;
     }
 
-    public static VitalsMinigame? GetVitalMinigame()
-    {
-		var role = FastDestroyableSingleton<RoleManager>.Instance.GetRole(RoleTypes.Scientist);
-
-		if (!role.IsTryCast<ScientistRole>(out var scientist))
-		{
-			return null;
-		}
-
-        return scientist!.VitalsPrefab;
-    }
-
     public static void ForceEndGame()
     {
         RPCOperator.Call(RPCOperator.Command.ForceEnd);
@@ -394,24 +382,6 @@ public static class GameSystem
                 !PhysicsHelpers.AnythingBetween(
                         playerPos, consolePos, Constants.ShadowMask, false)
             );
-    }
-
-    public static Minigame OpenMinigame(
-        Minigame prefab,
-        PlayerTask? task = null,
-        Console? console = null)
-    {
-        Minigame minigame = UnityObject.Instantiate(
-            prefab, Camera.main.transform, false);
-        minigame.transform.SetParent(Camera.main.transform, false);
-        minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-        if (console != null)
-        {
-            minigame.Console = console;
-        }
-        minigame.Begin(task);
-
-        return minigame;
     }
 
 	public static void RelinkVent()
