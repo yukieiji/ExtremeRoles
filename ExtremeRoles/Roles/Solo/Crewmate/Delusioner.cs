@@ -201,8 +201,9 @@ public sealed class Delusioner :
                 player.PlayerId != teloportTarget &&
                 !player.IsDead &&
                 player.Object != null &&
-                !player.Object.inVent && // ベント入ってない
-                player.Object.moveable) // 移動できる状態か
+				player.Object.moveable && // 動ける？
+				!player.Object.inVent && // ベント入ってない
+				!player.Object.inMovingPlat) // なんか乗ってる状態
             {
                 Vector3 targetPos = player.Object.transform.position;
 

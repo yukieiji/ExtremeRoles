@@ -447,11 +447,12 @@ public static class Player
     {
         return (
             targetPlayer != null &&
-            !targetPlayer.Disconnected &&
-            targetPlayer.PlayerId != sourcePlayer.PlayerId &&
+			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
+			!targetPlayer.Disconnected &&
             !targetPlayer.IsDead &&
             targetPlayer.Object &&
             !targetPlayer.Object.inVent &&
+			!targetPlayer.Object.inMovingPlat &&
             !role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[targetPlayer.PlayerId])
         );
     }

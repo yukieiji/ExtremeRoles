@@ -6,12 +6,11 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 {
-    public int HeadOptionId => (int)GlobalOption.NumMeating;
-
     public bool IsEnableImpostorVent => true;
     public bool CanUseHorseMode => true;
+	public bool IsBreakEmergencyButton => false;
 
-    public bool IsRandomMap { get; private set; }
+	public bool IsRandomMap { get; private set; }
 
     public int MaxMeetingCount { get; private set; }
 

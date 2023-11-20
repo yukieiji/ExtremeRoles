@@ -59,15 +59,15 @@ public enum ConfirmExilMode
 
 public interface IShipGlobalOption
 {
-    public int HeadOptionId { get; }
-
     public bool IsEnableImpostorVent { get; }
 
     public bool IsRandomMap { get; }
 
     public int MaxMeetingCount { get; }
 
-    public bool CanUseHorseMode { get; }
+	public bool IsBreakEmergencyButton { get; }
+
+	public bool CanUseHorseMode { get; }
 
     public bool IsChangeVoteAreaButtonSortArg { get; }
     public bool IsFixedVoteAreaPlayerLevel { get; }
@@ -96,7 +96,7 @@ public interface IShipGlobalOption
     public bool IsRemoveAngleIcon { get; }
     public bool IsBlockGAAbilityReport { get; }
 
-    public void Load();
+	public void Load();
 
     public bool IsValidOption(int id);
     public void BuildHudString(ref StringBuilder builder);
