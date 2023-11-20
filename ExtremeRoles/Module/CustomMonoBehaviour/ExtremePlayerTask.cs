@@ -18,7 +18,6 @@ public sealed class ExtremePlayerTask : PlayerTask
 		public string TaskText { get; }
 
 		public TaskTypes TaskTypes { get; }
-		public Minigame? Prefab { get; }
 
 		public void Initialize(PlayerControl owner);
 		public void OnRemove();
@@ -70,7 +69,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 		t.TaskType = t.Behavior.TaskTypes;
 		t.Id = id;
 		t.Owner = localPlayer;
-		t.MinigamePrefab = task.Prefab;
+		t.MinigamePrefab = null;
 		t.Initialize();
 		localPlayer.myTasks.Add(t);
 		return t;

@@ -83,8 +83,6 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 
 		public TaskTypes TaskTypes => (TaskTypes)200;
 
-		public Minigame? Prefab => null;
-
 		private ArrowBehaviour[] arrow;
 		private readonly TeroristTeroSabotageSystem system;
 
