@@ -164,15 +164,17 @@ public static class ModAnnounce
 
 		if (File.Exists(saveFile))
 		{
+			FileStream? stream = null;
 			ValueTaskWaiter<Stack<SavedAnnounce>?>? cacheAnnounce = null;
 			try
 			{
-				using var stream = new FileStream(saveFile, FileMode.Open, FileAccess.Read);
+				stream = new FileStream(saveFile, FileMode.Open, FileAccess.Read);
 				cacheAnnounce = JsonSerializer.DeserializeAsync<Stack<SavedAnnounce>>(stream);
 			}
 			catch (Exception ex)
 			{
 				Logging.Error($"Can't serialize announce : {ex.Message}");
+				stream?.Close();
 			}
 
 			if (cacheAnnounce is not null)
@@ -192,10 +194,12 @@ public static class ModAnnounce
 
 					if (datas.Count == 0)
 					{
+						stream?.Close();
 						yield break;
 					}
 				}
 			}
+			stream?.Close();
 		}
 
 		var jstTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
