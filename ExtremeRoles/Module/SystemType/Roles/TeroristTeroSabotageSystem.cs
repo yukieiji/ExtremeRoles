@@ -74,6 +74,55 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			=> null;
 	}
 
+	public sealed class TeroSabotageTask : ExtremePlayerTask.IBehavior
+	{
+		public int MaxStep => this.system.setNum;
+		public int TaskStep => this.system.setBomb.Count - this.MaxStep;
+
+		public string TaskText => throw new NotImplementedException();
+
+		public TaskTypes TaskTypes => (TaskTypes)200;
+
+		public Minigame? Prefab => null;
+
+		private ArrowBehaviour[] arrow;
+		private readonly TeroristTeroSabotageSystem system;
+
+		public TeroSabotageTask(TeroristTeroSabotageSystem system)
+		{
+			this.system = system;
+			this.arrow = new ArrowBehaviour[this.system.setNum];
+		}
+
+		public void Initialize(PlayerControl owner)
+		{
+			if (owner == null || owner.AmOwner) { return; }
+
+			ArrowBehaviour arrow = ExtremePlayerTask.IBehavior.GetArrowTemplate();
+
+			int index = 0;
+			foreach (var console in this.system.setBomb.Values)
+			{
+				var targetArrow = UnityObject.Instantiate(arrow);
+
+				targetArrow.target = console.transform.position;
+				targetArrow.gameObject.SetActive(true);
+
+				this.arrow[index] = targetArrow;
+			}
+		}
+
+		public void OnComplete()
+		{ }
+
+		public void OnRemove()
+		{
+			foreach (var arrow in this.arrow)
+			{
+				UnityObject.Destroy(arrow.gameObject);
+			}
+		}
+	}
 
 	public enum Ops
 	{

@@ -14,12 +14,13 @@ public sealed class ExtremePlayerTask : PlayerTask
 	public interface IBehavior
 	{
 		public int MaxStep { get; }
+		public int TaskStep { get; }
 		public string TaskText { get; }
 
 		public TaskTypes TaskTypes { get; }
 		public Minigame? Prefab { get; }
 
-		public void Initialize();
+		public void Initialize(PlayerControl owner);
 		public void OnRemove();
 		public void OnComplete();
 
@@ -82,7 +83,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 	public override void Initialize()
 	{
-		this.Behavior?.Initialize();
+		this.Behavior?.Initialize(this.Owner);
 	}
 
 	public override void OnRemove()
@@ -108,7 +109,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 		int maxStep = this.Behavior.MaxStep;
 		if (maxStep > 1)
 		{
-			sb.Append($" ({this.TaskStep}/{maxStep})");
+			sb.Append($" ({this.Behavior.TaskStep}/{maxStep})");
 		}
 		sb.AppendLine();
 	}
