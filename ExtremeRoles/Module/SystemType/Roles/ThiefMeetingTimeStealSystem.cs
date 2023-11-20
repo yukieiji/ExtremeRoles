@@ -18,8 +18,6 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 {
-	private sealed record VectorId(int Id, Vector2 pos);
-
 	public enum Ops
 	{
 		PickUp,
