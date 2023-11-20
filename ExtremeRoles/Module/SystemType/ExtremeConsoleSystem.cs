@@ -52,6 +52,11 @@ public sealed class ExtremeConsoleSystem : IExtremeSystemType
 		return console;
 	}
 
+	public ExtremeConsole CreateConsoleObj<T>(in Vector2 pos, string? name = null, T? behaviour = default(T))
+	{
+		return CreateConsoleObj(new Vector3(pos.x, pos.y, pos.y / 1000.0f), name, behaviour);
+	}
+
 	public ExtremeConsole CreateConsoleObj<T>(in Vector3 pos, string? name = null, T? behaviour = default(T))
 		where T : ExtremeConsole.IBehavior
 	{

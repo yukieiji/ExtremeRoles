@@ -17,7 +17,9 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 	{
 		public float CoolTime { get; }
 
-		public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse);
+		public bool IsCheckWall { get; }
+
+		public bool CanUse(GameData.PlayerInfo pc);
 
 		public void Use();
 	}
@@ -55,16 +57,37 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 		canUse = false;
 		couldUse = false;
 
-		if (this.Behavior is null)
+		float result = float.MaxValue;
+
+		if (this.Behavior is null ||
+			pc.Object == null ||
+			!this.Behavior.CanUse(pc))
 		{
-			return float.MaxValue;
+			return result;
 		}
-		return this.Behavior.CanUse(pc, out canUse, out couldUse);
+
+		couldUse = true;
+		canUse = couldUse;
+
+		var playerPos = pc.Object.GetTruePosition();
+		var objPos = base.transform.position;
+
+		result = Vector2.Distance(playerPos, objPos);
+		canUse &= result <= this.UsableDistance;
+		if (this.Behavior.IsCheckWall)
+		{
+			canUse &= !PhysicsHelpers.AnythingBetween(
+				playerPos, objPos, Constants.ShadowMask, false);
+		}
+
+		return result;
 	}
 
 	public void Use()
 	{
-		if (this.Behavior is null)
+		this.CanUse(PlayerControl.LocalPlayer.Data, out bool canUse, out bool _);
+
+		if (!canUse || this.Behavior is null)
 		{
 			return;
 		}

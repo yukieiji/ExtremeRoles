@@ -177,7 +177,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	private void setPart(VectorId posId)
 	{
 		int id = posId.Id;
-		Vector2 pos = posId.pos;
+		Vector2 pos = posId.Pos;
 		GameObject obj = new GameObject($"TimePart_{id}");
 		var part = obj.AddComponent<TimeParts>();
 		part.Id = id;

@@ -9,7 +9,10 @@ using Newtonsoft.Json.Linq;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Performance;
 
+using UnityObject = UnityEngine.Object;
 
 #nullable enable
 
@@ -17,6 +20,61 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemType
 {
+	public sealed class BombConsoleBehavior : ExtremeConsole.IBehavior
+	{
+		private static Minigame prefab
+		{
+			get
+			{
+				GameObject obj =
+					Resources.Loader.GetUnityObjectFromPath<GameObject>("", "");
+				return obj.GetComponent<Minigame>();
+			}
+		}
+
+		public float CoolTime
+		{
+			get
+			{
+				PlayerControl player = CachedPlayerControl.LocalPlayer;
+
+				if (player == null || player.Data == null)
+				{
+					return float.MaxValue;
+				}
+				return player.Data.IsDead ? this.deadPlayerCoolTime : 0.0f;
+			}
+		}
+
+		public bool IsCheckWall => true;
+
+		private readonly float deadPlayerCoolTime;
+		private readonly byte bombId;
+
+		public BombConsoleBehavior(float deadPlayerCoolTime, byte bombId)
+		{
+			this.deadPlayerCoolTime = deadPlayerCoolTime;
+			this.bombId = bombId;
+		}
+
+		public bool CanUse(GameData.PlayerInfo pc)
+			=> pc.Object.CanMove && findTeroSaboTask(pc.Object);
+
+		public void Use()
+		{
+			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+			PlayerTask? task = this.findTeroSaboTask(localPlayer);
+			if (task == null) { return; }
+			// Idセット処理
+			MinigameSystem.Open(prefab, task);
+		}
+
+		// TODO : 置き換える
+		private PlayerTask? findTeroSaboTask(PlayerControl pc)
+			=> null;
+	}
+
+
 	public enum Ops
 	{
 		Setup,
@@ -26,20 +84,25 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 	public bool IsDirty { get; private set; }
 	public float ExplosionTimer { get; private set; }
 
-	private readonly Dictionary<byte, int> setBomb = new Dictionary<byte, int>();
+	private readonly Dictionary<byte, ExtremeConsole> setBomb = new Dictionary<byte, ExtremeConsole>();
 	private readonly HashSet<int> setedId = new HashSet<int>();
 	private readonly float bombTimer;
 	private readonly int setNum;
+	private readonly float deadPlayerUseCoolTime;
+
+	private readonly ExtremeConsoleSystem consoleSystem;
 
 	private bool isActive = false;
 	private float syncTimer = 0.0f;
 
 	private JObject? json;
 
-	public TeroristTeroSabotageSystem(float bombTimer, int setNum)
+	public TeroristTeroSabotageSystem(float bombTimer, int setNum, float deadPlayerUseCoolTime)
 	{
+		this.consoleSystem = ExtremeConsoleSystem.Create();
 		this.bombTimer = bombTimer;
 		this.setNum = setNum;
+		this.deadPlayerUseCoolTime = deadPlayerUseCoolTime;
 	}
 
 	public void Deteriorate(float deltaTime)
@@ -83,7 +146,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			newBombState.Add(bombId);
 			if (!this.setBomb.ContainsKey(bombId))
 			{
-				setBombToRandomPos(1);
+				setBombToRandomPos(1, bombId);
 			}
 		}
 		this.ExplosionTimer = reader.ReadSingle();
@@ -98,7 +161,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		}
 		foreach (byte id in removeIndex)
 		{
-			// 爆弾解除処理
+			removeBomb(id);
 		}
 		checkAllCancel();
 	}
@@ -126,16 +189,13 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 				byte cancelBombId = msgReader.ReadByte();
 				lock (this.setBomb)
 				{
-					if (this.setBomb.TryGetValue(cancelBombId, out int value))
-					{
-						// 解除処理
-					}
+					removeBomb(cancelBombId);
 				}
 				checkAllCancel();
 				this.IsDirty = true;
 				break;
 			case Ops.Setup:
-				setBombToRandomPos(this.setNum);
+				setBombToRandomPos(this.setNum, 0);
 
 				this.isActive = true;
 				this.ExplosionTimer = this.bombTimer;
@@ -197,6 +257,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		return result;
 	}
 
+	// TODO: リアクターフラッシュ
 	private void flashActiveTo(bool isActive)
 	{
 
@@ -207,7 +268,17 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		this.syncTimer = 1.0f;
 	}
 
-	private void setBombToRandomPos(int num)
+	private void removeBomb(byte id)
+	{
+		if (this.setBomb.TryGetValue(id, out ExtremeConsole? value) ||
+			value != null)
+		{
+			this.setBomb.Remove(id);
+			UnityObject.Destroy(value.gameObject);
+		}
+	}
+
+	private void setBombToRandomPos(int num, byte startId)
 	{
 		var setPos = getSetPosIndex();
 		setPos.RemoveAll(x => this.setedId.Contains(x.Id));
@@ -216,10 +287,23 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			.OrderBy(x => RandomGenerator.Instance.Next())
 			.Take(num);
 
+		byte counter = 0;
 		foreach (var pos in randomPos)
 		{
 			this.setedId.Add(pos.Id);
-			// ボムの本体設置処理
+
+			byte bombId = (byte)(startId + counter);
+
+			var consoleBehavior = new BombConsoleBehavior(
+				this.deadPlayerUseCoolTime, (byte)(startId + counter));
+			var newConsole = this.consoleSystem.CreateConsoleObj(pos.Pos, "TeroristBomb", consoleBehavior);
+			// TODO: ここで画像入れる処理
+
+			var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
+			colider.isTrigger = true;
+			colider.radius = 0.1f;
+
+			this.setBomb.Add(bombId, newConsole);
 		}
 	}
 }
