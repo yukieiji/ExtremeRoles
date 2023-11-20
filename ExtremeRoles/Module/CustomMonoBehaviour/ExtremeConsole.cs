@@ -1,4 +1,5 @@
 ﻿using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance;
 using System;
 using UnityEngine;
 
@@ -85,7 +86,14 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 
 	public void Use()
 	{
-		this.CanUse(PlayerControl.LocalPlayer.Data, out bool canUse, out bool _);
+		PlayerControl? player = CachedPlayerControl.LocalPlayer;
+		if (player == null ||
+			player.Data == null)
+		{
+			return;
+		}
+
+		this.CanUse(player.Data, out bool canUse, out bool _);
 
 		if (!canUse || this.Behavior is null)
 		{
