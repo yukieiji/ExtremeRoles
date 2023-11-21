@@ -61,12 +61,12 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		}
 
 		public bool CanUse(GameData.PlayerInfo pc)
-			=> pc.Object.CanMove && findTeroSaboTask(pc.Object);
+			=> pc.Object.CanMove && FindTeroSaboTask(pc.Object);
 
 		public void Use()
 		{
 			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-			PlayerTask? task = this.findTeroSaboTask(localPlayer);
+			PlayerTask? task = FindTeroSaboTask(localPlayer);
 			if (task == null) { return; }
 			// Idセット処理
 			var minigame = MinigameSystem.Create(prefab);
@@ -78,17 +78,6 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			teroMiniGame!.TargetBombId = this.bombId;
 			teroMiniGame!.Begin(task);
 		}
-
-		private PlayerTask? findTeroSaboTask(PlayerControl pc)
-		{
-			foreach (var task in pc.myTasks.GetFastEnumerator())
-			{
-				if (task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
-					playerTask!.Behavior is TeroSabotageTask &&
-					!playerTask.Behavior.IsComplete)
-				{
-					return task;
-				}
 			}
 			return null;
 		}
@@ -172,6 +161,20 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		this.deadPlayerUseCoolTime = deadPlayerUseCoolTime;
 	}
 
+	public static PlayerTask? FindTeroSaboTask(PlayerControl pc)
+	{
+		foreach (var task in pc.myTasks.GetFastEnumerator())
+		{
+			if (task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
+				playerTask!.Behavior is TeroSabotageTask &&
+				!playerTask.Behavior.IsComplete)
+			{
+				return task;
+			}
+		}
+		return null;
+	}
+
 	public void Deteriorate(float deltaTime)
 	{
 		if (MeetingHud.Instance != null ||
@@ -182,11 +185,10 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			return;
 		}
 
-		// タスク追加処理
-		/*
-		if (!PlayerTask.PlayerHasTaskOfType<HeliCharlesTask>(PlayerControl.LocalPlayer))
+
+		if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
 		{
-			PlayerControl.LocalPlayer.AddSystemTask(SystemTypes.HeliSabotage);
+			ExtremePlayerTask.AddTask(new TeroSabotageTask(this), 254);
 		}
 		*/
 		this.ExplosionTimer -= deltaTime;
