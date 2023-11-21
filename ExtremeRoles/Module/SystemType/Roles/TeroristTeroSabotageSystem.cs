@@ -183,7 +183,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		}
 
 
-		if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
+		if (!FindTeroSaboTask(CachedPlayerControl.LocalPlayer))
 		{
 			ExtremePlayerTask.AddTask(new TeroSabotageTask(this), 254);
 		}
