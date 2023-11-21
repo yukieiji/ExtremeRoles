@@ -13,6 +13,9 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 #nullable enable
 
@@ -66,12 +69,29 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			PlayerTask? task = this.findTeroSaboTask(localPlayer);
 			if (task == null) { return; }
 			// Idセット処理
-			MinigameSystem.Open(prefab, task);
+			var minigame = MinigameSystem.Create(prefab);
+
+			if (!minigame.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMiniGame))
+			{
+				throw new ArgumentException("Minigame Missing");
+			}
+			teroMiniGame!.TargetBombId = this.bombId;
+			teroMiniGame!.Begin(task);
 		}
 
-		// TODO : 置き換える
 		private PlayerTask? findTeroSaboTask(PlayerControl pc)
-			=> null;
+		{
+			foreach (var task in pc.myTasks.GetFastEnumerator())
+			{
+				if (task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
+					playerTask!.Behavior is TeroSabotageTask &&
+					!playerTask.Behavior.IsComplete)
+				{
+					return task;
+				}
+			}
+			return null;
+		}
 	}
 
 	public sealed class TeroSabotageTask : ExtremePlayerTask.IBehavior
@@ -79,7 +99,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		public int MaxStep => this.system.setNum;
 		public int TaskStep => this.system.setBomb.Count - this.MaxStep;
 
-		public string TaskText => throw new NotImplementedException();
+		public string TaskText => "爆弾を解除する";
 
 		public TaskTypes TaskTypes => (TaskTypes)200;
 

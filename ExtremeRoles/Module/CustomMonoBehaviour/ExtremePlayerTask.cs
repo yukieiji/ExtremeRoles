@@ -13,6 +13,8 @@ public sealed class ExtremePlayerTask : PlayerTask
 {
 	public interface IBehavior
 	{
+		public bool IsComplete => this.MaxStep == this.TaskStep;
+
 		public int MaxStep { get; }
 		public int TaskStep { get; }
 		public string TaskText { get; }
