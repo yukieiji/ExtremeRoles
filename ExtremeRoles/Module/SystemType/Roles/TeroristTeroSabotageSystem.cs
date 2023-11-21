@@ -9,13 +9,13 @@ using Newtonsoft.Json.Linq;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 #nullable enable
 
@@ -98,14 +98,25 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			this.arrow = new ArrowBehaviour[this.system.setNum];
 		}
 
+		public void Next(byte id)
+		{
+			int index = (int)id;
+			this.arrow[index].gameObject.SetActive(false);
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				SystemType, x =>
+				{
+					x.Write((byte)Ops.Cancel);
+					x.Write(id);
+				});
+		}
+
 		public void Initialize(PlayerControl owner)
 		{
 			if (owner == null || owner.AmOwner) { return; }
 
 			ArrowBehaviour arrow = ExtremePlayerTask.IBehavior.GetArrowTemplate();
 
-			int index = 0;
-			foreach (var console in this.system.setBomb.Values)
+			foreach (var(index, console) in this.system.setBomb)
 			{
 				var targetArrow = UnityObject.Instantiate(arrow);
 
@@ -133,6 +144,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		Setup,
 		Cancel
 	}
+	public const ExtremeSystemType SystemType = ExtremeSystemType.TeroristTeroSabotage;
 
 	public bool IsDirty { get; private set; }
 	public float ExplosionTimer { get; private set; }
