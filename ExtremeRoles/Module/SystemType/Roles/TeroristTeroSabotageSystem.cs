@@ -78,9 +78,6 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			teroMiniGame!.TargetBombId = this.bombId;
 			teroMiniGame!.Begin(task);
 		}
-			}
-			return null;
-		}
 	}
 
 	public sealed class TeroSabotageTask : ExtremePlayerTask.IBehavior
@@ -190,7 +187,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		{
 			ExtremePlayerTask.AddTask(new TeroSabotageTask(this), 254);
 		}
-		*/
+		this.flashActiveTo(true);
 		this.ExplosionTimer -= deltaTime;
 		this.syncTimer -= deltaTime;
 
