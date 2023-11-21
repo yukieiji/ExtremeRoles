@@ -14,6 +14,8 @@
     <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     <DebugType>embedded</DebugType>
     <Nullable>enable</Nullable>
+    <!-- MSBuildの.NET8対応に伴って勝手にバージョンにハッシュ値入れられてBepInExのロード不具合が出たため、明示的に無効化しておく -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
