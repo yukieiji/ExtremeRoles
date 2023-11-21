@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>8.2.0.24</Version>
+    <Version>8.2.0.25</Version>
     <!--<VersionPrefix>8.2.0</VersionPrefix>-->
     <VersionSuffix>AnimationVisor</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
@@ -14,6 +14,8 @@
     <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     <DebugType>embedded</DebugType>
     <Nullable>enable</Nullable>
+    <!-- MSBuildの.NET8対応に伴って勝手にバージョンにハッシュ値入れられてBepInExのロード不具合が出たため、明示的に無効化しておく -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>

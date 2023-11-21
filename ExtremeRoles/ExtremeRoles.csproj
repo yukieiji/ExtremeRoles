@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>9.0.3.1</Version>
+    <Version>9.0.3.2</Version>
     <!--<VersionPrefix>9.0.3</VersionPrefix>-->
     <VersionSuffix>ExtremeRolesAnnounce</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
@@ -12,6 +12,8 @@
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>embedded</DebugType>
+    <!-- MSBuildの.NET8対応に伴って勝手にバージョンにハッシュ値入れられてBepInExのロード不具合が出たため、明示的に無効化しておく -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
