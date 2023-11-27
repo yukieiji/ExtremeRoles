@@ -30,8 +30,10 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			get
 			{
 				GameObject obj =
-					Resources.Loader.GetUnityObjectFromPath<GameObject>("", "");
-				return obj.GetComponent<Minigame>();
+					Resources.Loader.GetUnityObjectFromPath<GameObject>(
+						"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\TeroristMinigame.asset",
+						"assets\\role\\teroristminigame.prefab");
+				return obj.GetComponent<TeroristTeroSabotageMinigame>();
 			}
 		}
 
@@ -170,7 +172,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		this.deadPlayerUseCoolTime = deadPlayerUseCoolTime;
 	}
 
-	public static PlayerTask? FindTeroSaboTask(PlayerControl pc)
+	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc)
 	{
 		foreach (var task in pc.myTasks.GetFastEnumerator())
 		{
@@ -178,7 +180,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 				playerTask!.Behavior is TeroSabotageTask &&
 				!playerTask.Behavior.IsComplete)
 			{
-				return task;
+				return playerTask;
 			}
 		}
 		return null;
@@ -294,6 +296,12 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			this.ExplosionTimer = 1000.0f;
 			this.setedId.Clear();
 			this.flashActiveTo(false);
+
+			var task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer);
+			if (task != null)
+			{
+				task.Complete();
+			}
 		}
 		else
 		{
