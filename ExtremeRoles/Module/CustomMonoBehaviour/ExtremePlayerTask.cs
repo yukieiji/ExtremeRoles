@@ -62,7 +62,8 @@ public sealed class ExtremePlayerTask : PlayerTask
 	public static ExtremePlayerTask AddTask(IBehavior task, uint id)
 	{
 		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-		ExtremePlayerTask t = new GameObject(task.ToString()).AddComponent<ExtremePlayerTask>();
+		ExtremePlayerTask t = new GameObject(task.ToString())
+			.AddComponent<ExtremePlayerTask>();
 
 		t.Behavior = task;
 		t.transform.SetParent(localPlayer.transform, false);
