@@ -32,7 +32,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 				GameObject obj =
 					Resources.Loader.GetUnityObjectFromPath<GameObject>(
 						"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\TeroristMinigame.asset",
-						"assets\\role\\teroristminigame.prefab");
+						"assets\\roles\\teroristminigame.prefab");
 				return obj.GetComponent<TeroristTeroSabotageMinigame>();
 			}
 		}
