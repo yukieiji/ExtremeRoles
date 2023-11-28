@@ -13,8 +13,6 @@ public sealed class ExtremePlayerTask : PlayerTask
 {
 	public interface IBehavior
 	{
-		public bool IsComplete => this.MaxStep == this.TaskStep;
-
 		public int MaxStep { get; }
 		public int TaskStep { get; }
 		public string TaskText { get; }
@@ -79,6 +77,12 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 	public IBehavior? Behavior { get; set; }
 
+	public override int TaskStep =>
+		this.Behavior is null ? 0 : this.Behavior.TaskStep;
+
+	public override bool IsComplete =>
+		this.Behavior is null ? false : this.TaskStep >= this.Behavior.MaxStep;
+
 	public ExtremePlayerTask(IntPtr ptr) : base(ptr)
 	{ }
 
@@ -110,7 +114,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 		int maxStep = this.Behavior.MaxStep;
 		if (maxStep > 1)
 		{
-			sb.Append($" ({this.Behavior.TaskStep}/{maxStep})");
+			sb.Append($" ({this.TaskStep}/{maxStep})");
 		}
 		sb.AppendLine();
 	}

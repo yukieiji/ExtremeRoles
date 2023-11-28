@@ -89,7 +89,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 
 		public string TaskText => "爆弾を解除する";
 
-		public TaskTypes TaskTypes => (TaskTypes)200;
+		public TaskTypes TaskTypes => TeroristoTaskTypes;
 
 		private ArrowBehaviour[] arrow;
 		private readonly TeroristTeroSabotageSystem system;
@@ -146,7 +146,9 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		Setup,
 		Cancel
 	}
+
 	public const ExtremeSystemType SystemType = ExtremeSystemType.TeroristTeroSabotage;
+	public const TaskTypes TeroristoTaskTypes = (TaskTypes)200;
 
 	public bool IsDirty { get; private set; }
 	public float ExplosionTimer { get; private set; }
@@ -176,9 +178,10 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 	{
 		foreach (var task in pc.myTasks.GetFastEnumerator())
 		{
-			if (task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
-				playerTask!.Behavior is TeroSabotageTask &&
-				!playerTask.Behavior.IsComplete)
+			if (task != null &&
+				!task.IsComplete &&
+				task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
+				playerTask!.Behavior!.TaskTypes == TeroristoTaskTypes)
 			{
 				return playerTask;
 			}
