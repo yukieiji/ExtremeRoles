@@ -381,9 +381,13 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			byte bombId = (byte)(startId + counter);
 
 			var consoleBehavior = new BombConsoleBehavior(
-				this.deadPlayerUseCoolTime, (byte)(startId + counter));
-			var newConsole = this.consoleSystem.CreateConsoleObj(pos.Pos, "TeroristBomb", consoleBehavior);
-			// TODO: ここで画像入れる処理
+				this.deadPlayerUseCoolTime, bombId);
+			var newConsole = this.consoleSystem.CreateConsoleObj(
+				pos.Pos, "TeroristBomb", consoleBehavior);
+
+			var rend = newConsole.gameObject.AddComponent<SpriteRenderer>();
+			rend.sprite = Resources.Loader.CreateSpriteFromResources(
+				Resources.Path.TeroristTeroSabotageBomb);
 
 			var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 			colider.isTrigger = true;

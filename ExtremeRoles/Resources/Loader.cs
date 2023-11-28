@@ -106,6 +106,7 @@ public static class Path
 	public const string TheifTimeParts = "ExtremeRoles.Resources.TheifTimePart.png";
 	public const string TheifMagicCircle = "ExtremeRoles.Resources.TheifMagicCircle.png";
 	public const string TheifMagicCircleVideo = "theifmagiccircle";
+	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
 
 	public const string VigilanteEmergencyCall =
         "ExtremeRoles.Resources.EmergencyCall.png";
