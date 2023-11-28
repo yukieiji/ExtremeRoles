@@ -13,6 +13,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using AmongUs.GameOptions;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Host;
 
@@ -147,10 +149,16 @@ public sealed partial class Xion
 
     public void RpcTestAbilityCall()
     {
-        MessageWriter writer = createWriter(XionRpcOpsCode.TestRpc);
-        // 色々と
-        AmongUsClient.Instance.FinishRpcImmediately(writer);
-        // 必要な関数書く
+		var system = new TeroristTeroSabotageSystem(120.0f, 3, 5.0f);
+
+		ExtremeSystemTypeManager.Instance.TryAdd(TeroristTeroSabotageSystem.SystemType, system);
+
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			TeroristTeroSabotageSystem.SystemType,
+			x =>
+			{
+				x.Write((byte)TeroristTeroSabotageSystem.Ops.Setup);
+			});
     }
 
 
