@@ -385,8 +385,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			var newConsole = this.consoleSystem.CreateConsoleObj(
 				pos.Pos, "TeroristBomb", consoleBehavior);
 
-			var rend = newConsole.gameObject.AddComponent<SpriteRenderer>();
-			rend.sprite = Resources.Loader.CreateSpriteFromResources(
+			newConsole.Image!.sprite = Resources.Loader.CreateSpriteFromResources(
 				Resources.Path.TeroristTeroSabotageBomb);
 
 			var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
