@@ -393,6 +393,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			colider.radius = 0.1f;
 
 			this.setBomb.Add(bombId, newConsole);
+			++counter;
 		}
 	}
 }
