@@ -200,6 +200,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 					targetPet.GetAsset(), this.body.transform);
 				pet.transform.localPosition =
 					new Vector2(flipX ? 0.5f : -0.5f, -0.15f);
+				pet.SetCrewmateColor(colorId);
 				pet.transform.localScale = scale;
 				pet.FlipX = flipX;
 				destroyAllColider(pet.gameObject);
