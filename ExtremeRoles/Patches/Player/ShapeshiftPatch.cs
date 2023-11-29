@@ -77,7 +77,7 @@ public static class PlayerControlShapeshiftPatch
 
 			myPhysics.SetNormalizedVelocity(Vector2.zero);
 			bool amOwner = __instance.AmOwner;
-			if (amOwner)
+			if (amOwner && Minigame.Instance == null)
 			{
 				PlayerControl.HideCursorTemporarily();
 			}
