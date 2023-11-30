@@ -64,9 +64,9 @@ public static class ShipStatusPrespawnStepPatch
 
 		bool enableRandomSpawn = GameManager.Instance.LogicOptions.MapId switch
 		{
-			1 => spawnOpt.Skeld,
-			2 => spawnOpt.MiraHq,
-			3 => spawnOpt.Polus,
+			0 => spawnOpt.Skeld,
+			1 => spawnOpt.MiraHq,
+			2 => spawnOpt.Polus,
 			5 => spawnOpt.Fungle,
 			_ => false,
 		};
