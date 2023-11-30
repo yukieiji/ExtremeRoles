@@ -269,7 +269,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		yield break;
 	}
 
-	private static IEnumerator WaiteSpawn()
+	public static IEnumerator WaiteSpawn()
 	{
 		GameObject obj = new GameObject("SpawnSelector");
 		var spawnSelector = obj.AddComponent<ExtremeSpawnSelectorMinigame>();
