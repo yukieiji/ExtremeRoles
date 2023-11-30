@@ -5,12 +5,14 @@ using UnityEngine;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Task;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
 using CollectionEnum = System.Collections.IEnumerator;
-using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.TeroSabotageTask;
+using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.Task;
+using ConsoleInfo = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ConsoleInfo;
 
 #nullable enable
 
@@ -19,7 +21,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 [Il2CppRegister]
 public sealed class TeroristTeroSabotageMinigame : Minigame
 {
-	public byte TargetBombId { private get; set; } = byte.MaxValue;
+	public ConsoleInfo ConsoleInfo { private get; set; }
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	private TextMeshPro progressText;
@@ -27,8 +29,6 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 	private SimpleButton startButton;
 	private SpriteRenderer progress;
-
-	private float maxTimer = 5.0f;
 
 	private const float ProgressBarLastX = 0.8f;
 	private const float ProgressBarLastScaleX = 6.0f;
@@ -80,24 +80,26 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		this.progress.gameObject.SetActive(true);
 
 		float timer = 0.0f;
+		float maxTime = CachedPlayerControl.LocalPlayer.Data.IsDead ?
+			this.ConsoleInfo.DeadPlayerActivateTime : 5.0f;
 
-		this.updateProgress(0.0f);
+		this.updateProgress(0.0f, maxTime);
 
-		while (timer < maxTimer)
+		while (timer < maxTime)
 		{
 			yield return new WaitForFixedUpdate();
 			timer += Time.fixedDeltaTime;
-			this.updateProgress(timer);
+			this.updateProgress(timer, maxTime);
 		}
-		this.updateProgress(maxTimer);
-		this.task.Next(this.TargetBombId);
+		this.updateProgress(maxTime, maxTime);
+		this.task.Next(this.ConsoleInfo.BombId);
 
 		yield return new WaitForSeconds(0.5f);
 
 		this.Close();
 	}
 
-	private void updateProgress(float timer)
+	private void updateProgress(float timer, in float maxTimer)
 	{
 		float progress = timer / maxTimer;
 		float pow_progerss = Mathf.Pow(progress, 1 / (float)2.0f);

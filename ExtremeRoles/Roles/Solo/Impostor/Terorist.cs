@@ -15,7 +15,12 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
     public enum TeroristOption
 	{
         CanActiveOtherSabotage,
-    }
+		ExplosionTime,
+		BombNum,
+		CanUseDeadPlayer,
+		DeadPlayerCooltime,
+		DeadPlayerActivateTime,
+	}
 
     public ExtremeAbilityButton? Button { get; set; }
 
@@ -60,12 +65,27 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
+        this.CreateAbilityCountOption(
+            parentOps, 5, 100);
 		CreateBoolOption(
 			TeroristOption.CanActiveOtherSabotage,
 			false, parentOps);
-        this.CreateAbilityCountOption(
-            parentOps, 10, 100);
-    }
+		CreateFloatOption(
+			TeroristOption.ExplosionTime,
+			30.0f, 10.0f, 240.0f, 1.0f, parentOps);
+		CreateIntOption(
+			TeroristOption.ExplosionTime,
+			3, 1, 5, 1, parentOps);
+		var deadPlayerOpt = CreateBoolOption(
+			TeroristOption.CanUseDeadPlayer,
+			false, parentOps);
+		CreateFloatOption(
+			TeroristOption.DeadPlayerCooltime,
+			20.0f, 5.0f, 60.0f, 2.5f, deadPlayerOpt);
+		CreateFloatOption(
+			TeroristOption.DeadPlayerActivateTime,
+			10.0f, 3.0f, 45.0f, 1.0f, deadPlayerOpt);
+	}
 
     protected override void RoleSpecificInit()
     {
@@ -82,7 +102,23 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 			GetRoleOptionId(TeroristOption.CanActiveOtherSabotage));
 
 
-		this.teroSabo = new TeroristTeroSabotageSystem(120.0f, 3, 5.0f, !this.canActiveOtherSabotage);
+		var miniGameOption = new TeroristTeroSabotageSystem.MinigameOption(
+			optionMng.GetValue<bool>(
+				GetRoleOptionId(TeroristOption.CanUseDeadPlayer)),
+			optionMng.GetValue<float>(
+				GetRoleOptionId(TeroristOption.DeadPlayerCooltime)),
+			optionMng.GetValue<float>(
+				GetRoleOptionId(TeroristOption.DeadPlayerActivateTime)));
+
+		var sabotageOption = new TeroristTeroSabotageSystem.Option(
+			optionMng.GetValue<float>(
+				GetRoleOptionId(TeroristOption.ExplosionTime)),
+			optionMng.GetValue<int>(
+				GetRoleOptionId(TeroristOption.BombNum)),
+			miniGameOption);
+
+
+		this.teroSabo = new TeroristTeroSabotageSystem(sabotageOption, !this.canActiveOtherSabotage);
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			TeroristTeroSabotageSystem.SystemType, this.teroSabo);
 	}

@@ -23,6 +23,14 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 {
+	public readonly record struct Option(
+		float ExplosionTime, int BombNum,
+		MinigameOption MinigameOption);
+	public readonly record struct MinigameOption(
+		bool CanUseDeadPlayer, float DeadPlayerCooltime, float DeadPlayerActivateTime);
+	public readonly record struct ConsoleInfo(
+		byte BombId, bool CanUseDeadPlayer, float DeadPlayerCooltime, float DeadPlayerActivateTime);
+
 	public sealed class BombConsoleBehavior : ExtremeConsole.IBehavior
 	{
 		private static Minigame prefab
@@ -47,23 +55,26 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				{
 					return float.MaxValue;
 				}
-				return player.Data.IsDead ? this.deadPlayerCoolTime : 0.0f;
+				return player.Data.IsDead ? this.info.DeadPlayerCooltime : 0.0f;
 			}
 		}
 
 		public bool IsCheckWall => true;
 
-		private readonly float deadPlayerCoolTime;
-		private readonly byte bombId;
+		private readonly ConsoleInfo info;
 
-		public BombConsoleBehavior(float deadPlayerCoolTime, byte bombId)
+		public BombConsoleBehavior(in MinigameOption option, byte bombId)
 		{
-			this.deadPlayerCoolTime = deadPlayerCoolTime;
-			this.bombId = bombId;
+			this.info = new ConsoleInfo(
+				bombId,
+				option.CanUseDeadPlayer,
+				option.DeadPlayerCooltime,
+				option.DeadPlayerActivateTime);
 		}
 
 		public bool CanUse(GameData.PlayerInfo pc)
-			=> pc.Object.CanMove && FindTeroSaboTask(pc.Object);
+			=> pc.Object.CanMove && FindTeroSaboTask(pc.Object) &&
+			(!pc.IsDead || this.info.CanUseDeadPlayer);
 
 		public void Use()
 		{
@@ -77,12 +88,12 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			{
 				throw new ArgumentException("Minigame Missing");
 			}
-			teroMiniGame!.TargetBombId = this.bombId;
+			teroMiniGame!.ConsoleInfo = info;
 			teroMiniGame!.Begin(task);
 		}
 	}
 
-	public sealed class TeroSabotageTask : ExtremePlayerTask.IBehavior
+	public sealed class Task : ExtremePlayerTask.IBehavior
 	{
 		public int MaxStep => this.system.setNum;
 		public int TaskStep => this.MaxStep - this.system.setBomb.Count;
@@ -94,7 +105,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		private ArrowBehaviour[] arrow;
 		private readonly TeroristTeroSabotageSystem system;
 
-		public TeroSabotageTask(TeroristTeroSabotageSystem system)
+		public Task(TeroristTeroSabotageSystem system)
 		{
 			this.system = system;
 			this.arrow = new ArrowBehaviour[this.system.setNum];
@@ -159,8 +170,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 	private readonly HashSet<int> setedId = new HashSet<int>();
 	private readonly float bombTimer;
 	private readonly int setNum;
-	private readonly float deadPlayerUseCoolTime;
 	private readonly bool isBlockOtherSabotage;
+	private readonly MinigameOption minigameOption;
 
 	private readonly ExtremeConsoleSystem consoleSystem;
 
@@ -169,12 +180,12 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	private JObject? json;
 
-	public TeroristTeroSabotageSystem(float bombTimer, int setNum, float deadPlayerUseCoolTime, bool isBlockOtherSabotage)
+	public TeroristTeroSabotageSystem(in Option option, bool isBlockOtherSabotage)
 	{
 		this.consoleSystem = ExtremeConsoleSystem.Create();
-		this.bombTimer = bombTimer;
-		this.setNum = setNum;
-		this.deadPlayerUseCoolTime = deadPlayerUseCoolTime;
+		this.bombTimer = option.ExplosionTime;
+		this.setNum = option.BombNum;
+		this.minigameOption = option.MinigameOption;
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
 	}
 
@@ -206,7 +217,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		if (!FindTeroSaboTask(CachedPlayerControl.LocalPlayer))
 		{
-			ExtremePlayerTask.AddTask(new TeroSabotageTask(this), 254);
+			ExtremePlayerTask.AddTask(new Task(this), 254);
 		}
 		this.flashActiveTo(true);
 		this.ExplosionTimer -= deltaTime;
@@ -393,8 +404,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 			byte bombId = (byte)(startId + counter);
 
-			var consoleBehavior = new BombConsoleBehavior(
-				this.deadPlayerUseCoolTime, bombId);
+			var consoleBehavior = new BombConsoleBehavior(this.minigameOption, bombId);
 			var newConsole = this.consoleSystem.CreateConsoleObj(
 				pos.Pos, "TeroristBomb", consoleBehavior);
 
