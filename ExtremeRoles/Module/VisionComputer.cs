@@ -121,7 +121,7 @@ public class VisionComputer
 
 		float value =
 			shipStatus.Systems.TryGetValue(electrical, out var electricalSystem) &&
-			electricalSystem.IsTryCast<SwitchSystem>(out var switchSystem) ? switchSystem!.Value : 1;
+			electricalSystem.IsTryCast<SwitchSystem>(out var switchSystem) ? switchSystem!.Value / 255.0f : 1;
 
 		float maxLightRadius = shipStatus.MaxLightRadius;
 		float minLightRadius = shipStatus.MinLightRadius;
