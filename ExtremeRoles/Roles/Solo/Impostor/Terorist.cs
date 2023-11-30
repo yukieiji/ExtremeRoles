@@ -74,7 +74,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 			TeroristOption.ExplosionTime,
 			30.0f, 10.0f, 240.0f, 1.0f, parentOps);
 		CreateIntOption(
-			TeroristOption.ExplosionTime,
+			TeroristOption.BombNum,
 			3, 1, 5, 1, parentOps);
 		var deadPlayerOpt = CreateBoolOption(
 			TeroristOption.CanUseDeadPlayer,
