@@ -39,8 +39,17 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 	private SaboTask? task;
 
-	public void Awake()
+	public override void Begin(PlayerTask task)
 	{
+		this.AbstractBegin(task);
+
+		if (!task.IsTryCast<ExtremePlayerTask>(out var playerTask) ||
+			playerTask!.Behavior is not SaboTask saboTask)
+		{
+			throw new ArgumentException("invalided Task");
+		}
+		this.task = saboTask;
+
 		var trans = base.transform;
 
 		this.progressText = trans.Find("ProgressText").GetComponent<TextMeshPro>();
@@ -58,18 +67,6 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 			{
 				this.StartCoroutine(coStartActive());
 			});
-	}
-
-	public override void Begin(PlayerTask task)
-	{
-		this.AbstractBegin(task);
-
-		if (!task.IsTryCast<ExtremePlayerTask>(out var playerTask) ||
-			playerTask!.Behavior is not SaboTask saboTask)
-		{
-			throw new ArgumentException("invalided Task");
-		}
-		this.task = saboTask;
 	}
 
 	private CollectionEnum coStartActive()
