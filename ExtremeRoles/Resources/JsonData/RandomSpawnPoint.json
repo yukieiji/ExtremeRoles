@@ -113,6 +113,18 @@
       "ImgName": "",
       "X": -8.0,
       "Y": -10.0
+    },
+    {
+      "RoomName": "UpperEngine",
+      "ImgName": "",
+      "X": 20.0,
+      "Y": 3.0
+    },
+    {
+      "RoomName": "Cafeteria",
+      "ImgName": "",
+      "X": -16.0,
+      "Y": 2.5
     }
   ]
 }
