@@ -21,7 +21,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemType
+public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 {
 	public sealed class BombConsoleBehavior : ExtremeConsole.IBehavior
 	{
@@ -153,12 +153,14 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 	public bool IsDirty { get; private set; }
 	public float ExplosionTimer { get; private set; }
 	public bool IsActive { get; private set; }
+	public bool IsBlockOtherSabotage => this.isBlockOtherSabotage && this.IsActive;
 
 	private readonly Dictionary<byte, ExtremeConsole> setBomb = new Dictionary<byte, ExtremeConsole>();
 	private readonly HashSet<int> setedId = new HashSet<int>();
 	private readonly float bombTimer;
 	private readonly int setNum;
 	private readonly float deadPlayerUseCoolTime;
+	private readonly bool isBlockOtherSabotage;
 
 	private readonly ExtremeConsoleSystem consoleSystem;
 
@@ -167,12 +169,13 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 
 	private JObject? json;
 
-	public TeroristTeroSabotageSystem(float bombTimer, int setNum, float deadPlayerUseCoolTime)
+	public TeroristTeroSabotageSystem(float bombTimer, int setNum, float deadPlayerUseCoolTime, bool isBlockOtherSabotage)
 	{
 		this.consoleSystem = ExtremeConsoleSystem.Create();
 		this.bombTimer = bombTimer;
 		this.setNum = setNum;
 		this.deadPlayerUseCoolTime = deadPlayerUseCoolTime;
+		this.isBlockOtherSabotage = isBlockOtherSabotage;
 	}
 
 	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc)

@@ -58,11 +58,13 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public const SystemTypes Type = (SystemTypes)60;
 
 	public bool IsDirty { get; private set; } = false;
+	public bool IsActiveSpecialSabotage => this.sabotageSystem.Any(s => s.IsBlockOtherSabotage);
 
 	private static ExtremeSystemTypeManager? instance = null;
 
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> allSystems = new ();
 	private readonly Dictionary<ExtremeSystemType, IDeterioratableExtremeSystemType> deterioratableSystem = new ();
+	private readonly List<ISabotageExtremeSystemType> sabotageSystem = new();
 
 	private readonly List<ExtremeSystemType> dirtySystem = new List<ExtremeSystemType>();
 
@@ -169,6 +171,11 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 				system is IDeterioratableExtremeSystemType deterioratableSystem)
 			{
 				this.deterioratableSystem.Add(systemType, deterioratableSystem);
+			}
+			if (result &&
+				system is ISabotageExtremeSystemType saboSystem)
+			{
+				this.sabotageSystem.Add(saboSystem);
 			}
 			return result;
 		}

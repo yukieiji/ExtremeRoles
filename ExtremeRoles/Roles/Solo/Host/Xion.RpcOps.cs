@@ -149,20 +149,14 @@ public sealed partial class Xion
 
     public void RpcTestAbilityCall()
     {
-		var system = new TeroristTeroSabotageSystem(120.0f, 3, 5.0f);
-
-		ExtremeSystemTypeManager.Instance.TryAdd(TeroristTeroSabotageSystem.SystemType, system);
-
-		ExtremeSystemTypeManager.RpcUpdateSystem(
-			TeroristTeroSabotageSystem.SystemType,
-			x =>
-			{
-				x.Write((byte)TeroristTeroSabotageSystem.Ops.Setup);
-			});
-    }
+		MessageWriter writer = createWriter(XionRpcOpsCode.TestRpc);
+		// 色々と
+		AmongUsClient.Instance.FinishRpcImmediately(writer);
+		// 必要な関数書く
+	}
 
 
-    public static void RpcNoXionVote()
+	public static void RpcNoXionVote()
     {
         AmongUsClient.Instance.FinishRpcImmediately(
             createWriter(XionRpcOpsCode.NoXionVote));
