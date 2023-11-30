@@ -112,15 +112,15 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 				});
 		}
 
-		public void Initialize(PlayerControl owner)
+		public void Initialize(PlayerControl owner, Transform transform)
 		{
-			if (owner == null || owner.AmOwner) { return; }
+			if (owner == null || !owner.AmOwner) { return; }
 
 			ArrowBehaviour arrow = ExtremePlayerTask.IBehavior.GetArrowTemplate();
 
 			foreach (var(index, console) in this.system.setBomb)
 			{
-				var targetArrow = UnityObject.Instantiate(arrow);
+				var targetArrow = UnityObject.Instantiate(arrow, transform);
 
 				targetArrow.target = console.transform.position;
 				targetArrow.gameObject.SetActive(true);

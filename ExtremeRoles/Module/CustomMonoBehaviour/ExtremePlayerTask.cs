@@ -19,7 +19,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 		public TaskTypes TaskTypes { get; }
 
-		public void Initialize(PlayerControl owner);
+		public void Initialize(PlayerControl owner, Transform transform);
 		public void OnRemove();
 		public void OnComplete();
 
@@ -89,7 +89,8 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 	public override void Initialize()
 	{
-		this.Behavior?.Initialize(this.Owner);
+		this.Behavior?.Initialize(
+			this.Owner, base.gameObject.transform);
 	}
 
 	public override void OnRemove()
