@@ -112,7 +112,7 @@ public static class SubmarineSpawnInSystemDetorioratePatch
 
 		// ランダムスポーンが有効かつ自動選択がオフだけ処理飛ばす
 		if (spawnOpt == null ||
-			(spawnOpt.EnableRandom && submergedMod!.SpawnPoint is SpawnPoint.DefaultSpawn && !spawnOpt.IsAutoSelectRandom)) { return; }
+			(spawnOpt.EnableSpecialSetting && submergedMod!.SpawnPoint is SpawnPoint.DefaultSpawn && !spawnOpt.IsAutoSelectRandom)) { return; }
 
 		submarineSpawnInSystemTimer.SetValue(__instance, 0.0f);
 	}
@@ -217,7 +217,7 @@ public static class SubmarineSelectSpawnCoSelectLevelPatch
 		{
 			return;
 		}
-		else if (!spawnOpt.EnableRandom || spawnPoint is SpawnPoint.LowerCentralOnly)
+		else if (!spawnOpt.EnableSpecialSetting || spawnPoint is SpawnPoint.LowerCentralOnly)
 		{
 			upperSelected = false;
 		}

@@ -20,7 +20,7 @@ public static class MiraExileControllerAnimePatch
 	{
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
-		if (spawnOpt.EnableRandom && spawnOpt.MiraHq)
+		if (spawnOpt.EnableSpecialSetting && spawnOpt.MiraHq)
 		{
 			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
 		}

@@ -93,7 +93,20 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 		Spawn = new SpawnOption()
 		{
-			IsAutoSelectRandom = false,
+			EnableSpecialSetting = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.EnableSpecialSetting),
+			Skeld = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.SkeldRandomSpawn),
+			MiraHq = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.MiraHqRandomSpawn),
+			Polus = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.PolusRandomSpawn),
+			AirShip = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.AirShipRandomSpawn),
+			Fungle = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.FungleRandomSpawn),
+			IsAutoSelectRandom = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.IsAutoSelectRandomSpawn),
 		};
 
 		IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(

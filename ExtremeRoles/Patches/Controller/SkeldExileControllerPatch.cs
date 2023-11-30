@@ -20,7 +20,7 @@ public static class SkeldExileControllerAnimePatch
 	{
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
-		if (spawnOpt.EnableRandom && spawnOpt.Skeld)
+		if (spawnOpt.EnableSpecialSetting && spawnOpt.Skeld)
 		{
 			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
 			return false;

@@ -175,7 +175,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator, isHeader: true);
 		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
 
-		var randomSpawnOpt = OptionManager.Instance.Get<bool>((int)GlobalOption.EnableRandomSpawn);
+		var randomSpawnOpt = OptionManager.Instance.Get<bool>((int)GlobalOption.EnableSpecialSetting);
 		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<RandomSpawnPoint>(
 			SubmergedOption.SubmergedRandomSpawn, randomSpawnOpt, invert: true);
 	}

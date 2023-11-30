@@ -20,7 +20,7 @@ public static class PbExileControllerAnimePatch
 	{
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
-		if (spawnOpt.EnableRandom && spawnOpt.Polus)
+		if (spawnOpt.EnableSpecialSetting && spawnOpt.Polus)
 		{
 			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
 			return false;

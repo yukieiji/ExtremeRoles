@@ -32,7 +32,7 @@ public enum GlobalOption : int
 	DevelopPhotosTask,
 	DivertPowerTask,
 
-	EnableRandomSpawn,
+	EnableSpecialSetting,
 	SkeldRandomSpawn,
 	MiraHqRandomSpawn,
 	PolusRandomSpawn,
@@ -199,7 +199,7 @@ public interface IShipGlobalOption
 		}
 
 
-		var randomSpawnOpt = CreateBoolOption(GlobalOption.EnableRandomSpawn , true);
+		var randomSpawnOpt = CreateBoolOption(GlobalOption.EnableSpecialSetting , true);
 		CreateBoolOption(GlobalOption.SkeldRandomSpawn  , false, randomSpawnOpt, invert: true);
 		CreateBoolOption(GlobalOption.MiraHqRandomSpawn , false, randomSpawnOpt, invert: true);
 		CreateBoolOption(GlobalOption.PolusRandomSpawn  , false, randomSpawnOpt, invert: true);

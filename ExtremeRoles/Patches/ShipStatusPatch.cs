@@ -57,7 +57,7 @@ public static class ShipStatusPrespawnStepPatch
 	public static bool Prefix(ref IEnumerator __result)
 	{
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
-		if (!spawnOpt.EnableRandom)
+		if (!spawnOpt.EnableSpecialSetting)
 		{
 			return true;
 		}
