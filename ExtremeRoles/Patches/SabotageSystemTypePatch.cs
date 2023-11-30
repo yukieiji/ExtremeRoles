@@ -1,10 +1,6 @@
-﻿using ExtremeRoles.Module.SystemType;
-using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HarmonyLib;
+
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches;
 
@@ -14,6 +10,6 @@ public static class SabotageSystemTypeAnyActivePatch
 	public static void Postfix(
 		ref bool __result)
 	{
-		__result &= ExtremeSystemTypeManager.Instance.IsActiveSpecialSabotage;
+		__result |= ExtremeSystemTypeManager.Instance.IsActiveSpecialSabotage;
 	}
 }
