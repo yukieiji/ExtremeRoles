@@ -91,6 +91,10 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		}
 		this.updateProgress(maxTimer);
 		this.task.Next(this.TargetBombId);
+
+		yield return new WaitForSeconds(0.5f);
+
+		this.Close();
 	}
 
 	private void updateProgress(float timer)
