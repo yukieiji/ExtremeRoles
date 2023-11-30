@@ -5,8 +5,6 @@ using ExtremeRoles.Roles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using TempWinData = Il2CppSystem.Collections.Generic.List<WinningPlayerData>;
 using Player = GameData.PlayerInfo;
@@ -198,6 +196,7 @@ public sealed class ExtremeGameResult
 		switch ((RoleGameOverReason)reason)
 		{
 			case RoleGameOverReason.AssassinationMarin:
+			case RoleGameOverReason.TeroristoTeroWithShip:
 				this.winner.Clear();
 				foreach (Player player in GameData.Instance.AllPlayers.GetFastEnumerator())
 				{

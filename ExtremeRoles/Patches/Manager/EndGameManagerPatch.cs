@@ -279,7 +279,8 @@ public static class EndGameManagerSetUpPatch
             (RoleGameOverReason)GameOverReason.ImpostorByVote or
             (RoleGameOverReason)GameOverReason.ImpostorBySabotage or
             (RoleGameOverReason)GameOverReason.HideAndSeek_ByKills or
-            RoleGameOverReason.AssassinationMarin =>
+            RoleGameOverReason.AssassinationMarin or
+			RoleGameOverReason.TeroristoTeroWithShip =>
                 WinTextInfo.Create(RoleTypes.Impostor, Palette.ImpostorRed, false),
 
             RoleGameOverReason.AliceKilledByImposter or

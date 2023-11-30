@@ -134,6 +134,7 @@ public enum CombinationRoleType : byte
 public enum RoleGameOverReason
 {
     AssassinationMarin = 20,
+	TeroristoTeroWithShip,
 
     AliceKilledByImposter,
     AliceKillAllOther,
