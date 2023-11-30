@@ -195,12 +195,12 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
 	}
 
-	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc)
+	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete=false)
 	{
 		foreach (var task in pc.myTasks.GetFastEnumerator())
 		{
 			if (task != null &&
-				!task.IsComplete &&
+				(ignoreComplete || !task.IsComplete) &&
 				task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
 				playerTask!.Behavior!.TaskTypes == TeroristoTaskTypes)
 			{
@@ -313,17 +313,17 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	public void Clear()
 	{
-		this.IsActive = false;
 		this.ExplosionTimer = 1000.0f;
 		this.setedId.Clear();
 		this.setBomb.Clear();
 		this.flashActiveTo(false);
 
-		var task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer);
+		var task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer, true);
 		if (task != null)
 		{
 			task.Complete();
 		}
+		this.IsActive = false;
 	}
 
 	private void checkAllCancel()
@@ -397,7 +397,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
 			teroMinigame!.BombId == id)
 		{
-			Minigame.Instance.Close();
+			Minigame.Instance.ForceClose();
 		}
 
 		if (this.setBomb.TryGetValue(id, out ExtremeConsole? value) ||
