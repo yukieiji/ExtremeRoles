@@ -113,14 +113,18 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		public void Next(byte id)
 		{
-			int index = (int)id;
-			this.arrow[index].gameObject.SetActive(false);
+			HideArrow(id);
 			ExtremeSystemTypeManager.RpcUpdateSystem(
 				SystemType, x =>
 				{
 					x.Write((byte)Ops.Cancel);
 					x.Write(id);
 				});
+		}
+
+		public void HideArrow(int index)
+		{
+			this.arrow[index].gameObject.SetActive(false);
 		}
 
 		public void Initialize(PlayerControl owner, Transform transform)
@@ -141,7 +145,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 
 		public void OnComplete()
-		{ }
+		{
+			this.OnRemove();
+		}
 
 		public void OnRemove()
 		{
@@ -380,6 +386,20 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	private void removeBomb(byte id)
 	{
+		ExtremePlayerTask? task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer);
+		if (task != null &&
+			task.Behavior is Task teroSabo)
+		{
+			teroSabo.HideArrow(id);
+		}
+
+		if (Minigame.Instance != null &&
+			Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
+			teroMinigame!.BombId == id)
+		{
+			Minigame.Instance.Close();
+		}
+
 		if (this.setBomb.TryGetValue(id, out ExtremeConsole? value) ||
 			value != null)
 		{
