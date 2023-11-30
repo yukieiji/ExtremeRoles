@@ -5,6 +5,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using UnityEngine;
 
 using HarmonyLib;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
 
@@ -17,8 +18,15 @@ public static class SkeldExileControllerAnimePatch
 {
 	public static bool Prefix(SkeldExileController __instance, ref Il2CppEnumerator __result)
 	{
-		__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
-		return false;
+		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
+
+		if (spawnOpt.EnableRandom && spawnOpt.Skeld)
+		{
+			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
+			return false;
+		}
+
+		return true;
 	}
 
 	private static IEnumerator animateWithRandomSpawn(SkeldExileController __instance)
@@ -34,11 +42,12 @@ public static class SkeldExileControllerAnimePatch
 		yield return new WaitForSeconds(0.2f);
 		if (__instance.exiled != null && __instance.EjectSound)
 		{
-			SoundManager.Instance.PlayDynamicSound(
+			var snd = SoundManager.Instance;
+			snd.PlayDynamicSound(
 				"PlayerEjected",
 				__instance.EjectSound, true,
 				(DynamicSound.GetDynamicsFunction)__instance.SoundDynamics,
-				SoundManager.Instance.SfxChannel);
+				snd.SfxChannel);
 		}
 		yield return new WaitForSeconds(0.8f);
 

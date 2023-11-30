@@ -5,6 +5,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using UnityEngine;
 
 using HarmonyLib;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
 
@@ -17,8 +18,15 @@ public static class FungleExileControllerAnimePatch
 {
 	public static bool Prefix(FungleExileController __instance, ref Il2CppEnumerator __result)
 	{
-		__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
-		return false;
+		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
+
+		if (spawnOpt.EnableRandom && spawnOpt.Fungle)
+		{
+			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
+			return false;
+		}
+
+		return true;
 	}
 
 	private static IEnumerator animateWithRandomSpawn(FungleExileController __instance)

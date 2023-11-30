@@ -9,6 +9,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -17,7 +18,12 @@ public static class MiraExileControllerAnimePatch
 {
 	public static bool Prefix(MiraExileController __instance, ref Il2CppEnumerator __result)
 	{
-		__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
+		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
+
+		if (spawnOpt.EnableRandom && spawnOpt.MiraHq)
+		{
+			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
+		}
 		return false;
 	}
 
