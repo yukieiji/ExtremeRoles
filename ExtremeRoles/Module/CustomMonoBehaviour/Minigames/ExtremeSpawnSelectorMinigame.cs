@@ -121,10 +121,18 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			}
 		}
 
-		base.StartCoroutine(runTimer().WrapToIl2Cpp());
+		if (!ExtremeGameModeManager.Instance.ShipOption.Spawn.IsAutoSelectRandom)
+		{
 
-		PlayerControl.HideCursorTemporarily();
-		ConsoleJoystick.SetMode_Menu();
+			base.StartCoroutine(runTimer().WrapToIl2Cpp());
+
+			PlayerControl.HideCursorTemporarily();
+			ConsoleJoystick.SetMode_Menu();
+		}
+		else
+		{
+			this.Close();
+		}
 	}
 
 	public override void Close()
@@ -183,14 +191,11 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	private IEnumerator runTimer()
 	{
-		if (!ExtremeGameModeManager.Instance.ShipOption.Spawn.IsAutoSelectRandom)
+		for (float time = 10.0f; time >= 0f; time -= Time.deltaTime)
 		{
-			for (float time = 10.0f; time >= 0f; time -= Time.deltaTime)
-			{
-				this.text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-					StringNames.TimeRemaining, new Il2CppObject[] { Mathf.CeilToInt(time) });
-				yield return null;
-			}
+			this.text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+				StringNames.TimeRemaining, new Il2CppObject[] { Mathf.CeilToInt(time) });
+			yield return null;
 		}
 		spawnToRandom();
 		yield break;
