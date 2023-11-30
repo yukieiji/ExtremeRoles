@@ -152,6 +152,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 
 	public bool IsDirty { get; private set; }
 	public float ExplosionTimer { get; private set; }
+	public bool IsActive { get; private set; }
 
 	private readonly Dictionary<byte, ExtremeConsole> setBomb = new Dictionary<byte, ExtremeConsole>();
 	private readonly HashSet<int> setedId = new HashSet<int>();
@@ -161,7 +162,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 
 	private readonly ExtremeConsoleSystem consoleSystem;
 
-	private bool isActive = false;
+
 	private float syncTimer = 0.0f;
 
 	private JObject? json;
@@ -193,7 +194,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 	{
 		if (MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
-			!this.isActive)
+			!this.IsActive)
 		{
 			this.flashActiveTo(false);
 			return;
@@ -280,7 +281,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 			case Ops.Setup:
 				setBombToRandomPos(this.setNum, 0);
 
-				this.isActive = true;
+				this.IsActive = true;
 				this.ExplosionTimer = this.bombTimer;
 				this.IsDirty = true;
 
@@ -292,7 +293,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 
 	public void Clear()
 	{
-		this.isActive = false;
+		this.IsActive = false;
 		this.ExplosionTimer = 1000.0f;
 		this.setedId.Clear();
 		this.setBomb.Clear();
@@ -315,7 +316,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		else
 		{
 			this.flashActiveTo(true);
-			this.isActive = true;
+			this.IsActive = true;
 		}
 	}
 
