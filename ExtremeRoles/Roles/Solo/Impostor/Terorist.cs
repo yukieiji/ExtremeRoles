@@ -72,7 +72,8 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 			false, parentOps);
 		CreateFloatOption(
 			TeroristOption.ExplosionTime,
-			30.0f, 10.0f, 240.0f, 1.0f, parentOps);
+			45.0f, 10.0f, 240.0f, 1.0f,
+			parentOps, format: OptionUnit.Second);
 		CreateIntOption(
 			TeroristOption.BombNum,
 			3, 1, 5, 1, parentOps);
@@ -81,10 +82,12 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 			false, parentOps);
 		CreateFloatOption(
 			TeroristOption.DeadPlayerCooltime,
-			20.0f, 5.0f, 60.0f, 2.5f, deadPlayerOpt);
+			20.0f, 5.0f, 60.0f, 2.5f,
+			deadPlayerOpt, format: OptionUnit.Second);
 		CreateFloatOption(
 			TeroristOption.DeadPlayerActivateTime,
-			10.0f, 3.0f, 45.0f, 1.0f, deadPlayerOpt);
+			10.0f, 3.0f, 45.0f, 1.0f,
+			deadPlayerOpt, format: OptionUnit.Second);
 	}
 
     protected override void RoleSpecificInit()
