@@ -20,6 +20,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using Il2CppObject = Il2CppSystem.Object;
+using ExtremeRoles.GameMode;
 
 
 #nullable enable
@@ -182,11 +183,14 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	private IEnumerator runTimer()
 	{
-		for (float time = 128f; time >= 0f; time -= Time.deltaTime)
+		if (!ExtremeGameModeManager.Instance.ShipOption.Spawn.IsAutoSelectRandom)
 		{
-			this.text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-				StringNames.TimeRemaining, new Il2CppObject[] { Mathf.CeilToInt(time) });
-			yield return null;
+			for (float time = 10.0f; time >= 0f; time -= Time.deltaTime)
+			{
+				this.text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+					StringNames.TimeRemaining, new Il2CppObject[] { Mathf.CeilToInt(time) });
+				yield return null;
+			}
 		}
 		spawnToRandom();
 		yield break;
