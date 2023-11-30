@@ -95,7 +95,7 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 
 		this.CanUse(player.Data, out bool canUse, out bool _);
 
-		if (!canUse || this.Behavior is null)
+		if (!canUse || this.Behavior is null || Minigame.Instance != null)
 		{
 			return;
 		}
