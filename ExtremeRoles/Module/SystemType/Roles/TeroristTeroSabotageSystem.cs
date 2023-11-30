@@ -290,21 +290,27 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 		}
 	}
 
+	public void Clear()
+	{
+		this.isActive = false;
+		this.ExplosionTimer = 1000.0f;
+		this.setedId.Clear();
+		this.setBomb.Clear();
+		this.flashActiveTo(false);
+
+		var task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer);
+		if (task != null)
+		{
+			task.Complete();
+		}
+	}
+
 	private void checkAllCancel()
 	{
 		// 爆弾0 => サボ終了
 		if (this.setBomb.Count == 0)
 		{
-			this.isActive = false;
-			this.ExplosionTimer = 1000.0f;
-			this.setedId.Clear();
-			this.flashActiveTo(false);
-
-			var task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer);
-			if (task != null)
-			{
-				task.Complete();
-			}
+			this.Clear();
 		}
 		else
 		{
