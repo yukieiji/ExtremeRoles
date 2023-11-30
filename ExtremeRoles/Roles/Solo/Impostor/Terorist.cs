@@ -94,7 +94,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
     {
         this.RoleAbilityInit();
 
-		if (CachedShipStatus.Instance.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
+		if (CachedShipStatus.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
 			system.IsTryCast<SabotageSystemType>(out var saboSystem))
 		{
 			this.saboSystem = saboSystem;
