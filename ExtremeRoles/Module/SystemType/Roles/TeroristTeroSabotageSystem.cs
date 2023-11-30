@@ -85,7 +85,7 @@ public sealed class TeroristTeroSabotageSystem : IDeterioratableExtremeSystemTyp
 	public sealed class TeroSabotageTask : ExtremePlayerTask.IBehavior
 	{
 		public int MaxStep => this.system.setNum;
-		public int TaskStep => this.system.setBomb.Count - this.MaxStep;
+		public int TaskStep => this.MaxStep - this.system.setBomb.Count;
 
 		public string TaskText => $"爆弾を解除する(爆発まで残り{Mathf.CeilToInt(this.system.ExplosionTimer)}秒)";
 
