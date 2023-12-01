@@ -92,14 +92,14 @@ public static class MapCountOverlayUpdatePatch
                     counterArea.RoomType,
                     out PlainShipRoom? plainShipRoom) &&
 				plainShipRoom != null &&
-                plainShipRoom.roomArea)
+                plainShipRoom.roomArea != null)
             {
-                HashSet<byte> alreadyShowPlayerIds = new HashSet<byte>();
                 int hitNum = plainShipRoom.roomArea.OverlapCollider(
                     __instance.filter, __instance.buffer);
                 int showNum = 0;
 
-                List<int> addColor = new List<int>(hitNum);
+				HashSet<byte> alreadyShowPlayerIds = new HashSet<byte>(hitNum);
+				List<int> addColor = new List<int>(hitNum);
 
                 for (int j = 0; j < hitNum; j++)
                 {
@@ -107,9 +107,12 @@ public static class MapCountOverlayUpdatePatch
                     if (collider2D.CompareTag("DeadBody") && __instance.includeDeadBodies)
                     {
                         DeadBody component = collider2D.GetComponent<DeadBody>();
-                        if (component && alreadyShowPlayerIds.Add(component.ParentId))
+                        if (component != null &&
+							alreadyShowPlayerIds.Add(component.ParentId))
                         {
-                            GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(
+							showNum++;
+
+							GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(
                                 component.ParentId);
                             if (playerInfo != null)
                             {
