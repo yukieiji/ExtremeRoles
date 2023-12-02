@@ -17,6 +17,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
         CanActiveOtherSabotage,
 		ExplosionTime,
 		BombNum,
+		PlayerActivateTime,
 		CanUseDeadPlayer,
 		DeadPlayerCooltime,
 		DeadPlayerActivateTime,
@@ -77,6 +78,10 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 		CreateIntOption(
 			TeroristOption.BombNum,
 			3, 1, 5, 1, parentOps);
+		CreateFloatOption(
+			TeroristOption.PlayerActivateTime,
+			1.0f, 5.0f, 10.0f, 0.5f,
+			parentOps, format: OptionUnit.Second);
 		var deadPlayerOpt = CreateBoolOption(
 			TeroristOption.CanUseDeadPlayer,
 			false, parentOps);
@@ -106,6 +111,8 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 
 
 		var miniGameOption = new TeroristTeroSabotageSystem.MinigameOption(
+			optionMng.GetValue<float>(
+				GetRoleOptionId(TeroristOption.PlayerActivateTime)),
 			optionMng.GetValue<bool>(
 				GetRoleOptionId(TeroristOption.CanUseDeadPlayer)),
 			optionMng.GetValue<float>(

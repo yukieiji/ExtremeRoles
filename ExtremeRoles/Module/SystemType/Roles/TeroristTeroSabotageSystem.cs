@@ -27,9 +27,11 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		float ExplosionTime, int BombNum,
 		MinigameOption MinigameOption);
 	public readonly record struct MinigameOption(
-		bool CanUseDeadPlayer, float DeadPlayerCooltime, float DeadPlayerActivateTime);
+		float PlayerActivateTime, bool CanUseDeadPlayer,
+		float DeadPlayerCooltime, float DeadPlayerActivateTime);
 	public readonly record struct ConsoleInfo(
-		byte BombId, bool CanUseDeadPlayer, float DeadPlayerCooltime, float DeadPlayerActivateTime);
+		byte BombId, float PlayerActivateTime,
+		bool CanUseDeadPlayer, float DeadPlayerCooltime, float DeadPlayerActivateTime);
 
 	public sealed class BombConsoleBehavior : ExtremeConsole.IBehavior
 	{
@@ -67,6 +69,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			this.info = new ConsoleInfo(
 				bombId,
+				option.PlayerActivateTime,
 				option.CanUseDeadPlayer,
 				option.DeadPlayerCooltime,
 				option.DeadPlayerActivateTime);
