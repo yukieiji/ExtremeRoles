@@ -86,6 +86,7 @@ public sealed class FinalSummary : MonoBehaviour
 		}
 	}
 
+	[HideFromIl2Cpp]
 	public void Create(List<PlayerSummary> summaries)
 	{
 		List<Color> tagColor = new List<Color>();
@@ -187,6 +188,7 @@ public sealed class FinalSummary : MonoBehaviour
 			position.x + 3.5f, position.y - 0.1f);
 	}
 
+	[HideFromIl2Cpp]
 	private void sortedSummary(List<PlayerSummary> summaries)
 	{
 		summaries.Sort((x, y) =>

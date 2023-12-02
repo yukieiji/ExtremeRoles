@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Il2CppInterop.Runtime.Attributes;
+
 using TMPro;
 using UnityEngine;
 
@@ -10,8 +12,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 [Il2CppRegister]
 public sealed class SpriteButton : MonoBehaviour
 {
+	[HideFromIl2Cpp]
 	public Action? OnClick { get; set; }
-
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	public TextMeshPro Text { get; private set; }

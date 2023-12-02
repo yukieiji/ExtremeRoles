@@ -9,6 +9,7 @@ using System.Reflection;
 
 using TMPro;
 using UnityEngine;
+using Il2CppInterop.Runtime.Attributes;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
@@ -191,6 +192,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		}
 	}
 
+	[HideFromIl2Cpp]
 	public IEnumerator WaitForFinish()
 	{
 		yield return null;
@@ -202,6 +204,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		yield break;
 	}
 
+	[HideFromIl2Cpp]
 	private IEnumerator runTimer()
 	{
 		for (float time = 10.0f; time >= 0f; time -= Time.deltaTime)
@@ -214,6 +217,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		yield break;
 	}
 
+	[HideFromIl2Cpp]
 	private Action createSpawnAtAction(Vector2 pos, string name)
 	{
 		return () =>
@@ -238,6 +242,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		};
 	}
 
+	[HideFromIl2Cpp]
 	private IEnumerator coSpawnAt(PlayerControl playerControl)
 	{
 		yield return new WaitForFixedUpdate();
