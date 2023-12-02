@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Reflection;
 
 using TMPro;
@@ -36,7 +37,11 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	private const float buttonYOffset = 0.25f;
 
-	private readonly record struct SpawnPointInfo(string RoomName, string ImgName, float X, float Y);
+	private readonly record struct SpawnPointInfo(string RoomName, string ImgName, float X, float Y)
+	{
+		[JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+		public Vector2 Vector => new Vector2(X, Y);
+	}
 
 	private static Dictionary<string, SpawnPointInfo[]>? spawnInfo;
 	private const string jsonPath = "ExtremeRoles.Resources.JsonData.RandomSpawnPoint.json";
@@ -102,7 +107,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			button.Text.text = text;
 			button.Rend.sprite = Resources.Loader.CreateSpriteFromResources(imgName);
 			button.Colider.size = new Vector2(1.25f, 1.25f);
-			button.OnClick = createSpawnAtAction(new Vector2(point.X, point.Y), text);
+			button.OnClick = createSpawnAtAction(point.Vector, text);
 
 			this.button.Add(button);
 		}
