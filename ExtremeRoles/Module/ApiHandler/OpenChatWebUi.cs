@@ -151,6 +151,10 @@ public sealed class OpenChatWebUi : IRequestHandler
 
         async function handleUserInput() {
             const chat = userInput.value;
+			if (chat.length > 120) {
+				addMessage("|SYSTEM_MESSAGE|", "|OVER_MAXLENGTH_MESSAGE|", true);
+				return;
+			}
             const chatData = {
                 "Body" : chat
             }
@@ -232,10 +236,11 @@ public sealed class OpenChatWebUi : IRequestHandler
 		string socketUrl = ChatWebUI.SocketUrl;
 
 		string showPage = page
-			.Replace("|ESTABLISH_CONNECT_MESSAGE|", Translation.GetString("ConectSocket"))
-			.Replace("|DISCONNECT_MESSAGE|", Translation.GetString("DisconectAmongUs"))
+			.Replace("|ESTABLISH_CONNECT_MESSAGE|", Translation.GetString("ConectSocketMessage"))
+			.Replace("|DISCONNECT_MESSAGE|", Translation.GetString("DisconectAmongUsMessage"))
 			.Replace("|SYSTEM_MESSAGE|", Translation.GetString("SystemMessage"))
 			.Replace("|INPUT_MESSAGE|", Translation.GetString("InputMessage"))
+			.Replace("|OVER_MAXLENGTH_MESSAGE|", Translation.GetString("OverMaxLengthMessage"))
 			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
 			.Replace("|SOCKET_URL|", socketUrl.Replace("http://", ""));
 

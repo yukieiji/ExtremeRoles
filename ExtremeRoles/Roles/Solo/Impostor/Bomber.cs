@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -93,7 +93,8 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
     public bool CheckAbility()
         => Player.IsPlayerInRangeAndDrawOutLine(
             CachedPlayerControl.LocalPlayer,
-            this.bombSettingPlayer, this, this.KillRange);
+            this.bombSettingPlayer, this,
+			GameOptionsData.KillDistances[this.KillRange]);
 
     public bool UseAbility()
     {
