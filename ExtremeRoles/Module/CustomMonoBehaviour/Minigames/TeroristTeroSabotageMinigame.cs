@@ -9,6 +9,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
 
 using CollectionEnum = System.Collections.IEnumerator;
 using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.Task;
@@ -70,6 +71,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 			});
 	}
 
+	[HideFromIl2Cpp]
 	private CollectionEnum coStartActive()
 	{
 		if (this.task is null)
