@@ -37,10 +37,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
     <EmbeddedResource Include="Resources\Asset\*.asset" />
-    <EmbeddedResource Include="Resources\*.png" />
-    <EmbeddedResource Include="Resources\MeryVentAnimation\*.png" />
-    <EmbeddedResource Include="Resources\DelinquentScribe\*.png" />
-    <EmbeddedResource Include="Resources\SettingTab\*.png" />
+    <EmbeddedResource Include="Resources\**\*.png" />
 	  <EmbeddedResource Include="Resources\JsonData\*.json" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />
   </ItemGroup>
