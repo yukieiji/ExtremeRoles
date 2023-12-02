@@ -178,7 +178,8 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 		foreach (var button in this.button)
 		{
-			if (this.controller.CheckHover(button.Colider))
+			if (Controller.currentTouchType == Controller.TouchType.Joystick &&
+				this.controller.CheckHover(button.Colider))
 			{
 				button.OnClick?.Invoke();
 				return;
