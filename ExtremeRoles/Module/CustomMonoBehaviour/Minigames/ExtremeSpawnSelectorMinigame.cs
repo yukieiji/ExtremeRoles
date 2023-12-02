@@ -90,7 +90,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		{
 			var point = shuffleedPoint[i];
 
-			GameObject obj = new GameObject("selector_button");
+			GameObject obj = new GameObject($"selector_button_{i}");
 			obj.transform.SetParent(base.transform);
 			obj.transform.localPosition = new Vector3(2.5f * (i - 1), buttonYOffset);
 			obj.SetActive(true);
