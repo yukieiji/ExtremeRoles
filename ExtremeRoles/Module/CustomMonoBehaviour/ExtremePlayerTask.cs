@@ -1,4 +1,5 @@
 ﻿using System;
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Performance;
 using UnityEngine;
 
@@ -29,17 +30,13 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 			foreach (var task in CachedShipStatus.Instance.SpecialTasks)
 			{
-				if (task == null)
+				if (task == null ||
+					!task.IsTryCast<SabotageTask>(out var saboTask) ||
+					saboTask!.Arrows.Count == 0)
 				{
 					continue;
 				}
-				var saboTask = task.TryCast<SabotageTask>();
-				if (saboTask == null ||
-					saboTask.Arrows.Count == 0)
-				{
-					continue;
-				}
-				template = saboTask.Arrows[0];
+				template = saboTask!.Arrows[0];
 				break;
 			}
 			if (template == null)
