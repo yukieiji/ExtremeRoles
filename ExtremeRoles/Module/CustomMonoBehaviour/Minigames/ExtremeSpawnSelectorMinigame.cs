@@ -226,7 +226,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 			localPlayer.SetKinematic(true);
 			localPlayer.NetTransform.SetPaused(true);
-			Player.RpcUncheckSnap(localPlayer.PlayerId, pos);
+			Player.RpcUncheckSnap(localPlayer.PlayerId, pos, true);
 
 			FastDestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
 
