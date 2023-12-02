@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Compat;
+using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -207,10 +207,7 @@ public sealed class Delusioner :
             {
                 Vector3 targetPos = player.Object.transform.position;
 
-                // AirShipの初期スポーンは(new Vector2(-25f, 40f))で浮動小数点誤差を考慮してこうする
-                if (mapId == 4 &&
-                    (-26f <= targetPos.x && targetPos.x <= -24f) &&
-                    ( 39f <= targetPos.y && targetPos.y <= 41f))
+                if (ExtremeSpawnSelectorMinigame.IsCloseWaitPos(targetPos))
                 {
                     continue;
                 }

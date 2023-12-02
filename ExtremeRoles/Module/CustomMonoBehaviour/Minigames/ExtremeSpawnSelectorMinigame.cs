@@ -44,6 +44,9 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	}
 
 	private static Dictionary<string, SpawnPointInfo[]>? spawnInfo;
+
+	// AirShipの初期スポーンと同じくnew Vector2(-25f, 40f)にしておく
+	private static Vector2 waitPos => new Vector2(-25f, 40f);
 	private const string jsonPath = "ExtremeRoles.Resources.JsonData.RandomSpawnPoint.json";
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
@@ -124,7 +127,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 				{
 					var player = playerInfo.Object.NetTransform;
 
-					player.transform.position = new Vector2(-25f, 40f);
+					player.transform.position = waitPos;
 					player.Halt();
 				}
 			}
@@ -253,6 +256,10 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		int index = RandomGenerator.Instance.Next(0, this.button.Count);
 		this.button[index].OnClick?.Invoke();
 	}
+
+	// 距離が近いという部分で1.0位近いかCheck
+	public static bool IsCloseWaitPos(Vector2 pos)
+		=> Vector2.Distance(pos, waitPos) <= 1.0f;
 
 	public static IEnumerator WrapUpAndSpawn(ExileController instance)
 	{
