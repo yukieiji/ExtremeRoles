@@ -12,6 +12,7 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension.Task;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
@@ -20,7 +21,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using Il2CppObject = Il2CppSystem.Object;
-using ExtremeRoles.GameMode;
 
 
 #nullable enable
@@ -94,10 +94,13 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 				Enum.TryParse<SystemTypes>(roomName, true, out var systemRoomName) ?
 				FastDestroyableSingleton<TranslationController>.Instance.GetString(systemRoomName) :
 				Translation.GetString(roomName);
+			string imgName =
+				string.Format(
+					Resources.Path.ExtremeSelectorMinigameImgFormat,
+					mapKey, roomName);
 
 			button.Text.text = text;
-			button.Rend.sprite = Resources.Loader.CreateSpriteFromResources(
-				Resources.Path.MoverMove);
+			button.Rend.sprite = Resources.Loader.CreateSpriteFromResources(imgName);
 			button.Colider.size = new Vector2(1.25f, 1.25f);
 			button.OnClick = createSpawnAtAction(new Vector2(point.X, point.Y), text);
 

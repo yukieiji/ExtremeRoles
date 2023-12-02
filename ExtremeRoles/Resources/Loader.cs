@@ -32,8 +32,9 @@ public static class Path
     public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
 
     public const string TabImagePathFormat = "ExtremeRoles.Resources.SettingTab.{0}.png";
+	public const string ExtremeSelectorMinigameImgFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.{1}.png";
 
-    public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
+	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
     public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
     public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
