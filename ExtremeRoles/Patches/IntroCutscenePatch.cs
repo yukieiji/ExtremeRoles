@@ -409,6 +409,7 @@ public static class IntroCutsceneOnDestroyPatch
             }
         }
 
+		if (disableObjectName.Count == 0) { return; }
 		GameSystem.DisableSystemConsole(disableObjectName);
     }
 }
