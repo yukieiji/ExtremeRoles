@@ -146,7 +146,7 @@ public static class SecurityHelper
                     break;
             }
         }
-		GameSystem.DisableMapModule(securityObj);
+		GameSystem.DisableSystemConsole(securityObj);
 	}
 }
 

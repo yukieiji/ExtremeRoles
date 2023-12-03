@@ -274,6 +274,6 @@ public static class MapCountOverlayUpdatePatch
             }
         }
 
-		GameSystem.DisableMapModule(adminObj);
+		GameSystem.DisableMapConsole(adminObj);
 	}
 }
