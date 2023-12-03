@@ -280,16 +280,13 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		}
 		ExileControllerWrapUpPatch.WrapUpPostfix(instance.exiled);
 
-		bool meeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
-		if (meeting)
-		{
-			yield break;
-		}
-
 		if (DestroyableSingleton<TutorialManager>.InstanceExists ||
 			!GameManager.Instance.LogicFlow.IsGameOverDueToDeath())
 		{
-			yield return WaiteSpawn();
+			if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+			{
+				yield return WaiteSpawn();
+			}
 			instance.ReEnableGameplay();
 		}
 		Destroy(instance.gameObject);
