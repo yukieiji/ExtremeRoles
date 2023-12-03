@@ -195,9 +195,9 @@ public sealed class Psychic :
 	public ExtremeAbilityButton Button { get; set; }
 
 	public Psychic() : base(
-        ExtremeRoleId.Photographer,
+        ExtremeRoleId.Psychic,
         ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Photographer.ToString(),
+        ExtremeRoleId.Psychic.ToString(),
         ColorPalette.PhotographerVerdeSiena,
         false, true, false, false)
     { }

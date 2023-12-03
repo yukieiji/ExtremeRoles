@@ -62,6 +62,7 @@ public enum ExtremeRoleId : int
     Gambler,
     Teleporter,
 	Moderator,
+	Psychic,
 
 	SpecialImpostor,
     Evolver,
@@ -226,6 +227,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Gambler     , new Gambler()},
             {(int)ExtremeRoleId.Teleporter  , new Teleporter()},
 			{(int)ExtremeRoleId.Moderator   , new Moderator()},
+			{(int)ExtremeRoleId.Psychic     , new Psychic()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},

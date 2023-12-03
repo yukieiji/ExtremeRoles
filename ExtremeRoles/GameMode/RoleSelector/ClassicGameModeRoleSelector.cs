@@ -112,6 +112,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Gambler,
             ExtremeRoleId.Teleporter,
 			ExtremeRoleId.Moderator,
+			ExtremeRoleId.Psychic,
 
             ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
