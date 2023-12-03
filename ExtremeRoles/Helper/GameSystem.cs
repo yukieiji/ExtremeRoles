@@ -39,7 +39,7 @@ public static class GameSystem
 
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
 
-	public const string SkeldAdmin = "SMapRoomConsole";
+	public const string SkeldAdmin = "MapRoomConsole";
 	public const string SkeldSecurity = "SurvConsole";
 
 	public const string MiraHqAdmin = "AdminMapConsole";
