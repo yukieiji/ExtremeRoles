@@ -140,7 +140,7 @@ public static class GameSystem
         return body;
     }
 
-	public static void DisableMapModule(HashSet<string> mapModuleName)
+	public static void DisableMapModule(IReadOnlySet<string> mapModuleName)
 	{
 		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
 
