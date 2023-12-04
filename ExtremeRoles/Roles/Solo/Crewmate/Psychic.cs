@@ -390,12 +390,12 @@ public sealed class Psychic :
 			PsychicOption.IsUpgradeAbility,
 			false, parentOps);
 		CreateIntOption(
-			PsychicOption.AwakeTaskGage,
+			PsychicOption.UpgradeTaskGage,
 			70, 0, 100, 10,
 			isUpgradeOpt,
 			format: OptionUnit.Percentage);
 		CreateIntOption(
-		   PsychicOption.AwakeDeadPlayerNum,
+		   PsychicOption.UpgradeDeadPlayerNum,
 		   5, 0, 15, 1, isUpgradeOpt);
 	}
 
