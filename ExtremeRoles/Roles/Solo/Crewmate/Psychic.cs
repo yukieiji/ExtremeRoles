@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
+using System;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -46,15 +47,19 @@ public sealed class Psychic :
 
 		public void AddToStringBuilder(StringBuilder builder, bool includeRoleId)
 		{
-			builder.Append($" 生存者:{this.countNum}");
-			if (includeRoleId)
+			builder.AppendLine($" 生存者:{this.countNum}名");
+			if (includeRoleId && this.ids.Count != 0)
 			{
-				builder.AppendLine();
 				builder.AppendLine(" 生存している役職:");
 				foreach (var roleId in this.ids)
 				{
+					var castedRoleId = (RoleTypes)roleId;
+					string transKey =
+						Enum.IsDefined(castedRoleId) ?
+						castedRoleId.ToString() : roleId.ToString();
+
 					builder.AppendLine(
-						Translation.GetString(roleId.ToString()));
+						Translation.GetString(transKey));
 				}
 			}
 		}
@@ -116,12 +121,24 @@ public sealed class Psychic :
 				}
 
 				ExtremeRoleId id = role.Id;
-				if (role.IsNeutral() &&
-					role is MultiAssignRoleBase multiRole &&
-					multiRole.Id == ExtremeRoleId.Servant)
+				if (role is MultiAssignRoleBase multiRole &&
+					multiRole.AnotherRole != null)
 				{
-					id = ExtremeRoleId.Servant;
+					if (role.IsNeutral() &&
+						multiRole.AnotherRole.Id == ExtremeRoleId.Servant)
+					{
+						id = ExtremeRoleId.Servant;
+					}
+					else if (role.IsVanillaRole())
+					{
+						id = multiRole.AnotherRole.Id;
+					}
 				}
+				else if (role is VanillaRoleWrapper vanillaRole)
+				{
+					id = (ExtremeRoleId)vanillaRole.VanilaRoleId;
+				}
+
 				counter.Add(id);
 			}
 		}
@@ -225,13 +242,12 @@ public sealed class Psychic :
 		this.ForceAbilityOff();
 		this.counters?.Add(new AlivePlayerCounter());
 
-		this.popUpper?.AddText("霊から生存者の情報を入手した、次の会議までにまとめよう・・・");
+		this.popUpper?.AddText("霊から生存者の情報を入手した、次の会議までに纏めておこう・・・");
 	}
 
 	public bool CheckAbility()
 		=> this.startPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition() &&
-		MapBehaviour.Instance != null &&
-		Minigame.Instance != null;
+		this.IsCommonUse();
 
 	public bool UseAbility()
 	{
@@ -453,6 +469,7 @@ public sealed class Psychic :
 
 
 		StringBuilder builder = new StringBuilder("降霊術の結果");
+		builder.AppendLine();
 		foreach (var counter in this.counters)
 		{
 			string text = counter.ToString(this.isUpgraded);
@@ -461,7 +478,7 @@ public sealed class Psychic :
 
 			builder
 				.AppendLine(splitter)
-				.AppendLine(text)
+				.Append(text)
 				.AppendLine(splitter);
 		}
 		string chatText = builder.ToString();
