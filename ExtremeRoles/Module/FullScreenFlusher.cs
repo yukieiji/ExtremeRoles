@@ -42,6 +42,7 @@ public sealed class FullScreenFlusherWithAudio
 		else if (!enable && !flashIsNull)
 		{
 			hud.StopCoroutine(this.coroutine);
+			this.flush!.gameObject.SetActive(false);
 			this.flush!.enabled = false;
 		}
 	}
