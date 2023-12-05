@@ -40,7 +40,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 	private string[]? logTextArray;
 	private int logSelector;
 
-	private const int showMaxTextLine = 19;
+	private const int showMaxTextLine = 15;
 	private const float ProgressBarLastX = 0.75f;
 	private const float ProgressBarLastScaleX = 4.0f;
 	private const float ProgressBarScaleY = 0.75f;
@@ -125,11 +125,12 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		if (this.logTextArray is null) { return; }
 
-		float textProgress = progress * (this.logSelector + 1 / this.logTextArray.Length);
+		float textProgress = progress * (this.logTextArray.Length - 1);
 		int newSelecter = Mathf.CeilToInt(textProgress);
 
 		if (newSelecter == this.logSelector) { return; }
 
+		this.logSelector = newSelecter;
 		string newLog = this.logTextArray[newSelecter];
 		this.showLogText.Enqueue(newLog);
 		while (this.showLogText.Count > showMaxTextLine)
