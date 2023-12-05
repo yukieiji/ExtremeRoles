@@ -131,11 +131,11 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		if (newSelecter == this.logSelector) { return; }
 
 		string newLog = this.logTextArray[newSelecter];
+		this.showLogText.Enqueue(newLog);
 		while (this.showLogText.Count > showMaxTextLine)
 		{
 			this.showLogText.Dequeue();
 		}
-		this.showLogText.Enqueue(newLog);
 		this.logBuilder.Clear();
 		foreach (string text in this.showLogText)
 		{
@@ -144,7 +144,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		this.logText.text = this.logBuilder.ToString();
 	}
 
-	private static string[] allLog =
+	private static string[] allLog =>
 	[
 		"unpacking..... 0％",
 		"unpacking..... 10％",
