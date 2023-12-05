@@ -1,7 +1,10 @@
-﻿using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
-using System;
+﻿using System;
+
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
+
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -25,6 +28,7 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 		public void Use();
 	}
 
+	[HideFromIl2Cpp]
 	public IBehavior? Behavior { get; set; }
 	public SpriteRenderer? Image { get; private set; }
 

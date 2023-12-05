@@ -1,7 +1,10 @@
 ﻿using System;
+
+using Il2CppInterop.Runtime.Attributes;
+using UnityEngine;
+
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Performance;
-using UnityEngine;
 
 using Il2CppStringBuilder = Il2CppSystem.Text.StringBuilder;
 
@@ -73,6 +76,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 		return t;
 	}
 
+	[HideFromIl2Cpp]
 	public IBehavior? Behavior { get; set; }
 
 	public override int TaskStep =>
