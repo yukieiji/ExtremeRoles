@@ -7,6 +7,7 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Extension.Il2Cpp;
@@ -40,9 +41,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			get
 			{
 				GameObject obj =
-					Resources.Loader.GetUnityObjectFromPath<GameObject>(
-						"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\TeroristMinigame.asset",
-						"assets\\roles\\teroristminigame.prefab");
+					Loader.GetUnityObjectFromResources<GameObject>(
+						Path.TeroristTeroMinigameAsset,
+						Path.TeroristTeroMinigamePrefab);
 				return obj.GetComponent<TeroristTeroSabotageMinigame>();
 			}
 		}
