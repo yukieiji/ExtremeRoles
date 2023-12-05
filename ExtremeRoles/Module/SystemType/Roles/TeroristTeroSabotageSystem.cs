@@ -349,7 +349,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		if (this.json == null)
 		{
 			this.json = JsonParser.GetJObjectFromAssembly(
-				"ExtremeRoles.Resources.JsonData.ThiefTimePartPoint.json");
+				"ExtremeRoles.Resources.JsonData.TeroristBombPoint.json");
 			if (this.json == null)
 			{
 				throw new ArgumentException("Json can't find");
@@ -436,7 +436,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 			var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 			colider.isTrigger = true;
-			colider.radius = 0.1f;
+			colider.radius = 0.25f;
 
 			this.setBomb.Add(bombId, newConsole);
 			++counter;

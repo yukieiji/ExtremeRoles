@@ -77,7 +77,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 			parentOps, format: OptionUnit.Second);
 		CreateIntOption(
 			TeroristOption.BombNum,
-			3, 1, 5, 1, parentOps);
+			3, 1, 6, 1, parentOps);
 		CreateFloatOption(
 			TeroristOption.PlayerActivateTime,
 			3.0f, 0.25f, 10.0f, 0.25f,
