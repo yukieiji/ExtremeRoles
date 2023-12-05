@@ -153,6 +153,7 @@ public sealed class OpenChatWebUi : IRequestHandler
             const chat = userInput.value;
 			if (chat.length > 120) {
 				addMessage("|SYSTEM_MESSAGE|", "|OVER_MAXLENGTH_MESSAGE|", true);
+				userInput.value = "";
 				return;
 			}
             const chatData = {
