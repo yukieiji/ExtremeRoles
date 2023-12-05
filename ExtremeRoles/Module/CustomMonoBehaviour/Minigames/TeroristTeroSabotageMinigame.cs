@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Text;
+using System.Collections.Generic;
+
 using TMPro;
 using UnityEngine;
-using System.Collections.Generic;
+using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.UnityEvents;
@@ -9,13 +13,9 @@ using ExtremeRoles.Extension.Task;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
-using BepInEx.Unity.IL2CPP.Utils;
-using Il2CppInterop.Runtime.Attributes;
-
 using CollectionEnum = System.Collections.IEnumerator;
 using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.Task;
 using ConsoleInfo = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ConsoleInfo;
-using System.Text;
 
 #nullable enable
 
@@ -63,6 +63,8 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		var trans = base.transform;
 
 		this.progressText = trans.Find("ProgressText").GetComponent<TextMeshPro>();
+		this.progressText.text = "進捗";
+
 		this.logText = trans.Find("LogText").GetComponent<TextMeshPro>();
 
 		this.progress = trans.Find("Progress").GetComponent<SpriteRenderer>();
@@ -70,6 +72,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		this.startButton = trans.Find("SimpleButton").GetComponent<SimpleButton>();
 		this.startButton.Awake();
+		this.startButton.Text.text = "解除する";
 
 		this.logText.text = "";
 		this.logTextArray = allLog;
@@ -110,7 +113,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		this.updateProgress(maxTime, maxTime);
 		this.task.Next(this.ConsoleInfo.BombId);
 
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(1.0f);
 
 		this.Close();
 	}
@@ -128,10 +131,11 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		float textProgress = progress * (this.logTextArray.Length - 1);
 		int newSelecter = Mathf.CeilToInt(textProgress);
 
-		if (newSelecter == this.logSelector) { return; }
+		if (newSelecter == this.logSelector ||
+			newSelecter >= this.logTextArray.Length) { return; }
 
 		this.logSelector = newSelecter;
-		string newLog = this.logTextArray[newSelecter];
+		string newLog = this.logTextArray[this.logSelector];
 		this.showLogText.Enqueue(newLog);
 		while (this.showLogText.Count > showMaxTextLine)
 		{
