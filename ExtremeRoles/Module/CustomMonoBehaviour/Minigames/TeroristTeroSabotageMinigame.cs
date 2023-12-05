@@ -41,10 +41,10 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 	private int logSelector;
 
 	private const int showMaxTextLine = 19;
-	private const float ProgressBarLastX = 0.8f;
+	private const float ProgressBarLastX = 0.75f;
 	private const float ProgressBarLastScaleX = 4.0f;
 	private const float ProgressBarScaleY = 0.75f;
-	private const float ProgressBarX = 0.75f;
+	private const float ProgressBarX = 1.25f;
 	private const float ProgressBarY = 2.0f;
 
 	private SaboTask? task;
