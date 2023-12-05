@@ -15,6 +15,7 @@ using Il2CppInterop.Runtime.Attributes;
 using CollectionEnum = System.Collections.IEnumerator;
 using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.Task;
 using ConsoleInfo = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ConsoleInfo;
+using System.Text;
 
 #nullable enable
 
@@ -34,6 +35,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 	private SpriteRenderer progress;
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
+	private readonly StringBuilder logBuilder = new StringBuilder();
 	private readonly Queue<string> showLogText = new Queue<string>(showMaxTextLine);
 	private string[]? logTextArray;
 	private int logSelector;
@@ -90,7 +92,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		this.startButton.gameObject.SetActive(false);
 		this.progress.gameObject.SetActive(true);
-		this.logSelector = 0;
+		this.logSelector = -1;
 
 		float timer = 0.0f;
 		float maxTime = CachedPlayerControl.LocalPlayer.Data.IsDead ?
@@ -123,13 +125,23 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		if (this.logTextArray is null) { return; }
 
-		float textProgress = progress * ((this.logSelector + 1) / this.logTextArray.Length);
+		float textProgress = progress * (this.logSelector + 1 / this.logTextArray.Length);
 		int newSelecter = Mathf.CeilToInt(textProgress);
 
 		if (newSelecter == this.logSelector) { return; }
-		
 
-
+		string newLog = this.logTextArray[newSelecter];
+		while (this.showLogText.Count > showMaxTextLine)
+		{
+			this.showLogText.Dequeue();
+		}
+		this.showLogText.Enqueue(newLog);
+		this.logBuilder.Clear();
+		foreach (string text in this.showLogText)
+		{
+			this.logBuilder.AppendLine(text);
+		}
+		this.logText.text = this.logBuilder.ToString();
 	}
 
 	private static string[] allLog =
