@@ -1,6 +1,7 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.UnityEvents;
@@ -31,13 +32,18 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 	private SimpleButton startButton;
 	private SpriteRenderer progress;
-
-	private const float ProgressBarLastX = 0.8f;
-	private const float ProgressBarLastScaleX = 6.0f;
-	private const float ProgressBarScaleY = 0.75f;
-	private const float ProgressBarX = 2.2f;
-	private const float ProgressBarY = 2.75f;
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+
+	private readonly Queue<string> showLogText = new Queue<string>(showMaxTextLine);
+	private string[]? logTextArray;
+	private int logSelector;
+
+	private const int showMaxTextLine = 19;
+	private const float ProgressBarLastX = 0.8f;
+	private const float ProgressBarLastScaleX = 4.0f;
+	private const float ProgressBarScaleY = 0.75f;
+	private const float ProgressBarX = 0.75f;
+	private const float ProgressBarY = 2.0f;
 
 	private SaboTask? task;
 
@@ -63,6 +69,9 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		this.startButton = trans.Find("SimpleButton").GetComponent<SimpleButton>();
 		this.startButton.Awake();
 
+		this.logText.text = "";
+		this.logTextArray = allLog;
+
 		this.startButton.gameObject.SetActive(true);
 		this.startButton.ClickedEvent.AddListener(
 			() =>
@@ -81,6 +90,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		this.startButton.gameObject.SetActive(false);
 		this.progress.gameObject.SetActive(true);
+		this.logSelector = 0;
 
 		float timer = 0.0f;
 		float maxTime = CachedPlayerControl.LocalPlayer.Data.IsDead ?
@@ -110,5 +120,126 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		this.progress.transform.localPosition = new Vector3(-ProgressBarX + ((ProgressBarX + ProgressBarLastX) * pow_progerss), ProgressBarY);
 		this.progress.transform.localScale = new Vector3(pow_progerss * ProgressBarLastScaleX, ProgressBarScaleY);
+
+		if (this.logTextArray is null) { return; }
+
+		float textProgress = progress * ((this.logSelector + 1) / this.logTextArray.Length);
+		int newSelecter = Mathf.CeilToInt(textProgress);
+
+		if (newSelecter == this.logSelector) { return; }
+		
+
+
 	}
+
+	private static string[] allLog =
+	[
+		"unpacking..... 0％",
+		"unpacking..... 10％",
+		"unpacking..... 20％",
+		"unpacking..... 30％",
+		"unpacking..... 40％",
+		"unpacking..... 50％",
+		"unpacking..... 60％",
+		"unpacking..... 70％",
+		"unpacking..... 80％",
+		"unpacking..... 90％",
+		"unpacking..... 100％",
+		"---- starting : Bomb cracking system v9.2.0.0 -----",
+		"start: firewall breaking",
+		"progress..... 0％",
+		"progress..... 10％",
+		"progress..... 20％",
+		"progress..... 30％",
+		"progress..... 40％",
+		"progress..... 50％",
+		"progress..... 60％",
+		"progress..... 70％",
+		"progress..... 80％",
+		"progress..... 90％",
+		"progress..... 100％",
+		"end: firewall breaking",
+		"start: protection overriding",
+		"progress..... 0％",
+		"progress..... 10％",
+		"progress..... 20％",
+		"progress..... 30％",
+		"progress..... 40％",
+		"progress..... 50％",
+		"progress..... 60％",
+		"progress..... 70％",
+		"progress..... 80％",
+		"progress..... 90％",
+		"progress..... 100％",
+		"end: protection overriding",
+		"start: installing main system",
+		"progress..... 0％",
+		"progress..... 5％",
+		"progress..... 10％",
+		"progress..... 15％",
+		"progress..... 20％",
+		"progress..... 25％",
+		"progress..... 30％",
+		"progress..... 35％",
+		"progress..... 40％",
+		"progress..... 45％",
+		"progress..... 50％",
+		"progress..... 55％",
+		"progress..... 60％",
+		"progress..... 65％",
+		"progress..... 70％",
+		"progress..... 75％",
+		"progress..... 80％",
+		"progress..... 85％",
+		"progress..... 90％",
+		"progress..... 95％",
+		"progress..... 100％",
+		"end: installing main system",
+		"start: installing sub system",
+		"progress..... 0％",
+		"progress..... 10％",
+		"progress..... 20％",
+		"progress..... 30％",
+		"progress..... 40％",
+		"progress..... 50％",
+		"progress..... 60％",
+		"progress..... 70％",
+		"progress..... 80％",
+		"progress..... 90％",
+		"progress..... 100％",
+		"end: installing sub system",
+		"-------- start: main process --------",
+		"progress..... 0％",
+		"progress..... 5％",
+		"progress..... 10％",
+		"progress..... 15％",
+		"progress..... 20％",
+		"progress..... 25％",
+		"progress..... 30％",
+		"progress..... 35％",
+		"progress..... 40％",
+		"progress..... 45％",
+		"progress..... 50％",
+		"progress..... 55％",
+		"progress..... 60％",
+		"progress..... 65％",
+		"progress..... 70％",
+		"progress..... 75％",
+		"progress..... 80％",
+		"progress..... 85％",
+		"progress..... 90％",
+		"progress..... 95％",
+		"progress..... 100％",
+		"-------- end: main process --------",
+		"-------- start: backup process --------",
+		"progress..... 0％",
+		"progress..... 20％",
+		"progress..... 40％",
+		"progress..... 60％",
+		"progress..... 80％",
+		"progress..... 100％",
+		"-------- end: backup process --------",
+		"---- endting : Bomb cracking system v9.2.0.0 -----",
+		"deconstructing...."
+	];
 }
