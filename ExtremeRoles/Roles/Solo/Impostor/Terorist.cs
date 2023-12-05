@@ -80,14 +80,14 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 			3, 1, 5, 1, parentOps);
 		CreateFloatOption(
 			TeroristOption.PlayerActivateTime,
-			1.0f, 5.0f, 10.0f, 0.5f,
+			3.0f, 0.25f, 10.0f, 0.25f,
 			parentOps, format: OptionUnit.Second);
 		var deadPlayerOpt = CreateBoolOption(
 			TeroristOption.CanUseDeadPlayer,
 			false, parentOps);
 		CreateFloatOption(
 			TeroristOption.DeadPlayerCooltime,
-			20.0f, 5.0f, 60.0f, 2.5f,
+			10.0f, 3.0f, 60.0f, 2.5f,
 			deadPlayerOpt, format: OptionUnit.Second);
 		CreateFloatOption(
 			TeroristOption.DeadPlayerActivateTime,
