@@ -47,10 +47,13 @@ public sealed class Psychic :
 
 		public void AddToStringBuilder(StringBuilder builder, bool includeRoleId)
 		{
-			builder.AppendLine($" 生存者:{this.countNum}名");
+			builder.AppendLine(
+				string.Format(
+					Translation.GetString("PsychicPsychicStrForAliveNum"),
+					this.countNum));
 			if (includeRoleId && this.ids.Count != 0)
 			{
-				builder.AppendLine(" 生存している役職:");
+				builder.AppendLine(Translation.GetString("PsychicPsychicStrAliveRole"));
 				foreach (var roleId in this.ids)
 				{
 					var castedRoleId = (RoleTypes)roleId;
@@ -148,7 +151,7 @@ public sealed class Psychic :
 			var builder = new StringBuilder();
 			foreach (var (team, counter) in this.teamCount)
 			{
-				builder.Append($"陣営：{Translation.GetString(team.ToString())}");
+				builder.Append($"{Translation.GetString("PsychicPsychicStrTeam")}{Translation.GetString(team.ToString())}");
 				counter.AddToStringBuilder(builder, includeRoleId);
 			}
 			return builder.ToString();
@@ -223,7 +226,7 @@ public sealed class Psychic :
 	public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "降霊術",
+			Translation.GetString("PsychicPsychic"),
             Loader.CreateSpriteFromResources(
                 Path.PhotographerPhotoCamera),
 			CheckAbility,
@@ -242,7 +245,7 @@ public sealed class Psychic :
 		this.ForceAbilityOff();
 		this.counters?.Add(new AlivePlayerCounter());
 
-		this.popUpper?.AddText("霊から生存者の情報を入手した、次の会議までに纏めておこう・・・");
+		this.popUpper?.AddText(Translation.GetString("PsychicPsychicEnd"));
 	}
 
 	public bool CheckAbility()
@@ -252,7 +255,7 @@ public sealed class Psychic :
 	public bool UseAbility()
 	{
 		this.startPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
-		this.popUpper?.AddText("降霊術を開始した");
+		this.popUpper?.AddText(Translation.GetString("PsychicPsychicStart"));
 
 		return true;
 	}
@@ -468,7 +471,8 @@ public sealed class Psychic :
         if (!this.IsAwake || this.counters is null || this.counters.Count == 0) { return; }
 
 
-		StringBuilder builder = new StringBuilder("降霊術の結果");
+		StringBuilder builder = new StringBuilder(
+			Translation.GetString("PsychicPsychicResult"));
 		builder.AppendLine();
 		foreach (var counter in this.counters)
 		{
