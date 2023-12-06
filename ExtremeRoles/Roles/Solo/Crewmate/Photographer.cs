@@ -464,8 +464,11 @@ public sealed class Photographer :
             GetRoleOptionId(PhotographerOption.AwakeTaskGage)) / 100.0f;
         this.upgradePhotoTaskGage = allOpt.GetValue<int>(
             GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)) / 100.0f;
-        this.enableAllSend = allOpt.GetValue<bool>(
-            GetRoleOptionId(PhotographerOption.EnableAllSendChat));
+		this.enableAllSend = false;
+			/*
+			allOpt.GetValue<bool>(
+				GetRoleOptionId(PhotographerOption.EnableAllSendChat));
+			*/
         this.upgradeAllSendChatTaskGage = allOpt.GetValue<int>(
             GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)) / 100.0f;
 
