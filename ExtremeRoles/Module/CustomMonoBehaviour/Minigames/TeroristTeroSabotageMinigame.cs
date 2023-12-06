@@ -137,7 +137,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		this.logSelector = newSelecter;
 		string newLog = this.logTextArray[this.logSelector];
-		this.showLogText.Enqueue(newLog);
+		this.showLogText.Enqueue($"{DateTime.Now} : {newLog}");
 		while (this.showLogText.Count > showMaxTextLine)
 		{
 			this.showLogText.Dequeue();
