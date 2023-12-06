@@ -16,6 +16,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using CollectionEnum = System.Collections.IEnumerator;
 using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.Task;
 using ConsoleInfo = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ConsoleInfo;
+using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -63,7 +64,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 		var trans = base.transform;
 
 		this.progressText = trans.Find("ProgressText").GetComponent<TextMeshPro>();
-		this.progressText.text = "進捗";
+		this.progressText.text = Translation.GetString("TeroristBombMinigameProgress");
 
 		this.logText = trans.Find("LogText").GetComponent<TextMeshPro>();
 
@@ -72,7 +73,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		this.startButton = trans.Find("SimpleButton").GetComponent<SimpleButton>();
 		this.startButton.Awake();
-		this.startButton.Text.text = "解除する";
+		this.startButton.Text.text = Translation.GetString("TeroristBombMinigameStart");
 
 		this.logText.text = "";
 		this.logTextArray = allLog;

@@ -29,10 +29,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		MinigameOption MinigameOption);
 	public readonly record struct MinigameOption(
 		float PlayerActivateTime, bool CanUseDeadPlayer,
-		float DeadPlayerCooltime, float DeadPlayerActivateTime);
+		float DeadPlayerActivateTime);
 	public readonly record struct ConsoleInfo(
 		byte BombId, float PlayerActivateTime,
-		bool CanUseDeadPlayer, float DeadPlayerCooltime, float DeadPlayerActivateTime);
+		bool CanUseDeadPlayer, float DeadPlayerActivateTime);
 
 	public sealed class BombConsoleBehavior : ExtremeConsole.IBehavior
 	{
@@ -58,7 +58,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				{
 					return float.MaxValue;
 				}
-				return player.Data.IsDead ? this.info.DeadPlayerCooltime : 0.0f;
+				return player.Data.IsDead ? 5.0f : 0.0f;
 			}
 		}
 
@@ -72,7 +72,6 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				bombId,
 				option.PlayerActivateTime,
 				option.CanUseDeadPlayer,
-				option.DeadPlayerCooltime,
 				option.DeadPlayerActivateTime);
 		}
 
@@ -102,7 +101,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		public int MaxStep => this.system.setNum;
 		public int TaskStep => this.MaxStep - this.system.setBomb.Count;
 
-		public string TaskText => $"爆弾を解除する(爆発まで残り{Mathf.CeilToInt(this.system.ExplosionTimer)}秒)";
+		public string TaskText =>
+			string.Format(
+				Translation.GetString("TeroristBombTask"),
+				Mathf.CeilToInt(this.system.ExplosionTimer));
 
 		public TaskTypes TaskTypes => TeroristoTaskTypes;
 

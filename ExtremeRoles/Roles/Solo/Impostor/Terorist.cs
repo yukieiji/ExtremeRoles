@@ -5,6 +5,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -19,7 +20,6 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 		BombNum,
 		PlayerActivateTime,
 		CanUseDeadPlayer,
-		DeadPlayerCooltime,
 		DeadPlayerActivateTime,
 	}
 
@@ -40,7 +40,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-			"TeroristTero",
+			Translation.GetString("TeroristBombSet"),
 			FastDestroyableSingleton<HudManager>.Instance.SabotageButton.graphic.sprite);
     }
 
@@ -86,10 +86,6 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 			TeroristOption.CanUseDeadPlayer,
 			false, parentOps);
 		CreateFloatOption(
-			TeroristOption.DeadPlayerCooltime,
-			10.0f, 3.0f, 60.0f, 2.5f,
-			deadPlayerOpt, format: OptionUnit.Second);
-		CreateFloatOption(
 			TeroristOption.DeadPlayerActivateTime,
 			10.0f, 3.0f, 45.0f, 1.0f,
 			deadPlayerOpt, format: OptionUnit.Second);
@@ -115,8 +111,6 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 				GetRoleOptionId(TeroristOption.PlayerActivateTime)),
 			optionMng.GetValue<bool>(
 				GetRoleOptionId(TeroristOption.CanUseDeadPlayer)),
-			optionMng.GetValue<float>(
-				GetRoleOptionId(TeroristOption.DeadPlayerCooltime)),
 			optionMng.GetValue<float>(
 				GetRoleOptionId(TeroristOption.DeadPlayerActivateTime)));
 
