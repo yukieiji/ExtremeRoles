@@ -80,7 +80,7 @@ public enum VentAnimationMode
 {
 	VanillaAnimation,
 	DonotWallHack,
-	DonotInVison,
+	DonotOutVison,
 }
 
 public interface IShipGlobalOption

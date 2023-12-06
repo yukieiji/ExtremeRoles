@@ -138,7 +138,7 @@ public static class VentAnimationRemovePatch
 				return !PhysicsHelpers.AnythingBetween(
 					localPlayer.Collider, playerPos, ventPos,
 					Constants.ShipOnlyMask, false);
-			case VentAnimationMode.DonotInVison:
+			case VentAnimationMode.DonotOutVison:
 
 				// 視界端ギリギリが見えないのは困るのでライトオフセットとか言う値で調整しておく
 				float distance = Vector2.Distance(playerPos, ventPos) - 0.18f;
