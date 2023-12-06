@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Extension.Il2Cpp;
+﻿using AmongUs.GameOptions;
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
@@ -34,10 +36,18 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 	public void CreateAbility()
 	{
 		this.CreateNormalAbilityButton(
-			"crack",
+			Translation.GetString("CrewshroomSet"),
 			Loader.CreateSpriteFromResources(
 			   Path.CrackerCrack));
 	}
+
+	public override string GetIntroDescription()
+		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId) switch
+		{
+			5 => Translation.GetString($"{this.Id}FungleIntroDescription"),
+			_ => base.GetIntroDescription()
+		};
 
 	public bool IsAbilityUse() => this.IsCommonUse();
 
