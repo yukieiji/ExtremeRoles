@@ -32,10 +32,10 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	{
 		EnableElevator,
 		ReplaceDoorMinigame,
-		SubmergedRandomSpawn
+		SubmergedSpawnSetting
 	}
 
-	public enum RandomSpawnPoint
+	public enum SpawnSetting
 	{
 		DefaultSpawn,
 		LowerCentralOnly,
@@ -74,7 +74,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public ShipStatus.MapType MapType => (ShipStatus.MapType)MapId;
 	public bool CanPlaceCamera => false;
 	public bool IsCustomCalculateLightRadius => true;
-	public RandomSpawnPoint SpawnPoint => (RandomSpawnPoint)this.enableSubMergedRandomSpawn.GetValue();
+	public SpawnSetting Spawn => (SpawnSetting)this.enableSubMergedRandomSpawn.GetValue();
 
 	public TaskTypes RetrieveOxygenMask;
 
@@ -176,8 +176,8 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
 
 		var randomSpawnOpt = OptionManager.Instance.Get<bool>((int)GlobalOption.EnableSpecialSetting);
-		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<RandomSpawnPoint>(
-			SubmergedOption.SubmergedRandomSpawn, randomSpawnOpt, invert: true);
+		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<SpawnSetting>(
+			SubmergedOption.SubmergedSpawnSetting, randomSpawnOpt, invert: true);
 	}
 
 	public void Destroy()
