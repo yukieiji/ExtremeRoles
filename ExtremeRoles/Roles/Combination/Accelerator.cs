@@ -96,6 +96,7 @@ public sealed class Accelerator :
     private static void setupPanel(Accelerator accelerator, PlayerControl player)
     {
 		accelerator.EnableUseButton = false;
+		accelerator.EnableVentButton = false;
 
 		Vector2 pos = player.GetTruePosition();
 
@@ -116,6 +117,7 @@ public sealed class Accelerator :
 		if (accelerator.transformer == null) { return; }
 
 		accelerator.EnableUseButton = true;
+		accelerator.EnableVentButton = true;
 
 		GameObject obj = accelerator.transformer.gameObject;
 		Vector2 vec = accelerator.transformer.Vector;
