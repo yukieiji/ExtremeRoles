@@ -313,8 +313,8 @@ public static class IntroCutsceneOnDestroyPatch
                 case 0:
                     if (isRemoveAdmin)
                     {
-                        disableObjectName.Add(
-                            GameSystem.SkeldAdmin);
+						GameSystem.DisableMapConsole(
+							GameSystem.SkeldAdmin);
                     }
                     if (isRemoveSecurity)
                     {
@@ -325,7 +325,7 @@ public static class IntroCutsceneOnDestroyPatch
                 case 1:
                     if (isRemoveAdmin)
                     {
-                        disableObjectName.Add(
+						GameSystem.DisableMapConsole(
                             GameSystem.MiraHqAdmin);
                     }
                     if (isRemoveSecurity)
@@ -337,10 +337,12 @@ public static class IntroCutsceneOnDestroyPatch
                 case 2:
                     if (isRemoveAdmin)
                     {
-                        disableObjectName.Add(
-                            GameSystem.PolusAdmin1);
-                        disableObjectName.Add(
-                            GameSystem.PolusAdmin2);
+						GameSystem.DisableMapConsole(
+                            new HashSet<string>(2)
+							{
+								GameSystem.PolusAdmin1,
+								GameSystem.PolusAdmin2
+							});
                     }
                     if (isRemoveSecurity)
                     {
@@ -356,21 +358,23 @@ public static class IntroCutsceneOnDestroyPatch
                 case 4:
                     if (isRemoveAdmin)
                     {
-                        disableObjectName.Add(
-                            GameSystem.AirShipArchiveAdmin);
-                        disableObjectName.Add(
-                            GameSystem.AirShipCockpitAdmin);
+						GameSystem.DisableMapConsole(
+							new HashSet<string>(2)
+							{
+								GameSystem.AirShipArchiveAdmin,
+								GameSystem.AirShipCockpitAdmin
+							});
                     }
                     else
                     {
                         switch (shipOpt.Admin.AirShipEnable)
                         {
                             case AirShipAdminMode.ModeCockpitOnly:
-                                disableObjectName.Add(
+                                GameSystem.DisableMapConsole(
                                     GameSystem.AirShipArchiveAdmin);
                                 break;
                             case AirShipAdminMode.ModeArchiveOnly:
-                                disableObjectName.Add(
+                                GameSystem.DisableMapConsole(
                                     GameSystem.AirShipCockpitAdmin);
                                 break;
                             default:
@@ -405,6 +409,7 @@ public static class IntroCutsceneOnDestroyPatch
             }
         }
 
-		GameSystem.DisableMapModule(disableObjectName);
+		if (disableObjectName.Count == 0) { return; }
+		GameSystem.DisableSystemConsole(disableObjectName);
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Extension.Il2Cpp;
@@ -39,7 +40,7 @@ public static class GameSystem
 
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
 
-	public const string SkeldAdmin = "SMapRoomConsole";
+	public const string SkeldAdmin = "MapRoomConsole";
 	public const string SkeldSecurity = "SurvConsole";
 
 	public const string MiraHqAdmin = "AdminMapConsole";
@@ -140,20 +141,20 @@ public static class GameSystem
         return body;
     }
 
-	public static void DisableMapModule(HashSet<string> mapModuleName)
+	public static void DisableMapConsole(string mapModuleName)
+	{
+		var mapConsoleArray = UnityObject.FindObjectsOfType<MapConsole>();
+		findAndDisableComponent(mapConsoleArray, mapModuleName);
+	}
+	public static void DisableMapConsole(IReadOnlySet<string> mapModuleName)
+	{
+		var mapConsoleArray = UnityObject.FindObjectsOfType<MapConsole>();
+		findAndDisableComponent(mapConsoleArray, mapModuleName);
+	}
+	public static void DisableSystemConsole(IReadOnlySet<string> mapModuleName)
 	{
 		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
-
-		foreach (string key in mapModuleName)
-		{
-			SystemConsole? target = systemConsoleArray.FirstOrDefault(
-				x => x.gameObject.name.Contains(key));
-
-			if (target != null)
-			{
-				SetColliderActive(target.gameObject, false);
-			}
-		}
+		findAndDisableComponent(systemConsoleArray, mapModuleName);
 	}
 
 	public static void SetColliderActive(GameObject obj, bool active)
@@ -442,9 +443,6 @@ public static class GameSystem
 
     public static void RpcRepairAllSabotage()
     {
-		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId);
-
 		foreach (PlayerTask task in
             CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
         {
@@ -681,8 +679,26 @@ public static class GameSystem
         GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
     }
 
+	private static void findAndDisableComponent<T>(
+		Il2CppArrayBase<T> array, IReadOnlySet<string> disableComponent) where T : Component
+	{
+		foreach (string name in disableComponent)
+		{
+			findAndDisableComponent(array, name);
+		}
+	}
 
-    private static void setColliderEnable<T>(GameObject obj, bool active) where T : Collider2D
+	private static void findAndDisableComponent<T>(
+		Il2CppArrayBase<T> array, string name) where T : Component
+	{
+		T? target = array.FirstOrDefault(x => x.gameObject.name == name);
+		if (target != null)
+		{
+			SetColliderActive(target.gameObject, false);
+		}
+	}
+
+	private static void setColliderEnable<T>(GameObject obj, bool active) where T : Collider2D
     {
         T comp = obj.GetComponent<T>();
         if (comp != null)

@@ -162,6 +162,6 @@ public static class VitalsMinigameUpdatePatch
             }
         }
 
-		GameSystem.DisableMapModule(vitalObj);
+		GameSystem.DisableSystemConsole(vitalObj);
 	}
 }
