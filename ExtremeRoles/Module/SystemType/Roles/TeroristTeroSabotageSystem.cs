@@ -186,7 +186,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 	private readonly MinigameOption minigameOption;
 
 	private readonly ExtremeConsoleSystem consoleSystem;
-
+	private readonly FullScreenFlusherWithAudio flasher;
 
 	private float syncTimer = 0.0f;
 
@@ -199,6 +199,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.setNum = option.BombNum;
 		this.minigameOption = option.MinigameOption;
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
+		this.flasher = new FullScreenFlusherWithAudio(
+			Sound.GetAudio(Sound.SoundType.TeroristSabotageAnnounce),
+			new Color32(255, 25, 25, 50) , 3.0f);
 	}
 
 	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete=false)
@@ -222,7 +225,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			ExileController.Instance != null ||
 			!this.IsActive)
 		{
-			this.flashActiveTo(false);
+			this.flasher.SetActive(false);
 			return;
 		}
 
@@ -231,7 +234,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			ExtremePlayerTask.AddTask(new Task(this), 254);
 		}
-		this.flashActiveTo(true);
+		this.flasher.SetActive(true);
 		this.ExplosionTimer -= deltaTime;
 		this.syncTimer -= deltaTime;
 
@@ -322,7 +325,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.ExplosionTimer = 1000.0f;
 		this.setedId.Clear();
 		this.setBomb.Clear();
-		this.flashActiveTo(false);
+		this.flasher.SetActive(false);
 
 		var task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer, true);
 		if (task != null)
@@ -341,7 +344,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 		else
 		{
-			this.flashActiveTo(true);
+			this.flasher.SetActive(true);
 			this.IsActive = true;
 		}
 	}
@@ -377,12 +380,6 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 						(float)(posArr[1]))));
 		}
 		return result;
-	}
-
-	// TODO: リアクターフラッシュ
-	private void flashActiveTo(bool isActive)
-	{
-
 	}
 
 	private void resetSyncTimer()
