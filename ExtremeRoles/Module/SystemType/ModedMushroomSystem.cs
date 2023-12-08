@@ -18,7 +18,7 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 
 	public const string MushroomName = "ModdedMushroom";
 
-	private Mushroom prefab;
+	private readonly Mushroom prefab;
 	private readonly Dictionary<int, Mushroom> modMushroom = new Dictionary<int, Mushroom>();
 
 	private readonly float delaySecond;
