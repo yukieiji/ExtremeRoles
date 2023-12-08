@@ -201,7 +201,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
 		this.flasher = new FullScreenFlusherWithAudio(
 			Sound.GetAudio(Sound.SoundType.TeroristSabotageAnnounce),
-			new Color32(255, 25, 25, 50) , 3.0f);
+			new Color32(255, 25, 25, 50) , 2.75f);
 	}
 
 	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete=false)
