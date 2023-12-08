@@ -131,7 +131,7 @@ public sealed class Accelerator :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-            Translation.GetString("Moving"),
+            Translation.GetString("AccelerateSet"),
             Loader.CreateSpriteFromResources(
                Path.MoverMove),
             checkAbility: IsAbilityActive,
