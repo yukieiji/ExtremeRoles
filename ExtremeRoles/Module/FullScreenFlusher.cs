@@ -13,6 +13,7 @@ public sealed class FullScreenFlusherWithAudio
 {
 	private readonly AudioClip audio;
 	private readonly WaitForSeconds waiter;
+	private readonly WaitForSeconds defaultWaiter = new WaitForSeconds(1.0f);
 	private readonly Color screenColor;
 
 	private Coroutine? coroutine;
@@ -66,7 +67,7 @@ public sealed class FullScreenFlusherWithAudio
 			this.flush.enabled = !this.flush.enabled;
 			SoundManager.Instance.PlaySound(this.audio, false, 1f, null);
 
-			yield return this.waiter;
+			yield return this.flush.enabled ? this.defaultWaiter : this.waiter;
 		}
 	}
 }
