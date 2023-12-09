@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using Hazel;
@@ -14,14 +15,38 @@ namespace ExtremeRoles.Module;
 
 public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 {
-	public bool HasChatReport => this.chatReport.Count > 0 || this.newChatReport.Count > 0;
+	public bool HasChatReport => this.chatReport.Count > 0;
 
-	private HashSet<string> addedReport = new HashSet<string>();
-	private StringBuilder exilReporter = new StringBuilder();
-	private StringBuilder startReporter = new StringBuilder();
+	private sealed class NoSerializeStringSerializer : IStringSerializer
+	{
+		public StringSerializerType Type => throw new NotImplementedException();
 
-	private List<(string, bool)> chatReport = new List<(string, bool)>();
-	private readonly Queue<IStringSerializer> newChatReport = new Queue<IStringSerializer>();
+		public bool IsRpc { get; set; } = false;
+
+		private readonly string chat;
+
+		public NoSerializeStringSerializer(string chatStr)
+		{
+			this.chat = chatStr;
+		}
+
+		public override string ToString() => this.chat;
+
+		public void Deserialize(MessageReader reader)
+		{
+			throw new NotImplementedException();
+		}
+		public void Serialize(RPCOperator.RpcCaller caller)
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	private readonly HashSet<string> addedReport = new HashSet<string>();
+	private readonly StringBuilder exilReporter = new StringBuilder();
+	private readonly StringBuilder startReporter = new StringBuilder();
+
+	private readonly Queue<IStringSerializer> chatReport = new Queue<IStringSerializer>();
 	private float waitTimer = 0.0f;
 
 	public enum RpcOpType : byte
@@ -47,18 +72,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 		}
 	}
 
-	public static void RpcAddMeetingChatReport(string report)
-	{
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.MeetingReporterRpc))
-		{
-			caller.WriteByte((byte)RpcOpType.ChatReport);
-			caller.WriteStr(report);
-		}
-		Instance.AddMeetingChatReport(report);
-	}
-
-	public static void RpcAddTargetMeetingChatReport(byte targetPlayer, string report)
+	public static void RpcAddTargetMeetingChatReport(byte targetPlayer, IStringSerializer report)
 	{
 		if (targetPlayer == CachedPlayerControl.LocalPlayer.PlayerId)
 		{
@@ -70,7 +84,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 				RPCOperator.Command.MeetingReporterRpc))
 			{
 				caller.WriteByte((byte)RpcOpType.TargetChatReport);
-				caller.WriteStr(report);
+				IStringSerializer.SerializeStatic(report, caller);
 				caller.WriteByte(targetPlayer);
 			}
 		}
@@ -79,26 +93,26 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 	public static void RpcOp(ref MessageReader reader)
 	{
 		RpcOpType ops = (RpcOpType)reader.ReadByte();
+		var serializer = IStringSerializer.DeserializeStatic(reader);
+		// 無限共有が起きないようにRPCはここで無効化しておく
+		serializer.IsRpc = false;
 
 		switch (ops)
 		{
 			case RpcOpType.ChatSerializeDeserialize:
-				var serializer = IStringSerializer.DeserializeStatic(reader);
-				// 無限共有が起きないようにRPCはここで無効化しておく
-				serializer.IsRpc = false;
-				Instance.AddMeetingChatReport(serializer);
-				break;
-			case RpcOpType.ChatReport:
-				string report = reader.ReadString();
-				Instance.AddMeetingChatReport(report);
 				break;
 			case RpcOpType.TargetChatReport:
-				string targetChatReport = reader.ReadString();
 				byte targetPlayer = reader.ReadByte();
-				if (CachedPlayerControl.LocalPlayer.PlayerId != targetPlayer) { return; }
-				Instance.AddMeetingChatReport(targetChatReport);
+				var player = CachedPlayerControl.LocalPlayer;
+				if (player == null || player.PlayerId != targetPlayer)
+				{
+					return;
+				}
 				break;
+			default:
+				return;
 		}
+		Instance.AddMeetingChatReport(serializer);
 	}
 
 	public void AddMeetingStartReport(string report)
@@ -109,14 +123,14 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 		}
 	}
 
-	public void AddMeetingChatReport(string report, bool isRpc = false)
+	public void AddMeetingChatReport(string report)
 	{
-		this.chatReport.Add((report, isRpc));
+		AddMeetingChatReport(new NoSerializeStringSerializer(report));
 	}
 
 	public void AddMeetingChatReport(IStringSerializer serializer)
 	{
-		this.newChatReport.Enqueue(serializer);
+		this.chatReport.Enqueue(serializer);
 	}
 
 	public void AddMeetingEndReport(string report)
@@ -130,30 +144,13 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 	public void ReportMeetingChat()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-		foreach (var (report, isRpc) in this.chatReport)
-		{
-			if (isRpc)
-			{
-				localPlayer.RpcSendChat(report);
-			}
-			else
-			{
-				FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-					localPlayer, report);
-			}
-		}
-
-		this.chatReport.Clear();
-
 		if (this.waitTimer > 0.0f)
 		{
 			this.waitTimer -= Time.deltaTime;
 			return;
 		}
 
-		if (this.newChatReport.TryDequeue(out var serializer))
+		if (this.chatReport.TryDequeue(out var serializer))
 		{
 			string chatBody = serializer.ToString();
 
@@ -163,12 +160,12 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 					RPCOperator.Command.MeetingReporterRpc))
 				{
 					caller.WriteByte((byte)RpcOpType.ChatSerializeDeserialize);
-					caller.WriteByte((byte)serializer.Type);
-					serializer.Serialize(caller);
+					IStringSerializer.SerializeStatic(serializer, caller);
 				}
 			}
+
 			FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-				localPlayer, chatBody);
+				CachedPlayerControl.LocalPlayer, chatBody);
 
 			this.resetWaitTimer();
 		}
