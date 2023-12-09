@@ -341,21 +341,15 @@ public static class EndGameManagerSetUpPatch
         };
     }
 
-    private struct WinTextInfo
+    private readonly record struct WinTextInfo(string Text, Color Color, bool IsChangeBk)
     {
-        public string Text;
-        public Color Color;
-        public bool IsChangeBk;
-
         internal static WinTextInfo Create(
-            System.Enum textEnum, Color color, bool isChangeBk = true)
+            in System.Enum textEnum, in Color color,
+			in bool isChangeBk = true)
         {
-            return new WinTextInfo
-            {
-                Text = Translation.GetString(textEnum.ToString()),
-                Color = color,
-                IsChangeBk = isChangeBk,
-            };
+			return new WinTextInfo(
+				Translation.GetString(textEnum.ToString()),
+				color, isChangeBk);
         }
     }
 }
