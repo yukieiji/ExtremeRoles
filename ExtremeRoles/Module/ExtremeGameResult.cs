@@ -1,19 +1,20 @@
-﻿using ExtremeRoles.GameMode;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Performance.Il2Cpp;
+
+
 using TempWinData = Il2CppSystem.Collections.Generic.List<WinningPlayerData>;
 using Player = GameData.PlayerInfo;
-using ExtremeRoles.GhostRoles.API.Interface;
-using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-
 
 #nullable enable
 
@@ -31,8 +32,8 @@ public sealed class ExtremeGameResult
 
 		public IReadOnlyList<Player> PlusedWinner => this.plusWinPlayr;
 
-		private List<WinningPlayerData> finalWinPlayer;
-		private List<Player> plusWinPlayr;
+		private readonly List<WinningPlayerData> finalWinPlayer;
+		private readonly List<Player> plusWinPlayr;
 
 		public WinnerTempData()
 		{
@@ -123,6 +124,7 @@ public sealed class ExtremeGameResult
 
 		int playerNum = GameData.Instance.AllPlayers.Count;
 
+		this.PlayerSummaries.Capacity = playerNum;
 		var noWinner = new List<Player>(playerNum);
 		var modRole = new List<(Player, IRoleWinPlayerModifier)>(playerNum);
 		var ghostWinCheckRole = new List<(Player, IGhostRoleWinable)>(playerNum);
@@ -176,11 +178,11 @@ public sealed class ExtremeGameResult
 					playerInfo, role, ghostRole));
 		}
 
-		List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>(playerNum);
 		foreach (WinningPlayerData winner in this.winner.DefaultWinPlayer.GetFastEnumerator())
 		{
-			if (noWinner.Any(x => x.PlayerName == winner.PlayerName) ||
-				this.winner.PlusedWinner.Any(x => x.PlayerName == winner.PlayerName))
+			string playerName = winner.PlayerName;
+			if (noWinner.Any(x => x.PlayerName == playerName) ||
+				this.winner.PlusedWinner.Any(x => x.PlayerName == playerName))
 			{
 				this.winner.Remove(winner);
 			}
@@ -321,7 +323,7 @@ public sealed class ExtremeGameResult
 	}
 
 	private void replaceWinnerToSpecificNeutralRolePlayer(
-		List<Player> noWinner, params ExtremeRoleId[] roles)
+		in List<Player> noWinner, params ExtremeRoleId[] roles)
 	{
 		this.winner.Clear();
 
@@ -335,7 +337,7 @@ public sealed class ExtremeGameResult
 			}
 			else if (
 				role is MultiAssignRoleBase multiAssignRole &&
-				multiAssignRole.AnotherRole != null &&
+				multiAssignRole.AnotherRole is not null &&
 				roles.Contains(multiAssignRole.AnotherRole.Id))
 			{
 				addSpecificNeutralRoleToSameControlIdPlayer(role, player);
@@ -353,19 +355,19 @@ public sealed class ExtremeGameResult
 
 			if (role is MultiAssignRoleBase multiAssignRole &&
 				multiAssignRole.AnotherRole is not null &&
-				checkAndAddWinRole(
+				tryAddWinRole(
 					multiAssignRole.AnotherRole,
 						playerInfo, ref winRole))
 			{
 				continue;
 			}
-			checkAndAddWinRole(role, playerInfo, ref winRole);
+			tryAddWinRole(role, playerInfo, ref winRole);
 		}
 	}
 
-	private bool checkAndAddWinRole(
-		SingleRoleBase role,
-		Player playerInfo,
+	private bool tryAddWinRole(
+		in SingleRoleBase role,
+		in Player playerInfo,
 		ref List<(ExtremeRoleId, int)> winRole)
 	{
 		int gameControlId = role.GameControlId;
@@ -389,7 +391,7 @@ public sealed class ExtremeGameResult
 		return false;
 	}
 
-	private void addSpecificRoleToSameControlIdPlayer(SingleRoleBase role, Player player)
+	private void addSpecificRoleToSameControlIdPlayer(in SingleRoleBase role, in Player player)
 	{
 		if (this.winGameControlId != int.MaxValue &&
 			this.winGameControlId == role.GameControlId)
@@ -398,17 +400,15 @@ public sealed class ExtremeGameResult
 		}
 	}
 
-	private void addSpecificNeutralRoleToSameControlIdPlayer(SingleRoleBase role, Player player)
+	private void addSpecificNeutralRoleToSameControlIdPlayer(in SingleRoleBase role, in Player player)
 	{
 		if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 		{
 			this.winner.Add(player);
 		}
-		else if (
-			(this.winGameControlId != int.MaxValue) &&
-			(this.winGameControlId == role.GameControlId))
+		else
 		{
-			this.winner.Add(player);
+			addSpecificRoleToSameControlIdPlayer(role, player);
 		}
 	}
 }
