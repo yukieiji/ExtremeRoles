@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using UnityEngine;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Hazel;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -30,15 +31,46 @@ public sealed class Photographer :
     {
 		public readonly string PlayerName;
 		public readonly SystemTypes? Room;
+		private readonly byte playerId;
 
 		public PlayerPosInfo(
             GameData.PlayerInfo player)
         {
+			this.playerId = player.PlayerId;
             this.PlayerName = player.PlayerName;
 			Player.TryGetPlayerRoom(player.Object, out var room);
 			this.Room = room;
 		}
-    }
+		public PlayerPosInfo(GameData.PlayerInfo player, SystemTypes? room)
+		{
+			this.playerId = player.PlayerId;
+			this.PlayerName = player.PlayerName;
+			this.Room = room;
+		}
+
+		public static PlayerPosInfo Deserialize(MessageReader reader)
+		{
+			byte playerId = reader.ReadByte();
+			SystemTypes? room = (SystemTypes)reader.ReadByte();
+			var playerInfo = GameData.Instance.GetPlayerById(playerId);
+
+			if (room is SystemTypes.HeliSabotage)
+			{
+				room = null;
+			}
+			return new PlayerPosInfo(playerInfo, room);
+		}
+
+		public void Serialize(RPCOperator.RpcCaller caller)
+		{
+			caller.WritePackedInt(this.playerId);
+
+			// 取り敢えずNullってる場合はヘリサボを突っ込む
+			SystemTypes room = this.Room.HasValue ? this.Room.Value : SystemTypes.HeliSabotage;
+			caller.WriteByte((byte)room);
+		}
+
+	}
 
     public readonly struct Photo
     {
@@ -161,15 +193,202 @@ public sealed class Photographer :
         }
     }
 
-    private sealed class PhotoCamera
+	public readonly record struct PhotoNameGenerator(
+		ExtremeRoleType TeamId, ExtremeRoleId RoleId, byte Indexer)
+	{
+		public override string ToString()
+		{
+			string roleNameTransKey =
+				Enum.IsDefined((RoleTypes)this.RoleId) ?
+				((RoleTypes)this.RoleId).ToString() : this.RoleId.ToString();
+
+			// 適当な役職名とかを写真名にする
+			string[] photoNameArr =
+			[
+				Translation.GetString(roleNameTransKey),
+				Translation.GetString(this.TeamId.ToString()),
+				randomStr[this.Indexer],
+			];
+			return string.Concat(photoNameArr.OrderBy(
+				item => RandomGenerator.Instance.Next()));
+		}
+
+		public static PhotoNameGenerator Create()
+		{
+			int maxTeamId = Enum.GetValues(typeof(ExtremeRoleType)).Cast<int>().Max();
+			ExtremeRoleType teamId = (ExtremeRoleType)RandomGenerator.Instance.Next(
+				-1, maxTeamId + 1);
+			int maxRoleId = Enum.GetValues(typeof(ExtremeRoleId)).Cast<int>().Max();
+			ExtremeRoleId roleId = (ExtremeRoleId)RandomGenerator.Instance.Next(
+				maxRoleId + 1);
+
+			int indexer = RandomGenerator.Instance.Next(randomStr.Length);
+
+			return new PhotoNameGenerator(teamId, roleId, (byte)indexer);
+		}
+
+		public static PhotoNameGenerator Deserialize(MessageReader reader)
+		{
+			ExtremeRoleType teamId = (ExtremeRoleType)reader.ReadPackedInt32();
+			ExtremeRoleId roleId = (ExtremeRoleId)reader.ReadPackedInt32();
+			byte indexer = reader.ReadByte();
+
+			return new PhotoNameGenerator(teamId, roleId, indexer);
+		}
+
+		public void Serialize(RPCOperator.RpcCaller caller)
+		{
+			caller.WritePackedInt((int)this.TeamId);
+			caller.WritePackedInt((int)this.RoleId);
+			caller.WriteByte(this.Indexer);
+		}
+
+		private static readonly string[] randomStr =
+		[
+			"NoName",
+			"NewFile",
+			"NewPhoto",
+			"sudo",
+			"HelloWorld",
+			"AmongUs",
+			"yukieiji",
+			"ExtremeRoles",
+			"ExtremeSkins",
+			"ExtremeHat",
+			"ExtremeVisor",
+			"ExtremeNamePlate",
+			"ExR", "ExS","ExV",
+			"ExH", "ExN"
+		];
+	}
+
+	public sealed class PhotoSerializer : IStringSerializer
+	{
+		public StringSerializerType Type => StringSerializerType.PhotographerPhoto;
+
+		public bool IsRpc { get; set; }
+
+		private bool isUpgrade = false;
+		private PhotoNameGenerator photoName;
+		private IReadOnlyList<PlayerPosInfo> player;
+		private DateTime takeTime;
+
+		public PhotoSerializer(float range, bool isUpgrade)
+		{
+			this.isUpgrade = isUpgrade;
+			this.photoName = PhotoNameGenerator.Create();
+			this.takeTime = DateTime.UtcNow;
+
+			var playerInfo = new List<PlayerPosInfo>(GameData.Instance.AllPlayers.Count);
+
+			Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+
+			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+			{
+				if (player == null ||
+					player.IsDead ||
+					player.Disconnected ||
+					player.Object == null) { continue; }
+
+				Vector3 position = player.Object.transform.position;
+				if (range >= Vector2.Distance(photoCenter, position))
+				{
+					playerInfo.Add(new PlayerPosInfo(player));
+				}
+			}
+			this.player = playerInfo;
+		}
+
+		public PhotoSerializer()
+		{
+			IsRpc = false;
+			this.player = new List<PlayerPosInfo>();
+		}
+
+		public void Deserialize(MessageReader reader)
+		{
+			this.photoName = PhotoNameGenerator.Deserialize(reader);
+
+			ulong ulongBinary = reader.ReadUInt64();
+			this.takeTime = DateTime.FromBinary(
+				unchecked((long)ulongBinary + long.MinValue));
+
+			this.isUpgrade = reader.ReadBoolean();
+
+			int playerNum = reader.ReadPackedInt32();
+			var playerPos = new List<PlayerPosInfo>(playerNum);
+			for (int i = 0; i < playerNum; ++i)
+			{
+				playerPos.Add(
+					PlayerPosInfo.Deserialize(reader));
+			}
+			this.player = playerPos;
+		}
+
+		public void Serialize(RPCOperator.RpcCaller caller)
+		{
+			this.photoName.Serialize(caller);
+
+			long binary = this.takeTime.ToBinary();
+			caller.WriteUlong(unchecked((ulong)(binary - long.MinValue)));
+
+			caller.WriteBoolean(this.isUpgrade);
+			caller.WritePackedInt(this.player.Count);
+
+			foreach (var player in this.player)
+			{
+				player.Serialize(caller);
+			}
+		}
+
+		public override string ToString()
+		{
+			StringBuilder photoInfoBuilder = new StringBuilder();
+			photoInfoBuilder.AppendLine(
+				$"{Translation.GetString("takePhotoTime")} : {this.takeTime}");
+			photoInfoBuilder.AppendLine(
+				$"{Translation.GetString("photoName")} : {this.photoName.ToString()}");
+			photoInfoBuilder.AppendLine("");
+			if (this.player.Count <= 1)
+			{
+				photoInfoBuilder.AppendLine(
+					Translation.GetString("onlyMeOnPhoto"));
+			}
+			else
+			{
+				foreach (PlayerPosInfo playerInfo in this.player)
+				{
+					string roomInfo = string.Empty;
+
+					if (this.isUpgrade && playerInfo.Room != null)
+					{
+						roomInfo =
+							FastDestroyableSingleton<TranslationController>.Instance.GetString(
+								playerInfo.Room.Value);
+					}
+
+					string photoPlayerInfo =
+						roomInfo == string.Empty ?
+						$"{playerInfo.PlayerName}" :
+						$"{playerInfo.PlayerName}   {roomInfo}";
+
+					photoInfoBuilder.AppendLine(photoPlayerInfo);
+				}
+			}
+			return photoInfoBuilder.ToString().Trim('\r', '\n');
+		}
+	}
+
+
+	private sealed class PhotoCamera
     {
-        public bool IsUpgraded = false;
+        public bool IsUpgraded { get; set; } = false;
+		public IReadOnlyList<PhotoSerializer> AllPhoto => this.film;
 
-        private const string separateLine = "---------------------------------";
-        private float range;
-        private List<Photo> film = new List<Photo>();
+        private readonly float range;
+        private readonly List<PhotoSerializer> film = new List<PhotoSerializer>();
 
-        public PhotoCamera(float range)
+        public PhotoCamera(in float range)
         {
             this.range = range;
             this.film.Clear();
@@ -181,23 +400,7 @@ public sealed class Photographer :
 
         public void TakePhoto()
         {
-            this.film.Add(new Photo(this.range));
-        }
-        public override string ToString()
-        {
-            if (this.film.Count == 0) { return string.Empty; }
-
-            StringBuilder builder = new StringBuilder();
-
-            foreach (Photo photo in this.film)
-            {
-                builder.AppendLine(separateLine);
-                builder.AppendLine(
-                    photo.ToString(this.IsUpgraded));
-                builder.AppendLine(separateLine);
-            }
-
-            return builder.ToString().Trim('\r', '\n');
+            this.film.Add(new PhotoSerializer(this.range, this.IsUpgraded));
         }
     }
 
@@ -464,11 +667,9 @@ public sealed class Photographer :
             GetRoleOptionId(PhotographerOption.AwakeTaskGage)) / 100.0f;
         this.upgradePhotoTaskGage = allOpt.GetValue<int>(
             GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)) / 100.0f;
-		this.enableAllSend = false;
-			/*
+		this.enableAllSend =
 			allOpt.GetValue<bool>(
 				GetRoleOptionId(PhotographerOption.EnableAllSendChat));
-			*/
         this.upgradeAllSendChatTaskGage = allOpt.GetValue<int>(
             GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)) / 100.0f;
 
@@ -502,19 +703,15 @@ public sealed class Photographer :
     {
         if (!this.IsAwake) { return; }
 
-        string photoInfo = this.photoCreater.ToString();
-
         HudManager hud = FastDestroyableSingleton<HudManager>.Instance;
 
-        if (photoInfo == string.Empty ||
-            !AmongUsClient.Instance.AmClient ||
+        if (!AmongUsClient.Instance.AmClient ||
             hud == null) { return; }
 
-        string chatText = string.Format(
-            Translation.GetString("photoChat"),
-            photoInfo);
-
-        MeetingReporter.Instance.AddMeetingChatReport(
-            chatText, this.enableAllSend && this.isUpgradeChat);
+		foreach (var photo in this.photoCreater.AllPhoto)
+		{
+			photo.IsRpc = this.enableAllSend && this.isUpgradeChat;
+			MeetingReporter.Instance.AddMeetingChatReport(photo);
+		}
     }
 }

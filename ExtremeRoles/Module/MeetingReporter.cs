@@ -14,7 +14,7 @@ namespace ExtremeRoles.Module;
 
 public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 {
-	public bool HasChatReport => this.chatReport.Count > 0;
+	public bool HasChatReport => this.chatReport.Count > 0 || this.newChatReport.Count > 0;
 
 	private HashSet<string> addedReport = new HashSet<string>();
 	private StringBuilder exilReporter = new StringBuilder();
@@ -22,7 +22,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 	private List<(string, bool)> chatReport = new List<(string, bool)>();
 	private readonly Queue<IStringSerializer> newChatReport = new Queue<IStringSerializer>();
-	private float waiteTimer = 1.0f;
+	private float waitTimer = 0.0f;
 
 	public enum RpcOpType : byte
 	{
@@ -79,17 +79,24 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 	public static void RpcOp(ref MessageReader reader)
 	{
 		RpcOpType ops = (RpcOpType)reader.ReadByte();
-		string report = reader.ReadString();
 
 		switch (ops)
 		{
+			case RpcOpType.ChatSerializeDeserialize:
+				var serializer = IStringSerializer.DeserializeStatic(reader);
+				// 無限共有が起きないようにRPCはここで無効化しておく
+				serializer.IsRpc = false;
+				Instance.AddMeetingChatReport(serializer);
+				break;
 			case RpcOpType.ChatReport:
+				string report = reader.ReadString();
 				Instance.AddMeetingChatReport(report);
 				break;
 			case RpcOpType.TargetChatReport:
+				string targetChatReport = reader.ReadString();
 				byte targetPlayer = reader.ReadByte();
 				if (CachedPlayerControl.LocalPlayer.PlayerId != targetPlayer) { return; }
-				Instance.AddMeetingChatReport(report);
+				Instance.AddMeetingChatReport(targetChatReport);
 				break;
 		}
 	}
@@ -140,9 +147,9 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 		this.chatReport.Clear();
 
-		if (this.waiteTimer >= 0.0f)
+		if (this.waitTimer > 0.0f)
 		{
-			this.waiteTimer -= Time.deltaTime;
+			this.waitTimer -= Time.deltaTime;
 			return;
 		}
 
@@ -155,6 +162,8 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 				using (var caller = RPCOperator.CreateCaller(
 					RPCOperator.Command.MeetingReporterRpc))
 				{
+					caller.WriteByte((byte)RpcOpType.ChatSerializeDeserialize);
+					caller.WriteByte((byte)serializer.Type);
 					serializer.Serialize(caller);
 				}
 			}
@@ -167,6 +176,6 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 	private void resetWaitTimer()
 	{
-		this.waiteTimer = 1.0f;
+		this.waitTimer = 1.0f;
 	}
 }
