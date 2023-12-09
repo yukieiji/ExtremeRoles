@@ -139,7 +139,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 			ArrowBehaviour arrow = ExtremePlayerTask.IBehavior.GetArrowTemplate();
 
-			foreach (var(index, console) in this.system.setBomb)
+			foreach (var (index, console) in this.system.setBomb)
 			{
 				var targetArrow = UnityObject.Instantiate(arrow, transform);
 

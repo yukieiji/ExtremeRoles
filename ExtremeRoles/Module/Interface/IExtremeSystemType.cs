@@ -9,6 +9,8 @@ public interface ISabotageExtremeSystemType : IDeterioratableExtremeSystemType
 {
 	public bool IsBlockOtherSabotage => this.IsActive;
 	public bool IsActive { get; }
+
+	public void Clear();
 }
 
 public interface IDeterioratableExtremeSystemType : IExtremeSystemType

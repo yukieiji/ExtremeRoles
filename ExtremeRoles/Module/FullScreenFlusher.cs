@@ -40,7 +40,7 @@ public sealed class FullScreenFlusherWithAudio
 			this.coroutine = hud.StartCoroutine(
 				startReactorFlush());
 		}
-		else if (!enable && !flashIsNull)
+		else if (!(enable || flashIsNull))
 		{
 			hud.StopCoroutine(this.coroutine);
 			this.flush!.gameObject.SetActive(false);
