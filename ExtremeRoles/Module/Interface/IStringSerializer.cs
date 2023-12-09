@@ -3,6 +3,7 @@
 using Hazel;
 
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.GhostRoles.Crewmate;
 
 namespace ExtremeRoles.Module.Interface;
 
@@ -10,7 +11,8 @@ namespace ExtremeRoles.Module.Interface;
 
 public enum StringSerializerType : byte
 {
-	PhotographerPhoto
+	PhotographerPhoto,
+	ShutterPhoto,
 }
 
 public interface IStringSerializer
@@ -25,9 +27,10 @@ public interface IStringSerializer
 	// TODO: C#11以降全てのSerializerにこれを強制させる
 	public static IStringSerializer DeserializeStatic(MessageReader reader)
 	{
-		var serializer = ((StringSerializerType)reader.ReadByte()) switch
+		IStringSerializer serializer = ((StringSerializerType)reader.ReadByte()) switch
 		{
 			StringSerializerType.PhotographerPhoto => new Photographer.PhotoSerializer(),
+			StringSerializerType.ShutterPhoto => new Shutter.GhostPhotoSerializer(),
 			_ => throw new ArgumentException("Invalided Type"),
 		};
 

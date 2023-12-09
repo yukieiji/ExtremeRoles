@@ -72,127 +72,6 @@ public sealed class Photographer :
 
 	}
 
-    public readonly struct Photo
-    {
-		private readonly List<PlayerPosInfo> player;
-		private readonly DateTime takeTime;
-
-		private static readonly string[] randomStr = new string[]
-        {
-            "NoName",
-            "NewFile",
-            "NewPhoto",
-            "sudo",
-            "HelloWorld",
-            "AmongUs",
-            "yukieiji",
-            "ExtremeRoles",
-            "ExtremeSkins",
-            "ExtremeHat",
-            "ExtremeVisor",
-            "ExtremeNamePlate",
-            "ExR", "ExS","ExV",
-            "ExH", "ExN"
-        };
-
-        public Photo(float range)
-        {
-            this.takeTime = DateTime.UtcNow;
-            this.player = new List<PlayerPosInfo>();
-
-            Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
-
-            foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
-            {
-                if (player == null ||
-                    player.IsDead ||
-                    player.Disconnected ||
-                    player.Object == null) { continue; }
-
-                Vector3 position = player.Object.transform.position;
-                if (range >= Vector2.Distance(photoCenter, position))
-                {
-                    this.player.Add(new PlayerPosInfo(player));
-                }
-
-            }
-        }
-
-        public string ToString(bool isUpgrade)
-        {
-            StringBuilder photoInfoBuilder = new StringBuilder();
-            photoInfoBuilder.AppendLine(
-                $"{Translation.GetString("takePhotoTime")} : {this.takeTime}");
-            photoInfoBuilder.AppendLine(
-                $"{Translation.GetString("photoName")} : {GetRandomPhotoName()}");
-            photoInfoBuilder.AppendLine("");
-            if (this.player.Count <= 1)
-            {
-                photoInfoBuilder.AppendLine(
-                    Translation.GetString("onlyMeOnPhoto"));
-            }
-            else
-            {
-                foreach (PlayerPosInfo playerInfo in this.player)
-                {
-
-                    string roomInfo = string.Empty;
-
-                    if (isUpgrade && playerInfo.Room != null)
-                    {
-                        roomInfo =
-                            FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                                playerInfo.Room.Value);
-                    }
-
-                    string photoPlayerInfo =
-                        roomInfo == string.Empty ?
-                        $"{playerInfo.PlayerName}" :
-                        $"{playerInfo.PlayerName}   {roomInfo}";
-
-                    photoInfoBuilder.AppendLine(photoPlayerInfo);
-                }
-            }
-            return photoInfoBuilder.ToString().Trim('\r', '\n');
-        }
-
-        public static string GetRandomPhotoName()
-        {
-            // 適当な役職名とかを写真名にする
-            List<string> photoName = new List<string>();
-
-            // 適当な陣営
-            int maxTeamId = Enum.GetValues(typeof(ExtremeRoleType)).Cast<int>().Max();
-            ExtremeRoleType intedTeamId = (ExtremeRoleType)RandomGenerator.Instance.Next(
-                maxTeamId + 1);
-            photoName.Add(Translation.GetString(intedTeamId.ToString()));
-
-
-            // 適当な役職名
-            int maxRoleId = Enum.GetValues(typeof(ExtremeRoleId)).Cast<int>().Max();
-            ExtremeRoleId roleId = (ExtremeRoleId)RandomGenerator.Instance.Next(
-                maxRoleId + 1);
-
-            if (roleId != ExtremeRoleId.Null ||
-                roleId != ExtremeRoleId.VanillaRole)
-            {
-                photoName.Add(Translation.GetString(roleId.ToString()));
-            }
-            else
-            {
-                int maxAmongUsRoleId = Enum.GetValues(typeof(RoleTypes)).Cast<int>().Max();
-                RoleTypes amongUsRoleId = (RoleTypes)RandomGenerator.Instance.Next(
-                    maxAmongUsRoleId + 1);
-
-                photoName.Add(Translation.GetString(amongUsRoleId.ToString()));
-            }
-
-            photoName.Add(randomStr[RandomGenerator.Instance.Next(randomStr.Length)]);
-            return string.Concat(photoName.OrderBy(
-                item => RandomGenerator.Instance.Next()));
-        }
-    }
-
 	public readonly record struct PhotoNameGenerator(
 		ExtremeRoleType TeamId, ExtremeRoleId RoleId, byte Indexer)
 	{
@@ -702,11 +581,6 @@ public sealed class Photographer :
     private void sendPhotoInfo()
     {
         if (!this.IsAwake) { return; }
-
-        HudManager hud = FastDestroyableSingleton<HudManager>.Instance;
-
-        if (!AmongUsClient.Instance.AmClient ||
-            hud == null) { return; }
 
 		foreach (var photo in this.photoCreater.AllPhoto)
 		{

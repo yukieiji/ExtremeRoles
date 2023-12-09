@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -17,23 +19,33 @@ using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFa
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 
+
 #nullable enable
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 
 public sealed class Shutter : GhostRoleBase
 {
-    private readonly struct GhostPhoto
-    {
-        private readonly List<PlayerPosInfo> player;
-		private readonly DateTime takeTime;
-		private readonly int rate;
+	public sealed class GhostPhotoSerializer : IStringSerializer
+	{
+		public StringSerializerType Type => StringSerializerType.ShutterPhoto;
 
-        public GhostPhoto(int rate, float range)
+		public bool IsRpc { get; set; } = true;
+
+		private IReadOnlyList<(PlayerPosInfo, bool)> player;
+		private DateTime takeTime;
+		private PhotoNameGenerator photoName;
+
+		public GhostPhotoSerializer()
+		{
+			this.player = new List<(PlayerPosInfo, bool)>();
+		}
+
+		public GhostPhotoSerializer(in int rate, in float range)
         {
-            this.rate = rate;
-            this.takeTime = DateTime.UtcNow;
-            this.player = new List<PlayerPosInfo>();
+			this.photoName = PhotoNameGenerator.Create();
+			this.takeTime = DateTime.UtcNow;
+            var playerPoses = new List<(PlayerPosInfo, bool)>();
 
             Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
 
@@ -47,20 +59,55 @@ public sealed class Shutter : GhostRoleBase
                 Vector3 position = player.Object.transform.position;
                 if (range >= Vector2.Distance(photoCenter, position))
                 {
-                    this.player.Add(new PlayerPosInfo(player));
+					playerPoses.Add((
+						new PlayerPosInfo(player),
+						rate < RandomGenerator.Instance.Next(101)));
                 }
-
             }
+			this.player = playerPoses;
         }
 
-        public override string ToString()
+		public void Deserialize(MessageReader reader)
+		{
+			this.photoName = PhotoNameGenerator.Deserialize(reader);
+
+			ulong ulongBinary = reader.ReadUInt64();
+			this.takeTime = DateTime.FromBinary(
+				unchecked((long)ulongBinary + long.MinValue));
+
+			int playerNum = reader.ReadPackedInt32();
+			var playerPos = new List<(PlayerPosInfo, bool)>(playerNum);
+			for (int i = 0; i < playerNum; ++i)
+			{
+				bool isSmokey = reader.ReadBoolean();
+				var playerInfo = PlayerPosInfo.Deserialize(reader);
+				playerPos.Add((playerInfo, isSmokey));
+			}
+			this.player = playerPos;
+		}
+
+		public void Serialize(RPCOperator.RpcCaller caller)
+		{
+			this.photoName.Serialize(caller);
+
+			long binary = this.takeTime.ToBinary();
+			caller.WriteUlong(unchecked((ulong)(binary - long.MinValue)));
+
+			caller.WritePackedInt(this.player.Count);
+			foreach (var (player, isSmokey) in this.player)
+			{
+				caller.WriteBoolean(isSmokey);
+				player.Serialize(caller);
+			}
+		}
+
+		public override string ToString()
         {
             StringBuilder photoInfoBuilder = new StringBuilder();
             photoInfoBuilder.AppendLine(
                 $"{Translation.GetString("takePhotoTime")} : {this.takeTime}");
             photoInfoBuilder.AppendLine(
-                $"{Translation.GetString("photoName")} : {
-                    Photo.GetRandomPhotoName()}");
+                $"{Translation.GetString("photoName")} : {this.photoName.ToString()}");
             photoInfoBuilder.AppendLine("");
             if (this.player.Count <= 0)
             {
@@ -68,10 +115,10 @@ public sealed class Shutter : GhostRoleBase
             }
             else
             {
-                foreach (PlayerPosInfo playerInfo in this.player)
+                foreach (var (playerInfo, isSmokey) in this.player)
                 {
                     string addInfo =
-                        this.rate < RandomGenerator.Instance.Next(100) ?
+						isSmokey ?
                         Translation.GetString("smokingThisName") :
                         playerInfo.PlayerName;
 
@@ -82,51 +129,33 @@ public sealed class Shutter : GhostRoleBase
         }
     }
 
-    private sealed class GhostPhotoCamera
-    {
-        public bool IsUpgraded = false;
+	private sealed class GhostPhotoCamera
+	{
+		public IReadOnlyList<GhostPhotoSerializer> AllPhoto => this.film;
 
-        private const string separateLine = "---------------------------------";
-        private float range;
-        private int rate;
-        private List<GhostPhoto> film = new List<GhostPhoto>();
+		private readonly float range;
+		private readonly int rate;
+		private readonly List<GhostPhotoSerializer> film =
+			new List<GhostPhotoSerializer>();
 
-        public GhostPhotoCamera(float range, int rate)
-        {
-            this.range = range;
-            this.rate = rate;
+		public GhostPhotoCamera(float range, int rate)
+		{
+			this.range = range;
+			this.rate = rate;
 
-            this.film.Clear();
-        }
-        public void Reset()
-        {
-            this.film.Clear();
-        }
+			this.film.Clear();
+		}
+		public void Reset()
+		{
+			this.film.Clear();
+		}
 
-        public void TakePhoto()
-        {
-            this.film.Add(new GhostPhoto(this.rate, this.range));
-        }
-        public override string ToString()
-        {
-            if (this.film.Count == 0) { return string.Empty; }
-
-            StringBuilder builder = new StringBuilder();
-
-            foreach (GhostPhoto photo in this.film)
-            {
-                string photoInfo = photo.ToString();
-
-                if (string.IsNullOrEmpty(photoInfo)) { continue; }
-
-                builder.AppendLine(separateLine);
-                builder.AppendLine(photoInfo);
-                builder.AppendLine(separateLine);
-            }
-
-            return builder.ToString().Trim('\r', '\n');
-        }
-    }
+		public void TakePhoto()
+		{
+			this.film.Add(
+				new GhostPhotoSerializer(this.rate, this.range));
+		}
+	}
 
     public enum ShutterRpcOps : byte
     {
@@ -188,18 +217,14 @@ public sealed class Shutter : GhostRoleBase
         return;
     }
 
-    protected override void OnMeetingStartHook()
-    {
-        string photoInfo = this.photoCreater.ToString();
-        this.photoCreater.Reset();
-
-        if (string.IsNullOrEmpty(photoInfo)) { return; }
-
-        MeetingReporter.RpcAddMeetingChatReport(
-            string.Format(
-                Translation.GetString("ShutterTakePhotoReport"),
-                photoInfo));
-    }
+	protected override void OnMeetingStartHook()
+	{
+		foreach (var photo in this.photoCreater.AllPhoto)
+		{
+			photo.IsRpc = true;
+			MeetingReporter.Instance.AddMeetingChatReport(photo);
+		}
+	}
 
     protected override void CreateSpecificOption(OptionFactory factory)
     {
