@@ -190,9 +190,6 @@ public sealed class Delusioner :
 			GameSystem.AddSpawnPoint(randomPos, teloportTarget);
         }
 
-		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId);
-
 		foreach (GameData.PlayerInfo player in allPlayer.GetFastEnumerator())
         {
             if (player == null) { continue; }
