@@ -388,15 +388,13 @@ public static class ExtremeRoleManager
             }
         }
     }
-    public static bool IsAliveWinNeutral(
-        SingleRoleBase role, GameData.PlayerInfo playerInfo)
-    {
-        bool isAlive = (!playerInfo.IsDead && !playerInfo.Disconnected);
-
-        if (role.Id == ExtremeRoleId.Neet && isAlive) { return true; }
-
-        return false;
-    }
+	public static bool IsAliveWinNeutral(
+		SingleRoleBase role, GameData.PlayerInfo playerInfo)
+		=> role.Id switch
+		{
+			ExtremeRoleId.Neet => !(playerInfo.IsDead || playerInfo.Disconnected),
+			_ => false
+		};
 
     public static SingleRoleBase GetLocalPlayerRole()
     {
