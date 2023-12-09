@@ -17,7 +17,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 {
 	public bool HasChatReport => this.chatReport.Count > 0;
 
-	private sealed class NoSerializeStringSerializer : IStringSerializer
+	private sealed class NoRpcStringSerializer : IStringSerializer
 	{
 		public StringSerializerType Type => throw new NotImplementedException();
 
@@ -25,7 +25,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 		private readonly string chat;
 
-		public NoSerializeStringSerializer(string chatStr)
+		public NoRpcStringSerializer(string chatStr)
 		{
 			this.chat = chatStr;
 		}
@@ -125,7 +125,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 	public void AddMeetingChatReport(string report)
 	{
-		AddMeetingChatReport(new NoSerializeStringSerializer(report));
+		AddMeetingChatReport(new NoRpcStringSerializer(report));
 	}
 
 	public void AddMeetingChatReport(IStringSerializer serializer)
