@@ -2,8 +2,11 @@
 using System.Text;
 
 using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Interface;
+
 
 #nullable enable
 
@@ -18,9 +21,12 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 	private StringBuilder startReporter = new StringBuilder();
 
 	private List<(string, bool)> chatReport = new List<(string, bool)>();
+	private readonly Queue<IStringSerializer> newChatReport = new Queue<IStringSerializer>();
+	private float waiteTimer = 1.0f;
 
 	public enum RpcOpType : byte
 	{
+		ChatSerializeDeserialize,
 		ChatReport,
 		TargetChatReport
 	}
@@ -101,6 +107,11 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 		this.chatReport.Add((report, isRpc));
 	}
 
+	public void AddMeetingChatReport(IStringSerializer serializer)
+	{
+		this.newChatReport.Enqueue(serializer);
+	}
+
 	public void AddMeetingEndReport(string report)
 	{
 		this.exilReporter.AppendLine(report);
@@ -128,5 +139,34 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 		}
 
 		this.chatReport.Clear();
+
+		if (this.waiteTimer >= 0.0f)
+		{
+			this.waiteTimer -= Time.deltaTime;
+			return;
+		}
+
+		if (this.newChatReport.TryDequeue(out var serializer))
+		{
+			string chatBody = serializer.ToString();
+
+			if (serializer.IsRpc)
+			{
+				using (var caller = RPCOperator.CreateCaller(
+					RPCOperator.Command.MeetingReporterRpc))
+				{
+					serializer.Serialize(caller);
+				}
+			}
+			FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+				localPlayer, chatBody);
+
+			this.resetWaitTimer();
+		}
+	}
+
+	private void resetWaitTimer()
+	{
+		this.waiteTimer = 1.0f;
 	}
 }
