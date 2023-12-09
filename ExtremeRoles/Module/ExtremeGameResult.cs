@@ -141,7 +141,7 @@ public sealed class ExtremeGameResult
 			{
 				if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
 				{
-					gameData.AddWinner(playerInfo);
+					this.winner.AddPlusWinner(playerInfo);
 				}
 				else
 				{
