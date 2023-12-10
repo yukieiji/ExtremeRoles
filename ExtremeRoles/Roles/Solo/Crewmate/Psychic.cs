@@ -218,7 +218,7 @@ public sealed class Psychic :
         ExtremeRoleId.Psychic,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Psychic.ToString(),
-        ColorPalette.PhotographerVerdeSiena,
+        ColorPalette.PsychicSyentyietu,
         false, true, false, false)
     { }
 #pragma warning restore CS8618
