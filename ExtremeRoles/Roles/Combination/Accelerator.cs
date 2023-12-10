@@ -59,7 +59,7 @@ public sealed class Accelerator :
         ExtremeRoleId.Accelerator,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Accelerator.ToString(),
-        ColorPalette.MoverSafeColor,
+        ColorPalette.AcceleratorBiancoPeria,
         false, true, false, false,
         tab: OptionTab.Combination)
     { }

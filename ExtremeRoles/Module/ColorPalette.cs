@@ -6,11 +6,24 @@ public static class ColorPalette
 {
 	public readonly static Color DefaultColor = Color.white;
 
-	public readonly static Color LoverPink = new Color32(255, 107, 228, byte.MaxValue);
-	public readonly static Color GuesserRedYellow = new Color32(255, 255, 0, byte.MaxValue);
-	public readonly static Color BuddyOrange = new Color32(232, 192, 78, byte.MaxValue);
-	public readonly static Color MoverSafeColor = new Color32(102, 153, 153, byte.MaxValue);
+	public readonly static Color HeroAmaIro = new Color32(0, 134, 204, byte.MaxValue);
+	public readonly static Color VigilanteFujiIro = new Color32(186, 167, 204, byte.MaxValue);
+	public readonly static Color DetectiveKokikou = new Color32(158, 92, 70, byte.MaxValue);
+	public readonly static Color AssistantBluCapri = new Color32(0, 138, 153, byte.MaxValue);
+	public readonly static Color DetectiveApprenticeKonai = new Color32(
+		65, 65, 116, byte.MaxValue);
 	public readonly static Color KidsYellowGreen = new Color32(140, 170, 0, byte.MaxValue);
+
+	public readonly static Color LoverPink = new Color32(255, 107, 228, byte.MaxValue);
+	public readonly static Color BuddyOrange = new Color32(232, 192, 78, byte.MaxValue);
+
+	public readonly static Color GuesserRedYellow = new Color32(255, 255, 0, byte.MaxValue);
+	public readonly static Color MoverSafeColor = new Color32(102, 153, 153, byte.MaxValue);
+	public readonly static Color AcceleratorBiancoPeria = new Color32(
+		216, 214, 213, byte.MaxValue);
+
+	public readonly static Color TraitorLightShikon = new Color32(
+		76, 16, 80, byte.MaxValue);
 
 	public readonly static Color SheriffOrange = new Color32(255, 140, 0, byte.MaxValue);
 	public readonly static Color MarineBlue = new Color32(0, 255, 255, byte.MaxValue);
@@ -27,11 +40,6 @@ public static class ColorPalette
 	public readonly static Color CurseMakerViolet = new Color32(100, 61, 97, byte.MaxValue);
 	public readonly static Color FencerPin = new Color32(0, 87, 86, byte.MaxValue);
 	public readonly static Color OpenerSpringGreen = new Color32(0, 250, 154, byte.MaxValue);
-	public readonly static Color HeroAmaIro = new Color32(0, 134, 204, byte.MaxValue);
-	public readonly static Color DetectiveKokikou = new Color32(158, 92, 70, byte.MaxValue);
-	public readonly static Color AssistantBluCapri = new Color32(0, 138, 153, byte.MaxValue);
-	public readonly static Color DetectiveApprenticeKonai = new Color32(
-		65, 65, 116, byte.MaxValue);
 	public readonly static Color CarpenterBrown = new Color32(195, 178, 95, byte.MaxValue);
 	public readonly static Color SurvivorYellow = new Color32(255, 255, 153, byte.MaxValue);
 	public readonly static Color CaptainLightKonjou = new Color32(34, 85, 147, byte.MaxValue);
@@ -49,12 +57,10 @@ public static class ColorPalette
 	public readonly static Color MissionaryBlue = new Color32(103, 118, 161, byte.MaxValue);
 	public readonly static Color JesterPink = new Color32(245, 125, 167, byte.MaxValue);
 	public readonly static Color YandereVioletRed = new Color32(199, 21, 133, byte.MaxValue);
-	public readonly static Color VigilanteFujiIro = new Color32(186, 167, 204, byte.MaxValue);
 	public readonly static Color YokoShion = new Color32(134, 123, 169, byte.MaxValue);
 	public readonly static Color TotocalcioGreen = new Color32(0, 255, 0, byte.MaxValue);
 	public readonly static Color MinerIvyGreen = new Color32(76, 103, 51, byte.MaxValue);
 	public readonly static Color EaterMaroon = new Color32(102, 43, 44, byte.MaxValue);
-	public readonly static Color TraitorLightShikon = new Color32(76, 16, 80, byte.MaxValue);
 	public readonly static Color QueenWhite = new Color32(240, 240, 210, byte.MaxValue);
 	public readonly static Color UmbrerRed = new Color32(200, 0, 21, byte.MaxValue);
 
