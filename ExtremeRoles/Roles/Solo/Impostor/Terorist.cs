@@ -1,11 +1,12 @@
-﻿using ExtremeRoles.Module;
+﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Helper;
+using ExtremeRoles.Resources;
 
 #nullable enable
 
@@ -41,7 +42,8 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
     {
         this.CreateAbilityCountButton(
 			Translation.GetString("TeroristBombSet"),
-			FastDestroyableSingleton<HudManager>.Instance.SabotageButton.graphic.sprite);
+			Loader.CreateSpriteFromResources(
+			   Path.TeroristTeroSabotageButton));
     }
 
     public bool IsAbilityUse()
