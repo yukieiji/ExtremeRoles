@@ -228,7 +228,7 @@ public sealed class Psychic :
         this.CreateAbilityCountButton(
 			Translation.GetString("PsychicPsychic"),
             Loader.CreateSpriteFromResources(
-                Path.PhotographerPhotoCamera),
+                Path.PsychicPsychic),
 			CheckAbility,
 			CleanUp,
 			ForceAbilityOff);

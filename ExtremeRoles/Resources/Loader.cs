@@ -71,6 +71,7 @@ public static class Path
     public const string TeleporterSecondPortal =
         "ExtremeRoles.Resources.TeleporterSecondPortal.png";
 	public const string ModeratorModerate = "ExtremeRoles.Resources.Moderate.png";
+	public const string PsychicPsychic = "ExtremeRoles.Resources.PsychicPsychic.png";
 
 	public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
     public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
