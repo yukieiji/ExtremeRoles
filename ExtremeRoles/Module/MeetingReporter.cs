@@ -173,6 +173,6 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 	private void resetWaitTimer()
 	{
-		this.waitTimer = 1.0f;
+		this.waitTimer = this.chatReport.Count != 0 ? 1.0f : 0.0f;
 	}
 }
