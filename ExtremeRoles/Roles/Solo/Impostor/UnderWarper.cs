@@ -348,7 +348,7 @@ public sealed class UnderWarper :
             format: OptionUnit.Shot);
 		CreateBoolOption(
 			UnderWarperOption.WallHackVent,
-			true, parentOps);
+			false, parentOps);
 		CreateFloatOption(
             UnderWarperOption.Range,
             2.75f, 0.75f, 10.0f, 0.25f, parentOps);
