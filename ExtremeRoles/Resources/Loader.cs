@@ -42,6 +42,7 @@ public static class Path
         "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
     public const string WispTorch = "ExtremeRoles.Resources.torch.png";
     public const string MoverMove = "ExtremeRoles.Resources.MoverMoving.png";
+	public const string AcceleratorAccelerateSet = "ExtremeRoles.Resources.AcceleratorAccelerateSet.png";
 	public const string AcceleratorAcceleratePanel = "ExtremeRoles.Resources.AcceleratorAcceleratePanel.png";
 
 	public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";

@@ -133,7 +133,7 @@ public sealed class Accelerator :
         this.CreateReclickableCountAbilityButton(
             Translation.GetString("AccelerateSet"),
             Loader.CreateSpriteFromResources(
-               Path.MoverMove),
+               Path.AcceleratorAccelerateSet),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())
