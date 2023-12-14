@@ -1,4 +1,5 @@
 
+
 ##### Other Languages README
 - [English README](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/en/README.md)
 - [SChinese README(WIP)](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/ch_s/README.md)
@@ -10,7 +11,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.10.24-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.11.28-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -38,10 +39,13 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 - 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 - 多種多様の情報を取得できるREST APIを搭載(欲しいAPIがある場合は連絡をお願いします)
 
-## 追加役職一覧(Extreme Roles v9.0.0.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v9.2.0.0時点、今後も追加予定)
 ### ホスト役職
+
 - シオン
+
 ### 通常役職
+
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
 |  スペシャルクルー  |  スペシャルインポスター  | アリス |
@@ -67,16 +71,18 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  ギャンブラー |  マジシャン  |  |
 |  テレポーター |  ゾンビ  |  |
 |  モデレーター |  スライム  |  |
-|  マーリン  |  シーフ  |  |
-|  ヒーロー  |  アサシン  |  |
-|  探偵  | ヴィラン  |   |
-|  助手  | シェアーズ  |   |
-|  見習い探偵  |   |   |
+|  サイキック |  シーフ  |  |
+|  マーリン  |  クルーシュルーム  |  |
+|  ヒーロー  |  テロリスト  |  |
+|  探偵  | アサシン  |   |
+|  助手  | ヴィラン  |   |
+|  見習い探偵  | シェアーズ  |   |
 |  バディーズ  |  |  |
 |  ラバーズ  |  |  |
 |  サポーター |  |  |
 |  ゲッサー |  |  |
 |  ムーバー |  |  |
+|  アクセラレーター |  |  |
 
 ### 幽霊役職
 |  クルー  |  インポスター  | ニュートラル |
@@ -89,7 +95,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 「ラバーズ」、「サポーター」、「ゲッサー」と「ムーバー」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
 * 「サイドキック」と「見習い探偵」、「サーヴァント」、「ドール」はゲーム開始時にはアサインされず、条件を満たした時にアサインされます
 * 「マーリン」と「アサシン」、「ヒーロー」と「ヴィラン」と「ヴィジランテ」、「探偵」と「助手」、「ワルガキ」と「ウィスプ」は一対の関係です
-* 詳しくは[Wikiのロール](https://github.com/yukieiji/ExtremeRoles/wiki/%E3%83%AD%E3%83%BC%E3%83%AB)を参照
+* 詳しくは[Wikiのロール](https://yukieiji.github.io/ExtremeRoles.Docs/docs/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7.html)を参照
 
 # Extreme Skins
 Extreme Rolesのコズミック追加用アドオン、主な特徴として以下があります<br>
@@ -157,7 +163,8 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.10.24s/v2023.10.24e  | v9.0.0.0 |
+|  v2023.10.28s/v2023.10.28e  | v9.1.0.0 ～ v9.2.0.0 |
+|  v2023.10.24s/v2023.10.24e  | v9.0.0.0 ～ v9.0.3.2 |
 |  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.6.2 |
 |  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.4 |
 |  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
