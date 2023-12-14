@@ -221,6 +221,10 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 - Google Font Icons : https://fonts.google.com/icons ApacheLicenceV2、いくつかのアイコンを作るためにいくつか改変を加えて使用
 - 効果音ラボ：https://soundeffect-lab.info/ いくつかの役職のSEを使用
 - 無料効果音で遊ぼう：https://taira-komori.jpn.org/welcome.html いくつかの役職のSEを使用
+- VOICEVOX: https://voicevox.hiroshiba.jp/ いくつかの音声に使用
+    - クレジット表記
+        - VOICEVOX:ずんだもん
+
 
 ## ボタンのアイコンについて
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
