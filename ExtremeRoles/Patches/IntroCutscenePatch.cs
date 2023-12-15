@@ -7,19 +7,19 @@ using AmongUs.GameOptions;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.GameMode.Option.MapModule;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Compat;
-using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches;
 
@@ -208,12 +208,11 @@ public static class IntroCutsceneSetUpRoleTextPatch
         IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
     {
         var role = ExtremeRoleManager.GetLocalPlayerRole();
-        if (role.IsVanillaRole()) { return true; }
-        var awakeVanillaRole = role as IRoleAwake<RoleTypes>;
-        if (awakeVanillaRole != null && !awakeVanillaRole.IsAwake)
-        {
-            return true;
-        }
+        if (role.IsVanillaRole() ||
+			(role is IRoleAwake<RoleTypes> awakeVanillaRole && !awakeVanillaRole.IsAwake))
+		{
+			return true;
+		}
 
         __result = showRoleText(role, __instance).WrapToIl2Cpp();
         return false;
@@ -271,8 +270,34 @@ public static class IntroCutsceneOnDestroyPatch
         {
 			multiSetUpRole.IntroEndSetUp();
 		}
+
         disableMapObject();
-    }
+		changeWallHackTask();
+
+	}
+
+	private static void changeWallHackTask()
+	{
+		var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
+		if (!shipOpt.ChangeForceWallCheck) { return; }
+
+		var changeWallCheckTask = shipOpt.ChangeTask;
+		var wallCheckTasks = shipOpt.WallCheckTask;
+
+		var allConsole = Object.FindObjectsOfType<Console>();
+
+		foreach (Console console in allConsole)
+		{
+			foreach (var taskType in console.TaskTypes)
+			{
+				if (wallCheckTasks.Contains(taskType))
+				{
+					console.checkWalls = changeWallCheckTask.Contains(taskType);
+					break;
+				}
+			}
+		}
+	}
 
     private static void disableMapObject()
     {

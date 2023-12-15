@@ -5,8 +5,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-using AmongUs.GameOptions;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.Interface;
@@ -21,7 +19,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class WispTorchSystem : IExtremeSystemType
+public sealed class WispTorchSystem : IDeterioratableExtremeSystemType
 {
 	public sealed class Torch
 	{

@@ -141,16 +141,16 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
                 {
                     return false;
                 }
-                this.minigame = GameSystem.OpenMinigame(
+                this.minigame = MinigameSystem.Open(
                     watchConsole.MinigamePrefab);
                 break;
             case AbilityType.Vital:
-				VitalsMinigame vital = GameSystem.GetVitalMinigame();
+				VitalsMinigame vital = MinigameSystem.Vital;
 				if (vital == null || Camera.main == null)
                 {
                     return false;
                 }
-                this.minigame = GameSystem.OpenMinigame(vital);
+                this.minigame = MinigameSystem.Open(vital);
                 break;
             default:
                 return false;

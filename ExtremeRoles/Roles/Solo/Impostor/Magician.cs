@@ -7,13 +7,12 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Compat;
+using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -105,16 +104,9 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
         byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
             ByteOptionNames.MapId);
 
+		targetPos = targetPos.Where(item => !ExtremeSpawnSelectorMinigame.IsCloseWaitPos(item));
 
-        if (mapId == 4)
-        {
-            targetPos = targetPos.Where(
-                item =>
-                    (-26f > item.x || item.x > -24f) ||
-                    (39f > item.y || item.y > 41f));
-        }
-
-        byte randomPlayer = teleportPlayer.First().PlayerId;
+		byte randomPlayer = teleportPlayer.First().PlayerId;
 
         if (this.includeSpawnPoint)
         {

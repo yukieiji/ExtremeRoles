@@ -26,11 +26,14 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
     }
     public IEnumerable<CombinationRoleType> UseCombRoleType
     {
-        get
-        {
-            yield break;
-        }
-    }
+		get
+		{
+			foreach (CombinationRoleType id in getUseCombRoleType())
+			{
+				yield return id;
+			}
+		}
+	}
     public IEnumerable<ExtremeGhostRoleId> UseGhostRoleId
     {
         get
@@ -77,6 +80,12 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Bomber,
             ExtremeRoleId.LastWolf,
             ExtremeRoleId.Hypnotist,
-            ExtremeRoleId.Slime
+            ExtremeRoleId.Slime,
+			ExtremeRoleId.Terorist,
         };
+	private CombinationRoleType[] getUseCombRoleType() =>
+		new CombinationRoleType[]
+		{
+			CombinationRoleType.Accelerator,
+		};
 }

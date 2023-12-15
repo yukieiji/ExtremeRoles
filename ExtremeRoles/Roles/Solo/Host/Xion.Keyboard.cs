@@ -113,7 +113,7 @@ public sealed partial class Xion
 
 # if DEBUG
         // テスト用能力
-        if (Key.IsAltDown() &&
+        if (Key.IsShift() &&
             Input.GetKeyDown(functionCall))
         {
             this.RpcTestAbilityCall();

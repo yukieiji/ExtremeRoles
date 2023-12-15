@@ -13,6 +13,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using AmongUs.GameOptions;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Host;
 
@@ -147,14 +149,14 @@ public sealed partial class Xion
 
     public void RpcTestAbilityCall()
     {
-        MessageWriter writer = createWriter(XionRpcOpsCode.TestRpc);
-        // 色々と
-        AmongUsClient.Instance.FinishRpcImmediately(writer);
-        // 必要な関数書く
-    }
+		MessageWriter writer = createWriter(XionRpcOpsCode.TestRpc);
+		// 色々と
+		AmongUsClient.Instance.FinishRpcImmediately(writer);
+		// 必要な関数書く
+	}
 
 
-    public static void RpcNoXionVote()
+	public static void RpcNoXionVote()
     {
         AmongUsClient.Instance.FinishRpcImmediately(
             createWriter(XionRpcOpsCode.NoXionVote));
@@ -212,15 +214,20 @@ public sealed partial class Xion
         addChat(Translation.GetString("RevartXion"));
     }
 
+	public static void RpcTeleportTo(Vector2 pos)
+	{
+		MessageWriter writer = createWriter(XionRpcOpsCode.Teleport);
+		writer.Write(pos.x);
+		writer.Write(pos.y);
+		finishWrite(writer);
+		teleport(CachedPlayerControl.LocalPlayer, pos);
+	}
+
     private static void rpcTeleport(PlayerControl targetPlayer)
     {
         if (targetPlayer == null) { return; }
         Vector2 targetPos = targetPlayer.transform.position;
-        MessageWriter writer = createWriter(XionRpcOpsCode.Teleport);
-        writer.Write(targetPos.x);
-        writer.Write(targetPos.y);
-        finishWrite(writer);
-        teleport(CachedPlayerControl.LocalPlayer, targetPos);
+		RpcTeleportTo(targetPos);
     }
 
     // RPC終了

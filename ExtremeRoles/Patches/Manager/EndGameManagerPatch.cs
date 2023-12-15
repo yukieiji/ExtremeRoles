@@ -22,28 +22,34 @@ namespace ExtremeRoles.Patches.Manager;
 [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
 public static class EndGameManagerSetUpPatch
 {
-    private static List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
-
     public static void Postfix(EndGameManager __instance)
     {
-        setPlayerNameAndRole(__instance);
-        setWinDetailText(__instance);
-        setRoleSummary(__instance);
+		var gameResult = new ExtremeGameResult();
+		var winner = gameResult.Winner;
+
+		var winNeutral = setPlayerNameAndRole(
+			__instance,
+			gameResult.PlayerSummaries,
+			winner.Winner);
+        setWinDetailText(__instance, winNeutral, winner.PlusedWinner);
+        setRoleSummary(__instance, gameResult.PlayerSummaries);
         RPCOperator.Initialize();
     }
 
-    private static void setPlayerNameAndRole(
-        EndGameManager manager)
+    private static List<(SingleRoleBase, byte)> setPlayerNameAndRole(
+        EndGameManager manager,
+		IReadOnlyList<FinalSummary.PlayerSummary> summaries,
+		IReadOnlyList<WinningPlayerData> winner)
     {
-        winNeutral.Clear();
+		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
 
-        // Delete and readd PoolablePlayers always showing the name and role of the player
-        foreach (PoolablePlayer pb in manager.transform.GetComponentsInChildren<PoolablePlayer>())
+		// Delete and readd PoolablePlayers always showing the name and role of the player
+		foreach (PoolablePlayer pb in manager.transform.GetComponentsInChildren<PoolablePlayer>())
         {
             Object.Destroy(pb.gameObject);
         }
         int num = Mathf.CeilToInt(7.5f);
-        List<WinningPlayerData> winnerList = TempData.winners.ToArray().OrderBy(
+        List<WinningPlayerData> winnerList = winner.OrderBy(
             delegate (WinningPlayerData b)
             {
                 if (!b.IsYou)
@@ -102,7 +108,7 @@ public static class EndGameManagerSetUpPatch
 			string name = winningPlayerData.PlayerName;
 			text.text = name;
 
-            foreach (var data in FinalSummary.GetSummary())
+            foreach (var data in summaries)
             {
                 if (data.PlayerName != name) { continue; }
 				text.text +=
@@ -115,9 +121,12 @@ public static class EndGameManagerSetUpPatch
 
             }
         }
+		return winNeutral;
     }
 
-    private static void setRoleSummary(EndGameManager manager)
+    private static void setRoleSummary(
+		EndGameManager manager,
+		List<FinalSummary.PlayerSummary> summaries)
     {
         if (!ClientOption.Instance.ShowRoleSummary.Value) { return; }
 
@@ -132,11 +141,13 @@ public static class EndGameManagerSetUpPatch
 
         FinalSummary summary = summaryObj.AddComponent<FinalSummary>();
         summary.SetAnchorPoint(position);
-        summary.Create();
+        summary.Create(summaries);
     }
 
     private static void setWinDetailText(
-        EndGameManager manager)
+        EndGameManager manager,
+		List<(SingleRoleBase, byte)> winNeutral,
+		IReadOnlyList<GameData.PlayerInfo> plusWinner)
     {
 		var winText = manager.WinText;
 
@@ -171,7 +182,7 @@ public static class EndGameManagerSetUpPatch
         HashSet<ExtremeGhostRoleId> textAddedGhostRole = new HashSet<ExtremeGhostRoleId>();
         HashSet<byte> winPlayer = new HashSet<byte>();
 
-        foreach (var player in state.GetPlusWinner())
+        foreach (var player in plusWinner)
         {
             bool isGhost = ExtremeGhostRoleManager.GameRole.TryGetValue(
                 player.PlayerId, out GhostRoleBase ghostRole);
@@ -225,7 +236,7 @@ public static class EndGameManagerSetUpPatch
         }
 
         // ニュートラルの追加処理
-        foreach (var player in state.GetPlusWinner())
+        foreach (var player in plusWinner)
         {
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
@@ -268,7 +279,8 @@ public static class EndGameManagerSetUpPatch
             (RoleGameOverReason)GameOverReason.ImpostorByVote or
             (RoleGameOverReason)GameOverReason.ImpostorBySabotage or
             (RoleGameOverReason)GameOverReason.HideAndSeek_ByKills or
-            RoleGameOverReason.AssassinationMarin =>
+            RoleGameOverReason.AssassinationMarin or
+			RoleGameOverReason.TeroristoTeroWithShip =>
                 WinTextInfo.Create(RoleTypes.Impostor, Palette.ImpostorRed, false),
 
             RoleGameOverReason.AliceKilledByImposter or
@@ -329,21 +341,15 @@ public static class EndGameManagerSetUpPatch
         };
     }
 
-    private struct WinTextInfo
+    private readonly record struct WinTextInfo(string Text, Color Color, bool IsChangeBk)
     {
-        public string Text;
-        public Color Color;
-        public bool IsChangeBk;
-
         internal static WinTextInfo Create(
-            System.Enum textEnum, Color color, bool isChangeBk = true)
+            in System.Enum textEnum, in Color color,
+			in bool isChangeBk = true)
         {
-            return new WinTextInfo
-            {
-                Text = Translation.GetString(textEnum.ToString()),
-                Color = color,
-                IsChangeBk = isChangeBk,
-            };
+			return new WinTextInfo(
+				Translation.GetString(textEnum.ToString()),
+				color, isChangeBk);
         }
     }
 }

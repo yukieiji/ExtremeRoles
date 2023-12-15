@@ -55,9 +55,10 @@ public static class RPCOperator
         HeroHeroAcademia,
         KidsAbility,
         MoverAbility,
+		AcceleratorAbility,
 
-        // クルーメイト
-        BodyGuardAbility,
+		// クルーメイト
+		BodyGuardAbility,
         TimeMasterAbility,
         AgencyTakeTask,
         FencerAbility,
@@ -83,8 +84,8 @@ public static class RPCOperator
         ZombieRpc,
 		ThiefAddDeadbodyEffect,
 
-        // ニュートラル
-        AliceShipBroken,
+		// ニュートラル
+		AliceShipBroken,
         JesterOutburstKill,
         YandereSetOneSidedLover,
         TotocalcioSetBetPlayer,
@@ -234,9 +235,6 @@ public static class RPCOperator
         Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
         Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
 
-        // 最終結果リセット
-        Module.CustomMonoBehaviour.FinalSummary.Reset();
-
         VentExtension.ResetCustomVent();
     }
 
@@ -288,7 +286,7 @@ public static class RPCOperator
 
     public static void ShareOption(int numOptions, MessageReader reader)
     {
-        Module.CustomOption.OptionManager.ShareOption(numOptions, reader);
+		OptionManager.ShareOption(numOptions, reader);
     }
 
     public static void ReplaceDeadReason(byte playerId, byte reason)
@@ -551,7 +549,12 @@ public static class RPCOperator
         Roles.Combination.Mover.Ability(ref reader);
     }
 
-    public static void BodyGuardAbility(ref MessageReader reader)
+	public static void AcceleratorAbility(ref MessageReader reader)
+	{
+		Roles.Combination.Accelerator.Ability(ref reader);
+	}
+
+	public static void BodyGuardAbility(ref MessageReader reader)
     {
         Roles.Solo.Crewmate.BodyGuard.Ability(ref reader);
     }

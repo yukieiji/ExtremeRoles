@@ -1,9 +1,15 @@
-﻿using HarmonyLib;
+﻿using Il2CppSystem.Collections;
+
+using HarmonyLib;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
+
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Patches;
 
@@ -41,5 +47,35 @@ public static class ShipStatusOnDestroyPatch
         CachedShipStatus.Destroy();
 		CompatModManager.Instance.RemoveMap();
 		ExtremeSystemTypeManager.Instance.Reset();
+	}
+}
+
+
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.PrespawnStep))]
+public static class ShipStatusPrespawnStepPatch
+{
+	public static bool Prefix(ref IEnumerator __result)
+	{
+		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
+		if (!spawnOpt.EnableSpecialSetting)
+		{
+			return true;
+		}
+
+		bool enableRandomSpawn = GameManager.Instance.LogicOptions.MapId switch
+		{
+			0 => spawnOpt.Skeld,
+			1 => spawnOpt.MiraHq,
+			2 => spawnOpt.Polus,
+			5 => spawnOpt.Fungle,
+			_ => false,
+		};
+
+		if (enableRandomSpawn)
+		{
+			__result = ExtremeSpawnSelectorMinigame.WaiteSpawn().WrapToIl2Cpp();
+			return false;
+		}
+		return true;
 	}
 }

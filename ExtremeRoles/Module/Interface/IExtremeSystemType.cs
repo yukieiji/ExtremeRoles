@@ -5,11 +5,23 @@ using Hazel;
 
 namespace ExtremeRoles.Module.Interface;
 
+public interface ISabotageExtremeSystemType : IDeterioratableExtremeSystemType
+{
+	public bool IsBlockOtherSabotage => this.IsActive;
+	public bool IsActive { get; }
+
+	public void Clear();
+}
+
+public interface IDeterioratableExtremeSystemType : IExtremeSystemType
+{
+	public void Deteriorate(float deltaTime);
+}
+
+
 public interface IExtremeSystemType
 {
 	public bool IsDirty { get; }
-
-	public void Deteriorate(float deltaTime);
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null);
 

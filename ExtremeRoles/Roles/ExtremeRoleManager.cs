@@ -37,8 +37,9 @@ public enum ExtremeRoleId : int
     Delinquent,
     Buddy,
     Mover,
+	Accelerator,
 
-    SpecialCrew,
+	SpecialCrew,
     Sheriff,
     Maintainer,
     Neet,
@@ -61,6 +62,7 @@ public enum ExtremeRoleId : int
     Gambler,
     Teleporter,
 	Moderator,
+	Psychic,
 
 	SpecialImpostor,
     Evolver,
@@ -86,8 +88,10 @@ public enum ExtremeRoleId : int
     Slime,
     Zombie,
 	Thief,
+	Crewshroom,
+	Terorist,
 
-    Alice,
+	Alice,
     Jackal,
     Sidekick,
     TaskMaster,
@@ -123,13 +127,15 @@ public enum CombinationRoleType : byte
     Supporter,
     Guesser,
     Mover,
+	Accelerator,
 
-    Traitor,
+	Traitor,
 }
 
 public enum RoleGameOverReason
 {
     AssassinationMarin = 20,
+	TeroristoTeroWithShip,
 
     AliceKilledByImposter,
     AliceKillAllOther,
@@ -223,6 +229,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Gambler     , new Gambler()},
             {(int)ExtremeRoleId.Teleporter  , new Teleporter()},
 			{(int)ExtremeRoleId.Moderator   , new Moderator()},
+			{(int)ExtremeRoleId.Psychic     , new Psychic()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -248,6 +255,8 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Slime          , new Slime()},
             {(int)ExtremeRoleId.Zombie         , new Zombie()},
 			{(int)ExtremeRoleId.Thief          , new Thief()},
+			{(int)ExtremeRoleId.Crewshroom     , new Crewshroom()},
+			{(int)ExtremeRoleId.Terorist       , new Terorist()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},
@@ -277,7 +286,8 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
             {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
             {(byte)CombinationRoleType.Mover          , new MoverManager()},
-            {(byte)CombinationRoleType.Traitor        , new TraitorManager()},
+			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
+			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         };
 
     public static Dictionary<
@@ -288,7 +298,8 @@ public static class ExtremeRoleManager
         ExtremeRoleId.Jackal,
         ExtremeRoleId.Assassin,
         ExtremeRoleId.Hero,
-        ExtremeRoleId.Villain
+        ExtremeRoleId.Villain,
+		ExtremeRoleId.Yoko,
     };
 
     public enum ReplaceOperation : byte
@@ -377,15 +388,13 @@ public static class ExtremeRoleManager
             }
         }
     }
-    public static bool IsAliveWinNeutral(
-        SingleRoleBase role, GameData.PlayerInfo playerInfo)
-    {
-        bool isAlive = (!playerInfo.IsDead && !playerInfo.Disconnected);
-
-        if (role.Id == ExtremeRoleId.Neet && isAlive) { return true; }
-
-        return false;
-    }
+	public static bool IsAliveWinNeutral(
+		SingleRoleBase role, GameData.PlayerInfo playerInfo)
+		=> role.Id switch
+		{
+			ExtremeRoleId.Neet => !(playerInfo.IsDead || playerInfo.Disconnected),
+			_ => false
+		};
 
     public static SingleRoleBase GetLocalPlayerRole()
     {

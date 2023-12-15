@@ -26,7 +26,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
     };
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.betButton;
         set
         {
@@ -35,7 +35,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
     }
 
     private ExtremeAbilityButton betButton;
-    
+
     private float range;
     private GameData.PlayerInfo betPlayer;
     private PlayerControl tmpTarget;
@@ -56,7 +56,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
         byte rolePlayerId, byte betTargetPlayerId)
     {
         var totocalcio =  ExtremeRoleManager.GetSafeCastedRole<Totocalcio>(rolePlayerId);
-        
+
         if (totocalcio != null)
         {
             totocalcio.betPlayer = GameData.Instance.GetPlayerById(betTargetPlayerId);
@@ -96,32 +96,15 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
     public void ModifiedWinPlayer(
         GameData.PlayerInfo rolePlayerInfo,
         GameOverReason reason,
-        ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-        ref List<GameData.PlayerInfo> pulsWinner)
+		ref ExtremeGameResult.WinnerTempData winner)
     {
-        if (this.betPlayer == null) { return; }
+        if (this.betPlayer == null ||
+			ignoreRole.Contains(
+				ExtremeRoleManager.GameRole[
+					this.betPlayer.PlayerId].Id) ||
+			!winner.Contains(this.betPlayer.PlayerName)) { return; }
 
-        if (ignoreRole.Contains(
-            ExtremeRoleManager.GameRole[
-                this.betPlayer.PlayerId].Id)) { return; }
-        
-        foreach (var win in winner.GetFastEnumerator())
-        {
-            if (win.PlayerName == this.betPlayer.PlayerName)
-            {
-                this.AddWinner(rolePlayerInfo, winner, pulsWinner);
-                return;
-            }
-        }
-
-        foreach (var win in pulsWinner)
-        {
-            if (win.PlayerName == this.betPlayer.PlayerName)
-            {
-                this.AddWinner(rolePlayerInfo, winner, pulsWinner);
-                return;
-            }
-        }
+		winner.AddWithPlus(rolePlayerInfo);
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -134,8 +117,8 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
         if (this.Button == null) { return; }
 
         int deadNum = 0;
-        
-        foreach (var player in 
+
+        foreach (var player in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (player.IsDead || player.Disconnected) { ++deadNum; }
@@ -170,10 +153,10 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
         return true;
     }
 
-    public override string GetFullDescription() => 
+    public override string GetFullDescription() =>
         string.Format(
             base.GetFullDescription(),
-            this.betPlayer != null ? 
+            this.betPlayer != null ?
                 this.betPlayer.PlayerName : Helper.Translation.GetString("loseNow"));
 
     public override string GetRolePlayerNameTag(

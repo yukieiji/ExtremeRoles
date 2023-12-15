@@ -14,10 +14,12 @@ public static class Sound
     {
         Kill,
         GuardianAngleGuard,
-        AgencyTakeTask,
 
-        CommanderReduceKillCool,
-        CurseMakerCurse,
+        AgencyTakeTask,
+		CurseMakerCurse,
+
+		CommanderReduceKillCool,
+		TeroristSabotageAnnounce,
 
 		MinerMineSE,
 

@@ -9,9 +9,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using AmongUs.GameOptions;
-using ExtremeRoles.Compat.ModIntegrator;
-using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Json;
 
 
@@ -21,8 +18,6 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 {
-	private sealed record VectorId(int Id, Vector2 pos);
-
 	public enum Ops
 	{
 		PickUp,
@@ -95,9 +90,6 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 			Object.Destroy(part.gameObject);
 		}
 	}
-
-	public void Deteriorate(float deltaTime)
-	{ }
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
@@ -185,7 +177,7 @@ public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
 	private void setPart(VectorId posId)
 	{
 		int id = posId.Id;
-		Vector2 pos = posId.pos;
+		Vector2 pos = posId.Pos;
 		GameObject obj = new GameObject($"TimePart_{id}");
 		var part = obj.AddComponent<TimeParts>();
 		part.Id = id;

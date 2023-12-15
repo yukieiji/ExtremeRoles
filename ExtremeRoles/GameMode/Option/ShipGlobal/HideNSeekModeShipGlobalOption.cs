@@ -12,9 +12,12 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public bool IsEnableImpostorVent => false;
 
     public bool IsRandomMap { get; private set; }
+	public bool ChangeForceWallCheck { get; private set; }
 
-    public bool DisableVent { get; private set; }
-    public bool IsAllowParallelMedbayScan { get; private set; }
+	public bool DisableVent { get; private set; }
+	public VentAnimationMode VentAnimationMode { get; private set; }
+
+	public bool IsAllowParallelMedbayScan { get; private set; }
     public bool IsSameNeutralSameWin { get; private set; }
     public bool DisableNeutralSpecialForceEnd { get; private set; }
 
@@ -22,7 +25,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public SecurityOption Security { get; private set; }
     public VitalOption Vital { get; private set; }
 
-    public int MaxMeetingCount => 0;
+	public SpawnOption Spawn { get; private set; }
+
+	public int MaxMeetingCount => 0;
 
     public bool IsChangeVoteAreaButtonSortArg => false;
     public bool IsFixedVoteAreaPlayerLevel => false;
@@ -34,7 +39,6 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
     public bool EngineerUseImpostorVent => false;
     public bool CanKillVentInPlayer => false;
-    public bool IsAutoSelectRandomSpawn => false;
 
     public bool DisableTaskWinWhenNoneTaskCrew => false;
     public bool DisableTaskWin => false;
@@ -48,8 +52,15 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 	private HashSet<GlobalOption> useOption = new HashSet<GlobalOption>()
     {
         GlobalOption.DisableVent,
+		GlobalOption.VentAnimationModeInVison,
 
-        GlobalOption.IsRemoveAdmin,
+		GlobalOption.IsFixWallHaskTask,
+		GlobalOption.GarbageTask,
+		GlobalOption.ShowerTask,
+		GlobalOption.DevelopPhotosTask,
+		GlobalOption.DivertPowerTask,
+
+		GlobalOption.IsRemoveAdmin,
         GlobalOption.AirShipEnableAdmin,
         GlobalOption.EnableAdminLimit,
         GlobalOption.AdminLimitTime,
@@ -74,8 +85,31 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     {
         DisableVent = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.DisableVent);
+		this.VentAnimationMode = (VentAnimationMode)IShipGlobalOption.GetCommonOptionValue<int>(
+			GlobalOption.VentAnimationModeInVison);
 
-        IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
+		ChangeForceWallCheck = IShipGlobalOption.GetCommonOptionValue<bool>(
+			GlobalOption.IsFixWallHaskTask);
+
+		Spawn = new SpawnOption()
+		{
+			EnableSpecialSetting = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.EnableSpecialSetting),
+			Skeld = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.SkeldRandomSpawn),
+			MiraHq = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.MiraHqRandomSpawn),
+			Polus = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.PolusRandomSpawn),
+			AirShip = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.AirShipRandomSpawn),
+			Fungle = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.FungleRandomSpawn),
+			IsAutoSelectRandom = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.IsAutoSelectRandomSpawn),
+		};
+
+		IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.RandomMap);
 
         Admin = new AdminOption()

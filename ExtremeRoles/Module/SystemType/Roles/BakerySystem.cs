@@ -10,7 +10,7 @@ using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class BakerySystem : IExtremeSystemType
+public sealed class BakerySystem : IDeterioratableExtremeSystemType
 {
 	public bool IsDirty { get; private set; } = false;
 

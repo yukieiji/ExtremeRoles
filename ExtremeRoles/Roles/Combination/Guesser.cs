@@ -74,7 +74,7 @@ public sealed class Guesser :
     {
         public List<GuessBehaviour.RoleInfo> Result { get; } = new List<GuessBehaviour.RoleInfo>();
 
-        Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separetedRoleId;
+        private readonly Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separetedRoleId;
 
         private sealed class NormalExRAssignState
         {
@@ -83,24 +83,24 @@ public sealed class Guesser :
             public bool IsQueenOn { get; set; } = false;
         };
 
-        public void Create(bool includeNoneRole)
-        {
-            this.separetedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
-            {
-                {ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
-                {ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
-                {ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
-            };
+		public GuesserRoleInfoCreater(bool includeNoneRole)
+		{
+			this.separetedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
+			{
+				{ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
+				{ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
+				{ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
+			};
 
-            addVanillaRole(includeNoneRole);
+			addVanillaRole(includeNoneRole);
 
-            this.separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
-            this.separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
+			this.separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
+			this.separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
 
-            addAmongUsRole();
-            addExRNormalRole(out NormalExRAssignState assignState);
-            addExRCombRole(assignState);
-        }
+			addAmongUsRole();
+			addExRNormalRole(out NormalExRAssignState assignState);
+			addExRCombRole(assignState);
+		}
 
         private void add(
             ExtremeRoleId id,
@@ -475,8 +475,7 @@ public sealed class Guesser :
                     this.uiPrefab, MeetingHud.Instance.transform);
                 this.guesserUi = obj.GetComponent<GuesserUi>();
 
-                GuesserRoleInfoCreater creator = new GuesserRoleInfoCreater();
-                creator.Create(this.canGuessNoneRole);
+                GuesserRoleInfoCreater creator = new GuesserRoleInfoCreater(this.canGuessNoneRole);
 
                 this.guesserUi.gameObject.SetActive(true);
                 this.guesserUi.InitButton(

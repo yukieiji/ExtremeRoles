@@ -30,9 +30,6 @@ public sealed class MeetingTimeChangeSystem : IExtremeSystemType
 		this.ButtonTimeOffset = reader.ReadPackedInt32();
 	}
 
-	public void Deteriorate(float deltaTime)
-	{ }
-
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
 	{
 		if (timing == ResetTiming.MeetingEnd &&

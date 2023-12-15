@@ -205,6 +205,43 @@ public static class GameSystem
 		}
 	}
 
+	public static ShipStatus GetShipObj(byte mapId)
+	{
+		byte optionMapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId);
+
+		if (optionMapId == mapId)
+		{
+			return CachedShipStatus.Instance;
+		}
+
+		if (mapId > 5)
+		{
+			throw new ArgumentException("mapId is 5 over");
+		}
+
+		var fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
+
+		GameObject obj;
+
+		if (fungleAsset.IsValid())
+		{
+			obj = fungleAsset
+				.OperationHandle
+				.Result
+				.Cast<GameObject>();
+		}
+		else
+		{
+			var asset = fungleAsset.LoadAsset<GameObject>();
+			obj = asset.WaitForCompletion();
+		}
+
+		ShipStatus result = obj.GetComponent<ShipStatus>();
+
+		return result;
+	}
+
 	public static DeadBody? GetDeadBody(byte playerId)
 	{
 		DeadBody[] array = UnityObject.FindObjectsOfType<DeadBody>();
@@ -320,19 +357,6 @@ public static class GameSystem
         return watchConsole;
     }
 
-    public static VitalsMinigame? GetVitalMinigame()
-    {
-		var role = FastDestroyableSingleton<RoleManager>.Instance.GetRole(RoleTypes.Scientist);
-
-		if (!role.IsTryCast<ScientistRole>(out var scientist) ||
-			scientist == null)
-		{
-			return null;
-		}
-
-        return scientist.VitalsPrefab;
-    }
-
     public static void ForceEndGame()
     {
         RPCOperator.Call(RPCOperator.Command.ForceEnd);
@@ -358,24 +382,6 @@ public static class GameSystem
                 !PhysicsHelpers.AnythingBetween(
                         playerPos, consolePos, Constants.ShadowMask, false)
             );
-    }
-
-    public static Minigame OpenMinigame(
-        Minigame prefab,
-        PlayerTask? task = null,
-        Console? console = null)
-    {
-        Minigame minigame = UnityObject.Instantiate(
-            prefab, Camera.main.transform, false);
-        minigame.transform.SetParent(Camera.main.transform, false);
-        minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-        if (console != null)
-        {
-            minigame.Console = console;
-        }
-        minigame.Begin(task);
-
-        return minigame;
     }
 
 	public static void RelinkVent()
@@ -512,8 +518,7 @@ public static class GameSystem
 		{
 			case SystemTypes.Electrical:
 
-				if (!system.IsTryCast<SwitchSystem>(out var switchSystem) ||
-					switchSystem == null)
+				if (!system.IsTryCast<SwitchSystem>(out var switchSystem))
 				{
 					return;
 				}
@@ -523,15 +528,14 @@ public static class GameSystem
 				{
 					minigame.ForceClose();
 				}
-				switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+				switchSystem!.ActualSwitches = switchSystem!.ExpectedSwitches;
 				break;
 			case SystemTypes.MushroomMixupSabotage:
-				if (!system.IsTryCast<MushroomMixupSabotageSystem>(out var mixupSystem) ||
-					mixupSystem == null)
+				if (!system.IsTryCast<MushroomMixupSabotageSystem>(out var mixupSystem))
 				{
 					return;
 				}
-				mixupSystem.currentSecondsUntilHeal = 0.001f;
+				mixupSystem!.currentSecondsUntilHeal = 0.001f;
 				break;
 			default:
 				break;

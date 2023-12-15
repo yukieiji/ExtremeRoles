@@ -31,9 +31,9 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 			Disconnected,
 		}
 
-		public Dictionary<byte, DeadInfo> DeadPlayerInfo => this.deadPlayerInfo;
+		public IReadOnlyDictionary<byte, DeadInfo> DeadPlayerInfo => this.deadPlayerInfo;
 
-		private Dictionary<byte, DeadInfo> deadPlayerInfo = new Dictionary<byte, DeadInfo>();
+		private readonly Dictionary<byte, DeadInfo> deadPlayerInfo = new Dictionary<byte, DeadInfo>();
 
 		public void AddDeadInfo(
 			PlayerControl deadPlayer,

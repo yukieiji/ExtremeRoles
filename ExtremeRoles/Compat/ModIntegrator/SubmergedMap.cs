@@ -8,9 +8,9 @@ using HarmonyLib;
 
 using BepInEx;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Helper;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factories;
@@ -20,6 +20,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 #nullable enable
 
@@ -30,7 +31,15 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public enum SubmergedOption
 	{
 		EnableElevator,
-		ReplaceDoorMinigame
+		ReplaceDoorMinigame,
+		SubmergedSpawnSetting
+	}
+
+	public enum SpawnSetting
+	{
+		DefaultSpawn,
+		LowerCentralOnly,
+		UpperCentralOnly
 	}
 
 	public enum ElevatorSelection
@@ -65,6 +74,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public ShipStatus.MapType MapType => (ShipStatus.MapType)MapId;
 	public bool CanPlaceCamera => false;
 	public bool IsCustomCalculateLightRadius => true;
+	public SpawnSetting Spawn => (SpawnSetting)this.enableSubMergedRandomSpawn.GetValue();
 
 	public TaskTypes RetrieveOxygenMask;
 
@@ -93,6 +103,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	private SelectionCustomOption elevatorOption;
 	private BoolCustomOption replaceDoorMinigameOption;
+	private SelectionCustomOption enableSubMergedRandomSpawn;
 
 	public SubmergedIntegrator(PluginInfo plugin) : base(Guid, plugin)
 	{
@@ -163,6 +174,10 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
 		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator, isHeader: true);
 		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
+
+		var randomSpawnOpt = OptionManager.Instance.Get<bool>((int)GlobalOption.EnableSpecialSetting);
+		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<SpawnSetting>(
+			SubmergedOption.SubmergedSpawnSetting, randomSpawnOpt, invert: true);
 	}
 
 	public void Destroy()
@@ -536,6 +551,14 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			() => Patches.ExileControllerPatchesPatch.ExileController_BeginPrefix(cont, info, tie));
 #pragma warning restore CS8604
 
+		bool upperSelected = false;
+		Type submarineSelectSpawnType = ClassType.First(
+			t => t.Name == "SubmarineSelectSpawn");
+		MethodInfo submarineSelectSpawnCoSelectLevel = AccessTools.Method(
+			submarineSelectSpawnType, "CoSelectLevel");
+		MethodInfo submarineSelectSpawnCoSelectLevelPatch = SymbolExtensions.GetMethodInfo(
+			() => Patches.SubmarineSelectSpawnCoSelectLevelPatch.Prefix(ref upperSelected));
+
 
 		// 会議終了時のリセット処理を呼び出せるように
 		harmony.Patch(wrapUpAndSpawn,
@@ -571,6 +594,10 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		// このコメントに沿って修正：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
 		harmony.Patch(exileControllerPatchesExileControllerBegin,
 			new HarmonyMethod(exileControllerPatchesExileControllerBeginPatch));
+
+		// ランダムスポーンを無効化する用
+		harmony.Patch(submarineSelectSpawnCoSelectLevel,
+			new HarmonyMethod(submarineSelectSpawnCoSelectLevelPatch));
 	}
 
 	private MonoBehaviour? getFloorHandler(PlayerControl player)
@@ -629,15 +656,9 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		if (transformValue == null ||
 			transformValue is not Transform transform) { return; }
 
-		AssetReference airshipAsset = AmongUsClient.Instance.ShipPrefabs[4];
+		// AirShip持ってくる
+		ShipStatus ship = GameSystem.GetShipObj(4);
 
-		if (!airshipAsset.IsValid()) { return; }
-
-		ShipStatus ship = airshipAsset
-			.OperationHandle
-			.Result
-			.Cast<GameObject>()
-			.GetComponent<ShipStatus>();
 		Minigame? doorMinigame = ship.AllDoors
 			.Select(x =>
 			{

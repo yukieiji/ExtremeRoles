@@ -1028,8 +1028,7 @@ public sealed class Doll :
     public void ModifiedWinPlayer(
         GameData.PlayerInfo rolePlayerInfo,
         GameOverReason reason,
-        ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-        ref List<GameData.PlayerInfo> pulsWinner)
+		ref ExtremeGameResult.WinnerTempData winner)
     {
         switch (reason)
         {
@@ -1039,8 +1038,9 @@ public sealed class Doll :
             case GameOverReason.ImpostorDisconnect:
             case GameOverReason.HideAndSeek_ByKills:
             case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-                this.AddWinner(rolePlayerInfo, winner, pulsWinner);
-                break;
+			case (GameOverReason)RoleGameOverReason.TeroristoTeroWithShip:
+				winner.AddWithPlus(rolePlayerInfo);
+				break;
             default:
                 break;
         }
@@ -1086,16 +1086,16 @@ public sealed class Doll :
                 {
                     return false;
                 }
-                this.minigame = GameSystem.OpenMinigame(
+                this.minigame = MinigameSystem.Open(
                     watchConsole.MinigamePrefab);
                 break;
             case AbilityType.Vital:
-                VitalsMinigame? vital = GameSystem.GetVitalMinigame();
+                VitalsMinigame? vital = MinigameSystem.Vital;
                 if (vital == null || Camera.main == null)
                 {
                     return false;
                 }
-                this.minigame = GameSystem.OpenMinigame(vital);
+                this.minigame = MinigameSystem.Open(vital);
                 break;
             default:
                 return false;

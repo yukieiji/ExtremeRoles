@@ -112,6 +112,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Gambler,
             ExtremeRoleId.Teleporter,
 			ExtremeRoleId.Moderator,
+			ExtremeRoleId.Psychic,
 
             ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
@@ -137,6 +138,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Slime,
             ExtremeRoleId.Zombie,
 			ExtremeRoleId.Thief,
+			ExtremeRoleId.Crewshroom,
+			ExtremeRoleId.Terorist,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
@@ -169,8 +172,9 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             CombinationRoleType.Supporter,
             CombinationRoleType.Guesser,
             CombinationRoleType.Mover,
+			CombinationRoleType.Accelerator,
 
-            CombinationRoleType.Traitor,
+			CombinationRoleType.Traitor,
         };
 
     private ExtremeGhostRoleId[] getUseGhostRoleId() =>
