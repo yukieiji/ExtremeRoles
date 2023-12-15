@@ -943,14 +943,14 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
         switch (this.condition)
         {
             case VigilanteCondition.NewLawInTheShip:
-                winner.AddWithPlus(rolePlayerInfo);
+                winner.AddPlusWinner(rolePlayerInfo);
                 break;
             case VigilanteCondition.NewHeroForTheShip:
                 if (reason == GameOverReason.HumansByTask ||
                     reason == GameOverReason.HumansByVote ||
                     reason == GameOverReason.HumansDisconnect)
                 {
-                    winner.AddWithPlus(rolePlayerInfo);
+                    winner.AddPlusWinner(rolePlayerInfo);
                 }
                 break;
             case VigilanteCondition.NewVillainForTheShip:
@@ -960,7 +960,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
                     reason == GameOverReason.ImpostorDisconnect ||
                     reason == (GameOverReason)RoleGameOverReason.AssassinationMarin)
                 {
-					winner.AddWithPlus(rolePlayerInfo);
+					winner.AddPlusWinner(rolePlayerInfo);
                 }
                 break;
             default:

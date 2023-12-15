@@ -67,12 +67,6 @@ public sealed class ExtremeGameResult
 			this.finalWinPlayer.Remove(player);
 		}
 
-		public void AddWithPlus(Player playerInfo)
-		{
-			this.Add(playerInfo);
-			this.AddPlusWinner(playerInfo);
-		}
-
 		public void Add(Player playerInfo)
 		{
 			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
@@ -277,11 +271,6 @@ public sealed class ExtremeGameResult
 				break;
 		}
 
-		foreach (var player in this.winner.PlusedWinner)
-		{
-			this.winner.Add(player);
-		}
-
 		foreach (var (playerInfo, winCheckRole) in ghostWinCheckRole)
 		{
 			if (winCheckRole.IsWin(reason, playerInfo))
@@ -296,6 +285,11 @@ public sealed class ExtremeGameResult
 				playerInfo,
 				gameData.EndReason,
 				ref this.winner);
+		}
+
+		foreach (var player in this.winner.PlusedWinner)
+		{
+			this.winner.Add(player);
 		}
 	}
 
