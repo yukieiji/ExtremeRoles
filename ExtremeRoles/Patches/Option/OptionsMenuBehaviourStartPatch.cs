@@ -7,14 +7,11 @@ using HarmonyLib;
 
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using AmongUs.Data;
 
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.UnityEvents;
 
-using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 
 
@@ -22,7 +19,7 @@ namespace ExtremeRoles.Patches.Option;
 
 
 [HarmonyPatch]
-[HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
+[HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Open))]
 public static class OptionsMenuBehaviourStartPatch
 {
 
@@ -83,10 +80,22 @@ public static class OptionsMenuBehaviourStartPatch
     private static ToggleButtonBehaviour exportButton;
 
     private static ToggleButtonBehaviour buttonPrefab;
+
+	private static ModOptionMenu menu;
+
     public static void Postfix(OptionsMenuBehaviour __instance)
     {
         if (!__instance.CensorChatButton) { return; }
 
+		if (menu == null || menu.IsReCreate)
+		{
+			menu = new ModOptionMenu(__instance);
+			setLeaveGameButtonPostion();
+		}
+
+		menu.UpdateTranslation();
+
+		/*
         if (!moreOptionText && Module.Prefab.Text != null)
         {
             moreOptionText = Object.Instantiate(
@@ -110,8 +119,8 @@ public static class OptionsMenuBehaviourStartPatch
 
         setUpOptions();
         initializeMoreButton(__instance);
-        setLeaveGameButtonPostion();
-    }
+		*/
+	}
 
     public static void UpdateMenuTranslation()
     {
