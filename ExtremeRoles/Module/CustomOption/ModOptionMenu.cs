@@ -60,6 +60,7 @@ public sealed class ModOptionMenu
 			this.button.Background.color = color;
 			this.button.Text.fontSizeMin =
 				this.button.Text.fontSizeMax = 2.2f;
+			this.button.Text.transform.SetLocalZ(0.0f);
 
 			var passiveButton = this.button.GetComponent<PassiveButton>();
 			passiveButton.OnClick.RemoveAllPersistentAndListeners();
@@ -88,6 +89,8 @@ public sealed class ModOptionMenu
 
 		private void excute()
 		{
+			if (this.popUp == null) { return; }
+
 			foreach (var sr in this.popUp.GetComponentsInChildren<SpriteRenderer>())
 			{
 				sr.sortingOrder = 8;
@@ -246,7 +249,7 @@ public sealed class ModOptionMenu
 			.AppendLine($"<align=left>　アンハッピーセット");
 		if (DataManager.Settings.Language.CurrentLanguage != SupportedLangs.Japanese)
 		{
-			this.creditText.transform.localPosition = new Vector3(0.0f, -1.895f, -.5f);
+			this.creditText.transform.localPosition = new Vector3(0.0f, -1.895f);
 			showTextBuilder
 				.Append($"<align=left>")
 				.Append(Translation.GetString("langTranslate"))
@@ -254,7 +257,7 @@ public sealed class ModOptionMenu
 		}
 		else
 		{
-			this.creditText.transform.localPosition = new Vector3(0.0f, -2.0f, -.5f);
+			this.creditText.transform.localPosition = new Vector3(0.0f, -2.0f);
 		}
 		this.creditText.text = showTextBuilder.ToString();
 	}
@@ -279,7 +282,7 @@ public sealed class ModOptionMenu
 		title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
 		title.gameObject.SetActive(true);
 		title.fontSize = title.fontSizeMin = title.fontSizeMax = 3.25f;
-		title.transform.localPosition += new Vector3(0.0f, 0.25f, 0f);
+		title.transform.localPosition += new Vector3(0.0f, 0.25f);
 		title.name = "titleText";
 		return title;
 	}
@@ -298,9 +301,6 @@ public sealed class ModOptionMenu
 		passiveButton.OnClick.AddListener(() =>
 		{
 			if (this.popUp == null) { return; }
-			this.popUp.SetActive(false);
-			this.popUp.transform.position = new Vector3(0, 0, -800f);
-			this.popUp.transform.localPosition = new Vector3(0.0f, 0.0f, -100.0f);
 			this.popUp.SetActive(true);
 		});
 		return button;
@@ -313,12 +313,12 @@ public sealed class ModOptionMenu
 			new PopUpButton(
 				"import",
 				prefab, this.popUp!.transform,
-				Color.green,  new Vector3(-1.35f, -0.9f, -.5f),
+				Color.green,  new Vector3(-1.35f, -0.9f),
 				CustomOptionCsvProcessor.Import),
 			new PopUpButton(
 				"export",
 				prefab, this.popUp!.transform,
-				Palette.ImpostorRed,  new Vector3(1.35f, -0.9f, -.5f),
+				Palette.ImpostorRed,  new Vector3(1.35f, -0.9f),
 				CustomOptionCsvProcessor.Export),
 		};
 
@@ -333,14 +333,15 @@ public sealed class ModOptionMenu
 			var opt = modOptionArr[i];
 			var button = UnityObject.Instantiate(
 				prefab, this.popUp!.transform);
+			button.transform.position = Vector3.zero;
 			button.transform.localPosition = new Vector3(
 				i % 2 == 0 ? -1.17f : 1.17f,
-				1.75f - i / 2 * 0.8f,
-			-.5f);
+				1.75f - i / 2 * 0.8f);
 
 			button.onState = opt.DefaultValue;
 			button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
 
+			button.Text.transform.SetLocalZ(0.0f);
 			button.Text.text = "";
 			button.Text.fontSizeMin = button.Text.fontSizeMax = 2.2f;
 			button.Text.font = UnityObject.Instantiate(Prefab.Text.font);
@@ -391,6 +392,10 @@ public sealed class ModOptionMenu
 	{
 		GameObject popUp = UnityObject.Instantiate(
 			prefab.gameObject, prefab.transform);
+
+		popUp.transform.position = new Vector3(0, 0, -800f);
+		popUp.transform.localPosition = new Vector3(0.0f, 0.0f, -100.0f);
+
 		popUp.layer = 17;
 		popUp.name = "modMenu";
 		UnityObject.DontDestroyOnLoad(popUp);
