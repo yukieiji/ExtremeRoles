@@ -21,13 +21,16 @@ namespace ExtremeRoles.Module.SystemType;
 public enum ExtremeSystemType : byte
 {
 	MeetingTimeOffset,
+	ModedMushroom,
+	ExtremeConsoleSystem,
 
 	WispTorch,
 
 	BakeryReport,
 
 	FakerDummy,
-	ThiefMeetingTimeChange
+	ThiefMeetingTimeChange,
+	TeroristTeroSabotage
 }
 
 public enum ResetTiming : byte
@@ -52,12 +55,17 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	public static SystemTypes Type => (SystemTypes)60;
+	public const SystemTypes Type = (SystemTypes)60;
 
 	public bool IsDirty { get; private set; } = false;
+	public bool IsActiveSpecialSabotage => this.sabotageSystem.Any(s => s.IsBlockOtherSabotage);
 
 	private static ExtremeSystemTypeManager? instance = null;
-	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> systems = new Dictionary<ExtremeSystemType, IExtremeSystemType>();
+
+	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> allSystems = new ();
+	private readonly Dictionary<ExtremeSystemType, IDeterioratableExtremeSystemType> deterioratableSystem = new ();
+	private readonly List<ISabotageExtremeSystemType> sabotageSystem = new();
+
 	private readonly List<ExtremeSystemType> dirtySystem = new List<ExtremeSystemType>();
 
 	public ExtremeSystemTypeManager()
@@ -109,20 +117,22 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		writerForReader.Recycle();
 	}
 
+	public bool ExistSystem(ExtremeSystemType type) => this.allSystems.ContainsKey(type);
+
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
 		int sysmtemNum = reader.ReadPackedInt32();
 		for (int i = 0; i < sysmtemNum; ++i)
 		{
 			ExtremeSystemType systemType = (ExtremeSystemType)reader.ReadByte();
-			this.systems[systemType].Deserialize(reader, initialState);
+			this.allSystems[systemType].Deserialize(reader, initialState);
 		}
 	}
 
 	public void Deteriorate(float deltaTime)
 	{
 		this.dirtySystem.Clear();
-		foreach (var (systemTypes, system) in systems)
+		foreach (var (systemTypes, system) in this.deterioratableSystem)
 		{
 			system.Deteriorate(deltaTime);
 			if (system.IsDirty)
@@ -136,13 +146,13 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	[HideFromIl2Cpp]
 	public bool TryGet(ExtremeSystemType systemType, out IExtremeSystemType? system)
-		=> this.systems.TryGetValue(systemType, out system);
+		=> this.allSystems.TryGetValue(systemType, out system);
 
 	[HideFromIl2Cpp]
 	public bool TryGet<T>(ExtremeSystemType systemType, out T? system) where T : class, IExtremeSystemType
 	{
 		system = default(T);
-		if (!this.systems.TryGetValue(systemType, out IExtremeSystemType? iSystem))
+		if (!this.allSystems.TryGetValue(systemType, out IExtremeSystemType? iSystem))
 		{
 			return false;
 		}
@@ -153,9 +163,21 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	[HideFromIl2Cpp]
 	public bool TryAdd(ExtremeSystemType systemType, IExtremeSystemType system)
 	{
-		lock (this.systems)
+		lock (this.allSystems)
 		{
-			return this.systems.TryAdd(systemType, system);
+			bool result = this.allSystems.TryAdd(systemType, system);
+
+			if (result &&
+				system is IDeterioratableExtremeSystemType deterioratableSystem)
+			{
+				this.deterioratableSystem.Add(systemType, deterioratableSystem);
+			}
+			if (result &&
+				system is ISabotageExtremeSystemType saboSystem)
+			{
+				this.sabotageSystem.Add(saboSystem);
+			}
+			return result;
 		}
 	}
 
@@ -163,7 +185,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	{
 		ResetTiming timing = (ResetTiming)amount;
 		PlayerControl? resetPlayer = timing == ResetTiming.OnPlayer ? player : null;
-		foreach (var system in systems.Values)
+		foreach (var system in this.allSystems.Values)
 		{
 			system.Reset(timing, resetPlayer);
 		}
@@ -171,7 +193,8 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public void Reset()
 	{
-		this.systems.Clear();
+		this.deterioratableSystem.Clear();
+		this.allSystems.Clear();
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
@@ -180,7 +203,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		foreach (var systemType in this.dirtySystem)
 		{
 			writer.Write((byte)systemType);
-			this.systems[systemType].Serialize(writer, initialState);
+			this.allSystems[systemType].Serialize(writer, initialState);
 		}
 		this.IsDirty = initialState;
 	}
@@ -193,7 +216,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 	 	ExtremeSystemType systemType = (ExtremeSystemType)msgReader.ReadByte();
-		this.systems[systemType].UpdateSystem(player, msgReader);
+		this.allSystems[systemType].UpdateSystem(player, msgReader);
 	}
 
 	private static void callRpc(MessageWriter writer, int target)

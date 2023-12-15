@@ -11,11 +11,11 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Madmate : 
-    SingleRoleBase, 
-    IRoleAbility, 
-    IRoleUpdate, 
-    IRoleSpecialSetUp, 
+public sealed class Madmate :
+    SingleRoleBase,
+    IRoleAbility,
+    IRoleUpdate,
+    IRoleSpecialSetUp,
     IRoleWinPlayerModifier
 {
     public enum MadmateOption
@@ -48,7 +48,7 @@ public sealed class Madmate :
         }
     }
 
-    public bool IsDontCountAliveCrew => this.isDontCountAliveCrew; 
+    public bool IsDontCountAliveCrew => this.isDontCountAliveCrew;
 
     private ExtremeAbilityButton madmateAbilityButton;
 
@@ -106,7 +106,7 @@ public sealed class Madmate :
     public void IntroEndSetUp()
     {
         if (!this.UseVent || this.canMoveVentToVent) { return; }
-        
+
         // 全てのベントリンクを解除
         foreach (Vent vent in CachedShipStatus.Instance.AllVents)
         {
@@ -119,8 +119,7 @@ public sealed class Madmate :
     public void ModifiedWinPlayer(
         GameData.PlayerInfo rolePlayerInfo,
         GameOverReason reason,
-        ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-        ref List<GameData.PlayerInfo> pulsWinner)
+		ref ExtremeGameResult.WinnerTempData winner)
     {
         switch (reason)
         {
@@ -130,8 +129,9 @@ public sealed class Madmate :
             case GameOverReason.ImpostorDisconnect:
             case GameOverReason.HideAndSeek_ByKills:
             case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-                this.AddWinner(rolePlayerInfo, winner, pulsWinner);
-                break;
+			case (GameOverReason)RoleGameOverReason.TeroristoTeroWithShip:
+				winner.AddWithPlus(rolePlayerInfo);
+				break;
             default:
                 break;
         }
@@ -164,12 +164,12 @@ public sealed class Madmate :
     public override Color GetTargetRoleSeeColor(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (this.isSeeImpostorNow && 
+        if (this.isSeeImpostorNow &&
             (targetRole.IsImpostor() || targetRole.FakeImposter))
         {
             return Palette.ImpostorRed;
         }
-        
+
         return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
     }
 
@@ -233,10 +233,10 @@ public sealed class Madmate :
         this.seeFromImpostorTaskGage = allOpt.GetValue<int>(
             GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)) / 100.0f;
 
-        this.isSeeImpostorNow = 
-            this.HasTask && 
+        this.isSeeImpostorNow =
+            this.HasTask &&
             this.seeImpostorTaskGage <= 0.0f;
-        this.isUpdateMadmate = 
+        this.isUpdateMadmate =
             this.HasTask &&
             this.canSeeFromImpostor &&
             this.seeFromImpostorTaskGage <= 0.0f;

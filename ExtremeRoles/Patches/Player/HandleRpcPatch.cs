@@ -193,6 +193,9 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.MoverAbility:
 				RPCOperator.MoverAbility(ref reader);
 				break;
+			case RPCOperator.Command.AcceleratorAbility:
+				RPCOperator.AcceleratorAbility(ref reader);
+				break;
 			case RPCOperator.Command.BodyGuardAbility:
 				RPCOperator.BodyGuardAbility(ref reader);
 				break;

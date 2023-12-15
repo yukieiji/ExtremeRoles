@@ -7,13 +7,14 @@ using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 
-using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using Il2CppFile = Il2CppSystem.IO.File;
 
 namespace ExtremeRoles.Resources;
 
+#nullable enable
 
 public static class Path
 {
@@ -31,8 +32,9 @@ public static class Path
     public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
 
     public const string TabImagePathFormat = "ExtremeRoles.Resources.SettingTab.{0}.png";
+	public const string ExtremeSelectorMinigameImgFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.{1}.png";
 
-    public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
+	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
     public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
     public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
@@ -40,8 +42,10 @@ public static class Path
         "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
     public const string WispTorch = "ExtremeRoles.Resources.torch.png";
     public const string MoverMove = "ExtremeRoles.Resources.MoverMoving.png";
+	public const string AcceleratorAccelerateSet = "ExtremeRoles.Resources.AcceleratorAccelerateSet.png";
+	public const string AcceleratorAcceleratePanel = "ExtremeRoles.Resources.AcceleratorAcceleratePanel.png";
 
-    public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
+	public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
     public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
     public const string BodyGuardResetShield = "ExtremeRoles.Resources.ResetShield.png";
     public const string TimeMasterTimeShield = "ExtremeRoles.Resources.TimeShield.png";
@@ -67,6 +71,7 @@ public static class Path
     public const string TeleporterSecondPortal =
         "ExtremeRoles.Resources.TeleporterSecondPortal.png";
 	public const string ModeratorModerate = "ExtremeRoles.Resources.Moderate.png";
+	public const string PsychicPsychic = "ExtremeRoles.Resources.PsychicPsychic.png";
 
 	public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
     public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
@@ -103,6 +108,10 @@ public static class Path
 	public const string TheifTimeParts = "ExtremeRoles.Resources.TheifTimePart.png";
 	public const string TheifMagicCircle = "ExtremeRoles.Resources.TheifMagicCircle.png";
 	public const string TheifMagicCircleVideo = "theifmagiccircle";
+	public const string TeroristTeroMinigameAsset = "ExtremeRoles.Resources.Asset.teroristminigame.asset";
+	public const string TeroristTeroMinigamePrefab = "assets/roles/teroristminigame.prefab";
+	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
+	public const string TeroristTeroSabotageButton = "ExtremeRoles.Resources.TeroristoBombImg.png";
 
 	public const string VigilanteEmergencyCall =
         "ExtremeRoles.Resources.EmergencyCall.png";
@@ -136,8 +145,8 @@ public static class Path
 public static class Loader
 {
 
-    private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
-    private static Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
+    private static readonly Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
+    private static readonly Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
 	public static SimpleButton CreateSimpleButton(Transform parent)
 	{
@@ -147,38 +156,27 @@ public static class Loader
 			"assets/common/simplebutton.prefab"),
 			parent);
 
-		if (buuttonObj == null)
-		{
-				return null;
-		}
 		return buuttonObj.GetComponent<SimpleButton>();
 	}
 
 	public static Sprite CreateSpriteFromResources(
 		string path, float pixelsPerUnit=115f)
 	{
-		try
-		{
-			string key = $"{path}{pixelsPerUnit}";
+		string key = $"{path}{pixelsPerUnit}";
 
-			if (cachedSprite.TryGetValue(key, out Sprite sprite)) { return sprite; }
+		if (cachedSprite.TryGetValue(key, out Sprite? sprite) ||
+			sprite != null) { return sprite; }
 
-			Texture2D texture = createTextureFromResources(path);
-			sprite = Sprite.Create(
-				texture,
-				new Rect(0, 0, texture.width, texture.height),
-				new Vector2(0.5f, 0.5f), pixelsPerUnit);
+		Texture2D texture = createTextureFromResources(path);
+		sprite = Sprite.Create(
+			texture,
+			new Rect(0, 0, texture.width, texture.height),
+			new Vector2(0.5f, 0.5f), pixelsPerUnit);
 
-			sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-			cachedSprite.Add(key, sprite);
+		sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+		cachedSprite.Add(key, sprite);
 
-			return sprite;
-		}
-		catch
-		{
-			Logging.Debug($"Error loading sprite from path: {path}");
-		}
-		return null;
+		return sprite;
 	}
 
 	public static T GetUnityObjectFromResources<T>(
@@ -186,13 +184,18 @@ public static class Loader
 	{
 		AssetBundle bundle = getAssetBundleFromAssembly(
 			bundleName, Assembly.GetCallingAssembly());
+		T result = getObjectFromAsset<T>(bundle, objName);
 
-		var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
-		if (!obj)
-		{
-			return null;
-		}
-		return obj.TryCast<T>();
+		return result;
+	}
+
+	public static T GetUnityObjectFromPath<T>(
+		string path, string objName) where T : UnityObject
+	{
+		AssetBundle bundle = getAssetBundleFromFilePath(path);
+		T result = getObjectFromAsset<T>(bundle, objName);
+
+		return result;
 	}
 
 	public static void LoadCommonAsset()
@@ -208,38 +211,72 @@ public static class Loader
 		}
 	}
 
+	private static T getObjectFromAsset<T>(AssetBundle bundle, string objName) where T : UnityObject
+	{
+		var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
+		return obj.Cast<T>();
+	}
+
+	private static AssetBundle getAssetBundleFromFilePath(
+		string filePath)
+	{
+		if (cachedBundle.TryGetValue(filePath, out AssetBundle? bundle) ||
+			bundle != null)
+		{
+			bundle.Unload(true);
+			cachedBundle.Remove(filePath);
+		}
+		var byteArray = Il2CppFile.ReadAllBytes(filePath);
+		bundle = loadAssetFromByteArray(byteArray);
+
+		cachedBundle.Add(filePath, bundle);
+
+		return bundle;
+	}
+
 	private static AssetBundle getAssetBundleFromAssembly(
 		string bundleName, Assembly assembly)
 	{
-		if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
+		if (!cachedBundle.TryGetValue(bundleName, out AssetBundle? bundle) ||
+			bundle == null)
 		{
-			using var stream = assembly.GetManifestResourceStream(bundleName);
+			using var stream = getStreamFromResource(assembly, bundleName);
 			var byteArray = getBytedArryFrom(stream);
+			bundle = loadAssetFromByteArray(byteArray);
 
-			bundle = AssetBundle.LoadFromMemory(byteArray);
-			bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
 			cachedBundle.Add(bundleName, bundle);
 		}
 		return bundle;
 	}
 
+	private static AssetBundle loadAssetFromByteArray(Il2CppStructArray<byte> byteArray)
+	{
+		AssetBundle bundle = AssetBundle.LoadFromMemory(byteArray);
+		bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+		return bundle;
+	}
+
 	private static Texture2D createTextureFromResources(string path)
 	{
-		try
-		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			using Stream stream = assembly.GetManifestResourceStream(path);
-			var byteTexture = getBytedArryFrom(stream);
+		Assembly assembly = Assembly.GetExecutingAssembly();
+		using Stream stream = getStreamFromResource(assembly, path);
 
-			Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-			ImageConversion.LoadImage(texture, byteTexture, false);
-			return texture;
-		}
-		catch
+		var byteTexture = getBytedArryFrom(stream);
+
+		Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+		ImageConversion.LoadImage(texture, byteTexture, false);
+		return texture;
+	}
+
+	private static Stream getStreamFromResource(Assembly assembly, string path)
+	{
+		Stream? stream = assembly.GetManifestResourceStream(path);
+
+		if (stream is null)
 		{
-			Logging.Debug($"Error loading texture from resources: {path}");
+			throw new ArgumentException($"Can't find {path} in resorces");
 		}
-		return null;
+		return stream;
 	}
 
 	private static unsafe Il2CppStructArray<byte> getBytedArryFrom(Stream stream)

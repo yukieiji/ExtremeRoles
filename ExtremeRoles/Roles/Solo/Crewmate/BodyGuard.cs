@@ -28,7 +28,7 @@ public sealed class BodyGuard :
     IRoleUpdate,
     IRoleSpecialReset
 {
-    public sealed class BodyGuardAbilityBehavior : AbilityBehaviorBase
+	public sealed class BodyGuardAbilityBehavior : AbilityBehaviorBase
     {
         public int AbilityCount { get; private set; }
 
@@ -277,7 +277,6 @@ public sealed class BodyGuard :
 
     private bool isReportWithPlayerName;
     private BodyGuardReportPlayerNameMode reportMode;
-    private string reportStr = string.Empty;
 
     private TextMeshPro? meetingText;
 
@@ -418,15 +417,8 @@ public sealed class BodyGuard :
                 prevTargetPlayer.Data.DefaultOutfit.PlayerName :
                 string.Empty);
 
-        if (MeetingHud.Instance)
-        {
-            MeetingReporter.Instance.AddMeetingChatReport(reportStr);
-        }
-        else
-        {
-            bodyGuard.reportStr = reportStr;
-        }
-    }
+		MeetingReporter.Instance.AddMeetingChatReport(reportStr);
+	}
 
     private static void awakeReportMeeting(byte bodyGuardPlayerId)
     {
@@ -603,18 +595,10 @@ public sealed class BodyGuard :
     }
 
     public void ResetOnMeetingStart()
-    {
-        if (!string.IsNullOrEmpty(this.reportStr))
-        {
-            MeetingReporter.RpcAddMeetingChatReport(this.reportStr);
-        }
-        this.reportStr = string.Empty;
-    }
+    { }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
-    {
-        this.reportStr = string.Empty;
-    }
+    { }
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
     {
@@ -781,8 +765,6 @@ public sealed class BodyGuard :
     {
 
         var allOpt = OptionManager.Instance;
-
-        this.reportStr = string.Empty;
 
         IsBlockMeetingKill = allOpt.GetValue<bool>(
             GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill));

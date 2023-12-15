@@ -10,6 +10,8 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool CanUseHorseMode => true;
 	public bool IsBreakEmergencyButton => false;
 
+	public bool ChangeForceWallCheck { get; private set; }
+
 	public bool IsRandomMap { get; private set; }
 
     public int MaxMeetingCount { get; private set; }
@@ -25,8 +27,11 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool DisableVent { get; private set; }
     public bool EngineerUseImpostorVent { get; private set; }
     public bool CanKillVentInPlayer { get; private set; }
-    public bool IsAllowParallelMedbayScan { get; private set; }
-    public bool IsAutoSelectRandomSpawn { get; private set; }
+	public VentAnimationMode VentAnimationMode { get; private set; }
+
+	public bool IsAllowParallelMedbayScan { get; private set; }
+
+	public SpawnOption Spawn { get; private set; }
 
     public AdminOption Admin { get; private set; }
     public SecurityOption Security { get; private set; }
@@ -41,7 +46,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool IsRemoveAngleIcon { get; private set; }
     public bool IsBlockGAAbilityReport { get; private set; }
 
-    public void Load()
+	public void Load()
     {
         MaxMeetingCount = IShipGlobalOption.GetCommonOptionValue<int>(
             GlobalOption.NumMeating);
@@ -68,12 +73,34 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
             GlobalOption.EngineerUseImpostorVent);
         CanKillVentInPlayer = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.CanKillVentInPlayer);
-        IsAllowParallelMedbayScan = IShipGlobalOption.GetCommonOptionValue<bool>(
-            GlobalOption.ParallelMedBayScans);
-        IsAutoSelectRandomSpawn = IShipGlobalOption.GetCommonOptionValue<bool>(
-            GlobalOption.IsAutoSelectRandomSpawn);
+		this.VentAnimationMode = (VentAnimationMode)IShipGlobalOption.GetCommonOptionValue<int>(
+			GlobalOption.VentAnimationModeInVison);
 
-        Admin = new AdminOption()
+		IsAllowParallelMedbayScan = IShipGlobalOption.GetCommonOptionValue<bool>(
+            GlobalOption.ParallelMedBayScans);
+
+		Spawn = new SpawnOption()
+		{
+			EnableSpecialSetting = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.EnableSpecialSetting),
+			Skeld = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.SkeldRandomSpawn),
+			MiraHq = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.MiraHqRandomSpawn),
+			Polus = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.PolusRandomSpawn),
+			AirShip = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.AirShipRandomSpawn),
+			Fungle = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.FungleRandomSpawn),
+			IsAutoSelectRandom = IShipGlobalOption.GetCommonOptionValue<bool>(
+				GlobalOption.IsAutoSelectRandomSpawn),
+		};
+
+		ChangeForceWallCheck = IShipGlobalOption.GetCommonOptionValue<bool>(
+			GlobalOption.IsFixWallHaskTask);
+
+		Admin = new AdminOption()
         {
             DisableAdmin = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveAdmin),

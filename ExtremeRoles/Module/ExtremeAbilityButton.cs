@@ -35,11 +35,10 @@ public sealed class ExtremeAbilityButton
 
 	public Transform Transform => this.button.transform;
 
-	private ActionButton button;
+	private readonly ActionButton button;
+	private readonly IButtonAutoActivator activator;
 
 	private bool isShow = true;
-
-	private IButtonAutoActivator activator;
 
 	private readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
 

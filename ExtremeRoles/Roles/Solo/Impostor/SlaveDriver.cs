@@ -8,6 +8,8 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Interface;
+using Hazel;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -15,6 +17,22 @@ public sealed class SlaveDriver :
     SingleRoleBase,
     IRoleAbility
 {
+	public sealed class HarassmentReportSerializer : IStringSerializer
+	{
+		public StringSerializerType Type => StringSerializerType.SlaveDriverHarassment;
+
+		public bool IsRpc { get; set; } = true;
+
+		public override string ToString()
+			=> Translation.GetString("SlaveDriverReportMessage");
+
+		public void Serialize(RPCOperator.RpcCaller caller)
+		{ }
+
+		public void Deserialize(MessageReader reader)
+		{ }
+	}
+
 	public bool CanSeeTaskBar { get; private set; }
 	public ExtremeAbilityButton Button { get; set; }
 
@@ -81,7 +99,6 @@ public sealed class SlaveDriver :
     public void ResetOnMeetingStart()
     {
 		this.target = byte.MaxValue;
-		string reportMessage = Translation.GetString("SlaveDriverReportMessage");
 		foreach (byte playerId in this.effectPlayer)
 		{
 			GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
@@ -126,7 +143,8 @@ public sealed class SlaveDriver :
 			}
 			if (replacedTaskNum > 0)
 			{
-				MeetingReporter.RpcAddTargetMeetingChatReport(playerId, reportMessage);
+				MeetingReporter.RpcAddTargetMeetingChatReport(
+					playerId, new HarassmentReportSerializer());
 			}
 		}
 		this.effectPlayer.Clear();

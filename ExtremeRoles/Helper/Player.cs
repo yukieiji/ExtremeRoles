@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.Helper;
 
@@ -294,8 +295,16 @@ public static class Player
 		prevTarget = null;
 	}
 
-	public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos)
+	public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos, bool isTeleportXion=false)
     {
+		if (isTeleportXion &&
+			Xion.PlayerId == targetPlayerId &&
+			CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+		{
+			Xion.RpcTeleportTo(pos);
+			return;
+		}
+
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.UncheckedSnapTo))
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using ExtremeRoles.GameMode.Option.MapModule;
@@ -14,15 +15,33 @@ public enum GlobalOption : int
     FixedMeetingPlayerLevel,
     DisableSkipInEmergencyMeeting,
     DisableSelfVote,
+
     ConfirmExilMode,
     IsConfirmRole,
+
     DisableVent,
     EngineerUseImpostorVent,
     CanKillVentInPlayer,
-    ParallelMedBayScans,
-    IsAutoSelectRandomSpawn,
+	VentAnimationModeInVison,
 
-    IsRemoveAdmin,
+	ParallelMedBayScans,
+
+	IsFixWallHaskTask,
+	GarbageTask,
+	ShowerTask,
+	DevelopPhotosTask,
+	DivertPowerTask,
+
+	EnableSpecialSetting,
+	SkeldRandomSpawn,
+	MiraHqRandomSpawn,
+	PolusRandomSpawn,
+	AirShipRandomSpawn,
+	FungleRandomSpawn,
+
+	IsAutoSelectRandomSpawn,
+
+	IsRemoveAdmin,
     AirShipEnableAdmin,
     EnableAdminLimit,
     AdminLimitTime,
@@ -57,31 +76,75 @@ public enum ConfirmExilMode
     AllTeam
 }
 
+public enum VentAnimationMode
+{
+	VanillaAnimation,
+	DonotWallHack,
+	DonotOutVison,
+}
+
 public interface IShipGlobalOption
 {
     public bool IsEnableImpostorVent { get; }
 
-    public bool IsRandomMap { get; }
+	public bool IsRandomMap { get; }
 
-    public int MaxMeetingCount { get; }
+	public int MaxMeetingCount { get; }
 
 	public bool IsBreakEmergencyButton { get; }
 
 	public bool CanUseHorseMode { get; }
 
-    public bool IsChangeVoteAreaButtonSortArg { get; }
-    public bool IsFixedVoteAreaPlayerLevel { get; }
-    public bool IsBlockSkipInMeeting { get; }
-    public bool DisableSelfVote { get; }
+	public bool IsChangeVoteAreaButtonSortArg { get; }
+	public bool IsFixedVoteAreaPlayerLevel { get; }
+	public bool IsBlockSkipInMeeting { get; }
+	public bool DisableSelfVote { get; }
 
-    public ConfirmExilMode ExilMode { get; }
-    public bool IsConfirmRole { get; }
+	public ConfirmExilMode ExilMode { get; }
+	public bool IsConfirmRole { get; }
 
-    public bool DisableVent { get; }
-    public bool EngineerUseImpostorVent { get; }
-    public bool CanKillVentInPlayer { get; }
-    public bool IsAllowParallelMedbayScan { get; }
-    public bool IsAutoSelectRandomSpawn { get; }
+	public bool DisableVent { get; }
+	public bool EngineerUseImpostorVent { get; }
+	public bool CanKillVentInPlayer { get; }
+	public VentAnimationMode VentAnimationMode { get; }
+
+	public SpawnOption Spawn { get; }
+	public bool IsAllowParallelMedbayScan { get; }
+	public bool ChangeForceWallCheck { get; }
+
+	public IReadOnlySet<TaskTypes> WallCheckTask => new HashSet<TaskTypes>()
+	{
+		TaskTypes.EmptyGarbage,
+		TaskTypes.FixShower,
+		TaskTypes.DevelopPhotos,
+		TaskTypes.DivertPower,
+	};
+
+	public IReadOnlySet<TaskTypes> ChangeTask
+	{
+		get
+		{
+			var fixTask = new HashSet<TaskTypes>();
+			for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
+			{
+				var opt = (GlobalOption)i;
+
+				if (GetCommonOptionValue<bool>(opt))
+				{
+					var fixTaskType = opt switch
+					{
+						GlobalOption.GarbageTask => TaskTypes.EmptyGarbage,
+						GlobalOption.ShowerTask => TaskTypes.FixShower,
+						GlobalOption.DevelopPhotosTask => TaskTypes.DevelopPhotos,
+						GlobalOption.DivertPowerTask => TaskTypes.DivertPower,
+						_ => throw new KeyNotFoundException()
+					};
+					fixTask.Add(fixTaskType);
+				}
+			}
+			return fixTask;
+		}
+	}
 
     public AdminOption Admin { get; }
     public SecurityOption Security { get; }
@@ -116,8 +179,8 @@ public interface IShipGlobalOption
 		CreateBoolOption(GlobalOption.DisableSkipInEmergencyMeeting, false);
 		CreateBoolOption(GlobalOption.DisableSelfVote, false);
 
-        var confirmOpt = CreateSelectionOption<GlobalOption, ConfirmExilMode>(
-			GlobalOption.ConfirmExilMode);
+		var confirmOpt = CreateSelectionOption<GlobalOption, ConfirmExilMode>(
+			GlobalOption.ConfirmExilMode, isHeader: true);
         confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 		var confirmRoleOpt = CreateBoolOption(GlobalOption.IsConfirmRole, false);
         confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
@@ -125,11 +188,27 @@ public interface IShipGlobalOption
         var ventOption = CreateBoolOption(GlobalOption.DisableVent, false, isHeader: true);
 		CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
 		CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
+		CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption, invert: true);
 
 		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
-		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false);
 
-        var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
+		var fixTaskOpt = CreateBoolOption(GlobalOption.IsFixWallHaskTask, false);
+		for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
+		{
+			CreateBoolOption((GlobalOption)i, false, parent: fixTaskOpt);
+		}
+
+
+		var randomSpawnOpt = CreateBoolOption(GlobalOption.EnableSpecialSetting , true);
+		CreateBoolOption(GlobalOption.SkeldRandomSpawn  , false, randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.MiraHqRandomSpawn , false, randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.PolusRandomSpawn  , false, randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.AirShipRandomSpawn, true , randomSpawnOpt, invert: true);
+		CreateBoolOption(GlobalOption.FungleRandomSpawn , false, randomSpawnOpt, invert: true);
+
+		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false, randomSpawnOpt, invert: true);
+
+		var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
 		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
 			GlobalOption.AirShipEnableAdmin, adminOpt, invert: true);
 		var adminLimitOpt = CreateBoolOption(GlobalOption.EnableAdminLimit, false, adminOpt, invert: true);
