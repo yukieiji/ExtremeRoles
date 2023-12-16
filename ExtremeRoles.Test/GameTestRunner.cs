@@ -79,12 +79,14 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			this.Logger.LogInfo($"{testCase.GetType().Name}.{testCase.Name} - Start iteration:{i}");
 			if (testCase.Ids is null)
 			{
-				yield return GameUtility.StartGameWithRandom(this.Logger);
+				GameUtility.PrepereGameWithRandom(this.Logger);
 			}
 			else
 			{
-				yield return GameUtility.StartGameWithRole(this.Logger, testCase.Ids);
+				GameUtility.PrepereGameWithRole(this.Logger, testCase.Ids);
 			}
+
+			yield return GameUtility.StartGame(this.Logger);
 
 			while (GameUtility.IsContinue)
 			{
