@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 using BepInEx.Logging;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
@@ -13,22 +15,31 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Test.Helper;
 
+public sealed record RequireOption<T, W>(T OptionId, W Velue)
+	where T : struct, IConvertible
+	where W :
+		struct, IComparable, IConvertible,
+		IComparable<W>, IEquatable<W>;
+
 public static class GameUtility
 {
 	public static bool IsContinue =>
 		GameManager.Instance != null &&
 		GameManager.Instance.ShouldCheckForGameEnd;
 
-	public static IEnumerator StartGameWithRandom(ManualLogSource logger)
+	public static IEnumerator StartGame(ManualLogSource logger)
 	{
-		PrepereGameWithRandom(logger);
-		yield return start(logger);
-	}
+		yield return new WaitForSeconds(2.0f);
 
-	public static IEnumerator StartGameWithRole(ManualLogSource logger, HashSet<ExtremeRoleId> ids)
-	{
-		PrepereGameWithRole(logger, ids);
-		yield return start(logger);
+		logger.LogInfo("Start Games....");
+		GameStartManager.Instance.BeginGame();
+
+		yield return new WaitForSeconds(10.0f);
+		while (IntroCutscene.Instance)
+		{
+			yield return null;
+		}
+		yield return new WaitForSeconds(20.0f);
 	}
 
 	public static IEnumerator ReturnLobby(ManualLogSource logger)
@@ -131,20 +142,34 @@ public static class GameUtility
 		}
 	}
 
-	private static IEnumerator start(ManualLogSource logger)
+	public static void UpdateExROption(in RequireOption<int, int> option)
 	{
-		yield return new WaitForSeconds(2.0f);
-
-		logger.LogInfo("Start Games....");
-		GameStartManager.Instance.BeginGame();
-
-		yield return new WaitForSeconds(10.0f);
-		while (IntroCutscene.Instance)
-		{
-			yield return null;
-		}
-		yield return new WaitForSeconds(20.0f);
+		OptionManager.Instance.GetIOption(
+			option.OptionId).UpdateSelection(
+				option.Velue);
 	}
+
+	public static void UpdateAmongUsOption(in RequireOption<BoolOptionNames, bool> option)
+	{
+		GameOptionsManager.Instance.currentGameOptions.SetBool(option.OptionId, option.Velue);
+	}
+	public static void UpdateAmongUsOption(in RequireOption<Int32OptionNames, int> option)
+	{
+		GameOptionsManager.Instance.currentGameOptions.SetInt(option.OptionId, option.Velue);
+	}
+	public static void UpdateAmongUsOption(in RequireOption<UInt32OptionNames, uint> option)
+	{
+		GameOptionsManager.Instance.currentGameOptions.SetUInt(option.OptionId, option.Velue);
+	}
+	public static void UpdateAmongUsOption(in RequireOption<ByteOptionNames, byte> option)
+	{
+		GameOptionsManager.Instance.currentGameOptions.SetByte(option.OptionId, option.Velue);
+	}
+	public static void UpdateAmongUsOption(in RequireOption<FloatOptionNames, float> option)
+	{
+		GameOptionsManager.Instance.currentGameOptions.SetFloat(option.OptionId, option.Velue);
+	}
+
 
 	private static void enableXion()
 	{
