@@ -30,12 +30,13 @@ public class GameTestRunner : TestRunnerBase
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
 				new("Random", 3, null),
-				new("NeutralRemove", 100, new HashSet<ExtremeRoleId>()
+				new("NeutralRemove", 5, new HashSet<ExtremeRoleId>()
 				{
 					ExtremeRoleId.Jester, ExtremeRoleId.TaskMaster,
 					ExtremeRoleId.Neet, ExtremeRoleId.Umbrer,
 					ExtremeRoleId.Madmate
 				}),
+				new("QueenWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Queen }),
 				new("YokoWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yoko }),
 				new("YandereWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yandere })));
 	}
