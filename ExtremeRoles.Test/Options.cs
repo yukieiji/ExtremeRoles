@@ -41,6 +41,9 @@ internal class Options : TestRunnerBase
 
 			this.Logger.LogInfo($"Load.GhostRole.Iteration.{i}");
 			loadGhostRole();
+
+			this.Logger.LogInfo($"Load.HudString.Iteration.{i}");
+			this.hudString();
 		}
 	}
 
@@ -154,6 +157,24 @@ internal class Options : TestRunnerBase
 			catch (Exception ex)
 			{
 				this.Logger.LogError($"{role}   {ex.Message}");
+			}
+		}
+	}
+	private void hudString()
+	{
+		foreach (var opt in OptionManager.Instance.GetAllIOption())
+		{
+			try
+			{
+				string hudStr = opt.ToHudStringWithChildren();
+				if (!opt.IsActive() && string.IsNullOrEmpty(hudStr))
+				{
+					throw new Exception("Invalid HudString");
+				}
+			}
+			catch (Exception ex)
+			{
+				this.Logger.LogError($"{opt.Name}   {ex.Message}");
 			}
 		}
 	}
