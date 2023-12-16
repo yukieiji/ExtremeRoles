@@ -21,7 +21,7 @@ public static class GameUtility
 
 	public static IEnumerator StartGameWithRandom(ManualLogSource logger)
 	{
-		PrepereGame(logger);
+		PrepereGameWithRandom(logger);
 		yield return new WaitForSeconds(2.0f);
 
 		logger.LogInfo("Start Games....");
@@ -48,7 +48,7 @@ public static class GameUtility
 		yield return new WaitForSeconds(10.0f);
 	}
 
-	public static void PrepereGame(ManualLogSource logger)
+	public static void PrepereGameWithRandom(ManualLogSource logger)
 	{
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ
