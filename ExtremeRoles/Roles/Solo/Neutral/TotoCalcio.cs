@@ -104,7 +104,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
 					this.betPlayer.PlayerId].Id) ||
 			!winner.Contains(this.betPlayer.PlayerName)) { return; }
 
-		winner.AddWithPlus(rolePlayerInfo);
+		winner.AddPlusWinner(rolePlayerInfo);
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)

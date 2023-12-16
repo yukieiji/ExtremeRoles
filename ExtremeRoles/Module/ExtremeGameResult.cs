@@ -67,12 +67,6 @@ public sealed class ExtremeGameResult
 			this.finalWinPlayer.Remove(player);
 		}
 
-		public void AddWithPlus(Player playerInfo)
-		{
-			this.Add(playerInfo);
-			this.AddPlusWinner(playerInfo);
-		}
-
 		public void Add(Player playerInfo)
 		{
 			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
@@ -122,6 +116,8 @@ public sealed class ExtremeGameResult
 	{
 		this.PlayerSummaries.Clear();
 
+		var logger = ExtremeRolesPlugin.Logger;
+
 		int playerNum = GameData.Instance.AllPlayers.Count;
 
 		this.PlayerSummaries.Capacity = playerNum;
@@ -132,15 +128,23 @@ public sealed class ExtremeGameResult
 		var roleData = ExtremeRoleManager.GameRole;
 		var gameData = ExtremeRolesPlugin.ShipState;
 
+		GameOverReason reason = gameData.EndReason;
+		RoleGameOverReason modReason = (RoleGameOverReason)reason;
+
+		string resonStr = Enum.IsDefined(modReason) ? modReason.ToString() : reason.ToString();
+		logger.LogInfo($"GameEnd : {resonStr}");
+
+		logger.LogInfo(" --- start: Creating Winner ---");
+
 		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-
 			var role = roleData[playerInfo.PlayerId];
 
 			if (role.IsNeutral())
 			{
 				if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
 				{
+					logger.LogInfo($"AddPlusWinner(Reason:Alive Win) : {playerInfo.PlayerName}");
 					this.winner.AddPlusWinner(playerInfo);
 				}
 				else
@@ -184,6 +188,7 @@ public sealed class ExtremeGameResult
 			if (noWinner.Any(x => x.PlayerName == playerName) ||
 				this.winner.PlusedWinner.Any(x => x.PlayerName == playerName))
 			{
+				logger.LogInfo($"Remove Winner(Reason:Dupe or Neutral) : {playerName}");
 				this.winner.Remove(winner);
 			}
 		}
@@ -193,9 +198,7 @@ public sealed class ExtremeGameResult
 			addNeutralWinner();
 		}
 
-		GameOverReason reason = gameData.EndReason;
-
-		switch ((RoleGameOverReason)reason)
+		switch (modReason)
 		{
 			case RoleGameOverReason.AssassinationMarin:
 			case RoleGameOverReason.TeroristoTeroWithShip:
@@ -277,19 +280,16 @@ public sealed class ExtremeGameResult
 				break;
 		}
 
-		foreach (var player in this.winner.PlusedWinner)
-		{
-			this.winner.Add(player);
-		}
-
 		foreach (var (playerInfo, winCheckRole) in ghostWinCheckRole)
 		{
 			if (winCheckRole.IsWin(reason, playerInfo))
 			{
+				logger.LogInfo($"Add Winner(Reason:Ghost Role win) : {playerInfo.PlayerName}");
 				this.winner.AddPlusWinner(playerInfo);
 			}
 		}
 
+		logger.LogInfo($"-- Start: modified win player --");
 		foreach (var (playerInfo, winModRole) in modRole)
 		{
 			winModRole.ModifiedWinPlayer(
@@ -297,6 +297,17 @@ public sealed class ExtremeGameResult
 				gameData.EndReason,
 				ref this.winner);
 		}
+		logger.LogInfo($"-- End: modified win player --");
+
+		logger.LogInfo($"-- Start: merge plused win player --");
+		foreach (var player in this.winner.PlusedWinner)
+		{
+			logger.LogInfo($"marge to winner:{player.PlayerName}");
+			this.winner.Add(player);
+		}
+		logger.LogInfo($"-- end: merge plused win player --");
+
+		logger.LogInfo(" --- end: Creating Winner ---");
 	}
 
 	private void replaceWinnerToSpecificRolePlayer(
@@ -377,14 +388,19 @@ public sealed class ExtremeGameResult
 			gameControlId = PlayerStatistics.SameNeutralGameControlId;
 		}
 
+		var logger = ExtremeRolesPlugin.Logger;
+
 		if (winRole.Contains((role.Id, gameControlId)))
 		{
+			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
 			this.winner.Add(playerInfo);
 			return true;
 		}
 		else if (role.IsNeutral() && role.IsWin)
 		{
 			winRole.Add((role.Id, gameControlId));
+
+			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
 			this.winner.Add(playerInfo);
 			return true;
 		}
@@ -396,6 +412,7 @@ public sealed class ExtremeGameResult
 		if (this.winGameControlId != int.MaxValue &&
 			this.winGameControlId == role.GameControlId)
 		{
+			ExtremeRolesPlugin.Logger.LogInfo($"Add Winner(Reason:Win this role) : {player.PlayerName}");
 			this.winner.Add(player);
 		}
 	}
@@ -404,6 +421,7 @@ public sealed class ExtremeGameResult
 	{
 		if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 		{
+			ExtremeRolesPlugin.Logger.LogInfo($"Add Winner(Reason:Win this role) : {player.PlayerName}");
 			this.winner.Add(player);
 		}
 		else
