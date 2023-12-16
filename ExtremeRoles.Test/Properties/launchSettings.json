@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SingleInstance": {
+      "commandName": "Executable",
+      "executablePath": "$(AmongUs)\\Among Us.exe"
+    }
+  }
+}
