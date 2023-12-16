@@ -14,7 +14,9 @@ namespace ExtremeRoles.Test;
 public partial class ExtremeRolesTestPlugin : BasePlugin
 {
 	public Harmony Harmony { get; } = new Harmony(Id);
+#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	public static ExtremeRolesTestPlugin Instance;
+#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	public override void Load()
 	{
