@@ -1,18 +1,16 @@
-﻿using ExtremeRoles.GameMode.Option.ShipGlobal;
+﻿using System;
+using System.Collections.Generic;
+
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtremeRoles.Test;
 
 internal class Options : TestRunnerBase
 {
-	private const int iteration = 10000;
+	private const int iteration = 100000;
 
 
 	public override void Run()
