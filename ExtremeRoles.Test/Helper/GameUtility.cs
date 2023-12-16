@@ -52,17 +52,20 @@ public static class GameUtility
 		foreach (var opt in OptionManager.Instance.GetAllIOption())
 		{
 			int newIndex = RandomGenerator.Instance.Next(0, opt.ValueCount);
-			if (opt.Name.Contains("AssignWeight"))
+			string name = opt.Name;
+
+			if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
 			{
 				newIndex = 5;
 			}
-			else if (opt.Name.Contains(RoleCommonOption.SpawnRate.ToString()))
+			else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
 			{
 				newIndex = 0;
 			}
 			opt.UpdateSelection(newIndex);
 		}
 
+		logger.LogInfo("Update Roles and Player....");
 		enableXion();
 
 		for (int playerId = 0; playerId < 15; ++playerId)
@@ -87,15 +90,8 @@ public static class GameUtility
 			int length = opt.ValueCount;
 			int newIndex = RandomGenerator.Instance.Next(0, length);
 			string name = opt.Name;
-			if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
-			{
-				newIndex = 5;
-			}
-			else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
-			{
-				newIndex = 0;
-			}
-			else if (
+
+			if (
 				ids.Any(x => name.Contains(x.ToString())) &&
 				(
 					name.Contains(RoleCommonOption.SpawnRate.ToString()) ||
@@ -104,15 +100,30 @@ public static class GameUtility
 			{
 				newIndex = length - 1;
 			}
+			else if (
+				ids.Any(x => name.Contains(x.ToString())) &&
+				name.Contains(RoleCommonOption.RoleNum.ToString()))
+			{
+				newIndex = RandomGenerator.Instance.Next(1, ((15 - 3) / ids.Count));
+			}
+			else if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
+			{
+				newIndex = 5;
+			}
+			else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
+			{
+				newIndex = 0;
+			}
 			opt.UpdateSelection(newIndex);
 		}
 
 		enableXion();
 
+		logger.LogInfo("Update Player....");
 		for (int playerId = 0; playerId < 15; ++playerId)
 		{
 			string playerName = $"TestPlayer_{playerId}";
-			logger.LogInfo($"spawn : {playerName}");
+			logger.LogInfo($"Spawn : {playerName}");
 
 			GameSystem.SpawnDummyPlayer(playerName);
 		}

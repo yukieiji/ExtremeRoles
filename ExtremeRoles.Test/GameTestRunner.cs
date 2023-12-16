@@ -29,11 +29,12 @@ public class GameTestRunner : TestRunnerBase
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
-				new("Random", 5, null),
+				new("Random", 3, null),
 				new("NeutralRemove", 100, new HashSet<ExtremeRoleId>()
 				{
 					ExtremeRoleId.Jester, ExtremeRoleId.TaskMaster,
-					ExtremeRoleId.Neet,  ExtremeRoleId.Madmate
+					ExtremeRoleId.Neet, ExtremeRoleId.Umbrer,
+					ExtremeRoleId.Madmate
 				}),
 				new("YokoWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yoko }),
 				new("YandereWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yandere })));
