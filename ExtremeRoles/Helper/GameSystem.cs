@@ -210,7 +210,8 @@ public static class GameSystem
 		byte optionMapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
 			ByteOptionNames.MapId);
 
-		if (optionMapId == mapId)
+		if (optionMapId == mapId &&
+			CachedShipStatus.Instance != null)
 		{
 			return CachedShipStatus.Instance;
 		}
