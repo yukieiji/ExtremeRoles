@@ -134,7 +134,7 @@ public sealed class ExtremeGameResult
 		string resonStr = Enum.IsDefined(modReason) ? modReason.ToString() : reason.ToString();
 		logger.LogInfo($"GameEnd : {resonStr}");
 
-		logger.LogInfo(" --- start: Creating Winner ---");
+		logger.LogInfo("---- Start: Creating Winner ----");
 
 		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
@@ -305,9 +305,9 @@ public sealed class ExtremeGameResult
 			logger.LogInfo($"marge to winner:{player.PlayerName}");
 			this.winner.Add(player);
 		}
-		logger.LogInfo($"-- end: merge plused win player --");
+		logger.LogInfo($"-- End: merge plused win player --");
 
-		logger.LogInfo(" --- end: Creating Winner ---");
+		logger.LogInfo("--- End: Creating Winner ----");
 	}
 
 	private void replaceWinnerToSpecificRolePlayer(
