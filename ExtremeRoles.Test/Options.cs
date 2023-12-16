@@ -47,11 +47,6 @@ internal class Options : TestRunnerBase
 		}
 	}
 
-	public override void Export()
-	{
-
-	}
-
 	private void updateRandom()
 	{
 		foreach (var opt in OptionManager.Instance.GetAllIOption())

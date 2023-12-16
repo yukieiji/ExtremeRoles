@@ -39,6 +39,4 @@ internal abstract class TestRunnerBase
 	}
 
 	public abstract void Run();
-
-	public abstract void Export();
 }

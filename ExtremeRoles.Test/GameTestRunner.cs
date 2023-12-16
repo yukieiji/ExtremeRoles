@@ -22,11 +22,6 @@ internal class GameTestRunner : TestRunnerBase
 {
 	private const int iteration = 1000000;
 
-	public override void Export()
-	{
-
-	}
-
 	public override void Run()
 	{
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
