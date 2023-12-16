@@ -3,6 +3,7 @@ using BepInEx;
 
 using HarmonyLib;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Test;
 
@@ -22,6 +23,10 @@ public partial class ExtremeRolesTestPlugin : BasePlugin
 	{
 		Harmony.PatchAll();
 		Instance = this;
+
+		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
+		if (assembly is null) { return; }
+		Il2CppRegisterAttribute.Registration(assembly);
 	}
 }
 
@@ -32,7 +37,7 @@ public static class ChatControllerSendChatPatch
 	{
 		if (__instance.freeChatField.Text == "/RunTest")
 		{
-			var runner = new Options();
+			var runner = new GameTestRunner();
 			runner.Logger = ExtremeRolesTestPlugin.Instance.Log;
 			runner.Run();
 		}
