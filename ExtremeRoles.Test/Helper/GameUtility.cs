@@ -1,17 +1,15 @@
-﻿using BepInEx.Logging;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+using UnityEngine;
+using BepInEx.Logging;
+
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace ExtremeRoles.Test.Helper;
 

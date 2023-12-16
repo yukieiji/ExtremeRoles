@@ -1,10 +1,7 @@
-﻿using ExtremeRoles.Roles;
+﻿using System.Linq;
+
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtremeRoles.Test.Helper;
 
