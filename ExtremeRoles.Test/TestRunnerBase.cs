@@ -7,7 +7,7 @@ using BepInExLogger = BepInEx.Logging.Logger;
 
 namespace ExtremeRoles.Test;
 
-internal abstract class TestRunnerBase
+public abstract class TestRunnerBase
 {
 	protected ManualLogSource Log
 	{

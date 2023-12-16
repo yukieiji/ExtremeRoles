@@ -3,9 +3,11 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,17 +24,13 @@ public static class GameUtility
 	public static IEnumerator StartGameWithRandom(ManualLogSource logger)
 	{
 		PrepereGameWithRandom(logger);
-		yield return new WaitForSeconds(2.0f);
+		yield return start(logger);
+	}
 
-		logger.LogInfo("Start Games....");
-		GameStartManager.Instance.BeginGame();
-
-		yield return new WaitForSeconds(10.0f);
-		while (IntroCutscene.Instance)
-		{
-			yield return null;
-		}
-		yield return new WaitForSeconds(20.0f);
+	public static IEnumerator StartGameWithRole(ManualLogSource logger, HashSet<ExtremeRoleId> ids)
+	{
+		PrepereGameWithRole(logger, ids);
+		yield return start(logger);
 	}
 
 	public static IEnumerator ReturnLobby(ManualLogSource logger)
@@ -79,6 +77,61 @@ public static class GameUtility
 		}
 
 		enableRandomCombRole(logger);
+	}
+
+	public static void PrepereGameWithRole(ManualLogSource logger, HashSet<ExtremeRoleId> ids)
+	{
+		logger.LogInfo("Update Option....");
+		// オプションを適当にアプデ
+		foreach (var opt in OptionManager.Instance.GetAllIOption())
+		{
+			int length = opt.ValueCount;
+			int newIndex = RandomGenerator.Instance.Next(0, length);
+			string name = opt.Name;
+			if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
+			{
+				newIndex = 5;
+			}
+			else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
+			{
+				newIndex = 0;
+			}
+			else if (
+				ids.Any(x => name.Contains(x.ToString())) &&
+				(
+					name.Contains(RoleCommonOption.SpawnRate.ToString()) ||
+					name.Contains(RoleCommonOption.AssignWeight.ToString())
+				))
+			{
+				newIndex = length - 1;
+			}
+			opt.UpdateSelection(newIndex);
+		}
+
+		enableXion();
+
+		for (int playerId = 0; playerId < 15; ++playerId)
+		{
+			string playerName = $"TestPlayer_{playerId}";
+			logger.LogInfo($"spawn : {playerName}");
+
+			GameSystem.SpawnDummyPlayer(playerName);
+		}
+	}
+
+	private static IEnumerator start(ManualLogSource logger)
+	{
+		yield return new WaitForSeconds(2.0f);
+
+		logger.LogInfo("Start Games....");
+		GameStartManager.Instance.BeginGame();
+
+		yield return new WaitForSeconds(10.0f);
+		while (IntroCutscene.Instance)
+		{
+			yield return null;
+		}
+		yield return new WaitForSeconds(20.0f);
 	}
 
 	private static void enableXion()

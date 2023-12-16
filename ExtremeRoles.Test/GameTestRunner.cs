@@ -15,18 +15,23 @@ using UnityEngine;
 
 using BepInEx.Unity.IL2CPP.Utils;
 using BepInEx.Logging;
+using System.Collections.Generic;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Test;
 
-internal class GameTestRunner : TestRunnerBase
+public class GameTestRunner : TestRunnerBase
 {
-	private const int iteration = 1000000;
+	public sealed record TestCase(string Name, int Iteration, HashSet<ExtremeRoleId>? Ids);
 
 	public override void Run()
 	{
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
-			GameMudderEndTestingBehaviour.Instance.Run(iteration));
+			GameMudderEndTestingBehaviour.Instance.Run(
+				new("Random", 10, null),
+				new("YokoWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yoko }),
+				new("YandereWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yandere })));
 	}
 }
 
@@ -51,12 +56,26 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 	public GameMudderEndTestingBehaviour(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
-	public IEnumerator Run(int num)
+	public IEnumerator Run(params GameTestRunner.TestCase[] testCases)
 	{
-		for (int i = 0; i < num; ++i)
+		foreach (var testCase in testCases)
 		{
-			this.Logger.LogInfo($"Start iteration:{i}");
-			yield return GameUtility.StartGameWithRandom(this.Logger);
+			yield return runTestCase(testCase);
+		}
+	}
+	private IEnumerator runTestCase(GameTestRunner.TestCase testCase)
+	{
+		for (int i = 0; i < testCase.Iteration; ++i)
+		{
+			this.Logger.LogInfo($"{testCase.GetType().Name}.{testCase.Name} - Start iteration:{i}");
+			if (testCase.Ids is null)
+			{
+				yield return GameUtility.StartGameWithRandom(this.Logger);
+			}
+			else
+			{
+				yield return GameUtility.StartGameWithRole(this.Logger, testCase.Ids);
+			}
 
 			while (GameUtility.IsContinue)
 			{
