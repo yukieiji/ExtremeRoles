@@ -1,22 +1,21 @@
-﻿using ExtremeRoles.GameMode.Option.ShipGlobal;
-using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Test.Helper;
-using System;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using UnityEngine;
+using Il2CppInterop.Runtime.Attributes;
+
 
 using BepInEx.Unity.IL2CPP.Utils;
 using BepInEx.Logging;
-using System.Collections.Generic;
+
 using ExtremeRoles.Roles;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+
+using ExtremeRoles.Test.Helper;
 
 namespace ExtremeRoles.Test;
 
@@ -36,8 +35,8 @@ public class GameTestRunner : TestRunnerBase
 					ExtremeRoleId.Neet, ExtremeRoleId.Umbrer,
 					ExtremeRoleId.Madmate
 				}),
-				new("QueenWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Queen }),
 				new("YokoWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yoko }),
+				new("QueenWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Queen }),
 				new("YandereWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yandere })));
 	}
 }
@@ -63,6 +62,7 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 	public GameMudderEndTestingBehaviour(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
+	[HideFromIl2Cpp]
 	public IEnumerator Run(params GameTestRunner.TestCase[] testCases)
 	{
 		foreach (var testCase in testCases)
@@ -70,6 +70,8 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			yield return runTestCase(testCase);
 		}
 	}
+
+	[HideFromIl2Cpp]
 	private IEnumerator runTestCase(GameTestRunner.TestCase testCase)
 	{
 		for (int i = 0; i < testCase.Iteration; ++i)
