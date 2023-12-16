@@ -89,7 +89,7 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			while (GameUtility.IsContinue)
 			{
 				var player = CachedPlayerControl.AllPlayerControls.OrderBy(x => RandomGenerator.Instance.Next()).First();
-				if (!player.Data.IsDead)
+				if (!player.Data.IsDead || ExtremeRoleManager.GameRole[player.PlayerId].Id != ExtremeRoleId.Assassin)
 				{
 					Player.RpcUncheckMurderPlayer(player.PlayerId, player.PlayerId, byte.MinValue);
 					yield return new WaitForSeconds(1.0f);
