@@ -97,6 +97,12 @@ public sealed class ExtremeGameResult
 			this.finalWinPlayer.RemoveAll(x => x.PlayerName == player.PlayerName);
 		}
 
+		public void AddWithPlus(Player playerInfo)
+		{
+			this.Add(playerInfo);
+			this.AddPlusWinner(playerInfo);
+		}
+
 		public void Add(Player playerInfo)
 		{
 			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
@@ -305,6 +311,14 @@ public sealed class ExtremeGameResult
 				break;
 		}
 
+		logger.LogInfo($"-- Start: merge plused win player --");
+		foreach (var player in this.winner.PlusedWinner)
+		{
+			logger.LogInfo($"marge to winner:{player.PlayerName}");
+			this.winner.Add(player);
+		}
+		logger.LogInfo($"-- End: merge plused win player --");
+
 		foreach (var (playerInfo, winCheckRole) in ghostWinCheckRole)
 		{
 			if (winCheckRole.IsWin(reason, playerInfo))
@@ -324,13 +338,6 @@ public sealed class ExtremeGameResult
 		}
 		logger.LogInfo($"-- End: modified win player --");
 
-		logger.LogInfo($"-- Start: merge plused win player --");
-		foreach (var player in this.winner.PlusedWinner)
-		{
-			logger.LogInfo($"marge to winner:{player.PlayerName}");
-			this.winner.Add(player);
-		}
-		logger.LogInfo($"-- End: merge plused win player --");
 
 		logger.LogInfo("--- End: Creating Winner ----");
 #if DEBUG

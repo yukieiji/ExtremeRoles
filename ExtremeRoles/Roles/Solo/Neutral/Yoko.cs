@@ -70,7 +70,7 @@ public sealed class Yoko :
 			case RoleGameOverReason.TeroristoTeroWithShip:
 				break;
             case RoleGameOverReason.YokoAllDeceive:
-				winner.AddPlusWinner(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
                 break;
             default:
 				winner.AllClear();
