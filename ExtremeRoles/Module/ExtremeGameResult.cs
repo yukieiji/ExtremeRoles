@@ -15,6 +15,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using TempWinData = Il2CppSystem.Collections.Generic.List<WinningPlayerData>;
 using Player = GameData.PlayerInfo;
+using System.Text;
 
 #nullable enable
 
@@ -40,6 +41,33 @@ public sealed class ExtremeGameResult
 			this.DefaultWinPlayer = TempData.winners;
 			this.finalWinPlayer = new List<WinningPlayerData>(this.DefaultWinPlayer.ToArray());
 			this.plusWinPlayr = ExtremeRolesPlugin.ShipState.GetPlusWinner();
+		}
+
+		public override string ToString()
+		{
+			var builder = new StringBuilder();
+			builder
+				.AppendLine("---- Current Win data ----")
+				.AppendLine("--- Default Winner ---");
+
+			foreach (var winner in this.DefaultWinPlayer)
+			{
+				builder.AppendLine($"PlayerName:{winner.PlayerName}");
+			}
+
+			builder.AppendLine("--- Final Winner ---");
+			foreach (var winner in this.finalWinPlayer)
+			{
+				builder.AppendLine($"PlayerName:{winner.PlayerName}");
+			}
+
+			builder.AppendLine("--- Plus Winner ---");
+			foreach (var winner in this.plusWinPlayr)
+			{
+				builder.AppendLine($"PlayerName:{winner.PlayerName}");
+			}
+
+			return builder.ToString();
 		}
 
 		public WinnerResult Convert() => new WinnerResult(this.finalWinPlayer, plusWinPlayr);
@@ -308,6 +336,9 @@ public sealed class ExtremeGameResult
 		logger.LogInfo($"-- End: merge plused win player --");
 
 		logger.LogInfo("--- End: Creating Winner ----");
+#if DEBUG
+		logger.LogInfo(this.winner.ToString());
+#endif
 	}
 
 	private void replaceWinnerToSpecificRolePlayer(
