@@ -37,7 +37,7 @@ public static class ChatControllerSendChatPatch
 	{
 		if (__instance.freeChatField.Text == "/RunTest")
 		{
-			var runner = new Options();
+			var runner = new OptionRunner();
 			runner.Run();
 		}
 	}

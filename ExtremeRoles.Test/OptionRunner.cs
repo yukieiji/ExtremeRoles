@@ -8,7 +8,8 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Test;
 
-internal class Options : TestRunnerBase
+internal class OptionRunner
+	: TestRunnerBase
 {
 	private const int iteration = 100000;
 
