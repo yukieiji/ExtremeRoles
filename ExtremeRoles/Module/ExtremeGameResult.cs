@@ -85,14 +85,16 @@ public sealed class ExtremeGameResult
 
 		public void RemoveAll(Player playerInfo)
 		{
-			this.plusWinPlayr.Remove(playerInfo);
-			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
-			this.finalWinPlayer.Remove(wpd);
+			this.plusWinPlayr.RemoveAll(x => x.PlayerName == playerInfo.PlayerName);
+			Remove(playerInfo);
 		}
-
 		public void Remove(WinningPlayerData player)
 		{
-			this.finalWinPlayer.Remove(player);
+			this.finalWinPlayer.RemoveAll(x => x.PlayerName == player.PlayerName);
+		}
+		public void Remove(Player player)
+		{
+			this.finalWinPlayer.RemoveAll(x => x.PlayerName == player.PlayerName);
 		}
 
 		public void Add(Player playerInfo)
@@ -168,21 +170,21 @@ public sealed class ExtremeGameResult
 		{
 			var role = roleData[playerInfo.PlayerId];
 
+			string playerName = playerInfo.PlayerName;
 			if (role.IsNeutral())
 			{
 				if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
 				{
-					logger.LogInfo($"AddPlusWinner(Reason:Alive Win) : {playerInfo.PlayerName}");
+					logger.LogInfo($"AddPlusWinner(Reason:Alive Win) : {playerName}");
 					this.winner.AddPlusWinner(playerInfo);
 				}
-				else
-				{
-					noWinner.Add(playerInfo);
-				}
+				logger.LogInfo($"Remove Winner(Reason:Neutral) : {playerName}");
+				this.winner.Remove(playerInfo);
 			}
 			else if (role.Id == ExtremeRoleId.Xion)
 			{
-				noWinner.Add(playerInfo);
+				logger.LogInfo($"Remove Winner(Reason:Xion Player) : {playerName}");
+				this.winner.Remove(playerInfo);
 			}
 
 			if (role is IRoleWinPlayerModifier winModRole)
@@ -210,15 +212,10 @@ public sealed class ExtremeGameResult
 					playerInfo, role, ghostRole));
 		}
 
-		foreach (WinningPlayerData winner in this.winner.DefaultWinPlayer.GetFastEnumerator())
+		foreach (Player winner in this.winner.PlusedWinner)
 		{
-			string playerName = winner.PlayerName;
-			if (noWinner.Any(x => x.PlayerName == playerName) ||
-				this.winner.PlusedWinner.Any(x => x.PlayerName == playerName))
-			{
-				logger.LogInfo($"Remove Winner(Reason:Dupe or Neutral) : {playerName}");
-				this.winner.Remove(winner);
-			}
+			logger.LogInfo($"Remove Winner(Dupe Player) : {winner.PlayerName}");
+			this.winner.Remove(winner);
 		}
 
 		if (ExtremeGameModeManager.Instance.ShipOption.DisableNeutralSpecialForceEnd)
