@@ -40,7 +40,6 @@ public static class GameUtility
 		logger.LogInfo("Back to Lobby");
 		GameObject navObj = GameObject.Find("EndGameNavigation");
 		EndGameNavigation nav = navObj.GetComponent<EndGameNavigation>();
-		logger.LogInfo($"WinText : {nav.EndGameManager.WinText.text}");
 		nav.NextGame();
 
 		yield return new WaitForSeconds(10.0f);
