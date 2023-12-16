@@ -24,10 +24,16 @@ internal class Options : TestRunnerBase
 			this.updateRandom();
 
 			this.Logger.LogInfo($"Load.ClassicGameModeShipGlobalOption.Iteration.{i}");
-			this.loadClassicGameModeShipGlobalOption();
+			var classic = this.loadClassicGameModeShipGlobalOption();
+
+			this.Logger.LogInfo($"Load.ClassicGameModeShipGlobalOptionChangeTask.Iteration.{i}");
+			this.loadIShipGlobalOptionChangeTask(classic);
 
 			this.Logger.LogInfo($"Load.HideNSeekModeShipGlobalOption.Iteration.{i}");
-			this.loadHideNSeekShipGlobalOption();
+			var hns = this.loadHideNSeekShipGlobalOption();
+
+			this.Logger.LogInfo($"Load.HideNSeekModeShipGlobalOptionChangeTask.Iteration.{i}");
+			this.loadIShipGlobalOptionChangeTask(hns);
 
 			this.Logger.LogInfo($"Load.CombinationRole.Iteration.{i}");
 			loadCombinationRole();
@@ -61,29 +67,55 @@ internal class Options : TestRunnerBase
 		}
 	}
 
-	private void loadClassicGameModeShipGlobalOption()
+	private IShipGlobalOption? loadClassicGameModeShipGlobalOption()
 	{
 		try
 		{
 			var opt = new ClassicGameModeShipGlobalOption();
 			opt.Load();
+			return opt;
+		}
+		catch (Exception ex)
+		{
+			this.Logger.LogError(ex.Message);
+		}
+		return null;
+	}
+
+	private void loadIShipGlobalOptionChangeTask(IShipGlobalOption? opt)
+	{
+		if (opt == null)
+		{
+			this.Logger.LogWarning("Skip Load.IShipGlobalOptionChangeTask");
+			return;
+		}
+		try
+		{
+			var tasks = opt.ChangeTask;
+			if (tasks is not IReadOnlySet<TaskTypes>)
+			{
+				throw new Exception("Task set ignore");
+			}
 		}
 		catch (Exception ex)
 		{
 			this.Logger.LogError(ex.Message);
 		}
 	}
-	private void loadHideNSeekShipGlobalOption()
+
+	private IShipGlobalOption? loadHideNSeekShipGlobalOption()
 	{
 		try
 		{
 			var opt = new HideNSeekModeShipGlobalOption();
 			opt.Load();
+			return opt;
 		}
 		catch (Exception ex)
 		{
 			this.Logger.LogError(ex.Message);
 		}
+		return null;
 	}
 	private void loadCombinationRole()
 	{
