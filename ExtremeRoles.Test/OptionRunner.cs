@@ -52,6 +52,8 @@ internal class OptionRunner
 	{
 		foreach (var opt in OptionManager.Instance.GetAllIOption())
 		{
+			if (opt.Id == 0) { continue; }
+
 			int newIndex = RandomGenerator.Instance.Next(0, opt.ValueCount);
 			try
 			{

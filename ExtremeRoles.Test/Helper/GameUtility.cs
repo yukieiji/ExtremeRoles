@@ -49,6 +49,8 @@ public static class GameUtility
 		// オプションを適当にアプデ
 		foreach (var opt in OptionManager.Instance.GetAllIOption())
 		{
+			if (opt.Id == 0) { continue; }
+
 			int newIndex = RandomGenerator.Instance.Next(0, opt.ValueCount);
 			string name = opt.Name;
 
@@ -85,6 +87,8 @@ public static class GameUtility
 		// オプションを適当にアプデ
 		foreach (var opt in OptionManager.Instance.GetAllIOption())
 		{
+			if (opt.Id == 0) { continue; }
+
 			int length = opt.ValueCount;
 			int newIndex = RandomGenerator.Instance.Next(0, length);
 			string name = opt.Name;
