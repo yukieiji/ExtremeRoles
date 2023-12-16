@@ -32,10 +32,10 @@ internal class Options : TestRunnerBase
 			this.Logger.LogInfo($"Load.CombinationRole.Iteration.{i}");
 			loadCombinationRole();
 
-			this.Logger.LogInfo($"Load.CombinationRole.Iteration.{i}");
+			this.Logger.LogInfo($"Load.NormalRole.Iteration.{i}");
 			loadNormalRole();
 
-			this.Logger.LogInfo($"Load.CombinationRole.Iteration.{i}");
+			this.Logger.LogInfo($"Load.GhostRole.Iteration.{i}");
 			loadGhostRole();
 		}
 	}
