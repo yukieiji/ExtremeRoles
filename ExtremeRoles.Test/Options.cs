@@ -15,34 +15,34 @@ internal class Options : TestRunnerBase
 
 	public override void Run()
 	{
-		this.Logger.LogInfo($"----- Start: Options Test -----");
+		this.Log.LogInfo($"----- Start: Options Test -----");
 		for (int i = 0; i < iteration; ++i)
 		{
-			this.Logger.LogInfo($"Update.Option.Iteration.{i}");
+			this.Log.LogInfo($"Update.Option.Iteration.{i}");
 			this.updateRandom();
 
-			this.Logger.LogInfo($"Load.ClassicGameModeShipGlobalOption.Iteration.{i}");
+			this.Log.LogInfo($"Load.ClassicGameModeShipGlobalOption.Iteration.{i}");
 			var classic = this.loadClassicGameModeShipGlobalOption();
 
-			this.Logger.LogInfo($"Load.ClassicGameModeShipGlobalOptionChangeTask.Iteration.{i}");
+			this.Log.LogInfo($"Load.ClassicGameModeShipGlobalOptionChangeTask.Iteration.{i}");
 			this.loadIShipGlobalOptionChangeTask(classic);
 
-			this.Logger.LogInfo($"Load.HideNSeekModeShipGlobalOption.Iteration.{i}");
+			this.Log.LogInfo($"Load.HideNSeekModeShipGlobalOption.Iteration.{i}");
 			var hns = this.loadHideNSeekShipGlobalOption();
 
-			this.Logger.LogInfo($"Load.HideNSeekModeShipGlobalOptionChangeTask.Iteration.{i}");
+			this.Log.LogInfo($"Load.HideNSeekModeShipGlobalOptionChangeTask.Iteration.{i}");
 			this.loadIShipGlobalOptionChangeTask(hns);
 
-			this.Logger.LogInfo($"Load.CombinationRole.Iteration.{i}");
+			this.Log.LogInfo($"Load.CombinationRole.Iteration.{i}");
 			loadCombinationRole();
 
-			this.Logger.LogInfo($"Load.NormalRole.Iteration.{i}");
+			this.Log.LogInfo($"Load.NormalRole.Iteration.{i}");
 			loadNormalRole();
 
-			this.Logger.LogInfo($"Load.GhostRole.Iteration.{i}");
+			this.Log.LogInfo($"Load.GhostRole.Iteration.{i}");
 			loadGhostRole();
 
-			this.Logger.LogInfo($"Load.HudString.Iteration.{i}");
+			this.Log.LogInfo($"Load.HudString.Iteration.{i}");
 			this.hudString();
 		}
 	}
@@ -63,7 +63,7 @@ internal class Options : TestRunnerBase
 			}
 			catch (Exception ex)
 			{
-				this.Logger.LogError($"{opt.Name} : {newIndex}   {ex.Message}");
+				this.Log.LogError($"{opt.Name} : {newIndex}   {ex.Message}");
 			}
 		}
 	}
@@ -78,7 +78,7 @@ internal class Options : TestRunnerBase
 		}
 		catch (Exception ex)
 		{
-			this.Logger.LogError(ex.Message);
+			this.Log.LogError(ex.Message);
 		}
 		return null;
 	}
@@ -87,7 +87,7 @@ internal class Options : TestRunnerBase
 	{
 		if (opt == null)
 		{
-			this.Logger.LogWarning("Skip Load.IShipGlobalOptionChangeTask");
+			this.Log.LogWarning("Skip Load.IShipGlobalOptionChangeTask");
 			return;
 		}
 		try
@@ -100,7 +100,7 @@ internal class Options : TestRunnerBase
 		}
 		catch (Exception ex)
 		{
-			this.Logger.LogError(ex.Message);
+			this.Log.LogError(ex.Message);
 		}
 	}
 
@@ -114,7 +114,7 @@ internal class Options : TestRunnerBase
 		}
 		catch (Exception ex)
 		{
-			this.Logger.LogError(ex.Message);
+			this.Log.LogError(ex.Message);
 		}
 		return null;
 	}
@@ -128,7 +128,7 @@ internal class Options : TestRunnerBase
 			}
 			catch (Exception ex)
 			{
-				this.Logger.LogError($"{role}   {ex.Message}");
+				this.Log.LogError($"{role}   {ex.Message}");
 			}
 		}
 	}
@@ -142,7 +142,7 @@ internal class Options : TestRunnerBase
 			}
 			catch (Exception ex)
 			{
-				this.Logger.LogError($"{role}   {ex.Message}");
+				this.Log.LogError($"{role}   {ex.Message}");
 			}
 		}
 	}
@@ -156,7 +156,7 @@ internal class Options : TestRunnerBase
 			}
 			catch (Exception ex)
 			{
-				this.Logger.LogError($"{role}   {ex.Message}");
+				this.Log.LogError($"{role}   {ex.Message}");
 			}
 		}
 	}
@@ -166,15 +166,15 @@ internal class Options : TestRunnerBase
 		{
 			try
 			{
-				string hudStr = opt.ToHudStringWithChildren();
-				if (!opt.IsActive() && string.IsNullOrEmpty(hudStr))
+				string hudStr = opt.ToHudString();
+				if (!opt.Enabled && !opt.IsHidden && string.IsNullOrEmpty(hudStr))
 				{
 					throw new Exception("Invalid HudString");
 				}
 			}
 			catch (Exception ex)
 			{
-				this.Logger.LogError($"{opt.Name}   {ex.Message}");
+				this.Log.LogError($"{opt.Name}   {ex.Message}");
 			}
 		}
 	}

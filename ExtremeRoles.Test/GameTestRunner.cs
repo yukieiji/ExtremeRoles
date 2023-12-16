@@ -29,7 +29,7 @@ internal class GameTestRunner : TestRunnerBase
 
 	public override void Run()
 	{
-		GameMudderEndTestingBehaviour.Instance.Logger = this.Logger;
+		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(iteration));
 	}

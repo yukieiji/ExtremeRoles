@@ -37,8 +37,7 @@ public static class ChatControllerSendChatPatch
 	{
 		if (__instance.freeChatField.Text == "/RunTest")
 		{
-			var runner = new GameTestRunner();
-			runner.Logger = ExtremeRolesTestPlugin.Instance.Log;
+			var runner = new Options();
 			runner.Run();
 		}
 	}
