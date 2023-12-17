@@ -34,6 +34,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 			this.collider == null) { return; }
 
 		var body = CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D;
+		if (!body.IsTouching(this.collider)) { return; }
 
 		body.velocity += this.forceVec;
 
