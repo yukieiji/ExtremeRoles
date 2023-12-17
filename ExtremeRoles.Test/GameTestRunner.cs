@@ -75,7 +75,6 @@ public class GameTestRunner : TestRunnerBase
 [Il2CppRegister]
 public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 {
-	[HideFromIl2Cpp]
 	public static GameMudderEndTestingBehaviour Instance
 	{
 		get
@@ -89,6 +88,7 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 	}
 	private static GameMudderEndTestingBehaviour? instance;
 
+	[HideFromIl2Cpp]
 	public ManualLogSource Logger { private get; set; }
 
 	private int count = 0;
