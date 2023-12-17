@@ -248,7 +248,7 @@ public sealed class OptionManager
 
 		if (id == 0)
 		{
-			switchPreset(newSelection);
+			SwitchPreset(newSelection);
 		}
 
 		if (AmongUsClient.Instance &&
@@ -271,7 +271,7 @@ public sealed class OptionManager
 		shareOption(this.boolOption);
 	}
 
-	private void switchPreset(int newPreset)
+	public void SwitchPreset(int newPreset)
 	{
 		this.selectedPreset = newPreset;
 

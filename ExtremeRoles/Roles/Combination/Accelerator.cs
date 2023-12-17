@@ -221,9 +221,9 @@ public sealed class Accelerator :
 		if (this.canUseOtherPlayer)
 		{
 			using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.AcceleratorAbility))
+				RPCOperator.Command.AcceleratorAbility))
 			{
-				caller.WriteByte((byte)(isEnd ? AcceleratorRpc.Setup : AcceleratorRpc.End));
+				caller.WriteByte((byte)(isEnd ? AcceleratorRpc.End : AcceleratorRpc.Setup));
 				caller.WriteByte(playerControl.PlayerId);
 				caller.WriteFloat(pos.x);
 				caller.WriteFloat(pos.y);

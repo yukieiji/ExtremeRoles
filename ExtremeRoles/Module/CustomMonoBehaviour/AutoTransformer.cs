@@ -59,13 +59,7 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 		this.transform.position = Vector3.Lerp(this.start, this.end.position, 0.5f);
 
 		// 指定した方向に回転
-		var directionNorm = direction.normalized;
-		float num = Mathf.Atan2(directionNorm.y, directionNorm.x);
-		if (this.transform.lossyScale.x < 0f)
-		{
-			num += 3.1415927f;
-		}
-		this.transform.rotation = Quaternion.Euler(0f, 0f, num);
+		this.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
 
 		this.timer = 0.0f;
 	}

@@ -1,12 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>9.2.0.1</Version>
-    <!--<VersionPrefix>9.2.0</VersionPrefix>-->
-    <VersionSuffix>2ndAnniversary</VersionSuffix>
-    <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
@@ -14,6 +10,7 @@
     <DebugType>embedded</DebugType>
     <!-- MSBuildの.NET8対応に伴って勝手にバージョンにハッシュ値入れられてBepInExのロード不具合が出たため、明示的に無効化しておく -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,25 +29,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-	</ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
-    <EmbeddedResource Include="Resources\Asset\*.asset" />
-    <EmbeddedResource Include="Resources\**\*.png" />
-	  <EmbeddedResource Include="Resources\JsonData\*.json" />
-    <EmbeddedResource Include="Resources\Config\*.cfg" />
   </ItemGroup>
 
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="python $(SolutionDir)\makelanguagejson.py" />
-    <Exec Command="if not exist $(SolutionDir)ExtremeRoles\Resources\Asset mkdir $(SolutionDir)ExtremeRoles\Resources\Asset" />
-    <Exec Command="robocopy /mir $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources\Asset &amp; if errorlevel 8 (exit 1) else (exit 0)" />
-  </Target>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
+  </ItemGroup>
 
   <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />

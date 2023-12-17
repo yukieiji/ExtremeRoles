@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -161,14 +162,13 @@ public static class EndGameManagerSetUpPatch
         TMPro.TMP_Text textRenderer = bonusTextObject.GetComponent<TMPro.TMP_Text>();
         textRenderer.text = string.Empty;
 
-        List<string> winDetailText = new List<string>();
-
+		var winDetailTextBuilder = new StringBuilder();
         var state = ExtremeRolesPlugin.ShipState;
 
         // 背景とベースのテキスト追加
         var info = CreateWinTextInfo((RoleGameOverReason)state.EndReason);
 
-        winDetailText.Add(info.Text);
+		winDetailTextBuilder.Append(info.Text);
 
         textRenderer.color = info.Color;
 
@@ -196,10 +196,10 @@ public static class EndGameManagerSetUpPatch
             if (textAddedGhostRole.Contains(ghostRole.Id)) { continue; }
 
             AddPrefixs(
-                ref winDetailText,
+                ref winDetailTextBuilder,
                 textAddedRole.Count == 0 && textAddedGhostRole.Count == 0);
 
-            winDetailText.Add(Translation.GetString(
+			winDetailTextBuilder.Append(Translation.GetString(
                 ghostRole.GetColoredRoleName()));
             textAddedGhostRole.Add(ghostRole.Id);
         }
@@ -222,9 +222,9 @@ public static class EndGameManagerSetUpPatch
                         if (textAddedRole.Contains(id) ||
                             winPlayer.Contains(playerId)) { continue; }
 
-                        AddPrefixs(ref winDetailText, textAddedRole.Count == 0);
+                        AddPrefixs(ref winDetailTextBuilder, textAddedRole.Count == 0);
 
-                        winDetailText.Add(Translation.GetString(
+						winDetailTextBuilder.Append(Translation.GetString(
                             role.GetColoredRoleName(true)));
                         textAddedRole.Add(id);
                     }
@@ -247,22 +247,22 @@ public static class EndGameManagerSetUpPatch
             winPlayer.Add(player.PlayerId);
 
             AddPrefixs(
-                ref winDetailText,
+                ref winDetailTextBuilder,
                 textAddedRole.Count == 0);
 
-            winDetailText.Add(Translation.GetString(
+			winDetailTextBuilder.Append(Translation.GetString(
                 role.GetColoredRoleName(true)));
             textAddedRole.Add(role.Id);
         }
 
-        winDetailText.Add(Translation.GetString("win"));
+		winDetailTextBuilder.Append(Translation.GetString("win"));
 
-        textRenderer.text = string.Concat(winDetailText);
-    }
+		textRenderer.text = winDetailTextBuilder.ToString();
+	}
 
-    private static void AddPrefixs(ref List<string> baseStrings, bool condition)
+    private static void AddPrefixs(ref StringBuilder baseStrings, bool condition)
     {
-        baseStrings.Add(
+        baseStrings.Append(
             condition ? Translation.GetString("andFirst") : Translation.GetString("and"));
     }
 
