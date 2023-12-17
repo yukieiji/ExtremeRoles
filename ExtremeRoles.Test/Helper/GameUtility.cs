@@ -27,6 +27,12 @@ public static class GameUtility
 		GameManager.Instance != null &&
 		GameManager.Instance.ShouldCheckForGameEnd;
 
+	public static void ChangePresetTo(int newPreset)
+	{
+		OptionManager.Instance.GetIOption(0).UpdateSelection(newPreset);
+		OptionManager.Instance.SwitchPreset(newPreset);
+	}
+
 	public static IEnumerator StartGame(ManualLogSource logger)
 	{
 		yield return new WaitForSeconds(5.0f);

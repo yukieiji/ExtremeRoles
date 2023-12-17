@@ -4,6 +4,7 @@ using BepInEx;
 using HarmonyLib;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Test.Helper;
 
 namespace ExtremeRoles.Test;
 
@@ -37,6 +38,9 @@ public static class ChatControllerSendChatPatch
 	{
 		if (__instance.freeChatField.Text == "/RunTest")
 		{
+
+			GameUtility.ChangePresetTo(19);
+
 			var runner = new GameTestRunner();
 			runner.Run();
 		}
