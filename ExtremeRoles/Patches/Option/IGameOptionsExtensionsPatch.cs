@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using HarmonyLib;
 
+using ExtremeRoles.Extension.Strings;
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Compat;
@@ -104,7 +105,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
         StringBuilder pageBuilder = new StringBuilder();
         foreach (string optionStr in allOptionStr)
         {
-            int lines = optionStr.Count(c => c == '\n') + 1;
+			int lines = optionStr.CountLine();
 
             if (lineCount + lines > maxLines)
             {
