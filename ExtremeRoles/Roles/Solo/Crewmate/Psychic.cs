@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using UnityEngine;
@@ -14,7 +15,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
-using System;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -115,6 +115,8 @@ public sealed class Psychic :
 			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
 				if (player == null ||
+					player.IsDead ||
+					player.Disconnected ||
 					!ExtremeRoleManager.GameRole.TryGetValue(player.PlayerId, out var role) ||
 					role is null ||
 					!this.teamCount.TryGetValue(role.Team, out TeamCounter? counter) ||
