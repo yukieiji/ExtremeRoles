@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
+
 using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
@@ -147,19 +148,13 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
             GlobalOption.IsBlockGAAbilityReport);
     }
 
-    public void BuildHudString(ref StringBuilder builder)
-    {
-        foreach (GlobalOption id in Enum.GetValues(typeof(GlobalOption)))
-        {
-            var option = OptionManager.Instance.GetIOption((int)id);
+	public IEnumerable<GlobalOption> UseOptionId()
+	{
+		foreach (GlobalOption id in Enum.GetValues(typeof(GlobalOption)))
+		{
+			yield return id;
+		}
+	}
 
-			string optionStr = option.ToHudString();
-            if (optionStr != string.Empty)
-            {
-                builder.AppendLine(optionStr);
-            }
-        }
-    }
-
-    public bool IsValidOption(int id) => Enum.IsDefined(typeof(GlobalOption), id);
+	public bool IsValidOption(int id) => Enum.IsDefined(typeof(GlobalOption), id);
 }

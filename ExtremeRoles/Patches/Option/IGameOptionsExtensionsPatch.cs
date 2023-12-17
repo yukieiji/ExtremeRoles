@@ -37,7 +37,7 @@ public static class IGameOptionsExtensionsNumImpostorsPatch
     nameof(IGameOptionsExtensions.ToHudString))]
 public static class IGameOptionsExtensionsToHudStringPatch
 {
-    private const int maxLines = 28;
+    public const int MaxLines = 28;
     private static int page = 0;
 
     public static void ChangePage(int num)
@@ -71,7 +71,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
                     getHudString(RoleGlobalOption.UseXion)));
         }
 
-        allOptionStr.Add(egmm.ShipOption.ToHudString());
+		egmm.ShipOption.AddHudString(allOptionStr);
 
         var allOption = OptionManager.Instance;
 
@@ -107,7 +107,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
         {
 			int lines = optionStr.CountLine();
 
-            if (lineCount + lines > maxLines)
+            if (lineCount + lines > MaxLines)
             {
                 hudOptionPage.Add(pageBuilder.ToString());
                 pageBuilder.Clear();
