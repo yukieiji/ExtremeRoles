@@ -5,7 +5,7 @@ using System.Linq;
 
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
-
+using AmongUs.GameOptions;
 
 using BepInEx.Unity.IL2CPP.Utils;
 using BepInEx.Logging;
@@ -16,27 +16,58 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 
 using ExtremeRoles.Test.Helper;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles.Test;
 
 public class GameTestRunner : TestRunnerBase
 {
-	public sealed record TestCase(string Name, int Iteration, HashSet<ExtremeRoleId>? Ids);
+	public sealed record TestCase(
+		string Name, int Iteration,
+		HashSet<ExtremeRoleId>? Ids = null, Action? PreSetUp = null);
 
 	public override void Run()
 	{
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
-				new("Random", 3, null),
-				new("NeutralRemove", 5, new HashSet<ExtremeRoleId>()
+				new("Random", 3),
+				new("NeutralRemove", 5, new ()
 				{
 					ExtremeRoleId.Jester, ExtremeRoleId.TaskMaster,
 					ExtremeRoleId.Neet, ExtremeRoleId.Umbrer,
 					ExtremeRoleId.Madmate
 				}),
-				new("YokoWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yoko }),
-				new("QueenWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Queen }),
+				new("YokoWin", 5, new() { ExtremeRoleId.Yoko },
+				() =>
+				{
+					GameUtility.UpdateExROption(
+						new((int)GlobalOption.IsSameNeutralSameWin, 1));
+				}),
+				new("NeutralWin", 100,
+				new ()
+				{
+					ExtremeRoleId.Alice, ExtremeRoleId.Jackal,
+					ExtremeRoleId.Missionary, ExtremeRoleId.Miner,
+					ExtremeRoleId.Eater, ExtremeRoleId.Queen
+				},
+				() =>
+				{
+					GameUtility.UpdateExROption(
+						new((int)GlobalOption.IsSameNeutralSameWin, 1));
+					GameUtility.UpdateAmongUsOption(
+						new RequireOption<Int32OptionNames, int>(
+							Int32OptionNames.NumImpostors, 0));
+				}),
+				new("QueenWin", 100, new () { ExtremeRoleId.Queen },
+				() =>
+				{
+					GameUtility.UpdateExROption(
+						new((int)GlobalOption.IsSameNeutralSameWin, 0));
+					GameUtility.UpdateAmongUsOption(
+						new RequireOption<Int32OptionNames, int>(
+							Int32OptionNames.NumImpostors, 3));
+				}),
 				new("YandereWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yandere })));
 	}
 }
@@ -85,6 +116,8 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			{
 				GameUtility.PrepereGameWithRole(this.Logger, testCase.Ids);
 			}
+
+			testCase.PreSetUp?.Invoke();
 
 			yield return GameUtility.StartGame(this.Logger);
 
