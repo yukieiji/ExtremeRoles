@@ -49,8 +49,8 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 	public bool IsBreakEmergencyButton => true;
 
-	private HashSet<GlobalOption> useOption = new HashSet<GlobalOption>()
-    {
+	private HashSet<GlobalOption> useOption =
+	[
         GlobalOption.DisableVent,
 		GlobalOption.VentAnimationModeInVison,
 
@@ -79,7 +79,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
         GlobalOption.DisableNeutralSpecialForceEnd,
 
         GlobalOption.EnableHorseMode
-    };
+    ];
 
     public void Load()
     {

@@ -66,8 +66,7 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
     }
 
     private static ExtremeRoleId[] getUseNormalId() =>
-        new ExtremeRoleId[]
-        {
+		[
             ExtremeRoleId.SpecialCrew,
             ExtremeRoleId.Neet,
             ExtremeRoleId.Watchdog,
@@ -82,10 +81,9 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Hypnotist,
             ExtremeRoleId.Slime,
 			ExtremeRoleId.Terorist,
-        };
+        ];
 	private CombinationRoleType[] getUseCombRoleType() =>
-		new CombinationRoleType[]
-		{
+		[
 			CombinationRoleType.Accelerator,
-		};
+		];
 }

@@ -87,8 +87,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
     }
 
     private static ExtremeRoleId[] getUseNormalRoleId() =>
-        new ExtremeRoleId[]
-        {
+		[
             ExtremeRoleId.SpecialCrew,
             ExtremeRoleId.Sheriff,
             ExtremeRoleId.Maintainer,
@@ -154,11 +153,10 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Queen,
             ExtremeRoleId.Madmate,
             ExtremeRoleId.Umbrer,
-        };
+        ];
 
     private CombinationRoleType[] getUseCombRoleType() =>
-        new CombinationRoleType[]
-        {
+		[
             CombinationRoleType.Avalon,
             CombinationRoleType.HeroAca,
             CombinationRoleType.DetectiveOffice,
@@ -175,11 +173,10 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			CombinationRoleType.Accelerator,
 
 			CombinationRoleType.Traitor,
-        };
+        ];
 
     private ExtremeGhostRoleId[] getUseGhostRoleId() =>
-        new ExtremeGhostRoleId[]
-        {
+		[
             ExtremeGhostRoleId.Poltergeist,
             ExtremeGhostRoleId.Faunus,
             ExtremeGhostRoleId.Shutter,
@@ -189,6 +186,6 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeGhostRoleId.Igniter,
 
             ExtremeGhostRoleId.Foras,
-        };
+        ];
 }
 
