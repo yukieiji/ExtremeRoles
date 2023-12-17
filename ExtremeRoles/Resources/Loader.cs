@@ -108,6 +108,7 @@ public static class Path
 	public const string TheifTimeParts = "ExtremeRoles.Resources.TheifTimePart.png";
 	public const string TheifMagicCircle = "ExtremeRoles.Resources.TheifMagicCircle.png";
 	public const string TheifMagicCircleVideo = "theifmagiccircle";
+	public const string CrewshroomSet = "ExtremeRoles.Resources.CrewshroomSetMushroom.png";
 	public const string TeroristTeroMinigameAsset = "ExtremeRoles.Resources.Asset.teroristminigame.asset";
 	public const string TeroristTeroMinigamePrefab = "assets/roles/teroristminigame.prefab";
 	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
