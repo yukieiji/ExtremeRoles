@@ -41,6 +41,7 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 		this.rect.height /= unit;
 	}
 
+	// 画像は右横向きなので
 	public void FixedUpdate()
 	{
 		if (this.end == null) { return; }
@@ -51,15 +52,23 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 
 		// 始点から終点への方向ベクトルを求める
 		Vector3 direction = this.end.position - this.start;
-		this.transform.localScale = new Vector3(
-			Mathf.Abs(direction.x) / this.rect.width,
-			Mathf.Abs(direction.y) / this.rect.height, 1.0f);
 
 		// 対象オブジェクトを中間点に配置する
 		this.transform.position = Vector3.Lerp(this.start, this.end.position, 0.5f);
 
 		// 指定した方向に回転
 		this.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+
+		// 画像が横になってるから特定の角度でyとxを逆にする
+		var angle = this.transform.rotation.eulerAngles;
+		Vector2 sizeVec =
+			45.0f <= angle.z && angle.z < 135.0f ||
+			225.0f <= angle.z && angle.z < 315.0f ?
+				new Vector2(direction.y, direction.x) : direction;
+
+		this.transform.localScale = new Vector3(
+			Mathf.Abs(sizeVec.x) / this.rect.width,
+			Mathf.Abs(sizeVec.y) / this.rect.height, 1.0f);
 
 		this.timer = 0.0f;
 	}
