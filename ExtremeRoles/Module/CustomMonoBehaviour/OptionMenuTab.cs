@@ -82,8 +82,7 @@ public sealed class OptionMenuTab : MonoBehaviour
 			stringOption.TitleText.text = option.GetTranslatedName();
 			stringOption.Value = stringOption.oldValue = option.CurSelection;
 			stringOption.ValueText.text = option.GetTranslatedValue();
-			stringOption.gameObject.name = string.Concat(
-				StringOptionName, option.Id);
+			stringOption.gameObject.name = $"{StringOptionName}{option.Id}";
 			stringOption.gameObject.SetActive(true);
 
 			this.menuBody.Children[index] = stringOption;
