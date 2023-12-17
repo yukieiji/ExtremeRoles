@@ -18,6 +18,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Test.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
+using UnityResource = UnityEngine.Resources;
+
 namespace ExtremeRoles.Test;
 
 public class GameTestRunner : TestRunnerBase
@@ -113,12 +115,6 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 		for (int i = 0; i < testCase.Iteration; ++i)
 		{
 			++this.count;
-			if (this.count > waitCount)
-			{
-				this.Logger.LogInfo("Wait for 30s");
-				yield return new WaitForSeconds(30.0f);
-				this.count = 0;
-			}
 
 			this.Logger.LogInfo($"{testCase.GetType().Name}.{testCase.Name} - Start iteration:{i}");
 			if (testCase.Ids is null)
@@ -131,6 +127,15 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			}
 
 			testCase.PreSetUp?.Invoke();
+
+			if (this.count > waitCount)
+			{
+				this.Logger.LogInfo("Wait for 30s");
+				GC.Collect();
+				yield return UnityResource.UnloadUnusedAssets();
+				yield return new WaitForSeconds(30.0f);
+				this.count = 0;
+			}
 
 			yield return GameUtility.StartGame(this.Logger);
 
