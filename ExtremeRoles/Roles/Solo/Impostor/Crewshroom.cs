@@ -38,7 +38,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 		this.CreateNormalAbilityButton(
 			Translation.GetString("CrewshroomSet"),
 			Loader.CreateSpriteFromResources(
-			   Path.CrackerCrack));
+			   Path.CrewshroomSet));
 	}
 
 	public override string GetIntroDescription()
