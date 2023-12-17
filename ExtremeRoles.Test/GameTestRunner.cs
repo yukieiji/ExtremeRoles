@@ -75,6 +75,7 @@ public class GameTestRunner : TestRunnerBase
 [Il2CppRegister]
 public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 {
+	[HideFromIl2Cpp]
 	public static GameMudderEndTestingBehaviour Instance
 	{
 		get
@@ -89,6 +90,10 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 	private static GameMudderEndTestingBehaviour? instance;
 
 	public ManualLogSource Logger { private get; set; }
+
+	private int count = 0;
+	private const int waitCount = 5;
+
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	public GameMudderEndTestingBehaviour(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
@@ -107,6 +112,14 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 	{
 		for (int i = 0; i < testCase.Iteration; ++i)
 		{
+			++this.count;
+			if (this.count > waitCount)
+			{
+				this.Logger.LogInfo("Wait for 30s");
+				yield return new WaitForSeconds(30.0f);
+				this.count = 0;
+			}
+
 			this.Logger.LogInfo($"{testCase.GetType().Name}.{testCase.Name} - Start iteration:{i}");
 			if (testCase.Ids is null)
 			{

@@ -29,7 +29,7 @@ public static class GameUtility
 
 	public static IEnumerator StartGame(ManualLogSource logger)
 	{
-		yield return new WaitForSeconds(2.0f);
+		yield return new WaitForSeconds(5.0f);
 
 		logger.LogInfo("Start Games....");
 		GameStartManager.Instance.BeginGame();
