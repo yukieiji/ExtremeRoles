@@ -9,7 +9,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class AcceleratorPanel : MonoBehaviour
 {
-	private Rigidbody2D? body;
 	private BoxCollider2D? collider;
 	private Vector2 forceVec;
 
@@ -20,11 +19,8 @@ public sealed class AcceleratorPanel : MonoBehaviour
 		if (CachedPlayerControl.LocalPlayer == null) { return; }
 
 		this.collider = base.gameObject.AddComponent<BoxCollider2D>();
-		this.collider.isTrigger = true;
 		this.collider.size = new Vector2(1.5f, 1.15f);
 		this.collider.isTrigger = true;
-
-		this.body = CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D;
 	}
 
 	public void Initialize(Vector2 vector, float speed)
@@ -35,11 +31,11 @@ public sealed class AcceleratorPanel : MonoBehaviour
 	public void FixedUpdate()
 	{
 		if (CachedPlayerControl.LocalPlayer == null ||
-			this.body == null ||
-			this.collider == null ||
-			!this.body.IsTouching(this.collider)) { return; }
+			this.collider == null) { return; }
 
-		this.body.velocity += this.forceVec;
+		var body = CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D;
+
+		body.velocity += this.forceVec;
 
 	}
 }
