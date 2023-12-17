@@ -24,7 +24,7 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 	private Vector3 start;
 	private Transform? end;
 	private Rect rect;
-
+	private bool isFixed = false;
 	private float timer = 0.0f;
 
 	public AutoTransformerWithFixedFirstPoint(IntPtr ptr) : base(ptr) { }
@@ -39,22 +39,36 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 
 		this.rect.width  /= unit;
 		this.rect.height /= unit;
+		this.isFixed = false;
+	}
+
+	public void Fixed(Vector3 fixPoints)
+	{
+		this.isFixed = true;
+		updatePosAndRotate(fixPoints);
 	}
 
 	// 画像は右横向きなので
 	public void FixedUpdate()
 	{
-		if (this.end == null) { return; }
+		if (this.end == null || this.isFixed) { return; }
 
 		this.timer += Time.fixedDeltaTime;
 
 		if (this.timer < 0.15f) { return; }
 
+		updatePosAndRotate(this.end.position);
+
+		this.timer = 0.0f;
+	}
+
+	private void updatePosAndRotate(Vector3 target)
+	{
 		// 始点から終点への方向ベクトルを求める
-		Vector3 direction = this.end.position - this.start;
+		Vector3 direction = target - this.start;
 
 		// 対象オブジェクトを中間点に配置する
-		this.transform.position = Vector3.Lerp(this.start, this.end.position, 0.5f);
+		this.transform.position = Vector3.Lerp(this.start, target, 0.5f);
 
 		// 指定した方向に回転
 		this.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
@@ -69,7 +83,5 @@ public sealed class AutoTransformerWithFixedFirstPoint : MonoBehaviour
 		this.transform.localScale = new Vector3(
 			Mathf.Abs(sizeVec.x) / this.rect.width,
 			Mathf.Abs(sizeVec.y) / this.rect.height, 1.0f);
-
-		this.timer = 0.0f;
 	}
 }
