@@ -6,6 +6,7 @@ using System.Text;
 using UnityEngine;
 using HarmonyLib;
 
+using ExtremeRoles.Extension.Strings;
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Compat;
@@ -36,7 +37,7 @@ public static class IGameOptionsExtensionsNumImpostorsPatch
     nameof(IGameOptionsExtensions.ToHudString))]
 public static class IGameOptionsExtensionsToHudStringPatch
 {
-    private const int maxLines = 28;
+    public const int MaxLines = 28;
     private static int page = 0;
 
     public static void ChangePage(int num)
@@ -50,17 +51,17 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
         if (egmm == null) { return; }
 
-        List<string> hudOptionPage = new List<string>()
-        {
+        List<string> hudOptionPage =
+		[
             __result
-        };
+        ];
 
-        List<string> allOptionStr = new List<string>()
-        {
+        List<string> allOptionStr =
+		[
             getHudString(OptionCreator.CommonOptionKey.PresetSelection),
             createRngOptionHudString(),
             createRoleSpawnNumOptionHudString()
-        };
+        ];
 
         if (egmm.RoleSelector.CanUseXion)
         {
@@ -70,7 +71,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
                     getHudString(RoleGlobalOption.UseXion)));
         }
 
-        allOptionStr.Add(egmm.ShipOption.ToHudString());
+		egmm.ShipOption.AddHudString(allOptionStr);
 
         var allOption = OptionManager.Instance;
 
@@ -104,9 +105,9 @@ public static class IGameOptionsExtensionsToHudStringPatch
         StringBuilder pageBuilder = new StringBuilder();
         foreach (string optionStr in allOptionStr)
         {
-            int lines = optionStr.Count(c => c == '\n') + 1;
+			int lines = optionStr.CountLine();
 
-            if (lineCount + lines > maxLines)
+            if (lineCount + lines > MaxLines)
             {
                 hudOptionPage.Add(pageBuilder.ToString());
                 pageBuilder.Clear();
@@ -141,40 +142,40 @@ public static class IGameOptionsExtensionsToHudStringPatch
         StringBuilder builder = new StringBuilder(512);
 
         // 生存役職周り
-        builder.AppendLine(
-            createRoleSpawnNumOptionHudStringLine(
-                "crewmateRoles",
-                RoleGlobalOption.MinCrewmateRoles,
-                RoleGlobalOption.MaxCrewmateRoles));
-        builder.AppendLine(
-            createRoleSpawnNumOptionHudStringLine(
-                "neutralRoles",
-                RoleGlobalOption.MinNeutralRoles,
-                RoleGlobalOption.MaxNeutralRoles));
-        builder.AppendLine(
-            createRoleSpawnNumOptionHudStringLine(
-                "impostorRoles",
-                RoleGlobalOption.MinImpostorRoles,
-                RoleGlobalOption.MaxImpostorRoles));
-
-        builder.AppendLine();
+        builder
+			.AppendLine(
+				createRoleSpawnNumOptionHudStringLine(
+					"crewmateRoles",
+					RoleGlobalOption.MinCrewmateRoles,
+					RoleGlobalOption.MaxCrewmateRoles))
+			.AppendLine(
+				createRoleSpawnNumOptionHudStringLine(
+					"neutralRoles",
+					RoleGlobalOption.MinNeutralRoles,
+					RoleGlobalOption.MaxNeutralRoles))
+			.AppendLine(
+				createRoleSpawnNumOptionHudStringLine(
+					"impostorRoles",
+					RoleGlobalOption.MinImpostorRoles,
+					RoleGlobalOption.MaxImpostorRoles))
+			.AppendLine()
 
         // 幽霊役職周り
-        builder.AppendLine(
-            createRoleSpawnNumOptionHudStringLine(
-                "crewmateGhostRoles",
-                RoleGlobalOption.MinCrewmateGhostRoles,
-                RoleGlobalOption.MaxCrewmateGhostRoles));
-        builder.AppendLine(
-            createRoleSpawnNumOptionHudStringLine(
-                "neutralGhostRoles",
-                RoleGlobalOption.MinNeutralGhostRoles,
-                RoleGlobalOption.MaxNeutralGhostRoles));
-        builder.AppendLine(
-            createRoleSpawnNumOptionHudStringLine(
-                "impostorGhostRoles",
-                RoleGlobalOption.MinImpostorGhostRoles,
-                RoleGlobalOption.MaxImpostorGhostRoles));
+			.AppendLine(
+				createRoleSpawnNumOptionHudStringLine(
+					"crewmateGhostRoles",
+					RoleGlobalOption.MinCrewmateGhostRoles,
+					RoleGlobalOption.MaxCrewmateGhostRoles))
+			.AppendLine(
+				createRoleSpawnNumOptionHudStringLine(
+					"neutralGhostRoles",
+					RoleGlobalOption.MinNeutralGhostRoles,
+					RoleGlobalOption.MaxNeutralGhostRoles))
+			.AppendLine(
+				createRoleSpawnNumOptionHudStringLine(
+					"impostorGhostRoles",
+					RoleGlobalOption.MinImpostorGhostRoles,
+					RoleGlobalOption.MaxImpostorGhostRoles));
 
         return builder.ToString().Trim('\r', '\n');
     }
@@ -195,10 +196,11 @@ public static class IGameOptionsExtensionsToHudStringPatch
     private static string createRngOptionHudString()
     {
         StringBuilder rngOptBuilder = new StringBuilder();
-        rngOptBuilder.AppendLine(
-            getHudString(OptionCreator.CommonOptionKey.UseStrongRandomGen));
-        rngOptBuilder.AppendLine(
-            getHudString(OptionCreator.CommonOptionKey.UsePrngAlgorithm));
+        rngOptBuilder
+			.AppendLine(
+				getHudString(OptionCreator.CommonOptionKey.UseStrongRandomGen))
+			.AppendLine(
+				getHudString(OptionCreator.CommonOptionKey.UsePrngAlgorithm));
 
         return rngOptBuilder.ToString().Trim('\r', '\n');
     }

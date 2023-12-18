@@ -49,8 +49,8 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 	public bool IsBreakEmergencyButton => true;
 
-	private HashSet<GlobalOption> useOption = new HashSet<GlobalOption>()
-    {
+	private HashSet<GlobalOption> useOption =
+	[
         GlobalOption.DisableVent,
 		GlobalOption.VentAnimationModeInVison,
 
@@ -79,7 +79,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
         GlobalOption.DisableNeutralSpecialForceEnd,
 
         GlobalOption.EnableHorseMode
-    };
+    ];
 
     public void Load()
     {
@@ -148,18 +148,13 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
             GlobalOption.DisableNeutralSpecialForceEnd);
     }
 
-    public void BuildHudString(ref StringBuilder builder)
-    {
-        foreach (GlobalOption id in this.useOption)
-        {
-			var option = OptionManager.Instance.GetIOption((int)id);
-			string optionStr = option.ToHudString();
-			if (optionStr != string.Empty)
-            {
-                builder.AppendLine(optionStr);
-            }
-        }
-    }
-
     public bool IsValidOption(int id) => this.useOption.Contains((GlobalOption)id);
+
+	public IEnumerable<GlobalOption> UseOptionId()
+	{
+		foreach (GlobalOption id in this.useOption)
+		{
+			yield return id;
+		}
+	}
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
+using ExtremeRoles.Extension.Strings;
+using ExtremeRoles.Patches.Option;
 using ExtremeRoles.GameMode.Option.MapModule;
 
 using static ExtremeRoles.Module.CustomOption.Factories.SimpleFactory;
@@ -162,14 +164,31 @@ public interface IShipGlobalOption
 	public void Load();
 
     public bool IsValidOption(int id);
-    public void BuildHudString(ref StringBuilder builder);
+	public IEnumerable<GlobalOption> UseOptionId();
 
-    public string ToHudString()
-    {
-        StringBuilder strBuilder = new StringBuilder();
-        BuildHudString(ref strBuilder);
-        return strBuilder.ToString().Trim('\r', '\n');
-    }
+	public void AddHudString(in List<string> allStr)
+	{
+		int lineCounter = 0;
+		StringBuilder builder = new StringBuilder();
+		foreach (GlobalOption id in UseOptionId())
+		{
+			var option = OptionManager.Instance.GetIOption((int)id);
+
+			string optionStr = option.ToHudString();
+			int lineCount = optionStr.CountLine();
+			if (lineCounter + lineCount > IGameOptionsExtensionsToHudStringPatch.MaxLines)
+			{
+				lineCounter = 0;
+
+				allStr.Add(builder.ToString());
+
+				builder.Clear();
+			}
+			lineCounter += lineCount;
+			builder.AppendLine(optionStr);
+		}
+		allStr.Add(builder.ToString());
+	}
 
     public static void Create()
     {

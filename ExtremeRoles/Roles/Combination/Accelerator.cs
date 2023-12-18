@@ -78,6 +78,7 @@ public sealed class Accelerator :
         float y = reader.ReadSingle();
 
         rolePlayer.NetTransform.SnapTo(new Vector2(x, y));
+		var pos = rolePlayer.GetTruePosition();
 
 		switch (rpcId)
 		{
@@ -85,7 +86,7 @@ public sealed class Accelerator :
 				setupPanel(role, rolePlayer);
 				break;
 			case AcceleratorRpc.End:
-				endPanel(role);
+				endPanel(role, pos);
 				break;
 			default:
 				break;
@@ -112,13 +113,15 @@ public sealed class Accelerator :
 		accelerator.transformer.Initialize(firstPoint, player.transform, rend);
     }
 
-    private static void endPanel(Accelerator accelerator)
+    private static void endPanel(Accelerator accelerator, Vector2 endPos)
     {
 		if (accelerator.transformer == null) { return; }
 
 		accelerator.EnableUseButton = true;
 		accelerator.EnableVentButton = true;
 
+		accelerator.transformer.Fixed(
+			new Vector3(endPos.x, endPos.y, endPos.y / 100.0f));
 		GameObject obj = accelerator.transformer.gameObject;
 		Vector2 vec = accelerator.transformer.Vector;
 		Object.Destroy(accelerator.transformer);
@@ -172,7 +175,9 @@ public sealed class Accelerator :
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
 		if (this.transformer == null) { return; }
-		endPanel(this);
+
+		Vector2 playerPos = rolePlayer.GetTruePosition();
+		endPanel(this, playerPos);
 	}
 
     protected override void CreateSpecificOption(
@@ -211,12 +216,14 @@ public sealed class Accelerator :
     public void AllReset(PlayerControl rolePlayer)
     {
 		if (this.transformer == null) { return; }
-		endPanel(this);
+
+		Vector2 playerPos = rolePlayer.GetTruePosition();
+		endPanel(this, playerPos);
     }
 
 	private void acceleratorPanelOps(PlayerControl playerControl, bool isEnd)
 	{
-		Vector2 pos = playerControl.GetTruePosition();
+		Vector2 pos = playerControl.transform.position;
 
 		if (this.canUseOtherPlayer)
 		{
@@ -232,7 +239,8 @@ public sealed class Accelerator :
 
 		if (isEnd)
 		{
-			endPanel(this);
+			var endPos = playerControl.GetTruePosition();
+			endPanel(this, endPos);
 		}
 		else
 		{
