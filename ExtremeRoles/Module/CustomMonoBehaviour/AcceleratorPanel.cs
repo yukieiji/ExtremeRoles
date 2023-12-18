@@ -11,6 +11,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 {
 	private BoxCollider2D? collider;
 	private Vector2 forceVec;
+	private const float offset = 32.0f;
 
 	public AcceleratorPanel(IntPtr ptr) : base(ptr) { }
 
@@ -25,7 +26,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 
 	public void Initialize(Vector2 vector, float speed)
 	{
-		this.forceVec = vector * speed;
+		this.forceVec = vector * speed * offset;
 	}
 
 	public void FixedUpdate()
@@ -36,7 +37,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 		var body = CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D;
 		if (!body.IsTouching(this.collider)) { return; }
 
-		body.velocity += this.forceVec;
+		body.AddForce(this.forceVec);
 
 	}
 }
