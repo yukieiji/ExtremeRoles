@@ -35,7 +35,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 
 	public void CreateAbility()
 	{
-		this.CreateNormalAbilityButton(
+		this.CreateAbilityCountButton(
 			Translation.GetString("CrewshroomSet"),
 			Loader.CreateSpriteFromResources(
 			   Path.CrewshroomSet));
