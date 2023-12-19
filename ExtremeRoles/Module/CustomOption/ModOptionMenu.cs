@@ -301,6 +301,7 @@ public sealed class ModOptionMenu
 		passiveButton.OnClick.AddListener(() =>
 		{
 			if (this.popUp == null) { return; }
+			this.popUp.SetActive(false);
 			this.popUp.SetActive(true);
 		});
 		return button;
@@ -362,10 +363,10 @@ public sealed class ModOptionMenu
 			passiveButton.OnMouseOver.RemoveAllPersistentAndListeners();
 
 			passiveButton.OnClick.AddListener(() =>
-			{
-				button.onState = opt.OnClick.Invoke();
-				button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
-			});
+				{
+					button.onState = opt.OnClick.Invoke();
+					button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+				});
 
 			passiveButton.OnMouseOver.AddListener(
 				() =>
