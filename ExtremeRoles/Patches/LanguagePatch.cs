@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles.Patches.Option;
-
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(LanguageSetter), nameof(LanguageSetter.SetLanguage))]
@@ -9,7 +7,6 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix()
         {
-            OptionsMenuBehaviourStartPatch.UpdateMenuTranslation();
             Compat.CompatModMenu.UpdateTranslation();
         }
     }
