@@ -322,6 +322,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	public void Clear()
 	{
+		this.IsActive = false;
 		this.ExplosionTimer = 1000.0f;
 		this.setedId.Clear();
 		this.setBomb.Clear();
@@ -332,7 +333,6 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			task.Complete();
 		}
-		this.IsActive = false;
 	}
 
 	private void checkAllCancel()
