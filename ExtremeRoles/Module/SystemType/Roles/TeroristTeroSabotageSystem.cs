@@ -300,14 +300,17 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			case Ops.Cancel:
 				byte cancelBombId = msgReader.ReadByte();
-				lock (this.setBomb)
-				{
-					removeBomb(cancelBombId);
-				}
+
+				if (!this.IsActive) { return; }
+
+				removeBomb(cancelBombId);
 				checkAllCancel();
 				this.IsDirty = true;
 				break;
 			case Ops.Setup:
+
+				if (this.IsActive) { return; }
+
 				setBombToRandomPos(this.setNum, 0);
 
 				this.IsActive = true;
@@ -403,9 +406,14 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			Minigame.Instance.ForceClose();
 		}
 
-		if (this.setBomb.TryGetValue(id, out ExtremeConsole? value) ||
-			value != null)
+		lock (this.setBomb)
 		{
+			if (!this.setBomb.TryGetValue(id, out ExtremeConsole? value) &&
+				value == null)
+			{
+				return;
+			}
+
 			this.setBomb.Remove(id);
 			if (value.Image != null)
 			{
