@@ -287,8 +287,8 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 				TeroristTeroSabotageSystem.SystemType, out var teroSabo) &&
 			teroSabo!.ExplosionTimer < 0.0f)
 		{
-			gameIsEnd((GameOverReason)RoleGameOverReason.TeroristoTeroWithShip);
 			teroSabo.Clear();
+			gameIsEnd((GameOverReason)RoleGameOverReason.TeroristoTeroWithShip);
 			return false;
 		}
 

@@ -194,6 +194,8 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public void Reset()
 	{
 		this.deterioratableSystem.Clear();
+		this.sabotageSystem.Clear();
+		this.dirtySystem.Clear();
 		this.allSystems.Clear();
 	}
 

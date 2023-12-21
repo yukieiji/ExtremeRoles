@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>8.2.0.31</Version>
+    <Version>8.2.0.32</Version>
     <!--<VersionPrefix>8.2.0</VersionPrefix>-->
     <VersionSuffix>AnimationVisor</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>

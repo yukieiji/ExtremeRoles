@@ -300,14 +300,17 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			case Ops.Cancel:
 				byte cancelBombId = msgReader.ReadByte();
-				lock (this.setBomb)
-				{
-					removeBomb(cancelBombId);
-				}
+
+				if (!this.IsActive) { return; }
+
+				removeBomb(cancelBombId);
 				checkAllCancel();
 				this.IsDirty = true;
 				break;
 			case Ops.Setup:
+
+				if (this.IsActive) { return; }
+
 				setBombToRandomPos(this.setNum, 0);
 
 				this.IsActive = true;
@@ -322,6 +325,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	public void Clear()
 	{
+		this.IsActive = false;
 		this.ExplosionTimer = 1000.0f;
 		this.setedId.Clear();
 		this.setBomb.Clear();
@@ -332,7 +336,6 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			task.Complete();
 		}
-		this.IsActive = false;
 	}
 
 	private void checkAllCancel()
@@ -403,11 +406,20 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			Minigame.Instance.ForceClose();
 		}
 
-		if (this.setBomb.TryGetValue(id, out ExtremeConsole? value) ||
-			value != null)
+		lock (this.setBomb)
 		{
+			if (!this.setBomb.TryGetValue(id, out ExtremeConsole? value) &&
+				value == null)
+			{
+				return;
+			}
+
 			this.setBomb.Remove(id);
-			UnityObject.Destroy(value.gameObject);
+			if (value.Image != null)
+			{
+				value.Image.enabled = false;
+			}
+			UnityObject.DestroyImmediate(value.gameObject);
 		}
 	}
 
