@@ -30,7 +30,7 @@ public sealed class ModOptionMenu
 		this.csvButton.Any(x => x.IsReCreate);
 
 	private sealed record SelectionBehaviour(
-		string TitleKey, Func<bool> OnClick, bool DefaultValue);
+		string TitleKey, Func<bool> OnClick, bool CurValue);
 	private sealed record OptionButton(
 		ToggleButtonBehaviour? Button,
 		SelectionBehaviour Behaviour);
@@ -63,8 +63,8 @@ public sealed class ModOptionMenu
 			this.button.Text.transform.SetLocalZ(0.0f);
 
 			var passiveButton = this.button.GetComponent<PassiveButton>();
-			passiveButton.OnClick.RemoveAllPersistentAndListeners();
 			passiveButton.gameObject.SetActive(true);
+			passiveButton.OnClick.RemoveAllPersistentAndListeners();
 			passiveButton.OnClick.AddListener(this.excute);
 
 			this.popUp = UnityObject.Instantiate(
@@ -105,14 +105,10 @@ public sealed class ModOptionMenu
 			this.popUp.Show(info); // Show originally
 			bool result = onClick.Invoke();
 
-			if (result)
-			{
-				info = Translation.GetString($"{this.key}Success");
-			}
-			else
-			{
-				info = Translation.GetString($"{this.key}Error");
-			}
+			string transKey = result ?
+				$"{this.key}Success" : $"{this.key}Error";
+			info = Translation.GetString(transKey);
+
 			this.popUp.StartCoroutine(
 				Effects.Lerp(0.01f,
 				new Action<float>((p) => { setPopupText(info); })));
@@ -142,36 +138,31 @@ public sealed class ModOptionMenu
 
 	private static ClientOption clientOpt => ClientOption.Instance;
 	private static SelectionBehaviour[] modOption => [
-		new ("ghostsSeeTasksButton",
-			() =>
+		new ("ghostsSeeTasksButton", () =>
 			{
 				bool newValue = !clientOpt.GhostsSeeTask.Value;
 				clientOpt.GhostsSeeTask.Value = newValue;
 				return newValue;
 			}, clientOpt.GhostsSeeTask.Value),
-		new ("ghostsSeeVotesButton",
-			() =>
+		new ("ghostsSeeVotesButton", () =>
 			{
 				bool newValue = !clientOpt.GhostsSeeVote.Value;
 				clientOpt.GhostsSeeVote.Value = newValue;
 				return newValue;
 			}, clientOpt.GhostsSeeVote.Value),
-		new ("ghostsSeeRolesButton",
-			() =>
+		new ("ghostsSeeRolesButton", () =>
 			{
 				bool newValue = !clientOpt.GhostsSeeRole.Value;
 				clientOpt.GhostsSeeRole.Value = newValue;
 				return newValue;
 			}, clientOpt.GhostsSeeRole.Value),
-		new ("showRoleSummaryButton",
-			() =>
+		new ("showRoleSummaryButton", () =>
 			{
 				bool newValue = !clientOpt.ShowRoleSummary.Value;
 				clientOpt.ShowRoleSummary.Value = newValue;
 				return newValue;
 			}, clientOpt.ShowRoleSummary.Value),
-		new ("hideNamePlateButton",
-			() =>
+		new ("hideNamePlateButton", () =>
 			{
 				bool newValue = !clientOpt.HideNamePlate.Value;
 				clientOpt.HideNamePlate.Value = newValue;
@@ -233,6 +224,8 @@ public sealed class ModOptionMenu
 	{
 		if (this.creditText == null) { return; }
 
+		this.creditText.transform.localPosition = new Vector3(0.0f, -2.0f);
+
 		StringBuilder showTextBuilder = new StringBuilder();
 
 		showTextBuilder
@@ -247,6 +240,7 @@ public sealed class ModOptionMenu
 			.Append(Translation.GetString("debugThunk"))
 			.AppendLine("stou59，Tyoubi，mamePi,")
 			.AppendLine($"<align=left>　アンハッピーセット");
+
 		if (DataManager.Settings.Language.CurrentLanguage != SupportedLangs.Japanese)
 		{
 			this.creditText.transform.localPosition = new Vector3(0.0f, -1.895f);
@@ -255,10 +249,7 @@ public sealed class ModOptionMenu
 				.Append(Translation.GetString("langTranslate"))
 				.Append(Translation.GetString("translatorMember"));
 		}
-		else
-		{
-			this.creditText.transform.localPosition = new Vector3(0.0f, -2.0f);
-		}
+
 		this.creditText.text = showTextBuilder.ToString();
 	}
 
@@ -329,6 +320,10 @@ public sealed class ModOptionMenu
 		var modOptionArr = modOption;
 		var optionButton = new List<OptionButton>(modOptionArr.Length);
 
+		var buttonSize = new Vector2(2.2f, .7f);
+		var mouseColor = new Color32(34, 139, 34, byte.MaxValue);
+		var rectSize = new Vector2(2, 2);
+
 		for (int i = 0; i < modOptionArr.Length; i++)
 		{
 			var opt = modOptionArr[i];
@@ -339,15 +334,14 @@ public sealed class ModOptionMenu
 				i % 2 == 0 ? -1.17f : 1.17f,
 				1.75f - i / 2 * 0.8f);
 
-			button.onState = opt.DefaultValue;
+			button.onState = opt.CurValue;
 			button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
 
 			button.Text.transform.SetLocalZ(0.0f);
 			button.Text.text = "";
 			button.Text.fontSizeMin = button.Text.fontSizeMax = 2.2f;
 			button.Text.font = UnityObject.Instantiate(Prefab.Text.font);
-			button.Text.GetComponent<RectTransform>().sizeDelta =
-				new Vector2(2, 2);
+			button.Text.GetComponent<RectTransform>().sizeDelta = rectSize;
 
 			button.name = $"{opt.TitleKey.Replace(" ", "")}toggle";
 			button.gameObject.SetActive(true);
@@ -356,7 +350,7 @@ public sealed class ModOptionMenu
 			var passiveButton = button.GetComponent<PassiveButton>();
 			var colliderButton = button.GetComponent<BoxCollider2D>();
 
-			colliderButton.size = new Vector2(2.2f, .7f);
+			colliderButton.size = buttonSize;
 
 			passiveButton.OnClick.RemoveAllPersistentAndListeners();
 			passiveButton.OnMouseOut.RemoveAllPersistentAndListeners();
@@ -368,20 +362,18 @@ public sealed class ModOptionMenu
 					button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
 				});
 
-			passiveButton.OnMouseOver.AddListener(
-				() =>
+			passiveButton.OnMouseOver.AddListener(() =>
 				{
-					button.Background.color = new Color32(34, 139, 34, byte.MaxValue);
+					button.Background.color = mouseColor;
 				});
-			passiveButton.OnMouseOut.AddListener(
-				() =>
+			passiveButton.OnMouseOut.AddListener(() =>
 				{
 					button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
 				});
 
 			foreach (var spr in button.gameObject.GetComponentsInChildren<SpriteRenderer>())
 			{
-				spr.size = new Vector2(2.2f, .7f);
+				spr.size = buttonSize;
 			}
 			optionButton.Add(new(button, opt));
 		}
