@@ -29,6 +29,17 @@ public static class TranslationControllerExtension
         this TranslationController cont, string id, params Il2CppObject[] parts)
 		=> cont.GetString(cleanStringId(id), defaultStr: string.Empty, parts: parts);
 
+	public static void AddString(string id, string value)
+	{
+		TranslationController.Instance.AddString(cleanStringId(id), value);
+	}
+
+	public static void AddString(
+		this TranslationController cont, string id, string value)
+	{
+		cont.currentLanguage.AllStrings.Add(cleanStringId(id), value);
+	}
+
 	private static string cleanStringId(string id)
 	{
 		id = ignoreTransKeyRemover.Replace(id, string.Empty);

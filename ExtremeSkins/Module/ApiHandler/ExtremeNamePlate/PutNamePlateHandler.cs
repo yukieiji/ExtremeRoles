@@ -34,8 +34,8 @@ public sealed class PutNamePlateHandler : IRequestHandler
 			Path.Combine(newNamePate.ParentPath, newNamePate.AutherName),
 			newNamePate.AutherName, newNamePate.SkinName);
 
-		Translation.AddTransData(customNamePlate.Author, newNamePate.TransedAutherName);
-		Translation.AddTransData(customNamePlate.Name, newNamePate.TransedSkinName);
+		Translation.AddString(customNamePlate.Author, newNamePate.TransedAutherName);
+		Translation.AddString(customNamePlate.Name, newNamePate.TransedSkinName);
 
 		string id = customNamePlate.Id;
 

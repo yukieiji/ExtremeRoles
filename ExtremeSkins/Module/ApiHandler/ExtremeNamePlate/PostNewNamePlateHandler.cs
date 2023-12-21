@@ -8,7 +8,6 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.SkinManager;
-using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
@@ -34,8 +33,8 @@ public sealed class PostNewNamePlateHandler : IRequestHandler
 			Path.Combine(newNamePate.ParentPath, newNamePate.AutherName),
 			newNamePate.AutherName, newNamePate.SkinName);
 
-		Translation.AddTransData(customNamePlate.Author, newNamePate.TransedAutherName);
-		Translation.AddTransData(customNamePlate.Name  , newNamePate.TransedSkinName);
+		Translation.AddString(customNamePlate.Author, newNamePate.TransedAutherName);
+		Translation.AddString(customNamePlate.Name  , newNamePate.TransedSkinName);
 
 		if (ExtremeNamePlateManager.NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
 		{

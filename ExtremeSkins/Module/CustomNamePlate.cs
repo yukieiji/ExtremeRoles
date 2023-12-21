@@ -75,7 +75,7 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
         if (this.Data != null) { return this.Data; }
 
         this.Data = ScriptableObject.CreateInstance<NamePlateData>();
-        this.Data.name = TranslationControllerExtension.GetString(this.Name);
+        this.Data.name = Translation.GetString(this.Name);
         this.Data.displayOrder = 99;
         this.Data.ProductId = this.Id;
         this.Data.ChipOffset = new Vector2(0f, 0.2f);

@@ -120,7 +120,7 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	{
 		var data = ScriptableObject.CreateInstance<HatData>();
 
-		data.name = TranslationControllerExtension.GetString(this.Name);
+		data.name = Translation.GetString(this.Name);
 		data.displayOrder = 99;
 		data.ProductId = this.Id;
 		data.InFront = !this.Info.Back;

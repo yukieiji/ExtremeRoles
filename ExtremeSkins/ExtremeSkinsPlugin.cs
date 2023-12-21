@@ -1,4 +1,4 @@
-﻿global using ExtremeRoles.Extension.Translation;
+﻿global using Translation = ExtremeRoles.Extension.Translation.TranslationControllerExtension;
 
 using System.Net.Http;
 

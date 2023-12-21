@@ -87,7 +87,7 @@ public class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
 	{
 
 		var data = ScriptableObject.CreateInstance<VisorData>();
-		data.name = TranslationControllerExtension.GetString(this.Name);
+		data.name = Translation.GetString(this.Name);
 		data.displayOrder = 99;
 		data.ProductId = this.Id;
 		data.ChipOffset = new Vector2(0f, 0.2f);

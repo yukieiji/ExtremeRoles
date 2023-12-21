@@ -43,8 +43,8 @@ public sealed class PostNewHatHandler : IRequestHandler
 		CustomHat customHat = info.Animation == null ?
 			new CustomHat(folderPath, info) : new AnimationHat(folderPath, info);
 
-		Translation.AddTransData(newHat.AutherName, newHat.TransedAutherName);
-		Translation.AddTransData(newHat.SkinName  , newHat.TransedSkinName);
+		Translation.AddString(newHat.AutherName, newHat.TransedAutherName);
+		Translation.AddString(newHat.SkinName  , newHat.TransedSkinName);
 
 		if (ExtremeHatManager.HatData.TryAdd(customHat.Id, customHat))
 		{

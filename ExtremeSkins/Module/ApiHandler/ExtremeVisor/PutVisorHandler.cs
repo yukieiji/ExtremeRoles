@@ -44,8 +44,8 @@ public sealed class PutVisorHandler : IRequestHandler
 		CustomVisor customVisor = info.Animation == null ?
 			new CustomVisor(folderPath, info) : new AnimationVisor(folderPath, info);
 
-		Translation.AddTransData(newVisor.AutherName, newVisor.TransedAutherName);
-		Translation.AddTransData(newVisor.SkinName  , newVisor.TransedSkinName);
+		Translation.AddString(newVisor.AutherName, newVisor.TransedAutherName);
+		Translation.AddString(newVisor.SkinName  , newVisor.TransedSkinName);
 
 		string id = customVisor.Id;
 
