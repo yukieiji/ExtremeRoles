@@ -16,6 +16,10 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Performance;
+
+using Il2CppArray = Il2CppSystem.Array;
+using Il2CppObject = Il2CppSystem.Object;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -25,9 +29,10 @@ public static class EndGameManagerSetUpPatch
 {
     public static void Postfix(EndGameManager __instance)
     {
-		var gameResult = new ExtremeGameResult();
-		var winner = gameResult.Winner;
+		var gameResult = ExtremeGameResult.Instance;
+		gameResult.CreateEndGameManagerResult();
 
+		var winner = gameResult.Winner;
 		var winNeutral = setPlayerNameAndRole(
 			__instance,
 			gameResult.PlayerSummaries,
@@ -38,11 +43,11 @@ public static class EndGameManagerSetUpPatch
     }
 
     private static List<(SingleRoleBase, byte)> setPlayerNameAndRole(
-        EndGameManager manager,
-		IReadOnlyList<FinalSummary.PlayerSummary> summaries,
-		IReadOnlyList<WinningPlayerData> winner)
+        in EndGameManager manager,
+		in IReadOnlyList<FinalSummary.PlayerSummary> summaries,
+		in IReadOnlyList<WinningPlayerData> winner)
     {
-		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
+		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>(winner.Count);
 
 		// Delete and readd PoolablePlayers always showing the name and role of the player
 		foreach (PoolablePlayer pb in manager.transform.GetComponentsInChildren<PoolablePlayer>())
@@ -50,7 +55,7 @@ public static class EndGameManagerSetUpPatch
             Object.Destroy(pb.gameObject);
         }
         int num = Mathf.CeilToInt(7.5f);
-        List<WinningPlayerData> winnerList = winner.OrderBy(
+        IReadOnlyList<WinningPlayerData> winnerList = winner.OrderBy(
             delegate (WinningPlayerData b)
             {
                 if (!b.IsYou)
@@ -58,10 +63,14 @@ public static class EndGameManagerSetUpPatch
                     return 0;
                 }
                 return -1;
-            }
-            ).ToList();
+            }).ToList();
 
-        for (int i = 0; i < winnerList.Count; i++)
+		var overideText = winnerList.Any(x => x.IsYou) ?
+			StringNames.Victory : StringNames.Defeat;
+		manager.WinText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+			overideText, Il2CppArray.Empty<Il2CppObject>());
+
+		for (int i = 0; i < winnerList.Count; i++)
         {
             WinningPlayerData winningPlayerData = winnerList[i];
             int num2 = (i % 2 == 0) ? -1 : 1;
@@ -146,9 +155,9 @@ public static class EndGameManagerSetUpPatch
     }
 
     private static void setWinDetailText(
-        EndGameManager manager,
-		List<(SingleRoleBase, byte)> winNeutral,
-		IReadOnlyList<GameData.PlayerInfo> plusWinner)
+        in EndGameManager manager,
+		in List<(SingleRoleBase, byte)> winNeutral,
+		in IReadOnlyList<GameData.PlayerInfo> plusWinner)
     {
 		var winText = manager.WinText;
 
@@ -260,13 +269,13 @@ public static class EndGameManagerSetUpPatch
 		textRenderer.text = winDetailTextBuilder.ToString();
 	}
 
-    private static void AddPrefixs(ref StringBuilder baseStrings, bool condition)
+    private static void AddPrefixs(ref StringBuilder baseStrings, in bool condition)
     {
         baseStrings.Append(
             condition ? Translation.GetString("andFirst") : Translation.GetString("and"));
     }
 
-    private static WinTextInfo CreateWinTextInfo(RoleGameOverReason reason)
+    private static WinTextInfo CreateWinTextInfo(in RoleGameOverReason reason)
     {
         return reason switch
         {

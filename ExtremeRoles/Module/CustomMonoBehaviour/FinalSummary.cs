@@ -262,10 +262,11 @@ public sealed class FinalSummary : MonoBehaviour
 
 		public static PlayerSummary Create(
 			GameData.PlayerInfo playerInfo,
-			SingleRoleBase role, GhostRoleBase ghostRole)
+			SingleRoleBase role,
+			GhostRoleBase ghostRole,
+			ExtremeGameResult.TaskInfo taskInfo)
 		{
 			byte playerId = playerInfo.PlayerId;
-			var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
 			// IsImpostor
 
 			PlayerStatus finalStatus = PlayerStatus.Alive;
@@ -326,8 +327,8 @@ public sealed class FinalSummary : MonoBehaviour
 					Role = role,
 					GhostRole = ghostRole,
 					StatusInfo = finalStatus,
-					TotalTask = totalTask,
-					CompletedTask = reson == GameOverReason.HumansByTask ? totalTask : completedTask,
+					TotalTask = taskInfo.TotalTask,
+					CompletedTask = reson == GameOverReason.HumansByTask ? taskInfo.TotalTask : taskInfo.CompletedTask,
 				};
 		}
 	}

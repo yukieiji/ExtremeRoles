@@ -31,6 +31,9 @@ public static class PbExileControllerAnimePatch
 
 	private static IEnumerator animateWithRandomSpawn(PbExileController __instance)
 	{
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+
+		yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
 		yield return Effects.Wait(0.75f);
 		yield return Effects.All(new Il2CppEnumerator[]
 		{
@@ -46,7 +49,7 @@ public static class PbExileControllerAnimePatch
 
 		yield return Effects.Bloop(0f, __instance.ImpostorText.transform, 1f, 0.5f);
 		yield return new WaitForSeconds(0.5f);
-		yield return FastDestroyableSingleton<HudManager>.Instance.CoFadeFullScreen(Color.clear, Color.black, 0.2f, false);
+		yield return hud.CoFadeFullScreen(Color.clear, Color.black, 0.2f, false);
 
 		yield return ExtremeSpawnSelectorMinigame.WrapUpAndSpawn(__instance);
 

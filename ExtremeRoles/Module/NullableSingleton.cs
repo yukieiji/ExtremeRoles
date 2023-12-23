@@ -19,6 +19,14 @@ public class NullableSingleton<T> where T : new()
 
 	private static T? instance = default(T);
 
+	public static void TryDestroy()
+	{
+		if (instance != null)
+		{
+			instance = default(T);
+		}
+	}
+
 	public void Destroy()
 	{
 		instance = default(T);

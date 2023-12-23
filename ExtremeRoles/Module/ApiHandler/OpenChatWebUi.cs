@@ -10,6 +10,9 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 public sealed class OpenChatWebUi : IRequestHandler
 {
+	public const string SystemUser = "@EXR_MOD~SYSTEM";
+	public const string RemoveOldChat = "@SYSTEM_REMOVE_OLDCHAT";
+
 	public Action<HttpListenerContext> Request => this.requestAction;
 
 	private const string page =
@@ -21,7 +24,6 @@ public sealed class OpenChatWebUi : IRequestHandler
         <title>AmongUs Chat WebUI</title>
         <style>
             body, html {
-                height: 100%;
                 margin: 0;
                 padding: 0;
             }
@@ -104,7 +106,12 @@ public sealed class OpenChatWebUi : IRequestHandler
     <div id="chat-container">
         <div id="chat-history"></div>
         <div id="user-input-container">
-            <input type="text" id="user-input" placeholder="|INPUT_MESSAGE|">
+            <input
+				required
+				type="text"
+				id="user-input"
+				maxlength="120"
+				placeholder="|INPUT_MESSAGE|">
             <button id="send-button">▶</button>
         </div>
     </div>
@@ -113,6 +120,12 @@ public sealed class OpenChatWebUi : IRequestHandler
         const chatHistory = document.getElementById("chat-history");
         const userInput = document.getElementById("user-input");
         const sendButton = document.getElementById("send-button");
+
+		function removeOld() {
+            if( chatHistory.firstChild ){
+                chatHistory.removeChild( chatHistory.firstChild );
+            }
+        }
 
         function resetMessage() {
             while( chatHistory.firstChild ){
@@ -151,12 +164,15 @@ public sealed class OpenChatWebUi : IRequestHandler
 
         async function handleUserInput() {
             const chat = userInput.value;
-			if (chat.length > 120) {
-				addMessage("|SYSTEM_MESSAGE|", "|OVER_MAXLENGTH_MESSAGE|", true);
+
+			if (chat.match(/["$%&'()\*\+\-\.,\/:;<=>@\[\\\]^_`{|}~]/gi))
+			{
+				addMessage("|SYSTEM_MESSAGE|", "|INVALID_CHAR_IN_MESSAGE|", true);
 				userInput.value = "";
 				return;
 			}
-            const chatData = {
+
+			const chatData = {
                 "Body" : chat
             }
             const result = await fetch("|POST_URL|", {
@@ -167,8 +183,7 @@ public sealed class OpenChatWebUi : IRequestHandler
                 body: JSON.stringify(chatData),
             });
 
-            if (result.ok)
-            {
+            if (result.ok) {
                 userInput.value = "";
             }
         }
@@ -187,15 +202,22 @@ public sealed class OpenChatWebUi : IRequestHandler
 
         //メッセージ受信
         connection.onmessage = function(event) {
-			if (event.data == null || event.data == "")
-			{
+			if (event.data === null || event.data === "") {
 				resetMessage();
+				return;
 			}
-			else
-			{
-				const chat = JSON.parse(event.data);
-				addMessage(chat.PlayerName, chat.Chat, chat.isRight);
+
+			const chat = JSON.parse(event.data);
+			const playerName = chat.PlayerName;
+			const chatBody = chat.Chat;
+
+			if (playerName === "|SYSTEM_USER|") {
+				if (chatBody === "|CMD_REMOVE_OLD_CHAT|") {
+					removeOld();
+				}
+				return;
 			}
+			addMessage(chat.PlayerName, chat.Chat, chat.isRight);
         };
 
         //切断
@@ -237,11 +259,13 @@ public sealed class OpenChatWebUi : IRequestHandler
 		string socketUrl = ChatWebUI.SocketUrl;
 
 		string showPage = page
+			.Replace("|SYSTEM_USER|", SystemUser)
+			.Replace("|CMD_REMOVE_OLD_CHAT|", RemoveOldChat)
 			.Replace("|ESTABLISH_CONNECT_MESSAGE|", Translation.GetString("ConectSocketMessage"))
 			.Replace("|DISCONNECT_MESSAGE|", Translation.GetString("DisconectAmongUsMessage"))
 			.Replace("|SYSTEM_MESSAGE|", Translation.GetString("SystemMessage"))
 			.Replace("|INPUT_MESSAGE|", Translation.GetString("InputMessage"))
-			.Replace("|OVER_MAXLENGTH_MESSAGE|", Translation.GetString("OverMaxLengthMessage"))
+			.Replace("|INVALID_CHAR_IN_MESSAGE|", Translation.GetString("InvalidCharMessage"))
 			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
 			.Replace("|SOCKET_URL|", socketUrl.Replace("http://", ""));
 

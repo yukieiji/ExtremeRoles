@@ -141,10 +141,21 @@ public static class ChatControllerSetVisiblePatch
 {
 	public static void Prefix(ChatController __instance)
 	{
-		if (ChatWebUI.IsExist &&
-			__instance.chatBubblePool.NotInUse == 0)
+		if (!ChatWebUI.IsExist ||
+			__instance.chatBubblePool.NotInUse != 0)
 		{
-			ChatWebUI.Instance.ResetChat();
+			return;
+		}
+
+		var webUi = ChatWebUI.Instance;
+
+		if (__instance.chatBubblePool.activeChildren.Count > 0)
+		{
+			webUi.RemoveOldChat();
+		}
+		else
+		{
+			webUi.ResetChat();
 		}
 	}
 }

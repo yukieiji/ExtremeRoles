@@ -24,7 +24,12 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public static void ParseCommand(string chatStr)
         {
-            if (chatStr[0] != commandStarChar && GameSystem.IsLobby) { return; }
+            if (GameSystem.IsLobby ||
+				string.IsNullOrEmpty(chatStr) ||
+				chatStr[0] != commandStarChar)
+			{
+				return;
+			}
 
             string[] args = chatStr.Substring(1).Split(" ");
             string commandBody = args[0];
@@ -86,8 +91,8 @@ namespace ExtremeRoles.Roles.Solo.Host
         private static bool checkLocalOnlyCommand()
         {
             if (isLocalGame())
-            { 
-                return true; 
+            {
+                return true;
             }
             else
             {
@@ -97,7 +102,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         }
 
-        private static bool isLocalGame() => 
+        private static bool isLocalGame() =>
             AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame;
 
         private static bool isXion()
@@ -233,9 +238,9 @@ namespace ExtremeRoles.Roles.Solo.Host
         private static void xionPlayerToDead(byte xionPlayerId)
         {
             GameData.PlayerInfo player = GameData.Instance.GetPlayerById(xionPlayerId);
-            
+
             if (player.IsDead) { return; }
-            
+
             RPCOperator.UncheckedMurderPlayer(
                 xionPlayerId, xionPlayerId, byte.MaxValue);
         }
@@ -262,8 +267,8 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             ++this.noXionCount;
         }
-      
-        private bool isNoXion() => 
+
+        private bool isNoXion() =>
             this.noXionCount >= ((GameData.Instance.PlayerCount - 1) * 2 / 3);
     }
 }
