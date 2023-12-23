@@ -106,7 +106,12 @@ public sealed class OpenChatWebUi : IRequestHandler
     <div id="chat-container">
         <div id="chat-history"></div>
         <div id="user-input-container">
-            <input type="text" id="user-input" placeholder="|INPUT_MESSAGE|">
+            <input
+				required
+				type="text"
+				id="user-input"
+				maxlength="120"
+				placeholder="|INPUT_MESSAGE|">
             <button id="send-button">▶</button>
         </div>
     </div>
@@ -159,8 +164,10 @@ public sealed class OpenChatWebUi : IRequestHandler
 
         async function handleUserInput() {
             const chat = userInput.value;
-			if (chat.length > 120) {
-				addMessage("|SYSTEM_MESSAGE|", "|OVER_MAXLENGTH_MESSAGE|", true);
+
+			if (chat.match(/["$%&'()\*\+\-\.,\/:;<=>@\[\\\]^_`{|}~]/gi))
+			{
+				addMessage("|SYSTEM_MESSAGE|", "|INVALID_CHAR_IN_MESSAGE|", true);
 				userInput.value = "";
 				return;
 			}
@@ -258,7 +265,7 @@ public sealed class OpenChatWebUi : IRequestHandler
 			.Replace("|DISCONNECT_MESSAGE|", Translation.GetString("DisconectAmongUsMessage"))
 			.Replace("|SYSTEM_MESSAGE|", Translation.GetString("SystemMessage"))
 			.Replace("|INPUT_MESSAGE|", Translation.GetString("InputMessage"))
-			.Replace("|OVER_MAXLENGTH_MESSAGE|", Translation.GetString("OverMaxLengthMessage"))
+			.Replace("|INVALID_CHAR_IN_MESSAGE|", Translation.GetString("OverMaxLengthMessage"))
 			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
 			.Replace("|SOCKET_URL|", socketUrl.Replace("http://", ""));
 
