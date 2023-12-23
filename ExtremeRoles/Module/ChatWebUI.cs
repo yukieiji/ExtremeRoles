@@ -61,6 +61,15 @@ public sealed class ChatWebUI :
 		this.sendData(Array.Empty<byte>());
 	}
 
+	public void RemoveOldChat()
+	{
+		var chat = new WebUIChat(
+			OpenChatWebUi.SystemUser,
+			OpenChatWebUi.RemoveOldChat,
+			false);
+		AddChatToWebUI(chat);
+	}
+
 	public void AddChatToWebUI(ChatBubble bubble)
 	{
 		var chat = new WebUIChat(
