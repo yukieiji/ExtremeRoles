@@ -265,7 +265,7 @@ public sealed class OpenChatWebUi : IRequestHandler
 			.Replace("|DISCONNECT_MESSAGE|", Translation.GetString("DisconectAmongUsMessage"))
 			.Replace("|SYSTEM_MESSAGE|", Translation.GetString("SystemMessage"))
 			.Replace("|INPUT_MESSAGE|", Translation.GetString("InputMessage"))
-			.Replace("|INVALID_CHAR_IN_MESSAGE|", Translation.GetString("OverMaxLengthMessage"))
+			.Replace("|INVALID_CHAR_IN_MESSAGE|", Translation.GetString("InvalidCharMessage"))
 			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
 			.Replace("|SOCKET_URL|", socketUrl.Replace("http://", ""));
 
