@@ -22,7 +22,7 @@ using UnityResource = UnityEngine.Resources;
 
 namespace ExtremeRoles.Test;
 
-public class GameTestRunner : TestRunnerBase
+public sealed class GameTestRunner : TestRunnerBase
 {
 	public sealed record TestCase(
 		string Name, int Iteration,

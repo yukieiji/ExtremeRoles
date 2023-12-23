@@ -5,7 +5,7 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Test;
 
-internal class ImgLoadRunner
+internal sealed class ImgLoadRunner
 	: TestRunnerBase
 {
 	public override void Run()
