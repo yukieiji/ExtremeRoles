@@ -30,7 +30,7 @@ public sealed partial class Xion
             GameSystem.IsLobby &&
             IsAllPlyerDummy())
         {
-            GameSystem.SpawnDummyPlayer($"XionDummy_{randomString(10)}");
+            GameSystem.SpawnDummyPlayer($"XionDummy-{randomString(10)}");
         }
     }
 
