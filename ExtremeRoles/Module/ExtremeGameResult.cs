@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -15,18 +17,18 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using TempWinData = Il2CppSystem.Collections.Generic.List<WinningPlayerData>;
 using Player = GameData.PlayerInfo;
-using System.Text;
 
 #nullable enable
 
 namespace ExtremeRoles.Module;
 
-public sealed class ExtremeGameResult
+public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 {
 	public readonly record struct WinnerResult(
 		IReadOnlyList<WinningPlayerData> Winner,
 		IReadOnlyList<Player> PlusedWinner);
 
+	public readonly record struct TaskInfo(int CompletedTask, int TotalTask);
 	public class WinnerTempData
 	{
 		public TempWinData DefaultWinPlayer { get; init; }
@@ -138,17 +140,28 @@ public sealed class ExtremeGameResult
 	public List<FinalSummary.PlayerSummary> PlayerSummaries { get; init; }
 
 	private readonly int winGameControlId;
+	private readonly Dictionary<byte, TaskInfo> playerTaskInfo = new Dictionary<byte, TaskInfo>();
 	private WinnerTempData winner;
 
 	public ExtremeGameResult()
 	{
-		this.PlayerSummaries = new List<FinalSummary.PlayerSummary>();
 		this.winner = new WinnerTempData();
+		this.PlayerSummaries = new List<FinalSummary.PlayerSummary>();
 		this.winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
-		this.Build();
 	}
 
-	public void Build()
+	public void CreateTaskInfo()
+	{
+		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
+			this.playerTaskInfo.Add(
+				playerInfo.PlayerId,
+				new TaskInfo(completedTask, totalTask));
+		}
+	}
+
+	public void CreateEndGameManagerResult()
 	{
 		this.PlayerSummaries.Clear();
 
@@ -218,9 +231,15 @@ public sealed class ExtremeGameResult
 				ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
 			}
 
-			this.PlayerSummaries.Add(
-				FinalSummary.PlayerSummary.Create(
-					playerInfo, role, ghostRole));
+			if (this.playerTaskInfo.TryGetValue(
+					playerInfo.PlayerId, out var taskInfo))
+			{
+				var summary =
+					FinalSummary.PlayerSummary.Create(
+						playerInfo, role, ghostRole, taskInfo);
+
+				this.PlayerSummaries.Add(summary);
+			}
 		}
 
 		foreach (Player winner in this.winner.PlusedWinner)

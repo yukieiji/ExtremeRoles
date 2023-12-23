@@ -29,9 +29,10 @@ public static class EndGameManagerSetUpPatch
 {
     public static void Postfix(EndGameManager __instance)
     {
-		var gameResult = new ExtremeGameResult();
-		var winner = gameResult.Winner;
+		var gameResult = ExtremeGameResult.Instance;
+		gameResult.CreateEndGameManagerResult();
 
+		var winner = gameResult.Winner;
 		var winNeutral = setPlayerNameAndRole(
 			__instance,
 			gameResult.PlayerSummaries,
@@ -46,7 +47,7 @@ public static class EndGameManagerSetUpPatch
 		in IReadOnlyList<FinalSummary.PlayerSummary> summaries,
 		in IReadOnlyList<WinningPlayerData> winner)
     {
-		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
+		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>(winner.Count);
 
 		// Delete and readd PoolablePlayers always showing the name and role of the player
 		foreach (PoolablePlayer pb in manager.transform.GetComponentsInChildren<PoolablePlayer>())

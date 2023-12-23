@@ -216,6 +216,7 @@ public static class RPCOperator
     {
         Helper.Player.ResetTarget();
         ExtremeRolesPlugin.ShipState.Initialize();
+		Module.ExtremeGameResult.TryDestroy();
 
         // チェックポイントリセット
         Helper.Logging.ResetCkpt();
