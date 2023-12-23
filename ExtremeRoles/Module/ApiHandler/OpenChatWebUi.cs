@@ -10,8 +10,8 @@ namespace ExtremeRoles.Module.ApiHandler;
 
 public sealed class OpenChatWebUi : IRequestHandler
 {
-	public const string SystemUser = "#EXR?MOD!SYSTEM";
-	public const string RemoveOldChat = "?SYSTEM_REMOVE_OLDCHAT";
+	public const string SystemUser = "@EXR_MOD~SYSTEM";
+	public const string RemoveOldChat = "@SYSTEM_REMOVE_OLDCHAT";
 
 	public Action<HttpListenerContext> Request => this.requestAction;
 
