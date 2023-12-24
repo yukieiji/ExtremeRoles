@@ -31,18 +31,20 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 	public readonly record struct TaskInfo(int CompletedTask, int TotalTask);
 	public class WinnerTempData
 	{
-		public TempWinData DefaultWinPlayer { get; init; }
+		public TempWinData DefaultWinPlayer => TempData.winners;
 
 		public IReadOnlyList<Player> PlusedWinner => this.plusWinPlayr;
 
-		private readonly List<WinningPlayerData> finalWinPlayer;
-		private readonly List<Player> plusWinPlayr;
+		private readonly List<WinningPlayerData> finalWinPlayer = new List<WinningPlayerData>();
+		private readonly List<Player> plusWinPlayr = new List<Player>();
 
-		public WinnerTempData()
+		public void SetWinner()
 		{
-			this.DefaultWinPlayer = TempData.winners;
-			this.finalWinPlayer = new List<WinningPlayerData>(this.DefaultWinPlayer.ToArray());
-			this.plusWinPlayr = ExtremeRolesPlugin.ShipState.GetPlusWinner();
+			this.finalWinPlayer.Clear();
+			this.plusWinPlayr.Clear();
+
+			this.finalWinPlayer.AddRange(this.DefaultWinPlayer.ToArray());
+			this.plusWinPlayr.AddRange(ExtremeRolesPlugin.ShipState.GetPlusWinner());
 		}
 
 		public override string ToString()
@@ -164,6 +166,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 	public void CreateEndGameManagerResult()
 	{
 		this.PlayerSummaries.Clear();
+		this.winner.SetWinner();
 
 		var logger = ExtremeRolesPlugin.Logger;
 
