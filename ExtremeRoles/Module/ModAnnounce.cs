@@ -46,7 +46,7 @@ public static class ModAnnounce
 				ShortTitle = this.ShortTitle,
 				SubTitle = this.Bio,
 				Text = this.Body,
-				Date = this.OpenTime.ToString(),
+				Date = this.OpenTime.ToString("yyyy-MM-ddTHH:mm:ss"),
 				Id = "ExtremeRolesAnnounce",
 				Language = (uint)curLang,
 			};
