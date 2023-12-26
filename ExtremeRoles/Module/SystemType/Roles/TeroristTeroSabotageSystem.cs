@@ -387,7 +387,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	private void resetSyncTimer()
 	{
-		this.syncTimer = 1.0f;
+		this.syncTimer = 2.5f;
 	}
 
 	private void removeBomb(byte id)
