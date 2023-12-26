@@ -276,7 +276,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			removeBomb(id);
 		}
-		checkAllCancel();
+		this.checkAllCancel();
+		this.resetSyncTimer();
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
@@ -401,9 +402,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		if (Minigame.Instance != null &&
 			Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
+			teroMinigame!.amClosing != Minigame.CloseState.Closing &&
 			teroMinigame!.BombId == id)
 		{
-			Minigame.Instance.ForceClose();
+			Minigame.Instance.Close();
 		}
 
 		lock (this.setBomb)
