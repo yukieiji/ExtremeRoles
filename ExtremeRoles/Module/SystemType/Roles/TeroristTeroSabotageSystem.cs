@@ -111,13 +111,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		public TaskTypes TaskTypes => TeroristoTaskTypes;
 
-		private ArrowBehaviour[] arrow;
+		private readonly Dictionary<byte, ArrowBehaviour> arrow;
 		private readonly TeroristTeroSabotageSystem system;
 
 		public Task(TeroristTeroSabotageSystem system)
 		{
 			this.system = system;
-			this.arrow = new ArrowBehaviour[this.system.setNum];
+			this.arrow = new Dictionary<byte, ArrowBehaviour>(this.system.setNum);
 		}
 
 		public void Next(byte id)
@@ -131,9 +131,17 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				});
 		}
 
-		public void HideArrow(int index)
+		public void HideArrow(byte index)
 		{
-			this.arrow[index].gameObject.SetActive(false);
+			lock(this.arrow)
+			{
+				if (!this.arrow.TryGetValue(index, out var arrow) ||
+					arrow == null)
+				{
+					return;
+				}
+				arrow.gameObject.SetActive(false);
+			}
 		}
 
 		public void Initialize(PlayerControl owner, Transform transform)
@@ -149,7 +157,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				targetArrow.target = console.transform.position;
 				targetArrow.gameObject.SetActive(true);
 
-				this.arrow[index] = targetArrow;
+				this.arrow.Add(index, targetArrow);
 			}
 		}
 
@@ -160,10 +168,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		public void OnRemove()
 		{
-			foreach (var arrow in this.arrow)
+			foreach (var arrow in this.arrow.Values)
 			{
+				if (arrow == null) { continue; }
+
 				UnityObject.Destroy(arrow.gameObject);
 			}
+			this.arrow.Clear();
 		}
 	}
 
