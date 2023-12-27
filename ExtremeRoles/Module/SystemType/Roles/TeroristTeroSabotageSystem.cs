@@ -418,11 +418,6 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			{
 				return;
 			}
-			if (value.Image != null)
-			{
-				value.Image.enabled = false;
-			}
-			value.gameObject.SetActive(false);
 			UnityObject.DestroyImmediate(value.gameObject);
 
 			this.setBomb.Remove(id);

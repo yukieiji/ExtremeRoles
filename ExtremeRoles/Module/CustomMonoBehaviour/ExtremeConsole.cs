@@ -47,14 +47,6 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 		this.Image = rend;
 	}
 
-	public void OnDestory()
-	{
-		if (this.Image != null)
-		{
-			Destroy(this.Image);
-		}
-	}
-
 	public void SetOutline(bool on, bool mainTarget)
 	{
 		/* マテリアル周りがちゃんと作ってないので無効化しておく
