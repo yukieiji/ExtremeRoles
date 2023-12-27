@@ -17,6 +17,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
+using AmongUs.GameOptions;
+
 
 #nullable enable
 
@@ -62,12 +64,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			}
 		}
 
-		public bool IsCheckWall => true;
+		public bool IsCheckWall { get; init; }
 
 		private readonly ConsoleInfo info;
 
-		public BombConsoleBehavior(in MinigameOption option, byte bombId)
+		public BombConsoleBehavior(in MinigameOption option, byte bombId, bool isCheckWall)
 		{
+			this.IsCheckWall = isCheckWall;
 			this.info = new ConsoleInfo(
 				bombId,
 				option.PlayerActivateTime,
@@ -201,10 +204,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
 		this.flasher = new FullScreenFlusherWithAudio(
 			Sound.GetAudio(Sound.SoundType.TeroristSabotageAnnounce),
-			new Color32(255, 25, 25, 50) , 2.75f);
+			new Color32(255, 25, 25, 50), 2.75f);
 	}
 
-	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete=false)
+	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete = false)
 	{
 		foreach (var task in pc.myTasks.GetFastEnumerator())
 		{
@@ -436,13 +439,16 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			.Take(num);
 
 		byte counter = 0;
+
 		foreach (var pos in randomPos)
 		{
-			this.setedId.Add(pos.Id);
+			int posId = pos.Id;
+			this.setedId.Add(posId);
 
 			byte bombId = (byte)(startId + counter);
 
-			var consoleBehavior = new BombConsoleBehavior(this.minigameOption, bombId);
+			var consoleBehavior = new BombConsoleBehavior(
+				this.minigameOption, bombId, isCheckWall(posId));
 			var newConsole = this.consoleSystem.CreateConsoleObj(
 				pos.Pos, "TeroristBomb", consoleBehavior);
 
@@ -457,4 +463,11 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			++counter;
 		}
 	}
+	private static bool isCheckWall(in int posId)
+		=> (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId)) switch
+		{
+			5 => posId != 5, // 5はファングルのコミュ上はなんか凸凹してるからダメっぽい
+			_ => true,
+		};
 }
