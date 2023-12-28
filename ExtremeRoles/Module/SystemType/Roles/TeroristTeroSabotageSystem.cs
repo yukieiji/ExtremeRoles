@@ -176,12 +176,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			}
 			this.arrow.Clear();
 
-			if (Minigame.Instance != null &&
-				Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
-				teroMinigame!.amClosing != Minigame.CloseState.Closing)
-			{
-				Minigame.Instance.Close();
-			}
+			ExtremePlayerTask.IBehavior.CloseMinigame<TeroristTeroSabotageMinigame>();
 		}
 	}
 

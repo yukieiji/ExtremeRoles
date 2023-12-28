@@ -49,6 +49,16 @@ public sealed class ExtremePlayerTask : PlayerTask
 			return template;
 		}
 
+		protected static void CloseMinigame<T>() where T : Minigame
+		{
+			if (Minigame.Instance != null &&
+				Minigame.Instance.IsTryCast<T>(out var targetMinigame) &&
+				targetMinigame!.amClosing != Minigame.CloseState.Closing)
+			{
+				Minigame.Instance.Close();
+			}
+		}
+
 		protected static Minigame? GetMinigameFromAsset<T>(string name) where T : Minigame
 		{
 			GameObject minigameObj = Resources.Loader.GetUnityObjectFromResources<GameObject>("Minigame", name);
