@@ -175,6 +175,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				UnityObject.Destroy(arrow.gameObject);
 			}
 			this.arrow.Clear();
+
+			if (Minigame.Instance != null &&
+				Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
+				teroMinigame!.amClosing != Minigame.CloseState.Closing)
+			{
+				Minigame.Instance.Close();
+			}
 		}
 	}
 
