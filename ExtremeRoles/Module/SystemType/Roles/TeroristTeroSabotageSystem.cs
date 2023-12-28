@@ -17,6 +17,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
+using AmongUs.GameOptions;
+
 
 #nullable enable
 
@@ -62,12 +64,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			}
 		}
 
-		public bool IsCheckWall => true;
+		public bool IsCheckWall { get; init; }
 
 		private readonly ConsoleInfo info;
 
-		public BombConsoleBehavior(in MinigameOption option, byte bombId)
+		public BombConsoleBehavior(in MinigameOption option, byte bombId, bool isCheckWall)
 		{
+			this.IsCheckWall = isCheckWall;
 			this.info = new ConsoleInfo(
 				bombId,
 				option.PlayerActivateTime,
@@ -108,13 +111,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		public TaskTypes TaskTypes => TeroristoTaskTypes;
 
-		private ArrowBehaviour[] arrow;
+		private readonly Dictionary<byte, ArrowBehaviour> arrow;
 		private readonly TeroristTeroSabotageSystem system;
 
 		public Task(TeroristTeroSabotageSystem system)
 		{
 			this.system = system;
-			this.arrow = new ArrowBehaviour[this.system.setNum];
+			this.arrow = new Dictionary<byte, ArrowBehaviour>(this.system.setNum);
 		}
 
 		public void Next(byte id)
@@ -128,9 +131,17 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				});
 		}
 
-		public void HideArrow(int index)
+		public void HideArrow(byte index)
 		{
-			this.arrow[index].gameObject.SetActive(false);
+			lock(this.arrow)
+			{
+				if (!this.arrow.TryGetValue(index, out var arrow) ||
+					arrow == null)
+				{
+					return;
+				}
+				arrow.gameObject.SetActive(false);
+			}
 		}
 
 		public void Initialize(PlayerControl owner, Transform transform)
@@ -146,7 +157,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				targetArrow.target = console.transform.position;
 				targetArrow.gameObject.SetActive(true);
 
-				this.arrow[index] = targetArrow;
+				this.arrow.Add(index, targetArrow);
 			}
 		}
 
@@ -157,10 +168,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		public void OnRemove()
 		{
-			foreach (var arrow in this.arrow)
+			foreach (var arrow in this.arrow.Values)
 			{
+				if (arrow == null) { continue; }
+
 				UnityObject.Destroy(arrow.gameObject);
 			}
+			this.arrow.Clear();
 		}
 	}
 
@@ -201,10 +215,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
 		this.flasher = new FullScreenFlusherWithAudio(
 			Sound.GetAudio(Sound.SoundType.TeroristSabotageAnnounce),
-			new Color32(255, 25, 25, 50) , 2.75f);
+			new Color32(255, 25, 25, 50), 2.75f);
 	}
 
-	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete=false)
+	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete = false)
 	{
 		foreach (var task in pc.myTasks.GetFastEnumerator())
 		{
@@ -276,7 +290,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			removeBomb(id);
 		}
-		checkAllCancel();
+		this.checkAllCancel();
+		this.resetSyncTimer();
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
@@ -387,7 +402,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	private void resetSyncTimer()
 	{
-		this.syncTimer = 1.0f;
+		this.syncTimer = 2.5f;
 	}
 
 	private void removeBomb(byte id)
@@ -401,9 +416,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		if (Minigame.Instance != null &&
 			Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
+			teroMinigame!.amClosing != Minigame.CloseState.Closing &&
 			teroMinigame!.BombId == id)
 		{
-			Minigame.Instance.ForceClose();
+			Minigame.Instance.Close();
 		}
 
 		lock (this.setBomb)
@@ -413,13 +429,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			{
 				return;
 			}
+			UnityObject.DestroyImmediate(value.gameObject);
 
 			this.setBomb.Remove(id);
-			if (value.Image != null)
-			{
-				value.Image.enabled = false;
-			}
-			UnityObject.DestroyImmediate(value.gameObject);
 		}
 	}
 
@@ -433,13 +445,16 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			.Take(num);
 
 		byte counter = 0;
+
 		foreach (var pos in randomPos)
 		{
-			this.setedId.Add(pos.Id);
+			int posId = pos.Id;
+			this.setedId.Add(posId);
 
 			byte bombId = (byte)(startId + counter);
 
-			var consoleBehavior = new BombConsoleBehavior(this.minigameOption, bombId);
+			var consoleBehavior = new BombConsoleBehavior(
+				this.minigameOption, bombId, isCheckWall(posId));
 			var newConsole = this.consoleSystem.CreateConsoleObj(
 				pos.Pos, "TeroristBomb", consoleBehavior);
 
@@ -454,4 +469,11 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			++counter;
 		}
 	}
+	private static bool isCheckWall(in int posId)
+		=> (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+			ByteOptionNames.MapId)) switch
+		{
+			5 => posId != 5, // 5はファングルのコミュ上はなんか凸凹してるからダメっぽい
+			_ => true,
+		};
 }

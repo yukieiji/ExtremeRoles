@@ -49,12 +49,14 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 
 	public void SetOutline(bool on, bool mainTarget)
 	{
+		/* マテリアル周りがちゃんと作ってないので無効化しておく
 		if (this.Image != null)
 		{
 			this.Image.material.SetFloat("_Outline", on ? 1 : 0);
 			this.Image.material.SetColor("_OutlineColor", Color.yellow);
 			this.Image.material.SetColor("_AddColor", mainTarget ? Color.yellow : Color.clear);
 		}
+		*/
 	}
 
 	public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)

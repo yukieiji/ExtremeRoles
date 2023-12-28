@@ -116,7 +116,7 @@ public sealed class TeroristTeroSabotageMinigame : Minigame
 
 		yield return new WaitForSeconds(1.0f);
 
-		this.Close();
+		this.AbstractClose();
 	}
 
 	private void updateProgress(float timer, in float maxTimer)
