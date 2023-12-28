@@ -175,6 +175,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				UnityObject.Destroy(arrow.gameObject);
 			}
 			this.arrow.Clear();
+
+			ExtremePlayerTask.IBehavior.CloseMinigame<TeroristTeroSabotageMinigame>();
 		}
 	}
 
