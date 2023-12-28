@@ -328,7 +328,10 @@ public sealed class FinalSummary : MonoBehaviour
 					GhostRole = ghostRole,
 					StatusInfo = finalStatus,
 					TotalTask = taskInfo.TotalTask,
-					CompletedTask = reson == GameOverReason.HumansByTask ? taskInfo.TotalTask : taskInfo.CompletedTask,
+					CompletedTask =
+						reson == GameOverReason.HumansByTask &&
+						role.IsCrewmate() ?
+							taskInfo.TotalTask : taskInfo.CompletedTask,
 				};
 		}
 	}
