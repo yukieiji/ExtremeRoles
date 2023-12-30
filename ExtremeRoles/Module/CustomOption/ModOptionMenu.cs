@@ -34,7 +34,7 @@ public sealed class ModOptionMenu
 	private sealed record OptionButton(
 		ToggleButtonBehaviour? Button,
 		SelectionBehaviour Behaviour);
-	private sealed class PopUpButton
+	private sealed class PopupActionButton
 	{
 		public bool IsReCreate => this.popUp == null || this.button == null;
 
@@ -43,7 +43,7 @@ public sealed class ModOptionMenu
 		private readonly string key;
 		private readonly Func<bool> onClick;
 
-		public PopUpButton(
+		public PopupActionButton(
 			string key,
 			in ToggleButtonBehaviour prefab,
 			in Transform parent,
@@ -134,7 +134,7 @@ public sealed class ModOptionMenu
 	private readonly TextMeshPro? creditText;
 	private readonly TextMeshPro? titleText;
 	private readonly IReadOnlyList<OptionButton> menuButtons;
-	private readonly IReadOnlyList<PopUpButton> csvButton;
+	private readonly IReadOnlyList<PopupActionButton> csvButton;
 
 	private static ClientOption clientOpt => ClientOption.Instance;
 	private static SelectionBehaviour[] modOption => [
@@ -298,16 +298,16 @@ public sealed class ModOptionMenu
 		return button;
 	}
 
-	private IReadOnlyList<PopUpButton> initializeCsvLogic(
+	private IReadOnlyList<PopupActionButton> initializeCsvLogic(
 		in ToggleButtonBehaviour prefab)
-		=> new List<PopUpButton>(2)
+		=> new List<PopupActionButton>(2)
 		{
-			new PopUpButton(
+			new PopupActionButton(
 				"import",
 				prefab, this.popUp!.transform,
 				Color.green,  new Vector3(-1.35f, -0.9f),
 				CustomOptionCsvProcessor.Import),
-			new PopUpButton(
+			new PopupActionButton(
 				"export",
 				prefab, this.popUp!.transform,
 				Palette.ImpostorRed,  new Vector3(1.35f, -0.9f),
