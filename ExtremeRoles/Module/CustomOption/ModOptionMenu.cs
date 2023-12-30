@@ -389,7 +389,8 @@ public sealed class ModOptionMenu
 						},
 						StringNames.Accept);
 					this.confirmMenu.transform.SetParent(this.popUp!.transform);
-					this.confirmMenu.transform.SetLocalZ(-10.0f);
+					this.confirmMenu.transform.localPosition = 
+						new Vector3(0.0f, 0.0f, -20.0f);
 					this.confirmMenu.Show("パブリックベータモードを有効にします\n云々かんぬん");
 				}),
 			_ => throw new ArgumentException("NoDef ModMenu"),
