@@ -8,6 +8,8 @@ using AmongUs.Data;
 using UnityEngine;
 using TMPro;
 
+using BepInEx.Configuration;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Patches.Meeting;
@@ -26,7 +28,7 @@ public sealed class ModOptionMenu
 		this.popUp == null ||
 		this.creditText == null ||
 		this.titleText == null ||
-		this.menuButtons.Any(x => x.Behaviour == null) ||
+		this.menuButtons.Any(x => x == null) ||
 		this.csvButton.Any(x => x.IsReCreate);
 
 	private sealed record SelectionBehaviour(
@@ -34,6 +36,20 @@ public sealed class ModOptionMenu
 	private sealed record OptionButton(
 		ToggleButtonBehaviour? Button,
 		SelectionBehaviour Behaviour);
+
+	public enum MenuButton : byte
+	{
+		GhostsSeeTasksButton,
+		GhostsSeeVotesButton,
+		GhostsSeeRolesButton,
+		ShowRoleSummaryButton,
+		HideNamePlateButton,
+	}
+
+	private readonly record struct ButtonData(
+		bool CurState,
+		Action OnClick);
+
 	private sealed class PopupActionButton
 	{
 		public bool IsReCreate => this.popUp == null || this.button == null;
@@ -133,43 +149,10 @@ public sealed class ModOptionMenu
 
 	private readonly TextMeshPro? creditText;
 	private readonly TextMeshPro? titleText;
-	private readonly IReadOnlyList<OptionButton> menuButtons;
+	private readonly IReadOnlyList<ToggleButtonBehaviour> menuButtons;
 	private readonly IReadOnlyList<PopupActionButton> csvButton;
 
 	private static ClientOption clientOpt => ClientOption.Instance;
-	private static SelectionBehaviour[] modOption => [
-		new ("ghostsSeeTasksButton", () =>
-			{
-				bool newValue = !clientOpt.GhostsSeeTask.Value;
-				clientOpt.GhostsSeeTask.Value = newValue;
-				return newValue;
-			}, clientOpt.GhostsSeeTask.Value),
-		new ("ghostsSeeVotesButton", () =>
-			{
-				bool newValue = !clientOpt.GhostsSeeVote.Value;
-				clientOpt.GhostsSeeVote.Value = newValue;
-				return newValue;
-			}, clientOpt.GhostsSeeVote.Value),
-		new ("ghostsSeeRolesButton", () =>
-			{
-				bool newValue = !clientOpt.GhostsSeeRole.Value;
-				clientOpt.GhostsSeeRole.Value = newValue;
-				return newValue;
-			}, clientOpt.GhostsSeeRole.Value),
-		new ("showRoleSummaryButton", () =>
-			{
-				bool newValue = !clientOpt.ShowRoleSummary.Value;
-				clientOpt.ShowRoleSummary.Value = newValue;
-				return newValue;
-			}, clientOpt.ShowRoleSummary.Value),
-		new ("hideNamePlateButton", () =>
-			{
-				bool newValue = !clientOpt.HideNamePlate.Value;
-				clientOpt.HideNamePlate.Value = newValue;
-				NamePlateHelper.NameplateChange = true;
-				return newValue;
-			}, clientOpt.HideNamePlate.Value)
-	];
 
 	public ModOptionMenu(in OptionsMenuBehaviour optionMenu)
 	{
@@ -207,10 +190,10 @@ public sealed class ModOptionMenu
 
 		foreach (var button in this.menuButtons)
 		{
-			if (button.Button != null)
+			if (button != null)
 			{
-				button.Button.Text.text = Translation.GetString(
-					button.Behaviour.TitleKey);
+				button.Text.text = Translation.GetString(
+					button.name);
 			}
 		}
 		foreach (var button in this.csvButton)
@@ -314,28 +297,26 @@ public sealed class ModOptionMenu
 				CustomOptionCsvProcessor.Export),
 		};
 
-	private IReadOnlyList<OptionButton> initializeCustomMenu(
+	private IReadOnlyList<ToggleButtonBehaviour> initializeCustomMenu(
 		in ToggleButtonBehaviour prefab)
 	{
-		var modOptionArr = modOption;
-		var optionButton = new List<OptionButton>(modOptionArr.Length);
+		var modOptionArr = Enum.GetValues<MenuButton>();
+		var optionButton = new List<ToggleButtonBehaviour>(modOptionArr.Length);
 
 		var buttonSize = new Vector2(2.2f, .7f);
 		var mouseColor = new Color32(34, 139, 34, byte.MaxValue);
 		var rectSize = new Vector2(2, 2);
 
-		for (int i = 0; i < modOptionArr.Length; i++)
+		foreach (MenuButton menuType in modOptionArr)
 		{
-			var opt = modOptionArr[i];
+			int index = (int)menuType;
+
 			var button = UnityObject.Instantiate(
 				prefab, this.popUp!.transform);
 			button.transform.position = Vector3.zero;
 			button.transform.localPosition = new Vector3(
-				i % 2 == 0 ? -1.17f : 1.17f,
-				1.75f - i / 2 * 0.8f);
-
-			button.onState = opt.CurValue;
-			button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+				index % 2 == 0 ? -1.17f : 1.17f,
+				1.75f - index / 2 * 0.8f);
 
 			button.Text.transform.SetLocalZ(0.0f);
 			button.Text.text = "";
@@ -343,25 +324,25 @@ public sealed class ModOptionMenu
 			button.Text.font = UnityObject.Instantiate(Prefab.Text.font);
 			button.Text.GetComponent<RectTransform>().sizeDelta = rectSize;
 
-			button.name = $"{opt.TitleKey.Replace(" ", "")}toggle";
+			button.name = menuType.ToString();
 			button.gameObject.SetActive(true);
 			button.gameObject.transform.SetAsFirstSibling();
 
 			var passiveButton = button.GetComponent<PassiveButton>();
 			var colliderButton = button.GetComponent<BoxCollider2D>();
-
+			
 			colliderButton.size = buttonSize;
 
 			passiveButton.OnClick.RemoveAllPersistentAndListeners();
 			passiveButton.OnMouseOut.RemoveAllPersistentAndListeners();
 			passiveButton.OnMouseOver.RemoveAllPersistentAndListeners();
 
-			passiveButton.OnClick.AddListener(() =>
-				{
-					button.onState = opt.OnClick.Invoke();
-					button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
-				});
+			var data = createModMenuButton(button, menuType);
 
+			button.onState = data.CurState;
+			button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+
+			passiveButton.OnClick.AddListener(data.OnClick);
 			passiveButton.OnMouseOver.AddListener(() =>
 				{
 					button.Background.color = mouseColor;
@@ -375,7 +356,7 @@ public sealed class ModOptionMenu
 			{
 				spr.size = buttonSize;
 			}
-			optionButton.Add(new(button, opt));
+			optionButton.Add(button);
 		}
 		return optionButton;
 	}
@@ -418,6 +399,44 @@ public sealed class ModOptionMenu
 
 		return buttonPrefab;
 	}
+
+	private static ButtonData createModMenuButton(
+		in ToggleButtonBehaviour button, in MenuButton menu)
+		=> (menu) switch
+		{ 
+			MenuButton.GhostsSeeTasksButton => createPassiveButtonData(
+				button, clientOpt.GhostsSeeTask),
+			MenuButton.GhostsSeeVotesButton => createPassiveButtonData(
+				button, clientOpt.GhostsSeeVote),
+			MenuButton.GhostsSeeRolesButton => createPassiveButtonData(
+				button, clientOpt.GhostsSeeVote),
+			MenuButton.ShowRoleSummaryButton => createPassiveButtonData(
+				button, clientOpt.ShowRoleSummary),
+			MenuButton.HideNamePlateButton => createPassiveButtonData(
+				button, clientOpt.GhostsSeeTask,
+				() =>
+				{
+					NamePlateHelper.NameplateChange = true;
+				}),
+			_ => throw new ArgumentException("NoDef ModMenu"),
+		};
+	private static ButtonData createPassiveButtonData(
+		ToggleButtonBehaviour button,
+		ConfigEntry<bool> config,
+		Action? pressAct = null)
+		=> new ButtonData(
+			config.Value,
+			() =>
+			{
+				bool newValue = !config.Value;
+				config.Value = newValue;
+				pressAct?.Invoke();
+
+				button.onState = newValue;
+				button.Background.color =
+					button.onState ? Color.green : Palette.ImpostorRed;
+			});
+
 
 	private static IEnumerable<GameObject> getAllChilds(
 		GameObject go)
