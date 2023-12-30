@@ -44,6 +44,8 @@ public sealed class ModOptionMenu
 		GhostsSeeRolesButton,
 		ShowRoleSummaryButton,
 		HideNamePlateButton,
+
+		PublicBetaMode,
 	}
 
 	private readonly record struct ButtonData(
@@ -151,6 +153,7 @@ public sealed class ModOptionMenu
 	private readonly TextMeshPro? titleText;
 	private readonly IReadOnlyList<ToggleButtonBehaviour> menuButtons;
 	private readonly IReadOnlyList<PopupActionButton> csvButton;
+	private GenericPopup? confirmMenu;
 
 	private static ClientOption clientOpt => ClientOption.Instance;
 
@@ -361,6 +364,44 @@ public sealed class ModOptionMenu
 		return optionButton;
 	}
 
+	private ButtonData createModMenuButton(
+		in ToggleButtonBehaviour button, in MenuButton menu)
+		=> menu switch
+		{
+			MenuButton.GhostsSeeTasksButton => createPassiveButtonData(
+				button, clientOpt.GhostsSeeTask),
+			MenuButton.GhostsSeeVotesButton => createPassiveButtonData(
+				button, clientOpt.GhostsSeeVote),
+			MenuButton.GhostsSeeRolesButton => createPassiveButtonData(
+				button, clientOpt.GhostsSeeRole),
+			MenuButton.ShowRoleSummaryButton => createPassiveButtonData(
+				button, clientOpt.ShowRoleSummary),
+			MenuButton.HideNamePlateButton => createPassiveButtonData(
+				button, clientOpt.HideNamePlate,
+				() =>
+				{
+					NamePlateHelper.NameplateChange = true;
+				}),
+			MenuButton.PublicBetaMode => new ButtonData(
+				false,
+				() =>
+				{
+					if (this.confirmMenu == null)
+					{
+						this.confirmMenu = Prefab.CreateConfirmMenu(
+							() =>
+							{
+
+							},
+						StringNames.Accept);
+					}
+					this.confirmMenu.transform.SetParent(this.popUp!.transform);
+					this.confirmMenu.transform.SetLocalZ(-10.0f);
+					this.confirmMenu.Show("パブリックベータモードを有効にします\n云々かんぬん");
+				}),
+			_ => throw new ArgumentException("NoDef ModMenu"),
+		};
+
 	private static GameObject createCustomMenu(
 		in OptionsMenuBehaviour prefab)
 	{
@@ -400,26 +441,6 @@ public sealed class ModOptionMenu
 		return buttonPrefab;
 	}
 
-	private static ButtonData createModMenuButton(
-		in ToggleButtonBehaviour button, in MenuButton menu)
-		=> (menu) switch
-		{ 
-			MenuButton.GhostsSeeTasksButton => createPassiveButtonData(
-				button, clientOpt.GhostsSeeTask),
-			MenuButton.GhostsSeeVotesButton => createPassiveButtonData(
-				button, clientOpt.GhostsSeeVote),
-			MenuButton.GhostsSeeRolesButton => createPassiveButtonData(
-				button, clientOpt.GhostsSeeRole),
-			MenuButton.ShowRoleSummaryButton => createPassiveButtonData(
-				button, clientOpt.ShowRoleSummary),
-			MenuButton.HideNamePlateButton => createPassiveButtonData(
-				button, clientOpt.HideNamePlate,
-				() =>
-				{
-					NamePlateHelper.NameplateChange = true;
-				}),
-			_ => throw new ArgumentException("NoDef ModMenu"),
-		};
 	private static ButtonData createPassiveButtonData(
 		ToggleButtonBehaviour button,
 		ConfigEntry<bool> config,
