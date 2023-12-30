@@ -409,11 +409,11 @@ public sealed class ModOptionMenu
 			MenuButton.GhostsSeeVotesButton => createPassiveButtonData(
 				button, clientOpt.GhostsSeeVote),
 			MenuButton.GhostsSeeRolesButton => createPassiveButtonData(
-				button, clientOpt.GhostsSeeVote),
+				button, clientOpt.GhostsSeeRole),
 			MenuButton.ShowRoleSummaryButton => createPassiveButtonData(
 				button, clientOpt.ShowRoleSummary),
 			MenuButton.HideNamePlateButton => createPassiveButtonData(
-				button, clientOpt.GhostsSeeTask,
+				button, clientOpt.HideNamePlate,
 				() =>
 				{
 					NamePlateHelper.NameplateChange = true;
