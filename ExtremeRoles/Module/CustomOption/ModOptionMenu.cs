@@ -31,12 +31,6 @@ public sealed class ModOptionMenu
 		this.menuButtons.Any(x => x == null) ||
 		this.csvButton.Any(x => x.IsReCreate);
 
-	private sealed record SelectionBehaviour(
-		string TitleKey, Func<bool> OnClick, bool CurValue);
-	private sealed record OptionButton(
-		ToggleButtonBehaviour? Button,
-		SelectionBehaviour Behaviour);
-
 	public enum MenuButton : byte
 	{
 		GhostsSeeTasksButton,
@@ -88,10 +82,7 @@ public sealed class ModOptionMenu
 			this.popUp = UnityObject.Instantiate(
 				Prefab.Prop, passiveButton.transform);
 
-			var popUpPos = Prefab.Prop.transform.position;
-			popUpPos.z = -2048f;
-
-			this.popUp.transform.position = popUpPos;
+			this.popUp.transform.localPosition = new Vector3(-pos.x, -pos.y, 0.5f);
 			this.popUp.TextAreaTMP.fontSize *= 0.75f;
 			this.popUp.TextAreaTMP.enableAutoSizing = false;
 		}
