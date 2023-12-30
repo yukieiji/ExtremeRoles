@@ -82,7 +82,7 @@ public sealed class ModOptionMenu
 			this.popUp = UnityObject.Instantiate(
 				Prefab.Prop, passiveButton.transform);
 
-			this.popUp.transform.localPosition = new Vector3(-pos.x, -pos.y, 0.5f);
+			this.popUp.transform.localPosition = new Vector3(-pos.x, -pos.y, -10.0f);
 			this.popUp.TextAreaTMP.fontSize *= 0.75f;
 			this.popUp.TextAreaTMP.enableAutoSizing = false;
 		}
@@ -402,7 +402,7 @@ public sealed class ModOptionMenu
 			prefab.gameObject, prefab.transform);
 
 		popUp.transform.position = new Vector3(0, 0, -800f);
-		popUp.transform.localPosition = new Vector3(0.0f, 0.0f, -100.0f);
+		popUp.transform.localPosition = new Vector3(0.0f, 0.0f, -10.0f);
 
 		popUp.layer = 17;
 		popUp.name = "modMenu";
