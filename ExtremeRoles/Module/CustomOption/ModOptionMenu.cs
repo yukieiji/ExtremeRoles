@@ -386,15 +386,17 @@ public sealed class ModOptionMenu
 				false,
 				() =>
 				{
-					if (this.confirmMenu == null)
+					if (this.confirmMenu != null)
 					{
-						this.confirmMenu = Prefab.CreateConfirmMenu(
-							() =>
-							{
-
-							},
-						StringNames.Accept);
+						UnityObject.Destroy(this.confirmMenu);
+						this.confirmMenu = null;
 					}
+					this.confirmMenu = Prefab.CreateConfirmMenu(
+						() =>
+						{
+
+						},
+						StringNames.Accept);
 					this.confirmMenu.transform.SetParent(this.popUp!.transform);
 					this.confirmMenu.transform.SetLocalZ(-10.0f);
 					this.confirmMenu.Show("パブリックベータモードを有効にします\n云々かんぬん");
