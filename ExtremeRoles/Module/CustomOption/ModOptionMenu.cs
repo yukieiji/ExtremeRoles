@@ -356,7 +356,7 @@ public sealed class ModOptionMenu
 	}
 
 	private ButtonData createModMenuButton(
-		in ToggleButtonBehaviour button, in MenuButton menu)
+		ToggleButtonBehaviour button, in MenuButton menu)
 		=> menu switch
 		{
 			MenuButton.GhostsSeeTasksButton => createPassiveButtonData(
@@ -374,7 +374,7 @@ public sealed class ModOptionMenu
 					NamePlateHelper.NameplateChange = true;
 				}),
 			MenuButton.PublicBetaMode => new ButtonData(
-				false,
+				PublicBeta.Instance.Enable,
 				() =>
 				{
 					if (this.confirmMenu != null)
@@ -382,16 +382,42 @@ public sealed class ModOptionMenu
 						UnityObject.Destroy(this.confirmMenu);
 						this.confirmMenu = null;
 					}
+
+					var beta = PublicBeta.Instance;
+					bool target = !beta.Enable;
+					var pos = new Vector3(0.0f, 0.0f, -20.0f);
+
 					this.confirmMenu = Prefab.CreateConfirmMenu(
 						() =>
 						{
+							beta.Enable = target;
+							var popUp = UnityObject.Instantiate(
+								Prefab.Prop, this.popUp!.transform);
 
+							popUp.destroyOnClose = true;
+
+							popUp.transform.localScale = new Vector3(1.25f, 1.0f, 1.0f);
+							popUp.transform.Find("ExitGame").localScale = new Vector3(0.8f, 1.0f, 1.0f);
+							popUp.TextAreaTMP.transform.localScale = new Vector3(0.8f, 1.0f, 1.0f);
+							popUp.TextAreaTMP.fontSize *= 0.75f;
+							popUp.TextAreaTMP.enableAutoSizing = false;
+
+							popUp.transform.localPosition = pos;
+							popUp.Show(target ?
+								"パブリックベータモードを有効にしました\n再起動して下さい" :
+								"パブリックベータモードを無効にしました\n再起動して下さい");
 						},
 						StringNames.Accept);
 					this.confirmMenu.transform.SetParent(this.popUp!.transform);
-					this.confirmMenu.transform.localPosition = 
-						new Vector3(0.0f, 0.0f, -20.0f);
-					this.confirmMenu.Show("パブリックベータモードを有効にします\n云々かんぬん");
+					this.confirmMenu.transform.localPosition = pos;
+					this.confirmMenu.Show(
+						target ?
+							"パブリックベータモードを有効にします\n云々かんぬん" :
+							"パブリックベータモードを無効にします\n云々かんぬん");
+
+					button.onState = target;
+					button.Background.color =
+						button.onState ? Color.green : Palette.ImpostorRed;
 				}),
 			_ => throw new ArgumentException("NoDef ModMenu"),
 		};
