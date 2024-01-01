@@ -65,20 +65,15 @@ public static class EndGameManagerSetUpPatch
                 return -1;
             }).ToList();
 
-		var trans = FastDestroyableSingleton<TranslationController>.Instance;
-		if (winnerList.Any(x => x.IsYou))
-		{
-			manager.WinText.text = trans.GetString(
-				StringNames.Victory, Il2CppArray.Empty<Il2CppObject>());
-			// 色が上書きされてる可能性があるためこっちで指定する、デフォルトは(0, 0.5490196, 1, 1)
-			manager.WinText.color = new Color32(0, 140, byte.MaxValue, byte.MaxValue);
-		}
-		else
-		{
-			manager.WinText.text = trans.GetString(
-				StringNames.Defeat, Il2CppArray.Empty<Il2CppObject>());
-			manager.WinText.color = Color.red;
-		}
+
+		// 色とテキストが上書きされてる可能性があるためこっちで指定する、色のデフォルトは(0, 0.5490196, 1, 1)
+		var (overrideText, textColor) = winnerList.Any(x => x.IsYou) ?
+			(StringNames.Victory, new Color32(0, 140, byte.MaxValue, byte.MaxValue)) :
+			(StringNames.Defeat , new Color32(byte.MaxValue, 0, 0, byte.MaxValue));
+
+		manager.WinText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+			overrideText, Il2CppArray.Empty<Il2CppObject>());
+		manager.WinText.color = textColor;
 
 		for (int i = 0; i < winnerList.Count; i++)
         {
