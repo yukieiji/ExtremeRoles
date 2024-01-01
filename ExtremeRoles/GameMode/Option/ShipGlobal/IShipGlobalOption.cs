@@ -175,6 +175,8 @@ public interface IShipGlobalOption
 			var option = OptionManager.Instance.GetIOption((int)id);
 
 			string optionStr = option.ToHudString();
+			if (string.IsNullOrEmpty(optionStr)) { continue; }
+			
 			int lineCount = optionStr.CountLine();
 			if (lineCounter + lineCount > IGameOptionsExtensionsToHudStringPatch.MaxLines)
 			{
