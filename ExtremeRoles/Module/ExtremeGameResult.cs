@@ -35,6 +35,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		public IReadOnlyList<Player> PlusedWinner => this.plusWinPlayr;
 
+		private readonly Dictionary<byte, WinningPlayerData> allWinnerPool = new Dictionary<byte, WinningPlayerData>();
 		private readonly List<WinningPlayerData> finalWinPlayer = new List<WinningPlayerData>();
 		private readonly List<Player> plusWinPlayr = new List<Player>();
 
@@ -109,12 +110,23 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		public void Add(Player playerInfo)
 		{
-			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
+			if (!this.allWinnerPool.TryGetValue(playerInfo.PlayerId, out var wpd) ||
+				wpd == null)
+			{
+				ExtremeRolesPlugin.Logger.LogError($"Can't find {playerInfo.PlayerName} in winner pool");
+				return;
+			}
 			this.finalWinPlayer.Add(wpd);
 		}
 		public void AddPlusWinner(Player player)
 		{
 			this.plusWinPlayr.Add(player);
+		}
+
+		public void AddPool(Player playerInfo)
+		{
+			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
+			this.allWinnerPool.Add(playerInfo.PlayerId, wpd);
 		}
 
 		public bool Contains(string name)
@@ -160,6 +172,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 			this.playerTaskInfo.Add(
 				playerInfo.PlayerId,
 				new TaskInfo(completedTask, totalTask));
+			this.winner.AddPool(playerInfo);
 		}
 	}
 
