@@ -49,6 +49,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	// AirShipの初期スポーンと同じくnew Vector2(-25f, 40f)にしておく
 	private static Vector2 waitPos => new Vector2(-25f, 40f);
 	private const string jsonPath = "ExtremeRoles.Resources.JsonData.RandomSpawnPoint.json";
+	private const int buttonNum = 3;
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	private TextMeshPro text;
@@ -84,9 +85,14 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 		this.AbstractBegin(task);
 
-		var shuffleedPoint = usePoints.OrderBy(x => RandomGenerator.Instance.Next()).ToArray();
+		var shuffleedPoint = usePoints
+			.OrderBy(x => RandomGenerator.Instance.Next())
+			.Take(buttonNum)
+			.OrderByDescending(x => x.X)
+			.ThenByDescending(x => x.Y)
+			.ToArray();
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < buttonNum; ++i)
 		{
 			var point = shuffleedPoint[i];
 
