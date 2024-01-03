@@ -3,9 +3,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>9.2.0.6</Version>
-    <!--<VersionPrefix>9.2.0</VersionPrefix>-->
-    <VersionSuffix>2ndAnniversary</VersionSuffix>
+    <!--<Version>9.2.0.6</Version>-->
+    <VersionPrefix>9.2.1</VersionPrefix>
+    <VersionSuffix>2ndAnniversary-NewYear</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
