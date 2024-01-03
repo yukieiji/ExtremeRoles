@@ -39,7 +39,10 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         this.version = assembly?.GetName().Version;
         Updater.Instance.AddMod<ExRRepositoryInfo>($"{assemblyName}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
-    }
+
+
+		IngameTextShower.Instance.Add(() => this.ToString());
+	}
 
     public override string ToString()
         => $"{this.assemblyName} - v{this.version}";
