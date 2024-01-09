@@ -19,7 +19,7 @@ public static class CustomRegion
 		var exrTokyo = createStaticRegion(
 			ServerManagerExtension.ExROfficialServerTokyoManinName,
 			"168.138.196.31", 22023, false); // Only ExtremeRoles!!
-		IRegionInfo[] customServerRegion = 
+		IRegionInfo[] customServerRegion =
 		[
 			exrTokyo,
 			createStaticRegion(
@@ -28,7 +28,7 @@ public static class CustomRegion
 		];
 
 		bool isBetaMode = PublicBeta.Instance.Enable;
-		var allRegion = isBetaMode ? 
+		var allRegion = isBetaMode ?
 			customServerRegion :
 			defaultRegions.Concat(customServerRegion).ToArray();
 
@@ -36,7 +36,7 @@ public static class CustomRegion
         serverManager.AvailableRegions = allRegion;
 
 		var curServer = serverManager.CurrentRegion;
-		if (isBetaMode && defaultRegions.Any(x => x.Name == curServer.Name))
+		if (isBetaMode && !serverManager.IsCustomServer())
 		{
 			serverManager.SetRegion(exrTokyo);
 		}
