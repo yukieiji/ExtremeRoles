@@ -9,6 +9,6 @@ public static class PingTrackerUpdatePatch
 {
     public static void Postfix(PingTracker __instance)
     {
-		IngameTextShower.Instance.RebuildPingString(__instance);
+		StatusTextShower.Instance.RebuildPingString(__instance);
     }
 }

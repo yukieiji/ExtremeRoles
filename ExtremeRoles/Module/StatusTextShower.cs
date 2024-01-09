@@ -1,8 +1,8 @@
 ﻿using System;
+
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 using TMPro;
 
 using UnityEngine;
@@ -13,7 +13,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Module;
 
-public sealed class IngameTextShower : NullableSingleton<IngameTextShower>
+public sealed class StatusTextShower : NullableSingleton<StatusTextShower>
 {
 	private TextMeshPro? infoText;
 	private readonly StringBuilder builder = new StringBuilder();
@@ -82,7 +82,7 @@ public sealed class IngameTextShower : NullableSingleton<IngameTextShower>
 			string str = act.Invoke();
 
 			if (string.IsNullOrEmpty(str)) { continue; }
-			
+
 			this.builder.AppendLine(str);
 		}
 		this.builder.Append(text.text);

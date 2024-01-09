@@ -41,7 +41,7 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         Il2CppRegisterAttribute.Registration(assembly);
 
 
-		IngameTextShower.Instance.Add(() => this.ToString());
+		StatusTextShower.Instance.Add(() => this.ToString());
 	}
 
     public override string ToString()

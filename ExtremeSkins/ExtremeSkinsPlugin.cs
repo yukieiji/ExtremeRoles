@@ -78,7 +78,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 #endif
 		}
 
-		IngameTextShower.Instance.Add(() => CreatorModeManager.Instance.StatusString);
+		StatusTextShower.Instance.Add(() => CreatorModeManager.Instance.StatusString);
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 

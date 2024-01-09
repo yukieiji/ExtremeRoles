@@ -18,7 +18,7 @@ namespace ExtremeSkins.Patches
                 Input.GetKeyDown(KeyCode.F12))
             {
                 CreatorModeManager.Instance.SwitchMode();
-				IngameTextShower.Instance.RebuildVersionShower();
+				StatusTextShower.Instance.RebuildVersionShower();
             }
         }
     }

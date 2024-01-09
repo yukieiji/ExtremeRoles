@@ -18,7 +18,7 @@ public static class MainMenuTextInfoPatch
         var burner = GameObject.Find("bannerLogoExtremeRoles");
         if (burner == null) { return; }
 
-		IngameTextShower.Instance.RebuildVersionShower(__instance);
+		StatusTextShower.Instance.RebuildVersionShower(__instance);
 
 		var modTitle = Object.Instantiate(
             __instance.text, burner.transform);
