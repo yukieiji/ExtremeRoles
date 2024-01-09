@@ -42,7 +42,7 @@ public sealed class ModOptionMenu
 		PublicBetaMode,
 	}
 
-	private readonly record struct ButtonData(
+	private readonly record struct ButtonActionBuilder(
 		bool CurState,
 		Action OnClick);
 
@@ -324,26 +324,26 @@ public sealed class ModOptionMenu
 
 			var passiveButton = button.GetComponent<PassiveButton>();
 			var colliderButton = button.GetComponent<BoxCollider2D>();
-			
+
 			colliderButton.size = buttonSize;
 
 			passiveButton.OnClick.RemoveAllPersistentAndListeners();
 			passiveButton.OnMouseOut.RemoveAllPersistentAndListeners();
 			passiveButton.OnMouseOver.RemoveAllPersistentAndListeners();
 
-			var data = createModMenuButton(button, menuType);
+			var builder = createButtonActionBuilder(button, menuType);
 
-			button.onState = data.CurState;
-			button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+			button.onState = builder.CurState;
+			changeButtonColor(button);
 
-			passiveButton.OnClick.AddListener(data.OnClick);
+			passiveButton.OnClick.AddListener(builder.OnClick);
 			passiveButton.OnMouseOver.AddListener(() =>
 				{
 					button.Background.color = mouseColor;
 				});
 			passiveButton.OnMouseOut.AddListener(() =>
 				{
-					button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
+					changeButtonColor(button);
 				});
 
 			foreach (var spr in button.gameObject.GetComponentsInChildren<SpriteRenderer>())
@@ -355,25 +355,25 @@ public sealed class ModOptionMenu
 		return optionButton;
 	}
 
-	private ButtonData createModMenuButton(
+	private ButtonActionBuilder createButtonActionBuilder(
 		ToggleButtonBehaviour button, in MenuButton menu)
 		=> menu switch
 		{
-			MenuButton.GhostsSeeTasksButton => createPassiveButtonData(
+			MenuButton.GhostsSeeTasksButton => createPassiveButtonActionBuilder(
 				button, clientOpt.GhostsSeeTask),
-			MenuButton.GhostsSeeVotesButton => createPassiveButtonData(
+			MenuButton.GhostsSeeVotesButton => createPassiveButtonActionBuilder(
 				button, clientOpt.GhostsSeeVote),
-			MenuButton.GhostsSeeRolesButton => createPassiveButtonData(
+			MenuButton.GhostsSeeRolesButton => createPassiveButtonActionBuilder(
 				button, clientOpt.GhostsSeeRole),
-			MenuButton.ShowRoleSummaryButton => createPassiveButtonData(
+			MenuButton.ShowRoleSummaryButton => createPassiveButtonActionBuilder(
 				button, clientOpt.ShowRoleSummary),
-			MenuButton.HideNamePlateButton => createPassiveButtonData(
+			MenuButton.HideNamePlateButton => createPassiveButtonActionBuilder(
 				button, clientOpt.HideNamePlate,
 				() =>
 				{
 					NamePlateHelper.NameplateChange = true;
 				}),
-			MenuButton.PublicBetaMode => new ButtonData(
+			MenuButton.PublicBetaMode => new ButtonActionBuilder(
 				PublicBeta.Instance.Enable,
 				() =>
 				{
@@ -416,8 +416,7 @@ public sealed class ModOptionMenu
 							"パブリックベータモードを無効にします\n云々かんぬん");
 
 					button.onState = target;
-					button.Background.color =
-						button.onState ? Color.green : Palette.ImpostorRed;
+					changeButtonColor(button);
 				}),
 			_ => throw new ArgumentException("NoDef ModMenu"),
 		};
@@ -461,11 +460,11 @@ public sealed class ModOptionMenu
 		return buttonPrefab;
 	}
 
-	private static ButtonData createPassiveButtonData(
+	private static ButtonActionBuilder createPassiveButtonActionBuilder(
 		ToggleButtonBehaviour button,
 		ConfigEntry<bool> config,
 		Action? pressAct = null)
-		=> new ButtonData(
+		=> new ButtonActionBuilder(
 			config.Value,
 			() =>
 			{
@@ -474,8 +473,7 @@ public sealed class ModOptionMenu
 				pressAct?.Invoke();
 
 				button.onState = newValue;
-				button.Background.color =
-					button.onState ? Color.green : Palette.ImpostorRed;
+				changeButtonColor(button);
 			});
 
 
@@ -486,5 +484,9 @@ public sealed class ModOptionMenu
 		{
 			yield return go.transform.GetChild(i).gameObject;
 		}
+	}
+	private static void changeButtonColor(in ToggleButtonBehaviour button)
+	{
+		button.Background.color = button.onState ? Color.green : Palette.ImpostorRed;
 	}
 }
