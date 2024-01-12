@@ -21,7 +21,7 @@ public static class RPCOperator
     public enum Command : byte
     {
         // メインコントール
-        Initialize = 60,
+        Initialize = 70,
         ForceEnd,
         SetUpReady,
         SetRoleToAllPlayer,
