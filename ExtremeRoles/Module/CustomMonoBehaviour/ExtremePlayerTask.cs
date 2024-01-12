@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Performance;
 
@@ -66,6 +68,24 @@ public sealed class ExtremePlayerTask : PlayerTask
 			T minigame = prefab.GetComponent<T>();
 
 			return minigame.TryCast<Minigame>();
+		}
+
+		protected static string FlashArrowAndTextWithVanillaSabotage(
+			ref bool trigger,
+			in string text,
+			in IEnumerable<ArrowBehaviour?> arrowContainer)
+		{
+			trigger = !trigger;
+
+			var color = trigger ? Color.red : Color.yellow;
+
+			string coloredString = Design.ColoedString(color, text);
+			foreach (var arrow in arrowContainer)
+			{
+				if (arrow == null) { continue; }
+				arrow.image.color = color;
+			}
+			return coloredString;
 		}
 	}
 

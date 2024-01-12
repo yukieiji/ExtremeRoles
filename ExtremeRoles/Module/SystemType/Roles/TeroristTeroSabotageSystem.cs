@@ -104,15 +104,24 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		public int MaxStep => this.system.setNum;
 		public int TaskStep => this.MaxStep - this.system.setBomb.Count;
 
-		public string TaskText =>
-			string.Format(
-				Translation.GetString("TeroristBombTask"),
-				Mathf.CeilToInt(this.system.ExplosionTimer));
+		public string TaskText
+		{
+			get
+			{
+				string text = string.Format(
+					Translation.GetString("TeroristBombTask"),
+					Mathf.CeilToInt(this.system.ExplosionTimer));
+
+				return ExtremePlayerTask.IBehavior.FlashArrowAndTextWithVanillaSabotage(
+					ref this.even, text, this.arrow.Values);
+			}
+		}
 
 		public TaskTypes TaskTypes => TeroristoTaskTypes;
 
 		private readonly Dictionary<byte, ArrowBehaviour> arrow;
 		private readonly TeroristTeroSabotageSystem system;
+		private bool even = false;
 
 		public Task(TeroristTeroSabotageSystem system)
 		{
