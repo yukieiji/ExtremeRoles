@@ -35,8 +35,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 			foreach (var task in CachedShipStatus.Instance.SpecialTasks)
 			{
-				if (task == null ||
-					!task.IsTryCast<SabotageTask>(out var saboTask) ||
+				if (!task.IsTryCast<SabotageTask>(out var saboTask) ||
 					saboTask!.Arrows.Count == 0)
 				{
 					continue;
@@ -53,11 +52,10 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 		protected static void CloseMinigame<T>() where T : Minigame
 		{
-			if (Minigame.Instance != null &&
-				Minigame.Instance.IsTryCast<T>(out var targetMinigame) &&
+			if (Minigame.Instance.IsTryCast<T>(out var targetMinigame) &&
 				targetMinigame!.amClosing != Minigame.CloseState.Closing)
 			{
-				Minigame.Instance.Close();
+				targetMinigame!.Close();
 			}
 		}
 

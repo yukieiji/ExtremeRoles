@@ -21,8 +21,13 @@ public static class Il2CppExtension
 			.MakeGenericMethod(type)
 			.Invoke(self, Array.Empty<object>());
 	}
-	public static bool IsTryCast<T>(this Il2CppObjectBase self, out T? obj) where T : Il2CppObjectBase
+	public static bool IsTryCast<T>(this Il2CppObjectBase? self, out T? obj) where T : Il2CppObjectBase
 	{
+		if (self == null)
+		{
+			obj = null;
+			return false;
+		}
 		obj = self.TryCast<T>();
 		return obj != null;
 	}
