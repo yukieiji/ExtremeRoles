@@ -15,7 +15,7 @@ public static class VentExtension
 	{
 		if (instance == null) { return; }
 
-		Vent? vent = instance.AllVents.FirstOrDefault((x) => x.Id == id);
+		Vent? vent = instance.AllVents.FirstOrDefault((x) => x != null && x.Id == id);
 
 		vent.PlayVentAnimation();
 	}
