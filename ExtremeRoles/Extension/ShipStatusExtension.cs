@@ -41,9 +41,4 @@ public static class VentExtension
 		}
 		return CustomVent.Instance.TryGet(type, out vent);
 	}
-
-	public static void ResetCustomVent()
-    {
-		CustomVent.TryDestroy();
-    }
 }
