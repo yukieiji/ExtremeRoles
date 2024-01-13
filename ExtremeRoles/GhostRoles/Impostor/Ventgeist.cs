@@ -12,6 +12,7 @@ using ExtremeRoles.Performance;
 #nullable enable
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Extension.VentModule;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
 
@@ -97,9 +98,7 @@ public sealed class Ventgeist : GhostRoleBase
 
         foreach (Vent vent in ship.AllVents)
         {
-            if (vent == null) { continue; }
-            if (ship.IsCustomVent(vent.Id) &&
-                !vent.gameObject.active)
+            if (vent.IsModed() && !vent.gameObject.active)
             {
                 continue;
             }

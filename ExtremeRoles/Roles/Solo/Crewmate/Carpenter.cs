@@ -10,14 +10,13 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Extension.VentModule;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -592,9 +591,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
         foreach (Vent vent in ship.AllVents)
         {
-            if (vent == null) { continue; }
-            if (ship.IsCustomVent(vent.Id) &&
-                !vent.gameObject.active)
+            if (vent.IsModed() && !vent.gameObject.active)
             {
                 continue;
             }
