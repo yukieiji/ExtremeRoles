@@ -63,7 +63,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	private static ExtremeSystemTypeManager? instance = null;
 
 	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> allSystems = new ();
-	private readonly Dictionary<ExtremeSystemType, IDeterioratableExtremeSystemType> deterioratableSystem = new ();
 	private readonly List<ISabotageExtremeSystemType> sabotageSystem = new();
 
 	private readonly List<ExtremeSystemType> dirtySystem = new List<ExtremeSystemType>();
@@ -132,7 +131,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public void Deteriorate(float deltaTime)
 	{
 		this.dirtySystem.Clear();
-		foreach (var (systemTypes, system) in this.deterioratableSystem)
+		foreach (var (systemTypes, system) in this.allSystems)
 		{
 			system.Deteriorate(deltaTime);
 			if (system.IsDirty)
@@ -168,11 +167,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 			bool result = this.allSystems.TryAdd(systemType, system);
 
 			if (result &&
-				system is IDeterioratableExtremeSystemType deterioratableSystem)
-			{
-				this.deterioratableSystem.Add(systemType, deterioratableSystem);
-			}
-			if (result &&
 				system is ISabotageExtremeSystemType saboSystem)
 			{
 				this.sabotageSystem.Add(saboSystem);
@@ -193,7 +187,6 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public void Reset()
 	{
-		this.deterioratableSystem.Clear();
 		this.sabotageSystem.Clear();
 		this.dirtySystem.Clear();
 		this.allSystems.Clear();

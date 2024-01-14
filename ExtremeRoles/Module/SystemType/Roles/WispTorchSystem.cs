@@ -19,7 +19,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class WispTorchSystem : IDeterioratableExtremeSystemType
+public sealed class WispTorchSystem : IExtremeSystemType
 {
 	public sealed class Torch
 	{
