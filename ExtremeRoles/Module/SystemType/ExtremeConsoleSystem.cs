@@ -1,11 +1,8 @@
 ﻿using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 using Hazel;
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -15,9 +12,6 @@ namespace ExtremeRoles.Module.SystemType;
 public sealed class ExtremeConsoleSystem : IExtremeSystemType
 {
 	public readonly Dictionary<int, ExtremeConsole> console = new Dictionary<int, ExtremeConsole>();
-
-	public bool IsDirty => false;
-
 	private int id = 0;
 	private const ExtremeSystemType systemType = ExtremeSystemType.ExtremeConsoleSystem;
 
@@ -76,13 +70,7 @@ public sealed class ExtremeConsoleSystem : IExtremeSystemType
 		return console;
 	}
 
-	public void Deserialize(MessageReader reader, bool initialState)
-	{ }
-
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
-	{ }
-
-	public void Serialize(MessageWriter writer, bool initialState)
 	{ }
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)

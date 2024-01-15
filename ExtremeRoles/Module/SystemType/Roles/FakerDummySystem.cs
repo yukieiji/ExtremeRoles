@@ -317,16 +317,11 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		}
 	}
 
-	public bool IsDirty => false;
-
 	private List<IFakerObject> dummy = new List<IFakerObject> ();
 	private Dictionary<SystemTypes, List<int>> dummyRoomInfo = new Dictionary<SystemTypes, List<int>>();
 
 	public bool TryGetDummyColors(SystemTypes room, out List<int> color)
 		=> this.dummyRoomInfo.TryGetValue(room, out color);
-
-	public void Deserialize(MessageReader reader, bool initialState)
-	{ }
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
 	{
@@ -337,9 +332,6 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			this.dummyRoomInfo.Clear();
 		}
 	}
-
-	public void Serialize(MessageWriter writer, bool initialState)
-	{ }
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{

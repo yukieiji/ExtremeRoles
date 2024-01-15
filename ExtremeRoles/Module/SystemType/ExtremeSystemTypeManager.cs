@@ -62,7 +62,8 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	private static ExtremeSystemTypeManager? instance = null;
 
-	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> allSystems = new ();
+	private readonly Dictionary<ExtremeSystemType, IExtremeSystemType> allSystems = new();
+	private readonly Dictionary<ExtremeSystemType, IDirtableSystemType> dirtableSystems = new ();
 	private readonly List<ISabotageExtremeSystemType> sabotageSystem = new();
 
 	private readonly List<ExtremeSystemType> dirtySystem = new List<ExtremeSystemType>();
@@ -124,14 +125,14 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		for (int i = 0; i < sysmtemNum; ++i)
 		{
 			ExtremeSystemType systemType = (ExtremeSystemType)reader.ReadByte();
-			this.allSystems[systemType].Deserialize(reader, initialState);
+			this.dirtableSystems[systemType].Deserialize(reader, initialState);
 		}
 	}
 
 	public void Deteriorate(float deltaTime)
 	{
 		this.dirtySystem.Clear();
-		foreach (var (systemTypes, system) in this.allSystems)
+		foreach (var (systemTypes, system) in this.dirtableSystems)
 		{
 			system.Deteriorate(deltaTime);
 			if (system.IsDirty)
@@ -151,7 +152,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public bool TryGet<T>(ExtremeSystemType systemType, out T? system) where T : class, IExtremeSystemType
 	{
 		system = default(T);
-		if (!this.allSystems.TryGetValue(systemType, out IExtremeSystemType? iSystem))
+		if (!this.allSystems.TryGetValue(systemType, out var iSystem))
 		{
 			return false;
 		}
@@ -165,6 +166,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		lock (this.allSystems)
 		{
 			bool result = this.allSystems.TryAdd(systemType, system);
+
+			if (result &&
+				system is IDirtableSystemType dirtableSystem)
+			{
+				this.dirtableSystems.Add(systemType, dirtableSystem);
+			}
 
 			if (result &&
 				system is ISabotageExtremeSystemType saboSystem)
@@ -187,6 +194,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public void Reset()
 	{
+		this.dirtableSystems.Clear();
 		this.sabotageSystem.Clear();
 		this.dirtySystem.Clear();
 		this.allSystems.Clear();
@@ -198,7 +206,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		foreach (var systemType in this.dirtySystem)
 		{
 			writer.Write((byte)systemType);
-			this.allSystems[systemType].Serialize(writer, initialState);
+			this.dirtableSystems[systemType].Serialize(writer, initialState);
 		}
 		this.IsDirty = initialState;
 	}
