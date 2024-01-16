@@ -4,7 +4,7 @@ using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.SystemType;
 
-public sealed class MeetingTimeChangeSystem : IExtremeSystemType
+public sealed class MeetingTimeChangeSystem : IDirtableSystemType
 {
 	public enum Ops : byte
 	{

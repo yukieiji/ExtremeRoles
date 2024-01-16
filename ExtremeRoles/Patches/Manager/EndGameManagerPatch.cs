@@ -66,14 +66,17 @@ public static class EndGameManagerSetUpPatch
             }).ToList();
 
 
-		// 色とテキストが上書きされてる可能性があるためこっちで指定する、色のデフォルトは(0, 0.5490196, 1, 1)
-		var (overrideText, textColor) = winnerList.Any(x => x.IsYou) ?
-			(StringNames.Victory, new Color32(0, 140, byte.MaxValue, byte.MaxValue)) :
-			(StringNames.Defeat , new Color32(byte.MaxValue, 0, 0, byte.MaxValue));
+		// 色とテキストが上書きされてる可能性があるためこっちで指定する
+		// テキスト色のデフォルトは(0, 0.5490196, 1, 1)
+		// 背景デフォルトは(0.6415, 0, 0, 1)
+		var (overrideText, textColor, bkColor) = winnerList.Any(x => x.IsYou) ?
+			(StringNames.Victory, new Color32(0, 140, byte.MaxValue, byte.MaxValue), Palette.CrewmateBlue) :
+			(StringNames.Defeat , new Color32(byte.MaxValue, 0, 0, byte.MaxValue)  , new Color(0.6415f, 0, 0, 1));
 
 		manager.WinText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
 			overrideText, Il2CppArray.Empty<Il2CppObject>());
 		manager.WinText.color = textColor;
+		manager.BackgroundBar.material.SetColor("_Color", bkColor);
 
 		for (int i = 0; i < winnerList.Count; i++)
         {
@@ -180,7 +183,7 @@ public static class EndGameManagerSetUpPatch
         var state = ExtremeRolesPlugin.ShipState;
 
         // 背景とベースのテキスト追加
-        var info = CreateWinTextInfo((RoleGameOverReason)state.EndReason);
+        var info = createWinTextInfo((RoleGameOverReason)state.EndReason);
 
 		winDetailTextBuilder.Append(info.Text);
 
@@ -198,10 +201,8 @@ public static class EndGameManagerSetUpPatch
 
         foreach (var player in plusWinner)
         {
-            bool isGhost = ExtremeGhostRoleManager.GameRole.TryGetValue(
-                player.PlayerId, out GhostRoleBase ghostRole);
-
-            if (!isGhost ||
+            if (!ExtremeGhostRoleManager.GameRole.TryGetValue(
+					player.PlayerId, out GhostRoleBase ghostRole) ||
                 !ghostRole.IsNeutral() ||
                 !(ghostRole is IGhostRoleWinable ghostWin)) { continue; }
 
@@ -280,9 +281,8 @@ public static class EndGameManagerSetUpPatch
             condition ? Translation.GetString("andFirst") : Translation.GetString("and"));
     }
 
-    private static WinTextInfo CreateWinTextInfo(in RoleGameOverReason reason)
-    {
-        return reason switch
+    private static WinTextInfo createWinTextInfo(in RoleGameOverReason reason)
+		=> reason switch
         {
             (RoleGameOverReason)GameOverReason.HumansByTask or
             (RoleGameOverReason)GameOverReason.HumansByVote or
@@ -353,17 +353,14 @@ public static class EndGameManagerSetUpPatch
 
             _ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
-    }
 
     private readonly record struct WinTextInfo(string Text, Color Color, bool IsChangeBk)
     {
         internal static WinTextInfo Create(
             in System.Enum textEnum, in Color color,
 			in bool isChangeBk = true)
-        {
-			return new WinTextInfo(
+			=> new WinTextInfo(
 				Translation.GetString(textEnum.ToString()),
 				color, isChangeBk);
-        }
-    }
+	}
 }

@@ -21,7 +21,7 @@ public static class RPCOperator
     public enum Command : byte
     {
         // メインコントール
-        Initialize = 60,
+        Initialize = 70,
         ForceEnd,
         SetUpReady,
         SetRoleToAllPlayer,
@@ -241,6 +241,8 @@ public static class RPCOperator
 
     public static void ForceEnd()
     {
+		if (Helper.GameSystem.IsLobby) { return; }
+
         foreach (PlayerControl player in PlayerControl.AllPlayerControls)
         {
             if (!player.Data.Role.IsImpostor)
@@ -416,8 +418,9 @@ public static class RPCOperator
     public static void UncheckedMurderPlayer(
         byte sourceId, byte targetId, byte useAnimation)
     {
+		if (Helper.GameSystem.IsLobby) { return; }
 
-        PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
+		PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
         PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
 
         if (source != null && target != null)

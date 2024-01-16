@@ -16,7 +16,7 @@ using ExtremeRoles.Extension.Json;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class ThiefMeetingTimeStealSystem : IExtremeSystemType
+public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 {
 	public enum Ops
 	{

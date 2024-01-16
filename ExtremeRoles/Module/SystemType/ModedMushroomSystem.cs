@@ -30,8 +30,6 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 		Scorp
 	}
 
-	public bool IsDirty => false;
-
 	public ModedMushroomSystem(float delaySecond)
 	{
 		this.delaySecond = delaySecond;
@@ -84,12 +82,6 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 				return;
 		}
 	}
-
-	public void Serialize(MessageWriter writer, bool initialState)
-	{ }
-
-	public void Deserialize(MessageReader reader, bool initialState)
-	{ }
 
 	private void sporeModMushroom(int id)
 	{
