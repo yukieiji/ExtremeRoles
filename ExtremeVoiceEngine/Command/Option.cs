@@ -1,7 +1,7 @@
-﻿using ExtremeVoiceEngine.Extension;
-using System;
-using System.Linq;
+﻿using System;
 using System.Text;
+
+using ExtremeRoles.Extension.Controller;
 
 namespace ExtremeVoiceEngine.Command;
 
@@ -92,7 +92,7 @@ public sealed class Option
         {
             sb.Append(", ").Append(parser.ShortNameOptionSymbol).Append(this.ShortName);
         }
-        
+
         string expression = trans.GetString(this.Expression);
         if (expression == "STRMISS")
         {

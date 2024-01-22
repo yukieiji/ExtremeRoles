@@ -2,6 +2,8 @@
 
 using ExtremeRoles.Patches.Player;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Controller;
+
 using ExtremeVoiceEngine.Extension;
 
 namespace ExtremeVoiceEngine.Patches;

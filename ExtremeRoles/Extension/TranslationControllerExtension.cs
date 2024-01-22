@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using Il2CppObject = Il2CppSystem.Object;
 
-using ExtremeRoles.Extension;
-
-namespace ExtremeVoiceEngine.Extension;
+namespace ExtremeRoles.Extension.Controller;
 
 public static class TranslationControllerExtension
 {

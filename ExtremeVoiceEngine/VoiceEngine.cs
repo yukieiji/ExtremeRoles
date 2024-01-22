@@ -8,6 +8,7 @@ using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Controller;
 
 using ExtremeVoiceEngine.Command;
 using ExtremeVoiceEngine.Extension;
