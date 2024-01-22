@@ -15,6 +15,8 @@ using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Patches.Meeting;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Extension.Controller;
+using ExtremeRoles.Beta;
 
 
 #nullable enable
@@ -410,10 +412,14 @@ public sealed class ModOptionMenu
 						StringNames.Accept);
 					this.confirmMenu.transform.SetParent(this.popUp!.transform);
 					this.confirmMenu.transform.localPosition = pos;
+
+					string func = TranslationControllerExtension.GetString(
+						BetaContentManager.TransKey);
+
 					this.confirmMenu.Show(
 						target ?
-							"パブリックベータモードを有効にします\n云々かんぬん" :
-							"パブリックベータモードを無効にします\n云々かんぬん");
+							$"パブリックベータモードを有効にします\n以下の機能が有効になります\n{func}" :
+							$"パブリックベータモードを無効にします\n以下の機能が無効になります\n{func}");
 
 					button.onState = target;
 					changeButtonColor(button);
