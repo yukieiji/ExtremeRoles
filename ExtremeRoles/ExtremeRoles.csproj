@@ -45,6 +45,7 @@
   <!-- パブリックベータモード用 -->
   <ItemGroup>
     <Compile Include="..\ExtremeRoles.Beta\BetaContentManager.cs" Link="Beta\BetaContentManager.cs" />
+    <Compile Include="..\ExtremeRoles.Beta\FeedBackSystem.cs" Link="Beta\FeedBackSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\ExtremeRoles.Beta\Resources\JsonData\TextRevamp.json" LogicalName="ExtremeRoles.Beta.Resources.JsonData.TextRevamp.json" />

@@ -20,6 +20,8 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 		DisableReady
 	}
 
+	public bool IsEnableWithMode => this.Enable && this.mode == Mode.Enable;
+
 	public bool Enable
 	{
 		get

@@ -29,7 +29,8 @@ namespace ExtremeRoles.Helper
             stringData.Clear();
 
             JObject parsed = JsonParser.GetJObjectFromAssembly(
-				PublicBeta.Instance.Enable ? BetaContentManager.NewTransDataPath : dataPath);
+				PublicBeta.Instance.IsEnableWithMode ?
+				BetaContentManager.NewTransDataPath : dataPath);
 
             for (int i = 0; i < parsed.Count; i++)
             {
