@@ -49,6 +49,8 @@ public static class MeetingHudSortButtonsPatch
 		var player = CachedPlayerControl.LocalPlayer;
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
 			player);
+		bool isUseRaiseHand = OptionManager.Instance.GetValue<bool>
+			((int)OptionCreator.CommonOptionKey.UseRaiseHand);
 
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
@@ -61,6 +63,11 @@ public static class MeetingHudSortButtonsPatch
 				obj.AddComponent<OtherPlayerVoteAreaInfo>();
 
 			playerInfoUpdater.Init(playerVoteArea, isHudOverrideTaskActive);
+
+			if (isUseRaiseHand)
+			{
+				// ここで挙手ボタンのテクスチャを表示するやつを作る
+			}
 		}
 	}
 

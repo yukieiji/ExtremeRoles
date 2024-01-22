@@ -59,7 +59,8 @@ public static class IGameOptionsExtensionsToHudStringPatch
         List<string> allOptionStr =
 		[
             getHudString(OptionCreator.CommonOptionKey.PresetSelection),
-            createRngOptionHudString(),
+			getHudString(OptionCreator.CommonOptionKey.UseRaiseHand),
+			createRngOptionHudString(),
             createRoleSpawnNumOptionHudString()
         ];
 
