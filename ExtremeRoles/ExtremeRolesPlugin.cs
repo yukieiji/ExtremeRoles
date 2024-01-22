@@ -73,6 +73,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		Il2CppRegisterAttribute.Registration(
             System.Reflection.Assembly.GetAssembly(this.GetType()));
 
+		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
+
         Loader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();

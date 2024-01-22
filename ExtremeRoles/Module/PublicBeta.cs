@@ -1,5 +1,5 @@
-﻿using System.IO;
-using BepInEx;
+﻿using ExtremeRoles.Helper;
+
 using BepInEx.Configuration;
 
 #nullable enable
@@ -10,18 +10,51 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 {
 	public string CurStateString { get; private set; } = string.Empty;
 
+	public enum Mode
+	{
+		Enable,
+		Disable,
+		EnableReady,
+		DisableReady
+	}
+
 	public bool Enable
 	{
 		get
 		{
 			return this.getConfig().Value;
 		}
-		set
-		{
-			this.getConfig().Value = value;
-		}
 	}
+
 	private ConfigEntry<bool>? enableConfig;
+	private Mode mode;
+
+	public PublicBeta()
+	{
+		this.mode = this.Enable ? Mode.Enable : Mode.Disable;
+		ExtremeRolesPlugin.Logger.LogInfo($"PublicBeta Mode : {this.Enable}");
+		this.updateStatusString();
+	}
+
+	public void SwitchMode()
+	{
+		this.mode = this.Enable ? Mode.DisableReady : Mode.EnableReady;
+		this.getConfig().Value = !this.Enable;
+		ExtremeRolesPlugin.Logger.LogInfo($"Switch Mode: {this.mode}");
+		updateStatusString();
+	}
+
+	private void updateStatusString()
+	{
+		this.CurStateString = this.mode switch
+		{
+			Mode.Enable => "パブリックベータモード：有効中",
+			Mode.DisableReady => "再起動後にパブリックベータモードが無効になります",
+			Mode.EnableReady => "再起動後にパブリックベータモードが有効になります",
+			_ => string.Empty
+		};
+		StatusTextShower.Instance.RebuildVersionShower();
+	}
 
 	private ConfigEntry<bool> getConfig()
 	{
@@ -33,5 +66,5 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 	}
 
 	private static ConfigEntry<bool> getConfig(ConfigFile config)
-		=> config.Bind<bool>(ClientOption.Selection, "PublicBetaMode", false);
+		=> config.Bind(ClientOption.Selection, "PublicBetaMode", false);
 }

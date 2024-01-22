@@ -384,13 +384,13 @@ public sealed class ModOptionMenu
 					}
 
 					var beta = PublicBeta.Instance;
-					bool target = !beta.Enable;
 					var pos = new Vector3(0.0f, 0.0f, -20.0f);
+					bool target = !beta.Enable;
 
 					this.confirmMenu = Prefab.CreateConfirmMenu(
 						() =>
 						{
-							beta.Enable = target;
+							beta.SwitchMode();
 							var popUp = UnityObject.Instantiate(
 								Prefab.Prop, this.popUp!.transform);
 

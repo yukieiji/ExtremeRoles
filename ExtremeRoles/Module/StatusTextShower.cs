@@ -22,16 +22,7 @@ public sealed class StatusTextShower : NullableSingleton<StatusTextShower>
 	public void RebuildPingString(in PingTracker tracker)
 	{
 		tracker.text.alignment = TextAlignmentOptions.TopRight;
-
-		this.builder.Clear();
-		foreach (var act in this.prevStringBuildAction)
-		{
-			string str = act.Invoke();
-			this.builder.AppendLine(str);
-		}
-		this.builder.Append(tracker.text.text);
-
-		tracker.text.text = this.builder.ToString();
+		this.setText(tracker.text);
 	}
 
 	public void RebuildVersionShower(in VersionShower versionShower)
