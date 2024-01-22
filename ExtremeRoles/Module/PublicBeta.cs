@@ -2,6 +2,8 @@
 
 using BepInEx.Configuration;
 
+using ExtremeRoles.Beta;
+
 #nullable enable
 
 namespace ExtremeRoles.Module;
@@ -48,7 +50,7 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 	{
 		this.CurStateString = this.mode switch
 		{
-			Mode.Enable => "パブリックベータモード：有効中",
+			Mode.Enable => $"パブリックベータ - v{BetaContentManager.Version}",
 			Mode.DisableReady => "再起動後にパブリックベータモードが無効になります",
 			Mode.EnableReady => "再起動後にパブリックベータモードが有効になります",
 			_ => string.Empty

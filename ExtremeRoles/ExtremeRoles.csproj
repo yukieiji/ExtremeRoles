@@ -42,6 +42,14 @@
     <EmbeddedResource Include="Resources\Config\*.cfg" />
   </ItemGroup>
 
+  <!-- パブリックベータモード用 -->
+  <ItemGroup>
+    <Compile Include="..\ExtremeRoles.Beta\BetaContentManager.cs" Link="Beta\BetaContentManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\ExtremeRoles.Beta\Resources\JsonData\TextRevamp.json" LogicalName="ExtremeRoles.Beta.Resources.JsonData.TextRevamp.json" />
+  </ItemGroup>
+
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
