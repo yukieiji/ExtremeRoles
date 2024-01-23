@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 
 using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+
 using ExtremeRoles.Performance;
 
 #nullable enable
@@ -14,6 +16,7 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class RaiseHandSystem : IDirtableSystemType
 {
+	public bool IsInit => this.raiseHandButton != null;
 	public const ExtremeSystemType Type = ExtremeSystemType.RaiseHandSystem;
 
 	private readonly Dictionary<byte, RaiseHandBehaviour> allHand = new Dictionary<byte, RaiseHandBehaviour>();
@@ -38,22 +41,37 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		return sytem;
 	}
 
+	public void CreateRaiseHandButton()
+	{
+		this.raiseHandButton = Resources.Loader.CreateSimpleButton(
+			MeetingHud.Instance.transform);
+
+		this.raiseHandButton.Text.text = "挙手する";
+		this.raiseHandButton.Text.fontSize =
+			this.raiseHandButton.Text.fontSizeMax =
+			this.raiseHandButton.Text.fontSizeMin = 2.0f;
+		this.raiseHandButton.Scale = new Vector3(0.35f, 0.25f, 1.0f);
+		this.raiseHandButton.Layer = 5;
+		this.raiseHandButton.transform.localPosition = new Vector3(0.0f, -2.25f, -125f);
+
+		this.raiseHandButton.ClickedEvent.AddListener(() =>
+		{
+			ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
+				Type, (x) =>
+				{
+					x.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+				});
+		});
+	}
+
 	public void AddHand(PlayerVoteArea player)
 	{
 		var hand = player.gameObject.AddComponent<RaiseHandBehaviour>();
 
+		hand.Initialize(player);
+
 		byte playerId = player.TargetPlayerId;
 		this.allHand[playerId] = hand;
-
-		if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
-		{
-			this.raiseHandButton = Resources.Loader.CreateSimpleButton(
-				MeetingHud.Instance.transform);
-			this.raiseHandButton.ClickedEvent.AddListener(() =>
-			{
-				this.RaiseHand(player);
-			});
-		}
 	}
 
 	public void RaiseHandButtonSetActive(bool active)
@@ -62,15 +80,6 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		{
 			this.raiseHandButton.gameObject.SetActive(active);
 		}
-	}
-
-	public void RaiseHand(PlayerVoteArea player)
-	{
-		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
-			Type, (x) =>
-			{
-				x.Write(player.TargetPlayerId);
-			});
 	}
 
 	public void Deteriorate(float deltaTime)

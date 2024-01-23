@@ -56,7 +56,7 @@ public static class OptionCreator
 
 		var strongGen = commonOptionFactory.CreateBoolOption(
 			CommonOptionKey.UseStrongRandomGen,
-			true);
+			true, isHeader: true);
 		commonOptionFactory.CreateSelectionOption(
 			CommonOptionKey.UsePrngAlgorithm,
 			new string[]
