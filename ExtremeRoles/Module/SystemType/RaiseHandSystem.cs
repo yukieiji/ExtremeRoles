@@ -2,9 +2,13 @@
 
 using Hazel;
 
-using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Performance;
 
+#nullable enable
 
 namespace ExtremeRoles.Module.SystemType;
 
@@ -15,6 +19,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 	private readonly Dictionary<byte, RaiseHandBehaviour> allHand = new Dictionary<byte, RaiseHandBehaviour>();
 
 	private Dictionary<byte, float> raisedHand = new Dictionary<byte, float>();
+	private SimpleButton? raiseHandButton = null;
 
 	private const float time = 5.0f;
 
@@ -23,7 +28,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 	public static RaiseHandSystem Get()
 	{
 		var systemMng = ExtremeSystemTypeManager.Instance;
-		if (!systemMng.TryGet<RaiseHandSystem>(Type, out var sytem) &&
+		if (!systemMng.TryGet<RaiseHandSystem>(Type, out var sytem) ||
 			sytem == null)
 		{
 			sytem = new RaiseHandSystem();
@@ -40,12 +45,23 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		byte playerId = player.TargetPlayerId;
 		this.allHand[playerId] = hand;
 
-		// 挙手ボタンの追加
+		if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
+		{
+			this.raiseHandButton = Resources.Loader.CreateSimpleButton(
+				MeetingHud.Instance.transform);
+			this.raiseHandButton.ClickedEvent.AddListener(() =>
+			{
+				this.RaiseHand(player);
+			});
+		}
 	}
 
 	public void RaiseHandButtonSetActive(bool active)
 	{
-		// 挙手ボタンを隠したりする
+		if (this.raiseHandButton != null)
+		{
+			this.raiseHandButton.gameObject.SetActive(active);
+		}
 	}
 
 	public void RaiseHand(PlayerVoteArea player)
@@ -80,7 +96,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		this.raisedHand = newRaisedHand;
 	}
 
-	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
+	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
 		if (timing == ResetTiming.MeetingEnd ||
 			timing == ResetTiming.MeetingStart)
