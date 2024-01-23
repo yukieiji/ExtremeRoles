@@ -49,12 +49,13 @@ public static class MeetingHudStartPatch
 			.AppendLine();
 
 		if (!trigger &&
-			ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
-				ExtremeSystemType.MeetingTimeOffset, out var system) &&
+			ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) &&
 			system is not null)
 		{
 
 			__instance.discussionTimer -= system.HudTimerStartOffset;
+			__instance.TimerText.gameObject.SetActive(system.IsShowTimer);
 
 			builder
 				.AppendLine("   - TimeOffset System: Enable")

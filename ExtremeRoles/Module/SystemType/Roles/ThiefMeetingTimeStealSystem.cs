@@ -28,14 +28,14 @@ public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 
 	private int curActiveNum = 0;
 
-	private const ExtremeSystemType meetingSystemType = ExtremeSystemType.MeetingTimeOffset;
+	private const ExtremeSystemType meetingSystemType = ExtremeSystemType.ModdedMeetingTimeSystem;
 
 	private readonly int setNum;
 	private readonly int setTimeOffset;
 	private readonly int pickUpTimeOffset;
 
 	private readonly Dictionary<int, TimeParts> timeParts = new Dictionary<int, TimeParts>();
-	private readonly MeetingTimeChangeSystem internalSystem;
+	private readonly ModdedMeetingTimeSystem internalSystem;
 
 	private static JObject? json = null;
 
@@ -45,11 +45,11 @@ public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 		this.setTimeOffset = setTimeOffset;
 		this.pickUpTimeOffset = pickUpTimeOffset;
 
-		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
+		if (!ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
 				meetingSystemType, out var system) ||
 			system is null)
 		{
-			system = new MeetingTimeChangeSystem();
+			system = new ModdedMeetingTimeSystem();
 			ExtremeSystemTypeManager.Instance.TryAdd(meetingSystemType, system);
 		}
 
@@ -150,7 +150,7 @@ public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 			meetingSystemType,
 			(x) =>
 			{
-				x.Write((byte)MeetingTimeChangeSystem.Ops.ChangeMeetingHudPermOffset);
+				x.Write((byte)ModdedMeetingTimeSystem.Ops.ChangeMeetingHudPermOffset);
 				x.WritePacked(this.internalSystem.PermOffset + value);
 			});
 	}

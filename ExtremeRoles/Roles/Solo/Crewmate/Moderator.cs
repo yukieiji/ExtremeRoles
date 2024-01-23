@@ -152,17 +152,17 @@ public sealed class Moderator :
 
 	public bool UseAbility()
 	{
-		if (!ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
-				ExtremeSystemType.MeetingTimeOffset, out var system) ||
+		if (!ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) ||
 			system is null)
 		{
 			return false;
 		}
 
-		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(ExtremeSystemType.MeetingTimeOffset,
+		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(ExtremeSystemType.ModdedMeetingTimeSystem,
 			(x) =>
 			{
-				x.Write((byte)MeetingTimeChangeSystem.Ops.ChangeMeetingHudTempOffset);
+				x.Write((byte)ModdedMeetingTimeSystem.Ops.ChangeMeetingHudTempOffset);
 				x.WritePacked(system.TempOffset + this.offset);
 			});
 
@@ -226,6 +226,6 @@ public sealed class Moderator :
 			this.GetRoleOptionId(ModeratorOption.MeetingTimerOffset));
 		this.RoleAbilityInit();
 
-		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.MeetingTimeOffset, new MeetingTimeChangeSystem());
+		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 	}
 }

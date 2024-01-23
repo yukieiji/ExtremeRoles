@@ -210,12 +210,13 @@ public static class IRoleAbilityMixin
 
     }
 
-    public static void CreateAbilityCountOption(
-        this IRoleAbility self,
-        IOptionInfo parentOps,
-        int defaultAbilityCount,
-        int maxAbilityCount,
-        float defaultActiveTime = float.MaxValue)
+	public static void CreateAbilityCountOption(
+		this IRoleAbility self,
+		IOptionInfo parentOps,
+		int defaultAbilityCount,
+		int maxAbilityCount,
+		float defaultActiveTime = float.MaxValue,
+		int minAbilityCount = 1)
     {
 
         SingleRoleBase role = (SingleRoleBase)self;
@@ -229,7 +230,7 @@ public static class IRoleAbilityMixin
             string.Concat(
                 role.RoleName,
                 RoleAbilityCommonOption.AbilityCount.ToString()),
-            defaultAbilityCount, 1,
+            defaultAbilityCount, minAbilityCount,
             maxAbilityCount, 1,
             parentOps, format: OptionUnit.Shot,
             tab: role.Tab);

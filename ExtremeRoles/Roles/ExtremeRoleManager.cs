@@ -108,8 +108,10 @@ public enum ExtremeRoleId : int
     Madmate,
     Umbrer,
     Doll,
+	Hatter,
 
-    Xion,
+
+	Xion,
 }
 
 public enum CombinationRoleType : byte
