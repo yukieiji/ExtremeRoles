@@ -47,7 +47,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		{
 			if (this.hand != null)
 			{
-				this.hand.gameObject.SetActive(active);
+				this.hand.enabled = active;
 			}
 		}
 	}
@@ -115,7 +115,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 
 	public void Deteriorate(float deltaTime)
 	{
-		if (this.IsDirty || AmongUsClient.Instance.AmClient) { return; }
+		if (this.IsDirty || !AmongUsClient.Instance.AmHost) { return; }
 
 		var newRaisedHand = new Dictionary<byte, float>(this.raisedHand.Count);
 		foreach (var (playerId, time) in this.raisedHand)
@@ -142,6 +142,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		{
 			this.allHand.Clear();
 			this.raisedHand.Clear();
+			this.raiseHandButton = null;
 		}
 	}
 
@@ -181,6 +182,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		{
 			writer.Write(playerId);
 		}
+		this.IsDirty = initialState;
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
