@@ -5,7 +5,6 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using ExtremeRoles.Performance;
@@ -16,10 +15,47 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class RaiseHandSystem : IDirtableSystemType
 {
+	public sealed class Behavior
+	{
+		private readonly SpriteRenderer hand;
+
+		public Behavior(PlayerVoteArea pva)
+		{
+			this.hand = Object.Instantiate(
+				pva.Background, pva.LevelNumberText.transform);
+			this.hand.name = $"raisehand_{pva.TargetPlayerId}";
+			this.hand.sprite = Resources.Loader.CreateSpriteFromResources(
+				Resources.Path.CaptainSpecialVoteCheck);
+			this.hand.transform.localPosition = new Vector3(2.0f, -0.75f, -3f);
+			this.hand.transform.localScale = new Vector3(0.75f, 2.5f, 1.0f);
+			this.hand.gameObject.layer = 5;
+
+			this.Down();
+		}
+
+		public void Raise()
+		{
+			this.rendSetActive(true);
+		}
+
+		public void Down()
+		{
+			this.rendSetActive(false);
+		}
+
+		private void rendSetActive(bool active)
+		{
+			if (this.hand != null)
+			{
+				this.hand.gameObject.SetActive(active);
+			}
+		}
+	}
+
 	public bool IsInit => this.raiseHandButton != null;
 	public const ExtremeSystemType Type = ExtremeSystemType.RaiseHandSystem;
 
-	private readonly Dictionary<byte, RaiseHandBehaviour> allHand = new Dictionary<byte, RaiseHandBehaviour>();
+	private readonly Dictionary<byte, Behavior> allHand = new Dictionary<byte, Behavior>();
 
 	private Dictionary<byte, float> raisedHand = new Dictionary<byte, float>();
 	private SimpleButton? raiseHandButton = null;
@@ -66,12 +102,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 
 	public void AddHand(PlayerVoteArea player)
 	{
-		var hand = player.gameObject.AddComponent<RaiseHandBehaviour>();
-
-		hand.Initialize(player);
-
-		byte playerId = player.TargetPlayerId;
-		this.allHand[playerId] = hand;
+		this.allHand[player.TargetPlayerId] = new Behavior(player);
 	}
 
 	public void RaiseHandButtonSetActive(bool active)
@@ -107,8 +138,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing == ResetTiming.MeetingEnd ||
-			timing == ResetTiming.MeetingStart)
+		if (timing == ResetTiming.MeetingEnd)
 		{
 			this.allHand.Clear();
 			this.raisedHand.Clear();
