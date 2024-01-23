@@ -10,6 +10,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -49,8 +50,9 @@ public static class MeetingHudSortButtonsPatch
 		var player = CachedPlayerControl.LocalPlayer;
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
 			player);
-		bool isUseRaiseHand = OptionManager.Instance.GetValue<bool>
-			((int)OptionCreator.CommonOptionKey.UseRaiseHand);
+
+		var system = OptionManager.Instance.GetValue<bool>
+			((int)OptionCreator.CommonOptionKey.UseRaiseHand) ? RaiseHandSystem.Get() : null;
 
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
@@ -64,9 +66,9 @@ public static class MeetingHudSortButtonsPatch
 
 			playerInfoUpdater.Init(playerVoteArea, isHudOverrideTaskActive);
 
-			if (isUseRaiseHand)
+			if (system != null)
 			{
-				// ここで挙手ボタンのテクスチャを表示するやつを作る
+				system.AddHand(playerVoteArea);
 			}
 		}
 	}

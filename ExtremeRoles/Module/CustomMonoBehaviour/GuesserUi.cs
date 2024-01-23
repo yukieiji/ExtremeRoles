@@ -11,6 +11,7 @@ using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
@@ -197,5 +198,12 @@ public sealed class GuesserUi : MonoBehaviour
         {
             pva.gameObject.SetActive(active);
         }
+
+		if (ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
+			ExtremeSystemType.RaiseHandSystem, out var system) &&
+			system != null)
+		{
+			system.RaiseHandButtonSetActive(active);
+		}
     }
 }
