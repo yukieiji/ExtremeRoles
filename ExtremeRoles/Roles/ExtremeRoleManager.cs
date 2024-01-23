@@ -175,6 +175,9 @@ public enum RoleGameOverReason
     KidsTooBigHomeAlone,
     KidsAliveAlone,
 
+	HatterEndlessTeaTime,
+	HatterTeaPartyTime,
+
     UnKnown = 100,
 }
 

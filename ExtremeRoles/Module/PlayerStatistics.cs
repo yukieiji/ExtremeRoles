@@ -18,16 +18,16 @@ public sealed class PlayerStatistics
 {
 	public const int SameNeutralGameControlId = int.MaxValue;
 
-	public int AllTeamCrewmate { get; set; }
-	public int TeamImpostorAlive { get; set; }
-	public int TeamCrewmateAlive { get; set; }
-	public int TeamNeutralAlive { get; set; }
-	public int TotalAlive { get; set; }
-	public int AssassinAlive { get; set; }
+	public int AllTeamCrewmate { get; private set; }
+	public int TeamImpostorAlive { get; private set; }
+	public int TeamCrewmateAlive { get; private set; }
+	public int TeamNeutralAlive { get; private set; }
+	public int TotalAlive { get; private set; }
+	public int AssassinAlive { get; private set; }
 
-	public IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
+	public IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; private set; }
 
-	public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
+	public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; private set; }
 
 	public override string ToString()
 	{
@@ -314,15 +314,19 @@ public sealed class PlayerStatistics
 					addData = new LoverWinChecker();
 					addData.AddAliveRole(playerId, role);
 					break;
-				case ExtremeRoleId.Yandere:
-					addData = new YandereWinChecker();
-					addData.AddAliveRole(playerId, role);
-					break;
 				case ExtremeRoleId.Vigilante:
 					addData = new VigilanteWinChecker();
 					break;
 				case ExtremeRoleId.Delinquent:
 					addData = new KidsWinChecker();
+					addData.AddAliveRole(playerId, role);
+					break;
+				case ExtremeRoleId.Yandere:
+					addData = new YandereWinChecker();
+					addData.AddAliveRole(playerId, role);
+					break;
+				case ExtremeRoleId.Hatter:
+					addData = new HatterWinChecker();
 					addData.AddAliveRole(playerId, role);
 					break;
 				default:

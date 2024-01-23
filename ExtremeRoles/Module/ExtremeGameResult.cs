@@ -347,6 +347,11 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				replaceWinnerToSpecificNeutralRolePlayer(
 					neutralNoWinner, ExtremeRoleId.Delinquent);
 				break;
+			case RoleGameOverReason.HatterEndlessTeaTime:
+			case RoleGameOverReason.HatterTeaPartyTime:
+				replaceWinnerToSpecificNeutralRolePlayer(
+					neutralNoWinner, ExtremeRoleId.Hatter);
+				break;
 			default:
 				break;
 		}

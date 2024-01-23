@@ -351,6 +351,10 @@ public static class EndGameManagerSetUpPatch
             RoleGameOverReason.KidsAliveAlone =>
                 WinTextInfo.Create(ExtremeRoleId.Delinquent, ColorPalette.KidsYellowGreen),
 
+			RoleGameOverReason.HatterEndlessTeaTime or
+			RoleGameOverReason.HatterTeaPartyTime =>
+				WinTextInfo.Create(ExtremeRoleId.Hatter, ColorPalette.AliceGold),
+
             _ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
 
