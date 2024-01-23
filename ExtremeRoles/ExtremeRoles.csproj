@@ -4,8 +4,8 @@
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
     <!--<Version>9.2.0.6</Version>-->
-    <VersionPrefix>9.2.2</VersionPrefix>
-    <VersionSuffix>2ndAnniversary-NewYear</VersionSuffix>
+    <VersionPrefix>9.2.3</VersionPrefix>
+    <VersionSuffix>PublicBeta</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
