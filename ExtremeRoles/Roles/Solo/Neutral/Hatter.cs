@@ -15,7 +15,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBodyReportOverride
 {
     public enum HatterOption
 	{
@@ -28,7 +28,9 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate
 		IncreseNum
     }
 
-    public ExtremeAbilityButton? Button { get; set; }
+	public bool CanReport => false;
+
+	public ExtremeAbilityButton? Button { get; set; }
 
 	private int winSkipCount = 0;
 	private int curSkipCount = 0;
