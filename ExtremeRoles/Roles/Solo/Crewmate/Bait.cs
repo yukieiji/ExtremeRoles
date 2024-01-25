@@ -4,13 +4,11 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -36,8 +34,6 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	private float delayUntilForceReport;
 
 	private bool awakeRole;
-
-	private SpriteRenderer rend;
 
     public Bait() : base(
         ExtremeRoleId.Bait,
@@ -138,15 +134,13 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 			return;
 		}
 
-		flushOnKillerPlayer(killerPlayer);
-
-		if (this.delayUntilForceReport == 0.0f)
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		if (localPlayer.PlayerId == killerPlayer.PlayerId)
 		{
-			killerPlayer.ReportDeadBody(rolePlayer.Data);
-		}
-		else
-		{
-			// ディレイの強制通報
+			var baitReporter = localPlayer.gameObject.AddComponent<BaitDalayReporter>();
+			baitReporter.StartReportTimer(
+				this.NameColor, rolePlayer.Data,
+				this.delayUntilForceReport);
 		}
 	}
 
@@ -175,47 +169,9 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 
 		this.awakeRole = this.awakeTaskGage <= 0.0f;
 
+		/* キルタイム加速システム追加
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.BakeryReport);
-	}
-
-	private void flushOnKillerPlayer(PlayerControl killer)
-	{
-		if (killer.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
-		{
-			return;
-		}
-
-		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-		if (this.rend == null)
-		{
-			this.rend = Object.Instantiate(
-				hudManager.FullScreen, hudManager.transform);
-			this.rend.transform.localPosition = new Vector3(0f, 0f, 20f);
-			this.rend.gameObject.SetActive(true);
-		}
-
-		this.rend.enabled = true;
-
-		hudManager.StartCoroutine(
-			Effects.Lerp(1.0f, new System.Action<float>((p) =>
-			{
-				if (this.rend == null) { return; }
-
-				float alpha = p < 0.5 ?
-					Mathf.Clamp01(p * 2 * 0.75f) :
-					Mathf.Clamp01((1 - p) * 2 * 0.75f);
-
-				this.rend.color = new Color(
-					this.NameColor.r, this.NameColor.g,
-					this.NameColor.b, alpha);
-
-				if (p == 1f)
-				{
-					this.rend.enabled = false;
-				}
-			}))
-		);
+		*/
 	}
 }
