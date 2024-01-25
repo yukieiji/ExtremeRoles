@@ -48,7 +48,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
         ExtremeRoleId.Hatter,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Hatter.ToString(),
-        ColorPalette.AliceGold,
+        ColorPalette.HatterYanagizome,
         false, true, false, false,
 		false, false)
     { }

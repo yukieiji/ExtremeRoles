@@ -48,7 +48,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
         ExtremeRoleId.Bait,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Bait.ToString(),
-        ColorPalette.BakaryWheatColor,
+        ColorPalette.BaitCyan,
         false, true, false, false)
     { }
 
