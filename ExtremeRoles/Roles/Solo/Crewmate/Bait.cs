@@ -146,7 +146,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 		if (localPlayer.PlayerId == killerPlayer.PlayerId)
 		{
-			var baitReporter = localPlayer.gameObject.AddComponent<BaitDalayReporter>();
+			var baitReporter = FastDestroyableSingleton<HudManager>.Instance.gameObject.AddComponent<BaitDalayReporter>();
 			baitReporter.StartReportTimer(
 				this.NameColor, rolePlayer.Data,
 				this.delayUntilForceReport);
@@ -177,7 +177,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 			true, parentOps);
 		CreateFloatOption(
 			Option.KillCoolReduceMulti,
-			2.0f, 1.5f, 5.0f, 0.1f, parentOps,
+			2.0f, 1.1f, 5.0f, 0.1f, parentOps,
 			format: OptionUnit.Multiplier);
 		CreateFloatOption(
 			Option.ReduceTimer,

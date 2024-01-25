@@ -1,7 +1,10 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using System.Collections;
 using TMPro;
 using UnityEngine;
+
+using BepInEx.Unity.IL2CPP.Utils;
 
 using FloatAction = System.Action<float>;
 
@@ -16,7 +19,10 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	private SpriteRenderer rend;
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
-	private TextMeshPro? text;
+	private TextMeshPro? text = null;
+
+	private Coroutine? flushCorutine = null;
+	private Coroutine? delayCorutine = null;
 
 	public void Awake()
 	{
@@ -32,7 +38,8 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	{
 		if (MeetingHud.Instance == null) { return; }
 
-		this.StopAllCoroutines();
+		this.stopTargetCorutine(this.flushCorutine);
+		this.stopTargetCorutine(this.delayCorutine);
 
 		Destroy(this.rend);
 
@@ -51,7 +58,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	{
 		this.rend.enabled = true;
 
-		this.StartCoroutine(
+		this.flushCorutine = this.StartCoroutine(
 			Effects.Lerp(1.0f, new FloatAction((p) =>
 			{
 				if (this.rend == null) { return; }
@@ -78,33 +85,46 @@ public sealed class BaitDalayReporter : MonoBehaviour
 		}
 		else
 		{
-			this.StartCoroutine(
-				Effects.Lerp(timer, new FloatAction((time) =>
-				{
-					if (this.text == null)
-					{
-						this.text = Instantiate(
-							FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-							Camera.main.transform, false);
-						this.text.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-						this.text.enableWordWrapping = false;
-					}
-
-					this.text.gameObject.SetActive(true);
-					this.text.text = string.Format(
-						Translation.GetString("forceReportUntil"),
-						Mathf.CeilToInt(timer - time));
-
-					if (time == timer)
-					{
-						reportTarget(target);
-					}
-				}))
-			);
+			this.delayCorutine = this.StartCoroutine(
+				this.delayReport(timer, target));
 		}
 	}
+
+	private IEnumerator delayReport(float targetTime, GameData.PlayerInfo target)
+	{
+		if (this.text == null)
+		{
+			this.text = Instantiate(
+				FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+				Camera.main.transform, false);
+			this.text.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+			this.text.enableWordWrapping = false;
+		}
+
+		do
+		{
+			targetTime -= Time.deltaTime;
+			this.text.gameObject.SetActive(true);
+			this.text.text = string.Format(
+				Translation.GetString("forceReportUntil"),
+				Mathf.CeilToInt(targetTime));
+			yield return null;
+		}
+		while (targetTime >= 0.0f);
+
+		reportTarget(target);
+	}
+
 	private static void reportTarget(GameData.PlayerInfo target)
 	{
 		CachedPlayerControl.LocalPlayer.PlayerControl.CmdReportDeadBody(target);
+	}
+
+	private void stopTargetCorutine(Coroutine? coroutine)
+	{
+		if (coroutine != null)
+		{
+			this.StopCoroutine(coroutine);
+		}
 	}
 }
