@@ -50,13 +50,15 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 
 	private void updateStatusString()
 	{
-		this.CurStateString = this.mode switch
+		var (formatKey, value) = this.mode switch
 		{
-			Mode.Enable => $"パブリックベータ - v{BetaContentManager.Version}",
-			Mode.DisableReady => "再起動後にパブリックベータモードが無効になります",
-			Mode.EnableReady => "再起動後にパブリックベータモードが有効になります",
-			_ => string.Empty
+			Mode.Enable => ("PublicBetaStr", BetaContentManager.Version),
+			Mode.DisableReady => ("PublicBetaEnableDisableStr", Translation.GetString("EnableKey")),
+			Mode.EnableReady => ("PublicBetaEnableDisableStr", Translation.GetString("DisableKey")),
+			_ => (string.Empty, string.Empty)
 		};
+		this.CurStateString = string.Format(
+			Translation.GetString(formatKey), value);
 		StatusTextShower.Instance.RebuildVersionShower();
 	}
 

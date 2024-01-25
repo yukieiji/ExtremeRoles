@@ -389,6 +389,9 @@ public sealed class ModOptionMenu
 					var pos = new Vector3(0.0f, 0.0f, -20.0f);
 					bool target = !beta.Enable;
 
+					string targetStr = Translation.GetString(
+						target ? "EnableKey" : "DisableKey");
+
 					this.confirmMenu = Prefab.CreateConfirmMenu(
 						() =>
 						{
@@ -405,9 +408,10 @@ public sealed class ModOptionMenu
 							popUp.TextAreaTMP.enableAutoSizing = false;
 
 							popUp.transform.localPosition = pos;
-							popUp.Show(target ?
-								"パブリックベータモードを有効にしました\n再起動して下さい" :
-								"パブリックベータモードを無効にしました\n再起動して下さい");
+
+							string showText = Translation.GetString("PublicBetaReboot");
+							popUp.Show(
+								string.Format(showText, targetStr));
 						},
 						StringNames.Accept);
 					this.confirmMenu.transform.SetParent(this.popUp!.transform);
@@ -416,10 +420,9 @@ public sealed class ModOptionMenu
 					string func = TranslationControllerExtension.GetString(
 						BetaContentManager.TransKey);
 
+					string warnText = Translation.GetString("PublicBetaWarning");
 					this.confirmMenu.Show(
-						target ?
-							$"パブリックベータモードを有効にします\n以下の機能が有効になります\n{func}" :
-							$"パブリックベータモードを無効にします\n以下の機能が無効になります\n{func}");
+						$"{string.Format(warnText, targetStr)}\n{func}");
 
 					button.onState = target;
 					changeButtonColor(button);
