@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.Performance;
+﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Performance;
 using TMPro;
 using UnityEngine;
 
@@ -90,7 +91,8 @@ public sealed class BaitDalayReporter : MonoBehaviour
 					}
 
 					this.text.gameObject.SetActive(true);
-					this.text.text = $"強制通報まで、あと{p}秒";
+					this.text.text = string.Format(
+						Translation.GetString("forceReportUntil"), timer - p);
 
 					if (p == timer)
 					{
