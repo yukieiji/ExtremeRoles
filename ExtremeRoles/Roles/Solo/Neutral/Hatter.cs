@@ -153,9 +153,6 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
 			format: OptionUnit.Percentage);
 		upperOpt.SetUpdateOption(lowerOpt);
 
-		CreateBoolOption(
-			HatterOption.HideMeetingTimer, true);
-
 		CreateIntOption(
 			HatterOption.IncreaseTaskGage,
 			50, 0, 100, 10, parentOps,
