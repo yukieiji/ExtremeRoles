@@ -79,7 +79,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 		else
 		{
 			this.StartCoroutine(
-				Effects.Lerp(timer, new FloatAction((p) =>
+				Effects.Lerp(timer, new FloatAction((time) =>
 				{
 					if (this.text == null)
 					{
@@ -92,9 +92,10 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 					this.text.gameObject.SetActive(true);
 					this.text.text = string.Format(
-						Translation.GetString("forceReportUntil"), timer - p);
+						Translation.GetString("forceReportUntil"),
+						Mathf.CeilToInt(timer - time));
 
-					if (p == timer)
+					if (time == timer)
 					{
 						reportTarget(target);
 					}
