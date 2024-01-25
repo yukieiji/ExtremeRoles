@@ -9,6 +9,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 #nullable enable
@@ -188,6 +189,10 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 
+		this.curSkipCount = 0;
+		this.isAssassinMeeting = false;
+		this.IsWin = false;
+
 		this.RoleAbilityInit();
     }
 
@@ -198,12 +203,21 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
-		if (exiledPlayer != null || this.isAssassinMeeting)
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+		if (localPlayer == null ||
+			exiledPlayer != null ||
+			this.isAssassinMeeting ||
+			this.IsWin)
 		{
 			return;
 		}
+
 		++this.curSkipCount;
 
-		this.IsWin = this.curSkipCount >= this.winSkipCount;
+		if (this.curSkipCount >= this.winSkipCount)
+		{
+			ExtremeRolesPlugin.ShipState.RpcRoleIsWin(localPlayer.PlayerId);
+		}
     }
 }
