@@ -182,7 +182,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		CreateFloatOption(
 			Option.ReduceTimer,
 			5.0f, 1.0f, 30.0f, 0.5f, parentOps,
-			format: OptionUnit.Multiplier);
+			format: OptionUnit.Second);
 	}
 
     protected override void RoleSpecificInit()
