@@ -8,6 +8,7 @@ using FloatAction = System.Action<float>;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
+[Il2CppRegister]
 public sealed class BaitDalayReporter : MonoBehaviour
 {
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。

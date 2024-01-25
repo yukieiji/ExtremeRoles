@@ -9,6 +9,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Extension.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -17,7 +19,10 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	public enum Option
 	{
 		AwakeTaskGage,
-		DelayUntilForceReport
+		DelayUntilForceReport,
+		EnableBaitBenefit,
+		KillCoolReduceMulti,
+		ReduceTimer
 	}
 
 	public bool IsAwake
@@ -32,6 +37,10 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 
 	private float awakeTaskGage;
 	private float delayUntilForceReport;
+
+	private bool enableBaitBenefit;
+	private float killCoolReduceMulti;
+	private float timer;
 
 	private bool awakeRole;
 
@@ -142,6 +151,13 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 				this.NameColor, rolePlayer.Data,
 				this.delayUntilForceReport);
 		}
+
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
+		if (!this.enableBaitBenefit || !role.CanKill()) { return; }
+
+		var reducer = localPlayer.gameObject.TryAddComponent<BaitKillCoolReducer>();
+		reducer.Timer = this.timer;
+		reducer.ReduceMulti = this.killCoolReduceMulti;
 	}
 
 	protected override void CreateSpecificOption(
@@ -156,6 +172,17 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 			Option.DelayUntilForceReport,
 			5.0f, 0.0f, 30.0f, 0.5f,
 			parentOps, format: OptionUnit.Second);
+		CreateBoolOption(
+			Option.EnableBaitBenefit,
+			true, parentOps);
+		CreateFloatOption(
+			Option.KillCoolReduceMulti,
+			2.0f, 1.5f, 5.0f, 0.1f, parentOps,
+			format: OptionUnit.Multiplier);
+		CreateFloatOption(
+			Option.ReduceTimer,
+			5.0f, 1.0f, 30.0f, 0.5f, parentOps,
+			format: OptionUnit.Multiplier);
 	}
 
     protected override void RoleSpecificInit()
@@ -166,12 +193,13 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 			GetRoleOptionId(Option.AwakeTaskGage)) / 100.0f;
 		this.delayUntilForceReport = allOpt.GetValue<float>(
 			GetRoleOptionId(Option.DelayUntilForceReport));
+		this.enableBaitBenefit = allOpt.GetValue<bool>(
+			GetRoleOptionId(Option.EnableBaitBenefit));
+		this.killCoolReduceMulti = allOpt.GetValue<float>(
+			GetRoleOptionId(Option.KillCoolReduceMulti));
+		this.timer = allOpt.GetValue<float>(
+			GetRoleOptionId(Option.ReduceTimer));
 
 		this.awakeRole = this.awakeTaskGage <= 0.0f;
-
-		/* キルタイム加速システム追加
-		ExtremeSystemTypeManager.Instance.TryAdd(
-			ExtremeSystemType.BakeryReport);
-		*/
 	}
 }
