@@ -63,6 +63,7 @@ public enum ExtremeRoleId : int
     Teleporter,
 	Moderator,
 	Psychic,
+	Bait,
 
 	SpecialImpostor,
     Evolver,
