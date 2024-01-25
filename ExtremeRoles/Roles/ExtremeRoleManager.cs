@@ -236,6 +236,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Teleporter  , new Teleporter()},
 			{(int)ExtremeRoleId.Moderator   , new Moderator()},
 			{(int)ExtremeRoleId.Psychic     , new Psychic()},
+			{(int)ExtremeRoleId.Bait        , new Bait()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -277,7 +278,8 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Queen     , new Queen()},
             {(int)ExtremeRoleId.Madmate   , new Madmate()},
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
-        };
+			{(int)ExtremeRoleId.Hatter    , new Hatter()},
+		};
 
     public static readonly Dictionary<
         byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()

@@ -112,8 +112,9 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Teleporter,
 			ExtremeRoleId.Moderator,
 			ExtremeRoleId.Psychic,
+			ExtremeRoleId.Bait,
 
-            ExtremeRoleId.SpecialImpostor,
+			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
             ExtremeRoleId.Carrier,
             ExtremeRoleId.PsychoKiller,
@@ -153,7 +154,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Queen,
             ExtremeRoleId.Madmate,
             ExtremeRoleId.Umbrer,
-        ];
+			ExtremeRoleId.Hatter,
+		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
 		[
