@@ -74,7 +74,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
 	public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "shipBroken", Loader.CreateSpriteFromResources(
+            "timeKill", Loader.CreateSpriteFromResources(
                 Path.AliceShipBroken));
     }
 
