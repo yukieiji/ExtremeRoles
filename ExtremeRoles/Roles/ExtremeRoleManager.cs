@@ -204,10 +204,12 @@ public static class ExtremeRoleManager
     public static readonly HashSet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Lover,
-        ExtremeRoleId.Yandere,
         ExtremeRoleId.Vigilante,
         ExtremeRoleId.Delinquent,
-    };
+
+		ExtremeRoleId.Yandere,
+		ExtremeRoleId.Hatter,
+	};
 
     public static readonly Dictionary<
         int, SingleRoleBase> NormalRole = new Dictionary<int, SingleRoleBase>()
