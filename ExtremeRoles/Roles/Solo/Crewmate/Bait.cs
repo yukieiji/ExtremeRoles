@@ -196,7 +196,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		this.enableBaitBenefit = allOpt.GetValue<bool>(
 			GetRoleOptionId(Option.EnableBaitBenefit));
 		this.killCoolReduceMulti = allOpt.GetValue<float>(
-			GetRoleOptionId(Option.KillCoolReduceMulti));
+			GetRoleOptionId(Option.KillCoolReduceMulti)) - 1.0f;
 		this.timer = allOpt.GetValue<float>(
 			GetRoleOptionId(Option.ReduceTimer));
 
