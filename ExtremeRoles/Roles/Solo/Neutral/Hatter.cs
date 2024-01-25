@@ -188,7 +188,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 
-		this.RoleSpecificInit();
+		this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingStart()
