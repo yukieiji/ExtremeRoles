@@ -353,7 +353,7 @@ public static class EndGameManagerSetUpPatch
 
 			RoleGameOverReason.HatterEndlessTeaTime or
 			RoleGameOverReason.HatterTeaPartyTime =>
-				WinTextInfo.Create(ExtremeRoleId.Hatter, ColorPalette.AliceGold),
+				WinTextInfo.Create(ExtremeRoleId.Hatter, ColorPalette.HatterYanagizome),
 
             _ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
