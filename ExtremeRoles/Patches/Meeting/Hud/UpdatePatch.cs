@@ -105,7 +105,13 @@ public static class MeetingHudUpdatePatch
 
 	private static void tryCreateHandRaiseButton()
 	{
-		if (!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+		if (localPlayer == null ||
+			localPlayer.Data == null ||
+			localPlayer.Data.IsDead ||
+			localPlayer.Data.Disconnected ||
+			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
 			raiseHand == null || raiseHand.IsInit)
 		{
