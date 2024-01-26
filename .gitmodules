@@ -4,3 +4,6 @@
 [submodule "ExtremeSkins.Core"]
 	path = ExtremeSkins.Core
 	url = https://github.com/yukieiji/ExtremeSkins.Core
+[submodule "ExtremeRoles.Beta"]
+	path = ExtremeRoles.Beta
+	url = https://github.com/yukieiji/ExtremeRoles.Beta.git
