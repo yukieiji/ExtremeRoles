@@ -76,7 +76,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
     {
         this.CreateAbilityCountButton(
             "timeKill", Loader.CreateSpriteFromResources(
-                Path.AliceShipBroken));
+                Path.HatterTimeKill));
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
