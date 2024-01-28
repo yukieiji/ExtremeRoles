@@ -25,7 +25,7 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 				pva.Background, pva.LevelNumberText.transform);
 			this.hand.name = $"raisehand_{pva.TargetPlayerId}";
 			this.hand.sprite = Resources.Loader.CreateSpriteFromResources(
-				Resources.Path.CaptainSpecialVoteCheck);
+				Resources.Path.RaiseHandIcon);
 			this.hand.transform.localPosition = new Vector3(2.0f, -0.75f, -3f);
 			this.hand.transform.localScale = new Vector3(0.75f, 2.5f, 1.0f);
 			this.hand.gameObject.layer = 5;

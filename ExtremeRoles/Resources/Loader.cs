@@ -31,7 +31,9 @@ public static class Path
 
     public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
 
-    public const string TabImagePathFormat = "ExtremeRoles.Resources.SettingTab.{0}.png";
+	public const string RaiseHandIcon = "ExtremeRoles.Resources.RaiseHand.png";
+
+	public const string TabImagePathFormat = "ExtremeRoles.Resources.SettingTab.{0}.png";
 	public const string ExtremeSelectorMinigameImgFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.{1}.png";
 
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
