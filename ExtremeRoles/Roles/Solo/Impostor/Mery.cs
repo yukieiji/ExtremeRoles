@@ -141,7 +141,14 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
 
 			vent.myRend = ventRenderer;
-			vent.myRend.transform.localPosition = Vector3.zero;
+
+			var transform = vent.myRend.transform;
+			if (transform.localPosition != vent.transform.localPosition)
+			{
+				transform.localPosition = Vector3.zero;
+			}
+
+			vent.transform.localScale = Vector3.one;
 			vent.name = "MaryVent_" + vent.Id;
             vent.gameObject.SetActive(this.body.active);
 
