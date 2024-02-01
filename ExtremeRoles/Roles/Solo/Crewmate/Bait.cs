@@ -43,8 +43,9 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	private float timer;
 
 	private bool awakeRole;
+	private bool awakeHasOtherVision;
 
-    public Bait() : base(
+	public Bait() : base(
         ExtremeRoleId.Bait,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Bait.ToString(),
@@ -69,6 +70,8 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 			!this.awakeRole)
 		{
 			this.awakeRole = true;
+			this.HasOtherVision = this.awakeHasOtherVision;
+
 			using (var caller = RPCOperator.CreateCaller(
 				RPCOperator.Command.BaitAwakeRole))
 			{
@@ -212,6 +215,17 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		this.timer = allOpt.GetValue<float>(
 			GetRoleOptionId(Option.ReduceTimer));
 
-		this.awakeRole = this.awakeTaskGage <= 0.0f;
+		this.awakeHasOtherVision = this.HasOtherVision;
+
+		if (this.awakeTaskGage <= 0.0)
+		{
+			this.awakeRole = true;
+			this.HasOtherVision = this.awakeHasOtherVision;
+		}
+		else
+		{
+			this.awakeRole = false;
+			this.HasOtherVision = false;
+		}
 	}
 }
