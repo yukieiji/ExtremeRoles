@@ -52,6 +52,13 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
         false, true, false, false)
     { }
 
+	public static void Awake(byte playerId)
+	{
+		var bait = ExtremeRoleManager.GetSafeCastedRole<Bait>(playerId);
+		if (bait == null) { return; }
+		bait.awakeRole = true;
+	}
+
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (this.awakeRole) { return; }
@@ -62,6 +69,11 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 			!this.awakeRole)
 		{
 			this.awakeRole = true;
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.BaitAwakeRole))
+			{
+				caller.WriteByte(rolePlayer.PlayerId);
+			}
 		}
 	}
 

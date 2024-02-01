@@ -245,6 +245,10 @@ public static class PlayerControlHandleRpcPatch
 				RPCOperator.TeleporterSetPortal(
 					teleporterPlayerId, portalX, portalY);
 				break;
+			case RPCOperator.Command.BaitAwakeRole:
+				byte baitRolePlayerId = reader.ReadByte();
+				RPCOperator.BaitAwakeRole(baitRolePlayerId);
+				break;
 			case RPCOperator.Command.AssasinVoteFor:
 				byte voteTargetId = reader.ReadByte();
 				RPCOperator.AssasinVoteFor(voteTargetId);

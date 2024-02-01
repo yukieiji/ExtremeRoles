@@ -68,6 +68,7 @@ public static class RPCOperator
         CaptainAbility,
         ResurrecterRpc,
         TeleporterSetPortal,
+		BaitAwakeRole,
 
         // インポスター
         AssasinVoteFor,
@@ -612,6 +613,12 @@ public static class RPCOperator
         Roles.Solo.Crewmate.Teleporter.SetPortal(
             teleporterId, new UnityEngine.Vector2(x, y));
     }
+
+	public static void BaitAwakeRole(
+		byte playerId)
+	{
+		Roles.Solo.Crewmate.Bait.Awake(playerId);
+	}
 
     public static void AssasinVoteFor(byte targetId)
     {
