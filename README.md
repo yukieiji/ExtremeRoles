@@ -72,8 +72,9 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  テレポーター |  ゾンビ  |  |
 |  モデレーター |  スライム  |  |
 |  サイキック |  シーフ  |  |
-|  マーリン  |  クルーシュルーム  |  |
-|  ヒーロー  |  テロリスト  |  |
+|  ベイト  |  クルーシュルーム  |  |
+|  マーリン  |  テロリスト  |  |
+|  ヒーロー  |    |  |
 |  探偵  | アサシン  |   |
 |  助手  | ヴィラン  |   |
 |  見習い探偵  | シェアーズ  |   |
@@ -163,7 +164,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2023.10.28s/v2023.10.28e  | v9.1.0.0 ～ v9.2.0.0 |
+|  v2023.10.28s/v2023.10.28e  | v9.1.0.0 ～ v9.2.3.0 |
 |  v2023.10.24s/v2023.10.24e  | v9.0.0.0 ～ v9.0.3.2 |
 |  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.6.2 |
 |  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.4 |
@@ -219,7 +220,9 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 - Microsoft.CSharp: dynamic型を使用するために使用
 - GAHAG : https://gahag.net/ ボタンを作る際に使用
 - Google Font Icons : https://fonts.google.com/icons ApacheLicenceV2、いくつかのアイコンを作るためにいくつか改変を加えて使用
-- 効果音ラボ：https://soundeffect-lab.info/ いくつかの役職のSEを使用
+- Google note emoji：https://github.com/googlefonts/noto-emoji 一部のApacheLicenceV2のアイコンを使用しています
+
+- - 効果音ラボ：https://soundeffect-lab.info/ いくつかの役職のSEを使用
 - 無料効果音で遊ぼう：https://taira-komori.jpn.org/welcome.html いくつかの役職のSEを使用
 - VOICEVOX: https://voicevox.hiroshiba.jp/ いくつかの音声に使用
     - クレジット表記
@@ -237,6 +240,6 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status |
 | ---- | ---- |
-|  英語/English  |   完全翻訳済み/Fully Translated  |
+|  英語/English  |   ほぼ翻訳済み/Mostly Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
 |  简体中文/SChinese  |   ほぼ翻訳済み/Mostly Translated  |
