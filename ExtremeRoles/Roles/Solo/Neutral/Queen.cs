@@ -35,7 +35,8 @@ public sealed class Queen :
         ServantKillKillCoolReduceRate,
         ServantTaskKillCoolReduceRate,
         ServantTaskCompKillCoolReduceRate,
-        ServantSelfKillCool
+        ServantSelfKillCool,
+		ServantSucideWithQueenWhenHasKill
     }
 
     public ExtremeAbilityButton Button
@@ -57,8 +58,9 @@ public sealed class Queen :
     private Dictionary<byte, float> servantTaskGage;
     private HashSet<byte> taskCompServant;
     private HashSet<byte> servantPlayerId;
+	private bool servantSucideWithQueenWhenHasKill;
 
-    public Queen() : base(
+	public Queen() : base(
         ExtremeRoleId.Queen,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Queen.ToString(),
@@ -308,10 +310,10 @@ public sealed class Queen :
         {
             var player = Player.GetPlayerControlById(playerId);
 
-            if (player == null) { continue; }
-
-            if (player.Data.IsDead ||
-                player.Data.Disconnected) { continue; }
+            if (player == null ||
+				player.Data.IsDead ||
+                player.Data.Disconnected ||
+				this.isNotSucideServant(playerId)) { continue; }
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -367,8 +369,10 @@ public sealed class Queen :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null) { continue; }
-            if (player.Data.IsDead || player.Data.Disconnected) { continue; }
+            if (player == null ||
+				player.Data.IsDead ||
+				player.Data.Disconnected ||
+				this.isNotSucideServant(playerId)) { continue; }
 
             player.Exiled();
         }
@@ -411,10 +415,10 @@ public sealed class Queen :
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
-            if (player == null) { continue; }
-
-            if (player.Data.IsDead ||
-                player.Data.Disconnected) { continue; }
+            if (player == null ||
+				player.Data.IsDead ||
+                player.Data.Disconnected ||
+				this.isNotSucideServant(playerId)) { continue; }
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -474,24 +478,30 @@ public sealed class Queen :
             30.0f, 0.5f, 60.0f, 0.5f,
             parentOps,
             format: OptionUnit.Second);
+		CreateBoolOption(
+			QueenOption.ServantSucideWithQueenWhenHasKill,
+			true, parentOps);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(QueenOption.Range));
-        this.UseVent = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(QueenOption.CanUseVent));
-        this.ServantSelfKillCool = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(QueenOption.ServantSelfKillCool));
-        this.killKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)) / 100.0f);
-        this.taskKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)) / 100.0f);
-        this.taskCompKillCoolReduceRate = 1.0f - (OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)) / 100.0f);
+		var optMng = OptionManager.Instance;
 
-        this.servantTaskGage = new Dictionary<byte, float>();
+        this.range = optMng.GetValue<float>(GetRoleOptionId(QueenOption.Range));
+        this.UseVent = optMng.GetValue<bool>(
+            GetRoleOptionId(QueenOption.CanUseVent));
+        this.ServantSelfKillCool = optMng.GetValue<float>(
+            GetRoleOptionId(QueenOption.ServantSelfKillCool));
+        this.killKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
+            GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)) / 100.0f);
+        this.taskKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
+            GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)) / 100.0f);
+        this.taskCompKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
+            GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)) / 100.0f);
+		this.servantSucideWithQueenWhenHasKill = optMng.GetValue<bool>(
+			GetRoleOptionId(QueenOption.ServantSucideWithQueenWhenHasKill));
+
+		this.servantTaskGage = new Dictionary<byte, float>();
         this.servantPlayerId = new HashSet<byte>();
         this.taskCompServant = new HashSet<byte>();
     }
@@ -500,6 +510,11 @@ public sealed class Queen :
     {
         return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Servant));
     }
+	private bool isNotSucideServant(byte playerId)
+		=>
+		!this.servantSucideWithQueenWhenHasKill &&
+		ExtremeRoleManager.GameRole.TryGetValue(playerId, out var servant) &&
+		servant.CanKill;
 }
 
 public sealed class Servant :

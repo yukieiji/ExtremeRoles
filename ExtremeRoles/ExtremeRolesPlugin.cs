@@ -39,18 +39,20 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public static ConfigEntry<bool> DebugMode { get; private set; }
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
 
+	public ExtremeRolesPlugin() : base()
+	{
+		Instance = this;
+		Logger = Log;
+	}
+
     public override void Load()
     {
-        Helper.Translation.Load();
-
-        Logger = Log;
+		Helper.Translation.Load();
 
         DebugMode = Config.Bind("DeBug", "DebugMode", false);
         IgnoreOverrideConsoleDisable = Config.Bind(
             "DeBug", "IgnoreOverrideConsoleDisable", false,
             "If enabled, will ignore force disabling BepInEx.Console");
-
-        Instance = this;
 
 		Harmony.PatchAll();
 
@@ -72,6 +74,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
 		Il2CppRegisterAttribute.Registration(
             System.Reflection.Assembly.GetAssembly(this.GetType()));
+
+		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
 
         Loader.LoadCommonAsset();
 

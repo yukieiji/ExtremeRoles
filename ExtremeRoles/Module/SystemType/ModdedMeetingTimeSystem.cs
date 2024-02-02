@@ -4,16 +4,18 @@ using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.SystemType;
 
-public sealed class MeetingTimeChangeSystem : IDirtableSystemType
+public sealed class ModdedMeetingTimeSystem : IDirtableSystemType
 {
 	public enum Ops : byte
 	{
 		ChangeMeetingHudPermOffset,
 		ChangeMeetingHudTempOffset,
 		ChangeButtonTime,
+		ChangeMeetingTimerShower,
 		Reset,
 	}
 
+	public bool IsShowTimer { get; private set; } = true;
 	public int PermOffset { get; private set; } = 0;
 	public int TempOffset { get; private set; } = 0;
 
@@ -28,6 +30,7 @@ public sealed class MeetingTimeChangeSystem : IDirtableSystemType
 		this.PermOffset = reader.ReadPackedInt32();
 		this.TempOffset = reader.ReadPackedInt32();
 		this.ButtonTimeOffset = reader.ReadPackedInt32();
+		this.IsShowTimer = reader.ReadBoolean();
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
@@ -36,6 +39,7 @@ public sealed class MeetingTimeChangeSystem : IDirtableSystemType
 			AmongUsClient.Instance.AmHost &&
 			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
 		{
+			this.IsShowTimer = true;
 			this.TempOffset = 0;
 			this.IsDirty = true;
 		}
@@ -46,6 +50,7 @@ public sealed class MeetingTimeChangeSystem : IDirtableSystemType
 		writer.WritePacked(this.PermOffset);
 		writer.WritePacked(this.TempOffset);
 		writer.WritePacked(this.ButtonTimeOffset);
+		writer.Write(this.IsShowTimer);
 		this.IsDirty = initialState;
 	}
 
@@ -63,10 +68,14 @@ public sealed class MeetingTimeChangeSystem : IDirtableSystemType
 			case Ops.ChangeButtonTime:
 				this.ButtonTimeOffset = msgReader.ReadPackedInt32();
 				break;
+			case Ops.ChangeMeetingTimerShower:
+				this.IsShowTimer = msgReader.ReadBoolean();
+				break;
 			case Ops.Reset:
 				this.ButtonTimeOffset = 0;
 				this.TempOffset = 0;
 				this.PermOffset = 0;
+				this.IsShowTimer = true;
 				break;
 			default:
 				return;

@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -49,12 +50,18 @@ public static class MeetingHudStartPatch
 			.AppendLine();
 
 		if (!trigger &&
-			ExtremeSystemTypeManager.Instance.TryGet<MeetingTimeChangeSystem>(
-				ExtremeSystemType.MeetingTimeOffset, out var system) &&
+			ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) &&
 			system is not null)
 		{
 
 			__instance.discussionTimer -= system.HudTimerStartOffset;
+			if (!system.IsShowTimer)
+			{
+				var textObj = __instance.TimerText.gameObject;
+				textObj.SetActive(false);
+				textObj.AddComponent<AutoDisabler>();
+			}
 
 			builder
 				.AppendLine("   - TimeOffset System: Enable")

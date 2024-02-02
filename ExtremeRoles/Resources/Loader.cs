@@ -31,7 +31,9 @@ public static class Path
 
     public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
 
-    public const string TabImagePathFormat = "ExtremeRoles.Resources.SettingTab.{0}.png";
+	public const string RaiseHandIcon = "ExtremeRoles.Resources.RaiseHand.png";
+
+	public const string TabImagePathFormat = "ExtremeRoles.Resources.SettingTab.{0}.png";
 	public const string ExtremeSelectorMinigameImgFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.{1}.png";
 
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
@@ -130,8 +132,9 @@ public static class Path
     public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
     public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
     public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
+	public const string HatterTimeKill = "ExtremeRoles.Resources.HatterTimeKill.png";
 
-    public const string ForasShowArrow = "ExtremeRoles.Resources.ForasArrow.png";
+	public const string ForasShowArrow = "ExtremeRoles.Resources.ForasArrow.png";
 
     public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
     public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";

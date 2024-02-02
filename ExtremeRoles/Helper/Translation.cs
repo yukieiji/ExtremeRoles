@@ -6,6 +6,9 @@ using Newtonsoft.Json.Linq;
 
 using AmongUs.Data;
 
+using ExtremeRoles.Module;
+using ExtremeRoles.Beta;
+
 namespace ExtremeRoles.Helper
 {
     public static class Translation
@@ -24,7 +27,10 @@ namespace ExtremeRoles.Helper
 		public static void Load()
         {
             stringData.Clear();
-            JObject parsed = JsonParser.GetJObjectFromAssembly(dataPath);
+
+            JObject parsed = JsonParser.GetJObjectFromAssembly(
+				PublicBeta.Instance.IsEnableWithMode ?
+				BetaContentManager.NewTransDataPath : dataPath);
 
             for (int i = 0; i < parsed.Count; i++)
             {

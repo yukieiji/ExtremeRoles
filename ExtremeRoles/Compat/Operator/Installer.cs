@@ -21,6 +21,7 @@ internal sealed class Installer : OperatorBase
 	private bool isRequireReactor = false;
 
 	private HttpClient client;
+	private GenericPopup? popup;
 
 	internal Installer(CompatModInfo modInfo) : base()
 	{
@@ -43,9 +44,13 @@ internal sealed class Installer : OperatorBase
 
 		if (this.isRequireReactor)
 		{
-			ShowConfirmMenu(
-				Translation.GetString("isReactorInstall"),
-				excuteInstall);
+			if (this.popup == null)
+			{
+				this.popup = Module.Prefab.CreateConfirmMenu(
+					excuteInstall);
+			}
+			this.popup.Show(
+				Translation.GetString("isReactorInstall"));
 		}
 		else
 		{

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using ExtremeVoiceEngine.Extension;
+using ExtremeRoles.Extension.Controller;
 
 namespace ExtremeVoiceEngine.Command;
 
@@ -253,7 +253,7 @@ public sealed class OptionKey
     /// <param name="shortName"></param>
     /// <param name="longName"></param>
     /// <param name="ignoresCase"></param>
-    /// <exception cref="ArgumentException"></exception> 
+    /// <exception cref="ArgumentException"></exception>
     public OptionKey(string longName, char shortName = ' ')
     {
         if (string.IsNullOrEmpty(longName))

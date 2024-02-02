@@ -63,6 +63,7 @@ public enum ExtremeRoleId : int
     Teleporter,
 	Moderator,
 	Psychic,
+	Bait,
 
 	SpecialImpostor,
     Evolver,
@@ -108,8 +109,10 @@ public enum ExtremeRoleId : int
     Madmate,
     Umbrer,
     Doll,
+	Hatter,
 
-    Xion,
+
+	Xion,
 }
 
 public enum CombinationRoleType : byte
@@ -173,6 +176,9 @@ public enum RoleGameOverReason
     KidsTooBigHomeAlone,
     KidsAliveAlone,
 
+	HatterEndlessTeaTime,
+	HatterTeaPartyTime,
+
     UnKnown = 100,
 }
 
@@ -198,10 +204,12 @@ public static class ExtremeRoleManager
     public static readonly HashSet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Lover,
-        ExtremeRoleId.Yandere,
         ExtremeRoleId.Vigilante,
         ExtremeRoleId.Delinquent,
-    };
+
+		ExtremeRoleId.Yandere,
+		ExtremeRoleId.Hatter,
+	};
 
     public static readonly Dictionary<
         int, SingleRoleBase> NormalRole = new Dictionary<int, SingleRoleBase>()
@@ -230,6 +238,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Teleporter  , new Teleporter()},
 			{(int)ExtremeRoleId.Moderator   , new Moderator()},
 			{(int)ExtremeRoleId.Psychic     , new Psychic()},
+			{(int)ExtremeRoleId.Bait        , new Bait()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -271,7 +280,8 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Queen     , new Queen()},
             {(int)ExtremeRoleId.Madmate   , new Madmate()},
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
-        };
+			{(int)ExtremeRoleId.Hatter    , new Hatter()},
+		};
 
     public static readonly Dictionary<
         byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()

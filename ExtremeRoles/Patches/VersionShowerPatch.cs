@@ -6,32 +6,19 @@ using HarmonyLib;
 
 using AmongUs.Data;
 using TMPro;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
 public static class MainMenuTextInfoPatch
 {
-	public static TextMeshPro InfoText { get; private set; }
-
-	[HarmonyPostfix, HarmonyPriority(Priority.First)]
     public static void Postfix(VersionShower __instance)
     {
         var burner = GameObject.Find("bannerLogoExtremeRoles");
         if (burner == null) { return; }
 
-		InfoText = Object.Instantiate(__instance.text);
-		InfoText.name = "ExtremeRoles_InfoText";
-		InfoText.text = string.Empty;
-		InfoText.alignment = TextAlignmentOptions.TopRight;
-		InfoText.fontSize = InfoText.fontSizeMax = InfoText.fontSizeMin = 1.9f;
-
-		AspectPosition aspectPosition = InfoText.gameObject.AddComponent<AspectPosition>();
-		aspectPosition.Alignment = AspectPosition.EdgeAlignments.RightTop;
-		aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
-		aspectPosition.DistanceFromEdge = new Vector3(2.1f, 1.225f, - 10f);
-		aspectPosition.AdjustPosition();
-
+		StatusTextShower.Instance.RebuildVersionShower(__instance);
 
 		var modTitle = Object.Instantiate(
             __instance.text, burner.transform);

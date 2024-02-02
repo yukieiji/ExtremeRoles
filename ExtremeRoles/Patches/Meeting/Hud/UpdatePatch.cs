@@ -5,6 +5,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType;
 
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
@@ -96,5 +97,26 @@ public static class MeetingHudUpdatePatch
 				FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
 			}
 		}
+		else
+		{
+			tryCreateHandRaiseButton();
+		}
+	}
+
+	private static void tryCreateHandRaiseButton()
+	{
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+		if (localPlayer == null ||
+			localPlayer.Data == null ||
+			localPlayer.Data.IsDead ||
+			localPlayer.Data.Disconnected ||
+			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
+				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
+			raiseHand == null || raiseHand.IsInit)
+		{
+			return;
+		}
+		raiseHand.CreateRaiseHandButton();
 	}
 }

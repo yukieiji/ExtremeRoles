@@ -524,10 +524,9 @@ public static class GameSystem
 					return;
 				}
 
-				var minigame = Minigame.Instance;
-				if (minigame != null && minigame.TryCast<SwitchMinigame>() != null)
+				if (Minigame.Instance.IsTryCast<SwitchMinigame>(out var switchMinigame))
 				{
-					minigame.ForceClose();
+					switchMinigame!.ForceClose();
 				}
 				switchSystem!.ActualSwitches = switchSystem!.ExpectedSwitches;
 				break;

@@ -233,9 +233,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 	{
 		foreach (var task in pc.myTasks.GetFastEnumerator())
 		{
-			if (task != null &&
+			if (task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
 				(ignoreComplete || !task.IsComplete) &&
-				task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
 				playerTask!.Behavior!.TaskTypes == TeroristoTaskTypes)
 			{
 				return playerTask;
@@ -425,8 +424,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			teroSabo.HideArrow(id);
 		}
 
-		if (Minigame.Instance != null &&
-			Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
+		if (Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
 			teroMinigame!.amClosing != Minigame.CloseState.Closing &&
 			teroMinigame!.BombId == id)
 		{

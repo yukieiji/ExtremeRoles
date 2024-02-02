@@ -122,10 +122,10 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
         var allOption = OptionManager.Instance;
 
-        this.Vision = this.IsImpostor() ? 
-            baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) : 
+        this.Vision = this.IsImpostor() ?
+            baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) :
             baseOption.GetFloat(FloatOptionNames.CrewLightMod);
-        
+
         this.KillCoolTime = baseOption.GetFloat(FloatOptionNames.KillCooldown);
         this.KillRange = baseOption.GetInt(Int32OptionNames.KillDistance);
 

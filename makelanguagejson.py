@@ -1,5 +1,7 @@
 import os
 import json
+import glob
+
 from typing import Dict
 
 from pylightxl import readxl
@@ -11,6 +13,18 @@ EXTREMERORLS_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "
 
 EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinsTransData.xlsx")
 EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData", "stringData.json")
+
+PUBLIC_BETA_IN_FILE = os.path.join(WORKING_DIR, 'ExtremeRoles.Beta', '**', "*.xlsx")
+PUBLIC_BETA_OUT_FILE = os.path.join(WORKING_DIR, 'ExtremeRoles.Beta', "Resources", "JsonData")
+
+def create_public_beta_transdata():
+  all_file = glob.glob(PUBLIC_BETA_IN_FILE, recursive=True)
+
+  for file_path in all_file:
+    file_name = os.path.basename(file_path)
+    file_name = os.path.splitext(file_name)[0]
+    xlsx_to_json(file_path, os.path.join(PUBLIC_BETA_OUT_FILE, f'{file_name}.json'))
+
 
 def is_require_update(new_json : Dict[str, str], output_file : str) -> bool:
 
@@ -68,7 +82,10 @@ def xlsx_to_json(file_name : str, output_file : str) -> None:
     with open(output_file, "w") as f:
       json.dump(xlsx_data, f, indent=4)
 
-
-if __name__ == "__main__":
+def main() -> None:
   xlsx_to_json(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)
   xlsx_to_json(EXTREMESKIN_IN_FILE, EXTREMESKIN_OUT_FILE)
+  create_public_beta_transdata()
+
+if __name__ == "__main__":
+  main()

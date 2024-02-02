@@ -3,7 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles;
 using ExtremeRoles.Helper;
-using ExtremeSkins.Patches.AmongUs;
+using ExtremeRoles.Module;
 
 namespace ExtremeSkins.Patches
 {
@@ -18,7 +18,7 @@ namespace ExtremeSkins.Patches
                 Input.GetKeyDown(KeyCode.F12))
             {
                 CreatorModeManager.Instance.SwitchMode();
-                VersionShowerStartPatch.UpdateText();
+				StatusTextShower.Instance.RebuildVersionShower();
             }
         }
     }

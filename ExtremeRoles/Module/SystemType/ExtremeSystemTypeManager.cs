@@ -20,7 +20,8 @@ namespace ExtremeRoles.Module.SystemType;
 
 public enum ExtremeSystemType : byte
 {
-	MeetingTimeOffset,
+	RaiseHandSystem,
+	ModdedMeetingTimeSystem,
 	ModedMushroom,
 	ExtremeConsoleSystem,
 

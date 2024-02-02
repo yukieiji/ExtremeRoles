@@ -28,6 +28,8 @@ public static class OptionCreator
     {
         PresetSelection = 0,
 
+		UseRaiseHand,
+
         UseStrongRandomGen,
         UsePrngAlgorithm,
     }
@@ -48,9 +50,13 @@ public static class OptionCreator
 			isHeader: true,
 			format: OptionUnit.Preset);
 
+		commonOptionFactory.CreateBoolOption(
+			CommonOptionKey.UseRaiseHand,
+			false, isHeader: true);
+
 		var strongGen = commonOptionFactory.CreateBoolOption(
 			CommonOptionKey.UseStrongRandomGen,
-			true);
+			true, isHeader: true);
 		commonOptionFactory.CreateSelectionOption(
 			CommonOptionKey.UsePrngAlgorithm,
 			new string[]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Controller;
 
 using ExtremeVoiceEngine.Extension;
 

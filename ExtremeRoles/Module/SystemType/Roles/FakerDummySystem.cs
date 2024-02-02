@@ -95,6 +95,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			};
 			this.ColorId = cosmicInfo.ColorInfo;
 			this.body = new GameObject("DummyPlayer");
+			this.body.layer = rolePlayer.gameObject.layer;
 
 			createNameTextParentObj(targetPlayer, this.body, in cosmicInfo, canSeeFake);
 			this.rend = createBodyImage(in cosmicInfo);
@@ -154,7 +155,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			in SpriteRenderer playerImage, in PlayerCosmicInfo info)
 		{
 			CosmeticsLayer cosmetic = Object.Instantiate(
-				info.Cosmetics,
+				AmongUsClient.Instance.PlayerPrefab.cosmetics,
 				this.body.transform);
 
 			PlayerBodySprite basePayerBodySprite = info.Cosmetics.currentBodySprite;
@@ -207,6 +208,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			}
 			cosmetics.SetColor(colorId);
 
+			cosmetics.skin.transform.localPosition = cosmicInfo.Cosmetics.skin.transform.localPosition;
 			cosmetics.hat.transform.localPosition = posOffset;
 			cosmetics.visor.transform.localPosition = posOffset;
 		}

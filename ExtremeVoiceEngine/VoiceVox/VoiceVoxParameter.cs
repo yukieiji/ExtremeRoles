@@ -1,8 +1,8 @@
 ﻿using BepInEx.Configuration;
 
-using ExtremeVoiceEngine.Interface;
+using ExtremeRoles.Extension.Controller;
 
-using ExtremeVoiceEngine.Extension;
+using ExtremeVoiceEngine.Interface;
 
 
 namespace ExtremeVoiceEngine.VoiceVox;

@@ -4,6 +4,8 @@ namespace ExtremeRoles.Module.CustomOption;
 
 public sealed class ClientOption
 {
+	public const string Selection = "ClientOption";
+
 	public static ClientOption Instance { get; private set; }
 
 	public ConfigEntry<string> StreamerModeReplacementText { get; init; }
@@ -25,24 +27,24 @@ public sealed class ClientOption
 		var config = ExtremeRolesPlugin.Instance.Config;
 
 		GhostsSeeTask = config.Bind(
-			"ClientOption", "GhostCanSeeRemainingTasks", true);
+			Selection, "GhostCanSeeRemainingTasks", true);
 		GhostsSeeRole = config.Bind(
-			"ClientOption", "GhostCanSeeRoles", true);
+			Selection, "GhostCanSeeRoles", true);
 		GhostsSeeVote = config.Bind(
-			"ClientOption", "GhostCanSeeVotes", true);
+			Selection, "GhostCanSeeVotes", true);
 		ShowRoleSummary = config.Bind(
-			"ClientOption", "IsShowRoleSummary", true);
+			Selection, "IsShowRoleSummary", true);
 		HideNamePlate = config.Bind(
-			"ClientOption", "IsHideNamePlate", false);
+			Selection, "IsHideNamePlate", false);
 
 		StreamerModeReplacementText = config.Bind(
-			"ClientOption",
+			Selection,
 			"ReplacementRoomCodeText",
 			"Playing with Extreme Roles");
 
 		Ip = config.Bind(
-			"ClientOption", "CustomServerIP", "127.0.0.1");
+			Selection, "CustomServerIP", "127.0.0.1");
 		Port = config.Bind(
-			"ClientOption", "CustomServerPort", (ushort)22023);
+			Selection, "CustomServerPort", (ushort)22023);
 	}
 }
