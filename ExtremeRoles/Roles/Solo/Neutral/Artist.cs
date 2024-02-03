@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Hazel;
+using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Artist : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Artist :
+	SingleRoleBase,
+	IRoleAbility,
+	IRoleUpdate,
+	IRoleSpecialReset
 {
     public enum AliceOption
     {
@@ -24,6 +27,12 @@ public sealed class Artist : SingleRoleBase, IRoleAbility, IRoleUpdate
         RevartLongTaskNum,
         RevartNormalTaskNum,
     }
+
+	public enum Ops : byte
+	{
+		Start,
+		End
+	}
 
     public ExtremeAbilityButton? Button { get; set; }
 	private float area = 0.0f;
@@ -51,11 +60,9 @@ public sealed class Artist : SingleRoleBase, IRoleAbility, IRoleUpdate
 		if (this.drawer != null)
 		{
 			this.IsWin = this.area + this.drawer.Area >= this.winArea;
-
-			if (MeetingHud.Instance != null ||
-				ExileController.Instance != null)
+			if (this.IsWin)
 			{
-				// 解除処理
+				ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
 			}
 		}
 	}
@@ -67,24 +74,43 @@ public sealed class Artist : SingleRoleBase, IRoleAbility, IRoleUpdate
                 Path.AliceShipBroken));
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
-        this.IsNeutralSameTeam(targetRole);
-
     public bool IsAbilityUse() => this.IsCommonUse();
 
 	public bool UseAbility()
     {
-		// 解除処理
-		// 追加処理
-
-
-        return true;
+		drawOps(CachedPlayerControl.LocalPlayer);
+		return true;
     }
 
-    public static void ShipBroken(
-        byte callerId, byte targetPlayerId, List<int> addTaskId)
-    {
+	public void AllReset(PlayerControl rolePlayer)
+	{
+		endLine(this);
+		this.IsWin = false;
+	}
 
+	public override bool IsSameTeam(SingleRoleBase targetRole) =>
+		this.IsNeutralSameTeam(targetRole);
+
+	public static void DrawOps(in MessageReader reader)
+    {
+		byte playerId = reader.ReadByte();
+		Ops ops = (Ops)reader.ReadByte();
+
+		Artist artist = ExtremeRoleManager.GetSafeCastedRole<Artist>(playerId);
+		PlayerControl artistPlayer = Player.GetPlayerControlById(playerId);
+		if (artist == null || artistPlayer == null) { return; }
+
+		switch (ops)
+		{
+			case Ops.Start:
+				startLine(artist, artistPlayer);
+				break;
+			case Ops.End:
+				endLine(artist);
+				break;
+			default:
+				break;
+		}
     }
 
     protected override void CreateSpecificOption(
@@ -106,11 +132,49 @@ public sealed class Artist : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public void ResetOnMeetingStart()
     {
-        return;
+		if (this.drawer == null) { return; }
+		drawOps(CachedPlayerControl.LocalPlayer);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
+
+	private void drawOps(PlayerControl playerControl)
+	{
+		bool isStart = this.drawer == null;
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.AcceleratorAbility))
+		{
+			caller.WriteByte((byte)(isStart ? Ops.Start : Ops.End));
+			caller.WriteByte(playerControl.PlayerId);
+		}
+
+		if (this.drawer == null)
+		{
+			startLine(this, playerControl);
+		}
+		else
+		{
+			endLine(this);
+		}
+	}
+
+	private static void startLine(Artist artist, PlayerControl artistPlayer)
+	{
+		if (artist.drawer != null) { return; }
+		GameObject obj = new GameObject("Artist_Line");
+		artist.drawer = obj.AddComponent<ArtistLineDrawer>();
+		artist.drawer.ArtistPlayer = artistPlayer;
+	}
+
+	private static void endLine(Artist artist)
+	{
+		if (artist.drawer == null) { return; }
+		artist.area += artist.drawer.Area;
+		artist.IsWin = artist.area >= artist.winArea;
+		Object.Destroy(artist.drawer);
+		artist.drawer = null;
+	}
 }
