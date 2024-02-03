@@ -20,12 +20,8 @@ public sealed class Artist :
 	IRoleUpdate,
 	IRoleSpecialReset
 {
-    public enum AliceOption
-    {
-        CanUseSabotage,
-        RevartCommonTaskNum,
-        RevartLongTaskNum,
-        RevartNormalTaskNum,
+    public enum ArtistOption
+	{
     }
 
 	public enum Ops : byte
@@ -69,10 +65,14 @@ public sealed class Artist :
 
 	public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
-            "shipBroken", Loader.CreateSpriteFromResources(
-                Path.AliceShipBroken));
-    }
+		this.CreatePassiveAbilityButton(
+			"overLoad", "downLoad",
+			Loader.CreateSpriteFromResources(
+			   Path.OverLoaderOverLoad),
+			Loader.CreateSpriteFromResources(
+			   Path.OverLoaderDownLoad),
+			this.CleanUp);
+	}
 
     public bool IsAbilityUse() => this.IsCommonUse();
 
@@ -81,6 +81,11 @@ public sealed class Artist :
 		drawOps(CachedPlayerControl.LocalPlayer);
 		return true;
     }
+
+	public void CleanUp()
+	{
+		drawOps(CachedPlayerControl.LocalPlayer);
+	}
 
 	public void AllReset(PlayerControl rolePlayer)
 	{
@@ -117,8 +122,8 @@ public sealed class Artist :
         IOptionInfo parentOps)
     {
 
-        this.CreateAbilityCountOption(
-            parentOps, 2, 100);
+        this.CreateCommonAbilityOption(
+            parentOps, 3.0f);
 
     }
 
@@ -127,6 +132,7 @@ public sealed class Artist :
         var allOption = OptionManager.Instance;
 
 		this.area = 0.0f;
+		this.winArea = 10.0f;
         this.RoleAbilityInit();
     }
 
