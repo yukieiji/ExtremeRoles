@@ -110,7 +110,7 @@ public enum ExtremeRoleId : int
     Umbrer,
     Doll,
 	Hatter,
-
+	Artist,
 
 	Xion,
 }
