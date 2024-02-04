@@ -54,7 +54,7 @@ public sealed class ArtistLineDrawer :  MonoBehaviour
 	public void FixedUpdate()
 	{
 		if (this.artistPlayer == null ||
-			this.artistPlayer.Data != null ||
+			this.artistPlayer.Data == null ||
 			this.prevPos == null)
 		{
 			return;
