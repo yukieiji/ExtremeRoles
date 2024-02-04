@@ -221,20 +221,20 @@ public static class GameSystem
 			throw new ArgumentException("mapId is 5 over");
 		}
 
-		var fungleAsset = AmongUsClient.Instance.ShipPrefabs[5];
+		var shipPrefabRef = AmongUsClient.Instance.ShipPrefabs[mapId];
 
 		GameObject obj;
 
-		if (fungleAsset.IsValid())
+		if (shipPrefabRef.IsValid())
 		{
-			obj = fungleAsset
+			obj = shipPrefabRef
 				.OperationHandle
 				.Result
 				.Cast<GameObject>();
 		}
 		else
 		{
-			var asset = fungleAsset.LoadAsset<GameObject>();
+			var asset = shipPrefabRef.LoadAsset<GameObject>();
 			obj = asset.WaitForCompletion();
 		}
 
