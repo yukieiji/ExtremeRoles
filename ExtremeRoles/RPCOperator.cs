@@ -92,6 +92,7 @@ public static class RPCOperator
         TotocalcioSetBetPlayer,
 		MinerHandle,
 		MadmateToFakeImpostor,
+		ArtistRpcOps,
 
         // 幽霊役職
         SetGhostRole,
@@ -726,8 +727,12 @@ public static class RPCOperator
     {
         Roles.Solo.Neutral.Madmate.ToFakeImpostor(playerId);
     }
+	public static void ArtistDrawOps(in MessageReader reader)
+	{
+		Roles.Solo.Neutral.Artist.DrawOps(reader);
+	}
 
-    public static void SetGhostRole(
+	public static void SetGhostRole(
         ref MessageReader reader)
     {
         GhostRoles.ExtremeGhostRoleManager.SetGhostRoleToPlayerId(

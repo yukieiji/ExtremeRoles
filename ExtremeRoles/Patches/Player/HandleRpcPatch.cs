@@ -355,6 +355,9 @@ public static class PlayerControlHandleRpcPatch
 				RPCOperator.MadmateToFakeImpostor(
 					madmatePlayerId);
 				break;
+			case RPCOperator.Command.ArtistRpcOps:
+				RPCOperator.ArtistDrawOps(reader);
+				break;
 			case RPCOperator.Command.SetGhostRole:
 				RPCOperator.SetGhostRole(
 					ref reader);

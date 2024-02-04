@@ -155,7 +155,7 @@ public sealed class Artist :
 	{
 		bool isStart = this.drawer == null;
 		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.AcceleratorAbility))
+			RPCOperator.Command.ArtistRpcOps))
 		{
 			caller.WriteByte((byte)(isStart ? Ops.Start : Ops.End));
 			caller.WriteByte(playerControl.PlayerId);
