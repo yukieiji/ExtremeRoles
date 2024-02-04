@@ -22,6 +22,7 @@ public sealed class Artist :
 {
     public enum ArtistOption
 	{
+		CanUseVent,
 		WinAreaSize
     }
 
@@ -42,7 +43,7 @@ public sealed class Artist :
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Artist.ToString(),
         ColorPalette.AliceGold,
-        true, false, true, true)
+        false, false, false, false)
     { }
 
 	public void Update(PlayerControl rolePlayer)
@@ -122,6 +123,9 @@ public sealed class Artist :
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
+		CreateBoolOption(
+			ArtistOption.CanUseVent,
+			false, parentOps);
 		CreateIntOption(
 			ArtistOption.WinAreaSize,
 			15, 1, 100, 1, parentOps);
@@ -135,6 +139,8 @@ public sealed class Artist :
         var allOption = OptionManager.Instance;
 
 		this.area = 0.0f;
+		this.UseVent = allOption.GetValue<bool>(
+			GetRoleOptionId(ArtistOption.CanUseVent));
 		this.winArea = allOption.GetValue<int>(
 			GetRoleOptionId(ArtistOption.WinAreaSize));
         this.RoleAbilityInit();
