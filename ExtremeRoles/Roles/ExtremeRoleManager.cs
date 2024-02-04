@@ -179,6 +179,8 @@ public enum RoleGameOverReason
 	HatterEndlessTeaTime,
 	HatterTeaPartyTime,
 
+	ArtistShipToArt,
+
     UnKnown = 100,
 }
 
