@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
+[Il2CppRegister]
 public sealed class ArtistLineDrawer :  MonoBehaviour
 {
 
