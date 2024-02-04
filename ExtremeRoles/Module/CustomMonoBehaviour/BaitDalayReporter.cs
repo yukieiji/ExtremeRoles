@@ -63,9 +63,8 @@ public sealed class BaitDalayReporter : MonoBehaviour
 			{
 				if (this.rend == null) { return; }
 
-				float alpha = p < 0.5 ?
-					Mathf.Clamp01(p * 2 * 0.75f) :
-					Mathf.Clamp01((1 - p) * 2 * 0.75f);
+				float progress = p < 0.5 ?　p :　(1 - p);
+				float alpha = Mathf.Clamp01(progress * 2 * 0.75f);
 
 				this.rend.color = new Color(
 					color.r, color.g,
