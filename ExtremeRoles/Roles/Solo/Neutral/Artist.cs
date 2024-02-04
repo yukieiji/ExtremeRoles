@@ -124,7 +124,7 @@ public sealed class Artist :
     {
 		CreateIntOption(
 			ArtistOption.WinAreaSize,
-			10, 1, 100, 1, parentOps);
+			15, 1, 100, 1, parentOps);
         this.CreateCommonAbilityOption(
             parentOps, 3.0f);
 
