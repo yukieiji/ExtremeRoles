@@ -281,6 +281,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Madmate   , new Madmate()},
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
+			{(int)ExtremeRoleId.Artist    , new Artist()},
 		};
 
     public static readonly Dictionary<
