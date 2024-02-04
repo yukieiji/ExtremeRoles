@@ -101,13 +101,14 @@ public sealed class BaitDalayReporter : MonoBehaviour
 			this.text.enableWordWrapping = false;
 		}
 
+		string placeholder = Translation.GetString("forceReportUntil");
+
 		do
 		{
 			targetTime -= Time.deltaTime;
 			this.text.gameObject.SetActive(true);
 			this.text.text = string.Format(
-				Translation.GetString("forceReportUntil"),
-				Mathf.CeilToInt(targetTime));
+				placeholder, Mathf.CeilToInt(targetTime));
 			yield return null;
 		}
 		while (targetTime >= 0.0f);
