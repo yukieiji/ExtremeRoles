@@ -22,6 +22,7 @@ public sealed class Artist :
 {
     public enum ArtistOption
 	{
+		WinAreaSize
     }
 
 	public enum Ops : byte
@@ -121,7 +122,9 @@ public sealed class Artist :
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
-
+		CreateIntOption(
+			ArtistOption.WinAreaSize,
+			10, 1, 100, 1, parentOps);
         this.CreateCommonAbilityOption(
             parentOps, 3.0f);
 
@@ -132,7 +135,8 @@ public sealed class Artist :
         var allOption = OptionManager.Instance;
 
 		this.area = 0.0f;
-		this.winArea = 10.0f;
+		this.winArea = allOption.GetValue<int>(
+			GetRoleOptionId(ArtistOption.WinAreaSize));
         this.RoleAbilityInit();
     }
 
