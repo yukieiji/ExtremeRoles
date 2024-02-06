@@ -13,7 +13,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.SystemType;
 
-public sealed class RaiseHandSystem : IDirtableSystemType
+public sealed class RaiseHandSystem : IRaiseHandSystem
 {
 	public sealed class Behavior
 	{

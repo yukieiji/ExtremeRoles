@@ -13,6 +13,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.SystemType;
 
+using ExtremeRoles.Module.Interface;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -199,7 +201,7 @@ public sealed class GuesserUi : MonoBehaviour
             pva.gameObject.SetActive(active);
         }
 
-		if (ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
+		if (ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
 			ExtremeSystemType.RaiseHandSystem, out var system) &&
 			system != null)
 		{
