@@ -10,7 +10,22 @@ namespace ExtremeRoles.Module;
 
 public sealed class PublicBeta : NullableSingleton<PublicBeta>
 {
-	public string CurStateString { get; private set; } = string.Empty;
+	public string CurStateString
+	{
+		get
+		{
+			if (this.mode is Mode.Disable)
+			{
+				return string.Empty;
+			}
+
+			if (this.modeStr == string.Empty)
+			{
+				this.updateStatusString();
+			}
+			return this.modeStr;
+		}
+	}
 
 	public enum Mode
 	{
@@ -33,11 +48,12 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 	private ConfigEntry<bool>? enableConfig;
 	private Mode mode;
 
+	private string modeStr = string.Empty;
+
 	public PublicBeta()
 	{
 		this.mode = this.Enable ? Mode.Enable : Mode.Disable;
 		ExtremeRolesPlugin.Logger.LogInfo($"PublicBeta Mode : {this.Enable}");
-		this.updateStatusString();
 	}
 
 	public void SwitchMode()
@@ -45,21 +61,28 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 		this.mode = this.Enable ? Mode.DisableReady : Mode.EnableReady;
 		this.getConfig().Value = !this.Enable;
 		ExtremeRolesPlugin.Logger.LogInfo($"Switch Mode: {this.mode}");
+
 		updateStatusString();
+
+		StatusTextShower.Instance.RebuildVersionShower();
 	}
 
 	private void updateStatusString()
 	{
+		this.modeStr = string.Empty;
+
 		var (formatKey, value) = this.mode switch
 		{
 			Mode.Enable => ("PublicBetaStr", BetaContentManager.Version),
-			Mode.DisableReady => ("PublicBetaEnableDisableStr", Translation.GetString("EnableKey")),
-			Mode.EnableReady => ("PublicBetaEnableDisableStr", Translation.GetString("DisableKey")),
+			Mode.DisableReady => ("PublicBetaEnableDisableStr", Translation.GetString("DisableKey")),
+			Mode.EnableReady => ("PublicBetaEnableDisableStr", Translation.GetString("EnableKey")),
 			_ => (string.Empty, string.Empty)
 		};
-		this.CurStateString = string.Format(
+
+		if (string.IsNullOrEmpty(formatKey)) { return; }
+
+		this.modeStr = string.Format(
 			Translation.GetString(formatKey), value);
-		StatusTextShower.Instance.RebuildVersionShower();
 	}
 
 	private ConfigEntry<bool> getConfig()
