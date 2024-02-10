@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.Interface;
 
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
@@ -111,7 +112,7 @@ public static class MeetingHudUpdatePatch
 			localPlayer.Data == null ||
 			localPlayer.Data.IsDead ||
 			localPlayer.Data.Disconnected ||
-			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
+			!ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
 			raiseHand == null || raiseHand.IsInit)
 		{

@@ -12,6 +12,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Module.SystemType;
 
+
+using ExtremeRoles.Module.Interface;
+
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SortButtons))]
@@ -52,7 +55,7 @@ public static class MeetingHudSortButtonsPatch
 			player);
 
 		var system = OptionManager.Instance.GetValue<bool>
-			((int)OptionCreator.CommonOptionKey.UseRaiseHand) ? RaiseHandSystem.Get() : null;
+			((int)OptionCreator.CommonOptionKey.UseRaiseHand) ? IRaiseHandSystem.Get() : null;
 
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{

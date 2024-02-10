@@ -63,9 +63,8 @@ public sealed class BaitDalayReporter : MonoBehaviour
 			{
 				if (this.rend == null) { return; }
 
-				float alpha = p < 0.5 ?
-					Mathf.Clamp01(p * 2 * 0.75f) :
-					Mathf.Clamp01((1 - p) * 2 * 0.75f);
+				float progress = p < 0.5 ?　p :　(1 - p);
+				float alpha = Mathf.Clamp01(progress * 2 * 0.75f);
 
 				this.rend.color = new Color(
 					color.r, color.g,
@@ -101,13 +100,14 @@ public sealed class BaitDalayReporter : MonoBehaviour
 			this.text.enableWordWrapping = false;
 		}
 
+		string placeholder = Translation.GetString("forceReportUntil");
+
 		do
 		{
 			targetTime -= Time.deltaTime;
 			this.text.gameObject.SetActive(true);
 			this.text.text = string.Format(
-				Translation.GetString("forceReportUntil"),
-				Mathf.CeilToInt(targetTime));
+				placeholder, Mathf.CeilToInt(targetTime));
 			yield return null;
 		}
 		while (targetTime >= 0.0f);

@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <!--<Version>9.2.0.6</Version>-->
-    <VersionPrefix>9.2.3</VersionPrefix>
+    <Version>9.2.3.1</Version>
+    <!--<VersionPrefix>9.2.3</VersionPrefix>-->
     <VersionSuffix>PublicBeta</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="..\ExtremeRoles.Beta\BetaContentManager.cs" Link="Beta\BetaContentManager.cs" />
     <Compile Include="..\ExtremeRoles.Beta\FeedBackSystem.cs" Link="Beta\FeedBackSystem.cs" />
+    <Compile Include="..\ExtremeRoles.Beta\RaiseHandSystemToggle.cs" Link="Beta\RaiseHandSystemToggle.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\ExtremeRoles.Beta\Resources\JsonData\TextRevamp.json" LogicalName="ExtremeRoles.Beta.Resources.JsonData.TextRevamp.json" />
