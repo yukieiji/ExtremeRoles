@@ -153,7 +153,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		PlayerControl rolePlayer,
 		PlayerControl killerPlayer)
 	{
-		if (!IsAwake && MeetingHud.Instance != null)
+		if (!IsAwake || MeetingHud.Instance != null)
 		{
 			return;
 		}
