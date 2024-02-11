@@ -36,7 +36,10 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 
 		// ファングル持ってくる
 		ShipStatus ship = GameSystem.GetShipObj(5);
-		this.prefab = ship.GetComponentInChildren<Mushroom>();
+		var mushroom = ship.GetComponentInChildren<Mushroom>();
+		this.prefab = Object.Instantiate(
+			mushroom, PlayerControl.LocalPlayer.transform);
+		this.prefab.gameObject.SetActive(false);
 	}
 
 	public static void RpcSetModMushroom(Vector2 pos)
@@ -100,6 +103,7 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 		if (CachedShipStatus.Instance == null) { return; }
 
 		var newMushroom = Object.Instantiate(prefab, CachedShipStatus.Instance.transform);
+		newMushroom.gameObject.SetActive(true);
 		newMushroom.name = $"{MushroomName}_{this.id}";
 
 		var setPos = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
