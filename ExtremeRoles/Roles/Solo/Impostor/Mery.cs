@@ -331,9 +331,6 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-
-        this.RoleAbilityInit();
-
         var allOption = OptionManager.Instance;
 
         this.ActiveNum = allOption.GetValue<int>(

@@ -95,8 +95,6 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
 		if (CachedShipStatus.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
 			system.IsTryCast<SabotageSystemType>(out var saboSystem))
 		{

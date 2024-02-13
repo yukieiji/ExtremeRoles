@@ -26,7 +26,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.reloadButton;
         set
         {
@@ -36,14 +36,14 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
 
     private ExtremeAbilityButton reloadButton;
     private TMPro.TextMeshPro reduceKillCoolText;
-    
+
     private int stock;
     private int stockMax;
     private int addStockWhenReport;
     private int addStockWhenMeetingButton;
     private float cockingReduceTime;
     private float reloadReduceTimePerStock;
-    
+
     private bool isResetCoolTimeWhenKill;
 
     private float defaultReloadCoolTime;
@@ -83,7 +83,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
         addStock(this.addStockWhenMeetingButton);
     }
 
-    public bool IsAbilityUse() => 
+    public bool IsAbilityUse() =>
         this.IsCommonUse() &&
         this.stock > 0 &&
         PlayerControl.LocalPlayer.killTimer > 0;
@@ -150,7 +150,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
     }
     public void Update(PlayerControl rolePlayer)
     {
-        if (this.reduceKillCoolText == null && 
+        if (this.reduceKillCoolText == null &&
             this.Button != null)
         {
             this.reduceKillCoolText = GameObject.Instantiate(
@@ -162,10 +162,10 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
         }
 
         if (this.reduceKillCoolText == null) { return; }
-        
+
         if (this.stock == 0)
         {
-            this.reduceKillCoolText.text = 
+            this.reduceKillCoolText.text =
                 Translation.GetString("noStockNow");
         }
         else
@@ -192,7 +192,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
         {
             this.KillCoolTime = this.defaultKillCool;
         }
-        
+
         if (this.isResetCoolTimeWhenKill && this.Button != null)
         {
             this.Button.OnMeetingEnd();
@@ -275,7 +275,6 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
         {
             this.defaultKillCool = this.KillCoolTime;
         }
-        this.RoleAbilityInit();
     }
 
     private void addStock(int addNum)

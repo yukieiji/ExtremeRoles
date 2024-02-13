@@ -224,7 +224,6 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             GetRoleOptionId(CarrierOption.CarryDistance));
         this.canReportOnCarry = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(CarrierOption.CanReportOnCarry));
-        this.RoleAbilityInit();
     }
 
     public void AllReset(PlayerControl rolePlayer)

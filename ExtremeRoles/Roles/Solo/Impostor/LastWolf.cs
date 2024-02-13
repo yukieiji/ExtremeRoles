@@ -104,7 +104,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleType
         if (this.isAwake)
         {
             this.HasOtherKillCool = true;
-            float reduceRate = this.noneAwakeKillBonus * this.noneAwakeKillCount + 
+            float reduceRate = this.noneAwakeKillBonus * this.noneAwakeKillCount +
                 this.deadPlayerKillBonus * (float)(
                     GameData.Instance.AllPlayers.Count - computeAlivePlayerNum() - this.noneAwakeKillCount);
             this.KillCoolTime = this.KillCoolTime * (100.0f - reduceRate) / 100.0f;
@@ -151,7 +151,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleType
 
             foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() && 
+                if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() &&
                     (!player.IsDead && !player.Disconnected))
                 {
                     ++impNum;
@@ -290,8 +290,6 @@ public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleType
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var allOpt = OptionManager.Instance;
 
         this.awakeImpNum = allOpt.GetValue<int>(

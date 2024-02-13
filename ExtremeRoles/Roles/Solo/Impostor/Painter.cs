@@ -150,6 +150,5 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
     {
         this.paintDistance = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(PainterOption.CanPaintDistance));
-        this.RoleAbilityInit();
     }
 }

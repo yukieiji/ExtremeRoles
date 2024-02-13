@@ -130,8 +130,6 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var allOption = OptionManager.Instance;
 
         this.timerMinTime = allOption.GetValue<float>(
@@ -147,7 +145,6 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
 
         this.bombPlayerId = new Queue<byte>();
         resetTimer();
-
     }
 
     public void ResetOnMeetingStart()

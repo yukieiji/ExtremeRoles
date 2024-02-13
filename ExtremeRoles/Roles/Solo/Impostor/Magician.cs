@@ -168,7 +168,5 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
             GetRoleOptionId(MagicianOption.IncludeSpawnPoint));
         this.includeSpawnPoint = allOption.GetValue<bool>(
             GetRoleOptionId(MagicianOption.IncludeRolePlayer));
-
-        this.RoleAbilityInit();
     }
 }

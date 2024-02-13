@@ -79,8 +79,6 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 
 	protected override void RoleSpecificInit()
 	{
-		this.RoleAbilityInit();
-
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ModedMushroomSystem.Type,
 			new ModedMushroomSystem(

@@ -142,8 +142,6 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var allOption = OptionManager.Instance;
 
 		this.activeRange = allOption.GetValue<float>(GetRoleOptionId(ThiefOption.Range));

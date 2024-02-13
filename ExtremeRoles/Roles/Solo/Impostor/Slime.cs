@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Slime : 
+public sealed class Slime :
     SingleRoleBase,
     IRoleAbility,
     IRoleSpecialReset,
@@ -62,7 +62,7 @@ public sealed class Slime :
     private static void setPlayerSpriteToConsole(Slime slime, PlayerControl player, int index)
     {
         Console console = CachedShipStatus.Instance.AllConsoles[index];
-        
+
         if (console == null || console.Image == null) { return; }
 
         slime.consoleObj = new GameObject("MorphConsole");
@@ -112,13 +112,13 @@ public sealed class Slime :
             abilityOff: this.CleanUp);
     }
 
-    public bool IsAbilityActive() => 
+    public bool IsAbilityActive() =>
         CachedPlayerControl.LocalPlayer.PlayerControl.moveable || this.isKilling;
 
     public bool IsAbilityUse()
     {
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-        
+
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
 
@@ -157,7 +157,7 @@ public sealed class Slime :
             }
 
             setPlayerSpriteToConsole(this, player, i);
-            
+
             return true;
         }
         return false;
@@ -191,7 +191,6 @@ public sealed class Slime :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
         this.isKilling = false;
     }
 

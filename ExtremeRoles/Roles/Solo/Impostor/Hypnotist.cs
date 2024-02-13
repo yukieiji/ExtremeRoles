@@ -617,8 +617,6 @@ public sealed class Hypnotist :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 
         this.defaultKillCool = curOption.GetFloat(FloatOptionNames.KillCooldown);

@@ -73,7 +73,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTy
     {
         this.IsOverLoad = false;
     }
-    
+
     public static void SwitchAbility(byte rolePlayerId, bool activate)
     {
         var overLoader = ExtremeRoleManager.GetSafeCastedRole<OverLoader>(rolePlayerId);
@@ -95,7 +95,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTy
             this.CleanUp);
     }
 
-    public bool IsAbilityUse() => 
+    public bool IsAbilityUse() =>
         this.IsAwake && this.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -145,7 +145,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTy
                 }
             }
 
-            if (this.awakeImpNum >= impNum && 
+            if (this.awakeImpNum >= impNum &&
                 this.killCount >= this.awakeKillCount)
             {
                 this.Button.SetButtonShow(true);
@@ -325,7 +325,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTy
             this.isAwakedHasOtherKillRange = true;
         }
 
-        if (this.awakeImpNum >= curOption.GetInt(Int32OptionNames.NumImpostors) && 
+        if (this.awakeImpNum >= curOption.GetInt(Int32OptionNames.NumImpostors) &&
             this.awakeKillCount == 0)
         {
             this.isAwake = true;
@@ -333,8 +333,6 @@ public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTy
             this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
             this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
         }
-
-        this.RoleAbilityInit();
     }
 
     private void abilityOn()

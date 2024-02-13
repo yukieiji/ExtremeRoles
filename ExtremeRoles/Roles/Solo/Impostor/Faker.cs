@@ -134,7 +134,6 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 
 	protected override void RoleSpecificInit()
 	{
-		this.RoleAbilityInit();
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.FakerDummy, new FakerDummySystem());
 	}
 }

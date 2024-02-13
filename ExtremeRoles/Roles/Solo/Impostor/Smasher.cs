@@ -146,7 +146,6 @@ public sealed class Smasher : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
         this.penaltyKillCool = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(SmasherOption.SmashPenaltyKillCool));
     }

@@ -88,7 +88,6 @@ public sealed class SlaveDriver :
 			GetRoleOptionId(SlaveDriverOption.RevartTaskNum));
 		this.range = OptionManager.Instance.GetValue<float>(
 			GetRoleOptionId(SlaveDriverOption.Range));
-		this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)

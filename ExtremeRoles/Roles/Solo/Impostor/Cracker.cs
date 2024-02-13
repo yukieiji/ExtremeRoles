@@ -166,6 +166,5 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
             GetRoleOptionId(CrackerOption.CanCrackDistance));
         this.IsRemoveDeadBody = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(CrackerOption.RemoveDeadBody));
-        this.RoleAbilityInit();
     }
 }
