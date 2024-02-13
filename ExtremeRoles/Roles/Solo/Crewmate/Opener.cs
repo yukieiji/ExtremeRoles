@@ -154,7 +154,6 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
         this.isUpgraded = false;
         this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(OpenerOption.Range));

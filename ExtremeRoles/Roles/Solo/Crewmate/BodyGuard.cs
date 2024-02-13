@@ -513,13 +513,17 @@ public sealed class BodyGuard :
             new RoleButtonActivator(),
             KeyCode.F);
 
-        this.RoleAbilityInit();
-        if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
-        {
-            behavior.SetAbilityCount(
-                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)));
-        }
+		((IRoleAbility)(this)).RoleAbilityInit();
+
+		if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
+		{
+			int abilityNum = OptionManager.Instance.GetValue<int>(GetRoleOptionId(
+				RoleAbilityCommonOption.AbilityCount));
+
+			this.shildNum = abilityNum;
+			behavior.SetAbilityCount(abilityNum);
+		}
+
         this.Button.SetLabelToCrewmate();
     }
 
@@ -763,7 +767,6 @@ public sealed class BodyGuard :
 
     protected override void RoleSpecificInit()
     {
-
         var allOpt = OptionManager.Instance;
 
         IsBlockMeetingKill = allOpt.GetValue<bool>(
@@ -784,15 +787,5 @@ public sealed class BodyGuard :
 
         this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
         this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
-
-        this.RoleAbilityInit();
-        if (this.Button?.Behavior is BodyGuardAbilityBehavior behavior)
-        {
-			int abilityNum = allOpt.GetValue<int>(GetRoleOptionId(
-				RoleAbilityCommonOption.AbilityCount));
-
-			this.shildNum = abilityNum;
-            behavior.SetAbilityCount(abilityNum);
-        }
     }
 }

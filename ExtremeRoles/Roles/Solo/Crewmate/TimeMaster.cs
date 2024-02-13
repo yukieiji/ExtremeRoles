@@ -383,8 +383,6 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         if (history != null || CachedPlayerControl.LocalPlayer == null) { return; }
 
         history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<

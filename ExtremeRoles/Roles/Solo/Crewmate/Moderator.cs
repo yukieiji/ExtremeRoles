@@ -224,7 +224,6 @@ public sealed class Moderator :
 
 		this.offset = OptionManager.Instance.GetValue<int>(
 			this.GetRoleOptionId(ModeratorOption.MeetingTimerOffset));
-		this.RoleAbilityInit();
 
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 	}

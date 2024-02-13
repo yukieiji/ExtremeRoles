@@ -205,7 +205,5 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
         this.Timer = 0.0f;
         this.MaxTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(FencerOption.ResetTime));
-
-        this.RoleAbilityInit();
     }
 }

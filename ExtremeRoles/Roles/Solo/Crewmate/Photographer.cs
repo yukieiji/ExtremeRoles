@@ -574,9 +574,6 @@ public sealed class Photographer :
                 GetRoleOptionId(PhotographerOption.PhotoRange)));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
-
-        this.RoleAbilityInit();
-
     }
 
     private void sendPhotoInfo()

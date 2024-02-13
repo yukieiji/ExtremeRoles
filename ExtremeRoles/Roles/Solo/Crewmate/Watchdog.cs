@@ -128,7 +128,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
         if (!this.Button.IsAbilityActive())
         {
             this.chargeTime.gameObject.SetActive(false);
-            return; 
+            return;
         }
 
 
@@ -144,7 +144,5 @@ public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
     }
 
     protected override void RoleSpecificInit()
-    {
-        this.RoleAbilityInit();
-    }
+    { }
 }

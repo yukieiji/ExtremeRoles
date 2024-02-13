@@ -366,7 +366,6 @@ public sealed class Delusioner :
         {
             this.isOneTimeAwake = false;
         }
-        this.RoleAbilityInit();
     }
 }
 #if DEBUG

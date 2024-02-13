@@ -235,7 +235,12 @@ public sealed class Psychic :
 			CleanUp,
 			ForceAbilityOff);
         this.Button.SetLabelToCrewmate();
-    }
+
+		if (this.Button?.Behavior is ICountBehavior behavior)
+		{
+			this.counters = new List<AlivePlayerCounter>(behavior.AbilityCount);
+		}
+	}
 
 	public void ForceAbilityOff()
 	{
@@ -459,13 +464,6 @@ public sealed class Psychic :
 		this.popUpper = new TextPopUpper(
 			3, 2.5f, new Vector3(-3.75f, -2.5f, -250.0f),
 			TMPro.TextAlignmentOptions.BottomLeft);
-
-		this.RoleAbilityInit();
-
-		if (this.Button?.Behavior is ICountBehavior behavior)
-		{
-			this.counters = new List<AlivePlayerCounter>(behavior.AbilityCount);
-		}
 	}
 
     private void sendPhotoInfo()

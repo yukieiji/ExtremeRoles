@@ -276,8 +276,6 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
         this.takeTaskRange = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(AgencyOption.TakeTaskRange));
 
-        this.RoleAbilityInit();
-
         this.TakeTask = new List<TakeTaskType>();
 
     }

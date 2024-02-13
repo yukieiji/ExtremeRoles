@@ -105,7 +105,5 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
     }
 
     protected override void RoleSpecificInit()
-    {
-        this.RoleAbilityInit();
-    }
+    { }
 }
