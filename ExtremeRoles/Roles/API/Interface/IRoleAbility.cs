@@ -4,7 +4,7 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.API.Interface;
@@ -28,6 +28,32 @@ public interface IRoleAbility : IRoleResetMeeting
     public bool UseAbility();
 
     public bool IsAbilityUse();
+
+	public void RoleAbilityInit()
+	{
+		if (this.Button == null) { return; }
+
+		var allOpt = OptionManager.Instance;
+		this.Button.Behavior.SetCoolTime(
+			allOpt.GetValue<float>(
+				this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
+
+		if (allOpt.TryGet<float>(
+				this.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
+				out var activeTimeOption))
+		{
+			this.Button.Behavior.SetActiveTime(activeTimeOption.GetValue());
+		}
+
+		if (this.Button.Behavior is ICountBehavior countBehavior)
+		{
+			countBehavior.SetAbilityCount(
+				allOpt.GetValue<int>(this.GetRoleOptionId(
+					RoleAbilityCommonOption.AbilityCount)));
+		}
+
+		this.Button.OnMeetingEnd();
+	}
 }
 
 public static class IRoleAbilityMixin
@@ -254,31 +280,4 @@ public static class IRoleAbilityMixin
 			ExileController.Instance == null &&
 			IntroCutscene.Instance == null;
 	}
-
-    public static void RoleAbilityInit(this IRoleAbility self)
-    {
-
-        if (self.Button == null) { return; }
-
-        var allOpt = OptionManager.Instance;
-        self.Button.Behavior.SetCoolTime(
-            allOpt.GetValue<float>(
-                self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
-
-        if (allOpt.TryGet<float>(
-                self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
-                out var activeTimeOption))
-        {
-            self.Button.Behavior.SetActiveTime(activeTimeOption.GetValue());
-        }
-
-        if (self.Button.Behavior is ICountBehavior countBehavior)
-        {
-            countBehavior.SetAbilityCount(
-                allOpt.GetValue<int>(self.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)));
-        }
-
-        self.Button.OnMeetingEnd();
-    }
 }
