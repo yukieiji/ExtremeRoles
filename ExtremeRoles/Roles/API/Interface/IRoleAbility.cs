@@ -15,19 +15,17 @@ public enum RoleAbilityCommonOption
     AbilityCount,
     AbilityActiveTime,
 }
+
+
 public interface IRoleAbility : IRoleResetMeeting
 {
-    public ExtremeAbilityButton Button
-    {
-        get;
-        set;
-    }
+	public ExtremeAbilityButton Button
+	{
+		get;
+		set;
+	}
 
 	public void CreateAbility();
-
-    public bool UseAbility();
-
-    public bool IsAbilityUse();
 
 	public void RoleAbilityInit()
 	{
@@ -70,6 +68,13 @@ public interface IRoleAbility : IRoleResetMeeting
 	}
 }
 
+public interface IRoleAutoBuildAbility : IRoleAbility
+{
+    public bool UseAbility();
+
+    public bool IsAbilityUse();
+}
+
 public static class IRoleAbilityMixin
 {
     private const float defaultCoolTime = 30.0f;
@@ -80,7 +85,7 @@ public static class IRoleAbilityMixin
     private const float step = 0.5f;
 
     public static void CreateNormalAbilityButton(
-        this IRoleAbility self,
+        this IRoleAutoBuildAbility self,
         string textKey,
         Sprite sprite,
         Func<bool> checkAbility = null,
@@ -103,7 +108,7 @@ public static class IRoleAbilityMixin
     }
 
     public static void CreateAbilityCountButton(
-        this IRoleAbility self,
+        this IRoleAutoBuildAbility self,
         string textKey,
         Sprite sprite,
         Func<bool> checkAbility = null,
@@ -129,7 +134,7 @@ public static class IRoleAbilityMixin
 
 
     public static void CreateReclickableAbilityButton(
-        this IRoleAbility self,
+        this IRoleAutoBuildAbility self,
         string textKey,
         Sprite sprite,
         Func<bool> checkAbility = null,
@@ -149,7 +154,7 @@ public static class IRoleAbilityMixin
     }
 
     public static void CreateReclickableCountAbilityButton(
-        this IRoleAbility self,
+        this IRoleAutoBuildAbility self,
         string textKey,
         Sprite sprite,
         Func<bool> checkAbility = null,
@@ -169,7 +174,7 @@ public static class IRoleAbilityMixin
     }
 
     public static void CreateChargeAbilityButton(
-        this IRoleAbility self,
+        this IRoleAutoBuildAbility self,
         string textKey,
         Sprite sprite,
         Func<bool> checkAbility = null,
@@ -192,7 +197,7 @@ public static class IRoleAbilityMixin
     }
 
     public static void CreatePassiveAbilityButton(
-        this IRoleAbility self,
+        this IRoleAutoBuildAbility self,
         string activateButtonName,
         string deactivateButtonName,
         Sprite activateSprite,
@@ -217,7 +222,7 @@ public static class IRoleAbilityMixin
 
 
     public static void CreateCommonAbilityOption(
-        this IRoleAbility self,
+        this IRoleAutoBuildAbility self,
         IOptionInfo parentOps,
         float defaultActiveTime = float.MaxValue)
     {
@@ -251,7 +256,7 @@ public static class IRoleAbilityMixin
     }
 
 	public static void CreateAbilityCountOption(
-		this IRoleAbility self,
+		this IRoleAutoBuildAbility self,
 		IOptionInfo parentOps,
 		int defaultAbilityCount,
 		int maxAbilityCount,
