@@ -20,7 +20,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Mery : SingleRoleBase, IRoleAbility
+public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 {
     public sealed class Camp : IUpdatableObject
     {

@@ -11,7 +11,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Faker : SingleRoleBase, IRoleAbility
+public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 {
 	public enum FakerDummyOps : byte
 	{

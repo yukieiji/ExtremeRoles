@@ -15,7 +15,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialReset
 {
     private DeadBody carringBody;
     private float[] alphaValue;

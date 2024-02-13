@@ -8,7 +8,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Smasher : SingleRoleBase, IRoleAbility
+public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum SmasherOption
     {

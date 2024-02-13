@@ -13,7 +13,7 @@ using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Cracker : SingleRoleBase, IRoleAbility
+public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 {
     public sealed class CrackTrace : IMeetingResetObject
     {

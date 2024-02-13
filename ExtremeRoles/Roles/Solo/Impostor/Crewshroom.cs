@@ -14,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable
 
-public sealed class Crewshroom : SingleRoleBase, IRoleAbility
+public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 {
 	public ExtremeAbilityButton Button { get; set; }
 

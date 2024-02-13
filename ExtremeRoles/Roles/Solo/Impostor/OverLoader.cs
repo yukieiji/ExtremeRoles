@@ -15,7 +15,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
+public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
 {
 
     public enum OverLoaderOption

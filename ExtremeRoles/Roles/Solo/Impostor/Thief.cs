@@ -14,7 +14,7 @@ using UnityEngine.Video;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Thief : SingleRoleBase, IRoleAbility
+public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum ThiefOption
 	{

@@ -16,7 +16,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Magician : SingleRoleBase, IRoleAbility
+public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 {
 
     public ExtremeAbilityButton Button

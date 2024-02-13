@@ -33,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Hypnotist :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleMurderPlayerHook,
     IRoleSpecialReset
@@ -891,7 +891,7 @@ public sealed class Hypnotist :
 
 public sealed class Doll :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleUpdate,
     IRoleHasParent,
     IRoleWinPlayerModifier

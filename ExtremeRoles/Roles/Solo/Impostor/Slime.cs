@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Slime :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleSpecialReset,
     IRolePerformKillHook
 {

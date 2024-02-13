@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Commander : SingleRoleBase, IRoleAbility
+public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
 {
     public ExtremeAbilityButton Button
     {

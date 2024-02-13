@@ -8,7 +8,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Painter : SingleRoleBase, IRoleAbility
+public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum PainterOption
     {

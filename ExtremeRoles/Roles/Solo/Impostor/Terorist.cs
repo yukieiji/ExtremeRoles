@@ -12,7 +12,7 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Terorist : SingleRoleBase, IRoleAbility
+public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum TeroristOption
 	{

@@ -25,7 +25,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Zombie :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleOnRevive
 {

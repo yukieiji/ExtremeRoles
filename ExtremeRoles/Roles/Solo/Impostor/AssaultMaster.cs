@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHook, IRoleUpdate
+public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRoleReportHook, IRoleUpdate
 {
     public enum AssaultMasterOption
     {

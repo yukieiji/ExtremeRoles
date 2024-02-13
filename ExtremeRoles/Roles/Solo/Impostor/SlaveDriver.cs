@@ -15,7 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class SlaveDriver :
     SingleRoleBase,
-    IRoleAbility
+    IRoleAutoBuildAbility
 {
 	public sealed class HarassmentReportSerializer : IStringSerializer
 	{
