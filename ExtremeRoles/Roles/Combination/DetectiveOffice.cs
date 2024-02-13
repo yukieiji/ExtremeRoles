@@ -516,7 +516,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
     }
 }
 
-public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleReportHook
+public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleReportHook
 {
 
     public struct DetectiveApprenticeOptionHolder

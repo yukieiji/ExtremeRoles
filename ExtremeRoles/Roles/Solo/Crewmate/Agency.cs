@@ -12,7 +12,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
 	public bool CanSeeTaskBar { get; private set; }
 
@@ -194,7 +194,7 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
             this.TargetPlayer = target.PlayerId;
         }
 
-        return IRoleAbility.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
+        return IRoleAutoBuildAbility.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
     }
 
     public void ResetOnMeetingStart()

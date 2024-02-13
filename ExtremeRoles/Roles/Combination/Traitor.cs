@@ -63,7 +63,7 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 
 }
 
-public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp
+public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialSetUp
 {
     public enum AbilityType : byte
     {

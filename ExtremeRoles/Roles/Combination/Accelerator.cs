@@ -23,7 +23,7 @@ public sealed class AcceleratorManager : FlexibleCombinationRoleManagerBase
 
 public sealed class Accelerator :
     MultiAssignRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleSpecialReset,
     IRoleUsableOverride
 {

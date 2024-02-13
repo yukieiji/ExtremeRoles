@@ -58,7 +58,7 @@ public sealed class Kids : GhostAndAliveCombinationRoleManagerBase
     }
 }
 
-public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
+public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 {
 	public enum AbilityType : byte
 	{

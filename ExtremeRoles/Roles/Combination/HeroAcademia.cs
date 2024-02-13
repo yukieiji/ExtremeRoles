@@ -416,7 +416,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
 }
 
-public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
 {
     public enum OneForAllCondition : byte
     {
@@ -689,7 +689,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
         }
     }
 }
-public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
 {
     public enum VillanOption
     {
@@ -861,7 +861,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     }
 
 }
-public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
+public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleWinPlayerModifier
 {
     public enum VigilanteCondition : byte
     {

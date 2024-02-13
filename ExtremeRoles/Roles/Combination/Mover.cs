@@ -23,7 +23,7 @@ public sealed class MoverManager : FlexibleCombinationRoleManagerBase
 
 public sealed class Mover :
     MultiAssignRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleSpecialReset,
     IRoleUsableOverride
 {
