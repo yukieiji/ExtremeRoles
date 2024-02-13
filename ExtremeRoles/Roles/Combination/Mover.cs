@@ -268,8 +268,6 @@ public sealed class Mover :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
         this.hasConsole = new ConsoleData();

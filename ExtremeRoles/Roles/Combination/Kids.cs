@@ -285,9 +285,9 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
             new RoleButtonActivator(),
             KeyCode.F);
 
-        this.RoleAbilityInit();
+		((IRoleAbility)(this)).RoleAbilityInit();
 
-        if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
+		if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
                 OptionManager.Instance.GetValue<int>(GetRoleOptionId(
@@ -365,7 +365,6 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(DelinqentOption.Range));
 
-        this.RoleAbilityInit();
         if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(

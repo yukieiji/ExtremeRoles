@@ -200,8 +200,6 @@ public sealed class Accelerator :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
 		this.canUseOtherPlayer = OptionManager.Instance.GetValue<bool>(

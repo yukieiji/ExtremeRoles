@@ -374,7 +374,6 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     {
         this.canUseButton = false;
         this.nextUseAbilityType = AbilityType.Admin;
-        this.RoleAbilityInit();
     }
 
     private void updateAbility()
