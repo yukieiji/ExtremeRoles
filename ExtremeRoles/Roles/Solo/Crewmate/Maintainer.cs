@@ -10,7 +10,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Maintainer : SingleRoleBase, IRoleAbility
+public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
 {
     public ExtremeAbilityButton Button
     {

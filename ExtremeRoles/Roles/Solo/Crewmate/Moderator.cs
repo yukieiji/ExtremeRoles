@@ -17,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Moderator :
 	SingleRoleBase,
-	IRoleAbility,
+	IRoleAutoBuildAbility,
 	IRoleAwake<RoleTypes>
 {
 	public enum ModeratorOption

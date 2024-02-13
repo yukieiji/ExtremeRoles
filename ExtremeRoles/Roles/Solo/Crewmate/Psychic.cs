@@ -22,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Psychic :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleReportHook
 {

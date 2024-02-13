@@ -16,7 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Delusioner :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleVoteModifier
 {

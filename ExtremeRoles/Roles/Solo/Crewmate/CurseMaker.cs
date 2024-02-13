@@ -17,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class CurseMaker :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleMurderPlayerHook,
     IRoleUpdate
 {

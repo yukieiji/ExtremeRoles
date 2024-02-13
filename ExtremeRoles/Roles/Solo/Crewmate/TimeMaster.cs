@@ -15,7 +15,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class TimeMaster : SingleRoleBase, IRoleAbility
+public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum TimeMasterOption
     {

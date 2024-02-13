@@ -23,7 +23,7 @@ using ExtremeRoles.Compat;
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Teleporter :
-    SingleRoleBase, IRoleAbility, IRoleSpecialSetUp
+    SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp
 {
     public sealed class TeleporterAbilityBehavior :
         AbilityBehaviorBase, ICountBehavior

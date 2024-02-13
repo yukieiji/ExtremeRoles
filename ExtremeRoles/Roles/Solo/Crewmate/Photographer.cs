@@ -23,7 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Photographer :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleReportHook
 {

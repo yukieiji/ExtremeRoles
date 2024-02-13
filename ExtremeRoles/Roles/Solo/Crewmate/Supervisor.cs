@@ -9,7 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum SuperviosrOption
     {
