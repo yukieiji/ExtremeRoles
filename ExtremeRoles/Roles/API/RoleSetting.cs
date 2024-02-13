@@ -50,6 +50,7 @@ public abstract class RoleOptionBase
         CommonInit();
         RoleSpecificInit();
 
+		//TODO : 消して動くかチェック
 		if (this is IRoleAbility ability)
 		{
 			ability.RoleAbilityInit();
