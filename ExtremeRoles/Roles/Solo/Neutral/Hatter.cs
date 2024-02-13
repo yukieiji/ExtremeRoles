@@ -82,7 +82,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public bool UseAbility()
     {

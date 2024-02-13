@@ -49,7 +49,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 			_ => base.GetIntroDescription()
 		};
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
 	{

@@ -148,7 +148,7 @@ public sealed class Accelerator :
     public bool IsAbilityActive() =>
         CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {

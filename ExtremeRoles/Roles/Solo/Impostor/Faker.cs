@@ -67,7 +67,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 			isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr,
 			isPlayerDummy ? this.playerDummy : this.deadBodyDummy);
 
-		return this.IsCommonUse();
+		return IRoleAbility.IsCommonUse();
 	}
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)

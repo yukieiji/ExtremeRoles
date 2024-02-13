@@ -57,7 +57,7 @@ public sealed class Alice : SingleRoleBase, IRoleAbility
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse();
+        return IRoleAbility.IsCommonUse();
     }
 
     public override void RolePlayerKilledAction(

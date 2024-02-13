@@ -197,7 +197,7 @@ public sealed class Miner :
 		++this.mineId;
 	}
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void AllReset(PlayerControl rolePlayer)
     {

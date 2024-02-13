@@ -51,7 +51,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAbility
         {
             this.targetPlayerId = player.PlayerId;
         }
-        return this.IsCommonUse() && this.targetPlayerId != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.targetPlayerId != byte.MaxValue;
     }
 
     public bool UseAbility()

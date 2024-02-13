@@ -307,7 +307,7 @@ public sealed class Hypnotist :
             CachedPlayerControl.LocalPlayer,
             this, this.range);
 
-        return this.target != null && this.IsCommonUse();
+        return this.target != null && IRoleAbility.IsCommonUse();
     }
 
     public void ResetOnMeetingStart()
@@ -1152,14 +1152,14 @@ public sealed class Doll :
         {
             case AbilityType.Admin:
                 return
-                    this.IsCommonUse() &&
+                    IRoleAbility.IsCommonUse() &&
                     (
                         MapBehaviour.Instance == null ||
                         !MapBehaviour.Instance.isActiveAndEnabled
                     );
             case AbilityType.Security:
             case AbilityType.Vital:
-                return this.IsCommonUse() && Minigame.Instance == null;
+                return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
             default:
                 return false;
         }

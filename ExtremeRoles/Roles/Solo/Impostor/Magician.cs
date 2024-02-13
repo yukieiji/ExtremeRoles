@@ -63,7 +63,7 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
         this.airShipSpawn = GameSystem.GetAirShipRandomSpawn();
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {

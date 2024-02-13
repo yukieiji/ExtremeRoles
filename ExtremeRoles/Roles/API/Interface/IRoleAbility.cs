@@ -23,7 +23,7 @@ public interface IRoleAbility : IRoleResetMeeting
         set;
     }
 
-    public void CreateAbility();
+	public void CreateAbility();
 
     public bool UseAbility();
 
@@ -53,6 +53,20 @@ public interface IRoleAbility : IRoleResetMeeting
 		}
 
 		this.Button.OnMeetingEnd();
+	}
+
+	protected static bool IsCommonUse()
+	{
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+		return
+			localPlayer != null &&
+			localPlayer.Data != null &&
+			!localPlayer.Data.IsDead &&
+			localPlayer.CanMove &&
+			MeetingHud.Instance == null &&
+			ExileController.Instance == null &&
+			IntroCutscene.Instance == null;
 	}
 }
 
@@ -266,18 +280,4 @@ public static class IRoleAbilityMixin
     public static int GetRoleOptionId(
         this IRoleAbility self,
         RoleAbilityCommonOption option) => ((RoleOptionBase)self).GetRoleOptionId((int)option);
-
-    public static bool IsCommonUse(this IRoleAbility _)
-    {
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-        return
-			localPlayer != null &&
-			localPlayer.Data != null &&
-			!localPlayer.Data.IsDead &&
-			localPlayer.CanMove &&
-			MeetingHud.Instance == null &&
-			ExileController.Instance == null &&
-			IntroCutscene.Instance == null;
-	}
 }

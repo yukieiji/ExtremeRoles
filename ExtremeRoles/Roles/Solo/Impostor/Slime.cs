@@ -125,7 +125,7 @@ public sealed class Slime :
         if (this.targetConsole == null) { return false; }
 
         return
-            this.IsCommonUse() &&
+            IRoleAbility.IsCommonUse() &&
             this.targetConsole.Image != null &&
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }

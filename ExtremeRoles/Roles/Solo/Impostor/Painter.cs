@@ -105,7 +105,7 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
             this.targetDeadBodyId = info.PlayerId;
         }
 
-        return this.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)

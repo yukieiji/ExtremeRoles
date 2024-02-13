@@ -142,7 +142,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse();
+        return IRoleAbility.IsCommonUse();
     }
 
     public void ResetOnMeetingStart()

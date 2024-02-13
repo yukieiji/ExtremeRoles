@@ -84,7 +84,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHoo
     }
 
     public bool IsAbilityUse() =>
-        this.IsCommonUse() &&
+        IRoleAbility.IsCommonUse() &&
         this.stock > 0 &&
         PlayerControl.LocalPlayer.killTimer > 0;
 

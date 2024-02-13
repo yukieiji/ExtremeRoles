@@ -328,7 +328,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
         return true;
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingStart()
     {

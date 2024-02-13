@@ -763,7 +763,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleRepor
     }
 
     public bool IsAbilityUse() =>
-        this.IsCommonUse() && Minigame.Instance == null;
+        IRoleAbility.IsCommonUse() && Minigame.Instance == null;
 
     public bool IsOpen() => Minigame.Instance != null;
 

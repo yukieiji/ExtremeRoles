@@ -382,7 +382,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             this, GameOptionsData.KillDistances[
                 Mathf.Clamp(this.createSidekickRange, 0, 2)]);
 
-        return this.Target != null && this.IsCommonUse();
+        return this.Target != null && IRoleAbility.IsCommonUse();
     }
 
     public bool UseAbility()

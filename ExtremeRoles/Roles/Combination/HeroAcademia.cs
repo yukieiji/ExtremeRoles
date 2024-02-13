@@ -469,7 +469,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
 
     public bool IsAbilityUse() =>
         this.cond == OneForAllCondition.FeatButtonAbility &&
-        this.IsCommonUse();
+        IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
@@ -723,7 +723,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
             abilityOff: CleanUp);
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
@@ -925,7 +925,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
         this.target = player.PlayerId;
 
 
-        return this.IsCommonUse() && this.target != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.target != byte.MaxValue;
     }
     public void CleanUp()
     {

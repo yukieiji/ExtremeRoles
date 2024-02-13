@@ -96,7 +96,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTy
     }
 
     public bool IsAbilityUse() =>
-        this.IsAwake && this.IsCommonUse();
+        this.IsAwake && IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {

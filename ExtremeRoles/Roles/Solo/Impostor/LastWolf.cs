@@ -95,7 +95,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleType
 
     public bool IsAbilityUse() =>
         this.IsAwake &&
-        this.IsCommonUse() &&
+        IRoleAbility.IsCommonUse() &&
         VisionComputer.Instance.IsModifierResetted();
 
     public void ResetOnMeetingStart()

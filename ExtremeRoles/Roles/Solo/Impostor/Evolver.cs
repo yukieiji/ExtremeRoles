@@ -74,7 +74,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
     {
         this.targetBody = Player.GetDeadBodyInfo(
             this.eatingRange);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void ForceCleanUp()

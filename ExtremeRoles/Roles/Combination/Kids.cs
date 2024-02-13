@@ -307,7 +307,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         return this.curAbilityType switch
         {
             AbilityType.Scribe =>
-                this.IsCommonUse(),
+                IRoleAbility.IsCommonUse(),
             AbilityType.SelfBomb =>
                 Player.GetClosestPlayerInRange(
                     CachedPlayerControl.LocalPlayer, this, this.range) != null,

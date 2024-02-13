@@ -207,7 +207,7 @@ public sealed class CurseMaker :
     {
         this.targetBody = Player.GetDeadBodyInfo(
             this.deadBodyCheckRange);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void CleanUp()

@@ -158,7 +158,7 @@ public sealed class Missionary :
             }
         }
 
-        return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
     }
 
     public void ResetOnMeetingStart()

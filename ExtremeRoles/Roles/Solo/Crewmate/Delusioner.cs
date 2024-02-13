@@ -109,7 +109,7 @@ public sealed class Delusioner :
 
         this.targetPlayerId = target.PlayerId;
 
-        return this.IsCommonUse();
+        return IRoleAbility.IsCommonUse();
     }
 
     public void ModifiedVote(

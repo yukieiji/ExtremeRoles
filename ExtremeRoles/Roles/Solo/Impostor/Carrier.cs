@@ -149,7 +149,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     public bool IsAbilityUse()
     {
         this.targetBody = Player.GetDeadBodyInfo(this.carryDistance);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)

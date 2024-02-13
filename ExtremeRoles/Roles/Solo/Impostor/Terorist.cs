@@ -50,7 +50,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
     {
 		if (this.teroSabo is null || this.saboSystem == null) { return false; }
 
-        return this.IsCommonUse() && !this.teroSabo.IsActive &&
+        return IRoleAbility.IsCommonUse() && !this.teroSabo.IsActive &&
 			(this.canActiveOtherSabotage || !this.saboSystem.AnyActive);
     }
 

@@ -72,7 +72,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse() && Minigame.Instance == null;
+        return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
     }
 
     public bool IsOpen() => Minigame.Instance != null;

@@ -143,7 +143,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
             !hasDedBodyTarget && hasPlayerTarget ?
             EaterAbilityMode.Kill : EaterAbilityMode.DeadBody);
 
-        return this.IsCommonUse() &&
+        return IRoleAbility.IsCommonUse() &&
             (hasPlayerTarget || hasDedBodyTarget);
     }
 

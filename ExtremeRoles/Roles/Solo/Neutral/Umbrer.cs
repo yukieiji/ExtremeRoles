@@ -250,7 +250,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IR
 
         if (this.tmpTarget == null) { return false; }
 
-        return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
+        return IRoleAbility.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
     }
 
     public void ResetOnMeetingStart()

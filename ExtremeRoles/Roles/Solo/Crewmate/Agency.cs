@@ -194,7 +194,7 @@ public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
             this.TargetPlayer = target.PlayerId;
         }
 
-        return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
     }
 
     public void ResetOnMeetingStart()

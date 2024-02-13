@@ -174,7 +174,7 @@ public sealed class Moderator :
 		return true;
 	}
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingStart()
 	{

@@ -74,7 +74,7 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
     {
         this.targetBody = Player.GetDeadBodyInfo(
             this.activeRange);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void ForceCleanUp()

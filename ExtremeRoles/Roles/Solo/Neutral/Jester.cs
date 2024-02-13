@@ -118,7 +118,7 @@ public sealed class Jester : SingleRoleBase, IRoleAbility
         this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
             CachedPlayerControl.LocalPlayer, this,
             this.outburstDistance);
-        return this.IsCommonUse() && this.tmpTarget != null;
+        return IRoleAbility.IsCommonUse() && this.tmpTarget != null;
     }
 
     public override void ExiledAction(PlayerControl rolePlayer)

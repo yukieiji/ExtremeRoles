@@ -88,7 +88,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
             return false;
         }
 
-        return this.IsCommonUse() && !this.targetDoor.IsOpen;
+        return IRoleAbility.IsCommonUse() && !this.targetDoor.IsOpen;
     }
 
     public void ResetOnMeetingStart()

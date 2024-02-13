@@ -88,7 +88,7 @@ public sealed class Commander : SingleRoleBase, IRoleAbility
                Path.CommanderAttackCommand));
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {

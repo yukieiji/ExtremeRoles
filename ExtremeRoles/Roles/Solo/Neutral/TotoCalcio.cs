@@ -80,7 +80,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
         if (this.tmpTarget == null ||
             this.tmpTarget.Data == null) { return false; }
 
-        bool commonUse = this.IsCommonUse();
+        bool commonUse = IRoleAbility.IsCommonUse();
 
         if (this.betPlayer != null)
         {

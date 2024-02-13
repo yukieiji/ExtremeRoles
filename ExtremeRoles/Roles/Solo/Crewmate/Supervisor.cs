@@ -71,7 +71,7 @@ public sealed class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
     public bool IsAbilityUse()
     {
         return
-            this.IsCommonUse() && (
+            IRoleAbility.IsCommonUse() && (
                 MapBehaviour.Instance == null ||
                 !MapBehaviour.Instance.isActiveAndEnabled);
     }

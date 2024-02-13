@@ -83,7 +83,7 @@ public sealed class Maintainer : SingleRoleBase, IRoleAbility
             }
         }
 
-        return sabotageActive && this.IsCommonUse();
+        return sabotageActive && IRoleAbility.IsCommonUse();
 
     }
 

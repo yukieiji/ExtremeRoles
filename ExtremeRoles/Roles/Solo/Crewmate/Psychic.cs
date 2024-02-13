@@ -257,7 +257,7 @@ public sealed class Psychic :
 
 	public bool CheckAbility()
 		=> this.startPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition() &&
-		this.IsCommonUse();
+		IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()
 	{
@@ -268,7 +268,7 @@ public sealed class Psychic :
 	}
 
     public bool IsAbilityUse()
-        => this.IsAwake && this.IsCommonUse();
+        => this.IsAwake && IRoleAbility.IsCommonUse();
 
     public string GetFakeOptionString() => "";
 

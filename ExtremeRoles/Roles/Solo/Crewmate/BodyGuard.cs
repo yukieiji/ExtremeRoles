@@ -595,7 +595,7 @@ public sealed class BodyGuard :
 			}
 		}
 
-		return this.IsCommonUse() && this.targetPlayer != byte.MaxValue;
+		return IRoleAbility.IsCommonUse() && this.targetPlayer != byte.MaxValue;
     }
 
     public void ResetOnMeetingStart()

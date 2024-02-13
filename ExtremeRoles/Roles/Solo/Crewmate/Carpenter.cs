@@ -564,7 +564,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
 		return
 			this.IsAwake &&
-			this.IsCommonUse() &&
+			IRoleAbility.IsCommonUse() &&
 			!(
 				// Miraとファングルはカメラ設置できない, TODO:ファングルはカメラ設置できるか調査
 				this.targetVent == null && (mapId == 1 || mapId == 5)

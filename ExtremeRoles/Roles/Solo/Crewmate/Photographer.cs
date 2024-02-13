@@ -375,7 +375,7 @@ public sealed class Photographer :
     }
 
     public bool IsAbilityUse()
-        => this.IsAwake && this.IsCommonUse();
+        => this.IsAwake && IRoleAbility.IsCommonUse();
 
     public string GetFakeOptionString() => "";
 

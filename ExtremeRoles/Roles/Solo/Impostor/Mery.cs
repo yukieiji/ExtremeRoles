@@ -294,7 +294,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse();
+        return IRoleAbility.IsCommonUse();
     }
 
     public bool UseAbility()

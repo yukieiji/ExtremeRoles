@@ -172,6 +172,6 @@ public sealed class SlaveDriver :
 
 		this.target = target.PlayerId;
 
-		return this.IsCommonUse() && !this.effectPlayer.Contains(this.target);
+		return IRoleAbility.IsCommonUse() && !this.effectPlayer.Contains(this.target);
 	}
 }
