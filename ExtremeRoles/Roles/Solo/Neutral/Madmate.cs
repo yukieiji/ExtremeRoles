@@ -242,7 +242,5 @@ public sealed class Madmate :
             this.seeFromImpostorTaskGage <= 0.0f;
 
         this.FakeImposter = this.isUpdateMadmate;
-
-        this.RoleAbilityInit();
     }
 }

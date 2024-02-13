@@ -343,8 +343,6 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
         this.deadBodyArrow = new Dictionary<byte, Arrow>();
         this.isActivated = false;
 
-        this.RoleAbilityInit();
-
         if (this.Button?.Behavior is AbilityCountBehavior behaviour)
         {
             int abilityNum = allOpt.GetValue<int>(GetRoleOptionId(

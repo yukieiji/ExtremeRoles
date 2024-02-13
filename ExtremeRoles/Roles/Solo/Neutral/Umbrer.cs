@@ -373,8 +373,6 @@ public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IR
         this.maxTimer = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.KeepUpgradedVirus));
 
         this.isFetch = false;
-
-        this.RoleAbilityInit();
     }
     private bool isInfectOtherPlayer(PlayerControl sourcePlayer)
     {

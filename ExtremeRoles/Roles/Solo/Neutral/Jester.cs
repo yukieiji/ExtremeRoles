@@ -18,7 +18,7 @@ public sealed class Jester : SingleRoleBase, IRoleAbility
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.outburstButton;
         set
         {
@@ -146,7 +146,7 @@ public sealed class Jester : SingleRoleBase, IRoleAbility
         if (killTarget == null) { return; }
         if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }
         if (killTarget.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId) { return; }
-        
+
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.JesterOutburstKill))
         {
@@ -178,7 +178,6 @@ public sealed class Jester : SingleRoleBase, IRoleAbility
             GetRoleOptionId(JesterOption.UseSabotage));
         this.outburstDistance = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(JesterOption.OutburstDistance));
-        this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingStart()

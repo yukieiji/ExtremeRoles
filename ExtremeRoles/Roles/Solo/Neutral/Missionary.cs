@@ -132,8 +132,6 @@ public sealed class Missionary :
 		this.judgementTarget = new HashSet<byte>();
 
 		resetTimer();
-        this.RoleAbilityInit();
-
     }
 
     public void CreateAbility()

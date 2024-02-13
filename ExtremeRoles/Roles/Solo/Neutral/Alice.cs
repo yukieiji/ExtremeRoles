@@ -23,7 +23,7 @@ public sealed class Alice : SingleRoleBase, IRoleAbility
     }
 
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.aliceShipBroken;
         set
         {
@@ -52,7 +52,7 @@ public sealed class Alice : SingleRoleBase, IRoleAbility
                 Path.AliceShipBroken));
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) => 
+    public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
     public bool IsAbilityUse()
@@ -125,7 +125,7 @@ public sealed class Alice : SingleRoleBase, IRoleAbility
         if (alice == null) { return; }
         var player = Helper.Player.GetPlayerControlById(targetPlayerId);
         if (player == null) { return; }
-        
+
         for (int i = 0; i < player.Data.Tasks.Count; ++i)
         {
             if (addTaskId.Count == 0) { break; }
@@ -181,8 +181,6 @@ public sealed class Alice : SingleRoleBase, IRoleAbility
             GetRoleOptionId(AliceOption.RevartLongTaskNum));
         this.RevartCommonTask = allOption.GetValue<int>(
             GetRoleOptionId(AliceOption.RevartCommonTaskNum));
-
-        this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingStart()

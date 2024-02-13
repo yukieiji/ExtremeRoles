@@ -192,8 +192,6 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
 		this.curSkipCount = 0;
 		this.isAssassinMeeting = false;
 		this.IsWin = false;
-
-		this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingStart()
