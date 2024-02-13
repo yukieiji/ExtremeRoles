@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Miner :
 	SingleRoleBase,
-	IRoleAbility,
+	IRoleAutoBuildAbility,
 	IRoleUpdate,
 	IRoleSpecialSetUp,
 	IRoleSpecialReset

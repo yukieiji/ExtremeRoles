@@ -10,7 +10,7 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerModifier
+public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier
 {
     public enum TotocalcioOption
     {

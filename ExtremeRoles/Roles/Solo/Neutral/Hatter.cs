@@ -16,7 +16,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBodyReportOverride
+public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IDeadBodyReportOverride
 {
     public enum HatterOption
 	{

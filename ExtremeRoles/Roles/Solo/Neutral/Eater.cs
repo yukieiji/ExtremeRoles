@@ -16,7 +16,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook, IRoleUpdate
+public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPlayerHook, IRoleUpdate
 {
     public enum EaterOption
     {

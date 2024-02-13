@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Madmate :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleUpdate,
     IRoleSpecialSetUp,
     IRoleWinPlayerModifier

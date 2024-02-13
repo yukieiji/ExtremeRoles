@@ -16,7 +16,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IRoleUpdate
+public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp, IRoleUpdate
 {
     private sealed class InfectedContainer
     {

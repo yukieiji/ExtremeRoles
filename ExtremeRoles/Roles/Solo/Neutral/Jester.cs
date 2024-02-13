@@ -9,7 +9,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Jester : SingleRoleBase, IRoleAbility
+public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum JesterOption
     {

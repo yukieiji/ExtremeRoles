@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Queen :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleSpecialReset,
     IRoleMurderPlayerHook,
     IRoleUpdate
@@ -519,7 +519,7 @@ public sealed class Queen :
 
 public sealed class Servant :
     MultiAssignRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleMurderPlayerHook,
     IRoleHasParent
 {

@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Missionary :
 	SingleRoleBase,
-	IRoleAbility,
+	IRoleAutoBuildAbility,
 	IRoleUpdate,
 	IRoleVoteCheck
 {
