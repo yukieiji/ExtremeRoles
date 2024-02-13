@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
+
 using UnityEngine;
 
 using ExtremeRoles.Module;
@@ -53,6 +55,7 @@ public interface IRoleAbility : IRoleResetMeeting
 		this.Button.OnMeetingEnd();
 	}
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	protected static bool IsCommonUse()
 	{
 		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
