@@ -34,25 +34,24 @@ public sealed class GameTestRunner : TestRunnerBase
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
 				new("Random", 3),
-				new("NeutralRemove", 5, new ()
-				{
+				new("NeutralRemove", 5,
+				[
 					ExtremeRoleId.Jester, ExtremeRoleId.TaskMaster,
 					ExtremeRoleId.Neet, ExtremeRoleId.Umbrer,
 					ExtremeRoleId.Madmate
-				}),
-				new("YokoWin", 5, new() { ExtremeRoleId.Yoko },
+				]),
+				new("YokoWin", 5, [ ExtremeRoleId.Yoko ],
 				() =>
 				{
 					GameUtility.UpdateExROption(
 						new((int)GlobalOption.IsSameNeutralSameWin, 1));
 				}),
 				new("NeutralWin", 100,
-				new ()
-				{
+				[
 					ExtremeRoleId.Alice, ExtremeRoleId.Jackal,
 					ExtremeRoleId.Missionary, ExtremeRoleId.Miner,
 					ExtremeRoleId.Eater, ExtremeRoleId.Queen
-				},
+				],
 				() =>
 				{
 					GameUtility.UpdateExROption(
@@ -61,7 +60,7 @@ public sealed class GameTestRunner : TestRunnerBase
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 0));
 				}),
-				new("QueenWin", 100, new () { ExtremeRoleId.Queen },
+				new("QueenWin", 100, [ ExtremeRoleId.Queen ],
 				() =>
 				{
 					GameUtility.UpdateExROption(
@@ -70,7 +69,7 @@ public sealed class GameTestRunner : TestRunnerBase
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 3));
 				}),
-				new("YandereWin", 100, new HashSet<ExtremeRoleId>() { ExtremeRoleId.Yandere })));
+				new("YandereWin", 100, [ ExtremeRoleId.Yandere ])));
 	}
 }
 
@@ -132,6 +131,7 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			{
 				this.Logger.LogInfo("Wait for 30s");
 				GC.Collect();
+				Resources.Loader.ResetCache();
 				yield return UnityResource.UnloadUnusedAssets();
 				yield return new WaitForSeconds(30.0f);
 				this.count = 0;
@@ -142,7 +142,7 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			while (GameUtility.IsContinue)
 			{
 				var player = CachedPlayerControl.AllPlayerControls.OrderBy(x => RandomGenerator.Instance.Next()).First();
-				if (!player.Data.IsDead || ExtremeRoleManager.GameRole[player.PlayerId].Id != ExtremeRoleId.Assassin)
+				if (!player.Data.IsDead && ExtremeRoleManager.GameRole[player.PlayerId].Id != ExtremeRoleId.Assassin)
 				{
 					Player.RpcUncheckMurderPlayer(player.PlayerId, player.PlayerId, byte.MinValue);
 					yield return new WaitForSeconds(1.0f);
