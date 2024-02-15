@@ -83,9 +83,8 @@ public static class GameUtility
 		}
 
 		logger.LogInfo("Update Roles and Player....");
-		enableXion();
 
-		for (int playerId = 0; playerId < 15; ++playerId)
+		for (int playerId = 0; playerId < 14; ++playerId)
 		{
 			string playerName = $"TestPlayer_{playerId}";
 			logger.LogInfo($"spawn : {playerName}");
@@ -136,10 +135,8 @@ public static class GameUtility
 			opt.UpdateSelection(newIndex);
 		}
 
-		enableXion();
-
 		logger.LogInfo("Update Player....");
-		for (int playerId = 0; playerId < 15; ++playerId)
+		for (int playerId = 0; playerId < 14; ++playerId)
 		{
 			string playerName = $"TestPlayer_{playerId}";
 			logger.LogInfo($"Spawn : {playerName}");

@@ -76,6 +76,8 @@ public sealed class GameTestRunner : TestRunnerBase
 [Il2CppRegister]
 public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 {
+	public static bool Enable => instance != null;
+
 	public static GameMudderEndTestingBehaviour Instance
 	{
 		get
