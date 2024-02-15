@@ -150,6 +150,10 @@ public static class Loader
 {
 	public static void ResetCache()
 	{
+		foreach(var bundle in cachedBundle.Values)
+		{
+			bundle.Unload(false);
+		}
 		cachedBundle.Clear();
 		cachedSprite.Clear();
 	}
