@@ -34,6 +34,24 @@ public sealed class GameTestRunner : TestRunnerBase
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
 				new("Random", 3),
+				new("IRoleAbilityRole", 5,
+				[
+					ExtremeRoleId.Carpenter,
+					ExtremeRoleId.BodyGuard,
+					ExtremeRoleId.SandWorm,
+				]),
+				new("IRoleAutoBuildAbilityRole", 5,
+				[
+					ExtremeRoleId.Hatter,
+					ExtremeRoleId.Eater,
+					ExtremeRoleId.Carrier,
+					ExtremeRoleId.Thief,
+					ExtremeRoleId.Traitor,
+					ExtremeRoleId.Teleporter,
+					ExtremeRoleId.Supervisor,
+					ExtremeRoleId.Psychic,
+					ExtremeRoleId.Mover,
+				]),
 				new("NeutralRemove", 5,
 				[
 					ExtremeRoleId.Jester, ExtremeRoleId.TaskMaster,
