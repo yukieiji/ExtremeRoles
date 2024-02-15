@@ -113,7 +113,12 @@ public sealed class ExtremeAbilityButton
 
 	public void Update()
 	{
-		if (!this.isShow || this.button == null) { return; }
+		if (!this.isShow ||
+			this.button == null ||
+			IntroCutscene.Instance != null)
+		{
+			return;
+		}
 
 		bool isActive = this.activator.IsActive();
 
