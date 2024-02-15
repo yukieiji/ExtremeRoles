@@ -82,6 +82,8 @@ public static class GameUtility
 			opt.UpdateSelection(newIndex);
 		}
 
+		disableXion();
+
 		logger.LogInfo("Update Roles and Player....");
 
 		for (int playerId = 0; playerId < 14; ++playerId)
@@ -135,6 +137,8 @@ public static class GameUtility
 			opt.UpdateSelection(newIndex);
 		}
 
+		disableXion();
+
 		logger.LogInfo("Update Player....");
 		for (int playerId = 0; playerId < 14; ++playerId)
 		{
@@ -174,10 +178,10 @@ public static class GameUtility
 	}
 
 
-	private static void enableXion()
+	private static void disableXion()
 	{
 		OptionManager.Instance.GetIOption(
-			(int)RoleGlobalOption.UseXion).UpdateSelection(1);
+			(int)RoleGlobalOption.UseXion).UpdateSelection(0);
 	}
 
 	private static void enableRandomNormalRole(ManualLogSource logger)
