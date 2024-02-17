@@ -12,11 +12,11 @@ jobs:
   packing:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       - name: SetupNuget
-        uses: nuget/setup-nuget@v1
+        uses: nuget/setup-nuget@v2
       - name: RestoreNugetPackage
         run: nuget restore ExtremeRoles.sln
       - name: SetupPython
@@ -25,26 +25,26 @@ jobs:
           python-version: '3.10'
           architecture: 'x64'
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.x
       - name: AddMsBuildToPATH
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: RunBuildAndPacking
         run: ./packing.ps1
 
       # ExtremeRoles.zip
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }}"
           path: ./workspace/ExtremeRoles/
       # ExtremeRoles-v with skins.zip
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
           path: ./workspace/ExtremeRolesWithSkins/
       # Mod zip Only
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ExtremeRolesModOnly
           path: ./workspace/dll/
