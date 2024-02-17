@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Missionary :
 	SingleRoleBase,
-	IRoleAbility,
+	IRoleAutoBuildAbility,
 	IRoleUpdate,
 	IRoleVoteCheck
 {
@@ -132,8 +132,6 @@ public sealed class Missionary :
 		this.judgementTarget = new HashSet<byte>();
 
 		resetTimer();
-        this.RoleAbilityInit();
-
     }
 
     public void CreateAbility()
@@ -160,7 +158,7 @@ public sealed class Missionary :
             }
         }
 
-        return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
     }
 
     public void ResetOnMeetingStart()

@@ -1,5 +1,6 @@
 ﻿using System;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -48,6 +49,12 @@ public abstract class RoleOptionBase
     {
         CommonInit();
         RoleSpecificInit();
+
+		//TODO : 消して動くかチェック
+		if (this is IRoleAbility ability)
+		{
+			ability.RoleAbilityInit();
+		}
     }
 
     public void CreateRoleAllOption(
@@ -56,7 +63,7 @@ public abstract class RoleOptionBase
         this.OptionIdOffset = optionIdOffset;
         var parentOps = CreateSpawnOption();
         CreateVisionOption(parentOps);
-        
+
         if (this.CanKill)
         {
             CreateKillerOption(parentOps);
@@ -70,7 +77,7 @@ public abstract class RoleOptionBase
     {
         this.OptionIdOffset = optionIdOffset;
         CreateVisionOption(parentOps);
-        
+
         if (this.CanKill)
         {
             CreateKillerOption(parentOps);

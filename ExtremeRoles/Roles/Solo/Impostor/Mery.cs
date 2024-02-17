@@ -20,7 +20,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Mery : SingleRoleBase, IRoleAbility
+public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 {
     public sealed class Camp : IUpdatableObject
     {
@@ -294,7 +294,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse();
+        return IRoleAbility.IsCommonUse();
     }
 
     public bool UseAbility()
@@ -331,9 +331,6 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-
-        this.RoleAbilityInit();
-
         var allOption = OptionManager.Instance;
 
         this.ActiveNum = allOption.GetValue<int>(

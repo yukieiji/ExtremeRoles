@@ -15,9 +15,9 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class CurseMaker : 
-    SingleRoleBase, 
-    IRoleAbility, 
+public sealed class CurseMaker :
+    SingleRoleBase,
+    IRoleAutoBuildAbility,
     IRoleMurderPlayerHook,
     IRoleUpdate
 {
@@ -207,7 +207,7 @@ public sealed class CurseMaker :
     {
         this.targetBody = Player.GetDeadBodyInfo(
             this.deadBodyCheckRange);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void CleanUp()
@@ -234,7 +234,7 @@ public sealed class CurseMaker :
         if (killer == target)
         {
             this.deadBodyId = byte.MaxValue;
-            return; 
+            return;
         }
 
         using (var caller = RPCOperator.CreateCaller(
@@ -350,8 +350,6 @@ public sealed class CurseMaker :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var allOption = OptionManager.Instance;
 
         this.additionalKillCool = allOption.GetValue<float>(
@@ -383,7 +381,7 @@ public sealed class CurseMaker :
         this.deadBodyData = new Dictionary<byte, DeadBodyInfo>();
         this.deadBodyArrow = new Dictionary<byte, Arrow>();
 
-        this.isRemoveDeadBody = 
+        this.isRemoveDeadBody =
             this.isNotRemoveDeadBodyByTask && this.notRemoveDeadBodyTaskGage == 0.0f ? false : true;
 
         this.curCurseTime = allOption.GetValue<float>(
@@ -469,7 +467,7 @@ public sealed class CurseMaker :
         {
             if (deadBodyInfo.IsValid())
             {
-                if (deadBodyInfo.ComputeDeltaTime() > this.searchDeadBodyTime && 
+                if (deadBodyInfo.ComputeDeltaTime() > this.searchDeadBodyTime &&
                     !this.deadBodyArrow.ContainsKey(playerId))
                 {
                     var arrow = new Arrow(this.NameColor);

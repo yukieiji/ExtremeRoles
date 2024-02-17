@@ -13,7 +13,7 @@ using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Cracker : SingleRoleBase, IRoleAbility
+public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 {
     public sealed class CrackTrace : IMeetingResetObject
     {
@@ -117,7 +117,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
             this.targetDeadBodyId = info.PlayerId;
         }
 
-        return this.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -166,6 +166,5 @@ public sealed class Cracker : SingleRoleBase, IRoleAbility
             GetRoleOptionId(CrackerOption.CanCrackDistance));
         this.IsRemoveDeadBody = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(CrackerOption.RemoveDeadBody));
-        this.RoleAbilityInit();
     }
 }

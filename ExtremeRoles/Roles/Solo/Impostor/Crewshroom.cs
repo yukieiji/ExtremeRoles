@@ -14,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable
 
-public sealed class Crewshroom : SingleRoleBase, IRoleAbility
+public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 {
 	public ExtremeAbilityButton Button { get; set; }
 
@@ -49,7 +49,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 			_ => base.GetIntroDescription()
 		};
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
 	{
@@ -79,8 +79,6 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAbility
 
 	protected override void RoleSpecificInit()
 	{
-		this.RoleAbilityInit();
-
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ModedMushroomSystem.Type,
 			new ModedMushroomSystem(

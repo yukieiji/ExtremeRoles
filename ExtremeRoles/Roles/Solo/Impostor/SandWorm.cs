@@ -164,9 +164,8 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
                 IsAbilityUse, UseAbility),
             new AssaultButtonAutoActivator(),
             KeyCode.F);
-
-        this.RoleAbilityInit();
-    }
+		((IRoleAbility)(this)).RoleAbilityInit();
+	}
 
     public bool IsAbilityUse()
     {
@@ -261,8 +260,6 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
             this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
                 FloatOptionNames.KillCooldown);
         }
-
-        this.RoleAbilityInit();
     }
 
     private static bool isVentIn()

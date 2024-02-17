@@ -9,7 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum SuperviosrOption
     {
@@ -70,9 +70,9 @@ public sealed class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public bool IsAbilityUse()
     {
-        return 
-            this.IsCommonUse() && (
-                MapBehaviour.Instance == null || 
+        return
+            IRoleAbility.IsCommonUse() && (
+                MapBehaviour.Instance == null ||
                 !MapBehaviour.Instance.isActiveAndEnabled);
     }
 
@@ -126,7 +126,7 @@ public sealed class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
         if (!this.Button.IsAbilityActive())
         {
             this.chargeTime.gameObject.SetActive(false);
-            return; 
+            return;
         }
 
         this.chargeTime.text = Mathf.CeilToInt(this.Button.Timer).ToString();
@@ -155,6 +155,5 @@ public sealed class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
             GetRoleOptionId(SuperviosrOption.IsBoostTask));
         this.taskGage = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(SuperviosrOption.TaskGage)) / 100.0f;
-        this.RoleAbilityInit();
     }
 }

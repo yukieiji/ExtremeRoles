@@ -164,14 +164,21 @@ public sealed class RaiseHandSystem : IRaiseHandSystem
 			}
 		}
 
+		var downHand = new List<byte>(this.raisedHand.Count);
 		foreach (byte id in this.raisedHand.Keys)
 		{
 			if (!newRaiseHand.Remove(id) &&
 				this.allHand.TryGetValue(id, out var hand) &&
 				hand != null)
 			{
+				downHand.Add(id);
 				hand.Down();
 			}
+		}
+
+		foreach (byte id in downHand)
+		{
+			this.raisedHand.Remove(id);
 		}
 	}
 

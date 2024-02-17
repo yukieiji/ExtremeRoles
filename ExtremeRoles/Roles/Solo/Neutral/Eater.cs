@@ -16,7 +16,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook, IRoleUpdate
+public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPlayerHook, IRoleUpdate
 {
     public enum EaterOption
     {
@@ -143,7 +143,7 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
             !hasDedBodyTarget && hasPlayerTarget ?
             EaterAbilityMode.Kill : EaterAbilityMode.DeadBody);
 
-        return this.IsCommonUse() &&
+        return IRoleAbility.IsCommonUse() &&
             (hasPlayerTarget || hasDedBodyTarget);
     }
 
@@ -342,8 +342,6 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
 
         this.deadBodyArrow = new Dictionary<byte, Arrow>();
         this.isActivated = false;
-
-        this.RoleAbilityInit();
 
         if (this.Button?.Behavior is AbilityCountBehavior behaviour)
         {

@@ -8,7 +8,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Smasher : SingleRoleBase, IRoleAbility
+public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum SmasherOption
     {
@@ -51,7 +51,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAbility
         {
             this.targetPlayerId = player.PlayerId;
         }
-        return this.IsCommonUse() && this.targetPlayerId != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.targetPlayerId != byte.MaxValue;
     }
 
     public bool UseAbility()
@@ -146,7 +146,6 @@ public sealed class Smasher : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
         this.penaltyKillCool = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(SmasherOption.SmashPenaltyKillCool));
     }

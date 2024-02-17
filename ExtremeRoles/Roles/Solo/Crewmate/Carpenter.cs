@@ -534,8 +534,9 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
                 ventRemoveModeCheck: IsVentMode),
             new RoleButtonActivator(),
             KeyCode.F);
-        abilityInit();
-        this.Button.SetLabelToCrewmate();
+
+		this.RoleAbilityInit();
+		this.Button.SetLabelToCrewmate();
     }
 
     public bool UseAbility()
@@ -563,7 +564,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
 		return
 			this.IsAwake &&
-			this.IsCommonUse() &&
+			IRoleAbility.IsCommonUse() &&
 			!(
 				// Miraとファングルはカメラ設置できない, TODO:ファングルはカメラ設置できるか調査
 				this.targetVent == null && (mapId == 1 || mapId == 5)
@@ -752,7 +753,6 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             this.awakeRole = false;
             this.HasOtherVision = false;
         }
-        abilityInit();
     }
 
     private void createAbilityOption(IOptionInfo parentOps)
@@ -787,7 +787,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 			).SetOptionUnit(OptionUnit.ScrewNum);
     }
 
-    private void abilityInit()
+    public void RoleAbilityInit()
     {
         if (this.Button == null) { return; }
 

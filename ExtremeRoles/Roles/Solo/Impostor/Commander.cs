@@ -12,10 +12,10 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Commander : SingleRoleBase, IRoleAbility
+public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
 {
     public ExtremeAbilityButton Button
-    { 
+    {
         get => this.commandAttackButton;
         set
         {
@@ -70,8 +70,8 @@ public sealed class Commander : SingleRoleBase, IRoleAbility
         float killCool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
         if (killCool > 0.1f)
         {
-            float newKillCool = killCool - 
-                commander.killCoolReduceTime - 
+            float newKillCool = killCool -
+                commander.killCoolReduceTime -
                 (commander.killCoolImpNumBonus * deadImpNum);
 
             CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = Mathf.Clamp(
@@ -88,7 +88,7 @@ public sealed class Commander : SingleRoleBase, IRoleAbility
                Path.CommanderAttackCommand));
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
@@ -119,7 +119,7 @@ public sealed class Commander : SingleRoleBase, IRoleAbility
     {
         ++this.killCount;
         this.killCount = this.killCount % this.increaseKillNum;
-        if (this.killCount == 0 && 
+        if (this.killCount == 0 &&
             this.Button.Behavior is AbilityCountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
@@ -156,6 +156,5 @@ public sealed class Commander : SingleRoleBase, IRoleAbility
             GetRoleOptionId(CommanderOption.IncreaseKillNum));
 
         this.killCount = 0;
-        this.RoleAbilityInit();
     }
 }

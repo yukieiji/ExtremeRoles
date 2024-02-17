@@ -23,7 +23,7 @@ public sealed class MoverManager : FlexibleCombinationRoleManagerBase
 
 public sealed class Mover :
     MultiAssignRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleSpecialReset,
     IRoleUsableOverride
 {
@@ -194,7 +194,7 @@ public sealed class Mover :
         if (this.targetConsole == null) { return false; }
 
         return
-            this.IsCommonUse() &&
+            IRoleAbility.IsCommonUse() &&
             this.targetConsole.Image != null &&
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
@@ -268,8 +268,6 @@ public sealed class Mover :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
         this.hasConsole = new ConsoleData();

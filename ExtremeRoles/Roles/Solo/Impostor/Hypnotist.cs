@@ -33,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Hypnotist :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleMurderPlayerHook,
     IRoleSpecialReset
@@ -307,7 +307,7 @@ public sealed class Hypnotist :
             CachedPlayerControl.LocalPlayer,
             this, this.range);
 
-        return this.target != null && this.IsCommonUse();
+        return this.target != null && IRoleAbility.IsCommonUse();
     }
 
     public void ResetOnMeetingStart()
@@ -617,8 +617,6 @@ public sealed class Hypnotist :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 
         this.defaultKillCool = curOption.GetFloat(FloatOptionNames.KillCooldown);
@@ -893,7 +891,7 @@ public sealed class Hypnotist :
 
 public sealed class Doll :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleUpdate,
     IRoleHasParent,
     IRoleWinPlayerModifier
@@ -1154,14 +1152,14 @@ public sealed class Doll :
         {
             case AbilityType.Admin:
                 return
-                    this.IsCommonUse() &&
+                    IRoleAbility.IsCommonUse() &&
                     (
                         MapBehaviour.Instance == null ||
                         !MapBehaviour.Instance.isActiveAndEnabled
                     );
             case AbilityType.Security:
             case AbilityType.Vital:
-                return this.IsCommonUse() && Minigame.Instance == null;
+                return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
             default:
                 return false;
         }

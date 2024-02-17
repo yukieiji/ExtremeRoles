@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Miner :
 	SingleRoleBase,
-	IRoleAbility,
+	IRoleAutoBuildAbility,
 	IRoleUpdate,
 	IRoleSpecialSetUp,
 	IRoleSpecialReset
@@ -197,7 +197,7 @@ public sealed class Miner :
 		++this.mineId;
 	}
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void AllReset(PlayerControl rolePlayer)
     {

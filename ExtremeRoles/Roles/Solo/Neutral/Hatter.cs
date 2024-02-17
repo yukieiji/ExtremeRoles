@@ -16,7 +16,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBodyReportOverride
+public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IDeadBodyReportOverride
 {
     public enum HatterOption
 	{
@@ -82,7 +82,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public bool UseAbility()
     {
@@ -192,8 +192,6 @@ public sealed class Hatter : SingleRoleBase, IRoleAbility, IRoleUpdate, IDeadBod
 		this.curSkipCount = 0;
 		this.isAssassinMeeting = false;
 		this.IsWin = false;
-
-		this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingStart()

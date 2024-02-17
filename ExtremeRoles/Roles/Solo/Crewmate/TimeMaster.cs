@@ -15,7 +15,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class TimeMaster : SingleRoleBase, IRoleAbility
+public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum TimeMasterOption
     {
@@ -328,7 +328,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
         return true;
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingStart()
     {
@@ -383,8 +383,6 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         if (history != null || CachedPlayerControl.LocalPlayer == null) { return; }
 
         history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<

@@ -23,7 +23,7 @@ public sealed class AcceleratorManager : FlexibleCombinationRoleManagerBase
 
 public sealed class Accelerator :
     MultiAssignRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleSpecialReset,
     IRoleUsableOverride
 {
@@ -148,7 +148,7 @@ public sealed class Accelerator :
     public bool IsAbilityActive() =>
         CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
@@ -200,8 +200,6 @@ public sealed class Accelerator :
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
 		this.canUseOtherPlayer = OptionManager.Instance.GetValue<bool>(

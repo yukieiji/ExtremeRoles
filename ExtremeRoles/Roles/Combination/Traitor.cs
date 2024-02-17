@@ -63,7 +63,7 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 
 }
 
-public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp
+public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialSetUp
 {
     public enum AbilityType : byte
     {
@@ -209,14 +209,14 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
         {
             case AbilityType.Admin:
                 return
-                    this.IsCommonUse() &&
+                    IRoleAbility.IsCommonUse() &&
                     (
                         MapBehaviour.Instance == null ||
                         !MapBehaviour.Instance.isActiveAndEnabled
                     );
             case AbilityType.Security:
             case AbilityType.Vital:
-                return this.IsCommonUse() && Minigame.Instance == null;
+                return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
             default:
                 return false;
         }
@@ -374,7 +374,6 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     {
         this.canUseButton = false;
         this.nextUseAbilityType = AbilityType.Admin;
-        this.RoleAbilityInit();
     }
 
     private void updateAbility()

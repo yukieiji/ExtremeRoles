@@ -23,7 +23,7 @@ using ExtremeRoles.Compat;
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Teleporter :
-    SingleRoleBase, IRoleAbility, IRoleSpecialSetUp
+    SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp
 {
     public sealed class TeleporterAbilityBehavior :
         AbilityBehaviorBase, ICountBehavior
@@ -202,7 +202,21 @@ public sealed class Teleporter :
         }
     }
 
-    public void IncreaseAbilityCount()
+	public void RoleAbilityInit()
+	{
+		if (this.Button == null) { return; }
+
+		var allOpt = OptionManager.Instance;
+		this.Button.Behavior.SetCoolTime(
+			allOpt.GetValue<float>(this.GetRoleOptionId(
+				RoleAbilityCommonOption.AbilityCoolTime)));
+
+		this.behavior.SetAbilityCount(0);
+
+		this.Button.OnMeetingEnd();
+	}
+
+	public void IncreaseAbilityCount()
     {
         this.behavior.SetAbilityCount(
             this.behavior.AbilityCount + 1);
@@ -238,7 +252,7 @@ public sealed class Teleporter :
             new RoleButtonActivator(),
             KeyCode.F);
         this.Button.SetLabelToCrewmate();
-        this.abilityInit();
+		this.RoleAbilityInit();
     }
 
     public bool UseAbility()
@@ -268,7 +282,7 @@ public sealed class Teleporter :
         return true;
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingStart()
     {
@@ -296,21 +310,6 @@ public sealed class Teleporter :
             GetRoleOptionId(TeleporterOption.CanUseOtherPlayer));
         this.partNum = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(RoleAbilityCommonOption.AbilityCount));
-        this.abilityInit();
-    }
-
-    private void abilityInit()
-    {
-        if (this.Button == null) { return; }
-
-        var allOpt = OptionManager.Instance;
-        this.Button.Behavior.SetCoolTime(
-            allOpt.GetValue<float>(this.GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCoolTime)));
-
-        this.behavior.SetAbilityCount(0);
-
-        this.Button.OnMeetingEnd();
     }
 
     private static void setPartFromMapJsonInfo(JArray json, int num)

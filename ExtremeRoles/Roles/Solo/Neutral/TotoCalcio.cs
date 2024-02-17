@@ -10,7 +10,7 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerModifier
+public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier
 {
     public enum TotocalcioOption
     {
@@ -80,7 +80,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerMod
         if (this.tmpTarget == null ||
             this.tmpTarget.Data == null) { return false; }
 
-        bool commonUse = this.IsCommonUse();
+        bool commonUse = IRoleAbility.IsCommonUse();
 
         if (this.betPlayer != null)
         {

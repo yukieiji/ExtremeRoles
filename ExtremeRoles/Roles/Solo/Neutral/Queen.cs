@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Queen :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleSpecialReset,
     IRoleMurderPlayerHook,
     IRoleUpdate
@@ -350,7 +350,7 @@ public sealed class Queen :
             CachedPlayerControl.LocalPlayer,
             this, this.range);
 
-        return this.Target != null && this.IsCommonUse();
+        return this.Target != null && IRoleAbility.IsCommonUse();
     }
 
     public void ResetOnMeetingStart()
@@ -519,7 +519,7 @@ public sealed class Queen :
 
 public sealed class Servant :
     MultiAssignRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleMurderPlayerHook,
     IRoleHasParent
 {
@@ -642,7 +642,7 @@ public sealed class Servant :
         throw new Exception("Don't call this class method!!");
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {

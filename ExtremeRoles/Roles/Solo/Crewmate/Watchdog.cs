@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public ExtremeAbilityButton Button
     {
@@ -72,7 +72,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse() && Minigame.Instance == null;
+        return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
     }
 
     public bool IsOpen() => Minigame.Instance != null;
@@ -128,7 +128,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
         if (!this.Button.IsAbilityActive())
         {
             this.chargeTime.gameObject.SetActive(false);
-            return; 
+            return;
         }
 
 
@@ -144,7 +144,5 @@ public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
     }
 
     protected override void RoleSpecificInit()
-    {
-        this.RoleAbilityInit();
-    }
+    { }
 }

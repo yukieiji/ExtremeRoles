@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Evolver : SingleRoleBase, IRoleAbility
+public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum EvolverOption
     {
@@ -74,7 +74,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
     {
         this.targetBody = Player.GetDeadBodyInfo(
             this.eatingRange);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void ForceCleanUp()
@@ -104,7 +104,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
 
         this.KillCoolTime = this.KillCoolTime * ((100f - this.reduceRate) / 100f);
         this.reduceRate = this.reduceRate * this.reruceMulti;
-        
+
         this.CanKill = true;
         this.KillCoolTime = Mathf.Clamp(
             this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
@@ -131,7 +131,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
         {
             result = this.eatingBodyId == this.targetBody.PlayerId;
         }
-        
+
         this.Button.Behavior.SetButtonText(
             result ? this.eatingText : this.defaultButtonText);
 
@@ -176,8 +176,6 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         if(!this.HasOtherKillCool)
         {
             this.HasOtherKillCool = true;
@@ -186,7 +184,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
         }
 
         this.defaultKillCoolTime = this.KillCoolTime;
-        
+
         var allOption = OptionManager.Instance;
 
         this.isEvolvdAnimation = allOption.GetValue<bool>(

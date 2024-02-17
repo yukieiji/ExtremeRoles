@@ -16,7 +16,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Magician : SingleRoleBase, IRoleAbility
+public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 {
 
     public ExtremeAbilityButton Button
@@ -63,7 +63,7 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
         this.airShipSpawn = GameSystem.GetAirShipRandomSpawn();
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
@@ -168,7 +168,5 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
             GetRoleOptionId(MagicianOption.IncludeSpawnPoint));
         this.includeSpawnPoint = allOption.GetValue<bool>(
             GetRoleOptionId(MagicianOption.IncludeRolePlayer));
-
-        this.RoleAbilityInit();
     }
 }

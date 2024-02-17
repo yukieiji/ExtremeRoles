@@ -14,7 +14,7 @@ using UnityEngine.Video;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Thief : SingleRoleBase, IRoleAbility
+public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum ThiefOption
 	{
@@ -74,7 +74,7 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
     {
         this.targetBody = Player.GetDeadBodyInfo(
             this.activeRange);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void ForceCleanUp()
@@ -142,8 +142,6 @@ public sealed class Thief : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var allOption = OptionManager.Instance;
 
 		this.activeRange = allOption.GetValue<float>(GetRoleOptionId(ThiefOption.Range));

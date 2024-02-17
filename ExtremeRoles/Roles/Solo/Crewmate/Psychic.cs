@@ -22,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Psychic :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleReportHook
 {
@@ -235,7 +235,12 @@ public sealed class Psychic :
 			CleanUp,
 			ForceAbilityOff);
         this.Button.SetLabelToCrewmate();
-    }
+
+		if (this.Button?.Behavior is ICountBehavior behavior)
+		{
+			this.counters = new List<AlivePlayerCounter>(behavior.AbilityCount);
+		}
+	}
 
 	public void ForceAbilityOff()
 	{
@@ -252,7 +257,7 @@ public sealed class Psychic :
 
 	public bool CheckAbility()
 		=> this.startPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition() &&
-		this.IsCommonUse();
+		IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()
 	{
@@ -263,7 +268,7 @@ public sealed class Psychic :
 	}
 
     public bool IsAbilityUse()
-        => this.IsAwake && this.IsCommonUse();
+        => this.IsAwake && IRoleAbility.IsCommonUse();
 
     public string GetFakeOptionString() => "";
 
@@ -459,13 +464,6 @@ public sealed class Psychic :
 		this.popUpper = new TextPopUpper(
 			3, 2.5f, new Vector3(-3.75f, -2.5f, -250.0f),
 			TMPro.TextAlignmentOptions.BottomLeft);
-
-		this.RoleAbilityInit();
-
-		if (this.Button?.Behavior is ICountBehavior behavior)
-		{
-			this.counters = new List<AlivePlayerCounter>(behavior.AbilityCount);
-		}
 	}
 
     private void sendPhotoInfo()

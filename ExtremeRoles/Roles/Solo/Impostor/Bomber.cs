@@ -18,7 +18,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum BomberOption
     {
@@ -73,7 +73,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
     public bool IsAbilityUse()
     {
         this.setTargetPlayer = Player.GetClosestPlayerInKillRange();
-        return this.IsCommonUse() && this.setTargetPlayer != null;
+        return IRoleAbility.IsCommonUse() && this.setTargetPlayer != null;
     }
 
     public void ForceCleanUp()
@@ -130,8 +130,6 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         var allOption = OptionManager.Instance;
 
         this.timerMinTime = allOption.GetValue<float>(
@@ -147,7 +145,6 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
 
         this.bombPlayerId = new Queue<byte>();
         resetTimer();
-
     }
 
     public void ResetOnMeetingStart()

@@ -148,6 +148,15 @@ public static class Path
 
 public static class Loader
 {
+	public static void ResetCache()
+	{
+		foreach(var bundle in cachedBundle.Values)
+		{
+			bundle.Unload(false);
+		}
+		cachedBundle.Clear();
+		cachedSprite.Clear();
+	}
 
     private static readonly Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
     private static readonly Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();

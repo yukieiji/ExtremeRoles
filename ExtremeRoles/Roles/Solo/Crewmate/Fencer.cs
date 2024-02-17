@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum FencerOption
     {
@@ -142,7 +142,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse();
+        return IRoleAbility.IsCommonUse();
     }
 
     public void ResetOnMeetingStart()
@@ -205,7 +205,5 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
         this.Timer = 0.0f;
         this.MaxTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(FencerOption.ResetTime));
-
-        this.RoleAbilityInit();
     }
 }

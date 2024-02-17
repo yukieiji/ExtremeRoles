@@ -25,7 +25,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Zombie :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleOnRevive
 {
@@ -186,7 +186,7 @@ public sealed class Zombie :
     }
 
     public bool IsAbilityUse()
-		=> this.IsCommonUse() &&
+		=> IRoleAbility.IsCommonUse() &&
 			tryGetPlayerInRoom(out SystemTypes? room) &&
 			room.HasValue &&
 			this.setRooms.ContainsKey(room.Value);

@@ -15,7 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class SlaveDriver :
     SingleRoleBase,
-    IRoleAbility
+    IRoleAutoBuildAbility
 {
 	public sealed class HarassmentReportSerializer : IStringSerializer
 	{
@@ -88,7 +88,6 @@ public sealed class SlaveDriver :
 			GetRoleOptionId(SlaveDriverOption.RevartTaskNum));
 		this.range = OptionManager.Instance.GetValue<float>(
 			GetRoleOptionId(SlaveDriverOption.Range));
-		this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -173,6 +172,6 @@ public sealed class SlaveDriver :
 
 		this.target = target.PlayerId;
 
-		return this.IsCommonUse() && !this.effectPlayer.Contains(this.target);
+		return IRoleAbility.IsCommonUse() && !this.effectPlayer.Contains(this.target);
 	}
 }

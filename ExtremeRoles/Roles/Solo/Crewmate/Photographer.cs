@@ -23,7 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Photographer :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleReportHook
 {
@@ -375,7 +375,7 @@ public sealed class Photographer :
     }
 
     public bool IsAbilityUse()
-        => this.IsAwake && this.IsCommonUse();
+        => this.IsAwake && IRoleAbility.IsCommonUse();
 
     public string GetFakeOptionString() => "";
 
@@ -574,9 +574,6 @@ public sealed class Photographer :
                 GetRoleOptionId(PhotographerOption.PhotoRange)));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
-
-        this.RoleAbilityInit();
-
     }
 
     private void sendPhotoInfo()

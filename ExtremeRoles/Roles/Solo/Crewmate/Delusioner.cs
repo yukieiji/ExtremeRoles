@@ -16,7 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Delusioner :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleVoteModifier
 {
@@ -109,7 +109,7 @@ public sealed class Delusioner :
 
         this.targetPlayerId = target.PlayerId;
 
-        return this.IsCommonUse();
+        return IRoleAbility.IsCommonUse();
     }
 
     public void ModifiedVote(
@@ -366,7 +366,6 @@ public sealed class Delusioner :
         {
             this.isOneTimeAwake = false;
         }
-        this.RoleAbilityInit();
     }
 }
 #if DEBUG

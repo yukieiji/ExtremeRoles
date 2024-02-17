@@ -15,7 +15,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialReset
 {
     private DeadBody carringBody;
     private float[] alphaValue;
@@ -149,7 +149,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     public bool IsAbilityUse()
     {
         this.targetBody = Player.GetDeadBodyInfo(this.carryDistance);
-        return this.IsCommonUse() && this.targetBody != null;
+        return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -224,7 +224,6 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             GetRoleOptionId(CarrierOption.CarryDistance));
         this.canReportOnCarry = OptionManager.Instance.GetValue<bool>(
             GetRoleOptionId(CarrierOption.CanReportOnCarry));
-        this.RoleAbilityInit();
     }
 
     public void AllReset(PlayerControl rolePlayer)

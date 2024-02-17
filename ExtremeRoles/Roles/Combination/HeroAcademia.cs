@@ -416,7 +416,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
 }
 
-public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
 {
     public enum OneForAllCondition : byte
     {
@@ -469,7 +469,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
 
     public bool IsAbilityUse() =>
         this.cond == OneForAllCondition.FeatButtonAbility &&
-        this.IsCommonUse();
+        IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
@@ -675,8 +675,6 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
         this.featKillPer = OptionManager.Instance.GetValue<int>(
             GetRoleOptionId(HeroOption.FeatKillPercentage)) / 100.0f;
         this.featButtonAbilityPer = OptionManager.Instance.GetValue<int>(
@@ -691,7 +689,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
         }
     }
 }
-public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
 {
     public enum VillanOption
     {
@@ -725,7 +723,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
             abilityOff: CleanUp);
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
@@ -857,14 +855,13 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
         this.vigilanteArrowTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(VillanOption.VigilanteSeeTime));
         this.vigilanteArrowTimer = 0.0f;
     }
 
 }
-public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
+public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleWinPlayerModifier
 {
     public enum VigilanteCondition : byte
     {
@@ -928,7 +925,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
         this.target = player.PlayerId;
 
 
-        return this.IsCommonUse() && this.target != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.target != byte.MaxValue;
     }
     public void CleanUp()
     {
@@ -1063,7 +1060,6 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
         this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(VigilanteOption.Range));
     }

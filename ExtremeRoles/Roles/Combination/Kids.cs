@@ -58,7 +58,7 @@ public sealed class Kids : GhostAndAliveCombinationRoleManagerBase
     }
 }
 
-public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
+public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 {
 	public enum AbilityType : byte
 	{
@@ -285,9 +285,9 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
             new RoleButtonActivator(),
             KeyCode.F);
 
-        this.RoleAbilityInit();
+		((IRoleAbility)(this)).RoleAbilityInit();
 
-        if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
+		if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
                 OptionManager.Instance.GetValue<int>(GetRoleOptionId(
@@ -307,7 +307,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         return this.curAbilityType switch
         {
             AbilityType.Scribe =>
-                this.IsCommonUse(),
+                IRoleAbility.IsCommonUse(),
             AbilityType.SelfBomb =>
                 Player.GetClosestPlayerInRange(
                     CachedPlayerControl.LocalPlayer, this, this.range) != null,
@@ -365,7 +365,6 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
         this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(DelinqentOption.Range));
 
-        this.RoleAbilityInit();
         if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(

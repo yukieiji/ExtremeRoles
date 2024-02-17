@@ -16,7 +16,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IRoleUpdate
+public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp, IRoleUpdate
 {
     private sealed class InfectedContainer
     {
@@ -250,7 +250,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IR
 
         if (this.tmpTarget == null) { return false; }
 
-        return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
+        return IRoleAbility.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
     }
 
     public void ResetOnMeetingStart()
@@ -373,8 +373,6 @@ public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IR
         this.maxTimer = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.KeepUpgradedVirus));
 
         this.isFetch = false;
-
-        this.RoleAbilityInit();
     }
     private bool isInfectOtherPlayer(PlayerControl sourcePlayer)
     {

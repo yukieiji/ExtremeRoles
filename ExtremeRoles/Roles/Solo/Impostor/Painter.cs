@@ -8,7 +8,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Painter : SingleRoleBase, IRoleAbility
+public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum PainterOption
     {
@@ -105,7 +105,7 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
             this.targetDeadBodyId = info.PlayerId;
         }
 
-        return this.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
+        return IRoleAbility.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -150,6 +150,5 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
     {
         this.paintDistance = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(PainterOption.CanPaintDistance));
-        this.RoleAbilityInit();
     }
 }

@@ -11,7 +11,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Faker : SingleRoleBase, IRoleAbility
+public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 {
 	public enum FakerDummyOps : byte
 	{
@@ -67,7 +67,7 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 			isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr,
 			isPlayerDummy ? this.playerDummy : this.deadBodyDummy);
 
-		return this.IsCommonUse();
+		return IRoleAbility.IsCommonUse();
 	}
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -134,7 +134,6 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
 
 	protected override void RoleSpecificInit()
 	{
-		this.RoleAbilityInit();
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.FakerDummy, new FakerDummySystem());
 	}
 }

@@ -16,7 +16,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialReset
 {
     public enum JackalOption
     {
@@ -321,7 +321,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         {
             return ColorPalette.JackalBlue;
         }
-        
+
         return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
     }
 
@@ -376,13 +376,13 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
     public bool IsAbilityUse()
     {
-    
+
         this.Target = Player.GetClosestPlayerInRange(
             CachedPlayerControl.LocalPlayer,
             this, GameOptionsData.KillDistances[
                 Mathf.Clamp(this.createSidekickRange, 0, 2)]);
 
-        return this.Target != null && this.IsCommonUse();
+        return this.Target != null && IRoleAbility.IsCommonUse();
     }
 
     public bool UseAbility()
@@ -392,7 +392,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         if (!isLoverAndSetTarget(targetPlayerId)) { return false; }
 
         PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-        
+
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.ReplaceRole))
         {
@@ -487,8 +487,6 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             GetRoleOptionId(JackalOption.UpgradeSidekickNum));
 
         this.SidekickOption.ApplyOption();
-        
-        this.RoleAbilityInit();
     }
 
     private void createJackalOption(IOptionInfo parentOps)
@@ -629,7 +627,7 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-        
+
         if (targetPlayerId == this.jackalPlayerId)
         {
             return ColorPalette.JackalBlue;

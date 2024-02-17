@@ -17,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Moderator :
 	SingleRoleBase,
-	IRoleAbility,
+	IRoleAutoBuildAbility,
 	IRoleAwake<RoleTypes>
 {
 	public enum ModeratorOption
@@ -174,7 +174,7 @@ public sealed class Moderator :
 		return true;
 	}
 
-	public bool IsAbilityUse() => this.IsCommonUse();
+	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public void ResetOnMeetingStart()
 	{
@@ -224,7 +224,6 @@ public sealed class Moderator :
 
 		this.offset = OptionManager.Instance.GetValue<int>(
 			this.GetRoleOptionId(ModeratorOption.MeetingTimerOffset));
-		this.RoleAbilityInit();
 
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 	}

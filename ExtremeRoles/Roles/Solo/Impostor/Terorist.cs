@@ -12,7 +12,7 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Terorist : SingleRoleBase, IRoleAbility
+public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 {
     public enum TeroristOption
 	{
@@ -50,7 +50,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
     {
 		if (this.teroSabo is null || this.saboSystem == null) { return false; }
 
-        return this.IsCommonUse() && !this.teroSabo.IsActive &&
+        return IRoleAbility.IsCommonUse() && !this.teroSabo.IsActive &&
 			(this.canActiveOtherSabotage || !this.saboSystem.AnyActive);
     }
 
@@ -95,8 +95,6 @@ public sealed class Terorist : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
-
 		if (CachedShipStatus.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
 			system.IsTryCast<SabotageSystemType>(out var saboSystem))
 		{

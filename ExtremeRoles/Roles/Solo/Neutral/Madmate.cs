@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Madmate :
     SingleRoleBase,
-    IRoleAbility,
+    IRoleAutoBuildAbility,
     IRoleUpdate,
     IRoleSpecialSetUp,
     IRoleWinPlayerModifier
@@ -86,7 +86,7 @@ public sealed class Madmate :
         return true;
     }
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingStart()
     {
@@ -242,7 +242,5 @@ public sealed class Madmate :
             this.seeFromImpostorTaskGage <= 0.0f;
 
         this.FakeImposter = this.isUpdateMadmate;
-
-        this.RoleAbilityInit();
     }
 }

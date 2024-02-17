@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
+public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum OpenerOption
     {
@@ -88,7 +88,7 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
             return false;
         }
 
-        return this.IsCommonUse() && !this.targetDoor.IsOpen;
+        return IRoleAbility.IsCommonUse() && !this.targetDoor.IsOpen;
     }
 
     public void ResetOnMeetingStart()
@@ -154,7 +154,6 @@ public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        this.RoleAbilityInit();
         this.isUpgraded = false;
         this.range = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(OpenerOption.Range));
