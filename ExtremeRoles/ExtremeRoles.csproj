@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>9.2.3.3</Version>
+    <Version>9.2.3.4</Version>
     <!--<VersionPrefix>9.2.3</VersionPrefix>-->
     <VersionSuffix>PublicBeta</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
