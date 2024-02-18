@@ -15,6 +15,8 @@ public static class Sound
         Kill,
         GuardianAngleGuard,
 
+		NullSound,
+
         AgencyTakeTask,
 		CurseMakerCurse,
 
