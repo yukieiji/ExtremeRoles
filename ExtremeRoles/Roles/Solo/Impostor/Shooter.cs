@@ -139,7 +139,7 @@ public sealed class Shooter :
 
     private static void rpcPlayKillSound()
     {
-        Sound.RpcPlaySound(Sound.SoundType.Kill);
+        Sound.RpcPlaySound(Sound.Type.Kill);
     }
 
     public void SetSprite(SpriteRenderer render)

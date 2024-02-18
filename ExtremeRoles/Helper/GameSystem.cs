@@ -601,7 +601,7 @@ public static class GameSystem
 					ExtremeRolesPlugin.Logger.LogInfo(
 						$"Adding New Task\n - Task:{task.TaskType}\n - Id:{gameControlTaskId}\n - Index:{i}");
                     Sound.PlaySound(
-                        Sound.SoundType.ReplaceNewTask, 1.2f);
+                        Sound.Type.ReplaceNewTask, 1.2f);
                 }
                 return true;
             }

@@ -490,7 +490,7 @@ public static class RPCOperator
         byte soundType, float volume)
     {
         Helper.Sound.PlaySound(
-            (Helper.Sound.SoundType)soundType, volume);
+            (Helper.Sound.Type)soundType, volume);
     }
 
     public static void ReplaceTask(

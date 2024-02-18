@@ -10,7 +10,7 @@ public static class Sound
 {
 	private const string soundPlaceHolder = "assets/soundeffect/{0}.mp3";
 
-	public enum SoundType : byte
+	public enum Type : byte
     {
         Kill,
         GuardianAngleGuard,
@@ -28,10 +28,10 @@ public static class Sound
 		ReplaceNewTask,
     }
 
-    private static Dictionary<SoundType, AudioClip> cachedAudio =
-        new Dictionary<SoundType, AudioClip>();
+    private static Dictionary<Type, AudioClip> cachedAudio =
+        new Dictionary<Type, AudioClip>();
 
-    public static void RpcPlaySound(SoundType soundType, float volume=0.8f)
+    public static void RpcPlaySound(Type soundType, float volume=0.8f)
     {
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.PlaySound))
@@ -43,7 +43,7 @@ public static class Sound
     }
 
     public static void PlaySound(
-        SoundType soundType, float volume)
+        Type soundType, float volume)
     {
         AudioClip clip = GetAudio(soundType);
         if (Constants.ShouldPlaySfx() && clip != null)
@@ -53,7 +53,7 @@ public static class Sound
         }
     }
 
-    public static AudioClip GetAudio(SoundType soundType)
+    public static AudioClip GetAudio(Type soundType)
     {
         if (cachedAudio.TryGetValue(soundType, out AudioClip clip))
         {
@@ -63,10 +63,10 @@ public static class Sound
         {
             switch (soundType)
             {
-                case SoundType.Kill:
+                case Type.Kill:
                     clip = CachedPlayerControl.LocalPlayer.PlayerControl.KillSfx;
                     break;
-                case SoundType.GuardianAngleGuard:
+                case Type.GuardianAngleGuard:
                     clip = FastDestroyableSingleton<RoleManager>.Instance.protectAnim.UseSound;
                     break;
                 default:

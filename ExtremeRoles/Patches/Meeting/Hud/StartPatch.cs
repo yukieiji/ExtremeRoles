@@ -55,7 +55,7 @@ public static class MeetingHudStartPatch
 				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) &&
 			system is not null)
 		{
-			__instance.VoteEndingSound = SoundHelper.GetAudio(SoundHelper.SoundType.NullSound);
+			__instance.VoteEndingSound = SoundHelper.GetAudio(SoundHelper.Type.NullSound);
 			__instance.discussionTimer -= system.HudTimerStartOffset;
 			if (!system.IsShowTimer)
 			{

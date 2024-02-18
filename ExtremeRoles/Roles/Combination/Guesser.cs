@@ -378,7 +378,7 @@ public sealed class Guesser :
             CachedPlayerControl.LocalPlayer.PlayerId,
             CachedPlayerControl.LocalPlayer.PlayerId,
             byte.MinValue);
-        Sound.RpcPlaySound(Sound.SoundType.Kill);
+        Sound.RpcPlaySound(Sound.Type.Kill);
     }
 
     public void GuessAction(GuessBehaviour.RoleInfo roleInfo, byte playerId)
@@ -426,7 +426,7 @@ public sealed class Guesser :
             Player.RpcUncheckMurderPlayer(
                 CachedPlayerControl.LocalPlayer.PlayerId,
                 playerId, byte.MinValue);
-            Sound.RpcPlaySound(Sound.SoundType.Kill);
+            Sound.RpcPlaySound(Sound.Type.Kill);
         }
         else
         {

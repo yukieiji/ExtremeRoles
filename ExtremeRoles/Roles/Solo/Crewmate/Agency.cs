@@ -77,7 +77,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
         {
             Sound.PlaySound(
-                Sound.SoundType.AgencyTakeTask, 1.2f);
+                Sound.Type.AgencyTakeTask, 1.2f);
         }
 
         GameData.Instance.SetDirtyBit(
