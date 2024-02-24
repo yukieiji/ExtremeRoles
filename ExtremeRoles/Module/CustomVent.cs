@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using ExtremeRoles.Resources;
 
@@ -40,16 +39,18 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 		}
 		else
 		{
-			Sprite? newImg;
-			switch (type)
+			string imgFormat = type switch
 			{
-				case Type.MeryVent:
-					newImg = Loader.CreateSpriteFromResources(
-						string.Format(Path.MeryCustomVentAnime, index), 125f);
-					break;
-				default:
-					return null;
+				Type.MeryVent => Path.MeryCustomVentAnime,
+				_ => string.Empty,
+			};
+			if (string.IsNullOrEmpty(imgFormat))
+			{
+				return null;
 			}
+
+			Sprite? newImg = Loader.CreateSpriteFromResources(
+				string.Format(imgFormat, index), 125f);
 
 			this.ventAnimation[type][index] = newImg;
 			return newImg;
