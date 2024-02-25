@@ -14,6 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using System.Linq;
 
 #nullable enable
 
@@ -25,7 +26,6 @@ public sealed class Missionary :
 	IRoleUpdate,
 	IRoleVoteCheck
 {
-
     public enum MissionaryOption
     {
         TellDeparture,
@@ -36,7 +36,7 @@ public sealed class Missionary :
 		MaxJudgementNum,
 	}
 
-	public byte TargetPlayer = byte.MaxValue;
+	public PlayerControl? targetPlayer;
 
 	private float timer;
 
@@ -49,7 +49,7 @@ public sealed class Missionary :
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
-	private Queue<byte> lamb;
+	private List<PlayerControl> lamb;
 	private HashSet<byte> judgementTarget;
 	private TMPro.TextMeshPro tellText;
 
@@ -64,7 +64,7 @@ public sealed class Missionary :
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (this.lamb.Contains(targetPlayerId))
+		if (this.lamb.Any(x => x.PlayerId == targetPlayerId))
 		{
 			return Design.ColoedString(this.NameColor, " ×");
 		}
@@ -113,7 +113,7 @@ public sealed class Missionary :
 
     protected override void RoleSpecificInit()
     {
-        this.lamb = new Queue<byte>();
+        this.lamb = new List<PlayerControl>(CachedPlayerControl.AllPlayerControls.Count);
         this.timer = 0;
 
         this.tellDeparture = OptionManager.Instance.GetValue<bool>(
@@ -143,22 +143,18 @@ public sealed class Missionary :
 
     public bool IsAbilityUse()
     {
-        this.TargetPlayer = byte.MaxValue;
-        PlayerControl target = Player.GetClosestPlayerInRange(
+        this.targetPlayer = Player.GetClosestPlayerInRange(
             CachedPlayerControl.LocalPlayer, this,
             this.propagateRange);
 
-        if (target != null)
-        {
-			byte playerId = target.PlayerId;
+		if (this.targetPlayer == null)
+		{
+			return false;
+		}
 
-            if (!this.lamb.Contains(playerId))
-            {
-                this.TargetPlayer = playerId;
-            }
-        }
-
-        return IRoleAbility.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
+		return
+			IRoleAbility.IsCommonUse() &&
+			this.lamb.Contains(this.targetPlayer);
     }
 
     public void ResetOnMeetingStart()
@@ -186,23 +182,35 @@ public sealed class Missionary :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (this.lamb.Count == 0) { return; }
+        if (this.lamb.Count == 0 ||
+			CachedShipStatus.Instance == null ||
+            GameData.Instance == null ||
+			!CachedShipStatus.Instance.enabled ||
+			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
-        if (CachedShipStatus.Instance == null ||
-            GameData.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+		this.lamb.RemoveAll(
+			x =>
+				x == null ||
+				x.Data == null ||
+				x.Data.IsDead ||
+				x.Data.Disconnected);
+		// 削除しきって誰もいなかったらタイマー自体をリセットする、じゃないとタイマーが短い状態で次の人が追加される
+		if (this.lamb.Count == 0)
+		{
+			resetTimer();
+			return;
+		}
 
-        this.timer -= Time.deltaTime;
+		this.timer -= Time.deltaTime;
         if (this.timer > 0) { return; }
 
         resetTimer();
 
-        byte targetPlayerId = this.lamb.Dequeue();
-        PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+		PlayerControl targetPlayer = this.lamb[0];
 
-        if (targetPlayer == null) { return; }
-        if (targetPlayer.Data.IsDead || targetPlayer.Data.Disconnected) { return; }
+        if (targetPlayer == null ||
+			targetPlayer.Data.IsDead ||
+			targetPlayer.Data.Disconnected) { return; }
 
         Player.RpcUncheckMurderPlayer(
             targetPlayer.PlayerId,
@@ -220,33 +228,34 @@ public sealed class Missionary :
 
     public bool UseAbility()
     {
-        var assassin = ExtremeRoleManager.GameRole[this.TargetPlayer] as Combination.Assassin;
+		if (this.targetPlayer == null) { return false; }
 
-        if (assassin != null)
-        {
-            if (!assassin.CanKilled)
-            {
-                return false;
-            }
-            if (!assassin.CanKilledFromNeutral)
-            {
-                return false;
-            }
-        }
+		byte playerId = this.targetPlayer.PlayerId;
+        var assassin = ExtremeRoleManager.GameRole[playerId] as Combination.Assassin;
 
-		if (this.judgementTarget.Contains(this.TargetPlayer))
+		if (assassin != null)
+		{
+			if (!assassin.CanKilled)
+			{
+				return false;
+			}
+			if (!assassin.CanKilledFromNeutral)
+			{
+				return false;
+			}
+		}
+
+		if (this.judgementTarget.Contains(playerId))
 		{
 			Player.RpcUncheckMurderPlayer(
-				this.TargetPlayer,
-				this.TargetPlayer,
-				byte.MaxValue);
-			this.judgementTarget.Remove(this.TargetPlayer);
+				playerId, playerId, byte.MaxValue);
+			this.judgementTarget.Remove(playerId);
 		}
 		else
 		{
-			this.lamb.Enqueue(this.TargetPlayer);
+			this.lamb.Add(this.targetPlayer);
 		}
-        this.TargetPlayer = byte.MaxValue;
+		this.targetPlayer = null;
         return true;
     }
 
