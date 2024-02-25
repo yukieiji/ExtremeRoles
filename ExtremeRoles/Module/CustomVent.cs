@@ -17,7 +17,7 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 
 	private readonly Dictionary<int, Type> idType = new Dictionary<int, Type>();
 	private readonly Dictionary<Type, List<Vent>> allVent = new Dictionary<Type, List<Vent>>();
-	private readonly Dictionary<Type, Sprite[]> ventAnimation = new Dictionary<Type, Sprite[]>();
+	private readonly Dictionary<Type, Sprite?[]> ventAnimation = new Dictionary<Type, Sprite?[]>();
 
 	public CustomVent()
 	{
@@ -30,12 +30,15 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 
 	public Sprite? GetSprite(int id, int index)
 	{
-		if (!this.idType.TryGetValue(id, out Type type)) { return null; }
+		if (!this.idType.TryGetValue(id, out Type type) ||
+			!this.ventAnimation.TryGetValue(type, out var sprite) ||
+			sprite == null) { return null; }
 
-		if (this.ventAnimation.TryGetValue(type, out var sprite) &&
-			sprite != null)
+		Sprite? img = sprite[index];
+
+		if (img != null)
 		{
-			return sprite[index];
+			return img;
 		}
 		else
 		{
@@ -49,7 +52,7 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 				return null;
 			}
 
-			Sprite? newImg = Loader.CreateSpriteFromResources(
+			Sprite newImg = Loader.CreateSpriteFromResources(
 				string.Format(imgFormat, index), 125f);
 
 			this.ventAnimation[type][index] = newImg;
@@ -74,7 +77,7 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 
 		if (!this.ventAnimation.ContainsKey(type))
 		{
-			this.ventAnimation.Add(type, new Sprite[spriteSize]);
+			this.ventAnimation.Add(type, new Sprite?[spriteSize]);
 		}
 
 		this.idType.Add(newVent.Id, type);
