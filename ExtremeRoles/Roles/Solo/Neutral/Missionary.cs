@@ -154,7 +154,7 @@ public sealed class Missionary :
 
 		return
 			IRoleAbility.IsCommonUse() &&
-			this.lamb.Contains(this.targetPlayer);
+			!this.lamb.Contains(this.targetPlayer);
     }
 
     public void ResetOnMeetingStart()
