@@ -10,6 +10,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -91,6 +93,7 @@ public static class PlayerControlMurderPlayerPatch
 
 		byte targetPlayerId = target.PlayerId;
 		byte localPlayerId = player.PlayerId;
+		bool isLocalPlayerDead = localPlayerId == targetPlayerId;
 
 		// 会議中に発生したキルでキルされた人が開いてたボタンとキルされた人へ投票しようとしていたボタンを閉じる
 		if (MeetingHud.Instance != null)
@@ -98,7 +101,7 @@ public static class PlayerControlMurderPlayerPatch
 			foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
 			{
 				if ((
-						localPlayerId == targetPlayerId &&
+						isLocalPlayerDead &&
 						pva.Buttons.activeSelf
 					) ||
 					pva.TargetPlayerId == targetPlayerId)
@@ -106,6 +109,15 @@ public static class PlayerControlMurderPlayerPatch
 					pva.Cancel();
 				}
 			}
+		}
+
+		// 挙手ボタンを消す
+		if (isLocalPlayerDead &&
+			ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
+				ExtremeSystemType.RaiseHandSystem, out var system) &&
+			system != null)
+		{
+			system.RaiseHandButtonSetActive(false);
 		}
 
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
