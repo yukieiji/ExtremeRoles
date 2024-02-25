@@ -195,6 +195,8 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
     private ExtremeAbilityButton bombButton;
 
+	private const CustomVent.Type meryVentType = CustomVent.Type.MeryVent;
+
     public Mery() : base(
         ExtremeRoleId.Mery,
         ExtremeRoleType.Impostor,
@@ -248,14 +250,13 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(activateVentIndex);
 
         Vent newVent = camp.GetConvertedVent();
-        var meryVent = CachedShipStatus.Instance.GetCustomVent(
-            VentExtension.CustomVentType.MeryVent);
 
-        int ventNum = meryVent.Count;
-
-        if (ventNum > 0)
+        if (CachedShipStatus.Instance.TryGetCustomVent(
+				meryVentType, out List<Vent> meryVent))
         {
-            var prevAddVent = meryVent[ventNum - 1];
+			int ventNum = meryVent.Count;
+
+			var prevAddVent = meryVent[ventNum - 1];
             newVent.Left = prevAddVent;
             prevAddVent.Right = newVent;
 
@@ -277,8 +278,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         newVent.Center = null;
 
-        CachedShipStatus.Instance.AddVent(
-            newVent, VentExtension.CustomVentType.MeryVent);
+        CachedShipStatus.Instance.AddVent(newVent, meryVentType);
 
         camp.Clear();
     }

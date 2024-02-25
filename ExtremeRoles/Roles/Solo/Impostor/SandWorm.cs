@@ -6,13 +6,12 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Extension.VentModule;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -267,9 +266,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         bool result = CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
         Vent vent = Vent.currentVent;
 
-        if (!result || vent == null) { return false; }
-
-        if (CachedShipStatus.Instance.IsCustomVent(vent.Id)) { return false; }
+        if (!result || vent.IsModed()) { return false; }
 
         return true;
     }

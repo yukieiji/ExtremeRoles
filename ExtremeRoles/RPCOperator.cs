@@ -8,9 +8,9 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
@@ -217,10 +217,13 @@ public static class RPCOperator
     {
         Helper.Player.ResetTarget();
         ExtremeRolesPlugin.ShipState.Initialize();
-		Module.ExtremeGameResult.TryDestroy();
 
-        // チェックポイントリセット
-        Helper.Logging.ResetCkpt();
+
+		Module.ExtremeGameResult.TryDestroy();
+		Module.CustomVent.TryDestroy();
+
+		// チェックポイントリセット
+		Helper.Logging.ResetCkpt();
 
         // キルアニメーションリセット
         Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
@@ -236,9 +239,7 @@ public static class RPCOperator
         // 各種システムコンソールリセット
         Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
         Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
-
-        VentExtension.ResetCustomVent();
-    }
+	}
 
     public static void ForceEnd()
     {
@@ -302,12 +303,6 @@ public static class RPCOperator
     public static void CustomVentUse(
         int ventId, byte playerId, byte isEnter)
     {
-
-        HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-        ShipStatus ship = CachedShipStatus.Instance;
-
-        if (ship == null || hudManager == null) { return; }
-
         PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
         if (player == null) { return; }
 
@@ -321,62 +316,14 @@ public static class RPCOperator
         reader.Buffer = bytes;
         reader.Length = bytes.Length;
 
-        Vent vent = ship.AllVents.FirstOrDefault(
-            (x) => x.Id == ventId);
+		CachedShipStatus.Instance.StartVentAnimation(ventId);
 
-        hudManager.StartCoroutine(
-            Effects.Lerp(
-                0.6f, new Action<float>((p) => {
-                    if (vent != null && vent.myRend != null)
-                    {
-                        vent.myRend.sprite = ship.GetCustomVentSprite(
-                            ventId, (int)(p * 17));
-                        if (p == 1f)
-                        {
-                            vent.myRend.sprite = ship.GetCustomVentSprite(
-                                ventId, 0);
-                        }
-                    }
-                })));
-
-        player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
+		player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
     }
 
     public static void StartVentAnimation(int ventId)
     {
-
-        if (CachedShipStatus.Instance == null) { return; }
-        Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
-            (x) => x.Id == ventId);
-
-        if (!vent) { return; }
-
-        HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-        ShipStatus ship = CachedShipStatus.Instance;
-
-        if (ship.IsCustomVent(ventId) &&
-			hudManager != null)
-        {
-            hudManager.StartCoroutine(
-                Effects.Lerp(
-                    0.6f, new System.Action<float>((p) => {
-						if (vent.myRend == null) { return; }
-
-						vent.myRend.sprite = ship.GetCustomVentSprite(
-								ventId, (int)(p * 17));
-						if (p == 1f)
-						{
-							vent.myRend.sprite = ship.GetCustomVentSprite(
-								ventId, 0);
-						}
-					})
-                )
-            );
-        }
-        else if (vent.myAnim != null)
-        {
-			vent.myAnim.Play(vent.ExitVentAnim, 1f);
-		}
+		CachedShipStatus.Instance.StartVentAnimation(ventId);
     }
 
     public static void UncheckedSnapTo(
@@ -490,7 +437,7 @@ public static class RPCOperator
         byte soundType, float volume)
     {
         Helper.Sound.PlaySound(
-            (Helper.Sound.SoundType)soundType, volume);
+            (Helper.Sound.Type)soundType, volume);
     }
 
     public static void ReplaceTask(

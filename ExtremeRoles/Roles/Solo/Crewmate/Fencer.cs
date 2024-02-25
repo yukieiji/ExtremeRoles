@@ -182,7 +182,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
                 caller.WriteByte((byte)FencerAbility.ActivateKillButton);
             }
             enableKillButton(this, rolePlayer.PlayerId);
-            Sound.PlaySound(Sound.SoundType.GuardianAngleGuard, 0.85f);
+            Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.85f);
             return false;
         }
 

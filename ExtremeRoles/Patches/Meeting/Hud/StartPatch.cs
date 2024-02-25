@@ -4,6 +4,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -12,7 +13,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using PlayerHeler = ExtremeRoles.Helper.Player;
-using ExtremeRoles.Module.CustomMonoBehaviour;
+using SoundHelper = ExtremeRoles.Helper.Sound;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -54,7 +55,7 @@ public static class MeetingHudStartPatch
 				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) &&
 			system is not null)
 		{
-
+			__instance.VoteEndingSound = SoundHelper.GetAudio(SoundHelper.Type.NullSound);
 			__instance.discussionTimer -= system.HudTimerStartOffset;
 			if (!system.IsShowTimer)
 			{

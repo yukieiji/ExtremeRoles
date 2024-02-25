@@ -78,7 +78,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
                 newKillCool, 0.1f, killCool);
         }
         Sound.PlaySound(
-            Sound.SoundType.CommanderReduceKillCool, 1.2f);
+            Sound.Type.CommanderReduceKillCool, 1.2f);
     }
     public void CreateAbility()
     {

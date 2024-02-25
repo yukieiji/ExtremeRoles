@@ -47,7 +47,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 
 		if (cacheedClip == null)
 		{
-			cacheedClip = Sound.GetAudio(Sound.SoundType.MinerMineSE);
+			cacheedClip = Sound.GetAudio(Sound.Type.MinerMineSE);
 		}
 
 		this.audioSource.clip = cacheedClip;

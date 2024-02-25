@@ -119,7 +119,7 @@ public sealed class Whisper :
 					direction, System.DateTime.Now);
 			}
             this.textPopUp.AddText(showText);
-			Sound.PlaySound(Sound.SoundType.Kill, 0.3f);
+			Sound.PlaySound(Sound.Type.Kill, 0.3f);
         }
     }
 

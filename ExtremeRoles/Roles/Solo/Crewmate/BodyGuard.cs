@@ -383,7 +383,7 @@ public sealed class BodyGuard :
     {
         if (targetBodyGuard == CachedPlayerControl.LocalPlayer.PlayerId)
         {
-            Sound.PlaySound(Sound.SoundType.GuardianAngleGuard, 0.6f);
+            Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.6f);
         }
 
         // 必ずテレポートしないキル

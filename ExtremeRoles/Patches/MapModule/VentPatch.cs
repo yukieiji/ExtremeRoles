@@ -18,6 +18,7 @@ using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Extension.Il2Cpp;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Extension.VentModule;
 
 #nullable enable
 
@@ -312,8 +313,7 @@ public static class VentUsePatch
 
         bool isEnter = !localPlayer.inVent;
 
-        if (CachedShipStatus.Instance.IsCustomVent(
-            __instance.Id))
+        if (__instance.IsModed())
         {
             __instance.SetButtons(isEnter);
 

@@ -186,7 +186,7 @@ public sealed class CurseMaker :
                 FloatOptionNames.KillCooldown);
         }
         Sound.PlaySound(
-            Sound.SoundType.CurseMakerCurse, 1.2f);
+            Sound.Type.CurseMakerCurse, 1.2f);
     }
 
     public void CreateAbility()
