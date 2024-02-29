@@ -1,6 +1,10 @@
-﻿using ExtremeRoles.Performance;
-using System;
+﻿using System;
+
 using UnityEngine;
+
+using Il2CppInterop.Runtime.Attributes;
+
+using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -9,8 +13,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class SkaterSkateBehaviour : MonoBehaviour
 {
-	private const float offset = 32.0f;
+	public const float SpeedOffset = 32.0f;
 
+	public record struct Parameter(float Friction, float Acceleration, float MaxSpeed);
+
+	[HideFromIl2Cpp]
 	public Vector2 PrevForce { get; private set; }
 
 	private float speed;
@@ -19,11 +26,13 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 
 	public SkaterSkateBehaviour(IntPtr ptr) : base(ptr) { }
 
-	public void Initialize(float friction, float speed, float maxSpeed)
+
+	[HideFromIl2Cpp]
+	public void Initialize(in Parameter param)
 	{
-		this.speed = speed * offset * Time.fixedDeltaTime;
-		this.friction = friction * Time.fixedDeltaTime;
-		this.maxSpeed = maxSpeed * offset;
+		this.speed = param.Acceleration * SpeedOffset * Time.fixedDeltaTime;
+		this.friction = param.Friction * Time.fixedDeltaTime;
+		this.maxSpeed = param.MaxSpeed * SpeedOffset;
 	}
 
 	public void FixedUpdate()
