@@ -38,6 +38,7 @@ public enum ExtremeRoleId : int
     Buddy,
     Mover,
 	Accelerator,
+	Skater,
 
 	SpecialCrew,
     Sheriff,
@@ -131,6 +132,7 @@ public enum CombinationRoleType : byte
     Guesser,
     Mover,
 	Accelerator,
+	Skater,
 
 	Traitor,
 }
@@ -297,6 +299,7 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
             {(byte)CombinationRoleType.Mover          , new MoverManager()},
 			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
+			{(byte)CombinationRoleType.Skater        , new SkaterManager()},
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         };
 
