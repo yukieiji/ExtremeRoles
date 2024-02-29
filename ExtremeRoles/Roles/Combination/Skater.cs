@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -55,5 +56,7 @@ public sealed class Skater : MultiAssignRoleBase, IRoleSpecialSetUp
 
 	public void IntroEndSetUp()
 	{
+		var beha = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<SkaterSkateBehaviour>();
+		beha.Initialize(0.001f, 1.25f, 10.0f);
 	}
 }
