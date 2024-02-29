@@ -81,7 +81,7 @@ public sealed class Skater :
 			parentOps);
 		CreateFloatOption(
 			Option.CanUseSpeed,
-			1.5f, 0.0f, 50.0f, 0.1f,
+			2.0f, 0.0f, 50.0f, 0.1f,
 			parentOps);
 	}
 
@@ -106,7 +106,7 @@ public sealed class Skater :
 	{
 		this.behaviour = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<SkaterSkateBehaviour>();
 		this.behaviour.Initialize(this.param);
-		this.behaviour.enabled = false;
+		this.setBehaviourEnable(false);
 	}
 	public void AllReset(PlayerControl rolePlayer)
 	{
