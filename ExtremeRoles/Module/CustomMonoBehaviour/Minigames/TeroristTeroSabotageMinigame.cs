@@ -21,20 +21,21 @@ using ExtremeRoles.Helper;
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
-
 [Il2CppRegister]
-public sealed class TeroristTeroSabotageMinigame : Minigame
-{
-	public byte BombId => this.ConsoleInfo.BombId;
-	public ConsoleInfo ConsoleInfo { private get; set; }
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
+{
 	private TextMeshPro progressText;
 	private TextMeshPro logText;
 
 	private SimpleButton startButton;
 	private SpriteRenderer progress;
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+
+	public byte BombId => this.ConsoleInfo.BombId;
+	public ConsoleInfo ConsoleInfo { private get; set; }
+
 
 	private readonly StringBuilder logBuilder = new StringBuilder();
 	private readonly Queue<string> showLogText = new Queue<string>(showMaxTextLine);
