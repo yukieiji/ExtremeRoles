@@ -10,6 +10,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -91,21 +93,12 @@ public static class PlayerControlMurderPlayerPatch
 
 		byte targetPlayerId = target.PlayerId;
 		byte localPlayerId = player.PlayerId;
+		bool isLocalPlayerDead = localPlayerId == targetPlayerId;
 
-		// 会議中に発生したキルでキルされた人が開いてたボタンとキルされた人へ投票しようとしていたボタンを閉じる
 		if (MeetingHud.Instance != null)
 		{
-			foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
-			{
-				if ((
-						localPlayerId == targetPlayerId &&
-						pva.Buttons.activeSelf
-					) ||
-					pva.TargetPlayerId == targetPlayerId)
-				{
-					pva.Cancel();
-				}
-			}
+			hidePlayerVoteAreaButton(isLocalPlayerDead, targetPlayerId);
+			hideRaiseHandButton(isLocalPlayerDead);
 		}
 
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
@@ -115,54 +108,29 @@ public static class PlayerControlMurderPlayerPatch
 
 		var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
-		if (!role.HasTask())
-		{
-			target.ClearTasks();
-		}
+		clearTask(role, target);
 
 		if (ExtremeRoleManager.IsDisableWinCheckRole(role))
 		{
 			ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
 		}
 
-		var multiAssignRole = role as MultiAssignRoleBase;
-
-		role.RolePlayerKilledAction(
-			target, __instance);
-		if (multiAssignRole != null)
-		{
-			if (multiAssignRole.AnotherRole != null)
-			{
-				multiAssignRole.AnotherRole.RolePlayerKilledAction(
-					target, __instance);
-			}
-		}
+		invokeRoleKillAction(role, __instance, target);
 
 		ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
 
-		if (localPlayerId != targetPlayerId)
-		{
-			var hookRole = ExtremeRoleManager.GameRole[
-				localPlayerId] as IRoleMurderPlayerHook;
-			multiAssignRole = ExtremeRoleManager.GameRole[
-				localPlayerId] as MultiAssignRoleBase;
+		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+		invokeRoleHookAction(isLocalPlayerDead, localRole, __instance, target);
+	}
 
-			if (hookRole != null)
-			{
-				hookRole.HookMuderPlayer(
-					__instance, target);
-			}
-			if (multiAssignRole != null)
-			{
-				hookRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHook;
-				if (hookRole != null)
-				{
-					hookRole.HookMuderPlayer(
-						__instance, target);
-				}
-			}
+	private static void clearTask(in SingleRoleBase role, in PlayerControl target)
+	{
+		if (!role.HasTask())
+		{
+			target.ClearTasks();
 		}
 	}
+
 	private static void guardBreakKill(
 		PlayerControl instance,
 		PlayerControl target,
@@ -173,6 +141,66 @@ public static class PlayerControlMurderPlayerPatch
 			target.RemoveProtection();
 		}
 		murderPlayerBody(instance, target, killCool);
+	}
+
+	private static void hidePlayerVoteAreaButton(
+		in bool isLocalPlayerDead, in byte targetPlayerId)
+	{
+		foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
+		{
+			if ((
+					isLocalPlayerDead &&
+					pva.Buttons.activeSelf
+				) ||
+				pva.TargetPlayerId == targetPlayerId)
+			{
+				pva.Cancel();
+			}
+		}
+	}
+
+	private static void hideRaiseHandButton(in bool isLocalPlayerDead)
+	{
+		if (isLocalPlayerDead &&
+			ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
+				ExtremeSystemType.RaiseHandSystem, out var system) &&
+			system != null)
+		{
+			system.RaiseHandButtonSetActive(false);
+		}
+	}
+
+	private static void invokeRoleKillAction(
+		in SingleRoleBase role,
+		in PlayerControl killer,
+		in PlayerControl target)
+	{
+		role.RolePlayerKilledAction(target, killer);
+		if (role is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is not null)
+		{
+			multiAssignRole.AnotherRole.RolePlayerKilledAction(
+				target, killer);
+		}
+	}
+
+	private static void invokeRoleHookAction(
+		in bool isLocalPlayerDead,
+		in SingleRoleBase localPlayerRole,
+		in PlayerControl killer,
+		in PlayerControl target)
+	{
+		if (isLocalPlayerDead) { return; }
+
+		if (localPlayerRole is IRoleMurderPlayerHook hookRole)
+		{
+			hookRole.HookMuderPlayer(killer, target);
+		}
+		if (localPlayerRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is IRoleMurderPlayerHook multiHookRole)
+		{
+			multiHookRole.HookMuderPlayer(killer, target);
+		}
 	}
 
 	private static void murderPlayerBody(
