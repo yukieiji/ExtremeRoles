@@ -20,14 +20,14 @@ jobs:
       - name: RestoreNugetPackage
         run: nuget restore ExtremeRoles.sln
       - name: SetupPython
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
           architecture: 'x64'
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.x
+          dotnet-version: 8.0.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v2
       - name: RunBuildAndPacking
