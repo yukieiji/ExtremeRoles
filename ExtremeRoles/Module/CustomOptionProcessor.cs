@@ -238,7 +238,7 @@ public static class CustomOptionCsvProcessor
 	private static void exportIGameOptions(
 		StreamWriter writer,
 		GameOptionsFactory factory,
-		IGameOptions option, GameModes mode,)
+		IGameOptions option, GameModes mode)
 	{
 		foreach (byte bytedOption in factory.ToBytes(option, false))
 		{
