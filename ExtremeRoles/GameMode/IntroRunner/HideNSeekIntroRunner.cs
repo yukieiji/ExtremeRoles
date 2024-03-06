@@ -121,6 +121,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 
         float crewmateLeadTime = (float)logicOptionsHnS.GetCrewmateLeadTime();
         bool enableHorse = AprilFoolsMode.ShouldHorseAround();
+		bool enableLongAround = AprilFoolsMode.ShouldLongAround();
 
         if (localPlayer.Data.Role.IsImpostor)
         {
@@ -139,7 +140,14 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
                     localPlayer.Data,
                     localPlayer.CurrentOutfitType, PlayerMaterial.MaskType.None, false);
             }
-            else
+			else if (enableLongAround)
+			{
+				poolablePlayer = instance.HideAndSeekPlayerVisual;
+				poolablePlayer.gameObject.SetActive(true);
+				poolablePlayer.SetBodyType(PlayerBodyTypes.LongSeeker);
+				animationClip = instance.HnSSeekerSpawnLongAnim;
+			}
+			else
             {
                 poolablePlayer = instance.HideAndSeekPlayerVisual;
                 poolablePlayer.gameObject.SetActive(true);
@@ -147,14 +155,16 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
                 animationClip = instance.HnSSeekerSpawnAnim;
             }
 
-            poolablePlayer.UpdateFromPlayerData(
+			poolablePlayer.SetBodyCosmeticsVisible(false);
+
+			poolablePlayer.UpdateFromPlayerData(
                 localPlayer.Data,
                 localPlayer.CurrentOutfitType,
                 PlayerMaterial.MaskType.None, false);
 
             SpriteAnim component = poolablePlayer.GetComponent<SpriteAnim>();
             poolablePlayer.gameObject.SetActive(true);
-            poolablePlayer.SetBodyCosmeticsVisible(false);
+
             poolablePlayer.ToggleName(false);
 
             component.Play(animationClip, 1f);
@@ -176,7 +186,14 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
                 {
                     impostor.AnimateCustom(instance.HnSSeekerSpawnHorseInGameAnim);
                 }
-                else
+				else if (enableLongAround)
+				{
+					if (impostor != null)
+					{
+						impostor.AnimateCustom(instance.HnSSeekerSpawnLongInGameAnim);
+					}
+				}
+				else
                 {
                     impostor.AnimateCustom(instance.HnSSeekerSpawnAnim);
                     impostor.cosmetics.SetBodyCosmeticsVisible(false);
