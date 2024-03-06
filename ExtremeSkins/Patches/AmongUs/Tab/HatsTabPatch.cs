@@ -141,12 +141,11 @@ public static class HatsTabPatch
         int numHats = hats.Count;
 
         PlayerCustomizationData playerSkinData = DataManager.Player.Customization;
-
-        for (int i = 0; i < numHats; i++)
+		int index = 0;
+        foreach (var hat in hats)
         {
-            HatData hat = hats[i];
 
-            ColorChip colorChip = CustomCosmicTab.SetColorChip(__instance, i, offset);
+            ColorChip colorChip = CustomCosmicTab.SetColorChip(__instance, index, offset);
 
 			var button = colorChip.Button;
 
@@ -168,7 +167,7 @@ public static class HatsTabPatch
             }
 
 			button.ClickMask = __instance.scroller.Hitbox;
-			colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.ScrollingUI);
+			colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.SimpleUI);
 			colorChip.Tag = hat;
 
 			int color = __instance.HasLocalPlayer() ?
@@ -179,6 +178,13 @@ public static class HatsTabPatch
 
 			colorChip.SelectionHighlight.gameObject.SetActive(false);
 			__instance.ColorChips.Add(colorChip);
+
+			index++;
+			if (!DestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+				hat.ProdId, __instance.PlayerPreview.GetIgnoreLongMode()))
+			{
+				colorChip.SetUnavailable();
+			}
 		}
     }
 }
