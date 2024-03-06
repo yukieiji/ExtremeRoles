@@ -117,10 +117,7 @@ public class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
 			view.LeftIdleFrame = GetSprite(
 				Path.Combine(this.FolderPath, DataStructure.FlipIdleImageName));
 		}
-		if (this.Info.Shader)
-		{
-			view.AltShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
-		}
+		view.MatchPlayerColor = this.Info.Shader;
 
 		return view;
 	}

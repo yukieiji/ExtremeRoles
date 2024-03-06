@@ -21,28 +21,31 @@ namespace ExtremeSkins.Patches.AmongUs.Cosmic;
 public static class VisorPatch
 {
 	[HarmonyPrefix]
-	[HarmonyPatch(typeof(VisorLayer), nameof(VisorLayer.SetVisor), new Type[] { typeof(VisorData), typeof(int) })]
+	[HarmonyPatch(typeof(VisorLayer), nameof(VisorLayer.SetVisor), [ typeof(VisorData), typeof(int) ])]
 	public static bool VisorLayerSetVisorPrefix(
 		VisorLayer __instance,
 		[HarmonyArgument(0)] VisorData data,
-		[HarmonyArgument(1)] int colorId)
+		[HarmonyArgument(1)] int color)
 	{
-		if (ExtremeVisorManager.VisorData.TryGetValue(data.ProductId, out var visor))
+		if (ExtremeVisorManager.VisorData.TryGetValue(data.ProductId, out var visor) ||
+			visor != null)
 		{
-			__instance.currentVisor = data;
+			__instance.visorData = data;
+			__instance.SetMaterialColor(color);
 			__instance.UnloadAsset();
 			__instance.viewAsset = VisorAddressableAsset.CreateAsset(visor);
 			__instance.LoadAssetAsync(__instance.viewAsset, (Il2CppSystem.Action)(() =>
 			{
-				if (__instance.viewAsset.GetAsset() == null)
+				__instance.UpdateMaterial();
+				if (__instance.viewAsset == null ||
+					__instance.viewAsset.GetAsset() == null ||
+					__instance.IsDestroyedOrNull() ||
+					__instance.gameObject.IsDestroyedOrNull())
 				{
 					return;
 				}
-				if (__instance.IsDestroyedOrNull() || __instance.gameObject.IsDestroyedOrNull())
-				{
-					return;
-				}
-				__instance.SetVisor(__instance.currentVisor, __instance.viewAsset.GetAsset(), colorId);
+				__instance.transform.SetLocalZ(__instance.DesiredLocalZPosition);
+				__instance.SetFlipX(__instance.Image.flipX);
 			}), null);
 			return false;
 		}
