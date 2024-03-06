@@ -87,9 +87,9 @@ public static class CustomOptionCsvProcessor
 			{
 				IGameOptions option = gameMode switch
 				{
-					GameModes.Normal =>
+					GameModes.Normal or GameModes.NormalFools =>
 						gameOptionManager.normalGameHostOptions.Cast<IGameOptions>(),
-					GameModes.HideNSeek =>
+					GameModes.HideNSeek or GameModes.SeekFools =>
 						gameOptionManager.hideNSeekGameHostOptions.Cast<IGameOptions>(),
 					_ => null,
 				};
@@ -165,7 +165,7 @@ public static class CustomOptionCsvProcessor
 				switch (mode)
 				{
 					case GameModes.Normal:
-
+					case GameModes.NormalFools:
 						NormalGameOptionsV07 normalOption = option.Cast<NormalGameOptionsV07>();
 
 						if (option.Version < curVersion)
@@ -179,6 +179,7 @@ public static class CustomOptionCsvProcessor
 						gameOptionManager.SaveNormalHostOptions();
 						break;
 					case GameModes.HideNSeek:
+					case GameModes.SeekFools:
 						HideNSeekGameOptionsV07 hideNSeekOption = option.Cast<HideNSeekGameOptionsV07>();
 
 						if (option.Version < curVersion)
@@ -237,7 +238,7 @@ public static class CustomOptionCsvProcessor
 	private static void exportIGameOptions(
 		StreamWriter writer,
 		GameOptionsFactory factory,
-		IGameOptions option, GameModes mode)
+		IGameOptions option, GameModes mode,)
 	{
 		foreach (byte bytedOption in factory.ToBytes(option, false))
 		{

@@ -39,8 +39,8 @@ public sealed class ExtremeGameModeManager
 
         IModeFactory factory = mode switch
         {
-            GameModes.Normal => new ClassicGameModeFactory(),
-            GameModes.HideNSeek => new HideNSeekGameModeFactory(),
+            GameModes.Normal or GameModes.NormalFools => new ClassicGameModeFactory(),
+            GameModes.HideNSeek or GameModes.SeekFools => new HideNSeekGameModeFactory(),
             _ => null,
         };
 
@@ -60,8 +60,8 @@ public sealed class ExtremeGameModeManager
     public IIntroRunner GetIntroRunner()
         => CurrentGameMode switch
         {
-            GameModes.Normal => new ClassicIntroRunner(),
-            GameModes.HideNSeek => new HideNSeekIntroRunner(),
+            GameModes.Normal or GameModes.NormalFools => new ClassicIntroRunner(),
+            GameModes.HideNSeek or GameModes.SeekFools => new HideNSeekIntroRunner(),
             _ => null
         };
 }
