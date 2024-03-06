@@ -101,12 +101,25 @@ public static class PlayerControlShapeshiftPatch
 
 			roleEffectAnimation.MidAnimCB = changeAction;
 
+			bool shoudLongAround = AprilFoolsMode.ShouldLongAround();
+
+			if (shoudLongAround)
+			{
+				__instance.cosmetics.ShowLongModeParts(false);
+				__instance.cosmetics.SetHatVisorVisible(false);
+			}
+
 			__instance.StartCoroutine(
 				__instance.ScalePlayer(anim.ShapeshiftScale, 0.25f));
 
 			Action roleAnimation = () =>
 			{
 				__instance.shapeshifting = false;
+				if (shoudLongAround)
+				{
+					__instance.cosmetics.ShowLongModeParts(true);
+					__instance.cosmetics.SetHatVisorVisible(true);
+				}
 			};
 
 			roleEffectAnimation.Play(
