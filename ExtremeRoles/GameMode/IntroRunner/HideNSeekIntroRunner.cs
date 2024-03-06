@@ -120,7 +120,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
         }
 
         float crewmateLeadTime = (float)logicOptionsHnS.GetCrewmateLeadTime();
-        bool enableHorse = Constants.ShouldHorseAround();
+        bool enableHorse = AprilFoolsMode.ShouldHorseAround();
 
         if (localPlayer.Data.Role.IsImpostor)
         {

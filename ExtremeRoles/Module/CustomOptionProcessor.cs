@@ -239,7 +239,7 @@ public static class CustomOptionCsvProcessor
 		GameOptionsFactory factory,
 		IGameOptions option, GameModes mode)
 	{
-		foreach (byte bytedOption in factory.ToBytes(option))
+		foreach (byte bytedOption in factory.ToBytes(option, false))
 		{
 			writer.WriteLine(
 				string.Format("{1}{0}{2}{0}{3}",
