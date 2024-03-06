@@ -27,7 +27,7 @@ public static class VisorPatch
 		[HarmonyArgument(0)] VisorData data,
 		[HarmonyArgument(1)] int color)
 	{
-		if (ExtremeVisorManager.VisorData.TryGetValue(data.ProductId, out var visor) ||
+		if (ExtremeVisorManager.VisorData.TryGetValue(data.ProductId, out var visor) &&
 			visor != null)
 		{
 			__instance.visorData = data;
@@ -36,16 +36,7 @@ public static class VisorPatch
 			__instance.viewAsset = VisorAddressableAsset.CreateAsset(visor);
 			__instance.LoadAssetAsync(__instance.viewAsset, (Il2CppSystem.Action)(() =>
 			{
-				__instance.UpdateMaterial();
-				if (__instance.viewAsset == null ||
-					__instance.viewAsset.GetAsset() == null ||
-					__instance.IsDestroyedOrNull() ||
-					__instance.gameObject.IsDestroyedOrNull())
-				{
-					return;
-				}
-				__instance.transform.SetLocalZ(__instance.DesiredLocalZPosition);
-				__instance.SetFlipX(__instance.Image.flipX);
+				__instance.PopulateFromViewData();
 			}), null);
 			return false;
 		}
@@ -82,10 +73,19 @@ public static class VisorPatch
 	{
 		if (instance.visors.ContainsKey(visorId)) { yield break; }
 
-		AddressableAsset<VisorViewData>? asset =
-			ExtremeVisorManager.VisorData.TryGetValue(visorId, out var visor) ?
-			VisorAddressableAsset.CreateAsset(visor) :
-			FastDestroyableSingleton<HatManager>.Instance.GetVisorById(visorId).CreateAddressableAsset();
+		AddressableAsset<VisorViewData>? asset;
+
+		if (ExtremeVisorManager.VisorData.TryGetValue(visorId, out var visor) && visor != null)
+		{
+			asset = VisorAddressableAsset.CreateAsset(visor);
+		}
+		else
+		{
+			var visorData = FastDestroyableSingleton<HatManager>.Instance.GetVisorById(visorId);
+			if (visorData == null) { yield break; }
+			asset = visorData.CreateAddressableAsset();
+		}
+
 		instance.allCachedAssets.Add(asset);
 		yield return asset.CoLoadAsync(null);
 		instance.visors[visorId] = asset;
