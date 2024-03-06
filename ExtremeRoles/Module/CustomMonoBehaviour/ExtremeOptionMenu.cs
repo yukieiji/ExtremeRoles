@@ -127,6 +127,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 		switch (ExtremeGameModeManager.Instance.CurrentGameMode)
 		{
 			case GameModes.Normal:
+			case GameModes.NormalFools:
 				reconstructButton(
 					this.tabTemplate,
 					() =>
@@ -145,6 +146,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 					});
 				break;
 			case GameModes.HideNSeek:
+			case GameModes.SeekFools:
 				reconstructButton(
 					this.tabTemplate,
 					() =>

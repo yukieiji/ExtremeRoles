@@ -52,7 +52,10 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
 
 			DataManager.Player.Account.LoginStatus = EOSManager.AccountLoginStatus.LoggedIn;
 			DataManager.Settings.Multiplayer.ChatMode = QuickChatModes.FreeChatOrQuickChat;
-			DataManager.Player.Onboarding.LastAcceptedPrivacyPolicyVersion = Constants.PrivacyPolicyVersion;
+			/*
+			DataManager.Player.Onboarding.LastAcceptedPrivacyPolicyVersion =
+				DestroyableSingleton<ReferenceDataManager>.Instance.Refdata.privacyPolicyVersion;
+			*/
 
 			__instance.userId = new ProductUserId();
 

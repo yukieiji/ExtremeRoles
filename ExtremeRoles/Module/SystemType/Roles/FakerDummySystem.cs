@@ -164,7 +164,17 @@ public sealed class FakerDummySystem : IExtremeSystemType
 				BodySprite = playerImage,
 				Type = basePayerBodySprite.Type,
 				flippedCosmeticOffset = basePayerBodySprite.flippedCosmeticOffset,
+				LongModeParts = new(info.Cosmetics.currentBodySprite.LongModeParts.Length),
 			};
+
+			for (int i = 0 ; i < info.Cosmetics.currentBodySprite.LongModeParts.Length; ++i)
+			{
+				var newSprite = Object.Instantiate(
+					info.Cosmetics.currentBodySprite.LongModeParts[i],
+					cosmetic.transform);
+				playerBodySprite.LongModeParts[i] = newSprite;
+			}
+
 			cosmetic.currentBodySprite = playerBodySprite;
 			cosmetic.hat.Parent = playerImage;
 			cosmetic.petParent = this.body.transform;

@@ -15,7 +15,7 @@ public class HideAndSeekManagerGetBodyTypePatch
             player.Data.Role &&
             player.Data.Role.IsImpostor;
 
-        if (Constants.ShouldHorseAround())
+        if (AprilFoolsMode.ShouldHorseAround())
         {
             __result = isKiller ?
                 PlayerBodyTypes.Normal : PlayerBodyTypes.Horse;

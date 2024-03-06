@@ -6,8 +6,9 @@ using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
-public static class ConstantsShouldHorseAroundPatch
+
+[HarmonyPatch(typeof(AprilFoolsMode), nameof(AprilFoolsMode.ShouldHorseAround))]
+public static class AprilFoolsModeShouldHorseAroundPatch
 {
     public static bool Prefix(ref bool __result)
     {

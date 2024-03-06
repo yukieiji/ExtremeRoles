@@ -109,10 +109,7 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 			view.ClimbImage = GetSprite(
 				Path.Combine(this.FolderPath, DataStructure.ClimbImageName));
 		}
-		if (this.Info.Shader)
-		{
-			view.AltShader = FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial;
-		}
+		view.MatchPlayerColor = this.Info.Shader;
 		return view;
 	}
 

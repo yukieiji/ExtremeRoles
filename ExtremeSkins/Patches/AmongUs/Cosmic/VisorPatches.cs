@@ -21,28 +21,22 @@ namespace ExtremeSkins.Patches.AmongUs.Cosmic;
 public static class VisorPatch
 {
 	[HarmonyPrefix]
-	[HarmonyPatch(typeof(VisorLayer), nameof(VisorLayer.SetVisor), new Type[] { typeof(VisorData), typeof(int) })]
+	[HarmonyPatch(typeof(VisorLayer), nameof(VisorLayer.SetVisor), [ typeof(VisorData), typeof(int) ])]
 	public static bool VisorLayerSetVisorPrefix(
 		VisorLayer __instance,
 		[HarmonyArgument(0)] VisorData data,
-		[HarmonyArgument(1)] int colorId)
+		[HarmonyArgument(1)] int color)
 	{
-		if (ExtremeVisorManager.VisorData.TryGetValue(data.ProductId, out var visor))
+		if (ExtremeVisorManager.VisorData.TryGetValue(data.ProductId, out var visor) &&
+			visor != null)
 		{
-			__instance.currentVisor = data;
+			__instance.visorData = data;
+			__instance.SetMaterialColor(color);
 			__instance.UnloadAsset();
 			__instance.viewAsset = VisorAddressableAsset.CreateAsset(visor);
 			__instance.LoadAssetAsync(__instance.viewAsset, (Il2CppSystem.Action)(() =>
 			{
-				if (__instance.viewAsset.GetAsset() == null)
-				{
-					return;
-				}
-				if (__instance.IsDestroyedOrNull() || __instance.gameObject.IsDestroyedOrNull())
-				{
-					return;
-				}
-				__instance.SetVisor(__instance.currentVisor, __instance.viewAsset.GetAsset(), colorId);
+				__instance.PopulateFromViewData();
 			}), null);
 			return false;
 		}
@@ -79,10 +73,19 @@ public static class VisorPatch
 	{
 		if (instance.visors.ContainsKey(visorId)) { yield break; }
 
-		AddressableAsset<VisorViewData>? asset =
-			ExtremeVisorManager.VisorData.TryGetValue(visorId, out var visor) ?
-			VisorAddressableAsset.CreateAsset(visor) :
-			FastDestroyableSingleton<HatManager>.Instance.GetVisorById(visorId).CreateAddressableAsset();
+		AddressableAsset<VisorViewData>? asset;
+
+		if (ExtremeVisorManager.VisorData.TryGetValue(visorId, out var visor) && visor != null)
+		{
+			asset = VisorAddressableAsset.CreateAsset(visor);
+		}
+		else
+		{
+			var visorData = FastDestroyableSingleton<HatManager>.Instance.GetVisorById(visorId);
+			if (visorData == null) { yield break; }
+			asset = visorData.CreateAddressableAsset();
+		}
+
 		instance.allCachedAssets.Add(asset);
 		yield return asset.CoLoadAsync(null);
 		instance.visors[visorId] = asset;

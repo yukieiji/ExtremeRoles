@@ -50,7 +50,10 @@ public static class PbExileControllerAnimePatch
 		yield return Effects.Bloop(0f, __instance.ImpostorText.transform, 1f, 0.5f);
 		yield return new WaitForSeconds(0.5f);
 		yield return hud.CoFadeFullScreen(Color.clear, Color.black, 0.2f, false);
-
+		if (__instance.finalSinkCoroutine != null)
+		{
+			__instance.StopCoroutine(__instance.finalSinkCoroutine);
+		}
 		yield return ExtremeSpawnSelectorMinigame.WrapUpAndSpawn(__instance);
 
 		yield break;

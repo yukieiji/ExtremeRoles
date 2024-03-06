@@ -58,7 +58,7 @@ public sealed class PutVisorHandler : IRequestHandler
 
 		bool hasReloadVisor =
 			CachedPlayerControl.LocalPlayer != null &&
-			CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.visor.currentVisor.ProductId == id;
+			CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.visor.visorData.ProductId == id;
 
 		if (hasReloadVisor)
 		{

@@ -140,12 +140,11 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
             PlayerCustomizationData playerSkinData = DataManager.Player.Customization;
 
-            for (int i = 0; i < numVisor; i++)
+			int index = 0;
+            foreach(var vi in visores)
             {
-                VisorData vi = visores[i];
-
                 ColorChip colorChip = CustomCosmicTab.SetColorChip(
-                    __instance, i, offset);
+                    __instance, index, offset);
 
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                 {
@@ -174,7 +173,14 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 				vi.SetPreview(colorChip.Inner.FrontLayer, color);
 
                 __instance.ColorChips.Add(colorChip);
-            }
+
+				index++;
+				if (!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+						vi.ProdId, __instance.PlayerPreview.GetIgnoreLongMode()))
+				{
+					colorChip.SetUnavailable();
+				}
+			}
         }
     }
 #endif

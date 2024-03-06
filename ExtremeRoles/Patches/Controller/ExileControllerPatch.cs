@@ -189,9 +189,18 @@ public static class ExileControllerBeginePatch
 				exiled, PlayerOutfitType.Default,
 				PlayerMaterial.MaskType.Exile, false, (Il2CppSystem.Action)(() =>
 			{
-				SkinViewData skin = CachedShipStatus.Instance.CosmeticsCache.GetSkin(
-					exiled.Outfits[PlayerOutfitType.Default].SkinId);
-				instance.Player.FixSkinSprite(skin.EjectFrame);
+				string exiledPlayerSkinId = exiled.Outfits[PlayerOutfitType.Default].SkinId;
+
+				SkinViewData skin = CachedShipStatus.Instance.CosmeticsCache.GetSkin(exiledPlayerSkinId);
+				if (!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+						exiledPlayerSkinId, instance.Player.GetIgnoreLongMode()))
+				{
+					skin = ShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");
+				}
+
+				var showFrame = instance.useIdleAnim ? skin.IdleFrame : skin.EjectFrame;
+
+				instance.Player.FixSkinSprite(showFrame);
 			}));
 			instance.Player.ToggleName(false);
             instance.Player.SetCustomHatPosition(instance.exileHatPosition);
