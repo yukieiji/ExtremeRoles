@@ -21,7 +21,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 	public Vector2 PrevForce { get; private set; }
 
 	private float speed;
-	private float friction;
+	private float frictionMulti;
 	private float maxSpeed;
 
 	public SkaterSkateBehaviour(IntPtr ptr) : base(ptr) { }
@@ -31,7 +31,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 	public void Initialize(in Parameter param)
 	{
 		this.speed = param.Acceleration * SpeedOffset * Time.fixedDeltaTime;
-		this.friction = param.Friction * Time.fixedDeltaTime;
+		this.frictionMulti = (1 - param.Friction) * Time.fixedDeltaTime;
 		this.maxSpeed = param.MaxSpeed * SpeedOffset;
 	}
 
@@ -72,15 +72,15 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 			directionVector.y = directionVector.y - 1f;
 		}
 
-		Vector2 addForce =
+		Vector2 forceVector =
 			directionVector == Vector2.zero ?
-			-(this.PrevForce * this.friction) : directionVector * this.speed;
+			this.PrevForce * this.frictionMulti :
+			this.PrevForce + (directionVector * this.speed);
 
-		Vector2 forceVector = this.PrevForce + addForce;
 		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
 
 		this.PrevForce = clampedVector;
 
-		CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D.AddForce(clampedVector);
+		pc.rigidbody2D.AddForce(clampedVector);
 	}
 }
