@@ -15,13 +15,14 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 {
 	public const float SpeedOffset = 32.0f;
 
-	public record struct Parameter(float Friction, float Acceleration, float MaxSpeed);
+	public record struct Parameter(float Friction, float Acceleration, float MaxSpeed, float? E=null);
 
 	[HideFromIl2Cpp]
 	public Vector2 PrevForce { get; private set; }
 
 	private float speed;
 	private float frictionMulti;
+	private float? e;
 	private float maxSpeed;
 
 	public SkaterSkateBehaviour(IntPtr ptr) : base(ptr) { }
@@ -33,6 +34,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 		this.speed = param.Acceleration * SpeedOffset * Time.fixedDeltaTime;
 		this.frictionMulti = (1 - param.Friction) * Time.fixedDeltaTime;
 		this.maxSpeed = param.MaxSpeed * SpeedOffset;
+		this.e = param.E;
 	}
 
 	public void FixedUpdate()
@@ -78,6 +80,12 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 			this.PrevForce + (directionVector * this.speed);
 
 		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
+
+		if (this.e.HasValue &&
+			pc.Collider.Raycast())
+		{
+			clampedVector = -clampedVector * this.e.Value;
+		}
 
 		this.PrevForce = clampedVector;
 

@@ -28,6 +28,8 @@ public sealed class Skater :
 		Acceleration,
 		MaxSpeed,
 		Friction,
+		UseE,
+		EValue,
 		CanUseSpeed
 	}
 
@@ -79,6 +81,14 @@ public sealed class Skater :
 			Option.Friction,
 			0.25f, -1.0f, 1.0f, 0.01f,
 			parentOps);
+		var eOpt = CreateBoolOption(
+			Option.UseE, true, parentOps);
+		CreateFloatOption(
+			Option.EValue,
+			0.9f, 0.0f, 1.0f, 0.0025f,
+			eOpt,
+			invert: true,
+			enableCheckOption: parentOps);
 		CreateFloatOption(
 			Option.CanUseSpeed,
 			2.0f, 0.0f, 50.0f, 0.1f,
@@ -93,7 +103,8 @@ public sealed class Skater :
 		this.param = new SkaterSkateBehaviour.Parameter(
 			opt.GetValue<float>(this.GetRoleOptionId(Option.Friction)),
 			opt.GetValue<float>(this.GetRoleOptionId(Option.Acceleration)),
-			opt.GetValue<int>(this.GetRoleOptionId(Option.MaxSpeed)));
+			opt.GetValue<int>(this.GetRoleOptionId(Option.MaxSpeed)),
+			opt.GetValue<bool>(this.GetRoleOptionId(Option.UseE)) ? opt.GetValue<float>(this.GetRoleOptionId(Option.EValue)) : null);
 		this.canUseSpeed =
 			opt.GetValue<float>(this.GetRoleOptionId(Option.CanUseSpeed)) *
 			SkaterSkateBehaviour.SpeedOffset;
