@@ -10,11 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
-[Il2CppRegister(
-	new Type[]
-	{
-		typeof(IUsable)
-	})]
+[Il2CppRegister([ typeof(IUsable) ])]
 public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 {
 	public interface IBehavior
