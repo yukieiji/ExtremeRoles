@@ -45,7 +45,7 @@ internal sealed class AllPlayerArrows
 
                 var text = GameObject.Instantiate(
                     Prefab.Text, playerArrow.Main.transform);
-                text.fontSize = text.fontSizeMax = text.fontSizeMin = 3.8f;
+                text.fontSize = text.fontSizeMax = text.fontSizeMin = 3.25f;
                 Object.Destroy(text.fontMaterial);
                 text.fontMaterial = UnityEngine.Object.Instantiate(
                     FastDestroyableSingleton<HudManager>.Instance.UseButton.buttonLabelText.fontMaterial,

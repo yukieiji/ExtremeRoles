@@ -205,6 +205,27 @@ public static class GameSystem
 		}
 	}
 
+	public static ArrowBehaviour GetArrowTemplate()
+	{
+		ArrowBehaviour? template = null;
+
+		foreach (var task in CachedShipStatus.Instance.SpecialTasks)
+		{
+			if (!task.IsTryCast<SabotageTask>(out var saboTask) ||
+				saboTask!.Arrows.Count == 0)
+			{
+				continue;
+			}
+			template = saboTask!.Arrows[0];
+			break;
+		}
+		if (template == null)
+		{
+			throw new ArgumentNullException("Arrow is Null!!");
+		}
+		return template;
+	}
+
 	public static ShipStatus GetShipObj(byte mapId)
 	{
 		byte optionMapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(

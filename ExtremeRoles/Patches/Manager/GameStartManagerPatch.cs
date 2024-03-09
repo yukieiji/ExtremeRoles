@@ -125,10 +125,6 @@ public static class GameStartManagerPatch
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
     public static void StartPostfix(GameStartManager __instance)
     {
-        if (Module.Prefab.Arrow == null)
-        {
-            Module.Prefab.Arrow = __instance.StartButton.sprite;
-        }
         updateText(__instance, DataManager.Settings.Gameplay.StreamerMode);
     }
 

@@ -157,7 +157,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			if (owner == null || !owner.AmOwner) { return; }
 
-			ArrowBehaviour arrow = ExtremePlayerTask.IBehavior.GetArrowTemplate();
+			ArrowBehaviour arrow = GameSystem.GetArrowTemplate();
 
 			foreach (var (index, console) in this.system.setBomb)
 			{

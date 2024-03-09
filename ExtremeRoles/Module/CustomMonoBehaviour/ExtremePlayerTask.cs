@@ -29,27 +29,6 @@ public sealed class ExtremePlayerTask : PlayerTask
 		public void OnRemove();
 		public void OnComplete();
 
-		protected static ArrowBehaviour GetArrowTemplate()
-		{
-			ArrowBehaviour? template = null;
-
-			foreach (var task in CachedShipStatus.Instance.SpecialTasks)
-			{
-				if (!task.IsTryCast<SabotageTask>(out var saboTask) ||
-					saboTask!.Arrows.Count == 0)
-				{
-					continue;
-				}
-				template = saboTask!.Arrows[0];
-				break;
-			}
-			if (template == null)
-			{
-				throw new ArgumentNullException("Arrow is Null!!");
-			}
-			return template;
-		}
-
 		protected static void CloseMinigame<T>() where T : Minigame
 		{
 			if (Minigame.Instance.IsTryCast<T>(out var targetMinigame) &&
