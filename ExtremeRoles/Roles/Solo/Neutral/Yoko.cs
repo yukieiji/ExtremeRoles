@@ -38,7 +38,7 @@ public sealed class Yoko :
     private float timer;
     private int trueInfoGage;
 
-    private TMPro.TextMeshPro tellText;
+    private TMPro.TextMeshPro? tellText;
 	private YokoYashiroSystem? yashiro;
 
     private readonly HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
@@ -166,25 +166,32 @@ public sealed class Yoko :
 
         foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-            SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
 
-            if (!player.Disconnected &&
-                (player.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId) &&
-                !player.IsDead && !this.IsSameTeam(targetRole))
-            {
-                PlayerControl @object = player.Object;
-                if (@object)
-                {
-                    Vector2 vector = @object.GetTruePosition() - truePosition;
-                    float magnitude = vector.magnitude;
-                    if (magnitude <= this.searchRange && this.isEnemy(targetRole))
-                    {
-                        isEnemy = true;
-                        break;
-                    }
-                }
-            }
-        }
+			if (player == null ||
+				player.Disconnected ||
+				player.IsDead ||
+				player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+			{
+				continue;
+			}
+
+			PlayerControl @object = player.Object;
+			SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
+
+			if (@object == null || this.IsSameTeam(targetRole))
+			{
+				continue;
+			}
+
+			Vector2 vector = @object.GetTruePosition() - truePosition;
+			float magnitude = vector.magnitude;
+			if (magnitude <= this.searchRange &&
+				this.isEnemy(targetRole))
+			{
+				isEnemy = true;
+				break;
+			}
+		}
 
         if (this.trueInfoGage <= RandomGenerator.Instance.Next(101))
         {
