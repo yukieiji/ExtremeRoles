@@ -1,4 +1,5 @@
-﻿using Hazel;
+﻿using System;
+using Hazel;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -11,6 +12,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Extension.Il2Cpp;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -55,10 +57,10 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 			get
 			{
 				GameObject obj =
-					Loader.GetUnityObjectFromResources<GameObject>(
-						Path.TeroristTeroMinigameAsset,
-						Path.TeroristTeroMinigamePrefab);
-				return obj.GetComponent<TeroristTeroSabotageMinigame>();
+					Loader.GetUnityObjectFromPath<GameObject>(
+						"THIS IS PLACEHOLDER",
+						"assets/roles/yokominigame.prefab");
+				return obj.GetComponent<YokoYashiroStatusUpdateMinigame>();
 			}
 		}
 
@@ -75,6 +77,13 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 		{
 			// Idセット処理
 			var minigame = MinigameSystem.Create(prefab);
+
+			if (!minigame.IsTryCast<YokoYashiroStatusUpdateMinigame>(out var teroMiniGame))
+			{
+				throw new ArgumentException("Minigame Missing");
+			}
+			teroMiniGame!.Info = this.Info;
+			teroMiniGame!.Begin(null);
 		}
 	}
 
