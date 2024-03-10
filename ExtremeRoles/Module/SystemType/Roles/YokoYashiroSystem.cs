@@ -20,6 +20,8 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class YokoYashiroSystem : IDirtableSystemType
 {
+	public const ExtremeSystemType Type = ExtremeSystemType.YokoYashiro;
+
 	public bool IsDirty { get; private set; } = false;
 
 	public sealed class YashiroInfo(RolePlayerId id)
@@ -252,6 +254,16 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 
 		this.allInfo.Add(id, info);
 		this.yashiroPos.Add(id, pos);
+	}
+
+	public void UpdateNextStatus(in YashiroInfo info)
+	{
+		var targetStatus = info.Status switch
+		{
+			YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
+			_ => YashiroInfo.StatusType.Deactive
+		};
+		updateYashiroInfo(info, targetStatus);
 	}
 
 	private void updateYashiroInfo(in YashiroInfo info, YashiroInfo.StatusType targetStatus)

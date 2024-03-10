@@ -7,6 +7,7 @@ using TMPro;
 
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
@@ -28,6 +29,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 	private readonly List<YokoYashiroLinePoint> drawPoint = new List<YokoYashiroLinePoint>();
 
 	private YokoYashiroLinePoint curPoint => this.allPoint[this.curPointIndex];
+	private bool isClose = false;
 
 	private Vector2 curMousePoint
 	{
@@ -87,10 +89,20 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		}
 
 		this.Info.Timer -= Time.fixedDeltaTime;
-		this.statusText.text = $"現在の社：{this.Info.Status}、次の状態に変化するまで{this.Info.Timer}秒";
+		this.statusText.text = $"現在の社の状態：{this.Info.Status}\nへ以降まで{this.Info.Timer}秒";
 
-		if (this.curPointIndex == this.allPoint.Count)
+		if (!this.isClose &&
+			this.curPointIndex == this.allPoint.Count)
 		{
+			this.isClose = true;
+			if (ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(
+				YokoYashiroSystem.Type, out var system) &&
+				system is not null)
+			{
+				system.UpdateNextStatus(this.Info);
+			}
+			// テキストを表示
+			this.AbstractClose();
 			return;
 		}
 
