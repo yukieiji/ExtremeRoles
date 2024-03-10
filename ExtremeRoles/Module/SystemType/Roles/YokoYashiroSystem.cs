@@ -16,7 +16,7 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 {
 	public bool IsDirty { get; private set; } = false;
 
-	public sealed class YashiroInfo(int id)
+	public sealed class YashiroInfo(RolePlayerId id)
 	{
 		public enum StatusType : byte
 		{
@@ -25,7 +25,7 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 			Seal
 		}
 
-		public int Id { get; init; } = id;
+		public RolePlayerId Id { get; init; } = id;
 		public StatusType Status { get; set; }
 		public float Timer { get; set; } = 0.0f;
 		public bool IsDirty { get; set; }
@@ -76,17 +76,17 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 
 	public enum Ops : byte
 	{
-		Set,
+		SetHost,
 		Resync,
 		Update,
 	}
 
-	private readonly Dictionary<int, YashiroInfo> allInfo = new Dictionary<int, YashiroInfo>();
-	private int id = 0;
-
+	private readonly Dictionary<RolePlayerId, YashiroInfo> allInfo = new Dictionary<RolePlayerId, YashiroInfo>();
+	private readonly Dictionary<RolePlayerId, Vector2> yashiroPos = new Dictionary<RolePlayerId, Vector2>();
 	private readonly float activeTime = 0.0f;
 	private readonly float sealTime = 0.0f;
 	private readonly ExtremeConsoleSystem consoleSystem;
+	private readonly RolePlayerIdGenerator gen = new RolePlayerIdGenerator();
 
 	public YokoYashiroSystem(float activeTime, float sealTime)
 	{
@@ -103,11 +103,12 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 		int count = reader.ReadPackedInt32();
 		for (int i = 0; i < count; ++i)
 		{
-			int id = reader.ReadPackedInt32();
-			if (this.allInfo.TryGetValue(id, out var info))
+			var id = RolePlayerId.DeserializeConstruct(reader);
+			if (!this.allInfo.TryGetValue(id, out var info))
 			{
-				info.Deserialize(reader);
+				continue;
 			}
+			info.Deserialize(reader);
 		}
 		this.IsDirty = initialState;
 	}
@@ -160,36 +161,31 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 			{
 				continue;
 			}
-			writer.WritePacked(info.Id);
 
-			var prevStatus = info.Status;
+			info.Id.Serialize(writer);
 			info.Serialize(writer);
-
-			if (prevStatus != info.Status)
-			{
-				// 設置オブジェクトの色の変更処理
-			}
 		}
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 		Ops ops = (Ops)msgReader.ReadByte();
-		int id = msgReader.ReadPackedInt32();
 		switch (ops)
 		{
 			// ここは全員が通すようにする
-			case Ops.Set:
+			case Ops.SetHost:
 				// 社設置処理
+				int controlId = msgReader.ReadPackedInt32();
 				float x = msgReader.ReadSingle();
 				float y = msgReader.ReadSingle();
-				this.setYashiro(id, new Vector2(x, y));
+				this.createYashiro(controlId, new Vector2(x, y));
 				this.IsDirty = false;
 				break;
 			case Ops.Resync:
+				var resyncId = RolePlayerId.DeserializeConstruct(msgReader);
 				lock (this.allInfo)
 				{
-					if (this.allInfo.TryGetValue(id, out var resyncInfo))
+					if (this.allInfo.TryGetValue(resyncId, out var resyncInfo))
 					{
 						resyncInfo.IsDirty = true;
 					}
@@ -197,10 +193,11 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 				this.IsDirty = true;
 				break;
 			case Ops.Update:
+				var updateId = RolePlayerId.DeserializeConstruct(msgReader);
 				var newStatus = (YashiroInfo.StatusType)msgReader.ReadByte();
 				lock (this.allInfo)
 				{
-					if (this.allInfo.TryGetValue(id, out var updateInfo))
+					if (this.allInfo.TryGetValue(updateId, out var updateInfo))
 					{
 						updateYashiroInfo(updateInfo, newStatus);
 						updateInfo.IsDirty = true;
@@ -209,12 +206,13 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 				this.IsDirty = true;
 				break;
 			default:
-				break;
+				return;
 		}
 	}
 
-	private void setYashiro(in int id, in Vector2 pos)
+	private void createYashiro(in int controlId, in Vector2 pos)
 	{
+		var id = this.gen.Generate(controlId);
 		var info = new YashiroInfo(id);
 		var consoleBehavior = new YashiroConsoleBehavior(info);
 
@@ -227,6 +225,9 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 		var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 		colider.isTrigger = true;
 		colider.radius = 0.1f;
+
+		this.allInfo.Add(id, info);
+		this.yashiroPos.Add(id, pos);
 	}
 
 	private void updateYashiroInfo(in YashiroInfo info, YashiroInfo.StatusType targetStatus)
