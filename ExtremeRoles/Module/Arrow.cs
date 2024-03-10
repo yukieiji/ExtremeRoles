@@ -1,88 +1,78 @@
 ﻿using UnityEngine;
 
-using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Module
+namespace ExtremeRoles.Module;
+
+#nullable enable
+
+public sealed class Arrow
 {
-
-	public sealed class Arrow
+	public GameObject Main
 	{
-		public GameObject Main
+		get => this.arrowBehaviour.gameObject;
+	}
+
+	public Vector3 Target { get; private set; }
+
+	private readonly ArrowBehaviour arrowBehaviour;
+	private static readonly Vector3 defaultPos = new Vector3(100.0f, 100.0f, 100.0f);
+	private static ArrowBehaviour? arrow = null;
+
+	public Arrow(Color color)
+	{
+		if (arrow == null)
 		{
-			get => this.body;
+			arrow = GameSystem.GetArrowTemplate();
 		}
 
-		public Vector3 Target { get; private set; }
+		this.arrowBehaviour = Object.Instantiate(arrow);
+		this.arrowBehaviour.gameObject.SetActive(true);
+		this.arrowBehaviour.image.color = color;
+		this.arrowBehaviour.MaxScale = 0.75f;
 
-		private const float xzMaxSize = 0.4f;
-		private const float yMaxSize = 0.525f;
+		this.Target = defaultPos;
+	}
 
-		private GameObject body;
-		private SpriteRenderer image;
-		private ArrowBehaviour arrowBehaviour;
-		private static readonly Vector3 defaultPos = new Vector3(100.0f, 100.0f, 100.0f);
-
-		public Arrow(Color color)
+	public void Update()
+	{
+		if (this.Target == defaultPos)
 		{
-			this.body = new GameObject("Arrow");
+			this.Target = Vector3.zero;
+		}
+		UpdateTarget();
+	}
 
-			this.body.layer = 5;
-			this.image = this.body.AddComponent<SpriteRenderer>();
+	public void SetColor(Color? color = null)
+	{
+		if (color.HasValue)
+		{
+			this.arrowBehaviour.image.color = color.Value;
+		}
+	}
 
-			if (Prefab.Arrow != null)
-			{
-				this.image.sprite = Prefab.Arrow;
-			}
-			this.image.color = color;
-			this.arrowBehaviour = this.body.AddComponent<ArrowBehaviour>();
-			this.arrowBehaviour.image = this.image;
+	public void UpdateTarget(Vector3? target = null)
+	{
+		if (this.arrowBehaviour == null) { return; }
 
-			Resizeer resizer = this.body.AddComponent<Resizeer>();
-			resizer.SetScale(xzMaxSize, yMaxSize, xzMaxSize);
-			this.Target = defaultPos;
+		if (target.HasValue)
+		{
+			this.Target = target.Value;
 		}
 
-		public void Update()
-		{
-			if (Prefab.Arrow != null && this.image == null)
-			{
-				this.image.sprite = Prefab.Arrow;
-			}
-			if (this.Target == defaultPos)
-			{
-				this.Target = Vector3.zero;
-			}
-			UpdateTarget();
-		}
+		this.arrowBehaviour.target = this.Target;
+	}
 
-		public void SetColor(Color? color = null)
-		{
-			if (color.HasValue) { this.image.color = color.Value; };
-		}
+	public void Clear()
+	{
+		if (this.arrowBehaviour == null) { return; }
 
-		public void UpdateTarget(Vector3? target = null)
-		{
-			if (this.body == null) { return; }
+		Object.Destroy(this.arrowBehaviour);
+	}
+	public void SetActive(bool active)
+	{
+		if (this.arrowBehaviour == null) { return; }
 
-			if (target.HasValue)
-			{
-				this.Target = target.Value;
-			}
-
-			this.arrowBehaviour.target = this.Target;
-			this.arrowBehaviour.Update();
-		}
-
-		public void Clear()
-		{
-			Object.Destroy(this.body);
-		}
-		public void SetActive(bool active)
-		{
-			if (this.body != null)
-			{
-				this.body.SetActive(active);
-			}
-		}
+		this.arrowBehaviour.gameObject.SetActive(active);
 	}
 }
