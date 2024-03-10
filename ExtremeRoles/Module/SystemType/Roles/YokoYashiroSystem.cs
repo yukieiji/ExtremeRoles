@@ -80,10 +80,19 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 			// Idセット処理
 			var minigame = MinigameSystem.Create(prefab);
 
+			// ホストにこの社の情報をシンクロするように要請
+			ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
+				Type, x =>
+				{
+					x.Write((byte)Ops.Resync);
+					this.Info.Id.Serialize(x);
+				});
+
 			if (!minigame.IsTryCast<YokoYashiroStatusUpdateMinigame>(out var teroMiniGame))
 			{
 				throw new ArgumentException("Minigame Missing");
 			}
+
 			teroMiniGame!.Info = this.Info;
 			teroMiniGame!.Begin(null);
 		}
@@ -91,7 +100,7 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 
 	public enum Ops : byte
 	{
-		SetHost,
+		Set,
 		Resync,
 		Update,
 	}
@@ -199,7 +208,7 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 		switch (ops)
 		{
 			// ここは全員が通すようにする
-			case Ops.SetHost:
+			case Ops.Set:
 				// 社設置処理
 				int controlId = msgReader.ReadPackedInt32();
 				float x = msgReader.ReadSingle();
@@ -254,6 +263,19 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 
 		this.allInfo.Add(id, info);
 		this.yashiroPos.Add(id, pos);
+	}
+
+	public void RpcUpdateNextStatus(YashiroInfo info)
+	{
+		UpdateNextStatus(info);
+
+		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
+			Type, x =>
+			{
+				x.Write((byte)Ops.Update);
+				info.Id.Serialize(x);
+				x.Write((byte)info.Status);
+			});
 	}
 
 	public void UpdateNextStatus(in YashiroInfo info)

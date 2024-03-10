@@ -99,7 +99,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 				YokoYashiroSystem.Type, out var system) &&
 				system is not null)
 			{
-				system.UpdateNextStatus(this.Info);
+				system.RpcUpdateNextStatus(this.Info);
 			}
 			// テキストを表示
 			this.AbstractClose();
