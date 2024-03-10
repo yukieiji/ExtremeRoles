@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -13,6 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -37,6 +39,7 @@ public sealed class Yoko :
     private int trueInfoGage;
 
     private TMPro.TextMeshPro tellText;
+	private YokoYashiroSystem? yashiro;
 
     private readonly HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
     {
@@ -81,7 +84,12 @@ public sealed class Yoko :
         }
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
+	public override bool TryRolePlayerKilledFrom(
+		PlayerControl rolePlayer, PlayerControl fromPlayer)
+		=> this.yashiro is null || !this.yashiro.IsNearActiveYashiro(
+			rolePlayer.GetTruePosition());
+
+	public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(

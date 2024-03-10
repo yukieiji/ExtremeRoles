@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using System.Linq;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
@@ -11,6 +13,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
+
+#nullable enable
 
 public sealed class YokoYashiroSystem : IDirtableSystemType
 {
@@ -85,18 +89,29 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 	private readonly Dictionary<RolePlayerId, Vector2> yashiroPos = new Dictionary<RolePlayerId, Vector2>();
 	private readonly float activeTime = 0.0f;
 	private readonly float sealTime = 0.0f;
+	private readonly float range;
 	private readonly ExtremeConsoleSystem consoleSystem;
 	private readonly RolePlayerIdGenerator gen = new RolePlayerIdGenerator();
 
-	public YokoYashiroSystem(float activeTime, float sealTime)
+	public YokoYashiroSystem(float activeTime, float sealTime, float range)
 	{
 		this.activeTime = activeTime;
 		this.sealTime = sealTime;
+		this.range = range * range;
 
 		this.consoleSystem = ExtremeConsoleSystem.Create();
 
 		this.allInfo.Clear();
 	}
+
+	public bool IsNearActiveYashiro(Vector2 pos)
+		=> this.yashiroPos
+			.Where(x =>
+				this.allInfo.TryGetValue(x.Key, out var info) &&
+				info != null &&
+				info.Status == YashiroInfo.StatusType.Active &&
+				(x.Value - pos).magnitude <= this.range)
+			.Any();
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
@@ -149,7 +164,7 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 		}
 	}
 
-	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
+	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{ }
 
 	public void Serialize(MessageWriter writer, bool initialState)
