@@ -13,6 +13,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
@@ -181,15 +182,17 @@ public sealed class Yoko :
 		{
 			float activeTime = opt.GetValue<bool>(
 				GetRoleOptionId(YokoOption.YashiroActiveIsInfinity)) ?
-			float.MaxValue : opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroActiveTime));
+			float.MaxValue : opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroActiveTime));
 			float sealTime = opt.GetValue<bool>(
 				GetRoleOptionId(YokoOption.YashiroSeelIsInfinity)) ?
-				float.MaxValue : opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroSeelTime));
+				float.MaxValue : opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroSeelTime));
 			float protectRange = opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroProtectRange));
 			bool isUpdateMeeting = opt.GetValue<bool>(
 				GetRoleOptionId(YokoOption.YashiroUpdateWithMeeting));
 
-			this.yashiro = new YokoYashiroSystem(activeTime, sealTime, protectRange, isUpdateMeeting);
+			this.yashiro = ExtremeSystemTypeManager.Instance.CreateOrGet(
+				YokoYashiroSystem.Type,
+				() => new YokoYashiroSystem(activeTime, sealTime, protectRange, isUpdateMeeting));
 		}
 
 		this.timer = this.searchTime;
