@@ -7,6 +7,7 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Task;
@@ -16,7 +17,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using CollectionEnum = System.Collections.IEnumerator;
 using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.Task;
 using ConsoleInfo = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ConsoleInfo;
-using ExtremeRoles.Helper;
 
 #nullable enable
 
