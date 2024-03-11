@@ -165,6 +165,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		return system;
 	}
 
+	[HideFromIl2Cpp]
 	public T CreateOrGet<T>(ExtremeSystemType systemType, Func<T> construnctFunc) where T : class, IExtremeSystemType
 	{
 		if (!Instance.TryGet<T>(systemType, out var system) ||

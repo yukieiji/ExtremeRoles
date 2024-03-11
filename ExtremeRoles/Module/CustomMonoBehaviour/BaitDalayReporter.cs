@@ -7,6 +7,8 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
 
 using FloatAction = System.Action<float>;
+using Il2CppInterop.Runtime.Attributes;
+
 
 #nullable enable
 
@@ -89,6 +91,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 		}
 	}
 
+	[HideFromIl2Cpp]
 	private IEnumerator delayReport(float targetTime, GameData.PlayerInfo target)
 	{
 		if (this.text == null)

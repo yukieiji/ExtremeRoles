@@ -10,6 +10,8 @@ using BepInEx.Unity.IL2CPP.Utils;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
+using Il2CppInterop.Runtime.Attributes;
+
 
 #nullable enable
 
@@ -18,6 +20,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 [Il2CppRegister]
 public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 {
+	[HideFromIl2Cpp]
 	public YokoYashiroSystem.YashiroInfo? Info { private get; set; }
 
 	private YokoYashiroLinePoint? prefab;
@@ -128,6 +131,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		}
 	}
 
+	[HideFromIl2Cpp]
 	private IEnumerator closeAndShowText()
 	{
 		var text = this.transform.Find("CloseText").GetComponent<TextMeshPro>();
