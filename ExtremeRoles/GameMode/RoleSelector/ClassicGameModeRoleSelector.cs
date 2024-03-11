@@ -173,6 +173,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             CombinationRoleType.Guesser,
             CombinationRoleType.Mover,
 			CombinationRoleType.Accelerator,
+			CombinationRoleType.Skater,
 
 			CombinationRoleType.Traitor,
         ];
