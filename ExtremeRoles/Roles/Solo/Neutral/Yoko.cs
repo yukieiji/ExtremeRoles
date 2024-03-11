@@ -134,14 +134,14 @@ public sealed class Yoko :
 
 		var yashiroActiveOnOpt = CreateBoolOption(
 			YokoOption.YashiroActiveIsInfinity,
-			false);
+			false, yashiroOpt);
 		CreateIntOption(
 			YokoOption.YashiroActiveTime,
 			30, 1, 120, 1,
 			yashiroActiveOnOpt,
 			format: OptionUnit.Second,
 			invert: true,
-			enableCheckOption: yashiroActiveOnOpt);
+			enableCheckOption: yashiroOpt);
 		CreateFloatOption(
 			YokoOption.YashiroProtectRange,
 			5.0f, 1.0f, 10.0f, 0.1f,
@@ -149,14 +149,14 @@ public sealed class Yoko :
 
 		var yashiroSeelOnOpt = CreateBoolOption(
 			YokoOption.YashiroSeelIsInfinity,
-			false);
+			false, yashiroOpt);
 		CreateIntOption(
 			YokoOption.YashiroSeelTime,
 			10, 1, 120, 1,
 			yashiroSeelOnOpt,
 			format: OptionUnit.Second,
 			invert: true,
-			enableCheckOption: yashiroSeelOnOpt);
+			enableCheckOption: yashiroOpt);
 		CreateBoolOption(
 			YokoOption.YashiroUpdateWithMeeting,
 			true, yashiroOpt);
