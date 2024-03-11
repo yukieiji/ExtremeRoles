@@ -95,7 +95,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		}
 
 		this.Info.Timer -= Time.fixedDeltaTime;
-		this.statusText.text = $"現在の社の状態：{this.Info.Status}\nへ以降まで{this.Info.Timer}秒";
+		this.statusText.text = $"現在の社の状態：{this.Info.Status}\n<size=75%>へ以降まで{Mathf.Ceil(this.Info.Timer)}秒<size=75%>";
 
 		if (this.curPointIndex == this.allPoint.Count)
 		{
