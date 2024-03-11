@@ -133,13 +133,13 @@ public sealed class Yoko :
 		CreateIntOption(
 			YokoOption.YashiroActiveTime,
 			30, 1, 360, 1,
-			parentOps,
+			yashiroOpt,
 			format: OptionUnit.Second);
 
 		CreateIntOption(
 			YokoOption.YashiroSeelTime,
 			10, 1, 360, 1,
-			parentOps,
+			yashiroOpt,
 			format: OptionUnit.Second);
 
 		CreateFloatOption(
