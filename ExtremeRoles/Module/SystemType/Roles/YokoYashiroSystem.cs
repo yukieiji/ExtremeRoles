@@ -28,7 +28,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 	private readonly Dictionary<RolePlayerId, Vector2> yashiroPos = new Dictionary<RolePlayerId, Vector2>();
 	private readonly float activeTime = activeTime;
 	private readonly float sealTime = sealTime;
-	private readonly float range = range * range;
+	private readonly float range = range;
 	private readonly bool isChangeMeeting = isChangeMeeting;
 	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
 	private readonly RolePlayerIdGenerator gen = new RolePlayerIdGenerator();
@@ -125,7 +125,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 
 	public bool CanSet(Vector2 pos)
 		=> !this.yashiroPos.Values
-			.Where(x => (x - pos).magnitude > this.range * 2)
+			.Where(x => (x - pos).magnitude <= this.range * 2)
 			.Any();
 
 	public bool IsNearActiveYashiro(Vector2 pos)
