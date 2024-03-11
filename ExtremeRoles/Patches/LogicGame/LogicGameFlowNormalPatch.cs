@@ -218,6 +218,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
                     ExtremeRoleId.Eater      => RoleGameOverReason.EaterAllEatInTheShip,
                     ExtremeRoleId.Umbrer     => RoleGameOverReason.UmbrerBiohazard,
 					ExtremeRoleId.Hatter     => RoleGameOverReason.HatterEndlessTeaTime,
+					ExtremeRoleId.Artist     => RoleGameOverReason.ArtistShipToArt,
 					_ => RoleGameOverReason.UnKnown,
                 });
                 gameIsEnd(endReason);

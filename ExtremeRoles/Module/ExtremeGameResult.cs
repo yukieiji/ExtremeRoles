@@ -352,6 +352,10 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				replaceWinnerToSpecificNeutralRolePlayer(
 					neutralNoWinner, ExtremeRoleId.Hatter);
 				break;
+			case RoleGameOverReason.ArtistShipToArt:
+				replaceWinnerToSpecificNeutralRolePlayer(
+					neutralNoWinner, ExtremeRoleId.Artist);
+				break;
 			default:
 				break;
 		}

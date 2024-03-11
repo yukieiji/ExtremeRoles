@@ -111,7 +111,7 @@ public enum ExtremeRoleId : int
     Umbrer,
     Doll,
 	Hatter,
-
+	Artist,
 
 	Xion,
 }
@@ -180,6 +180,8 @@ public enum RoleGameOverReason
 
 	HatterEndlessTeaTime,
 	HatterTeaPartyTime,
+
+	ArtistShipToArt,
 
     UnKnown = 100,
 }
@@ -283,6 +285,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Madmate   , new Madmate()},
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
+			{(int)ExtremeRoleId.Artist    , new Artist()},
 		};
 
     public static readonly Dictionary<
