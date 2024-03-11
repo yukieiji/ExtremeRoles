@@ -16,7 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Artist :
 	SingleRoleBase,
-	IRoleAbility,
+	IRoleAutoBuildAbility,
 	IRoleUpdate,
 	IRoleSpecialReset
 {
@@ -76,7 +76,7 @@ public sealed class Artist :
 			this.CleanUp);
 	}
 
-    public bool IsAbilityUse() => this.IsCommonUse();
+    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()
     {
@@ -143,7 +143,6 @@ public sealed class Artist :
 			GetRoleOptionId(ArtistOption.CanUseVent));
 		this.winArea = allOption.GetValue<int>(
 			GetRoleOptionId(ArtistOption.WinAreaSize));
-        this.RoleAbilityInit();
     }
 
     public void ResetOnMeetingStart()
