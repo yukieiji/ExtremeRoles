@@ -61,7 +61,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 		}
 	}
 
-	public sealed class YashiroConsoleBehavior(in YashiroInfo info) : ExtremeConsole.IBehavior
+	public sealed class YashiroConsoleBehavior(in RolePlayerId id) : ExtremeConsole.IBehavior
 	{
 		private static Minigame prefab
 		{
@@ -79,30 +79,31 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 
 		public bool IsCheckWall => true;
 
-		public YashiroInfo Info { get; init; } = info;
+		public RolePlayerId Id { get; init; } = id;
 
 		public bool CanUse(GameData.PlayerInfo pc)
 			=> pc.Object.CanMove && !pc.IsDead;
 
 		public void Use()
 		{
-			// Idセット処理
-			var minigame = MinigameSystem.Create(prefab);
-
 			// ホストにこの社の情報をシンクロするように要請
 			ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
 				Type, x =>
 				{
 					x.Write((byte)Ops.Resync);
-					this.Info.Id.Serialize(x);
+					this.Id.Serialize(x);
 				});
 
-			if (!minigame.IsTryCast<YokoYashiroStatusUpdateMinigame>(out var teroMiniGame))
+			var minigame = MinigameSystem.Create(prefab);
+
+			if (!minigame.IsTryCast<YokoYashiroStatusUpdateMinigame>(out var teroMiniGame) ||
+				!ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(Type, out var system) ||
+				system is null)
 			{
 				throw new ArgumentException("Minigame Missing");
 			}
 
-			teroMiniGame!.Info = this.Info;
+			teroMiniGame!.Info = system.allInfo[this.Id];
 			teroMiniGame!.Begin(null);
 		}
 	}
@@ -113,6 +114,14 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 		Resync,
 		Update,
 	}
+
+	public static YashiroInfo.StatusType GetNextStatus(YashiroInfo.StatusType curStatus)
+		=> curStatus switch
+		{
+			YashiroInfo.StatusType.Deactive => YashiroInfo.StatusType.Active,
+			YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
+			_ => YashiroInfo.StatusType.Deactive
+		};
 
 	public bool CanSet(Vector2 pos)
 		=> !this.yashiroPos.Values
@@ -173,11 +182,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 				continue;
 			}
 
-			var targetStatus = info.Status switch
-			{
-				YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
-				_ => YashiroInfo.StatusType.Deactive
-			};
+			var targetStatus = GetNextStatus(info.Status);
 			updateYashiroInfo(info, targetStatus);
 			info.IsDirty = true;
 		}
@@ -235,12 +240,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 
 	public void UpdateNextStatus(in YashiroInfo info)
 	{
-		var targetStatus = info.Status switch
-		{
-			YashiroInfo.StatusType.Deactive => YashiroInfo.StatusType.Active,
-			YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
-			_ => YashiroInfo.StatusType.Deactive
-		};
+		var targetStatus = GetNextStatus(info.Status);
 		updateYashiroInfo(info, targetStatus);
 	}
 
@@ -259,6 +259,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 				this.IsDirty = false;
 				break;
 			case Ops.Resync:
+				Logging.Debug("Resync!! Status");
 				var resyncId = RolePlayerId.DeserializeConstruct(msgReader);
 				lock (this.allInfo)
 				{
@@ -291,7 +292,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 	{
 		var id = this.gen.Generate(controlId);
 		var info = new YashiroInfo(id);
-		var consoleBehavior = new YashiroConsoleBehavior(info);
+		var consoleBehavior = new YashiroConsoleBehavior(id);
 
 		var newConsole = this.consoleSystem.CreateConsoleObj(
 			pos, "Yashiro", consoleBehavior);

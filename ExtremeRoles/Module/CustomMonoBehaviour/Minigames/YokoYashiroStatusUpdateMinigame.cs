@@ -8,9 +8,9 @@ using TMPro;
 using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppInterop.Runtime.Attributes;
 
-using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 #nullable enable
 
@@ -20,7 +20,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 {
 	[HideFromIl2Cpp]
-	public YokoYashiroSystem.YashiroInfo? Info { private get; set; }
+	public YokoYashiroSystem.YashiroInfo? Info { get; set; }
 
 	private YokoYashiroLinePoint? prefab;
 	private LineRenderer? line;
@@ -89,27 +89,37 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		if (this.Info is null ||
 			this.statusText == null ||
 			this.line == null ||
-			this.anchor == null)
+			this.anchor == null ||
+			this.Info.Status is YokoYashiroSystem.YashiroInfo.StatusType.Seal)
 		{
 			return;
 		}
-
-		this.Info.Timer -= Time.fixedDeltaTime;
-		this.statusText.text = $"現在の社の状態：{this.Info.Status}\n<size=75%>へ以降まで{Mathf.Ceil(this.Info.Timer)}秒<size=75%>";
 
 		if (this.curPointIndex == this.allPoint.Count)
 		{
 			if (!this.isClose)
 			{
-				if (ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(
-					YokoYashiroSystem.Type, out var system) &&
-					system is not null)
-				{
-					system.RpcUpdateNextStatus(this.Info);
-				}
+				this.isClose = true;
+				updateNextStatus();
 				this.StartCoroutine(this.closeAndShowText());
 			}
 			return;
+		}
+
+		var nextStatus = YokoYashiroSystem.GetNextStatus(this.Info.Status);
+		if (this.Info.Status is YokoYashiroSystem.YashiroInfo.StatusType.Deactive ||
+			this.Info.Timer == float.MaxValue)
+		{
+			this.statusText.text = $"現在の社の状態：{this.Info.Status}";
+		}
+		else
+		{
+			this.Info.Timer -= Time.fixedDeltaTime;
+			this.statusText.text = $"現在の社の状態：{this.Info.Status}\n<size=75%>{nextStatus}へ以降まで{Mathf.Ceil(this.Info.Timer)}秒<size=75%>";
+			if (this.Info.Timer < 0.0f)
+			{
+				updateNextStatus();
+			}
 		}
 
 		if (Input.GetMouseButton(0))
@@ -172,6 +182,17 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		Vector2 pointPos = this.curPoint.transform.position;
 		Vector2 diff = pointPos - source;
 		return diff.magnitude <= 0.35f;
+	}
+
+	private void updateNextStatus()
+	{
+		if (ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(
+				YokoYashiroSystem.Type, out var system) &&
+			system is not null &&
+			this.Info is not null)
+		{
+			system.RpcUpdateNextStatus(this.Info);
+		}
 	}
 
 	private void resetLine()
