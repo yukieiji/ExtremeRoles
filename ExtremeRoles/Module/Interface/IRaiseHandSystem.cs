@@ -8,16 +8,10 @@ public interface IRaiseHandSystem : IDirtableSystemType
 	public bool IsInit { get; }
 
 	public static IRaiseHandSystem Get()
-	{
-		var systemMng = ExtremeSystemTypeManager.Instance;
-		if (!systemMng.TryGet<IRaiseHandSystem>(RaiseHandSystem.Type, out var sytem) ||
-			sytem == null)
-		{
-			sytem = PublicBeta.Instance.IsEnableWithMode ? new RaiseHandSystemToggle() : new RaiseHandSystem();
-			systemMng.TryAdd(RaiseHandSystem.Type, sytem);
-		}
-		return sytem;
-	}
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet<IRaiseHandSystem>(
+			RaiseHandSystem.Type,
+			() => PublicBeta.Instance.IsEnableWithMode ?
+				new RaiseHandSystemToggle() : new RaiseHandSystem());
 
 	public void CreateRaiseHandButton();
 	public void AddHand(PlayerVoteArea player);
