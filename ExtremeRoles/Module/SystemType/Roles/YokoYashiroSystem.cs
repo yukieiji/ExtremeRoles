@@ -18,11 +18,20 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 
-public sealed class YokoYashiroSystem : IDirtableSystemType
+public sealed class YokoYashiroSystem(float activeTime, float sealTime, float range, bool isChangeMeeting) : IDirtableSystemType
 {
 	public const ExtremeSystemType Type = ExtremeSystemType.YokoYashiro;
 
 	public bool IsDirty { get; private set; } = false;
+
+	private readonly Dictionary<RolePlayerId, YashiroInfo> allInfo = new Dictionary<RolePlayerId, YashiroInfo>();
+	private readonly Dictionary<RolePlayerId, Vector2> yashiroPos = new Dictionary<RolePlayerId, Vector2>();
+	private readonly float activeTime = activeTime;
+	private readonly float sealTime = sealTime;
+	private readonly float range = range * range;
+	private readonly bool isChangeMeeting = isChangeMeeting;
+	private readonly ExtremeConsoleSystem consoleSystem = ExtremeConsoleSystem.Create();
+	private readonly RolePlayerIdGenerator gen = new RolePlayerIdGenerator();
 
 	public sealed class YashiroInfo(RolePlayerId id)
 	{
@@ -105,24 +114,6 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 		Update,
 	}
 
-	private readonly Dictionary<RolePlayerId, YashiroInfo> allInfo = new Dictionary<RolePlayerId, YashiroInfo>();
-	private readonly Dictionary<RolePlayerId, Vector2> yashiroPos = new Dictionary<RolePlayerId, Vector2>();
-	private readonly float activeTime = 0.0f;
-	private readonly float sealTime = 0.0f;
-	private readonly float range;
-	private readonly ExtremeConsoleSystem consoleSystem;
-	private readonly RolePlayerIdGenerator gen = new RolePlayerIdGenerator();
-
-	public YokoYashiroSystem(float activeTime, float sealTime, float range)
-	{
-		this.activeTime = activeTime;
-		this.sealTime = sealTime;
-		this.range = range * range;
-
-		this.consoleSystem = ExtremeConsoleSystem.Create();
-
-		this.allInfo.Clear();
-	}
 
 	public bool IsNearActiveYashiro(Vector2 pos)
 		=> this.yashiroPos
@@ -150,13 +141,17 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 
 	public void Deteriorate(float deltaTime)
 	{
-		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
-
-		if ((MeetingHud.Instance != null ||
-			ExileController.Instance != null))
+		if (!AmongUsClient.Instance.AmHost ||
+			AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
+			!RoleAssignState.Instance.IsRoleSetUpEnd)
 		{
+			return;
+		}
 
+		if (!this.isChangeMeeting &&
+			(MeetingHud.Instance != null || ExileController.Instance != null))
+		{
+			return;
 		}
 
 		foreach (var info in this.allInfo.Values)
@@ -187,6 +182,31 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{ }
 
+	public void RpcUpdateNextStatus(YashiroInfo info)
+	{
+		UpdateNextStatus(info);
+
+		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
+			Type, x =>
+			{
+				x.Write((byte)Ops.Update);
+				info.Id.Serialize(x);
+				x.Write((byte)info.Status);
+			});
+	}
+
+	public void RpcSetYashiro(int controlId, Vector2 pos)
+	{
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			Type, x =>
+			{
+				x.Write((byte)Ops.Set);
+				x.WritePacked(controlId);
+				x.Write(pos.x);
+				x.Write(pos.y);
+			});
+	}
+
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
 		writer.WritePacked(this.allInfo.Count);
@@ -200,6 +220,16 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 			info.Id.Serialize(writer);
 			info.Serialize(writer);
 		}
+	}
+
+	public void UpdateNextStatus(in YashiroInfo info)
+	{
+		var targetStatus = info.Status switch
+		{
+			YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
+			_ => YashiroInfo.StatusType.Deactive
+		};
+		updateYashiroInfo(info, targetStatus);
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
@@ -263,29 +293,6 @@ public sealed class YokoYashiroSystem : IDirtableSystemType
 
 		this.allInfo.Add(id, info);
 		this.yashiroPos.Add(id, pos);
-	}
-
-	public void RpcUpdateNextStatus(YashiroInfo info)
-	{
-		UpdateNextStatus(info);
-
-		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
-			Type, x =>
-			{
-				x.Write((byte)Ops.Update);
-				info.Id.Serialize(x);
-				x.Write((byte)info.Status);
-			});
-	}
-
-	public void UpdateNextStatus(in YashiroInfo info)
-	{
-		var targetStatus = info.Status switch
-		{
-			YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
-			_ => YashiroInfo.StatusType.Deactive
-		};
-		updateYashiroInfo(info, targetStatus);
 	}
 
 	private void updateYashiroInfo(in YashiroInfo info, YashiroInfo.StatusType targetStatus)
