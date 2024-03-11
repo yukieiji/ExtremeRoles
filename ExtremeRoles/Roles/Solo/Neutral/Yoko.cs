@@ -135,16 +135,18 @@ public sealed class Yoko :
 			30, 1, 360, 1,
 			parentOps,
 			format: OptionUnit.Second);
-		CreateFloatOption(
-			YokoOption.YashiroProtectRange,
-			5.0f, 1.0f, 10.0f, 0.1f,
-			yashiroOpt);
 
 		CreateIntOption(
 			YokoOption.YashiroSeelTime,
 			10, 1, 360, 1,
 			parentOps,
 			format: OptionUnit.Second);
+
+		CreateFloatOption(
+			YokoOption.YashiroProtectRange,
+			5.0f, 1.0f, 10.0f, 0.1f,
+			yashiroOpt);
+
 		CreateBoolOption(
 			YokoOption.YashiroUpdateWithMeeting,
 			true, yashiroOpt);
