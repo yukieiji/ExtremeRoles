@@ -1,9 +1,11 @@
 ﻿using ExtremeRoles.Extension.Task;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 using TMPro;
+using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -91,18 +93,18 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		this.Info.Timer -= Time.fixedDeltaTime;
 		this.statusText.text = $"現在の社の状態：{this.Info.Status}\nへ以降まで{this.Info.Timer}秒";
 
-		if (!this.isClose &&
-			this.curPointIndex == this.allPoint.Count)
+		if (this.curPointIndex == this.allPoint.Count)
 		{
-			this.isClose = true;
-			if (ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(
-				YokoYashiroSystem.Type, out var system) &&
-				system is not null)
+			if (!this.isClose)
 			{
-				system.RpcUpdateNextStatus(this.Info);
+				if (ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(
+					YokoYashiroSystem.Type, out var system) &&
+					system is not null)
+				{
+					system.RpcUpdateNextStatus(this.Info);
+				}
+				this.StartCoroutine(this.closeAndShowText());
 			}
-			// テキストを表示
-			this.AbstractClose();
 			return;
 		}
 
@@ -124,6 +126,30 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		{
 			this.resetLine();
 		}
+	}
+
+	private IEnumerator closeAndShowText()
+	{
+		var text = this.transform.Find("CloseText").GetComponent<TextMeshPro>();
+
+		text.gameObject.SetActive(true);
+
+		var waiter = new WaitForFixedUpdate();
+		float timer = 0.0f;
+		var farstPos = new Vector2(0.0f, -2.0f);
+		while (timer <= 0.5f)
+		{
+			timer += (Time.fixedDeltaTime * 2);
+			var newPos = Vector2.Lerp(farstPos, Vector2.zero, timer);
+			text.transform.localPosition = newPos;
+
+			yield return waiter;
+		}
+		text.transform.localPosition = Vector2.zero;
+
+		yield return waiter;
+
+		this.AbstractClose();
 	}
 
 	private void updateDrawPoint(in Vector2 localMousePosition)
