@@ -33,10 +33,8 @@ public sealed class Yoko :
         SearchTime,
         TrueInfoRate,
 		UseYashiro,
-		YashiroActiveIsInfinity,
 		YashiroActiveTime,
 		YashiroProtectRange,
-		YashiroSeelIsInfinity,
 		YashiroSeelTime,
 		YashiroUpdateWithMeeting,
 	}
@@ -132,31 +130,21 @@ public sealed class Yoko :
 			false, parentOps);
 		this.CreateAbilityCountOption(yashiroOpt, 3, 10, 5f);
 
-		var yashiroActiveOnOpt = CreateBoolOption(
-			YokoOption.YashiroActiveIsInfinity,
-			false, yashiroOpt);
 		CreateIntOption(
 			YokoOption.YashiroActiveTime,
-			30, 1, 120, 1,
-			yashiroActiveOnOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: yashiroOpt);
+			30, 1, 360, 1,
+			parentOps,
+			format: OptionUnit.Second);
 		CreateFloatOption(
 			YokoOption.YashiroProtectRange,
 			5.0f, 1.0f, 10.0f, 0.1f,
 			yashiroOpt);
 
-		var yashiroSeelOnOpt = CreateBoolOption(
-			YokoOption.YashiroSeelIsInfinity,
-			false, yashiroOpt);
 		CreateIntOption(
 			YokoOption.YashiroSeelTime,
-			10, 1, 120, 1,
-			yashiroSeelOnOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: yashiroOpt);
+			10, 1, 360, 1,
+			parentOps,
+			format: OptionUnit.Second);
 		CreateBoolOption(
 			YokoOption.YashiroUpdateWithMeeting,
 			true, yashiroOpt);
@@ -179,12 +167,8 @@ public sealed class Yoko :
 
 		if (opt.GetValue<bool>(GetRoleOptionId(YokoOption.UseYashiro)))
 		{
-			float activeTime = opt.GetValue<bool>(
-				GetRoleOptionId(YokoOption.YashiroActiveIsInfinity)) ?
-			float.MaxValue : opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroActiveTime));
-			float sealTime = opt.GetValue<bool>(
-				GetRoleOptionId(YokoOption.YashiroSeelIsInfinity)) ?
-				float.MaxValue : opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroSeelTime));
+			float activeTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroActiveTime));
+			float sealTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroSeelTime));
 			float protectRange = opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroProtectRange));
 			bool isUpdateMeeting = opt.GetValue<bool>(
 				GetRoleOptionId(YokoOption.YashiroUpdateWithMeeting));
