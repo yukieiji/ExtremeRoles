@@ -237,6 +237,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 	{
 		var targetStatus = info.Status switch
 		{
+			YashiroInfo.StatusType.Deactive => YashiroInfo.StatusType.Active,
 			YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
 			_ => YashiroInfo.StatusType.Deactive
 		};
