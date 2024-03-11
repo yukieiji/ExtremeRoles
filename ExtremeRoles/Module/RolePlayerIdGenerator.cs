@@ -1,10 +1,5 @@
 ﻿using Hazel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static ExtremeRoles.Module.SystemType.Roles.YokoYashiroSystem;
 
 namespace ExtremeRoles.Module;
 
@@ -12,6 +7,9 @@ public sealed class RolePlayerId(int id, int gameId)
 {
 	private readonly int internalId = id;
 	private readonly int gameId = gameId;
+
+	public override string ToString()
+		=> $"InternalId:{this.internalId}  GameId:{this.internalId}";
 
 	public void Serialize(in MessageWriter writer)
 	{
