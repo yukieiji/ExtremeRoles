@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
-using Il2CppInterop.Runtime.Attributes;
-
 
 #nullable enable
 
@@ -46,8 +45,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 			}
 			Vector3 mousePosition = Input.mousePosition;
 			Vector3 mouseWorldPint = Camera.main.ScreenToWorldPoint(mousePosition);
-			Vector3 localMousePosition = this.anchor.InverseTransformPoint(mouseWorldPint.x, mouseWorldPint.y, 0.0f);
-			return localMousePosition;
+			return mouseWorldPint;
 		}
 	}
 
@@ -120,7 +118,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 			this.line.positionCount = this.drawPoint.Count + 1;
 			for (int i = 0; i < this.drawPoint.Count; ++i)
 			{
-				Vector2 pos = this.drawPoint[i].transform.localPosition + this.anchor.localPosition;
+				Vector2 pos = this.drawPoint[i].transform.position;
 				this.line.SetPosition(i, pos);
 			}
 			this.line.SetPosition(this.drawPoint.Count, mousePosition);
@@ -168,9 +166,9 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 
 	private bool isNearCurPoint(in Vector2 source)
 	{
-		Vector2 pointPos = this.curPoint.transform.localPosition;
+		Vector2 pointPos = this.curPoint.transform.position;
 		Vector2 diff = pointPos - source;
-		return diff.magnitude <= 0.45f;
+		return diff.magnitude <= 0.35f;
 	}
 
 	private void resetLine()
