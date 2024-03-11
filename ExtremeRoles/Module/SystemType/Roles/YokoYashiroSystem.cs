@@ -213,14 +213,21 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 
 	public void Serialize(MessageWriter writer, bool initialState)
 	{
-		writer.WritePacked(this.allInfo.Count);
+		int size = 0;
+		var dirtyInfo = new List<YashiroInfo>(this.allInfo.Count);
 		foreach (var info in this.allInfo.Values)
 		{
 			if (!info.IsDirty)
 			{
 				continue;
 			}
+			size++;
+			dirtyInfo.Add(info);
+		}
 
+		writer.WritePacked(dirtyInfo.Count);
+		foreach (var info in dirtyInfo)
+		{
 			info.Id.Serialize(writer);
 			info.Serialize(writer);
 		}
