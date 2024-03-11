@@ -162,11 +162,11 @@ public sealed class Artist :
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.ArtistRpcOps))
 		{
-			caller.WriteByte((byte)(isStart ? Ops.Start : Ops.End));
 			caller.WriteByte(playerControl.PlayerId);
+			caller.WriteByte((byte)(isStart ? Ops.Start : Ops.End));
 		}
 
-		if (this.drawer == null)
+		if (isStart)
 		{
 			startLine(this, playerControl);
 		}
