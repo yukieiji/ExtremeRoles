@@ -69,7 +69,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			{
 				GameObject obj =
 					Loader.GetUnityObjectFromPath<GameObject>(
-						"THIS IS PLACEHOLDER",
+						"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\yokominigame.asset",
 						"assets/roles/yokominigame.prefab");
 				return obj.GetComponent<YokoYashiroStatusUpdateMinigame>();
 			}
@@ -114,6 +114,10 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 		Update,
 	}
 
+	public bool CanSet(Vector2 pos)
+		=> !this.yashiroPos.Values
+			.Where(x => (x - pos).magnitude > this.range * 2)
+			.Any();
 
 	public bool IsNearActiveYashiro(Vector2 pos)
 		=> this.yashiroPos

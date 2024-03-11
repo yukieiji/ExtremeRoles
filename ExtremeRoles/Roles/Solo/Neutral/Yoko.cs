@@ -20,8 +20,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Yoko :
     SingleRoleBase,
+	IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleResetMeeting,
     IRoleWinPlayerModifier
 {
     public enum YokoOption
@@ -31,12 +31,22 @@ public sealed class Yoko :
         SearchRange,
         SearchTime,
         TrueInfoRate,
-    }
+		UseYashiro,
+		YashiroActiveIsInfinity,
+		YashiroActiveTime,
+		YashiroProtectRange,
+		YashiroSeelIsInfinity,
+		YashiroSeelTime,
+		YashiroUpdateWithMeeting,
+	}
 
-    private float searchRange;
+	private float searchRange;
     private float searchTime;
     private float timer;
     private int trueInfoGage;
+	private bool useYashiro;
+
+	private Vector2 prevPos;
 
     private TMPro.TextMeshPro? tellText;
 	private YokoYashiroSystem? yashiro;
@@ -49,7 +59,9 @@ public sealed class Yoko :
         ExtremeRoleId.Lover,
     };
 
-    public Yoko() : base(
+	public ExtremeAbilityButton? Button { get; set; }
+
+	public Yoko() : base(
         ExtremeRoleId.Yoko,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Yoko.ToString(),
@@ -114,22 +126,75 @@ public sealed class Yoko :
             YokoOption.TrueInfoRate,
             50, 25, 80, 5, parentOps,
             format: OptionUnit.Percentage);
-    }
+
+		var yashiroOpt = CreateBoolOption(
+			YokoOption.UseYashiro,
+			false, parentOps);
+		this.CreateAbilityCountOption(yashiroOpt, 3, 10, 5f);
+
+		var yashiroActiveOnOpt = CreateBoolOption(
+			YokoOption.YashiroActiveIsInfinity,
+			false);
+		CreateIntOption(
+			YokoOption.YashiroActiveTime,
+			30, 1, 120, 1,
+			yashiroActiveOnOpt,
+			format: OptionUnit.Second,
+			invert: true,
+			enableCheckOption: yashiroActiveOnOpt);
+		CreateFloatOption(
+			YokoOption.YashiroProtectRange,
+			5.0f, 1.0f, 10.0f, 0.1f,
+			yashiroOpt);
+
+		var yashiroSeelOnOpt = CreateBoolOption(
+			YokoOption.YashiroSeelIsInfinity,
+			false);
+		CreateIntOption(
+			YokoOption.YashiroSeelTime,
+			10, 1, 120, 1,
+			yashiroSeelOnOpt,
+			format: OptionUnit.Second,
+			invert: true,
+			enableCheckOption: yashiroSeelOnOpt);
+		CreateBoolOption(
+			YokoOption.YashiroUpdateWithMeeting,
+			true, yashiroOpt);
+	}
     protected override void RoleSpecificInit()
     {
-        this.CanRepairSabotage = OptionManager.Instance.GetValue<bool>(
+		var opt = OptionManager.Instance;
+        this.CanRepairSabotage = opt.GetValue<bool>(
             GetRoleOptionId(YokoOption.CanRepairSabo));
-        this.UseVent = OptionManager.Instance.GetValue<bool>(
+        this.UseVent = opt.GetValue<bool>(
             GetRoleOptionId(YokoOption.CanUseVent));
-        this.searchRange = OptionManager.Instance.GetValue<float>(
+        this.searchRange = opt.GetValue<float>(
             GetRoleOptionId(YokoOption.SearchRange));
-        this.searchTime = OptionManager.Instance.GetValue<float>(
+        this.searchTime = opt.GetValue<float>(
             GetRoleOptionId(YokoOption.SearchTime));
-        this.trueInfoGage = OptionManager.Instance.GetValue<int>(
+        this.trueInfoGage = opt.GetValue<int>(
             GetRoleOptionId(YokoOption.TrueInfoRate));
-        this.timer = this.searchTime;
+
+		this.yashiro = null;
+
+		if (opt.GetValue<bool>(GetRoleOptionId(YokoOption.UseYashiro)))
+		{
+			float activeTime = opt.GetValue<bool>(
+				GetRoleOptionId(YokoOption.YashiroActiveIsInfinity)) ?
+			float.MaxValue : opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroActiveTime));
+			float sealTime = opt.GetValue<bool>(
+				GetRoleOptionId(YokoOption.YashiroSeelIsInfinity)) ?
+				float.MaxValue : opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroSeelTime));
+			float protectRange = opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroProtectRange));
+			bool isUpdateMeeting = opt.GetValue<bool>(
+				GetRoleOptionId(YokoOption.YashiroUpdateWithMeeting));
+
+			this.yashiro = new YokoYashiroSystem(activeTime, sealTime, protectRange, isUpdateMeeting);
+		}
+
+		this.timer = this.searchTime;
     }
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -263,4 +328,52 @@ public sealed class Yoko :
         }
         return targetRole.Id == ExtremeRoleId.Yoko;
     }
+
+	public bool UseAbility()
+	{
+		if (this.yashiro is null)
+		{
+			return false;
+		}
+		this.prevPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+		return true;
+	}
+
+	public void CleanUp()
+	{
+		if (this.yashiro is null) { return; }
+
+		Vector2 pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+		this.yashiro.RpcSetYashiro(this.GameControlId, pos);
+	}
+
+	public bool IsAbilityUse()
+	{
+		if (this.yashiro is null) { return false; }
+
+		Vector2 pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+		return this.yashiro.CanSet(pos);
+	}
+
+	public bool IsAbilityActive() =>
+		this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+	public void CreateAbility()
+	{
+		this.CreateAbilityCountButton(
+			"yokoYashiro",
+			Resources.Loader.CreateSpriteFromResources(
+				Resources.Path.TestButton),
+			this.IsAbilityActive,
+			this.CleanUp,
+			() => { });
+
+		if (this.Button != null)
+		{
+			this.Button.SetButtonShow(this.yashiro is not null);
+		}
+	}
 }
