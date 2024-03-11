@@ -45,7 +45,6 @@ public sealed class Yoko :
     private float searchTime;
     private float timer;
     private int trueInfoGage;
-	private bool useYashiro;
 
 	private Vector2 prevPos;
 
