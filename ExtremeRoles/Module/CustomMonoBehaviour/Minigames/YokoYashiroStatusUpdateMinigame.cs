@@ -89,8 +89,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		if (this.Info is null ||
 			this.statusText == null ||
 			this.line == null ||
-			this.anchor == null ||
-			this.Info.Status is YokoYashiroSystem.YashiroInfo.StatusType.Seal)
+			this.anchor == null)
 		{
 			return;
 		}
@@ -122,7 +121,8 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 			}
 		}
 
-		if (Input.GetMouseButton(0))
+		if (Input.GetMouseButton(0) &&
+			this.Info.Status is not YokoYashiroSystem.YashiroInfo.StatusType.Seal)
 		{
 			Vector2 mousePosition = this.curMousePoint;
 
