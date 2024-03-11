@@ -88,6 +88,9 @@ public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
 			});
 	}
 
+	public override void Close()
+		=> this.AbstractClose();
+
 	[HideFromIl2Cpp]
 	private CollectionEnum coStartActive()
 	{

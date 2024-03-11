@@ -81,6 +81,9 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		this.resetLine();
 	}
 
+	public override void Close()
+		=> this.AbstractClose();
+
 	public void FixedUpdate()
 	{
 		if (this.Info is null ||
