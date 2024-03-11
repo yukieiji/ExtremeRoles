@@ -154,6 +154,17 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public bool TryGet(ExtremeSystemType systemType, out IExtremeSystemType? system)
 		=> this.allSystems.TryGetValue(systemType, out system);
 
+	public T CreateOrGet<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
+	{
+		if (!Instance.TryGet<T>(systemType, out var system) ||
+			system is null)
+		{
+			system = new T();
+			Instance.TryAdd(systemType, system);
+		}
+		return system;
+	}
+
 	public T CreateOrGet<T>(ExtremeSystemType systemType, Func<T> construnctFunc) where T : class, IExtremeSystemType
 	{
 		if (!Instance.TryGet<T>(systemType, out var system) ||

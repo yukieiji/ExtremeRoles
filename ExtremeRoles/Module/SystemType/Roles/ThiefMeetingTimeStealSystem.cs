@@ -45,15 +45,8 @@ public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 		this.setTimeOffset = setTimeOffset;
 		this.pickUpTimeOffset = pickUpTimeOffset;
 
-		if (!ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
-				meetingSystemType, out var system) ||
-			system is null)
-		{
-			system = new ModdedMeetingTimeSystem();
-			ExtremeSystemTypeManager.Instance.TryAdd(meetingSystemType, system);
-		}
-
-		this.internalSystem = system;
+		this.internalSystem = ExtremeSystemTypeManager.Instance.CreateOrGet<ModdedMeetingTimeSystem>(
+			meetingSystemType);
 		this.curActiveNum = 0;
 	}
 

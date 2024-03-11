@@ -532,12 +532,8 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
 	private void tryAddWispSystem()
 	{
-		var systemMng = ExtremeSystemTypeManager.Instance;
-		if (!systemMng.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system))
-		{
-			system = new WispTorchSystem(this.torchNum, this.range, this.torchActiveTime, this.torchBlackOutTime);
-			systemMng.TryAdd(ExtremeSystemType.WispTorch, system);
-		}
-		this.system = system;
+		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.WispTorch,
+			() => new WispTorchSystem(this.torchNum, this.range, this.torchActiveTime, this.torchBlackOutTime));
 	}
 }
