@@ -19,13 +19,13 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 
 	[HideFromIl2Cpp]
 	public Vector2 PrevForce { get; private set; } = Vector2.zero;
-	private Vector2 prevPos { get; set; } = Vector2.zero;
-	private Vector2 prevDirection { get; set; } = Vector2.zero;
 
 	private float speed;
 	private float frictionMulti;
 	private float? e;
 	private float maxSpeed;
+	private readonly Vector2 offset = new Vector2(0.275f, 0.5f);
+	private Vector2 prevPos = Vector2.zero;
 
 	public SkaterSkateBehaviour(IntPtr ptr) : base(ptr) { }
 
@@ -34,7 +34,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 	public void Initialize(in Parameter param)
 	{
 		this.speed = param.Acceleration * SpeedOffset * Time.fixedDeltaTime;
-		this.frictionMulti = (1 - param.Friction) * Time.fixedDeltaTime;
+		this.frictionMulti = (1 - (param.Friction * Time.fixedDeltaTime));
 		this.maxSpeed = param.MaxSpeed * SpeedOffset;
 		this.e = param.E;
 	}
@@ -81,27 +81,21 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 			this.PrevForce * this.frictionMulti :
 			this.PrevForce + (directionVector * this.speed);
 
-		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
-
 		var rigidBody = pc.rigidbody2D;
-		var curPos = pc.GetTruePosition();
+		Vector2 curPos = pc.transform.position;
 
 		if (this.e.HasValue &&
 			this.PrevForce != Vector2.zero &&
-			this.prevPos != Vector2.zero &&
-			this.prevDirection != Vector2.zero)
+			(
+				PhysicsHelpers.AnythingBetween(
+					curPos, curPos + (this.PrevForce.normalized * offset),
+					Constants.ShipAndObjectsMask, false) ||
+				(curPos - this.prevPos).normalized == Vector2.zero
+			))
 		{
-			float time = Time.fixedDeltaTime;
-			var prevVelocityVec = (this.PrevForce * time / rigidBody.mass) + this.prevDirection;
-			var curVelocityVec = (this.prevPos - curPos) / time;
-			if (prevVelocityVec != curVelocityVec)
-			{
-				clampedVector = -clampedVector * this.e.Value;
-			}
+			forceVector = -forceVector * this.e.Value;
 		}
-
-
-		this.prevDirection = directionVector;
+		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
 		this.prevPos = curPos;
 		this.PrevForce = clampedVector;
 
