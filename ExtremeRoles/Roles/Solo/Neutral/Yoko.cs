@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -13,7 +15,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.Unity.IL2CPP.Utils;
-using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
@@ -353,8 +354,8 @@ public sealed class Yoko :
 	{
 		this.CreateAbilityCountButton(
 			"yokoYashiro",
-			Resources.Loader.CreateSpriteFromResources(
-				Resources.Path.TestButton),
+			Loader.CreateSpriteFromResources(
+				Path.YokoYashiro),
 			this.IsAbilityActive,
 			this.CleanUp,
 			() => { });

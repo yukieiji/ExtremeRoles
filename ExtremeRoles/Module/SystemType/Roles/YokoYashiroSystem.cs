@@ -297,7 +297,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			pos, "Yashiro", consoleBehavior);
 
 		newConsole.Image!.sprite = Loader.CreateSpriteFromResources(
-			Path.TeroristTeroSabotageBomb);
+			Path.YokoYashiro);
 
 		var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 		colider.isTrigger = true;

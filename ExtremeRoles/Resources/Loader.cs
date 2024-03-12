@@ -122,7 +122,8 @@ public static class Path
     public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
     public const string MissionaryPropagate = "ExtremeRoles.Resources.Propagate.png";
     public const string JesterOutburst = "ExtremeRoles.Resources.Outburst.png";
-    public const string EaterDeadBodyEat = "ExtremeRoles.Resources.DeadBodyEat.png";
+	public const string YokoYashiro = "ExtremeRoles.Resources.YokoYashiro.png";
+	public const string EaterDeadBodyEat = "ExtremeRoles.Resources.DeadBodyEat.png";
     public const string EaterEatKill = "ExtremeRoles.Resources.EatKil.png";
     public const string MinerSetMine = "ExtremeRoles.Resources.SetMine.png";
 	public const string MinerActiveMineImg = "ExtremeRoles.Resources.MinerMineActive.png";
