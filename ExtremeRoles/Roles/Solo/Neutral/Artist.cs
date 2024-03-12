@@ -42,7 +42,7 @@ public sealed class Artist :
         ExtremeRoleId.Artist,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Artist.ToString(),
-        ColorPalette.AliceGold,
+        ColorPalette.ArtistChenChuWhowan,
         false, false, false, false)
     { }
 
