@@ -50,18 +50,16 @@ public sealed class Artist :
 	{
 		if (rolePlayer == null ||
 			rolePlayer.Data == null ||
-			this.IsWin)
+			this.IsWin ||
+			this.drawer == null)
 		{
 			return;
 		}
 
-		if (this.drawer != null)
+		this.IsWin = this.area + this.drawer.Area >= this.winArea;
+		if (this.IsWin)
 		{
-			this.IsWin = this.area + this.drawer.Area >= this.winArea;
-			if (this.IsWin)
-			{
-				ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
-			}
+			ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
 		}
 	}
 
