@@ -18,7 +18,9 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 	public record struct Parameter(float Friction, float Acceleration, float MaxSpeed, float? E=null);
 
 	[HideFromIl2Cpp]
-	public Vector2 PrevForce { get; private set; }
+	public Vector2 PrevForce { get; private set; } = Vector2.zero;
+	private Vector2 prevPos { get; set; } = Vector2.zero;
+	private Vector2 prevDirection { get; set; } = Vector2.zero;
 
 	private float speed;
 	private float frictionMulti;
@@ -81,14 +83,28 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 
 		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
 
+		var rigidBody = pc.rigidbody2D;
+		var curPos = pc.GetTruePosition();
+
 		if (this.e.HasValue &&
-			pc.Collider.Raycast())
+			this.PrevForce != Vector2.zero &&
+			this.prevPos != Vector2.zero &&
+			this.prevDirection != Vector2.zero)
 		{
-			clampedVector = -clampedVector * this.e.Value;
+			float time = Time.fixedDeltaTime;
+			var prevVelocityVec = (this.PrevForce * time / rigidBody.mass) + this.prevDirection;
+			var curVelocityVec = (this.prevPos - curPos) / time;
+			if (prevVelocityVec != curVelocityVec)
+			{
+				clampedVector = -clampedVector * this.e.Value;
+			}
 		}
 
+
+		this.prevDirection = directionVector;
+		this.prevPos = curPos;
 		this.PrevForce = clampedVector;
 
-		pc.rigidbody2D.AddForce(clampedVector);
+		rigidBody.AddForce(clampedVector);
 	}
 }
