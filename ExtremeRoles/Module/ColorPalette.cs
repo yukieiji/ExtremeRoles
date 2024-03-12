@@ -21,6 +21,8 @@ public static class ColorPalette
 	public readonly static Color MoverSafeColor = new Color32(102, 153, 153, byte.MaxValue);
 	public readonly static Color AcceleratorBiancoPeria = new Color32(
 		216, 214, 213, byte.MaxValue);
+	public readonly static Color SkaterMizuiro = new Color32(
+		172, 219, 218, byte.MaxValue);
 
 	public readonly static Color TraitorLightShikon = new Color32(
 		76, 16, 80, byte.MaxValue);

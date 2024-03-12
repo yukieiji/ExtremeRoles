@@ -55,7 +55,7 @@ public sealed class Skater :
             ExtremeRoleId.Skater,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Skater.ToString(),
-            ColorPalette.SupporterGreen,
+            ColorPalette.SkaterMizuiro,
             false, true, false, false,
             tab: OptionTab.Combination)
     {}
