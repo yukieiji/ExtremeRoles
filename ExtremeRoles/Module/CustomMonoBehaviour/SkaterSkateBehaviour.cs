@@ -15,14 +15,17 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 {
 	public const float SpeedOffset = 32.0f;
 
-	public record struct Parameter(float Friction, float Acceleration, float MaxSpeed);
+	public record struct Parameter(float Friction, float Acceleration, float MaxSpeed, float? E=null);
 
 	[HideFromIl2Cpp]
-	public Vector2 PrevForce { get; private set; }
+	public Vector2 PrevForce { get; private set; } = Vector2.zero;
 
 	private float speed;
 	private float frictionMulti;
+	private float? e;
 	private float maxSpeed;
+	private readonly Vector2 offset = new Vector2(0.275f, 0.5f);
+	private Vector2 prevPos = Vector2.zero;
 
 	public SkaterSkateBehaviour(IntPtr ptr) : base(ptr) { }
 
@@ -31,8 +34,9 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 	public void Initialize(in Parameter param)
 	{
 		this.speed = param.Acceleration * SpeedOffset * Time.fixedDeltaTime;
-		this.frictionMulti = (1 - param.Friction) * Time.fixedDeltaTime;
+		this.frictionMulti = (1 - (param.Friction * Time.fixedDeltaTime));
 		this.maxSpeed = param.MaxSpeed * SpeedOffset;
+		this.e = param.E;
 	}
 
 	public void FixedUpdate()
@@ -77,10 +81,24 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 			this.PrevForce * this.frictionMulti :
 			this.PrevForce + (directionVector * this.speed);
 
-		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
+		var rigidBody = pc.rigidbody2D;
+		Vector2 curPos = pc.transform.position;
 
+		if (this.e.HasValue &&
+			this.PrevForce != Vector2.zero &&
+			(
+				PhysicsHelpers.AnythingBetween(
+					curPos, curPos + (this.PrevForce.normalized * offset),
+					Constants.ShipAndObjectsMask, false) ||
+				(curPos - this.prevPos).normalized == Vector2.zero
+			))
+		{
+			forceVector = -forceVector * this.e.Value;
+		}
+		Vector2 clampedVector = Vector2.ClampMagnitude(forceVector, this.maxSpeed);
+		this.prevPos = curPos;
 		this.PrevForce = clampedVector;
 
-		pc.rigidbody2D.AddForce(clampedVector);
+		rigidBody.AddForce(clampedVector);
 	}
 }
