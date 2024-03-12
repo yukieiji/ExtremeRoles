@@ -37,9 +37,9 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 	{
 		public enum StatusType : byte
 		{
-			Deactive,
-			Active,
-			Seal
+			YashiroDeactive,
+			YashiroActive,
+			YashiroSeal
 		}
 
 		public RolePlayerId Id { get; init; } = id;
@@ -118,9 +118,9 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 	public static YashiroInfo.StatusType GetNextStatus(YashiroInfo.StatusType curStatus)
 		=> curStatus switch
 		{
-			YashiroInfo.StatusType.Deactive => YashiroInfo.StatusType.Active,
-			YashiroInfo.StatusType.Active => YashiroInfo.StatusType.Seal,
-			_ => YashiroInfo.StatusType.Deactive
+			YashiroInfo.StatusType.YashiroDeactive => YashiroInfo.StatusType.YashiroActive,
+			YashiroInfo.StatusType.YashiroActive => YashiroInfo.StatusType.YashiroSeal,
+			_ => YashiroInfo.StatusType.YashiroDeactive
 		};
 
 	public bool CanSet(Vector2 pos)
@@ -133,7 +133,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			.Where(x =>
 				this.allInfo.TryGetValue(x.Key, out var info) &&
 				info != null &&
-				info.Status == YashiroInfo.StatusType.Active &&
+				info.Status == YashiroInfo.StatusType.YashiroActive &&
 				(x.Value - pos).magnitude <= this.range)
 			.Any();
 
@@ -169,7 +169,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 
 		foreach (var info in this.allInfo.Values)
 		{
-			if (info.Status is YashiroInfo.StatusType.Deactive ||
+			if (info.Status is YashiroInfo.StatusType.YashiroDeactive ||
 				info.Timer == float.MaxValue)
 			{
 				continue;
@@ -259,7 +259,6 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 				this.IsDirty = false;
 				break;
 			case Ops.Resync:
-				Logging.Debug("Resync!! Status");
 				var resyncId = RolePlayerId.DeserializeConstruct(msgReader);
 				lock (this.allInfo)
 				{
@@ -313,10 +312,10 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 		info.Status = targetStatus;
 		switch (targetStatus)
 		{
-			case YashiroInfo.StatusType.Active:
+			case YashiroInfo.StatusType.YashiroActive:
 				info.Timer = this.activeTime;
 				break;
-			case YashiroInfo.StatusType.Seal:
+			case YashiroInfo.StatusType.YashiroSeal:
 				info.Timer = this.sealTime;
 				break;
 			default:

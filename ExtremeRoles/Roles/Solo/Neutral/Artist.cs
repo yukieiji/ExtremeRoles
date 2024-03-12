@@ -68,7 +68,7 @@ public sealed class Artist :
 	public void CreateAbility()
     {
 		this.CreatePassiveAbilityButton(
-			"overLoad", "downLoad",
+			"ArtistArtOn", "ArtistArtOff",
 			Loader.CreateSpriteFromResources(
 			   Path.OverLoaderOverLoad),
 			Loader.CreateSpriteFromResources(

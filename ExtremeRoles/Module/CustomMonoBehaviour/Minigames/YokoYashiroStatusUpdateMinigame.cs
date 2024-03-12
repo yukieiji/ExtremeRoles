@@ -1,5 +1,5 @@
-﻿using ExtremeRoles.Extension.Task;
-using System;
+﻿using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,6 +8,8 @@ using TMPro;
 using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Task;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
@@ -29,6 +31,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 
 	private int curPointIndex = 0;
 
+	private readonly StringBuilder builder = new StringBuilder();
 	private readonly List<YokoYashiroLinePoint> allPoint = new List<YokoYashiroLinePoint>();
 	private readonly List<YokoYashiroLinePoint> drawPoint = new List<YokoYashiroLinePoint>();
 
@@ -106,15 +109,32 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		}
 
 		var nextStatus = YokoYashiroSystem.GetNextStatus(this.Info.Status);
-		if (this.Info.Status is YokoYashiroSystem.YashiroInfo.StatusType.Deactive ||
+
+		this.builder.Clear();
+		this.builder.Append(
+			Translation.GetString("yokoYashiroStatusText"));
+		string statusText = Translation.GetString(this.Info.Status.ToString());
+
+		if (this.Info.Status is YokoYashiroSystem.YashiroInfo.StatusType.YashiroDeactive ||
 			this.Info.Timer == float.MaxValue)
 		{
-			this.statusText.text = $"現在の社の状態：{this.Info.Status}";
+			this.statusText.text = string.Format(
+				this.builder.ToString(), statusText);
 		}
 		else
 		{
 			this.Info.Timer -= Time.fixedDeltaTime;
-			this.statusText.text = $"現在の社の状態：{this.Info.Status}\n<size=75%>{nextStatus}へ以降まで{Mathf.Ceil(this.Info.Timer)}秒<size=75%>";
+
+			this.builder.AppendLine();
+			this.builder.Append(
+				Translation.GetString("yokoYashiroNextStatusText"));
+
+			this.statusText.text = string.Format(
+				this.builder.ToString(),
+				statusText,
+				Translation.GetString(nextStatus.ToString()),
+				Mathf.Ceil(this.Info.Timer));
+
 			if (this.Info.Timer < 0.0f)
 			{
 				updateNextStatus();
@@ -122,7 +142,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		}
 
 		if (Input.GetMouseButton(0) &&
-			this.Info.Status is not YokoYashiroSystem.YashiroInfo.StatusType.Seal)
+			this.Info.Status is not YokoYashiroSystem.YashiroInfo.StatusType.YashiroSeal)
 		{
 			Vector2 mousePosition = this.curMousePoint;
 
@@ -145,8 +165,14 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 	[HideFromIl2Cpp]
 	private IEnumerator closeAndShowText()
 	{
+		if (this.Info is null) { yield break; }
+
+		string statusText = Translation.GetString(this.Info.Status.ToString());
+		string closeText = Translation.GetString("yokoYashiroCloseText");
+
 		var text = this.transform.Find("CloseText").GetComponent<TextMeshPro>();
 
+		text.text = string.Format(closeText, statusText);
 		text.gameObject.SetActive(true);
 
 		var waiter = new WaitForFixedUpdate();
