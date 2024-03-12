@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.Json;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,6 +11,7 @@ using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.Task;
+using ExtremeRoles.Extension.Linq;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
@@ -31,12 +33,18 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 
 	private int curPointIndex = 0;
 
+	private record VectorClass(float X, float Y)
+	{
+		public Vector2 Vector => new Vector2(X, Y);
+	}
 	private readonly StringBuilder builder = new StringBuilder();
 	private readonly List<YokoYashiroLinePoint> allPoint = new List<YokoYashiroLinePoint>();
 	private readonly List<YokoYashiroLinePoint> drawPoint = new List<YokoYashiroLinePoint>();
 
 	private YokoYashiroLinePoint curPoint => this.allPoint[this.curPointIndex];
 	private bool isClose = false;
+
+	private static Dictionary<string, VectorClass>[]? yokoJsonData = null;
 
 	private Vector2 curMousePoint
 	{
@@ -63,22 +71,26 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		this.statusText = trans.Find("StatusText").GetComponent<TextMeshPro>();
 		this.line = this.anchor.Find("Line").GetComponent<LineRenderer>();
 
-		int index = 0;
-		foreach (var vec in new Vector2[]
+		if (yokoJsonData is null)
+		{
+			yokoJsonData = JsonParser.LoadJsonStructFromAssembly<Dictionary<string, VectorClass>[]>(
+				"ExtremeRoles.Resources.JsonData.YokoYahiroStatusUpdateMinigamePoint.json");
+			if (yokoJsonData is null)
 			{
-					new Vector2(0.0f, 1.5f),
-					new Vector2(1.5f, 0.0f),
-					new Vector2(0.0f, -1.5f),
-					new Vector2(-1.5f, 0.0f) })
+				return;
+			}
+		}
+
+		Dictionary<string, VectorClass> data = yokoJsonData.GetRandomItem();
+
+		foreach (var (index, vec) in data)
 		{
 			var newPoint = Instantiate(
 				this.prefab, this.anchor);
-			newPoint.transform.localPosition = vec;
+			newPoint.transform.localPosition = vec.Vector;
 			newPoint.gameObject.SetActive(true);
-			newPoint.Text.text = index.ToString();
+			newPoint.Text.text = index;
 			this.allPoint.Add(newPoint);
-
-			index++;
 		}
 		this.curPointIndex = 0;
 		this.resetLine();
