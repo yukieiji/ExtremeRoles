@@ -138,9 +138,9 @@ public sealed class Skater :
 		this.CreatePassiveAbilityButton(
 			"SkaterSkateOn", "SkaterSkateOff",
 			Loader.CreateSpriteFromResources(
-			   Path.OverLoaderOverLoad),
+			   Path.SkaterSkateOn),
 			Loader.CreateSpriteFromResources(
-			   Path.OverLoaderDownLoad),
+			   Path.SkaterSkateOff),
 			this.CleanUp);
 	}
 

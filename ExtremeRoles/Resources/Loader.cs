@@ -46,6 +46,8 @@ public static class Path
     public const string MoverMove = "ExtremeRoles.Resources.MoverMoving.png";
 	public const string AcceleratorAccelerateSet = "ExtremeRoles.Resources.AcceleratorAccelerateSet.png";
 	public const string AcceleratorAcceleratePanel = "ExtremeRoles.Resources.AcceleratorAcceleratePanel.png";
+	public const string SkaterSkateOff = "ExtremeRoles.Resources.SkaterSkateOff.png";
+	public const string SkaterSkateOn = "ExtremeRoles.Resources.SkaterSkateOn.png";
 
 	public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
     public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
@@ -134,6 +136,8 @@ public static class Path
     public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
     public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
 	public const string HatterTimeKill = "ExtremeRoles.Resources.HatterTimeKill.png";
+	public const string ArtistArtOff = "ExtremeRoles.Resources.ArtistArtOff.png";
+	public const string ArtistArtOn = "ExtremeRoles.Resources.ArtistArtOn.png";
 
 	public const string ForasShowArrow = "ExtremeRoles.Resources.ForasArrow.png";
 

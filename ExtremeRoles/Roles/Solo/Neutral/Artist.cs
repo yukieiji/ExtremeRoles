@@ -68,9 +68,9 @@ public sealed class Artist :
 		this.CreatePassiveAbilityButton(
 			"ArtistArtOn", "ArtistArtOff",
 			Loader.CreateSpriteFromResources(
-			   Path.OverLoaderOverLoad),
+			   Path.ArtistArtOn),
 			Loader.CreateSpriteFromResources(
-			   Path.OverLoaderDownLoad),
+			   Path.ArtistArtOff),
 			this.CleanUp);
 	}
 
