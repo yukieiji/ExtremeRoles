@@ -71,7 +71,14 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     public sealed class DelinquentAbilityBehavior : AbilityBehaviorBase
     {
         public int AbilityCount { get; private set; }
-        public AbilityType CurAbility { get; private set; }
+		public AbilityType CurAbility
+		{
+			get => this.switcher.Current;
+			set
+			{
+				this.switcher.Switch(value);
+			}
+		}
 
         private bool isUpdate;
 
@@ -79,7 +86,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         private Func<bool> useAbility;
         private Func<bool> canUse;
 
-        private GraphicSwitcher<AbilityType> switcher;
+        private readonly GraphicSwitcher<AbilityType> switcher;
 
         public DelinquentAbilityBehavior(
             GraphicMode scribeMode,
@@ -92,9 +99,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
             this.useAbility = useAbility;
             this.canUse = canUse;
 
-            this.switcher = new GraphicSwitcher<AbilityType>(this);
-            this.switcher.Add(AbilityType.Scribe, scribeMode);
-            this.switcher.Add(AbilityType.SelfBomb, bombMode);
+            this.switcher = new GraphicSwitcher<AbilityType>(this, scribeMode, bombMode);
         }
 
         public void SetAbilityCount(int newAbilityNum)
@@ -162,8 +167,6 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
                     this.abilityCountText.gameObject.SetActive(false);
                 }
             }
-
-            this.switcher.Switch(this.CurAbility);
             newState = AbilityState.CoolDown;
 
             return true;
@@ -264,22 +267,22 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     {
         this.Button = new ExtremeAbilityButton(
             new DelinquentAbilityBehavior(
-                new GraphicMode()
-                {
-                    Graphic = new ButtonGraphic(
-                        Translation.GetString("scribble"),
-                        Loader.CreateSpriteFromResources(
-                            string.Format(
-                                Path.DelinquentScribe,
-                                RandomGenerator.Instance.Next(0, maxImageNum))))
-                },
-                new GraphicMode()
-                {
-                    Graphic = new ButtonGraphic(
-                        Translation.GetString("selfBomb"),
-                        Loader.CreateSpriteFromResources(
-                            Path.BomberSetBomb))
-                },
+                new (
+					AbilityType.Scribe,
+					new ButtonGraphic(
+						Translation.GetString("scribble"),
+						Loader.CreateSpriteFromResources(
+							string.Format(
+								Path.DelinquentScribe,
+								RandomGenerator.Instance.Next(0, maxImageNum))))
+				),
+                new (
+					AbilityType.SelfBomb,
+					new ButtonGraphic(
+						Translation.GetString("selfBomb"),
+						Loader.CreateSpriteFromResources(
+							Path.BomberSetBomb))
+				),
                 this.IsAbilityUse,
                 this.UseAbility),
             new RoleButtonActivator(),
