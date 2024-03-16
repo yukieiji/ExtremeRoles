@@ -4,31 +4,32 @@ using System.Collections.Generic;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.AbilityModeSwitcher
+namespace ExtremeRoles.Module.AbilityModeSwitcher;
+
+public class ModeSwitcherBase<SwithEnum, ModeStruct>
+	where SwithEnum : struct, Enum
+	where ModeStruct : IAbilityMode<SwithEnum>
 {
-	public class ModeSwitcherBase<SwithEnum, ModeStruct>
-		where SwithEnum : struct, Enum
-		where ModeStruct : IAbilityMode
+	protected readonly AbilityBehaviorBase Behavior = behavior;
+	public SwithEnum Current { get; protected set; }
+
+	private readonly Dictionary<SwithEnum, ModeStruct> mode = new Dictionary<SwithEnum, ModeStruct>();
+
+	public ModeSwitcherBase(AbilityBehaviorBase behavior, params ModeStruct[] allMode)
 	{
-		protected AbilityBehaviorBase Behavior;
-		protected Dictionary<SwithEnum, ModeStruct> Mode = new Dictionary<SwithEnum, ModeStruct>();
-
-		public ModeSwitcherBase(AbilityBehaviorBase behavior)
+		this.Behavior = behavior;
+		foreach (var mode in allMode)
 		{
-			this.Behavior = behavior;
-		}
-
-		public void Add(SwithEnum type, ModeStruct mode)
-		{
-			this.Mode[type] = mode;
-		}
-
-		public ModeStruct Get(SwithEnum type) => this.Mode[type];
-
-		public virtual void Switch(SwithEnum type)
-		{
-			ModeStruct mode = this.Mode[type];
-			this.Behavior.SetGraphic(mode.Graphic);
+			this.Add(mode);
 		}
 	}
+
+	public void Add(ModeStruct mode)
+	{
+		this.mode[mode.Mode] = mode;
+	}
+
+	public ModeStruct Get(SwithEnum type) => this.mode[type];
+
+	public abstract void Switch(SwithEnum type);
 }
