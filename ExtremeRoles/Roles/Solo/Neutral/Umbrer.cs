@@ -150,15 +150,15 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     public void CreateAbility()
     {
         var allOpt = OptionManager.Instance;
-        GraphicAndActiveTimeMode upgradeVirusMode = new GraphicAndActiveTimeMode()
-        {
-            Graphic = new Module.AbilityBehavior.ButtonGraphic(
-                Translation.GetString("upgradeVirus"),
-                Loader.CreateSpriteFromResources(
-                Path.UmbrerUpgradeVirus)),
-            Time = allOpt.GetValue<float>(GetRoleOptionId(
-                UmbrerOption.UpgradeVirusTime)),
-        };
+        var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
+			UmbrerMode.Feat,
+				new Module.AbilityBehavior.ButtonGraphic(
+					Translation.GetString("featVirus"),
+					Loader.CreateSpriteFromResources(
+						Path.UmbrerFeatVirus)),
+				allOpt.GetValue<float>(GetRoleOptionId(
+					RoleAbilityCommonOption.AbilityActiveTime))
+		);
 
         this.CreateNormalAbilityButton(
             featVirusMode.Graphic.Text, featVirusMode.Graphic.Img,
@@ -166,15 +166,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
         this.mode = new GraphicAndActiveTimeSwitcher<UmbrerMode>(
 			this.Button.Behavior,
-			new(
-				UmbrerMode.Feat,
-				new Module.AbilityBehavior.ButtonGraphic(
-					Translation.GetString("featVirus"),
-					Loader.CreateSpriteFromResources(
-						Path.UmbrerFeatVirus)),
-				allOpt.GetValue<float>(GetRoleOptionId(
-					RoleAbilityCommonOption.AbilityActiveTime))
-			),
+			featVirusMode,
 			new(
 				UmbrerMode.Upgrage,
 				new Module.AbilityBehavior.ButtonGraphic(

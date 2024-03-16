@@ -3,13 +3,15 @@ using ExtremeRoles.Module.AbilityBehavior;
 
 namespace ExtremeRoles.Module.AbilityModeSwitcher;
 
-public struct GraphicAndActiveTimeMode<SwithEnum>(SwithEnum mode, ButtonGraphic graphic, float time) : GraphicMode(mode, graphic)
+public class GraphicAndActiveTimeMode<SwithEnum>(SwithEnum mode, ButtonGraphic graphic, float time) : 
+	GraphicMode<SwithEnum>(mode, graphic)
+	where SwithEnum : struct, Enum
 {
-	public float Time { get; } = time;
+	public float Time { get; set; } = time;
 }
 
 public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> : 
-	GraphicSwitcher<GraphicAndActiveTimeMode<SwithEnum>>
+	ModeSwitcherBase<SwithEnum, GraphicAndActiveTimeMode<SwithEnum>>
 	where SwithEnum : struct, Enum
 {
 	public GraphicAndActiveTimeSwitcher(
@@ -19,8 +21,10 @@ public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> :
 
 	public override void Switch(SwithEnum type)
 	{
-		base.Switch(type);
-		GraphicAndActiveTimeMode mode = this.Get(type);
+		this.Current = type;
+		GraphicAndActiveTimeMode<SwithEnum> mode = this.Get(type);
+
+		this.Behavior.SetGraphic(mode.Graphic);
 		this.Behavior.SetActiveTime(mode.Time);
 	}
 }

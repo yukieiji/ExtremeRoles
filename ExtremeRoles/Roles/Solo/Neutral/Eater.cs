@@ -74,7 +74,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     {
         var allOpt = OptionManager.Instance;
 
-		var deadBodyMode = new GraphicAndActiveTimeMode(
+		var deadBodyMode = new GraphicAndActiveTimeMode<EaterAbilityMode>(
 			EaterAbilityMode.DeadBody,
 			new ButtonGraphic(
 				Translation.GetString("deadBodyEat"),
@@ -89,7 +89,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(
             this.Button.Behavior,
 			deadBodyMode,
-			new GraphicAndActiveTimeMode(
+			new(
 				EaterAbilityMode.Kill,
 				new ButtonGraphic(
 					Translation.GetString("eatKill"),
@@ -155,7 +155,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             {
                 var mode = this.modeFactory.Get(EaterAbilityMode.Kill);
                 mode.Time *= this.killEatActiveCoolTimeReduceRate;
-                this.modeFactory.Add(EaterAbilityMode.Kill, mode);
+                this.modeFactory.Add(mode);
             }
         }
         this.isActivated = false;
@@ -243,7 +243,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
             var mode = this.modeFactory.Get(EaterAbilityMode.Kill);
             mode.Time *= this.deadBodyEatActiveCoolTimePenalty;
-            this.modeFactory.Add(EaterAbilityMode.Kill, mode);
+            this.modeFactory.Add(mode);
         }
         else if (this.targetPlayer != null)
         {

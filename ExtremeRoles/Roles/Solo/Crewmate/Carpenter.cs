@@ -49,8 +49,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         private GraphicAndActiveTimeSwitcher<CarpenterAbilityMode> switcher;
 
         public CarpenterAbilityBehavior(
-            GraphicAndActiveTimeMode ventMode,
-            GraphicAndActiveTimeMode cameraMode,
+            GraphicAndActiveTimeMode<CarpenterAbilityMode> ventMode,
+            GraphicAndActiveTimeMode<CarpenterAbilityMode> cameraMode,
             int ventRemoveScrewNum,
             int cameraSetScrewNum,
             Func<bool> setCountStart,

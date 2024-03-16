@@ -89,8 +89,8 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         private readonly GraphicSwitcher<AbilityType> switcher;
 
         public DelinquentAbilityBehavior(
-            GraphicMode scribeMode,
-            GraphicMode bombMode,
+            GraphicMode<AbilityType> scribeMode,
+            GraphicMode<AbilityType> bombMode,
             Func<bool> canUse,
             Func<bool> useAbility) : base(
                 scribeMode.Graphic.Text,

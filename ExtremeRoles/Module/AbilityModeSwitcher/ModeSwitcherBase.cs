@@ -6,11 +6,11 @@ using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.AbilityModeSwitcher;
 
-public class ModeSwitcherBase<SwithEnum, ModeStruct>
+public abstract class ModeSwitcherBase<SwithEnum, ModeStruct>
 	where SwithEnum : struct, Enum
 	where ModeStruct : IAbilityMode<SwithEnum>
 {
-	protected readonly AbilityBehaviorBase Behavior = behavior;
+	protected readonly AbilityBehaviorBase Behavior;
 	public SwithEnum Current { get; protected set; }
 
 	private readonly Dictionary<SwithEnum, ModeStruct> mode = new Dictionary<SwithEnum, ModeStruct>();

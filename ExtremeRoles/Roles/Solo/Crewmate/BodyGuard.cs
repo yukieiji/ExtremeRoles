@@ -45,8 +45,8 @@ public sealed class BodyGuard :
 		private TextMeshPro abilityCountText;
 
 		public BodyGuardAbilityBehavior(
-            GraphicMode featShieldMode,
-            GraphicMode resetMode,
+            GraphicMode<BodyGuardAbilityMode> featShieldMode,
+            GraphicMode<BodyGuardAbilityMode> resetMode,
             Func<bool> featShield,
             Action resetShield,
             Func<bool> canUse,
