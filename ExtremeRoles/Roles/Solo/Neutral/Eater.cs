@@ -177,6 +177,19 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
     public bool UseAbility()
     {
+		// ターゲットが存在するときのチェック
+		if (this.tmpTarget != null)
+		{
+
+			byte playerId = this.targetPlayer.PlayerId;
+			var assassin = ExtremeRoleManager.GameRole[playerId] as Combination.Assassin;
+
+			if (assassin != null && 
+				(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
+			{
+				return false;
+			}
+		}
         this.targetPlayer = this.tmpTarget;
         return true;
     }
