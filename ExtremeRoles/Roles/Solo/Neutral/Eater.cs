@@ -14,6 +14,8 @@ using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPlayerHook, IRoleUpdate
@@ -35,19 +37,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         DeadBody
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.eatButton;
-        set
-        {
-            this.eatButton = value;
-        }
-    }
-
-    private ExtremeAbilityButton eatButton;
-    private PlayerControl tmpTarget;
-    private PlayerControl targetPlayer;
-    private GameData.PlayerInfo targetDeadBody;
+    public ExtremeAbilityButton? Button {  get; set; }
+    private PlayerControl? tmpTarget;
+    private PlayerControl? targetPlayer;
+    private GameData.PlayerInfo? targetDeadBody;
 
     private float range;
     private float deadBodyEatActiveCoolTimePenalty;
@@ -58,12 +51,15 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     private bool isResetCoolTimeWhenMeeting;
     private bool isShowArrow;
     private bool isActivated;
-    private Dictionary<byte, Arrow> deadBodyArrow;
 
+
+	private Dictionary<byte, Arrow> deadBodyArrow;
     private GraphicAndActiveTimeSwitcher<EaterAbilityMode> modeFactory;
 
-    public Eater() : base(
-       ExtremeRoleId.Eater,
+#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+	public Eater() : base(
+#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+	   ExtremeRoleId.Eater,
        ExtremeRoleType.Neutral,
        ExtremeRoleId.Eater.ToString(),
        ColorPalette.EaterMaroon,
@@ -86,6 +82,8 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.CreateAbilityCountButton(
             deadBodyMode.Graphic.Text, deadBodyMode.Graphic.Img,
             IsAbilityCheck, CleanUp, ForceCleanUp);
+
+		if (this.Button is null) { return; }
 
         this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(
             this.Button.Behavior);
@@ -126,8 +124,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
     public bool IsAbilityUse()
     {
-
-        if (this.eatButton == null ||
+        if (this.Button == null ||
             this.modeFactory == null) { return false; }
 
         this.tmpTarget = Player.GetClosestPlayerInRange(
@@ -147,14 +144,14 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             (hasPlayerTarget || hasDedBodyTarget);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
-        if (this.eatButton != null)
+        if (this.Button != null)
         {
             if (this.isResetCoolTimeWhenMeeting)
             {
-                this.eatButton.Behavior.SetCoolTime(this.defaultCoolTime);
-                this.eatButton.OnMeetingEnd();
+                this.Button.Behavior.SetCoolTime(this.defaultCoolTime);
+                this.Button.OnMeetingEnd();
             }
             if (!this.isActivated)
             {
@@ -180,11 +177,9 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		// ターゲットが存在するときのチェック
 		if (this.tmpTarget != null)
 		{
+			byte playerId = this.tmpTarget.PlayerId;
 
-			byte playerId = this.targetPlayer.PlayerId;
-			var assassin = ExtremeRoleManager.GameRole[playerId] as Combination.Assassin;
-
-			if (assassin != null && 
+			if (ExtremeRoleManager.GameRole[playerId] is Combination.Assassin assassin && 
 				(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
 			{
 				return false;
@@ -214,7 +209,8 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         {
             byte playerId = GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId;
 
-            if (this.deadBodyArrow.TryGetValue(playerId, out Arrow arrow))
+            if (this.deadBodyArrow.TryGetValue(playerId, out Arrow? arrow) &&
+				arrow is not null)
             {
                 arrow.Update();
                 existDeadBodyPlayerId.Add(playerId);
@@ -236,7 +232,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             this.deadBodyArrow.Remove(playerId);
         }
 
-        if (this.Button.Behavior is AbilityCountBehavior behavior &&
+        if (this.Button?.Behavior is AbilityCountBehavior behavior &&
             behavior.AbilityCount != 0) { return; }
 
         ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
@@ -257,7 +253,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
             this.targetDeadBody = null;
 
-            if (this.eatButton == null) { return; }
+            if (this.Button == null) { return; }
 
             var mode = this.modeFactory.Get(EaterAbilityMode.Kill);
             mode.Time *= this.deadBodyEatActiveCoolTimePenalty;
@@ -370,7 +366,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
     private IEnumerator cleanDeadBodyOps(byte targetPlayerId)
     {
-        DeadBody checkDeadBody = null;
+        DeadBody? checkDeadBody = null;
 
         DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
         for (int i = 0; i < array.Length; ++i)
