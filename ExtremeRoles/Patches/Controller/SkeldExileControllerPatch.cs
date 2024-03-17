@@ -25,7 +25,6 @@ public static class SkeldExileControllerAnimePatch
 			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
 			return false;
 		}
-
 		return true;
 	}
 

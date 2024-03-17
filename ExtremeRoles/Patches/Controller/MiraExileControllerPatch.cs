@@ -23,8 +23,9 @@ public static class MiraExileControllerAnimePatch
 		if (spawnOpt.EnableSpecialSetting && spawnOpt.MiraHq)
 		{
 			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	private static IEnumerator animateWithRandomSpawn(MiraExileController __instance)
