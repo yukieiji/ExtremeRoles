@@ -68,7 +68,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			get
 			{
 				GameObject obj =
-					Loader.GetUnityObjectFromPath<GameObject>(
+					Loader.GetUnityObjectFromResources<GameObject>(
 						Path.YokoYashiroMinigameAsset,
 						Path.YokoYashiroMinigamePrefab);
 				return obj.GetComponent<YokoYashiroStatusUpdateMinigame>();
