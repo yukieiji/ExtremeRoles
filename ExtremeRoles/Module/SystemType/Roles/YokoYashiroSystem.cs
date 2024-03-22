@@ -69,8 +69,8 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			{
 				GameObject obj =
 					Loader.GetUnityObjectFromPath<GameObject>(
-						"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\yokominigame.asset",
-						"assets/roles/yokominigame.prefab");
+						Path.YokoYashiroMinigameAsset,
+						Path.YokoYashiroMinigamePrefab);
 				return obj.GetComponent<YokoYashiroStatusUpdateMinigame>();
 			}
 		}
