@@ -205,7 +205,12 @@ public sealed class Yoko :
             MeetingHud.Instance != null ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
-        if (Minigame.Instance) { return; }
+		if (this.Button != null)
+		{
+			this.Button.SetButtonShow(this.yashiro is not null);
+		}
+
+		if (Minigame.Instance) { return; }
 
         if (this.timer > 0)
         {
@@ -359,10 +364,5 @@ public sealed class Yoko :
 			this.IsAbilityActive,
 			this.CleanUp,
 			() => { });
-
-		if (this.Button != null)
-		{
-			this.Button.SetButtonShow(this.yashiro is not null);
-		}
 	}
 }
