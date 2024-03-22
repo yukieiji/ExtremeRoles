@@ -33,7 +33,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 
 	private int curPointIndex = 0;
 
-	private record VectorClass(float X, float Y)
+	private sealed record VectorClass(float X, float Y)
 	{
 		public Vector2 Vector => new Vector2(X, Y);
 	}
