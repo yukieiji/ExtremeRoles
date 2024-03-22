@@ -200,7 +200,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		}
 		text.transform.localPosition = Vector2.zero;
 
-		yield return waiter;
+		yield return new WaitForSeconds(0.5f);
 
 		this.AbstractClose();
 	}
