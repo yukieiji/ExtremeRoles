@@ -141,7 +141,7 @@ public sealed class Accelerator :
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())
         {
-            this.Button.SetLabelToCrewmate();
+            this.Button?.SetLabelToCrewmate();
         }
     }
 

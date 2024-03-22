@@ -142,6 +142,11 @@ public sealed class Skater :
 			Loader.CreateSpriteFromResources(
 			   Path.SkaterSkateOff),
 			this.CleanUp);
+
+		if (this.IsCrewmate())
+		{
+			this.Button?.SetLabelToCrewmate();
+		}
 	}
 
 	public void CleanUp()
