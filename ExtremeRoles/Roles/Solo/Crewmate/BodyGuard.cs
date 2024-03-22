@@ -40,13 +40,13 @@ public sealed class BodyGuard :
 
         private bool isReset;
 
-        private GraphicSwitcher<BodyGuardAbilityMode> switcher;
+        private readonly GraphicSwitcher<BodyGuardAbilityMode> switcher;
 #pragma warning disable CS8618
 		private TextMeshPro abilityCountText;
 
 		public BodyGuardAbilityBehavior(
-            GraphicMode featShieldMode,
-            GraphicMode resetMode,
+            GraphicMode<BodyGuardAbilityMode> featShieldMode,
+            GraphicMode<BodyGuardAbilityMode> resetMode,
             Func<bool> featShield,
             Action resetShield,
             Func<bool> canUse,
@@ -59,9 +59,7 @@ public sealed class BodyGuard :
             this.canUse = canUse;
             this.resetModeCheck = resetModeCheck;
 
-            this.switcher = new GraphicSwitcher<BodyGuardAbilityMode>(this);
-            this.switcher.Add(BodyGuardAbilityMode.Reset, resetMode);
-            this.switcher.Add(BodyGuardAbilityMode.FeatShield, featShieldMode);
+            this.switcher = new GraphicSwitcher<BodyGuardAbilityMode>(this, resetMode, featShieldMode);
         }
 #pragma warning restore CS8618
 		public void SetAbilityCount(int newAbilityNum)
@@ -493,19 +491,17 @@ public sealed class BodyGuard :
 
         this.Button = new ExtremeAbilityButton(
             new BodyGuardAbilityBehavior(
-                featShieldMode: new GraphicMode()
-                {
-                    Graphic = new ButtonGraphic(
-                        Translation.GetString("shield"),
-                        this.shildButtonImage)
-                },
-                resetMode: new GraphicMode()
-                {
-                    Graphic = new ButtonGraphic(
-                        Translation.GetString("resetShield"),
-                        Loader.CreateSpriteFromResources(
-                            Path.BodyGuardResetShield))
-                },
+                featShieldMode: new(
+					BodyGuardAbilityMode.FeatShield,
+					new ButtonGraphic(
+						Translation.GetString("shield"),
+						this.shildButtonImage)),
+                resetMode: new(
+					BodyGuardAbilityMode.Reset,
+					new ButtonGraphic(
+						Translation.GetString("resetShield"),
+						Loader.CreateSpriteFromResources(
+							Path.BodyGuardResetShield))),
                 featShield: UseAbility,
                 resetShield: Reset,
                 canUse: IsAbilityUse,

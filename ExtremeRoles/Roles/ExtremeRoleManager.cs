@@ -38,6 +38,7 @@ public enum ExtremeRoleId : int
     Buddy,
     Mover,
 	Accelerator,
+	Skater,
 
 	SpecialCrew,
     Sheriff,
@@ -110,7 +111,7 @@ public enum ExtremeRoleId : int
     Umbrer,
     Doll,
 	Hatter,
-
+	Artist,
 
 	Xion,
 }
@@ -131,6 +132,7 @@ public enum CombinationRoleType : byte
     Guesser,
     Mover,
 	Accelerator,
+	Skater,
 
 	Traitor,
 }
@@ -178,6 +180,8 @@ public enum RoleGameOverReason
 
 	HatterEndlessTeaTime,
 	HatterTeaPartyTime,
+
+	ArtistShipToArt,
 
     UnKnown = 100,
 }
@@ -281,6 +285,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Madmate   , new Madmate()},
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
+			{(int)ExtremeRoleId.Artist    , new Artist()},
 		};
 
     public static readonly Dictionary<
@@ -297,6 +302,7 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
             {(byte)CombinationRoleType.Mover          , new MoverManager()},
 			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
+			{(byte)CombinationRoleType.Skater        , new SkaterManager()},
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         };
 

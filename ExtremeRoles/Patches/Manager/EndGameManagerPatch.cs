@@ -355,7 +355,10 @@ public static class EndGameManagerSetUpPatch
 			RoleGameOverReason.HatterTeaPartyTime =>
 				WinTextInfo.Create(ExtremeRoleId.Hatter, ColorPalette.HatterYanagizome),
 
-            _ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
+			RoleGameOverReason.ArtistShipToArt =>
+				WinTextInfo.Create(ExtremeRoleId.Artist, ColorPalette.HatterYanagizome),
+
+			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
 
     private readonly record struct WinTextInfo(string Text, Color Color, bool IsChangeBk)

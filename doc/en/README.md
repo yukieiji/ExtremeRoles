@@ -27,7 +27,7 @@ As a main characteristic, there are the following:
 - Compatible MOD installation/update check/uninstall function
 - Multilingual (currently available in English and Japanese, SChinese only)
 
-### Additional role list (ExtremeRolesv 8.2.0.0 and more to come)
+### Additional role list (ExtremeRolesv 9.0.0.0 and more to come)
 
 #### Host Role
 - Xion
@@ -110,7 +110,9 @@ Client add-ons that add readability to ExtremeRoles, the main features are:
 
 |  Among Us - Version  |  Mod Version  |
 | ---- | ---- |
-|  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.0.0 |
+| v2023.10.24s/v2023.10.24e |	v9.0.0.0 |
+|  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.6.2 |
+|  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.6.2 |
 |  v2023.6.13s/v2023.6.13e/v2023.6.27s/v2023.6.27e  | v8.0.0.0 ～ v8.0.0.4 |
 |  v2023.3.28s/v2023.3.28e  | v7.0.0.0 ～ v7.1.2.0 |
 |  v2023.2.28s/v2023.2.28e  | v6.0.0.0 ～ v6.0.0.6 |

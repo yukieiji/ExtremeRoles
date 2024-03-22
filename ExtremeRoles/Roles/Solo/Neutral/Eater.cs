@@ -70,14 +70,13 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     {
         var allOpt = OptionManager.Instance;
 
-        GraphicAndActiveTimeMode deadBodyMode = new GraphicAndActiveTimeMode()
-        {
-            Graphic = new ButtonGraphic(
-                Translation.GetString("deadBodyEat"),
-                Loader.CreateSpriteFromResources(
-                    Path.EaterDeadBodyEat)),
-            Time = 0.1f,
-        };
+		var deadBodyMode = new GraphicAndActiveTimeMode<EaterAbilityMode>(
+			EaterAbilityMode.DeadBody,
+			new ButtonGraphic(
+				Translation.GetString("deadBodyEat"),
+				Loader.CreateSpriteFromResources(
+					Path.EaterDeadBodyEat)),
+			1.0f);
 
         this.CreateAbilityCountButton(
             deadBodyMode.Graphic.Text, deadBodyMode.Graphic.Img,
@@ -86,19 +85,15 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		if (this.Button is null) { return; }
 
         this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(
-            this.Button.Behavior);
-        this.modeFactory.Add(EaterAbilityMode.DeadBody, deadBodyMode);
-        this.modeFactory.Add(
-            EaterAbilityMode.Kill,
-            new GraphicAndActiveTimeMode()
-            {
-                Graphic = new ButtonGraphic(
-                    Translation.GetString("eatKill"),
-                    Loader.CreateSpriteFromResources(
-                        Path.EaterEatKill)),
-                Time = this.Button.Behavior.ActiveTime,
-            }
-        );
+            this.Button.Behavior,
+			deadBodyMode,
+			new(
+				EaterAbilityMode.Kill,
+				new ButtonGraphic(
+					Translation.GetString("eatKill"),
+					Loader.CreateSpriteFromResources(
+						Path.EaterEatKill)),
+				this.Button.Behavior.ActiveTime));
     }
 
     public void HookMuderPlayer(
@@ -157,7 +152,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             {
                 var mode = this.modeFactory.Get(EaterAbilityMode.Kill);
                 mode.Time *= this.killEatActiveCoolTimeReduceRate;
-                this.modeFactory.Add(EaterAbilityMode.Kill, mode);
+                this.modeFactory.Add(mode);
             }
         }
         this.isActivated = false;
@@ -257,7 +252,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
             var mode = this.modeFactory.Get(EaterAbilityMode.Kill);
             mode.Time *= this.deadBodyEatActiveCoolTimePenalty;
-            this.modeFactory.Add(EaterAbilityMode.Kill, mode);
+            this.modeFactory.Add(mode);
         }
         else if (this.targetPlayer != null)
         {

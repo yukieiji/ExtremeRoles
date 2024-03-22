@@ -121,10 +121,9 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 				GetRoleOptionId(TeroristOption.BombNum)),
 			miniGameOption);
 
-
-		this.teroSabo = new TeroristTeroSabotageSystem(sabotageOption, !this.canActiveOtherSabotage);
-		ExtremeSystemTypeManager.Instance.TryAdd(
-			TeroristTeroSabotageSystem.SystemType, this.teroSabo);
+		this.teroSabo = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			TeroristTeroSabotageSystem.SystemType,
+			()=> new TeroristTeroSabotageSystem(sabotageOption, !this.canActiveOtherSabotage));
 	}
 
     public void ResetOnMeetingStart()

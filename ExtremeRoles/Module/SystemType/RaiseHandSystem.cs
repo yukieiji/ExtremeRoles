@@ -8,6 +8,8 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Beta;
+
 
 #nullable enable
 
@@ -65,17 +67,7 @@ public sealed class RaiseHandSystem : IRaiseHandSystem
 	public bool IsDirty { get; private set; }
 
 	public static RaiseHandSystem Get()
-	{
-		var systemMng = ExtremeSystemTypeManager.Instance;
-		if (!systemMng.TryGet<RaiseHandSystem>(Type, out var sytem) ||
-			sytem == null)
-		{
-			sytem = new RaiseHandSystem();
-			systemMng.TryAdd(Type, sytem);
-		}
-
-		return sytem;
-	}
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet<RaiseHandSystem>(Type);
 
 	public void CreateRaiseHandButton()
 	{

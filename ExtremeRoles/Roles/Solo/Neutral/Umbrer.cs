@@ -150,33 +150,32 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     public void CreateAbility()
     {
         var allOpt = OptionManager.Instance;
-
-        GraphicAndActiveTimeMode featVirusMode = new GraphicAndActiveTimeMode()
-        {
-            Graphic = new Module.AbilityBehavior.ButtonGraphic(
-                Translation.GetString("featVirus"),
-                Loader.CreateSpriteFromResources(
-                    Path.UmbrerFeatVirus)),
-            Time = allOpt.GetValue<float>(GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityActiveTime)),
-        };
-        GraphicAndActiveTimeMode upgradeVirusMode = new GraphicAndActiveTimeMode()
-        {
-            Graphic = new Module.AbilityBehavior.ButtonGraphic(
-                Translation.GetString("upgradeVirus"),
-                Loader.CreateSpriteFromResources(
-                Path.UmbrerUpgradeVirus)),
-            Time = allOpt.GetValue<float>(GetRoleOptionId(
-                UmbrerOption.UpgradeVirusTime)),
-        };
+        var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
+			UmbrerMode.Feat,
+				new Module.AbilityBehavior.ButtonGraphic(
+					Translation.GetString("featVirus"),
+					Loader.CreateSpriteFromResources(
+						Path.UmbrerFeatVirus)),
+				allOpt.GetValue<float>(GetRoleOptionId(
+					RoleAbilityCommonOption.AbilityActiveTime))
+		);
 
         this.CreateNormalAbilityButton(
             featVirusMode.Graphic.Text, featVirusMode.Graphic.Img,
             IsAbilityCheck, CleanUp, ForceCleanUp);
 
-        this.mode = new GraphicAndActiveTimeSwitcher<UmbrerMode>(this.Button.Behavior);
-        this.mode.Add(UmbrerMode.Feat, featVirusMode);
-        this.mode.Add(UmbrerMode.Upgrage, upgradeVirusMode);
+        this.mode = new GraphicAndActiveTimeSwitcher<UmbrerMode>(
+			this.Button.Behavior,
+			featVirusMode,
+			new(
+				UmbrerMode.Upgrage,
+				new Module.AbilityBehavior.ButtonGraphic(
+					Translation.GetString("upgradeVirus"),
+					Loader.CreateSpriteFromResources(
+					Path.UmbrerUpgradeVirus)),
+				allOpt.GetValue<float>(GetRoleOptionId(
+					UmbrerOption.UpgradeVirusTime))
+			));
     }
 
     public bool UseAbility()

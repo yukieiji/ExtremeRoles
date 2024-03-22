@@ -16,17 +16,7 @@ public sealed class ExtremeConsoleSystem : IExtremeSystemType
 	private const ExtremeSystemType systemType = ExtremeSystemType.ExtremeConsoleSystem;
 
 	public static ExtremeConsoleSystem Create()
-	{
-		if (!ExtremeSystemTypeManager.Instance.TryGet<ExtremeConsoleSystem>(
-				systemType, out var system) ||
-			system is null)
-		{
-			system = new ExtremeConsoleSystem();
-			ExtremeSystemTypeManager.Instance.TryAdd(systemType, system);
-		}
-
-		return system;
-	}
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet<ExtremeConsoleSystem>(systemType);
 
 	public ExtremeConsole CreateConsoleObj(in Vector3 pos, string? name = null)
 	{

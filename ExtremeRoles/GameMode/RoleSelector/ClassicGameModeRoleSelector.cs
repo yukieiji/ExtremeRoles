@@ -155,6 +155,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Madmate,
             ExtremeRoleId.Umbrer,
 			ExtremeRoleId.Hatter,
+			ExtremeRoleId.Artist
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
@@ -173,6 +174,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             CombinationRoleType.Guesser,
             CombinationRoleType.Mover,
 			CombinationRoleType.Accelerator,
+			CombinationRoleType.Skater,
 
 			CombinationRoleType.Traitor,
         ];

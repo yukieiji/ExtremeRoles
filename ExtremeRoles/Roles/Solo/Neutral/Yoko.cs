@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -13,13 +16,14 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Yoko :
     SingleRoleBase,
+	IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleResetMeeting,
     IRoleWinPlayerModifier
 {
     public enum YokoOption
@@ -29,14 +33,22 @@ public sealed class Yoko :
         SearchRange,
         SearchTime,
         TrueInfoRate,
-    }
+		UseYashiro,
+		YashiroActiveTime,
+		YashiroProtectRange,
+		YashiroSeelTime,
+		YashiroUpdateWithMeeting,
+	}
 
-    private float searchRange;
+	private float searchRange;
     private float searchTime;
     private float timer;
     private int trueInfoGage;
 
-    private TMPro.TextMeshPro tellText;
+	private Vector2 prevPos;
+
+    private TMPro.TextMeshPro? tellText;
+	private YokoYashiroSystem? yashiro;
 
     private readonly HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
     {
@@ -46,7 +58,9 @@ public sealed class Yoko :
         ExtremeRoleId.Lover,
     };
 
-    public Yoko() : base(
+	public ExtremeAbilityButton? Button { get; set; }
+
+	public Yoko() : base(
         ExtremeRoleId.Yoko,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Yoko.ToString(),
@@ -81,7 +95,12 @@ public sealed class Yoko :
         }
     }
 
-    public override bool IsSameTeam(SingleRoleBase targetRole) =>
+	public override bool TryRolePlayerKilledFrom(
+		PlayerControl rolePlayer, PlayerControl fromPlayer)
+		=> this.yashiro is null || !this.yashiro.IsNearActiveYashiro(
+			rolePlayer.GetTruePosition());
+
+	public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
@@ -106,22 +125,65 @@ public sealed class Yoko :
             YokoOption.TrueInfoRate,
             50, 25, 80, 5, parentOps,
             format: OptionUnit.Percentage);
-    }
+
+		var yashiroOpt = CreateBoolOption(
+			YokoOption.UseYashiro,
+			false, parentOps);
+		this.CreateAbilityCountOption(yashiroOpt, 3, 10, 5f);
+
+		CreateIntOption(
+			YokoOption.YashiroActiveTime,
+			30, 1, 360, 1,
+			yashiroOpt,
+			format: OptionUnit.Second);
+
+		CreateIntOption(
+			YokoOption.YashiroSeelTime,
+			10, 1, 360, 1,
+			yashiroOpt,
+			format: OptionUnit.Second);
+
+		CreateFloatOption(
+			YokoOption.YashiroProtectRange,
+			5.0f, 1.0f, 10.0f, 0.1f,
+			yashiroOpt);
+
+		CreateBoolOption(
+			YokoOption.YashiroUpdateWithMeeting,
+			true, yashiroOpt);
+	}
     protected override void RoleSpecificInit()
     {
-        this.CanRepairSabotage = OptionManager.Instance.GetValue<bool>(
+		var opt = OptionManager.Instance;
+        this.CanRepairSabotage = opt.GetValue<bool>(
             GetRoleOptionId(YokoOption.CanRepairSabo));
-        this.UseVent = OptionManager.Instance.GetValue<bool>(
+        this.UseVent = opt.GetValue<bool>(
             GetRoleOptionId(YokoOption.CanUseVent));
-        this.searchRange = OptionManager.Instance.GetValue<float>(
+        this.searchRange = opt.GetValue<float>(
             GetRoleOptionId(YokoOption.SearchRange));
-        this.searchTime = OptionManager.Instance.GetValue<float>(
+        this.searchTime = opt.GetValue<float>(
             GetRoleOptionId(YokoOption.SearchTime));
-        this.trueInfoGage = OptionManager.Instance.GetValue<int>(
+        this.trueInfoGage = opt.GetValue<int>(
             GetRoleOptionId(YokoOption.TrueInfoRate));
-        this.timer = this.searchTime;
+
+		this.yashiro = null;
+
+		if (opt.GetValue<bool>(GetRoleOptionId(YokoOption.UseYashiro)))
+		{
+			float activeTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroActiveTime));
+			float sealTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroSeelTime));
+			float protectRange = opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroProtectRange));
+			bool isUpdateMeeting = opt.GetValue<bool>(
+				GetRoleOptionId(YokoOption.YashiroUpdateWithMeeting));
+
+			this.yashiro = ExtremeSystemTypeManager.Instance.CreateOrGet(
+				YokoYashiroSystem.Type,
+				() => new YokoYashiroSystem(activeTime, sealTime, protectRange, isUpdateMeeting));
+		}
+
+		this.timer = this.searchTime;
     }
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -158,25 +220,32 @@ public sealed class Yoko :
 
         foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-            SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
 
-            if (!player.Disconnected &&
-                (player.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId) &&
-                !player.IsDead && !this.IsSameTeam(targetRole))
-            {
-                PlayerControl @object = player.Object;
-                if (@object)
-                {
-                    Vector2 vector = @object.GetTruePosition() - truePosition;
-                    float magnitude = vector.magnitude;
-                    if (magnitude <= this.searchRange && this.isEnemy(targetRole))
-                    {
-                        isEnemy = true;
-                        break;
-                    }
-                }
-            }
-        }
+			if (player == null ||
+				player.Disconnected ||
+				player.IsDead ||
+				player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+			{
+				continue;
+			}
+
+			PlayerControl @object = player.Object;
+			SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
+
+			if (@object == null || this.IsSameTeam(targetRole))
+			{
+				continue;
+			}
+
+			Vector2 vector = @object.GetTruePosition() - truePosition;
+			float magnitude = vector.magnitude;
+			if (magnitude <= this.searchRange &&
+				this.isEnemy(targetRole))
+			{
+				isEnemy = true;
+				break;
+			}
+		}
 
         if (this.trueInfoGage <= RandomGenerator.Instance.Next(101))
         {
@@ -248,4 +317,52 @@ public sealed class Yoko :
         }
         return targetRole.Id == ExtremeRoleId.Yoko;
     }
+
+	public bool UseAbility()
+	{
+		if (this.yashiro is null)
+		{
+			return false;
+		}
+		this.prevPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+		return true;
+	}
+
+	public void CleanUp()
+	{
+		if (this.yashiro is null) { return; }
+
+		Vector2 pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+		this.yashiro.RpcSetYashiro(this.GameControlId, pos);
+	}
+
+	public bool IsAbilityUse()
+	{
+		if (this.yashiro is null) { return false; }
+
+		Vector2 pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+		return this.yashiro.CanSet(pos);
+	}
+
+	public bool IsAbilityActive() =>
+		this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
+	public void CreateAbility()
+	{
+		this.CreateAbilityCountButton(
+			"yokoYashiro",
+			Loader.CreateSpriteFromResources(
+				Path.YokoYashiro),
+			this.IsAbilityActive,
+			this.CleanUp,
+			() => { });
+
+		if (this.Button != null)
+		{
+			this.Button.SetButtonShow(this.yashiro is not null);
+		}
+	}
 }

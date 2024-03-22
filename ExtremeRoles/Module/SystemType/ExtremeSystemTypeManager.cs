@@ -13,6 +13,9 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
+using ExtremeRoles.Module.SystemType.Roles;
+using System.Reflection;
+
 
 #nullable enable
 
@@ -31,7 +34,9 @@ public enum ExtremeSystemType : byte
 
 	FakerDummy,
 	ThiefMeetingTimeChange,
-	TeroristTeroSabotage
+	TeroristTeroSabotage,
+
+	YokoYashiro
 }
 
 public enum ResetTiming : byte
@@ -148,6 +153,29 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	[HideFromIl2Cpp]
 	public bool TryGet(ExtremeSystemType systemType, out IExtremeSystemType? system)
 		=> this.allSystems.TryGetValue(systemType, out system);
+
+	public T CreateOrGet<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
+	{
+		if (!Instance.TryGet<T>(systemType, out var system) ||
+			system is null)
+		{
+			system = new T();
+			Instance.TryAdd(systemType, system);
+		}
+		return system;
+	}
+
+	[HideFromIl2Cpp]
+	public T CreateOrGet<T>(ExtremeSystemType systemType, Func<T> construnctFunc) where T : class, IExtremeSystemType
+	{
+		if (!Instance.TryGet<T>(systemType, out var system) ||
+			system is null)
+		{
+			system = construnctFunc.Invoke();
+			Instance.TryAdd(systemType, system);
+		}
+		return system;
+	}
 
 	[HideFromIl2Cpp]
 	public bool TryGet<T>(ExtremeSystemType systemType, out T? system) where T : class, IExtremeSystemType

@@ -7,6 +7,7 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Task;
@@ -16,7 +17,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using CollectionEnum = System.Collections.IEnumerator;
 using SaboTask = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.Task;
 using ConsoleInfo = ExtremeRoles.Module.SystemType.Roles.TeroristTeroSabotageSystem.ConsoleInfo;
-using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -34,8 +34,9 @@ public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	public byte BombId => this.ConsoleInfo.BombId;
-	public ConsoleInfo ConsoleInfo { private get; set; }
 
+	[HideFromIl2Cpp]
+	public ConsoleInfo ConsoleInfo { private get; set; }
 
 	private readonly StringBuilder logBuilder = new StringBuilder();
 	private readonly Queue<string> showLogText = new Queue<string>(showMaxTextLine);
@@ -86,6 +87,9 @@ public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
 				this.StartCoroutine(coStartActive());
 			});
 	}
+
+	public override void Close()
+		=> this.AbstractClose();
 
 	[HideFromIl2Cpp]
 	private CollectionEnum coStartActive()

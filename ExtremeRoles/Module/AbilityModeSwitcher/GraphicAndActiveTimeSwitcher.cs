@@ -1,26 +1,30 @@
 ﻿using System;
 using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.AbilityModeSwitcher;
 
-public struct GraphicAndActiveTimeMode : IAbilityMode
-{
-	public ButtonGraphic Graphic { get; set; }
-	public float Time { get; set; }
-}
-
-public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> :
-	ModeSwitcherBase<SwithEnum, GraphicAndActiveTimeMode>
+public class GraphicAndActiveTimeMode<SwithEnum>(SwithEnum mode, ButtonGraphic graphic, float time) : 
+	GraphicMode<SwithEnum>(mode, graphic)
 	where SwithEnum : struct, Enum
 {
-	public GraphicAndActiveTimeSwitcher(AbilityBehaviorBase behavior) : base(behavior)
+	public float Time { get; set; } = time;
+}
+
+public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> : 
+	ModeSwitcherBase<SwithEnum, GraphicAndActiveTimeMode<SwithEnum>>
+	where SwithEnum : struct, Enum
+{
+	public GraphicAndActiveTimeSwitcher(
+		AbilityBehaviorBase behavior,
+		params GraphicAndActiveTimeMode<SwithEnum>[] allMode) : base(behavior, allMode)
 	{ }
 
 	public override void Switch(SwithEnum type)
 	{
-		base.Switch(type);
-		GraphicAndActiveTimeMode mode = this.Mode[type];
+		this.Current = type;
+		GraphicAndActiveTimeMode<SwithEnum> mode = this.Get(type);
+
+		this.Behavior.SetGraphic(mode.Graphic);
 		this.Behavior.SetActiveTime(mode.Time);
 	}
 }

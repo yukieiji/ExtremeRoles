@@ -49,8 +49,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         private GraphicAndActiveTimeSwitcher<CarpenterAbilityMode> switcher;
 
         public CarpenterAbilityBehavior(
-            GraphicAndActiveTimeMode ventMode,
-            GraphicAndActiveTimeMode cameraMode,
+            GraphicAndActiveTimeMode<CarpenterAbilityMode> ventMode,
+            GraphicAndActiveTimeMode<CarpenterAbilityMode> cameraMode,
             int ventRemoveScrewNum,
             int cameraSetScrewNum,
             Func<bool> setCountStart,
@@ -70,9 +70,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             this.updateMapObj = updateMapObj;
             this.ventRemoveModeCheck = ventRemoveModeCheck;
 
-            this.switcher = new GraphicAndActiveTimeSwitcher<CarpenterAbilityMode>(this);
-            this.switcher.Add(CarpenterAbilityMode.RemoveVent, ventMode);
-            this.switcher.Add(CarpenterAbilityMode.SetCamera, cameraMode);
+            this.switcher = new GraphicAndActiveTimeSwitcher<CarpenterAbilityMode>(
+				this, ventMode, cameraMode);
         }
 
         public void SetAbilityCount(int newAbilityNum)
@@ -504,24 +503,24 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
         this.Button = new ExtremeAbilityButton(
             new CarpenterAbilityBehavior(
-                ventMode: new GraphicAndActiveTimeMode()
-                {
-                    Graphic = new ButtonGraphic(
-                        Translation.GetString("ventSeal"),
-                        Loader.CreateSpriteFromResources(
-                            Path.CarpenterVentSeal)),
-                    Time = allOpt.GetValue<float>(
-                        GetRoleOptionId(CarpenterOption.RemoveVentStopTime))
-                },
-                cameraMode: new GraphicAndActiveTimeMode()
-                {
-                    Graphic = new ButtonGraphic(
-                        Translation.GetString("cameraSet"),
-                        Loader.CreateSpriteFromResources(
-                            Path.CarpenterSetCamera)),
-                    Time = allOpt.GetValue<float>(
-                        GetRoleOptionId(CarpenterOption.SetCameraStopTime))
-                },
+                ventMode: new(
+					mode: CarpenterAbilityMode.RemoveVent,
+					graphic: new (
+						Translation.GetString("ventSeal"),
+						Loader.CreateSpriteFromResources(
+							Path.CarpenterVentSeal)),
+					time: allOpt.GetValue<float>(
+						GetRoleOptionId(CarpenterOption.RemoveVentStopTime))
+					),
+                cameraMode: new(
+					mode: CarpenterAbilityMode.SetCamera,
+					graphic: new(
+						Translation.GetString("cameraSet"),
+						Loader.CreateSpriteFromResources(
+							Path.CarpenterSetCamera)),
+					time: allOpt.GetValue<float>(
+						GetRoleOptionId(CarpenterOption.SetCameraStopTime))
+					),
                 ventRemoveScrewNum: allOpt.GetValue<int>(
                     GetRoleOptionId(CarpenterOption.RemoveVentScrew)),
                 cameraSetScrewNum: allOpt.GetValue<int>(
