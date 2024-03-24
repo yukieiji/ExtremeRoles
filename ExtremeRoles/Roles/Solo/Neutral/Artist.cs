@@ -73,7 +73,22 @@ public sealed class Artist :
 			   Path.ArtistArtOn),
 			Loader.CreateSpriteFromResources(
 			   Path.ArtistArtOff),
-			this.CleanUp);
+			this.CleanUp,
+			() =>
+			{
+				PlayerControl? pc = CachedPlayerControl.LocalPlayer;
+
+				return
+					!(
+						pc == null ||
+						pc.Data == null ||
+						pc.Data.IsDead ||
+						pc.Data.Disconnected ||
+						pc.inMovingPlat ||
+						pc.inVent ||
+						pc.onLadder
+					);
+			});
 	}
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();

@@ -102,6 +102,11 @@ public sealed class PassiveAbilityBehavior : AbilityBehaviorBase
 
 	public override AbilityState Update(AbilityState curState)
 	{
+		if (this.isActive && !this.IsCanAbilityActiving())
+		{
+			this.ForceAbilityOff();
+			curState = AbilityState.CoolDown;
+		}
 		return curState;
 	}
 }
