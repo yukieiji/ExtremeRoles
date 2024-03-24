@@ -356,7 +356,7 @@ public static class EndGameManagerSetUpPatch
 				WinTextInfo.Create(ExtremeRoleId.Hatter, ColorPalette.HatterYanagizome),
 
 			RoleGameOverReason.ArtistShipToArt =>
-				WinTextInfo.Create(ExtremeRoleId.Artist, ColorPalette.HatterYanagizome),
+				WinTextInfo.Create(ExtremeRoleId.Artist, ColorPalette.ArtistChenChuWhowan),
 
 			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
