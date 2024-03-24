@@ -50,6 +50,8 @@ public sealed class Artist :
 	{
 		if (rolePlayer == null ||
 			rolePlayer.Data == null ||
+			rolePlayer.Data.IsDead ||
+			rolePlayer.Data.Disconnected ||
 			this.IsWin ||
 			this.drawer == null)
 		{
@@ -95,6 +97,13 @@ public sealed class Artist :
 
 	public override bool IsSameTeam(SingleRoleBase targetRole) =>
 		this.IsNeutralSameTeam(targetRole);
+
+	public override void RolePlayerKilledAction(
+		PlayerControl rolePlayer,
+		PlayerControl killerPlayer)
+	{
+		endLine(this);
+	}
 
 	public static void DrawOps(in MessageReader reader)
     {
