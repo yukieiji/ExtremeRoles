@@ -164,9 +164,11 @@ public sealed class Skater :
 
 	private void setBehaviourEnable(bool enable)
 	{
-		if (this.behaviour != null)
-		{
-			this.behaviour.enabled = enable;
-		}
+		if (this.behaviour == null) { return; }
+
+		this.behaviour.enabled = enable;
+
+		if (enable) { return; }
+		this.behaviour.Reset();
 	}
 }

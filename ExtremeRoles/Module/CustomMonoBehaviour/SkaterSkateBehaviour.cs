@@ -39,6 +39,11 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 		this.e = param.E;
 	}
 
+	public void Reset()
+	{
+		this.PrevForce = Vector2.zero;
+	}
+
 	public void FixedUpdate()
 	{
 		PlayerControl pc = CachedPlayerControl.LocalPlayer;
@@ -53,7 +58,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null)
 		{
-			this.PrevForce = Vector2.zero;
+			this.Reset();
 			return;
 		}
 
