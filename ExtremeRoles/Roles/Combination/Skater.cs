@@ -85,7 +85,7 @@ public sealed class Skater :
 			Option.UseE, true, parentOps);
 		CreateFloatOption(
 			Option.EValue,
-			0.9f, 0.0f, 1.0f, 0.0025f,
+			0.9f, 0.0f, 2.0f, 0.01f,
 			eOpt,
 			invert: true,
 			enableCheckOption: parentOps);
