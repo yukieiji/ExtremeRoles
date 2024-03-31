@@ -5,6 +5,9 @@ using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+
+using ArgException = System.ArgumentException;
 
 namespace ExtremeRoles.Module.Ability;
 
@@ -187,13 +190,19 @@ public class ExtremeAbilityButton
 				}
 				break;
 			case AbilityState.Activating:
+
+				if (this.Behavior is not IActivatingBehavior activatingBehavior)
+				{
+					throw new ArgException("Can't inject IActivatingBehavior");
+				}
+
 				// 緑色でタイマーをすすめる
 				this.Timer -= Time.deltaTime;
 				this.button.cooldownTimerText.color = TimerOnColor;
 
-				maxTimer = this.Behavior.ActiveTime;
+				maxTimer = activatingBehavior.ActiveTime;
 
-				if (!this.Behavior.IsCanAbilityActiving())
+				if (!activatingBehavior.CanAbilityActiving)
 				{
 					this.Behavior.ForceAbilityOff();
 					setStatus(AbilityState.Ready);
@@ -260,7 +269,11 @@ public class ExtremeAbilityButton
 				}
 				break;
 			case AbilityState.Activating:
-				Timer = Behavior.ActiveTime;
+				if (this.Behavior is not IActivatingBehavior activatingBehavior)
+				{
+					throw new ArgException("Can't inject IActivatingBehavior");
+				}
+				this.Timer = activatingBehavior.ActiveTime;
 				break;
 			case AbilityState.Reset:
 				newState = AbilityState.CoolDown;

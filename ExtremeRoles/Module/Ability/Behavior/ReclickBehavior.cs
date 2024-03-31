@@ -1,23 +1,31 @@
 ﻿using System;
 using UnityEngine;
 
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+
+#nullable enable
+
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickBehavior : BehaviorBase
+public sealed class ReclickBehavior : BehaviorBase, IActivatingBehavior
 {
-	private Func<bool> ability;
-	private Func<bool> canUse;
-	private Func<bool> canActivating;
-	private Action abilityOff;
+	private readonly Func<bool> ability;
+	private readonly Func<bool> canUse;
+	private readonly Func<bool> canActivating;
+	private readonly Action? abilityOff;
 
 	private bool isActive;
 
-	public ReclickBehavior(
+	public float ActiveTime { get; set; }
+
+	public bool CanAbilityActiving => this.canActivating.Invoke();
+
+	public Reclickehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
-		Action abilityOff = null) : base(text, img)
+		Func<bool>? canActivating = null,
+		Action? abilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
 		this.canUse = canUse;
@@ -44,9 +52,7 @@ public sealed class ReclickBehavior : BehaviorBase
 		AbilityOff();
 	}
 
-	public override bool IsCanAbilityActiving() => canActivating.Invoke();
-
-	public override bool IsUse() => canUse.Invoke() || isActive;
+	public override bool IsUse() => this.canUse.Invoke() || this.isActive;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)

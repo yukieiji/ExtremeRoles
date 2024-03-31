@@ -1,13 +1,17 @@
 ﻿using System;
 
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+
+#nullable enable
+
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class PassiveBehavior : BehaviorBase
+public sealed class PassiveBehavior : BehaviorBase, IActivatingBehavior
 {
-	private Func<bool> ability;
-	private Func<bool> canUse;
-	private Func<bool> canActivating;
-	private Action abilityOff;
+	private readonly Func<bool> ability;
+	private readonly Func<bool> canUse;
+	private readonly Func<bool> canActivating;
+	private readonly Action? abilityOff;
 
 	private bool isActive;
 
@@ -17,13 +21,26 @@ public sealed class PassiveBehavior : BehaviorBase
 	private ButtonGraphic activeGraphic;
 	private ButtonGraphic deactiveGraphic;
 
+	public float ActiveTime
+	{
+		get => this.innerActiveTime;
+		set
+		{
+			this.innerActiveTime = value;
+			this.baseActiveTime = value;
+		}
+	}
+	public bool CanAbilityActiving => this.canActivating.Invoke();
+
+	private float innerActiveTime;
+
 	public PassiveBehavior(
 		ButtonGraphic activeGraphic,
 		ButtonGraphic deactiveGraphic,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
-		Action abilityOff = null) : base(activeGraphic)
+		Func<bool>? canActivating = null,
+		Action? abilityOff = null) : base(activeGraphic)
 	{
 		this.activeGraphic = activeGraphic;
 		this.deactiveGraphic = deactiveGraphic;
@@ -37,11 +54,6 @@ public sealed class PassiveBehavior : BehaviorBase
 		isActive = false;
 	}
 
-	public override void SetActiveTime(float newTime)
-	{
-		base.SetActiveTime(newTime);
-		baseActiveTime = newTime;
-	}
 
 	public override void SetCoolTime(float newTime)
 	{
@@ -65,9 +77,7 @@ public sealed class PassiveBehavior : BehaviorBase
 		base.SetCoolTime(baseCoolTime);
 	}
 
-	public override bool IsCanAbilityActiving() => canActivating.Invoke();
-
-	public override bool IsUse() => canUse.Invoke();
+	public override bool IsUse() => this.canUse.Invoke();
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -102,7 +112,7 @@ public sealed class PassiveBehavior : BehaviorBase
 
 	public override AbilityState Update(AbilityState curState)
 	{
-		if (isActive && !IsCanAbilityActiving())
+		if (this.isActive && !this.CanAbilityActiving)
 		{
 			ForceAbilityOff();
 			curState = AbilityState.CoolDown;

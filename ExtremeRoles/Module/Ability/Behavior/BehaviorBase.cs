@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.Ability.Behavior;
 
 public struct ButtonGraphic
@@ -17,7 +19,6 @@ public struct ButtonGraphic
 public abstract class BehaviorBase
 {
 	public float CoolTime { get; private set; }
-	public float ActiveTime { get; private set; }
 
 	public ButtonGraphic Graphic => graphic;
 	private ButtonGraphic graphic;
@@ -30,11 +31,6 @@ public abstract class BehaviorBase
 	public BehaviorBase(ButtonGraphic graphic)
 	{
 		SetGraphic(graphic);
-	}
-
-	public virtual void SetActiveTime(float newTime)
-	{
-		ActiveTime = newTime;
 	}
 
 	public virtual void SetCoolTime(float newTime)
@@ -77,8 +73,6 @@ public abstract class BehaviorBase
 	public abstract bool TryUseAbility(float timer, AbilityState curState, out AbilityState newState);
 
 	public abstract bool IsUse();
-
-	public abstract bool IsCanAbilityActiving();
 
 	public abstract AbilityState Update(AbilityState curState);
 }

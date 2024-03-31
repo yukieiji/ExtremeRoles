@@ -4,31 +4,31 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class CountBehavior : BehaviorBase, ICountBehavior
+public class CountBehavior : BehaviorBase, ICountBehavior
 {
 	public int AbilityCount { get; private set; }
 
 	private bool isReduceOnActive;
 
 	private bool isUpdate = false;
-	private Func<bool> ability;
-	private Func<bool> canUse;
-	private Func<bool> canActivating;
-	private Action forceAbilityOff;
-	private Action abilityOff;
+	private readonly Func<bool> ability;
+	private readonly Func<bool> canUse;
+	private readonly Action? forceAbilityOff;
+	private readonly Action? abilityOff;
 
-	private TMPro.TextMeshPro abilityCountText = null;
+	private TMPro.TextMeshPro? abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
 	public CountBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
-		Action abilityOff = null,
-		Action forceAbilityOff = null,
+		Action? abilityOff = null,
+		Action? forceAbilityOff = null,
 		bool isReduceOnActive = false) : base(text, img)
 	{
 		this.ability = ability;
@@ -37,8 +37,6 @@ public sealed class CountBehavior : BehaviorBase, ICountBehavior
 
 		this.abilityOff = abilityOff;
 		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
-
-		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 	}
 
 	public void SetCountText(string text)
@@ -48,13 +46,7 @@ public sealed class CountBehavior : BehaviorBase, ICountBehavior
 
 	public override void Initialize(ActionButton button)
 	{
-		var coolTimerText = button.cooldownTimerText;
-
-		abilityCountText = UnityEngine.Object.Instantiate(
-			coolTimerText, coolTimerText.transform.parent);
-		abilityCountText.enableWordWrapping = false;
-		abilityCountText.transform.localScale = Vector3.one * 0.5f;
-		abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+		this.abilityCountText = ICountBehavior.CreateCountText(button);
 		updateAbilityCountText();
 	}
 
@@ -71,8 +63,6 @@ public sealed class CountBehavior : BehaviorBase, ICountBehavior
 	{
 		forceAbilityOff?.Invoke();
 	}
-
-	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
 	public override bool IsUse()
 		=> canUse.Invoke() && AbilityCount > 0;
@@ -99,8 +89,7 @@ public sealed class CountBehavior : BehaviorBase, ICountBehavior
 			reduceAbilityCount();
 		}
 
-		newState = ActiveTime <= 0.0f ?
-			AbilityState.CoolDown : AbilityState.Activating;
+		newState = AbilityState.CoolDown;
 
 		return true;
 	}
@@ -145,8 +134,13 @@ public sealed class CountBehavior : BehaviorBase, ICountBehavior
 
 	private void updateAbilityCountText()
 	{
-		abilityCountText.text = string.Format(
-			Translation.GetString(buttonTextFormat),
-			AbilityCount);
+		if (this.abilityCountText == null)
+		{
+			return;
+		}
+
+		this.abilityCountText.text = string.Format(
+			Translation.GetString(this.buttonTextFormat),
+			this.AbilityCount);
 	}
 }

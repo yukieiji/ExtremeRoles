@@ -38,7 +38,6 @@ public static class RoleAbilityFactory
 		Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
 		bool isReduceOnActive = false,
@@ -50,7 +49,6 @@ public static class RoleAbilityFactory
 				img: img,
 				canUse: canUse,
 				ability: ability,
-				canActivating: canActivating,
 				abilityOff: abilityOff,
 				forceAbilityOff: forceAbilityOff,
 				isReduceOnActive: isReduceOnActive),
@@ -71,7 +69,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new CountBehavior(
+			new ActivatingCountBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
@@ -166,7 +164,6 @@ public static class RoleAbilityFactory
 		Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
 		KeyCode hotKey = KeyCode.F)
@@ -177,7 +174,6 @@ public static class RoleAbilityFactory
 				img: img,
 				canUse: canUse,
 				ability: ability,
-				canActivating: canActivating,
 				abilityOff: abilityOff,
 				forceAbilityOff: forceAbilityOff),
 			new RoleButtonActivator(),
@@ -196,7 +192,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new ReusableBehavior(
+			new ReusableActivatingBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,

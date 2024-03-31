@@ -4,29 +4,35 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickCountBehavior : BehaviorBase, ICountBehavior
+public sealed class ReclickCountBehavior : BehaviorBase, IActivatingBehavior, ICountBehavior
 {
 	public int AbilityCount { get; private set; }
 
+	public float ActiveTime { get; set; }
+
+	public bool CanAbilityActiving => this.canActivating.Invoke();
+
 	private bool isUpdate = false;
-	private Func<bool> ability;
-	private Func<bool> canUse;
-	private Func<bool> canActivating;
-	private Action abilityOff;
+	private readonly Func<bool> ability;
+	private readonly Func<bool> canUse;
+	private readonly Func<bool> canActivating;
+	private readonly Action? abilityOff;
 
 	private bool isActive;
 
-	private TMPro.TextMeshPro abilityCountText = null;
+	private TMPro.TextMeshPro? abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
 	public ReclickCountBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
-		Action abilityOff = null) : base(text, img)
+		Func<bool>? canActivating = null,
+		Action? abilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
 		this.canUse = canUse;
@@ -39,13 +45,7 @@ public sealed class ReclickCountBehavior : BehaviorBase, ICountBehavior
 
 	public override void Initialize(ActionButton button)
 	{
-		var coolTimerText = button.cooldownTimerText;
-
-		abilityCountText = UnityEngine.Object.Instantiate(
-			coolTimerText, coolTimerText.transform.parent);
-		abilityCountText.enableWordWrapping = false;
-		abilityCountText.transform.localScale = Vector3.one * 0.5f;
-		abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+		this.abilityCountText = ICountBehavior.CreateCountText(button);
 		updateAbilityCountText();
 	}
 
@@ -59,8 +59,6 @@ public sealed class ReclickCountBehavior : BehaviorBase, ICountBehavior
 	{
 		AbilityOff();
 	}
-
-	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
 	public override bool IsUse() =>
 		canUse.Invoke() && AbilityCount > 0 || isActive;
@@ -142,8 +140,13 @@ public sealed class ReclickCountBehavior : BehaviorBase, ICountBehavior
 
 	private void updateAbilityCountText()
 	{
-		abilityCountText.text = string.Format(
-			Translation.GetString(buttonTextFormat),
-			AbilityCount);
+		if (this.abilityCountText == null)
+		{
+			return;
+		}
+
+		this.abilityCountText.text = string.Format(
+			Translation.GetString(this.buttonTextFormat),
+			this.AbilityCount);
 	}
 }

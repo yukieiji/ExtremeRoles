@@ -1,31 +1,50 @@
-﻿using ExtremeRoles.Performance;
-using System;
+﻿using System;
 
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+
+#nullable enable
+
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class BatteryBehavior : BehaviorBase
+public sealed class BatteryBehavior : BehaviorBase, IActivatingBehavior
 {
-	private Func<bool> ability;
-	private Func<bool> canUse;
-	private Func<bool> canActivating;
-	private Action abilityOff;
-	private Action forceAbilityOff;
+	public float ActiveTime
+	{
+		get => this.innerActiveTime;
+		set
+		{
+			this.maxCharge = value;
+			this.currentCharge = value;
+			this.chargeTimer = value;
+			this.innerActiveTime = value;
+		}
+	}
+
+	public bool CanAbilityActiving => this.canActivating.Invoke();
+
+	private readonly Func<bool> ability;
+	private readonly Func<bool> canUse;
+	private readonly Func<bool> canActivating;
+	private readonly Action? abilityOff;
+	private readonly Action? forceAbilityOff;
 
 	private bool isActive;
 
 	private float maxCharge;
 	private float chargeTimer;
 	private float currentCharge;
+	private float innerActiveTime;
 
 	public BatteryBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
-		Action abilityOff = null,
-		Action forceAbilityOff = null) : base(text, img)
+		Func<bool>? canActivating = null,
+		Action? abilityOff = null,
+		Action? forceAbilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
 		this.canUse = canUse;
@@ -42,21 +61,13 @@ public sealed class BatteryBehavior : BehaviorBase
 		return;
 	}
 
-	public override void SetActiveTime(float time)
-	{
-		maxCharge = time;
-		currentCharge = time;
-		chargeTimer = time;
-		base.SetActiveTime(time);
-	}
-
 	public override void AbilityOff()
 	{
-		isActive = false;
-		currentCharge = maxCharge;
-		chargeTimer = maxCharge;
-		abilityOff?.Invoke();
-		base.SetActiveTime(maxCharge);
+		this.isActive = false;
+		this.currentCharge = this.maxCharge;
+		this.chargeTimer = this.maxCharge;
+		this.abilityOff?.Invoke();
+		this.innerActiveTime = this.maxCharge;
 	}
 
 	public override void ForceAbilityOff()
@@ -66,8 +77,6 @@ public sealed class BatteryBehavior : BehaviorBase
 		isActive = false;
 		forceAbilityOff?.Invoke();
 	}
-
-	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
 	public override bool IsUse() =>
 		(canUse.Invoke() || isActive) && currentCharge > 0.0f;
@@ -89,10 +98,11 @@ public sealed class BatteryBehavior : BehaviorBase
 			curState == AbilityState.Ready &&
 			ability.Invoke())
 		{
-			chargeTimer = currentCharge;
-			isActive = true;
-			base.SetActiveTime(chargeTimer);
-			newState = ActiveTime <= 0.0f ?
+			this.chargeTimer = this.currentCharge;
+			this.isActive = true;
+			this.innerActiveTime = this.chargeTimer;
+
+			newState = this.ActiveTime <= 0.0f ?
 				AbilityState.CoolDown : AbilityState.Activating;
 			result = true;
 		}

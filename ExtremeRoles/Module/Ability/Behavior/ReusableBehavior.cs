@@ -1,31 +1,29 @@
 ﻿using System;
 using UnityEngine;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReusableBehavior : BehaviorBase
+public class ReusableBehavior : BehaviorBase
 {
-	private Func<bool> ability;
-	private Func<bool> canUse;
-	private Func<bool> canActivating;
-	private Action forceAbilityOff;
-	private Action abilityOff;
+	private readonly Func<bool> ability;
+	private readonly Func<bool> canUse;
+	private readonly Action? forceAbilityOff;
+	private readonly Action? abilityOff;
 
 	public ReusableBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
-		Func<bool> canActivating = null,
-		Action abilityOff = null,
-		Action forceAbilityOff = null) : base(text, img)
+		Action? abilityOff = null,
+		Action? forceAbilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
 		this.canUse = canUse;
 
 		this.abilityOff = abilityOff;
 		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
-
-		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 	}
 
 	public override void Initialize(ActionButton button)
@@ -43,9 +41,7 @@ public sealed class ReusableBehavior : BehaviorBase
 		forceAbilityOff?.Invoke();
 	}
 
-	public override bool IsCanAbilityActiving() => canActivating.Invoke();
-
-	public override bool IsUse() => canUse.Invoke();
+	public override bool IsUse() => this.canUse.Invoke();
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -62,8 +58,7 @@ public sealed class ReusableBehavior : BehaviorBase
 			return false;
 		}
 
-		newState = ActiveTime <= 0.0f ?
-			AbilityState.CoolDown : AbilityState.Activating;
+		newState = AbilityState.CoolDown;
 
 		return true;
 	}
