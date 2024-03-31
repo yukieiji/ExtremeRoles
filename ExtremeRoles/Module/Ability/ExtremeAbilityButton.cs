@@ -41,6 +41,7 @@ public class ExtremeAbilityButton
 
 	private bool isShow = true;
 
+	private const string materialName = "_Desat";
 	private static readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
 	private static readonly Color TimerChargeColor = Color.yellow;
 
@@ -142,12 +143,12 @@ public class ExtremeAbilityButton
 		if (this.Behavior.IsUse())
 		{
 			this.button.graphic.color = this.button.buttonLabelText.color = Palette.EnabledColor;
-			this.button.graphic.material.SetFloat("_Desat", 0f);
+			this.button.graphic.material.SetFloat(materialName, 0f);
 		}
 		else
 		{
 			this.button.graphic.color = this.button.buttonLabelText.color = Palette.DisabledClear;
-			this.button.graphic.material.SetFloat("_Desat", 1f);
+			this.button.graphic.material.SetFloat(materialName, 1f);
 		}
 
 		switch (this.State)
