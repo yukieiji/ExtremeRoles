@@ -2,6 +2,7 @@
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 
+
 #nullable enable
 
 namespace ExtremeRoles.Module.Ability.ModeSwitcher;
@@ -32,7 +33,10 @@ public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> :
 		Current = type;
 		GraphicAndActiveTimeMode<SwithEnum> mode = Get(type);
 
-		Behavior.SetGraphic(mode.Graphic);
-		Behavior.SetActiveTime(mode.Time);
+		this.Behavior.SetGraphic(mode.Graphic);
+		if (this.Behavior is IActivatingBehavior activatingBehavior)
+		{
+			activatingBehavior.ActiveTime = mode.Time;
+		}
 	}
 }

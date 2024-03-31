@@ -3,7 +3,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
 using UnityEngine;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles
 {
