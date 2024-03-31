@@ -3,6 +3,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module;
 using UnityEngine;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.AbilityBehavior.Interface;
 
 namespace ExtremeRoles
 {
@@ -35,7 +36,10 @@ namespace ExtremeRoles
                 {
                     Logging.Debug("---- Role Button Info ----");
                     Logging.Debug($"Cool Time:{abilityRole.Button.Behavior.CoolTime}");
-                    Logging.Debug($"Active Time:{abilityRole.Button.Behavior.ActiveTime}");
+					if (abilityRole.Button.Behavior is IActivatingBehavior behavior)
+					{
+						Logging.Debug($"Active Time:{behavior.ActiveTime}");
+					}
                     Logging.Debug($"Button State:{abilityRole.Button.State}");
                 }
 
@@ -44,7 +48,10 @@ namespace ExtremeRoles
                 {
                     Logging.Debug("---- Ghost Role Button Info ----");
                     Logging.Debug($"Cool Time:{ghostRole.Button.Behavior.CoolTime}");
-                    Logging.Debug($"Active Time:{ghostRole.Button.Behavior.ActiveTime}");
+					if (ghostRole.Button.Behavior is IActivatingBehavior behavior)
+					{
+						Logging.Debug($"Active Time:{behavior.ActiveTime}");
+					}
                     Logging.Debug($"Button State:{ghostRole.Button.State}");
                 }
             }
