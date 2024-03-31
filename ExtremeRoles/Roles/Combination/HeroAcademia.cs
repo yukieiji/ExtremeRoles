@@ -460,7 +460,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "search",
             Loader.CreateSpriteFromResources(
                 Path.HiroAcaSearch),
@@ -717,7 +717,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
 	public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "search",
             Loader.CreateSpriteFromResources(
                 Path.HiroAcaSearch),
@@ -907,7 +907,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "call",
             Loader.CreateSpriteFromResources(
                 Path.VigilanteEmergencyCall),

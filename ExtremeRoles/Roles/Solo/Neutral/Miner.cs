@@ -155,7 +155,7 @@ public sealed class Miner :
 
 	public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "setMine",
             Loader.CreateSpriteFromResources(
                 Path.MinerSetMine),

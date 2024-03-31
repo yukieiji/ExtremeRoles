@@ -108,7 +108,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "counter",
             Loader.CreateSpriteFromResources(
                 Path.FencerCounter),

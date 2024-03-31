@@ -306,7 +306,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "timeShield",
             Loader.CreateSpriteFromResources(
                Path.TimeMasterTimeShield),

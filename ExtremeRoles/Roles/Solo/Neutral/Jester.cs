@@ -103,7 +103,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "outburst",
             Loader.CreateSpriteFromResources(
                 Path.JesterOutburst),

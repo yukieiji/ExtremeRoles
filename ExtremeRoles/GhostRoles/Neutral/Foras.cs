@@ -103,7 +103,7 @@ public sealed class Foras : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.ForasShowArrow,
             Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.ForasShowArrow),

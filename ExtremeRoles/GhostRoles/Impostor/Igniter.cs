@@ -75,7 +75,7 @@ public sealed class Igniter : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.IgniterSwitchLight,
             Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.LastWolfLightOff),

@@ -87,7 +87,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "liightOff",
             Resources.Loader.CreateSpriteFromResources(
                Resources.Path.LastWolfLightOff),

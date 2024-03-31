@@ -91,7 +91,7 @@ public sealed class Poltergeist : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.PoltergeistMoveDeadbody,
             Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.CarrierCarry),
@@ -99,7 +99,8 @@ public sealed class Poltergeist : GhostRoleBase
             this.isPreCheck,
             this.isAbilityUse,
             this.UseAbility,
-            abilityCall, true,
+            abilityCall,
+			true, null,
             cleanUp,
             cleanUp, KeyCode.F);
         this.ButtonInit();
