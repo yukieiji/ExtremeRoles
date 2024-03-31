@@ -49,7 +49,7 @@ public sealed class Faunus : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.FaunusOpenSaboConsole,
             Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.MaintainerRepair),

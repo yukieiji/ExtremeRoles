@@ -192,7 +192,7 @@ public sealed class Shutter : GhostRoleBase
             this.isAbilityUse,
             this.UseAbility,
             null, true,
-            null, null, null,
+            null, null,
             KeyCode.F);
         this.ButtonInit();
         this.Button.SetLabelToCrewmate();

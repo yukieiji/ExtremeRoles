@@ -100,7 +100,7 @@ public sealed class Poltergeist : GhostRoleBase
             this.isAbilityUse,
             this.UseAbility,
             abilityCall, true,
-            null, cleanUp,
+            cleanUp,
             cleanUp, KeyCode.F);
         this.ButtonInit();
         this.Button.SetLabelToCrewmate();

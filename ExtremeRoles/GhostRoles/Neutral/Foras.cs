@@ -7,6 +7,8 @@ using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -14,7 +16,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
-using ExtremeRoles.Module.Ability.Factory;
 
 namespace ExtremeRoles.GhostRoles.Neutal;
 
@@ -113,8 +114,10 @@ public sealed class Foras : GhostRoleBase
             abilityCall, true,
             null, cleanUp);
         this.ButtonInit();
-        this.Button.Behavior.SetActiveTime(
-            this.Button.Behavior.ActiveTime + this.delayTime);
+		if (this.Button.Behavior is IActivatingBehavior activatingBehavior)
+		{
+			activatingBehavior.ActiveTime = activatingBehavior.ActiveTime + this.delayTime;
+		}
     }
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>()

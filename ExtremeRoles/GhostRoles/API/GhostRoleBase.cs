@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -193,12 +194,13 @@ public abstract class GhostRoleBase
         this.Button.Behavior.SetCoolTime(
             allOps.GetValue<float>(this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
 
-        if (allOps.TryGet<float>(
+        if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
+			allOps.TryGet<float>(
                 this.GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityActiveTime), out var activeTimeOtion) &&
 			activeTimeOtion is not null)
         {
-            this.Button.Behavior.SetActiveTime(activeTimeOtion.GetValue());
+			activatingBehavior.ActiveTime = activeTimeOtion.GetValue();
         }
 
         if (this.Button.Behavior is CountBehavior behavior &&

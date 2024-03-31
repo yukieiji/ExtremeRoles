@@ -72,7 +72,6 @@ public static class GhostRoleAbilityFactory
 		Func<bool> canUse,
 		Action<RPCOperator.RpcCaller> ability,
 		Action rpcHostCallAbility,
-		Func<bool> canActivating = null,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
 		KeyCode hotKey = KeyCode.F)
@@ -80,6 +79,36 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ReusableActivatingBehavior(
+				text: Helper.Translation.GetString(
+					string.Concat(type.ToString(), "Button")),
+				img: img,
+				canUse: createGhostRoleUseFunc(canUse),
+				ability: createGhostRoleAbility(
+					type, isReport, abilityPreCheck,
+					ability, rpcHostCallAbility),
+				abilityOff: abilityOff,
+				forceAbilityOff: forceAbilityOff),
+			new GhostRoleButtonActivator(),
+			hotKey
+		);
+	}
+
+	public static ExtremeAbilityButton CreateReusableActivatingAbility(
+		AbilityType type,
+		Sprite img,
+		bool isReport,
+		Func<bool> abilityPreCheck,
+		Func<bool> canUse,
+		Action<RPCOperator.RpcCaller> ability,
+		Action rpcHostCallAbility,
+		Func<bool> canActivating = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
+		KeyCode hotKey = KeyCode.F)
+	{
+
+		return new ExtremeAbilityButton(
+			new ReusableActivatingAbilityBehavior(
 				text: Helper.Translation.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
@@ -104,7 +133,6 @@ public static class GhostRoleAbilityFactory
 		Action<RPCOperator.RpcCaller> ability,
 		Action rpcHostCallAbility,
 		bool isReduceOnActive = false,
-		Func<bool> canActivating = null,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
 		KeyCode hotKey = KeyCode.F)
@@ -112,6 +140,38 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ActivatingCountBehavior(
+				text: Helper.Translation.GetString(
+					string.Concat(type.ToString(), "Button")),
+				img: img,
+				canUse: createGhostRoleUseFunc(canUse),
+				ability: createGhostRoleAbility(
+					type, isReport, abilityPreCheck,
+					ability, rpcHostCallAbility),
+				abilityOff: abilityOff,
+				forceAbilityOff: forceAbilityOff,
+				isReduceOnActive: isReduceOnActive),
+			new GhostRoleButtonActivator(),
+			hotKey
+		);
+	}
+
+	public static ExtremeAbilityButton CreateActivatingCountAbility(
+		AbilityType type,
+		Sprite img,
+		bool isReport,
+		Func<bool> abilityPreCheck,
+		Func<bool> canUse,
+		Action<RPCOperator.RpcCaller> ability,
+		Action rpcHostCallAbility,
+		bool isReduceOnActive = false,
+		Func<bool> canActivating = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
+		KeyCode hotKey = KeyCode.F)
+	{
+
+		return new ExtremeAbilityButton(
+			new AbilityActivatingCountBehavior(
 				text: Helper.Translation.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
