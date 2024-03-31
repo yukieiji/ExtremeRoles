@@ -217,6 +217,13 @@ public class ExtremeAbilityButton
 				this.button.cooldownTimerText.color = TimerOnColor;
 				maxTimer = activatingBehavior.ActiveTime;
 
+				// Reclick可能であれば押す
+				if (Input.GetKeyDown(this.HotKey) &&
+					this.Behavior is IReclickBehavior)
+				{
+					onClick();
+				}
+
 				// アクティブできない状態になったら解除
 				if (!activatingBehavior.CanAbilityActiving)
 				{

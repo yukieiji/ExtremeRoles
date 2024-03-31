@@ -8,13 +8,18 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickCountBehavior : BehaviorBase, IActivatingBehavior, ICountBehavior
+public sealed class ReclickCountBehavior :
+	BehaviorBase,
+	IActivatingBehavior,
+	ICountBehavior,
+	IReclickBehavior
 {
 	public int AbilityCount { get; private set; }
 
 	public float ActiveTime { get; set; }
 
 	public bool CanAbilityActiving => this.canActivating.Invoke();
+	public AbilityState ReclickStatus => AbilityState.CoolDown;
 
 	private bool isUpdate = false;
 	private readonly Func<bool> ability;
@@ -84,10 +89,10 @@ public sealed class ReclickCountBehavior : BehaviorBase, IActivatingBehavior, IC
 				}
 				break;
 			case AbilityState.Activating:
-				if (isActive &&
-					timer <= ActiveTime - 0.25f)
+				if (this.isActive &&
+					IReclickBehavior.CanReClick(timer, this.ActiveTime))
 				{
-					newState = AbilityState.CoolDown;
+					newState = this.ReclickStatus;
 				}
 				else
 				{

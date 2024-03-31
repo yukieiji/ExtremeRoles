@@ -7,7 +7,10 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickBehavior : BehaviorBase, IActivatingBehavior
+public sealed class ReclickBehavior :
+	BehaviorBase,
+	IActivatingBehavior,
+	IReclickBehavior
 {
 	private readonly Func<bool> ability;
 	private readonly Func<bool> canUse;
@@ -19,6 +22,8 @@ public sealed class ReclickBehavior : BehaviorBase, IActivatingBehavior
 	public float ActiveTime { get; set; }
 
 	public bool CanAbilityActiving => this.canActivating.Invoke();
+
+	public AbilityState ReclickStatus => AbilityState.CoolDown;
 
 	public ReclickBehavior(
 		string text, Sprite img,
@@ -74,10 +79,10 @@ public sealed class ReclickBehavior : BehaviorBase, IActivatingBehavior
 				}
 				break;
 			case AbilityState.Activating:
-				if (isActive &&
-					timer <= ActiveTime - 0.25f)
+				if (this.isActive &&
+					IReclickBehavior.CanReClick(timer, this.ActiveTime))
 				{
-					newState = AbilityState.CoolDown;
+					newState = this.ReclickStatus;
 				}
 				else
 				{
