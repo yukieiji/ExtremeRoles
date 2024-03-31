@@ -56,9 +56,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     {
         var targetPlayerRole = ExtremeRoleManager.GameRole[
             targetPlayer.PlayerId];
-        
 
-        if ((targetPlayerRole.IsImpostor()) || 
+
+        if ((targetPlayerRole.IsImpostor()) ||
             (targetPlayerRole.IsNeutral() && this.canShootNeutral))
         {
             if ((!this.canShootAssassin && targetPlayerRole.Id == ExtremeRoleId.Assassin) ||
@@ -167,15 +167,11 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 
     private void createText()
     {
-        this.killCountText = GameObject.Instantiate(
-            FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-            FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText.transform.parent);
+		this.killCountText = ICountBehavior.CreateCountText(
+			FastDestroyableSingleton<HudManager>.Instance.KillButton);
         updateKillCountText();
         this.killCountText.name = ExtremeAbilityButton.AditionalInfoName;
-        this.killCountText.enableWordWrapping = false;
-        this.killCountText.transform.localScale = Vector3.one * 0.5f;
-        this.killCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
-        this.killCountText.gameObject.SetActive(true);
+		this.killCountText.gameObject.SetActive(true);
     }
 
 
@@ -244,7 +240,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
             GetRoleOptionId(SheriffOption.SyncShootTaskGage)) / 100.0f;
 
         this.prevGage = 0.0f;
-        
+
         this.maxShootNum = this.shootNum;
 
         if (this.enableTaskRelatedSetting && this.isSyncTaskShootNum)
