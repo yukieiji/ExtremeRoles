@@ -59,6 +59,32 @@ public static class RoleAbilityFactory
 		);
 	}
 
+	public static ExtremeAbilityButton CreateActivatingCountAbility(
+		string textKey,
+		Sprite img,
+		Func<bool> canUse,
+		Func<bool> ability,
+		Func<bool> canActivating = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
+		bool isReduceOnActive = false,
+		KeyCode hotKey = KeyCode.F)
+	{
+		return new ExtremeAbilityButton(
+			new AbilityCountBehavior(
+				text: Helper.Translation.GetString(textKey),
+				img: img,
+				canUse: canUse,
+				ability: ability,
+				canActivating: canActivating,
+				abilityOff: abilityOff,
+				forceAbilityOff: forceAbilityOff,
+				isReduceOnActive: isReduceOnActive),
+			new RoleButtonActivator(),
+			hotKey
+		);
+	}
+
 	public static ExtremeAbilityButton CreatePassiveAbility(
 		string activateTextKey,
 		Sprite activateImg,
@@ -147,6 +173,30 @@ public static class RoleAbilityFactory
 	{
 		return new ExtremeAbilityButton(
 			new ReusableBehavior(
+				text: Helper.Translation.GetString(textKey),
+				img: img,
+				canUse: canUse,
+				ability: ability,
+				canActivating: canActivating,
+				abilityOff: abilityOff,
+				forceAbilityOff: forceAbilityOff),
+			new RoleButtonActivator(),
+			hotKey
+		);
+	}
+
+	public static ExtremeAbilityButton CreateActivatingReusableAbility(
+		string textKey,
+		Sprite img,
+		Func<bool> canUse,
+		Func<bool> ability,
+		Func<bool> canActivating = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
+		KeyCode hotKey = KeyCode.F)
+	{
+		return new ExtremeAbilityButton(
+			new ReusableAbilityBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
