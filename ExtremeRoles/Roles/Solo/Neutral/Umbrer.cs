@@ -164,7 +164,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 					RoleAbilityCommonOption.AbilityActiveTime))
 		);
 
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             featVirusMode.Graphic.Text, featVirusMode.Graphic.Img,
             IsAbilityCheck, CleanUp, ForceCleanUp);
 

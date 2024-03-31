@@ -69,8 +69,6 @@ public sealed class Teleporter :
         public override void ForceAbilityOff()
         { }
 
-        public override bool IsCanAbilityActiving() => true;
-
         public override bool IsUse()
             => this.canUse.Invoke() && this.AbilityCount > 0;
 
@@ -97,8 +95,7 @@ public sealed class Teleporter :
                 this.IsReduceAbilityCount = false;
             }
 
-            newState = this.ActiveTime <= 0.0f ?
-                AbilityState.CoolDown : AbilityState.Activating;
+            newState = AbilityState.CoolDown;
 
             return true;
         }

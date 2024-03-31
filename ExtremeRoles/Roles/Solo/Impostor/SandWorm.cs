@@ -64,8 +64,6 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         public override void ForceAbilityOff()
         { }
 
-        public override bool IsCanAbilityActiving() => true;
-
         public override bool IsUse() =>
             this.canUse.Invoke();
 

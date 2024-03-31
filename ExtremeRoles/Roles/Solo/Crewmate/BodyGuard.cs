@@ -88,8 +88,6 @@ public sealed class BodyGuard :
             updateAbilityCountText();
         }
 
-        public override bool IsCanAbilityActiving() => true;
-
         public override bool IsUse() =>
             (this.AbilityCount > 0 && this.canUse.Invoke()) ||
 			this.isReset;

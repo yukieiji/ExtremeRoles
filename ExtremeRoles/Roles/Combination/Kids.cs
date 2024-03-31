@@ -128,8 +128,6 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
             updateAbilityInfoText();
         }
 
-        public override bool IsCanAbilityActiving() => true;
-
         public override bool IsUse() =>
             this.canUse.Invoke() && this.AbilityCount > 0;
 

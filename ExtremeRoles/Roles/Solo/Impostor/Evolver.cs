@@ -61,7 +61,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.defaultButtonText = Translation.GetString("evolve");
 
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "evolve",
             Loader.CreateSpriteFromResources(
                 Path.EvolverEvolved),

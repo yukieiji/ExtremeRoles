@@ -61,7 +61,7 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "steal",
             Loader.CreateSpriteFromResources(
                 Path.TheifMagicCircle),

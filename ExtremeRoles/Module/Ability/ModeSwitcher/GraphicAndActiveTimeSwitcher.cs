@@ -1,5 +1,8 @@
 ﻿using System;
 using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.Ability.ModeSwitcher;
 
@@ -17,7 +20,12 @@ public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> :
 	public GraphicAndActiveTimeSwitcher(
 		BehaviorBase behavior,
 		params GraphicAndActiveTimeMode<SwithEnum>[] allMode) : base(behavior, allMode)
-	{ }
+	{
+		if (behavior is not IActivatingBehavior)
+		{
+			throw new ArgumentException("Can't change activating mode!!");
+		}
+	}
 
 	public override void Switch(SwithEnum type)
 	{

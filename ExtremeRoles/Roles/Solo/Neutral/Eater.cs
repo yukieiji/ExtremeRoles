@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -11,9 +15,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.ModeSwitcher;
-using ExtremeRoles.Module.Ability.Behavior;
 
 #nullable enable
 
@@ -79,14 +80,18 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 					Path.EaterDeadBodyEat)),
 			1.0f);
 
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             deadBodyMode.Graphic.Text, deadBodyMode.Graphic.Img,
             IsAbilityCheck, CleanUp, ForceCleanUp);
 
-		if (this.Button is null) { return; }
+		if (this.Button is null ||
+			this.Button.Behavior is not IActivatingBehavior activatingBehavior)
+		{
+			return;
+		}
 
         this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(
-            this.Button.Behavior,
+			this.Button.Behavior,
 			deadBodyMode,
 			new(
 				EaterAbilityMode.Kill,
@@ -94,7 +99,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 					Translation.GetString("eatKill"),
 					Loader.CreateSpriteFromResources(
 						Path.EaterEatKill)),
-				this.Button.Behavior.ActiveTime));
+				activatingBehavior.ActiveTime));
     }
 
     public void HookMuderPlayer(
@@ -175,7 +180,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		{
 			byte playerId = this.tmpTarget.PlayerId;
 
-			if (ExtremeRoleManager.GameRole[playerId] is Combination.Assassin assassin && 
+			if (ExtremeRoleManager.GameRole[playerId] is Combination.Assassin assassin &&
 				(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
 			{
 				return false;

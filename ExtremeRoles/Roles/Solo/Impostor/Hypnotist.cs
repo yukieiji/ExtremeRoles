@@ -14,6 +14,9 @@ using BepInEx.Unity.IL2CPP.Utils;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -1082,8 +1085,10 @@ public sealed class Doll :
 
         this.Button.Behavior.SetCoolTime(
             hypnotist.DollCrakingCoolTime);
-        this.Button.Behavior.SetActiveTime(
-            hypnotist.DollCrakingActiveTime);
+		if (this.Button.Behavior is IActivatingBehavior activatingBehavior)
+		{
+			activatingBehavior.ActiveTime = hypnotist.DollCrakingActiveTime;
+		}
     }
 
     public bool UseAbility()

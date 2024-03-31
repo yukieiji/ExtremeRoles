@@ -140,7 +140,7 @@ public sealed class Zombie :
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             Translation.GetString("featMagicCircle"),
             Loader.CreateSpriteFromResources(
                 Path.ZombieMagicCircleButton),

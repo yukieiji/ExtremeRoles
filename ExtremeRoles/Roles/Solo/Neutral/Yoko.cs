@@ -358,7 +358,7 @@ public sealed class Yoko :
 
 	public void CreateAbility()
 	{
-		this.CreateAbilityCountButton(
+		this.CreateActivatingAbilityCountButton(
 			"yokoYashiro",
 			Loader.CreateSpriteFromResources(
 				Path.YokoYashiro),

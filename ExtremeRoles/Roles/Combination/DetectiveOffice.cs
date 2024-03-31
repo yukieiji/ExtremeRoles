@@ -753,7 +753,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
     public void CreateAbility()
     {
 
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "emergencyMeeting",
             Loader.GetUnityObjectFromResources<Sprite>(Path.Meeting),
             abilityOff: CleanUp,

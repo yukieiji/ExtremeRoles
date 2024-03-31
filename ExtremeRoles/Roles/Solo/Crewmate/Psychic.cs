@@ -227,7 +227,7 @@ public sealed class Psychic :
 
 	public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
 			Translation.GetString("PsychicPsychic"),
             Loader.CreateSpriteFromResources(
                 Path.PsychicPsychic),

@@ -18,6 +18,7 @@ using ExtremeRoles.Extension.VentModule;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -29,11 +30,14 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         SetCamera
     }
 
-    public sealed class CarpenterAbilityBehavior : BehaviorBase
+    public sealed class CarpenterAbilityBehavior : BehaviorBase, IActivatingBehavior
     {
         public int AbilityCount { get; private set; }
+		public float ActiveTime { get; set; }
 
-        private bool isUpdate;
+		public bool CanAbilityActiving => this.abilityCheck.Invoke();
+
+		private bool isUpdate;
 
         private TextMeshPro abilityCountText;
         private bool isVentRemoveMode = true;
@@ -105,8 +109,6 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
             updateAbilityCountText();
         }
-
-        public override bool IsCanAbilityActiving() => this.abilityCheck.Invoke();
 
         public override bool IsUse() =>
             this.canUse.Invoke() &&
