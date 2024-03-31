@@ -14,6 +14,7 @@ public enum AbilityState : byte
 	Stop,
 	CoolDown,
 	Ready,
+	Charging,
 	Activating,
 	Reset,
 }
@@ -40,7 +41,8 @@ public class ExtremeAbilityButton
 
 	private bool isShow = true;
 
-	private readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
+	private static readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
+	private static readonly Color TimerChargeColor = Color.yellow;
 
 	public ExtremeAbilityButton(
 		BehaviorBase behavior,
@@ -165,6 +167,23 @@ public class ExtremeAbilityButton
 					setStatus(AbilityState.Ready);
 				}
 				break;
+			case AbilityState.Charging:
+				// 黄色でタイマーを進める
+				this.Timer -= Time.deltaTime;
+				this.button.cooldownTimerText.color = TimerChargeColor;
+
+				// 能力がチャージングが時間切れなのでチャージング等を行う
+				if (this.Timer <= 0.0f)
+				{
+					this.setStatus(AbilityState.Charging);
+					return;
+				}
+				// チャージしてる状態で押す
+				if (Input.GetKeyDown(this.HotKey))
+				{
+					onClick();
+				}
+				break;
 			case AbilityState.Activating:
 				// 緑色でタイマーをすすめる
 				this.Timer -= Time.deltaTime;
@@ -210,7 +229,7 @@ public class ExtremeAbilityButton
 		if (Behavior.IsUse() &&
 			Behavior.TryUseAbility(Timer, State, out AbilityState newState))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Using {Behavior.Graphic.Text}");
+			ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}");
 			if (newState == AbilityState.CoolDown)
 			{
 				Behavior.AbilityOff();
