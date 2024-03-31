@@ -151,11 +151,12 @@ public class ExtremeAbilityButton
 			this.button.graphic.material.SetFloat(materialName, 1f);
 		}
 
+		float maxTimer = this.Behavior.CoolTime;
 		switch (this.State)
 		{
 			case AbilityState.None:
 				this.button.cooldownTimerText.color = Palette.EnabledColor;
-				this.button.SetCoolDown(0, Behavior.CoolTime);
+				this.button.SetCoolDown(0, maxTimer);
 				return;
 			case AbilityState.CoolDown:
 				// 白色でタイマーをすすめる
@@ -190,6 +191,8 @@ public class ExtremeAbilityButton
 				this.Timer -= Time.deltaTime;
 				this.button.cooldownTimerText.color = TimerOnColor;
 
+				maxTimer = this.Behavior.ActiveTime;
+
 				if (!this.Behavior.IsCanAbilityActiving())
 				{
 					this.Behavior.ForceAbilityOff();
@@ -214,10 +217,7 @@ public class ExtremeAbilityButton
 				break;
 		}
 
-		this.button.SetCoolDown(
-			this.Timer,
-			this.State != AbilityState.Activating ?
-			this.Behavior.CoolTime : this.Behavior.ActiveTime);
+		this.button.SetCoolDown(this.Timer, maxTimer);
 	}
 
 	protected void AddTimerOffset(in float offsetTime)
