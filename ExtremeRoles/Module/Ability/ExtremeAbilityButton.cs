@@ -162,58 +162,79 @@ public class ExtremeAbilityButton
 				this.button.SetCoolDown(0, maxTimer);
 				return;
 			case AbilityState.CoolDown:
-				// 白色でタイマーをすすめる
-				this.Timer -= Time.deltaTime;
 				this.button.cooldownTimerText.color = Palette.EnabledColor;
 
 				// クールダウンが明けた
-				if (this.Timer <= 0.0f)
+				if (this.Timer < 0.0f)
 				{
-					setStatus(AbilityState.Ready);
-				}
-				break;
-			case AbilityState.Charging:
-				// 黄色でタイマーを進める
-				this.Timer -= Time.deltaTime;
-				this.button.cooldownTimerText.color = TimerChargeColor;
-
-				// 能力がチャージングが時間切れなのでチャージング等を行う
-				if (this.Timer <= 0.0f)
-				{
-					this.setStatus(AbilityState.Charging);
+					this.setStatus(AbilityState.Ready);
 					return;
 				}
+
+				// クールタイムも普通に減らす
+				this.Timer -= Time.deltaTime;
+				break;
+			case AbilityState.Charging:
+				if (this.Behavior is not IChargingBehavior chargingBehavior)
+				{
+					throw new ArgException("Can't inject IChargingBehavior");
+				}
+
+				this.button.cooldownTimerText.color = TimerChargeColor;
+				maxTimer = chargingBehavior.ChargeTime;
+				chargingBehavior.ChargeGage = Mathf.Clamp(this.Timer / maxTimer, 0.0f, 1.0f);
+
 				// チャージしてる状態で押す
 				if (Input.GetKeyDown(this.HotKey))
 				{
 					onClick();
 				}
+
+				// チャージできない状態になったら準備状態へ
+				if (!chargingBehavior.IsCharging)
+				{
+					chargingBehavior.ChargeGage = 0.0f;
+					this.setStatus(AbilityState.Ready);
+					return;
+				}
+
+				// 最大までチャージして0.1f秒後経過すると失敗として再チャージを要求
+				if (this.Timer > maxTimer + 0.1f)
+				{
+					this.setStatus(AbilityState.Charging);
+					return;
+				}
+
+				// チャージ時間なのでタイマーを増やす
+				this.Timer += Time.deltaTime;
 				break;
 			case AbilityState.Activating:
-
 				if (this.Behavior is not IActivatingBehavior activatingBehavior)
 				{
 					throw new ArgException("Can't inject IActivatingBehavior");
 				}
 
-				// 緑色でタイマーをすすめる
-				this.Timer -= Time.deltaTime;
 				this.button.cooldownTimerText.color = TimerOnColor;
-
 				maxTimer = activatingBehavior.ActiveTime;
 
+				// アクティブできない状態になったら解除
 				if (!activatingBehavior.CanAbilityActiving)
 				{
 					this.Behavior.ForceAbilityOff();
 					setStatus(AbilityState.Ready);
 					return;
 				}
+
 				// 能力がアクティブが時間切れなので能力のリセット等を行う
-				if (this.Timer <= 0.0f)
+				if (this.Timer < 0.0f)
 				{
 					this.Behavior.AbilityOff();
 					setStatus(AbilityState.CoolDown);
 				}
+
+				// アクティブタイムも普通に減らす
+				this.Timer -= Time.deltaTime;
+
 				break;
 			case AbilityState.Ready:
 				this.Timer = 0.0f;
@@ -267,6 +288,14 @@ public class ExtremeAbilityButton
 				{
 					Timer = Behavior.CoolTime;
 				}
+				break;
+			case AbilityState.Charging:
+				if (this.Behavior is not IChargingBehavior chargingBehavior)
+				{
+					throw new ArgException("Can't inject IChargingBehavior");
+				}
+				chargingBehavior.ChargeGage = 0.0f;
+				this.Timer = 0;
 				break;
 			case AbilityState.Activating:
 				if (this.Behavior is not IActivatingBehavior activatingBehavior)
