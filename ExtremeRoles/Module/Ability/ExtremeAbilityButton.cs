@@ -109,9 +109,9 @@ public class ExtremeAbilityButton
 		var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
 
 		Object.Destroy(
-			button.buttonLabelText.fontMaterial);
-		button.buttonLabelText.fontMaterial = Object.Instantiate(
-			useButton.buttonLabelText.fontMaterial, button.transform);
+			this.button.buttonLabelText.fontMaterial);
+		this.button.buttonLabelText.fontMaterial = Object.Instantiate(
+			useButton.buttonLabelText.fontMaterial, this.button.transform);
 	}
 
 	public void Update()
