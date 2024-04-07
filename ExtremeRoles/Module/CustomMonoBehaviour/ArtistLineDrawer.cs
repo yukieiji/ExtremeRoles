@@ -51,7 +51,9 @@ public sealed class ArtistLineDrawer :  MonoBehaviour
 	{
 		if (this.artistPlayer == null ||
 			this.artistPlayer.Data == null ||
-			this.prevPos == null)
+			this.prevPos == null ||
+			MeetingHud.Instance != null ||
+			ExileController.Instance != null)
 		{
 			return;
 		}
