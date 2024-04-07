@@ -31,10 +31,13 @@ public sealed class AcceleratorPanel : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		if (CachedPlayerControl.LocalPlayer == null ||
+		PlayerControl? pc = CachedPlayerControl.LocalPlayer;
+		if (pc == null ||
+			pc.inMovingPlat ||
+			pc.inVent ||
 			this.collider == null) { return; }
 
-		var body = CachedPlayerControl.LocalPlayer.PlayerControl.rigidbody2D;
+		var body = pc.rigidbody2D;
 		if (!body.IsTouching(this.collider)) { return; }
 
 		body.AddForce(this.forceVec);
