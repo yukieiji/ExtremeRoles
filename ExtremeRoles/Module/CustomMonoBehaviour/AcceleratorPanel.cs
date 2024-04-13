@@ -35,6 +35,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 		if (pc == null ||
 			pc.inMovingPlat ||
 			pc.inVent ||
+			pc.onLadder ||
 			this.collider == null) { return; }
 
 		var body = pc.rigidbody2D;
