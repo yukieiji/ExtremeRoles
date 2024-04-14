@@ -78,7 +78,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
         GlobalOption.IsSameNeutralSameWin,
         GlobalOption.DisableNeutralSpecialForceEnd,
 
-        GlobalOption.EnableHorseMode
+        // GlobalOption.EnableHorseMode
     ];
 
     public void Load()

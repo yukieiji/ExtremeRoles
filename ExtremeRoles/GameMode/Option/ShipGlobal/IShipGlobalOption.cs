@@ -67,7 +67,8 @@ public enum GlobalOption : int
     IsRemoveAngleIcon,
     IsBlockGAAbilityReport,
 
-    EnableHorseMode
+	// ウマングアスを一時的もしくは恒久的に無効化
+	// EnableHorseMode
 }
 
 public enum ConfirmExilMode
@@ -176,7 +177,7 @@ public interface IShipGlobalOption
 
 			string optionStr = option.ToHudString();
 			if (string.IsNullOrEmpty(optionStr)) { continue; }
-			
+
 			int lineCount = optionStr.CountLine();
 			if (lineCounter + lineCount > IGameOptionsExtensionsToHudStringPatch.MaxLines)
 			{
@@ -270,7 +271,8 @@ public interface IShipGlobalOption
 		CreateBoolOption(GlobalOption.IsRemoveAngleIcon, false);
 		CreateBoolOption(GlobalOption.IsBlockGAAbilityReport, false);
 
-		CreateBoolOption(GlobalOption.EnableHorseMode, false, isHeader: true);
+		// ウマングアスを一時的もしくは恒久的に無効化
+		// CreateBoolOption(GlobalOption.EnableHorseMode, false, isHeader: true, isHidden: true);
     }
 
     public static T GetCommonOptionValue<T>(GlobalOption optionKey)

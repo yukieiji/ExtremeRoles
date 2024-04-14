@@ -7,7 +7,7 @@ using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles.Patches;
 
-
+/*
 [HarmonyPatch(typeof(AprilFoolsMode), nameof(AprilFoolsMode.ShouldHorseAround))]
 public static class AprilFoolsModeShouldHorseAroundPatch
 {
@@ -18,13 +18,14 @@ public static class AprilFoolsModeShouldHorseAroundPatch
 			return true;
 		}
 
-        __result =
-            ExtremeGameModeManager.Instance is not null &&
-            ExtremeGameModeManager.Instance.ShipOption.CanUseHorseMode &&
-            OptionManager.Instance.GetValue<bool>((int)GlobalOption.EnableHorseMode);
+		__result =
+			ExtremeGameModeManager.Instance is not null &&
+			ExtremeGameModeManager.Instance.ShipOption.CanUseHorseMode &&
+			OptionManager.Instance.GetValue<bool>((int)GlobalOption.EnableHorseMode);
         return false;
     }
 }
+*/
 
 [HarmonyPatch(typeof(AprilFoolsMode), nameof(AprilFoolsMode.ShouldShowAprilFoolsToggle))]
 public static class AprilFoolsModeShouldShowAprilFoolsTogglePatch
