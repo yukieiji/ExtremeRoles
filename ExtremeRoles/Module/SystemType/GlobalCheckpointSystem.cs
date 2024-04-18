@@ -26,7 +26,8 @@ public sealed class GlobalCheckpointSystem : IDirtableSystemType
 
 	public enum CheckpointType
 	{
-		AssassinMeeting
+		RoleAssign,
+		AssassinMeeting,
 	}
 
 	public bool IsDirty => false;
@@ -88,6 +89,7 @@ public sealed class GlobalCheckpointSystem : IDirtableSystemType
 			{
 				handler = checkPointType switch
 				{
+					CheckpointType.RoleAssign => new RoleAssignCheckPoint(),
 					CheckpointType.AssassinMeeting => new AssassinMeetingCheckpoint(msgReader),
 					_ => null,
 				};

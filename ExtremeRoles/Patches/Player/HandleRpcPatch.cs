@@ -29,10 +29,6 @@ public static class PlayerControlHandleRpcPatch
 			case RPCOperator.Command.ForceEnd:
 				RPCOperator.ForceEnd();
 				break;
-			case RPCOperator.Command.SetUpReady:
-				byte readyPlayerId = reader.ReadByte();
-				RPCOperator.SetUpReady(readyPlayerId);
-				break;
 			case RPCOperator.Command.SetRoleToAllPlayer:
 				List<Module.Interface.IPlayerToExRoleAssignData> assignData =
 					new List<Module.Interface.IPlayerToExRoleAssignData>();
