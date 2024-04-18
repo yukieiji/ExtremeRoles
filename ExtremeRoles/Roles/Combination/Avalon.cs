@@ -8,7 +8,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 
 namespace ExtremeRoles.Roles.Combination;
@@ -183,8 +182,6 @@ public sealed class Assassin : MultiAssignRoleBase
         this.CanSeeRoleBeforeFirstMeeting = allOption.GetValue<bool>(
             GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting));
         this.IsFirstMeeting = true;
-
-		GlobalCheckpointSystem.Get();
     }
 
     private void assassinMeetingTriggerOn(

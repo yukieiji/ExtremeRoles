@@ -13,6 +13,8 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
+using UnityEngine.Rendering.VirtualTexturing;
+
 
 
 #nullable enable
@@ -45,7 +47,7 @@ public enum ResetTiming : byte
 	MeetingEnd,
 }
 
-[Il2CppRegister(new Type[] { typeof(ISystemType) })]
+[Il2CppRegister([ typeof(ISystemType) ])]
 public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemType
 {
 	public static ExtremeSystemTypeManager Instance
@@ -55,6 +57,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 			if (instance == null)
 			{
 				instance = new ExtremeSystemTypeManager();
+				instance.add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
 			}
 			return instance;
 		}
@@ -248,6 +251,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	{
 	 	ExtremeSystemType systemType = (ExtremeSystemType)msgReader.ReadByte();
 		this.allSystems[systemType].UpdateSystem(player, msgReader);
+	}
+
+	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
+	{
+		var system = new T();
+		Instance.TryAdd(systemType, system);
 	}
 
 	private static void callRpc(MessageWriter writer, int target)

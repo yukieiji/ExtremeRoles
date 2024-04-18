@@ -36,9 +36,6 @@ public sealed class GlobalCheckpointSystem : IDirtableSystemType
 
 	private readonly Dictionary<CheckpointType, CheckpointHandler> checkpoints = new Dictionary<CheckpointType, CheckpointHandler>();
 
-	public static GlobalCheckpointSystem Get()
-		=> ExtremeSystemTypeManager.Instance.CreateOrGet<GlobalCheckpointSystem>(Type);
-
 	public void Deteriorate(float deltaTime)
 	{
 		if (this.checkpoints.Count == 0)
