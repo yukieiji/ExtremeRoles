@@ -13,8 +13,6 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
-using ExtremeRoles.Module.SystemType.Roles;
-using System.Reflection;
 
 
 #nullable enable
@@ -24,6 +22,7 @@ namespace ExtremeRoles.Module.SystemType;
 public enum ExtremeSystemType : byte
 {
 	RaiseHandSystem,
+	GlobalCheckpoint,
 	ModdedMeetingTimeSystem,
 	ModedMushroom,
 	ExtremeConsoleSystem,
