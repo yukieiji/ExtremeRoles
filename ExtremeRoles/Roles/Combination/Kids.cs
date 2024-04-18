@@ -11,6 +11,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityModeSwitcher;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
@@ -22,8 +24,6 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
-using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
@@ -466,7 +466,9 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             () => { }, true);
         this.ButtonInit();
         this.Button.SetLabelToCrewmate();
-    }
+
+		tryAddWispSystem();
+	}
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
@@ -484,7 +486,6 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
             GetRoleOptionId(WispOption.TorchActiveTime));
         this.torchBlackOutTime = OptionManager.Instance.GetValue<float>(
             GetRoleOptionId(WispOption.BlackOutTime));
-		tryAddWispSystem();
 	}
 
     protected override void OnMeetingEndHook()
