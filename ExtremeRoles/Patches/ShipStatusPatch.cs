@@ -46,7 +46,7 @@ public static class ShipStatusOnDestroyPatch
     {
         CachedShipStatus.Destroy();
 		CompatModManager.Instance.RemoveMap();
-		ExtremeSystemTypeManager.Instance.Reset();
+		ExtremeSystemTypeManager.Instance.RemoveSystem();
 	}
 }
 

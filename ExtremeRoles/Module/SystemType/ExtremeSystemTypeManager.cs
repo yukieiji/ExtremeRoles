@@ -57,7 +57,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 			if (instance == null)
 			{
 				instance = new ExtremeSystemTypeManager();
-				instance.add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
+				instance.initialize();
 			}
 			return instance;
 		}
@@ -223,12 +223,14 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		}
 	}
 
-	public void Reset()
+	public void RemoveSystem()
 	{
 		this.dirtableSystems.Clear();
 		this.sabotageSystem.Clear();
 		this.dirtySystem.Clear();
 		this.allSystems.Clear();
+
+		this.initialize();
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
@@ -251,6 +253,11 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	{
 	 	ExtremeSystemType systemType = (ExtremeSystemType)msgReader.ReadByte();
 		this.allSystems[systemType].UpdateSystem(player, msgReader);
+	}
+
+	private void initialize()
+	{
+		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
 	}
 
 	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
