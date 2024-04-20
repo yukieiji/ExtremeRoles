@@ -4,10 +4,11 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType.CheckPoint;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -107,16 +108,12 @@ public sealed class Assassin : MultiAssignRoleBase
 
         if (isServant()) { return; }
 
-        assassinMeetingTriggerOn(rolePlayer.PlayerId);
-        if (AmongUsClient.Instance.AmHost)
-        {
-            MeetingRoomManager.Instance.AssignSelf(rolePlayer, null);
-            FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer);
-            rolePlayer.RpcStartMeeting(null);
-        }
+		byte rolePlayerId = rolePlayer.PlayerId;
+		assassinMeetingTriggerOn(rolePlayerId);
+		this.IsFirstMeeting = false;
 
-        this.IsFirstMeeting = false;
-    }
+		AssassinMeetingCheckpoint.RpcCheckpoint(rolePlayerId);
+	}
 
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer,
@@ -125,26 +122,26 @@ public sealed class Assassin : MultiAssignRoleBase
 
         if (isServant()) { return; }
 
+		byte rolePlayerId = rolePlayer.PlayerId;
+
         if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
         {
-            AddDead(rolePlayer.PlayerId);
+            AddDead(rolePlayerId);
             return;
         }
 
-        assassinMeetingTriggerOn(rolePlayer.PlayerId);
-        if (AmongUsClient.Instance.AmHost &&
-            rolePlayer.PlayerId == killerPlayer.PlayerId)
-        {
-            MeetingRoomManager.Instance.AssignSelf(rolePlayer, null);
-            FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer);
-            rolePlayer.RpcStartMeeting(null);
-        }
-        else
-        {
-            killerPlayer.ReportDeadBody(rolePlayer.Data);
-        }
+        assassinMeetingTriggerOn(rolePlayerId);
         this.IsFirstMeeting = false;
-    }
+
+		if (rolePlayerId == killerPlayer.PlayerId)
+		{
+			AssassinMeetingCheckpoint.RpcCheckpoint(rolePlayerId);
+		}
+		else
+		{
+			killerPlayer.ReportDeadBody(rolePlayer.Data);
+		}
+	}
 
     public override bool IsBlockShowPlayingRoleInfo()
     {

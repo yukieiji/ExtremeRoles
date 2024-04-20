@@ -23,7 +23,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 			this.resetGlobalAction();
 			// this.resetPlayerSummary();
 			this.resetMeetingCount();
-			RoleAssignState.Instance.Reset();
+			RoleAssignState.TryDestroy();
 
 			this.resetWins();
 

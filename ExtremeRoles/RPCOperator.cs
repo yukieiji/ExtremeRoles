@@ -23,7 +23,6 @@ public static class RPCOperator
         // メインコントール
         Initialize = 70,
         ForceEnd,
-        SetUpReady,
         SetRoleToAllPlayer,
         ShareOption,
         CustomVentUse,
@@ -259,11 +258,6 @@ public static class RPCOperator
     public static void FixForceRepairSpecialSabotage(byte systemType)
     {
 		Helper.GameSystem.ForceRepairrSpecialSabotage((SystemTypes)systemType);
-    }
-
-    public static void SetUpReady(byte playerId)
-    {
-        RoleAssignState.Instance.AddReadyPlayer(playerId);
     }
 
     public static void SetRoleToAllPlayer(

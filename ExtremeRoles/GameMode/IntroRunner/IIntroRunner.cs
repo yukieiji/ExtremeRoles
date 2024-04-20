@@ -3,6 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType.CheckPoint;
 
 namespace ExtremeRoles.GameMode.IntroRunner
 {
@@ -27,9 +28,9 @@ namespace ExtremeRoles.GameMode.IntroRunner
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
 
             yield return CoRunModeIntro(instance, roleAssignText);
-            
+
             Object.Destroy(instance.gameObject);
-            
+
             yield break;
         }
 
@@ -40,6 +41,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
                 if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
                     !isAllPlyerDummy())
                 {
+					RoleAssignCheckPoint.RpcCheckpoint();
                     // ホストは全員の処理が終わるまで待つ
                     while (!RoleAssignState.Instance.IsReady)
                     {
@@ -60,9 +62,9 @@ namespace ExtremeRoles.GameMode.IntroRunner
                 // ラグも有るかもしれないで1フレーム待機
                 yield return null;
 
-                // ホスト以外はここまで処理済みである事を送信
-                RoleAssignState.SetLocalPlayerReady();
-            }
+				// ホスト以外はここまで処理済みである事を送信
+				RoleAssignCheckPoint.RpcCheckpoint();
+			}
 
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
             while (!RoleAssignState.Instance.IsRoleSetUpEnd)

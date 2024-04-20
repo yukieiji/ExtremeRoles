@@ -21,7 +21,7 @@ public static class ShipStatusAwakePatch
     {
 		CachedShipStatus.SetUp(__instance);
         CompatModManager.Instance.SetUpMap(__instance);
-    }
+	}
 }
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
@@ -46,7 +46,18 @@ public static class ShipStatusOnDestroyPatch
     {
         CachedShipStatus.Destroy();
 		CompatModManager.Instance.RemoveMap();
-		ExtremeSystemTypeManager.Instance.Reset();
+		ExtremeSystemTypeManager.Instance.RemoveSystem();
+	}
+}
+
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnEnable))]
+public static class ShipStatusOnEnablePatch
+{
+	[HarmonyPostfix, HarmonyPriority(Priority.Last)]
+	public static void Postfix(ShipStatus __instance)
+	{
+		var system = ExtremeSystemTypeManager.Instance;
+		__instance.Systems.Add(ExtremeSystemTypeManager.Type, system.Cast<ISystemType>());
 	}
 }
 
