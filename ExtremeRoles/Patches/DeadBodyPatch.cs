@@ -15,6 +15,7 @@ public static class DeadBodyOnClickPatch
 		var (role, another) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IDeadBodyReportOverride>();
 
 		return
+			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger &&
 			(role != null ? role.CanReport : true) &&
 			(another != null ? another.CanReport : true);
 	}
