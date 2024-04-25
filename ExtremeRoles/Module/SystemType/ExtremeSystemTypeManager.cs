@@ -13,7 +13,6 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
-using UnityEngine.Rendering.VirtualTexturing;
 
 
 
@@ -87,7 +86,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public static void ModInitialize()
 	{
-		SystemTypeHelpers.AllTypes = SystemTypeHelpers.AllTypes.Concat(new List<SystemTypes> { Type }).ToArray();
+		SystemTypeHelpers.AllTypes = SystemTypeHelpers.AllTypes.Concat([ Type ]).ToArray();
 	}
 
 	public static void RpcUpdateSystemOnlyHost(ExtremeSystemType targetSystem, Action<MessageWriter> writeAction)
