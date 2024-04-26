@@ -54,7 +54,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 		}
 	}
 
-	private CheckpointHandler tryGetHandler(CheckpointType type, in MessageReader msgReader)
+	private CheckpointHandler tryGetHandler(in CheckpointType type, in MessageReader msgReader)
 	{
 		if (!this.checkpoints.TryGetValue(type, out var handler) ||
 			handler is null)
