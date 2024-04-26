@@ -57,7 +57,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 	private CheckpointHandler tryGetHandler(CheckpointType type, in MessageReader msgReader)
 	{
 		if (!this.checkpoints.TryGetValue(type, out var handler) ||
-				handler is null)
+			handler is null)
 		{
 			handler = type switch
 			{
@@ -83,9 +83,9 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 			return false;
 		}
 
-		var invalidPlayer = CachedPlayerControl.AllPlayerControls.Where(
+		var validPlayer = CachedPlayerControl.AllPlayerControls.Where(
 			x => x != null && x.Data != null && !x.Data.Disconnected);
 
-		return invalidPlayer.All(x => checkedPlayer.Contains(x.PlayerId));
+		return validPlayer.All(x => checkedPlayer.Contains(x.PlayerId));
 	}
 }
