@@ -27,7 +27,7 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 	};
 	private JObject? releaseData = null;
 
-	public async Task<List<Updater.ModUpdateData>> GetModUpdateData(HttpClient client)
+	public async Task<IReadOnlyList<Updater.ModUpdateData>> GetModUpdateData(HttpClient client)
 	{
 		var result = new List<Updater.ModUpdateData>();
 
@@ -129,7 +129,7 @@ public sealed class Updater
 
 		public List<string> DllName { get; }
 
-		public Task<List<ModUpdateData>> GetModUpdateData(HttpClient client);
+		public Task<IReadOnlyList<ModUpdateData>> GetModUpdateData(HttpClient client);
 
 		public Task<bool> HasUpdate(HttpClient client);
 	}
@@ -208,7 +208,7 @@ public sealed class Updater
 				bool hasUpdate = await repo.HasUpdate(this.client);
 				if (!hasUpdate) { continue; }
 
-				List<ModUpdateData> updateData = repo.GetModUpdateData(
+				IReadOnlyList<ModUpdateData> updateData = repo.GetModUpdateData(
 					this.client).GetAwaiter().GetResult();
 				updatingData.AddRange(updateData);
 			}
