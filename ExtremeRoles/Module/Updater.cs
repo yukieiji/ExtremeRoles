@@ -28,9 +28,9 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 	};
 	private JObject? releaseData = null;
 
-	public async Task<IReadOnlyList<Updater.ModUpdateData>> GetModUpdateData(HttpClient client)
+	public async Task<IReadOnlyList<Updater.ModInstallData>> GetModUpdateData(HttpClient client)
 	{
-		var result = new List<Updater.ModUpdateData>();
+		var result = new List<Updater.ModInstallData>(this.DllName.Count);
 
 		var releaseDataResult = await getReleaseData(client);
 
@@ -122,7 +122,7 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 
 public sealed class Updater
 {
-	public readonly record struct ModUpdateData(string DownloadUrl, string DllName);
+	public readonly record struct ModInstallData(string DownloadUrl, string DllName);
 
 	public interface IRepositoryInfo
 	{
@@ -132,7 +132,7 @@ public sealed class Updater
 
 		public List<string> DllName { get; }
 
-		public Task<IReadOnlyList<ModUpdateData>> GetModUpdateData(HttpClient client);
+		public Task<IReadOnlyList<ModInstallData>> GetModUpdateData(HttpClient client);
 
 		public Task<bool> HasUpdate(HttpClient client);
 	}
@@ -204,14 +204,14 @@ public sealed class Updater
 
 		try
 		{
-			List<ModUpdateData> updatingData = new List<ModUpdateData>();
+			List<ModInstallData> updatingData = new List<ModInstallData>();
 
 			foreach (var repo in this.service.Values)
 			{
 				bool hasUpdate = await repo.HasUpdate(this.client);
 				if (!hasUpdate) { continue; }
 
-				IReadOnlyList<ModUpdateData> updateData = repo.GetModUpdateData(
+				IReadOnlyList<ModInstallData> updateData = repo.GetModUpdateData(
 					this.client).GetAwaiter().GetResult();
 				updatingData.AddRange(updateData);
 			}
@@ -229,7 +229,7 @@ public sealed class Updater
 				Effects.Lerp(0.01f, new Action<float>(
 					(p) => { setPopupText(Translation.GetString("updateInProgress")); })));
 
-			foreach (ModUpdateData data in updatingData)
+			foreach (ModInstallData data in updatingData)
 			{
 				var result = getStreamFromUrl(data.DownloadUrl).GetAwaiter().GetResult();
 
