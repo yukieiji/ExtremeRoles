@@ -224,6 +224,9 @@ public static class IntroCutsceneOnDestroyPatch
 {
     public static void Prefix()
     {
+		var system = ExtremeSystemTypeManager.Instance;
+		CachedShipStatus.Instance.Systems.Add(ExtremeSystemTypeManager.Type, system.Cast<ISystemType>());
+
 		if (ExtremeGameModeManager.Instance.EnableXion)
         {
             Xion.XionPlayerToGhostLayer();
