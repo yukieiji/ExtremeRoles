@@ -12,6 +12,7 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Json;
 
 namespace ExtremeRoles.Module;
 
@@ -54,19 +55,21 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 		for (JToken current = assets.First; current != null; current = current.Next)
 		{
 			string? browser_download_url = current["browser_download_url"]?.ToString();
-			if (browser_download_url != null &&
-				current[Updater.IRepositoryInfo.ContentType] != null)
+			if (string.IsNullOrEmpty(browser_download_url) ||
+				!current.TryGet(Updater.IRepositoryInfo.ContentType, out var contentResult))
 			{
-				string content = current[Updater.IRepositoryInfo.ContentType].ToString();
+				continue;
+			}
 
-				if (content.Equals("application/x-zip-compressed")) { continue; }
+			string content = contentResult!.ToString();
 
-				foreach (string dll in this.DllName)
+			if (content.Equals("application/x-zip-compressed")) { continue; }
+
+			foreach (string dll in this.DllName)
+			{
+				if (browser_download_url.EndsWith(dll))
 				{
-					if (browser_download_url.EndsWith(dll))
-					{
-						result.Add(new(browser_download_url, dll));
-					}
+					result.Add(new(browser_download_url, dll));
 				}
 			}
 		}
