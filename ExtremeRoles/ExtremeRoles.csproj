@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>10.1.0.5</Version>
+    <Version>10.1.0.6</Version>
     <!--<VersionPrefix>10.1.0</VersionPrefix>-->
     <VersionSuffix>Line</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
