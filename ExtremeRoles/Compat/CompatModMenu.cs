@@ -25,6 +25,8 @@ internal sealed class CompatModMenu
 	private sealed record MenuLine(TextMeshPro Text, IReadOnlyDictionary<ButtonType, SimpleButton> Button);
 
 	private GameObject? menuBody;
+	private SimpleButton? downgradeButton;
+
 	private enum ButtonType
 	{
 		InstallButton,
@@ -187,6 +189,29 @@ internal sealed class CompatModMenu
 		}
 	}
 
+	private void createDowngradeButton(SimpleButton template)
+	{
+		if (this.menuBody == null)
+		{
+			return;
+		}
+
+		this.downgradeButton = UnityObject.Instantiate(
+			template, this.menuBody.transform);
+		this.downgradeButton.name = "DowngradeButton";
+		this.downgradeButton.Scale = new Vector3(0.325f, 0.225f, 1.0f);
+		this.downgradeButton.Text.fontSize =
+			this.downgradeButton.Text.fontSizeMax =
+			this.downgradeButton.Text.fontSizeMin = 0.5f;
+
+		this.downgradeButton.Text.text = Helper.Translation.GetString(
+			this.downgradeButton.name);
+
+		this.downgradeButton.transform.localPosition = new Vector3(2.0f, -2.35f, 0f);
+		this.downgradeButton.ClickedEvent.AddListener(
+			Module.AutoModInstaller.Instance.Downgrade);
+	}
+
 	private void initMenu(SimpleButton template)
 	{
 		if (this.menuBody == null)
@@ -209,7 +234,7 @@ internal sealed class CompatModMenu
 		removeUnnecessaryComponent();
 		setTransfoms();
 		createCompatModLines(template);
-
+		createDowngradeButton(template);
 	}
 
 	private void openMenu(SimpleButton mngButton)
@@ -287,6 +312,11 @@ internal sealed class CompatModMenu
 				updateButtonTextAndName(buttonType, button);
 			}
 		}
+
+		if (this.downgradeButton == null) { return; }
+
+		this.downgradeButton.Text.text = Helper.Translation.GetString(
+			this.downgradeButton.name);
 	}
 
 	private static SimpleButton createButton(
