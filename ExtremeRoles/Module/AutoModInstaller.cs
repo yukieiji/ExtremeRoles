@@ -70,6 +70,11 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 							convertReleaseToDownloadData(result, targetRelease);
 							break;
 						}
+						else
+						{
+							// DDOSにならないように3秒程度待つ
+							await Task.Delay(3000);
+						}
 					}
 				}
 				break;
