@@ -21,7 +21,11 @@ public static class SafeModeMainMenuManagerPatch
 	{
 		// Mod ExitButton
 		__instance.quitButton.OnClick.AddListener(
-			() => Logging.BackupCurrentLog());
+			(System.Action)(
+			() =>
+			{
+				Logging.BackupCurrentLog();
+			}));
 		createUpdateButton(__instance);
 	}
 
