@@ -111,8 +111,6 @@ public static class GameSystem
         TaskTypes.VentCleaning,
     };
 
-    private static List<PlayerControl> bots = new List<PlayerControl>();
-
     public static GameObject CreateNoneReportableDeadbody(
         PlayerControl targetPlayer, Vector3 pos)
     {
@@ -759,7 +757,6 @@ public static class GameSystem
                 AmongUsClient.Instance.PlayerPrefab);
         playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
 
-        bots.Add(playerControl);
         GameData.Instance.AddPlayer(playerControl);
         AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
 
