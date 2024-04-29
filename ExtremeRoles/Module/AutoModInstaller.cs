@@ -138,12 +138,12 @@ public sealed class AutoModInstaller
 	}
 
 	private sealed record TransKey(
-		string CheckWait = "",
-		string NoOp = "",
-		string OpStart = "",
-		string OpProgress = "",
-		string Restart = "",
-		string Fail="");
+		string CheckWait,
+		string NoOp,
+		string OpStart,
+		string OpProgress,
+		string Restart,
+		string Fail);
 
 	private static string pluginFolder
 	{
@@ -197,7 +197,14 @@ public sealed class AutoModInstaller
 		var menu = Prefab.CreateConfirmMenu(
 			async () =>
 			{
-				await autoModInstallFromWeb(InstallType.Downgrade, new());
+				await autoModInstallFromWeb(
+					InstallType.Downgrade,
+					new("ダウングレード先を検索中",
+						"ダウングレード先が存在しません！！",
+						"ダウングレード開始！！！！！",
+						"ダウングレード中・・・・",
+						"ダウングレード完了！！",
+						"失敗したんで手動で頼むで"));
 			});
 
 		menu.destroyOnClose = true;
