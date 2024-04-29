@@ -35,7 +35,7 @@ public static class SafeModeMainMenuManagerPatch
 		// 動いてますよアピール
 		var exrLogo = new GameObject("bannerLogoExtremeRoles");
 		exrLogo.transform.parent = __instance.mainMenuUI.transform;
-		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
+		exrLogo.transform.position = new Vector3(1.95f, 0.5f, 1.0f);
 		var renderer = exrLogo.AddComponent<SpriteRenderer>();
 		renderer.sprite = Loader.CreateSpriteFromResources(
 			Path.TitleBurner, 300f);

@@ -6,6 +6,8 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Resources;
 
+using Trans = ExtremeRoles.Helper.Translation;
+
 #nullable enable
 
 namespace ExtremeRoles.Compat.SafeBoot;
@@ -19,7 +21,7 @@ public static class SafeBootScheduler
 
 		try
 		{
-			Helper.Translation.Load();
+			Trans.Load();
 		}
 		catch (Exception ex)
 		{
@@ -31,7 +33,7 @@ public static class SafeBootScheduler
 			Type.EmptyTypes);
 
 		StatusTextShower.Instance.Add(
-			() => "何らかの不具合が発生したため\nExRを最低限の機能で起動しています");
+			() => Trans.GetString("SafeBootMessage"));
 
 		Loader.LoadCommonAsset();
 
