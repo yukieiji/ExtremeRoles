@@ -43,8 +43,6 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 
     private ExtremeAbilityButton jugglingButton;
 
-    private List<Vector2> airShipSpawn;
-
     public Magician() : base(
         ExtremeRoleId.Magician,
         ExtremeRoleType.Impostor,
@@ -59,8 +57,6 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
             "juggling",
             Loader.CreateSpriteFromResources(
                 Path.MagicianJuggling));
-
-        this.airShipSpawn = GameSystem.GetAirShipRandomSpawn();
     }
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
@@ -110,7 +106,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 
         if (this.includeSpawnPoint)
         {
-			GameSystem.AddSpawnPoint(targetPos, randomPlayer);
+			Map.AddSpawnPoint(targetPos, randomPlayer);
         }
 
         if (!targetPos.Any()) { return false; }

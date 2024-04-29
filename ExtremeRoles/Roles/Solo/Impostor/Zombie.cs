@@ -527,7 +527,7 @@ public sealed class Zombie :
 
 		List<Vector2> randomPos = new List<Vector2>();
 
-		GameSystem.AddSpawnPoint(randomPos, playerId);
+		Map.AddSpawnPoint(randomPos, playerId);
 
         Player.RpcUncheckSnap(playerId, randomPos[
             RandomGenerator.Instance.Next(randomPos.Count)]);

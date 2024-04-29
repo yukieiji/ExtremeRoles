@@ -231,7 +231,7 @@ public sealed class Teleporter :
     {
         var position = JsonParser.GetJObjectFromAssembly(postionJson);
         setPartFromMapJsonInfo(
-			position.Get<JArray>(GameSystem.CurMapKey),
+			position.Get<JArray>(Map.Name),
 			this.partNum);
     }
 

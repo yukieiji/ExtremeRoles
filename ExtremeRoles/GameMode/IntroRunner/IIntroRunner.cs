@@ -198,11 +198,11 @@ public interface IIntroRunner
 
 		if (removeMapModule.Vital)
 		{
-			GameSystem.DisableVital();
+			Map.DisableVital();
 		}
 		if (removeMapModule.Security)
 		{
-			GameSystem.DisableSecurity();
+			Map.DisableSecurity();
 		}
 	}
 
@@ -210,7 +210,7 @@ public interface IIntroRunner
 	{
 		if (flag.Admin)
 		{
-			GameSystem.DisableAdmin();
+			Map.DisableAdmin();
 		}
 		// AirShipのみ一部のアドミンを消す
 		else if (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
@@ -218,15 +218,15 @@ public interface IIntroRunner
 		{
 			string removeTargetAdmin = flag.AirShipAdminMode switch
 			{
-				AirShipAdminMode.ModeArchiveOnly => GameSystem.AirShipCockpitAdmin,
-				AirShipAdminMode.ModeCockpitOnly => GameSystem.AirShipArchiveAdmin,
+				AirShipAdminMode.ModeArchiveOnly => Map.AirShipCockpitAdmin,
+				AirShipAdminMode.ModeCockpitOnly => Map.AirShipArchiveAdmin,
 				_ => string.Empty,
 			};
 			if (string.IsNullOrEmpty(removeTargetAdmin))
 			{
 				return;
 			}
-			GameSystem.DisableMapConsole(removeTargetAdmin);
+			Map.DisableConsole(removeTargetAdmin);
 		}
 	}
 }

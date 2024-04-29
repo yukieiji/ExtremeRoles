@@ -136,7 +136,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
                     });
                 break;
             case AbilityType.Security:
-                SystemConsole watchConsole = GameSystem.GetSecuritySystemConsole();
+                SystemConsole watchConsole = Map.GetSecuritySystemConsole();
                 if (watchConsole == null || Camera.main == null)
                 {
                     return false;

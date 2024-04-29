@@ -107,7 +107,7 @@ public static class SecurityHelper
 
         if (cameraTimer <= 0.0f)
         {
-			GameSystem.DisableSecurity();
+			Map.DisableSecurity();
             instance.ForceClose();
         }
     }

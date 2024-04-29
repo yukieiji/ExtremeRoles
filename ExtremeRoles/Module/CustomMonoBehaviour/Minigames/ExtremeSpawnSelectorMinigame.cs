@@ -59,9 +59,9 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	public override void Begin(PlayerTask? task)
 	{
-		string mapKey = GameSystem.CurMapKey;
-		if (mapKey == GameSystem.SubmergedKey ||
-			mapKey == GameSystem.AirShipKey)
+		string mapKey = Map.Name;
+		if (mapKey == Map.SubmergedKey ||
+			mapKey == Map.AirShipKey)
 		{
 			return;
 		}

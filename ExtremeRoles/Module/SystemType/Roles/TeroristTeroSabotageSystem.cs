@@ -391,7 +391,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		}
 
-		string key = GameSystem.CurMapKey;
+		string key = Map.Name;
 
 		var result = new List<VectorId>(15);
 

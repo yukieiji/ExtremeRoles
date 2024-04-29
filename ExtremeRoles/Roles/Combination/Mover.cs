@@ -5,12 +5,13 @@ using Hazel;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+
+using UnityHelper = ExtremeRoles.Helper.Unity;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -131,7 +132,7 @@ public sealed class Mover :
 
         mover.EnableUseButton = false;
 
-        GameSystem.SetColliderActive(console.gameObject, false);
+		UnityHelper.SetColliderActive(console.gameObject, false);
         setColliderTriggerOn(console.gameObject);
         disableBehavioures(console.gameObject);
 
@@ -162,7 +163,7 @@ public sealed class Mover :
 				mover.hasConsole.Console.gameObject,
 				Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 		}
-        GameSystem.SetColliderActive(mover.hasConsole.Object, true);
+		UnityHelper.SetColliderActive(mover.hasConsole.Object, true);
 
         mover.hasConsole.Put(player.GetTruePosition());
     }

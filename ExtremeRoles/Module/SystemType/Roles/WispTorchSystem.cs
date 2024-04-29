@@ -80,7 +80,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 				byte playerId = player.PlayerId;
 
 				List<Vector2> placePos = new List<Vector2>();
-				GameSystem.AddSpawnPoint(placePos, playerId);
+				Map.AddSpawnPoint(placePos, playerId);
 
 				var newTorch = new Torch(groupId, range, placePos[
 					RandomGenerator.Instance.Next(0, placePos.Count)]);

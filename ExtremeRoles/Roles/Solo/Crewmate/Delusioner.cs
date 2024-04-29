@@ -73,8 +73,6 @@ public sealed class Delusioner :
     private int voteCoolTimeReduceRate;
     private float deflectDamagePenaltyMod;
 
-    private List<Vector2> airShipSpawn;
-
     public Delusioner() : base(
         ExtremeRoleId.Delusioner,
         ExtremeRoleType.Crewmate,
@@ -90,8 +88,6 @@ public sealed class Delusioner :
             Loader.CreateSpriteFromResources(
                 Path.DelusionerDeflectDamage));
         this.Button.SetLabelToCrewmate();
-
-        this.airShipSpawn = GameSystem.GetAirShipRandomSpawn();
     }
 
     public string GetFakeOptionString() => "";
@@ -187,7 +183,7 @@ public sealed class Delusioner :
 
         if (this.includeSpawnPoint)
         {
-			GameSystem.AddSpawnPoint(randomPos, teloportTarget);
+			Map.AddSpawnPoint(randomPos, teloportTarget);
         }
 
 		foreach (GameData.PlayerInfo player in allPlayer.GetFastEnumerator())

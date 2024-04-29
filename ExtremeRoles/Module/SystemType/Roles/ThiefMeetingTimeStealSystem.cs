@@ -188,7 +188,7 @@ public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 			json = JsonParser.GetJObjectFromAssembly(
 				"ExtremeRoles.Resources.JsonData.ThiefTimePartPoint.json");
 		}
-		string key = GameSystem.CurMapKey;
+		string key = Map.Name;
 
 		var result = new List<VectorId>(10);
 

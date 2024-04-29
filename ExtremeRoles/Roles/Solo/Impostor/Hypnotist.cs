@@ -731,7 +731,7 @@ public sealed class Hypnotist :
 
 	private void setAbilityPart(int redModuleNum)
     {
-		string key = GameSystem.CurMapKey;
+		string key = Map.Name;
 		setAbilityPartFromMapJsonInfo(this.position[key], redModuleNum);
 	}
     private void setAbilityPartFromMapJsonInfo(
@@ -1079,7 +1079,7 @@ public sealed class Doll :
                     });
                 break;
             case AbilityType.Security:
-                SystemConsole? watchConsole = GameSystem.GetSecuritySystemConsole();
+                SystemConsole? watchConsole = Map.GetSecuritySystemConsole();
                 if (watchConsole == null || Camera.main == null)
                 {
                     return false;

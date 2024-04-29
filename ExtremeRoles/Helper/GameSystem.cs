@@ -6,17 +6,11 @@ using System.Reflection;
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using Newtonsoft.Json.Linq;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-
-using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
 using UnityObject = UnityEngine.Object;
@@ -31,40 +25,7 @@ public static class GameSystem
 	public const int VanillaMaxPlayerNum = 15;
 	public const int MaxImposterNum = 14;
 
-	public const string SkeldKey = "Skeld";
-	public const string MiraHqKey = "MiraHQ";
-	public const string PolusKey = "Polus";
-	public const string AirShipKey = "AirShip";
-	public const string FungleKey = "Fungle";
-	public const string SubmergedKey = "Submerged";
-
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
-
-	public const string SkeldAdmin = "MapRoomConsole";
-	public const string SkeldSecurity = "SurvConsole";
-
-	public const string MiraHqAdmin = "AdminMapConsole";
-	public const string MiraHqSecurity = "SurvLogConsole";
-
-	public const string PolusAdmin1 = "panel_map";
-	public const string PolusAdmin2 = "panel_map (1)";
-	public const string PolusSecurity = "Surv_Panel";
-	public const string PolusVital = "panel_vitals";
-
-	public const string AirShipSecurity = "task_cams";
-	public const string AirShipVital = "panel_vitals";
-	public const string AirShipArchiveAdmin = "records_admin_map";
-	public const string AirShipCockpitAdmin = "panel_cockpit_map";
-
-	public const string FangleSecurity = "BinocularsSecurityConsole";
-	public const string FangleVital = "VitalsConsole";
-
-	private const string airShipSpawnJson =
-		"ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
-	private const string airShipRandomSpawnKey = "VanillaRandomSpawn";
-
-	private const string ventInfoJson =
-		"ExtremeRoles.Resources.JsonData.AllVentLinkInfo.json";
 
 	private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -73,37 +34,6 @@ public static class GameSystem
 
 
 	private static UseButtonDict useButtonSetting => FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-
-	public static string CurMapKey
-	{
-		get
-		{
-			string key = string.Empty;
-
-			if (CompatModManager.Instance.TryGetModMap(out var modMap))
-			{
-				if (modMap is SubmergedIntegrator)
-				{
-					key = "Submerged";
-				}
-			}
-			else
-			{
-				byte mapId =  GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-					ByteOptionNames.MapId);
-				key = mapId switch
-				{
-					0 => SkeldKey,
-					1 => MiraHqKey,
-					2 => PolusKey,
-					4 => AirShipKey,
-					5 => FungleKey,
-					_ => string.Empty,
-				};
-			}
-			return key;
-		}
-	}
 
 	private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
     {
@@ -127,8 +57,9 @@ public static class GameSystem
         deadbody.enabled = true;
 
         GameObject body = deadbody.gameObject;
-        destroyComponent<Collider2D>(body);
-        destroyComponent<PassiveButton>(body);
+
+        Unity.DestroyComponent<Collider2D>(body);
+		Unity.DestroyComponent<PassiveButton>(body);
 
         Vector3 vector = pos + killAnimation.BodyOffset;
         vector.z = vector.y / 1000f;
@@ -138,70 +69,6 @@ public static class GameSystem
 
         return body;
     }
-
-	public static void DisableMapConsole(string mapModuleName)
-	{
-		var mapConsoleArray = UnityObject.FindObjectsOfType<MapConsole>();
-		findAndDisableComponent(mapConsoleArray, mapModuleName);
-	}
-	public static void DisableMapConsole(IReadOnlySet<string> mapModuleName)
-	{
-		var mapConsoleArray = UnityObject.FindObjectsOfType<MapConsole>();
-		findAndDisableComponent(mapConsoleArray, mapModuleName);
-	}
-	public static void DisableSystemConsole(IReadOnlySet<string> mapModuleName)
-	{
-		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
-		findAndDisableComponent(systemConsoleArray, mapModuleName);
-	}
-
-	public static void SetColliderActive(GameObject obj, bool active)
-    {
-        setColliderEnable<Collider2D>(obj, active);
-        setColliderEnable<PolygonCollider2D>(obj, active);
-        setColliderEnable<BoxCollider2D>(obj, active);
-        setColliderEnable<CircleCollider2D>(obj, active);
-    }
-
-	public static void AddSpawnPoint(in IEnumerable<Vector2> pos, in byte playerId)
-	{
-		var spawnPoint = new List<Vector2>();
-		AddSpawnPoint(spawnPoint, playerId);
-		pos.Concat(spawnPoint);
-	}
-
-	public static void AddSpawnPoint(in List<Vector2> pos, in byte playerId)
-	{
-		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId);
-
-		int playerNum = CachedPlayerControl.AllPlayerControls.Count;
-
-		if (CompatModManager.Instance.TryGetModMap(out var modMap))
-		{
-			pos.AddRange(modMap!.GetSpawnPos(playerId));
-		}
-		else
-		{
-			var ship = CachedShipStatus.Instance;
-
-			switch (mapId)
-			{
-				case 4:
-					pos.AddRange(GetAirShipRandomSpawn());
-					break;
-				default:
-					Vector2 baseVec = Vector2.up;
-					baseVec = baseVec.Rotate(
-						(float)(playerId - 1) * (360f / (float)playerNum));
-					Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(
-						0f, 0.3636f);
-					pos.Add(ship.InitialSpawnCenter + offset);
-					pos.Add(ship.MeetingSpawnCenter + offset);
-					break;
-			}
-		}
-	}
 
 	public static ArrowBehaviour GetArrowTemplate()
 	{
@@ -363,20 +230,6 @@ public static class GameSystem
     public static Sprite GetVitalImage() =>
 		useButtonSetting[ImageNames.VitalsButton].Image;
 
-    public static SystemConsole? GetSecuritySystemConsole()
-    {
-        SystemConsole? watchConsole;
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-            watchConsole = modMap!.GetSystemConsole(SystemConsoleType.SecurityCamera);
-        }
-        else
-        {
-            watchConsole = getVanillaSecurityConsole();
-        }
-        return watchConsole;
-    }
-
     public static void ForceEndGame()
     {
         RPCOperator.Call(RPCOperator.Command.ForceEnd);
@@ -403,33 +256,6 @@ public static class GameSystem
                         playerPos, consolePos, Constants.ShadowMask, false)
             );
     }
-
-	public static void RelinkVent()
-	{
-		var allVent = new Dictionary<int, Vent>();
-		foreach (Vent vent in CachedShipStatus.Instance.AllVents)
-		{
-			allVent.Add(vent.Id, vent);
-		}
-
-		JObject? linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
-		string key = CurMapKey;
-		if (linkInfoJson == null || key == MiraHqKey) { return; }
-
-		JArray linkInfo = linkInfoJson.Get<JArray>(key);
-
-		for (int i = 0; i < linkInfo.Count; ++i)
-		{
-			JArray ventLinkedId = linkInfo.Get<JArray>(i);
-
-			if (allVent.TryGetValue((int)ventLinkedId[0], out Vent? from) &&
-				allVent.TryGetValue((int)ventLinkedId[1], out Vent? target) &&
-				from != null && target != null)
-			{
-				linkVent(from, target);
-			}
-		}
-	}
 
     public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
     {
@@ -628,25 +454,6 @@ public static class GameSystem
         return false;
     }
 
-    public static List<Vector2> GetAirShipRandomSpawn()
-    {
-        JObject? json = JsonParser.GetJObjectFromAssembly(airShipSpawnJson);
-
-		List<Vector2> result = new List<Vector2>();
-
-		if (json == null) { return result; }
-
-        JArray airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
-
-        for (int i = 0; i < airShipSpawn.Count; ++i)
-        {
-            JArray pos = airShipSpawn.Get<JArray>(i);
-            result.Add(new Vector2((float)pos[0], (float)pos[1]));
-        }
-
-        return result;
-    }
-
     public static void ShareVersion()
     {
         Version? ver = Assembly.GetExecutingAssembly().GetName().Version;
@@ -668,88 +475,6 @@ public static class GameSystem
             ver.Build, ver.Revision,
             AmongUsClient.Instance.ClientId);
     }
-
-	public static void DisableSecurity()
-	{
-		var security = GetSecuritySystemConsole();
-		if (security == null) { return; }
-
-		SetColliderActive(security.gameObject, false);
-	}
-	public static void DisableVital()
-	{
-		HashSet<string> vitalObj = new HashSet<string>(2);
-		if (CompatModManager.Instance.TryGetModMap(out var modMap))
-		{
-			vitalObj = modMap!.GetSystemObjectName(
-				SystemConsoleType.Vital);
-		}
-		else
-		{
-			switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-				ByteOptionNames.MapId))
-			{
-				case 2:
-					vitalObj.Add(PolusVital);
-					break;
-				case 4:
-					vitalObj.Add(AirShipVital);
-					break;
-				case 5:
-					vitalObj.Add(FangleVital);
-					break;
-				default:
-					break;
-			}
-		}
-
-		if (vitalObj.Count == 0)
-		{
-			return;
-		}
-
-		DisableSystemConsole(vitalObj);
-	}
-
-	public static void DisableAdmin()
-	{
-		HashSet<string> adminObj = new HashSet<string>();
-		if (CompatModManager.Instance.TryGetModMap(out var modMap))
-		{
-			adminObj = modMap!.GetSystemObjectName(
-				SystemConsoleType.Admin);
-		}
-		else
-		{
-			switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-				ByteOptionNames.MapId))
-			{
-				case 0:
-					adminObj.Add(SkeldAdmin);
-					break;
-				case 1:
-					adminObj.Add(MiraHqAdmin);
-					break;
-				case 2:
-					adminObj.Add(PolusAdmin1);
-					adminObj.Add(PolusAdmin2);
-					break;
-				case 4:
-					adminObj.Add(AirShipArchiveAdmin);
-					adminObj.Add(AirShipCockpitAdmin);
-					break;
-				default:
-					break;
-			}
-		}
-
-		if (adminObj.Count == 0)
-		{
-			return;
-		}
-
-		DisableMapConsole(adminObj);
-	}
 
 	public static void SpawnDummyPlayer(string name = "")
     {
@@ -783,34 +508,6 @@ public static class GameSystem
         GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
     }
 
-	private static void findAndDisableComponent<T>(
-		Il2CppArrayBase<T> array, IReadOnlySet<string> disableComponent) where T : Component
-	{
-		foreach (string name in disableComponent)
-		{
-			findAndDisableComponent(array, name);
-		}
-	}
-
-	private static void findAndDisableComponent<T>(
-		Il2CppArrayBase<T> array, string name) where T : Component
-	{
-		T? target = array.FirstOrDefault(x => x.gameObject.name == name);
-		if (target != null)
-		{
-			SetColliderActive(target.gameObject, false);
-		}
-	}
-
-	private static void setColliderEnable<T>(GameObject obj, bool active) where T : Collider2D
-    {
-        T comp = obj.GetComponent<T>();
-        if (comp != null)
-        {
-            comp.enabled = active;
-        }
-    }
-
     private static List<int> getTaskIndex(
         NormalPlayerTask[] tasks)
     {
@@ -825,66 +522,4 @@ public static class GameSystem
 
         return index;
     }
-
-    private static SystemConsole? getVanillaSecurityConsole()
-    {
-        // 0 = Skeld
-        // 1 = Mira HQ
-        // 2 = Polus
-        // 3 = Dleks - deactivated
-        // 4 = Airship
-		string key = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
-		{
-			0 or 3 => SkeldSecurity,
-			1 => MiraHqSecurity,
-			2 => PolusSecurity,
-			4 => AirShipSecurity,
-			5 => FangleSecurity,
-			_ => string.Empty,
-		};
-
-		var systemConsoleArray = UnityObject.FindObjectsOfType<SystemConsole>();
-
-		return systemConsoleArray.FirstOrDefault(
-			x => x.gameObject.name.Contains(key));
-
-	}
-
-	private static void destroyComponent<T>(GameObject obj) where T : Behaviour
-    {
-        T collider = obj.GetComponent<T>();
-        if (collider != null)
-        {
-			UnityObject.Destroy(collider);
-        }
-    }
-
-	private static void linkVent(Vent from, Vent target)
-	{
-		if (from == null || target == null) { return; }
-
-		linkVentToEmptyTarget(from, target);
-		linkVentToEmptyTarget(target, from);
-	}
-
-	private static void linkVentToEmptyTarget(Vent from, Vent target)
-	{
-		if (from.Right == null)
-		{
-			from.Right = target;
-		}
-		else if (from.Center == null)
-		{
-			from.Center = target;
-		}
-		else if (from.Left == null)
-		{
-			from.Left = target;
-		}
-		else
-		{
-			ExtremeRolesPlugin.Logger.LogInfo("Vent Link fail!!");
-		}
-	}
 }

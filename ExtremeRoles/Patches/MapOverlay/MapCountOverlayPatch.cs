@@ -193,7 +193,7 @@ public static class MapCountOverlayUpdatePatch
 
         if (adminTimer <= 0.0f)
         {
-			GameSystem.DisableAdmin();
+			Map.DisableAdmin();
             MapBehaviour.Instance.Close();
         }
     }

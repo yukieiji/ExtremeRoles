@@ -84,7 +84,7 @@ public static class VitalsMinigameUpdatePatch
 
         if (vitalTimer <= 0.0f)
         {
-			GameSystem.DisableVital();
+			Map.DisableVital();
             __instance.ForceClose();
         }
     }

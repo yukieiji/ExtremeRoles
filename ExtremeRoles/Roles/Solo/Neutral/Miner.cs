@@ -148,7 +148,7 @@ public sealed class Miner :
 	{
 		if (this.isLinkingVent)
 		{
-			GameSystem.RelinkVent();
+			Map.RelinkVent();
 		}
 	}
 

@@ -99,7 +99,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
     {
         if (this.monitoring == null)
         {
-            SystemConsole watchConsole = GameSystem.GetSecuritySystemConsole();
+            SystemConsole watchConsole = Map.GetSecuritySystemConsole();
             if (watchConsole == null || Camera.main == null)
             {
                 return false;

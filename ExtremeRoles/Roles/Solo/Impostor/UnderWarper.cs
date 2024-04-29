@@ -213,7 +213,7 @@ public sealed class UnderWarper :
     {
         if (this.isVentLink)
         {
-			GameSystem.RelinkVent();
+			Map.RelinkVent();
         }
     }
 
@@ -228,7 +228,7 @@ public sealed class UnderWarper :
             this.killCount >= this.ventLinkKillCout)
         {
             this.isVentLink = true;
-			GameSystem.RelinkVent();
+			Map.RelinkVent();
 		}
         if (!this.IsNoVentAnime &&
             this.killCount >= this.noVentAnimeKillCout)
