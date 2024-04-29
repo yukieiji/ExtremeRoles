@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
+using System.Text.Json;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading.Tasks;
 
 using UnityEngine;
-using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Extension.Json;
-using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.JsonData;
 
 namespace ExtremeRoles.Module;
 
@@ -43,7 +42,7 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 		switch (installType)
 		{
 			case AutoModInstaller.InstallType.Update:
-				JObject latestData = await AutoModInstaller.IRepositoryInfo.GetRestApiData(
+				var latestData = await AutoModInstaller.IRepositoryInfo.GetRestApiData<GitHubReleaseData>(
 					client, $"{Endpoint}releases/latest");
 				if (getReleaseDiff(latestData, curVersion) < 0)
 				{
@@ -56,24 +55,18 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 				while (result.Count == 0)
 				{
 					++page;
-					var allRelease = await AutoModInstaller.IRepositoryInfo.GetRestApiData(
+					var allRelease = await AutoModInstaller.IRepositoryInfo.GetRestApiData<GitHubReleaseData[]>(
 						client, $"{Endpoint}releases?page={page}");
 
-					if (!allRelease.IsTryCast<JArray>(out var arr))
+					if (allRelease == null)
 					{
 						break;
 					}
 
-					for (int i = 0; i < arr!.Count; ++i)
+					foreach (var targetRelease in allRelease)
 					{
-						JObject? targetRelease = arr.Get<JObject>(i);
-						if (targetRelease == null)
-						{
-							continue;
-						}
-
 						int diff = getReleaseDiff(targetRelease, curVersion);
-						if (diff > 1)
+						if (diff > 0)
 						{
 							convertReleaseToDownloadData(result, targetRelease);
 							break;
@@ -87,16 +80,9 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 		return result;
 	}
 
-	private static int getReleaseDiff(in JObject releaseData, in Version curVersion)
+	private static int getReleaseDiff(in GitHubReleaseData releaseData, in Version curVersion)
 	{
-		string? tagname = releaseData["tag_name"]?.ToString();
-
-		if (string.IsNullOrEmpty(tagname))
-		{
-			return 0; // Something went wrong
-		}
-
-		Version ver = Version.Parse(tagname.Replace("v", ""));
+		Version ver = Version.Parse(releaseData.tag_name.Replace("v", ""));
 		int diff = curVersion.CompareTo(ver);
 
 		return diff;
@@ -104,26 +90,17 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 
 	private void convertReleaseToDownloadData(
 		in List<AutoModInstaller.DownloadData> result,
-		in JObject releaseData)
+		in GitHubReleaseData releaseData)
 	{
-		JToken assets = releaseData["assets"];
-		if (!assets.HasValues)
+		foreach (var asset in releaseData.assets)
 		{
-			return;
-		}
-
-		for (JToken current = assets.First; current != null; current = current.Next)
-		{
-			string? browser_download_url = current["browser_download_url"]?.ToString();
-			if (string.IsNullOrEmpty(browser_download_url) ||
-				!current.TryGet(
-					AutoModInstaller.IRepositoryInfo.ContentType,
-					out var contentResult))
+			string? browser_download_url = asset.browser_download_url;
+			if (string.IsNullOrEmpty(browser_download_url))
 			{
 				continue;
 			}
 
-			string content = contentResult!.ToString();
+			string content = asset.content_type;
 
 			if (content.Equals("application/x-zip-compressed")) { continue; }
 
@@ -193,7 +170,7 @@ public sealed class AutoModInstaller
 			HttpClient client,
 			InstallType installType);
 
-		protected static async Task<JObject> GetRestApiData(HttpClient client, string targetUrl)
+		protected static async Task<T?> GetRestApiData<T>(HttpClient client, string targetUrl)
 		{
 			ExtremeRolesPlugin.Logger.LogInfo($"Conecting...:{targetUrl}");
 
@@ -202,11 +179,11 @@ public sealed class AutoModInstaller
 			if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
 			{
 				Logging.Error($"Server returned no data: {response.StatusCode}");
-				return null!;
+				return default(T);
 			}
 
-			string json = await response.Content.ReadAsStringAsync();
-			JObject data = JObject.Parse(json);
+			var stream = await response.Content.ReadAsStreamAsync();
+			T? data = await JsonSerializer.DeserializeAsync<T>(stream);
 
 			return data;
 		}
