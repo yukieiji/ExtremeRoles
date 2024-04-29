@@ -84,7 +84,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		if (assembly is null) { return; }
 
-        Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
+        AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
     }
 }

@@ -14,7 +14,7 @@ public static class Prefab
 		StringNames okStr = StringNames.Continue,
 		StringNames canselStr = StringNames.Cancel)
 	{
-		var result = Object.Instantiate(Module.Prefab.Prop);
+		var result = Object.Instantiate(Prop);
 		result.transform.localScale = new Vector3(2.0f, 1.25f, 1.0f);
 
 		var okButton = result.transform.FindChild("ExitGame");

@@ -53,7 +53,7 @@ public static class MainMenuManagerStartPatch
 		var updateButton = createButton(
 			__instance, "ExtremeRolesUpdateButton",
 			Translation.GetString(Translation.GetString("UpdateButton")),
-			1.9f, async () => await Module.Updater.Instance.CheckAndUpdate(),
+			1.9f, async () => await AutoModInstaller.Instance.Update(),
 			Vector3.zero, anchorTransform);
 
 		// ModManagerButton
@@ -67,13 +67,13 @@ public static class MainMenuManagerStartPatch
 		discordButton.Image.color = discordButton.Text.color = discordColor;
 		discordButton.DefaultImgColor = discordButton.DefaultTextColor = discordColor;
 
-		if (!Module.Updater.Instance.IsInit)
+		if (!AutoModInstaller.Instance.IsInit)
 		{
 			TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
 			var infoPop = UnityObject.Instantiate(man.TwitchPopup);
 			infoPop.TextAreaTMP.fontSize *= 0.7f;
 			infoPop.TextAreaTMP.enableAutoSizing = false;
-			Module.Updater.Instance.InfoPopup = infoPop;
+			AutoModInstaller.Instance.InfoPopup = infoPop;
 		}
 	}
 
