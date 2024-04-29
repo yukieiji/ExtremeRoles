@@ -261,7 +261,7 @@ public static class Map
 		// 2 = Polus
 		// 3 = Dleks - deactivated
 		// 4 = Airship
-		string key = Map.Id switch
+		string key = Id switch
 		{
 			0 or 3 => SkeldSecurity,
 			1 => MiraHqSecurity,
