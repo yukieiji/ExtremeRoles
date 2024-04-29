@@ -47,14 +47,14 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
     public override void Load()
     {
+		Harmony.PatchAll();
+
 		Helper.Translation.Load();
 
-        DebugMode = Config.Bind("DeBug", "DebugMode", false);
-        IgnoreOverrideConsoleDisable = Config.Bind(
-            "DeBug", "IgnoreOverrideConsoleDisable", false,
-            "If enabled, will ignore force disabling BepInEx.Console");
-
-		Harmony.PatchAll();
+		DebugMode = Config.Bind("DeBug", "DebugMode", false);
+		IgnoreOverrideConsoleDisable = Config.Bind(
+			"DeBug", "IgnoreOverrideConsoleDisable", false,
+			"If enabled, will ignore force disabling BepInEx.Console");
 
 		CompatModManager.Initialize();
 
