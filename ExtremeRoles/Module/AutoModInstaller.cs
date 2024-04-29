@@ -204,16 +204,17 @@ public sealed class AutoModInstaller
 			{
 				await autoModInstallFromWeb(
 					InstallType.Downgrade,
-					new("ダウングレード先を検索中",
-						"ダウングレード先が存在しません！！",
-						"ダウングレード開始！！！！！",
-						"ダウングレード中・・・・",
-						"ダウングレード完了！！",
-						"失敗したんで手動で頼むで"));
+					new("searchDowngradeWait",
+						"downgradeNotFound",
+						"downgradeStart",
+						"downgradeInProgress",
+						"downgradeRestart",
+						"downgradeManually"));
 			});
 
 		menu.destroyOnClose = true;
-		menu.Show("ダウングレードするがよろしいかね？");
+		menu.Show(
+			Translation.GetString("donwgradeConfirm"));
 	}
 
 	public void AddRepository<TRepoType>() where TRepoType : class, IRepositoryInfo, new()
