@@ -117,7 +117,7 @@ public static class Map
 
 	public static void AddSpawnPoint(in IEnumerable<Vector2> pos, in byte playerId)
 	{
-		var spawnPoint = new List<Vector2>();
+		var spawnPoint = new List<Vector2>(5);
 		AddSpawnPoint(spawnPoint, playerId);
 		pos.Concat(spawnPoint);
 	}
@@ -165,7 +165,7 @@ public static class Map
 
 	public static void DisableAdmin()
 	{
-		HashSet<string> adminObj = new HashSet<string>();
+		HashSet<string> adminObj = new HashSet<string>(2);
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
 			adminObj = modMap!.GetSystemObjectName(
@@ -230,6 +230,7 @@ public static class Map
 		if (json == null) { return result; }
 
 		JArray airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
+		result.Capacity = airShipSpawn.Count;
 
 		for (int i = 0; i < airShipSpawn.Count; ++i)
 		{
@@ -280,10 +281,11 @@ public static class Map
 
 	public static void RelinkVent()
 	{
-		var allVent = new Dictionary<int, Vent>();
-		foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+		var mapVent = CachedShipStatus.Instance.AllVents;
+		var ventIdMapping = new Dictionary<int, Vent>(mapVent.Count);
+		foreach (Vent vent in mapVent)
 		{
-			allVent.Add(vent.Id, vent);
+			ventIdMapping.Add(vent.Id, vent);
 		}
 
 		JObject? linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
@@ -296,8 +298,8 @@ public static class Map
 		{
 			JArray ventLinkedId = linkInfo.Get<JArray>(i);
 
-			if (allVent.TryGetValue((int)ventLinkedId[0], out Vent? from) &&
-				allVent.TryGetValue((int)ventLinkedId[1], out Vent? target) &&
+			if (ventIdMapping.TryGetValue((int)ventLinkedId[0], out Vent? from) &&
+				ventIdMapping.TryGetValue((int)ventLinkedId[1], out Vent? target) &&
 				from != null && target != null)
 			{
 				linkVent(from, target);
