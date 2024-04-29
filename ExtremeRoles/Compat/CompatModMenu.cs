@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
 using UnityEngine;
-using UnityEngine.UI;
 
 using TMPro;
 
@@ -12,15 +12,19 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.Operator;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
+using UnityObject = UnityEngine.Object;
+using UnityHelper = ExtremeRoles.Helper.Unity;
+
 namespace ExtremeRoles.Compat;
 
 #nullable enable
 
-internal static class CompatModMenu
+internal sealed class CompatModMenu
 {
-#pragma warning disable CS8618
-	private static GameObject menuBody;
-#pragma warning restore CS8618
+	private static CompatModMenu? instance { get; set; }
+	private sealed record MenuLine(TextMeshPro Text, IReadOnlyDictionary<ButtonType, SimpleButton> Button);
+
+	private GameObject? menuBody;
 	private enum ButtonType
 	{
 		InstallButton,
@@ -30,14 +34,11 @@ internal static class CompatModMenu
 
 	private const string titleName = "compatModMenu";
 
-	private static Dictionary<CompatModType, (TextMeshPro, Dictionary<ButtonType, SimpleButton>)> compatModMenuLine = new Dictionary<
-		CompatModType, (TextMeshPro, Dictionary<ButtonType, SimpleButton>)>();
+	private readonly Dictionary<CompatModType, MenuLine> compatModMenuLine = new Dictionary<CompatModType, MenuLine>();
 
-	public static void CreateMenuButton(SimpleButton template, Transform parent)
+	public static void CreateStartMenuButton(SimpleButton template, Transform parent)
 	{
-		compatModMenuLine.Clear();
-
-		var mngButton = Object.Instantiate(
+		var mngButton = UnityObject.Instantiate(
 			template, parent);
 		mngButton.name = "ExtremeRolesModManagerButton";
 		mngButton.transform.localPosition = new Vector3(0.0f, 1.6f, 0.0f);
@@ -45,66 +46,93 @@ internal static class CompatModMenu
 
 		mngButton.ClickedEvent.AddListener(() =>
 		{
-			if (!menuBody)
+			if (instance == null)
 			{
-				initMenu(mngButton);
+				instance = new CompatModMenu();
 			}
-			menuBody.SetActive(true);
+			instance.openMenu(template);
 		});
 	}
 
 	public static void UpdateTranslation()
 	{
-		if (menuBody == null) { return; }
-
-		TextMeshPro title = menuBody.GetComponent<TextMeshPro>();
-		title.text = Helper.Translation.GetString(titleName);
-
-		foreach (var (mod, (modText, buttons)) in compatModMenuLine)
+		if (instance == null)
 		{
-			modText.text = $"{Helper.Translation.GetString(mod.ToString())}";
+			return;
+		}
+		instance.updateTranslation();
+	}
 
-			foreach (var (buttonType, button) in buttons)
-			{
-				updateButtonTextAndName(buttonType, button);
-			}
+	private void createAddonButtons(
+		int posIndex,
+		string pluginPath,
+		CompatModType modType,
+		SimpleButton template)
+	{
+		string addonName = modType.ToString();
+
+		TextMeshPro addonText = createButtonText(addonName, posIndex);
+
+		if (!File.Exists($"{pluginPath}{addonName}.dll"))
+		{
+			var installButton = createButton(template, addonText);
+			installButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
+			installButton.ClickedEvent.AddListener(
+				createOperator<ExRAddonInstaller>(modType));
+			updateButtonTextAndName(ButtonType.InstallButton, installButton);
+
+			this.compatModMenuLine.Add(
+				modType,
+				new (addonText, new Dictionary<ButtonType, SimpleButton>()
+				{ {ButtonType.UninstallButton, installButton}, }));
+
+		}
+		else
+		{
+			var uninstallButton = createButton(template, addonText);
+			uninstallButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
+			uninstallButton.ClickedEvent.AddListener(
+				createOperator<ExRAddonUninstaller>(modType));
+			updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
+
+			this.compatModMenuLine.Add(
+				modType,
+				new (addonText, new Dictionary<ButtonType, SimpleButton>()
+				{ {ButtonType.UninstallButton, uninstallButton}, }));
+		}
+	}
+
+	private TextMeshPro createButtonText(
+		string name, int posIndex)
+	{
+		if (this.menuBody == null)
+		{
+			throw new ArgumentNullException("menu is null!!");
 		}
 
+		TextMeshPro modText = UnityObject.Instantiate(
+			Module.Prefab.Text, this.menuBody.transform);
+		modText.name = name;
+
+		modText.transform.localPosition = new Vector3(0.25f, 1.9f - (posIndex * 0.5f), 0f);
+		modText.fontSizeMin = modText.fontSizeMax = 2.0f;
+		modText.font = UnityObject.Instantiate(Module.Prefab.Text.font);
+		modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
+		modText.text = $"{Helper.Translation.GetString(name)}";
+		modText.alignment = TextAlignmentOptions.Left;
+		modText.gameObject.SetActive(true);
+
+		return modText;
 	}
 
-	private static void initMenu(SimpleButton template)
+	private void createCompatModLines(SimpleButton template)
 	{
-		menuBody = Object.Instantiate(
-			FastDestroyableSingleton<EOSManager>.Instance.TimeOutPopup);
-		menuBody.name = "ExtremeRoles_CompatModMenu";
-		menuBody.SetActive(true);
-
-		TextMeshPro title = Object.Instantiate(
-			Module.Prefab.Text, menuBody.transform);
-		var rect = title.GetComponent<RectTransform>();
-		rect.sizeDelta = new Vector2(5.4f, 2.0f);
-		title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
-		title.gameObject.SetActive(true);
-		title.name = "title";
-		title.text = Helper.Translation.GetString(titleName);
-		title.autoSizeTextContainer = false;
-		title.fontSizeMin = title.fontSizeMax = 3.25f;
-		title.transform.localPosition = new Vector3(0.0f, 2.45f, 0f);
-
-		removeUnnecessaryComponent();
-		setTransfoms();
-		createCompatModLines(template);
-	}
-
-	private static void createCompatModLines(SimpleButton template)
-	{
-
 		string pluginPath = string.Concat(
 			Path.GetDirectoryName(Application.dataPath),
 			@"\BepInEx\plugins\");
 		int index = 0;
 
-		foreach (CompatModType mod in System.Enum.GetValues(typeof(CompatModType)))
+		foreach (CompatModType mod in Enum.GetValues<CompatModType>())
 		{
 			string modName = mod.ToString();
 
@@ -153,47 +181,75 @@ internal static class CompatModMenu
 				button.Add(ButtonType.InstallButton, installButton);
 			}
 
-			compatModMenuLine.Add(mod, (modText, button));
+			this.compatModMenuLine.Add(mod, new(modText, button));
 
 			++index;
 		}
 	}
 
-	private static SimpleButton createButton(
-		SimpleButton template, TextMeshPro text)
+	private void initMenu(SimpleButton template)
 	{
-		var button = Object.Instantiate(
-			template, text.transform);
-		button.name = $"{text.text}Button";
-		button.Scale = new Vector3(0.375f, 0.275f, 1.0f);
-		button.Text.fontSize =
-			button.Text.fontSizeMax =
-			button.Text.fontSizeMin = 0.75f;
-		return button;
-	}
-
-	private static void removeUnnecessaryComponent()
-	{
-		var timeOutPopup = menuBody.GetComponent<TimeOutPopupHandler>();
-		if (timeOutPopup != null)
+		if (this.menuBody == null)
 		{
-			Object.Destroy(timeOutPopup);
+			return;
 		}
 
-		var controllerNav = menuBody.GetComponent<ControllerNavMenu>();
-		if (controllerNav != null)
-		{
-			Object.Destroy(controllerNav);
-		}
+		TextMeshPro title = UnityObject.Instantiate(
+			Module.Prefab.Text, this.menuBody.transform);
+		var rect = title.GetComponent<RectTransform>();
+		rect.sizeDelta = new Vector2(5.4f, 2.0f);
+		title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
+		title.gameObject.SetActive(true);
+		title.name = "title";
+		title.text = Helper.Translation.GetString(titleName);
+		title.autoSizeTextContainer = false;
+		title.fontSizeMin = title.fontSizeMax = 3.25f;
+		title.transform.localPosition = new Vector3(0.0f, 2.45f, 0f);
 
-		destroyChild(menuBody, "OfflineButton");
-		destroyChild(menuBody, "RetryButton");
-		destroyChild(menuBody, "Text_TMP");
+		removeUnnecessaryComponent();
+		setTransfoms();
+		createCompatModLines(template);
+
 	}
 
-	private static void setTransfoms()
+	private void openMenu(SimpleButton mngButton)
 	{
-		Transform closeButtonTransform = menuBody.transform.FindChild("CloseButton");
+		if (this.menuBody == null)
+		{
+			this.menuBody = UnityObject.Instantiate(
+				FastDestroyableSingleton<EOSManager>.Instance.TimeOutPopup);
+			this.menuBody.name = "ExtremeRoles_CompatModMenu";
+			this.menuBody.SetActive(true);
+			this.compatModMenuLine.Clear();
+
+			initMenu(mngButton);
+		}
+		this.menuBody.SetActive(true);
+	}
+
+	private void removeUnnecessaryComponent()
+	{
+		if (this.menuBody == null)
+		{
+			return;
+		}
+
+		UnityHelper.DestroyComponent<TimeOutPopupHandler>(this.menuBody);
+		UnityHelper.DestroyComponent<ControllerNavMenu>(this.menuBody);
+
+		destroyChild(this.menuBody, "OfflineButton");
+		destroyChild(this.menuBody, "RetryButton");
+		destroyChild(this.menuBody, "Text_TMP");
+	}
+
+	private void setTransfoms()
+	{
+		if (this.menuBody == null)
+		{
+			return;
+		}
+
+		Transform closeButtonTransform = this.menuBody.transform.FindChild("CloseButton");
 		if (closeButtonTransform != null)
 		{
 			closeButtonTransform.localPosition = new Vector3(-3.25f, 2.5f, 0.0f);
@@ -202,17 +258,48 @@ internal static class CompatModMenu
 			closeButton.OnClick.RemoveAllPersistentAndListeners();
 			closeButton.OnClick.AddListener(() =>
 			{
-				menuBody.SetActive(false);
+				this.menuBody.SetActive(false);
 
 			});
 		}
 
-		Transform bkSprite = menuBody.transform.FindChild("BackgroundSprite");
+		Transform bkSprite = this.menuBody.transform.FindChild("BackgroundSprite");
 		if (bkSprite != null)
 		{
 			bkSprite.localScale = new Vector3(1.0f, 1.9f, 1.0f);
 			bkSprite.localPosition = new Vector3(0.0f, 0.0f, 2.0f);
 		}
+	}
+
+	private void updateTranslation()
+	{
+		if (this.menuBody == null) { return; }
+
+		TextMeshPro title = this.menuBody.GetComponent<TextMeshPro>();
+		title.text = Helper.Translation.GetString(titleName);
+
+		foreach (var (mod, menu) in this.compatModMenuLine)
+		{
+			menu.Text.text = $"{Helper.Translation.GetString(mod.ToString())}";
+
+			foreach (var (buttonType, button) in menu.Button)
+			{
+				updateButtonTextAndName(buttonType, button);
+			}
+		}
+	}
+
+	private static SimpleButton createButton(
+		SimpleButton template, TextMeshPro text)
+	{
+		var button = UnityObject.Instantiate(
+			template, text.transform);
+		button.name = $"{text.text}Button";
+		button.Scale = new Vector3(0.375f, 0.275f, 1.0f);
+		button.Text.fontSize =
+			button.Text.fontSizeMax =
+			button.Text.fontSizeMin = 0.75f;
+		return button;
 	}
 
 	private static void updateButtonTextAndName(
@@ -227,73 +314,16 @@ internal static class CompatModMenu
 		button.Text.text = Helper.Translation.GetString(buttonType.ToString());
 	}
 
-	private static void createAddonButtons(
-		int posIndex,
-		string pluginPath,
-		CompatModType modType,
-		SimpleButton template)
-	{
-		string addonName = modType.ToString();
-
-		TextMeshPro addonText = createButtonText(addonName, posIndex);
-
-		if (!File.Exists($"{pluginPath}{addonName}.dll"))
-		{
-			var installButton = createButton(template, addonText);
-			installButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
-			installButton.ClickedEvent.AddListener(
-				createOperator<ExRAddonInstaller>(modType));
-			updateButtonTextAndName(ButtonType.InstallButton, installButton);
-
-			compatModMenuLine.Add(
-				modType,
-				(addonText, new Dictionary<ButtonType, SimpleButton>()
-				{ {ButtonType.UninstallButton, installButton}, }));
-
-		}
-		else
-		{
-			var uninstallButton = createButton(template, addonText);
-			uninstallButton.transform.localPosition = new Vector3(0.9f, 0.0f, -5.0f);
-			uninstallButton.ClickedEvent.AddListener(
-				createOperator<ExRAddonUninstaller>(modType));
-			updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
-
-			compatModMenuLine.Add(
-				modType,
-				(addonText, new Dictionary<ButtonType, SimpleButton>()
-				{ {ButtonType.UninstallButton, uninstallButton}, }));
-		}
-	}
-
-	private static TextMeshPro createButtonText(
-		string name, int posIndex)
-	{
-		TextMeshPro modText = Object.Instantiate(
-			Module.Prefab.Text, menuBody.transform);
-		modText.name = name;
-
-		modText.transform.localPosition = new Vector3(0.25f, 1.9f - (posIndex * 0.5f), 0f);
-		modText.fontSizeMin = modText.fontSizeMax = 2.0f;
-		modText.font = Object.Instantiate(Module.Prefab.Text.font);
-		modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
-		modText.text = $"{Helper.Translation.GetString(name)}";
-		modText.alignment = TextAlignmentOptions.Left;
-		modText.gameObject.SetActive(true);
-
-		return modText;
-	}
-
-	private static System.Action createOperator<T>(object parm)
+	private static Action createOperator<T>(object parm)
 		where T : OperatorBase
 	{
 		return () =>
 		{
-			object? instance = System.Activator.CreateInstance(
+			object? instance = Activator.CreateInstance(
 				typeof(T),
 				BindingFlags.CreateInstance | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.OptionalParamBinding,
 				null,
-				new object[] { parm },
+				[ parm ],
 				null);
 			if (instance is T curOperator)
 			{
@@ -305,9 +335,9 @@ internal static class CompatModMenu
 	private static void destroyChild(GameObject obj, string name)
 	{
 		Transform targetTrans = obj.transform.FindChild(name);
-		if (targetTrans)
+		if (targetTrans != null)
 		{
-			Object.Destroy(targetTrans.gameObject);
+			UnityObject.Destroy(targetTrans.gameObject);
 		}
 	}
 }

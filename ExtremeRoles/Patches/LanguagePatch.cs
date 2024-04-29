@@ -1,13 +1,14 @@
 ﻿using HarmonyLib;
 
-namespace ExtremeRoles.Patches
+#nullable enable
+
+namespace ExtremeRoles.Patches;
+
+[HarmonyPatch(typeof(LanguageSetter), nameof(LanguageSetter.SetLanguage))]
+public static class SetLanguagepPatch
 {
-    [HarmonyPatch(typeof(LanguageSetter), nameof(LanguageSetter.SetLanguage))]
-    public static class SetLanguagepPatch
+    public static void Postfix()
     {
-        public static void Postfix()
-        {
-            Compat.CompatModMenu.UpdateTranslation();
-        }
-    }
+		Compat.CompatModMenu.UpdateTranslation();
+	}
 }

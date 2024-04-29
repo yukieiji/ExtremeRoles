@@ -19,6 +19,8 @@ using ExtremeRoles.Performance;
 
 using UnityObject = UnityEngine.Object;
 
+#nullable enable
+
 namespace ExtremeRoles.Patches.Manager;
 
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
@@ -57,7 +59,7 @@ public static class MainMenuManagerStartPatch
 			Vector3.zero, anchorTransform);
 
 		// ModManagerButton
-		Compat.CompatModMenu.CreateMenuButton(updateButton, anchorTransform);
+		Compat.CompatModMenu.CreateStartMenuButton(updateButton, anchorTransform);
 
 		// DiscordButton
 		var discordButton = createButton(
