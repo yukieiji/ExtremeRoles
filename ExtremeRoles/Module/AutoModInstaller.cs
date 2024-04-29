@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Text.Json;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -42,7 +41,7 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 		switch (installType)
 		{
 			case AutoModInstaller.InstallType.Update:
-				var latestData = await AutoModInstaller.IRepositoryInfo.GetRestApiData<GitHubReleaseData>(
+				var latestData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(
 					client, $"{Endpoint}releases/latest");
 				if (getReleaseDiff(latestData, curVersion) < 0)
 				{
@@ -55,7 +54,7 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 				while (result.Count == 0)
 				{
 					++page;
-					var allRelease = await AutoModInstaller.IRepositoryInfo.GetRestApiData<GitHubReleaseData[]>(
+					var allRelease = await JsonParser.GetRestApiAsync<GitHubReleaseData[]>(
 						client, $"{Endpoint}releases?page={page}");
 
 					if (allRelease == null)
@@ -169,24 +168,6 @@ public sealed class AutoModInstaller
 		public Task<IReadOnlyList<DownloadData>> GetInstallData(
 			HttpClient client,
 			InstallType installType);
-
-		protected static async Task<T?> GetRestApiData<T>(HttpClient client, string targetUrl)
-		{
-			ExtremeRolesPlugin.Logger.LogInfo($"Conecting...:{targetUrl}");
-
-			var response = await client.GetAsync(
-				targetUrl, HttpCompletionOption.ResponseContentRead);
-			if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
-			{
-				Logging.Error($"Server returned no data: {response.StatusCode}");
-				return default(T);
-			}
-
-			var stream = await response.Content.ReadAsStreamAsync();
-			T? data = await JsonSerializer.DeserializeAsync<T>(stream);
-
-			return data;
-		}
 	}
 
 	private readonly HttpClient client = new HttpClient();

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using ExtremeRoles.Module.JsonData;
+using Newtonsoft.Json.Linq;
 
 using SemanticVersioning;
 
@@ -7,22 +8,17 @@ using SemanticVersioning;
 
 namespace ExtremeRoles.Compat;
 
-internal readonly record struct CompatModRepoData(JObject Request, string DllName)
+internal readonly record struct CompatModRepoData(GitHubReleaseData Request, string DllName)
 {
-	private const string contentType = "content_type";
-
-	private string tag => Request["tag_name"].ToString().TrimStart('v');
+	private string tag => Request.tag_name.TrimStart('v');
 
 	public string GetDownloadUrl()
 	{
-		JToken assets = this.Request["assets"];
-
-		for (JToken current = assets.First; current != null; current = current.Next)
+		foreach (var asset in this.Request.assets)
 		{
-			string? browser_download_url = current["browser_download_url"]?.ToString();
+			string? browser_download_url = asset.browser_download_url;
 			if (string.IsNullOrEmpty(browser_download_url) ||
-				current[contentType] == null ||
-				current[contentType].ToString().Equals("application/x-zip-compressed") ||
+				asset.content_type.Equals("application/x-zip-compressed") ||
 				!browser_download_url.EndsWith(this.DllName))
 			{
 				continue;

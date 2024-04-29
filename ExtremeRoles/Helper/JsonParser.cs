@@ -1,7 +1,11 @@
 ﻿using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
+
+using System.Threading.Tasks;
 
 using Newtonsoft.Json.Linq;
 
@@ -34,5 +38,23 @@ public static class JsonParser
 		var result = JsonSerializer.Deserialize<T>(stream, opt);
 
 		return result;
+	}
+
+	public static async Task<T?> GetRestApiAsync<T>(HttpClient client, string targetUrl)
+	{
+		ExtremeRolesPlugin.Logger.LogInfo($"Conecting...:{targetUrl}");
+
+		var response = await client.GetAsync(
+			targetUrl, HttpCompletionOption.ResponseContentRead);
+		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+		{
+			Logging.Error($"Server returned no data: {response.StatusCode}");
+			return default(T);
+		}
+
+		var stream = await response.Content.ReadAsStreamAsync();
+		T? data = await JsonSerializer.DeserializeAsync<T>(stream);
+
+		return data;
 	}
 }

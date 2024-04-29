@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.JsonData;
 using Newtonsoft.Json.Linq;
 
 namespace ExtremeRoles.Compat.Operator;
@@ -34,39 +35,31 @@ internal sealed class ExRAddonInstaller : OperatorBase
 		Popup.Show(info);
 
 
-		var exrRepoData = GetRestApiDataAsync(this.client, url).GetAwaiter().GetResult();
+		var exrRepoData = JsonParser.GetRestApiAsync<GitHubReleaseData>(
+			this.client, url).GetAwaiter().GetResult();
 
-		if (exrRepoData == null)
+		info = Translation.GetString("installNow");
+
+		if (installTask == null)
 		{
-			SetPopupText(Translation.GetString("installManual"));
+			info = Translation.GetString("installInProgress");
+			installTask = downloadAndInstall(exrRepoData);
 		}
-		else
-		{
-			info = Translation.GetString("installNow");
 
-			if (installTask == null)
-			{
-				info = Translation.GetString("installInProgress");
-				installTask = downloadAndInstall(exrRepoData);
-			}
-
-			this.Popup.StartCoroutine(
-				Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
-		}
+		this.Popup.StartCoroutine(
+			Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
 	}
 
-	private async Task<bool> downloadAndInstall(JObject data)
+	private async Task<bool> downloadAndInstall(GitHubReleaseData data)
 	{
-		JToken assets = data["assets"];
 
 		string downloadUri = "";
 
-		for (JToken current = assets.First; current != null; current = current.Next)
+		foreach (var asset in data.assets)
 		{
-			string? browser_download_url = current["browser_download_url"]?.ToString();
+			string? browser_download_url = asset.browser_download_url;
 			if (string.IsNullOrEmpty(browser_download_url) ||
-				current["content_type"] == null ||
-				current["content_type"].ToString().Equals("application/x-zip-compressed") ||
+				asset.content_type.Equals("application/x-zip-compressed") ||
 				!browser_download_url.EndsWith(this.addonDll))
 			{
 				continue;
@@ -77,7 +70,8 @@ internal sealed class ExRAddonInstaller : OperatorBase
 
 		if (string.IsNullOrEmpty(downloadUri)) { return false; }
 
-		var res = await this.client.GetAsync(downloadUri, HttpCompletionOption.ResponseContentRead);
+		var res = await this.client.GetAsync(
+			downloadUri, HttpCompletionOption.ResponseContentRead);
 		if (res.StatusCode != HttpStatusCode.OK || res.Content == null)
 		{
 			Logging.Error($"Server returned no data: {res.StatusCode}");

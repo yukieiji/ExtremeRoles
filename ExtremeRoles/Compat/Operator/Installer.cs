@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.JsonData;
 
 namespace ExtremeRoles.Compat.Operator;
 
@@ -91,19 +92,11 @@ internal sealed class Installer : OperatorBase
 		List<CompatModRepoData> result = new List<CompatModRepoData>();
 		if (this.isRequireReactor)
 		{
-			var reactorData = await GetRestApiDataAsync(this.client, ReactorURL);
-			if (reactorData == null)
-			{
-				return result;
-			}
+			var reactorData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, ReactorURL);
 			result.Add(new CompatModRepoData(reactorData, ReactorDll));
 		}
 
-		var modData = await GetRestApiDataAsync(this.client, this.repoUrl);
-		if (modData == null)
-		{
-			return result;
-		}
+		var modData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, this.repoUrl);
 		result.Add(new CompatModRepoData(modData, this.dllName));
 		return result;
 	}

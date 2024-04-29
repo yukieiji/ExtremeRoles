@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BepInEx.Unity.IL2CPP;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.JsonData;
 
 namespace ExtremeRoles.Compat.Operator;
 
@@ -96,20 +97,11 @@ internal sealed class Updater : OperatorBase
 		Dictionary<string, CompatModRepoData> result = new Dictionary<string, CompatModRepoData>();
 		if (this.isRequireReactor)
 		{
-			var reactorData = await GetRestApiDataAsync(this.client, ReactorURL);
-			if (reactorData == null)
-			{
-				return result;
-			}
-
+			var reactorData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, ReactorURL);
 			result.Add(reactorGuid, new CompatModRepoData(reactorData, ReactorDll));
 		}
 
-		var modData = await GetRestApiDataAsync(this.client, this.repoUrl);
-		if (modData == null)
-		{
-			return result;
-		}
+		var modData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, this.repoUrl);
 		result.Add(this.guid, new CompatModRepoData(modData, this.dllName));
 		return result;
 	}
