@@ -100,23 +100,23 @@ public static class MainMenuManagerStartPatch
         renderer.sprite = Loader.CreateSpriteFromResources(
             Path.TitleBurner, 300f);
 
-        if (Module.Prefab.Prop == null || Module.Prefab.Text == null)
+        if (Prefab.Prop == null || Prefab.Text == null)
         {
             TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
-            Module.Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);
-            UnityObject.DontDestroyOnLoad(Module.Prefab.Prop);
-            Module.Prefab.Prop.name = "propForInEx";
-            Module.Prefab.Prop.gameObject.SetActive(false);
+            Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);
+            UnityObject.DontDestroyOnLoad(Prefab.Prop);
+            Prefab.Prop.name = "propForInEx";
+            Prefab.Prop.gameObject.SetActive(false);
 
-            Module.Prefab.Text = UnityObject.Instantiate(man.TwitchPopup.TextAreaTMP);
-            Module.Prefab.Text.fontSize =
-                Module.Prefab.Text.fontSizeMax =
-                Module.Prefab.Text.fontSizeMin = 2.25f;
-            Module.Prefab.Text.alignment = TextAlignmentOptions.Center;
-            UnityObject.DontDestroyOnLoad(Module.Prefab.Text);
-            UnityObject.Destroy(Module.Prefab.Text.GetComponent<TextTranslatorTMP>());
-            Module.Prefab.Text.gameObject.SetActive(false);
-            UnityObject.DontDestroyOnLoad(Module.Prefab.Text);
+            Prefab.Text = UnityObject.Instantiate(man.TwitchPopup.TextAreaTMP);
+            Prefab.Text.fontSize =
+                Prefab.Text.fontSizeMax =
+                Prefab.Text.fontSizeMin = 2.25f;
+            Prefab.Text.alignment = TextAlignmentOptions.Center;
+            UnityObject.DontDestroyOnLoad(Prefab.Text);
+            UnityObject.Destroy(Prefab.Text.GetComponent<TextTranslatorTMP>());
+            Prefab.Text.gameObject.SetActive(false);
+            UnityObject.DontDestroyOnLoad(Prefab.Text);
         }
 
 		CustomRegion.Update();

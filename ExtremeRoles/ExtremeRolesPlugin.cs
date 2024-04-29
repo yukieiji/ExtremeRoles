@@ -47,8 +47,20 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
     public override void Load()
     {
-		Harmony.PatchAll();
+		try
+		{
+			normalBoot();
+		}
+		catch(System.Exception ex)
+		{
+			Logger.LogError($"ExR can't boot with normal ops\nError:{ex.Message}");
+			Logger.LogWarning("Try boot ExR with SafeMode");
+			Compat.SafeBoot.SafeBootScheduler.Boot(this.Harmony);
+		}
+    }
 
+	private void normalBoot()
+	{
 		Helper.Translation.Load();
 
 		DebugMode = Config.Bind("DeBug", "DebugMode", false);
@@ -56,29 +68,31 @@ public partial class ExtremeRolesPlugin : BasePlugin
 			"DeBug", "IgnoreOverrideConsoleDisable", false,
 			"If enabled, will ignore force disabling BepInEx.Console");
 
+		this.Harmony.PatchAll();
+
 		CompatModManager.Initialize();
 
 		OptionCreator.Create();
 
-        AddComponent<ExtremeRolePluginBehavior>();
+		AddComponent<ExtremeRolePluginBehavior>();
 		AddComponent<UnityMainThreadDispatcher>();
 
-        if (BepInExUpdater.IsUpdateRquire())
-        {
-            AddComponent<BepInExUpdater>();
-        }
+		if (BepInExUpdater.IsUpdateRquire())
+		{
+			AddComponent<BepInExUpdater>();
+		}
 
-		ApiServer.Register("/au/chat/"  , HttpMethod.Get , new GetChat());
-		ApiServer.Register(PostChat.Path , HttpMethod.Post, new PostChat());
-		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get , new OpenChatWebUi());
+		ApiServer.Register("/au/chat/", HttpMethod.Get, new GetChat());
+		ApiServer.Register(PostChat.Path, HttpMethod.Post, new PostChat());
+		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get, new OpenChatWebUi());
 
 		Il2CppRegisterAttribute.Registration(
-            System.Reflection.Assembly.GetAssembly(this.GetType()));
+			System.Reflection.Assembly.GetAssembly(this.GetType()));
 
 		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
 
-        Loader.LoadCommonAsset();
+		Loader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();
-    }
+	}
 }

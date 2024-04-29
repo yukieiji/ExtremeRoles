@@ -34,6 +34,11 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
     public override void Load()
     {
+		if (ExtremeRoles.Compat.SafeBoot.SafeBootScheduler.IsSafe)
+		{
+			return;
+		}
+
         Helper.Translation.LoadTransData();
 
         Logger = Log;

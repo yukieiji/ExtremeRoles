@@ -27,7 +27,12 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
 
     public override void Load()
     {
-        Instance = this;
+		if (ExtremeRoles.Compat.SafeBoot.SafeBootScheduler.IsSafe)
+		{
+			return;
+		}
+
+		Instance = this;
         Logger = Log;
 
         Harmony.PatchAll();

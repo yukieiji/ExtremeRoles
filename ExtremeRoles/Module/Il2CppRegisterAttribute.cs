@@ -42,7 +42,7 @@ public sealed class Il2CppRegisterAttribute : Attribute
 				CustomAttributeExtensions.GetCustomAttribute<Il2CppRegisterAttribute>(type);
 			if (attribute != null)
 			{
-				registrationForTarget(type, attribute.Interfaces);
+				RegistrationForTarget(type, attribute.Interfaces);
 			}
 		}
 
@@ -51,7 +51,7 @@ public sealed class Il2CppRegisterAttribute : Attribute
 
 	}
 
-	private static void registrationForTarget(
+	public static void RegistrationForTarget(
 		Type targetType, Type[] interfaces)
 	{
 		Type? targetBase = targetType.BaseType;
@@ -63,7 +63,7 @@ public sealed class Il2CppRegisterAttribute : Attribute
 
 		if (baseAttribute != null)
 		{
-			registrationForTarget(targetBase!, baseAttribute.Interfaces);
+			RegistrationForTarget(targetBase!, baseAttribute.Interfaces);
 		}
 
 		ExtremeRolesPlugin.Logger.LogInfo(
