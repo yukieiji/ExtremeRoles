@@ -395,11 +395,13 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		var result = new List<VectorId>(15);
 
-		JArray posInfo = json.Get<JArray>(key);
+		JArray? posInfo = json.Get<JArray>(key);
+		if (posInfo == null) { return result; }
 
 		for (int i = 0; i < posInfo.Count; ++i)
 		{
-			JArray posArr = posInfo.Get<JArray>(i);
+			JArray? posArr = posInfo.Get<JArray>(i);
+			if (posArr == null) { continue; }
 
 			result.Add(
 				new VectorId(

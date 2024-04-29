@@ -720,7 +720,9 @@ public sealed class Hypnotist :
 	private IReadOnlyList<(Vector3, SystemConsoleType)> getSystemConsolePartPos(in JToken json, in string key)
 	{
 		List<(Vector3, SystemConsoleType)> result = new List<(Vector3, SystemConsoleType)>();
-		JObject keyJson = json.Get<JObject>(key);
+
+		JObject? keyJson = json.Get<JObject>(key);
+		if (keyJson == null) { return result; }
 
 		addJsonValeToConsoleType(keyJson, result, adminKey, SystemConsoleType.Admin);
 		addJsonValeToConsoleType(keyJson, result, securityKey, SystemConsoleType.SecurityCamera);
@@ -877,13 +879,22 @@ public sealed class Hypnotist :
 
 	private static IReadOnlyList<Vector3> getRedPartPos(in JToken json)
 	{
-		JArray jsonRedPos = json.Get<JArray>("Red");
+		JArray? jsonRedPos = json.Get<JArray>("Red");
+
+		if (jsonRedPos == null) { return []; }
 
 		List<Vector3> redPos = new List<Vector3>(jsonRedPos.Count);
 		for (int i = 0; i < jsonRedPos.Count; ++i)
 		{
-			JArray pos = jsonRedPos.Get<JArray>(i);
-			redPos.Add(new Vector3((float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f)));
+			JArray? pos = jsonRedPos.Get<JArray>(i);
+
+			if (pos == null) { continue; }
+
+			redPos.Add(
+				new Vector3(
+					(float)pos[0],
+					(float)pos[1],
+					(((float)pos[1]) / 1000.0f)));
 		}
 		return redPos;
 	}

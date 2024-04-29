@@ -229,12 +229,15 @@ public static class Map
 
 		if (json == null) { return result; }
 
-		JArray airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
+		JArray? airShipSpawn = json.Get<JArray>(airShipRandomSpawnKey);
+
+		if (airShipSpawn == null) { return result; }
 		result.Capacity = airShipSpawn.Count;
 
 		for (int i = 0; i < airShipSpawn.Count; ++i)
 		{
-			JArray pos = airShipSpawn.Get<JArray>(i);
+			JArray? pos = airShipSpawn.Get<JArray>(i);
+			if (pos == null) { continue; }
 			result.Add(new Vector2((float)pos[0], (float)pos[1]));
 		}
 
@@ -292,11 +295,13 @@ public static class Map
 		string key = Name;
 		if (linkInfoJson == null || key == MiraHqKey) { return; }
 
-		JArray linkInfo = linkInfoJson.Get<JArray>(key);
+		JArray? linkInfo = linkInfoJson.Get<JArray>(key);
+		if (linkInfo == null) { return; }
 
 		for (int i = 0; i < linkInfo.Count; ++i)
 		{
-			JArray ventLinkedId = linkInfo.Get<JArray>(i);
+			JArray? ventLinkedId = linkInfo.Get<JArray>(i);
+			if (ventLinkedId == null) { continue; }
 
 			if (ventIdMapping.TryGetValue((int)ventLinkedId[0], out Vent? from) &&
 				ventIdMapping.TryGetValue((int)ventLinkedId[1], out Vent? target) &&

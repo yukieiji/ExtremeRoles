@@ -187,22 +187,28 @@ public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 		{
 			json = JsonParser.GetJObjectFromAssembly(
 				"ExtremeRoles.Resources.JsonData.ThiefTimePartPoint.json");
+			if (json == null)
+			{
+				throw new System.ArgumentNullException("Json data is null!!!!");
+			}
 		}
 		string key = Map.Name;
 
 		var result = new List<VectorId>(10);
 
-		JArray posInfo = json.Get<JArray>(key);
+		JArray? posInfo = json.Get<JArray>(key);
+		if (posInfo == null) { return result; }
 
 		for (int i = 0; i < posInfo.Count; ++i)
 		{
-			JArray ventLinkedId = posInfo.Get<JArray>(i);
+			JArray? id = posInfo.Get<JArray>(i);
+			if (id == null) { continue; }
 
 			result.Add(
 				new VectorId(
 					i, new Vector2(
-						(float)(ventLinkedId[0]),
-						(float)(ventLinkedId[1]))));
+						(float)(id[0]),
+						(float)(id[1]))));
 		}
 		return result;
 	}
