@@ -12,13 +12,10 @@ namespace ExtremeRoles.Compat.SafeBoot;
 
 public static class SafeBootScheduler
 {
-	public static bool IsSafe { get; private set; } = false;
 
 	internal static void Boot(in Harmony harmony)
 	{
 		harmony.UnpatchSelf();
-
-		IsSafe = true;
 
 		try
 		{

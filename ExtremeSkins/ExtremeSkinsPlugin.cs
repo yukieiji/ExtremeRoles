@@ -34,7 +34,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
     public override void Load()
     {
-		if (ExtremeRoles.Compat.SafeBoot.SafeBootScheduler.IsSafe)
+		if (ExtremeRoles.ExtremeRolesPlugin.DebugMode == null)
 		{
 			return;
 		}

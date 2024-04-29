@@ -27,7 +27,7 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
 
     public override void Load()
     {
-		if (ExtremeRoles.Compat.SafeBoot.SafeBootScheduler.IsSafe)
+		if (ExtremeRoles.ExtremeRolesPlugin.DebugMode == null)
 		{
 			return;
 		}

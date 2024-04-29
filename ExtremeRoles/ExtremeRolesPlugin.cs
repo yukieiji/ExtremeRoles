@@ -56,6 +56,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 			Logger.LogError($"ExR can't boot with normal ops\nError:{ex.Message}");
 			Logger.LogWarning("Try boot ExR with SafeMode");
 			Compat.SafeBoot.SafeBootScheduler.Boot(this.Harmony);
+
+			DebugMode = null;
 		}
     }
 
