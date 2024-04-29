@@ -31,7 +31,7 @@ public static class SpawnInMinigameBeginPatch
 			__instance.StartCoroutine(
 				__instance.CoSpawnAt(
 					localPlayer,
-				new SpawnInMinigame.SpawnLocation()));
+					new SpawnInMinigame.SpawnLocation()));
 		}
         else if (spawnOpt.IsAutoSelectRandom)
         {

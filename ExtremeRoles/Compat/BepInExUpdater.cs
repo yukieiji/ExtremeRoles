@@ -135,5 +135,5 @@ public sealed class BepInExUpdater : MonoBehaviour
 	}
 
 	private static string[] getDefaultConfig()
-		=> new string[] { "ExtremeRoles.Resources.Config.BepInEx.cfg" };
+		=> [ "ExtremeRoles.Resources.Config.BepInEx.cfg" ];
 }

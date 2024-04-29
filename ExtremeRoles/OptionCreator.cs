@@ -59,15 +59,14 @@ public static class OptionCreator
 			true, isHeader: true);
 		commonOptionFactory.CreateSelectionOption(
 			CommonOptionKey.UsePrngAlgorithm,
-			new string[]
-			{
+			[
 				"Pcg32XshRr", "Pcg64RxsMXs",
 				"Xorshift64", "Xorshift128",
 				"Xorshiro256StarStar",
 				"Xorshiro512StarStar",
 				"RomuMono", "RomuTrio", "RomuQuad",
 				"Seiran128", "Shioi128", "JFT32",
-			},
+			],
 			strongGen, invert: true);
 
         IRoleSelector.CreateRoleGlobalOption();

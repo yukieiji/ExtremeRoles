@@ -74,15 +74,16 @@ public static class GameDataRecomputeTaskCountsPatch
 				) &&
 				playerInfo.Role &&
 				playerInfo.Role.TasksCountTowardProgress &&
-				roles.ContainsKey(playerInfo.PlayerId))
+				roles.TryGetValue(playerInfo.PlayerId, out var role) &&
+				role != null)
 			{
 
-				if (!roles[playerInfo.PlayerId].HasTask())
+				if (!role.HasTask())
 				{
 					continue;
 				}
 
-				if (!roles[playerInfo.PlayerId].IsCrewmate())
+				if (!role.IsCrewmate())
                 {
 					continue;
                 }

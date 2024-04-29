@@ -1,13 +1,12 @@
 ﻿using HarmonyLib;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches;
+
+[HarmonyPatch(typeof(AirshipStatus), nameof(AirshipStatus.PrespawnStep))]
+public static class AirshipStatusPrespawnStepPatch
 {
-    [HarmonyPatch(typeof(AirshipStatus), nameof(AirshipStatus.PrespawnStep))]
-    public static class AirshipStatusPrespawnStepPatch
+    public static bool Prefix()
     {
-        public static bool Prefix(AirshipStatus __instance)
-        {
-            return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
-        }
-	}
+        return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+    }
 }

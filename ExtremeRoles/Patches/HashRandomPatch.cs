@@ -1,7 +1,4 @@
-﻿using System;
-using HarmonyLib;
-
-using ExtremeRoles.Module.CustomOption;
+﻿using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
@@ -25,7 +22,7 @@ public static class HashRandomFastNextPatch
 [HarmonyPatch(
     typeof(HashRandom),
     nameof(HashRandom.Next),
-    new Type[] { typeof(int) })]
+    [ typeof(int) ])]
 public static class HashRandomNextPatch
 {
     public static bool Prefix(

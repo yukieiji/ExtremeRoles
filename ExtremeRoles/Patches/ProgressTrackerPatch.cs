@@ -42,7 +42,7 @@ public static class ProgressTrackerFixedUpdatePatch
                 (GameData.PlayerInfo p) => p.Disconnected);
 
             float curProgress = (float)gameData.CompletedTasks /
-			(float)gameData.TotalTasks * (float)num;
+				(float)gameData.TotalTasks * (float)num;
             __instance.curValue = Mathf.Lerp(
                 __instance.curValue, curProgress, Time.fixedDeltaTime * 2f);
             __instance.TileParent.material.SetFloat("_Buckets", (float)num);

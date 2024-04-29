@@ -83,7 +83,7 @@ internal sealed class CompatModManager
 				$"---- CompatMod:{guid} integrater Start!! ----");
 
 			object? instance = Activator.CreateInstance(
-							modInfo.ModIntegratorType, new object[] { plugin });
+				modInfo.ModIntegratorType, [ plugin ]);
 			if (instance == null) { continue; }
 
 			this.loadedMod.Add(modType, (ModIntegratorBase)instance);
