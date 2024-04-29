@@ -193,7 +193,7 @@ public static class MapCountOverlayUpdatePatch
 
         if (adminTimer <= 0.0f)
         {
-            disableAdmin();
+			GameSystem.DisableAdmin();
             MapBehaviour.Instance.Close();
         }
     }
@@ -242,39 +242,4 @@ public static class MapCountOverlayUpdatePatch
         }
         return false;
     }
-
-    private static void disableAdmin()
-    {
-        HashSet<string> adminObj = new HashSet<string>();
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-			adminObj = modMap!.GetSystemObjectName(
-				Compat.Interface.SystemConsoleType.Admin);
-        }
-        else
-        {
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 0:
-					adminObj.Add(GameSystem.SkeldAdmin);
-                    break;
-                case 1:
-					adminObj.Add(GameSystem.MiraHqAdmin);
-                    break;
-                case 2:
-                    adminObj.Add(GameSystem.PolusAdmin1);
-                    adminObj.Add(GameSystem.PolusAdmin2);
-                    break;
-                case 4:
-                    adminObj.Add(GameSystem.AirShipArchiveAdmin);
-                    adminObj.Add(GameSystem.AirShipCockpitAdmin);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-		GameSystem.DisableMapConsole(adminObj);
-	}
 }

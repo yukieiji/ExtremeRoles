@@ -107,47 +107,12 @@ public static class SecurityHelper
 
         if (cameraTimer <= 0.0f)
         {
-            disableSecurity();
+			GameSystem.DisableSecurity();
             instance.ForceClose();
         }
     }
 
     public static TMPro.TextMeshPro GetTimerText() => timerText;
-
-    private static void disableSecurity()
-    {
-        HashSet<string> securityObj = new HashSet<string>();
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-			securityObj = modMap!.GetSystemObjectName(
-                Compat.Interface.SystemConsoleType.SecurityCamera);
-        }
-        else
-        {
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 0:
-					securityObj.Add(GameSystem.SkeldSecurity);
-                    break;
-                case 1:
-					securityObj.Add(GameSystem.MiraHqSecurity);
-                    break;
-                case 2:
-					securityObj.Add(GameSystem.PolusSecurity);
-                    break;
-                case 4:
-					securityObj.Add(GameSystem.AirShipSecurity);
-					break;
-				case 5:
-					securityObj.Add(GameSystem.FangleSecurity);
-					break;
-				default:
-                    break;
-            }
-        }
-		GameSystem.DisableSystemConsole(securityObj);
-	}
 }
 
 [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]

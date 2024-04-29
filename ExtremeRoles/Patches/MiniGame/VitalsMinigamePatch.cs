@@ -84,7 +84,7 @@ public static class VitalsMinigameUpdatePatch
 
         if (vitalTimer <= 0.0f)
         {
-            disableVital();
+			GameSystem.DisableVital();
             __instance.ForceClose();
         }
     }
@@ -134,34 +134,4 @@ public static class VitalsMinigameUpdatePatch
         }
         return false;
     }
-
-    private static void disableVital()
-    {
-        HashSet<string> vitalObj = new HashSet<string>();
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-            vitalObj = modMap!.GetSystemObjectName(
-                Compat.Interface.SystemConsoleType.Vital);
-        }
-        else
-        {
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 2:
-                    vitalObj.Add(GameSystem.PolusVital);
-                    break;
-                case 4:
-                    vitalObj.Add(GameSystem.AirShipVital);
-                    break;
-				case 5:
-					vitalObj.Add(GameSystem.FangleVital);
-					break;
-                default:
-                    break;
-            }
-        }
-
-		GameSystem.DisableSystemConsole(vitalObj);
-	}
 }
