@@ -439,8 +439,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
         camera.NewName = newName;
 
-        byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId);
+        byte mapId = Map.Id;
 
         if (mapId == 2 || mapId == 4)
         {
@@ -558,7 +557,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     public bool IsAbilityUse()
 	{
-		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
+		byte mapId = Map.Id;
 
 		return
 			this.IsAwake &&

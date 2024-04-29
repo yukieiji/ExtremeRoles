@@ -42,8 +42,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	public override string GetIntroDescription()
-		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
+		=> Map.Id switch
 		{
 			5 => Translation.GetString($"{this.Id}FungleIntroDescription"),
 			_ => base.GetIntroDescription()

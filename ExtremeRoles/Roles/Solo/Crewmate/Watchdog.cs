@@ -49,8 +49,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
         string buttonText;
         Sprite buttonImage;
         var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-        switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId))
+        switch (Map.Id)
         {
             case 1:
                 buttonText = "doorLog";

@@ -93,10 +93,7 @@ public static class GameSystem
 
 	public static ShipStatus GetShipObj(byte mapId)
 	{
-		byte optionMapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId);
-
-		if (optionMapId == mapId &&
+		if (Map.Id == mapId &&
 			CachedShipStatus.Instance != null)
 		{
 			return CachedShipStatus.Instance;
@@ -205,8 +202,7 @@ public static class GameSystem
 
     public static Sprite GetAdminButtonImage()
     {
-		var useButtonKey = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
+		var useButtonKey = Map.Id switch
 		{
 			0 or 3 => ImageNames.AdminMapButton,
 			1 => ImageNames.MIRAAdminButton,
@@ -219,8 +215,7 @@ public static class GameSystem
 
     public static Sprite GetSecurityImage()
     {
-		var useButtonKey = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
+		var useButtonKey = Map.Id switch
 		{
 			1 => ImageNames.DoorLogsButton,
 			_ => ImageNames.CamsButton,

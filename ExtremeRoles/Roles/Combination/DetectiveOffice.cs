@@ -798,8 +798,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             // 2 = Polus
             // 3 = Dleks - deactivated
             // 4 = Airship
-			string key = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-				ByteOptionNames.MapId) switch
+			string key = Map.Id switch
 			{
 				0 or 1 or 3 => "EmergencyConsole",
 				2 => "EmergencyButton",

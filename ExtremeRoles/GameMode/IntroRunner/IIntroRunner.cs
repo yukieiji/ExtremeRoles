@@ -213,8 +213,7 @@ public interface IIntroRunner
 			Map.DisableAdmin();
 		}
 		// AirShipのみ一部のアドミンを消す
-		else if (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) == 4)
+		else if (Map.Id == 4)
 		{
 			string removeTargetAdmin = flag.AirShipAdminMode switch
 			{

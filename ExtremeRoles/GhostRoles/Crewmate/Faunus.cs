@@ -180,8 +180,7 @@ public sealed class Faunus : GhostRoleBase
     }
 
 	private string getLightConsoleName()
-		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
+		=> Map.Id switch
 		{
 			0 or 1 or 3 => "SwitchConsole",
 			2 => "panel_switches",
@@ -190,8 +189,7 @@ public sealed class Faunus : GhostRoleBase
 		};
 
     private IReadOnlyList<string> getOxyConsole()
-		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
+		=> Map.Id switch
 		{
 			0 or 1 or 3 => new List<string> { "NoOxyConsole" },
 			4 => new List<string> { "NoOxyConsoleLeft", "NoOxyConsoleRight" },
@@ -199,8 +197,7 @@ public sealed class Faunus : GhostRoleBase
 		};
 
     private IReadOnlyList<string> getHandConsole()
-		=> GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
+		=> Map.Id switch
 		{
 			0 or 3 => new List<string> { "UpperHandConsole", "LowerHandConsole" },
 			1 => new List<string> { "LeftHandConsole", "RightHandConsole" },

@@ -97,9 +97,6 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
             new Vector2(x.transform.position.x, x.transform.position.y)
         ));
 
-        byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-            ByteOptionNames.MapId);
-
 		targetPos = targetPos.Where(item => !ExtremeSpawnSelectorMinigame.IsCloseWaitPos(item));
 
 		byte randomPlayer = teleportPlayer.First().PlayerId;

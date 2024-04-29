@@ -479,8 +479,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 	}
 	private static bool isCheckWall(in int posId)
-		=> (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId)) switch
+		=> Map.Id switch
 		{
 			5 => posId != 5, // 5はファングルのコミュ上はなんか凸凹してるからダメっぽい
 			_ => true,

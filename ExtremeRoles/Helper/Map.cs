@@ -68,7 +68,7 @@ public static class Map
 			}
 			else
 			{
-				key = MapId switch
+				key = Id switch
 				{
 					0 => SkeldKey,
 					1 => MiraHqKey,
@@ -82,14 +82,11 @@ public static class Map
 		}
 	}
 
-	public static byte MapId => GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-					ByteOptionNames.MapId);
+	public static byte Id => GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+		ByteOptionNames.MapId);
 
 	public static void AddSpawnPoint(in List<Vector2> pos, in byte playerId)
 	{
-		byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId);
-
 		int playerNum = CachedPlayerControl.AllPlayerControls.Count;
 
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
@@ -100,7 +97,7 @@ public static class Map
 		{
 			var ship = CachedShipStatus.Instance;
 
-			switch (mapId)
+			switch (Id)
 			{
 				case 4:
 					pos.AddRange(GetAirShipRandomSpawn());
@@ -142,8 +139,7 @@ public static class Map
 		}
 		else
 		{
-			switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-				ByteOptionNames.MapId))
+			switch (Id)
 			{
 				case 2:
 					vitalObj.Add(PolusVital);
@@ -177,8 +173,7 @@ public static class Map
 		}
 		else
 		{
-			switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-				ByteOptionNames.MapId))
+			switch (Id)
 			{
 				case 0:
 					adminObj.Add(SkeldAdmin);
@@ -266,8 +261,7 @@ public static class Map
 		// 2 = Polus
 		// 3 = Dleks - deactivated
 		// 4 = Airship
-		string key = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-			ByteOptionNames.MapId) switch
+		string key = Map.Id switch
 		{
 			0 or 3 => SkeldSecurity,
 			1 => MiraHqSecurity,
