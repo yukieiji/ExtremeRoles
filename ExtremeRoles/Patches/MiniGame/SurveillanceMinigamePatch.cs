@@ -37,7 +37,7 @@ public static class SecurityHelper
         if (securityOption == null) { return; }
 
         cameraTimer = securityOption.SecurityLimitTime;
-        isRemoveSecurity = securityOption.DisableSecurity;
+        isRemoveSecurity = securityOption.Disable;
         enableCameraLimit = securityOption.EnableSecurityLimit;
 
         Logging.Debug("---- SecurityCondition ----");

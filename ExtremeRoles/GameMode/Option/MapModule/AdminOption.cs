@@ -9,7 +9,7 @@
 
     public sealed class AdminOption
     {
-        public bool DisableAdmin            { get; set; } = false;
+        public bool Disable            { get; set; } = false;
         public AirShipAdminMode AirShipEnable { get; set; } = AirShipAdminMode.ModeBoth;
         public bool EnableAdminLimit          { get; set; } = false;
         public float AdminLimitTime           { get; set; } = float.MaxValue;

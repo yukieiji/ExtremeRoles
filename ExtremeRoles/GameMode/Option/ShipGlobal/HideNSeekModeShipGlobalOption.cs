@@ -114,7 +114,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
         Admin = new AdminOption()
         {
-            DisableAdmin = IShipGlobalOption.GetCommonOptionValue<bool>(
+            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveAdmin),
             AirShipEnable = (AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue<int>(
                 GlobalOption.AirShipEnableAdmin),
@@ -125,7 +125,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
         };
         Vital = new VitalOption()
         {
-            DisableVital = IShipGlobalOption.GetCommonOptionValue<bool>(
+            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveVital),
             EnableVitalLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.EnableVitalLimit),
@@ -134,7 +134,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
         };
         Security = new SecurityOption()
         {
-            DisableSecurity = IShipGlobalOption.GetCommonOptionValue<bool>(
+            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveSecurity),
             EnableSecurityLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.EnableSecurityLimit),

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 
 using HarmonyLib;
 using UnityEngine;
@@ -7,18 +6,15 @@ using AmongUs.GameOptions;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
-using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;
-using ExtremeRoles.GameMode.Option.MapModule;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.Solo.Host;
+
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches;
@@ -99,8 +95,7 @@ public static class IntroCutsceneBeginImpostorPatch
     }
 
     public static void Postfix(
-        IntroCutscene __instance,
-        ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+        IntroCutscene __instance)
     {
         IntroCutscenceHelper.SetupIntroTeam(__instance);
         IntroCutscenceHelper.SetupRole();
@@ -120,8 +115,7 @@ public static class BeginCrewmatePatch
     }
 
     public static void Postfix(
-        IntroCutscene __instance,
-        ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
+        IntroCutscene __instance)
     {
         IntroCutscenceHelper.SetupIntroTeam(__instance);
         IntroCutscenceHelper.SetupRole();
@@ -154,9 +148,9 @@ public static class IntroCutsceneSetUpRoleTextPatch
         __instance.RoleBlurbText.text = role.GetIntroDescription();
         __instance.RoleBlurbText.color = role.GetNameColor();
 
-        if (role.Id != ExtremeRoleId.Lover ||
-            role.Id != ExtremeRoleId.Sharer ||
-            role.Id != ExtremeRoleId.Buddy)
+        if (role.Id is ExtremeRoleId.Lover
+			or ExtremeRoleId.Sharer
+			or ExtremeRoleId.Buddy)
         {
             if (role is MultiAssignRoleBase multiAssignRole &&
 				multiAssignRole.AnotherRole != null)
@@ -216,225 +210,5 @@ public static class IntroCutsceneSetUpRoleTextPatch
 
         __result = showRoleText(role, __instance).WrapToIl2Cpp();
         return false;
-    }
-}
-
-[HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-public static class IntroCutsceneOnDestroyPatch
-{
-    public static void Prefix()
-    {
-		var system = ExtremeSystemTypeManager.Instance;
-		CachedShipStatus.Instance.Systems.Add(ExtremeSystemTypeManager.Type, system.Cast<ISystemType>());
-
-		if (ExtremeGameModeManager.Instance.EnableXion)
-        {
-            Xion.XionPlayerToGhostLayer();
-            Xion.RemoveXionPlayerToAllPlayerControl();
-
-            if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame)
-            {
-                foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
-                {
-                    if (player == null ||
-						!player.GetComponent<DummyBehaviour>().enabled) { continue; }
-
-                    var role = ExtremeRoleManager.GameRole[player.PlayerId];
-                    if (!role.HasTask())
-                    {
-                        continue;
-                    }
-
-                    GameData.PlayerInfo playerInfo = player.Data;
-
-                    var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
-                    if (totalTask == 0)
-                    {
-                        GameSystem.SetTask(playerInfo,
-                            GameSystem.GetRandomCommonTaskId());
-                    }
-                }
-            }
-        }
-
-		InfoOverlay.Instance.InitializeToGame();
-
-        var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-        if (localRole is IRoleSpecialSetUp setUpRole)
-        {
-            setUpRole.IntroEndSetUp();
-        }
-
-        if (localRole is MultiAssignRoleBase multiAssignRole &&
-			multiAssignRole.AnotherRole is IRoleSpecialSetUp multiSetUpRole)
-        {
-			multiSetUpRole.IntroEndSetUp();
-		}
-
-        disableMapObject();
-		changeWallHackTask();
-
-	}
-
-	private static void changeWallHackTask()
-	{
-		var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
-		if (!shipOpt.ChangeForceWallCheck) { return; }
-
-		var changeWallCheckTask = shipOpt.ChangeTask;
-		var wallCheckTasks = shipOpt.WallCheckTask;
-
-		var allConsole = Object.FindObjectsOfType<Console>();
-
-		foreach (Console console in allConsole)
-		{
-			foreach (var taskType in console.TaskTypes)
-			{
-				if (wallCheckTasks.Contains(taskType))
-				{
-					console.checkWalls = changeWallCheckTask.Contains(taskType);
-					break;
-				}
-			}
-		}
-	}
-
-    private static void disableMapObject()
-    {
-        HashSet<string> disableObjectName = new HashSet<string>();
-
-        var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
-
-        bool isRemoveAdmin = shipOpt.Admin.DisableAdmin;
-        bool isRemoveSecurity = shipOpt.Security.DisableSecurity;
-        bool isRemoveVital = shipOpt.Vital.DisableVital;
-
-        if (CompatModManager.Instance.TryGetModMap(out var modMap))
-        {
-            if (isRemoveAdmin)
-            {
-                disableObjectName.UnionWith(
-                    modMap!.GetSystemObjectName(
-                        Compat.Interface.SystemConsoleType.Admin));
-            }
-            if (isRemoveSecurity)
-            {
-                disableObjectName.UnionWith(
-                    modMap!.GetSystemObjectName(
-                        Compat.Interface.SystemConsoleType.SecurityCamera));
-            }
-            if (isRemoveVital)
-            {
-                disableObjectName.UnionWith(
-                    modMap!.GetSystemObjectName(
-                        Compat.Interface.SystemConsoleType.Vital));
-            }
-        }
-        else
-        {
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 0:
-                    if (isRemoveAdmin)
-                    {
-						GameSystem.DisableMapConsole(
-							GameSystem.SkeldAdmin);
-                    }
-                    if (isRemoveSecurity)
-                    {
-                        disableObjectName.Add(
-                            GameSystem.SkeldSecurity);
-                    }
-                    break;
-                case 1:
-                    if (isRemoveAdmin)
-                    {
-						GameSystem.DisableMapConsole(
-                            GameSystem.MiraHqAdmin);
-                    }
-                    if (isRemoveSecurity)
-                    {
-                        disableObjectName.Add(
-                            GameSystem.MiraHqSecurity);
-                    }
-                    break;
-                case 2:
-                    if (isRemoveAdmin)
-                    {
-						GameSystem.DisableMapConsole(
-                            new HashSet<string>(2)
-							{
-								GameSystem.PolusAdmin1,
-								GameSystem.PolusAdmin2
-							});
-                    }
-                    if (isRemoveSecurity)
-                    {
-                        disableObjectName.Add(
-                            GameSystem.PolusSecurity);
-                    }
-                    if (isRemoveVital)
-                    {
-                        disableObjectName.Add(
-                            GameSystem.PolusVital);
-                    }
-                    break;
-                case 4:
-                    if (isRemoveAdmin)
-                    {
-						GameSystem.DisableMapConsole(
-							new HashSet<string>(2)
-							{
-								GameSystem.AirShipArchiveAdmin,
-								GameSystem.AirShipCockpitAdmin
-							});
-                    }
-                    else
-                    {
-                        switch (shipOpt.Admin.AirShipEnable)
-                        {
-                            case AirShipAdminMode.ModeCockpitOnly:
-                                GameSystem.DisableMapConsole(
-                                    GameSystem.AirShipArchiveAdmin);
-                                break;
-                            case AirShipAdminMode.ModeArchiveOnly:
-                                GameSystem.DisableMapConsole(
-                                    GameSystem.AirShipCockpitAdmin);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    if (isRemoveSecurity)
-                    {
-                        disableObjectName.Add(
-                            GameSystem.AirShipSecurity);
-                    }
-                    if (isRemoveVital)
-                    {
-                        disableObjectName.Add(
-                            GameSystem.AirShipVital);
-                    }
-                    break;
-				case 5:
-					if (isRemoveSecurity)
-					{
-						disableObjectName.Add(
-							GameSystem.FangleSecurity);
-					}
-					if (isRemoveVital)
-					{
-						disableObjectName.Add(
-							GameSystem.FangleVital);
-					}
-					break;
-				default:
-                    break;
-            }
-        }
-
-		if (disableObjectName.Count == 0) { return; }
-		GameSystem.DisableSystemConsole(disableObjectName);
     }
 }

@@ -208,7 +208,7 @@ public static class MapCountOverlayUpdatePatch
         if (adminOpt == null) { return; }
 
         adminTimer = adminOpt.AdminLimitTime;
-        isRemoveAdmin = adminOpt.DisableAdmin;
+        isRemoveAdmin = adminOpt.Disable;
         enableAdminLimit = adminOpt.EnableAdminLimit;
 
         Logging.Debug("---- AdminCondition ----");
@@ -248,7 +248,8 @@ public static class MapCountOverlayUpdatePatch
         HashSet<string> adminObj = new HashSet<string>();
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-			adminObj = modMap!.GetSystemObjectName(Compat.Interface.SystemConsoleType.Admin);
+			adminObj = modMap!.GetSystemObjectName(
+				Compat.Interface.SystemConsoleType.Admin);
         }
         else
         {

@@ -100,7 +100,7 @@ public static class VitalsMinigameUpdatePatch
         if (vitalOption == null) { return; }
 
         vitalTimer = vitalOption.VitalLimitTime;
-        isRemoveVital = vitalOption.DisableVital;
+        isRemoveVital = vitalOption.Disable;
         enableVitalLimit = vitalOption.EnableVitalLimit;
 
         Logging.Debug("---- VitalCondition ----");

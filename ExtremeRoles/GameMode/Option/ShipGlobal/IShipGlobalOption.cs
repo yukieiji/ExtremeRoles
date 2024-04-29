@@ -86,6 +86,12 @@ public enum VentAnimationMode
 	DonotOutVison,
 }
 
+public readonly record struct MapModuleDisableFlag(
+	bool Admin,
+	bool Security,
+	bool Vital,
+	AirShipAdminMode AirShipAdminMode);
+
 public interface IShipGlobalOption
 {
     public bool IsEnableImpostorVent { get; }
@@ -122,6 +128,12 @@ public interface IShipGlobalOption
 		TaskTypes.DevelopPhotos,
 		TaskTypes.DivertPower,
 	};
+
+	public MapModuleDisableFlag RemoveMapModule => new MapModuleDisableFlag(
+		this.Admin.Disable,
+		this.Security.Disable,
+		this.Vital.Disable,
+		this.Admin.AirShipEnable);
 
 	public IReadOnlySet<TaskTypes> ChangeTask
 	{

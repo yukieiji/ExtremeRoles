@@ -254,6 +254,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 		this.allSystems[systemType].UpdateSystem(player, msgReader);
 	}
 
+	internal static void AddSystem()
+	{
+		var system = Instance;
+		CachedShipStatus.Instance.Systems.Add(Type, system.Cast<ISystemType>());
+	}
+
 	private void initialize()
 	{
 		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);

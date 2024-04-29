@@ -671,7 +671,89 @@ public static class GameSystem
             AmongUsClient.Instance.ClientId);
     }
 
-    public static void SpawnDummyPlayer(string name = "")
+	public static void DisableSecurity()
+	{
+		var security = GetSecuritySystemConsole();
+		if (security == null) { return; }
+
+		SetColliderActive(security.gameObject, false);
+	}
+	public static void DisableVital()
+	{
+		HashSet<string> vitalObj = new HashSet<string>(2);
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			vitalObj = modMap!.GetSystemObjectName(
+				SystemConsoleType.Vital);
+		}
+		else
+		{
+			switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+				ByteOptionNames.MapId))
+			{
+				case 2:
+					vitalObj.Add(PolusVital);
+					break;
+				case 4:
+					vitalObj.Add(AirShipVital);
+					break;
+				case 5:
+					vitalObj.Add(FangleVital);
+					break;
+				default:
+					break;
+			}
+		}
+
+		if (vitalObj.Count == 0)
+		{
+			return;
+		}
+
+		DisableSystemConsole(vitalObj);
+	}
+
+	public static void DisableAdmin()
+	{
+		HashSet<string> adminObj = new HashSet<string>();
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			adminObj = modMap!.GetSystemObjectName(
+				SystemConsoleType.Admin);
+		}
+		else
+		{
+			switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+				ByteOptionNames.MapId))
+			{
+				case 0:
+					adminObj.Add(SkeldAdmin);
+					break;
+				case 1:
+					adminObj.Add(MiraHqAdmin);
+					break;
+				case 2:
+					adminObj.Add(PolusAdmin1);
+					adminObj.Add(PolusAdmin2);
+					break;
+				case 4:
+					adminObj.Add(AirShipArchiveAdmin);
+					adminObj.Add(AirShipCockpitAdmin);
+					break;
+				default:
+					break;
+			}
+		}
+
+		if (adminObj.Count == 0)
+		{
+			return;
+		}
+
+		DisableMapConsole(adminObj);
+	}
+
+	public static void SpawnDummyPlayer(string name = "")
     {
         PlayerControl playerControl = UnityEngine.Object.Instantiate(
                 AmongUsClient.Instance.PlayerPrefab);
