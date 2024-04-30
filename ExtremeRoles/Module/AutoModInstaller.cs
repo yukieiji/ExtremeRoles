@@ -278,6 +278,7 @@ public sealed class AutoModInstaller
 				setPopupText(
 					Translation.GetString(trans.NoOp));
 				this.isRunning = false;
+				ExtremeRolesPlugin.Logger.LogInfo($"---- Nothing Ops:{installType} ----");
 				return;
 			}
 
@@ -303,7 +304,7 @@ public sealed class AutoModInstaller
 				}
 			}
 
-			ExtremeRolesPlugin.Logger.LogInfo($"Completed!!!!!!!!!!!!!!");
+			ExtremeRolesPlugin.Logger.LogInfo($"---- Complete Auto install Ops:{installType} ----");
 			this.InfoPopup.StartCoroutine(
 				Effects.Lerp(0.01f, new Action<float>(
 					(p) => { this.showPopup(

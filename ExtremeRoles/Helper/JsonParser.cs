@@ -52,8 +52,12 @@ public static class JsonParser
 			return default(T);
 		}
 
+		ExtremeRolesPlugin.Logger.LogInfo("Success!!");
+
+		ExtremeRolesPlugin.Logger.LogInfo("Deserialize to Json....");
 		var stream = await response.Content.ReadAsStreamAsync();
 		T? data = await JsonSerializer.DeserializeAsync<T>(stream);
+		ExtremeRolesPlugin.Logger.LogInfo("Complete!!!");
 
 		return data;
 	}
