@@ -67,13 +67,15 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 						int diff = getReleaseDiff(targetRelease, curVersion);
 						if (diff > 0)
 						{
+							ExtremeRolesPlugin.Logger.LogInfo($"Find DowngradeData, Create Download Data....");
 							convertReleaseToDownloadData(result, targetRelease);
 							break;
 						}
 						else
 						{
 							// DDOSにならないように3秒程度待つ
-							await Task.Delay(3000);
+							ExtremeRolesPlugin.Logger.LogInfo($"Wait 3s, For preventing DDOS....");
+							await Task.Delay(300);
 						}
 					}
 				}
@@ -86,7 +88,8 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 
 	private static int getReleaseDiff(in GitHubReleaseData releaseData, in Version curVersion)
 	{
-		Version ver = Version.Parse(releaseData.tag_name.Replace("v", ""));
+		Version ver = Version.Parse(
+			releaseData.tag_name.Replace("v", ""));
 		int diff = curVersion.CompareTo(ver);
 
 		return diff;
@@ -99,24 +102,22 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 		foreach (var asset in releaseData.assets)
 		{
 			string? browser_download_url = asset.browser_download_url;
-			if (string.IsNullOrEmpty(browser_download_url))
+			if (string.IsNullOrEmpty(browser_download_url) ||
+				asset.content_type.Equals("application/x-zip-compressed"))
 			{
 				continue;
 			}
 
-			string content = asset.content_type;
-
-			if (content.Equals("application/x-zip-compressed")) { continue; }
-
 			foreach (string dll in this.DllName)
 			{
-				if (browser_download_url.EndsWith(dll))
+				if (!browser_download_url.EndsWith(dll))
 				{
-					var data = new AutoModInstaller.DownloadData(browser_download_url, dll);
-					ExtremeRolesPlugin.Logger.LogInfo($"Create DonwloadData:{data.ToString()}");
-					result.Add(
-						new(browser_download_url, dll));
+					continue;
 				}
+				var data = new AutoModInstaller.DownloadData(browser_download_url, dll);
+				ExtremeRolesPlugin.Logger.LogInfo($"Create DonwloadData:{data.ToString()}");
+				result.Add(
+					new(browser_download_url, dll));
 			}
 		}
 	}
