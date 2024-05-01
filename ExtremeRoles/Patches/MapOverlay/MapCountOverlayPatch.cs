@@ -3,7 +3,6 @@
 using UnityEngine;
 
 using HarmonyLib;
-using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
@@ -11,7 +10,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Compat;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 
@@ -26,11 +24,9 @@ public static class MapCountOverlayUpdatePatch
         new Dictionary<SystemTypes, List<int>>();
 
     private static float adminTimer = 0.0f;
-    private static bool enableAdminLimit = false;
-    private static bool isRemoveAdmin = false;
     private static TMPro.TextMeshPro? timerText;
 
-    private static readonly HashSet<ExtremeRoleId> adminUseRole = new HashSet<ExtremeRoleId>()
+    private static readonly IReadOnlySet<ExtremeRoleId> adminUseRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Supervisor,
         ExtremeRoleId.Traitor,
@@ -163,13 +159,11 @@ public static class MapCountOverlayUpdatePatch
 
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-        if (isRemoveAdmin || // アドミン無効化してる
-            !enableAdminLimit) //アドミン制限あるか
-        {
-            return;
-        }
+		var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
 
-        if (IsAbilityUse())
+		if (adminOpt.Disable || // アドミン無効化してる
+            !adminOpt.EnableAdminLimit || //アドミン制限あるか
+			IsAbilityUse())
         {
             return;
         }
@@ -198,47 +192,24 @@ public static class MapCountOverlayUpdatePatch
         }
     }
 
-    public static void Initialize()
+	public static bool IsAbilityUse()
+		=> IRoleAbility.IsLocalPlayerAbilityUse(adminUseRole);
+
+	public static void Initialize()
     {
         Object.Destroy(timerText);
     }
+
+
     public static void LoadOptionValue()
     {
         var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
 
         adminTimer = adminOpt.AdminLimitTime;
-        isRemoveAdmin = adminOpt.Disable;
-        enableAdminLimit = adminOpt.EnableAdminLimit;
 
         Logging.Debug("---- AdminCondition ----");
-        Logging.Debug($"IsRemoveAdmin:{isRemoveAdmin}");
-        Logging.Debug($"EnableAdminLimit:{enableAdminLimit}");
+        Logging.Debug($"IsRemoveAdmin:{adminOpt.Disable}");
+        Logging.Debug($"EnableAdminLimit:{adminOpt.EnableAdminLimit}");
         Logging.Debug($"AdminTime:{adminTimer}");
-    }
-
-    public static bool IsAbilityUse()
-    {
-        SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-        MultiAssignRoleBase? multiAssignRole = role as MultiAssignRoleBase;
-
-        if (adminUseRole.Contains(role.Id))
-        {
-            if (((IRoleAbility)role).Button.IsAbilityActive())
-            {
-                return true;
-            }
-        }
-        if (multiAssignRole?.AnotherRole != null)
-        {
-            if (adminUseRole.Contains(
-                multiAssignRole.AnotherRole.Id))
-            {
-                if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

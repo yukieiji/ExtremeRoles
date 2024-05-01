@@ -2,28 +2,25 @@
 using System.Linq;
 using UnityEngine;
 
-using AmongUs.GameOptions;
 using HarmonyLib;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Compat;
 
 namespace ExtremeRoles.Patches.MiniGame;
+
+#nullable enable
 
 public static class SecurityHelper
 {
     private static float cameraTimer = 0.0f;
-    private static bool enableCameraLimit = false;
-    private static bool isRemoveSecurity = false;
-    private static TMPro.TextMeshPro timerText;
+    private static TMPro.TextMeshPro? timerText;
 
-    private static readonly HashSet<ExtremeRoleId> securityUseRole =
+    private static readonly IReadOnlySet<ExtremeRoleId> securityUseRole =
         new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Traitor,
@@ -36,39 +33,11 @@ public static class SecurityHelper
         var securityOption = ExtremeGameModeManager.Instance.ShipOption.Security;
 
         cameraTimer = securityOption.SecurityLimitTime;
-        isRemoveSecurity = securityOption.Disable;
-        enableCameraLimit = securityOption.EnableSecurityLimit;
 
         Logging.Debug("---- SecurityCondition ----");
-        Logging.Debug($"IsRemoveSecurity:{enableCameraLimit}");
-        Logging.Debug($"EnableSecurityLimit:{isRemoveSecurity}");
+        Logging.Debug($"IsRemoveSecurity:{securityOption.Disable}");
+        Logging.Debug($"EnableSecurityLimit:{securityOption.EnableSecurityLimit}");
         Logging.Debug($"SecurityTime:{cameraTimer}");
-    }
-
-    public static bool IsAbilityUse()
-    {
-        SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-        MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
-
-        if (securityUseRole.Contains(role.Id))
-        {
-            if (((IRoleAbility)role).Button.IsAbilityActive())
-            {
-                return true;
-            }
-        }
-        if (multiAssignRole?.AnotherRole != null)
-        {
-            if (securityUseRole.Contains(
-                multiAssignRole.AnotherRole.Id))
-            {
-                if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public static void PostUpdate(Minigame instance)
@@ -76,13 +45,11 @@ public static class SecurityHelper
 
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-        if (isRemoveSecurity || // セキュリティ無効化してる
-            !enableCameraLimit) // セキュリティ制限あるか
-        {
-            return;
-        }
+		var securityOpt = ExtremeGameModeManager.Instance.ShipOption.Security;
 
-        if (IsAbilityUse())
+		if (securityOpt.Disable || // セキュリティ無効化してる
+            !securityOpt.EnableSecurityLimit ||  // セキュリティ制限あるか
+			IsAbilityUse())
         {
             return;
         }
@@ -110,8 +77,10 @@ public static class SecurityHelper
             instance.ForceClose();
         }
     }
+	public static bool IsAbilityUse()
+		=> IRoleAbility.IsLocalPlayerAbilityUse(securityUseRole);
 
-    public static TMPro.TextMeshPro GetTimerText() => timerText;
+	public static TMPro.TextMeshPro? GetTimerText() => timerText;
 }
 
 [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
@@ -131,7 +100,7 @@ public static class SurveillanceMinigameBeginPatch
             for (int i = 4; i < CachedShipStatus.Instance.AllCameras.Length; i++)
             {
                 SurvCamera surv = CachedShipStatus.Instance.AllCameras[i];
-                Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
+                Camera camera = Object.Instantiate(__instance.CameraPrefab);
                 camera.transform.SetParent(__instance.transform);
                 camera.transform.position = new Vector3(
                     surv.transform.position.x,
