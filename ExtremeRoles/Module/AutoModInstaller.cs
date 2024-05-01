@@ -287,6 +287,9 @@ public sealed class AutoModInstaller
 				Translation.GetString(trans.OpStart));
 			clearOldMod();
 
+			// 起動後すぐに実行すると失敗するんで1s待機
+			await Task.Delay(100);
+
 			this.InfoPopup.StartCoroutine(
 				Effects.Lerp(0.01f, new Action<float>(
 					(p) => { setPopupText(
