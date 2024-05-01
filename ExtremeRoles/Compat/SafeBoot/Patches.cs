@@ -14,7 +14,7 @@ using UnityObject = UnityEngine.Object;
 namespace ExtremeRoles.Compat.SafeBoot;
 
 
-public static class SafeModeMainMenuManagerPatch
+public static class SafeBootMainMenuManagerPatch
 {
 	public static void Prefix(MainMenuManager __instance)
 	{
@@ -99,7 +99,7 @@ public static class SafeModeMainMenuManagerPatch
 	}
 }
 
-public static class SafeModeVersionShowerPatch
+public static class SafeBootVersionShowerPatch
 {
 	public static void Postfix(VersionShower __instance)
 	{

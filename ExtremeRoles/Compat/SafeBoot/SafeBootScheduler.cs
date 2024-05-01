@@ -44,10 +44,10 @@ public static class SafeBootScheduler
 				nameof(MainMenuManager.Start)),
 			new HarmonyMethod(
 				SymbolExtensions.GetMethodInfo(
-					() => SafeModeMainMenuManagerPatch.Prefix(menuManager))),
+					() => SafeBootMainMenuManagerPatch.Prefix(menuManager))),
 			new HarmonyMethod(
 				SymbolExtensions.GetMethodInfo(
-					() => SafeModeMainMenuManagerPatch.Postfix(menuManager)))
+					() => SafeBootMainMenuManagerPatch.Postfix(menuManager)))
 			);
 
 		VersionShower? shower = null;
@@ -57,7 +57,7 @@ public static class SafeBootScheduler
 				nameof(VersionShower.Start)),
 			postfix: new HarmonyMethod(
 				SymbolExtensions.GetMethodInfo(
-					() => SafeModeVersionShowerPatch.Postfix(shower)))
+					() => SafeBootVersionShowerPatch.Postfix(shower)))
 			);
 	}
 }
