@@ -1,14 +1,10 @@
 ﻿namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
-public sealed class SpawnOption
-{
-	public bool EnableSpecialSetting { get; init; } = true;
-
-	public bool Skeld   { get; init; } = false;
-	public bool MiraHq  { get; init; } = false;
-	public bool Polus   { get; init; } = false;
-	public bool AirShip { get; init; } = true;
-	public bool Fungle  { get; init; } = false;
-
-	public bool IsAutoSelectRandom { get; init; } = false;
-}
+public readonly record struct SpawnOption(
+	bool EnableSpecialSetting = true,
+	bool Skeld = false,
+	bool MiraHq = false,
+	bool Polus = false,
+	bool AirShip = true,
+	bool Fungle = false,
+	bool IsAutoSelectRandom = false);

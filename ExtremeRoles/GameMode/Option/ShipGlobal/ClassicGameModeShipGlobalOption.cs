@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ExtremeRoles.GameMode.Option.MapModule;
+#nullable enable
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -80,58 +80,67 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 		IsAllowParallelMedbayScan = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.ParallelMedBayScans);
 
-		Spawn = new SpawnOption()
-		{
-			EnableSpecialSetting = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.EnableSpecialSetting),
-			Skeld = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.SkeldRandomSpawn),
-			MiraHq = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.MiraHqRandomSpawn),
-			Polus = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.PolusRandomSpawn),
-			AirShip = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.AirShipRandomSpawn),
-			Fungle = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.FungleRandomSpawn),
-			IsAutoSelectRandom = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.IsAutoSelectRandomSpawn),
-		};
+		Spawn = new SpawnOption(
+			EnableSpecialSetting:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.EnableSpecialSetting),
+			Skeld:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.SkeldRandomSpawn),
+			MiraHq:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.MiraHqRandomSpawn),
+			Polus:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.PolusRandomSpawn),
+			AirShip:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.AirShipRandomSpawn),
+			Fungle:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.FungleRandomSpawn),
+			IsAutoSelectRandom:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.IsAutoSelectRandomSpawn));
 
 		ChangeForceWallCheck = IShipGlobalOption.GetCommonOptionValue<bool>(
 			GlobalOption.IsFixWallHaskTask);
 
-		Admin = new AdminOption()
-        {
-            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.IsRemoveAdmin),
-            AirShipEnable = (AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue<int>(
-                GlobalOption.AirShipEnableAdmin),
-            EnableAdminLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.EnableAdminLimit),
-            AdminLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
-                GlobalOption.AdminLimitTime),
-        };
-        Vital = new VitalOption()
-        {
-            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.IsRemoveVital),
-            EnableVitalLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.EnableVitalLimit),
-            VitalLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
-                GlobalOption.VitalLimitTime),
-        };
-        Security = new SecurityOption()
-        {
-            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.IsRemoveSecurity),
-            EnableSecurityLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.EnableSecurityLimit),
-            SecurityLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
-                GlobalOption.SecurityLimitTime),
-        };
+		Admin = new AdminOption(
+			Disable:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.IsRemoveAdmin),
+			AirShipEnable:
+				(AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue<int>(
+					GlobalOption.AirShipEnableAdmin),
+			EnableAdminLimit:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.EnableAdminLimit),
+			AdminLimitTime:
+				IShipGlobalOption.GetCommonOptionValue<float>(
+					GlobalOption.AdminLimitTime));
+		Vital = new VitalOption(
+			Disable:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.IsRemoveVital),
+			EnableVitalLimit:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.EnableVitalLimit),
+			VitalLimitTime:
+				IShipGlobalOption.GetCommonOptionValue<float>(
+					GlobalOption.VitalLimitTime));
+		Security = new SecurityOption(
+			Disable:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.IsRemoveSecurity),
+			EnableSecurityLimit:
+				IShipGlobalOption.GetCommonOptionValue<bool>(
+					GlobalOption.EnableSecurityLimit),
+			SecurityLimitTime:
+				IShipGlobalOption.GetCommonOptionValue<float>(
+					GlobalOption.SecurityLimitTime));
 
-        DisableTaskWinWhenNoneTaskCrew = IShipGlobalOption.GetCommonOptionValue<bool>(
+		DisableTaskWinWhenNoneTaskCrew = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.DisableTaskWinWhenNoneTaskCrew);
         DisableTaskWin = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.DisableTaskWin);

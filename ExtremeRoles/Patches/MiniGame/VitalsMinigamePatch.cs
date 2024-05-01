@@ -97,7 +97,6 @@ public static class VitalsMinigameUpdatePatch
     public static void LoadOptionValue()
     {
         var vitalOption = ExtremeGameModeManager.Instance.ShipOption.Vital;
-        if (vitalOption == null) { return; }
 
         vitalTimer = vitalOption.VitalLimitTime;
         isRemoveVital = vitalOption.Disable;

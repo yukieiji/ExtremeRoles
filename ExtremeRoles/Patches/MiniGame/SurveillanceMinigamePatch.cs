@@ -34,7 +34,6 @@ public static class SecurityHelper
     public static void LoadOptionValue()
     {
         var securityOption = ExtremeGameModeManager.Instance.ShipOption.Security;
-        if (securityOption == null) { return; }
 
         cameraTimer = securityOption.SecurityLimitTime;
         isRemoveSecurity = securityOption.Disable;

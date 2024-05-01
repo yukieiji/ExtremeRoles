@@ -1,9 +1,6 @@
 ﻿using System.Collections;
 
-using AmongUs.GameOptions;
 using UnityEngine;
-
-using ExtremeRoles.GameMode.Option.MapModule;
 
 using ExtremeRoles.Helper;
 

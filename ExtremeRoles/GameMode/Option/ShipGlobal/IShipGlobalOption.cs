@@ -4,9 +4,10 @@ using System.Text;
 
 using ExtremeRoles.Extension.Strings;
 using ExtremeRoles.Patches.Option;
-using ExtremeRoles.GameMode.Option.MapModule;
 
 using static ExtremeRoles.Module.CustomOption.Factories.SimpleFactory;
+
+#nullable enable
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
