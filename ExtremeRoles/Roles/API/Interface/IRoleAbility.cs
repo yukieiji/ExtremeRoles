@@ -10,8 +10,6 @@ using ExtremeRoles.Module.AbilityBehavior.Interface;
 
 using ExtremeRoles.Performance;
 
-#nullable enable
-
 namespace ExtremeRoles.Roles.API.Interface;
 
 public enum RoleAbilityCommonOption
@@ -23,7 +21,7 @@ public enum RoleAbilityCommonOption
 
 public interface IRoleAbility : IRoleResetMeeting
 {
-	public ExtremeAbilityButton? Button
+	public ExtremeAbilityButton Button
 	{
 		get;
 		set;
@@ -82,7 +80,7 @@ public interface IRoleAbility : IRoleResetMeeting
 				isAbilityUse(multiAssignRole.AnotherRole, fillter)
 			);
 	}
-	private static bool isAbilityUse(in SingleRoleBase? role, in IReadOnlySet<ExtremeRoleId> fillter)
+	private static bool isAbilityUse(in SingleRoleBase role, in IReadOnlySet<ExtremeRoleId> fillter)
 		=>
 			role is not null &&
 			fillter.Contains(role.Id) &&
@@ -182,9 +180,9 @@ public static class IRoleAutoBuildAbilityMixin
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
-		Func<bool>? checkAbility = null,
-		Action? abilityOff = null,
-		Action? forceAbilityOff = null,
+		Func<bool> checkAbility = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
 		KeyCode hotkey = KeyCode.F)
 	{
 
@@ -205,9 +203,9 @@ public static class IRoleAutoBuildAbilityMixin
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
-		Func<bool>? checkAbility = null,
-		Action? abilityOff = null,
-		Action? forceAbilityOff = null,
+		Func<bool> checkAbility = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
 		bool isReduceOnActive = false,
 		KeyCode hotkey = KeyCode.F)
 	{
@@ -231,8 +229,8 @@ public static class IRoleAutoBuildAbilityMixin
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
-		Func<bool>? checkAbility = null,
-		Action? abilityOff = null,
+		Func<bool> checkAbility = null,
+		Action abilityOff = null,
 		KeyCode hotkey = KeyCode.F)
 	{
 		self.Button = RoleAbilityFactory.CreateReclickAbility(
@@ -251,8 +249,8 @@ public static class IRoleAutoBuildAbilityMixin
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
-		Func<bool>? checkAbility = null,
-		Action? abilityOff = null,
+		Func<bool> checkAbility = null,
+		Action abilityOff = null,
 		KeyCode hotkey = KeyCode.F)
 	{
 		self.Button = RoleAbilityFactory.CreateReclickCountAbility(
@@ -271,9 +269,9 @@ public static class IRoleAutoBuildAbilityMixin
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
-		Func<bool>? checkAbility = null,
-		Action? abilityOff = null,
-		Action? forceAbilityOff = null,
+		Func<bool> checkAbility = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
 		KeyCode hotkey = KeyCode.F)
 	{
 
@@ -297,7 +295,7 @@ public static class IRoleAutoBuildAbilityMixin
 		Sprite activateSprite,
 		Sprite deactivateSprite,
 		Action abilityCleanUp,
-		Func<bool>? checkAbility = null,
+		Func<bool> checkAbility = null,
 		KeyCode hotkey = KeyCode.F)
 	{
 		self.Button = RoleAbilityFactory.CreatePassiveAbility(
