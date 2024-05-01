@@ -31,6 +31,7 @@ public enum ExtremeSystemType : byte
 	WispTorch,
 
 	BakeryReport,
+	DelusionerCounter,
 
 	FakerDummy,
 	ThiefMeetingTimeChange,
