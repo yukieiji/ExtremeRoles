@@ -128,7 +128,10 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 					GlobalOption.EnableVitalLimit),
 			VitalLimitTime:
 				IShipGlobalOption.GetCommonOptionValue<float>(
-					GlobalOption.VitalLimitTime));
+					GlobalOption.VitalLimitTime),
+			PolusPos:
+				(PolusVitalPos)IShipGlobalOption.GetCommonOptionValue<int>(
+					GlobalOption.PolusVitalPos));
 		Security = new SecurityOption(
 			Disable:
 				IShipGlobalOption.GetCommonOptionValue<bool>(

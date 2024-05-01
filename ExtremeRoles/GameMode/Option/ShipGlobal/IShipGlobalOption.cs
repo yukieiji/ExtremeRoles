@@ -54,8 +54,9 @@ public enum GlobalOption : int
     SecurityLimitTime,
 
     IsRemoveVital,
-    EnableVitalLimit,
-    VitalLimitTime,
+	PolusVitalPos,
+	EnableVitalLimit,
+	VitalLimitTime,
 
     RandomMap,
 
@@ -264,7 +265,9 @@ public interface IShipGlobalOption
 			enableCheckOption: secLimitOpt);
 
         var vitalOpt = CreateBoolOption(GlobalOption.IsRemoveVital, false, isHeader: true);
-        var vitalLimitOpt = CreateBoolOption(GlobalOption.EnableVitalLimit, false, vitalOpt, invert: true);
+		CreateSelectionOption<GlobalOption, PolusVitalPos>(
+			GlobalOption.PolusVitalPos, vitalOpt, invert: true);
+		var vitalLimitOpt = CreateBoolOption(GlobalOption.EnableVitalLimit, false, vitalOpt, invert: true);
 		CreateFloatOption(
 			GlobalOption.VitalLimitTime,
 			30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,

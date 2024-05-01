@@ -7,6 +7,13 @@ public enum AirShipAdminMode
 	ModeArchiveOnly
 }
 
+public enum PolusVitalPos
+{
+	DefaultKey,
+	SpecimenKey,
+	LaboratoryKey
+}
+
 public readonly record struct AdminOption(
 	bool Disable = false,
 	AirShipAdminMode AirShipEnable = AirShipAdminMode.ModeBoth,
@@ -21,4 +28,5 @@ public readonly record struct SecurityOption(
 public readonly record struct VitalOption(
 	bool Disable = false,
 	bool EnableVitalLimit = false,
-	float VitalLimitTime = float.MaxValue);
+	float VitalLimitTime = float.MaxValue,
+	PolusVitalPos PolusPos = PolusVitalPos.DefaultKey);
