@@ -131,12 +131,6 @@ public interface IShipGlobalOption
 		TaskTypes.DivertPower,
 	};
 
-	public MapModuleDisableFlag RemoveMapModule => new MapModuleDisableFlag(
-		this.Admin.Disable,
-		this.Security.Disable,
-		this.Vital.Disable,
-		this.Admin.AirShipEnable);
-
 	public IReadOnlySet<TaskTypes> ChangeTask
 	{
 		get
