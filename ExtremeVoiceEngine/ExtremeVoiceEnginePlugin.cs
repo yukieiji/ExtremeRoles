@@ -29,6 +29,7 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
     {
 		if (ExtremeRoles.ExtremeRolesPlugin.DebugMode == null)
 		{
+			AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>();
 			return;
 		}
 
@@ -38,13 +39,12 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         Harmony.PatchAll();
 
         AddComponent<VoiceEngine>();
+		AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>();
 
-        var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
+		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
         this.assemblyName = assembly?.GetName().Name;
         this.version = assembly?.GetName().Version;
-		AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>($"{assemblyName}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
-
 
 		StatusTextShower.Instance.Add(() => this.ToString());
 	}

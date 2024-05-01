@@ -36,6 +36,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
     {
 		if (ExtremeRoles.ExtremeRolesPlugin.DebugMode == null)
 		{
+			AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>();
 			return;
 		}
 
@@ -84,12 +85,10 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 		}
 
 		StatusTextShower.Instance.Add(() => CreatorModeManager.Instance.StatusString);
+		AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>();
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
-
 		if (assembly is null) { return; }
-
-        AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
     }
 }

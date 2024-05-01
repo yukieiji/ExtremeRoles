@@ -231,6 +231,13 @@ public sealed class AutoModInstaller
 		}
 	}
 
+	public void AddMod<TRepoType>()
+	{
+		var assembly = Assembly.GetCallingAssembly();
+		if (assembly is null) { return; }
+		this.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
+	}
+
 	public void AddMod<TRepoType>(string dllName) where TRepoType : class, IRepositoryInfo, new()
 	{
 		TRepoType? repo;
