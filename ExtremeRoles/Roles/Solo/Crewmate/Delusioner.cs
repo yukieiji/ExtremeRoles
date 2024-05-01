@@ -11,6 +11,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
+using ExtremeRoles.Module.AbilityBehavior.Interface;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -32,14 +35,7 @@ public sealed class Delusioner :
 
     public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.deflectDamageButton;
-        set
-        {
-            this.deflectDamageButton = value;
-        }
-    }
+    public ExtremeAbilityButton? Button { get; set; }
 
     public enum DelusionerOption
     {
@@ -51,8 +47,6 @@ public sealed class Delusioner :
         IsIncludeLocalPlayer,
         IsIncludeSpawnPoint
     }
-
-    private ExtremeAbilityButton deflectDamageButton;
 
     private bool isAwakeRole;
     private bool isOneTimeAwake;
@@ -73,6 +67,8 @@ public sealed class Delusioner :
     private int voteCoolTimeReduceRate;
     private float deflectDamagePenaltyMod;
 
+	private AbilityState prevState;
+
     public Delusioner() : base(
         ExtremeRoleId.Delusioner,
         ExtremeRoleType.Crewmate,
@@ -87,7 +83,7 @@ public sealed class Delusioner :
             "deflectDamage",
             Loader.CreateSpriteFromResources(
                 Path.DelusionerDeflectDamage));
-        this.Button.SetLabelToCrewmate();
+        this.Button?.SetLabelToCrewmate();
     }
 
     public string GetFakeOptionString() => "";
@@ -150,7 +146,7 @@ public sealed class Delusioner :
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -162,10 +158,28 @@ public sealed class Delusioner :
 
     public void Update(PlayerControl rolePlayer)
     {
+		if (this.Button == null ||
+			rolePlayer == null ||
+			rolePlayer.Data == null ||
+			rolePlayer.Data.IsDead ||
+			rolePlayer.Data.Disconnected)
+		{
+			return;
+		}
+
         if (!this.isAwakeRole)
         {
-            this.Button?.SetButtonShow(false);
+            this.Button.SetButtonShow(false);
         }
+		else if (
+			this.prevState == AbilityState.CoolDown &&
+			this.Button.State == AbilityState.Ready &&
+			this.Button.Behavior is ICountBehavior countBehavior &&
+			countBehavior.AbilityCount > 0)
+		{
+			// でりゅのかうんたー起動！！
+		}
+		this.prevState = this.Button.State;
     }
 
     public bool UseAbility()
