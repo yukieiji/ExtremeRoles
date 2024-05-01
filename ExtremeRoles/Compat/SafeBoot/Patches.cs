@@ -40,9 +40,6 @@ public static class SafeModeMainMenuManagerPatch
 		renderer.sprite = Loader.CreateSpriteFromResources(
 			Path.TitleBurner, 300f);
 
-		// プレイできないようにボタンを消し飛ばす
-		__instance.playButton.gameObject.SetActive(false);
-
 		setupPrefab();
 	}
 
@@ -80,24 +77,25 @@ public static class SafeModeMainMenuManagerPatch
 
 	private static void setupPrefab()
 	{
-		if (Prefab.Prop == null || Prefab.Text == null)
+		if (Prefab.Prop != null && Prefab.Text != null)
 		{
-			TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
-			Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);
-			UnityObject.DontDestroyOnLoad(Prefab.Prop);
-			Prefab.Prop.name = "propForInEx";
-			Prefab.Prop.gameObject.SetActive(false);
-
-			Prefab.Text = UnityObject.Instantiate(man.TwitchPopup.TextAreaTMP);
-			Prefab.Text.fontSize =
-				Prefab.Text.fontSizeMax =
-				Prefab.Text.fontSizeMin = 2.5f;
-			Prefab.Text.alignment = TextAlignmentOptions.Center;
-			UnityObject.DontDestroyOnLoad(Prefab.Text);
-			UnityObject.Destroy(Prefab.Text.GetComponent<TextTranslatorTMP>());
-			Prefab.Text.gameObject.SetActive(false);
-			UnityObject.DontDestroyOnLoad(Prefab.Text);
+			return;
 		}
+		TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+		Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);
+		UnityObject.DontDestroyOnLoad(Prefab.Prop);
+		Prefab.Prop.name = "propForInEx";
+		Prefab.Prop.gameObject.SetActive(false);
+
+		Prefab.Text = UnityObject.Instantiate(man.TwitchPopup.TextAreaTMP);
+		Prefab.Text.fontSize =
+			Prefab.Text.fontSizeMax =
+			Prefab.Text.fontSizeMin = 2.5f;
+		Prefab.Text.alignment = TextAlignmentOptions.Center;
+		UnityObject.DontDestroyOnLoad(Prefab.Text);
+		UnityObject.Destroy(Prefab.Text.GetComponent<TextTranslatorTMP>());
+		Prefab.Text.gameObject.SetActive(false);
+		UnityObject.DontDestroyOnLoad(Prefab.Text);
 	}
 }
 
