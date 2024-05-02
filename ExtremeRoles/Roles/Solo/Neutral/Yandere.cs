@@ -6,7 +6,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -22,7 +21,8 @@ public sealed class Yandere :
     IRoleUpdate,
     IRoleMurderPlayerHook,
     IRoleResetMeeting,
-    IRoleSpecialSetUp
+	IRoleReviveHook,
+	IRoleSpecialSetUp
 {
     public PlayerControl OneSidedLover = null;
 
@@ -589,4 +589,15 @@ public sealed class Yandere :
         }
         this.oneSidedArrow.UpdateTarget(pos);
     }
+
+	public void HookRevive(PlayerControl revivePlayer)
+	{
+		byte playerId = revivePlayer.PlayerId;
+
+		if (this.target != null &&
+			!this.target.IsContain(playerId))
+		{
+			this.target.Add(revivePlayer.PlayerId);
+		}
+	}
 }

@@ -73,5 +73,22 @@ public static class PlayerControlRevivePatch
 		{
 			ExtremeGhostRoleManager.GameRole.Remove(__instance.PlayerId);
 		}
+
+		var localPlayer = CachedPlayerControl.LocalPlayer;
+		if (localPlayer.PlayerId == __instance.PlayerId)
+		{
+			return;
+		}
+
+		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+		if (localRole is IRoleReviveHook hookRole)
+		{
+			hookRole.HookRevive(__instance);
+		}
+		if (localRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is IRoleReviveHook multiHookRole)
+		{
+			multiHookRole.HookRevive(__instance);
+		}
 	}
 }
