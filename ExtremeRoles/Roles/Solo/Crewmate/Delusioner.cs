@@ -377,7 +377,7 @@ public sealed class Delusioner :
 			this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(
 				DelusionerCounterSystem.Type);
 		}
-
+		this.prevState = AbilityState.CoolDown;
 
         this.curCoolTime = this.defaultCoolTime;
         this.isAwakeRole = this.awakeVoteCount == 0;
