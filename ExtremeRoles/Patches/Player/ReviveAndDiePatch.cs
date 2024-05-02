@@ -31,7 +31,8 @@ public static class PlayerControlRevivePatch
 	public static void Postfix(PlayerControl __instance)
 	{
 
-		ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
+		byte revivePlayerId = __instance.PlayerId;
+		ExtremeRolesPlugin.ShipState.RemoveDeadInfo(revivePlayerId);
 
 		// 消したペットをもとに戻しておく
 		if (!__instance.Data.IsDead &&
@@ -44,15 +45,16 @@ public static class PlayerControlRevivePatch
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
-		var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<
-			IRoleOnRevive>(__instance.PlayerId);
+		bool isLocalPlayerRevive = revivePlayerId == CachedPlayerControl.LocalPlayer.PlayerId;
 
-		onRevive?.ReviveAction(__instance);
-		onReviveOther?.ReviveAction(__instance);
+		invokeReviveAction(__instance);
+		invokeReviveHook(__instance, isLocalPlayerRevive);
 
-		SingleRoleBase role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+		RoleTypes roleId = RoleTypes.Crewmate;
 
-		if (!role.TryGetVanillaRoleId(out RoleTypes roleId) &&
+		if (ExtremeRoleManager.GameRole.TryGetValue(revivePlayerId, out var role) &&
+			role is not null &&
+			!role.TryGetVanillaRoleId(out roleId) &&
 			role.IsImpostor())
 		{
 			roleId = RoleTypes.Impostor;
@@ -64,18 +66,29 @@ public static class PlayerControlRevivePatch
 		var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 		if (ghostRole == null) { return; }
 
-		if (__instance.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+		if (isLocalPlayerRevive)
 		{
 			ghostRole.ResetOnMeetingStart();
 		}
 
 		lock (ExtremeGhostRoleManager.GameRole)
 		{
-			ExtremeGhostRoleManager.GameRole.Remove(__instance.PlayerId);
+			ExtremeGhostRoleManager.GameRole.Remove(revivePlayerId);
 		}
+	}
 
-		var localPlayer = CachedPlayerControl.LocalPlayer;
-		if (localPlayer.PlayerId == __instance.PlayerId)
+	private static void invokeReviveAction(in PlayerControl revivePlayer)
+	{
+		var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<
+			IRoleOnRevive>(revivePlayer.PlayerId);
+
+		onRevive?.ReviveAction(revivePlayer);
+		onReviveOther?.ReviveAction(revivePlayer);
+	}
+
+	private static void invokeReviveHook(in PlayerControl revivePlayer, in bool isLocalPlayerRevive)
+	{
+		if (isLocalPlayerRevive)
 		{
 			return;
 		}
@@ -83,12 +96,12 @@ public static class PlayerControlRevivePatch
 		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
 		if (localRole is IRoleReviveHook hookRole)
 		{
-			hookRole.HookRevive(__instance);
+			hookRole.HookRevive(revivePlayer);
 		}
 		if (localRole is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole is IRoleReviveHook multiHookRole)
 		{
-			multiHookRole.HookRevive(__instance);
+			multiHookRole.HookRevive(revivePlayer);
 		}
 	}
 }
