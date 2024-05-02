@@ -67,7 +67,8 @@ public sealed class Arrow
 	{
 		if (this.arrowBehaviour == null) { return; }
 
-		Object.Destroy(this.arrowBehaviour);
+		Object.Destroy(
+			this.arrowBehaviour.gameObject);
 	}
 	public void SetActive(bool active)
 	{
