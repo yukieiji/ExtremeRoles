@@ -71,7 +71,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new AbilityCountBehavior(
+			new CountBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
@@ -196,7 +196,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new ReusableAbilityBehavior(
+			new ReusableBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
