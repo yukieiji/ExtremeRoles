@@ -20,7 +20,7 @@ public sealed class ReclickBehavior : BehaviorBase, IActivatingBehavior
 
 	public bool CanAbilityActiving => this.canActivating.Invoke();
 
-	public Reclickehavior(
+	public ReclickBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
