@@ -20,12 +20,12 @@ public enum AbilityState : byte
 
 #nullable enable
 
-public sealed class ExtremeAbilityButton
+public class ExtremeAbilityButton
 {
 	public const string Name = "ExRAbilityButton";
 	public const string AditionalInfoName = "ExRKillButtonAditionalInfo";
 
-	public BehaviorBase Behavior { get; private set; }
+	public BehaviorBase Behavior { get; protected set; }
 
 	public AbilityState State { get; private set; }
 
@@ -113,75 +113,78 @@ public sealed class ExtremeAbilityButton
 
 	public void Update()
 	{
-		if (!isShow ||
-			button == null ||
+		if (!this.isShow ||
+			this.button == null ||
 			IntroCutscene.Instance != null)
 		{
 			return;
 		}
+		this.UpdateImp();
+	}
 
-		bool isActive = activator.IsActive();
-
+	protected virtual void UpdateImp()
+	{
+		bool isActive = this.activator.IsActive();
 		setActive(isActive);
-		if (!button.isActiveAndEnabled) { return; }
+		if (!this.button.isActiveAndEnabled) { return; }
 
-		AbilityState newState = Behavior.Update(State);
-		if (newState != State)
+		AbilityState newState = this.Behavior.Update(State);
+		if (newState != this.State)
 		{
 			setStatus(newState);
 		}
 
-		button.graphic.sprite = Behavior.Graphic.Img;
-		button.OverrideText(Behavior.Graphic.Text);
+		this.button.graphic.sprite = this.Behavior.Graphic.Img;
+		this.button.OverrideText(this.Behavior.Graphic.Text);
 
-		if (Behavior.IsUse())
+		if (this.Behavior.IsUse())
 		{
-			button.graphic.color = button.buttonLabelText.color = Palette.EnabledColor;
-			button.graphic.material.SetFloat("_Desat", 0f);
+			this.button.graphic.color = this.button.buttonLabelText.color = Palette.EnabledColor;
+			this.button.graphic.material.SetFloat("_Desat", 0f);
 		}
 		else
 		{
-			button.graphic.color = button.buttonLabelText.color = Palette.DisabledClear;
-			button.graphic.material.SetFloat("_Desat", 1f);
+			this.button.graphic.color = this.button.buttonLabelText.color = Palette.DisabledClear;
+			this.button.graphic.material.SetFloat("_Desat", 1f);
 		}
 
-		switch (State)
+		switch (this.State)
 		{
 			case AbilityState.None:
-				button.cooldownTimerText.color = Palette.EnabledColor;
-				button.SetCoolDown(0, Behavior.CoolTime);
+				this.button.cooldownTimerText.color = Palette.EnabledColor;
+				this.button.SetCoolDown(0, Behavior.CoolTime);
 				return;
 			case AbilityState.CoolDown:
 				// 白色でタイマーをすすめる
-				Timer -= Time.deltaTime;
-				button.cooldownTimerText.color = Palette.EnabledColor;
+				this.Timer -= Time.deltaTime;
+				this.button.cooldownTimerText.color = Palette.EnabledColor;
 
 				// クールダウンが明けた
-				if (Timer <= 0.0f)
+				if (this.Timer <= 0.0f)
 				{
 					setStatus(AbilityState.Ready);
 				}
 				break;
 			case AbilityState.Activating:
 				// 緑色でタイマーをすすめる
-				Timer -= Time.deltaTime;
-				button.cooldownTimerText.color = TimerOnColor;
+				this.Timer -= Time.deltaTime;
+				this.button.cooldownTimerText.color = TimerOnColor;
 
-				if (!Behavior.IsCanAbilityActiving())
+				if (!this.Behavior.IsCanAbilityActiving())
 				{
-					Behavior.ForceAbilityOff();
+					this.Behavior.ForceAbilityOff();
 					setStatus(AbilityState.Ready);
 					return;
 				}
 				// 能力がアクティブが時間切れなので能力のリセット等を行う
-				if (Timer <= 0.0f)
+				if (this.Timer <= 0.0f)
 				{
-					Behavior.AbilityOff();
+					this.Behavior.AbilityOff();
 					setStatus(AbilityState.CoolDown);
 				}
 				break;
 			case AbilityState.Ready:
-				Timer = 0.0f;
+				this.Timer = 0.0f;
 				if (Input.GetKeyDown(HotKey))
 				{
 					onClick();
@@ -191,10 +194,10 @@ public sealed class ExtremeAbilityButton
 				break;
 		}
 
-		button.SetCoolDown(
-			Timer,
-			State != AbilityState.Activating ?
-			Behavior.CoolTime : Behavior.ActiveTime);
+		this.button.SetCoolDown(
+			this.Timer,
+			this.State != AbilityState.Activating ?
+			this.Behavior.CoolTime : this.Behavior.ActiveTime);
 	}
 
 	private void onClick()
