@@ -9,7 +9,7 @@ namespace ExtremeRoles.Module.Ability.Factory;
 
 public static class RoleAbilityFactory
 {
-	public static ExtremeAbilityButton CreateChargableAbility(
+	public static ExtremeAbilityButton CreateBatteryAbility(
 		string textKey,
 		Sprite img,
 		Func<bool> canUse,
@@ -20,7 +20,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new ChargableBehavior(
+			new BatteryBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,

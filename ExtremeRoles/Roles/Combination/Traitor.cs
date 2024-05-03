@@ -115,7 +115,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         this.securitySprite = GameSystem.GetSecurityImage();
         this.vitalSprite = GameSystem.GetVitalImage();
 
-        this.CreateChargeAbilityButton(
+        this.CreateBatteryAbilityButton(
             "traitorCracking",
             this.adminSprite,
             checkAbility: CheckAbility,
@@ -385,7 +385,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
     private void updateButtonSprite()
     {
-        if (this.Button.Behavior is not ChargableBehavior chargableAbility)
+        if (this.Button.Behavior is not BatteryBehavior chargableAbility)
         {
             return;
         }

@@ -1072,7 +1072,7 @@ public sealed class Doll :
         this.securitySprite = GameSystem.GetSecurityImage();
         this.vitalSprite = GameSystem.GetVitalImage();
 
-        this.Button = RoleAbilityFactory.CreateChargableAbility(
+        this.Button = RoleAbilityFactory.CreateBatteryAbility(
             "traitorCracking",
             this.adminSprite,
             IsAbilityUse,

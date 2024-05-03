@@ -264,7 +264,7 @@ public static class IRoleAutoBuildAbilityMixin
 		self.RoleAbilityInit();
 	}
 
-	public static void CreateChargeAbilityButton(
+	public static void CreateBatteryAbilityButton(
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
@@ -274,7 +274,7 @@ public static class IRoleAutoBuildAbilityMixin
 		KeyCode hotkey = KeyCode.F)
 	{
 
-		self.Button = RoleAbilityFactory.CreateChargableAbility(
+		self.Button = RoleAbilityFactory.CreateBatteryAbility(
 			textKey: textKey,
 			img: sprite,
 			canUse: self.IsAbilityUse,

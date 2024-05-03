@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ChargableBehavior : BehaviorBase
+public sealed class BatteryBehavior : BehaviorBase
 {
 	private Func<bool> ability;
 	private Func<bool> canUse;
@@ -19,7 +19,7 @@ public sealed class ChargableBehavior : BehaviorBase
 	private float chargeTimer;
 	private float currentCharge;
 
-	public ChargableBehavior(
+	public BatteryBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,

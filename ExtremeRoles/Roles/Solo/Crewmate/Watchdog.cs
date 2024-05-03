@@ -62,7 +62,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
                 break;
         }
 
-        this.CreateChargeAbilityButton(
+        this.CreateBatteryAbilityButton(
             buttonText,
             buttonImage,
             IsOpen,

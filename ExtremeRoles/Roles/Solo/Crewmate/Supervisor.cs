@@ -62,7 +62,7 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     public void CreateAbility()
     {
-        this.CreateChargeAbilityButton(
+        this.CreateBatteryAbilityButton(
             "admin",
             GameSystem.GetAdminButtonImage(),
             IsOpen, CleanUp);
