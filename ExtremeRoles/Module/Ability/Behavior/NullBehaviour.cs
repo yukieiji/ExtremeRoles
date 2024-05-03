@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace ExtremeRoles.Module.Ability.Behavior;
+﻿namespace ExtremeRoles.Module.Ability.Behavior;
 
 public sealed class NullBehaviour : BehaviorBase
 {

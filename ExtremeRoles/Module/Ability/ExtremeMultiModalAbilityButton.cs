@@ -18,15 +18,24 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 	private readonly List<BehaviorBase> allAbility;
 
 	public ExtremeMultiModalAbilityButton(
+		List<BehaviorBase> behaviorors,
 		IButtonAutoActivator activator,
-		KeyCode hotKey,
-		params BehaviorBase[] behaviorors) : base(
+		KeyCode hotKey) : base(
 			behaviorors[0],
 			activator,
 			hotKey)
 	{
 		this.allAbility = behaviorors.ToList();
 	}
+
+	public ExtremeMultiModalAbilityButton(
+		IButtonAutoActivator activator,
+		KeyCode hotKey,
+		params BehaviorBase[] behaviorors) : this(
+			behaviorors.ToList(),
+			activator,
+			hotKey)
+	{ }
 
 	public void Add(BehaviorBase behavior)
 	{
