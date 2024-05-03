@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

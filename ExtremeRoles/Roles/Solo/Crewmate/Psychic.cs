@@ -14,7 +14,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

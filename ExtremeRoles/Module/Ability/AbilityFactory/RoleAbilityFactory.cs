@@ -5,7 +5,7 @@ using UnityEngine;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.ButtonAutoActivator;
 
-namespace ExtremeRoles.Module.AbilityFactory;
+namespace ExtremeRoles.Module.Ability.AbilityFactory;
 
 public static class RoleAbilityFactory
 {

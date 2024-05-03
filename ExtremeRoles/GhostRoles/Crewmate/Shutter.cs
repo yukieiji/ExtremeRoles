@@ -7,7 +7,6 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
@@ -18,6 +17,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
+using ExtremeRoles.Module.Ability.AbilityFactory;
 
 
 #nullable enable

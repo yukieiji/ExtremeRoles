@@ -14,7 +14,6 @@ using BepInEx.Unity.IL2CPP.Utils;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -26,6 +25,8 @@ using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability.AbilityFactory;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

@@ -7,15 +7,16 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
-using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

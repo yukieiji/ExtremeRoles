@@ -1,9 +1,9 @@
 ﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

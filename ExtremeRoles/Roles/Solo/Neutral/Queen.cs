@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -16,6 +15,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability.AbilityFactory;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 

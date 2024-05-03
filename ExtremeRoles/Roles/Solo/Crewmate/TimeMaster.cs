@@ -12,6 +12,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

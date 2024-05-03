@@ -1,7 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;

@@ -7,8 +7,6 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
@@ -17,6 +15,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.VentModule;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

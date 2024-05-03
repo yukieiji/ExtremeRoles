@@ -11,10 +11,11 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using System.Linq;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

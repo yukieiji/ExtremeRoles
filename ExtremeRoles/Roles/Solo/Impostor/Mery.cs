@@ -17,6 +17,7 @@ using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Compat;
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

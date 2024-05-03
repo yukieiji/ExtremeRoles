@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -33,7 +34,7 @@ public abstract class GhostRoleBase
 	public string Name { get; protected set; }
 	public bool HasTask { get; protected set; }
 
-	public Module.ExtremeAbilityButton? Button { get; protected set; }
+	public ExtremeAbilityButton? Button { get; protected set; }
 
     private OptionTab tab = OptionTab.General;
     private int controlId;

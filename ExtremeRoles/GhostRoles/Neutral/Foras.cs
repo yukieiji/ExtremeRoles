@@ -7,7 +7,6 @@ using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -15,6 +14,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Module.Ability.AbilityFactory;
 
 namespace ExtremeRoles.GhostRoles.Neutal;
 

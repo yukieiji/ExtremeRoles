@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.AbilityModeSwitcher;
+namespace ExtremeRoles.Module.Ability.AbilityModeSwitcher;
 
 public abstract class ModeSwitcherBase<SwithEnum, ModeStruct>
 	where SwithEnum : struct, Enum
@@ -17,10 +16,10 @@ public abstract class ModeSwitcherBase<SwithEnum, ModeStruct>
 
 	public ModeSwitcherBase(AbilityBehaviorBase behavior, params ModeStruct[] allMode)
 	{
-		this.Behavior = behavior;
+		Behavior = behavior;
 		foreach (var mode in allMode)
 		{
-			this.Add(mode);
+			Add(mode);
 		}
 	}
 
@@ -29,7 +28,7 @@ public abstract class ModeSwitcherBase<SwithEnum, ModeStruct>
 		this.mode[mode.Mode] = mode;
 	}
 
-	public ModeStruct Get(SwithEnum type) => this.mode[type];
+	public ModeStruct Get(SwithEnum type) => mode[type];
 
 	public abstract void Switch(SwithEnum type);
 }

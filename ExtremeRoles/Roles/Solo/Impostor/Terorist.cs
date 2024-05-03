@@ -1,5 +1,4 @@
 ﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -7,6 +6,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

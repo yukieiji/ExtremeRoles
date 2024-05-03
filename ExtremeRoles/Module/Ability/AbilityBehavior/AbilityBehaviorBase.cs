@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ExtremeRoles.Module.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.AbilityBehavior;
 
 public struct ButtonGraphic
 {
@@ -19,7 +19,7 @@ public abstract class AbilityBehaviorBase
 	public float CoolTime { get; private set; }
 	public float ActiveTime { get; private set; }
 
-	public ButtonGraphic Graphic => this.graphic;
+	public ButtonGraphic Graphic => graphic;
 	private ButtonGraphic graphic;
 
 	public AbilityBehaviorBase(string text, Sprite img)
@@ -34,22 +34,22 @@ public abstract class AbilityBehaviorBase
 
 	public virtual void SetActiveTime(float newTime)
 	{
-		this.ActiveTime = newTime;
+		ActiveTime = newTime;
 	}
 
 	public virtual void SetCoolTime(float newTime)
 	{
-		this.CoolTime = newTime;
+		CoolTime = newTime;
 	}
 
 	public void SetButtonImage(Sprite image)
 	{
-		this.graphic.Img = image;
+		graphic.Img = image;
 	}
 
 	public void SetButtonText(string text)
 	{
-		this.graphic.Text = text;
+		graphic.Text = text;
 	}
 
 	public void SetGraphic(string text, Sprite image)

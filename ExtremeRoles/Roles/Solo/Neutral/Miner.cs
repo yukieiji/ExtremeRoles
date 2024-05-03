@@ -14,6 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

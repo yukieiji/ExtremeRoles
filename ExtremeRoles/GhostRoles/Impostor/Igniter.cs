@@ -2,13 +2,13 @@
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Module.Ability.AbilityFactory;
 
 #nullable enable
 

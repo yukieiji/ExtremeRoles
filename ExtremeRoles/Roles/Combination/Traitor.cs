@@ -3,11 +3,12 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Combination;
 

@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -17,6 +16,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Module.Ability.AbilityFactory;
 
 #nullable enable
 

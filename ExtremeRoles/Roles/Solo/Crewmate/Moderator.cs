@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

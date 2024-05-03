@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -13,6 +11,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

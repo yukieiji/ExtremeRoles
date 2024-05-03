@@ -1,8 +1,7 @@
 ﻿using System;
-
 using UnityEngine;
 
-namespace ExtremeRoles.Module.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.AbilityBehavior;
 
 public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 {
@@ -26,7 +25,7 @@ public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 		this.abilityOff = abilityOff;
 		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 
-		this.isActive = false;
+		isActive = false;
 	}
 
 	public override void Initialize(ActionButton button)
@@ -36,18 +35,18 @@ public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 
 	public override void AbilityOff()
 	{
-		this.isActive = false;
-		this.abilityOff?.Invoke();
+		isActive = false;
+		abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
-		this.AbilityOff();
+		AbilityOff();
 	}
 
-	public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
-	public override bool IsUse() => this.canUse.Invoke() || this.isActive;
+	public override bool IsUse() => canUse.Invoke() || isActive;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -58,10 +57,10 @@ public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 		{
 			case AbilityState.Ready:
 				if (timer <= 0.0f &&
-					this.ability.Invoke())
+					ability.Invoke())
 				{
 					newState = AbilityState.Activating;
-					this.isActive = true;
+					isActive = true;
 				}
 				else
 				{
@@ -69,8 +68,8 @@ public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 				}
 				break;
 			case AbilityState.Activating:
-				if (this.isActive &&
-					timer <= this.ActiveTime - 0.25f)
+				if (isActive &&
+					timer <= ActiveTime - 0.25f)
 				{
 					newState = AbilityState.CoolDown;
 				}

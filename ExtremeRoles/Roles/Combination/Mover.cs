@@ -12,6 +12,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
 using UnityHelper = ExtremeRoles.Helper.Unity;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Combination;
 

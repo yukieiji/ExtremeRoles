@@ -1,8 +1,7 @@
 ﻿using System;
-
 using UnityEngine;
 
-namespace ExtremeRoles.Module.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.AbilityBehavior;
 
 public sealed class ReusableAbilityBehavior : AbilityBehaviorBase
 {
@@ -36,17 +35,17 @@ public sealed class ReusableAbilityBehavior : AbilityBehaviorBase
 
 	public override void AbilityOff()
 	{
-		this.abilityOff?.Invoke();
+		abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
-		this.forceAbilityOff?.Invoke();
+		forceAbilityOff?.Invoke();
 	}
 
-	public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
-	public override bool IsUse() => this.canUse.Invoke();
+	public override bool IsUse() => canUse.Invoke();
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -58,12 +57,12 @@ public sealed class ReusableAbilityBehavior : AbilityBehaviorBase
 			return false;
 		}
 
-		if (!this.ability.Invoke())
+		if (!ability.Invoke())
 		{
 			return false;
 		}
 
-		newState = this.ActiveTime <= 0.0f ?
+		newState = ActiveTime <= 0.0f ?
 			AbilityState.CoolDown : AbilityState.Activating;
 
 		return true;

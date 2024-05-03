@@ -11,7 +11,6 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -20,6 +19,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

@@ -1,9 +1,8 @@
 ﻿using System;
-
-using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.AbilityModeSwitcher;
+namespace ExtremeRoles.Module.Ability.AbilityModeSwitcher;
 
 public class GraphicMode<SwithEnum>(SwithEnum mode, ButtonGraphic graphic) : IAbilityMode<SwithEnum>
 	where SwithEnum : struct, Enum
@@ -20,10 +19,10 @@ public class GraphicSwitcher<SwithEnum> : ModeSwitcherBase<SwithEnum, GraphicMod
 	{ }
 
 	public override void Switch(SwithEnum type)
-    {
-		this.Current = type;
+	{
+		Current = type;
 
-		var mode = this.Get(this.Current);
-		this.Behavior.SetGraphic(mode.Graphic);
+		var mode = Get(Current);
+		Behavior.SetGraphic(mode.Graphic);
 	}
 }

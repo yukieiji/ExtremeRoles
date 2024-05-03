@@ -2,11 +2,11 @@
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Manager;
-using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability.AbilityBehavior;
 
-namespace ExtremeRoles.Module;
+namespace ExtremeRoles.Module.Ability;
 
 public enum AbilityState : byte
 {
@@ -33,7 +33,7 @@ public sealed class ExtremeAbilityButton
 
 	public KeyCode HotKey { private get; set; } = KeyCode.F;
 
-	public Transform Transform => this.button.transform;
+	public Transform Transform => button.transform;
 
 	private readonly ActionButton button;
 	private readonly IButtonAutoActivator activator;
@@ -47,50 +47,50 @@ public sealed class ExtremeAbilityButton
 		IButtonAutoActivator activator,
 		KeyCode hotKey)
 	{
-		this.State = AbilityState.CoolDown;
+		State = AbilityState.CoolDown;
 		this.activator = activator;
-		this.Behavior = behavior;
-		this.HotKey = hotKey;
+		Behavior = behavior;
+		HotKey = hotKey;
 
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
 		var killButton = hud.KillButton;
 
-		this.button = Object.Instantiate(
+		button = Object.Instantiate(
 			killButton, killButton.transform.parent);
 		PassiveButton passiveButton = button.GetComponent<PassiveButton>();
 		passiveButton.OnClick.RemoveAllPersistentAndListeners();
 		passiveButton.OnClick.AddListener(onClick);
 		passiveButton.name = Name;
 
-		Transform info = this.button.transform.FindChild(AditionalInfoName);
+		Transform info = button.transform.FindChild(AditionalInfoName);
 		if (info != null)
 		{
 			info.gameObject.SetActive(false);
 		}
 
-		this.SetButtonShow(true);
+		SetButtonShow(true);
 
-		this.Behavior.Initialize(this.button);
-		this.button.graphic.sprite = this.Behavior.Graphic.Img;
+		Behavior.Initialize(button);
+		button.graphic.sprite = Behavior.Graphic.Img;
 
 		hud.ReGridButtons();
 	}
 
 	public bool IsAbilityActive() =>
-		this.State == AbilityState.Activating;
+		State == AbilityState.Activating;
 	public bool IsAbilityReady() =>
-		this.State == AbilityState.Ready;
+		State == AbilityState.Ready;
 
 	public void OnMeetingStart()
 	{
-		this.Behavior.ForceAbilityOff();
-		this.SetButtonShow(false);
+		Behavior.ForceAbilityOff();
+		SetButtonShow(false);
 	}
 
 	public void OnMeetingEnd()
 	{
-		this.setStatus(AbilityState.Reset);
-		this.SetButtonShow(true);
+		setStatus(AbilityState.Reset);
+		SetButtonShow(true);
 	}
 
 	public void SetButtonShow(bool isShow)
@@ -106,83 +106,83 @@ public sealed class ExtremeAbilityButton
 		var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
 
 		Object.Destroy(
-			this.button.buttonLabelText.fontMaterial);
-		this.button.buttonLabelText.fontMaterial = UnityEngine.Object.Instantiate(
-			useButton.buttonLabelText.fontMaterial, this.button.transform);
+			button.buttonLabelText.fontMaterial);
+		button.buttonLabelText.fontMaterial = Object.Instantiate(
+			useButton.buttonLabelText.fontMaterial, button.transform);
 	}
 
 	public void Update()
 	{
-		if (!this.isShow ||
-			this.button == null ||
+		if (!isShow ||
+			button == null ||
 			IntroCutscene.Instance != null)
 		{
 			return;
 		}
 
-		bool isActive = this.activator.IsActive();
+		bool isActive = activator.IsActive();
 
 		setActive(isActive);
-		if (!this.button.isActiveAndEnabled) { return; }
+		if (!button.isActiveAndEnabled) { return; }
 
-		AbilityState newState = this.Behavior.Update(this.State);
-		if (newState != this.State)
+		AbilityState newState = Behavior.Update(State);
+		if (newState != State)
 		{
 			setStatus(newState);
 		}
 
-		this.button.graphic.sprite = this.Behavior.Graphic.Img;
-		this.button.OverrideText(this.Behavior.Graphic.Text);
+		button.graphic.sprite = Behavior.Graphic.Img;
+		button.OverrideText(Behavior.Graphic.Text);
 
-		if (this.Behavior.IsUse())
+		if (Behavior.IsUse())
 		{
-			this.button.graphic.color = this.button.buttonLabelText.color = Palette.EnabledColor;
-			this.button.graphic.material.SetFloat("_Desat", 0f);
+			button.graphic.color = button.buttonLabelText.color = Palette.EnabledColor;
+			button.graphic.material.SetFloat("_Desat", 0f);
 		}
 		else
 		{
-			this.button.graphic.color = this.button.buttonLabelText.color = Palette.DisabledClear;
-			this.button.graphic.material.SetFloat("_Desat", 1f);
+			button.graphic.color = button.buttonLabelText.color = Palette.DisabledClear;
+			button.graphic.material.SetFloat("_Desat", 1f);
 		}
 
-		switch (this.State)
+		switch (State)
 		{
 			case AbilityState.None:
-				this.button.cooldownTimerText.color = Palette.EnabledColor;
-				this.button.SetCoolDown(0, this.Behavior.CoolTime);
+				button.cooldownTimerText.color = Palette.EnabledColor;
+				button.SetCoolDown(0, Behavior.CoolTime);
 				return;
 			case AbilityState.CoolDown:
 				// 白色でタイマーをすすめる
-				this.Timer -= Time.deltaTime;
-				this.button.cooldownTimerText.color = Palette.EnabledColor;
+				Timer -= Time.deltaTime;
+				button.cooldownTimerText.color = Palette.EnabledColor;
 
 				// クールダウンが明けた
-				if (this.Timer <= 0.0f)
+				if (Timer <= 0.0f)
 				{
-					this.setStatus(AbilityState.Ready);
+					setStatus(AbilityState.Ready);
 				}
 				break;
 			case AbilityState.Activating:
 				// 緑色でタイマーをすすめる
-				this.Timer -= Time.deltaTime;
-				this.button.cooldownTimerText.color = TimerOnColor;
+				Timer -= Time.deltaTime;
+				button.cooldownTimerText.color = TimerOnColor;
 
-				if (!this.Behavior.IsCanAbilityActiving())
+				if (!Behavior.IsCanAbilityActiving())
 				{
-					this.Behavior.ForceAbilityOff();
-					this.setStatus(AbilityState.Ready);
+					Behavior.ForceAbilityOff();
+					setStatus(AbilityState.Ready);
 					return;
 				}
 				// 能力がアクティブが時間切れなので能力のリセット等を行う
-				if (this.Timer <= 0.0f)
+				if (Timer <= 0.0f)
 				{
-					this.Behavior.AbilityOff();
-					this.setStatus(AbilityState.CoolDown);
+					Behavior.AbilityOff();
+					setStatus(AbilityState.CoolDown);
 				}
 				break;
 			case AbilityState.Ready:
-				this.Timer = 0.0f;
-				if (Input.GetKeyDown(this.HotKey))
+				Timer = 0.0f;
+				if (Input.GetKeyDown(HotKey))
 				{
 					onClick();
 				}
@@ -191,30 +191,30 @@ public sealed class ExtremeAbilityButton
 				break;
 		}
 
-		this.button.SetCoolDown(
-			this.Timer,
-			this.State != AbilityState.Activating ?
-			this.Behavior.CoolTime : this.Behavior.ActiveTime);
+		button.SetCoolDown(
+			Timer,
+			State != AbilityState.Activating ?
+			Behavior.CoolTime : Behavior.ActiveTime);
 	}
 
 	private void onClick()
 	{
-		if (this.Behavior.IsUse() &&
-			this.Behavior.TryUseAbility(this.Timer, this.State, out AbilityState newState))
+		if (Behavior.IsUse() &&
+			Behavior.TryUseAbility(Timer, State, out AbilityState newState))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Using {this.Behavior.Graphic.Text}");
+			ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Using {Behavior.Graphic.Text}");
 			if (newState == AbilityState.CoolDown)
 			{
-				this.Behavior.AbilityOff();
+				Behavior.AbilityOff();
 			}
-			this.setStatus(newState);
+			setStatus(newState);
 		}
 	}
 
 	private void setActive(bool active)
 	{
-		this.button.gameObject.SetActive(active);
-		this.button.graphic.enabled = active;
+		button.gameObject.SetActive(active);
+		button.graphic.enabled = active;
 	}
 
 	private void setStatus(AbilityState newState)
@@ -223,24 +223,24 @@ public sealed class ExtremeAbilityButton
 		{
 			case AbilityState.None:
 			case AbilityState.Ready:
-				this.Timer = 0.0f;
+				Timer = 0.0f;
 				break;
 			case AbilityState.CoolDown:
-				if (this.State != AbilityState.Stop)
+				if (State != AbilityState.Stop)
 				{
-					this.Timer = this.Behavior.CoolTime;
+					Timer = Behavior.CoolTime;
 				}
 				break;
 			case AbilityState.Activating:
-				this.Timer = this.Behavior.ActiveTime;
+				Timer = Behavior.ActiveTime;
 				break;
 			case AbilityState.Reset:
 				newState = AbilityState.CoolDown;
-				this.Timer = this.Behavior.CoolTime;
+				Timer = Behavior.CoolTime;
 				break;
 			default:
 				break;
 		}
-		this.State = newState;
+		State = newState;
 	}
 }

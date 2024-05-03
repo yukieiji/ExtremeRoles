@@ -3,13 +3,14 @@
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability;
 
 
 #nullable enable

@@ -3,7 +3,7 @@ using System;
 
 using UnityEngine;
 
-namespace ExtremeRoles.Module.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.AbilityBehavior;
 
 public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
 {
@@ -34,7 +34,7 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
 		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
 		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 
-		this.isActive = false;
+		isActive = false;
 	}
 
 	public override void Initialize(ActionButton button)
@@ -44,33 +44,33 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
 
 	public override void SetActiveTime(float time)
 	{
-		this.maxCharge = time;
-		this.currentCharge = time;
-		this.chargeTimer = time;
+		maxCharge = time;
+		currentCharge = time;
+		chargeTimer = time;
 		base.SetActiveTime(time);
 	}
 
 	public override void AbilityOff()
 	{
-		this.isActive = false;
-		this.currentCharge = this.maxCharge;
-		this.chargeTimer = this.maxCharge;
-		this.abilityOff?.Invoke();
-		base.SetActiveTime(this.maxCharge);
+		isActive = false;
+		currentCharge = maxCharge;
+		chargeTimer = maxCharge;
+		abilityOff?.Invoke();
+		base.SetActiveTime(maxCharge);
 	}
 
 	public override void ForceAbilityOff()
 	{
-		this.currentCharge = Mathf.Clamp(
-			this.chargeTimer, 0.1f, this.ActiveTime);
-		this.isActive = false;
-		this.forceAbilityOff?.Invoke();
+		currentCharge = Mathf.Clamp(
+			chargeTimer, 0.1f, ActiveTime);
+		isActive = false;
+		forceAbilityOff?.Invoke();
 	}
 
-	public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
 	public override bool IsUse() =>
-		(this.canUse.Invoke() || this.isActive) && this.currentCharge > 0.0f;
+		(canUse.Invoke() || isActive) && currentCharge > 0.0f;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -79,20 +79,20 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
 		bool result = false;
 		if (curState == AbilityState.Activating)
 		{
-			this.ForceAbilityOff();
+			ForceAbilityOff();
 			newState = AbilityState.Ready;
-			this.isActive = false;
+			isActive = false;
 			result = true;
 		}
 		else if (
 			timer <= 0f &&
 			curState == AbilityState.Ready &&
-			this.ability.Invoke())
+			ability.Invoke())
 		{
-			this.chargeTimer = this.currentCharge;
-			this.isActive = true;
-			base.SetActiveTime(this.chargeTimer);
-			newState = this.ActiveTime <= 0.0f ?
+			chargeTimer = currentCharge;
+			isActive = true;
+			base.SetActiveTime(chargeTimer);
+			newState = ActiveTime <= 0.0f ?
 				AbilityState.CoolDown : AbilityState.Activating;
 			result = true;
 		}
@@ -101,13 +101,13 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
 
 	public override AbilityState Update(AbilityState curState)
 	{
-		if (this.isActive)
+		if (isActive)
 		{
-			this.chargeTimer -= Time.deltaTime;
+			chargeTimer -= Time.deltaTime;
 		}
 		if (CachedPlayerControl.LocalPlayer.PlayerControl.AllTasksCompleted())
 		{
-			this.currentCharge = this.maxCharge;
+			currentCharge = maxCharge;
 		}
 		return curState;
 	}

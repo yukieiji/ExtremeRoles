@@ -6,12 +6,12 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Module.Ability.AbilityFactory;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 

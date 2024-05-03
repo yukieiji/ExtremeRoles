@@ -1,11 +1,10 @@
 ﻿using System;
 
 using UnityEngine;
-
-using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 
-namespace ExtremeRoles.Module.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.AbilityBehavior;
 
 public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 {
@@ -44,39 +43,39 @@ public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 
 	public void SetCountText(string text)
 	{
-		this.buttonTextFormat = text;
+		buttonTextFormat = text;
 	}
 
 	public override void Initialize(ActionButton button)
 	{
 		var coolTimerText = button.cooldownTimerText;
 
-		this.abilityCountText = UnityEngine.Object.Instantiate(
+		abilityCountText = UnityEngine.Object.Instantiate(
 			coolTimerText, coolTimerText.transform.parent);
-		this.abilityCountText.enableWordWrapping = false;
-		this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
-		this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+		abilityCountText.enableWordWrapping = false;
+		abilityCountText.transform.localScale = Vector3.one * 0.5f;
+		abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
 		updateAbilityCountText();
 	}
 
 	public override void AbilityOff()
 	{
-		if (!this.isReduceOnActive)
+		if (!isReduceOnActive)
 		{
-			this.reduceAbilityCount();
+			reduceAbilityCount();
 		}
-		this.abilityOff?.Invoke();
+		abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
-		this.forceAbilityOff?.Invoke();
+		forceAbilityOff?.Invoke();
 	}
 
-	public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
 	public override bool IsUse()
-		=> this.canUse.Invoke() && this.AbilityCount > 0;
+		=> canUse.Invoke() && AbilityCount > 0;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -85,22 +84,22 @@ public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 
 		if (timer > 0 ||
 			curState != AbilityState.Ready ||
-			this.AbilityCount <= 0)
+			AbilityCount <= 0)
 		{
 			return false;
 		}
 
-		if (!this.ability.Invoke())
+		if (!ability.Invoke())
 		{
 			return false;
 		}
 
-		if (this.isReduceOnActive)
+		if (isReduceOnActive)
 		{
-			this.reduceAbilityCount();
+			reduceAbilityCount();
 		}
 
-		newState = this.ActiveTime <= 0.0f ?
+		newState = ActiveTime <= 0.0f ?
 			AbilityState.CoolDown : AbilityState.Activating;
 
 		return true;
@@ -113,32 +112,32 @@ public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 			return curState;
 		}
 
-		if (this.isUpdate)
+		if (isUpdate)
 		{
-			this.isUpdate = false;
+			isUpdate = false;
 			return AbilityState.CoolDown;
 		}
 
 		return
-			this.AbilityCount > 0 ? curState : AbilityState.None;
+			AbilityCount > 0 ? curState : AbilityState.None;
 	}
 
 	public void SetAbilityCount(int newAbilityNum)
 	{
-		this.AbilityCount = newAbilityNum;
-		this.isUpdate = true;
+		AbilityCount = newAbilityNum;
+		isUpdate = true;
 		updateAbilityCountText();
 	}
 
 	public void SetButtonTextFormat(string newTextFormat)
 	{
-		this.buttonTextFormat = newTextFormat;
+		buttonTextFormat = newTextFormat;
 	}
 
 	private void reduceAbilityCount()
 	{
-		--this.AbilityCount;
-		if (this.abilityCountText != null)
+		--AbilityCount;
+		if (abilityCountText != null)
 		{
 			updateAbilityCountText();
 		}
@@ -146,8 +145,8 @@ public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 
 	private void updateAbilityCountText()
 	{
-		this.abilityCountText.text = string.Format(
-			Translation.GetString(this.buttonTextFormat),
-			this.AbilityCount);
+		abilityCountText.text = string.Format(
+			Translation.GetString(buttonTextFormat),
+			AbilityCount);
 	}
 }

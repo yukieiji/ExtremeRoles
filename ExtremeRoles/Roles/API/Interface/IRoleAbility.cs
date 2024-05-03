@@ -4,11 +4,10 @@ using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
-
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability.AbilityFactory;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.API.Interface;
 

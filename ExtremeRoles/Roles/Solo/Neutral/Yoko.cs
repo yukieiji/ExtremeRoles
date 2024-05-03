@@ -15,6 +15,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

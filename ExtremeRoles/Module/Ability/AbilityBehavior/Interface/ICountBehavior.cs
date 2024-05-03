@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Module.AbilityBehavior.Interface;
+﻿namespace ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 
 public interface ICountBehavior
 {

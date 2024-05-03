@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 
 using Hazel;
-
-using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 
 
 namespace ExtremeRoles.Module.SystemType.Roles;

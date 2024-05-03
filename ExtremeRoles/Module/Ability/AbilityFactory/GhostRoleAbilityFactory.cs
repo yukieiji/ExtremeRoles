@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
-namespace ExtremeRoles.Module.AbilityFactory;
+namespace ExtremeRoles.Module.Ability.AbilityFactory;
 
 public static class GhostRoleAbilityFactory
 {

@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 

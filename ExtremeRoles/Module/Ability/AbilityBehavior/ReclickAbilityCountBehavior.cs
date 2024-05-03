@@ -1,10 +1,10 @@
 ﻿using System;
 
 using UnityEngine;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 
-namespace ExtremeRoles.Module.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.AbilityBehavior;
 
 public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 {
@@ -34,36 +34,36 @@ public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBeh
 		this.abilityOff = abilityOff;
 		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 
-		this.isActive = false;
+		isActive = false;
 	}
 
 	public override void Initialize(ActionButton button)
 	{
 		var coolTimerText = button.cooldownTimerText;
 
-		this.abilityCountText = UnityEngine.Object.Instantiate(
+		abilityCountText = UnityEngine.Object.Instantiate(
 			coolTimerText, coolTimerText.transform.parent);
-		this.abilityCountText.enableWordWrapping = false;
-		this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
-		this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+		abilityCountText.enableWordWrapping = false;
+		abilityCountText.transform.localScale = Vector3.one * 0.5f;
+		abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
 		updateAbilityCountText();
 	}
 
 	public override void AbilityOff()
 	{
-		this.isActive = false;
-		this.abilityOff?.Invoke();
+		isActive = false;
+		abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
-		this.AbilityOff();
+		AbilityOff();
 	}
 
-	public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
 	public override bool IsUse() =>
-		(this.canUse.Invoke() && this.AbilityCount > 0) || this.isActive;
+		canUse.Invoke() && AbilityCount > 0 || isActive;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -74,11 +74,11 @@ public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBeh
 		{
 			case AbilityState.Ready:
 				if (timer <= 0.0f &&
-					this.ability.Invoke())
+					ability.Invoke())
 				{
 					newState = AbilityState.Activating;
-					this.isActive = true;
-					this.reduceAbilityCount();
+					isActive = true;
+					reduceAbilityCount();
 				}
 				else
 				{
@@ -86,8 +86,8 @@ public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBeh
 				}
 				break;
 			case AbilityState.Activating:
-				if (this.isActive &&
-					timer <= this.ActiveTime - 0.25f)
+				if (isActive &&
+					timer <= ActiveTime - 0.25f)
 				{
 					newState = AbilityState.CoolDown;
 				}
@@ -109,32 +109,32 @@ public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBeh
 			return curState;
 		}
 
-		if (this.isUpdate)
+		if (isUpdate)
 		{
-			this.isUpdate = false;
+			isUpdate = false;
 			return AbilityState.CoolDown;
 		}
 
 		return
-			this.AbilityCount > 0 ? curState : AbilityState.None;
+			AbilityCount > 0 ? curState : AbilityState.None;
 	}
 
 	public void SetAbilityCount(int newAbilityNum)
 	{
-		this.AbilityCount = newAbilityNum;
-		this.isUpdate = true;
+		AbilityCount = newAbilityNum;
+		isUpdate = true;
 		updateAbilityCountText();
 	}
 
 	public void SetButtonTextFormat(string newTextFormat)
 	{
-		this.buttonTextFormat = newTextFormat;
+		buttonTextFormat = newTextFormat;
 	}
 
 	private void reduceAbilityCount()
 	{
-		--this.AbilityCount;
-		if (this.abilityCountText != null)
+		--AbilityCount;
+		if (abilityCountText != null)
 		{
 			updateAbilityCountText();
 		}
@@ -142,8 +142,8 @@ public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBeh
 
 	private void updateAbilityCountText()
 	{
-		this.abilityCountText.text = string.Format(
-			Translation.GetString(this.buttonTextFormat),
-			this.AbilityCount);
+		abilityCountText.text = string.Format(
+			Translation.GetString(buttonTextFormat),
+			AbilityCount);
 	}
 }

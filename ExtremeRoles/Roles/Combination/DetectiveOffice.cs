@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Combination;
 

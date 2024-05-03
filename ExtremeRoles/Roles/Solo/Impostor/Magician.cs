@@ -5,14 +5,13 @@ using System.Data;
 
 using UnityEngine;
 using AmongUs.GameOptions;
-
-using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
+using ExtremeRoles.Module.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
