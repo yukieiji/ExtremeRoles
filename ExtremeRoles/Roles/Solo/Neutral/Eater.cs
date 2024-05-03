@@ -228,7 +228,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             this.deadBodyArrow.Remove(playerId);
         }
 
-        if (this.Button?.Behavior is AbilityCountBehavior behavior &&
+        if (this.Button?.Behavior is CountBehavior behavior &&
             behavior.AbilityCount != 0) { return; }
 
         ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
@@ -348,7 +348,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.deadBodyArrow = new Dictionary<byte, Arrow>();
         this.isActivated = false;
 
-        if (this.Button?.Behavior is AbilityCountBehavior behaviour)
+        if (this.Button?.Behavior is CountBehavior behaviour)
         {
             int abilityNum = allOpt.GetValue<int>(GetRoleOptionId(
                 RoleAbilityCommonOption.AbilityCount));

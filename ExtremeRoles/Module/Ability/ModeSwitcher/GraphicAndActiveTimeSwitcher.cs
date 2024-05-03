@@ -15,7 +15,7 @@ public sealed class GraphicAndActiveTimeSwitcher<SwithEnum> :
 	where SwithEnum : struct, Enum
 {
 	public GraphicAndActiveTimeSwitcher(
-		AbilityBehaviorBase behavior,
+		BehaviorBase behavior,
 		params GraphicAndActiveTimeMode<SwithEnum>[] allMode) : base(behavior, allMode)
 	{ }
 

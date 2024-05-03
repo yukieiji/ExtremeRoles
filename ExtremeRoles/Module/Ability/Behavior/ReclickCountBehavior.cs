@@ -6,7 +6,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
+public sealed class ReclickCountBehavior : BehaviorBase, ICountBehavior
 {
 	public int AbilityCount { get; private set; }
 
@@ -21,7 +21,7 @@ public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBeh
 	private TMPro.TextMeshPro abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
-	public ReclickAbilityCountBehavior(
+	public ReclickCountBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,

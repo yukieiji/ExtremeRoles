@@ -27,7 +27,7 @@ public sealed class Teleporter :
     SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp
 {
     public sealed class TeleporterAbilityBehavior :
-        AbilityBehaviorBase, ICountBehavior
+        BehaviorBase, ICountBehavior
     {
         public int AbilityCount { get; private set; }
         public bool IsReduceAbilityCount { get; set; } = false;

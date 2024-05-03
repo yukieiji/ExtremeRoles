@@ -29,7 +29,7 @@ public sealed class BodyGuard :
     IRoleUpdate,
     IRoleSpecialReset
 {
-	public sealed class BodyGuardAbilityBehavior : AbilityBehaviorBase
+	public sealed class BodyGuardAbilityBehavior : BehaviorBase
     {
         public int AbilityCount { get; private set; }
 

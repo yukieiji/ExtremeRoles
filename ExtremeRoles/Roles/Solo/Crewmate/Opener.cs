@@ -125,7 +125,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             OptionManager.Instance.GetValue<float>(
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)) * rate);
 
-        if (this.Button.Behavior is AbilityCountBehavior countBehavior)
+        if (this.Button.Behavior is CountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(
                 countBehavior.AbilityCount + plusAbilityNum);

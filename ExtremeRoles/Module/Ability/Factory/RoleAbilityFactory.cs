@@ -20,7 +20,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new ChargableAbilityBehavior(
+			new ChargableBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
@@ -45,7 +45,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new AbilityCountBehavior(
+			new CountBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
@@ -71,7 +71,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new PassiveAbilityBehavior(
+			new PassiveBehavior(
 				new ButtonGraphic
 				{
 					Text = Helper.Translation.GetString(activateTextKey),
@@ -101,7 +101,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new ReclickAbilityBehavior(
+			new ReclickBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
@@ -123,7 +123,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new ReclickAbilityCountBehavior(
+			new ReclickCountBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
@@ -146,7 +146,7 @@ public static class RoleAbilityFactory
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
-			new ReusableAbilityBehavior(
+			new ReusableBehavior(
 				text: Helper.Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,

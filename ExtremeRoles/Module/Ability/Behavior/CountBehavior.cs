@@ -6,7 +6,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
+public sealed class CountBehavior : BehaviorBase, ICountBehavior
 {
 	public int AbilityCount { get; private set; }
 
@@ -22,7 +22,7 @@ public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 	private TMPro.TextMeshPro abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
-	public AbilityCountBehavior(
+	public CountBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,

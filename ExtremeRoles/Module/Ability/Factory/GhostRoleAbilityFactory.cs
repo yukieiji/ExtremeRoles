@@ -79,7 +79,7 @@ public static class GhostRoleAbilityFactory
 	{
 
 		return new ExtremeAbilityButton(
-			new ReusableAbilityBehavior(
+			new ReusableBehavior(
 				text: Helper.Translation.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
@@ -111,7 +111,7 @@ public static class GhostRoleAbilityFactory
 	{
 
 		return new ExtremeAbilityButton(
-			new AbilityCountBehavior(
+			new CountBehavior(
 				text: Helper.Translation.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,

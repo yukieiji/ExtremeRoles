@@ -37,7 +37,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         }
     }
 
-    public sealed class SandWormAbilityBehavior : AbilityBehaviorBase
+    public sealed class SandWormAbilityBehavior : BehaviorBase
     {
         private Func<bool> ability;
         private Func<bool> canUse;

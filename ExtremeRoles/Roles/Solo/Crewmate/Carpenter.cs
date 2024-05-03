@@ -29,7 +29,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         SetCamera
     }
 
-    public sealed class CarpenterAbilityBehavior : AbilityBehaviorBase
+    public sealed class CarpenterAbilityBehavior : BehaviorBase
     {
         public int AbilityCount { get; private set; }
 

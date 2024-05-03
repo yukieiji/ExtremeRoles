@@ -3,29 +3,29 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
+public sealed class ReusableBehavior : BehaviorBase
 {
 	private Func<bool> ability;
 	private Func<bool> canUse;
 	private Func<bool> canActivating;
+	private Action forceAbilityOff;
 	private Action abilityOff;
 
-	private bool isActive;
-
-	public ReclickAbilityBehavior(
+	public ReusableBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
 		Func<bool> canActivating = null,
-		Action abilityOff = null) : base(text, img)
+		Action abilityOff = null,
+		Action forceAbilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
 		this.canUse = canUse;
 
 		this.abilityOff = abilityOff;
-		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
+		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
 
-		isActive = false;
+		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 	}
 
 	public override void Initialize(ActionButton button)
@@ -35,52 +35,36 @@ public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 
 	public override void AbilityOff()
 	{
-		isActive = false;
 		abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
-		AbilityOff();
+		forceAbilityOff?.Invoke();
 	}
 
 	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
-	public override bool IsUse() => canUse.Invoke() || isActive;
+	public override bool IsUse() => canUse.Invoke();
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
 	{
 		newState = curState;
 
-		switch (curState)
+		if (timer > 0 || curState != AbilityState.Ready)
 		{
-			case AbilityState.Ready:
-				if (timer <= 0.0f &&
-					ability.Invoke())
-				{
-					newState = AbilityState.Activating;
-					isActive = true;
-				}
-				else
-				{
-					return false;
-				}
-				break;
-			case AbilityState.Activating:
-				if (isActive &&
-					timer <= ActiveTime - 0.25f)
-				{
-					newState = AbilityState.CoolDown;
-				}
-				else
-				{
-					return false;
-				}
-				break;
-			default:
-				return false;
+			return false;
 		}
+
+		if (!ability.Invoke())
+		{
+			return false;
+		}
+
+		newState = ActiveTime <= 0.0f ?
+			AbilityState.CoolDown : AbilityState.Activating;
+
 		return true;
 	}
 

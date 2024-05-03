@@ -9,12 +9,12 @@ public abstract class ModeSwitcherBase<SwithEnum, ModeStruct>
 	where SwithEnum : struct, Enum
 	where ModeStruct : IAbilityMode<SwithEnum>
 {
-	protected readonly AbilityBehaviorBase Behavior;
+	protected readonly BehaviorBase Behavior;
 	public SwithEnum Current { get; protected set; }
 
 	private readonly Dictionary<SwithEnum, ModeStruct> mode = new Dictionary<SwithEnum, ModeStruct>();
 
-	public ModeSwitcherBase(AbilityBehaviorBase behavior, params ModeStruct[] allMode)
+	public ModeSwitcherBase(BehaviorBase behavior, params ModeStruct[] allMode)
 	{
 		Behavior = behavior;
 		foreach (var mode in allMode)

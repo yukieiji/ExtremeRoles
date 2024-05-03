@@ -384,7 +384,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
     private void updateButtonSprite()
     {
-        if (this.Button.Behavior is not ChargableAbilityBehavior chargableAbility)
+        if (this.Button.Behavior is not ChargableBehavior chargableAbility)
         {
             return;
         }

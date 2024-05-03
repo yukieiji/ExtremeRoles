@@ -201,7 +201,7 @@ public abstract class GhostRoleBase
             this.Button.Behavior.SetActiveTime(activeTimeOtion.GetValue());
         }
 
-        if (this.Button.Behavior is AbilityCountBehavior behavior &&
+        if (this.Button.Behavior is CountBehavior behavior &&
             allOps.TryGet<int>(
                 this.GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityCount),

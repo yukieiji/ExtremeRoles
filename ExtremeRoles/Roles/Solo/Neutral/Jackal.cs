@@ -673,7 +673,7 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
                 !curSideKick.sidekickJackalCanMakeSidekick ||
                 curSideKick.recursion >= newJackal.SidekickRecursionLimit
             ) &&
-            newJackal.Button?.Behavior is AbilityCountBehavior countBehavior)
+            newJackal.Button?.Behavior is CountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(0);
         }

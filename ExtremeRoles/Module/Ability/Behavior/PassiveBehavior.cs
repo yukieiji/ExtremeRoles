@@ -2,7 +2,7 @@
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class PassiveAbilityBehavior : AbilityBehaviorBase
+public sealed class PassiveBehavior : BehaviorBase
 {
 	private Func<bool> ability;
 	private Func<bool> canUse;
@@ -17,7 +17,7 @@ public sealed class PassiveAbilityBehavior : AbilityBehaviorBase
 	private ButtonGraphic activeGraphic;
 	private ButtonGraphic deactiveGraphic;
 
-	public PassiveAbilityBehavior(
+	public PassiveBehavior(
 		ButtonGraphic activeGraphic,
 		ButtonGraphic deactiveGraphic,
 		Func<bool> canUse,

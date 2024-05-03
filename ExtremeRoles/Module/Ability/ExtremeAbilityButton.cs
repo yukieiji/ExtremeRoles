@@ -25,7 +25,7 @@ public sealed class ExtremeAbilityButton
 	public const string Name = "ExRAbilityButton";
 	public const string AditionalInfoName = "ExRKillButtonAditionalInfo";
 
-	public AbilityBehaviorBase Behavior { get; private set; }
+	public BehaviorBase Behavior { get; private set; }
 
 	public AbilityState State { get; private set; }
 
@@ -43,7 +43,7 @@ public sealed class ExtremeAbilityButton
 	private readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
 
 	public ExtremeAbilityButton(
-		AbilityBehaviorBase behavior,
+		BehaviorBase behavior,
 		IButtonAutoActivator activator,
 		KeyCode hotKey)
 	{

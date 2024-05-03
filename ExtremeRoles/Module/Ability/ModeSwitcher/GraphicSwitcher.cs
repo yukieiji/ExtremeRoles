@@ -14,7 +14,7 @@ public class GraphicMode<SwithEnum>(SwithEnum mode, ButtonGraphic graphic) : IAb
 public class GraphicSwitcher<SwithEnum> : ModeSwitcherBase<SwithEnum, GraphicMode<SwithEnum>>
 	where SwithEnum : struct, Enum
 {
-	public GraphicSwitcher(AbilityBehaviorBase behavior, params GraphicMode<SwithEnum>[] allMode)
+	public GraphicSwitcher(BehaviorBase behavior, params GraphicMode<SwithEnum>[] allMode)
 		: base(behavior, allMode)
 	{ }
 

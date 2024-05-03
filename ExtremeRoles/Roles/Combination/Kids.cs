@@ -69,7 +69,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
 	public override bool IsAssignGhostRole => this.canAssignWisp;
 
-    public sealed class DelinquentAbilityBehavior : AbilityBehaviorBase
+    public sealed class DelinquentAbilityBehavior : BehaviorBase
     {
         public int AbilityCount { get; private set; }
 		public AbilityType CurAbility
@@ -413,7 +413,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public void SetAbilityNum(int abilityNum)
     {
-		if (this.Button?.Behavior is AbilityCountBehavior behavior)
+		if (this.Button?.Behavior is CountBehavior behavior)
 		{
 			behavior.SetAbilityCount(abilityNum + this.abilityNum);
 		}

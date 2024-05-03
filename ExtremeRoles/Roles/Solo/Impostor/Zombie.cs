@@ -148,7 +148,7 @@ public sealed class Zombie :
             SetMagicCircle,
              () => { });
 
-        if (this.Button?.Behavior is not AbilityCountBehavior countBehavior)
+        if (this.Button?.Behavior is not CountBehavior countBehavior)
         {
             return;
         }
@@ -551,7 +551,7 @@ public sealed class Zombie :
     private void updateReviveState(bool isReduceAfter)
     {
         if (this.killCount >= this.resurrectKillCount &&
-            this.Button.Behavior is AbilityCountBehavior behavior &&
+            this.Button.Behavior is CountBehavior behavior &&
             behavior.AbilityCount <= (isReduceAfter ? 1 : 0) &&
             !this.canResurrect)
         {

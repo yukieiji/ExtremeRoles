@@ -14,7 +14,7 @@ public struct ButtonGraphic
 	}
 }
 
-public abstract class AbilityBehaviorBase
+public abstract class BehaviorBase
 {
 	public float CoolTime { get; private set; }
 	public float ActiveTime { get; private set; }
@@ -22,12 +22,12 @@ public abstract class AbilityBehaviorBase
 	public ButtonGraphic Graphic => graphic;
 	private ButtonGraphic graphic;
 
-	public AbilityBehaviorBase(string text, Sprite img)
+	public BehaviorBase(string text, Sprite img)
 	{
 		SetGraphic(text, img);
 	}
 
-	public AbilityBehaviorBase(ButtonGraphic graphic)
+	public BehaviorBase(ButtonGraphic graphic)
 	{
 		SetGraphic(graphic);
 	}
