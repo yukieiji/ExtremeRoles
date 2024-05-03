@@ -11,7 +11,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.11.28-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.3.5-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -33,13 +33,14 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 - すべての役職に対して、細かい設定(視界、視界効果、キルクールなど)が可能
 - 多彩なゲームオプション(シャッフルの強度、エンジニアのベント調整など)
 - MODオプションのインポート/エクスポート機能
-- MODの更新/バージョンチェック機能
+- MODの更新/ダウングレード/バージョンチェック機能
 - 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
-- 互換性のあるMODとの専用オプションの実装 
+- 互換性のあるMODとの専用オプションの実装
+- 起動時に問題が発生しても入れ替えなしアップデートすることができるセーフブート機能
 - 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 - 多種多様の情報を取得できるREST APIを搭載(欲しいAPIがある場合は連絡をお願いします)
 
-## 追加役職一覧(Extreme Roles v10.1.0.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v10.1.1.0時点、今後も追加予定)
 ### ホスト役職
 
 - シオン
@@ -165,7 +166,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2024.3.5s/v2024.3.5e  | v10.0.0.0 ～ v10.1.0.0 |
+|  v2024.3.5s/v2024.3.5e  | v10.0.0.0 ～ v10.1.1.0 |
 |  v2023.10.28s/v2023.10.28e  | v9.1.0.0 ～ v9.2.3.0 |
 |  v2023.10.24s/v2023.10.24e  | v9.0.0.0 ～ v9.0.3.2 |
 |  v2023.7.11s/v2023.7.11e/v2023.7.12s/v2023.7.12e  | v8.1.0.0 ～ v8.2.6.2 |
