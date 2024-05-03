@@ -200,6 +200,11 @@ public class ExtremeAbilityButton
 			this.Behavior.CoolTime : this.Behavior.ActiveTime);
 	}
 
+	protected void AddTimerOffset(in float offsetTime)
+	{
+		this.Timer += offsetTime;
+	}
+
 	private void onClick()
 	{
 		if (Behavior.IsUse() &&

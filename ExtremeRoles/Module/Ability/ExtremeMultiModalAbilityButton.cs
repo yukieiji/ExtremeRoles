@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 using System.Linq;
 using System.Collections.Generic;
@@ -6,7 +7,6 @@ using System.Collections.Generic;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Helper;
-using System;
 
 namespace ExtremeRoles.Module.Ability;
 
@@ -75,6 +75,15 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		int rowIndex = isInvert ? curAbilityNum - 1 : curAbilityNum + 1;
 		int newIndex = (rowIndex + curAbilityNum) % curAbilityNum;
 
+		float curMaxCoolTime = this.Behavior.CoolTime;
 		this.Behavior = this.allAbility[newIndex];
+
+		// クールタイム詐称を防ぐ(CT長いの使う => 短いのに切り替え => CTがカットされる => 長いのに切り替えて詐称)
+		// 短いのから長いのに切り替えた瞬間にクールタイムが発生するようにする
+		float diff = this.Behavior.CoolTime - curMaxCoolTime;
+		if (diff > 0)
+		{
+			this.AddTimerOffset(diff);
+		}
 	}
 }
