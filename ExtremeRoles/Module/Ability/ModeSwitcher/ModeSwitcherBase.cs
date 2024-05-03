@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.Ability.AbilityModeSwitcher;
+namespace ExtremeRoles.Module.Ability.ModeSwitcher;
 
 public abstract class ModeSwitcherBase<SwithEnum, ModeStruct>
 	where SwithEnum : struct, Enum

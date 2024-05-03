@@ -2,10 +2,10 @@
 
 using UnityEngine;
 
-using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.ButtonAutoActivator;
 
-namespace ExtremeRoles.Module.Ability.AbilityFactory;
+namespace ExtremeRoles.Module.Ability.Factory;
 
 public static class RoleAbilityFactory
 {

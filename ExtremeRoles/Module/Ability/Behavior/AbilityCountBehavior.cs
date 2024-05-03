@@ -2,39 +2,48 @@
 
 using UnityEngine;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
-namespace ExtremeRoles.Module.Ability.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
+public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 {
 	public int AbilityCount { get; private set; }
+
+	private bool isReduceOnActive;
 
 	private bool isUpdate = false;
 	private Func<bool> ability;
 	private Func<bool> canUse;
 	private Func<bool> canActivating;
+	private Action forceAbilityOff;
 	private Action abilityOff;
-
-	private bool isActive;
 
 	private TMPro.TextMeshPro abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
-	public ReclickAbilityCountBehavior(
+	public AbilityCountBehavior(
 		string text, Sprite img,
 		Func<bool> canUse,
 		Func<bool> ability,
 		Func<bool> canActivating = null,
-		Action abilityOff = null) : base(text, img)
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
+		bool isReduceOnActive = false) : base(text, img)
 	{
 		this.ability = ability;
 		this.canUse = canUse;
+		this.isReduceOnActive = isReduceOnActive;
 
 		this.abilityOff = abilityOff;
-		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
+		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
 
-		isActive = false;
+		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
+	}
+
+	public void SetCountText(string text)
+	{
+		buttonTextFormat = text;
 	}
 
 	public override void Initialize(ActionButton button)
@@ -51,54 +60,48 @@ public sealed class ReclickAbilityCountBehavior : AbilityBehaviorBase, ICountBeh
 
 	public override void AbilityOff()
 	{
-		isActive = false;
+		if (!isReduceOnActive)
+		{
+			reduceAbilityCount();
+		}
 		abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
-		AbilityOff();
+		forceAbilityOff?.Invoke();
 	}
 
 	public override bool IsCanAbilityActiving() => canActivating.Invoke();
 
-	public override bool IsUse() =>
-		canUse.Invoke() && AbilityCount > 0 || isActive;
+	public override bool IsUse()
+		=> canUse.Invoke() && AbilityCount > 0;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
 	{
 		newState = curState;
 
-		switch (curState)
+		if (timer > 0 ||
+			curState != AbilityState.Ready ||
+			AbilityCount <= 0)
 		{
-			case AbilityState.Ready:
-				if (timer <= 0.0f &&
-					ability.Invoke())
-				{
-					newState = AbilityState.Activating;
-					isActive = true;
-					reduceAbilityCount();
-				}
-				else
-				{
-					return false;
-				}
-				break;
-			case AbilityState.Activating:
-				if (isActive &&
-					timer <= ActiveTime - 0.25f)
-				{
-					newState = AbilityState.CoolDown;
-				}
-				else
-				{
-					return false;
-				}
-				break;
-			default:
-				return false;
+			return false;
 		}
+
+		if (!ability.Invoke())
+		{
+			return false;
+		}
+
+		if (isReduceOnActive)
+		{
+			reduceAbilityCount();
+		}
+
+		newState = ActiveTime <= 0.0f ?
+			AbilityState.CoolDown : AbilityState.Activating;
+
 		return true;
 	}
 

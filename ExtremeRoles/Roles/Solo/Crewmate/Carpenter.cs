@@ -15,9 +15,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.VentModule;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
-using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Behavior;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

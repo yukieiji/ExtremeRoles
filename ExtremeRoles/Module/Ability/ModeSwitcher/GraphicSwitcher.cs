@@ -1,8 +1,8 @@
 ﻿using System;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.Ability.AbilityModeSwitcher;
+namespace ExtremeRoles.Module.Ability.ModeSwitcher;
 
 public class GraphicMode<SwithEnum>(SwithEnum mode, ButtonGraphic graphic) : IAbilityMode<SwithEnum>
 	where SwithEnum : struct, Enum

@@ -11,9 +11,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
-using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Behavior;
 
 #nullable enable
 

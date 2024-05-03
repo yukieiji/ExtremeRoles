@@ -19,8 +19,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

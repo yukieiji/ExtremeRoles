@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ExtremeRoles.Module.Ability.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.Behavior;
 
 public struct ButtonGraphic
 {

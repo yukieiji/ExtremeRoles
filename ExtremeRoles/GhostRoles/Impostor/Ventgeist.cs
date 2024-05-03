@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 using ExtremeRoles.Extension.VentModule;
-using ExtremeRoles.Module.Ability.AbilityFactory;
+using ExtremeRoles.Module.Ability.Factory;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
 

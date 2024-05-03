@@ -6,7 +6,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 namespace ExtremeRoles.Module.SystemType.Roles;

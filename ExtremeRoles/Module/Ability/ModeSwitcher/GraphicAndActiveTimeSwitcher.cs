@@ -1,7 +1,7 @@
 ﻿using System;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability.Behavior;
 
-namespace ExtremeRoles.Module.Ability.AbilityModeSwitcher;
+namespace ExtremeRoles.Module.Ability.ModeSwitcher;
 
 public class GraphicAndActiveTimeMode<SwithEnum>(SwithEnum mode, ButtonGraphic graphic, float time) :
 	GraphicMode<SwithEnum>(mode, graphic)

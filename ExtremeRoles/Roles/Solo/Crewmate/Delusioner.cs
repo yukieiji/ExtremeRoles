@@ -14,8 +14,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Module.SystemType.Roles;
 using System.Linq;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 #nullable enable
 

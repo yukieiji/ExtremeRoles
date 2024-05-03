@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ExtremeRoles.Module.Ability.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.Behavior;
 
 public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
 {

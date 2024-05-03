@@ -13,10 +13,10 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
-using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
-using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 #nullable enable
 

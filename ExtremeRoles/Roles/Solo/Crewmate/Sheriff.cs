@@ -8,8 +8,8 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

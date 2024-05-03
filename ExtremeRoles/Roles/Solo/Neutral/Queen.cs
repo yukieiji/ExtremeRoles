@@ -15,8 +15,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability.AbilityFactory;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 

@@ -7,8 +7,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 namespace ExtremeRoles.Roles.Combination;
 

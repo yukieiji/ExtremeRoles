@@ -9,8 +9,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 namespace ExtremeRoles.GhostRoles.API;
 

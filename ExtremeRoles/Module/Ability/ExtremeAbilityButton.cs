@@ -4,7 +4,7 @@ using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
+using ExtremeRoles.Module.Ability.Behavior;
 
 namespace ExtremeRoles.Module.Ability;
 

@@ -17,9 +17,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
-using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

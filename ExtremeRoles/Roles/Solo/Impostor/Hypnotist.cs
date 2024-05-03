@@ -25,8 +25,8 @@ using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
 using ExtremeRoles.Compat;
-using ExtremeRoles.Module.Ability.AbilityFactory;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

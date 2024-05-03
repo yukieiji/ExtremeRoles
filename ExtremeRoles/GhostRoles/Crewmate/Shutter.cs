@@ -17,7 +17,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
-using ExtremeRoles.Module.Ability.AbilityFactory;
+using ExtremeRoles.Module.Ability.Factory;
 
 
 #nullable enable

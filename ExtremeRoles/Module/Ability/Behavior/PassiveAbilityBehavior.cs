@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExtremeRoles.Module.Ability.AbilityBehavior;
+namespace ExtremeRoles.Module.Ability.Behavior;
 
 public sealed class PassiveAbilityBehavior : AbilityBehaviorBase
 {

@@ -12,8 +12,11 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+
+
+using ButtonGraphic = ExtremeRoles.Module.Ability.Behavior.ButtonGraphic;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -66,7 +69,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         public bool IsContain(byte playerId) =>
             this.firstStage.Contains(playerId) || this.finalStage.Contains(playerId);
 
-        public bool IsFirstStage(byte playerId) => 
+        public bool IsFirstStage(byte playerId) =>
             this.firstStage.Contains(playerId);
 
         public bool IsFinalStage(byte playerId) =>
@@ -153,7 +156,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         var allOpt = OptionManager.Instance;
         var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
 			UmbrerMode.Feat,
-				new Module.AbilityBehavior.ButtonGraphic(
+				new ButtonGraphic(
 					Translation.GetString("featVirus"),
 					Loader.CreateSpriteFromResources(
 						Path.UmbrerFeatVirus)),
@@ -170,7 +173,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 			featVirusMode,
 			new(
 				UmbrerMode.Upgrage,
-				new Module.AbilityBehavior.ButtonGraphic(
+				new ButtonGraphic(
 					Translation.GetString("upgradeVirus"),
 					Loader.CreateSpriteFromResources(
 					Path.UmbrerUpgradeVirus)),

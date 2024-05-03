@@ -21,10 +21,10 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
-using ExtremeRoles.Module.Ability.AbilityBehavior;
-using ExtremeRoles.Module.Ability.AbilityFactory;
-using ExtremeRoles.Module.Ability.AbilityModeSwitcher;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior;
 
 #nullable enable
 

@@ -5,13 +5,13 @@ using UnityEngine;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
-namespace ExtremeRoles.Module.Ability.AbilityFactory;
+namespace ExtremeRoles.Module.Ability.Factory;
 
 public static class GhostRoleAbilityFactory
 {

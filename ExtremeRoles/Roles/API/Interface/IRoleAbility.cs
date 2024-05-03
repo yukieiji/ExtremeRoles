@@ -5,9 +5,9 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability.AbilityFactory;
-using ExtremeRoles.Module.Ability.AbilityBehavior.Interface;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Roles.API.Interface;
 

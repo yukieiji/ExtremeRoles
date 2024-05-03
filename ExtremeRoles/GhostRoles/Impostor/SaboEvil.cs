@@ -6,7 +6,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
-using ExtremeRoles.Module.Ability.AbilityFactory;
+using ExtremeRoles.Module.Ability.Factory;
 
 #nullable enable
 
