@@ -9,7 +9,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class BulletBehaviour : MonoBehaviour
 {
-	private readonly int collisionLayer = LayerMask.GetMask(new string[] { "Objects", "ShortObjects" });
+	private readonly int collisionLayer = LayerMask.GetMask(new string[] { "Ship", "Objects" });
 
 	private float range; // 射程C
 	private byte ignorePlayerId;
