@@ -1,6 +1,6 @@
-﻿using ExtremeRoles.Performance;
+﻿using UnityEngine;
+
 using ExtremeRoles.Resources;
-using UnityEngine;
 
 #nullable enable
 
@@ -9,21 +9,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class BulletBehaviour : MonoBehaviour
 {
-	private float distanceTraveled = 0f;
+	private readonly int collisionLayer = LayerMask.GetMask(new string[] { "Objects", "ShortObjects" });
 
-	private BoxCollider2D? collider;
-	private readonly int collisionLayer = Constants.ShipAndAllObjectsMask;
-
-	private Vector2 direction; // 方向ベクトルA
-	private float speed = 0; // 速度ベクトルB
 	private float range; // 射程C
-	private SpriteRenderer? rend;
 	private byte ignorePlayerId;
-
-	public void Awake()
-	{
-		this.collider = this.gameObject.AddComponent<BoxCollider2D>();
-	}
+	private Vector2 initialPosition;
 
 	public void Initialize(
 		in string bulletImg,
@@ -33,66 +23,58 @@ public sealed class BulletBehaviour : MonoBehaviour
 		in float range,
 		in byte ignorePlayerId)
 	{
-		if (this.collider == null)
-		{
-			return;
-		}
-		this.collider.size = size;
-		this.direction = direction;
-		this.speed = speed;
+
+		var collider = this.gameObject.AddComponent<BoxCollider2D>();
+		collider.isTrigger = true;
+		collider.size = size;
+
 		this.range = range;
 		this.ignorePlayerId = ignorePlayerId;
 
-		this.rend = this.gameObject.AddComponent<SpriteRenderer>();
-		this.rend.sprite = Loader.CreateSpriteFromResources(
+		var rend = this.gameObject.AddComponent<SpriteRenderer>();
+		rend.sprite = Loader.CreateSpriteFromResources(
 			bulletImg);
+
+		this.initialPosition = transform.position;
+
+		var rb = this.gameObject.AddComponent<Rigidbody2D>();
+		rb.velocity = direction.normalized * speed;
+		rb.isKinematic = true;
 	}
 
 	public void Update()
 	{
-		if (this.collider == null || this.rend == null)
+		if (Vector2.Distance(this.transform.position, this.initialPosition) > this.range)
 		{
-			return;
-		}
-
-		// ベクトルBに基づいて移動
-		Vector2 xyPos = this.direction.normalized * speed * Time.deltaTime;
-		this.transform.Translate(new Vector3(xyPos.x, xyPos.y, xyPos.y / 1000.0f));
-
-		// 移動した距離を更新
-		this.distanceTraveled += speed * Time.deltaTime;
-
-		// 射程を超えた場合は消滅
-		if (distanceTraveled >= range)
-		{
-			Destroy(this.gameObject);
+			this.removeThis();
 		}
 	}
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{
+		ExtremeRolesPlugin.Logger.LogInfo("Hitting!!");
+		ExtremeRolesPlugin.Logger.LogInfo($"ObjName:{other}");
+
 		// レイヤーDのオブジェクトと衝突した場合は消滅
-		if (this.collisionLayer == (collisionLayer | (1 << other.gameObject.layer)))
+		if (other.TryGetComponent<PlayerControl>(out var pc) &&
+			pc != null &&
+			pc.Data != null &&
+			!pc.Data.IsDead &&
+			!pc.Data.Disconnected &&
+			pc.PlayerId != this.ignorePlayerId &&
+			!pc.inVent)
 		{
-			Destroy(this.gameObject);
+			ExtremeRolesPlugin.Logger.LogInfo("Hit Player!!!");
 		}
-
-		// オブジェクトEとの当たり判定が発生する
-		foreach (PlayerControl pc in CachedPlayerControl.AllPlayerControls)
+		else if (this.collisionLayer == (this.collisionLayer | (1 << other.gameObject.layer)))
 		{
-			if (pc == null ||
-				pc.Data == null ||
-				pc.Data.IsDead ||
-				pc.Data.Disconnected ||
-				pc.PlayerId == pc.PlayerId ||
-				pc.inVent ||
-				pc.Collider != other)
-			{
-				continue;
-			}
-
-			// 衝突処理を記述
-			// 例えば、ダメージを与える、エフェクトを再生するなど
+			ExtremeRolesPlugin.Logger.LogInfo("Hit Wall");
+			this.removeThis();
 		}
+	}
+
+	private void removeThis()
+	{
+		Destroy(this.gameObject);
 	}
 }
