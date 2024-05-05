@@ -308,10 +308,10 @@ public static class ExtremeRoleManager
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         };
 
-    public static Dictionary<
+    public static readonly Dictionary<
         byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
 
-    public static readonly HashSet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
+    public static readonly IReadOnlySet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Jackal,
         ExtremeRoleId.Assassin,
