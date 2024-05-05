@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 using AmongUs.GameOptions;
@@ -217,8 +218,8 @@ public static class ExtremeRoleManager
 		ExtremeRoleId.Hatter,
 	};
 
-    public static readonly Dictionary<
-        int, SingleRoleBase> NormalRole = new Dictionary<int, SingleRoleBase>()
+    public static readonly ImmutableDictionary<int, SingleRoleBase> NormalRole =
+		new Dictionary<int, SingleRoleBase>()
         {
             {(int)ExtremeRoleId.SpecialCrew , new SpecialCrew()},
             {(int)ExtremeRoleId.Sheriff     , new Sheriff()},
@@ -288,10 +289,10 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
-		};
+		}.ToImmutableDictionary();
 
-    public static readonly Dictionary<
-        byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()
+    public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
+		new Dictionary<byte, CombinationRoleManagerBase>()
         {
             {(byte)CombinationRoleType.Avalon         , new Avalon()},
             {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
@@ -306,10 +307,9 @@ public static class ExtremeRoleManager
 			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
 			{(byte)CombinationRoleType.Skater        , new SkaterManager()},
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
-        };
+        }.ToImmutableDictionary();
 
-    public static readonly Dictionary<
-        byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
+    public static readonly Dictionary<byte, SingleRoleBase> GameRole = new();
 
     public static readonly IReadOnlySet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
     {
