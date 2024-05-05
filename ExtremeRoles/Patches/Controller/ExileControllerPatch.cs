@@ -19,6 +19,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
+using Assassin = ExtremeRoles.Roles.Combination.Assassin;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -287,17 +290,26 @@ public static class ExileControllerBeginePatch
         {
             case ConfirmExilMode.Impostor:
                 modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsImpostor());
+                    allPlayer, (GameData.PlayerInfo p) =>
+						p != null &&
+						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
+						role!.IsImpostor());
                 isExiledSameMode = exiledPlayerRole.IsImpostor();
                 break;
             case ConfirmExilMode.Crewmate:
                 modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsCrewmate());
+                    allPlayer, (GameData.PlayerInfo p) =>
+						p != null &&
+						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
+						role!.IsCrewmate());
                 isExiledSameMode = exiledPlayerRole.IsCrewmate();
                 break;
             case ConfirmExilMode.Neutral:
                 modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsNeutral());
+                    allPlayer, (GameData.PlayerInfo p) =>
+						p != null &&
+						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
+						role!.IsNeutral());
                 isExiledSameMode = exiledPlayerRole.IsNeutral();
                 break;
             default:
@@ -328,7 +340,7 @@ public static class ExileControllerBeginePatch
     }
 
     private static void setExiledTarget(
-        ExileController instance, GameData.PlayerInfo player)
+        ExileController instance, GameData.PlayerInfo? player)
     {
         if (instance.specialInputHandler != null)
         {
@@ -396,7 +408,7 @@ public static class ExileControllerWrapUpPatch
         }
     }
 
-    public static void WrapUpPostfix(GameData.PlayerInfo exiled)
+    public static void WrapUpPostfix(GameData.PlayerInfo? exiled)
     {
         InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
@@ -405,11 +417,11 @@ public static class ExileControllerWrapUpPatch
 
         var state = ExtremeRolesPlugin.ShipState;
 
-        if (state.TryGetDeadAssasin(out byte playerId))
+        if (state.TryGetDeadAssasin(out byte playerId) &&
+			ExtremeRoleManager.TryGetSafeCastedRole(playerId, out Assassin? assasin))
         {
-            var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
-            assasin.ExiledAction(
-                Helper.Player.GetPlayerControlById(playerId));
+            assasin!.ExiledAction(
+				Helper.Player.GetPlayerControlById(playerId));
         }
 
 

@@ -564,10 +564,22 @@ public static class ExtremeRoleManager
         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
     }
 
+// TryGet系列：ここでTrueの場合、取得した役職はNullではない！！！！
 	public static bool TryGetRole(byte playerId, out SingleRoleBase? role )
 		=> GameRole.TryGetValue(playerId, out role) && role is not null;
 
-    public static T? GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
+	public static bool TryGetSafeCastedRole<T>(byte playerId, out T? role) where T : SingleRoleBase
+	{
+		role = null;
+		if (!TryGetRole(playerId, out var checkRole))
+		{
+			return false;
+		}
+		role = safeCast<T>(checkRole);
+		return role is not null;
+	}
+
+	public static T? GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
     {
         TryGetRole(playerId, out var checkRole);
 		return safeCast<T>(checkRole);
