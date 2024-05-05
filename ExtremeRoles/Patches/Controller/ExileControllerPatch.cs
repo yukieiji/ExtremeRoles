@@ -289,24 +289,24 @@ public static class ExileControllerBeginePatch
         switch (mode)
         {
             case ConfirmExilMode.Impostor:
-                modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) =>
+                modeTeamAlive = allPlayer.Count(
+					(GameData.PlayerInfo p) =>
 						p != null &&
 						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
 						role!.IsImpostor());
                 isExiledSameMode = exiledPlayerRole.IsImpostor();
                 break;
             case ConfirmExilMode.Crewmate:
-                modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) =>
+                modeTeamAlive = allPlayer.Count(
+					(GameData.PlayerInfo p) =>
 						p != null &&
 						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
 						role!.IsCrewmate());
                 isExiledSameMode = exiledPlayerRole.IsCrewmate();
                 break;
             case ConfirmExilMode.Neutral:
-                modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) =>
+                modeTeamAlive = allPlayer.Count(
+					(GameData.PlayerInfo p) =>
 						p != null &&
 						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
 						role!.IsNeutral());
