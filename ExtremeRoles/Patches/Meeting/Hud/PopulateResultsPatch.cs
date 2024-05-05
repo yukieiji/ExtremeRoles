@@ -90,19 +90,22 @@ public static class MeetingHudPopulateResultsPatch
 		return false;
 	}
 	private static void addVoteModRole(
-		IRoleVoteModifier role, byte rolePlayerId,
+		IRoleVoteModifier? role, byte rolePlayerId,
 		ref SortedList<int, (IRoleVoteModifier, GameData.PlayerInfo)> voteModifier)
 	{
-		GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(rolePlayerId);
-		if (role != null)
+		if (role is null)
 		{
-			int order = role.Order;
-			// 同じ役職は同じ優先度になるので次の優先度になるようにセット
-			while (voteModifier.ContainsKey(order))
-			{
-				++order;
-			}
-			voteModifier.Add(order, (role, playerById));
+			return;
 		}
+
+		GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(rolePlayerId);
+
+		int order = role.Order;
+		// 同じ役職は同じ優先度になるので次の優先度になるようにセット
+		while (voteModifier.ContainsKey(order))
+		{
+			++order;
+		}
+		voteModifier.Add(order, (role, playerById));
 	}
 }

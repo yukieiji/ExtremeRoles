@@ -123,10 +123,10 @@ public static class MeetingHudCheckForEndVotingPatch
 	}
 
 	private static void addVoteModRole(
-		IRoleVoteModifier role, byte rolePlayerId,
+		IRoleVoteModifier? role, byte rolePlayerId,
 		ref SortedList<int, (IRoleVoteModifier, byte)> voteModifier)
 	{
-		if (role == null) { return; }
+		if (role is null) { return; }
 
 		int order = role.Order;
 		// 同じ役職は同じ優先度になるので次の優先度になるようにセット

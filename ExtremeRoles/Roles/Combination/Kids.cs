@@ -225,8 +225,12 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 		AbilityType abilityType = (AbilityType)reader.ReadByte();
 		byte playerId = reader.ReadByte();
 
-		Delinquent delinquent =
+		Delinquent? delinquent =
             ExtremeRoleManager.GetSafeCastedRole<Delinquent>(playerId);
+		if (delinquent is null)
+		{
+			return;
+		}
         switch (abilityType)
         {
             case AbilityType.Scribe:

@@ -136,19 +136,31 @@ public sealed class Hypnotist :
 	public static void Ability(ref MessageReader reader)
     {
         byte rolePlayerId = reader.ReadByte();
-        Hypnotist role = ExtremeRoleManager.GetSafeCastedRole<Hypnotist>(rolePlayerId);
+        Hypnotist? role = ExtremeRoleManager.GetSafeCastedRole<Hypnotist>(rolePlayerId);
         RpcOps ops = (RpcOps)reader.ReadByte();
         switch (ops)
         {
             case RpcOps.TargetToDoll:
                 byte targetPlayerId = reader.ReadByte();
+				if (role is null)
+				{
+					return;
+				}
                 targetToDoll(role, rolePlayerId, targetPlayerId);
                 break;
             case RpcOps.PickUpAbilityModule:
-                updateDoll(role, ref reader);
+				if (role is null)
+				{
+					return;
+				}
+				updateDoll(role, ref reader);
                 break;
             case RpcOps.ResetDollKillButton:
-                resetDollKillButton(role);
+				if (role is null)
+				{
+					return;
+				}
+				resetDollKillButton(role);
                 break;
         }
     }

@@ -294,7 +294,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
                 }
             }
 
-            Vigilante vigilante = ExtremeRoleManager.GetSafeCastedRole<Vigilante>(player.PlayerId);
+            Vigilante? vigilante = ExtremeRoleManager.GetSafeCastedRole<Vigilante>(player.PlayerId);
 
             if (vigilante != null)
             {

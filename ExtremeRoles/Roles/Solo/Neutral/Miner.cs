@@ -83,22 +83,22 @@ public sealed class Miner :
 	{
 		MinerRpc rpc = (MinerRpc)reader.ReadByte();
 		byte playerId = reader.ReadByte();
-		Miner miner = ExtremeRoleManager.GetSafeCastedRole<Miner>(playerId);
+		Miner? miner = ExtremeRoleManager.GetSafeCastedRole<Miner>(playerId);
 		int id = reader.ReadInt32();
 		switch (rpc)
 		{
 			case MinerRpc.SetMine:
 				float x = reader.ReadSingle();
 				float y = reader.ReadSingle();
-				if (miner == null) { return; }
+				if (miner is null) { return; }
 				setMine(miner, new(x, y), id);
 				break;
 			case MinerRpc.ActiveMine:
-				if (miner == null) { return; }
+				if (miner is null) { return; }
 				activateMine(miner, id);
 				break;
 			case MinerRpc.RemoveMine:
-				if (miner == null) { return; }
+				if (miner is null) { return; }
 				removeMine(miner, id);
 				break;
 		}
