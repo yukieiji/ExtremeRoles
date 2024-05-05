@@ -49,7 +49,7 @@ public sealed class PutVisorHandler : IRequestHandler
 
 		string id = customVisor.Id;
 
-		if (!ExtremeVisorManager.VisorData.TryGetValue(id, out var visor))
+		if (SkinContainer<CustomVisor>.TryGet(id, out var visor))
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
@@ -65,7 +65,7 @@ public sealed class PutVisorHandler : IRequestHandler
 			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetVisor(VisorData.EmptyId);
 		}
 
-		ExtremeVisorManager.VisorData[id] = customVisor;
+		SkinContainer<CustomVisor>.TryAdd(id, customVisor);
 
 		List<VisorData> visorData = hatMng.allVisors.ToList();
 		visorData.RemoveAll(x => x.ProductId == id);

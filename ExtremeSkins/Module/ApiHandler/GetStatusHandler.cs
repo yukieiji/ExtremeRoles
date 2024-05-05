@@ -27,7 +27,7 @@ public sealed class GetStatusHandler : IRequestHandler
 		ModuleStatus exhStatus = ModuleStatus.NotLoad;
 #endif
 #if WITHVISOR
-		ModuleStatus exvStatus = ExtremeVisorManager.VisorData.Count == 0 ? ModuleStatus.NoData : ModuleStatus.Arrive;
+		ModuleStatus exvStatus = SkinContainer<CustomVisor>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
 #else
 		ModuleStatus exvStatus = ModuleStatus.NotLoad;
 #endif

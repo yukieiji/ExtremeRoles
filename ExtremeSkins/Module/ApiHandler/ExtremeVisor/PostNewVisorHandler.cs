@@ -45,7 +45,7 @@ public sealed class PostNewVisorHandler : IRequestHandler
 		Translation.AddTransData(newVisor.AutherName, newVisor.TransedAutherName);
 		Translation.AddTransData(newVisor.SkinName  , newVisor.TransedSkinName);
 
-		if (ExtremeVisorManager.VisorData.TryAdd(customVisor.Id, customVisor))
+		if (SkinContainer<CustomVisor>.TryAdd(customVisor.Id, customVisor))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
 		}

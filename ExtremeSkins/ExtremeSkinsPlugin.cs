@@ -55,10 +55,10 @@ public partial class ExtremeSkinsPlugin : BasePlugin
         ExtremeNamePlateManager.Initialize();
 #endif
 #if WITHVISOR
-        ExtremeVisorManager.Initialize();
+		ExtremeSkinLoader.Instance.AddLoader<CustomVisor, VisorLoader>();
 #endif
 
-        CreatorModeManager.Initialize();
+		CreatorModeManager.Initialize();
 
         ExtremeColorManager.Initialize();
 

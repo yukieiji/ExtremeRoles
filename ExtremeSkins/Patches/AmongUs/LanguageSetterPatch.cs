@@ -16,7 +16,7 @@ public static class LanguageSetterPatch
         ExtremeNamePlateManager.UpdateTranslation();
 #endif
 #if WITHVISOR
-        ExtremeVisorManager.UpdateTranslation();
+        // ExtremeVisorManager.UpdateTranslation();
 #endif
     }
 }

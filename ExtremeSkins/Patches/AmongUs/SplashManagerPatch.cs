@@ -24,24 +24,12 @@ public static class SplashManagerStartPatch
 
         List<IEnumerator> dlTask = new List<IEnumerator>();
 
-#if WITHHAT
-#endif
 #if WITHNAMEPLATE
         if (!ExtremeNamePlateManager.IsLoaded)
         {
             if (!creatorMode && ExtremeNamePlateManager.IsUpdate())
             {
                 dlTask.Add(ExtremeNamePlateManager.InstallData());
-            }
-        }
-#endif
-#if WITHVISOR
-        if (!ExtremeVisorManager.IsLoaded)
-        {
-
-            if (!creatorMode && ExtremeVisorManager.IsUpdate())
-            {
-                dlTask.Add(ExtremeVisorManager.InstallData());
             }
         }
 #endif
@@ -71,12 +59,10 @@ public static class SplashManagerStartPatch
         }
 #endif
 #if WITHVISOR
-        if (!ExtremeVisorManager.IsLoaded)
-        {
-            ExtremeVisorManager.Load();
-        }
+		new SkinContainer<CustomVisor>(
+			ExtremeSkinLoader.Instance.Load<CustomVisor>());
 #endif
-        ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
+		ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
         SplashManagerUpdatePatch.SetSkinLoadMode(false);
     }
 

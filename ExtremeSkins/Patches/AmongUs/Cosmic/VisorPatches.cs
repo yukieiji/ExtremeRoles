@@ -27,7 +27,7 @@ public static class VisorPatch
 		[HarmonyArgument(0)] VisorData data,
 		[HarmonyArgument(1)] int color)
 	{
-		if (ExtremeVisorManager.VisorData.TryGetValue(data.ProductId, out var visor) &&
+		if (SkinContainer<CustomVisor>.TryGet(data.ProductId, out var visor) &&
 			visor != null)
 		{
 			__instance.visorData = data;
@@ -50,7 +50,8 @@ public static class VisorPatch
 		[HarmonyArgument(0)] Il2CppSystem.Action<Sprite, AddressableAsset> onLoaded,
 		ref Il2CppEnumerator __result)
 	{
-		if (ExtremeVisorManager.VisorData.TryGetValue(__instance.ProductId, out var value))
+		if (SkinContainer<CustomVisor>.TryGet(__instance.ProductId, out var value) &&
+			value != null)
 		{
 			__result = patchedCoLoadIcon(onLoaded, value).WrapToIl2Cpp();
 			return false;
@@ -75,7 +76,7 @@ public static class VisorPatch
 
 		AddressableAsset<VisorViewData>? asset;
 
-		if (ExtremeVisorManager.VisorData.TryGetValue(visorId, out var visor) && visor != null)
+		if (SkinContainer<CustomVisor>.TryGet(visorId, out var visor) && visor != null)
 		{
 			asset = VisorAddressableAsset.CreateAsset(visor);
 		}

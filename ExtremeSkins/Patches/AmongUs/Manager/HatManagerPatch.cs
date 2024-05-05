@@ -50,7 +50,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             try
             {
                 List<VisorData> visorData = __instance.allVisors.ToList();
-                foreach (CustomVisor vi in ExtremeVisorManager.VisorData.Values)
+                foreach (CustomVisor vi in SkinContainer<CustomVisor>.GetValues())
                 {
                     visorData.Add(vi.Data);
                 }

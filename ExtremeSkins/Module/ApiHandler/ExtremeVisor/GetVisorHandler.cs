@@ -19,7 +19,7 @@ public sealed class GetVisorHandler : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 
-		var curData = ExtremeVisorManager.VisorData.Values.Select(
+		var curData = SkinContainer<CustomVisor>.GetValues().Select(
 			x => new ExportData(x.Id, x.Name, x.Author));
 
 		IRequestHandler.Write(response, curData);

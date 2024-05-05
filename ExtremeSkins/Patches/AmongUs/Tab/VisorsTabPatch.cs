@@ -68,7 +68,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
 			foreach (VisorData viData in unlockedVisor)
             {
-                if (ExtremeVisorManager.VisorData.TryGetValue(
+                if (SkinContainer<CustomVisor>.TryGet(
 						viData.ProductId, out var vi) &&
 					vi != null)
                 {

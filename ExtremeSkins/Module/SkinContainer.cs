@@ -37,11 +37,11 @@ public sealed class SkinContainer<T>
 	}
 
 	private static SkinContainer<T>? instance;
-	private readonly ImmutableDictionary<string, T> data;
+	private readonly ImmutableSortedDictionary<string, T> data;
 
 	public SkinContainer(in IReadOnlyDictionary<string, T> dict)
 	{
 		instance = this;
-		this.data = dict.ToImmutableDictionary();
+		this.data = dict.ToImmutableSortedDictionary();
 	}
 }
