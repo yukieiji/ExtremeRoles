@@ -42,6 +42,16 @@ public sealed class ActivatingCountBehavior : CountBehavior, IActivatingBehavior
 		base.AbilityOff();
 	}
 
+	public override AbilityState Update(AbilityState curState)
+	{
+		if (curState is AbilityState.Activating)
+		{
+			return curState;
+		}
+
+		return base.Update(curState);
+	}
+
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
 	{

@@ -29,6 +29,16 @@ public sealed class ReusableActivatingBehavior : ReusableBehavior, IActivatingBe
 		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
 	}
 
+	public override AbilityState Update(AbilityState curState)
+	{
+		if (curState is AbilityState.Activating)
+		{
+			return curState;
+		}
+
+		return base.Update(curState);
+	}
+
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
 	{
