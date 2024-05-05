@@ -226,7 +226,6 @@ public static class IRoleAutoBuildAbilityMixin
 		Sprite sprite,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
-		bool isReduceOnActive = false,
 		KeyCode hotkey = KeyCode.F)
 	{
 		self.Button = RoleAbilityFactory.CreateCountAbility(
@@ -236,7 +235,6 @@ public static class IRoleAutoBuildAbilityMixin
 			ability: self.UseAbility,
 			abilityOff: abilityOff,
 			forceAbilityOff: forceAbilityOff,
-			isReduceOnActive: isReduceOnActive,
 			hotKey: hotkey);
 
 		self.RoleAbilityInit();

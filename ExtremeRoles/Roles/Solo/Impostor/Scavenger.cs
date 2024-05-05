@@ -116,8 +116,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					"",
 					Loader.CreateSpriteFromResources(Path.TestButton),
 					IRoleAbility.IsCommonUse,
-					handGunAbility,
-					isReduceOnActive: true)
+					handGunAbility)
 			},
 			{
 				Ability.SniperRifle,
@@ -125,8 +124,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					"",
 					Loader.CreateSpriteFromResources(Path.TestButton),
 					IRoleAbility.IsCommonUse,
-					sniperRifleAbility,
-					isReduceOnActive: true)
+					sniperRifleAbility)
 			},
 			{
 				Ability.BeamRifle,
@@ -134,8 +132,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					"",
 					Loader.CreateSpriteFromResources(Path.TestButton),
 					IRoleAbility.IsCommonUse,
-					beamRifleAbility,
-					isReduceOnActive: true)
+					beamRifleAbility)
 			}
 		};
 	}

@@ -12,8 +12,6 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 {
 	public int AbilityCount { get; private set; }
 
-	private bool isReduceOnActive;
-
 	private bool isUpdate = false;
 	private readonly Func<bool> ability;
 	private readonly Func<bool> canUse;
@@ -28,12 +26,10 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 		Func<bool> canUse,
 		Func<bool> ability,
 		Action? abilityOff = null,
-		Action? forceAbilityOff = null,
-		bool isReduceOnActive = false) : base(text, img)
+		Action? forceAbilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
 		this.canUse = canUse;
-		this.isReduceOnActive = isReduceOnActive;
 
 		this.abilityOff = abilityOff;
 		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
@@ -52,10 +48,6 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 
 	public override void AbilityOff()
 	{
-		if (!isReduceOnActive)
-		{
-			reduceAbilityCount();
-		}
 		abilityOff?.Invoke();
 	}
 
@@ -84,10 +76,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 			return false;
 		}
 
-		if (isReduceOnActive)
-		{
-			reduceAbilityCount();
-		}
+		ReduceAbilityCount();
 
 		newState = AbilityState.CoolDown;
 
@@ -96,11 +85,6 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 
 	public override AbilityState Update(AbilityState curState)
 	{
-		if (curState == AbilityState.Activating)
-		{
-			return curState;
-		}
-
 		if (isUpdate)
 		{
 			isUpdate = false;
@@ -123,7 +107,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 		buttonTextFormat = newTextFormat;
 	}
 
-	private void reduceAbilityCount()
+	protected void ReduceAbilityCount()
 	{
 		--AbilityCount;
 		if (abilityCountText != null)

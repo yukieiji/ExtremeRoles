@@ -40,7 +40,6 @@ public static class RoleAbilityFactory
 		Func<bool> ability,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
-		bool isReduceOnActive = false,
 		KeyCode hotKey = KeyCode.F)
 	{
 		return new ExtremeAbilityButton(
@@ -50,8 +49,7 @@ public static class RoleAbilityFactory
 				canUse: canUse,
 				ability: ability,
 				abilityOff: abilityOff,
-				forceAbilityOff: forceAbilityOff,
-				isReduceOnActive: isReduceOnActive),
+				forceAbilityOff: forceAbilityOff),
 			new RoleButtonActivator(),
 			hotKey
 		);
