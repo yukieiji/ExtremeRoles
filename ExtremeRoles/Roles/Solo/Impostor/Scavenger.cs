@@ -7,6 +7,7 @@ using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using UnityEngine;
+using System.Linq;
 
 #nullable enable
 
@@ -27,7 +28,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
-	public enum Ability
+	public enum Option
+	{
+		InitAbility
+	}
+
+	public enum Ability : byte
 	{
 		// 何もないよ
 		Null,
@@ -91,7 +97,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	protected override void CreateSpecificOption(IOptionInfo parentOps)
 	{
-		throw new NotImplementedException();
+		CreateSelectionOption(
+			Option.InitAbility,
+			Enum.GetValues<Ability>()
+				.Select(x => x.ToString())
+				.ToArray(),
+			parentOps);
 	}
 
 	protected override void RoleSpecificInit()
@@ -128,6 +139,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 		};
 	}
+
 	private bool handGunAbility()
 	{
 		return true;
