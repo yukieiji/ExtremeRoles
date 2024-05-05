@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Text;
@@ -16,7 +13,7 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 
 using ExtremeSkins.Core;
-using ExtremeSkins.Core.ExtremeHats;
+using ExtremeSkins.Core.ExtremeNamePlate;
 using ExtremeSkins.Module;
 
 namespace ExtremeSkins.SkinLoader;
@@ -150,44 +147,9 @@ public sealed class NamePlateLoader : ISkinLoader
 
 	private static async Task getJsonData(string fileName)
 	{
-		try
-		{
-			HttpClient http = new HttpClient();
-			http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
-			var response = await http.GetAsync(
-				new System.Uri($"{repo}/namePlate/{fileName}"),
-				HttpCompletionOption.ResponseContentRead);
-			if (response.StatusCode != HttpStatusCode.OK)
-			{
-				ExtremeSkinsPlugin.Logger.LogInfo($"Can't load json");
-			}
-			if (response.Content == null)
-			{
-				ExtremeSkinsPlugin.Logger.LogInfo(
-					$"Server returned no data: {response.StatusCode}");
-				return;
-			}
-
-			string? ausFolder = Path.GetDirectoryName(Application.dataPath);
-			if (string.IsNullOrEmpty(ausFolder))
-			{
-				return;
-			}
-
-			using (var responseStream = await response.Content.ReadAsStreamAsync())
-			{
-				using (var fileStream = File.Create(
-					Path.Combine(ausFolder, DataStructure.FolderName, fileName)))
-				{
-					responseStream.CopyTo(fileStream);
-				}
-			}
-		}
-		catch (System.Exception e)
-		{
-			ExtremeSkinsPlugin.Logger.LogInfo(
-				$"Unable to fetch hats from repo: {repo}\n{e.Message}");
-		}
+		await ISkinLoader.getData(
+			$"{repo}/namePlate/{fileName}",
+			Path.Combine(DataStructure.FolderName, fileName));
 	}
 
 	private static void cleanUpCurSkinData(
@@ -199,15 +161,15 @@ public sealed class NamePlateLoader : ISkinLoader
 
 		getJsonData(namePlateRepoData).GetAwaiter().GetResult();
 
-		byte[] byteVisorArray = File.ReadAllBytes(
+		byte[] byteNpArray = File.ReadAllBytes(
 			Path.Combine(dataSaveFolder, namePlateRepoData));
-		string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
+		string npJsonString = Encoding.UTF8.GetString(byteNpArray);
 
-		JObject visorFolder = JObject.Parse(visorJsonString);
+		JObject npFolder = JObject.Parse(npJsonString);
 
-		for (int i = 0; i < visorFolder.Count; ++i)
+		for (int i = 0; i < npFolder.Count; ++i)
 		{
-			JProperty? token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
+			JProperty? token = npFolder.ChildrenTokens[i].TryCast<JProperty>();
 			if (token == null) { continue; }
 
 			string author = token.Name;
@@ -216,18 +178,18 @@ public sealed class NamePlateLoader : ISkinLoader
 				author == namePlateRepoData ||
 				author == namePlateTransData) { continue; }
 
-			string checkVisorFolder = string.Concat(dataSaveFolder, author);
+			string checkNpFolder = string.Concat(dataSaveFolder, author);
 
 			// まずはフォルダとファイルを消す
-			if (Directory.Exists(checkVisorFolder))
+			if (Directory.Exists(checkNpFolder))
 			{
-				string[] filePaths = Directory.GetFiles(checkVisorFolder);
+				string[] filePaths = Directory.GetFiles(checkNpFolder);
 				foreach (string filePath in filePaths)
 				{
 					File.SetAttributes(filePath, FileAttributes.Normal);
 					File.Delete(filePath);
 				}
-				Directory.Delete(checkVisorFolder, false); ;
+				Directory.Delete(checkNpFolder, false); ;
 			}
 		}
 	}
@@ -286,7 +248,7 @@ public sealed class NamePlateLoader : ISkinLoader
 		byte[] byteNamePlateArray = File.ReadAllBytes(
 			Path.Combine(installFolder, namePlateRepoData));
 
-		string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
+		string namePlateJsonString = Encoding.UTF8.GetString(byteNamePlateArray);
 		JObject namePlateFolder = JObject.Parse(namePlateJsonString);
 
 		for (int i = 0; i < namePlateFolder.Count; ++i)

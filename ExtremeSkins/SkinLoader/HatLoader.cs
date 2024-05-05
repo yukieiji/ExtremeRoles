@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Text;
@@ -231,46 +228,9 @@ public sealed class HatLoader : ISkinLoader
 
 	private static async Task getJsonData(string fileName)
 	{
-		try
-		{
-			string? auPath = Path.GetDirectoryName(Application.dataPath);
-
-			if (string.IsNullOrEmpty(auPath)) { return; }
-
-			HttpClient http = new HttpClient();
-			http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
-			{
-				NoCache = true
-			};
-
-			var response = await http.GetAsync(
-				new System.Uri($"{repo}/{hatDataFolderPath}/{fileName}"),
-				HttpCompletionOption.ResponseContentRead);
-			if (response.StatusCode != HttpStatusCode.OK)
-			{
-				ExtremeSkinsPlugin.Logger.LogInfo($"Can't load json");
-			}
-			if (response.Content == null)
-			{
-				ExtremeSkinsPlugin.Logger.LogInfo(
-					$"Server returned no data: {response.StatusCode}");
-				return;
-			}
-
-			using (var responseStream = await response.Content.ReadAsStreamAsync())
-			{
-				using (var fileStream = File.Create(
-					Path.Combine(auPath, DataStructure.FolderName, fileName)))
-				{
-					responseStream.CopyTo(fileStream);
-				}
-			}
-		}
-		catch (System.Exception e)
-		{
-			ExtremeSkinsPlugin.Logger.LogInfo(
-				$"Unable to fetch hats from repo: {repo}\n{e.Message}");
-		}
+		await ISkinLoader.getData(
+			$"{repo}/{hatDataFolderPath}/{fileName}",
+			Path.Combine(DataStructure.FolderName, fileName));
 	}
 
 	private bool isUpdate()
