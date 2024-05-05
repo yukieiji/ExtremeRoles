@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeSkins.Core.API;
+using ExtremeSkins.SkinLoader;
 using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler;
@@ -21,7 +22,7 @@ public sealed class GetStatusHandler : IRequestHandler
 
 		ModuleStatus excStatus = ModuleStatus.Arrive;
 #if WITHHAT
-		ModuleStatus exhStatus = ExtremeHatManager.HatData.Count == 0 ? ModuleStatus.NoData : ModuleStatus.Arrive;
+		ModuleStatus exhStatus = SkinContainer<CustomHat>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
 #else
 		ModuleStatus exhStatus = ModuleStatus.NotLoad;
 #endif

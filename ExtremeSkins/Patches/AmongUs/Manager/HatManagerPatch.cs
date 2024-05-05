@@ -5,6 +5,7 @@ using HarmonyLib;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.SkinManager;
+using ExtremeSkins.SkinLoader;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
@@ -17,7 +18,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 			try
 			{
 				List<HatData> hatData = __instance.allHats.ToList();
-				foreach (CustomHat hat in ExtremeHatManager.HatData.Values)
+				foreach (CustomHat hat in SkinContainer<CustomHat>.GetValues())
 				{
 					hatData.Add(hat.Data);
 				}

@@ -12,6 +12,7 @@ using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
+using ExtremeSkins.SkinLoader;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
@@ -49,7 +50,7 @@ public sealed class PutHatHandler : IRequestHandler
 
 		string id = customHat.Id;
 
-		if (!ExtremeHatManager.HatData.TryGetValue(id, out var hat))
+		if (!SkinContainer<CustomHat>.TryGet(id, out var hat))
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
@@ -65,7 +66,7 @@ public sealed class PutHatHandler : IRequestHandler
 			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetHat(HatData.EmptyId);
 		}
 
-		ExtremeHatManager.HatData[id] = customHat;
+		SkinContainer<CustomHat>.TryAdd(id, customHat);
 
 		List<HatData> hatData = hatMng.allHats.ToList();
 		hatData.RemoveAll(x => x.ProductId == id);

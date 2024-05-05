@@ -13,6 +13,8 @@ using ExtremeSkins.Module.ApiHandler;
 using ExtremeSkins.Module.ApiHandler.ExtremeHat;
 using ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 using ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
+using ExtremeSkins.SkinLoader;
+using ExtremeSkins.Module;
 
 namespace ExtremeSkins;
 
@@ -47,7 +49,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
         Instance = this;
 
 #if WITHHAT
-        ExtremeHatManager.Initialize();
+	 	ExtremeSkinLoader.Instance.AddLoader<CustomHat, HatLoader>();
 #endif
 #if WITHNAMEPLATE
         ExtremeNamePlateManager.Initialize();

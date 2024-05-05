@@ -15,6 +15,8 @@ using AmongUs.Data;
 using AmongUs.Data.Player;
 
 using ExRLoader = ExtremeRoles.Resources.Loader;
+using ExtremeSkins.SkinLoader;
+
 
 #nullable enable
 
@@ -70,9 +72,9 @@ public static class HatsTabPatch
 
         foreach (HatData hatBehaviour in unlockedHats)
         {
-            if (ExtremeHatManager.HatData.TryGetValue(
-				hatBehaviour.ProductId, out CustomHat? hat) &&
-				hat != null)
+            if (SkinContainer<CustomHat>.TryGet(
+					hatBehaviour.ProductId, out CustomHat? hat) &&
+					hat != null)
             {
                 if (!hatPackage.ContainsKey(hat.Author))
                 {

@@ -10,7 +10,7 @@ public static class LanguageSetterPatch
     public static void Postfix()
     {
 #if WITHHAT
-        ExtremeHatManager.UpdateTranslation();
+        // ExtremeHatManager.UpdateTranslation();
 #endif
 #if WITHNAMEPLATE
         ExtremeNamePlateManager.UpdateTranslation();

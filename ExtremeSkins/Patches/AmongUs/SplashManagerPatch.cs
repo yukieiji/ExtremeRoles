@@ -7,6 +7,8 @@ using HarmonyLib;
 using ExtremeSkins.SkinManager;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeSkins.SkinLoader;
+using ExtremeSkins.Module;
 
 namespace ExtremeSkins.Patches.AmongUs;
 
@@ -23,13 +25,6 @@ public static class SplashManagerStartPatch
         List<IEnumerator> dlTask = new List<IEnumerator>();
 
 #if WITHHAT
-        if (!ExtremeHatManager.IsLoaded)
-        {
-            if (!creatorMode && ExtremeHatManager.IsUpdate())
-            {
-                dlTask.Add(ExtremeHatManager.InstallData());
-            }
-        }
 #endif
 #if WITHNAMEPLATE
         if (!ExtremeNamePlateManager.IsLoaded)
@@ -57,6 +52,8 @@ public static class SplashManagerStartPatch
     {
         SplashManagerUpdatePatch.SetSkinLoadMode(true);
 
+		yield return ExtremeSkinLoader.Instance.Fetch();
+
         foreach (IEnumerator task in dlTask)
         {
             yield return task;
@@ -64,10 +61,8 @@ public static class SplashManagerStartPatch
 
         ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ Skin Load Start!! ------------------------------");
 #if WITHHAT
-        if (!ExtremeHatManager.IsLoaded)
-        {
-            ExtremeHatManager.Load();
-        }
+		new SkinContainer<CustomHat>(
+			ExtremeSkinLoader.Instance.Load<CustomHat>());
 #endif
 #if WITHNAMEPLATE
         if (!ExtremeNamePlateManager.IsLoaded)

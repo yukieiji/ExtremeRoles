@@ -5,6 +5,7 @@ using System.Net;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeSkins.Core.API;
+using ExtremeSkins.SkinLoader;
 using ExtremeSkins.SkinManager;
 
 
@@ -20,7 +21,7 @@ public sealed class GetHatHandler : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 
-		var curData = ExtremeHatManager.HatData.Values.Select(
+		var curData = SkinContainer<CustomHat>.GetValues().Select(
 			x => new ExportData(x.Id, x.Name, x.Author)).ToArray();
 
 		IRequestHandler.Write(response, curData);
