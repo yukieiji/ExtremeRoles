@@ -9,13 +9,11 @@ using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
-using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
 
 using ExRLoader = ExtremeRoles.Resources.Loader;
-using ExtremeSkins.SkinLoader;
 
 
 #nullable enable
@@ -72,7 +70,7 @@ public static class HatsTabPatch
 
         foreach (HatData hatBehaviour in unlockedHats)
         {
-            if (SkinContainer<CustomHat>.TryGet(
+            if (CosmicStorage<CustomHat>.TryGet(
 					hatBehaviour.ProductId, out CustomHat? hat) &&
 					hat != null)
             {

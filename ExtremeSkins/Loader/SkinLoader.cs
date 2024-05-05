@@ -12,9 +12,9 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 
-namespace ExtremeSkins.SkinLoader;
+namespace ExtremeSkins.Loader;
 
-public interface ISkinLoader
+public interface ICosmicLoader
 {
 	public IReadOnlyDictionary<string, T> Load<T>() where T : class;
 	public IEnumerator Fetch();
@@ -65,11 +65,11 @@ public interface ISkinLoader
 	}
 }
 
-public sealed class ExtremeSkinLoader : NullableSingleton<ExtremeSkinLoader>
+public sealed class ExtremeCosmicLoader : NullableSingleton<ExtremeCosmicLoader>
 {
-	private readonly Dictionary<Type, ISkinLoader> loader = new Dictionary<Type, ISkinLoader>();
+	private readonly Dictionary<Type, ICosmicLoader> loader = new Dictionary<Type, ICosmicLoader>();
 
-	public void AddLoader<C, T>() where T : ISkinLoader, new()
+	public void AddLoader<C, T>() where T : ICosmicLoader, new()
 	{
 		this.loader.Add(typeof(C), new T());
 	}

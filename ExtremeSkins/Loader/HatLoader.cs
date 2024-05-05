@@ -18,9 +18,9 @@ using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins.SkinLoader;
+namespace ExtremeSkins.Loader;
 
-public sealed class HatLoader : ISkinLoader
+public sealed class HatLoader : ICosmicLoader
 {
 	private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
 	private const string skinDlUrl = "https://github.com/yukieiji/ExtremeHats/archive/refs/heads/main.zip";
@@ -228,7 +228,7 @@ public sealed class HatLoader : ISkinLoader
 
 	private static async Task getJsonData(string fileName)
 	{
-		await ISkinLoader.getData(
+		await ICosmicLoader.getData(
 			$"{repo}/{hatDataFolderPath}/{fileName}",
 			Path.Combine(DataStructure.FolderName, fileName));
 	}

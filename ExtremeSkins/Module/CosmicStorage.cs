@@ -3,10 +3,10 @@ using System.Collections.Immutable;
 
 namespace ExtremeSkins.Module;
 
-public sealed class SkinContainer<T>
+public sealed class CosmicStorage<T>
 {
 	public static bool IsEmpty => instance is null || instance.data.IsEmpty;
-	public static IEnumerable<T> GetValues()
+	public static IEnumerable<T> GetAll()
 	{
 		if (instance is null) { yield break; }
 		foreach (var item in instance.data.Values)
@@ -22,7 +22,7 @@ public sealed class SkinContainer<T>
 			return false;
 		}
 		var newData = instance.data.SetItem(key, data);
-		new SkinContainer<T>(newData);
+		new CosmicStorage<T>(newData);
 		return true;
 	}
 
@@ -36,10 +36,10 @@ public sealed class SkinContainer<T>
 		return instance.data.TryGetValue(key, out data);
 	}
 
-	private static SkinContainer<T>? instance;
+	private static CosmicStorage<T>? instance;
 	private readonly ImmutableSortedDictionary<string, T> data;
 
-	public SkinContainer(in IReadOnlyDictionary<string, T> dict)
+	public CosmicStorage(in IReadOnlyDictionary<string, T> dict)
 	{
 		instance = this;
 		this.data = dict.ToImmutableSortedDictionary();

@@ -1,6 +1,4 @@
-﻿using System;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 using Innersloth.Assets;
 
 using UnityEngine;
@@ -8,7 +6,6 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Performance;
 using ExtremeSkins.Module;
-using ExtremeSkins.SkinManager;
 
 using Enumerator = System.Collections.IEnumerator;
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
@@ -27,7 +24,7 @@ public static class VisorPatch
 		[HarmonyArgument(0)] VisorData data,
 		[HarmonyArgument(1)] int color)
 	{
-		if (SkinContainer<CustomVisor>.TryGet(data.ProductId, out var visor) &&
+		if (CosmicStorage<CustomVisor>.TryGet(data.ProductId, out var visor) &&
 			visor != null)
 		{
 			__instance.visorData = data;
@@ -50,7 +47,7 @@ public static class VisorPatch
 		[HarmonyArgument(0)] Il2CppSystem.Action<Sprite, AddressableAsset> onLoaded,
 		ref Il2CppEnumerator __result)
 	{
-		if (SkinContainer<CustomVisor>.TryGet(__instance.ProductId, out var value) &&
+		if (CosmicStorage<CustomVisor>.TryGet(__instance.ProductId, out var value) &&
 			value != null)
 		{
 			__result = patchedCoLoadIcon(onLoaded, value).WrapToIl2Cpp();
@@ -76,7 +73,7 @@ public static class VisorPatch
 
 		AddressableAsset<VisorViewData>? asset;
 
-		if (SkinContainer<CustomVisor>.TryGet(visorId, out var visor) && visor != null)
+		if (CosmicStorage<CustomVisor>.TryGet(visorId, out var visor) && visor != null)
 		{
 			asset = VisorAddressableAsset.CreateAsset(visor);
 		}

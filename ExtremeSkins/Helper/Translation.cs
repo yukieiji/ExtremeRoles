@@ -14,8 +14,8 @@ namespace ExtremeSkins.Helper;
 
 public static class Translation
 {
-    private static Dictionary<string, Dictionary<SupportedLangs, string>> stringData =
-        new Dictionary<string, Dictionary<SupportedLangs, string>>();
+    private static readonly Dictionary<string, Dictionary<SupportedLangs, string>> stringData =new ();
+	private static readonly Dictionary<StringNames, string> colorKey = new ();
 
     private const SupportedLangs defaultLanguage = SupportedLangs.Japanese;
     private const string dataPath = "ExtremeSkins.Resources.LangData.stringData.json";
@@ -71,11 +71,17 @@ public static class Translation
 		}
     }
 
+	public static string GetString(StringNames stringName)
+	{
+		return GetString(colorKey[stringName]);
+	}
+
     public static void AddKeyTransdata(
         string key, Dictionary<SupportedLangs, string> newData)
     {
         stringData[key] = newData;
     }
+
 	public static void AddTransData(string key, string newData)
 	{
 		if (string.IsNullOrEmpty(key) ||
@@ -88,6 +94,11 @@ public static class Translation
 		{
 			{ DataManager.Settings.Language.CurrentLanguage, newData }
 		};
+	}
+
+	internal static void AddColorText(StringNames stringName, string text)
+	{
+		colorKey[stringName] = text;
 	}
 
     private static void addJsonToTransData(JObject parsed)

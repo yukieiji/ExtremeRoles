@@ -16,9 +16,9 @@ using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeNamePlate;
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins.SkinLoader;
+namespace ExtremeSkins.Loader;
 
-public sealed class NamePlateLoader : ISkinLoader
+public sealed class NamePlateLoader : ICosmicLoader
 {
 	private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeNamePlate/main"; // When using this repository with Fork, please follow the license of each hat
 	private const string skinDlUrl = "https://github.com/yukieiji/ExtremeNamePlate/archive/refs/heads/main.zip";
@@ -147,7 +147,7 @@ public sealed class NamePlateLoader : ISkinLoader
 
 	private static async Task getJsonData(string fileName)
 	{
-		await ISkinLoader.getData(
+		await ICosmicLoader.getData(
 			$"{repo}/namePlate/{fileName}",
 			Path.Combine(DataStructure.FolderName, fileName));
 	}

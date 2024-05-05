@@ -11,7 +11,7 @@ public static class LanguageSetterPatch
     public static void Postfix()
     {
 #if WITHHAT
-		foreach (var hat in SkinContainer<CustomHat>.GetValues())
+		foreach (var hat in CosmicStorage<CustomHat>.GetAll())
 		{
 			if (hat.Data == null)
 			{
@@ -21,7 +21,7 @@ public static class LanguageSetterPatch
 		}
 #endif
 #if WITHNAMEPLATE
-		foreach (var np in SkinContainer<CustomNamePlate>.GetValues())
+		foreach (var np in CosmicStorage<CustomNamePlate>.GetAll())
 		{
 			if (np.Data == null)
 			{
@@ -32,7 +32,7 @@ public static class LanguageSetterPatch
 
 #endif
 #if WITHVISOR
-		foreach (var vi in SkinContainer<CustomVisor>.GetValues())
+		foreach (var vi in CosmicStorage<CustomVisor>.GetAll())
 		{
 			if (vi.Data == null)
 			{

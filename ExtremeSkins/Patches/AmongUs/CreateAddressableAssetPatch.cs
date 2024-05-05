@@ -1,5 +1,4 @@
 ﻿using ExtremeSkins.Module;
-using ExtremeSkins.SkinManager;
 
 using Innersloth.Assets;
 
@@ -48,7 +47,7 @@ public static class CreateAddressableAssetPatch
 	[HarmonyPatch(typeof(NamePlateData), nameof(NamePlateData.CreateAddressableAsset))]
 	public static bool NamePlatePrefix(NamePlateData __instance, ref AddressableAsset<NamePlateViewData> __result)
 	{
-		if (SkinContainer<CustomNamePlate>.TryGet(__instance.ProductId, out var value) &&
+		if (CosmicStorage<CustomNamePlate>.TryGet(__instance.ProductId, out var value) &&
 			value != null)
 		{
 			var asset = new NamePlateAddressableAsset();

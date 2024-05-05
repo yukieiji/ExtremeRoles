@@ -16,7 +16,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 			try
 			{
 				List<HatData> hatData = __instance.allHats.ToList();
-				foreach (CustomHat hat in SkinContainer<CustomHat>.GetValues())
+				foreach (CustomHat hat in CosmicStorage<CustomHat>.GetAll())
 				{
 					hatData.Add(hat.Data);
 				}
@@ -32,7 +32,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             try
             {
                 List<NamePlateData> npData = __instance.allNamePlates.ToList();
-                foreach (CustomNamePlate np in SkinContainer<CustomNamePlate>.GetValues())
+                foreach (CustomNamePlate np in CosmicStorage<CustomNamePlate>.GetAll())
                 {
                     npData.Add(np.GetData());
                 }
@@ -48,7 +48,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             try
             {
                 List<VisorData> visorData = __instance.allVisors.ToList();
-                foreach (CustomVisor vi in SkinContainer<CustomVisor>.GetValues())
+                foreach (CustomVisor vi in CosmicStorage<CustomVisor>.GetAll())
                 {
                     visorData.Add(vi.Data);
                 }

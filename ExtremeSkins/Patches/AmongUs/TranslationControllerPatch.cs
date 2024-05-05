@@ -2,8 +2,6 @@
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
-using ExtremeSkins.SkinManager;
-
 namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(
@@ -19,8 +17,7 @@ namespace ExtremeSkins.Patches.AmongUs
         {
             if ((int)name >= 50000)
             {
-                __result = Helper.Translation.GetString(
-                    ExtremeColorManager.LangData[name]);
+                __result = Helper.Translation.GetString(name);
                 return false;
             }
             return true;

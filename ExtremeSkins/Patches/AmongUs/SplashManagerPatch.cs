@@ -1,15 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using HarmonyLib;
 
-using ExtremeSkins.SkinManager;
-
 using BepInEx.Unity.IL2CPP.Utils;
-using ExtremeSkins.SkinLoader;
+using ExtremeSkins.Loader;
 using ExtremeSkins.Module;
-using ExtremeSkins.Core;
 
 namespace ExtremeSkins.Patches.AmongUs;
 
@@ -29,22 +24,25 @@ public static class SplashManagerStartPatch
 
 		if (!CreatorModeManager.Instance.IsEnable)
 		{
-			yield return ExtremeSkinLoader.Instance.Fetch();
+			yield return ExtremeCosmicLoader.Instance.Fetch();
 		}
 
         ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ Skin Load Start!! ------------------------------");
 #if WITHHAT
-		new SkinContainer<CustomHat>(
-			ExtremeSkinLoader.Instance.Load<CustomHat>());
+		new CosmicStorage<CustomHat>(
+			ExtremeCosmicLoader.Instance.Load<CustomHat>());
 #endif
 #if WITHNAMEPLATE
-		new SkinContainer<CustomNamePlate>(
-			ExtremeSkinLoader.Instance.Load<CustomNamePlate>());
+		new CosmicStorage<CustomNamePlate>(
+			ExtremeCosmicLoader.Instance.Load<CustomNamePlate>());
 #endif
 #if WITHVISOR
-		new SkinContainer<CustomVisor>(
-			ExtremeSkinLoader.Instance.Load<CustomVisor>());
+		new CosmicStorage<CustomVisor>(
+			ExtremeCosmicLoader.Instance.Load<CustomVisor>());
 #endif
+		// 使わないので消す
+		ExtremeCosmicLoader.TryDestroy();
+
 		ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
         SplashManagerUpdatePatch.SetSkinLoadMode(false);
     }

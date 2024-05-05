@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
-using System.Text.Json.Serialization;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeSkins.Core.API;
-using ExtremeSkins.SkinLoader;
-using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler;
 
@@ -22,17 +18,17 @@ public sealed class GetStatusHandler : IRequestHandler
 
 		ModuleStatus excStatus = ModuleStatus.Arrive;
 #if WITHHAT
-		ModuleStatus exhStatus = SkinContainer<CustomHat>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
+		ModuleStatus exhStatus = CosmicStorage<CustomHat>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
 #else
 		ModuleStatus exhStatus = ModuleStatus.NotLoad;
 #endif
 #if WITHVISOR
-		ModuleStatus exvStatus = SkinContainer<CustomVisor>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
+		ModuleStatus exvStatus = CosmicStorage<CustomVisor>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
 #else
 		ModuleStatus exvStatus = ModuleStatus.NotLoad;
 #endif
 #if WITHNAMEPLATE
-		ModuleStatus exnStatus = SkinContainer<CustomNamePlate>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
+		ModuleStatus exnStatus = CosmicStorage<CustomNamePlate>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
 #else
 		ModuleStatus exnStatus = ModuleStatus.NotLoad;
 #endif

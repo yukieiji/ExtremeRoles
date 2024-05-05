@@ -1,7 +1,7 @@
 ﻿using Hazel;
 using HarmonyLib;
 
-using ExtremeSkins.SkinManager;
+using ExtremeSkins.Loader;
 
 namespace ExtremeSkins.Patches.AmongUs;
 
@@ -11,21 +11,21 @@ public static class PlayerControlCheckColorPatch
     public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
     {
         // Fix incorrect color assignment
-        uint color = (uint)bodyColor;
+        int color = bodyColor;
 
         if (isTaken(__instance, color) || color >= Palette.PlayerColors.Length)
         {
             int num = 0;
-            while (num++ < 50 && (color >= ExtremeColorManager.ColorNum || isTaken(__instance, color)))
+            while (num++ < 50 && (color >= CustomColorLoader.AllColorNum || isTaken(__instance, color)))
             {
-                color = (color + 1) % ExtremeColorManager.ColorNum;
+                color = (color + 1) % CustomColorLoader.AllColorNum;
             }
         }
         __instance.RpcSetColor((byte)color);
         return false;
     }
 
-    private static bool isTaken(PlayerControl player, uint color)
+    private static bool isTaken(PlayerControl player, int color)
     {
         foreach (GameData.PlayerInfo info in GameData.Instance.AllPlayers)
         {

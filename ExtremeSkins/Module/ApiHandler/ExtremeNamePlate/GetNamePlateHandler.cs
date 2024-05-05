@@ -4,7 +4,6 @@ using System.Net;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeSkins.Core.API;
-using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
@@ -19,7 +18,7 @@ public sealed class GetNamePlateHandler : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 
-		var curData = SkinContainer<CustomNamePlate>.GetValues().Select(
+		var curData = CosmicStorage<CustomNamePlate>.GetAll().Select(
 			x => new ExportData(x.Id, x.Name, x.Author));
 
 		IRequestHandler.Write(response, curData);

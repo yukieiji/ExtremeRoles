@@ -9,7 +9,6 @@ using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
-using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
@@ -68,7 +67,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
 			foreach (VisorData viData in unlockedVisor)
             {
-                if (SkinContainer<CustomVisor>.TryGet(
+                if (CosmicStorage<CustomVisor>.TryGet(
 						viData.ProductId, out var vi) &&
 					vi != null)
                 {

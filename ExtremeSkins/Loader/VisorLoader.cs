@@ -17,9 +17,9 @@ using ExtremeSkins.Core;
 using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins.SkinLoader;
+namespace ExtremeSkins.Loader;
 
-public sealed class VisorLoader : ISkinLoader
+public sealed class VisorLoader : ICosmicLoader
 {
 	private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeVisor/main"; // When using this repository with Fork, please follow the license of each hat
 	private const string skinDlUrl = "https://github.com/yukieiji/ExtremeVisor/archive/refs/heads/main.zip";
@@ -153,7 +153,7 @@ public sealed class VisorLoader : ISkinLoader
 
 	private static async Task getJsonData(string fileName)
 	{
-		await ISkinLoader.getData(
+		await ICosmicLoader.getData(
 			$"{repo}/{visorDataFolderPath}/{fileName}",
 			Path.Combine(DataStructure.FolderName, fileName));
 	}

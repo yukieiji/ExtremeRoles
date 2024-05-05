@@ -7,14 +7,12 @@ using HarmonyLib;
 
 using ExtremeRoles.Module;
 
-using ExtremeSkins.SkinManager;
-
+using ExtremeSkins.Loader;
+using ExtremeSkins.Module;
 using ExtremeSkins.Module.ApiHandler;
 using ExtremeSkins.Module.ApiHandler.ExtremeHat;
 using ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 using ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
-using ExtremeSkins.SkinLoader;
-using ExtremeSkins.Module;
 
 namespace ExtremeSkins;
 
@@ -49,18 +47,18 @@ public partial class ExtremeSkinsPlugin : BasePlugin
         Instance = this;
 
 #if WITHHAT
-	 	ExtremeSkinLoader.Instance.AddLoader<CustomHat, HatLoader>();
+		ExtremeCosmicLoader.Instance.AddLoader<CustomHat, HatLoader>();
 #endif
 #if WITHNAMEPLATE
-		ExtremeSkinLoader.Instance.AddLoader<CustomNamePlate, NamePlateLoader>();
+		ExtremeCosmicLoader.Instance.AddLoader<CustomNamePlate, NamePlateLoader>();
 #endif
 #if WITHVISOR
-		ExtremeSkinLoader.Instance.AddLoader<CustomVisor, VisorLoader>();
+		ExtremeCosmicLoader.Instance.AddLoader<CustomVisor, VisorLoader>();
 #endif
 
 		CreatorModeManager.Initialize();
 
-        ExtremeColorManager.Initialize();
+		CustomColorLoader.StaticLoad();
 
         VersionManager.PlayerVersion.Clear();
 

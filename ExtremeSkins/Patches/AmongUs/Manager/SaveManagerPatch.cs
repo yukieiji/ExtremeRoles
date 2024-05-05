@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
-using ExtremeSkins.SkinManager;
 
 using AmongUs.Data.Legacy;
+using ExtremeSkins.Loader;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
@@ -22,7 +22,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
         public static void Postfix()
         {
             if (!needsPatch) { return; }
-            LegacySaveManager.colorConfig %= ExtremeColorManager.ColorNum;
+            LegacySaveManager.colorConfig %= (uint)CustomColorLoader.AllColorNum;
             needsPatch = false;
         }
     }

@@ -10,7 +10,6 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
-using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
@@ -45,7 +44,7 @@ public sealed class PostNewVisorHandler : IRequestHandler
 		Translation.AddTransData(newVisor.AutherName, newVisor.TransedAutherName);
 		Translation.AddTransData(newVisor.SkinName  , newVisor.TransedSkinName);
 
-		if (SkinContainer<CustomVisor>.TryAdd(customVisor.Id, customVisor))
+		if (CosmicStorage<CustomVisor>.TryAdd(customVisor.Id, customVisor))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
 		}
