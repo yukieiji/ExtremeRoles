@@ -553,14 +553,13 @@ public static class ExtremeRoleManager
         {
             SetNewAnothorRole(playerId, addRole);
 
-            if (GameRole[playerId] is IRoleAbility multiAssignAbilityRole &&
-                CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+            if (TryGetRole(playerId, out var existRole) &&
+				existRole is IRoleAbility multiAssignAbilityRole &&
+                CachedPlayerControl.LocalPlayer.PlayerId == playerId &&
+				multiAssignAbilityRole.Button != null)
             {
-                if (multiAssignAbilityRole.Button != null)
-                {
-                    multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;
-                }
-            }
+				multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;
+			}
         }
         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
     }

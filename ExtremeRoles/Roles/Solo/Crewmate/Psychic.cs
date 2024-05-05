@@ -117,24 +117,23 @@ public sealed class Psychic :
 				if (player == null ||
 					player.IsDead ||
 					player.Disconnected ||
-					!ExtremeRoleManager.GameRole.TryGetValue(player.PlayerId, out var role) ||
-					role is null ||
-					!this.teamCount.TryGetValue(role.Team, out TeamCounter? counter) ||
+					!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+					!this.teamCount.TryGetValue(role!.Team, out TeamCounter? counter) ||
 					counter is null)
 				{
 					continue;
 				}
 
-				ExtremeRoleId id = role.Id;
+				ExtremeRoleId id = role!.Id;
 				if (role is MultiAssignRoleBase multiRole &&
 					multiRole.AnotherRole != null)
 				{
-					if (role.IsNeutral() &&
+					if (role!.IsNeutral() &&
 						multiRole.AnotherRole.Id == ExtremeRoleId.Servant)
 					{
 						id = ExtremeRoleId.Servant;
 					}
-					else if (role.IsVanillaRole())
+					else if (role!.IsVanillaRole())
 					{
 						id = multiRole.AnotherRole.Id;
 					}
