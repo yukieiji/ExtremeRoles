@@ -13,7 +13,7 @@ public static class LanguageSetterPatch
         // ExtremeHatManager.UpdateTranslation();
 #endif
 #if WITHNAMEPLATE
-        ExtremeNamePlateManager.UpdateTranslation();
+        // ExtremeNamePlateManager.UpdateTranslation();
 #endif
 #if WITHVISOR
         // ExtremeVisorManager.UpdateTranslation();

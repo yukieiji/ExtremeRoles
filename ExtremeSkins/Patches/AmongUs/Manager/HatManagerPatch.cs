@@ -4,8 +4,6 @@ using System.Linq;
 using HarmonyLib;
 
 using ExtremeSkins.Module;
-using ExtremeSkins.SkinManager;
-using ExtremeSkins.SkinLoader;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
@@ -34,7 +32,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             try
             {
                 List<NamePlateData> npData = __instance.allNamePlates.ToList();
-                foreach (CustomNamePlate np in ExtremeNamePlateManager.NamePlateData.Values)
+                foreach (CustomNamePlate np in SkinContainer<CustomNamePlate>.GetValues())
                 {
                     npData.Add(np.GetData());
                 }

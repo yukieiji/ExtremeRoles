@@ -73,7 +73,7 @@ public static class NameplatesTabPatch
 
 		foreach (NamePlateData npData in unlockedNamePlate)
         {
-            if (ExtremeNamePlateManager.NamePlateData.TryGetValue(
+            if (SkinContainer<CustomNamePlate>.TryGet(
 					npData.ProductId, out CustomNamePlate? np) &&
 				np != null)
             {

@@ -19,7 +19,7 @@ public sealed class GetNamePlateHandler : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 
-		var curData = ExtremeNamePlateManager.NamePlateData.Values.Select(
+		var curData = SkinContainer<CustomNamePlate>.GetValues().Select(
 			x => new ExportData(x.Id, x.Name, x.Author));
 
 		IRequestHandler.Write(response, curData);

@@ -23,7 +23,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.SkinLoader;
 
-public sealed class HatLoader : SkinLoader
+public sealed class HatLoader : ISkinLoader
 {
 	private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
 	private const string skinDlUrl = "https://github.com/yukieiji/ExtremeHats/archive/refs/heads/main.zip";
@@ -48,7 +48,7 @@ public sealed class HatLoader : SkinLoader
 			updateComitKey, "NoHashData");
 	}
 
-	public override IEnumerator Fetch()
+	public IEnumerator Fetch()
 	{
 		if (!this.isUpdate())
 		{
@@ -93,7 +93,7 @@ public sealed class HatLoader : SkinLoader
 #endif
 	}
 
-	public override IReadOnlyDictionary<string, T> Load<T>() where T : class
+	public IReadOnlyDictionary<string, T> Load<T>() where T : class
 	{
 		if (typeof(T) != typeof(CustomHat))
 		{

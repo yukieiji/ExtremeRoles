@@ -8,17 +8,17 @@ using ExtremeRoles.Module;
 
 namespace ExtremeSkins.SkinLoader;
 
-public abstract class SkinLoader
+public interface ISkinLoader
 {
-	public abstract IReadOnlyDictionary<string, T> Load<T>() where T : class;
-	public abstract IEnumerator Fetch();
+	public IReadOnlyDictionary<string, T> Load<T>() where T : class;
+	public IEnumerator Fetch();
 }
 
 public sealed class ExtremeSkinLoader : NullableSingleton<ExtremeSkinLoader>
 {
-	private readonly Dictionary<Type, SkinLoader> loader = new Dictionary<Type, SkinLoader>();
+	private readonly Dictionary<Type, ISkinLoader> loader = new Dictionary<Type, ISkinLoader>();
 
-	public void AddLoader<C, T>() where T : SkinLoader, new()
+	public void AddLoader<C, T>() where T : ISkinLoader, new()
 	{
 		this.loader.Add(typeof(C), new T());
 	}

@@ -39,7 +39,7 @@ public sealed class PutNamePlateHandler : IRequestHandler
 
 		string id = customNamePlate.Id;
 
-		if (!ExtremeNamePlateManager.NamePlateData.TryGetValue(id, out var np))
+		if (!SkinContainer<CustomNamePlate>.TryGet(id, out var np))
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
@@ -55,7 +55,7 @@ public sealed class PutNamePlateHandler : IRequestHandler
 			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetNamePlate(NamePlateData.EmptyId);
 		}
 
-		ExtremeNamePlateManager.NamePlateData[id] = customNamePlate;
+		SkinContainer<CustomNamePlate>.TryAdd(id, customNamePlate);
 
 		List<NamePlateData> namePlateData = hatMng.allNamePlates.ToList();
 		namePlateData.RemoveAll(x => x.ProductId == id);

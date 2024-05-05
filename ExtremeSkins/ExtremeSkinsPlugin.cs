@@ -52,7 +52,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 	 	ExtremeSkinLoader.Instance.AddLoader<CustomHat, HatLoader>();
 #endif
 #if WITHNAMEPLATE
-        ExtremeNamePlateManager.Initialize();
+		ExtremeSkinLoader.Instance.AddLoader<CustomNamePlate, NamePlateLoader>();
 #endif
 #if WITHVISOR
 		ExtremeSkinLoader.Instance.AddLoader<CustomVisor, VisorLoader>();

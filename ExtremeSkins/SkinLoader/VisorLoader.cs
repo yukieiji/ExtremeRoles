@@ -22,7 +22,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.SkinLoader;
 
-public sealed class VisorLoader : SkinLoader
+public sealed class VisorLoader : ISkinLoader
 {
 	private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeVisor/main"; // When using this repository with Fork, please follow the license of each hat
 	private const string skinDlUrl = "https://github.com/yukieiji/ExtremeVisor/archive/refs/heads/main.zip";
@@ -47,7 +47,7 @@ public sealed class VisorLoader : SkinLoader
 			updateComitKey, "NoHashData");
 	}
 
-	public override IEnumerator Fetch()
+	public IEnumerator Fetch()
 	{
 		if (!this.isUpdate())
 		{
@@ -90,7 +90,7 @@ public sealed class VisorLoader : SkinLoader
 #endif
 	}
 
-	public override IReadOnlyDictionary<string, T> Load<T>() where T : class
+	public IReadOnlyDictionary<string, T> Load<T>() where T : class
 	{
 		if (typeof(T) != typeof(CustomVisor))
 		{

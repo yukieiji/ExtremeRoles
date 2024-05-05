@@ -32,7 +32,7 @@ public sealed class GetStatusHandler : IRequestHandler
 		ModuleStatus exvStatus = ModuleStatus.NotLoad;
 #endif
 #if WITHNAMEPLATE
-		ModuleStatus exnStatus = ExtremeNamePlateManager.NamePlateData.Count == 0 ? ModuleStatus.NoData : ModuleStatus.Arrive;
+		ModuleStatus exnStatus = SkinContainer<CustomNamePlate>.IsEmpty ? ModuleStatus.NoData : ModuleStatus.Arrive;
 #else
 		ModuleStatus exnStatus = ModuleStatus.NotLoad;
 #endif

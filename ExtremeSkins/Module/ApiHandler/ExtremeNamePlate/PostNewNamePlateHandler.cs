@@ -37,7 +37,7 @@ public sealed class PostNewNamePlateHandler : IRequestHandler
 		Translation.AddTransData(customNamePlate.Author, newNamePate.TransedAutherName);
 		Translation.AddTransData(customNamePlate.Name  , newNamePate.TransedSkinName);
 
-		if (ExtremeNamePlateManager.NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
+		if (SkinContainer<CustomNamePlate>.TryAdd(customNamePlate.Id, customNamePlate))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"NamePlate Loaded :\n{customNamePlate}");
 		}
