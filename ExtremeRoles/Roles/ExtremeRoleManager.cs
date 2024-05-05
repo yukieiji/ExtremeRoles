@@ -207,7 +207,7 @@ public static class ExtremeRoleManager
 {
     public const int OptionOffsetPerRole = 75;
 
-    public static readonly HashSet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
+	public static readonly IReadOnlySet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Lover,
         ExtremeRoleId.Vigilante,
