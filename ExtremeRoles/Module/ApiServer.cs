@@ -30,8 +30,8 @@ public class ApiServer : IDisposable
 		}
 	}
 
-	private HttpListener listener;
-	private Thread listenerThread;
+	private readonly HttpListener listener;
+	private readonly Thread listenerThread;
 
 	private const int port = 57700;
 
@@ -50,11 +50,18 @@ public class ApiServer : IDisposable
 			this.listener.Prefixes.Add($"{Url}{key.Url}");
 		}
 		this.listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
-		this.listener.Start();
+		try
+		{
+			this.listener.Start();
+		}
+		catch
+		{
+			this.listener.Close();
+			throw;
+		}
 
 		this.listenerThread = new Thread(startListener);
 		this.listenerThread.Start();
-		this.listenerThread.IsBackground = true;
 	}
 
 	public static void Create()
