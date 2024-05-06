@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 using AmongUs.GameOptions;
@@ -16,6 +17,8 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles;
+
+#nullable enable
 
 public enum ExtremeRoleId : int
 {
@@ -205,7 +208,7 @@ public static class ExtremeRoleManager
 {
     public const int OptionOffsetPerRole = 75;
 
-    public static readonly HashSet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
+	public static readonly IReadOnlySet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Lover,
         ExtremeRoleId.Vigilante,
@@ -215,8 +218,8 @@ public static class ExtremeRoleManager
 		ExtremeRoleId.Hatter,
 	};
 
-    public static readonly Dictionary<
-        int, SingleRoleBase> NormalRole = new Dictionary<int, SingleRoleBase>()
+    public static readonly ImmutableDictionary<int, SingleRoleBase> NormalRole =
+		new Dictionary<int, SingleRoleBase>()
         {
             {(int)ExtremeRoleId.SpecialCrew , new SpecialCrew()},
             {(int)ExtremeRoleId.Sheriff     , new Sheriff()},
@@ -286,10 +289,10 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
-		};
+		}.ToImmutableDictionary();
 
-    public static readonly Dictionary<
-        byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()
+    public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
+		new Dictionary<byte, CombinationRoleManagerBase>()
         {
             {(byte)CombinationRoleType.Avalon         , new Avalon()},
             {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
@@ -304,12 +307,11 @@ public static class ExtremeRoleManager
 			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
 			{(byte)CombinationRoleType.Skater        , new SkaterManager()},
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
-        };
+        }.ToImmutableDictionary();
 
-    public static Dictionary<
-        byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
+    public static readonly Dictionary<byte, SingleRoleBase> GameRole = new();
 
-    public static readonly HashSet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
+    public static readonly IReadOnlySet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Jackal,
         ExtremeRoleId.Assassin,
@@ -387,21 +389,16 @@ public static class ExtremeRoleManager
     public static bool IsDisableWinCheckRole(SingleRoleBase role)
     {
         bool mainRoleCheckResult = WinCheckDisableRole.Contains(role.Id);
-        var multiAssignRole = role as MultiAssignRoleBase;
-        if (multiAssignRole == null)
+        if (role is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is not null)
         {
-            return mainRoleCheckResult;
-        }
+			return
+				mainRoleCheckResult ||
+				WinCheckDisableRole.Contains(multiAssignRole.AnotherRole.Id);
+		}
         else
         {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                return WinCheckDisableRole.Contains(multiAssignRole.AnotherRole.Id);
-            }
-            else
-            {
-                return mainRoleCheckResult;
-            }
+			return mainRoleCheckResult;
         }
     }
 	public static bool IsAliveWinNeutral(
@@ -414,7 +411,11 @@ public static class ExtremeRoleManager
 
     public static SingleRoleBase GetLocalPlayerRole()
     {
-        return GameRole[CachedPlayerControl.LocalPlayer.PlayerId];
+		if (!TryGetRole(CachedPlayerControl.LocalPlayer.PlayerId, out var role))
+		{
+			throw new ArgumentNullException("Local Role is Null!!!!!!!!!!");
+		}
+		return role!;
     }
 
     public static void SetPlayerIdToMultiRoleId(
@@ -435,33 +436,33 @@ public static class ExtremeRoleManager
                 break;
         }
 
-        var role = CombRole[combType].GetRole(
-                roleId, roleType);
+        var role = CombRole[combType].GetRole(roleId, roleType);
 
-        if (role != null)
-        {
+        if (role is null)
+		{
+			return;
+		}
 
-            SingleRoleBase addRole = role.Clone();
+		SingleRoleBase addRole = role.Clone();
 
-            if (addRole is IRoleAbility abilityRole &&
-                CachedPlayerControl.LocalPlayer.PlayerId == playerId)
-            {
-                Helper.Logging.Debug("Try Create Ability NOW!!!");
-                abilityRole.CreateAbility();
-            }
+		if (addRole is IRoleAbility abilityRole &&
+			CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+		{
+			Helper.Logging.Debug("Try Create Ability NOW!!!");
+			abilityRole.CreateAbility();
+		}
 
-            addRole.Initialize();
-            addRole.SetControlId(id);
+		addRole.Initialize();
+		addRole.SetControlId(id);
 
-            SetNewRole(playerId, addRole);
+		SetNewRole(playerId, addRole);
 
-            if (hasVanilaRole)
-            {
-                SetNewAnothorRole(playerId, new Solo.VanillaRoleWrapper(roleType));
-            }
-            Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
-        }
-    }
+		if (hasVanilaRole)
+		{
+			SetNewAnothorRole(playerId, new Solo.VanillaRoleWrapper(roleType));
+		}
+		Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
+	}
     public static void SetPlyerIdToSingleRoleId(
         int roleId, byte playerId, int controlId)
     {
@@ -552,100 +553,83 @@ public static class ExtremeRoleManager
         {
             SetNewAnothorRole(playerId, addRole);
 
-            if (GameRole[playerId] is IRoleAbility multiAssignAbilityRole &&
-                CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+            if (TryGetRole(playerId, out var existRole) &&
+				existRole is IRoleAbility multiAssignAbilityRole &&
+                CachedPlayerControl.LocalPlayer.PlayerId == playerId &&
+				multiAssignAbilityRole.Button != null)
             {
-                if (multiAssignAbilityRole.Button != null)
-                {
-                    multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;
-                }
-            }
+				multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;
+			}
         }
         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
     }
 
-    public static T GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
+// TryGet系列：ここでTrueの場合、取得した役職はNullではない！！！！
+	public static bool TryGetRole(byte playerId, out SingleRoleBase? role )
+		=> GameRole.TryGetValue(playerId, out role) && role is not null;
+
+	public static bool TryGetSafeCastedRole<T>(byte playerId, out T? role) where T : SingleRoleBase
+	{
+		role = null;
+		if (!TryGetRole(playerId, out var checkRole))
+		{
+			return false;
+		}
+		role = safeCast<T>(checkRole);
+		return role is not null;
+	}
+
+	public static T? GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
     {
-        var checRole = GameRole[playerId];
+        TryGetRole(playerId, out var checkRole);
+		return safeCast<T>(checkRole);
+	}
 
-        var role = checRole as T;
-
-        if (role != null)
-        {
-            return role;
-        }
-
-        var multiAssignRole = checRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            role = multiAssignRole.AnotherRole as T;
-
-            if (role != null)
-            {
-                return role;
-            }
-        }
-
-        return null;
-
-    }
-
-    public static T GetSafeCastedLocalPlayerRole<T>() where T : SingleRoleBase
+    public static T? GetSafeCastedLocalPlayerRole<T>() where T : SingleRoleBase
     {
         var checkRole = GetLocalPlayerRole();
-
-        var role = checkRole as T;
-
-        if (role != null)
-        {
-            return role;
-        }
-
-        var multiAssignRole = checkRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            role = multiAssignRole.AnotherRole as T;
-
-            if (role != null)
-            {
-                return role;
-            }
-        }
-
-        return null;
-
+        return safeCast<T>(checkRole);
     }
 
-    public static (T, T) GetInterfaceCastedLocalRole<T>() where T : class
+    public static (T?, T?) GetInterfaceCastedLocalRole<T>() where T : class
     {
-        SingleRoleBase checkRole = GameRole[CachedPlayerControl.LocalPlayer.PlayerId];
+		var checkRole = GetLocalPlayerRole();
+		return dualSafeCast<T>(checkRole);
+	}
 
-        T interfacedSingleRole = checkRole as T;
-        T interfacedMultiRole = null;
-
-        MultiAssignRoleBase multiAssignRole = checkRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            interfacedMultiRole = multiAssignRole.AnotherRole as T;
-        }
-
-        return (interfacedSingleRole, interfacedMultiRole);
-    }
-
-    public static (T, T) GetInterfaceCastedRole<T>(byte playerId) where T : class
+    public static (T?, T?) GetInterfaceCastedRole<T>(byte playerId) where T : class
     {
-        SingleRoleBase checkRole = GameRole[playerId];
+		TryGetRole(playerId, out var checkRole);
+		return dualSafeCast<T>(checkRole);
+	}
 
-        T interfacedSingleRole = checkRole as T;
-        T interfacedMultiRole = null;
 
-        MultiAssignRoleBase multiAssignRole = checkRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            interfacedMultiRole = multiAssignRole.AnotherRole as T;
-        }
+	private static T? safeCast<T>(in SingleRoleBase? checkRole) where T : SingleRoleBase
+	{
+		if (checkRole is T role)
+		{
+			return role;
+		}
 
-        return (interfacedSingleRole, interfacedMultiRole);
-    }
+		if (checkRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is T anotherRole)
+		{
+			return anotherRole;
+		}
 
+		return null;
+	}
+	private static (T?, T?) dualSafeCast<T>(in SingleRoleBase? checkRole) where T : class
+	{
+		T? interfacedSingleRole = checkRole as T;
+		T? interfacedMultiRole = null;
+
+		if (checkRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is T anotherRole)
+		{
+			interfacedMultiRole = anotherRole;
+		}
+
+		return (interfacedSingleRole, interfacedMultiRole);
+	}
 }

@@ -7,7 +7,6 @@ using System.Net;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
-using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
@@ -37,7 +36,7 @@ public sealed class PostNewNamePlateHandler : IRequestHandler
 		Translation.AddTransData(customNamePlate.Author, newNamePate.TransedAutherName);
 		Translation.AddTransData(customNamePlate.Name  , newNamePate.TransedSkinName);
 
-		if (ExtremeNamePlateManager.NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
+		if (CosmicStorage<CustomNamePlate>.TryAdd(customNamePlate.Id, customNamePlate))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"NamePlate Loaded :\n{customNamePlate}");
 		}

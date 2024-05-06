@@ -126,9 +126,9 @@ public sealed class Artist :
 		byte playerId = reader.ReadByte();
 		Ops ops = (Ops)reader.ReadByte();
 
-		Artist artist = ExtremeRoleManager.GetSafeCastedRole<Artist>(playerId);
+		Artist? artist = ExtremeRoleManager.GetSafeCastedRole<Artist>(playerId);
 		PlayerControl artistPlayer = Player.GetPlayerControlById(playerId);
-		if (artist == null || artistPlayer == null) { return; }
+		if (artist is null || artistPlayer == null) { return; }
 
 		switch (ops)
 		{

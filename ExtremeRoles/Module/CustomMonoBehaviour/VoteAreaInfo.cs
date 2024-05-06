@@ -152,9 +152,12 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 		resetInfo();
 
 		byte playerId = this.votePlayerInfo.PlayerId;
+		if (ExtremeRoleManager.TryGetRole(playerId, out SingleRoleBase targetRole))
+		{
+			return;
+		}
 
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-		SingleRoleBase targetRole = ExtremeRoleManager.GameRole[playerId];
 
 		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 		ExtremeGhostRoleManager.GameRole.TryGetValue(

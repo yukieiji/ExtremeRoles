@@ -19,6 +19,10 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
+using Assassin = ExtremeRoles.Roles.Combination.Assassin;
+using Translation = ExtremeRoles.Helper.Translation;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -111,7 +115,7 @@ public static class ExileControllerBeginePatch
 
         string transKey = state.IsAssassinateMarin ?
             "assassinateMarinSucsess" : "assassinateMarinFail";
-        string printStr = $"{player?.PlayerName}{Helper.Translation.GetString(transKey)}";
+        string printStr = $"{player?.PlayerName}{Translation.GetString(transKey)}";
 
         if (instance.Player)
         {
@@ -170,13 +174,13 @@ public static class ExileControllerBeginePatch
             switch (mode)
             {
                 case ConfirmExilMode.AllTeam:
-                    string team = Helper.Translation.GetString(exiledPlayerRole.Team.ToString());
+                    string team = Translation.GetString(exiledPlayerRole.Team.ToString());
                     completeString = isShowRole ?
                         string.Format(
-                            Helper.Translation.GetString("ExileTextAllTeamWithRole"),
+							Translation.GetString("ExileTextAllTeamWithRole"),
                             playerName, team, exiledPlayerRole.GetColoredRoleName()) :
                         string.Format(
-                            Helper.Translation.GetString("ExileTextAllTeam"),
+							Translation.GetString("ExileTextAllTeam"),
                             playerName, team);
                     break;
                 default:
@@ -222,17 +226,17 @@ public static class ExileControllerBeginePatch
                 new Il2CppObject[] { aliveImpNum }),
 
             ConfirmExilMode.Crewmate => string.Format(
-                Helper.Translation.GetString(
+				Translation.GetString(
                     aliveCrewNum == 1 ? "CrewmateRemainS" : "CrewmateRemainP"),
                 aliveCrewNum),
 
             ConfirmExilMode.Neutral => string.Format(
-                Helper.Translation.GetString(
+				Translation.GetString(
                     aliveNeutNum == 1 ?  "NeutralRemainS" : "NeutralRemainP"),
                 aliveNeutNum),
 
             ConfirmExilMode.AllTeam => string.Format(
-                Helper.Translation.GetString("AllTeamAlive"),
+				Translation.GetString("AllTeamAlive"),
                 aliveCrewNum, aliveImpNum, aliveNeutNum),
 
             _ => string.Empty
@@ -286,18 +290,27 @@ public static class ExileControllerBeginePatch
         switch (mode)
         {
             case ConfirmExilMode.Impostor:
-                modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsImpostor());
+                modeTeamAlive = allPlayer.Count(
+					(GameData.PlayerInfo p) =>
+						p != null &&
+						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
+						role!.IsImpostor());
                 isExiledSameMode = exiledPlayerRole.IsImpostor();
                 break;
             case ConfirmExilMode.Crewmate:
-                modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsCrewmate());
+                modeTeamAlive = allPlayer.Count(
+					(GameData.PlayerInfo p) =>
+						p != null &&
+						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
+						role!.IsCrewmate());
                 isExiledSameMode = exiledPlayerRole.IsCrewmate();
                 break;
             case ConfirmExilMode.Neutral:
-                modeTeamAlive = Enumerable.Count(
-                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsNeutral());
+                modeTeamAlive = allPlayer.Count(
+					(GameData.PlayerInfo p) =>
+						p != null &&
+						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
+						role!.IsNeutral());
                 isExiledSameMode = exiledPlayerRole.IsNeutral();
                 break;
             default:
@@ -316,19 +329,19 @@ public static class ExileControllerBeginePatch
             return
                 isShowRole ?
                 string.Format(
-                    Helper.Translation.GetString($"{transKey}WithRole"),
+                    Translation.GetString($"{transKey}WithRole"),
                     playerName,
                     exiledPlayerRole.GetColoredRoleName()
                 ) :
                 string.Format(
-                    Helper.Translation.GetString(transKey),
+                    Translation.GetString(transKey),
                     playerName
                 );
         }
     }
 
     private static void setExiledTarget(
-        ExileController instance, GameData.PlayerInfo player)
+        ExileController instance, GameData.PlayerInfo? player)
     {
         if (instance.specialInputHandler != null)
         {
@@ -396,7 +409,7 @@ public static class ExileControllerWrapUpPatch
         }
     }
 
-    public static void WrapUpPostfix(GameData.PlayerInfo exiled)
+    public static void WrapUpPostfix(GameData.PlayerInfo? exiled)
     {
         InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
@@ -405,11 +418,11 @@ public static class ExileControllerWrapUpPatch
 
         var state = ExtremeRolesPlugin.ShipState;
 
-        if (state.TryGetDeadAssasin(out byte playerId))
+        if (state.TryGetDeadAssasin(out byte playerId) &&
+			ExtremeRoleManager.TryGetSafeCastedRole(playerId, out Assassin? assasin))
         {
-            var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
-            assasin.ExiledAction(
-                Helper.Player.GetPlayerControlById(playerId));
+            assasin!.ExiledAction(
+				Helper.Player.GetPlayerControlById(playerId));
         }
 
 

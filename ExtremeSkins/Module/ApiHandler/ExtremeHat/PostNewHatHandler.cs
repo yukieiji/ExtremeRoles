@@ -10,8 +10,8 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeHats;
-using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
+using ExtremeSkins.Loader;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
@@ -46,7 +46,7 @@ public sealed class PostNewHatHandler : IRequestHandler
 		Translation.AddTransData(newHat.AutherName, newHat.TransedAutherName);
 		Translation.AddTransData(newHat.SkinName  , newHat.TransedSkinName);
 
-		if (ExtremeHatManager.HatData.TryAdd(customHat.Id, customHat))
+		if (CosmicStorage<CustomHat>.TryAdd(customHat.Id, customHat))
 		{
 			ExtremeSkinsPlugin.Logger.LogInfo($"Hat Loaded :\n{customHat}");
 		}

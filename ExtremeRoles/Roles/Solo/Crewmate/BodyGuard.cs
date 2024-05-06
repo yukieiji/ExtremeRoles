@@ -402,10 +402,10 @@ public sealed class BodyGuard :
         ExtremeRolesPlugin.ShipState.ReplaceDeadReason(
             targetBodyGuard, ExtremeShipStatus.PlayerStatus.Martyrdom);
 
-        BodyGuard bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
+        BodyGuard? bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
             targetBodyGuard);
 
-        if (bodyGuard == null ||
+        if (bodyGuard is null ||
             !bodyGuard.awakeMeetingReport) { return; }
 
         var prevTargetPlayer = Player.GetPlayerControlById(prevTargetPlayerId);
@@ -421,9 +421,9 @@ public sealed class BodyGuard :
 
     private static void awakeReportMeeting(byte bodyGuardPlayerId)
     {
-        BodyGuard bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
+        BodyGuard? bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
             bodyGuardPlayerId);
-        if (bodyGuard != null)
+        if (bodyGuard is not null)
         {
             bodyGuard.awakeMeetingReport = true;
         }

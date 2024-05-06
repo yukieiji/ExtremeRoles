@@ -514,8 +514,8 @@ public sealed class Queen :
 	private bool isNotSucideServant(byte playerId)
 		=>
 		!this.servantSucideWithQueenWhenHasKill &&
-		ExtremeRoleManager.GameRole.TryGetValue(playerId, out var servant) &&
-		servant.CanKill;
+		ExtremeRoleManager.TryGetRole(playerId, out var servant) &&
+		servant!.CanKill;
 }
 
 public sealed class Servant :
