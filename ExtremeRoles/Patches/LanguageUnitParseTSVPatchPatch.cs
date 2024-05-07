@@ -4,11 +4,9 @@ using HarmonyLib;
 
 using Il2CppSystem.Collections.Generic;
 
-using ExtremeRoles.Patches;
+using ExtremeRoles.Translation;
 
-using ExtremeVoiceEngine.Translation;
-
-namespace ExtremeVoiceEngine.Patches.ExtremeRoles;
+namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(LanguageUnitParseTSVPatch), nameof(LanguageUnitParseTSVPatch.Postfix))]
 public static class LanguageUnitParseTSVPatchPatch

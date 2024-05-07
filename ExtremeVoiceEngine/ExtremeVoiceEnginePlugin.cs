@@ -5,6 +5,7 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Translation;
 
 namespace ExtremeVoiceEngine;
 
@@ -40,6 +41,7 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
 
         AddComponent<VoiceEngine>();
 		AutoModInstaller.Instance.AddMod<ExRRepositoryInfo>();
+		TranslatorManager.AddTranslator(new Translator());
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
         this.assemblyName = assembly?.GetName().Name;
