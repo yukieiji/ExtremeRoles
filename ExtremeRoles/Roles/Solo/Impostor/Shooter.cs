@@ -566,7 +566,7 @@ public sealed class Shooter :
         if (this.chargeInfoText != null)
         {
             this.chargeInfoText.text = string.Format(
-                Helper.Translation.GetString("shooterChargeInfo"),
+                Translation.GetString("shooterChargeInfo"),
                 this.curShootNum, this.maxShootNum);
         }
     }

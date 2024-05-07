@@ -6,8 +6,6 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Resources;
 
-using Trans = ExtremeRoles.Helper.Translation;
-
 #nullable enable
 
 namespace ExtremeRoles.Compat.SafeBoot;
@@ -19,21 +17,12 @@ public static class SafeBootScheduler
 	{
 		harmony.UnpatchSelf();
 
-		try
-		{
-			Trans.Load();
-		}
-		catch (Exception ex)
-		{
-			ExtremeRolesPlugin.Logger.LogInfo($"Can't load transdata\nMessage:{ex.Message}");
-		}
-
 		Il2CppRegisterAttribute.RegistrationForTarget(
 			typeof(SimpleButton),
 			Type.EmptyTypes);
 
 		StatusTextShower.Instance.Add(
-			() => Trans.GetString("SafeBootMessage"));
+			() => Translation.GetString("SafeBootMessage"));
 
 		Loader.LoadCommonAsset();
 

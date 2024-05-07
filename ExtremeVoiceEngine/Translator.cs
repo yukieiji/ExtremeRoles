@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
-using ExtremeRoles.Translation;
+using ExtremeRoles.Module;
 
 namespace ExtremeVoiceEngine;
 

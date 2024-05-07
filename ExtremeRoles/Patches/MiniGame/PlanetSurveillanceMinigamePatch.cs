@@ -28,7 +28,7 @@ namespace ExtremeRoles.Patches.MiniGame
             __instance.Camera.transform.position = survCamera.transform.position + __instance.survCameras[
                 __instance.currentCamera].Offset;
             __instance.LocationName.text = (
-                (survCamera.NewName > StringNames.ExitButton) ? 
+                (survCamera.NewName > StringNames.ExitButton) ?
                     FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         survCamera.NewName, Array.Empty<Il2CppSystem.Object>()) : survCamera.CamName);
 
@@ -53,7 +53,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             __instance.isStatic = true;
             __instance.ViewPort.sharedMaterial = __instance.StaticMaterial;
-            __instance.SabText.text = Helper.Translation.GetString("youDonotUse");
+            __instance.SabText.text = Translation.GetString("youDonotUse");
             __instance.SabText.gameObject.SetActive(true);
 
             return false;

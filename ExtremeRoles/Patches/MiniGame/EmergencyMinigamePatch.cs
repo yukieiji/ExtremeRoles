@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             if (!Roles.ExtremeRoleManager.GetLocalPlayerRole().CanCallMeeting())
             {
-                __instance.StatusText.text = Helper.Translation.GetString("youDonotUse");
+                __instance.StatusText.text = Translation.GetString("youDonotUse");
                 __instance.NumberText.text = string.Empty;
                 __instance.ClosedLid.gameObject.SetActive(true);
                 __instance.OpenLid.gameObject.SetActive(false);
@@ -27,7 +27,7 @@ namespace ExtremeRoles.Patches.MiniGame
             // Handle max number of meetings
             if (__instance.state == 1)
             {
-                int localRemaining = 
+                int localRemaining =
                     CachedPlayerControl.LocalPlayer.PlayerControl.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
                     0, ExtremeGameModeManager.Instance.ShipOption.MaxMeetingCount -
@@ -36,14 +36,10 @@ namespace ExtremeRoles.Patches.MiniGame
 
                 __instance.StatusText.text = string.Concat(
                     "<size=100%>",
-                    string.Format(
-                        Helper.Translation.GetString("meetingStatus"),
-                        CachedPlayerControl.LocalPlayer.PlayerControl.name),
+                    Translation.GetString("meetingStatus", CachedPlayerControl.LocalPlayer.PlayerControl.name),
                     "</size>");
-                __instance.NumberText.text = string.Format(
-                    Helper.Translation.GetString("meetingCount"),
-                    localRemaining.ToString(),
-                    teamRemaining.ToString());
+                __instance.NumberText.text = Translation.GetString(
+					"meetingCount", localRemaining.ToString(), teamRemaining.ToString());
                 __instance.ButtonActive = remaining > 0;
                 __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);
                 __instance.OpenLid.gameObject.SetActive(__instance.ButtonActive);

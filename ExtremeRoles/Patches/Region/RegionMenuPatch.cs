@@ -105,7 +105,7 @@ public static class RegionMenuOpenPatch
             ipTextBox.OnChange.AddListener(onEnterOrIpChange);
             ipTextBox.OnFocusLost.AddListener(onFocusLost);
 
-            ipText.text =  Helper.Translation.GetString(
+            ipText.text = Translation.GetString(
                 "customServerIp");
             ipText.font = ipTextBox.outputText.font;
             ipText.transform.SetParent(ipField.transform);
@@ -152,7 +152,7 @@ public static class RegionMenuOpenPatch
             portTextBox.OnChange.AddListener(onEnterOrPortFieldChange);
             portTextBox.OnFocusLost.AddListener(onFocusLost);
 
-            portText.text = Helper.Translation.GetString(
+            portText.text = Translation.GetString(
                 "customServerPort");
             portText.font = portTextBox.outputText.font;
             portText.transform.SetParent(portField.transform);

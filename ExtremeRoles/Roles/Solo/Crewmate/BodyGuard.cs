@@ -708,9 +708,8 @@ public sealed class BodyGuard :
 
             if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                this.meetingText.text = string.Format(
-                    Helper.Translation.GetString("meetingShieldState"),
-                    behavior.AbilityCount);
+                this.meetingText.text = Translation.GetString(
+					"meetingShieldState", behavior.AbilityCount);
             }
             this.meetingText.gameObject.SetActive(true);
         }

@@ -1,4 +1,5 @@
 ﻿global using ExtremeRoles.Module.CustomOption;
+global using Translation = ExtremeRoles.Extension.Controller.TranslationControllerExtension;
 global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 
@@ -63,7 +64,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
 	private void normalBoot()
 	{
-		Helper.Translation.Load();
+		TranslatorManager.AddTranslator(new ExRTranslator());
 
 		DebugMode = Config.Bind("DeBug", "DebugMode", false);
 		IgnoreOverrideConsoleDisable = Config.Bind(

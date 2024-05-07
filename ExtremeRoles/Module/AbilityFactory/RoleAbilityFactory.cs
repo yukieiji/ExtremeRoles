@@ -21,7 +21,7 @@ public static class RoleAbilityFactory
 	{
 		return new ExtremeAbilityButton(
 			new ChargableAbilityBehavior(
-				text: Helper.Translation.GetString(textKey),
+				text: Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
 				ability: ability,
@@ -46,7 +46,7 @@ public static class RoleAbilityFactory
 	{
 		return new ExtremeAbilityButton(
 			new AbilityCountBehavior(
-				text: Helper.Translation.GetString(textKey),
+				text: Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
 				ability: ability,
@@ -74,12 +74,12 @@ public static class RoleAbilityFactory
 			new PassiveAbilityBehavior(
 				new ButtonGraphic
 				{
-					Text = Helper.Translation.GetString(activateTextKey),
+					Text = Translation.GetString(activateTextKey),
 					Img = activateImg,
 				},
 				new ButtonGraphic
 				{
-					Text = Helper.Translation.GetString(deactivateTextKey),
+					Text = Translation.GetString(deactivateTextKey),
 					Img = deactivateImg,
 				},
 				canUse: canUse,
@@ -102,7 +102,7 @@ public static class RoleAbilityFactory
 	{
 		return new ExtremeAbilityButton(
 			new ReclickAbilityBehavior(
-				text: Helper.Translation.GetString(textKey),
+				text: Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
 				ability: ability,
@@ -124,7 +124,7 @@ public static class RoleAbilityFactory
 	{
 		return new ExtremeAbilityButton(
 			new ReclickAbilityCountBehavior(
-				text: Helper.Translation.GetString(textKey),
+				text: Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
 				ability: ability,
@@ -147,7 +147,7 @@ public static class RoleAbilityFactory
 	{
 		return new ExtremeAbilityButton(
 			new ReusableAbilityBehavior(
-				text: Helper.Translation.GetString(textKey),
+				text: Translation.GetString(textKey),
 				img: img,
 				canUse: canUse,
 				ability: ability,

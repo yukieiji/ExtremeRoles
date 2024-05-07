@@ -3,8 +3,7 @@
 using HarmonyLib;
 
 using Il2CppSystem.Collections.Generic;
-
-using ExtremeRoles.Translation;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches;
 

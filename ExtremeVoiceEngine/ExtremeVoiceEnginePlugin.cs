@@ -5,7 +5,6 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Translation;
 
 namespace ExtremeVoiceEngine;
 

@@ -80,7 +80,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ReusableAbilityBehavior(
-				text: Helper.Translation.GetString(
+				text: Translation.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
 				canUse: createGhostRoleUseFunc(canUse),
@@ -112,7 +112,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new AbilityCountBehavior(
-				text: Helper.Translation.GetString(
+				text: Translation.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
 				canUse: createGhostRoleUseFunc(canUse),
@@ -162,7 +162,7 @@ public static class GhostRoleAbilityFactory
 			if (isReportAbility)
 			{
 				MeetingReporter.Instance.AddMeetingStartReport(
-					Helper.Translation.GetString(type.ToString()));
+					Translation.GetString(type.ToString()));
 			}
 
 			return true;

@@ -97,7 +97,7 @@ public sealed class OptionMenuTab : MonoBehaviour
 	public void Start()
 	{
 		this.tabName.SetText(
-			Helper.Translation.GetString(this.gameObject.name));
+			Translation.GetString(this.gameObject.name));
 	}
 
 	public void FixedUpdate()
