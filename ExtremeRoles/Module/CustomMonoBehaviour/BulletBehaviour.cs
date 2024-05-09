@@ -169,17 +169,17 @@ public sealed class SwordBehaviour : MonoBehaviour
 		in PlayerControl anchorPlayer)
 	{
 		var obj = new GameObject($"Sword_{id}");
-		obj.transform.position = anchorPlayer.transform.position + new Vector3(
-			size.x / 2 - 0.5f, 0.0f, 0.0f);
+		obj.transform.position = anchorPlayer.transform.position - new Vector3(
+			size.x / 2 + 0.5f, 0.0f, 0.0f);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 
 		var sword = obj.AddComponent<SwordBehaviour>();
 		sword.Initialize(
-				bulletImg,
-				size,
-				rotationTime,
-				chargeRotationTime,
-				anchorPlayer);
+			bulletImg,
+			size,
+			rotationTime,
+			chargeRotationTime,
+			anchorPlayer);
 		return sword;
 	}
 
