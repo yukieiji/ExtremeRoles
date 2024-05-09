@@ -52,18 +52,21 @@ public static class  WeaponHitHelper
 [Il2CppRegister]
 public sealed class BulletBehaviour : MonoBehaviour
 {
+	public sealed record Parameter(
+		string Img,
+		Vector2 Size,
+		Vector2 Direction,
+		float Speed,
+		float Range);
+
 	private float range; // 射程C
 	private byte ignorePlayerId;
 	private Vector2 initialPosition;
 
 	public static BulletBehaviour Create(
 		int id,
-		in string bulletImg,
-		in Vector2 size,
-		in Vector2 direction,
-		in float speed,
-		in float range,
-		in PlayerControl abilityPlayer)
+		in PlayerControl abilityPlayer,
+		in Parameter param)
 	{
 		var obj = new GameObject($"Bullet_{id}");
 		obj.transform.position = abilityPlayer.transform.position;
@@ -71,12 +74,13 @@ public sealed class BulletBehaviour : MonoBehaviour
 
 		var bullet = obj.AddComponent<BulletBehaviour>();
 		bullet.Initialize(
-				bulletImg,
-				size,
-				direction,
-				speed,
-				range,
-				abilityPlayer.PlayerId);
+			param.Img,
+			param.Size,
+			param.Direction,
+			param.Speed,
+			param.Range,
+			abilityPlayer.PlayerId);
+
 		return bullet;
 	}
 
@@ -174,7 +178,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 		obj.layer = Constants.LivingPlayersOnlyMask;
 
 		var sword = obj.AddComponent<SwordBehaviour>();
-		sword.Initialize(
+		sword.initialize(
 			bulletImg,
 			size,
 			rotationTime,
@@ -250,7 +254,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 		}
 	}
 
-	public void Initialize(
+	private void initialize(
 		in string bulletImg,
 		in Vector2 size,
 		in float rotationTime,

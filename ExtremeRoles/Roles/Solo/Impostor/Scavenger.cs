@@ -8,6 +8,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using UnityEngine;
 using System.Linq;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -54,8 +56,22 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		All,
 	}
 
+	public enum BulletType : byte
+	{
+		HandGun,
+		SniperRifle,
+		BeamRifle,
+	}
+
+	private int id = 0;
+
+	private Dictionary<int, MonoBehaviour> showBehaviours = new();
 	private Ability initMode = Ability.Null;
 	private IReadOnlyDictionary<Ability, BehaviorBase>? allAbility;
+
+	private BulletBehaviour.Parameter? handGunParam;
+	private BulletBehaviour.Parameter? sniperRifleParam;
+	private BulletBehaviour.Parameter? beamRifleParam;
 
 	private ExtremeMultiModalAbilityButton? internalButton;
 
@@ -139,16 +155,62 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private bool handGunAbility()
 	{
+		createBullet(this.handGunParam);
 		return true;
 	}
 
 	private bool sniperRifleAbility()
 	{
+		createBullet(this.sniperRifleParam);
 		return true;
 	}
 
 	private bool beamRifleAbility()
 	{
+		createBullet(this.beamRifleParam);
 		return true;
+	}
+
+	private void createBullet(
+		in BulletBehaviour.Parameter? param)
+	{
+		if (param is null)
+		{
+			throw new ArgumentNullException("Bullet parameter is null");
+		}
+
+		// Rpc処理
+
+		createBulletStatic(
+			in this.showBehaviours,
+			this.id,
+			this.beamRifleParam,
+			CachedPlayerControl.LocalPlayer);
+
+		++this.id;
+	}
+
+	private static void createBulletStatic(
+		in Dictionary<int, MonoBehaviour> mngContainer,
+		int mngId,
+		in BulletBehaviour.Parameter? param,
+		in PlayerControl? rolePlayer)
+	{
+		if (rolePlayer == null)
+		{
+			throw new ArgumentNullException("RolePlayer is null");
+		}
+
+		if (param is null)
+		{
+			throw new ArgumentNullException("Bullet parameter is null");
+		}
+
+		var bullet = BulletBehaviour.Create(
+			mngId,
+			rolePlayer,
+			param);
+
+		mngContainer.Add(mngId, bullet);
 	}
 }
