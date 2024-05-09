@@ -10,6 +10,7 @@ using UnityEngine;
 using System.Linq;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -35,14 +36,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private readonly float xSize = xSize;
 
 		public BehaviorBase Create(in CreateParam param)
-			=> new ChargingCountBehaviour(
+			=> new ChargingAndActivatingCountBehaviour(
 				param.Name,
 				Loader.CreateSpriteFromResources(param.Path),
 				isSwordUse,
 				startSwordRotation,
 				startSwordCharge,
-				ChargingCountBehaviour.ReduceTiming.OnActive,
-				Hide);
+				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
+				isValidSword, isValidSword);
 
 		public void Hide()
 		{
@@ -87,18 +88,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 
 		private bool isSwordUse(bool isCharge, float chargeGauge)
-		{
-			bool isCommonUse = IRoleAbility.IsCommonUse();
-
-			return
-				isCommonUse &&
-			(
-				isCharge && this.showSword != null && this.showSword.gameObject.active
-			) ||
-			(
-				!isCharge
-			);
-		}
+			=> IRoleAbility.IsCommonUse();
+		private bool isValidSword()
+			=> this.showSword != null && this.showSword.gameObject.active;
 
 		private static SwordBehaviour createSword(
 			float xSize,
@@ -106,6 +98,84 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			=> SwordBehaviour.Create(
 				"", new Vector2(),
 				rolePlayer);
+	}
+
+	private sealed class BeamSaber(
+		float range,
+		bool isAutoDetect) : IWeapon
+	{
+		private readonly float range = range;
+		private readonly bool isAutoDetect = isAutoDetect;
+		private byte targetPlayerId;
+		private Vector2 chargePos = Vector2.zero;
+
+		public BehaviorBase Create(in CreateParam param)
+			=> new ChargingCountBehaviour(
+				param.Name,
+				Loader.CreateSpriteFromResources(param.Path),
+				isIaiOk,
+				tryIai,
+				startIai,
+				ChargingCountBehaviour.ReduceTiming.OnActive,
+				iaiCheck);
+
+		public void Hide()
+		{ }
+
+		private bool iaiCheck()
+		{
+			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			return curPos == this.chargePos;
+		}
+
+		private bool startIai()
+		{
+			this.targetPlayerId = byte.MaxValue;
+			this.chargePos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			return true;
+		}
+
+		private bool tryIai(float chargeGauge)
+		{
+			this.chargePos = Vector2.zero;
+			if (this.targetPlayerId == byte.MaxValue)
+			{
+				return true;
+			}
+
+			Player.RpcUncheckMurderPlayer(
+				CachedPlayerControl.LocalPlayer.PlayerId,
+				this.targetPlayerId,
+				byte.MaxValue);
+			//　おとならす
+
+			return true;
+		}
+
+		private bool isIaiOk(bool isCharge, float chargeGauge)
+		{
+			bool isCommonUse = IRoleAbility.IsCommonUse();
+
+			if (!isCommonUse)
+			{
+				return false;
+			}
+
+			if (!(isCharge && this.isAutoDetect))
+			{
+				return true;
+			}
+
+			float searchRange = this.range * chargeGauge * chargeGauge;
+			var pc = Player.GetClosestPlayerInRange(searchRange);
+
+			if (pc == null)
+			{
+				return false;
+			}
+			this.targetPlayerId = pc.PlayerId;
+			return true;
+		}
 	}
 
 	private sealed class NormalGun(
@@ -293,6 +363,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				Ability.BeamRifle,
 				new NormalGun(Ability.BeamRifle, null)
+			},
+			{
+				Ability.BeamSaber,
+				new BeamSaber(0.0f, true)
 			}
 		};
 	}

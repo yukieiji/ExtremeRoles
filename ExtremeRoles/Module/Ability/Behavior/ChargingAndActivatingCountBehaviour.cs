@@ -9,19 +9,22 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, ICountBehavior
+public sealed class ChargingAndActivatingCountBehaviour :
+	BehaviorBase, IActivatingBehavior, IChargingBehavior, ICountBehavior
 {
 	public float ChargeGage { get; set; }
 	public float ChargeTime { get; set; }
-
 	public bool IsCharging => this.isCharging.Invoke();
 
+	public float ActiveTime { get; set; }
+	public bool CanAbilityActiving => this.canActivating.Invoke();
 	public int AbilityCount { get; private set; }
 
 	public enum ReduceTiming
 	{
-		OnActive,
 		OnCharge,
+		OnActive,
+		OnActiveDone,
 	}
 
 	private bool isUpdate = false;
@@ -33,24 +36,29 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 	private readonly Func<float, bool> ability;
 	private readonly Func<bool> onCharge;
 	private readonly Func<bool> isCharging;
+	private readonly Func<bool> canActivating;
 	private readonly ReduceTiming reduceTiming;
 	private readonly Action? forceAbilityOff;
 	private readonly Action? abilityOff;
 
-	public ChargingCountBehaviour(
+	public ChargingAndActivatingCountBehaviour(
 		string text, Sprite img,
 		Func<bool, float, bool> isUse,
 		Func<float, bool> ability,
 		Func<bool> onCharge,
 		ReduceTiming reduceTiming,
 		Func<bool>? isCharge = null,
+		Func<bool>? canActivating = null,
 		Action? abilityOff = null,
 		Action? forceAbilityOff = null) : base(text, img)
 	{
 		this.isUse = isUse;
 		this.ability = ability;
 		this.onCharge = onCharge;
+
 		this.isCharging = isCharge ?? new Func<bool>(() => { return true; });
+		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
+
 		this.reduceTiming = reduceTiming;
 		this.abilityOff = abilityOff;
 		this.forceAbilityOff = forceAbilityOff;
@@ -58,6 +66,11 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 
 	public override void AbilityOff()
 	{
+		if (this.reduceTiming is ReduceTiming.OnActiveDone)
+		{
+			reduceAbilityCount();
+		}
+
 		this.abilityOff?.Invoke();
 	}
 
@@ -122,7 +135,7 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 					reduceAbilityCount();
 				}
 				this.isCharge = false;
-				newState = AbilityState.CoolDown;
+				newState = this.ActiveTime > 0.0f ? AbilityState.Activating : AbilityState.CoolDown;
 				break;
 			default:
 				return false;
@@ -132,7 +145,7 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 
 	public override AbilityState Update(AbilityState curState)
 	{
-		if (curState is AbilityState.Charging or AbilityState.Activating)
+		if (curState == AbilityState.Charging)
 		{
 			return curState;
 		}
