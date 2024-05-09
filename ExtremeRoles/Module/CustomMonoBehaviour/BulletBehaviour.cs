@@ -56,6 +56,30 @@ public sealed class BulletBehaviour : MonoBehaviour
 	private byte ignorePlayerId;
 	private Vector2 initialPosition;
 
+	public static BulletBehaviour Create(
+		int id,
+		in string bulletImg,
+		in Vector2 size,
+		in Vector2 direction,
+		in float speed,
+		in float range,
+		in PlayerControl abilityPlayer)
+	{
+		var obj = new GameObject($"Bullet_{id}");
+		obj.transform.position = abilityPlayer.transform.position;
+		obj.layer = Constants.LivingPlayersOnlyMask;
+
+		var bullet = obj.AddComponent<BulletBehaviour>();
+		bullet.Initialize(
+				bulletImg,
+				size,
+				direction,
+				speed,
+				range,
+				abilityPlayer.PlayerId);
+		return bullet;
+	}
+
 	public void Initialize(
 		in string bulletImg,
 		in Vector2 size,
@@ -135,6 +159,29 @@ public sealed class SwordBehaviour : MonoBehaviour
 	private RotationInfo? chargeRotationInfo;
 
 	public SwordBehaviour(System.IntPtr ptr) : base(ptr) { }
+
+	public static SwordBehaviour Create(
+		int id,
+		in string bulletImg,
+		in Vector2 size,
+		in float rotationTime,
+		in float chargeRotationTime,
+		in PlayerControl anchorPlayer)
+	{
+		var obj = new GameObject($"Sword_{id}");
+		obj.transform.position = anchorPlayer.transform.position + new Vector3(
+			size.x / 2 + 0.5f, 0.0f, 0.0f);
+		obj.layer = Constants.LivingPlayersOnlyMask;
+
+		var sword = obj.AddComponent<SwordBehaviour>();
+		sword.Initialize(
+				bulletImg,
+				size,
+				rotationTime,
+				chargeRotationTime,
+				anchorPlayer);
+		return sword;
+	}
 
 	public float CanUse(
 		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
