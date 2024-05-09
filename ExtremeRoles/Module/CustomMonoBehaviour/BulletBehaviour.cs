@@ -3,6 +3,8 @@
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
+using Act = System.Action;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -10,6 +12,17 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 public static class  WeaponHitHelper
 {
 	private static readonly int collisionLayer = LayerMask.GetMask(new string[] { "Ship", "Objects" });
+
+	public static bool IsHitPlayer(Collider2D other, out PlayerControl pc)
+		=> other.TryGetComponent(out pc) &&
+			pc != null &&
+			pc.Data != null &&
+			!pc.Data.IsDead &&
+			!pc.Data.Disconnected &&
+			!pc.inVent;
+
+	public static bool IsHitWall(Collider2D other)
+		=> collisionLayer == (collisionLayer | (1 << other.gameObject.layer));
 
 	public static void OnHitCollider2D(
 		GameObject obj, Collider2D other,
@@ -121,29 +134,42 @@ public sealed class BulletBehaviour : MonoBehaviour
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		WeaponHitHelper.OnHitCollider2D(
-			this.gameObject,
-			other,
-			this.ignorePlayerId,
-			false,
-			true);
+		ExtremeRolesPlugin.Logger.LogInfo("Hitting!!");
+		ExtremeRolesPlugin.Logger.LogInfo($"ObjName:{other}");
+		if (CachedPlayerControl.LocalPlayer.PlayerId != this.ignorePlayerId)
+		{
+			return;
+		}
+
+		if (WeaponHitHelper.IsHitPlayer(other, out var pc) &&
+			pc.PlayerId != this.ignorePlayerId)
+		{
+			ExtremeRolesPlugin.Logger.LogInfo("Hit Player!!!");
+		}
+		else if (WeaponHitHelper.IsHitWall(other))
+		{
+			ExtremeRolesPlugin.Logger.LogInfo("Hit Wall");
+		}
 	}
 }
 
 [Il2CppRegister(typeof(IUsable))]
 public sealed class SwordBehaviour : MonoBehaviour
 {
-	private sealed class RotationInfo
+	public sealed class RotationInfo
 	{
 		public float Time { get; private set; }
 		public float DeltaAnglePerSec { get; private set; }
+		public bool IsActive { get; private set; }
 
 		public RotationInfo(
 			in float time,
-			in float angle)
+			in float angle,
+			in bool isActive)
 		{
 			this.Time = time;
 			this.DeltaAnglePerSec = angle / time;
+			this.IsActive = isActive;
 		}
 		public void Update(in float deltaTime)
 		{
@@ -159,32 +185,34 @@ public sealed class SwordBehaviour : MonoBehaviour
 
 	private GameObject? anchor;
 
-	private RotationInfo? activeRotationInfo;
-	private RotationInfo? chargeRotationInfo;
-
+	private RotationInfo? rotationInfo;
 	public SwordBehaviour(System.IntPtr ptr) : base(ptr) { }
 
 	public static SwordBehaviour Create(
-		int id,
-		in string bulletImg,
+		in string img,
 		in Vector2 size,
-		in float rotationTime,
-		in float chargeRotationTime,
 		in PlayerControl anchorPlayer)
 	{
-		var obj = new GameObject($"Sword_{id}");
+		var obj = new GameObject($"Sword_{anchorPlayer.PlayerId}");
 		obj.transform.position = anchorPlayer.transform.position - new Vector3(
 			size.x / 2 + 0.5f, 0.0f, 0.0f);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 
 		var sword = obj.AddComponent<SwordBehaviour>();
 		sword.initialize(
-			bulletImg,
+			img,
 			size,
-			rotationTime,
-			chargeRotationTime,
 			anchorPlayer);
 		return sword;
+	}
+
+	public void SetRotation(in RotationInfo rotation, bool isReset)
+	{
+		this.rotationInfo = rotation;
+		if (isReset && this.anchor != null)
+		{
+			this.anchor.transform.Rotate(Vector3.forward, 0.0f);
+		}
 	}
 
 	public float CanUse(
@@ -210,40 +238,48 @@ public sealed class SwordBehaviour : MonoBehaviour
 	public void Update()
 	{
 		if (this.anchor == null ||
-			this.activeRotationInfo is null ||
-			this.chargeRotationInfo is null)
+			this.rotationInfo is null)
 		{
 			return;
 		}
 
-		if (this.activeRotationInfo.Time <= 0)
+		if (this.rotationInfo.Time <= 0)
 		{
-			Destroy(this.gameObject);
+			if (this.rotationInfo.IsActive)
+			{
+				Destroy(this.gameObject);
+			}
+			else
+			{
+				this.rotationInfo = null;
+				return;
+			}
 		}
 
 		float deltaTime = Time.deltaTime;
 
-		var curRotationInfo = this.chargeRotationInfo.Time > 0 ? this.chargeRotationInfo : this.activeRotationInfo;
-		this.anchor.transform.Rotate(Vector3.forward, curRotationInfo.DeltaAnglePerSec * deltaTime);
-		curRotationInfo.Update(deltaTime);
+		this.anchor.transform.Rotate(Vector3.forward, this.rotationInfo.DeltaAnglePerSec * deltaTime);
+		this.rotationInfo.Update(deltaTime);
 	}
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		if (this.chargeRotationInfo is null ||
-			this.activeRotationInfo is null ||
-			this.chargeRotationInfo.Time > 0 ||
-			this.activeRotationInfo.Time <= 0)
+		if (this.rotationInfo is null ||
+			!this.rotationInfo.IsActive)
 		{
 			return;
 		}
 
-		WeaponHitHelper.OnHitCollider2D(
-			this.gameObject,
-			other,
-			this.ignorePlayerId,
-			false,
-			true);
+		if (WeaponHitHelper.IsHitPlayer(other, out var pc) &&
+			pc.PlayerId != this.ignorePlayerId)
+		{
+			ExtremeRolesPlugin.Logger.LogInfo("Hit Player!!!");
+		}
+		else if (WeaponHitHelper.IsHitWall(other))
+		{
+			ExtremeRolesPlugin.Logger.LogInfo("Hit Wall");
+			this.gameObject.SetActive(false);
+		}
 	}
 
 	public void OnDestroy()
@@ -257,8 +293,6 @@ public sealed class SwordBehaviour : MonoBehaviour
 	private void initialize(
 		in string bulletImg,
 		in Vector2 size,
-		in float rotationTime,
-		in float chargeRotationTime,
 		in PlayerControl anchorPlayer)
 	{
 		this.anchor = new GameObject("SwordAnchor");
@@ -279,8 +313,5 @@ public sealed class SwordBehaviour : MonoBehaviour
 
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
 		rb.isKinematic = true;
-
-		this.activeRotationInfo = new RotationInfo(rotationTime, 360);
-		this.chargeRotationInfo = new RotationInfo(chargeRotationTime, -45);
 	}
 }

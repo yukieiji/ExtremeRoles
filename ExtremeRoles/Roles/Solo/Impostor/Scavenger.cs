@@ -65,13 +65,18 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private int id = 0;
 
-	private Dictionary<int, MonoBehaviour> showBehaviours = new();
+	private Dictionary<int, BulletBehaviour> allShowBullet = new();
+	private SwordBehaviour? showSword;
+
+
 	private Ability initMode = Ability.Null;
 	private IReadOnlyDictionary<Ability, BehaviorBase>? allAbility;
 
 	private BulletBehaviour.Parameter? handGunParam;
 	private BulletBehaviour.Parameter? sniperRifleParam;
 	private BulletBehaviour.Parameter? beamRifleParam;
+	private float swordSize;
+
 
 	private ExtremeMultiModalAbilityButton? internalButton;
 
@@ -135,6 +140,17 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					handGunAbility)
 			},
 			{
+				Ability.Sword,
+				new ChargingCountBehaviour(
+					"",
+					Loader.CreateSpriteFromResources(Path.TestButton),
+					isSwordUse,
+					startSwordRotation,
+					startSwordCharge,
+					ChargingCountBehaviour.ReduceTiming.OnActive,
+					hideSword)
+			},
+			{
 				Ability.SniperRifle,
 				new CountBehavior(
 					"",
@@ -152,6 +168,62 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 		};
 	}
+
+	private bool startSwordCharge()
+	{
+		if (this.showSword == null)
+		{
+			this.showSword = createSword(
+				this, CachedPlayerControl.LocalPlayer);
+		}
+
+		this.showSword.SetRotation(
+			new SwordBehaviour.RotationInfo(
+				0.0f, 0.0f, false),
+			true);
+		this.showSword.gameObject.SetActive(true);
+
+		return true;
+	}
+
+	private bool startSwordRotation(float chargeGauge)
+	{
+		if (this.showSword == null)
+		{
+			return false;
+		}
+		this.showSword.SetRotation(
+			new SwordBehaviour.RotationInfo(
+				0.0f, 0.0f, true),
+			false);
+
+		return true;
+	}
+
+	private void hideSword()
+	{
+		// ToDo Hide処理
+		if (this.showSword == null)
+		{
+			return;
+		}
+		this.showSword.gameObject.SetActive(false);
+	}
+
+	private bool isSwordUse(bool isCharge, float chargeGauge)
+	{
+		bool isCommonUse = IRoleAbility.IsCommonUse();
+
+		return
+			isCommonUse &&
+		(
+			isCharge && this.showSword != null && this.showSword.gameObject.active
+		) ||
+		(
+			!isCharge
+		);
+	}
+
 
 	private bool handGunAbility()
 	{
@@ -182,7 +254,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		// Rpc処理
 
 		createBulletStatic(
-			in this.showBehaviours,
+			in this.allShowBullet,
 			this.id,
 			this.beamRifleParam,
 			CachedPlayerControl.LocalPlayer);
@@ -190,8 +262,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		++this.id;
 	}
 
+	private static SwordBehaviour createSword(
+		in Scavenger scavenger,
+		in PlayerControl rolePlayer)
+		=> SwordBehaviour.Create(
+			"", new Vector2(),
+			rolePlayer);
+
 	private static void createBulletStatic(
-		in Dictionary<int, MonoBehaviour> mngContainer,
+		in Dictionary<int, BulletBehaviour> mngContainer,
 		int mngId,
 		in BulletBehaviour.Parameter? param,
 		in PlayerControl? rolePlayer)

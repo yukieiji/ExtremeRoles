@@ -31,6 +31,7 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 
 	private readonly Func<bool, float, bool> isUse;
 	private readonly Func<float, bool> ability;
+	private readonly Func<bool> onCharge;
 	private readonly ReduceTiming reduceTiming;
 	private readonly Action? forceAbilityOff;
 	private readonly Action? abilityOff;
@@ -39,12 +40,14 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 		string text, Sprite img,
 		Func<bool, float, bool> isUse,
 		Func<float, bool> ability,
+		Func<bool> onCharge,
 		ReduceTiming reduceTiming,
 		Action? abilityOff = null,
 		Action? forceAbilityOff = null) : base(text, img)
 	{
 		this.isUse = isUse;
 		this.ability = ability;
+		this.onCharge = onCharge;
 		this.reduceTiming = reduceTiming;
 		this.abilityOff = abilityOff;
 		this.forceAbilityOff = forceAbilityOff;
@@ -89,7 +92,8 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 			case AbilityState.Ready:
 				if (timer > 0 ||
 					this.AbilityCount <= 0 ||
-					this.IsUse())
+					this.IsUse() ||
+					!this.onCharge.Invoke())
 				{
 					return false;
 				}
