@@ -170,7 +170,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 	{
 		var obj = new GameObject($"Sword_{id}");
 		obj.transform.position = anchorPlayer.transform.position + new Vector3(
-			size.x / 2 + 0.5f, 0.0f, 0.0f);
+			size.x / 2 - 0.5f, 0.0f, 0.0f);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 
 		var sword = obj.AddComponent<SwordBehaviour>();
@@ -205,7 +205,8 @@ public sealed class SwordBehaviour : MonoBehaviour
 
 	public void Update()
 	{
-		if (this.activeRotationInfo is null ||
+		if (this.anchor == null ||
+			this.activeRotationInfo is null ||
 			this.chargeRotationInfo is null)
 		{
 			return;
@@ -219,7 +220,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 		float deltaTime = Time.deltaTime;
 
 		var curRotationInfo = this.chargeRotationInfo.Time > 0 ? this.chargeRotationInfo : this.activeRotationInfo;
-		this.transform.Rotate(Vector3.forward, curRotationInfo.DeltaAnglePerSec * deltaTime);
+		this.anchor.transform.Rotate(Vector3.forward, curRotationInfo.DeltaAnglePerSec * deltaTime);
 		curRotationInfo.Update(deltaTime);
 	}
 
