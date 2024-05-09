@@ -15,8 +15,152 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
+
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
+	private record struct CreateParam(string Name, string Path);
+
+	private interface IWeapon
+	{
+		public BehaviorBase Create(in CreateParam param);
+		public void Hide();
+	}
+
+	private sealed class Sword(
+		in Ability type,
+		float xSize) : IWeapon
+	{
+		private SwordBehaviour? showSword;
+		private Ability type = type;
+		private readonly float xSize = xSize;
+
+		public BehaviorBase Create(in CreateParam param)
+			=> new ChargingCountBehaviour(
+				param.Name,
+				Loader.CreateSpriteFromResources(param.Path),
+				isSwordUse,
+				startSwordRotation,
+				startSwordCharge,
+				ChargingCountBehaviour.ReduceTiming.OnActive);
+
+		public void Hide()
+		{
+			if (this.showSword == null)
+			{
+				return;
+			}
+			this.showSword.gameObject.SetActive(false);
+		}
+
+		private bool startSwordCharge()
+		{
+			// Rpc処理
+			if (this.showSword == null)
+			{
+				this.showSword = createSword(
+					this.xSize, CachedPlayerControl.LocalPlayer);
+			}
+
+			this.showSword.SetRotation(
+				new SwordBehaviour.RotationInfo(
+					0.0f, 0.0f, false),
+				true);
+			this.showSword.gameObject.SetActive(true);
+
+			return true;
+		}
+
+		private bool startSwordRotation(float chargeGauge)
+		{
+
+			// Rpc処理
+			if (this.showSword == null)
+			{
+				return false;
+			}
+			this.showSword.SetRotation(
+				new SwordBehaviour.RotationInfo(
+					0.0f, 0.0f, true),
+				false);
+			return true;
+		}
+
+		private bool isSwordUse(bool isCharge, float chargeGauge)
+		{
+			bool isCommonUse = IRoleAbility.IsCommonUse();
+
+			return
+				isCommonUse &&
+			(
+				isCharge && this.showSword != null && this.showSword.gameObject.active
+			) ||
+			(
+				!isCharge
+			);
+		}
+
+		private static SwordBehaviour createSword(
+			float xSize,
+			in PlayerControl rolePlayer)
+			=> SwordBehaviour.Create(
+				"", new Vector2(),
+				rolePlayer);
+	}
+
+	private sealed class NormalGun(
+		in Ability type,
+		in BulletBehaviour.Parameter param) : IWeapon
+	{
+		private Ability type = type;
+		private readonly BulletBehaviour.Parameter pram = param;
+		private readonly Dictionary<int, BulletBehaviour> ballet = new();
+		private int id = 0;
+
+		public BehaviorBase Create(in CreateParam param)
+		{
+			return new CountBehavior(
+			   param.Name,
+			   Loader.CreateSpriteFromResources(param.Path),
+			   IRoleAbility.IsCommonUse,
+			   ability);
+		}
+
+		public void Hide()
+		{
+
+		}
+
+		public void CreateBullet(
+			int mngId,
+			in PlayerControl? rolePlayer)
+		{
+			if (rolePlayer == null)
+			{
+				throw new ArgumentNullException("RolePlayer is null");
+			}
+
+			var bullet = BulletBehaviour.Create(
+				mngId,
+				rolePlayer,
+				this.pram);
+
+			this.ballet.Add(mngId, bullet);
+		}
+
+		private bool ability()
+		{
+
+			// Rpc処理
+			CreateBullet(
+				this.id,
+				CachedPlayerControl.LocalPlayer);
+
+			++this.id;
+
+			return true;
+		}
+	}
+
 	public ExtremeAbilityButton? Button
 	{
 		get => this.internalButton;
@@ -56,26 +200,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		All,
 	}
 
-	public enum BulletType : byte
-	{
-		HandGun,
-		SniperRifle,
-		BeamRifle,
-	}
-
-	private int id = 0;
-
-	private Dictionary<int, BulletBehaviour> allShowBullet = new();
-	private SwordBehaviour? showSword;
-
-
 	private Ability initMode = Ability.Null;
-	private IReadOnlyDictionary<Ability, BehaviorBase>? allAbility;
-
-	private BulletBehaviour.Parameter? handGunParam;
-	private BulletBehaviour.Parameter? sniperRifleParam;
-	private BulletBehaviour.Parameter? beamRifleParam;
-	private float swordSize;
+	private IReadOnlyDictionary<Ability, IWeapon>? weapon;
 
 
 	private ExtremeMultiModalAbilityButton? internalButton;
@@ -90,14 +216,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	public void CreateAbility()
 	{
-		if (this.allAbility is null ||
-			!this.allAbility.TryGetValue(this.initMode, out var ability))
-		{
-			return;
-		}
+		BehaviorBase init =
+			this.weapon is null ||
+			!this.weapon.TryGetValue(this.initMode, out var weapon) ?
+			new NullBehaviour() :
+			weapon.Create(
+				createParam(this.initMode));
 
 		this.Button = new ExtremeMultiModalAbilityButton(
-			[ ability ],
+			[ init ],
 			new RoleButtonActivator(),
 			KeyCode.F);
 	}
@@ -128,168 +255,30 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	protected override void RoleSpecificInit()
 	{
-		this.allAbility = new Dictionary<Ability, BehaviorBase>()
+		this.weapon = new Dictionary<Ability, IWeapon>()
 		{
-			{ Ability.Null, new NullBehaviour() },
 			{
 				Ability.HandGun,
-				new CountBehavior(
-					"",
-					Loader.CreateSpriteFromResources(Path.TestButton),
-					IRoleAbility.IsCommonUse,
-					handGunAbility)
+				new NormalGun(Ability.HandGun, null)
 			},
 			{
 				Ability.Sword,
-				new ChargingCountBehaviour(
-					"",
-					Loader.CreateSpriteFromResources(Path.TestButton),
-					isSwordUse,
-					startSwordRotation,
-					startSwordCharge,
-					ChargingCountBehaviour.ReduceTiming.OnActive,
-					hideSword)
+				new Sword(Ability.Sword, 0.0f)
 			},
 			{
 				Ability.SniperRifle,
-				new CountBehavior(
-					"",
-					Loader.CreateSpriteFromResources(Path.TestButton),
-					IRoleAbility.IsCommonUse,
-					sniperRifleAbility)
+				new NormalGun(Ability.SniperRifle, null)
 			},
 			{
 				Ability.BeamRifle,
-				new CountBehavior(
-					"",
-					Loader.CreateSpriteFromResources(Path.TestButton),
-					IRoleAbility.IsCommonUse,
-					beamRifleAbility)
+				new NormalGun(Ability.BeamRifle, null)
 			}
 		};
 	}
 
-	private bool startSwordCharge()
-	{
-		if (this.showSword == null)
+	private CreateParam createParam(in Ability ability)
+		=> ability switch
 		{
-			this.showSword = createSword(
-				this, CachedPlayerControl.LocalPlayer);
-		}
-
-		this.showSword.SetRotation(
-			new SwordBehaviour.RotationInfo(
-				0.0f, 0.0f, false),
-			true);
-		this.showSword.gameObject.SetActive(true);
-
-		return true;
-	}
-
-	private bool startSwordRotation(float chargeGauge)
-	{
-		if (this.showSword == null)
-		{
-			return false;
-		}
-		this.showSword.SetRotation(
-			new SwordBehaviour.RotationInfo(
-				0.0f, 0.0f, true),
-			false);
-
-		return true;
-	}
-
-	private void hideSword()
-	{
-		// ToDo Hide処理
-		if (this.showSword == null)
-		{
-			return;
-		}
-		this.showSword.gameObject.SetActive(false);
-	}
-
-	private bool isSwordUse(bool isCharge, float chargeGauge)
-	{
-		bool isCommonUse = IRoleAbility.IsCommonUse();
-
-		return
-			isCommonUse &&
-		(
-			isCharge && this.showSword != null && this.showSword.gameObject.active
-		) ||
-		(
-			!isCharge
-		);
-	}
-
-
-	private bool handGunAbility()
-	{
-		createBullet(this.handGunParam);
-		return true;
-	}
-
-	private bool sniperRifleAbility()
-	{
-		createBullet(this.sniperRifleParam);
-		return true;
-	}
-
-	private bool beamRifleAbility()
-	{
-		createBullet(this.beamRifleParam);
-		return true;
-	}
-
-	private void createBullet(
-		in BulletBehaviour.Parameter? param)
-	{
-		if (param is null)
-		{
-			throw new ArgumentNullException("Bullet parameter is null");
-		}
-
-		// Rpc処理
-
-		createBulletStatic(
-			in this.allShowBullet,
-			this.id,
-			this.beamRifleParam,
-			CachedPlayerControl.LocalPlayer);
-
-		++this.id;
-	}
-
-	private static SwordBehaviour createSword(
-		in Scavenger scavenger,
-		in PlayerControl rolePlayer)
-		=> SwordBehaviour.Create(
-			"", new Vector2(),
-			rolePlayer);
-
-	private static void createBulletStatic(
-		in Dictionary<int, BulletBehaviour> mngContainer,
-		int mngId,
-		in BulletBehaviour.Parameter? param,
-		in PlayerControl? rolePlayer)
-	{
-		if (rolePlayer == null)
-		{
-			throw new ArgumentNullException("RolePlayer is null");
-		}
-
-		if (param is null)
-		{
-			throw new ArgumentNullException("Bullet parameter is null");
-		}
-
-		var bullet = BulletBehaviour.Create(
-			mngId,
-			rolePlayer,
-			param);
-
-		mngContainer.Add(mngId, bullet);
-	}
+			_ => new("", Path.TestButton)
+		};
 }
