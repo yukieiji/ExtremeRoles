@@ -41,7 +41,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				isSwordUse,
 				startSwordRotation,
 				startSwordCharge,
-				ChargingCountBehaviour.ReduceTiming.OnActive);
+				ChargingCountBehaviour.ReduceTiming.OnActive,
+				Hide);
 
 		public void Hide()
 		{
@@ -113,7 +114,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	{
 		private Ability type = type;
 		private readonly BulletBehaviour.Parameter pram = param;
-		private readonly Dictionary<int, BulletBehaviour> ballet = new();
+		private readonly Dictionary<int, BulletBehaviour> bullet = new();
 		private int id = 0;
 
 		public BehaviorBase Create(in CreateParam param)
@@ -127,7 +128,27 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void Hide()
 		{
+			foreach (var ballet in this.bullet.Values)
+			{
+				if (ballet == null ||
+					ballet.gameObject == null)
+				{
+					continue;
+				}
+				UnityEngine.Object.Destroy(ballet.gameObject);
+			}
+			this.bullet.Clear();
+		}
 
+		public void Hide(int id)
+		{
+			if (this.bullet.TryGetValue(id, out var bullet) &&
+				bullet != null &&
+				bullet.gameObject != null)
+			{
+				UnityEngine.Object.Destroy(bullet.gameObject);
+			}
+			this.bullet.Remove(id);
 		}
 
 		public void CreateBullet(
@@ -144,7 +165,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				rolePlayer,
 				this.pram);
 
-			this.ballet.Add(mngId, bullet);
+			this.bullet.Add(mngId, bullet);
 		}
 
 		private bool ability()
