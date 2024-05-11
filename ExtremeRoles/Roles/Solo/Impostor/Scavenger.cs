@@ -146,7 +146,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Player.RpcUncheckMurderPlayer(
 				CachedPlayerControl.LocalPlayer.PlayerId,
 				this.targetPlayerId,
-				byte.MaxValue);
+				byte.MinValue);
 			//　おとならす
 
 			return true;
