@@ -111,7 +111,7 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 						(this.AbilityCount > 0) ||
 						(this.reduceTiming is ReduceTiming.OnCharge && this.AbilityCount >= 0)
 					)  &&
-					this.ability.Invoke(this.ChargeGage))
+					!this.ability.Invoke(this.ChargeGage))
 				{
 					return false;
 				}
