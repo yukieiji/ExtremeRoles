@@ -202,6 +202,7 @@ public class ExtremeAbilityButton
 				// 最大までチャージして1.0f秒後経過すると失敗として再チャージを要求
 				if (this.Timer > maxTimer + 1.0f)
 				{
+					this.Behavior.ForceAbilityOff();
 					this.setStatus(AbilityState.Charging);
 					return;
 				}
