@@ -500,7 +500,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					Ability.HandGun,
 					new (
 						Path.BulletImg,
-						new Vector2(0.05f, 0.075f),
+						new Vector2(0.025f, 0.075f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.HandGunSpeed)),
 						mng.GetValue<float>(
@@ -516,7 +516,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					Ability.SniperRifle,
 					new (
 						Path.BulletImg,
-						new Vector2(0.05f, 0.075f),
+						new Vector2(0.025f, 0.075f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.SniperRifleSpeed)),
 						128.0f))
