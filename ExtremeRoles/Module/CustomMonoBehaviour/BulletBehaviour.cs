@@ -36,7 +36,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 		float Speed,
 		float Range);
 
-	private float range; // 射程C
+	private float range;
 	private byte ignorePlayerId;
 	private Vector2 initialPosition;
 
@@ -85,7 +85,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 		this.initialPosition = transform.position;
 
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
-		rb.velocity = direction.normalized * speed;
+		rb.AddForce(direction.normalized * speed);
 		rb.isKinematic = true;
 	}
 
