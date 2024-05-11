@@ -91,12 +91,12 @@ public interface IRoleAbility : IRoleResetMeeting
 
 public static class IRoleAbilityMixin
 {
-	private const float defaultCoolTime = 30.0f;
-	private const float minCoolTime = 0.5f;
-	private const float maxCoolTime = 120.0f;
+	public const float DefaultCoolTime = 30.0f;
+	public const float MinCoolTime = 0.5f;
+	public const float MaxCoolTime = 120.0f;
 	private const float minActiveTime = 0.5f;
 	private const float maxActiveTime = 60.0f;
-	private const float step = 0.5f;
+	public const float Step = 0.5f;
 
 
 	public static void CreateCommonAbilityOption(
@@ -112,7 +112,7 @@ public static class IRoleAbilityMixin
 			string.Concat(
 				role.RoleName,
 				RoleAbilityCommonOption.AbilityCoolTime.ToString()),
-			defaultCoolTime, minCoolTime, maxCoolTime, step,
+			DefaultCoolTime, MinCoolTime, MaxCoolTime, Step,
 			parentOps, format: OptionUnit.Second,
 			tab: role.Tab);
 
@@ -126,7 +126,7 @@ public static class IRoleAbilityMixin
 				string.Concat(
 					role.RoleName,
 					RoleAbilityCommonOption.AbilityActiveTime.ToString()),
-				defaultActiveTime, minActiveTime, maxActiveTime, step,
+				defaultActiveTime, minActiveTime, maxActiveTime, Step,
 				parentOps, format: OptionUnit.Second,
 				tab: role.Tab);
 		}

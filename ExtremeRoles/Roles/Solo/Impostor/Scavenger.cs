@@ -267,7 +267,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	public enum Option
 	{
-		InitAbility
+		InitAbility,
+
+
+		BeamSaberCount,
+		BeamSaberChargeTime,
+		BeamSaberRange,
+		BeamSaberAutoDetect,
 	}
 
 	public enum Ability : byte
@@ -307,45 +313,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	public void CreateAbility()
 	{
-		BehaviorBase init =
-			this.weapon is null ||
-			!this.weapon.TryGetValue(this.initMode, out var weapon) ?
-			new NullBehaviour() :
-			weapon.Create(
-				createParam(this.initMode));
-
-		this.Button = new ExtremeMultiModalAbilityButton(
-			[ init ],
-			new RoleButtonActivator(),
-			KeyCode.F);
-	}
-
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
-	{　}
-
-	public void ResetOnMeetingStart()
-	{　}
-
-	public void Update(PlayerControl rolePlayer)
-	{
-		if (this.Button?.Behavior is NullBehaviour)
-		{
-			this.Button.SetButtonShow(false);
-		}
-	}
-
-	protected override void CreateSpecificOption(IOptionInfo parentOps)
-	{
-		CreateSelectionOption(
-			Option.InitAbility,
-			Enum.GetValues<Ability>()
-				.Select(x => x.ToString())
-				.ToArray(),
-			parentOps);
-	}
-
-	protected override void RoleSpecificInit()
-	{
 		this.initMode = (Ability)OptionManager.Instance.GetValue<int>(
 			this.GetRoleOptionId(Option.InitAbility));
 
@@ -372,6 +339,66 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new BeamSaber(5.0f, true)
 			}
 		};
+
+		BehaviorBase init = this.getAbilityBehavior(this.initMode);
+
+		this.Button = new ExtremeMultiModalAbilityButton(
+			[ init ],
+			new RoleButtonActivator(),
+			KeyCode.F);
+	}
+
+	public void RoleAbilityInit()
+	{ }
+
+	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	{　}
+
+	public void ResetOnMeetingStart()
+	{　}
+
+	public void Update(PlayerControl rolePlayer)
+	{
+		if (this.Button?.Behavior is NullBehaviour)
+		{
+			this.Button.SetButtonShow(false);
+		}
+	}
+
+	protected override void CreateSpecificOption(IOptionInfo parentOps)
+	{
+		CreateSelectionOption(
+			Option.InitAbility,
+			Enum.GetValues<Ability>()
+				.Select(x => x.ToString())
+				.ToArray(),
+			parentOps);
+
+		CreateFloatOption(
+			RoleAbilityCommonOption.AbilityCoolTime,
+			IRoleAbilityMixin.DefaultCoolTime,
+			IRoleAbilityMixin.MinCoolTime,
+			IRoleAbilityMixin.MaxCoolTime,
+			IRoleAbilityMixin.Step,
+			parentOps,
+			format: OptionUnit.Second);
+
+
+		CreateIntOption(
+			Option.BeamSaberCount,
+			1, 0, 10, 1, parentOps);
+		CreateIntOption(
+			Option.BeamSaberChargeTime,
+			5, 1, 60, 1, parentOps,
+			format: OptionUnit.Second);
+		CreateFloatOption(
+			Option.BeamSaberRange,
+			3.5f, 0.1f, 7.5f, 0.1f, parentOps);
+	}
+
+	protected override void RoleSpecificInit()
+	{
+
 	}
 
 	private CreateParam createParam(in Ability ability)
@@ -379,4 +406,67 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			_ => new("", Path.TestButton)
 		};
+
+	private BehaviorBase getAbilityBehavior(in Ability ability)
+	{
+		BehaviorBase? result;
+
+		ExtremeRolesPlugin.Logger.LogInfo(ability.ToString());
+
+		if (this.weapon is null ||
+			!this.weapon.TryGetValue(ability, out var weapon))
+		{
+			result = new NullBehaviour();
+		}
+		else
+		{
+			var weaponParam = createParam(ability);
+			result = weapon.Create(weaponParam);
+			this.loadAbilityOption(result, ability);
+		}
+		ExtremeRolesPlugin.Logger.LogInfo(result.ToString());
+		return result;
+	}
+
+	private void loadAbilityOption(in BehaviorBase behavior, in Ability ability)
+	{
+		var mng = OptionManager.Instance;
+
+		float coolTime = mng.GetValue<float>(
+			this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
+
+		behavior.SetCoolTime(coolTime);
+
+		switch (ability)
+		{
+			case Ability.HandGun:
+				//behavior.SetCount(3);
+				break;
+			case Ability.Sword:
+				// behavior.SetCount(3);
+				break;
+			case Ability.SniperRifle:
+				// behavior.SetCount(3);
+				break;
+			case Ability.BeamRifle:
+				// behavior.SetCount(3);
+				break;
+			case Ability.BeamSaber:
+				if (behavior is not ChargingCountBehaviour beamSaber)
+				{
+					throw new ArgumentException("BeamSaber Behavior is not ChargingCountBehaviour");
+				}
+
+				beamSaber.SetAbilityCount(
+					mng.GetValue<int>(
+						this.GetRoleOptionId(Option.BeamSaberCount)));
+				beamSaber.ChargeTime = mng.GetValue<int>(
+					this.GetRoleOptionId(Option.BeamSaberChargeTime));
+
+				break;
+			case Ability.All:
+				// behavior.SetCount(3);
+				break;
+		}
+	}
 }

@@ -259,6 +259,11 @@ public class ExtremeAbilityButton
 
 	protected void AddTimerOffset(in float offsetTime)
 	{
+		if (this.State is AbilityState.Ready)
+		{
+			this.setStatus(AbilityState.CoolDown);
+			this.Timer = 0;
+		}
 		this.Timer += offsetTime;
 	}
 
