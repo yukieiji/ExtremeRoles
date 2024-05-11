@@ -125,7 +125,7 @@ public sealed class ChargingAndActivatingCountBehaviour :
 				if ((
 						(this.AbilityCount < 1) ||
 						(this.reduceTiming is ReduceTiming.OnCharge && this.AbilityCount < 0)
-					)  &&
+					)  ||
 					!this.ability.Invoke(this.ChargeGage))
 				{
 					return false;
