@@ -195,7 +195,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 				Vector2 vector = target.GetTruePosition() - truePosition;
 				float magnitude = vector.magnitude;
-				if (magnitude <= range)
+				if (magnitude <= searchRange)
 				{
 					this.cacheResult.Add(target);
 				}
@@ -221,7 +221,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 			this.targetPlayerId = this.cacheResult[0].PlayerId;
-			Helper.Logging.Debug($"targetPlayerId:{this.targetPlayerId}");
 			return true;
 		}
 	}
@@ -361,37 +360,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	public void CreateAbility()
 	{
-		var mng = OptionManager.Instance;
-		this.initMode = (Ability)mng.GetValue<int>(
+		this.initMode = (Ability)OptionManager.Instance.GetValue<int>(
 			this.GetRoleOptionId(Option.InitAbility));
-
-		this.weapon = new Dictionary<Ability, IWeapon>()
-		{
-			{
-				Ability.HandGun,
-				new NormalGun(Ability.HandGun, null)
-			},
-			{
-				Ability.Sword,
-				new Sword(Ability.Sword, 0.0f)
-			},
-			{
-				Ability.SniperRifle,
-				new NormalGun(Ability.SniperRifle, null)
-			},
-			{
-				Ability.BeamRifle,
-				new NormalGun(Ability.BeamRifle, null)
-			},
-			{
-				Ability.BeamSaber,
-				new BeamSaber(
-					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.BeamSaberRange)),
-					mng.GetValue<bool>(
-						this.GetRoleOptionId(Option.BeamSaberAutoDetect)))
-			}
-		};
+		this.createWeapon();
 
 		BehaviorBase init = this.getAbilityBehavior(this.initMode);
 
@@ -455,6 +426,39 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	protected override void RoleSpecificInit()
 	{
 
+	}
+
+	private void createWeapon()
+	{
+		var mng = OptionManager.Instance;
+
+		this.weapon = new Dictionary<Ability, IWeapon>()
+		{
+			{
+				Ability.HandGun,
+				new NormalGun(Ability.HandGun, null)
+			},
+			{
+				Ability.Sword,
+				new Sword(Ability.Sword, 0.0f)
+			},
+			{
+				Ability.SniperRifle,
+				new NormalGun(Ability.SniperRifle, null)
+			},
+			{
+				Ability.BeamRifle,
+				new NormalGun(Ability.BeamRifle, null)
+			},
+			{
+				Ability.BeamSaber,
+				new BeamSaber(
+					mng.GetValue<float>(
+						this.GetRoleOptionId(Option.BeamSaberRange)),
+					mng.GetValue<bool>(
+						this.GetRoleOptionId(Option.BeamSaberAutoDetect)))
+			}
+		};
 	}
 
 	private CreateParam createParam(in Ability ability)
