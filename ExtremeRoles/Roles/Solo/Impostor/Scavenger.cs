@@ -107,7 +107,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		bool isAutoDetect) : IWeapon
 	{
 		private readonly float range = range;
-		private readonly bool isAutoDetect = isAutoDetect;
+		private readonly bool isIgnoreAutoDetect = !isAutoDetect;
 		private byte targetPlayerId;
 		private Vector2 chargePos = Vector2.zero;
 		private readonly List<PlayerControl> cacheResult = new List<PlayerControl>();
@@ -143,7 +143,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			if (this.targetPlayerId == byte.MaxValue)
 			{
-				return false;
+				return this.isIgnoreAutoDetect;
 			}
 
 
@@ -158,6 +158,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool isIaiOk(bool isCharge, float chargeGauge)
 		{
+			this.targetPlayerId = byte.MaxValue;
+
 			bool isCommonUse = IRoleAbility.IsCommonUse();
 
 			if (!isCommonUse)
@@ -165,7 +167,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 
-			if (!(isCharge && this.isAutoDetect))
+			if (!isCharge)
 			{
 				return true;
 			}
@@ -218,7 +220,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			if (this.cacheResult.Count <= 0)
 			{
-				return false;
+				return this.isIgnoreAutoDetect;
 			}
 			this.targetPlayerId = this.cacheResult[0].PlayerId;
 			return true;
