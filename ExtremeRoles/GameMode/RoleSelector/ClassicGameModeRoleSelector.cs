@@ -140,6 +140,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Thief,
 			ExtremeRoleId.Crewshroom,
 			ExtremeRoleId.Terorist,
+			ExtremeRoleId.Scavenger,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
