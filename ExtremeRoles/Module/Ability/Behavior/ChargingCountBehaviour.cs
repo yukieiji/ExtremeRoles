@@ -95,7 +95,6 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 			case AbilityState.Ready:
 				if (timer > 0 ||
 					this.AbilityCount <= 0 ||
-					this.IsUse() ||
 					!this.onCharge.Invoke())
 				{
 					return false;
@@ -108,8 +107,7 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 				newState = AbilityState.Charging;
 				break;
 			case AbilityState.Charging:
-				if (this.IsUse() &&
-					(
+				if ((
 						(this.AbilityCount > 0) ||
 						(this.reduceTiming is ReduceTiming.OnCharge && this.AbilityCount >= 0)
 					)  &&
