@@ -3,6 +3,8 @@
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Helper;
+
 using Act = System.Action;
 
 #nullable enable
@@ -23,43 +25,6 @@ public static class  WeaponHitHelper
 
 	public static bool IsHitWall(Collider2D other)
 		=> collisionLayer == (collisionLayer | (1 << other.gameObject.layer));
-
-	public static void OnHitCollider2D(
-		GameObject obj, Collider2D other,
-		byte localPlayerId,
-		bool isPermeatePlayer = false,
-		bool isHitWall = true)
-	{
-		ExtremeRolesPlugin.Logger.LogInfo("Hitting!!");
-		ExtremeRolesPlugin.Logger.LogInfo($"ObjName:{other}");
-		if (CachedPlayerControl.LocalPlayer.PlayerId != localPlayerId)
-		{
-			return;
-		}
-
-		// レイヤーDのオブジェクトと衝突した場合は消滅
-		if (other.TryGetComponent<PlayerControl>(out var pc) &&
-			pc != null &&
-			pc.Data != null &&
-			!pc.Data.IsDead &&
-			!pc.Data.Disconnected &&
-			pc.PlayerId != localPlayerId &&
-			!pc.inVent)
-		{
-			ExtremeRolesPlugin.Logger.LogInfo("Hit Player!!!");
-			if (isPermeatePlayer)
-			{
-				// Destory Rpc
-			}
-		}
-		else if (
-			isHitWall &&
-			collisionLayer == (collisionLayer | (1 << other.gameObject.layer)))
-		{
-			ExtremeRolesPlugin.Logger.LogInfo("Hit Wall");
-			// Destory Rpc
-		}
-	}
 }
 
 [Il2CppRegister]
@@ -68,7 +33,6 @@ public sealed class BulletBehaviour : MonoBehaviour
 	public sealed record Parameter(
 		string Img,
 		Vector2 Size,
-		Vector2 Direction,
 		float Speed,
 		float Range);
 
@@ -79,6 +43,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 	public static BulletBehaviour Create(
 		int id,
 		in PlayerControl abilityPlayer,
+		in Vector2 direction,
 		in Parameter param)
 	{
 		var obj = new GameObject($"Bullet_{id}");
@@ -89,7 +54,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 		bullet.Initialize(
 			param.Img,
 			param.Size,
-			param.Direction,
+			direction,
 			param.Speed,
 			param.Range,
 			abilityPlayer.PlayerId);
@@ -134,8 +99,6 @@ public sealed class BulletBehaviour : MonoBehaviour
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		ExtremeRolesPlugin.Logger.LogInfo("Hitting!!");
-		ExtremeRolesPlugin.Logger.LogInfo($"ObjName:{other}");
 		if (CachedPlayerControl.LocalPlayer.PlayerId != this.ignorePlayerId)
 		{
 			return;
@@ -144,11 +107,15 @@ public sealed class BulletBehaviour : MonoBehaviour
 		if (WeaponHitHelper.IsHitPlayer(other, out var pc) &&
 			pc.PlayerId != this.ignorePlayerId)
 		{
-			ExtremeRolesPlugin.Logger.LogInfo("Hit Player!!!");
+			Player.RpcUncheckMurderPlayer(
+				this.ignorePlayerId,
+				pc.PlayerId,
+				byte.MinValue);
+			Destroy(this.gameObject);
 		}
 		else if (WeaponHitHelper.IsHitWall(other))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo("Hit Wall");
+			Destroy(this.gameObject);
 		}
 	}
 }

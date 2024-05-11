@@ -115,6 +115,7 @@ public static class Path
 	public const string TeroristTeroMinigamePrefab = "assets/roles/teroristminigame.prefab";
 	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
 	public const string TeroristTeroSabotageButton = "ExtremeRoles.Resources.TeroristoSetbombImg.png";
+	public const string BulletImg = "ExtremeRoles.Resources.Bullet.png";
 	// !----- インポスター終了 -----
 
 	public const string VigilanteEmergencyCall =

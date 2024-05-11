@@ -236,6 +236,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private readonly BulletBehaviour.Parameter pram = param;
 		private readonly Dictionary<int, BulletBehaviour> bullet = new();
 		private int id = 0;
+		private Vector2 playerDirection;
 
 		public BehaviorBase Create(in CreateParam param)
 		{
@@ -267,13 +268,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				bullet != null &&
 				bullet.gameObject != null)
 			{
-				UnityEngine.Object.Destroy(bullet.gameObject);
+				UnityObject.Destroy(bullet.gameObject);
 			}
 			this.bullet.Remove(id);
 		}
 
 		public void CreateBullet(
 			int mngId,
+			in Vector2 direction,
 			in PlayerControl? rolePlayer)
 		{
 			if (rolePlayer == null)
@@ -284,17 +286,47 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			var bullet = BulletBehaviour.Create(
 				mngId,
 				rolePlayer,
+				direction,
 				this.pram);
 
 			this.bullet.Add(mngId, bullet);
 		}
 
+		private bool isUse()
+		{
+			this.playerDirection = Vector2.zero;
+
+			if (KeyboardJoystick.player.GetButton(40))
+			{
+				this.playerDirection.x = this.playerDirection.x + 1f;
+			}
+			if (KeyboardJoystick.player.GetButton(39))
+			{
+				this.playerDirection.x = this.playerDirection.x - 1f;
+			}
+			if (KeyboardJoystick.player.GetButton(44))
+			{
+				this.playerDirection.y = this.playerDirection.y + 1f;
+			}
+			if (KeyboardJoystick.player.GetButton(42))
+			{
+				this.playerDirection.y = this.playerDirection.y - 1f;
+			}
+
+			return IRoleAbility.IsCommonUse();
+		}
+
 		private bool ability()
 		{
-
+			if (this.playerDirection == Vector2.zero)
+			{
+				this.playerDirection.x = this.playerDirection.x +
+					(CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX ? -1 : 1);
+			}
 			// Rpc処理
 			CreateBullet(
 				this.id,
+				this.playerDirection,
 				CachedPlayerControl.LocalPlayer);
 
 			++this.id;
@@ -320,6 +352,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	{
 		InitAbility,
 
+		HandGunCount,
+		HandGunSpeed,
+		HandGunRange,
+
+		SniperRifleCount,
+		SniperRifleSpeed,
 
 		BeamSaberCount,
 		BeamSaberChargeTime,
@@ -411,6 +449,26 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			parentOps,
 			format: OptionUnit.Second);
 
+		CreateIntOption(
+			Option.HandGunCount,
+			1, 0, 10, 1, parentOps);
+		CreateFloatOption(
+			Option.HandGunSpeed,
+			10.0f, 0.5f, 15.0f, 0.5f, parentOps,
+			format: OptionUnit.Second);
+		CreateFloatOption(
+			Option.HandGunRange,
+			3.5f, 0.1f, 5.0f, 0.1f, parentOps);
+
+
+		CreateIntOption(
+			Option.SniperRifleCount,
+			1, 0, 10, 1, parentOps);
+		CreateFloatOption(
+			Option.SniperRifleSpeed,
+			50.0f, 25.0f, 75.0f, 0.5f, parentOps,
+			format: OptionUnit.Second);
+
 
 		CreateIntOption(
 			Option.BeamSaberCount,
@@ -440,7 +498,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			{
 				Ability.HandGun,
-				new NormalGun(Ability.HandGun, null)
+				new NormalGun(
+					Ability.HandGun,
+					new (
+						Path.BulletImg,
+						new Vector2(0.05f, 0.1f),
+						mng.GetValue<float>(
+							this.GetRoleOptionId(Option.HandGunSpeed)),
+						mng.GetValue<float>(
+							this.GetRoleOptionId(Option.HandGunRange))))
 			},
 			{
 				Ability.Sword,
@@ -448,7 +514,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.SniperRifle,
-				new NormalGun(Ability.SniperRifle, null)
+				new NormalGun(
+					Ability.SniperRifle,
+					new (
+						Path.BulletImg,
+						new Vector2(0.05f, 0.1f),
+						mng.GetValue<float>(
+							this.GetRoleOptionId(Option.SniperRifleSpeed)),
+						128.0f))
 			},
 			{
 				Ability.BeamRifle,
@@ -504,13 +577,25 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		switch (ability)
 		{
 			case Ability.HandGun:
-				//behavior.SetCount(3);
+				if (behavior is not CountBehavior handGun)
+				{
+					throw new ArgumentException("HandGun Behavior is not CountBehavior");
+				}
+				handGun.SetAbilityCount(
+					mng.GetValue<int>(
+						this.GetRoleOptionId(Option.HandGunCount)));
 				break;
 			case Ability.Sword:
 				// behavior.SetCount(3);
 				break;
 			case Ability.SniperRifle:
-				// behavior.SetCount(3);
+				if (behavior is not CountBehavior sniperRifle)
+				{
+					throw new ArgumentException("SniperRifle Behavior is not CountBehavior");
+				}
+				sniperRifle.SetAbilityCount(
+					mng.GetValue<int>(
+						this.GetRoleOptionId(Option.SniperRifleCount)));
 				break;
 			case Ability.BeamRifle:
 				// behavior.SetCount(3);
