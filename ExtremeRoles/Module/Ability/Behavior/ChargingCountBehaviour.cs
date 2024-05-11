@@ -58,11 +58,13 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 
 	public override void AbilityOff()
 	{
+		this.isCharge = false;
 		this.abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
+		this.isCharge = false;
 		this.forceAbilityOff?.Invoke();
 	}
 

@@ -70,12 +70,13 @@ public sealed class ChargingAndActivatingCountBehaviour :
 		{
 			reduceAbilityCount();
 		}
-
+		this.isCharge = false;
 		this.abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
+		this.isCharge = false;
 		this.forceAbilityOff?.Invoke();
 	}
 

@@ -194,6 +194,7 @@ public class ExtremeAbilityButton
 				if (!chargingBehavior.IsCharging)
 				{
 					chargingBehavior.ChargeGage = 0.0f;
+					this.Behavior.ForceAbilityOff();
 					this.setStatus(AbilityState.Ready);
 					return;
 				}
