@@ -243,7 +243,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			return new CountBehavior(
 			   param.Name,
 			   Loader.CreateSpriteFromResources(param.Path),
-			   IRoleAbility.IsCommonUse,
+			   isUse,
 			   ability,
 			   forceAbilityOff: Hide);
 		}
@@ -454,8 +454,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			1, 0, 10, 1, parentOps);
 		CreateFloatOption(
 			Option.HandGunSpeed,
-			10.0f, 0.5f, 15.0f, 0.5f, parentOps,
-			format: OptionUnit.Second);
+			10.0f, 0.5f, 15.0f, 0.5f, parentOps);
 		CreateFloatOption(
 			Option.HandGunRange,
 			3.5f, 0.1f, 5.0f, 0.1f, parentOps);
@@ -466,8 +465,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			1, 0, 10, 1, parentOps);
 		CreateFloatOption(
 			Option.SniperRifleSpeed,
-			50.0f, 25.0f, 75.0f, 0.5f, parentOps,
-			format: OptionUnit.Second);
+			50.0f, 25.0f, 75.0f, 0.5f, parentOps);
 
 
 		CreateIntOption(
@@ -502,7 +500,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					Ability.HandGun,
 					new (
 						Path.BulletImg,
-						new Vector2(0.05f, 0.1f),
+						new Vector2(0.05f, 0.075f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.HandGunSpeed)),
 						mng.GetValue<float>(
@@ -518,7 +516,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					Ability.SniperRifle,
 					new (
 						Path.BulletImg,
-						new Vector2(0.05f, 0.1f),
+						new Vector2(0.05f, 0.075f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.SniperRifleSpeed)),
 						128.0f))
