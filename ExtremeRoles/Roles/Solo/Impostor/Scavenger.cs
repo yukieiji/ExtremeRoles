@@ -361,7 +361,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	public void CreateAbility()
 	{
-		this.initMode = (Ability)OptionManager.Instance.GetValue<int>(
+		var mng = OptionManager.Instance;
+		this.initMode = (Ability)mng.GetValue<int>(
 			this.GetRoleOptionId(Option.InitAbility));
 
 		this.weapon = new Dictionary<Ability, IWeapon>()
@@ -384,7 +385,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.BeamSaber,
-				new BeamSaber(5.0f, true)
+				new BeamSaber(
+					mng.GetValue<float>(
+						this.GetRoleOptionId(Option.BeamSaberRange)),
+					mng.GetValue<bool>(
+						this.GetRoleOptionId(Option.BeamSaberAutoDetect)))
 			}
 		};
 
@@ -442,6 +447,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		CreateFloatOption(
 			Option.BeamSaberRange,
 			3.5f, 0.1f, 7.5f, 0.1f, parentOps);
+		CreateBoolOption(
+			Option.BeamSaberAutoDetect,
+			false, parentOps);
 	}
 
 	protected override void RoleSpecificInit()
