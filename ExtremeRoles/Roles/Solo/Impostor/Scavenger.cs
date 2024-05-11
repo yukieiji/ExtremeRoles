@@ -346,6 +346,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	protected override void RoleSpecificInit()
 	{
+		this.initMode = (Ability)OptionManager.Instance.GetValue<int>(
+			this.GetRoleOptionId(Option.InitAbility));
+
 		this.weapon = new Dictionary<Ability, IWeapon>()
 		{
 			{
@@ -366,7 +369,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.BeamSaber,
-				new BeamSaber(0.0f, true)
+				new BeamSaber(5.0f, true)
 			}
 		};
 	}
