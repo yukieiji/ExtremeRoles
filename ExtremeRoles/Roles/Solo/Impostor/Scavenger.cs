@@ -11,6 +11,8 @@ using System.Linq;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Performance.Il2Cpp;
+
 
 #nullable enable
 
@@ -108,6 +110,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private readonly bool isAutoDetect = isAutoDetect;
 		private byte targetPlayerId;
 		private Vector2 chargePos = Vector2.zero;
+		private readonly List<PlayerControl> cacheResult = new List<PlayerControl>();
 
 		public BehaviorBase Create(in CreateParam param)
 			=> new ChargingCountBehaviour(
@@ -130,6 +133,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool startIai()
 		{
+			this.cacheResult.Clear();
 			this.targetPlayerId = byte.MaxValue;
 			this.chargePos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 			return true;
@@ -137,11 +141,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool tryIai(float chargeGauge)
 		{
-			this.chargePos = Vector2.zero;
 			if (this.targetPlayerId == byte.MaxValue)
 			{
-				return true;
+				return false;
 			}
+
 
 			Player.RpcUncheckMurderPlayer(
 				CachedPlayerControl.LocalPlayer.PlayerId,
@@ -167,13 +171,57 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 
 			float searchRange = this.range * chargeGauge * chargeGauge;
-			var pc = Player.GetClosestPlayerInRange(searchRange);
 
-			if (pc == null)
+			var allPlayer = GameData.Instance.AllPlayers;
+			this.cacheResult.Clear();
+
+			if (!ShipStatus.Instance)
 			{
 				return false;
 			}
-			this.targetPlayerId = pc.PlayerId;
+
+			PlayerControl pc = CachedPlayerControl.LocalPlayer;
+			Vector2 truePosition = pc.GetTruePosition();
+			var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+			foreach (GameData.PlayerInfo playerInfo in
+				GameData.Instance.AllPlayers.GetFastEnumerator())
+			{
+				if (!Player.IsValidPlayer(role, pc, playerInfo))
+				{
+					continue;
+				}
+				PlayerControl target = playerInfo.Object;
+
+				Vector2 vector = target.GetTruePosition() - truePosition;
+				float magnitude = vector.magnitude;
+				if (magnitude <= range)
+				{
+					this.cacheResult.Add(target);
+				}
+			}
+
+			this.cacheResult.Sort(delegate (PlayerControl a, PlayerControl b)
+			{
+				float magnitude2 = (a.GetTruePosition() - truePosition).magnitude;
+				float magnitude3 = (b.GetTruePosition() - truePosition).magnitude;
+				if (magnitude2 > magnitude3)
+				{
+					return 1;
+				}
+				if (magnitude2 < magnitude3)
+				{
+					return -1;
+				}
+				return 0;
+			});
+
+			if (this.cacheResult.Count <= 0)
+			{
+				return false;
+			}
+			this.targetPlayerId = this.cacheResult[0].PlayerId;
+			Helper.Logging.Debug($"targetPlayerId:{this.targetPlayerId}");
 			return true;
 		}
 	}
