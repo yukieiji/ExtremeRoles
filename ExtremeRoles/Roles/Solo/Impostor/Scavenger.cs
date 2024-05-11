@@ -13,6 +13,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance.Il2Cpp;
 
+using UnityObject = UnityEngine.Object;
 
 #nullable enable
 
@@ -242,7 +243,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			   param.Name,
 			   Loader.CreateSpriteFromResources(param.Path),
 			   IRoleAbility.IsCommonUse,
-			   ability);
+			   ability,
+			   forceAbilityOff: Hide);
 		}
 
 		public void Hide()
@@ -254,7 +256,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				{
 					continue;
 				}
-				UnityEngine.Object.Destroy(ballet.gameObject);
+				UnityObject.Destroy(ballet.gameObject);
 			}
 			this.bullet.Clear();
 		}
