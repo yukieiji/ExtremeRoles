@@ -385,8 +385,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		// FlameThrower + Sword + HandGun
 		All,
 	}
-
-	private Ability initMode = Ability.Null;
 	private IReadOnlyDictionary<Ability, IWeapon>? weapon;
 
 
@@ -402,11 +400,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	public void CreateAbility()
 	{
-		this.initMode = (Ability)OptionManager.Instance.GetValue<int>(
+		var initMode = (Ability)OptionManager.Instance.GetValue<int>(
 			this.GetRoleOptionId(Option.InitAbility));
 		this.createWeapon();
 
-		BehaviorBase init = this.getAbilityBehavior(this.initMode);
+		BehaviorBase init = this.getAbilityBehavior(initMode);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
 			[ init ],
