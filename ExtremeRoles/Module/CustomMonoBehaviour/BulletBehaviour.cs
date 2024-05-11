@@ -84,8 +84,11 @@ public sealed class BulletBehaviour : MonoBehaviour
 
 		this.initialPosition = transform.position;
 
+		this.transform.LookAt2d(this.initialPosition + direction);
+
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
-		rb.AddForce(direction.normalized * speed);
+		rb.velocity = direction.normalized * speed;
+		rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 		rb.isKinematic = true;
 	}
 
