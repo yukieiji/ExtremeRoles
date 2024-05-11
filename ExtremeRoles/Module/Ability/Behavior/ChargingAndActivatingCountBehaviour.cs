@@ -86,8 +86,9 @@ public sealed class ChargingAndActivatingCountBehaviour :
 		updateAbilityCountText();
 	}
 
-	public override bool IsUse() => this.isUse.Invoke(
-		this.isCharge, this.ChargeGage);
+	public override bool IsUse() =>
+		(this.AbilityCount > 0 || this.isCharge) &&
+		this.isUse.Invoke(this.isCharge, this.ChargeGage);
 
 	public void SetAbilityCount(int newAbilityNum)
 	{
