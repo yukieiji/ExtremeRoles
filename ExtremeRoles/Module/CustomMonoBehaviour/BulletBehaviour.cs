@@ -177,7 +177,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 	{
 		if (isReset && this.anchor != null)
 		{
-			this.anchor.transform.Rotate(Vector3.forward, 0.0f);
+			this.anchor.transform.rotation = Quaternion.identity;
 		}
 		this.rotationInfo = rotation;
 	}
