@@ -13,6 +13,8 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module;
 
+#nullable enable
+
 public static class CustomOptionCsvProcessor
 {
 	private const string csvName = "option.csv";
@@ -85,7 +87,7 @@ public static class CustomOptionCsvProcessor
 
 			foreach (GameModes gameMode in Enum.GetValues(typeof(GameModes)))
 			{
-				IGameOptions option = gameMode switch
+				IGameOptions? option = gameMode switch
 				{
 					GameModes.Normal or GameModes.NormalFools =>
 						gameOptionManager.normalGameHostOptions.Cast<IGameOptions>(),
@@ -117,13 +119,17 @@ public static class CustomOptionCsvProcessor
 		{
 			using var csv = new StreamReader(csvName, new UTF8Encoding(true));
 
-			string infoData = csv.ReadLine(); // verHeader
+			string? infoData = csv.ReadLine(); // verHeader
+			if (string.IsNullOrEmpty(infoData))
+			{
+				return false;
+			}
 			string[] info = infoData.Split(comma);
 
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"Loading from {info[1]} with {info[2]} {info[3]} Data");
 
-			string line = csv.ReadLine(); // ヘッダー
+			string? line = csv.ReadLine(); // ヘッダー
 			while ((line = csv.ReadLine()) != null)
 			{
 				string[] option = line.Split(comma);
@@ -135,7 +141,8 @@ public static class CustomOptionCsvProcessor
 					case vanilaOptionKey:
 						GameModes mode = (GameModes)Enum.Parse(typeof(GameModes), option[1]);
 						if (!importedVanillaOptions.TryGetValue(
-								mode, out List<byte> modeOption))
+								mode, out List<byte>? modeOption) ||
+							modeOption is null)
 						{
 							modeOption = new List<byte>();
 							importedVanillaOptions.Add(mode, modeOption);
