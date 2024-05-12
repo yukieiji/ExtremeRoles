@@ -40,7 +40,7 @@ public static class CustomOptionCsvProcessor
 
 		if (TwitchManager.InstanceExists)
 		{
-			var info = WinApiHelper.SaveFile(".csv", "Select Export FileName");
+			var info = WinApiHelper.SaveFile("*.csv", "Select Export FileName");
 			if (info is null ||
 				info.FilePath is null)
 			{
@@ -135,7 +135,7 @@ public static class CustomOptionCsvProcessor
 
 		if (TwitchManager.InstanceExists)
 		{
-			var info = WinApiHelper.OpenFile(".csv", "Select Import FileName");
+			var info = WinApiHelper.OpenFile("*.csv", "Select Import FileName");
 			if (info is null ||
 				info.FilePath is null)
 			{

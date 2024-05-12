@@ -15,9 +15,13 @@ public sealed class WinApiHelper
 		string defaultDir = "",
 		int? defaultFilterIdx = null)
 	{
-		var ofn = create(filter, title, defaultDir, defaultFilterIdx);
+		var ofn = create(
+			filter,
+			title,
+			defaultDir,
+			defaultFilterIdx);
 
-		bool result = DllApi.GetOpenFileName(ofn);
+		bool result = DllApi.GetOpenFileNameW(ofn);
 
 		return result ? new FileInfo(ofn.stringFile, ofn.stringFileTitle) : null;
 	}
@@ -28,9 +32,13 @@ public sealed class WinApiHelper
 		string defaultDir = "",
 		int? defaultFilterIdx = null)
 	{
-		var ofn = create(filter, title, defaultDir, defaultFilterIdx);
+		var ofn = create(
+			filter,
+			title,
+			defaultDir,
+			defaultFilterIdx);
 
-		bool result = DllApi.GetSaveFileName(ofn);
+		bool result = DllApi.GetSaveFileNameW(ofn);
 
 		return result ? new FileInfo(ofn.stringFile, ofn.stringFileTitle) : null;
 	}
