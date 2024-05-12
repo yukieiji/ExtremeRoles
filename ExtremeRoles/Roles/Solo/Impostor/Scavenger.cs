@@ -81,11 +81,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					CachedPlayerControl.LocalPlayer);
 			}
 
+			this.showSword.gameObject.SetActive(true);
 			this.showSword.SetRotation(
 				new SwordBehaviour.RotationInfo(
 					this.chargeTime, -45f, false),
 				true);
-			this.showSword.gameObject.SetActive(true);
 
 			return true;
 		}
@@ -106,7 +106,18 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 
 		private bool isSwordUse(bool isCharge, float chargeGauge)
-			=> IRoleAbility.IsCommonUse();
+		{
+			bool isCommonUse = IRoleAbility.IsCommonUse();
+			if (!isCommonUse)
+			{
+				return false;
+			}
+			if (!isCharge)
+			{
+				return true;
+			}
+			return chargeGauge == 1.0f;
+		}
 		private bool isValidSword()
 			=> this.showSword != null && this.showSword.gameObject.active;
 
