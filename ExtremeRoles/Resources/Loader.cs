@@ -116,6 +116,7 @@ public static class Path
 	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
 	public const string TeroristTeroSabotageButton = "ExtremeRoles.Resources.TeroristoSetbombImg.png";
 	public const string BulletImg = "ExtremeRoles.Resources.Bullet.png";
+	public const string SwordImg = "ExtremeRoles.Resources.Sword.png";
 	// !----- インポスター終了 -----
 
 	public const string VigilanteEmergencyCall =

@@ -157,7 +157,6 @@ public sealed class SwordBehaviour : MonoBehaviour
 	public SwordBehaviour(System.IntPtr ptr) : base(ptr) { }
 
 	public static SwordBehaviour Create(
-		in string img,
 		in float r,
 		in PlayerControl anchorPlayer)
 	{
@@ -168,19 +167,19 @@ public sealed class SwordBehaviour : MonoBehaviour
 
 		var sword = obj.AddComponent<SwordBehaviour>();
 		sword.initialize(
-			img,
-			new Vector2(),
+			Path.SwordImg,
+			new Vector2(0.9f, 0.1f),
 			anchorPlayer);
 		return sword;
 	}
 
 	public void SetRotation(in RotationInfo rotation, bool isReset)
 	{
-		this.rotationInfo = rotation;
 		if (isReset && this.anchor != null)
 		{
 			this.anchor.transform.Rotate(Vector3.forward, 0.0f);
 		}
+		this.rotationInfo = rotation;
 	}
 
 	public float CanUse(

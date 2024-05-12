@@ -39,11 +39,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		in Ability type,
 		float chargeTime,
 		float activeTime,
-		float xSize) : IWeapon
+		float r) : IWeapon
 	{
 		private SwordBehaviour? showSword;
 		private Ability type = type;
-		private readonly float xSize = xSize;
+		private readonly float r = r;
 		private readonly float chargeTime = chargeTime;
 		private readonly float activeTime = activeTime;
 
@@ -78,12 +78,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			if (this.showSword == null)
 			{
 				this.showSword = createSword(
-					this.xSize, CachedPlayerControl.LocalPlayer);
+					CachedPlayerControl.LocalPlayer);
 			}
 
 			this.showSword.SetRotation(
 				new SwordBehaviour.RotationInfo(
-					this.chargeTime, 45f, false),
+					this.chargeTime, -45f, false),
 				true);
 			this.showSword.gameObject.SetActive(true);
 
@@ -110,12 +110,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private bool isValidSword()
 			=> this.showSword != null && this.showSword.gameObject.active;
 
-		private static SwordBehaviour createSword(
-			float xSize,
+		private SwordBehaviour createSword(
 			in PlayerControl rolePlayer)
 			=> SwordBehaviour.Create(
-				"", new Vector2(),
-				rolePlayer);
+				this.r, rolePlayer);
 	}
 
 	private sealed class BeamSaber(
@@ -482,13 +480,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			1, 0, 10, 1, parentOps);
 		CreateFloatOption(
 			Option.SwordChargeTime,
-			3.0f, 0.5f, 30.0f, 0.5f, parentOps);
+			3.0f, 0.5f, 30.0f, 0.5f, parentOps,
+			format: OptionUnit.Second);
 		CreateFloatOption(
 			Option.SwordActiveTime,
-			15.0f, 0.5f, 60.0f, 0.5f, parentOps);
+			15.0f, 0.5f, 60.0f, 0.5f, parentOps,
+			format: OptionUnit.Second);
 		CreateFloatOption(
 			Option.SwordR,
-			5.0f, 2.5f, 10.0f, 0.5f, parentOps);
+			1.0f, 0.25f, 5.0f, 0.25f, parentOps);
 
 		CreateIntOption(
 			Option.SniperRifleCount,
