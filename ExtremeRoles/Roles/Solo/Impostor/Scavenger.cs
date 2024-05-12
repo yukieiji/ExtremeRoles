@@ -14,6 +14,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 #nullable enable
 
@@ -32,21 +33,31 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private sealed class Sword(
 		in Ability type,
+		float chargeTime,
+		float activeTime,
 		float xSize) : IWeapon
 	{
 		private SwordBehaviour? showSword;
 		private Ability type = type;
 		private readonly float xSize = xSize;
+		private readonly float chargeTime = chargeTime;
+		private readonly float activeTime = activeTime;
 
 		public BehaviorBase Create(in CreateParam param)
-			=> new ChargingAndActivatingCountBehaviour(
+		{
+			var behavior = new ChargingAndActivatingCountBehaviour(
 				param.Name,
 				Loader.CreateSpriteFromResources(param.Path),
 				isSwordUse,
 				startSwordRotation,
 				startSwordCharge,
 				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
-				isValidSword, isValidSword);
+				isValidSword, isValidSword,
+				Hide, Hide);
+			behavior.ChargeTime = chargeTime;
+			behavior.ActiveTime = activeTime;
+			return behavior;
+		}
 
 		public void Hide()
 		{
@@ -68,7 +79,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			this.showSword.SetRotation(
 				new SwordBehaviour.RotationInfo(
-					0.0f, 0.0f, false),
+					this.chargeTime, 45f, false),
 				true);
 			this.showSword.gameObject.SetActive(true);
 
@@ -85,7 +96,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 			this.showSword.SetRotation(
 				new SwordBehaviour.RotationInfo(
-					0.0f, 0.0f, true),
+					this.activeTime, 365f, true),
 				false);
 			return true;
 		}
@@ -356,6 +367,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		HandGunSpeed,
 		HandGunRange,
 
+		SwordCount,
+		SwordChargeTime,
+		SwordActiveTime,
+		SwordR,
+
 		SniperRifleCount,
 		SniperRifleSpeed,
 
@@ -457,6 +473,18 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.HandGunRange,
 			3.5f, 0.1f, 5.0f, 0.1f, parentOps);
 
+		CreateIntOption(
+			Option.SwordCount,
+			1, 0, 10, 1, parentOps);
+		CreateFloatOption(
+			Option.SwordChargeTime,
+			3.0f, 0.5f, 30.0f, 0.5f, parentOps);
+		CreateFloatOption(
+			Option.SwordActiveTime,
+			15.0f, 0.5f, 60.0f, 0.5f, parentOps);
+		CreateFloatOption(
+			Option.SwordR,
+			5.0f, 2.5f, 10.0f, 0.5f, parentOps);
 
 		CreateIntOption(
 			Option.SniperRifleCount,
@@ -506,7 +534,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.Sword,
-				new Sword(Ability.Sword, 0.0f)
+				new Sword(
+					Ability.Sword,
+					mng.GetValue<float>(
+						this.GetRoleOptionId(Option.SwordChargeTime)),
+					mng.GetValue<float>(
+						this.GetRoleOptionId(Option.SwordActiveTime)),
+					mng.GetValue<float>(
+						this.GetRoleOptionId(Option.SwordR)))
 			},
 			{
 				Ability.SniperRifle,
@@ -582,7 +617,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 						this.GetRoleOptionId(Option.HandGunCount)));
 				break;
 			case Ability.Sword:
-				// behavior.SetCount(3);
+				if (behavior is not ICountBehavior countBehavior)
+				{
+					throw new ArgumentException("Sword Behavior is not CountBehavior");
+				}
+				countBehavior.SetAbilityCount(
+					mng.GetValue<int>(
+						this.GetRoleOptionId(Option.SwordCount)));
 				break;
 			case Ability.SniperRifle:
 				if (behavior is not CountBehavior sniperRifle)

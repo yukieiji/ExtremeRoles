@@ -5,8 +5,6 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Helper;
 
-using Act = System.Action;
-
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -160,18 +158,18 @@ public sealed class SwordBehaviour : MonoBehaviour
 
 	public static SwordBehaviour Create(
 		in string img,
-		in Vector2 size,
+		in float r,
 		in PlayerControl anchorPlayer)
 	{
 		var obj = new GameObject($"Sword_{anchorPlayer.PlayerId}");
 		obj.transform.position = anchorPlayer.transform.position - new Vector3(
-			size.x / 2 + 0.5f, 0.0f, 0.0f);
+			r + 0.5f, 0.0f, 0.0f);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 
 		var sword = obj.AddComponent<SwordBehaviour>();
 		sword.initialize(
 			img,
-			size,
+			new Vector2(),
 			anchorPlayer);
 		return sword;
 	}
@@ -201,8 +199,11 @@ public sealed class SwordBehaviour : MonoBehaviour
 
 	public void Use()
 	{
-		// キル
-		Destroy(this.gameObject);
+		Player.RpcUncheckMurderPlayer(
+			CachedPlayerControl.LocalPlayer.PlayerId,
+			this.ignorePlayerId,
+			byte.MinValue);
+		this.gameObject.SetActive(false);
 	}
 
 	public void Update()
@@ -217,7 +218,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 		{
 			if (this.rotationInfo.IsActive)
 			{
-				Destroy(this.gameObject);
+				this.gameObject.SetActive(false);
 			}
 			else
 			{
@@ -235,7 +236,8 @@ public sealed class SwordBehaviour : MonoBehaviour
 	public void OnTriggerEnter2D(Collider2D other)
 	{
 		if (this.rotationInfo is null ||
-			!this.rotationInfo.IsActive)
+			!this.rotationInfo.IsActive ||
+			CachedPlayerControl.LocalPlayer.PlayerId != this.ignorePlayerId)
 		{
 			return;
 		}
@@ -243,11 +245,13 @@ public sealed class SwordBehaviour : MonoBehaviour
 		if (WeaponHitHelper.IsHitPlayer(other, out var pc) &&
 			pc.PlayerId != this.ignorePlayerId)
 		{
-			ExtremeRolesPlugin.Logger.LogInfo("Hit Player!!!");
+			Player.RpcUncheckMurderPlayer(
+				this.ignorePlayerId,
+				pc.PlayerId,
+				byte.MinValue);
 		}
 		else if (WeaponHitHelper.IsHitWall(other))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo("Hit Wall");
 			this.gameObject.SetActive(false);
 		}
 	}
@@ -282,6 +286,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 			bulletImg);
 
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
+		rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 		rb.isKinematic = true;
 	}
 }
