@@ -277,7 +277,8 @@ public class ExtremeAbilityButton
 		if (Behavior.IsUse() &&
 			Behavior.TryUseAbility(Timer, State, out AbilityState newState))
 		{
-			ExtremeRolesPlugin.Logger.LogInfo($"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}");
+			ExtremeRolesPlugin.Logger.LogInfo(
+				$"ExtremeAbilityButton : Clicking {this.Behavior.Graphic.Text}, {State} => {newState}");
 			if (newState == AbilityState.CoolDown)
 			{
 				Behavior.AbilityOff();

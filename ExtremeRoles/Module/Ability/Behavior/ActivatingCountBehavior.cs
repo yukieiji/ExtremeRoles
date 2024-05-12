@@ -15,6 +15,7 @@ public sealed class ActivatingCountBehavior : CountBehavior, IActivatingBehavior
 	public bool CanAbilityActiving => this.canActivating.Invoke();
 	private Func<bool> canActivating;
 
+	private bool isActivating;
 	private bool isReduceOnActive;
 
 	public ActivatingCountBehavior(
@@ -35,12 +36,21 @@ public sealed class ActivatingCountBehavior : CountBehavior, IActivatingBehavior
 
 	public override void AbilityOff()
 	{
+		this.isActivating = false;
 		if (!this.isReduceOnActive)
 		{
 			this.ReduceAbilityCount();
 		}
 		base.AbilityOff();
 	}
+	public override void ForceAbilityOff()
+	{
+		this.isActivating = false;
+		base.ForceAbilityOff();
+	}
+
+	public override bool IsUse()
+		=> this.CanUse.Invoke() && (this.AbilityCount > 0 || this.isActivating);
 
 	public override AbilityState Update(AbilityState curState)
 	{
@@ -66,6 +76,7 @@ public sealed class ActivatingCountBehavior : CountBehavior, IActivatingBehavior
 		{
 			this.ReduceAbilityCount();
 		}
+		this.isActivating = true;
 
 		return true;
 	}

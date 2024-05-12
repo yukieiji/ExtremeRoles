@@ -11,10 +11,11 @@ namespace ExtremeRoles.Module.Ability.Behavior;
 public class CountBehavior : BehaviorBase, ICountBehavior
 {
 	public int AbilityCount { get; private set; }
+	protected readonly Func<bool> CanUse;
 
 	private bool isUpdate = false;
+
 	private readonly Func<bool> ability;
-	private readonly Func<bool> canUse;
 	private readonly Action? forceAbilityOff;
 	private readonly Action? abilityOff;
 
@@ -29,7 +30,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 		Action? forceAbilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
-		this.canUse = canUse;
+		this.CanUse = canUse;
 
 		this.abilityOff = abilityOff;
 		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
@@ -57,7 +58,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 	}
 
 	public override bool IsUse()
-		=> canUse.Invoke() && AbilityCount > 0;
+		=> CanUse.Invoke() && AbilityCount > 0;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)

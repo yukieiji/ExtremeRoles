@@ -29,6 +29,7 @@ public sealed class ChargingAndActivatingCountBehaviour :
 
 	private bool isUpdate = false;
 	private bool isCharge = false;
+	private bool isActive = false;
 	private TMPro.TextMeshPro? abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
@@ -70,12 +71,14 @@ public sealed class ChargingAndActivatingCountBehaviour :
 		{
 			reduceAbilityCount();
 		}
+		this.isActive = false;
 		this.isCharge = false;
 		this.abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
 	{
+		this.isActive =	false;
 		this.isCharge = false;
 		this.forceAbilityOff?.Invoke();
 	}
@@ -87,7 +90,7 @@ public sealed class ChargingAndActivatingCountBehaviour :
 	}
 
 	public override bool IsUse() =>
-		(this.AbilityCount > 0 || this.isCharge) &&
+		(this.AbilityCount > 0 || this.isCharge || this.isActive) &&
 		this.isUse.Invoke(this.isCharge, this.ChargeGage);
 
 	public void SetAbilityCount(int newAbilityNum)
@@ -135,6 +138,7 @@ public sealed class ChargingAndActivatingCountBehaviour :
 					reduceAbilityCount();
 				}
 				this.isCharge = false;
+				this.isActive = true;
 				newState = this.ActiveTime > 0.0f ? AbilityState.Activating : AbilityState.CoolDown;
 				break;
 			default:
@@ -145,7 +149,7 @@ public sealed class ChargingAndActivatingCountBehaviour :
 
 	public override AbilityState Update(AbilityState curState)
 	{
-		if (curState == AbilityState.Charging)
+		if (curState is AbilityState.Charging or AbilityState.Activating)
 		{
 			return curState;
 		}
