@@ -5,9 +5,10 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-using ExtremeRoles.Module.CustomOption;
-
 using AmongUs.GameOptions;
+
+using Twitch;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 
@@ -35,13 +36,31 @@ public static class CustomOptionCsvProcessor
 
 	public static bool Export()
 	{
-		Helper.Logging.Debug("Export Start!!!!!!");
+		string path = csvName;
+
+		if (TwitchManager.InstanceExists)
+		{
+			var info = WinApiHelper.SaveFile(".csv", "Select Export FileName");
+			if (info is null ||
+				info.FilePath is null)
+			{
+				return false;
+			}
+
+			path = info.FilePath;
+			if (!path.EndsWith(".csv"))
+			{
+				path += ".csv";
+			}
+		}
+
+		ExtremeRolesPlugin.Logger.LogInfo("---------- Option Export Start ----------");
 
 		var cleaner = new StringCleaner();
 
 		try
 		{
-			using var csv = new StreamWriter(csvName, false, new UTF8Encoding(true));
+			using var csv = new StreamWriter(path, false, new UTF8Encoding(true));
 
 			csv.WriteLine(
 				string.Format("{1}{0}{2}{0}{3}{0}{4}",
@@ -98,6 +117,9 @@ public static class CustomOptionCsvProcessor
 				if (option == null) { continue; }
 				exportIGameOptions(csv, gameOptionManager.gameOptionsFactory, option, gameMode);
 			}
+
+			ExtremeRolesPlugin.Logger.LogInfo("---------- Option Export End ----------");
+
 			return true;
 		}
 		catch (Exception e)
@@ -109,6 +131,24 @@ public static class CustomOptionCsvProcessor
 
 	public static bool Import()
 	{
+		string path = csvName;
+
+		if (TwitchManager.InstanceExists)
+		{
+			var info = WinApiHelper.OpenFile(".csv", "Select Import FileName");
+			if (info is null ||
+				info.FilePath is null)
+			{
+				return false;
+			}
+
+			path = info.FilePath;
+			if (!path.EndsWith(".csv"))
+			{
+				return false;
+			}
+		}
+
 		ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
 
 		Dictionary<string, int> importedOption = new Dictionary<string, int>();
@@ -117,17 +157,17 @@ public static class CustomOptionCsvProcessor
 
 		try
 		{
-			using var csv = new StreamReader(csvName, new UTF8Encoding(true));
+			using var csv = new StreamReader(path, new UTF8Encoding(true));
 
 			string? infoData = csv.ReadLine(); // verHeader
 			if (string.IsNullOrEmpty(infoData))
 			{
 				return false;
 			}
-			string[] info = infoData.Split(comma);
+			string[] exportInfo = infoData.Split(comma);
 
 			ExtremeRolesPlugin.Logger.LogInfo(
-				$"Loading from {info[1]} with {info[2]} {info[3]} Data");
+				$"Loading from {exportInfo[1]} with {exportInfo[2]} {exportInfo[3]} Data");
 
 			string? line = csv.ReadLine(); // ヘッダー
 			while ((line = csv.ReadLine()) != null)

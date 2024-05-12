@@ -40,8 +40,8 @@ public static class DllApi
 	public static extern int MessageBox(IntPtr hWnd, string text, string caption, int options);
 
 	[DllImport("Comdlg32.dll", CharSet = CharSet.Unicode, ThrowOnUnmappableChar = true, SetLastError = true)]
-	private static extern bool GetOpenFileName([In][Out] OPENFILENAME ofn);
+	public static extern bool GetOpenFileName([In][Out] OPENFILENAME ofn);
 
 	[DllImport("Comdlg32.dll", CharSet = CharSet.Unicode, ThrowOnUnmappableChar = true, SetLastError = true)]
-	private static extern bool GetSaveFileName([In][Out] OPENFILENAME ofn);
+	public static extern bool GetSaveFileName([In][Out] OPENFILENAME ofn);
 }
