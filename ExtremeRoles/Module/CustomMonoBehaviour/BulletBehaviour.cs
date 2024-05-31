@@ -168,7 +168,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 		var sword = obj.AddComponent<SwordBehaviour>();
 		sword.initialize(
 			Path.SwordImg,
-			new Vector2(0.825f, 0.09f),
+			new Vector2(0.815f, 0.08f),
 			anchorPlayer);
 		return sword;
 	}
