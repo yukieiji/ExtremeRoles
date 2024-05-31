@@ -88,8 +88,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
     public bool UseAbility()
     {
 		if (!ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
-				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) ||
-			system == null)
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system))
 		{
 			return false;
 		}
@@ -101,8 +100,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
 		if (decrease != 0 && GameManager.Instance.LogicOptions.IsTryCast<LogicOptionsNormal>(out var opt))
 		{
-			int discussionTime = opt!.GetDiscussionTime();
-			int voteTime = opt!.GetVotingTime();
+			int discussionTime = opt.GetDiscussionTime();
+			int voteTime = opt.GetVotingTime();
 			int reduceTime = Mathf.CeilToInt((discussionTime + voteTime) * (decrease / 100.0f));
 
 			ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(

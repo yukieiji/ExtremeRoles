@@ -77,11 +77,11 @@ public static class GameSystem
 		foreach (var task in CachedShipStatus.Instance.SpecialTasks)
 		{
 			if (!task.IsTryCast<SabotageTask>(out var saboTask) ||
-				saboTask!.Arrows.Count == 0)
+				saboTask.Arrows.Count == 0)
 			{
 				continue;
 			}
-			template = saboTask!.Arrows[0];
+			template = saboTask.Arrows[0];
 			break;
 		}
 		if (template == null)
@@ -299,9 +299,9 @@ public static class GameSystem
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                if (modMap!.IsCustomSabotageTask(taskType))
+                if (modMap.IsCustomSabotageTask(taskType))
                 {
-                    modMap!.RpcRepairCustomSabotage(taskType);
+                    modMap.RpcRepairCustomSabotage(taskType);
                     continue;
                 }
             }
@@ -366,16 +366,16 @@ public static class GameSystem
 
 				if (Minigame.Instance.IsTryCast<SwitchMinigame>(out var switchMinigame))
 				{
-					switchMinigame!.ForceClose();
+					switchMinigame.ForceClose();
 				}
-				switchSystem!.ActualSwitches = switchSystem!.ExpectedSwitches;
+				switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
 				break;
 			case SystemTypes.MushroomMixupSabotage:
 				if (!system.IsTryCast<MushroomMixupSabotageSystem>(out var mixupSystem))
 				{
 					return;
 				}
-				mixupSystem!.currentSecondsUntilHeal = 0.001f;
+				mixupSystem.currentSecondsUntilHeal = 0.001f;
 				break;
 			default:
 				break;
@@ -418,7 +418,7 @@ public static class GameSystem
 				PlayerTask.TaskIsEmergency(task)) { continue; }
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
-				modMap!.IsCustomSabotageTask(task.TaskType))
+				modMap.IsCustomSabotageTask(task.TaskType))
             {
 				continue;
 			}

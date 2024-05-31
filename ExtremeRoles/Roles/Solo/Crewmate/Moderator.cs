@@ -154,8 +154,7 @@ public sealed class Moderator :
 	public bool UseAbility()
 	{
 		if (!ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
-				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) ||
-			system is null)
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system))
 		{
 			return false;
 		}

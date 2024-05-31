@@ -450,7 +450,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-			modMap!.SetUpNewCamera(camera);
+			modMap.SetUpNewCamera(camera);
         }
 
         var allCameras = CachedShipStatus.Instance.AllCameras.ToList();
@@ -573,7 +573,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 			!(
 				this.targetVent == null &&
 				CompatModManager.Instance.TryGetModMap(out var modMap) &&
-				!modMap!.CanPlaceCamera
+				!modMap.CanPlaceCamera
 			);
 	}
 

@@ -95,7 +95,7 @@ public sealed class Faunus : GhostRoleBase
         Console? console;
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            console = modMap!.GetConsole(this.saboTask);
+            console = modMap.GetConsole(this.saboTask);
         }
         else
         {

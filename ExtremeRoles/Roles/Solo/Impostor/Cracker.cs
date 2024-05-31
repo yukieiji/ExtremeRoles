@@ -31,7 +31,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-				modMap!.AddCustomComponent(
+				modMap.AddCustomComponent(
                     this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
         }

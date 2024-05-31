@@ -202,8 +202,7 @@ public sealed class GuesserUi : MonoBehaviour
         }
 
 		if (ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
-			ExtremeSystemType.RaiseHandSystem, out var system) &&
-			system != null)
+				ExtremeSystemType.RaiseHandSystem, out var system))
 		{
 			system.RaiseHandButtonSetActive(active);
 		}

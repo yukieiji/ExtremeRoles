@@ -110,7 +110,7 @@ public sealed class Miner :
 		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			modMap!.AddCustomComponent(
+			modMap.AddCustomComponent(
 				obj, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 		}
 		obj.transform.position = pos;

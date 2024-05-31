@@ -97,14 +97,13 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			var minigame = MinigameSystem.Create(prefab);
 
 			if (!minigame.IsTryCast<YokoYashiroStatusUpdateMinigame>(out var teroMiniGame) ||
-				!ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(Type, out var system) ||
-				system is null)
+				!ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(Type, out var system))
 			{
 				throw new ArgumentException("Minigame Missing");
 			}
 
-			teroMiniGame!.Info = system.allInfo[this.Id];
-			teroMiniGame!.Begin(null);
+			teroMiniGame.Info = system.allInfo[this.Id];
+			teroMiniGame.Begin(null);
 		}
 	}
 

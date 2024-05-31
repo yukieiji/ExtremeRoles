@@ -788,7 +788,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         SystemConsole emergencyConsole;
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            emergencyConsole = modMap!.GetSystemConsole(
+            emergencyConsole = modMap.GetSystemConsole(
                 Compat.Interface.SystemConsoleType.EmergencyButton);
         }
         else

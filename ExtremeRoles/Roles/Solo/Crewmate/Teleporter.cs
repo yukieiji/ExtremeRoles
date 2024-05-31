@@ -182,7 +182,7 @@ public sealed class Teleporter :
 
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-			modMap!.AddCustomComponent(obj,
+			modMap.AddCustomComponent(obj,
                 Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
         }
 

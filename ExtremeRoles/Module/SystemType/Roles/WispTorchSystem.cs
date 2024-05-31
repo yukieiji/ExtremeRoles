@@ -32,7 +32,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 				pos.x, pos.y, (pos.y / 1000f));
 			if (CompatModManager.Instance.TryGetModMap(out var modMap))
 			{
-				modMap!.AddCustomComponent(
+				modMap.AddCustomComponent(
 					this.body,
 					Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 			}

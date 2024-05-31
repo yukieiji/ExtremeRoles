@@ -94,8 +94,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			{
 				throw new ArgumentException("Minigame Missing");
 			}
-			teroMiniGame!.ConsoleInfo = info;
-			teroMiniGame!.Begin(task);
+			teroMiniGame.ConsoleInfo = info;
+			teroMiniGame.Begin(task);
 		}
 	}
 
@@ -235,7 +235,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			if (task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
 				(ignoreComplete || !task.IsComplete) &&
-				playerTask!.Behavior!.TaskTypes == TeroristoTaskTypes)
+				playerTask.Behavior!.TaskTypes == TeroristoTaskTypes)
 			{
 				return playerTask;
 			}
@@ -427,8 +427,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 
 		if (Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
-			teroMinigame!.amClosing != Minigame.CloseState.Closing &&
-			teroMinigame!.BombId == id)
+			teroMinigame.amClosing != Minigame.CloseState.Closing &&
+			teroMinigame.BombId == id)
 		{
 			Minigame.Instance.Close();
 		}

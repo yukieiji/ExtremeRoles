@@ -51,7 +51,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-				modMap!.AddCustomComponent(
+				modMap.AddCustomComponent(
                     this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 
@@ -155,7 +155,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-                modMap!.AddCustomComponent(
+                modMap.AddCustomComponent(
                     vent.gameObject, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
 

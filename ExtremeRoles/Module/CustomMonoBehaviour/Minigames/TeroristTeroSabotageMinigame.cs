@@ -57,7 +57,7 @@ public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
 		this.AbstractBegin(task);
 
 		if (!task.IsTryCast<ExtremePlayerTask>(out var playerTask) ||
-			playerTask!.Behavior is not SaboTask saboTask)
+			playerTask.Behavior is not SaboTask saboTask)
 		{
 			throw new ArgumentException("invalided Task");
 		}

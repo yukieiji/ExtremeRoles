@@ -78,7 +78,7 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 		couldUse =
 			!pc.IsDead &&
 			ExtremeSystemTypeManager.Instance.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system) &&
-			!system!.HasTorch(pc.PlayerId);
+			!system.HasTorch(pc.PlayerId);
 		canUse = (couldUse && num <= this.UsableDistance);
 		return num;
 	}

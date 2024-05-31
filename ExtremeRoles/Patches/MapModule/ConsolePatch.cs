@@ -29,7 +29,7 @@ namespace ExtremeRoles.Patches.MapModule
             var role = ExtremeRoleManager.GameRole[pc.PlayerId];
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
-				modMap!.IsCustomSabotageTask(taskType))
+				modMap.IsCustomSabotageTask(taskType))
             {
                 return role.CanRepairSabotage();
             }

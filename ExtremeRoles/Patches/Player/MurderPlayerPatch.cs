@@ -163,8 +163,7 @@ public static class PlayerControlMurderPlayerPatch
 	{
 		if (isLocalPlayerDead &&
 			ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
-				ExtremeSystemType.RaiseHandSystem, out var system) &&
-			system != null)
+				ExtremeSystemType.RaiseHandSystem, out var system))
 		{
 			system.RaiseHandButtonSetActive(false);
 		}

@@ -182,7 +182,7 @@ public static class VentCanUsePatch
 
         bool isCustomMapVent =
 			CompatModManager.Instance.TryGetModMap(out var modMap) &&
-			modMap!.IsCustomVentUse(__instance);
+			modMap.IsCustomVentUse(__instance);
 
         if (ExtremeRoleManager.GameRole.Count == 0)
         {
@@ -241,7 +241,7 @@ public static class VentCanUsePatch
         if (CachedShipStatus.Instance.Systems.TryGetValue(
                 SystemTypes.Ventilation, out var systemType) &&
 			systemType.IsTryCast<VentilationSystem>(out var ventilationSystem) &&
-			ventilationSystem!.IsVentCurrentlyBeingCleaned(__instance.Id))
+			ventilationSystem.IsVentCurrentlyBeingCleaned(__instance.Id))
         {
 			couldUse = false;
 		}
