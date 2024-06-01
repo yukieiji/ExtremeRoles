@@ -457,6 +457,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		SniperRifleCount,
 		SniperRifleSpeed,
 
+		BeamRifleCount,
+		BeamRifleSpeed,
+		BeamRifleRange,
+
 		BeamSaberCount,
 		BeamSaberChargeTime,
 		BeamSaberRange,
@@ -597,6 +601,16 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.SniperRifleSpeed,
 			50.0f, 25.0f, 75.0f, 0.5f, parentOps);
 
+		CreateIntOption(
+			Option.BeamRifleCount,
+			1, 0, 10, 1, parentOps);
+		CreateFloatOption(
+			Option.BeamRifleSpeed,
+			20.0f, 0.5f, 30.0f, 0.5f, parentOps);
+		CreateFloatOption(
+			Option.BeamRifleSpeed,
+			7.0f, 0.1f, 10.0f, 0.1f, parentOps);
+
 
 		CreateIntOption(
 			Option.BeamSaberCount,
@@ -667,7 +681,16 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.BeamRifle,
-				new NormalGun(Ability.BeamRifle, null)
+				new NormalGun(
+					Ability.BeamRifle,
+					new (
+						Path.BulletImg,
+						new Vector2(0.05f, 0.05f),
+						mng.GetValue<float>(
+							this.GetRoleOptionId(Option.BeamRifleSpeed)),
+						mng.GetValue<float>(
+							this.GetRoleOptionId(Option.BeamRifleRange)),
+						true))
 			},
 			{
 				Ability.BeamSaber,
@@ -759,7 +782,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 						this.GetRoleOptionId(Option.SniperRifleCount)));
 				break;
 			case Ability.BeamRifle:
-				// behavior.SetCount(3);
+				if (behavior is not CountBehavior beamRifle)
+				{
+					throw new ArgumentException("BeamRile Behavior is not CountBehavior");
+				}
+				beamRifle.SetAbilityCount(
+					mng.GetValue<int>(
+						this.GetRoleOptionId(Option.BeamRifleCount)));
 				break;
 			case Ability.BeamSaber:
 				if (behavior is not ChargingCountBehaviour beamSaber)

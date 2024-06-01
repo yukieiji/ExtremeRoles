@@ -36,11 +36,13 @@ public sealed class BulletBehaviour : MonoBehaviour
 		string Img,
 		Vector2 Size,
 		float Speed,
-		float Range);
+		float Range,
+		bool IsWallHack = false);
 
 	private float range;
 	private byte ignorePlayerId;
 	private Vector2 initialPosition;
+	private bool isWallHack = false;
 
 	public static BulletBehaviour Create(
 		int id,
@@ -59,7 +61,8 @@ public sealed class BulletBehaviour : MonoBehaviour
 			direction,
 			param.Speed,
 			param.Range,
-			abilityPlayer.PlayerId);
+			abilityPlayer.PlayerId,
+			param.IsWallHack);
 
 		return bullet;
 	}
@@ -70,7 +73,8 @@ public sealed class BulletBehaviour : MonoBehaviour
 		in Vector2 direction,
 		in float speed,
 		in float range,
-		in byte ignorePlayerId)
+		in byte ignorePlayerId,
+		in bool isWallHack)
 	{
 
 		var collider = this.gameObject.AddComponent<BoxCollider2D>();
@@ -92,6 +96,8 @@ public sealed class BulletBehaviour : MonoBehaviour
 		rb.velocity = direction.normalized * speed;
 		rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 		rb.isKinematic = true;
+
+		this.isWallHack = isWallHack;
 	}
 
 	public void Update()
@@ -118,7 +124,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 				byte.MinValue);
 			Destroy(this.gameObject);
 		}
-		else if (WeaponHitHelper.IsHitWall(other))
+		else if (WeaponHitHelper.IsHitWall(other) && this.isWallHack)
 		{
 			Destroy(this.gameObject);
 		}
