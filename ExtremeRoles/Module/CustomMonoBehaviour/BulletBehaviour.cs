@@ -383,11 +383,12 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 
 	public HitInfo? Info { private get; set; }
 
-	public void OnCollisionStay2D(Collider2D other)
+	public void OnCollisionStay2D(Collision2D collision)
 	{
 		if (this.Info is null ||
 			this.Info.IgnorePlayer == null ||
-			!WeaponHitHelper.IsHitPlayer(other, out var pc) ||
+			collision.collider == null ||
+			!WeaponHitHelper.IsHitPlayer(collision.collider, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
 				this.Info.IgnorePlayer.transform.position,
