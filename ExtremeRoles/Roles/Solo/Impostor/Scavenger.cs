@@ -19,6 +19,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
+using TMPro;
+using static ExtremeRoles.Roles.Solo.Impostor.Scavenger;
+
 
 #nullable enable
 
@@ -465,6 +468,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		BeamSaberChargeTime,
 		BeamSaberRange,
 		BeamSaberAutoDetect,
+
+		WeaponMixTime,
 	}
 
 	public enum Ability : byte
@@ -489,8 +494,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 	private IReadOnlyDictionary<Ability, IWeapon>? weapon;
 
-
 	private ExtremeMultiModalAbilityButton? internalButton;
+
+	private HashSet<Ability> curAbility = new HashSet<Ability>();
+	private TextMeshPro? abilityText;
+	private Vector2 prevPlayerPos;
+	private float timer;
+	private float weaponMixTime;
+	private static Vector2 defaultPos => new Vector2(100.0f, 100.0f);
 
 	public Scavenger() : base(
 		ExtremeRoleId.Scavenger,
@@ -505,6 +516,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		var initMode = (Ability)OptionManager.Instance.GetValue<int>(
 			this.GetRoleOptionId(Option.InitAbility));
 		this.createWeapon();
+		this.curAbility = new HashSet<Ability>();
+
+		if (initMode is not Ability.Null)
+		{
+			this.curAbility.Add(initMode);
+		}
 
 		BehaviorBase init = this.getAbilityBehavior(initMode);
 
@@ -528,6 +545,54 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		if (this.Button?.Behavior is NullBehaviour)
 		{
 			this.Button.SetButtonShow(false);
+		}
+
+		if (rolePlayer == null)
+		{
+			return;
+		}
+
+		// 能力合成
+		if (this.prevPlayerPos == defaultPos)
+		{
+			this.prevPlayerPos = rolePlayer.GetTruePosition();
+		}
+		var curPos = rolePlayer.GetTruePosition();
+
+		if (this.internalButton?.MultiModalAbilityNum <= 1 ||
+			this.prevPlayerPos != curPos ||
+			Key.IsAltDown() ||
+			IntroCutscene.Instance != null ||
+			MeetingHud.Instance != null ||
+			ExileController.Instance != null)
+		{
+			if (this.abilityText != null)
+			{
+				this.abilityText.gameObject.SetActive(false);
+			}
+			this.timer = this.weaponMixTime;
+			return;
+		}
+
+		if (this.abilityText == null)
+		{
+			this.abilityText = UnityObject.Instantiate(
+				FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+				Camera.main.transform, false);
+			this.abilityText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+			this.abilityText.enableWordWrapping = false;
+			this.abilityText.color = Palette.EnabledColor;
+		}
+
+		this.abilityText.text =
+			string.Format(
+				Translation.GetString("WeaponMixTimeRemain"),
+				Mathf.CeilToInt(this.timer));
+		this.timer -= Time.fixedDeltaTime;
+
+		if (this.timer < 0.0f)
+		{
+			this.mixWeapon();
 		}
 	}
 
@@ -625,11 +690,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		CreateBoolOption(
 			Option.BeamSaberAutoDetect,
 			false, parentOps);
+
+		CreateFloatOption(
+			Option.WeaponMixTime,
+			3.0f, 0.5f, 25.0f, 0.5f, parentOps,
+			format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-
 	}
 
 	private void createWeapon()
@@ -728,6 +797,51 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 		ExtremeRolesPlugin.Logger.LogInfo(result.ToString());
 		return result;
+	}
+
+	private void mixWeapon()
+	{
+		// 最終進化系
+		if (this.curAbility.Count == 3 ||
+			this.curAbility.Contains(Ability.BeamSaber) ||
+			this.curAbility.Contains(Ability.BeamRifle) ||
+			this.curAbility.Contains(Ability.SniperRifle))
+		{
+			replaceToWeapon(Ability.All);
+		}
+		else if (
+			this.curAbility.Contains(Ability.HandGun) &&
+			this.curAbility.Contains(Ability.Sword))
+		{
+			replaceToWeapon(Ability.SniperRifle);
+		}
+		else if (
+			this.curAbility.Contains(Ability.HandGun) &&
+			this.curAbility.Contains(Ability.FlameThrower))
+		{
+			replaceToWeapon(Ability.BeamRifle);
+		}
+		else if (
+			this.curAbility.Contains(Ability.Sword) &&
+			this.curAbility.Contains(Ability.FlameThrower))
+		{
+			replaceToWeapon(Ability.BeamSaber);
+		}
+		else
+		{
+			throw new ArgumentException("Invalid Ability");
+		}
+	}
+	private void replaceToWeapon(in Ability ability)
+	{
+		if (this.internalButton is null)
+		{
+			return;
+		}
+		this.curAbility.Clear();
+		this.curAbility.Add(ability);
+		var newAbility = getAbilityBehavior(ability);
+		this.internalButton.ClearAndAnd(newAbility);
 	}
 
 	private void loadAbilityOption(in BehaviorBase behavior, in Ability ability)
