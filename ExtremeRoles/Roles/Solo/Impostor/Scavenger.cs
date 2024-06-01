@@ -36,13 +36,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 
 	private sealed class Sword(
-		in Ability type,
 		float chargeTime,
 		float activeTime,
 		float r) : IWeapon
 	{
 		private SwordBehaviour? showSword;
-		private Ability type = type;
 		private readonly float r = r;
 		private readonly float chargeTime = chargeTime;
 		private readonly float activeTime = activeTime;
@@ -92,7 +90,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool startSwordRotation(float chargeGauge)
 		{
-
 			// Rpc処理
 			if (this.showSword == null)
 			{
@@ -125,6 +122,68 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			in PlayerControl rolePlayer)
 			=> SwordBehaviour.Create(
 				this.r, rolePlayer);
+	}
+
+	private sealed class FlameThrower() : IWeapon
+	{
+		private FlameThrowerBehaviour? flame;
+
+		public BehaviorBase Create(in CreateParam param)
+		{
+			var behavior = new ChargingAndActivatingCountBehaviour(
+				param.Name,
+				Loader.CreateSpriteFromResources(param.Path),
+				isFireThrowerUse,
+				startSwordRotation,
+				startSwordCharge,
+				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
+				IRoleAbility.IsCommonUse,
+				IRoleAbility.IsCommonUse,
+				Hide, Hide);
+			return behavior;
+		}
+
+		public void Hide()
+		{
+			if (this.flame == null)
+			{
+				return;
+			}
+			this.flame.gameObject.SetActive(false);
+		}
+
+		private bool startSwordCharge()
+		{
+			// Rpc処理
+			if (this.flame == null)
+			{
+				this.flame = createSword(
+					CachedPlayerControl.LocalPlayer);
+			}
+
+			this.flame.StartCharge();
+			this.flame.gameObject.SetActive(true);
+
+			return true;
+		}
+
+		private bool startSwordRotation(float _)
+		{
+			// Rpc処理
+			if (this.flame == null)
+			{
+				return false;
+			}
+			this.flame.Fire();
+			return true;
+		}
+
+		private bool isFireThrowerUse(bool _, float __)
+			=> IRoleAbility.IsCommonUse();
+
+		private FlameThrowerBehaviour createSword(
+			in PlayerControl rolePlayer)
+			=> FlameThrowerBehaviour.Create(0.0f, rolePlayer);
 	}
 
 	private sealed class BeamSaber(
@@ -380,6 +439,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		HandGunSpeed,
 		HandGunRange,
 
+		FlameThrowerCount,
+		FlameThrowerChargeTime,
+		FlameThrowerActiveTime,
+		FlameThrowerFireSecond,
+		FlameThrowerDeadSecond,
+
 		SwordCount,
 		SwordChargeTime,
 		SwordActiveTime,
@@ -487,6 +552,26 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			3.5f, 0.1f, 5.0f, 0.1f, parentOps);
 
 		CreateIntOption(
+			Option.FlameThrowerCount,
+			1, 0, 10, 1, parentOps);
+		CreateFloatOption(
+			Option.FlameThrowerChargeTime,
+			2.0f, 0.1f, 5.0f, 0.1f, parentOps,
+			format: OptionUnit.Second);
+		CreateFloatOption(
+			Option.FlameThrowerActiveTime,
+			25.0f, 5.0f, 120.0f, 0.5f, parentOps,
+			format: OptionUnit.Second);
+		CreateFloatOption(
+			Option.FlameThrowerFireSecond,
+			3.5f, 0.1f, 5.0f, 0.1f, parentOps,
+			format: OptionUnit.Second);
+		CreateFloatOption(
+			Option.FlameThrowerDeadSecond,
+			3.5f, 0.1f, 5.0f, 0.1f, parentOps,
+			format: OptionUnit.Second);
+
+		CreateIntOption(
 			Option.SwordCount,
 			1, 0, 10, 1, parentOps);
 		CreateFloatOption(
@@ -548,9 +633,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 							this.GetRoleOptionId(Option.HandGunRange))))
 			},
 			{
+				Ability.FlameThrower,
+				new FlameThrower()
+			},
+			{
 				Ability.Sword,
 				new Sword(
-					Ability.Sword,
 					mng.GetValue<float>(
 						this.GetRoleOptionId(Option.SwordChargeTime)),
 					mng.GetValue<float>(
@@ -630,6 +718,19 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				handGun.SetAbilityCount(
 					mng.GetValue<int>(
 						this.GetRoleOptionId(Option.HandGunCount)));
+				break;
+			case Ability.FlameThrower:
+				if (behavior is not ChargingAndActivatingCountBehaviour flameThrower)
+				{
+					throw new ArgumentException("FlameThrower Behavior is not CountBehavior");
+				}
+				flameThrower.ActiveTime = mng.GetValue<float>(
+					this.GetRoleOptionId(Option.FlameThrowerActiveTime));
+				flameThrower.ChargeTime = mng.GetValue<float>(
+					this.GetRoleOptionId(Option.FlameThrowerChargeTime));
+				flameThrower.SetAbilityCount(
+					mng.GetValue<int>(
+						this.GetRoleOptionId(Option.FlameThrowerCount)));
 				break;
 			case Ability.Sword:
 				if (behavior is not ICountBehavior countBehavior)

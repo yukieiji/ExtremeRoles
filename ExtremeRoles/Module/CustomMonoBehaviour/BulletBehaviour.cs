@@ -289,3 +289,30 @@ public sealed class SwordBehaviour : MonoBehaviour
 		rb.isKinematic = true;
 	}
 }
+
+public sealed class FlameThrowerBehaviour : MonoBehaviour
+{
+	public static FlameThrowerBehaviour Create(
+		in float r,
+		in PlayerControl anchorPlayer)
+	{
+		var obj = new GameObject($"FlameThrower_{anchorPlayer.PlayerId}");
+		obj.transform.position = anchorPlayer.transform.position - new Vector3(
+			r + 0.5f, 0.0f, 0.0f);
+		obj.layer = Constants.LivingPlayersOnlyMask;
+
+		var sword = obj.AddComponent<FlameThrowerBehaviour>();
+		return sword;
+	}
+
+
+	public void StartCharge()
+	{
+
+	}
+
+	public void Fire()
+	{
+
+	}
+}
