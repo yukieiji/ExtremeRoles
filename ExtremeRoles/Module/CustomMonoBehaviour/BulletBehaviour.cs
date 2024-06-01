@@ -5,6 +5,8 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Helper;
 
+using NullException = System.ArgumentNullException;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -292,27 +294,108 @@ public sealed class SwordBehaviour : MonoBehaviour
 
 public sealed class FlameThrowerBehaviour : MonoBehaviour
 {
+
 	public static FlameThrowerBehaviour Create(
-		in float r,
+		in float fireSecond,
+		in float fireDeadSecond,
 		in PlayerControl anchorPlayer)
 	{
-		var obj = new GameObject($"FlameThrower_{anchorPlayer.PlayerId}");
-		obj.transform.position = anchorPlayer.transform.position - new Vector3(
-			r + 0.5f, 0.0f, 0.0f);
-		obj.layer = Constants.LivingPlayersOnlyMask;
+		var gameObj = Loader.GetUnityObjectFromPath<GameObject>(
+			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\firethrower.asset",
+			"assets/roles/firethrower.prefab");
+		var obj = Instantiate(gameObj);
+		obj.layer = anchorPlayer.gameObject.layer;
+		obj.transform.position = anchorPlayer.transform.position;
+		obj.transform.SetParent(anchorPlayer.transform);
+		obj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+		obj.SetActive(true);
+		if (obj.TryGetComponent<FlameThrowerBehaviour>(out var flameThrower) ||
+			flameThrower.hitBehaviour == null)
+		{
+			throw new NullException("FlameThrower Missing!!!!!");
+		}
 
-		var sword = obj.AddComponent<FlameThrowerBehaviour>();
-		return sword;
+		flameThrower.hitBehaviour.Info = new FlameThrowerHitBehaviour.HitInfo(
+			anchorPlayer,
+			fireSecond,
+			fireDeadSecond);
+
+		return flameThrower;
 	}
 
+	private ParticleSystem? fire;
+	private FlameThrowerHitBehaviour? hitBehaviour;
+
+	public void Awake()
+	{
+		if (base.transform.parent.TryGetComponent<ParticleSystem>(out var particle))
+		{
+			this.fire = particle;
+		}
+		var colison = base.transform.Find("");
+		if (colison != null &&
+			colison.TryGetComponent<FlameThrowerHitBehaviour>(out var hitBehaviour))
+		{
+			this.hitBehaviour = hitBehaviour;
+		}
+	}
+
+	public void OnEnable()
+	{
+		if (this.hitBehaviour != null)
+		{
+			this.hitBehaviour.enabled = true;
+		}
+	}
+
+	public void OnDisable()
+	{
+		if (this.hitBehaviour != null)
+		{
+			this.hitBehaviour.enabled = false;
+		}
+		if (this.fire != null)
+		{
+			this.fire.Stop();
+		}
+	}
 
 	public void StartCharge()
 	{
-
+		if (this.fire != null)
+		{
+			this.fire.Play();
+		}
 	}
 
 	public void Fire()
 	{
 
+	}
+}
+
+public sealed class FlameThrowerHitBehaviour : MonoBehaviour
+{
+	public sealed record class HitInfo(
+		PlayerControl IgnorePlayer,
+		float FireSecond,
+		float DeadCountDown);
+
+	public HitInfo? Info { private get; set; }
+
+	public void OnCollisionStay2D(Collider2D other)
+	{
+		if (this.Info is null ||
+			this.Info.IgnorePlayer == null ||
+			!WeaponHitHelper.IsHitPlayer(other, out var pc) ||
+			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
+			PhysicsHelpers.AnythingBetween(
+				this.Info.IgnorePlayer.transform.position,
+				base.transform.position,
+				Constants.ShipAndObjectsMask, false))
+		{
+			return;
+		}
+		// 燃やす処理
 	}
 }

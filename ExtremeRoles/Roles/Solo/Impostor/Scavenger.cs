@@ -124,8 +124,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.r, rolePlayer);
 	}
 
-	private sealed class FlameThrower() : IWeapon
+	private sealed class FlameThrower(float fireSecond, float fireDeadSecond) : IWeapon
 	{
+		private readonly float fireSecond = fireSecond;
+		private readonly float fireDeadSecond = fireDeadSecond;
+
 		private FlameThrowerBehaviour? flame;
 
 		public BehaviorBase Create(in CreateParam param)
@@ -183,7 +186,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private FlameThrowerBehaviour createSword(
 			in PlayerControl rolePlayer)
-			=> FlameThrowerBehaviour.Create(0.0f, rolePlayer);
+			=> FlameThrowerBehaviour.Create(
+				this.fireSecond, this.fireDeadSecond, rolePlayer);
 	}
 
 	private sealed class BeamSaber(
@@ -634,7 +638,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.FlameThrower,
-				new FlameThrower()
+				new FlameThrower(
+					mng.GetValue<float>(
+						this.GetRoleOptionId(Option.FlameThrowerFireSecond)),
+					mng.GetValue<float>(
+						this.GetRoleOptionId(Option.FlameThrowerDeadSecond)))
 			},
 			{
 				Ability.Sword,
