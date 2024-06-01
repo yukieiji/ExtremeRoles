@@ -207,7 +207,7 @@ public enum NeutralSeparateTeam
 
 public static class ExtremeRoleManager
 {
-    public const int OptionOffsetPerRole = 75;
+    public const int OptionOffsetPerRole = 100;
 
 	public static readonly IReadOnlySet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {

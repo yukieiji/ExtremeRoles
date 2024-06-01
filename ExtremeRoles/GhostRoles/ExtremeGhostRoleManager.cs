@@ -51,7 +51,7 @@ public enum AbilityType : byte
 
 public static class ExtremeGhostRoleManager
 {
-    private const int ghostRoleOptionId = 25;
+    private const int ghostRoleOptionId = 100;
     private const int idOffset = 128;
 
     public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();

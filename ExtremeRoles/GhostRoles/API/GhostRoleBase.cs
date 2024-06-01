@@ -19,7 +19,7 @@ namespace ExtremeRoles.GhostRoles.API;
 
 public enum GhostRoleOption
 {
-    IsReportAbility = 40
+    IsReportAbility = 90
 }
 
 public abstract class GhostRoleBase

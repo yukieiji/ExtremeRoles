@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.API.Interface;
 
 public enum RoleAbilityCommonOption
 {
-    AbilityCoolTime = 35,
+    AbilityCoolTime = 70,
     AbilityCount,
     AbilityActiveTime,
 }

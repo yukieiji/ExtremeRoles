@@ -9,11 +9,11 @@ namespace ExtremeRoles;
 
 public static class OptionCreator
 {
-	public const int IntegrateOptionStartOffset = 15000;
+	public const int IntegrateOptionStartOffset = 40000;
 
 	private const int singleRoleOptionStartOffset = 256;
-    private const int combRoleOptionStartOffset = 5000;
-    private const int ghostRoleOptionStartOffset = 10000;
+    private const int combRoleOptionStartOffset = 15000;
+    private const int ghostRoleOptionStartOffset = 30000;
     private const int maxPresetNum = 20;
 
     public static readonly string[] SpawnRate = [

@@ -8,7 +8,7 @@ namespace ExtremeRoles.Roles.API;
 
 public enum CombinationRoleCommonOption
 {
-    IsMultiAssign = 50,
+    IsMultiAssign = 80,
     AssignsNum,
     IsAssignImposter,
     ImposterSelectedRate,
