@@ -393,7 +393,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		if (this.fire != null)
 		{
 			this.fire.Play();
-			this.transform.rotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
 		}
 	}
 
@@ -415,11 +415,11 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 	{
 		if (isFlip)
 		{
-			this.transform.rotation = Quaternion.Euler(270.0f, 180.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler(0, 180.0f, 0.0f);
 		}
 		else
 		{
-			this.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler(0, 0.0f, 0.0f);
 		}
 	}
 }
@@ -435,14 +435,13 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 
 	public HitInfo? Info { get; set; }
 
-	public void OnCollisionStay2D(Collision2D collision)
+	public void OnTriggerStay2D(Collider2D other)
 	{
-		ExtremeRolesPlugin.Logger.LogInfo($"あぶられてるもの:{collision.collider.name}");
+		ExtremeRolesPlugin.Logger.LogInfo($"あぶられてるもの:{other.name}");
 
 		if (this.Info is null ||
 			this.Info.IgnorePlayer == null ||
-			collision.collider == null ||
-			!WeaponHitHelper.IsHitPlayer(collision.collider, out var pc) ||
+			!WeaponHitHelper.IsHitPlayer(other, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
 				this.Info.IgnorePlayer.transform.position,
