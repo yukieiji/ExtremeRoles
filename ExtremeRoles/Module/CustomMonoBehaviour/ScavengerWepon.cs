@@ -6,8 +6,14 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
 
 using NullException = System.ArgumentNullException;
+using Scavenger = ExtremeRoles.Roles.Solo.Impostor.Scavenger;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
+
 
 #nullable enable
 
@@ -28,6 +34,54 @@ public static class  WeaponHitHelper
 	public static bool IsHitWall(Collider2D other)
 		=> collisionLayer == (collisionLayer | (1 << other.gameObject.layer));
 }
+
+[Il2CppRegister([typeof(IUsable)])]
+public sealed class WeponMapUsable : MonoBehaviour, IAmongUs.IUsable
+{
+	public readonly record struct Info(Scavenger.Ability Ability, bool IsSync);
+
+	public Info WeponInfo { private get; set; }
+
+	public float UsableDistance => 0.75f;
+
+	public float PercentCool => 0.0f;
+
+	public ImageNames UseIcon => ImageNames.UseButton;
+
+	public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+	{
+		float num = Vector2.Distance(
+			pc.Object.GetTruePosition(),
+			base.transform.position);
+		var scavenger = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Scavenger>();
+		couldUse = pc.IsDead || scavenger is null ? false : true;
+		canUse = (couldUse && num <= this.UsableDistance);
+		return num;
+	}
+
+	public void SetOutline(bool on, bool mainTarget)
+	{ }
+
+	public void Use()
+	{
+		var scavenger = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Scavenger>();
+		if (scavenger is null)
+		{
+			return;
+		}
+
+		var ability = this.WeponInfo.Ability;
+		if (this.WeponInfo.IsSync)
+		{
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				ScavengerAbilityProviderSystem.Type,
+					x => x.Write((byte)ability));
+		}
+		scavenger.AddWepon(ability);
+		Destroy(this.gameObject);
+	}
+}
+
 
 [Il2CppRegister]
 public sealed class BulletBehaviour : MonoBehaviour
@@ -433,7 +487,6 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		}
 	}
 }
-
 
 [Il2CppRegister]
 public sealed class FlameThrowerHitBehaviour : MonoBehaviour

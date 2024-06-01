@@ -6,6 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
+
+
+using UnityObject = UnityEngine.Object;
 using WeaponAbility = ExtremeRoles.Roles.Solo.Impostor.Scavenger.Ability;
 
 #nullable enable
@@ -26,6 +30,7 @@ public sealed class ScavengerAbilityProviderSystem(
 	private readonly WeaponAbility initAbility = initWeapon;
 	private readonly bool isSyncPlayer = SyncPlayer;
 	private readonly RandomOption? randomOption = randomOption;
+	private readonly Dictionary<WeaponAbility, GameObject> settedWeapon = new Dictionary<WeaponAbility, GameObject>();
 	private WeaponAbility[]? abilities;
 	private HashSet<WeaponAbility> initProvided = new HashSet<WeaponAbility>();
 	private bool init = false;
@@ -52,7 +57,14 @@ public sealed class ScavengerAbilityProviderSystem(
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
-
+		WeaponAbility weapon = (WeaponAbility)msgReader.ReadByte();
+		if (!this.isSyncPlayer ||
+			!this.settedWeapon.TryGetValue(weapon, out var obj) ||
+			obj == null)
+		{
+			return;
+		}
+		UnityObject.Destroy(obj);
 	}
 
 	public WeaponAbility GetInitWepon()

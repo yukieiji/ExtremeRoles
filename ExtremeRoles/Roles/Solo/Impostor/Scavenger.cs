@@ -571,6 +571,16 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			KeyCode.F);
 	}
 
+	public void AddWepon(in Ability ability)
+	{
+		if (this.internalButton is null)
+		{
+			return;
+		}
+		BehaviorBase newBehavior = this.getAbilityBehavior(ability);
+		this.internalButton.Add(newBehavior);
+	}
+
 	public void RoleAbilityInit()
 	{ }
 
