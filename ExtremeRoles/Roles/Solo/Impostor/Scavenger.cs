@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-
-
+using TMPro;
 
 using ExtremeRoles.Resources;
 using ExtremeRoles.Helper;
@@ -13,14 +12,14 @@ using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
-using TMPro;
-using static ExtremeRoles.Roles.Solo.Impostor.Scavenger;
 
 
 #nullable enable
@@ -440,7 +439,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	public enum Option
 	{
+		IsRandomInitAbility,
+
+		AllowDupe,
+		AllowAdvancedWepon,
+
 		InitAbility,
+
+		SyncWeapon,
 
 		HandGunCount,
 		HandGunSpeed,
@@ -492,6 +498,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		// FlameThrower + Sword + HandGun
 		All,
 	}
+
+	public Ability InitAbility { get; private set; }
+
 	private IReadOnlyDictionary<Ability, IWeapon>? weapon;
 
 	private ExtremeMultiModalAbilityButton? internalButton;
@@ -511,19 +520,50 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		true, false, true, true)
 	{ }
 
+	// 全体の武器に関するシステムを構築させておく
+	public override SingleRoleBase Clone()
+	{
+		var newRole = base.Clone();
+		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<ScavengerAbilityProviderSystem>(
+			ScavengerAbilityProviderSystem.Type,
+			() =>
+			{
+				var mng = OptionManager.Instance;
+
+				ScavengerAbilityProviderSystem.RandomOption? randOpt = mng.GetValue<bool>(
+					this.GetRoleOptionId(Option.IsRandomInitAbility)) ?
+					new(mng.GetValue<bool>(
+							this.GetRoleOptionId(Option.AllowDupe)),
+						mng.GetValue<bool>(
+							this.GetRoleOptionId(Option.AllowAdvancedWepon))) : null;
+
+				return new ScavengerAbilityProviderSystem(
+					(Ability)mng.GetValue<int>(
+						this.GetRoleOptionId(Option.InitAbility)),
+					mng.GetValue<bool>(
+						this.GetRoleOptionId(Option.SyncWeapon)),
+					randOpt);
+			});
+
+		if (newRole is Scavenger scavenger)
+		{
+			scavenger.InitAbility = system.GetInitWepon();
+		}
+
+		return base.Clone();
+	}
+
 	public void CreateAbility()
 	{
-		var initMode = (Ability)OptionManager.Instance.GetValue<int>(
-			this.GetRoleOptionId(Option.InitAbility));
 		this.createWeapon();
 		this.curAbility = new HashSet<Ability>();
 
-		if (initMode is not Ability.Null)
+		if (this.InitAbility is not Ability.Null)
 		{
-			this.curAbility.Add(initMode);
+			this.curAbility.Add(this.InitAbility);
 		}
 
-		BehaviorBase init = this.getAbilityBehavior(initMode);
+		BehaviorBase init = this.getAbilityBehavior(this.InitAbility);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
 			[ init ],
@@ -598,13 +638,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	protected override void CreateSpecificOption(IOptionInfo parentOps)
 	{
-		CreateSelectionOption(
-			Option.InitAbility,
-			Enum.GetValues<Ability>()
-				.Select(x => x.ToString())
-				.ToArray(),
-			parentOps);
-
 		CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
 			IRoleAbilityMixin.DefaultCoolTime,
@@ -613,6 +646,31 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			IRoleAbilityMixin.Step,
 			parentOps,
 			format: OptionUnit.Second);
+
+		var randomWepon = CreateBoolOption(
+			Option.IsRandomInitAbility,
+			false, parentOps);
+
+		CreateBoolOption(
+			Option.AllowDupe,
+			false, randomWepon);
+		CreateBoolOption(
+			Option.AllowAdvancedWepon,
+			false, randomWepon);
+
+
+		CreateSelectionOption(
+			Option.InitAbility,
+			Enum.GetValues<Ability>()
+				.Select(x => x.ToString())
+				.ToArray(),
+			parentOps,
+			invert: true,
+			enableCheckOption: randomWepon);
+
+		CreateBoolOption(
+			Option.SyncWeapon,
+			true, parentOps);
 
 		CreateIntOption(
 			Option.HandGunCount,
