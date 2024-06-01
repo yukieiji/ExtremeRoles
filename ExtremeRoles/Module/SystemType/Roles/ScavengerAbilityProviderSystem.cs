@@ -1,13 +1,13 @@
-﻿using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Roles;
-using Hazel;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
 
 using UnityObject = UnityEngine.Object;
 using WeaponAbility = ExtremeRoles.Roles.Solo.Impostor.Scavenger.Ability;
@@ -36,6 +36,121 @@ public sealed class ScavengerAbilityProviderSystem(
 	private bool init = false;
 
 	public bool IsDirty => false;
+
+	private class WeponSetter
+	{
+		private readonly Dictionary<WeaponAbility, Vector2> pos = new Dictionary<WeaponAbility, Vector2>(3);
+		private readonly bool isSync;
+		public WeponSetter(bool isSync)
+		{
+			this.isSync = isSync;
+		}
+		public void SetFromInitWepon(
+			in IReadOnlySet<WeaponAbility> init)
+		{
+			bool isSwordProvided = init.Contains(WeaponAbility.Sword);
+			bool isHandGunProvided = init.Contains(WeaponAbility.HandGun);
+			bool isFlameThrowerProvided = init.Contains(WeaponAbility.FlameThrower);
+
+			if (this.isSync)
+			{
+				if (init.Contains(WeaponAbility.All) ||
+					(isSwordProvided && isHandGunProvided && isFlameThrowerProvided))
+				{
+					return;
+				}
+				else if (init.Contains(WeaponAbility.SniperRifle))
+				{
+					if (isFlameThrowerProvided)
+					{
+						return;
+					}
+					set(WeaponAbility.FlameThrower);
+				}
+				else if (init.Contains(WeaponAbility.BeamRifle))
+				{
+					if (isSwordProvided)
+					{
+						return;
+					}
+					set(WeaponAbility.Sword);
+				}
+				else if (init.Contains(WeaponAbility.BeamSaber))
+				{
+					if (isHandGunProvided)
+					{
+						return;
+					}
+					set(WeaponAbility.HandGun);
+				}
+				else
+				{
+					if (!isSwordProvided)
+					{
+						set(WeaponAbility.Sword);
+					}
+					if (!isHandGunProvided)
+					{
+						set(WeaponAbility.HandGun);
+					}
+					if (!isFlameThrowerProvided)
+					{
+						set(WeaponAbility.FlameThrower);
+					}
+				}
+			}
+			else
+			{
+				var scavent = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
+					ExtremeRoles.Roles.Solo.Impostor.Scavenger>();
+				if (scavent is null) { return; }
+
+				switch (scavent.InitAbility)
+				{
+					case WeaponAbility.Null:
+						set(WeaponAbility.HandGun,
+							WeaponAbility.Sword,
+							WeaponAbility.FlameThrower);
+						break;
+					case WeaponAbility.HandGun:
+						set(WeaponAbility.FlameThrower, WeaponAbility.Sword);
+						break;
+					case WeaponAbility.Sword:
+						set(WeaponAbility.FlameThrower, WeaponAbility.HandGun);
+						break;
+					case WeaponAbility.FlameThrower:
+						set(WeaponAbility.HandGun, WeaponAbility.Sword);
+						break;
+					case WeaponAbility.SniperRifle:
+						set(WeaponAbility.FlameThrower);
+						break;
+					case WeaponAbility.BeamSaber:
+						set(WeaponAbility.HandGun);
+						break;
+					case WeaponAbility.BeamRifle:
+						set(WeaponAbility.Sword);
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		private void set(params WeaponAbility[] abilities)
+		{
+			foreach (var ability in abilities)
+			{
+				if (!this.pos.TryGetValue(ability, out var pos))
+				{
+					continue;
+				}
+				var obj = new GameObject(ability.ToString());
+				obj.transform.localPosition = pos;
+				var wepon = obj.AddComponent<WeponMapUsable>();
+				wepon.WeponInfo = new(ability, this.isSync);
+			}
+		}
+	}
 
 	public void Deteriorate(float deltaTime)
 	{
@@ -110,97 +225,8 @@ public sealed class ScavengerAbilityProviderSystem(
 	{
 		this.init = true;
 
-		bool isSwordProvided = this.initProvided.Contains(WeaponAbility.Sword);
-		bool isHandGunProvided = this.initProvided.Contains(WeaponAbility.HandGun);
-		bool isFlameThrowerProvided = this.initProvided.Contains(WeaponAbility.FlameThrower);
-
-		if (this.isSyncPlayer)
-		{
-			if (this.initProvided.Contains(WeaponAbility.All) ||
-				(isSwordProvided && isHandGunProvided && isFlameThrowerProvided))
-			{
-				return;
-			}
-			else if (this.initProvided.Contains(WeaponAbility.SniperRifle))
-			{
-				if (isFlameThrowerProvided)
-				{
-					return;
-				}
-				put(WeaponAbility.FlameThrower);
-			}
-			else if (this.initProvided.Contains(WeaponAbility.BeamRifle))
-			{
-				if (isSwordProvided)
-				{
-					return;
-				}
-				put(WeaponAbility.Sword);
-			}
-			else if (this.initProvided.Contains(WeaponAbility.BeamSaber))
-			{
-				if (isHandGunProvided)
-				{
-					return;
-				}
-				put(WeaponAbility.HandGun);
-			}
-			else
-			{
-				if (!isSwordProvided)
-				{
-					put(WeaponAbility.Sword);
-				}
-				if (!isHandGunProvided)
-				{
-					put(WeaponAbility.HandGun);
-				}
-				if (!isFlameThrowerProvided)
-				{
-					put(WeaponAbility.FlameThrower);
-				}
-			}
-		}
-		else
-		{
-			var scavent = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
-				ExtremeRoles.Roles.Solo.Impostor.Scavenger>();
-			if (scavent is null) { return; }
-
-			switch (scavent.InitAbility)
-			{
-				case WeaponAbility.Null:
-					put(WeaponAbility.HandGun,
-						WeaponAbility.Sword,
-						WeaponAbility.FlameThrower);
-					break;
-				case WeaponAbility.HandGun:
-					put(WeaponAbility.FlameThrower, WeaponAbility.Sword);
-					break;
-				case WeaponAbility.Sword:
-					put(WeaponAbility.FlameThrower, WeaponAbility.HandGun);
-					break;
-				case WeaponAbility.FlameThrower:
-					put(WeaponAbility.HandGun, WeaponAbility.Sword);
-					break;
-				case WeaponAbility.SniperRifle:
-					put(WeaponAbility.FlameThrower);
-					break;
-				case WeaponAbility.BeamSaber:
-					put(WeaponAbility.HandGun);
-					break;
-				case WeaponAbility.BeamRifle:
-					put(WeaponAbility.Sword);
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	private void put(params WeaponAbility[] ability)
-	{
-
+		new WeponSetter(this.isSyncPlayer)
+			.SetFromInitWepon(this.initProvided);
 	}
 
 	private WeaponAbility getRandomAbility()
