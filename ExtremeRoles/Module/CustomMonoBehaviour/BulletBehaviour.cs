@@ -305,12 +305,12 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\flamethrower.asset",
 			"assets/roles/flamethrower.prefab");
 		var obj = Instantiate(gameObj);
-		obj.layer = anchorPlayer.gameObject.layer;
+		obj.layer = LayerMask.GetMask("Players");
 		obj.transform.position = anchorPlayer.transform.position;
 		obj.transform.SetParent(anchorPlayer.transform);
 		obj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 		obj.SetActive(true);
-		if (obj.TryGetComponent<FlameThrowerBehaviour>(out var flameThrower) ||
+		if (!obj.TryGetComponent<FlameThrowerBehaviour>(out var flameThrower) ||
 			flameThrower.hitBehaviour == null)
 		{
 			throw new NullException("FlameThrower Missing!!!!!");
@@ -327,6 +327,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 	private ParticleSystem? fire;
 	private FlameThrowerHitBehaviour? hitBehaviour;
 	private bool isStart = false;
+	private bool prevFlip = false;
 
 	public void Awake()
 	{
@@ -356,7 +357,12 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		}
 
 		bool isFlip = this.hitBehaviour.Info.IgnorePlayer.cosmetics.FlipX;
-		this.transform.Rotate(Vector3.forward, isFlip ? 180.0f : 0.0f);
+		if (this.prevFlip == isFlip)
+		{
+			return;
+		}
+		this.changeRotate(isFlip);
+		this.prevFlip = isFlip;
 	}
 
 	public void OnEnable()
@@ -365,6 +371,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		{
 			this.hitBehaviour.enabled = true;
 		}
+		this.StartCharge();
 	}
 
 	public void OnDisable()
@@ -386,12 +393,34 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		if (this.fire != null)
 		{
 			this.fire.Play();
+			this.transform.rotation = Quaternion.Euler(0.0f, 270.0f, 0.0f);
 		}
 	}
 
 	public void Fire()
 	{
+		if (this.isStart ||
+			this.fire == null ||
+			this.hitBehaviour == null ||
+			this.hitBehaviour.Info == null ||
+			this.hitBehaviour.Info.IgnorePlayer == null)
+		{
+			return;
+		}
+
+		this.prevFlip = this.hitBehaviour.Info.IgnorePlayer.cosmetics.FlipX;
 		this.isStart = true;
+	}
+	private void changeRotate(bool isFlip)
+	{
+		if (isFlip)
+		{
+			this.transform.rotation = Quaternion.Euler(270.0f, 180.0f, 0.0f);
+		}
+		else
+		{
+			this.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+		}
 	}
 }
 
@@ -408,6 +437,8 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 
 	public void OnCollisionStay2D(Collision2D collision)
 	{
+		ExtremeRolesPlugin.Logger.LogInfo($"あぶられてるもの:{collision.collider.name}");
+
 		if (this.Info is null ||
 			this.Info.IgnorePlayer == null ||
 			collision.collider == null ||
