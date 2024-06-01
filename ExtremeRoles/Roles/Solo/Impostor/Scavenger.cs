@@ -739,10 +739,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			1, 0, 10, 1, parentOps);
 		CreateFloatOption(
 			Option.BeamRifleSpeed,
-			20.0f, 0.5f, 30.0f, 0.5f, parentOps);
-		CreateFloatOption(
-			Option.BeamRifleSpeed,
 			7.0f, 0.1f, 10.0f, 0.1f, parentOps);
+		CreateFloatOption(
+			Option.BeamRifleRange,
+			20.0f, 0.5f, 30.0f, 0.5f, parentOps);
 
 
 		CreateIntOption(
