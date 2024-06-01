@@ -292,6 +292,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 	}
 }
 
+[Il2CppRegister]
 public sealed class FlameThrowerBehaviour : MonoBehaviour
 {
 
@@ -301,8 +302,8 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		in PlayerControl anchorPlayer)
 	{
 		var gameObj = Loader.GetUnityObjectFromPath<GameObject>(
-			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\firethrower.asset",
-			"assets/roles/firethrower.prefab");
+			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\flamethrower.asset",
+			"assets/roles/flamethrower.prefab");
 		var obj = Instantiate(gameObj);
 		obj.layer = anchorPlayer.gameObject.layer;
 		obj.transform.position = anchorPlayer.transform.position;
@@ -325,19 +326,37 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 
 	private ParticleSystem? fire;
 	private FlameThrowerHitBehaviour? hitBehaviour;
+	private bool isStart = false;
 
 	public void Awake()
 	{
-		if (base.transform.parent.TryGetComponent<ParticleSystem>(out var particle))
+		if (base.transform.TryGetComponent<ParticleSystem>(out var particle))
 		{
 			this.fire = particle;
+			this.fire.Stop();
 		}
-		var colison = base.transform.Find("");
+		var colison = base.transform.Find("Collider");
 		if (colison != null &&
 			colison.TryGetComponent<FlameThrowerHitBehaviour>(out var hitBehaviour))
 		{
 			this.hitBehaviour = hitBehaviour;
 		}
+		this.isStart = false;
+	}
+
+	public void FixedUpdate()
+	{
+		if (!this.isStart ||
+			this.fire == null ||
+			this.hitBehaviour == null ||
+			this.hitBehaviour.Info == null ||
+			this.hitBehaviour.Info.IgnorePlayer == null)
+		{
+			return;
+		}
+
+		bool isFlip = this.hitBehaviour.Info.IgnorePlayer.cosmetics.FlipX;
+		this.transform.Rotate(Vector3.forward, isFlip ? 180.0f : 0.0f);
 	}
 
 	public void OnEnable()
@@ -356,12 +375,14 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		}
 		if (this.fire != null)
 		{
+			this.isStart = false;
 			this.fire.Stop();
 		}
 	}
 
 	public void StartCharge()
 	{
+		this.isStart = false;
 		if (this.fire != null)
 		{
 			this.fire.Play();
@@ -370,10 +391,12 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 
 	public void Fire()
 	{
-
+		this.isStart = true;
 	}
 }
 
+
+[Il2CppRegister]
 public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 {
 	public sealed record class HitInfo(
@@ -381,7 +404,7 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 		float FireSecond,
 		float DeadCountDown);
 
-	public HitInfo? Info { private get; set; }
+	public HitInfo? Info { get; set; }
 
 	public void OnCollisionStay2D(Collision2D collision)
 	{
@@ -397,6 +420,7 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 		{
 			return;
 		}
+		ExtremeRolesPlugin.Logger.LogInfo("ﾑｶ着火ファイアーナウ");
 		// 燃やす処理
 	}
 }
