@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
@@ -409,6 +411,8 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		}
 
 		this.prevFlip = this.hitBehaviour.Info.IgnorePlayer.cosmetics.FlipX;
+		this.changeRotate(this.prevFlip);
+
 		this.isStart = true;
 	}
 	private void changeRotate(bool isFlip)
@@ -433,13 +437,113 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 		float FireSecond,
 		float DeadCountDown);
 
-	public HitInfo? Info { get; set; }
+	private class PlayerDeadTimerContainer(float deadTime)
+	{
+		private readonly Dictionary<byte, float> playerDeadTimes = new Dictionary<byte, float>();
+		private readonly Dictionary<byte, PlayerControl> pcs = new Dictionary<byte, PlayerControl>();
+		private readonly Dictionary<byte, Vector2> prevPos = new Dictionary<byte, Vector2>();
+		private readonly float deadTime = deadTime;
+
+		private const float blockTime = 0.1f;
+		private float blockTimer = 0.1f;
+
+		public bool IsContain(byte playerId) => this.playerDeadTimes.ContainsKey(playerId);
+
+		public void Update()
+		{
+			this.blockTimer += Time.deltaTime;
+			if (this.blockTimer < blockTime)
+			{
+				return;
+			}
+			this.blockTimer = 0.0f;
+
+			foreach (var (id, pc) in pcs)
+			{
+				var cur = pc.GetTruePosition();
+				var prev = prevPos[id];
+				Increse(id, cur == prev ? blockTime : -blockTime);
+				this.prevPos[id] = cur;
+			}
+		}
+
+		public void Increse(byte playerId, float addTime)
+		{
+			float newTime = this.playerDeadTimes[playerId] + addTime;
+			if (newTime >= this.deadTime)
+			{
+				// 焼死
+				Player.RpcUncheckMurderPlayer(
+					playerId, playerId, byte.MinValue);
+				// エフェクト非表示処理
+
+				this.pcs.Remove(playerId);
+				this.playerDeadTimes.Remove(playerId);
+			}
+			else if (newTime < 0.0f)
+			{
+				this.pcs.Remove(playerId);
+				this.playerDeadTimes.Remove(playerId);
+			}
+			else
+			{
+				this.playerDeadTimes[playerId] = newTime;
+			}
+		}
+
+		public void Add(byte playerId)
+		{
+			var pc = Player.GetPlayerControlById(playerId);
+			if (pc == null)
+			{
+				return;
+			}
+			this.playerDeadTimes[playerId] = Time.deltaTime * 2.0f;
+			this.pcs[playerId] = pc;
+			this.prevPos[playerId] = pc.GetTruePosition();
+		}
+	}
+
+	public HitInfo? Info
+	{
+		get => this.info;
+		set
+		{
+			if (value is null)
+			{
+				throw new NullException("value is null");
+			}
+			this.info = value;
+			this.playerDeadTimer = new PlayerDeadTimerContainer(this.info.DeadCountDown);
+		}
+	}
+
+	private readonly Dictionary<byte, float> playerTimes = new Dictionary<byte, float>();
+	private PlayerDeadTimerContainer? playerDeadTimer;
+	private HitInfo? info;
+
+	public void LateUpdate()
+	{
+		foreach (byte key in playerTimes.Keys)
+		{
+			if (!this.playerTimes.TryGetValue(key, out float time))
+			{
+				continue;
+			}
+			float newTime = time - Time.deltaTime;
+			if (newTime < 0.0f)
+			{
+				this.playerTimes.Remove(key);
+			}
+			this.playerTimes[key] = newTime;
+		}
+		this.playerDeadTimer?.Update();
+	}
 
 	public void OnTriggerStay2D(Collider2D other)
 	{
-		ExtremeRolesPlugin.Logger.LogInfo($"あぶられてるもの:{other.name}");
-
-		if (this.Info is null ||
+		if (this.playerDeadTimer is null ||
+			this.Info is null ||
 			this.Info.IgnorePlayer == null ||
 			!WeaponHitHelper.IsHitPlayer(other, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
@@ -450,7 +554,28 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 		{
 			return;
 		}
-		ExtremeRolesPlugin.Logger.LogInfo("ﾑｶ着火ファイアーナウ");
-		// 燃やす処理
+
+		if (!this.playerTimes.TryGetValue(pc.PlayerId, out float time))
+		{
+			time = 0.0f;
+		}
+
+		if (this.playerDeadTimer.IsContain(pc.PlayerId))
+		{
+			this.playerDeadTimer.Increse(pc.PlayerId, Time.deltaTime);
+			return;
+		}
+		else if (time >= this.Info.FireSecond)
+		{
+			this.playerDeadTimer.Add(pc.PlayerId);
+
+			// Rpcのエフェクト追加処理
+
+			this.playerTimes.Remove(pc.PlayerId);
+			return;
+		}
+
+		// Updateで減らす処理を入れてるので2倍で進める
+		this.playerTimes[pc.PlayerId] = time + (Time.deltaTime * 2.0f);
 	}
 }
