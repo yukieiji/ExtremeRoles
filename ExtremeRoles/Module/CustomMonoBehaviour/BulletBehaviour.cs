@@ -305,7 +305,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\flamethrower.asset",
 			"assets/roles/flamethrower.prefab");
 		var obj = Instantiate(gameObj);
-		obj.layer = LayerMask.GetMask("Players");
+		obj.layer = Constants.LivingPlayersOnlyMask;
 		obj.transform.position = anchorPlayer.transform.position;
 		obj.transform.SetParent(anchorPlayer.transform);
 		obj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
