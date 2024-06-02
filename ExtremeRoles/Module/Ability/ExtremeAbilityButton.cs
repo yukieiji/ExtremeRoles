@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Manager;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability.Behavior;
@@ -140,29 +141,37 @@ public class ExtremeAbilityButton
 			setStatus(newState);
 		}
 
-		this.button.graphic.sprite = this.Behavior.Graphic.Img;
+		var grahic = this.button.graphic;
+		grahic.sprite = this.Behavior.Graphic.Img;
 		this.button.OverrideText(this.Behavior.Graphic.Text);
 
 		if (this.Behavior.IsUse())
 		{
-			this.button.graphic.color = this.button.buttonLabelText.color = Palette.EnabledColor;
-			this.button.graphic.material.SetFloat(materialName, 0f);
+			grahic.color = this.button.buttonLabelText.color = Palette.EnabledColor;
+			grahic.material.SetFloat(materialName, 0f);
 		}
 		else
 		{
-			this.button.graphic.color = this.button.buttonLabelText.color = Palette.DisabledClear;
-			this.button.graphic.material.SetFloat(materialName, 1f);
+			grahic.color = this.button.buttonLabelText.color = Palette.DisabledClear;
+			grahic.material.SetFloat(materialName, 1f);
+		}
+
+		// チャージ中は改行をオフにしてるので
+		var cooldownTimerText = this.button.cooldownTimerText;
+		if (!cooldownTimerText.enableWordWrapping)
+		{
+			cooldownTimerText.enableWordWrapping = true;
 		}
 
 		float maxTimer = this.Behavior.CoolTime;
 		switch (this.State)
 		{
 			case AbilityState.None:
-				this.button.cooldownTimerText.color = Palette.EnabledColor;
+				cooldownTimerText.color = Palette.EnabledColor;
 				this.button.SetCoolDown(0, maxTimer);
 				return;
 			case AbilityState.CoolDown:
-				this.button.cooldownTimerText.color = Palette.EnabledColor;
+				cooldownTimerText.color = Palette.EnabledColor;
 
 				// クールダウンが明けた
 				if (this.Timer < 0.0f)
@@ -180,7 +189,7 @@ public class ExtremeAbilityButton
 					throw new ArgException("Can't inject IChargingBehavior");
 				}
 
-				this.button.cooldownTimerText.color = TimerChargeColor;
+				cooldownTimerText.color = TimerChargeColor;
 				maxTimer = chargingBehavior.ChargeTime;
 				chargingBehavior.ChargeGage = Mathf.Clamp(this.Timer / maxTimer, 0.0f, 1.0f);
 
@@ -216,8 +225,11 @@ public class ExtremeAbilityButton
 				// そのままだと表示が分かりにくいので変える
 				this.button.isCoolingDown = true;
 				this.button.SetCooldownFill(1 - chargingBehavior.ChargeGage);
-				this.button.cooldownTimerText.text = Mathf.CeilToInt(this.Timer).ToString();
-				this.button.cooldownTimerText.gameObject.SetActive(true);
+				cooldownTimerText.text = string.Format(
+					Translation.GetString(OptionUnit.Percentage.ToString()),
+					Mathf.CeilToInt(chargingBehavior.ChargeGage * 100));
+				cooldownTimerText.enableWordWrapping = false;
+				cooldownTimerText.gameObject.SetActive(true);
 				return;
 			case AbilityState.Activating:
 				if (this.Behavior is not IActivatingBehavior activatingBehavior)
@@ -225,7 +237,7 @@ public class ExtremeAbilityButton
 					throw new ArgException("Can't inject IActivatingBehavior");
 				}
 
-				this.button.cooldownTimerText.color = TimerOnColor;
+				cooldownTimerText.color = TimerOnColor;
 				maxTimer = activatingBehavior.ActiveTime;
 
 				// Reclick可能であれば押す
