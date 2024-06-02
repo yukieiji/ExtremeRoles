@@ -183,8 +183,19 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			return true;
 		}
 
-		private bool isFireThrowerUse(bool _, float __)
-			=> IRoleAbility.IsCommonUse();
+		private bool isFireThrowerUse(bool isCharge, float chargeGauge)
+		{
+			bool isCommonUse = IRoleAbility.IsCommonUse();
+			if (!isCommonUse)
+			{
+				return false;
+			}
+			if (!isCharge)
+			{
+				return true;
+			}
+			return chargeGauge == 1.0f;
+		}
 
 		private FlameThrowerBehaviour createSword(
 			in PlayerControl rolePlayer)
