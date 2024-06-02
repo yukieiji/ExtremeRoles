@@ -455,7 +455,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		if (this.fire != null)
 		{
 			this.fire.Play();
-			this.transform.rotation = Quaternion.Euler(0.0f, 90.0f, 0.0f);
+			this.transform.rotation = Quaternion.Euler(0.0f, 90.0f, 180.0f);
 		}
 	}
 
