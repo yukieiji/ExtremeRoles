@@ -212,7 +212,13 @@ public class ExtremeAbilityButton
 
 				// チャージ時間なのでタイマーを増やす
 				this.Timer += Time.deltaTime;
-				break;
+
+				// そのままだと表示が分かりにくいので変える
+				this.button.isCoolingDown = true;
+				this.button.SetCooldownFill(1 - chargingBehavior.ChargeGage);
+				this.button.cooldownTimerText.text = Mathf.CeilToInt(this.Timer).ToString();
+				this.button.cooldownTimerText.gameObject.SetActive(true);
+				return;
 			case AbilityState.Activating:
 				if (this.Behavior is not IActivatingBehavior activatingBehavior)
 				{
