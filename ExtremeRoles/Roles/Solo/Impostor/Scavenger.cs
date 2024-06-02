@@ -524,7 +524,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	public override SingleRoleBase Clone()
 	{
 		var newRole = base.Clone();
-		var system = ExtremeSystemTypeManager.Instance.CreateOrGet<ScavengerAbilityProviderSystem>(
+		var system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ScavengerAbilityProviderSystem.Type,
 			() =>
 			{
@@ -549,8 +549,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			scavenger.InitAbility = system.GetInitWepon();
 		}
-
-		return base.Clone();
+		return newRole;
 	}
 
 	public void CreateAbility()
@@ -674,9 +673,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Enum.GetValues<Ability>()
 				.Select(x => x.ToString())
 				.ToArray(),
-			parentOps,
+			randomWepon,
 			invert: true,
-			enableCheckOption: randomWepon);
+			enableCheckOption: parentOps);
 
 		CreateBoolOption(
 			Option.SyncWeapon,
@@ -767,6 +766,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	protected override void RoleSpecificInit()
 	{
+		this.weaponMixTime = OptionManager.Instance.GetValue<float>(
+			this.GetRoleOptionId(Option.WeaponMixTime));
 	}
 
 	private void createWeapon()
@@ -850,7 +851,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	{
 		BehaviorBase? result;
 
-		ExtremeRolesPlugin.Logger.LogInfo(ability.ToString());
+		ExtremeRolesPlugin.Logger.LogInfo($"Init Weapon: {ability}");
 
 		if (this.weapon is null ||
 			!this.weapon.TryGetValue(ability, out var weapon))
@@ -863,7 +864,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			result = weapon.Create(weaponParam);
 			this.loadAbilityOption(result, ability);
 		}
-		ExtremeRolesPlugin.Logger.LogInfo(result.ToString());
 		return result;
 	}
 
