@@ -24,7 +24,8 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class ScavengerAbilityProviderSystem(
 	in WeaponAbility initWeapon,
-	in bool SyncPlayer,
+	in bool isSetWepon,
+	in bool syncPlayer,
 	in ScavengerAbilityProviderSystem.RandomOption? randomOption) : IDirtableSystemType
 {
 	public const ExtremeSystemType Type = ExtremeSystemType.ScavengerAbilityProvider;
@@ -34,12 +35,12 @@ public sealed class ScavengerAbilityProviderSystem(
 		bool ContainAdvanced);
 
 	private readonly WeaponAbility initAbility = initWeapon;
-	private readonly bool isSyncPlayer = SyncPlayer;
+	private readonly bool isSyncPlayer = syncPlayer;
 	private readonly RandomOption? randomOption = randomOption;
 	private readonly Dictionary<WeaponAbility, GameObject> settedWeapon = new Dictionary<WeaponAbility, GameObject>();
 	private WeaponAbility[]? abilities;
 	private HashSet<WeaponAbility> initProvided = new HashSet<WeaponAbility>();
-	private bool init = false;
+	private bool init = !isSetWepon;
 
 	public bool IsDirty => false;
 

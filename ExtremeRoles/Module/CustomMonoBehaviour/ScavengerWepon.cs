@@ -22,7 +22,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 public static class  ScavengerWeaponHitHelper
 {
-	private static readonly int collisionLayer = LayerMask.GetMask(new string[] { "Ship", "Objects" });
+	private static readonly int collisionLayer = LayerMask.GetMask("Ship", "Objects" );
 
 	public static bool IsHitPlayer(Collider2D other, out PlayerControl pc)
 		=> other.TryGetComponent(out pc) &&

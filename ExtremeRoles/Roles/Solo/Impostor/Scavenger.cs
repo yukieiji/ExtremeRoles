@@ -457,6 +457,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		InitAbility,
 
+		IsSetWepon,
+
 		SyncWeapon,
 
 		HandGunCount,
@@ -551,6 +553,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return new ScavengerAbilityProviderSystem(
 					(Ability)mng.GetValue<int>(
 						this.GetRoleOptionId(Option.InitAbility)),
+					mng.GetValue<bool>(
+						this.GetRoleOptionId(Option.IsSetWepon)),
 					mng.GetValue<bool>(
 						this.GetRoleOptionId(Option.SyncWeapon)),
 					randOpt);
@@ -678,7 +682,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.AllowAdvancedWepon,
 			false, randomWepon);
 
-
 		CreateSelectionOption(
 			Option.InitAbility,
 			Enum.GetValues<Ability>()
@@ -688,9 +691,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			invert: true,
 			enableCheckOption: parentOps);
 
+		var mapSetOps = CreateBoolOption(
+			Option.IsSetWepon,
+			true, parentOps);
+
 		CreateBoolOption(
 			Option.SyncWeapon,
-			true, parentOps);
+			true, mapSetOps,
+			invert: true,
+			enableCheckOption: parentOps);
 
 		CreateIntOption(
 			Option.HandGunCount,
