@@ -49,7 +49,7 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 			weponInfo = value;
 			var rend = base.gameObject.TryAddComponent<SpriteRenderer>();
 			rend.sprite = Loader.CreateSpriteFromResources(
-				string.Format(Path.ScavengerWeponIconPathFormat, weponInfo.Ability));
+				string.Format(Path.ScavengerWeponMapIconPathFormat, weponInfo.Ability));
 
 			var collider = base.gameObject.TryAddComponent<CircleCollider2D>();
 			collider.isTrigger = true;
