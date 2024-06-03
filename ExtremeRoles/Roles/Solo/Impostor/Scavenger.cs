@@ -42,7 +42,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		float activeTime,
 		float r) : IWeapon
 	{
-		private SwordBehaviour? showSword;
+		private ScavengerSwordBehaviour? showSword;
 		private readonly float r = r;
 		private readonly float chargeTime = chargeTime;
 		private readonly float activeTime = activeTime;
@@ -83,7 +83,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			this.showSword.gameObject.SetActive(true);
 			this.showSword.SetRotation(
-				new SwordBehaviour.RotationInfo(
+				new ScavengerSwordBehaviour.RotationInfo(
 					this.chargeTime, -45f, false),
 				true);
 
@@ -98,7 +98,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 			this.showSword.SetRotation(
-				new SwordBehaviour.RotationInfo(
+				new ScavengerSwordBehaviour.RotationInfo(
 					this.activeTime, 365f, true),
 				false);
 			return true;
@@ -120,9 +120,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private bool isValidSword()
 			=> this.showSword != null && this.showSword.gameObject.active;
 
-		private SwordBehaviour createSword(
+		private ScavengerSwordBehaviour createSword(
 			in PlayerControl rolePlayer)
-			=> SwordBehaviour.Create(
+			=> ScavengerSwordBehaviour.Create(
 				this.r, rolePlayer);
 	}
 
@@ -131,7 +131,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private readonly float fireSecond = fireSecond;
 		private readonly float fireDeadSecond = fireDeadSecond;
 
-		private FlameThrowerBehaviour? flame;
+		private ScavengerFlameThrowerBehaviour? flame;
 
 		public BehaviorBase Create(in CreateParam param)
 		{
@@ -197,9 +197,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			return chargeGauge == 1.0f;
 		}
 
-		private FlameThrowerBehaviour createSword(
+		private ScavengerFlameThrowerBehaviour createSword(
 			in PlayerControl rolePlayer)
-			=> FlameThrowerBehaviour.Create(
+			=> ScavengerFlameThrowerBehaviour.Create(
 				this.fireSecond, this.fireDeadSecond, rolePlayer);
 	}
 
@@ -330,11 +330,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private sealed class NormalGun(
 		in Ability type,
-		in BulletBehaviour.Parameter param) : IWeapon
+		in ScavengerBulletBehaviour.Parameter param) : IWeapon
 	{
 		private Ability type = type;
-		private readonly BulletBehaviour.Parameter pram = param;
-		private readonly Dictionary<int, BulletBehaviour> bullet = new();
+		private readonly ScavengerBulletBehaviour.Parameter pram = param;
+		private readonly Dictionary<int, ScavengerBulletBehaviour> bullet = new();
 		private int id = 0;
 		private Vector2 playerDirection;
 
@@ -383,7 +383,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				throw new ArgumentNullException("RolePlayer is null");
 			}
 
-			var bullet = BulletBehaviour.Create(
+			var bullet = ScavengerBulletBehaviour.Create(
 				mngId,
 				rolePlayer,
 				direction,
@@ -792,7 +792,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new NormalGun(
 					Ability.HandGun,
 					new (
-						Path.BulletImg,
+						Path.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.HandGunSpeed)),
@@ -822,7 +822,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new NormalGun(
 					Ability.SniperRifle,
 					new (
-						Path.BulletImg,
+						Path.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.SniperRifleSpeed)),
@@ -833,7 +833,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new NormalGun(
 					Ability.BeamRifle,
 					new (
-						Path.BulletImg,
+						Path.ScavengerBulletImg,
 						new Vector2(0.05f, 0.05f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.BeamRifleSpeed)),

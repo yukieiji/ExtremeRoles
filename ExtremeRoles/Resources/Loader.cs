@@ -115,6 +115,9 @@ public static class Path
 	public const string TeroristTeroMinigamePrefab = "assets/roles/teroristminigame.prefab";
 	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
 	public const string TeroristTeroSabotageButton = "ExtremeRoles.Resources.TeroristoSetbombImg.png";
+	public const string ScavengerWeponIconPathFormat = "ExtremeRoles.Resources.Scavenger.{0}Icon.png";
+	public const string ScavengerBulletImg = "ExtremeRoles.Resources.Scavenger.Bullet.png";
+	public const string ScavengerSwordImg = "ExtremeRoles.Resources.Scavenger.Sword.png";
 	public const string BulletImg = "ExtremeRoles.Resources.Bullet.png";
 	public const string SwordImg = "ExtremeRoles.Resources.Sword.png";
 	// !----- インポスター終了 -----

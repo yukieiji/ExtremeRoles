@@ -5,12 +5,18 @@ using System.Linq;
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 
 using UnityObject = UnityEngine.Object;
 using WeaponAbility = ExtremeRoles.Roles.Solo.Impostor.Scavenger.Ability;
+
+
+using Newtonsoft.Json.Linq;
+using ExtremeRoles.Extension.Json;
+
 
 #nullable enable
 
@@ -39,8 +45,10 @@ public sealed class ScavengerAbilityProviderSystem(
 
 	private class WeponSetter
 	{
-		private readonly Dictionary<WeaponAbility, Vector2> pos = new Dictionary<WeaponAbility, Vector2>(3);
 		private readonly bool isSync;
+
+		private IReadOnlyDictionary<WeaponAbility, Vector2>? setPos;
+
 		public WeponSetter(bool isSync)
 		{
 			this.isSync = isSync;
@@ -138,17 +146,50 @@ public sealed class ScavengerAbilityProviderSystem(
 
 		private void set(params WeaponAbility[] abilities)
 		{
+			if (setPos == null)
+			{
+				setPos = getSetPoint();
+			}
+
 			foreach (var ability in abilities)
 			{
-				if (!this.pos.TryGetValue(ability, out var pos))
+				if (!setPos.TryGetValue(ability, out var pos))
 				{
 					continue;
 				}
 				var obj = new GameObject(ability.ToString());
-				obj.transform.localPosition = pos;
-				var wepon = obj.AddComponent<WeponMapUsable>();
+				obj.transform.localPosition = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+				var wepon = obj.AddComponent<ScavengerWeponMapUsable>();
 				wepon.WeponInfo = new(ability, this.isSync);
 			}
+		}
+		private IReadOnlyDictionary<WeaponAbility, Vector2> getSetPoint()
+		{
+			var json = JsonParser.GetJObjectFromAssembly(
+				"ExtremeRoles.Resources.JsonData.ScavengerWeponPoint.json");
+			if (json == null)
+			{
+				throw new ArgumentNullException("Json data is null!!!!");
+			}
+			string key = Map.Name;
+
+			var result = new Dictionary<WeaponAbility, Vector2>(3);
+
+			JArray? posInfo = json.Get<JArray>(key);
+			if (posInfo == null) { return result; }
+
+			for (int i = 0; i < posInfo.Count; ++i)
+			{
+				JArray? id = posInfo.Get<JArray>(i);
+				if (id == null) { continue; }
+
+				result.Add(
+					(WeaponAbility)(i + 1),
+					new Vector2(
+						(float)(id[0]),
+						(float)(id[1])));
+			}
+			return result;
 		}
 	}
 
@@ -158,7 +199,7 @@ public sealed class ScavengerAbilityProviderSystem(
 		{
 			return;
 		}
-		putWeaponToMap();
+		setWeaponToMap();
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
@@ -221,7 +262,7 @@ public sealed class ScavengerAbilityProviderSystem(
 		}
 	}
 
-	private void putWeaponToMap()
+	private void setWeaponToMap()
 	{
 		this.init = true;
 

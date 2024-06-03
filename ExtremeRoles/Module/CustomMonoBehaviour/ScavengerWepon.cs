@@ -5,21 +5,22 @@ using UnityEngine;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles;
 
 using NullException = System.ArgumentNullException;
 using Scavenger = ExtremeRoles.Roles.Solo.Impostor.Scavenger;
-using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.SystemType.Roles;
 
 
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
-public static class  WeaponHitHelper
+public static class  ScavengerWeaponHitHelper
 {
 	private static readonly int collisionLayer = LayerMask.GetMask(new string[] { "Ship", "Objects" });
 
@@ -36,13 +37,28 @@ public static class  WeaponHitHelper
 }
 
 [Il2CppRegister([typeof(IUsable)])]
-public sealed class WeponMapUsable : MonoBehaviour, IAmongUs.IUsable
+public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 {
 	public readonly record struct Info(Scavenger.Ability Ability, bool IsSync);
 
-	public Info WeponInfo { private get; set; }
+	public Info WeponInfo
+	{
+		private get => weponInfo;
+		set
+		{
+			weponInfo = value;
+			var rend = base.gameObject.TryAddComponent<SpriteRenderer>();
+			rend.sprite = Loader.CreateSpriteFromResources(
+				string.Format(Path.ScavengerWeponIconPathFormat, weponInfo.Ability));
 
-	public float UsableDistance => 0.75f;
+			var collider = base.gameObject.TryAddComponent<CircleCollider2D>();
+			collider.isTrigger = true;
+			collider.radius = 0.1f;
+		}
+	}
+	private Info weponInfo;
+
+	public float UsableDistance => 0.5f;
 
 	public float PercentCool => 0.0f;
 
@@ -84,7 +100,7 @@ public sealed class WeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 
 
 [Il2CppRegister]
-public sealed class BulletBehaviour : MonoBehaviour
+public sealed class ScavengerBulletBehaviour : MonoBehaviour
 {
 	public sealed record Parameter(
 		string Img,
@@ -98,7 +114,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 	private Vector2 initialPosition;
 	private bool isWallHack = false;
 
-	public static BulletBehaviour Create(
+	public static ScavengerBulletBehaviour Create(
 		int id,
 		in PlayerControl abilityPlayer,
 		in Vector2 direction,
@@ -108,7 +124,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 		obj.transform.position = abilityPlayer.transform.position;
 		obj.layer = Constants.LivingPlayersOnlyMask;
 
-		var bullet = obj.AddComponent<BulletBehaviour>();
+		var bullet = obj.AddComponent<ScavengerBulletBehaviour>();
 		bullet.Initialize(
 			param.Img,
 			param.Size,
@@ -169,7 +185,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 			return;
 		}
 
-		if (WeaponHitHelper.IsHitPlayer(other, out var pc) &&
+		if (ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) &&
 			pc.PlayerId != this.ignorePlayerId)
 		{
 			Player.RpcUncheckMurderPlayer(
@@ -178,7 +194,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 				byte.MinValue);
 			Destroy(this.gameObject);
 		}
-		else if (WeaponHitHelper.IsHitWall(other) && this.isWallHack)
+		else if (ScavengerWeaponHitHelper.IsHitWall(other) && this.isWallHack)
 		{
 			Destroy(this.gameObject);
 		}
@@ -186,7 +202,7 @@ public sealed class BulletBehaviour : MonoBehaviour
 }
 
 [Il2CppRegister(typeof(IUsable))]
-public sealed class SwordBehaviour : MonoBehaviour
+public sealed class ScavengerSwordBehaviour : MonoBehaviour
 {
 	public sealed class RotationInfo
 	{
@@ -218,9 +234,9 @@ public sealed class SwordBehaviour : MonoBehaviour
 	private GameObject? anchor;
 
 	private RotationInfo? rotationInfo;
-	public SwordBehaviour(System.IntPtr ptr) : base(ptr) { }
+	public ScavengerSwordBehaviour(System.IntPtr ptr) : base(ptr) { }
 
-	public static SwordBehaviour Create(
+	public static ScavengerSwordBehaviour Create(
 		in float r,
 		in PlayerControl anchorPlayer)
 	{
@@ -229,9 +245,9 @@ public sealed class SwordBehaviour : MonoBehaviour
 			r + 0.5f, 0.0f, 0.0f);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 
-		var sword = obj.AddComponent<SwordBehaviour>();
+		var sword = obj.AddComponent<ScavengerSwordBehaviour>();
 		sword.initialize(
-			Path.SwordImg,
+			Path.ScavengerSwordImg,
 			new Vector2(0.815f, 0.08f),
 			anchorPlayer);
 		return sword;
@@ -305,7 +321,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 			return;
 		}
 
-		if (WeaponHitHelper.IsHitPlayer(other, out var pc) &&
+		if (ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) &&
 			pc.PlayerId != this.ignorePlayerId)
 		{
 			Player.RpcUncheckMurderPlayer(
@@ -313,7 +329,7 @@ public sealed class SwordBehaviour : MonoBehaviour
 				pc.PlayerId,
 				byte.MinValue);
 		}
-		else if (WeaponHitHelper.IsHitWall(other))
+		else if (ScavengerWeaponHitHelper.IsHitWall(other))
 		{
 			this.gameObject.SetActive(false);
 		}
@@ -355,10 +371,10 @@ public sealed class SwordBehaviour : MonoBehaviour
 }
 
 [Il2CppRegister]
-public sealed class FlameThrowerBehaviour : MonoBehaviour
+public sealed class ScavengerFlameThrowerBehaviour : MonoBehaviour
 {
 
-	public static FlameThrowerBehaviour Create(
+	public static ScavengerFlameThrowerBehaviour Create(
 		in float fireSecond,
 		in float fireDeadSecond,
 		in PlayerControl anchorPlayer)
@@ -372,13 +388,13 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		obj.transform.SetParent(anchorPlayer.transform);
 		obj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 		obj.SetActive(true);
-		if (!obj.TryGetComponent<FlameThrowerBehaviour>(out var flameThrower) ||
+		if (!obj.TryGetComponent<ScavengerFlameThrowerBehaviour>(out var flameThrower) ||
 			flameThrower.hitBehaviour == null)
 		{
 			throw new NullException("FlameThrower Missing!!!!!");
 		}
 
-		flameThrower.hitBehaviour.Info = new FlameThrowerHitBehaviour.HitInfo(
+		flameThrower.hitBehaviour.Info = new ScavengerFlameThrowerHitBehaviour.HitInfo(
 			anchorPlayer,
 			fireSecond,
 			fireDeadSecond);
@@ -387,7 +403,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 	}
 
 	private ParticleSystem? fire;
-	private FlameThrowerHitBehaviour? hitBehaviour;
+	private ScavengerFlameThrowerHitBehaviour? hitBehaviour;
 	private bool isStart = false;
 	private bool prevFlip = false;
 
@@ -400,7 +416,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 		}
 		var colison = base.transform.Find("Collider");
 		if (colison != null &&
-			colison.TryGetComponent<FlameThrowerHitBehaviour>(out var hitBehaviour))
+			colison.TryGetComponent<ScavengerFlameThrowerHitBehaviour>(out var hitBehaviour))
 		{
 			this.hitBehaviour = hitBehaviour;
 		}
@@ -489,7 +505,7 @@ public sealed class FlameThrowerBehaviour : MonoBehaviour
 }
 
 [Il2CppRegister]
-public sealed class FlameThrowerHitBehaviour : MonoBehaviour
+public sealed class ScavengerFlameThrowerHitBehaviour : MonoBehaviour
 {
 	public sealed record class HitInfo(
 		PlayerControl IgnorePlayer,
@@ -604,7 +620,7 @@ public sealed class FlameThrowerHitBehaviour : MonoBehaviour
 		if (this.playerDeadTimer is null ||
 			this.Info is null ||
 			this.Info.IgnorePlayer == null ||
-			!WeaponHitHelper.IsHitPlayer(other, out var pc) ||
+			!ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
 				this.Info.IgnorePlayer.transform.position,
