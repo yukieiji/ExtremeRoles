@@ -53,7 +53,7 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 
 			var collider = base.gameObject.TryAddComponent<CircleCollider2D>();
 			collider.isTrigger = true;
-			collider.radius = 0.1f;
+			collider.radius = 0.01f;
 		}
 	}
 	private Info weponInfo;
