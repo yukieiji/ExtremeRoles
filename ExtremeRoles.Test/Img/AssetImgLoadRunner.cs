@@ -38,6 +38,7 @@ internal abstract class AssetImgLoadRunner
 		}
 	}
 
+#if DEBUG
 	protected void LoadFromExR(string asset, string img)
 	{
 		try
@@ -52,6 +53,7 @@ internal abstract class AssetImgLoadRunner
 				$"Img:{asset} | {img} not load   {ex.Message}");
 		}
 	}
+#endif
 	protected void SpriteCheck(in Sprite sprite)
 	{
 		if (sprite == null)

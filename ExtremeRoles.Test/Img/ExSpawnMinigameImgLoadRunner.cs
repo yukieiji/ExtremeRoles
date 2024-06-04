@@ -36,7 +36,7 @@ internal sealed class ExSpawnMinigameImgLoadRunner
 
 		string[] allMap = [Map.SkeldKey, Map.MiraHqKey, Map.PolusKey, Map.FungleKey];
 
-
+#if DEBUG
 		foreach (string map in allMap)
 		{
 
@@ -58,5 +58,6 @@ internal sealed class ExSpawnMinigameImgLoadRunner
 						Path.ExtremeSelectorMinigameImgFormat, lowerMap, spawnPoint.RoomName));
 			}
 		}
+#endif
 	}
 }

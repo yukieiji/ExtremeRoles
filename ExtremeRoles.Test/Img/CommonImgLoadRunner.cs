@@ -12,7 +12,7 @@ internal sealed class CommonImgLoadRunner
 	public override void Run()
 	{
 		Log.LogInfo($"----- Unit:SingleImgLoad Test -----");
-
+#if DEBUG
 		imgTest(Path.Bomb);
 		imgTest(Path.Meeting);
 	}
@@ -30,5 +30,6 @@ internal sealed class CommonImgLoadRunner
 			Log.LogError(
 				$"Img: {img} not load   {ex.Message}");
 		}
+#endif
 	}
 }
