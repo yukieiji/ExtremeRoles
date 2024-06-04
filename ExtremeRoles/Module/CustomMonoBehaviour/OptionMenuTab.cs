@@ -162,8 +162,9 @@ public sealed class OptionMenuTab : MonoBehaviour
 			"Tab Background").GetComponentInChildren<SpriteRenderer>();
 
 		colorButtonTrans.FindChild("Icon").GetComponent<SpriteRenderer>().sprite =
-			Loader.CreateSpriteFromResources(
-				string.Format(Path.TabImagePathFormat, this.tabType), 150f);
+			Loader.GetUnityObjectFromResources<Sprite>(
+				Path.TabImageAsset,
+				string.Format(Path.GeneralImagePathFormat, this.tabType));
 		this.tabHighLight.enabled = false;
 	}
 

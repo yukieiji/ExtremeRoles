@@ -26,14 +26,16 @@ public static class Path
 
     public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
-    public const string HelpImage = "ExtremeRoles.Resources.Help.png";
+	public const string GeneralImagePathFormat = "assets/general/{0}.png";
+	public const string TabImageAsset = "ExtremeRoles.Resources.settingtab.asset";
+
+	public const string HelpImage = "ExtremeRoles.Resources.Help.png";
     public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
 
     public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
 
 	public const string RaiseHandIcon = "ExtremeRoles.Resources.RaiseHand.png";
 
-	public const string TabImagePathFormat = "ExtremeRoles.Resources.SettingTab.{0}.png";
 	public const string ExtremeSelectorMinigameImgFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.{1}.png";
 
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
