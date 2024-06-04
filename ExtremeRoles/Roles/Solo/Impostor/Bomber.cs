@@ -66,9 +66,8 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         this.CreateAbilityCountButton(
             "setBomb",
-            Loader.CreateSpriteFromResources(
-                Path.BomberSetBomb),
-            CheckAbility, CleanUp, ForceCleanUp);
+			Loader.GetUnityObjectFromResources<Sprite>(Path.Bomb),
+			CheckAbility, CleanUp, ForceCleanUp);
     }
 
     public bool IsAbilityUse()

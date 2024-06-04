@@ -25,14 +25,9 @@ internal sealed class KidsImgLoadRunner
 		try
 		{
 			var sprite = Wisp.TorchSprite;
-			if (sprite == null)
-			{
-				throw new Exception("TorchSprite is Null");
-			}
-			else
-			{
-				Log.LogInfo($"TorchSprite load success");
-			}
+			Log.LogInfo($"TorchSprite loading... ");
+			SpriteCheck(sprite);
+
 		}
 		catch (Exception ex)
 		{

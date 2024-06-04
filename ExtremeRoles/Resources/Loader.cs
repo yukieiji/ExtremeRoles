@@ -40,6 +40,10 @@ public static class Path
 	// !--- 役職用 ---
 	public const string RoleImgPathFormat = "assets/roles/{0}.png";
 	public const string ButtonIcon = ".ButtonIcon";
+
+	public const string Bomb = "Bomb";
+	public const string Meeting = "EmergencyMeeting";
+
 	// !----- コンビ用 -----
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
@@ -61,8 +65,6 @@ public static class Path
     public const string FencerCounter = "ExtremeRoles.Resources.Counter.png";
     public const string CurseMakerCurse = "ExtremeRoles.Resources.Curse.png";
     public const string OpenerOpenDoor = "ExtremeRoles.Resources.OpenDoor.png";
-    public const string DetectiveApprenticeEmergencyMeeting =
-        "ExtremeRoles.Resources.EmergencyMeeting.png";
     public const string CarpenterSetCamera = "ExtremeRoles.Resources.SetCamera.png";
     public const string CarpenterVentSeal = "ExtremeRoles.Resources.VentSeal.png";
     public const string CaptainSpecialVote = "ExtremeRoles.Resources.SpecialVote.png";
@@ -92,7 +94,6 @@ public static class Path
     public const string FakerDummyPlayer = "ExtremeRoles.Resources.DummyPlayer.png";
     public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
     public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
-    public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
 	public const string SlaveDriverHarassment = "ExtremeRoles.Resources.Harassment.png";
 	// !------- メリー -------
 	public const string MeryAsset = "ExtremeRoles.Resources.mery.asset";
@@ -147,12 +148,9 @@ public static class Path
 
 	public const string ForasShowArrow = "ExtremeRoles.Resources.ForasArrow.png";
 
-    public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
-    public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";
-    public const string XionSpeedUp = "ExtremeRoles.Resources.SpeedUp.png";
-    public const string XionSpeedDown = "ExtremeRoles.Resources.SpeedDown.png";
+    public const string XionAsset = "ExtremeRoles.Resources.xion.asset";
 
-    public const string SoundEffect = "ExtremeRoles.Resources.Asset.soundeffect.asset";
+	public const string SoundEffect = "ExtremeRoles.Resources.Asset.soundeffect.asset";
 
     public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
 }
@@ -213,6 +211,21 @@ public static class Loader
 		return result;
 	}
 
+	private const string oneImgAsset = "ExtremeRoles.Resources.{0}.asset";
+
+	public static T GetUnityObjectFromResources<T>(
+		string objName) where T : UnityObject
+	{
+		AssetBundle bundle = GetAssetBundleFromAssembly(
+			string.Format(oneImgAsset, objName.ToLower()),
+			Assembly.GetCallingAssembly());
+		T result = getObjectFromAsset<T>(
+			bundle,
+			string.Format(Path.RoleImgPathFormat, objName));
+
+		return result;
+	}
+
 #if DEBUG
 	public static T GetUnityObjectFromExRResources<T>(
 		string bundleName, string objName) where T : UnityObject
@@ -225,6 +238,22 @@ public static class Loader
 
 		return result;
 	}
+
+	public static T GetUnityObjectFromExRResources<T>(
+		string objName) where T : UnityObject
+	{
+		var assm = Assembly.GetAssembly(typeof(Loader));
+
+		AssetBundle bundle = GetAssetBundleFromAssembly(
+			string.Format(oneImgAsset, objName.ToLower()),
+			assm!);
+		T result = getObjectFromAsset<T>(
+			bundle,
+			string.Format(Path.RoleImgPathFormat, objName));
+
+		return result;
+	}
+
 #endif
 
 	public static T GetUnityObjectFromPath<T>(

@@ -15,15 +15,19 @@ internal abstract class AssetImgLoadRunner
 		{
 			var sprite = Loader.GetUnityObjectFromExRResources<Sprite>(asset, img);
 			Log.LogInfo($"Img Loaded:{asset} | {img}");
-			if (sprite == null)
-			{
-				throw new Exception("Sprite is Null");
-			}
+			SpriteCheck(sprite);
 		}
 		catch (Exception ex)
 		{
 			Log.LogError(
 				$"Img:{asset} | {img} not load   {ex.Message}");
+		}
+	}
+	protected void SpriteCheck(in Sprite sprite)
+	{
+		if (sprite == null)
+		{
+			throw new Exception("Sprite is Null");
 		}
 	}
 }

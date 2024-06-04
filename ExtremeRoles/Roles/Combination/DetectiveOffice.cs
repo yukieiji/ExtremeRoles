@@ -755,8 +755,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
         this.CreateAbilityCountButton(
             "emergencyMeeting",
-            Loader.CreateSpriteFromResources(
-                Path.DetectiveApprenticeEmergencyMeeting),
+            Loader.GetUnityObjectFromResources<Sprite>(Path.Meeting),
             abilityOff: CleanUp,
             checkAbility: IsOpen,
             isReduceOnActive: true);
