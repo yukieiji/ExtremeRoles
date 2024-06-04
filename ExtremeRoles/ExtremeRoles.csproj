@@ -36,8 +36,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
-    <EmbeddedResource Include="Resources\Asset\*.asset" />
-    <EmbeddedResource Include="Resources\*.asset" />
+    <EmbeddedResource Include="Resources\**\*.asset" />
     <EmbeddedResource Include="Resources\**\*.png" />
 	  <EmbeddedResource Include="Resources\JsonData\*.json" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />

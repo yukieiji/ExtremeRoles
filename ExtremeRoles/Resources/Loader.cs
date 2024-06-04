@@ -31,11 +31,12 @@ public static class Path
 	public const string CommonAsset = "ExtremeRoles.Resources.common.asset";
 	public const string TabImageAsset = "ExtremeRoles.Resources.settingtab.asset";
 
+	public const string ExtremeSelectorMinigameAssetFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.asset";
+	public const string ExtremeSelectorMinigameImgFormat = "assets/randomspawn/{0}/{1}.png";
+
 	public const string HelpImage = "ExtremeRoles.Resources.Help.png";
 
 	public const string RaiseHandIcon = "ExtremeRoles.Resources.RaiseHand.png";
-
-	public const string ExtremeSelectorMinigameImgFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.{1}.png";
 
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";

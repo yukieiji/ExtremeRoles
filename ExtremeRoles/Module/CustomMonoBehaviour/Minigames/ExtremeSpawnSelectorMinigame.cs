@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -21,6 +20,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Patches.Controller;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
 
 using Il2CppObject = Il2CppSystem.Object;
 
@@ -69,7 +69,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		if (spawnInfo == null)
 		{
 			var assembly = Assembly.GetCallingAssembly();
-			using Stream? stream = assembly.GetManifestResourceStream(jsonPath);
+			using var stream = assembly.GetManifestResourceStream(jsonPath);
 
 			if (stream is null) { return; }
 
@@ -92,6 +92,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			.ThenByDescending(x => x.Y)
 			.ToArray();
 
+		string lowerMap = mapKey.ToLower();
 		for (int i = 0; i < buttonNum; ++i)
 		{
 			var point = shuffleedPoint[i];
@@ -109,13 +110,13 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 				Enum.TryParse<SystemTypes>(roomName, true, out var systemRoomName) ?
 				FastDestroyableSingleton<TranslationController>.Instance.GetString(systemRoomName) :
 				Translation.GetString(roomName);
-			string imgName =
-				string.Format(
-					Resources.Path.ExtremeSelectorMinigameImgFormat,
-					mapKey, roomName);
 
 			button.Text.text = text;
-			button.Rend.sprite = Resources.Loader.CreateSpriteFromResources(imgName);
+			button.Rend.sprite = Loader.GetUnityObjectFromResources<Sprite>(
+				string.Format(
+					Path.ExtremeSelectorMinigameAssetFormat, lowerMap),
+				string.Format(
+					Path.ExtremeSelectorMinigameImgFormat, lowerMap, roomName));
 			button.Colider.size = new Vector2(1.25f, 1.25f);
 			button.OnClick = createSpawnAtAction(point.Vector, text);
 
