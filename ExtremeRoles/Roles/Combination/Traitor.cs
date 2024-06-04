@@ -332,7 +332,8 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
         if (CachedPlayerControl.LocalPlayer.PlayerId == rolePlayerId)
         {
-            if (this.AnotherRole is IRoleAbility abilityRole)
+            if (this.AnotherRole is IRoleAbility abilityRole &&
+				abilityRole.Button is not null)
             {
                 abilityRole.Button.OnMeetingStart();
             }
