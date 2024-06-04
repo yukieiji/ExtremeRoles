@@ -9,11 +9,11 @@ namespace ExtremeRoles.Test.Img;
 internal abstract class AssetImgLoadRunner
 	: TestRunnerBase
 {
-	protected void LoadFromExR(ExtremeRoleId id)
+	protected void LoadFromExR<W>(W id) where W : Enum
 	{
 		try
 		{
-			var sprite = Loader.GetUnityObjectFromResources<Sprite>(id);
+			var sprite = Loader.GetUnityObjectFromResources<Sprite, W>(id);
 			Log.LogInfo($"Img Loaded:{id}.ButtonIcon");
 			SpriteCheck(sprite);
 		}
@@ -21,6 +21,20 @@ internal abstract class AssetImgLoadRunner
 		{
 			Log.LogError(
 				$"Img:{id}.ButtonIcon not load   {ex.Message}");
+		}
+	}
+	protected void LoadFromExR<W>(W id, string name) where W : Enum
+	{
+		try
+		{
+			var sprite = Loader.GetUnityObjectFromResources<Sprite, W>(id, name);
+			Log.LogInfo($"Img Loaded:{id}.{name}");
+			SpriteCheck(sprite);
+		}
+		catch (Exception ex)
+		{
+			Log.LogError(
+				$"Img:{id}.{name} not load   {ex.Message}");
 		}
 	}
 

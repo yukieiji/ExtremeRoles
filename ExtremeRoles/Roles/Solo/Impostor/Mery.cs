@@ -42,10 +42,8 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         {
             this.body = new GameObject("MaryCamp");
             this.img = this.body.AddComponent<SpriteRenderer>();
-			this.img.sprite = Loader.GetUnityObjectFromResources<Sprite>(
-				Path.MeryAsset,
-				string.Format(
-					Path.RoleImgPathFormat, Path.MeryNoneActive));
+			this.img.sprite = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+				ExtremeRoleId.Mery, Path.MeryNoneActive);
 
             this.body.SetActive(canSee);
             this.body.transform.position = new Vector3(
@@ -140,10 +138,8 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 				vent.myAnim.enabled = false;
 			}
 
-			ventRenderer.sprite = Loader.GetUnityObjectFromResources<Sprite>(
-				Path.MeryAsset,
-				string.Format(
-					Path.RoleImgPathFormat, $"{ExtremeRoleId.Mery}.{0}"));
+			ventRenderer.sprite = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+				ExtremeRoleId.Mery, "0");
 
 			vent.myRend = ventRenderer;
 
@@ -293,7 +289,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateAbilityCountButton(
             "setCamp",
-			Loader.GetUnityObjectFromResources<Sprite>(ExtremeRoleId.Mery));
+			Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(ExtremeRoleId.Mery));
 	}
 
     public bool IsAbilityUse()

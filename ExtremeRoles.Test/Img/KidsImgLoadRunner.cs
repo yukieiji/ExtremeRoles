@@ -15,11 +15,7 @@ internal sealed class KidsImgLoadRunner
 
 		for (int index = 0; index < 10; ++index)
 		{
-			LoadFromExR(
-				Path.KidsAsset,
-				string.Format(
-					Path.RoleImgPathFormat,
-					$"{CombinationRoleType.Kids}.{index}"));
+			LoadFromExR(CombinationRoleType.Kids, $"{index}");
 		}
 
 		try

@@ -117,10 +117,8 @@ public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 
 	protected virtual Color GetColor() => Palette.ImpostorRed;
 
-	private Sprite getSprite() => Loader.GetUnityObjectFromResources<Sprite>(
-		Path.HypnotistAsset,
-		string.Format(
-			Path.RoleImgPathFormat, $"{ExtremeRoleId.Hypnotist}.{PartType}"));
+	private Sprite getSprite() => Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+		ExtremeRoleId.Hypnotist, PartType.ToString());
 }
 
 public sealed class RedAbilityPart : AbilityPartBase

@@ -30,6 +30,7 @@ internal sealed class ImgLoadRunner
 		runSuite<CommonImgLoadRunner>();
 		runSuite<ExSpawnMinigameImgLoadRunner>();
 		runSuite<XionImgLoadRunner>();
+		runSuite<AcceleratorImgLoadRunner>();
 		runSuite<KidsImgLoadRunner>();
 		runSuite<MeryImgLoadRunner>();
 		runSuite<HypnotistImgLoadRunner>();

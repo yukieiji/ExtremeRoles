@@ -13,18 +13,12 @@ internal sealed class MeryImgLoadRunner
 
 		for (int index = 0; index < 18; ++index)
 		{
-			LoadFromExR(
-				Path.MeryAsset,
-				string.Format(
-					Path.RoleImgPathFormat,
-					$"{ExtremeRoleId.Mery}.{index}"));
+			LoadFromExR(ExtremeRoleId.Mery, $"{index}");
 		}
 
 		LoadFromExR(
-			Path.MeryAsset,
-			string.Format(
-				Path.RoleImgPathFormat,
-				Path.MeryNoneActive));
+			ExtremeRoleId.Mery,
+			Path.MeryNoneActive);
 
 		LoadFromExR(ExtremeRoleId.Mery);
 	}

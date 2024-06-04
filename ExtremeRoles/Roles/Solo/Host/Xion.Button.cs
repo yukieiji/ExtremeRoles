@@ -201,8 +201,5 @@ public sealed partial class Xion
     }
 
 	public static Sprite GetSprite(string name)
-		=> Loader.GetUnityObjectFromResources<Sprite>(
-			Path.XionAsset,
-			string.Format(
-				Path.RoleImgPathFormat, $"{ExtremeRoleId.Xion}.{name}"));
+		=> Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(ExtremeRoleId.Xion, name);
 }

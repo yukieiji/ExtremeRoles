@@ -14,11 +14,7 @@ internal sealed class HypnotistImgLoadRunner
 
 		foreach (var ability in Enum.GetValues<Hypnotist.AbilityModuleType>())
 		{
-			LoadFromExR(
-				Path.HypnotistAsset,
-				string.Format(
-					Path.RoleImgPathFormat,
-					$"{ExtremeRoleId.Hypnotist}.{ability}"));
+			LoadFromExR(ExtremeRoleId.Hypnotist, ability.ToString());
 		}
 
 		LoadFromExR(ExtremeRoleId.Hypnotist);
