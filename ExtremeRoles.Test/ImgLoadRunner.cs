@@ -28,6 +28,7 @@ internal sealed class ImgLoadRunner
 			}
 		}
 		runSuite<ExSpawnMinigameImgLoadRunner>();
+		runSuite<KidsImgLoadRunner>();
 		runSuite<MeryImgLoadRunner>();
 		runSuite<HypnotistImgLoadRunner>();
 	}

@@ -34,8 +34,6 @@ public static class Path
 	public const string ExtremeSelectorMinigameAssetFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.asset";
 	public const string ExtremeSelectorMinigameImgFormat = "assets/randomspawn/{0}/{1}.png";
 
-	public const string HelpImage = "ExtremeRoles.Resources.Help.png";
-
 	public const string RaiseHandIcon = "ExtremeRoles.Resources.RaiseHand.png";
 
 
@@ -47,10 +45,8 @@ public static class Path
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
     public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
     public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
-    public const string DelinquentScribe =
-        "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
-    public const string WispTorch = "ExtremeRoles.Resources.torch.png";
-    public const string MoverMove = "ExtremeRoles.Resources.MoverMoving.png";
+	public const string KidsAsset = "ExtremeRoles.Resources.kids.asset";
+	public const string MoverMove = "ExtremeRoles.Resources.MoverMoving.png";
 	public const string AcceleratorAccelerateSet = "ExtremeRoles.Resources.AcceleratorAccelerateSet.png";
 	public const string AcceleratorAcceleratePanel = "ExtremeRoles.Resources.AcceleratorAcceleratePanel.png";
 	public const string SkaterSkateOff = "ExtremeRoles.Resources.SkaterSkateOff.png";

@@ -249,11 +249,9 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         GameObject obj = new GameObject("Scribe");
         obj.transform.position = player.transform.position;
         SpriteRenderer rend = obj.AddComponent<SpriteRenderer>();
-        rend.sprite = Loader.CreateSpriteFromResources(
-            string.Format(
-                Path.DelinquentScribe,
-                RandomGenerator.Instance.Next(0, maxImageNum)));
-        delinquent.abilityCount++;
+		rend.sprite = randomSprite;
+
+		delinquent.abilityCount++;
     }
     private static void setBomb(Delinquent delinquent)
     {
@@ -276,10 +274,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 					AbilityType.Scribe,
 					new ButtonGraphic(
 						Translation.GetString("scribble"),
-						Loader.CreateSpriteFromResources(
-							string.Format(
-								Path.DelinquentScribe,
-								RandomGenerator.Instance.Next(0, maxImageNum))))
+						randomSprite)
 				),
                 new (
 					AbilityType.SelfBomb,
@@ -383,6 +378,15 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         this.canAssignWisp = true;
     }
 
+	private static Sprite randomSprite
+		=> Loader.GetUnityObjectFromResources<Sprite>(
+			Path.KidsAsset,
+			string.Format(
+				Path.RoleImgPathFormat,
+				$"{CombinationRoleType.Kids}.{RandomGenerator.Instance.Next(0, maxImageNum)}"
+			)
+		);
+
 }
 
 public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
@@ -414,6 +418,14 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
         ColorPalette.KidsYellowGreen,
         OptionTab.Combination)
     { }
+
+	public static Sprite TorchSprite
+		=> Loader.GetUnityObjectFromResources<Sprite>(
+			Path.KidsAsset,
+			string.Format(
+				Path.RoleImgPathFormat,
+				$"{CombinationRoleType.Kids}.Torch")
+		);
 
     public void SetAbilityNum(int abilityNum)
     {
@@ -462,8 +474,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.WispSetTorch,
-            Loader.CreateSpriteFromResources(
-                Path.WispTorch),
+			TorchSprite,
             this.isReportAbility(),
             () => true,
             () => true,

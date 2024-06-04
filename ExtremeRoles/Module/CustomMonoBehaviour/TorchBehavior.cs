@@ -1,12 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -47,8 +45,7 @@ public sealed class TorchBehavior : MonoBehaviour, IAmongUs.IUsable
 	{
 		this.collider = base.gameObject.AddComponent<CircleCollider2D>();
 		this.img = base.gameObject.AddComponent<SpriteRenderer>();
-		this.img.sprite = Loader.CreateSpriteFromResources(
-			Path.WispTorch);
+		this.img.sprite = Wisp.TorchSprite;
 
 		this.arrow = new Arrow(ColorPalette.KidsYellowGreen);
 		this.arrow.SetActive(true);
