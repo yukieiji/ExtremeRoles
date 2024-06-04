@@ -97,10 +97,11 @@ public static class MainMenuManagerStartPatch
 		exrLogo.transform.parent = __instance.mainMenuUI.transform;
 		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
-        renderer.sprite = Loader.CreateSpriteFromResources(
-            Path.TitleBurner, 300f);
+        renderer.sprite = Loader.GetUnityObjectFromResources<Sprite>(
+			Path.CommonAsset,
+			string.Format(Path.GeneralImagePathFormat, "TitleBurner"));
 
-        if (Prefab.Prop == null || Prefab.Text == null)
+		if (Prefab.Prop == null || Prefab.Text == null)
         {
             TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
             Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);

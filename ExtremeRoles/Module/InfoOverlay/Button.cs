@@ -32,8 +32,9 @@ public sealed class HelpButton
 		passiveButton.OnClick.AddListener(openAct);
 
 		var render = this.body.GetComponent<SpriteRenderer>();
-		render.sprite = Loader.CreateSpriteFromResources(
-			Path.HelpImage, 230f);
+		render.sprite = Loader.GetUnityObjectFromResources<Sprite>(
+			Path.CommonAsset,
+			string.Format(Path.GeneralImagePathFormat, "Help"));
 	}
 
 	public void SetInfoButtonToGameStartShipPositon()
