@@ -12,7 +12,7 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 {
 	public enum Type
 	{
-		MeryVent
+		Mery
 	}
 
 	private readonly Dictionary<int, Type> idType = new Dictionary<int, Type>();
@@ -42,18 +42,20 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 		}
 		else
 		{
-			string imgFormat = type switch
+			string imgAsset = type switch
 			{
-				Type.MeryVent => Path.MeryCustomVentAnime,
+				Type.Mery => Path.MeryAsset,
 				_ => string.Empty,
 			};
-			if (string.IsNullOrEmpty(imgFormat))
+			if (string.IsNullOrEmpty(imgAsset))
 			{
 				return null;
 			}
 
-			Sprite newImg = Loader.CreateSpriteFromResources(
-				string.Format(imgFormat, index), 125f);
+			Sprite newImg = Loader.GetUnityObjectFromResources<Sprite>(
+				Path.MeryAsset,
+				string.Format(
+					Path.RoleImgPathFormat, $"{type}.{index}"));
 
 			this.ventAnimation[type][index] = newImg;
 			return newImg;

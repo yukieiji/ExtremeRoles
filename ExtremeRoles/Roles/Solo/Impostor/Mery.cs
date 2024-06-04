@@ -42,8 +42,10 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         {
             this.body = new GameObject("MaryCamp");
             this.img = this.body.AddComponent<SpriteRenderer>();
-            this.img.sprite = Loader.CreateSpriteFromResources(
-               Path.MeryNoneActiveVent, 125f);
+			this.img.sprite = Loader.GetUnityObjectFromResources<Sprite>(
+				Path.MeryAsset,
+				string.Format(
+					Path.RoleImgPathFormat, Path.MeryNoneActive));
 
             this.body.SetActive(canSee);
             this.body.transform.position = new Vector3(
@@ -138,8 +140,10 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 				vent.myAnim.enabled = false;
 			}
 
-			ventRenderer.sprite = Loader.CreateSpriteFromResources(
-                string.Format(Path.MeryCustomVentAnime, "0"), 125f);
+			ventRenderer.sprite = Loader.GetUnityObjectFromResources<Sprite>(
+				Path.MeryAsset,
+				string.Format(
+					Path.RoleImgPathFormat, $"{Path.MeryVent}{0}"));
 
 			vent.myRend = ventRenderer;
 
@@ -196,7 +200,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
     private ExtremeAbilityButton bombButton;
 
-	private const CustomVent.Type meryVentType = CustomVent.Type.MeryVent;
+	private const CustomVent.Type meryVentType = CustomVent.Type.Mery;
 
     public Mery() : base(
         ExtremeRoleId.Mery,
@@ -289,8 +293,11 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateAbilityCountButton(
             "setCamp",
-            Loader.CreateSpriteFromResources(
-                string.Format(Path.MeryCustomVentAnime, "0")));
+			Loader.GetUnityObjectFromResources<Sprite>(
+				Path.MeryAsset,
+				string.Format(
+					Path.RoleImgPathFormat,
+					Path.MeryButtonIcon)));
     }
 
     public bool IsAbilityUse()

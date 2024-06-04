@@ -38,6 +38,10 @@ public static class Path
 
 	public const string RaiseHandIcon = "ExtremeRoles.Resources.RaiseHand.png";
 
+
+	// !--- 役職用 ---
+	public const string RoleImgPathFormat = "assets/roles/{0}.png";
+	// !----- コンビ用 -----
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
     public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
@@ -50,7 +54,8 @@ public static class Path
 	public const string AcceleratorAcceleratePanel = "ExtremeRoles.Resources.AcceleratorAcceleratePanel.png";
 	public const string SkaterSkateOff = "ExtremeRoles.Resources.SkaterSkateOff.png";
 	public const string SkaterSkateOn = "ExtremeRoles.Resources.SkaterSkateOn.png";
-
+	// !----- コンビ終了 -----
+	// !----- クルー用 -----
 	public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
     public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
     public const string BodyGuardResetShield = "ExtremeRoles.Resources.ResetShield.png";
@@ -78,7 +83,8 @@ public static class Path
         "ExtremeRoles.Resources.TeleporterSecondPortal.png";
 	public const string ModeratorModerate = "ExtremeRoles.Resources.Moderate.png";
 	public const string PsychicPsychic = "ExtremeRoles.Resources.PsychicPsychic.png";
-
+	// !----- クルー終了 -----
+	// !----- インポスター用 -----
 	public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
     public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
     public const string PainterPaintRandom = "ExtremeRoles.Resources.PaintRandom.png";
@@ -91,10 +97,13 @@ public static class Path
     public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
     public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
 	public const string SlaveDriverHarassment = "ExtremeRoles.Resources.Harassment.png";
-	public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
-    public const string MeryCustomVentAnime =
-        "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
-    public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
+	// !------- メリー -------
+	public const string MeryAsset = "ExtremeRoles.Resources.mery.asset";
+	public const string MeryNoneActive = "Mery.NoneActivateVent";
+	public const string MeryButtonIcon = "Mery.ButtonIcon";
+	public const string MeryVent = "Mery.";
+
+	public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
     public const string LastWolfLightOff = "ExtremeRoles.Resources.LightOff.png";
     public const string HypnotistHypnosis = "ExtremeRoles.Resources.Hypnosis.png";
     public const string CommanderAttackCommand =
@@ -119,6 +128,7 @@ public static class Path
 	public const string TeroristTeroMinigamePrefab = "assets/roles/teroristminigame.prefab";
 	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
 	public const string TeroristTeroSabotageButton = "ExtremeRoles.Resources.TeroristoSetbombImg.png";
+	// !----- インポスター終了 -----
 
 	public const string VigilanteEmergencyCall =
         "ExtremeRoles.Resources.EmergencyCall.png";

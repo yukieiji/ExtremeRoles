@@ -28,6 +28,7 @@ internal sealed class ImgLoadRunner
 			}
 		}
 		runSuite<ExSpawnMinigameImgLoadRunner>();
+		runSuite<MeryImgLoadRunner>();
 	}
 
 	private void runSuite<T>() where T : TestRunnerBase, new()

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json;
 
 using ExtremeRoles.Helper;
 
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
-using UnityEngine;
 
 namespace ExtremeRoles.Test.Img;
 
 internal sealed class ExSpawnMinigameImgLoadRunner
-	: TestRunnerBase
+	: AssetImgLoadRunner
 {
 	public override void Run()
 	{
@@ -53,30 +51,12 @@ internal sealed class ExSpawnMinigameImgLoadRunner
 
 			foreach (var spawnPoint in spawnPoints)
 			{
-				tryImgLoad(lowerMap, spawnPoint.RoomName);
+				LoadFromExR(
+					string.Format(
+						Path.ExtremeSelectorMinigameAssetFormat, lowerMap),
+					string.Format(
+						Path.ExtremeSelectorMinigameImgFormat, lowerMap, spawnPoint.RoomName));
 			}
-		}
-	}
-
-	private void tryImgLoad(string lowerMap, string roomName)
-	{
-		try
-		{
-			var sprite = Loader.GetUnityObjectFromExRResources<Sprite>(
-				string.Format(
-					Path.ExtremeSelectorMinigameAssetFormat, lowerMap),
-				string.Format(
-					Path.ExtremeSelectorMinigameImgFormat, lowerMap, roomName));
-			Log.LogInfo($"Img Loaded:{lowerMap}.{roomName}");
-			if (sprite == null)
-			{
-				throw new Exception("Sprite is Null");
-			}
-		}
-		catch (Exception ex)
-		{
-			Log.LogError(
-				$"Img:{lowerMap}, {roomName} not load   {ex.Message}");
 		}
 	}
 }
