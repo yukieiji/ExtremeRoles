@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
 
-using AmongUs.GameOptions;
 using UnityEngine;
 
 using Newtonsoft.Json.Linq;
 
-using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -238,12 +236,12 @@ public sealed class Teleporter :
 
     public void CreateAbility()
     {
-        this.firstPortalImg = Loader.CreateSpriteFromResources(
-            Path.TeleporterFirstPortal);
-        this.secondPortalImg = Loader.CreateSpriteFromResources(
-            Path.TeleporterSecondPortal);
+		this.firstPortalImg = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+			ExtremeRoleId.Teleporter, Path.TeleporterFirstPortal);
+        this.secondPortalImg = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+			ExtremeRoleId.Teleporter, Path.TeleporterSecondPortal);
 
-        this.behavior = new TeleporterAbilityBehavior(
+		this.behavior = new TeleporterAbilityBehavior(
             Translation.GetString("SetPortal"),
             this.firstPortalImg,
             IsAbilityUse, UseAbility);
