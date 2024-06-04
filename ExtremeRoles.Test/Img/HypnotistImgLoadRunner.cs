@@ -21,10 +21,6 @@ internal sealed class HypnotistImgLoadRunner
 					$"{ExtremeRoleId.Hypnotist}.{ability}"));
 		}
 
-		LoadFromExR(
-			Path.HypnotistAsset,
-			string.Format(
-				Path.RoleImgPathFormat,
-				$"{ExtremeRoleId.Hypnotist}{Path.ButtonIcon}"));
+		LoadFromExR(ExtremeRoleId.Hypnotist);
 	}
 }

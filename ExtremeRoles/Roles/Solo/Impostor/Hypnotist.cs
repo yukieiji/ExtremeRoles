@@ -298,10 +298,7 @@ public sealed class Hypnotist :
     {
         this.CreateAbilityCountButton(
             "Hypnosis",
-            Loader.GetUnityObjectFromResources<Sprite>(
-				Path.HypnotistAsset,
-				string.Format(
-					Path.RoleImgPathFormat, $"{ExtremeRoleId.Hypnotist}{Path.ButtonIcon}")));
+            Loader.GetUnityObjectFromResources<Sprite>(ExtremeRoleId.Hypnotist));
 
 		var json = JsonParser.GetJObjectFromAssembly(postionJson);
 		if (json == null)

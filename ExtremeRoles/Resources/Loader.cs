@@ -11,6 +11,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using UnityObject = UnityEngine.Object;
 using Il2CppFile = Il2CppSystem.IO.File;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Resources;
 
@@ -40,6 +41,8 @@ public static class Path
 	// !--- 役職用 ---
 	public const string RoleImgPathFormat = "assets/roles/{0}.png";
 	public const string ButtonIcon = ".ButtonIcon";
+	public const string AssetPlace = "ExtremeRoles.Resources.{0}.asset";
+
 
 	public const string Bomb = "Bomb";
 	public const string Meeting = "EmergencyMeeting";
@@ -202,6 +205,12 @@ public static class Loader
 	}
 
 	public static T GetUnityObjectFromResources<T>(
+		ExtremeRoleId id) where T : UnityObject
+		=> GetUnityObjectFromResources<T>(
+			string.Format(Path.AssetPlace, id.ToString().ToLower()),
+			string.Format(Path.RoleImgPathFormat, $"{id}{Path.ButtonIcon}"));
+
+	public static T GetUnityObjectFromResources<T>(
 		string bundleName, string objName) where T : UnityObject
 	{
 		AssetBundle bundle = GetAssetBundleFromAssembly(
@@ -211,13 +220,11 @@ public static class Loader
 		return result;
 	}
 
-	private const string oneImgAsset = "ExtremeRoles.Resources.{0}.asset";
-
 	public static T GetUnityObjectFromResources<T>(
 		string objName) where T : UnityObject
 	{
 		AssetBundle bundle = GetAssetBundleFromAssembly(
-			string.Format(oneImgAsset, objName.ToLower()),
+			string.Format(Path.AssetPlace, objName.ToLower()),
 			Assembly.GetCallingAssembly());
 		T result = getObjectFromAsset<T>(
 			bundle,
@@ -245,7 +252,7 @@ public static class Loader
 		var assm = Assembly.GetAssembly(typeof(Loader));
 
 		AssetBundle bundle = GetAssetBundleFromAssembly(
-			string.Format(oneImgAsset, objName.ToLower()),
+			string.Format(Path.AssetPlace, objName.ToLower()),
 			assm!);
 		T result = getObjectFromAsset<T>(
 			bundle,

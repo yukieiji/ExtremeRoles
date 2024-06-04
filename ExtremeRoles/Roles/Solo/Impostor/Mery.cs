@@ -293,12 +293,8 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateAbilityCountButton(
             "setCamp",
-			Loader.GetUnityObjectFromResources<Sprite>(
-				Path.MeryAsset,
-				string.Format(
-					Path.RoleImgPathFormat,
-					$"{ExtremeRoleId.Mery}{Path.ButtonIcon}")));
-    }
+			Loader.GetUnityObjectFromResources<Sprite>(ExtremeRoleId.Mery));
+	}
 
     public bool IsAbilityUse()
     {

@@ -1,5 +1,6 @@
 ﻿using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
+using UnityEngine;
 
 namespace ExtremeRoles.Test.Img;
 
@@ -24,10 +25,7 @@ internal sealed class MeryImgLoadRunner
 			string.Format(
 				Path.RoleImgPathFormat,
 				Path.MeryNoneActive));
-		LoadFromExR(
-			Path.MeryAsset,
-			string.Format(
-				Path.RoleImgPathFormat,
-				$"{ExtremeRoleId.Mery}{Path.ButtonIcon}"));
+
+		LoadFromExR(ExtremeRoleId.Mery);
 	}
 }
