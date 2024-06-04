@@ -19,12 +19,11 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
 
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
-using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Factory;
 
@@ -65,7 +64,7 @@ public sealed class Hypnotist :
     {
         Red,
         Blue,
-        Glay
+        Gray
     }
 
     public bool IsAwake
@@ -256,7 +255,7 @@ public sealed class Hypnotist :
                 SystemConsoleType featAbilityConsole = (SystemConsoleType)reader.ReadByte();
                 FeatAllDollMapModuleAccess(role, featAbilityConsole);
                 break;
-            case AbilityModuleType.Glay:
+            case AbilityModuleType.Gray:
                 SystemConsoleType unlockConsole = (SystemConsoleType)reader.ReadByte();
                 UnlockAllDollCrakingAbility(role, unlockConsole);
                 break;
@@ -299,8 +298,10 @@ public sealed class Hypnotist :
     {
         this.CreateAbilityCountButton(
             "Hypnosis",
-            Resources.Loader.CreateSpriteFromResources(
-               Resources.Path.HypnotistHypnosis));
+            Loader.GetUnityObjectFromResources<Sprite>(
+				Path.HypnotistAsset,
+				string.Format(
+					Path.RoleImgPathFormat, $"{ExtremeRoleId.Hypnotist}{Path.ButtonIcon}")));
 
 		var json = JsonParser.GetJObjectFromAssembly(postionJson);
 		if (json == null)

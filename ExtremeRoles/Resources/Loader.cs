@@ -41,6 +41,7 @@ public static class Path
 
 	// !--- 役職用 ---
 	public const string RoleImgPathFormat = "assets/roles/{0}.png";
+	public const string ButtonIcon = ".ButtonIcon";
 	// !----- コンビ用 -----
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
@@ -100,21 +101,16 @@ public static class Path
 	// !------- メリー -------
 	public const string MeryAsset = "ExtremeRoles.Resources.mery.asset";
 	public const string MeryNoneActive = "Mery.NoneActivateVent";
-	public const string MeryButtonIcon = "Mery.ButtonIcon";
-	public const string MeryVent = "Mery.";
 
 	public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
     public const string LastWolfLightOff = "ExtremeRoles.Resources.LightOff.png";
-    public const string HypnotistHypnosis = "ExtremeRoles.Resources.Hypnosis.png";
-    public const string CommanderAttackCommand =
-        "ExtremeRoles.Resources.AttackCommand.png";
-    public const string HypnotistRedAbilityPart =
-        "ExtremeRoles.Resources.RedAbilityPart.png";
-    public const string HypnotistBlueAbilityPart =
-        "ExtremeRoles.Resources.BlueAbilityPart.png";
-    public const string HypnotistGrayAbilityPart =
-        "ExtremeRoles.Resources.GrayAbilityPart.png";
-    public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
+
+	public const string HypnotistAsset = "ExtremeRoles.Resources.hypnotist.asset";
+
+	public const string CommanderAttackCommand =
+		"ExtremeRoles.Resources.AttackCommand.png";
+
+	public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
     public const string ZombieMagicCircle = "ExtremeRoles.Resources.ZombieMagicCircle.png";
     public const string ZombieMagicCircleButton =
         "ExtremeRoles.Resources.ZombieMagicCircleButton.png";

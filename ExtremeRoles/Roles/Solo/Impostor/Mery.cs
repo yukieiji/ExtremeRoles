@@ -143,7 +143,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 			ventRenderer.sprite = Loader.GetUnityObjectFromResources<Sprite>(
 				Path.MeryAsset,
 				string.Format(
-					Path.RoleImgPathFormat, $"{Path.MeryVent}{0}"));
+					Path.RoleImgPathFormat, $"{ExtremeRoleId.Mery}.{0}"));
 
 			vent.myRend = ventRenderer;
 
@@ -297,7 +297,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 				Path.MeryAsset,
 				string.Format(
 					Path.RoleImgPathFormat,
-					Path.MeryButtonIcon)));
+					$"{ExtremeRoleId.Mery}{Path.ButtonIcon}")));
     }
 
     public bool IsAbilityUse()

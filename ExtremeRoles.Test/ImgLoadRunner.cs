@@ -29,9 +29,10 @@ internal sealed class ImgLoadRunner
 		}
 		runSuite<ExSpawnMinigameImgLoadRunner>();
 		runSuite<MeryImgLoadRunner>();
+		runSuite<HypnotistImgLoadRunner>();
 	}
 
-	private void runSuite<T>() where T : TestRunnerBase, new()
+	private void runSuite<T>() where T : AssetImgLoadRunner, new()
 	{
 		T runner = new T();
 		runner.Run();
