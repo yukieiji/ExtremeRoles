@@ -5,6 +5,7 @@ using HarmonyLib;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Test.Helper;
+using ExtremeRoles.Test.Img;
 
 namespace ExtremeRoles.Test;
 
@@ -41,7 +42,7 @@ public static class ChatControllerSendChatPatch
 
 			GameUtility.ChangePresetTo(19);
 
-			var runner = new GameTestRunner();
+			var runner = new ImgLoadRunner();
 			runner.Run();
 		}
 	}

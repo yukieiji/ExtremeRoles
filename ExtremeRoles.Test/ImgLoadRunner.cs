@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
-
 using ExtremeRoles.Resources;
+
+using ExtremeRoles.Test.Img;
 
 namespace ExtremeRoles.Test;
 
@@ -10,7 +11,7 @@ internal sealed class ImgLoadRunner
 {
 	public override void Run()
 	{
-		this.Log.LogInfo($"----- Start: Img Load Test -----");
+		Log.LogInfo($"----- Start: Img Load Test -----");
 
 		foreach (FieldInfo field in typeof(Path).GetFields(BindingFlags.Public | BindingFlags.Static))
 		{
@@ -22,10 +23,17 @@ internal sealed class ImgLoadRunner
 				imgPath.Contains(".png") &&
 				!imgPath.Contains("{"))
 			{
-				this.Log.LogInfo($"Load:{field.Name}  path:{imgPath}");
+				Log.LogInfo($"Load:{field.Name}  path:{imgPath}");
 				tryImgLoad(imgPath);
 			}
 		}
+		runSuite<ExSpawnMinigameImgLoadRunner>();
+	}
+
+	private void runSuite<T>() where T : TestRunnerBase, new()
+	{
+		T runner = new T();
+		runner.Run();
 	}
 
 	private void tryImgLoad(string path)
@@ -40,7 +48,7 @@ internal sealed class ImgLoadRunner
 		}
 		catch (Exception ex)
 		{
-			this.Log.LogError($"Img:{path} not load   {ex.Message}");
+			Log.LogError($"Img:{path} not load   {ex.Message}");
 		}
 	}
 }

@@ -204,12 +204,26 @@ public static class Loader
 	public static T GetUnityObjectFromResources<T>(
 		string bundleName, string objName) where T : UnityObject
 	{
-		AssetBundle bundle = getAssetBundleFromAssembly(
+		AssetBundle bundle = GetAssetBundleFromAssembly(
 			bundleName, Assembly.GetCallingAssembly());
 		T result = getObjectFromAsset<T>(bundle, objName);
 
 		return result;
 	}
+
+#if DEBUG
+	public static T GetUnityObjectFromExRResources<T>(
+		string bundleName, string objName) where T : UnityObject
+	{
+		var assm = Assembly.GetAssembly(typeof(Loader));
+
+		AssetBundle bundle = GetAssetBundleFromAssembly(
+			bundleName, assm!);
+		T result = getObjectFromAsset<T>(bundle, objName);
+
+		return result;
+	}
+#endif
 
 	public static T GetUnityObjectFromPath<T>(
 		string path, string objName) where T : UnityObject
@@ -229,7 +243,7 @@ public static class Loader
 			"simplebutton", "closebutton", "confirmmenu"
 		})
 		{
-			getAssetBundleFromAssembly($"ExtremeRoles.Resources.Asset.{path}.asset", assembly);
+			GetAssetBundleFromAssembly($"ExtremeRoles.Resources.Asset.{path}.asset", assembly);
 		}
 	}
 
@@ -256,7 +270,7 @@ public static class Loader
 		return bundle;
 	}
 
-	private static AssetBundle getAssetBundleFromAssembly(
+	private static AssetBundle GetAssetBundleFromAssembly(
 		string bundleName, Assembly assembly)
 	{
 		if (!cachedBundle.TryGetValue(bundleName, out AssetBundle? bundle) ||
