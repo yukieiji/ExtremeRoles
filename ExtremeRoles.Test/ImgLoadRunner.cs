@@ -27,24 +27,18 @@ internal sealed class ImgLoadRunner
 				tryImgLoad(imgPath);
 			}
 		}
-		runSuite<CommonImgLoadRunner>();
-		runSuite<ExSpawnMinigameImgLoadRunner>();
+		Run<CommonImgLoadRunner>();
+		Run<ExSpawnMinigameImgLoadRunner>();
 
-		runSuite<XionImgLoadRunner>();
+		Run<XionImgLoadRunner>();
 
-		runSuite<AcceleratorImgLoadRunner>();
-		runSuite<KidsImgLoadRunner>();
+		Run<AcceleratorImgLoadRunner>();
+		Run<KidsImgLoadRunner>();
 
-		runSuite<TeleporterImgLoadRunner>();
+		Run<TeleporterImgLoadRunner>();
 
-		runSuite<MeryImgLoadRunner>();
-		runSuite<HypnotistImgLoadRunner>();
-	}
-
-	private void runSuite<T>() where T : AssetImgLoadRunner, new()
-	{
-		T runner = new T();
-		runner.Run();
+		Run<MeryImgLoadRunner>();
+		Run<HypnotistImgLoadRunner>();
 	}
 
 	private void tryImgLoad(string path)
