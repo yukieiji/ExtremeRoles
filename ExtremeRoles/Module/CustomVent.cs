@@ -53,7 +53,7 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 				return null;
 			}
 
-			Sprite newImg = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+			Sprite newImg = Loader.GetSpriteFromResources(
 				roleId, $"{index}");
 
 			this.ventAnimation[type][index] = newImg;

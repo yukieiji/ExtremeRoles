@@ -182,7 +182,7 @@ public sealed class Teleporter :
 
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-			modMap.AddCustomComponent(obj,
+			modMap!.AddCustomComponent(obj,
                 Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
         }
 
@@ -233,9 +233,9 @@ public sealed class Teleporter :
 
     public void CreateAbility()
     {
-		this.firstPortalImg = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+		this.firstPortalImg = Loader.GetSpriteFromResources(
 			ExtremeRoleId.Teleporter, Path.TeleporterFirstPortal);
-        this.secondPortalImg = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+        this.secondPortalImg = Loader.GetSpriteFromResources(
 			ExtremeRoleId.Teleporter, Path.TeleporterSecondPortal);
 
 		this.behavior = new TeleporterAbilityBehavior(

@@ -21,9 +21,6 @@ public static class Path
 	public const string InfoOverlayResources = "ExtremeRoles.Resources.Asset.infooverlay.asset";
 	public const string InfoOverlayPrefab = "assets/roles/infooverlay.prefab";
 
-	public const string VideoAsset = "ExtremeRoles.Resources.Asset.video.asset";
-	public const string VideoAssetPlaceHolder = "assets/video/{0}.webm";
-
 	public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
 	public const string GeneralImagePathFormat = "assets/general/{0}.png";
@@ -38,8 +35,13 @@ public static class Path
 
 
 	// !--- 役職用 ---
+	public const string RolePrefabFormat = "assets/roles/{0}.prefab";
+	public const string RoleVideoFormat = "assets/roles/{0}.webm";
 	public const string RoleImgPathFormat = "assets/roles/{0}.png";
 	public const string ButtonIcon = "ButtonIcon";
+	public const string MapIcon = "MapIcon";
+	public const string Minigame = "Minigame";
+	public const string Video = "Video";
 	public const string AssetPlace = "ExtremeRoles.Resources.{0}.asset";
 
 	public const string Bomb = "Bomb";
@@ -47,9 +49,6 @@ public static class Path
 
 	// !----- コンビ用 -----
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
-	public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
-	public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
-	public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
 	public const string MoverMove = "ExtremeRoles.Resources.MoverMoving.png";
 	public const string AcceleratorAcceleratePanel = "Panel";
 	public const string SkaterSkateOff = "ExtremeRoles.Resources.SkaterSkateOff.png";
@@ -102,19 +101,8 @@ public static class Path
 		"ExtremeRoles.Resources.AttackCommand.png";
 
 	public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
-	public const string ZombieMagicCircle = "ExtremeRoles.Resources.ZombieMagicCircle.png";
-	public const string ZombieMagicCircleButton =
-		"ExtremeRoles.Resources.ZombieMagicCircleButton.png";
-	public const string ZombieMagicCircleVideo = "zombiemagiccircle";
 	public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
-	public const string TheifTimeParts = "ExtremeRoles.Resources.TheifTimePart.png";
-	public const string TheifMagicCircle = "ExtremeRoles.Resources.TheifMagicCircle.png";
-	public const string TheifMagicCircleVideo = "theifmagiccircle";
 	public const string CrewshroomSet = "ExtremeRoles.Resources.CrewshroomSetMushroom.png";
-	public const string TeroristTeroMinigameAsset = "ExtremeRoles.Resources.Asset.teroristminigame.asset";
-	public const string TeroristTeroMinigamePrefab = "assets/roles/teroristminigame.prefab";
-	public const string TeroristTeroSabotageBomb = "ExtremeRoles.Resources.TeroristoBomb.png";
-	public const string TeroristTeroSabotageButton = "ExtremeRoles.Resources.TeroristoSetbombImg.png";
 	public const string ScavengerWeponIconPathFormat = "ExtremeRoles.Resources.Scavenger.{0}Icon.png";
 	public const string ScavengerWeponMapIconPathFormat = "ExtremeRoles.Resources.Scavenger.{0}MapIcon.png";
 	public const string ScavengerBulletImg = "ExtremeRoles.Resources.Scavenger.Bullet.png";
@@ -129,9 +117,6 @@ public static class Path
 	public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
 	public const string MissionaryPropagate = "ExtremeRoles.Resources.Propagate.png";
 	public const string JesterOutburst = "ExtremeRoles.Resources.Outburst.png";
-	public const string YokoYashiro = "ExtremeRoles.Resources.YokoYashiro.png";
-	public const string YokoYashiroMinigameAsset = "ExtremeRoles.Resources.Asset.yokominigame.asset";
-	public const string YokoYashiroMinigamePrefab = "assets/roles/yokominigame.prefab";
 	public const string EaterDeadBodyEat = "ExtremeRoles.Resources.DeadBodyEat.png";
 	public const string EaterEatKill = "ExtremeRoles.Resources.EatKil.png";
 	public const string MinerSetMine = "ExtremeRoles.Resources.SetMine.png";
@@ -156,6 +141,12 @@ public static class Path
 		=> string.Format(AssetPlace, id.ToString().ToLower());
 	public static string GetRoleImgPath<W>(W id, string name) where W : Enum
 		=> string.Format(RoleImgPathFormat, $"{id}.{name}");
+	public static string GetRoleMinigamePath<W>(W id) where W : Enum
+		=> GetRolePrefabPath(id, Minigame);
+	public static string GetRoleVideoPath<W>(W id) where W : Enum
+		=> string.Format(RoleVideoFormat, $"{id}.{Video}");
+	public static string GetRolePrefabPath<W>(W id, string name) where W : Enum
+		=> string.Format(RolePrefabFormat, $"{id}.{name}");
 }
 
 public static class Loader
@@ -177,7 +168,7 @@ public static class Loader
 	{
 		GameObject buuttonObj = UnityObject.Instantiate(
 			GetUnityObjectFromResources<GameObject>(
-			"ExtremeRoles.Resources.Asset.simplebutton.asset",
+			"ExtremeRoles.Resources.simplebutton.asset",
 			"assets/common/simplebutton.prefab"),
 			parent);
 
@@ -204,18 +195,22 @@ public static class Loader
 		return sprite;
 	}
 
-	public static T GetUnityObjectFromResources<T, W>(W id)
-		where T : UnityObject
+	public static Sprite GetSpriteFromResources<W>(W id)
 		where W : Enum
-		=> GetUnityObjectFromResources<T>(
+		=> GetUnityObjectFromResources<Sprite>(
 			Path.GetRoleAssetPath(id),
 			Path.GetRoleImgPath(id, Path.ButtonIcon));
-	public static T GetUnityObjectFromResources<T, W>(W id, string name)
+	public static Sprite GetSpriteFromResources<W>(W id, string name)
+		where W : Enum
+		=> GetUnityObjectFromResources<Sprite>(
+			Path.GetRoleAssetPath(id),
+			Path.GetRoleImgPath(id, name));
+	public static T GetUnityObjectFromResources<T, W>(W id, string path)
 		where T : UnityObject
 		where W : Enum
 		=> GetUnityObjectFromResources<T>(
 			Path.GetRoleAssetPath(id),
-			Path.GetRoleImgPath(id, name));
+			path);
 
 	public static T GetUnityObjectFromResources<T>(
 		string bundleName, string objName) where T : UnityObject
@@ -288,7 +283,7 @@ public static class Loader
 			"simplebutton", "closebutton", "confirmmenu"
 		})
 		{
-			GetAssetBundleFromAssembly($"ExtremeRoles.Resources.Asset.{path}.asset", assembly);
+			GetAssetBundleFromAssembly($"ExtremeRoles.Resources.{path}.asset", assembly);
 		}
 	}
 

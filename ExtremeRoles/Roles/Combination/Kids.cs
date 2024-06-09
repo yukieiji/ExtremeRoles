@@ -376,7 +376,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     }
 
 	private static Sprite randomSprite
-		=> Loader.GetUnityObjectFromResources<Sprite, CombinationRoleType>(
+		=> Loader.GetSpriteFromResources(
 			CombinationRoleType.Kids,
 			$"{RandomGenerator.Instance.Next(0, maxImageNum)}");
 
@@ -413,7 +413,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
     { }
 
 	public static Sprite TorchSprite
-		=> Loader.GetUnityObjectFromResources<Sprite, CombinationRoleType>(
+		=> Loader.GetSpriteFromResources(
 			CombinationRoleType.Kids, "Torch");
 
     public void SetAbilityNum(int abilityNum)

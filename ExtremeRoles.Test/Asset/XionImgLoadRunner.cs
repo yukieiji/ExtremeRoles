@@ -18,6 +18,6 @@ internal sealed class XionAssetLoadRunner
 	{
 		Log.LogInfo($"{imgName} loading....");
 		var sprite = Xion.GetSprite(imgName);
-		SpriteCheck(sprite);
+		NullCheck(sprite);
 	}
 }

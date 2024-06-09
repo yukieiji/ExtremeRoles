@@ -23,7 +23,7 @@ internal sealed class CommonAssetLoadRunner
 		{
 			var sprite = Loader.GetUnityObjectFromExRResources<Sprite>(img);
 			Log.LogInfo($"Img Loaded: {img}");
-			SpriteCheck(sprite);
+			NullCheck(sprite);
 		}
 		catch (Exception ex)
 		{

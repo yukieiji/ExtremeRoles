@@ -49,7 +49,7 @@ public class TeleporterPortalPart : MonoBehaviour, IAmongUs.IUsable
 		collider.isTrigger = true;
 
 		var img = base.gameObject.AddComponent<SpriteRenderer>();
-		img.sprite = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
+		img.sprite = Loader.GetSpriteFromResources(
 			ExtremeRoleId.Teleporter, Path.TeleporterPortalBase);
 	}
 

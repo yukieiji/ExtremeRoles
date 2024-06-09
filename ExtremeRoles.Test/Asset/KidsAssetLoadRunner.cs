@@ -22,7 +22,7 @@ internal sealed class KidsAssetLoadRunner
 		{
 			var sprite = Wisp.TorchSprite;
 			Log.LogInfo($"TorchSprite loading... ");
-			SpriteCheck(sprite);
+			NullCheck(sprite);
 
 		}
 		catch (Exception ex)

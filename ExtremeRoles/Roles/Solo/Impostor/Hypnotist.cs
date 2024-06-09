@@ -27,8 +27,6 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -301,7 +299,7 @@ public sealed class Hypnotist :
     {
         this.CreateAbilityCountButton(
             "Hypnosis",
-            Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(ExtremeRoleId.Hypnotist));
+			Loader.GetSpriteFromResources(ExtremeRoleId.Hypnotist));
 
 		var json = JsonParser.GetJObjectFromAssembly(postionJson);
 		if (json == null)

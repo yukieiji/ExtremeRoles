@@ -136,7 +136,7 @@ public sealed class Accelerator :
     {
         this.CreateReclickableCountAbilityButton(
             Translation.GetString("AccelerateSet"),
-            Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(ExtremeRoleId.Accelerator),
+            Loader.GetSpriteFromResources(ExtremeRoleId.Accelerator),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())
