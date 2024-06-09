@@ -44,7 +44,7 @@ public sealed class ScavengerAbilityProviderSystem(
 
 	public bool IsDirty => false;
 
-	private class WeponSetter
+	private class WeponSetter : IDisposable
 	{
 		private readonly bool isSync;
 
@@ -192,6 +192,9 @@ public sealed class ScavengerAbilityProviderSystem(
 			}
 			return result;
 		}
+
+		public void Dispose()
+		{ }
 	}
 
 	public void Deteriorate(float deltaTime)
@@ -267,8 +270,8 @@ public sealed class ScavengerAbilityProviderSystem(
 	{
 		this.init = true;
 
-		new WeponSetter(this.isSyncPlayer)
-			.SetFromInitWepon(this.initProvided);
+		using var setter = new WeponSetter(this.isSyncPlayer);
+		setter.SetFromInitWepon(this.initProvided);
 	}
 
 	private WeaponAbility getRandomAbility()
