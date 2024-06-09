@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -56,8 +57,8 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 
 		var img = base.gameObject.AddComponent<SpriteRenderer>();
 
-		img.sprite = Loader.CreateSpriteFromResources(
-			Path.TheifTimeParts);
+		img.sprite = Loader.GetSpriteFromResources(
+			ExtremeRoleId.Thief, Path.MapIcon);
 	}
 
 	public float CanUse(
