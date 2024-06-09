@@ -41,6 +41,8 @@ internal sealed class AllAssetLoadRunner
 		Run<MeryAssetLoadRunner>();
 		Run<HypnotistAssetLoadRunner>();
 		Run<ThiefAssetLoadRunner>();
+
+		Run<YokoAssetLoadRunner>();
 	}
 
 	private void tryImgLoad(string path)

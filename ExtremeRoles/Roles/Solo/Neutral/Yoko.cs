@@ -360,8 +360,8 @@ public sealed class Yoko :
 	{
 		this.CreateActivatingAbilityCountButton(
 			"yokoYashiro",
-			Loader.CreateSpriteFromResources(
-				Path.YokoYashiro),
+			Loader.GetSpriteFromResources(
+				ExtremeRoleId.Yoko),
 			this.IsAbilityActive,
 			this.CleanUp,
 			() => { });
