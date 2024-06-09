@@ -38,7 +38,7 @@ internal abstract class AssetLoadRunner
 		}
 	}
 
-	protected void LoadFromUnityObjectExR<T, W>(W id, string name)
+	protected void LoadUnityObjectFromExR<T, W>(W id, string name)
 		where T : UnityEngine.Object
 		where W : Enum
 	{

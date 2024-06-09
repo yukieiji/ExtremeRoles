@@ -462,9 +462,9 @@ public sealed class Guesser :
             if (this.uiPrefab == null)
             {
                 this.uiPrefab = UnityEngine.Object.Instantiate(
-                    Loader.GetUnityObjectFromResources<GameObject>(
-                        Path.GusserUiResources,
-                        Path.GusserUiPrefab),
+                    Loader.GetUnityObjectFromResources<GameObject, ExtremeRoleId>(
+                        ExtremeRoleId.Guesser,
+                        Path.GetRolePrefabPath(ExtremeRoleId.Guesser, "UI")),
                     CachedShipStatus.Instance.transform);
 
                 this.uiPrefab.SetActive(false);
@@ -514,9 +514,8 @@ public sealed class Guesser :
 
     public void SetSprite(SpriteRenderer render)
     {
-        render.sprite = Loader.CreateSpriteFromResources(
-            Path.GuesserGuess);
-        render.transform.localScale *= new Vector2(0.625f, 0.625f);
+        render.sprite = Loader.GetSpriteFromResources(ExtremeRoleId.Guesser);
+		render.transform.localScale *= new Vector2(0.625f, 0.625f);
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)

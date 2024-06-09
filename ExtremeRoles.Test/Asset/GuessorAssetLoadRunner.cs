@@ -9,8 +9,11 @@ internal sealed class GuessorAssetLoadRunner
 {
 	public override void Run()
 	{
-		Log.LogInfo($"----- Unit:TeleporterImgLoad Test -----");
+		Log.LogInfo($"----- Unit:GuesserLoad Test -----");
 
 		LoadFromExR(ExtremeRoleId.Guesser);
+		LoadUnityObjectFromExR<GameObject, ExtremeRoleId>(
+			ExtremeRoleId.Guesser,
+			Path.GetRolePrefabPath(ExtremeRoleId.Guesser, "UI"));
 	}
 }

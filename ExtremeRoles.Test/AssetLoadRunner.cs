@@ -32,6 +32,7 @@ internal sealed class AllAssetLoadRunner
 
 		Run<XionAssetLoadRunner>();
 
+		Run<GuessorAssetLoadRunner>();
 		Run<AcceleratorAssetLoadRunner>();
 		Run<KidsAssetLoadRunner>();
 
