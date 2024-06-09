@@ -512,7 +512,7 @@ public sealed class ScavengerFlameThrowerHitBehaviour : MonoBehaviour
 		float FireSecond,
 		float DeadCountDown);
 
-	private class PlayerDeadTimerContainer(float deadTime)
+	private sealed class PlayerDeadTimerContainer(float deadTime)
 	{
 		private readonly Dictionary<byte, float> playerDeadTimes = new Dictionary<byte, float>();
 		private readonly Dictionary<byte, PlayerControl> pcs = new Dictionary<byte, PlayerControl>();

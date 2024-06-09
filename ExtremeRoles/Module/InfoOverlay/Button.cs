@@ -33,8 +33,8 @@ public sealed class HelpButton
 
 		var render = this.body.GetComponent<SpriteRenderer>();
 		render.sprite = Loader.GetUnityObjectFromResources<Sprite>(
-			Path.CommonAsset,
-			string.Format(Path.GeneralImagePathFormat, "Help"));
+			Path.CommonTextureAsset,
+			string.Format(Path.CommonImagePathFormat, "Help"));
 	}
 
 	public void SetInfoButtonToGameStartShipPositon()

@@ -98,8 +98,8 @@ public static class MainMenuManagerStartPatch
 		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
         renderer.sprite = Loader.GetUnityObjectFromResources<Sprite>(
-			Path.CommonAsset,
-			string.Format(Path.GeneralImagePathFormat, "TitleBurner"));
+			Path.CommonTextureAsset,
+			string.Format(Path.CommonImagePathFormat, "TitleBurner"));
 
 		if (Prefab.Prop == null || Prefab.Text == null)
         {

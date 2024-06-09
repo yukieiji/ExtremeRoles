@@ -153,8 +153,8 @@ public sealed class Controller : NullableSingleton<Controller>
 	{
 		GameObject obj = Object.Instantiate(
 			Loader.GetUnityObjectFromResources<GameObject>(
-				Path.InfoOverlayResources,
-				Path.InfoOverlayPrefab));
+				Path.CommonPrefabAsset,
+				string.Format(Path.CommonPrefabPath, "InfoOverlay")));
 		this.view = obj.GetComponent<InfoOverlayView>();
 		this.view.Awake();
 	}

@@ -18,20 +18,28 @@ namespace ExtremeRoles.Resources;
 
 public static class Path
 {
-	public const string InfoOverlayResources = "ExtremeRoles.Resources.Asset.infooverlay.asset";
-	public const string InfoOverlayPrefab = "assets/roles/infooverlay.prefab";
-
 	public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
-	public const string GeneralImagePathFormat = "assets/general/{0}.png";
+	public const string CommonImagePathFormat = "assets/common/{0}.png";
+	public const string CommonPrefabPath = "assets/common/{0}.prefab";
 
-	public const string CommonAsset = "ExtremeRoles.Resources.common.asset";
-	public const string TabImageAsset = "ExtremeRoles.Resources.settingtab.asset";
+	public const string Texture = "texture";
+	public const string Prefab = "commonprefab";
+
+	public const string RoleAssignFilterPrefab = "assets/setting/RoleAssignFilter.prefab";
+	public const string SettingTabImage = "assets/setting/{0}.png";
+	public const string SettingTab = "settingtab";
+
+	public const string AssetPlace = "ExtremeRoles.Resources.{0}.asset";
 
 	public const string ExtremeSelectorMinigameAssetFormat = "ExtremeRoles.Resources.RandomSpawn.{0}.asset";
 	public const string ExtremeSelectorMinigameImgFormat = "assets/randomspawn/{0}/{1}.png";
 
 	public const string RaiseHandIcon = "ExtremeRoles.Resources.RaiseHand.png";
+
+	public static string CommonPrefabAsset => string.Format(AssetPlace, Prefab);
+	public static string CommonTextureAsset => string.Format(AssetPlace, Texture);
+	public static string SettingTabAsset => string.Format(AssetPlace, SettingTab);
 
 
 	// !--- 役職用 ---
@@ -44,7 +52,6 @@ public static class Path
 	public const string Minigame = "Minigame";
 	public const string Video = "Video";
 	public const string Se = "SE";
-	public const string AssetPlace = "ExtremeRoles.Resources.{0}.asset";
 
 	public const string Bomb = "Bomb";
 	public const string Meeting = "EmergencyMeeting";
@@ -172,8 +179,8 @@ public static class Loader
 	{
 		GameObject buuttonObj = UnityObject.Instantiate(
 			GetUnityObjectFromResources<GameObject>(
-			"ExtremeRoles.Resources.simplebutton.asset",
-			"assets/common/simplebutton.prefab"),
+			Path.CommonPrefabAsset,
+			string.Format(Path.CommonPrefabPath, "SimpleButton")),
 			parent);
 
 		return buuttonObj.GetComponent<SimpleButton>();
@@ -283,11 +290,10 @@ public static class Loader
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		foreach (string path in new string[]
 		{
-			"texture", "fonts", "eventsystem",
-			"simplebutton", "closebutton", "confirmmenu"
+			Path.Texture, "fonts", "eventsystem", Path.Prefab
 		})
 		{
-			GetAssetBundleFromAssembly($"ExtremeRoles.Resources.{path}.asset", assembly);
+			GetAssetBundleFromAssembly(string.Format(Path.AssetPlace, path), assembly);
 		}
 	}
 

@@ -44,7 +44,7 @@ public sealed class ScavengerAbilityProviderSystem(
 
 	public bool IsDirty => false;
 
-	private class WeponSetter : IDisposable
+	private sealed class WeponSetter : IDisposable
 	{
 		private readonly bool isSync;
 
