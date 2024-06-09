@@ -18,6 +18,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
 using AmongUs.GameOptions;
+using ExtremeRoles.Roles;
 
 
 #nullable enable
@@ -43,9 +44,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			get
 			{
 				GameObject obj =
-					Loader.GetUnityObjectFromResources<GameObject>(
-						Path.TeroristTeroMinigameAsset,
-						Path.TeroristTeroMinigamePrefab);
+					Loader.GetUnityObjectFromResources<GameObject, ExtremeRoleId>(
+						ExtremeRoleId.Terorist,
+						Path.GetRoleMinigamePath(ExtremeRoleId.Terorist));
 				return obj.GetComponent<TeroristTeroSabotageMinigame>();
 			}
 		}
@@ -469,8 +470,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			var newConsole = this.consoleSystem.CreateConsoleObj(
 				pos.Pos, "TeroristBomb", consoleBehavior);
 
-			newConsole.Image!.sprite = Loader.CreateSpriteFromResources(
-				Path.TeroristTeroSabotageBomb);
+			newConsole.Image!.sprite = Loader.GetSpriteFromResources(
+				ExtremeRoleId.Terorist, Path.MapIcon);
 
 			var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 			colider.isTrigger = true;

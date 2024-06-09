@@ -38,10 +38,12 @@ public static class Path
 	public const string RolePrefabFormat = "assets/roles/{0}.prefab";
 	public const string RoleVideoFormat = "assets/roles/{0}.webm";
 	public const string RoleImgPathFormat = "assets/roles/{0}.png";
+	public const string RoleSePathFormat = "assets/roles/{0}.mp3";
 	public const string ButtonIcon = "ButtonIcon";
 	public const string MapIcon = "MapIcon";
 	public const string Minigame = "Minigame";
 	public const string Video = "Video";
+	public const string Se = "SE";
 	public const string AssetPlace = "ExtremeRoles.Resources.{0}.asset";
 
 	public const string Bomb = "Bomb";
@@ -145,6 +147,8 @@ public static class Path
 		=> GetRolePrefabPath(id, Minigame);
 	public static string GetRoleVideoPath<W>(W id) where W : Enum
 		=> string.Format(RoleVideoFormat, $"{id}.{Video}");
+	public static string GetRoleSePath<W>(W id) where W : Enum
+		=> string.Format(RoleSePathFormat, $"{id}.{Se}");
 	public static string GetRolePrefabPath<W>(W id, string name) where W : Enum
 		=> string.Format(RolePrefabFormat, $"{id}.{name}");
 }

@@ -7,6 +7,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.Ability;
+using UnityEngine;
 
 #nullable enable
 
@@ -42,8 +43,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
 			Translation.GetString("TeroristBombSet"),
-			Loader.CreateSpriteFromResources(
-			   Path.TeroristTeroSabotageButton));
+			Loader.GetSpriteFromResources(ExtremeRoleId.Terorist));
     }
 
     public bool IsAbilityUse()

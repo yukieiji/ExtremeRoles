@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module;
 
 public sealed class FullScreenFlusherWithAudio
 {
-	private readonly AudioClip audio;
+	private readonly AudioClip? audio;
 	private readonly WaitForSeconds waiter;
 	private readonly WaitForSeconds defaultWaiter = new WaitForSeconds(1.0f);
 	private readonly Color screenColor;
@@ -22,7 +22,7 @@ public sealed class FullScreenFlusherWithAudio
 	private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
 
 	public FullScreenFlusherWithAudio(
-		in AudioClip audio, in Color color,
+		in AudioClip? audio, in Color color,
 		in float seconds = 1.0f)
 	{
 		this.audio = audio;
