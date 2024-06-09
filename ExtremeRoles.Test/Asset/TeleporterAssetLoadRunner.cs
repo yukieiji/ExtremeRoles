@@ -2,10 +2,10 @@
 using ExtremeRoles.Roles;
 using UnityEngine;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal sealed class TeleporterImgLoadRunner
-	: AssetImgLoadRunner
+internal sealed class TeleporterAssetLoadRunner
+	: AssetLoadRunner
 {
 	public override void Run()
 	{

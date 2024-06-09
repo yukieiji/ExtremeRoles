@@ -5,7 +5,6 @@ using HarmonyLib;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Test.Helper;
-using ExtremeRoles.Test.Img;
 
 namespace ExtremeRoles.Test;
 

@@ -1,9 +1,9 @@
 ﻿using ExtremeRoles.Roles.Solo.Host;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal sealed class XionImgLoadRunner
-	: AssetImgLoadRunner
+internal sealed class XionAssetLoadRunner
+	: AssetLoadRunner
 {
 	public override void Run()
 	{

@@ -2,10 +2,10 @@
 using ExtremeRoles.Roles;
 using UnityEngine;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal sealed class MeryImgLoadRunner
-	: AssetImgLoadRunner
+internal sealed class MeryAssetLoadRunner
+	: AssetLoadRunner
 {
 	public override void Run()
 	{

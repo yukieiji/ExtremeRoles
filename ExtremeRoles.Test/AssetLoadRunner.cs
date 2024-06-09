@@ -2,11 +2,11 @@
 using System.Reflection;
 using ExtremeRoles.Resources;
 
-using ExtremeRoles.Test.Img;
+using ExtremeRoles.Test.Asset;
 
 namespace ExtremeRoles.Test;
 
-internal sealed class ImgLoadRunner
+internal sealed class AllAssetLoadRunner
 	: TestRunnerBase
 {
 	public override void Run()
@@ -27,18 +27,18 @@ internal sealed class ImgLoadRunner
 				tryImgLoad(imgPath);
 			}
 		}
-		Run<CommonImgLoadRunner>();
-		Run<ExSpawnMinigameImgLoadRunner>();
+		Run<CommonAssetLoadRunner>();
+		Run<ExSpawnMinigameLoadRunner>();
 
-		Run<XionImgLoadRunner>();
+		Run<XionAssetLoadRunner>();
 
-		Run<AcceleratorImgLoadRunner>();
-		Run<KidsImgLoadRunner>();
+		Run<AcceleratorAssetLoadRunner>();
+		Run<KidsAssetLoadRunner>();
 
-		Run<TeleporterImgLoadRunner>();
+		Run<TeleporterAssetLoadRunner>();
 
-		Run<MeryImgLoadRunner>();
-		Run<HypnotistImgLoadRunner>();
+		Run<MeryAssetLoadRunner>();
+		Run<HypnotistAssetLoadRunner>();
 	}
 
 	private void tryImgLoad(string path)

@@ -4,10 +4,10 @@ using ExtremeRoles.Roles.Combination;
 
 using System;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal sealed class KidsImgLoadRunner
-	: AssetImgLoadRunner
+internal sealed class KidsAssetLoadRunner
+	: AssetLoadRunner
 {
 	public override void Run()
 	{

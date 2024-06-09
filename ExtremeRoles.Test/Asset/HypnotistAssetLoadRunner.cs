@@ -3,10 +3,10 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 using System;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal sealed class HypnotistImgLoadRunner
-	: AssetImgLoadRunner
+internal sealed class HypnotistAssetLoadRunner
+	: AssetLoadRunner
 {
 	public override void Run()
 	{

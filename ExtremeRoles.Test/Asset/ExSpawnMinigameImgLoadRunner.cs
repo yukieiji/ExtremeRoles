@@ -6,10 +6,10 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal sealed class ExSpawnMinigameImgLoadRunner
-	: AssetImgLoadRunner
+internal sealed class ExSpawnMinigameLoadRunner
+	: AssetLoadRunner
 {
 	public override void Run()
 	{

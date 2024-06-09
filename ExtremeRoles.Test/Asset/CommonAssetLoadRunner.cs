@@ -4,10 +4,10 @@ using ExtremeRoles.Resources;
 
 using UnityEngine;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal sealed class CommonImgLoadRunner
-	: AssetImgLoadRunner
+internal sealed class CommonAssetLoadRunner
+	: AssetLoadRunner
 {
 	public override void Run()
 	{

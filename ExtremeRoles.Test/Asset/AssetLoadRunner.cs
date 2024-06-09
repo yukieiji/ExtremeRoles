@@ -4,9 +4,9 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using UnityEngine;
 
-namespace ExtremeRoles.Test.Img;
+namespace ExtremeRoles.Test.Asset;
 
-internal abstract class AssetImgLoadRunner
+internal abstract class AssetLoadRunner
 	: TestRunnerBase
 {
 	protected void LoadFromExR<W>(W id) where W : Enum
