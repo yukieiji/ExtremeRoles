@@ -42,6 +42,7 @@ internal sealed class AllAssetLoadRunner
 		Run<HypnotistAssetLoadRunner>();
 		Run<ThiefAssetLoadRunner>();
 		Run<TeroAssetLoadRunner>();
+		Run<ZombieAssetLoadRunner>();
 
 		Run<YokoAssetLoadRunner>();
 	}

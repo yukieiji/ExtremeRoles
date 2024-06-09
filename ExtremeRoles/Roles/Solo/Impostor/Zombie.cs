@@ -130,11 +130,16 @@ public sealed class Zombie :
 
         var player = circle.AddComponent<DlayableVideoPlayer>();
 
-        player.SetThum(Loader.CreateSpriteFromResources(
-            Path.ZombieMagicCircle));
-        player.SetVideo(Loader.GetUnityObjectFromResources<VideoClip>(
-            Path.VideoAsset, string.Format(
-                Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
+		var thum = Loader.GetSpriteFromResources(
+			ExtremeRoleId.Zombie,
+			Path.GetRoleImgPath(ExtremeRoleId.Zombie, Path.MapIcon));
+		player.SetThum(thum);
+
+		var video = Loader.GetUnityObjectFromResources<VideoClip, ExtremeRoleId>(
+			ExtremeRoleId.Zombie,
+			Path.GetRoleVideoPath(ExtremeRoleId.Zombie));
+		player.SetVideo(video);
+
         player.SetTimer(activeTime);
     }
 
@@ -142,8 +147,7 @@ public sealed class Zombie :
     {
         this.CreateActivatingAbilityCountButton(
             Translation.GetString("featMagicCircle"),
-            Loader.CreateSpriteFromResources(
-                Path.ZombieMagicCircleButton),
+			Loader.GetSpriteFromResources(ExtremeRoleId.Zombie),
             IsActivate,
             SetMagicCircle,
              () => { });
