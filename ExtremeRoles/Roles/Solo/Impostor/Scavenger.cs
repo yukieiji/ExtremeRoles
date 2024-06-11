@@ -126,12 +126,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.r, rolePlayer);
 	}
 
-	private sealed class FlameThrower(float fireSecond, float fireDeadSecond) : IWeapon
+	private sealed class Flame(float fireSecond, float fireDeadSecond) : IWeapon
 	{
 		private readonly float fireSecond = fireSecond;
 		private readonly float fireDeadSecond = fireDeadSecond;
 
-		private ScavengerFlameThrowerBehaviour? flame;
+		private ScavengerFlameBehaviour? flame;
 
 		public BehaviorBase Create(in CreateParam param)
 		{
@@ -197,9 +197,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			return chargeGauge == 1.0f;
 		}
 
-		private ScavengerFlameThrowerBehaviour createSword(
+		private ScavengerFlameBehaviour createSword(
 			in PlayerControl rolePlayer)
-			=> ScavengerFlameThrowerBehaviour.Create(
+			=> ScavengerFlameBehaviour.Create(
 				this.fireSecond, this.fireDeadSecond, rolePlayer);
 	}
 
@@ -465,11 +465,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		HandGunSpeed,
 		HandGunRange,
 
-		FlameThrowerCount,
-		FlameThrowerChargeTime,
-		FlameThrowerActiveTime,
-		FlameThrowerFireSecond,
-		FlameThrowerDeadSecond,
+		FlameCount,
+		FlameChargeTime,
+		FlameActiveTime,
+		FlameFireSecond,
+		FlameDeadSecond,
 
 		SwordCount,
 		SwordChargeTime,
@@ -498,17 +498,17 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		// 落ちてるやつ
 		HandGun,
-		FlameThrower,
+		Flame,
 		Sword,
 
 		// HandGun + Sword
 		SniperRifle,
-		// HandGun + FlameThrower
+		// HandGun + Flame
 		BeamRifle,
-		// FlameThrower + Sword
+		// Flame + Sword
 		BeamSaber,
 
-		// FlameThrower + Sword + HandGun
+		// Flame + Sword + HandGun
 		All,
 	}
 
@@ -712,22 +712,22 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			3.5f, 0.1f, 5.0f, 0.1f, parentOps);
 
 		CreateIntOption(
-			Option.FlameThrowerCount,
+			Option.FlameCount,
 			1, 0, 10, 1, parentOps);
 		CreateFloatOption(
-			Option.FlameThrowerChargeTime,
+			Option.FlameChargeTime,
 			2.0f, 0.1f, 5.0f, 0.1f, parentOps,
 			format: OptionUnit.Second);
 		CreateFloatOption(
-			Option.FlameThrowerActiveTime,
+			Option.FlameActiveTime,
 			25.0f, 5.0f, 120.0f, 0.5f, parentOps,
 			format: OptionUnit.Second);
 		CreateFloatOption(
-			Option.FlameThrowerFireSecond,
+			Option.FlameFireSecond,
 			3.5f, 0.1f, 5.0f, 0.1f, parentOps,
 			format: OptionUnit.Second);
 		CreateFloatOption(
-			Option.FlameThrowerDeadSecond,
+			Option.FlameDeadSecond,
 			3.5f, 0.1f, 5.0f, 0.1f, parentOps,
 			format: OptionUnit.Second);
 
@@ -809,12 +809,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 							this.GetRoleOptionId(Option.HandGunRange))))
 			},
 			{
-				Ability.FlameThrower,
-				new FlameThrower(
+				Ability.Flame,
+				new Flame(
 					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.FlameThrowerFireSecond)),
+						this.GetRoleOptionId(Option.FlameFireSecond)),
 					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.FlameThrowerDeadSecond)))
+						this.GetRoleOptionId(Option.FlameDeadSecond)))
 			},
 			{
 				Ability.Sword,
@@ -905,13 +905,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 		else if (
 			this.curAbility.Contains(Ability.HandGun) &&
-			this.curAbility.Contains(Ability.FlameThrower))
+			this.curAbility.Contains(Ability.Flame))
 		{
 			replaceToWeapon(Ability.BeamRifle);
 		}
 		else if (
 			this.curAbility.Contains(Ability.Sword) &&
-			this.curAbility.Contains(Ability.FlameThrower))
+			this.curAbility.Contains(Ability.Flame))
 		{
 			replaceToWeapon(Ability.BeamSaber);
 		}
@@ -952,18 +952,18 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					mng.GetValue<int>(
 						this.GetRoleOptionId(Option.HandGunCount)));
 				break;
-			case Ability.FlameThrower:
-				if (behavior is not ChargingAndActivatingCountBehaviour flameThrower)
+			case Ability.Flame:
+				if (behavior is not ChargingAndActivatingCountBehaviour flame)
 				{
-					throw new ArgumentException("FlameThrower Behavior is not CountBehavior");
+					throw new ArgumentException("Flame Behavior is not CountBehavior");
 				}
-				flameThrower.ActiveTime = mng.GetValue<float>(
-					this.GetRoleOptionId(Option.FlameThrowerActiveTime));
-				flameThrower.ChargeTime = mng.GetValue<float>(
-					this.GetRoleOptionId(Option.FlameThrowerChargeTime));
-				flameThrower.SetAbilityCount(
+				flame.ActiveTime = mng.GetValue<float>(
+					this.GetRoleOptionId(Option.FlameActiveTime));
+				flame.ChargeTime = mng.GetValue<float>(
+					this.GetRoleOptionId(Option.FlameChargeTime));
+				flame.SetAbilityCount(
 					mng.GetValue<int>(
-						this.GetRoleOptionId(Option.FlameThrowerCount)));
+						this.GetRoleOptionId(Option.FlameCount)));
 				break;
 			case Ability.Sword:
 				if (behavior is not ICountBehavior countBehavior)

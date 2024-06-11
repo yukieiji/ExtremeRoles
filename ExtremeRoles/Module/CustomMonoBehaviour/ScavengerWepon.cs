@@ -371,39 +371,39 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 }
 
 [Il2CppRegister]
-public sealed class ScavengerFlameThrowerBehaviour : MonoBehaviour
+public sealed class ScavengerFlameBehaviour : MonoBehaviour
 {
 
-	public static ScavengerFlameThrowerBehaviour Create(
+	public static ScavengerFlameBehaviour Create(
 		in float fireSecond,
 		in float fireDeadSecond,
 		in PlayerControl anchorPlayer)
 	{
 		var gameObj = Loader.GetUnityObjectFromPath<GameObject>(
-			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\flamethrower.asset",
-			"assets/roles/flamethrower.prefab");
+			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\Flame.asset",
+			"assets/roles/scavenger.flame.prefab");
 		var obj = Instantiate(gameObj);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 		obj.transform.position = anchorPlayer.transform.position;
 		obj.transform.SetParent(anchorPlayer.transform);
 		obj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 		obj.SetActive(true);
-		if (!obj.TryGetComponent<ScavengerFlameThrowerBehaviour>(out var flameThrower) ||
-			flameThrower.hitBehaviour == null)
+		if (!obj.TryGetComponent<ScavengerFlameBehaviour>(out var flame) ||
+			flame.hitBehaviour == null)
 		{
-			throw new NullException("FlameThrower Missing!!!!!");
+			throw new NullException("Flame Missing!!!!!");
 		}
 
-		flameThrower.hitBehaviour.Info = new ScavengerFlameThrowerHitBehaviour.HitInfo(
+		flame.hitBehaviour.Info = new ScavengerFlameHitBehaviour.HitInfo(
 			anchorPlayer,
 			fireSecond,
 			fireDeadSecond);
 
-		return flameThrower;
+		return flame;
 	}
 
 	private ParticleSystem? fire;
-	private ScavengerFlameThrowerHitBehaviour? hitBehaviour;
+	private ScavengerFlameHitBehaviour? hitBehaviour;
 	private bool isStart = false;
 	private bool prevFlip = false;
 
@@ -416,7 +416,7 @@ public sealed class ScavengerFlameThrowerBehaviour : MonoBehaviour
 		}
 		var colison = base.transform.Find("Collider");
 		if (colison != null &&
-			colison.TryGetComponent<ScavengerFlameThrowerHitBehaviour>(out var hitBehaviour))
+			colison.TryGetComponent<ScavengerFlameHitBehaviour>(out var hitBehaviour))
 		{
 			this.hitBehaviour = hitBehaviour;
 		}
@@ -505,7 +505,7 @@ public sealed class ScavengerFlameThrowerBehaviour : MonoBehaviour
 }
 
 [Il2CppRegister]
-public sealed class ScavengerFlameThrowerHitBehaviour : MonoBehaviour
+public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 {
 	public sealed record class HitInfo(
 		PlayerControl IgnorePlayer,

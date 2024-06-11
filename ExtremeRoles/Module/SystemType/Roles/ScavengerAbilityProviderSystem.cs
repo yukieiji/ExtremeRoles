@@ -59,22 +59,22 @@ public sealed class ScavengerAbilityProviderSystem(
 		{
 			bool isSwordProvided = init.Contains(WeaponAbility.Sword);
 			bool isHandGunProvided = init.Contains(WeaponAbility.HandGun);
-			bool isFlameThrowerProvided = init.Contains(WeaponAbility.FlameThrower);
+			bool isFlameProvided = init.Contains(WeaponAbility.Flame);
 
 			if (this.isSync)
 			{
 				if (init.Contains(WeaponAbility.All) ||
-					(isSwordProvided && isHandGunProvided && isFlameThrowerProvided))
+					(isSwordProvided && isHandGunProvided && isFlameProvided))
 				{
 					return;
 				}
 				else if (init.Contains(WeaponAbility.SniperRifle))
 				{
-					if (isFlameThrowerProvided)
+					if (isFlameProvided)
 					{
 						return;
 					}
-					set(WeaponAbility.FlameThrower);
+					set(WeaponAbility.Flame);
 				}
 				else if (init.Contains(WeaponAbility.BeamRifle))
 				{
@@ -102,9 +102,9 @@ public sealed class ScavengerAbilityProviderSystem(
 					{
 						set(WeaponAbility.HandGun);
 					}
-					if (!isFlameThrowerProvided)
+					if (!isFlameProvided)
 					{
-						set(WeaponAbility.FlameThrower);
+						set(WeaponAbility.Flame);
 					}
 				}
 			}
@@ -119,19 +119,19 @@ public sealed class ScavengerAbilityProviderSystem(
 					case WeaponAbility.Null:
 						set(WeaponAbility.HandGun,
 							WeaponAbility.Sword,
-							WeaponAbility.FlameThrower);
+							WeaponAbility.Flame);
 						break;
 					case WeaponAbility.HandGun:
-						set(WeaponAbility.FlameThrower, WeaponAbility.Sword);
+						set(WeaponAbility.Flame, WeaponAbility.Sword);
 						break;
 					case WeaponAbility.Sword:
-						set(WeaponAbility.FlameThrower, WeaponAbility.HandGun);
+						set(WeaponAbility.Flame, WeaponAbility.HandGun);
 						break;
-					case WeaponAbility.FlameThrower:
+					case WeaponAbility.Flame:
 						set(WeaponAbility.HandGun, WeaponAbility.Sword);
 						break;
 					case WeaponAbility.SniperRifle:
-						set(WeaponAbility.FlameThrower);
+						set(WeaponAbility.Flame);
 						break;
 					case WeaponAbility.BeamSaber:
 						set(WeaponAbility.HandGun);
