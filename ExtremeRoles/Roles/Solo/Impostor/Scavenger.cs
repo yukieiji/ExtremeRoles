@@ -332,7 +332,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		in Ability type,
 		in ScavengerBulletBehaviour.Parameter param) : IWeapon
 	{
-		private Ability type = type;
+		private readonly Ability type = type;
 		private readonly ScavengerBulletBehaviour.Parameter pram = param;
 		private readonly Dictionary<int, ScavengerBulletBehaviour> bullet = new();
 		private int id = 0;
