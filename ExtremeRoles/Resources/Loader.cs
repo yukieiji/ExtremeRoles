@@ -112,12 +112,9 @@ public static class Path
 	public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
 	public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
 	public const string CrewshroomSet = "ExtremeRoles.Resources.CrewshroomSetMushroom.png";
-	public const string ScavengerWeponIconPathFormat = "ExtremeRoles.Resources.Scavenger.{0}Icon.png";
-	public const string ScavengerWeponMapIconPathFormat = "ExtremeRoles.Resources.Scavenger.{0}MapIcon.png";
-	public const string ScavengerBulletImg = "ExtremeRoles.Resources.Scavenger.Bullet.png";
-	public const string ScavengerSwordImg = "ExtremeRoles.Resources.Scavenger.Sword.png";
-	public const string BulletImg = "ExtremeRoles.Resources.Bullet.png";
-	public const string SwordImg = "ExtremeRoles.Resources.Sword.png";
+
+	public const string ScavengerBulletImg = "Bullet";
+
 	// !----- インポスター終了 -----
 
 	public const string VigilanteEmergencyCall =

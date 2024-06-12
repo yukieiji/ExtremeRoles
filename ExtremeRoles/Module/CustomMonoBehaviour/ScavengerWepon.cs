@@ -48,8 +48,9 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 		{
 			weponInfo = value;
 			var rend = base.gameObject.TryAddComponent<SpriteRenderer>();
-			rend.sprite = Loader.CreateSpriteFromResources(
-				string.Format(Path.ScavengerWeponMapIconPathFormat, weponInfo.Ability));
+			rend.sprite = Loader.GetUnityObjectFromPath<Sprite>(
+				"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
+				$"assets/roles/scavenger.{weponInfo.Ability}.{Path.MapIcon}.png");
 
 			var collider = base.gameObject.TryAddComponent<CircleCollider2D>();
 			collider.isTrigger = true;
@@ -155,8 +156,9 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		this.ignorePlayerId = ignorePlayerId;
 
 		var rend = this.gameObject.AddComponent<SpriteRenderer>();
-		rend.sprite = Loader.CreateSpriteFromResources(
-			bulletImg);
+		rend.sprite = Loader.GetUnityObjectFromPath<Sprite>(
+			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
+			$"assets/roles/scavenger.{bulletImg}.png");
 
 		this.initialPosition = transform.position;
 
@@ -247,7 +249,6 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 
 		var sword = obj.AddComponent<ScavengerSwordBehaviour>();
 		sword.initialize(
-			Path.ScavengerSwordImg,
 			new Vector2(0.815f, 0.08f),
 			anchorPlayer);
 		return sword;
@@ -344,7 +345,6 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 	}
 
 	private void initialize(
-		in string bulletImg,
 		in Vector2 size,
 		in PlayerControl anchorPlayer)
 	{
@@ -361,8 +361,9 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 		this.ignorePlayerId = anchorPlayer.PlayerId;
 
 		var rend = this.gameObject.AddComponent<SpriteRenderer>();
-		rend.sprite = Loader.CreateSpriteFromResources(
-			bulletImg);
+		rend.sprite = Loader.GetUnityObjectFromPath<Sprite>(
+			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
+			$"assets/roles/scavenger.{Scavenger.Ability.Sword}.png");
 
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
 		rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -380,7 +381,7 @@ public sealed class ScavengerFlameBehaviour : MonoBehaviour
 		in PlayerControl anchorPlayer)
 	{
 		var gameObj = Loader.GetUnityObjectFromPath<GameObject>(
-			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\Flame.asset",
+			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
 			"assets/roles/scavenger.flame.prefab");
 		var obj = Instantiate(gameObj);
 		obj.layer = Constants.LivingPlayersOnlyMask;

@@ -29,12 +29,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
-	private record struct CreateParam(string Name, string Path);
+	private record struct CreateParam(string ButtonName, string Name);
 
 	private interface IWeapon
 	{
-		public BehaviorBase Create(in CreateParam param);
+		public BehaviorBase Create(in Ability abilityType);
 		public void Hide();
+
+		protected static Sprite getSprite(in Ability abilityType)
+			=> Loader.GetUnityObjectFromPath<Sprite>(
+				"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
+				$"assets/roles/scavenger.{abilityType}.{Path.ButtonIcon}.png");
 	}
 
 	private sealed class Sword(
@@ -47,11 +52,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private readonly float chargeTime = chargeTime;
 		private readonly float activeTime = activeTime;
 
-		public BehaviorBase Create(in CreateParam param)
+		public BehaviorBase Create(in Ability abilityType)
 		{
 			var behavior = new ChargingAndActivatingCountBehaviour(
-				param.Name,
-				Loader.CreateSpriteFromResources(param.Path),
+				$"{abilityType}ButtonName",
+				IWeapon.getSprite(abilityType),
 				isSwordUse,
 				startSwordRotation,
 				startSwordCharge,
@@ -133,11 +138,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private ScavengerFlameBehaviour? flame;
 
-		public BehaviorBase Create(in CreateParam param)
+		public BehaviorBase Create(in Ability abilityType)
 		{
 			var behavior = new ChargingAndActivatingCountBehaviour(
-				param.Name,
-				Loader.CreateSpriteFromResources(param.Path),
+				$"{abilityType}ButtonName",
+				IWeapon.getSprite(abilityType),
 				isFireThrowerUse,
 				startSwordRotation,
 				startSwordCharge,
@@ -213,10 +218,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private Vector2 chargePos = Vector2.zero;
 		private readonly List<PlayerControl> cacheResult = new List<PlayerControl>();
 
-		public BehaviorBase Create(in CreateParam param)
+		public BehaviorBase Create(in Ability abilityType)
 			=> new ChargingCountBehaviour(
-				param.Name,
-				Loader.CreateSpriteFromResources(param.Path),
+				$"{abilityType}ButtonName",
+				IWeapon.getSprite(abilityType),
 				isIaiOk,
 				tryIai,
 				startIai,
@@ -329,23 +334,23 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 
 	private sealed class NormalGun(
-		in Ability type,
 		in ScavengerBulletBehaviour.Parameter param) : IWeapon
 	{
-		private readonly Ability type = type;
 		private readonly ScavengerBulletBehaviour.Parameter pram = param;
 		private readonly Dictionary<int, ScavengerBulletBehaviour> bullet = new();
 		private int id = 0;
 		private Vector2 playerDirection;
+		private Ability type;
 
-		public BehaviorBase Create(in CreateParam param)
+		public BehaviorBase Create(in Ability abilityType)
 		{
+			this.type = abilityType;
 			return new CountBehavior(
-			   param.Name,
-			   Loader.CreateSpriteFromResources(param.Path),
-			   isUse,
-			   ability,
-			   forceAbilityOff: Hide);
+			   $"{abilityType}ButtonName",
+				IWeapon.getSprite(abilityType),
+				isUse,
+				ability,
+				forceAbilityOff: Hide);
 		}
 
 		public void Hide()
@@ -799,7 +804,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				Ability.HandGun,
 				new NormalGun(
-					Ability.HandGun,
 					new (
 						Path.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
@@ -829,7 +833,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				Ability.SniperRifle,
 				new NormalGun(
-					Ability.SniperRifle,
 					new (
 						Path.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
@@ -840,7 +843,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				Ability.BeamRifle,
 				new NormalGun(
-					Ability.BeamRifle,
 					new (
 						Path.ScavengerBulletImg,
 						new Vector2(0.05f, 0.05f),
@@ -861,12 +863,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		};
 	}
 
-	private CreateParam createParam(in Ability ability)
-		=> ability switch
-		{
-			_ => new("", Path.TestButton)
-		};
-
 	private BehaviorBase getAbilityBehavior(in Ability ability)
 	{
 		BehaviorBase? result;
@@ -880,8 +876,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 		else
 		{
-			var weaponParam = createParam(ability);
-			result = weapon.Create(weaponParam);
+			result = weapon.Create(ability);
 			this.loadAbilityOption(result, ability);
 		}
 		return result;
