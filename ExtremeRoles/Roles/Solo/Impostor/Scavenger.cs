@@ -600,7 +600,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			return;
 		}
 		BehaviorBase newBehavior = this.getAbilityBehavior(ability);
-		if (this.internalButton.MultiModalAbilityNum == 1)
+		if (this.internalButton.Behavior is NullBehaviour)
 		{
 			this.internalButton.ClearAndAnd(newBehavior);
 		}
