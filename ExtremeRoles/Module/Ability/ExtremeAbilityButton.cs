@@ -168,7 +168,7 @@ public class ExtremeAbilityButton
 		{
 			case AbilityState.None:
 				cooldownTimerText.color = Palette.EnabledColor;
-				this.button.SetCoolDown(0, maxTimer);
+				this.button.SetCoolDown(0.0f, maxTimer);
 				return;
 			case AbilityState.CoolDown:
 				cooldownTimerText.color = Palette.EnabledColor;
