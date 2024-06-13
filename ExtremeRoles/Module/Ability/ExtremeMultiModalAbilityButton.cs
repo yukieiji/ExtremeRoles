@@ -28,6 +28,17 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			hotKey)
 	{
 		this.allAbility = behaviorors.ToList();
+		if (this.MultiModalAbilityNum > 1)
+		{
+			foreach (BehaviorBase behavior in this.allAbility)
+			{
+				if (behavior == this.Behavior)
+				{
+					continue;
+				}
+				_ = behavior.Update(AbilityState.None);
+			}
+		}
 	}
 
 	public ExtremeMultiModalAbilityButton(
@@ -39,8 +50,12 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			hotKey)
 	{ }
 
-	public void Add(BehaviorBase behavior)
+	public void Add(BehaviorBase behavior, bool withUpdate = true)
 	{
+		if (withUpdate)
+		{
+			_ = behavior.Update(AbilityState.None);
+		}
 		this.allAbility.Add(behavior);
 	}
 	public void Remove(int index)
@@ -65,7 +80,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			}
 			Remove(item);
 		}
-		Add(behavior);
+		Add(behavior, false);
 		var curAbility = this.Behavior;
 		switchAbility(false);
 		Remove(curAbility);
@@ -85,7 +100,6 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			else if (Input.GetKeyDown(KeyCode.LeftArrow))
 			{
 				switchAbility(true);
-				return;
 			}
 		}
 		base.UpdateImp();
@@ -128,14 +142,16 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		// クールタイム詐称を防ぐ(CT長いの使う => 短いのに切り替え => CTがカットされる => 長いのに切り替えて詐称)
 		// 短いのから長いのに切り替えた瞬間にクールタイムが発生するようにする
 		float diff = this.Behavior.CoolTime - curMaxCoolTime;
+
+		// 能力使い切ってるとかでクールタイムになるように
+		if (this.State is AbilityState.None or AbilityState.Stop)
+		{
+			this.OnMeetingEnd();
+		}
+
 		if (diff > 0.0f)
 		{
 			this.AddTimerOffset(diff);
-		}
-		// 能力使い切ってるとかでクールタイムになるように
-		else if (this.State is AbilityState.None or AbilityState.Stop)
-		{
-			this.OnMeetingEnd();
 		}
 	}
 }
