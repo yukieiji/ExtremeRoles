@@ -168,7 +168,7 @@ public sealed class ScavengerAbilityProviderSystem(
 					continue;
 				}
 				var obj = new GameObject(ability.ToString());
-				obj.transform.localPosition = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+				obj.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 				var wepon = obj.AddComponent<ScavengerWeponMapUsable>();
 				wepon.WeponInfo = new(ability, this.isSync);
 				result.Add(ability, obj);
