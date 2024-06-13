@@ -29,6 +29,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
+	public static T GetFromAsset<T>(string path) where T : UnityObject
+		=> Loader.GetUnityObjectFromPath<T>(
+			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
+			path);
+
 	private record struct CreateParam(string ButtonName, string Name);
 
 	private interface IWeapon
@@ -37,9 +42,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public void Hide();
 
 		protected static Sprite getSprite(in Ability abilityType)
-			=> Loader.GetUnityObjectFromPath<Sprite>(
-				"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
-				$"assets/roles/scavenger.{abilityType}.{Path.ButtonIcon}.png");
+			=> GetFromAsset<Sprite>($"assets/roles/scavenger.{abilityType}.{Path.ButtonIcon}.png");
 	}
 
 	private sealed class Sword(
@@ -597,7 +600,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			return;
 		}
 		BehaviorBase newBehavior = this.getAbilityBehavior(ability);
-		this.internalButton.Add(newBehavior);
+		if (this.internalButton.MultiModalAbilityNum == 1)
+		{
+			this.internalButton.ClearAndAnd(newBehavior);
+		}
+		else
+		{
+			this.internalButton.Add(newBehavior);
+		}
 	}
 
 	public void RoleAbilityInit()
