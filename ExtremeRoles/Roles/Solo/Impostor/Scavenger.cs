@@ -608,6 +608,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.internalButton.Add(newBehavior);
 		}
+		this.internalButton.SetButtonShow(true);
 	}
 
 	public void RoleAbilityInit()
