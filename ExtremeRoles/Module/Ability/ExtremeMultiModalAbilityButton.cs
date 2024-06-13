@@ -90,16 +90,18 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 	protected override void UpdateImp()
 	{
 		if (this.MultiModalAbilityNum > 1 &&
-			this.State is not AbilityState.Activating)
+			this.State is not AbilityState.Activating or AbilityState.Charging)
 		{
-			if (Input.GetKeyDown(KeyCode.RightArrow))
+			float delta = Input.mouseScrollDelta.y;
+			if (delta <= -1.0f)
 			{
 				switchAbility(false);
 				return;
 			}
-			else if (Input.GetKeyDown(KeyCode.LeftArrow))
+			else if (delta >= 1.0f)
 			{
 				switchAbility(true);
+				return;
 			}
 		}
 		base.UpdateImp();
