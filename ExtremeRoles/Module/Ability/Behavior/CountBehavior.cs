@@ -8,7 +8,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public class CountBehavior : BehaviorBase, ICountBehavior
+public class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 {
 	public int AbilityCount { get; private set; }
 	protected readonly Func<bool> CanUse;
@@ -127,5 +127,21 @@ public class CountBehavior : BehaviorBase, ICountBehavior
 		this.abilityCountText.text = string.Format(
 			Translation.GetString(this.buttonTextFormat),
 			this.AbilityCount);
+	}
+
+	public void Hide()
+	{
+		if (this.abilityCountText != null)
+		{
+			this.abilityCountText.gameObject.SetActive(false);
+		}
+	}
+
+	public void Show()
+	{
+		if (this.abilityCountText != null)
+		{
+			this.abilityCountText.gameObject.SetActive(true);
+		}
 	}
 }

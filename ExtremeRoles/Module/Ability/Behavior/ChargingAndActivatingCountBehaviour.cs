@@ -10,7 +10,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 namespace ExtremeRoles.Module.Ability.Behavior;
 
 public sealed class ChargingAndActivatingCountBehaviour :
-	BehaviorBase, IActivatingBehavior, IChargingBehavior, ICountBehavior
+	BehaviorBase, IActivatingBehavior, IChargingBehavior, ICountBehavior, IHideLogic
 {
 	public float ChargeGage { get; set; }
 	public float ChargeTime { get; set; }
@@ -179,5 +179,21 @@ public sealed class ChargingAndActivatingCountBehaviour :
 	{
 		--this.AbilityCount;
 		updateAbilityCountText();
+	}
+
+	public void Hide()
+	{
+		if (this.abilityCountText != null)
+		{
+			this.abilityCountText.gameObject.SetActive(false);
+		}
+	}
+
+	public void Show()
+	{
+		if (this.abilityCountText != null)
+		{
+			this.abilityCountText.gameObject.SetActive(true);
+		}
 	}
 }

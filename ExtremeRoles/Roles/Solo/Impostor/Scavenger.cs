@@ -948,9 +948,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	{
 		var mng = OptionManager.Instance;
 
-		float coolTime = mng.GetValue<float>(
-			this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
-
 		switch (ability)
 		{
 			case Ability.HandGun:
@@ -1018,6 +1015,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			case Ability.All:
 				// behavior.SetCount(3);
 				break;
+		}
+		if (this.internalButton != null &&
+			this.internalButton.Transform.TryGetComponent<ActionButton>(out var button))
+		{
+			behavior.Initialize(button);
 		}
 	}
 }

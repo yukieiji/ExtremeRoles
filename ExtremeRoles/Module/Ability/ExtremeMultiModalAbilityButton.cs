@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability;
 
@@ -110,7 +111,15 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		int newIndex = (rowIndex + curAbilityNum) % curAbilityNum;
 
 		float curMaxCoolTime = this.Behavior.CoolTime;
+		if (this.Behavior is IHideLogic hideLogic)
+		{
+			hideLogic.Hide();
+		}
 		this.Behavior = this.allAbility[newIndex];
+		if (this.Behavior is IHideLogic hideLogic2)
+		{
+			hideLogic2.Show();
+		}
 		this.curIndex = newIndex;
 
 		ExtremeRolesPlugin.Logger.LogInfo($"Switched to {this.Behavior.GetType().Name}, Index:{newIndex}");

@@ -12,7 +12,8 @@ public sealed class ReclickCountBehavior :
 	BehaviorBase,
 	IActivatingBehavior,
 	ICountBehavior,
-	IReclickBehavior
+	IReclickBehavior,
+	IHideLogic
 {
 	public int AbilityCount { get; private set; }
 
@@ -153,5 +154,20 @@ public sealed class ReclickCountBehavior :
 		this.abilityCountText.text = string.Format(
 			Translation.GetString(this.buttonTextFormat),
 			this.AbilityCount);
+	}
+	public void Hide()
+	{
+		if (this.abilityCountText != null)
+		{
+			this.abilityCountText.gameObject.SetActive(false);
+		}
+	}
+
+	public void Show()
+	{
+		if (this.abilityCountText != null)
+		{
+			this.abilityCountText.gameObject.SetActive(true);
+		}
 	}
 }
