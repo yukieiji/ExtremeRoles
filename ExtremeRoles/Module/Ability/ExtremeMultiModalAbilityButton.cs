@@ -73,11 +73,16 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 	protected override void UpdateImp()
 	{
 		if (this.MultiModalAbilityNum > 1 &&
-			this.State is not AbilityState.Activating &&
-			Input.GetKeyDown(KeyCode.Tab))
+			this.State is not AbilityState.Activating)
 		{
-			bool isShiftDown = Key.IsShiftDown();
-			switchAbility(isShiftDown);
+			if (Input.GetKeyDown(KeyCode.RightArrow))
+			{
+				switchAbility(false);
+			}
+			else if (Input.GetKeyDown(KeyCode.LeftArrow))
+			{
+				switchAbility(true);
+			}
 		}
 		base.UpdateImp();
 	}
