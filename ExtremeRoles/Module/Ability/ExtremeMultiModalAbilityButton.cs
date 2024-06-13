@@ -78,10 +78,12 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			if (Input.GetKeyDown(KeyCode.RightArrow))
 			{
 				switchAbility(false);
+				return;
 			}
 			else if (Input.GetKeyDown(KeyCode.LeftArrow))
 			{
 				switchAbility(true);
+				return;
 			}
 		}
 		base.UpdateImp();
