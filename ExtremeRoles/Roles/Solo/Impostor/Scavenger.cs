@@ -30,9 +30,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
 	public static T GetFromAsset<T>(string path) where T : UnityObject
-		=> Loader.GetUnityObjectFromPath<T>(
-			"F:\\Documents\\UnityProject\\UnityAsset\\ExtremeRoles\\scavenger.asset",
-			path);
+		=> Loader.GetUnityObjectFromResources<T>(
+			Path.GetRoleAssetPath(ExtremeRoleId.Scavenger),
+			path.ToLower());
 
 	private record struct CreateParam(string ButtonName, string Name);
 

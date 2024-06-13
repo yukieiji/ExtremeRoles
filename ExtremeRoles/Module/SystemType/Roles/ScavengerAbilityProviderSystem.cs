@@ -162,7 +162,6 @@ public sealed class ScavengerAbilityProviderSystem(
 
 			foreach (var ability in abilities)
 			{
-				ExtremeRolesPlugin.Logger.LogInfo($"Set {ability}");
 				if (!setPos.TryGetValue(ability, out var pos))
 				{
 					continue;
