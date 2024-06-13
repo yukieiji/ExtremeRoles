@@ -602,6 +602,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		BehaviorBase newBehavior = this.getAbilityBehavior(ability);
 		if (this.internalButton.Behavior is NullBehaviour)
 		{
+			this.internalButton.OnMeetingEnd();
 			this.internalButton.ClearAndAnd(newBehavior);
 		}
 		else
@@ -890,6 +891,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			result = weapon.Create(ability);
 			this.loadAbilityOption(result, ability);
 		}
+
+		float coolTime = OptionManager.Instance.GetValue<float>(
+			this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
+		result.SetCoolTime(coolTime);
+
 		return result;
 	}
 
@@ -944,8 +950,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		float coolTime = mng.GetValue<float>(
 			this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
-
-		behavior.SetCoolTime(coolTime);
 
 		switch (ability)
 		{

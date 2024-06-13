@@ -116,7 +116,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		// クールタイム詐称を防ぐ(CT長いの使う => 短いのに切り替え => CTがカットされる => 長いのに切り替えて詐称)
 		// 短いのから長いのに切り替えた瞬間にクールタイムが発生するようにする
 		float diff = this.Behavior.CoolTime - curMaxCoolTime;
-		if (diff > 0)
+		if (diff > 0.0f)
 		{
 			this.AddTimerOffset(diff);
 		}

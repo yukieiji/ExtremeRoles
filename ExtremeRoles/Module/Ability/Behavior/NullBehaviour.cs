@@ -3,7 +3,9 @@
 public sealed class NullBehaviour : BehaviorBase
 {
 	public NullBehaviour() : base("", null)
-	{ }
+	{
+		this.SetCoolTime(0.0f);
+	}
 
 	public override void AbilityOff()
 	{ }
