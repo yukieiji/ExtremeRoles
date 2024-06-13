@@ -55,6 +55,7 @@ public sealed class ScavengerAbilityProviderSystem(
 			this.isSync = isSync;
 		}
 		public void SetFromInitWepon(
+			in Dictionary<WeaponAbility, GameObject> result,
 			in IReadOnlySet<WeaponAbility> init)
 		{
 			bool isSwordProvided = init.Contains(WeaponAbility.Sword);
@@ -74,7 +75,7 @@ public sealed class ScavengerAbilityProviderSystem(
 					{
 						return;
 					}
-					set(WeaponAbility.Flame);
+					set(result, WeaponAbility.Flame);
 				}
 				else if (init.Contains(WeaponAbility.BeamRifle))
 				{
@@ -82,7 +83,7 @@ public sealed class ScavengerAbilityProviderSystem(
 					{
 						return;
 					}
-					set(WeaponAbility.Sword);
+					set(result, WeaponAbility.Sword);
 				}
 				else if (init.Contains(WeaponAbility.BeamSaber))
 				{
@@ -90,21 +91,21 @@ public sealed class ScavengerAbilityProviderSystem(
 					{
 						return;
 					}
-					set(WeaponAbility.HandGun);
+					set(result, WeaponAbility.HandGun);
 				}
 				else
 				{
 					if (!isSwordProvided)
 					{
-						set(WeaponAbility.Sword);
+						set(result, WeaponAbility.Sword);
 					}
 					if (!isHandGunProvided)
 					{
-						set(WeaponAbility.HandGun);
+						set(result, WeaponAbility.HandGun);
 					}
 					if (!isFlameProvided)
 					{
-						set(WeaponAbility.Flame);
+						set(result, WeaponAbility.Flame);
 					}
 				}
 			}
@@ -117,27 +118,34 @@ public sealed class ScavengerAbilityProviderSystem(
 				switch (scavent.InitAbility)
 				{
 					case WeaponAbility.Null:
-						set(WeaponAbility.HandGun,
+						set(result,
+							WeaponAbility.HandGun,
 							WeaponAbility.Sword,
 							WeaponAbility.Flame);
 						break;
 					case WeaponAbility.HandGun:
-						set(WeaponAbility.Flame, WeaponAbility.Sword);
+						set(result,
+							WeaponAbility.Flame, WeaponAbility.Sword);
 						break;
 					case WeaponAbility.Sword:
-						set(WeaponAbility.Flame, WeaponAbility.HandGun);
+						set(result,
+							WeaponAbility.Flame, WeaponAbility.HandGun);
 						break;
 					case WeaponAbility.Flame:
-						set(WeaponAbility.HandGun, WeaponAbility.Sword);
+						set(result,
+							WeaponAbility.HandGun, WeaponAbility.Sword);
 						break;
 					case WeaponAbility.SniperRifle:
-						set(WeaponAbility.Flame);
+						set(result,
+							WeaponAbility.Flame);
 						break;
 					case WeaponAbility.BeamSaber:
-						set(WeaponAbility.HandGun);
+						set(result,
+							WeaponAbility.HandGun);
 						break;
 					case WeaponAbility.BeamRifle:
-						set(WeaponAbility.Sword);
+						set(result,
+							WeaponAbility.Sword);
 						break;
 					default:
 						break;
@@ -145,7 +153,7 @@ public sealed class ScavengerAbilityProviderSystem(
 			}
 		}
 
-		private void set(params WeaponAbility[] abilities)
+		private void set(in Dictionary<WeaponAbility, GameObject> result, params WeaponAbility[] abilities)
 		{
 			if (setPos == null)
 			{
@@ -154,6 +162,7 @@ public sealed class ScavengerAbilityProviderSystem(
 
 			foreach (var ability in abilities)
 			{
+				ExtremeRolesPlugin.Logger.LogInfo($"Set {ability}");
 				if (!setPos.TryGetValue(ability, out var pos))
 				{
 					continue;
@@ -162,6 +171,7 @@ public sealed class ScavengerAbilityProviderSystem(
 				obj.transform.localPosition = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
 				var wepon = obj.AddComponent<ScavengerWeponMapUsable>();
 				wepon.WeponInfo = new(ability, this.isSync);
+				result.Add(ability, obj);
 			}
 		}
 		private IReadOnlyDictionary<WeaponAbility, Vector2> getSetPoint()
@@ -271,7 +281,7 @@ public sealed class ScavengerAbilityProviderSystem(
 		this.init = true;
 
 		using var setter = new WeponSetter(this.isSyncPlayer);
-		setter.SetFromInitWepon(this.initProvided);
+		setter.SetFromInitWepon(this.settedWeapon, this.initProvided);
 	}
 
 	private WeaponAbility getRandomAbility()
