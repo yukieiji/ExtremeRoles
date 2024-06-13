@@ -16,6 +16,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 {
 	public int MultiModalAbilityNum => allAbility.Count;
 	private readonly List<BehaviorBase> allAbility;
+	private int curIndex = 0;
 
 	public ExtremeMultiModalAbilityButton(
 		List<BehaviorBase> behaviorors,
@@ -53,7 +54,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		this.allAbility.Remove(behavior);
 	}
 
-	public void ClearAndAnd(in BehaviorBase behavior)
+	public void ClearAndAnd(BehaviorBase behavior)
 	{
 		foreach (var item in this.allAbility)
 		{
@@ -98,11 +99,14 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 	private void switchAbility(bool isInvert)
 	{
 		int curAbilityNum = this.MultiModalAbilityNum;
-		int rowIndex = isInvert ? curAbilityNum - 1 : curAbilityNum + 1;
+		int rowIndex = isInvert ? this.curIndex - 1 : this.curIndex + 1;
 		int newIndex = (rowIndex + curAbilityNum) % curAbilityNum;
 
 		float curMaxCoolTime = this.Behavior.CoolTime;
 		this.Behavior = this.allAbility[newIndex];
+		this.curIndex = newIndex;
+
+		ExtremeRolesPlugin.Logger.LogInfo($"Switched to {this.Behavior.GetType().Name}, Index:{newIndex}");
 
 		// クールタイム詐称を防ぐ(CT長いの使う => 短いのに切り替え => CTがカットされる => 長いのに切り替えて詐称)
 		// 短いのから長いのに切り替えた瞬間にクールタイムが発生するようにする
