@@ -69,6 +69,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		var curAbility = this.Behavior;
 		switchAbility(false);
 		Remove(curAbility);
+		this.OnMeetingEnd();
 	}
 
 	protected override void UpdateImp()
@@ -130,6 +131,11 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		if (diff > 0.0f)
 		{
 			this.AddTimerOffset(diff);
+		}
+		// 能力使い切ってるとかでクールタイムになるように
+		else if (this.State is AbilityState.None or AbilityState.Stop)
+		{
+			this.OnMeetingEnd();
 		}
 	}
 }
