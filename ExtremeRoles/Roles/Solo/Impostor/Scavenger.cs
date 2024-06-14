@@ -877,7 +877,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				Ability.BeamRifle,
 				new NormalGun(
 					new (
-						Path.ScavengerBulletImg,
+						Path.ScavengerBeamImg,
 						new Vector2(0.05f, 0.05f),
 						mng.GetValue<float>(
 							this.GetRoleOptionId(Option.BeamRifleSpeed)),

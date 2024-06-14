@@ -114,7 +114,7 @@ public static class Path
 	public const string CrewshroomSet = "ExtremeRoles.Resources.CrewshroomSetMushroom.png";
 
 	public const string ScavengerBulletImg = "Bullet";
-
+	public const string ScavengerBeamImg = "BeamRifle";
 	// !----- インポスター終了 -----
 
 	public const string VigilanteEmergencyCall =
