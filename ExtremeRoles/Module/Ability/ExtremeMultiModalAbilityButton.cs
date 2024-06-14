@@ -6,8 +6,8 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.Ability;
 
@@ -16,6 +16,7 @@ namespace ExtremeRoles.Module.Ability;
 public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 {
 	public int MultiModalAbilityNum => allAbility.Count;
+	private readonly SpriteRenderer multiAbilityImg;
 	private readonly List<BehaviorBase> allAbility;
 	private int curIndex = 0;
 
@@ -39,6 +40,16 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 				_ = behavior.Update(AbilityState.None);
 			}
 		}
+
+		var obj = new GameObject("MultiAbilityImg");
+		obj.transform.SetParent(this.Transform);
+		obj.transform.position = this.Transform.position;
+		this.multiAbilityImg = obj.AddComponent<SpriteRenderer>();
+			this.multiAbilityImg.name = "MultiAbilityImg";
+		this.multiAbilityImg.sprite = Loader.GetUnityObjectFromResources<Sprite>(
+			Path.CommonTextureAsset,
+			string.Format(Path.CommonImagePathFormat, "MultiAbility"));
+		this.multiAbilityImg.enabled = this.MultiModalAbilityNum > 1;
 	}
 
 	public ExtremeMultiModalAbilityButton(
@@ -57,17 +68,20 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			_ = behavior.Update(AbilityState.None);
 		}
 		this.allAbility.Add(behavior);
+		this.reenableImg();
 	}
 	public void Remove(int index)
 	{
 		var targetAbility = this.allAbility[index];
 		checkForRemove(targetAbility);
 		this.allAbility.RemoveAt(index);
+		this.reenableImg();
 	}
 	public void Remove(in BehaviorBase behavior)
 	{
 		checkForRemove(behavior);
 		this.allAbility.Remove(behavior);
+		this.reenableImg();
 	}
 
 	public void ClearAndAnd(BehaviorBase behavior)
@@ -78,6 +92,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		switchAbility(false);
 		Remove(curAbility);
 		this.OnMeetingEnd();
+		this.reenableImg();
 	}
 
 	protected override void UpdateImp()
@@ -148,5 +163,9 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		{
 			this.AddTimerOffset(diff);
 		}
+	}
+	private void reenableImg()
+	{
+		this.multiAbilityImg.enabled = this.MultiModalAbilityNum > 1;
 	}
 }
