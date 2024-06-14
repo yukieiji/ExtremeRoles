@@ -72,14 +72,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 
 	public void ClearAndAnd(BehaviorBase behavior)
 	{
-		foreach (var item in this.allAbility)
-		{
-			if (this.Behavior == item)
-			{
-				continue;
-			}
-			Remove(item);
-		}
+		this.allAbility.RemoveAll(x => x != this.Behavior);
 		Add(behavior, false);
 		var curAbility = this.Behavior;
 		switchAbility(false);

@@ -528,10 +528,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private HashSet<Ability> curAbility = new HashSet<Ability>();
 	private TextMeshPro? abilityText;
-	private Vector2 prevPlayerPos;
+	private Vector2? prevPlayerPos;
 	private float timer;
 	private float weaponMixTime;
-	private static Vector2 defaultPos => new Vector2(100.0f, 100.0f);
 
 	public Scavenger() : base(
 		ExtremeRoleId.Scavenger,
@@ -610,6 +609,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.internalButton.Add(newBehavior);
 		}
 		this.internalButton.SetButtonShow(true);
+		this.curAbility.Add(ability);
 	}
 
 	public void RoleAbilityInit()
@@ -618,8 +618,20 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
 	{　}
 
+	public override void RolePlayerKilledAction(
+		PlayerControl rolePlayer, PlayerControl killerPlayer)
+	{
+		if (rolePlayer.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId)
+		{
+			return;
+		}
+		this.reset();
+	}
+
 	public void ResetOnMeetingStart()
-	{　}
+	{
+		this.reset();
+	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
@@ -634,19 +646,22 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 
 		// 能力合成
-		if (this.prevPlayerPos == defaultPos)
+		if (!this.prevPlayerPos.HasValue)
 		{
 			this.prevPlayerPos = rolePlayer.GetTruePosition();
 		}
 		var curPos = rolePlayer.GetTruePosition();
 
-		if (this.internalButton?.MultiModalAbilityNum <= 1 ||
-			this.prevPlayerPos != curPos ||
-			Key.IsAltDown() ||
+		if (this.internalButton is null ||
+			this.internalButton.MultiModalAbilityNum <= 1 ||
+			!this.internalButton.IsAbilityReady() ||
+			this.prevPlayerPos.Value != curPos ||
+			!Key.IsAltDown() ||
 			IntroCutscene.Instance != null ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null)
 		{
+			this.prevPlayerPos = curPos;
 			if (this.abilityText != null)
 			{
 				this.abilityText.gameObject.SetActive(false);
@@ -655,6 +670,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			return;
 		}
 
+		this.prevPlayerPos = curPos;
 		if (this.abilityText == null)
 		{
 			this.abilityText = UnityObject.Instantiate(
@@ -665,15 +681,20 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.abilityText.color = Palette.EnabledColor;
 		}
 
-		this.abilityText.text =
+		this.abilityText.text = $"WeaponMixTimeRemain:{Mathf.CeilToInt(this.timer)}";
+
+			/*
 			string.Format(
 				Translation.GetString("WeaponMixTimeRemain"),
 				Mathf.CeilToInt(this.timer));
-		this.timer -= Time.fixedDeltaTime;
+			*/
+		this.abilityText.gameObject.SetActive(true);
+		this.timer -= Time.deltaTime;
 
 		if (this.timer < 0.0f)
 		{
 			this.mixWeapon();
+			this.timer = this.weaponMixTime;
 		}
 	}
 
@@ -1020,6 +1041,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.internalButton.Transform.TryGetComponent<ActionButton>(out var button))
 		{
 			behavior.Initialize(button);
+		}
+	}
+
+	private void reset()
+	{
+		if (this.abilityText != null)
+		{
+			this.abilityText.gameObject.SetActive(true);
 		}
 	}
 }
