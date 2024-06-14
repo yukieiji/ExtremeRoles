@@ -44,6 +44,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		var obj = new GameObject("MultiAbilityImg");
 		obj.transform.SetParent(this.Transform);
 		obj.transform.position = this.Transform.position;
+		obj.transform.localPosition = new Vector3(0.0f, 0.0f, 0.25f);
 		this.multiAbilityImg = obj.AddComponent<SpriteRenderer>();
 			this.multiAbilityImg.name = "MultiAbilityImg";
 		this.multiAbilityImg.sprite = Loader.GetUnityObjectFromResources<Sprite>(
