@@ -120,6 +120,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 	private bool isWallHack = false;
 
 	private BoxCollider2D? collider;
+	private SpriteRenderer? renderer;
 
 	public static ScavengerBulletBehaviour Create(
 		int id,
@@ -165,8 +166,8 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		this.range = range;
 		this.ignorePlayerId = ignorePlayerId;
 
-		var rend = this.gameObject.AddComponent<SpriteRenderer>();
-		rend.sprite = Scavenger.GetFromAsset<Sprite>(
+		this.renderer = this.gameObject.AddComponent<SpriteRenderer>();
+		this.renderer.sprite = Scavenger.GetFromAsset<Sprite>(
 			$"assets/roles/scavenger.{bulletImg}.png");
 
 		this.initialPosition = transform.position;
@@ -182,6 +183,14 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		this.ability = ability;
 
 		this.isWallHack = isWallHack;
+	}
+
+	public void OnDestroy()
+	{
+		if (this.renderer != null)
+		{
+			Destroy(this.renderer);
+		}
 	}
 
 	public void Update()
@@ -254,6 +263,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 	private byte ignorePlayerId;
 
 	private GameObject? anchor;
+	private SpriteRenderer? renderer;
 
 	private RotationInfo? rotationInfo;
 	public ScavengerSwordBehaviour(System.IntPtr ptr) : base(ptr) { }
@@ -380,8 +390,8 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 
 		this.ignorePlayerId = anchorPlayer.PlayerId;
 
-		var rend = this.gameObject.AddComponent<SpriteRenderer>();
-		rend.sprite = Scavenger.GetFromAsset<Sprite>(
+		this.renderer = this.gameObject.AddComponent<SpriteRenderer>();
+		this.renderer.sprite = Scavenger.GetFromAsset<Sprite>(
 			$"assets/roles/scavenger.{Scavenger.Ability.Sword}.png");
 
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
