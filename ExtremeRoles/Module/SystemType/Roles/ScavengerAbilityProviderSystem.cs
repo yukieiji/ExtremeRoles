@@ -314,16 +314,15 @@ public sealed class ScavengerAbilitySystem(
 		var ability = (WeaponAbility)msgReader.ReadByte();
 		float x = msgReader.ReadSingle();
 		float y = msgReader.ReadSingle();
-		var scavent = ExtremeRoleManager.GetSafeCastedRole<
-			ExtremeRoles.Roles.Solo.Impostor.Scavenger>(playerId);
 		var player = Player.GetPlayerControlById(playerId);
-		if (scavent is null ||
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<ExtremeRoles.Roles.Solo.Impostor.Scavenger> (
+				playerId, out var scavenger) ||
 			player == null)
 		{
 			return;
 		}
 		player.NetTransform.SnapTo(new (x, y));
-		scavent.WeaponOps(ability, player, msgReader);
+		scavenger.WeaponOps(ability, player, msgReader);
 	}
 
 	private WeaponAbility getRandomAbility()

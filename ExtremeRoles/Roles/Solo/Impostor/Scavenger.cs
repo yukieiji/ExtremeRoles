@@ -839,7 +839,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 
 	public void RoleAbilityInit()
-	{ }
+	{
+		if (this.weapon is null)
+		{
+			this.createWeapon();
+		}
+	}
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
 	{}
