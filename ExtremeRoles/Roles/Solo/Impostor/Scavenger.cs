@@ -127,7 +127,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public void RpcHide()
 		{
 			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Hide);
-			hide();
 		}
 
 		private bool rpcStartSwordCharge()
@@ -138,14 +137,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Create);
-			startSwordChargeOnPlayer(local);
 			return true;
 		}
 
 		private bool rpcStartSwordRotation(float _)
 		{
 			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Start);
-			startSwordRotation();
 			return true;
 		}
 
@@ -253,7 +250,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public void RpcHide()
 		{
 			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Hide);
-			hide();
 		}
 
 		private bool rpcStartFlameCharge()
@@ -264,7 +260,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Create);
-			startFlameCharge(local);
 			return true;
 		}
 
@@ -284,7 +279,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private bool rpcStartFlameFire(float _)
 		{
 			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Start);
-			startFlameFire();
 			return true;
 		}
 
@@ -478,6 +472,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					float y = reader.ReadSingle();
 					this.createBullet(id, new (x, y), rolePlayer);
 					break;
+				case Ops.HideToId:
+					int hideId = reader.ReadPackedInt32();
+					this.hide(hideId);
+					break;
 				case Ops.HideAll:
 					this.hide();
 					break;
@@ -515,7 +513,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					writer.Write(pos.y);
 					writer.Write((byte)Ops.HideAll);
 				});
-			hide();
 		}
 
 		public void RpcHideToId(int id)
@@ -539,7 +536,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					writer.Write((byte)Ops.HideToId);
 					writer.WritePacked(id);
 				});
-			hide(id);
 		}
 
 		private void hide(int id)
@@ -620,15 +616,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					writer.Write(this.playerDirection.x);
 					writer.Write(this.playerDirection.y);
 				});
-
-
-			createBullet(
-				this.id,
-				this.playerDirection,
-				CachedPlayerControl.LocalPlayer);
-
 			++this.id;
-
 			return true;
 		}
 

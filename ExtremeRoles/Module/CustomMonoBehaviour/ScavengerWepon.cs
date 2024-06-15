@@ -98,7 +98,6 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 				});
 		}
 		scavenger.AddWepon(ability);
-		Destroy(this.gameObject);
 	}
 }
 
@@ -209,7 +208,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 				byte.MinValue);
 			hide();
 		}
-		else if (ScavengerWeaponHitHelper.IsHitWall(other) && this.isWallHack)
+		else if (ScavengerWeaponHitHelper.IsHitWall(other) && !this.isWallHack)
 		{
 			hide();
 		}
