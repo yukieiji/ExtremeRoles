@@ -91,7 +91,11 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 		{
 			ExtremeSystemTypeManager.RpcUpdateSystem(
 				ScavengerAbilitySystem.Type,
-					x => x.Write((byte)ability));
+				x =>
+				{
+					x.Write((byte)ScavengerAbilitySystem.Ops.PickUp);
+					x.Write((byte)ability);
+				});
 		}
 		scavenger.AddWepon(ability);
 		Destroy(this.gameObject);
