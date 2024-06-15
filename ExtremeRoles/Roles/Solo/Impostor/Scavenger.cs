@@ -46,6 +46,28 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			in PlayerControl rolePlayer,
 			in MessageReader reader);
 
+		protected static void SimpleRpcOps(Ability type, byte bytedOps)
+		{
+			var local = CachedPlayerControl.LocalPlayer;
+			if (local == null)
+			{
+				return;
+			}
+
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				ScavengerAbilitySystem.Type,
+				writer =>
+				{
+					var pos = local.transform.position;
+					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
+					writer.Write(local.PlayerId);
+					writer.Write((byte)Ability.Flame);
+					writer.Write(pos.x);
+					writer.Write(pos.y);
+					writer.Write(bytedOps);
+				});
+		}
+
 		protected static Sprite getSprite(in Ability abilityType)
 			=> GetFromAsset<Sprite>($"assets/roles/scavenger.{abilityType}.{Path.ButtonIcon}.png");
 	}
@@ -75,7 +97,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			switch (ops)
 			{
 				case Ops.Create:
-					this.createSword(rolePlayer);
+					this.startSwordChargeOnPlayer(rolePlayer);
 					break;
 				case Ops.Start:
 					startSwordRotation();
@@ -104,80 +126,26 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void RpcHide()
 		{
-			var local = CachedPlayerControl.LocalPlayer;
-			if (local == null ||
-				this.showSword == null)
-			{
-				return;
-			}
-
-			ExtremeSystemTypeManager.RpcUpdateSystem(
-				ScavengerAbilitySystem.Type,
-				writer =>
-				{
-					var pos = local.transform.position;
-					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
-					writer.Write(local.PlayerId);
-					writer.Write((byte)Ability.Sword);
-					writer.Write(pos.x);
-					writer.Write(pos.y);
-					writer.Write((byte)Ops.Hide);
-				});
-
+			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Hide);
 			hide();
 		}
 
 		private bool rpcStartSwordCharge()
 		{
-			// Rpc処理
 			var local = CachedPlayerControl.LocalPlayer;
 			if (local == null)
 			{
 				return false;
 			}
-
-			ExtremeSystemTypeManager.RpcUpdateSystem(
-				ScavengerAbilitySystem.Type,
-				writer =>
-				{
-					var pos = local.transform.position;
-					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
-					writer.Write(local.PlayerId);
-					writer.Write((byte)Ability.Sword);
-					writer.Write(pos.x);
-					writer.Write(pos.y);
-					writer.Write((byte)Ops.Create);
-				});
-
+			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Create);
 			startSwordChargeOnPlayer(local);
-
 			return true;
 		}
 
-		private bool rpcStartSwordRotation(float chargeGauge)
+		private bool rpcStartSwordRotation(float _)
 		{
-			// Rpc処理
-			var local = CachedPlayerControl.LocalPlayer;
-			if (local == null || this.showSword == null)
-			{
-				return false;
-			}
-
-			ExtremeSystemTypeManager.RpcUpdateSystem(
-				ScavengerAbilitySystem.Type,
-				writer =>
-				{
-					var pos = local.transform.position;
-					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
-					writer.Write(local.PlayerId);
-					writer.Write((byte)Ability.Sword);
-					writer.Write(pos.x);
-					writer.Write(pos.y);
-					writer.Write((byte)Ops.Start);
-				});
-
+			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Start);
 			startSwordRotation();
-
 			return true;
 		}
 
@@ -195,7 +163,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			// Rpc処理
 			if (this.showSword == null)
 			{
-				this.showSword = createSword(rolePlayer);
+				this.showSword = ScavengerSwordBehaviour.Create(
+					this.r, rolePlayer);
 			}
 
 			this.showSword.gameObject.SetActive(true);
@@ -233,17 +202,19 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 		private bool isValidSword()
 			=> this.showSword != null && this.showSword.gameObject.active;
-
-		private ScavengerSwordBehaviour createSword(
-			in PlayerControl rolePlayer)
-			=> ScavengerSwordBehaviour.Create(
-				this.r, rolePlayer);
 	}
 
 	private sealed class Flame(float fireSecond, float fireDeadSecond) : IWeapon
 	{
 		private readonly float fireSecond = fireSecond;
 		private readonly float fireDeadSecond = fireDeadSecond;
+
+		public enum Ops
+		{
+			Create,
+			Start,
+			Hide,
+		}
 
 		private ScavengerFlameBehaviour? flame;
 
@@ -253,8 +224,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				$"{abilityType}ButtonName",
 				IWeapon.getSprite(abilityType),
 				isFireThrowerUse,
-				startSwordRotation,
-				startSwordCharge,
+				rpcStartFlameFire,
+				rpcStartFlameCharge,
 				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
 				IRoleAbility.IsCommonUse,
 				IRoleAbility.IsCommonUse,
@@ -264,42 +235,75 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void RpcOps(in PlayerControl rolePlayer, in MessageReader reader)
 		{
-			throw new NotImplementedException();
+			Ops ops = (Ops)reader.ReadByte();
+			switch (ops)
+			{
+				case Ops.Create:
+					startFlameCharge(rolePlayer);
+					break;
+				case Ops.Start:
+					startFlameFire();
+					break;
+				case Ops.Hide:
+					this.hide();
+					break;
+			}
 		}
 
 		public void RpcHide()
+		{
+			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Hide);
+			hide();
+		}
+
+		private bool rpcStartFlameCharge()
+		{
+			var local = CachedPlayerControl.LocalPlayer;
+			if (local == null)
+			{
+				return false;
+			}
+			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Create);
+			startFlameCharge(local);
+			return true;
+		}
+
+		private void startFlameCharge(PlayerControl player)
+		{
+			// Rpc処理
+			if (this.flame == null)
+			{
+				this.flame = ScavengerFlameBehaviour.Create(
+					this.fireSecond, this.fireDeadSecond, player);
+			}
+
+			this.flame.StartCharge();
+			this.flame.gameObject.SetActive(true);
+		}
+
+		private bool rpcStartFlameFire(float _)
+		{
+			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Start);
+			startFlameFire();
+			return true;
+		}
+
+		private void startFlameFire()
+		{
+			if (this.flame == null)
+			{
+				return;
+			}
+			this.flame.Fire();
+		}
+
+		private void hide()
 		{
 			if (this.flame == null)
 			{
 				return;
 			}
 			this.flame.gameObject.SetActive(false);
-		}
-
-		private bool startSwordCharge()
-		{
-			// Rpc処理
-			if (this.flame == null)
-			{
-				this.flame = createSword(
-					CachedPlayerControl.LocalPlayer);
-			}
-
-			this.flame.StartCharge();
-			this.flame.gameObject.SetActive(true);
-
-			return true;
-		}
-
-		private bool startSwordRotation(float _)
-		{
-			// Rpc処理
-			if (this.flame == null)
-			{
-				return false;
-			}
-			this.flame.Fire();
-			return true;
 		}
 
 		private bool isFireThrowerUse(bool isCharge, float chargeGauge)
@@ -315,11 +319,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 			return chargeGauge == 1.0f;
 		}
-
-		private ScavengerFlameBehaviour createSword(
-			in PlayerControl rolePlayer)
-			=> ScavengerFlameBehaviour.Create(
-				this.fireSecond, this.fireDeadSecond, rolePlayer);
 	}
 
 	private sealed class BeamSaber(
@@ -855,7 +854,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	{ }
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
-	{　}
+	{}
 
 	public override void RolePlayerKilledAction(
 		PlayerControl rolePlayer, PlayerControl killerPlayer)
@@ -1288,6 +1287,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		if (this.abilityText != null)
 		{
 			this.abilityText.gameObject.SetActive(true);
+		}
+		if (this.weapon is null)
+		{
+			return;
+		}
+		foreach (var weapon in this.weapon.Values)
+		{
+			weapon.RpcHide();
 		}
 	}
 }
