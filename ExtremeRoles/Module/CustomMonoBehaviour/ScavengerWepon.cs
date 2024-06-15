@@ -372,6 +372,10 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 		{
 			Destroy(this.anchor);
 		}
+		if (this.renderer != null)
+		{
+			Destroy(this.renderer);
+		}
 	}
 
 	private void initialize(
