@@ -552,25 +552,17 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 		private readonly Dictionary<byte, Vector2> prevPos = new Dictionary<byte, Vector2>();
 		private readonly float deadTime = deadTime;
 
-		private const float blockTime = 0.1f;
-		private float blockTimer = 0.1f;
-
 		public bool IsContain(byte playerId) => this.playerDeadTimes.ContainsKey(playerId);
 
 		public void Update()
 		{
-			this.blockTimer += Time.deltaTime;
-			if (this.blockTimer < blockTime)
-			{
-				return;
-			}
-			this.blockTimer = 0.0f;
+			float deltaTime = Time.deltaTime;
 
 			foreach (var (id, pc) in pcs)
 			{
 				var cur = pc.GetTruePosition();
 				var prev = prevPos[id];
-				Increse(id, cur == prev ? blockTime : -blockTime);
+				Increse(id, cur == prev ? deltaTime : -deltaTime);
 				this.prevPos[id] = cur;
 			}
 		}
@@ -626,24 +618,26 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 		}
 	}
 
-	private readonly Dictionary<byte, float> playerTimes = new Dictionary<byte, float>();
+	private Dictionary<byte, float> playerTimes = new Dictionary<byte, float>();
 	private PlayerDeadTimerContainer? playerDeadTimer;
 	private HitInfo? info;
 
 	public void LateUpdate()
 	{
-		foreach (byte key in playerTimes.Keys)
+		int itemNum = this.playerTimes.Count;
+		if (itemNum != 0)
 		{
-			if (!this.playerTimes.TryGetValue(key, out float time))
+			Dictionary<byte, float> newPlayerTime = new Dictionary<byte, float>(itemNum);
+			foreach (var (playerId, time) in this.playerTimes)
 			{
-				continue;
+				float newTime = time - Time.deltaTime;
+				if (newTime < 0.0f)
+				{
+					continue;
+				}
+				newPlayerTime[playerId] = time;
 			}
-			float newTime = time - Time.deltaTime;
-			if (newTime < 0.0f)
-			{
-				this.playerTimes.Remove(key);
-			}
-			this.playerTimes[key] = newTime;
+			this.playerTimes = newPlayerTime;
 		}
 		this.playerDeadTimer?.Update();
 	}
