@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Performance;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Roles;
 
@@ -567,10 +568,10 @@ public static class ExtremeRoleManager
     }
 
 // TryGet系列：ここでTrueの場合、取得した役職はNullではない！！！！
-	public static bool TryGetRole(byte playerId, out SingleRoleBase? role )
+	public static bool TryGetRole(byte playerId, [NotNullWhen(true)] out SingleRoleBase? role )
 		=> GameRole.TryGetValue(playerId, out role) && role is not null;
 
-	public static bool TryGetSafeCastedRole<T>(byte playerId, out T? role) where T : SingleRoleBase
+	public static bool TryGetSafeCastedRole<T>(byte playerId, [NotNullWhen(true)] out T? role) where T : SingleRoleBase
 	{
 		role = null;
 		if (!TryGetRole(playerId, out var checkRole))
@@ -578,6 +579,13 @@ public static class ExtremeRoleManager
 			return false;
 		}
 		role = safeCast<T>(checkRole);
+		return role is not null;
+	}
+
+	public static bool TryGetSafeCastedLocalRole<T>([NotNullWhen(true)] out T? role) where T : SingleRoleBase
+	{
+		var rowRole = GetLocalPlayerRole();
+		role = safeCast<T>(rowRole);
 		return role is not null;
 	}
 

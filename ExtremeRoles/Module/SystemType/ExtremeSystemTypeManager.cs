@@ -38,7 +38,7 @@ public enum ExtremeSystemType : byte
 	FakerDummy,
 	ThiefMeetingTimeChange,
 	TeroristTeroSabotage,
-	ScavengerAbilityProvider,
+	ScavengerAbility,
 
 	YokoYashiro
 }

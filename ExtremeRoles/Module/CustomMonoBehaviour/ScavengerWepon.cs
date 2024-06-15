@@ -90,7 +90,7 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 		if (this.WeponInfo.IsSync)
 		{
 			ExtremeSystemTypeManager.RpcUpdateSystem(
-				ScavengerAbilityProviderSystem.Type,
+				ScavengerAbilitySystem.Type,
 					x => x.Write((byte)ability));
 		}
 		scavenger.AddWepon(ability);
@@ -111,11 +111,16 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 
 	private float range;
 	private byte ignorePlayerId;
+	private int id;
+	private Scavenger.Ability ability;
 	private Vector2 initialPosition;
 	private bool isWallHack = false;
 
+	private BoxCollider2D? collider;
+
 	public static ScavengerBulletBehaviour Create(
 		int id,
+		Scavenger.Ability ability,
 		in PlayerControl abilityPlayer,
 		in Vector2 direction,
 		in Parameter param)
@@ -126,6 +131,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 
 		var bullet = obj.AddComponent<ScavengerBulletBehaviour>();
 		bullet.Initialize(
+			id, ability,
 			param.Img,
 			param.Size,
 			direction,
@@ -138,6 +144,8 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 	}
 
 	public void Initialize(
+		int id,
+		Scavenger.Ability ability,
 		in string bulletImg,
 		in Vector2 size,
 		in Vector2 direction,
@@ -147,9 +155,9 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		in bool isWallHack)
 	{
 
-		var collider = this.gameObject.AddComponent<BoxCollider2D>();
-		collider.isTrigger = true;
-		collider.size = size;
+		this.collider = this.gameObject.AddComponent<BoxCollider2D>();
+		this.collider.isTrigger = true;
+		this.collider.size = size;
 
 		this.range = range;
 		this.ignorePlayerId = ignorePlayerId;
@@ -167,6 +175,9 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 		rb.isKinematic = true;
 
+		this.id = id;
+		this.ability = ability;
+
 		this.isWallHack = isWallHack;
 	}
 
@@ -174,7 +185,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 	{
 		if (Vector2.Distance(this.transform.position, this.initialPosition) > this.range)
 		{
-			Destroy(this.gameObject);
+			hide();
 		}
 	}
 
@@ -192,12 +203,20 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 				this.ignorePlayerId,
 				pc.PlayerId,
 				byte.MinValue);
-			Destroy(this.gameObject);
+			hide();
 		}
 		else if (ScavengerWeaponHitHelper.IsHitWall(other) && this.isWallHack)
 		{
-			Destroy(this.gameObject);
+			hide();
 		}
+	}
+	private void hide()
+	{
+		if (this.collider != null)
+		{
+			this.collider.enabled = false;
+		}
+		Scavenger.HideGunId(this.ability, this.id);
 	}
 }
 

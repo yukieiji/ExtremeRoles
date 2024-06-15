@@ -20,6 +20,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
+using Hazel;
+using UnityEngine.SocialPlatforms;
+
 
 
 #nullable enable
@@ -39,7 +42,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private interface IWeapon
 	{
 		public BehaviorBase Create(in Ability abilityType);
-		public void Hide();
+		public void RpcHide();
 
 		protected static Sprite getSprite(in Ability abilityType)
 			=> GetFromAsset<Sprite>($"assets/roles/scavenger.{abilityType}.{Path.ButtonIcon}.png");
@@ -65,13 +68,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				startSwordCharge,
 				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
 				isValidSword, isValidSword,
-				Hide, Hide);
+				RpcHide, RpcHide);
 			behavior.ChargeTime = chargeTime;
 			behavior.ActiveTime = activeTime;
 			return behavior;
 		}
 
-		public void Hide()
+		public void RpcHide()
 		{
 			if (this.showSword == null)
 			{
@@ -152,11 +155,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
 				IRoleAbility.IsCommonUse,
 				IRoleAbility.IsCommonUse,
-				Hide, Hide);
+				RpcHide, RpcHide);
 			return behavior;
 		}
 
-		public void Hide()
+		public void RpcHide()
 		{
 			if (this.flame == null)
 			{
@@ -231,7 +234,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				ChargingCountBehaviour.ReduceTiming.OnActive,
 				iaiCheck);
 
-		public void Hide()
+		public void RpcHide()
 		{ }
 
 		private bool iaiCheck()
@@ -336,7 +339,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
-	private sealed class NormalGun(
+	public sealed class Gun(
 		in ScavengerBulletBehaviour.Parameter param) : IWeapon
 	{
 		private readonly ScavengerBulletBehaviour.Parameter pram = param;
@@ -344,6 +347,32 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private int id = 0;
 		private Vector2 playerDirection;
 		private Ability type;
+
+		public enum Ops
+		{
+			Create,
+			HideToId,
+			HideAll,
+		}
+
+		public void RpcOps(
+			in PlayerControl rolePlayer,
+			in MessageReader reader)
+		{
+			Ops ops = (Ops)reader.ReadByte();
+			switch (ops)
+			{
+				case Ops.Create:
+					int id = reader.ReadPackedInt32();
+					float x = reader.ReadSingle();
+					float y = reader.ReadSingle();
+					this.createBullet(id, new (x, y), rolePlayer);
+					break;
+				case Ops.HideAll:
+					this.hide();
+					break;
+			}
+		}
 
 		public BehaviorBase Create(in Ability abilityType)
 		{
@@ -353,10 +382,68 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				IWeapon.getSprite(abilityType),
 				isUse,
 				ability,
-				forceAbilityOff: Hide);
+				forceAbilityOff: RpcHide);
 		}
 
-		public void Hide()
+		public void RpcHide()
+		{
+			var local = CachedPlayerControl.LocalPlayer;
+			if (local == null)
+			{
+				return;
+			}
+
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				ScavengerAbilitySystem.Type,
+				writer =>
+				{
+					var pos = local.transform.position;
+					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
+					writer.Write(local.PlayerId);
+					writer.Write((byte)this.type);
+					writer.Write(pos.x);
+					writer.Write(pos.y);
+					writer.Write((byte)Ops.HideAll);
+				});
+			hide();
+		}
+
+		public void RpcHideToId(int id)
+		{
+			var local = CachedPlayerControl.LocalPlayer;
+			if (local == null)
+			{
+				return;
+			}
+
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				ScavengerAbilitySystem.Type,
+				writer =>
+				{
+					var pos = local.transform.position;
+					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
+					writer.Write(local.PlayerId);
+					writer.Write((byte)this.type);
+					writer.Write(pos.x);
+					writer.Write(pos.y);
+					writer.Write((byte)Ops.HideToId);
+					writer.WritePacked(id);
+				});
+			hide(id);
+		}
+
+		private void hide(int id)
+		{
+			if (this.bullet.TryGetValue(id, out var bullet) &&
+				bullet != null &&
+				bullet.gameObject != null)
+			{
+				UnityObject.Destroy(bullet.gameObject);
+			}
+			this.bullet.Remove(id);
+		}
+
+		private void hide()
 		{
 			foreach (var ballet in this.bullet.Values)
 			{
@@ -368,36 +455,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				UnityObject.Destroy(ballet.gameObject);
 			}
 			this.bullet.Clear();
-		}
-
-		public void Hide(int id)
-		{
-			if (this.bullet.TryGetValue(id, out var bullet) &&
-				bullet != null &&
-				bullet.gameObject != null)
-			{
-				UnityObject.Destroy(bullet.gameObject);
-			}
-			this.bullet.Remove(id);
-		}
-
-		public void CreateBullet(
-			int mngId,
-			in Vector2 direction,
-			in PlayerControl? rolePlayer)
-		{
-			if (rolePlayer == null)
-			{
-				throw new ArgumentNullException("RolePlayer is null");
-			}
-
-			var bullet = ScavengerBulletBehaviour.Create(
-				mngId,
-				rolePlayer,
-				direction,
-				this.pram);
-
-			this.bullet.Add(mngId, bullet);
 		}
 
 		private bool isUse()
@@ -431,8 +488,31 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.playerDirection.x = this.playerDirection.x +
 					(CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX ? -1 : 1);
 			}
-			// Rpc処理
-			CreateBullet(
+
+			var local = CachedPlayerControl.LocalPlayer;
+			if (local == null)
+			{
+				return false;
+			}
+
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				ScavengerAbilitySystem.Type,
+				writer =>
+				{
+					var pos = local.transform.position;
+					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
+					writer.Write(local.PlayerId);
+					writer.Write((byte)this.type);
+					writer.Write(pos.x);
+					writer.Write(pos.y);
+					writer.Write((byte)Ops.Create);
+					writer.WritePacked(this.id);
+					writer.Write(this.playerDirection.x);
+					writer.Write(this.playerDirection.y);
+				});
+
+
+			createBullet(
 				this.id,
 				this.playerDirection,
 				CachedPlayerControl.LocalPlayer);
@@ -440,6 +520,26 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			++this.id;
 
 			return true;
+		}
+
+		private void createBullet(
+			int mngId,
+			in Vector2 direction,
+			in PlayerControl? rolePlayer)
+		{
+			if (rolePlayer == null)
+			{
+				throw new ArgumentNullException("RolePlayer is null");
+			}
+
+			var bullet = ScavengerBulletBehaviour.Create(
+				mngId,
+				this.type,
+				rolePlayer,
+				direction,
+				this.pram);
+
+			this.bullet.Add(mngId, bullet);
 		}
 	}
 
@@ -545,19 +645,19 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	{
 		var newRole = base.Clone();
 		var system = ExtremeSystemTypeManager.Instance.CreateOrGet(
-			ScavengerAbilityProviderSystem.Type,
+			ScavengerAbilitySystem.Type,
 			() =>
 			{
 				var mng = OptionManager.Instance;
 
-				ScavengerAbilityProviderSystem.RandomOption? randOpt = mng.GetValue<bool>(
+				ScavengerAbilitySystem.RandomOption? randOpt = mng.GetValue<bool>(
 					this.GetRoleOptionId(Option.IsRandomInitAbility)) ?
 					new(mng.GetValue<bool>(
 							this.GetRoleOptionId(Option.AllowDupe)),
 						mng.GetValue<bool>(
 							this.GetRoleOptionId(Option.AllowAdvancedWepon))) : null;
 
-				return new ScavengerAbilityProviderSystem(
+				return new ScavengerAbilitySystem(
 					(Ability)mng.GetValue<int>(
 						this.GetRoleOptionId(Option.InitAbility)),
 					mng.GetValue<bool>(
@@ -572,6 +672,20 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			scavenger.InitAbility = system.GetInitWepon();
 		}
 		return newRole;
+	}
+
+	public static void HideGunId(
+		in Ability gunType,
+		int id)
+	{
+		if (!ExtremeRoleManager.TryGetSafeCastedLocalRole<Scavenger>(out var scavenger) ||
+			scavenger.weapon is null ||
+			scavenger.weapon.TryGetValue(gunType, out var weapon) ||
+			weapon is not Gun gun)
+		{
+			return;
+		}
+		gun.RpcHideToId(id);
 	}
 
 	public void CreateAbility()
@@ -610,6 +724,32 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 		this.internalButton.SetButtonShow(true);
 		this.curAbility.Add(ability);
+	}
+
+	public void WeaponOps(
+		in Ability ability,
+		in PlayerControl rolePlayer,
+		in MessageReader reader)
+	{
+		if (this.weapon is null ||
+			!this.weapon.TryGetValue(ability, out var weapon) ||
+			weapon is null)
+		{
+			return;
+		}
+
+		switch (ability)
+		{
+			case Ability.HandGun:
+			case Ability.SniperRifle:
+			case Ability.BeamRifle:
+				if (weapon is Gun gun)
+				{
+					gun.RpcOps(rolePlayer, reader);
+				}
+				break;
+		}
+
 	}
 
 	public void RoleAbilityInit()
@@ -836,7 +976,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			{
 				Ability.HandGun,
-				new NormalGun(
+				new Gun(
 					new (
 						Path.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
@@ -865,7 +1005,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.SniperRifle,
-				new NormalGun(
+				new Gun(
 					new (
 						Path.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
@@ -875,7 +1015,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			},
 			{
 				Ability.BeamRifle,
-				new NormalGun(
+				new Gun(
 					new (
 						Path.ScavengerBeamImg,
 						new Vector2(0.05f, 0.05f),

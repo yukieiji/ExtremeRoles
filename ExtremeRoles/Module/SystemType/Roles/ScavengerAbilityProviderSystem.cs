@@ -4,7 +4,9 @@ using System.Linq;
 
 using Hazel;
 using UnityEngine;
+using Newtonsoft.Json.Linq;
 
+using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
@@ -14,25 +16,27 @@ using UnityObject = UnityEngine.Object;
 using WeaponAbility = ExtremeRoles.Roles.Solo.Impostor.Scavenger.Ability;
 
 
-using Newtonsoft.Json.Linq;
-using ExtremeRoles.Extension.Json;
-
-
 #nullable enable
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class ScavengerAbilityProviderSystem(
+public sealed class ScavengerAbilitySystem(
 	in WeaponAbility initWeapon,
 	in bool isSetWepon,
 	in bool syncPlayer,
-	in ScavengerAbilityProviderSystem.RandomOption? randomOption) : IDirtableSystemType
+	in ScavengerAbilitySystem.RandomOption? randomOption) : IDirtableSystemType
 {
-	public const ExtremeSystemType Type = ExtremeSystemType.ScavengerAbilityProvider;
+	public const ExtremeSystemType Type = ExtremeSystemType.ScavengerAbility;
 
 	public readonly record struct RandomOption(
 		bool AllowDupe,
 		bool ContainAdvanced);
+
+	public enum Ops : byte
+	{
+		PickUp,
+		WeponOps,
+	}
 
 	private readonly WeaponAbility initAbility = initWeapon;
 	private readonly bool isSyncPlayer = syncPlayer;
@@ -229,14 +233,19 @@ public sealed class ScavengerAbilityProviderSystem(
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
-		WeaponAbility weapon = (WeaponAbility)msgReader.ReadByte();
-		if (!this.isSyncPlayer ||
-			!this.settedWeapon.TryGetValue(weapon, out var obj) ||
-			obj == null)
+		Ops ops = (Ops)msgReader.ReadByte();
+
+		switch (ops)
 		{
-			return;
+			case Ops.PickUp:
+				this.destroyWeponOnMap(msgReader);
+				break;
+			case Ops.WeponOps:
+				weaponOps(msgReader);
+				break;
+			default:
+				break;
 		}
-		UnityObject.Destroy(obj);
 	}
 
 	public WeaponAbility GetInitWepon()
@@ -284,6 +293,37 @@ public sealed class ScavengerAbilityProviderSystem(
 
 		using var setter = new WeponSetter(this.isSyncPlayer);
 		setter.SetFromInitWepon(this.settedWeapon, this.initProvided);
+	}
+
+	private void destroyWeponOnMap(in MessageReader msgReader)
+	{
+		WeaponAbility weapon = (WeaponAbility)msgReader.ReadByte();
+		if (!this.isSyncPlayer ||
+			!this.settedWeapon.TryGetValue(weapon, out var obj) ||
+			obj == null)
+		{
+			return;
+		}
+		UnityObject.Destroy(obj);
+	}
+
+	private void weaponOps(
+		in MessageReader msgReader)
+	{
+		byte playerId = msgReader.ReadByte();
+		var ability = (WeaponAbility)msgReader.ReadByte();
+		float x = msgReader.ReadSingle();
+		float y = msgReader.ReadSingle();
+		var scavent = ExtremeRoleManager.GetSafeCastedRole<
+			ExtremeRoles.Roles.Solo.Impostor.Scavenger>(playerId);
+		var player = Player.GetPlayerControlById(playerId);
+		if (scavent is null ||
+			player == null)
+		{
+			return;
+		}
+		player.NetTransform.SnapTo(new (x, y));
+		scavent.WeaponOps(ability, player, msgReader);
 	}
 
 	private WeaponAbility getRandomAbility()
