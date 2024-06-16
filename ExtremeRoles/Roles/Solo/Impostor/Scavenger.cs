@@ -82,7 +82,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private readonly float chargeTime = chargeTime;
 		private readonly float activeTime = activeTime;
 
-		public enum Ops
+		public enum Ops : byte
 		{
 			Create,
 			Start,
@@ -380,17 +380,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				isIaiOk,
 				tryIai,
 				startIai,
-				ChargingCountBehaviour.ReduceTiming.OnActive,
-				iaiCheck);
+				ChargingCountBehaviour.ReduceTiming.OnActive);
 
 		public void RpcHide()
 		{ }
-
-		private bool iaiCheck()
-		{
-			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
-			return curPos == this.chargePos;
-		}
 
 		private bool startIai()
 		{
@@ -431,6 +424,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			if (!isCharge)
 			{
 				return true;
+			}
+
+			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			if (curPos != this.chargePos)
+			{
+				return false;
 			}
 
 			float searchRange = this.range * chargeGauge * chargeGauge;
@@ -491,7 +490,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{ }
 	}
 
-	public sealed class Gun(
+	private sealed class Gun(
 		in ScavengerBulletBehaviour.Parameter param) : IWeapon
 	{
 		private readonly ScavengerBulletBehaviour.Parameter pram = param;
@@ -689,6 +688,129 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
+	private sealed class Aguni : IWeapon
+	{
+		// TODO: ちゃんとしたやつに変更する
+		private MonoBehaviour? aguniBehaviour;
+
+		private Vector2 chargePos = Vector2.zero;
+
+		public enum Ops : byte
+		{
+			Charge,
+			Fire,
+			Hide,
+		}
+
+		public BehaviorBase Create(in Ability abilityType)
+		{
+			var behavior = new ChargingAndActivatingCountBehaviour(
+				$"{abilityType}ButtonName",
+				IWeapon.getSprite(abilityType),
+				isAguniFire,
+				rpcStartAguniFire,
+				rpcStartAguniCharge,
+				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
+				isAguniChargeCheck, null,
+				RpcHide, RpcHide);
+			behavior.ActiveTime = 5.0f;
+			return behavior;
+		}
+
+		private bool isAguniChargeCheck()
+		{
+			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			return curPos == this.chargePos;
+		}
+
+		public void RpcHide()
+		{
+			IWeapon.SimpleRpcOps(Ability.Aguni, (byte)Ops.Hide);
+		}
+
+		public void RpcOps(in PlayerControl rolePlayer, in MessageReader reader)
+		{
+			Ops ops = (Ops)reader.ReadByte();
+			switch (ops)
+			{
+				case Ops.Charge:
+					this.startAguniCharge(rolePlayer);
+					break;
+				case Ops.Fire:
+					fireAguni();
+					break;
+				case Ops.Hide:
+					this.hide();
+					break;
+				default:
+					break;
+			}
+		}
+
+		private bool isAguniFire(bool isCharge, float chargeGauge)
+		{
+			bool isCommonUse = IRoleAbility.IsCommonUse();
+			if (!isCommonUse)
+			{
+				return false;
+			}
+			if (!isCharge)
+			{
+				return true;
+			}
+			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			return curPos == this.chargePos;
+		}
+
+		private bool rpcStartAguniFire(float _)
+		{
+			IWeapon.SimpleRpcOps(Ability.Aguni, (byte)Ops.Fire);
+			return true;
+		}
+
+		private bool rpcStartAguniCharge()
+		{
+			var local = CachedPlayerControl.LocalPlayer;
+			if (local == null)
+			{
+				return false;
+			}
+			this.chargePos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			IWeapon.SimpleRpcOps(Ability.Aguni, (byte)Ops.Charge);
+			return true;
+		}
+
+		private void startAguniCharge(PlayerControl player)
+		{
+			// Rpc処理
+			if (this.aguniBehaviour == null)
+			{
+
+			}
+
+			// チャージ開始(0いれる)
+			this.aguniBehaviour.gameObject.SetActive(true);
+		}
+
+		private void fireAguni()
+		{
+			if (this.aguniBehaviour == null)
+			{
+				return;
+			}
+			// 撃つ
+		}
+
+		private void hide()
+		{
+			if (this.aguniBehaviour == null)
+			{
+				return;
+			}
+			this.aguniBehaviour.gameObject.SetActive(false);
+		}
+	}
+
 	public ExtremeAbilityButton? Button
 	{
 		get => this.internalButton;
@@ -742,6 +864,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		BeamSaberRange,
 		BeamSaberAutoDetect,
 
+		AguniCount,
+		AguniChargeTime,
+
 		WeaponMixTime,
 	}
 
@@ -763,7 +888,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		BeamSaber,
 
 		// Flame + Sword + HandGun
-		All,
+		Aguni,
 	}
 
 	public Ability InitAbility { get; private set; }
@@ -1108,6 +1233,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.BeamSaberAutoDetect,
 			false, parentOps);
 
+		CreateIntOption(
+			Option.AguniCount,
+			1, 0, 10, 1, parentOps);
+		CreateIntOption(
+			Option.AguniChargeTime,
+			5, 1, 60, 1, parentOps,
+			format: OptionUnit.Second);
+
 		CreateFloatOption(
 			Option.WeaponMixTime,
 			3.0f, 0.5f, 25.0f, 0.5f, parentOps,
@@ -1184,6 +1317,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 						this.GetRoleOptionId(Option.BeamSaberRange)),
 					mng.GetValue<bool>(
 						this.GetRoleOptionId(Option.BeamSaberAutoDetect)))
+			},
+			{
+				Ability.Aguni,
+				new Aguni()
 			}
 		};
 	}
@@ -1220,7 +1357,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.curAbility.Contains(Ability.BeamRifle) ||
 			this.curAbility.Contains(Ability.SniperRifle))
 		{
-			replaceToWeapon(Ability.All);
+			replaceToWeapon(Ability.Aguni);
 		}
 		else if (
 			this.curAbility.Contains(Ability.HandGun) &&
@@ -1325,8 +1462,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					this.GetRoleOptionId(Option.BeamSaberChargeTime));
 
 				break;
-			case Ability.All:
-				// behavior.SetCount(3);
+			case Ability.Aguni:
+				if (behavior is not ChargingAndActivatingCountBehaviour aguni)
+				{
+					throw new ArgumentException("Aguni Behavior is not ChargingAndActivatingCountBehaviour");
+				}
+				aguni.ChargeTime = mng.GetValue<float>(
+					this.GetRoleOptionId(Option.AguniChargeTime));
+
 				break;
 		}
 		if (this.internalButton != null &&

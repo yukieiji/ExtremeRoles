@@ -68,7 +68,7 @@ public sealed class ScavengerAbilitySystem(
 
 			if (this.isSync)
 			{
-				if (init.Contains(WeaponAbility.All) ||
+				if (init.Contains(WeaponAbility.Aguni) ||
 					(isSwordProvided && isHandGunProvided && isFlameProvided))
 				{
 					return;
@@ -268,7 +268,7 @@ public sealed class ScavengerAbilitySystem(
 								WeaponAbility.SniperRifle or
 								WeaponAbility.BeamRifle or
 								WeaponAbility.BeamSaber or
-								WeaponAbility.All)
+								WeaponAbility.Aguni)
 						)
 					).ToArray();
 			}
