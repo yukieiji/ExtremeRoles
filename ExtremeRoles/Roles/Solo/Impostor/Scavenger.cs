@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using Hazel;
 using TMPro;
+using UnityEngine;
 
 using ExtremeRoles.Resources;
 using ExtremeRoles.Helper;
@@ -20,8 +22,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using UnityObject = UnityEngine.Object;
-using Hazel;
-
 
 
 #nullable enable
@@ -61,7 +61,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					var pos = local.transform.position;
 					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
 					writer.Write(local.PlayerId);
-					writer.Write((byte)Ability.Flame);
+					writer.Write((byte)type);
 					writer.Write(pos.x);
 					writer.Write(pos.y);
 					writer.Write(bytedOps);
@@ -201,7 +201,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			=> this.showSword != null && this.showSword.gameObject.active;
 	}
 
-	private sealed class Flame(float fireSecond, float fireDeadSecond) : IWeapon
+	public sealed class Flame(float fireSecond, float fireDeadSecond) : IWeapon
 	{
 		private readonly float fireSecond = fireSecond;
 		private readonly float fireDeadSecond = fireDeadSecond;
@@ -211,9 +211,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Create,
 			Start,
 			Hide,
+			FireStart,
+			FireEnd,
 		}
 
 		private ScavengerFlameBehaviour? flame;
+		private readonly Dictionary<byte, ScavengerFlameFire> allFire = new();
 
 		public BehaviorBase Create(in Ability abilityType)
 		{
@@ -244,8 +247,21 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				case Ops.Hide:
 					this.hide();
 					break;
+				case Ops.FireStart:
+					byte startTargetPlayerId = reader.ReadByte();
+					fireStart(startTargetPlayerId, rolePlayer.PlayerId);
+					break;
+				case Ops.FireEnd:
+					byte endTargetPlayerId = reader.ReadByte();
+					fireEnd(endTargetPlayerId);
+					break;
+				default:
+					break;
 			}
 		}
+
+		public bool TryGetFire(byte playerId, [NotNullWhen(true)] out ScavengerFlameFire? fire)
+			=> this.allFire.TryGetValue(playerId, out fire) && fire != null;
 
 		public void RpcHide()
 		{
@@ -269,7 +285,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			if (this.flame == null)
 			{
 				this.flame = ScavengerFlameBehaviour.Create(
-					this.fireSecond, this.fireDeadSecond, player);
+					this.fireSecond, player);
 			}
 
 			this.flame.StartCharge();
@@ -289,6 +305,37 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return;
 			}
 			this.flame.Fire();
+		}
+
+		private void fireStart(byte playerId, byte rolePlayerId)
+		{
+			if (!this.allFire.TryGetValue(playerId, out var fire) ||
+				fire == null)
+			{
+				var player = Player.GetPlayerControlById(playerId);
+				if (player == null)
+				{
+					return;
+				}
+
+				var obj = UnityObject.Instantiate(
+					GetFromAsset<GameObject>("Scavenger.FlameFire"),
+					player.transform);
+				fire = obj.GetComponent<ScavengerFlameFire>();
+				fire.DeadTime = this.fireDeadSecond;
+				fire.IgnorePlayerId = rolePlayerId;
+				fire.TargetPlayer = player;
+			}
+			fire.gameObject.SetActive(true);
+		}
+		private void fireEnd(byte playerId)
+		{
+			if (!this.allFire.TryGetValue(playerId, out var fire) ||
+				fire == null)
+			{
+				return;
+			}
+			fire.gameObject.SetActive(false);
 		}
 
 		private void hide()
@@ -719,6 +766,19 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 
 	public Ability InitAbility { get; private set; }
+	public Flame FlameWepon
+	{
+		get
+		{
+			if (this.weapon is null ||
+				!this.weapon.TryGetValue(Ability.Flame, out var wepon) ||
+				wepon is not Flame flame)
+			{
+				throw new InvalidOperationException("Flame wepon is null");
+			}
+			return flame;
+		}
+	}
 
 	private IReadOnlyDictionary<Ability, IWeapon>? weapon;
 

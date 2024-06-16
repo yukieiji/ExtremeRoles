@@ -14,6 +14,7 @@ using ExtremeRoles.Roles;
 
 using NullException = System.ArgumentNullException;
 using Scavenger = ExtremeRoles.Roles.Solo.Impostor.Scavenger;
+using Ptr = System.IntPtr;
 
 
 #nullable enable
@@ -63,6 +64,8 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 	public float PercentCool => 0.0f;
 
 	public ImageNames UseIcon => ImageNames.UseButton;
+
+	public ScavengerWeponMapUsable(Ptr ptr) : base(ptr) { }
 
 	public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
 	{
@@ -121,6 +124,8 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 
 	private BoxCollider2D? collider;
 	private SpriteRenderer? renderer;
+
+	public ScavengerBulletBehaviour(Ptr ptr) : base(ptr) { }
 
 	public static ScavengerBulletBehaviour Create(
 		int id,
@@ -266,7 +271,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 	private SpriteRenderer? renderer;
 
 	private RotationInfo? rotationInfo;
-	public ScavengerSwordBehaviour(System.IntPtr ptr) : base(ptr) { }
+	public ScavengerSwordBehaviour(Ptr ptr) : base(ptr) { }
 
 	public static ScavengerSwordBehaviour Create(
 		in float r,
@@ -410,7 +415,6 @@ public sealed class ScavengerFlameBehaviour : MonoBehaviour
 
 	public static ScavengerFlameBehaviour Create(
 		in float fireSecond,
-		in float fireDeadSecond,
 		in PlayerControl anchorPlayer)
 	{
 		var gameObj = Scavenger.GetFromAsset<GameObject>(
@@ -429,8 +433,7 @@ public sealed class ScavengerFlameBehaviour : MonoBehaviour
 
 		flame.hitBehaviour.Info = new ScavengerFlameHitBehaviour.HitInfo(
 			anchorPlayer,
-			fireSecond,
-			fireDeadSecond);
+			fireSecond);
 
 		return flame;
 	}
@@ -439,6 +442,8 @@ public sealed class ScavengerFlameBehaviour : MonoBehaviour
 	private ScavengerFlameHitBehaviour? hitBehaviour;
 	private bool isStart = false;
 	private bool prevFlip = false;
+
+	public ScavengerFlameBehaviour(Ptr ptr) : base(ptr) { }
 
 	public void Awake()
 	{
@@ -454,6 +459,14 @@ public sealed class ScavengerFlameBehaviour : MonoBehaviour
 			this.hitBehaviour = hitBehaviour;
 		}
 		this.isStart = false;
+	}
+
+	public void Start()
+	{
+		if (this.hitBehaviour != null)
+		{
+			this.hitBehaviour.Reset();
+		}
 	}
 
 	public void FixedUpdate()
@@ -542,67 +555,7 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 {
 	public sealed record class HitInfo(
 		PlayerControl IgnorePlayer,
-		float FireSecond,
-		float DeadCountDown);
-
-	private sealed class PlayerDeadTimerContainer(float deadTime)
-	{
-		private readonly Dictionary<byte, float> playerDeadTimes = new Dictionary<byte, float>();
-		private readonly Dictionary<byte, PlayerControl> pcs = new Dictionary<byte, PlayerControl>();
-		private readonly Dictionary<byte, Vector2> prevPos = new Dictionary<byte, Vector2>();
-		private readonly float deadTime = deadTime;
-
-		public bool IsContain(byte playerId) => this.playerDeadTimes.ContainsKey(playerId);
-
-		public void Update()
-		{
-			float deltaTime = Time.deltaTime;
-
-			foreach (var (id, pc) in pcs)
-			{
-				var cur = pc.GetTruePosition();
-				var prev = prevPos[id];
-				Increse(id, cur == prev ? deltaTime : -deltaTime);
-				this.prevPos[id] = cur;
-			}
-		}
-
-		public void Increse(byte playerId, float addTime)
-		{
-			float newTime = this.playerDeadTimes[playerId] + addTime;
-			if (newTime >= this.deadTime)
-			{
-				// 焼死
-				Player.RpcUncheckMurderPlayer(
-					playerId, playerId, byte.MinValue);
-				// エフェクト非表示処理
-
-				this.pcs.Remove(playerId);
-				this.playerDeadTimes.Remove(playerId);
-			}
-			else if (newTime < 0.0f)
-			{
-				this.pcs.Remove(playerId);
-				this.playerDeadTimes.Remove(playerId);
-			}
-			else
-			{
-				this.playerDeadTimes[playerId] = newTime;
-			}
-		}
-
-		public void Add(byte playerId)
-		{
-			var pc = Player.GetPlayerControlById(playerId);
-			if (pc == null)
-			{
-				return;
-			}
-			this.playerDeadTimes[playerId] = Time.deltaTime * 2.0f;
-			this.pcs[playerId] = pc;
-			this.prevPos[playerId] = pc.GetTruePosition();
-		}
-	}
+		float FireSecond);
 
 	public HitInfo? Info
 	{
@@ -613,17 +566,43 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 			{
 				throw new NullException("value is null");
 			}
+			if (!ExtremeRoleManager.TryGetSafeCastedRole<Scavenger>(
+				value.IgnorePlayer.PlayerId, out var scavenger))
+			{
+				throw new NullException("Scavenger is null");
+			}
+
 			this.info = value;
-			this.playerDeadTimer = new PlayerDeadTimerContainer(this.info.DeadCountDown);
+			this.frame = scavenger.FlameWepon;
 		}
 	}
 
+
+
 	private Dictionary<byte, float> playerTimes = new Dictionary<byte, float>();
-	private PlayerDeadTimerContainer? playerDeadTimer;
+	private Scavenger.Flame? frame;
+	private Dictionary<byte, ScavengerFlameFire> cacheFire = new Dictionary<byte, ScavengerFlameFire>();
 	private HitInfo? info;
+
+	public ScavengerFlameHitBehaviour(Ptr ptr) : base(ptr) { }
+
+	public void Reset()
+	{
+		this.playerTimes.Clear();
+		this.cacheFire.Clear();
+	}
 
 	public void LateUpdate()
 	{
+		if (CachedPlayerControl.LocalPlayer == null ||
+			this.Info == null ||
+			this.Info.IgnorePlayer == null ||
+			this.Info.IgnorePlayer.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId ||
+			this.frame == null)
+		{
+			return;
+		}
+
 		int itemNum = this.playerTimes.Count;
 		if (itemNum != 0)
 		{
@@ -639,12 +618,11 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 			}
 			this.playerTimes = newPlayerTime;
 		}
-		this.playerDeadTimer?.Update();
 	}
 
 	public void OnTriggerStay2D(Collider2D other)
 	{
-		if (this.playerDeadTimer is null ||
+		if (this.frame is null ||
 			this.Info is null ||
 			this.Info.IgnorePlayer == null ||
 			!ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) ||
@@ -657,27 +635,161 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 			return;
 		}
 
-		if (!this.playerTimes.TryGetValue(pc.PlayerId, out float time))
+		byte playerId = pc.PlayerId;
+
+		if (!this.playerTimes.TryGetValue(playerId, out float time))
 		{
 			time = 0.0f;
 		}
 
-		if (this.playerDeadTimer.IsContain(pc.PlayerId))
+		if (this.cacheFire.TryGetValue(playerId, out var fire) &&
+			fire != null)
 		{
-			this.playerDeadTimer.Increse(pc.PlayerId, Time.deltaTime);
+			fire.Increse(Time.deltaTime);
 			return;
 		}
 		else if (time >= this.Info.FireSecond)
 		{
-			this.playerDeadTimer.Add(pc.PlayerId);
-
-			// Rpcのエフェクト追加処理
-
-			this.playerTimes.Remove(pc.PlayerId);
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				ScavengerAbilitySystem.Type,
+				writer =>
+				{
+					var pos = this.Info.IgnorePlayer.transform.position;
+					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
+					writer.Write(this.Info.IgnorePlayer.PlayerId);
+					writer.Write((byte)Scavenger.Ability.Flame);
+					writer.Write(pos.x);
+					writer.Write(pos.y);
+					writer.Write((byte)Scavenger.Flame.Ops.FireStart);
+					writer.Write(playerId);
+				});
+			if (this.frame.TryGetFire(playerId, out var newFire))
+			{
+				this.cacheFire[playerId] = newFire;
+			}
+			this.playerTimes.Remove(playerId);
 			return;
 		}
 
 		// Updateで減らす処理を入れてるので2倍で進める
-		this.playerTimes[pc.PlayerId] = time + (Time.deltaTime * 2.0f);
+		this.playerTimes[playerId] = time + (Time.deltaTime * 2.0f);
+	}
+}
+
+[Il2CppRegister]
+public sealed class ScavengerFlameFire : MonoBehaviour
+{
+	public float DeadTime { private get; set; }
+	public byte IgnorePlayerId { private get; set; }
+	public PlayerControl? TargetPlayer
+	{
+		private get => targetPlayer;
+		set
+		{
+			if (value == null)
+			{
+				return;
+			}
+
+			this.timer = Time.deltaTime * 2.0f;
+			this.targetPlayer = value;
+			this.prevPos = value.GetTruePosition();
+		}
+	}
+
+	private float timer;
+	private Vector2 prevPos;
+	private PlayerControl? targetPlayer;
+	private ParticleSystem? fire;
+
+	public void Awake()
+	{
+		if (this.gameObject.TryGetComponent<ParticleSystem>(out var particle))
+		{
+			this.fire = particle;
+			this.fire.Play();
+		}
+
+	}
+
+	public void OnEnable()
+	{
+		if (this.fire != null)
+		{
+			this.fire.Play();
+		}
+	}
+
+	public void LateUpdate()
+	{
+		if (this.fire == null ||
+			this.TargetPlayer == null)
+		{
+			return;
+		}
+		if (MeetingHud.Instance != null ||
+			ExileController.Instance != null)
+		{
+			this.gameObject.SetActive(false);
+			return;
+		}
+		var cur = this.TargetPlayer.GetTruePosition();
+		this.Increse(cur == this.prevPos ? Time.deltaTime : -Time.deltaTime);
+	}
+
+	public void Increse(float addTime)
+	{
+		if (this.TargetPlayer == null)
+		{
+			return;
+		}
+
+		float newTime = this.timer + addTime;
+		if (newTime >= this.DeadTime)
+		{
+			Player.RpcUncheckMurderPlayer(
+				this.TargetPlayer.PlayerId,
+				this.TargetPlayer.PlayerId,
+				byte.MinValue);
+			disable();
+		}
+		else if (newTime < 0.0f)
+		{
+			disable();
+		}
+		else
+		{
+			this.timer = newTime;
+		}
+	}
+
+	public void OnDisable()
+	{
+		if (this.fire != null)
+		{
+			this.fire.Stop();
+		}
+	}
+
+	private void disable()
+	{
+		var local = CachedPlayerControl.LocalPlayer;
+		if (local == null || this.TargetPlayer == null)
+		{
+			return;
+		}
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			ScavengerAbilitySystem.Type,
+			writer =>
+			{
+				var pos = local.transform.position;
+				writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
+				writer.Write(local.PlayerId);
+				writer.Write((byte)Scavenger.Ability.Flame);
+				writer.Write(pos.x);
+				writer.Write(pos.y);
+				writer.Write((byte)Scavenger.Flame.Ops.FireEnd);
+				writer.Write(this.TargetPlayer.PlayerId);
+			});
 	}
 }
