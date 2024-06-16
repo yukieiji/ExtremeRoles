@@ -126,6 +126,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void RpcHide()
 		{
+			if (this.showSword == null)
+			{
+				return;
+			}
 			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Hide);
 		}
 
@@ -265,6 +269,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void RpcHide()
 		{
+			if (this.flame == null)
+			{
+				return;
+			}
 			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Hide);
 		}
 
