@@ -644,12 +644,13 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 			time = 0.0f;
 		}
 
+		float deltaTime = Time.deltaTime;
 		if (this.cacheFire.TryGetValue(playerId, out var fire) &&
 			fire != null)
 		{
 			if (fire.gameObject.activeSelf)
 			{
-
+				fire.Increse(deltaTime);
 			}
 			else
 			{
@@ -681,7 +682,7 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 		}
 
 		// Updateで減らす処理を入れてるので2倍で進める
-		this.playerTimes[playerId] = time + (Time.deltaTime * 2.0f);
+		this.playerTimes[playerId] = time + (deltaTime * 2.0f);
 	}
 }
 
