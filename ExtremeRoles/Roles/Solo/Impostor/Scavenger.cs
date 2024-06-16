@@ -325,6 +325,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				fire.DeadTime = this.fireDeadSecond;
 				fire.IgnorePlayerId = rolePlayerId;
 				fire.TargetPlayer = player;
+				this.allFire.Add(playerId, fire);
 			}
 			fire.gameObject.SetActive(true);
 		}

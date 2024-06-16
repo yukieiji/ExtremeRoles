@@ -625,6 +625,8 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 		if (this.frame is null ||
 			this.Info is null ||
 			this.Info.IgnorePlayer == null ||
+			this.Info.IgnorePlayer.Data == null ||
+			this.Info.IgnorePlayer.Data.IsDead ||
 			!ScavengerWeaponHitHelper.IsHitPlayer(other, out var pc) ||
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
@@ -645,7 +647,14 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 		if (this.cacheFire.TryGetValue(playerId, out var fire) &&
 			fire != null)
 		{
-			fire.Increse(Time.deltaTime);
+			if (fire.gameObject.activeSelf)
+			{
+
+			}
+			else
+			{
+				this.cacheFire.Remove(playerId);
+			}
 			return;
 		}
 		else if (time >= this.Info.FireSecond)
@@ -723,7 +732,9 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 	public void LateUpdate()
 	{
 		if (this.fire == null ||
-			this.TargetPlayer == null)
+			this.TargetPlayer == null ||
+			CachedPlayerControl.LocalPlayer == null ||
+			CachedPlayerControl.LocalPlayer.PlayerId != this.IgnorePlayerId)
 		{
 			return;
 		}
@@ -735,6 +746,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 		}
 		var cur = this.TargetPlayer.GetTruePosition();
 		this.Increse(cur == this.prevPos ? Time.deltaTime : -Time.deltaTime);
+		this.prevPos = cur;
 	}
 
 	public void Increse(float addTime)
@@ -745,13 +757,13 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 		}
 
 		float newTime = this.timer + addTime;
-		if (newTime >= this.DeadTime)
+		if (newTime > this.DeadTime)
 		{
+			disable();
 			Player.RpcUncheckMurderPlayer(
 				this.TargetPlayer.PlayerId,
 				this.TargetPlayer.PlayerId,
 				byte.MinValue);
-			disable();
 		}
 		else if (newTime < 0.0f)
 		{
