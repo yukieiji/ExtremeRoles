@@ -69,6 +69,8 @@ public enum ExtremeRoleId : int
 	Moderator,
 	Psychic,
 	Bait,
+	Jailer,
+	Yardbird,
 
 	SpecialImpostor,
     Evolver,
@@ -117,6 +119,7 @@ public enum ExtremeRoleId : int
     Doll,
 	Hatter,
 	Artist,
+	Lawbreaker,
 
 	Xion,
 }
@@ -248,6 +251,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Moderator   , new Moderator()},
 			{(int)ExtremeRoleId.Psychic     , new Psychic()},
 			{(int)ExtremeRoleId.Bait        , new Bait()},
+			{(int)ExtremeRoleId.Jailer      , new Jailer()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -329,7 +333,9 @@ public static class ExtremeRoleManager
         ForceReplaceToSidekick,
         SidekickToJackal,
         CreateServant,
-    }
+		ForceReplaceToYardbird,
+		BecomeLawbreaker
+	}
 
     public static void CreateCombinationRoleOptions(
         int optionIdOffsetChord)
@@ -512,6 +518,16 @@ public static class ExtremeRoleManager
             case ReplaceOperation.CreateServant:
                 Queen.TargetToServant(caller, targetId);
                 break;
+			case ReplaceOperation.ForceReplaceToYardbird:
+				Jailer.NotCrewmateToYardbird(caller, targetId);
+				break;
+			case ReplaceOperation.BecomeLawbreaker:
+				if (caller != targetId)
+				{
+					return;
+				}
+				Jailer.ToLawbreaker(caller);
+				break;
             default:
                 break;
         }
