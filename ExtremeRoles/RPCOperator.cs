@@ -564,8 +564,14 @@ public static class RPCOperator
 	{
 		Roles.Solo.Crewmate.Bait.Awake(playerId);
 	}
+	public static void SummonerRpcOps(
+		byte rolePlayerId, byte targetPlayerId, float x, float y, bool isDead)
+	{
+		Roles.Solo.Crewmate.Summoner.RpcOps(
+			rolePlayerId, targetPlayerId, x, y, isDead);
+	}
 
-    public static void AssasinVoteFor(byte targetId)
+	public static void AssasinVoteFor(byte targetId)
     {
         Roles.Combination.Assassin.VoteFor(
             targetId);

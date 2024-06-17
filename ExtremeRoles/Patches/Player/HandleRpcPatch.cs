@@ -244,6 +244,15 @@ public static class PlayerControlHandleRpcPatch
 				byte baitRolePlayerId = reader.ReadByte();
 				RPCOperator.BaitAwakeRole(baitRolePlayerId);
 				break;
+			case RPCOperator.Command.SummonerOps:
+				byte summonerPlayerId  = reader.ReadByte();
+				float x = reader.ReadSingle();
+				float y = reader.ReadSingle();
+				byte summonTargetPlayerId = reader.ReadByte();
+				bool isDead = reader.ReadBoolean();
+				RPCOperator.SummonerRpcOps(
+					summonerPlayerId, summonTargetPlayerId, x, y, isDead);
+				break;
 			case RPCOperator.Command.AssasinVoteFor:
 				byte voteTargetId = reader.ReadByte();
 				RPCOperator.AssasinVoteFor(voteTargetId);
