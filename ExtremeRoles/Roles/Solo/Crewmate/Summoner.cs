@@ -7,12 +7,12 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.AutoActivator;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
-using ExtremeRoles.Module.AbilityBehavior;
 
-using UnityObject = UnityEngine.Object;
-using ExtremeRoles.Module.ButtonAutoActivator;
+
 
 
 #nullable enable
@@ -21,135 +21,32 @@ namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Summoner :
     SingleRoleBase,
-    IRoleAutoBuildAbility
+    IRoleAbility
 {
-	public sealed class SummonerAbilityBehavior :
-		AbilityBehaviorBase, ICountBehavior
+
+	public ExtremeAbilityButton? Button
 	{
-		public int AbilityCount { get; private set; }
-		public bool IsReduceAbilityCount { private get; set; } = false;
-
-		private Func<bool> ability;
-		private Func<bool> canUse;
-		private TextMeshPro? abilityCountText = null;
-		private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
-
-		public SummonerAbilityBehavior(
-			string text, Sprite img,
-			Func<bool> canUse,
-			Func<bool> ability) : base(text, img)
+		get => this.internalButton;
+		set
 		{
-			this.ability = ability;
-			this.canUse = canUse;
-		}
-
-		public void SetCountText(string text)
-		{
-			this.buttonTextFormat = text;
-		}
-
-		public override void Initialize(ActionButton button)
-		{
-			var coolTimerText = button.cooldownTimerText;
-
-			this.abilityCountText = UnityObject.Instantiate(
-				coolTimerText, coolTimerText.transform.parent);
-			this.abilityCountText.enableWordWrapping = false;
-			this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
-			this.abilityCountText.transform.localPosition +=
-				new Vector3(-0.05f, 0.65f, 0);
-			updateAbilityCountText();
-		}
-
-		public override void AbilityOff()
-		{ }
-
-		public override void ForceAbilityOff()
-		{ }
-
-		public override bool IsCanAbilityActiving() => true;
-
-		public override bool IsUse()
-			=> this.canUse.Invoke() && this.AbilityCount > 0;
-
-		public override bool TryUseAbility(
-			float timer, AbilityState curState, out AbilityState newState)
-		{
-			newState = curState;
-
-			if (timer > 0 ||
-				curState != AbilityState.Ready ||
-				this.AbilityCount <= 0)
+			if (value is not ExtremeMultiModalAbilityButton button)
 			{
-				return false;
+				throw new ArgumentException("This role using multimodal ability");
 			}
-
-			if (!this.ability.Invoke())
-			{
-				return false;
-			}
-
-			if (this.IsReduceAbilityCount)
-			{
-				this.reduceAbilityCount();
-				this.IsReduceAbilityCount = false;
-			}
-
-			newState = this.ActiveTime <= 0.0f ?
-				AbilityState.CoolDown : AbilityState.Activating;
-
-			return true;
-		}
-
-		public override AbilityState Update(AbilityState curState)
-		{
-			if (curState == AbilityState.Activating)
-			{
-				return curState;
-			}
-
-			return
-				this.AbilityCount > 0 ? curState : AbilityState.None;
-		}
-
-		public void SetAbilityCount(int newAbilityNum)
-		{
-			this.AbilityCount = newAbilityNum;
-			updateAbilityCountText();
-		}
-
-		public void SetButtonTextFormat(string newTextFormat)
-		{
-			this.buttonTextFormat = newTextFormat;
-		}
-
-		private void reduceAbilityCount()
-		{
-			--this.AbilityCount;
-			updateAbilityCountText();
-		}
-
-		private void updateAbilityCountText()
-		{
-			if (this.abilityCountText == null)
-			{
-				return;
-			}
-			this.abilityCountText.text = string.Format(
-				Translation.GetString(this.buttonTextFormat),
-				this.AbilityCount);
+			this.internalButton = button;
 		}
 	}
+	private ExtremeMultiModalAbilityButton? internalButton;
 
-
-	public ExtremeAbilityButton? Button { get; set; }
-
-    public enum DelusionerOption
-    {
+	public enum Option
+	{
+		MarkingCount,
+		SummonCount,
         Range,
     }
-	private GameData.PlayerInfo? targetData;
 
+	private GameData.PlayerInfo? targetData;
+	private GameData.PlayerInfo? summonTarget;
 
     private float range;
 
@@ -161,15 +58,64 @@ public sealed class Summoner :
         false, true, false, false)
     { }
 
+	public static void RpcOps(byte rolePlayerId, byte targetPlayerId, float x, float y, bool isDead)
+	{
+		var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
+		if (rolePlayer == null) { return; }
+
+		var pos = new Vector2(x, y);
+		rolePlayer.NetTransform.SnapTo(pos);
+
+		if (isDead)
+		{
+			DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+			for (int i = 0; i < array.Length; ++i)
+			{
+				var target = array[i];
+				if (GameData.Instance.GetPlayerById(target.ParentId).PlayerId != targetPlayerId)
+				{
+					continue;
+				}
+				target.transform.position = new Vector3(x, y, y / 1000.0f);
+				break;
+			}
+		}
+		else
+		{
+			var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+			if (targetPlayer == null) { return; }
+			targetPlayer.NetTransform.SnapTo(pos);
+		}
+	}
+
     public void CreateAbility()
     {
-		this.Button = new ExtremeAbilityButton(
-			new SummonerAbilityBehavior(
-				Translation.GetString("SetPortal"),
-				null,
-				IsAbilityUse, UseAbility),
+		var opt = OptionManager.Instance;
+		float coolTime = opt.GetValue<float>(
+			this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
+
+		var markingAbility = new CountBehavior(
+			"marking", null,
+			isUseMarking,
+			marking);
+		markingAbility.SetCoolTime(coolTime);
+		markingAbility.SetAbilityCount(
+			opt.GetValue<int>(this.GetRoleOptionId(Option.MarkingCount)));
+
+		var summonAbility = new CountBehavior(
+			"Summon", null,
+			isUseSummon,
+			summon);
+		summonAbility.SetCoolTime(coolTime);
+		summonAbility.SetAbilityCount(
+			opt.GetValue<int>(this.GetRoleOptionId(Option.SummonCount)));
+
+		this.Button = new ExtremeMultiModalAbilityButton(
 			new RoleButtonActivator(),
-			KeyCode.F);
+			KeyCode.F,
+			markingAbility,
+			summonAbility);
+
 		this.Button.SetLabelToCrewmate();
 	}
 
@@ -196,37 +142,94 @@ public sealed class Summoner :
 
     public void ResetOnMeetingStart()
     {
-		if (this.targetData != null &&
-			this.targetData.IsDead)
+		if (this.summonTarget != null &&
+			this.summonTarget.IsDead)
 		{
-			this.targetData = null;
+			this.summonTarget = null;
 		}
-    }
-
-    public bool UseAbility()
-    {
-
-        return true;
     }
 
     protected override void CreateSpecificOption(
         IOptionInfo parentOps)
     {
 
-        CreateFloatOption(
-            DelusionerOption.Range,
-            2.5f, 0.0f, 7.5f, 0.1f,
-            parentOps);
+		CreateFloatOption(
+			RoleAbilityCommonOption.AbilityCoolTime,
+			IRoleAbilityMixin.DefaultCoolTime,
+			IRoleAbilityMixin.MinCoolTime,
+			IRoleAbilityMixin.MaxCoolTime,
+			IRoleAbilityMixin.Step,
+			parentOps,
+			format: OptionUnit.Second);
 
-        this.CreateAbilityCountOption(
-            parentOps, 3, 25);
+		CreateIntOption(
+			Option.MarkingCount,
+			3, 1, 10, 1, parentOps);
 
-    }
+		CreateFloatOption(
+			Option.Range,
+			2.5f, 0.0f, 7.5f, 0.1f,
+			parentOps);
+
+		CreateIntOption(
+			Option.SummonCount,
+			3, 1, 10, 1, parentOps);
+	}
 
     protected override void RoleSpecificInit()
     {
         var allOpt = OptionManager.Instance;
         this.range = allOpt.GetValue<float>(
-            GetRoleOptionId(DelusionerOption.Range));
+            GetRoleOptionId(Option.Range));
     }
+
+	private bool isUseMarking()
+	{
+		this.targetData = null;
+
+		PlayerControl target = Player.GetClosestPlayerInRange(
+			CachedPlayerControl.LocalPlayer, this,
+			this.range);
+		if (target == null) { return false; }
+
+		this.targetData = target.Data;
+
+		return IRoleAbility.IsCommonUse();
+	}
+
+	private bool isUseSummon()
+		=> this.summonTarget != null && IRoleAbility.IsCommonUse();
+
+	private bool summon()
+	{
+		if (this.summonTarget == null ||
+			CachedPlayerControl.LocalPlayer == null)
+		{
+			return false;
+		}
+
+		var local = CachedPlayerControl.LocalPlayer;
+
+		using (var writer = RPCOperator.CreateCaller(
+			RPCOperator.Command.SummonerOps))
+		{
+			var pos = local.PlayerControl.transform.position;
+			writer.WriteByte(local.PlayerId);
+			writer.WriteFloat(pos.x);
+			writer.WriteFloat(pos.y);
+			writer.WriteByte(this.summonTarget.PlayerId);
+			writer.WriteBoolean(this.summonTarget.IsDead);
+		}
+
+		return true;
+	}
+
+	private bool marking()
+	{
+		if (this.targetData == null) { return false; }
+
+		this.summonTarget = this.targetData;
+
+		return true;
+	}
 }

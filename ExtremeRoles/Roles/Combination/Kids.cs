@@ -22,7 +22,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.Ability.AutoActivator;
 
 
 

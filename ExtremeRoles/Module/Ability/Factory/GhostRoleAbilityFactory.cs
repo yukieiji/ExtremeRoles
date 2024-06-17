@@ -6,7 +6,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Performance;
 
 

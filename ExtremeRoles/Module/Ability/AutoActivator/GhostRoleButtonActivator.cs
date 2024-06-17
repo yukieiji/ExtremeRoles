@@ -1,0 +1,23 @@
+﻿using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance;
+
+namespace ExtremeRoles.Module.Ability.AutoActivator;
+
+public sealed class GhostRoleButtonActivator : IButtonAutoActivator
+{
+	public bool IsActive()
+	{
+		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+		return
+			(
+				localPlayer.IsKillTimerEnabled ||
+				localPlayer.ForceKillTimerContinue ||
+				FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
+			) &&
+			localPlayer.Data != null &&
+			MeetingHud.Instance == null &&
+			ExileController.Instance == null &&
+			localPlayer.Data.IsDead;
+	}
+}

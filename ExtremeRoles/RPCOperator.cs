@@ -70,6 +70,7 @@ public static class RPCOperator
         ResurrecterRpc,
         TeleporterSetPortal,
 		BaitAwakeRole,
+		SummonerOps,
 
         // インポスター
         AssasinVoteFor,

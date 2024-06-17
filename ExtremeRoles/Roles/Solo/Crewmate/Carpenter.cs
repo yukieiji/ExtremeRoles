@@ -7,7 +7,7 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;

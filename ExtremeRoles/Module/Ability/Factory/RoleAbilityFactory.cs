@@ -3,7 +3,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.Ability.AutoActivator;
 
 namespace ExtremeRoles.Module.Ability.Factory;
 
