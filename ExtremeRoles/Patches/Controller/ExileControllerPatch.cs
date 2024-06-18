@@ -110,12 +110,16 @@ public static class ExileControllerBeginePatch
         ExileController instance, ExtremeShipStatus state)
     {
         setExiledTarget(instance, null);
-        NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(
+        NetworkedPlayerInfo? player = GameData.Instance.GetPlayerById(
             state.IsMarinPlayerId);
+		if (player == null)
+		{
+			return;
+		}
 
         string transKey = state.IsAssassinateMarin ?
             "assassinateMarinSucsess" : "assassinateMarinFail";
-        string printStr = $"{player?.PlayerName}{Translation.GetString(transKey)}";
+        string printStr = $"{player.PlayerName}{Translation.GetString(transKey)}";
 
         if (instance.Player)
         {
