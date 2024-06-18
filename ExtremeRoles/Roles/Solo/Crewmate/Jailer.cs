@@ -1,16 +1,15 @@
-﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 #nullable enable
 
