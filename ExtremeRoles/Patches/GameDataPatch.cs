@@ -21,8 +21,8 @@ public static class GameDataAddPlayerPatch
 	}
 }
 
-[HarmonyPatch(typeof(GameData), nameof(GameData.Deserialize))]
-public static class GameDataDeserializePatch
+[HarmonyPatch(typeof(NetworkedPlayerInfo), nameof(NetworkedPlayerInfo.Deserialize))]
+public static class NetworkedPlayerInfoDeserializePatch
 {
 	public static void Postfix()
 	{
