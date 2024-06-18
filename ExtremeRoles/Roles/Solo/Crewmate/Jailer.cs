@@ -3,6 +3,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -108,8 +109,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			"",
-			null);
+			"AddJail", null);
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -128,8 +128,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
-	{
-	}
+	{ }
 
 	public void ResetOnMeetingStart()
 	{ }
