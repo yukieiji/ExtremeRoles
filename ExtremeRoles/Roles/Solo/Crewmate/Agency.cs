@@ -228,7 +228,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
                 switch (taskType)
                 {
                     case TakeTaskType.Normal:
-                        taskIndex = GameSystem.GetRandomNormalTaskId();
+                        taskIndex = GameSystem.GetRandomShortTaskId();
                         break;
                     case TakeTaskType.Long:
                         taskIndex = GameSystem.GetRandomLongTask();

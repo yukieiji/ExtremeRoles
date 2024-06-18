@@ -129,7 +129,7 @@ public sealed class SlaveDriver :
 				else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
 					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
-					newTaskId = GameSystem.GetRandomNormalTaskId();
+					newTaskId = GameSystem.GetRandomShortTaskId();
 				}
 				else
 				{

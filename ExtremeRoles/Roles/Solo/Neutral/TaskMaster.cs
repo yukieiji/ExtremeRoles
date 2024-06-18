@@ -96,7 +96,7 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
         }
         for (int i = 0; i < this.addNormalTask; ++i)
         {
-            this.addTask.Add(GameSystem.GetRandomNormalTaskId());
+            this.addTask.Add(GameSystem.GetRandomShortTaskId());
         }
     }
 

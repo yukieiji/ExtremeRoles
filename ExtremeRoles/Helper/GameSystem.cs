@@ -188,7 +188,7 @@ public static class GameSystem
         return taskIndex[index];
     }
 
-    public static int GetRandomNormalTaskId()
+    public static int GetRandomShortTaskId()
     {
         if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
@@ -263,12 +263,10 @@ public static class GameSystem
 
         if (SetPlayerNewTask(ref player, taskId, (uint)index))
         {
-            player.Data.Tasks[index] = new GameData.TaskInfo(
+            player.Data.Tasks[index] = new NetworkedPlayerInfo.TaskInfo(
                 taskId, (uint)index);
             player.Data.Tasks[index].Id = (uint)index;
-
-            GameData.Instance.SetDirtyBit(
-                1U << (int)player.PlayerId);
+			player.Data.MarkDirty();
         }
     }
 
@@ -391,7 +389,7 @@ public static class GameSystem
         PlayerControl player = playerInfo.Object;
 
         int index = playerInfo.Tasks.Count;
-        playerInfo.Tasks.Add(new GameData.TaskInfo((byte)taskIndex, (uint)index));
+        playerInfo.Tasks.Add(new ((byte)taskIndex, (uint)index));
         playerInfo.Tasks[index].Id = (uint)index;
 
         task.Id = (uint)index;
@@ -477,7 +475,7 @@ public static class GameSystem
                 AmongUsClient.Instance.PlayerPrefab);
         playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
 
-        GameData.Instance.AddPlayer(playerControl);
+        // GameData.Instance.AddPlayer(playerControl);
         AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
 
         var hatMng = FastDestroyableSingleton<HatManager>.Instance;
@@ -500,13 +498,13 @@ public static class GameSystem
         playerControl.SetPet(hatMng.allPets[pet].ProdId, color);
         playerControl.SetVisor(hatMng.allVisors[visor].ProdId, color);
         playerControl.SetSkin(hatMng.allSkins[skin].ProdId, color);
-        GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
+        // GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
     }
 
     private static List<int> getTaskIndex(
         NormalPlayerTask[] tasks)
     {
-        List<int> index = new List<int>();
+        List<int> index = new List<int>(tasks.Length);
         for (int i = 0; i < tasks.Length; ++i)
         {
             if (!ignoreTask.Contains(tasks[i].TaskType))

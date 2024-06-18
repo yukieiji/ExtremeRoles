@@ -94,7 +94,7 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
             }
             for (int i = 0; i < this.RevartNormalTask; ++i)
             {
-                addTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
+                addTaskId.Add(Helper.GameSystem.GetRandomShortTaskId());
             }
 
             var shuffled = addTaskId.OrderBy(
@@ -130,21 +130,20 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         {
             if (addTaskId.Count == 0) { break; }
 
-            if (player.Data.Tasks[i].Complete)
+			var task = player.Data.Tasks[i];
+            if (task.Complete)
             {
                 byte taskId = (byte)addTaskId[0];
                 addTaskId.RemoveAt(0);
-
-                if (Helper.GameSystem.SetPlayerNewTask(
-                    ref player, taskId, player.Data.Tasks[i].Id))
+				uint id = task.Id;
+				if (Helper.GameSystem.SetPlayerNewTask(
+                    ref player, taskId, id))
                 {
-                    player.Data.Tasks[i] = new GameData.TaskInfo(
-                        taskId, player.Data.Tasks[i].Id);
+                    player.Data.Tasks[i] = new (taskId, id);
                 }
             }
         }
-        GameData.Instance.SetDirtyBit(
-            1U << (int)player.PlayerId);
+		player.Data.MarkDirty();
 
     }
 
