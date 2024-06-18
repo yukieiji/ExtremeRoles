@@ -7,7 +7,7 @@ using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Patches.Option;
-
+/*
 [HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
 public static class StringOptionDecreasePatch
 {
@@ -60,3 +60,4 @@ public static class StringOptionOnEnablePatch
         return false;
     }
 }
+*/

@@ -16,10 +16,11 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Option;
 
+/*
 [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
 public static class GameOptionsMenuStartPatch
 {
-    private static List<(StringNames, Action<OptionBehaviour>)> hooks = 
+    private static List<(StringNames, Action<OptionBehaviour>)> hooks =
         new List<(StringNames, Action<OptionBehaviour>)>();
 
     public static void AddHook(StringNames targetOption, Action<OptionBehaviour> hook)
@@ -92,3 +93,4 @@ public static class GameOptionsMenuStartPatch
         return optionBehaviour;
     }
 }
+*/

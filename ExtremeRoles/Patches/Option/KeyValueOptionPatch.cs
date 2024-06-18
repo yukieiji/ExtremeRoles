@@ -4,6 +4,7 @@ using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
+/*
 [HarmonyPatch(typeof(KeyValueOption), nameof(KeyValueOption.OnEnable))]
 public static class KeyValueOptionOnEnablePatch
 {
@@ -23,3 +24,4 @@ public static class KeyValueOptionOnEnablePatch
 		}
     }
 }
+*/
