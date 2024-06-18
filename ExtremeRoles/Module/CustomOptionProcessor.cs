@@ -166,7 +166,7 @@ public static class CustomOptionCsvProcessor
 				{
 					case GameModes.Normal:
 					case GameModes.NormalFools:
-						NormalGameOptionsV07 normalOption = option.Cast<NormalGameOptionsV07>();
+						NormalGameOptionsV08 normalOption = option.Cast<NormalGameOptionsV08>();
 
 						if (option.Version < curVersion)
 						{
@@ -180,7 +180,7 @@ public static class CustomOptionCsvProcessor
 						break;
 					case GameModes.HideNSeek:
 					case GameModes.SeekFools:
-						HideNSeekGameOptionsV07 hideNSeekOption = option.Cast<HideNSeekGameOptionsV07>();
+						HideNSeekGameOptionsV08 hideNSeekOption = option.Cast<HideNSeekGameOptionsV08>();
 
 						if (option.Version < curVersion)
 						{
