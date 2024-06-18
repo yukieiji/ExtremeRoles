@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -232,11 +234,36 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 			Option.IsDeadAbilityZero,
 			true, lowBreakerOpt);
 
-		CreateBoolOption(
+		var lowBreakerKillOpt = CreateBoolOption(
 		   Option.LawbreakerCanKill,
 		   false, lowBreakerOpt,
 		   invert: true,
 		   enableCheckOption: parentOps);
+
+		var killCoolOption = CreateBoolOption(
+			KillerCommonOption.HasOtherKillCool,
+			false, lowBreakerKillOpt,
+			invert: true,
+			enableCheckOption: lowBreakerKillOpt);
+		CreateFloatOption(
+			KillerCommonOption.KillCoolDown,
+			30f, 1.0f, 120f, 0.5f,
+			killCoolOption, format: OptionUnit.Second,
+			invert: true,
+			enableCheckOption: killCoolOption);
+
+		var killRangeOption = CreateBoolOption(
+			KillerCommonOption.HasOtherKillRange,
+			false, lowBreakerKillOpt,
+			invert: true,
+			enableCheckOption: lowBreakerKillOpt);
+		CreateSelectionOption(
+			KillerCommonOption.KillRange,
+			OptionCreator.Range,
+			killRangeOption,
+			invert: true,
+			enableCheckOption: killRangeOption);
+
 		CreateBoolOption(
 		   Option.LawbreakerUseVent,
 		   true, lowBreakerOpt,
@@ -296,6 +323,10 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		{
 			lawBreakerOption = new Lawbreaker.Option(
 				optMng.GetValue<bool>(this.GetRoleOptionId(Option.LawbreakerCanKill)),
+				optMng.GetValue<bool>(this.GetRoleOptionId(KillerCommonOption.HasOtherKillCool)),
+				optMng.GetValue<float>(this.GetRoleOptionId(KillerCommonOption.KillCoolDown)),
+				optMng.GetValue<bool>(this.GetRoleOptionId(KillerCommonOption.HasOtherKillRange)),
+				optMng.GetValue<int>(this.GetRoleOptionId(KillerCommonOption.KillRange)),
 				optMng.GetValue<bool>(this.GetRoleOptionId(Option.LawbreakerUseVent)),
 				optMng.GetValue<bool>(this.GetRoleOptionId(Option.LawbreakerUseSab)));
 		}
@@ -423,6 +454,10 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 {
 	public sealed record Option(
 		bool Kill,
+		bool HasOtherKillCool,
+		float KillCool,
+		bool HasOtherKillRange,
+		int KillRange,
 		bool Vent,
 		bool Sab);
 
@@ -433,7 +468,18 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		ExtremeRoleId.Lawbreaker.ToString(),
 		ColorPalette.GamblerYellowGold,
 		option.Kill, false, option.Vent, option.Sab)
-	{ }
+	{
+		if (this.CanKill)
+		{
+			var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
+
+			this.HasOtherKillCool = option.HasOtherKillCool;
+			this.KillCoolTime = this.HasOtherKillCool ? option.KillCool : baseOption.GetFloat(FloatOptionNames.KillCooldown);
+
+			this.HasOtherKillRange = option.HasOtherKillRange;
+			this.KillRange = this.HasOtherKillRange ? option.KillRange : baseOption.GetInt(Int32OptionNames.KillDistance);
+		}
+	}
 
 	protected override void CreateSpecificOption(IOptionInfo parentOps)
 	{
