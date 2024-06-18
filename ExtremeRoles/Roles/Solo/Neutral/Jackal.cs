@@ -640,10 +640,14 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         var jackal = Player.GetPlayerControlById(this.jackalPlayerId);
         string fullDesc = base.GetFullDescription();
 
-        if (!jackal) { return fullDesc; }
+        if (jackal == null ||
+			jackal.Data == null)
+		{
+			return fullDesc;
+		}
 
         return string.Format(
-            fullDesc, jackal.Data?.PlayerName);
+            fullDesc, jackal.Data.PlayerName);
     }
 
     public static void BecomeToJackal(byte callerId, byte targetId)
