@@ -45,7 +45,7 @@ public static class EndGameManagerSetUpPatch
     private static List<(SingleRoleBase, byte)> setPlayerNameAndRole(
         in EndGameManager manager,
 		in IReadOnlyList<FinalSummary.PlayerSummary> summaries,
-		in IReadOnlyList<WinningPlayerData> winner)
+		in IReadOnlyList<CachedPlayerData> winner)
     {
 		List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>(winner.Count);
 
@@ -55,8 +55,8 @@ public static class EndGameManagerSetUpPatch
             Object.Destroy(pb.gameObject);
         }
         int num = Mathf.CeilToInt(7.5f);
-        IReadOnlyList<WinningPlayerData> winnerList = winner.OrderBy(
-            delegate (WinningPlayerData b)
+        IReadOnlyList<CachedPlayerData> winnerList = winner.OrderBy(
+            delegate (CachedPlayerData b)
             {
                 if (!b.IsYou)
                 {
@@ -80,7 +80,7 @@ public static class EndGameManagerSetUpPatch
 
 		for (int i = 0; i < winnerList.Count; i++)
         {
-            WinningPlayerData winningPlayerData = winnerList[i];
+            CachedPlayerData playerData = winnerList[i];
             int num2 = (i % 2 == 0) ? -1 : 1;
             int num3 = (i + 1) / 2;
             float num4 = (float)num3 / (float)num;
@@ -97,7 +97,7 @@ public static class EndGameManagerSetUpPatch
             float num7 = Mathf.Lerp(1f, 0.65f, num4) * 0.9f;
             Vector3 vector = new Vector3(num7, num7, 1f);
 
-			bool isDead = winningPlayerData.IsDead;
+			bool isDead = playerData.IsDead;
 			poolablePlayer.transform.localScale = vector;
 
             if (isDead)
@@ -111,7 +111,7 @@ public static class EndGameManagerSetUpPatch
             }
 
 			poolablePlayer.UpdateFromPlayerOutfit(
-				winningPlayerData,
+				playerData.Outfit,
 				PlayerMaterial.MaskType.None,
 				isDead, true, null);
 
@@ -123,7 +123,7 @@ public static class EndGameManagerSetUpPatch
                 text.transform.localPosition.x,
 				text.transform.localPosition.y - 1.0f, -15f);
 
-			string name = winningPlayerData.PlayerName;
+			string name = playerData.PlayerName;
 			text.text = name;
 
             foreach (var data in summaries)
