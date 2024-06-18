@@ -247,9 +247,8 @@ public static class Player
         int taskNum = 0;
         int compNum = 0;
 
-        foreach (GameData.TaskInfo task in player.Tasks.GetFastEnumerator())
+        foreach (var task in player.Tasks.GetFastEnumerator())
         {
-
             ++taskNum;
 
             if (task.Complete)
