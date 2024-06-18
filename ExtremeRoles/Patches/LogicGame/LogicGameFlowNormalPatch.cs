@@ -79,7 +79,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         if (statistics.TeamImpostorAlive >= (statistics.TotalAlive - statistics.TeamImpostorAlive) &&
             statistics.SeparatedNeutralAlive.Count == 0)
         {
-            GameOverReason endReason = TempData.LastDeathReason switch
+            GameOverReason endReason = GameData.LastDeathReason switch
             {
                 DeathReason.Exile => GameOverReason.ImpostorByVote,
                 DeathReason.Kill  => GameOverReason.ImpostorByKill,
