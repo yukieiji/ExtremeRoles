@@ -20,7 +20,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
-
+/*
 [Il2CppRegister]
 public sealed class ExtremeOptionMenu : MonoBehaviour
 {
@@ -249,3 +249,4 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 		return template;
 	}
 }
+*/

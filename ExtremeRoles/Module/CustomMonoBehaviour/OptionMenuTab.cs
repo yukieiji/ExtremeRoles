@@ -10,7 +10,7 @@ using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
-
+/*
 [Il2CppRegister]
 public sealed class OptionMenuTab : MonoBehaviour
 {
@@ -177,3 +177,4 @@ public sealed class OptionMenuTab : MonoBehaviour
 		this.template = option;
 	}
 }
+*/
