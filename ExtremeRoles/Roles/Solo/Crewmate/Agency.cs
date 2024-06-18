@@ -79,10 +79,8 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             Sound.PlaySound(
                 Sound.Type.AgencyTakeTask, 1.2f);
         }
-
-        GameData.Instance.SetDirtyBit(
-            1U << (int)targetPlayer.PlayerId);
-    }
+		targetPlayer.Data.MarkDirty();
+	}
 
 
     public void CreateAbility()
