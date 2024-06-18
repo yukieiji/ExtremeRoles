@@ -135,8 +135,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 		public void SetTarget(byte playerId)
 		{
+			var info = GameData.Instance.GetPlayerById(playerId);
+			if (info == null)
+			{
+				return;
+			}
 			this.playerId = playerId;
-			this.playerName = GameData.Instance.GetPlayerById(playerId)?.DefaultOutfit.PlayerName;
+			this.playerName = info.DefaultOutfit.PlayerName;
 		}
 	}
 }

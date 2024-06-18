@@ -459,7 +459,14 @@ public sealed class Guesser :
     {
         void openGusserUi()
         {
-            if (this.uiPrefab == null)
+			byte targetPlayerId = instance.TargetPlayerId;
+			var info = GameData.Instance.GetPlayerById(targetPlayerId);
+			if (info == null)
+			{
+				return;
+			}
+
+			if (this.uiPrefab == null)
             {
                 this.uiPrefab = UnityEngine.Object.Instantiate(
                     Loader.GetUnityObjectFromResources<GameObject>(
@@ -496,12 +503,10 @@ public sealed class Guesser :
                 );
             }
 
-            byte targetPlayerId = instance.TargetPlayerId;
-            this.guesserUi.SetTitle(
+			this.guesserUi.SetTitle(
                 string.Format(
                     Translation.GetString("guesserUiTitle"),
-                    GameData.Instance.GetPlayerById(
-                        targetPlayerId)?.DefaultOutfit.PlayerName));
+					info.DefaultOutfit.PlayerName));
             this.guesserUi.SetInfo(
                 string.Format(
                     Translation.GetString("guesserUiInfo"),

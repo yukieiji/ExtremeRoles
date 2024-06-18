@@ -1278,10 +1278,14 @@ public sealed class Doll :
         var hypno = Player.GetPlayerControlById(this.hypnotistPlayerId);
         string fullDesc = base.GetFullDescription();
 
-        if (!hypno) { return fullDesc; }
+        if (hypno == null ||
+			hypno.Data == null)
+		{
+			return fullDesc;
+		}
 
         return string.Format(
-            fullDesc, hypno.Data?.PlayerName);
+            fullDesc, hypno.Data.PlayerName);
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole)

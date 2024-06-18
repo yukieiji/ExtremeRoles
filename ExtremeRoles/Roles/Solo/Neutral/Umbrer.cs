@@ -50,8 +50,8 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             foreach (NetworkedPlayerInfo player in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player == null || player?.Object == null) { continue; }
-                if (player.IsDead || player.Disconnected) { continue; }
+                if (player == null || player.Object == null ||
+					player.IsDead || player.Disconnected) { continue; }
 
                 if (!this.firstStage.Contains(player.PlayerId))
                 {
@@ -65,7 +65,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         public bool IsContain(byte playerId) =>
             this.firstStage.Contains(playerId) || this.finalStage.Contains(playerId);
 
-        public bool IsFirstStage(byte playerId) => 
+        public bool IsFirstStage(byte playerId) =>
             this.firstStage.Contains(playerId);
 
         public bool IsFinalStage(byte playerId) =>

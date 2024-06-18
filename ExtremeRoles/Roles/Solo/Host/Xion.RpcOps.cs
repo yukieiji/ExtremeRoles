@@ -60,7 +60,8 @@ public sealed partial class Xion
             case XionRpcOpsCode.Teleport:
                 float x = reader.ReadSingle();
                 float y = reader.ReadSingle();
-                if (xionPlayer?.Object == null) { return; }
+                if (xionPlayer == null ||
+					xionPlayer.Object == null) { return; }
                 teleport(xionPlayer.Object, new Vector2(x, y));
                 break;
             case XionRpcOpsCode.NoXionVote:

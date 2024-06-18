@@ -709,10 +709,14 @@ public sealed class Servant :
         var queen = Player.GetPlayerControlById(this.queenPlayerId);
         string fullDesc = base.GetFullDescription();
 
-        if (!queen) { return fullDesc; }
+        if (queen == null ||
+            queen.Data == null)
+		{
+			return fullDesc;
+		}
 
         return string.Format(
-            fullDesc, queen.Data?.PlayerName);
+            fullDesc, queen.Data.PlayerName);
     }
 
     public override Color GetTargetRoleSeeColor(
