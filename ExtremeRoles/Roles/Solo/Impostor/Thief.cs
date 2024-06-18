@@ -26,7 +26,7 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
     }
 
 
-    private GameData.PlayerInfo? targetBody;
+    private NetworkedPlayerInfo? targetBody;
 	private byte targetPlayerId = byte.MaxValue;
 	private float activeRange;
 	private bool isAddEffect;
@@ -160,7 +160,7 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }

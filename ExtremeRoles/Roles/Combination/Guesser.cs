@@ -519,7 +519,7 @@ public sealed class Guesser :
         render.transform.localScale *= new Vector2(0.625f, 0.625f);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.guesserUi = null;
     }

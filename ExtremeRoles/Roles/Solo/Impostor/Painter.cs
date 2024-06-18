@@ -93,7 +93,7 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
     public bool IsAbilityUse()
     {
         this.targetDeadBodyId = byte.MaxValue;
-        GameData.PlayerInfo info = Player.GetDeadBodyInfo(
+        NetworkedPlayerInfo info = Player.GetDeadBodyInfo(
             this.paintDistance);
 
         this.Button.Behavior.SetButtonImage(
@@ -108,7 +108,7 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
         return IRoleAbility.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

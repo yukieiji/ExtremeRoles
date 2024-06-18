@@ -12,8 +12,8 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(0)] PlayerControl sourcePlayer,
         [HarmonyArgument(1)] string chatText)
     {
-		GameData.PlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
-		GameData.PlayerInfo sourcePlayerData = sourcePlayer.Data;
+		NetworkedPlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
+		NetworkedPlayerInfo sourcePlayerData = sourcePlayer.Data;
 
 		if (VoiceEngine.Instance == null ||
             chatText.StartsWith(Command.CommandManager.CmdChar) ||

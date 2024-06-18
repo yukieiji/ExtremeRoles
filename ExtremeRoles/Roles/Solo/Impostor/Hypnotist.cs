@@ -337,7 +337,7 @@ public sealed class Hypnotist :
         this.isActiveTimer = false;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         updateAwakeCheck(exiledPlayer);
 
@@ -810,7 +810,7 @@ public sealed class Hypnotist :
 		return abilityPart;
 	}
 
-    private void updateAwakeCheck(GameData.PlayerInfo? ignorePlayer)
+    private void updateAwakeCheck(NetworkedPlayerInfo? ignorePlayer)
     {
         int impNum = 0;
 
@@ -1047,7 +1047,7 @@ public sealed class Doll :
     }
 
     public void ModifiedWinPlayer(
-        GameData.PlayerInfo rolePlayerInfo,
+        NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
     {
@@ -1209,7 +1209,7 @@ public sealed class Doll :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }

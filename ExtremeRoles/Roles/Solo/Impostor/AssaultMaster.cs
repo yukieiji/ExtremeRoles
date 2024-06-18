@@ -71,14 +71,14 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         addStock(this.addStockWhenReport);
     }
 
     public void HookReportButton(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
     {
         addStock(this.addStockWhenMeetingButton);
     }
@@ -88,7 +88,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
         this.stock > 0 &&
         PlayerControl.LocalPlayer.killTimer > 0;
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         if (this.reloadButton != null && this.timerStock > 0)
         {

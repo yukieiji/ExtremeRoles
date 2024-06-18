@@ -149,7 +149,7 @@ public sealed class Shooter :
     }
 
     public void HookReportButton(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
     {
         this.canShootThisMeeting = true;
         if (rolePlayer.PlayerId == reporter.PlayerId)
@@ -159,7 +159,7 @@ public sealed class Shooter :
     }
 
     public void HookBodyReport(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter, GameData.PlayerInfo reportBody)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter, NetworkedPlayerInfo reportBody)
     {
         this.canShootThisMeeting = true;
     }
@@ -180,7 +180,7 @@ public sealed class Shooter :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         chargeInfoSetActive(true);
         this.canShootThisMeeting = true;

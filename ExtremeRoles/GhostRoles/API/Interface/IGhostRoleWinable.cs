@@ -4,6 +4,6 @@
     {
         public bool IsWin(
             GameOverReason reason,
-            GameData.PlayerInfo ghostRolePlayer);
+            NetworkedPlayerInfo ghostRolePlayer);
     }
 }

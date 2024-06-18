@@ -68,7 +68,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
                 this.body.transform.position.x,
                 this.body.transform.position.y);
 
-            foreach (GameData.PlayerInfo playerInfo in
+            foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null) { continue; }
@@ -345,7 +345,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

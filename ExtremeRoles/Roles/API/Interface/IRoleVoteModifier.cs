@@ -22,7 +22,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public void ModifiedVoteAnime(
             MeetingHud instance,
-            GameData.PlayerInfo rolePlayer,
+            NetworkedPlayerInfo rolePlayer,
             ref Dictionary<byte, int> voteIndex);
         
         public void ResetModifier();

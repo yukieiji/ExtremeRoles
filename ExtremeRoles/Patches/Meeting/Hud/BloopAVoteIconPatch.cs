@@ -20,7 +20,7 @@ public static class MeetingHudBloopAVoteIconPatch
 {
 	public static bool Prefix(
 		MeetingHud __instance,
-		[HarmonyArgument(0)] GameData.PlayerInfo voterPlayer,
+		[HarmonyArgument(0)] NetworkedPlayerInfo voterPlayer,
 		[HarmonyArgument(1)] int index, [HarmonyArgument(2)] Transform parent)
 	{
 

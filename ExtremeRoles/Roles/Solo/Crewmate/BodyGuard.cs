@@ -597,7 +597,7 @@ public sealed class BodyGuard :
     public void ResetOnMeetingStart()
     { }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     { }
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)

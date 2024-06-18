@@ -24,7 +24,7 @@ public static class RoleManagerSelectRolesPatch
 
 		int adjustedNumImpostors = currentOption.GetAdjustedNumImpostors(allPlayer.Count);
 
-		var il2CppListPlayer = new Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo>();
+		var il2CppListPlayer = new Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>();
 
 		foreach (PlayerControl player in allPlayer)
 		{

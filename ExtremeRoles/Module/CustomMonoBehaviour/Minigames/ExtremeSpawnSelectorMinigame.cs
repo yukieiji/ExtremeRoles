@@ -124,7 +124,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 		if (GameManager.Instance != null && GameManager.Instance.IsNormal())
 		{
-			foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
+			foreach (NetworkedPlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
 				if (playerInfo != null &&
 					playerInfo.Object != null &&

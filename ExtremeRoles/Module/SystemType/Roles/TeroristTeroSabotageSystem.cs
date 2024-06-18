@@ -78,7 +78,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				option.DeadPlayerActivateTime);
 		}
 
-		public bool CanUse(GameData.PlayerInfo pc)
+		public bool CanUse(NetworkedPlayerInfo pc)
 			=> pc.Object.CanMove && FindTeroSaboTask(pc.Object) &&
 			(!pc.IsDead || this.info.CanUseDeadPlayer);
 

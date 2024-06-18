@@ -163,7 +163,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         upgradeAssistant();
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.info.Clear();
     }
@@ -179,7 +179,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
     public void HookReportButton(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter)
+        NetworkedPlayerInfo reporter)
     {
         this.targetCrime = null;
         this.searchCrimeInfoTime = float.MaxValue;
@@ -187,8 +187,8 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         this.targetCrime = this.info.GetCrimeInfo(reportBody.PlayerId);
         this.searchCrimeInfoTime = ExtremeRoleManager.GameRole[
@@ -453,15 +453,15 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 
     public void HookReportButton(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter)
+        NetworkedPlayerInfo reporter)
     {
         this.deadBodyInfo.Clear();
     }
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         if (this.IsSameControlId(ExtremeRoleManager.GameRole[rolePlayer.PlayerId]))
         {
@@ -767,7 +767,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
     public bool IsOpen() => Minigame.Instance != null;
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.meeting = null;
         this.callAnotherButton = false;
@@ -826,7 +826,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
     public void HookReportButton(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter)
+        NetworkedPlayerInfo reporter)
     {
         if (this.callAnotherButton &&
             CachedPlayerControl.LocalPlayer.PlayerId == reporter.PlayerId &&
@@ -841,8 +841,8 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         return;
     }

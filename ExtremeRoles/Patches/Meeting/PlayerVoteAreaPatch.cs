@@ -47,7 +47,7 @@ public static class NamePlateHelper
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]
 public static class PlayerVoteAreaCosmetics
 {
-	public static void Postfix(PlayerVoteArea __instance, GameData.PlayerInfo playerInfo)
+	public static void Postfix(PlayerVoteArea __instance, NetworkedPlayerInfo playerInfo)
 	{
 		NamePlateHelper.UpdateNameplate(
 			__instance, playerInfo.PlayerId);

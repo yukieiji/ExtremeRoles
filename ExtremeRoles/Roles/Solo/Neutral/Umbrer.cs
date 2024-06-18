@@ -47,7 +47,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         {
             if (this.firstStage.Count <= 0) { return false; }
 
-            foreach (GameData.PlayerInfo player in
+            foreach (NetworkedPlayerInfo player in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (player == null || player?.Object == null) { continue; }
@@ -84,7 +84,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             foreach (byte playerId in this.firstStage)
             {
 
-                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+                NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
                 if (player == null ||
                     player.IsDead ||
@@ -260,7 +260,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -380,7 +380,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         byte sourcePlayerId = sourcePlayer.PlayerId;
         byte rolePlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-        foreach (GameData.PlayerInfo playerInfo in
+        foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (playerInfo == null) { continue; }
@@ -414,7 +414,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         foreach (var (playerId, poolPlayer) in this.playerIcon)
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
             if (this.container.IsContain(playerId) ||
                 player == null ||

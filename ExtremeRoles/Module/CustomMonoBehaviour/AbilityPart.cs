@@ -73,7 +73,7 @@ public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 	}
 
 	public float CanUse(
-		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+		NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
 	{
 		float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),

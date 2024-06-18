@@ -63,7 +63,7 @@ public static class GameDataRecomputeTaskCountsPatch
 		int completedTask = 0;
 		int doTaskCrew = 0;
 
-		foreach (GameData.PlayerInfo playerInfo in __instance.AllPlayers.GetFastEnumerator())
+		foreach (NetworkedPlayerInfo playerInfo in __instance.AllPlayers.GetFastEnumerator())
 		{
 			if (!playerInfo.Disconnected &&
 				playerInfo.Tasks != null &&

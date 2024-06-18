@@ -343,7 +343,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         resetMeeting(localPlayer.PlayerId);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

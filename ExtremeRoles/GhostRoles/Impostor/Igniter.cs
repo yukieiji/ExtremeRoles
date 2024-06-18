@@ -33,7 +33,7 @@ public sealed class Igniter : GhostRoleBase
         Palette.ImpostorRed)
     { }
 
-    public static bool TryComputeVison(GameData.PlayerInfo player, out float vison)
+    public static bool TryComputeVison(NetworkedPlayerInfo player, out float vison)
     {
         vison = float.MaxValue;
         SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];

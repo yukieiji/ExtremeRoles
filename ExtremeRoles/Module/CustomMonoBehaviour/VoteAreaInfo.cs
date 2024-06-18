@@ -137,7 +137,7 @@ public sealed class LocalPlayerVoteAreaInfo : VoteAreaInfo
 [Il2CppRegister]
 public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 {
-	private GameData.PlayerInfo votePlayerInfo;
+	private NetworkedPlayerInfo votePlayerInfo;
 
 	public OtherPlayerVoteAreaInfo(IntPtr ptr) : base(ptr) { }
 

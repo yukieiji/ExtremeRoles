@@ -165,7 +165,7 @@ public static class EndGameManagerSetUpPatch
     private static void setWinDetailText(
         in EndGameManager manager,
 		in List<(SingleRoleBase, byte)> winNeutral,
-		in IReadOnlyList<GameData.PlayerInfo> plusWinner)
+		in IReadOnlyList<NetworkedPlayerInfo> plusWinner)
     {
 		var winText = manager.WinText;
 

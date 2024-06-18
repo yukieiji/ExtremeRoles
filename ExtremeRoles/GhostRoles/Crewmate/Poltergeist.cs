@@ -27,7 +27,7 @@ public sealed class Poltergeist : GhostRoleBase
     private float range;
 
 	private DeadBody? carringBody;
-	private GameData.PlayerInfo? targetBody;
+	private NetworkedPlayerInfo? targetBody;
 
     public Poltergeist() : base(
         true,

@@ -90,7 +90,7 @@ public sealed class SlaveDriver :
 			GetRoleOptionId(SlaveDriverOption.Range));
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -100,7 +100,7 @@ public sealed class SlaveDriver :
 		this.target = byte.MaxValue;
 		foreach (byte playerId in this.effectPlayer)
 		{
-			GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+			NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
 			if (player == null ||
 				!ExtremeRoleManager.GameRole[player.PlayerId].HasTask()) { continue; }

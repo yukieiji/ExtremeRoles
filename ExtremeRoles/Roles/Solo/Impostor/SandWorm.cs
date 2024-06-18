@@ -175,7 +175,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         return isVentIn() && this.targetPlayer != null;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

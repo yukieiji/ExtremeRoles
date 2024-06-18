@@ -365,7 +365,7 @@ public sealed class Yandere :
         this.CanKill = false;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         if (this.isRunawayNextMeetingEnd)
         {
@@ -514,7 +514,7 @@ public sealed class Yandere :
         PlayerControl rolePlayer,
         Vector2 pos)
     {
-        foreach (GameData.PlayerInfo playerInfo in
+        foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 

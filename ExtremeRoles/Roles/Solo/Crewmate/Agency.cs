@@ -125,7 +125,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
-        GameData.PlayerInfo targetPlayerInfo = GameData.Instance.GetPlayerById(
+        NetworkedPlayerInfo targetPlayerInfo = GameData.Instance.GetPlayerById(
             this.TargetPlayer);
 
         var shuffleTaskIndex = Enumerable.Range(
@@ -202,7 +202,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

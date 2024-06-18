@@ -166,7 +166,7 @@ public sealed class Missionary :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		if (exiledPlayer != null)
 		{

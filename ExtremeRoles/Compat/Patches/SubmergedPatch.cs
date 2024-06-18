@@ -20,7 +20,7 @@ namespace ExtremeRoles.Compat.Patches;
 
 public static class ExileControllerPatchesPatch
 {
-	public static bool ExileController_BeginPrefix(ExileController __instance, GameData.PlayerInfo exiled, bool tie)
+	public static bool ExileController_BeginPrefix(ExileController __instance, NetworkedPlayerInfo exiled, bool tie)
 	{
 		return ExtremeRoles.Patches.Controller.ExileControllerBeginePatch.PrefixRun(__instance, exiled, tie);
 	}

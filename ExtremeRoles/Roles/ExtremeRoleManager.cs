@@ -402,7 +402,7 @@ public static class ExtremeRoleManager
         }
     }
 	public static bool IsAliveWinNeutral(
-		SingleRoleBase role, GameData.PlayerInfo playerInfo)
+		SingleRoleBase role, NetworkedPlayerInfo playerInfo)
 		=> role.Id switch
 		{
 			ExtremeRoleId.Neet => !(playerInfo.IsDead || playerInfo.Disconnected),

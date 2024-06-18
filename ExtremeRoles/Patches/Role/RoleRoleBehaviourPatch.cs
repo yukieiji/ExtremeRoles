@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches.Role
         public static bool Prefix(
             RoleBehaviour __instance,
             ref bool __result,
-            [HarmonyArgument(0)] GameData.PlayerInfo target)
+            [HarmonyArgument(0)] NetworkedPlayerInfo target)
         {
             if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 

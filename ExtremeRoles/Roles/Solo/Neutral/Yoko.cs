@@ -70,7 +70,7 @@ public sealed class Yoko :
     { }
 
     public void ModifiedWinPlayer(
-        GameData.PlayerInfo rolePlayerInfo,
+        NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
     {
@@ -183,7 +183,7 @@ public sealed class Yoko :
 
 		this.timer = this.searchTime;
     }
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -223,7 +223,7 @@ public sealed class Yoko :
         this.timer = this.searchTime;
         bool isEnemy = false;
 
-        foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
+        foreach (NetworkedPlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 
 			if (player == null ||

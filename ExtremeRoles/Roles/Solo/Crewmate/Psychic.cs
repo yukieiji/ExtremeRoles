@@ -272,15 +272,15 @@ public sealed class Psychic :
     public string GetFakeOptionString() => "";
 
     public void HookReportButton(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
     {
         sendPhotoInfo();
     }
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         sendPhotoInfo();
     }
@@ -290,7 +290,7 @@ public sealed class Psychic :
 		this.popUpper?.Clear();
 	}
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		this.counters?.Clear();
     }

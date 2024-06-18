@@ -23,7 +23,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     }
 
 
-    public GameData.PlayerInfo targetBody;
+    public NetworkedPlayerInfo targetBody;
     public byte eatingBodyId;
 
     private float eatingRange = 1.0f;
@@ -207,7 +207,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

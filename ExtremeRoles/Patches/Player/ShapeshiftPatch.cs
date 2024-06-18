@@ -35,7 +35,7 @@ public static class PlayerControlShapeshiftPatch
 		if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup) { return false; }
 
 
-		GameData.PlayerInfo targetPlayerInfo = targetPlayer.Data;
+		NetworkedPlayerInfo targetPlayerInfo = targetPlayer.Data;
 
 		bool isSame = targetPlayerInfo.PlayerId == __instance.Data.PlayerId;
 

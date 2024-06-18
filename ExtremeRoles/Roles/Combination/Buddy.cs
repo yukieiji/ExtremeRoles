@@ -34,10 +34,10 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
 
     public sealed class BuddyContainer
     {
-        private HashSet<GameData.PlayerInfo> buddy = new HashSet<GameData.PlayerInfo>();
+        private HashSet<NetworkedPlayerInfo> buddy = new HashSet<NetworkedPlayerInfo>();
         private HashSet<byte> bytedBuddy = new HashSet<byte>();
 
-        public HashSet<GameData.PlayerInfo> PlayerInfo => this.buddy;
+        public HashSet<NetworkedPlayerInfo> PlayerInfo => this.buddy;
 
         public BuddyContainer()
         {
@@ -49,7 +49,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         {
             List<string> playerName = new List<string>();
 
-            foreach (GameData.PlayerInfo player in this.PlayerInfo)
+            foreach (NetworkedPlayerInfo player in this.PlayerInfo)
             {
                 if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
@@ -70,11 +70,11 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
             return string.Concat(playerName);
         }
 
-        public bool Contains(GameData.PlayerInfo player) => this.buddy.Contains(player);
+        public bool Contains(NetworkedPlayerInfo player) => this.buddy.Contains(player);
 
         public bool Contains(byte playerId) => this.bytedBuddy.Contains(playerId);
 
-        public void Add(GameData.PlayerInfo player)
+        public void Add(NetworkedPlayerInfo player)
         {
             this.buddy.Add(player);
             this.bytedBuddy.Add(player.PlayerId);
@@ -125,7 +125,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
             rolePlayer.Data != null &&
             rolePlayer.Data.Tasks.Count != 0)
         {
-            foreach (GameData.PlayerInfo playerId in this.buddy.PlayerInfo)
+            foreach (NetworkedPlayerInfo playerId in this.buddy.PlayerInfo)
             {
                 if (Player.GetPlayerTaskGage(playerId) < this.awakeTaskGage)
                 {

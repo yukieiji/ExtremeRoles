@@ -40,7 +40,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     public ExtremeAbilityButton? Button {  get; set; }
     private PlayerControl? tmpTarget;
     private PlayerControl? targetPlayer;
-    private GameData.PlayerInfo? targetDeadBody;
+    private NetworkedPlayerInfo? targetDeadBody;
 
     private float range;
     private float deadBodyEatActiveCoolTimePenalty;
@@ -139,7 +139,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             (hasPlayerTarget || hasDedBodyTarget);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         if (this.Button != null)
         {

@@ -135,7 +135,7 @@ public static class GameSystem
 	}
 
     public static (int, int) GetTaskInfo(
-        GameData.PlayerInfo playerInfo)
+        NetworkedPlayerInfo playerInfo)
     {
         int TotalTasks = 0;
         int CompletedTasks = 0;
@@ -383,7 +383,7 @@ public static class GameSystem
 	}
 
     public static void SetTask(
-        GameData.PlayerInfo playerInfo,
+        NetworkedPlayerInfo playerInfo,
         int taskIndex)
     {
         NormalPlayerTask task = CachedShipStatus.Instance.GetTaskById((byte)taskIndex);

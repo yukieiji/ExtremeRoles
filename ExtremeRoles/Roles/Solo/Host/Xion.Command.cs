@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             byte targetPlayerId = byte.MaxValue;
 
-            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+            foreach (NetworkedPlayerInfo player in GameData.Instance.AllPlayers)
             {
                 if (player.DefaultOutfit.PlayerName == playerName)
                 {
@@ -237,7 +237,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private static void xionPlayerToDead(byte xionPlayerId)
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(xionPlayerId);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(xionPlayerId);
 
             if (player.IsDead) { return; }
 

@@ -199,7 +199,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 		this.isAssassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 

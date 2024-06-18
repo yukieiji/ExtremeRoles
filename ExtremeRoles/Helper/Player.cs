@@ -200,7 +200,7 @@ public static class Player
 
         Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-        foreach (GameData.PlayerInfo playerInfo in
+        foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (isValidPlayer(role, sourcePlayer, playerInfo))
@@ -242,7 +242,7 @@ public static class Player
         return GetPlayerTaskGage(player.Data);
     }
 
-    public static float GetPlayerTaskGage(GameData.PlayerInfo player)
+    public static float GetPlayerTaskGage(NetworkedPlayerInfo player)
     {
         int taskNum = 0;
         int compNum = 0;
@@ -262,7 +262,7 @@ public static class Player
 
     }
 
-    public static GameData.PlayerInfo GetDeadBodyInfo(float range)
+    public static NetworkedPlayerInfo GetDeadBodyInfo(float range)
     {
         Vector2 playerPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
@@ -452,7 +452,7 @@ public static class Player
 	private static bool isValidPlayer(
         SingleRoleBase role,
         PlayerControl sourcePlayer,
-        GameData.PlayerInfo targetPlayer)
+        NetworkedPlayerInfo targetPlayer)
     {
         return (
             targetPlayer != null &&

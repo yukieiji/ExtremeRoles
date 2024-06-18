@@ -173,7 +173,7 @@ public sealed class Artist :
 		drawOps(CachedPlayerControl.LocalPlayer);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }

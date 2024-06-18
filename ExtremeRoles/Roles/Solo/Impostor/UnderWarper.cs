@@ -217,7 +217,7 @@ public sealed class UnderWarper :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         if (!this.isAwake &&
             this.killCount >= this.awakeKillCount)

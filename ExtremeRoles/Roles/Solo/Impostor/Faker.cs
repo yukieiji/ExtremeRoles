@@ -70,7 +70,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		return IRoleAbility.IsCommonUse();
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
 	{
 		return;
 	}

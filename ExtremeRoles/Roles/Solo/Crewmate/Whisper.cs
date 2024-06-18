@@ -52,7 +52,7 @@ public sealed class Whisper :
     { }
 #pragma warning restore CS8618
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }

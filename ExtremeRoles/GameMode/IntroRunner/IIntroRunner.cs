@@ -141,7 +141,7 @@ public interface IIntroRunner
 				continue;
 			}
 
-			GameData.PlayerInfo playerInfo = player.Data;
+			NetworkedPlayerInfo playerInfo = player.Data;
 
 			var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
 			if (totalTask != 0)

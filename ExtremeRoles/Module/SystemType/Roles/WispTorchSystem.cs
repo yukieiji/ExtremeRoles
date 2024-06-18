@@ -227,7 +227,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 
 			// 停電処理かつ持ってない人更新
 			int playerNum = 0;
-			foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
+			foreach (NetworkedPlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
 				if (player.IsDead ||
 					player.Disconnected ||

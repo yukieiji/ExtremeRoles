@@ -17,7 +17,7 @@ namespace ExtremeRoles.Performance
 		public PlayerControl PlayerControl;
 		public PlayerPhysics PlayerPhysics;
 		public CustomNetworkTransform NetTransform;
-		public GameData.PlayerInfo Data;
+		public NetworkedPlayerInfo Data;
 		public byte PlayerId;
 
 		public CachedPlayerControl(PlayerControl pc)

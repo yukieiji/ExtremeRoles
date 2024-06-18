@@ -145,7 +145,7 @@ public sealed class Resurrecter :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         if (this.isActiveMeetingCount &&
             this.meetingCounter >= this.maxMeetingCount)
@@ -535,7 +535,7 @@ public sealed class Resurrecter :
 
     private void replaceTask(PlayerControl rolePlayer)
     {
-        GameData.PlayerInfo playerInfo = rolePlayer.Data;
+        NetworkedPlayerInfo playerInfo = rolePlayer.Data;
 
         var shuffleTaskIndex = Enumerable.Range(
             0, playerInfo.Tasks.Count).ToList().OrderBy(

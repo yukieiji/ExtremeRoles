@@ -16,7 +16,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using TempWinData = Il2CppSystem.Collections.Generic.List<WinningPlayerData>;
-using Player = GameData.PlayerInfo;
+using Player = NetworkedPlayerInfo;
 
 #nullable enable
 

@@ -101,7 +101,7 @@ public sealed class CurseMaker :
     private Dictionary<byte, Arrow> deadBodyArrow;
     private Dictionary<byte, DeadBodyInfo> deadBodyData;
 
-    private GameData.PlayerInfo targetBody;
+    private NetworkedPlayerInfo targetBody;
     private byte deadBodyId;
 
     private bool isDeadBodySearch = false;
@@ -399,7 +399,7 @@ public sealed class CurseMaker :
         deadBodyData.Clear();
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

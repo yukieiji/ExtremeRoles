@@ -212,7 +212,7 @@ public sealed class Miner :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -252,7 +252,7 @@ public sealed class Miner :
 			}
             Vector2 pos = mine.transform.position;
 
-            foreach (GameData.PlayerInfo playerInfo in
+            foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null ||
@@ -311,7 +311,7 @@ public sealed class Miner :
 
             if (this.isShowKillLog)
             {
-                GameData.PlayerInfo killPlayer = GameData.Instance.GetPlayerById(player);
+                NetworkedPlayerInfo killPlayer = GameData.Instance.GetPlayerById(player);
 
                 if (killPlayer != null)
                 {

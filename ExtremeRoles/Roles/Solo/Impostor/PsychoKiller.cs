@@ -101,7 +101,7 @@ public sealed class PsychoKiller :
 			byte.MaxValue);
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
 		if (this.hasSelfTimer)
 		{

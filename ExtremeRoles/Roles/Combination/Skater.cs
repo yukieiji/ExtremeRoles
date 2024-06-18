@@ -154,7 +154,7 @@ public sealed class Skater :
 		this.setBehaviourEnable(false);
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{ }
 
 	public void ResetOnMeetingStart()

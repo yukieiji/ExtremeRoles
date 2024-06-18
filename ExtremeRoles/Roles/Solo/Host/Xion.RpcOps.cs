@@ -48,7 +48,7 @@ public sealed partial class Xion
         byte playerId = reader.ReadByte();
         XionRpcOpsCode ops = (XionRpcOpsCode)reader.ReadByte();
         Xion xion = ExtremeRoleManager.GetSafeCastedRole<Xion>(playerId);
-        GameData.PlayerInfo xionPlayer = GameData.Instance.GetPlayerById(playerId);
+        NetworkedPlayerInfo xionPlayer = GameData.Instance.GetPlayerById(playerId);
 
         switch (ops)
         {

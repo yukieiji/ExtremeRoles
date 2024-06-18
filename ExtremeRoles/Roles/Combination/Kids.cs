@@ -322,7 +322,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         };
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -425,11 +425,11 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public bool IsWin(
         GameOverReason reason,
-        GameData.PlayerInfo ghostRolePlayer) => this.system != null && this.system.IsWin(this);
+        NetworkedPlayerInfo ghostRolePlayer) => this.system != null && this.system.IsWin(this);
 
     public void SetWinPlayerNum(byte rolePlayerId)
     {
-        foreach (GameData.PlayerInfo player in
+        foreach (NetworkedPlayerInfo player in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (player == null ||

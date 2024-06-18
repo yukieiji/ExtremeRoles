@@ -404,7 +404,7 @@ public static class RPCOperator
     {
         foreach (byte id in playerId)
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(id);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(id);
             if (player == null) { continue; }
             ExtremeRolesPlugin.ShipState.AddWinner(player);
         }

@@ -50,7 +50,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 		return;
 	}

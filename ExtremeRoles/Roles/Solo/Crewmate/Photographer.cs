@@ -34,14 +34,14 @@ public sealed class Photographer :
 		private readonly byte playerId;
 
 		public PlayerPosInfo(
-            GameData.PlayerInfo player)
+            NetworkedPlayerInfo player)
         {
 			this.playerId = player.PlayerId;
             this.PlayerName = player.PlayerName;
 			Player.TryGetPlayerRoom(player.Object, out var room);
 			this.Room = room;
 		}
-		public PlayerPosInfo(GameData.PlayerInfo player, SystemTypes? room)
+		public PlayerPosInfo(NetworkedPlayerInfo player, SystemTypes? room)
 		{
 			this.playerId = player.PlayerId;
 			this.PlayerName = player.PlayerName;
@@ -380,15 +380,15 @@ public sealed class Photographer :
     public string GetFakeOptionString() => "";
 
     public void HookReportButton(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
     {
         sendPhotoInfo();
     }
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         sendPhotoInfo();
     }
@@ -401,7 +401,7 @@ public sealed class Photographer :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         this.photoCreater.Reset();
     }

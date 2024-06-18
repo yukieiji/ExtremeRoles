@@ -20,7 +20,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     private DeadBody carringBody;
     private float[] alphaValue;
     private bool canReportOnCarry;
-    private GameData.PlayerInfo targetBody;
+    private NetworkedPlayerInfo targetBody;
 
     public enum CarrierOption
     {
@@ -152,7 +152,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
         return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

@@ -200,7 +200,7 @@ public sealed class Mover :
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

@@ -190,7 +190,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		curOption.SetFloat(FloatOptionNames.ImpostorLightMod, impostorVision);
 	}
 
-	public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
+	public float CalculateLightRadius(NetworkedPlayerInfo player, bool neutral, bool neutralImpostor)
 	{
 		object? value = calculateLightRadiusMethod.Invoke(
 			this.submarineStatus, new object?[] { null, neutral, neutralImpostor });
@@ -198,7 +198,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	}
 
 	public float CalculateLightRadius(
-		GameData.PlayerInfo player, float visionMod, bool applayVisionEffects = true)
+		NetworkedPlayerInfo player, float visionMod, bool applayVisionEffects = true)
 	{
 		// サブマージドの視界計算のロジックは「クルーだと停電効果受ける、インポスターだと受けないので」
 		// 1. まずはデフォルトの視界をMOD側で用意した視界の広さにリプレイス
@@ -362,7 +362,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	}
 
 	public (float, bool, bool) IsCustomVentUseResult(
-		Vent vent, GameData.PlayerInfo player, bool isVentUse)
+		Vent vent, NetworkedPlayerInfo player, bool isVentUse)
 	{
 		object? valueObj = inTransitionField.GetValue(null);
 
@@ -540,7 +540,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 #pragma warning restore CS8604
 
 		// このコメントに沿って関数調整：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
-		GameData.PlayerInfo? info = null;
+		NetworkedPlayerInfo? info = null;
 		bool tie = false;
 		Type exileControllerPatches = ClassType.First(
 			t => t.Name == "ExileControllerPatches");

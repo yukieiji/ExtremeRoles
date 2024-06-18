@@ -118,7 +118,7 @@ public sealed class Delusioner :
 
     public void ModifiedVoteAnime(
         MeetingHud instance,
-        GameData.PlayerInfo rolePlayer,
+        NetworkedPlayerInfo rolePlayer,
         ref Dictionary<byte, int> voteIndex)
     {
         if (voteIndex.TryGetValue(
@@ -150,7 +150,7 @@ public sealed class Delusioner :
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -186,7 +186,7 @@ public sealed class Delusioner :
 			Map.AddSpawnPoint(randomPos, teloportTarget);
         }
 
-		foreach (GameData.PlayerInfo player in allPlayer.GetFastEnumerator())
+		foreach (NetworkedPlayerInfo player in allPlayer.GetFastEnumerator())
         {
             if (player == null) { continue; }
             if (!player.Disconnected &&

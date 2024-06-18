@@ -183,7 +183,7 @@ public sealed partial class Xion
     {
         return () =>
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
             if (player == null || player.Disconnected) { return; }
 
             if (Key.IsAltDown())

@@ -55,7 +55,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 	public void StartReportTimer(
 		Color color,
-		GameData.PlayerInfo target,
+		NetworkedPlayerInfo target,
 		float timer = 0.0f)
 	{
 		this.rend.enabled = true;
@@ -92,7 +92,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 	}
 
 	[HideFromIl2Cpp]
-	private IEnumerator delayReport(float targetTime, GameData.PlayerInfo target)
+	private IEnumerator delayReport(float targetTime, NetworkedPlayerInfo target)
 	{
 		if (this.text == null)
 		{
@@ -118,7 +118,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 		reportTarget(target);
 	}
 
-	private static void reportTarget(GameData.PlayerInfo target)
+	private static void reportTarget(NetworkedPlayerInfo target)
 	{
 		CachedPlayerControl.LocalPlayer.PlayerControl.CmdReportDeadBody(target);
 	}

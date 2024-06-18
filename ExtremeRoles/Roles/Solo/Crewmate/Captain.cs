@@ -140,7 +140,7 @@ public sealed class Captain :
     }
     public void ModifiedVoteAnime(
         MeetingHud instance,
-        GameData.PlayerInfo rolePlayer,
+        NetworkedPlayerInfo rolePlayer,
         ref Dictionary<byte, int> voteIndex)
     {
         PlayerVoteArea pva = instance.playerStates.FirstOrDefault(

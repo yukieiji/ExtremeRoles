@@ -160,7 +160,7 @@ public static class VentCanUsePatch
     public static bool Prefix(
         Vent __instance,
         ref float __result,
-        [HarmonyArgument(0)] GameData.PlayerInfo playerInfo,
+        [HarmonyArgument(0)] NetworkedPlayerInfo playerInfo,
         [HarmonyArgument(1)] out bool canUse,
         [HarmonyArgument(2)] out bool couldUse)
     {
