@@ -109,7 +109,8 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			"AddJail", null);
+			"AddJail",
+			Loader.GetSpriteFromResources(ExtremeRoleId.Jailer));
 		this.Button?.SetLabelToCrewmate();
 	}
 
