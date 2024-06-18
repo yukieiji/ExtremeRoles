@@ -103,10 +103,12 @@ public static class HudManagerUpdatePatch
 
     public static bool Prefix(HudManager __instance)
     {
+		/*
         if (__instance.GameSettings != null)
         {
             __instance.GameSettings.fontSize = 1.2f;
         }
+		*/
         if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
         {
             __instance.UseButton.ToggleVisible(false);
