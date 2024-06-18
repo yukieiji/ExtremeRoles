@@ -32,7 +32,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public Harmony Harmony { get; } = new Harmony(Id);
 
     public static ExtremeRolesPlugin Instance;
-    public static ExtremeShipStatus ShipState = new ExtremeShipStatus();
+    public static ExtremeShipStatus ShipState;
 
     internal static BepInEx.Logging.ManualLogSource Logger;
 
@@ -63,6 +63,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
 	private void normalBoot()
 	{
+		ShipState = new ExtremeShipStatus();
 		Helper.Translation.Load();
 
 		DebugMode = Config.Bind("DeBug", "DebugMode", false);
