@@ -6,6 +6,7 @@ using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes;
 
 using Il2CppType = Il2CppSystem.Type;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
 
@@ -21,7 +22,8 @@ public static class Il2CppExtension
 			.MakeGenericMethod(type)
 			.Invoke(self, Array.Empty<object>());
 	}
-	public static bool IsTryCast<T>(this Il2CppObjectBase? self, out T? obj) where T : Il2CppObjectBase
+
+	public static bool IsTryCast<T>(this Il2CppObjectBase? self, [NotNullWhen(true)] out T? obj) where T : Il2CppObjectBase
 	{
 		if (self == null)
 		{

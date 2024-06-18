@@ -10,6 +10,7 @@ using ExtremeRoles.Module.CustomOption;
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Il2Cpp;
 
 namespace ExtremeRoles.Module;
 
@@ -21,7 +22,7 @@ public static class CustomOptionCsvProcessor
 	private const string vanilaOptionKey = "BytedVanillaOptions";
 
 	private const string comma = ",";
-	private const int curVersion = 7;
+	private const int curVersion = 8;
 
 	private sealed class StringCleaner
 	{
@@ -166,29 +167,19 @@ public static class CustomOptionCsvProcessor
 				{
 					case GameModes.Normal:
 					case GameModes.NormalFools:
-						NormalGameOptionsV08 normalOption = option.Cast<NormalGameOptionsV08>();
-
-						if (option.Version < curVersion)
+						if (!option.IsTryCast<NormalGameOptionsV08>(out var normalOption))
 						{
 							normalOption = gameOptionManager.MigrateNormalGameOptions(option);
 						}
-
-						if (normalOption == null) { continue; }
-
 						gameOptionManager.normalGameHostOptions = normalOption;
 						gameOptionManager.SaveNormalHostOptions();
 						break;
 					case GameModes.HideNSeek:
 					case GameModes.SeekFools:
-						HideNSeekGameOptionsV08 hideNSeekOption = option.Cast<HideNSeekGameOptionsV08>();
-
-						if (option.Version < curVersion)
+						if (!option.IsTryCast<HideNSeekGameOptionsV08>(out var hideNSeekOption))
 						{
 							hideNSeekOption = gameOptionManager.MigrateHideNSeekGameOptions(option);
 						}
-
-						if (hideNSeekOption == null) { continue; }
-
 						gameOptionManager.hideNSeekGameHostOptions = hideNSeekOption;
 						gameOptionManager.SaveHideNSeekHostOptions();
 						break;
