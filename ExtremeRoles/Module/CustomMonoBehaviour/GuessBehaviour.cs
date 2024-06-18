@@ -25,6 +25,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				RoleTypes.Crewmate,
 				RoleTypes.Scientist,
 				RoleTypes.Engineer,
+				RoleTypes.Noisemaker,
+				RoleTypes.Tracker,
 			};
 
 			public string GetRoleName()

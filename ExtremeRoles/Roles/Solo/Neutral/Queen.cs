@@ -173,26 +173,21 @@ public sealed class Queen :
         SingleRoleBase targetRole,
         PlayerControl targetPlayer)
     {
-        var multiAssignRole = targetRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
+        if (targetRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is VanillaRoleWrapper)
         {
-            if (multiAssignRole.AnotherRole is VanillaRoleWrapper)
-            {
-                FastDestroyableSingleton<RoleManager>.Instance.SetRole(
-                    targetPlayer, RoleTypes.Crewmate);
-                return;
-            }
-        }
+			FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+				targetPlayer, RoleTypes.Crewmate);
+			return;
+		}
 
         switch (targetPlayer.Data.Role.Role)
         {
             case RoleTypes.Crewmate:
             case RoleTypes.Impostor:
-                FastDestroyableSingleton<RoleManager>.Instance.SetRole(
-                    targetPlayer, RoleTypes.Crewmate);
-                break;
-            default:
-                break;
+				FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+					targetPlayer, RoleTypes.Crewmate);
+				break;
         }
     }
     private static void resetRole(

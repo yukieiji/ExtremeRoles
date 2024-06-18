@@ -168,7 +168,10 @@ public static class PlayerControlFixedUpdatePatch
 		var ship = ExtremeGameModeManager.Instance.ShipOption;
 
 		if (!role.TryGetVanillaRoleId(out RoleTypes roleId) ||
-			roleId is RoleTypes.Shapeshifter or RoleTypes.Impostor)
+			roleId is
+				RoleTypes.Impostor or
+				RoleTypes.Shapeshifter or
+				RoleTypes.Phantom)
 		{
 			if (ventButtonShow && ship.IsEnableImpostorVent)
 			{
@@ -180,8 +183,8 @@ public static class PlayerControlFixedUpdatePatch
 			}
 		}
 		else if (
-			roleId == RoleTypes.Engineer &&
-			player.Data.Role.Role == RoleTypes.Engineer)
+			roleId is RoleTypes.Engineer &&
+			player.Data.Role.Role is RoleTypes.Engineer)
 		{
 			if (ventButtonShow)
 			{
@@ -214,6 +217,8 @@ public static class PlayerControlFixedUpdatePatch
 			case RoleTypes.Engineer:
 			case RoleTypes.Scientist:
 			case RoleTypes.Shapeshifter:
+			case RoleTypes.Tracker:
+			case RoleTypes.Phantom:
 				abilityButton.Hide();
 				break;
 			case RoleTypes.CrewmateGhost:

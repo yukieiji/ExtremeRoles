@@ -12,7 +12,7 @@ namespace ExtremeRoles.Roles.API;
 
 public abstract class MultiAssignRoleBase : SingleRoleBase
 {
-    
+
     public SingleRoleBase AnotherRole = null;
     public bool CanHasAnotherRole = false;
     protected int ManagerOptionOffset = 0;
@@ -43,22 +43,25 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
     {
         switch (roleType)
         {
-            case RoleTypes.Shapeshifter:
-            case RoleTypes.Impostor:
+			case RoleTypes.Crewmate:
+			case RoleTypes.Engineer:
+			case RoleTypes.Scientist:
+			case RoleTypes.Noisemaker:
+			case RoleTypes.Tracker:
+				this.CanKill = false;
+				this.UseVent = false;
+				this.UseSabotage = false;
+				this.HasTask = true;
+				break;
+			case RoleTypes.Impostor:
+			case RoleTypes.Shapeshifter:
+			case RoleTypes.Phantom:
                 this.Team = ExtremeRoleType.Impostor;
                 this.NameColor = Palette.ImpostorRed;
                 this.CanKill = true;
                 this.UseVent = true;
                 this.UseSabotage = true;
                 this.HasTask = false;
-                break;
-            case RoleTypes.Crewmate:
-            case RoleTypes.Engineer:
-            case RoleTypes.Scientist:
-                this.CanKill = false;
-                this.UseVent = false;
-                this.UseSabotage = false;
-                this.HasTask = true;
                 break;
             default:
                 break;

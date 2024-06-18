@@ -224,15 +224,15 @@ public static class RoleManagerSelectRolesPatch
             $"----------------------------- SingleRoleAssign End!! -----------------------------");
     }
 
-    private static void addImpostorSingleExtremeRoleAssignData(
-        ref RoleSpawnDataManager spawnData,
-        ref PlayerRoleAssignData assignData)
-    {
-        addSingleExtremeRoleAssignDataFromTeamAndPlayer(
-            ref spawnData, ref assignData,
-            ExtremeRoleType.Impostor,
-            assignData.GetCanImpostorAssignPlayer(),
-            new HashSet<RoleTypes> { RoleTypes.Shapeshifter });
+	private static void addImpostorSingleExtremeRoleAssignData(
+		ref RoleSpawnDataManager spawnData,
+		ref PlayerRoleAssignData assignData)
+	{
+		addSingleExtremeRoleAssignDataFromTeamAndPlayer(
+			ref spawnData, ref assignData,
+			ExtremeRoleType.Impostor,
+			assignData.GetCanImpostorAssignPlayer(),
+			[ RoleTypes.Shapeshifter, RoleTypes.Phantom ]);
     }
 
     private static void addNeutralSingleExtremeRoleAssignData(
@@ -273,7 +273,7 @@ public static class RoleManagerSelectRolesPatch
             ref spawnData, ref assignData,
             ExtremeRoleType.Neutral,
             neutralAssignTargetPlayer,
-            new HashSet<RoleTypes> { RoleTypes.Engineer, RoleTypes.Scientist });
+            [RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker]);
     }
 
     private static void addCrewmateSingleExtremeRoleAssignData(
@@ -284,7 +284,7 @@ public static class RoleManagerSelectRolesPatch
             ref spawnData, ref assignData,
             ExtremeRoleType.Crewmate,
             assignData.GetCanCrewmateAssignPlayer(),
-            new HashSet<RoleTypes> { RoleTypes.Engineer, RoleTypes.Scientist });
+			[RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker]);
     }
 
     private static void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
@@ -541,23 +541,30 @@ public static class RoleManagerSelectRolesPatch
 
         return
             (
-                roleType == RoleTypes.Crewmate && isAssignToCrewmate
+                roleType is RoleTypes.Crewmate && isAssignToCrewmate
             )
             ||
             (
-                roleType == RoleTypes.Impostor && isImpostor
+                roleType is RoleTypes.Impostor && isImpostor
             )
             ||
             (
                 (
-                    roleType == RoleTypes.Engineer ||
-                    roleType == RoleTypes.Scientist
+                    roleType is
+						RoleTypes.Engineer or
+						RoleTypes.Scientist or
+						RoleTypes.Noisemaker or
+						RoleTypes.Tracker
                 )
                 && hasAnotherRole && isAssignToCrewmate
             )
             ||
             (
-                roleType == RoleTypes.Shapeshifter &&
+				(
+					roleType is
+						RoleTypes.Shapeshifter or
+						RoleTypes.Phantom
+				) &&
                 hasAnotherRole && isAssignToCrewmate
             );
     }

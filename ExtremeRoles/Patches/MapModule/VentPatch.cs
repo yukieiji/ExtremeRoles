@@ -190,7 +190,7 @@ public static class VentCanUsePatch
             {
                 (__result, canUse, couldUse) = modMap!.IsCustomVentUseResult(
                     __instance, playerInfo,
-                    playerInfo.Role.IsImpostor || playerInfo.Role.Role == RoleTypes.Engineer);
+                    playerInfo.Role.IsImpostor || playerInfo.Role.Role is RoleTypes.Engineer);
                 return false;
             }
             return true;

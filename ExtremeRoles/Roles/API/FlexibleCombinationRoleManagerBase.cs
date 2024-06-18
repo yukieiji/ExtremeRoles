@@ -97,6 +97,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
         {
             case RoleTypes.Impostor:
             case RoleTypes.Shapeshifter:
+			case RoleTypes.Phantom:
                 role.Team = ExtremeRoleType.Impostor;
                 role.SetNameColor(Palette.ImpostorRed);
                 role.CanKill = true;

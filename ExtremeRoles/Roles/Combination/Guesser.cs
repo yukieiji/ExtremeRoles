@@ -122,11 +122,12 @@ public sealed class Guesser :
 
             foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
             {
-                if (role == RoleTypes.Crewmate ||
-                    role == RoleTypes.Impostor ||
-                    role == RoleTypes.GuardianAngel ||
-                    role == RoleTypes.CrewmateGhost ||
-                    role == RoleTypes.ImpostorGhost)
+                if (role is
+						RoleTypes.Crewmate or
+						RoleTypes.Impostor or
+						RoleTypes.GuardianAngel or
+						RoleTypes.CrewmateGhost or
+						RoleTypes.ImpostorGhost)
                 {
                     continue;
                 }
@@ -137,9 +138,12 @@ public sealed class Guesser :
                     {
                         case RoleTypes.Engineer:
                         case RoleTypes.Scientist:
+						case RoleTypes.Noisemaker:
+						case RoleTypes.Tracker:
                             team = ExtremeRoleType.Crewmate;
                             break;
                         case RoleTypes.Shapeshifter:
+						case RoleTypes.Phantom:
                             team = ExtremeRoleType.Impostor;
                             break;
                         default:
