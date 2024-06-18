@@ -4,8 +4,8 @@
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
     <!--<Version>10.1.1.0</Version>-->
-    <VersionPrefix>10.1.1</VersionPrefix>
-    <VersionSuffix>Recovery</VersionSuffix>
+    <VersionPrefix>10.2.0</VersionPrefix>
+    <VersionSuffix>Wepon</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
