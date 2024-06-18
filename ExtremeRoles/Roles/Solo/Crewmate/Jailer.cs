@@ -305,6 +305,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 			this.isDeadAbilityZero = optMng.GetValue<bool>(this.GetRoleOptionId(Option.IsDeadAbilityZero));
 		}
 
+		this.range = optMng.GetValue<float>(this.GetRoleOptionId(Option.Range));
 		this.mode = (TargetMode)optMng.GetValue<int>(this.GetRoleOptionId(Option.TargetMode));
 		this.canReplaceAssassin = optMng.GetValue<bool>(this.GetRoleOptionId(Option.CanReplaceAssassin));
 
