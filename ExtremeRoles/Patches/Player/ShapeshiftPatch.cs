@@ -41,8 +41,8 @@ public static class PlayerControlShapeshiftPatch
 
 		var outfits = __instance.Data.Outfits;
 
-		GameData.PlayerOutfit instancePlayerOutfit = outfits[PlayerOutfitType.Default];
-		GameData.PlayerOutfit newOutfit = instancePlayerOutfit;
+		NetworkedPlayerInfo.PlayerOutfit instancePlayerOutfit = outfits[PlayerOutfitType.Default];
+		NetworkedPlayerInfo.PlayerOutfit newOutfit = instancePlayerOutfit;
 
 		if (!isSame)
 		{
