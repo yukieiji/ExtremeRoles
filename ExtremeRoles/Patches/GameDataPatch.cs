@@ -90,7 +90,7 @@ public static class GameDataRecomputeTaskCountsPatch
 
 				++doTaskCrew;
 
-				foreach (GameData.TaskInfo taskInfo in playerInfo.Tasks.GetFastEnumerator())
+				foreach (var taskInfo in playerInfo.Tasks.GetFastEnumerator())
 				{
 					++totalTask;
 					if (taskInfo.Complete)
