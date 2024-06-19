@@ -14,11 +14,11 @@ public sealed class SequentialOptionGroupFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionGroup> action,
-	OptionTab tab = OptionTab.General,
-	int optionIdOffset = 0) : OptionGroupFactory(name, groupId, action, tab, optionIdOffset)
+	OptionTab tab = OptionTab.General) :
+	OptionGroupFactory(name, groupId, action, tab)
 {
-	public int StartId => this.GetOptionId(0);
-	public int EndId => this.GetOptionId(this.Offset - 1);
+	public int StartId => 0;
+	public int EndId => this.Offset - 1;
 
 	public int Offset { private get; set; } = 0;
 
@@ -218,7 +218,7 @@ public sealed class SequentialOptionGroupFactory(
 	}
 	private int getOptionIdAndUpdate()
 	{
-		int optionId = GetOptionId(this.Offset);
+		int optionId = this.Offset;
 		this.Offset++;
 		return optionId;
 	}

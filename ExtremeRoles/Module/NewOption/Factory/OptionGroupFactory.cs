@@ -15,11 +15,9 @@ public class OptionGroupFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionGroup> action,
-	OptionTab tab = OptionTab.General,
-	int optionIdOffset = 0) : IDisposable
+	OptionTab tab = OptionTab.General) : IDisposable
 {
 	public string Name { get; set; } = name;
-	public int IdOffset { private get; set; } = optionIdOffset;
 
 	public OptionTab Tab { get; } = tab;
 
@@ -227,10 +225,8 @@ public class OptionGroupFactory(
 	public int GetOptionId<T>(T option) where T : struct, IConvertible
 	{
 		enumCheck(option);
-		return GetOptionId(Convert.ToInt32(option));
+		return Convert.ToInt32(option);
 	}
-
-	public int GetOptionId(int option) => this.IdOffset + option;
 
 	protected string GetOptionName<T>(T option, Color? color, bool ignorePrefix = false) where T : struct, IConvertible
 	{
