@@ -64,6 +64,13 @@ public interface IRoleSelector
 		{
 			createExtremeGhostRoleGlobalSpawnOption(roleOptionFactory);
 		}
+		using (var xionCategory = optMng.CreateOptionGroup(
+			Helper.Design.ColoedString(ColorPalette.XionBlue, "Xion")))
+		{
+			xionCategory.CreateBoolOption(
+				RoleGlobalOption.UseXion, false,
+				color: ColorPalette.XionBlue);
+		}
 	}
 
     private static void createExtremeRoleGlobalSpawnOption(ColorSyncOptionGroupFactory factory)

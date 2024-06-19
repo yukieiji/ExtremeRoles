@@ -27,7 +27,7 @@ public sealed class NewOptionManager
 
 	public OptionGroupFactory CreateOptionGroup(
 		string name,
-		in OptionTab tab)
+		in OptionTab tab = OptionTab.General)
 	{
 		var factory = new OptionGroupFactory(name, this.id, this.registerOptionGroup, tab);
 		this.id++;
@@ -37,7 +37,7 @@ public sealed class NewOptionManager
 
 	public SequentialOptionGroupFactory CreateSequentialOptionGroup(
 		string name,
-		in OptionTab tab)
+		in OptionTab tab = OptionTab.General)
 	{
 		var factory = new SequentialOptionGroupFactory(name, this.id, this.registerOptionGroup, tab);
 		this.id++;
