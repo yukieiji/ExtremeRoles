@@ -30,10 +30,11 @@ public sealed class HelpButton
 		var passiveButton = this.body.GetComponent<PassiveButton>();
 		passiveButton.OnClick.RemoveAllPersistentAndListeners();
 		passiveButton.OnClick.AddListener(openAct);
-
+		/*
 		var render = this.body.GetComponent<SpriteRenderer>();
 		render.sprite = Loader.CreateSpriteFromResources(
 			Path.HelpImage, 230f);
+		*/
 	}
 
 	public void SetInfoButtonToGameStartShipPositon()
