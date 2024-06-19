@@ -88,6 +88,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 		float yPos = initPos;
 		int settingInfoIndex = 0;
 		int activeObjNum = 0;
+		int groupNum = 0;
 		foreach (var catego in container.Category)
 		{
 			var categoryObj = this.vanillaSettings.settingsInfo[settingInfoIndex];
@@ -99,6 +100,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 
 			yPos -= 0.85f;
 
+			++groupNum;
 			++settingInfoIndex;
 			++activeObjNum;
 
@@ -138,7 +140,8 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 			yPos -= 0.59f;
 		}
 
-		this.vanillaSettings.scrollBar.CalculateAndSetYBounds((activeObjNum + 10), 2f, 6f, 0.59f);
+		this.vanillaSettings.scrollBar.CalculateAndSetYBounds(
+			(groupNum + 2) * 2 + activeObjNum, 2f, 6f, 0.59f);
 		this.vanillaSettings.scrollBar.ScrollToTop();
 	}
 
