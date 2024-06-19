@@ -28,7 +28,7 @@ public sealed class OptionPack
 	}
 	public void Add(int id, IValueOption<bool> option)
 	{
-		this.allOpt.Add(id, option);
+		this.boolOpt.Add(id, option);
 		this.allOpt.Add(id, option);
 	}
 
