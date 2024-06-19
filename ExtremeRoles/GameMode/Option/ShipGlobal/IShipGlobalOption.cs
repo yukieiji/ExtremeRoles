@@ -6,7 +6,7 @@ using ExtremeRoles.Extension.Strings;
 using ExtremeRoles.Patches.Option;
 using ExtremeRoles.GameMode.Option.MapModule;
 
-using static ExtremeRoles.Module.CustomOption.Factories.SimpleFactory;
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -207,81 +207,110 @@ public interface IShipGlobalOption
 
     public static void Create()
     {
-		CreateIntOption(GlobalOption.NumMeating, 10, 0, 100, 1, isHeader: true);
-		CreateBoolOption(GlobalOption.ChangeMeetingVoteAreaSort, false);
-		CreateBoolOption(GlobalOption.FixedMeetingPlayerLevel, false);
-		CreateBoolOption(GlobalOption.DisableSkipInEmergencyMeeting, false);
-		CreateBoolOption(GlobalOption.DisableSelfVote, false);
-
-		var confirmOpt = CreateSelectionOption<GlobalOption, ConfirmExilMode>(
-			GlobalOption.ConfirmExilMode, isHeader: true);
-        confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
-		var confirmRoleOpt = CreateBoolOption(GlobalOption.IsConfirmRole, false);
-        confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
-
-        var ventOption = CreateBoolOption(GlobalOption.DisableVent, false, isHeader: true);
-		CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
-		CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
-		CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption, invert: true);
-
-		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
-
-		var fixTaskOpt = CreateBoolOption(GlobalOption.IsFixWallHaskTask, false);
-		for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
+		var mng = NewOptionManager.Instance;
+		using (var factory = NewOptionManager.Instance.CreateOptionGroup("MeetingOption"))
 		{
-			CreateBoolOption((GlobalOption)i, false, parent: fixTaskOpt);
+			factory.CreateIntOption(GlobalOption.NumMeating, 10, 0, 100, 1);
+			factory.CreateBoolOption(GlobalOption.ChangeMeetingVoteAreaSort, false);
+			factory.CreateBoolOption(GlobalOption.FixedMeetingPlayerLevel, false);
+			factory.CreateBoolOption(GlobalOption.DisableSkipInEmergencyMeeting, false);
+			factory.CreateBoolOption(GlobalOption.DisableSelfVote, false);
+		}
+		using (var factory = mng.CreateOptionGroup("ExiledOption"))
+		{
+			var confirmOpt = factory.CreateSelectionOption<GlobalOption, ConfirmExilMode>(GlobalOption.ConfirmExilMode);
+			confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
+			var confirmRoleOpt = factory.CreateBoolOption(GlobalOption.IsConfirmRole, false);
+			confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
+		}
+		using (var factory = mng.CreateOptionGroup("VentOption"))
+		{
+			var ventOption = factory.CreateBoolOption(GlobalOption.DisableVent, false);
+			factory.CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
+			factory.CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
+			factory.CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption, invert: true);
+		}
+		using (var factory = mng.CreateOptionGroup("TaskOption"))
+		{
+			factory.CreateBoolOption(GlobalOption.ParallelMedBayScans, false);
+
+			var fixTaskOpt = factory.CreateBoolOption(GlobalOption.IsFixWallHaskTask, false);
+			for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
+			{
+				factory.CreateBoolOption((GlobalOption)i, false, parent: fixTaskOpt);
+			}
 		}
 
+		using (var factory = mng.CreateOptionGroup("RandomSpawnOption"))
+		{
+			var randomSpawnOpt = factory.CreateBoolOption(GlobalOption.EnableSpecialSetting, true);
+			factory.CreateBoolOption(GlobalOption.SkeldRandomSpawn, false, randomSpawnOpt, invert: true);
+			factory.CreateBoolOption(GlobalOption.MiraHqRandomSpawn, false, randomSpawnOpt, invert: true);
+			factory.CreateBoolOption(GlobalOption.PolusRandomSpawn, false, randomSpawnOpt, invert: true);
+			factory.CreateBoolOption(GlobalOption.AirShipRandomSpawn, true, randomSpawnOpt, invert: true);
+			factory.CreateBoolOption(GlobalOption.FungleRandomSpawn, false, randomSpawnOpt, invert: true);
 
-		var randomSpawnOpt = CreateBoolOption(GlobalOption.EnableSpecialSetting , true);
-		CreateBoolOption(GlobalOption.SkeldRandomSpawn  , false, randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.MiraHqRandomSpawn , false, randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.PolusRandomSpawn  , false, randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.AirShipRandomSpawn, true , randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.FungleRandomSpawn , false, randomSpawnOpt, invert: true);
+			factory.CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false, randomSpawnOpt, invert: true);
+		}
+		using (var factory = mng.CreateOptionGroup("AdminOption"))
+		{
+			var adminOpt = factory.CreateBoolOption(GlobalOption.IsRemoveAdmin, false);
+			factory.CreateSelectionOption<GlobalOption, AirShipAdminMode>(
+				GlobalOption.AirShipEnableAdmin, adminOpt, invert: true);
+			var adminLimitOpt = factory.CreateBoolOption(GlobalOption.EnableAdminLimit, false, adminOpt, invert: true);
+			factory.CreateFloatOption(
+				GlobalOption.AdminLimitTime,
+				30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
+				format: OptionUnit.Second,
+				invert: true,
+				enableCheckOption: adminLimitOpt);
+		}
+		using (var factory = mng.CreateOptionGroup("SecurityOption"))
+		{
+			var secOpt = factory.CreateBoolOption(GlobalOption.IsRemoveSecurity, false);
+			var secLimitOpt = factory.CreateBoolOption(GlobalOption.EnableSecurityLimit, false, secOpt, invert: true);
+			factory.CreateFloatOption(
+				GlobalOption.SecurityLimitTime,
+				30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
+				format: OptionUnit.Second,
+				invert: true,
+				enableCheckOption: secLimitOpt);
+		}
+		using (var factory = mng.CreateOptionGroup("VitalOption"))
+		{
+			var vitalOpt = factory.CreateBoolOption(GlobalOption.IsRemoveVital, false);
+			var vitalLimitOpt = factory.CreateBoolOption(GlobalOption.EnableVitalLimit, false, vitalOpt, invert: true);
+			factory.CreateFloatOption(
+				GlobalOption.VitalLimitTime,
+				30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
+				format: OptionUnit.Second,
+				invert: true,
+				enableCheckOption: vitalLimitOpt);
+		}
 
-		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false, randomSpawnOpt, invert: true);
+		using (var factory = mng.CreateOptionGroup("RandomMapOption"))
+		{
+			factory.CreateBoolOption(GlobalOption.RandomMap, false);
+		}
 
-		var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
-		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
-			GlobalOption.AirShipEnableAdmin, adminOpt, invert: true);
-		var adminLimitOpt = CreateBoolOption(GlobalOption.EnableAdminLimit, false, adminOpt, invert: true);
-		CreateFloatOption(
-			GlobalOption.AdminLimitTime,
-			30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: adminLimitOpt);
+		using (var factory = mng.CreateOptionGroup("TaskWinOption"))
+		{
+			var taskDisableOpt = factory.CreateBoolOption(GlobalOption.DisableTaskWinWhenNoneTaskCrew, false);
+			factory.CreateBoolOption(GlobalOption.DisableTaskWin, false, taskDisableOpt);
+		}
 
-        var secOpt = CreateBoolOption(GlobalOption.IsRemoveSecurity, false, isHeader: true);
-		var secLimitOpt = CreateBoolOption(GlobalOption.EnableSecurityLimit, false, secOpt, invert: true);
-		CreateFloatOption(
-			GlobalOption.SecurityLimitTime,
-			30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: secLimitOpt);
+		using (var factory = mng.CreateOptionGroup("NeutralWinOption"))
+		{
+			factory.CreateBoolOption(GlobalOption.IsSameNeutralSameWin, true);
+			factory.CreateBoolOption(GlobalOption.DisableNeutralSpecialForceEnd, false);
+		}
 
-        var vitalOpt = CreateBoolOption(GlobalOption.IsRemoveVital, false, isHeader: true);
-        var vitalLimitOpt = CreateBoolOption(GlobalOption.EnableVitalLimit, false, vitalOpt, invert: true);
-		CreateFloatOption(
-			GlobalOption.VitalLimitTime,
-			30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: vitalLimitOpt);
-
-		CreateBoolOption(GlobalOption.RandomMap, false, isHeader: true);
-
-        var taskDisableOpt = CreateBoolOption(GlobalOption.DisableTaskWinWhenNoneTaskCrew, false, isHeader: true);
-		CreateBoolOption(GlobalOption.DisableTaskWin, false, taskDisableOpt);
-
-		CreateBoolOption(GlobalOption.IsSameNeutralSameWin, true, isHeader: true);
-		CreateBoolOption(GlobalOption.DisableNeutralSpecialForceEnd, false);
-
-		CreateBoolOption(GlobalOption.IsAssignNeutralToVanillaCrewGhostRole, true, isHeader: true);
-		CreateBoolOption(GlobalOption.IsRemoveAngleIcon, false);
-		CreateBoolOption(GlobalOption.IsBlockGAAbilityReport, false);
+		using (var factory = mng.CreateOptionGroup("GhostRoleGlobalOption"))
+		{
+			factory.CreateBoolOption(GlobalOption.IsAssignNeutralToVanillaCrewGhostRole, true);
+			factory.CreateBoolOption(GlobalOption.IsRemoveAngleIcon, false);
+			factory.CreateBoolOption(GlobalOption.IsBlockGAAbilityReport, false);
+		}
 
 		// ウマングアスを一時的もしくは恒久的に無効化
 		// CreateBoolOption(GlobalOption.EnableHorseMode, false, isHeader: true, isHidden: true);
