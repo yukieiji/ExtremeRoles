@@ -1,7 +1,7 @@
 ﻿using ExtremeRoles.Module.NewOption.Factory;
 using System;
 using System.Collections.Generic;
-
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 #nullable enable
@@ -22,6 +22,8 @@ public sealed class NewOptionManager
 			options.Add(tab, new OptionTabContainer(tab));
 		}
 	}
+	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
+		=> this.options.TryGetValue(tab, out container) && container is not null;
 
 	public OptionGroupFactory CreateOptionGroup(
 		string name,
@@ -65,7 +67,7 @@ public sealed class NewOptionManager
 		return factory;
 	}
 
-	private void registerOptionGroup(OptionTab tab, OptionGroup group)
+	private void registerOptionGroup(OptionTab tab, OptionCategory group)
 	{
 		if (!this.options.TryGetValue(tab, out var container))
 		{

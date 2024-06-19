@@ -43,34 +43,40 @@ public static class OptionCreator
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
-		var commonOptionFactory = NewOptionManager.Instance.CreateColorSyncOptionGroup(
+		using (var commonOptionFactory = NewOptionManager.Instance.CreateColorSyncOptionGroup(
 			"CommonOption",
-			defaultOptionColor);
+			defaultOptionColor))
+		{
+			commonOptionFactory.CreateIntOption(
+				CommonOptionKey.PresetSelection,
+				1, 1, maxPresetNum, 1,
+				isHeader: true,
+				format: OptionUnit.Preset);
 
-		commonOptionFactory.CreateIntOption(
-			CommonOptionKey.PresetSelection,
-			1, 1, maxPresetNum, 1,
-			isHeader: true,
-			format: OptionUnit.Preset);
-
-		commonOptionFactory.CreateBoolOption(
+			commonOptionFactory.CreateBoolOption(
 			CommonOptionKey.UseRaiseHand,
 			false, isHeader: true);
+		}
 
-		var strongGen = commonOptionFactory.CreateBoolOption(
-			CommonOptionKey.UseStrongRandomGen,
-			true, isHeader: true);
-		commonOptionFactory.CreateSelectionOption(
-			CommonOptionKey.UsePrngAlgorithm,
-			[
-				"Pcg32XshRr", "Pcg64RxsMXs",
+		using (var commonOptionFactory = NewOptionManager.Instance.CreateColorSyncOptionGroup(
+			"CommonOption",
+			defaultOptionColor))
+		{
+			var strongGen = commonOptionFactory.CreateBoolOption(
+				CommonOptionKey.UseStrongRandomGen,
+				true, isHeader: true);
+			commonOptionFactory.CreateSelectionOption(
+				CommonOptionKey.UsePrngAlgorithm,
+				[
+					"Pcg32XshRr", "Pcg64RxsMXs",
 				"Xorshift64", "Xorshift128",
 				"Xorshiro256StarStar",
 				"Xorshiro512StarStar",
 				"RomuMono", "RomuTrio", "RomuQuad",
 				"Seiran128", "Shioi128", "JFT32",
-			],
-			strongGen, invert: true);
+				],
+				strongGen, invert: true);
+		}
 
         IRoleSelector.CreateRoleGlobalOption();
         IShipGlobalOption.Create();

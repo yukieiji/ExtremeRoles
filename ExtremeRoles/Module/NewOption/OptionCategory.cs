@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace ExtremeRoles.Module.NewOption;
 
-public sealed class OptionGroup(
+public sealed class OptionCategory(
 	int id,
 	string name,
 	in OptionPack option)

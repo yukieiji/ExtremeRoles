@@ -14,7 +14,7 @@ namespace ExtremeRoles.Module.NewOption.Factory;
 public class OptionGroupFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionGroup> action,
+	in Action<OptionTab, OptionCategory> action,
 	OptionTab tab = OptionTab.General) : IDisposable
 {
 	public string Name { get; set; } = name;
@@ -22,7 +22,7 @@ public class OptionGroupFactory(
 	public OptionTab Tab { get; } = tab;
 
 	private readonly int groupid = groupId;
-	private readonly Action<OptionTab, OptionGroup> registerOption = action;
+	private readonly Action<OptionTab, OptionCategory> registerOption = action;
 	private readonly OptionPack optionPack = new OptionPack();
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -266,7 +266,7 @@ public class OptionGroupFactory(
 
 	public void Dispose()
 	{
-		var newGroup = new OptionGroup(groupid, this.Name, optionPack);
+		var newGroup = new OptionCategory(groupid, this.Name, optionPack);
 		this.registerOption(Tab, newGroup);
 	}
 }

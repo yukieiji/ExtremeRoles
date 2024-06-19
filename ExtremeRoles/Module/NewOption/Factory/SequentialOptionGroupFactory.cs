@@ -13,7 +13,7 @@ namespace ExtremeRoles.Module.NewOption.Factory;
 public sealed class SequentialOptionGroupFactory(
 	string name,
 	int groupId,
-	in Action<OptionTab, OptionGroup> action,
+	in Action<OptionTab, OptionCategory> action,
 	OptionTab tab = OptionTab.General) :
 	OptionGroupFactory(name, groupId, action, tab)
 {

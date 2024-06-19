@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.NewOption;
 
-public sealed class OptionGroupView(in OptionGroup group)
+public sealed class OptionGroupView(in OptionCategory group)
 {
 	public int GroupId { get; } = group.Id;
 	public string Name { get; } = group.Name;
@@ -15,7 +15,7 @@ public sealed class OptionGroupView(in OptionGroup group)
 	public IEnumerable<GameObject> AllObject => obj.Values;
 
 	private readonly IReadOnlyDictionary<int, GameObject> obj = new Dictionary<int, GameObject>();
-	private readonly OptionGroup group = group;
+	private readonly OptionCategory group = group;
 
 	public void Update(in float posOffset)
 	{
