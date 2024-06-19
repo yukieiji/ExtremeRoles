@@ -45,13 +45,13 @@ public sealed class NewOptionManager
 		return factory;
 	}
 
-	public ColorSyncOptionFactory CreateColorSyncOptionGroup(
+	public ColorSyncOptionGroupFactory CreateColorSyncOptionGroup(
 		string name,
 		in Color color,
 		in OptionTab tab = OptionTab.General)
 	{
 		var internalFactory = CreateOptionGroup(name, tab);
-		var factory = new ColorSyncOptionFactory(color, internalFactory);
+		var factory = new ColorSyncOptionGroupFactory(color, internalFactory);
 
 		return factory;
 	}

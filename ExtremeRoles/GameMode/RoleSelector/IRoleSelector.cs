@@ -8,6 +8,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Module.CustomOption.Factories;
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -50,22 +52,25 @@ public interface IRoleSelector
 
     public static void CreateRoleGlobalOption()
     {
-		var roleOptionFactory = new ColorSyncFactory(defaultOptionColor);
+		var optMng = NewOptionManager.Instance;
+		using (var roleOptionFactory = optMng.CreateColorSyncOptionGroup(
+			"RoleSpawnOption", defaultOptionColor))
+		{
+			createExtremeRoleGlobalSpawnOption(roleOptionFactory);
+		}
 
-        createExtremeRoleGlobalSpawnOption(roleOptionFactory);
-        createExtremeGhostRoleGlobalSpawnOption(roleOptionFactory);
+		using (var roleOptionFactory = optMng.CreateColorSyncOptionGroup(
+			"GhostRoleSpawnOption", defaultOptionColor))
+		{
+			createExtremeGhostRoleGlobalSpawnOption(roleOptionFactory);
+		}
+	}
 
-		roleOptionFactory.CreateBoolOption(
-			RoleGlobalOption.UseXion, false,
-			isHeader:true, color: ColorPalette.XionBlue);
-    }
-
-    private static void createExtremeRoleGlobalSpawnOption(ColorSyncFactory factory)
+    private static void createExtremeRoleGlobalSpawnOption(ColorSyncOptionGroupFactory factory)
     {
 		factory.CreateIntOption(
 			RoleGlobalOption.MinCrewmateRoles,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1,
-			isHeader: true);
+			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
 		factory.CreateIntOption(
 			RoleGlobalOption.MaxCrewmateRoles,
 			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
@@ -85,12 +90,11 @@ public interface IRoleSelector
 			0, 0, GameSystem.MaxImposterNum * 2, 1);
     }
 
-    private static void createExtremeGhostRoleGlobalSpawnOption(ColorSyncFactory factory)
+    private static void createExtremeGhostRoleGlobalSpawnOption(ColorSyncOptionGroupFactory factory)
 	{
 		factory.CreateIntOption(
 			RoleGlobalOption.MinCrewmateGhostRoles,
-			0, 0, GameSystem.VanillaMaxPlayerNum - 1, 1,
-			isHeader: true);
+			0, 0, GameSystem.VanillaMaxPlayerNum - 1, 1);
 		factory.CreateIntOption(
 			RoleGlobalOption.MaxCrewmateGhostRoles,
 			0, 0, GameSystem.VanillaMaxPlayerNum - 1, 1);

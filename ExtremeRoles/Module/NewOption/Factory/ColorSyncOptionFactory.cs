@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
-public sealed class ColorSyncOptionFactory(
+public sealed class ColorSyncOptionGroupFactory(
 	in Color color,
 	in OptionGroupFactory factory) : IDisposable
 {
