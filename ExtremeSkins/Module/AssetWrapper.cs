@@ -7,7 +7,7 @@ using Il2CppSystem;
 using ExtremeRoles.Module;
 
 namespace ExtremeSkins.Module;
-
+#if WITHHAT
 [Il2CppRegister]
 public sealed class HatAddressableAsset : AddressableAsset<HatViewData>
 {
@@ -124,7 +124,9 @@ public sealed class NamePlateAddressableAsset : AddressableAsset<NamePlateViewDa
 
 	public override AssetLoadState GetState() => AssetLoadState.Success;
 }
+#endif
 
+#if WITHVISOR
 [Il2CppRegister]
 public sealed class VisorAddressableAsset : AddressableAsset<VisorViewData>
 {
@@ -183,3 +185,4 @@ public sealed class VisorAddressableAsset : AddressableAsset<VisorViewData>
 
 	public override AssetLoadState GetState() => AssetLoadState.Success;
 }
+#endif
