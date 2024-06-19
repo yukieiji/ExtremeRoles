@@ -44,7 +44,7 @@ public static class OptionCreator
         Roles.ExtremeRoleManager.GameRole.Clear();
 
 		var commonOptionFactory = NewOptionManager.Instance.CreateColorSyncOptionGroup(
-			"共通設定",
+			"CommonOption",
 			defaultOptionColor);
 
 		commonOptionFactory.CreateIntOption(
