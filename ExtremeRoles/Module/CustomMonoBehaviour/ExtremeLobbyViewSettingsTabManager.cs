@@ -58,7 +58,6 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 			{
 				var categoryHeaderMasked = Instantiate(
 					this.vanillaSettings.categoryHeaderOrigin);
-				setText(categoryHeaderMasked, group.Name);
 				categoryHeaderMasked.transform.SetParent(
 					this.vanillaSettings.settingsContainer);
 				categoryHeaderMasked.transform.localScale = Vector3.one;
@@ -71,15 +70,14 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 					viewSettingsInfoPanel.transform.SetParent(
 						this.vanillaSettings.settingsContainer);
 					viewSettingsInfoPanel.transform.localScale = Vector3.one;
-					setInfo(viewSettingsInfoPanel, option.Name, option.Id.ToString());
 					this.vanillaSettings.settingsInfo.Add(viewSettingsInfoPanel.gameObject);
 				}
 			}
 		}
-		this.recomputePos(OptionTab.General);
+		this.updateTextAndPos(OptionTab.General);
 	}
 
-	private void recomputePos(OptionTab tab)
+	private void updateTextAndPos(OptionTab tab)
 	{
 		if (this.vanillaSettings == null ||
 			!NewOptionManager.Instance.TryGetTab(tab, out var container))
@@ -94,6 +92,11 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 		{
 			var categoryObj = this.vanillaSettings.settingsInfo[settingInfoIndex];
 			categoryObj.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
+			if (categoryObj.TryGetComponent<CategoryHeaderMasked>(out var categoryHeaderMasked))
+			{
+				setText(categoryHeaderMasked, catego.Name);
+			}
+
 			yPos -= 0.85f;
 
 			++settingInfoIndex;
@@ -110,6 +113,10 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 				if (!isActive)
 				{
 					continue;
+				}
+				if (optionObj.TryGetComponent<ViewSettingsInfoPanel>(out var viewSettingsInfoPanel))
+				{
+					setInfo(viewSettingsInfoPanel, option.Name, option.CurSelection.ToString());
 				}
 				float x;
 				if (activeIndex % 2 == 0)
