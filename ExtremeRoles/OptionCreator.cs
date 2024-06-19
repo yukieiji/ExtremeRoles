@@ -3,7 +3,8 @@
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Factories;
+// using ExtremeRoles.Module.CustomOption.Factories;
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles;
 
@@ -42,7 +43,9 @@ public static class OptionCreator
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
-		var commonOptionFactory = new ColorSyncFactory(defaultOptionColor);
+		var commonOptionFactory = NewOptionManager.Instance.CreateColorSyncOptionGroup(
+			"共通設定",
+			defaultOptionColor);
 
 		commonOptionFactory.CreateIntOption(
 			CommonOptionKey.PresetSelection,

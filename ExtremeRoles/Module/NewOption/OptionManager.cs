@@ -8,14 +8,14 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.NewOption;
 
-public sealed class OptionManager
+public sealed class NewOptionManager
 {
-	public readonly static OptionManager Instance = new ();
+	public readonly static NewOptionManager Instance = new ();
 
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 	private int id = 0;
 
-	private OptionManager()
+	private NewOptionManager()
 	{
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
@@ -45,8 +45,8 @@ public sealed class OptionManager
 
 	public ColorSyncOptionFactory CreateColorSyncOptionGroup(
 		string name,
-		in OptionTab tab,
-		in Color color)
+		in Color color,
+		in OptionTab tab = OptionTab.General)
 	{
 		var internalFactory = CreateOptionGroup(name, tab);
 		var factory = new ColorSyncOptionFactory(color, internalFactory);
