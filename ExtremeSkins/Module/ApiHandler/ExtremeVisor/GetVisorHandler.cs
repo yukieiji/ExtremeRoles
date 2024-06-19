@@ -7,6 +7,7 @@ using ExtremeSkins.Core.API;
 using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
+#if WITHVISOR
 
 public sealed class GetVisorHandler : IRequestHandler
 {
@@ -25,3 +26,4 @@ public sealed class GetVisorHandler : IRequestHandler
 		IRequestHandler.Write(response, curData);
 	}
 }
+#endif
