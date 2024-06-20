@@ -26,7 +26,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 
 	public IOptionRelation Relation { get; init; }
 
-	public bool IsEnable => OptionRange.Selection != _config.DefaultValue;
+	public bool IsEnable => OptionRange.Selection != config.DefaultValue;
 
 	public bool IsActiveAndEnable
 	{
@@ -85,12 +85,12 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 			if (amongUs != null &&
 				amongUs.AmHost)
 			{
-				_config.Value = OptionRange.Selection;
+				config.Value = OptionRange.Selection;
 			}
 		}
 	}
 
-	private readonly ConfigBinder _config;
+	private readonly ConfigBinder config;
 	protected IOptionRange<SelectionType> OptionRange;
 	private readonly List<IDynamismOption<OutType>> _withUpdate = new List<IDynamismOption<OutType>>();
 
@@ -110,9 +110,9 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 		{
 			parentRelation.Parent.Relation.Children.Add(this);
 		}
-		_config = new ConfigBinder(Info.CodeRemovedName, defaultIndex);
+		config = new ConfigBinder(Info.CodeRemovedName, defaultIndex);
 
-		OptionRange.Selection = _config.Value;
+		OptionRange.Selection = config.Value;
 
 		ExtremeRolesPlugin.Logger.LogInfo($"---- Create new Option ----\n{this}\n--------");
 	}
@@ -134,7 +134,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 
 	public void SwitchPreset()
 	{
-		_config.Rebind();
-		Selection = _config.Value;
+		config.Rebind();
+		Selection = config.Value;
 	}
 }
