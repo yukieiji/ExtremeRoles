@@ -22,7 +22,7 @@ public static class OptionRelationFactory
 		}
 		else if (invert)
 		{
-			return new OptionRelationWithParent(parent);
+			return new OptionRelationWithInvertParent(parent);
 		}
 		else
 		{
