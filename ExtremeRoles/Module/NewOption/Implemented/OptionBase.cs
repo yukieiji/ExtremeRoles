@@ -76,7 +76,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 		{
 			OptionRange.Selection = value;
 
-			foreach (var withUdate in _withUpdate)
+			foreach (var withUdate in withUpdate)
 			{
 				withUdate.Update(Value);
 			}
@@ -92,7 +92,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 
 	private readonly ConfigBinder config;
 	protected IOptionRange<SelectionType> OptionRange;
-	private readonly List<IDynamismOption<OutType>> _withUpdate = new List<IDynamismOption<OutType>>();
+	private readonly List<IDynamismOption<OutType>> withUpdate = new List<IDynamismOption<OutType>>();
 
 	public CustomOptionBase(
 		IOptionInfo info,
@@ -128,7 +128,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 
 	public void AddWithUpdate(IDynamismOption<OutType> option)
 	{
-		_withUpdate.Add(option);
+		withUpdate.Add(option);
 		option.Update(Value);
 	}
 
