@@ -51,22 +51,18 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 	{
 		get
 		{
-			SelectionType value = OptionRange.Value;
-
-			string formatStr =
-				Info.Format is OptionUnit.None ? "" :
-				Translation.GetString(Info.Format.ToString());
-
+			string? value = OptionRange.Value.ToString();
+			if (string.IsNullOrEmpty(value))
+			{
+				value = "NOT_SUPPORT";
+			}
 			if (typeof(SelectionType) == typeof(string))
 			{
-				string strValue = Unsafe.As<SelectionType, string>(ref value);
-				string translatedValue = Translation.GetString(strValue);
-				return $"{translatedValue}{formatStr}";
+				value = Translation.GetString(value);
 			}
-			else
-			{
-				return $"{value}{formatStr}";
-			}
+			string format = this.Info.Format;
+			return string.IsNullOrEmpty(format) ?
+				value : string.Format(Translation.GetString(format), value);
 		}
 	}
 

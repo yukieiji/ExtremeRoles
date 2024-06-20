@@ -22,7 +22,7 @@ public sealed class OptionInfo(
 	public string CodeRemovedName => nameCleaner.Replace(Name, string.Empty);
 
 	public OptionTab Tab { get; } = tab;
-	public OptionUnit Format { get; } = format;
+	public string Format { get; } = format == OptionUnit.None ? string.Empty : format.ToString();
 
 	public bool IsHidden { get; } = hidden;
 
