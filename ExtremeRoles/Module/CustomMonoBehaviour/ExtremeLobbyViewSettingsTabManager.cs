@@ -89,7 +89,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 
 		float yPos = initPos;
 		int settingInfoIndex = 0;
-		int activeObjNum = 0;
+		int activeOptionRowNum = 0;
 		int groupNum = 0;
 		foreach (var catego in container.Category)
 		{
@@ -104,7 +104,6 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 
 			++groupNum;
 			++settingInfoIndex;
-			++activeObjNum;
 
 			int activeIndex = 0;
 			foreach (var option in catego.AllOption)
@@ -125,6 +124,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 				float x;
 				if (activeIndex % 2 == 0)
 				{
+					++activeOptionRowNum;
 					x = -8.95f;
 					if (activeIndex > 0)
 					{
@@ -135,15 +135,13 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 				{
 					x = -3f;
 				}
-				++activeObjNum;
 				++activeIndex;
 				optionObj.transform.localPosition = new Vector3(x, yPos, -2f);
 			}
 			yPos -= 0.59f;
 		}
 
-		this.vanillaSettings.scrollBar.CalculateAndSetYBounds(
-			(groupNum + 2) * 2 + activeObjNum, 2f, 6f, 0.59f);
+		this.vanillaSettings.scrollBar.SetYBoundsMax(-yPos);
 		this.vanillaSettings.scrollBar.ScrollToTop();
 	}
 
