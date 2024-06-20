@@ -23,7 +23,7 @@ public static class KeyboardJoystickPatch
         { return; }
 
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
-            OptionManager.Instance.GetValue<bool>((int)RoleGlobalOption.UseXion) &&
+            // OptionManager.Instance.GetValue<bool>((int)RoleGlobalOption.UseXion) &&
             !ExtremeRolesPlugin.DebugMode.Value)
         {
             Roles.Solo.Host.Xion.SpecialKeyShortCut();
