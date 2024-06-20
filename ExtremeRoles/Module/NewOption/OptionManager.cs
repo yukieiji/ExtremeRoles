@@ -17,6 +17,12 @@ public sealed class NewOptionManager
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 	private int id = 0;
 
+	public string ConfigPreset
+	{
+		get => $"Preset:{selectedPreset}";
+	}
+	private int selectedPreset = 0;
+
 	private NewOptionManager()
 	{
 		foreach (var tab in Enum.GetValues<OptionTab>())
