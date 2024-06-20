@@ -4,6 +4,8 @@ using System.Security.Cryptography;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.PRNG;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles;
 
 public static class RandomGenerator
@@ -196,7 +198,7 @@ public static class RandomGenerator
                 return new JFT32(
                     CreateLongStrongSeed(),
                     CreateLongStrongSeed());
-            
+
             default:
                 return new SystemRandomWrapper(0, 0);
         }

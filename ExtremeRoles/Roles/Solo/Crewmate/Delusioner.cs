@@ -12,6 +12,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Delusioner :

@@ -20,6 +20,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Teleporter :

@@ -16,6 +16,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 #nullable enable

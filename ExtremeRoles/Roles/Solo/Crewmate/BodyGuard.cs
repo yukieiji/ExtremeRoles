@@ -19,6 +19,8 @@ using ExtremeRoles.Performance;
 
 #nullable enable
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class BodyGuard :

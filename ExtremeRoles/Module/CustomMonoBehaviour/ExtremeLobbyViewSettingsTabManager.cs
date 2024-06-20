@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 

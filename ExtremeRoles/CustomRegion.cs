@@ -3,6 +3,8 @@
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Module;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles;
 
 public static class CustomRegion

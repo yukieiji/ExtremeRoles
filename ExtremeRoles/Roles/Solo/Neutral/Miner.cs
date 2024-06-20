@@ -15,6 +15,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;

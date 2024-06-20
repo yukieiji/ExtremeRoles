@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(HashRandom), nameof(HashRandom.FastNext))]

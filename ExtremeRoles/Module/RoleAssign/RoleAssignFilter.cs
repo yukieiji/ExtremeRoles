@@ -9,6 +9,8 @@ using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Resources;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.RoleAssign;

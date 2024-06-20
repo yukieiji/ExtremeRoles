@@ -2,6 +2,7 @@
 
 using UnityEngine;
 
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Patches.Option;
 

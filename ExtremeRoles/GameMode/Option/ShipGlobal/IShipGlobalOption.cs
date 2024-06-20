@@ -7,6 +7,7 @@ using ExtremeRoles.Patches.Option;
 using ExtremeRoles.GameMode.Option.MapModule;
 
 using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 

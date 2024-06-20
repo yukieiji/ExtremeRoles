@@ -19,6 +19,8 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Patches.MapOverlay;
 
+using ExtremeRoles.Module.CustomOption;
+
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 
 namespace ExtremeRoles.Patches.Manager;

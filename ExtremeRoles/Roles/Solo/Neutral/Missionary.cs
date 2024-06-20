@@ -16,6 +16,8 @@ using ExtremeRoles.Performance;
 using BepInEx.Unity.IL2CPP.Utils;
 using System.Linq;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;

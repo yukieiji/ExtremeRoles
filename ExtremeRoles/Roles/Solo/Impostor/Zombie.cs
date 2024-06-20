@@ -21,6 +21,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Zombie :

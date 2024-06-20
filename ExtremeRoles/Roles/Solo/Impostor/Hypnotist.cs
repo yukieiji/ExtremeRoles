@@ -27,6 +27,8 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable

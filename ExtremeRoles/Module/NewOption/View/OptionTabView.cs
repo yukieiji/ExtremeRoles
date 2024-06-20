@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.NewOption.View;
 
 public sealed class OptionTabView(OptionTab tab, in OptionGroupView[] optionGroupView)

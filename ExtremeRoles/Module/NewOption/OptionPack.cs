@@ -4,6 +4,8 @@ using System.Runtime.CompilerServices;
 
 namespace ExtremeRoles.Module.NewOption;
 
+using ExtremeRoles.Module.CustomOption;
+
 public sealed class OptionPack
 {
 	public IReadOnlyDictionary<int, IValueOption<int>> IntOptions => intOpt;

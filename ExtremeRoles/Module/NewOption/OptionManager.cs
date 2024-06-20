@@ -6,6 +6,8 @@ using UnityEngine;
 
 #nullable enable
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.NewOption;
 
 public sealed class NewOptionManager

@@ -9,6 +9,8 @@ using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.CustomOption;
+
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
 namespace ExtremeRoles.Module.AbilityFactory;

@@ -8,6 +8,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.CustomOption;
+
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
 
 #nullable enable

@@ -14,6 +14,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles;
 
 public static class RPCOperator

@@ -11,6 +11,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;

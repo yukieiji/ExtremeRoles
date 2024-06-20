@@ -18,6 +18,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.VentModule;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>

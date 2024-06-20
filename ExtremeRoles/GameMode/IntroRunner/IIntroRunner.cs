@@ -20,6 +20,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.GameMode.IntroRunner;
 
 #nullable enable

@@ -15,6 +15,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Extension.Player;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Combination;

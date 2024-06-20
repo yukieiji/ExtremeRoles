@@ -10,6 +10,8 @@ using ExtremeRoles.Roles.API.Interface;
 
 using UnityEngine;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable

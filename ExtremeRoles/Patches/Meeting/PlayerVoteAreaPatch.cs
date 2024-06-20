@@ -13,6 +13,8 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
+using ExtremeRoles.Module.CustomOption;
+
 using Il2CppActionFloat = Il2CppSystem.Action<float>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 

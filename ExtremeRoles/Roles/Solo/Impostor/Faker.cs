@@ -9,6 +9,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility

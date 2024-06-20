@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using AmongUs.GameOptions;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.API;
 

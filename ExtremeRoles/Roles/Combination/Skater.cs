@@ -5,6 +5,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class SkaterManager : FlexibleCombinationRoleManagerBase

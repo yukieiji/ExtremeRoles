@@ -11,6 +11,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.CustomOption;
+
 using UnityHelper = ExtremeRoles.Helper.Unity;
 
 namespace ExtremeRoles.Roles.Combination;

@@ -2,6 +2,8 @@
 using ExtremeRoles.Roles.API;
 using System.Collections.Generic;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.Interface;
 
 #nullable enable

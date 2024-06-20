@@ -11,6 +11,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Interface;
 using Hazel;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class SlaveDriver :

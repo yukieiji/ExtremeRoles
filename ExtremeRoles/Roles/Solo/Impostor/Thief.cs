@@ -9,6 +9,7 @@ using UnityEngine;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using UnityEngine.Video;
 
+using ExtremeRoles.Module.CustomOption;
 
 #nullable enable
 

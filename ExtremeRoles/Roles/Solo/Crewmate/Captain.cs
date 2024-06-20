@@ -11,12 +11,14 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Captain : 
-    SingleRoleBase, 
-    IRoleAwake<RoleTypes>, 
-    IRoleMeetingButtonAbility, 
+public sealed class Captain :
+    SingleRoleBase,
+    IRoleAwake<RoleTypes>,
+    IRoleMeetingButtonAbility,
     IRoleVoteModifier
 {
     public enum CaptainOption
@@ -111,7 +113,7 @@ public sealed class Captain :
             // スキップ => チャージ
             if (voteFor == 252 ||
                 voteFor == 253 ||
-                voteFor == 254 || 
+                voteFor == 254 ||
                 voteFor == byte.MaxValue)
             {
                 using (var caller = RPCOperator.CreateCaller(
@@ -145,7 +147,7 @@ public sealed class Captain :
     {
         PlayerVoteArea pva = instance.playerStates.FirstOrDefault(
             x => x.TargetPlayerId == this.voteTarget);
-        
+
         if (pva == null) { return; }
 
         if (!voteIndex.TryGetValue(pva.TargetPlayerId, out int startIndex))
@@ -227,7 +229,7 @@ public sealed class Captain :
 
     public string GetFakeOptionString() => "";
 
-    public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) => 
+    public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) =>
         instance.TargetPlayerId == 253 || isNotUseSpecialVote();
 
     public void SetSprite(SpriteRenderer render)

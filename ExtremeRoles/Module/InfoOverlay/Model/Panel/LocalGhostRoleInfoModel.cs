@@ -5,6 +5,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 #nullable enable

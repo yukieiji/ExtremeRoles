@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using ExtremeRoles.Module.CustomOption;
 
 using ExtremeRoles.Helper;
 

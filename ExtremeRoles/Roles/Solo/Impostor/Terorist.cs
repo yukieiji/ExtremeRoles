@@ -8,6 +8,8 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Resources;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

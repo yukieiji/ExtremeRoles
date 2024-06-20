@@ -1,4 +1,4 @@
-﻿global using ExtremeRoles.Module.CustomOption;
+﻿// global using ExtremeRoles.Module.CustomOption;
 global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 

@@ -103,8 +103,8 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
     {
         this.buddy = this.getSameBuddy();
 
-        if (IsAwake || 
-            !this.CanHasAnotherRole || 
+        if (IsAwake ||
+            !this.CanHasAnotherRole ||
             this.AnotherRole == null) { return; }
 
         this.hiddeRole = this.AnotherRole;
@@ -154,7 +154,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
     public override Color GetTargetRoleSeeColor(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (IsAwake && 
+        if (IsAwake &&
             this.buddy is not null &&
             this.buddy.Contains(targetPlayerId))
         {
@@ -183,7 +183,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         {
             return string.Format(
                 base.GetFullDescription(),
-                this.buddy is null ? 
+                this.buddy is null ?
                     string.Empty : this.buddy.GetAllPlayerName());
         }
         else
@@ -214,7 +214,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         {
             return string.Format(
                 base.GetIntroDescription(),
-                this.buddy is null ? 
+                this.buddy is null ?
                     string.Empty : this.buddy.GetAllPlayerName());
         }
         else

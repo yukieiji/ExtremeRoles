@@ -13,6 +13,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.VentModule;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class SandWorm : SingleRoleBase, IRoleAbility

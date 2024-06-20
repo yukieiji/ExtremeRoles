@@ -4,6 +4,8 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.GameMode.RoleSelector;
 
 public sealed class ClassicGameModeRoleSelector : IRoleSelector
@@ -71,7 +73,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
         }
     }
 
-    public bool IsValidRoleOption(IOptionInfo option)
+    public bool IsValidRoleOption(
+		IOptionInfo option)
     {
         while (option.Parent != null)
         {

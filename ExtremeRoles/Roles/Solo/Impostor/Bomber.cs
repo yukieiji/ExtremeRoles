@@ -14,6 +14,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+using ExtremeRoles.Module.CustomOption;
+
 using BepInEx.Unity.IL2CPP.Utils;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

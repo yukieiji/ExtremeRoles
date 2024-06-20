@@ -9,6 +9,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
 
+using ExtremeRoles.Module.CustomOption;
+
 using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Combination;

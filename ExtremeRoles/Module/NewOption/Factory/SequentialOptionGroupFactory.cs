@@ -8,6 +8,8 @@ using UnityEngine;
 
 #nullable enable
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.NewOption.Factory;
 
 public sealed class SequentialOptionGroupFactory(

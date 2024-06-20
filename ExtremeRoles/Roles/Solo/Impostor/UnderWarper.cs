@@ -13,6 +13,8 @@ using ExtremeRoles.Compat;
 
 using RoleEffectAction = Il2CppSystem.Action<RoleEffectAnimation>;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

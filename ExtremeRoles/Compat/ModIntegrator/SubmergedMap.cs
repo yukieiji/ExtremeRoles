@@ -22,6 +22,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 using UnityObject = UnityEngine.Object;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
+using ExtremeRoles.Module.CustomOption;
+
 #nullable enable
 
 namespace ExtremeRoles.Compat.ModIntegrator;

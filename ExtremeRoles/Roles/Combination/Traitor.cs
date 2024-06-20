@@ -9,6 +9,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class TraitorManager : FlexibleCombinationRoleManagerBase

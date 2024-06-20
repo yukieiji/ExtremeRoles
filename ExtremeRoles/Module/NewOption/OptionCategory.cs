@@ -2,6 +2,8 @@
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.NewOption;
 
 public sealed class OptionCategory(

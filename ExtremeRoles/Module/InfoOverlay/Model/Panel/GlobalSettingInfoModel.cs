@@ -9,6 +9,8 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 #nullable enable

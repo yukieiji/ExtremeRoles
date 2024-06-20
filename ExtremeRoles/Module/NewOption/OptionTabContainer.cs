@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Module.NewOption;
 
 public sealed class OptionTabContainer(OptionTab tab)

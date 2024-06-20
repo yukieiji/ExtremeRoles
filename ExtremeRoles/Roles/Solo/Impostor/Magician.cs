@@ -14,6 +14,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
+using ExtremeRoles.Module.CustomOption;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
