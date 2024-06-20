@@ -2,29 +2,58 @@
 
 using UnityEngine;
 
-#nullable enable
+using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
+using OptionUnit = ExtremeRoles.Module.CustomOption.OptionUnit;
 
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.NewOption.Implemented;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
 public sealed class AutoParentSetFactory(
 	in OptionGroupFactory factory,
-	in IOptionInfo? parent = null) : IDisposable
+	in IOption? parent = null) : IDisposable
 {
-	private IOptionInfo? parent = parent;
+	private IOption? parent = parent;
 	private readonly OptionGroupFactory internalFactory = factory;
+
+	public BoolCustomOption CreateBoolOption<T>(
+		T option,
+		bool defaultValue,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		Color? color = null,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		BoolCustomOption newOption = this.internalFactory.CreateBoolOption(
+			option,
+			defaultValue,
+			parent is null ? this.parent : parent,
+			isHidden,
+			format,
+			invert,
+			color,
+			ignorePrefix);
+
+		if (this.parent is null)
+		{
+			this.parent = newOption;
+		}
+		return newOption;
+	}
 
 	public FloatCustomOption CreateBoolOption<T>(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
@@ -33,15 +62,13 @@ public sealed class AutoParentSetFactory(
 			defaultValue,
 			min, max, step,
 			parent is null ? this.parent : parent,
-			isHeader,
 			isHidden,
 			format,
 			invert,
-			enableCheckOption,
 			color,
 			ignorePrefix);
 
-		if (isHeader)
+		if (this.parent is null)
 		{
 			this.parent = newOption;
 		}
@@ -52,12 +79,10 @@ public sealed class AutoParentSetFactory(
 		T option,
 		float defaultValue,
 		float min, float max, float step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
@@ -66,15 +91,13 @@ public sealed class AutoParentSetFactory(
 			defaultValue,
 			min, max, step,
 			parent is null ? this.parent : parent,
-			isHeader,
 			isHidden,
 			format,
 			invert,
-			enableCheckOption,
 			color,
 			ignorePrefix);
 
-		if (isHeader)
+		if (this.parent is null)
 		{
 			this.parent = newOption;
 		}
@@ -85,12 +108,10 @@ public sealed class AutoParentSetFactory(
 		T option,
 		float defaultValue,
 		float min, float step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
@@ -100,16 +121,14 @@ public sealed class AutoParentSetFactory(
 			defaultValue,
 			min, step,
 			parent is null ? this.parent : parent,
-			isHeader,
 			isHidden,
 			format,
 			invert,
-			enableCheckOption,
 			color,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (isHeader)
+		if (this.parent is null)
 		{
 			this.parent = newOption;
 		}
@@ -120,12 +139,10 @@ public sealed class AutoParentSetFactory(
 		T option,
 		int defaultValue,
 		int min, int max, int step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
@@ -134,15 +151,13 @@ public sealed class AutoParentSetFactory(
 			defaultValue,
 			min, max, step,
 			parent is null ? this.parent : parent,
-			isHeader,
 			isHidden,
 			format,
 			invert,
-			enableCheckOption,
 			color,
 			ignorePrefix);
 
-		if (isHeader)
+		if (this.parent is null)
 		{
 			this.parent = newOption;
 		}
@@ -153,12 +168,10 @@ public sealed class AutoParentSetFactory(
 		T option,
 		int defaultValue,
 		int min, int step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
@@ -168,47 +181,14 @@ public sealed class AutoParentSetFactory(
 			defaultValue,
 			min, step,
 			parent is null ? this.parent : parent,
-			isHeader,
 			isHidden,
 			format,
 			invert,
-			enableCheckOption,
 			color,
 			tempMaxValue,
 			ignorePrefix);
 
-		if (isHeader)
-		{
-			this.parent = newOption;
-		}
-		return newOption;
-	}
-
-	public BoolCustomOption CreateBoolOption<T>(
-		T option,
-		bool defaultValue,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
-		Color? color = null,
-		bool ignorePrefix = false) where T : struct, IConvertible
-	{
-		BoolCustomOption newOption = this.internalFactory.CreateBoolOption(
-			option,
-			defaultValue,
-			parent is null ? this.parent : parent,
-			isHeader,
-			isHidden,
-			format,
-			invert,
-			enableCheckOption,
-			color,
-			ignorePrefix);
-
-		if (isHeader)
+		if (this.parent is null)
 		{
 			this.parent = newOption;
 		}
@@ -218,12 +198,10 @@ public sealed class AutoParentSetFactory(
 	public SelectionCustomOption CreateSelectionOption<T>(
 		T option,
 		string[] selections,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
@@ -231,15 +209,13 @@ public sealed class AutoParentSetFactory(
 			option,
 			selections,
 			parent is null ? this.parent : parent,
-			isHeader,
 			isHidden,
 			format,
 			invert,
-			enableCheckOption,
 			color,
 			ignorePrefix);
 
-		if (isHeader)
+		if (this.parent is null)
 		{
 			this.parent = newOption;
 		}
@@ -248,29 +224,26 @@ public sealed class AutoParentSetFactory(
 
 	public SelectionCustomOption CreateSelectionOption<T, W>(
 		T option,
-		IOptionInfo? parent = null,
+		IOption? parent = null,
 		bool isHeader = false,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
-		where W : struct, IConvertible
+		where W : struct, Enum
 	{
 		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
 			option,
 			parent is null ? this.parent : parent,
-			isHeader,
 			isHidden,
 			format,
 			invert,
-			enableCheckOption,
 			color,
 			ignorePrefix);
 
-		if (isHeader)
+		if (this.parent is null)
 		{
 			this.parent = newOption;
 		}

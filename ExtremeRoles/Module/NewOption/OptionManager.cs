@@ -6,7 +6,11 @@ using UnityEngine;
 
 #nullable enable
 
-using ExtremeRoles.Module.CustomOption;
+using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
+using OptionUnit = ExtremeRoles.Module.CustomOption.OptionUnit;
+
+using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.NewOption.Implemented;
 
 namespace ExtremeRoles.Module.NewOption;
 
@@ -67,7 +71,7 @@ public sealed class NewOptionManager
 	public AutoParentSetFactory CreateColorSyncOptionGroup(
 		string name,
 		in OptionTab tab,
-		in IOptionInfo? parent = null)
+		in IOption? parent = null)
 	{
 		var internalFactory = CreateOptionGroup(name, tab);
 		var factory = new AutoParentSetFactory(internalFactory, parent);

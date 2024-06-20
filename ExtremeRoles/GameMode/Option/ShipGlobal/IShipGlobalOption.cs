@@ -220,9 +220,9 @@ public interface IShipGlobalOption
 		using (var factory = mng.CreateOptionGroup("ExiledOption"))
 		{
 			var confirmOpt = factory.CreateSelectionOption<GlobalOption, ConfirmExilMode>(GlobalOption.ConfirmExilMode);
-			confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
+			// confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 			var confirmRoleOpt = factory.CreateBoolOption(GlobalOption.IsConfirmRole, false);
-			confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
+			// confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 		}
 		using (var factory = mng.CreateOptionGroup("VentOption"))
 		{
@@ -263,8 +263,7 @@ public interface IShipGlobalOption
 				GlobalOption.AdminLimitTime,
 				30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
 				format: OptionUnit.Second,
-				invert: true,
-				enableCheckOption: adminLimitOpt);
+				invert: true);
 		}
 		using (var factory = mng.CreateOptionGroup("SecurityOption"))
 		{
@@ -274,8 +273,7 @@ public interface IShipGlobalOption
 				GlobalOption.SecurityLimitTime,
 				30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
 				format: OptionUnit.Second,
-				invert: true,
-				enableCheckOption: secLimitOpt);
+				invert: true);
 		}
 		using (var factory = mng.CreateOptionGroup("VitalOption"))
 		{
@@ -285,8 +283,7 @@ public interface IShipGlobalOption
 				GlobalOption.VitalLimitTime,
 				30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
 				format: OptionUnit.Second,
-				invert: true,
-				enableCheckOption: vitalLimitOpt);
+				invert: true);
 		}
 
 		using (var factory = mng.CreateOptionGroup("RandomMapOption"))

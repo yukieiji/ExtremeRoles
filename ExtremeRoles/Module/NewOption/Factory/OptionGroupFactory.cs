@@ -7,9 +7,14 @@ using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
-#nullable enable
+using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
+using OptionUnit = ExtremeRoles.Module.CustomOption.OptionUnit;
 
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.NewOption.Implemented;
+
+
+#nullable enable
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
@@ -28,27 +33,47 @@ public class OptionGroupFactory(
 	private readonly OptionPack optionPack = new OptionPack();
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public FloatCustomOption CreateFloatOption<T>(
+	public BoolCustomOption CreateBoolOption<T>(
 		T option,
-		float defaultValue,
-		float min, float max, float step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		bool defaultValue,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
-		var opt = new FloatCustomOption(
-			optionId,
-			GetOptionName(option, color, ignorePrefix),
+		string name = GetOptionName(option, color, ignorePrefix);
+
+		var opt = new BoolCustomOption(
+			new OptionInfo(optionId, name, format, this.Tab, isHidden),
 			defaultValue,
-			min, max, step,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			OptionRelationFactory.Create(parent, invert));
+
+		this.AddOption(optionId, opt);
+		return opt;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public FloatCustomOption CreateFloatOption<T>(
+		T option,
+		float defaultValue,
+		float min, float max, float step,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		Color? color = null,
+		bool ignorePrefix = false) where T : struct, IConvertible
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, color, ignorePrefix);
+
+		var opt = new FloatCustomOption(
+			new OptionInfo(optionId, name, format, this.Tab, isHidden),
+			defaultValue, min, max, step,
+			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -59,25 +84,22 @@ public class OptionGroupFactory(
 		T option,
 		float defaultValue,
 		float min, float step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, color, ignorePrefix);
+
 		var opt = new FloatDynamicCustomOption(
-			optionId,
-			GetOptionName(option, color, ignorePrefix),
-			defaultValue,
-			min, step,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption,
-			this.Tab, tempMaxValue);
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			defaultValue, min, step,
+			OptionRelationFactory.Create(parent, invert),
+			tempMaxValue);
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -88,23 +110,20 @@ public class OptionGroupFactory(
 		T option,
 		int defaultValue,
 		int min, int max, int step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, color, ignorePrefix);
+
 		var opt = new IntCustomOption(
-			optionId,
-			GetOptionName(option, color, ignorePrefix),
-			defaultValue,
-			min, max, step,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			defaultValue, min, max, step,
+			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -115,51 +134,22 @@ public class OptionGroupFactory(
 		T option,
 		int defaultValue,
 		int min, int step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, color, ignorePrefix);
+
 		var opt = new IntDynamicCustomOption(
-		   optionId,
-		   GetOptionName(option, color, ignorePrefix),
-		   defaultValue,
-		   min, step,
-		   parent, isHeader, isHidden,
-		   format, invert, enableCheckOption,
-		   this.Tab, tempMaxValue);
-
-		this.AddOption(optionId, opt);
-		return opt;
-	}
-
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public BoolCustomOption CreateBoolOption<T>(
-		T option,
-		bool defaultValue,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
-		Color? color = null,
-		bool ignorePrefix = false) where T : struct, IConvertible
-	{
-		int optionId = GetOptionId(option);
-		var opt = new BoolCustomOption(
-			GetOptionId(option),
-			GetOptionName(option, color, ignorePrefix),
-			defaultValue,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			defaultValue, min, step,
+			OptionRelationFactory.Create(parent, invert),
+			tempMaxValue);
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -169,22 +159,20 @@ public class OptionGroupFactory(
 	public SelectionCustomOption CreateSelectionOption<T>(
 		T option,
 		string[] selections,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, color, ignorePrefix);
+
 		var opt = new SelectionCustomOption(
-			GetOptionId(option),
-			GetOptionName(option, color, ignorePrefix),
+			new OptionInfo(optionId, name, format, Tab, isHidden),
 			selections,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -193,24 +181,22 @@ public class OptionGroupFactory(
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<T, W>(
 		T option,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
-		where W : struct, IConvertible
+		where W : struct, Enum
 	{
 		int optionId = GetOptionId(option);
-		var opt = new SelectionCustomOption(
-			optionId,
-			GetOptionName(option, color, ignorePrefix),
-			GetEnumString<W>().ToArray(),
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+		string name = GetOptionName(option, color, ignorePrefix);
+
+		var opt = SelectionCustomOption.CreateFromEnum<W>(
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			OptionRelationFactory.Create(parent, invert));
+
 		this.AddOption(optionId, opt);
 		return opt;
 	}

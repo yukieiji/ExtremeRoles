@@ -21,11 +21,11 @@ public sealed class OptionGroupView(in OptionCategory group)
 	{
 		foreach (var option in this.group.AllOption)
 		{
-			if (!this.obj.TryGetValue(option.Id, out var obj))
+			if (!this.obj.TryGetValue(option.Info.Id, out var obj))
 			{
 				continue;
 			}
-			bool enabled = option.IsActive();
+			bool enabled = option.IsActiveAndEnable;
 
 			obj.SetActive(enabled);
 		}

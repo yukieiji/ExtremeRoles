@@ -6,9 +6,13 @@ using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
-#nullable enable
+using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
+using OptionUnit = ExtremeRoles.Module.CustomOption.OptionUnit;
 
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.NewOption.Implemented;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
@@ -25,27 +29,24 @@ public sealed class SequentialOptionGroupFactory(
 	public int Offset { private get; set; } = 0;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public FloatCustomOption CreateFloatOption(
+	public BoolCustomOption CreateBoolOption(
 		object option,
-		float defaultValue,
-		float min, float max, float step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		bool defaultValue,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
-		var opt = new FloatCustomOption(
-				optionId,
-				getOptionName(option, color, ignorePrefix),
-				defaultValue,
-				min, max, step,
-				parent, isHeader, isHidden,
-				format, invert, enableCheckOption, this.Tab);
+		string name = getOptionName(option, color, ignorePrefix);
+
+		var opt = new BoolCustomOption(
+			new OptionInfo(optionId, name, format, this.Tab, isHidden),
+			defaultValue,
+			OptionRelationFactory.Create(parent, invert));
+
 		this.AddOption(optionId, opt);
 		return opt;
 	}
@@ -55,26 +56,22 @@ public sealed class SequentialOptionGroupFactory(
 		object option,
 		float defaultValue,
 		float min, float step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false)
-
 	{
 		int optionId = getOptionIdAndUpdate();
+		string name = getOptionName(option, color, ignorePrefix);
+
 		var opt = new FloatDynamicCustomOption(
-			optionId,
-			getOptionName(option, color, ignorePrefix),
-			defaultValue,
-			min, step,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption,
-			this.Tab, tempMaxValue);
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			defaultValue, min, step,
+			OptionRelationFactory.Create(parent, invert),
+			tempMaxValue);
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -85,23 +82,20 @@ public sealed class SequentialOptionGroupFactory(
 		object option,
 		int defaultValue,
 		int min, int max, int step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
+		string name = getOptionName(option, color, ignorePrefix);
+
 		var opt = new IntCustomOption(
-			optionId,
-			getOptionName(option, color, ignorePrefix),
-			defaultValue,
-			min, max, step,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			defaultValue, min, max, step,
+			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -112,50 +106,22 @@ public sealed class SequentialOptionGroupFactory(
 		object option,
 		int defaultValue,
 		int min, int step,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
+		string name = getOptionName(option, color, ignorePrefix);
+
 		var opt = new IntDynamicCustomOption(
-			optionId,
-			getOptionName(option, color, ignorePrefix),
-			defaultValue,
-			min, step,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption,
-			this.Tab, tempMaxValue);
-
-		this.AddOption(optionId, opt);
-		return opt;
-	}
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public BoolCustomOption CreateBoolOption(
-		object option,
-		bool defaultValue,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
-		bool isHidden = false,
-		OptionUnit format = OptionUnit.None,
-		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
-		Color? color = null,
-		bool ignorePrefix = false)
-	{
-		int optionId = getOptionIdAndUpdate();
-		var opt = new BoolCustomOption(
-			optionId,
-			getOptionName(option, color, ignorePrefix),
-			defaultValue,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			defaultValue, min, step,
+			OptionRelationFactory.Create(parent, invert),
+			tempMaxValue);
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -165,22 +131,20 @@ public sealed class SequentialOptionGroupFactory(
 	public SelectionCustomOption CreateSelectionOption(
 		object option,
 		string[] selections,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
+		string name = getOptionName(option, color, ignorePrefix);
+
 		var opt = new SelectionCustomOption(
-			optionId,
-			getOptionName(option, color, ignorePrefix),
+			new OptionInfo(optionId, name, format, Tab, isHidden),
 			selections,
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -189,24 +153,20 @@ public sealed class SequentialOptionGroupFactory(
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<W>(
 		object option,
-		IOptionInfo? parent = null,
-		bool isHeader = false,
+		IOption? parent = null,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		IOptionInfo? enableCheckOption = null,
 		Color? color = null,
 		bool ignorePrefix = false)
-		where W : struct, IConvertible
-
+		where W : struct, Enum
 	{
 		int optionId = getOptionIdAndUpdate();
-		var opt = new SelectionCustomOption(
-			optionId,
-			getOptionName(option, color, ignorePrefix),
-			GetEnumString<W>().ToArray(),
-			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+		string name = getOptionName(option, color, ignorePrefix);
+
+		var opt = SelectionCustomOption.CreateFromEnum<W>(
+			new OptionInfo(optionId, name, format, Tab, isHidden),
+			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);
 		return opt;

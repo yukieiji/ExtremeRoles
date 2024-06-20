@@ -111,7 +111,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 			{
 				var optionObj = this.vanillaSettings.settingsInfo[settingInfoIndex];
 				++settingInfoIndex;
-				bool isActive = option.IsActive();
+				bool isActive = option.IsActiveAndEnable;
 
 				optionObj.SetActive(isActive);
 				if (!isActive)
@@ -120,7 +120,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 				}
 				if (optionObj.TryGetComponent<ViewSettingsInfoPanel>(out var viewSettingsInfoPanel))
 				{
-					setInfo(viewSettingsInfoPanel, option.Name, option.CurSelection.ToString());
+					setInfo(viewSettingsInfoPanel, option.Title, option.ValueString);
 				}
 				float x;
 				if (activeIndex % 2 == 0)

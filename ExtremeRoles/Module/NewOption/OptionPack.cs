@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
-using ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.NewOption;
 
 public sealed class OptionPack
 {
 	public IReadOnlyDictionary<int, IValueOption<int>> IntOptions => intOpt;
 	public IReadOnlyDictionary<int, IValueOption<float>> FloatOptions => floatOpt;
 	public IReadOnlyDictionary<int, IValueOption<bool>> BoolOptions => boolOpt;
-	public IReadOnlyDictionary<int, IOptionInfo> AllOptions => allOpt;
+	public IReadOnlyDictionary<int, IOption> AllOptions => allOpt;
 
 	private readonly Dictionary<int, IValueOption<int>> intOpt = new Dictionary<int, IValueOption<int>>();
 	private readonly Dictionary<int, IValueOption<float>> floatOpt = new Dictionary<int, IValueOption<float>>();
 	private readonly Dictionary<int, IValueOption<bool>> boolOpt = new Dictionary<int, IValueOption<bool>>();
-	private readonly Dictionary<int, IOptionInfo> allOpt = new Dictionary<int, IOptionInfo>();
+	private readonly Dictionary<int, IOption> allOpt = new Dictionary<int, IOption>();
 
 	public void Add(int id, IValueOption<float> option)
 	{
