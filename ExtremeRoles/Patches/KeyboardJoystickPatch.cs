@@ -31,7 +31,7 @@ public static class KeyboardJoystickPatch
 
         if (GameSystem.IsLobby && Input.GetKeyDown(KeyCode.Tab))
         {
-			Option.IGameOptionsExtensionsToHudStringPatch.ChangePage(1);
+			// Option.IGameOptionsExtensionsToHudStringPatch.ChangePage(1);
 		}
 
 		InfoOverlay.Instance.Update();
