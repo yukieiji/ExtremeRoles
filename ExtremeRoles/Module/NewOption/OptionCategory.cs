@@ -16,11 +16,15 @@ public sealed class OptionCategory(
 
 	public int Id { get; } = id;
 	public string Name { get; } = name;
+	public bool IsDirty { get; set; } = false;
 
 	private readonly ImmutableDictionary<int, IValueOption<int>> intOpt = option.IntOptions.ToImmutableDictionary();
 	private readonly ImmutableDictionary<int, IValueOption<float>> floatOpt = option.FloatOptions.ToImmutableDictionary();
 	private readonly ImmutableDictionary<int, IValueOption<bool>> boolOpt = option.BoolOptions.ToImmutableDictionary();
 	private readonly ImmutableDictionary<int, IOption> allOpt = option.AllOptions.ToImmutableDictionary();
+
+	public bool TryGet(int id, out IOption option)
+		=> this.allOpt.TryGetValue(id, out option) && option is not null;
 
 	public T GetValue<T>(int id)
 	{

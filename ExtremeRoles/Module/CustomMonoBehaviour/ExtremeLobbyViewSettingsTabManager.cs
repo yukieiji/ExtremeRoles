@@ -24,6 +24,9 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 	private const float initPos = 1.44f;
 	private List<OptionGroupViewObject<ViewSettingsInfoPanel>> optionGroupViewObject = new();
 
+	private const float blockTime = 0.25f;
+	private float blockTimer = blockTime;
+
 	public void Awake()
 	{
 		if (!base.gameObject.TryGetComponent<LobbyViewSettingsPane>(out var lobby))
@@ -38,6 +41,28 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 		this.testButton.transform.localPosition = new Vector3(3.5f, 0, 0);
 		this.testButton.OnClick.RemoveAllListeners();
 		this.testButton.OnClick.AddListener(changeExRTab);
+	}
+
+	public void FixedUpdate()
+	{
+		if (this.blockTimer >= 0.0f ||
+			!NewOptionManager.Instance.TryGetTab(OptionTab.General, out var container))
+		{
+			this.blockTimer -= Time.fixedDeltaTime;
+			return;
+		}
+
+		this.resetTimer();
+		bool isRefresh = false;
+		foreach (var cat in container.Category)
+		{
+			isRefresh = isRefresh || cat.IsDirty;
+			cat.IsDirty = false;
+		}
+		if (isRefresh)
+		{
+			this.updateTextAndPos(OptionTab.General);
+		}
 	}
 
 	private void changeExRTab()
@@ -151,5 +176,10 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 		panel.disabledBackground.gameObject.SetActive(false);
 		panel.background.gameObject.SetActive(true);
 		panel.SetMaskLayer(61);
+	}
+
+	private void resetTimer()
+	{
+		this.blockTimer = blockTime;
 	}
 }

@@ -148,29 +148,37 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		this.titleText = opt.TitleText;
 		this.valueText = opt.ValueText;
 
-		opt.buttons[0].OnClick.RemoveAllListeners();
-		opt.buttons[0].OnClick.AddListener(this.Decrease);
-
-		opt.buttons[1].OnClick.RemoveAllListeners();
-		opt.buttons[1].OnClick.AddListener(this.Increase);
+		if (base.transform.Find("MinusButton (1)").TryGetComponent(out PassiveButton minus))
+		{
+			minus.OnClick.RemoveAllListeners();
+			minus.OnClick.AddListener(this.Decrease);
+		}
+		if (base.transform.Find("PlusButton (1)").TryGetComponent(out PassiveButton plus))
+		{
+			plus.OnClick.RemoveAllListeners();
+			plus.OnClick.AddListener(this.Increase);
+		}
 
 		Destroy(opt);
 	}
 
 	public void Decrease()
 	{
-		if (OptionModel is null)
+		if (OptionModel is null ||
+			OptionCategoryModel is null)
 		{
 			return;
 		}
+		NewOptionManager.Instance.Update(OptionCategoryModel, OptionModel, -1);
 	}
 	public void Increase()
 	{
-		if (OptionModel is null)
+		if (OptionModel is null ||
+			OptionCategoryModel is null)
 		{
 			return;
 		}
-
+		NewOptionManager.Instance.Update(OptionCategoryModel, OptionModel, 1);
 	}
 
 	public void SetMaterialLayer(int maskLayer)
@@ -227,6 +235,8 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 	private ExtremeOptionView? optionPrefab;
 
 	private Collider2D? buttonClickMask;
+	private const float blockTime = 0.25f;
+	private float blockTimer = blockTime;
 
 	public void Awake()
 	{
@@ -246,6 +256,32 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 
 		Destroy(menu.MapPicker.gameObject);
 		Destroy(menu);
+	}
+
+	public void FixedUpdate()
+	{
+		if (this.AllCategory is null)
+		{
+			return;
+		}
+
+		if (this.blockTimer >= 0.0f)
+		{
+			this.blockTimer -= Time.fixedDeltaTime;
+			return;
+		}
+
+		this.resetTimer();
+		bool isRefresh = false;
+		foreach (var cat in this.AllCategory)
+		{
+			isRefresh = isRefresh || cat.IsDirty;
+			cat.IsDirty = false;
+		}
+		if (isRefresh)
+		{
+			this.Refresh();
+		}
 	}
 
 	public void Refresh()
@@ -281,7 +317,6 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 				yPos -= 0.45f;
 			}
 		}
-
 		this.scroller.SetYBoundsMax(-yPos - 1.65f);
 	}
 
@@ -296,8 +331,6 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		this.Refresh();
 	}
 
-
-	// Token: 0x06002595 RID: 9621 RVA: 0x000A01F9 File Offset: 0x0009E3F9
 	public void OnDisable()
 	{
 		ControllerManager.Instance.CloseOverlayMenu(base.name);
@@ -428,7 +461,10 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			}
 		}
 	}
-
+	private void resetTimer()
+	{
+		this.blockTimer = blockTime;
+	}
 }
 
 
