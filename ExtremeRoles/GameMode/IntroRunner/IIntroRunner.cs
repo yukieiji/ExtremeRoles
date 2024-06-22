@@ -3,8 +3,6 @@
 using AmongUs.GameOptions;
 using UnityEngine;
 
-using ExtremeRoles.GameMode.Option.MapModule;
-
 using ExtremeRoles.Helper;
 
 using ExtremeRoles.Module.RoleAssign;
@@ -21,6 +19,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
