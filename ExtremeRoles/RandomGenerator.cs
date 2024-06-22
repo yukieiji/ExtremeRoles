@@ -5,10 +5,11 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.PRNG;
 
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles;
 
-public static class RandomGenerator
+public class RandomGenerator
 {
     public static RNGBase Instance
     {
@@ -16,12 +17,21 @@ public static class RandomGenerator
         {
             if (instance == null)
             {
-                createGlobalRandomGenerator(OptionManager.Instance.GetValue<bool>(
-                    (int)OptionCreator.PresetOptionKey.UseStrongRandomGen));
+                createGlobalRandomGenerator(
+					NewOptionManager.Instance.TryGetCategory(
+						OptionTab.General,
+						randCategoryKey,
+						out var category) &&
+					category.GetValue<bool>(useStrongKey));
             }
             return instance;
         }
     }
+
+	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
+	private const int useStrongKey = (int)OptionCreator.RandomOptionKey.UseStrong;
+	private const int algorithmKey = (int)OptionCreator.RandomOptionKey.Algorithm;
+
     private static bool prevValue = false;
     private static int prevSelection = 0;
 
@@ -29,8 +39,15 @@ public static class RandomGenerator
 
     public static void Initialize()
     {
-        bool useStrongGen = OptionManager.Instance.GetValue<bool>(
-            (int)OptionCreator.PresetOptionKey.UseStrongRandomGen);
+		if (!NewOptionManager.Instance.TryGetCategory(
+				OptionTab.General,
+				randCategoryKey,
+				out var category))
+		{
+			return;
+		}
+
+        bool useStrongGen = category.GetValue<bool>(useStrongKey);
         if (instance != null)
         {
             if (useStrongGen != prevValue)
@@ -39,8 +56,7 @@ public static class RandomGenerator
             }
             else
             {
-                int selection = OptionManager.Instance.GetValue<int>(
-                    (int)OptionCreator.PresetOptionKey.UsePrngAlgorithm);
+                int selection = category.GetValue<int>(algorithmKey);
                 if (prevSelection != selection)
                 {
                     instance = getAditionalPrng(selection);
@@ -63,10 +79,13 @@ public static class RandomGenerator
     private static void createGlobalRandomGenerator(bool isStrong)
     {
 		Logging.Debug("Initialize RNG");
-		if (isStrong)
-        {
-            int selection = OptionManager.Instance.GetValue<int>(
-                (int)OptionCreator.PresetOptionKey.UsePrngAlgorithm);
+		if (NewOptionManager.Instance.TryGetCategory(
+				OptionTab.General,
+				randCategoryKey,
+				out var category) &&
+			isStrong)
+		{
+            int selection = category.GetValue<int>(algorithmKey);
             instance = getAditionalPrng(selection);
             UnityEngine.Random.InitState(CreateStrongRandomSeed());
             prevSelection = selection;
@@ -82,10 +101,11 @@ public static class RandomGenerator
 
     public static Random GetTempGenerator()
     {
-        bool useStrongGen = OptionManager.Instance.GetValue<bool>(
-            (int)OptionCreator.PresetOptionKey.UseStrongRandomGen);
-
-        if (useStrongGen)
+        if (NewOptionManager.Instance.TryGetCategory(
+				OptionTab.General,
+				randCategoryKey,
+				out var category) &&
+			category.GetValue<bool>(useStrongKey))
         {
             return new Random(CreateStrongRandomSeed());
         }

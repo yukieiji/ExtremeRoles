@@ -79,6 +79,12 @@ public sealed class NewOptionManager
 	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
 		=> this.options.TryGetValue(tab, out container) && container is not null;
 
+	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out OptionCategory? category)
+	{
+		category = null;
+		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
+	}
+
 	public OptionCategoryFactory CreateOptionCategory(
 		int id,
 		string name,
