@@ -1,22 +1,21 @@
-﻿using ExtremeRoles.Extension.Controller;
-using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Module.NewOption;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using UnityEngine;
 
 using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Extension.Option;
+using ExtremeRoles.Extension.UnityEvents;
+using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.View;
 
 #nullable enable
-namespace ExtremeRoles.Module.CustomMonoBehaviour;
+namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 
 [Il2CppRegister]
-public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehaviour(ptr)
+public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(ptr)
 {
 	private LobbyViewSettingsPane? vanillaSettings;
 
@@ -29,30 +28,30 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 
 	public void Awake()
 	{
-		if (!base.gameObject.TryGetComponent<LobbyViewSettingsPane>(out var lobby))
+		if (!gameObject.TryGetComponent<LobbyViewSettingsPane>(out var lobby))
 		{
 			return;
 		}
-		this.vanillaSettings = lobby;
+		vanillaSettings = lobby;
 
-		this.testButton = Instantiate(
-			this.vanillaSettings.taskTabButton,
-			this.vanillaSettings.rolesTabButton.transform);
-		this.testButton.transform.localPosition = new Vector3(3.5f, 0, 0);
-		this.testButton.OnClick.RemoveAllListeners();
-		this.testButton.OnClick.AddListener(changeExRTab);
+		testButton = Instantiate(
+			vanillaSettings.taskTabButton,
+			vanillaSettings.rolesTabButton.transform);
+		testButton.transform.localPosition = new Vector3(3.5f, 0, 0);
+		testButton.OnClick.RemoveAllListeners();
+		testButton.OnClick.AddListener(changeExRTab);
 	}
 
 	public void FixedUpdate()
 	{
-		if (this.blockTimer >= 0.0f ||
+		if (blockTimer >= 0.0f ||
 			!NewOptionManager.Instance.TryGetTab(OptionTab.General, out var container))
 		{
-			this.blockTimer -= Time.fixedDeltaTime;
+			blockTimer -= Time.fixedDeltaTime;
 			return;
 		}
 
-		this.resetTimer();
+		resetTimer();
 		bool isRefresh = false;
 		foreach (var cat in container.Category)
 		{
@@ -61,62 +60,62 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 		}
 		if (isRefresh)
 		{
-			this.updateTextAndPos(OptionTab.General);
+			updateTextAndPos(OptionTab.General);
 		}
 	}
 
 	private void changeExRTab()
 	{
-		if (this.vanillaSettings == null)
+		if (vanillaSettings == null)
 		{
 			return;
 		}
 
-		this.vanillaSettings.rolesTabButton.SelectButton(false);
-		this.vanillaSettings.taskTabButton.SelectButton(false);
-		this.testButton.SelectButton(true);
+		vanillaSettings.rolesTabButton.SelectButton(false);
+		vanillaSettings.taskTabButton.SelectButton(false);
+		testButton.SelectButton(true);
 
 		if (NewOptionManager.Instance.TryGetTab(OptionTab.General, out var container))
 		{
-			foreach (var obj in this.vanillaSettings.settingsInfo)
+			foreach (var obj in vanillaSettings.settingsInfo)
 			{
 				Destroy(obj);
 			}
-			this.vanillaSettings.settingsInfo.Clear();
-			this.optionGroupViewObject.Clear();
-			this.optionGroupViewObject.Capacity = container.Count;
+			vanillaSettings.settingsInfo.Clear();
+			optionGroupViewObject.Clear();
+			optionGroupViewObject.Capacity = container.Count;
 
 			foreach (var group in container.Category)
 			{
 				var categoryHeaderMasked = Instantiate(
-					this.vanillaSettings.categoryHeaderOrigin);
+					vanillaSettings.categoryHeaderOrigin);
 				categoryHeaderMasked.transform.SetParent(
-					this.vanillaSettings.settingsContainer);
+					vanillaSettings.settingsContainer);
 				categoryHeaderMasked.transform.localScale = Vector3.one;
-				this.vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
+				vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
 
 				var groupViewObj = new OptionGroupViewObject<ViewSettingsInfoPanel>(
 					categoryHeaderMasked, group.Count);
 				foreach (var option in group.Options)
 				{
 					ViewSettingsInfoPanel viewSettingsInfoPanel = Instantiate(
-						this.vanillaSettings.infoPanelOrigin);
+						vanillaSettings.infoPanelOrigin);
 					viewSettingsInfoPanel.transform.SetParent(
-						this.vanillaSettings.settingsContainer);
+						vanillaSettings.settingsContainer);
 					viewSettingsInfoPanel.transform.localScale = Vector3.one;
-					this.vanillaSettings.settingsInfo.Add(viewSettingsInfoPanel.gameObject);
+					vanillaSettings.settingsInfo.Add(viewSettingsInfoPanel.gameObject);
 
 					groupViewObj.Options.Add(viewSettingsInfoPanel);
 				}
-				this.optionGroupViewObject.Add(groupViewObj);
+				optionGroupViewObject.Add(groupViewObj);
 			}
 		}
-		this.updateTextAndPos(OptionTab.General);
+		updateTextAndPos(OptionTab.General);
 	}
 
 	private void updateTextAndPos(OptionTab tab)
 	{
-		if (this.vanillaSettings == null ||
+		if (vanillaSettings == null ||
 			!NewOptionManager.Instance.TryGetTab(tab, out var container))
 		{
 			return;
@@ -124,7 +123,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 
 		float yPos = initPos;
 
-		foreach (var (catego, optionGroupView) in Enumerable.Zip(container.Category, this.optionGroupViewObject))
+		foreach (var (catego, optionGroupView) in container.Category.Zip(optionGroupViewObject))
 		{
 			var category = optionGroupView.Category;
 			category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
@@ -133,7 +132,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 			yPos -= 0.85f;
 
 			int activeIndex = 0;
-			foreach (var (option, optionView) in Enumerable.Zip(catego.Options, optionGroupView.Options))
+			foreach (var (option, optionView) in catego.Options.Zip(optionGroupView.Options))
 			{
 				bool isActive = option.IsActiveAndEnable;
 
@@ -162,8 +161,8 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 			yPos -= 0.59f;
 		}
 
-		this.vanillaSettings.scrollBar.SetYBoundsMax(-yPos);
-		this.vanillaSettings.scrollBar.ScrollToTop();
+		vanillaSettings.scrollBar.SetYBoundsMax(-yPos);
+		vanillaSettings.scrollBar.ScrollToTop();
 	}
 
 	private static void setInfo(
@@ -180,6 +179,6 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 
 	private void resetTimer()
 	{
-		this.blockTimer = blockTime;
+		blockTimer = blockTime;
 	}
 }
