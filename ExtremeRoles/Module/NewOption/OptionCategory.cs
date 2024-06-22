@@ -11,7 +11,7 @@ public sealed class OptionCategory(
 	string name,
 	in OptionPack option)
 {
-	public IEnumerable<IOption> AllOption => allOpt.Values;
+	public IEnumerable<IOption> Options => allOpt.Values;
 	public int Count => allOpt.Count;
 
 	public int Id { get; } = id;

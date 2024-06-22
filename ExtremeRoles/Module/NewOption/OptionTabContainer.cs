@@ -8,6 +8,7 @@ namespace ExtremeRoles.Module.NewOption;
 public sealed class OptionTabContainer(OptionTab tab)
 {
 	public string Name { get; } = tab.ToString();
+	public int Count => this.allGroup.Count;
 
 	public IEnumerable<OptionCategory> Category => this.allGroup.Values;
 	private readonly Dictionary<int, OptionCategory> allGroup = new ();

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Extension.Option;
+using ExtremeRoles.Module.NewOption.View;
 
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -20,6 +22,7 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 
 	private PassiveButton? testButton;
 	private const float initPos = 1.44f;
+	private List<OptionGroupViewObject<ViewSettingsInfoPanel>> optionGroupViewObject = new();
 
 	public void Awake()
 	{
@@ -48,14 +51,16 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 		this.vanillaSettings.taskTabButton.SelectButton(false);
 		this.testButton.SelectButton(true);
 
-		foreach (var obj in this.vanillaSettings.settingsInfo)
-		{
-			Destroy(obj);
-		}
-		this.vanillaSettings.settingsInfo.Clear();
-
 		if (NewOptionManager.Instance.TryGetTab(OptionTab.General, out var container))
 		{
+			foreach (var obj in this.vanillaSettings.settingsInfo)
+			{
+				Destroy(obj);
+			}
+			this.vanillaSettings.settingsInfo.Clear();
+			this.optionGroupViewObject.Clear();
+			this.optionGroupViewObject.Capacity = container.Count;
+
 			foreach (var group in container.Category)
 			{
 				var categoryHeaderMasked = Instantiate(
@@ -65,7 +70,9 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 				categoryHeaderMasked.transform.localScale = Vector3.one;
 				this.vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
 
-				foreach (var option in group.AllOption)
+				var groupViewObj = new OptionGroupViewObject<ViewSettingsInfoPanel>(
+					categoryHeaderMasked, group.Count);
+				foreach (var option in group.Options)
 				{
 					ViewSettingsInfoPanel viewSettingsInfoPanel = Instantiate(
 						this.vanillaSettings.infoPanelOrigin);
@@ -73,7 +80,10 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 						this.vanillaSettings.settingsContainer);
 					viewSettingsInfoPanel.transform.localScale = Vector3.one;
 					this.vanillaSettings.settingsInfo.Add(viewSettingsInfoPanel.gameObject);
+
+					groupViewObj.Options.Add(viewSettingsInfoPanel);
 				}
+				this.optionGroupViewObject.Add(groupViewObj);
 			}
 		}
 		this.updateTextAndPos(OptionTab.General);
@@ -88,43 +98,29 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 		}
 
 		float yPos = initPos;
-		int settingInfoIndex = 0;
-		int activeOptionRowNum = 0;
-		int groupNum = 0;
-		foreach (var catego in container.Category)
+
+		foreach (var (catego, optionGroupView) in Enumerable.Zip(container.Category, this.optionGroupViewObject))
 		{
-			var categoryObj = this.vanillaSettings.settingsInfo[settingInfoIndex];
-			categoryObj.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
-			if (categoryObj.TryGetComponent<CategoryHeaderMasked>(out var categoryHeaderMasked))
-			{
-				setText(categoryHeaderMasked, catego.Name);
-			}
+			var category = optionGroupView.Category;
+			category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
+			category.ReplaceExRText(catego.Name, 61);
 
 			yPos -= 0.85f;
 
-			++groupNum;
-			++settingInfoIndex;
-
 			int activeIndex = 0;
-			foreach (var option in catego.AllOption)
+			foreach (var (option, optionView) in Enumerable.Zip(catego.Options, optionGroupView.Options))
 			{
-				var optionObj = this.vanillaSettings.settingsInfo[settingInfoIndex];
-				++settingInfoIndex;
 				bool isActive = option.IsActiveAndEnable;
 
-				optionObj.SetActive(isActive);
+				optionView.gameObject.SetActive(isActive);
 				if (!isActive)
 				{
 					continue;
 				}
-				if (optionObj.TryGetComponent<ViewSettingsInfoPanel>(out var viewSettingsInfoPanel))
-				{
-					setInfo(viewSettingsInfoPanel, option.Title, option.ValueString);
-				}
+				setInfo(optionView, option.Title, option.ValueString);
 				float x;
 				if (activeIndex % 2 == 0)
 				{
-					++activeOptionRowNum;
 					x = -8.95f;
 					if (activeIndex > 0)
 					{
@@ -136,21 +132,13 @@ public sealed class ExtremeLobbyViewSettingsTabManager(IntPtr ptr) : MonoBehavio
 					x = -3f;
 				}
 				++activeIndex;
-				optionObj.transform.localPosition = new Vector3(x, yPos, -2f);
+				optionView.transform.localPosition = new Vector3(x, yPos, -2f);
 			}
 			yPos -= 0.59f;
 		}
 
 		this.vanillaSettings.scrollBar.SetYBoundsMax(-yPos);
 		this.vanillaSettings.scrollBar.ScrollToTop();
-	}
-
-	private static void setText(CategoryHeaderMasked masked, string txt)
-	{
-		masked.Title.text = txt;
-		masked.Background.material.SetInt(PlayerMaterial.MaskLayer, 61);
-		masked.Title.fontMaterial.SetFloat("_StencilComp", 3f);
-		masked.Title.fontMaterial.SetFloat("_Stencil", (float)61);
 	}
 
 	private static void setInfo(

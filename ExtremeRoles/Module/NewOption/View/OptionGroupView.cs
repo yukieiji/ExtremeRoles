@@ -19,7 +19,7 @@ public sealed class OptionGroupView(in OptionCategory group)
 
 	public void Update(in float posOffset)
 	{
-		foreach (var option in this.group.AllOption)
+		foreach (var option in this.group.Options)
 		{
 			if (!this.obj.TryGetValue(option.Info.Id, out var obj))
 			{
