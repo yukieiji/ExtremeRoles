@@ -2,6 +2,8 @@
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
+using System.Text;
+
 using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
 
 using ExtremeRoles.Module.NewOption.Interfaces;
@@ -26,6 +28,21 @@ public sealed class OptionCategory(
 	private readonly ImmutableDictionary<int, IValueOption<float>> floatOpt = option.FloatOptions.ToImmutableDictionary();
 	private readonly ImmutableDictionary<int, IValueOption<bool>> boolOpt = option.BoolOptions.ToImmutableDictionary();
 	private readonly ImmutableDictionary<int, IOption> allOpt = option.AllOptions.ToImmutableDictionary();
+
+	public void AddHudString(in StringBuilder builder)
+	{
+		builder.Append($"・OptionCategory: {this.Name}");
+
+		foreach (var option in this.allOpt.Values)
+		{
+			if (!option.IsActiveAndEnable)
+			{
+				continue;
+			}
+
+			builder.AppendLine($"{option.Title}: {option.ValueString}");
+		}
+	}
 
 	public bool TryGet(int id, out IOption option)
 		=> this.allOpt.TryGetValue(id, out option) && option is not null;
