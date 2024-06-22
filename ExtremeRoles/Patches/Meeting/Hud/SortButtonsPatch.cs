@@ -23,7 +23,7 @@ public static class MeetingHudSortButtonsPatch
 {
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!ExtremeGameModeManager.Instance.ShipOption.IsChangeVoteAreaButtonSortArg ||
+		if (!ExtremeGameModeManager.Instance.ShipOption.Meeting.IsChangeVoteAreaButtonSortArg ||
 			ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 		PlayerVoteArea[] array = __instance.playerStates.OrderBy(delegate (PlayerVoteArea p)

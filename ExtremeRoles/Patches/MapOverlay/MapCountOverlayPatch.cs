@@ -205,11 +205,10 @@ public static class MapCountOverlayUpdatePatch
     public static void LoadOptionValue()
     {
         var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
-        if (adminOpt == null) { return; }
 
-        adminTimer = adminOpt.AdminLimitTime;
+        adminTimer = adminOpt.LimitTime;
         isRemoveAdmin = adminOpt.Disable;
-        enableAdminLimit = adminOpt.EnableAdminLimit;
+        enableAdminLimit = adminOpt.EnableLimit;
 
         Logging.Debug("---- AdminCondition ----");
         Logging.Debug($"IsRemoveAdmin:{isRemoveAdmin}");

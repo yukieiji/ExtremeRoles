@@ -33,7 +33,7 @@ public static class IGameOptionsExtensionsNumImpostorsPatch
         return false;
     }
 }
-
+/*
 [HarmonyPatch(
     typeof(IGameOptionsExtensions),
     nameof(IGameOptionsExtensions.ToHudString))]
@@ -222,3 +222,4 @@ public static class IGameOptionsExtensionsToHudStringPatch
         return Translation.GetString(key);
     }
 }
+*/

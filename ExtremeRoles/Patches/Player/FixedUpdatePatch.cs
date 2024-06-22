@@ -188,7 +188,7 @@ public static class PlayerControlFixedUpdatePatch
 		{
 			if (ventButtonShow)
 			{
-				if (!ship.EngineerUseImpostorVent)
+				if (!ship.Vent.EngineerUseImpostorVent)
 				{
 					hudManager.AbilityButton.Show();
 				}

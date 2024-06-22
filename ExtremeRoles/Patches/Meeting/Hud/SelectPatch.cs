@@ -26,7 +26,7 @@ public static class MeetingHudSelectPatch
 
 		if (isBlock) { return false; }
 
-		var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
+		var shipOpt = ExtremeGameModeManager.Instance.ShipOption.Meeting;
 
 		if (shipOpt.DisableSelfVote &&
 			CachedPlayerControl.LocalPlayer.PlayerId == suspectStateIdx)

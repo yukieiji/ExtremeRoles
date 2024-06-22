@@ -23,6 +23,7 @@ using UnityObject = UnityEngine.Object;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.OLDS;
 
 #nullable enable
 

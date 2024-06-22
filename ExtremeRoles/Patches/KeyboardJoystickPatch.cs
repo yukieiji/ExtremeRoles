@@ -58,7 +58,7 @@ public static class KeyboardJoystickPatch
             if (role.TryGetVanillaRoleId(out RoleTypes roleId))
             {
                 if (roleId != RoleTypes.Engineer ||
-                    ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
+                    ExtremeGameModeManager.Instance.ShipOption.Vent.EngineerUseImpostorVent)
                 {
                     hudManager.ImpostorVentButton.DoClick();
                 }

@@ -243,7 +243,7 @@ public static class PlayerVoteAreaSetCosmeticsPatch
 {
 	public static void Postfix(PlayerVoteArea __instance)
 	{
-		if (ExtremeGameModeManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
+		if (ExtremeGameModeManager.Instance.ShipOption.Meeting.IsFixedVoteAreaPlayerLevel)
         {
 			__instance.LevelNumberText.text = "99";
 		}
@@ -277,7 +277,7 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(1)] bool isDead,
 		[HarmonyArgument(2)] bool isGuardian = false)
         {
-		if (ExtremeGameModeManager.Instance.ShipOption.IsRemoveAngleIcon)
+		if (ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsRemoveAngleIcon)
 		{
 			__instance.GAIcon.gameObject.SetActive(false);
 		}

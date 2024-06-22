@@ -610,10 +610,10 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
     // クルーの幽霊役職の処理（インポスターの時はここに来ない）
     public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
         // バニラ幽霊クルー役職にニュートラルがアサインされる時はTrueを返す
-        if (ExtremeGameModeManager.Instance.ShipOption.IsAssignNeutralToVanillaCrewGhostRole)
+        if (ExtremeRoleManager.GameRole.Count == 0 ||
+			!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsAssignNeutralToVanillaCrewGhostRole)
         {
             return true;
         }

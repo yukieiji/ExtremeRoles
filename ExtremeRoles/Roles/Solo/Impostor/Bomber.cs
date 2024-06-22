@@ -221,7 +221,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             if (!playerInfo.Disconnected &&
                 !playerInfo.IsDead &&
                 (playerInfo.PlayerId != sourcePlayer.PlayerId) &&
-                (!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer) &&
+                (!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
                 (!ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() ||
                  playerInfo.PlayerId == rolePlayer.PlayerId))
             {
