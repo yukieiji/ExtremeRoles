@@ -51,6 +51,10 @@ public interface IRoleSelector
 	public bool IsValidGlobalRoleOptionId(RoleSpawnOption optionId)
 		=> Enum.IsDefined(typeof(RoleSpawnOption), optionId);
 
+	public static bool RawXionUse => NewOptionManager.Instance.TryGetCategory(
+			OptionTab.General, (int)ExtremeRoleId.Xion + 200, out var cate) &&
+			cate.GetValue<bool>((int)XionOption.UseXion);
+
 	public bool IsValidRoleOption(IOptionInfo option);
 
     public static void CreateRoleGlobalOption()
