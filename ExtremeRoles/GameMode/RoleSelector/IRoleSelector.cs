@@ -54,18 +54,18 @@ public interface IRoleSelector
     public static void CreateRoleGlobalOption()
     {
 		var optMng = NewOptionManager.Instance;
-		using (var roleOptionFactory = optMng.CreateColorSyncOptionGroup(
+		using (var roleOptionFactory = optMng.CreateColorSyncOptionCategory(
 			"RoleSpawnOption", defaultOptionColor))
 		{
 			createExtremeRoleGlobalSpawnOption(roleOptionFactory);
 		}
 
-		using (var roleOptionFactory = optMng.CreateColorSyncOptionGroup(
+		using (var roleOptionFactory = optMng.CreateColorSyncOptionCategory(
 			"GhostRoleSpawnOption", defaultOptionColor))
 		{
 			createExtremeGhostRoleGlobalSpawnOption(roleOptionFactory);
 		}
-		using (var xionCategory = optMng.CreateOptionGroup(
+		using (var xionCategory = optMng.CreateOptionCategory(
 			Helper.Design.ColoedString(ColorPalette.XionBlue, "Xion")))
 		{
 			xionCategory.CreateBoolOption(
@@ -74,7 +74,7 @@ public interface IRoleSelector
 		}
 	}
 
-    private static void createExtremeRoleGlobalSpawnOption(ColorSyncOptionGroupFactory factory)
+    private static void createExtremeRoleGlobalSpawnOption(ColorSyncOptionCategoryFactory factory)
     {
 		factory.CreateIntOption(
 			RoleGlobalOption.MinCrewmateRoles,
@@ -98,7 +98,7 @@ public interface IRoleSelector
 			0, 0, GameSystem.MaxImposterNum * 2, 1);
     }
 
-    private static void createExtremeGhostRoleGlobalSpawnOption(ColorSyncOptionGroupFactory factory)
+    private static void createExtremeGhostRoleGlobalSpawnOption(ColorSyncOptionCategoryFactory factory)
 	{
 		factory.CreateIntOption(
 			RoleGlobalOption.MinCrewmateGhostRoles,

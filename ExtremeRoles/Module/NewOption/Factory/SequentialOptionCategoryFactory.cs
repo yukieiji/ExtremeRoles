@@ -16,12 +16,12 @@ using ExtremeRoles.Module.NewOption.Implemented;
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
-public sealed class SequentialOptionGroupFactory(
+public sealed class SequentialOptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,
 	OptionTab tab = OptionTab.General) :
-	OptionGroupFactory(name, groupId, action, tab)
+	OptionCategoryFactory(name, groupId, action, tab)
 {
 	public int StartId => 0;
 	public int EndId => this.Offset - 1;
@@ -43,7 +43,7 @@ public sealed class SequentialOptionGroupFactory(
 		string name = getOptionName(option, color, ignorePrefix);
 
 		var opt = new BoolCustomOption(
-			new OptionInfo(optionId, name, format, this.Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue,
 			OptionRelationFactory.Create(parent, invert));
 
@@ -68,7 +68,7 @@ public sealed class SequentialOptionGroupFactory(
 		string name = getOptionName(option, color, ignorePrefix);
 
 		var opt = new FloatDynamicCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue, min, step,
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
@@ -93,7 +93,7 @@ public sealed class SequentialOptionGroupFactory(
 		string name = getOptionName(option, color, ignorePrefix);
 
 		var opt = new IntCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue, min, max, step,
 			OptionRelationFactory.Create(parent, invert));
 
@@ -118,7 +118,7 @@ public sealed class SequentialOptionGroupFactory(
 		string name = getOptionName(option, color, ignorePrefix);
 
 		var opt = new IntDynamicCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue, min, step,
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
@@ -142,7 +142,7 @@ public sealed class SequentialOptionGroupFactory(
 		string name = getOptionName(option, color, ignorePrefix);
 
 		var opt = new SelectionCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			selections,
 			OptionRelationFactory.Create(parent, invert));
 
@@ -165,7 +165,7 @@ public sealed class SequentialOptionGroupFactory(
 		string name = getOptionName(option, color, ignorePrefix);
 
 		var opt = SelectionCustomOption.CreateFromEnum<W>(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);

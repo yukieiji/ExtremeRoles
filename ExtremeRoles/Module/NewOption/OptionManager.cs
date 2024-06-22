@@ -14,6 +14,7 @@ using ExtremeRoles.Module.NewOption.Implemented;
 using ExtremeRoles.Helper;
 using System.Linq;
 using ExtremeRoles.GameMode;
+
 using Hazel;
 
 namespace ExtremeRoles.Module.NewOption;
@@ -79,44 +80,44 @@ public sealed class NewOptionManager
 	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
 		=> this.options.TryGetValue(tab, out container) && container is not null;
 
-	public OptionGroupFactory CreateOptionGroup(
+	public OptionCategoryFactory CreateOptionCategory(
 		string name,
 		in OptionTab tab = OptionTab.General)
 	{
-		var factory = new OptionGroupFactory(name, this.id, this.registerOptionGroup, tab);
+		var factory = new OptionCategoryFactory(name, this.id, this.registerOptionGroup, tab);
 		this.id++;
 
 		return factory;
 	}
 
-	public SequentialOptionGroupFactory CreateSequentialOptionGroup(
+	public SequentialOptionCategoryFactory CreateSequentialOptionCategory(
 		string name,
 		in OptionTab tab = OptionTab.General)
 	{
-		var factory = new SequentialOptionGroupFactory(name, this.id, this.registerOptionGroup, tab);
+		var factory = new SequentialOptionCategoryFactory(name, this.id, this.registerOptionGroup, tab);
 		this.id++;
 
 		return factory;
 	}
 
-	public ColorSyncOptionGroupFactory CreateColorSyncOptionGroup(
+	public ColorSyncOptionCategoryFactory CreateColorSyncOptionCategory(
 		string name,
 		in Color color,
 		in OptionTab tab = OptionTab.General)
 	{
-		var internalFactory = CreateOptionGroup(name, tab);
-		var factory = new ColorSyncOptionGroupFactory(color, internalFactory);
+		var internalFactory = CreateOptionCategory(name, tab);
+		var factory = new ColorSyncOptionCategoryFactory(color, internalFactory);
 
 		return factory;
 	}
 
-	public AutoParentSetFactory CreateColorSyncOptionGroup(
+	public AutoParentSetOptionCategoryFactory CreateColorSyncOptionCategory(
 		string name,
 		in OptionTab tab,
 		in IOption? parent = null)
 	{
-		var internalFactory = CreateOptionGroup(name, tab);
-		var factory = new AutoParentSetFactory(internalFactory, parent);
+		var internalFactory = CreateOptionCategory(name, tab);
+		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
 
 		return factory;
 	}
@@ -139,7 +140,7 @@ public sealed class NewOptionManager
 		}
 		else
 		{
-			shareOptionCategory(option.Info.Tab, category);
+			shareOptionCategory(category);
 			category.IsDirty = true;
 		}
 	}
@@ -155,42 +156,43 @@ public sealed class NewOptionManager
 
 	private void shereAllOption()
 	{
-		foreach (var (tab, tabContainer) in this.options)
+		foreach (var tabContainer in this.options.Values)
 		{
 			foreach (var category in tabContainer.Category)
 			{
-				shareOptionCategory(tab, category);
+				shareOptionCategory(category);
 			}
 		}
 	}
 
 	private static void shareOptionCategory(
-		in OptionTab tab, in OptionCategory category)
+		in OptionCategory category)
 	{
 		int size = category.Count;
+
 		if (size <= chunkSize)
 		{
-			shareOptionCategoryWithSize(tab, category, size);
+			shareOptionCategoryWithSize(category, size);
 		}
 		else
 		{
 			int mod = size;
 			do
 			{
-				shareOptionCategoryWithSize(tab, category, chunkSize);
+				shareOptionCategoryWithSize(category, chunkSize);
 				mod -= chunkSize;
 			} while (mod > chunkSize);
-			shareOptionCategoryWithSize(tab, category, mod);
+			shareOptionCategoryWithSize(category, mod);
 		}
 	}
 
 	private static void shareOptionCategoryWithSize(
-		in OptionTab tab, in OptionCategory category, int size)
+		in OptionCategory category, int size)
 	{
 		using (var caller = RPCOperator.CreateCaller(
 				RPCOperator.Command.ShareOption))
 		{
-			caller.WriteByte((byte)tab);
+			caller.WriteByte((byte)category.Tab);
 			caller.WritePackedInt(category.Id);
 			caller.WriteByte((byte)size);
 			foreach (var option in category.Options)

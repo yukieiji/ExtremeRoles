@@ -12,12 +12,12 @@ using ExtremeRoles.Module.NewOption.Implemented;
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
-public sealed class ColorSyncOptionGroupFactory(
+public sealed class ColorSyncOptionCategoryFactory(
 	in Color color,
-	in OptionGroupFactory factory) : IDisposable
+	in OptionCategoryFactory factory) : IDisposable
 {
 	private readonly Color color = color;
-	private readonly OptionGroupFactory factory = factory;
+	private readonly OptionCategoryFactory factory = factory;
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public BoolCustomOption CreateBoolOption<T>(

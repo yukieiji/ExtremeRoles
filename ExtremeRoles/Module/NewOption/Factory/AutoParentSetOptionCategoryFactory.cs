@@ -12,12 +12,12 @@ using ExtremeRoles.Module.NewOption.Implemented;
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
-public sealed class AutoParentSetFactory(
-	in OptionGroupFactory factory,
+public sealed class AutoParentSetOptionCategoryFactory(
+	in OptionCategoryFactory factory,
 	in IOption? parent = null) : IDisposable
 {
 	private IOption? parent = parent;
-	private readonly OptionGroupFactory internalFactory = factory;
+	private readonly OptionCategoryFactory internalFactory = factory;
 
 	public BoolCustomOption CreateBoolOption<T>(
 		T option,

@@ -18,7 +18,7 @@ using ExtremeRoles.Module.NewOption.Implemented;
 
 namespace ExtremeRoles.Module.NewOption.Factory;
 
-public class OptionGroupFactory(
+public class OptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,
@@ -47,7 +47,7 @@ public class OptionGroupFactory(
 		string name = GetOptionName(option, color, ignorePrefix);
 
 		var opt = new BoolCustomOption(
-			new OptionInfo(optionId, name, format, this.Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue,
 			OptionRelationFactory.Create(parent, invert));
 
@@ -71,7 +71,7 @@ public class OptionGroupFactory(
 		string name = GetOptionName(option, color, ignorePrefix);
 
 		var opt = new FloatCustomOption(
-			new OptionInfo(optionId, name, format, this.Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue, min, max, step,
 			OptionRelationFactory.Create(parent, invert));
 
@@ -96,7 +96,7 @@ public class OptionGroupFactory(
 		string name = GetOptionName(option, color, ignorePrefix);
 
 		var opt = new FloatDynamicCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue, min, step,
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
@@ -121,7 +121,7 @@ public class OptionGroupFactory(
 		string name = GetOptionName(option, color, ignorePrefix);
 
 		var opt = new IntCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue, min, max, step,
 			OptionRelationFactory.Create(parent, invert));
 
@@ -146,7 +146,7 @@ public class OptionGroupFactory(
 		string name = GetOptionName(option, color, ignorePrefix);
 
 		var opt = new IntDynamicCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue, min, step,
 			OptionRelationFactory.Create(parent, invert),
 			tempMaxValue);
@@ -170,7 +170,7 @@ public class OptionGroupFactory(
 		string name = GetOptionName(option, color, ignorePrefix);
 
 		var opt = new SelectionCustomOption(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			selections,
 			OptionRelationFactory.Create(parent, invert));
 
@@ -194,7 +194,7 @@ public class OptionGroupFactory(
 		string name = GetOptionName(option, color, ignorePrefix);
 
 		var opt = SelectionCustomOption.CreateFromEnum<W>(
-			new OptionInfo(optionId, name, format, Tab, isHidden),
+			new OptionInfo(optionId, name, format, isHidden),
 			OptionRelationFactory.Create(parent, invert));
 
 		this.AddOption(optionId, opt);
@@ -254,7 +254,7 @@ public class OptionGroupFactory(
 
 	public void Dispose()
 	{
-		var newGroup = new OptionCategory(groupid, this.Name, optionPack);
+		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, optionPack);
 		this.registerOption(Tab, newGroup);
 	}
 }

@@ -2,11 +2,14 @@
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
+using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
+
 using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Module.NewOption;
 
 public sealed class OptionCategory(
+	OptionTab tab,
 	int id,
 	string name,
 	in OptionPack option)
@@ -14,6 +17,7 @@ public sealed class OptionCategory(
 	public IEnumerable<IOption> Options => allOpt.Values;
 	public int Count => allOpt.Count;
 
+	public OptionTab Tab { get; } = tab;
 	public int Id { get; } = id;
 	public string Name { get; } = name;
 	public bool IsDirty { get; set; } = false;
