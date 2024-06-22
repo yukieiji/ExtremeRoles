@@ -136,6 +136,9 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	private TextMeshPro? titleText;
 	private TextMeshPro? valueText;
 
+	public IOption? OptionModel { private get; set; }
+	public OptionCategory? OptionCategoryModel { private get; set; }
+
 	public void Awake()
 	{
 		if (!base.TryGetComponent(out StringOption opt))
@@ -144,8 +147,30 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		}
 		this.titleText = opt.TitleText;
 		this.valueText = opt.ValueText;
-		this.buttons = opt.buttons;
+
+		opt.buttons[0].OnClick.RemoveAllListeners();
+		opt.buttons[0].OnClick.AddListener(this.Decrease);
+
+		opt.buttons[1].OnClick.RemoveAllListeners();
+		opt.buttons[1].OnClick.AddListener(this.Increase);
+
 		Destroy(opt);
+	}
+
+	public void Decrease()
+	{
+		if (OptionModel is null)
+		{
+			return;
+		}
+	}
+	public void Increase()
+	{
+		if (OptionModel is null)
+		{
+			return;
+		}
+
 	}
 
 	public void SetMaterialLayer(int maskLayer)
@@ -164,18 +189,22 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		}
 	}
 
-	public void Refresh(in IOption model)
+	public void Refresh()
 	{
+		if (this.OptionModel is null)
+		{
+			return;
+		}
+
 		if (this.titleText != null)
 		{
-			this.titleText.text = model.Title;
+			this.titleText.text = this.OptionModel.Title;
 		}
-		if (valueText != null)
+		if (this.valueText != null)
 		{
-			this.valueText.text = model.ValueString;
+			this.valueText.text = this.OptionModel.ValueString;
 		}
 	}
-
 }
 
 
@@ -248,7 +277,7 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 				}
 
 				optionObj.transform.localPosition = new Vector3(0.952f, yPos, -2f);
-				optionObj.Refresh(option);
+				optionObj.Refresh();
 				yPos -= 0.45f;
 			}
 		}
@@ -290,7 +319,7 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 
 		this.optionGroupViewObject.Capacity = this.AllCategory.Length;
-		foreach (var group in this.AllCategory)
+		foreach (var catego in this.AllCategory)
 		{
 			var categoryHeaderMasked = Instantiate(
 				this.categoryHeaderOrigin, Vector3.zero, Quaternion.identity,
@@ -298,14 +327,18 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			categoryHeaderMasked.transform.localScale = Vector3.one * 0.63f;
 
 			var optionGroupViewObject = new OptionGroupViewObject<ExtremeOptionView>(
-				categoryHeaderMasked, group.Count);
+				categoryHeaderMasked, catego.Count);
 
-			foreach (var option in group.Options)
+			foreach (var option in catego.Options)
 			{
 				ExtremeOptionView opt = Instantiate(
 					this.optionPrefab, Vector3.zero, Quaternion.identity, this.settingsContainer);
 				opt.SetClickMask(this.buttonClickMask);
 				opt.SetMaterialLayer(20);
+
+				opt.OptionModel = option;
+				opt.OptionCategoryModel = catego;
+
 				optionGroupViewObject.Options.Add(opt);
 				result.Add(opt);
 			}
