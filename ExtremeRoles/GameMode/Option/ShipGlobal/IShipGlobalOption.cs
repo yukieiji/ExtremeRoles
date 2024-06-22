@@ -81,7 +81,7 @@ public enum MapObjectOption
 	LimitTime,
 }
 
-public enum AdminOption : int
+public enum AdminSpecialOption : int
 {
 	AirShipEnableAdmin = 5
 }
@@ -179,18 +179,25 @@ public interface IShipGlobalOption
 		get
 		{
 			var fixTask = new HashSet<TaskTypes>();
-			for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
-			{
-				var opt = (GlobalOption)i;
 
-				if (GetCommonOptionValue<bool>(opt))
+			if (!NewOptionManager.Instance.TryGetCategory(
+					OptionTab.General,
+					(int)ShipGlobalOptionCategory.TaskOption,
+					out var cate))
+			{
+				return fixTask;
+			}
+
+			for (int i = (int)TaskOption.GarbageTask; i <= (int)TaskOption.DivertPowerTask; ++i)
+			{
+				if (cate.GetValue<bool>(i))
 				{
-					var fixTaskType = opt switch
+					var fixTaskType = (TaskOption)i switch
 					{
-						GlobalOption.GarbageTask => TaskTypes.EmptyGarbage,
-						GlobalOption.ShowerTask => TaskTypes.FixShower,
-						GlobalOption.DevelopPhotosTask => TaskTypes.DevelopPhotos,
-						GlobalOption.DivertPowerTask => TaskTypes.DivertPower,
+						TaskOption.GarbageTask => TaskTypes.EmptyGarbage,
+						TaskOption.ShowerTask => TaskTypes.FixShower,
+						TaskOption.DevelopPhotosTask => TaskTypes.DevelopPhotos,
+						TaskOption.DivertPowerTask => TaskTypes.DivertPower,
 						_ => throw new KeyNotFoundException()
 					};
 					fixTask.Add(fixTaskType);
@@ -216,8 +223,8 @@ public interface IShipGlobalOption
 	public void Load();
 
     public bool IsValidOption(int id);
-	public IEnumerable<GlobalOption> UseOptionId();
-
+	// public IEnumerable<GlobalOption> UseOptionId();
+	/*
 	public void AddHudString(in List<string> allStr)
 	{
 		int lineCounter = 0;
@@ -243,6 +250,7 @@ public interface IShipGlobalOption
 		}
 		allStr.Add(builder.ToString());
 	}
+	*/
 
     public static void Create()
     {
@@ -295,8 +303,8 @@ public interface IShipGlobalOption
 		using (var factory = mng.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
 		{
 			var adminOpt = factory.CreateBoolOption(MapObjectOption.IsRemove, false);
-			factory.CreateSelectionOption<AdminOption, AirShipAdminMode>(
-				AdminOption.AirShipEnableAdmin, adminOpt, invert: true);
+			factory.CreateSelectionOption<AdminSpecialOption, AirShipAdminMode>(
+				AdminSpecialOption.AirShipEnableAdmin, adminOpt, invert: true);
 			var adminLimitOpt = factory.CreateBoolOption(MapObjectOption.EnableLimit, false, adminOpt, invert: true);
 			factory.CreateFloatOption(
 				MapObjectOption.LimitTime,
@@ -347,12 +355,4 @@ public interface IShipGlobalOption
 				format: OptionUnit.Second);
 		}
 	}
-
-    public static T GetCommonOptionValue<T>(GlobalOption optionKey)
-        where T :
-            struct, IComparable, IConvertible,
-            IComparable<T>, IEquatable<T>
-    {
-        return OptionManager.Instance.GetValue<T>((int)optionKey);
-    }
 }
