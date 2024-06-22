@@ -181,7 +181,7 @@ public static class GameUtility
 	private static void disableXion()
 	{
 		OptionManager.Instance.GetIOption(
-			(int)RoleGlobalOption.UseXion).UpdateSelection(0);
+			(int)RoleSpawnOption.UseXion).UpdateSelection(0);
 	}
 
 	private static void enableRandomNormalRole(ManualLogSource logger)

@@ -26,15 +26,22 @@ public static class OptionCreator
 
     private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
-    public enum CommonOptionKey : int
+    public enum PresetOptionKey : int
     {
         PresetSelection = 0,
-
-		UseRaiseHand,
-
-        UseStrongRandomGen,
-        UsePrngAlgorithm,
     }
+
+	public enum RandomOptionKey : int
+	{
+		UseStrong = 0,
+		Algorithm,
+	}
+
+	public enum CommonOption : int
+	{
+		Preset,
+		RandomOption
+	}
 
     public static void Create()
     {
@@ -46,23 +53,21 @@ public static class OptionCreator
 
 		var optionMng = NewOptionManager.Instance;
 		using (var commonOptionFactory = optionMng.CreateColorSyncOptionCategory(
-			"CommonOption", defaultOptionColor))
+			CommonOption.Preset, defaultOptionColor))
 		{
 			commonOptionFactory.CreateIntOption(
-				CommonOptionKey.PresetSelection,
+				PresetOptionKey.PresetSelection,
 				1, 1, maxPresetNum, 1,
 				format: OptionUnit.Preset);
-			commonOptionFactory.CreateBoolOption(
-				CommonOptionKey.UseRaiseHand,　false);
 		}
 
 		using (var commonOptionFactory = optionMng.CreateColorSyncOptionCategory(
-			"RandomOption", defaultOptionColor))
+			CommonOption.RandomOption, defaultOptionColor))
 		{
 			var strongGen = commonOptionFactory.CreateBoolOption(
-				CommonOptionKey.UseStrongRandomGen,　true);
+				RandomOptionKey.UseStrong,　true);
 			commonOptionFactory.CreateSelectionOption(
-				CommonOptionKey.UsePrngAlgorithm,
+				RandomOptionKey.Algorithm,
 				[
 					"Pcg32XshRr", "Pcg64RxsMXs",
 					"Xorshift64", "Xorshift128",

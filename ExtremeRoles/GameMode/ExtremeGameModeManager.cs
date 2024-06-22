@@ -56,7 +56,7 @@ public sealed class ExtremeGameModeManager
         Instance.ShipOption.Load();
 
 		isXionActive = OptionManager.Instance.GetValue<bool>(
-			(int)RoleGlobalOption.UseXion);
+			(int)RoleSpawnOption.UseXion);
 	}
 
     public IIntroRunner GetIntroRunner()

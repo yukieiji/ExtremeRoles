@@ -8,8 +8,8 @@ namespace ExtremeRoles.Module.Interface;
 public interface ISpawnDataManager
 {
 	protected static int ComputeSpawnNum(
-		RoleGlobalOption minSpawnKey,
-		RoleGlobalOption maxSpawnKey)
+		RoleSpawnOption minSpawnKey,
+		RoleSpawnOption maxSpawnKey)
 	{
 		var allOption = OptionManager.Instance;
 

@@ -23,16 +23,16 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	{
 		this.printOption.Clear();
 
-		foreach (OptionCreator.CommonOptionKey key in Enum.GetValues(
-			typeof(OptionCreator.CommonOptionKey)))
+		foreach (OptionCreator.PresetOptionKey key in Enum.GetValues(
+			typeof(OptionCreator.PresetOptionKey)))
 		{
-			if (key == OptionCreator.CommonOptionKey.PresetSelection) { continue; }
+			if (key == OptionCreator.PresetOptionKey.PresetSelection) { continue; }
 
 			addOptionString(ref this.printOption, key);
 		}
 
 		addRoleSpawnNumOptionHudString(ref this.printOption);
-		addOptionString(ref this.printOption, RoleGlobalOption.UseXion);
+		addOptionString(ref this.printOption, RoleSpawnOption.UseXion);
 
 		foreach (GlobalOption key in Enum.GetValues(typeof(GlobalOption)))
 		{
@@ -75,39 +75,39 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				"crewmateRoles",
-				RoleGlobalOption.MinCrewmateRoles,
-				RoleGlobalOption.MaxCrewmateRoles));
+				RoleSpawnOption.MinCrewmateRoles,
+				RoleSpawnOption.MaxCrewmateRoles));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				"neutralRoles",
-				RoleGlobalOption.MinNeutralRoles,
-				RoleGlobalOption.MaxNeutralRoles));
+				RoleSpawnOption.MinNeutralRoles,
+				RoleSpawnOption.MaxNeutralRoles));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				"impostorRoles",
-				RoleGlobalOption.MinImpostorRoles,
-				RoleGlobalOption.MaxImpostorRoles));
+				RoleSpawnOption.MinImpostorRoles,
+				RoleSpawnOption.MaxImpostorRoles));
 
 		// 幽霊役職周り
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				"crewmateGhostRoles",
-				RoleGlobalOption.MinCrewmateGhostRoles,
-				RoleGlobalOption.MaxCrewmateGhostRoles));
+				RoleSpawnOption.MinCrewmateGhostRoles,
+				RoleSpawnOption.MaxCrewmateGhostRoles));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				"neutralGhostRoles",
-				RoleGlobalOption.MinNeutralGhostRoles,
-				RoleGlobalOption.MaxNeutralGhostRoles));
+				RoleSpawnOption.MinNeutralGhostRoles,
+				RoleSpawnOption.MaxNeutralGhostRoles));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				"impostorGhostRoles",
-				RoleGlobalOption.MinImpostorGhostRoles,
-				RoleGlobalOption.MaxImpostorGhostRoles));
+				RoleSpawnOption.MinImpostorGhostRoles,
+				RoleSpawnOption.MaxImpostorGhostRoles));
 	}
 
 	private static string createRoleSpawnNumOptionHudStringLine(
-		string transKey, RoleGlobalOption minOptKey, RoleGlobalOption maxOptKey)
+		string transKey, RoleSpawnOption minOptKey, RoleSpawnOption maxOptKey)
 	{
 		string optionName = Design.ColoedString(
 						new UnityEngine.Color(204f / 255f, 204f / 255f, 0, 1f),
@@ -119,6 +119,6 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		return $"{optionName}: {optionValueStr}";
 	}
 
-	private static int getSpawnOptionValue(RoleGlobalOption optionKey)
+	private static int getSpawnOptionValue(RoleSpawnOption optionKey)
 		=> OptionManager.Instance.GetValue<int>((int)optionKey);
 }

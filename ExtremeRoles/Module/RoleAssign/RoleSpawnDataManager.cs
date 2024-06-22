@@ -43,20 +43,20 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{
 				ExtremeRoleType.Crewmate,
 				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinCrewmateRoles,
-					RoleGlobalOption.MaxCrewmateRoles)
+					RoleSpawnOption.MinCrewmateRoles,
+					RoleSpawnOption.MaxCrewmateRoles)
 			},
 			{
 				ExtremeRoleType.Neutral,
 				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinNeutralRoles,
-					RoleGlobalOption.MaxNeutralRoles)
+					RoleSpawnOption.MinNeutralRoles,
+					RoleSpawnOption.MaxNeutralRoles)
 			},
 			{
 				ExtremeRoleType.Impostor,
 				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinImpostorRoles,
-					RoleGlobalOption.MaxImpostorRoles)
+					RoleSpawnOption.MinImpostorRoles,
+					RoleSpawnOption.MaxImpostorRoles)
 			},
 		};
 

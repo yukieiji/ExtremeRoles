@@ -45,20 +45,20 @@ public sealed class GhostRoleSpawnDataManager :
 			{
 				ExtremeRoleType.Crewmate,
 				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinCrewmateGhostRoles,
-					RoleGlobalOption.MaxCrewmateGhostRoles)
+					RoleSpawnOption.MinCrewmateGhostRoles,
+					RoleSpawnOption.MaxCrewmateGhostRoles)
 			},
 			{
 				ExtremeRoleType.Neutral,
 				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinNeutralGhostRoles,
-					RoleGlobalOption.MaxNeutralGhostRoles)
+					RoleSpawnOption.MinNeutralGhostRoles,
+					RoleSpawnOption.MaxNeutralGhostRoles)
 			},
 			{
 				ExtremeRoleType.Impostor,
 				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinImpostorGhostRoles,
-					RoleGlobalOption.MaxImpostorGhostRoles)
+					RoleSpawnOption.MinImpostorGhostRoles,
+					RoleSpawnOption.MaxImpostorGhostRoles)
 			},
 		};
 

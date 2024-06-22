@@ -24,7 +24,6 @@ public sealed class NewOptionManager
 	public readonly static NewOptionManager Instance = new ();
 
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
-	private int id = 0;
 
 	public string ConfigPreset
 	{
@@ -81,46 +80,69 @@ public sealed class NewOptionManager
 		=> this.options.TryGetValue(tab, out container) && container is not null;
 
 	public OptionCategoryFactory CreateOptionCategory(
+		int id,
 		string name,
 		in OptionTab tab = OptionTab.General)
 	{
-		var factory = new OptionCategoryFactory(name, this.id, this.registerOptionGroup, tab);
-		this.id++;
+		var factory = new OptionCategoryFactory(name, id, this.registerOptionGroup, tab);
 
 		return factory;
 	}
+	public OptionCategoryFactory CreateOptionCategory<T>(
+		T option,
+		in OptionTab tab = OptionTab.General) where T : Enum
+		=> CreateOptionCategory(
+			Convert.ToInt32(option), option.ToString(), tab);
 
 	public SequentialOptionCategoryFactory CreateSequentialOptionCategory(
+		int id,
 		string name,
 		in OptionTab tab = OptionTab.General)
 	{
-		var factory = new SequentialOptionCategoryFactory(name, this.id, this.registerOptionGroup, tab);
-		this.id++;
+		var factory = new SequentialOptionCategoryFactory(name, id, this.registerOptionGroup, tab);
 
 		return factory;
 	}
 
 	public ColorSyncOptionCategoryFactory CreateColorSyncOptionCategory(
+		int id,
 		string name,
 		in Color color,
 		in OptionTab tab = OptionTab.General)
 	{
-		var internalFactory = CreateOptionCategory(name, tab);
+		var internalFactory = CreateOptionCategory(id, name, tab);
 		var factory = new ColorSyncOptionCategoryFactory(color, internalFactory);
 
 		return factory;
 	}
 
-	public AutoParentSetOptionCategoryFactory CreateColorSyncOptionCategory(
+	public ColorSyncOptionCategoryFactory CreateColorSyncOptionCategory<T>(
+		T option,
+		in Color color,
+		in OptionTab tab = OptionTab.General) where T : Enum
+		=> CreateColorSyncOptionCategory(
+			Convert.ToInt32(option), option.ToString(),
+			color, tab);
+
+	public AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
+		int id,
 		string name,
 		in OptionTab tab,
 		in IOption? parent = null)
 	{
-		var internalFactory = CreateOptionCategory(name, tab);
+		var internalFactory = CreateOptionCategory(id, name, tab);
 		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
 
 		return factory;
 	}
+
+	public AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
+		T option,
+		in OptionTab tab = OptionTab.General,
+		in IOption? parent = null) where T : Enum
+		=> CreateAutoParentSetOptionCategory(
+			Convert.ToInt32(option), option.ToString(),
+			tab, parent);
 
 	public void Update(in OptionCategory category, in IOption option, int step)
 	{
@@ -132,7 +154,7 @@ public sealed class NewOptionManager
 		option.Selection = newSelection;
 
 		int id = option.Info.Id;
-		if (id == 0)
+		if (category.Id == 0 && id == 0)
 		{
 			// プリセット切り替え
 			switchPreset();

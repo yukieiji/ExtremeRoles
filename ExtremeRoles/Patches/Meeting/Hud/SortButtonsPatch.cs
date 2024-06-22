@@ -56,7 +56,7 @@ public static class MeetingHudSortButtonsPatch
 			player);
 
 		var system = OptionManager.Instance.GetValue<bool>
-			((int)OptionCreator.CommonOptionKey.UseRaiseHand) ? IRaiseHandSystem.Get() : null;
+			((int)OptionCreator.PresetOptionKey.UseRaiseHand) ? IRaiseHandSystem.Get() : null;
 
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{

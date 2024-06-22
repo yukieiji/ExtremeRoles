@@ -17,7 +17,7 @@ public static class RandomGenerator
             if (instance == null)
             {
                 createGlobalRandomGenerator(OptionManager.Instance.GetValue<bool>(
-                    (int)OptionCreator.CommonOptionKey.UseStrongRandomGen));
+                    (int)OptionCreator.PresetOptionKey.UseStrongRandomGen));
             }
             return instance;
         }
@@ -30,7 +30,7 @@ public static class RandomGenerator
     public static void Initialize()
     {
         bool useStrongGen = OptionManager.Instance.GetValue<bool>(
-            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen);
+            (int)OptionCreator.PresetOptionKey.UseStrongRandomGen);
         if (instance != null)
         {
             if (useStrongGen != prevValue)
@@ -40,7 +40,7 @@ public static class RandomGenerator
             else
             {
                 int selection = OptionManager.Instance.GetValue<int>(
-                    (int)OptionCreator.CommonOptionKey.UsePrngAlgorithm);
+                    (int)OptionCreator.PresetOptionKey.UsePrngAlgorithm);
                 if (prevSelection != selection)
                 {
                     instance = getAditionalPrng(selection);
@@ -66,7 +66,7 @@ public static class RandomGenerator
 		if (isStrong)
         {
             int selection = OptionManager.Instance.GetValue<int>(
-                (int)OptionCreator.CommonOptionKey.UsePrngAlgorithm);
+                (int)OptionCreator.PresetOptionKey.UsePrngAlgorithm);
             instance = getAditionalPrng(selection);
             UnityEngine.Random.InitState(CreateStrongRandomSeed());
             prevSelection = selection;
@@ -83,7 +83,7 @@ public static class RandomGenerator
     public static Random GetTempGenerator()
     {
         bool useStrongGen = OptionManager.Instance.GetValue<bool>(
-            (int)OptionCreator.CommonOptionKey.UseStrongRandomGen);
+            (int)OptionCreator.PresetOptionKey.UseStrongRandomGen);
 
         if (useStrongGen)
         {

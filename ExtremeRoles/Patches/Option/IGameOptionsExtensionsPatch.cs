@@ -60,8 +60,8 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
         List<string> allOptionStr =
 		[
-            getHudString(OptionCreator.CommonOptionKey.PresetSelection),
-			getHudString(OptionCreator.CommonOptionKey.UseRaiseHand),
+            getHudString(OptionCreator.PresetOptionKey.PresetSelection),
+			getHudString(OptionCreator.PresetOptionKey.UseRaiseHand),
 			createRngOptionHudString(),
             createRoleSpawnNumOptionHudString()
         ];
@@ -71,7 +71,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
             allOptionStr.Add(
                 Design.ColoedString(
                     ColorPalette.XionBlue,
-                    getHudString(RoleGlobalOption.UseXion)));
+                    getHudString(RoleSpawnOption.UseXion)));
         }
 
 		egmm.ShipOption.AddHudString(allOptionStr);
@@ -82,8 +82,8 @@ public static class IGameOptionsExtensionsToHudStringPatch
         {
             int optionId = option.Id;
 
-            if (Enum.IsDefined(typeof(OptionCreator.CommonOptionKey), optionId) ||
-                Enum.IsDefined(typeof(RoleGlobalOption), optionId) ||
+            if (Enum.IsDefined(typeof(OptionCreator.PresetOptionKey), optionId) ||
+                Enum.IsDefined(typeof(RoleSpawnOption), optionId) ||
                 Enum.IsDefined(typeof(GlobalOption), optionId))
             {
                 continue;
@@ -149,42 +149,42 @@ public static class IGameOptionsExtensionsToHudStringPatch
 			.AppendLine(
 				createRoleSpawnNumOptionHudStringLine(
 					"crewmateRoles",
-					RoleGlobalOption.MinCrewmateRoles,
-					RoleGlobalOption.MaxCrewmateRoles))
+					RoleSpawnOption.MinCrewmateRoles,
+					RoleSpawnOption.MaxCrewmateRoles))
 			.AppendLine(
 				createRoleSpawnNumOptionHudStringLine(
 					"neutralRoles",
-					RoleGlobalOption.MinNeutralRoles,
-					RoleGlobalOption.MaxNeutralRoles))
+					RoleSpawnOption.MinNeutralRoles,
+					RoleSpawnOption.MaxNeutralRoles))
 			.AppendLine(
 				createRoleSpawnNumOptionHudStringLine(
 					"impostorRoles",
-					RoleGlobalOption.MinImpostorRoles,
-					RoleGlobalOption.MaxImpostorRoles))
+					RoleSpawnOption.MinImpostorRoles,
+					RoleSpawnOption.MaxImpostorRoles))
 			.AppendLine()
 
         // 幽霊役職周り
 			.AppendLine(
 				createRoleSpawnNumOptionHudStringLine(
 					"crewmateGhostRoles",
-					RoleGlobalOption.MinCrewmateGhostRoles,
-					RoleGlobalOption.MaxCrewmateGhostRoles))
+					RoleSpawnOption.MinCrewmateGhostRoles,
+					RoleSpawnOption.MaxCrewmateGhostRoles))
 			.AppendLine(
 				createRoleSpawnNumOptionHudStringLine(
 					"neutralGhostRoles",
-					RoleGlobalOption.MinNeutralGhostRoles,
-					RoleGlobalOption.MaxNeutralGhostRoles))
+					RoleSpawnOption.MinNeutralGhostRoles,
+					RoleSpawnOption.MaxNeutralGhostRoles))
 			.AppendLine(
 				createRoleSpawnNumOptionHudStringLine(
 					"impostorGhostRoles",
-					RoleGlobalOption.MinImpostorGhostRoles,
-					RoleGlobalOption.MaxImpostorGhostRoles));
+					RoleSpawnOption.MinImpostorGhostRoles,
+					RoleSpawnOption.MaxImpostorGhostRoles));
 
         return builder.ToString().Trim('\r', '\n');
     }
 
     private static string createRoleSpawnNumOptionHudStringLine(
-        string transKey, RoleGlobalOption minOptKey, RoleGlobalOption maxOptKey)
+        string transKey, RoleSpawnOption minOptKey, RoleSpawnOption maxOptKey)
     {
         string optionName = Design.ColoedString(
             new Color(204f / 255f, 204f / 255f, 0, 1f),
@@ -201,9 +201,9 @@ public static class IGameOptionsExtensionsToHudStringPatch
         StringBuilder rngOptBuilder = new StringBuilder();
         rngOptBuilder
 			.AppendLine(
-				getHudString(OptionCreator.CommonOptionKey.UseStrongRandomGen))
+				getHudString(OptionCreator.PresetOptionKey.UseStrongRandomGen))
 			.AppendLine(
-				getHudString(OptionCreator.CommonOptionKey.UsePrngAlgorithm));
+				getHudString(OptionCreator.PresetOptionKey.UsePrngAlgorithm));
 
         return rngOptBuilder.ToString().Trim('\r', '\n');
     }
@@ -214,7 +214,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
 		return option.ToHudString();
 	}
 
-    private static int getSpawnOptionValue(RoleGlobalOption optionKey)
+    private static int getSpawnOptionValue(RoleSpawnOption optionKey)
         => OptionManager.Instance.GetValue<int>((int)optionKey);
 
     private static string translate(string key)
