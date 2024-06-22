@@ -10,6 +10,9 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.OLDS;
+
+using OldRoleGlobalOption = ExtremeRoles.Module.NewOption.OLDS.RoleGlobalOption;
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
@@ -32,7 +35,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		}
 
 		addRoleSpawnNumOptionHudString(ref this.printOption);
-		addOptionString(ref this.printOption, RoleSpawnOption.UseXion);
+		addOptionString(ref this.printOption, OldRoleGlobalOption.UseXion);
 
 		foreach (GlobalOption key in Enum.GetValues(typeof(GlobalOption)))
 		{
