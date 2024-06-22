@@ -22,6 +22,9 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using ExtremeRoles.Module.NewOption.Interfaces;
 
+using AuController = Controller;
+using ExtremeRoles.Extension.Il2Cpp;
+
 
 #nullable enable
 
@@ -35,19 +38,29 @@ public sealed class GameSettingMenuDecorator : IDisposable
 	{
 		get
 		{
-			var newButton = UnityObject.Instantiate(buttonPrefab);
+			var newButton = UnityObject.Instantiate(this.buttonPrefab);
 
-			newButton.transform.SetParent(buttonPrefab.transform.parent);
+			newButton.transform.SetParent(this.buttonPrefab.transform.parent);
 			newButton.transform.localPosition = this.buttonPrefab.transform.localPosition;
-			newButton.transform.localScale = this.buttonPrefab.transform.localScale;
-			rescaleText(
-				newButton,
-				newButton.transform.localScale.y,
-				newButton.transform.localScale.x);
+			newButton.transform.localScale = new Vector3(0.35f, 0.7f, 1.0f);
+			rescaleText(newButton, 0.7f, 0.4f);
 
 			return newButton;
 		}
 	}
+
+	public ExtremeGameOptionsMenu NewMenu
+	{
+		get
+		{
+			var newMenu = UnityObject.Instantiate(this.tagPrefab);
+			newMenu.transform.SetParent(this.tagPrefab.transform.parent);
+			newMenu.transform.localPosition = this.tagPrefab.transform.localPosition;
+			return newMenu.gameObject.AddComponent<ExtremeGameOptionsMenu>();
+		}
+	}
+	public GameSettingMenu Menu { get; }
+	public Vector3 FirstButtonPos { get; } = new Vector3(-3.875f, -2.5f, -2.0f);
 
 	private readonly PassiveButton buttonPrefab;
 	public readonly GameOptionsMenu tagPrefab;
@@ -55,6 +68,7 @@ public sealed class GameSettingMenuDecorator : IDisposable
 	public GameSettingMenuDecorator(GameSettingMenu menu)
 	{
 
+		this.Menu = menu;
 		/* まずは画像とか文章を変える */
 		var whatIsThis = menu.MenuDescriptionText.transform.parent.transform;
 		whatIsThis.localPosition = new Vector3(-0.5f, 2.0f, -1.0f);
@@ -77,7 +91,7 @@ public sealed class GameSettingMenuDecorator : IDisposable
 
 		this.buttonPrefab = UnityObject.Instantiate(menu.GameSettingsButton);
 		this.buttonPrefab.transform.SetParent(menu.GameSettingsButton.transform.parent);
-		this.buttonPrefab.transform.localPosition = new Vector3(-3.875f, -2.5f, -2.0f);
+		this.buttonPrefab.transform.localPosition = this.FirstButtonPos;
 		this.buttonPrefab.transform.localScale = new Vector3(0.4f, 0.8f, 1.0f);
 		rescaleText(this.buttonPrefab, 0.8f, 0.4f);
 		this.buttonPrefab.OnClick.RemoveAllListeners();
@@ -127,7 +141,10 @@ public sealed class GameSettingMenuDecorator : IDisposable
 
 
 	public void Dispose()
-	{ }
+	{
+		UnityObject.Destroy(this.buttonPrefab.gameObject);
+		UnityObject.Destroy(this.tagPrefab.gameObject);
+	}
 }
 
 [Il2CppRegister]
@@ -467,6 +484,119 @@ public sealed class ExtremeGameOptionsMenu(IntPtr ptr) : MonoBehaviour(ptr)
 	}
 }
 
+[Il2CppRegister]
+public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
+{
+	private readonly Dictionary<OptionTab, ExtremeGameOptionsMenu> allMenu = new(8);
+	private readonly Dictionary<OptionTab, PassiveButton> allButton = new(8);
+
+	private GameSettingMenu? menu;
+
+	public void Initialize(in GameSettingMenuDecorator decorator)
+	{
+		this.menu = decorator.Menu;
+
+		var firstPos = decorator.FirstButtonPos;
+		int xIndex = 0;
+		int yIndex = 0;
+
+		foreach (var tab in Enum.GetValues<OptionTab>())
+		{
+			var menu = decorator.NewMenu;
+			var button = decorator.NewTagButton;
+
+			button.gameObject.name = $"{tab}Button";
+			menu.gameObject.name = $"{tab}Menu";
+
+			button.transform.localPosition = new Vector3(
+				firstPos.x + xIndex * 1.5f,
+				firstPos.y - yIndex * 0.5f,
+				firstPos.z);
+			xIndex++;
+			if (xIndex == 2)
+			{
+				xIndex = 0;
+				yIndex++;
+			}
+
+			button.OnClick.AddListener(() =>
+			{
+				this.SwitchTab(tab, false);
+			});
+			button.OnMouseOver.AddListener(() =>
+			{
+				this.SwitchTab(tab, true);
+			});
+
+			this.allMenu.Add(tab, menu);
+			this.allButton.Add(tab, button);
+		};
+	}
+
+	public void SwitchTab(OptionTab tab, bool isPreviewOnly)
+	{
+		if (!this.allMenu.TryGetValue(tab, out var targetMenu) ||
+			!this.allButton.TryGetValue(tab, out var targetButton))
+		{
+			return;
+		}
+
+		if (this.menu != null)
+		{
+
+			if (previewIfCond(isPreviewOnly))
+			{
+				this.menu.GamePresetsButton.SelectButton(false);
+				this.menu.GameSettingsButton.SelectButton(false);
+				this.menu.RoleSettingsButton.SelectButton(false);
+
+				this.menu.PresetsTab.gameObject.SetActive(false);
+				this.menu.GameSettingsTab.gameObject.SetActive(false);
+				this.menu.RoleSettingsTab.gameObject.SetActive(false);
+
+				this.menu.MenuDescriptionText.text = tab.ToString();
+
+				unselectButton();
+				targetMenu.gameObject.SetActive(true);
+			}
+
+			if (isPreviewOnly)
+			{
+				this.menu.ToggleLeftSideDarkener(false);
+				this.menu.ToggleRightSideDarkener(true);
+				return;
+			}
+			this.menu.ToggleLeftSideDarkener(true);
+			this.menu.ToggleRightSideDarkener(false);
+		}
+
+		targetButton.SelectButton(true);
+		targetMenu.Open();
+	}
+	public void SwitchTabPrefix(bool previewOnly)
+	{
+		if (previewIfCond(previewOnly))
+		{
+			unselectButton();
+			foreach (var menu in this.allMenu.Values)
+			{
+				menu.gameObject.SetActive(false);
+			}
+		}
+	}
+
+	private void unselectButton()
+	{
+		foreach (var button in this.allButton.Values)
+		{
+			button.SelectButton(false);
+		}
+	}
+
+	private static bool previewIfCond(bool isPreviewOnly)
+		=> (isPreviewOnly && AuController.currentTouchType == AuController.TouchType.Joystick) || !isPreviewOnly;
+}
+
 
 [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]
 public static class GameSettingMenuStartPatch
@@ -476,5 +606,22 @@ public static class GameSettingMenuStartPatch
 	public static void Postfix(GameSettingMenu __instance)
 	{
 		using var dec = new GameSettingMenuDecorator(__instance);
+		var menu = __instance.gameObject.TryAddComponent<ExtremeGameSettingMenu>();
+		menu.Initialize(dec);
+	}
+}
+
+[HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.ChangeTab))]
+public static class GameSettingMenuChangeTabPatch
+{
+	public static void Prefix(
+		GameSettingMenu __instance,
+		[HarmonyArgument(0)] int tabNum,
+		[HarmonyArgument(1)] bool previewOnly)
+	{
+		if (__instance.TryGetComponent(out ExtremeGameSettingMenu menu))
+		{
+			menu.SwitchTabPrefix(previewOnly);
+		}
 	}
 }
