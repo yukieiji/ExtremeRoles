@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 using UnityEngine;
 
@@ -32,6 +32,7 @@ public class OptionCategoryFactory(
 	private readonly int groupid = groupId;
 	private readonly Action<OptionTab, OptionCategory> registerOption = action;
 	private readonly OptionPack optionPack = new OptionPack();
+	private readonly Regex nameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
 
 	public IOption Get(int id)
 		=> this.optionPack.Get(id);
@@ -227,7 +228,8 @@ public class OptionCategoryFactory(
 
 	protected string GetOptionName<T>(T option, Color? color, bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		string optionName = ignorePrefix ? $"|{this.Name}|{option}" : $"{this.Name}{option}";
+		string cleanedName = this.nameCleaner.Replace(this.Name, string.Empty).Trim();
+		string optionName = ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
 
 		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
 	}
