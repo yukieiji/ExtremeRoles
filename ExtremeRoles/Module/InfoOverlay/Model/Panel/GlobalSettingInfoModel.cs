@@ -40,7 +40,10 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		}
 
 		addRoleSpawnNumOptionHudString(container, this.printOption);
-		tryAddHudString(container, (int)ExtremeRoleId.Xion + 200, this.printOption);
+		tryAddHudString(
+			container,
+			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+			this.printOption);
 
 		foreach (var key in Enum.GetValues<ShipGlobalOptionCategory>())
 		{

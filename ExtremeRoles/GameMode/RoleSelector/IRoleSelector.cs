@@ -52,8 +52,10 @@ public interface IRoleSelector
 		=> Enum.IsDefined(typeof(RoleSpawnOption), optionId);
 
 	public static bool RawXionUse => NewOptionManager.Instance.TryGetCategory(
-			OptionTab.General, (int)ExtremeRoleId.Xion + 200, out var cate) &&
-			cate.GetValue<bool>((int)XionOption.UseXion);
+		OptionTab.General,
+		ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+		out var cate) &&
+		cate.GetValue<bool>((int)XionOption.UseXion);
 
 	public bool IsValidRoleOption(IOptionInfo option);
 
@@ -74,7 +76,7 @@ public interface IRoleSelector
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 		using (var xionCategory = optMng.CreateOptionCategory(
-			(int)ExtremeRoleId.Xion + 200,
+			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			Helper.Design.ColoedString(ColorPalette.XionBlue, "Xion")))
 		{
 			xionCategory.CreateBoolOption(
