@@ -14,6 +14,9 @@ using ExtremeRoles.Extension.Il2Cpp;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
@@ -178,27 +181,26 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	}
 
 	protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.AwakeTaskGage,
 			70, 0, 100, 10,
-			parentOps,
 			format: OptionUnit.Percentage);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.DelayUntilForceReport,
 			5.0f, 0.0f, 30.0f, 0.5f,
-			parentOps, format: OptionUnit.Second);
-		CreateBoolOption(
+			format: OptionUnit.Second);
+		factory.CreateBoolOption(
 			Option.EnableBaitBenefit,
-			true, parentOps);
-		CreateFloatOption(
+			true);
+		factory.CreateFloatOption(
 			Option.KillCoolReduceMulti,
-			2.0f, 1.1f, 5.0f, 0.1f, parentOps,
+			2.0f, 1.1f, 5.0f, 0.1f,
 			format: OptionUnit.Multiplier);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.ReduceTimer,
-			5.0f, 1.0f, 30.0f, 0.5f, parentOps,
+			5.0f, 1.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
 	}
 
@@ -207,15 +209,15 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		var allOpt = OptionManager.Instance;
 
 		this.awakeTaskGage = allOpt.GetValue<int>(
-			GetRoleOptionId(Option.AwakeTaskGage)) / 100.0f;
+			Option.AwakeTaskGage)) / 100.0f;
 		this.delayUntilForceReport = allOpt.GetValue<float>(
-			GetRoleOptionId(Option.DelayUntilForceReport));
+			Option.DelayUntilForceReport));
 		this.enableBaitBenefit = allOpt.GetValue<bool>(
-			GetRoleOptionId(Option.EnableBaitBenefit));
+			Option.EnableBaitBenefit));
 		this.killCoolReduceMulti = allOpt.GetValue<float>(
-			GetRoleOptionId(Option.KillCoolReduceMulti)) - 1.0f;
+			Option.KillCoolReduceMulti)) - 1.0f;
 		this.timer = allOpt.GetValue<float>(
-			GetRoleOptionId(Option.ReduceTimer));
+			Option.ReduceTimer));
 
 		this.awakeHasOtherVision = this.HasOtherVision;
 

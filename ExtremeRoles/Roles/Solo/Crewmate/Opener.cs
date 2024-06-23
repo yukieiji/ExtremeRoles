@@ -8,6 +8,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
@@ -122,7 +125,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         this.Button.Behavior.SetCoolTime(
             OptionManager.Instance.GetValue<float>(
-                GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)) * rate);
+                RoleAbilityCommonOption.AbilityCoolTime)) * rate);
 
         if (this.Button.Behavior is AbilityCountBehavior countBehavior)
         {
@@ -132,23 +135,20 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
-        CreateFloatOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
+        factory.CreateFloatOption(
             OpenerOption.Range,
-            2.0f, 0.5f, 5.0f, 0.1f,
-            parentOps);
-        CreateIntOption(
+            2.0f, 0.5f, 5.0f, 0.1f);
+        factory.CreateIntOption(
             OpenerOption.ReduceRate,
             45, 5, 95, 1,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             OpenerOption.PlusAbility,
             5, 1, 10, 1,
-            parentOps,
             format: OptionUnit.Shot);
     }
 
@@ -156,10 +156,10 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.isUpgraded = false;
         this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(OpenerOption.Range));
+            OpenerOption.Range));
         this.reduceRate = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(OpenerOption.ReduceRate));
+            OpenerOption.ReduceRate));
         this.plusAbilityNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(OpenerOption.PlusAbility));
+            OpenerOption.PlusAbility));
     }
 }

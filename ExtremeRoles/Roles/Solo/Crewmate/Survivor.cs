@@ -10,6 +10,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPlayerModifier
@@ -194,31 +197,29 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             SurvivorOption.AwakeTaskGage,
             70, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             SurvivorOption.DeadWinTaskGage,
             100, 50, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             SurvivorOption.NoWinSurvivorAssignGhostRole,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
         this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(SurvivorOption.AwakeTaskGage)) / 100.0f;
+            SurvivorOption.AwakeTaskGage)) / 100.0f;
         this.deadWinTaskGage = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(SurvivorOption.DeadWinTaskGage)) / 100.0f;
+            SurvivorOption.DeadWinTaskGage)) / 100.0f;
         this.isNoWinSurvivorAssignGhostRole = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(SurvivorOption.NoWinSurvivorAssignGhostRole));
+            SurvivorOption.NoWinSurvivorAssignGhostRole));
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.isDeadWin = false;

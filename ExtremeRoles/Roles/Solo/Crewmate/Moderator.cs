@@ -13,6 +13,9 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -189,16 +192,17 @@ public sealed class Moderator :
 	}
 
 	protected override void CreateSpecificOption(
-		IOptionInfo parentOps)
+		AutoParentSetOptionCategoryFactory factory)
 	{
-		CreateIntOption(
+		factory.CreateIntOption(
 			ModeratorOption.AwakeTaskGage,
 			60, 0, 100, 10,
-			parentOps,
 			format: OptionUnit.Percentage);
-		this.CreateAbilityCountOption(
-			parentOps, 2, 10);
-		CreateIntOption(ModeratorOption.MeetingTimerOffset, 30, 5, 360, 5, parentOps, format: OptionUnit.Second);
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 2, 10);
+		factory.CreateIntOption(
+			ModeratorOption.MeetingTimerOffset,
+			30, 5, 360, 5, format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
@@ -209,7 +213,7 @@ public sealed class Moderator :
 			TMPro.TextAlignmentOptions.BottomLeft);
 
 		this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-		   GetRoleOptionId(ModeratorOption.AwakeTaskGage)) / 100.0f;
+		   ModeratorOption.AwakeTaskGage)) / 100.0f;
 
 		this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -225,7 +229,7 @@ public sealed class Moderator :
 		}
 
 		this.offset = OptionManager.Instance.GetValue<int>(
-			this.GetRoleOptionId(ModeratorOption.MeetingTimerOffset));
+			this.ModeratorOption.MeetingTimerOffset));
 
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 	}

@@ -6,10 +6,13 @@ using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Gambler : 
-    SingleRoleBase, 
+public sealed class Gambler :
+    SingleRoleBase,
     IRoleVoteModifier
 {
     public enum GamblerOption
@@ -45,9 +48,9 @@ public sealed class Gambler :
         Array.Fill(voteArray, 2, this.normalVoteRate + zeroVoteRate, dualVoteRate);
 
         int playerVoteNum = voteArray[RandomGenerator.Instance.Next(100)];
-        
+
         if (playerVoteNum == 1) { return; }
-     
+
         int newVotedNum = playerVoteNum == 0 ? curVoteNum - 1 : curVoteNum + 1;
         voteResult[voteTo] = newVotedNum;
     }
@@ -61,17 +64,17 @@ public sealed class Gambler :
     public void ResetModifier()
     { }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             GamblerOption.NormalVoteRate,
-            50, 0, 90, 5, parentOps,
+            50, 0, 90, 5,
             format: OptionUnit.Percentage);
     }
 
     protected override void RoleSpecificInit()
     {
         this.normalVoteRate = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(GamblerOption.NormalVoteRate));
+            GamblerOption.NormalVoteRate));
     }
 }

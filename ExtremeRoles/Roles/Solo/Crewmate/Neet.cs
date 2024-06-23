@@ -3,6 +3,9 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Neet : SingleRoleBase
@@ -36,23 +39,22 @@ public sealed class Neet : SingleRoleBase
         return base.GetFullDescription();
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             NeetOption.CanCallMeeting,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             NeetOption.CanRepairSabotage,
-            false, parentOps);
-        
-        var neutralOps = CreateBoolOption(
+            false);
+
+        var neutralOps = factory.CreateBoolOption(
             NeetOption.IsNeutral,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             NeetOption.HasTask,
             false, neutralOps,
-            invert: true,
-            enableCheckOption: parentOps);
+            invert: true);
     }
 
     protected override void RoleSpecificInit()
@@ -60,14 +62,14 @@ public sealed class Neet : SingleRoleBase
         var allOption = OptionManager.Instance;
 
         this.CanCallMeeting = allOption.GetValue<bool>(
-            GetRoleOptionId(NeetOption.CanCallMeeting));
+            NeetOption.CanCallMeeting));
         this.CanRepairSabotage = allOption.GetValue<bool>(
-            GetRoleOptionId(NeetOption.CanRepairSabotage));
+            NeetOption.CanRepairSabotage));
         this.HasTask = allOption.GetValue<bool>(
-            GetRoleOptionId(NeetOption.HasTask));
+            NeetOption.HasTask));
 
         if (allOption.GetValue<bool>(
-            GetRoleOptionId(NeetOption.IsNeutral)))
+            NeetOption.IsNeutral)))
         {
             this.Team = ExtremeRoleType.Neutral;
         }

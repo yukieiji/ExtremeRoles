@@ -7,6 +7,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
@@ -134,15 +137,15 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 3.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 3.0f);
 
-        var boostOption = this.CreateBoolOption(
+        var boostOption = factory.CreateBoolOption(
             SuperviosrOption.IsBoostTask,
-            false, parentOps);
-        CreateIntOption(
+            false);
+        factory.CreateIntOption(
             SuperviosrOption.TaskGage,
             100, 50, 100, 5,
             boostOption,
@@ -152,8 +155,8 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     protected override void RoleSpecificInit()
     {
         this.isBoostTask = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(SuperviosrOption.IsBoostTask));
+            SuperviosrOption.IsBoostTask));
         this.taskGage = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(SuperviosrOption.TaskGage)) / 100.0f;
+            SuperviosrOption.TaskGage)) / 100.0f;
     }
 }

@@ -18,6 +18,9 @@ using ExtremeRoles.Module.AbilityBehavior.Interface;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 #nullable enable
@@ -399,29 +402,28 @@ public sealed class Psychic :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             PsychicOption.AwakeTaskGage,
             30, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-		CreateIntOption(
+		factory.CreateIntOption(
 		   PsychicOption.AwakeDeadPlayerNum,
-		   2, 0, 7, 1, parentOps);
+		   2, 0, 7, 1);
 
-        this.CreateAbilityCountOption(
-            parentOps, 1, 5, 3.0f);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 5, 3.0f);
 
-		var isUpgradeOpt = CreateBoolOption(
+		var isUpgradeOpt = factory.CreateBoolOption(
 			PsychicOption.IsUpgradeAbility,
-			false, parentOps);
-		CreateIntOption(
+			false);
+		factory.CreateIntOption(
 			PsychicOption.UpgradeTaskGage,
 			70, 0, 100, 10,
 			isUpgradeOpt,
 			format: OptionUnit.Percentage);
-		CreateIntOption(
+		factory.CreateIntOption(
 		   PsychicOption.UpgradeDeadPlayerNum,
 		   5, 0, 15, 1, isUpgradeOpt);
 	}
@@ -431,16 +433,16 @@ public sealed class Psychic :
 		var allOpt = OptionManager.Instance;
 
 		this.awakeTaskGage = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.AwakeTaskGage)) / 100.0f;
+			PsychicOption.AwakeTaskGage)) / 100.0f;
 		this.awakeDeadPlayerNum = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.AwakeDeadPlayerNum));
+			PsychicOption.AwakeDeadPlayerNum));
 
 		this.upgradeTaskGage = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.UpgradeTaskGage)) / 100.0f;
+			PsychicOption.UpgradeTaskGage)) / 100.0f;
 		this.upgradeDeadPlayerNum = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.UpgradeDeadPlayerNum));
+			PsychicOption.UpgradeDeadPlayerNum));
 		this.enableUpgrade = allOpt.GetValue<bool>(
-			GetRoleOptionId(PsychicOption.IsUpgradeAbility));
+			PsychicOption.IsUpgradeAbility));
 
 		int maxPlayerNum = CachedPlayerControl.AllPlayerControls.Count - 1;
 

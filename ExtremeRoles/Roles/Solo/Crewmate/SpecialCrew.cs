@@ -13,7 +13,7 @@ public sealed class SpecialCrew : SingleRoleBase
         false, true, false, false)
     {}
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         return;
     }

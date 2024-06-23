@@ -22,6 +22,9 @@ using ExtremeRoles.Compat;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Teleporter :
@@ -210,7 +213,7 @@ public sealed class Teleporter :
 
 		var allOpt = OptionManager.Instance;
 		this.Button.Behavior.SetCoolTime(
-			allOpt.GetValue<float>(this.GetRoleOptionId(
+			allOpt.GetValue<float>(this.
 				RoleAbilityCommonOption.AbilityCoolTime)));
 
 		this.behavior.SetAbilityCount(0);
@@ -297,21 +300,21 @@ public sealed class Teleporter :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             TeleporterOption.CanUseOtherPlayer,
-            false, parentOps);
-        this.CreateAbilityCountOption(
-            parentOps, 1, 3);
+            false);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 3);
     }
 
     protected override void RoleSpecificInit()
     {
         this.isSharePortal = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(TeleporterOption.CanUseOtherPlayer));
+            TeleporterOption.CanUseOtherPlayer));
         this.partNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(RoleAbilityCommonOption.AbilityCount));
+            RoleAbilityCommonOption.AbilityCount));
     }
 
     private static void setPartFromMapJsonInfo(JArray json, int num)

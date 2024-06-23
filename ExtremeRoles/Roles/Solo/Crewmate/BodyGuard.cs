@@ -17,6 +17,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 #nullable enable
 
 using ExtremeRoles.Module.CustomOption;
@@ -515,7 +518,7 @@ public sealed class BodyGuard :
 
 		if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
 		{
-			int abilityNum = OptionManager.Instance.GetValue<int>(GetRoleOptionId(
+			int abilityNum = OptionManager.Instance.GetValue<int>(
 				RoleAbilityCommonOption.AbilityCount));
 
 			this.shildNum = abilityNum;
@@ -726,41 +729,33 @@ public sealed class BodyGuard :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BodyGuardOption.ShieldRange,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            1.0f, 0.0f, 2.0f, 0.1f);
 
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             BodyGuardOption.FeatMeetingAbilityTaskGage,
             30, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             BodyGuardOption.FeatMeetingReportTaskGage,
             60, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        var reportPlayerNameOpt = CreateBoolOption(
+        var reportPlayerNameOpt = factory.CreateBoolOption(
             BodyGuardOption.IsReportPlayerName,
-            false, parentOps);
-        CreateSelectionOption(
+            false);
+        factory.CreateSelectionOption<BodyGuardOption, BodyGuardReportPlayerNameMode>(
             BodyGuardOption.ReportPlayerMode,
-            new string[]
-            {
-                BodyGuardReportPlayerNameMode.GuardedPlayerNameOnly.ToString(),
-                BodyGuardReportPlayerNameMode.BodyGuardPlayerNameOnly.ToString(),
-                BodyGuardReportPlayerNameMode.BothPlayerName.ToString(),
-            }, reportPlayerNameOpt);
-        CreateBoolOption(
+            reportPlayerNameOpt);
+        factory.CreateBoolOption(
             BodyGuardOption.IsBlockMeetingKill,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
@@ -768,20 +763,20 @@ public sealed class BodyGuard :
         var allOpt = OptionManager.Instance;
 
         IsBlockMeetingKill = allOpt.GetValue<bool>(
-            GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill));
+            BodyGuardOption.IsBlockMeetingKill));
 
         this.shieldRange = allOpt.GetValue<float>(
-            GetRoleOptionId(BodyGuardOption.ShieldRange));
+            BodyGuardOption.ShieldRange));
 
         this.meetingAbilityTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)) / 100.0f;
+            BodyGuardOption.FeatMeetingAbilityTaskGage)) / 100.0f;
         this.meetingReportTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)) / 100.0f;
+            BodyGuardOption.FeatMeetingReportTaskGage)) / 100.0f;
 
         this.isReportWithPlayerName = allOpt.GetValue<bool>(
-            GetRoleOptionId(BodyGuardOption.IsReportPlayerName));
+            BodyGuardOption.IsReportPlayerName));
         this.reportMode = (BodyGuardReportPlayerNameMode)allOpt.GetValue<int>(
-            GetRoleOptionId(BodyGuardOption.ReportPlayerMode));
+            BodyGuardOption.ReportPlayerMode));
 
         this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
         this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;

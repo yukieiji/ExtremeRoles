@@ -13,6 +13,9 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Captain :
@@ -340,22 +343,19 @@ public sealed class Captain :
         }
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             CaptainOption.AwakeTaskGage,
             70, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CaptainOption.ChargeVoteWhenSkip,
             0.7f, 0.1f, 100.0f, 0.1f,
-            parentOps,
             format: OptionUnit.VoteNum);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CaptainOption.AwakedDefaultVoteNum,
             0.0f, 0.0f, 100.0f, 0.1f,
-            parentOps,
             format: OptionUnit.VoteNum);
     }
 
@@ -365,11 +365,11 @@ public sealed class Captain :
         var allOpt = OptionManager.Instance;
 
         this.chargeVoteNum = allOpt.GetValue<float>(
-           GetRoleOptionId(CaptainOption.ChargeVoteWhenSkip));
+           CaptainOption.ChargeVoteWhenSkip));
         this.defaultVote = allOpt.GetValue<float>(
-           GetRoleOptionId(CaptainOption.AwakedDefaultVoteNum));
+           CaptainOption.AwakedDefaultVoteNum));
         this.awakeTaskGage = allOpt.GetValue<int>(
-           GetRoleOptionId(CaptainOption.AwakeTaskGage)) / 100.0f;
+           CaptainOption.AwakeTaskGage)) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.curChargedVote = this.defaultVote;

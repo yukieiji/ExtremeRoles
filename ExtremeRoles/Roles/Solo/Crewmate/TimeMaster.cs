@@ -15,6 +15,9 @@ using ExtremeRoles.Module.CustomOption;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
@@ -372,15 +375,15 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 3.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 3.0f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             TimeMasterOption.RewindTime,
             5.0f, 1.0f, 60.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()
@@ -390,7 +393,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<
             TimeMasterHistory>();
         history.Initialize(
-            OptionManager.Instance.GetValue<float>(GetRoleOptionId(
+            OptionManager.Instance.GetValue<float>(
                 TimeMasterOption.RewindTime)));
     }
 }

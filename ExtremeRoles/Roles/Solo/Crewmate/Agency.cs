@@ -12,6 +12,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
@@ -250,31 +253,30 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			AgencyOption.CanSeeTaskBar,
-			true, parentOps);
-		CreateIntOption(
+			true);
+		factory.CreateIntOption(
             AgencyOption.MaxTaskNum,
-            2, 1, 3, 1, parentOps);
-        CreateFloatOption(
+            2, 1, 3, 1);
+        factory.CreateFloatOption(
             AgencyOption.TakeTaskRange,
-            1.0f, 0.5f, 2.0f, 0.1f,
-            parentOps);
+            1.0f, 0.5f, 2.0f, 0.1f);
 
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
     }
 
     protected override void RoleSpecificInit()
     {
 		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
-			GetRoleOptionId(AgencyOption.CanSeeTaskBar));
+			AgencyOption.CanSeeTaskBar));
 		this.maxTakeTask = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(AgencyOption.MaxTaskNum)) + 1;
+            AgencyOption.MaxTaskNum)) + 1;
         this.takeTaskRange = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(AgencyOption.TakeTaskRange));
+            AgencyOption.TakeTaskRange));
 
         this.TakeTask = new List<TakeTaskType>();
 

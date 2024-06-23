@@ -8,6 +8,9 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -199,32 +202,31 @@ public sealed class Whisper :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             WhisperOption.AbilityOffTime,
             2.0f, 1.0f, 5.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             WhisperOption.AbilityOnTime,
             4.0f, 1.0f, 10.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             WhisperOption.TellTextTime,
             3.0f, 1.0f, 25.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             WhisperOption.MaxTellText,
-            3, 1, 10, 1,
-            parentOps);
-		var awakeOpt = CreateBoolOption(
+            3, 1, 10, 1);
+		var awakeOpt = factory.CreateBoolOption(
 			WhisperOption.EnableAwakeAbility,
-			false, parentOps);
-		CreateIntOption(
+			false);
+		factory.CreateIntOption(
 			WhisperOption.AbilityTaskGage,
 			70, 0, 100, 10,
 			awakeOpt,
@@ -236,19 +238,19 @@ public sealed class Whisper :
         var allOption = OptionManager.Instance;
 
         this.textPopUp = new TextPopUpper(
-            allOption.GetValue<int>(GetRoleOptionId(WhisperOption.MaxTellText)),
-            allOption.GetValue<float>(GetRoleOptionId(WhisperOption.TellTextTime)),
+            allOption.GetValue<int>(WhisperOption.MaxTellText)),
+            allOption.GetValue<float>(WhisperOption.TellTextTime)),
             new Vector3(-3.75f, -2.5f, -250.0f),
             TMPro.TextAlignmentOptions.BottomLeft);
 
         this.abilityOffTime = allOption.GetValue<float>(
-            GetRoleOptionId(WhisperOption.AbilityOffTime));
-        this.abilityOnTime = allOption.GetValue<float>(GetRoleOptionId(WhisperOption.AbilityOnTime));
+            WhisperOption.AbilityOffTime));
+        this.abilityOnTime = allOption.GetValue<float>(WhisperOption.AbilityOnTime));
 
 		this.isEnableAwakeAbility = allOption.GetValue<bool>(
-			GetRoleOptionId(WhisperOption.EnableAwakeAbility));
+			WhisperOption.EnableAwakeAbility));
 		this.awakeTaskGage = allOption.GetValue<int>(
-			GetRoleOptionId(WhisperOption.AbilityTaskGage)) / 100.0f;
+			WhisperOption.AbilityTaskGage)) / 100.0f;
 		this.isAwake = this.isEnableAwakeAbility && this.awakeTaskGage <= 0.0f;
 
         this.prevPlayerPos = defaultPos;

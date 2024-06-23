@@ -10,6 +10,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
@@ -55,9 +58,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     {
         var targetPlayerRole = ExtremeRoleManager.GameRole[
             targetPlayer.PlayerId];
-        
 
-        if ((targetPlayerRole.IsImpostor()) || 
+
+        if ((targetPlayerRole.IsImpostor()) ||
             (targetPlayerRole.IsNeutral() && this.canShootNeutral))
         {
             if ((!this.canShootAssassin && targetPlayerRole.Id == ExtremeRoleId.Assassin) ||
@@ -179,40 +182,39 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-
-        CreateBoolOption(
+        factory.CreateBoolOption(
             SheriffOption.CanShootAssassin,
-            false, parentOps);
+            false);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             SheriffOption.CanShootNeutral,
-            true, parentOps);
+            true);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             SheriffOption.ShootNum,
             1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1,
-            parentOps, format: OptionUnit.Shot);
+            format: OptionUnit.Shot);
 
-        var enableTaskRelatedOps = CreateBoolOption(
+        var enableTaskRelatedOps = factory.CreateBoolOption(
             SheriffOption.EnableTaskRelated,
-            false, parentOps);
+            false);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             SheriffOption.ReduceCurKillCool,
             2.0f, 1.0f, 5.0f,
             0.1f, enableTaskRelatedOps,
             format:OptionUnit.Second);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             SheriffOption.IsPerm,
             false, enableTaskRelatedOps);
 
-        var syncOpt = CreateBoolOption(
+        var syncOpt = factory.CreateBoolOption(
             SheriffOption.IsSyncTaskAndShootNum,
             false, enableTaskRelatedOps);;
-        CreateIntOption(
+        factory.CreateIntOption(
             SheriffOption.SyncShootTaskGage,
             5, 5, 100, 1,
             syncOpt, format: OptionUnit.Percentage);
@@ -224,26 +226,26 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
         var allOpt = OptionManager.Instance;
 
         this.shootNum = allOpt.GetValue<int>(
-            GetRoleOptionId(SheriffOption.ShootNum));
+            SheriffOption.ShootNum));
         this.canShootNeutral = allOpt.GetValue<bool>(
-            GetRoleOptionId(SheriffOption.CanShootNeutral));
+            SheriffOption.CanShootNeutral));
         this.canShootAssassin = allOpt.GetValue<bool>(
-            GetRoleOptionId(SheriffOption.CanShootAssassin));
+            SheriffOption.CanShootAssassin));
         this.killCountText = null;
 
         this.enableTaskRelatedSetting = allOpt.GetValue<bool>(
-            GetRoleOptionId(SheriffOption.EnableTaskRelated));
+            SheriffOption.EnableTaskRelated));
         this.reduceKillCool = allOpt.GetValue<float>(
-            GetRoleOptionId(SheriffOption.ReduceCurKillCool));
+            SheriffOption.ReduceCurKillCool));
         this.isPerm = allOpt.GetValue<bool>(
-            GetRoleOptionId(SheriffOption.IsPerm));
+            SheriffOption.IsPerm));
         this.isSyncTaskShootNum = allOpt.GetValue<bool>(
-            GetRoleOptionId(SheriffOption.IsSyncTaskAndShootNum));
+            SheriffOption.IsSyncTaskAndShootNum));
         this.syncShootTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(SheriffOption.SyncShootTaskGage)) / 100.0f;
+            SheriffOption.SyncShootTaskGage)) / 100.0f;
 
         this.prevGage = 0.0f;
-        
+
         this.maxShootNum = this.shootNum;
 
         if (this.enableTaskRelatedSetting && this.isSyncTaskShootNum)

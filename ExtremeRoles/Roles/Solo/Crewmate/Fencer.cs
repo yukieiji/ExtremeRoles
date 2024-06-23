@@ -9,6 +9,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
@@ -190,20 +193,20 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 7, 3.0f);
-        CreateFloatOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 7, 3.0f);
+        factory.CreateFloatOption(
             FencerOption.ResetTime,
             5.0f, 2.5f, 30.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()
     {
         this.Timer = 0.0f;
         this.MaxTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(FencerOption.ResetTime));
+            FencerOption.ResetTime));
     }
 }

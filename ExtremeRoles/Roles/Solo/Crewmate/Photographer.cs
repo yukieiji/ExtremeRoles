@@ -17,6 +17,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Interface;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 #nullable enable
@@ -505,38 +508,34 @@ public sealed class Photographer :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             PhotographerOption.AwakeTaskGage,
             30, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             PhotographerOption.UpgradePhotoTaskGage,
             60, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        var chatUpgradeOpt = CreateBoolOption(
+        var chatUpgradeOpt = factory.CreateBoolOption(
             PhotographerOption.EnableAllSendChat,
-            false, parentOps, isHidden: true);
+            false);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             PhotographerOption.UpgradeAllSendChatTaskGage,
             80, 0, 100, 10,
             chatUpgradeOpt,
-            format: OptionUnit.Percentage,
-			isHidden: true);
+            format: OptionUnit.Percentage);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             PhotographerOption.PhotoRange,
-            10.0f, 2.5f, 50f, 0.5f,
-            parentOps);
+            10.0f, 2.5f, 50f, 0.5f);
 
-        this.CreateAbilityCountOption(
-            parentOps, 5, 10);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 5, 10);
     }
 
     protected override void RoleSpecificInit()
@@ -544,14 +543,14 @@ public sealed class Photographer :
         var allOpt = OptionManager.Instance;
 
         this.awakeTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(PhotographerOption.AwakeTaskGage)) / 100.0f;
+            PhotographerOption.AwakeTaskGage)) / 100.0f;
         this.upgradePhotoTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)) / 100.0f;
+            PhotographerOption.UpgradePhotoTaskGage)) / 100.0f;
 		this.enableAllSend =
 			allOpt.GetValue<bool>(
-				GetRoleOptionId(PhotographerOption.EnableAllSendChat));
+				PhotographerOption.EnableAllSendChat));
         this.upgradeAllSendChatTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)) / 100.0f;
+            PhotographerOption.UpgradeAllSendChatTaskGage)) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -571,7 +570,7 @@ public sealed class Photographer :
 
         this.photoCreater = new PhotoCamera(
             allOpt.GetValue<float>(
-                GetRoleOptionId(PhotographerOption.PhotoRange)));
+                PhotographerOption.PhotoRange)));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
     }

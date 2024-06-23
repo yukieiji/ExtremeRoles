@@ -9,6 +9,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
@@ -99,10 +102,10 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 10);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 10);
     }
 
     protected override void RoleSpecificInit()
