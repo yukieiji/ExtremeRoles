@@ -15,7 +15,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Module.NewOption;
 
-public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) : IOptionLoader, IDisposable
+public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) : IOptionLoader
 {
 	private readonly OptionCategory category = category;
 	private readonly int idOffset = idOffset;
@@ -31,20 +31,28 @@ public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) 
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
 		=> this.category.TryGetValueOption(id.FastInt() + idOffset, out option);
-
 	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
 		=> this.category.TryGetValueOption(id + idOffset, out option);
 
+	public IValueOption<T> GetValueOption<W, T>(W id)
+		where W : Enum
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.category.GetValueOption<T>(id.FastInt() + idOffset);
+	public IValueOption<T> GetValueOption<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.category.GetValueOption<T>(id + idOffset);
+
 	public T GetValue<W, T>(W id) where W : Enum
 		=> this.category.GetValue<T>(id.FastInt() + idOffset);
 	public T GetValue<T>(int id)
 		=> this.category.GetValue<T>(id + idOffset);
-
-	public void Dispose()
-	{ }
 }
 
 public sealed class OptionCategory(
