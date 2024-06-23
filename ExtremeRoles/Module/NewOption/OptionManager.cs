@@ -15,6 +15,8 @@ using ExtremeRoles.Helper;
 using System.Linq;
 using ExtremeRoles.GameMode;
 
+using ExtremeRoles.Extension;
+
 using Hazel;
 
 namespace ExtremeRoles.Module.NewOption;
@@ -98,7 +100,8 @@ public sealed class NewOptionManager
 		T option,
 		in OptionTab tab = OptionTab.General) where T : Enum
 		=> CreateOptionCategory(
-			Convert.ToInt32(option), option.ToString(), tab);
+			option.FastInt(),
+			option.ToString(), tab);
 
 	public SequentialOptionCategoryFactory CreateSequentialOptionCategory(
 		int id,
@@ -127,7 +130,8 @@ public sealed class NewOptionManager
 		in Color color,
 		in OptionTab tab = OptionTab.General) where T : Enum
 		=> CreateColorSyncOptionCategory(
-			Convert.ToInt32(option), option.ToString(),
+			option.FastInt(),
+			option.ToString(),
 			color, tab);
 
 	public AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
@@ -147,7 +151,8 @@ public sealed class NewOptionManager
 		in OptionTab tab = OptionTab.General,
 		in IOption? parent = null) where T : Enum
 		=> CreateAutoParentSetOptionCategory(
-			Convert.ToInt32(option), option.ToString(),
+			option.FastInt(),
+			option.ToString(),
 			tab, parent);
 
 	public void Update(in OptionCategory category, in IOption option, int step)

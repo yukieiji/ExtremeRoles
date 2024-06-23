@@ -7,6 +7,8 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.NewOption;
+using Unity.Jobs.LowLevel.Unsafe;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -40,27 +42,39 @@ public sealed class GhostRoleSpawnDataManager :
 			}
 		}
 
-		this.globalSpawnLimit = new Dictionary<ExtremeRoleType, int>
+		var opt = NewOptionManager.Instance;
+
+		if (opt.TryGetCategory(OptionTab.General, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
 		{
+			this.globalSpawnLimit = new Dictionary<ExtremeRoleType, int>
 			{
-				ExtremeRoleType.Crewmate,
-				ISpawnDataManager.ComputeSpawnNum(
-					RoleSpawnOption.MinCrewmateGhostRoles,
-					RoleSpawnOption.MaxCrewmateGhostRoles)
-			},
-			{
-				ExtremeRoleType.Neutral,
-				ISpawnDataManager.ComputeSpawnNum(
-					RoleSpawnOption.MinNeutralGhostRoles,
-					RoleSpawnOption.MaxNeutralGhostRoles)
-			},
-			{
-				ExtremeRoleType.Impostor,
-				ISpawnDataManager.ComputeSpawnNum(
-					RoleSpawnOption.MinImpostorGhostRoles,
-					RoleSpawnOption.MaxImpostorGhostRoles)
-			},
-		};
+				{
+					ExtremeRoleType.Crewmate,
+					ISpawnDataManager.ComputeSpawnNum(
+						cate,
+						RoleSpawnOption.MinCrewmate,
+						RoleSpawnOption.MaxCrewmate)
+				},
+				{
+					ExtremeRoleType.Neutral,
+					ISpawnDataManager.ComputeSpawnNum(
+						cate,
+						RoleSpawnOption.MinNeutral,
+						RoleSpawnOption.MaxNeutral)
+				},
+				{
+					ExtremeRoleType.Impostor,
+					ISpawnDataManager.ComputeSpawnNum(
+						cate,
+						RoleSpawnOption.MinImpostor,
+						RoleSpawnOption.MaxImpostor)
+				},
+			};
+		}
+		else
+		{
+			this.globalSpawnLimit = new();
+		}
 
 		var allOption = OptionManager.Instance;
 		var tmpUseData = new Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>>();
@@ -70,13 +84,23 @@ public sealed class GhostRoleSpawnDataManager :
 		{
 			var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
+			var tab = role.Team switch
+			{
+				ExtremeRoleType.Neutral => OptionTab.GhostNeutral,
+				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmate,
+				ExtremeRoleType.Impostor => OptionTab.GhostImpostor,
+				_ => throw new System.ArgumentOutOfRangeException(),
+			};
+
+			if (!opt.TryGetCategory(tab, (int)role.Id, out var roleCate))
+			{
+				continue;
+			}
+
 			int spawnRate = ISpawnDataManager.ComputePercentage(
-				allOption.Get<int>(
-					role.GetRoleOptionId(RoleCommonOption.SpawnRate)));
-			int weight = allOption.GetValue<int>(
-				role.GetRoleOptionId(RoleCommonOption.AssignWeight));
-			int roleNum = allOption.GetValue<int>(
-				role.GetRoleOptionId(RoleCommonOption.RoleNum));
+				roleCate.GetValueOption<RoleCommonOption, int>(RoleCommonOption.SpawnRate));
+			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
+			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			Helper.Logging.Debug(
 				$"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");

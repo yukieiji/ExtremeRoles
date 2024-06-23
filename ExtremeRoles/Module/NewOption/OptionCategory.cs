@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
@@ -7,6 +8,7 @@ using System.Text;
 using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
 
 using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Extension;
 
 namespace ExtremeRoles.Module.NewOption;
 
@@ -46,6 +48,51 @@ public sealed class OptionCategory(
 
 	public bool TryGet(int id, out IOption option)
 		=> this.allOpt.TryGetValue(id, out option) && option is not null;
+	public IOption Get<T>(T id) where T : Enum
+		=> this.Get(id.FastInt());
+
+	public IValueOption<T> GetValueOption<W, T>(W id) where W : Enum
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.GetValueOption<T>(id.FastInt());
+
+	public IValueOption<T> GetValueOption<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
+		if (typeof(T) == typeof(int))
+		{
+			var intOption = this.intOpt[id];
+			return Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+		}
+		else if (typeof(T) == typeof(float))
+		{
+			var floatOption = this.floatOpt[id];
+			return Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+		}
+		else if (typeof(T) == typeof(bool))
+		{
+			var boolOption = this.boolOpt[id];
+			return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+		}
+		else
+		{
+			throw new ArgumentException($"OptionId: {id} Not Found");
+		}
+	}
+
+	public IOption Get(int id)
+	{
+		if (!TryGet(id, out var option))
+		{
+			throw new ArgumentException($"OptionId: {id} Not Found");
+		}
+		return option;
+	}
+	public T GetValue<W, T>(W id) where W : Enum
+		=> this.GetValue<T>(id.FastInt());
 
 	public T GetValue<T>(int id)
 	{
