@@ -362,20 +362,20 @@ public sealed class UnderWarper :
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.awakeKillCount = allOpt.GetValue<int>(
-            UnderWarperOption.AwakeKillCount));
-        this.ventLinkKillCout = allOpt.GetValue<int>(
-            UnderWarperOption.VentLinkKillCout));
-        this.noVentAnimeKillCout = allOpt.GetValue<int>(
-            UnderWarperOption.NoVentAnimeKillCout));
+        this.awakeKillCount = cate.GetValue<UnderWarperOption, int>(
+            UnderWarperOption.AwakeKillCount);
+        this.ventLinkKillCout = cate.GetValue<UnderWarperOption, int>(
+            UnderWarperOption.VentLinkKillCout);
+        this.noVentAnimeKillCout = cate.GetValue<UnderWarperOption, int>(
+            UnderWarperOption.NoVentAnimeKillCout);
 
-		this.isWallHackVent = allOpt.GetValue<bool>(
-			UnderWarperOption.WallHackVent));
+		this.isWallHackVent = cate.GetValue<UnderWarperOption, bool>(
+			UnderWarperOption.WallHackVent);
 
-        this.VentUseRange = allOpt.GetValue<float>(
-            UnderWarperOption.Range));
+        this.VentUseRange = cate.GetValue<UnderWarperOption, float>(
+            UnderWarperOption.Range);
 
         this.isAwakedHasOtherVision = false;
         this.isAwakedHasOtherKillCool = true;

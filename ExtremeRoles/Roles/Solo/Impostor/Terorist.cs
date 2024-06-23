@@ -106,24 +106,24 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 			this.saboSystem = saboSystem;
 		}
 
-		var optionMng = OptionManager.Instance;
-		this.canActiveOtherSabotage = optionMng.GetValue<bool>(
-			TeroristOption.CanActiveOtherSabotage));
+		var cate = this.Category;
+		this.canActiveOtherSabotage = cate.GetValue<TeroristOption, bool>(
+			TeroristOption.CanActiveOtherSabotage);
 
 
 		var miniGameOption = new TeroristTeroSabotageSystem.MinigameOption(
-			optionMng.GetValue<float>(
-				TeroristOption.PlayerActivateTime)),
-			optionMng.GetValue<bool>(
-				TeroristOption.CanUseDeadPlayer)),
-			optionMng.GetValue<float>(
-				TeroristOption.DeadPlayerActivateTime)));
+			cate.GetValue<TeroristOption, float>(
+				TeroristOption.PlayerActivateTime),
+			cate.GetValue<TeroristOption, bool>(
+				TeroristOption.CanUseDeadPlayer),
+			cate.GetValue<TeroristOption, float>(
+				TeroristOption.DeadPlayerActivateTime));
 
 		var sabotageOption = new TeroristTeroSabotageSystem.Option(
-			optionMng.GetValue<float>(
-				TeroristOption.ExplosionTime)),
-			optionMng.GetValue<int>(
-				TeroristOption.BombNum)),
+			cate.GetValue<TeroristOption, float>(
+				TeroristOption.ExplosionTime),
+			cate.GetValue<TeroristOption, int>(
+				TeroristOption.BombNum),
 			miniGameOption);
 
 		this.teroSabo = ExtremeSystemTypeManager.Instance.CreateOrGet(

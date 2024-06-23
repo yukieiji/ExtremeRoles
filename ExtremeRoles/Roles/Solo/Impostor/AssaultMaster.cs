@@ -243,28 +243,28 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.stockMax = allOpt.GetValue<int>(
-            AssaultMasterOption.StockLimit));
-        this.addStockWhenReport = allOpt.GetValue<int>(
-            AssaultMasterOption.StockNumWhenReport));
-        this.addStockWhenMeetingButton = allOpt.GetValue<int>(
-            AssaultMasterOption.StockNumWhenMeetingButton));
-        this.cockingReduceTime = allOpt.GetValue<float>(
-            AssaultMasterOption.CockingKillCoolReduceTime));
-        this.reloadReduceTimePerStock = allOpt.GetValue<float>(
-            AssaultMasterOption.ReloadReduceKillCoolTimePerStock));
-        this.isResetCoolTimeWhenKill = allOpt.GetValue<bool>(
-            AssaultMasterOption.IsResetReloadCoolTimeWhenKill));
-        this.timerReduceRate = 1.0f - allOpt.GetValue<int>(
-            AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock)) / 100.0f;
+        this.stockMax = cate.GetValue<AssaultMasterOption, int>(
+            AssaultMasterOption.StockLimit);
+        this.addStockWhenReport = cate.GetValue<AssaultMasterOption, int>(
+            AssaultMasterOption.StockNumWhenReport);
+        this.addStockWhenMeetingButton = cate.GetValue<AssaultMasterOption, int>(
+            AssaultMasterOption.StockNumWhenMeetingButton);
+        this.cockingReduceTime = cate.GetValue<AssaultMasterOption, float>(
+            AssaultMasterOption.CockingKillCoolReduceTime);
+        this.reloadReduceTimePerStock = cate.GetValue<AssaultMasterOption, float>(
+            AssaultMasterOption.ReloadReduceKillCoolTimePerStock);
+        this.isResetCoolTimeWhenKill = cate.GetValue<AssaultMasterOption, bool>(
+            AssaultMasterOption.IsResetReloadCoolTimeWhenKill);
+        this.timerReduceRate = 1.0f - cate.GetValue<AssaultMasterOption, int>(
+            AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock) / 100.0f;
 
         this.stock = 0;
         this.timerStock = 0;
 
-        this.defaultReloadCoolTime = allOpt.GetValue<float>(
-            RoleAbilityCommonOption.AbilityCoolTime));
+        this.defaultReloadCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(
+            RoleAbilityCommonOption.AbilityCoolTime);
 
         this.curReloadCoolTime = this.defaultReloadCoolTime;
 

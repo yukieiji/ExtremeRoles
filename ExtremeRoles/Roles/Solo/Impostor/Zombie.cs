@@ -460,21 +460,21 @@ public sealed class Zombie :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
         this.killCount = 0;
 
-        this.awakeKillCount = allOpt.GetValue<int>(
-            ZombieOption.AwakeKillCount));
-        this.resurrectKillCount = allOpt.GetValue<int>(
-            ZombieOption.ResurrectKillCount));
+        this.awakeKillCount = cate.GetValue<ZombieOption, int>(
+            ZombieOption.AwakeKillCount);
+        this.resurrectKillCount = cate.GetValue<ZombieOption, int>(
+            ZombieOption.ResurrectKillCount);
 
-        this.showMagicCircleTime = allOpt.GetValue<float>(
-            ZombieOption.ShowMagicCircleTime));
-        this.resurrectTimer = allOpt.GetValue<float>(
-            ZombieOption.ResurrectDelayTime));
-        this.canResurrectOnExil = allOpt.GetValue<bool>(
-            ZombieOption.CanResurrectOnExil));
+        this.showMagicCircleTime = cate.GetValue<ZombieOption, float>(
+            ZombieOption.ShowMagicCircleTime);
+        this.resurrectTimer = cate.GetValue<ZombieOption, float>(
+            ZombieOption.ResurrectDelayTime);
+        this.canResurrectOnExil = cate.GetValue<ZombieOption, bool>(
+            ZombieOption.CanResurrectOnExil);
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;

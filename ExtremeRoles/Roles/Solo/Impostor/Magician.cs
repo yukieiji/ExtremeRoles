@@ -157,14 +157,14 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
-        this.teleportRate = (float)allOption.GetValue<int>(
-            MagicianOption.TeleportTargetRate)) / 100.0f;
-        this.dupeTeleportTarget = allOption.GetValue<bool>(
-            MagicianOption.DupeTeleportTargetTo));
-        this.includeRolePlayer = allOption.GetValue<bool>(
-            MagicianOption.IncludeSpawnPoint));
-        this.includeSpawnPoint = allOption.GetValue<bool>(
-            MagicianOption.IncludeRolePlayer));
+        var cate = this.Category;
+        this.teleportRate = (float)cate.GetValue<MagicianOption, int>(
+            MagicianOption.TeleportTargetRate) / 100.0f;
+        this.dupeTeleportTarget = cate.GetValue<MagicianOption, bool>(
+            MagicianOption.DupeTeleportTargetTo);
+        this.includeRolePlayer = cate.GetValue<MagicianOption, bool>(
+            MagicianOption.IncludeSpawnPoint);
+        this.includeSpawnPoint = cate.GetValue<MagicianOption, bool>(
+            MagicianOption.IncludeRolePlayer);
     }
 }

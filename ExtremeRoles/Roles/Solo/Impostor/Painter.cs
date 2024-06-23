@@ -152,7 +152,7 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        this.paintDistance = OptionManager.Instance.GetValue<float>(
-            PainterOption.CanPaintDistance));
+        this.paintDistance = this.Category.GetValue<PainterOption, float>(
+            PainterOption.CanPaintDistance);
     }
 }

@@ -148,8 +148,8 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        this.penaltyKillCool = OptionManager.Instance.GetValue<float>(
-            SmasherOption.SmashPenaltyKillCool));
+        this.penaltyKillCool = this.Category.GetValue<SmasherOption, float>(
+            SmasherOption.SmashPenaltyKillCool);
     }
 
     public void ResetOnMeetingStart()

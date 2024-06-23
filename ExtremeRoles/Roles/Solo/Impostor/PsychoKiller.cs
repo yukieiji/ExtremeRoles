@@ -215,26 +215,26 @@ public sealed class PsychoKiller :
                 FloatOptionNames.KillCooldown);
         }
 
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.reduceRate = allOption.GetValue<int>(
-            PsychoKillerOption.KillCoolReduceRate));
-        this.isResetMeeting = allOption.GetValue<bool>(
-            PsychoKillerOption.CombResetWhenMeeting));
-        this.combMax= allOption.GetValue<int>(
-            PsychoKillerOption.CombMax));
+        this.reduceRate = cate.GetValue<PsychoKillerOption, int>(
+            PsychoKillerOption.KillCoolReduceRate);
+        this.isResetMeeting = cate.GetValue<PsychoKillerOption, bool>(
+            PsychoKillerOption.CombResetWhenMeeting);
+        this.combMax= cate.GetValue<PsychoKillerOption, int>(
+            PsychoKillerOption.CombMax);
 
-		this.hasSelfTimer = allOption.GetValue<bool>(
-			PsychoKillerOption.HasSelfKillTimer));
-		this.defaultTimer = allOption.GetValue<float>(
-			PsychoKillerOption.SelfKillTimerTime));
-		this.isForceRestartWhenMeetingEnd = allOption.GetValue<bool>(
-			PsychoKillerOption.IsForceRestartWhenMeetingEnd));
-		this.isDiactiveUntilKillWhenMeetingEnd = allOption.GetValue<bool>(
-			PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd));
+		this.hasSelfTimer = cate.GetValue<PsychoKillerOption, bool>(
+			PsychoKillerOption.HasSelfKillTimer);
+		this.defaultTimer = cate.GetValue<PsychoKillerOption, float>(
+			PsychoKillerOption.SelfKillTimerTime);
+		this.isForceRestartWhenMeetingEnd = cate.GetValue<PsychoKillerOption, bool>(
+			PsychoKillerOption.IsForceRestartWhenMeetingEnd);
+		this.isDiactiveUntilKillWhenMeetingEnd = cate.GetValue<PsychoKillerOption, bool>(
+			PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd);
 
-		this.timerModRate = (100.0f - (float)allOption.GetValue<int>(
-			PsychoKillerOption.SelfKillTimerModRate))) / 100.0f;
+		this.timerModRate = (100.0f - (float)cate.GetValue<PsychoKillerOption, int>(
+			PsychoKillerOption.SelfKillTimerModRate)) / 100.0f;
 		if (this.hasSelfTimer)
 		{
 			this.timer = this.defaultTimer;

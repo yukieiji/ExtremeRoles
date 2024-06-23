@@ -634,33 +634,33 @@ public sealed class Hypnotist :
             this.defaultKillCool = this.KillCoolTime;
         }
 
-        var allOpt = OptionManager.Instance;
-        this.awakeCheckImpNum = allOpt.GetValue<int>(
-            HypnotistOption.AwakeCheckImpostorNum));
-        this.awakeCheckTaskGage = allOpt.GetValue<int>(
-            HypnotistOption.AwakeCheckTaskGage)) / 100.0f;
-        this.awakeKillCount = allOpt.GetValue<int>(
-            HypnotistOption.AwakeKillCount));
+        var cate = this.Category;
+        this.awakeCheckImpNum = cate.GetValue<HypnotistOption, int>(
+            HypnotistOption.AwakeCheckImpostorNum);
+        this.awakeCheckTaskGage = cate.GetValue<HypnotistOption, int>(
+            HypnotistOption.AwakeCheckTaskGage) / 100.0f;
+        this.awakeKillCount = cate.GetValue<HypnotistOption, int>(
+            HypnotistOption.AwakeKillCount);
 
-        this.range = allOpt.GetValue<float>(
-            HypnotistOption.Range));
+        this.range = cate.GetValue<HypnotistOption, float>(
+            HypnotistOption.Range);
 
-        this.hideDistance = allOpt.GetValue<float>(
-            HypnotistOption.HideArrowRange));
-        this.isResetKillCoolWhenDollKill = allOpt.GetValue<bool>(
-            HypnotistOption.IsResetKillCoolWhenDollKill));
-        this.dollKillCoolReduceRate = (1.0f - (allOpt.GetValue<int>(
-            HypnotistOption.DollKillCoolReduceRate)) / 100.0f));
-        this.defaultRedAbilityPartNum = allOpt.GetValue<int>(
-            HypnotistOption.DefaultRedAbilityPart));
+        this.hideDistance = cate.GetValue<HypnotistOption, float>(
+            HypnotistOption.HideArrowRange);
+        this.isResetKillCoolWhenDollKill = cate.GetValue<HypnotistOption, bool>(
+            HypnotistOption.IsResetKillCoolWhenDollKill);
+        this.dollKillCoolReduceRate = (1.0f - (cate.GetValue<HypnotistOption, int>(
+            HypnotistOption.DollKillCoolReduceRate) / 100.0f));
+        this.defaultRedAbilityPartNum = cate.GetValue<HypnotistOption, int>(
+            HypnotistOption.DefaultRedAbilityPart);
 
-        this.DollCrakingActiveTime = allOpt.GetValue<float>(
-            HypnotistOption.DollCrakingActiveTime));
-        this.DollCrakingCoolTime = allOpt.GetValue<float>(
-            HypnotistOption.DollCrakingCoolTime));
+        this.DollCrakingActiveTime = cate.GetValue<HypnotistOption, float>(
+            HypnotistOption.DollCrakingActiveTime);
+        this.DollCrakingCoolTime = cate.GetValue<HypnotistOption, float>(
+            HypnotistOption.DollCrakingCoolTime);
 
-        this.defaultTimer = allOpt.GetValue<float>(
-            HypnotistOption.HideKillButtonTime));
+        this.defaultTimer = cate.GetValue<HypnotistOption, float>(
+            HypnotistOption.HideKillButtonTime);
 
         this.canAwakeNow =
             this.awakeCheckImpNum >= curOption.GetInt(Int32OptionNames.NumImpostors) &&

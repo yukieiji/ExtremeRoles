@@ -334,12 +334,12 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.ActiveNum = allOption.GetValue<int>(
-            MeryOption.ActiveNum));
-        this.ActiveRange = allOption.GetValue<float>(
-            MeryOption.ActiveRange));
+        this.ActiveNum = cate.GetValue<MeryOption, int>(
+            MeryOption.ActiveNum);
+        this.ActiveRange = cate.GetValue<MeryOption, float>(
+            MeryOption.ActiveRange);
 
     }
 

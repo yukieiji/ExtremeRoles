@@ -289,17 +289,17 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         this.defaultKillRange = this.KillRange;
         this.IsOverLoad = false;
 
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.awakeImpNum = allOption.GetValue<int>(
-            OverLoaderOption.AwakeImpostorNum));
-        this.awakeKillCount = allOption.GetValue<int>(
-            OverLoaderOption.AwakeKillCount));
+        this.awakeImpNum = cate.GetValue<OverLoaderOption, int>(
+            OverLoaderOption.AwakeImpostorNum);
+        this.awakeKillCount = cate.GetValue<OverLoaderOption, int>(
+            OverLoaderOption.AwakeKillCount);
 
-        this.MoveSpeed = allOption.GetValue<float>(
-            OverLoaderOption.MoveSpeed));
-        this.reduceRate = allOption.GetValue<float>(
-            OverLoaderOption.KillCoolReduceRate));
+        this.MoveSpeed = cate.GetValue<OverLoaderOption, float>(
+            OverLoaderOption.MoveSpeed);
+        this.reduceRate = cate.GetValue<OverLoaderOption, float>(
+            OverLoaderOption.KillCoolReduceRate);
 
         this.killCount = 0;
 

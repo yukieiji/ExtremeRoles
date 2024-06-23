@@ -187,18 +187,18 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 
         this.defaultKillCoolTime = this.KillCoolTime;
 
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.isEvolvdAnimation = allOption.GetValue<bool>(
-            EvolverOption.IsEvolvedAnimation));
-        this.isEatingEndCleanBody = allOption.GetValue <bool>(
-            EvolverOption.IsEatingEndCleanBody));
-        this.eatingRange = allOption.GetValue<float>(
-            EvolverOption.EatingRange));
-        this.reduceRate = allOption.GetValue<int>(
-            EvolverOption.KillCoolReduceRate));
-        this.reruceMulti = allOption.GetValue<float>(
-            EvolverOption.KillCoolResuceRateMulti));
+        this.isEvolvdAnimation = cate.GetValue<EvolverOption, bool>(
+            EvolverOption.IsEvolvedAnimation);
+        this.isEatingEndCleanBody = cate.GetValue<EvolverOption, bool>(
+            EvolverOption.IsEatingEndCleanBody);
+        this.eatingRange = cate.GetValue<EvolverOption, float>(
+            EvolverOption.EatingRange);
+        this.reduceRate = cate.GetValue<EvolverOption, int>(
+            EvolverOption.KillCoolReduceRate);
+        this.reruceMulti = cate.GetValue<EvolverOption, float>(
+            EvolverOption.KillCoolResuceRateMulti);
 
         this.eatingText = Translation.GetString("eating");
 

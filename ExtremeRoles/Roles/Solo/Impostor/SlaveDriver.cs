@@ -87,12 +87,13 @@ public sealed class SlaveDriver :
 
     protected override void RoleSpecificInit()
     {
-		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
-			SlaveDriverOption.CanSeeTaskBar));
-		this.revartTaskNum= OptionManager.Instance.GetValue<int>(
-			SlaveDriverOption.RevartTaskNum));
-		this.range = OptionManager.Instance.GetValue<float>(
-			SlaveDriverOption.Range));
+		var cate = this.Category;
+		this.CanSeeTaskBar = cate.GetValue<SlaveDriverOption, bool>(
+			SlaveDriverOption.CanSeeTaskBar);
+		this.revartTaskNum= cate.GetValue<SlaveDriverOption, int>(
+			SlaveDriverOption.RevartTaskNum);
+		this.range = cate.GetValue<SlaveDriverOption, float>(
+			SlaveDriverOption.Range);
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)

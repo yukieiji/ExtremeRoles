@@ -438,36 +438,36 @@ public sealed class Shooter :
 
     protected override void RoleSpecificInit()
     {
-        var allOps = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.isAwake = allOps.GetValue<bool>(
-            ShooterOption.IsInitAwake));
+        this.isAwake = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.IsInitAwake);
 
-        this.awakeKillCount = allOps.GetValue<int>(
-            ShooterOption.AwakeKillNum));
-        this.awakeImpNum = allOps.GetValue<int>(
-            ShooterOption.AwakeImpNum));
+        this.awakeKillCount = cate.GetValue<ShooterOption, int>(
+            ShooterOption.AwakeKillNum);
+        this.awakeImpNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.AwakeImpNum);
 
-        this.isNoneAwakeWhenShoot = allOps.GetValue<bool>(
-            ShooterOption.NoneAwakeWhenShoot));
+        this.isNoneAwakeWhenShoot = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.NoneAwakeWhenShoot);
 
-        this.awakedCallMeeting = allOps.GetValue<bool>(
-            ShooterOption.CanCallMeeting));
-        this.canShootSelfCallMeeting = allOps.GetValue<bool>(
-            ShooterOption.CanShootSelfCallMeeting));
+        this.awakedCallMeeting = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.CanCallMeeting);
+        this.canShootSelfCallMeeting = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.CanShootSelfCallMeeting);
 
-        this.maxShootNum = allOps.GetValue<int>(
-            ShooterOption.MaxShootNum));
-        this.curShootNum = allOps.GetValue<int>(
-            ShooterOption.InitShootNum));
-        this.maxMeetingShootNum = allOps.GetValue<int>(
-            ShooterOption.MaxMeetingShootNum));
-        this.chargeTime = allOps.GetValue<float>(
-            ShooterOption.ShootChargeTime));
-        this.chargeKillNum = allOps.GetValue<int>(
-            ShooterOption.ShootKillNum));
-        this.killCoolPenalty = allOps.GetValue<float>(
-            ShooterOption.ShootKillCoolPenalty));
+        this.maxShootNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.MaxShootNum);
+        this.curShootNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.InitShootNum);
+        this.maxMeetingShootNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.MaxMeetingShootNum);
+        this.chargeTime = cate.GetValue<ShooterOption, float>(
+            ShooterOption.ShootChargeTime);
+        this.chargeKillNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.ShootKillNum);
+        this.killCoolPenalty = cate.GetValue<ShooterOption, float>(
+            ShooterOption.ShootKillCoolPenalty);
 
         this.isNoneAwakeWhenShoot =
 

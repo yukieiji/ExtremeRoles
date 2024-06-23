@@ -20,6 +20,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.Factory;
+using static UnityEngine.GridBrushBase;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -134,18 +135,18 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.timerMinTime = allOption.GetValue<float>(
-            BomberOption.TimerMinTime));
-        this.timerMaxTime = allOption.GetValue<float>(
-            BomberOption.TimerMaxTime));
-        this.explosionKillChance = allOption.GetValue<int>(
-            BomberOption.ExplosionKillChance));
-        this.explosionRange = allOption.GetValue<int>(
-            BomberOption.ExplosionRange));
-        this.tellExplosion = allOption.GetValue<bool>(
-            BomberOption.TellExplosion));
+        this.timerMinTime = cate.GetValue<BomberOption, float>(
+            BomberOption.TimerMinTime);
+        this.timerMaxTime = cate.GetValue<BomberOption, float>(
+            BomberOption.TimerMaxTime);
+        this.explosionKillChance = cate.GetValue<BomberOption, int>(
+            BomberOption.ExplosionKillChance);
+        this.explosionRange = cate.GetValue<BomberOption, int>(
+		BomberOption.ExplosionRange);
+        this.tellExplosion = cate.GetValue<BomberOption, bool>(
+            BomberOption.TellExplosion);
 
         this.bombPlayerId = new Queue<byte>();
         resetTimer();

@@ -289,18 +289,18 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.awakeImpNum = allOpt.GetValue<int>(
-            LastWolfOption.AwakeImpostorNum));
+        this.awakeImpNum = cate.GetValue<LastWolfOption, int>(
+            LastWolfOption.AwakeImpostorNum);
 
-        this.noneAwakeKillBonus = allOpt.GetValue<float>(
-            LastWolfOption.KillPlayerNumBonus));
-        this.deadPlayerKillBonus = allOpt.GetValue<float>(
-            LastWolfOption.DeadPlayerNumBonus));
+        this.noneAwakeKillBonus = cate.GetValue<LastWolfOption, float>(
+            LastWolfOption.KillPlayerNumBonus);
+        this.deadPlayerKillBonus = cate.GetValue<LastWolfOption, float>(
+            LastWolfOption.DeadPlayerNumBonus);
 
-        LightOffVision = allOpt.GetValue<float>(
-            LastWolfOption.LightOffVision));
+        LightOffVision = cate.GetValue<LastWolfOption, float>(
+            LastWolfOption.LightOffVision);
 
         this.noneAwakeKillCount = 0;
 

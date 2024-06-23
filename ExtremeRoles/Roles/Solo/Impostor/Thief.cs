@@ -146,17 +146,17 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-		this.activeRange = allOption.GetValue<float>(ThiefOption.Range));
-		this.isAddEffect = allOption.GetValue<bool>(ThiefOption.IsAddEffect));
+		this.activeRange = cate.GetValue<ThiefOption, float>(ThiefOption.Range);
+		this.isAddEffect = cate.GetValue<ThiefOption, bool>(ThiefOption.IsAddEffect);
 
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.ThiefMeetingTimeChange,
 			new ThiefMeetingTimeStealSystem(
-				allOption.GetValue<int>(ThiefOption.SetNum)),
-				-allOption.GetValue<int>(ThiefOption.SetTimeOffset)),
-				allOption.GetValue<int>(ThiefOption.PickUpTimeOffset))));
+				cate.GetValue<ThiefOption, int>(ThiefOption.SetNum),
+				-cate.GetValue<ThiefOption, int>(ThiefOption.SetTimeOffset),
+				cate.GetValue<ThiefOption, int>(ThiefOption.PickUpTimeOffset)));
     }
 
     public void ResetOnMeetingStart()

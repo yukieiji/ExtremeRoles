@@ -249,13 +249,14 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.range = OptionManager.Instance.GetValue<float>(
-            SandWormOption.AssaultRange));
+		var cate = this.Category;
+        this.range = cate.GetValue<SandWormOption, float>(
+            SandWormOption.AssaultRange);
 
-        this.killPenalty = OptionManager.Instance.GetValue<float>(
-            SandWormOption.KillCoolPenalty));
-        this.killBonus = OptionManager.Instance.GetValue<float>(
-            SandWormOption.AssaultKillCoolReduce));
+        this.killPenalty = cate.GetValue<SandWormOption, float>(
+            SandWormOption.KillCoolPenalty);
+        this.killBonus = cate.GetValue<SandWormOption, float>(
+            SandWormOption.AssaultKillCoolReduce);
 
         if (!this.HasOtherKillCool)
         {

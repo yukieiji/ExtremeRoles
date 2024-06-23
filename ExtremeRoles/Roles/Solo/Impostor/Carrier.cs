@@ -222,10 +222,11 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
 
     protected override void RoleSpecificInit()
     {
-        this.carryDistance = OptionManager.Instance.GetValue<float>(
-            CarrierOption.CarryDistance));
-        this.canReportOnCarry = OptionManager.Instance.GetValue<bool>(
-            CarrierOption.CanReportOnCarry));
+		var cate = this.Category;
+        this.carryDistance = cate.GetValue<CarrierOption, float>(
+            CarrierOption.CarryDistance);
+        this.canReportOnCarry = cate.GetValue<CarrierOption, bool>(
+            CarrierOption.CanReportOnCarry);
     }
 
     public void AllReset(PlayerControl rolePlayer)

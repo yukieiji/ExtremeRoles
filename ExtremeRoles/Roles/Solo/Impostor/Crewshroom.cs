@@ -87,7 +87,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ModedMushroomSystem.Type,
 			new ModedMushroomSystem(
-				OptionManager.Instance.GetValue<float>(
-					Option.DelaySecond))));
+				this.Category.GetValue<Option, float>(
+					Option.DelaySecond)));
 	}
 }

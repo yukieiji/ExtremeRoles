@@ -150,13 +150,13 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
-        this.killCoolReduceTime = allOpt.GetValue<float>(
-            CommanderOption.KillCoolReduceTime));
-        this.killCoolImpNumBonus = allOpt.GetValue<float>(
-            CommanderOption.KillCoolReduceImpBonus));
-        this.increaseKillNum = allOpt.GetValue<int>(
-            CommanderOption.IncreaseKillNum));
+        var cate = this.Category;
+        this.killCoolReduceTime = cate.GetValue<CommanderOption, float>(
+            CommanderOption.KillCoolReduceTime);
+        this.killCoolImpNumBonus = cate.GetValue<CommanderOption, float>(
+            CommanderOption.KillCoolReduceImpBonus);
+        this.increaseKillNum = cate.GetValue<CommanderOption, int>(
+            CommanderOption.IncreaseKillNum);
 
         this.killCount = 0;
     }
