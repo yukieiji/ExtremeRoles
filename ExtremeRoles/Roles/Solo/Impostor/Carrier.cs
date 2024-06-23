@@ -13,6 +13,9 @@ using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialReset
@@ -203,27 +206,26 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 5.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 5.0f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CarrierOption.CarryDistance,
-            1.0f, 1.0f, 5.0f, 0.5f,
-            parentOps);
+            1.0f, 1.0f, 5.0f, 0.5f);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             CarrierOption.CanReportOnCarry,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
         this.carryDistance = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(CarrierOption.CarryDistance));
+            CarrierOption.CarryDistance));
         this.canReportOnCarry = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(CarrierOption.CanReportOnCarry));
+            CarrierOption.CanReportOnCarry));
     }
 
     public void AllReset(PlayerControl rolePlayer)

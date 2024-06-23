@@ -13,6 +13,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.VentModule;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
@@ -221,39 +224,38 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             SandWormOption.KillCoolPenalty,
             5.0f, 1.0f, 10.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             SandWormOption.AssaultKillCoolReduce,
             3.0f, 1.0f, 5.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             SandWormOption.AssaultRange,
-            2.0f, 0.1f, 3.0f, 0.1f,
-            parentOps);
+            2.0f, 0.1f, 3.0f, 0.1f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             RoleAbilityCommonOption.AbilityCoolTime,
             15.0f, 0.5f, 45.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
     }
 
     protected override void RoleSpecificInit()
     {
         this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(SandWormOption.AssaultRange));
+            SandWormOption.AssaultRange));
 
         this.killPenalty = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(SandWormOption.KillCoolPenalty));
+            SandWormOption.KillCoolPenalty));
         this.killBonus = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(SandWormOption.AssaultKillCoolReduce));
+            SandWormOption.AssaultKillCoolReduce));
 
         if (!this.HasOtherKillCool)
         {

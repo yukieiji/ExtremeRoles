@@ -11,6 +11,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
@@ -260,32 +263,28 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             LastWolfOption.AwakeImpostorNum,
-            1, 1, GameSystem.MaxImposterNum, 1,
-            parentOps);
+            1, 1, GameSystem.MaxImposterNum, 1);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             LastWolfOption.DeadPlayerNumBonus,
             1.0f, 2.0f, 6.5f, 0.1f,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             LastWolfOption.KillPlayerNumBonus,
             2.5f, 4.0f, 10.0f, 0.1f,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        this.CreateCommonAbilityOption(
-            parentOps, 10.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 10.0f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             LastWolfOption.LightOffVision,
-            0.1f, 0.0f, 1.0f, 0.1f,
-            parentOps);
+            0.1f, 0.0f, 1.0f, 0.1f);
     }
 
     protected override void RoleSpecificInit()
@@ -293,15 +292,15 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         var allOpt = OptionManager.Instance;
 
         this.awakeImpNum = allOpt.GetValue<int>(
-            GetRoleOptionId(LastWolfOption.AwakeImpostorNum));
+            LastWolfOption.AwakeImpostorNum));
 
         this.noneAwakeKillBonus = allOpt.GetValue<float>(
-            GetRoleOptionId(LastWolfOption.KillPlayerNumBonus));
+            LastWolfOption.KillPlayerNumBonus));
         this.deadPlayerKillBonus = allOpt.GetValue<float>(
-            GetRoleOptionId(LastWolfOption.DeadPlayerNumBonus));
+            LastWolfOption.DeadPlayerNumBonus));
 
         LightOffVision = allOpt.GetValue<float>(
-            GetRoleOptionId(LastWolfOption.LightOffVision));
+            LastWolfOption.LightOffVision));
 
         this.noneAwakeKillCount = 0;
 

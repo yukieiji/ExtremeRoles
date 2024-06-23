@@ -10,6 +10,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
@@ -128,32 +131,32 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CommanderOption.KillCoolReduceTime,
-            2.0f, 0.5f, 5.0f, 0.1f, parentOps,
+            2.0f, 0.5f, 5.0f, 0.1f,
             format: OptionUnit.Second);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CommanderOption.KillCoolReduceImpBonus,
-            1.5f, 0.1f, 3.0f, 0.1f, parentOps,
+            1.5f, 0.1f, 3.0f, 0.1f,
             format: OptionUnit.Second);
-        CreateIntOption(
+        factory.CreateIntOption(
             CommanderOption.IncreaseKillNum,
-            2, 1, 3, 1, parentOps,
+            2, 1, 3, 1,
             format: OptionUnit.Shot);
-        this.CreateAbilityCountOption(parentOps, 1, 3);
+        IRoleAbility.CreateAbilityCountOption(factory, 1, 3);
     }
 
     protected override void RoleSpecificInit()
     {
         var allOpt = OptionManager.Instance;
         this.killCoolReduceTime = allOpt.GetValue<float>(
-            GetRoleOptionId(CommanderOption.KillCoolReduceTime));
+            CommanderOption.KillCoolReduceTime));
         this.killCoolImpNumBonus = allOpt.GetValue<float>(
-            GetRoleOptionId(CommanderOption.KillCoolReduceImpBonus));
+            CommanderOption.KillCoolReduceImpBonus));
         this.increaseKillNum = allOpt.GetValue<int>(
-            GetRoleOptionId(CommanderOption.IncreaseKillNum));
+            CommanderOption.IncreaseKillNum));
 
         this.killCount = 0;
     }

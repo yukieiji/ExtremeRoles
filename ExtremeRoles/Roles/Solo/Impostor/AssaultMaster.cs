@@ -10,6 +10,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRoleReportHook, IRoleUpdate
@@ -205,36 +208,36 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
         base.GetFullDescription(), this.stock,
         this.stockMax, this.curReloadCoolTime);
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(parentOps);
+        IRoleAbility.CreateCommonAbilityOption(factory);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             AssaultMasterOption.StockLimit,
-            2, 1, 10, 1, parentOps,
+            2, 1, 10, 1,
             format: OptionUnit.ScrewNum);
-        CreateIntOption(
+        factory.CreateIntOption(
             AssaultMasterOption.StockNumWhenReport,
-            1, 1, 5, 1, parentOps,
+            1, 1, 5, 1,
             format: OptionUnit.ScrewNum);
-        CreateIntOption(
+        factory.CreateIntOption(
             AssaultMasterOption.StockNumWhenMeetingButton,
-            3, 1, 10, 1, parentOps,
+            3, 1, 10, 1,
             format: OptionUnit.ScrewNum);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             AssaultMasterOption.CockingKillCoolReduceTime,
-            2.0f, 1.0f, 5.0f, 0.1f, parentOps,
+            2.0f, 1.0f, 5.0f, 0.1f,
             format: OptionUnit.Second);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             AssaultMasterOption.ReloadReduceKillCoolTimePerStock,
-            5.0f, 2.0f, 10.0f, 0.1f, parentOps,
+            5.0f, 2.0f, 10.0f, 0.1f,
             format: OptionUnit.Second);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AssaultMasterOption.IsResetReloadCoolTimeWhenKill,
-            true, parentOps);
-        CreateIntOption(
+            true);
+        factory.CreateIntOption(
             AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock,
-            75, 30, 90, 1, parentOps,
+            75, 30, 90, 1,
             format: OptionUnit.Percentage);
     }
 
@@ -243,25 +246,25 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
         var allOpt = OptionManager.Instance;
 
         this.stockMax = allOpt.GetValue<int>(
-            GetRoleOptionId(AssaultMasterOption.StockLimit));
+            AssaultMasterOption.StockLimit));
         this.addStockWhenReport = allOpt.GetValue<int>(
-            GetRoleOptionId(AssaultMasterOption.StockNumWhenReport));
+            AssaultMasterOption.StockNumWhenReport));
         this.addStockWhenMeetingButton = allOpt.GetValue<int>(
-            GetRoleOptionId(AssaultMasterOption.StockNumWhenMeetingButton));
+            AssaultMasterOption.StockNumWhenMeetingButton));
         this.cockingReduceTime = allOpt.GetValue<float>(
-            GetRoleOptionId(AssaultMasterOption.CockingKillCoolReduceTime));
+            AssaultMasterOption.CockingKillCoolReduceTime));
         this.reloadReduceTimePerStock = allOpt.GetValue<float>(
-            GetRoleOptionId(AssaultMasterOption.ReloadReduceKillCoolTimePerStock));
+            AssaultMasterOption.ReloadReduceKillCoolTimePerStock));
         this.isResetCoolTimeWhenKill = allOpt.GetValue<bool>(
-            GetRoleOptionId(AssaultMasterOption.IsResetReloadCoolTimeWhenKill));
+            AssaultMasterOption.IsResetReloadCoolTimeWhenKill));
         this.timerReduceRate = 1.0f - allOpt.GetValue<int>(
-            GetRoleOptionId(AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock)) / 100.0f;
+            AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock)) / 100.0f;
 
         this.stock = 0;
         this.timerStock = 0;
 
         this.defaultReloadCoolTime = allOpt.GetValue<float>(
-            GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
+            RoleAbilityCommonOption.AbilityCoolTime));
 
         this.curReloadCoolTime = this.defaultReloadCoolTime;
 

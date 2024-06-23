@@ -11,6 +11,9 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class PsychoKiller :
@@ -166,39 +169,37 @@ public sealed class PsychoKiller :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             PsychoKillerOption.KillCoolReduceRate,
-            5, 1, 15, 1, parentOps,
+            5, 1, 15, 1,
             format: OptionUnit.Percentage);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             PsychoKillerOption.CombMax,
-            2, 1, 5, 1,
-            parentOps);
+            2, 1, 5, 1);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             PsychoKillerOption.CombResetWhenMeeting,
-            true, parentOps);
+            true);
 
-		var hasSelfKillTimer = CreateBoolOption(
+		var hasSelfKillTimer = factory.CreateBoolOption(
 			PsychoKillerOption.HasSelfKillTimer,
-			false, parentOps);
-		CreateFloatOption(
+			false);
+		factory.CreateFloatOption(
 			PsychoKillerOption.SelfKillTimerTime,
 			30.0f, 5.0f, 120.0f, 0.5f,
 			hasSelfKillTimer,
 			format: OptionUnit.Second);
-		var timerOpt = CreateBoolOption(
+		var timerOpt = factory.CreateBoolOption(
 			PsychoKillerOption.IsForceRestartWhenMeetingEnd,
 			false, hasSelfKillTimer);
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd,
 			false, timerOpt,
-			invert: true,
-			enableCheckOption: parentOps);
-		CreateIntOption(
+			invert: true);
+		factory.CreateIntOption(
 			PsychoKillerOption.SelfKillTimerModRate,
 			0, -50, 50, 1, hasSelfKillTimer,
 			format: OptionUnit.Percentage);
@@ -217,23 +218,23 @@ public sealed class PsychoKiller :
         var allOption = OptionManager.Instance;
 
         this.reduceRate = allOption.GetValue<int>(
-            GetRoleOptionId(PsychoKillerOption.KillCoolReduceRate));
+            PsychoKillerOption.KillCoolReduceRate));
         this.isResetMeeting = allOption.GetValue<bool>(
-            GetRoleOptionId(PsychoKillerOption.CombResetWhenMeeting));
+            PsychoKillerOption.CombResetWhenMeeting));
         this.combMax= allOption.GetValue<int>(
-            GetRoleOptionId(PsychoKillerOption.CombMax));
+            PsychoKillerOption.CombMax));
 
 		this.hasSelfTimer = allOption.GetValue<bool>(
-			GetRoleOptionId(PsychoKillerOption.HasSelfKillTimer));
+			PsychoKillerOption.HasSelfKillTimer));
 		this.defaultTimer = allOption.GetValue<float>(
-			GetRoleOptionId(PsychoKillerOption.SelfKillTimerTime));
+			PsychoKillerOption.SelfKillTimerTime));
 		this.isForceRestartWhenMeetingEnd = allOption.GetValue<bool>(
-			GetRoleOptionId(PsychoKillerOption.IsForceRestartWhenMeetingEnd));
+			PsychoKillerOption.IsForceRestartWhenMeetingEnd));
 		this.isDiactiveUntilKillWhenMeetingEnd = allOption.GetValue<bool>(
-			GetRoleOptionId(PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd));
+			PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd));
 
 		this.timerModRate = (100.0f - (float)allOption.GetValue<int>(
-			GetRoleOptionId(PsychoKillerOption.SelfKillTimerModRate))) / 100.0f;
+			PsychoKillerOption.SelfKillTimerModRate))) / 100.0f;
 		if (this.hasSelfTimer)
 		{
 			this.timer = this.defaultTimer;

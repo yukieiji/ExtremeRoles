@@ -11,6 +11,9 @@ using UnityEngine.Video;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
@@ -130,30 +133,30 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		this.CreateAbilityCountOption(
-            parentOps, 2, 5, 2.0f);
-		CreateFloatOption(ThiefOption.Range, 0.1f, 1.8f, 3.6f, 0.1f, parentOps);
-		CreateIntOption(ThiefOption.SetTimeOffset, 30, 10, 360, 5, parentOps, format: OptionUnit.Second);
-		CreateIntOption(ThiefOption.SetNum, 5, 1, 10, 1, parentOps);
-		CreateIntOption(ThiefOption.PickUpTimeOffset, 6, 1, 60, 1, parentOps, format: OptionUnit.Second);
-		CreateBoolOption(ThiefOption.IsAddEffect, true, parentOps);
+		IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5, 2.0f);
+		factory.CreateFloatOption(ThiefOption.Range, 0.1f, 1.8f, 3.6f, 0.1f);
+		factory.CreateIntOption(ThiefOption.SetTimeOffset, 30, 10, 360, 5, format: OptionUnit.Second);
+		factory.CreateIntOption(ThiefOption.SetNum, 5, 1, 10, 1);
+		factory.CreateIntOption(ThiefOption.PickUpTimeOffset, 6, 1, 60, 1, format: OptionUnit.Second);
+		factory.CreateBoolOption(ThiefOption.IsAddEffect, true);
 	}
 
     protected override void RoleSpecificInit()
     {
         var allOption = OptionManager.Instance;
 
-		this.activeRange = allOption.GetValue<float>(GetRoleOptionId(ThiefOption.Range));
-		this.isAddEffect = allOption.GetValue<bool>(GetRoleOptionId(ThiefOption.IsAddEffect));
+		this.activeRange = allOption.GetValue<float>(ThiefOption.Range));
+		this.isAddEffect = allOption.GetValue<bool>(ThiefOption.IsAddEffect));
 
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.ThiefMeetingTimeChange,
 			new ThiefMeetingTimeStealSystem(
-				allOption.GetValue<int>(GetRoleOptionId(ThiefOption.SetNum)),
-				-allOption.GetValue<int>(GetRoleOptionId(ThiefOption.SetTimeOffset)),
-				allOption.GetValue<int>(GetRoleOptionId(ThiefOption.PickUpTimeOffset))));
+				allOption.GetValue<int>(ThiefOption.SetNum)),
+				-allOption.GetValue<int>(ThiefOption.SetTimeOffset)),
+				allOption.GetValue<int>(ThiefOption.PickUpTimeOffset))));
     }
 
     public void ResetOnMeetingStart()

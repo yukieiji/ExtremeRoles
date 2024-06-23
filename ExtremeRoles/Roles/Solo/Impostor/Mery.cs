@@ -18,6 +18,9 @@ using ExtremeRoles.Compat;
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
@@ -316,17 +319,17 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 3, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 3, 5);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             MeryOption.ActiveNum,
-            3, 1, 5, 1, parentOps);
-        CreateFloatOption(
+            3, 1, 5, 1);
+        factory.CreateFloatOption(
             MeryOption.ActiveRange,
-            2.0f, 0.1f, 3.0f, 0.1f, parentOps);
+            2.0f, 0.1f, 3.0f, 0.1f);
     }
 
     protected override void RoleSpecificInit()
@@ -334,9 +337,9 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         var allOption = OptionManager.Instance;
 
         this.ActiveNum = allOption.GetValue<int>(
-            GetRoleOptionId(MeryOption.ActiveNum));
+            MeryOption.ActiveNum));
         this.ActiveRange = allOption.GetValue<float>(
-            GetRoleOptionId(MeryOption.ActiveRange));
+            MeryOption.ActiveRange));
 
     }
 

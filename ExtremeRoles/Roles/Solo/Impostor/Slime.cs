@@ -9,6 +9,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Slime :
@@ -183,10 +186,10 @@ public sealed class Slime :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 30.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 30.0f);
     }
 
     protected override void RoleSpecificInit()

@@ -11,6 +11,9 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
@@ -128,10 +131,10 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	protected override void CreateSpecificOption(
-		IOptionInfo parentOps)
+		AutoParentSetOptionCategoryFactory factory)
 	{
-		this.CreateCommonAbilityOption(
-			parentOps);
+		IRoleAbility.CreateCommonAbilityOption(
+			factory);
 	}
 
 	protected override void RoleSpecificInit()

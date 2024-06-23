@@ -12,6 +12,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetUp, IRoleResetMeeting
@@ -104,29 +107,29 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.TargetUpdateTime,
             60f, 30.0f, 120f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.TargetKillCoolTime,
             5f, 1.0f, 60f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.NoneTargetKillCoolTime,
             45f, 1.0f, 120f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        var arrowOption = CreateBoolOption(
+        var arrowOption = factory.CreateBoolOption(
             BountyHunterOption.IsShowArrow,
-            false, parentOps);
+            false);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.ArrowUpdateCycle,
             10f, 1.0f, 120f, 0.5f,
             arrowOption, format: OptionUnit.Second);
@@ -148,17 +151,17 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         var allOption = OptionManager.Instance;
 
         this.changeTargetTime = allOption.GetValue<float>(
-            GetRoleOptionId(BountyHunterOption.TargetUpdateTime));
+            BountyHunterOption.TargetUpdateTime));
         this.targetKillCool = allOption.GetValue<float>(
-            GetRoleOptionId(BountyHunterOption.TargetKillCoolTime));
+            BountyHunterOption.TargetKillCoolTime));
         this.noneTargetKillCool = allOption.GetValue<float>(
-            GetRoleOptionId(BountyHunterOption.NoneTargetKillCoolTime));
+            BountyHunterOption.NoneTargetKillCoolTime));
         this.isShowArrow = allOption.GetValue<bool>(
-            GetRoleOptionId(BountyHunterOption.IsShowArrow));
+            BountyHunterOption.IsShowArrow));
         if (this.isShowArrow)
         {
             this.targetArrowUpdateTime = allOption.GetValue<float>(
-                GetRoleOptionId(BountyHunterOption.ArrowUpdateCycle));
+                BountyHunterOption.ArrowUpdateCycle));
         }
         this.targetArrowUpdateTimer = 0;
         this.targetTimer = 0;

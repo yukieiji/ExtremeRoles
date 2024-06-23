@@ -29,6 +29,9 @@ using ExtremeRoles.Compat;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable
@@ -571,60 +574,51 @@ public sealed class Hypnotist :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             HypnotistOption.AwakeCheckImpostorNum,
-            1, 1, GameSystem.MaxImposterNum, 1,
-            parentOps);
-        CreateIntOption(
+            1, 1, GameSystem.MaxImposterNum, 1);
+        factory.CreateIntOption(
             HypnotistOption.AwakeCheckTaskGage,
             60, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             HypnotistOption.AwakeKillCount,
-            2, 0, 5, 1, parentOps,
+            2, 0, 5, 1,
             format: OptionUnit.Shot);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.Range,
-            1.6f, 0.5f, 5.0f, 0.1f,
-            parentOps);
+            1.6f, 0.5f, 5.0f, 0.1f);
 
-        this.CreateAbilityCountOption(parentOps, 1, 5);
+        IRoleAbility.CreateAbilityCountOption(factory, 1, 5);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.HideArrowRange,
-            10.0f, 5.0f, 25.0f, 0.5f,
-            parentOps);
-        CreateIntOption(
+            10.0f, 5.0f, 25.0f, 0.5f);
+        factory.CreateIntOption(
             HypnotistOption.DefaultRedAbilityPart,
-            0, 0, 10, 1,
-            parentOps);
-        CreateFloatOption(
+            0, 0, 10, 1);
+        factory.CreateFloatOption(
             HypnotistOption.HideKillButtonTime,
             15.0f, 2.5f, 60.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
-        CreateIntOption(
+        factory.CreateIntOption(
             HypnotistOption.DollKillCoolReduceRate,
             10, 0, 75, 1,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             HypnotistOption.IsResetKillCoolWhenDollKill,
-            true, parentOps);
-        CreateFloatOption(
+            true);
+        factory.CreateFloatOption(
             HypnotistOption.DollCrakingCoolTime,
             30.0f, 0.5f, 120.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             HypnotistOption.DollCrakingActiveTime,
             3.0f, 0.5f, 60.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
 
     }
@@ -642,31 +636,31 @@ public sealed class Hypnotist :
 
         var allOpt = OptionManager.Instance;
         this.awakeCheckImpNum = allOpt.GetValue<int>(
-            GetRoleOptionId(HypnotistOption.AwakeCheckImpostorNum));
+            HypnotistOption.AwakeCheckImpostorNum));
         this.awakeCheckTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(HypnotistOption.AwakeCheckTaskGage)) / 100.0f;
+            HypnotistOption.AwakeCheckTaskGage)) / 100.0f;
         this.awakeKillCount = allOpt.GetValue<int>(
-            GetRoleOptionId(HypnotistOption.AwakeKillCount));
+            HypnotistOption.AwakeKillCount));
 
         this.range = allOpt.GetValue<float>(
-            GetRoleOptionId(HypnotistOption.Range));
+            HypnotistOption.Range));
 
         this.hideDistance = allOpt.GetValue<float>(
-            GetRoleOptionId(HypnotistOption.HideArrowRange));
+            HypnotistOption.HideArrowRange));
         this.isResetKillCoolWhenDollKill = allOpt.GetValue<bool>(
-            GetRoleOptionId(HypnotistOption.IsResetKillCoolWhenDollKill));
+            HypnotistOption.IsResetKillCoolWhenDollKill));
         this.dollKillCoolReduceRate = (1.0f - (allOpt.GetValue<int>(
-            GetRoleOptionId(HypnotistOption.DollKillCoolReduceRate)) / 100.0f));
+            HypnotistOption.DollKillCoolReduceRate)) / 100.0f));
         this.defaultRedAbilityPartNum = allOpt.GetValue<int>(
-            GetRoleOptionId(HypnotistOption.DefaultRedAbilityPart));
+            HypnotistOption.DefaultRedAbilityPart));
 
         this.DollCrakingActiveTime = allOpt.GetValue<float>(
-            GetRoleOptionId(HypnotistOption.DollCrakingActiveTime));
+            HypnotistOption.DollCrakingActiveTime));
         this.DollCrakingCoolTime = allOpt.GetValue<float>(
-            GetRoleOptionId(HypnotistOption.DollCrakingCoolTime));
+            HypnotistOption.DollCrakingCoolTime));
 
         this.defaultTimer = allOpt.GetValue<float>(
-            GetRoleOptionId(HypnotistOption.HideKillButtonTime));
+            HypnotistOption.HideKillButtonTime));
 
         this.canAwakeNow =
             this.awakeCheckImpNum >= curOption.GetInt(Int32OptionNames.NumImpostors) &&
@@ -1310,7 +1304,7 @@ public sealed class Doll :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
         throw new Exception("Don't call this class method!!");
     }

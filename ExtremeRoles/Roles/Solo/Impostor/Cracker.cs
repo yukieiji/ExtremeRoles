@@ -11,6 +11,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
@@ -145,26 +148,25 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CrackerOption.CanCrackDistance,
-            1.0f, 1.0f, 5.0f, 0.5f,
-            parentOps);
+            1.0f, 1.0f, 5.0f, 0.5f);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             CrackerOption.RemoveDeadBody,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
     {
         this.crackDistance = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(CrackerOption.CanCrackDistance));
+            CrackerOption.CanCrackDistance));
         this.IsRemoveDeadBody = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(CrackerOption.RemoveDeadBody));
+            CrackerOption.RemoveDeadBody));
     }
 }

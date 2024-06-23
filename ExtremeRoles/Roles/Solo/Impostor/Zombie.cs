@@ -23,6 +23,9 @@ using SystemArray = System.Array;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Zombie :
@@ -427,35 +430,32 @@ public sealed class Zombie :
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             ZombieOption.AwakeKillCount,
             1, 0, 3, 1,
-            parentOps,
             format: OptionUnit.Shot);
 
-        this.CreateAbilityCountOption(parentOps, 1, 3, 3f);
+        IRoleAbility.CreateAbilityCountOption(factory, 1, 3, 3f);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             ZombieOption.ResurrectKillCount,
             2, 0, 3, 1,
-            parentOps,
             format: OptionUnit.Shot);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             ZombieOption.ShowMagicCircleTime,
             10.0f, 0.0f, 30.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             ZombieOption.ResurrectDelayTime,
             5.0f, 4.0f, 60.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
-        CreateBoolOption(
+            format: OptionUnit.Second);
+        factory.CreateBoolOption(
             ZombieOption.CanResurrectOnExil,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
@@ -465,16 +465,16 @@ public sealed class Zombie :
         this.killCount = 0;
 
         this.awakeKillCount = allOpt.GetValue<int>(
-            GetRoleOptionId(ZombieOption.AwakeKillCount));
+            ZombieOption.AwakeKillCount));
         this.resurrectKillCount = allOpt.GetValue<int>(
-            GetRoleOptionId(ZombieOption.ResurrectKillCount));
+            ZombieOption.ResurrectKillCount));
 
         this.showMagicCircleTime = allOpt.GetValue<float>(
-            GetRoleOptionId(ZombieOption.ShowMagicCircleTime));
+            ZombieOption.ShowMagicCircleTime));
         this.resurrectTimer = allOpt.GetValue<float>(
-            GetRoleOptionId(ZombieOption.ResurrectDelayTime));
+            ZombieOption.ResurrectDelayTime));
         this.canResurrectOnExil = allOpt.GetValue<bool>(
-            GetRoleOptionId(ZombieOption.CanResurrectOnExil));
+            ZombieOption.CanResurrectOnExil));
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;

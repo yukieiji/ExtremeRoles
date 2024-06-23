@@ -8,6 +8,9 @@ using ExtremeRoles.Roles.API.Interface;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
@@ -137,20 +140,19 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             PainterOption.CanPaintDistance,
-            1.0f, 1.0f, 5.0f, 0.5f,
-            parentOps);
+            1.0f, 1.0f, 5.0f, 0.5f);
     }
 
     protected override void RoleSpecificInit()
     {
         this.paintDistance = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(PainterOption.CanPaintDistance));
+            PainterOption.CanPaintDistance));
     }
 }

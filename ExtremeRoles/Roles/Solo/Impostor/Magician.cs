@@ -16,6 +16,9 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
@@ -133,35 +136,35 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(parentOps, 1, 10);
+        IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             MagicianOption.TeleportTargetRate,
-            100, 10, 100, 10, parentOps,
+            100, 10, 100, 10,
             format: OptionUnit.Percentage);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MagicianOption.DupeTeleportTargetTo,
-            true, parentOps);
-        CreateBoolOption(
+            true);
+        factory.CreateBoolOption(
             MagicianOption.IncludeSpawnPoint,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MagicianOption.IncludeRolePlayer,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
     {
         var allOption = OptionManager.Instance;
         this.teleportRate = (float)allOption.GetValue<int>(
-            GetRoleOptionId(MagicianOption.TeleportTargetRate)) / 100.0f;
+            MagicianOption.TeleportTargetRate)) / 100.0f;
         this.dupeTeleportTarget = allOption.GetValue<bool>(
-            GetRoleOptionId(MagicianOption.DupeTeleportTargetTo));
+            MagicianOption.DupeTeleportTargetTo));
         this.includeRolePlayer = allOption.GetValue<bool>(
-            GetRoleOptionId(MagicianOption.IncludeSpawnPoint));
+            MagicianOption.IncludeSpawnPoint));
         this.includeSpawnPoint = allOption.GetValue<bool>(
-            GetRoleOptionId(MagicianOption.IncludeRolePlayer));
+            MagicianOption.IncludeRolePlayer));
     }
 }

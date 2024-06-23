@@ -12,6 +12,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -243,29 +246,27 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             OverLoaderOption.AwakeImpostorNum,
             GameSystem.MaxImposterNum, 1,
-            GameSystem.MaxImposterNum, 1,
-            parentOps);
+            GameSystem.MaxImposterNum, 1);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             OverLoaderOption.AwakeKillCount,
-            0, 0, 3, 1,
-            parentOps);
+            0, 0, 3, 1);
 
-        this.CreateCommonAbilityOption(
-            parentOps, 7.5f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 7.5f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             OverLoaderOption.KillCoolReduceRate,
-            75.0f, 50.0f, 90.0f, 1.0f, parentOps,
+            75.0f, 50.0f, 90.0f, 1.0f,
             format: OptionUnit.Percentage);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             OverLoaderOption.MoveSpeed,
-            1.5f, 1.0f, 3.0f, 0.1f, parentOps,
+            1.5f, 1.0f, 3.0f, 0.1f,
             format: OptionUnit.Multiplier);
     }
 
@@ -291,14 +292,14 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         var allOption = OptionManager.Instance;
 
         this.awakeImpNum = allOption.GetValue<int>(
-            GetRoleOptionId(OverLoaderOption.AwakeImpostorNum));
+            OverLoaderOption.AwakeImpostorNum));
         this.awakeKillCount = allOption.GetValue<int>(
-            GetRoleOptionId(OverLoaderOption.AwakeKillCount));
+            OverLoaderOption.AwakeKillCount));
 
         this.MoveSpeed = allOption.GetValue<float>(
-            GetRoleOptionId(OverLoaderOption.MoveSpeed));
+            OverLoaderOption.MoveSpeed));
         this.reduceRate = allOption.GetValue<float>(
-            GetRoleOptionId(OverLoaderOption.KillCoolReduceRate));
+            OverLoaderOption.KillCoolReduceRate));
 
         this.killCount = 0;
 

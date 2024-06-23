@@ -12,6 +12,9 @@ using UnityEngine;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable
@@ -72,10 +75,11 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	protected override void CreateSpecificOption(
-		IOptionInfo parentOps)
+		AutoParentSetOptionCategoryFactory factory)
 	{
-		this.CreateAbilityCountOption(parentOps, 3, 50);
-		CreateFloatOption(Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, parentOps, format:OptionUnit.Second);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
+		factory.CreateFloatOption(
+			Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, format:OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
@@ -84,6 +88,6 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 			ModedMushroomSystem.Type,
 			new ModedMushroomSystem(
 				OptionManager.Instance.GetValue<float>(
-					GetRoleOptionId(Option.DelaySecond))));
+					Option.DelaySecond))));
 	}
 }

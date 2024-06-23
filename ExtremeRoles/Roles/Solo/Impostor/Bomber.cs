@@ -18,6 +18,9 @@ using ExtremeRoles.Module.CustomOption;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
@@ -105,29 +108,28 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5, 2.5f);
-        CreateIntOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5, 2.5f);
+        factory.CreateIntOption(
             BomberOption.ExplosionRange,
-            2, 1, 5, 1,
-            parentOps);
-        CreateIntOption(
+            2, 1, 5, 1);
+        factory.CreateIntOption(
             BomberOption.ExplosionKillChance,
             50, 25, 75, 1,
-            parentOps, format: OptionUnit.Percentage);
-        CreateFloatOption(
+            format: OptionUnit.Percentage);
+        factory.CreateFloatOption(
             BomberOption.TimerMinTime,
             15f, 5.0f, 30f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateFloatOption(
+            format: OptionUnit.Second);
+        factory.CreateFloatOption(
             BomberOption.TimerMaxTime,
             60f, 45f, 75f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateBoolOption(
+            format: OptionUnit.Second);
+        factory.CreateBoolOption(
             BomberOption.TellExplosion,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
@@ -135,15 +137,15 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         var allOption = OptionManager.Instance;
 
         this.timerMinTime = allOption.GetValue<float>(
-            GetRoleOptionId(BomberOption.TimerMinTime));
+            BomberOption.TimerMinTime));
         this.timerMaxTime = allOption.GetValue<float>(
-            GetRoleOptionId(BomberOption.TimerMaxTime));
+            BomberOption.TimerMaxTime));
         this.explosionKillChance = allOption.GetValue<int>(
-            GetRoleOptionId(BomberOption.ExplosionKillChance));
+            BomberOption.ExplosionKillChance));
         this.explosionRange = allOption.GetValue<int>(
-            GetRoleOptionId(BomberOption.ExplosionRange));
+            BomberOption.ExplosionRange));
         this.tellExplosion = allOption.GetValue<bool>(
-            GetRoleOptionId(BomberOption.TellExplosion));
+            BomberOption.TellExplosion));
 
         this.bombPlayerId = new Queue<byte>();
         resetTimer();

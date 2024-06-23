@@ -8,6 +8,9 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Resources;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 using ExtremeRoles.Module.CustomOption;
 
 #nullable enable
@@ -68,28 +71,28 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 5, 100);
-		CreateBoolOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 5, 100);
+		factory.CreateBoolOption(
 			TeroristOption.CanActiveOtherSabotage,
-			false, parentOps);
-		CreateFloatOption(
+			false);
+		factory.CreateFloatOption(
 			TeroristOption.ExplosionTime,
 			45.0f, 10.0f, 240.0f, 1.0f,
-			parentOps, format: OptionUnit.Second);
-		CreateIntOption(
+			format: OptionUnit.Second);
+		factory.CreateIntOption(
 			TeroristOption.BombNum,
-			3, 1, 6, 1, parentOps);
-		CreateFloatOption(
+			3, 1, 6, 1);
+		factory.CreateFloatOption(
 			TeroristOption.PlayerActivateTime,
 			3.0f, 0.25f, 10.0f, 0.25f,
-			parentOps, format: OptionUnit.Second);
-		var deadPlayerOpt = CreateBoolOption(
+			format: OptionUnit.Second);
+		var deadPlayerOpt = factory.CreateBoolOption(
 			TeroristOption.CanUseDeadPlayer,
-			false, parentOps);
-		CreateFloatOption(
+			false);
+		factory.CreateFloatOption(
 			TeroristOption.DeadPlayerActivateTime,
 			10.0f, 3.0f, 45.0f, 1.0f,
 			deadPlayerOpt, format: OptionUnit.Second);
@@ -105,22 +108,22 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 
 		var optionMng = OptionManager.Instance;
 		this.canActiveOtherSabotage = optionMng.GetValue<bool>(
-			GetRoleOptionId(TeroristOption.CanActiveOtherSabotage));
+			TeroristOption.CanActiveOtherSabotage));
 
 
 		var miniGameOption = new TeroristTeroSabotageSystem.MinigameOption(
 			optionMng.GetValue<float>(
-				GetRoleOptionId(TeroristOption.PlayerActivateTime)),
+				TeroristOption.PlayerActivateTime)),
 			optionMng.GetValue<bool>(
-				GetRoleOptionId(TeroristOption.CanUseDeadPlayer)),
+				TeroristOption.CanUseDeadPlayer)),
 			optionMng.GetValue<float>(
-				GetRoleOptionId(TeroristOption.DeadPlayerActivateTime)));
+				TeroristOption.DeadPlayerActivateTime)));
 
 		var sabotageOption = new TeroristTeroSabotageSystem.Option(
 			optionMng.GetValue<float>(
-				GetRoleOptionId(TeroristOption.ExplosionTime)),
+				TeroristOption.ExplosionTime)),
 			optionMng.GetValue<int>(
-				GetRoleOptionId(TeroristOption.BombNum)),
+				TeroristOption.BombNum)),
 			miniGameOption);
 
 		this.teroSabo = ExtremeSystemTypeManager.Instance.CreateOrGet(

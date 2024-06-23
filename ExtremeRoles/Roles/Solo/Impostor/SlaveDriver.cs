@@ -13,6 +13,9 @@ using Hazel;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class SlaveDriver :
@@ -68,28 +71,28 @@ public sealed class SlaveDriver :
 	}
 
 	protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			SlaveDriverOption.CanSeeTaskBar,
-			true, parentOps);
-		this.CreateAbilityCountOption(parentOps, 2, 10);
-		CreateIntOption(
+			true);
+		IRoleAbility.CreateAbilityCountOption(factory, 2, 10);
+		factory.CreateIntOption(
 			SlaveDriverOption.RevartTaskNum,
-			2, 1, 5, 1, parentOps);
-		CreateFloatOption(
+			2, 1, 5, 1);
+		factory.CreateFloatOption(
 			SlaveDriverOption.Range,
-			0.75f, 0.25f, 3.5f, 0.25f, parentOps);
+			0.75f, 0.25f, 3.5f, 0.25f);
 	}
 
     protected override void RoleSpecificInit()
     {
 		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
-			GetRoleOptionId(SlaveDriverOption.CanSeeTaskBar));
+			SlaveDriverOption.CanSeeTaskBar));
 		this.revartTaskNum= OptionManager.Instance.GetValue<int>(
-			GetRoleOptionId(SlaveDriverOption.RevartTaskNum));
+			SlaveDriverOption.RevartTaskNum));
 		this.range = OptionManager.Instance.GetValue<float>(
-			GetRoleOptionId(SlaveDriverOption.Range));
+			SlaveDriverOption.Range));
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
