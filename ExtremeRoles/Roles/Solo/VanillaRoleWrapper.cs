@@ -8,6 +8,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API.Interface;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo;
 
 public sealed class VanillaRoleWrapper : MultiAssignRoleBase
@@ -143,7 +145,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }
@@ -154,8 +156,8 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         {
             var trans = FastDestroyableSingleton<TranslationController>.Instance;
 
-            return string.Concat(new string[]
-            {
+            return string.Concat(
+			[
                 trans.GetString(StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
                 "\r\n",
                 Palette.ImpostorRed.ToTextColor(),
@@ -163,7 +165,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
                     trans.GetString(StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()) :
                     string.Empty,
                 "</color>"
-            });
+            ]);
         }
 
         return Design.ColoedString(
