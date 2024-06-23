@@ -540,17 +540,17 @@ public sealed class Photographer :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.awakeTaskGage = allOpt.GetValue<int>(
-            PhotographerOption.AwakeTaskGage)) / 100.0f;
-        this.upgradePhotoTaskGage = allOpt.GetValue<int>(
-            PhotographerOption.UpgradePhotoTaskGage)) / 100.0f;
+        this.awakeTaskGage = cate.GetValue<PhotographerOption, int>(
+            PhotographerOption.AwakeTaskGage) / 100.0f;
+        this.upgradePhotoTaskGage = cate.GetValue<PhotographerOption, int>(
+            PhotographerOption.UpgradePhotoTaskGage) / 100.0f;
 		this.enableAllSend =
-			allOpt.GetValue<bool>(
-				PhotographerOption.EnableAllSendChat));
-        this.upgradeAllSendChatTaskGage = allOpt.GetValue<int>(
-            PhotographerOption.UpgradeAllSendChatTaskGage)) / 100.0f;
+			cate.GetValue<PhotographerOption, bool>(
+				PhotographerOption.EnableAllSendChat);
+        this.upgradeAllSendChatTaskGage = cate.GetValue<PhotographerOption, int>(
+            PhotographerOption.UpgradeAllSendChatTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -569,8 +569,8 @@ public sealed class Photographer :
             this.upgradeAllSendChatTaskGage <= 0.0f;
 
         this.photoCreater = new PhotoCamera(
-            allOpt.GetValue<float>(
-                PhotographerOption.PhotoRange)));
+			cate.GetValue<PhotographerOption, float>(
+                PhotographerOption.PhotoRange));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
     }

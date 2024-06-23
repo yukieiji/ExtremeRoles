@@ -74,7 +74,7 @@ public sealed class Gambler :
 
     protected override void RoleSpecificInit()
     {
-        this.normalVoteRate = OptionManager.Instance.GetValue<int>(
-            GamblerOption.NormalVoteRate));
+        this.normalVoteRate = this.Category.GetValue<GamblerOption, int>(
+            GamblerOption.NormalVoteRate);
     }
 }

@@ -393,7 +393,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<
             TimeMasterHistory>();
         history.Initialize(
-            OptionManager.Instance.GetValue<float>(
-                TimeMasterOption.RewindTime)));
+            this.Category.GetValue<TimeMasterOption, float>(
+                TimeMasterOption.RewindTime));
     }
 }

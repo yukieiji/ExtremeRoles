@@ -211,10 +211,9 @@ public sealed class Teleporter :
 	{
 		if (this.Button == null) { return; }
 
-		var allOpt = OptionManager.Instance;
 		this.Button.Behavior.SetCoolTime(
-			allOpt.GetValue<float>(this.
-				RoleAbilityCommonOption.AbilityCoolTime)));
+			this.Category.GetValue<RoleAbilityCommonOption, float>(
+				RoleAbilityCommonOption.AbilityCoolTime));
 
 		this.behavior.SetAbilityCount(0);
 
@@ -311,10 +310,11 @@ public sealed class Teleporter :
 
     protected override void RoleSpecificInit()
     {
-        this.isSharePortal = OptionManager.Instance.GetValue<bool>(
-            TeleporterOption.CanUseOtherPlayer));
-        this.partNum = OptionManager.Instance.GetValue<int>(
-            RoleAbilityCommonOption.AbilityCount));
+		var cate = this.Category;
+        this.isSharePortal = cate.GetValue<TeleporterOption, bool>(
+            TeleporterOption.CanUseOtherPlayer);
+        this.partNum = cate.GetValue<RoleAbilityCommonOption, int>(
+            RoleAbilityCommonOption.AbilityCount);
     }
 
     private static void setPartFromMapJsonInfo(JArray json, int num)

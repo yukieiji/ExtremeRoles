@@ -337,26 +337,26 @@ public sealed class Delusioner :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
-        this.awakeVoteCount = allOpt.GetValue<int>(
-            DelusionerOption.AwakeVoteNum));
-        this.isOneTimeAwake = allOpt.GetValue<bool>(
-            DelusionerOption.IsOnetimeAwake));
-        this.voteCoolTimeReduceRate = allOpt.GetValue<int>(
-            DelusionerOption.VoteCoolTimeReduceRate));
-        this.deflectDamagePenaltyMod = 100f - (allOpt.GetValue<int>(
-            DelusionerOption.DeflectDamagePenaltyRate)) / 100f);
-        this.range = allOpt.GetValue<float>(
-            DelusionerOption.Range));
+        var cate = this.Category;
+        this.awakeVoteCount = cate.GetValue<DelusionerOption, int>(
+            DelusionerOption.AwakeVoteNum);
+        this.isOneTimeAwake = cate.GetValue<DelusionerOption, bool>(
+            DelusionerOption.IsOnetimeAwake);
+        this.voteCoolTimeReduceRate = cate.GetValue<DelusionerOption, int>(
+            DelusionerOption.VoteCoolTimeReduceRate);
+        this.deflectDamagePenaltyMod = 100f - (cate.GetValue<DelusionerOption, int>(
+            DelusionerOption.DeflectDamagePenaltyRate) / 100f);
+        this.range = cate.GetValue<DelusionerOption, float>(
+            DelusionerOption.Range);
 
-        this.includeLocalPlayer = allOpt.GetValue<bool>(
-            DelusionerOption.IsIncludeLocalPlayer));
-        this.includeSpawnPoint = allOpt.GetValue<bool>(
-            DelusionerOption.IsIncludeSpawnPoint));
+        this.includeLocalPlayer = cate.GetValue<DelusionerOption, bool>(
+            DelusionerOption.IsIncludeLocalPlayer);
+        this.includeSpawnPoint = cate.GetValue<DelusionerOption, bool>(
+            DelusionerOption.IsIncludeSpawnPoint);
 
         this.isOneTimeAwake = this.isOneTimeAwake && this.awakeVoteCount > 0;
-        this.defaultCoolTime = allOpt.GetValue<float>(
-            RoleAbilityCommonOption.AbilityCoolTime));
+        this.defaultCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(
+            RoleAbilityCommonOption.AbilityCoolTime);
         this.curCoolTime = this.defaultCoolTime;
         this.isAwakeRole = this.awakeVoteCount == 0;
 

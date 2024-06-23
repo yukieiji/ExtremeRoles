@@ -154,9 +154,10 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     protected override void RoleSpecificInit()
     {
-        this.isBoostTask = OptionManager.Instance.GetValue<bool>(
-            SuperviosrOption.IsBoostTask));
-        this.taskGage = OptionManager.Instance.GetValue<int>(
-            SuperviosrOption.TaskGage)) / 100.0f;
+		var cate = this.Category;
+        this.isBoostTask = cate.GetValue<SuperviosrOption, bool>(
+            SuperviosrOption.IsBoostTask);
+        this.taskGage = cate.GetValue<SuperviosrOption, int>(
+            SuperviosrOption.TaskGage) / 100.0f;
     }
 }

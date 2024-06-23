@@ -235,22 +235,22 @@ public sealed class Whisper :
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
         this.textPopUp = new TextPopUpper(
-            allOption.GetValue<int>(WhisperOption.MaxTellText)),
-            allOption.GetValue<float>(WhisperOption.TellTextTime)),
+            cate.GetValue<WhisperOption, int>(WhisperOption.MaxTellText),
+            cate.GetValue<WhisperOption, float>(WhisperOption.TellTextTime),
             new Vector3(-3.75f, -2.5f, -250.0f),
             TMPro.TextAlignmentOptions.BottomLeft);
 
-        this.abilityOffTime = allOption.GetValue<float>(
-            WhisperOption.AbilityOffTime));
-        this.abilityOnTime = allOption.GetValue<float>(WhisperOption.AbilityOnTime));
+        this.abilityOffTime = cate.GetValue<WhisperOption, float>(
+            WhisperOption.AbilityOffTime);
+        this.abilityOnTime = cate.GetValue<WhisperOption, float>(WhisperOption.AbilityOnTime);
 
-		this.isEnableAwakeAbility = allOption.GetValue<bool>(
-			WhisperOption.EnableAwakeAbility));
-		this.awakeTaskGage = allOption.GetValue<int>(
-			WhisperOption.AbilityTaskGage)) / 100.0f;
+		this.isEnableAwakeAbility = cate.GetValue<WhisperOption, bool>(
+			WhisperOption.EnableAwakeAbility);
+		this.awakeTaskGage = cate.GetValue<WhisperOption, int>(
+			WhisperOption.AbilityTaskGage) / 100.0f;
 		this.isAwake = this.isEnableAwakeAbility && this.awakeTaskGage <= 0.0f;
 
         this.prevPlayerPos = defaultPos;

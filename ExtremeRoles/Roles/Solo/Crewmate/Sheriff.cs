@@ -223,26 +223,26 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.shootNum = allOpt.GetValue<int>(
-            SheriffOption.ShootNum));
-        this.canShootNeutral = allOpt.GetValue<bool>(
-            SheriffOption.CanShootNeutral));
-        this.canShootAssassin = allOpt.GetValue<bool>(
-            SheriffOption.CanShootAssassin));
+        this.shootNum = cate.GetValue<SheriffOption, int>(
+            SheriffOption.ShootNum);
+		this.canShootNeutral = cate.GetValue<SheriffOption, bool>(
+			SheriffOption.CanShootNeutral);
+        this.canShootAssassin = cate.GetValue<SheriffOption, bool>(
+            SheriffOption.CanShootAssassin);
         this.killCountText = null;
 
-        this.enableTaskRelatedSetting = allOpt.GetValue<bool>(
-            SheriffOption.EnableTaskRelated));
-        this.reduceKillCool = allOpt.GetValue<float>(
-            SheriffOption.ReduceCurKillCool));
-        this.isPerm = allOpt.GetValue<bool>(
-            SheriffOption.IsPerm));
-        this.isSyncTaskShootNum = allOpt.GetValue<bool>(
-            SheriffOption.IsSyncTaskAndShootNum));
-        this.syncShootTaskGage = allOpt.GetValue<int>(
-            SheriffOption.SyncShootTaskGage)) / 100.0f;
+        this.enableTaskRelatedSetting = cate.GetValue<SheriffOption, bool>(
+            SheriffOption.EnableTaskRelated);
+        this.reduceKillCool = cate.GetValue<SheriffOption, float>(
+            SheriffOption.ReduceCurKillCool);
+        this.isPerm = cate.GetValue<SheriffOption, bool>(
+            SheriffOption.IsPerm);
+        this.isSyncTaskShootNum = cate.GetValue<SheriffOption, bool>(
+            SheriffOption.IsSyncTaskAndShootNum);
+        this.syncShootTaskGage = cate.GetValue<SheriffOption, int>(
+            SheriffOption.SyncShootTaskGage) / 100.0f;
 
         this.prevGage = 0.0f;
 

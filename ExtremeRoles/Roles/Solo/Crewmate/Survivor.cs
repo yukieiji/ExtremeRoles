@@ -214,12 +214,13 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
 
     protected override void RoleSpecificInit()
     {
-        this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-            SurvivorOption.AwakeTaskGage)) / 100.0f;
-        this.deadWinTaskGage = OptionManager.Instance.GetValue<int>(
-            SurvivorOption.DeadWinTaskGage)) / 100.0f;
-        this.isNoWinSurvivorAssignGhostRole = OptionManager.Instance.GetValue<bool>(
-            SurvivorOption.NoWinSurvivorAssignGhostRole));
+		var cate = this.Category;
+        this.awakeTaskGage = cate.GetValue<SurvivorOption, int>(
+            SurvivorOption.AwakeTaskGage) / 100.0f;
+        this.deadWinTaskGage = cate.GetValue<SurvivorOption, int>(
+            SurvivorOption.DeadWinTaskGage) / 100.0f;
+        this.isNoWinSurvivorAssignGhostRole = cate.GetValue<SurvivorOption, bool>(
+            SurvivorOption.NoWinSurvivorAssignGhostRole);
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.isDeadWin = false;

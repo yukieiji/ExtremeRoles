@@ -271,12 +271,14 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
-			AgencyOption.CanSeeTaskBar));
-		this.maxTakeTask = OptionManager.Instance.GetValue<int>(
-            AgencyOption.MaxTaskNum)) + 1;
-        this.takeTaskRange = OptionManager.Instance.GetValue<float>(
-            AgencyOption.TakeTaskRange));
+		var cate = this.Category;
+
+		this.CanSeeTaskBar = cate.GetValue<AgencyOption, bool>(
+			AgencyOption.CanSeeTaskBar);
+		this.maxTakeTask = cate.GetValue<AgencyOption, int>(
+            AgencyOption.MaxTaskNum) + 1;
+        this.takeTaskRange = cate.GetValue<AgencyOption, float>(
+            AgencyOption.TakeTaskRange);
 
         this.TakeTask = new List<TakeTaskType>();
 

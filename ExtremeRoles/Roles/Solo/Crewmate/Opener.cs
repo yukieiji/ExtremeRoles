@@ -37,6 +37,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     private float range;
     private float reduceRate;
     private int plusAbilityNum;
+	private float abilityCoolTime;
 
     public Opener() : base(
         ExtremeRoleId.Opener,
@@ -123,9 +124,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         float rate = 1.0f - ((float)this.reduceRate / 100f);
 
-        this.Button.Behavior.SetCoolTime(
-            OptionManager.Instance.GetValue<float>(
-                RoleAbilityCommonOption.AbilityCoolTime)) * rate);
+        this.Button.Behavior.SetCoolTime(this.abilityCoolTime * rate);
 
         if (this.Button.Behavior is AbilityCountBehavior countBehavior)
         {
@@ -155,11 +154,15 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     protected override void RoleSpecificInit()
     {
         this.isUpgraded = false;
-        this.range = OptionManager.Instance.GetValue<float>(
-            OpenerOption.Range));
-        this.reduceRate = OptionManager.Instance.GetValue<int>(
-            OpenerOption.ReduceRate));
-        this.plusAbilityNum = OptionManager.Instance.GetValue<int>(
-            OpenerOption.PlusAbility));
+
+		var cate = this.Category;
+        this.range = cate.GetValue<OpenerOption, float>(
+            OpenerOption.Range);
+        this.reduceRate = cate.GetValue<OpenerOption, int>(
+            OpenerOption.ReduceRate);
+        this.plusAbilityNum = cate.GetValue<OpenerOption, int>(
+            OpenerOption.PlusAbility);
+		this.abilityCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(
+			RoleAbilityCommonOption.AbilityCoolTime);
     }
 }

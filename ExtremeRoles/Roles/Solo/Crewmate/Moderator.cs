@@ -212,8 +212,10 @@ public sealed class Moderator :
 			new Vector3(-3.75f, -2.5f, -250.0f),
 			TMPro.TextAlignmentOptions.BottomLeft);
 
-		this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-		   ModeratorOption.AwakeTaskGage)) / 100.0f;
+		var cate = this.Category;
+
+		this.awakeTaskGage = cate.GetValue<ModeratorOption, int>(
+		   ModeratorOption.AwakeTaskGage) / 100.0f;
 
 		this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -228,8 +230,8 @@ public sealed class Moderator :
 			this.HasOtherVision = false;
 		}
 
-		this.offset = OptionManager.Instance.GetValue<int>(
-			this.ModeratorOption.MeetingTimerOffset));
+		this.offset = cate.GetValue<ModeratorOption, int>(
+			ModeratorOption.MeetingTimerOffset);
 
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 	}

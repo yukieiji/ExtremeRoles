@@ -490,7 +490,6 @@ public sealed class BodyGuard :
 
     public void CreateAbility()
     {
-
         this.shildButtonImage = Loader.CreateSpriteFromResources(
                 Path.BodyGuardShield);
 
@@ -518,8 +517,8 @@ public sealed class BodyGuard :
 
 		if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
 		{
-			int abilityNum = OptionManager.Instance.GetValue<int>(
-				RoleAbilityCommonOption.AbilityCount));
+			int abilityNum = this.Category.GetValue<RoleAbilityCommonOption, int>(
+				RoleAbilityCommonOption.AbilityCount);
 
 			this.shildNum = abilityNum;
 			behavior.SetAbilityCount(abilityNum);
@@ -760,23 +759,23 @@ public sealed class BodyGuard :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+		var cate = this.Category;
 
-        IsBlockMeetingKill = allOpt.GetValue<bool>(
-            BodyGuardOption.IsBlockMeetingKill));
+		IsBlockMeetingKill = cate.GetValue<BodyGuardOption, bool>(
+            BodyGuardOption.IsBlockMeetingKill);
 
-        this.shieldRange = allOpt.GetValue<float>(
-            BodyGuardOption.ShieldRange));
+        this.shieldRange = cate.GetValue<BodyGuardOption, float>(
+            BodyGuardOption.ShieldRange);
 
-        this.meetingAbilityTaskGage = allOpt.GetValue<int>(
-            BodyGuardOption.FeatMeetingAbilityTaskGage)) / 100.0f;
-        this.meetingReportTaskGage = allOpt.GetValue<int>(
-            BodyGuardOption.FeatMeetingReportTaskGage)) / 100.0f;
+        this.meetingAbilityTaskGage = cate.GetValue<BodyGuardOption, int>(
+            BodyGuardOption.FeatMeetingAbilityTaskGage) / 100.0f;
+        this.meetingReportTaskGage = cate.GetValue<BodyGuardOption, int>(
+            BodyGuardOption.FeatMeetingReportTaskGage) / 100.0f;
 
-        this.isReportWithPlayerName = allOpt.GetValue<bool>(
-            BodyGuardOption.IsReportPlayerName));
-        this.reportMode = (BodyGuardReportPlayerNameMode)allOpt.GetValue<int>(
-            BodyGuardOption.ReportPlayerMode));
+        this.isReportWithPlayerName = cate.GetValue<BodyGuardOption, bool>(
+            BodyGuardOption.IsReportPlayerName);
+        this.reportMode = (BodyGuardReportPlayerNameMode)cate.GetValue<BodyGuardOption, int>(
+            BodyGuardOption.ReportPlayerMode);
 
         this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
         this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;

@@ -47,16 +47,16 @@ public sealed class Bakary : SingleRoleBase
 
     protected override void RoleSpecificInit()
     {
-		var allOpt = OptionManager.Instance;
+		var cate = this.Category;
 
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.BakeryReport,
 			new BakerySystem(
-				allOpt.GetValue<float>(
-					BakaryOption.GoodBakeTime)),
-				allOpt.GetValue<float>(
-					BakaryOption.BadBakeTime)),
-				allOpt.GetValue<bool>(
-					BakaryOption.ChangeCooking))));
+				cate.GetValue<BakaryOption, float>(
+					BakaryOption.GoodBakeTime),
+				cate.GetValue<BakaryOption, float>(
+					BakaryOption.BadBakeTime),
+				cate.GetValue<BakaryOption, bool>(
+					BakaryOption.ChangeCooking)));
 	}
 }

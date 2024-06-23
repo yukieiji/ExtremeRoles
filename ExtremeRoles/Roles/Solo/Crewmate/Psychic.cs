@@ -430,19 +430,19 @@ public sealed class Psychic :
 
 	protected override void RoleSpecificInit()
 	{
-		var allOpt = OptionManager.Instance;
+		var cate = this.Category;
 
-		this.awakeTaskGage = allOpt.GetValue<int>(
-			PsychicOption.AwakeTaskGage)) / 100.0f;
-		this.awakeDeadPlayerNum = allOpt.GetValue<int>(
-			PsychicOption.AwakeDeadPlayerNum));
+		this.awakeTaskGage = cate.GetValue<PsychicOption, int>(
+			PsychicOption.AwakeTaskGage) / 100.0f;
+		this.awakeDeadPlayerNum = cate.GetValue<PsychicOption, int>(
+			PsychicOption.AwakeDeadPlayerNum);
 
-		this.upgradeTaskGage = allOpt.GetValue<int>(
-			PsychicOption.UpgradeTaskGage)) / 100.0f;
-		this.upgradeDeadPlayerNum = allOpt.GetValue<int>(
-			PsychicOption.UpgradeDeadPlayerNum));
-		this.enableUpgrade = allOpt.GetValue<bool>(
-			PsychicOption.IsUpgradeAbility));
+		this.upgradeTaskGage = cate.GetValue<PsychicOption, int>(
+			PsychicOption.UpgradeTaskGage) / 100.0f;
+		this.upgradeDeadPlayerNum = cate.GetValue<PsychicOption, int>(
+			PsychicOption.UpgradeDeadPlayerNum);
+		this.enableUpgrade = cate.GetValue<PsychicOption, bool>(
+			PsychicOption.IsUpgradeAbility);
 
 		int maxPlayerNum = CachedPlayerControl.AllPlayerControls.Count - 1;
 

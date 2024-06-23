@@ -59,17 +59,16 @@ public sealed class Neet : SingleRoleBase
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.CanCallMeeting = allOption.GetValue<bool>(
-            NeetOption.CanCallMeeting));
-        this.CanRepairSabotage = allOption.GetValue<bool>(
-            NeetOption.CanRepairSabotage));
-        this.HasTask = allOption.GetValue<bool>(
-            NeetOption.HasTask));
+        this.CanCallMeeting = cate.GetValue<NeetOption, bool>(
+            NeetOption.CanCallMeeting);
+        this.CanRepairSabotage = cate.GetValue<NeetOption, bool>(
+            NeetOption.CanRepairSabotage);
+        this.HasTask = cate.GetValue<NeetOption, bool>(
+            NeetOption.HasTask);
 
-        if (allOption.GetValue<bool>(
-            NeetOption.IsNeutral)))
+        if (cate.GetValue<NeetOption, bool>(NeetOption.IsNeutral))
         {
             this.Team = ExtremeRoleType.Neutral;
         }

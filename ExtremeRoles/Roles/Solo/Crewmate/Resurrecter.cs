@@ -437,27 +437,27 @@ public sealed class Resurrecter :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.awakeTaskGage = allOpt.GetValue<int>(
-            ResurrecterOption.AwakeTaskGage)) / 100.0f;
-        this.resurrectTaskGage = allOpt.GetValue<int>(
-            ResurrecterOption.ResurrectTaskGage)) / 100.0f;
-        this.resetTaskGage = allOpt.GetValue<int>(
-            ResurrecterOption.ResurrectTaskResetGage)) / 100.0f;
+        this.awakeTaskGage = cate.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.AwakeTaskGage) / 100.0f;
+        this.resurrectTaskGage = cate.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.ResurrectTaskGage) / 100.0f;
+        this.resetTaskGage = cate.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.ResurrectTaskResetGage) / 100.0f;
 
-        this.resurrectTimer = allOpt.GetValue<float>(
-            ResurrecterOption.ResurrectDelayTime));
-        this.canResurrectAfterDeath = allOpt.GetValue<bool>(
-            ResurrecterOption.CanResurrectAfterDeath));
-        this.canResurrectOnExil = allOpt.GetValue<bool>(
-            ResurrecterOption.CanResurrectOnExil));
-        this.maxMeetingCount = allOpt.GetValue<int>(
-            ResurrecterOption.ResurrectTaskResetMeetingNum));
-        this.isMeetingCoolResetOnResurrect = allOpt.GetValue<bool>(
-            ResurrecterOption.IsMeetingCoolResetOnResurrect));
-        this.meetingCoolDown = allOpt.GetValue<float>(
-            ResurrecterOption.ResurrectMeetingCooltime));
+        this.resurrectTimer = cate.GetValue<ResurrecterOption, float>(
+            ResurrecterOption.ResurrectDelayTime);
+        this.canResurrectAfterDeath = cate.GetValue<ResurrecterOption, bool>(
+            ResurrecterOption.CanResurrectAfterDeath);
+        this.canResurrectOnExil = cate.GetValue<ResurrecterOption, bool>(
+            ResurrecterOption.CanResurrectOnExil);
+        this.maxMeetingCount = cate.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.ResurrectTaskResetMeetingNum);
+        this.isMeetingCoolResetOnResurrect = cate.GetValue<ResurrecterOption, bool>(
+            ResurrecterOption.IsMeetingCoolResetOnResurrect);
+        this.meetingCoolDown = cate.GetValue<ResurrecterOption, float>(
+            ResurrecterOption.ResurrectMeetingCooltime);
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
