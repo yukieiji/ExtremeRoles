@@ -2,6 +2,7 @@
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.NewOption.Interfaces;
 using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
@@ -74,7 +75,9 @@ public abstract class RoleOptionBase
         CreateSpecificOption(factory);
     }
     protected abstract void CreateKillerOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
+        AutoParentSetOptionCategoryFactory factory,
+		IOption parent = null,
+		bool ignorePrefix = true);
     protected abstract AutoParentSetOptionCategoryFactory CreateSpawnOption();
 
     protected abstract void CreateSpecificOption(

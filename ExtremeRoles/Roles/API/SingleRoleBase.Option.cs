@@ -4,17 +4,21 @@ using ExtremeRoles.Module.NewOption.Factory;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;
 
 public abstract partial class SingleRoleBase
 {
     protected sealed override void CreateKillerOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
+        AutoParentSetOptionCategoryFactory factory,
+		IOption parent = null,
+		bool ignorePrefix = true)
     {
         var killCoolOption = factory.CreateBoolOption(
             KillerCommonOption.HasOtherKillCool,
-            false, ignorePrefix: ignorePrefix);
+            false, parent,
+			ignorePrefix: ignorePrefix);
 		factory.CreateFloatOption(
             KillerCommonOption.KillCoolDown,
             30f, 1.0f, 120f, 0.5f,
@@ -23,7 +27,7 @@ public abstract partial class SingleRoleBase
 
         var killRangeOption = factory.CreateBoolOption(
             KillerCommonOption.HasOtherKillRange,
-            false,
+            false, parent,
 			ignorePrefix: ignorePrefix);
 		factory.CreateSelectionOption(
             KillerCommonOption.KillRange,
