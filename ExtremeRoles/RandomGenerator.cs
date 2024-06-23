@@ -28,6 +28,12 @@ public class RandomGenerator
         }
     }
 
+	public static bool IsUsingStrongGenerator => NewOptionManager.Instance.TryGetCategory(
+			OptionTab.General,
+			randCategoryKey,
+			out var category) &&
+		category.GetValue<bool>(useStrongKey);
+
 	private const int randCategoryKey = (int)OptionCreator.CommonOption.RandomOption;
 	private const int useStrongKey = (int)OptionCreator.RandomOptionKey.UseStrong;
 	private const int algorithmKey = (int)OptionCreator.RandomOptionKey.Algorithm;
@@ -101,11 +107,7 @@ public class RandomGenerator
 
     public static Random GetTempGenerator()
     {
-        if (NewOptionManager.Instance.TryGetCategory(
-				OptionTab.General,
-				randCategoryKey,
-				out var category) &&
-			category.GetValue<bool>(useStrongKey))
+        if (IsUsingStrongGenerator)
         {
             return new Random(CreateStrongRandomSeed());
         }

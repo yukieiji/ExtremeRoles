@@ -55,8 +55,7 @@ public static class MeetingHudSortButtonsPatch
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
 			player);
 
-		var system = OptionManager.Instance.GetValue<bool>
-			((int)OptionCreator.PresetOptionKey.UseRaiseHand) ? IRaiseHandSystem.Get() : null;
+		var system = ExtremeGameModeManager.Instance.ShipOption.Meeting.UseRaiseHand ? IRaiseHandSystem.Get() : null;
 
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
