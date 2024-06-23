@@ -7,6 +7,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles.Module.SpecialWinChecker;
 
@@ -31,11 +32,13 @@ internal sealed class LoverWinChecker : IWinChecker
 		byte playerId,
 		SingleRoleBase role)
 	{
-		if (this.loverNum == 0)
+		if (this.loverNum == 0 &&
+			NewOptionManager.Instance.TryGetCategory(
+				OptionTab.Combination,
+				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.Lover),
+				out var cate))
 		{
-			this.loverNum = OptionManager.Instance.GetValue<int>(
-				((MultiAssignRoleBase)role).GetManagerOptionId(
-					CombinationRoleCommonOption.AssignsNum));
+			this.loverNum = cate.GetValue<CombinationRoleCommonOption, int>(CombinationRoleCommonOption.AssignsNum);
 		}
 		if (!role.HasTask())
 		{
