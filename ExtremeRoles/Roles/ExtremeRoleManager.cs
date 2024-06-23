@@ -328,7 +328,17 @@ public static class ExtremeRoleManager
         CreateServant,
     }
 
-    public static void CreateCombinationRoleOptions(
+	public const int roleIdOffset = 200;
+
+	public static int GetRoleGroupId(ExtremeRoleId roleId)
+		=> roleIdOffset + (int)roleId;
+
+	public const int conbRoleIdOffset = 1000;
+
+	public static int GetCombRoleGroupId(CombinationRoleType roleId)
+		=> conbRoleIdOffset + (int)roleId;
+
+	public static void CreateCombinationRoleOptions(
         int optionIdOffsetChord)
     {
 
