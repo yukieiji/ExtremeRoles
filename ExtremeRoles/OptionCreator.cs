@@ -15,8 +15,8 @@ public static class OptionCreator
     private const int maxPresetNum = 20;
 
     public static readonly string[] SpawnRate = [
-        "0%", "10%", "20%", "30%", "40%",
-        "50%", "60%", "70%", "80%", "90%", "100%" ];
+        "0", "10", "20", "30", "40",
+        "50", "60", "70", "80", "90", "100" ];
 
     public static readonly string[] Range = [ "short", "middle", "long" ];
 
