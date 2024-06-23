@@ -362,13 +362,13 @@ public sealed class Captain :
     protected override void RoleSpecificInit()
     {
 
-        var cate = this.Category;
+        var loader = this.Loader;
 
-        this.chargeVoteNum = cate.GetValue<CaptainOption, float>(
+        this.chargeVoteNum = loader.GetValue<CaptainOption, float>(
            CaptainOption.ChargeVoteWhenSkip);
-        this.defaultVote = cate.GetValue<CaptainOption, float>(
+        this.defaultVote = loader.GetValue<CaptainOption, float>(
            CaptainOption.AwakedDefaultVoteNum);
-        this.awakeTaskGage = cate.GetValue<CaptainOption, int>(
+        this.awakeTaskGage = loader.GetValue<CaptainOption, int>(
            CaptainOption.AwakeTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;

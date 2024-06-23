@@ -60,8 +60,8 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "juggling",
-            Loader.CreateSpriteFromResources(
-                Path.MagicianJuggling));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.MagicianJuggling));
     }
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
@@ -157,7 +157,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
         this.teleportRate = (float)cate.GetValue<MagicianOption, int>(
             MagicianOption.TeleportTargetRate) / 100.0f;
         this.dupeTeleportTarget = cate.GetValue<MagicianOption, bool>(

@@ -155,7 +155,7 @@ public sealed class Yoko :
 	}
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
         this.CanRepairSabotage = cate.GetValue<YokoOption, bool>(YokoOption.CanRepairSabo);
         this.UseVent = cate.GetValue<YokoOption, bool>(YokoOption.CanUseVent);
         this.searchRange = cate.GetValue<YokoOption, float>(YokoOption.SearchRange);
@@ -354,7 +354,7 @@ public sealed class Yoko :
 	{
 		this.CreateAbilityCountButton(
 			"yokoYashiro",
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 				Path.YokoYashiro),
 			this.IsAbilityActive,
 			this.CleanUp,

@@ -92,8 +92,8 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateAbilityCountButton(
             "takeTask",
-            Loader.CreateSpriteFromResources(
-                Path.AgencyTakeTask));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.AgencyTakeTask));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -271,13 +271,13 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var loader = this.Loader;
 
-		this.CanSeeTaskBar = cate.GetValue<AgencyOption, bool>(
+		this.CanSeeTaskBar = loader.GetValue<AgencyOption, bool>(
 			AgencyOption.CanSeeTaskBar);
-		this.maxTakeTask = cate.GetValue<AgencyOption, int>(
+		this.maxTakeTask = loader.GetValue<AgencyOption, int>(
             AgencyOption.MaxTaskNum) + 1;
-        this.takeTaskRange = cate.GetValue<AgencyOption, float>(
+        this.takeTaskRange = loader.GetValue<AgencyOption, float>(
             AgencyOption.TakeTaskRange);
 
         this.TakeTask = new List<TakeTaskType>();

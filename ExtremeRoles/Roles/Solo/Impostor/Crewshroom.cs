@@ -42,7 +42,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			Translation.GetString("CrewshroomSet"),
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.CrewshroomSet));
 	}
 
@@ -87,7 +87,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ModedMushroomSystem.Type,
 			new ModedMushroomSystem(
-				this.Category.GetValue<Option, float>(
+				this.Loader.GetValue<Option, float>(
 					Option.DelaySecond)));
 	}
 }

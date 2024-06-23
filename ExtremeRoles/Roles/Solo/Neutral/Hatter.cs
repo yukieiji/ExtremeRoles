@@ -78,8 +78,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 	public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "timeKill", Loader.CreateSpriteFromResources(
-                Path.HatterTimeKill));
+            "timeKill", Resources.Loader.CreateSpriteFromResources(
+				Path.HatterTimeKill));
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -167,7 +167,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
 		this.CanRepairSabotage = cate.GetValue<HatterOption, bool>(
 			HatterOption.CanRepairSabotage);
 		this.winSkipCount = cate.GetValue<HatterOption, int>(

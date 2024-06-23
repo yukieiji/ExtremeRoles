@@ -106,8 +106,8 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "outburst",
-            Loader.CreateSpriteFromResources(
-                Path.JesterOutburst),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.JesterOutburst),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }
@@ -175,7 +175,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-		var cat = this.Category;
+		var cat = this.Loader;
         this.UseSabotage = cat.GetValue<bool>(
             (int)JesterOption.UseSabotage);
         this.outburstDistance = cat.GetValue<float>(

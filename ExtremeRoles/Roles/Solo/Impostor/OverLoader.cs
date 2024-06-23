@@ -91,10 +91,10 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     {
         this.CreatePassiveAbilityButton(
             "overLoad", "downLoad",
-            Loader.CreateSpriteFromResources(
-               Path.OverLoaderOverLoad),
-            Loader.CreateSpriteFromResources(
-               Path.OverLoaderDownLoad),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.OverLoaderOverLoad),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.OverLoaderDownLoad),
             this.CleanUp);
     }
 
@@ -289,7 +289,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         this.defaultKillRange = this.KillRange;
         this.IsOverLoad = false;
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.awakeImpNum = cate.GetValue<OverLoaderOption, int>(
             OverLoaderOption.AwakeImpostorNum);

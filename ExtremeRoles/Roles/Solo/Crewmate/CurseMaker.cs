@@ -198,8 +198,8 @@ public sealed class CurseMaker :
 
         this.CreateAbilityCountButton(
             "curse",
-            Loader.CreateSpriteFromResources(
-                Path.CurseMakerCurse),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.CurseMakerCurse),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
@@ -347,31 +347,31 @@ public sealed class CurseMaker :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var loader = this.Loader;
 
-        this.additionalKillCool = cate.GetValue<CurseMakerOption, float>(
+        this.additionalKillCool = loader.GetValue<CurseMakerOption, float>(
             CurseMakerOption.AdditionalKillCool);
-        this.deadBodyCheckRange = cate.GetValue<CurseMakerOption, float>(
+        this.deadBodyCheckRange = loader.GetValue<CurseMakerOption, float>(
             CurseMakerOption.CursingRange);
-        this.curseTimeReduceRate = 1.0f - (cate.GetValue<CurseMakerOption, int>(
+        this.curseTimeReduceRate = 1.0f - (loader.GetValue<CurseMakerOption, int>(
             CurseMakerOption.TaskCurseTimeReduceRate) / 100.0f);
-        this.isNotRemoveDeadBodyByTask = cate.GetValue<CurseMakerOption, bool>(
+        this.isNotRemoveDeadBodyByTask = loader.GetValue<CurseMakerOption, bool>(
             CurseMakerOption.IsNotRemoveDeadBodyByTask);
-        this.notRemoveDeadBodyTaskGage = cate.GetValue<CurseMakerOption, int>(
+        this.notRemoveDeadBodyTaskGage = loader.GetValue<CurseMakerOption, int>(
             CurseMakerOption.NotRemoveDeadBodyTaskGage) / 100.0f;
-        this.isDeadBodySearch = cate.GetValue<CurseMakerOption, bool>(
+        this.isDeadBodySearch = loader.GetValue<CurseMakerOption, bool>(
             CurseMakerOption.IsDeadBodySearch);
-        this.isMultiDeadBodySearch = cate.GetValue<CurseMakerOption, bool>(
+        this.isMultiDeadBodySearch = loader.GetValue<CurseMakerOption, bool>(
             CurseMakerOption.IsMultiDeadBodySearch);
-        this.searchDeadBodyTime = cate.GetValue<CurseMakerOption, float>(
+        this.searchDeadBodyTime = loader.GetValue<CurseMakerOption, float>(
             CurseMakerOption.SearchDeadBodyTime);
 
         this.isDeadBodySearchUsed = false;
-        this.isReduceSearchByTask = cate.GetValue<CurseMakerOption, bool>(
+        this.isReduceSearchByTask = loader.GetValue<CurseMakerOption, bool>(
             CurseMakerOption.IsReduceSearchForTask);
-        this.reduceSearchtaskGage = cate.GetValue<CurseMakerOption, int>(
+        this.reduceSearchtaskGage = loader.GetValue<CurseMakerOption, int>(
             CurseMakerOption.ReduceSearchTaskGage) / 100.0f;
-        this.reduceTime = cate.GetValue<CurseMakerOption, float>(
+        this.reduceTime = loader.GetValue<CurseMakerOption, float>(
             CurseMakerOption.ReduceSearchDeadBodyTime);
 
         this.cursingText = Translation.GetString("cursing");
@@ -381,7 +381,7 @@ public sealed class CurseMaker :
         this.isRemoveDeadBody =
             this.isNotRemoveDeadBodyByTask && this.notRemoveDeadBodyTaskGage == 0.0f ? false : true;
 
-        this.curCurseTime = cate.GetValue<RoleAbilityCommonOption, float>(
+        this.curCurseTime = loader.GetValue<RoleAbilityCommonOption, float>(
             RoleAbilityCommonOption.AbilityActiveTime);
     }
 

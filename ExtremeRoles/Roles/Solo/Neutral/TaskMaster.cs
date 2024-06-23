@@ -135,7 +135,7 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
         this.UseSabotage = cate.GetValue<TaskMasterOption, bool>(
             TaskMasterOption.CanUseSabotage);
         this.addLongTask = cate.GetValue<TaskMasterOption, int>(

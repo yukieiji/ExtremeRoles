@@ -312,8 +312,8 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateNormalAbilityButton(
             "timeShield",
-            Loader.CreateSpriteFromResources(
-               Path.TimeMasterTimeShield),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.TimeMasterTimeShield),
             abilityOff: this.CleanUp);
         this.Button.SetLabelToCrewmate();
     }
@@ -393,7 +393,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<
             TimeMasterHistory>();
         history.Initialize(
-            this.Category.GetValue<TimeMasterOption, float>(
+            this.Loader.GetValue<TimeMasterOption, float>(
                 TimeMasterOption.RewindTime));
     }
 }

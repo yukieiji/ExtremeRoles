@@ -68,8 +68,8 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
     {
         this.CreateNormalAbilityButton(
             "reload",
-            Loader.CreateSpriteFromResources(
-                Path.AssaultMasterReload));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.AssaultMasterReload));
     }
 
     public void HookBodyReport(
@@ -243,7 +243,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.stockMax = cate.GetValue<AssaultMasterOption, int>(
             AssaultMasterOption.StockLimit);

@@ -233,8 +233,8 @@ public sealed class Psychic :
     {
         this.CreateAbilityCountButton(
 			Translation.GetString("PsychicPsychic"),
-            Loader.CreateSpriteFromResources(
-                Path.PsychicPsychic),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.PsychicPsychic),
 			CheckAbility,
 			CleanUp,
 			ForceAbilityOff);
@@ -430,18 +430,18 @@ public sealed class Psychic :
 
 	protected override void RoleSpecificInit()
 	{
-		var cate = this.Category;
+		var loader = this.Loader;
 
-		this.awakeTaskGage = cate.GetValue<PsychicOption, int>(
+		this.awakeTaskGage = loader.GetValue<PsychicOption, int>(
 			PsychicOption.AwakeTaskGage) / 100.0f;
-		this.awakeDeadPlayerNum = cate.GetValue<PsychicOption, int>(
+		this.awakeDeadPlayerNum = loader.GetValue<PsychicOption, int>(
 			PsychicOption.AwakeDeadPlayerNum);
 
-		this.upgradeTaskGage = cate.GetValue<PsychicOption, int>(
+		this.upgradeTaskGage = loader.GetValue<PsychicOption, int>(
 			PsychicOption.UpgradeTaskGage) / 100.0f;
-		this.upgradeDeadPlayerNum = cate.GetValue<PsychicOption, int>(
+		this.upgradeDeadPlayerNum = loader.GetValue<PsychicOption, int>(
 			PsychicOption.UpgradeDeadPlayerNum);
-		this.enableUpgrade = cate.GetValue<PsychicOption, bool>(
+		this.enableUpgrade = loader.GetValue<PsychicOption, bool>(
 			PsychicOption.IsUpgradeAbility);
 
 		int maxPlayerNum = CachedPlayerControl.AllPlayerControls.Count - 1;

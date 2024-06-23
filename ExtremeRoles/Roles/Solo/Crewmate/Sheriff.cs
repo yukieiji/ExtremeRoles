@@ -223,25 +223,25 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     protected override void RoleSpecificInit()
     {
 
-        var cate = this.Category;
+        var loader = this.Loader;
 
-        this.shootNum = cate.GetValue<SheriffOption, int>(
+        this.shootNum = loader.GetValue<SheriffOption, int>(
             SheriffOption.ShootNum);
-		this.canShootNeutral = cate.GetValue<SheriffOption, bool>(
+		this.canShootNeutral = loader.GetValue<SheriffOption, bool>(
 			SheriffOption.CanShootNeutral);
-        this.canShootAssassin = cate.GetValue<SheriffOption, bool>(
+        this.canShootAssassin = loader.GetValue<SheriffOption, bool>(
             SheriffOption.CanShootAssassin);
         this.killCountText = null;
 
-        this.enableTaskRelatedSetting = cate.GetValue<SheriffOption, bool>(
+        this.enableTaskRelatedSetting = loader.GetValue<SheriffOption, bool>(
             SheriffOption.EnableTaskRelated);
-        this.reduceKillCool = cate.GetValue<SheriffOption, float>(
+        this.reduceKillCool = loader.GetValue<SheriffOption, float>(
             SheriffOption.ReduceCurKillCool);
-        this.isPerm = cate.GetValue<SheriffOption, bool>(
+        this.isPerm = loader.GetValue<SheriffOption, bool>(
             SheriffOption.IsPerm);
-        this.isSyncTaskShootNum = cate.GetValue<SheriffOption, bool>(
+        this.isSyncTaskShootNum = loader.GetValue<SheriffOption, bool>(
             SheriffOption.IsSyncTaskAndShootNum);
-        this.syncShootTaskGage = cate.GetValue<SheriffOption, int>(
+        this.syncShootTaskGage = loader.GetValue<SheriffOption, int>(
             SheriffOption.SyncShootTaskGage) / 100.0f;
 
         this.prevGage = 0.0f;

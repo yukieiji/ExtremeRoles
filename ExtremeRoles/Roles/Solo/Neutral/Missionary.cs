@@ -119,7 +119,7 @@ public sealed class Missionary :
         this.lamb = new List<PlayerControl>(CachedPlayerControl.AllPlayerControls.Count);
         this.timer = 0;
 
-		var cate = this.Category;
+		var cate = this.Loader;
 
         this.tellDeparture = cate.GetValue<MissionaryOption, bool>(
             MissionaryOption.TellDeparture);
@@ -142,8 +142,8 @@ public sealed class Missionary :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "propagate", Loader.CreateSpriteFromResources(
-                Path.MissionaryPropagate));
+            "propagate", Resources.Loader.CreateSpriteFromResources(
+				Path.MissionaryPropagate));
     }
 
     public bool IsAbilityUse()

@@ -47,7 +47,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
 			Translation.GetString("TeroristBombSet"),
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.TeroristTeroSabotageButton));
     }
 
@@ -106,7 +106,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 			this.saboSystem = saboSystem;
 		}
 
-		var cate = this.Category;
+		var cate = this.Loader;
 		this.canActiveOtherSabotage = cate.GetValue<TeroristOption, bool>(
 			TeroristOption.CanActiveOtherSabotage);
 

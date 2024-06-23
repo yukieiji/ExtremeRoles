@@ -71,9 +71,9 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         this.CreateAbilityCountButton(
             "setBomb",
-            Loader.CreateSpriteFromResources(
-                Path.BomberSetBomb),
-            CheckAbility, CleanUp, ForceCleanUp);
+			Resources.Loader.CreateSpriteFromResources(
+				Path.BomberSetBomb),
+			CheckAbility, CleanUp, ForceCleanUp);
     }
 
     public bool IsAbilityUse()
@@ -135,7 +135,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.timerMinTime = cate.GetValue<BomberOption, float>(
             BomberOption.TimerMinTime);

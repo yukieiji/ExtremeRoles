@@ -206,17 +206,17 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var loader = this.Loader;
 
-		this.awakeTaskGage = cate.GetValue<Option, int>(
+		this.awakeTaskGage = loader.GetValue<Option, int>(
 			Option.AwakeTaskGage) / 100.0f;
-		this.delayUntilForceReport = cate.GetValue<Option, float>(
+		this.delayUntilForceReport = loader.GetValue<Option, float>(
 			Option.DelayUntilForceReport);
-		this.enableBaitBenefit = cate.GetValue<Option, bool>(
+		this.enableBaitBenefit = loader.GetValue<Option, bool>(
 			Option.EnableBaitBenefit);
-		this.killCoolReduceMulti = cate.GetValue<Option, float>(
+		this.killCoolReduceMulti = loader.GetValue<Option, float>(
 			Option.KillCoolReduceMulti) - 1.0f;
-		this.timer = cate.GetValue<Option, float>(
+		this.timer = loader.GetValue<Option, float>(
 			Option.ReduceTimer);
 
 		this.awakeHasOtherVision = this.HasOtherVision;

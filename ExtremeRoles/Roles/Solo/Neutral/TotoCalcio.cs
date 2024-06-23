@@ -68,8 +68,8 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "betPlayer",Loader.CreateSpriteFromResources(
-                Path.TotocalcioBetPlayer));
+            "betPlayer", Resources.Loader.CreateSpriteFromResources(
+				Path.TotocalcioBetPlayer));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -194,7 +194,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     protected override void RoleSpecificInit()
     {
         this.betPlayer = null;
-		var cate = this.Category;
+		var cate = this.Loader;
         this.range = cate.GetValue<TotocalcioOption, float>(
             TotocalcioOption.Range);
         this.defaultCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(

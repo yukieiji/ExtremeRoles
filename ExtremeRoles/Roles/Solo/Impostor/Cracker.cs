@@ -27,8 +27,8 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
         {
             this.body = new GameObject("CrackTrace");
             this.image = this.body.AddComponent<SpriteRenderer>();
-            this.image.sprite = Loader.CreateSpriteFromResources(
-               Path.CrackerCrackTrace, 300f);
+            this.image.sprite = Resources.Loader.CreateSpriteFromResources(
+			   Path.CrackerCrackTrace, 300f);
 
             this.body.transform.position = pos;
 
@@ -105,8 +105,8 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "crack",
-            Loader.CreateSpriteFromResources(
-               Path.CrackerCrack));
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.CrackerCrack));
     }
 
     public bool IsAbilityUse()
@@ -164,7 +164,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
         this.crackDistance = cate.GetValue<CrackerOption, float>(
             CrackerOption.CanCrackDistance);
         this.IsRemoveDeadBody = cate.GetValue<CrackerOption, bool>(

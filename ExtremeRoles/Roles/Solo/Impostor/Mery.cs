@@ -44,8 +44,8 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         {
             this.body = new GameObject("MaryCamp");
             this.img = this.body.AddComponent<SpriteRenderer>();
-            this.img.sprite = Loader.CreateSpriteFromResources(
-               Path.MeryNoneActiveVent, 125f);
+            this.img.sprite = Resources.Loader.CreateSpriteFromResources(
+			   Path.MeryNoneActiveVent, 125f);
 
             this.body.SetActive(canSee);
             this.body.transform.position = new Vector3(
@@ -140,7 +140,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 				vent.myAnim.enabled = false;
 			}
 
-			ventRenderer.sprite = Loader.CreateSpriteFromResources(
+			ventRenderer.sprite = Resources.Loader.CreateSpriteFromResources(
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
 
 			vent.myRend = ventRenderer;
@@ -291,7 +291,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateAbilityCountButton(
             "setCamp",
-            Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
                 string.Format(Path.MeryCustomVentAnime, "0")));
     }
 
@@ -334,7 +334,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.ActiveNum = cate.GetValue<MeryOption, int>(
             MeryOption.ActiveNum);

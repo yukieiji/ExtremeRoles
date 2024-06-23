@@ -72,8 +72,8 @@ public sealed class Madmate :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "selfKill", Loader.CreateSpriteFromResources(
-                Path.SucideSprite));
+            "selfKill", Resources.Loader.CreateSpriteFromResources(
+				Path.SucideSprite));
     }
 
     public bool UseAbility()
@@ -210,7 +210,7 @@ public sealed class Madmate :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
         this.isSeeImpostorNow = false;
         this.isUpdateMadmate = false;
         this.FakeImposter = false;

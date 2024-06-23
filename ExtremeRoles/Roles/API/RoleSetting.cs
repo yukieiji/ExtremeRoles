@@ -36,7 +36,7 @@ public abstract class RoleOptionBase
 {
     public bool CanKill = false;
 
-	protected abstract OptionCategory Category { get; }
+	protected abstract IOptionLoader Loader { get; }
 
 	public void Initialize()
     {

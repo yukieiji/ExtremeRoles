@@ -251,8 +251,8 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         this.CreateAbilityCountButton(
             "Sidekick",
-            Loader.CreateSpriteFromResources(
-                Path.JackalSidekick));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.JackalSidekick));
     }
 
     public override Color GetTargetRoleSeeColor(
@@ -408,7 +408,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         this.CurRecursion = 0;
         this.SidekickPlayerId = new List<byte>();
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.SidekickRecursionLimit = cate.GetValue<JackalOption, int>(
             JackalOption.SidekickLimitNum);

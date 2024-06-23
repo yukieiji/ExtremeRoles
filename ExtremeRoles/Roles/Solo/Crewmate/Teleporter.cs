@@ -212,7 +212,7 @@ public sealed class Teleporter :
 		if (this.Button == null) { return; }
 
 		this.Button.Behavior.SetCoolTime(
-			this.Category.GetValue<RoleAbilityCommonOption, float>(
+			this.Loader.GetValue<RoleAbilityCommonOption, float>(
 				RoleAbilityCommonOption.AbilityCoolTime));
 
 		this.behavior.SetAbilityCount(0);
@@ -241,10 +241,10 @@ public sealed class Teleporter :
 
     public void CreateAbility()
     {
-        this.firstPortalImg = Loader.CreateSpriteFromResources(
-            Path.TeleporterFirstPortal);
-        this.secondPortalImg = Loader.CreateSpriteFromResources(
-            Path.TeleporterSecondPortal);
+        this.firstPortalImg = Resources.Loader.CreateSpriteFromResources(
+			Path.TeleporterFirstPortal);
+        this.secondPortalImg = Resources.Loader.CreateSpriteFromResources(
+			Path.TeleporterSecondPortal);
 
         this.behavior = new TeleporterAbilityBehavior(
             Translation.GetString("SetPortal"),
@@ -310,10 +310,10 @@ public sealed class Teleporter :
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
-        this.isSharePortal = cate.GetValue<TeleporterOption, bool>(
+		var loader = this.Loader;
+        this.isSharePortal = loader.GetValue<TeleporterOption, bool>(
             TeleporterOption.CanUseOtherPlayer);
-        this.partNum = cate.GetValue<RoleAbilityCommonOption, int>(
+        this.partNum = loader.GetValue<RoleAbilityCommonOption, int>(
             RoleAbilityCommonOption.AbilityCount);
     }
 

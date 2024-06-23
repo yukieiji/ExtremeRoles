@@ -362,7 +362,7 @@ public sealed class UnderWarper :
     protected override void RoleSpecificInit()
     {
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.awakeKillCount = cate.GetValue<UnderWarperOption, int>(
             UnderWarperOption.AwakeKillCount);

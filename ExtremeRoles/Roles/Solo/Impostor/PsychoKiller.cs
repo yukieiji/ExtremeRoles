@@ -215,7 +215,7 @@ public sealed class PsychoKiller :
                 FloatOptionNames.KillCooldown);
         }
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.reduceRate = cate.GetValue<PsychoKillerOption, int>(
             PsychoKillerOption.KillCoolReduceRate);

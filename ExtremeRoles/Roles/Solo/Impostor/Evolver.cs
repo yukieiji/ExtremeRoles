@@ -66,8 +66,8 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateAbilityCountButton(
             "evolve",
-            Loader.CreateSpriteFromResources(
-                Path.EvolverEvolved),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.EvolverEvolved),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: ForceCleanUp);
@@ -187,7 +187,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 
         this.defaultKillCoolTime = this.KillCoolTime;
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.isEvolvdAnimation = cate.GetValue<EvolverOption, bool>(
             EvolverOption.IsEvolvedAnimation);

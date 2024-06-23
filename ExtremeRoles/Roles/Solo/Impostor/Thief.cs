@@ -56,9 +56,9 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 		effect.transform.localPosition = new Vector2(-0.25f, -0.15f);
 		var player = effect.AddComponent<DlayableVideoPlayer>();
 
-		player.SetThum(Loader.CreateSpriteFromResources(
+		player.SetThum(Resources.Loader.CreateSpriteFromResources(
 			Path.TheifMagicCircle));
-		player.SetVideo(Loader.GetUnityObjectFromResources<VideoClip>(
+		player.SetVideo(Resources.Loader.GetUnityObjectFromResources<VideoClip>(
 			Path.VideoAsset, string.Format(
 				Path.VideoAssetPlaceHolder, Path.TheifMagicCircleVideo)));
 	}
@@ -67,8 +67,8 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "steal",
-            Loader.CreateSpriteFromResources(
-                Path.TheifMagicCircle),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.TheifMagicCircle),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: ForceCleanUp);
@@ -146,7 +146,7 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
 		this.activeRange = cate.GetValue<ThiefOption, float>(ThiefOption.Range);
 		this.isAddEffect = cate.GetValue<ThiefOption, bool>(ThiefOption.IsAddEffect);

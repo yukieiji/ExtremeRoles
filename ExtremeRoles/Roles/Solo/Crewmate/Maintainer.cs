@@ -39,8 +39,8 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "maintenance",
-            Loader.CreateSpriteFromResources(
-                Path.MaintainerRepair));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.MaintainerRepair));
         this.Button.SetLabelToCrewmate();
     }
 

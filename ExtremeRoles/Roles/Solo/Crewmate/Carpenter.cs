@@ -502,7 +502,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     public void CreateAbility()
     {
 
-        var cate = this.Category;
+        var loader = this.Loader;
 
         this.Button = new ExtremeAbilityButton(
             new CarpenterAbilityBehavior(
@@ -510,31 +510,31 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 					mode: CarpenterAbilityMode.RemoveVent,
 					graphic: new (
 						Translation.GetString("ventSeal"),
-						Loader.CreateSpriteFromResources(
+						Resources.Loader.CreateSpriteFromResources(
 							Path.CarpenterVentSeal)),
-					time: cate.GetValue<CarpenterOption, float>(
+					time: loader.GetValue<CarpenterOption, float>(
 						CarpenterOption.RemoveVentStopTime)
 					),
                 cameraMode: new(
 					mode: CarpenterAbilityMode.SetCamera,
 					graphic: new(
 						Translation.GetString("cameraSet"),
-						Loader.CreateSpriteFromResources(
+						Resources.Loader.CreateSpriteFromResources(
 							Path.CarpenterSetCamera)),
-					time: cate.GetValue<CarpenterOption, float>(
+					time: loader.GetValue<CarpenterOption, float>(
 						CarpenterOption.SetCameraStopTime)
 					),
-                ventRemoveScrewNum: cate.GetValue<CarpenterOption, int>(
-                    CarpenterOption.RemoveVentScrew),
-                cameraSetScrewNum: cate.GetValue<CarpenterOption, int>(
-                    CarpenterOption.SetCameraScrew),
+                ventRemoveScrewNum: loader.GetValue<CarpenterOption, int>(
+					CarpenterOption.RemoveVentScrew),
+                cameraSetScrewNum: loader.GetValue<CarpenterOption, int>(
+					CarpenterOption.SetCameraScrew),
                 setCountStart: UseAbility,
                 canUse: IsAbilityUse,
                 abilityCheck: IsAbilityCheck,
                 updateMapObj: CleanUp,
                 ventRemoveModeCheck: IsVentMode),
             new RoleButtonActivator(),
-            KeyCode.F);
+			KeyCode.F);
 
 		this.RoleAbilityInit();
 		this.Button.SetLabelToCrewmate();
@@ -736,7 +736,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     protected override void RoleSpecificInit()
     {
         this.targetVent = null;
-        this.awakeTaskGage = this.Category.GetValue<CarpenterOption, int>(
+        this.awakeTaskGage = this.Loader.GetValue<CarpenterOption, int>(
             CarpenterOption.AwakeTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
@@ -785,14 +785,14 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     {
         if (this.Button == null) { return; }
 
-        var cate = this.Category;
+        var loader = this.Loader;
         this.Button.Behavior.SetCoolTime(
-            cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
+            loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
         if (this.Button.Behavior is CarpenterAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount));
+                loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount));
         }
         this.Button.OnMeetingEnd();
     }

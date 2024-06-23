@@ -634,7 +634,7 @@ public sealed class Hypnotist :
             this.defaultKillCool = this.KillCoolTime;
         }
 
-        var cate = this.Category;
+        var cate = this.Loader;
         this.awakeCheckImpNum = cate.GetValue<HypnotistOption, int>(
             HypnotistOption.AwakeCheckImpostorNum);
         this.awakeCheckTaskGage = cate.GetValue<HypnotistOption, int>(

@@ -78,7 +78,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 			EaterAbilityMode.DeadBody,
 			new ButtonGraphic(
 				Translation.GetString("deadBodyEat"),
-				Loader.CreateSpriteFromResources(
+				Resources.Loader.CreateSpriteFromResources(
 					Path.EaterDeadBodyEat)),
 			1.0f);
 
@@ -95,7 +95,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 				EaterAbilityMode.Kill,
 				new ButtonGraphic(
 					Translation.GetString("eatKill"),
-					Loader.CreateSpriteFromResources(
+					Resources.Loader.CreateSpriteFromResources(
 						Path.EaterEatKill)),
 				this.Button.Behavior.ActiveTime));
     }
@@ -329,7 +329,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.targetDeadBody = null;
         this.targetPlayer = null;
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.UseVent = cate.GetValue<EaterOption, bool>(
             EaterOption.CanUseVent);

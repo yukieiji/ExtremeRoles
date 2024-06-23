@@ -160,8 +160,8 @@ public sealed class Miner :
     {
         this.CreateNormalAbilityButton(
             "setMine",
-            Loader.CreateSpriteFromResources(
-                Path.MinerSetMine),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.MinerSetMine),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }
@@ -380,7 +380,7 @@ public sealed class Miner :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
 		this.isLinkingVent = cate.GetValue<MinerOption, bool>(
 			MinerOption.LinkingAllVent);

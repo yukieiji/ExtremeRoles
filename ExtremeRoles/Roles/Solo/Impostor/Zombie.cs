@@ -134,22 +134,22 @@ public sealed class Zombie :
 
         var player = circle.AddComponent<DlayableVideoPlayer>();
 
-        player.SetThum(Loader.CreateSpriteFromResources(
-            Path.ZombieMagicCircle));
-        player.SetVideo(Loader.GetUnityObjectFromResources<VideoClip>(
-            Path.VideoAsset, string.Format(
-                Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
+        player.SetThum(Resources.Loader.CreateSpriteFromResources(
+			Path.ZombieMagicCircle));
+        player.SetVideo(Resources.Loader.GetUnityObjectFromResources<VideoClip>(
+			Path.VideoAsset, string.Format(
+				Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
         player.SetTimer(activeTime);
     }
 
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            Translation.GetString("featMagicCircle"),
-            Loader.CreateSpriteFromResources(
-                Path.ZombieMagicCircleButton),
-            IsActivate,
-            SetMagicCircle,
+			Translation.GetString("featMagicCircle"),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.ZombieMagicCircleButton),
+			IsActivate,
+			SetMagicCircle,
              () => { });
 
         if (this.Button?.Behavior is not AbilityCountBehavior countBehavior)
@@ -460,7 +460,7 @@ public sealed class Zombie :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.killCount = 0;
 

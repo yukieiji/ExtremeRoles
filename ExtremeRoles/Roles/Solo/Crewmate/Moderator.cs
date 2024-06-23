@@ -150,7 +150,7 @@ public sealed class Moderator :
 	{
 		this.CreateAbilityCountButton(
 			"moderate",
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 				Path.ModeratorModerate));
 		this.Button?.SetLabelToCrewmate();
 	}
@@ -212,7 +212,7 @@ public sealed class Moderator :
 			new Vector3(-3.75f, -2.5f, -250.0f),
 			TMPro.TextAlignmentOptions.BottomLeft);
 
-		var cate = this.Category;
+		var cate = this.Loader;
 
 		this.awakeTaskGage = cate.GetValue<ModeratorOption, int>(
 		   ModeratorOption.AwakeTaskGage) / 100.0f;

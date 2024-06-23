@@ -289,7 +289,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.awakeImpNum = cate.GetValue<LastWolfOption, int>(
             LastWolfOption.AwakeImpostorNum);

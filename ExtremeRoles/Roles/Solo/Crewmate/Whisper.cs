@@ -235,21 +235,21 @@ public sealed class Whisper :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var loader = this.Loader;
 
         this.textPopUp = new TextPopUpper(
-            cate.GetValue<WhisperOption, int>(WhisperOption.MaxTellText),
-            cate.GetValue<WhisperOption, float>(WhisperOption.TellTextTime),
+            loader.GetValue<WhisperOption, int>(WhisperOption.MaxTellText),
+            loader.GetValue<WhisperOption, float>(WhisperOption.TellTextTime),
             new Vector3(-3.75f, -2.5f, -250.0f),
             TMPro.TextAlignmentOptions.BottomLeft);
 
-        this.abilityOffTime = cate.GetValue<WhisperOption, float>(
+        this.abilityOffTime = loader.GetValue<WhisperOption, float>(
             WhisperOption.AbilityOffTime);
-        this.abilityOnTime = cate.GetValue<WhisperOption, float>(WhisperOption.AbilityOnTime);
+        this.abilityOnTime = loader.GetValue<WhisperOption, float>(WhisperOption.AbilityOnTime);
 
-		this.isEnableAwakeAbility = cate.GetValue<WhisperOption, bool>(
+		this.isEnableAwakeAbility = loader.GetValue<WhisperOption, bool>(
 			WhisperOption.EnableAwakeAbility);
-		this.awakeTaskGage = cate.GetValue<WhisperOption, int>(
+		this.awakeTaskGage = loader.GetValue<WhisperOption, int>(
 			WhisperOption.AbilityTaskGage) / 100.0f;
 		this.isAwake = this.isEnableAwakeAbility && this.awakeTaskGage <= 0.0f;
 

@@ -86,10 +86,10 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
 
-        this.randomColorPaintImage = Loader.CreateSpriteFromResources(
-            Path.PainterPaintRandom);
-        this.transColorPaintImage = Loader.CreateSpriteFromResources(
-            Path.PainterPaintTrans);
+        this.randomColorPaintImage = Resources.Loader.CreateSpriteFromResources(
+			Path.PainterPaintRandom);
+        this.transColorPaintImage = Resources.Loader.CreateSpriteFromResources(
+			Path.PainterPaintTrans);
 
         this.CreateNormalAbilityButton(
             "paint", this.randomColorPaintImage);
@@ -152,7 +152,7 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        this.paintDistance = this.Category.GetValue<PainterOption, float>(
+        this.paintDistance = this.Loader.GetValue<PainterOption, float>(
             PainterOption.CanPaintDistance);
     }
 }

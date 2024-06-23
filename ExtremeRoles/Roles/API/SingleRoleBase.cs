@@ -6,6 +6,7 @@ using ExtremeRoles.Module.CustomOption;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -47,7 +48,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     protected readonly string RawRoleName;
 
-	protected override OptionCategory Category
+	protected override IOptionLoader Loader
 	{
 		get
 		{
@@ -140,7 +141,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     {
         var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
 
-		var cate = this.Category;
+		var loader = this.Loader;
 
         this.Vision = this.IsImpostor() ?
             baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) :
@@ -152,32 +153,32 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         this.IsApplyEnvironmentVision = !this.IsImpostor();
 
 
-        this.HasOtherVision = cate.GetValue<RoleCommonOption, bool>(
+        this.HasOtherVision = loader.GetValue<RoleCommonOption, bool>(
 			RoleCommonOption.HasOtherVision);
         if (this.HasOtherVision)
         {
-            this.Vision = cate.GetValue<RoleCommonOption, float>(
+            this.Vision = loader.GetValue<RoleCommonOption, float>(
 				RoleCommonOption.Vision);
-            this.IsApplyEnvironmentVision = cate.GetValue<RoleCommonOption, bool>(
+            this.IsApplyEnvironmentVision = loader.GetValue<RoleCommonOption, bool>(
                 RoleCommonOption.ApplyEnvironmentVisionEffect);
         }
 
         if (this.CanKill)
         {
-            this.HasOtherKillCool = cate.GetValue<KillerCommonOption, bool>(
+            this.HasOtherKillCool = loader.GetValue<KillerCommonOption, bool>(
                 KillerCommonOption.HasOtherKillCool);
             if (this.HasOtherKillCool)
             {
-                this.KillCoolTime = cate.GetValue<KillerCommonOption, float>(
+                this.KillCoolTime = loader.GetValue<KillerCommonOption, float>(
                     KillerCommonOption.KillCoolDown);
             }
 
-            this.HasOtherKillRange = cate.GetValue<KillerCommonOption, bool>(
+            this.HasOtherKillRange = loader.GetValue<KillerCommonOption, bool>(
 				KillerCommonOption.HasOtherKillRange);
 
             if (this.HasOtherKillRange)
             {
-                this.KillRange = cate.GetValue<KillerCommonOption, int>(
+                this.KillRange = loader.GetValue<KillerCommonOption, int>(
 					KillerCommonOption.KillRange);
             }
         }

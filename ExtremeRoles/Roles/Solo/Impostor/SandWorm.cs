@@ -249,7 +249,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
         this.range = cate.GetValue<SandWormOption, float>(
             SandWormOption.AssaultRange);
 

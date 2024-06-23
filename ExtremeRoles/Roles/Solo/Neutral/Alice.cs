@@ -50,8 +50,8 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "shipBroken", Loader.CreateSpriteFromResources(
-                Path.AliceShipBroken));
+            "shipBroken", Resources.Loader.CreateSpriteFromResources(
+				Path.AliceShipBroken));
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -172,15 +172,15 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var loader = this.Loader;
 
-        this.UseSabotage = cate.GetValue<AliceOption, bool>(
+        this.UseSabotage = loader.GetValue<AliceOption, bool>(
             AliceOption.CanUseSabotage);
-        this.RevartNormalTask = cate.GetValue<AliceOption, int>(
+        this.RevartNormalTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartNormalTaskNum);
-        this.RevartLongTask = cate.GetValue<AliceOption, int>(
+        this.RevartLongTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartLongTaskNum);
-        this.RevartCommonTask = cate.GetValue<AliceOption, int>(
+        this.RevartCommonTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartCommonTaskNum);
     }
 

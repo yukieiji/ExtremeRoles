@@ -144,8 +144,8 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     {
         this.CreateReclickableAbilityButton(
             "carry",
-            Loader.CreateSpriteFromResources(
-               Path.CarrierCarry),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.CarrierCarry),
             abilityOff: this.CleanUp);
     }
 
@@ -222,7 +222,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
         this.carryDistance = cate.GetValue<CarrierOption, float>(
             CarrierOption.CarryDistance);
         this.canReportOnCarry = cate.GetValue<CarrierOption, bool>(

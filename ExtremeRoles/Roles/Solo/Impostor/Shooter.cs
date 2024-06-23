@@ -438,7 +438,7 @@ public sealed class Shooter :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.isAwake = cate.GetValue<ShooterOption, bool>(
             ShooterOption.IsInitAwake);

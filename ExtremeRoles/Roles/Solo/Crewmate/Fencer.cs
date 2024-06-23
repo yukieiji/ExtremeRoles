@@ -112,8 +112,8 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateAbilityCountButton(
             "counter",
-            Loader.CreateSpriteFromResources(
-                Path.FencerCounter),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.FencerCounter),
             abilityOff: this.CleanUp,
             isReduceOnActive: true);
         this.Button.SetLabelToCrewmate();
@@ -206,7 +206,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     protected override void RoleSpecificInit()
     {
         this.Timer = 0.0f;
-        this.MaxTime = this.Category.GetValue<FencerOption, float>(
+        this.MaxTime = this.Loader.GetValue<FencerOption, float>(
             FencerOption.ResetTime);
     }
 }

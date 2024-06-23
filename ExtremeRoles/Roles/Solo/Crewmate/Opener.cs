@@ -51,8 +51,8 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateAbilityCountButton(
             "openDoor",
-            Loader.CreateSpriteFromResources(
-                Path.OpenerOpenDoor));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.OpenerOpenDoor));
         this.Button.SetLabelToCrewmate();
     }
     public bool UseAbility()
@@ -155,14 +155,14 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.isUpgraded = false;
 
-		var cate = this.Category;
-        this.range = cate.GetValue<OpenerOption, float>(
+		var loader = this.Loader;
+        this.range = loader.GetValue<OpenerOption, float>(
             OpenerOption.Range);
-        this.reduceRate = cate.GetValue<OpenerOption, int>(
+        this.reduceRate = loader.GetValue<OpenerOption, int>(
             OpenerOption.ReduceRate);
-        this.plusAbilityNum = cate.GetValue<OpenerOption, int>(
+        this.plusAbilityNum = loader.GetValue<OpenerOption, int>(
             OpenerOption.PlusAbility);
-		this.abilityCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(
+		this.abilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
 			RoleAbilityCommonOption.AbilityCoolTime);
     }
 }

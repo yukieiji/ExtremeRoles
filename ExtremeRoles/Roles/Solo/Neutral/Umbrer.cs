@@ -151,12 +151,12 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public void CreateAbility()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
         var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
 			UmbrerMode.Feat,
 				new Module.AbilityBehavior.ButtonGraphic(
 					Translation.GetString("featVirus"),
-					Loader.CreateSpriteFromResources(
+					Resources.Loader.CreateSpriteFromResources(
 						Path.UmbrerFeatVirus)),
 				cate.GetValue<RoleAbilityCommonOption, float >(
 					RoleAbilityCommonOption.AbilityActiveTime)
@@ -173,7 +173,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 				UmbrerMode.Upgrage,
 				new Module.AbilityBehavior.ButtonGraphic(
 					Translation.GetString("upgradeVirus"),
-					Loader.CreateSpriteFromResources(
+					Resources.Loader.CreateSpriteFromResources(
 					Path.UmbrerUpgradeVirus)),
 				cate.GetValue<UmbrerOption, float>(
 					UmbrerOption.UpgradeVirusTime))
@@ -363,7 +363,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         this.timer = new Dictionary<byte, float>();
         this.playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.range = cate.GetValue<UmbrerOption, float>(UmbrerOption.Range);
         this.infectRange = cate.GetValue<UmbrerOption, float>(UmbrerOption.InfectRange);

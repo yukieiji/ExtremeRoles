@@ -59,16 +59,16 @@ public sealed class Neet : SingleRoleBase
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var loader = this.Loader;
 
-        this.CanCallMeeting = cate.GetValue<NeetOption, bool>(
+        this.CanCallMeeting = loader.GetValue<NeetOption, bool>(
             NeetOption.CanCallMeeting);
-        this.CanRepairSabotage = cate.GetValue<NeetOption, bool>(
+        this.CanRepairSabotage = loader.GetValue<NeetOption, bool>(
             NeetOption.CanRepairSabotage);
-        this.HasTask = cate.GetValue<NeetOption, bool>(
+        this.HasTask = loader.GetValue<NeetOption, bool>(
             NeetOption.HasTask);
 
-        if (cate.GetValue<NeetOption, bool>(NeetOption.IsNeutral))
+        if (loader.GetValue<NeetOption, bool>(NeetOption.IsNeutral))
         {
             this.Team = ExtremeRoleType.Neutral;
         }

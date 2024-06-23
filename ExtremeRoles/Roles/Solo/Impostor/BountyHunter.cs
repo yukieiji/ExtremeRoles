@@ -148,7 +148,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
         this.defaultKillCool = this.KillCoolTime;
 
-        var cate = this.Category;
+        var cate = this.Loader;
 
         this.changeTargetTime = cate.GetValue<BountyHunterOption, float>(
             BountyHunterOption.TargetUpdateTime);

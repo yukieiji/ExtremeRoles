@@ -437,26 +437,26 @@ public sealed class Resurrecter :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var loader = this.Loader;
 
-        this.awakeTaskGage = cate.GetValue<ResurrecterOption, int>(
+        this.awakeTaskGage = loader.GetValue<ResurrecterOption, int>(
             ResurrecterOption.AwakeTaskGage) / 100.0f;
-        this.resurrectTaskGage = cate.GetValue<ResurrecterOption, int>(
+        this.resurrectTaskGage = loader.GetValue<ResurrecterOption, int>(
             ResurrecterOption.ResurrectTaskGage) / 100.0f;
-        this.resetTaskGage = cate.GetValue<ResurrecterOption, int>(
+        this.resetTaskGage = loader.GetValue<ResurrecterOption, int>(
             ResurrecterOption.ResurrectTaskResetGage) / 100.0f;
 
-        this.resurrectTimer = cate.GetValue<ResurrecterOption, float>(
+        this.resurrectTimer = loader.GetValue<ResurrecterOption, float>(
             ResurrecterOption.ResurrectDelayTime);
-        this.canResurrectAfterDeath = cate.GetValue<ResurrecterOption, bool>(
+        this.canResurrectAfterDeath = loader.GetValue<ResurrecterOption, bool>(
             ResurrecterOption.CanResurrectAfterDeath);
-        this.canResurrectOnExil = cate.GetValue<ResurrecterOption, bool>(
+        this.canResurrectOnExil = loader.GetValue<ResurrecterOption, bool>(
             ResurrecterOption.CanResurrectOnExil);
-        this.maxMeetingCount = cate.GetValue<ResurrecterOption, int>(
+        this.maxMeetingCount = loader.GetValue<ResurrecterOption, int>(
             ResurrecterOption.ResurrectTaskResetMeetingNum);
-        this.isMeetingCoolResetOnResurrect = cate.GetValue<ResurrecterOption, bool>(
+        this.isMeetingCoolResetOnResurrect = loader.GetValue<ResurrecterOption, bool>(
             ResurrecterOption.IsMeetingCoolResetOnResurrect);
-        this.meetingCoolDown = cate.GetValue<ResurrecterOption, float>(
+        this.meetingCoolDown = loader.GetValue<ResurrecterOption, float>(
             ResurrecterOption.ResurrectMeetingCooltime);
 
         this.awakeHasOtherVision = this.HasOtherVision;

@@ -323,8 +323,8 @@ public sealed class Queen :
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "queenCharm", Loader.CreateSpriteFromResources(
-                Path.QueenCharm));
+            "queenCharm", Resources.Loader.CreateSpriteFromResources(
+				Path.QueenCharm));
     }
 
     public bool UseAbility()
@@ -479,7 +479,7 @@ public sealed class Queen :
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
 
         this.range = cate.GetValue<QueenOption, float>(QueenOption.Range);
         this.UseVent = cate.GetValue<QueenOption, bool>(
@@ -574,8 +574,8 @@ public sealed class Servant :
     {
         this.Button = RoleAbilityFactory.CreateReusableAbility(
             "selfKill",
-            Loader.CreateSpriteFromResources(
-                Path.SucideSprite),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.SucideSprite),
             this.IsAbilityUse,
             this.UseAbility);
         this.Button.Behavior.SetCoolTime(coolTime);

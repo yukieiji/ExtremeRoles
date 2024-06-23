@@ -447,7 +447,7 @@ public sealed class Yandere :
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
 
         this.setTargetRange = cate.GetValue<YandereOption, float>(
             YandereOption.SetTargetRange);

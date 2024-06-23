@@ -73,9 +73,9 @@ public sealed class Artist :
     {
 		this.CreatePassiveAbilityButton(
 			"ArtistArtOn", "ArtistArtOff",
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.ArtistArtOn),
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.ArtistArtOff),
 			this.CleanUp,
 			() =>
@@ -162,7 +162,7 @@ public sealed class Artist :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
 
 		this.area = 0.0f;
 		this.UseVent = cate.GetValue<ArtistOption, bool>(

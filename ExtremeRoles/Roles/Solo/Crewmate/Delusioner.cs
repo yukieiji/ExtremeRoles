@@ -90,8 +90,8 @@ public sealed class Delusioner :
     {
         this.CreateAbilityCountButton(
             "deflectDamage",
-            Loader.CreateSpriteFromResources(
-                Path.DelusionerDeflectDamage));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.DelusionerDeflectDamage));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -337,25 +337,25 @@ public sealed class Delusioner :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
-        this.awakeVoteCount = cate.GetValue<DelusionerOption, int>(
+        var loader = this.Loader;
+        this.awakeVoteCount = loader.GetValue<DelusionerOption, int>(
             DelusionerOption.AwakeVoteNum);
-        this.isOneTimeAwake = cate.GetValue<DelusionerOption, bool>(
+        this.isOneTimeAwake = loader.GetValue<DelusionerOption, bool>(
             DelusionerOption.IsOnetimeAwake);
-        this.voteCoolTimeReduceRate = cate.GetValue<DelusionerOption, int>(
+        this.voteCoolTimeReduceRate = loader.GetValue<DelusionerOption, int>(
             DelusionerOption.VoteCoolTimeReduceRate);
-        this.deflectDamagePenaltyMod = 100f - (cate.GetValue<DelusionerOption, int>(
+        this.deflectDamagePenaltyMod = 100f - (loader.GetValue<DelusionerOption, int>(
             DelusionerOption.DeflectDamagePenaltyRate) / 100f);
-        this.range = cate.GetValue<DelusionerOption, float>(
+        this.range = loader.GetValue<DelusionerOption, float>(
             DelusionerOption.Range);
 
-        this.includeLocalPlayer = cate.GetValue<DelusionerOption, bool>(
+        this.includeLocalPlayer = loader.GetValue<DelusionerOption, bool>(
             DelusionerOption.IsIncludeLocalPlayer);
-        this.includeSpawnPoint = cate.GetValue<DelusionerOption, bool>(
+        this.includeSpawnPoint = loader.GetValue<DelusionerOption, bool>(
             DelusionerOption.IsIncludeSpawnPoint);
 
         this.isOneTimeAwake = this.isOneTimeAwake && this.awakeVoteCount > 0;
-        this.defaultCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(
+        this.defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
             RoleAbilityCommonOption.AbilityCoolTime);
         this.curCoolTime = this.defaultCoolTime;
         this.isAwakeRole = this.awakeVoteCount == 0;

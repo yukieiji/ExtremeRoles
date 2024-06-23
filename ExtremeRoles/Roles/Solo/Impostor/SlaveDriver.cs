@@ -87,7 +87,7 @@ public sealed class SlaveDriver :
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
 		this.CanSeeTaskBar = cate.GetValue<SlaveDriverOption, bool>(
 			SlaveDriverOption.CanSeeTaskBar);
 		this.revartTaskNum= cate.GetValue<SlaveDriverOption, int>(

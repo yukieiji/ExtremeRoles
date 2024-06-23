@@ -87,8 +87,8 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
            "attackCommand",
-            Loader.CreateSpriteFromResources(
-               Path.CommanderAttackCommand));
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.CommanderAttackCommand));
     }
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
@@ -150,7 +150,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var cate = this.Loader;
         this.killCoolReduceTime = cate.GetValue<CommanderOption, float>(
             CommanderOption.KillCoolReduceTime);
         this.killCoolImpNumBonus = cate.GetValue<CommanderOption, float>(

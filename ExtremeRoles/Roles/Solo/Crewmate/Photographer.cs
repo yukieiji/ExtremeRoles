@@ -331,8 +331,8 @@ public sealed class Photographer :
     {
         this.CreateAbilityCountButton(
             "takePhoto",
-            Loader.CreateSpriteFromResources(
-                Path.PhotographerPhotoCamera));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.PhotographerPhotoCamera));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -540,16 +540,16 @@ public sealed class Photographer :
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Category;
+        var loader = this.Loader;
 
-        this.awakeTaskGage = cate.GetValue<PhotographerOption, int>(
+        this.awakeTaskGage = loader.GetValue<PhotographerOption, int>(
             PhotographerOption.AwakeTaskGage) / 100.0f;
-        this.upgradePhotoTaskGage = cate.GetValue<PhotographerOption, int>(
+        this.upgradePhotoTaskGage = loader.GetValue<PhotographerOption, int>(
             PhotographerOption.UpgradePhotoTaskGage) / 100.0f;
 		this.enableAllSend =
-			cate.GetValue<PhotographerOption, bool>(
+			loader.GetValue<PhotographerOption, bool>(
 				PhotographerOption.EnableAllSendChat);
-        this.upgradeAllSendChatTaskGage = cate.GetValue<PhotographerOption, int>(
+        this.upgradeAllSendChatTaskGage = loader.GetValue<PhotographerOption, int>(
             PhotographerOption.UpgradeAllSendChatTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
@@ -569,7 +569,7 @@ public sealed class Photographer :
             this.upgradeAllSendChatTaskGage <= 0.0f;
 
         this.photoCreater = new PhotoCamera(
-			cate.GetValue<PhotographerOption, float>(
+			loader.GetValue<PhotographerOption, float>(
                 PhotographerOption.PhotoRange));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
