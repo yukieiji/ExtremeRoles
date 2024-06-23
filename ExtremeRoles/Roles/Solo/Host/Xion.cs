@@ -5,6 +5,8 @@ using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Host;
 
 public sealed partial class Xion : SingleRoleBase
@@ -28,7 +30,7 @@ public sealed partial class Xion : SingleRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     { }
 
     public static void XionPlayerToGhostLayer()
@@ -39,7 +41,7 @@ public sealed partial class Xion : SingleRoleBase
             player.gameObject.layer = LayerMask.NameToLayer("Ghost");
         }
     }
-    
+
     public static void RemoveXionPlayerToAllPlayerControl()
     {
         bool isXion(PlayerControl x) => x.PlayerId == PlayerId;
