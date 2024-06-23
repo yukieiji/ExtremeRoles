@@ -9,6 +9,7 @@ using Il2CppUiElementList = Il2CppSystem.Collections.Generic.List<UiElement>;
 using ExtremeRoles.Extension.Option;
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.View;
+using ExtremeRoles.GameMode;
 
 #nullable enable
 
@@ -92,6 +93,15 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		float yPos = initY;
 		foreach (var (catego, groupViewObj) in Enumerable.Zip(this.AllCategory, this.optionGroupViewObject))
 		{
+			if (!(
+					catego.Tab is CustomOption.OptionTab.General ||
+					ExtremeGameModeManager.Instance.RoleSelector.IsValidCategory(catego.Id)
+				))
+			{
+				continue;
+			}
+
+
 			var categoObj = groupViewObj.Category;
 			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
 			categoObj.ReplaceExRText(catego.Name, 20);

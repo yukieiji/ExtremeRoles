@@ -8,7 +8,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.CustomOption.Factories;
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.Factory;
 
@@ -57,7 +56,7 @@ public interface IRoleSelector
 		out var cate) &&
 		cate.GetValue<bool>((int)XionOption.UseXion);
 
-	public bool IsValidRoleOption(IOptionInfo option);
+	public bool IsValidCategory(int categoryId);
 
     public static void CreateRoleGlobalOption()
     {

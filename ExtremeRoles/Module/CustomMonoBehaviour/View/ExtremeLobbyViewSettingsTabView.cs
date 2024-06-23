@@ -10,6 +10,7 @@ using ExtremeRoles.Extension.Option;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.View;
+using ExtremeRoles.GameMode;
 
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
@@ -125,6 +126,14 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 		foreach (var (catego, optionGroupView) in container.Category.Zip(optionGroupViewObject))
 		{
+			if (!(
+					tab is CustomOption.OptionTab.General ||
+					ExtremeGameModeManager.Instance.RoleSelector.IsValidCategory(catego.Id)
+				))
+			{
+				continue;
+			}
+
 			var category = optionGroupView.Category;
 			category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
 			category.ReplaceExRText(catego.Name, 61);
