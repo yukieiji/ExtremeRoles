@@ -69,10 +69,10 @@ public sealed class OptionCategory(
 	public string Name { get; } = name;
 	public bool IsDirty { get; set; } = false;
 
-	private readonly ImmutableDictionary<int, IValueOption<int>> intOpt = option.IntOptions.ToImmutableDictionary();
-	private readonly ImmutableDictionary<int, IValueOption<float>> floatOpt = option.FloatOptions.ToImmutableDictionary();
-	private readonly ImmutableDictionary<int, IValueOption<bool>> boolOpt = option.BoolOptions.ToImmutableDictionary();
-	private readonly ImmutableDictionary<int, IOption> allOpt = option.AllOptions.ToImmutableDictionary();
+	private readonly IReadOnlyDictionary<int, IValueOption<int>> intOpt = option.IntOptions;
+	private readonly IReadOnlyDictionary<int, IValueOption<float>> floatOpt = option.FloatOptions;
+	private readonly IReadOnlyDictionary<int, IValueOption<bool>> boolOpt = option.BoolOptions;
+	private readonly IReadOnlyDictionary<int, IOption> allOpt = option.AllOptions;
 
 	public void AddHudString(in StringBuilder builder)
 	{
