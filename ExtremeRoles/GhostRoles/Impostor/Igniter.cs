@@ -97,10 +97,9 @@ public sealed class Igniter : GhostRoleBase
 
     public override void Initialize()
     {
-        isEffectImp = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(IgniterOption.IsEffectImpostor));
-        isEffectNeut = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(IgniterOption.IsEffectNeutral));
+		var loader = this.Loader;
+        isEffectImp = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectImpostor);
+        isEffectNeut = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectNeutral);
     }
 
     protected override void OnMeetingEndHook()

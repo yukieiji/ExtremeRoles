@@ -112,8 +112,7 @@ public sealed class Poltergeist : GhostRoleBase
 
     public override void Initialize()
     {
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(Option.Range));
+        this.range = this.Loader.GetValue<Option, float>(Option.Range);
     }
 
     protected override void OnMeetingEndHook()

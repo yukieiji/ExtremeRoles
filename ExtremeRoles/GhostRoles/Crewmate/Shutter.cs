@@ -207,11 +207,11 @@ public sealed class Shutter : GhostRoleBase
 
     public override void Initialize()
     {
+		var loader = this.Loader;
+
         this.photoCreater = new GhostPhotoCamera(
-            OptionManager.Instance.GetValue<float>(
-                GetRoleOptionId(ShutterOption.PhotoRange)),
-            OptionManager.Instance.GetValue<int>(
-                GetRoleOptionId(ShutterOption.RightPlayerNameRate)));
+			loader.GetValue<ShutterOption, float>(ShutterOption.PhotoRange),
+			loader.GetValue<ShutterOption, int>(ShutterOption.RightPlayerNameRate));
     }
 
     protected override void OnMeetingEndHook()

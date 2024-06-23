@@ -13,6 +13,8 @@ using ExtremeRoles.Module.CustomOption;
 
 using ExtremeRoles.Module.NewOption;
 using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -30,7 +32,6 @@ public abstract class GhostRoleBase
 	public ExtremeRoleType Team { get; protected set; }
 	public ExtremeGhostRoleId Id { get; protected set; }
 
-	public int OptionIdOffset { get; protected set; }
 	public int GameControlId { get; protected set; }
 
 	public string Name { get; protected set; }
@@ -41,7 +42,22 @@ public abstract class GhostRoleBase
     protected readonly OptionTab Tab = OptionTab.General;
     private int controlId;
 
-    public GhostRoleBase(
+	public IOptionLoader Loader
+	{
+		get
+		{
+			if (!NewOptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
+					out var cate))
+			{
+				throw new ArgumentException("Can't find category");
+			}
+			return cate;
+		}
+	}
+
+	public GhostRoleBase(
         bool hasTask,
         ExtremeRoleType team,
         ExtremeGhostRoleId id,
@@ -101,14 +117,6 @@ public abstract class GhostRoleBase
     {
         CreateSpecificOption(factory);
     }
-
-    public int GetRoleOptionId<T>(T option) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-        return GetRoleOptionId(Convert.ToInt32(option));
-    }
-
-    public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
 
     public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
 
@@ -189,32 +197,29 @@ public abstract class GhostRoleBase
     {
         if (this.Button == null) { return; }
 
-        var allOps = OptionManager.Instance;
+        var loader = this.Loader;
         this.Button.Behavior.SetCoolTime(
-            allOps.GetValue<float>(this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
+            loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
-        if (allOps.TryGet<float>(
-                this.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityActiveTime), out var activeTimeOtion) &&
+        if (loader.TryGetValueOption<RoleAbilityCommonOption, float>(
+                RoleAbilityCommonOption.AbilityActiveTime, out var activeTimeOtion) &&
 			activeTimeOtion is not null)
         {
-            this.Button.Behavior.SetActiveTime(activeTimeOtion.GetValue());
+            this.Button.Behavior.SetActiveTime(activeTimeOtion.Value);
         }
 
         if (this.Button.Behavior is AbilityCountBehavior behavior &&
-            allOps.TryGet<int>(
-                this.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount),
+            loader.TryGetValueOption<RoleAbilityCommonOption, int>(
+                RoleAbilityCommonOption.AbilityCount,
                 out var countOption) &&
 			countOption is not null)
         {
-            behavior.SetAbilityCount(countOption.GetValue());
+            behavior.SetAbilityCount(countOption.Value);
         }
         this.Button.OnMeetingEnd();
     }
 
-    protected bool isReportAbility() => OptionManager.Instance.GetValue<bool>(
-        this.GetRoleOptionId(GhostRoleOption.IsReportAbility));
+    protected bool isReportAbility() => this.Loader.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility);
 
     private OptionFactory createOptionFactory()
     {
