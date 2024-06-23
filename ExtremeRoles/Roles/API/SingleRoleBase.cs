@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 using ExtremeRoles.Module.CustomOption;
 using AmongUs.GameOptions;
+
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -36,14 +40,29 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public float KillCoolTime = 0f;
     public int KillRange = 1;
 
-    public ExtremeRoleId Id;
-    public ExtremeRoleType Team;
+    public readonly ExtremeRoleId Id;
+	public ExtremeRoleType Team;
 
     protected Color NameColor;
 
-    protected string RawRoleName;
+    protected readonly string RawRoleName;
 
-    public SingleRoleBase()
+	protected override OptionCategory Category
+	{
+		get
+		{
+			if (!NewOptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeRoleManager.GetRoleGroupId(this.Id),
+					out var cate))
+			{
+				throw new ArgumentException("Can't find category");
+			}
+			return cate;
+		}
+	}
+
+	public SingleRoleBase()
     { }
     public SingleRoleBase(
         ExtremeRoleId id,
@@ -120,7 +139,8 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     protected override void CommonInit()
     {
         var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
-        var allOption = OptionManager.Instance;
+
+		var cate = this.Category;
 
         this.Vision = this.IsImpostor() ?
             baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) :
@@ -132,33 +152,33 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         this.IsApplyEnvironmentVision = !this.IsImpostor();
 
 
-        this.HasOtherVision = allOption.GetValue<bool>(
-            GetRoleOptionId(RoleCommonOption.HasOtherVision));
+        this.HasOtherVision = cate.GetValue<RoleCommonOption, bool>(
+			RoleCommonOption.HasOtherVision);
         if (this.HasOtherVision)
         {
-            this.Vision = allOption.GetValue<float>(
-                GetRoleOptionId(RoleCommonOption.Vision));
-            this.IsApplyEnvironmentVision = allOption.GetValue<bool>(
-                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect));
+            this.Vision = cate.GetValue<RoleCommonOption, float>(
+				RoleCommonOption.Vision);
+            this.IsApplyEnvironmentVision = cate.GetValue<RoleCommonOption, bool>(
+                RoleCommonOption.ApplyEnvironmentVisionEffect);
         }
 
         if (this.CanKill)
         {
-            this.HasOtherKillCool = allOption.GetValue<bool>(
-                GetRoleOptionId(KillerCommonOption.HasOtherKillCool));
+            this.HasOtherKillCool = cate.GetValue<KillerCommonOption, bool>(
+                KillerCommonOption.HasOtherKillCool);
             if (this.HasOtherKillCool)
             {
-                this.KillCoolTime = allOption.GetValue<float>(
-                    GetRoleOptionId(KillerCommonOption.KillCoolDown));
+                this.KillCoolTime = cate.GetValue<KillerCommonOption, float>(
+                    KillerCommonOption.KillCoolDown);
             }
 
-            this.HasOtherKillRange = allOption.GetValue<bool>(
-                GetRoleOptionId(KillerCommonOption.HasOtherKillRange));
+            this.HasOtherKillRange = cate.GetValue<KillerCommonOption, bool>(
+				KillerCommonOption.HasOtherKillRange);
 
             if (this.HasOtherKillRange)
             {
-                this.KillRange = allOption.GetValue<int>(
-                    GetRoleOptionId(KillerCommonOption.KillRange));
+                this.KillRange = cate.GetValue<KillerCommonOption, int>(
+					KillerCommonOption.KillRange);
             }
         }
     }

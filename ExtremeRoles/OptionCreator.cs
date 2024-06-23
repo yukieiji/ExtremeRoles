@@ -12,10 +12,6 @@ namespace ExtremeRoles;
 public static class OptionCreator
 {
 	public const int IntegrateOptionStartOffset = 15000;
-
-	private const int singleRoleOptionStartOffset = 256;
-    private const int combRoleOptionStartOffset = 5000;
-    private const int ghostRoleOptionStartOffset = 10000;
     private const int maxPresetNum = 20;
 
     public static readonly string[] SpawnRate = [
@@ -82,14 +78,9 @@ public static class OptionCreator
         IRoleSelector.CreateRoleGlobalOption();
         IShipGlobalOption.Create();
 
-        Roles.ExtremeRoleManager.CreateNormalRoleOptions(
-            singleRoleOptionStartOffset);
-
-        Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
-            combRoleOptionStartOffset);
-
-        GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
-            ghostRoleOptionStartOffset);
+        Roles.ExtremeRoleManager.CreateNormalRoleOptions();
+        Roles.ExtremeRoleManager.CreateCombinationRoleOptions();
+        GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption();
 
 
 		CompatModManager.Instance.CreateIntegrateOption(IntegrateOptionStartOffset);

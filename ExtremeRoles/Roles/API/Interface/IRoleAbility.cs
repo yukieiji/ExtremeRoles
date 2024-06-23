@@ -84,7 +84,7 @@ public static class IRoleAbilityMixin
 
 	public static void CreateCommonAbilityOption(
 		this IRoleAbility self,
-		IOptionInfo parentOps,
+		AutoParentSetOptionCategoryFactory factory,
 		float defaultActiveTime = float.MaxValue)
 	{
 
@@ -118,7 +118,7 @@ public static class IRoleAbilityMixin
 
 	public static void CreateAbilityCountOption(
 		this IRoleAbility self,
-		IOptionInfo parentOps,
+		AutoParentSetOptionCategoryFactory factory,
 		int defaultAbilityCount,
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue,

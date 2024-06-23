@@ -338,40 +338,19 @@ public static class ExtremeRoleManager
 	public static int GetCombRoleGroupId(CombinationRoleType roleId)
 		=> conbRoleIdOffset + (int)roleId;
 
-	public static void CreateCombinationRoleOptions(
-        int optionIdOffsetChord)
+	public static void CreateCombinationRoleOptions()
     {
-
-        if (CombRole.Count == 0) { return; };
-
-        IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
-
-        int roleOptionOffset = optionIdOffsetChord;
-
-        foreach (var item
-         in roles.Select((Value, Index) => new { Value, Index }))
+        foreach (var role in CombRole.Values)
         {
-            roleOptionOffset = roleOptionOffset + (
-                OptionOffsetPerRole * (item.Index + item.Value.Roles.Count + 1));
-            item.Value.CreateRoleAllOption(roleOptionOffset);
+			role.CreateRoleAllOption();
         }
     }
 
-    public static void CreateNormalRoleOptions(
-        int optionIdOffsetChord)
+    public static void CreateNormalRoleOptions()
     {
-
-        if (NormalRole.Count == 0) { return; };
-
-        IEnumerable<SingleRoleBase> roles = NormalRole.Values;
-
-        int roleOptionOffset = 0;
-
-        foreach (var item in roles.Select(
-            (Value, Index) => new { Value, Index }))
+        foreach (var role in NormalRole.Values)
         {
-            roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
-            item.Value.CreateRoleAllOption(roleOptionOffset);
+			role.CreateRoleAllOption();
         }
     }
 

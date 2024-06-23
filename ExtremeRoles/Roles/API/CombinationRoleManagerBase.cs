@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -17,16 +20,35 @@ public enum CombinationRoleCommonOption
 
 public abstract class CombinationRoleManagerBase : RoleOptionBase
 {
-    public List<MultiAssignRoleBase> Roles = new List<MultiAssignRoleBase>();
+	public List<MultiAssignRoleBase> Roles = new List<MultiAssignRoleBase>();
 
-    protected Color OptionColor;
-    protected string RoleName = "";
+	protected readonly Color OptionColor;
+	protected readonly string RoleName = "";
+	protected readonly CombinationRoleType RoleType;
+
+	protected sealed override OptionCategory Category
+	{
+		get
+		{
+			if (!NewOptionManager.Instance.TryGetCategory(
+					OptionTab.General,
+					ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
+					out var cate))
+			{
+				throw new ArgumentException("Can't find category");
+			}
+			return cate;
+		}
+	}
+
     internal CombinationRoleManagerBase(
+		CombinationRoleType type,
         string roleName,
         Color optionColor)
     {
         this.OptionColor = optionColor;
         this.RoleName = roleName;
+		this.RoleType = type;
     }
 
     public abstract string GetOptionName();
@@ -36,14 +58,14 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
         int roleId, RoleTypes playerRoleType);
 
     protected override void CreateKillerOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix)
     {
         // 複数ロールの中に殺戮者がいる可能性がため、管理ロールで殺戮者の設定はしない
         return;
     }
 
     protected override void CreateVisionOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix)
     {
         // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
         return;

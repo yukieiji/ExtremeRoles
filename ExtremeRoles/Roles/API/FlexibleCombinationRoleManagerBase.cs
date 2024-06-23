@@ -2,6 +2,8 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -13,10 +15,11 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     private bool canAssignImposter = true;
 
     public FlexibleCombinationRoleManagerBase(
+		CombinationRoleType roleType,
         MultiAssignRoleBase role,
         int minimumRoleNum = 2,
         bool canAssignImposter = true) :
-            base(role.Id.ToString(), role.GetNameColor(true))
+            base(roleType, role.Id.ToString(), role.GetNameColor(true))
     {
         this.BaseRole = role;
         this.minimumRoleNum = minimumRoleNum;
@@ -28,33 +31,29 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
             this.OptionColor,
             Translation.GetString(this.RoleName));
 
-    public int GetOptionIdOffset() => this.OptionIdOffset;
-
     public string GetBaseRoleFullDescription() =>
         Translation.GetString($"{BaseRole.Id}FullDescription");
 
     public override void AssignSetUpInit(int curImpNum)
     {
+		var cate = this.Category;
 
-        var allOption = OptionManager.Instance;
-
-        foreach (var role in this.Roles)
+		foreach (var role in this.Roles)
         {
-            role.CanHasAnotherRole = allOption.GetValue<bool>(
-                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
+            role.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
+				CombinationRoleCommonOption.IsMultiAssign);
 
-            if (!allOption.TryGet<bool>(
-                    GetRoleOptionId(
-                        CombinationRoleCommonOption.IsAssignImposter),
+			if (!cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
+                   CombinationRoleCommonOption.IsAssignImposter,
                     out var impOpt)) { continue; }
 
-            bool isEvil = impOpt.GetValue();
+            bool isEvil = impOpt.Value;
 
-            var spawnOption = allOption.Get<int>(
-                GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate));
+            var spawnOption = cate.GetValueOption<CombinationRoleCommonOption, int>(
+                CombinationRoleCommonOption.ImposterSelectedRate);
             isEvil = isEvil &&
                 (UnityEngine.Random.RandomRange(0, 110) < (int)decimal.Multiply(
-                    spawnOption.GetValue(), spawnOption.ValueCount)) &&
+                    spawnOption.Value, spawnOption.Range)) &&
                 curImpNum < GameOptionsManager.Instance.CurrentGameOptions.GetInt(
                     Int32OptionNames.NumImpostors);
 
@@ -88,10 +87,10 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
         if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
 
-        this.BaseRole.CanHasAnotherRole = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
+		this.BaseRole.CanHasAnotherRole = this.Category.GetValue<CombinationRoleCommonOption, bool>(
+			CombinationRoleCommonOption.IsMultiAssign);
 
-        role = (MultiAssignRoleBase)this.BaseRole.Clone();
+		role = (MultiAssignRoleBase)this.BaseRole.Clone();
 
         switch (playerRoleType)
         {
@@ -112,112 +111,87 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
     }
 
-    protected override IOptionInfo CreateSpawnOption()
+    protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-        // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
-        var roleSetOption = new SelectionCustomOption(
-            GetRoleOptionId(RoleCommonOption.SpawnRate),
-            Design.ColoedString(
-                this.OptionColor,
-                string.Concat(
-                    this.RoleName,
-                    RoleCommonOption.SpawnRate.ToString())),
-            OptionCreator.SpawnRate, null, true,
-            tab: OptionTab.Combination);
+		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
+			this.RoleName,
+			OptionTab.Combination);
+		var roleSetOption = factory.CreateSelectionOption(
+			RoleCommonOption.SpawnRate,
+			OptionCreator.SpawnRate,
+			ignorePrefix: true);
 
-        int roleAssignNum = this.BaseRole.IsImpostor() ?
-            GameSystem.MaxImposterNum :
-            GameSystem.VanillaMaxPlayerNum - 1;
+		int maxSetNum = this.BaseRole.IsImpostor() ?
+			GameSystem.MaxImposterNum :
+			(GameSystem.VanillaMaxPlayerNum - 1);
 
-        var roleAssignNumOption = new IntCustomOption(
-            GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
-            string.Concat(
-                this.RoleName,
-                CombinationRoleCommonOption.AssignsNum.ToString()),
-            this.minimumRoleNum, this.minimumRoleNum,
-            roleAssignNum, 1,
-            roleSetOption, isHidden: this.minimumRoleNum <= 1,
-            tab: OptionTab.Combination);
+		var roleSetNumOption = factory.CreateIntOption(
+			RoleCommonOption.RoleNum,
+			1, 1, maxSetNum, 1,
+			ignorePrefix: true);
 
+		int roleAssignNum = this.BaseRole.IsImpostor() ?
+			GameSystem.MaxImposterNum :
+			GameSystem.VanillaMaxPlayerNum - 1;
+		var roleAssignNumOption = factory.CreateIntOption(
+			CombinationRoleCommonOption.AssignsNum,
+			this.minimumRoleNum, this.minimumRoleNum,
+			roleAssignNum, 1,
+			isHidden: this.minimumRoleNum <= 1,
+			ignorePrefix: true);
 
-        int maxSetNum = this.BaseRole.IsImpostor() ?
-            GameSystem.MaxImposterNum:
-            (GameSystem.VanillaMaxPlayerNum - 1);
+		factory.CreateBoolOption(
+			CombinationRoleCommonOption.IsMultiAssign, false,
+			ignorePrefix: true);
 
-        var roleSetNumOption = new IntCustomOption(
-            GetRoleOptionId(RoleCommonOption.RoleNum),
-            string.Concat(
-                this.RoleName,
-                RoleCommonOption.RoleNum.ToString()),
-            1, 1, maxSetNum, 1,
-            roleSetOption,
-            tab: OptionTab.Combination);
+		roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
-        roleAssignNumOption.SetUpdateOption(roleSetNumOption);
-
-        new IntCustomOption(
-            GetRoleOptionId(RoleCommonOption.AssignWeight),
-			$"|{this.RoleName}|{RoleCommonOption.AssignWeight}",
-			500, 1, 1000, 1,
-            roleSetOption,
-			tab: OptionTab.Combination);
+		factory.CreateIntOption(RoleCommonOption.AssignWeight,
+			500, 1, 1000, 1, ignorePrefix: true);
 
         if (this.canAssignImposter)
         {
-            var isImposterAssignOps = new BoolCustomOption(
-                GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter),
-                string.Concat(
-                    this.RoleName,
-                    CombinationRoleCommonOption.IsAssignImposter.ToString()),
-                false, roleSetOption,
-            tab: OptionTab.Combination);
+			var isImposterAssignOps = factory.CreateBoolOption(
+				CombinationRoleCommonOption.IsAssignImposter,
+				false, ignorePrefix: true);
 
-            new SelectionCustomOption(
-                GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
-                string.Concat(
-                    this.RoleName,
-                    CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
-                OptionCreator.SpawnRate, isImposterAssignOps,
-            tab: OptionTab.Combination);
+			factory.CreateSelectionOption(
+				CombinationRoleCommonOption.ImposterSelectedRate,
+				OptionCreator.SpawnRate, isImposterAssignOps,
+				ignorePrefix: true);
         }
 
-        new BoolCustomOption(
-            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
-            string.Concat(
-                this.RoleName,
-                CombinationRoleCommonOption.IsMultiAssign.ToString()),
-            false, roleSetOption,
-            isHidden: this.minimumRoleNum <= 1,
-            tab: OptionTab.Combination);
+		factory.CreateBoolOption(
+			CombinationRoleCommonOption.IsMultiAssign, false,
+			isHidden: this.minimumRoleNum <= 1,
+			ignorePrefix: true);
 
-        return roleSetOption;
+        return factory;
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-
-        int optionOffset = this.OptionIdOffset + ExtremeRoleManager.OptionOffsetPerRole;
-        this.BaseRole.SetManagerOptionOffset(this.OptionIdOffset);
         this.BaseRole.CreateRoleSpecificOption(
-            parentOps,
-            optionOffset);
+            factory);
     }
 
     protected override void CommonInit()
     {
         this.Roles.Clear();
         int roleAssignNum = 1;
-        var allOptions = OptionManager.Instance;
 
-        this.BaseRole.CanHasAnotherRole = allOptions.GetValue<bool>(
-            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
+		var cate = this.Category;
 
-        if (allOptions.TryGet<int>(
-                GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
+        this.BaseRole.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
+			CombinationRoleCommonOption.IsMultiAssign);
+
+		if (cate.TryGetValueOption<CombinationRoleCommonOption, int>(
+				CombinationRoleCommonOption.AssignsNum,
                 out var opt))
         {
-            roleAssignNum = opt.GetValue();
+            roleAssignNum = opt.Value;
         }
 
         for (int i = 0; i < roleAssignNum; ++i)

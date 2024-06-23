@@ -7,6 +7,8 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -21,10 +23,11 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
             RoleCommonOption.SpawnRate.ToString()));
 
     public ConstCombinationRoleManagerBase(
-        string roleName,
+		CombinationRoleType type,
+		string roleName,
         Color optionColor,
         int setPlayerNum,
-        int maxSetNum = int.MaxValue) : base (roleName, optionColor)
+        int maxSetNum = int.MaxValue) : base (type, roleName, optionColor)
     {
         this.setPlayerNum = setPlayerNum;
         this.maxSetNum = maxSetNum;
@@ -41,16 +44,16 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     public override MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType)
     {
-
-        foreach(var checkRole in this.Roles)
+		var cate = this.Category;
+		foreach (var checkRole in this.Roles)
         {
 
             if (checkRole.Id != (ExtremeRoleId)roleId) { continue; }
 
-            checkRole.CanHasAnotherRole = OptionManager.Instance.GetValue<bool>(
-                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
+            checkRole.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
+				CombinationRoleCommonOption.IsMultiAssign);
 
-            switch (checkRole.Team)
+			switch (checkRole.Team)
             {
                 case ExtremeRoleType.Crewmate:
                 case ExtremeRoleType.Neutral:
@@ -75,68 +78,59 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 
     }
 
-    protected override IOptionInfo CreateSpawnOption()
+    protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-        // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
-        var roleSetOption = new SelectionCustomOption(
-            GetRoleOptionId(RoleCommonOption.SpawnRate),
-            this.optionKey,
-            OptionCreator.SpawnRate, null, true,
-            tab: OptionTab.Combination);
+		// ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
+
+		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
+			this.RoleName,
+			OptionTab.Combination);
+
+        var roleSetOption = factory.CreateSelectionOption(
+			RoleCommonOption.SpawnRate,
+            OptionCreator.SpawnRate,
+			ignorePrefix: true);
 
         int thisMaxRoleNum =
             this.maxSetNum == int.MaxValue ?
             (int)Math.Floor((decimal)GameSystem.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
 
-        new IntCustomOption(
-            GetRoleOptionId(RoleCommonOption.RoleNum),
-            string.Concat(
-                this.RoleName,
-                RoleCommonOption.RoleNum.ToString()),
+		factory.CreateIntOption(
+			RoleCommonOption.RoleNum,
             1, 1, thisMaxRoleNum, 1,
-            roleSetOption,
-            tab: OptionTab.Combination);
-        new BoolCustomOption(
-            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
-            string.Concat(
-                this.RoleName,
-                CombinationRoleCommonOption.IsMultiAssign.ToString()),
-            false, roleSetOption,
-            tab: OptionTab.Combination);
+			ignorePrefix: true);
 
-		new IntCustomOption(
-            GetRoleOptionId(RoleCommonOption.AssignWeight),
-			$"|{this.RoleName}|{RoleCommonOption.AssignWeight}",
-			500, 1, 1000, 1,
-            roleSetOption,
-            tab: OptionTab.Combination);
+		factory.CreateBoolOption(
+			CombinationRoleCommonOption.IsMultiAssign, false,
+			ignorePrefix: true);
 
-        return roleSetOption;
+		factory.CreateIntOption(RoleCommonOption.AssignWeight,
+			500, 1, 1000, 1, ignorePrefix: true);
+
+        return factory;
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
         IEnumerable<MultiAssignRoleBase> collection = Roles;
 
         foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
-            int optionOffset = this.OptionIdOffset + (
-                ExtremeRoleManager.OptionOffsetPerRole * (item.Index + 1));
-            item.Value.SetManagerOptionOffset(this.OptionIdOffset);
-            item.Value.CreateRoleSpecificOption(
-                parentOps,
-                optionOffset);
+            item.Value.CreateRoleSpecificOption(factory);
         }
     }
 
     protected override void CommonInit()
     {
+		var cate = this.Category;
         foreach (var role in this.Roles)
         {
-            role.CanHasAnotherRole = OptionManager.Instance.GetValue<bool>(
-                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
+            role.CanHasAnotherRole =
+				cate.GetValue<CombinationRoleCommonOption, bool>(
+					CombinationRoleCommonOption.IsMultiAssign);
             role.Initialize();
         }
     }

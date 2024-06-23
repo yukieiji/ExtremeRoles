@@ -1,5 +1,7 @@
 ﻿using System;
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
 using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
@@ -31,21 +33,11 @@ public enum KillerCommonOption
 
 public abstract class RoleOptionBase
 {
-
     public bool CanKill = false;
-    protected int OptionIdOffset = 0;
 
-    public int GetRoleOptionId<T>(T option) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-        return GetRoleOptionId(Convert.ToInt32(option));
-    }
+	protected abstract OptionCategory Category { get; }
 
-    public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
-
-    public int GetRoleOptionOffset() => this.OptionIdOffset;
-
-    public void Initialize()
+	public void Initialize()
     {
         CommonInit();
         RoleSpecificInit();
@@ -57,42 +49,38 @@ public abstract class RoleOptionBase
 		}
     }
 
-    public void CreateRoleAllOption(
-        int optionIdOffset)
+    public void CreateRoleAllOption()
     {
-        this.OptionIdOffset = optionIdOffset;
-        var parentOps = CreateSpawnOption();
-        CreateVisionOption(parentOps);
+        var factory = CreateSpawnOption();
+        CreateVisionOption(factory);
 
         if (this.CanKill)
         {
-            CreateKillerOption(parentOps);
+            CreateKillerOption(factory);
         }
 
-        CreateSpecificOption(parentOps);
+        CreateSpecificOption(factory);
     }
     public void CreateRoleSpecificOption(
-        IOptionInfo parentOps,
-        int optionIdOffset)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.OptionIdOffset = optionIdOffset;
-        CreateVisionOption(parentOps);
+        CreateVisionOption(factory);
 
         if (this.CanKill)
         {
-            CreateKillerOption(parentOps);
+            CreateKillerOption(factory);
         }
 
-        CreateSpecificOption(parentOps);
+        CreateSpecificOption(factory);
     }
     protected abstract void CreateKillerOption(
-        IOptionInfo parentOps);
-    protected abstract IOptionInfo CreateSpawnOption();
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
+    protected abstract AutoParentSetOptionCategoryFactory CreateSpawnOption();
 
     protected abstract void CreateSpecificOption(
-        IOptionInfo parentOps);
+        AutoParentSetOptionCategoryFactory factory);
     protected abstract void CreateVisionOption(
-        IOptionInfo parentOps);
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true);
 
     protected abstract void CommonInit();
 

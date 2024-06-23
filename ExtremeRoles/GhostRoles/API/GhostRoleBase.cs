@@ -11,7 +11,8 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using ExtremeRoles.Module.NewOption;
+using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -89,17 +90,15 @@ public abstract class GhostRoleBase
         return copy;
     }
 
-    public void CreateRoleAllOption(int optionIdOffset)
+    public void CreateRoleAllOption()
     {
-        this.OptionIdOffset = optionIdOffset;
-        var parentOps = createOptionFactory(optionIdOffset);
+        var parentOps = createOptionFactory();
         CreateSpecificOption(parentOps);
     }
 
     public void CreateRoleSpecificOption(
-		OptionFactory factory, int optionIdOffset)
+		OptionFactory factory)
     {
-        this.OptionIdOffset = optionIdOffset;
         CreateSpecificOption(factory);
     }
 
@@ -217,19 +216,24 @@ public abstract class GhostRoleBase
     protected bool isReportAbility() => OptionManager.Instance.GetValue<bool>(
         this.GetRoleOptionId(GhostRoleOption.IsReportAbility));
 
-    private OptionFactory createOptionFactory(int offset)
+    private OptionFactory createOptionFactory()
     {
-		var factory = new OptionFactory(offset, this.Name, this.tab);
+		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
+			this.Name,
+			this.tab);
 		factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
 			OptionCreator.SpawnRate, null, true,
-			color: this.Color);
+			color: this.Color,
+			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
 		factory.CreateIntOption(
             RoleCommonOption.RoleNum,
-            1, 1, spawnNum, 1);
+            1, 1, spawnNum, 1,
+			ignorePrefix: true);
 
 		factory.CreateIntOption(RoleCommonOption.AssignWeight, 500, 1, 1000, 1, ignorePrefix: true);
 

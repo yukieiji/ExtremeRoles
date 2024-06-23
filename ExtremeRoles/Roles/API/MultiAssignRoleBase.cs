@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.NewOption;
 
 
 namespace ExtremeRoles.Roles.API;
@@ -15,9 +16,10 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 
     public SingleRoleBase AnotherRole = null;
     public bool CanHasAnotherRole = false;
-    protected int ManagerOptionOffset = 0;
 
-    public MultiAssignRoleBase(
+	protected override OptionCategory Category => throw new NotImplementedException();
+
+	public MultiAssignRoleBase(
         ExtremeRoleId id,
         ExtremeRoleType team,
         string roleName,
@@ -175,25 +177,10 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
     }
 
-    public virtual void OverrideAnotherRoleSetting()
-    {
-        return;
-    }
-    public int GetManagerOptionId<T>(T option) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return GetManagerOptionId(Convert.ToInt32(option));
-    }
-
-    public int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
-
-    public void SetManagerOptionOffset(int offset)
-    {
-        this.ManagerOptionOffset = offset;
-    }
-
-    public int GetManagerOptionOffset() => this.ManagerOptionOffset;
+	public virtual void OverrideAnotherRoleSetting()
+	{
+		return;
+	}
 
     protected string CreateImpCrewPrefix() => this.IsImpostor() ? "Evil" : "Nice";
 }

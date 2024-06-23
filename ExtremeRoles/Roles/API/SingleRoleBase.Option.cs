@@ -1,230 +1,81 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using ExtremeRoles.Module.CustomOption;
+﻿using ExtremeRoles.Module.CustomOption;
+
+using ExtremeRoles.Module.NewOption.Factory;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles.Roles.API;
 
 public abstract partial class SingleRoleBase
 {
     protected sealed override void CreateKillerOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
-        var killCoolOption = CreateBoolOption(
+        var killCoolOption = factory.CreateBoolOption(
             KillerCommonOption.HasOtherKillCool,
-            false, parentOps);
-        CreateFloatOption(
+            false, ignorePrefix: ignorePrefix);
+		factory.CreateFloatOption(
             KillerCommonOption.KillCoolDown,
             30f, 1.0f, 120f, 0.5f,
-            killCoolOption, format: OptionUnit.Second);
+            killCoolOption, format: OptionUnit.Second,
+			ignorePrefix: ignorePrefix);
 
-        var killRangeOption = CreateBoolOption(
+        var killRangeOption = factory.CreateBoolOption(
             KillerCommonOption.HasOtherKillRange,
-            false, parentOps);
-        CreateSelectionOption(
+            false,
+			ignorePrefix: ignorePrefix);
+		factory.CreateSelectionOption(
             KillerCommonOption.KillRange,
             OptionCreator.Range,
-            killRangeOption);
+            killRangeOption,
+			ignorePrefix: ignorePrefix);
     }
-    protected sealed override IOptionInfo CreateSpawnOption()
+    protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-        var roleSetOption = CreateSelectionOption(
+		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+			ExtremeRoleManager.GetRoleGroupId(this.Id),
+			this.RawRoleName,
+			this.Tab);
+
+		var roleSetOption = factory.CreateSelectionOption(
             RoleCommonOption.SpawnRate,
-            OptionCreator.SpawnRate, null, true,
-            colored: true);
+            OptionCreator.SpawnRate,
+			format: OptionUnit.Percentage,
+			color: this.NameColor,
+			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ?
             GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
-        CreateIntOption(
+		factory.CreateIntOption(
             RoleCommonOption.RoleNum,
-            1, 1, spawnNum, 1, roleSetOption);
+            1, 1, spawnNum, 1, roleSetOption,
+			ignorePrefix: true);
 
-		new IntCustomOption(
-			GetRoleOptionId(RoleCommonOption.AssignWeight),
-			$"|{this.RawRoleName}|{RoleCommonOption.AssignWeight}",
+		factory.CreateIntOption(
+			RoleCommonOption.AssignWeight,
 			500, 1, 1000, 1,
-			roleSetOption,
-			tab: this.Tab);
+			ignorePrefix: true);
 
-        return roleSetOption;
+        return factory;
     }
 
     protected sealed override void CreateVisionOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
-        var visionOption = CreateBoolOption(
+        var visionOption = factory.CreateBoolOption(
             RoleCommonOption.HasOtherVision,
-            false, parentOps);
-        CreateFloatOption(RoleCommonOption.Vision,
+            false,
+			ignorePrefix: ignorePrefix);
+		factory.CreateFloatOption(RoleCommonOption.Vision,
             2f, 0.25f, 5.0f, 0.25f,
-            visionOption, format: OptionUnit.Multiplier);
+            visionOption, format: OptionUnit.Multiplier,
+			ignorePrefix: ignorePrefix);
 
-        CreateBoolOption(
+		factory.CreateBoolOption(
             RoleCommonOption.ApplyEnvironmentVisionEffect,
-            this.IsCrewmate(), visionOption);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected FloatCustomOption CreateFloatOption<T>(
-        T option,
-        float defaultValue,
-        float min, float max, float step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new FloatCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, max, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption, this.Tab);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected FloatDynamicCustomOption CreateFloatDynamicOption<T>(
-        T option,
-        float defaultValue,
-        float min, float step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false,
-        float tempMaxValue = 0.0f) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new FloatDynamicCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            this.Tab, tempMaxValue);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected IntCustomOption CreateIntOption<T>(
-        T option,
-        int defaultValue,
-        int min, int max, int step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new IntCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, max, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption, this.Tab);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected IntDynamicCustomOption CreateIntDynamicOption<T>(
-        T option,
-        int defaultValue,
-        int min, int step,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false,
-        int tempMaxValue = 0) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new IntDynamicCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            min, step,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption,
-            this.Tab, tempMaxValue);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected BoolCustomOption CreateBoolOption<T>(
-        T option,
-        bool defaultValue,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new BoolCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            defaultValue,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption, this.Tab);
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected SelectionCustomOption CreateSelectionOption<T>(
-        T option,
-        string[] selections,
-        IOptionInfo parent = null,
-        bool isHeader = false,
-        bool isHidden = false,
-        OptionUnit format = OptionUnit.None,
-        bool invert = false,
-        IOptionInfo enableCheckOption = null,
-        bool colored = false) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return new SelectionCustomOption(
-            GetRoleOptionId(option),
-            createAutoOptionString(option, colored),
-            selections,
-            parent, isHeader, isHidden,
-            format, invert, enableCheckOption, this.Tab);
-    }
-
-    private string createAutoOptionString<T>(
-        T option, bool colored) where T : struct, IConvertible
-    {
-        if (!colored)
-        {
-            return string.Concat(
-                this.RawRoleName, option.ToString());
-        }
-        else
-        {
-            return Design.ColoedString(
-                this.NameColor,
-                string.Concat(
-                    this.RawRoleName,
-                    RoleCommonOption.SpawnRate.ToString()));
-        }
+            this.IsCrewmate(), visionOption,
+			ignorePrefix: ignorePrefix);
     }
 }
