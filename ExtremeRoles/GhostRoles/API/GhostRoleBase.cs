@@ -38,7 +38,7 @@ public abstract class GhostRoleBase
 
 	public Module.ExtremeAbilityButton? Button { get; protected set; }
 
-    private OptionTab tab = OptionTab.General;
+    protected readonly OptionTab Tab = OptionTab.General;
     private int controlId;
 
     public GhostRoleBase(
@@ -60,19 +60,19 @@ public abstract class GhostRoleBase
             switch (team)
             {
                 case ExtremeRoleType.Crewmate:
-                    this.tab = OptionTab.GhostCrewmate;
+                    this.Tab = OptionTab.GhostCrewmate;
                     break;
                 case ExtremeRoleType.Impostor:
-                    this.tab = OptionTab.GhostImpostor;
+                    this.Tab = OptionTab.GhostImpostor;
                     break;
                 case ExtremeRoleType.Neutral:
-                    this.tab = OptionTab.GhostNeutral;
+                    this.Tab = OptionTab.GhostNeutral;
                     break;
             }
         }
         else
         {
-            this.tab = tab;
+            this.Tab = tab;
         }
     }
 
@@ -221,7 +221,7 @@ public abstract class GhostRoleBase
 		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
 			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
 			this.Name,
-			this.tab);
+			this.Tab);
 		factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
 			OptionCreator.SpawnRate, null, true,

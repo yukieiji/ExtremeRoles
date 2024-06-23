@@ -52,7 +52,7 @@ public enum AbilityType : byte
 public static class ExtremeGhostRoleManager
 {
     private const int ghostRoleOptionId = 25;
-    private const int idOffset = 128;
+    public const int IdOffset = 512;
 
     public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
 
@@ -84,7 +84,7 @@ public static class ExtremeGhostRoleManager
     {
         RoleTypes roleType = player.Data.Role.Role;
         SingleRoleBase baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
-        int controlId = baseRole.GameControlId + idOffset;
+        int controlId = baseRole.GameControlId + IdOffset;
 
         if (vanillaGhostRole.Contains(roleType))
         {

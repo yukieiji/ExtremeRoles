@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption.Factories;
+using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -16,7 +16,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         RoleTypes vanillaRoleId) : base(
             true, Roles.API.ExtremeRoleType.Crewmate,
             ExtremeGhostRoleId.VanillaRole,
-            "", UnityEngine.Color.white)
+            "", Color.white)
     {
         this.vanillaRoleId = vanillaRoleId;
         this.Name = vanillaRoleId.ToString();
@@ -83,7 +83,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(AutoParentSetFactory factory)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }

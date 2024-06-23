@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;
 
 #nullable enable
 

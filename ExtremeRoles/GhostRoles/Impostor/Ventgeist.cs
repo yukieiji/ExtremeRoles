@@ -13,7 +13,7 @@ using ExtremeRoles.Module.CustomOption;
 
 #nullable enable
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.VentModule;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
