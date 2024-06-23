@@ -17,8 +17,8 @@ public enum ExtremeRoleType : int
 }
 public enum RoleCommonOption
 {
-    RoleNum = 20,
-    SpawnRate,
+	SpawnRate = 20,
+	RoleNum,
     AssignWeight,
     HasOtherVision,
     Vision,
@@ -52,7 +52,7 @@ public abstract class RoleOptionBase
 
     public void CreateRoleAllOption()
     {
-        var factory = CreateSpawnOption();
+        using var factory = CreateSpawnOption();
         CreateVisionOption(factory);
 
         if (this.CanKill)

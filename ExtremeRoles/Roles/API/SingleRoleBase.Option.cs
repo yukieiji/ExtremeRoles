@@ -37,7 +37,7 @@ public abstract partial class SingleRoleBase
     }
     protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+		var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(this.Id),
 			Design.ColoedString(this.NameColor, this.RawRoleName),
 			this.Tab);
@@ -46,7 +46,6 @@ public abstract partial class SingleRoleBase
             RoleCommonOption.SpawnRate,
             OptionCreator.SpawnRate,
 			format: OptionUnit.Percentage,
-			color: this.NameColor,
 			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ?
@@ -54,7 +53,7 @@ public abstract partial class SingleRoleBase
 
 		factory.CreateIntOption(
             RoleCommonOption.RoleNum,
-            1, 1, spawnNum, 1, roleSetOption,
+            1, 1, spawnNum, 1,
 			ignorePrefix: true);
 
 		factory.CreateIntOption(
