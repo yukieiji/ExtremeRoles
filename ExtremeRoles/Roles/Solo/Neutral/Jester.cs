@@ -157,19 +157,19 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             JesterOption.OutburstDistance,
             1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            );
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             JesterOption.UseSabotage,
-            true, parentOps);
+            true);
 
-        this.CreateAbilityCountOption(
-            parentOps, 5, 100, 2.0f);
+        IRoleAbility.CreateAbilityCountOption(
+            , 5, 100, 2.0f);
     }
 
     protected override void RoleSpecificInit()

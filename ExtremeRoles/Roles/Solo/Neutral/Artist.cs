@@ -12,6 +12,8 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
@@ -145,16 +147,16 @@ public sealed class Artist :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			ArtistOption.CanUseVent,
-			false, parentOps);
-		CreateIntOption(
+			false);
+		factory.CreateIntOption(
 			ArtistOption.WinAreaSize,
-			15, 1, 100, 1, parentOps);
-        this.CreateCommonAbilityOption(
-            parentOps, 3.0f);
+			15, 1, 100, 1);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 3.0f);
 
     }
 

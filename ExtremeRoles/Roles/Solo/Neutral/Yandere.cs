@@ -13,6 +13,8 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 // TODO: 復活しても問題ないようにする #281
@@ -398,49 +400,48 @@ public sealed class Yandere :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             YandereOption.TargetKilledKillCoolReduceRate,
             85, 25, 99, 1,
-            parentOps, format: OptionUnit.Percentage);
+            format: OptionUnit.Percentage);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.NoneTargetKilledKillCoolMultiplier,
             1.2f, 1.0f, 2.0f, 0.1f,
-            parentOps, format: OptionUnit.Multiplier);
+            format: OptionUnit.Multiplier);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.BlockTargetTime,
             5.0f, 0.5f, 30.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+			format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.SetTargetRange,
-            1.8f, 0.5f, 5.0f, 0.1f,
-            parentOps);
+            1.8f, 0.5f, 5.0f, 0.1f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.SetTargetTime,
             2.0f, 0.1f, 7.5f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             YandereOption.MaxTargetNum,
-            5, 1, GameSystem.VanillaMaxPlayerNum, 1, parentOps);
+            5, 1, GameSystem.VanillaMaxPlayerNum, 1);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.RunawayTime,
             60.0f, 25.0f, 120.0f, 0.25f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             YandereOption.HasOneSidedArrow,
-            true, parentOps);
+            true);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             YandereOption.HasTargetArrow,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()

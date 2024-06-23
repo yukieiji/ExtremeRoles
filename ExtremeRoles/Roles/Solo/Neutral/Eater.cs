@@ -16,6 +16,8 @@ using ExtremeRoles.Module.CustomOption;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
@@ -289,36 +291,37 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             EaterOption.CanUseVent,
-            true, parentOps);
-        this.CreateAbilityCountOption(
-            parentOps, 5, 7, 7.5f);
-        CreateFloatOption(
+            true);
+
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 5, 7, 7.5f);
+
+		factory.CreateFloatOption(
             EaterOption.EatRange,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
-        CreateIntOption(
+            1.0f, 0.0f, 2.0f, 0.1f);
+		factory.CreateIntOption(
             EaterOption.DeadBodyEatActiveCoolTimePenalty,
-            10, 0, 25, 1, parentOps,
+            10, 0, 25, 1,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+		factory.CreateIntOption(
             EaterOption.KillEatCoolTimePenalty,
-            10, 0, 25, 1, parentOps,
+            10, 0, 25, 1,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+		factory.CreateIntOption(
             EaterOption.KillEatActiveCoolTimeReduceRate,
-            10, 0, 50, 1, parentOps,
+            10, 0, 50, 1,
             format: OptionUnit.Percentage);
-        CreateBoolOption(
+		factory.CreateBoolOption(
             EaterOption.IsResetCoolTimeWhenMeeting,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+		factory.CreateBoolOption(
             EaterOption.IsShowArrowForDeadBody,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()

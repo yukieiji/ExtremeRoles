@@ -8,6 +8,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier
@@ -174,20 +176,19 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             TotocalcioOption.Range,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            1.0f, 0.0f, 2.0f, 0.1f);
 
-        this.CreateAbilityCountOption(parentOps, 3, 5);
+        IRoleAbility.CreateAbilityCountOption(factory, 3, 5);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             TotocalcioOption.FinalCoolTime,
             80.0f, 45.0f, 180.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()

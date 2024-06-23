@@ -14,6 +14,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Helper;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp, IRoleUpdate
@@ -330,31 +332,27 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.Range,
-            1.0f, 0.1f, 4.0f, 0.1f,
-            parentOps);
+            1.0f, 0.1f, 4.0f, 0.1f);
 
-        this.CreateCommonAbilityOption(
-            parentOps, 3.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+           factory, 3.0f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.UpgradeVirusTime,
             3.5f, 0.5f, 10.0f, 0.1f,
-            parentOps,
             format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.InfectRange,
-            1.4f, 0.1f, 3.6f, 0.1f,
-            parentOps);
+            1.4f, 0.1f, 3.6f, 0.1f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.KeepUpgradedVirus,
             10.0f, 2.5f, 360.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
     }
 

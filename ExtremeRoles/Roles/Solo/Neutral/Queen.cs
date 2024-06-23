@@ -19,6 +19,8 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Queen :
@@ -442,42 +444,37 @@ public sealed class Queen :
         }
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             QueenOption.CanUseVent,
-            false, parentOps);
+            false);
 
-        this.CreateAbilityCountOption(
-            parentOps, 1, 3);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 3);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             QueenOption.Range,
-            1.0f, 0.5f, 2.6f, 0.1f,
-            parentOps);
-        CreateIntOption(
+            1.0f, 0.5f, 2.6f, 0.1f);
+        factory.CreateIntOption(
             QueenOption.ServantKillKillCoolReduceRate,
             40, 0, 85, 1,
-            parentOps,
             format:OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             QueenOption.ServantTaskKillCoolReduceRate,
             75, 0, 99, 1,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             QueenOption.ServantTaskCompKillCoolReduceRate,
             30, 0, 75, 1,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             QueenOption.ServantSelfKillCool,
             30.0f, 0.5f, 60.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			QueenOption.ServantSucideWithQueenWhenHasKill,
-			true, parentOps);
+			true);
     }
 
     protected override void RoleSpecificInit()
@@ -745,7 +742,7 @@ public sealed class Servant :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
         throw new Exception("Don't call this class method!!");
     }

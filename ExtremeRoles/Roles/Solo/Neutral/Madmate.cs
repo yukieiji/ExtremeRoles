@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
@@ -8,6 +6,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -174,38 +174,38 @@ public sealed class Madmate :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MadmateOption.IsDontCountAliveCrew,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MadmateOption.CanFixSabotage,
-            false, parentOps);
-        var ventUseOpt = CreateBoolOption(
+            false);
+        var ventUseOpt = factory.CreateBoolOption(
             MadmateOption.CanUseVent,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MadmateOption.CanMoveVentToVent,
             false, ventUseOpt);
-        var taskOpt = CreateBoolOption(
+        var taskOpt = factory.CreateBoolOption(
             MadmateOption.HasTask,
-            false, parentOps);
-        CreateIntOption(
+            false);
+        factory.CreateIntOption(
             MadmateOption.SeeImpostorTaskGage,
             70, 0, 100, 10,
             taskOpt,
             format: OptionUnit.Percentage);
-        var impFromSeeOpt = CreateBoolOption(
+        var impFromSeeOpt = factory.CreateBoolOption(
             MadmateOption.CanSeeFromImpostor,
             false, taskOpt);
-        CreateIntOption(
+        factory.CreateIntOption(
             MadmateOption.CanSeeFromImpostorTaskGage,
             70, 0, 100, 10,
             impFromSeeOpt,
             format: OptionUnit.Percentage);
 
-        this.CreateCommonAbilityOption(parentOps);
+        IRoleAbility.CreateCommonAbilityOption(factory);
     }
 
     protected override void RoleSpecificInit()

@@ -13,6 +13,8 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
@@ -127,41 +129,40 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 		   HatterOption.CanRepairSabotage,
-		   false, parentOps);
+		   false);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 		   HatterOption.WinCount,
-		   3, 1, 10, 1, parentOps);
+		   3, 1, 10, 1);
 
-		this.CreateAbilityCountOption(
-			parentOps, 3, 10, minAbilityCount: 0);
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 3, 10, minAbilityCount: 0);
 
-		CreateBoolOption(
-			HatterOption.HideMeetingTimer, true,
-			parentOps);
+		factory.CreateBoolOption(
+			HatterOption.HideMeetingTimer, true);
 
-		var lowerOpt = CreateIntDynamicOption(
+		var lowerOpt = factory.CreateIntDynamicOption(
 			HatterOption.MeetingTimerDecreaseLower,
-			0, 0, 5, parentOps,
+			0, 0, 5,
 			format: OptionUnit.Percentage);
 
-		var upperOpt = CreateIntOption(
+		var upperOpt = factory.CreateIntOption(
 			HatterOption.MeetingTimerDecreaseUpper,
-			20, 0, 50, 5, parentOps,
+			20, 0, 50, 5,
 			format: OptionUnit.Percentage);
-		upperOpt.SetUpdateOption(lowerOpt);
+		upperOpt.AddWithUpdate(lowerOpt);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			HatterOption.IncreaseTaskGage,
-			50, 0, 100, 10, parentOps,
+			50, 0, 100, 10,
 			format: OptionUnit.Percentage);
-		CreateIntOption(
+		factory.CreateIntOption(
 			HatterOption.IncreseNum,
-			3, 1, 10, 1, parentOps);
+			3, 1, 10, 1);
 	}
 
     protected override void RoleSpecificInit()

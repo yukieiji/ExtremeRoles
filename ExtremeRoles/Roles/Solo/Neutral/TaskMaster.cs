@@ -9,6 +9,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
@@ -44,8 +46,8 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
 
         var playerInfo = GameData.Instance.GetPlayerById(
             rolePlayer.PlayerId);
-        if (playerInfo.IsDead || 
-            playerInfo.Disconnected || 
+        if (playerInfo.IsDead ||
+            playerInfo.Disconnected ||
             playerInfo.Tasks.Count == 0) { return; }
 
         int compCount = 0;
@@ -115,20 +117,20 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             TaskMasterOption.CanUseSabotage,
-            true, parentOps);
-        CreateIntOption(
+            true);
+        factory.CreateIntOption(
             TaskMasterOption.AddCommonTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             TaskMasterOption.AddLongTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             TaskMasterOption.AddNormalTaskNum,
-            1, 0, 15, 1, parentOps);
+            1, 0, 15, 1);
     }
 
     protected override void RoleSpecificInit()

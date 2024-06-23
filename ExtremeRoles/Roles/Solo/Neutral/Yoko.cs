@@ -15,6 +15,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.Factory;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
@@ -106,51 +107,51 @@ public sealed class Yoko :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             YokoOption.CanRepairSabo,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             YokoOption.CanUseVent,
-            false, parentOps);
-        CreateFloatOption(
+            false);
+        factory.CreateFloatOption(
             YokoOption.SearchRange,
             7.5f, 5.0f, 15.0f, 0.5f,
-            parentOps);
-        CreateFloatOption(
+            );
+        factory.CreateFloatOption(
             YokoOption.SearchTime,
             10f, 3.0f, 30f, 0.5f,
-            parentOps,
+            ,
             format: OptionUnit.Second);
-        CreateIntOption(
+        factory.CreateIntOption(
             YokoOption.TrueInfoRate,
-            50, 25, 80, 5, parentOps,
+            50, 25, 80, 5,
             format: OptionUnit.Percentage);
 
-		var yashiroOpt = CreateBoolOption(
+		var yashiroOpt = factory.factory.CreateBoolOption(
 			YokoOption.UseYashiro,
-			false, parentOps);
-		this.CreateAbilityCountOption(yashiroOpt, 3, 10, 5f);
+			false);
+		IRoleAbility.CreateAbilityCountOption(yashiroOpt, 3, 10, 5f);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			YokoOption.YashiroActiveTime,
 			30, 1, 360, 1,
 			yashiroOpt,
 			format: OptionUnit.Second);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			YokoOption.YashiroSeelTime,
 			10, 1, 360, 1,
 			yashiroOpt,
 			format: OptionUnit.Second);
 
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			YokoOption.YashiroProtectRange,
 			5.0f, 1.0f, 10.0f, 0.1f,
 			yashiroOpt);
 
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			YokoOption.YashiroUpdateWithMeeting,
 			true, yashiroOpt);
 	}

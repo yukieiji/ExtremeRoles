@@ -16,6 +16,8 @@ using ExtremeRoles.Performance;
 using BepInEx.Unity.IL2CPP.Utils;
 using System.Linq;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 using ExtremeRoles.Module.CustomOption;
 
 #nullable enable
@@ -84,30 +86,29 @@ public sealed class Missionary :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MissionaryOption.TellDeparture,
-            true, parentOps);
-        CreateFloatOption(
+            true);
+        factory.CreateFloatOption(
             MissionaryOption.DepartureMinTime,
             10f, 1.0f, 15f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateFloatOption(
+			format: OptionUnit.Second);
+        factory.CreateFloatOption(
             MissionaryOption.DepartureMaxTime,
-            30f, 15f, 120f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateFloatOption(
+            30f, 15f, 120f, 0.5f
+            , format: OptionUnit.Second);
+        factory.CreateFloatOption(
             MissionaryOption.PropagateRange,
-            1.2f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            1.2f, 0.0f, 2.0f, 0.1f);
 
-        this.CreateCommonAbilityOption(parentOps);
+        IRoleAbility.CreateCommonAbilityOption(factory);
 
-		var useOpt = CreateBoolOption(
+		var useOpt = factory.CreateBoolOption(
 			MissionaryOption.IsUseSolemnJudgment,
-			false, parentOps);
-		CreateIntOption(
+			false);
+		factory.CreateIntOption(
 			MissionaryOption.MaxJudgementNum,
 			3, 1, GameSystem.VanillaMaxPlayerNum, 1,
 			useOpt);

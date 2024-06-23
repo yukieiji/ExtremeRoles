@@ -15,6 +15,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 using ExtremeRoles.Module.CustomOption;
 
 #nullable enable
@@ -342,46 +344,38 @@ public sealed class Miner :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			MinerOption.LinkingAllVent,
-			false, parentOps);
-		this.CreateCommonAbilityOption(
-            parentOps, 2.0f);
-        CreateFloatOption(
+			false);
+		IRoleAbility.CreateCommonAbilityOption(
+            factory, 2.0f);
+        factory.CreateFloatOption(
             MinerOption.MineKillRange,
-            1.8f, 0.5f, 5f, 0.1f, parentOps);
-		var showOpt = CreateBoolOption(
+            1.8f, 0.5f, 5f, 0.1f);
+		var showOpt = factory.CreateBoolOption(
 			MinerOption.CanShowMine,
-			false, parentOps);
-		CreateSelectionOption(
+			false);
+		factory.CreateSelectionOption(
 			MinerOption.RolePlayerShowMode,
-			new string[]
-			{
+			[
 				ShowMode.MineSeeOnlySe.ToString(),
 				ShowMode.MineSeeOnlyImg.ToString(),
 				ShowMode.MineSeeBoth.ToString(),
-			}, showOpt);
-		var anotherPlayerShowMode = CreateSelectionOption(
-			MinerOption.AnotherPlayerShowMode,
-			new string[]
-			{
-				ShowMode.MineSeeNone.ToString(),
-				ShowMode.MineSeeOnlySe.ToString(),
-				ShowMode.MineSeeOnlyImg.ToString(),
-				ShowMode.MineSeeBoth.ToString(),
-			}, showOpt);
-		CreateBoolOption(
+			], showOpt);
+		var anotherPlayerShowMode = factory.CreateSelectionOption<MinerOption, ShowMode>(
+			MinerOption.AnotherPlayerShowMode, showOpt);
+		factory.CreateBoolOption(
 			MinerOption.CanShowNoneActiveAnotherPlayer,
 			false, anotherPlayerShowMode);
-		CreateFloatOption(
+		factory.CreateFloatOption(
             MinerOption.NoneActiveTime,
             20.0f, 1.0f, 45f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateBoolOption(
+			format: OptionUnit.Second);
+        factory.CreateBoolOption(
             MinerOption.ShowKillLog,
-            true, parentOps);
+            true);
 	}
 
     protected override void RoleSpecificInit()

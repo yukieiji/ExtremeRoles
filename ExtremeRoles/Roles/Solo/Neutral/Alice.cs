@@ -10,6 +10,8 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
@@ -148,23 +150,23 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AliceOption.CanUseSabotage,
-            true, parentOps);
+            true);
 
-        this.CreateAbilityCountOption(
-            parentOps, 2, 100);
-        CreateIntOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 100);
+        factory.CreateIntOption(
             AliceOption.RevartLongTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             AliceOption.RevartCommonTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             AliceOption.RevartNormalTaskNum,
-            1, 0, 15, 1, parentOps);
+            1, 0, 15, 1);
 
     }
 
