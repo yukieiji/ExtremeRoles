@@ -16,6 +16,7 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.NewOption.Factory;
 using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -134,45 +135,45 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 				false, visionOption);
         }
 
-        public void ApplyOption(in OptionCategory category)
+        public void ApplyOption(in IOptionLoader loader)
         {
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 
-            this.UseSabotage = category.GetValue<JackalOption, bool>(
+            this.UseSabotage = loader.GetValue<JackalOption, bool>(
                 JackalOption.SidekickUseSabotage);
-            this.UseVent = category.GetValue<JackalOption, bool>(
+            this.UseVent = loader.GetValue<JackalOption, bool>(
                 JackalOption.SidekickUseVent);
 
-            this.CanKill = category.GetValue<JackalOption, bool>(
+            this.CanKill = loader.GetValue<JackalOption, bool>(
                 JackalOption.SidekickCanKill);
 
-            this.HasOtherKillCool = category.GetValue<JackalOption, bool>(
+            this.HasOtherKillCool = loader.GetValue<JackalOption, bool>(
                 JackalOption.SidekickHasOtherKillCool);
             this.KillCool = curOption.GetFloat(FloatOptionNames.KillCooldown);
             if (this.HasOtherKillCool)
             {
-                this.KillCool = category.GetValue<JackalOption, float>(
+                this.KillCool = loader.GetValue<JackalOption, float>(
                     JackalOption.SidekickKillCoolDown);
             }
 
-            this.HasOtherKillRange = category.GetValue<JackalOption, bool>(
+            this.HasOtherKillRange = loader.GetValue<JackalOption, bool>(
                 JackalOption.SidekickHasOtherKillRange);
             this.KillRange = curOption.GetInt(Int32OptionNames.KillDistance);
             if (this.HasOtherKillRange)
             {
-                this.KillRange = category.GetValue<JackalOption, int>(
+                this.KillRange = loader.GetValue<JackalOption, int>(
                     JackalOption.SidekickKillRange);
             }
 
-			this.HasOtherVision = category.GetValue<JackalOption, bool>(
+			this.HasOtherVision = loader.GetValue<JackalOption, bool>(
 				JackalOption.SidekickHasOtherVision);
             this.Vision = curOption.GetFloat(FloatOptionNames.CrewLightMod);
             this.ApplyEnvironmentVisionEffect = false;
             if (this.HasOtherVision)
             {
-                this.Vision = category.GetValue<JackalOption, float>(
+                this.Vision = loader.GetValue<JackalOption, float>(
                     JackalOption.SidekickVision);
-                this.ApplyEnvironmentVisionEffect = category.GetValue<JackalOption, bool>(
+                this.ApplyEnvironmentVisionEffect = loader.GetValue<JackalOption, bool>(
                     JackalOption.SidekickApplyEnvironmentVisionEffect);
             }
         }

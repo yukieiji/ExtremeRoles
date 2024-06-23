@@ -8,7 +8,10 @@ using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API.Interface;
 
@@ -34,23 +37,22 @@ public interface IRoleAbility : IRoleResetMeeting
 	{
 		if (this.Button == null) { return; }
 
-		var allOpt = OptionManager.Instance;
+		var cate = ((SingleRoleBase)this).Loader;
 		this.Button.Behavior.SetCoolTime(
-			allOpt.GetValue<float>(
-				this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
+			cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
-		if (allOpt.TryGet<float>(
-				this.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
+		if (cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+				RoleAbilityCommonOption.AbilityActiveTime,
 				out var activeTimeOption))
 		{
-			this.Button.Behavior.SetActiveTime(activeTimeOption.GetValue());
+			this.Button.Behavior.SetActiveTime(activeTimeOption.Value);
 		}
 
 		if (this.Button.Behavior is ICountBehavior countBehavior)
 		{
 			countBehavior.SetAbilityCount(
-				allOpt.GetValue<int>(this.GetRoleOptionId(
-					RoleAbilityCommonOption.AbilityCount)));
+				cate.GetValue<RoleAbilityCommonOption, int>(
+					RoleAbilityCommonOption.AbilityCount));
 		}
 
 		this.Button.OnMeetingEnd();
@@ -70,10 +72,7 @@ public interface IRoleAbility : IRoleResetMeeting
 			ExileController.Instance == null &&
 			IntroCutscene.Instance == null;
 	}
-}
 
-public static class IRoleAbilityMixin
-{
 	private const float defaultCoolTime = 30.0f;
 	private const float minCoolTime = 0.5f;
 	private const float maxCoolTime = 120.0f;
@@ -83,69 +82,49 @@ public static class IRoleAbilityMixin
 
 
 	public static void CreateCommonAbilityOption(
-		this IRoleAbility self,
 		AutoParentSetOptionCategoryFactory factory,
-		float defaultActiveTime = float.MaxValue)
+		float defaultActiveTime = float.MaxValue,
+		IOption parentOpt = null)
 	{
-
-		SingleRoleBase role = (SingleRoleBase)self;
-
-		new FloatCustomOption(
-			self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
-			string.Concat(
-				role.RoleName,
-				RoleAbilityCommonOption.AbilityCoolTime.ToString()),
+		factory.CreateFloatOption(
+			RoleAbilityCommonOption.AbilityCoolTime,
 			defaultCoolTime, minCoolTime, maxCoolTime, step,
-			parentOps, format: OptionUnit.Second,
-			tab: role.Tab);
+			parentOpt,
+			format: OptionUnit.Second);
 
 		if (defaultActiveTime != float.MaxValue)
 		{
 			defaultActiveTime = Mathf.Clamp(
 				defaultActiveTime, minActiveTime, maxActiveTime);
-
-			new FloatCustomOption(
-				self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
-				string.Concat(
-					role.RoleName,
-					RoleAbilityCommonOption.AbilityActiveTime.ToString()),
+			factory.CreateFloatOption(
+				RoleAbilityCommonOption.AbilityActiveTime,
 				defaultActiveTime, minActiveTime, maxActiveTime, step,
-				parentOps, format: OptionUnit.Second,
-				tab: role.Tab);
+				parentOpt,
+				format: OptionUnit.Second);
 		}
 
 	}
 
 	public static void CreateAbilityCountOption(
-		this IRoleAbility self,
 		AutoParentSetOptionCategoryFactory factory,
 		int defaultAbilityCount,
 		int maxAbilityCount,
 		float defaultActiveTime = float.MaxValue,
-		int minAbilityCount = 1)
+		int minAbilityCount = 1,
+		IOption parentOpt = null)
 	{
+		CreateCommonAbilityOption(
+			factory,
+			defaultActiveTime,
+			parentOpt);
 
-		SingleRoleBase role = (SingleRoleBase)self;
-
-		self.CreateCommonAbilityOption(
-			parentOps,
-			defaultActiveTime);
-
-		new IntCustomOption(
-			self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),
-			string.Concat(
-				role.RoleName,
-				RoleAbilityCommonOption.AbilityCount.ToString()),
+		factory.CreateIntOption(
+			RoleAbilityCommonOption.AbilityCount,
 			defaultAbilityCount, minAbilityCount,
 			maxAbilityCount, 1,
-			parentOps, format: OptionUnit.Shot,
-			tab: role.Tab);
+			format: OptionUnit.Shot);
 
 	}
-
-	public static int GetRoleOptionId(
-		this IRoleAbility self,
-		RoleAbilityCommonOption option) => ((RoleOptionBase)self).GetRoleOptionId((int)option);
 }
 
 
