@@ -18,6 +18,33 @@ public sealed class OptionPack
 	private readonly Dictionary<int, IValueOption<bool>> boolOpt = new Dictionary<int, IValueOption<bool>>();
 	private readonly Dictionary<int, IOption> allOpt = new Dictionary<int, IOption>();
 
+	public IOption Get(int id) => this.allOpt[id];
+	public IValueOption<T> Get<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
+		if (typeof(T) == typeof(int))
+		{
+			var intOption = this.intOpt[id];
+			return Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+		}
+		else if (typeof(T) == typeof(float))
+		{
+			var floatOption = this.floatOpt[id];
+			return Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+		}
+		else if (typeof(T) == typeof(bool))
+		{
+			var boolOption = this.boolOpt[id];
+			return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+		}
+		else
+		{
+			throw new ArgumentException("Cannot Find Options");
+		}
+	}
+
 	public void Add(int id, IValueOption<float> option)
 	{
 		this.floatOpt.Add(id, option);

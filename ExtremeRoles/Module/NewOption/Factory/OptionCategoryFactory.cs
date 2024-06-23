@@ -27,10 +27,19 @@ public class OptionCategoryFactory(
 	public string Name { get; set; } = name;
 
 	public OptionTab Tab { get; } = tab;
+	public int IdOffset { protected get; set; } = 0;
 
 	private readonly int groupid = groupId;
 	private readonly Action<OptionTab, OptionCategory> registerOption = action;
 	private readonly OptionPack optionPack = new OptionPack();
+
+	public IOption Get(int id)
+		=> this.optionPack.Get(id);
+	public IValueOption<T> Get<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.optionPack.Get<T>(id);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public BoolCustomOption CreateBoolOption<T>(
@@ -213,7 +222,7 @@ public class OptionCategoryFactory(
 	public int GetOptionId<T>(T option) where T : struct, IConvertible
 	{
 		enumCheck(option);
-		return Convert.ToInt32(option);
+		return Convert.ToInt32(option) + IdOffset;
 	}
 
 	protected string GetOptionName<T>(T option, Color? color, bool ignorePrefix = false) where T : struct, IConvertible

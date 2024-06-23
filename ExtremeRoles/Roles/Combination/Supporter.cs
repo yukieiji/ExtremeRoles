@@ -151,14 +151,11 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
-
-        CreateKillerOption(imposterSetting);
-
-    }
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
+	}
 
     protected override void RoleSpecificInit()
     {

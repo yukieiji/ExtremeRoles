@@ -10,11 +10,15 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class BuddyManager : FlexibleCombinationRoleManagerBase
 {
     public BuddyManager() : base(
+		CombinationRoleType.Buddy,
         new Buddy(),
         canAssignImposter: false)
     { }
@@ -254,19 +258,18 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             BuddyOption.AwakeTaskGage,
             50, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
     }
 
     protected override void RoleSpecificInit()
     {
         this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-           GetRoleOptionId(BuddyOption.AwakeTaskGage)) / 100.0f;
+           BuddyOption.AwakeTaskGage)) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 

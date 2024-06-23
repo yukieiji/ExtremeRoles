@@ -9,11 +9,15 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class SharerManager : FlexibleCombinationRoleManagerBase
 {
     public SharerManager() : base(
+		CombinationRoleType.Sharer,
         new Sharer(), 2, false)
     { }
 
@@ -244,18 +248,18 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             SharerOption.SharerTellKill,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
 
         this.sharerTellKill = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(SharerOption.SharerTellKill));
+            SharerOption.SharerTellKill));
 
         if (this.sharerTellKill)
         {

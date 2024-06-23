@@ -36,7 +36,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
     public override void AssignSetUpInit(int curImpNum)
     {
-		var cate = this.Category;
+		var cate = this.Loader;
 
 		foreach (var role in this.Roles)
         {
@@ -87,7 +87,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
         if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
 
-		this.BaseRole.CanHasAnotherRole = this.Category.GetValue<CombinationRoleCommonOption, bool>(
+		this.BaseRole.CanHasAnotherRole = this.Loader.GetValue<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsMultiAssign);
 
 		role = (MultiAssignRoleBase)this.BaseRole.Clone();
@@ -182,7 +182,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
         this.Roles.Clear();
         int roleAssignNum = 1;
 
-		var cate = this.Category;
+		var cate = this.Loader;
 
         this.BaseRole.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsMultiAssign);

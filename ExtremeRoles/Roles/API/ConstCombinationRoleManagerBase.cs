@@ -44,7 +44,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     public override MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType)
     {
-		var cate = this.Category;
+		var cate = this.Loader;
 		foreach (var checkRole in this.Roles)
         {
 
@@ -119,13 +119,18 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
         foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
+			// 同じオプションを参照したい時があるのでオフセット値を入れておく
+			int offset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
+			factory.IdOffset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
             item.Value.CreateRoleSpecificOption(factory);
+			item.Value.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
+				this.RoleType, offset);
         }
     }
 
     protected override void CommonInit()
     {
-		var cate = this.Category;
+		var cate = this.Loader;
         foreach (var role in this.Roles)
         {
             role.CanHasAnotherRole =

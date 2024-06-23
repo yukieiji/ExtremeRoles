@@ -180,7 +180,7 @@ public sealed class SequentialOptionCategoryFactory(
 	}
 	private int getOptionIdAndUpdate()
 	{
-		int optionId = this.Offset;
+		int optionId = this.Offset + this.IdOffset;
 		this.Offset++;
 		return optionId;
 	}

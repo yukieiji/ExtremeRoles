@@ -13,11 +13,17 @@ using ExtremeRoles.Module.CustomOption;
 
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class LoverManager : FlexibleCombinationRoleManagerBase
 {
-    public LoverManager() : base(new Lover())
+    public LoverManager() : base(
+		CombinationRoleType.Lover,
+		new Lover())
     { }
 
 }
@@ -224,35 +230,31 @@ public sealed class Lover : MultiAssignRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        var neutralSetting = CreateBoolOption(
+        var neutralSetting = factory.CreateBoolOption(
             LoverOption.IsNeutral,
-            false, parentOps);
+            false);
 
-        var killerSetting = CreateBoolOption(
+        var killerSetting = factory.CreateBoolOption(
             LoverOption.BecomNeutral,
             false, neutralSetting);
 
-        var deathSetting = CreateIntDynamicOption(
+        var deathSetting = factory.CreateIntDynamicOption(
             LoverOption.DethWhenUnderAlive,
             1, 1, 1, killerSetting,
             invert: true,
-            enableCheckOption: parentOps,
             tempMaxValue: GameSystem.VanillaMaxPlayerNum - 1);
 
-        CreateKillerOption(killerSetting);
-        killerVisionSetting(killerSetting);
+        CreateKillerOption(factory, killerSetting);
+        killerVisionSetting(factory, killerSetting);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverCanUseVent,
             false, killerSetting);
 
-        OptionManager.Instance.Get<int>(
-            GetManagerOptionId(
-                CombinationRoleCommonOption.AssignsNum)
-			).SetUpdateOption(deathSetting);
-
+		factory.Get<int>((int)CombinationRoleCommonOption.AssignsNum)
+			.AddWithUpdate(deathSetting);
     }
 
     protected override void RoleSpecificInit()
@@ -260,10 +262,10 @@ public sealed class Lover : MultiAssignRoleBase
         var allOption = OptionManager.Instance;
 
         bool isNeutral = allOption.GetValue<bool>(
-            GetRoleOptionId(LoverOption.IsNeutral));
+            LoverOption.IsNeutral));
 
         this.becomeKiller = allOption.GetValue<bool>(
-            GetRoleOptionId(LoverOption.BecomNeutral)) && isNeutral;
+            LoverOption.BecomNeutral)) && isNeutral;
 
         if (isNeutral && !this.becomeKiller)
         {
@@ -274,11 +276,11 @@ public sealed class Lover : MultiAssignRoleBase
             var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
 
             this.HasOtherKillCool = allOption.GetValue<bool>(
-                GetRoleOptionId(KillerCommonOption.HasOtherKillCool));
+                KillerCommonOption.HasOtherKillCool));
             if (this.HasOtherKillCool)
             {
                 this.KillCoolTime = allOption.GetValue<float>(
-                    GetRoleOptionId(KillerCommonOption.KillCoolDown));
+                    KillerCommonOption.KillCoolDown));
             }
             else
             {
@@ -286,12 +288,12 @@ public sealed class Lover : MultiAssignRoleBase
             }
 
             this.HasOtherKillRange = allOption.GetValue<bool>(
-                GetRoleOptionId(KillerCommonOption.HasOtherKillRange));
+                KillerCommonOption.HasOtherKillRange));
 
             if (this.HasOtherKillRange)
             {
                 this.KillRange = allOption.GetValue<int>(
-                    GetRoleOptionId(KillerCommonOption.KillRange));
+                    KillerCommonOption.KillRange));
             }
             else
             {
@@ -299,13 +301,13 @@ public sealed class Lover : MultiAssignRoleBase
             }
 
             this.killerLoverHasOtherVision = allOption.GetValue<bool>(
-                GetRoleOptionId(LoverOption.BecomeNeutralLoverHasOtherVision));
+                LoverOption.BecomeNeutralLoverHasOtherVision));
             if (this.killerLoverHasOtherVision)
             {
                 this.killerLoverVision = allOption.GetValue<float>(
-                    GetRoleOptionId(LoverOption.BecomeNeutralLoverVision));
+                    LoverOption.BecomeNeutralLoverVision));
                 this.killerLoverIsApplyEnvironmentVisionEffect = allOption.GetValue<bool>(
-                    GetRoleOptionId(LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect));
+                    LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect));
             }
             else
             {
@@ -314,25 +316,26 @@ public sealed class Lover : MultiAssignRoleBase
             }
 
             this.killerLoverCanUseVent = allOption.GetValue<bool>(
-                GetRoleOptionId(LoverOption.BecomeNeutralLoverCanUseVent));
+                LoverOption.BecomeNeutralLoverCanUseVent));
         }
 
         this.limit = allOption.GetValue<int>(
-            GetRoleOptionId(LoverOption.DethWhenUnderAlive));
+            LoverOption.DethWhenUnderAlive));
 
     }
 
     private void killerVisionSetting(
-        IOptionInfo killerOpt)
+		AutoParentSetOptionCategoryFactory factory,
+		IOption killerOpt)
     {
-        var visionOption = CreateBoolOption(
+        var visionOption = factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverHasOtherVision,
             false, killerOpt);
-        CreateFloatOption(LoverOption.BecomeNeutralLoverVision,
+        factory.CreateFloatOption(LoverOption.BecomeNeutralLoverVision,
             2f, 0.25f, 5.0f, 0.25f,
             visionOption, format: OptionUnit.Multiplier);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect,
             false, visionOption);
     }

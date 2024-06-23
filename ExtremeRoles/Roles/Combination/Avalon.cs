@@ -11,12 +11,16 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class Avalon : ConstCombinationRoleManagerBase
 {
     public const string Name = "AvalonsRoles";
     public Avalon() : base(
+		CombinationRoleType.Avalon,
         Name, new Color(255f, 255f, 255f), 2,
         GameSystem.MaxImposterNum)
     {
@@ -77,30 +81,30 @@ public sealed class Assassin : MultiAssignRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AssassinOption.HasTask,
-            false, parentOps);
-        var killedOps = CreateBoolOption(
+            false);
+        var killedOps = factory.CreateBoolOption(
             AssassinOption.CanKilled,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             AssassinOption.CanKilledFromCrew,
             false, killedOps);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AssassinOption.CanKilledFromNeutral,
             false, killedOps);
-        var meetingOpt = CreateBoolOption(
+        var meetingOpt = factory.CreateBoolOption(
             AssassinOption.IsDeadForceMeeting,
             true, killedOps);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AssassinOption.CanSeeRoleBeforeFirstMeeting,
             false, meetingOpt);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
              AssassinOption.CanSeeVote,
-            true, parentOps);
+            true);
     }
 
     public override void ExiledAction(
@@ -168,20 +172,20 @@ public sealed class Assassin : MultiAssignRoleBase
         var allOption = OptionManager.Instance;
 
         this.HasTask = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.HasTask));
+            AssassinOption.HasTask));
         this.CanKilled = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanKilled));
+            AssassinOption.CanKilled));
         this.CanKilledFromCrew = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanKilledFromCrew));
+            AssassinOption.CanKilledFromCrew));
         this.CanKilledFromNeutral = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanKilledFromNeutral));
+            AssassinOption.CanKilledFromNeutral));
         this.CanSeeVote = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanSeeVote));
+            AssassinOption.CanSeeVote));
 
         this.isDeadForceMeeting = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.IsDeadForceMeeting));
+            AssassinOption.IsDeadForceMeeting));
         this.CanSeeRoleBeforeFirstMeeting = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting));
+            AssassinOption.CanSeeRoleBeforeFirstMeeting));
         this.IsFirstMeeting = true;
     }
 
@@ -295,25 +299,25 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.HasTask,
-            false, parentOps);
+            false);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanSeeAssassin,
-            true, parentOps);
+            true);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanSeeVote,
-            true, parentOps);
-        CreateBoolOption(
+            true);
+        factory.CreateBoolOption(
             MarlinOption.CanSeeNeutral,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MarlinOption.CanUseVent,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
@@ -323,15 +327,15 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         var allOption = OptionManager.Instance;
 
         this.HasTask = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.HasTask));
+            MarlinOption.HasTask));
         this.canSeeAssassin = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanSeeAssassin));
+            MarlinOption.CanSeeAssassin));
         this.CanSeeVote = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanSeeVote));
+            MarlinOption.CanSeeVote));
         this.CanSeeNeutral = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanSeeNeutral));
+            MarlinOption.CanSeeNeutral));
         this.UseVent = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanUseVent));
+            MarlinOption.CanUseVent));
         this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
     }
 

@@ -11,11 +11,17 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption;
 
+
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 {
-    public TraitorManager() : base(new Traitor(), 1, false)
+    public TraitorManager() : base(
+		CombinationRoleType.Traitor,
+		new Traitor(), 1, false)
     { }
 
     public override void AssignSetUpInit(int curImpNum)
@@ -48,13 +54,13 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
         this.BaseRole.CanHasAnotherRole = true;
 
 		// 0:オフ、1:オン
-		allOptions.Get<bool>(GetRoleOptionId(
+		allOptions.Get<bool>(
 			CombinationRoleCommonOption.IsMultiAssign)).UpdateSelection(1);
 
-		if (allOptions.Contains(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
+		if (allOptions.Contains(CombinationRoleCommonOption.AssignsNum)))
         {
             roleAssignNum = allOptions.GetValue<int>(
-                GetRoleOptionId(CombinationRoleCommonOption.AssignsNum));
+                CombinationRoleCommonOption.AssignsNum));
         }
 
         for (int i = 0; i < roleAssignNum; ++i)
@@ -366,10 +372,10 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 5.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 5.0f);
     }
 
     protected override void RoleSpecificInit()

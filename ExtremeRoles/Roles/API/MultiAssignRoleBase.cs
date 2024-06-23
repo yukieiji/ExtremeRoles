@@ -7,17 +7,36 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
+#nullable enable
 
 namespace ExtremeRoles.Roles.API;
 
 public abstract class MultiAssignRoleBase : SingleRoleBase
 {
+	public sealed record class OptionOffsetInfo(CombinationRoleType RoleId, int IdOffset);
 
-    public SingleRoleBase AnotherRole = null;
+    public SingleRoleBase? AnotherRole = null;
     public bool CanHasAnotherRole = false;
 
-	protected override OptionCategory Category => throw new NotImplementedException();
+	public OptionOffsetInfo? OffsetInfo { protected get; set; }
+
+	protected override IOptionLoader Loader
+	{
+		get
+		{
+			if (OffsetInfo is null ||
+				!NewOptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
+					out var cate))
+			{
+				throw new ArgumentException("Can't find category");
+			}
+			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+		}
+	}
 
 	public MultiAssignRoleBase(
         ExtremeRoleId id,

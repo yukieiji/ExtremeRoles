@@ -11,13 +11,18 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 #nullable enable
 
 public sealed class AcceleratorManager : FlexibleCombinationRoleManagerBase
 {
-    public AcceleratorManager() : base(new Accelerator(), 1)
+    public AcceleratorManager() : base(
+		CombinationRoleType.Accelerator,
+		new Accelerator(), 1)
     { }
 
 }
@@ -107,7 +112,7 @@ public sealed class Accelerator :
 		obj.transform.position = firstPoint;
 
 		var rend = obj.AddComponent<SpriteRenderer>();
-		rend.sprite = Loader.CreateSpriteFromResources(
+		rend.sprite = Resources.Loader.CreateSpriteFromResources(
 			 Path.AcceleratorAcceleratePanel, 100.0f);
 
 		accelerator.transformer = obj.AddComponent<AutoTransformerWithFixedFirstPoint>();
@@ -135,9 +140,9 @@ public sealed class Accelerator :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-            Translation.GetString("AccelerateSet"),
-            Loader.CreateSpriteFromResources(
-               Path.AcceleratorAccelerateSet),
+			Translation.GetString("AccelerateSet"),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.AcceleratorAccelerateSet),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())
@@ -182,21 +187,19 @@ public sealed class Accelerator :
 	}
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
+        var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+        CreateKillerOption(factory, imposterSetting);
 
-        CreateKillerOption(imposterSetting);
-
-        this.CreateAbilityCountOption(
-            parentOps, 3, 10, 30.0f);
-		CreateFloatOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 3, 10, 30.0f);
+		factory.CreateFloatOption(
 			Option.Speed, 1.0f, 0.1f,
-			3.0f, 0.1f, parentOps);
-		CreateBoolOption(
+			3.0f, 0.1f);
+		factory.CreateBoolOption(
 			Option.UseOtherPlayer,
-			true, parentOps);
+			true);
     }
 
     protected override void RoleSpecificInit()
@@ -204,9 +207,9 @@ public sealed class Accelerator :
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
 		this.canUseOtherPlayer = OptionManager.Instance.GetValue<bool>(
-			GetRoleOptionId(Option.UseOtherPlayer));
+			Option.UseOtherPlayer));
 		this.speed = OptionManager.Instance.GetValue<float>(
-			GetRoleOptionId(Option.Speed));
+			Option.Speed);
 
 		this.EnableVentButton = true;
         this.EnableUseButton = true;

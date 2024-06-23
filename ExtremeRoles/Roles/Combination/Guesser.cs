@@ -17,11 +17,16 @@ using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class GuesserManager : FlexibleCombinationRoleManagerBase
 {
-    public GuesserManager() : base(new Guesser(), 1)
+    public GuesserManager() : base(
+		CombinationRoleType.Guesser,
+		new Guesser(), 1)
     { }
 
 }
@@ -164,9 +169,9 @@ public sealed class Guesser :
             foreach (var (id, role) in ExtremeRoleManager.NormalRole)
             {
                 int spawnOptSel = allOption.GetValue<int>(
-                    role.GetRoleOptionId(RoleCommonOption.SpawnRate));
+                    role.RoleCommonOption.SpawnRate));
                 int roleNum = allOption.GetValue<int>(
-                    role.GetRoleOptionId(RoleCommonOption.RoleNum));
+                    role.RoleCommonOption.RoleNum));
 
                 if (spawnOptSel < 1 || roleNum <= 0)
                 {
@@ -188,7 +193,7 @@ public sealed class Guesser :
                     case ExtremeRoleId.Jackal:
                         assignState.IsJackalOn = true;
                         assignState.IsJackalForceReplaceLover = allOption.GetValue<bool>(
-                            role.GetRoleOptionId(
+                            role.
                                 Solo.Neutral.Jackal.JackalOption.ForceReplaceLover));
                         break;
                     case ExtremeRoleId.Queen:
@@ -232,9 +237,9 @@ public sealed class Guesser :
                 foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
                 {
                     int spawnOptSel = allOption.GetValue<int>(
-                        roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate));
+                        roleMng.RoleCommonOption.SpawnRate));
                     int roleNum = allOption.GetValue<int>(
-                        roleMng.GetRoleOptionId(RoleCommonOption.RoleNum));
+                        roleMng.RoleCommonOption.RoleNum));
 
                     if (spawnOptSel < 1 || roleNum <= 0)
                     {
@@ -270,12 +275,12 @@ public sealed class Guesser :
             foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
             {
                 int spawnOptSel = allOption.GetValue<int>(
-                    roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate));
+                    roleMng.RoleCommonOption.SpawnRate));
                 int roleNum = allOption.GetValue<int>(
-                    roleMng.GetRoleOptionId(RoleCommonOption.RoleNum));
+                    roleMng.RoleCommonOption.RoleNum));
 
                 bool multiAssign = allOption.GetValue<bool>(
-                    roleMng.GetRoleOptionId(
+                    roleMng.
                         CombinationRoleCommonOption.IsMultiAssign));
 
                 if (spawnOptSel < 1 || roleNum <= 0)
@@ -294,7 +299,7 @@ public sealed class Guesser :
                     if (multiAssign)
                     {
                         if (allOption.TryGet<bool>(
-                                flexMng.GetRoleOptionId(
+                                flexMng.
                                     CombinationRoleCommonOption.IsAssignImposter),
                                 out var option) &&
                             option.GetValue())
@@ -473,10 +478,10 @@ public sealed class Guesser :
 			if (this.uiPrefab == null)
             {
                 this.uiPrefab = UnityEngine.Object.Instantiate(
-                    Loader.GetUnityObjectFromResources<GameObject>(
-                        Path.GusserUiResources,
-                        Path.GusserUiPrefab),
-                    CachedShipStatus.Instance.transform);
+					Resources.Loader.GetUnityObjectFromResources<GameObject>(
+						Path.GusserUiResources,
+						Path.GusserUiPrefab),
+					CachedShipStatus.Instance.transform);
 
                 this.uiPrefab.SetActive(false);
             }
@@ -523,8 +528,8 @@ public sealed class Guesser :
 
     public void SetSprite(SpriteRenderer render)
     {
-        render.sprite = Loader.CreateSpriteFromResources(
-            Path.GuesserGuess);
+        render.sprite = Resources.Loader.CreateSpriteFromResources(
+			Path.GuesserGuess);
         render.transform.localScale *= new Vector2(0.625f, 0.625f);
     }
 
@@ -567,36 +572,27 @@ public sealed class Guesser :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
-        CreateKillerOption(imposterSetting);
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
 
-        CreateBoolOption(
+		factory.CreateBoolOption(
             GuesserOption.CanCallMeeting,
-            false, parentOps);
-        CreateIntOption(
+            false);
+        factory.CreateIntOption(
             GuesserOption.GuessNum,
             1, 1, GameSystem.MaxImposterNum, 1,
-            parentOps,
             format: OptionUnit.Shot);
-        CreateIntOption(
+        factory.CreateIntOption(
             GuesserOption.MaxGuessNumWhenMeeting,
             1, 1, GameSystem.MaxImposterNum, 1,
-            parentOps,
             format: OptionUnit.Shot);
-        var noneGuessRoleOpt = CreateBoolOption(
+        var noneGuessRoleOpt = factory.CreateBoolOption(
             GuesserOption.CanGuessNoneRole,
-            false, parentOps);
-        CreateSelectionOption(
-            GuesserOption.GuessNoneRoleMode,
-            new string[]
-            {
-                GuessMode.BothGuesser.ToString(),
-                GuessMode.NiceGuesserOnly.ToString(),
-                GuessMode.EvilGuesserOnly.ToString(),
-            }, noneGuessRoleOpt);
+            false);
+        factory.CreateSelectionOption<GuesserOption, GuessMode>(
+            GuesserOption.GuessNoneRoleMode, noneGuessRoleOpt);
     }
 
     protected override void RoleSpecificInit()
@@ -606,12 +602,12 @@ public sealed class Guesser :
         var allOption = OptionManager.Instance;
 
         this.CanCallMeeting = allOption.GetValue<bool>(
-            GetRoleOptionId(GuesserOption.CanCallMeeting));
+            GuesserOption.CanCallMeeting));
 
         bool canGuessNoneRole = allOption.GetValue<bool>(
-            GetRoleOptionId(GuesserOption.CanGuessNoneRole));
+            GuesserOption.CanGuessNoneRole));
         GuessMode guessMode = (GuessMode)allOption.GetValue<int>(
-            GetRoleOptionId(GuesserOption.GuessNoneRoleMode));
+            GuesserOption.GuessNoneRoleMode));
 
         this.canGuessNoneRole = canGuessNoneRole &&
             ((
@@ -627,9 +623,9 @@ public sealed class Guesser :
             ));
 
         this.bulletNum = allOption.GetValue<int>(
-            GetRoleOptionId(GuesserOption.GuessNum));
+            GuesserOption.GuessNum));
         this.maxGuessNum = allOption.GetValue<int>(
-            GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting));
+            GuesserOption.MaxGuessNumWhenMeeting));
 
         this.curGuessNum = 0;
         this.roleNamePrefix = this.CreateImpCrewPrefix();

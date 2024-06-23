@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -26,12 +27,12 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 	protected readonly string RoleName = "";
 	protected readonly CombinationRoleType RoleType;
 
-	protected sealed override OptionCategory Category
+	protected sealed override OptionCategory Loader
 	{
 		get
 		{
 			if (!NewOptionManager.Instance.TryGetCategory(
-					OptionTab.General,
+					OptionTab.Combination,
 					ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 					out var cate))
 			{
@@ -57,20 +58,22 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
     public abstract MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType);
 
-    protected override void CreateKillerOption(
-        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix)
+    protected sealed override void CreateKillerOption(
+        AutoParentSetOptionCategoryFactory factory,
+		IOption parent = null,
+		bool ignorePrefix=true)
     {
         // 複数ロールの中に殺戮者がいる可能性がため、管理ロールで殺戮者の設定はしない
         return;
     }
 
-    protected override void CreateVisionOption(
+    protected sealed override void CreateVisionOption(
         AutoParentSetOptionCategoryFactory factory, bool ignorePrefix)
     {
         // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
         return;
     }
-    protected override void RoleSpecificInit()
+    protected sealed override void RoleSpecificInit()
     {
         // 複数のロールがまとまっているため、設定はしない
         return;

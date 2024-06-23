@@ -9,14 +9,49 @@ using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
 
 using ExtremeRoles.Module.NewOption.Interfaces;
 using ExtremeRoles.Extension;
+using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.NewOption;
+
+public sealed class OptionLoadWrapper(in OptionCategory category, int idOffset) : IOptionLoader, IDisposable
+{
+	private readonly OptionCategory category = category;
+	private readonly int idOffset = idOffset;
+
+	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
+		=> this.TryGet(id + idOffset, out option);
+	public IOption Get<T>(T id) where T : Enum
+			=> this.category.Get(id.FastInt() + idOffset);
+
+	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
+		where W : Enum
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.category.TryGetValueOption(id.FastInt() + idOffset, out option);
+
+	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.category.TryGetValueOption(id + idOffset, out option);
+
+	public T GetValue<W, T>(W id) where W : Enum
+		=> this.category.GetValue<T>(id.FastInt() + idOffset);
+	public T GetValue<T>(int id)
+		=> this.category.GetValue<T>(id + idOffset);
+
+	public void Dispose()
+	{ }
+}
 
 public sealed class OptionCategory(
 	OptionTab tab,
 	int id,
 	string name,
-	in OptionPack option)
+	in OptionPack option) : IOptionLoader
 {
 	public IEnumerable<IOption> Options => allOpt.Values;
 	public int Count => allOpt.Count;
@@ -45,13 +80,52 @@ public sealed class OptionCategory(
 			builder.AppendLine($"{option.Title}: {option.ValueString}");
 		}
 	}
-
-	public bool TryGet(int id, out IOption option)
+	public bool TryGet(int id, [NotNullWhen(true)] out IOption? option)
 		=> this.allOpt.TryGetValue(id, out option) && option is not null;
 	public IOption Get<T>(T id) where T : Enum
 		=> this.Get(id.FastInt());
 
-	public IValueOption<T> GetValueOption<W, T>(W id) where W : Enum
+	public bool TryGetValueOption<W, T>(W id, [NotNullWhen(true)] out IValueOption<T>? option)
+		where W : Enum
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.TryGetValueOption(id.FastInt(), out option);
+
+	public bool TryGetValueOption<T>(int id, [NotNullWhen(true)] out IValueOption<T>? option)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+	{
+		option = null;
+		if (!this.allOpt.ContainsKey(id)) { return false; }
+
+		if (typeof(T) == typeof(int))
+		{
+			var intOption = this.intOpt[id];
+			option = Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
+			return option is not null;
+		}
+		else if (typeof(T) == typeof(float))
+		{
+			var floatOption = this.floatOpt[id];
+			option = Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
+			return option is not null;
+		}
+		else if (typeof(T) == typeof(bool))
+		{
+			var boolOption = this.boolOpt[id];
+			option = Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
+			return option is not null;
+		}
+		else
+		{
+			throw new ArgumentException("Cannot Find Options");
+		}
+	}
+
+	public IValueOption<T> GetValueOption<W, T>(W id)
+		where W : Enum
 		where T :
 			struct, IComparable, IConvertible,
 			IComparable<T>, IEquatable<T>
@@ -116,7 +190,7 @@ public sealed class OptionCategory(
 		}
 		else
 		{
-			return default(T);
+			throw new ArgumentException($"OptionId: {typeof(T)} Not Found");
 		}
 	}
 }

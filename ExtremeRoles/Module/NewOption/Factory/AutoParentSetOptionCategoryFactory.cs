@@ -19,6 +19,22 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	private IOption? parent = parent;
 	private readonly OptionCategoryFactory internalFactory = factory;
 
+	public int IdOffset
+	{
+		set
+		{
+			this.internalFactory.IdOffset = value;
+		}
+	}
+
+	public IOption Get(int id)
+		=> this.internalFactory.Get(id);
+	public IValueOption<T> Get<T>(int id)
+		where T :
+			struct, IComparable, IConvertible,
+			IComparable<T>, IEquatable<T>
+		=> this.internalFactory.Get<T>(id);
+
 	public BoolCustomOption CreateBoolOption<T>(
 		T option,
 		bool defaultValue,
