@@ -45,7 +45,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 		}
 	}
 
-	public string Title => Translation.GetString(Info.CodeRemovedName);
+	public string Title => Translation.GetString(Info.Name);
 
 	public string ValueString
 	{
