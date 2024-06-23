@@ -74,8 +74,8 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 		if (!role.IsVanillaRole())
 		{
-			var option = allOption.GetIOption(role.GetRoleOptionId(RoleCommonOption.SpawnRate));
-			roleOptionString = option.ToHudStringWithChildren();
+			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
+			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 		string colorRoleName = role.GetColoredRoleName();
 		string roleFullDesc = role.GetFullDescription();
@@ -93,8 +93,8 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 		if (!role.IsVanillaRole())
 		{
-			var option = allOption.GetIOption(role.GetManagerOptionId(RoleCommonOption.SpawnRate));
-			roleOptionString = option.ToHudStringWithChildren();
+			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
+			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 
 		string colorRoleName = Design.ColoedString(

@@ -1,8 +1,8 @@
 ﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Roles.API;
+
 using System.Collections.Generic;
 
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Module.Interface;
 
@@ -10,7 +10,7 @@ namespace ExtremeRoles.Module.Interface;
 
 public abstract class PanelPageModelBase : IInfoOverlayPanelModel
 {
-	protected readonly record struct RoleInfo(string RoleName, string FullDec, int OptionId);
+	protected readonly record struct RoleInfo(string RoleName, string FullDec, IOption Option);
 
 	public int PageNum => this.allPage.Count;
 
@@ -41,10 +41,7 @@ public abstract class PanelPageModelBase : IInfoOverlayPanelModel
 		var info = this.allPage[this.curPage];
 
 		string colorRoleName = info.RoleName;
-
-		var option = OptionManager.Instance.GetIOption(
-			info.OptionId + (int)RoleCommonOption.SpawnRate);
-		string roleOptionStr = option.ToHudStringWithChildren();
+		string roleOptionStr = IInfoOverlayPanelModel.ToHudStringWithChildren(info.Option);
 
 		return (
 			$"<size=150%>・{colorRoleName}</size>\n{info.FullDec}",
