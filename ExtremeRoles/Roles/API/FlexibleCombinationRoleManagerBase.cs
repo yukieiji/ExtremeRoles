@@ -115,7 +115,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     {
 		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
-			this.RoleName,
+			Design.ColoedString(this.OptionColor, this.RoleName),
 			OptionTab.Combination);
 		var roleSetOption = factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
@@ -161,12 +161,6 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 				OptionCreator.SpawnRate, isImposterAssignOps,
 				ignorePrefix: true);
         }
-
-		factory.CreateBoolOption(
-			CombinationRoleCommonOption.IsMultiAssign, false,
-			isHidden: this.minimumRoleNum <= 1,
-			ignorePrefix: true);
-
         return factory;
     }
 
