@@ -10,6 +10,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.View;
 
 using ExtremeRoles.Patches.Option;
 using ExtremeRoles.Module.NewOption;
+using System.Linq;
 
 
 #nullable enable
@@ -123,6 +124,10 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			var menu = initialize.NewMenu;
 			var button = initialize.NewTagButton;
+			if (NewOptionManager.Instance.TryGetTab(tab, out var optionTab))
+			{
+				menu.AllCategory = optionTab.Category.ToArray();
+			}
 
 			button.gameObject.name = $"{tab}Button";
 			menu.gameObject.name = $"{tab}Menu";
