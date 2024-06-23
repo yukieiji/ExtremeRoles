@@ -27,7 +27,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 	protected readonly string RoleName = "";
 	protected readonly CombinationRoleType RoleType;
 
-	protected sealed override OptionCategory Loader
+	public sealed override IOptionLoader Loader
 	{
 		get
 		{

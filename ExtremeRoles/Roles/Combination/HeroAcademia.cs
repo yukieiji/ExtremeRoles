@@ -681,10 +681,11 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
     protected override void RoleSpecificInit()
     {
-        this.featKillPer = OptionManager.Instance.GetValue<int>(
-            HeroOption.FeatKillPercentage)) / 100.0f;
-        this.featButtonAbilityPer = OptionManager.Instance.GetValue<int>(
-            HeroOption.FeatButtonAbilityPercentage)) / 100.0f;
+		var loader = this.Loader;
+        this.featKillPer = loader.GetValue<HeroOption, int>(
+            HeroOption.FeatKillPercentage) / 100.0f;
+        this.featButtonAbilityPer = loader.GetValue<HeroOption, int>(
+            HeroOption.FeatButtonAbilityPercentage) / 100.0f;
 
     }
     private void setButtonActive(bool active)
@@ -861,8 +862,8 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
     protected override void RoleSpecificInit()
     {
-        this.vigilanteArrowTime = OptionManager.Instance.GetValue<float>(
-            VillanOption.VigilanteSeeTime));
+        this.vigilanteArrowTime = this.Loader.GetValue<VillanOption, float>(
+            VillanOption.VigilanteSeeTime);
         this.vigilanteArrowTimer = 0.0f;
     }
 
@@ -1066,8 +1067,8 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     protected override void RoleSpecificInit()
     {
-        this.range = OptionManager.Instance.GetValue<float>(
-            VigilanteOption.Range));
+        this.range = this.Loader.GetValue<VigilanteOption, float>(
+            VigilanteOption.Range);
     }
 
     public void Update(PlayerControl rolePlayer)

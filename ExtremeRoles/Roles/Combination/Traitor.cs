@@ -49,18 +49,21 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
     {
         this.Roles.Clear();
         int roleAssignNum = 1;
-        var allOptions = OptionManager.Instance;
+        var loader = this.Loader;
 
         this.BaseRole.CanHasAnotherRole = true;
 
 		// 0:オフ、1:オン
-		allOptions.Get<bool>(
-			CombinationRoleCommonOption.IsMultiAssign)).UpdateSelection(1);
+		if (loader.TryGetValueOption<CombinationRoleCommonOption, bool>(
+				CombinationRoleCommonOption.IsMultiAssign, out var option))
+		{
+			option.Selection = 1;
+		}
 
-		if (allOptions.Contains(CombinationRoleCommonOption.AssignsNum)))
+		if (loader.TryGetValueOption<CombinationRoleCommonOption, int>(
+				CombinationRoleCommonOption.AssignsNum, out var o))
         {
-            roleAssignNum = allOptions.GetValue<int>(
-                CombinationRoleCommonOption.AssignsNum));
+            roleAssignNum = o.Value;
         }
 
         for (int i = 0; i < roleAssignNum; ++i)

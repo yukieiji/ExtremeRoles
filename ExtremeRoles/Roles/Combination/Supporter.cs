@@ -9,11 +9,16 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption;
 
+using ExtremeRoles.Module.NewOption;
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class SupporterManager : FlexibleCombinationRoleManagerBase
 {
-    public SupporterManager() : base(new Supporter(), 1)
+    public SupporterManager() : base(
+		CombinationRoleType.Supporter,
+		new Supporter(), 1)
     { }
 
 }

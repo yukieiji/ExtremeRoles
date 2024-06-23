@@ -206,7 +206,7 @@ public enum NeutralSeparateTeam
 
 public static class ExtremeRoleManager
 {
-    public const int OptionOffsetPerRole = 75;
+    public const int OptionOffsetPerRole = 200;
 
 	public static readonly IReadOnlySet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
@@ -328,12 +328,12 @@ public static class ExtremeRoleManager
         CreateServant,
     }
 
-	public const int roleIdOffset = 200;
+	private const int roleIdOffset = 200;
 
 	public static int GetRoleGroupId(ExtremeRoleId roleId)
 		=> roleIdOffset + (int)roleId;
 
-	public const int conbRoleIdOffset = 1000;
+	private const int conbRoleIdOffset = 1000;
 
 	public static int GetCombRoleGroupId(CombinationRoleType roleId)
 		=> conbRoleIdOffset + (int)roleId;

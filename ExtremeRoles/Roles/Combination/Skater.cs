@@ -14,7 +14,8 @@ namespace ExtremeRoles.Roles.Combination;
 
 public sealed class SkaterManager : FlexibleCombinationRoleManagerBase
 {
-    public SkaterManager() : base(new Skater(), 1)
+    public SkaterManager() : base(
+		CombinationRoleType.Skater, new Skater(), 1)
     { }
 
 }
@@ -98,14 +99,14 @@ public sealed class Skater :
     {
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
-		var opt = OptionManager.Instance;
+		var loader = this.Loader;
 		this.param = new SkaterSkateBehaviour.Parameter(
-			opt.GetValue<float>(this.Option.Friction)),
-			opt.GetValue<float>(this.Option.Acceleration)),
-			opt.GetValue<int>(this.Option.MaxSpeed)),
-			opt.GetValue<bool>(this.Option.UseE)) ? opt.GetValue<float>(this.Option.EValue)) : null);
+			loader.GetValue<Option, float>(Option.Friction),
+			loader.GetValue<Option, float>(Option.Acceleration),
+			loader.GetValue<Option, int>(Option.MaxSpeed),
+			loader.GetValue<Option, bool>(Option.UseE) ? loader.GetValue<Option, float>(Option.EValue) : null);
 		this.canUseSpeed =
-			opt.GetValue<float>(this.Option.CanUseSpeed)) *
+			loader.GetValue<Option, float>(Option.CanUseSpeed) *
 			SkaterSkateBehaviour.SpeedOffset;
     }
 

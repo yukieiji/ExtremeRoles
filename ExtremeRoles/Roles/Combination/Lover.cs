@@ -259,13 +259,13 @@ public sealed class Lover : MultiAssignRoleBase
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var loader = this.Loader;
 
-        bool isNeutral = allOption.GetValue<bool>(
-            LoverOption.IsNeutral));
+        bool isNeutral = loader.GetValue<LoverOption, bool>(
+            LoverOption.IsNeutral);
 
-        this.becomeKiller = allOption.GetValue<bool>(
-            LoverOption.BecomNeutral)) && isNeutral;
+        this.becomeKiller = isNeutral && loader.GetValue<LoverOption, bool>(
+            LoverOption.BecomNeutral);
 
         if (isNeutral && !this.becomeKiller)
         {
@@ -275,39 +275,39 @@ public sealed class Lover : MultiAssignRoleBase
         {
             var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
 
-            this.HasOtherKillCool = allOption.GetValue<bool>(
-                KillerCommonOption.HasOtherKillCool));
+            this.HasOtherKillCool = loader.GetValue<KillerCommonOption, bool>(
+                KillerCommonOption.HasOtherKillCool);
             if (this.HasOtherKillCool)
             {
-                this.KillCoolTime = allOption.GetValue<float>(
-                    KillerCommonOption.KillCoolDown));
+                this.KillCoolTime = loader.GetValue<KillerCommonOption, float>(
+                    KillerCommonOption.KillCoolDown);
             }
             else
             {
                 this.KillCoolTime = baseOption.GetFloat(FloatOptionNames.KillCooldown);
             }
 
-            this.HasOtherKillRange = allOption.GetValue<bool>(
-                KillerCommonOption.HasOtherKillRange));
+            this.HasOtherKillRange = loader.GetValue<KillerCommonOption, bool>(
+                KillerCommonOption.HasOtherKillRange);
 
             if (this.HasOtherKillRange)
             {
-                this.KillRange = allOption.GetValue<int>(
-                    KillerCommonOption.KillRange));
+                this.KillRange = loader.GetValue<KillerCommonOption, int>(
+                    KillerCommonOption.KillRange);
             }
             else
             {
                 this.KillRange = baseOption.GetInt(Int32OptionNames.KillDistance);
             }
 
-            this.killerLoverHasOtherVision = allOption.GetValue<bool>(
-                LoverOption.BecomeNeutralLoverHasOtherVision));
+            this.killerLoverHasOtherVision = loader.GetValue<LoverOption, bool>(
+                LoverOption.BecomeNeutralLoverHasOtherVision);
             if (this.killerLoverHasOtherVision)
             {
-                this.killerLoverVision = allOption.GetValue<float>(
-                    LoverOption.BecomeNeutralLoverVision));
-                this.killerLoverIsApplyEnvironmentVisionEffect = allOption.GetValue<bool>(
-                    LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect));
+                this.killerLoverVision = loader.GetValue<LoverOption, float>(
+                    LoverOption.BecomeNeutralLoverVision);
+                this.killerLoverIsApplyEnvironmentVisionEffect = loader.GetValue<LoverOption, bool>(
+                    LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect);
             }
             else
             {
@@ -315,12 +315,12 @@ public sealed class Lover : MultiAssignRoleBase
                 this.killerLoverIsApplyEnvironmentVisionEffect = this.IsApplyEnvironmentVision;
             }
 
-            this.killerLoverCanUseVent = allOption.GetValue<bool>(
-                LoverOption.BecomeNeutralLoverCanUseVent));
+            this.killerLoverCanUseVent = loader.GetValue<LoverOption, bool>(
+                LoverOption.BecomeNeutralLoverCanUseVent);
         }
 
-        this.limit = allOption.GetValue<int>(
-            LoverOption.DethWhenUnderAlive));
+        this.limit = loader.GetValue<LoverOption, int>(
+            LoverOption.DethWhenUnderAlive);
 
     }
 

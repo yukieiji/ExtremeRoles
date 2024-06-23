@@ -206,9 +206,10 @@ public sealed class Accelerator :
     {
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
-		this.canUseOtherPlayer = OptionManager.Instance.GetValue<bool>(
-			Option.UseOtherPlayer));
-		this.speed = OptionManager.Instance.GetValue<float>(
+		var loader = this.Loader;
+		this.canUseOtherPlayer = loader.GetValue<Option, bool>(
+			Option.UseOtherPlayer);
+		this.speed = loader.GetValue<Option, float>(
 			Option.Speed);
 
 		this.EnableVentButton = true;

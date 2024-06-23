@@ -258,8 +258,8 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
     protected override void RoleSpecificInit()
     {
 
-        this.sharerTellKill = OptionManager.Instance.GetValue<bool>(
-            SharerOption.SharerTellKill));
+        this.sharerTellKill = this.Loader.GetValue<SharerOption, bool>(
+            SharerOption.SharerTellKill);
 
         if (this.sharerTellKill)
         {

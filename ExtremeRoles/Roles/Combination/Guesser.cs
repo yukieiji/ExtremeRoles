@@ -19,6 +19,7 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Roles.Solo.Neutral;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -168,10 +169,12 @@ public sealed class Guesser :
 
             foreach (var (id, role) in ExtremeRoleManager.NormalRole)
             {
-                int spawnOptSel = allOption.GetValue<int>(
-                    role.RoleCommonOption.SpawnRate));
-                int roleNum = allOption.GetValue<int>(
-                    role.RoleCommonOption.RoleNum));
+				var loader = role.Loader;
+
+                int spawnOptSel = loader.GetValue<RoleCommonOption, int>(
+					RoleCommonOption.SpawnRate);
+                int roleNum = loader.GetValue<RoleCommonOption, int>(
+                    RoleCommonOption.RoleNum);
 
                 if (spawnOptSel < 1 || roleNum <= 0)
                 {
@@ -192,9 +195,10 @@ public sealed class Guesser :
                 {
                     case ExtremeRoleId.Jackal:
                         assignState.IsJackalOn = true;
-                        assignState.IsJackalForceReplaceLover = allOption.GetValue<bool>(
-                            role.
-                                Solo.Neutral.Jackal.JackalOption.ForceReplaceLover));
+                        assignState.IsJackalForceReplaceLover = NewOptionManager.Instance.TryGetCategory(
+							OptionTab.Neutral,
+							ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
+							out var cate) && cate.GetValue<Jackal.JackalOption, bool>(Jackal.JackalOption.ForceReplaceLover);
                         break;
                     case ExtremeRoleId.Queen:
                         assignState.IsQueenOn = true;
@@ -236,12 +240,14 @@ public sealed class Guesser :
 
                 foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
                 {
-                    int spawnOptSel = allOption.GetValue<int>(
-                        roleMng.RoleCommonOption.SpawnRate));
-                    int roleNum = allOption.GetValue<int>(
-                        roleMng.RoleCommonOption.RoleNum));
+					var loader = roleMng.Loader;
 
-                    if (spawnOptSel < 1 || roleNum <= 0)
+					int spawnOptSel = loader.GetValue<RoleCommonOption, int>(
+						RoleCommonOption.SpawnRate);
+					int roleNum = loader.GetValue<RoleCommonOption, int>(
+						RoleCommonOption.RoleNum);
+
+					if (spawnOptSel < 1 || roleNum <= 0)
                     {
                         continue;
                     }
@@ -270,18 +276,17 @@ public sealed class Guesser :
 
         private void addExRCombRole(NormalExRAssignState assignState)
         {
-            var allOption = OptionManager.Instance;
-
             foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
             {
-                int spawnOptSel = allOption.GetValue<int>(
-                    roleMng.RoleCommonOption.SpawnRate));
-                int roleNum = allOption.GetValue<int>(
-                    roleMng.RoleCommonOption.RoleNum));
+				var loader = roleMng.Loader;
 
-                bool multiAssign = allOption.GetValue<bool>(
-                    roleMng.
-                        CombinationRoleCommonOption.IsMultiAssign));
+				int spawnOptSel = loader.GetValue<RoleCommonOption, int>(
+					RoleCommonOption.SpawnRate);
+				int roleNum = loader.GetValue<RoleCommonOption, int>(
+					RoleCommonOption.RoleNum);
+
+				bool multiAssign = loader.GetValue<CombinationRoleCommonOption, bool>(
+					CombinationRoleCommonOption.IsMultiAssign);
 
                 if (spawnOptSel < 1 || roleNum <= 0)
                 {
@@ -298,11 +303,10 @@ public sealed class Guesser :
 
                     if (multiAssign)
                     {
-                        if (allOption.TryGet<bool>(
-                                flexMng.
-                                    CombinationRoleCommonOption.IsAssignImposter),
+                        if (loader.TryGetValueOption<CombinationRoleCommonOption, bool>(
+								CombinationRoleCommonOption.IsAssignImposter,
                                 out var option) &&
-                            option.GetValue())
+                            option.Value)
                         {
                             listAddTargetTeam(
                                 baseRoleId,
@@ -599,15 +603,17 @@ public sealed class Guesser :
     {
         this.uiPrefab = null;
         this.guesserUi = null;
-        var allOption = OptionManager.Instance;
 
-        this.CanCallMeeting = allOption.GetValue<bool>(
-            GuesserOption.CanCallMeeting));
 
-        bool canGuessNoneRole = allOption.GetValue<bool>(
-            GuesserOption.CanGuessNoneRole));
-        GuessMode guessMode = (GuessMode)allOption.GetValue<int>(
-            GuesserOption.GuessNoneRoleMode));
+        var loader = this.Loader;
+
+        this.CanCallMeeting = loader.GetValue<GuesserOption, bool>(
+            GuesserOption.CanCallMeeting);
+
+        bool canGuessNoneRole = loader.GetValue<GuesserOption, bool>(
+            GuesserOption.CanGuessNoneRole);
+        GuessMode guessMode = (GuessMode)loader.GetValue<GuesserOption, int>(
+            GuesserOption.GuessNoneRoleMode);
 
         this.canGuessNoneRole = canGuessNoneRole &&
             ((
@@ -622,10 +628,10 @@ public sealed class Guesser :
                 guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
             ));
 
-        this.bulletNum = allOption.GetValue<int>(
-            GuesserOption.GuessNum));
-        this.maxGuessNum = allOption.GetValue<int>(
-            GuesserOption.MaxGuessNumWhenMeeting));
+        this.bulletNum = loader.GetValue<GuesserOption, int>(
+            GuesserOption.GuessNum);
+        this.maxGuessNum = loader.GetValue<GuesserOption, int>(
+            GuesserOption.MaxGuessNumWhenMeeting);
 
         this.curGuessNum = 0;
         this.roleNamePrefix = this.CreateImpCrewPrefix();

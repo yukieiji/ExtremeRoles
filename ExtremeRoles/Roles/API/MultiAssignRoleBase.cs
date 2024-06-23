@@ -22,7 +22,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 
 	public OptionOffsetInfo? OffsetInfo { protected get; set; }
 
-	protected override IOptionLoader Loader
+	public override IOptionLoader Loader
 	{
 		get
 		{

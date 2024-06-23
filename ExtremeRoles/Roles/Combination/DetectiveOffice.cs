@@ -308,16 +308,16 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         this.info = new CrimeInfoContainer();
         this.info.Clear();
 
-        var allOption = OptionManager.Instance;
-        this.range = allOption.GetValue<float>(
-            DetectiveOption.SearchRange));
-        this.searchTime = allOption.GetValue<float>(
-            DetectiveOption.SearchTime));
-        this.searchAssistantTime = allOption.GetValue<float>(
-            DetectiveOption.SearchAssistantTime));
+        var loader = this.Loader;
+        this.range = loader.GetValue<DetectiveOption, float>(
+            DetectiveOption.SearchRange);
+        this.searchTime = loader.GetValue<DetectiveOption, float>(
+            DetectiveOption.SearchTime);
+        this.searchAssistantTime = loader.GetValue<DetectiveOption, float>(
+            DetectiveOption.SearchAssistantTime);
 
         this.textPopUp = new TextPopUpper(
-            4, allOption.GetValue<float>(DetectiveOption.TextShowTime)),
+            4, loader.GetValue<DetectiveOption, float>(DetectiveOption.TextShowTime),
             new Vector3(-3.75f, -2.5f, -250.0f),
             TMPro.TextAlignmentOptions.BottomLeft);
         this.searchCrimeInfoTime = float.MaxValue;
@@ -569,29 +569,20 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 				format: OptionUnit.Shot);
         }
 
-        public static DetectiveApprenticeOptionHolder LoadOptions(
-            int optionId)
+        public static DetectiveApprenticeOptionHolder LoadOptions(in OptionLoadWrapper loader)
         {
-            int getRoleOptionId(DetectiveApprenticeOption option)
-            {
-                return optionId + (int)option;
-            }
-
-            var allOption = OptionManager.Instance;
-
             return new DetectiveApprenticeOptionHolder()
             {
-                OptionOffset = optionId,
-                HasOtherVision = allOption.GetValue<bool>(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherVision)),
-                Vision = allOption.GetValue<float>(
-                    getRoleOptionId(DetectiveApprenticeOption.Vision)),
-                ApplyEnvironmentVisionEffect = allOption.GetValue<bool>(
-                    getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect)),
-                HasOtherButton = allOption.GetValue<bool>(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherButton)),
-                HasOtherButtonNum = allOption.GetValue<int>(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherButtonNum)),
+                HasOtherVision = loader.GetValue<DetectiveApprenticeOption, bool>(
+					DetectiveApprenticeOption.DetectiveApprenticeHasOtherVision),
+                Vision = loader.GetValue<DetectiveApprenticeOption, float>(
+					DetectiveApprenticeOption.DetectiveApprenticeVision),
+                ApplyEnvironmentVisionEffect = loader.GetValue<DetectiveApprenticeOption, bool>(
+					DetectiveApprenticeOption.DetectiveApprenticeApplyEnvironmentVisionEffect),
+                HasOtherButton = loader.GetValue<DetectiveApprenticeOption, bool>(
+					DetectiveApprenticeOption.DetectiveApprenticeHasOtherButton),
+                HasOtherButtonNum = loader.GetValue<DetectiveApprenticeOption, int>(
+					DetectiveApprenticeOption.DetectiveApprenticeHasOtherButtonNum),
             };
         }
     }
@@ -671,10 +662,18 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             }
         }
 
-        DetectiveApprentice newRole = new DetectiveApprentice(
+		if (!NewOptionManager.Instance.TryGetCategory(
+				OptionTab.Combination,
+				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.DetectiveOffice),
+				out var cate))
+		{
+			return;
+		}
+
+		int offset = 2 * ExtremeRoleManager.OptionOffsetPerRole;
+		DetectiveApprentice newRole = new DetectiveApprentice(
             prevRole.GameControlId,
-            DetectiveApprenticeOptionHolder.LoadOptions(
-                prevRole.GetManagerOptionId(0)));
+            DetectiveApprenticeOptionHolder.LoadOptions(new OptionLoadWrapper(cate, offset)));
         if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
         {
             newRole.CreateAbility();

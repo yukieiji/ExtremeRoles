@@ -28,7 +28,7 @@ using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.NewOption;
 using ExtremeRoles.Module.NewOption.Factory;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;
 
 #nullable enable
 
@@ -303,8 +303,8 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 		if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                OptionManager.Instance.GetValue<int>(
-                    RoleAbilityCommonOption.AbilityCount)));
+				this.Loader.GetValue<RoleAbilityCommonOption, int>(
+                    RoleAbilityCommonOption.AbilityCount));
         }
     }
 
@@ -374,14 +374,15 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
         this.abilityCount = 0;
 
-        this.range = OptionManager.Instance.GetValue<float>(
-            DelinqentOption.Range));
+		var loader = this.Loader;
+        this.range = loader.GetValue<DelinqentOption, float>(
+            DelinqentOption.Range);
 
         if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                OptionManager.Instance.GetValue<int>(
-                    RoleAbilityCommonOption.AbilityCount)));
+				loader.GetValue<RoleAbilityCommonOption, int>(
+                    RoleAbilityCommonOption.AbilityCount));
         }
 
         this.canAssignWisp = true;
@@ -389,10 +390,27 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
 }
 
-public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
+public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 {
+	public MultiAssignRoleBase.OptionOffsetInfo? OffsetInfo { get; set; }
+	public OptionLoadWrapper WrappedCategory
+	{
+		get
+		{
+			if (OffsetInfo is null ||
+				!NewOptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
+					out var cate))
+			{
+				throw new ArgumentException("Can't find category");
+			}
+			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+		}
+	}
 
-    public enum WispOption
+
+	public enum WispOption
     {
         WinNum,
         TorchAbilityNum,
@@ -483,18 +501,19 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public override void Initialize()
     {
-        this.abilityNum = OptionManager.Instance.GetValue<int>(
-            WispOption.TorchAbilityNum));
-        this.winNum = OptionManager.Instance.GetValue<int>(
-            WispOption.WinNum));
-        this.torchNum = OptionManager.Instance.GetValue<int>(
-            WispOption.TorchNum));
-        this.range = OptionManager.Instance.GetValue<float>(
-            WispOption.TorchRange));
-        this.torchActiveTime = OptionManager.Instance.GetValue<float>(
-            WispOption.TorchActiveTime));
-        this.torchBlackOutTime = OptionManager.Instance.GetValue<float>(
-            WispOption.BlackOutTime));
+		var loader = this.WrappedCategory;
+        this.abilityNum = loader.GetValue<WispOption, int>(
+            WispOption.TorchAbilityNum);
+        this.winNum = loader.GetValue<WispOption, int>(
+            WispOption.WinNum);
+        this.torchNum = loader.GetValue<WispOption, int>(
+            WispOption.TorchNum);
+        this.range = loader.GetValue<WispOption, float>(
+            WispOption.TorchRange);
+        this.torchActiveTime = loader.GetValue<WispOption, float>(
+            WispOption.TorchActiveTime);
+        this.torchBlackOutTime = loader.GetValue<WispOption, float>(
+            WispOption.BlackOutTime);
 	}
 
     protected override void OnMeetingEndHook()

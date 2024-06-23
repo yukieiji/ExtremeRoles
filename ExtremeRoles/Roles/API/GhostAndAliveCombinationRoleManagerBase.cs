@@ -4,6 +4,8 @@ using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -45,7 +47,14 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 		foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
+			int offset = (item.Index + 1) * ExtremeGhostRoleManager.IdOffset;
+			factory.IdOffset = offset;
 			item.Value.CreateRoleSpecificOption(factory);
+			if (item.Value is ICombination combGhost)
+			{
+				combGhost.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
+					this.RoleType, offset);
+			}
         }
     }
     protected override void CommonInit()

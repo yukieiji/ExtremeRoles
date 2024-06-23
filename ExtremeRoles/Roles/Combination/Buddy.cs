@@ -268,8 +268,8 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
 
     protected override void RoleSpecificInit()
     {
-        this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-           BuddyOption.AwakeTaskGage)) / 100.0f;
+        this.awakeTaskGage = this.Loader.GetValue<BuddyOption, int>(
+           BuddyOption.AwakeTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 
