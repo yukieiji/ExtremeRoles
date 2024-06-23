@@ -210,28 +210,28 @@ public sealed class Madmate :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
         this.isSeeImpostorNow = false;
         this.isUpdateMadmate = false;
         this.FakeImposter = false;
 
-        this.isDontCountAliveCrew = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.IsDontCountAliveCrew));
+        this.isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.IsDontCountAliveCrew);
 
-        this.CanRepairSabotage = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanFixSabotage));
-        this.UseVent = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanUseVent));
-        this.canMoveVentToVent = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanMoveVentToVent));
-        this.HasTask = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.HasTask));
-        this.seeImpostorTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(MadmateOption.SeeImpostorTaskGage)) / 100.0f;
-        this.canSeeFromImpostor = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanSeeFromImpostor));
-        this.seeFromImpostorTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)) / 100.0f;
+        this.CanRepairSabotage = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanFixSabotage);
+        this.UseVent = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanUseVent);
+        this.canMoveVentToVent = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanMoveVentToVent);
+        this.HasTask = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.HasTask);
+        this.seeImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+            MadmateOption.SeeImpostorTaskGage) / 100.0f;
+        this.canSeeFromImpostor = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanSeeFromImpostor);
+        this.seeFromImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+            MadmateOption.CanSeeFromImpostorTaskGage) / 100.0f;
 
         this.isSeeImpostorNow =
             this.HasTask &&

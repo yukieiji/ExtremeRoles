@@ -162,13 +162,13 @@ public sealed class Artist :
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
 		this.area = 0.0f;
-		this.UseVent = allOption.GetValue<bool>(
-			GetRoleOptionId(ArtistOption.CanUseVent));
-		this.winArea = allOption.GetValue<int>(
-			GetRoleOptionId(ArtistOption.WinAreaSize));
+		this.UseVent = cate.GetValue<ArtistOption, bool>(
+			ArtistOption.CanUseVent);
+		this.winArea = cate.GetValue<ArtistOption, int>(
+			ArtistOption.WinAreaSize);
     }
 
     public void ResetOnMeetingStart()

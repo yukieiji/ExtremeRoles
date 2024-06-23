@@ -117,22 +117,20 @@ public sealed class Yoko :
             false);
         factory.CreateFloatOption(
             YokoOption.SearchRange,
-            7.5f, 5.0f, 15.0f, 0.5f,
-            );
+            7.5f, 5.0f, 15.0f, 0.5f);
         factory.CreateFloatOption(
             YokoOption.SearchTime,
             10f, 3.0f, 30f, 0.5f,
-            ,
             format: OptionUnit.Second);
         factory.CreateIntOption(
             YokoOption.TrueInfoRate,
             50, 25, 80, 5,
             format: OptionUnit.Percentage);
 
-		var yashiroOpt = factory.factory.CreateBoolOption(
+		var yashiroOpt = factory.CreateBoolOption(
 			YokoOption.UseYashiro,
 			false);
-		IRoleAbility.CreateAbilityCountOption(yashiroOpt, 3, 10, 5f);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 10, 5f, parentOpt: yashiroOpt);
 
 		factory.CreateIntOption(
 			YokoOption.YashiroActiveTime,
@@ -157,27 +155,21 @@ public sealed class Yoko :
 	}
     protected override void RoleSpecificInit()
     {
-		var opt = OptionManager.Instance;
-        this.CanRepairSabotage = opt.GetValue<bool>(
-            GetRoleOptionId(YokoOption.CanRepairSabo));
-        this.UseVent = opt.GetValue<bool>(
-            GetRoleOptionId(YokoOption.CanUseVent));
-        this.searchRange = opt.GetValue<float>(
-            GetRoleOptionId(YokoOption.SearchRange));
-        this.searchTime = opt.GetValue<float>(
-            GetRoleOptionId(YokoOption.SearchTime));
-        this.trueInfoGage = opt.GetValue<int>(
-            GetRoleOptionId(YokoOption.TrueInfoRate));
+		var cate = this.Category;
+        this.CanRepairSabotage = cate.GetValue<YokoOption, bool>(YokoOption.CanRepairSabo);
+        this.UseVent = cate.GetValue<YokoOption, bool>(YokoOption.CanUseVent);
+        this.searchRange = cate.GetValue<YokoOption, float>(YokoOption.SearchRange);
+        this.searchTime = cate.GetValue<YokoOption, float>(YokoOption.SearchTime);
+        this.trueInfoGage = cate.GetValue<YokoOption, int>(YokoOption.TrueInfoRate);
 
 		this.yashiro = null;
 
-		if (opt.GetValue<bool>(GetRoleOptionId(YokoOption.UseYashiro)))
+		if (cate.GetValue<YokoOption, bool>(YokoOption.UseYashiro))
 		{
-			float activeTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroActiveTime));
-			float sealTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroSeelTime));
-			float protectRange = opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroProtectRange));
-			bool isUpdateMeeting = opt.GetValue<bool>(
-				GetRoleOptionId(YokoOption.YashiroUpdateWithMeeting));
+			float activeTime = cate.GetValue<YokoOption, int>(YokoOption.YashiroActiveTime);
+			float sealTime = cate.GetValue<YokoOption, int>(YokoOption.YashiroSeelTime);
+			float protectRange = cate.GetValue<YokoOption, float>(YokoOption.YashiroProtectRange);
+			bool isUpdateMeeting = cate.GetValue<YokoOption, bool>(YokoOption.YashiroUpdateWithMeeting);
 
 			this.yashiro = ExtremeSystemTypeManager.Instance.CreateOrGet(
 				YokoYashiroSystem.Type,

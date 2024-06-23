@@ -7,6 +7,8 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.NewOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
@@ -161,23 +163,23 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     {
         factory.CreateFloatOption(
             JesterOption.OutburstDistance,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            );
+            1.0f, 0.0f, 2.0f, 0.1f);
 
         factory.CreateBoolOption(
             JesterOption.UseSabotage,
             true);
 
         IRoleAbility.CreateAbilityCountOption(
-            , 5, 100, 2.0f);
+            factory, 5, 100, 2.0f);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.UseSabotage = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(JesterOption.UseSabotage));
-        this.outburstDistance = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(JesterOption.OutburstDistance));
+		var cat = this.Category;
+        this.UseSabotage = cat.GetValue<bool>(
+            (int)JesterOption.UseSabotage);
+        this.outburstDistance = cat.GetValue<float>(
+			(int)JesterOption.OutburstDistance);
     }
 
     public void ResetOnMeetingStart()

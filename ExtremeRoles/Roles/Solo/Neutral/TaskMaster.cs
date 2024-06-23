@@ -135,15 +135,15 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
-        this.UseSabotage = allOption.GetValue<bool>(
-            GetRoleOptionId(TaskMasterOption.CanUseSabotage));
-        this.addLongTask = allOption.GetValue<int>(
-            GetRoleOptionId(TaskMasterOption.AddLongTaskNum));
-        this.addNormalTask = allOption.GetValue<int>(
-            GetRoleOptionId(TaskMasterOption.AddNormalTaskNum));
-        this.addCommonTask = allOption.GetValue<int>(
-            GetRoleOptionId(TaskMasterOption.AddCommonTaskNum));
+        var cate = this.Category;
+        this.UseSabotage = cate.GetValue<TaskMasterOption, bool>(
+            TaskMasterOption.CanUseSabotage);
+        this.addLongTask = cate.GetValue<TaskMasterOption, int>(
+            TaskMasterOption.AddLongTaskNum);
+        this.addNormalTask = cate.GetValue<TaskMasterOption, int>(
+            TaskMasterOption.AddNormalTaskNum);
+        this.addCommonTask = cate.GetValue<TaskMasterOption, int>(
+            TaskMasterOption.AddCommonTaskNum);
         this.addTask = new List<int>();
     }
     private void resetTask(byte playerId)

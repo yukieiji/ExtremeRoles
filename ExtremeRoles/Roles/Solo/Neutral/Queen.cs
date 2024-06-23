@@ -479,21 +479,21 @@ public sealed class Queen :
 
     protected override void RoleSpecificInit()
     {
-		var optMng = OptionManager.Instance;
+		var cate = this.Category;
 
-        this.range = optMng.GetValue<float>(GetRoleOptionId(QueenOption.Range));
-        this.UseVent = optMng.GetValue<bool>(
-            GetRoleOptionId(QueenOption.CanUseVent));
-        this.ServantSelfKillCool = optMng.GetValue<float>(
-            GetRoleOptionId(QueenOption.ServantSelfKillCool));
-        this.killKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)) / 100.0f);
-        this.taskKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)) / 100.0f);
-        this.taskCompKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)) / 100.0f);
-		this.servantSucideWithQueenWhenHasKill = optMng.GetValue<bool>(
-			GetRoleOptionId(QueenOption.ServantSucideWithQueenWhenHasKill));
+        this.range = cate.GetValue<QueenOption, float>(QueenOption.Range);
+        this.UseVent = cate.GetValue<QueenOption, bool>(
+            QueenOption.CanUseVent);
+        this.ServantSelfKillCool = cate.GetValue<QueenOption, float>(
+            QueenOption.ServantSelfKillCool);
+        this.killKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
+            QueenOption.ServantKillKillCoolReduceRate) / 100.0f);
+        this.taskKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
+            QueenOption.ServantTaskKillCoolReduceRate) / 100.0f);
+        this.taskCompKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
+            QueenOption.ServantTaskCompKillCoolReduceRate) / 100.0f);
+		this.servantSucideWithQueenWhenHasKill = cate.GetValue<QueenOption, bool>(
+			QueenOption.ServantSucideWithQueenWhenHasKill);
 
 		this.servantTaskGage = new Dictionary<byte, float>();
         this.servantPlayerId = new HashSet<byte>();

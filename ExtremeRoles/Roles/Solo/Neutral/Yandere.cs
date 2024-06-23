@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Module.NewOption.Factory;
+using static ExtremeRoles.Roles.Solo.Neutral.Yoko;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -446,34 +447,33 @@ public sealed class Yandere :
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+		var cate = this.Category;
 
+        this.setTargetRange = cate.GetValue<YandereOption, float>(
+            YandereOption.SetTargetRange);
+        this.setTargetTime = cate.GetValue<YandereOption, float>(
+            YandereOption.SetTargetTime);
 
-        this.setTargetRange = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.SetTargetRange));
-        this.setTargetTime = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.SetTargetTime));
+        this.targetKillReduceRate = cate.GetValue<YandereOption, int>(
+            YandereOption.TargetKilledKillCoolReduceRate);
+        this.noneTargetKillMultiplier = cate.GetValue<YandereOption, float>(
+            YandereOption.NoneTargetKilledKillCoolMultiplier);
 
-        this.targetKillReduceRate = allOption.GetValue<int>(
-            GetRoleOptionId(YandereOption.TargetKilledKillCoolReduceRate));
-        this.noneTargetKillMultiplier = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.NoneTargetKilledKillCoolMultiplier));
-
-        this.maxTargetNum = allOption.GetValue<int>(
-            GetRoleOptionId(YandereOption.MaxTargetNum));
+        this.maxTargetNum = cate.GetValue<YandereOption, int>(
+            YandereOption.MaxTargetNum);
 
         this.timer = 0.0f;
-        this.timeLimit = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.RunawayTime));
+        this.timeLimit = cate.GetValue<YandereOption, float>(
+            YandereOption.RunawayTime);
 
         this.blockTimer = 0.0f;
-        this.blockTargetTime = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.BlockTargetTime));
+        this.blockTargetTime = cate.GetValue<YandereOption, float>(
+            YandereOption.BlockTargetTime);
 
-        this.hasOneSidedArrow = allOption.GetValue<bool>(
-            GetRoleOptionId(YandereOption.HasOneSidedArrow));
+        this.hasOneSidedArrow = cate.GetValue<YandereOption, bool>(
+            YandereOption.HasOneSidedArrow);
         this.target = new KillTarget(
-            allOption.GetValue<bool>(GetRoleOptionId(YandereOption.HasTargetArrow)));
+			cate.GetValue<YandereOption, bool>(YandereOption.HasTargetArrow));
 
         this.progress = new Dictionary<byte, float>();
 

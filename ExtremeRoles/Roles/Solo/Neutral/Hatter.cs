@@ -167,26 +167,26 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
     protected override void RoleSpecificInit()
     {
-		var optMng = OptionManager.Instance;
-		this.CanRepairSabotage = optMng.GetValue<bool>(
-			GetRoleOptionId(HatterOption.CanRepairSabotage));
-		this.winSkipCount = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.WinCount));
+		var cate = this.Category;
+		this.CanRepairSabotage = cate.GetValue<HatterOption, bool>(
+			HatterOption.CanRepairSabotage);
+		this.winSkipCount = cate.GetValue<HatterOption, int>(
+			HatterOption.WinCount);
 
-		this.isHideMeetingTimer = optMng.GetValue<bool>(
-			GetRoleOptionId(HatterOption.HideMeetingTimer));
+		this.isHideMeetingTimer = cate.GetValue<HatterOption, bool>(
+			HatterOption.HideMeetingTimer);
 
-		this.meetingTimerDecreaseLower = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.MeetingTimerDecreaseLower));
-		this.meetingTimerDecreaseUpper = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.MeetingTimerDecreaseUpper));
+		this.meetingTimerDecreaseLower = cate.GetValue<HatterOption, int>(
+			HatterOption.MeetingTimerDecreaseLower);
+		this.meetingTimerDecreaseUpper = cate.GetValue<HatterOption, int>(
+			HatterOption.MeetingTimerDecreaseUpper);
 
 		this.isUpgrated = false;
 
-		this.abilityIncreaseTaskGage = (float)optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.IncreaseTaskGage)) / 100.0f;
-		this.abilityIncreaseNum = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.IncreseNum));
+		this.abilityIncreaseTaskGage = (float)cate.GetValue<HatterOption, int>(
+			HatterOption.IncreaseTaskGage) / 100.0f;
+		this.abilityIncreaseNum = cate.GetValue<HatterOption, int>(
+			HatterOption.IncreseNum);
 
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());

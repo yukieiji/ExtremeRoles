@@ -151,15 +151,15 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public void CreateAbility()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
         var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
 			UmbrerMode.Feat,
 				new Module.AbilityBehavior.ButtonGraphic(
 					Translation.GetString("featVirus"),
 					Loader.CreateSpriteFromResources(
 						Path.UmbrerFeatVirus)),
-				allOpt.GetValue<float>(GetRoleOptionId(
-					RoleAbilityCommonOption.AbilityActiveTime))
+				cate.GetValue<RoleAbilityCommonOption, float >(
+					RoleAbilityCommonOption.AbilityActiveTime)
 		);
 
         this.CreateNormalAbilityButton(
@@ -175,9 +175,9 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 					Translation.GetString("upgradeVirus"),
 					Loader.CreateSpriteFromResources(
 					Path.UmbrerUpgradeVirus)),
-				allOpt.GetValue<float>(GetRoleOptionId(
+				cate.GetValue<UmbrerOption, float>(
 					UmbrerOption.UpgradeVirusTime))
-			));
+			);
     }
 
     public bool UseAbility()
@@ -363,11 +363,11 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         this.timer = new Dictionary<byte, float>();
         this.playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.range = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.Range));
-        this.infectRange = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.InfectRange));
-        this.maxTimer = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.KeepUpgradedVirus));
+        this.range = cate.GetValue<UmbrerOption, float>(UmbrerOption.Range);
+        this.infectRange = cate.GetValue<UmbrerOption, float>(UmbrerOption.InfectRange);
+        this.maxTimer = cate.GetValue<UmbrerOption, float>(UmbrerOption.KeepUpgradedVirus);
 
         this.isFetch = false;
     }

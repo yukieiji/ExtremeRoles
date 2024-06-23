@@ -172,16 +172,16 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Category;
 
-        this.UseSabotage = allOption.GetValue<bool>(
-            GetRoleOptionId(AliceOption.CanUseSabotage));
-        this.RevartNormalTask = allOption.GetValue<int>(
-            GetRoleOptionId(AliceOption.RevartNormalTaskNum));
-        this.RevartLongTask = allOption.GetValue<int>(
-            GetRoleOptionId(AliceOption.RevartLongTaskNum));
-        this.RevartCommonTask = allOption.GetValue<int>(
-            GetRoleOptionId(AliceOption.RevartCommonTaskNum));
+        this.UseSabotage = cate.GetValue<AliceOption, bool>(
+            AliceOption.CanUseSabotage);
+        this.RevartNormalTask = cate.GetValue<AliceOption, int>(
+            AliceOption.RevartNormalTaskNum);
+        this.RevartLongTask = cate.GetValue<AliceOption, int>(
+            AliceOption.RevartLongTaskNum);
+        this.RevartCommonTask = cate.GetValue<AliceOption, int>(
+            AliceOption.RevartCommonTaskNum);
     }
 
     public void ResetOnMeetingStart()

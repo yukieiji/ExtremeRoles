@@ -119,18 +119,20 @@ public sealed class Missionary :
         this.lamb = new List<PlayerControl>(CachedPlayerControl.AllPlayerControls.Count);
         this.timer = 0;
 
-        this.tellDeparture = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(MissionaryOption.TellDeparture));
-        this.maxTimerTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(MissionaryOption.DepartureMaxTime));
-        this.minTimerTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(MissionaryOption.DepartureMinTime));
-        this.propagateRange = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(MissionaryOption.PropagateRange));
-		this.isUseSolemnJudgment = OptionManager.Instance.GetValue<bool>(
-		   GetRoleOptionId(MissionaryOption.IsUseSolemnJudgment));
-		this.maxJudgementTarget = OptionManager.Instance.GetValue<int>(
-		   GetRoleOptionId(MissionaryOption.MaxJudgementNum));
+		var cate = this.Category;
+
+        this.tellDeparture = cate.GetValue<MissionaryOption, bool>(
+            MissionaryOption.TellDeparture);
+        this.maxTimerTime = cate.GetValue<MissionaryOption, float>(
+            MissionaryOption.DepartureMaxTime);
+        this.minTimerTime = cate.GetValue<MissionaryOption, float>(
+            MissionaryOption.DepartureMinTime);
+        this.propagateRange = cate.GetValue<MissionaryOption, float>(
+            MissionaryOption.PropagateRange);
+		this.isUseSolemnJudgment = cate.GetValue<MissionaryOption, bool>(
+		   MissionaryOption.IsUseSolemnJudgment);
+		this.maxJudgementTarget = cate.GetValue<MissionaryOption, int>(
+		   MissionaryOption.MaxJudgementNum);
 
 		this.judgementTarget = new HashSet<byte>();
 

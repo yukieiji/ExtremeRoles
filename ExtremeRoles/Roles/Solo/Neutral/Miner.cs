@@ -380,36 +380,36 @@ public sealed class Miner :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Category;
 
-		this.isLinkingVent = allOpt.GetValue<bool>(
-			GetRoleOptionId(MinerOption.LinkingAllVent));
+		this.isLinkingVent = cate.GetValue<MinerOption, bool>(
+			MinerOption.LinkingAllVent);
 
-        this.killRange = allOpt.GetValue<float>(
-            GetRoleOptionId(MinerOption.MineKillRange));
-        this.nonActiveTime = allOpt.GetValue<float>(
-            GetRoleOptionId(MinerOption.NoneActiveTime));
-        this.isShowKillLog = allOpt.GetValue<bool>(
-            GetRoleOptionId(MinerOption.ShowKillLog));
+        this.killRange = cate.GetValue<MinerOption, float>(
+            MinerOption.MineKillRange);
+        this.nonActiveTime = cate.GetValue<MinerOption, float>(
+            MinerOption.NoneActiveTime);
+        this.isShowKillLog = cate.GetValue<MinerOption, bool>(
+            MinerOption.ShowKillLog);
 
         this.mines = new Dictionary<int, MinerMineEffect>();
         this.timer = this.nonActiveTime;
 		this.mineId = 0;
 
-		bool isShowMine = allOpt.GetValue<bool>(
-			GetRoleOptionId(MinerOption.CanShowMine));
+		bool isShowMine = cate.GetValue<MinerOption, bool>(
+			MinerOption.CanShowMine);
 
-		var rolePlayerShowMode = (ShowMode)(allOpt.GetValue<int>(
-			GetRoleOptionId(MinerOption.RolePlayerShowMode)) + 1);
-		var anotherPlayerShowMode = (ShowMode)allOpt.GetValue<int>(
-			GetRoleOptionId(MinerOption.AnotherPlayerShowMode));
+		var rolePlayerShowMode = (ShowMode)(cate.GetValue<MinerOption, int>(
+			MinerOption.RolePlayerShowMode) + 1);
+		var anotherPlayerShowMode = (ShowMode)cate.GetValue<MinerOption, int>(
+			MinerOption.AnotherPlayerShowMode);
 		this.isShowAnotherPlayer = anotherPlayerShowMode != ShowMode.MineSeeNone && isShowMine;
 		this.parameter = new MineEffectParameter(
 			RolePlayerShowMode: isShowMine ? rolePlayerShowMode : ShowMode.MineSeeNone,
 			AnotherPlayerShowMode: anotherPlayerShowMode,
 			CanShowNoneActiveAtherPlayer:
-				allOpt.GetValue<bool>(
-					GetRoleOptionId(MinerOption.CanShowNoneActiveAnotherPlayer)) &&
+				cate.GetValue<MinerOption, bool>(
+					MinerOption.CanShowNoneActiveAnotherPlayer) &&
 				this.isShowAnotherPlayer);
 
 		this.killLogger = new TextPopUpper(
