@@ -65,9 +65,11 @@ public sealed class OptionManager
 	{
 		try
 		{
+			bool isShow = reader.ReadByte() == byte.MinValue;
 			OptionTab tab = (OptionTab)reader.ReadByte();
 			int categoryId = reader.ReadPackedInt32();
-			Instance.syncOption(tab, categoryId, reader);
+			Instance.syncOption(
+				isShow, tab, categoryId, reader);
 		}
 		catch (Exception e)
 		{
@@ -218,7 +220,10 @@ public sealed class OptionManager
 		}
 	}
 
-	private void syncOption(OptionTab tab, int categoryId, in MessageReader reader)
+	private void syncOption(
+		bool isShow,
+		OptionTab tab, int categoryId,
+		in MessageReader reader)
 	{
 		lock(this.options)
 		{
@@ -242,7 +247,7 @@ public sealed class OptionManager
 				option.Selection = selection;
 
 				// 値が変更されたのでポップアップ通知
-				if (curSelection != option.Selection)
+				if (isShow && curSelection != option.Selection)
 				{
 					FastDestroyableSingleton<HudManager>.Instance.Notifier.AddSettingsChangeMessage(
 						key, $"[{tab}-{category.TransedName}]の{option.Title}が{option.ValueString}に更新されました");
