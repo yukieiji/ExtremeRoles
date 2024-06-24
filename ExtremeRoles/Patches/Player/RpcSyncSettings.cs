@@ -4,13 +4,11 @@ namespace ExtremeRoles.Patches.Player;
 
 #nullable enable
 
-
-
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
 public static class PlayerControlRpcSyncSettingsPatch
 {
 	public static void Postfix()
 	{
-		// OptionManager.Instance.ShareOptionSelections();
+		OptionManager.Instance.ShereAllOption();
 	}
 }
