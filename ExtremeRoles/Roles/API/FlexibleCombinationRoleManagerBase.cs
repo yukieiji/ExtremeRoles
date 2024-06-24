@@ -169,6 +169,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     {
         this.BaseRole.CreateRoleSpecificOption(
             factory);
+		this.BaseRole.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
+			this.RoleType, 0);
     }
 
     protected override void CommonInit()

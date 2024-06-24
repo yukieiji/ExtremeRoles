@@ -89,7 +89,14 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         };
     }
 
-    public void SetAnotherRole(SingleRoleBase role)
+	public override SingleRoleBase Clone()
+	{
+		var newRole = (MultiAssignRoleBase)base.Clone();
+		newRole.OffsetInfo = this.OffsetInfo;
+		return newRole;
+	}
+
+	public void SetAnotherRole(SingleRoleBase role)
     {
 
         if (this.CanHasAnotherRole)
