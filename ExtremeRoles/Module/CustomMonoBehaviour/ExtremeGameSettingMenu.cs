@@ -138,6 +138,11 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			button.gameObject.name = $"{tab}Button";
 			button.ChangeButtonText(Translation.GetString(string.Format(
 				"ExtremeRoles_{0}Settings", tab)));
+			var text = button.buttonText;
+			text.transform.localScale = new Vector3(1.3f, 1.1f, 1.0f);
+			text.transform.localPosition = new Vector3(-0.5f, 0.0f, -1.0f);
+			text.fontSize = text.fontSizeMin = text.fontSizeMax = 2.0f;
+
 			menu.gameObject.name = $"{tab}Menu";
 
 			button.transform.localPosition = new Vector3(
