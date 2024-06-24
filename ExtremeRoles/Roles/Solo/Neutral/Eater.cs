@@ -72,8 +72,6 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
     public void CreateAbility()
     {
-        var allOpt = OptionManager.Instance;
-
 		var deadBodyMode = new GraphicAndActiveTimeMode<EaterAbilityMode>(
 			EaterAbilityMode.DeadBody,
 			new ButtonGraphic(

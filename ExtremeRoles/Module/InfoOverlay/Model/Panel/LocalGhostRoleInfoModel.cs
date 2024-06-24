@@ -25,8 +25,6 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 			return ($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
 		}
 
-		var allOption = OptionManager.Instance;
-
 		string roleOptionString = "";
 		string colorRoleName = role.GetColoredRoleName();
 

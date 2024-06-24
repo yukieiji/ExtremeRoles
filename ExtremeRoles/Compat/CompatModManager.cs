@@ -117,12 +117,11 @@ internal sealed class CompatModManager
 		StringBuilder builder = new StringBuilder();
 		for (int id = this.startOptionId; id <= this.endOptionId; ++id)
 		{
-			var option = OptionManager.Instance.GetIOption(id);
-			string optionStr = option.ToHudString();
-			if (optionStr != string.Empty)
+			if (!NewOptionManager.Instance.TryGetCategory(OptionTab.General, id, out var cate))
 			{
-				builder.AppendLine(optionStr);
+				continue;
 			}
+			cate.AddHudString(builder);
 		}
 		return builder.ToString().Trim('\r', '\n');
 	}

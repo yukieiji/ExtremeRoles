@@ -165,8 +165,6 @@ public sealed class Guesser :
         {
             assignState = new NormalExRAssignState();
 
-            var allOption = OptionManager.Instance;
-
             foreach (var (id, role) in ExtremeRoleManager.NormalRole)
             {
 				var loader = role.Loader;

@@ -76,17 +76,17 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Neutral , 0 },
 		};
 
-		var allOption = OptionManager.Instance;
-
 		foreach (var roleId in ExtremeGameModeManager.Instance.RoleSelector.UseCombRoleType)
 		{
 			byte combType = (byte)roleId;
-			if (!opt.TryGetCategory(OptionTab.Combination, combType, out var conbCate))
+			if (!opt.TryGetCategory(
+					OptionTab.Combination,
+					ExtremeRoleManager.GetCombRoleGroupId(roleId),
+					out var conbCate))
 			{
 				continue;
 			}
-			int spawnRate = ISpawnDataManager.ComputePercentage(
-				conbCate.GetValueOption<RoleCommonOption, int>(RoleCommonOption.SpawnRate));
+			int spawnRate = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
 			int roleSet = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 			int weight = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			bool isMultiAssign = conbCate.GetValue<CombinationRoleCommonOption, bool>(CombinationRoleCommonOption.IsMultiAssign);
@@ -117,13 +117,15 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 		{
 			int intedRoleId = (int)roleId;
 			SingleRoleBase role = ExtremeRoleManager.NormalRole[intedRoleId];
-			if (!opt.TryGetCategory(role.Tab, intedRoleId, out var roleCate))
+			if (!opt.TryGetCategory(
+					role.Tab,
+					ExtremeRoleManager.GetRoleGroupId(roleId),
+					out var roleCate))
 			{
 				continue;
 			}
 
-			int spawnRate = ISpawnDataManager.ComputePercentage(
-				roleCate.GetValueOption<RoleCommonOption, int>(RoleCommonOption.SpawnRate));
+			int spawnRate = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
 			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 

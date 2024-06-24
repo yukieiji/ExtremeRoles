@@ -75,8 +75,6 @@ public sealed class GhostRoleSpawnDataManager :
 		{
 			this.globalSpawnLimit = new();
 		}
-
-		var allOption = OptionManager.Instance;
 		var tmpUseData = new Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>>();
 
 		foreach (ExtremeGhostRoleId roleId in
@@ -92,13 +90,14 @@ public sealed class GhostRoleSpawnDataManager :
 				_ => throw new System.ArgumentOutOfRangeException(),
 			};
 
-			if (!opt.TryGetCategory(tab, (int)role.Id, out var roleCate))
+			if (!opt.TryGetCategory(
+					tab, ExtremeGhostRoleManager.GetRoleGroupId(role.Id),
+					out var roleCate))
 			{
 				continue;
 			}
 
-			int spawnRate = ISpawnDataManager.ComputePercentage(
-				roleCate.GetValueOption<RoleCommonOption, int>(RoleCommonOption.SpawnRate));
+			int spawnRate = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
 			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 

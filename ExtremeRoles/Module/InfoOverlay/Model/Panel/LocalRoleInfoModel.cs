@@ -68,8 +68,6 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 	private static (string, string, string) getRoleInfoAndOption(SingleRoleBase role)
 	{
-		var allOption = OptionManager.Instance;
-
 		string roleOptionString = "";
 
 		if (!role.IsVanillaRole())
@@ -87,8 +85,6 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 	private static (string, string, string) getMultiRoleInfoAndOption(MultiAssignRoleBase role)
 	{
-		var allOption = OptionManager.Instance;
-
 		string roleOptionString = "";
 
 		if (!role.IsVanillaRole())
