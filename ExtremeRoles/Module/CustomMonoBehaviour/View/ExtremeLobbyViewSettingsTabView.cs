@@ -135,6 +135,10 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			}
 
 			var category = optionGroupView.Category;
+			if (catego.Color.HasValue)
+			{
+				category.Background.color = catego.Color.Value;
+			}
 			category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
 			category.ReplaceExRText(catego.Name, 61);
 

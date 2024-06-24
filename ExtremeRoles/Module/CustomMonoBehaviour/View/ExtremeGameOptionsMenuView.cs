@@ -117,6 +117,10 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 
 			var categoObj = groupViewObj.Category;
+			if (catego.Color.HasValue)
+			{
+				categoObj.Background.color = catego.Color.Value;
+			}
 			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
 			categoObj.ReplaceExRText(
 				Helper.Translation.GetString(catego.Name), 20);
