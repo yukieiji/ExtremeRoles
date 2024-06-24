@@ -6,8 +6,8 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.NewOption;
+
+
 using Unity.Jobs.LowLevel.Unsafe;
 
 namespace ExtremeRoles.Module.RoleAssign;

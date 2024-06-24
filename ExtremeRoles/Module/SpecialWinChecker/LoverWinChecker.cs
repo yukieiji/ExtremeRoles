@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Neutral;
-using ExtremeRoles.Module.NewOption;
+
 
 namespace ExtremeRoles.Module.SpecialWinChecker;
 

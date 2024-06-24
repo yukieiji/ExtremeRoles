@@ -4,7 +4,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factories;
+namespace ExtremeRoles.Module.NewOption.OLDS.Implemented.Factories;
 
 public sealed class AutoParentSetFactory
 {
@@ -15,16 +15,16 @@ public sealed class AutoParentSetFactory
 	{
 		set
 		{
-			this.internalFactory.IdOffset = value;
+			internalFactory.IdOffset = value;
 		}
 	}
 
 	public string NamePrefix
 	{
-		get => this.internalFactory.NamePrefix;
+		get => internalFactory.NamePrefix;
 		set
 		{
-			this.internalFactory.NamePrefix = value;
+			internalFactory.NamePrefix = value;
 		}
 	}
 
@@ -35,7 +35,7 @@ public sealed class AutoParentSetFactory
 		IOptionInfo? parent = null)
 	{
 		this.parent = parent;
-		this.internalFactory = new SimpleFactory(idOffset, namePrefix, tab);
+		internalFactory = new SimpleFactory(idOffset, namePrefix, tab);
 	}
 
 	public FloatCustomOption CreateBoolOption<T>(
@@ -51,7 +51,7 @@ public sealed class AutoParentSetFactory
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
+		FloatCustomOption newOption = internalFactory.CreateFloatOption(
 			option,
 			defaultValue,
 			min, max, step,
@@ -84,7 +84,7 @@ public sealed class AutoParentSetFactory
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
+		FloatCustomOption newOption = internalFactory.CreateFloatOption(
 			option,
 			defaultValue,
 			min, max, step,
@@ -118,7 +118,7 @@ public sealed class AutoParentSetFactory
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		FloatDynamicCustomOption newOption = this.internalFactory.CreateFloatDynamicOption(
+		FloatDynamicCustomOption newOption = internalFactory.CreateFloatDynamicOption(
 			option,
 			defaultValue,
 			min, step,
@@ -152,7 +152,7 @@ public sealed class AutoParentSetFactory
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		IntCustomOption newOption = this.internalFactory.CreateIntOption(
+		IntCustomOption newOption = internalFactory.CreateIntOption(
 			option,
 			defaultValue,
 			min, max, step,
@@ -186,7 +186,7 @@ public sealed class AutoParentSetFactory
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		IntDynamicCustomOption newOption = this.internalFactory.CreateIntDynamicOption(
+		IntDynamicCustomOption newOption = internalFactory.CreateIntDynamicOption(
 			option,
 			defaultValue,
 			min, step,
@@ -219,7 +219,7 @@ public sealed class AutoParentSetFactory
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		BoolCustomOption newOption = this.internalFactory.CreateBoolOption(
+		BoolCustomOption newOption = internalFactory.CreateBoolOption(
 			option,
 			defaultValue,
 			parent is null ? this.parent : parent,
@@ -250,7 +250,7 @@ public sealed class AutoParentSetFactory
 		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption(
+		SelectionCustomOption newOption = internalFactory.CreateSelectionOption(
 			option,
 			selections,
 			parent is null ? this.parent : parent,
@@ -282,7 +282,7 @@ public sealed class AutoParentSetFactory
 		where T : struct, IConvertible
 		where W : struct, IConvertible
 	{
-		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
+		SelectionCustomOption newOption = internalFactory.CreateSelectionOption<T, W>(
 			option,
 			parent is null ? this.parent : parent,
 			isHeader,

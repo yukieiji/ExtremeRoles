@@ -14,7 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 namespace ExtremeRoles;
 
@@ -286,9 +286,9 @@ public static class RPCOperator
         }
     }
 
-    public static void ShareOption(int numOptions, MessageReader reader)
+    public static void ShareOption(in MessageReader reader)
     {
-		OptionManager.ShareOption(numOptions, reader);
+		NewOptionManager.ShareOption(reader);
     }
 
     public static void ReplaceDeadReason(byte playerId, byte reason)

@@ -8,10 +8,10 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Roles;
 
-using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
+
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 

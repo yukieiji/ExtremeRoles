@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -13,7 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using TMPro;
 
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

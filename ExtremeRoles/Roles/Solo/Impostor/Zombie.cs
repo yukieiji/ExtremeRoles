@@ -21,9 +21,9 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
 
-using ExtremeRoles.Module.CustomOption;
 
-using ExtremeRoles.Module.NewOption;
+
+
 using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

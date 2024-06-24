@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Interfaces;
 
 #nullable enable

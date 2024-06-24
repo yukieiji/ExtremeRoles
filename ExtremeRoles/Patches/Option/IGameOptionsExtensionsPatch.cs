@@ -14,7 +14,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 namespace ExtremeRoles.Patches.Option;
 

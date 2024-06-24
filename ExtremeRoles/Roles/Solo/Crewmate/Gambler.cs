@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;

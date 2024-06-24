@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.NewOption;
 
 public sealed class ClientOption
 {

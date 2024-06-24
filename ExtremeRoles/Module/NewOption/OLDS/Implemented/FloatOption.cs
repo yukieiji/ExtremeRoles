@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.NewOption.OLDS.Implemented;
 
 public sealed class FloatCustomOption : CustomOptionBase<float, float>
 {
@@ -23,7 +23,7 @@ public sealed class FloatCustomOption : CustomOptionBase<float, float>
 			enableCheckOption, tab)
 	{ }
 
-	public override float GetValue() => this.Option[CurSelection];
+	public override float GetValue() => Option[CurSelection];
 
 	private static List<float> createSelection(float min, float max, float step)
 	{
@@ -36,7 +36,7 @@ public sealed class FloatCustomOption : CustomOptionBase<float, float>
 
 		for (decimal s = dMin; s <= dMax; s += dStep)
 		{
-			selection.Add(((float)(decimal.ToDouble(s))));
+			selection.Add((float)decimal.ToDouble(s));
 		}
 
 		return selection;
@@ -68,21 +68,21 @@ public sealed class FloatDynamicCustomOption : CustomOptionBase<float, float>
 		this.step = step;
 	}
 
-	public override float GetValue() => this.Option[CurSelection];
+	public override float GetValue() => Option[CurSelection];
 
 	public override void Update(float newValue)
 	{
-		decimal dStep = new decimal(this.step);
-		decimal dMin = new decimal(this.Option[0]);
+		decimal dStep = new decimal(step);
+		decimal dMin = new decimal(Option[0]);
 		decimal dMax = new decimal(newValue);
 
 		List<float> newSelection = new List<float>();
 		for (decimal s = dMin; s <= dMax; s += dStep)
 		{
-			newSelection.Add(((float)(decimal.ToDouble(s))));
+			newSelection.Add((float)decimal.ToDouble(s));
 		}
-		this.Option = newSelection.ToArray();
-		this.UpdateSelection(this.CurSelection);
+		Option = newSelection.ToArray();
+		UpdateSelection(CurSelection);
 	}
 
 	private static List<float> createSelection(
@@ -97,7 +97,7 @@ public sealed class FloatDynamicCustomOption : CustomOptionBase<float, float>
 		decimal tempMaxValue;
 		if (floatTempMaxValue == 0.0f)
 		{
-			tempMaxValue = (min + step) < defaultValue ? new decimal(defaultValue) : dMin + dStep;
+			tempMaxValue = min + step < defaultValue ? new decimal(defaultValue) : dMin + dStep;
 		}
 		else
 		{
@@ -106,7 +106,7 @@ public sealed class FloatDynamicCustomOption : CustomOptionBase<float, float>
 
 		for (decimal s = dMin; s <= tempMaxValue; s += dStep)
 		{
-			selection.Add(((float)(decimal.ToDouble(s))));
+			selection.Add((float)decimal.ToDouble(s));
 		}
 
 		return selection;

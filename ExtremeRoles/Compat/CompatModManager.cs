@@ -11,8 +11,8 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.NewOption;
+
+
 
 namespace ExtremeRoles.Compat;
 

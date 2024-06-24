@@ -9,9 +9,9 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.NewOption.OLDS.Implemented;
 
 namespace ExtremeRoles.Test.Helper;
 

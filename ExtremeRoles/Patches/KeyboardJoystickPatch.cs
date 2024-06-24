@@ -9,7 +9,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches;

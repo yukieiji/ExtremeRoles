@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 

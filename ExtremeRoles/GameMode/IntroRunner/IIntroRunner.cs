@@ -18,7 +18,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
@@ -85,7 +85,7 @@ public interface IIntroRunner
         else
         {
             // クライアントはここでオプション値を読み込むことで待ち時間を短く見せるトリック
-            OptionManager.Load();
+            NewOptionManager.Load();
 
             // ラグも有るかもしれないで1フレーム待機
             yield return null;

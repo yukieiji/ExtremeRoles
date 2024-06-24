@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.NewOption.OLDS.Implemented;
 
 public sealed class SelectionCustomOption : CustomOptionBase<int, string>
 {

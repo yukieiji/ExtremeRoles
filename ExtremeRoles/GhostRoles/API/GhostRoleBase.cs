@@ -9,9 +9,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-using ExtremeRoles.Module.CustomOption;
 
-using ExtremeRoles.Module.NewOption;
+
+
 using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Module.NewOption.Interfaces;
 using ExtremeRoles.Roles;

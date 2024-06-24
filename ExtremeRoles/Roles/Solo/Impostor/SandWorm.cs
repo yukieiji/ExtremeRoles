@@ -13,10 +13,10 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.VentModule;
 
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Factory;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

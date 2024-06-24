@@ -18,7 +18,7 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Performance;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;

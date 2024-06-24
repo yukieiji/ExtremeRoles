@@ -7,7 +7,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -15,7 +15,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.NewOption.Factory;
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;

@@ -5,8 +5,8 @@ using ExtremeRoles.GameMode.Logic.Usable;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.NewOption;
+
+
 using ExtremeRoles.Roles;
 
 // TODO: setプロパティ => initにする

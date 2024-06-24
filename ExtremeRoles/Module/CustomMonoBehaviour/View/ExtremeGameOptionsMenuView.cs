@@ -7,7 +7,7 @@ using UnityEngine;
 using Il2CppUiElementList = Il2CppSystem.Collections.Generic.List<UiElement>;
 
 using ExtremeRoles.Extension.Option;
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.View;
 using ExtremeRoles.GameMode;
 
@@ -108,7 +108,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		foreach (var (catego, groupViewObj) in Enumerable.Zip(this.AllCategory, this.optionGroupViewObject))
 		{
 			if (!(
-					catego.Tab is CustomOption.OptionTab.General ||
+					catego.Tab is OptionTab.General ||
 					ExtremeGameModeManager.Instance.RoleSelector.IsValidCategory(catego.Id)
 				))
 			{

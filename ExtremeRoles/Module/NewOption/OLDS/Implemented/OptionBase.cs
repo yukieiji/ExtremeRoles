@@ -11,9 +11,10 @@ using BepInEx.Configuration;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
+
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.NewOption.OLDS.Implemented;
 
 public enum OptionTab : byte
 {
@@ -97,9 +98,9 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 	public int Id { get; init; }
 	public string Name { get; init; }
 
-	public int ValueCount => this.Option.Length;
+	public int ValueCount => Option.Length;
 	public bool Enabled
-		=> this.CurSelection != this.defaultSelection;
+		=> CurSelection != defaultSelection;
 
 	protected SelectionType[] Option = new SelectionType[1];
 
@@ -128,45 +129,45 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 		OptionTab tab = OptionTab.General)
 	{
 
-		this.Tab = tab;
-		this.Parent = parent;
+		Tab = tab;
+		Parent = parent;
 
-		this.Option = selections;
+		Option = selections;
 		int index = Array.IndexOf(selections, defaultValue);
 
-		this.Id = id;
-		this.Name = name;
+		Id = id;
+		Name = name;
 
-		this.formatStr = format == OptionUnit.None ? string.Empty : format.ToString();
-		this.defaultSelection = Mathf.Clamp(index, 0, index);
+		formatStr = format == OptionUnit.None ? string.Empty : format.ToString();
+		defaultSelection = Mathf.Clamp(index, 0, index);
 
-		this.IsHeader = isHeader;
-		this.IsHidden = isHidden;
+		IsHeader = isHeader;
+		IsHidden = isHidden;
 
-		this.Children = new List<IOptionInfo>();
-		this.withUpdateOption.Clear();
-		this.forceEnableCheckOption = enableCheckOption;
+		Children = new List<IOptionInfo>();
+		withUpdateOption.Clear();
+		forceEnableCheckOption = enableCheckOption;
 
 		if (parent != null)
 		{
-			this.enableInvert = invert;
+			enableInvert = invert;
 			parent.Children.Add(this);
 		}
 
-		this.CurSelection = 0;
+		CurSelection = 0;
 		if (id > 0)
 		{
 			bindConfig();
-			this.CurSelection = Mathf.Clamp(this.entry!.Value, 0, selections.Length - 1);
+			CurSelection = Mathf.Clamp(entry!.Value, 0, selections.Length - 1);
 		}
 
 		ExtremeRolesPlugin.Logger.LogInfo($"Register Options:  {this}");
 
-		OptionManager.Instance.AddOption(this.Id, this);
+		// OptionManager.Instance.AddOption(Id, this);
 	}
 
 	public override string ToString()
-		=> $"ID:{this.Id} Name:{this.Name} CurValue:{this.GetValue()}";
+		=> $"ID:{Id} Name:{Name} CurValue:{GetValue()}";
 
 	public void AddToggleOptionCheckHook(StringNames targetOption)
 	{
@@ -181,30 +182,30 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 		return;
 	}
 
-	public string GetTranslatedName() => Translation.GetString(this.Name);
+	public string GetTranslatedName() => Translation.GetString(Name);
 
 	public string GetTranslatedValue()
 	{
-		string? sel = this.Option[this.CurSelection].ToString();
+		string? sel = Option[CurSelection].ToString();
 
-		return string.IsNullOrEmpty(this.formatStr) ?
+		return string.IsNullOrEmpty(formatStr) ?
 			Translation.GetString(sel) :
-			string.Format(Translation.GetString(this.formatStr), sel);
+			string.Format(Translation.GetString(formatStr), sel);
 	}
 
 	public bool IsActive()
 	{
-		if (this.IsHidden)
+		if (IsHidden)
 		{
 			return false;
 		}
 
-		if (this.IsHeader || this.Parent == null)
+		if (IsHeader || Parent == null)
 		{
 			return true;
 		}
 
-		IOptionInfo parent = this.Parent;
+		IOptionInfo parent = Parent;
 		bool active = true;
 
 		while (parent != null && active)
@@ -213,18 +214,18 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 			parent = parent.Parent;
 		}
 
-		if (this.enableInvert)
+		if (enableInvert)
 		{
 			active = !active;
 		}
 
-		if (this.forceEnableCheckOption is not null)
+		if (forceEnableCheckOption is not null)
 		{
-			bool forceEnable = this.forceEnableCheckOption.Enabled;
+			bool forceEnable = forceEnableCheckOption.Enabled;
 
-			if (this.forceEnableCheckOption.Parent is not null)
+			if (forceEnableCheckOption.Parent is not null)
 			{
-				forceEnable = forceEnable && this.forceEnableCheckOption.Parent.IsActive();
+				forceEnable = forceEnable && forceEnableCheckOption.Parent.IsActive();
 			}
 
 			active = active && forceEnable;
@@ -234,72 +235,72 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
 	public void SetUpdateOption(IValueOption<OutType> option)
 	{
-		this.withUpdateOption.Add(option);
-		option.Update(this.GetValue());
+		withUpdateOption.Add(option);
+		option.Update(GetValue());
 	}
 
 	public void UpdateSelection(int newSelection)
 	{
-		int length = this.ValueCount;
+		int length = ValueCount;
 
-		this.CurSelection = Mathf.Clamp(
+		CurSelection = Mathf.Clamp(
 			(newSelection + length) % length,
 			0, length - 1);
 
-		if (this.Body is StringOption stringOption)
+		if (Body is StringOption stringOption)
 		{
-			stringOption.oldValue = stringOption.Value = this.CurSelection;
-			stringOption.ValueText.text = this.GetTranslatedValue();
+			stringOption.oldValue = stringOption.Value = CurSelection;
+			stringOption.ValueText.text = GetTranslatedValue();
 		}
 
-		foreach (IValueOption<OutType> option in this.withUpdateOption)
+		foreach (IValueOption<OutType> option in withUpdateOption)
 		{
-			option.Update(this.GetValue());
+			option.Update(GetValue());
 		}
 
 		if (AmongUsClient.Instance &&
 			AmongUsClient.Instance.AmHost &&
 			CachedPlayerControl.LocalPlayer &&
-			this.entry != null)
+			entry != null)
 		{
-			this.entry.Value = this.CurSelection; // Save selection to config
+			entry.Value = CurSelection; // Save selection to config
 		}
 	}
 
 	public void SaveConfigValue()
 	{
-		if (this.entry != null)
+		if (entry != null)
 		{
-			this.entry.Value = this.CurSelection;
+			entry.Value = CurSelection;
 		}
 	}
 
 	public void SwitchPreset()
 	{
 		bindConfig();
-		this.UpdateSelection(Mathf.Clamp(
-			this.entry!.Value, 0,
-			this.ValueCount - 1));
+		UpdateSelection(Mathf.Clamp(
+			entry!.Value, 0,
+			ValueCount - 1));
 	}
 
 	public void SetOptionBehaviour(OptionBehaviour newBehaviour)
 	{
-		this.Body = newBehaviour;
+		Body = newBehaviour;
 	}
 
 	public void SetOptionUnit(OptionUnit unit)
 	{
-		this.formatStr = unit.ToString();
+		formatStr = unit.ToString();
 	}
 
 	public string ToHudString() =>
-		this.IsActive() ? $"{this.GetTranslatedName()}: {this.GetTranslatedValue()}" : string.Empty;
+		IsActive() ? $"{GetTranslatedName()}: {GetTranslatedValue()}" : string.Empty;
 
 	public string ToHudStringWithChildren(int indent = 0)
 	{
 		StringBuilder builder = new StringBuilder();
-		string optStr = this.ToHudString();
-		if (!this.IsHidden && optStr != string.Empty)
+		string optStr = ToHudString();
+		if (!IsHidden && optStr != string.Empty)
 		{
 			builder.AppendLine(optStr);
 		}
@@ -311,14 +312,14 @@ public abstract class CustomOptionBase<OutType, SelectionType>
 
 	private void bindConfig()
 	{
-		this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
-			OptionManager.Instance.ConfigPreset,
-			this.cleanName(),
-			this.defaultSelection);
+		entry = ExtremeRolesPlugin.Instance.Config.Bind(
+			"OLD_OPTION", // OptionManager.Instance.ConfigPreset,
+			cleanName(),
+			defaultSelection);
 	}
 
 	private string cleanName()
-		=> nameCleaner.Replace(this.Name, string.Empty).Trim();
+		=> nameCleaner.Replace(Name, string.Empty).Trim();
 
 	private static void addChildrenOptionHudString(
 		ref StringBuilder builder,

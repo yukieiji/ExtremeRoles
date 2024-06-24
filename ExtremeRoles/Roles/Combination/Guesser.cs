@@ -8,7 +8,7 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -17,7 +17,7 @@ using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Factory;
 using ExtremeRoles.Roles.Solo.Neutral;
 

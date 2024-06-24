@@ -33,7 +33,7 @@ using UnityEngine.Events;
 
 using ExtremeRoles.Extension.UnityEvents;
 
-using ExtremeRoles.Module.CustomOption;
+
 using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Patches.Region;

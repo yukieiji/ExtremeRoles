@@ -4,9 +4,9 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Interfaces;
 
 #nullable enable

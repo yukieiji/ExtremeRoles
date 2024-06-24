@@ -64,8 +64,7 @@ public static class PlayerControlHandleRpcPatch
 				}
 				break;
 			case RPCOperator.Command.ShareOption:
-				int numOptions = reader.ReadByte();
-				RPCOperator.ShareOption(numOptions, reader);
+				RPCOperator.ShareOption(reader);
 				break;
 			case RPCOperator.Command.CustomVentUse:
 				int ventId = reader.ReadPackedInt32();

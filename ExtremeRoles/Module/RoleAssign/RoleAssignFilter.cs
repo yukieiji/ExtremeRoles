@@ -9,7 +9,7 @@ using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Resources;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 #nullable enable
 
@@ -158,7 +158,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 		=> new RoleAssignFilterModel()
 		{
 			Config = ExtremeRolesPlugin.Instance.Config.Bind(
-				"RoleAssignFilter", OptionManager.Instance.ConfigPreset, defaultValue),
+				"RoleAssignFilter", NewOptionManager.Instance.ConfigPreset, defaultValue),
 			Id = new(),
 			NormalRole = new(),
 			CombRole = new(),

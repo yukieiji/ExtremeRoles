@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using AmongUs.GameOptions;
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.NewOption;
+
+
 using ExtremeRoles.Module.NewOption.Factory;
 using ExtremeRoles.Module.NewOption.Interfaces;
 

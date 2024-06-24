@@ -5,11 +5,11 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
 
 using ExtremeRoles.Patches.Option;
-using ExtremeRoles.Module.NewOption;
+
 using System.Linq;
 
 

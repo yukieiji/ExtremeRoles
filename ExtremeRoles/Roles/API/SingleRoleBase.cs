@@ -2,10 +2,10 @@
 
 using UnityEngine;
 
-using ExtremeRoles.Module.CustomOption;
+
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;

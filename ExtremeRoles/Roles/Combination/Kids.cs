@@ -23,9 +23,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
 
-using ExtremeRoles.Module.CustomOption;
 
-using ExtremeRoles.Module.NewOption;
+
+
 using ExtremeRoles.Module.NewOption.Factory;
 
 using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;

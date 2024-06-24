@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Module.CustomOption;
+﻿namespace ExtremeRoles.Module.NewOption.OLDS.Implemented;
 
 public sealed class BoolCustomOption : CustomOptionBase<bool, string>
 {

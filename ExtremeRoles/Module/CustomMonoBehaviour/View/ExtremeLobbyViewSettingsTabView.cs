@@ -4,13 +4,12 @@ using System.Linq;
 
 using UnityEngine;
 
-using ExtremeRoles.Module.CustomOption;
-
 using ExtremeRoles.Extension.Option;
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.View;
 using ExtremeRoles.GameMode;
+
 
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
@@ -127,7 +126,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		foreach (var (catego, optionGroupView) in container.Category.Zip(optionGroupViewObject))
 		{
 			if (!(
-					tab is CustomOption.OptionTab.General ||
+					tab is OptionTab.General ||
 					ExtremeGameModeManager.Instance.RoleSelector.IsValidCategory(catego.Id)
 				))
 			{

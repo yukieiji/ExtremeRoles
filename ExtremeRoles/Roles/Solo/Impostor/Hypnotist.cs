@@ -27,9 +27,9 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
 using ExtremeRoles.Compat;
 
-using ExtremeRoles.Module.CustomOption;
 
-using ExtremeRoles.Module.NewOption;
+
+
 using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

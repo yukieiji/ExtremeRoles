@@ -6,8 +6,8 @@ using UnityEngine;
 
 #nullable enable
 
-using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
-using OptionUnit = ExtremeRoles.Module.CustomOption.OptionUnit;
+
+
 
 using ExtremeRoles.Module.NewOption.Interfaces;
 using ExtremeRoles.Module.NewOption.Implemented;

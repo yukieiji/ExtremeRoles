@@ -7,7 +7,7 @@ using UnityEngine;
 using AmongUs.Data;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -66,7 +66,7 @@ public static class GameStartManagerPatch
 
         InfoOverlay.Instance.Hide();
         // ホストはここでオプションを読み込み
-        OptionManager.Load();
+        NewOptionManager.Load();
 
         if (ExtremeGameModeManager.Instance.ShipOption.IsRandomMap)
         {

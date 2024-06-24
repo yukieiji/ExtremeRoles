@@ -2,7 +2,7 @@
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;

@@ -4,10 +4,10 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.NewOption;
+
 using Unity.Jobs.LowLevel.Unsafe;
 
 namespace ExtremeRoles.Module.RoleAssign;

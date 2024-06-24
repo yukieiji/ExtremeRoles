@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.RoleAssign;
@@ -54,7 +54,7 @@ public static class CustomOptionCsvProcessor
 				string.Format("{1}{0}{2}{0}{3}{0}{4}",
 					comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
 
-
+			/*
 			foreach (IOptionInfo option in OptionManager.Instance.GetAllIOption())
 			{
 
@@ -68,6 +68,7 @@ public static class CustomOptionCsvProcessor
 						cleaner.Clean(option.Name),
 						option.CurSelection));
 			}
+			*/
 
 			csv.WriteLine(
 				string.Format(
@@ -187,7 +188,7 @@ public static class CustomOptionCsvProcessor
 						break;
 				}
 			}
-
+			/*
 			var options = OptionManager.Instance;
 			var cleaner = new StringCleaner();
 
@@ -205,7 +206,6 @@ public static class CustomOptionCsvProcessor
 					option.SaveConfigValue();
 				}
 			}
-
 			if (AmongUsClient.Instance &&
 				AmongUsClient.Instance.AmHost &&
 				CachedPlayerControl.LocalPlayer)
@@ -213,6 +213,7 @@ public static class CustomOptionCsvProcessor
 				options.ShareOptionSelections();// Share all selections
 			}
 
+			*/
 			ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Complete ----------");
 
 			return true;

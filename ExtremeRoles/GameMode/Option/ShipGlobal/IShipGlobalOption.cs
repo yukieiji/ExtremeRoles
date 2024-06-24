@@ -5,8 +5,8 @@ using System.Text;
 using ExtremeRoles.Extension.Strings;
 using ExtremeRoles.Patches.Option;
 
-using ExtremeRoles.Module.NewOption;
-using ExtremeRoles.Module.CustomOption;
+
+
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExtremeRoles.Module.CustomOption;
+namespace ExtremeRoles.Module.NewOption.OLDS.Implemented;
 
 public sealed class IntCustomOption : CustomOptionBase<int, int>
 {
@@ -26,15 +26,15 @@ public sealed class IntCustomOption : CustomOptionBase<int, int>
 			format, invert,
 			enableCheckOption, tab)
 	{
-		this.minValue = this.Option[0];
-		this.maxValue = this.Option[this.ValueCount - 1];
+		minValue = Option[0];
+		maxValue = Option[ValueCount - 1];
 	}
 
 	public override int GetValue() => Option[CurSelection];
 
 	public override void Update(int newValue)
 	{
-		int newMaxValue = this.maxValue / newValue;
+		int newMaxValue = maxValue / newValue;
 
 		List<int> newSelections = new List<int>();
 		for (int s = minValue; s <= newMaxValue; ++s)
@@ -42,8 +42,8 @@ public sealed class IntCustomOption : CustomOptionBase<int, int>
 			newSelections.Add(s);
 		}
 
-		this.Option = newSelections.ToArray();
-		this.UpdateSelection(this.CurSelection);
+		Option = newSelections.ToArray();
+		UpdateSelection(CurSelection);
 	}
 
 	private static List<int> createSelection(int min, int max, int step)
@@ -85,19 +85,19 @@ public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>
 		this.step = step;
 	}
 
-	public override int GetValue() => this.Option[this.CurSelection];
+	public override int GetValue() => Option[CurSelection];
 
 	public override void Update(int newValue)
 	{
-		int minValue = this.Option[0];
+		int minValue = Option[0];
 
 		List<int> newSelections = new List<int>();
-		for (int s = minValue; s <= newValue; s += this.step)
+		for (int s = minValue; s <= newValue; s += step)
 		{
 			newSelections.Add(s);
 		}
-		this.Option = newSelections.ToArray();
-		this.UpdateSelection(this.CurSelection);
+		Option = newSelections.ToArray();
+		UpdateSelection(CurSelection);
 	}
 
 	private static List<int> createSelection(
@@ -107,7 +107,7 @@ public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>
 
 		if (tempMaxValue == 0)
 		{
-			tempMaxValue = (min + step) < defaultValue ? defaultValue : min + step;
+			tempMaxValue = min + step < defaultValue ? defaultValue : min + step;
 		}
 
 		for (int s = min; s <= tempMaxValue; s += step)

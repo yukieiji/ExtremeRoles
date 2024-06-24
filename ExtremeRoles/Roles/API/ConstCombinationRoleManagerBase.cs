@@ -6,9 +6,9 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Module.NewOption.Factory;
-using ExtremeRoles.Module.NewOption;
+
 
 namespace ExtremeRoles.Roles.API;
 

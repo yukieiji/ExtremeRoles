@@ -7,7 +7,7 @@ using System.Text;
 
 using UnityEngine;
 
-using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
+
 
 using ExtremeRoles.Module.NewOption.Interfaces;
 using ExtremeRoles.Extension;

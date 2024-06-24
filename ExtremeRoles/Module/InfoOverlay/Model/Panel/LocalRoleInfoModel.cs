@@ -7,7 +7,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 

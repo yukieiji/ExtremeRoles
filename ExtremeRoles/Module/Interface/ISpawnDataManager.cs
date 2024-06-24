@@ -2,7 +2,7 @@
 
 using ExtremeRoles.GameMode.RoleSelector;
 
-using ExtremeRoles.Module.NewOption;
+
 using ExtremeRoles.Module.NewOption.Interfaces;
 
 namespace ExtremeRoles.Module.Interface;

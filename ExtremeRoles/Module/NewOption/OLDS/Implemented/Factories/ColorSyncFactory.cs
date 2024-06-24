@@ -6,7 +6,7 @@ using UnityEngine;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factories;
+namespace ExtremeRoles.Module.NewOption.OLDS.Implemented.Factories;
 
 public sealed class ColorSyncFactory : SimpleFactory
 {
@@ -35,11 +35,11 @@ public sealed class ColorSyncFactory : SimpleFactory
 		where T : struct, IConvertible
 		=> new FloatCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, this.color),
+			GetOptionName(option, color),
 			defaultValue,
 			min, max, step,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public FloatDynamicCustomOption CreateFloatDynamicOption<T>(
@@ -56,12 +56,12 @@ public sealed class ColorSyncFactory : SimpleFactory
 		where T : struct, IConvertible
 		=> new FloatDynamicCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, this.color),
+			GetOptionName(option, color),
 			defaultValue,
 			min, step,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption,
-			this.Tab, tempMaxValue);
+			Tab, tempMaxValue);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntCustomOption CreateIntOption<T>(
@@ -77,11 +77,11 @@ public sealed class ColorSyncFactory : SimpleFactory
 		where T : struct, IConvertible
 		=> new IntCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, this.color),
+			GetOptionName(option, color),
 			defaultValue,
 			min, max, step,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntDynamicCustomOption CreateIntDynamicOption<T>(
@@ -98,12 +98,12 @@ public sealed class ColorSyncFactory : SimpleFactory
 		where T : struct, IConvertible
 		=> new IntDynamicCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, this.color),
+			GetOptionName(option, color),
 			defaultValue,
 			min, step,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption,
-			this.Tab, tempMaxValue);
+			Tab, tempMaxValue);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public BoolCustomOption CreateBoolOption<T>(
@@ -118,10 +118,10 @@ public sealed class ColorSyncFactory : SimpleFactory
 		where T : struct, IConvertible
 		=> new BoolCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, this.color),
+			GetOptionName(option, color),
 			defaultValue,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<T>(
@@ -136,10 +136,10 @@ public sealed class ColorSyncFactory : SimpleFactory
 		where T : struct, IConvertible
 		=> new SelectionCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, this.color),
+			GetOptionName(option, color),
 			selections,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<T, W>(
@@ -154,8 +154,8 @@ public sealed class ColorSyncFactory : SimpleFactory
 		where W : struct, IConvertible
 		=> new SelectionCustomOption(
 			GetOptionId(option),
-			GetOptionName(option, this.color),
+			GetOptionName(option, color),
 			GetEnumString<W>().ToArray(),
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 }

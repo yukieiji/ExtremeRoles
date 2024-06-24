@@ -7,11 +7,12 @@ using System.Text.RegularExpressions;
 
 using UnityEngine;
 
-using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
-using OptionUnit = ExtremeRoles.Module.CustomOption.OptionUnit;
+
+
 
 using ExtremeRoles.Module.NewOption.Interfaces;
 using ExtremeRoles.Module.NewOption.Implemented;
+
 
 
 #nullable enable

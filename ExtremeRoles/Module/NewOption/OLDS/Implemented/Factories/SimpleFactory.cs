@@ -7,9 +7,10 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 
+
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomOption.Factories;
+namespace ExtremeRoles.Module.NewOption.OLDS.Implemented.Factories;
 
 public class SimpleFactory
 {
@@ -23,9 +24,9 @@ public class SimpleFactory
 		string namePrefix = "",
 		OptionTab tab = OptionTab.General)
 	{
-		this.IdOffset = idOffset;
-		this.NamePrefix = namePrefix;
-		this.Tab = tab;
+		IdOffset = idOffset;
+		NamePrefix = namePrefix;
+		Tab = tab;
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -147,7 +148,7 @@ public class SimpleFactory
 			defaultValue,
 			min, max, step,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public FloatDynamicCustomOption CreateFloatDynamicOption<T>(
@@ -170,7 +171,7 @@ public class SimpleFactory
 			min, step,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption,
-			this.Tab, tempMaxValue);
+			Tab, tempMaxValue);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntCustomOption CreateIntOption<T>(
@@ -191,7 +192,7 @@ public class SimpleFactory
 			defaultValue,
 			min, max, step,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public IntDynamicCustomOption CreateIntDynamicOption<T>(
@@ -214,7 +215,7 @@ public class SimpleFactory
 			min, step,
 			parent, isHeader, isHidden,
 			format, invert, enableCheckOption,
-			this.Tab, tempMaxValue);
+			Tab, tempMaxValue);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public BoolCustomOption CreateBoolOption<T>(
@@ -233,7 +234,7 @@ public class SimpleFactory
 			GetOptionName(option, color, ignorePrefix),
 			defaultValue,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<T>(
@@ -252,7 +253,7 @@ public class SimpleFactory
 			GetOptionName(option, color, ignorePrefix),
 			selections,
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public SelectionCustomOption CreateSelectionOption<T, W>(
@@ -272,7 +273,7 @@ public class SimpleFactory
 			GetOptionName(option, color, ignorePrefix),
 			GetEnumString<W>().ToArray(),
 			parent, isHeader, isHidden,
-			format, invert, enableCheckOption, this.Tab);
+			format, invert, enableCheckOption, Tab);
 
 	public int GetOptionId<T>(T option) where T : struct, IConvertible
 	{
@@ -280,11 +281,11 @@ public class SimpleFactory
 		return GetOptionId(Convert.ToInt32(option));
 	}
 
-	public int GetOptionId(int option) => this.IdOffset + option;
+	public int GetOptionId(int option) => IdOffset + option;
 
 	protected string GetOptionName<T>(T option, Color? color, bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		string optionName = ignorePrefix ? $"|{this.NamePrefix}|{option}" : $"{this.NamePrefix}{option}";
+		string optionName = ignorePrefix ? $"|{NamePrefix}|{option}" : $"{NamePrefix}{option}";
 
 		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
 	}

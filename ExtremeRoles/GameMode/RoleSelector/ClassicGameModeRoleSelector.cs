@@ -4,7 +4,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-using ExtremeRoles.Module.CustomOption;
+
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 

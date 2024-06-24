@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.NewOption;
+﻿
 using ExtremeRoles.Module.NewOption.Factory;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
