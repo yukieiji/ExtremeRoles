@@ -13,8 +13,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using UnityObject = UnityEngine.Object;
 using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
+
 
 #nullable enable
 
@@ -471,12 +474,14 @@ public static class GameSystem
 
 	public static void SpawnDummyPlayer(string name = "")
     {
-        PlayerControl playerControl = UnityEngine.Object.Instantiate(
-                AmongUsClient.Instance.PlayerPrefab);
+        PlayerControl playerControl = UnityObject.Instantiate(
+            AmongUsClient.Instance.PlayerPrefab);
         playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
 
-        // GameData.Instance.AddPlayer(playerControl);
-        AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
+        var dummyData = GameData.Instance.AddDummy(playerControl);
+		AmongUsClient.Instance.Spawn(dummyData);
+        AmongUsClient.Instance.Spawn(playerControl);
+		playerControl.isDummy = true;
 
         var hatMng = FastDestroyableSingleton<HatManager>.Instance;
         var rng = RandomGenerator.GetTempGenerator();
@@ -498,8 +503,10 @@ public static class GameSystem
         playerControl.SetPet(hatMng.allPets[pet].ProdId, color);
         playerControl.SetVisor(hatMng.allVisors[visor].ProdId, color);
         playerControl.SetSkin(hatMng.allSkins[skin].ProdId, color);
-        // GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
-    }
+
+		dummyData.PlayerId = playerControl.PlayerId;
+		dummyData.RpcSetTasks(new Il2CppStructArray<byte>(0));
+	}
 
     private static List<int> getTaskIndex(
         NormalPlayerTask[] tasks)
