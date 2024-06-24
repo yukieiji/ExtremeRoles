@@ -91,6 +91,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
         var roleSetOption = factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
             OptionCreator.SpawnRate,
+			format: OptionUnit.Percentage,
 			ignorePrefix: true);
 
         int thisMaxRoleNum =

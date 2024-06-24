@@ -122,6 +122,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		var roleSetOption = factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
 			OptionCreator.SpawnRate,
+			format: OptionUnit.Percentage,
 			ignorePrefix: true);
 
 		int maxSetNum = this.BaseRole.IsImpostor() ?
