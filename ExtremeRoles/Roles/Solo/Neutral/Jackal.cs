@@ -400,7 +400,8 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         // JackalOption
         this.createJackalOption(factory);
 
-        // SideKickOption
+		// SideKickOption
+		factory.OptionPrefix = string.Empty;
         this.SidekickOption = new SidekickOptionHolder(factory);
     }
 

@@ -26,6 +26,7 @@ public class OptionCategoryFactory(
 	in Color? color = null) : IDisposable
 {
 	public string Name { get; set; } = name;
+	public string OptionPrefix { protected get; set; } = name;
 
 	public OptionTab Tab { get; } = tab;
 	public int IdOffset { protected get; set; } = 0;
@@ -223,7 +224,7 @@ public class OptionCategoryFactory(
 
 	protected string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		string cleanedName = this.NameCleaner.Replace(this.Name, string.Empty).Trim();
+		string cleanedName = this.NameCleaner.Replace(this.OptionPrefix, string.Empty).Trim();
 
 		return ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
 	}

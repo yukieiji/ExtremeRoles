@@ -119,11 +119,15 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
         foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
+			var role = item.Value;
 			// 同じオプションを参照したい時があるのでオフセット値を入れておく
 			int offset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
+
 			factory.IdOffset = (item.Index + 1) * ExtremeRoleManager.OptionOffsetPerRole;
-            item.Value.CreateRoleSpecificOption(factory);
-			item.Value.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
+			factory.OptionPrefix = role.RawRoleName;
+
+			role.CreateRoleSpecificOption(factory, false);
+			role.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
 				this.RoleType, offset);
         }
     }

@@ -46,7 +46,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     protected Color NameColor;
 
-    protected readonly string RawRoleName;
+    public readonly string RawRoleName;
 
 	public override IOptionLoader Loader
 	{

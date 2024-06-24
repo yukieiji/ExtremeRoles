@@ -38,7 +38,8 @@ public sealed class DetectiveOffice : ConstCombinationRoleManagerBase
     {
         base.CreateSpecificOption(factory);
 		factory.IdOffset = this.Roles.Count * ExtremeRoleManager.OptionOffsetPerRole;
-        DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(factory);
+		factory.OptionPrefix = ExtremeRoleId.DetectiveApprentice.ToString();
+		DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(factory);
     }
 
 }
@@ -531,40 +532,40 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         public bool HasOtherButton;
         public int HasOtherButtonNum;
 
-        public enum DetectiveApprenticeOption
-        {
-			DetectiveApprenticeHasOtherVision,
-			DetectiveApprenticeVision,
-			DetectiveApprenticeApplyEnvironmentVisionEffect,
-			DetectiveApprenticeHasOtherButton,
-			DetectiveApprenticeHasOtherButtonNum,
-        }
+		public enum DetectiveApprenticeOption
+		{
+			HasOtherVision,
+			Vision,
+			ApplyEnvironmentVisionEffect,
+			HasOtherButton,
+			HasOtherButtonNum,
+		}
 
         public static void CreateOption(
             AutoParentSetOptionCategoryFactory factory)
 		{
 			var visionOpt = factory.CreateBoolOption(
-				DetectiveApprenticeOption.DetectiveApprenticeHasOtherVision,
+				DetectiveApprenticeOption.HasOtherVision,
 				false);
 
 			factory.CreateFloatOption(
-				DetectiveApprenticeOption.DetectiveApprenticeVision,
+				DetectiveApprenticeOption.Vision,
 				2f, 0.25f, 5f, 0.25f,
 				visionOpt,
 				format: OptionUnit.Multiplier);
 
 			factory.CreateBoolOption(
-				DetectiveApprenticeOption.DetectiveApprenticeApplyEnvironmentVisionEffect,
+				DetectiveApprenticeOption.ApplyEnvironmentVisionEffect,
 				false, visionOpt);
 
 			IRoleAbility.CreateAbilityCountOption(
 				factory, 1, 10, 3.0f);
 
 			var buttonOpt = factory.CreateBoolOption(
-				DetectiveApprenticeOption.DetectiveApprenticeHasOtherButton,
+				DetectiveApprenticeOption.HasOtherButton,
 				false);
 			factory.CreateIntOption(
-				DetectiveApprenticeOption.DetectiveApprenticeHasOtherButtonNum,
+				DetectiveApprenticeOption.HasOtherButtonNum,
 				1, 1, 10, 1, buttonOpt,
 				format: OptionUnit.Shot);
         }
@@ -574,15 +575,15 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             return new DetectiveApprenticeOptionHolder()
             {
                 HasOtherVision = loader.GetValue<DetectiveApprenticeOption, bool>(
-					DetectiveApprenticeOption.DetectiveApprenticeHasOtherVision),
+					DetectiveApprenticeOption.HasOtherVision),
                 Vision = loader.GetValue<DetectiveApprenticeOption, float>(
-					DetectiveApprenticeOption.DetectiveApprenticeVision),
+					DetectiveApprenticeOption.Vision),
                 ApplyEnvironmentVisionEffect = loader.GetValue<DetectiveApprenticeOption, bool>(
-					DetectiveApprenticeOption.DetectiveApprenticeApplyEnvironmentVisionEffect),
+					DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
                 HasOtherButton = loader.GetValue<DetectiveApprenticeOption, bool>(
-					DetectiveApprenticeOption.DetectiveApprenticeHasOtherButton),
+					DetectiveApprenticeOption.HasOtherButton),
                 HasOtherButtonNum = loader.GetValue<DetectiveApprenticeOption, int>(
-					DetectiveApprenticeOption.DetectiveApprenticeHasOtherButtonNum),
+					DetectiveApprenticeOption.HasOtherButtonNum),
             };
         }
     }

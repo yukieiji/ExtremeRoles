@@ -28,6 +28,13 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			this.internalFactory.IdOffset = value;
 		}
 	}
+	public string OptionPrefix
+	{
+		set
+		{
+			this.internalFactory.OptionPrefix = value;
+		}
+	}
 
 	public IOption Get(int id)
 		=> this.internalFactory.Get(id);

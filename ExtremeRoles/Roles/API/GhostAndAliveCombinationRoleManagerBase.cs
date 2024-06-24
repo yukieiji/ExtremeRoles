@@ -47,10 +47,14 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
 		foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
+			var role = item.Value; ;
+
 			int offset = (item.Index + 1) * ExtremeGhostRoleManager.IdOffset;
 			factory.IdOffset = offset;
-			item.Value.CreateRoleSpecificOption(factory);
-			if (item.Value is ICombination combGhost)
+			factory.OptionPrefix = role.Name;
+
+			role.CreateRoleSpecificOption(factory);
+			if (role is ICombination combGhost)
 			{
 				combGhost.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
 					this.RoleType, offset);

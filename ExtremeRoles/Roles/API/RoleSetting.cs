@@ -53,23 +53,16 @@ public abstract class RoleOptionBase
     public void CreateRoleAllOption()
     {
         using var factory = CreateSpawnOption();
-        CreateVisionOption(factory);
-
-        if (this.CanKill)
-        {
-            CreateKillerOption(factory);
-        }
-
-        CreateSpecificOption(factory);
+		this.CreateSpecificOption(factory);
     }
     public void CreateRoleSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
+        AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
     {
-        CreateVisionOption(factory);
+        CreateVisionOption(factory, ignorePrefix);
 
         if (this.CanKill)
         {
-            CreateKillerOption(factory);
+            CreateKillerOption(factory, ignorePrefix: ignorePrefix);
         }
 
         CreateSpecificOption(factory);
