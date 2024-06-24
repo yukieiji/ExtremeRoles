@@ -223,7 +223,7 @@ public abstract class GhostRoleBase
 
     private OptionFactory createOptionFactory()
     {
-		var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+		var factory = NewOptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
 			this.Name, this.Tab, this.Color);
 		factory.CreateSelectionOption(

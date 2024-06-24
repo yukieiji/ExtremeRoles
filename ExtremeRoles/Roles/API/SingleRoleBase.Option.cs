@@ -37,7 +37,7 @@ public abstract partial class SingleRoleBase
     }
     protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-		var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+		var factory = NewOptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(this.Id),
 			this.RawRoleName, this.Tab, this.NameColor);
 

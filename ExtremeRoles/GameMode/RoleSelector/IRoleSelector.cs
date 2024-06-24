@@ -60,21 +60,20 @@ public interface IRoleSelector
 
     public static void CreateRoleGlobalOption()
     {
-		var optMng = NewOptionManager.Instance;
-		using (var roleOptionFactory = optMng.CreateOptionCategory(
+		using (var roleOptionFactory = NewOptionManager.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 
-		using (var roleOptionFactory = optMng.CreateOptionCategory(
+		using (var roleOptionFactory = NewOptionManager.CreateOptionCategory(
 			SpawnOptionCategory.GhostRoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
-		using (var xionCategory = optMng.CreateOptionCategory(
+		using (var xionCategory = NewOptionManager.CreateOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			ExtremeRoleId.Xion.ToString(),
 			color: ColorPalette.XionBlue))

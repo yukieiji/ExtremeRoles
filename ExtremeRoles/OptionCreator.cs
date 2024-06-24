@@ -47,8 +47,7 @@ public static class OptionCreator
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
-		var optionMng = NewOptionManager.Instance;
-		using (var commonOptionFactory = optionMng.CreateOptionCategory(
+		using (var commonOptionFactory = NewOptionManager.CreateOptionCategory(
 			CommonOption.Preset, color: defaultOptionColor))
 		{
 			commonOptionFactory.CreateIntOption(
@@ -57,7 +56,7 @@ public static class OptionCreator
 				format: OptionUnit.Preset);
 		}
 
-		using (var commonOptionFactory = optionMng.CreateOptionCategory(
+		using (var commonOptionFactory = NewOptionManager.CreateOptionCategory(
 			CommonOption.RandomOption, color: defaultOptionColor))
 		{
 			var strongGen = commonOptionFactory.CreateBoolOption(

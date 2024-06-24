@@ -87,17 +87,17 @@ public sealed class NewOptionManager
 		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
 	}
 
-	public OptionCategoryFactory CreateOptionCategory(
+	public static OptionCategoryFactory CreateOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab = OptionTab.General,
 		in Color? color = null)
 	{
-		var factory = new OptionCategoryFactory(name, id, this.registerOptionGroup, tab, color);
+		var factory = new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
 
 		return factory;
 	}
-	public OptionCategoryFactory CreateOptionCategory<T>(
+	public static OptionCategoryFactory CreateOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.General,
 		in Color? color = null) where T : Enum
@@ -105,18 +105,18 @@ public sealed class NewOptionManager
 			option.FastInt(),
 			option.ToString(), tab, color);
 
-	public SequentialOptionCategoryFactory CreateSequentialOptionCategory(
+	public static SequentialOptionCategoryFactory CreateSequentialOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab = OptionTab.General,
 		in Color? color = null)
 	{
-		var factory = new SequentialOptionCategoryFactory(name, id, this.registerOptionGroup, tab, color);
+		var factory = new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
 
 		return factory;
 	}
 
-	public AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
+	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab,
@@ -129,7 +129,7 @@ public sealed class NewOptionManager
 		return factory;
 	}
 
-	public AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
+	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.General,
 		in Color? color = null,
