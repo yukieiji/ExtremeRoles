@@ -15,6 +15,7 @@ using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 
+[Il2CppRegister]
 public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 {
 	public OptionCategory[]? AllCategory { private get; set; }
@@ -48,10 +49,23 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		this.backButton = menu.BackButton;
 		this.settingsContainer = menu.settingsContainer;
 		this.categoryHeaderOrigin = menu.categoryHeaderOrigin;
-		this.optionPrefab = menu.stringOptionOrigin.gameObject.AddComponent<ExtremeOptionView>();
+
+		this.optionPrefab = Instantiate(menu.stringOptionOrigin).gameObject.AddComponent<ExtremeOptionView>();
+		this.optionPrefab.gameObject.SetActive(false);
+
 		this.buttonClickMask = menu.ButtonClickMask;
 
 		Destroy(menu.MapPicker.gameObject);
+		foreach (var child in menu.Children)
+		{
+			Destroy(child.gameObject);
+		}
+		var allCate = menu.settingsContainer.GetComponentsInChildren<CategoryHeaderMasked>();
+		foreach (var cate in allCate)
+		{
+			Destroy(cate.gameObject);
+		}
+		menu.Children.Clear();
 		Destroy(menu);
 	}
 
@@ -104,7 +118,8 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 			var categoObj = groupViewObj.Category;
 			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
-			categoObj.ReplaceExRText(catego.Name, 20);
+			categoObj.ReplaceExRText(
+				Helper.Translation.GetString(catego.Name), 20);
 
 			yPos -= 0.63f;
 
@@ -118,7 +133,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 					continue;
 				}
 
-				optionObj.transform.localPosition = new Vector3(0.952f, yPos, -2f);
+				optionObj.transform.localPosition = new Vector3(1.25f, yPos, -2f);
 				optionObj.Refresh();
 				yPos -= 0.45f;
 			}

@@ -26,7 +26,13 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		{
 			return;
 		}
+
 		this.titleText = opt.TitleText;
+		var curSizeDelt = this.titleText.rectTransform.sizeDelta;
+		this.titleText.rectTransform.sizeDelta = new Vector2(4.25f, curSizeDelt.y);
+		var curTextpos = this.titleText.transform.localPosition;
+		this.titleText.transform.localPosition = new Vector3(-1.8f, curTextpos.y, curTextpos.z);
+
 		this.valueText = opt.ValueText;
 
 		if (base.transform.Find("MinusButton (1)").TryGetComponent(out PassiveButton minus))
@@ -39,6 +45,13 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 			plus.OnClick.RemoveAllListeners();
 			plus.OnClick.AddListener(this.Increase);
 		}
+
+		var imgTrans = base.transform.Find("LabelBackground");
+		var curPos = imgTrans.localPosition;
+		imgTrans.localPosition = new Vector3(-1.915f, curPos.y, curPos.z);
+		var curScale = imgTrans.localScale;
+		imgTrans.localScale = new Vector3(1.5f, curScale.y, curScale.z);
+
 
 		Destroy(opt);
 	}

@@ -167,7 +167,6 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 
 		if (this.menu != null)
 		{
-
 			if (previewIfCond(isPreviewOnly))
 			{
 				this.menu.GamePresetsButton.SelectButton(false);
@@ -177,6 +176,11 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 				this.menu.PresetsTab.gameObject.SetActive(false);
 				this.menu.GameSettingsTab.gameObject.SetActive(false);
 				this.menu.RoleSettingsTab.gameObject.SetActive(false);
+
+				foreach (var menu in this.allMenu.Values)
+				{
+					menu.gameObject.SetActive(false);
+				}
 
 				this.menu.MenuDescriptionText.text = tab.ToString();
 
