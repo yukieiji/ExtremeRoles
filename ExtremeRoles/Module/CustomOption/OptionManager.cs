@@ -10,6 +10,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension;
+using ExtremeRoles.Performance;
 
 
 #nullable enable
@@ -164,7 +165,7 @@ public sealed class OptionManager
 		{
 			foreach (var category in tabContainer.Category)
 			{
-				shareOptionCategory(category);
+				shareOptionCategory(category, false);
 			}
 		}
 	}
@@ -179,32 +180,33 @@ public sealed class OptionManager
 	}
 
 	private static void shareOptionCategory(
-		in OptionCategory category)
+		in OptionCategory category, bool isShow = true)
 	{
 		int size = category.Count;
 
 		if (size <= chunkSize)
 		{
-			shareOptionCategoryWithSize(category, size);
+			shareOptionCategoryWithSize(category, size, isShow);
 		}
 		else
 		{
 			int mod = size;
 			do
 			{
-				shareOptionCategoryWithSize(category, chunkSize);
+				shareOptionCategoryWithSize(category, chunkSize, isShow);
 				mod -= chunkSize;
 			} while (mod > chunkSize);
-			shareOptionCategoryWithSize(category, mod);
+			shareOptionCategoryWithSize(category, mod, isShow);
 		}
 	}
 
 	private static void shareOptionCategoryWithSize(
-		in OptionCategory category, int size)
+		in OptionCategory category, int size, bool isShow=true)
 	{
 		using (var caller = RPCOperator.CreateCaller(
-				RPCOperator.Command.ShareOption))
+			RPCOperator.Command.ShareOption))
 		{
+			caller.WriteByte(isShow ? byte.MinValue : byte.MaxValue);
 			caller.WriteByte((byte)category.Tab);
 			caller.WritePackedInt(category.Id);
 			caller.WriteByte((byte)size);
@@ -220,6 +222,8 @@ public sealed class OptionManager
 	{
 		lock(this.options)
 		{
+			StringNames key = (StringNames)5000;
+
 			if (!this.options.TryGetValue(tab, out var container) ||
 				!container.TryGetCategory(categoryId, out var category))
 			{
@@ -230,9 +234,19 @@ public sealed class OptionManager
 			{
 				int id = reader.ReadPackedInt32();
 				int selection = reader.ReadPackedInt32();
-				if (category.TryGet(id, out var option))
+				if (!category.TryGet(id, out var option))
 				{
-					option.Selection = selection;
+					continue;
+				}
+				int curSelection = option.Selection;
+				option.Selection = selection;
+
+				// 値が変更されたのでポップアップ通知
+				if (curSelection != option.Selection)
+				{
+					FastDestroyableSingleton<HudManager>.Instance.Notifier.AddSettingsChangeMessage(
+						key, $"[{tab}-{category.TransedName}]の{option.Title}が{option.ValueString}に更新されました");
+					key++;
 				}
 			}
 			category.IsDirty = true;

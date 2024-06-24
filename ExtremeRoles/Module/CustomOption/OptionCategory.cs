@@ -12,6 +12,7 @@ using UnityEngine;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Extension;
 using System.Diagnostics.CodeAnalysis;
+using ExtremeRoles.Helper;
 
 #nullable enable
 
@@ -72,6 +73,8 @@ public sealed class OptionCategory(
 	public OptionTab Tab { get; } = tab;
 	public int Id { get; } = id;
 	public string Name { get; } = name;
+	public string TransedName => Translation.GetString(Name);
+
 	public bool IsDirty { get; set; } = false;
 
 	private readonly IReadOnlyDictionary<int, IValueOption<int>> intOpt = option.IntOptions;
@@ -81,7 +84,7 @@ public sealed class OptionCategory(
 
 	public void AddHudString(in StringBuilder builder)
 	{
-		builder.Append($"・OptionCategory: {this.Name}");
+		builder.Append($"・OptionCategory: {this.TransedName}");
 
 		foreach (var option in this.allOpt.Values)
 		{

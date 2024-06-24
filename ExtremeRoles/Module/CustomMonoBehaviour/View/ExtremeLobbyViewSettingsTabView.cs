@@ -139,7 +139,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				category.Background.color = catego.Color.Value;
 			}
 			category.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
-			category.ReplaceExRText(catego.Name, 61);
+			category.ReplaceExRText(catego.TransedName, 61);
 
 			yPos -= 0.85f;
 

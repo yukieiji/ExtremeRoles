@@ -122,8 +122,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 				categoObj.Background.color = catego.Color.Value;
 			}
 			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
-			categoObj.ReplaceExRText(
-				Helper.Translation.GetString(catego.Name), 20);
+			categoObj.ReplaceExRText(catego.TransedName, 20);
 
 			yPos -= 0.63f;
 
