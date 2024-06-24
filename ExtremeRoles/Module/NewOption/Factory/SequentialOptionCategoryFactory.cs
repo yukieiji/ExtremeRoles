@@ -20,8 +20,9 @@ public sealed class SequentialOptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,
-	OptionTab tab = OptionTab.General) :
-	OptionCategoryFactory(name, groupId, action, tab)
+	OptionTab tab = OptionTab.General,
+	in Color? color = null) :
+	OptionCategoryFactory(name, groupId, action, tab, color)
 {
 	public int StartId => 0;
 	public int EndId => this.Offset - 1;
@@ -36,11 +37,10 @@ public sealed class SequentialOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
-		string name = getOptionName(option, color, ignorePrefix);
+		string name = getOptionName(option, ignorePrefix);
 
 		var opt = new BoolCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -60,12 +60,11 @@ public sealed class SequentialOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
-		string name = getOptionName(option, color, ignorePrefix);
+		string name = getOptionName(option, ignorePrefix);
 
 		var opt = new FloatDynamicCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -86,11 +85,10 @@ public sealed class SequentialOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
-		string name = getOptionName(option, color, ignorePrefix);
+		string name = getOptionName(option, ignorePrefix);
 
 		var opt = new IntCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -110,12 +108,11 @@ public sealed class SequentialOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
-		string name = getOptionName(option, color, ignorePrefix);
+		string name = getOptionName(option, ignorePrefix);
 
 		var opt = new IntDynamicCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -135,11 +132,10 @@ public sealed class SequentialOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false)
 	{
 		int optionId = getOptionIdAndUpdate();
-		string name = getOptionName(option, color, ignorePrefix);
+		string name = getOptionName(option, ignorePrefix);
 
 		var opt = new SelectionCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -157,12 +153,11 @@ public sealed class SequentialOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false)
 		where W : struct, Enum
 	{
 		int optionId = getOptionIdAndUpdate();
-		string name = getOptionName(option, color, ignorePrefix);
+		string name = getOptionName(option, ignorePrefix);
 
 		var opt = SelectionCustomOption.CreateFromEnum<W>(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -172,12 +167,13 @@ public sealed class SequentialOptionCategoryFactory(
 		return opt;
 	}
 
-	private string getOptionName(object option, Color? color, bool ignorePrefix = false)
+	private string getOptionName(object option, bool ignorePrefix = false)
 	{
-		string optionName = ignorePrefix ? $"|{this.Name}|{option}" : $"{this.Name}{option}";
+		string cleanedName = this.NameCleaner.Replace(this.Name, string.Empty).Trim();
 
-		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
+		return ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
 	}
+
 	private int getOptionIdAndUpdate()
 	{
 		int optionId = this.Offset + this.IdOffset;

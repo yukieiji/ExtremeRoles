@@ -42,7 +42,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		BoolCustomOption newOption = this.internalFactory.CreateBoolOption(
@@ -52,7 +51,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			ignorePrefix);
 
 		if (this.parent is null)
@@ -70,7 +68,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
@@ -81,7 +78,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			ignorePrefix);
 
 		if (this.parent is null)
@@ -99,7 +95,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		FloatCustomOption newOption = this.internalFactory.CreateFloatOption(
@@ -110,7 +105,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			ignorePrefix);
 
 		if (this.parent is null)
@@ -128,7 +122,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
@@ -140,7 +133,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			tempMaxValue,
 			ignorePrefix);
 
@@ -159,7 +151,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		IntCustomOption newOption = this.internalFactory.CreateIntOption(
@@ -170,7 +161,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			ignorePrefix);
 
 		if (this.parent is null)
@@ -188,7 +178,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
@@ -200,7 +189,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			tempMaxValue,
 			ignorePrefix);
 
@@ -218,7 +206,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption(
@@ -228,7 +215,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			ignorePrefix);
 
 		if (this.parent is null)
@@ -245,7 +231,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
 		where W : struct, Enum
@@ -256,7 +241,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 			isHidden,
 			format,
 			invert,
-			color,
 			ignorePrefix);
 
 		if (this.parent is null)

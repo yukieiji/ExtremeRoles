@@ -90,57 +90,40 @@ public sealed class NewOptionManager
 	public OptionCategoryFactory CreateOptionCategory(
 		int id,
 		string name,
-		in OptionTab tab = OptionTab.General)
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null)
 	{
-		var factory = new OptionCategoryFactory(name, id, this.registerOptionGroup, tab);
+		var factory = new OptionCategoryFactory(name, id, this.registerOptionGroup, tab, color);
 
 		return factory;
 	}
 	public OptionCategoryFactory CreateOptionCategory<T>(
 		T option,
-		in OptionTab tab = OptionTab.General) where T : Enum
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null) where T : Enum
 		=> CreateOptionCategory(
 			option.FastInt(),
-			option.ToString(), tab);
+			option.ToString(), tab, color);
 
 	public SequentialOptionCategoryFactory CreateSequentialOptionCategory(
 		int id,
 		string name,
-		in OptionTab tab = OptionTab.General)
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null)
 	{
-		var factory = new SequentialOptionCategoryFactory(name, id, this.registerOptionGroup, tab);
+		var factory = new SequentialOptionCategoryFactory(name, id, this.registerOptionGroup, tab, color);
 
 		return factory;
 	}
-
-	public ColorSyncOptionCategoryFactory CreateColorSyncOptionCategory(
-		int id,
-		string name,
-		in Color color,
-		in OptionTab tab = OptionTab.General)
-	{
-		var internalFactory = CreateOptionCategory(id, name, tab);
-		var factory = new ColorSyncOptionCategoryFactory(color, internalFactory);
-
-		return factory;
-	}
-
-	public ColorSyncOptionCategoryFactory CreateColorSyncOptionCategory<T>(
-		T option,
-		in Color color,
-		in OptionTab tab = OptionTab.General) where T : Enum
-		=> CreateColorSyncOptionCategory(
-			option.FastInt(),
-			option.ToString(),
-			color, tab);
 
 	public AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab,
+		in Color? color = null,
 		in IOption? parent = null)
 	{
-		var internalFactory = CreateOptionCategory(id, name, tab);
+		var internalFactory = CreateOptionCategory(id, name, tab, color);
 		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
 
 		return factory;
@@ -149,11 +132,12 @@ public sealed class NewOptionManager
 	public AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.General,
+		in Color? color = null,
 		in IOption? parent = null) where T : Enum
 		=> CreateAutoParentSetOptionCategory(
 			option.FastInt(),
 			option.ToString(),
-			tab, parent);
+			tab, color, parent);
 
 	public void Update(in OptionCategory category, in IOption option, int step)
 	{

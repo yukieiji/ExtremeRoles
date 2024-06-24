@@ -61,30 +61,30 @@ public interface IRoleSelector
     public static void CreateRoleGlobalOption()
     {
 		var optMng = NewOptionManager.Instance;
-		using (var roleOptionFactory = optMng.CreateColorSyncOptionCategory(
+		using (var roleOptionFactory = optMng.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
-			defaultOptionColor))
+			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 
-		using (var roleOptionFactory = optMng.CreateColorSyncOptionCategory(
+		using (var roleOptionFactory = optMng.CreateOptionCategory(
 			SpawnOptionCategory.GhostRoleSpawnCategory,
-			defaultOptionColor))
+			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 		using (var xionCategory = optMng.CreateOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
-			Helper.Design.ColoedString(ColorPalette.XionBlue, "Xion")))
+			ExtremeRoleId.Xion.ToString(),
+			color: ColorPalette.XionBlue))
 		{
 			xionCategory.CreateBoolOption(
-				XionOption.UseXion, false,
-				color: ColorPalette.XionBlue);
+				XionOption.UseXion, false);
 		}
 	}
 
-    private static void createExtremeRoleRoleSpawnOption(ColorSyncOptionCategoryFactory factory)
+    private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
     {
 		factory.CreateIntOption(
 			RoleSpawnOption.MinCrewmate,

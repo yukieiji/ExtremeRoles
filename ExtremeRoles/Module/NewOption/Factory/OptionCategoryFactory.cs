@@ -22,17 +22,19 @@ public class OptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,
-	OptionTab tab = OptionTab.General) : IDisposable
+	OptionTab tab = OptionTab.General,
+	in Color? color = null) : IDisposable
 {
 	public string Name { get; set; } = name;
 
 	public OptionTab Tab { get; } = tab;
 	public int IdOffset { protected get; set; } = 0;
+	protected readonly Regex NameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
 
+	private readonly Color? color = color;
 	private readonly int groupid = groupId;
 	private readonly Action<OptionTab, OptionCategory> registerOption = action;
 	private readonly OptionPack optionPack = new OptionPack();
-	private readonly Regex nameCleaner = new Regex(@"(\|)|(<.*?>)|(\\n)", RegexOptions.Compiled);
 
 	public IOption Get(int id)
 		=> this.optionPack.Get(id);
@@ -50,11 +52,10 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, color, ignorePrefix);
+		string name = GetOptionName(option, ignorePrefix);
 
 		var opt = new BoolCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -74,11 +75,10 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, color, ignorePrefix);
+		string name = GetOptionName(option, ignorePrefix);
 
 		var opt = new FloatCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -98,12 +98,11 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		float tempMaxValue = 0.0f,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, color, ignorePrefix);
+		string name = GetOptionName(option, ignorePrefix);
 
 		var opt = new FloatDynamicCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -124,11 +123,10 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, color, ignorePrefix);
+		string name = GetOptionName(option, ignorePrefix);
 
 		var opt = new IntCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -148,12 +146,11 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		int tempMaxValue = 0,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, color, ignorePrefix);
+		string name = GetOptionName(option, ignorePrefix);
 
 		var opt = new IntDynamicCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -173,11 +170,10 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, color, ignorePrefix);
+		string name = GetOptionName(option, ignorePrefix);
 
 		var opt = new SelectionCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -195,13 +191,12 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		Color? color = null,
 		bool ignorePrefix = false)
 		where T : struct, IConvertible
 		where W : struct, Enum
 	{
 		int optionId = GetOptionId(option);
-		string name = GetOptionName(option, color, ignorePrefix);
+		string name = GetOptionName(option, ignorePrefix);
 
 		var opt = SelectionCustomOption.CreateFromEnum<W>(
 			new OptionInfo(optionId, name, format, isHidden),
@@ -226,12 +221,11 @@ public class OptionCategoryFactory(
 		return Convert.ToInt32(option) + IdOffset;
 	}
 
-	protected string GetOptionName<T>(T option, Color? color, bool ignorePrefix = false) where T : struct, IConvertible
+	protected string GetOptionName<T>(T option, bool ignorePrefix = false) where T : struct, IConvertible
 	{
-		string cleanedName = this.nameCleaner.Replace(this.Name, string.Empty).Trim();
-		string optionName = ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
+		string cleanedName = this.NameCleaner.Replace(this.Name, string.Empty).Trim();
 
-		return !color.HasValue ? optionName : Design.ColoedString(color.Value, optionName);
+		return ignorePrefix ? $"|{cleanedName}|{option}" : $"{cleanedName}{option}";
 	}
 
 	protected static string GetColoredOptionName<T>(T option, Color? color) where T : struct, IConvertible
@@ -265,7 +259,7 @@ public class OptionCategoryFactory(
 
 	public void Dispose()
 	{
-		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, optionPack);
+		var newGroup = new OptionCategory(this.Tab, groupid, this.Name, this.optionPack, this.color);
 		this.registerOption(Tab, newGroup);
 	}
 }

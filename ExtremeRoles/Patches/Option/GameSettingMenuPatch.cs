@@ -15,9 +15,11 @@ public static class GameSettingMenuStartPatch
 
 	public static void Postfix(GameSettingMenu __instance)
 	{
-		using var dec = new ExtremeGameSettingMenu.Initializer(__instance);
-		var menu = __instance.gameObject.TryAddComponent<ExtremeGameSettingMenu>();
-		menu.Initialize(dec);
+		using (var dec = new ExtremeGameSettingMenu.Initializer(__instance))
+		{
+			var menu = __instance.gameObject.TryAddComponent<ExtremeGameSettingMenu>();
+			menu.Initialize(dec);
+		}
 	}
 }
 

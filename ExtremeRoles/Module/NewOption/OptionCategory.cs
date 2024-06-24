@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 
 using System.Text;
 
+using UnityEngine;
+
 using OptionTab = ExtremeRoles.Module.CustomOption.OptionTab;
 
 using ExtremeRoles.Module.NewOption.Interfaces;
@@ -59,8 +61,11 @@ public sealed class OptionCategory(
 	OptionTab tab,
 	int id,
 	string name,
-	in OptionPack option) : IOptionLoader
+	in OptionPack option,
+	in Color? color = null) : IOptionLoader
 {
+	public Color? Color { get; } = color;
+
 	public IEnumerable<IOption> Options => allOpt.Values;
 	public int Count => allOpt.Count;
 

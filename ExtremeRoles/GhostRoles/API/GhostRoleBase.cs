@@ -223,14 +223,12 @@ public abstract class GhostRoleBase
 
     private OptionFactory createOptionFactory()
     {
-		using var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
+		var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
 			ExtremeGhostRoleManager.GetRoleGroupId(this.Id),
-			this.Name,
-			this.Tab);
+			this.Name, this.Tab, this.Color);
 		factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
 			OptionCreator.SpawnRate, null, true,
-			color: this.Color,
 			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
