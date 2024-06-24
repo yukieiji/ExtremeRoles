@@ -13,17 +13,15 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 
 using ExtremeRoles.Extension.Il2Cpp;
-using ExtremeRoles.Module.CustomOption.Factories;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 
 using UnityObject = UnityEngine.Object;
-using ExtremeRoles.GameMode.Option.ShipGlobal;
 
-using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.Module.NewOption.OLDS;
+using ExtremeRoles.Module.NewOption.Implemented;
+using OptionFactory = ExtremeRoles.Module.NewOption.Factory.SequentialOptionCategoryFactory;
 
 #nullable enable
 
@@ -77,7 +75,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public ShipStatus.MapType MapType => (ShipStatus.MapType)MapId;
 	public bool CanPlaceCamera => false;
 	public bool IsCustomCalculateLightRadius => true;
-	public SpawnSetting Spawn => (SpawnSetting)this.enableSubMergedRandomSpawn.GetValue();
+	public SpawnSetting Spawn => (SpawnSetting)this.enableSubMergedRandomSpawn.Value;
 
 	public TaskTypes RetrieveOxygenMask;
 
@@ -172,15 +170,17 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		replaceDoorMinigame();
 	}
 
-	public override void CreateIntegrateOption(SequentialOptionFactory factory)
+	public override void CreateIntegrateOption(OptionFactory factory)
 	{
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
-		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator, isHeader: true);
+		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator);
 		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
 
+		/*
 		var randomSpawnOpt = OptionManager.Instance.Get<bool>((int)GlobalOption.EnableSpecialSetting);
 		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<SpawnSetting>(
 			SubmergedOption.SubmergedSpawnSetting, randomSpawnOpt, invert: true);
+		*/
 	}
 
 	public void Destroy()
@@ -237,7 +237,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MonoBehaviour? floorHandler = getFloorHandler(player);
 		if (floorHandler == null) { return; }
 
-		object[] args = new object[] { floor == 1 };
+		object[] args = [ floor == 1 ];
 
 		this.rpcRequestChangeFloorMethod.Invoke(floorHandler, args);
 		this.registerFloorOverrideMethod.Invoke(floorHandler, args);
@@ -614,7 +614,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	private void disableElevator()
 	{
-		var useElevator = (ElevatorSelection)this.elevatorOption.GetValue();
+		var useElevator = (ElevatorSelection)this.elevatorOption.Value;
 
 		switch (useElevator)
 		{
@@ -652,7 +652,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	private void replaceDoorMinigame()
 	{
-		if (!this.replaceDoorMinigameOption.GetValue() || CachedShipStatus.Instance == null)
+		if (!this.replaceDoorMinigameOption.Value || CachedShipStatus.Instance == null)
 		{ return; }
 
 		object? transformValue = this.submarineStatusReference.GetValue(this.submarineStatus);

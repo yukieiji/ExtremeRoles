@@ -12,8 +12,7 @@ using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 
 using ExtremeRoles.Module.CustomOption;
-
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.SequentialOptionFactory;
+using ExtremeRoles.Module.NewOption;
 
 namespace ExtremeRoles.Compat;
 
@@ -100,16 +99,17 @@ internal sealed class CompatModManager
 
 	internal void CreateIntegrateOption(int startId)
 	{
-		var optionFactory = new OptionFactory(startId);
-
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
-			optionFactory.NamePrefix = mod.Name;
-			mod.CreateIntegrateOption(optionFactory);
+			using (var factory = NewOptionManager.CreateSequentialOptionCategory(
+				startId + index, mod.Name))
+			{
+				mod.CreateIntegrateOption(factory);
+			}
 		}
 
 		this.startOptionId = startId;
-		this.endOptionId = optionFactory.EndId;
+		this.endOptionId = startId + this.loadedMod.Count - 1;
 	}
 
 	internal string GetIntegrateOptionHudString()
