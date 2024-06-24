@@ -14,9 +14,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
-using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 

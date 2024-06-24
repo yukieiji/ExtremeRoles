@@ -17,7 +17,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

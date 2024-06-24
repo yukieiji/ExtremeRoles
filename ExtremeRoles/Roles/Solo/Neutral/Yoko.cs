@@ -15,7 +15,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 using BepInEx.Unity.IL2CPP.Utils;
 

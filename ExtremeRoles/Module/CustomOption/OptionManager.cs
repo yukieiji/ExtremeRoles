@@ -1,0 +1,258 @@
+﻿using ExtremeRoles.Module.CustomOption.Factory;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+using UnityEngine;
+using Hazel;
+
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Implemented;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Extension;
+
+
+#nullable enable
+
+
+namespace ExtremeRoles.Module.CustomOption;
+
+public sealed class NewOptionManager
+{
+	public readonly static NewOptionManager Instance = new ();
+
+	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
+
+	public string ConfigPreset
+	{
+		get => $"Preset:{selectedPreset}";
+	}
+	private int selectedPreset = 0;
+	private const int skipStep = 10;
+
+	private const int chunkSize = 50;
+
+	private NewOptionManager()
+	{
+		foreach (var tab in Enum.GetValues<OptionTab>())
+		{
+			options.Add(tab, new OptionTabContainer(tab));
+		}
+	}
+
+	public static void Load()
+	{
+		// ランダム生成機を設定を読み込んで作成
+		RandomGenerator.Initialize();
+
+		// ゲームモードのオプションロード
+		ExtremeGameModeManager.Instance.Load();
+
+		// 各役職を設定を読み込んで初期化する
+		Roles.ExtremeRoleManager.Initialize();
+		GhostRoles.ExtremeGhostRoleManager.Initialize();
+
+		// 各種マップモジュール等のオプション値を読み込む
+		Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
+		Patches.MiniGame.SecurityHelper.LoadOptionValue();
+		Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
+
+		MeetingReporter.Reset();
+	}
+
+	public static void ShareOption(in MessageReader reader)
+	{
+		try
+		{
+			OptionTab tab = (OptionTab)reader.ReadByte();
+			int categoryId = reader.ReadPackedInt32();
+			Instance.syncOption(tab, categoryId, reader);
+		}
+		catch (Exception e)
+		{
+			Logging.Error($"Error while deserializing options:{e.Message}");
+		}
+	}
+
+	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
+		=> this.options.TryGetValue(tab, out container) && container is not null;
+
+	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out OptionCategory? category)
+	{
+		category = null;
+		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
+	}
+
+	public static OptionCategoryFactory CreateOptionCategory(
+		int id,
+		string name,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null)
+	{
+		var factory = new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
+
+		return factory;
+	}
+	public static OptionCategoryFactory CreateOptionCategory<T>(
+		T option,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null) where T : Enum
+		=> CreateOptionCategory(
+			option.FastInt(),
+			option.ToString(), tab, color);
+
+	public static SequentialOptionCategoryFactory CreateSequentialOptionCategory(
+		int id,
+		string name,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null)
+	{
+		var factory = new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
+
+		return factory;
+	}
+
+	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
+		int id,
+		string name,
+		in OptionTab tab,
+		in Color? color = null,
+		in IOption? parent = null)
+	{
+		var internalFactory = CreateOptionCategory(id, name, tab, color);
+		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
+
+		return factory;
+	}
+
+	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
+		T option,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null,
+		in IOption? parent = null) where T : Enum
+		=> CreateAutoParentSetOptionCategory(
+			option.FastInt(),
+			option.ToString(),
+			tab, color, parent);
+
+	public void Update(in OptionCategory category, in IOption option, int step)
+	{
+		int newSelection = option.Selection + (Key.IsShift() ? step * skipStep : step);
+		if (Key.IsControlDown())
+		{
+			newSelection = newSelection > 0 ? option.Range - 1 : 0;
+		}
+		option.Selection = newSelection;
+
+		int id = option.Info.Id;
+		if (category.Id == 0 && id == 0)
+		{
+			// プリセット切り替え
+			switchPreset();
+			ShereAllOption();
+		}
+		else
+		{
+			shareOptionCategory(category);
+			category.IsDirty = true;
+		}
+	}
+
+	public void ShereAllOption()
+	{
+		foreach (var tabContainer in this.options.Values)
+		{
+			foreach (var category in tabContainer.Category)
+			{
+				shareOptionCategory(category);
+			}
+		}
+	}
+
+	private void registerOptionGroup(OptionTab tab, OptionCategory group)
+	{
+		if (!this.options.TryGetValue(tab, out var container))
+		{
+			throw new ArgumentException($"Tab {tab} is not registered.");
+		}
+		container.AddGroup(group);
+	}
+
+	private static void shareOptionCategory(
+		in OptionCategory category)
+	{
+		int size = category.Count;
+
+		if (size <= chunkSize)
+		{
+			shareOptionCategoryWithSize(category, size);
+		}
+		else
+		{
+			int mod = size;
+			do
+			{
+				shareOptionCategoryWithSize(category, chunkSize);
+				mod -= chunkSize;
+			} while (mod > chunkSize);
+			shareOptionCategoryWithSize(category, mod);
+		}
+	}
+
+	private static void shareOptionCategoryWithSize(
+		in OptionCategory category, int size)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.ShareOption))
+		{
+			caller.WriteByte((byte)category.Tab);
+			caller.WritePackedInt(category.Id);
+			caller.WriteByte((byte)size);
+			foreach (var option in category.Options)
+			{
+				caller.WritePackedInt(option.Info.Id);
+				caller.WritePackedInt(option.Selection);
+			}
+		}
+	}
+
+	private void syncOption(OptionTab tab, int categoryId, in MessageReader reader)
+	{
+		lock(this.options)
+		{
+			if (!this.options.TryGetValue(tab, out var container) ||
+				!container.TryGetCategory(categoryId, out var category))
+			{
+				return;
+			}
+			int size = reader.ReadPackedInt32();
+			for (int i = 0; i < size; i++)
+			{
+				int id = reader.ReadPackedInt32();
+				int selection = reader.ReadPackedInt32();
+				if (category.TryGet(id, out var option))
+				{
+					option.Selection = selection;
+				}
+			}
+			category.IsDirty = true;
+		}
+	}
+
+	private void switchPreset()
+	{
+		foreach (var tab in this.options.Values)
+		{
+			foreach (var category in tab.Category)
+			{
+				foreach (var option in category.Options)
+				{
+					option.SwitchPreset();
+				}
+				category.IsDirty = true;
+			}
+		}
+	}
+}

@@ -5,7 +5,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

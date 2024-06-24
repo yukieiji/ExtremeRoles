@@ -1,10 +1,10 @@
 ﻿
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 using ExtremeRoles.Helper;
 
-using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;
 

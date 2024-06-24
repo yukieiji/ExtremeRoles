@@ -19,7 +19,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using BepInEx.Unity.IL2CPP.Utils;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 using static UnityEngine.GridBrushBase;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;

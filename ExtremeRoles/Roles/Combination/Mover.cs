@@ -16,7 +16,7 @@ using ExtremeRoles.Compat;
 using UnityHelper = ExtremeRoles.Helper.Unity;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 

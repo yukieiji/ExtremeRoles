@@ -18,7 +18,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Interface;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

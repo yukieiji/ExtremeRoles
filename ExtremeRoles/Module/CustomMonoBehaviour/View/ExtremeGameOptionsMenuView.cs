@@ -8,7 +8,7 @@ using Il2CppUiElementList = Il2CppSystem.Collections.Generic.List<UiElement>;
 
 using ExtremeRoles.Extension.Option;
 
-using ExtremeRoles.Module.NewOption.View;
+using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.GameMode;
 
 #nullable enable

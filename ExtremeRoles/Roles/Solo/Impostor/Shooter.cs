@@ -14,7 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using TMPro;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 

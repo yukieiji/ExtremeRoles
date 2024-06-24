@@ -19,7 +19,7 @@ using ExtremeRoles.Module.AbilityBehavior.Interface;
 
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 

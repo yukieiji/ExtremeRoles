@@ -5,7 +5,7 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 
-using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 

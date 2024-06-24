@@ -13,7 +13,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 using static ExtremeRoles.Roles.Solo.Neutral.Yoko;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;

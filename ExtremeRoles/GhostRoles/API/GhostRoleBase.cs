@@ -12,8 +12,8 @@ using ExtremeRoles.Performance;
 
 
 
-using OptionFactory = ExtremeRoles.Module.NewOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Module.NewOption.Interfaces;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.GhostRoles.API;

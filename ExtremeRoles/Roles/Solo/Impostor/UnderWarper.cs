@@ -16,7 +16,7 @@ using RoleEffectAction = Il2CppSystem.Action<RoleEffectAnimation>;
 
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 

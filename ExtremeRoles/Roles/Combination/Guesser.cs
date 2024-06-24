@@ -18,7 +18,7 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Roles.Solo.Neutral;
 
 namespace ExtremeRoles.Roles.Combination;

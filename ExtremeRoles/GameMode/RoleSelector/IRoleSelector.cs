@@ -9,7 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 
 
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 

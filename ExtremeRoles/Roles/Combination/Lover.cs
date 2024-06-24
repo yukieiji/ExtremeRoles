@@ -14,8 +14,8 @@ using ExtremeRoles.Extension.Player;
 using AmongUs.GameOptions;
 
 
-using ExtremeRoles.Module.NewOption.Interfaces;
-using ExtremeRoles.Module.NewOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 

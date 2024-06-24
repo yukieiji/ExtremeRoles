@@ -7,7 +7,7 @@ using UnityEngine;
 using ExtremeRoles.Extension.Option;
 using ExtremeRoles.Extension.UnityEvents;
 
-using ExtremeRoles.Module.NewOption.View;
+using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.GameMode;
 
 

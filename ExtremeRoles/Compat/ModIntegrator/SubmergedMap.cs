@@ -20,8 +20,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
 
-using ExtremeRoles.Module.NewOption.Implemented;
-using OptionFactory = ExtremeRoles.Module.NewOption.Factory.SequentialOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
 
 #nullable enable
 

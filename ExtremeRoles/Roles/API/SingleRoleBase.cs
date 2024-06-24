@@ -6,7 +6,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 
-using ExtremeRoles.Module.NewOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;
 
