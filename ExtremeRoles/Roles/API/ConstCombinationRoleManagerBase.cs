@@ -88,13 +88,11 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 			OptionTab.Combination,
 			this.OptionColor == DefaultColor ? null : this.OptionColor);
 
-        var roleSetOption = factory.CreateSelectionOption(
+        var roleSetOption = factory.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
-            OptionCreator.SpawnRate,
-			format: OptionUnit.Percentage,
 			ignorePrefix: true);
 
-        int thisMaxRoleNum =
+		int thisMaxRoleNum =
             this.maxSetNum == int.MaxValue ?
             (int)Math.Floor((decimal)GameSystem.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
 

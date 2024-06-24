@@ -119,10 +119,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			OptionTab.Combination,
 			this.OptionColor);
 
-		var roleSetOption = factory.CreateSelectionOption(
+		var roleSetOption = factory.Create0To100Percentage10StepOption(
 			RoleCommonOption.SpawnRate,
-			OptionCreator.SpawnRate,
-			format: OptionUnit.Percentage,
 			ignorePrefix: true);
 
 		int maxSetNum = this.BaseRole.IsImpostor() ?
@@ -159,9 +157,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 				CombinationRoleCommonOption.IsAssignImposter,
 				false, ignorePrefix: true);
 
-			factory.CreateSelectionOption(
+			factory.Create0To100Percentage10StepOption(
 				CombinationRoleCommonOption.ImposterSelectedRate,
-				OptionCreator.SpawnRate, isImposterAssignOps,
 				ignorePrefix: true);
         }
         return factory;

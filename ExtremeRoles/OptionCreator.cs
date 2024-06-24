@@ -14,10 +14,6 @@ public static class OptionCreator
 	public const int IntegrateOptionStartOffset = 15000;
     private const int maxPresetNum = 20;
 
-    public static readonly string[] SpawnRate = [
-        "0", "10", "20", "30", "40",
-        "50", "60", "70", "80", "90", "100" ];
-
     public static readonly string[] Range = [ "short", "middle", "long" ];
 
     private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);

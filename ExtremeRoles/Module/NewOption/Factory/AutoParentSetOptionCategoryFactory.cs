@@ -7,6 +7,8 @@ using OptionUnit = ExtremeRoles.Module.CustomOption.OptionUnit;
 
 using ExtremeRoles.Module.NewOption.Interfaces;
 using ExtremeRoles.Module.NewOption.Implemented;
+using ExtremeRoles.Roles.API;
+
 
 #nullable enable
 
@@ -227,7 +229,6 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	public SelectionCustomOption CreateSelectionOption<T, W>(
 		T option,
 		IOption? parent = null,
-		bool isHeader = false,
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
@@ -249,6 +250,21 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		}
 		return newOption;
 	}
+
+	public IntCustomOption Create0To100Percentage10StepOption<T>(
+		T option,
+		IOption? parent = null,
+		bool isHidden = false,
+		bool invert = false,
+		bool ignorePrefix = false) where T : struct, IConvertible
+		=> CreateIntOption(
+			option,
+			0, 0, 100, 10,
+			parent,
+			isHidden,
+			OptionUnit.Percentage,
+			invert,
+			ignorePrefix);
 
 	public void Dispose()
 	{

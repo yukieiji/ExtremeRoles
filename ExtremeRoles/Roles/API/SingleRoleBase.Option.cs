@@ -41,10 +41,8 @@ public abstract partial class SingleRoleBase
 			ExtremeRoleManager.GetRoleGroupId(this.Id),
 			this.RawRoleName, this.Tab, this.NameColor);
 
-		var roleSetOption = factory.CreateSelectionOption(
+		var roleSetOption = factory.Create0To100Percentage10StepOption(
             RoleCommonOption.SpawnRate,
-            OptionCreator.SpawnRate,
-			format: OptionUnit.Percentage,
 			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ?
