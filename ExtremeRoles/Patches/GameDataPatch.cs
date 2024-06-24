@@ -21,20 +21,6 @@ public static class GameDataAddPlayerPatch
 	}
 }
 
-[HarmonyPatch(typeof(NetworkedPlayerInfo), nameof(NetworkedPlayerInfo.Deserialize))]
-public static class NetworkedPlayerInfoDeserializePatch
-{
-	public static void Postfix()
-	{
-		foreach (CachedPlayerControl cachedPlayer in CachedPlayerControl.AllPlayerControls)
-		{
-			cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
-			cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
-		}
-	}
-}
-
-
 [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
 public static class GameDataRecomputeTaskCountsPatch
 {
