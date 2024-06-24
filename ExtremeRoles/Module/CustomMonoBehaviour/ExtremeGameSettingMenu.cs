@@ -11,6 +11,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Patches.Option;
 
 using System.Linq;
+using ExtremeRoles.Helper;
 
 
 #nullable enable
@@ -39,6 +40,11 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 				newButton.transform.localPosition = this.buttonPrefab.transform.localPosition;
 				newButton.transform.localScale = new Vector3(0.35f, 0.7f, 1.0f);
 				rescaleText(newButton, 0.7f, 0.4f);
+
+				if (newButton.buttonText.TryGetComponent(out TextTranslatorTMP text))
+				{
+					Destroy(text);
+				}
 
 				return newButton;
 			}
@@ -130,6 +136,8 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			}
 
 			button.gameObject.name = $"{tab}Button";
+			button.ChangeButtonText(Translation.GetString(string.Format(
+				"ExtremeRoles_{0}Settings", tab)));
 			menu.gameObject.name = $"{tab}Menu";
 
 			button.transform.localPosition = new Vector3(
