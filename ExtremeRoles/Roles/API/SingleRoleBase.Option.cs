@@ -39,8 +39,7 @@ public abstract partial class SingleRoleBase
     {
 		var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(this.Id),
-			Design.ColoedString(this.NameColor, this.RawRoleName),
-			this.Tab);
+			this.RawRoleName, this.Tab, this.NameColor);
 
 		var roleSetOption = factory.CreateSelectionOption(
             RoleCommonOption.SpawnRate,

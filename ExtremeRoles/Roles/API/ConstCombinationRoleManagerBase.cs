@@ -22,7 +22,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
             this.RoleName,
             RoleCommonOption.SpawnRate.ToString()));
 
-    public ConstCombinationRoleManagerBase(
+	public ConstCombinationRoleManagerBase(
 		CombinationRoleType type,
 		string roleName,
         Color optionColor,
@@ -84,8 +84,9 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 
 		var factory = NewOptionManager.Instance.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
-			Design.ColoedString(this.OptionColor, this.RoleName),
-			OptionTab.Combination);
+			this.RoleName,
+			OptionTab.Combination,
+			this.OptionColor == DefaultColor ? null : this.OptionColor);
 
         var roleSetOption = factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,

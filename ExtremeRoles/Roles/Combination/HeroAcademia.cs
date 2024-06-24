@@ -169,7 +169,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
     public const string Name = "HeroAca";
     public HeroAcademia() : base(
 		CombinationRoleType.HeroAca,
-        Name, new Color(255f, 255f, 255f), 3,
+        Name, DefaultColor, 3,
         GameSystem.MaxImposterNum)
     {
         this.Roles.Add(new Hero());

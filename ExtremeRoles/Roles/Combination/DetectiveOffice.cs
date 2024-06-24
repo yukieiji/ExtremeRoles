@@ -26,7 +26,7 @@ public sealed class DetectiveOffice : ConstCombinationRoleManagerBase
 
     public DetectiveOffice() : base(
 		CombinationRoleType.DetectiveOffice,
-        Name, new Color(255f, 255f, 255f), 2,
+        Name, DefaultColor, 2,
         (GameSystem.VanillaMaxPlayerNum - 1) / 2)
     {
         this.Roles.Add(new Detective());

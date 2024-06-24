@@ -21,7 +21,7 @@ public sealed class Avalon : ConstCombinationRoleManagerBase
     public const string Name = "AvalonsRoles";
     public Avalon() : base(
 		CombinationRoleType.Avalon,
-        Name, new Color(255f, 255f, 255f), 2,
+        Name, DefaultColor, 2,
         GameSystem.MaxImposterNum)
     {
         this.Roles.Add(new Assassin());
