@@ -229,6 +229,7 @@ public abstract class GhostRoleBase
 		factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
 			OptionCreator.SpawnRate,
+			format: OptionUnit.Percentage,
 			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
