@@ -236,24 +236,32 @@ public static class GameStartManagerPatch
             }
         }
 
-        if (blockStart)
+		if (blockStart)
         {
-            __instance.GameStartText.text = message;
+			if (__instance.StartButtonGlyph != null)
+			{
+				__instance.StartButtonGlyph.SetColor(Palette.DisabledClear);
+			}
+			__instance.StartButton.SetButtonEnableState(false);
+
+			__instance.GameStartText.text = message;
             __instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition + Vector3.up * 2;
         }
         else
         {
-            __instance.GameStartText.transform.localPosition =
+			bool isPlayerOk = __instance.LastPlayerCount >= __instance.MinPlayers;
+
+			if (__instance.StartButtonGlyph != null)
+			{
+				__instance.StartButtonGlyph.SetColor(isPlayerOk ?
+					Palette.EnabledColor : Palette.DisabledClear);
+			}
+
+			__instance.StartButton.SetButtonEnableState(isPlayerOk);
+			__instance.GameStartText.transform.localPosition =
                 __instance.StartButton.transform.localPosition;
         }
-
-		if (__instance.StartButtonGlyph != null)
-		{
-			__instance.StartButtonGlyph.SetColor(
-				(!blockStart && __instance.LastPlayerCount >= __instance.MinPlayers) ?
-				Palette.EnabledColor : Palette.DisabledClear);
-		}
 
 		if (AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && !isCustomServer)
         {
