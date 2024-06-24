@@ -108,7 +108,7 @@ public abstract class GhostRoleBase
 
     public void CreateRoleAllOption()
     {
-        var parentOps = createOptionFactory();
+        using var parentOps = createOptionFactory();
         CreateSpecificOption(parentOps);
     }
 
@@ -228,7 +228,7 @@ public abstract class GhostRoleBase
 			this.Name, this.Tab, this.Color);
 		factory.CreateSelectionOption(
 			RoleCommonOption.SpawnRate,
-			OptionCreator.SpawnRate, null, true,
+			OptionCreator.SpawnRate,
 			ignorePrefix: true);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
