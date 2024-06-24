@@ -50,7 +50,7 @@ public interface IRoleSelector
 	public bool IsValidGlobalRoleOptionId(RoleSpawnOption optionId)
 		=> Enum.IsDefined(typeof(RoleSpawnOption), optionId);
 
-	public static bool RawXionUse => NewOptionManager.Instance.TryGetCategory(
+	public static bool RawXionUse => OptionManager.Instance.TryGetCategory(
 		OptionTab.General,
 		ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 		out var cate) &&
@@ -60,20 +60,20 @@ public interface IRoleSelector
 
     public static void CreateRoleGlobalOption()
     {
-		using (var roleOptionFactory = NewOptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
 			SpawnOptionCategory.RoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
 
-		using (var roleOptionFactory = NewOptionManager.CreateOptionCategory(
+		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
 			SpawnOptionCategory.GhostRoleSpawnCategory,
 			color: defaultOptionColor))
 		{
 			createExtremeRoleRoleSpawnOption(roleOptionFactory);
 		}
-		using (var xionCategory = NewOptionManager.CreateOptionCategory(
+		using (var xionCategory = OptionManager.CreateOptionCategory(
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			ExtremeRoleId.Xion.ToString(),
 			color: ColorPalette.XionBlue))

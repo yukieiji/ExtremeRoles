@@ -663,7 +663,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             }
         }
 
-		if (!NewOptionManager.Instance.TryGetCategory(
+		if (!OptionManager.Instance.TryGetCategory(
 				OptionTab.Combination,
 				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.DetectiveOffice),
 				out var cate))

@@ -288,7 +288,7 @@ public static class RPCOperator
 
     public static void ShareOption(in MessageReader reader)
     {
-		NewOptionManager.ShareOption(reader);
+		OptionManager.ShareOption(reader);
     }
 
     public static void ReplaceDeadReason(byte playerId, byte reason)

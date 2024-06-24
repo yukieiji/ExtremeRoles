@@ -42,7 +42,7 @@ public sealed class GhostRoleSpawnDataManager :
 			}
 		}
 
-		var opt = NewOptionManager.Instance;
+		var opt = OptionManager.Instance;
 
 		if (opt.TryGetCategory(OptionTab.General, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
 		{

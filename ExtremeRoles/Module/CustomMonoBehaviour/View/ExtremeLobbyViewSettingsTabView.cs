@@ -45,7 +45,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 	public void FixedUpdate()
 	{
 		if (blockTimer >= 0.0f ||
-			!NewOptionManager.Instance.TryGetTab(OptionTab.General, out var container))
+			!OptionManager.Instance.TryGetTab(OptionTab.General, out var container))
 		{
 			blockTimer -= Time.fixedDeltaTime;
 			return;
@@ -75,7 +75,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		vanillaSettings.taskTabButton.SelectButton(false);
 		testButton.SelectButton(true);
 
-		if (NewOptionManager.Instance.TryGetTab(OptionTab.General, out var container))
+		if (OptionManager.Instance.TryGetTab(OptionTab.General, out var container))
 		{
 			foreach (var obj in vanillaSettings.settingsInfo)
 			{
@@ -116,7 +116,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 	private void updateTextAndPos(OptionTab tab)
 	{
 		if (vanillaSettings == null ||
-			!NewOptionManager.Instance.TryGetTab(tab, out var container))
+			!OptionManager.Instance.TryGetTab(tab, out var container))
 		{
 			return;
 		}

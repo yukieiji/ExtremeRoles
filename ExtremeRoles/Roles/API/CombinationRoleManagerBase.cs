@@ -33,7 +33,7 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 	{
 		get
 		{
-			if (!NewOptionManager.Instance.TryGetCategory(
+			if (!OptionManager.Instance.TryGetCategory(
 					OptionTab.Combination,
 					ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 					out var cate))

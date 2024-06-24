@@ -40,7 +40,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Neutral , new Dictionary<int, SingleRoleSpawnData>() },
 		};
 
-		var opt = NewOptionManager.Instance;
+		var opt = OptionManager.Instance;
 
 		MaxRoleNum = opt.TryGetCategory(OptionTab.General, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate)
 			? new Dictionary<ExtremeRoleType, int>

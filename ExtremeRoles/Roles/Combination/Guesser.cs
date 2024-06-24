@@ -193,7 +193,7 @@ public sealed class Guesser :
                 {
                     case ExtremeRoleId.Jackal:
                         assignState.IsJackalOn = true;
-                        assignState.IsJackalForceReplaceLover = NewOptionManager.Instance.TryGetCategory(
+                        assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
 							OptionTab.Neutral,
 							ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
 							out var cate) && cate.GetValue<Jackal.JackalOption, bool>(Jackal.JackalOption.ForceReplaceLover);

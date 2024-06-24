@@ -124,7 +124,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			var menu = initialize.NewMenu;
 			var button = initialize.NewTagButton;
-			if (NewOptionManager.Instance.TryGetTab(tab, out var optionTab))
+			if (OptionManager.Instance.TryGetTab(tab, out var optionTab))
 			{
 				menu.AllCategory = optionTab.Category.ToArray();
 			}

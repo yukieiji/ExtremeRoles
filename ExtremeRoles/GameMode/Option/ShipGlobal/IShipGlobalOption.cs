@@ -189,22 +189,22 @@ public interface IShipGlobalOption
 
 	public static void Create()
     {
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.MeetingOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.MeetingOption))
 		{
 			MeetingHudOption.Create(factory);
 		}
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.ExiledOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.ExiledOption))
 		{
 			var confirmOpt = factory.CreateSelectionOption<ExiledOption, ConfirmExilMode>(ExiledOption.ConfirmExilMode);
 			// confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 			var confirmRoleOpt = factory.CreateBoolOption(ExiledOption.IsConfirmRole, false);
 			// confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 		}
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VentOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VentOption))
 		{
 			VentConsoleOption.Create(factory);
 		}
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskOption))
 		{
 			factory.CreateBoolOption(TaskOption.ParallelMedBayScans, false);
 
@@ -215,35 +215,35 @@ public interface IShipGlobalOption
 			}
 		}
 
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomSpawnOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomSpawnOption))
 		{
 			SpawnOption.Create(factory);
 		}
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
 		{
 			AdminDeviceOption.Create(factory);
 		}
 		createMapObjectOptions(ShipGlobalOptionCategory.SecurityOption);
 		createMapObjectOptions(ShipGlobalOptionCategory.VitalOption);
 
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
 		{
 			factory.CreateBoolOption(RandomMap.RandomMap, false);
 		}
 
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
 		{
 			var taskDisableOpt = factory.CreateBoolOption(TaskWinOption.DisableTaskWinWhenNoneTaskCrew, false);
 			factory.CreateBoolOption(TaskWinOption.DisableTaskWin, false, taskDisableOpt);
 		}
 
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))
 		{
 			factory.CreateBoolOption(NeutralWinOption.IsSameNeutralSameWin, true);
 			factory.CreateBoolOption(NeutralWinOption.DisableNeutralSpecialForceEnd, false);
 		}
 
-		using (var factory = NewOptionManager.CreateOptionCategory(ShipGlobalOptionCategory.GhostRoleGlobalOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.GhostRoleGlobalOption))
 		{
 			GhostRoleOption.Create(factory);
 		}
@@ -254,7 +254,7 @@ public interface IShipGlobalOption
 
 	private static void createMapObjectOptions(ShipGlobalOptionCategory category)
 	{
-		using (var factory = NewOptionManager.CreateOptionCategory(category))
+		using (var factory = OptionManager.CreateOptionCategory(category))
 		{
 			IDeviceOption.Create(factory);
 		}
@@ -262,7 +262,7 @@ public interface IShipGlobalOption
 
 	protected static OptionCategory GetOptionCategory(ShipGlobalOptionCategory category)
 	{
-		if (!NewOptionManager.Instance.TryGetCategory(OptionTab.General, (int)category, out var cate))
+		if (!OptionManager.Instance.TryGetCategory(OptionTab.General, (int)category, out var cate))
 		{
 			throw new ArgumentException(category.ToString());
 		}

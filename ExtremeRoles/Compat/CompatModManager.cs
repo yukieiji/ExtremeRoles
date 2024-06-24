@@ -101,7 +101,7 @@ internal sealed class CompatModManager
 	{
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
-			using (var factory = NewOptionManager.CreateSequentialOptionCategory(
+			using (var factory = OptionManager.CreateSequentialOptionCategory(
 				startId + index, mod.Name))
 			{
 				mod.CreateIntegrateOption(factory);
@@ -117,7 +117,7 @@ internal sealed class CompatModManager
 		StringBuilder builder = new StringBuilder();
 		for (int id = this.startOptionId; id <= this.endOptionId; ++id)
 		{
-			if (!NewOptionManager.Instance.TryGetCategory(OptionTab.General, id, out var cate))
+			if (!OptionManager.Instance.TryGetCategory(OptionTab.General, id, out var cate))
 			{
 				continue;
 			}

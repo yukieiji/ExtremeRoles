@@ -1,15 +1,13 @@
-﻿using ExtremeRoles.Module.CustomOption.Factory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
 using Hazel;
 
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Module.CustomOption.Implemented;
-
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension;
 
@@ -19,9 +17,9 @@ using ExtremeRoles.Extension;
 
 namespace ExtremeRoles.Module.CustomOption;
 
-public sealed class NewOptionManager
+public sealed class OptionManager
 {
-	public readonly static NewOptionManager Instance = new ();
+	public readonly static OptionManager Instance = new ();
 
 	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 
@@ -34,7 +32,7 @@ public sealed class NewOptionManager
 
 	private const int chunkSize = 50;
 
-	private NewOptionManager()
+	private OptionManager()
 	{
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{

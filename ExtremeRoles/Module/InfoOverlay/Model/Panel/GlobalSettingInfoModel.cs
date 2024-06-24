@@ -27,7 +27,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		this.printOption.Clear();
 		if (container is null)
 		{
-			if (!NewOptionManager.Instance.TryGetTab(OptionTab.General, out var tab))
+			if (!OptionManager.Instance.TryGetTab(OptionTab.General, out var tab))
 			{
 				return ("", "");
 			}

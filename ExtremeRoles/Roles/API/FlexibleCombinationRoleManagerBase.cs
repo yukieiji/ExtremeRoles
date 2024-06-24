@@ -113,7 +113,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
     protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
-		var factory = NewOptionManager.CreateAutoParentSetOptionCategory(
+		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
 			OptionTab.Combination,
