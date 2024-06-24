@@ -10,6 +10,8 @@ using ExtremeRoles.Extension.Option;
 
 using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.GameMode;
+using Il2CppInterop.Runtime.Attributes;
+
 
 #nullable enable
 
@@ -18,6 +20,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 [Il2CppRegister]
 public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 {
+	[HideFromIl2Cpp]
 	public OptionCategory[]? AllCategory { private get; set; }
 
 	private readonly List<OptionGroupViewObject<ExtremeOptionView>> optionGroupViewObject = new();
@@ -165,6 +168,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		ControllerManager.Instance.OpenOverlayMenu(base.name, this.backButton, this.firstButton, this.allUiElement, false);
 	}
 
+	[HideFromIl2Cpp]
 	private IReadOnlyList<OptionBehaviour> initializeOption()
 	{
 		var result = new List<OptionBehaviour>();

@@ -2,9 +2,9 @@
 
 using TMPro;
 using UnityEngine;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
@@ -17,7 +17,10 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	private TextMeshPro? titleText;
 	private TextMeshPro? valueText;
 
+	[HideFromIl2Cpp]
 	public IOption? OptionModel { private get; set; }
+
+	[HideFromIl2Cpp]
 	public OptionCategory? OptionCategoryModel { private get; set; }
 
 	public void Awake()
