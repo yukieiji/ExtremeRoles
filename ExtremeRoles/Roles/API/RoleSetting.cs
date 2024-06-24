@@ -52,8 +52,8 @@ public abstract class RoleOptionBase
 
     public void CreateRoleAllOption()
     {
-        using var factory = CreateSpawnOption();
-		this.CreateSpecificOption(factory);
+		using var factory = CreateSpawnOption();
+		this.CreateRoleSpecificOption(factory);
     }
     public void CreateRoleSpecificOption(
         AutoParentSetOptionCategoryFactory factory, bool ignorePrefix = true)
