@@ -15,6 +15,7 @@ using ExtremeRoles.Performance;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -96,6 +97,12 @@ public abstract class GhostRoleBase
     {
         GhostRoleBase copy = (GhostRoleBase)this.MemberwiseClone();
         Color baseColor = this.Color;
+
+		if (this is ICombination combRole &&
+			copy is ICombination copyComb)
+		{
+			copyComb.OffsetInfo = combRole.OffsetInfo;
+		}
 
         copy.Color = new Color(
             baseColor.r,
