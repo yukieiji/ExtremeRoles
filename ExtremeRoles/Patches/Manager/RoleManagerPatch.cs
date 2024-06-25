@@ -565,8 +565,8 @@ public static class RoleManagerSelectRolesPatch
 						RoleTypes.Shapeshifter or
 						RoleTypes.Phantom
 				) &&
-                hasAnotherRole && isAssignToCrewmate
-            );
+                hasAnotherRole && isImpostor
+			);
     }
 }
 
