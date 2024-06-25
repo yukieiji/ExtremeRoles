@@ -9,6 +9,7 @@ using ExtremeRoles.Extension.UnityEvents;
 
 using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.GameMode;
+using Il2CppInterop.Runtime.Attributes;
 
 
 #nullable enable
@@ -19,12 +20,13 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 {
 	private LobbyViewSettingsPane? vanillaSettings;
 
-	private PassiveButton? testButton;
 	private const float initPos = 1.44f;
 	private readonly List<OptionGroupViewObject<ViewSettingsInfoPanel>> optionGroupViewObject = new();
+	private readonly Dictionary<OptionTab, PassiveButton> allButton = new(8);
 
 	private const float blockTime = 0.25f;
 	private float blockTimer = blockTime;
+	private OptionTab curTab;
 
 	public void Awake()
 	{
@@ -34,18 +36,65 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		}
 		vanillaSettings = lobby;
 
-		testButton = Instantiate(
-			vanillaSettings.taskTabButton,
-			vanillaSettings.rolesTabButton.transform);
-		testButton.transform.localPosition = new Vector3(3.5f, 0, 0);
-		testButton.OnClick.RemoveAllListeners();
-		testButton.OnClick.AddListener(changeExRTab);
+		var taskButton = vanillaSettings.taskTabButton;
+
+		taskButton.gameObject.SetActive(true);
+
+		List<PassiveButton> allButton = [ taskButton ];
+
+		if (vanillaSettings.rolesTabButton.gameObject.activeSelf)
+		{
+			allButton.Add(vanillaSettings.rolesTabButton);
+		}
+
+		foreach (var tab in Enum.GetValues<OptionTab>())
+		{
+			var newButton = Instantiate(taskButton, taskButton.transform.parent);
+			newButton.OnClick.RemoveAllListeners();
+			newButton.OnClick.AddListener(() =>
+			{
+				this.changeExRTab(tab);
+			});
+
+			this.allButton.Add(tab, newButton);
+			allButton.Add(newButton);
+		}
+
+		int x = 0;
+		int y = 0;
+
+		foreach (var (index, button) in allButton.Select((value, index) => (index, value)))
+		{
+			if (index % 4 == 0)
+			{
+				++y;
+				x = 0;
+			}
+			else
+			{
+				++x;
+			}
+
+			button.transform.localPosition = new Vector3(
+				initPos + (x * 0.16f),
+				-0.16f + (y * 0.25f),
+				0.0f);
+		}
 	}
 
 	public void FixedUpdate()
 	{
+		if (!(
+				this.allButton.TryGetValue(this.curTab, out var button) &&
+				button != null &&
+				button.selected
+			))
+		{
+			return;
+		}
+
 		if (blockTimer >= 0.0f ||
-			!OptionManager.Instance.TryGetTab(OptionTab.General, out var container))
+			!OptionManager.Instance.TryGetTab(this.curTab, out var container))
 		{
 			blockTimer -= Time.fixedDeltaTime;
 			return;
@@ -60,16 +109,20 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		}
 		if (isRefresh)
 		{
-			updateTextAndPos(OptionTab.General);
+			updateTextAndPos(this.curTab);
 		}
 	}
 
 	public void ChangeTabPostfix()
 	{
-		testButton.SelectButton(false);
+		foreach (var button in this.allButton.Values)
+		{
+			button.SelectButton(false);
+		}
 	}
 
-	private void changeExRTab()
+	[HideFromIl2Cpp]
+	private void changeExRTab(OptionTab tab)
 	{
 		if (vanillaSettings == null)
 		{
@@ -78,46 +131,63 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 		vanillaSettings.rolesTabButton.SelectButton(false);
 		vanillaSettings.taskTabButton.SelectButton(false);
-		testButton.SelectButton(true);
 
-		if (OptionManager.Instance.TryGetTab(OptionTab.General, out var container))
+		foreach (var button in this.allButton.Values)
 		{
-			foreach (var obj in vanillaSettings.settingsInfo)
-			{
-				Destroy(obj);
-			}
-			vanillaSettings.settingsInfo.Clear();
-			optionGroupViewObject.Clear();
-			optionGroupViewObject.Capacity = container.Count;
-
-			foreach (var group in container.Category)
-			{
-				var categoryHeaderMasked = Instantiate(
-					vanillaSettings.categoryHeaderOrigin);
-				categoryHeaderMasked.transform.SetParent(
-					vanillaSettings.settingsContainer);
-				categoryHeaderMasked.transform.localScale = Vector3.one;
-				vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
-
-				var groupViewObj = new OptionGroupViewObject<ViewSettingsInfoPanel>(
-					categoryHeaderMasked, group.Count);
-				foreach (var option in group.Options)
-				{
-					ViewSettingsInfoPanel viewSettingsInfoPanel = Instantiate(
-						vanillaSettings.infoPanelOrigin);
-					viewSettingsInfoPanel.transform.SetParent(
-						vanillaSettings.settingsContainer);
-					viewSettingsInfoPanel.transform.localScale = Vector3.one;
-					vanillaSettings.settingsInfo.Add(viewSettingsInfoPanel.gameObject);
-
-					groupViewObj.Options.Add(viewSettingsInfoPanel);
-				}
-				optionGroupViewObject.Add(groupViewObj);
-			}
+			button.SelectButton(false);
 		}
-		updateTextAndPos(OptionTab.General);
+
+		if (!(
+				this.allButton.TryGetValue(tab, out var targetButton) &&
+				targetButton != null &&
+				OptionManager.Instance.TryGetTab(tab, out var container)
+			))
+		{
+			return;
+		}
+
+		targetButton.SelectButton(true);
+
+		foreach (var obj in vanillaSettings.settingsInfo)
+		{
+			Destroy(obj);
+		}
+
+		vanillaSettings.settingsInfo.Clear();
+		optionGroupViewObject.Clear();
+		optionGroupViewObject.Capacity = container.Count;
+
+		foreach (var group in container.Category)
+		{
+			var categoryHeaderMasked = Instantiate(
+				vanillaSettings.categoryHeaderOrigin);
+			categoryHeaderMasked.transform.SetParent(
+				vanillaSettings.settingsContainer);
+			categoryHeaderMasked.transform.localScale = Vector3.one;
+			vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
+
+			var groupViewObj = new OptionGroupViewObject<ViewSettingsInfoPanel>(
+				categoryHeaderMasked, group.Count);
+			foreach (var option in group.Options)
+			{
+				ViewSettingsInfoPanel viewSettingsInfoPanel = Instantiate(
+					vanillaSettings.infoPanelOrigin);
+				viewSettingsInfoPanel.transform.SetParent(
+					vanillaSettings.settingsContainer);
+				viewSettingsInfoPanel.transform.localScale = Vector3.one;
+				vanillaSettings.settingsInfo.Add(viewSettingsInfoPanel.gameObject);
+
+				groupViewObj.Options.Add(viewSettingsInfoPanel);
+			}
+			optionGroupViewObject.Add(groupViewObj);
+		}
+
+		updateTextAndPos(tab);
+
+		this.curTab = tab;
 	}
 
+	[HideFromIl2Cpp]
 	private void updateTextAndPos(OptionTab tab)
 	{
 		if (vanillaSettings == null ||
