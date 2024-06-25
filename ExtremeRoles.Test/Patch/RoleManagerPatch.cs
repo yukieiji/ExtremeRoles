@@ -9,7 +9,7 @@ namespace ExtremeRoles.Test.Patches.Manager;
 [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
 public static class RoleManagerSelectRolesPatch
 {
-
+	[HarmonyPriority(Priority.First)]
 	public static void Prefix()
 	{
 		if (!GameMudderEndTestingBehaviour.Enable) { return; }
