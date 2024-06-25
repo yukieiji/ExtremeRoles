@@ -34,7 +34,7 @@ public static class GameUtility
 			return;
 		}
 		var option = presetCate.Get(0);
-		mng.UpdateToStep(presetCate, option, newPreset);
+		mng.Update(presetCate, option, newPreset);
 	}
 
 	public static IEnumerator StartGame(ManualLogSource logger)

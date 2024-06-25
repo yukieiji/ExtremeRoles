@@ -151,7 +151,7 @@ public sealed class OptionManager
 		{
 			newSelection = newSelection > 0 ? option.Range - 1 : 0;
 		}
-		Update(category, option, newSelection));
+		Update(category, option, newSelection);
 	}
 
 	public void Update(in OptionCategory category, in int id, int newIndex)
