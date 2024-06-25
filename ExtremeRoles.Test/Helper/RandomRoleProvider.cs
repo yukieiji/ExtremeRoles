@@ -9,6 +9,6 @@ public static class RandomRoleProvider
 {
 	public static SingleRoleBase GetNormalRole()
 		=> ExtremeRoleManager.NormalRole.Values.OrderBy(x => RandomGenerator.Instance.Next()).First();
-	public static CombinationRoleManagerBase GetCombRole()
-		=> ExtremeRoleManager.CombRole.Values.OrderBy(x => RandomGenerator.Instance.Next()).First();
+	public static byte GetCombRole()
+		=> ExtremeRoleManager.CombRole.Keys.OrderBy(x => RandomGenerator.Instance.Next()).First();
 }

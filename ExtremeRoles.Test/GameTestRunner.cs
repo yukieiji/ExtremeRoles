@@ -19,6 +19,7 @@ using ExtremeRoles.Test.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 using UnityResource = UnityEngine.Resources;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Test;
 
@@ -62,7 +63,9 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						new((int)GlobalOption.IsSameNeutralSameWin, 1));
+						OptionTab.General,
+						(int)ShipGlobalOptionCategory.NeutralWinOption,
+						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 				}),
 				new("NeutralWin", 100,
 				[
@@ -73,7 +76,9 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						new((int)GlobalOption.IsSameNeutralSameWin, 1));
+						OptionTab.General,
+						(int)ShipGlobalOptionCategory.NeutralWinOption,
+						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 					GameUtility.UpdateAmongUsOption(
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 0));
@@ -82,7 +87,9 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						new((int)GlobalOption.IsSameNeutralSameWin, 0));
+						OptionTab.General,
+						(int)ShipGlobalOptionCategory.NeutralWinOption,
+						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 					GameUtility.UpdateAmongUsOption(
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 3));

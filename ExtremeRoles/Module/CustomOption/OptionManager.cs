@@ -138,6 +138,12 @@ public sealed class OptionManager
 			option.ToString(),
 			tab, color, parent);
 
+	public void Update(in OptionCategory category, in int id, int step)
+	{
+		var option = category.Get(id);
+		Update(category, option, step);
+	}
+
 	public void Update(in OptionCategory category, in IOption option, int step)
 	{
 		int newSelection = option.Selection + (Key.IsShift() ? step * skipStep : step);

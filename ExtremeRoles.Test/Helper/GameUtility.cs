@@ -6,12 +6,11 @@ using System.Linq;
 using UnityEngine;
 using BepInEx.Logging;
 using AmongUs.GameOptions;
-
-using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.NewOption.OLDS.Implemented;
+
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Test.Helper;
 
@@ -29,8 +28,13 @@ public static class GameUtility
 
 	public static void ChangePresetTo(int newPreset)
 	{
-		OptionManager.Instance.GetIOption(0).UpdateSelection(newPreset);
-		OptionManager.Instance.SwitchPreset(newPreset);
+		var mng = OptionManager.Instance;
+		if (!mng.TryGetCategory(OptionTab.General, (int)OptionCreator.CommonOption.PresetOption, out var presetCate))
+		{
+			return;
+		}
+		var option = presetCate.Get(0);
+		mng.Update(presetCate, option, newPreset);
 	}
 
 	public static IEnumerator StartGame(ManualLogSource logger)
@@ -64,22 +68,34 @@ public static class GameUtility
 	{
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ
-		foreach (var opt in OptionManager.Instance.GetAllIOption())
+		var mng = OptionManager.Instance;
+		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
-			if (opt.Id == 0) { continue; }
-
-			int newIndex = RandomGenerator.Instance.Next(0, opt.ValueCount);
-			string name = opt.Name;
-
-			if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
+			if (!mng.TryGetTab(tab, out var tabObj))
 			{
-				newIndex = 5;
+				continue;
 			}
-			else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
+
+			foreach (var cate in tabObj.Category)
 			{
-				newIndex = 0;
+				if (cate.Id == 0) { continue; }
+
+				foreach (var opt in cate.Options)
+				{
+					int newIndex = RandomGenerator.Instance.Next(0, opt.Range);
+					string name = opt.Info.Name;
+
+					if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
+					{
+						newIndex = 5;
+					}
+					else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
+					{
+						newIndex = 0;
+					}
+					mng.Update(cate, opt, newIndex);
+				}
 			}
-			opt.UpdateSelection(newIndex);
 		}
 
 		disableXion();
@@ -103,38 +119,51 @@ public static class GameUtility
 	{
 		logger.LogInfo("Update Option....");
 		// オプションを適当にアプデ
-		foreach (var opt in OptionManager.Instance.GetAllIOption())
+
+		var mng = OptionManager.Instance;
+		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
-			if (opt.Id == 0) { continue; }
+			if (!mng.TryGetTab(tab, out var tabObj))
+			{
+				continue;
+			}
 
-			int length = opt.ValueCount;
-			int newIndex = RandomGenerator.Instance.Next(0, length);
-			string name = opt.Name;
+			foreach (var cate in tabObj.Category)
+			{
+				if (cate.Id == 0) { continue; }
 
-			if (
-				ids.Any(x => name.Contains(x.ToString())) &&
-				(
-					name.Contains(RoleCommonOption.SpawnRate.ToString()) ||
-					name.Contains(RoleCommonOption.AssignWeight.ToString())
-				))
-			{
-				newIndex = length - 1;
+				foreach (var opt in cate.Options)
+				{
+					int length = opt.Range;
+					int newIndex = RandomGenerator.Instance.Next(0, length);
+					string name = opt.Info.Name;
+
+					if (
+						ids.Any(x => name.Contains(x.ToString())) &&
+						(
+							name.Contains(RoleCommonOption.SpawnRate.ToString()) ||
+							name.Contains(RoleCommonOption.AssignWeight.ToString())
+						))
+					{
+						newIndex = length - 1;
+					}
+					else if (
+						ids.Any(x => name.Contains(x.ToString())) &&
+						name.Contains(RoleCommonOption.RoleNum.ToString()))
+					{
+						newIndex = RandomGenerator.Instance.Next(1, ((15 - 3) / ids.Count));
+					}
+					else if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
+					{
+						newIndex = 5;
+					}
+					else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
+					{
+						newIndex = 0;
+					}
+					mng.Update(cate, opt, newIndex);
+				}
 			}
-			else if (
-				ids.Any(x => name.Contains(x.ToString())) &&
-				name.Contains(RoleCommonOption.RoleNum.ToString()))
-			{
-				newIndex = RandomGenerator.Instance.Next(1, ((15 - 3) / ids.Count));
-			}
-			else if (name.Contains(RoleCommonOption.AssignWeight.ToString()))
-			{
-				newIndex = 5;
-			}
-			else if (name.Contains(RoleCommonOption.SpawnRate.ToString()))
-			{
-				newIndex = 0;
-			}
-			opt.UpdateSelection(newIndex);
 		}
 
 		disableXion();
@@ -149,11 +178,12 @@ public static class GameUtility
 		}
 	}
 
-	public static void UpdateExROption(in RequireOption<int, int> option)
+	public static void UpdateExROption(OptionTab tab, int categoryId, in RequireOption<int, int> option)
 	{
-		OptionManager.Instance.GetIOption(
-			option.OptionId).UpdateSelection(
-				option.Velue);
+		if (OptionManager.Instance.TryGetCategory(tab, categoryId, out var category))
+		{
+			OptionManager.Instance.Update(category, option.OptionId, option.Velue);
+		}
 	}
 
 	public static void UpdateAmongUsOption(in RequireOption<BoolOptionNames, bool> option)
@@ -180,23 +210,38 @@ public static class GameUtility
 
 	private static void disableXion()
 	{
-		OptionManager.Instance.GetIOption(
-			(int)RoleSpawnOption.UseXion).UpdateSelection(0);
+		if (OptionManager.Instance.TryGetCategory(
+				OptionTab.General,
+				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+				out var category))
+		{
+			OptionManager.Instance.Update(category, 0, 0);
+		}
 	}
 
 	private static void enableRandomNormalRole(ManualLogSource logger)
 	{
 		SingleRoleBase role = RandomRoleProvider.GetNormalRole();
-		int optionId = role.GetRoleOptionId(RoleCommonOption.SpawnRate);
-		OptionManager.Instance.GetIOption(optionId).UpdateSelection(
-			OptionCreator.SpawnRate.Length - 1);
+
+		if (OptionManager.Instance.TryGetCategory(
+				role.Tab,
+				ExtremeRoleManager.GetRoleGroupId(role.Id),
+				out var category))
+		{
+			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
+		}
 		logger.LogInfo($"Enable:{role.Id}");
 	}
 	private static void enableRandomCombRole(ManualLogSource logger)
 	{
-		CombinationRoleManagerBase role = RandomRoleProvider.GetCombRole();
-		int optionId = role.GetRoleOptionId(RoleCommonOption.SpawnRate);
-		OptionManager.Instance.GetIOption(optionId).UpdateSelection(1);
+		CombinationRoleType role = (CombinationRoleType)RandomRoleProvider.GetCombRole();
+		if (OptionManager.Instance.TryGetCategory(
+				OptionTab.Combination,
+				ExtremeRoleManager.GetCombRoleGroupId(role),
+				out var category))
+		{
+			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
+		}
 		logger.LogInfo($"Enable:{role}");
 	}
 }
