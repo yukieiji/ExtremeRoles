@@ -195,7 +195,8 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 					menu.gameObject.SetActive(false);
 				}
 
-				this.menu.MenuDescriptionText.text = tab.ToString();
+				this.menu.MenuDescriptionText.text =
+					Translation.GetString($"ExR_{tab}SettingsDescription");
 
 				unselectButton();
 				targetMenu.gameObject.SetActive(true);

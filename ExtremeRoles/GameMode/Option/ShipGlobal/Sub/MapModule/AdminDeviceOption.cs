@@ -37,6 +37,6 @@ public readonly struct AdminDeviceOption : IDeviceOption
 		var removeOpt = IDeviceOption.Create(factory);
 
 		factory.CreateSelectionOption<AdminSpecialOption, AirShipAdminMode>(
-				AdminSpecialOption.AirShipEnable, removeOpt, invert: true);
+			AdminSpecialOption.AirShipEnable, removeOpt, invert: true);
 	}
 }
