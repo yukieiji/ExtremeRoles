@@ -8,6 +8,8 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
+
+
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches;
@@ -21,7 +23,7 @@ public static class KeyboardJoystickPatch
         { return; }
 
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
-            OptionManager.Instance.GetValue<bool>((int)RoleGlobalOption.UseXion) &&
+            // OptionManager.Instance.GetValue<bool>((int)RoleGlobalOption.UseXion) &&
             !ExtremeRolesPlugin.DebugMode.Value)
         {
             Roles.Solo.Host.Xion.SpecialKeyShortCut();
@@ -29,7 +31,7 @@ public static class KeyboardJoystickPatch
 
         if (GameSystem.IsLobby && Input.GetKeyDown(KeyCode.Tab))
         {
-			Option.IGameOptionsExtensionsToHudStringPatch.ChangePage(1);
+			// Option.IGameOptionsExtensionsToHudStringPatch.ChangePage(1);
 		}
 
 		InfoOverlay.Instance.Update();
@@ -56,7 +58,7 @@ public static class KeyboardJoystickPatch
             if (role.TryGetVanillaRoleId(out RoleTypes roleId))
             {
                 if (roleId != RoleTypes.Engineer ||
-                    ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
+                    ExtremeGameModeManager.Instance.ShipOption.Vent.EngineerUseImpostorVent)
                 {
                     hudManager.ImpostorVentButton.DoClick();
                 }

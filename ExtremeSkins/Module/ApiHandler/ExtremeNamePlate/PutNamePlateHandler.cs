@@ -12,6 +12,7 @@ using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
 
+#if WITHNAMEPLATE
 public sealed class PutNamePlateHandler : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
@@ -72,3 +73,4 @@ public sealed class PutNamePlateHandler : IRequestHandler
 		response.Close();
 	}
 }
+#endif

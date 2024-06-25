@@ -5,6 +5,10 @@ using ExtremeRoles.GameMode.Logic.Usable;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 
+
+
+using ExtremeRoles.Roles;
+
 // TODO: setプロパティ => initにする
 
 namespace ExtremeRoles.GameMode;
@@ -53,8 +57,7 @@ public sealed class ExtremeGameModeManager
     {
         Instance.ShipOption.Load();
 
-		isXionActive = OptionManager.Instance.GetValue<bool>(
-			(int)RoleGlobalOption.UseXion);
+		isXionActive = IRoleSelector.RawXionUse;
 	}
 
     public IIntroRunner GetIntroRunner()

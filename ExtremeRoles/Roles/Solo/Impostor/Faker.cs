@@ -9,6 +9,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
@@ -46,9 +51,9 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 
 	public void CreateAbility()
 	{
-		this.deadBodyDummy = Loader.CreateSpriteFromResources(
+		this.deadBodyDummy = Resources.Loader.CreateSpriteFromResources(
 			Path.FakerDummyDeadBody, 115f);
-		this.playerDummy = Loader.CreateSpriteFromResources(
+		this.playerDummy = Resources.Loader.CreateSpriteFromResources(
 			Path.FakerDummyPlayer, 115f);
 
 		this.deadBodyDummyStr = Translation.GetString("dummyDeadBody");
@@ -70,7 +75,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		return IRoleAbility.IsCommonUse();
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
 	{
 		return;
 	}
@@ -126,10 +131,10 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	protected override void CreateSpecificOption(
-		IOptionInfo parentOps)
+		AutoParentSetOptionCategoryFactory factory)
 	{
-		this.CreateCommonAbilityOption(
-			parentOps);
+		IRoleAbility.CreateCommonAbilityOption(
+			factory);
 	}
 
 	protected override void RoleSpecificInit()

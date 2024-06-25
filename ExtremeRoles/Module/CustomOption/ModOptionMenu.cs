@@ -26,12 +26,12 @@ namespace ExtremeRoles.Module.CustomOption;
 public sealed class ModOptionMenu
 {
 	public bool IsReCreate =>
-		this.modOptionButton == null ||
-		this.popUp == null ||
-		this.creditText == null ||
-		this.titleText == null ||
-		this.menuButtons.Any(x => x == null) ||
-		this.csvButton.Any(x => x.IsReCreate);
+		modOptionButton == null ||
+		popUp == null ||
+		creditText == null ||
+		titleText == null ||
+		menuButtons.Any(x => x == null) ||
+		csvButton.Any(x => x.IsReCreate);
 
 	public enum MenuButton : byte
 	{
@@ -50,7 +50,7 @@ public sealed class ModOptionMenu
 
 	private sealed class PopupActionButton
 	{
-		public bool IsReCreate => this.popUp == null || this.button == null;
+		public bool IsReCreate => popUp == null || button == null;
 
 		private readonly GenericPopup? popUp;
 		private readonly ToggleButtonBehaviour? button;
@@ -67,73 +67,73 @@ public sealed class ModOptionMenu
 		{
 			this.key = key;
 			this.onClick = onClick;
-			this.button = UnityObject.Instantiate(
+			button = UnityObject.Instantiate(
 				prefab, parent);
-			this.button.transform.localPosition = pos;
-			this.button.Text.enableWordWrapping = false;
-			this.button.Background.color = color;
-			this.button.Text.fontSizeMin =
-				this.button.Text.fontSizeMax = 2.2f;
-			this.button.Text.transform.SetLocalZ(0.0f);
+			button.transform.localPosition = pos;
+			button.Text.enableWordWrapping = false;
+			button.Background.color = color;
+			button.Text.fontSizeMin =
+				button.Text.fontSizeMax = 2.2f;
+			button.Text.transform.SetLocalZ(0.0f);
 
-			var passiveButton = this.button.GetComponent<PassiveButton>();
+			var passiveButton = button.GetComponent<PassiveButton>();
 			passiveButton.gameObject.SetActive(true);
 			passiveButton.OnClick.RemoveAllPersistentAndListeners();
 			passiveButton.OnClick.AddListener(this.excute);
 
-			this.popUp = UnityObject.Instantiate(
+			popUp = UnityObject.Instantiate(
 				Prefab.Prop, passiveButton.transform);
 
-			this.popUp.transform.localPosition = new Vector3(-pos.x, -pos.y, -10.0f);
-			this.popUp.TextAreaTMP.fontSize *= 0.75f;
-			this.popUp.TextAreaTMP.enableAutoSizing = false;
+			popUp.transform.localPosition = new Vector3(-pos.x, -pos.y, -10.0f);
+			popUp.TextAreaTMP.fontSize *= 0.75f;
+			popUp.TextAreaTMP.enableAutoSizing = false;
 		}
 
 		public void UpdateTranslation(string postfix)
 		{
-			if (this.button != null)
+			if (button != null)
 			{
-				this.button.Text.text = Translation.GetString(
-					$"{this.key}{postfix}");
+				button.Text.text = Translation.GetString(
+					$"{key}{postfix}");
 			}
 		}
 
 		private void excute()
 		{
-			if (this.popUp == null) { return; }
+			if (popUp == null) { return; }
 
-			foreach (var sr in this.popUp.GetComponentsInChildren<SpriteRenderer>())
+			foreach (var sr in popUp.GetComponentsInChildren<SpriteRenderer>())
 			{
 				sr.sortingOrder = 8;
 			}
-			foreach (var mr in this.popUp.GetComponentsInChildren<MeshRenderer>())
+			foreach (var mr in popUp.GetComponentsInChildren<MeshRenderer>())
 			{
 				mr.sortingOrder = 9;
 			}
 
 			string info = Translation.GetString(
-				$"{this.key}PleaseWait");
-			this.popUp.Show(info); // Show originally
+				$"{key}PleaseWait");
+			popUp.Show(info); // Show originally
 			bool result = onClick.Invoke();
 
 			string transKey = result ?
-				$"{this.key}Success" : $"{this.key}Error";
+				$"{key}Success" : $"{key}Error";
 			info = Translation.GetString(transKey);
 
-			this.popUp.StartCoroutine(
+			popUp.StartCoroutine(
 				Effects.Lerp(0.01f,
 				new Action<float>((p) => { setPopupText(info); })));
 		}
 
 		private void setPopupText(string message)
 		{
-			if (this.popUp == null)
+			if (popUp == null)
 			{
 				return;
 			}
-			if (this.popUp.TextAreaTMP != null)
+			if (popUp.TextAreaTMP != null)
 			{
-				this.popUp.TextAreaTMP.text = message;
+				popUp.TextAreaTMP.text = message;
 			}
 		}
 	}
@@ -152,39 +152,39 @@ public sealed class ModOptionMenu
 
 	public ModOptionMenu(in OptionsMenuBehaviour optionMenu)
 	{
-		this.popUp = createCustomMenu(optionMenu);
+		popUp = createCustomMenu(optionMenu);
 
 		var buttonPrefab = createButtonPrefab(optionMenu);
-		this.menuButtons = initializeCustomMenu(buttonPrefab);
-		this.csvButton = initializeCsvLogic(buttonPrefab);
-		this.modOptionButton = initializeModButton(buttonPrefab, optionMenu);
+		menuButtons = initializeCustomMenu(buttonPrefab);
+		csvButton = initializeCsvLogic(buttonPrefab);
+		modOptionButton = initializeModButton(buttonPrefab, optionMenu);
 
-		this.creditText = initializeCreditText();
-		this.titleText = initializeMenuTitle();
-		this.popUp.SetActive(false);
+		creditText = initializeCreditText();
+		titleText = initializeMenuTitle();
+		popUp.SetActive(false);
 	}
 
 	public void Hide()
 	{
-		if (this.popUp != null)
+		if (popUp != null)
 		{
-			this.popUp.SetActive(false);
+			popUp.SetActive(false);
 		}
 	}
 
 	public void UpdateTranslation()
 	{
-		if (this.modOptionButton != null)
+		if (modOptionButton != null)
 		{
-			this.modOptionButton.Text.text = Translation.GetString(
+			modOptionButton.Text.text = Translation.GetString(
 				"modOptionText");
 		}
-		if (this.titleText != null)
+		if (titleText != null)
 		{
-			this.titleText.text = Translation.GetString("moreOptionText");
+			titleText.text = Translation.GetString("moreOptionText");
 		}
 
-		foreach (var button in this.menuButtons)
+		foreach (var button in menuButtons)
 		{
 			if (button != null)
 			{
@@ -192,7 +192,7 @@ public sealed class ModOptionMenu
 					button.name);
 			}
 		}
-		foreach (var button in this.csvButton)
+		foreach (var button in csvButton)
 		{
 			button.UpdateTranslation("Csv");
 		}
@@ -201,9 +201,9 @@ public sealed class ModOptionMenu
 
 	private void updateCreditText()
 	{
-		if (this.creditText == null) { return; }
+		if (creditText == null) { return; }
 
-		this.creditText.transform.localPosition = new Vector3(0.0f, -2.0f);
+		creditText.transform.localPosition = new Vector3(0.0f, -2.0f);
 
 		StringBuilder showTextBuilder = new StringBuilder();
 
@@ -222,20 +222,20 @@ public sealed class ModOptionMenu
 
 		if (DataManager.Settings.Language.CurrentLanguage != SupportedLangs.Japanese)
 		{
-			this.creditText.transform.localPosition = new Vector3(0.0f, -1.895f);
+			creditText.transform.localPosition = new Vector3(0.0f, -1.895f);
 			showTextBuilder
 				.Append($"<align=left>")
 				.Append(Translation.GetString("langTranslate"))
 				.Append(Translation.GetString("translatorMember"));
 		}
 
-		this.creditText.text = showTextBuilder.ToString();
+		creditText.text = showTextBuilder.ToString();
 	}
 
 	private TextMeshPro initializeCreditText()
 	{
 		var text = UnityObject.Instantiate(
-			Prefab.Text, this.popUp!.transform);
+			Prefab.Text, popUp!.transform);
 		text.name = "credit";
 		text.fontSize = text.fontSizeMin = text.fontSizeMax = 2.0f;
 		text.font = UnityObject.Instantiate(Prefab.Text.font);
@@ -248,7 +248,7 @@ public sealed class ModOptionMenu
 	private TextMeshPro initializeMenuTitle()
 	{
 		var title = UnityObject.Instantiate(
-			Prefab.Text, this.popUp!.transform);
+			Prefab.Text, popUp!.transform);
 		title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
 		title.gameObject.SetActive(true);
 		title.fontSize = title.fontSizeMin = title.fontSizeMax = 3.25f;
@@ -270,9 +270,9 @@ public sealed class ModOptionMenu
 		passiveButton.OnClick.RemoveAllPersistentAndListeners();
 		passiveButton.OnClick.AddListener(() =>
 		{
-			if (this.popUp == null) { return; }
-			this.popUp.SetActive(false);
-			this.popUp.SetActive(true);
+			if (popUp == null) { return; }
+			popUp.SetActive(false);
+			popUp.SetActive(true);
 		});
 		return button;
 	}
@@ -283,12 +283,12 @@ public sealed class ModOptionMenu
 		{
 			new PopupActionButton(
 				"import",
-				prefab, this.popUp!.transform,
+				prefab, popUp!.transform,
 				Color.green,  new Vector3(-1.35f, -0.9f),
 				CustomOptionCsvProcessor.Import),
 			new PopupActionButton(
 				"export",
-				prefab, this.popUp!.transform,
+				prefab, popUp!.transform,
 				Palette.ImpostorRed,  new Vector3(1.35f, -0.9f),
 				CustomOptionCsvProcessor.Export),
 		};
@@ -308,7 +308,7 @@ public sealed class ModOptionMenu
 			int index = (int)menuType;
 
 			var button = UnityObject.Instantiate(
-				prefab, this.popUp!.transform);
+				prefab, popUp!.transform);
 			button.transform.position = Vector3.zero;
 			button.transform.localPosition = new Vector3(
 				index % 2 == 0 ? -1.17f : 1.17f,
@@ -379,10 +379,10 @@ public sealed class ModOptionMenu
 				PublicBeta.Instance.Enable,
 				() =>
 				{
-					if (this.confirmMenu != null)
+					if (confirmMenu != null)
 					{
-						UnityObject.Destroy(this.confirmMenu);
-						this.confirmMenu = null;
+						UnityObject.Destroy(confirmMenu);
+						confirmMenu = null;
 					}
 
 					var beta = PublicBeta.Instance;
@@ -392,7 +392,7 @@ public sealed class ModOptionMenu
 					string targetStr = Translation.GetString(
 						target ? "EnableKey" : "DisableKey");
 
-					this.confirmMenu = Prefab.CreateConfirmMenu(
+					confirmMenu = Prefab.CreateConfirmMenu(
 						() =>
 						{
 							beta.SwitchMode();
@@ -414,14 +414,14 @@ public sealed class ModOptionMenu
 								string.Format(showText, targetStr));
 						},
 						StringNames.Accept);
-					this.confirmMenu.transform.SetParent(this.popUp!.transform);
-					this.confirmMenu.transform.localPosition = pos;
+					confirmMenu.transform.SetParent(popUp!.transform);
+					confirmMenu.transform.localPosition = pos;
 
 					string func = TranslationControllerExtension.GetString(
 						BetaContentManager.TransKey);
 
 					string warnText = Translation.GetString("PublicBetaWarning");
-					this.confirmMenu.Show(
+					confirmMenu.Show(
 						$"{string.Format(warnText, targetStr)}\n{func}");
 
 					button.onState = target;

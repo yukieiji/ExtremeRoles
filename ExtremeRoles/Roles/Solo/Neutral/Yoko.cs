@@ -14,6 +14,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 using BepInEx.Unity.IL2CPP.Utils;
 
 #nullable enable
@@ -70,7 +73,7 @@ public sealed class Yoko :
     { }
 
     public void ModifiedWinPlayer(
-        GameData.PlayerInfo rolePlayerInfo,
+        NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
     {
@@ -104,77 +107,69 @@ public sealed class Yoko :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             YokoOption.CanRepairSabo,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             YokoOption.CanUseVent,
-            false, parentOps);
-        CreateFloatOption(
+            false);
+        factory.CreateFloatOption(
             YokoOption.SearchRange,
-            7.5f, 5.0f, 15.0f, 0.5f,
-            parentOps);
-        CreateFloatOption(
+            7.5f, 5.0f, 15.0f, 0.5f);
+        factory.CreateFloatOption(
             YokoOption.SearchTime,
             10f, 3.0f, 30f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
-        CreateIntOption(
+        factory.CreateIntOption(
             YokoOption.TrueInfoRate,
-            50, 25, 80, 5, parentOps,
+            50, 25, 80, 5,
             format: OptionUnit.Percentage);
 
-		var yashiroOpt = CreateBoolOption(
+		var yashiroOpt = factory.CreateBoolOption(
 			YokoOption.UseYashiro,
-			false, parentOps);
-		this.CreateAbilityCountOption(yashiroOpt, 3, 10, 5f);
+			false);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 10, 5f, parentOpt: yashiroOpt);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			YokoOption.YashiroActiveTime,
 			30, 1, 360, 1,
 			yashiroOpt,
 			format: OptionUnit.Second);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			YokoOption.YashiroSeelTime,
 			10, 1, 360, 1,
 			yashiroOpt,
 			format: OptionUnit.Second);
 
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			YokoOption.YashiroProtectRange,
 			5.0f, 1.0f, 10.0f, 0.1f,
 			yashiroOpt);
 
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			YokoOption.YashiroUpdateWithMeeting,
 			true, yashiroOpt);
 	}
     protected override void RoleSpecificInit()
     {
-		var opt = OptionManager.Instance;
-        this.CanRepairSabotage = opt.GetValue<bool>(
-            GetRoleOptionId(YokoOption.CanRepairSabo));
-        this.UseVent = opt.GetValue<bool>(
-            GetRoleOptionId(YokoOption.CanUseVent));
-        this.searchRange = opt.GetValue<float>(
-            GetRoleOptionId(YokoOption.SearchRange));
-        this.searchTime = opt.GetValue<float>(
-            GetRoleOptionId(YokoOption.SearchTime));
-        this.trueInfoGage = opt.GetValue<int>(
-            GetRoleOptionId(YokoOption.TrueInfoRate));
+		var cate = this.Loader;
+        this.CanRepairSabotage = cate.GetValue<YokoOption, bool>(YokoOption.CanRepairSabo);
+        this.UseVent = cate.GetValue<YokoOption, bool>(YokoOption.CanUseVent);
+        this.searchRange = cate.GetValue<YokoOption, float>(YokoOption.SearchRange);
+        this.searchTime = cate.GetValue<YokoOption, float>(YokoOption.SearchTime);
+        this.trueInfoGage = cate.GetValue<YokoOption, int>(YokoOption.TrueInfoRate);
 
 		this.yashiro = null;
 
-		if (opt.GetValue<bool>(GetRoleOptionId(YokoOption.UseYashiro)))
+		if (cate.GetValue<YokoOption, bool>(YokoOption.UseYashiro))
 		{
-			float activeTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroActiveTime));
-			float sealTime = opt.GetValue<int>(GetRoleOptionId(YokoOption.YashiroSeelTime));
-			float protectRange = opt.GetValue<float>(GetRoleOptionId(YokoOption.YashiroProtectRange));
-			bool isUpdateMeeting = opt.GetValue<bool>(
-				GetRoleOptionId(YokoOption.YashiroUpdateWithMeeting));
+			float activeTime = cate.GetValue<YokoOption, int>(YokoOption.YashiroActiveTime);
+			float sealTime = cate.GetValue<YokoOption, int>(YokoOption.YashiroSeelTime);
+			float protectRange = cate.GetValue<YokoOption, float>(YokoOption.YashiroProtectRange);
+			bool isUpdateMeeting = cate.GetValue<YokoOption, bool>(YokoOption.YashiroUpdateWithMeeting);
 
 			this.yashiro = ExtremeSystemTypeManager.Instance.CreateOrGet(
 				YokoYashiroSystem.Type,
@@ -183,7 +178,7 @@ public sealed class Yoko :
 
 		this.timer = this.searchTime;
     }
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -223,7 +218,7 @@ public sealed class Yoko :
         this.timer = this.searchTime;
         bool isEnemy = false;
 
-        foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
+        foreach (NetworkedPlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 
 			if (player == null ||
@@ -359,7 +354,7 @@ public sealed class Yoko :
 	{
 		this.CreateAbilityCountButton(
 			"yokoYashiro",
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 				Path.YokoYashiro),
 			this.IsAbilityActive,
 			this.CleanUp,

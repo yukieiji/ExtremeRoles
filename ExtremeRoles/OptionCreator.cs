@@ -3,36 +3,37 @@
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Module.CustomOption.Factories;
+// using ExtremeRoles.Module.CustomOption.Factories;
+
+
 
 namespace ExtremeRoles;
 
 public static class OptionCreator
 {
 	public const int IntegrateOptionStartOffset = 15000;
-
-	private const int singleRoleOptionStartOffset = 256;
-    private const int combRoleOptionStartOffset = 5000;
-    private const int ghostRoleOptionStartOffset = 10000;
     private const int maxPresetNum = 20;
-
-    public static readonly string[] SpawnRate = [
-        "0%", "10%", "20%", "30%", "40%",
-        "50%", "60%", "70%", "80%", "90%", "100%" ];
 
     public static readonly string[] Range = [ "short", "middle", "long" ];
 
     private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
-    public enum CommonOptionKey : int
+    public enum PresetOptionKey : int
     {
-        PresetSelection = 0,
-
-		UseRaiseHand,
-
-        UseStrongRandomGen,
-        UsePrngAlgorithm,
+        Selection = 0,
     }
+
+	public enum RandomOptionKey : int
+	{
+		UseStrong = 0,
+		Algorithm,
+	}
+
+	public enum CommonOption : int
+	{
+		PresetOption,
+		RandomOption
+	}
 
     public static void Create()
     {
@@ -42,44 +43,40 @@ public static class OptionCreator
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
-		var commonOptionFactory = new ColorSyncFactory(defaultOptionColor);
+		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
+			CommonOption.PresetOption,
+			color: defaultOptionColor))
+		{
+			commonOptionFactory.CreateIntOption(
+				PresetOptionKey.Selection,
+				1, 1, maxPresetNum, 1,
+				format: OptionUnit.Preset);
+		}
 
-		commonOptionFactory.CreateIntOption(
-			CommonOptionKey.PresetSelection,
-			1, 1, maxPresetNum, 1,
-			isHeader: true,
-			format: OptionUnit.Preset);
-
-		commonOptionFactory.CreateBoolOption(
-			CommonOptionKey.UseRaiseHand,
-			false, isHeader: true);
-
-		var strongGen = commonOptionFactory.CreateBoolOption(
-			CommonOptionKey.UseStrongRandomGen,
-			true, isHeader: true);
-		commonOptionFactory.CreateSelectionOption(
-			CommonOptionKey.UsePrngAlgorithm,
-			[
-				"Pcg32XshRr", "Pcg64RxsMXs",
-				"Xorshift64", "Xorshift128",
-				"Xorshiro256StarStar",
-				"Xorshiro512StarStar",
-				"RomuMono", "RomuTrio", "RomuQuad",
-				"Seiran128", "Shioi128", "JFT32",
-			],
-			strongGen, invert: true);
+		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
+			CommonOption.RandomOption, color: defaultOptionColor))
+		{
+			var strongGen = commonOptionFactory.CreateBoolOption(
+				RandomOptionKey.UseStrong,　true);
+			commonOptionFactory.CreateSelectionOption(
+				RandomOptionKey.Algorithm,
+				[
+					"Pcg32XshRr", "Pcg64RxsMXs",
+					"Xorshift64", "Xorshift128",
+					"Xorshiro256StarStar",
+					"Xorshiro512StarStar",
+					"RomuMono", "RomuTrio", "RomuQuad",
+					"Seiran128", "Shioi128", "JFT32",
+				],
+				strongGen, invert: true);
+		}
 
         IRoleSelector.CreateRoleGlobalOption();
         IShipGlobalOption.Create();
 
-        Roles.ExtremeRoleManager.CreateNormalRoleOptions(
-            singleRoleOptionStartOffset);
-
-        Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
-            combRoleOptionStartOffset);
-
-        GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
-            ghostRoleOptionStartOffset);
+        Roles.ExtremeRoleManager.CreateNormalRoleOptions();
+        Roles.ExtremeRoleManager.CreateCombinationRoleOptions();
+        GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption();
 
 
 		CompatModManager.Instance.CreateIntegrateOption(IntegrateOptionStartOffset);

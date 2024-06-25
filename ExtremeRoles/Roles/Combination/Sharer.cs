@@ -4,16 +4,20 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class SharerManager : FlexibleCombinationRoleManagerBase
 {
     public SharerManager() : base(
+		CombinationRoleType.Sharer,
         new Sharer(), 2, false)
     { }
 
@@ -121,7 +125,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         if (this.sameSharer != null)
         {
@@ -244,18 +248,18 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             SharerOption.SharerTellKill,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
 
-        this.sharerTellKill = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(SharerOption.SharerTellKill));
+        this.sharerTellKill = this.Loader.GetValue<SharerOption, bool>(
+            SharerOption.SharerTellKill);
 
         if (this.sharerTellKill)
         {

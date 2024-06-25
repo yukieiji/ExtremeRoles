@@ -10,6 +10,7 @@ using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
+#if WITHHAT
 public sealed class GetHatHandler : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
@@ -26,3 +27,4 @@ public sealed class GetHatHandler : IRequestHandler
 		IRequestHandler.Write(response, curData);
 	}
 }
+#endif

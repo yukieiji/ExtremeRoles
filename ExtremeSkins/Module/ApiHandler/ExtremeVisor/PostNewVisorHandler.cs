@@ -14,7 +14,7 @@ using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
-
+#if WITHVISOR
 public sealed class PostNewVisorHandler : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
@@ -63,3 +63,4 @@ public sealed class PostNewVisorHandler : IRequestHandler
 		response.Close();
 	}
 }
+#endif

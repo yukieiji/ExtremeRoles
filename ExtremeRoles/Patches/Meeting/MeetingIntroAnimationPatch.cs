@@ -56,7 +56,7 @@ public static class MeetingIntroAnimationInitPatch
 
 		string gaProtectText = string.Empty;
 
-		if (someoneWasProtected && !ExtremeGameModeManager.Instance.ShipOption.IsBlockGAAbilityReport)
+		if (someoneWasProtected && !ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsBlockGAAbilityReport)
 		{
 			gaProtectText = text.text;
 		}

@@ -64,7 +64,9 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 			{
 				return x.Data.Role.Role switch
 				{
-					RoleTypes.Impostor or RoleTypes.Shapeshifter => true,
+					RoleTypes.Impostor or
+					RoleTypes.Shapeshifter or
+					RoleTypes.Phantom => true,
 					_ => false
 				};
 			});
@@ -79,7 +81,9 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 				{
 					RoleTypes.Crewmate or
 					RoleTypes.Engineer or
-					RoleTypes.Scientist => true,
+					RoleTypes.Scientist or
+					RoleTypes.Noisemaker or
+					RoleTypes.Tracker => true,
 
 					_ => false
 				};

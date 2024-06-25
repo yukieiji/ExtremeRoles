@@ -14,7 +14,13 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+
+
 using BepInEx.Unity.IL2CPP.Utils;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+using static UnityEngine.GridBrushBase;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -65,9 +71,9 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         this.CreateAbilityCountButton(
             "setBomb",
-            Loader.CreateSpriteFromResources(
-                Path.BomberSetBomb),
-            CheckAbility, CleanUp, ForceCleanUp);
+			Resources.Loader.CreateSpriteFromResources(
+				Path.BomberSetBomb),
+			CheckAbility, CleanUp, ForceCleanUp);
     }
 
     public bool IsAbilityUse()
@@ -103,45 +109,44 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5, 2.5f);
-        CreateIntOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5, 2.5f);
+        factory.CreateIntOption(
             BomberOption.ExplosionRange,
-            2, 1, 5, 1,
-            parentOps);
-        CreateIntOption(
+            2, 1, 5, 1);
+        factory.CreateIntOption(
             BomberOption.ExplosionKillChance,
             50, 25, 75, 1,
-            parentOps, format: OptionUnit.Percentage);
-        CreateFloatOption(
+            format: OptionUnit.Percentage);
+        factory.CreateFloatOption(
             BomberOption.TimerMinTime,
             15f, 5.0f, 30f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateFloatOption(
+            format: OptionUnit.Second);
+        factory.CreateFloatOption(
             BomberOption.TimerMaxTime,
             60f, 45f, 75f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateBoolOption(
+            format: OptionUnit.Second);
+        factory.CreateBoolOption(
             BomberOption.TellExplosion,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.timerMinTime = allOption.GetValue<float>(
-            GetRoleOptionId(BomberOption.TimerMinTime));
-        this.timerMaxTime = allOption.GetValue<float>(
-            GetRoleOptionId(BomberOption.TimerMaxTime));
-        this.explosionKillChance = allOption.GetValue<int>(
-            GetRoleOptionId(BomberOption.ExplosionKillChance));
-        this.explosionRange = allOption.GetValue<int>(
-            GetRoleOptionId(BomberOption.ExplosionRange));
-        this.tellExplosion = allOption.GetValue<bool>(
-            GetRoleOptionId(BomberOption.TellExplosion));
+        this.timerMinTime = cate.GetValue<BomberOption, float>(
+            BomberOption.TimerMinTime);
+        this.timerMaxTime = cate.GetValue<BomberOption, float>(
+            BomberOption.TimerMaxTime);
+        this.explosionKillChance = cate.GetValue<BomberOption, int>(
+            BomberOption.ExplosionKillChance);
+        this.explosionRange = cate.GetValue<BomberOption, int>(
+		BomberOption.ExplosionRange);
+        this.tellExplosion = cate.GetValue<BomberOption, bool>(
+            BomberOption.TellExplosion);
 
         this.bombPlayerId = new Queue<byte>();
         resetTimer();
@@ -155,7 +160,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -212,14 +217,14 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-        foreach (GameData.PlayerInfo playerInfo in
+        foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 
             if (!playerInfo.Disconnected &&
                 !playerInfo.IsDead &&
                 (playerInfo.PlayerId != sourcePlayer.PlayerId) &&
-                (!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer) &&
+                (!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
                 (!ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() ||
                  playerInfo.PlayerId == rolePlayer.PlayerId))
             {

@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -72,8 +72,8 @@ public sealed class Madmate :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "selfKill", Loader.CreateSpriteFromResources(
-                Path.SucideSprite));
+            "selfKill", Resources.Loader.CreateSpriteFromResources(
+				Path.SucideSprite));
     }
 
     public bool UseAbility()
@@ -93,7 +93,7 @@ public sealed class Madmate :
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -117,7 +117,7 @@ public sealed class Madmate :
     }
 
     public void ModifiedWinPlayer(
-        GameData.PlayerInfo rolePlayerInfo,
+        NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
     {
@@ -174,64 +174,64 @@ public sealed class Madmate :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MadmateOption.IsDontCountAliveCrew,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MadmateOption.CanFixSabotage,
-            false, parentOps);
-        var ventUseOpt = CreateBoolOption(
+            false);
+        var ventUseOpt = factory.CreateBoolOption(
             MadmateOption.CanUseVent,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MadmateOption.CanMoveVentToVent,
             false, ventUseOpt);
-        var taskOpt = CreateBoolOption(
+        var taskOpt = factory.CreateBoolOption(
             MadmateOption.HasTask,
-            false, parentOps);
-        CreateIntOption(
+            false);
+        factory.CreateIntOption(
             MadmateOption.SeeImpostorTaskGage,
             70, 0, 100, 10,
             taskOpt,
             format: OptionUnit.Percentage);
-        var impFromSeeOpt = CreateBoolOption(
+        var impFromSeeOpt = factory.CreateBoolOption(
             MadmateOption.CanSeeFromImpostor,
             false, taskOpt);
-        CreateIntOption(
+        factory.CreateIntOption(
             MadmateOption.CanSeeFromImpostorTaskGage,
             70, 0, 100, 10,
             impFromSeeOpt,
             format: OptionUnit.Percentage);
 
-        this.CreateCommonAbilityOption(parentOps);
+        IRoleAbility.CreateCommonAbilityOption(factory);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Loader;
         this.isSeeImpostorNow = false;
         this.isUpdateMadmate = false;
         this.FakeImposter = false;
 
-        this.isDontCountAliveCrew = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.IsDontCountAliveCrew));
+        this.isDontCountAliveCrew = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.IsDontCountAliveCrew);
 
-        this.CanRepairSabotage = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanFixSabotage));
-        this.UseVent = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanUseVent));
-        this.canMoveVentToVent = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanMoveVentToVent));
-        this.HasTask = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.HasTask));
-        this.seeImpostorTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(MadmateOption.SeeImpostorTaskGage)) / 100.0f;
-        this.canSeeFromImpostor = allOpt.GetValue<bool>(
-            GetRoleOptionId(MadmateOption.CanSeeFromImpostor));
-        this.seeFromImpostorTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)) / 100.0f;
+        this.CanRepairSabotage = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanFixSabotage);
+        this.UseVent = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanUseVent);
+        this.canMoveVentToVent = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanMoveVentToVent);
+        this.HasTask = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.HasTask);
+        this.seeImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+            MadmateOption.SeeImpostorTaskGage) / 100.0f;
+        this.canSeeFromImpostor = cate.GetValue<MadmateOption, bool>(
+            MadmateOption.CanSeeFromImpostor);
+        this.seeFromImpostorTaskGage = cate.GetValue<MadmateOption, int>(
+            MadmateOption.CanSeeFromImpostorTaskGage) / 100.0f;
 
         this.isSeeImpostorNow =
             this.HasTask &&

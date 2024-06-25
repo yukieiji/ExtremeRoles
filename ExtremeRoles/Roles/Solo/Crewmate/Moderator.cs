@@ -11,6 +11,11 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -145,7 +150,7 @@ public sealed class Moderator :
 	{
 		this.CreateAbilityCountButton(
 			"moderate",
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 				Path.ModeratorModerate));
 		this.Button?.SetLabelToCrewmate();
 	}
@@ -181,22 +186,23 @@ public sealed class Moderator :
 		return;
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 		return;
 	}
 
 	protected override void CreateSpecificOption(
-		IOptionInfo parentOps)
+		AutoParentSetOptionCategoryFactory factory)
 	{
-		CreateIntOption(
+		factory.CreateIntOption(
 			ModeratorOption.AwakeTaskGage,
 			60, 0, 100, 10,
-			parentOps,
 			format: OptionUnit.Percentage);
-		this.CreateAbilityCountOption(
-			parentOps, 2, 10);
-		CreateIntOption(ModeratorOption.MeetingTimerOffset, 30, 5, 360, 5, parentOps, format: OptionUnit.Second);
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 2, 10);
+		factory.CreateIntOption(
+			ModeratorOption.MeetingTimerOffset,
+			30, 5, 360, 5, format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
@@ -206,8 +212,10 @@ public sealed class Moderator :
 			new Vector3(-3.75f, -2.5f, -250.0f),
 			TMPro.TextAlignmentOptions.BottomLeft);
 
-		this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-		   GetRoleOptionId(ModeratorOption.AwakeTaskGage)) / 100.0f;
+		var cate = this.Loader;
+
+		this.awakeTaskGage = cate.GetValue<ModeratorOption, int>(
+		   ModeratorOption.AwakeTaskGage) / 100.0f;
 
 		this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -222,8 +230,8 @@ public sealed class Moderator :
 			this.HasOtherVision = false;
 		}
 
-		this.offset = OptionManager.Instance.GetValue<int>(
-			this.GetRoleOptionId(ModeratorOption.MeetingTimerOffset));
+		this.offset = cate.GetValue<ModeratorOption, int>(
+			ModeratorOption.MeetingTimerOffset);
 
 		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 	}

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.CustomOption;
+using ExtremeRoles.Module.NewOption.OLDS.Implemented;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Test;

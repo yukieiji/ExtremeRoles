@@ -14,8 +14,6 @@ public static class SpawnInMinigameBeginPatch
     {
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
-		if (spawnOpt == null) { return; }
-
 		if (!(spawnOpt.EnableSpecialSetting && spawnOpt.AirShip))
 		{
 			__instance.gotButton = true;

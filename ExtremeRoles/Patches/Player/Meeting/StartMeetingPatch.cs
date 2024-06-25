@@ -7,7 +7,7 @@ namespace ExtremeRoles.Patches.Player.Meeting;
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
 public static class PlayerControlCoStartMeetingPatch
 {
-	public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
+	public static void Prefix([HarmonyArgument(0)] NetworkedPlayerInfo target)
 	{
 		InfoOverlay.Instance.IsBlock = true;
 

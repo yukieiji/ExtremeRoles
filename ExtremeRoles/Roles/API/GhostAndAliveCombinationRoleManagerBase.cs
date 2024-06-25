@@ -3,7 +3,9 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.CustomOption.Factories;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -14,11 +16,13 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
         Dictionary<ExtremeRoleId, GhostRoleBase> ();
 
     public GhostAndAliveCombinationRoleManagerBase(
+		CombinationRoleType roleType,
         string roleName,
         Color optionColor,
         int setPlayerNum,
         int maxSetNum = int.MaxValue) : base(
-            roleName,
+			roleType,
+			roleName,
             optionColor,
             setPlayerNum,
             maxSetNum)
@@ -29,29 +33,32 @@ public abstract class GhostAndAliveCombinationRoleManagerBase :
     public abstract void InitializeGhostRole(
         byte rolePlayerId, GhostRoleBase role, SingleRoleBase aliveRole);
 
-    public int GetOptionIdOffset() => this.OptionIdOffset;
-
     public GhostRoleBase GetGhostRole(ExtremeRoleId id) =>
         this.CombGhostRole[id];
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        base.CreateSpecificOption(parentOps);
+        base.CreateSpecificOption(factory);
 
         IEnumerable<GhostRoleBase> collection = this.CombGhostRole.Values;
-		var factory = new AutoParentSetFactory(tab: OptionTab.Combination, parent: parentOps);
 
 		foreach (var item in collection.Select(
             (Value, Index) => new { Value, Index }))
         {
-            int optionOffset = this.OptionIdOffset + (
-                ExtremeRoleManager.OptionOffsetPerRole * (
-                item.Index + 1 + this.Roles.Count));
-			factory.IdOffset = optionOffset;
-			factory.NamePrefix = item.Value.Name;
-			item.Value.CreateRoleSpecificOption(factory, optionOffset);
+			var role = item.Value; ;
+
+			int offset = (item.Index + 1) * ExtremeGhostRoleManager.IdOffset;
+			factory.IdOffset = offset;
+			factory.OptionPrefix = role.Name;
+
+			role.CreateRoleSpecificOption(factory);
+			if (role is ICombination combGhost)
+			{
+				combGhost.OffsetInfo = new MultiAssignRoleBase.OptionOffsetInfo(
+					this.RoleType, offset);
+			}
         }
     }
     protected override void CommonInit()

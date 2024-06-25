@@ -30,7 +30,7 @@ public static class ShipStatusCalculateLightRadiusPatch
     public static bool Prefix(
         ref float __result,
         ShipStatus __instance,
-        [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
+        [HarmonyArgument(0)] NetworkedPlayerInfo playerInfo)
     {
         return VisionComputer.Instance.IsVanillaVisionAndGetVision(
             __instance, playerInfo, out __result);

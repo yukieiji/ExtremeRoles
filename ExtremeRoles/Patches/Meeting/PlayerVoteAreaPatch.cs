@@ -13,6 +13,8 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
+
+
 using Il2CppActionFloat = Il2CppSystem.Action<float>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 
@@ -47,7 +49,7 @@ public static class NamePlateHelper
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]
 public static class PlayerVoteAreaCosmetics
 {
-	public static void Postfix(PlayerVoteArea __instance, GameData.PlayerInfo playerInfo)
+	public static void Postfix(PlayerVoteArea __instance, NetworkedPlayerInfo playerInfo)
 	{
 		NamePlateHelper.UpdateNameplate(
 			__instance, playerInfo.PlayerId);
@@ -241,7 +243,7 @@ public static class PlayerVoteAreaSetCosmeticsPatch
 {
 	public static void Postfix(PlayerVoteArea __instance)
 	{
-		if (ExtremeGameModeManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
+		if (ExtremeGameModeManager.Instance.ShipOption.Meeting.IsFixedVoteAreaPlayerLevel)
         {
 			__instance.LevelNumberText.text = "99";
 		}
@@ -275,7 +277,7 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(1)] bool isDead,
 		[HarmonyArgument(2)] bool isGuardian = false)
         {
-		if (ExtremeGameModeManager.Instance.ShipOption.IsRemoveAngleIcon)
+		if (ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsRemoveAngleIcon)
 		{
 			__instance.GAIcon.gameObject.SetActive(false);
 		}

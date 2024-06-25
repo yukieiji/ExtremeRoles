@@ -75,7 +75,7 @@ public static class DebugTool
             if (dict.Count == 0) { return; }
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
             {
-                GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
+                NetworkedPlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                 var role = dict[playerInfo.PlayerId];
                 if (!role.HasTask())
                 {
@@ -93,7 +93,7 @@ public static class DebugTool
             if (dict.Count == 0) { return; }
             for (int i = 0; i < GameData.Instance.PlayerCount; i++)
             {
-                GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
+                NetworkedPlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                 var role = dict[playerInfo.PlayerId];
                 if (!role.HasTask())
                 {

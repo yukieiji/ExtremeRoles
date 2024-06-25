@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Collections.Generic;
-
-using ExtremeRoles.GameMode.Option.MapModule;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -14,41 +14,29 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public bool IsRandomMap { get; private set; }
 	public bool ChangeForceWallCheck { get; private set; }
 
-	public bool DisableVent { get; private set; }
-	public VentAnimationMode VentAnimationMode { get; private set; }
-
 	public bool IsAllowParallelMedbayScan { get; private set; }
     public bool IsSameNeutralSameWin { get; private set; }
     public bool DisableNeutralSpecialForceEnd { get; private set; }
 
-    public AdminOption Admin { get; private set; }
-    public SecurityOption Security { get; private set; }
-    public VitalOption Vital { get; private set; }
-
+    public AdminDeviceOption Admin { get; private set; }
+    public DeviceOption Security { get; private set; }
+    public DeviceOption Vital { get; private set; }
 	public SpawnOption Spawn { get; private set; }
 
-	public int MaxMeetingCount => 0;
-
-    public bool IsChangeVoteAreaButtonSortArg => false;
-    public bool IsFixedVoteAreaPlayerLevel => false;
-    public bool IsBlockSkipInMeeting  => false;
-    public bool DisableSelfVote => false;
-
-    public ConfirmExilMode ExilMode => ConfirmExilMode.Impostor;
+	public ConfirmExilMode ExilMode => ConfirmExilMode.Impostor;
     public bool IsConfirmRole => false;
-
-    public bool EngineerUseImpostorVent => false;
-    public bool CanKillVentInPlayer => false;
 
     public bool DisableTaskWinWhenNoneTaskCrew => false;
     public bool DisableTaskWin => false;
 
-    public bool IsAssignNeutralToVanillaCrewGhostRole => false;
-    public bool IsRemoveAngleIcon => false;
-    public bool IsBlockGAAbilityReport => false;
-
 	public bool IsBreakEmergencyButton => true;
 
+	public VentConsoleOption Vent { get; private set; }
+
+	public MeetingHudOption Meeting { get; } = new();
+	public GhostRoleOption GhostRole { get; } = new();
+
+	/*
 	private HashSet<GlobalOption> useOption =
 	[
         GlobalOption.DisableVent,
@@ -80,74 +68,38 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
         // GlobalOption.EnableHorseMode
     ];
+	*/
 
     public void Load()
     {
-        DisableVent = IShipGlobalOption.GetCommonOptionValue<bool>(
-            GlobalOption.DisableVent);
-		this.VentAnimationMode = (VentAnimationMode)IShipGlobalOption.GetCommonOptionValue<int>(
-			GlobalOption.VentAnimationModeInVison);
+		var vent = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VentOption);
+		this.Vent = new VentConsoleOption(
+			vent.GetValue<bool>((int)VentOption.Disable),
+			false, false,
+			(VentAnimationMode)vent.GetValue<int>((int)VentOption.AnimationModeInVison));
 
-		ChangeForceWallCheck = IShipGlobalOption.GetCommonOptionValue<bool>(
-			GlobalOption.IsFixWallHaskTask);
+		Spawn = new SpawnOption(
+			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.RandomSpawnOption));
 
-		Spawn = new SpawnOption()
-		{
-			EnableSpecialSetting = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.EnableSpecialSetting),
-			Skeld = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.SkeldRandomSpawn),
-			MiraHq = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.MiraHqRandomSpawn),
-			Polus = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.PolusRandomSpawn),
-			AirShip = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.AirShipRandomSpawn),
-			Fungle = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.FungleRandomSpawn),
-			IsAutoSelectRandom = IShipGlobalOption.GetCommonOptionValue<bool>(
-				GlobalOption.IsAutoSelectRandomSpawn),
-		};
+		Admin = new AdminDeviceOption(
+			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.AdminOption));
+		Vital = new DeviceOption(
+			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VitalOption));
+		Security = new DeviceOption(
+			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.SecurityOption));
 
-		IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
-            GlobalOption.RandomMap);
+		var neutralWinCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.NeutralWinOption);
+		IsSameNeutralSameWin = neutralWinCate.GetValue<bool>((int)NeutralWinOption.IsSame);
+		DisableNeutralSpecialForceEnd = neutralWinCate.GetValue<bool>((int)NeutralWinOption.DisableSpecialEnd);
 
-        Admin = new AdminOption()
-        {
-            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.IsRemoveAdmin),
-            AirShipEnable = (AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue<int>(
-                GlobalOption.AirShipEnableAdmin),
-            EnableAdminLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.EnableAdminLimit),
-            AdminLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
-                GlobalOption.AdminLimitTime),
-        };
-        Vital = new VitalOption()
-        {
-            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.IsRemoveVital),
-            EnableVitalLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.EnableVitalLimit),
-            VitalLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
-                GlobalOption.VitalLimitTime),
-        };
-        Security = new SecurityOption()
-        {
-            Disable = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.IsRemoveSecurity),
-            EnableSecurityLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
-                GlobalOption.EnableSecurityLimit),
-            SecurityLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
-                GlobalOption.SecurityLimitTime),
-        };
+		var taskCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.TaskOption);
+		ChangeForceWallCheck = taskCate.GetValue<bool>((int)TaskOption.IsFixWallHaskTask);
+		IsAllowParallelMedbayScan = taskCate.GetValue<bool>((int)TaskOption.ParallelMedBayScans);
 
-        IsSameNeutralSameWin = IShipGlobalOption.GetCommonOptionValue<bool>(
-            GlobalOption.IsSameNeutralSameWin);
-        DisableNeutralSpecialForceEnd = IShipGlobalOption.GetCommonOptionValue<bool>(
-            GlobalOption.DisableNeutralSpecialForceEnd);
-    }
-
+		var randomMapCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.RandomMapOption);
+		IsRandomMap = randomMapCate.GetValue<bool>((int)RandomMap.Enable);
+	}
+	/*
     public bool IsValidOption(int id) => this.useOption.Contains((GlobalOption)id);
 
 	public IEnumerable<GlobalOption> UseOptionId()
@@ -157,4 +109,5 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 			yield return id;
 		}
 	}
+	*/
 }

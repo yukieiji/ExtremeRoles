@@ -206,7 +206,7 @@ public enum NeutralSeparateTeam
 
 public static class ExtremeRoleManager
 {
-    public const int OptionOffsetPerRole = 75;
+    public const int OptionOffsetPerRole = 200;
 
 	public static readonly IReadOnlySet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
@@ -328,40 +328,29 @@ public static class ExtremeRoleManager
         CreateServant,
     }
 
-    public static void CreateCombinationRoleOptions(
-        int optionIdOffsetChord)
+	private const int roleIdOffset = 200;
+
+	public static int GetRoleGroupId(ExtremeRoleId roleId)
+		=> roleIdOffset + (int)roleId;
+
+	private const int conbRoleIdOffset = 1000;
+
+	public static int GetCombRoleGroupId(CombinationRoleType roleId)
+		=> conbRoleIdOffset + (int)roleId;
+
+	public static void CreateCombinationRoleOptions()
     {
-
-        if (CombRole.Count == 0) { return; };
-
-        IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
-
-        int roleOptionOffset = optionIdOffsetChord;
-
-        foreach (var item
-         in roles.Select((Value, Index) => new { Value, Index }))
+        foreach (var role in CombRole.Values)
         {
-            roleOptionOffset = roleOptionOffset + (
-                OptionOffsetPerRole * (item.Index + item.Value.Roles.Count + 1));
-            item.Value.CreateRoleAllOption(roleOptionOffset);
+			role.CreateRoleAllOption();
         }
     }
 
-    public static void CreateNormalRoleOptions(
-        int optionIdOffsetChord)
+    public static void CreateNormalRoleOptions()
     {
-
-        if (NormalRole.Count == 0) { return; };
-
-        IEnumerable<SingleRoleBase> roles = NormalRole.Values;
-
-        int roleOptionOffset = 0;
-
-        foreach (var item in roles.Select(
-            (Value, Index) => new { Value, Index }))
+        foreach (var role in NormalRole.Values)
         {
-            roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
-            item.Value.CreateRoleAllOption(roleOptionOffset);
+			role.CreateRoleAllOption();
         }
     }
 
@@ -402,7 +391,7 @@ public static class ExtremeRoleManager
         }
     }
 	public static bool IsAliveWinNeutral(
-		SingleRoleBase role, GameData.PlayerInfo playerInfo)
+		SingleRoleBase role, NetworkedPlayerInfo playerInfo)
 		=> role.Id switch
 		{
 			ExtremeRoleId.Neet => !(playerInfo.IsDead || playerInfo.Disconnected),
@@ -423,18 +412,16 @@ public static class ExtremeRoleManager
     {
         RoleTypes roleType = (RoleTypes)bytedRoleType;
 
-        bool hasVanilaRole = false;
-
-        switch (roleType)
-        {
-            case RoleTypes.Scientist:
-            case RoleTypes.Engineer:
-            case RoleTypes.Shapeshifter:
-                hasVanilaRole = true;
-                break;
-            default:
-                break;
-        }
+		bool hasVanilaRole = roleType switch
+		{
+			RoleTypes.Scientist or
+			RoleTypes.Scientist or
+			RoleTypes.Shapeshifter or
+			RoleTypes.Noisemaker or
+			RoleTypes.Phantom or
+			RoleTypes.Tracker => true,
+			_ => false
+		};
 
         var role = CombRole[combType].GetRole(roleId, roleType);
 

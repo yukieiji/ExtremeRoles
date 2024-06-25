@@ -13,8 +13,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using UnityObject = UnityEngine.Object;
 using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
+
 
 #nullable enable
 
@@ -135,7 +138,7 @@ public static class GameSystem
 	}
 
     public static (int, int) GetTaskInfo(
-        GameData.PlayerInfo playerInfo)
+        NetworkedPlayerInfo playerInfo)
     {
         int TotalTasks = 0;
         int CompletedTasks = 0;
@@ -188,7 +191,7 @@ public static class GameSystem
         return taskIndex[index];
     }
 
-    public static int GetRandomNormalTaskId()
+    public static int GetRandomShortTaskId()
     {
         if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
@@ -263,12 +266,10 @@ public static class GameSystem
 
         if (SetPlayerNewTask(ref player, taskId, (uint)index))
         {
-            player.Data.Tasks[index] = new GameData.TaskInfo(
+            player.Data.Tasks[index] = new NetworkedPlayerInfo.TaskInfo(
                 taskId, (uint)index);
             player.Data.Tasks[index].Id = (uint)index;
-
-            GameData.Instance.SetDirtyBit(
-                1U << (int)player.PlayerId);
+			player.Data.MarkDirty();
         }
     }
 
@@ -383,7 +384,7 @@ public static class GameSystem
 	}
 
     public static void SetTask(
-        GameData.PlayerInfo playerInfo,
+        NetworkedPlayerInfo playerInfo,
         int taskIndex)
     {
         NormalPlayerTask task = CachedShipStatus.Instance.GetTaskById((byte)taskIndex);
@@ -391,7 +392,7 @@ public static class GameSystem
         PlayerControl player = playerInfo.Object;
 
         int index = playerInfo.Tasks.Count;
-        playerInfo.Tasks.Add(new GameData.TaskInfo((byte)taskIndex, (uint)index));
+        playerInfo.Tasks.Add(new ((byte)taskIndex, (uint)index));
         playerInfo.Tasks[index].Id = (uint)index;
 
         task.Id = (uint)index;
@@ -473,12 +474,14 @@ public static class GameSystem
 
 	public static void SpawnDummyPlayer(string name = "")
     {
-        PlayerControl playerControl = UnityEngine.Object.Instantiate(
-                AmongUsClient.Instance.PlayerPrefab);
+        PlayerControl playerControl = UnityObject.Instantiate(
+            AmongUsClient.Instance.PlayerPrefab);
         playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
 
-        GameData.Instance.AddPlayer(playerControl);
-        AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
+        var dummyData = GameData.Instance.AddDummy(playerControl);
+		AmongUsClient.Instance.Spawn(dummyData);
+        AmongUsClient.Instance.Spawn(playerControl);
+		playerControl.isDummy = true;
 
         var hatMng = FastDestroyableSingleton<HatManager>.Instance;
         var rng = RandomGenerator.GetTempGenerator();
@@ -500,13 +503,15 @@ public static class GameSystem
         playerControl.SetPet(hatMng.allPets[pet].ProdId, color);
         playerControl.SetVisor(hatMng.allVisors[visor].ProdId, color);
         playerControl.SetSkin(hatMng.allSkins[skin].ProdId, color);
-        GameData.Instance.RpcSetTasks(playerControl.PlayerId, Array.Empty<byte>());
-    }
+
+		dummyData.PlayerId = playerControl.PlayerId;
+		dummyData.RpcSetTasks(new Il2CppStructArray<byte>(0));
+	}
 
     private static List<int> getTaskIndex(
         NormalPlayerTask[] tasks)
     {
-        List<int> index = new List<int>();
+        List<int> index = new List<int>(tasks.Length);
         for (int i = 0; i < tasks.Length; ++i)
         {
             if (!ignoreTask.Contains(tasks[i].TaskType))

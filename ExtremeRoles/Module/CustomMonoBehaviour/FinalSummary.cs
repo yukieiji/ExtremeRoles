@@ -261,7 +261,7 @@ public sealed class FinalSummary : MonoBehaviour
 		public PlayerStatus StatusInfo { get; init; }
 
 		public static PlayerSummary Create(
-			GameData.PlayerInfo playerInfo,
+			NetworkedPlayerInfo playerInfo,
 			SingleRoleBase role,
 			GhostRoleBase ghostRole,
 			ExtremeGameResult.TaskInfo taskInfo)

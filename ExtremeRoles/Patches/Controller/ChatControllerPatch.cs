@@ -18,7 +18,7 @@ namespace ExtremeRoles.Patches.Controller;
 public static class ChatControllerAddChatNotePatch
 {
 	public static bool Prefix(
-		[HarmonyArgument(0)] GameData.PlayerInfo srcPlayer,
+		[HarmonyArgument(0)] NetworkedPlayerInfo srcPlayer,
 		[HarmonyArgument(1)] ChatNoteTypes noteType)
 	{
 		return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger || noteType != ChatNoteTypes.DidVote;
@@ -43,8 +43,8 @@ public static class ChatControllerAddChatPatch
 			return false;
 		}
 
-		GameData.PlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
-		GameData.PlayerInfo sourcePlayerData = sourcePlayer.Data;
+		NetworkedPlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
+		NetworkedPlayerInfo sourcePlayerData = sourcePlayer.Data;
 
 		var roleDict = ExtremeRoleManager.GameRole;
 

@@ -11,7 +11,12 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 
+
+
 using BepInEx.Unity.IL2CPP.Utils;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -307,8 +312,8 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateNormalAbilityButton(
             "timeShield",
-            Loader.CreateSpriteFromResources(
-               Path.TimeMasterTimeShield),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.TimeMasterTimeShield),
             abilityOff: this.CleanUp);
         this.Button.SetLabelToCrewmate();
     }
@@ -343,7 +348,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         resetMeeting(localPlayer.PlayerId);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -370,15 +375,15 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 3.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 3.0f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             TimeMasterOption.RewindTime,
             5.0f, 1.0f, 60.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()
@@ -388,7 +393,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<
             TimeMasterHistory>();
         history.Initialize(
-            OptionManager.Instance.GetValue<float>(GetRoleOptionId(
-                TimeMasterOption.RewindTime)));
+            this.Loader.GetValue<TimeMasterOption, float>(
+                TimeMasterOption.RewindTime));
     }
 }

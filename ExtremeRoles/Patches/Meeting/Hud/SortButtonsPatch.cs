@@ -13,6 +13,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Module.SystemType;
 
 
+
 using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
@@ -22,7 +23,7 @@ public static class MeetingHudSortButtonsPatch
 {
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!ExtremeGameModeManager.Instance.ShipOption.IsChangeVoteAreaButtonSortArg ||
+		if (!ExtremeGameModeManager.Instance.ShipOption.Meeting.IsChangeVoteAreaButtonSortArg ||
 			ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 		PlayerVoteArea[] array = __instance.playerStates.OrderBy(delegate (PlayerVoteArea p)
@@ -54,8 +55,7 @@ public static class MeetingHudSortButtonsPatch
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
 			player);
 
-		var system = OptionManager.Instance.GetValue<bool>
-			((int)OptionCreator.CommonOptionKey.UseRaiseHand) ? IRaiseHandSystem.Get() : null;
+		var system = ExtremeGameModeManager.Instance.ShipOption.Meeting.UseRaiseHand ? IRaiseHandSystem.Get() : null;
 
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{

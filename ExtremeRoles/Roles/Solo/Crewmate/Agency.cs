@@ -10,6 +10,11 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
@@ -79,18 +84,16 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             Sound.PlaySound(
                 Sound.Type.AgencyTakeTask, 1.2f);
         }
-
-        GameData.Instance.SetDirtyBit(
-            1U << (int)targetPlayer.PlayerId);
-    }
+		targetPlayer.Data.MarkDirty();
+	}
 
 
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
             "takeTask",
-            Loader.CreateSpriteFromResources(
-                Path.AgencyTakeTask));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.AgencyTakeTask));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -125,7 +128,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
-        GameData.PlayerInfo targetPlayerInfo = GameData.Instance.GetPlayerById(
+        NetworkedPlayerInfo targetPlayerInfo = GameData.Instance.GetPlayerById(
             this.TargetPlayer);
 
         var shuffleTaskIndex = Enumerable.Range(
@@ -202,7 +205,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -230,7 +233,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
                 switch (taskType)
                 {
                     case TakeTaskType.Normal:
-                        taskIndex = GameSystem.GetRandomNormalTaskId();
+                        taskIndex = GameSystem.GetRandomShortTaskId();
                         break;
                     case TakeTaskType.Long:
                         taskIndex = GameSystem.GetRandomLongTask();
@@ -250,31 +253,32 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			AgencyOption.CanSeeTaskBar,
-			true, parentOps);
-		CreateIntOption(
+			true);
+		factory.CreateIntOption(
             AgencyOption.MaxTaskNum,
-            2, 1, 3, 1, parentOps);
-        CreateFloatOption(
+            2, 1, 3, 1);
+        factory.CreateFloatOption(
             AgencyOption.TakeTaskRange,
-            1.0f, 0.5f, 2.0f, 0.1f,
-            parentOps);
+            1.0f, 0.5f, 2.0f, 0.1f);
 
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
     }
 
     protected override void RoleSpecificInit()
     {
-		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
-			GetRoleOptionId(AgencyOption.CanSeeTaskBar));
-		this.maxTakeTask = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(AgencyOption.MaxTaskNum)) + 1;
-        this.takeTaskRange = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(AgencyOption.TakeTaskRange));
+		var loader = this.Loader;
+
+		this.CanSeeTaskBar = loader.GetValue<AgencyOption, bool>(
+			AgencyOption.CanSeeTaskBar);
+		this.maxTakeTask = loader.GetValue<AgencyOption, int>(
+            AgencyOption.MaxTaskNum) + 1;
+        this.takeTaskRange = loader.GetValue<AgencyOption, float>(
+            AgencyOption.TakeTaskRange);
 
         this.TakeTask = new List<TakeTaskType>();
 

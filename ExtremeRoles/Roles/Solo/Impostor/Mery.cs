@@ -13,10 +13,13 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Compat;
 using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -41,8 +44,8 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         {
             this.body = new GameObject("MaryCamp");
             this.img = this.body.AddComponent<SpriteRenderer>();
-            this.img.sprite = Loader.CreateSpriteFromResources(
-               Path.MeryNoneActiveVent, 125f);
+            this.img.sprite = Resources.Loader.CreateSpriteFromResources(
+			   Path.MeryNoneActiveVent, 125f);
 
             this.body.SetActive(canSee);
             this.body.transform.position = new Vector3(
@@ -68,7 +71,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
                 this.body.transform.position.x,
                 this.body.transform.position.y);
 
-            foreach (GameData.PlayerInfo playerInfo in
+            foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null) { continue; }
@@ -137,7 +140,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 				vent.myAnim.enabled = false;
 			}
 
-			ventRenderer.sprite = Loader.CreateSpriteFromResources(
+			ventRenderer.sprite = Resources.Loader.CreateSpriteFromResources(
                 string.Format(Path.MeryCustomVentAnime, "0"), 125f);
 
 			vent.myRend = ventRenderer;
@@ -288,7 +291,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateAbilityCountButton(
             "setCamp",
-            Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
                 string.Format(Path.MeryCustomVentAnime, "0")));
     }
 
@@ -316,27 +319,27 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 3, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 3, 5);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             MeryOption.ActiveNum,
-            3, 1, 5, 1, parentOps);
-        CreateFloatOption(
+            3, 1, 5, 1);
+        factory.CreateFloatOption(
             MeryOption.ActiveRange,
-            2.0f, 0.1f, 3.0f, 0.1f, parentOps);
+            2.0f, 0.1f, 3.0f, 0.1f);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.ActiveNum = allOption.GetValue<int>(
-            GetRoleOptionId(MeryOption.ActiveNum));
-        this.ActiveRange = allOption.GetValue<float>(
-            GetRoleOptionId(MeryOption.ActiveRange));
+        this.ActiveNum = cate.GetValue<MeryOption, int>(
+            MeryOption.ActiveNum);
+        this.ActiveRange = cate.GetValue<MeryOption, float>(
+            MeryOption.ActiveRange);
 
     }
 
@@ -345,7 +348,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

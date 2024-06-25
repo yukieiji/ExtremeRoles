@@ -19,6 +19,8 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Patches.MapOverlay;
 
+
+
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 
 namespace ExtremeRoles.Patches.Manager;
@@ -103,10 +105,6 @@ public static class HudManagerUpdatePatch
 
     public static bool Prefix(HudManager __instance)
     {
-        if (__instance.GameSettings != null)
-        {
-            __instance.GameSettings.fontSize = 1.2f;
-        }
         if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
         {
             __instance.UseButton.ToggleVisible(false);

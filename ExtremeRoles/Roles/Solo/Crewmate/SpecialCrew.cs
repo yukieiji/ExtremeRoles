@@ -1,5 +1,8 @@
-﻿using ExtremeRoles.Module.CustomOption;
+﻿
 using ExtremeRoles.Roles.API;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -13,11 +16,11 @@ public sealed class SpecialCrew : SingleRoleBase
         false, true, false, false)
     {}
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         return;
     }
-    
+
     protected override void RoleSpecificInit()
     {
         return;

@@ -7,6 +7,8 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 
+
+
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 #nullable enable
@@ -66,14 +68,12 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 	private static (string, string, string) getRoleInfoAndOption(SingleRoleBase role)
 	{
-		var allOption = OptionManager.Instance;
-
 		string roleOptionString = "";
 
 		if (!role.IsVanillaRole())
 		{
-			var option = allOption.GetIOption(role.GetRoleOptionId(RoleCommonOption.SpawnRate));
-			roleOptionString = option.ToHudStringWithChildren();
+			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
+			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 		string colorRoleName = role.GetColoredRoleName();
 		string roleFullDesc = role.GetFullDescription();
@@ -85,14 +85,12 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 	private static (string, string, string) getMultiRoleInfoAndOption(MultiAssignRoleBase role)
 	{
-		var allOption = OptionManager.Instance;
-
 		string roleOptionString = "";
 
 		if (!role.IsVanillaRole())
 		{
-			var option = allOption.GetIOption(role.GetManagerOptionId(RoleCommonOption.SpawnRate));
-			roleOptionString = option.ToHudStringWithChildren();
+			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
+			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 
 		string colorRoleName = Design.ColoedString(

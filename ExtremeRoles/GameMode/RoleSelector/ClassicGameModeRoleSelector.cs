@@ -4,6 +4,8 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
+
+
 namespace ExtremeRoles.GameMode.RoleSelector;
 
 public sealed class ClassicGameModeRoleSelector : IRoleSelector
@@ -45,46 +47,29 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
         }
     }
 
-    private readonly HashSet<int> useNormalRoleSpawnOption = new HashSet<int>();
-    private readonly HashSet<int> useCombRoleSpawnOption = new HashSet<int>();
-    private readonly HashSet<int> useGhostRoleSpawnOption = new HashSet<int>();
+    private readonly HashSet<int> roleCategoryGroup = new HashSet<int>();
 
     public ClassicGameModeRoleSelector()
     {
         foreach (ExtremeRoleId roleId in getUseNormalRoleId())
         {
-            var role = ExtremeRoleManager.NormalRole[(int)roleId];
-            this.useNormalRoleSpawnOption.Add(
-                role.GetRoleOptionId(RoleCommonOption.SpawnRate));
+            this.roleCategoryGroup.Add(
+				ExtremeRoleManager.GetRoleGroupId(roleId));
         }
         foreach (CombinationRoleType roleId in getUseCombRoleType())
         {
-            var role = ExtremeRoleManager.CombRole[(byte)roleId];
-            this.useCombRoleSpawnOption.Add(
-                role.GetRoleOptionId(RoleCommonOption.SpawnRate));
-        }
+			this.roleCategoryGroup.Add(
+				ExtremeRoleManager.GetCombRoleGroupId(roleId));
+		}
         foreach (ExtremeGhostRoleId roleId in getUseGhostRoleId())
         {
-            var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
-            this.useGhostRoleSpawnOption.Add(
-                role.GetRoleOptionId(RoleCommonOption.SpawnRate));
-        }
+			this.roleCategoryGroup.Add(
+				ExtremeGhostRoleManager.GetRoleGroupId(roleId));
+		}
     }
 
-    public bool IsValidRoleOption(IOptionInfo option)
-    {
-        while (option.Parent != null)
-        {
-            option = option.Parent;
-        }
-
-        int id = option.Id;
-
-        return
-            this.useNormalRoleSpawnOption.Contains(id) ||
-            this.useCombRoleSpawnOption.Contains(id) ||
-            this.useGhostRoleSpawnOption.Contains(id);
-    }
+	public bool IsValidCategory(int categoryId)
+		=> this.roleCategoryGroup.Contains(categoryId);
 
     private static ExtremeRoleId[] getUseNormalRoleId() =>
 		[

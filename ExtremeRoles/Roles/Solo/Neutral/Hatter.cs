@@ -12,6 +12,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
@@ -75,8 +78,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 	public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "timeKill", Loader.CreateSpriteFromResources(
-                Path.HatterTimeKill));
+            "timeKill", Resources.Loader.CreateSpriteFromResources(
+				Path.HatterTimeKill));
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -126,65 +129,64 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 		   HatterOption.CanRepairSabotage,
-		   false, parentOps);
+		   false);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 		   HatterOption.WinCount,
-		   3, 1, 10, 1, parentOps);
+		   3, 1, 10, 1);
 
-		this.CreateAbilityCountOption(
-			parentOps, 3, 10, minAbilityCount: 0);
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 3, 10, minAbilityCount: 0);
 
-		CreateBoolOption(
-			HatterOption.HideMeetingTimer, true,
-			parentOps);
+		factory.CreateBoolOption(
+			HatterOption.HideMeetingTimer, true);
 
-		var lowerOpt = CreateIntDynamicOption(
+		var lowerOpt = factory.CreateIntDynamicOption(
 			HatterOption.MeetingTimerDecreaseLower,
-			0, 0, 5, parentOps,
+			0, 0, 5,
 			format: OptionUnit.Percentage);
 
-		var upperOpt = CreateIntOption(
+		var upperOpt = factory.CreateIntOption(
 			HatterOption.MeetingTimerDecreaseUpper,
-			20, 0, 50, 5, parentOps,
+			20, 0, 50, 5,
 			format: OptionUnit.Percentage);
-		upperOpt.SetUpdateOption(lowerOpt);
+		upperOpt.AddWithUpdate(lowerOpt);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			HatterOption.IncreaseTaskGage,
-			50, 0, 100, 10, parentOps,
+			50, 0, 100, 10,
 			format: OptionUnit.Percentage);
-		CreateIntOption(
+		factory.CreateIntOption(
 			HatterOption.IncreseNum,
-			3, 1, 10, 1, parentOps);
+			3, 1, 10, 1);
 	}
 
     protected override void RoleSpecificInit()
     {
-		var optMng = OptionManager.Instance;
-		this.CanRepairSabotage = optMng.GetValue<bool>(
-			GetRoleOptionId(HatterOption.CanRepairSabotage));
-		this.winSkipCount = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.WinCount));
+		var cate = this.Loader;
+		this.CanRepairSabotage = cate.GetValue<HatterOption, bool>(
+			HatterOption.CanRepairSabotage);
+		this.winSkipCount = cate.GetValue<HatterOption, int>(
+			HatterOption.WinCount);
 
-		this.isHideMeetingTimer = optMng.GetValue<bool>(
-			GetRoleOptionId(HatterOption.HideMeetingTimer));
+		this.isHideMeetingTimer = cate.GetValue<HatterOption, bool>(
+			HatterOption.HideMeetingTimer);
 
-		this.meetingTimerDecreaseLower = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.MeetingTimerDecreaseLower));
-		this.meetingTimerDecreaseUpper = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.MeetingTimerDecreaseUpper));
+		this.meetingTimerDecreaseLower = cate.GetValue<HatterOption, int>(
+			HatterOption.MeetingTimerDecreaseLower);
+		this.meetingTimerDecreaseUpper = cate.GetValue<HatterOption, int>(
+			HatterOption.MeetingTimerDecreaseUpper);
 
 		this.isUpgrated = false;
 
-		this.abilityIncreaseTaskGage = (float)optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.IncreaseTaskGage)) / 100.0f;
-		this.abilityIncreaseNum = optMng.GetValue<int>(
-			GetRoleOptionId(HatterOption.IncreseNum));
+		this.abilityIncreaseTaskGage = (float)cate.GetValue<HatterOption, int>(
+			HatterOption.IncreaseTaskGage) / 100.0f;
+		this.abilityIncreaseNum = cate.GetValue<HatterOption, int>(
+			HatterOption.IncreseNum);
 
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
@@ -199,7 +201,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 		this.isAssassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 

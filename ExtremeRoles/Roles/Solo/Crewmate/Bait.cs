@@ -12,6 +12,11 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Extension.Il2Cpp;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
@@ -176,44 +181,43 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	}
 
 	protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.AwakeTaskGage,
 			70, 0, 100, 10,
-			parentOps,
 			format: OptionUnit.Percentage);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.DelayUntilForceReport,
 			5.0f, 0.0f, 30.0f, 0.5f,
-			parentOps, format: OptionUnit.Second);
-		CreateBoolOption(
+			format: OptionUnit.Second);
+		factory.CreateBoolOption(
 			Option.EnableBaitBenefit,
-			true, parentOps);
-		CreateFloatOption(
+			true);
+		factory.CreateFloatOption(
 			Option.KillCoolReduceMulti,
-			2.0f, 1.1f, 5.0f, 0.1f, parentOps,
+			2.0f, 1.1f, 5.0f, 0.1f,
 			format: OptionUnit.Multiplier);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.ReduceTimer,
-			5.0f, 1.0f, 30.0f, 0.5f, parentOps,
+			5.0f, 1.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
 	}
 
     protected override void RoleSpecificInit()
     {
-		var allOpt = OptionManager.Instance;
+		var loader = this.Loader;
 
-		this.awakeTaskGage = allOpt.GetValue<int>(
-			GetRoleOptionId(Option.AwakeTaskGage)) / 100.0f;
-		this.delayUntilForceReport = allOpt.GetValue<float>(
-			GetRoleOptionId(Option.DelayUntilForceReport));
-		this.enableBaitBenefit = allOpt.GetValue<bool>(
-			GetRoleOptionId(Option.EnableBaitBenefit));
-		this.killCoolReduceMulti = allOpt.GetValue<float>(
-			GetRoleOptionId(Option.KillCoolReduceMulti)) - 1.0f;
-		this.timer = allOpt.GetValue<float>(
-			GetRoleOptionId(Option.ReduceTimer));
+		this.awakeTaskGage = loader.GetValue<Option, int>(
+			Option.AwakeTaskGage) / 100.0f;
+		this.delayUntilForceReport = loader.GetValue<Option, float>(
+			Option.DelayUntilForceReport);
+		this.enableBaitBenefit = loader.GetValue<Option, bool>(
+			Option.EnableBaitBenefit);
+		this.killCoolReduceMulti = loader.GetValue<Option, float>(
+			Option.KillCoolReduceMulti) - 1.0f;
+		this.timer = loader.GetValue<Option, float>(
+			Option.ReduceTimer);
 
 		this.awakeHasOtherVision = this.HasOtherVision;
 

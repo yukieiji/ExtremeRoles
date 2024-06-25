@@ -39,7 +39,7 @@ public static class ProgressTrackerFixedUpdatePatch
                 1 : (gameData.PlayerCount - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
                         Int32OptionNames.NumImpostors)));
             num -= gameData.AllPlayers.ToArray().ToList().Count(
-                (GameData.PlayerInfo p) => p.Disconnected);
+                (NetworkedPlayerInfo p) => p.Disconnected);
 
             float curProgress = (float)gameData.CompletedTasks /
 				(float)gameData.TotalTasks * (float)num;

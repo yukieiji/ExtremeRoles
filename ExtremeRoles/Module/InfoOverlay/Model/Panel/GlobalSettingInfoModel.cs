@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.Linq;
 
 using ExtremeRoles.Helper;
 
@@ -9,6 +8,11 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
+
+using ExtremeRoles.Roles;
+
+
+
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
 #nullable enable
@@ -16,25 +20,34 @@ namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 {
 	private StringBuilder printOption = new StringBuilder();
+	private OptionTabContainer? container;
 
 	public (string, string) GetInfoText()
 	{
 		this.printOption.Clear();
-
-		foreach (OptionCreator.CommonOptionKey key in Enum.GetValues(
-			typeof(OptionCreator.CommonOptionKey)))
+		if (container is null)
 		{
-			if (key == OptionCreator.CommonOptionKey.PresetSelection) { continue; }
-
-			addOptionString(ref this.printOption, key);
+			if (!OptionManager.Instance.TryGetTab(OptionTab.General, out var tab))
+			{
+				return ("", "");
+			}
+			container = tab;
 		}
 
-		addRoleSpawnNumOptionHudString(ref this.printOption);
-		addOptionString(ref this.printOption, RoleGlobalOption.UseXion);
-
-		foreach (GlobalOption key in Enum.GetValues(typeof(GlobalOption)))
+		foreach (var key in Enum.GetValues<OptionCreator.CommonOption>())
 		{
-			addOptionString(ref this.printOption, key);
+			tryAddHudString(container, (int)key, this.printOption);
+		}
+
+		addRoleSpawnNumOptionHudString(container, this.printOption);
+		tryAddHudString(
+			container,
+			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+			this.printOption);
+
+		foreach (var key in Enum.GetValues<ShipGlobalOptionCategory>())
+		{
+			tryAddHudString(container, (int)key, this.printOption);
 		}
 
 		string integrateOption = CompatModManager.Instance.GetIntegrateOptionHudString();
@@ -49,74 +62,69 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		);
 	}
 
-	private static void addOptionString<T>(
-		ref StringBuilder builder, T optionKey) where T : struct, IConvertible
+	private static void tryAddHudString(OptionTabContainer tab, int categoryId, in StringBuilder builder)
 	{
-		if (!OptionManager.Instance.TryGetIOption(
-			Convert.ToInt32(optionKey), out IOptionInfo? option) ||
-			option is null ||
-			option.IsHidden)
+		if (!tab.TryGetCategory(categoryId, out var category))
+		{
+			return;
+		}
+		category.AddHudString(builder);
+	}
+
+	private static void addRoleSpawnNumOptionHudString(OptionTabContainer tab, in StringBuilder builder)
+	{
+		// 生存役職周り
+		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder);
+		// 幽霊役職周り
+		addSpawnNumOptionHudString(tab, SpawnOptionCategory.GhostRoleSpawnCategory, builder);
+	}
+
+	private static void addSpawnNumOptionHudString(
+		OptionTabContainer tab,
+		SpawnOptionCategory categoryId,
+		in StringBuilder builder)
+	{
+		if (!tab.TryGetCategory((int)categoryId, out var category))
 		{
 			return;
 		}
 
-		string optStr = option.ToHudString();
-		if (optStr != string.Empty)
-		{
-			builder.AppendLine(optStr);
-		}
-	}
-
-	private static void addRoleSpawnNumOptionHudString(ref StringBuilder builder)
-	{
-		// 生存役職周り
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
-				"crewmateRoles",
-				RoleGlobalOption.MinCrewmateRoles,
-				RoleGlobalOption.MaxCrewmateRoles));
-		builder.AppendLine(
-			createRoleSpawnNumOptionHudStringLine(
-				"neutralRoles",
-				RoleGlobalOption.MinNeutralRoles,
-				RoleGlobalOption.MaxNeutralRoles));
-		builder.AppendLine(
-			createRoleSpawnNumOptionHudStringLine(
-				"impostorRoles",
-				RoleGlobalOption.MinImpostorRoles,
-				RoleGlobalOption.MaxImpostorRoles));
-
-		// 幽霊役職周り
-		builder.AppendLine(
-			createRoleSpawnNumOptionHudStringLine(
+				category,
 				"crewmateGhostRoles",
-				RoleGlobalOption.MinCrewmateGhostRoles,
-				RoleGlobalOption.MaxCrewmateGhostRoles));
+				RoleSpawnOption.MinCrewmate,
+				RoleSpawnOption.MaxCrewmate));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
+				category,
 				"neutralGhostRoles",
-				RoleGlobalOption.MinNeutralGhostRoles,
-				RoleGlobalOption.MaxNeutralGhostRoles));
+				RoleSpawnOption.MinNeutral,
+				RoleSpawnOption.MaxNeutral));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
+				category,
 				"impostorGhostRoles",
-				RoleGlobalOption.MinImpostorGhostRoles,
-				RoleGlobalOption.MaxImpostorGhostRoles));
+				RoleSpawnOption.MinImpostor,
+				RoleSpawnOption.MaxImpostor));
 	}
 
 	private static string createRoleSpawnNumOptionHudStringLine(
-		string transKey, RoleGlobalOption minOptKey, RoleGlobalOption maxOptKey)
+		OptionCategory category,
+		string transKey,
+		RoleSpawnOption minOptKey,
+		RoleSpawnOption maxOptKey)
 	{
 		string optionName = Design.ColoedString(
-						new UnityEngine.Color(204f / 255f, 204f / 255f, 0, 1f),
-						Translation.GetString(transKey));
-		int min = getSpawnOptionValue(minOptKey);
-		int max = getSpawnOptionValue(maxOptKey);
+			new UnityEngine.Color(204f / 255f, 204f / 255f, 0, 1f),
+			Translation.GetString(transKey));
+		int min = getSpawnOptionValue(category, minOptKey);
+		int max = getSpawnOptionValue(category, maxOptKey);
 		string optionValueStr = (min >= max) ? $"{max}" : $"{min} - {max}";
 
 		return $"{optionName}: {optionValueStr}";
 	}
 
-	private static int getSpawnOptionValue(RoleGlobalOption optionKey)
-		=> OptionManager.Instance.GetValue<int>((int)optionKey);
+	private static int getSpawnOptionValue(OptionCategory category, RoleSpawnOption optionKey)
+		=> category.GetValue<int>((int)optionKey);
 }

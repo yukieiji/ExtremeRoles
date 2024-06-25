@@ -10,6 +10,11 @@ using ExtremeRoles.Roles.API.Interface;
 
 using UnityEngine;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 #nullable enable
@@ -37,7 +42,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			Translation.GetString("CrewshroomSet"),
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.CrewshroomSet));
 	}
 
@@ -50,7 +55,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 		return;
 	}
@@ -70,10 +75,11 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 	protected override void CreateSpecificOption(
-		IOptionInfo parentOps)
+		AutoParentSetOptionCategoryFactory factory)
 	{
-		this.CreateAbilityCountOption(parentOps, 3, 50);
-		CreateFloatOption(Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, parentOps, format:OptionUnit.Second);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
+		factory.CreateFloatOption(
+			Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, format:OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
@@ -81,7 +87,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ModedMushroomSystem.Type,
 			new ModedMushroomSystem(
-				OptionManager.Instance.GetValue<float>(
-					GetRoleOptionId(Option.DelaySecond))));
+				this.Loader.GetValue<Option, float>(
+					Option.DelaySecond)));
 	}
 }

@@ -14,6 +14,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 
+
+
 namespace ExtremeRoles;
 
 public static class RPCOperator
@@ -284,9 +286,9 @@ public static class RPCOperator
         }
     }
 
-    public static void ShareOption(int numOptions, MessageReader reader)
+    public static void ShareOption(in MessageReader reader)
     {
-		OptionManager.ShareOption(numOptions, reader);
+		OptionManager.ShareOption(reader);
     }
 
     public static void ReplaceDeadReason(byte playerId, byte reason)
@@ -404,7 +406,7 @@ public static class RPCOperator
     {
         foreach (byte id in playerId)
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(id);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(id);
             if (player == null) { continue; }
             ExtremeRolesPlugin.ShipState.AddWinner(player);
         }

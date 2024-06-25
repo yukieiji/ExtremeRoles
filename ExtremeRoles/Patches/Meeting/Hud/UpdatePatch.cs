@@ -71,7 +71,7 @@ public static class MeetingHudUpdatePatch
 		}
 
 		// Deactivate skip Button if skipping on emergency meetings is disabled
-		if (ExtremeGameModeManager.Instance.ShipOption.IsBlockSkipInMeeting)
+		if (ExtremeGameModeManager.Instance.ShipOption.Meeting.IsBlockSkipInMeeting)
 		{
 			__instance.SkipVoteButton.gameObject.SetActive(false);
 		}

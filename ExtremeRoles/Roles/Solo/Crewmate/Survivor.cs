@@ -5,10 +5,13 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -65,7 +68,7 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     public string GetFakeOptionString() => "";
 
     public void ModifiedWinPlayer(
-        GameData.PlayerInfo rolePlayerInfo,
+        NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
     {
@@ -194,31 +197,30 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             SurvivorOption.AwakeTaskGage,
             70, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             SurvivorOption.DeadWinTaskGage,
             100, 50, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             SurvivorOption.NoWinSurvivorAssignGhostRole,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(SurvivorOption.AwakeTaskGage)) / 100.0f;
-        this.deadWinTaskGage = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(SurvivorOption.DeadWinTaskGage)) / 100.0f;
-        this.isNoWinSurvivorAssignGhostRole = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(SurvivorOption.NoWinSurvivorAssignGhostRole));
+		var loader = this.Loader;
+        this.awakeTaskGage = loader.GetValue<SurvivorOption, int>(
+            SurvivorOption.AwakeTaskGage) / 100.0f;
+        this.deadWinTaskGage = loader.GetValue<SurvivorOption, int>(
+            SurvivorOption.DeadWinTaskGage) / 100.0f;
+        this.isNoWinSurvivorAssignGhostRole = loader.GetValue<SurvivorOption, bool>(
+            SurvivorOption.NoWinSurvivorAssignGhostRole);
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.isDeadWin = false;

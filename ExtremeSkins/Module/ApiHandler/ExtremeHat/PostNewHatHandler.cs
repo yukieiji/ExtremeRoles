@@ -15,6 +15,8 @@ using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeHat;
 
+#if WITHHAT
+
 public sealed class PostNewHatHandler : IRequestHandler
 {
 	public Action<HttpListenerContext> Request => this.requestAction;
@@ -64,3 +66,4 @@ public sealed class PostNewHatHandler : IRequestHandler
 		response.Close();
 	}
 }
+#endif

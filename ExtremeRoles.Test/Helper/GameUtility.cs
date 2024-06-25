@@ -9,9 +9,9 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.NewOption.OLDS.Implemented;
 
 namespace ExtremeRoles.Test.Helper;
 
@@ -181,7 +181,7 @@ public static class GameUtility
 	private static void disableXion()
 	{
 		OptionManager.Instance.GetIOption(
-			(int)RoleGlobalOption.UseXion).UpdateSelection(0);
+			(int)RoleSpawnOption.UseXion).UpdateSelection(0);
 	}
 
 	private static void enableRandomNormalRole(ManualLogSource logger)

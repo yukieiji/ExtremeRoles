@@ -52,7 +52,7 @@ public enum AbilityType : byte
 public static class ExtremeGhostRoleManager
 {
     private const int ghostRoleOptionId = 25;
-    private const int idOffset = 128;
+    public const int IdOffset = 512;
 
     public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
 
@@ -75,11 +75,16 @@ public static class ExtremeGhostRoleManager
         RoleTypes.GuardianAngel,
     };
 
-    public static void AssignGhostRoleToPlayer(PlayerControl player)
+	private const int roleIdOffset = 512;
+
+	public static int GetRoleGroupId(ExtremeGhostRoleId roleId)
+		=> roleIdOffset + (int)roleId;
+
+	public static void AssignGhostRoleToPlayer(PlayerControl player)
     {
         RoleTypes roleType = player.Data.Role.Role;
         SingleRoleBase baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
-        int controlId = baseRole.GameControlId + idOffset;
+        int controlId = baseRole.GameControlId + IdOffset;
 
         if (vanillaGhostRole.Contains(roleType))
         {
@@ -142,21 +147,12 @@ public static class ExtremeGhostRoleManager
         }
     }
 
-    public static void CreateGhostRoleOption(int optionIdOffset)
+    public static void CreateGhostRoleOption()
     {
-        if (AllGhostRole.Count == 0) { return; };
-
-        IEnumerable<GhostRoleBase> roles = AllGhostRole.Values;
-
-        int roleOptionOffset = 0;
-
-        foreach (var item in roles.Select(
-            (Value, Index) => new { Value, Index }))
-        {
-            roleOptionOffset = optionIdOffset + (ghostRoleOptionId * item.Index);
-            item.Value.CreateRoleAllOption(roleOptionOffset);
-        }
-
+        foreach (var ghost in AllGhostRole.Values)
+		{
+			ghost.CreateRoleAllOption();
+		}
     }
 
     public static GhostRoleBase GetLocalPlayerGhostRole()

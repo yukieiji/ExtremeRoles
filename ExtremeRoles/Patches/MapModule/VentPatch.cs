@@ -8,7 +8,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles;
@@ -121,7 +121,7 @@ public static class VentAnimationRemovePatch
 
 	private static bool isRunOriginal(Vent vent, PlayerControl pc)
 	{
-		var ventAnimationMode = ExtremeGameModeManager.Instance.ShipOption.VentAnimationMode;
+		var ventAnimationMode = ExtremeGameModeManager.Instance.ShipOption.Vent.AnimationMode;
 
 		PlayerControl? localPlayer = CachedPlayerControl.LocalPlayer;
 		if (localPlayer == null ||
@@ -160,7 +160,7 @@ public static class VentCanUsePatch
     public static bool Prefix(
         Vent __instance,
         ref float __result,
-        [HarmonyArgument(0)] GameData.PlayerInfo playerInfo,
+        [HarmonyArgument(0)] NetworkedPlayerInfo playerInfo,
         [HarmonyArgument(1)] out bool canUse,
         [HarmonyArgument(2)] out bool couldUse)
     {
@@ -169,7 +169,7 @@ public static class VentCanUsePatch
 
         canUse = couldUse = false;
 
-        if (ExtremeGameModeManager.Instance.ShipOption.DisableVent)
+        if (ExtremeGameModeManager.Instance.ShipOption.Vent.Disable)
         {
             __result = num;
             return false;
@@ -190,7 +190,7 @@ public static class VentCanUsePatch
             {
                 (__result, canUse, couldUse) = modMap!.IsCustomVentUseResult(
                     __instance, playerInfo,
-                    playerInfo.Role.IsImpostor || playerInfo.Role.Role == RoleTypes.Engineer);
+                    playerInfo.Role.IsImpostor || playerInfo.Role.Role is RoleTypes.Engineer);
                 return false;
             }
             return true;

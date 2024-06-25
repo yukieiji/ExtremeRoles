@@ -74,7 +74,7 @@ public sealed class PlayerStatistics
 		Dictionary<int, IWinChecker> specialWinCheckRoleAlive = new Dictionary<
 			int, IWinChecker>();
 
-		foreach (GameData.PlayerInfo playerInfo in
+		foreach (NetworkedPlayerInfo playerInfo in
 			GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
 			if (playerInfo == null ||

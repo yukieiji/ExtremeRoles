@@ -150,7 +150,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     }
                 }
             }
-
+			/*
             if (blockStart)
             {
                 __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
@@ -163,6 +163,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     (__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
                 __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
             }
+			*/
 
         }
 

@@ -15,6 +15,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Extension.Player;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
@@ -163,7 +168,8 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
     public const string Name = "HeroAca";
     public HeroAcademia() : base(
-        Name, new Color(255f, 255f, 255f), 3,
+		CombinationRoleType.HeroAca,
+        Name, DefaultColor, 3,
         GameSystem.MaxImposterNum)
     {
         this.Roles.Add(new Hero());
@@ -276,7 +282,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
         int crewNum = 0;
         int impNum = 0;
 
-        foreach (GameData.PlayerInfo player in
+        foreach (NetworkedPlayerInfo player in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
@@ -461,8 +467,8 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     {
         this.CreateNormalAbilityButton(
             "search",
-            Loader.CreateSpriteFromResources(
-                Path.HiroAcaSearch),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.HiroAcaSearch),
             abilityOff: CleanUp);
         this.Button.SetLabelToCrewmate();
     }
@@ -471,7 +477,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
         this.cond == OneForAllCondition.FeatButtonAbility &&
         IRoleAbility.IsCommonUse();
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -659,26 +665,27 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 5.0f);
-        CreateIntOption(
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 5.0f);
+        factory.CreateIntOption(
             HeroOption.FeatKillPercentage,
-            33, 20, 50, 1, parentOps,
+            33, 20, 50, 1,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             HeroOption.FeatButtonAbilityPercentage,
-            66, 50, 80, 1, parentOps,
+            66, 50, 80, 1,
             format: OptionUnit.Percentage);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.featKillPer = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(HeroOption.FeatKillPercentage)) / 100.0f;
-        this.featButtonAbilityPer = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(HeroOption.FeatButtonAbilityPercentage)) / 100.0f;
+		var loader = this.Loader;
+        this.featKillPer = loader.GetValue<HeroOption, int>(
+            HeroOption.FeatKillPercentage) / 100.0f;
+        this.featButtonAbilityPer = loader.GetValue<HeroOption, int>(
+            HeroOption.FeatButtonAbilityPercentage) / 100.0f;
 
     }
     private void setButtonActive(bool active)
@@ -718,14 +725,14 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     {
         this.CreateNormalAbilityButton(
             "search",
-            Loader.CreateSpriteFromResources(
-                Path.HiroAcaSearch),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.HiroAcaSearch),
             abilityOff: CleanUp);
     }
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -843,20 +850,20 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 5.0f);
-        this.CreateFloatOption(
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 5.0f);
+        factory.CreateFloatOption(
             VillanOption.VigilanteSeeTime,
-            2.5f, 1.0f, 10.0f, 0.5f, parentOps,
+            2.5f, 1.0f, 10.0f, 0.5f,
             format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.vigilanteArrowTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(VillanOption.VigilanteSeeTime));
+        this.vigilanteArrowTime = this.Loader.GetValue<VillanOption, float>(
+            VillanOption.VigilanteSeeTime);
         this.vigilanteArrowTimer = 0.0f;
     }
 
@@ -908,8 +915,8 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     {
         this.CreateNormalAbilityButton(
             "call",
-            Loader.CreateSpriteFromResources(
-                Path.VigilanteEmergencyCall),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.VigilanteEmergencyCall),
             abilityOff: CleanUp);
         this.Button.SetLabelToCrewmate();
     }
@@ -933,7 +940,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     }
 
     public void ModifiedWinPlayer(
-        GameData.PlayerInfo rolePlayerInfo,
+        NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
     {
@@ -969,7 +976,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -1049,19 +1056,19 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 10, 5.0f);
-        CreateFloatOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 10, 5.0f);
+        factory.CreateFloatOption(
             VigilanteOption.Range,
-            3.0f, 1.2f, 5.0f, 0.1f, parentOps);
+            3.0f, 1.2f, 5.0f, 0.1f);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(VigilanteOption.Range));
+        this.range = this.Loader.GetValue<VigilanteOption, float>(
+            VigilanteOption.Range);
     }
 
     public void Update(PlayerControl rolePlayer)

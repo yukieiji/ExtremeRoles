@@ -21,6 +21,11 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Zombie :
@@ -129,22 +134,22 @@ public sealed class Zombie :
 
         var player = circle.AddComponent<DlayableVideoPlayer>();
 
-        player.SetThum(Loader.CreateSpriteFromResources(
-            Path.ZombieMagicCircle));
-        player.SetVideo(Loader.GetUnityObjectFromResources<VideoClip>(
-            Path.VideoAsset, string.Format(
-                Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
+        player.SetThum(Resources.Loader.CreateSpriteFromResources(
+			Path.ZombieMagicCircle));
+        player.SetVideo(Resources.Loader.GetUnityObjectFromResources<VideoClip>(
+			Path.VideoAsset, string.Format(
+				Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
         player.SetTimer(activeTime);
     }
 
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            Translation.GetString("featMagicCircle"),
-            Loader.CreateSpriteFromResources(
-                Path.ZombieMagicCircleButton),
-            IsActivate,
-            SetMagicCircle,
+			Translation.GetString("featMagicCircle"),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.ZombieMagicCircleButton),
+			IsActivate,
+			SetMagicCircle,
              () => { });
 
         if (this.Button?.Behavior is not AbilityCountBehavior countBehavior)
@@ -221,7 +226,7 @@ public sealed class Zombie :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -425,54 +430,51 @@ public sealed class Zombie :
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             ZombieOption.AwakeKillCount,
             1, 0, 3, 1,
-            parentOps,
             format: OptionUnit.Shot);
 
-        this.CreateAbilityCountOption(parentOps, 1, 3, 3f);
+        IRoleAbility.CreateAbilityCountOption(factory, 1, 3, 3f);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             ZombieOption.ResurrectKillCount,
             2, 0, 3, 1,
-            parentOps,
             format: OptionUnit.Shot);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             ZombieOption.ShowMagicCircleTime,
             10.0f, 0.0f, 30.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             ZombieOption.ResurrectDelayTime,
             5.0f, 4.0f, 60.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
-        CreateBoolOption(
+            format: OptionUnit.Second);
+        factory.CreateBoolOption(
             ZombieOption.CanResurrectOnExil,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Loader;
 
         this.killCount = 0;
 
-        this.awakeKillCount = allOpt.GetValue<int>(
-            GetRoleOptionId(ZombieOption.AwakeKillCount));
-        this.resurrectKillCount = allOpt.GetValue<int>(
-            GetRoleOptionId(ZombieOption.ResurrectKillCount));
+        this.awakeKillCount = cate.GetValue<ZombieOption, int>(
+            ZombieOption.AwakeKillCount);
+        this.resurrectKillCount = cate.GetValue<ZombieOption, int>(
+            ZombieOption.ResurrectKillCount);
 
-        this.showMagicCircleTime = allOpt.GetValue<float>(
-            GetRoleOptionId(ZombieOption.ShowMagicCircleTime));
-        this.resurrectTimer = allOpt.GetValue<float>(
-            GetRoleOptionId(ZombieOption.ResurrectDelayTime));
-        this.canResurrectOnExil = allOpt.GetValue<bool>(
-            GetRoleOptionId(ZombieOption.CanResurrectOnExil));
+        this.showMagicCircleTime = cate.GetValue<ZombieOption, float>(
+            ZombieOption.ShowMagicCircleTime);
+        this.resurrectTimer = cate.GetValue<ZombieOption, float>(
+            ZombieOption.ResurrectDelayTime);
+        this.canResurrectOnExil = cate.GetValue<ZombieOption, bool>(
+            ZombieOption.CanResurrectOnExil);
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;

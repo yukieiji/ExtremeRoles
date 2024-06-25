@@ -14,7 +14,7 @@ public readonly record struct PlayerNameInfo(string PlayerName, ColorInfo ShowCo
 
 public readonly record struct PlayerColorInfo(int ColorId, StringNames ColorNameId, ColorInfo MainColor, ColorInfo ShadowColor)
 {
-	public static PlayerColorInfo Create(GameData.PlayerOutfit outfit)
+	public static PlayerColorInfo Create(NetworkedPlayerInfo.PlayerOutfit outfit)
 	{
 		int colorId = outfit.ColorId;
 		StringNames colorName = Palette.ColorNames[colorId];
@@ -30,7 +30,7 @@ public readonly record struct PlayerCosmicInfo(
 	string HatId, string VisorId,
 	string SkinId, string PetId, string NamePlateId)
 {
-	public static PlayerCosmicInfo Create(GameData.PlayerOutfit outfit)
+	public static PlayerCosmicInfo Create(NetworkedPlayerInfo.PlayerOutfit outfit)
 		=> new PlayerCosmicInfo(
 			PlayerColorInfo.Create(outfit),
 			outfit.HatId,

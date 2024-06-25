@@ -2,11 +2,13 @@
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API.Interface;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo;
 
@@ -44,8 +46,8 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
     }
 
     public VanillaRoleWrapper(
-        RoleTypes id) : 
-        this(id, id == RoleTypes.Impostor || id == RoleTypes.Shapeshifter)
+        RoleTypes id) :
+        this(id, id is RoleTypes.Impostor or RoleTypes.Shapeshifter or RoleTypes.Phantom)
     { }
 
     public override void OverrideAnotherRoleSetting()
@@ -73,7 +75,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
 
     public override string GetColoredRoleName(bool isTruthColor = false)
     {
-        if (!isTruthColor && 
+        if (!isTruthColor &&
             (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole && !awakeRole.IsAwake))
         {
             return Design.ColoedString(
@@ -143,7 +145,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         return;
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
         throw new System.Exception("Don't call this class method!!");
     }
@@ -154,16 +156,16 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         {
             var trans = FastDestroyableSingleton<TranslationController>.Instance;
 
-            return string.Concat(new string[]
-            {
+            return string.Concat(
+			[
                 trans.GetString(StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
                 "\r\n",
                 Palette.ImpostorRed.ToTextColor(),
-                isContainFakeTask ? 
-                    trans.GetString(StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()) : 
+                isContainFakeTask ?
+                    trans.GetString(StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()) :
                     string.Empty,
                 "</color>"
-            });
+            ]);
         }
 
         return Design.ColoedString(

@@ -63,7 +63,7 @@ public static class RoleManagerSelectRolesPatch
 
             int adjustedNumImpostors = currentOption.GetAdjustedNumImpostors(allPlayer.Count);
 
-            var il2CppListPlayer = new Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo>();
+            var il2CppListPlayer = new Il2CppSystem.Collections.Generic.List<NetworkedPlayerInfo>();
 
             foreach (PlayerControl player in allPlayer)
             {
@@ -224,15 +224,15 @@ public static class RoleManagerSelectRolesPatch
             $"----------------------------- SingleRoleAssign End!! -----------------------------");
     }
 
-    private static void addImpostorSingleExtremeRoleAssignData(
-        ref RoleSpawnDataManager spawnData,
-        ref PlayerRoleAssignData assignData)
-    {
-        addSingleExtremeRoleAssignDataFromTeamAndPlayer(
-            ref spawnData, ref assignData,
-            ExtremeRoleType.Impostor,
-            assignData.GetCanImpostorAssignPlayer(),
-            new HashSet<RoleTypes> { RoleTypes.Shapeshifter });
+	private static void addImpostorSingleExtremeRoleAssignData(
+		ref RoleSpawnDataManager spawnData,
+		ref PlayerRoleAssignData assignData)
+	{
+		addSingleExtremeRoleAssignDataFromTeamAndPlayer(
+			ref spawnData, ref assignData,
+			ExtremeRoleType.Impostor,
+			assignData.GetCanImpostorAssignPlayer(),
+			[ RoleTypes.Shapeshifter, RoleTypes.Phantom ]);
     }
 
     private static void addNeutralSingleExtremeRoleAssignData(
@@ -273,7 +273,7 @@ public static class RoleManagerSelectRolesPatch
             ref spawnData, ref assignData,
             ExtremeRoleType.Neutral,
             neutralAssignTargetPlayer,
-            new HashSet<RoleTypes> { RoleTypes.Engineer, RoleTypes.Scientist });
+            [RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker]);
     }
 
     private static void addCrewmateSingleExtremeRoleAssignData(
@@ -284,7 +284,7 @@ public static class RoleManagerSelectRolesPatch
             ref spawnData, ref assignData,
             ExtremeRoleType.Crewmate,
             assignData.GetCanCrewmateAssignPlayer(),
-            new HashSet<RoleTypes> { RoleTypes.Engineer, RoleTypes.Scientist });
+			[RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker]);
     }
 
     private static void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
@@ -541,23 +541,30 @@ public static class RoleManagerSelectRolesPatch
 
         return
             (
-                roleType == RoleTypes.Crewmate && isAssignToCrewmate
+                roleType is RoleTypes.Crewmate && isAssignToCrewmate
             )
             ||
             (
-                roleType == RoleTypes.Impostor && isImpostor
+                roleType is RoleTypes.Impostor && isImpostor
             )
             ||
             (
                 (
-                    roleType == RoleTypes.Engineer ||
-                    roleType == RoleTypes.Scientist
+                    roleType is
+						RoleTypes.Engineer or
+						RoleTypes.Scientist or
+						RoleTypes.Noisemaker or
+						RoleTypes.Tracker
                 )
                 && hasAnotherRole && isAssignToCrewmate
             )
             ||
             (
-                roleType == RoleTypes.Shapeshifter &&
+				(
+					roleType is
+						RoleTypes.Shapeshifter or
+						RoleTypes.Phantom
+				) &&
                 hasAnotherRole && isAssignToCrewmate
             );
     }
@@ -603,10 +610,10 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
     // クルーの幽霊役職の処理（インポスターの時はここに来ない）
     public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
         // バニラ幽霊クルー役職にニュートラルがアサインされる時はTrueを返す
-        if (ExtremeGameModeManager.Instance.ShipOption.IsAssignNeutralToVanillaCrewGhostRole)
+        if (ExtremeRoleManager.GameRole.Count == 0 ||
+			!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsAssignNeutralToVanillaCrewGhostRole)
         {
             return true;
         }

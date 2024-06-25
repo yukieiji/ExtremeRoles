@@ -7,27 +7,31 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Module.CustomOption.Factories;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
-public enum RoleGlobalOption : int
+public enum RoleSpawnOption : int
 {
-    MinCrewmateRoles = 10,
-    MaxCrewmateRoles,
-    MinNeutralRoles,
-    MaxNeutralRoles,
-    MinImpostorRoles,
-    MaxImpostorRoles,
+    MinCrewmate = 0,
+    MaxCrewmate,
+    MinNeutral,
+    MaxNeutral,
+    MinImpostor,
+    MaxImpostor,
+}
 
-    MinCrewmateGhostRoles,
-    MaxCrewmateGhostRoles,
-    MinNeutralGhostRoles,
-    MaxNeutralGhostRoles,
-    MinImpostorGhostRoles,
-    MaxImpostorGhostRoles,
+public enum SpawnOptionCategory : int
+{
+	RoleSpawnCategory = 5,
+	GhostRoleSpawnCategory,
+}
 
-    UseXion,
+public enum XionOption : int
+{
+	UseXion,
 }
 
 public interface IRoleSelector
@@ -43,70 +47,63 @@ public interface IRoleSelector
 
     private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
-	public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
-		=> Enum.IsDefined(typeof(RoleGlobalOption), optionId);
+	public bool IsValidGlobalRoleOptionId(RoleSpawnOption optionId)
+		=> Enum.IsDefined(typeof(RoleSpawnOption), optionId);
 
-	public bool IsValidRoleOption(IOptionInfo option);
+	public static bool RawXionUse => OptionManager.Instance.TryGetCategory(
+		OptionTab.General,
+		ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+		out var cate) &&
+		cate.GetValue<bool>((int)XionOption.UseXion);
+
+	public bool IsValidCategory(int categoryId);
 
     public static void CreateRoleGlobalOption()
     {
-		var roleOptionFactory = new ColorSyncFactory(defaultOptionColor);
+		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+			SpawnOptionCategory.RoleSpawnCategory,
+			color: defaultOptionColor))
+		{
+			createExtremeRoleRoleSpawnOption(roleOptionFactory);
+		}
 
-        createExtremeRoleGlobalSpawnOption(roleOptionFactory);
-        createExtremeGhostRoleGlobalSpawnOption(roleOptionFactory);
+		using (var roleOptionFactory = OptionManager.CreateOptionCategory(
+			SpawnOptionCategory.GhostRoleSpawnCategory,
+			color: defaultOptionColor))
+		{
+			createExtremeRoleRoleSpawnOption(roleOptionFactory);
+		}
+		using (var xionCategory = OptionManager.CreateOptionCategory(
+			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+			ExtremeRoleId.Xion.ToString(),
+			color: ColorPalette.XionBlue))
+		{
+			xionCategory.CreateBoolOption(
+				XionOption.UseXion, false);
+		}
+	}
 
-		roleOptionFactory.CreateBoolOption(
-			RoleGlobalOption.UseXion, false,
-			isHeader:true, color: ColorPalette.XionBlue);
-    }
-
-    private static void createExtremeRoleGlobalSpawnOption(ColorSyncFactory factory)
+    private static void createExtremeRoleRoleSpawnOption(OptionCategoryFactory factory)
     {
 		factory.CreateIntOption(
-			RoleGlobalOption.MinCrewmateRoles,
-			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1,
-			isHeader: true);
+			RoleSpawnOption.MinCrewmate,
+			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
 		factory.CreateIntOption(
-			RoleGlobalOption.MaxCrewmateRoles,
+			RoleSpawnOption.MaxCrewmate,
 			0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
 
 		factory.CreateIntOption(
-			RoleGlobalOption.MinNeutralRoles,
+			RoleSpawnOption.MinNeutral,
 			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
 		factory.CreateIntOption(
-			RoleGlobalOption.MaxNeutralRoles,
+			RoleSpawnOption.MaxNeutral,
 			0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
 
 		factory.CreateIntOption(
-			RoleGlobalOption.MinImpostorRoles,
+			RoleSpawnOption.MinImpostor,
 			0, 0, GameSystem.MaxImposterNum * 2, 1);
 		factory.CreateIntOption(
-			RoleGlobalOption.MaxImpostorRoles,
+			RoleSpawnOption.MaxImpostor,
 			0, 0, GameSystem.MaxImposterNum * 2, 1);
-    }
-
-    private static void createExtremeGhostRoleGlobalSpawnOption(ColorSyncFactory factory)
-	{
-		factory.CreateIntOption(
-			RoleGlobalOption.MinCrewmateGhostRoles,
-			0, 0, GameSystem.VanillaMaxPlayerNum - 1, 1,
-			isHeader: true);
-		factory.CreateIntOption(
-			RoleGlobalOption.MaxCrewmateGhostRoles,
-			0, 0, GameSystem.VanillaMaxPlayerNum - 1, 1);
-
-		factory.CreateIntOption(
-			RoleGlobalOption.MinNeutralGhostRoles,
-			0, 0, GameSystem.VanillaMaxPlayerNum - 2, 1);
-		factory.CreateIntOption(
-			RoleGlobalOption.MaxNeutralGhostRoles,
-			0, 0, GameSystem.VanillaMaxPlayerNum - 2, 1);
-
-		factory.CreateIntOption(
-			RoleGlobalOption.MinImpostorGhostRoles,
-			0, 0, GameSystem.MaxImposterNum, 1);
-		factory.CreateIntOption(
-			RoleGlobalOption.MaxImpostorGhostRoles,
-			0, 0, GameSystem.MaxImposterNum, 1);
     }
 }

@@ -36,7 +36,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 	private ButtonWrapper button;
 #pragma warning restore CS8618
 
-	private SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
+	private readonly SortedDictionary<InfoOverlayModel.Type, ButtonWrapper> menu =
 		new SortedDictionary<InfoOverlayModel.Type, ButtonWrapper>();
 
 	public void Awake()

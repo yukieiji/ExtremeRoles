@@ -4,11 +4,15 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.CheckPoint;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -16,7 +20,8 @@ public sealed class Avalon : ConstCombinationRoleManagerBase
 {
     public const string Name = "AvalonsRoles";
     public Avalon() : base(
-        Name, new Color(255f, 255f, 255f), 2,
+		CombinationRoleType.Avalon,
+        Name, DefaultColor, 2,
         GameSystem.MaxImposterNum)
     {
         this.Roles.Add(new Assassin());
@@ -76,30 +81,30 @@ public sealed class Assassin : MultiAssignRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AssassinOption.HasTask,
-            false, parentOps);
-        var killedOps = CreateBoolOption(
+            false);
+        var killedOps = factory.CreateBoolOption(
             AssassinOption.CanKilled,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             AssassinOption.CanKilledFromCrew,
             false, killedOps);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AssassinOption.CanKilledFromNeutral,
             false, killedOps);
-        var meetingOpt = CreateBoolOption(
+        var meetingOpt = factory.CreateBoolOption(
             AssassinOption.IsDeadForceMeeting,
             true, killedOps);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AssassinOption.CanSeeRoleBeforeFirstMeeting,
             false, meetingOpt);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
              AssassinOption.CanSeeVote,
-            true, parentOps);
+            true);
     }
 
     public override void ExiledAction(
@@ -164,23 +169,23 @@ public sealed class Assassin : MultiAssignRoleBase
     }
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var loader = this.Loader;
 
-        this.HasTask = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.HasTask));
-        this.CanKilled = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanKilled));
-        this.CanKilledFromCrew = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanKilledFromCrew));
-        this.CanKilledFromNeutral = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanKilledFromNeutral));
-        this.CanSeeVote = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanSeeVote));
+        this.HasTask = loader.GetValue<AssassinOption, bool>(
+            AssassinOption.HasTask);
+        this.CanKilled = loader.GetValue<AssassinOption, bool>(
+            AssassinOption.CanKilled);
+        this.CanKilledFromCrew = loader.GetValue<AssassinOption, bool>(
+            AssassinOption.CanKilledFromCrew);
+        this.CanKilledFromNeutral = loader.GetValue<AssassinOption, bool>(
+            AssassinOption.CanKilledFromNeutral);
+        this.CanSeeVote = loader.GetValue<AssassinOption, bool>(
+            AssassinOption.CanSeeVote);
 
-        this.isDeadForceMeeting = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.IsDeadForceMeeting));
-        this.CanSeeRoleBeforeFirstMeeting = allOption.GetValue<bool>(
-            GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting));
+        this.isDeadForceMeeting = loader.GetValue<AssassinOption, bool>(
+            AssassinOption.IsDeadForceMeeting);
+        this.CanSeeRoleBeforeFirstMeeting = loader.GetValue<AssassinOption, bool>(
+            AssassinOption.CanSeeRoleBeforeFirstMeeting);
         this.IsFirstMeeting = true;
     }
 
@@ -259,7 +264,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         this.updateShowIcon();
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.updateShowIcon();
     }
@@ -294,43 +299,43 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.HasTask,
-            false, parentOps);
+            false);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanSeeAssassin,
-            true, parentOps);
+            true);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MarlinOption.CanSeeVote,
-            true, parentOps);
-        CreateBoolOption(
+            true);
+        factory.CreateBoolOption(
             MarlinOption.CanSeeNeutral,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MarlinOption.CanUseVent,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
     {
         this.IsAssassinate = false;
 
-        var allOption = OptionManager.Instance;
+        var loader = this.Loader;
 
-        this.HasTask = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.HasTask));
-        this.canSeeAssassin = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanSeeAssassin));
-        this.CanSeeVote = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanSeeVote));
-        this.CanSeeNeutral = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanSeeNeutral));
-        this.UseVent = allOption.GetValue<bool>(
-            GetRoleOptionId(MarlinOption.CanUseVent));
+        this.HasTask = loader.GetValue<MarlinOption, bool>(
+            MarlinOption.HasTask);
+        this.canSeeAssassin = loader.GetValue<MarlinOption, bool>(
+            MarlinOption.CanSeeAssassin);
+        this.CanSeeVote = loader.GetValue<MarlinOption, bool>(
+            MarlinOption.CanSeeVote);
+        this.CanSeeNeutral = loader.GetValue<MarlinOption, bool>(
+            MarlinOption.CanSeeNeutral);
+        this.UseVent = loader.GetValue<MarlinOption, bool>(
+            MarlinOption.CanUseVent);
         this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
     }
 

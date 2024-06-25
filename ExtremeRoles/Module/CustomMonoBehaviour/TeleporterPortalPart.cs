@@ -54,7 +54,7 @@ public class TeleporterPortalPart : MonoBehaviour, IAmongUs.IUsable
 	}
 
 	public float CanUse(
-		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+		NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
 	{
 		if (!tryGetTeleporter(out var _))
 		{

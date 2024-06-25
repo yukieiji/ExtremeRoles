@@ -23,7 +23,12 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ButtonAutoActivator;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 #nullable enable
 
@@ -34,6 +39,7 @@ public sealed class Kids : GhostAndAliveCombinationRoleManagerBase
     public const string Name = "Kids";
 
     public Kids() : base(
+		CombinationRoleType.Kids,
         Name, ColorPalette.KidsYellowGreen, 2,
         GameSystem.MaxImposterNum)
     {
@@ -248,10 +254,10 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         GameObject obj = new GameObject("Scribe");
         obj.transform.position = player.transform.position;
         SpriteRenderer rend = obj.AddComponent<SpriteRenderer>();
-        rend.sprite = Loader.CreateSpriteFromResources(
+        rend.sprite = Resources.Loader.CreateSpriteFromResources(
             string.Format(
-                Path.DelinquentScribe,
-                RandomGenerator.Instance.Next(0, maxImageNum)));
+				Path.DelinquentScribe,
+				RandomGenerator.Instance.Next(0, maxImageNum)));
         delinquent.abilityCount++;
     }
     private static void setBomb(Delinquent delinquent)
@@ -275,7 +281,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 					AbilityType.Scribe,
 					new ButtonGraphic(
 						Translation.GetString("scribble"),
-						Loader.CreateSpriteFromResources(
+						Resources.Loader.CreateSpriteFromResources(
 							string.Format(
 								Path.DelinquentScribe,
 								RandomGenerator.Instance.Next(0, maxImageNum))))
@@ -284,21 +290,21 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 					AbilityType.SelfBomb,
 					new ButtonGraphic(
 						Translation.GetString("selfBomb"),
-						Loader.CreateSpriteFromResources(
+						Resources.Loader.CreateSpriteFromResources(
 							Path.BomberSetBomb))
 				),
                 this.IsAbilityUse,
                 this.UseAbility),
             new RoleButtonActivator(),
-            KeyCode.F);
+			KeyCode.F);
 
 		((IRoleAbility)(this)).RoleAbilityInit();
 
 		if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)));
+				this.Loader.GetValue<RoleAbilityCommonOption, int>(
+                    RoleAbilityCommonOption.AbilityCount));
         }
     }
 
@@ -322,7 +328,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         };
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -354,13 +360,12 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(parentOps, 7, 20);
-        CreateFloatOption(
+        IRoleAbility.CreateAbilityCountOption(factory, 7, 20);
+        factory.CreateFloatOption(
             DelinqentOption.Range,
-            3.6f, 1.0f, 5.0f, 0.1f,
-            parentOps);
+            3.6f, 1.0f, 5.0f, 0.1f);
     }
 
     protected override void RoleSpecificInit()
@@ -369,14 +374,15 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
         this.abilityCount = 0;
 
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(DelinqentOption.Range));
+		var loader = this.Loader;
+        this.range = loader.GetValue<DelinqentOption, float>(
+            DelinqentOption.Range);
 
         if (this.Button?.Behavior is DelinquentAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                OptionManager.Instance.GetValue<int>(GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)));
+				loader.GetValue<RoleAbilityCommonOption, int>(
+                    RoleAbilityCommonOption.AbilityCount));
         }
 
         this.canAssignWisp = true;
@@ -384,10 +390,27 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
 }
 
-public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
+public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 {
+	public MultiAssignRoleBase.OptionOffsetInfo? OffsetInfo { get; set; }
+	public OptionLoadWrapper WrappedCategory
+	{
+		get
+		{
+			if (OffsetInfo is null ||
+				!OptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
+					out var cate))
+			{
+				throw new ArgumentException("Can't find category");
+			}
+			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+		}
+	}
 
-    public enum WispOption
+
+	public enum WispOption
     {
         WinNum,
         TorchAbilityNum,
@@ -425,11 +448,11 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public bool IsWin(
         GameOverReason reason,
-        GameData.PlayerInfo ghostRolePlayer) => this.system != null && this.system.IsWin(this);
+        NetworkedPlayerInfo ghostRolePlayer) => this.system != null && this.system.IsWin(this);
 
     public void SetWinPlayerNum(byte rolePlayerId)
     {
-        foreach (GameData.PlayerInfo player in
+        foreach (NetworkedPlayerInfo player in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (player == null ||
@@ -461,7 +484,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.WispSetTorch,
-            Loader.CreateSpriteFromResources(
+            Resources.Loader.CreateSpriteFromResources(
                 Path.WispTorch),
             this.isReportAbility(),
             () => true,
@@ -478,18 +501,19 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
 
     public override void Initialize()
     {
-        this.abilityNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(WispOption.TorchAbilityNum));
-        this.winNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(WispOption.WinNum));
-        this.torchNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(WispOption.TorchNum));
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(WispOption.TorchRange));
-        this.torchActiveTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(WispOption.TorchActiveTime));
-        this.torchBlackOutTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(WispOption.BlackOutTime));
+		var loader = this.WrappedCategory;
+        this.abilityNum = loader.GetValue<WispOption, int>(
+            WispOption.TorchAbilityNum);
+        this.winNum = loader.GetValue<WispOption, int>(
+            WispOption.WinNum);
+        this.torchNum = loader.GetValue<WispOption, int>(
+            WispOption.TorchNum);
+        this.range = loader.GetValue<WispOption, float>(
+            WispOption.TorchRange);
+        this.torchActiveTime = loader.GetValue<WispOption, float>(
+            WispOption.TorchActiveTime);
+        this.torchBlackOutTime = loader.GetValue<WispOption, float>(
+            WispOption.BlackOutTime);
 	}
 
     protected override void OnMeetingEndHook()

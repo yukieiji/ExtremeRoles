@@ -5,13 +5,16 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -20,7 +23,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     private DeadBody carringBody;
     private float[] alphaValue;
     private bool canReportOnCarry;
-    private GameData.PlayerInfo targetBody;
+    private NetworkedPlayerInfo targetBody;
 
     public enum CarrierOption
     {
@@ -141,8 +144,8 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     {
         this.CreateReclickableAbilityButton(
             "carry",
-            Loader.CreateSpriteFromResources(
-               Path.CarrierCarry),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.CarrierCarry),
             abilityOff: this.CleanUp);
     }
 
@@ -152,7 +155,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
         return IRoleAbility.IsCommonUse() && this.targetBody != null;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -203,27 +206,27 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 5.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 5.0f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CarrierOption.CarryDistance,
-            1.0f, 1.0f, 5.0f, 0.5f,
-            parentOps);
+            1.0f, 1.0f, 5.0f, 0.5f);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             CarrierOption.CanReportOnCarry,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.carryDistance = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(CarrierOption.CarryDistance));
-        this.canReportOnCarry = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(CarrierOption.CanReportOnCarry));
+		var cate = this.Loader;
+        this.carryDistance = cate.GetValue<CarrierOption, float>(
+            CarrierOption.CarryDistance);
+        this.canReportOnCarry = cate.GetValue<CarrierOption, bool>(
+            CarrierOption.CanReportOnCarry);
     }
 
     public void AllReset(PlayerControl rolePlayer)

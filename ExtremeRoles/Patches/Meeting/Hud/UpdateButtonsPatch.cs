@@ -22,7 +22,7 @@ public static class MeetingHudUpdateButtonsPatch
 		for (int i = 0; i < __instance.playerStates.Length; i++)
 		{
 			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-			GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(
+			NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(
 				playerVoteArea.TargetPlayerId);
 			if (playerById == null)
 			{

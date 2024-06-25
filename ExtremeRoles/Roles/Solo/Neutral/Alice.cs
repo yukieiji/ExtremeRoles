@@ -2,13 +2,15 @@
 using System.Linq;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -48,8 +50,8 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "shipBroken", Loader.CreateSpriteFromResources(
-                Path.AliceShipBroken));
+            "shipBroken", Resources.Loader.CreateSpriteFromResources(
+				Path.AliceShipBroken));
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -94,7 +96,7 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
             }
             for (int i = 0; i < this.RevartNormalTask; ++i)
             {
-                addTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
+                addTaskId.Add(Helper.GameSystem.GetRandomShortTaskId());
             }
 
             var shuffled = addTaskId.OrderBy(
@@ -130,57 +132,56 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         {
             if (addTaskId.Count == 0) { break; }
 
-            if (player.Data.Tasks[i].Complete)
+			var task = player.Data.Tasks[i];
+            if (task.Complete)
             {
                 byte taskId = (byte)addTaskId[0];
                 addTaskId.RemoveAt(0);
-
-                if (Helper.GameSystem.SetPlayerNewTask(
-                    ref player, taskId, player.Data.Tasks[i].Id))
+				uint id = task.Id;
+				if (Helper.GameSystem.SetPlayerNewTask(
+                    ref player, taskId, id))
                 {
-                    player.Data.Tasks[i] = new GameData.TaskInfo(
-                        taskId, player.Data.Tasks[i].Id);
+                    player.Data.Tasks[i] = new (taskId, id);
                 }
             }
         }
-        GameData.Instance.SetDirtyBit(
-            1U << (int)player.PlayerId);
+		player.Data.MarkDirty();
 
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             AliceOption.CanUseSabotage,
-            true, parentOps);
+            true);
 
-        this.CreateAbilityCountOption(
-            parentOps, 2, 100);
-        CreateIntOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 100);
+        factory.CreateIntOption(
             AliceOption.RevartLongTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             AliceOption.RevartCommonTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             AliceOption.RevartNormalTaskNum,
-            1, 0, 15, 1, parentOps);
+            1, 0, 15, 1);
 
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var loader = this.Loader;
 
-        this.UseSabotage = allOption.GetValue<bool>(
-            GetRoleOptionId(AliceOption.CanUseSabotage));
-        this.RevartNormalTask = allOption.GetValue<int>(
-            GetRoleOptionId(AliceOption.RevartNormalTaskNum));
-        this.RevartLongTask = allOption.GetValue<int>(
-            GetRoleOptionId(AliceOption.RevartLongTaskNum));
-        this.RevartCommonTask = allOption.GetValue<int>(
-            GetRoleOptionId(AliceOption.RevartCommonTaskNum));
+        this.UseSabotage = loader.GetValue<AliceOption, bool>(
+            AliceOption.CanUseSabotage);
+        this.RevartNormalTask = loader.GetValue<AliceOption, int>(
+            AliceOption.RevartNormalTaskNum);
+        this.RevartLongTask = loader.GetValue<AliceOption, int>(
+            AliceOption.RevartLongTaskNum);
+        this.RevartCommonTask = loader.GetValue<AliceOption, int>(
+            AliceOption.RevartCommonTaskNum);
     }
 
     public void ResetOnMeetingStart()
@@ -188,7 +189,7 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

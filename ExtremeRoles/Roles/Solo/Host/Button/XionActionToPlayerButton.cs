@@ -65,7 +65,7 @@ internal sealed class XionActionToPlayerButton
         {
 
             if (playerId == xionPlayerId) { continue; }
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
             if (player == null || player.Disconnected)
             {
                 continue;
@@ -125,7 +125,7 @@ internal sealed class XionActionToPlayerButton
         bool updated = false;
         foreach (var (playerId, pool) in this.buttonIcons)
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
             if (player == null || player.Disconnected)
             {
                 SetActive(playerId, false);

@@ -3,11 +3,14 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -109,8 +112,8 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateAbilityCountButton(
             "counter",
-            Loader.CreateSpriteFromResources(
-                Path.FencerCounter),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.FencerCounter),
             abilityOff: this.CleanUp,
             isReduceOnActive: true);
         this.Button.SetLabelToCrewmate();
@@ -151,7 +154,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         this.CanKill = false;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -190,20 +193,20 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 7, 3.0f);
-        CreateFloatOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 7, 3.0f);
+        factory.CreateFloatOption(
             FencerOption.ResetTime,
             5.0f, 2.5f, 30.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()
     {
         this.Timer = 0.0f;
-        this.MaxTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(FencerOption.ResetTime));
+        this.MaxTime = this.Loader.GetValue<FencerOption, float>(
+            FencerOption.ResetTime);
     }
 }

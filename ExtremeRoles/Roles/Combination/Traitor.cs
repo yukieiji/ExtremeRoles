@@ -9,11 +9,19 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
+
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
 {
-    public TraitorManager() : base(new Traitor(), 1, false)
+    public TraitorManager() : base(
+		CombinationRoleType.Traitor,
+		new Traitor(), 1, false)
     { }
 
     public override void AssignSetUpInit(int curImpNum)
@@ -41,18 +49,21 @@ public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
     {
         this.Roles.Clear();
         int roleAssignNum = 1;
-        var allOptions = OptionManager.Instance;
+        var loader = this.Loader;
 
         this.BaseRole.CanHasAnotherRole = true;
 
 		// 0:オフ、1:オン
-		allOptions.Get<bool>(GetRoleOptionId(
-			CombinationRoleCommonOption.IsMultiAssign)).UpdateSelection(1);
+		if (loader.TryGetValueOption<CombinationRoleCommonOption, bool>(
+				CombinationRoleCommonOption.IsMultiAssign, out var option))
+		{
+			option.Selection = 1;
+		}
 
-		if (allOptions.Contains(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
+		if (loader.TryGetValueOption<CombinationRoleCommonOption, int>(
+				CombinationRoleCommonOption.AssignsNum, out var o))
         {
-            roleAssignNum = allOptions.GetValue<int>(
-                GetRoleOptionId(CombinationRoleCommonOption.AssignsNum));
+            roleAssignNum = o.Value;
         }
 
         for (int i = 0; i < roleAssignNum; ++i)
@@ -262,7 +273,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -364,10 +375,10 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 5.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 5.0f);
     }
 
     protected override void RoleSpecificInit()

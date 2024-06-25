@@ -75,7 +75,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		private struct PlayerCosmicInfo
 		{
 			public CosmeticsLayer Cosmetics;
-			public GameData.PlayerOutfit OutfitInfo;
+			public NetworkedPlayerInfo.PlayerOutfit OutfitInfo;
 			public bool FlipX;
 			public int ColorInfo;
 		}
@@ -85,7 +85,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			PlayerControl targetPlayer,
 			bool canSeeFake)
 		{
-			GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
+			NetworkedPlayerInfo.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
 			PlayerCosmicInfo cosmicInfo = new PlayerCosmicInfo()
 			{
 				Cosmetics = targetPlayer.cosmetics,

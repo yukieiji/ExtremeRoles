@@ -31,8 +31,8 @@ public static class MeetingHudPopulateResultsPatch
 				StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
 
 		Dictionary<byte, int> voteIndex = new Dictionary<byte, int>();
-		SortedList<int, (IRoleVoteModifier, GameData.PlayerInfo)> voteModifier = new SortedList<
-			int, (IRoleVoteModifier, GameData.PlayerInfo)>();
+		SortedList<int, (IRoleVoteModifier, NetworkedPlayerInfo)> voteModifier = new SortedList<
+			int, (IRoleVoteModifier, NetworkedPlayerInfo)>();
 
 		int num = 0;
 		// それぞれの人に対してどんな投票があったか
@@ -56,7 +56,7 @@ public static class MeetingHudPopulateResultsPatch
 			int num2 = 0;
 			foreach (MeetingHud.VoterState voterState in states)
 			{
-				GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
+				NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
 				if (playerById == null)
 				{
 					Debug.LogError(
@@ -91,14 +91,14 @@ public static class MeetingHudPopulateResultsPatch
 	}
 	private static void addVoteModRole(
 		IRoleVoteModifier? role, byte rolePlayerId,
-		ref SortedList<int, (IRoleVoteModifier, GameData.PlayerInfo)> voteModifier)
+		ref SortedList<int, (IRoleVoteModifier, NetworkedPlayerInfo)> voteModifier)
 	{
 		if (role is null)
 		{
 			return;
 		}
 
-		GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(rolePlayerId);
+		NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(rolePlayerId);
 
 		int order = role.Order;
 		// 同じ役職は同じ優先度になるので次の優先度になるようにセット

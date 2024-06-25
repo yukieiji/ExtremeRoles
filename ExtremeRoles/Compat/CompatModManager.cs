@@ -11,7 +11,8 @@ using Hazel;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.SequentialOptionFactory;
+
+
 
 namespace ExtremeRoles.Compat;
 
@@ -98,16 +99,17 @@ internal sealed class CompatModManager
 
 	internal void CreateIntegrateOption(int startId)
 	{
-		var optionFactory = new OptionFactory(startId);
-
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
-			optionFactory.NamePrefix = mod.Name;
-			mod.CreateIntegrateOption(optionFactory);
+			using (var factory = OptionManager.CreateSequentialOptionCategory(
+				startId + index, mod.Name))
+			{
+				mod.CreateIntegrateOption(factory);
+			}
 		}
 
 		this.startOptionId = startId;
-		this.endOptionId = optionFactory.EndId;
+		this.endOptionId = startId + this.loadedMod.Count - 1;
 	}
 
 	internal string GetIntegrateOptionHudString()
@@ -115,12 +117,11 @@ internal sealed class CompatModManager
 		StringBuilder builder = new StringBuilder();
 		for (int id = this.startOptionId; id <= this.endOptionId; ++id)
 		{
-			var option = OptionManager.Instance.GetIOption(id);
-			string optionStr = option.ToHudString();
-			if (optionStr != string.Empty)
+			if (!OptionManager.Instance.TryGetCategory(OptionTab.General, id, out var cate))
 			{
-				builder.AppendLine(optionStr);
+				continue;
 			}
+			cate.AddHudString(builder);
 		}
 		return builder.ToString().Trim('\r', '\n');
 	}
