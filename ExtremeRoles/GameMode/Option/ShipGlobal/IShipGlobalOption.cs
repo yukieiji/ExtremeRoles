@@ -47,19 +47,19 @@ public enum TaskOption : int
 
 public enum RandomMap : int
 {
-	RandomMap,
+	Enable,
 }
 
 public enum TaskWinOption : int
 {
-	DisableTaskWinWhenNoneTaskCrew,
-	DisableTaskWin,
+	DisableWhenNoneTaskCrew,
+	DisableAll,
 }
 
 public enum NeutralWinOption : int
 {
-	IsSameNeutralSameWin,
-	DisableNeutralSpecialForceEnd,
+	IsSame,
+	DisableSpecialEnd,
 }
 
 public enum GhostRoleGlobalOption : int
@@ -228,19 +228,19 @@ public interface IShipGlobalOption
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
 		{
-			factory.CreateBoolOption(RandomMap.RandomMap, false);
+			factory.CreateBoolOption(RandomMap.Enable, false);
 		}
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
 		{
-			var taskDisableOpt = factory.CreateBoolOption(TaskWinOption.DisableTaskWinWhenNoneTaskCrew, false);
-			factory.CreateBoolOption(TaskWinOption.DisableTaskWin, false, taskDisableOpt);
+			var taskDisableOpt = factory.CreateBoolOption(TaskWinOption.DisableWhenNoneTaskCrew, false);
+			factory.CreateBoolOption(TaskWinOption.DisableAll, false, taskDisableOpt);
 		}
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))
 		{
-			factory.CreateBoolOption(NeutralWinOption.IsSameNeutralSameWin, true);
-			factory.CreateBoolOption(NeutralWinOption.DisableNeutralSpecialForceEnd, false);
+			factory.CreateBoolOption(NeutralWinOption.IsSame, true);
+			factory.CreateBoolOption(NeutralWinOption.DisableSpecialEnd, false);
 		}
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.GhostRoleGlobalOption))

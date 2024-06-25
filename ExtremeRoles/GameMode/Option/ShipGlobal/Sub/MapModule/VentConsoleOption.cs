@@ -12,10 +12,10 @@ public enum VentAnimationMode
 
 public enum VentOption : int
 {
-	DisableVent,
-	EngineerUseImpostorVent,
-	CanKillVentInPlayer,
-	VentAnimationModeInVison,
+	Disable,
+	EngineerUseImpostor,
+	CanKillInPlayer,
+	AnimationModeInVison,
 }
 
 public readonly struct VentConsoleOption(
@@ -30,18 +30,18 @@ public readonly struct VentConsoleOption(
 	public readonly VentAnimationMode AnimationMode = ventAnimation;
 
 	public VentConsoleOption(in OptionCategory category) : this(
-		category.GetValue<bool>((int)VentOption.DisableVent),
-		category.GetValue<bool>((int)VentOption.EngineerUseImpostorVent),
-		category.GetValue<bool>((int)VentOption.CanKillVentInPlayer),
-		(VentAnimationMode)category.GetValue<int>((int)VentOption.VentAnimationModeInVison))
+		category.GetValue<bool>((int)VentOption.Disable),
+		category.GetValue<bool>((int)VentOption.EngineerUseImpostor),
+		category.GetValue<bool>((int)VentOption.CanKillInPlayer),
+		(VentAnimationMode)category.GetValue<int>((int)VentOption.AnimationModeInVison))
 	{ }
 
 	public static void Create(in OptionCategoryFactory factory)
 	{
-		var ventOption = factory.CreateBoolOption(VentOption.DisableVent, false);
+		var ventOption = factory.CreateBoolOption(VentOption.Disable, false);
 
-		factory.CreateBoolOption(VentOption.CanKillVentInPlayer, false, ventOption, invert: true);
-		factory.CreateBoolOption(VentOption.EngineerUseImpostorVent, false, ventOption, invert: true);
-		factory.CreateSelectionOption<VentOption, VentAnimationMode>(VentOption.VentAnimationModeInVison, parent: ventOption, invert: true);
+		factory.CreateBoolOption(VentOption.CanKillInPlayer, false, ventOption, invert: true);
+		factory.CreateBoolOption(VentOption.EngineerUseImpostor, false, ventOption, invert: true);
+		factory.CreateSelectionOption<VentOption, VentAnimationMode>(VentOption.AnimationModeInVison, parent: ventOption, invert: true);
 	}
 }

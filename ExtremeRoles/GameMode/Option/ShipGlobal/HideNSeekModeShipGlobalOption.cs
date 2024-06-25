@@ -74,9 +74,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     {
 		var vent = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VentOption);
 		this.Vent = new VentConsoleOption(
-			vent.GetValue<bool>((int)VentOption.DisableVent),
+			vent.GetValue<bool>((int)VentOption.Disable),
 			false, false,
-			(VentAnimationMode)vent.GetValue<int>((int)VentOption.VentAnimationModeInVison));
+			(VentAnimationMode)vent.GetValue<int>((int)VentOption.AnimationModeInVison));
 
 		Spawn = new SpawnOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.RandomSpawnOption));
@@ -89,15 +89,15 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.SecurityOption));
 
 		var neutralWinCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.NeutralWinOption);
-		IsSameNeutralSameWin = neutralWinCate.GetValue<bool>((int)NeutralWinOption.IsSameNeutralSameWin);
-		DisableNeutralSpecialForceEnd = neutralWinCate.GetValue<bool>((int)NeutralWinOption.DisableNeutralSpecialForceEnd);
+		IsSameNeutralSameWin = neutralWinCate.GetValue<bool>((int)NeutralWinOption.IsSame);
+		DisableNeutralSpecialForceEnd = neutralWinCate.GetValue<bool>((int)NeutralWinOption.DisableSpecialEnd);
 
 		var taskCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.TaskOption);
 		ChangeForceWallCheck = taskCate.GetValue<bool>((int)TaskOption.IsFixWallHaskTask);
 		IsAllowParallelMedbayScan = taskCate.GetValue<bool>((int)TaskOption.ParallelMedBayScans);
 
 		var randomMapCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.RandomMapOption);
-		IsRandomMap = randomMapCate.GetValue<bool>((int)RandomMap.RandomMap);
+		IsRandomMap = randomMapCate.GetValue<bool>((int)RandomMap.Enable);
 	}
 	/*
     public bool IsValidOption(int id) => this.useOption.Contains((GlobalOption)id);

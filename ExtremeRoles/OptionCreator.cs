@@ -20,7 +20,7 @@ public static class OptionCreator
 
     public enum PresetOptionKey : int
     {
-        PresetSelection = 0,
+        Selection = 0,
     }
 
 	public enum RandomOptionKey : int
@@ -31,7 +31,7 @@ public static class OptionCreator
 
 	public enum CommonOption : int
 	{
-		Preset,
+		PresetOption,
 		RandomOption
 	}
 
@@ -44,10 +44,11 @@ public static class OptionCreator
         Roles.ExtremeRoleManager.GameRole.Clear();
 
 		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
-			CommonOption.Preset, color: defaultOptionColor))
+			CommonOption.PresetOption,
+			color: defaultOptionColor))
 		{
 			commonOptionFactory.CreateIntOption(
-				PresetOptionKey.PresetSelection,
+				PresetOptionKey.Selection,
 				1, 1, maxPresetNum, 1,
 				format: OptionUnit.Preset);
 		}

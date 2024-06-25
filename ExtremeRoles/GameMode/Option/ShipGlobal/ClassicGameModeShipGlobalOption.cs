@@ -61,12 +61,12 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.SecurityOption));
 
 		var taskWinCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.TaskWinOption);
-		DisableTaskWinWhenNoneTaskCrew = taskWinCate.GetValue<bool>((int)TaskWinOption.DisableTaskWinWhenNoneTaskCrew);
-        DisableTaskWin = taskWinCate.GetValue<bool>((int)TaskWinOption.DisableTaskWin);
+		DisableTaskWinWhenNoneTaskCrew = taskWinCate.GetValue<bool>((int)TaskWinOption.DisableWhenNoneTaskCrew);
+        DisableTaskWin = taskWinCate.GetValue<bool>((int)TaskWinOption.DisableAll);
 
 		var neutralWinCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.NeutralWinOption);
-		IsSameNeutralSameWin = neutralWinCate.GetValue<bool>((int)NeutralWinOption.IsSameNeutralSameWin);
-        DisableNeutralSpecialForceEnd = neutralWinCate.GetValue<bool>((int)NeutralWinOption.DisableNeutralSpecialForceEnd);
+		IsSameNeutralSameWin = neutralWinCate.GetValue<bool>((int)NeutralWinOption.IsSame);
+        DisableNeutralSpecialForceEnd = neutralWinCate.GetValue<bool>((int)NeutralWinOption.DisableSpecialEnd);
 
 		GhostRole = new GhostRoleOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.GhostRoleGlobalOption));
@@ -76,7 +76,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 		IsAllowParallelMedbayScan = taskCate.GetValue<bool>((int)TaskOption.ParallelMedBayScans);
 
 		var randomMapCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.RandomMapOption);
-		IsRandomMap = randomMapCate.GetValue<bool>((int)RandomMap.RandomMap);
+		IsRandomMap = randomMapCate.GetValue<bool>((int)RandomMap.Enable);
 	}
 	/*
 	public IEnumerable<GlobalOption> UseOptionId()

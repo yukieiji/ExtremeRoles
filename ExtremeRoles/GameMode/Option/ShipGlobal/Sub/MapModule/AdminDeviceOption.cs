@@ -12,7 +12,7 @@ public enum AirShipAdminMode
 
 public enum AdminSpecialOption : int
 {
-	AirShipEnableAdmin = 5
+	AirShipEnable = 5
 }
 
 public readonly struct AdminDeviceOption : IDeviceOption
@@ -25,7 +25,7 @@ public readonly struct AdminDeviceOption : IDeviceOption
 
 	public AdminDeviceOption(in OptionCategory cate)
 	{
-		AirShipEnable = (AirShipAdminMode)cate.GetValue<int>((int)AdminSpecialOption.AirShipEnableAdmin);
+		AirShipEnable = (AirShipAdminMode)cate.GetValue<int>((int)AdminSpecialOption.AirShipEnable);
 
 		var device = new DeviceOption(cate);
 		Disable = device.Disable;
@@ -37,6 +37,6 @@ public readonly struct AdminDeviceOption : IDeviceOption
 		var removeOpt = IDeviceOption.Create(factory);
 
 		factory.CreateSelectionOption<AdminSpecialOption, AirShipAdminMode>(
-				AdminSpecialOption.AirShipEnableAdmin, removeOpt, invert: true);
+				AdminSpecialOption.AirShipEnable, removeOpt, invert: true);
 	}
 }
