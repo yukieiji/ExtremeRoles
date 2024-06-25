@@ -244,6 +244,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		this.firstButton = this.allUiElement[0];
 	}
 
+	[HideFromIl2Cpp]
 	private void initializeControllerNavigation(in IReadOnlyList<OptionBehaviour> allOpt)
 	{
 		for (int i = 0; i < allOpt.Count; i++)

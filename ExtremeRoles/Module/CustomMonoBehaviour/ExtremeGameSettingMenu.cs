@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 
+using Il2CppInterop.Runtime.Attributes;
+
 using ExtremeRoles.Extension.UnityEvents;
-
-
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
-
-using ExtremeRoles.Patches.Option;
-
-using System.Linq;
 using ExtremeRoles.Helper;
 
 
@@ -118,6 +115,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 	}
 
+	[HideFromIl2Cpp]
 	public void Initialize(in Initializer initialize)
 	{
 		this.menu = initialize.Menu;
