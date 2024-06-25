@@ -66,7 +66,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		{
 			return;
 		}
-		OptionManager.Instance.Update(OptionCategoryModel, OptionModel, -1);
+		OptionManager.Instance.UpdateToStep(OptionCategoryModel, OptionModel, -1);
 	}
 	public void Increase()
 	{
@@ -75,7 +75,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 		{
 			return;
 		}
-		OptionManager.Instance.Update(OptionCategoryModel, OptionModel, 1);
+		OptionManager.Instance.UpdateToStep(OptionCategoryModel, OptionModel, 1);
 	}
 
 	public void SetMaterialLayer(int maskLayer)

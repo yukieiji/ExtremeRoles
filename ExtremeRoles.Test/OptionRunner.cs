@@ -66,7 +66,7 @@ internal sealed class OptionRunner
 					int newIndex = RandomGenerator.Instance.Next(0, opt.Range);
 					try
 					{
-						mng.Update(cate, opt, newIndex);
+						mng.UpdateToStep(cate, opt, newIndex);
 					}
 					catch (Exception ex)
 					{

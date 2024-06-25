@@ -138,20 +138,31 @@ public sealed class OptionManager
 			option.ToString(),
 			tab, color, parent);
 
-	public void Update(in OptionCategory category, in int id, int step)
+	public void UpdateToStep(in OptionCategory category, in int id, int step)
 	{
 		var option = category.Get(id);
-		Update(category, option, step);
+		UpdateToStep(category, option, step);
 	}
 
-	public void Update(in OptionCategory category, in IOption option, int step)
+	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
 	{
 		int newSelection = option.Selection + (Key.IsShift() ? step * skipStep : step);
 		if (Key.IsControlDown())
 		{
 			newSelection = newSelection > 0 ? option.Range - 1 : 0;
 		}
-		option.Selection = newSelection;
+		Update(category, option, newSelection));
+	}
+
+	public void Update(in OptionCategory category, in int id, int newIndex)
+	{
+		var option = category.Get(id);
+		Update(category, option, newIndex);
+	}
+
+	public void Update(in OptionCategory category, in IOption option, int newIndex)
+	{
+		option.Selection = newIndex;
 
 		int id = option.Info.Id;
 		if (category.Id == 0 && id == 0)
