@@ -6,12 +6,16 @@ using UnityEngine;
 
 using Il2CppUiElementList = Il2CppSystem.Collections.Generic.List<UiElement>;
 
-using ExtremeRoles.Extension.Option;
-
-using ExtremeRoles.Module.CustomOption.View;
-using ExtremeRoles.GameMode;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Extension.UnityEvents;
+using ExtremeRoles.Extension.Option;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.CustomOption.View;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Resources;
 
 #nullable enable
 
@@ -34,6 +38,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 	private Transform? settingsContainer;
 	private CategoryHeaderMasked? categoryHeaderOrigin;
 	private ExtremeOptionView? optionPrefab;
+	private SimpleButton? button;
 
 	private Collider2D? buttonClickMask;
 	private const float blockTime = 0.25f;
@@ -70,6 +75,20 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 		menu.Children.Clear();
 		Destroy(menu);
+
+		this.button = Loader.CreateSimpleButton(menu.transform);
+		this.button.Layer = menu.gameObject.layer;
+		this.button.Scale = new Vector3(0.625f, 0.3f, 1.0f);
+		this.button.gameObject.transform.localPosition = new Vector3(4.0f, 0.575f);
+		this.button.Text.text = Translation.GetString("RoleAssignFilter");
+		this.button.Text.fontSize =
+			this.button.Text.fontSizeMax =
+			this.button.Text.fontSizeMin = 1.9f;
+		this.button.ClickedEvent.AddListener(
+			() =>
+			{
+				RoleAssignFilter.Instance.OpenEditor(base.gameObject);
+			});
 	}
 
 	public void FixedUpdate()
