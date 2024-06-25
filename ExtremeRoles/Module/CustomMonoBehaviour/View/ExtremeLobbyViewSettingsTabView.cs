@@ -21,7 +21,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 	private PassiveButton? testButton;
 	private const float initPos = 1.44f;
-	private List<OptionGroupViewObject<ViewSettingsInfoPanel>> optionGroupViewObject = new();
+	private readonly List<OptionGroupViewObject<ViewSettingsInfoPanel>> optionGroupViewObject = new();
 
 	private const float blockTime = 0.25f;
 	private float blockTimer = blockTime;
