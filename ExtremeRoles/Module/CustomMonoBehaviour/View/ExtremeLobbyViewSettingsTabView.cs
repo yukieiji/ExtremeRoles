@@ -64,6 +64,11 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		}
 	}
 
+	public void ChangeTabPostfix()
+	{
+		testButton.SelectButton(false);
+	}
+
 	private void changeExRTab()
 	{
 		if (vanillaSettings == null)
