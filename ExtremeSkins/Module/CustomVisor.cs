@@ -43,6 +43,8 @@ public class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
         get => $"visor_{new DirectoryInfo(this.FolderPath).Name}_{this.Author}_{this.Name}";
     }
 
+	public Sprite? Preview { get; private set; }
+
 	protected readonly string FolderPath;
 	protected readonly VisorInfo Info;
 	protected VisorViewData? View;
@@ -94,7 +96,7 @@ public class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
 		data.Free = true;
 		data.NotInStore = true;
 
-		data.SpritePreview = GetSprite(Path.Combine(this.FolderPath, DataStructure.IdleImageName));
+		this.Preview = GetSprite(Path.Combine(this.FolderPath, DataStructure.IdleImageName));
 		data.behindHats = this.Info.BehindHat;
 		data.PreviewCrewmateColor = this.Info.Shader;
 
@@ -109,8 +111,7 @@ public class CustomVisor : ICustomCosmicData<VisorData, VisorViewData>
 	{
 		var view = ScriptableObject.CreateInstance<VisorViewData>();
 
-		view.IdleFrame = GetSprite(
-			Path.Combine(this.FolderPath, DataStructure.IdleImageName));
+		view.IdleFrame = this.Preview;
 
 		if (this.Info.LeftIdle)
 		{
@@ -212,7 +213,7 @@ public sealed class AnimationVisor : CustomVisor
 			sprite = GetSprite(Path.Combine(this.FolderPath, path));
 			if (sprite == null)
 			{
-				sprite = this.Data.SpritePreview;
+				sprite = this.Preview;
 			}
 			this.cacheSprite.Add(path, sprite);
 		}

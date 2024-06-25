@@ -12,6 +12,7 @@ public interface ICustomCosmicData<T, C>
     public string Name { get; }
 
     public string Id { get; }
+	public Sprite? Preview { get; }
 
 	public C GetViewData();
 }

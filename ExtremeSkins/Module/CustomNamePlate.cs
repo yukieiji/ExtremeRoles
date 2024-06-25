@@ -32,6 +32,7 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
     private string name;
     private string author;
     private string imgPath;
+	public Sprite? Preview { get; private set; }
 	private NamePlateViewData? viewData;
 
     public CustomNamePlate(
@@ -65,7 +66,7 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
 		if (this.viewData == null)
 		{
 			this.viewData = ScriptableObject.CreateInstance<NamePlateViewData>();
-			this.viewData.Image = getSprite(this.imgPath);
+			this.viewData.Image = this.Preview;
 		}
 		return this.viewData;
 	}
@@ -84,9 +85,8 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlate
 		this.Data.PreviewCrewmateColor = false;
 
 		this.viewData = ScriptableObject.CreateInstance<NamePlateViewData>();
-		var img = getSprite(this.imgPath);
-		this.viewData.Image = img;
-		this.Data.SpritePreview = img;
+		this.Preview = getSprite(this.imgPath);
+		this.viewData.Image = this.Preview;
 		this.Data.ViewDataRef = new AssetReference(this.viewData.Pointer);
 
         return this.Data;
