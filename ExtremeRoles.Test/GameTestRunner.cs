@@ -156,11 +156,11 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 
 			if (this.count > waitCount)
 			{
-				this.Logger.LogInfo("Wait for 30s");
+				this.Logger.LogInfo("Wait for 10s");
 				GC.Collect();
 				Resources.Loader.ResetCache();
 				yield return UnityResource.UnloadUnusedAssets();
-				yield return new WaitForSeconds(30.0f);
+				yield return new WaitForSeconds(10.0f);
 				this.count = 0;
 			}
 
