@@ -33,7 +33,7 @@ public sealed class HelpButton
 			Object.Destroy(aspect);
 		}
 		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-		this.body.transform.localPosition = new Vector3(-1.25f, 0.0f, -400.0f);
+		this.body.transform.localPosition = new Vector3(-1.075f, 0.0f, 0.0f);
 
 		passiveButton.inactiveSprites.GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
 			Path.HelpNoneActiveImage, 175f);
