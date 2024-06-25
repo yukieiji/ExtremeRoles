@@ -6,7 +6,7 @@ using UnityEngine;
 
 using ExtremeRoles.Extension.Option;
 using ExtremeRoles.Extension.UnityEvents;
-
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.GameMode;
 using Il2CppInterop.Runtime.Attributes;
@@ -52,6 +52,12 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
 			var newButton = Instantiate(taskButton, taskButton.transform.parent);
+			if (newButton.buttonText.TryGetComponent<TextTranslatorTMP>(out var tmp))
+			{
+				Destroy(tmp);
+			}
+			newButton.ChangeButtonText(Translation.GetString(string.Format(
+				"ExtremeRoles_{0}Settings", tab)));
 			newButton.OnClick.RemoveAllListeners();
 			newButton.OnClick.AddListener(() =>
 			{
@@ -78,6 +84,8 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			}
 
 			button.transform.localScale = new Vector3(0.65f, 1.35f, 1.0f);
+			button.buttonText.transform.localPosition = new Vector3(-0.85f, 0.05f, -2.0f);
+			button.buttonText.transform.localScale = new Vector3(1.5f, 0.75f, 1.0f);
 			button.transform.localPosition = new Vector3(
 				-5.75f + (x * 2.5f),
 				2.6f - (y * 1.1f),
