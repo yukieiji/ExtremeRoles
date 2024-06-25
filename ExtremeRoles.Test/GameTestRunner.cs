@@ -166,6 +166,11 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 
 			yield return GameUtility.StartGame(this.Logger);
 
+			while (IntroCutscene.Instance != null)
+			{
+				yield return new WaitForSeconds(10.0f);
+			}
+
 			while (GameUtility.IsContinue)
 			{
 				var player = CachedPlayerControl.AllPlayerControls.OrderBy(x => RandomGenerator.Instance.Next()).First();

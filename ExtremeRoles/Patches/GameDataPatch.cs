@@ -9,6 +9,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
+[HarmonyPatch(typeof(GameData), nameof(GameData.AddDummy))]
 public static class GameDataAddPlayerPatch
 {
 	public static void Postfix()
