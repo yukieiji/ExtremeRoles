@@ -34,7 +34,9 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		{
 			return;
 		}
+
 		vanillaSettings = lobby;
+		vanillaSettings.gameModeText.transform.localPosition = new Vector3(-4.0f, 3.5f, -2.0f);
 
 		var taskButton = vanillaSettings.taskTabButton;
 
@@ -60,12 +62,12 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			allButton.Add(newButton);
 		}
 
-		int x = 0;
-		int y = 0;
+		int x = -1;
+		int y = -1;
 
 		foreach (var (index, button) in allButton.Select((value, index) => (index, value)))
 		{
-			if (index % 4 == 0)
+			if (index % 5 == 0)
 			{
 				++y;
 				x = 0;
@@ -75,10 +77,12 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				++x;
 			}
 
+			button.transform.localScale = new Vector3(0.65f, 1.35f, 1.0f);
 			button.transform.localPosition = new Vector3(
-				initPos + (x * 0.16f),
-				-0.16f + (y * 0.25f),
+				-5.75f + (x * 2.5f),
+				2.6f - (y * 1.1f),
 				0.0f);
+
 		}
 	}
 
