@@ -41,7 +41,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 	public void Awake()
 	{
-		if (!base.TryGetComponent(out GameOptionsMenu menu))
+		if (!base.TryGetComponent<GameOptionsMenu>(out var menu))
 		{
 			return;
 		}

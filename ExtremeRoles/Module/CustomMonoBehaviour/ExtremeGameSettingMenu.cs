@@ -41,7 +41,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 				newButton.transform.localScale = new Vector3(0.35f, 0.7f, 1.0f);
 				rescaleText(newButton, 0.7f, 0.4f);
 
-				if (newButton.buttonText.TryGetComponent(out TextTranslatorTMP text))
+				if (newButton.buttonText.TryGetComponent<TextTranslatorTMP>(out var text))
 				{
 					Destroy(text);
 				}
@@ -76,7 +76,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 
 			var infoImage = whatIsThis.GetChild(0);
 			infoImage.localPosition = new Vector3(-2.0f, 0.25f, -1.0f);
-			if (infoImage.TryGetComponent(out SpriteRenderer spriteRenderer))
+			if (infoImage.TryGetComponent<SpriteRenderer>(out var spriteRenderer))
 			{
 				spriteRenderer.flipX = true;
 			}

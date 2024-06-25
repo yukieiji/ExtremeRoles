@@ -25,7 +25,7 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 
 	public void Awake()
 	{
-		if (!base.TryGetComponent(out StringOption opt))
+		if (!base.TryGetComponent<StringOption>(out var opt))
 		{
 			return;
 		}
@@ -38,12 +38,12 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 
 		this.valueText = opt.ValueText;
 
-		if (base.transform.Find("MinusButton (1)").TryGetComponent(out PassiveButton minus))
+		if (base.transform.Find("MinusButton (1)").TryGetComponent<PassiveButton>(out var minus))
 		{
 			minus.OnClick.RemoveAllListeners();
 			minus.OnClick.AddListener(this.Decrease);
 		}
-		if (base.transform.Find("PlusButton (1)").TryGetComponent(out PassiveButton plus))
+		if (base.transform.Find("PlusButton (1)").TryGetComponent<PassiveButton>(out var plus))
 		{
 			plus.OnClick.RemoveAllListeners();
 			plus.OnClick.AddListener(this.Increase);

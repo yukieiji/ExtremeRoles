@@ -128,7 +128,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			{
 				if (playerInfo != null &&
 					playerInfo.Object != null &&
-					playerInfo.Object.TryGetComponent(out DummyBehaviour dummy) &&
+					playerInfo.Object.TryGetComponent<DummyBehaviour>(out var dummy) &&
 					!dummy.enabled &&
 					!playerInfo.Disconnected)
 				{

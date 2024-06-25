@@ -31,7 +31,7 @@ public static class GameSettingMenuChangeTabPatch
 		[HarmonyArgument(0)] int tabNum,
 		[HarmonyArgument(1)] bool previewOnly)
 	{
-		if (__instance.TryGetComponent(out ExtremeGameSettingMenu menu))
+		if (__instance.TryGetComponent<ExtremeGameSettingMenu>(out var menu))
 		{
 			menu.SwitchTabPrefix(previewOnly);
 		}
