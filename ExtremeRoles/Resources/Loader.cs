@@ -26,8 +26,9 @@ public static class Path
 
     public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
-    public const string HelpImage = "ExtremeRoles.Resources.Help.png";
-    public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
+    public const string HelpActiveImage = "ExtremeRoles.Resources.HelpActive.png";
+	public const string HelpNoneActiveImage = "ExtremeRoles.Resources.HelpNoActive.png";
+	public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
 
     public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
 

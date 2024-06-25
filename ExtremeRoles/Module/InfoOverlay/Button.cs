@@ -23,32 +23,23 @@ public sealed class HelpButton
 		this.body.name = "infoRoleButton";
 		this.body.SetActive(true);
 		this.body.layer = 5;
-		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-
-		SetInfoButtonToGameStartShipPositon();
 
 		var passiveButton = this.body.GetComponent<PassiveButton>();
 		passiveButton.OnClick.RemoveAllPersistentAndListeners();
 		passiveButton.OnClick.AddListener(openAct);
-		/*
-		var render = this.body.GetComponent<SpriteRenderer>();
-		render.sprite = Loader.CreateSpriteFromResources(
-			Path.HelpImage, 230f);
-		*/
-	}
 
-	public void SetInfoButtonToGameStartShipPositon()
-	{
-		if (this.body == null) { return; }
-		this.body.transform.localPosition = new Vector3(
-			0.0f, -0.825f, 0.0f);
-	}
+		if (passiveButton.TryGetComponent<AspectPosition>(out var aspect))
+		{
+			Object.Destroy(aspect);
+		}
+		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+		this.body.transform.localPosition = new Vector3(-1.25f, 0.0f, -400.0f);
 
-	public void SetInfoButtonToInGamePositon()
-	{
-		if (this.body == null) { return; }
-		this.body.SetActive(true);
-		this.body.transform.localPosition = new Vector3(
-			0.0f, -1.75f, 0.0f);
+		passiveButton.inactiveSprites.GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
+			Path.HelpNoneActiveImage, 175f);
+		passiveButton.selectedSprites.GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
+			Path.HelpActiveImage, 175f);
+		passiveButton.activeSprites.GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
+			Path.HelpActiveImage, 175f);
 	}
 }
