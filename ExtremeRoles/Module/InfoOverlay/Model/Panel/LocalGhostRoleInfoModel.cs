@@ -1,9 +1,10 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
+
+
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
@@ -24,23 +25,13 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 			return ($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
 		}
 
-		var allOption = OptionManager.Instance;
-
 		string roleOptionString = "";
 		string colorRoleName = role.GetColoredRoleName();
 
 		if (!role.IsVanillaRole())
 		{
-			int useId = role.GetRoleOptionId(RoleCommonOption.SpawnRate);
-
-			if (!allOption.Contains(useId))
-			{
-				var aliveRole = (MultiAssignRoleBase)ExtremeRoleManager.GetLocalPlayerRole();
-				useId = aliveRole.GetManagerOptionId(RoleCommonOption.SpawnRate);
-			}
-
-			var option = allOption.GetIOption(useId);
-			roleOptionString = option.ToHudStringWithChildren();
+			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
+			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 
 		string roleFullDesc = role.GetFullDescription();

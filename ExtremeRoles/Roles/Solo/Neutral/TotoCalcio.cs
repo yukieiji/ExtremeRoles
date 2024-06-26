@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -37,7 +39,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     private ExtremeAbilityButton betButton;
 
     private float range;
-    private GameData.PlayerInfo betPlayer;
+    private NetworkedPlayerInfo betPlayer;
     private PlayerControl tmpTarget;
 
     private float defaultCoolTime;
@@ -66,8 +68,8 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "betPlayer",Loader.CreateSpriteFromResources(
-                Path.TotocalcioBetPlayer));
+            "betPlayer", Resources.Loader.CreateSpriteFromResources(
+				Path.TotocalcioBetPlayer));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -94,7 +96,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     }
 
     public void ModifiedWinPlayer(
-        GameData.PlayerInfo rolePlayerInfo,
+        NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
     {
@@ -107,7 +109,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
 		winner.AddWithPlus(rolePlayerInfo);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -174,30 +176,30 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             TotocalcioOption.Range,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            1.0f, 0.0f, 2.0f, 0.1f);
 
-        this.CreateAbilityCountOption(parentOps, 3, 5);
+        IRoleAbility.CreateAbilityCountOption(factory, 3, 5);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             TotocalcioOption.FinalCoolTime,
             80.0f, 45.0f, 180.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()
     {
         this.betPlayer = null;
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(TotocalcioOption.Range));
-        this.defaultCoolTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
-        this.finalCoolTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(TotocalcioOption.FinalCoolTime));
+		var cate = this.Loader;
+        this.range = cate.GetValue<TotocalcioOption, float>(
+            TotocalcioOption.Range);
+        this.defaultCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(
+            RoleAbilityCommonOption.AbilityCoolTime);
+        this.finalCoolTime = cate.GetValue<TotocalcioOption, float>(
+            TotocalcioOption.FinalCoolTime);
     }
 }

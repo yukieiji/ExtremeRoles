@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -26,8 +26,6 @@ public sealed partial class ExtremeShipStatus
 
 	public void AddGlobalActionRole(SingleRoleBase role)
 	{
-		var allOpt = OptionManager.Instance;
-
 		switch (role.Id)
 		{
 			case ExtremeRoleId.Assassin:

@@ -19,7 +19,7 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 
 		public bool IsCheckWall { get; }
 
-		public bool CanUse(GameData.PlayerInfo pc);
+		public bool CanUse(NetworkedPlayerInfo pc);
 
 		public void Use();
 	}
@@ -55,7 +55,7 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 		*/
 	}
 
-	public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+	public float CanUse(NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
 	{
 		canUse = false;
 		couldUse = false;
@@ -121,7 +121,7 @@ public sealed class __ExtremeConsole : Console
 		this.Image = rend;
 	}
 
-	public override float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+	public override float CanUse(NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
 	{
 		canUse = false;
 		couldUse = false;

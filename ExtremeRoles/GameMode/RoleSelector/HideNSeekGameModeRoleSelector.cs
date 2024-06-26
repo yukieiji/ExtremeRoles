@@ -2,7 +2,6 @@
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -42,30 +41,21 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
         }
     }
 
-    private readonly HashSet<int> useNormalRoleSpawnOption = new HashSet<int>();
+	private readonly HashSet<int> roleCategoryGroup = new HashSet<int>();
 
-    public HideNSeekGameModeRoleSelector()
+	public HideNSeekGameModeRoleSelector()
     {
         foreach (ExtremeRoleId id in getUseNormalId())
-        {
-            this.useNormalRoleSpawnOption.Add(
-                ExtremeRoleManager.NormalRole[(int)id].GetRoleOptionId(RoleCommonOption.SpawnRate));
-        }
+		{
+			this.roleCategoryGroup.Add(
+				ExtremeRoleManager.GetRoleGroupId(id));
+		}
     }
 
-	public bool IsValidRoleOption(IOptionInfo option)
-    {
-        while (option.Parent != null)
-        {
-            option = option.Parent;
-        }
+	public bool IsValidCategory(int categoryId)
+		=> this.roleCategoryGroup.Contains(categoryId);
 
-        int id = option.Id;
-
-        return this.useNormalRoleSpawnOption.Contains(id);
-    }
-
-    private static ExtremeRoleId[] getUseNormalId() =>
+	private static ExtremeRoleId[] getUseNormalId() =>
 		[
             ExtremeRoleId.SpecialCrew,
             ExtremeRoleId.Neet,

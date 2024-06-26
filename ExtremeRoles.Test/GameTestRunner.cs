@@ -19,6 +19,7 @@ using ExtremeRoles.Test.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 using UnityResource = UnityEngine.Resources;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Test;
 
@@ -33,7 +34,7 @@ public sealed class GameTestRunner : TestRunnerBase
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
-				new("Random", 3),
+				new("Random", 256),
 				new("IRoleAbilityRole", 5,
 				[
 					ExtremeRoleId.Carpenter,
@@ -62,7 +63,9 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						new((int)GlobalOption.IsSameNeutralSameWin, 1));
+						OptionTab.General,
+						(int)ShipGlobalOptionCategory.NeutralWinOption,
+						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 				}),
 				new("NeutralWin", 100,
 				[
@@ -73,7 +76,9 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						new((int)GlobalOption.IsSameNeutralSameWin, 1));
+						OptionTab.General,
+						(int)ShipGlobalOptionCategory.NeutralWinOption,
+						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 					GameUtility.UpdateAmongUsOption(
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 0));
@@ -82,7 +87,9 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						new((int)GlobalOption.IsSameNeutralSameWin, 0));
+						OptionTab.General,
+						(int)ShipGlobalOptionCategory.NeutralWinOption,
+						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 					GameUtility.UpdateAmongUsOption(
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 3));
@@ -149,15 +156,20 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 
 			if (this.count > waitCount)
 			{
-				this.Logger.LogInfo("Wait for 30s");
+				this.Logger.LogInfo("Wait for 10s");
 				GC.Collect();
 				Resources.Loader.ResetCache();
 				yield return UnityResource.UnloadUnusedAssets();
-				yield return new WaitForSeconds(30.0f);
+				yield return new WaitForSeconds(10.0f);
 				this.count = 0;
 			}
 
 			yield return GameUtility.StartGame(this.Logger);
+
+			while (IntroCutscene.Instance != null)
+			{
+				yield return new WaitForSeconds(10.0f);
+			}
 
 			while (GameUtility.IsContinue)
 			{

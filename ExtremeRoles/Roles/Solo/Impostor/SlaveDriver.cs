@@ -11,6 +11,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Interface;
 using Hazel;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class SlaveDriver :
@@ -66,31 +71,32 @@ public sealed class SlaveDriver :
 	}
 
 	protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			SlaveDriverOption.CanSeeTaskBar,
-			true, parentOps);
-		this.CreateAbilityCountOption(parentOps, 2, 10);
-		CreateIntOption(
+			true);
+		IRoleAbility.CreateAbilityCountOption(factory, 2, 10);
+		factory.CreateIntOption(
 			SlaveDriverOption.RevartTaskNum,
-			2, 1, 5, 1, parentOps);
-		CreateFloatOption(
+			2, 1, 5, 1);
+		factory.CreateFloatOption(
 			SlaveDriverOption.Range,
-			0.75f, 0.25f, 3.5f, 0.25f, parentOps);
+			0.75f, 0.25f, 3.5f, 0.25f);
 	}
 
     protected override void RoleSpecificInit()
     {
-		this.CanSeeTaskBar = OptionManager.Instance.GetValue<bool>(
-			GetRoleOptionId(SlaveDriverOption.CanSeeTaskBar));
-		this.revartTaskNum= OptionManager.Instance.GetValue<int>(
-			GetRoleOptionId(SlaveDriverOption.RevartTaskNum));
-		this.range = OptionManager.Instance.GetValue<float>(
-			GetRoleOptionId(SlaveDriverOption.Range));
+		var cate = this.Loader;
+		this.CanSeeTaskBar = cate.GetValue<SlaveDriverOption, bool>(
+			SlaveDriverOption.CanSeeTaskBar);
+		this.revartTaskNum= cate.GetValue<SlaveDriverOption, int>(
+			SlaveDriverOption.RevartTaskNum);
+		this.range = cate.GetValue<SlaveDriverOption, float>(
+			SlaveDriverOption.Range);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -100,7 +106,7 @@ public sealed class SlaveDriver :
 		this.target = byte.MaxValue;
 		foreach (byte playerId in this.effectPlayer)
 		{
-			GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+			NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
 			if (player == null ||
 				!ExtremeRoleManager.GameRole[player.PlayerId].HasTask()) { continue; }
@@ -129,7 +135,7 @@ public sealed class SlaveDriver :
 				else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
 					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
-					newTaskId = GameSystem.GetRandomNormalTaskId();
+					newTaskId = GameSystem.GetRandomShortTaskId();
 				}
 				else
 				{

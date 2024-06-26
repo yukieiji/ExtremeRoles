@@ -4,12 +4,15 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -24,8 +27,8 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
         {
             this.body = new GameObject("CrackTrace");
             this.image = this.body.AddComponent<SpriteRenderer>();
-            this.image.sprite = Loader.CreateSpriteFromResources(
-               Path.CrackerCrackTrace, 300f);
+            this.image.sprite = Resources.Loader.CreateSpriteFromResources(
+			   Path.CrackerCrackTrace, 300f);
 
             this.body.transform.position = pos;
 
@@ -102,14 +105,14 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "crack",
-            Loader.CreateSpriteFromResources(
-               Path.CrackerCrack));
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.CrackerCrack));
     }
 
     public bool IsAbilityUse()
     {
         this.targetDeadBodyId = byte.MaxValue;
-        GameData.PlayerInfo info = Player.GetDeadBodyInfo(
+        NetworkedPlayerInfo info = Player.GetDeadBodyInfo(
             this.crackDistance);
 
         if (info != null)
@@ -120,7 +123,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
         return IRoleAbility.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -145,26 +148,26 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CrackerOption.CanCrackDistance,
-            1.0f, 1.0f, 5.0f, 0.5f,
-            parentOps);
+            1.0f, 1.0f, 5.0f, 0.5f);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             CrackerOption.RemoveDeadBody,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.crackDistance = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(CrackerOption.CanCrackDistance));
-        this.IsRemoveDeadBody = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(CrackerOption.RemoveDeadBody));
+		var cate = this.Loader;
+        this.crackDistance = cate.GetValue<CrackerOption, float>(
+            CrackerOption.CanCrackDistance);
+        this.IsRemoveDeadBody = cate.GetValue<CrackerOption, bool>(
+            CrackerOption.RemoveDeadBody);
     }
 }

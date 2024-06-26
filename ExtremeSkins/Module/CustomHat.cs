@@ -43,6 +43,7 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	{
 		get => $"hat_{new DirectoryInfo(this.FolderPath).Name}_{this.Author}_{this.Name}";
 	}
+	public Sprite? Preview { get; private set; }
 
 	protected readonly string FolderPath;
 	protected readonly HatInfo Info;
@@ -85,7 +86,7 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	private HatViewData createView()
 	{
 		var view = ScriptableObject.CreateInstance<HatViewData>();
-		view.MainImage = GetSprite(Path.Combine(this.FolderPath, DataStructure.FrontImageName));
+		view.MainImage = this.Preview;
 
 		if (this.Info.FrontFlip)
 		{
@@ -127,7 +128,7 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 		data.NotInStore = true;
 		data.PreviewCrewmateColor = this.Info.Shader;
 
-		data.SpritePreview = GetSprite(Path.Combine(this.FolderPath, DataStructure.FrontImageName));
+		this.Preview = GetSprite(Path.Combine(this.FolderPath, DataStructure.FrontImageName));
 
 		this.HatView = ScriptableObject.CreateInstance<HatViewData>();
 		data.ViewDataRef = new AssetReference(this.HatView.Pointer);
@@ -258,7 +259,7 @@ public sealed class AnimationHat : CustomHat
 			sprite = GetSprite(Path.Combine(this.FolderPath, path));
 			if (sprite == null)
 			{
-				sprite = this.Data.SpritePreview;
+				sprite = this.Preview;
 			}
 			this.cacheSprite.Add(path, sprite);
 		}

@@ -45,7 +45,7 @@ public static class MeetingHudCheckForEndVotingPatch
 		var logger = ExtremeRolesPlugin.Logger;
 		logger.LogInfo(" ----- AssassinMeeting Target selecting is End ----- ");
 
-		//GameData.PlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
+		//NetworkedPlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
 		Il2CppStructArray<MeetingHud.VoterState> array =
 			new Il2CppStructArray<MeetingHud.VoterState>(
 				instance.playerStates.Length);
@@ -214,8 +214,8 @@ public static class MeetingHudCheckForEndVotingPatch
 			}
 		}
 
-		GameData.PlayerInfo? exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
-			(GameData.PlayerInfo v) => !isTie && v.PlayerId == result.PlayerId);
+		NetworkedPlayerInfo? exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
+			(NetworkedPlayerInfo v) => !isTie && v.PlayerId == result.PlayerId);
 
 		if (exiled != null)
 		{

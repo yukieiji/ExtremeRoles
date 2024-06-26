@@ -14,8 +14,8 @@ public static class MeetingHudCoIntroPatch
 {
 	public static void Postfix(
 		MeetingHud __instance,
-		[HarmonyArgument(0)] GameData.PlayerInfo reporter,
-		[HarmonyArgument(1)] GameData.PlayerInfo reportedBody)
+		[HarmonyArgument(0)] NetworkedPlayerInfo reporter,
+		[HarmonyArgument(1)] NetworkedPlayerInfo reportedBody)
 	{
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 

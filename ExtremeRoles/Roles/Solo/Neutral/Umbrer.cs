@@ -5,7 +5,7 @@ using UnityEngine;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityModeSwitcher;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -13,6 +13,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Helper;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -47,11 +49,11 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         {
             if (this.firstStage.Count <= 0) { return false; }
 
-            foreach (GameData.PlayerInfo player in
+            foreach (NetworkedPlayerInfo player in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player == null || player?.Object == null) { continue; }
-                if (player.IsDead || player.Disconnected) { continue; }
+                if (player == null || player.Object == null ||
+					player.IsDead || player.Disconnected) { continue; }
 
                 if (!this.firstStage.Contains(player.PlayerId))
                 {
@@ -65,7 +67,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         public bool IsContain(byte playerId) =>
             this.firstStage.Contains(playerId) || this.finalStage.Contains(playerId);
 
-        public bool IsFirstStage(byte playerId) => 
+        public bool IsFirstStage(byte playerId) =>
             this.firstStage.Contains(playerId);
 
         public bool IsFinalStage(byte playerId) =>
@@ -84,7 +86,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             foreach (byte playerId in this.firstStage)
             {
 
-                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+                NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
                 if (player == null ||
                     player.IsDead ||
@@ -149,15 +151,15 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public void CreateAbility()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Loader;
         var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
 			UmbrerMode.Feat,
 				new Module.AbilityBehavior.ButtonGraphic(
 					Translation.GetString("featVirus"),
-					Loader.CreateSpriteFromResources(
+					Resources.Loader.CreateSpriteFromResources(
 						Path.UmbrerFeatVirus)),
-				allOpt.GetValue<float>(GetRoleOptionId(
-					RoleAbilityCommonOption.AbilityActiveTime))
+				cate.GetValue<RoleAbilityCommonOption, float >(
+					RoleAbilityCommonOption.AbilityActiveTime)
 		);
 
         this.CreateNormalAbilityButton(
@@ -171,11 +173,11 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 				UmbrerMode.Upgrage,
 				new Module.AbilityBehavior.ButtonGraphic(
 					Translation.GetString("upgradeVirus"),
-					Loader.CreateSpriteFromResources(
+					Resources.Loader.CreateSpriteFromResources(
 					Path.UmbrerUpgradeVirus)),
-				allOpt.GetValue<float>(GetRoleOptionId(
+				cate.GetValue<UmbrerOption, float>(
 					UmbrerOption.UpgradeVirusTime))
-			));
+			);
     }
 
     public bool UseAbility()
@@ -260,7 +262,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -330,31 +332,27 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.Range,
-            1.0f, 0.1f, 4.0f, 0.1f,
-            parentOps);
+            1.0f, 0.1f, 4.0f, 0.1f);
 
-        this.CreateCommonAbilityOption(
-            parentOps, 3.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+           factory, 3.0f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.UpgradeVirusTime,
             3.5f, 0.5f, 10.0f, 0.1f,
-            parentOps,
             format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.InfectRange,
-            1.4f, 0.1f, 3.6f, 0.1f,
-            parentOps);
+            1.4f, 0.1f, 3.6f, 0.1f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             UmbrerOption.KeepUpgradedVirus,
             10.0f, 2.5f, 360.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
     }
 
@@ -365,11 +363,11 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         this.timer = new Dictionary<byte, float>();
         this.playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-        var allOpt = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.range = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.Range));
-        this.infectRange = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.InfectRange));
-        this.maxTimer = allOpt.GetValue<float>(GetRoleOptionId(UmbrerOption.KeepUpgradedVirus));
+        this.range = cate.GetValue<UmbrerOption, float>(UmbrerOption.Range);
+        this.infectRange = cate.GetValue<UmbrerOption, float>(UmbrerOption.InfectRange);
+        this.maxTimer = cate.GetValue<UmbrerOption, float>(UmbrerOption.KeepUpgradedVirus);
 
         this.isFetch = false;
     }
@@ -380,7 +378,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         byte sourcePlayerId = sourcePlayer.PlayerId;
         byte rolePlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-        foreach (GameData.PlayerInfo playerInfo in
+        foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
         {
             if (playerInfo == null) { continue; }
@@ -414,7 +412,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         foreach (var (playerId, poolPlayer) in this.playerIcon)
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
 
             if (this.container.IsContain(playerId) ||
                 player == null ||

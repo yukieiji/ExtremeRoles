@@ -11,12 +11,17 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Captain : 
-    SingleRoleBase, 
-    IRoleAwake<RoleTypes>, 
-    IRoleMeetingButtonAbility, 
+public sealed class Captain :
+    SingleRoleBase,
+    IRoleAwake<RoleTypes>,
+    IRoleMeetingButtonAbility,
     IRoleVoteModifier
 {
     public enum CaptainOption
@@ -111,7 +116,7 @@ public sealed class Captain :
             // スキップ => チャージ
             if (voteFor == 252 ||
                 voteFor == 253 ||
-                voteFor == 254 || 
+                voteFor == 254 ||
                 voteFor == byte.MaxValue)
             {
                 using (var caller = RPCOperator.CreateCaller(
@@ -140,12 +145,12 @@ public sealed class Captain :
     }
     public void ModifiedVoteAnime(
         MeetingHud instance,
-        GameData.PlayerInfo rolePlayer,
+        NetworkedPlayerInfo rolePlayer,
         ref Dictionary<byte, int> voteIndex)
     {
         PlayerVoteArea pva = instance.playerStates.FirstOrDefault(
             x => x.TargetPlayerId == this.voteTarget);
-        
+
         if (pva == null) { return; }
 
         if (!voteIndex.TryGetValue(pva.TargetPlayerId, out int startIndex))
@@ -227,7 +232,7 @@ public sealed class Captain :
 
     public string GetFakeOptionString() => "";
 
-    public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) => 
+    public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) =>
         instance.TargetPlayerId == 253 || isNotUseSpecialVote();
 
     public void SetSprite(SpriteRenderer render)
@@ -338,36 +343,33 @@ public sealed class Captain :
         }
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             CaptainOption.AwakeTaskGage,
             70, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CaptainOption.ChargeVoteWhenSkip,
             0.7f, 0.1f, 100.0f, 0.1f,
-            parentOps,
             format: OptionUnit.VoteNum);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CaptainOption.AwakedDefaultVoteNum,
             0.0f, 0.0f, 100.0f, 0.1f,
-            parentOps,
             format: OptionUnit.VoteNum);
     }
 
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = OptionManager.Instance;
+        var loader = this.Loader;
 
-        this.chargeVoteNum = allOpt.GetValue<float>(
-           GetRoleOptionId(CaptainOption.ChargeVoteWhenSkip));
-        this.defaultVote = allOpt.GetValue<float>(
-           GetRoleOptionId(CaptainOption.AwakedDefaultVoteNum));
-        this.awakeTaskGage = allOpt.GetValue<int>(
-           GetRoleOptionId(CaptainOption.AwakeTaskGage)) / 100.0f;
+        this.chargeVoteNum = loader.GetValue<CaptainOption, float>(
+           CaptainOption.ChargeVoteWhenSkip);
+        this.defaultVote = loader.GetValue<CaptainOption, float>(
+           CaptainOption.AwakedDefaultVoteNum);
+        this.awakeTaskGage = loader.GetValue<CaptainOption, int>(
+           CaptainOption.AwakeTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.curChargedVote = this.defaultVote;

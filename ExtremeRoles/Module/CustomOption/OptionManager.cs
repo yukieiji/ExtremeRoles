@@ -1,308 +1,45 @@
-﻿using Hazel;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Extension;
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Module.CustomOption;
 
 #nullable enable
 
-public sealed class OptionManager
+
+namespace ExtremeRoles.Module.CustomOption;
+
+public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTabContainer>>
 {
-	public enum ValueType : byte
-	{
-		Int,
-		Float,
-		Bool
-	}
+	public readonly static OptionManager Instance = new ();
+
+	private readonly Dictionary<OptionTab, OptionTabContainer> options = new ();
 
 	public string ConfigPreset
 	{
 		get => $"Preset:{selectedPreset}";
 	}
-
-	public int Count => this.allOptionId.Count;
-
-	public readonly static OptionManager Instance = new OptionManager();
-
-	private Dictionary<int, ValueType> allOptionId = new Dictionary<int, ValueType>();
-	private TypeOptionHolder<int> intOption = new TypeOptionHolder<int>();
-	private TypeOptionHolder<float> floatOption = new TypeOptionHolder<float>();
-	private TypeOptionHolder<bool> boolOption = new TypeOptionHolder<bool>();
-
 	private int selectedPreset = 0;
+	private const int skipStep = 10;
 
 	private const int chunkSize = 50;
 
-	private const int defaultStep = 1;
-	private const int skipStep = 10;
-
-	// ジェネリック化をJIT化する時にtypeofの比較がどうやら定数比較になり必ずtrueになる部分とfalseになる部分が決定するらしい
-	// それによってメソッドが特殊化されfalseの部分がJITの最適化時に削除、常にtrueの部分はifが消されるので非常に簡潔なILになる(ここはまぁコンパイラの授業で習った)
-	// https://qiita.com/aka-nse/items/2f45f056262d2d5c6df7#comment-a8e1c1c3e9e7a0208068
-	// 実際に測ったらUnsafe.Asを使わないas キャストを使ってるのに2倍近く早かった・・・・
-
-
-	public void Add(int id, IValueOption<float> option)
+	private OptionManager()
 	{
-		this.floatOption.Add(id, option);
-		this.allOptionId.Add(id, ValueType.Float);
-	}
-	public void Add(int id, IValueOption<int> option)
-	{
-		this.intOption.Add(id, option);
-		this.allOptionId.Add(id, ValueType.Int);
-	}
-	public void Add(int id, IValueOption<bool> option)
-	{
-		this.boolOption.Add(id, option);
-		this.allOptionId.Add(id, ValueType.Bool);
-	}
-
-	public void AddOption<SelectionType>(int id, IValueOption<SelectionType> option)
-		where SelectionType :
-			struct, IComparable, IConvertible,
-			IComparable<SelectionType>, IEquatable<SelectionType>
-	{
-		if (typeof(SelectionType) == typeof(int))
+		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
-			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<int>>(ref option));
+			options.Add(tab, new OptionTabContainer(tab));
 		}
-		else if (typeof(SelectionType) == typeof(float))
-		{
-			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<float>>(ref option));
-		}
-		else if (typeof(SelectionType) == typeof(bool))
-		{
-			Add(id, Unsafe.As<IValueOption<SelectionType>, IValueOption<bool>>(ref option));
-		}
-		else
-		{
-			throw new ArgumentException("Cannot Add Options");
-		}
-	}
-
-	public bool Contains(int id) => this.allOptionId.ContainsKey(id);
-
-	public bool TryGet<T>(int id, out IValueOption<T>? option)
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>
-	{
-		option = null;
-		if (!this.allOptionId.ContainsKey(id)) { return false; }
-
-		if (typeof(T) == typeof(int))
-		{
-			var intOption = this.intOption.Get(id);
-			option = Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
-			return true;
-		}
-		else if (typeof(T) == typeof(float))
-		{
-			var floatOption = this.floatOption.Get(id);
-			option = Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
-			return true;
-		}
-		else if (typeof(T) == typeof(bool))
-		{
-			var boolOption = this.boolOption.Get(id);
-			option = Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
-			return true;
-		}
-		else
-		{
-			throw new ArgumentException("Cannot Find Options");
-		}
-	}
-
-	public bool TryGetIOption(int id, out IOptionInfo? option)
-	{
-		option = null;
-		if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return false; }
-
-		option = type switch
-		{
-			ValueType.Int => this.intOption.Get(id),
-			ValueType.Float => this.floatOption.Get(id),
-			ValueType.Bool => this.boolOption.Get(id),
-			_ => null
-		};
-		return true;
-	}
-
-	public IValueOption<T> Get<T>(int id)
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>
-	{
-		if (typeof(T) == typeof(int))
-		{
-			var intOption = this.intOption.Get(id);
-			return Unsafe.As<IValueOption<int>, IValueOption<T>>(ref intOption);
-		}
-		else if (typeof(T) == typeof(float))
-		{
-			var floatOption = this.floatOption.Get(id);
-			return Unsafe.As<IValueOption<float>, IValueOption<T>>(ref floatOption);
-		}
-		else if (typeof(T) == typeof(bool))
-		{
-			var boolOption = this.boolOption.Get(id);
-			return Unsafe.As<IValueOption<bool>, IValueOption<T>>(ref boolOption);
-		}
-		else
-		{
-			throw new ArgumentException("Cannot Find Options");
-		}
-	}
-
-	public IEnumerable<KeyValuePair<int, IOptionInfo>> GetKeyValueAllIOptions()
-	{
-		foreach (var (id, key) in this.allOptionId)
-		{
-			IOptionInfo info = key switch
-			{
-				ValueType.Int => this.intOption.Get(id),
-				ValueType.Float => this.floatOption.Get(id),
-				ValueType.Bool => this.boolOption.Get(id),
-				_ => throw new ArgumentException("Invalided Option Id"),
-			};
-			yield return new KeyValuePair<int, IOptionInfo>(id, info);
-		}
-	}
-
-	public IEnumerable<IOptionInfo> GetAllIOption()
-	{
-		foreach (var (id, key) in this.allOptionId)
-		{
-			yield return key switch
-			{
-				ValueType.Int => this.intOption.Get(id),
-				ValueType.Float => this.floatOption.Get(id),
-				ValueType.Bool => this.boolOption.Get(id),
-				_ => throw new ArgumentException("Invalided Option Id"),
-			};
-		}
-	}
-
-	public IOptionInfo GetIOption(int id)
-		=> this.allOptionId[id] switch
-		{
-			ValueType.Int => this.intOption.Get(id),
-			ValueType.Float => this.floatOption.Get(id),
-			ValueType.Bool => this.boolOption.Get(id),
-			_ => throw new ArgumentException("Invalided Option Id"),
-		};
-
-	public T GetValue<T>(int id)
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>
-	{
-		if (typeof(T) == typeof(int))
-		{
-			var intOption = this.intOption.Get(id);
-			int intValue = intOption.GetValue();
-			return Unsafe.As<int, T>(ref intValue);
-		}
-		else if (typeof(T) == typeof(float))
-		{
-			var floatOption = this.floatOption.Get(id);
-			float floatValue = floatOption.GetValue();
-			return Unsafe.As<float, T>(ref floatValue);
-		}
-		else if (typeof(T) == typeof(bool))
-		{
-			var boolOption = this.boolOption.Get(id);
-			bool boolValue = boolOption.GetValue();
-			return Unsafe.As<bool, T>(ref boolValue);
-		}
-		else
-		{
-			return default(T);
-		}
-	}
-
-	public void ChangeOptionValue(int id, bool isIncrese)
-	{
-		var option = GetIOption(id);
-
-		int curSelection = option.CurSelection;
-		int step = Key.IsShift() ? skipStep : defaultStep;
-		int newSelection = isIncrese ? curSelection + step : curSelection - step;
-		if (Key.IsControlDown())
-		{
-			newSelection = isIncrese ? option.ValueCount - 1 : 0;
-		}
-
-		option.UpdateSelection(newSelection);
-
-		if (id == 0)
-		{
-			SwitchPreset(newSelection);
-		}
-
-		if (AmongUsClient.Instance &&
-			AmongUsClient.Instance.AmHost &&
-			CachedPlayerControl.LocalPlayer)
-		{
-			ShareOptionSelections();// Share all selections
-		}
-	}
-
-	public void ShareOptionSelections()
-	{
-		if (PlayerControl.AllPlayerControls.Count <= 1 ||
-			!AmongUsClient.Instance ||
-			!AmongUsClient.Instance.AmHost ||
-			!PlayerControl.LocalPlayer) { return; }
-
-		shareOption(this.intOption);
-		shareOption(this.floatOption);
-		shareOption(this.boolOption);
-	}
-
-	public void SwitchPreset(int newPreset)
-	{
-		this.selectedPreset = newPreset;
-
-		foreach (var (_, option) in this.GetKeyValueAllIOptions())
-		{
-			if (option.Id == 0) { continue; }
-			option.SwitchPreset();
-		}
-
-		ShareOptionSelections();
-		RoleAssignFilter.Instance.SwitchPreset();
-	}
-
-	private void rpcValueSync(int id, int selection)
-	{
-		if (!this.allOptionId.TryGetValue(id, out ValueType type)) { return; }
-
-		switch (type)
-		{
-			case ValueType.Int:
-				this.intOption.Update(id, selection);
-				break;
-			case ValueType.Float:
-				this.floatOption.Update(id, selection);
-				break;
-			case ValueType.Bool:
-				this.boolOption.Update(id, selection);
-				break;
-			default:
-				break;
-		};
 	}
 
 	public static void Load()
@@ -325,16 +62,15 @@ public sealed class OptionManager
 		MeetingReporter.Reset();
 	}
 
-	public static void ShareOption(int numberOfOptions, MessageReader reader)
+	public static void ShareOption(in MessageReader reader)
 	{
 		try
 		{
-			for (int i = 0; i < numberOfOptions; i++)
-			{
-				int optionId = reader.ReadPackedInt32();
-				int selection = reader.ReadPackedInt32();
-				Instance.rpcValueSync(optionId, selection);
-			}
+			bool isShow = reader.ReadByte() == byte.MinValue;
+			OptionTab tab = (OptionTab)reader.ReadByte();
+			int categoryId = reader.ReadPackedInt32();
+			Instance.syncOption(
+				isShow, tab, categoryId, reader);
 		}
 		catch (Exception e)
 		{
@@ -342,27 +78,218 @@ public sealed class OptionManager
 		}
 	}
 
-	private static void shareOption<T>(TypeOptionHolder<T> holder)
-		where T :
-			struct, IComparable, IConvertible,
-			IComparable<T>, IEquatable<T>
-	{
-		var splitOption = holder.Select((x, i) =>
-			new { data = x, indexgroup = i / chunkSize })
-			.GroupBy(x => x.indexgroup, x => x.data)
-			.Select(y => y.Select(x => x));
+	public IEnumerator<KeyValuePair<OptionTab, OptionTabContainer>> GetEnumerator() => this.options.GetEnumerator();
+	IEnumerator IEnumerable.GetEnumerator() { throw new Exception(); }
 
-		foreach (var chunkedOption in splitOption)
+	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
+		=> this.options.TryGetValue(tab, out container) && container is not null;
+
+	public bool TryGetCategory(OptionTab tab, int categoryId, [NotNullWhen(true)] out OptionCategory? category)
+	{
+		category = null;
+		return this.TryGetTab(tab, out var container) && container.TryGetCategory(categoryId, out category) && category is not null;
+	}
+
+	public static OptionCategoryFactory CreateOptionCategory(
+		int id,
+		string name,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null)
+	{
+		var factory = new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
+
+		return factory;
+	}
+	public static OptionCategoryFactory CreateOptionCategory<T>(
+		T option,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null) where T : Enum
+		=> CreateOptionCategory(
+			option.FastInt(),
+			option.ToString(), tab, color);
+
+	public static SequentialOptionCategoryFactory CreateSequentialOptionCategory(
+		int id,
+		string name,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null)
+	{
+		var factory = new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
+
+		return factory;
+	}
+
+	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
+		int id,
+		string name,
+		in OptionTab tab,
+		in Color? color = null,
+		in IOption? parent = null)
+	{
+		var internalFactory = CreateOptionCategory(id, name, tab, color);
+		var factory = new AutoParentSetOptionCategoryFactory(internalFactory, parent);
+
+		return factory;
+	}
+
+	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
+		T option,
+		in OptionTab tab = OptionTab.General,
+		in Color? color = null,
+		in IOption? parent = null) where T : Enum
+		=> CreateAutoParentSetOptionCategory(
+			option.FastInt(),
+			option.ToString(),
+			tab, color, parent);
+
+	public void UpdateToStep(in OptionCategory category, in int id, int step)
+	{
+		var option = category.Get(id);
+		UpdateToStep(category, option, step);
+	}
+
+	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
+	{
+		int newSelection = option.Selection + (Key.IsShift() ? step * skipStep : step);
+		if (Key.IsControlDown())
 		{
-			using (var caller = RPCOperator.CreateCaller(
-				RPCOperator.Command.ShareOption))
+			newSelection = newSelection > 0 ? option.Range - 1 : 0;
+		}
+		Update(category, option, newSelection);
+	}
+
+	public void Update(in OptionCategory category, in int id, int newIndex)
+	{
+		var option = category.Get(id);
+		Update(category, option, newIndex);
+	}
+
+	public void Update(in OptionCategory category, in IOption option, int newIndex)
+	{
+		option.Selection = newIndex;
+
+		int id = option.Info.Id;
+		if (category.Id == 0 && id == 0)
+		{
+			// プリセット切り替え
+			switchPreset();
+			ShereAllOption();
+		}
+		else
+		{
+			shareOptionCategory(category);
+			category.IsDirty = true;
+		}
+	}
+
+	public void ShereAllOption()
+	{
+		foreach (var tabContainer in this.options.Values)
+		{
+			foreach (var category in tabContainer.Category)
 			{
-				caller.WriteByte((byte)chunkedOption.Count());
-				foreach (var (id, option) in chunkedOption)
+				shareOptionCategory(category, false);
+			}
+		}
+	}
+
+	private void registerOptionGroup(OptionTab tab, OptionCategory group)
+	{
+		if (!this.options.TryGetValue(tab, out var container))
+		{
+			throw new ArgumentException($"Tab {tab} is not registered.");
+		}
+		container.AddGroup(group);
+	}
+
+	private static void shareOptionCategory(
+		in OptionCategory category, bool isShow = true)
+	{
+		int size = category.Count;
+
+		if (size <= chunkSize)
+		{
+			shareOptionCategoryWithSize(category, size, isShow);
+		}
+		else
+		{
+			int mod = size;
+			do
+			{
+				shareOptionCategoryWithSize(category, chunkSize, isShow);
+				mod -= chunkSize;
+			} while (mod > chunkSize);
+			shareOptionCategoryWithSize(category, mod, isShow);
+		}
+	}
+
+	private static void shareOptionCategoryWithSize(
+		in OptionCategory category, int size, bool isShow=true)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.ShareOption))
+		{
+			caller.WriteByte(isShow ? byte.MinValue : byte.MaxValue);
+			caller.WriteByte((byte)category.Tab);
+			caller.WritePackedInt(category.Id);
+			caller.WriteByte((byte)size);
+			foreach (var option in category.Options)
+			{
+				caller.WritePackedInt(option.Info.Id);
+				caller.WritePackedInt(option.Selection);
+			}
+		}
+	}
+
+	private void syncOption(
+		bool isShow,
+		OptionTab tab, int categoryId,
+		in MessageReader reader)
+	{
+		lock(this.options)
+		{
+			StringNames key = (StringNames)5000;
+
+			if (!this.options.TryGetValue(tab, out var container) ||
+				!container.TryGetCategory(categoryId, out var category))
+			{
+				return;
+			}
+			int size = reader.ReadPackedInt32();
+			for (int i = 0; i < size; i++)
+			{
+				int id = reader.ReadPackedInt32();
+				int selection = reader.ReadPackedInt32();
+				if (!category.TryGet(id, out var option))
 				{
-					caller.WritePackedInt(id);
-					caller.WritePackedInt(option.CurSelection);
+					continue;
 				}
+				int curSelection = option.Selection;
+				option.Selection = selection;
+
+				// 値が変更されたのでポップアップ通知
+				if (isShow && curSelection != option.Selection)
+				{
+					FastDestroyableSingleton<HudManager>.Instance.Notifier.AddSettingsChangeMessage(
+						key, $"[{tab}-{category.TransedName}]の{option.Title}が{option.ValueString}に更新されました");
+					key++;
+				}
+			}
+			category.IsDirty = true;
+		}
+	}
+
+	private void switchPreset()
+	{
+		foreach (var tab in this.options.Values)
+		{
+			foreach (var category in tab.Category)
+			{
+				foreach (var option in category.Options)
+				{
+					option.SwitchPreset();
+				}
+				category.IsDirty = true;
 			}
 		}
 	}

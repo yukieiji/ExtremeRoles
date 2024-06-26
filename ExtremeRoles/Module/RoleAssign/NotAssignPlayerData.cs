@@ -31,6 +31,8 @@ namespace ExtremeRoles.Module.RoleAssign
 						break;
 					case RoleTypes.Scientist:
 					case RoleTypes.Engineer:
+					case RoleTypes.Noisemaker:
+					case RoleTypes.Tracker:
 						++crewMultiAssignNum;
 						break;
 					case RoleTypes.Impostor:
@@ -38,8 +40,8 @@ namespace ExtremeRoles.Module.RoleAssign
 						++impSingleAssignNum;
 						break;
 					case RoleTypes.Shapeshifter:
+					case RoleTypes.Phantom:
 						++impMultiAssignNum;
-						++impSingleAssignNum;
 						break;
 					default:
 						break;

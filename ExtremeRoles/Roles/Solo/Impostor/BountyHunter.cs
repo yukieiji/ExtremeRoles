@@ -6,11 +6,14 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -52,7 +55,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         true, false, true, true)
     { }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.setNewTarget();
 
@@ -104,29 +107,29 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.TargetUpdateTime,
             60f, 30.0f, 120f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.TargetKillCoolTime,
             5f, 1.0f, 60f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.NoneTargetKillCoolTime,
             45f, 1.0f, 120f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        var arrowOption = CreateBoolOption(
+        var arrowOption = factory.CreateBoolOption(
             BountyHunterOption.IsShowArrow,
-            false, parentOps);
+            false);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BountyHunterOption.ArrowUpdateCycle,
             10f, 1.0f, 120f, 0.5f,
             arrowOption, format: OptionUnit.Second);
@@ -145,20 +148,20 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
         this.defaultKillCool = this.KillCoolTime;
 
-        var allOption = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.changeTargetTime = allOption.GetValue<float>(
-            GetRoleOptionId(BountyHunterOption.TargetUpdateTime));
-        this.targetKillCool = allOption.GetValue<float>(
-            GetRoleOptionId(BountyHunterOption.TargetKillCoolTime));
-        this.noneTargetKillCool = allOption.GetValue<float>(
-            GetRoleOptionId(BountyHunterOption.NoneTargetKillCoolTime));
-        this.isShowArrow = allOption.GetValue<bool>(
-            GetRoleOptionId(BountyHunterOption.IsShowArrow));
+        this.changeTargetTime = cate.GetValue<BountyHunterOption, float>(
+            BountyHunterOption.TargetUpdateTime);
+        this.targetKillCool = cate.GetValue<BountyHunterOption, float>(
+            BountyHunterOption.TargetKillCoolTime);
+        this.noneTargetKillCool = cate.GetValue<BountyHunterOption, float>(
+            BountyHunterOption.NoneTargetKillCoolTime);
+        this.isShowArrow = cate.GetValue<BountyHunterOption, bool>(
+            BountyHunterOption.IsShowArrow);
         if (this.isShowArrow)
         {
-            this.targetArrowUpdateTime = allOption.GetValue<float>(
-                GetRoleOptionId(BountyHunterOption.ArrowUpdateCycle));
+            this.targetArrowUpdateTime = cate.GetValue<BountyHunterOption, float>(
+                BountyHunterOption.ArrowUpdateCycle);
         }
         this.targetArrowUpdateTimer = 0;
         this.targetTimer = 0;

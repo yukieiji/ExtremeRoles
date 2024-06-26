@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Test;
 
@@ -42,26 +44,35 @@ internal sealed class OptionRunner
 
 			this.Log.LogInfo($"Load.GhostRole.Iteration.{i}");
 			loadGhostRole();
-
-			this.Log.LogInfo($"Load.HudString.Iteration.{i}");
-			this.hudString();
 		}
 	}
 
 	private void updateRandom()
 	{
-		foreach (var opt in OptionManager.Instance.GetAllIOption())
+		var mng = OptionManager.Instance;
+		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
-			if (opt.Id == 0) { continue; }
-
-			int newIndex = RandomGenerator.Instance.Next(0, opt.ValueCount);
-			try
+			if (!mng.TryGetTab(tab, out var tabObj))
 			{
-				opt.UpdateSelection(newIndex);
+				continue;
 			}
-			catch (Exception ex)
+
+			foreach (var cate in tabObj.Category)
 			{
-				this.Log.LogError($"{opt.Name} : {newIndex}   {ex.Message}");
+				if (cate.Id == 0) { continue; }
+
+				foreach (var opt in cate.Options)
+				{
+					int newIndex = RandomGenerator.Instance.Next(0, opt.Range);
+					try
+					{
+						mng.UpdateToStep(cate, opt, newIndex);
+					}
+					catch (Exception ex)
+					{
+						this.Log.LogError($"{opt.Info.Name} : {newIndex}   {ex.Message}");
+					}
+				}
 			}
 		}
 	}
@@ -155,24 +166,6 @@ internal sealed class OptionRunner
 			catch (Exception ex)
 			{
 				this.Log.LogError($"{role}   {ex.Message}");
-			}
-		}
-	}
-	private void hudString()
-	{
-		foreach (var opt in OptionManager.Instance.GetAllIOption())
-		{
-			try
-			{
-				string hudStr = opt.ToHudString();
-				if (!opt.Enabled && !opt.IsHidden && string.IsNullOrEmpty(hudStr))
-				{
-					throw new Exception("Invalid HudString");
-				}
-			}
-			catch (Exception ex)
-			{
-				this.Log.LogError($"{opt.Name}   {ex.Message}");
 			}
 		}
 	}

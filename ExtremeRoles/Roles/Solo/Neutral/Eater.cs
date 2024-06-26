@@ -12,7 +12,11 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
+
+
 using BepInEx.Unity.IL2CPP.Utils;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -40,7 +44,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     public ExtremeAbilityButton? Button {  get; set; }
     private PlayerControl? tmpTarget;
     private PlayerControl? targetPlayer;
-    private GameData.PlayerInfo? targetDeadBody;
+    private NetworkedPlayerInfo? targetDeadBody;
 
     private float range;
     private float deadBodyEatActiveCoolTimePenalty;
@@ -68,13 +72,11 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
     public void CreateAbility()
     {
-        var allOpt = OptionManager.Instance;
-
 		var deadBodyMode = new GraphicAndActiveTimeMode<EaterAbilityMode>(
 			EaterAbilityMode.DeadBody,
 			new ButtonGraphic(
 				Translation.GetString("deadBodyEat"),
-				Loader.CreateSpriteFromResources(
+				Resources.Loader.CreateSpriteFromResources(
 					Path.EaterDeadBodyEat)),
 			1.0f);
 
@@ -91,7 +93,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 				EaterAbilityMode.Kill,
 				new ButtonGraphic(
 					Translation.GetString("eatKill"),
-					Loader.CreateSpriteFromResources(
+					Resources.Loader.CreateSpriteFromResources(
 						Path.EaterEatKill)),
 				this.Button.Behavior.ActiveTime));
     }
@@ -139,7 +141,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             (hasPlayerTarget || hasDedBodyTarget);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         if (this.Button != null)
         {
@@ -174,7 +176,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		{
 			byte playerId = this.tmpTarget.PlayerId;
 
-			if (ExtremeRoleManager.GameRole[playerId] is Combination.Assassin assassin && 
+			if (ExtremeRoleManager.GameRole[playerId] is Combination.Assassin assassin &&
 				(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
 			{
 				return false;
@@ -287,36 +289,37 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             EaterOption.CanUseVent,
-            true, parentOps);
-        this.CreateAbilityCountOption(
-            parentOps, 5, 7, 7.5f);
-        CreateFloatOption(
+            true);
+
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 5, 7, 7.5f);
+
+		factory.CreateFloatOption(
             EaterOption.EatRange,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
-        CreateIntOption(
+            1.0f, 0.0f, 2.0f, 0.1f);
+		factory.CreateIntOption(
             EaterOption.DeadBodyEatActiveCoolTimePenalty,
-            10, 0, 25, 1, parentOps,
+            10, 0, 25, 1,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+		factory.CreateIntOption(
             EaterOption.KillEatCoolTimePenalty,
-            10, 0, 25, 1, parentOps,
+            10, 0, 25, 1,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+		factory.CreateIntOption(
             EaterOption.KillEatActiveCoolTimeReduceRate,
-            10, 0, 50, 1, parentOps,
+            10, 0, 50, 1,
             format: OptionUnit.Percentage);
-        CreateBoolOption(
+		factory.CreateBoolOption(
             EaterOption.IsResetCoolTimeWhenMeeting,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+		factory.CreateBoolOption(
             EaterOption.IsShowArrowForDeadBody,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
@@ -324,33 +327,33 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.targetDeadBody = null;
         this.targetPlayer = null;
 
-        var allOpt = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.UseVent = allOpt.GetValue<bool>(
-            GetRoleOptionId(EaterOption.CanUseVent));
-        this.range = allOpt.GetValue<float>(
-            GetRoleOptionId(EaterOption.EatRange));
-        this.deadBodyEatActiveCoolTimePenalty = (allOpt.GetValue<int>(
-           GetRoleOptionId(EaterOption.DeadBodyEatActiveCoolTimePenalty)) / 100.0f) + 1.0f;
-        this.killEatCoolTimePenalty = (allOpt.GetValue<int>(
-           GetRoleOptionId(EaterOption.KillEatCoolTimePenalty)) / 100.0f) + 1.0f;
-        this.killEatActiveCoolTimeReduceRate = 1.0f - allOpt.GetValue<int>(
-           GetRoleOptionId(EaterOption.KillEatCoolTimePenalty)) / 100.0f;
-        this.isResetCoolTimeWhenMeeting = allOpt.GetValue<bool>(
-           GetRoleOptionId(EaterOption.IsResetCoolTimeWhenMeeting));
-        this.isShowArrow = allOpt.GetValue<bool>(
-           GetRoleOptionId(EaterOption.IsShowArrowForDeadBody));
+        this.UseVent = cate.GetValue<EaterOption, bool>(
+            EaterOption.CanUseVent);
+        this.range = cate.GetValue<EaterOption, float>(
+            EaterOption.EatRange);
+        this.deadBodyEatActiveCoolTimePenalty = (cate.GetValue<EaterOption, int>(
+           EaterOption.DeadBodyEatActiveCoolTimePenalty) / 100.0f) + 1.0f;
+        this.killEatCoolTimePenalty = (cate.GetValue<EaterOption, int>(
+           EaterOption.KillEatCoolTimePenalty) / 100.0f) + 1.0f;
+        this.killEatActiveCoolTimeReduceRate = 1.0f - cate.GetValue<EaterOption, int>(
+           EaterOption.KillEatCoolTimePenalty) / 100.0f;
+        this.isResetCoolTimeWhenMeeting = cate.GetValue<EaterOption, bool>(
+           EaterOption.IsResetCoolTimeWhenMeeting);
+        this.isShowArrow = cate.GetValue<EaterOption, bool>(
+           EaterOption.IsShowArrowForDeadBody);
 
-        this.defaultCoolTime = allOpt.GetValue<float>(GetRoleOptionId(
-            RoleAbilityCommonOption.AbilityCoolTime));
+        this.defaultCoolTime = cate.GetValue<RoleAbilityCommonOption, float>(
+            RoleAbilityCommonOption.AbilityCoolTime);
 
         this.deadBodyArrow = new Dictionary<byte, Arrow>();
         this.isActivated = false;
 
         if (this.Button?.Behavior is AbilityCountBehavior behaviour)
         {
-            int abilityNum = allOpt.GetValue<int>(GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCount));
+            int abilityNum = cate.GetValue<RoleAbilityCommonOption, int>(
+                RoleAbilityCommonOption.AbilityCount);
             int halfPlayerNum = GameData.Instance.PlayerCount / 2;
 
             behaviour.SetCountText("eaterWinNum");

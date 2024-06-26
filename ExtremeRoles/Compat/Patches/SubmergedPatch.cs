@@ -20,7 +20,7 @@ namespace ExtremeRoles.Compat.Patches;
 
 public static class ExileControllerPatchesPatch
 {
-	public static bool ExileController_BeginPrefix(ExileController __instance, GameData.PlayerInfo exiled, bool tie)
+	public static bool ExileController_BeginPrefix(ExileController __instance, NetworkedPlayerInfo exiled, bool tie)
 	{
 		return ExtremeRoles.Patches.Controller.ExileControllerBeginePatch.PrefixRun(__instance, exiled, tie);
 	}
@@ -111,8 +111,7 @@ public static class SubmarineSpawnInSystemDetorioratePatch
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
 		// ランダムスポーンが有効かつ自動選択がオフだけ処理飛ばす
-		if (spawnOpt == null ||
-			(spawnOpt.EnableSpecialSetting && submergedMod!.Spawn is SpawnPoint.DefaultSpawn && !spawnOpt.IsAutoSelectRandom)) { return; }
+		if (spawnOpt.EnableSpecialSetting && submergedMod!.Spawn is SpawnPoint.DefaultSpawn && !spawnOpt.IsAutoSelectRandom) { return; }
 
 		submarineSpawnInSystemTimer.SetValue(__instance, 0.0f);
 	}
@@ -213,7 +212,7 @@ public static class SubmarineSelectSpawnCoSelectLevelPatch
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 		var spawnPoint = submergedMod!.Spawn;
 
-		if (spawnOpt == null || spawnPoint is SpawnPoint.DefaultSpawn)
+		if (spawnPoint is SpawnPoint.DefaultSpawn)
 		{
 			return;
 		}

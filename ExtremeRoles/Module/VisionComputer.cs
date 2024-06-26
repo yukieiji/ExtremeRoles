@@ -50,7 +50,7 @@ public class VisionComputer
 	public bool IsModifierResetted() => this.modifier == Modifier.None;
 
 	public bool IsVanillaVisionAndGetVision(
-		ShipStatus shipStatus, GameData.PlayerInfo playerInfo, out float vision)
+		ShipStatus shipStatus, NetworkedPlayerInfo playerInfo, out float vision)
 	{
 		vision = shipStatus.MaxLightRadius;
 
@@ -156,7 +156,7 @@ public class VisionComputer
 
 	private static bool checkNormalOrCustomCalculateLightRadius(
 		IMapMod modMap,
-		bool isRequireCustomVision, GameData.PlayerInfo player, ref float result)
+		bool isRequireCustomVision, NetworkedPlayerInfo player, ref float result)
 	{
 		if (!isRequireCustomVision) { return true; }
 

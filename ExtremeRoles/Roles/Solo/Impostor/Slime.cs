@@ -3,11 +3,14 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -105,9 +108,9 @@ public sealed class Slime :
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
-            Translation.GetString("SlimeMorph"),
-            Loader.CreateSpriteFromResources(
-               Path.SlimeMorph),
+			Translation.GetString("SlimeMorph"),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.SlimeMorph),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
     }
@@ -130,7 +133,7 @@ public sealed class Slime :
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -183,10 +186,10 @@ public sealed class Slime :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 30.0f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 30.0f);
     }
 
     protected override void RoleSpecificInit()

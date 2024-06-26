@@ -11,13 +11,20 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
+
+
 using UnityHelper = ExtremeRoles.Helper.Unity;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class MoverManager : FlexibleCombinationRoleManagerBase
 {
-    public MoverManager() : base(new Mover(), 1)
+    public MoverManager() : base(
+		CombinationRoleType.Mover,
+		new Mover(), 1)
     { }
 
 }
@@ -171,9 +178,9 @@ public sealed class Mover :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-            Translation.GetString("Moving"),
-            Loader.CreateSpriteFromResources(
-               Path.MoverMove),
+			Translation.GetString("Moving"),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.MoverMove),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())
@@ -200,7 +207,7 @@ public sealed class Mover :
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -256,15 +263,13 @@ public sealed class Mover :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
 
-        CreateKillerOption(imposterSetting);
-
-        this.CreateAbilityCountOption(
-            parentOps, 3, 10, 30.0f);
+		IRoleAbility.CreateAbilityCountOption(
+            factory, 3, 10, 30.0f);
     }
 
     protected override void RoleSpecificInit()

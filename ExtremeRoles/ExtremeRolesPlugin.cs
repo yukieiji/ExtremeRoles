@@ -31,10 +31,10 @@ public partial class ExtremeRolesPlugin : BasePlugin
 {
     public Harmony Harmony { get; } = new Harmony(Id);
 
-    public static ExtremeRolesPlugin Instance;
-    public static ExtremeShipStatus ShipState;
+    public static ExtremeRolesPlugin Instance { get; private set; }
+    public static ExtremeShipStatus ShipState { get; private set; }
 
-    internal static BepInEx.Logging.ManualLogSource Logger;
+	internal static BepInEx.Logging.ManualLogSource Logger;
 
     public static ConfigEntry<bool> DebugMode { get; private set; }
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }

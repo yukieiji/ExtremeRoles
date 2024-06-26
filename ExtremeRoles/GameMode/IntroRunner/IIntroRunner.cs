@@ -3,8 +3,6 @@
 using AmongUs.GameOptions;
 using UnityEngine;
 
-using ExtremeRoles.GameMode.Option.MapModule;
-
 using ExtremeRoles.Helper;
 
 using ExtremeRoles.Module.RoleAssign;
@@ -19,6 +17,9 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
+
+
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -141,7 +142,7 @@ public interface IIntroRunner
 				continue;
 			}
 
-			GameData.PlayerInfo playerInfo = player.Data;
+			NetworkedPlayerInfo playerInfo = player.Data;
 
 			var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
 			if (totalTask != 0)

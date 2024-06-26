@@ -14,6 +14,7 @@ using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
+#if WITHVISOR
 
 public sealed class PutVisorHandler : IRequestHandler
 {
@@ -82,3 +83,4 @@ public sealed class PutVisorHandler : IRequestHandler
 		response.Close();
 	}
 }
+#endif

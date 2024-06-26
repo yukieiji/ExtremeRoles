@@ -18,6 +18,10 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.VentModule;
 
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
@@ -498,7 +502,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     public void CreateAbility()
     {
 
-        var allOpt = OptionManager.Instance;
+        var loader = this.Loader;
 
         this.Button = new ExtremeAbilityButton(
             new CarpenterAbilityBehavior(
@@ -506,31 +510,31 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 					mode: CarpenterAbilityMode.RemoveVent,
 					graphic: new (
 						Translation.GetString("ventSeal"),
-						Loader.CreateSpriteFromResources(
+						Resources.Loader.CreateSpriteFromResources(
 							Path.CarpenterVentSeal)),
-					time: allOpt.GetValue<float>(
-						GetRoleOptionId(CarpenterOption.RemoveVentStopTime))
+					time: loader.GetValue<CarpenterOption, float>(
+						CarpenterOption.RemoveVentStopTime)
 					),
                 cameraMode: new(
 					mode: CarpenterAbilityMode.SetCamera,
 					graphic: new(
 						Translation.GetString("cameraSet"),
-						Loader.CreateSpriteFromResources(
+						Resources.Loader.CreateSpriteFromResources(
 							Path.CarpenterSetCamera)),
-					time: allOpt.GetValue<float>(
-						GetRoleOptionId(CarpenterOption.SetCameraStopTime))
+					time: loader.GetValue<CarpenterOption, float>(
+						CarpenterOption.SetCameraStopTime)
 					),
-                ventRemoveScrewNum: allOpt.GetValue<int>(
-                    GetRoleOptionId(CarpenterOption.RemoveVentScrew)),
-                cameraSetScrewNum: allOpt.GetValue<int>(
-                    GetRoleOptionId(CarpenterOption.SetCameraScrew)),
+                ventRemoveScrewNum: loader.GetValue<CarpenterOption, int>(
+					CarpenterOption.RemoveVentScrew),
+                cameraSetScrewNum: loader.GetValue<CarpenterOption, int>(
+					CarpenterOption.SetCameraScrew),
                 setCountStart: UseAbility,
                 canUse: IsAbilityUse,
                 abilityCheck: IsAbilityCheck,
                 updateMapObj: CleanUp,
                 ventRemoveModeCheck: IsVentMode),
             new RoleButtonActivator(),
-            KeyCode.F);
+			KeyCode.F);
 
 		this.RoleAbilityInit();
 		this.Button.SetLabelToCrewmate();
@@ -647,7 +651,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.targetVent = null;
     }
@@ -720,21 +724,20 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             CarpenterOption.AwakeTaskGage,
             70, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        createAbilityOption(parentOps);
+        createAbilityOption(factory);
     }
 
     protected override void RoleSpecificInit()
     {
         this.targetVent = null;
-        this.awakeTaskGage = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(CarpenterOption.AwakeTaskGage)) / 100.0f;
+        this.awakeTaskGage = this.Loader.GetValue<CarpenterOption, int>(
+            CarpenterOption.AwakeTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -750,50 +753,46 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
     }
 
-    private void createAbilityOption(IOptionInfo parentOps)
+    private void createAbilityOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             RoleAbilityCommonOption.AbilityCoolTime,
             15.0f, 2.0f, 60.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateIntOption(
+            format: OptionUnit.Second);
+        factory.CreateIntOption(
             RoleAbilityCommonOption.AbilityCount,
             15, 5, 100, 1,
-            parentOps, format: OptionUnit.Shot);
-        CreateIntOption(
+            format: OptionUnit.ScrewNum);
+        factory.CreateIntOption(
             CarpenterOption.RemoveVentScrew,
             10, 1, 20, 1,
-            parentOps, format: OptionUnit.ScrewNum);
-        CreateFloatOption(
+            format: OptionUnit.ScrewNum);
+        factory.CreateFloatOption(
             CarpenterOption.RemoveVentStopTime,
             5.0f, 2.0f, 15.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateIntOption(
+            format: OptionUnit.Second);
+        factory.CreateIntOption(
             CarpenterOption.SetCameraScrew,
             5, 1, 10, 1,
-            parentOps, format: OptionUnit.ScrewNum);
-        CreateFloatOption(
+            format: OptionUnit.ScrewNum);
+        factory.CreateFloatOption(
             CarpenterOption.SetCameraStopTime,
             2.5f, 1.0f, 5.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        ((IntCustomOption)OptionManager.Instance.Get<int>(
-            GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCount))
-			).SetOptionUnit(OptionUnit.ScrewNum);
+            format: OptionUnit.Second);
     }
 
     public void RoleAbilityInit()
     {
         if (this.Button == null) { return; }
 
-        var allOps = OptionManager.Instance;
+        var loader = this.Loader;
         this.Button.Behavior.SetCoolTime(
-            allOps.GetValue<float>(GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
+            loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
         if (this.Button.Behavior is CarpenterAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                allOps.GetValue<int>(GetRoleOptionId(RoleAbilityCommonOption.AbilityCount)));
+                loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount));
         }
         this.Button.OnMeetingEnd();
     }

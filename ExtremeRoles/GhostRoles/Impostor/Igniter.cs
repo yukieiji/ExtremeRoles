@@ -8,7 +8,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 #nullable enable
 
@@ -33,7 +35,7 @@ public sealed class Igniter : GhostRoleBase
         Palette.ImpostorRed)
     { }
 
-    public static bool TryComputeVison(GameData.PlayerInfo player, out float vison)
+    public static bool TryComputeVison(NetworkedPlayerInfo player, out float vison)
     {
         vison = float.MaxValue;
         SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
@@ -95,10 +97,9 @@ public sealed class Igniter : GhostRoleBase
 
     public override void Initialize()
     {
-        isEffectImp = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(IgniterOption.IsEffectImpostor));
-        isEffectNeut = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(IgniterOption.IsEffectNeutral));
+		var loader = this.Loader;
+        isEffectImp = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectImpostor);
+        isEffectNeut = loader.GetValue<IgniterOption, bool>(IgniterOption.IsEffectNeutral);
     }
 
     protected override void OnMeetingEndHook()

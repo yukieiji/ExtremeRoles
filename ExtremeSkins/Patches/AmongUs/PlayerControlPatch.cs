@@ -27,7 +27,7 @@ public static class PlayerControlCheckColorPatch
 
     private static bool isTaken(PlayerControl player, uint color)
     {
-        foreach (GameData.PlayerInfo info in GameData.Instance.AllPlayers)
+        foreach (NetworkedPlayerInfo info in GameData.Instance.AllPlayers)
         {
             if (!info.Disconnected &&
                 info.PlayerId != player.PlayerId &&

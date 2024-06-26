@@ -20,8 +20,7 @@ public static class FungleExileControllerAnimePatch
 	{
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
-		if (spawnOpt is not null &&
-			spawnOpt.EnableSpecialSetting &&
+		if (spawnOpt.EnableSpecialSetting &&
 			spawnOpt.Fungle)
 		{
 			__result = animateWithRandomSpawn(__instance).WrapToIl2Cpp();

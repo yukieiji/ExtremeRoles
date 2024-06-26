@@ -3,10 +3,10 @@ using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(TempData), nameof(TempData.OnGameEnd))]
-public static class TempDataOnGameEndPatch
+[HarmonyPatch(typeof(GameData), nameof(GameData.OnGameEnd))]
+public static class GameDataOnGameEndPatch
 {
-	public static void Postfix()
+	public static void Prefix()
 	{
 		ExtremeGameResult.Instance.CreateTaskInfo();
 	}

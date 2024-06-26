@@ -31,13 +31,13 @@ public interface IMapMod
 	public bool IsCustomCalculateLightRadius { get; }
 	public void Awake(ShipStatus map);
 	public void Destroy();
-	public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor);
-	public float CalculateLightRadius(GameData.PlayerInfo player, float visionMod, bool applayVisionEffects = true);
+	public float CalculateLightRadius(NetworkedPlayerInfo player, bool neutral, bool neutralImpostor);
+	public float CalculateLightRadius(NetworkedPlayerInfo player, float visionMod, bool applayVisionEffects = true);
 	public bool IsCustomSabotageNow();
 	public bool IsCustomSabotageTask(TaskTypes saboTask);
 	public bool IsCustomVentUse(Vent vent);
 	public (float, bool, bool) IsCustomVentUseResult(
-		Vent vent, GameData.PlayerInfo player, bool isVentUse);
+		Vent vent, NetworkedPlayerInfo player, bool isVentUse);
 	public void RpcRepairCustomSabotage();
 	public void RpcRepairCustomSabotage(TaskTypes saboTask);
 	public void RepairCustomSabotage();

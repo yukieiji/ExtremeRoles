@@ -4,10 +4,10 @@
     {
         public void HookReportButton(
             PlayerControl rolePlayer,
-            GameData.PlayerInfo reporter);
+            NetworkedPlayerInfo reporter);
         public void HookBodyReport(
             PlayerControl rolePlayer,
-            GameData.PlayerInfo reporter,
-            GameData.PlayerInfo reportBody);
+            NetworkedPlayerInfo reporter,
+            NetworkedPlayerInfo reportBody);
     }
 }

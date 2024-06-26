@@ -6,7 +6,9 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.CustomOption;
+
+
+using Unity.Jobs.LowLevel.Unsafe;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -38,27 +40,34 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Neutral , new Dictionary<int, SingleRoleSpawnData>() },
 		};
 
-		MaxRoleNum = new Dictionary<ExtremeRoleType, int>
-		{
+		var opt = OptionManager.Instance;
+
+		MaxRoleNum = opt.TryGetCategory(OptionTab.General, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate)
+			? new Dictionary<ExtremeRoleType, int>
 			{
-				ExtremeRoleType.Crewmate,
-				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinCrewmateRoles,
-					RoleGlobalOption.MaxCrewmateRoles)
-			},
-			{
-				ExtremeRoleType.Neutral,
-				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinNeutralRoles,
-					RoleGlobalOption.MaxNeutralRoles)
-			},
-			{
-				ExtremeRoleType.Impostor,
-				ISpawnDataManager.ComputeSpawnNum(
-					RoleGlobalOption.MinImpostorRoles,
-					RoleGlobalOption.MaxImpostorRoles)
-			},
-		};
+				{
+					ExtremeRoleType.Crewmate,
+					ISpawnDataManager.ComputeSpawnNum(
+						cate,
+						RoleSpawnOption.MinCrewmate,
+						RoleSpawnOption.MaxCrewmate)
+				},
+				{
+					ExtremeRoleType.Neutral,
+					ISpawnDataManager.ComputeSpawnNum(
+						cate,
+						RoleSpawnOption.MinNeutral,
+						RoleSpawnOption.MaxNeutral)
+				},
+				{
+					ExtremeRoleType.Impostor,
+					ISpawnDataManager.ComputeSpawnNum(
+						cate,
+						RoleSpawnOption.MinImpostor,
+						RoleSpawnOption.MaxImpostor)
+				},
+			} : new ();
+
 
 		CurrentSingleRoleUseNum = new Dictionary<ExtremeRoleType, int>()
 		{
@@ -67,28 +76,28 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			{ ExtremeRoleType.Neutral , 0 },
 		};
 
-		var allOption = OptionManager.Instance;
-
 		foreach (var roleId in ExtremeGameModeManager.Instance.RoleSelector.UseCombRoleType)
 		{
 			byte combType = (byte)roleId;
-			var role = ExtremeRoleManager.CombRole[combType];
-			int spawnRate = ISpawnDataManager.ComputePercentage(allOption.Get<int>(
-				role.GetRoleOptionId(RoleCommonOption.SpawnRate)));
-			int roleSet = allOption.GetValue<int>(
-				role.GetRoleOptionId(RoleCommonOption.RoleNum));
-			int weight = allOption.GetValue<int>(
-				role.GetRoleOptionId(RoleCommonOption.AssignWeight));
-			bool isMultiAssign = allOption.GetValue<bool>(
-				role.GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
+			if (!opt.TryGetCategory(
+					OptionTab.Combination,
+					ExtremeRoleManager.GetCombRoleGroupId(roleId),
+					out var conbCate))
+			{
+				continue;
+			}
+			int spawnRate = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
+			int roleSet = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
+			int weight = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
+			bool isMultiAssign = conbCate.GetValue<CombinationRoleCommonOption, bool>(CombinationRoleCommonOption.IsMultiAssign);
 
+			var role = ExtremeRoleManager.CombRole[combType];
 			Logging.Debug($"Role:{role}    SpawnRate:{spawnRate}   RoleSet:{roleSet}");
 
 			if (roleSet <= 0 || spawnRate <= 0.0)
 			{
 				continue;
 			}
-
 			CurrentCombRoleSpawnData.Add(
 				combType,
 				new CombinationRoleSpawnData(
@@ -100,7 +109,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
 			if (role is GhostAndAliveCombinationRoleManagerBase ghostComb)
 			{
-				this.UseGhostCombRole.Add(((CombinationRoleType)combType, ghostComb));
+				this.UseGhostCombRole.Add((roleId, ghostComb));
 			}
 		}
 
@@ -108,13 +117,17 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 		{
 			int intedRoleId = (int)roleId;
 			SingleRoleBase role = ExtremeRoleManager.NormalRole[intedRoleId];
+			if (!opt.TryGetCategory(
+					role.Tab,
+					ExtremeRoleManager.GetRoleGroupId(roleId),
+					out var roleCate))
+			{
+				continue;
+			}
 
-			int spawnRate = ISpawnDataManager.ComputePercentage(allOption.Get<int>(
-				role.GetRoleOptionId(RoleCommonOption.SpawnRate)));
-			int weight = allOption.GetValue<int>(
-				role.GetRoleOptionId(RoleCommonOption.AssignWeight));
-			int roleNum = allOption.GetValue<int>(
-				role.GetRoleOptionId(RoleCommonOption.RoleNum));
+			int spawnRate = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
+			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
+			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			Logging.Debug(
 				$"Role Name:{role.RoleName}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");

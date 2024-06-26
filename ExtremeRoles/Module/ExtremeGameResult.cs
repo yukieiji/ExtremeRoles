@@ -15,8 +15,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance.Il2Cpp;
 
 
-using TempWinData = Il2CppSystem.Collections.Generic.List<WinningPlayerData>;
-using Player = GameData.PlayerInfo;
+using TempWinData = Il2CppSystem.Collections.Generic.List<CachedPlayerData>;
+using Player = NetworkedPlayerInfo;
 
 #nullable enable
 
@@ -25,18 +25,18 @@ namespace ExtremeRoles.Module;
 public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 {
 	public readonly record struct WinnerResult(
-		IReadOnlyList<WinningPlayerData> Winner,
+		IReadOnlyList<CachedPlayerData> Winner,
 		IReadOnlyList<Player> PlusedWinner);
 
 	public readonly record struct TaskInfo(int CompletedTask, int TotalTask);
 	public class WinnerTempData
 	{
-		public TempWinData DefaultWinPlayer => TempData.winners;
+		public TempWinData DefaultWinPlayer => EndGameResult.CachedWinners;
 
 		public IReadOnlyList<Player> PlusedWinner => this.plusWinPlayr;
 
-		private readonly Dictionary<byte, WinningPlayerData> allWinnerPool = new Dictionary<byte, WinningPlayerData>();
-		private readonly List<WinningPlayerData> finalWinPlayer = new List<WinningPlayerData>();
+		private readonly Dictionary<byte, CachedPlayerData> allWinnerPool = new Dictionary<byte, CachedPlayerData>();
+		private readonly List<CachedPlayerData> finalWinPlayer = new List<CachedPlayerData>();
 		private readonly List<Player> plusWinPlayr = new List<Player>();
 
 		public void SetWinner()
@@ -93,7 +93,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 			this.plusWinPlayr.RemoveAll(x => x.PlayerName == playerInfo.PlayerName);
 			Remove(playerInfo);
 		}
-		public void Remove(WinningPlayerData player)
+		public void Remove(CachedPlayerData player)
 		{
 			this.finalWinPlayer.RemoveAll(x => x.PlayerName == player.PlayerName);
 		}
@@ -125,7 +125,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		public void AddPool(Player playerInfo)
 		{
-			WinningPlayerData wpd = new WinningPlayerData(playerInfo);
+			CachedPlayerData wpd = new CachedPlayerData(playerInfo);
 			this.allWinnerPool.Add(playerInfo.PlayerId, wpd);
 		}
 

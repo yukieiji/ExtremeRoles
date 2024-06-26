@@ -4,20 +4,41 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.CustomOption.Interfaces;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.API;
 
 public abstract class MultiAssignRoleBase : SingleRoleBase
 {
-    
-    public SingleRoleBase AnotherRole = null;
-    public bool CanHasAnotherRole = false;
-    protected int ManagerOptionOffset = 0;
+	public sealed record class OptionOffsetInfo(CombinationRoleType RoleId, int IdOffset);
 
-    public MultiAssignRoleBase(
+    public SingleRoleBase? AnotherRole = null;
+    public bool CanHasAnotherRole = false;
+
+	public OptionOffsetInfo? OffsetInfo { protected get; set; }
+
+	public override IOptionLoader Loader
+	{
+		get
+		{
+			if (OffsetInfo is null ||
+				!OptionManager.Instance.TryGetCategory(
+					this.Tab,
+					ExtremeRoleManager.GetCombRoleGroupId(this.OffsetInfo.RoleId),
+					out var cate))
+			{
+				throw new ArgumentException("Can't find category");
+			}
+			return new OptionLoadWrapper(cate, this.OffsetInfo.IdOffset);
+		}
+	}
+
+	public MultiAssignRoleBase(
         ExtremeRoleId id,
         ExtremeRoleType team,
         string roleName,
@@ -43,8 +64,19 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
     {
         switch (roleType)
         {
-            case RoleTypes.Shapeshifter:
-            case RoleTypes.Impostor:
+			case RoleTypes.Crewmate:
+			case RoleTypes.Engineer:
+			case RoleTypes.Scientist:
+			case RoleTypes.Noisemaker:
+			case RoleTypes.Tracker:
+				this.CanKill = false;
+				this.UseVent = false;
+				this.UseSabotage = false;
+				this.HasTask = true;
+				break;
+			case RoleTypes.Impostor:
+			case RoleTypes.Shapeshifter:
+			case RoleTypes.Phantom:
                 this.Team = ExtremeRoleType.Impostor;
                 this.NameColor = Palette.ImpostorRed;
                 this.CanKill = true;
@@ -52,20 +84,19 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
                 this.UseSabotage = true;
                 this.HasTask = false;
                 break;
-            case RoleTypes.Crewmate:
-            case RoleTypes.Engineer:
-            case RoleTypes.Scientist:
-                this.CanKill = false;
-                this.UseVent = false;
-                this.UseSabotage = false;
-                this.HasTask = true;
-                break;
             default:
                 break;
         };
     }
 
-    public void SetAnotherRole(SingleRoleBase role)
+	public override SingleRoleBase Clone()
+	{
+		var newRole = (MultiAssignRoleBase)base.Clone();
+		newRole.OffsetInfo = this.OffsetInfo;
+		return newRole;
+	}
+
+	public void SetAnotherRole(SingleRoleBase role)
     {
 
         if (this.CanHasAnotherRole)
@@ -172,25 +203,10 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
     }
 
-    public virtual void OverrideAnotherRoleSetting()
-    {
-        return;
-    }
-    public int GetManagerOptionId<T>(T option) where T : struct, IConvertible
-    {
-        EnumCheck(option);
-
-        return GetManagerOptionId(Convert.ToInt32(option));
-    }
-
-    public int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
-
-    public void SetManagerOptionOffset(int offset)
-    {
-        this.ManagerOptionOffset = offset;
-    }
-
-    public int GetManagerOptionOffset() => this.ManagerOptionOffset;
+	public virtual void OverrideAnotherRoleSetting()
+	{
+		return;
+	}
 
     protected string CreateImpCrewPrefix() => this.IsImpostor() ? "Evil" : "Nice";
 }

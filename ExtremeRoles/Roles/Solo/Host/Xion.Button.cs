@@ -37,15 +37,15 @@ public sealed partial class Xion
         this.funcButton = new List<XionActionButton>(6)
         {
             new XionActionButton(
-                Loader.CreateSpriteFromResources(
-                    Path.XionMapZoomIn),
+				Resources.Loader.CreateSpriteFromResources(
+					Path.XionMapZoomIn),
                 this.cameraZoomIn,
-                Translation.GetString("zoomIn")),
+				Translation.GetString("zoomIn")),
             new XionActionButton(
-                Loader.CreateSpriteFromResources(
-                    Path.XionSpeedDown),
+				Resources.Loader.CreateSpriteFromResources(
+					Path.XionSpeedDown),
                 this.RpcSpeedDown,
-                Translation.GetString("speedDown")),
+				Translation.GetString("speedDown")),
         };
 
 		bool enableMeeting = !ExtremeGameModeManager.Instance.ShipOption.IsBreakEmergencyButton;
@@ -53,7 +53,7 @@ public sealed partial class Xion
 		{
 			this.funcButton.Add(
 				new XionActionButton(
-				Loader.CreateSpriteFromResources(
+				Resources.Loader.CreateSpriteFromResources(
 					Path.DetectiveApprenticeEmergencyMeeting),
 				this.RpcCallMeeting,
 				Translation.GetString("emergencyMeeting")));
@@ -62,19 +62,19 @@ public sealed partial class Xion
 		// 残りのボタン
 		this.funcButton.Add(
 			new XionActionButton(
-				Loader.CreateSpriteFromResources(
+				Resources.Loader.CreateSpriteFromResources(
 					Path.MaintainerRepair),
 				this.RpcRepairSabotage,
 				Translation.GetString("maintenance")));
 		this.funcButton.Add(
 			new XionActionButton(
-				Loader.CreateSpriteFromResources(
+				Resources.Loader.CreateSpriteFromResources(
 					Path.XionMapZoomOut),
 				this.cameraZoomOut,
 				Translation.GetString("zoomOut")));
 		this.funcButton.Add(
 			new XionActionButton(
-				Loader.CreateSpriteFromResources(
+				Resources.Loader.CreateSpriteFromResources(
 					Path.XionSpeedUp),
 				this.RpcSpeedUp,
 				Translation.GetString("speedUp")));
@@ -183,7 +183,7 @@ public sealed partial class Xion
     {
         return () =>
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+            NetworkedPlayerInfo player = GameData.Instance.GetPlayerById(playerId);
             if (player == null || player.Disconnected) { return; }
 
             if (Key.IsAltDown())

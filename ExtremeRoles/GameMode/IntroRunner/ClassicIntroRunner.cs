@@ -23,8 +23,8 @@ public sealed class ClassicIntroRunner : IIntroRunner
         instance.ImpostorTitle.gameObject.SetActive(false);
 
         Il2CppSystem.Collections.Generic.List<PlayerControl> teamToShow = IntroCutscene.SelectTeamToShow(
-            (Il2CppSystem.Func<GameData.PlayerInfo, bool>)(
-                (GameData.PlayerInfo pcd) =>
+            (Il2CppSystem.Func<NetworkedPlayerInfo, bool>)(
+                (NetworkedPlayerInfo pcd) =>
                     !localPlayer.Data.Role.IsImpostor ||
                     pcd.Role.TeamType == localPlayer.Data.Role.TeamType
             ));

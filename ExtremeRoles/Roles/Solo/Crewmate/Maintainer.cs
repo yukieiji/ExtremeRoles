@@ -8,6 +8,10 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
@@ -35,8 +39,8 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "maintenance",
-            Loader.CreateSpriteFromResources(
-                Path.MaintainerRepair));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.MaintainerRepair));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -92,16 +96,16 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 10);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 10);
     }
 
     protected override void RoleSpecificInit()

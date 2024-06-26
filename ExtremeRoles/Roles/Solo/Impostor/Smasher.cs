@@ -1,10 +1,12 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -132,22 +134,22 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 1, 14);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 14);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             SmasherOption.SmashPenaltyKillCool,
-            4.0f, 0.0f, 30f, 0.5f, parentOps,
+            4.0f, 0.0f, 30f, 0.5f,
             format: OptionUnit.Second);
 
     }
 
     protected override void RoleSpecificInit()
     {
-        this.penaltyKillCool = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(SmasherOption.SmashPenaltyKillCool));
+        this.penaltyKillCool = this.Loader.GetValue<SmasherOption, float>(
+            SmasherOption.SmashPenaltyKillCool);
     }
 
     public void ResetOnMeetingStart()
@@ -155,7 +157,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

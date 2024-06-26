@@ -7,13 +7,18 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomOption;
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class SupporterManager : FlexibleCombinationRoleManagerBase
 {
-    public SupporterManager() : base(new Supporter(), 1)
+    public SupporterManager() : base(
+		CombinationRoleType.Supporter,
+		new Supporter(), 1)
     { }
 
 }
@@ -151,14 +156,11 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
-
-        CreateKillerOption(imposterSetting);
-
-    }
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
+	}
 
     protected override void RoleSpecificInit()
     {

@@ -14,7 +14,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles.Neutal;
 
@@ -86,8 +88,8 @@ public sealed class Foras : GhostRoleBase
             foras.arrowControler.SetTarget(arrowTargetPlayer.gameObject);
             foras.arrowControler.SetDelayActiveTimer(foras.delayTime);
             foras.arrowControler.SetHideTimer(
-                OptionManager.Instance.GetValue<float>(foras.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityActiveTime)));
+			   foras.Loader.GetValue<RoleAbilityCommonOption, float>(
+                    RoleAbilityCommonOption.AbilityActiveTime));
             foras.arrowControler.gameObject.SetActive(true);
         }
     }
@@ -125,12 +127,10 @@ public sealed class Foras : GhostRoleBase
 
     public override void Initialize()
     {
-        this.delayTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(ForasOption.DelayTime));
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(ForasOption.Range));
-        this.rate = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(ForasOption.MissingTargetRate));
+		var loader = this.Loader;
+        this.delayTime = loader.GetValue<ForasOption, float>(ForasOption.DelayTime);
+        this.range = loader.GetValue<ForasOption, float>(ForasOption.Range);
+        this.rate = loader.GetValue<ForasOption, int>(ForasOption.MissingTargetRate);
     }
 
     protected override void OnMeetingEndHook()

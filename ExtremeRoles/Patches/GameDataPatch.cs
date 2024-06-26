@@ -9,6 +9,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
+[HarmonyPatch(typeof(GameData), nameof(GameData.AddDummy))]
 public static class GameDataAddPlayerPatch
 {
 	public static void Postfix()
@@ -20,20 +21,6 @@ public static class GameDataAddPlayerPatch
 		}
 	}
 }
-
-[HarmonyPatch(typeof(GameData), nameof(GameData.Deserialize))]
-public static class GameDataDeserializePatch
-{
-	public static void Postfix()
-	{
-		foreach (CachedPlayerControl cachedPlayer in CachedPlayerControl.AllPlayerControls)
-		{
-			cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
-			cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
-		}
-	}
-}
-
 
 [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
 public static class GameDataRecomputeTaskCountsPatch
@@ -63,7 +50,7 @@ public static class GameDataRecomputeTaskCountsPatch
 		int completedTask = 0;
 		int doTaskCrew = 0;
 
-		foreach (GameData.PlayerInfo playerInfo in __instance.AllPlayers.GetFastEnumerator())
+		foreach (NetworkedPlayerInfo playerInfo in __instance.AllPlayers.GetFastEnumerator())
 		{
 			if (!playerInfo.Disconnected &&
 				playerInfo.Tasks != null &&
@@ -90,7 +77,7 @@ public static class GameDataRecomputeTaskCountsPatch
 
 				++doTaskCrew;
 
-				foreach (GameData.TaskInfo taskInfo in playerInfo.Tasks.GetFastEnumerator())
+				foreach (var taskInfo in playerInfo.Tasks.GetFastEnumerator())
 				{
 					++totalTask;
 					if (taskInfo.Complete)

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 
 using ExtremeSkins.Patches.AmongUs.Tab;
+using Innersloth.Assets;
 
 namespace ExtremeSkins.Helper;
 
@@ -60,7 +61,18 @@ public static class CustomCosmicTab
         }
     }
 
-    public static void RemoveAllTabs()
+	public static void SetPreviewToRawSprite(ColorChip colorChip, Sprite? sprite, int color)
+	{
+		var renderer = colorChip.Inner.FrontLayer;
+		renderer.sprite = sprite;
+		AddressableAssetHandler.AddToGameObject(renderer.gameObject);
+		if (Application.isPlaying)
+		{
+			PlayerMaterial.SetColors(color, renderer);
+		}
+	}
+
+	public static void RemoveAllTabs()
     {
 #if WITHHAT
 		if (HatsTabPatch.Tab != null)

@@ -81,7 +81,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 
 		public RolePlayerId Id { get; init; } = id;
 
-		public bool CanUse(GameData.PlayerInfo pc)
+		public bool CanUse(NetworkedPlayerInfo pc)
 			=> pc.Object.CanMove && !pc.IsDead;
 
 		public void Use()

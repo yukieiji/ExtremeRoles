@@ -11,7 +11,9 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 namespace ExtremeRoles.GhostRoles.Crewmate;
 
@@ -27,7 +29,7 @@ public sealed class Poltergeist : GhostRoleBase
     private float range;
 
 	private DeadBody? carringBody;
-	private GameData.PlayerInfo? targetBody;
+	private NetworkedPlayerInfo? targetBody;
 
     public Poltergeist() : base(
         true,
@@ -110,8 +112,7 @@ public sealed class Poltergeist : GhostRoleBase
 
     public override void Initialize()
     {
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(Option.Range));
+        this.range = this.Loader.GetValue<Option, float>(Option.Range);
     }
 
     protected override void OnMeetingEndHook()

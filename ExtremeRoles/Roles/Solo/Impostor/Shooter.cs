@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -12,6 +12,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using TMPro;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -149,7 +152,7 @@ public sealed class Shooter :
     }
 
     public void HookReportButton(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
     {
         this.canShootThisMeeting = true;
         if (rolePlayer.PlayerId == reporter.PlayerId)
@@ -159,7 +162,7 @@ public sealed class Shooter :
     }
 
     public void HookBodyReport(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter, GameData.PlayerInfo reportBody)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter, NetworkedPlayerInfo reportBody)
     {
         this.canShootThisMeeting = true;
     }
@@ -180,7 +183,7 @@ public sealed class Shooter :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         chargeInfoSetActive(true);
         this.canShootThisMeeting = true;
@@ -372,103 +375,99 @@ public sealed class Shooter :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             ShooterOption.IsInitAwake,
-            false, parentOps);
-        CreateIntOption(
+            false);
+        factory.CreateIntOption(
             ShooterOption.AwakeKillNum,
             1, 0, 5, 1,
-            parentOps,
             format: OptionUnit.Shot);
-        CreateIntOption(
+        factory.CreateIntOption(
             ShooterOption.AwakeImpNum,
-            1, 1, GameSystem.MaxImposterNum, 1,
-            parentOps);
+            1, 1, GameSystem.MaxImposterNum, 1);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             ShooterOption.NoneAwakeWhenShoot,
-            true, parentOps);
-        CreateFloatOption(
+            true);
+        factory.CreateFloatOption(
             ShooterOption.ShootKillCoolPenalty,
             5.0f, 0.0f, 30.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        var meetingOps = CreateBoolOption(
+        var meetingOps = factory.CreateBoolOption(
             ShooterOption.CanCallMeeting,
-            true, parentOps);
+            true);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             ShooterOption.CanShootSelfCallMeeting,
             true, meetingOps,
-            invert: true,
-            enableCheckOption: parentOps);
+            invert: true);
 
-        var maxShootOps = CreateIntOption(
+        var maxShootOps = factory.CreateIntOption(
            ShooterOption.MaxShootNum,
-           1, 1, 14, 1, parentOps,
+           1, 1, 14, 1,
            format: OptionUnit.Shot);
 
-        var initShootOps = CreateIntDynamicOption(
+        var initShootOps = factory.CreateIntDynamicOption(
             ShooterOption.InitShootNum,
-            0, 0, 1, parentOps,
+            0, 0, 1,
             format: OptionUnit.Shot,
             tempMaxValue: 14);
 
-        var maxMeetingShootOps = CreateIntDynamicOption(
+        var maxMeetingShootOps = factory.CreateIntDynamicOption(
             ShooterOption.MaxMeetingShootNum,
-            1, 1, 1, parentOps,
+            1, 1, 1,
             format: OptionUnit.Shot,
             tempMaxValue: 14);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             ShooterOption.ShootChargeTime,
             90.0f, 30.0f, 120.0f, 5.0f,
-            parentOps, format: OptionUnit.Second);
-        CreateIntOption(
+            format: OptionUnit.Second);
+        factory.CreateIntOption(
             ShooterOption.ShootKillNum,
             1, 0, 5, 1,
-            parentOps,
             format: OptionUnit.Shot);
 
-        maxShootOps.SetUpdateOption(initShootOps);
-        maxShootOps.SetUpdateOption(maxMeetingShootOps);
+        maxShootOps.AddWithUpdate(initShootOps);
+        maxShootOps.AddWithUpdate(maxMeetingShootOps);
 
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOps = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.isAwake = allOps.GetValue<bool>(
-            GetRoleOptionId(ShooterOption.IsInitAwake));
+        this.isAwake = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.IsInitAwake);
 
-        this.awakeKillCount = allOps.GetValue<int>(
-            GetRoleOptionId(ShooterOption.AwakeKillNum));
-        this.awakeImpNum = allOps.GetValue<int>(
-            GetRoleOptionId(ShooterOption.AwakeImpNum));
+        this.awakeKillCount = cate.GetValue<ShooterOption, int>(
+            ShooterOption.AwakeKillNum);
+        this.awakeImpNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.AwakeImpNum);
 
-        this.isNoneAwakeWhenShoot = allOps.GetValue<bool>(
-            GetRoleOptionId(ShooterOption.NoneAwakeWhenShoot));
+        this.isNoneAwakeWhenShoot = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.NoneAwakeWhenShoot);
 
-        this.awakedCallMeeting = allOps.GetValue<bool>(
-            GetRoleOptionId(ShooterOption.CanCallMeeting));
-        this.canShootSelfCallMeeting = allOps.GetValue<bool>(
-            GetRoleOptionId(ShooterOption.CanShootSelfCallMeeting));
+        this.awakedCallMeeting = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.CanCallMeeting);
+        this.canShootSelfCallMeeting = cate.GetValue<ShooterOption, bool>(
+            ShooterOption.CanShootSelfCallMeeting);
 
-        this.maxShootNum = allOps.GetValue<int>(
-            GetRoleOptionId(ShooterOption.MaxShootNum));
-        this.curShootNum = allOps.GetValue<int>(
-            GetRoleOptionId(ShooterOption.InitShootNum));
-        this.maxMeetingShootNum = allOps.GetValue<int>(
-            GetRoleOptionId(ShooterOption.MaxMeetingShootNum));
-        this.chargeTime = allOps.GetValue<float>(
-            GetRoleOptionId(ShooterOption.ShootChargeTime));
-        this.chargeKillNum = allOps.GetValue<int>(
-            GetRoleOptionId(ShooterOption.ShootKillNum));
-        this.killCoolPenalty = allOps.GetValue<float>(
-            GetRoleOptionId(ShooterOption.ShootKillCoolPenalty));
+        this.maxShootNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.MaxShootNum);
+        this.curShootNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.InitShootNum);
+        this.maxMeetingShootNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.MaxMeetingShootNum);
+        this.chargeTime = cate.GetValue<ShooterOption, float>(
+            ShooterOption.ShootChargeTime);
+        this.chargeKillNum = cate.GetValue<ShooterOption, int>(
+            ShooterOption.ShootKillNum);
+        this.killCoolPenalty = cate.GetValue<ShooterOption, float>(
+            ShooterOption.ShootKillCoolPenalty);
 
         this.isNoneAwakeWhenShoot =
 

@@ -1,11 +1,13 @@
 ﻿using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -104,8 +106,8 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "outburst",
-            Loader.CreateSpriteFromResources(
-                Path.JesterOutburst),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.JesterOutburst),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }
@@ -157,27 +159,27 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             JesterOption.OutburstDistance,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            1.0f, 0.0f, 2.0f, 0.1f);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             JesterOption.UseSabotage,
-            true, parentOps);
+            true);
 
-        this.CreateAbilityCountOption(
-            parentOps, 5, 100, 2.0f);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 5, 100, 2.0f);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.UseSabotage = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(JesterOption.UseSabotage));
-        this.outburstDistance = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(JesterOption.OutburstDistance));
+		var cat = this.Loader;
+        this.UseSabotage = cat.GetValue<bool>(
+            (int)JesterOption.UseSabotage);
+        this.outburstDistance = cat.GetValue<float>(
+			(int)JesterOption.OutburstDistance);
     }
 
     public void ResetOnMeetingStart()
@@ -185,7 +187,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

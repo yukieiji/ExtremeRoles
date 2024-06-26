@@ -79,7 +79,7 @@ public class PortalBase : MonoBehaviour, IAmongUs.IUsable
 	}
 
 	public float CanUse(
-		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+		NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
 	{
 		float num = this.linkPortal && this.timer <= 0.0f ?
 			Vector2.Distance(

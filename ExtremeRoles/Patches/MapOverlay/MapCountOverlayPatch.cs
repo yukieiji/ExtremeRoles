@@ -112,7 +112,7 @@ public static class MapCountOverlayUpdatePatch
                         {
 							showNum++;
 
-							GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(
+							NetworkedPlayerInfo playerInfo = GameData.Instance.GetPlayerById(
                                 component.ParentId);
                             if (playerInfo != null)
                             {
@@ -205,11 +205,10 @@ public static class MapCountOverlayUpdatePatch
     public static void LoadOptionValue()
     {
         var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
-        if (adminOpt == null) { return; }
 
-        adminTimer = adminOpt.AdminLimitTime;
+        adminTimer = adminOpt.LimitTime;
         isRemoveAdmin = adminOpt.Disable;
-        enableAdminLimit = adminOpt.EnableAdminLimit;
+        enableAdminLimit = adminOpt.EnableLimit;
 
         Logging.Debug("---- AdminCondition ----");
         Logging.Debug($"IsRemoveAdmin:{isRemoveAdmin}");

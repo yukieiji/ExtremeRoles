@@ -174,7 +174,16 @@ public static class HatsTabPatch
 				CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
 				DataManager.Player.Customization.Color;
 			__instance.UpdateMaterials(colorChip.Inner.FrontLayer, hat);
-			hat.SetPreview(colorChip.Inner.FrontLayer,color);
+			if (ExtremeHatManager.HatData.TryGetValue(
+					hat.ProductId, out var customHat) &&
+				customHat != null)
+			{
+				CustomCosmicTab.SetPreviewToRawSprite(colorChip, customHat.Preview, color);
+			}
+			else
+			{
+				hat.SetPreview(colorChip.Inner.FrontLayer, color);
+			}
 
 			colorChip.SelectionHighlight.gameObject.SetActive(false);
 			__instance.ColorChips.Add(colorChip);

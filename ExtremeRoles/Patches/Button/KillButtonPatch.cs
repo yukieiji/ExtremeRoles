@@ -102,7 +102,7 @@ public static class KillButtonDoClickPatch
             target.MyPhysics.Animations.IsPlayingAnyLadderAnimation() ||
             (
                 target.MyPhysics.Animations.IsPlayingEnterVentAnimation() &&
-                ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer
+                ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer
             ) ||
             target.inMovingPlat ||
             MeetingHud.Instance;

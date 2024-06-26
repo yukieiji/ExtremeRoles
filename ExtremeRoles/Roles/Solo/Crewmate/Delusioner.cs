@@ -12,6 +12,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Delusioner :
@@ -85,8 +90,8 @@ public sealed class Delusioner :
     {
         this.CreateAbilityCountButton(
             "deflectDamage",
-            Loader.CreateSpriteFromResources(
-                Path.DelusionerDeflectDamage));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.DelusionerDeflectDamage));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -118,7 +123,7 @@ public sealed class Delusioner :
 
     public void ModifiedVoteAnime(
         MeetingHud instance,
-        GameData.PlayerInfo rolePlayer,
+        NetworkedPlayerInfo rolePlayer,
         ref Dictionary<byte, int> voteIndex)
     {
         if (voteIndex.TryGetValue(
@@ -150,7 +155,7 @@ public sealed class Delusioner :
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -186,7 +191,7 @@ public sealed class Delusioner :
 			Map.AddSpawnPoint(randomPos, teloportTarget);
         }
 
-		foreach (GameData.PlayerInfo player in allPlayer.GetFastEnumerator())
+		foreach (NetworkedPlayerInfo player in allPlayer.GetFastEnumerator())
         {
             if (player == null) { continue; }
             if (!player.Disconnected &&
@@ -295,64 +300,63 @@ public sealed class Delusioner :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             DelusionerOption.AwakeVoteNum,
-            3, 0, 8, 1, parentOps,
+            3, 0, 8, 1,
             format: OptionUnit.VoteNum);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             DelusionerOption.IsOnetimeAwake,
-            false, parentOps);
+            false);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             DelusionerOption.Range,
-            2.5f, 0.0f, 7.5f, 0.1f,
-            parentOps);
+            2.5f, 0.0f, 7.5f, 0.1f);
 
-        this.CreateAbilityCountOption(
-            parentOps, 3, 25);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 3, 25);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             DelusionerOption.VoteCoolTimeReduceRate,
-            5, 0, 100, 5, parentOps,
+            5, 0, 100, 5,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             DelusionerOption.DeflectDamagePenaltyRate,
-            10, 0, 100, 5, parentOps,
+            10, 0, 100, 5,
             format: OptionUnit.Percentage);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             DelusionerOption.IsIncludeLocalPlayer,
-            true, parentOps);
-        CreateBoolOption(
+            true);
+        factory.CreateBoolOption(
             DelusionerOption.IsIncludeSpawnPoint,
-            false, parentOps);
+            false);
 
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
-        this.awakeVoteCount = allOpt.GetValue<int>(
-            GetRoleOptionId(DelusionerOption.AwakeVoteNum));
-        this.isOneTimeAwake = allOpt.GetValue<bool>(
-            GetRoleOptionId(DelusionerOption.IsOnetimeAwake));
-        this.voteCoolTimeReduceRate = allOpt.GetValue<int>(
-            GetRoleOptionId(DelusionerOption.VoteCoolTimeReduceRate));
-        this.deflectDamagePenaltyMod = 100f - (allOpt.GetValue<int>(
-            GetRoleOptionId(DelusionerOption.DeflectDamagePenaltyRate)) / 100f);
-        this.range = allOpt.GetValue<float>(
-            GetRoleOptionId(DelusionerOption.Range));
+        var loader = this.Loader;
+        this.awakeVoteCount = loader.GetValue<DelusionerOption, int>(
+            DelusionerOption.AwakeVoteNum);
+        this.isOneTimeAwake = loader.GetValue<DelusionerOption, bool>(
+            DelusionerOption.IsOnetimeAwake);
+        this.voteCoolTimeReduceRate = loader.GetValue<DelusionerOption, int>(
+            DelusionerOption.VoteCoolTimeReduceRate);
+        this.deflectDamagePenaltyMod = 100f - (loader.GetValue<DelusionerOption, int>(
+            DelusionerOption.DeflectDamagePenaltyRate) / 100f);
+        this.range = loader.GetValue<DelusionerOption, float>(
+            DelusionerOption.Range);
 
-        this.includeLocalPlayer = allOpt.GetValue<bool>(
-            GetRoleOptionId(DelusionerOption.IsIncludeLocalPlayer));
-        this.includeSpawnPoint = allOpt.GetValue<bool>(
-            GetRoleOptionId(DelusionerOption.IsIncludeSpawnPoint));
+        this.includeLocalPlayer = loader.GetValue<DelusionerOption, bool>(
+            DelusionerOption.IsIncludeLocalPlayer);
+        this.includeSpawnPoint = loader.GetValue<DelusionerOption, bool>(
+            DelusionerOption.IsIncludeSpawnPoint);
 
         this.isOneTimeAwake = this.isOneTimeAwake && this.awakeVoteCount > 0;
-        this.defaultCoolTime = allOpt.GetValue<float>(
-            GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
+        this.defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
+            RoleAbilityCommonOption.AbilityCoolTime);
         this.curCoolTime = this.defaultCoolTime;
         this.isAwakeRole = this.awakeVoteCount == 0;
 

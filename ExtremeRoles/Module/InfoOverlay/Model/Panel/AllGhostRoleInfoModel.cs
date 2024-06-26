@@ -4,6 +4,7 @@ using ExtremeRoles.Helper;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
 
@@ -13,7 +14,7 @@ public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 {
 	protected override void CreateAllRoleText()
 	{
-		int optionId;
+		IOption option;
 		string colorRoleName;
 		string roleFullDesc;
 
@@ -23,28 +24,29 @@ public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 
 			if (ghostCombRole == null) { continue; }
 
+			option = combRole.Loader.Get(RoleCommonOption.SpawnRate);
+
 			foreach (var role in ghostCombRole.CombGhostRole.Values)
 			{
-				optionId = ghostCombRole.GetOptionIdOffset();
 				colorRoleName = role.GetColoredRoleName();
 
 				roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
 				roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-				AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
+				AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));
 			}
 		}
 
 
 		foreach (var role in GhostRoles.ExtremeGhostRoleManager.AllGhostRole.Values)
 		{
-			optionId = role.OptionIdOffset;
+			option = role.Loader.Get(RoleCommonOption.SpawnRate);
 			colorRoleName = role.GetColoredRoleName();
 
 			roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
 			roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
-			AddPage(new RoleInfo(colorRoleName, roleFullDesc, optionId));
+			AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace ExtremeRoles.Module.InfoOverlay.Model;
 
 public sealed class InfoOverlayModel
 {
-	public enum Type
+	public enum Type : byte
 	{
 		YourRolePanel,
 		YourGhostRolePanel,

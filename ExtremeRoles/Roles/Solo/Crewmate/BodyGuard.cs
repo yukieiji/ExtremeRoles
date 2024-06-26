@@ -17,7 +17,12 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 #nullable enable
+
+
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -485,9 +490,8 @@ public sealed class BodyGuard :
 
     public void CreateAbility()
     {
-
-        this.shildButtonImage = Loader.CreateSpriteFromResources(
-                Path.BodyGuardShield);
+        this.shildButtonImage = Resources.Loader.CreateSpriteFromResources(
+				Path.BodyGuardShield);
 
         this.Button = new ExtremeAbilityButton(
             new BodyGuardAbilityBehavior(
@@ -500,21 +504,21 @@ public sealed class BodyGuard :
 					BodyGuardAbilityMode.Reset,
 					new ButtonGraphic(
 						Translation.GetString("resetShield"),
-						Loader.CreateSpriteFromResources(
+						Resources.Loader.CreateSpriteFromResources(
 							Path.BodyGuardResetShield))),
                 featShield: UseAbility,
                 resetShield: Reset,
                 canUse: IsAbilityUse,
                 resetModeCheck: IsResetMode),
             new RoleButtonActivator(),
-            KeyCode.F);
+			KeyCode.F);
 
 		((IRoleAbility)(this)).RoleAbilityInit();
 
 		if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
 		{
-			int abilityNum = OptionManager.Instance.GetValue<int>(GetRoleOptionId(
-				RoleAbilityCommonOption.AbilityCount));
+			int abilityNum = this.Loader.GetValue<RoleAbilityCommonOption, int>(
+				RoleAbilityCommonOption.AbilityCount);
 
 			this.shildNum = abilityNum;
 			behavior.SetAbilityCount(abilityNum);
@@ -597,7 +601,7 @@ public sealed class BodyGuard :
     public void ResetOnMeetingStart()
     { }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     { }
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
@@ -724,62 +728,54 @@ public sealed class BodyGuard :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             BodyGuardOption.ShieldRange,
-            1.0f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            1.0f, 0.0f, 2.0f, 0.1f);
 
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             BodyGuardOption.FeatMeetingAbilityTaskGage,
             30, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             BodyGuardOption.FeatMeetingReportTaskGage,
             60, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        var reportPlayerNameOpt = CreateBoolOption(
+        var reportPlayerNameOpt = factory.CreateBoolOption(
             BodyGuardOption.IsReportPlayerName,
-            false, parentOps);
-        CreateSelectionOption(
+            false);
+        factory.CreateSelectionOption<BodyGuardOption, BodyGuardReportPlayerNameMode>(
             BodyGuardOption.ReportPlayerMode,
-            new string[]
-            {
-                BodyGuardReportPlayerNameMode.GuardedPlayerNameOnly.ToString(),
-                BodyGuardReportPlayerNameMode.BodyGuardPlayerNameOnly.ToString(),
-                BodyGuardReportPlayerNameMode.BothPlayerName.ToString(),
-            }, reportPlayerNameOpt);
-        CreateBoolOption(
+            reportPlayerNameOpt);
+        factory.CreateBoolOption(
             BodyGuardOption.IsBlockMeetingKill,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+		var loader = this.Loader;
 
-        IsBlockMeetingKill = allOpt.GetValue<bool>(
-            GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill));
+		IsBlockMeetingKill = loader.GetValue<BodyGuardOption, bool>(
+            BodyGuardOption.IsBlockMeetingKill);
 
-        this.shieldRange = allOpt.GetValue<float>(
-            GetRoleOptionId(BodyGuardOption.ShieldRange));
+        this.shieldRange = loader.GetValue<BodyGuardOption, float>(
+            BodyGuardOption.ShieldRange);
 
-        this.meetingAbilityTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)) / 100.0f;
-        this.meetingReportTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)) / 100.0f;
+        this.meetingAbilityTaskGage = loader.GetValue<BodyGuardOption, int>(
+            BodyGuardOption.FeatMeetingAbilityTaskGage) / 100.0f;
+        this.meetingReportTaskGage = loader.GetValue<BodyGuardOption, int>(
+            BodyGuardOption.FeatMeetingReportTaskGage) / 100.0f;
 
-        this.isReportWithPlayerName = allOpt.GetValue<bool>(
-            GetRoleOptionId(BodyGuardOption.IsReportPlayerName));
-        this.reportMode = (BodyGuardReportPlayerNameMode)allOpt.GetValue<int>(
-            GetRoleOptionId(BodyGuardOption.ReportPlayerMode));
+        this.isReportWithPlayerName = loader.GetValue<BodyGuardOption, bool>(
+            BodyGuardOption.IsReportPlayerName);
+        this.reportMode = (BodyGuardReportPlayerNameMode)loader.GetValue<BodyGuardOption, int>(
+            BodyGuardOption.ReportPlayerMode);
 
         this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
         this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;

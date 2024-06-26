@@ -15,6 +15,10 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Compat;
 
+using ExtremeRoles.Module.CustomOption.Factory;
+
+
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
@@ -156,8 +160,8 @@ public sealed class Miner :
     {
         this.CreateNormalAbilityButton(
             "setMine",
-            Loader.CreateSpriteFromResources(
-                Path.MinerSetMine),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.MinerSetMine),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }
@@ -212,7 +216,7 @@ public sealed class Miner :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -252,7 +256,7 @@ public sealed class Miner :
 			}
             Vector2 pos = mine.transform.position;
 
-            foreach (GameData.PlayerInfo playerInfo in
+            foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null ||
@@ -311,7 +315,7 @@ public sealed class Miner :
 
             if (this.isShowKillLog)
             {
-                GameData.PlayerInfo killPlayer = GameData.Instance.GetPlayerById(player);
+                NetworkedPlayerInfo killPlayer = GameData.Instance.GetPlayerById(player);
 
                 if (killPlayer != null)
                 {
@@ -340,80 +344,72 @@ public sealed class Miner :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			MinerOption.LinkingAllVent,
-			false, parentOps);
-		this.CreateCommonAbilityOption(
-            parentOps, 2.0f);
-        CreateFloatOption(
+			false);
+		IRoleAbility.CreateCommonAbilityOption(
+            factory, 2.0f);
+        factory.CreateFloatOption(
             MinerOption.MineKillRange,
-            1.8f, 0.5f, 5f, 0.1f, parentOps);
-		var showOpt = CreateBoolOption(
+            1.8f, 0.5f, 5f, 0.1f);
+		var showOpt = factory.CreateBoolOption(
 			MinerOption.CanShowMine,
-			false, parentOps);
-		CreateSelectionOption(
+			false);
+		factory.CreateSelectionOption(
 			MinerOption.RolePlayerShowMode,
-			new string[]
-			{
+			[
 				ShowMode.MineSeeOnlySe.ToString(),
 				ShowMode.MineSeeOnlyImg.ToString(),
 				ShowMode.MineSeeBoth.ToString(),
-			}, showOpt);
-		var anotherPlayerShowMode = CreateSelectionOption(
-			MinerOption.AnotherPlayerShowMode,
-			new string[]
-			{
-				ShowMode.MineSeeNone.ToString(),
-				ShowMode.MineSeeOnlySe.ToString(),
-				ShowMode.MineSeeOnlyImg.ToString(),
-				ShowMode.MineSeeBoth.ToString(),
-			}, showOpt);
-		CreateBoolOption(
+			], showOpt);
+		var anotherPlayerShowMode = factory.CreateSelectionOption<MinerOption, ShowMode>(
+			MinerOption.AnotherPlayerShowMode, showOpt);
+		factory.CreateBoolOption(
 			MinerOption.CanShowNoneActiveAnotherPlayer,
 			false, anotherPlayerShowMode);
-		CreateFloatOption(
+		factory.CreateFloatOption(
             MinerOption.NoneActiveTime,
             20.0f, 1.0f, 45f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateBoolOption(
+			format: OptionUnit.Second);
+        factory.CreateBoolOption(
             MinerOption.ShowKillLog,
-            true, parentOps);
+            true);
 	}
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var cate = this.Loader;
 
-		this.isLinkingVent = allOpt.GetValue<bool>(
-			GetRoleOptionId(MinerOption.LinkingAllVent));
+		this.isLinkingVent = cate.GetValue<MinerOption, bool>(
+			MinerOption.LinkingAllVent);
 
-        this.killRange = allOpt.GetValue<float>(
-            GetRoleOptionId(MinerOption.MineKillRange));
-        this.nonActiveTime = allOpt.GetValue<float>(
-            GetRoleOptionId(MinerOption.NoneActiveTime));
-        this.isShowKillLog = allOpt.GetValue<bool>(
-            GetRoleOptionId(MinerOption.ShowKillLog));
+        this.killRange = cate.GetValue<MinerOption, float>(
+            MinerOption.MineKillRange);
+        this.nonActiveTime = cate.GetValue<MinerOption, float>(
+            MinerOption.NoneActiveTime);
+        this.isShowKillLog = cate.GetValue<MinerOption, bool>(
+            MinerOption.ShowKillLog);
 
         this.mines = new Dictionary<int, MinerMineEffect>();
         this.timer = this.nonActiveTime;
 		this.mineId = 0;
 
-		bool isShowMine = allOpt.GetValue<bool>(
-			GetRoleOptionId(MinerOption.CanShowMine));
+		bool isShowMine = cate.GetValue<MinerOption, bool>(
+			MinerOption.CanShowMine);
 
-		var rolePlayerShowMode = (ShowMode)(allOpt.GetValue<int>(
-			GetRoleOptionId(MinerOption.RolePlayerShowMode)) + 1);
-		var anotherPlayerShowMode = (ShowMode)allOpt.GetValue<int>(
-			GetRoleOptionId(MinerOption.AnotherPlayerShowMode));
+		var rolePlayerShowMode = (ShowMode)(cate.GetValue<MinerOption, int>(
+			MinerOption.RolePlayerShowMode) + 1);
+		var anotherPlayerShowMode = (ShowMode)cate.GetValue<MinerOption, int>(
+			MinerOption.AnotherPlayerShowMode);
 		this.isShowAnotherPlayer = anotherPlayerShowMode != ShowMode.MineSeeNone && isShowMine;
 		this.parameter = new MineEffectParameter(
 			RolePlayerShowMode: isShowMine ? rolePlayerShowMode : ShowMode.MineSeeNone,
 			AnotherPlayerShowMode: anotherPlayerShowMode,
 			CanShowNoneActiveAtherPlayer:
-				allOpt.GetValue<bool>(
-					GetRoleOptionId(MinerOption.CanShowNoneActiveAnotherPlayer)) &&
+				cate.GetValue<MinerOption, bool>(
+					MinerOption.CanShowNoneActiveAnotherPlayer) &&
 				this.isShowAnotherPlayer);
 
 		this.killLogger = new TextPopUpper(

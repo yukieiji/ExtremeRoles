@@ -15,7 +15,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+
+
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 
@@ -205,11 +207,11 @@ public sealed class Shutter : GhostRoleBase
 
     public override void Initialize()
     {
+		var loader = this.Loader;
+
         this.photoCreater = new GhostPhotoCamera(
-            OptionManager.Instance.GetValue<float>(
-                GetRoleOptionId(ShutterOption.PhotoRange)),
-            OptionManager.Instance.GetValue<int>(
-                GetRoleOptionId(ShutterOption.RightPlayerNameRate)));
+			loader.GetValue<ShutterOption, float>(ShutterOption.PhotoRange),
+			loader.GetValue<ShutterOption, int>(ShutterOption.RightPlayerNameRate));
     }
 
     protected override void OnMeetingEndHook()

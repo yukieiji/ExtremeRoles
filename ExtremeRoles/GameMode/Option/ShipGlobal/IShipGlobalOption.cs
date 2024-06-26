@@ -4,28 +4,38 @@ using System.Text;
 
 using ExtremeRoles.Extension.Strings;
 using ExtremeRoles.Patches.Option;
-using ExtremeRoles.GameMode.Option.MapModule;
 
-using static ExtremeRoles.Module.CustomOption.Factories.SimpleFactory;
+
+
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
-public enum GlobalOption : int
+public enum ShipGlobalOptionCategory : int
 {
-    NumMeating = 50,
-    ChangeMeetingVoteAreaSort,
-    FixedMeetingPlayerLevel,
-    DisableSkipInEmergencyMeeting,
-    DisableSelfVote,
+	MeetingOption = 10,
+	ExiledOption,
+	VentOption,
+	TaskOption,
+	RandomSpawnOption,
+	AdminOption,
+	SecurityOption,
+	VitalOption,
+	RandomMapOption,
+	TaskWinOption,
+	NeutralWinOption,
+	GhostRoleGlobalOption
+}
 
-    ConfirmExilMode,
-    IsConfirmRole,
+public enum ExiledOption : int
+{
+	ConfirmExilMode,
+	IsConfirmRole,
+}
 
-    DisableVent,
-    EngineerUseImpostorVent,
-    CanKillVentInPlayer,
-	VentAnimationModeInVison,
-
+public enum TaskOption : int
+{
 	ParallelMedBayScans,
 
 	IsFixWallHaskTask,
@@ -33,57 +43,38 @@ public enum GlobalOption : int
 	ShowerTask,
 	DevelopPhotosTask,
 	DivertPowerTask,
+}
 
-	EnableSpecialSetting,
-	SkeldRandomSpawn,
-	MiraHqRandomSpawn,
-	PolusRandomSpawn,
-	AirShipRandomSpawn,
-	FungleRandomSpawn,
+public enum RandomMap : int
+{
+	Enable,
+}
 
-	IsAutoSelectRandomSpawn,
+public enum TaskWinOption : int
+{
+	DisableWhenNoneTaskCrew,
+	DisableAll,
+}
 
-	IsRemoveAdmin,
-    AirShipEnableAdmin,
-    EnableAdminLimit,
-    AdminLimitTime,
+public enum NeutralWinOption : int
+{
+	IsSame,
+	DisableSpecialEnd,
+}
 
-    IsRemoveSecurity,
-    EnableSecurityLimit,
-    SecurityLimitTime,
-
-    IsRemoveVital,
-    EnableVitalLimit,
-    VitalLimitTime,
-
-    RandomMap,
-
-    DisableTaskWinWhenNoneTaskCrew,
-    DisableTaskWin,
-    IsSameNeutralSameWin,
-    DisableNeutralSpecialForceEnd,
-
-    IsAssignNeutralToVanillaCrewGhostRole,
-    IsRemoveAngleIcon,
-    IsBlockGAAbilityReport,
-
-	// ウマングアスを一時的もしくは恒久的に無効化
-	// EnableHorseMode
+public enum GhostRoleGlobalOption : int
+{
+	IsAssignNeutralToVanillaCrewGhostRole,
+	IsRemoveAngleIcon,
+	IsBlockGAAbilityReport,
 }
 
 public enum ConfirmExilMode
 {
-    Impostor,
-    Crewmate,
-    Neutral,
-    AllTeam
-}
-
-public enum VentAnimationMode
-{
-	VanillaAnimation,
-	DonotWallHack,
-	DonotOutVison,
+	Impostor,
+	Crewmate,
+	Neutral,
+	AllTeam
 }
 
 public readonly record struct MapModuleDisableFlag(
@@ -94,30 +85,20 @@ public readonly record struct MapModuleDisableFlag(
 
 public interface IShipGlobalOption
 {
-    public bool IsEnableImpostorVent { get; }
+	public bool IsEnableImpostorVent { get; }
 
 	public bool IsRandomMap { get; }
-
-	public int MaxMeetingCount { get; }
 
 	public bool IsBreakEmergencyButton { get; }
 
 	public bool CanUseHorseMode { get; }
 
-	public bool IsChangeVoteAreaButtonSortArg { get; }
-	public bool IsFixedVoteAreaPlayerLevel { get; }
-	public bool IsBlockSkipInMeeting { get; }
-	public bool DisableSelfVote { get; }
-
 	public ConfirmExilMode ExilMode { get; }
 	public bool IsConfirmRole { get; }
 
-	public bool DisableVent { get; }
-	public bool EngineerUseImpostorVent { get; }
-	public bool CanKillVentInPlayer { get; }
-	public VentAnimationMode VentAnimationMode { get; }
-
+	public VentConsoleOption Vent { get; }
 	public SpawnOption Spawn { get; }
+
 	public bool IsAllowParallelMedbayScan { get; }
 	public bool ChangeForceWallCheck { get; }
 
@@ -140,18 +121,19 @@ public interface IShipGlobalOption
 		get
 		{
 			var fixTask = new HashSet<TaskTypes>();
-			for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
-			{
-				var opt = (GlobalOption)i;
 
-				if (GetCommonOptionValue<bool>(opt))
+			var cate = GetOptionCategory(ShipGlobalOptionCategory.TaskOption);
+
+			for (int i = (int)TaskOption.GarbageTask; i <= (int)TaskOption.DivertPowerTask; ++i)
+			{
+				if (cate.GetValue<bool>(i))
 				{
-					var fixTaskType = opt switch
+					var fixTaskType = (TaskOption)i switch
 					{
-						GlobalOption.GarbageTask => TaskTypes.EmptyGarbage,
-						GlobalOption.ShowerTask => TaskTypes.FixShower,
-						GlobalOption.DevelopPhotosTask => TaskTypes.DevelopPhotos,
-						GlobalOption.DivertPowerTask => TaskTypes.DivertPower,
+						TaskOption.GarbageTask => TaskTypes.EmptyGarbage,
+						TaskOption.ShowerTask => TaskTypes.FixShower,
+						TaskOption.DevelopPhotosTask => TaskTypes.DevelopPhotos,
+						TaskOption.DivertPowerTask => TaskTypes.DivertPower,
 						_ => throw new KeyNotFoundException()
 					};
 					fixTask.Add(fixTaskType);
@@ -161,24 +143,23 @@ public interface IShipGlobalOption
 		}
 	}
 
-    public AdminOption Admin { get; }
-    public SecurityOption Security { get; }
-    public VitalOption Vital { get; }
+	public MeetingHudOption Meeting { get; }
+    public AdminDeviceOption Admin { get; }
+    public DeviceOption Security { get; }
+    public DeviceOption Vital { get; }
 
     public bool DisableTaskWinWhenNoneTaskCrew { get; }
     public bool DisableTaskWin { get; }
     public bool IsSameNeutralSameWin { get; }
     public bool DisableNeutralSpecialForceEnd { get; }
 
-    public bool IsAssignNeutralToVanillaCrewGhostRole { get; }
-    public bool IsRemoveAngleIcon { get; }
-    public bool IsBlockGAAbilityReport { get; }
+    public GhostRoleOption GhostRole { get; }
 
 	public void Load();
-
+	/*
     public bool IsValidOption(int id);
-	public IEnumerable<GlobalOption> UseOptionId();
-
+	// public IEnumerable<GlobalOption> UseOptionId();
+	/*
 	public void AddHudString(in List<string> allStr)
 	{
 		int lineCounter = 0;
@@ -204,94 +185,87 @@ public interface IShipGlobalOption
 		}
 		allStr.Add(builder.ToString());
 	}
+	*/
 
-    public static void Create()
+	public static void Create()
     {
-		CreateIntOption(GlobalOption.NumMeating, 10, 0, 100, 1, isHeader: true);
-		CreateBoolOption(GlobalOption.ChangeMeetingVoteAreaSort, false);
-		CreateBoolOption(GlobalOption.FixedMeetingPlayerLevel, false);
-		CreateBoolOption(GlobalOption.DisableSkipInEmergencyMeeting, false);
-		CreateBoolOption(GlobalOption.DisableSelfVote, false);
-
-		var confirmOpt = CreateSelectionOption<GlobalOption, ConfirmExilMode>(
-			GlobalOption.ConfirmExilMode, isHeader: true);
-        confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
-		var confirmRoleOpt = CreateBoolOption(GlobalOption.IsConfirmRole, false);
-        confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
-
-        var ventOption = CreateBoolOption(GlobalOption.DisableVent, false, isHeader: true);
-		CreateBoolOption(GlobalOption.CanKillVentInPlayer, false, ventOption, invert: true);
-		CreateBoolOption(GlobalOption.EngineerUseImpostorVent, false, ventOption, invert: true);
-		CreateSelectionOption<GlobalOption, VentAnimationMode>(GlobalOption.VentAnimationModeInVison, parent: ventOption, invert: true);
-
-		CreateBoolOption(GlobalOption.ParallelMedBayScans, false, isHeader: true);
-
-		var fixTaskOpt = CreateBoolOption(GlobalOption.IsFixWallHaskTask, false);
-		for (int i = (int)GlobalOption.GarbageTask; i <= (int)GlobalOption.DivertPowerTask; ++i)
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.MeetingOption))
 		{
-			CreateBoolOption((GlobalOption)i, false, parent: fixTaskOpt);
+			MeetingHudOption.Create(factory);
+		}
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.ExiledOption))
+		{
+			var confirmOpt = factory.CreateSelectionOption<ExiledOption, ConfirmExilMode>(ExiledOption.ConfirmExilMode);
+			// confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
+			var confirmRoleOpt = factory.CreateBoolOption(ExiledOption.IsConfirmRole, false);
+			// confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
+		}
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VentOption))
+		{
+			VentConsoleOption.Create(factory);
+		}
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskOption))
+		{
+			factory.CreateBoolOption(TaskOption.ParallelMedBayScans, false);
+
+			var fixTaskOpt = factory.CreateBoolOption(TaskOption.IsFixWallHaskTask, false);
+			for (int i = (int)TaskOption.GarbageTask; i <= (int)TaskOption.DivertPowerTask; ++i)
+			{
+				factory.CreateBoolOption((TaskOption)i, false, parent: fixTaskOpt);
+			}
 		}
 
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomSpawnOption))
+		{
+			SpawnOption.Create(factory);
+		}
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
+		{
+			AdminDeviceOption.Create(factory);
+		}
+		createMapObjectOptions(ShipGlobalOptionCategory.SecurityOption);
+		createMapObjectOptions(ShipGlobalOptionCategory.VitalOption);
 
-		var randomSpawnOpt = CreateBoolOption(GlobalOption.EnableSpecialSetting , true);
-		CreateBoolOption(GlobalOption.SkeldRandomSpawn  , false, randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.MiraHqRandomSpawn , false, randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.PolusRandomSpawn  , false, randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.AirShipRandomSpawn, true , randomSpawnOpt, invert: true);
-		CreateBoolOption(GlobalOption.FungleRandomSpawn , false, randomSpawnOpt, invert: true);
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
+		{
+			factory.CreateBoolOption(RandomMap.Enable, false);
+		}
 
-		CreateBoolOption(GlobalOption.IsAutoSelectRandomSpawn, false, randomSpawnOpt, invert: true);
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.TaskWinOption))
+		{
+			var taskDisableOpt = factory.CreateBoolOption(TaskWinOption.DisableWhenNoneTaskCrew, false);
+			factory.CreateBoolOption(TaskWinOption.DisableAll, false, taskDisableOpt);
+		}
 
-		var adminOpt = CreateBoolOption(GlobalOption.IsRemoveAdmin, false, isHeader: true);
-		CreateSelectionOption<GlobalOption, AirShipAdminMode>(
-			GlobalOption.AirShipEnableAdmin, adminOpt, invert: true);
-		var adminLimitOpt = CreateBoolOption(GlobalOption.EnableAdminLimit, false, adminOpt, invert: true);
-		CreateFloatOption(
-			GlobalOption.AdminLimitTime,
-			30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: adminLimitOpt);
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.NeutralWinOption))
+		{
+			factory.CreateBoolOption(NeutralWinOption.IsSame, true);
+			factory.CreateBoolOption(NeutralWinOption.DisableSpecialEnd, false);
+		}
 
-        var secOpt = CreateBoolOption(GlobalOption.IsRemoveSecurity, false, isHeader: true);
-		var secLimitOpt = CreateBoolOption(GlobalOption.EnableSecurityLimit, false, secOpt, invert: true);
-		CreateFloatOption(
-			GlobalOption.SecurityLimitTime,
-			30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: secLimitOpt);
-
-        var vitalOpt = CreateBoolOption(GlobalOption.IsRemoveVital, false, isHeader: true);
-        var vitalLimitOpt = CreateBoolOption(GlobalOption.EnableVitalLimit, false, vitalOpt, invert: true);
-		CreateFloatOption(
-			GlobalOption.VitalLimitTime,
-			30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
-			format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: vitalLimitOpt);
-
-		CreateBoolOption(GlobalOption.RandomMap, false, isHeader: true);
-
-        var taskDisableOpt = CreateBoolOption(GlobalOption.DisableTaskWinWhenNoneTaskCrew, false, isHeader: true);
-		CreateBoolOption(GlobalOption.DisableTaskWin, false, taskDisableOpt);
-
-		CreateBoolOption(GlobalOption.IsSameNeutralSameWin, true, isHeader: true);
-		CreateBoolOption(GlobalOption.DisableNeutralSpecialForceEnd, false);
-
-		CreateBoolOption(GlobalOption.IsAssignNeutralToVanillaCrewGhostRole, true, isHeader: true);
-		CreateBoolOption(GlobalOption.IsRemoveAngleIcon, false);
-		CreateBoolOption(GlobalOption.IsBlockGAAbilityReport, false);
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.GhostRoleGlobalOption))
+		{
+			GhostRoleOption.Create(factory);
+		}
 
 		// ウマングアスを一時的もしくは恒久的に無効化
 		// CreateBoolOption(GlobalOption.EnableHorseMode, false, isHeader: true, isHidden: true);
     }
 
-    public static T GetCommonOptionValue<T>(GlobalOption optionKey)
-        where T :
-            struct, IComparable, IConvertible,
-            IComparable<T>, IEquatable<T>
-    {
-        return OptionManager.Instance.GetValue<T>((int)optionKey);
-    }
+	private static void createMapObjectOptions(ShipGlobalOptionCategory category)
+	{
+		using (var factory = OptionManager.CreateOptionCategory(category))
+		{
+			IDeviceOption.Create(factory);
+		}
+	}
+
+	protected static OptionCategory GetOptionCategory(ShipGlobalOptionCategory category)
+	{
+		if (!OptionManager.Instance.TryGetCategory(OptionTab.General, (int)category, out var cate))
+		{
+			throw new ArgumentException(category.ToString());
+		}
+		return cate;
+	}
 }

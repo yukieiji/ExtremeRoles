@@ -13,6 +13,11 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Resurrecter :
@@ -145,7 +150,7 @@ public sealed class Resurrecter :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         if (this.isActiveMeetingCount &&
             this.meetingCounter >= this.maxMeetingCount)
@@ -387,77 +392,72 @@ public sealed class Resurrecter :
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.AwakeTaskGage,
             100, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskGage,
             100, 50, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             ResurrecterOption.ResurrectDelayTime,
             5.0f, 4.0f, 60.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        var meetingResetOpt = CreateBoolOption(
+        var meetingResetOpt = factory.CreateBoolOption(
             ResurrecterOption.IsMeetingCoolResetOnResurrect,
-            true, parentOps);
+            true);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             ResurrecterOption.ResurrectMeetingCooltime,
             20.0f, 5.0f, 60.0f, 0.25f,
             meetingResetOpt,
             format: OptionUnit.Second,
-            invert: true,
-            enableCheckOption: parentOps);
+            invert: true);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskResetMeetingNum,
-            1, 1, 5, 1,
-            parentOps);
+            1, 1, 5, 1);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             ResurrecterOption.ResurrectTaskResetGage,
             20, 10, 50, 5,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             ResurrecterOption.CanResurrectAfterDeath,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             ResurrecterOption.CanResurrectOnExil,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var loader = this.Loader;
 
-        this.awakeTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(ResurrecterOption.AwakeTaskGage)) / 100.0f;
-        this.resurrectTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(ResurrecterOption.ResurrectTaskGage)) / 100.0f;
-        this.resetTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(ResurrecterOption.ResurrectTaskResetGage)) / 100.0f;
+        this.awakeTaskGage = loader.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.AwakeTaskGage) / 100.0f;
+        this.resurrectTaskGage = loader.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.ResurrectTaskGage) / 100.0f;
+        this.resetTaskGage = loader.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.ResurrectTaskResetGage) / 100.0f;
 
-        this.resurrectTimer = allOpt.GetValue<float>(
-            GetRoleOptionId(ResurrecterOption.ResurrectDelayTime));
-        this.canResurrectAfterDeath = allOpt.GetValue<bool>(
-            GetRoleOptionId(ResurrecterOption.CanResurrectAfterDeath));
-        this.canResurrectOnExil = allOpt.GetValue<bool>(
-            GetRoleOptionId(ResurrecterOption.CanResurrectOnExil));
-        this.maxMeetingCount = allOpt.GetValue<int>(
-            GetRoleOptionId(ResurrecterOption.ResurrectTaskResetMeetingNum));
-        this.isMeetingCoolResetOnResurrect = allOpt.GetValue<bool>(
-            GetRoleOptionId(ResurrecterOption.IsMeetingCoolResetOnResurrect));
-        this.meetingCoolDown = allOpt.GetValue<float>(
-            GetRoleOptionId(ResurrecterOption.ResurrectMeetingCooltime));
+        this.resurrectTimer = loader.GetValue<ResurrecterOption, float>(
+            ResurrecterOption.ResurrectDelayTime);
+        this.canResurrectAfterDeath = loader.GetValue<ResurrecterOption, bool>(
+            ResurrecterOption.CanResurrectAfterDeath);
+        this.canResurrectOnExil = loader.GetValue<ResurrecterOption, bool>(
+            ResurrecterOption.CanResurrectOnExil);
+        this.maxMeetingCount = loader.GetValue<ResurrecterOption, int>(
+            ResurrecterOption.ResurrectTaskResetMeetingNum);
+        this.isMeetingCoolResetOnResurrect = loader.GetValue<ResurrecterOption, bool>(
+            ResurrecterOption.IsMeetingCoolResetOnResurrect);
+        this.meetingCoolDown = loader.GetValue<ResurrecterOption, float>(
+            ResurrecterOption.ResurrectMeetingCooltime);
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
@@ -535,7 +535,7 @@ public sealed class Resurrecter :
 
     private void replaceTask(PlayerControl rolePlayer)
     {
-        GameData.PlayerInfo playerInfo = rolePlayer.Data;
+        NetworkedPlayerInfo playerInfo = rolePlayer.Data;
 
         var shuffleTaskIndex = Enumerable.Range(
             0, playerInfo.Tasks.Count).ToList().OrderBy(
@@ -567,7 +567,7 @@ public sealed class Resurrecter :
                 else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
-                    taskIndex = GameSystem.GetRandomNormalTaskId();
+                    taskIndex = GameSystem.GetRandomShortTaskId();
                 }
                 else
                 {

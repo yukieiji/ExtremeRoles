@@ -46,7 +46,7 @@ public static class ExileControllerBeginePatch
 	[HarmonyPrefix, HarmonyPriority(Priority.Last)]
     public static bool Prefix(
         ExileController __instance,
-        [HarmonyArgument(0)] GameData.PlayerInfo exiled,
+        [HarmonyArgument(0)] NetworkedPlayerInfo exiled,
         [HarmonyArgument(1)] bool tie)
     {
 		if (CompatModManager.Instance.IsModMap<SubmergedIntegrator>())
@@ -85,7 +85,7 @@ public static class ExileControllerBeginePatch
 
 	public static bool PrefixRun(
 		ExileController __instance,
-		GameData.PlayerInfo exiled,
+		NetworkedPlayerInfo exiled,
 		bool tie)
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
@@ -110,12 +110,16 @@ public static class ExileControllerBeginePatch
         ExileController instance, ExtremeShipStatus state)
     {
         setExiledTarget(instance, null);
-        GameData.PlayerInfo player = GameData.Instance.GetPlayerById(
+        NetworkedPlayerInfo? player = GameData.Instance.GetPlayerById(
             state.IsMarinPlayerId);
+		if (player == null)
+		{
+			return;
+		}
 
         string transKey = state.IsAssassinateMarin ?
             "assassinateMarinSucsess" : "assassinateMarinFail";
-        string printStr = $"{player?.PlayerName}{Translation.GetString(transKey)}";
+        string printStr = $"{player.PlayerName}{Translation.GetString(transKey)}";
 
         if (instance.Player)
         {
@@ -129,7 +133,7 @@ public static class ExileControllerBeginePatch
 
     private static void confirmExil(
         ExileController instance,
-        GameData.PlayerInfo exiled,
+        NetworkedPlayerInfo exiled,
         ConfirmExilMode mode, bool isShowRole, bool tie)
     {
         setExiledTarget(instance, exiled);
@@ -148,19 +152,19 @@ public static class ExileControllerBeginePatch
 
         int aliveImpNum = Enumerable.Count(
             alivePlayers,
-            (GameData.PlayerInfo p) =>
+            (NetworkedPlayerInfo p) =>
             {
                 return allRoles[p.PlayerId].IsImpostor();
             });
         int aliveCrewNum = Enumerable.Count(
             alivePlayers,
-            (GameData.PlayerInfo p) =>
+            (NetworkedPlayerInfo p) =>
             {
                 return allRoles[p.PlayerId].IsCrewmate();
             });
         int aliveNeutNum = Enumerable.Count(
             alivePlayers,
-            (GameData.PlayerInfo p) =>
+            (NetworkedPlayerInfo p) =>
             {
                 return allRoles[p.PlayerId].IsNeutral();
             });
@@ -291,7 +295,7 @@ public static class ExileControllerBeginePatch
         {
             case ConfirmExilMode.Impostor:
                 modeTeamAlive = allPlayer.Count(
-					(GameData.PlayerInfo p) =>
+					(NetworkedPlayerInfo p) =>
 						p != null &&
 						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
 						role!.IsImpostor());
@@ -299,7 +303,7 @@ public static class ExileControllerBeginePatch
                 break;
             case ConfirmExilMode.Crewmate:
                 modeTeamAlive = allPlayer.Count(
-					(GameData.PlayerInfo p) =>
+					(NetworkedPlayerInfo p) =>
 						p != null &&
 						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
 						role!.IsCrewmate());
@@ -307,7 +311,7 @@ public static class ExileControllerBeginePatch
                 break;
             case ConfirmExilMode.Neutral:
                 modeTeamAlive = allPlayer.Count(
-					(GameData.PlayerInfo p) =>
+					(NetworkedPlayerInfo p) =>
 						p != null &&
 						ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) &&
 						role!.IsNeutral());
@@ -341,7 +345,7 @@ public static class ExileControllerBeginePatch
     }
 
     private static void setExiledTarget(
-        ExileController instance, GameData.PlayerInfo? player)
+        ExileController instance, NetworkedPlayerInfo? player)
     {
         if (instance.specialInputHandler != null)
         {
@@ -409,7 +413,7 @@ public static class ExileControllerWrapUpPatch
         }
     }
 
-    public static void WrapUpPostfix(GameData.PlayerInfo? exiled)
+    public static void WrapUpPostfix(NetworkedPlayerInfo? exiled)
     {
         InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);

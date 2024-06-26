@@ -7,12 +7,15 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -22,7 +25,8 @@ public sealed class DetectiveOffice : ConstCombinationRoleManagerBase
     public const string Name = "DetectiveOffice";
 
     public DetectiveOffice() : base(
-        Name, new Color(255f, 255f, 255f), 2,
+		CombinationRoleType.DetectiveOffice,
+        Name, DefaultColor, 2,
         (GameSystem.VanillaMaxPlayerNum - 1) / 2)
     {
         this.Roles.Add(new Detective());
@@ -30,11 +34,12 @@ public sealed class DetectiveOffice : ConstCombinationRoleManagerBase
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        base.CreateSpecificOption(parentOps);
-        DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(
-            parentOps, this.OptionIdOffset);
+        base.CreateSpecificOption(factory);
+		factory.IdOffset = this.Roles.Count * ExtremeRoleManager.OptionOffsetPerRole;
+		factory.OptionPrefix = ExtremeRoleId.DetectiveApprentice.ToString();
+		DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(factory);
     }
 
 }
@@ -163,7 +168,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         upgradeAssistant();
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.info.Clear();
     }
@@ -179,7 +184,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
     public void HookReportButton(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter)
+        NetworkedPlayerInfo reporter)
     {
         this.targetCrime = null;
         this.searchCrimeInfoTime = float.MaxValue;
@@ -187,8 +192,8 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         this.targetCrime = this.info.GetCrimeInfo(reportBody.PlayerId);
         this.searchCrimeInfoTime = ExtremeRoleManager.GameRole[
@@ -276,27 +281,26 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             DetectiveOption.SearchRange,
-            1.0f, 0.5f, 2.8f, 0.1f,
-            parentOps);
+            1.0f, 0.5f, 2.8f, 0.1f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             DetectiveOption.SearchTime,
             6.0f, 3.0f, 10.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             DetectiveOption.SearchAssistantTime,
             4.0f, 2.0f, 7.5f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             DetectiveOption.TextShowTime,
             60.0f, 5.0f, 120.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
     }
 
     protected override void RoleSpecificInit()
@@ -305,16 +309,16 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         this.info = new CrimeInfoContainer();
         this.info.Clear();
 
-        var allOption = OptionManager.Instance;
-        this.range = allOption.GetValue<float>(
-            GetRoleOptionId(DetectiveOption.SearchRange));
-        this.searchTime = allOption.GetValue<float>(
-            GetRoleOptionId(DetectiveOption.SearchTime));
-        this.searchAssistantTime = allOption.GetValue<float>(
-            GetRoleOptionId(DetectiveOption.SearchAssistantTime));
+        var loader = this.Loader;
+        this.range = loader.GetValue<DetectiveOption, float>(
+            DetectiveOption.SearchRange);
+        this.searchTime = loader.GetValue<DetectiveOption, float>(
+            DetectiveOption.SearchTime);
+        this.searchAssistantTime = loader.GetValue<DetectiveOption, float>(
+            DetectiveOption.SearchAssistantTime);
 
         this.textPopUp = new TextPopUpper(
-            4, allOption.GetValue<float>(GetRoleOptionId(DetectiveOption.TextShowTime)),
+            4, loader.GetValue<DetectiveOption, float>(DetectiveOption.TextShowTime),
             new Vector3(-3.75f, -2.5f, -250.0f),
             TMPro.TextAlignmentOptions.BottomLeft);
         this.searchCrimeInfoTime = float.MaxValue;
@@ -453,15 +457,15 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 
     public void HookReportButton(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter)
+        NetworkedPlayerInfo reporter)
     {
         this.deadBodyInfo.Clear();
     }
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         if (this.IsSameControlId(ExtremeRoleManager.GameRole[rolePlayer.PlayerId]))
         {
@@ -492,7 +496,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     { }
 
     protected override void RoleSpecificInit()
@@ -528,120 +532,60 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         public bool HasOtherButton;
         public int HasOtherButtonNum;
 
-        public enum DetectiveApprenticeOption
-        {
-            HasOtherVision,
-            Vision,
-            ApplyEnvironmentVisionEffect,
-            HasOtherButton,
-            HasOtherButtonNum,
-        }
+		public enum DetectiveApprenticeOption
+		{
+			HasOtherVision,
+			Vision,
+			ApplyEnvironmentVisionEffect,
+			HasOtherButton,
+			HasOtherButtonNum,
+		}
 
         public static void CreateOption(
-            IOptionInfo parentOps,
-            int optionId)
-        {
-            int getRoleOptionId<T>(T option) where T : struct, IConvertible
-            {
-                return optionId + Convert.ToInt32(option);
-            }
+            AutoParentSetOptionCategoryFactory factory)
+		{
+			var visionOpt = factory.CreateBoolOption(
+				DetectiveApprenticeOption.HasOtherVision,
+				false);
 
-            string roleName = ExtremeRoleId.DetectiveApprentice.ToString();
+			factory.CreateFloatOption(
+				DetectiveApprenticeOption.Vision,
+				2f, 0.25f, 5f, 0.25f,
+				visionOpt,
+				format: OptionUnit.Multiplier);
 
-            var visionOption = new BoolCustomOption(
-                getRoleOptionId(DetectiveApprenticeOption.HasOtherVision),
-                string.Concat(
-                    roleName,
-                    DetectiveApprenticeOption.HasOtherVision.ToString()),
-                false, parentOps,
-                tab: OptionTab.Combination);
+			factory.CreateBoolOption(
+				DetectiveApprenticeOption.ApplyEnvironmentVisionEffect,
+				false, visionOpt);
 
-            new FloatCustomOption(
-                getRoleOptionId(DetectiveApprenticeOption.Vision),
-                string.Concat(
-                    roleName,
-                    DetectiveApprenticeOption.Vision.ToString()),
-                2f, 0.25f, 5f, 0.25f,
-                visionOption, format: OptionUnit.Multiplier,
-                tab: OptionTab.Combination);
-            new BoolCustomOption(
-                getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
-                string.Concat(
-                    roleName,
-                    DetectiveApprenticeOption.ApplyEnvironmentVisionEffect.ToString()),
-                false, visionOption,
-                tab: OptionTab.Combination);
+			IRoleAbility.CreateAbilityCountOption(
+				factory, 1, 10, 3.0f);
 
-            new IntCustomOption(
-                getRoleOptionId(RoleAbilityCommonOption.AbilityCount),
-                string.Concat(
-                    roleName,
-                    RoleAbilityCommonOption.AbilityCount.ToString()),
-                1, 1, 10, 1,
-                parentOps, format: OptionUnit.Shot,
-                tab: OptionTab.Combination);
-
-            new FloatCustomOption(
-                getRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
-                string.Concat(
-                    roleName,
-                    RoleAbilityCommonOption.AbilityCoolTime.ToString()),
-                30.0f, 0.5f, 60f, 0.5f,
-                parentOps, format: OptionUnit.Second,
-                tab: OptionTab.Combination);
-
-            new FloatCustomOption(
-                getRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
-                string.Concat(
-                    roleName,
-                    RoleAbilityCommonOption.AbilityActiveTime.ToString()),
-                3.0f, 1.0f, 5.0f, 0.5f,
-                parentOps, format: OptionUnit.Second,
-                tab: OptionTab.Combination);
-
-            var buttonOption = new BoolCustomOption(
-                getRoleOptionId(DetectiveApprenticeOption.HasOtherButton),
-                string.Concat(
-                    roleName,
-                    DetectiveApprenticeOption.HasOtherButton.ToString()),
-                false, parentOps,
-                tab: OptionTab.Combination);
-            new IntCustomOption(
-                getRoleOptionId(DetectiveApprenticeOption.HasOtherButtonNum),
-                string.Concat(
-                    roleName,
-                    DetectiveApprenticeOption.HasOtherButtonNum.ToString()),
-                1, 1, 10, 1, buttonOption,
-                format: OptionUnit.Shot,
-                tab: OptionTab.Combination);
+			var buttonOpt = factory.CreateBoolOption(
+				DetectiveApprenticeOption.HasOtherButton,
+				false);
+			factory.CreateIntOption(
+				DetectiveApprenticeOption.HasOtherButtonNum,
+				1, 1, 10, 1, buttonOpt,
+				format: OptionUnit.Shot);
         }
 
-        public static DetectiveApprenticeOptionHolder LoadOptions(
-            int optionId)
+        public static DetectiveApprenticeOptionHolder LoadOptions(in OptionLoadWrapper loader)
         {
-            int getRoleOptionId(DetectiveApprenticeOption option)
-            {
-                return optionId + (int)option;
-            }
-
-            var allOption = OptionManager.Instance;
-
             return new DetectiveApprenticeOptionHolder()
             {
-                OptionOffset = optionId,
-                HasOtherVision = allOption.GetValue<bool>(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherVision)),
-                Vision = allOption.GetValue<float>(
-                    getRoleOptionId(DetectiveApprenticeOption.Vision)),
-                ApplyEnvironmentVisionEffect = allOption.GetValue<bool>(
-                    getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect)),
-                HasOtherButton = allOption.GetValue<bool>(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherButton)),
-                HasOtherButtonNum = allOption.GetValue<int>(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherButtonNum)),
+                HasOtherVision = loader.GetValue<DetectiveApprenticeOption, bool>(
+					DetectiveApprenticeOption.HasOtherVision),
+                Vision = loader.GetValue<DetectiveApprenticeOption, float>(
+					DetectiveApprenticeOption.Vision),
+                ApplyEnvironmentVisionEffect = loader.GetValue<DetectiveApprenticeOption, bool>(
+					DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
+                HasOtherButton = loader.GetValue<DetectiveApprenticeOption, bool>(
+					DetectiveApprenticeOption.HasOtherButton),
+                HasOtherButtonNum = loader.GetValue<DetectiveApprenticeOption, int>(
+					DetectiveApprenticeOption.HasOtherButtonNum),
             };
         }
-
     }
 
     public ExtremeAbilityButton Button
@@ -670,7 +614,6 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             ColorPalette.DetectiveApprenticeKonai,
             false, true, false, false)
     {
-        this.OptionIdOffset = option.OptionOffset;
         this.SetControlId(gameControlId);
         this.HasOtherVision = option.HasOtherVision;
         if (this.HasOtherVision)
@@ -720,10 +663,18 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             }
         }
 
-        DetectiveApprentice newRole = new DetectiveApprentice(
+		if (!OptionManager.Instance.TryGetCategory(
+				OptionTab.Combination,
+				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.DetectiveOffice),
+				out var cate))
+		{
+			return;
+		}
+
+		int offset = 2 * ExtremeRoleManager.OptionOffsetPerRole;
+		DetectiveApprentice newRole = new DetectiveApprentice(
             prevRole.GameControlId,
-            DetectiveApprenticeOptionHolder.LoadOptions(
-                prevRole.GetManagerOptionId(0)));
+            DetectiveApprenticeOptionHolder.LoadOptions(new OptionLoadWrapper(cate, offset)));
         if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
         {
             newRole.CreateAbility();
@@ -754,8 +705,8 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
         this.CreateAbilityCountButton(
             "emergencyMeeting",
-            Loader.CreateSpriteFromResources(
-                Path.DetectiveApprenticeEmergencyMeeting),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.DetectiveApprenticeEmergencyMeeting),
             abilityOff: CleanUp,
             checkAbility: IsOpen,
             isReduceOnActive: true);
@@ -767,7 +718,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
     public bool IsOpen() => Minigame.Instance != null;
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.meeting = null;
         this.callAnotherButton = false;
@@ -826,7 +777,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
     public void HookReportButton(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter)
+        NetworkedPlayerInfo reporter)
     {
         if (this.callAnotherButton &&
             CachedPlayerControl.LocalPlayer.PlayerId == reporter.PlayerId &&
@@ -841,14 +792,14 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         return;
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
         throw new Exception("Don't call this class method!!");
     }

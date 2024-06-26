@@ -2,11 +2,14 @@
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -34,6 +37,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     private float range;
     private float reduceRate;
     private int plusAbilityNum;
+	private float abilityCoolTime;
 
     public Opener() : base(
         ExtremeRoleId.Opener,
@@ -47,8 +51,8 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateAbilityCountButton(
             "openDoor",
-            Loader.CreateSpriteFromResources(
-                Path.OpenerOpenDoor));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.OpenerOpenDoor));
         this.Button.SetLabelToCrewmate();
     }
     public bool UseAbility()
@@ -96,7 +100,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         this.targetDoor = null;
         return;
@@ -120,9 +124,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         float rate = 1.0f - ((float)this.reduceRate / 100f);
 
-        this.Button.Behavior.SetCoolTime(
-            OptionManager.Instance.GetValue<float>(
-                GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)) * rate);
+        this.Button.Behavior.SetCoolTime(this.abilityCoolTime * rate);
 
         if (this.Button.Behavior is AbilityCountBehavior countBehavior)
         {
@@ -132,34 +134,35 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(
-            parentOps, 2, 5);
-        CreateFloatOption(
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 2, 5);
+        factory.CreateFloatOption(
             OpenerOption.Range,
-            2.0f, 0.5f, 5.0f, 0.1f,
-            parentOps);
-        CreateIntOption(
+            2.0f, 0.5f, 5.0f, 0.1f);
+        factory.CreateIntOption(
             OpenerOption.ReduceRate,
             45, 5, 95, 1,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             OpenerOption.PlusAbility,
             5, 1, 10, 1,
-            parentOps,
             format: OptionUnit.Shot);
     }
 
     protected override void RoleSpecificInit()
     {
         this.isUpgraded = false;
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(OpenerOption.Range));
-        this.reduceRate = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(OpenerOption.ReduceRate));
-        this.plusAbilityNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(OpenerOption.PlusAbility));
+
+		var loader = this.Loader;
+        this.range = loader.GetValue<OpenerOption, float>(
+            OpenerOption.Range);
+        this.reduceRate = loader.GetValue<OpenerOption, int>(
+            OpenerOption.ReduceRate);
+        this.plusAbilityNum = loader.GetValue<OpenerOption, int>(
+            OpenerOption.PlusAbility);
+		this.abilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
+			RoleAbilityCommonOption.AbilityCoolTime);
     }
 }

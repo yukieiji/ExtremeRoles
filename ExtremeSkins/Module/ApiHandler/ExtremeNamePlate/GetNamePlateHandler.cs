@@ -7,7 +7,7 @@ using ExtremeSkins.Core.API;
 using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
-
+#if WITHNAMEPLATE
 public sealed class GetNamePlateHandler : IRequestHandler
 {
 
@@ -25,3 +25,4 @@ public sealed class GetNamePlateHandler : IRequestHandler
 		IRequestHandler.Write(response, curData);
 	}
 }
+#endif

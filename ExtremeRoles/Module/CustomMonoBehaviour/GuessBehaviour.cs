@@ -25,6 +25,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				RoleTypes.Crewmate,
 				RoleTypes.Scientist,
 				RoleTypes.Engineer,
+				RoleTypes.Noisemaker,
+				RoleTypes.Tracker,
 			};
 
 			public string GetRoleName()
@@ -135,8 +137,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 		public void SetTarget(byte playerId)
 		{
+			var info = GameData.Instance.GetPlayerById(playerId);
+			if (info == null)
+			{
+				return;
+			}
 			this.playerId = playerId;
-			this.playerName = GameData.Instance.GetPlayerById(playerId)?.DefaultOutfit.PlayerName;
+			this.playerName = info.DefaultOutfit.PlayerName;
 		}
 	}
 }

@@ -28,7 +28,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 	private ButtonWrapper buttonPrefab;
 	private GridLayoutGroup layout;
 
-	private Dictionary<int, ButtonWrapper> allButton;
+	private readonly Dictionary<int, ButtonWrapper> allButton = new ();
 
 	public AddRoleMenuView(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -62,11 +62,12 @@ public sealed class AddRoleMenuView : MonoBehaviour
 	{
 		if (this.layout.rectChildren.Count == 0)
 		{
-			this.allButton = new Dictionary<int, ButtonWrapper>();
+			this.allButton.Clear();
 			// メニューを作る
 			foreach (int id in model.Id)
 			{
-				this.allButton.Add(id, Instantiate(this.buttonPrefab, this.layout.transform));
+				var button = Instantiate(this.buttonPrefab, this.layout.transform);
+				this.allButton.Add(id, button);
 			}
 		}
 

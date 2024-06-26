@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 		private bool disableWinCheck = false;
 		private GameOverReason reason;
 		private int winGameControlId = int.MaxValue;
-		private List<GameData.PlayerInfo> plusWinner = new List<GameData.PlayerInfo>();
+		private List<NetworkedPlayerInfo> plusWinner = new List<NetworkedPlayerInfo>();
 
 		public void RpcRoleIsWin(byte playerId)
 		{
@@ -28,7 +28,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 			this.plusWinner.Add(player.Data);
 		}
 
-		public void AddWinner(GameData.PlayerInfo player)
+		public void AddWinner(NetworkedPlayerInfo player)
 		{
 			this.plusWinner.Add(player);
 		}
@@ -38,14 +38,14 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 			this.disableWinCheck = state;
 		}
 
-		public List<GameData.PlayerInfo> GetPlusWinner() => this.plusWinner;
+		public List<NetworkedPlayerInfo> GetPlusWinner() => this.plusWinner;
 
 		public void SetGameOverReason(GameOverReason endReason)
 		{
 			this.reason = endReason;
 		}
 
-		public void SetPlusWinner(List<GameData.PlayerInfo> newWinner)
+		public void SetPlusWinner(List<NetworkedPlayerInfo> newWinner)
 		{
 			this.plusWinner = newWinner;
 		}

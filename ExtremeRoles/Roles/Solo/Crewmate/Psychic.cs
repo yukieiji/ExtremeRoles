@@ -16,6 +16,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 #nullable enable
@@ -228,8 +233,8 @@ public sealed class Psychic :
     {
         this.CreateAbilityCountButton(
 			Translation.GetString("PsychicPsychic"),
-            Loader.CreateSpriteFromResources(
-                Path.PsychicPsychic),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.PsychicPsychic),
 			CheckAbility,
 			CleanUp,
 			ForceAbilityOff);
@@ -272,15 +277,15 @@ public sealed class Psychic :
     public string GetFakeOptionString() => "";
 
     public void HookReportButton(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
     {
         sendPhotoInfo();
     }
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         sendPhotoInfo();
     }
@@ -290,7 +295,7 @@ public sealed class Psychic :
 		this.popUpper?.Clear();
 	}
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		this.counters?.Clear();
     }
@@ -397,48 +402,47 @@ public sealed class Psychic :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             PsychicOption.AwakeTaskGage,
             30, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
-		CreateIntOption(
+		factory.CreateIntOption(
 		   PsychicOption.AwakeDeadPlayerNum,
-		   2, 0, 7, 1, parentOps);
+		   2, 0, 7, 1);
 
-        this.CreateAbilityCountOption(
-            parentOps, 1, 5, 3.0f);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 5, 3.0f);
 
-		var isUpgradeOpt = CreateBoolOption(
+		var isUpgradeOpt = factory.CreateBoolOption(
 			PsychicOption.IsUpgradeAbility,
-			false, parentOps);
-		CreateIntOption(
+			false);
+		factory.CreateIntOption(
 			PsychicOption.UpgradeTaskGage,
 			70, 0, 100, 10,
 			isUpgradeOpt,
 			format: OptionUnit.Percentage);
-		CreateIntOption(
+		factory.CreateIntOption(
 		   PsychicOption.UpgradeDeadPlayerNum,
 		   5, 0, 15, 1, isUpgradeOpt);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		var allOpt = OptionManager.Instance;
+		var loader = this.Loader;
 
-		this.awakeTaskGage = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.AwakeTaskGage)) / 100.0f;
-		this.awakeDeadPlayerNum = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.AwakeDeadPlayerNum));
+		this.awakeTaskGage = loader.GetValue<PsychicOption, int>(
+			PsychicOption.AwakeTaskGage) / 100.0f;
+		this.awakeDeadPlayerNum = loader.GetValue<PsychicOption, int>(
+			PsychicOption.AwakeDeadPlayerNum);
 
-		this.upgradeTaskGage = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.UpgradeTaskGage)) / 100.0f;
-		this.upgradeDeadPlayerNum = allOpt.GetValue<int>(
-			GetRoleOptionId(PsychicOption.UpgradeDeadPlayerNum));
-		this.enableUpgrade = allOpt.GetValue<bool>(
-			GetRoleOptionId(PsychicOption.IsUpgradeAbility));
+		this.upgradeTaskGage = loader.GetValue<PsychicOption, int>(
+			PsychicOption.UpgradeTaskGage) / 100.0f;
+		this.upgradeDeadPlayerNum = loader.GetValue<PsychicOption, int>(
+			PsychicOption.UpgradeDeadPlayerNum);
+		this.enableUpgrade = loader.GetValue<PsychicOption, bool>(
+			PsychicOption.IsUpgradeAbility);
 
 		int maxPlayerNum = CachedPlayerControl.AllPlayerControls.Count - 1;
 

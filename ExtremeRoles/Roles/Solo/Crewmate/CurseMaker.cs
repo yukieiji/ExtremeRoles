@@ -6,12 +6,15 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -101,7 +104,7 @@ public sealed class CurseMaker :
     private Dictionary<byte, Arrow> deadBodyArrow;
     private Dictionary<byte, DeadBodyInfo> deadBodyData;
 
-    private GameData.PlayerInfo targetBody;
+    private NetworkedPlayerInfo targetBody;
     private byte deadBodyId;
 
     private bool isDeadBodySearch = false;
@@ -195,8 +198,8 @@ public sealed class CurseMaker :
 
         this.CreateAbilityCountButton(
             "curse",
-            Loader.CreateSpriteFromResources(
-                Path.CurseMakerCurse),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.CurseMakerCurse),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
@@ -277,105 +280,99 @@ public sealed class CurseMaker :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CurseMakerOption.CursingRange,
-            2.5f, 0.5f, 5.0f, 0.5f,
-            parentOps);
+            2.5f, 0.5f, 5.0f, 0.5f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             CurseMakerOption.AdditionalKillCool,
             5.0f, 1.0f, 30.0f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        this.CreateAbilityCountOption(
-            parentOps, 1, 3, 5.0f);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 3, 5.0f);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             CurseMakerOption.TaskCurseTimeReduceRate,
-            0, 0, 10, 1, parentOps,
+            0, 0, 10, 1,
             format: OptionUnit.Percentage);
 
-        var removeDeadBodyOpt = CreateBoolOption(
+        var removeDeadBodyOpt = factory.CreateBoolOption(
             CurseMakerOption.IsNotRemoveDeadBodyByTask,
-            false, parentOps);
+            false);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             CurseMakerOption.NotRemoveDeadBodyTaskGage,
             100, 0, 100, 5, removeDeadBodyOpt,
             format: OptionUnit.Percentage);
 
-        var searchDeadBodyOption = CreateBoolOption(
+        var searchDeadBodyOption = factory.CreateBoolOption(
             CurseMakerOption.IsDeadBodySearch,
-            true, parentOps);
+            true);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             CurseMakerOption.IsMultiDeadBodySearch,
             false, searchDeadBodyOption,
-            invert: true,
-            enableCheckOption: parentOps);
+            invert: true);
 
-        var searchTimeOpt = CreateFloatOption(
+        var searchTimeOpt = factory.CreateFloatOption(
             CurseMakerOption.SearchDeadBodyTime,
             60.0f, 0.5f, 120.0f, 0.5f,
             searchDeadBodyOption, format: OptionUnit.Second,
-            invert: true,
-            enableCheckOption: parentOps);
+            invert: true);
 
-        var taskBoostOpt = CreateBoolOption(
+        var taskBoostOpt = factory.CreateBoolOption(
             CurseMakerOption.IsReduceSearchForTask,
             false, searchDeadBodyOption,
-            invert: true,
-            enableCheckOption: parentOps);
+            invert: true);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             CurseMakerOption.ReduceSearchTaskGage,
             100, 25, 100, 5,
             taskBoostOpt,
             format: OptionUnit.Percentage,
-            invert: true,
-            enableCheckOption: taskBoostOpt);
+            invert: true);
 
-        var reduceTimeOpt = CreateFloatDynamicOption(
+        var reduceTimeOpt = factory.CreateFloatDynamicOption(
             CurseMakerOption.ReduceSearchDeadBodyTime,
             30f, 0.5f, 0.5f, taskBoostOpt,
             format: OptionUnit.Second,
             invert: true,
-            enableCheckOption: taskBoostOpt,
             tempMaxValue: 120.0f);
 
-        searchTimeOpt.SetUpdateOption(reduceTimeOpt);
+        searchTimeOpt.AddWithUpdate(reduceTimeOpt);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var loader = this.Loader;
 
-        this.additionalKillCool = allOption.GetValue<float>(
-            GetRoleOptionId(CurseMakerOption.AdditionalKillCool));
-        this.deadBodyCheckRange = allOption.GetValue<float>(
-            GetRoleOptionId(CurseMakerOption.CursingRange));
-        this.curseTimeReduceRate = 1.0f - (allOption.GetValue<int>(
-            GetRoleOptionId(CurseMakerOption.TaskCurseTimeReduceRate)) / 100.0f);
-        this.isNotRemoveDeadBodyByTask = allOption.GetValue<bool>(
-            GetRoleOptionId(CurseMakerOption.IsNotRemoveDeadBodyByTask));
-        this.notRemoveDeadBodyTaskGage = allOption.GetValue<int>(
-            GetRoleOptionId(CurseMakerOption.NotRemoveDeadBodyTaskGage)) / 100.0f;
-        this.isDeadBodySearch = allOption.GetValue<bool>(
-            GetRoleOptionId(CurseMakerOption.IsDeadBodySearch));
-        this.isMultiDeadBodySearch = allOption.GetValue<bool>(
-            GetRoleOptionId(CurseMakerOption.IsMultiDeadBodySearch));
-        this.searchDeadBodyTime = allOption.GetValue<float>(
-            GetRoleOptionId(CurseMakerOption.SearchDeadBodyTime));
+        this.additionalKillCool = loader.GetValue<CurseMakerOption, float>(
+            CurseMakerOption.AdditionalKillCool);
+        this.deadBodyCheckRange = loader.GetValue<CurseMakerOption, float>(
+            CurseMakerOption.CursingRange);
+        this.curseTimeReduceRate = 1.0f - (loader.GetValue<CurseMakerOption, int>(
+            CurseMakerOption.TaskCurseTimeReduceRate) / 100.0f);
+        this.isNotRemoveDeadBodyByTask = loader.GetValue<CurseMakerOption, bool>(
+            CurseMakerOption.IsNotRemoveDeadBodyByTask);
+        this.notRemoveDeadBodyTaskGage = loader.GetValue<CurseMakerOption, int>(
+            CurseMakerOption.NotRemoveDeadBodyTaskGage) / 100.0f;
+        this.isDeadBodySearch = loader.GetValue<CurseMakerOption, bool>(
+            CurseMakerOption.IsDeadBodySearch);
+        this.isMultiDeadBodySearch = loader.GetValue<CurseMakerOption, bool>(
+            CurseMakerOption.IsMultiDeadBodySearch);
+        this.searchDeadBodyTime = loader.GetValue<CurseMakerOption, float>(
+            CurseMakerOption.SearchDeadBodyTime);
 
         this.isDeadBodySearchUsed = false;
-        this.isReduceSearchByTask = allOption.GetValue<bool>(
-            GetRoleOptionId(CurseMakerOption.IsReduceSearchForTask));
-        this.reduceSearchtaskGage = allOption.GetValue<int>(
-            GetRoleOptionId(CurseMakerOption.ReduceSearchTaskGage)) / 100.0f;
-        this.reduceTime = allOption.GetValue<float>(
-            GetRoleOptionId(CurseMakerOption.ReduceSearchDeadBodyTime));
+        this.isReduceSearchByTask = loader.GetValue<CurseMakerOption, bool>(
+            CurseMakerOption.IsReduceSearchForTask);
+        this.reduceSearchtaskGage = loader.GetValue<CurseMakerOption, int>(
+            CurseMakerOption.ReduceSearchTaskGage) / 100.0f;
+        this.reduceTime = loader.GetValue<CurseMakerOption, float>(
+            CurseMakerOption.ReduceSearchDeadBodyTime);
 
         this.cursingText = Translation.GetString("cursing");
         this.deadBodyData = new Dictionary<byte, DeadBodyInfo>();
@@ -384,8 +381,8 @@ public sealed class CurseMaker :
         this.isRemoveDeadBody =
             this.isNotRemoveDeadBodyByTask && this.notRemoveDeadBodyTaskGage == 0.0f ? false : true;
 
-        this.curCurseTime = allOption.GetValue<float>(
-            GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime));
+        this.curCurseTime = loader.GetValue<RoleAbilityCommonOption, float>(
+            RoleAbilityCommonOption.AbilityActiveTime);
     }
 
     public void ResetOnMeetingStart()
@@ -399,7 +396,7 @@ public sealed class CurseMaker :
         deadBodyData.Clear();
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

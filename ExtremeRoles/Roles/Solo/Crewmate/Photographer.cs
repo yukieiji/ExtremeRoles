@@ -9,13 +9,16 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Interface;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -34,14 +37,14 @@ public sealed class Photographer :
 		private readonly byte playerId;
 
 		public PlayerPosInfo(
-            GameData.PlayerInfo player)
+            NetworkedPlayerInfo player)
         {
 			this.playerId = player.PlayerId;
             this.PlayerName = player.PlayerName;
 			Player.TryGetPlayerRoom(player.Object, out var room);
 			this.Room = room;
 		}
-		public PlayerPosInfo(GameData.PlayerInfo player, SystemTypes? room)
+		public PlayerPosInfo(NetworkedPlayerInfo player, SystemTypes? room)
 		{
 			this.playerId = player.PlayerId;
 			this.PlayerName = player.PlayerName;
@@ -328,8 +331,8 @@ public sealed class Photographer :
     {
         this.CreateAbilityCountButton(
             "takePhoto",
-            Loader.CreateSpriteFromResources(
-                Path.PhotographerPhotoCamera));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.PhotographerPhotoCamera));
         this.Button.SetLabelToCrewmate();
     }
 
@@ -380,15 +383,15 @@ public sealed class Photographer :
     public string GetFakeOptionString() => "";
 
     public void HookReportButton(
-        PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
     {
         sendPhotoInfo();
     }
 
     public void HookBodyReport(
         PlayerControl rolePlayer,
-        GameData.PlayerInfo reporter,
-        GameData.PlayerInfo reportBody)
+        NetworkedPlayerInfo reporter,
+        NetworkedPlayerInfo reportBody)
     {
         sendPhotoInfo();
     }
@@ -401,7 +404,7 @@ public sealed class Photographer :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         this.photoCreater.Reset();
     }
@@ -505,53 +508,49 @@ public sealed class Photographer :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             PhotographerOption.AwakeTaskGage,
             30, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             PhotographerOption.UpgradePhotoTaskGage,
             60, 0, 100, 10,
-            parentOps,
             format: OptionUnit.Percentage);
 
-        var chatUpgradeOpt = CreateBoolOption(
+        var chatUpgradeOpt = factory.CreateBoolOption(
             PhotographerOption.EnableAllSendChat,
-            false, parentOps, isHidden: true);
+            false);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             PhotographerOption.UpgradeAllSendChatTaskGage,
             80, 0, 100, 10,
             chatUpgradeOpt,
-            format: OptionUnit.Percentage,
-			isHidden: true);
+            format: OptionUnit.Percentage);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             PhotographerOption.PhotoRange,
-            10.0f, 2.5f, 50f, 0.5f,
-            parentOps);
+            10.0f, 2.5f, 50f, 0.5f);
 
-        this.CreateAbilityCountOption(
-            parentOps, 5, 10);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 5, 10);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
+        var loader = this.Loader;
 
-        this.awakeTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(PhotographerOption.AwakeTaskGage)) / 100.0f;
-        this.upgradePhotoTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)) / 100.0f;
+        this.awakeTaskGage = loader.GetValue<PhotographerOption, int>(
+            PhotographerOption.AwakeTaskGage) / 100.0f;
+        this.upgradePhotoTaskGage = loader.GetValue<PhotographerOption, int>(
+            PhotographerOption.UpgradePhotoTaskGage) / 100.0f;
 		this.enableAllSend =
-			allOpt.GetValue<bool>(
-				GetRoleOptionId(PhotographerOption.EnableAllSendChat));
-        this.upgradeAllSendChatTaskGage = allOpt.GetValue<int>(
-            GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)) / 100.0f;
+			loader.GetValue<PhotographerOption, bool>(
+				PhotographerOption.EnableAllSendChat);
+        this.upgradeAllSendChatTaskGage = loader.GetValue<PhotographerOption, int>(
+            PhotographerOption.UpgradeAllSendChatTaskGage) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -570,8 +569,8 @@ public sealed class Photographer :
             this.upgradeAllSendChatTaskGage <= 0.0f;
 
         this.photoCreater = new PhotoCamera(
-            allOpt.GetValue<float>(
-                GetRoleOptionId(PhotographerOption.PhotoRange)));
+			loader.GetValue<PhotographerOption, float>(
+                PhotographerOption.PhotoRange));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
     }

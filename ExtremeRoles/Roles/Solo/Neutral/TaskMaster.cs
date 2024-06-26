@@ -2,12 +2,14 @@
 using System.Linq;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -44,8 +46,8 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
 
         var playerInfo = GameData.Instance.GetPlayerById(
             rolePlayer.PlayerId);
-        if (playerInfo.IsDead || 
-            playerInfo.Disconnected || 
+        if (playerInfo.IsDead ||
+            playerInfo.Disconnected ||
             playerInfo.Tasks.Count == 0) { return; }
 
         int compCount = 0;
@@ -96,7 +98,7 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
         }
         for (int i = 0; i < this.addNormalTask; ++i)
         {
-            this.addTask.Add(GameSystem.GetRandomNormalTaskId());
+            this.addTask.Add(GameSystem.GetRandomShortTaskId());
         }
     }
 
@@ -115,33 +117,33 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             TaskMasterOption.CanUseSabotage,
-            true, parentOps);
-        CreateIntOption(
+            true);
+        factory.CreateIntOption(
             TaskMasterOption.AddCommonTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             TaskMasterOption.AddLongTaskNum,
-            1, 0, 15, 1, parentOps);
-        CreateIntOption(
+            1, 0, 15, 1);
+        factory.CreateIntOption(
             TaskMasterOption.AddNormalTaskNum,
-            1, 0, 15, 1, parentOps);
+            1, 0, 15, 1);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
-        this.UseSabotage = allOption.GetValue<bool>(
-            GetRoleOptionId(TaskMasterOption.CanUseSabotage));
-        this.addLongTask = allOption.GetValue<int>(
-            GetRoleOptionId(TaskMasterOption.AddLongTaskNum));
-        this.addNormalTask = allOption.GetValue<int>(
-            GetRoleOptionId(TaskMasterOption.AddNormalTaskNum));
-        this.addCommonTask = allOption.GetValue<int>(
-            GetRoleOptionId(TaskMasterOption.AddCommonTaskNum));
+        var cate = this.Loader;
+        this.UseSabotage = cate.GetValue<TaskMasterOption, bool>(
+            TaskMasterOption.CanUseSabotage);
+        this.addLongTask = cate.GetValue<TaskMasterOption, int>(
+            TaskMasterOption.AddLongTaskNum);
+        this.addNormalTask = cate.GetValue<TaskMasterOption, int>(
+            TaskMasterOption.AddNormalTaskNum);
+        this.addCommonTask = cate.GetValue<TaskMasterOption, int>(
+            TaskMasterOption.AddCommonTaskNum);
         this.addTask = new List<int>();
     }
     private void resetTask(byte playerId)

@@ -16,6 +16,10 @@ using ExtremeRoles.Performance;
 using BepInEx.Unity.IL2CPP.Utils;
 using System.Linq;
 
+using ExtremeRoles.Module.CustomOption.Factory;
+
+
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
@@ -82,30 +86,29 @@ public sealed class Missionary :
         this.IsNeutralSameTeam(targetRole);
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MissionaryOption.TellDeparture,
-            true, parentOps);
-        CreateFloatOption(
+            true);
+        factory.CreateFloatOption(
             MissionaryOption.DepartureMinTime,
             10f, 1.0f, 15f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateFloatOption(
+			format: OptionUnit.Second);
+        factory.CreateFloatOption(
             MissionaryOption.DepartureMaxTime,
-            30f, 15f, 120f, 0.5f,
-            parentOps, format: OptionUnit.Second);
-        CreateFloatOption(
+            30f, 15f, 120f, 0.5f
+            , format: OptionUnit.Second);
+        factory.CreateFloatOption(
             MissionaryOption.PropagateRange,
-            1.2f, 0.0f, 2.0f, 0.1f,
-            parentOps);
+            1.2f, 0.0f, 2.0f, 0.1f);
 
-        this.CreateCommonAbilityOption(parentOps);
+        IRoleAbility.CreateCommonAbilityOption(factory);
 
-		var useOpt = CreateBoolOption(
+		var useOpt = factory.CreateBoolOption(
 			MissionaryOption.IsUseSolemnJudgment,
-			false, parentOps);
-		CreateIntOption(
+			false);
+		factory.CreateIntOption(
 			MissionaryOption.MaxJudgementNum,
 			3, 1, GameSystem.VanillaMaxPlayerNum, 1,
 			useOpt);
@@ -116,18 +119,20 @@ public sealed class Missionary :
         this.lamb = new List<PlayerControl>(CachedPlayerControl.AllPlayerControls.Count);
         this.timer = 0;
 
-        this.tellDeparture = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(MissionaryOption.TellDeparture));
-        this.maxTimerTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(MissionaryOption.DepartureMaxTime));
-        this.minTimerTime = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(MissionaryOption.DepartureMinTime));
-        this.propagateRange = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(MissionaryOption.PropagateRange));
-		this.isUseSolemnJudgment = OptionManager.Instance.GetValue<bool>(
-		   GetRoleOptionId(MissionaryOption.IsUseSolemnJudgment));
-		this.maxJudgementTarget = OptionManager.Instance.GetValue<int>(
-		   GetRoleOptionId(MissionaryOption.MaxJudgementNum));
+		var cate = this.Loader;
+
+        this.tellDeparture = cate.GetValue<MissionaryOption, bool>(
+            MissionaryOption.TellDeparture);
+        this.maxTimerTime = cate.GetValue<MissionaryOption, float>(
+            MissionaryOption.DepartureMaxTime);
+        this.minTimerTime = cate.GetValue<MissionaryOption, float>(
+            MissionaryOption.DepartureMinTime);
+        this.propagateRange = cate.GetValue<MissionaryOption, float>(
+            MissionaryOption.PropagateRange);
+		this.isUseSolemnJudgment = cate.GetValue<MissionaryOption, bool>(
+		   MissionaryOption.IsUseSolemnJudgment);
+		this.maxJudgementTarget = cate.GetValue<MissionaryOption, int>(
+		   MissionaryOption.MaxJudgementNum);
 
 		this.judgementTarget = new HashSet<byte>();
 
@@ -137,8 +142,8 @@ public sealed class Missionary :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "propagate", Loader.CreateSpriteFromResources(
-                Path.MissionaryPropagate));
+            "propagate", Resources.Loader.CreateSpriteFromResources(
+				Path.MissionaryPropagate));
     }
 
     public bool IsAbilityUse()
@@ -166,7 +171,7 @@ public sealed class Missionary :
         }
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		if (exiledPlayer != null)
 		{

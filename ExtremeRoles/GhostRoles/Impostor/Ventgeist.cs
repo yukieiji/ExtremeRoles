@@ -9,9 +9,11 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
+
+
 #nullable enable
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factories.AutoParentSetFactory;
+using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 using ExtremeRoles.Extension.VentModule;
 
 namespace ExtremeRoles.GhostRoles.Impostor;
@@ -56,8 +58,7 @@ public sealed class Ventgeist : GhostRoleBase
 
     public override void Initialize()
     {
-        this.range = OptionManager.Instance.GetValue<float>(
-            GetRoleOptionId(Option.Range));
+        this.range = this.Loader.GetValue<Option, float>(Option.Range);
     }
 
     protected override void OnMeetingEndHook()

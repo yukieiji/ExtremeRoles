@@ -14,6 +14,11 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
@@ -55,13 +60,13 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "juggling",
-            Loader.CreateSpriteFromResources(
-                Path.MagicianJuggling));
+			Resources.Loader.CreateSpriteFromResources(
+				Path.MagicianJuggling));
     }
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -131,35 +136,35 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        this.CreateAbilityCountOption(parentOps, 1, 10);
+        IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             MagicianOption.TeleportTargetRate,
-            100, 10, 100, 10, parentOps,
+            100, 10, 100, 10,
             format: OptionUnit.Percentage);
-        CreateBoolOption(
+        factory.CreateBoolOption(
             MagicianOption.DupeTeleportTargetTo,
-            true, parentOps);
-        CreateBoolOption(
+            true);
+        factory.CreateBoolOption(
             MagicianOption.IncludeSpawnPoint,
-            false, parentOps);
-        CreateBoolOption(
+            false);
+        factory.CreateBoolOption(
             MagicianOption.IncludeRolePlayer,
-            false, parentOps);
+            false);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
-        this.teleportRate = (float)allOption.GetValue<int>(
-            GetRoleOptionId(MagicianOption.TeleportTargetRate)) / 100.0f;
-        this.dupeTeleportTarget = allOption.GetValue<bool>(
-            GetRoleOptionId(MagicianOption.DupeTeleportTargetTo));
-        this.includeRolePlayer = allOption.GetValue<bool>(
-            GetRoleOptionId(MagicianOption.IncludeSpawnPoint));
-        this.includeSpawnPoint = allOption.GetValue<bool>(
-            GetRoleOptionId(MagicianOption.IncludeRolePlayer));
+        var cate = this.Loader;
+        this.teleportRate = (float)cate.GetValue<MagicianOption, int>(
+            MagicianOption.TeleportTargetRate) / 100.0f;
+        this.dupeTeleportTarget = cate.GetValue<MagicianOption, bool>(
+            MagicianOption.DupeTeleportTargetTo);
+        this.includeRolePlayer = cate.GetValue<MagicianOption, bool>(
+            MagicianOption.IncludeSpawnPoint);
+        this.includeSpawnPoint = cate.GetValue<MagicianOption, bool>(
+            MagicianOption.IncludeRolePlayer);
     }
 }

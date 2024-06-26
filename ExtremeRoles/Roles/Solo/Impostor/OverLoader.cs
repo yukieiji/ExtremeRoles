@@ -5,12 +5,15 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
@@ -88,17 +91,17 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     {
         this.CreatePassiveAbilityButton(
             "overLoad", "downLoad",
-            Loader.CreateSpriteFromResources(
-               Path.OverLoaderOverLoad),
-            Loader.CreateSpriteFromResources(
-               Path.OverLoaderDownLoad),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.OverLoaderOverLoad),
+			Resources.Loader.CreateSpriteFromResources(
+			   Path.OverLoaderDownLoad),
             this.CleanUp);
     }
 
     public bool IsAbilityUse() =>
         this.IsAwake && IRoleAbility.IsCommonUse();
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -243,29 +246,27 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             OverLoaderOption.AwakeImpostorNum,
             GameSystem.MaxImposterNum, 1,
-            GameSystem.MaxImposterNum, 1,
-            parentOps);
+            GameSystem.MaxImposterNum, 1);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             OverLoaderOption.AwakeKillCount,
-            0, 0, 3, 1,
-            parentOps);
+            0, 0, 3, 1);
 
-        this.CreateCommonAbilityOption(
-            parentOps, 7.5f);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 7.5f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             OverLoaderOption.KillCoolReduceRate,
-            75.0f, 50.0f, 90.0f, 1.0f, parentOps,
+            75.0f, 50.0f, 90.0f, 1.0f,
             format: OptionUnit.Percentage);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             OverLoaderOption.MoveSpeed,
-            1.5f, 1.0f, 3.0f, 0.1f, parentOps,
+            1.5f, 1.0f, 3.0f, 0.1f,
             format: OptionUnit.Multiplier);
     }
 
@@ -288,17 +289,17 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         this.defaultKillRange = this.KillRange;
         this.IsOverLoad = false;
 
-        var allOption = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.awakeImpNum = allOption.GetValue<int>(
-            GetRoleOptionId(OverLoaderOption.AwakeImpostorNum));
-        this.awakeKillCount = allOption.GetValue<int>(
-            GetRoleOptionId(OverLoaderOption.AwakeKillCount));
+        this.awakeImpNum = cate.GetValue<OverLoaderOption, int>(
+            OverLoaderOption.AwakeImpostorNum);
+        this.awakeKillCount = cate.GetValue<OverLoaderOption, int>(
+            OverLoaderOption.AwakeKillCount);
 
-        this.MoveSpeed = allOption.GetValue<float>(
-            GetRoleOptionId(OverLoaderOption.MoveSpeed));
-        this.reduceRate = allOption.GetValue<float>(
-            GetRoleOptionId(OverLoaderOption.KillCoolReduceRate));
+        this.MoveSpeed = cate.GetValue<OverLoaderOption, float>(
+            OverLoaderOption.MoveSpeed);
+        this.reduceRate = cate.GetValue<OverLoaderOption, float>(
+            OverLoaderOption.KillCoolReduceRate);
 
         this.killCount = 0;
 

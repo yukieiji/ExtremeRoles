@@ -20,6 +20,11 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
 public sealed class Teleporter :
@@ -206,10 +211,9 @@ public sealed class Teleporter :
 	{
 		if (this.Button == null) { return; }
 
-		var allOpt = OptionManager.Instance;
 		this.Button.Behavior.SetCoolTime(
-			allOpt.GetValue<float>(this.GetRoleOptionId(
-				RoleAbilityCommonOption.AbilityCoolTime)));
+			this.Loader.GetValue<RoleAbilityCommonOption, float>(
+				RoleAbilityCommonOption.AbilityCoolTime));
 
 		this.behavior.SetAbilityCount(0);
 
@@ -237,10 +241,10 @@ public sealed class Teleporter :
 
     public void CreateAbility()
     {
-        this.firstPortalImg = Loader.CreateSpriteFromResources(
-            Path.TeleporterFirstPortal);
-        this.secondPortalImg = Loader.CreateSpriteFromResources(
-            Path.TeleporterSecondPortal);
+        this.firstPortalImg = Resources.Loader.CreateSpriteFromResources(
+			Path.TeleporterFirstPortal);
+        this.secondPortalImg = Resources.Loader.CreateSpriteFromResources(
+			Path.TeleporterSecondPortal);
 
         this.behavior = new TeleporterAbilityBehavior(
             Translation.GetString("SetPortal"),
@@ -289,27 +293,28 @@ public sealed class Teleporter :
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             TeleporterOption.CanUseOtherPlayer,
-            false, parentOps);
-        this.CreateAbilityCountOption(
-            parentOps, 1, 3);
+            false);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 3);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.isSharePortal = OptionManager.Instance.GetValue<bool>(
-            GetRoleOptionId(TeleporterOption.CanUseOtherPlayer));
-        this.partNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(RoleAbilityCommonOption.AbilityCount));
+		var loader = this.Loader;
+        this.isSharePortal = loader.GetValue<TeleporterOption, bool>(
+            TeleporterOption.CanUseOtherPlayer);
+        this.partNum = loader.GetValue<RoleAbilityCommonOption, int>(
+            RoleAbilityCommonOption.AbilityCount);
     }
 
     private static void setPartFromMapJsonInfo(JArray json, int num)

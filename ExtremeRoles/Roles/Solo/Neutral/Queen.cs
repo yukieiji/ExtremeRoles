@@ -17,6 +17,10 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Queen :
@@ -173,26 +177,21 @@ public sealed class Queen :
         SingleRoleBase targetRole,
         PlayerControl targetPlayer)
     {
-        var multiAssignRole = targetRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
+        if (targetRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is VanillaRoleWrapper)
         {
-            if (multiAssignRole.AnotherRole is VanillaRoleWrapper)
-            {
-                FastDestroyableSingleton<RoleManager>.Instance.SetRole(
-                    targetPlayer, RoleTypes.Crewmate);
-                return;
-            }
-        }
+			FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+				targetPlayer, RoleTypes.Crewmate);
+			return;
+		}
 
         switch (targetPlayer.Data.Role.Role)
         {
             case RoleTypes.Crewmate:
             case RoleTypes.Impostor:
-                FastDestroyableSingleton<RoleManager>.Instance.SetRole(
-                    targetPlayer, RoleTypes.Crewmate);
-                break;
-            default:
-                break;
+				FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+					targetPlayer, RoleTypes.Crewmate);
+				break;
         }
     }
     private static void resetRole(
@@ -324,8 +323,8 @@ public sealed class Queen :
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "queenCharm", Loader.CreateSpriteFromResources(
-                Path.QueenCharm));
+            "queenCharm", Resources.Loader.CreateSpriteFromResources(
+				Path.QueenCharm));
     }
 
     public bool UseAbility()
@@ -358,7 +357,7 @@ public sealed class Queen :
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -445,61 +444,56 @@ public sealed class Queen :
         }
     }
 
-    protected override void CreateSpecificOption(IOptionInfo parentOps)
+    protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             QueenOption.CanUseVent,
-            false, parentOps);
+            false);
 
-        this.CreateAbilityCountOption(
-            parentOps, 1, 3);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 1, 3);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             QueenOption.Range,
-            1.0f, 0.5f, 2.6f, 0.1f,
-            parentOps);
-        CreateIntOption(
+            1.0f, 0.5f, 2.6f, 0.1f);
+        factory.CreateIntOption(
             QueenOption.ServantKillKillCoolReduceRate,
             40, 0, 85, 1,
-            parentOps,
             format:OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             QueenOption.ServantTaskKillCoolReduceRate,
             75, 0, 99, 1,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+        factory.CreateIntOption(
             QueenOption.ServantTaskCompKillCoolReduceRate,
             30, 0, 75, 1,
-            parentOps,
             format: OptionUnit.Percentage);
-        CreateFloatOption(
+        factory.CreateFloatOption(
             QueenOption.ServantSelfKillCool,
             30.0f, 0.5f, 60.0f, 0.5f,
-            parentOps,
             format: OptionUnit.Second);
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			QueenOption.ServantSucideWithQueenWhenHasKill,
-			true, parentOps);
+			true);
     }
 
     protected override void RoleSpecificInit()
     {
-		var optMng = OptionManager.Instance;
+		var cate = this.Loader;
 
-        this.range = optMng.GetValue<float>(GetRoleOptionId(QueenOption.Range));
-        this.UseVent = optMng.GetValue<bool>(
-            GetRoleOptionId(QueenOption.CanUseVent));
-        this.ServantSelfKillCool = optMng.GetValue<float>(
-            GetRoleOptionId(QueenOption.ServantSelfKillCool));
-        this.killKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)) / 100.0f);
-        this.taskKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)) / 100.0f);
-        this.taskCompKillCoolReduceRate = 1.0f - (optMng.GetValue<int>(
-            GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)) / 100.0f);
-		this.servantSucideWithQueenWhenHasKill = optMng.GetValue<bool>(
-			GetRoleOptionId(QueenOption.ServantSucideWithQueenWhenHasKill));
+        this.range = cate.GetValue<QueenOption, float>(QueenOption.Range);
+        this.UseVent = cate.GetValue<QueenOption, bool>(
+            QueenOption.CanUseVent);
+        this.ServantSelfKillCool = cate.GetValue<QueenOption, float>(
+            QueenOption.ServantSelfKillCool);
+        this.killKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
+            QueenOption.ServantKillKillCoolReduceRate) / 100.0f);
+        this.taskKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
+            QueenOption.ServantTaskKillCoolReduceRate) / 100.0f);
+        this.taskCompKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
+            QueenOption.ServantTaskCompKillCoolReduceRate) / 100.0f);
+		this.servantSucideWithQueenWhenHasKill = cate.GetValue<QueenOption, bool>(
+			QueenOption.ServantSucideWithQueenWhenHasKill);
 
 		this.servantTaskGage = new Dictionary<byte, float>();
         this.servantPlayerId = new HashSet<byte>();
@@ -580,8 +574,8 @@ public sealed class Servant :
     {
         this.Button = RoleAbilityFactory.CreateReusableAbility(
             "selfKill",
-            Loader.CreateSpriteFromResources(
-                Path.SucideSprite),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.SucideSprite),
             this.IsAbilityUse,
             this.UseAbility);
         this.Button.Behavior.SetCoolTime(coolTime);
@@ -644,7 +638,7 @@ public sealed class Servant :
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }
@@ -709,10 +703,14 @@ public sealed class Servant :
         var queen = Player.GetPlayerControlById(this.queenPlayerId);
         string fullDesc = base.GetFullDescription();
 
-        if (!queen) { return fullDesc; }
+        if (queen == null ||
+            queen.Data == null)
+		{
+			return fullDesc;
+		}
 
         return string.Format(
-            fullDesc, queen.Data?.PlayerName);
+            fullDesc, queen.Data.PlayerName);
     }
 
     public override Color GetTargetRoleSeeColor(
@@ -744,7 +742,7 @@ public sealed class Servant :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
         throw new Exception("Don't call this class method!!");
     }

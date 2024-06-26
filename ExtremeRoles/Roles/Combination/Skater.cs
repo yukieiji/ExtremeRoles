@@ -5,11 +5,17 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
+
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class SkaterManager : FlexibleCombinationRoleManagerBase
 {
-    public SkaterManager() : base(new Skater(), 1)
+    public SkaterManager() : base(
+		CombinationRoleType.Skater, new Skater(), 1)
     { }
 
 }
@@ -61,52 +67,46 @@ public sealed class Skater :
     {}
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        var imposterSetting = OptionManager.Instance.Get<bool>(
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter));
-        CreateKillerOption(imposterSetting);
+		var imposterSetting = factory.Get((int)CombinationRoleCommonOption.IsAssignImposter);
+		CreateKillerOption(factory, imposterSetting);
 
-		this.CreateAbilityCountOption(parentOps, 3, 50, 5.0f);
+		IRoleAbility.CreateAbilityCountOption(factory, 3, 50, 5.0f);
 
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.Acceleration,
-			1.25f, 0.05f, 2.0f, 0.05f,
-			parentOps);
-		CreateIntOption(
+			1.25f, 0.05f, 2.0f, 0.05f);
+		factory.CreateIntOption(
 			Option.MaxSpeed,
-			10, 5, 50, 1,
-			parentOps);
-		CreateFloatOption(
+			10, 5, 50, 1);
+		factory.CreateFloatOption(
 			Option.Friction,
-			0.25f, -1.0f, 1.0f, 0.01f,
-			parentOps);
-		var eOpt = CreateBoolOption(
-			Option.UseE, true, parentOps);
-		CreateFloatOption(
+			0.25f, -1.0f, 1.0f, 0.01f);
+		var eOpt = factory.CreateBoolOption(
+			Option.UseE, true);
+		factory.CreateFloatOption(
 			Option.EValue,
 			0.9f, 0.0f, 2.0f, 0.01f,
 			eOpt,
-			invert: true,
-			enableCheckOption: parentOps);
-		CreateFloatOption(
+			invert: true);
+		factory.CreateFloatOption(
 			Option.CanUseSpeed,
-			2.0f, 0.0f, 50.0f, 0.1f,
-			parentOps);
+			2.0f, 0.0f, 50.0f, 0.1f);
 	}
 
     protected override void RoleSpecificInit()
     {
         this.roleNamePrefix = this.CreateImpCrewPrefix();
 
-		var opt = OptionManager.Instance;
+		var loader = this.Loader;
 		this.param = new SkaterSkateBehaviour.Parameter(
-			opt.GetValue<float>(this.GetRoleOptionId(Option.Friction)),
-			opt.GetValue<float>(this.GetRoleOptionId(Option.Acceleration)),
-			opt.GetValue<int>(this.GetRoleOptionId(Option.MaxSpeed)),
-			opt.GetValue<bool>(this.GetRoleOptionId(Option.UseE)) ? opt.GetValue<float>(this.GetRoleOptionId(Option.EValue)) : null);
+			loader.GetValue<Option, float>(Option.Friction),
+			loader.GetValue<Option, float>(Option.Acceleration),
+			loader.GetValue<Option, int>(Option.MaxSpeed),
+			loader.GetValue<Option, bool>(Option.UseE) ? loader.GetValue<Option, float>(Option.EValue) : null);
 		this.canUseSpeed =
-			opt.GetValue<float>(this.GetRoleOptionId(Option.CanUseSpeed)) *
+			loader.GetValue<Option, float>(Option.CanUseSpeed) *
 			SkaterSkateBehaviour.SpeedOffset;
     }
 
@@ -137,9 +137,9 @@ public sealed class Skater :
 	{
 		this.CreatePassiveAbilityButton(
 			"SkaterSkateOn", "SkaterSkateOff",
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.SkaterSkateOn),
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.SkaterSkateOff),
 			this.CleanUp);
 
@@ -154,7 +154,7 @@ public sealed class Skater :
 		this.setBehaviourEnable(false);
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{ }
 
 	public void ResetOnMeetingStart()

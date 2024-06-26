@@ -3,11 +3,14 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -23,7 +26,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     }
 
 
-    public GameData.PlayerInfo targetBody;
+    public NetworkedPlayerInfo targetBody;
     public byte eatingBodyId;
 
     private float eatingRange = 1.0f;
@@ -63,8 +66,8 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateAbilityCountButton(
             "evolve",
-            Loader.CreateSpriteFromResources(
-                Path.EvolverEvolved),
+			Resources.Loader.CreateSpriteFromResources(
+				Path.EvolverEvolved),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: ForceCleanUp);
@@ -145,33 +148,32 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateBoolOption(
+        factory.CreateBoolOption(
             EvolverOption.IsEvolvedAnimation,
-            true, parentOps);
+            true);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             EvolverOption.IsEatingEndCleanBody,
-            true, parentOps);
+            true);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             EvolverOption.EatingRange,
-            2.5f, 0.5f, 5.0f, 0.5f,
-            parentOps);
+            2.5f, 0.5f, 5.0f, 0.5f);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             EvolverOption.KillCoolReduceRate,
-            10, 1, 50, 1, parentOps,
+            10, 1, 50, 1,
             format: OptionUnit.Percentage);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             EvolverOption.KillCoolResuceRateMulti,
             1.0f, 1.0f, 5.0f, 0.1f,
-            parentOps, format: OptionUnit.Multiplier);
+            format: OptionUnit.Multiplier);
 
-        this.CreateAbilityCountOption(
-            parentOps, 5, 10, 5.0f);
+        IRoleAbility.CreateAbilityCountOption(
+            factory, 5, 10, 5.0f);
     }
 
     protected override void RoleSpecificInit()
@@ -185,18 +187,18 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 
         this.defaultKillCoolTime = this.KillCoolTime;
 
-        var allOption = OptionManager.Instance;
+        var cate = this.Loader;
 
-        this.isEvolvdAnimation = allOption.GetValue<bool>(
-            GetRoleOptionId(EvolverOption.IsEvolvedAnimation));
-        this.isEatingEndCleanBody = allOption.GetValue <bool>(
-            GetRoleOptionId(EvolverOption.IsEatingEndCleanBody));
-        this.eatingRange = allOption.GetValue<float>(
-            GetRoleOptionId(EvolverOption.EatingRange));
-        this.reduceRate = allOption.GetValue<int>(
-            GetRoleOptionId(EvolverOption.KillCoolReduceRate));
-        this.reruceMulti = allOption.GetValue<float>(
-            GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti));
+        this.isEvolvdAnimation = cate.GetValue<EvolverOption, bool>(
+            EvolverOption.IsEvolvedAnimation);
+        this.isEatingEndCleanBody = cate.GetValue<EvolverOption, bool>(
+            EvolverOption.IsEatingEndCleanBody);
+        this.eatingRange = cate.GetValue<EvolverOption, float>(
+            EvolverOption.EatingRange);
+        this.reduceRate = cate.GetValue<EvolverOption, int>(
+            EvolverOption.KillCoolReduceRate);
+        this.reruceMulti = cate.GetValue<EvolverOption, float>(
+            EvolverOption.KillCoolResuceRateMulti);
 
         this.eatingText = Translation.GetString("eating");
 
@@ -207,7 +209,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
     }

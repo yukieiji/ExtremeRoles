@@ -6,12 +6,15 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+
+using ExtremeRoles.Module.CustomOption.Factory;
+using static ExtremeRoles.Roles.Solo.Neutral.Yoko;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -365,7 +368,7 @@ public sealed class Yandere :
         this.CanKill = false;
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         if (this.isRunawayNextMeetingEnd)
         {
@@ -398,81 +401,79 @@ public sealed class Yandere :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-        CreateIntOption(
+        factory.CreateIntOption(
             YandereOption.TargetKilledKillCoolReduceRate,
             85, 25, 99, 1,
-            parentOps, format: OptionUnit.Percentage);
+            format: OptionUnit.Percentage);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.NoneTargetKilledKillCoolMultiplier,
             1.2f, 1.0f, 2.0f, 0.1f,
-            parentOps, format: OptionUnit.Multiplier);
+            format: OptionUnit.Multiplier);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.BlockTargetTime,
             5.0f, 0.5f, 30.0f, 0.5f,
-            parentOps, format: OptionUnit.Second);
+			format: OptionUnit.Second);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.SetTargetRange,
-            1.8f, 0.5f, 5.0f, 0.1f,
-            parentOps);
+            1.8f, 0.5f, 5.0f, 0.1f);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.SetTargetTime,
             2.0f, 0.1f, 7.5f, 0.1f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateIntOption(
+        factory.CreateIntOption(
             YandereOption.MaxTargetNum,
-            5, 1, GameSystem.VanillaMaxPlayerNum, 1, parentOps);
+            5, 1, GameSystem.VanillaMaxPlayerNum, 1);
 
-        CreateFloatOption(
+        factory.CreateFloatOption(
             YandereOption.RunawayTime,
             60.0f, 25.0f, 120.0f, 0.25f,
-            parentOps, format: OptionUnit.Second);
+            format: OptionUnit.Second);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             YandereOption.HasOneSidedArrow,
-            true, parentOps);
+            true);
 
-        CreateBoolOption(
+        factory.CreateBoolOption(
             YandereOption.HasTargetArrow,
-            true, parentOps);
+            true);
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+		var cate = this.Loader;
 
+        this.setTargetRange = cate.GetValue<YandereOption, float>(
+            YandereOption.SetTargetRange);
+        this.setTargetTime = cate.GetValue<YandereOption, float>(
+            YandereOption.SetTargetTime);
 
-        this.setTargetRange = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.SetTargetRange));
-        this.setTargetTime = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.SetTargetTime));
+        this.targetKillReduceRate = cate.GetValue<YandereOption, int>(
+            YandereOption.TargetKilledKillCoolReduceRate);
+        this.noneTargetKillMultiplier = cate.GetValue<YandereOption, float>(
+            YandereOption.NoneTargetKilledKillCoolMultiplier);
 
-        this.targetKillReduceRate = allOption.GetValue<int>(
-            GetRoleOptionId(YandereOption.TargetKilledKillCoolReduceRate));
-        this.noneTargetKillMultiplier = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.NoneTargetKilledKillCoolMultiplier));
-
-        this.maxTargetNum = allOption.GetValue<int>(
-            GetRoleOptionId(YandereOption.MaxTargetNum));
+        this.maxTargetNum = cate.GetValue<YandereOption, int>(
+            YandereOption.MaxTargetNum);
 
         this.timer = 0.0f;
-        this.timeLimit = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.RunawayTime));
+        this.timeLimit = cate.GetValue<YandereOption, float>(
+            YandereOption.RunawayTime);
 
         this.blockTimer = 0.0f;
-        this.blockTargetTime = allOption.GetValue<float>(
-            GetRoleOptionId(YandereOption.BlockTargetTime));
+        this.blockTargetTime = cate.GetValue<YandereOption, float>(
+            YandereOption.BlockTargetTime);
 
-        this.hasOneSidedArrow = allOption.GetValue<bool>(
-            GetRoleOptionId(YandereOption.HasOneSidedArrow));
+        this.hasOneSidedArrow = cate.GetValue<YandereOption, bool>(
+            YandereOption.HasOneSidedArrow);
         this.target = new KillTarget(
-            allOption.GetValue<bool>(GetRoleOptionId(YandereOption.HasTargetArrow)));
+			cate.GetValue<YandereOption, bool>(YandereOption.HasTargetArrow));
 
         this.progress = new Dictionary<byte, float>();
 
@@ -514,7 +515,7 @@ public sealed class Yandere :
         PlayerControl rolePlayer,
         Vector2 pos)
     {
-        foreach (GameData.PlayerInfo playerInfo in
+        foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 

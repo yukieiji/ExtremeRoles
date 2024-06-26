@@ -170,7 +170,16 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 					DataManager.Player.Customization.Color;
 
 				__instance.UpdateMaterials(colorChip.Inner.FrontLayer, vi);
-				vi.SetPreview(colorChip.Inner.FrontLayer, color);
+				if (ExtremeVisorManager.VisorData.TryGetValue(
+						vi.ProductId, out var customVi) &&
+					customVi != null)
+				{
+					CustomCosmicTab.SetPreviewToRawSprite(colorChip, customVi.Preview, color);
+				}
+				else
+				{
+					vi.SetPreview(colorChip.Inner.FrontLayer, color);
+				}
 
                 __instance.ColorChips.Add(colorChip);
 

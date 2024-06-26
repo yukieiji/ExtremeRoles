@@ -53,16 +53,11 @@ public sealed class Controller : NullableSingleton<Controller>
 		{
 			this.button.CreateInfoButton(toggleView);
 		}
-		else
-		{
-			this.button.SetInfoButtonToGameStartShipPositon();
-		}
 		UpdateFunc.InitializeLobby(this.model);
 	}
 
 	public void InitializeToGame()
 	{
-		this.button.SetInfoButtonToInGamePositon();
 		if (!GameSystem.IsFreePlay)
 		{
 			UpdateFunc.InitializeGame(this.model);

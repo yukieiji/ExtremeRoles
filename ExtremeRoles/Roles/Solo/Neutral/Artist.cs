@@ -10,6 +10,10 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+
+
+using ExtremeRoles.Module.CustomOption.Factory;
+
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
@@ -69,9 +73,9 @@ public sealed class Artist :
     {
 		this.CreatePassiveAbilityButton(
 			"ArtistArtOn", "ArtistArtOff",
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.ArtistArtOn),
-			Loader.CreateSpriteFromResources(
+			Resources.Loader.CreateSpriteFromResources(
 			   Path.ArtistArtOff),
 			this.CleanUp,
 			() =>
@@ -143,28 +147,28 @@ public sealed class Artist :
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			ArtistOption.CanUseVent,
-			false, parentOps);
-		CreateIntOption(
+			false);
+		factory.CreateIntOption(
 			ArtistOption.WinAreaSize,
-			15, 1, 100, 1, parentOps);
-        this.CreateCommonAbilityOption(
-            parentOps, 3.0f);
+			15, 1, 100, 1);
+        IRoleAbility.CreateCommonAbilityOption(
+            factory, 3.0f);
 
     }
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionManager.Instance;
+        var cate = this.Loader;
 
 		this.area = 0.0f;
-		this.UseVent = allOption.GetValue<bool>(
-			GetRoleOptionId(ArtistOption.CanUseVent));
-		this.winArea = allOption.GetValue<int>(
-			GetRoleOptionId(ArtistOption.WinAreaSize));
+		this.UseVent = cate.GetValue<ArtistOption, bool>(
+			ArtistOption.CanUseVent);
+		this.winArea = cate.GetValue<ArtistOption, int>(
+			ArtistOption.WinAreaSize);
     }
 
     public void ResetOnMeetingStart()
@@ -173,7 +177,7 @@ public sealed class Artist :
 		drawOps(CachedPlayerControl.LocalPlayer);
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
