@@ -2,8 +2,6 @@
 
 public enum CommonOptionKey : int
 {
-	PresetSelection = 0,
-
 	UseRaiseHand,
 
 	UseStrongRandomGen,

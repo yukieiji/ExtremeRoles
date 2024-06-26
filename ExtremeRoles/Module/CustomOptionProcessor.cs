@@ -11,6 +11,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomOption.Migrator;
 
 #nullable enable
 
@@ -141,15 +142,6 @@ public static class CustomOptionCsvProcessor
 
 			string[] info = infoData.Split(comma);
 			string exrVersion = info[2];
-			exrVersion = exrVersion.Replace("ExtremeRoles ver.", "");
-			if (!Version.TryParse(exrVersion, out var version) ||
-				version is null ||
-				version.Major <= 10)
-			{
-				ExtremeRolesPlugin.Logger.LogError(
-					$"Can't load v11 below options data, wait for next update.");
-				return false;
-			}
 
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"Loading from {info[1]} with {exrVersion} {info[3]} Data");
@@ -218,6 +210,19 @@ public static class CustomOptionCsvProcessor
 						break;
 				}
 			}
+
+			exrVersion = exrVersion.Replace("ExtremeRoles ver.", "");
+			if (!Version.TryParse(exrVersion, out var version) ||
+				version is null)
+			{
+				return false;
+			}
+
+			if (MigratorManager.IsMigrate(version))
+			{
+				MigratorManager.MigrateExportedOption(importedOption, version.Major);
+			}
+
 			var optionMng = OptionManager.Instance;
 			var cleaner = new StringCleaner();
 
