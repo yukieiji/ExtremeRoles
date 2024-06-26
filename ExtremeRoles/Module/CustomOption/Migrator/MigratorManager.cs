@@ -25,9 +25,6 @@ public static class MigratorManager
 
 		bool result = IsMigrate(version);
 
-		// いらないので消す
-		config.Remove(def);
-
 		return result;
 	}
 
@@ -57,7 +54,6 @@ public static class MigratorManager
 				ExtremeRolesPlugin.Logger.LogInfo($"---- End Migrating ----");
 			}
 		}
-		config.Remove(def);
 		ExtremeRolesPlugin.Logger.LogInfo($"Migrating Complete");
 	}
 
