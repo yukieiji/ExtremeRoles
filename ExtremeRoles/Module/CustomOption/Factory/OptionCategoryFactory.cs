@@ -7,12 +7,8 @@ using System.Text.RegularExpressions;
 
 using UnityEngine;
 
-
-
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
-
 
 
 #nullable enable
@@ -208,7 +204,7 @@ public class OptionCategoryFactory(
 		return opt;
 	}
 
-	protected void AddOption<SelectionType>(
+	public void AddOption<SelectionType>(
 		int id,
 		IValueOption<SelectionType> option) where SelectionType :
 		struct, IComparable, IConvertible,

@@ -5,13 +5,13 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
-
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.CustomOption.Migrator;
+
 
 #nullable enable
 
@@ -61,20 +61,21 @@ public static class CustomOptionCsvProcessor
 			{
 				foreach (var cate in tabContainer.Category)
 				{
-					if (cate.Id == 0 &&
-						tab is OptionTab.General)
-					{
-						continue;
-					}
-
+					int cateId = cate.Id;
 					foreach (var option in cate.Options)
 					{
+						var info = option.Info;
+						if (PresetOption.IsPreset(cateId, info.Id))
+						{
+							continue;
+						}
+
 						csv.WriteLine(
 							string.Format("{1}{0}{2}{0}{3}{0}{4}",
 								comma,
 								cleaner.Clean(option.Title),
 								cleaner.Clean(option.ValueString),
-								cleaner.Clean(option.Info.Name),
+								cleaner.Clean(info.Name),
 								option.Selection));
 					}
 				}
@@ -230,12 +231,14 @@ public static class CustomOptionCsvProcessor
 			{
 				foreach (var cate in tabContainer.Category)
 				{
-					if (cate.Id == 0 && tab is OptionTab.General) { continue; }
+					int cateId = cate.Id;
 
 					foreach (var option in cate.Options)
 					{
-						string name = option.Info.Name;
-						if (!importedOption.TryGetValue(
+						var optionInfo = option.Info;
+						string name = optionInfo.Name;
+						if (PresetOption.IsPreset(cateId, optionInfo.Id) ||
+							!importedOption.TryGetValue(
 								cleaner.Clean(name),
 							out int selection))
 						{
