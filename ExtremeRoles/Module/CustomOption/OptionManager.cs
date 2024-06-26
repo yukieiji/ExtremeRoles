@@ -171,6 +171,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		int id = option.Info.Id;
 		if (category.Id == 0 && id == 0)
 		{
+			this.selectedPreset = newIndex;
+
 			// プリセット切り替え
 			switchPreset();
 			ShereAllOption();
