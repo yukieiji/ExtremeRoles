@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -18,7 +19,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomOption;
 
-public sealed class OptionManager
+public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTabContainer>>
 {
 	public readonly static OptionManager Instance = new ();
 
@@ -76,6 +77,9 @@ public sealed class OptionManager
 			Logging.Error($"Error while deserializing options:{e.Message}");
 		}
 	}
+
+	public IEnumerator<KeyValuePair<OptionTab, OptionTabContainer>> GetEnumerator() => this.options.GetEnumerator();
+	IEnumerator IEnumerable.GetEnumerator() { throw new Exception(); }
 
 	public bool TryGetTab(OptionTab tab, [NotNullWhen(true)] out OptionTabContainer? container)
 		=> this.options.TryGetValue(tab, out container) && container is not null;

@@ -124,14 +124,12 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		int xIndex = 0;
 		int yIndex = 0;
 
-		foreach (var tab in Enum.GetValues<OptionTab>())
+		foreach (var (tab, tabContainer) in OptionManager.Instance)
 		{
 			var menu = initialize.NewMenu;
 			var button = initialize.NewTagButton;
-			if (OptionManager.Instance.TryGetTab(tab, out var optionTab))
-			{
-				menu.AllCategory = optionTab.Category.ToArray();
-			}
+
+			menu.AllCategory = tabContainer.Category.ToArray();
 
 			button.gameObject.name = $"{tab}Button";
 			button.ChangeButtonText(Translation.GetString(string.Format(

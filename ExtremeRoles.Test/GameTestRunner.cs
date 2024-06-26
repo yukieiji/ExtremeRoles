@@ -34,7 +34,7 @@ public sealed class GameTestRunner : TestRunnerBase
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
-				new("Random", 3),
+				new("Random", 256),
 				new("IRoleAbilityRole", 5,
 				[
 					ExtremeRoleId.Carpenter,
