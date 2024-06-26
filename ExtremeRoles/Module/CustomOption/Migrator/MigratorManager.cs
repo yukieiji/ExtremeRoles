@@ -18,10 +18,10 @@ public static class MigratorManager
 
 	private static ConfigDefinition def => new ConfigDefinition(category, key);
 
-	public static bool IsMigrate(in ConfigFile config)
+	public static bool IsMigrate(in ConfigFile config, out int version)
 	{
 		var def = MigratorManager.def;
-		int version = config.Bind(def, 10).Value;
+		version = config.Bind(def, 0).Value;
 
 		bool result = IsMigrate(version);
 
@@ -37,27 +37,45 @@ public static class MigratorManager
 
 	public static void MigrateConfig(in ConfigFile config, int startVersion)
 	{
-		foreach (MigratorBase migrator in allMigrator)
-		{
-			int checkVersion = migrator.TargetVersion;
-			if (checkVersion < startVersion)
-			{
-				migrator.MigrateConfig(config);
-				startVersion = checkVersion;
-			}
-		}
-	}
+		ExtremeRolesPlugin.Logger.LogInfo($"Migrating Config....");
+		var def = MigratorManager.def;
+		var entry = config.Bind(def, 0);
 
-	public static void MigrateExportedOption(in Dictionary<string, int> importedOption, int startVersion)
-	{
 		foreach (MigratorBase migrator in allMigrator)
 		{
 			int checkVersion = migrator.TargetVersion;
 			if (startVersion < checkVersion)
 			{
-				migrator.MigrateExportedOption(importedOption);
+				ExtremeRolesPlugin.Logger.LogInfo($"---- Start Migrating {startVersion} to {checkVersion} ----");
+				migrator.MigrateConfig(config);
 				startVersion = checkVersion;
+
+				ExtremeRolesPlugin.Logger.LogInfo($"reloading config file....");
+				config.Reload();
+
+				entry.Value = startVersion;
+				ExtremeRolesPlugin.Logger.LogInfo($"---- End Migrating ----");
 			}
 		}
+		config.Remove(def);
+		ExtremeRolesPlugin.Logger.LogInfo($"Migrating Complete");
+	}
+
+	public static void MigrateExportedOption(in Dictionary<string, int> importedOption, int startVersion)
+	{
+		ExtremeRolesPlugin.Logger.LogInfo($"Migrating ExportedOption....");
+		foreach (MigratorBase migrator in allMigrator)
+		{
+			int checkVersion = migrator.TargetVersion;
+			if (startVersion < checkVersion)
+			{
+				ExtremeRolesPlugin.Logger.LogInfo($"---- Start Migrating {startVersion} to {checkVersion} ----");
+				migrator.MigrateExportedOption(importedOption);
+				startVersion = checkVersion;
+				ExtremeRolesPlugin.Logger.LogInfo($"---- End Migrating ----");
+			}
+		}
+
+		ExtremeRolesPlugin.Logger.LogInfo($"Migrating Complete");
 	}
 }

@@ -16,6 +16,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomOption.Migrator;
 
 namespace ExtremeRoles;
 
@@ -43,6 +44,11 @@ public partial class ExtremeRolesPlugin : BasePlugin
 	{
 		Instance = this;
 		Logger = Log;
+
+		if (MigratorManager.IsMigrate(this.Config, out int version))
+		{
+			MigratorManager.MigrateConfig(this.Config, version);
+		}
 	}
 
     public override void Load()
