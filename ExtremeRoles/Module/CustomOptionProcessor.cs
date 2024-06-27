@@ -5,12 +5,13 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-
-
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Migrator;
+
 
 #nullable enable
 
@@ -60,20 +61,21 @@ public static class CustomOptionCsvProcessor
 			{
 				foreach (var cate in tabContainer.Category)
 				{
-					if (cate.Id == 0 &&
-						tab is OptionTab.General)
-					{
-						continue;
-					}
-
+					int cateId = cate.Id;
 					foreach (var option in cate.Options)
 					{
+						var info = option.Info;
+						if (PresetOption.IsPreset(cateId, info.Id))
+						{
+							continue;
+						}
+
 						csv.WriteLine(
 							string.Format("{1}{0}{2}{0}{3}{0}{4}",
 								comma,
 								cleaner.Clean(option.Title),
 								cleaner.Clean(option.ValueString),
-								cleaner.Clean(option.Info.Name),
+								cleaner.Clean(info.Name),
 								option.Selection));
 					}
 				}
@@ -141,15 +143,6 @@ public static class CustomOptionCsvProcessor
 
 			string[] info = infoData.Split(comma);
 			string exrVersion = info[2];
-			exrVersion = exrVersion.Replace("ExtremeRoles ver.", "");
-			if (!Version.TryParse(exrVersion, out var version) ||
-				version is null ||
-				version.Major <= 10)
-			{
-				ExtremeRolesPlugin.Logger.LogError(
-					$"Can't load v11 below options data, wait for next update.");
-				return false;
-			}
 
 			ExtremeRolesPlugin.Logger.LogInfo(
 				$"Loading from {info[1]} with {exrVersion} {info[3]} Data");
@@ -218,6 +211,19 @@ public static class CustomOptionCsvProcessor
 						break;
 				}
 			}
+
+			exrVersion = exrVersion.Replace("ExtremeRoles ver.", "");
+			if (!Version.TryParse(exrVersion, out var version) ||
+				version is null)
+			{
+				return false;
+			}
+
+			if (MigratorManager.IsMigrate(version))
+			{
+				MigratorManager.MigrateExportedOption(importedOption, version.Major);
+			}
+
 			var optionMng = OptionManager.Instance;
 			var cleaner = new StringCleaner();
 
@@ -225,12 +231,14 @@ public static class CustomOptionCsvProcessor
 			{
 				foreach (var cate in tabContainer.Category)
 				{
-					if (cate.Id == 0 && tab is OptionTab.General) { continue; }
+					int cateId = cate.Id;
 
 					foreach (var option in cate.Options)
 					{
-						string name = option.Info.Name;
-						if (!importedOption.TryGetValue(
+						var optionInfo = option.Info;
+						string name = optionInfo.Name;
+						if (PresetOption.IsPreset(cateId, optionInfo.Id) ||
+							!importedOption.TryGetValue(
 								cleaner.Clean(name),
 							out int selection))
 						{

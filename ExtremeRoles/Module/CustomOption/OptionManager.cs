@@ -7,8 +7,9 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Implemented;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension;
 using ExtremeRoles.Performance;
@@ -169,8 +170,10 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		option.Selection = newIndex;
 
 		int id = option.Info.Id;
-		if (category.Id == 0 && id == 0)
+		if (PresetOption.IsPreset(category.Id, id))
 		{
+			this.selectedPreset = newIndex;
+
 			// プリセット切り替え
 			switchPreset();
 			ShereAllOption();

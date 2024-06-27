@@ -3,7 +3,7 @@
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-// using ExtremeRoles.Module.CustomOption.Factories;
+using ExtremeRoles.Module.CustomOption.Implemented;
 
 
 
@@ -12,11 +12,10 @@ namespace ExtremeRoles;
 public static class OptionCreator
 {
 	public const int IntegrateOptionStartOffset = 15000;
-    private const int maxPresetNum = 20;
 
     public static readonly string[] Range = [ "short", "middle", "long" ];
 
-    private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
+    public static Color DefaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
     public enum PresetOptionKey : int
     {
@@ -43,18 +42,10 @@ public static class OptionCreator
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
-		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
-			CommonOption.PresetOption,
-			color: defaultOptionColor))
-		{
-			commonOptionFactory.CreateIntOption(
-				PresetOptionKey.Selection,
-				1, 1, maxPresetNum, 1,
-				format: OptionUnit.Preset);
-		}
+		PresetOption.Create(CommonOption.PresetOption.ToString());
 
 		using (var commonOptionFactory = OptionManager.CreateOptionCategory(
-			CommonOption.RandomOption, color: defaultOptionColor))
+			CommonOption.RandomOption, color: DefaultOptionColor))
 		{
 			var strongGen = commonOptionFactory.CreateBoolOption(
 				RandomOptionKey.UseStrong,　true);

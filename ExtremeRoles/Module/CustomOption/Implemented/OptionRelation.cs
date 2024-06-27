@@ -6,6 +6,11 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 
+public sealed class NoRelation() : IOptionRelation
+{
+	public List<IOption> Children => throw new System.NotImplementedException();
+}
+
 public sealed class DefaultRelation() : IOptionRelation
 {
 	public List<IOption> Children { get; } = new List<IOption>();
