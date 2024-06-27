@@ -2,6 +2,8 @@
 
 using System.Linq;
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
@@ -29,7 +31,7 @@ public static class GameOptionsMenuCreateSettingsPatch
 	}
 
 	private static void changeValueRange(
-	   OptionBehaviour[] child,
+	   Il2CppArrayBase<OptionBehaviour> child,
 	   StringNames name, float minValue, float maxValue)
 	{
 		if (!(
@@ -44,7 +46,7 @@ public static class GameOptionsMenuCreateSettingsPatch
 	}
 
 	private static OptionBehaviour tryGetOption(
-		this OptionBehaviour[] child,
+		this Il2CppArrayBase<OptionBehaviour> child,
 		StringNames name, out OptionBehaviour optionBehaviour)
 	{
 		optionBehaviour = child.FirstOrDefault(x => x.Title == name);
