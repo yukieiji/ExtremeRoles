@@ -5,6 +5,7 @@ using System.Linq;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Il2Cpp;
 
 
 namespace ExtremeRoles.Patches.Option;
@@ -31,10 +32,14 @@ public static class GameOptionsMenuCreateSettingsPatch
 	   OptionBehaviour[] child,
 	   StringNames name, float minValue, float maxValue)
 	{
-		if (!child.tryGetOption(name, out OptionBehaviour opt)) { return; }
+		if (!(
+				child.tryGetOption(name, out OptionBehaviour opt) &&
+				opt.IsTryCast<NumberOption>(out var numOpt)
+			))
+		{
+			return;
+		}
 
-		NumberOption numOpt = opt.TryCast<NumberOption>();
-		if (!numOpt) { return; }
 		numOpt.ValidRange = new FloatRange(minValue, maxValue);
 	}
 
