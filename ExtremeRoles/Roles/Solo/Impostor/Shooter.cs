@@ -120,7 +120,7 @@ public sealed class Shooter :
         {
             if (instance.AmDead) { return; }
             Shoot();
-            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+            PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
             if (BodyGuard.IsBlockMeetingKill &&
                 BodyGuard.TryRpcKillGuardedBodyGuard(
@@ -351,7 +351,7 @@ public sealed class Shooter :
         {
             return Design.ColoedString(
                 Palette.ImpostorRed,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

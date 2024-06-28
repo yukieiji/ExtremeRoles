@@ -36,7 +36,7 @@ internal sealed class AllPlayerArrows
         this.arrow.Clear();
         this.distance.Clear();
 
-        foreach (var player in CachedPlayerControl.AllPlayerControls)
+        foreach (var player in PlayerControl.AllPlayerControls)
         {
             if (player.PlayerId != rolePlayerId)
             {
@@ -572,7 +572,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
         if (this.arrow == null)
         {
             this.arrow = new AllPlayerArrows(
-                CachedPlayerControl.LocalPlayer.PlayerId);
+                PlayerControl.LocalPlayer.PlayerId);
         }
         this.arrow.SetActive(true);
         return true;
@@ -779,7 +779,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         if (this.arrow == null)
         {
             this.arrow = new AllPlayerArrows(
-                CachedPlayerControl.LocalPlayer.PlayerId);
+                PlayerControl.LocalPlayer.PlayerId);
         }
         this.arrow.SetActive(true);
         return true;
@@ -926,7 +926,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         this.target = byte.MaxValue;
 
         PlayerControl player = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this, this.range);
+            PlayerControl.LocalPlayer, this, this.range);
 
         if (player == null) { return false; }
         this.target = player.PlayerId;

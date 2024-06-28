@@ -327,7 +327,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
 
         this.Target = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             this, GameOptionsData.KillDistances[
                 Mathf.Clamp(this.createSidekickRange, 0, 2)]);
 
@@ -340,7 +340,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         if (!isImpostorAndSetTarget(targetPlayerId)) { return false; }
         if (!isLoverAndSetTarget(targetPlayerId)) { return false; }
 
-        PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.ReplaceRole))
@@ -611,7 +611,7 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         }
 
         newJackal.Initialize();
-        if (targetId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (targetId == PlayerControl.LocalPlayer.PlayerId)
         {
             newJackal.CreateAbility();
         }

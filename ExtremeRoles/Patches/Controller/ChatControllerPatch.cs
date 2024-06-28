@@ -37,13 +37,13 @@ public static class ChatControllerAddChatPatch
 
 		if (sourcePlayer == null ||
 			sourcePlayer.Data == null ||
-			CachedPlayerControl.LocalPlayer == null ||
-			CachedPlayerControl.LocalPlayer.Data == null)
+			PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.Data == null)
 		{
 			return false;
 		}
 
-		NetworkedPlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
+		NetworkedPlayerInfo localPlayerData = PlayerControl.LocalPlayer.Data;
 		NetworkedPlayerInfo sourcePlayerData = sourcePlayer.Data;
 
 		var roleDict = ExtremeRoleManager.GameRole;
@@ -78,7 +78,7 @@ public static class ChatControllerAddChatPatch
 		{
 			chatBubble.transform.SetParent(__instance.scroller.Inner);
 			chatBubble.transform.localScale = Vector3.one;
-			bool isSamePlayer = sourcePlayerId == CachedPlayerControl.LocalPlayer.PlayerId;
+			bool isSamePlayer = sourcePlayerId == PlayerControl.LocalPlayer.PlayerId;
 			if (isSamePlayer)
 			{
 				chatBubble.SetRight();

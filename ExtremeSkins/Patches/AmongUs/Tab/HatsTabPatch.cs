@@ -171,7 +171,7 @@ public static class HatsTabPatch
 			colorChip.Tag = hat;
 
 			int color = __instance.HasLocalPlayer() ?
-				CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
+				PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
 				DataManager.Player.Customization.Color;
 			__instance.UpdateMaterials(colorChip.Inner.FrontLayer, hat);
 			if (ExtremeHatManager.HatData.TryGetValue(

@@ -124,7 +124,7 @@ public static class PlayerControlShapeshiftPatch
 
 			roleEffectAnimation.Play(
 				__instance, roleAnimation,
-				CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX,
+				PlayerControl.LocalPlayer.cosmetics.FlipX,
 				RoleEffectAnimation.SoundType.Local, 0f);
 			return false;
 		}

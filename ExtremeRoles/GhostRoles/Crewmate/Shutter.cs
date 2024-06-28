@@ -49,7 +49,7 @@ public sealed class Shutter : GhostRoleBase
 			this.takeTime = DateTime.UtcNow;
             var playerPoses = new List<(PlayerPosInfo, bool)>();
 
-            Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+            Vector3 photoCenter = PlayerControl.LocalPlayer.transform.position;
 
             foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {

@@ -187,12 +187,12 @@ public sealed class AnimationHat : CustomHat
 
 	private void updateHatView()
 	{
-		if (CachedPlayerControl.LocalPlayer == null ||
-			CachedPlayerControl.LocalPlayer.PlayerPhysics == null ||
-			CachedPlayerControl.LocalPlayer.PlayerPhysics.Animations == null) { return; }
+		if (PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.MyPhysics == null ||
+			PlayerControl.LocalPlayer.MyPhysics.Animations == null) { return; }
 
-		bool isFlip = CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX;
-		var animationGroup = CachedPlayerControl.LocalPlayer.PlayerPhysics.Animations;
+		bool isFlip = PlayerControl.LocalPlayer.cosmetics.FlipX;
+		var animationGroup = PlayerControl.LocalPlayer.MyPhysics.Animations;
 		var animation = this.Info.Animation!;
 
 		bool hasFrontFlip = this.Info.FrontFlip;

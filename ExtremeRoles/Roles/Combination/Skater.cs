@@ -115,7 +115,7 @@ public sealed class Skater :
 
 	public void IntroEndSetUp()
 	{
-		this.behaviour = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<SkaterSkateBehaviour>();
+		this.behaviour = PlayerControl.LocalPlayer.gameObject.AddComponent<SkaterSkateBehaviour>();
 		this.behaviour.Initialize(this.param);
 		this.setBehaviourEnable(false);
 	}

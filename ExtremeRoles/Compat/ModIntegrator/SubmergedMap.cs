@@ -351,7 +351,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		switch (vent.Id)
 		{
 			case 9:  // Cannot enter vent 9 (Engine Room Exit Only Vent)!
-				if (CachedPlayerControl.LocalPlayer.PlayerControl.inVent)
+				if (PlayerControl.LocalPlayer.inVent)
 				{
 					return false;
 				}

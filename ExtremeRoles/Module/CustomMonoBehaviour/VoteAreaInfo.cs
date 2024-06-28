@@ -22,7 +22,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public class VoteAreaInfo : MonoBehaviour
 {
-	protected CachedPlayerControl LocalPlayer;
+	protected PlayerControl LocalPlayer;
 	protected TextMeshPro NameText;
 	protected TextMeshPro MeetingInfo;
 
@@ -34,7 +34,7 @@ public class VoteAreaInfo : MonoBehaviour
 
 	public virtual void Init(PlayerVoteArea pva, bool commActive)
 	{
-		this.LocalPlayer = CachedPlayerControl.LocalPlayer;
+		this.LocalPlayer = PlayerControl.LocalPlayer;
 		this.NameText = pva.NameText;
 
 		this.MeetingInfo = Instantiate(

@@ -46,7 +46,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		PlayerControl pc = CachedPlayerControl.LocalPlayer;
+		PlayerControl pc = PlayerControl.LocalPlayer;
 
 		if (pc == null ||
 			pc.Data == null ||

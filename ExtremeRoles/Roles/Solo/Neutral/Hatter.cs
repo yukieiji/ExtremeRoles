@@ -203,7 +203,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 		if (localPlayer == null ||
 			exiledPlayer != null ||

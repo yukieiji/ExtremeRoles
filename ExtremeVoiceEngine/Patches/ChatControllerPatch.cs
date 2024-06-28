@@ -12,7 +12,7 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(0)] PlayerControl sourcePlayer,
         [HarmonyArgument(1)] string chatText)
     {
-		NetworkedPlayerInfo localPlayerData = CachedPlayerControl.LocalPlayer.Data;
+		NetworkedPlayerInfo localPlayerData = PlayerControl.LocalPlayer.Data;
 		NetworkedPlayerInfo sourcePlayerData = sourcePlayer.Data;
 
 		if (VoiceEngine.Instance == null ||

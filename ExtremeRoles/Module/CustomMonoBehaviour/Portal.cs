@@ -97,7 +97,7 @@ public class PortalBase : MonoBehaviour, IAmongUs.IUsable
 
 	public void Use()
 	{
-		PlayerControl player = CachedPlayerControl.LocalPlayer;
+		PlayerControl player = PlayerControl.LocalPlayer;
 
 		Player.RpcUncheckSnap(
 			player.PlayerId, this.pos - player.Collider.offset);

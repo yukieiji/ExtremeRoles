@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+/*
 // from TOR : https://github.com/Eisbison/TheOtherRoles/blob/main/TheOtherRoles/Players/CachedPlayer.cs
 
 namespace ExtremeRoles.Performance
@@ -11,7 +12,7 @@ namespace ExtremeRoles.Performance
 	{
 		public static readonly Dictionary<IntPtr, CachedPlayerControl> PlayerPtrs = new Dictionary<IntPtr, CachedPlayerControl>();
 		public static readonly List<CachedPlayerControl> AllPlayerControls = new List<CachedPlayerControl>();
-		public static CachedPlayerControl LocalPlayer;
+		public static PlayerControl LocalPlayer;
 
 		public Transform transform;
 		public PlayerControl PlayerControl;
@@ -33,18 +34,19 @@ namespace ExtremeRoles.Performance
 		public static void Remove(PlayerControl pc)
         {
 			AllPlayerControls.RemoveAll(
-				p => p.PlayerControl.Pointer == pc.Pointer);
+				p => p.Pointer == pc.Pointer);
 			PlayerPtrs.Remove(pc.Pointer);
 		}
 
 
-		public static implicit operator bool(CachedPlayerControl player)
+		public static implicit operator bool(PlayerControl player)
 		{
 			return player != null && player.PlayerControl;
 		}
 
-		public static implicit operator PlayerControl(CachedPlayerControl player) => player.PlayerControl;
+		public static implicit operator PlayerControl(PlayerControl player) => player.PlayerControl;
 
-		public static implicit operator PlayerPhysics(CachedPlayerControl player) => player.PlayerPhysics;
+		public static implicit operator PlayerPhysics(PlayerControl player) => player.MyPhysics;
 	}
 }
+*/

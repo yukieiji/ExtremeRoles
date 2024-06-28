@@ -17,7 +17,7 @@ public static class MiniGameExtension
 		game.MyNormTask = task as NormalPlayerTask;
 		game.timeOpened = Time.realtimeSinceStartup;
 
-		PlayerControl? localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl? localPlayer = PlayerControl.LocalPlayer;
 
 		if (localPlayer != null)
 		{
@@ -45,7 +45,7 @@ public static class MiniGameExtension
 				SoundManager.Instance.PlaySound(game.CloseSound, false, 1f, null);
 			}
 
-			PlayerControl? localPlayer = CachedPlayerControl.LocalPlayer;
+			PlayerControl? localPlayer = PlayerControl.LocalPlayer;
 
 			if (localPlayer != null)
 			{

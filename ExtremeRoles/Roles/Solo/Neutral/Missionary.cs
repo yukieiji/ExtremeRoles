@@ -116,7 +116,7 @@ public sealed class Missionary :
 
     protected override void RoleSpecificInit()
     {
-        this.lamb = new List<PlayerControl>(CachedPlayerControl.AllPlayerControls.Count);
+        this.lamb = new List<PlayerControl>(PlayerControl.AllPlayerControls.Count);
         this.timer = 0;
 
 		var cate = this.Loader;
@@ -149,7 +149,7 @@ public sealed class Missionary :
     public bool IsAbilityUse()
     {
         this.targetPlayer = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this,
+            PlayerControl.LocalPlayer, this,
             this.propagateRange);
 
 		if (this.targetPlayer == null)

@@ -242,7 +242,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     {
         this.Button.HotKey = KeyCode.F;
 
-        byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.ReplaceRole))
@@ -340,7 +340,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         }
         if (rolePlayerId == byte.MaxValue) { return; }
 
-        if (CachedPlayerControl.LocalPlayer.PlayerId == rolePlayerId)
+        if (PlayerControl.LocalPlayer.PlayerId == rolePlayerId)
         {
             if (this.AnotherRole is IRoleAbility abilityRole)
             {

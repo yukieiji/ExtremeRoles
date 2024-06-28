@@ -260,12 +260,12 @@ public sealed class Psychic :
 	}
 
 	public bool CheckAbility()
-		=> this.startPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition() &&
+		=> this.startPos == PlayerControl.LocalPlayer.GetTruePosition() &&
 		IRoleAbility.IsCommonUse();
 
 	public bool UseAbility()
 	{
-		this.startPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+		this.startPos = PlayerControl.LocalPlayer.GetTruePosition();
 		this.popUpper?.AddText(Translation.GetString("PsychicPsychicStart"));
 
 		return true;
@@ -385,7 +385,7 @@ public sealed class Psychic :
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 
@@ -444,7 +444,7 @@ public sealed class Psychic :
 		this.enableUpgrade = loader.GetValue<PsychicOption, bool>(
 			PsychicOption.IsUpgradeAbility);
 
-		int maxPlayerNum = CachedPlayerControl.AllPlayerControls.Count - 1;
+		int maxPlayerNum = PlayerControl.AllPlayerControls.Count - 1;
 
 		this.awakeDeadPlayerNum = Mathf.Clamp(
 			this.awakeDeadPlayerNum, 0, maxPlayerNum);

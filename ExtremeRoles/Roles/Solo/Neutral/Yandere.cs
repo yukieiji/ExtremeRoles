@@ -335,7 +335,7 @@ public sealed class Yandere :
             playerIndex = UnityEngine.Random.RandomRange(
                 0, PlayerControl.AllPlayerControls.Count - 1);
 
-            this.OneSidedLover = CachedPlayerControl.AllPlayerControls[playerIndex];
+            this.OneSidedLover = PlayerControl.AllPlayerControls[playerIndex];
 
             var role = ExtremeRoleManager.GameRole[this.OneSidedLover.PlayerId];
             if (role.Id != ExtremeRoleId.Yandere &&

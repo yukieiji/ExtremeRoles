@@ -172,11 +172,11 @@ public sealed class AnimationVisor : CustomVisor
 
 	private void updateVisorView()
 	{
-		if (CachedPlayerControl.LocalPlayer == null ||
-			CachedPlayerControl.LocalPlayer.PlayerPhysics == null ||
-			CachedPlayerControl.LocalPlayer.PlayerPhysics.Animations == null) { return; }
+		if (PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.MyPhysics == null ||
+			PlayerControl.LocalPlayer.MyPhysics.Animations == null) { return; }
 
-		bool isFlip = CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX;
+		bool isFlip = PlayerControl.LocalPlayer.cosmetics.FlipX;
 		var animation = this.Info.Animation!;
 		bool hasLeftIdle = this.Info.LeftIdle;
 

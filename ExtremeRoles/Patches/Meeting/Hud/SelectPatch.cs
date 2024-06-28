@@ -29,7 +29,7 @@ public static class MeetingHudSelectPatch
 		var shipOpt = ExtremeGameModeManager.Instance.ShipOption.Meeting;
 
 		if (shipOpt.DisableSelfVote &&
-			CachedPlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
+			PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
 		{
 			return false;
 		}
@@ -47,7 +47,7 @@ public static class MeetingHudSelectPatch
 		{
 			return __result;
 		}
-		if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
 		{
 			return __result;
 		}

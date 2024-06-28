@@ -384,7 +384,7 @@ public sealed class BodyGuard :
     private static void coverDead(
         byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
     {
-        if (targetBodyGuard == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (targetBodyGuard == PlayerControl.LocalPlayer.PlayerId)
         {
             Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.6f);
         }
@@ -468,7 +468,7 @@ public sealed class BodyGuard :
         SingleRoleBase targetRole, byte targetPlayerId)
     {
         if (shilded.IsShielding(
-			CachedPlayerControl.LocalPlayer.PlayerId, targetPlayerId))
+			PlayerControl.LocalPlayer.PlayerId, targetPlayerId))
         {
             return Design.ColoedString(this.NameColor, $" ■");
         }
@@ -529,7 +529,7 @@ public sealed class BodyGuard :
 
     public void Reset()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         byte playerId = localPlayer.PlayerId;
 
         using (var caller = RPCOperator.CreateCaller(
@@ -548,7 +548,7 @@ public sealed class BodyGuard :
 
     public bool UseAbility()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         byte playerId = localPlayer.PlayerId;
 
         if (this.targetPlayer != byte.MaxValue)
@@ -574,14 +574,14 @@ public sealed class BodyGuard :
 
     public bool IsResetMode() =>
 		this.targetPlayer == byte.MaxValue &&
-		shilded.IsGuard(CachedPlayerControl.LocalPlayer.PlayerId);
+		shilded.IsGuard(PlayerControl.LocalPlayer.PlayerId);
 
     public bool IsAbilityUse()
     {
         this.targetPlayer = byte.MaxValue;
 
         PlayerControl target = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this,
+            PlayerControl.LocalPlayer, this,
             this.shieldRange);
 
 		if (target != null)
@@ -589,7 +589,7 @@ public sealed class BodyGuard :
 			byte targetId = target.PlayerId;
 
 			if (!shilded.IsShielding(
-				CachedPlayerControl.LocalPlayer.PlayerId, targetId))
+				PlayerControl.LocalPlayer.PlayerId, targetId))
 			{
 				this.targetPlayer = targetId;
 			}
@@ -606,7 +606,7 @@ public sealed class BodyGuard :
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
     {
-        byte bodyGuardPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte bodyGuardPlayerId = PlayerControl.LocalPlayer.PlayerId;
         byte targetPlayerId = instance.TargetPlayerId;
 
         if (targetPlayerId == bodyGuardPlayerId ||
@@ -639,7 +639,7 @@ public sealed class BodyGuard :
 
     public Action CreateAbilityAction(PlayerVoteArea instance)
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
         byte targetPlayerId = instance.TargetPlayerId;
 
         void meetingfeatShield()

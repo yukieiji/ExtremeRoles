@@ -132,7 +132,7 @@ public sealed class Faunus : GhostRoleBase
             return;
         }
 
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         PlayerTask playerTask = console.FindTask(localPlayer);
         this.saboGame = MinigameSystem.Open(
             playerTask.GetMinigamePrefab(), playerTask, console);
@@ -156,7 +156,7 @@ public sealed class Faunus : GhostRoleBase
         this.saboActive = false;
 
         foreach (PlayerTask task in
-            CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
+            PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
         {
             if (!task) { continue; }
 

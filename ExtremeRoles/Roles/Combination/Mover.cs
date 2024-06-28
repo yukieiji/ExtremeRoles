@@ -190,11 +190,11 @@ public sealed class Mover :
     }
 
     public bool IsAbilityActive() =>
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
+        PlayerControl.LocalPlayer.moveable;
 
     public bool IsAbilityUse()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
@@ -219,7 +219,7 @@ public sealed class Mover :
 
     public bool UseAbility()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
 
         for (int i = 0; i < CachedShipStatus.Instance.AllConsoles.Length; ++i)
         {
@@ -243,7 +243,7 @@ public sealed class Mover :
 
     public void CleanUp()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.MoverAbility))

@@ -65,7 +65,7 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
     {
         bool sabotageActive = false;
         foreach (PlayerTask task in
-            CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
+            PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
         {
             if (task == null) { continue; }
 

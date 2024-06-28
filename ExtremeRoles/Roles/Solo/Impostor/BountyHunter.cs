@@ -233,12 +233,12 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
             prevTarget.gameObject.SetActive(false);
         }
 
-        List<CachedPlayerControl> allPlayer = CachedPlayerControl.AllPlayerControls;
+        var allPlayer = PlayerControl.AllPlayerControls.ToArray();
 
-        allPlayer = allPlayer.OrderBy(
+        var sortedAllPlayer = allPlayer.OrderBy(
             item => RandomGenerator.Instance.Next()).ToList();
 
-        foreach (var player in allPlayer)
+        foreach (var player in sortedAllPlayer)
         {
             if (player.Data.IsDead || player.Data.Disconnected) { continue; }
 

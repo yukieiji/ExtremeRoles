@@ -131,7 +131,7 @@ public interface IIntroRunner
 			return;
 		}
 
-		foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+		foreach (PlayerControl player in PlayerControl.AllPlayerControls)
 		{
 			if (player == null ||
 				!player.GetComponent<DummyBehaviour>().enabled) { continue; }

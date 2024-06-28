@@ -235,7 +235,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			ExtremeRolesPlugin.Logger.LogInfo($"Player selected spawn point {name}");
 
 			this.selected = true;
-			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+			PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 			localPlayer.SetKinematic(true);
 			localPlayer.NetTransform.SetPaused(true);

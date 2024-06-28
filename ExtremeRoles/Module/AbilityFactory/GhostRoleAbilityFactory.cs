@@ -135,7 +135,7 @@ public static class GhostRoleAbilityFactory
 		return () =>
 			isUse.Invoke() &&
 			!PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
-				CachedPlayerControl.LocalPlayer);
+				PlayerControl.LocalPlayer);
 	}
 
 	private static Func<bool> createGhostRoleAbility(

@@ -58,7 +58,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
 
     public bool UseAbility()
     {
-        PlayerControl killer = CachedPlayerControl.LocalPlayer;
+        PlayerControl killer = PlayerControl.LocalPlayer;
         if (killer.Data.IsDead || !killer.CanMove) { return false; }
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();

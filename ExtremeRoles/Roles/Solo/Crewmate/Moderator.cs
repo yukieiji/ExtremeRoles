@@ -111,7 +111,7 @@ public sealed class Moderator :
 		{
 			return Design.ColoedString(
 				Palette.CrewmateBlue,
-				CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+				PlayerControl.LocalPlayer.Data.Role.Blurb);
 		}
 	}
 

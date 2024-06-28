@@ -28,7 +28,7 @@ namespace ExtremeRoles.Patches.MiniGame
             if (__instance.state == 1)
             {
                 int localRemaining =
-                    CachedPlayerControl.LocalPlayer.PlayerControl.RemainingEmergencies;
+                    PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
                     0, ExtremeGameModeManager.Instance.ShipOption.Meeting.MaxMeetingCount -
                         ExtremeRolesPlugin.ShipState.MeetingCount);
@@ -38,7 +38,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     "<size=100%>",
                     string.Format(
                         Helper.Translation.GetString("meetingStatus"),
-                        CachedPlayerControl.LocalPlayer.PlayerControl.name),
+                        PlayerControl.LocalPlayer.name),
                     "</size>");
                 __instance.NumberText.text = string.Format(
                     Helper.Translation.GetString("meetingCount"),

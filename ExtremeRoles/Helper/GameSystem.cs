@@ -292,7 +292,7 @@ public static class GameSystem
     public static void RpcRepairAllSabotage()
     {
 		foreach (PlayerTask task in
-            CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
+            PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
         {
             if (task == null) { continue; }
 
@@ -437,7 +437,7 @@ public static class GameSystem
 
                 removeTask.OnRemove();
                 UnityObject.Destroy(removeTask.gameObject);
-                if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                 {
 					ExtremeRolesPlugin.Logger.LogInfo(
 						$"Adding New Task\n - Task:{task.TaskType}\n - Id:{gameControlTaskId}\n - Index:{i}");

@@ -22,6 +22,7 @@ using ExtremeRoles.Patches.MapOverlay;
 
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -30,7 +31,7 @@ public static class HudManagerSetAlertOverlayPatch
 {
 	public static bool Prefix()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer == null ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd)
 		{
@@ -134,7 +135,7 @@ public static class HudManagerUpdatePatch
 
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-        CachedPlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
 
         resetNameTagsAndColors(player);
 
@@ -208,10 +209,11 @@ public static class HudManagerUpdatePatch
         }
     }
 
-    private static void resetNameTagsAndColors(CachedPlayerControl localPlayer)
+    private static void resetNameTagsAndColors(PlayerControl localPlayer)
     {
+		var allPc = PlayerControl.AllPlayerControls;
 
-        foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in allPc.GetFastEnumerator())
         {
             player.cosmetics.SetName(player.CurrentOutfit.PlayerName);
 
@@ -227,8 +229,8 @@ public static class HudManagerUpdatePatch
 
         if (localPlayer.Data.Role.IsImpostor)
         {
-            List<CachedPlayerControl> impostors = CachedPlayerControl.AllPlayerControls.ToArray().ToList();
-            impostors.RemoveAll((CachedPlayerControl x) =>
+            var impostors = allPc.ToArray().ToList();
+            impostors.RemoveAll((PlayerControl x) =>
             {
                 if (x == null ||
                     x.Data == null ||
@@ -274,7 +276,7 @@ public static class HudManagerUpdatePatch
 
         GhostRoleBase targetGhostRole;
 
-        foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
         {
             if (targetPlayer.PlayerId == localPlayerId) { continue; }
 
@@ -321,7 +323,7 @@ public static class HudManagerUpdatePatch
         SingleRoleBase playerRole)
     {
 
-        foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
         {
             byte playerId = targetPlayer.PlayerId;
             string tag = playerRole.GetRolePlayerNameTag(
@@ -333,14 +335,14 @@ public static class HudManagerUpdatePatch
     }
 
     private static void playerInfoUpdate(
-        CachedPlayerControl localPlayer,
+        PlayerControl localPlayer,
         bool blockCondition,
         bool playeringInfoBlock)
     {
 
         bool commsActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer);
 
-        foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in PlayerControl.AllPlayerControls)
         {
 
             if (player.PlayerId != localPlayer.PlayerId && !localPlayer.Data.IsDead)
@@ -381,7 +383,7 @@ public static class HudManagerUpdatePatch
     }
 
     private static bool isBlockCondition(
-        CachedPlayerControl localPlayer, SingleRoleBase role)
+        PlayerControl localPlayer, SingleRoleBase role)
     {
         if (localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
         {
@@ -397,7 +399,7 @@ public static class HudManagerUpdatePatch
     }
 
     private static string getRoleInfo(
-        CachedPlayerControl localPlayer,
+        PlayerControl localPlayer,
         PlayerControl targetPlayer,
         bool commonActive)
     {
@@ -454,7 +456,7 @@ public static class HudManagerUpdatePatch
 
 
     private static void roleUpdate(
-        CachedPlayerControl player, SingleRoleBase checkRole)
+        PlayerControl player, SingleRoleBase checkRole)
     {
         var updatableRole = checkRole as IRoleUpdate;
         if (updatableRole != null)

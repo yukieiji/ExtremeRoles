@@ -154,7 +154,7 @@ public sealed class CurseMaker :
         byte rolePlayerId, byte targetPlayerId)
     {
 
-        if (CachedPlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
+        if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
 
         PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
 
@@ -216,7 +216,7 @@ public sealed class CurseMaker :
     public void CleanUp()
     {
 
-        PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
 
         if (this.isRemoveDeadBody)
         {

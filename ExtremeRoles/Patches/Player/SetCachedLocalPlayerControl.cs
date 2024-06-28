@@ -8,6 +8,7 @@ namespace ExtremeRoles.Patches.Player;
 
 #nullable enable
 
+
 [HarmonyPatch]
 public static class SetCachedLocalPlayerControl
 {
@@ -24,15 +25,16 @@ public static class SetCachedLocalPlayerControl
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		if (!localPlayer)
 		{
-			CachedPlayerControl.LocalPlayer = null;
+			PlayerControl.LocalPlayer = null;
 			return;
 		}
-
-		CachedPlayerControl? cached = CachedPlayerControl.AllPlayerControls.FirstOrDefault(
-			p => p.PlayerControl.Pointer == localPlayer.Pointer);
+		/*
+		CachedPlayerControl? cached = PlayerControl.AllPlayerControls.FirstOrDefault(
+			p => p.Pointer == localPlayer.Pointer);
 		if (cached != null)
 		{
-			CachedPlayerControl.LocalPlayer = cached;
+			PlayerControl.LocalPlayer = cached;
 		}
+		*/
 	}
 }

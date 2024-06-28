@@ -261,7 +261,7 @@ public sealed class Teleporter :
 
     public bool UseAbility()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         byte playerId = localPlayer.PlayerId;
         Vector2 pos = localPlayer.GetTruePosition();
 

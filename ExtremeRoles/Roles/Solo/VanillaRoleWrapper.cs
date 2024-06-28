@@ -90,7 +90,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
     {
         string baseIntro = Design.ColoedString(
             this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
-            CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+            PlayerControl.LocalPlayer.Data.Role.Blurb);
 
         if (this.AnotherRole == null ||
             (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&

@@ -138,7 +138,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		{
 			return Design.ColoedString(
 				Palette.CrewmateBlue,
-				CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+				PlayerControl.LocalPlayer.Data.Role.Blurb);
 		}
 	}
 
@@ -163,7 +163,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 			return;
 		}
 
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer.PlayerId == killerPlayer.PlayerId)
 		{
 			var baitReporter = FastDestroyableSingleton<HudManager>.Instance.gameObject.AddComponent<BaitDalayReporter>();

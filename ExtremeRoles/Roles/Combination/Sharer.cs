@@ -170,7 +170,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
         List<byte> sharer = getAliveSameSharer();
 
-        sharer.Remove(CachedPlayerControl.LocalPlayer.PlayerId);
+        sharer.Remove(PlayerControl.LocalPlayer.PlayerId);
 
         this.sameSharer = new SharerContainer(sharer);
 

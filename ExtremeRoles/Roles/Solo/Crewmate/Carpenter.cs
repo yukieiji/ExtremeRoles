@@ -555,7 +555,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
                 return false;
             }
         }
-        this.prevPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+        this.prevPos = PlayerControl.LocalPlayer.GetTruePosition();
         return true;
     }
 
@@ -579,7 +579,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 	}
 
     public bool IsAbilityCheck() =>
-        this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+        this.prevPos == PlayerControl.LocalPlayer.GetTruePosition();
 
     public bool IsVentMode()
     {
@@ -589,7 +589,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
         if (ship == null || !ship.enabled) { return false; }
 
-        Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
 
         foreach (Vent vent in ship.AllVents)
         {
@@ -622,7 +622,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
         else
         {
-            var pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+            var pos = PlayerControl.LocalPlayer.GetTruePosition();
             byte roomId;
             try
             {
@@ -707,7 +707,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

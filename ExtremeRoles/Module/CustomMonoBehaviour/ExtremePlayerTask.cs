@@ -68,7 +68,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 	public static ExtremePlayerTask AddTask(IBehavior task, uint id)
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		ExtremePlayerTask t = new GameObject(task.ToString())
 			.AddComponent<ExtremePlayerTask>();
 
@@ -112,7 +112,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 	public override void Complete()
 	{
 		this.Behavior?.OnComplete();
-		CachedPlayerControl.LocalPlayer.PlayerControl.RemoveTask(this);
+		PlayerControl.LocalPlayer.RemoveTask(this);
 	}
 
 	public override void AppendTaskText(Il2CppStringBuilder sb)

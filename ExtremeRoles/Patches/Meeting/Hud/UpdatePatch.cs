@@ -51,7 +51,7 @@ public static class MeetingHudUpdatePatch
 				if (pva.DidVote && pva.VotedFor == b.ParentId)
 				{
 					pva.UnsetVote();
-					if (CachedPlayerControl.LocalPlayer.PlayerId == pva.TargetPlayerId)
+					if (PlayerControl.LocalPlayer.PlayerId == pva.TargetPlayerId)
 					{
 						__instance.ClearVote();
 					}
@@ -88,7 +88,7 @@ public static class MeetingHudUpdatePatch
 				"whoIsMarine");
 			__instance.SkipVoteButton.gameObject.SetActive(false);
 
-			if (CachedPlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId ||
+			if (PlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId ||
 				ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
 			{
 				FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
@@ -106,7 +106,7 @@ public static class MeetingHudUpdatePatch
 
 	private static void tryCreateHandRaiseButton()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 		if (localPlayer == null ||
 			localPlayer.Data == null ||

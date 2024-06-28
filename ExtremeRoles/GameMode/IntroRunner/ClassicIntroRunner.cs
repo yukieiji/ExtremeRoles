@@ -11,7 +11,7 @@ public sealed class ClassicIntroRunner : IIntroRunner
     public IEnumerator CoRunModeIntro(
         IntroCutscene instance, GameObject roleAssignText)
     {
-        CachedPlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         Logger.GlobalInstance.Info("IntroCutscene :: CoBegin() :: Game Mode: Normal", null);
         instance.LogPlayerRoleData();

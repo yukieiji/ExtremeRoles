@@ -123,7 +123,7 @@ public static class VentAnimationRemovePatch
 	{
 		var ventAnimationMode = ExtremeGameModeManager.Instance.ShipOption.Vent.AnimationMode;
 
-		PlayerControl? localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl? localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer == null ||
 			localPlayer.PlayerId == pc.PlayerId)
 		{
@@ -302,7 +302,7 @@ public static class VentUsePatch
         bool canUse;
         bool couldUse;
 
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         __instance.CanUse(
             localPlayer.Data,

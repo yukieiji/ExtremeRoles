@@ -231,7 +231,7 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         {
             return Design.ColoedString(
                 Palette.ImpostorRed,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

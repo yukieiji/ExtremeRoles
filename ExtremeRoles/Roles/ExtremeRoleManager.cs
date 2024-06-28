@@ -400,7 +400,7 @@ public static class ExtremeRoleManager
 
     public static SingleRoleBase GetLocalPlayerRole()
     {
-		if (!TryGetRole(CachedPlayerControl.LocalPlayer.PlayerId, out var role))
+		if (!TryGetRole(PlayerControl.LocalPlayer.PlayerId, out var role))
 		{
 			throw new ArgumentNullException("Local Role is Null!!!!!!!!!!");
 		}
@@ -433,7 +433,7 @@ public static class ExtremeRoleManager
 		SingleRoleBase addRole = role.Clone();
 
 		if (addRole is IRoleAbility abilityRole &&
-			CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+			PlayerControl.LocalPlayer.PlayerId == playerId)
 		{
 			Helper.Logging.Debug("Try Create Ability NOW!!!");
 			abilityRole.CreateAbility();
@@ -523,7 +523,7 @@ public static class ExtremeRoleManager
         SingleRoleBase addRole = role.Clone();
 
         if (addRole is IRoleAbility abilityRole &&
-            CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+            PlayerControl.LocalPlayer.PlayerId == playerId)
         {
             Helper.Logging.Debug("Try Create Ability NOW!!!");
             abilityRole.CreateAbility();
@@ -542,7 +542,7 @@ public static class ExtremeRoleManager
 
             if (TryGetRole(playerId, out var existRole) &&
 				existRole is IRoleAbility multiAssignAbilityRole &&
-                CachedPlayerControl.LocalPlayer.PlayerId == playerId &&
+                PlayerControl.LocalPlayer.PlayerId == playerId &&
 				multiAssignAbilityRole.Button != null)
             {
 				multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;

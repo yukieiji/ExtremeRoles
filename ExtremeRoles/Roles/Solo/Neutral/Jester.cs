@@ -44,7 +44,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     public static void OutburstKill(
         byte outburstTargetPlayerId, byte killTargetPlayerId)
     {
-        if (outburstTargetPlayerId != CachedPlayerControl.LocalPlayer.PlayerId) { return; }
+        if (outburstTargetPlayerId != PlayerControl.LocalPlayer.PlayerId) { return; }
 
         PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
         PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
@@ -118,7 +118,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     public bool IsAbilityUse()
     {
         this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this,
+            PlayerControl.LocalPlayer, this,
             this.outburstDistance);
         return IRoleAbility.IsCommonUse() && this.tmpTarget != null;
     }
@@ -147,7 +147,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
 
         if (killTarget == null) { return; }
         if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }
-        if (killTarget.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId) { return; }
+        if (killTarget.PlayerId == PlayerControl.LocalPlayer.PlayerId) { return; }
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.JesterOutburstKill))
