@@ -1,52 +1,51 @@
 ﻿using UnityEngine;
 
+#nullable enable
 
-namespace ExtremeRoles.Roles.API
+namespace ExtremeRoles.Roles.API;
+
+public abstract partial class SingleRoleBase
 {
-    public abstract partial class SingleRoleBase
+    public void SetNameColor(Color newColor)
     {
-        public void SetNameColor(Color newColor)
+        this.NameColor = newColor;
+    }
+
+    public virtual Color GetNameColor(bool isTruthColor = false) => this.NameColor;
+
+    public virtual Color GetTargetRoleSeeColor(
+        SingleRoleBase? targetRole,
+        byte targetPlayerId)
+    {
+		if (targetRole is null)
+		{
+			return Palette.White;
+		}
+
+        if (targetRole.Id == ExtremeRoleId.Xion)
         {
-            this.NameColor = newColor;
+            return Module.ColorPalette.XionBlue;
         }
 
-        public virtual Color GetNameColor(bool isTruthColor = false) => this.NameColor;
-
-        public virtual Color GetTargetRoleSeeColor(
-            SingleRoleBase targetRole,
-            byte targetPlayerId)
+        if (targetRole is Solo.Impostor.OverLoader overLoader &&
+			overLoader.IsOverLoad)
         {
-            if (targetRole.Id == ExtremeRoleId.Xion)
-            { 
-                return Module.ColorPalette.XionBlue; 
-            }
+			return Palette.ImpostorRed;
+		}
 
-            Solo.Impostor.OverLoader overLoader = targetRole as Solo.Impostor.OverLoader;
-
-            if (overLoader != null)
-            {
-                if (overLoader.IsOverLoad)
-                {
-                    return Palette.ImpostorRed;
-                }
-            }
-
-            if ((targetRole.IsImpostor() || targetRole.FakeImposter) &&
-                this.IsImpostor())
-            {
-                return Palette.ImpostorRed;
-            }
-            MultiAssignRoleBase multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    return this.GetTargetRoleSeeColor(
-                        multiAssignRole.AnotherRole, targetPlayerId);
-                }
-            }
-
-            return Palette.White;
+        if ((targetRole.IsImpostor() || targetRole.FakeImposter) &&
+            this.IsImpostor())
+        {
+            return Palette.ImpostorRed;
         }
+
+        if (targetRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole != null)
+        {
+			return this.GetTargetRoleSeeColor(
+				 multiAssignRole.AnotherRole, targetPlayerId);
+		}
+
+        return Palette.White;
     }
 }
