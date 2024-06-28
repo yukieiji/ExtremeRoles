@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 using AmongUs.GameOptions;
 
@@ -551,11 +551,10 @@ public static class ExtremeRoleManager
         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
     }
 
-// TryGet系列：ここでTrueの場合、取得した役職はNullではない！！！！
-	public static bool TryGetRole(byte playerId, out SingleRoleBase? role )
+	public static bool TryGetRole(byte playerId, [NotNullWhen(true)] out SingleRoleBase? role )
 		=> GameRole.TryGetValue(playerId, out role) && role is not null;
 
-	public static bool TryGetSafeCastedRole<T>(byte playerId, out T? role) where T : SingleRoleBase
+	public static bool TryGetSafeCastedRole<T>(byte playerId, [NotNullWhen(true)] out T? role) where T : SingleRoleBase
 	{
 		role = null;
 		if (!TryGetRole(playerId, out var checkRole))

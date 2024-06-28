@@ -13,9 +13,9 @@ using ExtremeRoles.Performance;
 
 using Il2CppInterop.Runtime.Attributes;
 
-
-
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -28,7 +28,9 @@ public class VoteAreaInfo : MonoBehaviour
 
 	protected bool CommActive;
 
+#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	public VoteAreaInfo(IntPtr ptr) : base(ptr) { }
+#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	public virtual void Init(PlayerVoteArea pva, bool commActive)
 	{
@@ -57,7 +59,7 @@ public sealed class LocalPlayerVoteAreaInfo : VoteAreaInfo
 	public void FixedUpdate()
 	{
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+		GhostRoleBase? ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
 		resetInfo();
 		setTag(role);
@@ -82,11 +84,11 @@ public sealed class LocalPlayerVoteAreaInfo : VoteAreaInfo
 	[HideFromIl2Cpp]
 	private void setColor(
 		SingleRoleBase role,
-		GhostRoleBase ghostRole)
+		GhostRoleBase? ghostRole)
 	{
 		Color paintColor = role.GetNameColor(
 			this.LocalPlayer.Data.IsDead);
-		if (ghostRole != null)
+		if (ghostRole is not null)
 		{
 			Color ghostRoleColor = ghostRole.Color;
 			paintColor = (paintColor / 2.0f) + (ghostRoleColor / 2.0f);
@@ -99,7 +101,7 @@ public sealed class LocalPlayerVoteAreaInfo : VoteAreaInfo
 	[HideFromIl2Cpp]
 	private void setInfo(
 		SingleRoleBase role,
-		GhostRoleBase ghostRole)
+		GhostRoleBase? ghostRole)
 	{
 		this.MeetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
 			"" : getMeetingInfo(role, ghostRole);
@@ -108,13 +110,13 @@ public sealed class LocalPlayerVoteAreaInfo : VoteAreaInfo
 
 	[HideFromIl2Cpp]
 	private string getMeetingInfo(
-		SingleRoleBase role, GhostRoleBase ghostRole)
+		SingleRoleBase role, GhostRoleBase? ghostRole)
 	{
 		var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(
 			this.LocalPlayer.Data);
 		string roleNames = role.GetColoredRoleName(this.LocalPlayer.Data.IsDead);
 
-		if (ghostRole != null)
+		if (ghostRole is not null)
 		{
 			string ghostRoleName = ghostRole.GetColoredRoleName();
 			roleNames = $"{ghostRoleName}({roleNames})";
@@ -141,7 +143,9 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 {
 	private NetworkedPlayerInfo votePlayerInfo;
 
+#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	public OtherPlayerVoteAreaInfo(IntPtr ptr) : base(ptr) { }
+#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	public override void Init(PlayerVoteArea pva, bool commActive)
 	{
@@ -154,7 +158,7 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 		resetInfo();
 
 		byte playerId = this.votePlayerInfo.PlayerId;
-		if (ExtremeRoleManager.TryGetRole(playerId, out SingleRoleBase targetRole))
+		if (!ExtremeRoleManager.TryGetRole(playerId, out SingleRoleBase? targetRole))
 		{
 			return;
 		}
@@ -163,7 +167,7 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 
 		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 		ExtremeGhostRoleManager.GameRole.TryGetValue(
-			playerId, out GhostRoleBase targetGhostRole);
+			playerId, out GhostRoleBase? targetGhostRole);
 		bool isLocalPlayerGhostRole = ghostRole != null;
 
 		bool blockCondition = isBlockCondition(role) || isLocalPlayerGhostRole;
@@ -214,8 +218,8 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 	private void setNameColor(
 		SingleRoleBase localRole,
 		SingleRoleBase targetRole,
-		GhostRoleBase localGhostRole,
-		GhostRoleBase targetGhostRole,
+		GhostRoleBase? localGhostRole,
+		GhostRoleBase? targetGhostRole,
 		bool isMeetingInfoBlock,
 		bool blockCondition)
 	{
@@ -228,7 +232,7 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 		{
 			Color paintColor = localRole.GetTargetRoleSeeColor(
 				targetRole, targetPlayerId);
-			if (localGhostRole != null)
+			if (localGhostRole is not null)
 			{
 				Color paintGhostColor = localGhostRole.GetTargetRoleSeeColor(
 					targetPlayerId, targetRole, targetGhostRole);
@@ -260,7 +264,7 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 	[HideFromIl2Cpp]
 	private void setMeetingInfo(
 		SingleRoleBase targetRole,
-		GhostRoleBase targetGhostRole,
+		GhostRoleBase? targetGhostRole,
 		bool isMeetingInfoBlock,
 		bool blockCondition)
 	{
@@ -280,12 +284,12 @@ public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
 	[HideFromIl2Cpp]
 	private string getMeetingInfo(
 		SingleRoleBase targetRole,
-		GhostRoleBase targetGhostRole)
+		GhostRoleBase? targetGhostRole)
 	{
 		var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(this.votePlayerInfo);
 		string roleNames = targetRole.GetColoredRoleName(this.LocalPlayer.Data.IsDead);
 
-		if (targetGhostRole != null)
+		if (targetGhostRole is not null)
 		{
 			string ghostRoleName = targetGhostRole.GetColoredRoleName();
 			roleNames = $"{ghostRoleName}({roleNames})";
