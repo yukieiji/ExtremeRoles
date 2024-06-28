@@ -1,12 +1,10 @@
-﻿using System;
-
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-
+using ExtremeRoles.Roles.API.Interface;
 
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
@@ -89,7 +87,14 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 		if (!role.IsVanillaRole())
 		{
-			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
+			var useLoader =
+				role.OffsetInfo is not null &&
+				ExtremeRoleManager.CombRole.TryGetValue((byte)role.OffsetInfo.RoleId, out var combRole) &&
+				combRole is not null ?
+				combRole.Loader : role.Loader;
+
+
+			var option = useLoader.Get(RoleCommonOption.SpawnRate);
 			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 

@@ -17,9 +17,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -534,6 +533,8 @@ public sealed class Servant :
     private SpriteRenderer killFlash;
     private Queen queen;
 
+	public override IOptionLoader Loader { get; }
+
     public Servant(
         byte queenPlayerId,
         Queen queen,
@@ -548,6 +549,7 @@ public sealed class Servant :
             baseRole.UseVent,
             baseRole.UseSabotage)
     {
+		this.Loader = baseRole.Loader;
         this.SetControlId(queen.GameControlId);
         this.queenPlayerId = queenPlayerId;
         this.queen = queen;
