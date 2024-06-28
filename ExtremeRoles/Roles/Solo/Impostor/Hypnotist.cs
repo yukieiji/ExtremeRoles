@@ -1258,7 +1258,7 @@ public sealed class Doll :
     }
 
     public override Color GetTargetRoleSeeColor(
-        SingleRoleBase targetRole,
+        SingleRoleBase? targetRole,
         byte targetPlayerId)
     {
 

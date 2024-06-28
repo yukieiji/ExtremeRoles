@@ -150,7 +150,7 @@ public abstract class GhostRoleBase
                     $"{this.Id}ShortDescription")));
 
     public virtual Color GetTargetRoleSeeColor(
-        byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase targetGhostRole)
+        byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase? targetGhostRole)
     {
         var overLoader = targetRole as Roles.Solo.Impostor.OverLoader;
 

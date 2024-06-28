@@ -188,7 +188,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
     }
 
     public override Color GetTargetRoleSeeColor(
-        SingleRoleBase targetRole,
+        SingleRoleBase? targetRole,
         byte targetPlayerId)
     {
 
