@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;

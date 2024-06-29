@@ -10,7 +10,6 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
 using ExtremeSkins.Core.ExtremeVisor;
-using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
@@ -50,7 +49,7 @@ public sealed class PutVisorHandler : IRequestHandler
 
 		string id = customVisor.Id;
 
-		if (!ExtremeVisorManager.VisorData.TryGetValue(id, out var visor))
+		if (CosmicStorage<CustomVisor>.TryGet(id, out var visor))
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
@@ -66,7 +65,7 @@ public sealed class PutVisorHandler : IRequestHandler
 			PlayerControl.LocalPlayer!.RpcSetVisor(VisorData.EmptyId);
 		}
 
-		ExtremeVisorManager.VisorData[id] = customVisor;
+		CosmicStorage<CustomVisor>.TryAdd(id, customVisor);
 
 		List<VisorData> visorData = hatMng.allVisors.ToList();
 		visorData.RemoveAll(x => x.ProductId == id);

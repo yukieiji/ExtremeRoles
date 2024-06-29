@@ -4,7 +4,6 @@ using System.Net;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeSkins.Core.API;
-using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 #if WITHVISOR
@@ -20,7 +19,7 @@ public sealed class GetVisorHandler : IRequestHandler
 		IRequestHandler.SetStatusOK(response);
 		IRequestHandler.SetContentsType(response);
 
-		var curData = ExtremeVisorManager.VisorData.Values.Select(
+		var curData = CosmicStorage<CustomVisor>.GetAll().Select(
 			x => new ExportData(x.Id, x.Name, x.Author));
 
 		IRequestHandler.Write(response, curData);

@@ -5,7 +5,7 @@ using UnityEngine;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityModeSwitcher;
-
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -13,6 +13,11 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+
+
+using ButtonGraphic = ExtremeRoles.Module.Ability.Behavior.ButtonGraphic;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -154,7 +159,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         var cate = this.Loader;
         var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
 			UmbrerMode.Feat,
-				new Module.AbilityBehavior.ButtonGraphic(
+				new ButtonGraphic(
 					Translation.GetString("featVirus"),
 					Resources.Loader.CreateSpriteFromResources(
 						Path.UmbrerFeatVirus)),
@@ -162,7 +167,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 					RoleAbilityCommonOption.AbilityActiveTime)
 		);
 
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             featVirusMode.Graphic.Text, featVirusMode.Graphic.Img,
             IsAbilityCheck, CleanUp, ForceCleanUp);
 
@@ -171,7 +176,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 			featVirusMode,
 			new(
 				UmbrerMode.Upgrage,
-				new Module.AbilityBehavior.ButtonGraphic(
+				new ButtonGraphic(
 					Translation.GetString("upgradeVirus"),
 					Resources.Loader.CreateSpriteFromResources(
 					Path.UmbrerUpgradeVirus)),

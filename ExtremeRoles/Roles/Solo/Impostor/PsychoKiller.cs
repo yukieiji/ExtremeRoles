@@ -4,10 +4,11 @@ using UnityEngine;
 using TMPro;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 
@@ -248,16 +249,9 @@ public sealed class PsychoKiller :
 	{
 		if (FastDestroyableSingleton<HudManager>.Instance == null) { return; }
 
-		var killButton = FastDestroyableSingleton<HudManager>.Instance.KillButton;
-
-		this.combCountText = Object.Instantiate(
-			killButton.cooldownTimerText,
-			killButton.cooldownTimerText.transform.parent);
-
+		this.combCountText = ICountBehavior.CreateCountText(
+			FastDestroyableSingleton<HudManager>.Instance.KillButton);
 		this.combCountText.name = ExtremeAbilityButton.AditionalInfoName;
-		this.combCountText.enableWordWrapping = false;
-		this.combCountText.transform.localScale = Vector3.one * 0.5f;
-		this.combCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
 		this.combCountText.gameObject.SetActive(true);
 	}
 

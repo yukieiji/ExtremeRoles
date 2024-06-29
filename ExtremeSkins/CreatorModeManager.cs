@@ -9,6 +9,7 @@ using UnityEngine;
 
 using ExtremeSkins.Core;
 using ExtremeSkins.Module;
+using ExtremeSkins.Loader;
 
 namespace ExtremeSkins;
 
@@ -149,7 +150,7 @@ public sealed class CreatorModeManager
                         byte.Parse(colorInfo[9])),
                 };
 
-                CustomColorPalette.AddCustomColor(color);
+                CustomColorLoader.Instance.AddCustomColor(color);
             }
         }
         else

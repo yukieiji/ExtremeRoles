@@ -1,5 +1,4 @@
 ﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -8,6 +7,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 using UnityEngine;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using UnityEngine.Video;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -56,19 +56,20 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 		effect.transform.localPosition = new Vector2(-0.25f, -0.15f);
 		var player = effect.AddComponent<DlayableVideoPlayer>();
 
-		player.SetThum(Resources.Loader.CreateSpriteFromResources(
-			Path.TheifMagicCircle));
-		player.SetVideo(Resources.Loader.GetUnityObjectFromResources<VideoClip>(
-			Path.VideoAsset, string.Format(
-				Path.VideoAssetPlaceHolder, Path.TheifMagicCircleVideo)));
+		var thum = Loader.GetSpriteFromResources(ExtremeRoleId.Thief);
+		player.SetThum(thum);
+
+		var video = Loader.GetUnityObjectFromResources<VideoClip, ExtremeRoleId>(
+			ExtremeRoleId.Thief,
+			Path.GetRoleVideoPath(ExtremeRoleId.Thief));
+		player.SetVideo(video);
 	}
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "steal",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.TheifMagicCircle),
+			Loader.GetSpriteFromResources(ExtremeRoleId.Thief),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: ForceCleanUp);

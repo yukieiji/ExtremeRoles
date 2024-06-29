@@ -1,5 +1,4 @@
 ﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -7,6 +6,8 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Ability;
+using UnityEngine;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -47,8 +48,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
 			Translation.GetString("TeroristBombSet"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.TeroristTeroSabotageButton));
+			Loader.GetSpriteFromResources(ExtremeRoleId.Terorist));
     }
 
     public bool IsAbilityUse()

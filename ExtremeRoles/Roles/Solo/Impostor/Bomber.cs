@@ -17,6 +17,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -69,10 +70,9 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     public void CreateAbility()
     {
 
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "setBomb",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.BomberSetBomb),
+			Loader.GetUnityObjectFromResources<Sprite>(Path.Bomb),
 			CheckAbility, CleanUp, ForceCleanUp);
     }
 

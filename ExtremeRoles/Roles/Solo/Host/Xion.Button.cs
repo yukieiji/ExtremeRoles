@@ -37,15 +37,13 @@ public sealed partial class Xion
         this.funcButton = new List<XionActionButton>(6)
         {
             new XionActionButton(
-				Resources.Loader.CreateSpriteFromResources(
-					Path.XionMapZoomIn),
-                this.cameraZoomIn,
-				Translation.GetString("zoomIn")),
+				GetSprite("ZoomIn"),
+				this.cameraZoomIn,
+                Translation.GetString("zoomIn")),
             new XionActionButton(
-				Resources.Loader.CreateSpriteFromResources(
-					Path.XionSpeedDown),
-                this.RpcSpeedDown,
-				Translation.GetString("speedDown")),
+				GetSprite("SpeedDown"),
+				this.RpcSpeedDown,
+                Translation.GetString("speedDown")),
         };
 
 		bool enableMeeting = !ExtremeGameModeManager.Instance.ShipOption.IsBreakEmergencyButton;
@@ -53,10 +51,9 @@ public sealed partial class Xion
 		{
 			this.funcButton.Add(
 				new XionActionButton(
-				Resources.Loader.CreateSpriteFromResources(
-					Path.DetectiveApprenticeEmergencyMeeting),
-				this.RpcCallMeeting,
-				Translation.GetString("emergencyMeeting")));
+					Loader.GetUnityObjectFromResources<Sprite>(Path.Meeting),
+					this.RpcCallMeeting,
+					Translation.GetString("emergencyMeeting")));
 		}
 
 		// 残りのボタン
@@ -68,14 +65,12 @@ public sealed partial class Xion
 				Translation.GetString("maintenance")));
 		this.funcButton.Add(
 			new XionActionButton(
-				Resources.Loader.CreateSpriteFromResources(
-					Path.XionMapZoomOut),
+				GetSprite("ZoomOut"),
 				this.cameraZoomOut,
 				Translation.GetString("zoomOut")));
 		this.funcButton.Add(
 			new XionActionButton(
-				Resources.Loader.CreateSpriteFromResources(
-					Path.XionSpeedUp),
+				GetSprite("SpeedUp"),
 				this.RpcSpeedUp,
 				Translation.GetString("speedUp")));
 
@@ -204,4 +199,7 @@ public sealed partial class Xion
             }
         };
     }
+
+	public static Sprite GetSprite(string name)
+		=> Loader.GetSpriteFromResources(ExtremeRoleId.Xion, name);
 }

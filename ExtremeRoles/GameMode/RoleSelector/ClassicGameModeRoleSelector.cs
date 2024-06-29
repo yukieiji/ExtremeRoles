@@ -98,6 +98,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Moderator,
 			ExtremeRoleId.Psychic,
 			ExtremeRoleId.Bait,
+			ExtremeRoleId.Jailer,
 
 			ExtremeRoleId.SpecialImpostor,
             ExtremeRoleId.Evolver,
@@ -125,6 +126,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Thief,
 			ExtremeRoleId.Crewshroom,
 			ExtremeRoleId.Terorist,
+			ExtremeRoleId.Scavenger,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,

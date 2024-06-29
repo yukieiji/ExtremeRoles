@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -310,7 +311,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "timeShield",
 			Resources.Loader.CreateSpriteFromResources(
 			   Path.TimeMasterTimeShield),

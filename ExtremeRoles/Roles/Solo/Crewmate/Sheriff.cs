@@ -4,11 +4,13 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
-
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -169,15 +171,11 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 
     private void createText()
     {
-        this.killCountText = GameObject.Instantiate(
-            FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-            FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText.transform.parent);
+		this.killCountText = ICountBehavior.CreateCountText(
+			FastDestroyableSingleton<HudManager>.Instance.KillButton);
         updateKillCountText();
         this.killCountText.name = ExtremeAbilityButton.AditionalInfoName;
-        this.killCountText.enableWordWrapping = false;
-        this.killCountText.transform.localScale = Vector3.one * 0.5f;
-        this.killCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
-        this.killCountText.gameObject.SetActive(true);
+		this.killCountText.gameObject.SetActive(true);
     }
 
 

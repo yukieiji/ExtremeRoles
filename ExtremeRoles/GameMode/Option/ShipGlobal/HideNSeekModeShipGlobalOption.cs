@@ -1,7 +1,8 @@
-﻿using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
+
+#nullable enable
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 

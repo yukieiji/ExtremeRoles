@@ -2,11 +2,13 @@
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -126,7 +128,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         this.Button.Behavior.SetCoolTime(this.abilityCoolTime * rate);
 
-        if (this.Button.Behavior is AbilityCountBehavior countBehavior)
+        if (this.Button.Behavior is CountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(
                 countBehavior.AbilityCount + plusAbilityNum);

@@ -67,7 +67,11 @@ public sealed class Arrow
 	{
 		if (this.arrowBehaviour == null) { return; }
 
-		Object.Destroy(this.arrowBehaviour);
+		this.arrowBehaviour.SetImageEnabled(false);
+		Object.Destroy(
+			this.arrowBehaviour.image);
+		Object.Destroy(
+			this.arrowBehaviour.gameObject);
 	}
 	public void SetActive(bool active)
 	{

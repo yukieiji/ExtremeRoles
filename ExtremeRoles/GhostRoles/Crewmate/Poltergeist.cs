@@ -6,7 +6,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
@@ -93,7 +92,7 @@ public sealed class Poltergeist : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.PoltergeistMoveDeadbody,
             Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.CarrierCarry),
@@ -101,8 +100,9 @@ public sealed class Poltergeist : GhostRoleBase
             this.isPreCheck,
             this.isAbilityUse,
             this.UseAbility,
-            abilityCall, true,
-            null, cleanUp,
+            abilityCall,
+			true, null,
+            cleanUp,
             cleanUp, KeyCode.F);
         this.ButtonInit();
         this.Button.SetLabelToCrewmate();

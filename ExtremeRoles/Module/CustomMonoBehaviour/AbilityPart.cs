@@ -14,13 +14,10 @@ using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
-[Il2CppRegister(
-new Type[]
-{
-	typeof(IUsable)
-})]
+[Il2CppRegister([ typeof(IUsable) ])]
 public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 {
+	protected virtual AbilityModuleType PartType => AbilityModuleType.Red;
 
 	public ImageNames UseIcon
 	{
@@ -59,7 +56,7 @@ public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 		collider.radius = 0.1f;
 
 		this.img = base.gameObject.AddComponent<SpriteRenderer>();
-		this.img.sprite = GetSprite();
+		this.img.sprite = getSprite();
 
 		this.arrow = new Arrow(GetColor());
 		this.arrow.SetActive(false);
@@ -120,13 +117,13 @@ public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 
 	protected virtual Color GetColor() => Palette.ImpostorRed;
 
-	protected virtual Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.TestButton);
+	private Sprite getSprite() => Loader.GetSpriteFromResources(
+		ExtremeRoleId.Hypnotist, PartType.ToString());
 }
 
 public sealed class RedAbilityPart : AbilityPartBase
 {
-	private const AbilityModuleType partType = AbilityModuleType.Red;
+	protected override AbilityModuleType PartType => AbilityModuleType.Red;
 
 	public RedAbilityPart(IntPtr ptr) : base(ptr) { }
 
@@ -140,19 +137,16 @@ public sealed class RedAbilityPart : AbilityPartBase
 		{
 			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 			caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
-			caller.WriteByte((byte)partType);
+			caller.WriteByte((byte)PartType);
 		}
 		UpdateAllDollKillButtonState(hypnotist);
 		hypnotist.EnableKillTimer();
 	}
-
-	protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.HypnotistRedAbilityPart);
 }
 
 public sealed class BlueAbilityPart : AbilityPartBase
 {
-	private const AbilityModuleType partType = AbilityModuleType.Blue;
+	protected override AbilityModuleType PartType => AbilityModuleType.Blue;
 	private SystemConsoleType console;
 
 	public BlueAbilityPart(IntPtr ptr) : base(ptr) { }
@@ -173,20 +167,17 @@ public sealed class BlueAbilityPart : AbilityPartBase
 		{
 			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 			caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
-			caller.WriteByte((byte)partType);
+			caller.WriteByte((byte)PartType);
 			caller.WriteByte((byte)this.console);
 		}
 		FeatAllDollMapModuleAccess(hypnotist, this.console);
 	}
 	protected override Color GetColor() => Palette.CrewmateBlue;
-
-	protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.HypnotistBlueAbilityPart);
 }
 
 public sealed class GrayAbilityPart : AbilityPartBase
 {
-	private const AbilityModuleType partType = AbilityModuleType.Glay;
+	protected override AbilityModuleType PartType => AbilityModuleType.Gray;
 	private SystemConsoleType console;
 
 	public GrayAbilityPart(IntPtr ptr) : base(ptr) { }
@@ -206,14 +197,11 @@ public sealed class GrayAbilityPart : AbilityPartBase
 		{
 			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 			caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
-			caller.WriteByte((byte)partType);
+			caller.WriteByte((byte)PartType);
 			caller.WriteByte((byte)this.console);
 		}
 		UnlockAllDollCrakingAbility(hypnotist, this.console);
 	}
 
 	protected override Color GetColor() => ColorPalette.NeutralColor;
-
-	protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.HypnotistGrayAbilityPart);
 }

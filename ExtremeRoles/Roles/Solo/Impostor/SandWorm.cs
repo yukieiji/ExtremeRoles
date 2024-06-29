@@ -4,14 +4,14 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.VentModule;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -42,7 +42,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         }
     }
 
-    public sealed class SandWormAbilityBehavior : AbilityBehaviorBase
+    public sealed class SandWormAbilityBehavior : BehaviorBase
     {
         private Func<bool> ability;
         private Func<bool> canUse;
@@ -68,8 +68,6 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
 
         public override void ForceAbilityOff()
         { }
-
-        public override bool IsCanAbilityActiving() => true;
 
         public override bool IsUse() =>
             this.canUse.Invoke();

@@ -3,11 +3,12 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 
 
@@ -125,7 +126,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         this.securitySprite = GameSystem.GetSecurityImage();
         this.vitalSprite = GameSystem.GetVitalImage();
 
-        this.CreateChargeAbilityButton(
+        this.CreateBatteryAbilityButton(
             "traitorCracking",
             this.adminSprite,
             checkAbility: CheckAbility,
@@ -342,7 +343,8 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
         if (PlayerControl.LocalPlayer.PlayerId == rolePlayerId)
         {
-            if (this.AnotherRole is IRoleAbility abilityRole)
+            if (this.AnotherRole is IRoleAbility abilityRole &&
+				abilityRole.Button is not null)
             {
                 abilityRole.Button.OnMeetingStart();
             }
@@ -394,7 +396,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
     private void updateButtonSprite()
     {
-        if (this.Button.Behavior is not ChargableAbilityBehavior chargableAbility)
+        if (this.Button.Behavior is not BatteryBehavior chargableAbility)
         {
             return;
         }

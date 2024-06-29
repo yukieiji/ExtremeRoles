@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -23,7 +25,7 @@ namespace ExtremeRoles.GhostRoles.API;
 
 public enum GhostRoleOption
 {
-    IsReportAbility = 40
+    IsReportAbility = 90
 }
 
 public abstract class GhostRoleBase
@@ -38,7 +40,7 @@ public abstract class GhostRoleBase
 	public string Name { get; protected set; }
 	public bool HasTask { get; protected set; }
 
-	public Module.ExtremeAbilityButton? Button { get; protected set; }
+	public ExtremeAbilityButton? Button { get; protected set; }
 
     protected readonly OptionTab Tab = OptionTab.General;
     private int controlId;
@@ -215,8 +217,8 @@ public abstract class GhostRoleBase
             this.Button.Behavior.SetActiveTime(activeTimeOtion.Value);
         }
 
-        if (this.Button.Behavior is AbilityCountBehavior behavior &&
-            loader.TryGetValueOption<RoleAbilityCommonOption, int>(
+        if (this.Button.Behavior is CountBehavior behavior &&
+			loader.TryGetValueOption<RoleAbilityCommonOption, int>(
                 RoleAbilityCommonOption.AbilityCount,
                 out var countOption) &&
 			countOption is not null)

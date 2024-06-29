@@ -18,6 +18,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 
@@ -352,10 +353,10 @@ public sealed class Yoko :
 
 	public void CreateAbility()
 	{
-		this.CreateAbilityCountButton(
+		this.CreateActivatingAbilityCountButton(
 			"yokoYashiro",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.YokoYashiro),
+			Loader.GetSpriteFromResources(
+				ExtremeRoleId.Yoko),
 			this.IsAbilityActive,
 			this.CleanUp,
 			() => { });

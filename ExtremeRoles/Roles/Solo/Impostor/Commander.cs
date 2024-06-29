@@ -4,11 +4,13 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
-
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -123,7 +125,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
         ++this.killCount;
         this.killCount = this.killCount % this.increaseKillNum;
         if (this.killCount == 0 &&
-            this.Button.Behavior is AbilityCountBehavior countBehavior)
+            this.Button.Behavior is CountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
         }

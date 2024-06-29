@@ -4,6 +4,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Ability;
 
 
 

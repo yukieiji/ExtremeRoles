@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Performance;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Roles;
 
@@ -68,6 +69,8 @@ public enum ExtremeRoleId : int
 	Moderator,
 	Psychic,
 	Bait,
+	Jailer,
+	Yardbird,
 
 	SpecialImpostor,
     Evolver,
@@ -95,6 +98,7 @@ public enum ExtremeRoleId : int
 	Thief,
 	Crewshroom,
 	Terorist,
+	Scavenger,
 
 	Alice,
     Jackal,
@@ -115,6 +119,7 @@ public enum ExtremeRoleId : int
     Doll,
 	Hatter,
 	Artist,
+	Lawbreaker,
 
 	Xion,
 }
@@ -246,6 +251,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Moderator   , new Moderator()},
 			{(int)ExtremeRoleId.Psychic     , new Psychic()},
 			{(int)ExtremeRoleId.Bait        , new Bait()},
+			{(int)ExtremeRoleId.Jailer      , new Jailer()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -273,6 +279,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Thief          , new Thief()},
 			{(int)ExtremeRoleId.Crewshroom     , new Crewshroom()},
 			{(int)ExtremeRoleId.Terorist       , new Terorist()},
+			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},
@@ -326,7 +333,9 @@ public static class ExtremeRoleManager
         ForceReplaceToSidekick,
         SidekickToJackal,
         CreateServant,
-    }
+		ForceReplaceToYardbird,
+		BecomeLawbreaker
+	}
 
 	private const int roleIdOffset = 200;
 
@@ -496,6 +505,16 @@ public static class ExtremeRoleManager
             case ReplaceOperation.CreateServant:
                 Queen.TargetToServant(caller, targetId);
                 break;
+			case ReplaceOperation.ForceReplaceToYardbird:
+				Jailer.NotCrewmateToYardbird(caller, targetId);
+				break;
+			case ReplaceOperation.BecomeLawbreaker:
+				if (caller != targetId)
+				{
+					return;
+				}
+				Jailer.ToLawbreaker(caller);
+				break;
             default:
                 break;
         }
@@ -551,6 +570,7 @@ public static class ExtremeRoleManager
         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
     }
 
+// TryGet系列：ここでTrueの場合、取得した役職はNullではない！！！！
 	public static bool TryGetRole(byte playerId, [NotNullWhen(true)] out SingleRoleBase? role )
 		=> GameRole.TryGetValue(playerId, out role) && role is not null;
 
@@ -562,6 +582,13 @@ public static class ExtremeRoleManager
 			return false;
 		}
 		role = safeCast<T>(checkRole);
+		return role is not null;
+	}
+
+	public static bool TryGetSafeCastedLocalRole<T>([NotNullWhen(true)] out T? role) where T : SingleRoleBase
+	{
+		var rowRole = GetLocalPlayerRole();
+		role = safeCast<T>(rowRole);
 		return role is not null;
 	}
 

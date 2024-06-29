@@ -32,9 +32,9 @@ public sealed class ExtremePlayerTask : PlayerTask
 		protected static void CloseMinigame<T>() where T : Minigame
 		{
 			if (Minigame.Instance.IsTryCast<T>(out var targetMinigame) &&
-				targetMinigame!.amClosing != Minigame.CloseState.Closing)
+				targetMinigame.amClosing != Minigame.CloseState.Closing)
 			{
-				targetMinigame!.Close();
+				targetMinigame.Close();
 			}
 		}
 

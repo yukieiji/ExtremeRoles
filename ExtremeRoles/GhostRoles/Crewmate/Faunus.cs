@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -49,7 +48,7 @@ public sealed class Faunus : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.FaunusOpenSaboConsole,
             Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.MaintainerRepair),
@@ -95,7 +94,7 @@ public sealed class Faunus : GhostRoleBase
         Console? console;
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            console = modMap!.GetConsole(this.saboTask);
+            console = modMap.GetConsole(this.saboTask);
         }
         else
         {

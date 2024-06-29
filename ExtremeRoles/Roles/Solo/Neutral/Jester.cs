@@ -6,6 +6,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -104,7 +105,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "outburst",
 			Resources.Loader.CreateSpriteFromResources(
 				Path.JesterOutburst),

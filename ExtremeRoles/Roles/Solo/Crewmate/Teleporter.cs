@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Linq;
 
-using AmongUs.GameOptions;
 using UnityEngine;
 
 using Newtonsoft.Json.Linq;
 
-using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
@@ -19,6 +15,9 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 
@@ -31,7 +30,7 @@ public sealed class Teleporter :
     SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp
 {
     public sealed class TeleporterAbilityBehavior :
-        AbilityBehaviorBase, ICountBehavior
+        BehaviorBase, ICountBehavior
     {
         public int AbilityCount { get; private set; }
         public bool IsReduceAbilityCount { get; set; } = false;
@@ -75,8 +74,6 @@ public sealed class Teleporter :
         public override void ForceAbilityOff()
         { }
 
-        public override bool IsCanAbilityActiving() => true;
-
         public override bool IsUse()
             => this.canUse.Invoke() && this.AbilityCount > 0;
 
@@ -103,8 +100,7 @@ public sealed class Teleporter :
                 this.IsReduceAbilityCount = false;
             }
 
-            newState = this.ActiveTime <= 0.0f ?
-                AbilityState.CoolDown : AbilityState.Activating;
+            newState = AbilityState.CoolDown;
 
             return true;
         }
@@ -241,12 +237,12 @@ public sealed class Teleporter :
 
     public void CreateAbility()
     {
-        this.firstPortalImg = Resources.Loader.CreateSpriteFromResources(
-			Path.TeleporterFirstPortal);
-        this.secondPortalImg = Resources.Loader.CreateSpriteFromResources(
-			Path.TeleporterSecondPortal);
+		this.firstPortalImg = Loader.GetSpriteFromResources(
+			ExtremeRoleId.Teleporter, Path.TeleporterFirstPortal);
+        this.secondPortalImg = Loader.GetSpriteFromResources(
+			ExtremeRoleId.Teleporter, Path.TeleporterSecondPortal);
 
-        this.behavior = new TeleporterAbilityBehavior(
+		this.behavior = new TeleporterAbilityBehavior(
             Translation.GetString("SetPortal"),
             this.firstPortalImg,
             IsAbilityUse, UseAbility);

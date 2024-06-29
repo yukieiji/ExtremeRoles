@@ -7,15 +7,16 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
-using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -33,7 +34,7 @@ public sealed class BodyGuard :
     IRoleUpdate,
     IRoleSpecialReset
 {
-	public sealed class BodyGuardAbilityBehavior : AbilityBehaviorBase
+	public sealed class BodyGuardAbilityBehavior : BehaviorBase
     {
         public int AbilityCount { get; private set; }
 
@@ -91,8 +92,6 @@ public sealed class BodyGuard :
             this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
             updateAbilityCountText();
         }
-
-        public override bool IsCanAbilityActiving() => true;
 
         public override bool IsUse() =>
             (this.AbilityCount > 0 && this.canUse.Invoke()) ||

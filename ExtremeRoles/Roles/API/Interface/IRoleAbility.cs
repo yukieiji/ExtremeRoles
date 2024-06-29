@@ -1,27 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
-
-
+using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
 
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API.Interface;
 
 public enum RoleAbilityCommonOption
 {
-    AbilityCoolTime = 35,
+    AbilityCoolTime = 70,
     AbilityCount,
     AbilityActiveTime,
 }
-
 
 public interface IRoleAbility : IRoleResetMeeting
 {
@@ -41,7 +39,8 @@ public interface IRoleAbility : IRoleResetMeeting
 		this.Button.Behavior.SetCoolTime(
 			cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
-		if (cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+		if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
+			cate.TryGetValueOption<RoleAbilityCommonOption, float>(
 				RoleAbilityCommonOption.AbilityActiveTime,
 				out var activeTimeOption))
 		{
@@ -73,12 +72,30 @@ public interface IRoleAbility : IRoleResetMeeting
 			IntroCutscene.Instance == null;
 	}
 
-	private const float defaultCoolTime = 30.0f;
-	private const float minCoolTime = 0.5f;
-	private const float maxCoolTime = 120.0f;
+	public static bool IsLocalPlayerAbilityUse(in IReadOnlySet<ExtremeRoleId> fillter)
+	{
+		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+
+		return isAbilityUse(role, fillter) ||
+			(
+				role is MultiAssignRoleBase multiAssignRole &&
+				isAbilityUse(multiAssignRole.AnotherRole, fillter)
+			);
+	}
+	private static bool isAbilityUse(in SingleRoleBase role, in IReadOnlySet<ExtremeRoleId> fillter)
+		=>
+			role is not null &&
+			fillter.Contains(role.Id) &&
+			role is IRoleAbility abilityRole &&
+			abilityRole.Button is not null &&
+			abilityRole.Button.IsAbilityActive();
+
+	public const float DefaultCoolTime = 30.0f;
+	public const float MinCoolTime = 0.5f;
+	public const float MaxCoolTime = 120.0f;
 	private const float minActiveTime = 0.5f;
 	private const float maxActiveTime = 60.0f;
-	private const float step = 0.5f;
+	public const float Step = 0.5f;
 
 
 	public static void CreateCommonAbilityOption(
@@ -88,7 +105,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	{
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
-			defaultCoolTime, minCoolTime, maxCoolTime, step,
+			DefaultCoolTime, MinCoolTime, MaxCoolTime, Step,
 			parentOpt,
 			format: OptionUnit.Second);
 
@@ -142,13 +159,34 @@ public static class IRoleAutoBuildAbilityMixin
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
-		Func<bool> checkAbility = null,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
 		KeyCode hotkey = KeyCode.F)
 	{
 
 		self.Button = RoleAbilityFactory.CreateReusableAbility(
+			textKey: textKey,
+			img: sprite,
+			canUse: self.IsAbilityUse,
+			ability: self.UseAbility,
+			abilityOff: abilityOff,
+			forceAbilityOff: forceAbilityOff,
+			hotKey: hotkey);
+
+		self.RoleAbilityInit();
+	}
+
+	public static void CreateNormalActivatingAbilityButton(
+		this IRoleAutoBuildAbility self,
+		string textKey,
+		Sprite sprite,
+		Func<bool> checkAbility = null,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
+		KeyCode hotkey = KeyCode.F)
+	{
+
+		self.Button = RoleAbilityFactory.CreateActivatingReusableAbility(
 			textKey: textKey,
 			img: sprite,
 			canUse: self.IsAbilityUse,
@@ -165,13 +203,33 @@ public static class IRoleAutoBuildAbilityMixin
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
+		Action abilityOff = null,
+		Action forceAbilityOff = null,
+		KeyCode hotkey = KeyCode.F)
+	{
+		self.Button = RoleAbilityFactory.CreateCountAbility(
+			textKey: textKey,
+			img: sprite,
+			canUse: self.IsAbilityUse,
+			ability: self.UseAbility,
+			abilityOff: abilityOff,
+			forceAbilityOff: forceAbilityOff,
+			hotKey: hotkey);
+
+		self.RoleAbilityInit();
+	}
+
+	public static void CreateActivatingAbilityCountButton(
+		this IRoleAutoBuildAbility self,
+		string textKey,
+		Sprite sprite,
 		Func<bool> checkAbility = null,
 		Action abilityOff = null,
 		Action forceAbilityOff = null,
 		bool isReduceOnActive = false,
 		KeyCode hotkey = KeyCode.F)
 	{
-		self.Button = RoleAbilityFactory.CreateCountAbility(
+		self.Button = RoleAbilityFactory.CreateActivatingCountAbility(
 			textKey: textKey,
 			img: sprite,
 			canUse: self.IsAbilityUse,
@@ -183,9 +241,7 @@ public static class IRoleAutoBuildAbilityMixin
 			hotKey: hotkey);
 
 		self.RoleAbilityInit();
-
 	}
-
 
 	public static void CreateReclickableAbilityButton(
 		this IRoleAutoBuildAbility self,
@@ -227,7 +283,7 @@ public static class IRoleAutoBuildAbilityMixin
 		self.RoleAbilityInit();
 	}
 
-	public static void CreateChargeAbilityButton(
+	public static void CreateBatteryAbilityButton(
 		this IRoleAutoBuildAbility self,
 		string textKey,
 		Sprite sprite,
@@ -237,7 +293,7 @@ public static class IRoleAutoBuildAbilityMixin
 		KeyCode hotkey = KeyCode.F)
 	{
 
-		self.Button = RoleAbilityFactory.CreateChargableAbility(
+		self.Button = RoleAbilityFactory.CreateBatteryAbility(
 			textKey: textKey,
 			img: sprite,
 			canUse: self.IsAbilityUse,

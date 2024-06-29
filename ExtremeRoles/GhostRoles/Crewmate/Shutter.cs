@@ -7,7 +7,6 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
@@ -20,6 +19,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
 using static ExtremeRoles.Roles.Solo.Crewmate.Photographer;
+using ExtremeRoles.Module.Ability.Factory;
 
 
 #nullable enable
@@ -194,7 +194,7 @@ public sealed class Shutter : GhostRoleBase
             this.isAbilityUse,
             this.UseAbility,
             null, true,
-            null, null, null,
+            null, null,
             KeyCode.F);
         this.ButtonInit();
         this.Button.SetLabelToCrewmate();

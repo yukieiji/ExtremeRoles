@@ -134,14 +134,13 @@ internal sealed class CompatModManager
 		=> this.map is T;
 
 	// ここでtrueが返ってきてる時点でIMapModはNullではない
-	internal bool TryGetModMap(out IMapMod? mapMod)
+	internal bool TryGetModMap([NotNullWhen(true)] out IMapMod? mapMod)
 	{
 		mapMod = this.map;
 		return mapMod != null;
 	}
 
-	// ここでtrueが返ってきてる時点でT?はNullではない
-	internal bool TryGetModMap<T>(out T? mapMod)
+	internal bool TryGetModMap<T>([NotNullWhen(true)] out T? mapMod)
 		where T : ModIntegratorBase
 	{
 		mapMod = this.map as T;

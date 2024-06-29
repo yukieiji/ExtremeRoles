@@ -8,9 +8,10 @@ using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.AbilityModeSwitcher;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.GhostRoles;
@@ -74,7 +75,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
 	public override bool IsAssignGhostRole => this.canAssignWisp;
 
-    public sealed class DelinquentAbilityBehavior : AbilityBehaviorBase
+    public sealed class DelinquentAbilityBehavior : BehaviorBase
     {
         public int AbilityCount { get; private set; }
 		public AbilityType CurAbility
@@ -132,8 +133,6 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
             this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
             updateAbilityInfoText();
         }
-
-        public override bool IsCanAbilityActiving() => true;
 
         public override bool IsUse() =>
             this.canUse.Invoke() && this.AbilityCount > 0;
@@ -254,11 +253,9 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         GameObject obj = new GameObject("Scribe");
         obj.transform.position = player.transform.position;
         SpriteRenderer rend = obj.AddComponent<SpriteRenderer>();
-        rend.sprite = Resources.Loader.CreateSpriteFromResources(
-            string.Format(
-				Path.DelinquentScribe,
-				RandomGenerator.Instance.Next(0, maxImageNum)));
-        delinquent.abilityCount++;
+		rend.sprite = randomSprite;
+
+		delinquent.abilityCount++;
     }
     private static void setBomb(Delinquent delinquent)
     {
@@ -281,17 +278,13 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 					AbilityType.Scribe,
 					new ButtonGraphic(
 						Translation.GetString("scribble"),
-						Resources.Loader.CreateSpriteFromResources(
-							string.Format(
-								Path.DelinquentScribe,
-								RandomGenerator.Instance.Next(0, maxImageNum))))
+						randomSprite)
 				),
                 new (
 					AbilityType.SelfBomb,
 					new ButtonGraphic(
 						Translation.GetString("selfBomb"),
-						Resources.Loader.CreateSpriteFromResources(
-							Path.BomberSetBomb))
+						Loader.GetUnityObjectFromResources<Sprite>(Path.Bomb))
 				),
                 this.IsAbilityUse,
                 this.UseAbility),
@@ -388,6 +381,11 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         this.canAssignWisp = true;
     }
 
+	private static Sprite randomSprite
+		=> Loader.GetSpriteFromResources(
+			CombinationRoleType.Kids,
+			$"{RandomGenerator.Instance.Next(0, maxImageNum)}");
+
 }
 
 public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
@@ -437,9 +435,13 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
         OptionTab.Combination)
     { }
 
+	public static Sprite TorchSprite
+		=> Loader.GetSpriteFromResources(
+			CombinationRoleType.Kids, "Torch");
+
     public void SetAbilityNum(int abilityNum)
     {
-		if (this.Button?.Behavior is AbilityCountBehavior behavior)
+		if (this.Button?.Behavior is CountBehavior behavior)
 		{
 			behavior.SetAbilityCount(abilityNum + this.abilityNum);
 		}
@@ -484,8 +486,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.WispSetTorch,
-            Resources.Loader.CreateSpriteFromResources(
-                Path.WispTorch),
+			TorchSprite,
             this.isReportAbility(),
             () => true,
             () => true,

@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -465,7 +466,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "search",
 			Resources.Loader.CreateSpriteFromResources(
 				Path.HiroAcaSearch),
@@ -723,7 +724,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
 	public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "search",
 			Resources.Loader.CreateSpriteFromResources(
 				Path.HiroAcaSearch),
@@ -913,7 +914,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "call",
 			Resources.Loader.CreateSpriteFromResources(
 				Path.VigilanteEmergencyCall),

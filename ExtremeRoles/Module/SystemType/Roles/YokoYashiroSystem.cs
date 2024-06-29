@@ -13,6 +13,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -68,9 +69,9 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			get
 			{
 				GameObject obj =
-					Loader.GetUnityObjectFromResources<GameObject>(
-						Path.YokoYashiroMinigameAsset,
-						Path.YokoYashiroMinigamePrefab);
+					Loader.GetUnityObjectFromResources<GameObject, ExtremeRoleId>(
+						ExtremeRoleId.Yoko,
+						Path.GetRoleMinigamePath(ExtremeRoleId.Yoko));
 				return obj.GetComponent<YokoYashiroStatusUpdateMinigame>();
 			}
 		}
@@ -97,14 +98,13 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			var minigame = MinigameSystem.Create(prefab);
 
 			if (!minigame.IsTryCast<YokoYashiroStatusUpdateMinigame>(out var teroMiniGame) ||
-				!ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(Type, out var system) ||
-				system is null)
+				!ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(Type, out var system))
 			{
 				throw new ArgumentException("Minigame Missing");
 			}
 
-			teroMiniGame!.Info = system.allInfo[this.Id];
-			teroMiniGame!.Begin(null);
+			teroMiniGame.Info = system.allInfo[this.Id];
+			teroMiniGame.Begin(null);
 		}
 	}
 
@@ -296,8 +296,8 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 		var newConsole = this.consoleSystem.CreateConsoleObj(
 			pos, "Yashiro", consoleBehavior);
 
-		newConsole.Image!.sprite = Loader.CreateSpriteFromResources(
-			Path.YokoYashiro);
+		newConsole.Image!.sprite = Loader.GetSpriteFromResources(
+			ExtremeRoleId.Yoko);
 
 		var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 		colider.isTrigger = true;

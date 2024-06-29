@@ -6,6 +6,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -70,14 +71,12 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
             if (task == null) { continue; }
 
             TaskTypes taskType = task.TaskType;
-            if (CompatModManager.Instance.TryGetModMap(out var modMap))
+            if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
+				modMap.IsCustomSabotageTask(taskType))
             {
-                if (modMap!.IsCustomSabotageTask(taskType))
-                {
-                    sabotageActive = true;
-                    break;
-                }
-            }
+				sabotageActive = true;
+				break;
+			}
 
             if (PlayerTask.TaskIsEmergency(task) ||
 				task.TaskType == TaskTypes.MushroomMixupSabotage)

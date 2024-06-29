@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -64,7 +65,7 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     public void CreateAbility()
     {
-        this.CreateChargeAbilityButton(
+        this.CreateBatteryAbilityButton(
             "admin",
             GameSystem.GetAdminButtonImage(),
             IsOpen, CleanUp);

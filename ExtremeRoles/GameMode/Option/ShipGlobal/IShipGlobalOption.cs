@@ -10,6 +10,8 @@ using ExtremeRoles.Patches.Option;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
+#nullable enable
+
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public enum ShipGlobalOptionCategory : int
@@ -109,12 +111,6 @@ public interface IShipGlobalOption
 		TaskTypes.DevelopPhotos,
 		TaskTypes.DivertPower,
 	};
-
-	public MapModuleDisableFlag RemoveMapModule => new MapModuleDisableFlag(
-		this.Admin.Disable,
-		this.Security.Disable,
-		this.Vital.Disable,
-		this.Admin.AirShipEnable);
 
 	public IReadOnlySet<TaskTypes> ChangeTask
 	{

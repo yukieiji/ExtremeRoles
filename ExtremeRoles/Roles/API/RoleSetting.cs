@@ -17,7 +17,7 @@ public enum ExtremeRoleType : int
 }
 public enum RoleCommonOption
 {
-	SpawnRate = 20,
+	SpawnRate = 50,
 	RoleNum,
     AssignWeight,
     HasOtherVision,
@@ -26,7 +26,7 @@ public enum RoleCommonOption
 }
 public enum KillerCommonOption
 {
-    HasOtherKillRange = 40,
+    HasOtherKillRange = 60,
     KillRange,
     HasOtherKillCool,
     KillCoolDown,

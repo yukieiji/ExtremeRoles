@@ -9,7 +9,6 @@ using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
-using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
@@ -73,7 +72,7 @@ public static class NameplatesTabPatch
 
 		foreach (NamePlateData npData in unlockedNamePlate)
         {
-            if (ExtremeNamePlateManager.NamePlateData.TryGetValue(
+            if (CosmicStorage<CustomNamePlate>.TryGet(
 					npData.ProductId, out CustomNamePlate? np) &&
 				np != null)
             {

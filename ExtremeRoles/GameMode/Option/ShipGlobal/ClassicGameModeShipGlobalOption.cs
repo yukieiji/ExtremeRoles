@@ -4,6 +4,8 @@ using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 using ExtremeRoles.Module.CustomOption.OLDS;
 
+#nullable enable
+
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption

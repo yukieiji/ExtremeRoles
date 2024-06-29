@@ -2,7 +2,6 @@
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
 
 using ExtremeRoles.Resources;
@@ -10,6 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -34,7 +34,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 
             if (CompatModManager.Instance.TryGetModMap(out var modMap))
             {
-				modMap!.AddCustomComponent(
+				modMap.AddCustomComponent(
                     this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
         }
