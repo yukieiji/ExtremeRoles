@@ -32,7 +32,7 @@ public static class KillAnimationSetMovementPatch
         [HarmonyArgument(1)] bool canMove)
     {
         if (!RoleAssignState.Instance.IsRoleSetUpEnd || canMove || 
-            source.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId) { return; }
+            source.PlayerId != PlayerControl.LocalPlayer.PlayerId) { return; }
 
         var (role, anothorRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
             IRolePerformKillHook>();
@@ -45,7 +45,7 @@ public static class KillAnimationSetMovementPatch
         [HarmonyArgument(1)] bool canMove)
     {
         if (!RoleAssignState.Instance.IsRoleSetUpEnd || !canMove ||
-            source.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId) { return; }
+            source.PlayerId != PlayerControl.LocalPlayer.PlayerId) { return; }
 
         var (role, anothorRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
             IRolePerformKillHook>();

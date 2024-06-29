@@ -59,7 +59,7 @@ public static class MapCountOverlayUpdatePatch
 		PlayerColor.Clear();
 
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
-            CachedPlayerControl.LocalPlayer);
+            PlayerControl.LocalPlayer);
 
         if (!__instance.isSab && isHudOverrideTaskActive)
 		{

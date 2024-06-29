@@ -163,7 +163,7 @@ public sealed class Photographer :
 
 			var playerInfo = new List<PlayerPosInfo>(GameData.Instance.AllPlayers.Count);
 
-			Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+			Vector3 photoCenter = PlayerControl.LocalPlayer.transform.position;
 
 			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
@@ -491,7 +491,7 @@ public sealed class Photographer :
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

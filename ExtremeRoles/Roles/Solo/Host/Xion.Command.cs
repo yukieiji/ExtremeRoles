@@ -109,18 +109,18 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             return
                 PlayerId != byte.MaxValue &&
-                CachedPlayerControl.LocalPlayer.PlayerId == PlayerId;
+                PlayerControl.LocalPlayer.PlayerId == PlayerId;
         }
 
         private static void addChat(string text)
         {
             FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-                CachedPlayerControl.LocalPlayer, text);
+                PlayerControl.LocalPlayer, text);
         }
 
         private static void hostToSpecificRole(string[] args)
         {
-            RpcRoleReplaceOps(CachedPlayerControl.LocalPlayer.PlayerId, args[1]);
+            RpcRoleReplaceOps(PlayerControl.LocalPlayer.PlayerId, args[1]);
         }
 
         private static void specificPlayerIdToSpecificRole(string[] args)
@@ -160,7 +160,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             IRoleHasParent.PurgeParent(targetPlayerId);
 
             // プレイヤーのリセット処理
-            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
                 abilityReset(targetRole);
             }

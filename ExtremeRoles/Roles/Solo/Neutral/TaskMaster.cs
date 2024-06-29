@@ -149,7 +149,7 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     private void resetTask(byte playerId)
     {
         this.HasTask = this.IsWin;
-        PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
         if (rolePlayer.PlayerId == playerId && !this.HasTask)
         {
             rolePlayer.ClearTasks();

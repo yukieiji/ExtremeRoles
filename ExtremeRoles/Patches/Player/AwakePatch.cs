@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Player;
@@ -14,17 +13,17 @@ public static class PlayerControlAwakePatch
 	{
 		if (__instance.notRealPlayer) { return; }
 
-		new CachedPlayerControl(__instance);
+		AmongUsCache.AddPlayerControl(__instance);
 
 #if DEBUG
-		foreach (var cachedPlayer in CachedPlayerControl.AllPlayerControls)
+		foreach (var cachedPlayer in AmongUsCache.AllPlayerControl)
 		{
 			if (!cachedPlayer.PlayerControl ||
-				!cachedPlayer.PlayerPhysics ||
+				!cachedPlayer.MyPhysics ||
 				!cachedPlayer.NetTransform ||
 				!cachedPlayer.transform)
 			{
-				Logging.Debug($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
+				Logging.Debug($"CachedPlayer {cachedPlayer.name} has null fields");
 			}
 		}
 #endif

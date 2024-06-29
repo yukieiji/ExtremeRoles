@@ -55,7 +55,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
 
             foreach (NetworkedPlayerInfo player in this.PlayerInfo)
             {
-                if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                 {
                     continue;
                 }
@@ -225,7 +225,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

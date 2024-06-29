@@ -79,7 +79,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             }
         }
 
-        if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             Sound.PlaySound(
                 Sound.Type.AgencyTakeTask, 1.2f);
@@ -189,7 +189,7 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         this.TargetPlayer = byte.MaxValue;
 
         PlayerControl target = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this,
+            PlayerControl.LocalPlayer, this,
             this.takeTaskRange);
 
         if (target != null)

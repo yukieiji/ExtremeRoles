@@ -141,7 +141,7 @@ public sealed class Resurrecter :
             RPCOperator.Command.ResurrecterRpc))
         {
             caller.WriteByte((byte)ResurrecterRpcOps.ResetFlash);
-            caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
         }
 
         if (flash != null)
@@ -157,7 +157,7 @@ public sealed class Resurrecter :
         {
             this.isActiveMeetingCount = false;
             this.meetingCounter = 0;
-            replaceTask(CachedPlayerControl.LocalPlayer);
+            replaceTask(PlayerControl.LocalPlayer);
         }
     }
 
@@ -331,7 +331,7 @@ public sealed class Resurrecter :
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

@@ -13,7 +13,7 @@ public static class MeetingHudSetForegroundForDeadPatch
 		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
 			FastDestroyableSingleton<HudManager>.Instance == null) { return true; }
 
-		if (CachedPlayerControl.LocalPlayer.PlayerId !=
+		if (PlayerControl.LocalPlayer.PlayerId !=
 			ExtremeRolesPlugin.ShipState.ExiledAssassinId)
 		{
 			return true;

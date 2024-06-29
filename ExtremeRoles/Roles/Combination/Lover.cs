@@ -141,7 +141,7 @@ public sealed class Lover : MultiAssignRoleBase
 
         List<byte> lover = getAliveSameLover();
 
-        lover.Remove(CachedPlayerControl.LocalPlayer.PlayerId);
+        lover.Remove(PlayerControl.LocalPlayer.PlayerId);
 
         byte firstLover = lover[0];
         lover.RemoveAt(0);

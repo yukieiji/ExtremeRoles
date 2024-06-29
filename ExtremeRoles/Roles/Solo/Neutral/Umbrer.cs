@@ -216,7 +216,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public bool IsAbilityCheck()
         => Helper.Player.IsPlayerInRangeAndDrawOutLine(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             this.target, this, this.range);
 
     public void CleanUp()
@@ -241,7 +241,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     public bool IsAbilityUse()
     {
         this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this, this.range);
+            PlayerControl.LocalPlayer, this, this.range);
 
         bool isUpgrade = this.container.IsFirstStage(
             this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);
@@ -376,7 +376,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         if (sourcePlayer == null) { return false; }
         Vector2 pos = sourcePlayer.GetTruePosition();
         byte sourcePlayerId = sourcePlayer.PlayerId;
-        byte rolePlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte rolePlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         foreach (NetworkedPlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())

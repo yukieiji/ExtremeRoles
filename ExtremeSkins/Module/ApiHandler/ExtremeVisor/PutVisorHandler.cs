@@ -58,12 +58,12 @@ public sealed class PutVisorHandler : IRequestHandler
 		}
 
 		bool hasReloadVisor =
-			CachedPlayerControl.LocalPlayer != null &&
-			CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.visor.visorData.ProductId == id;
+			PlayerControl.LocalPlayer != null &&
+			PlayerControl.LocalPlayer.cosmetics.visor.visorData.ProductId == id;
 
 		if (hasReloadVisor)
 		{
-			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetVisor(VisorData.EmptyId);
+			PlayerControl.LocalPlayer!.RpcSetVisor(VisorData.EmptyId);
 		}
 
 		ExtremeVisorManager.VisorData[id] = customVisor;
@@ -76,7 +76,7 @@ public sealed class PutVisorHandler : IRequestHandler
 		ExtremeSkinsPlugin.Logger.LogInfo($"Visor Reloaded :\n{customVisor}");
 		if (hasReloadVisor)
 		{
-			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetVisor(id);
+			PlayerControl.LocalPlayer!.RpcSetVisor(id);
 		}
 
 		IRequestHandler.SetStatusOK(response);

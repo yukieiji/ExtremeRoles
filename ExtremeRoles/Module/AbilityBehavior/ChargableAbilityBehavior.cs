@@ -105,7 +105,7 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
 		{
 			this.chargeTimer -= Time.deltaTime;
 		}
-		if (CachedPlayerControl.LocalPlayer.PlayerControl.AllTasksCompleted())
+		if (PlayerControl.LocalPlayer.AllTasksCompleted())
 		{
 			this.currentCharge = this.maxCharge;
 		}

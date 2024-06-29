@@ -104,7 +104,7 @@ public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
 		this.logSelector = -1;
 
 		float timer = 0.0f;
-		float maxTime = CachedPlayerControl.LocalPlayer.Data.IsDead ?
+		float maxTime = PlayerControl.LocalPlayer.Data.IsDead ?
 			this.ConsoleInfo.DeadPlayerActivateTime :
 			this.ConsoleInfo.PlayerActivateTime;
 

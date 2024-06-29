@@ -51,7 +51,7 @@ public static class MeetingHudSortButtonsPatch
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
-		var player = CachedPlayerControl.LocalPlayer;
+		var player = PlayerControl.LocalPlayer;
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
 			player);
 
@@ -63,7 +63,7 @@ public static class MeetingHudSortButtonsPatch
 			var obj = __instance.gameObject;
 
 			VoteAreaInfo playerInfoUpdater =
-				playerVoteArea.TargetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId ?
+				playerVoteArea.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ?
 				obj.AddComponent<LocalPlayerVoteAreaInfo>() :
 				obj.AddComponent<OtherPlayerVoteAreaInfo>();
 

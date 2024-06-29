@@ -41,7 +41,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				return;
 			}
 
-			PlayerControl player = CachedPlayerControl.LocalPlayer;
+			PlayerControl player = PlayerControl.LocalPlayer;
 
 			int overflow = this.history.Count - this.Size;
 			for (int i = 0; i < overflow; ++i)

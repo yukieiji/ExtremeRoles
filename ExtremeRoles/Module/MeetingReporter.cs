@@ -74,7 +74,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
 	public static void RpcAddTargetMeetingChatReport(byte targetPlayer, IStringSerializer report)
 	{
-		if (targetPlayer == CachedPlayerControl.LocalPlayer.PlayerId)
+		if (targetPlayer == PlayerControl.LocalPlayer.PlayerId)
 		{
 			Instance.AddMeetingChatReport(report);
 		}
@@ -103,7 +103,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 				break;
 			case RpcOpType.TargetChatReport:
 				byte targetPlayer = reader.ReadByte();
-				var player = CachedPlayerControl.LocalPlayer;
+				var player = PlayerControl.LocalPlayer;
 				if (player == null || player.PlayerId != targetPlayer)
 				{
 					return;
@@ -165,7 +165,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 			}
 
 			FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-				CachedPlayerControl.LocalPlayer, chatBody);
+				PlayerControl.LocalPlayer, chatBody);
 
 			this.resetWaitTimer();
 		}

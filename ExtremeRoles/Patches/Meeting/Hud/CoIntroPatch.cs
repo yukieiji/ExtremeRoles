@@ -21,7 +21,7 @@ public static class MeetingHudCoIntroPatch
 
 		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
 		{
-			var player = CachedPlayerControl.LocalPlayer;
+			var player = PlayerControl.LocalPlayer;
 			var hookRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHook;
 			var multiAssignRole = ExtremeRoleManager.GetLocalPlayerRole() as MultiAssignRoleBase;
 

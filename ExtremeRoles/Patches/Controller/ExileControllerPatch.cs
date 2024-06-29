@@ -378,7 +378,7 @@ public static class ExileControllerReEnableGameplayPatch
 
         if (!role.TryGetKillCool(out float killCool)) { return; }
 
-        CachedPlayerControl.LocalPlayer.PlayerControl.SetKillTimer(killCool);
+        PlayerControl.LocalPlayer.SetKillTimer(killCool);
     }
 
 }

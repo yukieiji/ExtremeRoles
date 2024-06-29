@@ -83,7 +83,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 			return false;
 		}
 
-		var validPlayer = CachedPlayerControl.AllPlayerControls.Where(
+		var validPlayer = AmongUsCache.AllPlayerControl.Where(
 			x => x != null && x.Data != null && !x.Data.Disconnected);
 
 		return validPlayer.All(x => checkedPlayer.Contains(x.PlayerId));

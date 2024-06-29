@@ -17,7 +17,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
     public IEnumerator CoRunModeIntro(
         IntroCutscene instance, GameObject roleAssignText)
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         Logger.GlobalInstance.Info(
             "IntroCutscene :: CoBegin() :: Game Mode: Hide and Seek", null);
@@ -51,8 +51,8 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 		}
 
 		PlayerControl impostor =
-            CachedPlayerControl.AllPlayerControls.Find(
-                (CachedPlayerControl pc) => pc.Data.Role.IsImpostor);
+            AmongUsCache.AllPlayerControl.Find(
+				(PlayerControl pc) => pc.Data.Role.IsImpostor));
 
         if (impostor == null)
         {

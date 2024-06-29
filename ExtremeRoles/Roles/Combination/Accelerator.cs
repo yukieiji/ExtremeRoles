@@ -152,7 +152,7 @@ public sealed class Accelerator :
     }
 
     public bool IsAbilityActive() =>
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
+        PlayerControl.LocalPlayer.moveable;
 
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
@@ -168,13 +168,13 @@ public sealed class Accelerator :
 
     public bool UseAbility()
     {
-		acceleratorPanelOps(CachedPlayerControl.LocalPlayer, false);
+		acceleratorPanelOps(PlayerControl.LocalPlayer, false);
 		return true;
 	}
 
     public void CleanUp()
     {
-		acceleratorPanelOps(CachedPlayerControl.LocalPlayer, true);
+		acceleratorPanelOps(PlayerControl.LocalPlayer, true);
 	}
 
     public override void RolePlayerKilledAction(

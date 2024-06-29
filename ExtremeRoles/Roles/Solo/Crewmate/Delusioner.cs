@@ -104,7 +104,7 @@ public sealed class Delusioner :
         this.targetPlayerId = byte.MaxValue;
 
         PlayerControl target = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this,
+            PlayerControl.LocalPlayer, this,
             this.range);
         if (target == null) { return false; }
 
@@ -178,7 +178,7 @@ public sealed class Delusioner :
         List<Vector2> randomPos = new List<Vector2>();
         byte teloportTarget = this.targetPlayerId;
 
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         var allPlayer = GameData.Instance.AllPlayers;
 
         if (this.includeLocalPlayer)
@@ -283,7 +283,7 @@ public sealed class Delusioner :
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

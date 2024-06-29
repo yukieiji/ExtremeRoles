@@ -135,7 +135,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 
     public bool UseAbility()
     {
-        byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.CrackerCrackDeadBody))

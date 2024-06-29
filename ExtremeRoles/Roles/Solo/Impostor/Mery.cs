@@ -302,7 +302,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
     public bool UseAbility()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         Vector2 setPos = localPlayer.GetTruePosition();
 
         using (var caller = RPCOperator.CreateCaller(

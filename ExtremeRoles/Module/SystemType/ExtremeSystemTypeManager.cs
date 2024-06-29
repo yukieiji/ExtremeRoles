@@ -245,7 +245,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 	public void UpdateSystem(Il2CppByteArry data)
 		=> UpdateSystem(
-			CachedPlayerControl.LocalPlayer,
+			PlayerControl.LocalPlayer,
 			MessageReader.Get(data));
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
@@ -274,10 +274,10 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	private static void callRpc(MessageWriter writer, int target)
 	{
 		using var caller = new RPCOperator.RpcCaller(
-			CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+			PlayerControl.LocalPlayer.NetId,
 			RPCOperator.Command.UpdateExtremeSystemType,
 			target: target);
-		caller.WriteNetObject(CachedPlayerControl.LocalPlayer.PlayerControl);
+		caller.WriteNetObject(PlayerControl.LocalPlayer);
 		caller.WriteWriter(writer, false);
 	}
 

@@ -73,7 +73,7 @@ public sealed class Foras : GhostRoleBase
 
         if (foras is null || (role is null && anotherRole is null)) { return; }
 
-        byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         if (localPlayerId == forasPlayerId ||
             localPlayerId == role?.Parent ||
@@ -161,11 +161,11 @@ public sealed class Foras : GhostRoleBase
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
-        byte rolePlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte rolePlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         if (this.rate > RandomGenerator.Instance.Next(101))
         {
-            this.targetPlayer = CachedPlayerControl.AllPlayerControls
+            this.targetPlayer = AmongUsCache.AllPlayerControl
                 .Where(x =>
                 {
                     return
@@ -190,7 +190,7 @@ public sealed class Foras : GhostRoleBase
 
 
         this.targetPlayer = Helper.Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             ExtremeRoleManager.GetLocalPlayerRole(),
             this.range);
 
@@ -199,13 +199,13 @@ public sealed class Foras : GhostRoleBase
 
     private void abilityCall()
     {
-        showArrow(CachedPlayerControl.LocalPlayer.PlayerId, this.targetPlayer!.PlayerId);
+        showArrow(PlayerControl.LocalPlayer.PlayerId, this.targetPlayer!.PlayerId);
         this.targetPlayer = null;
     }
 
     private void cleanUp()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.UseGhostRoleAbility))

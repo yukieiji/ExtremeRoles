@@ -7,7 +7,7 @@ namespace ExtremeRoles.Module.ButtonAutoActivator
 	{
 		public bool IsActive()
 		{
-			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+			PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 			return
 				(

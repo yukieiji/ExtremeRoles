@@ -14,7 +14,7 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 {
 	public (string, string) GetInfoText()
 	{
-		if (!CachedPlayerControl.LocalPlayer.Data.IsDead)
+		if (!PlayerControl.LocalPlayer.Data.IsDead)
 		{
 			return ($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", string.Empty);
 		}

@@ -21,7 +21,7 @@ public sealed class VentInPlayerPosSyncer : MonoBehaviour
 		this.timer = 0.0f;
 
 		this.vent = base.gameObject.GetComponent<Vent>();
-		this.localPlayer = CachedPlayerControl.LocalPlayer;
+		this.localPlayer = PlayerControl.LocalPlayer;
 		setSystem();
 	}
 

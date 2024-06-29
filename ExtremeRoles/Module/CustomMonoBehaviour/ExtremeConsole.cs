@@ -88,7 +88,7 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 
 	public void Use()
 	{
-		PlayerControl? player = CachedPlayerControl.LocalPlayer;
+		PlayerControl? player = PlayerControl.LocalPlayer;
 		if (player == null ||
 			player.Data == null)
 		{

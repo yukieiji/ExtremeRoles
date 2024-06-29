@@ -137,7 +137,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
 			submarineOxygenSystemPlayersWithMask.GetValue(__instance) as HashSet<byte>;
 
 		if (playersWithMask != null &&
-			!playersWithMask.Contains(CachedPlayerControl.LocalPlayer.PlayerId))
+			!playersWithMask.Contains(PlayerControl.LocalPlayer.PlayerId))
 		{
 			submergedMod!.RepairCustomSabotage(
 				submergedMod.RetrieveOxygenMask);

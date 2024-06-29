@@ -37,7 +37,7 @@ public static class Player
 
 		Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-		foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+		foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
 		{
 			PoolablePlayer poolPlayer = Object.Instantiate(
 				Module.Prefab.PlayerPrefab, parent);
@@ -68,7 +68,7 @@ public static class Player
 
 	public static PlayerControl GetPlayerControlById(byte id)
     {
-        foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
         {
             if (player.PlayerId == id) { return player; }
         }
@@ -103,7 +103,7 @@ public static class Player
     public static PlayerControl GetClosestPlayerInKillRange()
     {
         var playersInAbilityRangeSorted =
-            CachedPlayerControl.LocalPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
+            PlayerControl.LocalPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
                 RoleBehaviour.GetTempPlayerList());
         if (playersInAbilityRangeSorted.Count <= 0)
         {
@@ -263,7 +263,7 @@ public static class Player
 
     public static NetworkedPlayerInfo GetDeadBodyInfo(float range)
     {
-        Vector2 playerPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+        Vector2 playerPos = PlayerControl.LocalPlayer.GetTruePosition();
 
         foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
             playerPos, range,
@@ -277,7 +277,7 @@ public static class Player
             {
                 Vector2 truePosition = component.TruePosition;
                 if ((Vector2.Distance(truePosition, playerPos) <= range) &&
-                    (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
+                    (PlayerControl.LocalPlayer.CanMove) &&
                     (!PhysicsHelpers.AnythingBetween(
                         playerPos, truePosition, Constants.ShipAndObjectsMask, false)))
                 {
@@ -298,7 +298,7 @@ public static class Player
     {
 		if (isTeleportXion &&
 			Xion.PlayerId == targetPlayerId &&
-			CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+			PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
 		{
 			Xion.RpcTeleportTo(pos);
 			return;

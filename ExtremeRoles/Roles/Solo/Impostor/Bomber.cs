@@ -98,7 +98,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public bool CheckAbility()
         => Player.IsPlayerInRangeAndDrawOutLine(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             this.bombSettingPlayer, this,
 			GameOptionsData.KillDistances[this.KillRange]);
 

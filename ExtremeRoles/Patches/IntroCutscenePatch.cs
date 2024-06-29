@@ -53,7 +53,7 @@ public static class IntroCutscenceHelper
         if (role.IsNeutral() || role.Id == ExtremeRoleId.Xion)
         {
             var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-            soloTeam.Add(CachedPlayerControl.LocalPlayer);
+            soloTeam.Add(PlayerControl.LocalPlayer);
             yourTeam = soloTeam;
         }
     }
@@ -172,7 +172,7 @@ public static class IntroCutsceneSetUpRoleTextPatch
         }
 
         SoundManager.Instance.PlaySound(
-            CachedPlayerControl.LocalPlayer.Data.Role.IntroSound, false, 1f);
+            PlayerControl.LocalPlayer.Data.Role.IntroSound, false, 1f);
 
         __instance.YouAreText.gameObject.SetActive(true);
         __instance.RoleText.gameObject.SetActive(true);
@@ -181,7 +181,7 @@ public static class IntroCutsceneSetUpRoleTextPatch
         if (__instance.ourCrewmate == null)
         {
             __instance.ourCrewmate = __instance.CreatePlayer(
-                0, 1, CachedPlayerControl.LocalPlayer.Data, false);
+                0, 1, PlayerControl.LocalPlayer.Data, false);
             __instance.ourCrewmate.gameObject.SetActive(false);
         }
         __instance.ourCrewmate.gameObject.SetActive(true);

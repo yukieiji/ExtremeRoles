@@ -96,7 +96,7 @@ public static class PlayerVoteAreaSelectPatch
 			}
 		}
 
-		if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
 		{
 			return false;
 		}

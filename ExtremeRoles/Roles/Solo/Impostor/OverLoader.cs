@@ -228,7 +228,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
         {
             return Design.ColoedString(
                 Palette.ImpostorRed,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 
@@ -338,7 +338,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
     private void abilityOn()
     {
-        byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.OverLoaderSwitchAbility))
@@ -351,7 +351,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     }
     private void abilityOff()
     {
-        byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.OverLoaderSwitchAbility))

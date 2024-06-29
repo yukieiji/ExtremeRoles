@@ -79,7 +79,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             if (decon != null) { continue; }
 
             if (Vector3.Distance(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.transform.position,
+                    PlayerControl.LocalPlayer.transform.position,
                     door.transform.position) < this.range)
             {
                 this.targetDoor = door;

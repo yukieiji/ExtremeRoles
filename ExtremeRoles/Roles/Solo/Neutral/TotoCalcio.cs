@@ -76,7 +76,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public bool IsAbilityUse()
     {
         this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this,
+            PlayerControl.LocalPlayer, this,
             this.range);
 
         if (this.tmpTarget == null ||
@@ -138,7 +138,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     {
         if (this.tmpTarget == null) { return false; }
 
-        byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.TotocalcioSetBetPlayer))

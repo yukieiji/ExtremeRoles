@@ -67,7 +67,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool UseAbility()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		Vector2 setPos = localPlayer.GetTruePosition();
 
 		ModedMushroomSystem.RpcSetModMushroom(setPos);

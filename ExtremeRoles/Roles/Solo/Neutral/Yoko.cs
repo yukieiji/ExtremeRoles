@@ -224,7 +224,7 @@ public sealed class Yoko :
 			if (player == null ||
 				player.Disconnected ||
 				player.IsDead ||
-				player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+				player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 			{
 				continue;
 			}
@@ -324,7 +324,7 @@ public sealed class Yoko :
 		{
 			return false;
 		}
-		this.prevPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+		this.prevPos = PlayerControl.LocalPlayer.GetTruePosition();
 
 		return true;
 	}
@@ -333,7 +333,7 @@ public sealed class Yoko :
 	{
 		if (this.yashiro is null) { return; }
 
-		Vector2 pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
 
 		this.yashiro.RpcSetYashiro(this.GameControlId, pos);
 	}
@@ -342,13 +342,13 @@ public sealed class Yoko :
 	{
 		if (this.yashiro is null) { return false; }
 
-		Vector2 pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
 
 		return this.yashiro.CanSet(pos);
 	}
 
 	public bool IsAbilityActive() =>
-		this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+		this.prevPos == PlayerControl.LocalPlayer.GetTruePosition();
 
 	public void CreateAbility()
 	{

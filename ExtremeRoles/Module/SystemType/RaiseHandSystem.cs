@@ -87,7 +87,7 @@ public sealed class RaiseHandSystem : IRaiseHandSystem
 			ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
 				Type, (x) =>
 				{
-					x.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+					x.Write(PlayerControl.LocalPlayer.PlayerId);
 				});
 		});
 	}

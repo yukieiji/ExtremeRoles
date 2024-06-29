@@ -64,7 +64,7 @@ public static class Sound
             switch (soundType)
             {
                 case Type.Kill:
-                    clip = CachedPlayerControl.LocalPlayer.PlayerControl.KillSfx;
+                    clip = PlayerControl.LocalPlayer.KillSfx;
                     break;
                 case Type.GuardianAngleGuard:
                     clip = FastDestroyableSingleton<RoleManager>.Instance.protectAnim.UseSound;

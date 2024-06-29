@@ -17,7 +17,7 @@ public static class MeetingHudConfirmPatch
 	{
 		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
-		if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
 		{
 			return false;
 		}
@@ -38,7 +38,7 @@ public static class MeetingHudConfirmPatch
 		}
 		__instance.state = MeetingHud.VoteStates.Voted;
 		__instance.CmdCastVote(
-			CachedPlayerControl.LocalPlayer.PlayerId, suspectStateIdx);
+			PlayerControl.LocalPlayer.PlayerId, suspectStateIdx);
 
 		return false;
 	}

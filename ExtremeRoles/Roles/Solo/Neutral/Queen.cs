@@ -90,7 +90,7 @@ public sealed class Queen :
         Servant servant = new Servant(
             rolePlayerId, queen, targetRole);
 
-        if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             Player.ResetTarget();
             servant.SelfKillAbility(queen.ServantSelfKillCool);
@@ -154,7 +154,7 @@ public sealed class Queen :
         var multiAssignRole = targetRole as MultiAssignRoleBase;
         if (multiAssignRole == null) { return; }
 
-        if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+        if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
         {
             if (multiAssignRole.AnotherRole is IRoleAbility abilityRole)
             {
@@ -198,7 +198,7 @@ public sealed class Queen :
         byte targetPlayerId,
         PlayerControl targetPlayer)
     {
-        if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+        if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
         {
             if (targetRole is IRoleAbility abilityRole)
             {
@@ -221,7 +221,7 @@ public sealed class Queen :
         byte targetPlayerId)
     {
         // 会議開始と終了の処理を呼び出すことで能力を使用可能な状態でリセット
-        if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+        if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
         {
             if (targetRole is IRoleAbility abilityRole)
             {
@@ -253,10 +253,10 @@ public sealed class Queen :
             this.servantPlayerId.Contains(source.PlayerId))
         {
 
-            float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
+            float killcool = PlayerControl.LocalPlayer.killTimer;
             if (killcool > 0.0f)
             {
-                CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = killcool * this.killKillCoolReduceRate;
+                PlayerControl.LocalPlayer.killTimer = killcool * this.killKillCoolReduceRate;
             }
         }
     }
@@ -282,10 +282,10 @@ public sealed class Queen :
             float prevGage = this.servantTaskGage[playerId];
             this.servantTaskGage[playerId] = gage;
 
-            float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
+            float killcool = PlayerControl.LocalPlayer.killTimer;
             if (gage > prevGage && killcool > 0.0f)
             {
-                CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = killcool * this.taskKillCoolReduceRate;
+                PlayerControl.LocalPlayer.killTimer = killcool * this.taskKillCoolReduceRate;
             }
             if (gage >= 1.0f && !this.taskCompServant.Contains(playerId))
             {
@@ -330,7 +330,7 @@ public sealed class Queen :
     {
         byte targetPlayerId = this.Target.PlayerId;
 
-        PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
         using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.ReplaceRole))
         {
@@ -345,7 +345,7 @@ public sealed class Queen :
     public bool IsAbilityUse()
     {
         this.Target = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             this, this.range);
 
         return this.Target != null && IRoleAbility.IsCommonUse();
@@ -655,7 +655,7 @@ public sealed class Servant :
 
     public bool UseAbility()
     {
-        byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte playerId = PlayerControl.LocalPlayer.PlayerId;
         Player.RpcUncheckMurderPlayer(
             playerId, playerId, byte.MaxValue);
 

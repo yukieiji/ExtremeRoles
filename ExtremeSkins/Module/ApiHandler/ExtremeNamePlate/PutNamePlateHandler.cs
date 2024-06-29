@@ -48,12 +48,12 @@ public sealed class PutNamePlateHandler : IRequestHandler
 		}
 
 		bool hasReloadNamePlate =
-			CachedPlayerControl.LocalPlayer != null &&
-			CachedPlayerControl.LocalPlayer.PlayerControl.Data.DefaultOutfit.NamePlateId == id;
+			PlayerControl.LocalPlayer != null &&
+			PlayerControl.LocalPlayer.Data.DefaultOutfit.NamePlateId == id;
 
 		if (hasReloadNamePlate)
 		{
-			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetNamePlate(NamePlateData.EmptyId);
+			PlayerControl.LocalPlayer!.RpcSetNamePlate(NamePlateData.EmptyId);
 		}
 
 		ExtremeNamePlateManager.NamePlateData[id] = customNamePlate;
@@ -66,7 +66,7 @@ public sealed class PutNamePlateHandler : IRequestHandler
 		ExtremeSkinsPlugin.Logger.LogInfo($"NamePlate Reloaded :\n{customNamePlate}");
 		if (hasReloadNamePlate)
 		{
-			CachedPlayerControl.LocalPlayer!.PlayerControl.RpcSetNamePlate(id);
+			PlayerControl.LocalPlayer!.RpcSetNamePlate(id);
 		}
 
 		IRequestHandler.SetStatusOK(response);

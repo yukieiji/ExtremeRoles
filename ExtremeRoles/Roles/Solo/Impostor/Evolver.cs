@@ -88,7 +88,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     public void CleanUp()
     {
 
-        PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
 
         if (this.isEvolvdAnimation)
         {

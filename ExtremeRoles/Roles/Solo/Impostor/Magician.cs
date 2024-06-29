@@ -79,16 +79,15 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
     public bool UseAbility()
     {
         // まずはテレポート先とかにも設定できるプレヤーを取得
-        var allPlayer = CachedPlayerControl.AllPlayerControls;
-        var validPlayer = allPlayer.Where(x =>
+        var validPlayer = AmongUsCache.AllPlayerControl.Where(x =>
             x != null &&
             x.Data != null &&
             !x.Data.IsDead &&
             !x.Data.Disconnected &&
-			!x.PlayerControl.inVent && // ベント入ってない
-			x.PlayerControl.moveable &&  // 移動できる状態か
-			!x.PlayerControl.inMovingPlat && // なんか乗ってないか
-			(CachedPlayerControl.LocalPlayer.PlayerId != x.PlayerId || this.includeRolePlayer));
+			!x.inVent && // ベント入ってない
+			x.moveable &&  // 移動できる状態か
+			!x.inMovingPlat && // なんか乗ってないか
+			(PlayerControl.LocalPlayer.PlayerId != x.PlayerId || this.includeRolePlayer));
 
         var teleportPlayer = validPlayer.OrderBy(
             x => RandomGenerator.Instance.Next()).Take(

@@ -172,7 +172,7 @@ public sealed class Hypnotist :
 
     public static void UpdateAllDollKillButtonState(Hypnotist role)
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         float optionKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.KillCooldown);
         foreach (byte dollPlayerId in role.doll)
@@ -233,7 +233,7 @@ public sealed class Hypnotist :
 
         IRoleSpecialReset.ResetRole(targetPlayerId);
         Doll newDoll = new Doll(targetPlayerId, rolePlayerId, role);
-        if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
         {
             newDoll.CreateAbility();
         }
@@ -321,7 +321,7 @@ public sealed class Hypnotist :
         if (!this.IsAwake) { return false; }
 
         this.target = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             this, this.range);
 
         return this.target != null && IRoleAbility.IsCommonUse();
@@ -334,7 +334,7 @@ public sealed class Hypnotist :
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.HypnotistAbility))
             {
-                caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+                caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
                 caller.WriteByte((byte)RpcOps.ResetDollKillButton);
             }
             resetDollKillButton(this);
@@ -364,7 +364,7 @@ public sealed class Hypnotist :
 
     public bool UseAbility()
     {
-        PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
         byte targetPlayerId = this.target!.PlayerId;
 
         SingleRoleBase role = ExtremeRoleManager.GameRole[targetPlayerId];
@@ -386,7 +386,7 @@ public sealed class Hypnotist :
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.HypnotistAbility))
         {
-            caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
             caller.WriteByte((byte)RpcOps.TargetToDoll);
             caller.WriteByte(targetPlayerId);
         }
@@ -437,7 +437,7 @@ public sealed class Hypnotist :
         if (this.doll.Contains(source.PlayerId) &&
             this.isResetKillCoolWhenDollKill)
         {
-            CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = this.defaultKillCool;
+            PlayerControl.LocalPlayer.killTimer = this.defaultKillCool;
         }
     }
 
@@ -516,7 +516,7 @@ public sealed class Hypnotist :
         {
             return Design.ColoedString(
                 Palette.ImpostorRed,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 
@@ -987,7 +987,7 @@ public sealed class Doll :
             default:
                 break;
         }
-        if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
+        if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
             string consoleName = Translation.GetString(consoleType.ToString());
 
@@ -1023,7 +1023,7 @@ public sealed class Doll :
         }
         this.canUseCrakingModule.Add(addType);
 
-        if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
+        if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
             string consoleName = Translation.GetString(consoleType.ToString());
 
@@ -1348,7 +1348,7 @@ public sealed class Doll :
 
     private void showText(string text)
     {
-        CachedPlayerControl.LocalPlayer.PlayerControl.StartCoroutine(coShowText(text));
+        PlayerControl.LocalPlayer.StartCoroutine(coShowText(text));
     }
 
     private IEnumerator coShowText(string text)

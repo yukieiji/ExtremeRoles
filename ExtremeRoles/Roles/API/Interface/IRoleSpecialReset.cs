@@ -19,7 +19,7 @@ namespace ExtremeRoles.Roles.API.Interface
             IRoleHasParent.PurgeParent(targetPlayerId);
 
             // プレイヤーのリセット処理
-            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
                 Player.ResetTarget();
                 abilityReset(resetRole);

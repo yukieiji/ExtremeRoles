@@ -53,7 +53,7 @@ public static class PlayerControlMurderPlayerPatch
 			))
 		{
 			target.protectedByGuardianThisRound = true;
-			bool isGuardianAngel = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+			bool isGuardianAngel = PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
 			if (__instance.AmOwner || isGuardianAngel)
 			{
 				target.ShowFailedMurder();
@@ -86,7 +86,7 @@ public static class PlayerControlMurderPlayerPatch
 		[HarmonyArgument(0)] PlayerControl target)
 	{
 
-		PlayerControl player = CachedPlayerControl.LocalPlayer;
+		PlayerControl player = PlayerControl.LocalPlayer;
 
 		if (!target.Data.IsDead ||
 			player == null) { return; }

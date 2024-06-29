@@ -61,7 +61,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	protected static bool IsCommonUse()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 		return
 			localPlayer != null &&

@@ -11,7 +11,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (ExtremeGameModeManager.Instance.ShipOption.IsAllowParallelMedbayScan)
             {
-                __instance.medscan.CurrentUser = CachedPlayerControl.LocalPlayer.PlayerId;
+                __instance.medscan.CurrentUser = PlayerControl.LocalPlayer.PlayerId;
                 __instance.medscan.UsersList.Clear();
             }
         }
