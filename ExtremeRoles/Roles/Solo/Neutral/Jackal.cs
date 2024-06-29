@@ -511,7 +511,9 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
     private int recursion = 0;
     private bool sidekickJackalCanMakeSidekick = false;
 
-    public Sidekick(
+	public override IOptionLoader Loader => jackal.Loader;
+
+	public Sidekick(
         Jackal jackal,
         byte jackalPlayerId,
         bool isImpostor,
