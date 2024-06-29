@@ -69,8 +69,8 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
     {
         this.CreateNormalAbilityButton(
             "reload",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.AssaultMasterReload));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.AssaultMasterReload));
     }
 
     public void HookBodyReport(

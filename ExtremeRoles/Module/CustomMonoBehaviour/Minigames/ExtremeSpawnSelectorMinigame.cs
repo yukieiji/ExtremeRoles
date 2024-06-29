@@ -112,11 +112,11 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 				Translation.GetString(roomName);
 
 			button.Text.text = text;
-			button.Rend.sprite = Loader.GetUnityObjectFromResources<Sprite>(
+			button.Rend.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
 				string.Format(
-					Path.ExtremeSelectorMinigameAssetFormat, lowerMap),
+					ObjectPath.ExtremeSelectorMinigameAssetFormat, lowerMap),
 				string.Format(
-					Path.ExtremeSelectorMinigameImgFormat, lowerMap, roomName));
+					ObjectPath.ExtremeSelectorMinigameImgFormat, lowerMap, roomName));
 			button.Colider.size = new Vector2(1.25f, 1.25f);
 			button.OnClick = createSpawnAtAction(point.Vector, text);
 

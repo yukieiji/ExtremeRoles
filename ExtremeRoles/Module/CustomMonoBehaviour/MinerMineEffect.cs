@@ -145,8 +145,8 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	{
 		if (cachedActiveSprite == null)
 		{
-			cachedActiveSprite = Loader.CreateSpriteFromResources(
-				Path.MinerActiveMineImg);
+			cachedActiveSprite = UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MinerActiveMineImg);
 		}
 		this.rend.sprite = cachedActiveSprite;
 	}
@@ -154,8 +154,8 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	{
 		if (cachedDeactiveSprite == null)
 		{
-			cachedDeactiveSprite = Loader.CreateSpriteFromResources(
-				Path.MinerDeactivateMineImg);
+			cachedDeactiveSprite = UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MinerDeactivateMineImg);
 		}
 		this.rend.sprite = cachedDeactiveSprite;
 	}

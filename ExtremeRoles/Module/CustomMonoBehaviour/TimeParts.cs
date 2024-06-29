@@ -57,8 +57,8 @@ public sealed class TimeParts : MonoBehaviour, IAmongUs.IUsable
 
 		var img = base.gameObject.AddComponent<SpriteRenderer>();
 
-		img.sprite = Loader.GetSpriteFromResources(
-			ExtremeRoleId.Thief, Path.MapIcon);
+		img.sprite = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Thief, ObjectPath.MapIcon);
 	}
 
 	public float CanUse(

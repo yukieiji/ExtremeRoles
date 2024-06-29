@@ -401,8 +401,8 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
             return;
         }
 
-        Sprite sprite = Resources.Loader.CreateSpriteFromResources(
-            Resources.Path.TestButton);
+        Sprite sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
+            Resources.ObjectPath.TestButton);
 
         switch (this.nextUseAbilityType)
         {

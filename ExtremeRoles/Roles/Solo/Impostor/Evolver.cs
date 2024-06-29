@@ -67,8 +67,8 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 
         this.CreateActivatingAbilityCountButton(
             "evolve",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.EvolverEvolved),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.EvolverEvolved),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: ForceCleanUp);

@@ -47,9 +47,9 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		obj.transform.localPosition = new Vector3(0.0f, 0.0f, 0.25f);
 		this.multiAbilityImg = obj.AddComponent<SpriteRenderer>();
 			this.multiAbilityImg.name = "MultiAbilityImg";
-		this.multiAbilityImg.sprite = Loader.GetUnityObjectFromResources<Sprite>(
-			Path.CommonTextureAsset,
-			string.Format(Path.CommonImagePathFormat, "MultiAbility"));
+		this.multiAbilityImg.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+			ObjectPath.CommonTextureAsset,
+			string.Format(ObjectPath.CommonImagePathFormat, "MultiAbility"));
 		this.multiAbilityImg.enabled = this.MultiModalAbilityNum > 1;
 	}
 

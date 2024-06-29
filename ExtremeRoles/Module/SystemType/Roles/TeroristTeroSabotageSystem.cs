@@ -44,9 +44,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			get
 			{
 				GameObject obj =
-					Loader.GetUnityObjectFromResources<GameObject, ExtremeRoleId>(
+					UnityObjectLoader.LoadFromResources<GameObject, ExtremeRoleId>(
 						ExtremeRoleId.Terorist,
-						Path.GetRoleMinigamePath(ExtremeRoleId.Terorist));
+						ObjectPath.GetRoleMinigamePath(ExtremeRoleId.Terorist));
 				return obj.GetComponent<TeroristTeroSabotageMinigame>();
 			}
 		}
@@ -470,8 +470,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			var newConsole = this.consoleSystem.CreateConsoleObj(
 				pos.Pos, "TeroristBomb", consoleBehavior);
 
-			newConsole.Image!.sprite = Loader.GetSpriteFromResources(
-				ExtremeRoleId.Terorist, Path.MapIcon);
+			newConsole.Image!.sprite = UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Terorist, ObjectPath.MapIcon);
 
 			var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 			colider.isTrigger = true;

@@ -145,8 +145,8 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     {
         this.CreateReclickableAbilityButton(
             "carry",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.CarrierCarry),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.CarrierCarry),
             abilityOff: this.CleanUp);
     }
 

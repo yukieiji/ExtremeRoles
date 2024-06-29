@@ -76,7 +76,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		menu.Children.Clear();
 		Destroy(menu);
 
-		this.button = Loader.CreateSimpleButton(menu.transform);
+		this.button = UnityObjectLoader.CreateSimpleButton(menu.transform);
 		this.button.Layer = menu.gameObject.layer;
 		this.button.Scale = new Vector3(0.625f, 0.3f, 1.0f);
 		this.button.gameObject.transform.localPosition = new Vector3(4.0f, 0.575f);

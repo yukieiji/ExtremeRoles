@@ -16,7 +16,7 @@ namespace ExtremeRoles.Resources;
 
 #nullable enable
 
-public static class Path
+public static class ObjectPath
 {
 	public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
@@ -160,7 +160,7 @@ public static class Path
 		=> string.Format(RolePrefabFormat, $"{id}.{name}");
 }
 
-public static class Loader
+public static class UnityObjectLoader
 {
 	public static void ResetCache()
 	{
@@ -178,15 +178,15 @@ public static class Loader
 	public static SimpleButton CreateSimpleButton(Transform parent)
 	{
 		GameObject buuttonObj = UnityObject.Instantiate(
-			GetUnityObjectFromResources<GameObject>(
-			Path.CommonPrefabAsset,
-			string.Format(Path.CommonPrefabPath, "SimpleButton")),
+			LoadFromResources<GameObject>(
+			ObjectPath.CommonPrefabAsset,
+			string.Format(ObjectPath.CommonPrefabPath, "SimpleButton")),
 			parent);
 
 		return buuttonObj.GetComponent<SimpleButton>();
 	}
 
-	public static Sprite CreateSpriteFromResources(
+	public static Sprite LoadSpriteFromResources(
 		string path, float pixelsPerUnit=115f)
 	{
 		string key = $"{path}{pixelsPerUnit}";
@@ -206,42 +206,42 @@ public static class Loader
 		return sprite;
 	}
 
-	public static Sprite GetSpriteFromResources<W>(W id)
+	public static Sprite LoadFromResources<W>(W id)
 		where W : Enum
-		=> GetUnityObjectFromResources<Sprite>(
-			Path.GetRoleAssetPath(id),
-			Path.GetRoleImgPath(id, Path.ButtonIcon));
-	public static Sprite GetSpriteFromResources<W>(W id, string name)
+		=> LoadFromResources<Sprite>(
+			ObjectPath.GetRoleAssetPath(id),
+			ObjectPath.GetRoleImgPath(id, ObjectPath.ButtonIcon));
+	public static Sprite LoadFromResources<W>(W id, string name)
 		where W : Enum
-		=> GetUnityObjectFromResources<Sprite>(
-			Path.GetRoleAssetPath(id),
-			Path.GetRoleImgPath(id, name));
-	public static T GetUnityObjectFromResources<T, W>(W id, string path)
+		=> LoadFromResources<Sprite>(
+			ObjectPath.GetRoleAssetPath(id),
+			ObjectPath.GetRoleImgPath(id, name));
+	public static T LoadFromResources<T, W>(W id, string path)
 		where T : UnityObject
 		where W : Enum
-		=> GetUnityObjectFromResources<T>(
-			Path.GetRoleAssetPath(id),
+		=> LoadFromResources<T>(
+			ObjectPath.GetRoleAssetPath(id),
 			path);
 
-	public static T GetUnityObjectFromResources<T>(
+	public static T LoadFromResources<T>(
 		string bundleName, string objName) where T : UnityObject
 	{
 		AssetBundle bundle = GetAssetBundleFromAssembly(
 			bundleName, Assembly.GetCallingAssembly());
-		T result = getObjectFromAsset<T>(bundle, objName);
+		T result = loadObjectFromAsset<T>(bundle, objName);
 
 		return result;
 	}
 
-	public static T GetUnityObjectFromResources<T>(
+	public static T LoadFromResources<T>(
 		string objName) where T : UnityObject
 	{
 		AssetBundle bundle = GetAssetBundleFromAssembly(
-			string.Format(Path.AssetPlace, objName.ToLower()),
+			string.Format(ObjectPath.AssetPlace, objName.ToLower()),
 			Assembly.GetCallingAssembly());
-		T result = getObjectFromAsset<T>(
+		T result = loadObjectFromAsset<T>(
 			bundle,
-			string.Format(Path.RoleImgPathFormat, objName));
+			string.Format(ObjectPath.RoleImgPathFormat, objName));
 
 		return result;
 	}
@@ -250,11 +250,11 @@ public static class Loader
 	public static T GetUnityObjectFromExRResources<T>(
 		string bundleName, string objName) where T : UnityObject
 	{
-		var assm = Assembly.GetAssembly(typeof(Loader));
+		var assm = Assembly.GetAssembly(typeof(UnityObjectLoader));
 
 		AssetBundle bundle = GetAssetBundleFromAssembly(
 			bundleName, assm!);
-		T result = getObjectFromAsset<T>(bundle, objName);
+		T result = loadObjectFromAsset<T>(bundle, objName);
 
 		return result;
 	}
@@ -262,25 +262,25 @@ public static class Loader
 	public static T GetUnityObjectFromExRResources<T>(
 		string objName) where T : UnityObject
 	{
-		var assm = Assembly.GetAssembly(typeof(Loader));
+		var assm = Assembly.GetAssembly(typeof(UnityObjectLoader));
 
 		AssetBundle bundle = GetAssetBundleFromAssembly(
-			string.Format(Path.AssetPlace, objName.ToLower()),
+			string.Format(ObjectPath.AssetPlace, objName.ToLower()),
 			assm!);
-		T result = getObjectFromAsset<T>(
+		T result = loadObjectFromAsset<T>(
 			bundle,
-			string.Format(Path.RoleImgPathFormat, objName));
+			string.Format(ObjectPath.RoleImgPathFormat, objName));
 
 		return result;
 	}
 
 #endif
 
-	public static T GetUnityObjectFromPath<T>(
+	public static T LoadFromPath<T>(
 		string path, string objName) where T : UnityObject
 	{
 		AssetBundle bundle = getAssetBundleFromFilePath(path);
-		T result = getObjectFromAsset<T>(bundle, objName);
+		T result = loadObjectFromAsset<T>(bundle, objName);
 
 		return result;
 	}
@@ -290,14 +290,14 @@ public static class Loader
 		Assembly assembly = Assembly.GetExecutingAssembly();
 		foreach (string path in new string[]
 		{
-			Path.Texture, "fonts", "eventsystem", Path.Prefab
+			ObjectPath.Texture, "fonts", "eventsystem", ObjectPath.Prefab
 		})
 		{
-			GetAssetBundleFromAssembly(string.Format(Path.AssetPlace, path), assembly);
+			GetAssetBundleFromAssembly(string.Format(ObjectPath.AssetPlace, path), assembly);
 		}
 	}
 
-	private static T getObjectFromAsset<T>(AssetBundle bundle, string objName) where T : UnityObject
+	private static T loadObjectFromAsset<T>(AssetBundle bundle, string objName) where T : UnityObject
 	{
 		var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
 		return obj.Cast<T>();

@@ -26,8 +26,8 @@ public sealed class RaiseHandSystem : IRaiseHandSystem
 			this.hand = Object.Instantiate(
 				pva.Background, pva.LevelNumberText.transform);
 			this.hand.name = $"raisehand_{pva.TargetPlayerId}";
-			this.hand.sprite = Resources.Loader.CreateSpriteFromResources(
-				Resources.Path.RaiseHandIcon);
+			this.hand.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
+				Resources.ObjectPath.RaiseHandIcon);
 			this.hand.transform.localPosition = new Vector3(2.0f, -0.75f, -3f);
 			this.hand.transform.localScale = new Vector3(0.75f, 2.5f, 1.0f);
 			this.hand.gameObject.layer = 5;
@@ -71,7 +71,7 @@ public sealed class RaiseHandSystem : IRaiseHandSystem
 
 	public void CreateRaiseHandButton()
 	{
-		this.raiseHandButton = Resources.Loader.CreateSimpleButton(
+		this.raiseHandButton = Resources.UnityObjectLoader.CreateSimpleButton(
 			MeetingHud.Instance.transform);
 
 		this.raiseHandButton.Text.text = "挙手する";

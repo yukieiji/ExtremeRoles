@@ -97,9 +97,9 @@ public static class MainMenuManagerStartPatch
 		exrLogo.transform.parent = __instance.mainMenuUI.transform;
 		exrLogo.transform.position = new Vector3(1.95f, 1.0f, 1.0f);
         var renderer = exrLogo.AddComponent<SpriteRenderer>();
-        renderer.sprite = Loader.GetUnityObjectFromResources<Sprite>(
-			Path.CommonTextureAsset,
-			string.Format(Path.CommonImagePathFormat, "TitleBurner"));
+        renderer.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+			ObjectPath.CommonTextureAsset,
+			string.Format(ObjectPath.CommonImagePathFormat, "TitleBurner"));
 
 		if (Prefab.Prop == null || Prefab.Text == null)
         {
@@ -128,7 +128,7 @@ public static class MainMenuManagerStartPatch
 		string name, string text, float fontSize,
 		Action action, Vector3 pos, Transform parent)
 	{
-		var button = Loader.CreateSimpleButton(parent);
+		var button = UnityObjectLoader.CreateSimpleButton(parent);
 
 		button.gameObject.SetActive(true);
 		button.Layer = instance.gameObject.layer;

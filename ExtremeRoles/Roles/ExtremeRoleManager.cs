@@ -15,7 +15,6 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Performance;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Roles;
 

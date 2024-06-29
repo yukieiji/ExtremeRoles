@@ -187,8 +187,8 @@ public sealed class Shutter : GhostRoleBase
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.ShutterTakePhoto,
-            Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.PhotographerPhotoCamera),
+            Resources.UnityObjectLoader.LoadSpriteFromResources(
+                Resources.ObjectPath.PhotographerPhotoCamera),
             this.isReportAbility(),
             () => true,
             this.isAbilityUse,

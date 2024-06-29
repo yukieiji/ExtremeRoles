@@ -332,8 +332,8 @@ public sealed class Photographer :
     {
         this.CreateAbilityCountButton(
             "takePhoto",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.PhotographerPhotoCamera));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.PhotographerPhotoCamera));
         this.Button.SetLabelToCrewmate();
     }
 

@@ -113,8 +113,8 @@ public sealed class Accelerator :
 		obj.transform.position = firstPoint;
 
 		var rend = obj.AddComponent<SpriteRenderer>();
-		rend.sprite = Loader.GetUnityObjectFromResources<Sprite, ExtremeRoleId>(
-			ExtremeRoleId.Accelerator, Path.AcceleratorAcceleratePanel);
+		rend.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+			ExtremeRoleId.Accelerator, ObjectPath.AcceleratorAcceleratePanel);
 
 		accelerator.transformer = obj.AddComponent<AutoTransformerWithFixedFirstPoint>();
 		accelerator.transformer.Initialize(firstPoint, player.transform, rend);
@@ -142,7 +142,7 @@ public sealed class Accelerator :
     {
         this.CreateReclickableCountAbilityButton(
             Translation.GetString("AccelerateSet"),
-            Loader.GetSpriteFromResources(ExtremeRoleId.Accelerator),
+            UnityObjectLoader.LoadFromResources(ExtremeRoleId.Accelerator),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())

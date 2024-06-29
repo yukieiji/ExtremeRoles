@@ -76,8 +76,8 @@ public static class Sound
 					clip = getRoleAudio(soundType);
 					break;
                 default:
-					clip = Loader.GetUnityObjectFromResources<AudioClip>(
-						Path.SoundEffect, string.Format(
+					clip = UnityObjectLoader.LoadFromResources<AudioClip>(
+						ObjectPath.SoundEffect, string.Format(
 							soundPlaceHolder, soundType.ToString()));
 					clip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
 					break;
@@ -102,8 +102,8 @@ public static class Sound
 		{
 			return null;
 		}
-		var result = Loader.GetUnityObjectFromResources<AudioClip, ExtremeRoleId>(
-			id, Path.GetRoleSePath(id));
+		var result = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
+			id, ObjectPath.GetRoleSePath(id));
 		return result;
 	}
 }

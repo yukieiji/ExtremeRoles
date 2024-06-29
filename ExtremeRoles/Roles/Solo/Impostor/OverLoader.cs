@@ -92,10 +92,10 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     {
         this.CreatePassiveAbilityButton(
             "overLoad", "downLoad",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.OverLoaderOverLoad),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.OverLoaderDownLoad),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.OverLoaderOverLoad),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.OverLoaderDownLoad),
             this.CleanUp);
     }
 

@@ -82,7 +82,7 @@ public sealed class DelusionerCounterSystem : IExtremeSystemType
 
 					this.countingPlayer.Remove(reducePlayerId);
 
-					var localPlayer = CachedPlayerControl.LocalPlayer;
+					var localPlayer = PlayerControl.LocalPlayer;
 					if (localPlayer.PlayerId != reducePlayerId)
 					{
 						return;

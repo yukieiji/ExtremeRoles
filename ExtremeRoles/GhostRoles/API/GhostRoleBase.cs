@@ -210,11 +210,12 @@ public abstract class GhostRoleBase
         this.Button.Behavior.SetCoolTime(
             loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
-        if (loader.TryGetValueOption<RoleAbilityCommonOption, float>(
+        if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
+			loader.TryGetValueOption<RoleAbilityCommonOption, float>(
                 RoleAbilityCommonOption.AbilityActiveTime, out var activeTimeOtion) &&
 			activeTimeOtion is not null)
         {
-            this.Button.Behavior.SetActiveTime(activeTimeOtion.Value);
+			activatingBehavior.ActiveTime = activeTimeOtion.Value;
         }
 
         if (this.Button.Behavior is CountBehavior behavior &&

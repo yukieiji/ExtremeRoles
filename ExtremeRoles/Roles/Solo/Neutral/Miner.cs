@@ -161,8 +161,8 @@ public sealed class Miner :
     {
         this.CreateNormalActivatingAbilityButton(
             "setMine",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.MinerSetMine),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MinerSetMine),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }

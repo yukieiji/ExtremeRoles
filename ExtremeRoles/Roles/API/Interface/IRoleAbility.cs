@@ -44,7 +44,7 @@ public interface IRoleAbility : IRoleResetMeeting
 				RoleAbilityCommonOption.AbilityActiveTime,
 				out var activeTimeOption))
 		{
-			this.Button.Behavior.SetActiveTime(activeTimeOption.Value);
+			activatingBehavior.ActiveTime = activeTimeOption.Value;
 		}
 
 		if (this.Button.Behavior is ICountBehavior countBehavior)
@@ -115,7 +115,7 @@ public interface IRoleAbility : IRoleResetMeeting
 				defaultActiveTime, minActiveTime, maxActiveTime);
 			factory.CreateFloatOption(
 				RoleAbilityCommonOption.AbilityActiveTime,
-				defaultActiveTime, minActiveTime, maxActiveTime, step,
+				defaultActiveTime, minActiveTime, maxActiveTime, Step,
 				parentOpt,
 				format: OptionUnit.Second);
 		}

@@ -2,13 +2,9 @@
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 
@@ -89,8 +85,8 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
            "attackCommand",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.CommanderAttackCommand));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.CommanderAttackCommand));
     }
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();

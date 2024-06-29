@@ -37,16 +37,16 @@ public static class SafeBootMainMenuManagerPatch
 		exrLogo.transform.parent = __instance.mainMenuUI.transform;
 		exrLogo.transform.position = new Vector3(1.95f, 0.5f, 1.0f);
 		var renderer = exrLogo.AddComponent<SpriteRenderer>();
-		renderer.sprite = Loader.GetUnityObjectFromResources<Sprite>(
-			Path.CommonTextureAsset,
-			string.Format(Path.CommonImagePathFormat, "TitleBurner"));
+		renderer.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+			ObjectPath.CommonTextureAsset,
+			string.Format(ObjectPath.CommonImagePathFormat, "TitleBurner"));
 
 		setupPrefab();
 	}
 
 	private static void createUpdateButton(MainMenuManager instance)
 	{
-		var button = Loader.CreateSimpleButton(
+		var button = UnityObjectLoader.CreateSimpleButton(
 			instance.quitButton.transform);
 
 		button.gameObject.SetActive(true);

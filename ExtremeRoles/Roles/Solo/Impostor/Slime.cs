@@ -110,8 +110,8 @@ public sealed class Slime :
     {
         this.CreateReclickableAbilityButton(
 			Translation.GetString("SlimeMorph"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.SlimeMorph),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.SlimeMorph),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
     }

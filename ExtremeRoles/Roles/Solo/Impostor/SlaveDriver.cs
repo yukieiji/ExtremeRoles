@@ -159,8 +159,8 @@ public sealed class SlaveDriver :
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			"Harassment", Resources.Loader.CreateSpriteFromResources(
-				Resources.Path.SlaveDriverHarassment));
+			"Harassment", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				Resources.ObjectPath.SlaveDriverHarassment));
 	}
 
 	public bool UseAbility()

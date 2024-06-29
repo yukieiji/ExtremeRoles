@@ -12,6 +12,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -87,6 +89,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		}
 		IRoleSpecialReset.ResetRole(targetPlayerId);
 		var yardbird = new Yardbird(
+			jailer.Loader,
 			targetPlayerId,
 			jailer.yardBirdOption);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, yardbird);
@@ -111,7 +114,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			"AddJail",
-			Loader.GetSpriteFromResources(ExtremeRoleId.Jailer));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Jailer));
 		this.Button?.SetLabelToCrewmate();
 	}
 
@@ -120,7 +123,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		this.targetPlayerId = byte.MaxValue;
 
 		PlayerControl target = Player.GetClosestPlayerInRange(
-			CachedPlayerControl.LocalPlayer, this,
+			PlayerControl.LocalPlayer, this,
 			this.range);
 		if (target == null) { return false; }
 
@@ -129,7 +132,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		return IRoleAbility.IsCommonUse();
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{ }
 
 	public void ResetOnMeetingStart()
@@ -137,7 +140,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool UseAbility()
 	{
-		var local = CachedPlayerControl.LocalPlayer;
+		var local = PlayerControl.LocalPlayer;
 		if (local == null ||
 			this.Button?.Behavior is not CountBehavior count ||
 			!ExtremeRoleManager.TryGetRole(this.targetPlayerId, out var role))
@@ -198,157 +201,134 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		return true;
 	}
 
-	protected override void CreateSpecificOption(IOptionInfo parentOps)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		CreateBoolOption(
-			Option.UseAdmin,
-			false, parentOps);
-		CreateBoolOption(
-			Option.UseSecurity,
-			true, parentOps);
-		CreateBoolOption(
-			Option.UseVital,
-			false, parentOps);
+		factory.CreateBoolOption(
+			Option.UseAdmin, false);
+		factory.CreateBoolOption(
+			Option.UseSecurity, true);
+		factory.CreateBoolOption(
+			Option.UseVital, false);
 
-		this.CreateAbilityCountOption(
-			parentOps, 1, 5);
+		IRoleAbility.CreateAbilityCountOption(
+			factory, 1, 5);
 
-		CreateSelectionOption(
-			Option.TargetMode,
-			Enum.GetValues<TargetMode>().Select(x => x.ToString()).ToArray(),
-			parentOps);
-		CreateBoolOption(
+		factory.CreateSelectionOption<Option, TargetMode>(
+			Option.TargetMode);
+		factory.CreateBoolOption(
 			Option.CanReplaceAssassin,
-			true, parentOps);
+			true);
 
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.Range,
-			0.75f, 0.1f, 1.5f, 0.1f,
-			parentOps);
+			0.75f, 0.1f, 1.5f, 0.1f);
 
-		var lowBreakerOpt = CreateBoolOption(
-			Option.IsMissingToDead,
-			false, parentOps);
+		var lowBreakerOpt = factory.CreateBoolOption(
+			Option.IsMissingToDead, false);
 
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			Option.IsDeadAbilityZero,
 			true, lowBreakerOpt);
 
-		var lowBreakerKillOpt = CreateBoolOption(
+		var lowBreakerKillOpt = factory.CreateBoolOption(
 		   Option.LawbreakerCanKill,
 		   false, lowBreakerOpt,
-		   invert: true,
-		   enableCheckOption: parentOps);
+		   invert: true);
 
-		var killCoolOption = CreateBoolOption(
+		var killCoolOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillCool,
 			false, lowBreakerKillOpt,
-			invert: true,
-			enableCheckOption: lowBreakerKillOpt);
-		CreateFloatOption(
+			invert: true);
+		factory.CreateFloatOption(
 			KillerCommonOption.KillCoolDown,
 			30f, 1.0f, 120f, 0.5f,
 			killCoolOption, format: OptionUnit.Second,
-			invert: true,
-			enableCheckOption: killCoolOption);
+			invert: true);
 
-		var killRangeOption = CreateBoolOption(
+		var killRangeOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillRange,
 			false, lowBreakerKillOpt,
-			invert: true,
-			enableCheckOption: lowBreakerKillOpt);
-		CreateSelectionOption(
+			invert: true);
+		factory.CreateSelectionOption(
 			KillerCommonOption.KillRange,
 			OptionCreator.Range,
 			killRangeOption,
-			invert: true,
-			enableCheckOption: killRangeOption);
+			invert: true);
 
-		CreateBoolOption(
+		factory.CreateBoolOption(
 		   Option.LawbreakerUseVent,
 		   true, lowBreakerOpt,
-		   invert: true,
-		   enableCheckOption: parentOps);
-		CreateBoolOption(
+		   invert: true);
+		factory.CreateBoolOption(
 		   Option.LawbreakerUseSab,
 		   true, lowBreakerOpt,
-		   invert: true,
-		   enableCheckOption: parentOps);
+		   invert: true);
 
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.YardbirdAddCommonTask,
-			2, 0, 15, 1,
-			parentOps);
-		CreateIntOption(
+			2, 0, 15, 1);
+		factory.CreateIntOption(
 			Option.YardbirdAddNormalTask,
-			1, 0, 15, 1,
-			parentOps);
-		CreateIntOption(
+			1, 0, 15, 1);
+		factory.CreateIntOption(
 			Option.YardbirdAddLongTask,
-			1, 0, 15, 1,
-			parentOps);
-		CreateFloatOption(
+			1, 0, 15, 1);
+		factory.CreateFloatOption(
 			Option.YardbirdSpeedMod,
-			0.8f, 0.1f, 1.0f, 0.1f,
-			parentOps);
+			0.8f, 0.1f, 1.0f, 0.1f);
 
-		CreateBoolOption(
-			Option.YardbirdUseAdmin,
-			false, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseSecurity,
-			false, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseVital,
-			false, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseVent,
-			true, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseSab,
-			true, parentOps);
+		factory.CreateBoolOption(
+			Option.YardbirdUseAdmin, false);
+		factory.CreateBoolOption(
+			Option.YardbirdUseSecurity, false);
+		factory.CreateBoolOption(
+			Option.YardbirdUseVital, false);
+		factory.CreateBoolOption(
+			Option.YardbirdUseVent, true);
+		factory.CreateBoolOption(
+			Option.YardbirdUseSab, true);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		var optMng = OptionManager.Instance;
+		var loader = this.Loader;
 
-		this.CanUseAdmin = optMng.GetValue<bool>(this.GetRoleOptionId(Option.UseAdmin));
-		this.CanUseSecurity = optMng.GetValue<bool>(this.GetRoleOptionId(Option.UseSecurity));
-		this.CanUseVital = optMng.GetValue<bool>(this.GetRoleOptionId(Option.UseVital));
+		this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
+		this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
+		this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
 
-		this.isMissingToDead = optMng.GetValue<bool>(this.GetRoleOptionId(Option.IsMissingToDead));
+		this.isMissingToDead = loader.GetValue<Option, bool>(Option.IsMissingToDead);
 		if (!this.isMissingToDead)
 		{
 			lawBreakerOption = new Lawbreaker.Option(
-				optMng.GetValue<bool>(this.GetRoleOptionId(Option.LawbreakerCanKill)),
-				optMng.GetValue<bool>(this.GetRoleOptionId(KillerCommonOption.HasOtherKillCool)),
-				optMng.GetValue<float>(this.GetRoleOptionId(KillerCommonOption.KillCoolDown)),
-				optMng.GetValue<bool>(this.GetRoleOptionId(KillerCommonOption.HasOtherKillRange)),
-				optMng.GetValue<int>(this.GetRoleOptionId(KillerCommonOption.KillRange)),
-				optMng.GetValue<bool>(this.GetRoleOptionId(Option.LawbreakerUseVent)),
-				optMng.GetValue<bool>(this.GetRoleOptionId(Option.LawbreakerUseSab)));
+				loader.GetValue<Option, bool>(Option.LawbreakerCanKill),
+				loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillCool),
+				loader.GetValue<KillerCommonOption, float>(KillerCommonOption.KillCoolDown),
+				loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillRange),
+				loader.GetValue<KillerCommonOption, int>(KillerCommonOption.KillRange),
+				loader.GetValue<Option, bool>(Option.LawbreakerUseVent),
+				loader.GetValue<Option, bool>(Option.LawbreakerUseSab));
 		}
 		else
 		{
-			this.isDeadAbilityZero = optMng.GetValue<bool>(this.GetRoleOptionId(Option.IsDeadAbilityZero));
+			this.isDeadAbilityZero = loader.GetValue<Option, bool>(Option.IsDeadAbilityZero);
 		}
 
-		this.range = optMng.GetValue<float>(this.GetRoleOptionId(Option.Range));
-		this.mode = (TargetMode)optMng.GetValue<int>(this.GetRoleOptionId(Option.TargetMode));
-		this.canReplaceAssassin = optMng.GetValue<bool>(this.GetRoleOptionId(Option.CanReplaceAssassin));
+		this.range = loader.GetValue<Option, float>(Option.Range);
+		this.mode = (TargetMode)loader.GetValue<Option, int>(Option.TargetMode);
+		this.canReplaceAssassin = loader.GetValue<Option, bool>(Option.CanReplaceAssassin);
 
 		yardBirdOption = new Yardbird.Option(
-			optMng.GetValue<int>(this.GetRoleOptionId(Option.YardbirdAddCommonTask)),
-			optMng.GetValue<int>(this.GetRoleOptionId(Option.YardbirdAddNormalTask)),
-			optMng.GetValue<int>(this.GetRoleOptionId(Option.YardbirdAddLongTask)),
-			optMng.GetValue<float>(this.GetRoleOptionId(Option.YardbirdSpeedMod)),
-			optMng.GetValue<bool>(this.GetRoleOptionId(Option.YardbirdUseAdmin)),
-			optMng.GetValue<bool>(this.GetRoleOptionId(Option.YardbirdUseSecurity)),
-			optMng.GetValue<bool>(this.GetRoleOptionId(Option.YardbirdUseVital)),
-			optMng.GetValue<bool>(this.GetRoleOptionId(Option.YardbirdUseVent)),
-			optMng.GetValue<bool>(this.GetRoleOptionId(Option.YardbirdUseSab)));
+			loader.GetValue<Option, int>(Option.YardbirdAddCommonTask),
+			loader.GetValue<Option, int>(Option.YardbirdAddNormalTask),
+			loader.GetValue<Option, int>(Option.YardbirdAddLongTask),
+			loader.GetValue<Option, float>(Option.YardbirdSpeedMod),
+			loader.GetValue<Option, bool>(Option.YardbirdUseAdmin),
+			loader.GetValue<Option, bool>(Option.YardbirdUseSecurity),
+			loader.GetValue<Option, bool>(Option.YardbirdUseVital),
+			loader.GetValue<Option, bool>(Option.YardbirdUseVent),
+			loader.GetValue<Option, bool>(Option.YardbirdUseSab));
 	}
 	private static void selfKill(byte rolePlayerId)
 	{
@@ -373,9 +353,12 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		bool Vent,
 		bool Sab);
 
+	public override IOptionLoader Loader { get; }
+
 	private readonly List<int> allTask;
 
 	public Yardbird(
+		in IOptionLoader loader,
 		byte targetPlayerId,
 		Option option) : base(
 		ExtremeRoleId.Yardbird,
@@ -390,10 +373,11 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		option.Security,
 		option.Vital)
 	{
+		this.Loader = loader;
 		this.MoveSpeed = option.SpeedMod;
 		var addTasks = new List<int>(option.AddCommonTask + option.AddNormalTask + option.AddLongTask);
 
-		if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+		if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
 			for (int i = 0; i < option.AddCommonTask; ++i)
 			{
@@ -401,11 +385,11 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 			}
 			for (int i = 0; i < option.AddNormalTask; ++i)
 			{
-				addTasks.Add(GameSystem.GetRandomNormalTaskId());
+				addTasks.Add(GameSystem.GetRandomShortTaskId());
 			}
 			for (int i = 0; i < option.AddLongTask; ++i)
 			{
-				addTasks.Add(GameSystem.GetRandomNormalTaskId());
+				addTasks.Add(GameSystem.GetRandomLongTask());
 			}
 			this.allTask = addTasks.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 		}
@@ -415,7 +399,7 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		}
 	}
 
-	protected override void CreateSpecificOption(IOptionInfo parentOps)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}
@@ -481,7 +465,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		}
 	}
 
-	protected override void CreateSpecificOption(IOptionInfo parentOps)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}
@@ -492,7 +476,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	}
 
 	public void ModifiedWinPlayer(
-		GameData.PlayerInfo rolePlayerInfo,
+		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
 		ref ExtremeGameResult.WinnerTempData winner)
 	{

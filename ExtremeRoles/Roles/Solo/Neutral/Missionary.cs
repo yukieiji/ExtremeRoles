@@ -143,8 +143,8 @@ public sealed class Missionary :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "propagate", Resources.Loader.CreateSpriteFromResources(
-				Path.MissionaryPropagate));
+            "propagate", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MissionaryPropagate));
     }
 
     public bool IsAbilityUse()

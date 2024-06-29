@@ -113,8 +113,8 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateActivatingAbilityCountButton(
             "counter",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.FencerCounter),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.FencerCounter),
             abilityOff: this.CleanUp,
             isReduceOnActive: true);
         this.Button.SetLabelToCrewmate();

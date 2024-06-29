@@ -42,8 +42,8 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			Translation.GetString("CrewshroomSet"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.CrewshroomSet));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.CrewshroomSet));
 	}
 
 	public override string GetIntroDescription()

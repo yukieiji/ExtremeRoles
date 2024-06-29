@@ -4,8 +4,6 @@ using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityModeSwitcher;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -161,8 +159,8 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 			UmbrerMode.Feat,
 				new ButtonGraphic(
 					Translation.GetString("featVirus"),
-					Resources.Loader.CreateSpriteFromResources(
-						Path.UmbrerFeatVirus)),
+					Resources.UnityObjectLoader.LoadSpriteFromResources(
+						ObjectPath.UmbrerFeatVirus)),
 				cate.GetValue<RoleAbilityCommonOption, float >(
 					RoleAbilityCommonOption.AbilityActiveTime)
 		);
@@ -178,8 +176,8 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 				UmbrerMode.Upgrage,
 				new ButtonGraphic(
 					Translation.GetString("upgradeVirus"),
-					Resources.Loader.CreateSpriteFromResources(
-					Path.UmbrerUpgradeVirus)),
+					Resources.UnityObjectLoader.LoadSpriteFromResources(
+					ObjectPath.UmbrerUpgradeVirus)),
 				cate.GetValue<UmbrerOption, float>(
 					UmbrerOption.UpgradeVirusTime))
 			);

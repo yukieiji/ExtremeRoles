@@ -304,7 +304,7 @@ public sealed class Hypnotist :
     {
         this.CreateAbilityCountButton(
             "Hypnosis",
-			Loader.GetSpriteFromResources(ExtremeRoleId.Hypnotist));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Hypnotist));
 
 		var json = JsonParser.GetJObjectFromAssembly(postionJson);
 		if (json == null)
@@ -1327,8 +1327,8 @@ public sealed class Doll :
     }
     private void updateButtonSprite()
     {
-        Sprite sprite = Resources.Loader.CreateSpriteFromResources(
-            Resources.Path.TestButton);
+        Sprite sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
+            Resources.ObjectPath.TestButton);
 
         switch (this.nextUseAbilityType)
         {

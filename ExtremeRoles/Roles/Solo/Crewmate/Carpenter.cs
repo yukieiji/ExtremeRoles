@@ -513,8 +513,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 					mode: CarpenterAbilityMode.RemoveVent,
 					graphic: new (
 						Translation.GetString("ventSeal"),
-						Resources.Loader.CreateSpriteFromResources(
-							Path.CarpenterVentSeal)),
+						Resources.UnityObjectLoader.LoadSpriteFromResources(
+							ObjectPath.CarpenterVentSeal)),
 					time: loader.GetValue<CarpenterOption, float>(
 						CarpenterOption.RemoveVentStopTime)
 					),
@@ -522,8 +522,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 					mode: CarpenterAbilityMode.SetCamera,
 					graphic: new(
 						Translation.GetString("cameraSet"),
-						Resources.Loader.CreateSpriteFromResources(
-							Path.CarpenterSetCamera)),
+						Resources.UnityObjectLoader.LoadSpriteFromResources(
+							ObjectPath.CarpenterSetCamera)),
 					time: loader.GetValue<CarpenterOption, float>(
 						CarpenterOption.SetCameraStopTime)
 					),

@@ -284,7 +284,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 					AbilityType.SelfBomb,
 					new ButtonGraphic(
 						Translation.GetString("selfBomb"),
-						Loader.GetUnityObjectFromResources<Sprite>(Path.Bomb))
+						UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb))
 				),
                 this.IsAbilityUse,
                 this.UseAbility),
@@ -382,7 +382,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     }
 
 	private static Sprite randomSprite
-		=> Loader.GetSpriteFromResources(
+		=> UnityObjectLoader.LoadFromResources(
 			CombinationRoleType.Kids,
 			$"{RandomGenerator.Instance.Next(0, maxImageNum)}");
 
@@ -436,7 +436,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
     { }
 
 	public static Sprite TorchSprite
-		=> Loader.GetSpriteFromResources(
+		=> UnityObjectLoader.LoadFromResources(
 			CombinationRoleType.Kids, "Torch");
 
     public void SetAbilityNum(int abilityNum)

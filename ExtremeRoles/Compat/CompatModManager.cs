@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
@@ -10,8 +11,6 @@ using Hazel;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
-
-
 
 
 namespace ExtremeRoles.Compat;

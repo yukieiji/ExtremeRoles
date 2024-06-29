@@ -180,8 +180,8 @@ public sealed class Mover :
     {
         this.CreateReclickableCountAbilityButton(
 			Translation.GetString("Moving"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.MoverMove),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.MoverMove),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())

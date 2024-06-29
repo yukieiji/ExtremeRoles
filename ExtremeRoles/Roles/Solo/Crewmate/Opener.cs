@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -53,8 +51,8 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateAbilityCountButton(
             "openDoor",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.OpenerOpenDoor));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.OpenerOpenDoor));
         this.Button.SetLabelToCrewmate();
     }
     public bool UseAbility()

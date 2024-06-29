@@ -69,9 +69,9 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			get
 			{
 				GameObject obj =
-					Loader.GetUnityObjectFromResources<GameObject, ExtremeRoleId>(
+					UnityObjectLoader.LoadFromResources<GameObject, ExtremeRoleId>(
 						ExtremeRoleId.Yoko,
-						Path.GetRoleMinigamePath(ExtremeRoleId.Yoko));
+						ObjectPath.GetRoleMinigamePath(ExtremeRoleId.Yoko));
 				return obj.GetComponent<YokoYashiroStatusUpdateMinigame>();
 			}
 		}
@@ -296,7 +296,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 		var newConsole = this.consoleSystem.CreateConsoleObj(
 			pos, "Yashiro", consoleBehavior);
 
-		newConsole.Image!.sprite = Loader.GetSpriteFromResources(
+		newConsole.Image!.sprite = UnityObjectLoader.LoadFromResources(
 			ExtremeRoleId.Yoko);
 
 		var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();

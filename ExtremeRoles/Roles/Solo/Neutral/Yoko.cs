@@ -355,7 +355,7 @@ public sealed class Yoko :
 	{
 		this.CreateActivatingAbilityCountButton(
 			"yokoYashiro",
-			Loader.GetSpriteFromResources(
+			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Yoko),
 			this.IsAbilityActive,
 			this.CleanUp,

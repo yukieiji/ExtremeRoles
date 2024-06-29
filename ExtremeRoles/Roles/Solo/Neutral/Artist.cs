@@ -74,10 +74,10 @@ public sealed class Artist :
     {
 		this.CreatePassiveAbilityButton(
 			"ArtistArtOn", "ArtistArtOff",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.ArtistArtOn),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.ArtistArtOff),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.ArtistArtOn),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.ArtistArtOff),
 			this.CleanUp,
 			() =>
 			{

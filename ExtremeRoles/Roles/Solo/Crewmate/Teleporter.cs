@@ -237,10 +237,10 @@ public sealed class Teleporter :
 
     public void CreateAbility()
     {
-		this.firstPortalImg = Loader.GetSpriteFromResources(
-			ExtremeRoleId.Teleporter, Path.TeleporterFirstPortal);
-        this.secondPortalImg = Loader.GetSpriteFromResources(
-			ExtremeRoleId.Teleporter, Path.TeleporterSecondPortal);
+		this.firstPortalImg = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Teleporter, ObjectPath.TeleporterFirstPortal);
+        this.secondPortalImg = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Teleporter, ObjectPath.TeleporterSecondPortal);
 
 		this.behavior = new TeleporterAbilityBehavior(
             Translation.GetString("SetPortal"),

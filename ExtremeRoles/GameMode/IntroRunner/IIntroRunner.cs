@@ -206,7 +206,7 @@ public interface IIntroRunner
 		}
 	}
 
-	private static void modVital(in VitalOption option, in byte mapId)
+	private static void modVital(in VitalDeviceOption option, in byte mapId)
 	{
 		if (option.Disable)
 		{
@@ -236,7 +236,7 @@ public interface IIntroRunner
 		}
 	}
 
-	private static void modAdmin(in AdminOption option, in byte mapId)
+	private static void modAdmin(in AdminDeviceOption option, in byte mapId)
 	{
 		if (option.Disable)
 		{

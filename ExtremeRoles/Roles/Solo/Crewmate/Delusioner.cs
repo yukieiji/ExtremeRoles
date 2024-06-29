@@ -93,8 +93,8 @@ public sealed class Delusioner :
     {
         this.CreateAbilityCountButton(
             "deflectDamage",
-            Loader.CreateSpriteFromResources(
-                Path.DelusionerDeflectDamage));
+			UnityObjectLoader.LoadSpriteFromResources(
+                ObjectPath.DelusionerDeflectDamage));
         this.Button?.SetLabelToCrewmate();
     }
 
@@ -197,7 +197,7 @@ public sealed class Delusioner :
 
     public bool UseAbility()
     {
-		PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl rolePlayer = PlayerControl.LocalPlayer;
 
 		bool result = useAbilityTo(
 			rolePlayer,
@@ -380,7 +380,7 @@ public sealed class Delusioner :
 			RoleAbilityCommonOption.AbilityCoolTime);
 
 		if (loader.GetValue<DelusionerOption, bool>(
-				DelusionerOption.EnableCounter)))
+				DelusionerOption.EnableCounter))
 		{
 			this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(
 				DelusionerCounterSystem.Type);
@@ -405,7 +405,7 @@ public sealed class Delusioner :
 		in IReadOnlySet<byte> ignores)
 	{
 		List<Vector2> randomPos = new List<Vector2>(
-			CachedPlayerControl.AllPlayerControls.Count);
+			PlayerControl.AllPlayerControls.Count);
 		var allPlayer = GameData.Instance.AllPlayers;
 
 		if (includeRolePlayer)
@@ -418,7 +418,7 @@ public sealed class Delusioner :
 			Map.AddSpawnPoint(randomPos, teloportTarget);
 		}
 
-		foreach (GameData.PlayerInfo player in allPlayer.GetFastEnumerator())
+		foreach (var player in allPlayer.GetFastEnumerator())
 		{
 			if (player == null ||
 				player.Disconnected ||

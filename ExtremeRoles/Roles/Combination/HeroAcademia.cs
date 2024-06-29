@@ -468,8 +468,8 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     {
         this.CreateNormalActivatingAbilityButton(
             "search",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.HiroAcaSearch),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.HiroAcaSearch),
             abilityOff: CleanUp);
         this.Button.SetLabelToCrewmate();
     }
@@ -726,8 +726,8 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     {
         this.CreateNormalActivatingAbilityButton(
             "search",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.HiroAcaSearch),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.HiroAcaSearch),
             abilityOff: CleanUp);
     }
 
@@ -916,8 +916,8 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     {
         this.CreateNormalActivatingAbilityButton(
             "call",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.VigilanteEmergencyCall),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.VigilanteEmergencyCall),
             abilityOff: CleanUp);
         this.Button.SetLabelToCrewmate();
     }

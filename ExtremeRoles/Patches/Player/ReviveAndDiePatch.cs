@@ -45,7 +45,7 @@ public static class PlayerControlRevivePatch
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
-		bool isLocalPlayerRevive = revivePlayerId == CachedPlayerControl.LocalPlayer.PlayerId;
+		bool isLocalPlayerRevive = revivePlayerId == PlayerControl.LocalPlayer.PlayerId;
 
 		invokeReviveAction(__instance);
 		invokeReviveHook(__instance, isLocalPlayerRevive);

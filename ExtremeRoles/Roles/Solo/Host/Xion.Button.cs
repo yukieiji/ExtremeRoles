@@ -51,7 +51,7 @@ public sealed partial class Xion
 		{
 			this.funcButton.Add(
 				new XionActionButton(
-					Loader.GetUnityObjectFromResources<Sprite>(Path.Meeting),
+					UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Meeting),
 					this.RpcCallMeeting,
 					Translation.GetString("emergencyMeeting")));
 		}
@@ -59,8 +59,8 @@ public sealed partial class Xion
 		// 残りのボタン
 		this.funcButton.Add(
 			new XionActionButton(
-				Resources.Loader.CreateSpriteFromResources(
-					Path.MaintainerRepair),
+				UnityObjectLoader.LoadSpriteFromResources(
+					ObjectPath.MaintainerRepair),
 				this.RpcRepairSabotage,
 				Translation.GetString("maintenance")));
 		this.funcButton.Add(
@@ -201,5 +201,5 @@ public sealed partial class Xion
     }
 
 	public static Sprite GetSprite(string name)
-		=> Loader.GetSpriteFromResources(ExtremeRoleId.Xion, name);
+		=> UnityObjectLoader.LoadFromResources(ExtremeRoleId.Xion, name);
 }

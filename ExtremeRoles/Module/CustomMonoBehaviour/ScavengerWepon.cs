@@ -50,7 +50,7 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 			weponInfo = value;
 			var rend = base.gameObject.TryAddComponent<SpriteRenderer>();
 			rend.sprite = Scavenger.GetFromAsset<Sprite>(
-				$"assets/roles/scavenger.{weponInfo.Ability}.{Path.MapIcon}.png");
+				$"assets/roles/scavenger.{weponInfo.Ability}.{ObjectPath.MapIcon}.png");
 
 			var collider = base.gameObject.TryAddComponent<CircleCollider2D>();
 			collider.isTrigger = true;
@@ -67,7 +67,7 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 
 	public ScavengerWeponMapUsable(Ptr ptr) : base(ptr) { }
 
-	public float CanUse(GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+	public float CanUse(NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
 	{
 		float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),
@@ -208,7 +208,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 
 	public void OnTriggerEnter2D(Collider2D other)
 	{
-		if (CachedPlayerControl.LocalPlayer.PlayerId != this.ignorePlayerId)
+		if (PlayerControl.LocalPlayer.PlayerId != this.ignorePlayerId)
 		{
 			return;
 		}
@@ -299,7 +299,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 	}
 
 	public float CanUse(
-		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
+		NetworkedPlayerInfo pc, out bool canUse, out bool couldUse)
 	{
 		float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),
@@ -315,7 +315,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 	public void Use()
 	{
 		Player.RpcUncheckMurderPlayer(
-			CachedPlayerControl.LocalPlayer.PlayerId,
+			PlayerControl.LocalPlayer.PlayerId,
 			this.ignorePlayerId,
 			byte.MinValue);
 		this.gameObject.SetActive(false);
@@ -352,7 +352,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 	{
 		if (this.rotationInfo is null ||
 			!this.rotationInfo.IsActive ||
-			CachedPlayerControl.LocalPlayer.PlayerId != this.ignorePlayerId)
+			PlayerControl.LocalPlayer.PlayerId != this.ignorePlayerId)
 		{
 			return;
 		}
@@ -594,10 +594,10 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 
 	public void LateUpdate()
 	{
-		if (CachedPlayerControl.LocalPlayer == null ||
+		if (PlayerControl.LocalPlayer == null ||
 			this.Info == null ||
 			this.Info.IgnorePlayer == null ||
-			this.Info.IgnorePlayer.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId ||
+			this.Info.IgnorePlayer.PlayerId != PlayerControl.LocalPlayer.PlayerId ||
 			this.frame == null)
 		{
 			return;
@@ -734,8 +734,8 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 	{
 		if (this.fire == null ||
 			this.TargetPlayer == null ||
-			CachedPlayerControl.LocalPlayer == null ||
-			CachedPlayerControl.LocalPlayer.PlayerId != this.IgnorePlayerId)
+			PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.PlayerId != this.IgnorePlayerId)
 		{
 			return;
 		}
@@ -786,7 +786,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 
 	private void disable()
 	{
-		var local = CachedPlayerControl.LocalPlayer;
+		var local = PlayerControl.LocalPlayer;
 		if (local == null || this.TargetPlayer == null)
 		{
 			return;

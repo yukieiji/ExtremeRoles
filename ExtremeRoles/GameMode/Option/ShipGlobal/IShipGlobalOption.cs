@@ -142,7 +142,7 @@ public interface IShipGlobalOption
 	public MeetingHudOption Meeting { get; }
     public AdminDeviceOption Admin { get; }
     public DeviceOption Security { get; }
-    public DeviceOption Vital { get; }
+    public VitalDeviceOption Vital { get; }
 
     public bool DisableTaskWinWhenNoneTaskCrew { get; }
     public bool DisableTaskWin { get; }
@@ -218,6 +218,10 @@ public interface IShipGlobalOption
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
 		{
 			AdminDeviceOption.Create(factory);
+		}
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.SecurityOption))
+		{
+			VitalDeviceOption.Create(factory);
 		}
 		createMapObjectOptions(ShipGlobalOptionCategory.SecurityOption);
 		createMapObjectOptions(ShipGlobalOptionCategory.VitalOption);

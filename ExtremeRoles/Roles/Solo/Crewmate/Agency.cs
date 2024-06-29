@@ -93,8 +93,8 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         this.CreateAbilityCountButton(
             "takeTask",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.AgencyTakeTask));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.AgencyTakeTask));
         this.Button.SetLabelToCrewmate();
     }
 

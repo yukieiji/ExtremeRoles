@@ -40,7 +40,7 @@ public sealed class ExtremePlayerTask : PlayerTask
 
 		protected static Minigame? GetMinigameFromAsset<T>(string name) where T : Minigame
 		{
-			GameObject minigameObj = Resources.Loader.GetUnityObjectFromResources<GameObject>("Minigame", name);
+			GameObject minigameObj = Resources.UnityObjectLoader.LoadFromResources<GameObject>("Minigame", name);
 			GameObject prefab = Instantiate(minigameObj);
 			T minigame = prefab.GetComponent<T>();
 

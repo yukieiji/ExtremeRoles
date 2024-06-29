@@ -200,8 +200,8 @@ public sealed class CurseMaker :
 
         this.CreateActivatingAbilityCountButton(
             "curse",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.CurseMakerCurse),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.CurseMakerCurse),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: () => { });

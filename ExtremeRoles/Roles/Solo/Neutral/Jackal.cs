@@ -6,13 +6,10 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior;
 
@@ -254,8 +251,8 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         this.CreateAbilityCountButton(
             "Sidekick",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.JackalSidekick));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.JackalSidekick));
     }
 
     public override Color GetTargetRoleSeeColor(

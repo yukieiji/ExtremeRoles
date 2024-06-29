@@ -107,8 +107,8 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateActivatingAbilityCountButton(
             "outburst",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.JesterOutburst),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.JesterOutburst),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }

@@ -59,8 +59,8 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateAbilityCountButton(
             "juggling",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.MagicianJuggling));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MagicianJuggling));
     }
 
     public bool IsAbilityUse() => IRoleAbility.IsCommonUse();

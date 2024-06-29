@@ -323,8 +323,8 @@ public sealed class Queen :
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "queenCharm", Resources.Loader.CreateSpriteFromResources(
-				Path.QueenCharm));
+            "queenCharm", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.QueenCharm));
     }
 
     public bool UseAbility()
@@ -577,8 +577,8 @@ public sealed class Servant :
     {
         this.Button = RoleAbilityFactory.CreateReusableAbility(
             "selfKill",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.SucideSprite),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.SucideSprite),
             this.IsAbilityUse,
             this.UseAbility);
         this.Button.Behavior.SetCoolTime(coolTime);

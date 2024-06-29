@@ -107,8 +107,8 @@ public sealed class Foras : GhostRoleBase
     {
         this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.ForasShowArrow,
-            Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.ForasShowArrow),
+            Resources.UnityObjectLoader.LoadSpriteFromResources(
+                Resources.ObjectPath.ForasShowArrow),
             this.isReportAbility(),
             () => true,
             this.isAbilityUse,

@@ -78,8 +78,8 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 			EaterAbilityMode.DeadBody,
 			new ButtonGraphic(
 				Translation.GetString("deadBodyEat"),
-				Resources.Loader.CreateSpriteFromResources(
-					Path.EaterDeadBodyEat)),
+				Resources.UnityObjectLoader.LoadSpriteFromResources(
+					ObjectPath.EaterDeadBodyEat)),
 			1.0f);
 
         this.CreateActivatingAbilityCountButton(
@@ -99,8 +99,8 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 				EaterAbilityMode.Kill,
 				new ButtonGraphic(
 					Translation.GetString("eatKill"),
-					Resources.Loader.CreateSpriteFromResources(
-						Path.EaterEatKill)),
+					Resources.UnityObjectLoader.LoadSpriteFromResources(
+						ObjectPath.EaterEatKill)),
 				activatingBehavior.ActiveTime));
     }
 

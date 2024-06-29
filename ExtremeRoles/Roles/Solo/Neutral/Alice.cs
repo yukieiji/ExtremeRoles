@@ -51,8 +51,8 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "shipBroken", Resources.Loader.CreateSpriteFromResources(
-				Path.AliceShipBroken));
+            "shipBroken", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.AliceShipBroken));
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>

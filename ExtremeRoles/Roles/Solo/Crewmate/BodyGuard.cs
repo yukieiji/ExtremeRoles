@@ -489,8 +489,8 @@ public sealed class BodyGuard :
 
     public void CreateAbility()
     {
-        this.shildButtonImage = Resources.Loader.CreateSpriteFromResources(
-				Path.BodyGuardShield);
+        this.shildButtonImage = Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.BodyGuardShield);
 
         this.Button = new ExtremeAbilityButton(
             new BodyGuardAbilityBehavior(
@@ -503,8 +503,8 @@ public sealed class BodyGuard :
 					BodyGuardAbilityMode.Reset,
 					new ButtonGraphic(
 						Translation.GetString("resetShield"),
-						Resources.Loader.CreateSpriteFromResources(
-							Path.BodyGuardResetShield))),
+						Resources.UnityObjectLoader.LoadSpriteFromResources(
+							ObjectPath.BodyGuardResetShield))),
                 featShield: UseAbility,
                 resetShield: Reset,
                 canUse: IsAbilityUse,

@@ -6,11 +6,10 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
-
-
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
@@ -94,8 +93,8 @@ public sealed class Poltergeist : GhostRoleBase
     {
         this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.PoltergeistMoveDeadbody,
-            Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.CarrierCarry),
+            Resources.UnityObjectLoader.LoadSpriteFromResources(
+                Resources.ObjectPath.CarrierCarry),
             this.isReportAbility(),
             this.isPreCheck,
             this.isAbilityUse,

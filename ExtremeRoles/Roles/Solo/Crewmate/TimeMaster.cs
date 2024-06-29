@@ -313,8 +313,8 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateNormalActivatingAbilityButton(
             "timeShield",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.TimeMasterTimeShield),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.TimeMasterTimeShield),
             abilityOff: this.CleanUp);
         this.Button.SetLabelToCrewmate();
     }

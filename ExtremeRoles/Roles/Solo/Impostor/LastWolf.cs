@@ -92,8 +92,8 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
     {
         this.CreateNormalActivatingAbilityButton(
             "liightOff",
-            Resources.Loader.CreateSpriteFromResources(
-               Resources.Path.LastWolfLightOff),
+            Resources.UnityObjectLoader.LoadSpriteFromResources(
+               Resources.ObjectPath.LastWolfLightOff),
             abilityOff: CleanUp);
     }
 

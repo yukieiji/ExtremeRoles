@@ -14,6 +14,7 @@ using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance;
@@ -32,8 +33,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
 	public static T GetFromAsset<T>(string path) where T : UnityObject
-		=> Loader.GetUnityObjectFromResources<T>(
-			Path.GetRoleAssetPath(ExtremeRoleId.Scavenger),
+		=> UnityObjectLoader.LoadFromResources<T>(
+			ObjectPath.GetRoleAssetPath(ExtremeRoleId.Scavenger),
 			path.ToLower());
 
 	private record struct CreateParam(string ButtonName, string Name);
@@ -48,7 +49,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		protected static void SimpleRpcOps(Ability type, byte bytedOps)
 		{
-			var local = CachedPlayerControl.LocalPlayer;
+			var local = PlayerControl.LocalPlayer;
 			if (local == null)
 			{
 				return;
@@ -69,7 +70,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 
 		protected static Sprite getSprite(in Ability abilityType)
-			=> GetFromAsset<Sprite>($"assets/roles/scavenger.{abilityType}.{Path.ButtonIcon}.png");
+			=> GetFromAsset<Sprite>($"assets/roles/scavenger.{abilityType}.{ObjectPath.ButtonIcon}.png");
 	}
 
 	private sealed class Sword(
@@ -135,7 +136,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool rpcStartSwordCharge()
 		{
-			var local = CachedPlayerControl.LocalPlayer;
+			var local = PlayerControl.LocalPlayer;
 			if (local == null)
 			{
 				return false;
@@ -278,7 +279,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool rpcStartFlameCharge()
 		{
-			var local = CachedPlayerControl.LocalPlayer;
+			var local = PlayerControl.LocalPlayer;
 			if (local == null)
 			{
 				return false;
@@ -397,7 +398,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.cacheResult.Clear();
 			this.targetPlayerId = byte.MaxValue;
-			this.chargePos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			this.chargePos = PlayerControl.LocalPlayer.GetTruePosition();
 			return true;
 		}
 
@@ -410,7 +411,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 
 			Player.RpcUncheckMurderPlayer(
-				CachedPlayerControl.LocalPlayer.PlayerId,
+				PlayerControl.LocalPlayer.PlayerId,
 				this.targetPlayerId,
 				byte.MinValue);
 			//　おとならす
@@ -434,7 +435,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return true;
 			}
 
-			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
 			if (curPos != this.chargePos)
 			{
 				return false;
@@ -450,11 +451,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 
-			PlayerControl pc = CachedPlayerControl.LocalPlayer;
+			PlayerControl pc = PlayerControl.LocalPlayer;
 			Vector2 truePosition = pc.GetTruePosition();
 			var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-			foreach (GameData.PlayerInfo playerInfo in
+			foreach (var playerInfo in
 				GameData.Instance.AllPlayers.GetFastEnumerator())
 			{
 				if (!Player.IsValidPlayer(role, pc, playerInfo))
@@ -550,7 +551,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void RpcHide()
 		{
-			var local = CachedPlayerControl.LocalPlayer;
+			var local = PlayerControl.LocalPlayer;
 			if (local == null || this.bullet.Count <= 0)
 			{
 				return;
@@ -572,7 +573,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void RpcHideToId(int id)
 		{
-			var local = CachedPlayerControl.LocalPlayer;
+			var local = PlayerControl.LocalPlayer;
 			if (local == null)
 			{
 				return;
@@ -647,10 +648,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			if (this.playerDirection == Vector2.zero)
 			{
 				this.playerDirection.x = this.playerDirection.x +
-					(CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX ? -1 : 1);
+					(PlayerControl.LocalPlayer.cosmetics.FlipX ? -1 : 1);
 			}
 
-			var local = CachedPlayerControl.LocalPlayer;
+			var local = PlayerControl.LocalPlayer;
 			if (local == null)
 			{
 				return false;
@@ -727,7 +728,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool isAguniChargeCheck()
 		{
-			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
 			return curPos == this.chargePos;
 		}
 
@@ -766,7 +767,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				return true;
 			}
-			var curPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
 			return curPos == this.chargePos;
 		}
 
@@ -778,12 +779,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool rpcStartAguniCharge()
 		{
-			var local = CachedPlayerControl.LocalPlayer;
+			var local = PlayerControl.LocalPlayer;
 			if (local == null)
 			{
 				return false;
 			}
-			this.chargePos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+			this.chargePos = local.GetTruePosition();
 			IWeapon.SimpleRpcOps(Ability.Aguni, (byte)Ops.Charge);
 			return true;
 		}
@@ -940,22 +941,16 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			ScavengerAbilitySystem.Type,
 			() =>
 			{
-				var mng = OptionManager.Instance;
+				var loader = this.Loader;
 
-				ScavengerAbilitySystem.RandomOption? randOpt = mng.GetValue<bool>(
-					this.GetRoleOptionId(Option.IsRandomInitAbility)) ?
-					new(mng.GetValue<bool>(
-							this.GetRoleOptionId(Option.AllowDupe)),
-						mng.GetValue<bool>(
-							this.GetRoleOptionId(Option.AllowAdvancedWepon))) : null;
+				ScavengerAbilitySystem.RandomOption? randOpt = loader.GetValue<Option, bool>(Option.IsRandomInitAbility) ?
+					new(loader.GetValue<Option, bool>(Option.AllowDupe),
+						loader.GetValue<Option, bool>(Option.AllowAdvancedWepon)) : null;
 
 				return new ScavengerAbilitySystem(
-					(Ability)mng.GetValue<int>(
-						this.GetRoleOptionId(Option.InitAbility)),
-					mng.GetValue<bool>(
-						this.GetRoleOptionId(Option.IsSetWepon)),
-					mng.GetValue<bool>(
-						this.GetRoleOptionId(Option.SyncWeapon)),
+					(Ability)loader.GetValue<Option, int>(Option.InitAbility),
+					loader.GetValue<Option, bool>(Option.IsSetWepon),
+					loader.GetValue<Option, bool>(Option.SyncWeapon),
 					randOpt);
 			});
 
@@ -1040,13 +1035,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{}
 
 	public override void RolePlayerKilledAction(
 		PlayerControl rolePlayer, PlayerControl killerPlayer)
 	{
-		if (rolePlayer.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId)
+		if (rolePlayer.PlayerId != PlayerControl.LocalPlayer.PlayerId)
 		{
 			return;
 		}
@@ -1123,147 +1118,142 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
-	protected override void CreateSpecificOption(IOptionInfo parentOps)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
-			IRoleAbilityMixin.DefaultCoolTime,
-			IRoleAbilityMixin.MinCoolTime,
-			IRoleAbilityMixin.MaxCoolTime,
-			IRoleAbilityMixin.Step,
-			parentOps,
+			IRoleAbility.DefaultCoolTime,
+			IRoleAbility.MinCoolTime,
+			IRoleAbility.MaxCoolTime,
+			IRoleAbility.Step,
 			format: OptionUnit.Second);
 
-		var randomWepon = CreateBoolOption(
+		var randomWepon = factory.CreateBoolOption(
 			Option.IsRandomInitAbility,
-			false, parentOps);
+			false);
 
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			Option.AllowDupe,
 			false, randomWepon);
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			Option.AllowAdvancedWepon,
 			false, randomWepon);
 
-		CreateSelectionOption(
+		factory.CreateSelectionOption(
 			Option.InitAbility,
 			Enum.GetValues<Ability>()
 				.Select(x => x.ToString())
 				.ToArray(),
 			randomWepon,
-			invert: true,
-			enableCheckOption: parentOps);
+			invert: true);
 
-		var mapSetOps = CreateBoolOption(
-			Option.IsSetWepon,
-			true, parentOps);
+		var mapSetOps = factory.CreateBoolOption(
+			Option.IsSetWepon, true);
 
-		CreateBoolOption(
+		factory.CreateBoolOption(
 			Option.SyncWeapon,
 			true, mapSetOps,
-			invert: true,
-			enableCheckOption: parentOps);
+			invert: true);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.HandGunCount,
-			1, 0, 10, 1, parentOps);
-		CreateFloatOption(
+			1, 0, 10, 1);
+		factory.CreateFloatOption(
 			Option.HandGunSpeed,
-			10.0f, 0.5f, 15.0f, 0.5f, parentOps);
-		CreateFloatOption(
+			10.0f, 0.5f, 15.0f, 0.5f);
+		factory.CreateFloatOption(
 			Option.HandGunRange,
-			3.5f, 0.1f, 5.0f, 0.1f, parentOps);
+			3.5f, 0.1f, 5.0f, 0.1f);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.FlameCount,
-			1, 0, 10, 1, parentOps);
-		CreateFloatOption(
+			1, 0, 10, 1);
+		factory.CreateFloatOption(
 			Option.FlameChargeTime,
-			2.0f, 0.1f, 5.0f, 0.1f, parentOps,
+			2.0f, 0.1f, 5.0f, 0.1f,
 			format: OptionUnit.Second);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.FlameActiveTime,
-			25.0f, 5.0f, 120.0f, 0.5f, parentOps,
+			25.0f, 5.0f, 120.0f, 0.5f,
 			format: OptionUnit.Second);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.FlameFireSecond,
-			3.5f, 0.1f, 5.0f, 0.1f, parentOps,
+			3.5f, 0.1f, 5.0f, 0.1f,
 			format: OptionUnit.Second);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.FlameDeadSecond,
-			3.5f, 0.1f, 5.0f, 0.1f, parentOps,
+			3.5f, 0.1f, 5.0f, 0.1f,
 			format: OptionUnit.Second);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.SwordCount,
-			1, 0, 10, 1, parentOps);
-		CreateFloatOption(
+			1, 0, 10, 1);
+		factory.CreateFloatOption(
 			Option.SwordChargeTime,
-			3.0f, 0.5f, 30.0f, 0.5f, parentOps,
+			3.0f, 0.5f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.SwordActiveTime,
-			15.0f, 0.5f, 60.0f, 0.5f, parentOps,
+			15.0f, 0.5f, 60.0f, 0.5f,
 			format: OptionUnit.Second);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.SwordR,
-			1.0f, 0.25f, 5.0f, 0.25f, parentOps);
+			1.0f, 0.25f, 5.0f, 0.25f);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.SniperRifleCount,
-			1, 0, 10, 1, parentOps);
-		CreateFloatOption(
+			1, 0, 10, 1);
+		factory.CreateFloatOption(
 			Option.SniperRifleSpeed,
-			50.0f, 25.0f, 75.0f, 0.5f, parentOps);
+			50.0f, 25.0f, 75.0f, 0.5f);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.BeamRifleCount,
-			1, 0, 10, 1, parentOps);
-		CreateFloatOption(
+			1, 0, 10, 1);
+		factory.CreateFloatOption(
 			Option.BeamRifleSpeed,
-			7.0f, 0.1f, 10.0f, 0.1f, parentOps);
-		CreateFloatOption(
+			7.0f, 0.1f, 10.0f, 0.1f);
+		factory.CreateFloatOption(
 			Option.BeamRifleRange,
-			20.0f, 0.5f, 30.0f, 0.5f, parentOps);
+			20.0f, 0.5f, 30.0f, 0.5f);
 
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.BeamSaberCount,
-			1, 0, 10, 1, parentOps);
-		CreateIntOption(
+			1, 0, 10, 1);
+		factory.CreateIntOption(
 			Option.BeamSaberChargeTime,
-			5, 1, 60, 1, parentOps,
+			5, 1, 60, 1,
 			format: OptionUnit.Second);
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.BeamSaberRange,
-			3.5f, 0.1f, 7.5f, 0.1f, parentOps);
-		CreateBoolOption(
+			3.5f, 0.1f, 7.5f, 0.1f);
+		factory.CreateBoolOption(
 			Option.BeamSaberAutoDetect,
-			false, parentOps);
+			false);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.AguniCount,
-			1, 0, 10, 1, parentOps);
-		CreateIntOption(
+			1, 0, 10, 1);
+		factory.CreateIntOption(
 			Option.AguniChargeTime,
-			5, 1, 60, 1, parentOps,
+			5, 1, 60, 1,
 			format: OptionUnit.Second);
 
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.WeaponMixTime,
-			3.0f, 0.5f, 25.0f, 0.5f, parentOps,
+			3.0f, 0.5f, 25.0f, 0.5f,
 			format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		this.weaponMixTime = OptionManager.Instance.GetValue<float>(
-			this.GetRoleOptionId(Option.WeaponMixTime));
+		this.weaponMixTime = this.Loader.GetValue<Option, float>(Option.WeaponMixTime);
 	}
 
 	private void createWeapon()
 	{
-		var mng = OptionManager.Instance;
+		var loader = this.Loader;
 
 		this.weapon = new Dictionary<Ability, IWeapon>()
 		{
@@ -1271,60 +1261,48 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				Ability.HandGun,
 				new Gun(
 					new (
-						Path.ScavengerBulletImg,
+						ObjectPath.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
-						mng.GetValue<float>(
-							this.GetRoleOptionId(Option.HandGunSpeed)),
-						mng.GetValue<float>(
-							this.GetRoleOptionId(Option.HandGunRange))))
+						loader.GetValue<Option, float>(Option.HandGunSpeed),
+						loader.GetValue<Option, float>(Option.HandGunRange)))
 			},
 			{
 				Ability.Flame,
 				new Flame(
-					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.FlameFireSecond)),
-					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.FlameDeadSecond)))
+					loader.GetValue<Option, float>(Option.FlameFireSecond),
+					loader.GetValue<Option, float>(Option.FlameDeadSecond))
 			},
 			{
 				Ability.Sword,
 				new Sword(
-					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.SwordChargeTime)),
-					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.SwordActiveTime)),
-					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.SwordR)))
+					loader.GetValue<Option, float>(Option.SwordChargeTime),
+					loader.GetValue<Option, float>(Option.SwordActiveTime),
+					loader.GetValue<Option, float>(Option.SwordR))
 			},
 			{
 				Ability.SniperRifle,
 				new Gun(
 					new (
-						Path.ScavengerBulletImg,
+						ObjectPath.ScavengerBulletImg,
 						new Vector2(0.025f, 0.05f),
-						mng.GetValue<float>(
-							this.GetRoleOptionId(Option.SniperRifleSpeed)),
+						loader.GetValue<Option, float>(Option.SniperRifleSpeed),
 						128.0f))
 			},
 			{
 				Ability.BeamRifle,
 				new Gun(
 					new (
-						Path.ScavengerBeamImg,
+						ObjectPath.ScavengerBeamImg,
 						new Vector2(0.05f, 0.05f),
-						mng.GetValue<float>(
-							this.GetRoleOptionId(Option.BeamRifleSpeed)),
-						mng.GetValue<float>(
-							this.GetRoleOptionId(Option.BeamRifleRange)),
+						loader.GetValue<Option, float>(Option.BeamRifleSpeed),
+						loader.GetValue<Option, float>(Option.BeamRifleRange),
 						true))
 			},
 			{
 				Ability.BeamSaber,
 				new BeamSaber(
-					mng.GetValue<float>(
-						this.GetRoleOptionId(Option.BeamSaberRange)),
-					mng.GetValue<bool>(
-						this.GetRoleOptionId(Option.BeamSaberAutoDetect)))
+					loader.GetValue<Option, float>(Option.BeamSaberRange),
+					loader.GetValue<Option, bool>(Option.BeamSaberAutoDetect))
 			},
 			{
 				Ability.Aguni,
@@ -1350,8 +1328,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.loadAbilityOption(result, ability);
 		}
 
-		float coolTime = OptionManager.Instance.GetValue<float>(
-			this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
+		float coolTime = this.Loader.GetValue<RoleAbilityCommonOption, float>(
+			RoleAbilityCommonOption.AbilityCoolTime);
 		result.SetCoolTime(coolTime);
 
 		return result;
@@ -1404,7 +1382,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private void loadAbilityOption(in BehaviorBase behavior, in Ability ability)
 	{
-		var mng = OptionManager.Instance;
+		var loader = this.Loader;
 
 		switch (ability)
 		{
@@ -1414,21 +1392,18 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					throw new ArgumentException("HandGun Behavior is not CountBehavior");
 				}
 				handGun.SetAbilityCount(
-					mng.GetValue<int>(
-						this.GetRoleOptionId(Option.HandGunCount)));
+					loader.GetValue<Option, int>(
+						Option.HandGunCount));
 				break;
 			case Ability.Flame:
 				if (behavior is not ChargingAndActivatingCountBehaviour flame)
 				{
 					throw new ArgumentException("Flame Behavior is not CountBehavior");
 				}
-				flame.ActiveTime = mng.GetValue<float>(
-					this.GetRoleOptionId(Option.FlameActiveTime));
-				flame.ChargeTime = mng.GetValue<float>(
-					this.GetRoleOptionId(Option.FlameChargeTime));
+				flame.ActiveTime = loader.GetValue<Option, float>(Option.FlameActiveTime);
+				flame.ChargeTime = loader.GetValue<Option, float>(Option.FlameChargeTime);
 				flame.SetAbilityCount(
-					mng.GetValue<int>(
-						this.GetRoleOptionId(Option.FlameCount)));
+					loader.GetValue<Option, int>(Option.FlameCount));
 				break;
 			case Ability.Sword:
 				if (behavior is not ICountBehavior countBehavior)
@@ -1436,8 +1411,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					throw new ArgumentException("Sword Behavior is not CountBehavior");
 				}
 				countBehavior.SetAbilityCount(
-					mng.GetValue<int>(
-						this.GetRoleOptionId(Option.SwordCount)));
+					loader.GetValue<Option, int>(Option.SwordCount));
 				break;
 			case Ability.SniperRifle:
 				if (behavior is not CountBehavior sniperRifle)
@@ -1445,8 +1419,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					throw new ArgumentException("SniperRifle Behavior is not CountBehavior");
 				}
 				sniperRifle.SetAbilityCount(
-					mng.GetValue<int>(
-						this.GetRoleOptionId(Option.SniperRifleCount)));
+					loader.GetValue<Option, int>(Option.SniperRifleCount));
 				break;
 			case Ability.BeamRifle:
 				if (behavior is not CountBehavior beamRifle)
@@ -1454,8 +1427,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					throw new ArgumentException("BeamRile Behavior is not CountBehavior");
 				}
 				beamRifle.SetAbilityCount(
-					mng.GetValue<int>(
-						this.GetRoleOptionId(Option.BeamRifleCount)));
+					loader.GetValue<Option, int>(Option.BeamRifleCount));
 				break;
 			case Ability.BeamSaber:
 				if (behavior is not ChargingCountBehaviour beamSaber)
@@ -1464,10 +1436,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				}
 
 				beamSaber.SetAbilityCount(
-					mng.GetValue<int>(
-						this.GetRoleOptionId(Option.BeamSaberCount)));
-				beamSaber.ChargeTime = mng.GetValue<int>(
-					this.GetRoleOptionId(Option.BeamSaberChargeTime));
+					loader.GetValue<Option, int>(Option.BeamSaberCount));
+				beamSaber.ChargeTime = loader.GetValue<Option, int>(Option.BeamSaberChargeTime);
 
 				break;
 			case Ability.Aguni:
@@ -1475,8 +1445,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				{
 					throw new ArgumentException("Aguni Behavior is not ChargingAndActivatingCountBehaviour");
 				}
-				aguni.ChargeTime = mng.GetValue<float>(
-					this.GetRoleOptionId(Option.AguniChargeTime));
+				aguni.ChargeTime = loader.GetValue<Option, float>(Option.AguniChargeTime);
 
 				break;
 		}

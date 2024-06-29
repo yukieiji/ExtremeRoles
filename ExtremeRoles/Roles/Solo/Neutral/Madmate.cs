@@ -73,8 +73,8 @@ public sealed class Madmate :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "selfKill", Resources.Loader.CreateSpriteFromResources(
-				Path.SucideSprite));
+            "selfKill", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.SucideSprite));
     }
 
     public bool UseAbility()

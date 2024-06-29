@@ -234,8 +234,8 @@ public sealed class Psychic :
     {
         this.CreateActivatingAbilityCountButton(
 			Translation.GetString("PsychicPsychic"),
-			Resources.Loader.CreateSpriteFromResources(
-				Path.PsychicPsychic),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.PsychicPsychic),
 			CheckAbility,
 			CleanUp,
 			ForceAbilityOff);

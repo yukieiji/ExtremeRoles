@@ -72,7 +72,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
         this.CreateActivatingAbilityCountButton(
             "setBomb",
-			Loader.GetUnityObjectFromResources<Sprite>(Path.Bomb),
+			UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb),
 			CheckAbility, CleanUp, ForceCleanUp);
     }
 

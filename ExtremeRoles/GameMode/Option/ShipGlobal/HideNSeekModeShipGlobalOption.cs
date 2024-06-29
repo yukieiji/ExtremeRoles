@@ -21,7 +21,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
     public AdminDeviceOption Admin { get; private set; }
     public DeviceOption Security { get; private set; }
-    public DeviceOption Vital { get; private set; }
+    public VitalDeviceOption Vital { get; private set; }
 	public SpawnOption Spawn { get; private set; }
 
 	public ConfirmExilMode ExilMode => ConfirmExilMode.Impostor;
@@ -84,7 +84,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 		Admin = new AdminDeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.AdminOption));
-		Vital = new DeviceOption(
+		Vital = new VitalDeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VitalOption));
 		Security = new DeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.SecurityOption));

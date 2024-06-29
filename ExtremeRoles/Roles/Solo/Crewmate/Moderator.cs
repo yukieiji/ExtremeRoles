@@ -151,8 +151,8 @@ public sealed class Moderator :
 	{
 		this.CreateAbilityCountButton(
 			"moderate",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.ModeratorModerate));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.ModeratorModerate));
 		this.Button?.SetLabelToCrewmate();
 	}
 

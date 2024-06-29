@@ -138,10 +138,10 @@ public sealed class Skater :
 	{
 		this.CreatePassiveAbilityButton(
 			"SkaterSkateOn", "SkaterSkateOff",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.SkaterSkateOn),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.SkaterSkateOff),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.SkaterSkateOn),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.SkaterSkateOff),
 			this.CleanUp);
 
 		if (this.IsCrewmate())
