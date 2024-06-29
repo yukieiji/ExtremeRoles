@@ -14,7 +14,7 @@ using AmongUs.Data;
 using AmongUs.Data.Player;
 using Innersloth.Assets;
 
-using ExRLoader = ExtremeRoles.Resources.Loader;
+using ExRLoader = ExtremeRoles.Resources.UnityObjectLoader;
 
 #nullable enable
 
@@ -58,7 +58,7 @@ public static class NameplatesTabPatch
         if (Tab == null)
         {
             GameObject obj = Object.Instantiate(
-                ExRLoader.GetUnityObjectFromResources<GameObject>(
+                ExRLoader.LoadFromResources<GameObject>(
                     CustomCosmicTab.CreatorTabAssetBundle,
                     CustomCosmicTab.CreatorTabAssetPrefab),
                 __instance.transform);
