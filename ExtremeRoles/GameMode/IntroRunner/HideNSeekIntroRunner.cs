@@ -51,9 +51,8 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 		}
 
 		PlayerControl impostor =
-            PlayerControl.AllPlayerControls.Find(
-				(Il2CppSystem.Predicate<PlayerControl>)(
-					(PlayerControl pc) => pc.Data.Role.IsImpostor));
+            AmongUsCache.AllPlayerControl.Find(
+				(PlayerControl pc) => pc.Data.Role.IsImpostor));
 
         if (impostor == null)
         {

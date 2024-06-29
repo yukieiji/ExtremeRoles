@@ -247,7 +247,7 @@ public static class RPCOperator
     {
 		if (Helper.GameSystem.IsLobby) { return; }
 
-        foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
         {
             if (!player.Data.Role.IsImpostor)
             {

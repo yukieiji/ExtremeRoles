@@ -289,7 +289,7 @@ public sealed partial class Xion
                     targetPlayer = array[i];
 
                     PlayerControl.AllPlayerControls.Add(targetPlayer);
-                    // new CachedPlayerControl(targetPlayer);
+					AmongUsCache.AddPlayerControl(targetPlayer);
                     break;
                 }
             }

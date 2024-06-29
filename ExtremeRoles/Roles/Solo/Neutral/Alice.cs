@@ -78,7 +78,7 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         RandomGenerator.Instance.Next();
         byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
-        foreach (var player in PlayerControl.AllPlayerControls)
+        foreach (var player in AmongUsCache.AllPlayerControl)
         {
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];

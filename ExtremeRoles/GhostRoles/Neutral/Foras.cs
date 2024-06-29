@@ -165,7 +165,7 @@ public sealed class Foras : GhostRoleBase
 
         if (this.rate > RandomGenerator.Instance.Next(101))
         {
-            this.targetPlayer = PlayerControl.AllPlayerControls.ToArray()
+            this.targetPlayer = AmongUsCache.AllPlayerControl
                 .Where(x =>
                 {
                     return

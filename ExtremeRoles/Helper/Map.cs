@@ -87,7 +87,7 @@ public static class Map
 
 	public static void AddSpawnPoint(in List<Vector2> pos, in byte playerId)
 	{
-		int playerNum = PlayerControl.AllPlayerControls.Count;
+		int playerNum = AmongUsCache.AllPlayerControl.Count;
 
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{

@@ -1,12 +1,11 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Player;
 
 #nullable enable
-/*
+
 [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
 public static class PlayerControlAwakePatch
 {
@@ -14,10 +13,10 @@ public static class PlayerControlAwakePatch
 	{
 		if (__instance.notRealPlayer) { return; }
 
-		new CachedPlayerControl(__instance);
+		AmongUsCache.AddPlayerControl(__instance);
 
 #if DEBUG
-		foreach (var cachedPlayer in PlayerControl.AllPlayerControls)
+		foreach (var cachedPlayer in AmongUsCache.AllPlayerControl)
 		{
 			if (!cachedPlayer.PlayerControl ||
 				!cachedPlayer.MyPhysics ||
@@ -30,4 +29,3 @@ public static class PlayerControlAwakePatch
 #endif
 	}
 }
-*/

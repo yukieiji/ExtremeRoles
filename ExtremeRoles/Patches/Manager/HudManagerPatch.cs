@@ -211,13 +211,14 @@ public static class HudManagerUpdatePatch
 
     private static void resetNameTagsAndColors(PlayerControl localPlayer)
     {
-		var allPc = PlayerControl.AllPlayerControls;
-
-        foreach (PlayerControl player in allPc.GetFastEnumerator())
+        foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
         {
             player.cosmetics.SetName(player.CurrentOutfit.PlayerName);
 
-            if (localPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
+            if (localPlayer.Data.Role.IsImpostor &&
+				player.Data != null &&
+				player.Data.Role != null &&
+				player.Data.Role.IsImpostor)
             {
                 player.cosmetics.SetNameColor(Palette.ImpostorRed);
             }
@@ -226,31 +227,6 @@ public static class HudManagerUpdatePatch
                 player.cosmetics.SetNameColor(Color.white);
             }
         }
-
-        if (localPlayer.Data.Role.IsImpostor)
-        {
-            var impostors = allPc.ToArray().ToList();
-            impostors.RemoveAll((PlayerControl x) =>
-            {
-                if (x == null ||
-                    x.Data == null ||
-                    x.Data.Role == null ||
-                    !x.Data.Role.IsImpostor)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            });
-
-            foreach (PlayerControl player in impostors)
-            {
-                player.cosmetics.SetNameColor(Palette.ImpostorRed);
-            }
-        }
-
     }
 
     private static void setPlayerNameColor(
@@ -276,7 +252,7 @@ public static class HudManagerUpdatePatch
 
         GhostRoleBase targetGhostRole;
 
-        foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
+        foreach (PlayerControl targetPlayer in AmongUsCache.AllPlayerControl)
         {
             if (targetPlayer.PlayerId == localPlayerId) { continue; }
 
@@ -323,7 +299,7 @@ public static class HudManagerUpdatePatch
         SingleRoleBase playerRole)
     {
 
-        foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
+        foreach (PlayerControl targetPlayer in AmongUsCache.AllPlayerControl)
         {
             byte playerId = targetPlayer.PlayerId;
             string tag = playerRole.GetRolePlayerNameTag(
@@ -342,7 +318,7 @@ public static class HudManagerUpdatePatch
 
         bool commsActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer);
 
-        foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
         {
 
             if (player.PlayerId != localPlayer.PlayerId && !localPlayer.Data.IsDead)

@@ -79,8 +79,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
     public bool UseAbility()
     {
         // まずはテレポート先とかにも設定できるプレヤーを取得
-        var allPlayer = PlayerControl.AllPlayerControls;
-        var validPlayer = allPlayer.ToArray().Where(x =>
+        var validPlayer = AmongUsCache.AllPlayerControl.Where(x =>
             x != null &&
             x.Data != null &&
             !x.Data.IsDead &&

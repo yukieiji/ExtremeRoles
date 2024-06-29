@@ -116,7 +116,7 @@ public sealed class Missionary :
 
     protected override void RoleSpecificInit()
     {
-        this.lamb = new List<PlayerControl>(PlayerControl.AllPlayerControls.Count);
+        this.lamb = new List<PlayerControl>(AmongUsCache.AllPlayerControl.Count);
         this.timer = 0;
 
 		var cate = this.Loader;

@@ -29,7 +29,7 @@ public static class SetCachedLocalPlayerControl
 			return;
 		}
 		/*
-		CachedPlayerControl? cached = PlayerControl.AllPlayerControls.FirstOrDefault(
+		CachedPlayerControl? cached = AmongUsCache.AllPlayerControl.FirstOrDefault(
 			p => p.Pointer == localPlayer.Pointer);
 		if (cached != null)
 		{

@@ -625,7 +625,7 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
         // デフォルトのメソッドではニュートラルもクルー陣営の死亡者数にカウントされてアサインされなくなるため
         RoleTypes roleTypes = RoleTypes.GuardianAngel;
 
-        int num = PlayerControl.AllPlayerControls.ToArray().Count(
+        int num = AmongUsCache.AllPlayerControl.Count(
             (PlayerControl pc) =>
                 pc.Data.IsDead &&
                 !pc.Data.Role.IsImpostor &&
