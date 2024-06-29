@@ -91,14 +91,14 @@ public sealed partial class Xion
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(
             Input.mousePosition);
         GameObject body = GameSystem.CreateNoneReportableDeadbody(
-            CachedPlayerControl.LocalPlayer, mouseWorldPos);
+            PlayerControl.LocalPlayer, mouseWorldPos);
         this.dummyDeadBody.Add(body);
     }
 
     // RPC周り
     public void RpcCallMeeting()
     {
-        PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl xionPlayer = PlayerControl.LocalPlayer;
         MeetingRoomManager.Instance.AssignSelf(xionPlayer, null);
         FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(xionPlayer);
         xionPlayer.RpcStartMeeting(null);
@@ -207,7 +207,7 @@ public sealed partial class Xion
             return;
         }
 
-        byte xionPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte xionPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         finishWrite(createWriter(XionRpcOpsCode.BackXion));
         hostToXion(xionPlayerId);
@@ -221,7 +221,7 @@ public sealed partial class Xion
 		writer.Write(pos.x);
 		writer.Write(pos.y);
 		finishWrite(writer);
-		teleport(CachedPlayerControl.LocalPlayer, pos);
+		teleport(PlayerControl.LocalPlayer, pos);
 	}
 
     private static void rpcTeleport(PlayerControl targetPlayer)
@@ -236,7 +236,7 @@ public sealed partial class Xion
     private static MessageWriter createWriter(XionRpcOpsCode opsCode)
     {
         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-            CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+            PlayerControl.LocalPlayer.NetId,
             (byte)RPCOperator.Command.XionAbility,
             Hazel.SendOption.Reliable, -1);
         writer.Write(PlayerId);
@@ -289,7 +289,7 @@ public sealed partial class Xion
                     targetPlayer = array[i];
 
                     PlayerControl.AllPlayerControls.Add(targetPlayer);
-                    new CachedPlayerControl(targetPlayer);
+					PlayerCache.AddPlayerControl(targetPlayer);
                     break;
                 }
             }
@@ -322,7 +322,7 @@ public sealed partial class Xion
         }
 
         if (addRole is IRoleAbility abilityRole &&
-            CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
         {
             Logging.Debug("Try Create Ability NOW!!!");
             abilityRole.CreateAbility();

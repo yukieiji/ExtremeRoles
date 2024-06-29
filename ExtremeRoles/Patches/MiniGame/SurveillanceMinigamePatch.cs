@@ -197,7 +197,7 @@ public static class SurveillanceMinigameUpdatePatch
 
         if ((instance.isStatic || update) &&
             !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
-                CachedPlayerControl.LocalPlayer))
+                PlayerControl.LocalPlayer))
         {
             instance.isStatic = false;
             for (int i = 0; i < instance.ViewPorts.Length; i++)
@@ -217,7 +217,7 @@ public static class SurveillanceMinigameUpdatePatch
         }
         else if (!instance.isStatic &&
             PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(
-                CachedPlayerControl.LocalPlayer))
+                PlayerControl.LocalPlayer))
         {
             instance.isStatic = true;
             for (int j = 0; j < instance.ViewPorts.Length; j++)

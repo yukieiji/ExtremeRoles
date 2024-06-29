@@ -474,7 +474,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
                 if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                 {
                     FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-                        CachedPlayerControl.LocalPlayer,
+                        PlayerControl.LocalPlayer,
                         string.Format(
                             Translation.GetString("reportedDeadBodyInfo"),
                             this.deadBodyInfo[reportBody.PlayerId]));
@@ -648,7 +648,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
         if (hasAnotherRole)
         {
-            if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            if (playerId == PlayerControl.LocalPlayer.PlayerId)
             {
                 if (prevRole.AnotherRole is IRoleAbility abilityRole)
                 {
@@ -675,7 +675,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 		DetectiveApprentice newRole = new DetectiveApprentice(
             prevRole.GameControlId,
             DetectiveApprenticeOptionHolder.LoadOptions(new OptionLoadWrapper(cate, offset)));
-        if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (playerId == PlayerControl.LocalPlayer.PlayerId)
         {
             newRole.CreateAbility();
         }
@@ -780,7 +780,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         NetworkedPlayerInfo reporter)
     {
         if (this.callAnotherButton &&
-            CachedPlayerControl.LocalPlayer.PlayerId == reporter.PlayerId &&
+            PlayerControl.LocalPlayer.PlayerId == reporter.PlayerId &&
             this.hasOtherButton &&
             this.buttonNum > 0)
         {

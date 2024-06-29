@@ -79,7 +79,7 @@ public sealed class Madmate :
     public bool UseAbility()
     {
 
-        byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
         Helper.Player.RpcUncheckMurderPlayer(
             playerId, playerId, byte.MaxValue);

@@ -17,7 +17,7 @@ public static class SabotageButtonDoClickPatch
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
         // The sabotage button behaves just fine if it's a regular impostor
-        if ((CachedPlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
+        if ((PlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
             role.IsImpostor()) { return true; }
         if (!role.CanUseSabotage()) { return true; }
 
@@ -41,7 +41,7 @@ public static class SabotageButtonRefreshPatch
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         bool roleCanUseSabotage = role.CanUseSabotage();
 

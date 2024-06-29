@@ -157,7 +157,7 @@ public static class ExtremeGhostRoleManager
 
     public static GhostRoleBase GetLocalPlayerGhostRole()
     {
-        byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
         if (GameRole.TryGetValue(playerId, out GhostRoleBase ghostRole))
         {
@@ -186,7 +186,7 @@ public static class ExtremeGhostRoleManager
     public static T GetSafeCastedLocalPlayerRole<T>() where T : GhostRoleBase
     {
 
-        byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+        byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
         if (!GameRole.TryGetValue(playerId, out GhostRoleBase ghostRole)) { return null; }
 
@@ -329,7 +329,7 @@ public static class ExtremeGhostRoleManager
 
         role.SetGameControlId(gameControlId);
         role.Initialize();
-        if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (playerId == PlayerControl.LocalPlayer.PlayerId)
         {
             role.CreateAbility();
         }
@@ -353,7 +353,7 @@ public static class ExtremeGhostRoleManager
 
         role.SetGameControlId(gameControlId);
         role.Initialize();
-        if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        if (playerId == PlayerControl.LocalPlayer.PlayerId)
         {
             role.CreateAbility();
         }

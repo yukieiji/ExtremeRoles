@@ -19,7 +19,7 @@ public static class KillButtonDoClickPatch
     {
         if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-        PlayerControl killer = CachedPlayerControl.LocalPlayer;
+        PlayerControl killer = PlayerControl.LocalPlayer;
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
         if (__instance.enabled &&

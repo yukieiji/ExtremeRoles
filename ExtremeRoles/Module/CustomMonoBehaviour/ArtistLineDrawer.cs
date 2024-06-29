@@ -62,7 +62,7 @@ public sealed class ArtistLineDrawer :  MonoBehaviour
 
 		if (curPos == this.prevPos) { return; }
 
-		if (CachedPlayerControl.LocalPlayer.PlayerId == this.artistPlayer.PlayerId)
+		if (PlayerControl.LocalPlayer.PlayerId == this.artistPlayer.PlayerId)
 		{
 			float distance = Vector3.Distance(curPos, this.prevPos.Value);
 			this.Area += distance * lineSize;

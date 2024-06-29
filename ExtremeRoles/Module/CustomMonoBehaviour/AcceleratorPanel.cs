@@ -17,7 +17,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 
 	public void Awake()
 	{
-		if (CachedPlayerControl.LocalPlayer == null) { return; }
+		if (PlayerControl.LocalPlayer == null) { return; }
 
 		this.collider = base.gameObject.AddComponent<BoxCollider2D>();
 		this.collider.size = new Vector2(1.5f, 1.15f);
@@ -31,7 +31,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		PlayerControl? pc = CachedPlayerControl.LocalPlayer;
+		PlayerControl? pc = PlayerControl.LocalPlayer;
 		if (pc == null ||
 			pc.inMovingPlat ||
 			pc.inVent ||

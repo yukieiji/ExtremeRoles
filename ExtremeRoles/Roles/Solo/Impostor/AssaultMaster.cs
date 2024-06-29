@@ -126,7 +126,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
 
         this.curReloadCoolTime = this.defaultReloadCoolTime;
 
-        float curKillCool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
+        float curKillCool = PlayerControl.LocalPlayer.killTimer;
         float newKillCool = curKillCool;
         int loop = this.stock;
         for (int i = 0; i < loop; ++i)

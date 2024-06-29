@@ -80,7 +80,7 @@ public sealed class Artist :
 			this.CleanUp,
 			() =>
 			{
-				PlayerControl? pc = CachedPlayerControl.LocalPlayer;
+				PlayerControl? pc = PlayerControl.LocalPlayer;
 
 				return
 					!(
@@ -99,13 +99,13 @@ public sealed class Artist :
 
 	public bool UseAbility()
     {
-		drawOps(CachedPlayerControl.LocalPlayer);
+		drawOps(PlayerControl.LocalPlayer);
 		return true;
     }
 
 	public void CleanUp()
 	{
-		drawOps(CachedPlayerControl.LocalPlayer);
+		drawOps(PlayerControl.LocalPlayer);
 	}
 
 	public void AllReset(PlayerControl rolePlayer)
@@ -174,7 +174,7 @@ public sealed class Artist :
     public void ResetOnMeetingStart()
     {
 		if (this.drawer == null) { return; }
-		drawOps(CachedPlayerControl.LocalPlayer);
+		drawOps(PlayerControl.LocalPlayer);
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)

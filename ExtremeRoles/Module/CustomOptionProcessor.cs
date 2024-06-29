@@ -254,7 +254,7 @@ public static class CustomOptionCsvProcessor
 			}
 			if (AmongUsClient.Instance != null &&
 				AmongUsClient.Instance.AmHost &&
-				CachedPlayerControl.LocalPlayer != null)
+				PlayerControl.LocalPlayer != null)
 			{
 				optionMng.ShereAllOption();// Share all selections
 			}

@@ -89,7 +89,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     private static void enableKillButton(
         Fencer fencer, byte rolePlayerId)
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         if (localPlayer.PlayerId != rolePlayerId) { return; }
 
@@ -124,7 +124,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             RPCOperator.Command.FencerAbility))
         {
             caller.WriteByte(
-                CachedPlayerControl.LocalPlayer.PlayerId);
+                PlayerControl.LocalPlayer.PlayerId);
             caller.WriteByte((byte)FencerAbility.CounterOff);
         }
         counterOff(this);
@@ -136,7 +136,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
             RPCOperator.Command.FencerAbility))
         {
             caller.WriteByte(
-                CachedPlayerControl.LocalPlayer.PlayerId);
+                PlayerControl.LocalPlayer.PlayerId);
             caller.WriteByte((byte)FencerAbility.CounterOn);
         }
         counterOn(this);

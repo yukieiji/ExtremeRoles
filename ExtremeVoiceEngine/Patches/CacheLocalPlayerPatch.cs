@@ -18,7 +18,7 @@ public static class ChatCurrentSettingPatch
         if (Chated ||
             FastDestroyableSingleton<HudManager>.Instance == null ||
             VoiceEngine.Instance == null ||
-            !CachedPlayerControl.LocalPlayer) { return; }
+            !PlayerControl.LocalPlayer) { return; }
 
         VoiceEngine.Instance.WaitExecute(
             () =>

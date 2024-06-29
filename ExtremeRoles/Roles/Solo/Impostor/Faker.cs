@@ -94,7 +94,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		bool excludeImp = Key.IsControlDown();
 		bool excludeMe = Key.IsAltDown();
 
-		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
 		bool contine;
 		byte targetPlayerId;

@@ -35,7 +35,7 @@ namespace ExtremeRoles.Roles.Solo.Host.Button
         public virtual void Update()
         {
             if (this.Body == null) { return; }
-            if (CachedPlayerControl.LocalPlayer.Data == null ||
+            if (PlayerControl.LocalPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance)
             {
@@ -53,8 +53,8 @@ namespace ExtremeRoles.Roles.Solo.Host.Button
             if (this.Timer >= 0)
             {
 
-                if (!CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
-                    CachedPlayerControl.LocalPlayer.PlayerControl.moveable)
+                if (!PlayerControl.LocalPlayer.inVent &&
+                    PlayerControl.LocalPlayer.moveable)
                 {
                     this.Timer -= Time.deltaTime;
                 }

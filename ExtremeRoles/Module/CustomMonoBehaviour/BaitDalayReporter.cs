@@ -79,7 +79,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 			}))
 		);
 
-		var player = CachedPlayerControl.LocalPlayer.PlayerControl;
+		var player = PlayerControl.LocalPlayer;
 		if (timer == 0)
 		{
 			reportTarget(target);
@@ -120,7 +120,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 	private static void reportTarget(NetworkedPlayerInfo target)
 	{
-		CachedPlayerControl.LocalPlayer.PlayerControl.CmdReportDeadBody(target);
+		PlayerControl.LocalPlayer.CmdReportDeadBody(target);
 	}
 
 	private void stopTargetCorutine(Coroutine? coroutine)

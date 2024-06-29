@@ -42,6 +42,8 @@ public static class ExtremeColorManager
 		List<StringNames> longlist = Palette.ColorNames.ToList();
 		List<Color32> colorlist = Palette.PlayerColors.ToList();
 		List<Color32> shadowlist = Palette.ShadowColors.ToList();
+		List<Color32> textColorlist = Palette.TextColors.ToList();
+		List<Color32> textOutLineColorlist = Palette.TextOutlineColors.ToList();
 
 		int id = 50000;
 
@@ -52,8 +54,16 @@ public static class ExtremeColorManager
 			longlist.Add(name);
             colorlist.Add(cc.MainColor);
             shadowlist.Add(cc.ShadowColor);
+			textColorlist.Add(cc.MainColor);
+			textOutLineColorlist.Add(new Color32(
+				(byte)(byte.MaxValue - cc.ShadowColor.r),
+				(byte)(byte.MaxValue - cc.ShadowColor.g),
+				(byte)(byte.MaxValue - cc.ShadowColor.b),
+				byte.MaxValue));
 
-            LangData.Add(name, cc.Name);
+
+
+			LangData.Add(name, cc.Name);
 
 			++id;
         }
@@ -61,5 +71,7 @@ public static class ExtremeColorManager
         Palette.ColorNames = longlist.ToArray();
         Palette.PlayerColors = colorlist.ToArray();
         Palette.ShadowColors = shadowlist.ToArray();
+		Palette.TextColors = textColorlist.ToArray();
+		Palette.TextOutlineColors = textOutLineColorlist.ToArray();
     }
 }

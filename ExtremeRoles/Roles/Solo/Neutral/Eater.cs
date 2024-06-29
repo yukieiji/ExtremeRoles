@@ -102,7 +102,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         PlayerControl source, PlayerControl target)
     {
         if (MeetingHud.Instance ||
-            source.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId ||
+            source.PlayerId == PlayerControl.LocalPlayer.PlayerId ||
             !this.isShowArrow) { return; }
 
         DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
@@ -125,7 +125,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             this.modeFactory == null) { return false; }
 
         this.tmpTarget = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this, this.range);
+            PlayerControl.LocalPlayer, this, this.range);
 
         this.targetDeadBody = Player.GetDeadBodyInfo(
             this.range);
@@ -259,7 +259,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         else if (this.targetPlayer != null)
         {
             Player.RpcUncheckMurderPlayer(
-                CachedPlayerControl.LocalPlayer.PlayerId,
+                PlayerControl.LocalPlayer.PlayerId,
                 this.targetPlayer.PlayerId, 0);
 
             ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
@@ -281,7 +281,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         if (this.targetDeadBody != null) { return true; }
 
         return Player.IsPlayerInRangeAndDrawOutLine(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             this.targetPlayer, this, this.range);
     }
 

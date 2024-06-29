@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 using AmongUs.GameOptions;
 
@@ -400,7 +400,7 @@ public static class ExtremeRoleManager
 
     public static SingleRoleBase GetLocalPlayerRole()
     {
-		if (!TryGetRole(CachedPlayerControl.LocalPlayer.PlayerId, out var role))
+		if (!TryGetRole(PlayerControl.LocalPlayer.PlayerId, out var role))
 		{
 			throw new ArgumentNullException("Local Role is Null!!!!!!!!!!");
 		}
@@ -433,7 +433,7 @@ public static class ExtremeRoleManager
 		SingleRoleBase addRole = role.Clone();
 
 		if (addRole is IRoleAbility abilityRole &&
-			CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+			PlayerControl.LocalPlayer.PlayerId == playerId)
 		{
 			Helper.Logging.Debug("Try Create Ability NOW!!!");
 			abilityRole.CreateAbility();
@@ -523,7 +523,7 @@ public static class ExtremeRoleManager
         SingleRoleBase addRole = role.Clone();
 
         if (addRole is IRoleAbility abilityRole &&
-            CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+            PlayerControl.LocalPlayer.PlayerId == playerId)
         {
             Helper.Logging.Debug("Try Create Ability NOW!!!");
             abilityRole.CreateAbility();
@@ -542,7 +542,7 @@ public static class ExtremeRoleManager
 
             if (TryGetRole(playerId, out var existRole) &&
 				existRole is IRoleAbility multiAssignAbilityRole &&
-                CachedPlayerControl.LocalPlayer.PlayerId == playerId &&
+                PlayerControl.LocalPlayer.PlayerId == playerId &&
 				multiAssignAbilityRole.Button != null)
             {
 				multiAssignAbilityRole.Button.HotKey = UnityEngine.KeyCode.C;
@@ -551,11 +551,10 @@ public static class ExtremeRoleManager
         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
     }
 
-// TryGet系列：ここでTrueの場合、取得した役職はNullではない！！！！
-	public static bool TryGetRole(byte playerId, out SingleRoleBase? role )
+	public static bool TryGetRole(byte playerId, [NotNullWhen(true)] out SingleRoleBase? role )
 		=> GameRole.TryGetValue(playerId, out role) && role is not null;
 
-	public static bool TryGetSafeCastedRole<T>(byte playerId, out T? role) where T : SingleRoleBase
+	public static bool TryGetSafeCastedRole<T>(byte playerId, [NotNullWhen(true)] out T? role) where T : SingleRoleBase
 	{
 		role = null;
 		if (!TryGetRole(playerId, out var checkRole))

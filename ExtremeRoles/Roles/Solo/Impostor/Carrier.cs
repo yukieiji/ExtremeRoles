@@ -167,7 +167,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
 
     public bool UseAbility()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
         Vector3 pos = player.transform.position;
 
         using (var caller = RPCOperator.CreateCaller(
@@ -189,7 +189,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecia
     {
         if (this.carringBody == null) { return; }
 
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
         Vector3 pos = player.transform.position;
 
         using (var caller = RPCOperator.CreateCaller(

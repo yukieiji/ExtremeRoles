@@ -91,7 +91,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
     {
         if (history.BlockAddHistory) { return; }
 
-        history.StartCoroutine(coRewind(playerId, CachedPlayerControl.LocalPlayer));
+        history.StartCoroutine(coRewind(playerId, PlayerControl.LocalPlayer));
     }
 
     private static IEnumerator coRewind(
@@ -288,16 +288,16 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 			// ここでポジションを上書きする => TMが発動してなくても通るが問題なし
 			// それ以外でコードを追加してもいいが最も被害が少ない変更がここ
 			CachedShipStatus.Instance.SpawnPlayer(
-				CachedPlayerControl.LocalPlayer,
+				PlayerControl.LocalPlayer,
 				GameData.Instance.PlayerCount, false);
 		}
 
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable = true;
+        PlayerControl.LocalPlayer.moveable = true;
     }
 
     public void CleanUp()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.TimeMasterAbility))
@@ -320,7 +320,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 
     public bool UseAbility()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.TimeMasterAbility))
@@ -338,7 +338,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
     public void ResetOnMeetingStart()
     {
 
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.TimeMasterAbility))
         {
@@ -388,9 +388,9 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        if (history != null || CachedPlayerControl.LocalPlayer == null) { return; }
+        if (history != null || PlayerControl.LocalPlayer == null) { return; }
 
-        history = CachedPlayerControl.LocalPlayer.PlayerControl.gameObject.AddComponent<
+        history = PlayerControl.LocalPlayer.gameObject.AddComponent<
             TimeMasterHistory>();
         history.Initialize(
             this.Loader.GetValue<TimeMasterOption, float>(

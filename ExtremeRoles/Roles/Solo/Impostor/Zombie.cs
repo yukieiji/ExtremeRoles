@@ -176,11 +176,11 @@ public sealed class Zombie :
     }
 
     public bool IsActivate()
-        => this.curPos == CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+        => this.curPos == PlayerControl.LocalPlayer.transform.position;
 
     public bool UseAbility()
     {
-        this.curPos = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+        this.curPos = PlayerControl.LocalPlayer.transform.position;
 
         if (!tryGetPlayerInRoom(out SystemTypes? room) ||
 			!room.HasValue ||
@@ -206,7 +206,7 @@ public sealed class Zombie :
             RPCOperator.Command.ZombieRpc))
         {
             caller.WriteByte((byte)ZombieRpcOps.SetMagicCircle);
-            caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
             caller.WriteFloat(pos.x);
             caller.WriteFloat(pos.y);
             caller.WriteFloat(this.showMagicCircleTime);
@@ -381,7 +381,7 @@ public sealed class Zombie :
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 
@@ -565,7 +565,7 @@ public sealed class Zombie :
     {
         if (this.cachedColider == null)
         {
-            this.cachedColider = CachedPlayerControl.LocalPlayer.PlayerControl.GetComponent<Collider2D>();
+            this.cachedColider = PlayerControl.LocalPlayer.GetComponent<Collider2D>();
         }
 
         return Player.TryGetPlayerColiderRoom(this.cachedColider, out playerRoom);

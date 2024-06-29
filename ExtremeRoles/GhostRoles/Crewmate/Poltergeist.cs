@@ -135,7 +135,7 @@ public sealed class Poltergeist : GhostRoleBase
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
         Vector3 pos = player.transform.position;
 
         caller.WriteByte(player.PlayerId);
@@ -154,7 +154,7 @@ public sealed class Poltergeist : GhostRoleBase
         if (CachedShipStatus.Instance == null ||
             !CachedShipStatus.Instance.enabled) { return false; }
 
-        Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
 
         foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
             truePosition, this.range, Constants.PlayersOnlyMask))
@@ -167,7 +167,7 @@ public sealed class Poltergeist : GhostRoleBase
             {
                 Vector2 truePosition2 = component.TruePosition;
                 if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
-                    (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
+                    (PlayerControl.LocalPlayer.CanMove) &&
                     (!PhysicsHelpers.AnythingBetween(
                         truePosition, truePosition2,
                         Constants.ShipAndObjectsMask, false)))
@@ -182,12 +182,12 @@ public sealed class Poltergeist : GhostRoleBase
     }
     private void abilityCall()
     {
-        pickUpDeadBody(CachedPlayerControl.LocalPlayer, this, this.targetBody!.PlayerId);
+        pickUpDeadBody(PlayerControl.LocalPlayer, this, this.targetBody!.PlayerId);
         this.targetBody = null;
     }
     private void cleanUp()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
         Vector3 pos = player.transform.position;
 
         using (var caller = RPCOperator.CreateCaller(

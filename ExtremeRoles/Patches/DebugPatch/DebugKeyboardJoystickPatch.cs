@@ -113,7 +113,7 @@ public static class DebugTool
 
         if (Input.GetKeyDown(KeyCode.J))
         {
-            var player = CachedPlayerControl.LocalPlayer;
+            var player = PlayerControl.LocalPlayer;
             GameSystem.CreateNoneReportableDeadbody(
                 player, player.transform.position + new Vector3(0.75f, 0.75f));
         }

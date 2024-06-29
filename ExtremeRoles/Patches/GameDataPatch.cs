@@ -8,20 +8,6 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
-[HarmonyPatch(typeof(GameData), nameof(GameData.AddDummy))]
-public static class GameDataAddPlayerPatch
-{
-	public static void Postfix()
-	{
-		foreach (CachedPlayerControl cachedPlayer in CachedPlayerControl.AllPlayerControls)
-		{
-			cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
-			cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
-		}
-	}
-}
-
 [HarmonyPatch(typeof(GameData), nameof(GameData.RecomputeTaskCounts))]
 public static class GameDataRecomputeTaskCountsPatch
 {

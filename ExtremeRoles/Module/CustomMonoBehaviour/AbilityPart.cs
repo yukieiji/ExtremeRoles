@@ -98,7 +98,7 @@ public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 
 	public void FixedUpdate()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		float distance = Vector2.Distance(
 			localPlayer.GetTruePosition(),
 			base.transform.position);
@@ -138,7 +138,7 @@ public sealed class RedAbilityPart : AbilityPartBase
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.HypnotistAbility))
 		{
-			caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 			caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
 			caller.WriteByte((byte)partType);
 		}
@@ -171,7 +171,7 @@ public sealed class BlueAbilityPart : AbilityPartBase
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.HypnotistAbility))
 		{
-			caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 			caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
 			caller.WriteByte((byte)partType);
 			caller.WriteByte((byte)this.console);
@@ -204,7 +204,7 @@ public sealed class GrayAbilityPart : AbilityPartBase
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.HypnotistAbility))
 		{
-			caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+			caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 			caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
 			caller.WriteByte((byte)partType);
 			caller.WriteByte((byte)this.console);

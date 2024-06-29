@@ -26,7 +26,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
     {
         public bool IsActive()
         {
-            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+            PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
             return
                 (
@@ -174,7 +174,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
     public bool IsAbilityUse()
     {
         this.targetPlayer = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer,
+            PlayerControl.LocalPlayer,
             this, this.range);
 
         return isVentIn() && this.targetPlayer != null;
@@ -192,7 +192,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
 
     public bool UseAbility()
     {
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
         float prevTime = localPlayer.killTimer;
         Helper.Logging.Debug($"PrevKillCool:{prevTime}");
 
@@ -268,7 +268,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
 
     private static bool isVentIn()
     {
-        bool result = CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
+        bool result = PlayerControl.LocalPlayer.inVent;
         Vent vent = Vent.currentVent;
 
         if (!result || vent.IsModed()) { return false; }
@@ -279,7 +279,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
     private static bool isLightOff()
     {
         foreach (PlayerTask task in
-            CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
+            PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
         {
             if (task.TaskType == TaskTypes.FixLights)
             {

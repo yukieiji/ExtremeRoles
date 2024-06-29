@@ -16,7 +16,7 @@ public static class MushroomStartSporeTriggerPatch
 		if (!name.StartsWith(ModedMushroomSystem.MushroomName)) { return true; }
 
 
-		PlayerControl? localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl? localPlayer = PlayerControl.LocalPlayer;
 
 		if (!__instance.mushroomCollider.enabled ||
 			localPlayer == null ||

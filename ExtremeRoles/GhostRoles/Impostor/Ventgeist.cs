@@ -95,7 +95,7 @@ public sealed class Ventgeist : GhostRoleBase
         if (ship == null ||
             !ship.enabled) { return false; }
 
-        Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
 
         foreach (Vent vent in ship.AllVents)
         {

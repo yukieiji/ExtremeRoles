@@ -18,7 +18,7 @@ public static class SpawnInMinigameBeginPatch
 		{
 			__instance.gotButton = true;
 
-			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+			PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 			localPlayer.SetKinematic(true);
 			localPlayer.NetTransform.SetPaused(true);

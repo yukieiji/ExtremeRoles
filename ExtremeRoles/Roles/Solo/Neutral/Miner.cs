@@ -168,14 +168,14 @@ public sealed class Miner :
 
     public bool UseAbility()
     {
-		var pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+		var pos = PlayerControl.LocalPlayer.GetTruePosition();
 
 		if (this.isShowAnotherPlayer)
 		{
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MinerHandle))
 			{
 				caller.WriteByte((byte)MinerRpc.SetMine);
-				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 				caller.WriteInt(this.mineId);
 				caller.WriteFloat(pos.x);
 				caller.WriteFloat(pos.y);
@@ -193,7 +193,7 @@ public sealed class Miner :
 			using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MinerHandle))
 			{
 				caller.WriteByte((byte)MinerRpc.ActiveMine);
-				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 				caller.WriteInt(this.mineId);
 			}
 		}
@@ -298,7 +298,7 @@ public sealed class Miner :
 				using (var caller = RPCOperator.CreateCaller(RPCOperator.Command.MinerHandle))
 				{
 					caller.WriteByte((byte)MinerRpc.RemoveMine);
-					caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+					caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
 					caller.WriteInt(id);
 				}
 			}

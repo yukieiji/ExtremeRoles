@@ -1,6 +1,6 @@
 ﻿using AmongUs.GameOptions;
 
-using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.RoleAssign
 {
@@ -20,8 +20,7 @@ namespace ExtremeRoles.Module.RoleAssign
 			int crewMultiAssignNum = 0;
 			int impMultiAssignNum = 0;
 
-			foreach (PlayerControl player in
-				PlayerControl.AllPlayerControls.GetFastEnumerator())
+			foreach (PlayerControl player in PlayerCache.AllPlayerControl)
 			{
 				switch (player.Data.Role.Role)
 				{

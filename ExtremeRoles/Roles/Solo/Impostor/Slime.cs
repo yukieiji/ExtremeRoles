@@ -116,11 +116,11 @@ public sealed class Slime :
     }
 
     public bool IsAbilityActive() =>
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable || this.isKilling;
+        PlayerControl.LocalPlayer.moveable || this.isKilling;
 
     public bool IsAbilityUse()
     {
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
@@ -145,7 +145,7 @@ public sealed class Slime :
 
     public bool UseAbility()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
         for (int i = 0; i < CachedShipStatus.Instance.AllConsoles.Length; ++i)
         {
             Console console = CachedShipStatus.Instance.AllConsoles[i];
@@ -168,7 +168,7 @@ public sealed class Slime :
 
     public void CleanUp()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.SlimeAbility))

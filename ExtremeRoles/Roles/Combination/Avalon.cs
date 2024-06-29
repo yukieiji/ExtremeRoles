@@ -343,7 +343,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     {
         foreach (var(playerId, poolPlayer) in this.PlayerIcon)
         {
-            if (playerId == CachedPlayerControl.LocalPlayer.PlayerId) { continue; }
+            if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
 
             SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
             if (role.IsCrewmate() ||

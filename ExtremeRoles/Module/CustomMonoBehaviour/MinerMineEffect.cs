@@ -78,7 +78,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 
 	public void Update()
 	{
-		var player = CachedPlayerControl.LocalPlayer;
+		var player = PlayerControl.LocalPlayer;
 
 		if (!this.isUseEffect ||
 			player == null ||

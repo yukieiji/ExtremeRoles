@@ -28,7 +28,7 @@ public sealed class PostChat : IRequestHandler
 
 		Data chatData = IRequestHandler.DeserializeJson<Data>(context.Request);
 
-		CachedPlayerControl.LocalPlayer.PlayerControl.RpcSendChat(chatData.Body);
+		PlayerControl.LocalPlayer.RpcSendChat(chatData.Body);
 
 		IRequestHandler.SetStatusOK(response);
 		response.Close();

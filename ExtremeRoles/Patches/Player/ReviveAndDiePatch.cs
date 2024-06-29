@@ -64,7 +64,7 @@ public static class PlayerControlRevivePatch
 		var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 		if (ghostRole == null) { return; }
 
-		if (__instance.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+		if (__instance.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
 			ghostRole.ResetOnMeetingStart();
 		}

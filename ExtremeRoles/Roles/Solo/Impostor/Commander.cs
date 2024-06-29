@@ -70,14 +70,14 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
 
         deadImpNum = Mathf.Clamp(deadImpNum, 0, maxImpNum);
 
-        float killCool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
+        float killCool = PlayerControl.LocalPlayer.killTimer;
         if (killCool > 0.1f)
         {
             float newKillCool = killCool -
                 commander.killCoolReduceTime -
                 (commander.killCoolImpNumBonus * deadImpNum);
 
-            CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = Mathf.Clamp(
+            PlayerControl.LocalPlayer.killTimer = Mathf.Clamp(
                 newKillCool, 0.1f, killCool);
         }
         Sound.PlaySound(
@@ -105,7 +105,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
 
     public bool UseAbility()
     {
-        PlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.CommanderAttackCommand))

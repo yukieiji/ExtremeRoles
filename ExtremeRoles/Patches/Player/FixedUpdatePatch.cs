@@ -30,7 +30,7 @@ public static class PlayerControlFixedUpdatePatch
 		if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||
 			ExtremeRoleManager.GameRole.Count == 0 ||
-			CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
+			PlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
@@ -212,7 +212,7 @@ public static class PlayerControlFixedUpdatePatch
 
 		var abilityButton = FastDestroyableSingleton<HudManager>.Instance.AbilityButton;
 
-		switch (CachedPlayerControl.LocalPlayer.Data.Role.Role)
+		switch (PlayerControl.LocalPlayer.Data.Role.Role)
 		{
 			case RoleTypes.Engineer:
 			case RoleTypes.Scientist:

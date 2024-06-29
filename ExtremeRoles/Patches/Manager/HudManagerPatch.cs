@@ -22,6 +22,7 @@ using ExtremeRoles.Patches.MapOverlay;
 
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -30,7 +31,7 @@ public static class HudManagerSetAlertOverlayPatch
 {
 	public static bool Prefix()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer == null ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd)
 		{
@@ -134,7 +135,7 @@ public static class HudManagerUpdatePatch
 
         SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
         GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-        CachedPlayerControl player = CachedPlayerControl.LocalPlayer;
+        PlayerControl player = PlayerControl.LocalPlayer;
 
         resetNameTagsAndColors(player);
 
@@ -208,14 +209,16 @@ public static class HudManagerUpdatePatch
         }
     }
 
-    private static void resetNameTagsAndColors(CachedPlayerControl localPlayer)
+    private static void resetNameTagsAndColors(PlayerControl localPlayer)
     {
-
-        foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
             player.cosmetics.SetName(player.CurrentOutfit.PlayerName);
 
-            if (localPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
+            if (localPlayer.Data.Role.IsImpostor &&
+				player.Data != null &&
+				player.Data.Role != null &&
+				player.Data.Role.IsImpostor)
             {
                 player.cosmetics.SetNameColor(Palette.ImpostorRed);
             }
@@ -224,31 +227,6 @@ public static class HudManagerUpdatePatch
                 player.cosmetics.SetNameColor(Color.white);
             }
         }
-
-        if (localPlayer.Data.Role.IsImpostor)
-        {
-            List<CachedPlayerControl> impostors = CachedPlayerControl.AllPlayerControls.ToArray().ToList();
-            impostors.RemoveAll((CachedPlayerControl x) =>
-            {
-                if (x == null ||
-                    x.Data == null ||
-                    x.Data.Role == null ||
-                    !x.Data.Role.IsImpostor)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            });
-
-            foreach (PlayerControl player in impostors)
-            {
-                player.cosmetics.SetNameColor(Palette.ImpostorRed);
-            }
-        }
-
     }
 
     private static void setPlayerNameColor(
@@ -274,7 +252,7 @@ public static class HudManagerUpdatePatch
 
         GhostRoleBase targetGhostRole;
 
-        foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl targetPlayer in PlayerCache.AllPlayerControl)
         {
             if (targetPlayer.PlayerId == localPlayerId) { continue; }
 
@@ -321,7 +299,7 @@ public static class HudManagerUpdatePatch
         SingleRoleBase playerRole)
     {
 
-        foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl targetPlayer in PlayerCache.AllPlayerControl)
         {
             byte playerId = targetPlayer.PlayerId;
             string tag = playerRole.GetRolePlayerNameTag(
@@ -333,14 +311,14 @@ public static class HudManagerUpdatePatch
     }
 
     private static void playerInfoUpdate(
-        CachedPlayerControl localPlayer,
+        PlayerControl localPlayer,
         bool blockCondition,
         bool playeringInfoBlock)
     {
 
         bool commsActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer);
 
-        foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
 
             if (player.PlayerId != localPlayer.PlayerId && !localPlayer.Data.IsDead)
@@ -381,7 +359,7 @@ public static class HudManagerUpdatePatch
     }
 
     private static bool isBlockCondition(
-        CachedPlayerControl localPlayer, SingleRoleBase role)
+        PlayerControl localPlayer, SingleRoleBase role)
     {
         if (localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
         {
@@ -397,7 +375,7 @@ public static class HudManagerUpdatePatch
     }
 
     private static string getRoleInfo(
-        CachedPlayerControl localPlayer,
+        PlayerControl localPlayer,
         PlayerControl targetPlayer,
         bool commonActive)
     {
@@ -454,7 +432,7 @@ public static class HudManagerUpdatePatch
 
 
     private static void roleUpdate(
-        CachedPlayerControl player, SingleRoleBase checkRole)
+        PlayerControl player, SingleRoleBase checkRole)
     {
         var updatableRole = checkRole as IRoleUpdate;
         if (updatableRole != null)

@@ -195,7 +195,7 @@ public sealed class Captain :
                     RPCOperator.Command.CaptainAbility))
             {
                 caller.WriteByte((byte)AbilityType.SetVoteTarget);
-                caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+                caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
                 caller.WriteByte(instance.TargetPlayerId);
             }
             this.SetTargetVote(
@@ -327,7 +327,7 @@ public sealed class Captain :
         {
             return Design.ColoedString(
                 Palette.CrewmateBlue,
-                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+                PlayerControl.LocalPlayer.Data.Role.Blurb);
         }
     }
 

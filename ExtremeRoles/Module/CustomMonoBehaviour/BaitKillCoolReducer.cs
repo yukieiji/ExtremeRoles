@@ -18,7 +18,7 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 
 	public void Awake()
 	{
-		this.localPlayer = CachedPlayerControl.LocalPlayer;
+		this.localPlayer = PlayerControl.LocalPlayer;
 	}
 
 	public void FixedUpdate()

@@ -386,8 +386,8 @@ public sealed class Guesser :
     private static void missGuess()
     {
         Player.RpcUncheckMurderPlayer(
-            CachedPlayerControl.LocalPlayer.PlayerId,
-            CachedPlayerControl.LocalPlayer.PlayerId,
+            PlayerControl.LocalPlayer.PlayerId,
+            PlayerControl.LocalPlayer.PlayerId,
             byte.MinValue);
         Sound.RpcPlaySound(Sound.Type.Kill);
     }
@@ -435,7 +435,7 @@ public sealed class Guesser :
             roleInfo.AnothorId == anotherRoleId)
         {
             Player.RpcUncheckMurderPlayer(
-                CachedPlayerControl.LocalPlayer.PlayerId,
+                PlayerControl.LocalPlayer.PlayerId,
                 playerId, byte.MinValue);
             Sound.RpcPlaySound(Sound.Type.Kill);
         }

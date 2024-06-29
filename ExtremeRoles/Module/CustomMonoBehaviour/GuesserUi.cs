@@ -100,7 +100,7 @@ public sealed class GuesserUi : MonoBehaviour
     public void Update()
     {
         var meetingHud = MeetingHud.Instance;
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 		if (this.isActive &&
             (

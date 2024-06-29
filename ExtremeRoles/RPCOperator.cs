@@ -181,7 +181,7 @@ public static class RPCOperator
 
     public static RpcCaller CreateCaller(Command ops)
     {
-        return CreateCaller(CachedPlayerControl.LocalPlayer.PlayerControl.NetId, ops);
+        return CreateCaller(PlayerControl.LocalPlayer.NetId, ops);
     }
 
     public static RpcCaller CreateCaller(uint netId, Command ops)
@@ -191,7 +191,7 @@ public static class RPCOperator
 
     public static void Call(Command ops)
     {
-        Call(CachedPlayerControl.LocalPlayer.PlayerControl.NetId, ops);
+        Call(PlayerControl.LocalPlayer.NetId, ops);
     }
 
     public static void Call(uint netId, Command ops)
@@ -247,7 +247,7 @@ public static class RPCOperator
     {
 		if (Helper.GameSystem.IsLobby) { return; }
 
-        foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+        foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
             if (!player.Data.Role.IsImpostor)
             {
@@ -333,7 +333,7 @@ public static class RPCOperator
 		teleportPlayer.NetTransform.SnapTo(pos);
 
 		if (CompatModManager.Instance.TryGetModMap<SubmergedIntegrator>(out var mapMod) &&
-			CachedPlayerControl.LocalPlayer.PlayerId == teleporterId)
+			PlayerControl.LocalPlayer.PlayerId == teleporterId)
 		{
 			int targetFloor = mapMod.GetFloor(pos);
 			int prevFloor   = mapMod.GetFloor(prevPos);

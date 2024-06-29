@@ -54,7 +54,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			get
 			{
-				PlayerControl player = CachedPlayerControl.LocalPlayer;
+				PlayerControl player = PlayerControl.LocalPlayer;
 
 				if (player == null || player.Data == null)
 				{
@@ -84,7 +84,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		public void Use()
 		{
-			PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+			PlayerControl localPlayer = PlayerControl.LocalPlayer;
 			PlayerTask? task = FindTeroSaboTask(localPlayer);
 			if (task == null) { return; }
 			// Idセット処理
@@ -254,7 +254,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 
 
-		if (!FindTeroSaboTask(CachedPlayerControl.LocalPlayer))
+		if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
 		{
 			ExtremePlayerTask.AddTask(new Task(this), 254);
 		}
@@ -356,7 +356,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.setBomb.Clear();
 		this.flasher.SetActive(false);
 
-		var task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer, true);
+		var task = FindTeroSaboTask(PlayerControl.LocalPlayer, true);
 		if (task != null)
 		{
 			task.Complete();
@@ -419,7 +419,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 	private void removeBomb(byte id)
 	{
-		ExtremePlayerTask? task = FindTeroSaboTask(CachedPlayerControl.LocalPlayer);
+		ExtremePlayerTask? task = FindTeroSaboTask(PlayerControl.LocalPlayer);
 		if (task != null &&
 			task.Behavior is Task teroSabo)
 		{

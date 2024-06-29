@@ -64,18 +64,18 @@ public sealed class WispTorchSystem : IDirtableSystemType
 			this.GroupId = groupId;
 			this.WispId = callWispId;
 
-			int playerNum = CachedPlayerControl.AllPlayerControls.Count;
+			int playerNum = PlayerCache.AllPlayerControl.Count;
 
 			int clampedNum = Math.Clamp(num, 0, playerNum);
 			ShipStatus ship = CachedShipStatus.Instance;
 
-			IEnumerable<CachedPlayerControl> target =
-				CachedPlayerControl.AllPlayerControls.OrderBy(
+			IEnumerable<PlayerControl> target =
+				PlayerCache.AllPlayerControl.OrderBy(
 					x => RandomGenerator.Instance.Next()).Take(clampedNum);
 
 			var placeTorch = new List<Torch>();
 
-			foreach (CachedPlayerControl player in target)
+			foreach (PlayerControl player in target)
 			{
 				byte playerId = player.PlayerId;
 
@@ -168,7 +168,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 	{
 		int removeNum = reader.ReadPackedInt32();
 		bool islocalPlayerHasTorch = false;
-		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
 		for (int i = 0; i < removeNum; ++i)
 		{
@@ -245,7 +245,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 		if (this.removeTorch.Count == 0) { return; }
 
 		this.hasTorchHostPlayer = false;
-		byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId; ;
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId; ;
 
 		foreach (int id in this.removeTorch)
 		{

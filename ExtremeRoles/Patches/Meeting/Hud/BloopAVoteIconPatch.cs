@@ -50,7 +50,7 @@ public static class MeetingHudBloopAVoteIconPatch
 		if (!GameManager.Instance.LogicOptions.GetAnonymousVotes() ||
 			canSeeVote ||
 			(
-				CachedPlayerControl.LocalPlayer.Data.IsDead &&
+				PlayerControl.LocalPlayer.Data.IsDead &&
 				ClientOption.Instance.GhostsSeeRole.Value &&
 				!isVoteSeeBlock(role)
 			))
@@ -82,8 +82,8 @@ public static class MeetingHudBloopAVoteIconPatch
 	private static bool isVoteSeeBlock(SingleRoleBase role)
 	{
 		if (ExtremeGhostRoleManager.GameRole.ContainsKey(
-				CachedPlayerControl.LocalPlayer.PlayerId) ||
-			CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+				PlayerControl.LocalPlayer.PlayerId) ||
+			PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
 		{
 			return true;
 		}

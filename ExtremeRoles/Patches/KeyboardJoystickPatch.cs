@@ -19,7 +19,7 @@ public static class KeyboardJoystickPatch
 {
     public static void Postfix()
     {
-        if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null)
+        if (AmongUsClient.Instance == null || PlayerControl.LocalPlayer == null)
         { return; }
 
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
@@ -37,8 +37,8 @@ public static class KeyboardJoystickPatch
 		InfoOverlay.Instance.Update();
 
         // キルとベントボタン
-        if (CachedPlayerControl.LocalPlayer.Data == null ||
-            CachedPlayerControl.LocalPlayer.Data.Role == null ||
+        if (PlayerControl.LocalPlayer.Data == null ||
+            PlayerControl.LocalPlayer.Data.Role == null ||
             !RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
         var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();

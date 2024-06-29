@@ -166,7 +166,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 colorChip.Tag = vi.ProdId;
 
                 int color = __instance.HasLocalPlayer() ?
-                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
+                    PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
 					DataManager.Player.Customization.Color;
 
 				__instance.UpdateMaterials(colorChip.Inner.FrontLayer, vi);

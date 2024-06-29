@@ -6,6 +6,6 @@ public static class ChatControllerExtension
 {
     public static void AddLocalChat(this ChatController chat, string text)
     {
-        chat.AddChat(CachedPlayerControl.LocalPlayer, text);
+        chat.AddChat(PlayerControl.LocalPlayer, text);
     }
 }

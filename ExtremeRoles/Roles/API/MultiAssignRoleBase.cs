@@ -20,7 +20,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
     public SingleRoleBase? AnotherRole = null;
     public bool CanHasAnotherRole = false;
 
-	public OptionOffsetInfo? OffsetInfo { protected get; set; }
+	public OptionOffsetInfo? OffsetInfo { get; set; } = null;
 
 	public override IOptionLoader Loader
 	{
@@ -188,7 +188,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
     }
 
     public override Color GetTargetRoleSeeColor(
-        SingleRoleBase targetRole,
+        SingleRoleBase? targetRole,
         byte targetPlayerId)
     {
 

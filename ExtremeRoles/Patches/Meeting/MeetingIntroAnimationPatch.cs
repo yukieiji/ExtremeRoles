@@ -37,7 +37,7 @@ public static class MeetingIntroAnimationInitPatch
 		SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
 
 		bool someoneWasProtected = false;
-		foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
+		foreach(PlayerControl pc in PlayerCache.AllPlayerControl)
 		{
 			if (pc == null || !pc.protectedByGuardianThisRound) { continue; }
 

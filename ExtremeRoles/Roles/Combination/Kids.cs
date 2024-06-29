@@ -55,7 +55,7 @@ public sealed class Kids : GhostAndAliveCombinationRoleManagerBase
         if (aliveRole is Delinquent delinquent &&
             role is Wisp wisp)
         {
-            if (rolePlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            if (rolePlayerId == PlayerControl.LocalPlayer.PlayerId)
             {
                 wisp.SetAbilityNum(delinquent.WispAbilityNum);
             }
@@ -323,7 +323,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
                 IRoleAbility.IsCommonUse(),
             AbilityType.SelfBomb =>
                 Player.GetClosestPlayerInRange(
-                    CachedPlayerControl.LocalPlayer, this, this.range) != null,
+                    PlayerControl.LocalPlayer, this, this.range) != null,
             _ => true
         };
     }
@@ -344,12 +344,12 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
             RPCOperator.Command.KidsAbility))
         {
             caller.WriteByte((byte)this.curAbilityType);
-            caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+            caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
         }
         switch (this.curAbilityType)
         {
             case AbilityType.Scribe:
-                setScibe(CachedPlayerControl.LocalPlayer, this);
+                setScibe(PlayerControl.LocalPlayer, this);
                 break;
             case AbilityType.SelfBomb:
                 setBomb(this);
@@ -558,7 +558,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 			(writer) =>
 			{
 				writer.Write((byte)WispTorchSystem.Ops.SetTorch);
-				writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+				writer.Write(PlayerControl.LocalPlayer.PlayerId);
 			});
     }
 
