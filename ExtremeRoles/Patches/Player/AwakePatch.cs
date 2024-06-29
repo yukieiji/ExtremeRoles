@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Player;
@@ -16,10 +17,9 @@ public static class PlayerControlAwakePatch
 		PlayerCache.AddPlayerControl(__instance);
 
 #if DEBUG
-		foreach (var cachedPlayer in AmongUsCache.AllPlayerControl)
+		foreach (var cachedPlayer in PlayerCache.AllPlayerControl)
 		{
-			if (!cachedPlayer.PlayerControl ||
-				!cachedPlayer.MyPhysics ||
+			if (!cachedPlayer.MyPhysics ||
 				!cachedPlayer.NetTransform ||
 				!cachedPlayer.transform)
 			{
