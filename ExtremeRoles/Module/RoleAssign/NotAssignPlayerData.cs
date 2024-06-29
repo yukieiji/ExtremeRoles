@@ -20,7 +20,7 @@ namespace ExtremeRoles.Module.RoleAssign
 			int crewMultiAssignNum = 0;
 			int impMultiAssignNum = 0;
 
-			foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
+			foreach (PlayerControl player in PlayerCache.AllPlayerControl)
 			{
 				switch (player.Data.Role.Role)
 				{

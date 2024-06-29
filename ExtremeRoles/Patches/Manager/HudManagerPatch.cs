@@ -211,7 +211,7 @@ public static class HudManagerUpdatePatch
 
     private static void resetNameTagsAndColors(PlayerControl localPlayer)
     {
-        foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
+        foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
             player.cosmetics.SetName(player.CurrentOutfit.PlayerName);
 
@@ -252,7 +252,7 @@ public static class HudManagerUpdatePatch
 
         GhostRoleBase targetGhostRole;
 
-        foreach (PlayerControl targetPlayer in AmongUsCache.AllPlayerControl)
+        foreach (PlayerControl targetPlayer in PlayerCache.AllPlayerControl)
         {
             if (targetPlayer.PlayerId == localPlayerId) { continue; }
 
@@ -299,7 +299,7 @@ public static class HudManagerUpdatePatch
         SingleRoleBase playerRole)
     {
 
-        foreach (PlayerControl targetPlayer in AmongUsCache.AllPlayerControl)
+        foreach (PlayerControl targetPlayer in PlayerCache.AllPlayerControl)
         {
             byte playerId = targetPlayer.PlayerId;
             string tag = playerRole.GetRolePlayerNameTag(
@@ -318,7 +318,7 @@ public static class HudManagerUpdatePatch
 
         bool commsActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer);
 
-        foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
+        foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
 
             if (player.PlayerId != localPlayer.PlayerId && !localPlayer.Data.IsDead)

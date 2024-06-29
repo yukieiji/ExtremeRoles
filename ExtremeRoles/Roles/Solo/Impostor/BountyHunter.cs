@@ -233,7 +233,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
             prevTarget.gameObject.SetActive(false);
         }
 
-        var allPlayer = AmongUsCache.AllPlayerControl.ToArray();
+        var allPlayer = PlayerCache.AllPlayerControl.ToArray();
 
         var sortedAllPlayer = allPlayer.OrderBy(
             item => RandomGenerator.Instance.Next()).ToList();

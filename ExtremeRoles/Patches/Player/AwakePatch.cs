@@ -13,7 +13,7 @@ public static class PlayerControlAwakePatch
 	{
 		if (__instance.notRealPlayer) { return; }
 
-		AmongUsCache.AddPlayerControl(__instance);
+		PlayerCache.AddPlayerControl(__instance);
 
 #if DEBUG
 		foreach (var cachedPlayer in AmongUsCache.AllPlayerControl)

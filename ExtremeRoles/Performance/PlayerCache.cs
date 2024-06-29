@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ExtremeRoles.Performance;
 
 // Il2Cpp
-public static class AmongUsCache
+public static class PlayerCache
 {
 	public static readonly List<PlayerControl> AllPlayerControl = new List<PlayerControl>();
 

@@ -48,6 +48,6 @@ public sealed partial class Xion : SingleRoleBase
 
         PlayerControl.AllPlayerControls.RemoveAll(
             (Il2CppSystem.Predicate<PlayerControl>)isXion);
-		AmongUsCache.AllPlayerControl.RemoveAll(isXion);
+		PlayerCache.AllPlayerControl.RemoveAll(isXion);
     }
 }

@@ -12,6 +12,6 @@ public static class PlayerControlOnDestroyPatch
 	public static void Postfix(PlayerControl __instance)
 	{
 		if (__instance.notRealPlayer) { return; }
-		AmongUsCache.RemovePlayerControl(__instance);
+		PlayerCache.RemovePlayerControl(__instance);
 	}
 }

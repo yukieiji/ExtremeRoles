@@ -36,7 +36,7 @@ internal sealed class AllPlayerArrows
         this.arrow.Clear();
         this.distance.Clear();
 
-        foreach (var player in AmongUsCache.AllPlayerControl)
+        foreach (var player in PlayerCache.AllPlayerControl)
         {
             if (player.PlayerId != rolePlayerId)
             {

@@ -64,13 +64,13 @@ public sealed class WispTorchSystem : IDirtableSystemType
 			this.GroupId = groupId;
 			this.WispId = callWispId;
 
-			int playerNum = AmongUsCache.AllPlayerControl.Count;
+			int playerNum = PlayerCache.AllPlayerControl.Count;
 
 			int clampedNum = Math.Clamp(num, 0, playerNum);
 			ShipStatus ship = CachedShipStatus.Instance;
 
 			IEnumerable<PlayerControl> target =
-				AmongUsCache.AllPlayerControl.OrderBy(
+				PlayerCache.AllPlayerControl.OrderBy(
 					x => RandomGenerator.Instance.Next()).Take(clampedNum);
 
 			var placeTorch = new List<Torch>();

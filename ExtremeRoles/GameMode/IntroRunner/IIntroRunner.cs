@@ -104,7 +104,7 @@ public interface IIntroRunner
 
     private static bool isAllPlyerDummy()
     {
-        foreach (var player in AmongUsCache.AllPlayerControl)
+        foreach (var player in PlayerCache.AllPlayerControl)
         {
             if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
 
@@ -131,7 +131,7 @@ public interface IIntroRunner
 			return;
 		}
 
-		foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
+		foreach (PlayerControl player in PlayerCache.AllPlayerControl)
 		{
 			if (player == null ||
 				!player.GetComponent<DummyBehaviour>().enabled) { continue; }

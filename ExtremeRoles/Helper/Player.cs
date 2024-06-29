@@ -37,7 +37,7 @@ public static class Player
 
 		Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-		foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
+		foreach (PlayerControl player in PlayerCache.AllPlayerControl)
 		{
 			PoolablePlayer poolPlayer = Object.Instantiate(
 				Module.Prefab.PlayerPrefab, parent);
@@ -68,7 +68,7 @@ public static class Player
 
 	public static PlayerControl GetPlayerControlById(byte id)
     {
-        foreach (PlayerControl player in AmongUsCache.AllPlayerControl)
+        foreach (PlayerControl player in PlayerCache.AllPlayerControl)
         {
             if (player.PlayerId == id) { return player; }
         }

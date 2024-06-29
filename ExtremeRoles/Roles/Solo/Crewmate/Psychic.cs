@@ -444,7 +444,7 @@ public sealed class Psychic :
 		this.enableUpgrade = loader.GetValue<PsychicOption, bool>(
 			PsychicOption.IsUpgradeAbility);
 
-		int maxPlayerNum = AmongUsCache.AllPlayerControl.Count - 1;
+		int maxPlayerNum = PlayerCache.AllPlayerControl.Count - 1;
 
 		this.awakeDeadPlayerNum = Mathf.Clamp(
 			this.awakeDeadPlayerNum, 0, maxPlayerNum);
