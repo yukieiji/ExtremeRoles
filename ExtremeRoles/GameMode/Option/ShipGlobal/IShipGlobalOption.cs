@@ -219,12 +219,11 @@ public interface IShipGlobalOption
 		{
 			AdminDeviceOption.Create(factory);
 		}
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.SecurityOption))
+		createMapObjectOptions(ShipGlobalOptionCategory.SecurityOption);
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VitalOption))
 		{
 			VitalDeviceOption.Create(factory);
 		}
-		createMapObjectOptions(ShipGlobalOptionCategory.SecurityOption);
-		createMapObjectOptions(ShipGlobalOptionCategory.VitalOption);
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
 		{
