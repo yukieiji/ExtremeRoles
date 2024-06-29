@@ -55,7 +55,11 @@ public static class ExtremeColorManager
             colorlist.Add(cc.MainColor);
             shadowlist.Add(cc.ShadowColor);
 			textColorlist.Add(cc.MainColor);
-			textOutLineColorlist.Add(cc.ShadowColor);
+			textOutLineColorlist.Add(new Color32(
+				(byte)(byte.MaxValue - cc.ShadowColor.r),
+				(byte)(byte.MaxValue - cc.ShadowColor.g),
+				(byte)(byte.MaxValue - cc.ShadowColor.b),
+				byte.MaxValue));
 
 
 
