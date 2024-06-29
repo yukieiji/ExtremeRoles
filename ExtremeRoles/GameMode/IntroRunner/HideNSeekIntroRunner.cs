@@ -52,7 +52,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
 
 		PlayerControl impostor =
             AmongUsCache.AllPlayerControl.Find(
-				(PlayerControl pc) => pc.Data.Role.IsImpostor));
+				(PlayerControl pc) => pc.Data.Role.IsImpostor);
 
         if (impostor == null)
         {
