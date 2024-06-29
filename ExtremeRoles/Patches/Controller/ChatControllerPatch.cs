@@ -31,7 +31,8 @@ public static class ChatControllerAddChatPatch
     public static bool Prefix(
         ChatController __instance,
         [HarmonyArgument(0)] PlayerControl sourcePlayer,
-        [HarmonyArgument(1)] string chatText)
+        [HarmonyArgument(1)] string chatText,
+		[HarmonyArgument(2)] bool censor)
     {
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
@@ -43,16 +44,13 @@ public static class ChatControllerAddChatPatch
 			return false;
 		}
 
-		NetworkedPlayerInfo localPlayerData = PlayerControl.LocalPlayer.Data;
-		NetworkedPlayerInfo sourcePlayerData = sourcePlayer.Data;
-
-		var roleDict = ExtremeRoleManager.GameRole;
-
+		var localPlayerData = PlayerControl.LocalPlayer.Data;
+		var sourcePlayerData = sourcePlayer.Data;
 		byte localPlayerId = localPlayerData.PlayerId;
 		byte sourcePlayerId = sourcePlayerData.PlayerId;
 
-		if (!roleDict.TryGetValue(localPlayerId , out var localPlayerRole) ||
-			!roleDict.TryGetValue(sourcePlayerId, out var sourcePlayerRole))
+		if (!ExtremeRoleManager.TryGetRole(localPlayerId , out var localPlayerRole) ||
+			!ExtremeRoleManager.TryGetRole(sourcePlayerId, out var sourcePlayerRole))
 		{
 			return true;
 		}
@@ -78,7 +76,7 @@ public static class ChatControllerAddChatPatch
 		{
 			chatBubble.transform.SetParent(__instance.scroller.Inner);
 			chatBubble.transform.localScale = Vector3.one;
-			bool isSamePlayer = sourcePlayerId == PlayerControl.LocalPlayer.PlayerId;
+			bool isSamePlayer = sourcePlayerId == localPlayerId;
 			if (isSamePlayer)
 			{
 				chatBubble.SetRight();
@@ -99,11 +97,14 @@ public static class ChatControllerAddChatPatch
 			__instance.SetChatBubbleName(
 				chatBubble, sourcePlayerData, isSourcePlayerDead,
 				didVote, seeColor, null);
+
 			chatBubble.SetText(
-				DataManager.Settings.Multiplayer.CensorChat ?
+				censor && DataManager.Settings.Multiplayer.CensorChat ?
                     BlockedWords.CensorWords(chatText) : chatText);
+
 			chatBubble.AlignChildren();
 			__instance.AlignAllBubbles();
+
 			if (!__instance.IsOpenOrOpening && __instance.notificationRoutine == null)
 			{
 				__instance.notificationRoutine = __instance.StartCoroutine(__instance.BounceDot());
@@ -112,6 +113,7 @@ public static class ChatControllerAddChatPatch
 			{
 				SoundManager.Instance.PlaySound(
 					__instance.messageSound, false, 1f).pitch = 0.5f + (float)sourcePlayer.PlayerId / 15f;
+				__instance.chatNotification.SetUp(sourcePlayer, chatText);
 			}
 		}
 		catch (Exception ex)
