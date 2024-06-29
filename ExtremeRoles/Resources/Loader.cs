@@ -29,9 +29,8 @@ public static class ObjectPath
 	public const string RoleAssignFilterPrefab = "assets/setting/RoleAssignFilter.prefab";
 	public const string SettingTabImage = "assets/setting/{0}.png";
 	public const string SettingTab = "settingtab";
-    public const string HelpActiveImage = "ExtremeRoles.Resources.HelpActive.png";
-	public const string HelpNoneActiveImage = "ExtremeRoles.Resources.HelpNoActive.png";
-	public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
+    public const string HelpActiveImage = "HelpActive";
+	public const string HelpNoneActiveImage = "HelpNoActive";
 
 	public const string AssetPlace = "ExtremeRoles.Resources.{0}.asset";
 
