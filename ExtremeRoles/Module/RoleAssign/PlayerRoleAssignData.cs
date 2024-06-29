@@ -25,7 +25,7 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 		this.assignData.Clear();
 
 		this.needRoleAssignPlayer = new List<PlayerControl>(
-			AmongUsCache.AllPlayerControl.ToArray());
+			PlayerControl.AllPlayerControls.ToArray());
 		this.gameControlId = 0;
 	}
 

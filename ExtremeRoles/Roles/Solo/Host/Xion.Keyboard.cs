@@ -123,7 +123,7 @@ public sealed partial class Xion
 
     public static bool IsAllPlyerDummy()
     {
-        foreach (var player in AmongUsCache.AllPlayerControl)
+        foreach (var player in PlayerControl.AllPlayerControls)
         {
             if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
 
