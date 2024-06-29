@@ -15,10 +15,10 @@ internal sealed class TeroAssetLoadRunner
 		Log.LogInfo($"----- Unit:TeroLoad Test -----");
 
 		LoadFromExR(ExtremeRoleId.Terorist);
-		LoadFromExR(ExtremeRoleId.Terorist, Path.MapIcon);
+		LoadFromExR(ExtremeRoleId.Terorist, ObjectPath.MapIcon);
 		LoadUnityObjectFromExR<GameObject, ExtremeRoleId>(
 			ExtremeRoleId.Terorist,
-			Path.GetRoleMinigamePath(ExtremeRoleId.Terorist));
+			ObjectPath.GetRoleMinigamePath(ExtremeRoleId.Terorist));
 		try
 		{
 

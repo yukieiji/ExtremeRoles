@@ -18,7 +18,7 @@ internal sealed class MeryAssetLoadRunner
 
 		LoadFromExR(
 			ExtremeRoleId.Mery,
-			Path.MeryNoneActive);
+			ObjectPath.MeryNoneActive);
 
 		LoadFromExR(ExtremeRoleId.Mery);
 	}

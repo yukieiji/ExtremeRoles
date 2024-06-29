@@ -11,9 +11,9 @@ internal sealed class TeleporterAssetLoadRunner
 	{
 		Log.LogInfo($"----- Unit:TeleporterImgLoad Test -----");
 
-		LoadFromExR(ExtremeRoleId.Teleporter, Path.TeleporterNoneActivatePortal);
-		LoadFromExR(ExtremeRoleId.Teleporter, Path.TeleporterFirstPortal);
-		LoadFromExR(ExtremeRoleId.Teleporter, Path.TeleporterSecondPortal);
-		LoadFromExR(ExtremeRoleId.Teleporter, Path.TeleporterPortalBase);
+		LoadFromExR(ExtremeRoleId.Teleporter, ObjectPath.TeleporterNoneActivatePortal);
+		LoadFromExR(ExtremeRoleId.Teleporter, ObjectPath.TeleporterFirstPortal);
+		LoadFromExR(ExtremeRoleId.Teleporter, ObjectPath.TeleporterSecondPortal);
+		LoadFromExR(ExtremeRoleId.Teleporter, ObjectPath.TeleporterPortalBase);
 	}
 }

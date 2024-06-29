@@ -13,6 +13,6 @@ internal sealed class AcceleratorAssetLoadRunner
 		Log.LogInfo($"----- Unit:AcceleratorAssetLoad Test -----");
 
 		LoadFromExR(CombinationRoleType.Accelerator);
-		LoadFromExR(CombinationRoleType.Accelerator, Path.AcceleratorAcceleratePanel);
+		LoadFromExR(CombinationRoleType.Accelerator, ObjectPath.AcceleratorAcceleratePanel);
 	}
 }

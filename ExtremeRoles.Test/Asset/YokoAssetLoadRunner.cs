@@ -15,6 +15,6 @@ internal sealed class YokoAssetLoadRunner
 		LoadFromExR(ExtremeRoleId.Yoko);
 		LoadUnityObjectFromExR<GameObject, ExtremeRoleId>(
 			ExtremeRoleId.Yoko,
-			Path.GetRoleMinigamePath(ExtremeRoleId.Yoko));
+			ObjectPath.GetRoleMinigamePath(ExtremeRoleId.Yoko));
 	}
 }

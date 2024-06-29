@@ -13,7 +13,7 @@ internal sealed class AllAssetLoadRunner
 	{
 		Log.LogInfo($"----- Start: Img Load Test -----");
 
-		foreach (FieldInfo field in typeof(Path).GetFields(BindingFlags.Public | BindingFlags.Static))
+		foreach (FieldInfo field in typeof(ObjectPath).GetFields(BindingFlags.Public | BindingFlags.Static))
 		{
 			if (!field.IsLiteral) { continue; }
 
@@ -52,7 +52,7 @@ internal sealed class AllAssetLoadRunner
 	{
 		try
 		{
-			var sprite = Loader.CreateSpriteFromResources(path);
+			var sprite = UnityObjectLoader.LoadSpriteFromResources(path);
 			if (sprite == null)
 			{
 				throw new Exception("Sprite is Null");

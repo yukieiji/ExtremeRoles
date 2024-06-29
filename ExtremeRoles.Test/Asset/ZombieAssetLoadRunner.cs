@@ -15,9 +15,9 @@ internal sealed class ZombieAssetLoadRunner
 		Log.LogInfo($"----- Unit:ZombieLoad Test -----");
 
 		LoadFromExR(ExtremeRoleId.Zombie);
-		LoadFromExR(ExtremeRoleId.Zombie, Path.MapIcon);
+		LoadFromExR(ExtremeRoleId.Zombie, ObjectPath.MapIcon);
 		LoadUnityObjectFromExR<VideoClip, ExtremeRoleId>(
 			ExtremeRoleId.Zombie,
-			Path.GetRoleVideoPath(ExtremeRoleId.Zombie));
+			ObjectPath.GetRoleVideoPath(ExtremeRoleId.Zombie));
 	}
 }

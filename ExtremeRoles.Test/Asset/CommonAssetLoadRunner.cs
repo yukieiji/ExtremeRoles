@@ -13,15 +13,15 @@ internal sealed class CommonAssetLoadRunner
 	{
 		Log.LogInfo($"----- Unit:SingleImgLoad Test -----");
 #if DEBUG
-		imgTest(Path.Bomb);
-		imgTest(Path.Meeting);
+		imgTest(ObjectPath.Bomb);
+		imgTest(ObjectPath.Meeting);
 	}
 
 	private void imgTest(string img)
 	{
 		try
 		{
-			var sprite = Loader.GetUnityObjectFromExRResources<Sprite>(img);
+			var sprite = UnityObjectLoader.GetUnityObjectFromExRResources<Sprite>(img);
 			Log.LogInfo($"Img Loaded: {img}");
 			NullCheck(sprite);
 		}

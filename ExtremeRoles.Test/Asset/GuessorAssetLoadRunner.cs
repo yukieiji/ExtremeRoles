@@ -14,6 +14,6 @@ internal sealed class GuessorAssetLoadRunner
 		LoadFromExR(ExtremeRoleId.Guesser);
 		LoadUnityObjectFromExR<GameObject, ExtremeRoleId>(
 			ExtremeRoleId.Guesser,
-			Path.GetRolePrefabPath(ExtremeRoleId.Guesser, "UI"));
+			ObjectPath.GetRolePrefabPath(ExtremeRoleId.Guesser, "UI"));
 	}
 }

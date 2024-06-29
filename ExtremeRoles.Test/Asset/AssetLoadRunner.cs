@@ -13,7 +13,7 @@ internal abstract class AssetLoadRunner
 	{
 		try
 		{
-			var sprite = Loader.GetSpriteFromResources(id);
+			var sprite = UnityObjectLoader.LoadFromResources(id);
 			Log.LogInfo($"Img Loaded:{id}.ButtonIcon");
 			NullCheck(sprite);
 		}
@@ -27,7 +27,7 @@ internal abstract class AssetLoadRunner
 	{
 		try
 		{
-			var sprite = Loader.GetSpriteFromResources(id, name);
+			var sprite = UnityObjectLoader.LoadFromResources(id, name);
 			Log.LogInfo($"Img Loaded:{id}.{name}");
 			NullCheck(sprite);
 		}
@@ -44,7 +44,7 @@ internal abstract class AssetLoadRunner
 	{
 		try
 		{
-			var sprite = Loader.GetUnityObjectFromResources<T, W>(id, name);
+			var sprite = UnityObjectLoader.LoadFromResources<T, W>(id, name);
 			Log.LogInfo($"Asset Loaded:{id}.{name}");
 			NullCheck(sprite);
 		}
@@ -60,7 +60,7 @@ internal abstract class AssetLoadRunner
 	{
 		try
 		{
-			var sprite = Loader.GetUnityObjectFromExRResources<Sprite>(asset, img);
+			var sprite = UnityObjectLoader.GetUnityObjectFromExRResources<Sprite>(asset, img);
 			Log.LogInfo($"Img Loaded:{asset} | {img}");
 			NullCheck(sprite);
 		}

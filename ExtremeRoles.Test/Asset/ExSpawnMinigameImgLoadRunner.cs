@@ -53,9 +53,9 @@ internal sealed class ExSpawnMinigameLoadRunner
 			{
 				LoadFromExR(
 					string.Format(
-						Path.ExtremeSelectorMinigameAssetFormat, lowerMap),
+						ObjectPath.ExtremeSelectorMinigameAssetFormat, lowerMap),
 					string.Format(
-						Path.ExtremeSelectorMinigameImgFormat, lowerMap, spawnPoint.RoomName));
+						ObjectPath.ExtremeSelectorMinigameImgFormat, lowerMap, spawnPoint.RoomName));
 			}
 		}
 #endif

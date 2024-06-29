@@ -13,9 +13,9 @@ internal sealed class ThiefAssetLoadRunner
 		Log.LogInfo($"----- Unit:ThiefLoad Test -----");
 
 		LoadFromExR(ExtremeRoleId.Thief);
-		LoadFromExR(ExtremeRoleId.Thief, Path.MapIcon);
+		LoadFromExR(ExtremeRoleId.Thief, ObjectPath.MapIcon);
 		LoadUnityObjectFromExR<VideoClip, ExtremeRoleId>(
 			ExtremeRoleId.Thief,
-			Path.GetRoleVideoPath(ExtremeRoleId.Thief));
+			ObjectPath.GetRoleVideoPath(ExtremeRoleId.Thief));
 	}
 }
