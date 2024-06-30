@@ -43,7 +43,7 @@ public abstract class GhostRoleBase
     protected readonly OptionTab Tab = OptionTab.GeneralTab;
     private int controlId;
 
-	public IOptionLoader Loader
+	public virtual IOptionLoader Loader
 	{
 		get
 		{
