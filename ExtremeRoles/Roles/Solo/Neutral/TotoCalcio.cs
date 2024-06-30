@@ -16,7 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier
 {
-	private record BetPlayerInfo(byte PlayerId, string PlayerName)
+	private sealed record BetPlayerInfo(byte PlayerId, string PlayerName)
 	{
 		public BetPlayerInfo(in NetworkedPlayerInfo info) :
 			this(info.PlayerId, info.DefaultOutfit.PlayerName)
