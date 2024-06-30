@@ -10,10 +10,20 @@ using ExtremeRoles.Resources;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
+#nullable enable
+
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier
 {
+	private record BetPlayerInfo(byte PlayerId, string PlayerName)
+	{
+		public BetPlayerInfo(in NetworkedPlayerInfo info) :
+			this(info.PlayerId, info.DefaultOutfit.PlayerName)
+		{
+		}
+	}
+
     public enum TotocalcioOption
     {
         Range,
@@ -27,20 +37,12 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         ExtremeRoleId.Totocalcio,
     };
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.betButton;
-        set
-        {
-            this.betButton = value;
-        }
-    }
+    public ExtremeAbilityButton? Button { get; set; }
 
-    private ExtremeAbilityButton betButton;
 
     private float range;
-    private NetworkedPlayerInfo betPlayer;
-    private PlayerControl tmpTarget;
+    private BetPlayerInfo? betPlayer;
+    private PlayerControl? tmpTarget;
 
     private float defaultCoolTime;
     private float finalCoolTime;
@@ -58,10 +60,11 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         byte rolePlayerId, byte betTargetPlayerId)
     {
         var totocalcio =  ExtremeRoleManager.GetSafeCastedRole<Totocalcio>(rolePlayerId);
-
-        if (totocalcio != null)
+		var target = GameData.Instance.GetPlayerById(betTargetPlayerId);
+        if (totocalcio != null &&
+			target != null)
         {
-            totocalcio.betPlayer = GameData.Instance.GetPlayerById(betTargetPlayerId);
+            totocalcio.betPlayer = new BetPlayerInfo(target);
         }
     }
 
@@ -70,7 +73,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         this.CreateAbilityCountButton(
             "betPlayer", Resources.Loader.CreateSpriteFromResources(
 				Path.TotocalcioBetPlayer));
-        this.Button.SetLabelToCrewmate();
+        this.Button?.SetLabelToCrewmate();
     }
 
     public bool IsAbilityUse()
@@ -109,7 +112,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
 		winner.AddWithPlus(rolePlayerInfo);
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
