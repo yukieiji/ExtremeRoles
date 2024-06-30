@@ -266,7 +266,9 @@ public static class RoleManagerSelectRolesPatch
                 neutralAssignTargetPlayer.Count,
                 spawnData.CurrentSingleRoleUseNum[ExtremeRoleType.Neutral]));
 
-        neutralAssignTargetPlayer = neutralAssignTargetPlayer.OrderBy(
+		Logging.Debug($"Neutral assign num:{assignNum}");
+
+		neutralAssignTargetPlayer = neutralAssignTargetPlayer.OrderBy(
             x => RandomGenerator.Instance.Next()).Take(assignNum).ToList();
 
         addSingleExtremeRoleAssignDataFromTeamAndPlayer(
