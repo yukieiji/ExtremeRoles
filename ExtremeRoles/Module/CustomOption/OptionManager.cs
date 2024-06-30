@@ -153,10 +153,14 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	public void UpdateToStep(in OptionCategory category, in IOption option, int step)
 	{
-		int newSelection = option.Selection + (Key.IsShift() ? step * skipStep : step);
+		int newSelection = 0;
 		if (Key.IsControlDown())
 		{
-			newSelection = newSelection > 0 ? option.Range - 1 : 0;
+			newSelection = step > 0 ? option.Range - 1 : 0;
+		}
+		else
+		{
+			newSelection = option.Selection + (Key.IsShift() ? step * skipStep : step);
 		}
 		Update(category, option, newSelection);
 	}
