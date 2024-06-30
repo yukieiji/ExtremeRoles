@@ -60,7 +60,6 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			}
 
 			string tabName = Translation.GetString(tab.ToString());
-
 			newButton.ChangeButtonText($"{modName}\n{tabName}");
 
 			newButton.OnClick.RemoveAllListeners();

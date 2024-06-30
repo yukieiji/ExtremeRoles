@@ -124,6 +124,8 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		int xIndex = 0;
 		int yIndex = 0;
 
+		string modName = Translation.GetString("MODNAME_TRANS");
+
 		foreach (var (tab, tabContainer) in OptionManager.Instance)
 		{
 			var menu = initialize.NewMenu;
@@ -132,8 +134,10 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			menu.AllCategory = tabContainer.Category.ToArray();
 
 			button.gameObject.name = $"{tab}Button";
-			button.ChangeButtonText(Translation.GetString(string.Format(
-				"ExtremeRoles_{0}Settings", tab)));
+
+			string tabName = Translation.GetString(tab.ToString());
+			button.ChangeButtonText($"{modName}\n{tabName}");
+
 			var text = button.buttonText;
 			text.transform.localScale = new Vector3(1.3f, 1.1f, 1.0f);
 			text.transform.localPosition = new Vector3(-0.5f, 0.0f, -1.0f);
