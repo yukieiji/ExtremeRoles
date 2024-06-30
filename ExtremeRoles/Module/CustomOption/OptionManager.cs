@@ -273,8 +273,9 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				// 値が変更されたのでポップアップ通知
 				if (isShow && curSelection != option.Selection)
 				{
-					FastDestroyableSingleton<HudManager>.Instance.Notifier.AddSettingsChangeMessage(
-						key, $"[{tab}-{category.TransedName}]の{option.Title}が{option.ValueString}に更新されました");
+					FastDestroyableSingleton<HudManager>.Instance.Notifier.SettingsChangeMessageLogic(
+						key, $"[{tab}-{category.TransedName}]の「{option.Title}」が「{option.ValueString}」に更新されました",
+						true);
 					key++;
 				}
 			}
