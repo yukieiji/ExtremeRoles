@@ -104,6 +104,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		public void AddWithPlus(Player playerInfo)
 		{
+			ExtremeRolesPlugin.Logger.LogError($"{playerInfo.PlayerName} add to winner pool(With and Plus)");
 			this.Add(playerInfo);
 			this.AddPlusWinner(playerInfo);
 		}
