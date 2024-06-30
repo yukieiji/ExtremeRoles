@@ -4,6 +4,7 @@ using System.Linq;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
@@ -25,7 +26,7 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 		this.assignData.Clear();
 
 		this.needRoleAssignPlayer = new List<PlayerControl>(
-			PlayerControl.AllPlayerControls.ToArray());
+			GameData.Instance.AllPlayers.ToArray().Select(x => x.Object));
 		this.gameControlId = 0;
 	}
 
