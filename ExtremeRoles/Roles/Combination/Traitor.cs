@@ -113,7 +113,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
             ExtremeRoleId.Traitor.ToString(),
             ColorPalette.TraitorLightShikon,
             true, false, true, false,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     {
         this.CanHasAnotherRole = true;
     }

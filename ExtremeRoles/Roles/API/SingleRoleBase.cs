@@ -14,7 +14,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 {
     public virtual bool IsAssignGhostRole => true;
 
-    public OptionTab Tab { get; } = OptionTab.General;
+    public OptionTab Tab { get; } = OptionTab.GeneralTab;
     public virtual string RoleName => this.RawRoleName;
 
     public bool CanCallMeeting = true;
@@ -79,7 +79,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         bool canUseAdmin = true,
         bool canUseSecurity = true,
         bool canUseVital = true,
-        OptionTab tab = OptionTab.General)
+        OptionTab tab = OptionTab.GeneralTab)
     {
         this.Id = id;
         this.Team = team;
@@ -97,21 +97,21 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         this.CanUseSecurity = canUseSecurity;
         this.CanUseVital = canUseVital;
 
-        if (tab == OptionTab.General)
+        if (tab == OptionTab.GeneralTab)
         {
             switch (this.Team)
             {
                 case ExtremeRoleType.Crewmate:
-                    this.Tab = OptionTab.Crewmate;
+                    this.Tab = OptionTab.CrewmateTab;
                     break;
                 case ExtremeRoleType.Impostor:
-                    this.Tab = OptionTab.Impostor;
+                    this.Tab = OptionTab.ImpostorTab;
                     break;
                 case ExtremeRoleType.Neutral:
-                    this.Tab = OptionTab.Neutral;
+                    this.Tab = OptionTab.NeutralTab;
                     break;
                 default:
-                    this.Tab = OptionTab.General;
+                    this.Tab = OptionTab.GeneralTab;
                     break;
             }
         }

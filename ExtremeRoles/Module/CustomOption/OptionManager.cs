@@ -35,6 +35,8 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	private const int chunkSize = 50;
 
+	private const string OptionChangeFontPlace = "<font=\"Barlow-Black SDF\" material=\"Barlow-Black Outline\">{0}</font>";
+
 	private OptionManager()
 	{
 		foreach (var tab in Enum.GetValues<OptionTab>())
@@ -94,7 +96,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public static OptionCategoryFactory CreateOptionCategory(
 		int id,
 		string name,
-		in OptionTab tab = OptionTab.General,
+		in OptionTab tab = OptionTab.GeneralTab,
 		in Color? color = null)
 	{
 		var factory = new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
@@ -103,7 +105,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	}
 	public static OptionCategoryFactory CreateOptionCategory<T>(
 		T option,
-		in OptionTab tab = OptionTab.General,
+		in OptionTab tab = OptionTab.GeneralTab,
 		in Color? color = null) where T : Enum
 		=> CreateOptionCategory(
 			option.FastInt(),
@@ -112,7 +114,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public static SequentialOptionCategoryFactory CreateSequentialOptionCategory(
 		int id,
 		string name,
-		in OptionTab tab = OptionTab.General,
+		in OptionTab tab = OptionTab.GeneralTab,
 		in Color? color = null)
 	{
 		var factory = new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
@@ -135,7 +137,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 
 	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
 		T option,
-		in OptionTab tab = OptionTab.General,
+		in OptionTab tab = OptionTab.GeneralTab,
 		in Color? color = null,
 		in IOption? parent = null) where T : Enum
 		=> CreateAutoParentSetOptionCategory(
@@ -258,7 +260,10 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 			{
 				return;
 			}
+
+			string tabName = Translation.GetString(tab.ToString());
 			int size = reader.ReadPackedInt32();
+
 			for (int i = 0; i < size; i++)
 			{
 				int id = reader.ReadPackedInt32();
@@ -273,8 +278,12 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				// 値が変更されたのでポップアップ通知
 				if (isShow && curSelection != option.Selection)
 				{
+					string showStr = string.Format(
+						Translation.GetString("OptionSettingChange"),
+						tabName, category.TransedName, option.Title, option.ValueString);
+
 					FastDestroyableSingleton<HudManager>.Instance.Notifier.SettingsChangeMessageLogic(
-						key, $"[{tab}-{category.TransedName}]の「{option.Title}」が「{option.ValueString}」に更新されました",
+						key, string.Format(OptionChangeFontPlace, showStr),
 						true);
 					key++;
 				}

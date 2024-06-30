@@ -85,7 +85,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
-			OptionTab.Combination,
+			OptionTab.CombinationTab,
 			this.OptionColor == DefaultColor ? null : this.OptionColor);
 
         var roleSetOption = factory.Create0To100Percentage10StepOption(

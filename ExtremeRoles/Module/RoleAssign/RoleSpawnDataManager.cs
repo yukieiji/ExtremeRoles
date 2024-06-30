@@ -42,7 +42,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
 		var opt = OptionManager.Instance;
 
-		MaxRoleNum = opt.TryGetCategory(OptionTab.General, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate)
+		MaxRoleNum = opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate)
 			? new Dictionary<ExtremeRoleType, int>
 			{
 				{
@@ -80,7 +80,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 		{
 			byte combType = (byte)roleId;
 			if (!opt.TryGetCategory(
-					OptionTab.Combination,
+					OptionTab.CombinationTab,
 					ExtremeRoleManager.GetCombRoleGroupId(roleId),
 					out var conbCate))
 			{

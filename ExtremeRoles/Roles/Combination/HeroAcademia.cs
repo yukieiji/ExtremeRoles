@@ -453,7 +453,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
             ExtremeRoleId.Hero.ToString(),
             ColorPalette.HeroAmaIro,
             false, true, false, false,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     { }
 #pragma warning restore CS8618
 
@@ -717,7 +717,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
             ExtremeRoleId.Villain.ToString(),
             Palette.ImpostorRed,
             true, false, true, true,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     { }
 #pragma warning restore CS8618
 
@@ -898,7 +898,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
             ExtremeRoleId.Vigilante.ToString(),
             ColorPalette.VigilanteFujiIro,
             false, false, false, false,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     { }
 #pragma warning restore CS8618
 	public void SetCondition(

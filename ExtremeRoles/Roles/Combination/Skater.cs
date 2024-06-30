@@ -63,7 +63,7 @@ public sealed class Skater :
             ExtremeRoleId.Skater.ToString(),
             ColorPalette.SkaterMizuiro,
             false, true, false, false,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     {}
 
     protected override void CreateSpecificOption(

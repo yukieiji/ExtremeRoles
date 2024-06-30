@@ -262,7 +262,7 @@ public interface IShipGlobalOption
 
 	protected static OptionCategory GetOptionCategory(ShipGlobalOptionCategory category)
 	{
-		if (!OptionManager.Instance.TryGetCategory(OptionTab.General, (int)category, out var cate))
+		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)category, out var cate))
 		{
 			throw new ArgumentException(category.ToString());
 		}

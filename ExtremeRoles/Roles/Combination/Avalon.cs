@@ -58,7 +58,7 @@ public sealed class Assassin : MultiAssignRoleBase
             ExtremeRoleId.Assassin.ToString(),
             Palette.ImpostorRed,
             true, false, true, true,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     {}
 
     public override bool TryRolePlayerKilledFrom(
@@ -234,7 +234,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
             ExtremeRoleId.Marlin.ToString(),
             ColorPalette.MarineBlue,
             false, false, false, false,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     {}
 
     public void IntroBeginSetUp()

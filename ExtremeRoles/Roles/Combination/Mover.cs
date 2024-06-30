@@ -100,7 +100,7 @@ public sealed class Mover :
         ExtremeRoleId.Mover.ToString(),
         ColorPalette.MoverSafeColor,
         false, true, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public static void Ability(ref MessageReader reader)

@@ -116,7 +116,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
 			ExtremeRoleManager.GetCombRoleGroupId(this.RoleType),
 			this.RoleName,
-			OptionTab.Combination,
+			OptionTab.CombinationTab,
 			this.OptionColor);
 
 		var roleSetOption = factory.Create0To100Percentage10StepOption(

@@ -223,7 +223,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         ExtremeRoleId.Delinquent.ToString(),
         ColorPalette.KidsYellowGreen,
         false, false, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public static void Ability(ref MessageReader reader)
@@ -434,7 +434,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
         ExtremeGhostRoleId.Wisp,
         ExtremeGhostRoleId.Wisp.ToString(),
         ColorPalette.KidsYellowGreen,
-        OptionTab.Combination)
+        OptionTab.CombinationTab)
     { }
 
     public void SetAbilityNum(int abilityNum)

@@ -160,7 +160,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         ExtremeRoleId.Detective.ToString(),
         ColorPalette.DetectiveKokikou,
         false, true, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public void AllReset(PlayerControl rolePlayer)
@@ -441,7 +441,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
         ExtremeRoleId.Assistant.ToString(),
         ColorPalette.AssistantBluCapri,
         false, true, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public void AllReset(PlayerControl rolePlayer)
@@ -664,7 +664,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         }
 
 		if (!OptionManager.Instance.TryGetCategory(
-				OptionTab.Combination,
+				OptionTab.CombinationTab,
 				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.DetectiveOffice),
 				out var cate))
 		{

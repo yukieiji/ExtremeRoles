@@ -2,17 +2,17 @@
 
 public enum OptionTab : byte
 {
-	General,
-	Combination,
+	GeneralTab,
+	CombinationTab,
 
-	Crewmate,
-	GhostCrewmate,
+	CrewmateTab,
+	GhostCrewmateTab,
 
-	Impostor,
-	GhostImpostor,
+	ImpostorTab,
+	GhostImpostorTab,
 
-	Neutral,
-	GhostNeutral,
+	NeutralTab,
+	GhostNeutralTab,
 }
 
 public enum OptionUnit : byte

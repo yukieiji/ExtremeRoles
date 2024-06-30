@@ -91,7 +91,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         Palette.ImpostorRed,
         true, false,
         true, true,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public void HookMuderPlayer(

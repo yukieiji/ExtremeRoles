@@ -131,7 +131,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		foreach (var (catego, groupViewObj) in Enumerable.Zip(this.AllCategory, this.optionGroupViewObject))
 		{
 			if (!(
-					catego.Tab is OptionTab.General ||
+					catego.Tab is OptionTab.GeneralTab ||
 					ExtremeGameModeManager.Instance.RoleSelector.IsValidCategory(catego.Id)
 				))
 			{

@@ -44,7 +44,7 @@ public sealed class GhostRoleSpawnDataManager :
 
 		var opt = OptionManager.Instance;
 
-		if (opt.TryGetCategory(OptionTab.General, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
+		if (opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
 		{
 			this.globalSpawnLimit = new Dictionary<ExtremeRoleType, int>
 			{
@@ -84,9 +84,9 @@ public sealed class GhostRoleSpawnDataManager :
 
 			var tab = role.Team switch
 			{
-				ExtremeRoleType.Neutral => OptionTab.GhostNeutral,
-				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmate,
-				ExtremeRoleType.Impostor => OptionTab.GhostImpostor,
+				ExtremeRoleType.Neutral => OptionTab.GhostNeutralTab,
+				ExtremeRoleType.Crewmate => OptionTab.GhostCrewmateTab,
+				ExtremeRoleType.Impostor => OptionTab.GhostImpostorTab,
 				_ => throw new System.ArgumentOutOfRangeException(),
 			};
 

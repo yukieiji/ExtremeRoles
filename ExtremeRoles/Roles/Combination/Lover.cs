@@ -57,7 +57,7 @@ public sealed class Lover : MultiAssignRoleBase
         ColorPalette.LoverPink,
         false, true,
         false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public override string GetFullDescription()
