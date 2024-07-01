@@ -8,6 +8,8 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class ExtremeRoleAssignee
@@ -83,7 +85,7 @@ public sealed class ExtremeRoleAssignee
 		{
 			foreach (var role in roleListData.RoleList)
 			{
-				PlayerControl removePlayer = null;
+				PlayerControl? removePlayer = null;
 
 				foreach (PlayerControl player in assignData.NeedRoleAssignPlayer)
 				{
@@ -207,8 +209,8 @@ public sealed class ExtremeRoleAssignee
 
 	private void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 		ExtremeRoleType team,
-		IReadOnlyList<PlayerControl> targetPlayer,
-		HashSet<RoleTypes> vanilaTeams)
+		in IReadOnlyList<PlayerControl> targetPlayer,
+		in HashSet<RoleTypes> vanilaTeams)
 	{
 
 		Dictionary<int, SingleRoleSpawnData> teamSpawnData = spawnData.CurrentSingleRoleSpawnData[team];
@@ -231,7 +233,7 @@ public sealed class ExtremeRoleAssignee
 		{
 			Logging.Debug(
 				$"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
-			PlayerControl removePlayer = null;
+			PlayerControl? removePlayer = null;
 
 			RoleTypes vanillaRoleId = player.Data.Role.Role;
 
@@ -377,7 +379,7 @@ public sealed class ExtremeRoleAssignee
 	}
 
 	private bool isCombinationLimit(
-		NotAssignPlayerData notAssignPlayer,
+		in NotAssignPlayerData notAssignPlayer,
 		int maxImpNum,
 		int curCrewUseNum,
 		int curImpUseNum,
@@ -425,7 +427,7 @@ public sealed class ExtremeRoleAssignee
 	}
 
 	private static List<(int intedRoleId, int weight)> createSingleRoleIdData(
-		Dictionary<int, SingleRoleSpawnData> spawnData)
+		in IReadOnlyDictionary<int, SingleRoleSpawnData> spawnData)
 	{
 		List<(int, int)> result = new List<(int, int)>();
 
@@ -443,8 +445,8 @@ public sealed class ExtremeRoleAssignee
 	}
 
 	private static bool isCanMulitAssignRoleToPlayer(
-		MultiAssignRoleBase role,
-		PlayerControl player)
+		in MultiAssignRoleBase role,
+		in PlayerControl player)
 	{
 
 		RoleTypes roleType = player.Data.Role.Role;
