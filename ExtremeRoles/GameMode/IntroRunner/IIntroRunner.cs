@@ -64,7 +64,8 @@ public interface IIntroRunner
 
     private static IEnumerator waitRoleAssign()
     {
-		FastDestroyableSingleton<HudManager>.Instance.GameLoadAnimation.SetActive(true);
+		var loadingAnimation = FastDestroyableSingleton<HudManager>.Instance.GameLoadAnimation;
+		loadingAnimation.SetActive(true);
 
 		if (AmongUsClient.Instance.AmHost)
         {
@@ -109,7 +110,7 @@ public interface IIntroRunner
             yield return null;
         }
 
-		FastDestroyableSingleton<HudManager>.Instance.GameLoadAnimation.SetActive(false);
+		loadingAnimation.SetActive(false);
 
 		yield break;
     }

@@ -45,10 +45,7 @@ public sealed class ClassicIntroRunner : IIntroRunner
             else
             {
                 instance.ImpostorText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                    StringNames.NumImpostorsP, new Il2CppSystem.Object[]
-                    {
-                        adjustedNumImpostors.ToString()
-                    });
+                    StringNames.NumImpostorsP, [adjustedNumImpostors.ToString()]);
             }
             instance.ImpostorText.text = instance.ImpostorText.text.Replace("[FF1919FF]", "<color=#FF1919FF>");
             instance.ImpostorText.text = instance.ImpostorText.text.Replace("[]", "</color>");
