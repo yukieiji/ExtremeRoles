@@ -107,6 +107,8 @@ dotnet_diagnostic.UNT0018.severity = warning
 dotnet_diagnostic.UNT0002.severity = warning
 dotnet_diagnostic.CA1825.severity = warning
 dotnet_diagnostic.UNT0019.severity = warning
+csharp_style_prefer_primary_constructors = true:suggestion
+dotnet_diagnostic.CA1870.severity = warning
 
 [*.vb]
 #### �����X�^�C�� ####
@@ -205,5 +207,6 @@ dotnet_diagnostic.CA1834.severity = warning
 dotnet_diagnostic.CA1846.severity = suggestion
 dotnet_diagnostic.CA1821.severity = warning
 dotnet_diagnostic.CA1806.severity = suggestion
+dotnet_diagnostic.CA1868.severity = warning
 
 
