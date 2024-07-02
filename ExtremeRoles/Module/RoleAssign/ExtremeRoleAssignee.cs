@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
 #nullable enable
@@ -43,11 +45,32 @@ public sealed class ExtremeRoleAssignee
 		RPCOperator.Initialize();
 
 		spawnData = new RoleSpawnDataManager();
+
+		if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
+
+		PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+
+		assignData.AddAssignData(
+			new PlayerToSingleRoleAssignData(
+				loaclPlayer.PlayerId,
+				(int)ExtremeRoleId.Xion,
+				assignData.GetControlId()));
+		assignData.RemvePlayer(loaclPlayer);
 	}
 
-	public void CreateAssignData()
+	public IEnumerator Assign()
+	{
+		createAssignData();
+
+		yield return null;
+
+		this.assignData.AllPlayerAssignToExRole();
+	}
+
+	private void createAssignData()
 	{
 		GhostRoleSpawnDataManager.Instance.Create(spawnData.UseGhostCombRole);
+
 		RoleAssignFilter.Instance.Initialize();
 
 		addCombinationExtremeRoleAssignData();
@@ -55,18 +78,7 @@ public sealed class ExtremeRoleAssignee
 		addNotAssignPlayerToVanillaRoleAssign();
 	}
 
-	private void addNotAssignPlayerToVanillaRoleAssign()
-	{
-		foreach (PlayerControl player in assignData.NeedRoleAssignPlayer)
-		{
-			var roleId = player.Data.Role.Role;
-			Logging.Debug($"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
-			Logging.Debug($"---AssignRole:{roleId}---");
-			assignData.AddAssignData(new PlayerToSingleRoleAssignData(
-				player.PlayerId, (byte)roleId, assignData.GetControlId()));
-		}
-	}
-
+	#region Create CombinationRole Assign Data
 	private void addCombinationExtremeRoleAssignData()
 	{
 		Logging.Debug(
@@ -93,7 +105,7 @@ public sealed class ExtremeRoleAssignee
 						$"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
 					Logging.Debug($"---AssignRole:{role.Id}---");
 
-					bool assign = isCanMulitAssignRoleToPlayer(role, player);
+					bool assign = canMulitAssignRoleToPlayer(role, player);
 
 					Logging.Debug($"AssignResult:{assign}");
 
@@ -140,6 +152,186 @@ public sealed class ExtremeRoleAssignee
 			$"----------------------------- CombinationRoleAssign End!! -----------------------------");
 	}
 
+	private List<CombinationRoleAssignData> createCombinationRoleListData()
+	{
+		List<CombinationRoleAssignData> roleListData = new List<CombinationRoleAssignData>();
+
+		int curImpNum = 0;
+		int curCrewNum = 0;
+		int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+			Int32OptionNames.NumImpostors);
+
+		NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
+		var shuffleCombRole = spawnData.CurrentCombRoleSpawnData
+			.OrderByDescending(x => x.Value.Weight) // まずは重みでソート
+			.ThenBy(x => RandomGenerator.Instance.Next()); //その上で全体のソート
+
+		foreach (var (combType, combSpawnData) in shuffleCombRole)
+		{
+			var roleManager = combSpawnData.Role;
+
+			for (int i = 0; i < combSpawnData.SpawnSetNum; i++)
+			{
+				roleManager.AssignSetUpInit(curImpNum);
+				bool isSpawn = combSpawnData.IsSpawn();
+
+				int reduceCrewmateRole = 0;
+				int reduceImpostorRole = 0;
+				int reduceNeutralRole = 0;
+
+				foreach (var role in roleManager.Roles)
+				{
+					switch (role.Team)
+					{
+						case ExtremeRoleType.Crewmate:
+							++reduceCrewmateRole;
+							break;
+						case ExtremeRoleType.Impostor:
+							++reduceImpostorRole;
+							break;
+						case ExtremeRoleType.Neutral:
+							++reduceNeutralRole;
+							break;
+						default:
+							break;
+					}
+					if (roleManager is GhostAndAliveCombinationRoleManagerBase)
+					{
+						isSpawn = !GhostRoleSpawnDataManager.Instance.IsGlobalSpawnLimit(role.Team);
+					}
+				}
+
+				isSpawn = (
+					isSpawn &&
+					isCombinationLimit(
+						notAssignPlayer,
+						maxImpNum,
+						curCrewNum, curImpNum,
+						reduceCrewmateRole,
+						reduceImpostorRole,
+						reduceNeutralRole,
+						combSpawnData.IsMultiAssign) &&
+					!RoleAssignFilter.Instance.IsBlock(combType));
+
+				if (!isSpawn) { continue; }
+
+				spawnData.ReduceSpawnLimit(ExtremeRoleType.Crewmate, reduceCrewmateRole);
+				spawnData.ReduceSpawnLimit(ExtremeRoleType.Impostor, reduceImpostorRole);
+				spawnData.ReduceSpawnLimit(ExtremeRoleType.Neutral, reduceNeutralRole);
+
+				curImpNum = curImpNum + reduceImpostorRole;
+				curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole);
+
+				var spawnRoles = new List<MultiAssignRoleBase>();
+				foreach (var role in roleManager.Roles)
+				{
+					spawnRoles.Add((MultiAssignRoleBase)role.Clone());
+				}
+
+				notAssignPlayer.ReduceImpostorAssignNum(reduceImpostorRole);
+				roleListData.Add(
+					new CombinationRoleAssignData(
+						assignData.GetControlId(),
+						combType, spawnRoles));
+
+				RoleAssignFilter.Instance.Update(combType);
+			}
+		}
+
+		return roleListData;
+	}
+
+	private static bool canMulitAssignRoleToPlayer(
+		in MultiAssignRoleBase role,
+		in PlayerControl player)
+	{
+
+		RoleTypes roleType = player.Data.Role.Role;
+
+		bool hasAnotherRole = role.CanHasAnotherRole;
+		bool isImpostor = role.IsImpostor();
+		bool isAssignToCrewmate = role.IsCrewmate() || role.IsNeutral();
+
+		return
+			(
+				roleType is RoleTypes.Crewmate && isAssignToCrewmate
+			)
+			||
+			(
+				roleType is RoleTypes.Impostor && isImpostor
+			)
+			||
+			(
+				(
+					roleType is
+						RoleTypes.Engineer or
+						RoleTypes.Scientist or
+						RoleTypes.Noisemaker or
+						RoleTypes.Tracker
+				)
+				&& hasAnotherRole && isAssignToCrewmate
+			)
+			||
+			(
+				(
+					roleType is
+						RoleTypes.Shapeshifter or
+						RoleTypes.Phantom
+				) &&
+				hasAnotherRole && isImpostor
+			);
+	}
+
+	private bool isCombinationLimit(
+		in NotAssignPlayerData notAssignPlayer,
+		int maxImpNum,
+		int curCrewUseNum,
+		int curImpUseNum,
+		int reduceCrewmateRoleNum,
+		int reduceImpostorRoleNum,
+		int reduceNeutralRoleNum,
+		bool isMultiAssign)
+	{
+		int crewNotAssignPlayerNum = isMultiAssign ?
+			notAssignPlayer.CrewmateMultiAssignPlayerNum :
+			notAssignPlayer.CrewmateSingleAssignPlayerNum;
+		int impNotAssignPlayerNum = isMultiAssign ?
+			notAssignPlayer.ImpostorMultiAssignPlayerNum :
+			notAssignPlayer.ImpostorSingleAssignPlayerNum;
+
+		int totalReduceCrewmateNum = reduceCrewmateRoleNum + reduceNeutralRoleNum;
+
+		bool isLimitCrewAssignNum = crewNotAssignPlayerNum >= totalReduceCrewmateNum;
+		bool isLimitImpAssignNum = impNotAssignPlayerNum >= reduceImpostorRoleNum;
+
+		return
+			// まずはアサインの上限チェック
+			(
+				curCrewUseNum + totalReduceCrewmateNum <= crewNotAssignPlayerNum &&
+				curImpUseNum + reduceImpostorRoleNum <= maxImpNum
+			)
+			// クルーのスポーン上限チェック
+			&&
+			(
+				spawnData.IsCanSpawnTeam(ExtremeRoleType.Crewmate, reduceCrewmateRoleNum) &&
+				isLimitCrewAssignNum
+			)
+			// ニュートラルのスポーン上限チェック
+			&&
+			(
+				spawnData.IsCanSpawnTeam(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
+				isLimitCrewAssignNum
+			)
+			// インポスターのスポーン上限チェック
+			&&
+			(
+				spawnData.IsCanSpawnTeam(ExtremeRoleType.Impostor, reduceImpostorRoleNum) &&
+				isLimitImpAssignNum
+			);
+	}
+	#endregion
+
+	#region Create SingleRole Assign Data
 	private void addSingleExtremeRoleAssignData()
 	{
 		Logging.Debug(
@@ -289,143 +481,6 @@ public sealed class ExtremeRoleAssignee
 		}
 	}
 
-	private List<CombinationRoleAssignData> createCombinationRoleListData()
-	{
-		List<CombinationRoleAssignData> roleListData = new List<CombinationRoleAssignData>();
-
-		int curImpNum = 0;
-		int curCrewNum = 0;
-		int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
-			Int32OptionNames.NumImpostors);
-
-		NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
-		var shuffleCombRole = spawnData.CurrentCombRoleSpawnData
-			.OrderByDescending(x => x.Value.Weight) // まずは重みでソート
-			.ThenBy(x => RandomGenerator.Instance.Next()); //その上で全体のソート
-
-		foreach (var (combType, combSpawnData) in shuffleCombRole)
-		{
-			var roleManager = combSpawnData.Role;
-
-			for (int i = 0; i < combSpawnData.SpawnSetNum; i++)
-			{
-				roleManager.AssignSetUpInit(curImpNum);
-				bool isSpawn = combSpawnData.IsSpawn();
-
-				int reduceCrewmateRole = 0;
-				int reduceImpostorRole = 0;
-				int reduceNeutralRole = 0;
-
-				foreach (var role in roleManager.Roles)
-				{
-					switch (role.Team)
-					{
-						case ExtremeRoleType.Crewmate:
-							++reduceCrewmateRole;
-							break;
-						case ExtremeRoleType.Impostor:
-							++reduceImpostorRole;
-							break;
-						case ExtremeRoleType.Neutral:
-							++reduceNeutralRole;
-							break;
-						default:
-							break;
-					}
-					if (roleManager is GhostAndAliveCombinationRoleManagerBase)
-					{
-						isSpawn = !GhostRoleSpawnDataManager.Instance.IsGlobalSpawnLimit(role.Team);
-					}
-				}
-
-				isSpawn = (
-					isSpawn &&
-					isCombinationLimit(
-						notAssignPlayer,
-						maxImpNum,
-						curCrewNum, curImpNum,
-						reduceCrewmateRole,
-						reduceImpostorRole,
-						reduceNeutralRole,
-						combSpawnData.IsMultiAssign) &&
-					!RoleAssignFilter.Instance.IsBlock(combType));
-
-				if (!isSpawn) { continue; }
-
-				spawnData.ReduceSpawnLimit(ExtremeRoleType.Crewmate, reduceCrewmateRole);
-				spawnData.ReduceSpawnLimit(ExtremeRoleType.Impostor, reduceImpostorRole);
-				spawnData.ReduceSpawnLimit(ExtremeRoleType.Neutral, reduceNeutralRole);
-
-				curImpNum = curImpNum + reduceImpostorRole;
-				curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole);
-
-				var spawnRoles = new List<MultiAssignRoleBase>();
-				foreach (var role in roleManager.Roles)
-				{
-					spawnRoles.Add((MultiAssignRoleBase)role.Clone());
-				}
-
-				notAssignPlayer.ReduceImpostorAssignNum(reduceImpostorRole);
-				roleListData.Add(
-					new CombinationRoleAssignData(
-						assignData.GetControlId(),
-						combType, spawnRoles));
-
-				RoleAssignFilter.Instance.Update(combType);
-			}
-		}
-
-		return roleListData;
-	}
-
-	private bool isCombinationLimit(
-		in NotAssignPlayerData notAssignPlayer,
-		int maxImpNum,
-		int curCrewUseNum,
-		int curImpUseNum,
-		int reduceCrewmateRoleNum,
-		int reduceImpostorRoleNum,
-		int reduceNeutralRoleNum,
-		bool isMultiAssign)
-	{
-		int crewNotAssignPlayerNum = isMultiAssign ?
-			notAssignPlayer.CrewmateMultiAssignPlayerNum :
-			notAssignPlayer.CrewmateSingleAssignPlayerNum;
-		int impNotAssignPlayerNum = isMultiAssign ?
-			notAssignPlayer.ImpostorMultiAssignPlayerNum :
-			notAssignPlayer.ImpostorSingleAssignPlayerNum;
-
-		int totalReduceCrewmateNum = reduceCrewmateRoleNum + reduceNeutralRoleNum;
-
-		bool isLimitCrewAssignNum = crewNotAssignPlayerNum >= totalReduceCrewmateNum;
-		bool isLimitImpAssignNum = impNotAssignPlayerNum >= reduceImpostorRoleNum;
-
-		return
-			// まずはアサインの上限チェック
-			(
-				curCrewUseNum + totalReduceCrewmateNum <= crewNotAssignPlayerNum &&
-				curImpUseNum + reduceImpostorRoleNum <= maxImpNum
-			)
-			// クルーのスポーン上限チェック
-			&&
-			(
-				spawnData.IsCanSpawnTeam(ExtremeRoleType.Crewmate, reduceCrewmateRoleNum) &&
-				isLimitCrewAssignNum
-			)
-			// ニュートラルのスポーン上限チェック
-			&&
-			(
-				spawnData.IsCanSpawnTeam(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
-				isLimitCrewAssignNum
-			)
-			// インポスターのスポーン上限チェック
-			&&
-			(
-				spawnData.IsCanSpawnTeam(ExtremeRoleType.Impostor, reduceImpostorRoleNum) &&
-				isLimitImpAssignNum
-			);
-	}
-
 	private static List<(int intedRoleId, int weight)> createSingleRoleIdData(
 		in IReadOnlyDictionary<int, SingleRoleSpawnData> spawnData)
 	{
@@ -443,50 +498,19 @@ public sealed class ExtremeRoleAssignee
 
 		return result;
 	}
+	#endregion
 
-	private static bool isCanMulitAssignRoleToPlayer(
-		in MultiAssignRoleBase role,
-		in PlayerControl player)
+	#region Post prosesss for not assign player
+	private void addNotAssignPlayerToVanillaRoleAssign()
 	{
-
-		RoleTypes roleType = player.Data.Role.Role;
-
-		bool hasAnotherRole = role.CanHasAnotherRole;
-		bool isImpostor = role.IsImpostor();
-		bool isAssignToCrewmate = role.IsCrewmate() || role.IsNeutral();
-
-		return
-			(
-				roleType is RoleTypes.Crewmate && isAssignToCrewmate
-			)
-			||
-			(
-				roleType is RoleTypes.Impostor && isImpostor
-			)
-			||
-			(
-				(
-					roleType is
-						RoleTypes.Engineer or
-						RoleTypes.Scientist or
-						RoleTypes.Noisemaker or
-						RoleTypes.Tracker
-				)
-				&& hasAnotherRole && isAssignToCrewmate
-			)
-			||
-			(
-				(
-					roleType is
-						RoleTypes.Shapeshifter or
-						RoleTypes.Phantom
-				) &&
-				hasAnotherRole && isImpostor
-			);
+		foreach (PlayerControl player in assignData.NeedRoleAssignPlayer)
+		{
+			var roleId = player.Data.Role.Role;
+			Logging.Debug($"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
+			Logging.Debug($"---AssignRole:{roleId}---");
+			assignData.AddAssignData(new PlayerToSingleRoleAssignData(
+				player.PlayerId, (byte)roleId, assignData.GetControlId()));
+		}
 	}
-
-	public void Assign()
-	{
-		this.assignData.AllPlayerAssignToExRole();
-	}
+	#endregion
 }
