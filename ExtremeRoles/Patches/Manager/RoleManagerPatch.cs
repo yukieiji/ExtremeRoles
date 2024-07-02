@@ -17,6 +17,20 @@ using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.Patches.Manager;
 
+[HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
+public static class RoleManagerAssignSelectRolesPatch
+{
+	public static void Prefix()
+	{
+		if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
+
+		PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+
+		loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+		loaclPlayer.Data.IsDead = true;
+	}
+}
+
 [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.AssignRoleOnDeath))]
 public static class RoleManagerAssignRoleOnDeathPatch
 {

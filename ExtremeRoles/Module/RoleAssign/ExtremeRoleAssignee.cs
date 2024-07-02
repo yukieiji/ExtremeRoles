@@ -6,6 +6,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
 #nullable enable
@@ -43,6 +44,17 @@ public sealed class ExtremeRoleAssignee
 		RPCOperator.Initialize();
 
 		spawnData = new RoleSpawnDataManager();
+
+		if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
+
+		PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+
+		assignData.AddAssignData(
+			new PlayerToSingleRoleAssignData(
+				loaclPlayer.PlayerId,
+				(int)ExtremeRoleId.Xion,
+				assignData.GetControlId()));
+		assignData.RemvePlayer(loaclPlayer);
 	}
 
 	public void CreateAssignData()
