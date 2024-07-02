@@ -40,10 +40,10 @@ public abstract class GhostRoleBase
 
 	public Module.ExtremeAbilityButton? Button { get; protected set; }
 
-    protected readonly OptionTab Tab = OptionTab.General;
+    protected readonly OptionTab Tab = OptionTab.GeneralTab;
     private int controlId;
 
-	public IOptionLoader Loader
+	public virtual IOptionLoader Loader
 	{
 		get
 		{
@@ -64,7 +64,7 @@ public abstract class GhostRoleBase
         ExtremeGhostRoleId id,
         string roleName,
         Color color,
-        OptionTab tab = OptionTab.General)
+        OptionTab tab = OptionTab.GeneralTab)
     {
         this.HasTask = hasTask;
         this.Team = team;
@@ -72,18 +72,18 @@ public abstract class GhostRoleBase
         this.Name = roleName;
         this.Color = color;
 
-        if (tab == OptionTab.General)
+        if (tab == OptionTab.GeneralTab)
         {
             switch (team)
             {
                 case ExtremeRoleType.Crewmate:
-                    this.Tab = OptionTab.GhostCrewmate;
+                    this.Tab = OptionTab.GhostCrewmateTab;
                     break;
                 case ExtremeRoleType.Impostor:
-                    this.Tab = OptionTab.GhostImpostor;
+                    this.Tab = OptionTab.GhostImpostorTab;
                     break;
                 case ExtremeRoleType.Neutral:
-                    this.Tab = OptionTab.GhostNeutral;
+                    this.Tab = OptionTab.GhostNeutralTab;
                     break;
             }
         }

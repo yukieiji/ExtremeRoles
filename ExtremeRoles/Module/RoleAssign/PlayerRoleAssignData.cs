@@ -3,14 +3,14 @@ using System.Linq;
 
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
-public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignData>
+public sealed class PlayerRoleAssignData
 {
 	public IReadOnlyList<PlayerControl> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 
@@ -25,7 +25,7 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 		this.assignData.Clear();
 
 		this.needRoleAssignPlayer = new List<PlayerControl>(
-			PlayerControl.AllPlayerControls.ToArray());
+			GameData.Instance.AllPlayers.ToArray().Select(x => x.Object));
 		this.gameControlId = 0;
 	}
 
@@ -54,7 +54,6 @@ public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignDat
 		}
 		RPCOperator.SetRoleToAllPlayer(this.assignData);
 		RoleAssignState.Instance.SwitchRoleAssignToEnd();
-		Destroy();
 	}
 
 	public IReadOnlyList<PlayerControl> GetCanImpostorAssignPlayer()

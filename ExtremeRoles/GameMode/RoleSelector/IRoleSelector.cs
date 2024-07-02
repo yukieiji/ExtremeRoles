@@ -51,7 +51,7 @@ public interface IRoleSelector
 		=> Enum.IsDefined(typeof(RoleSpawnOption), optionId);
 
 	public static bool RawXionUse => OptionManager.Instance.TryGetCategory(
-		OptionTab.General,
+		OptionTab.GeneralTab,
 		ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 		out var cate) &&
 		cate.GetValue<bool>((int)XionOption.UseXion);

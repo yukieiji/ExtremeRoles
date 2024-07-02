@@ -194,7 +194,7 @@ public sealed class Guesser :
                     case ExtremeRoleId.Jackal:
                         assignState.IsJackalOn = true;
                         assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
-							OptionTab.Neutral,
+							OptionTab.NeutralTab,
 							ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
 							out var cate) && cate.GetValue<Jackal.JackalOption, bool>(Jackal.JackalOption.ForceReplaceLover);
                         break;
@@ -380,7 +380,7 @@ public sealed class Guesser :
             ExtremeRoleId.Guesser.ToString(),
             ColorPalette.GuesserRedYellow,
             false, true, false, false,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     { }
 
     private static void missGuess()

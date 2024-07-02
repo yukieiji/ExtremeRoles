@@ -29,7 +29,7 @@ public static class GameUtility
 	public static void ChangePresetTo(int newPreset)
 	{
 		var mng = OptionManager.Instance;
-		if (!mng.TryGetCategory(OptionTab.General, (int)OptionCreator.CommonOption.PresetOption, out var presetCate))
+		if (!mng.TryGetCategory(OptionTab.GeneralTab, (int)OptionCreator.CommonOption.PresetOption, out var presetCate))
 		{
 			return;
 		}
@@ -211,7 +211,7 @@ public static class GameUtility
 	private static void disableXion()
 	{
 		if (OptionManager.Instance.TryGetCategory(
-				OptionTab.General,
+				OptionTab.GeneralTab,
 				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 				out var category))
 		{
@@ -236,7 +236,7 @@ public static class GameUtility
 	{
 		CombinationRoleType role = (CombinationRoleType)RandomRoleProvider.GetCombRole();
 		if (OptionManager.Instance.TryGetCategory(
-				OptionTab.Combination,
+				OptionTab.CombinationTab,
 				ExtremeRoleManager.GetCombRoleGroupId(role),
 				out var category))
 		{

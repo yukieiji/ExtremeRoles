@@ -16,6 +16,7 @@ using ExtremeRoles.Compat;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -160,7 +161,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         ExtremeRoleId.Detective.ToString(),
         ColorPalette.DetectiveKokikou,
         false, true, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public void AllReset(PlayerControl rolePlayer)
@@ -441,7 +442,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
         ExtremeRoleId.Assistant.ToString(),
         ColorPalette.AssistantBluCapri,
         false, true, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public void AllReset(PlayerControl rolePlayer)
@@ -604,7 +605,10 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
     private ExtremeAbilityButton meetingButton;
     private Minigame meeting;
 
-    public DetectiveApprentice(
+	public override IOptionLoader Loader { get; }
+
+	public DetectiveApprentice(
+		IOptionLoader loader,
         int gameControlId,
         DetectiveApprenticeOptionHolder option
         ) : base(
@@ -614,6 +618,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
             ColorPalette.DetectiveApprenticeKonai,
             false, true, false, false)
     {
+		this.Loader = loader;
         this.SetControlId(gameControlId);
         this.HasOtherVision = option.HasOtherVision;
         if (this.HasOtherVision)
@@ -664,7 +669,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         }
 
 		if (!OptionManager.Instance.TryGetCategory(
-				OptionTab.Combination,
+				OptionTab.CombinationTab,
 				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.DetectiveOffice),
 				out var cate))
 		{
@@ -673,6 +678,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 
 		int offset = 2 * ExtremeRoleManager.OptionOffsetPerRole;
 		DetectiveApprentice newRole = new DetectiveApprentice(
+			prevRole.Loader,
             prevRole.GameControlId,
             DetectiveApprenticeOptionHolder.LoadOptions(new OptionLoadWrapper(cate, offset)));
         if (playerId == PlayerControl.LocalPlayer.PlayerId)

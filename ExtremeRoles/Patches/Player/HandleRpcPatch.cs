@@ -58,10 +58,6 @@ public static class PlayerControlHandleRpcPatch
 				}
 				RPCOperator.SetRoleToAllPlayer(assignData);
 				RoleAssignState.Instance.SwitchRoleAssignToEnd();
-				if (PlayerRoleAssignData.IsExist)
-				{
-					PlayerRoleAssignData.Instance.Destroy();
-				}
 				break;
 			case RPCOperator.Command.ShareOption:
 				RPCOperator.ShareOption(reader);

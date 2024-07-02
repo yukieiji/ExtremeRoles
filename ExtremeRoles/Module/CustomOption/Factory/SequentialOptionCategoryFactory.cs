@@ -21,7 +21,7 @@ public sealed class SequentialOptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,
-	OptionTab tab = OptionTab.General,
+	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) :
 	OptionCategoryFactory(name, groupId, action, tab, color)
 {

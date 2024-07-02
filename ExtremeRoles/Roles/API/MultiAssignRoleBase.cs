@@ -52,7 +52,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         bool canUseAdmin = true,
         bool canUseSecurity = true,
         bool canUseVital = true,
-        OptionTab tab = OptionTab.General) : base(
+        OptionTab tab = OptionTab.GeneralTab) : base(
             id, team, roleName, roleColor,
             canKill, hasTask, useVent,
             useSabotage, canCallMeeting,

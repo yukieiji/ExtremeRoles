@@ -98,7 +98,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         ColorPalette.BuddyOrange,
         false, true,
         false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public string GetFakeOptionString() => "";

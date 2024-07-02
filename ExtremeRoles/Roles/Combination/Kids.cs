@@ -29,6 +29,8 @@ using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Module.CustomOption.Interfaces;
+
 
 #nullable enable
 
@@ -223,7 +225,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         ExtremeRoleId.Delinquent.ToString(),
         ColorPalette.KidsYellowGreen,
         false, false, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 
     public static void Ability(ref MessageReader reader)
@@ -393,7 +395,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 {
 	public MultiAssignRoleBase.OptionOffsetInfo? OffsetInfo { get; set; }
-	public OptionLoadWrapper WrappedCategory
+	public override IOptionLoader Loader
 	{
 		get
 		{
@@ -434,7 +436,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
         ExtremeGhostRoleId.Wisp,
         ExtremeGhostRoleId.Wisp.ToString(),
         ColorPalette.KidsYellowGreen,
-        OptionTab.Combination)
+        OptionTab.CombinationTab)
     { }
 
     public void SetAbilityNum(int abilityNum)
@@ -501,7 +503,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 
     public override void Initialize()
     {
-		var loader = this.WrappedCategory;
+		var loader = this.Loader;
         this.abilityNum = loader.GetValue<WispOption, int>(
             WispOption.TorchAbilityNum);
         this.winNum = loader.GetValue<WispOption, int>(

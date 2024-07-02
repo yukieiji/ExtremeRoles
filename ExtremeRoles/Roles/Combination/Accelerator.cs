@@ -67,7 +67,7 @@ public sealed class Accelerator :
         ExtremeRoleId.Accelerator.ToString(),
         ColorPalette.AcceleratorBiancoPeria,
         false, true, false, false,
-        tab: OptionTab.Combination)
+        tab: OptionTab.CombinationTab)
     { }
 #pragma warning restore CS8618
 

@@ -63,7 +63,7 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						OptionTab.General,
+						OptionTab.GeneralTab,
 						(int)ShipGlobalOptionCategory.NeutralWinOption,
 						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 				}),
@@ -76,7 +76,7 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						OptionTab.General,
+						OptionTab.GeneralTab,
 						(int)ShipGlobalOptionCategory.NeutralWinOption,
 						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 					GameUtility.UpdateAmongUsOption(
@@ -87,7 +87,7 @@ public sealed class GameTestRunner : TestRunnerBase
 				() =>
 				{
 					GameUtility.UpdateExROption(
-						OptionTab.General,
+						OptionTab.GeneralTab,
 						(int)ShipGlobalOptionCategory.NeutralWinOption,
 						new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
 					GameUtility.UpdateAmongUsOption(

@@ -19,7 +19,7 @@ public class OptionCategoryFactory(
 	string name,
 	int groupId,
 	in Action<OptionTab, OptionCategory> action,
-	OptionTab tab = OptionTab.General,
+	OptionTab tab = OptionTab.GeneralTab,
 	in Color? color = null) : IDisposable
 {
 	public string Name { get; set; } = name;

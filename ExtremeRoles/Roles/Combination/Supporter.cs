@@ -42,7 +42,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
             ExtremeRoleId.Supporter.ToString(),
             ColorPalette.SupporterGreen,
             false, true, false, false,
-            tab: OptionTab.Combination)
+            tab: OptionTab.CombinationTab)
     {}
 
     public void IntroBeginSetUp()

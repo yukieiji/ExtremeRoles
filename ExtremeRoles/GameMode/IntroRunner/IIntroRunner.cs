@@ -64,9 +64,14 @@ public interface IIntroRunner
 
     private static IEnumerator waitRoleAssign()
     {
-        if (AmongUsClient.Instance.AmHost)
+		var loadingAnimation = FastDestroyableSingleton<HudManager>.Instance.GameLoadAnimation;
+		loadingAnimation.SetActive(true);
+
+		if (AmongUsClient.Instance.AmHost)
         {
-            if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
+			var assignee = new ExtremeRoleAssignee();
+
+			if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
                 !isAllPlyerDummy())
             {
 				RoleAssignCheckPoint.RpcCheckpoint();
@@ -78,10 +83,15 @@ public interface IIntroRunner
             }
             else
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(2.5f);
             }
-            PlayerRoleAssignData.Instance.AllPlayerAssignToExRole();
-        }
+
+			assignee.CreateAssignData();
+
+			yield return null;
+
+			assignee.Assign();
+		}
         else
         {
             // クライアントはここでオプション値を読み込むことで待ち時間を短く見せるトリック
@@ -99,7 +109,10 @@ public interface IIntroRunner
         {
             yield return null;
         }
-        yield break;
+
+		loadingAnimation.SetActive(false);
+
+		yield break;
     }
 
     private static bool isAllPlyerDummy()

@@ -549,7 +549,7 @@ public sealed class Servant :
             baseRole.UseVent,
             baseRole.UseSabotage)
     {
-		this.Loader = baseRole.Loader;
+		this.Loader = queen.Loader;
         this.SetControlId(queen.GameControlId);
         this.queenPlayerId = queenPlayerId;
         this.queen = queen;

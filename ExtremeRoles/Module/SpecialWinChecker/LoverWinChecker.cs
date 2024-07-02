@@ -34,7 +34,7 @@ internal sealed class LoverWinChecker : IWinChecker
 	{
 		if (this.loverNum == 0 &&
 			OptionManager.Instance.TryGetCategory(
-				OptionTab.Combination,
+				OptionTab.CombinationTab,
 				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.Lover),
 				out var cate))
 		{

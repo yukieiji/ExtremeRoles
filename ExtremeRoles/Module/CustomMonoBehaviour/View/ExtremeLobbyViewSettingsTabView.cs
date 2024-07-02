@@ -49,6 +49,8 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			allButton.Add(vanillaSettings.rolesTabButton);
 		}
 
+		string modName = Translation.GetString("MODNAME_TRANS");
+
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
 			var newButton = Instantiate(taskButton, taskButton.transform.parent);
@@ -56,8 +58,10 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			{
 				Destroy(tmp);
 			}
-			newButton.ChangeButtonText(Translation.GetString(string.Format(
-				"ExtremeRoles_{0}Settings", tab)));
+
+			string tabName = Translation.GetString(tab.ToString());
+			newButton.ChangeButtonText($"{modName}\n{tabName}");
+
 			newButton.OnClick.RemoveAllListeners();
 			newButton.OnClick.AddListener(() =>
 			{
@@ -213,7 +217,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		foreach (var (catego, optionGroupView) in container.Category.Zip(optionGroupViewObject))
 		{
 			if (!(
-					tab is OptionTab.General ||
+					tab is OptionTab.GeneralTab ||
 					ExtremeGameModeManager.Instance.RoleSelector.IsValidCategory(catego.Id)
 				))
 			{
