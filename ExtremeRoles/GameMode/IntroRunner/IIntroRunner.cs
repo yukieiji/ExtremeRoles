@@ -86,11 +86,7 @@ public interface IIntroRunner
                 yield return new WaitForSeconds(2.5f);
             }
 
-			assignee.CreateAssignData();
-
-			yield return null;
-
-			assignee.Assign();
+			yield return assignee.Assign();
 		}
         else
         {
