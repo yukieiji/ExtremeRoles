@@ -90,6 +90,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		public void RemoveAll(Player playerInfo)
 		{
+			ExtremeRolesPlugin.Logger.LogInfo($"Remove [{playerInfo.PlayerName}] from all winner pool");
 			this.plusWinPlayr.RemoveAll(x => x.PlayerName == playerInfo.PlayerName);
 			Remove(playerInfo);
 		}
@@ -104,7 +105,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		public void AddWithPlus(Player playerInfo)
 		{
-			ExtremeRolesPlugin.Logger.LogError($"{playerInfo.PlayerName} add to winner pool(With and Plus)");
+			ExtremeRolesPlugin.Logger.LogInfo($"Add [{playerInfo.PlayerName}] winner pool(With and Plus)");
 			this.Add(playerInfo);
 			this.AddPlusWinner(playerInfo);
 		}
