@@ -84,7 +84,7 @@ public sealed class ExtremeRoleAssignee
 		Logging.Debug(
 			$"----------------------------- CombinationRoleAssign Start!! -----------------------------");
 
-		if (!spawnData.CurrentCombRoleSpawnData.Any()) { return; }
+		if (spawnData.CurrentCombRoleSpawnData.Count == 0) { return; }
 
 		List<CombinationRoleAssignData> combRoleListData = createCombinationRoleListData();
 		var shuffledRoleListData = combRoleListData.OrderBy(
@@ -412,7 +412,7 @@ public sealed class ExtremeRoleAssignee
 		List<(int intedRoleId, int weight)> spawnCheckRoleId =
 			createSingleRoleIdData(teamSpawnData);
 
-		if (!spawnCheckRoleId.Any()) { return; }
+		if (spawnCheckRoleId.Count == 0) { return; }
 
 		var shuffledSpawnCheckRoleId = spawnCheckRoleId
 			.OrderByDescending(x => x.weight) // まずは重みでソート
@@ -449,7 +449,7 @@ public sealed class ExtremeRoleAssignee
 			}
 
 			if (spawnData.IsCanSpawnTeam(team) &&
-				shuffledSpawnCheckRoleId.Any() &&
+				shuffledSpawnCheckRoleId.Count > 0 &&
 				removePlayer == null)
 			{
 				for (int i = 0; i < shuffledSpawnCheckRoleId.Count; ++i)
