@@ -366,7 +366,7 @@ public static class EndGameManagerSetUpPatch
     private readonly record struct WinTextInfo(string Text, Color Color, bool IsChangeBk)
     {
         internal static WinTextInfo Create(
-            in System.Enum textEnum, in Color color,
+            in System.Enum textEnum, Color color,
 			in bool isChangeBk = true)
 			=> new WinTextInfo(
 				Translation.GetString(textEnum.ToString()),

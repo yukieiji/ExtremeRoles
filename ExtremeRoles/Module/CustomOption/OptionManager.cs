@@ -97,16 +97,13 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		int id,
 		string name,
 		in OptionTab tab = OptionTab.GeneralTab,
-		in Color? color = null)
-	{
-		var factory = new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
+		Color? color = null)
+		=> new OptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
 
-		return factory;
-	}
 	public static OptionCategoryFactory CreateOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.GeneralTab,
-		in Color? color = null) where T : Enum
+		Color? color = null) where T : Enum
 		=> CreateOptionCategory(
 			option.FastInt(),
 			option.ToString(), tab, color);
@@ -115,18 +112,14 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 		int id,
 		string name,
 		in OptionTab tab = OptionTab.GeneralTab,
-		in Color? color = null)
-	{
-		var factory = new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
-
-		return factory;
-	}
+		Color? color = null)
+		=> new SequentialOptionCategoryFactory(name, id, Instance.registerOptionGroup, tab, color);
 
 	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory(
 		int id,
 		string name,
 		in OptionTab tab,
-		in Color? color = null,
+		Color? color = null,
 		in IOption? parent = null)
 	{
 		var internalFactory = CreateOptionCategory(id, name, tab, color);
@@ -138,7 +131,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 	public static AutoParentSetOptionCategoryFactory CreateAutoParentSetOptionCategory<T>(
 		T option,
 		in OptionTab tab = OptionTab.GeneralTab,
-		in Color? color = null,
+		Color? color = null,
 		in IOption? parent = null) where T : Enum
 		=> CreateAutoParentSetOptionCategory(
 			option.FastInt(),

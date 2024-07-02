@@ -1,13 +1,12 @@
 ﻿using HarmonyLib;
 
-namespace ExtremeRoles.Patches.Manager
+namespace ExtremeRoles.Patches.Manager;
+
+[HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
+public static class StatsManagerAmBannedPatch
 {
-    [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
-    public class StatsManagerAmBannedPatch
+    public static void Postfix(out bool __result)
     {
-        public static void Postfix(out bool __result)
-        {
-            __result = false;
-        }
+        __result = false;
     }
 }

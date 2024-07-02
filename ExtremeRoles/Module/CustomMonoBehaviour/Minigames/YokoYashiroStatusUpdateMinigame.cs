@@ -205,7 +205,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		this.AbstractClose();
 	}
 
-	private void updateDrawPoint(in Vector2 localMousePosition)
+	private void updateDrawPoint(Vector2 localMousePosition)
 	{
 		bool isNearCurPoint = this.isNearCurPoint(localMousePosition);
 
@@ -215,7 +215,7 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 		this.curPointIndex++;
 	}
 
-	private bool isNearCurPoint(in Vector2 source)
+	private bool isNearCurPoint(Vector2 source)
 	{
 		Vector2 pointPos = this.curPoint.transform.position;
 		Vector2 diff = pointPos - source;

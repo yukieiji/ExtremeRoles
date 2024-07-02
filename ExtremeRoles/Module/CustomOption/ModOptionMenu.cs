@@ -61,8 +61,8 @@ public sealed class ModOptionMenu
 			string key,
 			in ToggleButtonBehaviour prefab,
 			in Transform parent,
-			in Color color,
-			in Vector3 pos,
+			Color color,
+			Vector3 pos,
 			in Func<bool> onClick)
 		{
 			this.key = key;
