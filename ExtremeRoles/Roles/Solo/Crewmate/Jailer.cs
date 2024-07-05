@@ -106,6 +106,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		}
 		IRoleSpecialReset.ResetRole(rolePlayerId);
 		var lawbreaker = new Lawbreaker(
+			jailer.Loader,
 			jailer.lawBreakerOption);
 		ExtremeRoleManager.SetNewRole(rolePlayerId, lawbreaker);
 	}
@@ -320,15 +321,15 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		this.canReplaceAssassin = loader.GetValue<Option, bool>(Option.CanReplaceAssassin);
 
 		yardBirdOption = new Yardbird.Option(
-			loader.GetValue<Option, int>(Option.YardbirdAddCommonTask),
-			loader.GetValue<Option, int>(Option.YardbirdAddNormalTask),
-			loader.GetValue<Option, int>(Option.YardbirdAddLongTask),
+			loader.GetValue<Option, int  >(Option.YardbirdAddCommonTask),
+			loader.GetValue<Option, int  >(Option.YardbirdAddNormalTask),
+			loader.GetValue<Option, int  >(Option.YardbirdAddLongTask),
 			loader.GetValue<Option, float>(Option.YardbirdSpeedMod),
-			loader.GetValue<Option, bool>(Option.YardbirdUseAdmin),
-			loader.GetValue<Option, bool>(Option.YardbirdUseSecurity),
-			loader.GetValue<Option, bool>(Option.YardbirdUseVital),
-			loader.GetValue<Option, bool>(Option.YardbirdUseVent),
-			loader.GetValue<Option, bool>(Option.YardbirdUseSab));
+			loader.GetValue<Option, bool >(Option.YardbirdUseAdmin),
+			loader.GetValue<Option, bool >(Option.YardbirdUseSecurity),
+			loader.GetValue<Option, bool >(Option.YardbirdUseVital),
+			loader.GetValue<Option, bool >(Option.YardbirdUseVent),
+			loader.GetValue<Option, bool >(Option.YardbirdUseSab));
 	}
 	private static void selfKill(byte rolePlayerId)
 	{
@@ -445,7 +446,10 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		bool Vent,
 		bool Sab);
 
+	public override IOptionLoader Loader { get; }
+
 	public Lawbreaker(
+		IOptionLoader loader,
 		Option option) : base(
 		ExtremeRoleId.Lawbreaker,
 		ExtremeRoleType.Neutral,
@@ -453,6 +457,9 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		ColorPalette.GamblerYellowGold,
 		option.Kill, false, option.Vent, option.Sab)
 	{
+
+		this.Loader = loader;
+
 		if (this.CanKill)
 		{
 			var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
