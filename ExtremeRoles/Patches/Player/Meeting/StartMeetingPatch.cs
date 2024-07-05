@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.Module.SystemType;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Player.Meeting;
 
@@ -16,9 +17,12 @@ public static class PlayerControlCoStartMeetingPatch
 		if (state.AssassinMeetingTrigger) { return; }
 
 		// Count meetings
-		if (target == null)
+		if (target == null &&
+			ExtremeSystemTypeManager.Instance.TryGet<MeetingCountSystem>(
+				ExtremeSystemType.MeetingCount,
+				out var countSystem))
 		{
-			state.IncreaseMeetingCount();
+			countSystem.Increse();
 		}
 	}
 }

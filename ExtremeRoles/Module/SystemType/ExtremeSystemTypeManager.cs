@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 using Hazel;
 using InnerNet;
@@ -22,8 +23,10 @@ namespace ExtremeRoles.Module.SystemType;
 
 public enum ExtremeSystemType : byte
 {
-	RaiseHandSystem,
+	MeetingCount,
 	GlobalCheckpoint,
+
+	RaiseHandSystem,
 	ModdedMeetingTimeSystem,
 	ModedMushroom,
 	ExtremeConsoleSystem,
@@ -274,6 +277,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	private void initialize()
 	{
 		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
+		add<MeetingCountSystem>(MeetingCountSystem.Type);
 	}
 
 	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
