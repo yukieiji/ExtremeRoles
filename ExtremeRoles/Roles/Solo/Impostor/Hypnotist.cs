@@ -1045,7 +1045,7 @@ public sealed class Doll :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         switch (reason)
         {
@@ -1208,9 +1208,7 @@ public sealed class Doll :
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
-    {
-        return;
-    }
+    { }
 
     public void Update(PlayerControl rolePlayer)
     {
@@ -1327,8 +1325,8 @@ public sealed class Doll :
     }
     private void updateButtonSprite()
     {
-        Sprite sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
-            Resources.ObjectPath.TestButton);
+        Sprite sprite = UnityObjectLoader.LoadSpriteFromResources(
+            ObjectPath.TestButton);
 
         switch (this.nextUseAbilityType)
         {

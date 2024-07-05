@@ -120,7 +120,7 @@ public sealed class Madmate :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         switch (reason)
         {

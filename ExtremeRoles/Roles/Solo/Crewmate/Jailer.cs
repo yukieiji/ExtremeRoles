@@ -485,11 +485,12 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
 	{
 		if (reason is
-			GameOverReason.HumansByTask or
-			GameOverReason.HumansByVote)
+				GameOverReason.HumansByTask or
+				GameOverReason.HumansByVote or
+				GameOverReason.HumansDisconnect)
 		{
 			return;
 		}

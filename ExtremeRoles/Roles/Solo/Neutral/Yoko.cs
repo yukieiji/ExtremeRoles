@@ -76,7 +76,7 @@ public sealed class Yoko :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected) { return; }
 

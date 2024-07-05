@@ -7,5 +7,5 @@ public interface IRoleWinPlayerModifier
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner);
+		in ExtremeGameResult.WinnerTempData winner);
 }
