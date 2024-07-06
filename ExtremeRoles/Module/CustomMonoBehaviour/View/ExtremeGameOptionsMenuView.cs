@@ -11,6 +11,7 @@ using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Option;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Helper;
@@ -128,11 +129,23 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		}
 
 		float yPos = initY;
+
+		IReadOnlySet<int> validOptionId = new HashSet<int>();
+		var instance = ExtremeGameModeManager.Instance;
+
 		foreach (var (catego, groupViewObj) in Enumerable.Zip(this.AllCategory, this.optionGroupViewObject))
 		{
+			int id = catego.Id;
 			if (!(
-					catego.Tab is OptionTab.GeneralTab ||
-					ExtremeGameModeManager.Instance.RoleSelector.IsValidCategory(catego.Id)
+					(
+						catego.Tab is OptionTab.GeneralTab &&
+						(
+							OptionCreator.IsCommonOption(id) ||
+							IRoleSelector.IsCommonOption(id) ||
+							instance.ShipOption.TryGetInvalidOption(id, out validOptionId)
+						)
+					) ||
+					instance.RoleSelector.IsValidCategory(id)
 				))
 			{
 				continue;
@@ -151,6 +164,14 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 			foreach (var (option, optionObj) in Enumerable.Zip(catego.Options, groupViewObj.Options))
 			{
+				if (!(
+						validOptionId.Count == 0 ||
+						validOptionId.Contains(option.Info.Id)
+					))
+				{
+					continue;
+				}
+
 				bool isActive = option.IsActiveAndEnable;
 
 				optionObj.gameObject.SetActive(isActive);

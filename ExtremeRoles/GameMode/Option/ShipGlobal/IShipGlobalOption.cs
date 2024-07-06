@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-
-using ExtremeRoles.Extension.Strings;
-using ExtremeRoles.Patches.Option;
-
-
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
@@ -156,36 +150,7 @@ public interface IShipGlobalOption
     public GhostRoleOption GhostRole { get; }
 
 	public void Load();
-	/*
-    public bool IsValidOption(int id);
-	// public IEnumerable<GlobalOption> UseOptionId();
-	/*
-	public void AddHudString(in List<string> allStr)
-	{
-		int lineCounter = 0;
-		StringBuilder builder = new StringBuilder();
-		foreach (GlobalOption id in UseOptionId())
-		{
-			var option = OptionManager.Instance.GetIOption((int)id);
-
-			string optionStr = option.ToHudString();
-			if (string.IsNullOrEmpty(optionStr)) { continue; }
-
-			int lineCount = optionStr.CountLine();
-			if (lineCounter + lineCount > IGameOptionsExtensionsToHudStringPatch.MaxLines)
-			{
-				lineCounter = 0;
-
-				allStr.Add(builder.ToString());
-
-				builder.Clear();
-			}
-			lineCounter += lineCount;
-			builder.AppendLine(optionStr);
-		}
-		allStr.Add(builder.ToString());
-	}
-	*/
+	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId);
 
 	public static void Create()
     {

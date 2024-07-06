@@ -208,6 +208,9 @@ public static class ExtremeRoleManager
 {
     public const int OptionOffsetPerRole = 200;
 
+	public const int RoleCategoryIdOffset = 200;
+	private const int conbRoleIdOffset = 1000;
+
 	public static readonly IReadOnlySet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Lover,
@@ -328,12 +331,8 @@ public static class ExtremeRoleManager
         CreateServant,
     }
 
-	private const int roleIdOffset = 200;
-
 	public static int GetRoleGroupId(ExtremeRoleId roleId)
-		=> roleIdOffset + (int)roleId;
-
-	private const int conbRoleIdOffset = 1000;
+		=> RoleCategoryIdOffset + (int)roleId;
 
 	public static int GetCombRoleGroupId(CombinationRoleType roleId)
 		=> conbRoleIdOffset + (int)roleId;

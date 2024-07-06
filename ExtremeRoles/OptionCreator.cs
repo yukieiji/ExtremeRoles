@@ -17,22 +17,25 @@ public static class OptionCreator
 
     public static Color DefaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 
-    public enum PresetOptionKey : int
+    public enum PresetOptionKey
     {
         Selection = 0,
     }
 
-	public enum RandomOptionKey : int
+	public enum RandomOptionKey
 	{
 		UseStrong = 0,
 		Algorithm,
 	}
 
-	public enum CommonOption : int
+	public enum CommonOption
 	{
 		PresetOption,
 		RandomOption
 	}
+
+	public static bool IsCommonOption(int id)
+		=> (CommonOption)id is CommonOption.PresetOption or CommonOption.RandomOption;
 
     public static void Create()
     {
