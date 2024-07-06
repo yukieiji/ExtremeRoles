@@ -204,7 +204,11 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			var role = roleData[playerInfo.PlayerId];
+			byte playerId = playerInfo.PlayerId;
+			if (!ExtremeRoleManager.TryGetRole(playerId, out var role))
+			{
+				continue;
+			}
 
 			string playerName = playerInfo.PlayerName;
 			if (role.IsNeutral())
@@ -239,7 +243,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 			}
 
 			if (ExtremeGhostRoleManager.GameRole.TryGetValue(
-					playerInfo.PlayerId, out GhostRoleBase? ghostRole) &&
+					playerId, out GhostRoleBase? ghostRole) &&
 				ghostRole is not null &&
 				ghostRole.IsNeutral() &&
 				ghostRole is IGhostRoleWinable winCheckGhostRole)
@@ -247,8 +251,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
 			}
 
-			if (this.playerTaskInfo.TryGetValue(
-					playerInfo.PlayerId, out var taskInfo))
+			if (this.playerTaskInfo.TryGetValue(playerId, out var taskInfo))
 			{
 				var summary =
 					FinalSummary.PlayerSummary.Create(
@@ -443,7 +446,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 	private void addNeutralWinner()
 	{
-		List<(ExtremeRoleId, int)> winRole = new List<(ExtremeRoleId, int)>();
+		HashSet<(ExtremeRoleId, int)> winRole = new HashSet<(ExtremeRoleId, int)>();
 
 		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
@@ -453,18 +456,18 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				multiAssignRole.AnotherRole is not null &&
 				tryAddWinRole(
 					multiAssignRole.AnotherRole,
-						playerInfo, ref winRole))
+						playerInfo, in winRole))
 			{
 				continue;
 			}
-			tryAddWinRole(role, playerInfo, ref winRole);
+			tryAddWinRole(role, playerInfo, in winRole);
 		}
 	}
 
 	private bool tryAddWinRole(
 		in SingleRoleBase role,
 		in Player playerInfo,
-		ref List<(ExtremeRoleId, int)> winRole)
+		in HashSet<(ExtremeRoleId, int)> winRole)
 	{
 		int gameControlId = role.GameControlId;
 
@@ -474,8 +477,9 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 		}
 
 		var logger = ExtremeRolesPlugin.Logger;
+		var item = (role.Id, gameControlId);
 
-		if (winRole.Contains((role.Id, gameControlId)))
+		if (winRole.Contains(item))
 		{
 			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
 			this.winner.Add(playerInfo);
@@ -483,7 +487,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 		}
 		else if (role.IsNeutral() && role.IsWin)
 		{
-			winRole.Add((role.Id, gameControlId));
+			winRole.Add(item);
 
 			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
 			this.winner.Add(playerInfo);
