@@ -279,7 +279,8 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				this.winner.Clear();
 				foreach (Player player in GameData.Instance.AllPlayers.GetFastEnumerator())
 				{
-					if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor())
+					if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
+						role.IsImpostor())
 					{
 						this.winner.Add(player);
 					}
@@ -404,7 +405,10 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			var role = ExtremeRoleManager.GameRole[player.PlayerId];
+			if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+			{
+				continue;
+			}
 
 			if (role.Id == roleId)
 			{
@@ -428,7 +432,10 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		foreach (var player in neutralNoWinner)
 		{
-			var role = ExtremeRoleManager.GameRole[player.PlayerId];
+			if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+			{
+				continue;
+			}
 
 			if (roles.Contains(role.Id))
 			{
@@ -450,7 +457,10 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+			if (!ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role))
+			{
+				continue;
+			}
 
 			if (role is MultiAssignRoleBase multiAssignRole &&
 				multiAssignRole.AnotherRole is not null &&
