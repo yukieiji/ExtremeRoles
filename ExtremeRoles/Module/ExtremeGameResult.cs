@@ -383,7 +383,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 			winModRole.ModifiedWinPlayer(
 				playerInfo,
 				gameData.EndReason,
-				ref this.winner);
+				in this.winner);
 		}
 		logger.LogInfo($"-- End: modified win player --");
 
