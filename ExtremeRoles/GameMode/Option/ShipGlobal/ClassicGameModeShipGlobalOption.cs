@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
@@ -37,7 +38,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool IsSameNeutralSameWin { get; private set; }
     public bool DisableNeutralSpecialForceEnd { get; private set; }
 
-	private readonly IReadOnlySet<int> cacheOptionId = new HashSet<int>();
+	private readonly IReadOnlySet<int> cacheOptionId = OptionSplitter.AllEnable;
 
 	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId)
 	{

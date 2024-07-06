@@ -215,23 +215,13 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 		float yPos = initPos;
 
-		IReadOnlySet<int> validOptionId = new HashSet<int>();
+		IReadOnlySet<int>? validOptionId = default;
 		var instance = ExtremeGameModeManager.Instance;
 
 		foreach (var (catego, optionGroupView) in container.Category.Zip(optionGroupViewObject))
 		{
 			int id = catego.Id;
-			if (!(
-					(
-						catego.Tab is OptionTab.GeneralTab &&
-						(
-							OptionCreator.IsCommonOption(id) ||
-							IRoleSelector.IsCommonOption(id) ||
-							instance.ShipOption.TryGetInvalidOption(id, out validOptionId)
-						)
-					) ||
-					instance.RoleSelector.IsValidCategory(id)
-				))
+			if (!OptionSplitter.TryGetValidOption(catego, out validOptionId))
 			{
 				continue;
 			}
@@ -249,10 +239,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			int activeIndex = 0;
 			foreach (var (option, optionView) in catego.Options.Zip(optionGroupView.Options))
 			{
-				if (!(
-						validOptionId.Count == 0 ||
-						validOptionId.Contains(option.Info.Id)
-					))
+				if (!OptionSplitter.IsValidOption(validOptionId, option.Info.Id))
 				{
 					continue;
 				}
