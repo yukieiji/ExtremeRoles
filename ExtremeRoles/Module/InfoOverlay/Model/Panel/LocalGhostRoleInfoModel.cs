@@ -30,8 +30,8 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 
 		if (!role.IsVanillaRole())
 		{
-			var useLoader = role is
-				ICombination combGhost &&
+			var useLoader =
+				role is ICombination combGhost &&
 				combGhost.OffsetInfo is not null &&
 				ExtremeRoleManager.CombRole.TryGetValue((byte)combGhost.OffsetInfo.RoleId, out var combRole) &&
 					combRole is not null ?
