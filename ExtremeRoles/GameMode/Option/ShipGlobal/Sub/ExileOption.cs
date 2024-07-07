@@ -1,10 +1,7 @@
-﻿using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+﻿using AmongUs.GameOptions;
+
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -29,7 +26,14 @@ public readonly struct ExileOption(in OptionCategory category)
 
 	public static void Create(in OptionCategoryFactory factory)
 	{
-		factory.CreateSelectionOption<ExiledOption, ConfirmExileMode>(ExiledOption.ConfirmExilMode);
-		factory.CreateBoolOption(ExiledOption.IsConfirmRole, false);
+		var hook = () =>
+		{
+			var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
+			return
+				currentGameOptions.IsTryCast<NormalGameOptionsV08>(out var normal) &&
+				normal.ConfirmImpostor;
+		};
+		factory.CreateSelectionOption<ExiledOption, ConfirmExileMode>(ExiledOption.ConfirmExilMode, hook: hook);
+		factory.CreateBoolOption(ExiledOption.IsConfirmRole, false, hook: hook);
 	}
 }
