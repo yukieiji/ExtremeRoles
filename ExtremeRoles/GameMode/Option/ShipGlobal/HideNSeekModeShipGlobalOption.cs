@@ -19,12 +19,12 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public bool IsSameNeutralSameWin { get; private set; }
     public bool DisableNeutralSpecialForceEnd { get; private set; }
 
-    public AdminDeviceOption Admin { get; private set; }
+	public AdminDeviceOption Admin { get; private set; }
     public DeviceOption Security { get; private set; }
     public DeviceOption Vital { get; private set; }
 	public SpawnOption Spawn { get; private set; }
 
-	public ConfirmExilMode ExilMode => ConfirmExilMode.Impostor;
+	public ConfirmExileMode ExilMode => ConfirmExileMode.Impostor;
     public bool IsConfirmRole => false;
 
     public bool DisableTaskWinWhenNoneTaskCrew => false;
@@ -36,6 +36,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 	public MeetingHudOption Meeting { get; } = new();
 	public GhostRoleOption GhostRole { get; } = new();
+	public ExileOption Exile { get; } = new();
 
 	private IReadOnlyDictionary<int, HashSet<int>> useOption = new Dictionary<int, HashSet<int>>()
 	{
