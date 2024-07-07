@@ -9,7 +9,7 @@ namespace ExtremeRoles.Module.CustomOption.Implemented;
 
 public sealed class NoRelation() : IOptionRelation
 {
-	public List<IOption> Children => throw new System.NotImplementedException();
+	public List<IOption> Children => throw new NotImplementedException();
 }
 
 public sealed class DefaultRelation() : IOptionRelation
@@ -17,7 +17,15 @@ public sealed class DefaultRelation() : IOptionRelation
 	public List<IOption> Children { get; } = new List<IOption>();
 }
 
-public sealed class WithParentRelation(IOption parent) : IOptionRelation, IOptionParent
+public sealed class DefaultChain(in Func<bool> hook) : IOptionRelation, IOptionChain
+{
+	public List<IOption> Children { get; } = new List<IOption>();
+	private readonly Func<bool> hook = hook;
+
+	public bool IsChainEnable => hook.Invoke();
+}
+
+public sealed class WithParentRelation(IOption parent) : IOptionRelation, IOptionParent, IOptionChain
 {
 	public List<IOption> Children { get; } = new List<IOption>();
 	public IOption Parent { get; } = parent;
@@ -48,7 +56,8 @@ public sealed class WithParentRelation(IOption parent) : IOptionRelation, IOptio
 	}
 }
 
-public sealed class WithInvertParent(IOption parent) : IOptionRelation, IOptionParent, IOptionInvertRelation
+public sealed class WithInvertParent(IOption parent) :
+	IOptionRelation, IOptionParent, IOptionInvertRelation, IOptionChain
 {
 	public List<IOption> Children { get; } = new List<IOption>();
 	public IOption Parent { get; } = parent;
@@ -57,7 +66,8 @@ public sealed class WithInvertParent(IOption parent) : IOptionRelation, IOptionP
 		=> WithParentRelation.ParentChainEnable(Parent, true);
 }
 
-public sealed class WithInvertParentAndCustomHook(IOption parent, in Func<bool> hook) : IOptionRelation, IOptionParent, IOptionInvertRelation
+public sealed class WithInvertParentAndCustomHook(IOption parent, in Func<bool> hook) :
+	IOptionRelation, IOptionParent, IOptionChain, IOptionInvertRelation
 {
 	public List<IOption> Children { get; } = new List<IOption>();
 	public IOption Parent { get; } = parent;

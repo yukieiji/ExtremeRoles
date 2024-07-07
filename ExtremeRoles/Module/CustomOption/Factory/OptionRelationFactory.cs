@@ -23,7 +23,9 @@ public static class OptionRelationFactory
 		}
 		else if (isParentNull)
 		{
-			return new DefaultRelation();
+			return notUseHook ?
+				new DefaultRelation() :
+				new DefaultChain(hook!);
 		}
 		else if (invert)
 		{

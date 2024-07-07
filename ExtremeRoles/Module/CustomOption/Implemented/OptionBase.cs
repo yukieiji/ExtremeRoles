@@ -38,7 +38,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 				return false;
 			}
 
-			if (Relation is not IOptionParent hasParent)
+			if (Relation is not IOptionChain hasParent)
 			{
 				return true;
 			}
