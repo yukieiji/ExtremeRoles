@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
@@ -16,7 +17,7 @@ public sealed class DefaultRelation() : IOptionRelation
 	public List<IOption> Children { get; } = new List<IOption>();
 }
 
-public sealed class OptionRelationWithParent(IOption parent) : IOptionRelation, IOptionParent
+public sealed class WithParentRelation(IOption parent) : IOptionRelation, IOptionParent
 {
 	public List<IOption> Children { get; } = new List<IOption>();
 	public IOption Parent { get; } = parent;
@@ -37,7 +38,7 @@ public sealed class OptionRelationWithParent(IOption parent) : IOptionRelation, 
 			{
 				active = !active;
 			}
-			isInvert = parent.Relation is OptionRelationWithInvertParent;
+			isInvert = parent.Relation is IOptionInvertRelation;
 
 			parent =
 				parent.Relation is IOptionParent hasParent ?
@@ -47,11 +48,22 @@ public sealed class OptionRelationWithParent(IOption parent) : IOptionRelation, 
 	}
 }
 
-public sealed class OptionRelationWithInvertParent(IOption parent) : IOptionRelation, IOptionParent
+public sealed class WithInvertParent(IOption parent) : IOptionRelation, IOptionParent, IOptionInvertRelation
 {
 	public List<IOption> Children { get; } = new List<IOption>();
 	public IOption Parent { get; } = parent;
 
 	public bool IsChainEnable
-		=> OptionRelationWithParent.ParentChainEnable(Parent, true);
+		=> WithParentRelation.ParentChainEnable(Parent, true);
+}
+
+public sealed class WithInvertParentAndCustomHook(IOption parent, in Func<bool> hook) : IOptionRelation, IOptionParent, IOptionInvertRelation
+{
+	public List<IOption> Children { get; } = new List<IOption>();
+	public IOption Parent { get; } = parent;
+	private readonly Func<bool> hook = hook;
+
+	public bool IsChainEnable
+		=> hook.Invoke() &&
+		WithParentRelation.ParentChainEnable(Parent, true);
 }

@@ -10,23 +10,30 @@ namespace ExtremeRoles.Module.CustomOption.Factory;
 
 public static class OptionRelationFactory
 {
-	public static IOptionRelation Create(IOption? parent = null, bool invert=false)
+	public static IOptionRelation Create(
+		IOption? parent = null,
+		bool invert=false,
+		in Func<bool>? hook = null)
 	{
-		if (parent is null && invert)
+		bool isParentNull = parent is null;
+		bool notUseHook = hook is null;
+		if (isParentNull && invert)
 		{
 			throw new ArgumentException("Invalided Parent");
 		}
-		else if (parent is null)
+		else if (isParentNull)
 		{
 			return new DefaultRelation();
 		}
 		else if (invert)
 		{
-			return new OptionRelationWithInvertParent(parent);
+			return notUseHook ?
+				new WithInvertParent(parent!) :
+				new WithInvertParentAndCustomHook(parent!, hook!);
 		}
 		else
 		{
-			return new OptionRelationWithParent(parent);
+			return new WithParentRelation(parent!);
 		}
 	}
 }

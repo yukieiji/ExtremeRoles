@@ -12,3 +12,6 @@ public interface IOptionParent
 	public IOption Parent { get; }
 	public bool IsChainEnable { get; }
 }
+
+public interface IOptionInvertRelation
+{ }
