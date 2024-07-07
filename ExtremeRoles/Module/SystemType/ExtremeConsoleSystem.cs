@@ -18,7 +18,7 @@ public sealed class ExtremeConsoleSystem : IExtremeSystemType
 	public static ExtremeConsoleSystem Create()
 		=> ExtremeSystemTypeManager.Instance.CreateOrGet<ExtremeConsoleSystem>(systemType);
 
-	public ExtremeConsole CreateConsoleObj(in Vector3 pos, string? name = null)
+	public ExtremeConsole CreateConsoleObj(Vector3 pos, string? name = null)
 	{
 		if (string.IsNullOrEmpty(name))
 		{
@@ -36,7 +36,7 @@ public sealed class ExtremeConsoleSystem : IExtremeSystemType
 		return console;
 	}
 
-	public ExtremeConsole CreateConsoleObj<T>(in Vector2 pos, string? name = null, T? behaviour = default(T))
+	public ExtremeConsole CreateConsoleObj<T>(Vector2 pos, string? name = null, T? behaviour = default(T))
 		where T : ExtremeConsole.IBehavior
 	{
 		var console = CreateConsoleObj(new Vector3(pos.x, pos.y, pos.y / 1000.0f), name);
@@ -48,7 +48,7 @@ public sealed class ExtremeConsoleSystem : IExtremeSystemType
 		return console;
 	}
 
-	public ExtremeConsole CreateConsoleObj<T>(in Vector3 pos, string? name = null, T? behaviour = default(T))
+	public ExtremeConsole CreateConsoleObj<T>(Vector3 pos, string? name = null, T? behaviour = default(T))
 		where T : ExtremeConsole.IBehavior
 	{
 		var console = CreateConsoleObj(pos, name);

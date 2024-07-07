@@ -72,13 +72,11 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		private const string nameTextObjName = "NameText_TMP";
 		private const string colorBindTextName = "ColorblindName_TMP";
 
-		private struct PlayerCosmicInfo
-		{
-			public CosmeticsLayer Cosmetics;
-			public NetworkedPlayerInfo.PlayerOutfit OutfitInfo;
-			public bool FlipX;
-			public int ColorInfo;
-		}
+		private readonly record struct PlayerCosmicInfo(
+			CosmeticsLayer Cosmetics,
+			NetworkedPlayerInfo.PlayerOutfit OutfitInfo,
+			bool FlipX,
+			int ColorInfo);
 
 		public FakePlayer(
 			PlayerControl rolePlayer,
@@ -86,13 +84,11 @@ public sealed class FakerDummySystem : IExtremeSystemType
 			bool canSeeFake)
 		{
 			NetworkedPlayerInfo.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
-			PlayerCosmicInfo cosmicInfo = new PlayerCosmicInfo()
-			{
-				Cosmetics = targetPlayer.cosmetics,
-				FlipX = rolePlayer.cosmetics.currentBodySprite.BodySprite.flipX,
-				OutfitInfo = playerOutfit,
-				ColorInfo = playerOutfit.ColorId,
-			};
+			PlayerCosmicInfo cosmicInfo = new PlayerCosmicInfo(
+				targetPlayer.cosmetics,
+				playerOutfit,
+				rolePlayer.cosmetics.currentBodySprite.BodySprite.flipX,
+				playerOutfit.ColorId);
 			this.ColorId = cosmicInfo.ColorInfo;
 			this.body = new GameObject("DummyPlayer");
 			this.body.layer = rolePlayer.gameObject.layer;

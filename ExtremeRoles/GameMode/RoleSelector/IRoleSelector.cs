@@ -56,6 +56,14 @@ public interface IRoleSelector
 		out var cate) &&
 		cate.GetValue<bool>((int)XionOption.UseXion);
 
+	public static bool IsCommonOption(int id)
+	=> id == (int)SpawnOptionCategory.RoleSpawnCategory ||
+		id == (int)SpawnOptionCategory.GhostRoleSpawnCategory ||
+		(
+			id > ExtremeRoleManager.RoleCategoryIdOffset &&
+			id == ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion)
+		);
+
 	public bool IsValidCategory(int categoryId);
 
     public static void CreateRoleGlobalOption()

@@ -9,7 +9,7 @@ using ExtremeRoles.Module.PRNG;
 
 namespace ExtremeRoles;
 
-public class RandomGenerator
+public static class RandomGenerator
 {
     public static RNGBase Instance
     {

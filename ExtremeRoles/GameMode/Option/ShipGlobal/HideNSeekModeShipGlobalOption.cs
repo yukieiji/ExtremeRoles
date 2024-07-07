@@ -1,7 +1,8 @@
-﻿using System.Text;
-using System.Collections.Generic;
-using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+﻿using System.Collections.Generic;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -36,41 +37,26 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 	public MeetingHudOption Meeting { get; } = new();
 	public GhostRoleOption GhostRole { get; } = new();
 
-	/*
-	private HashSet<GlobalOption> useOption =
-	[
-        GlobalOption.DisableVent,
-		GlobalOption.VentAnimationModeInVison,
+	private IReadOnlyDictionary<int, HashSet<int>> useOption = new Dictionary<int, HashSet<int>>()
+	{
+		{ (int)ShipGlobalOptionCategory.VentOption       , [(int)VentOption.Disable, (int)VentOption.AnimationModeInVison] },
+		{ (int)ShipGlobalOptionCategory.RandomSpawnOption, OptionSplitter.AllEnable },
+		{ (int)ShipGlobalOptionCategory.AdminOption      , OptionSplitter.AllEnable },
+		{ (int)ShipGlobalOptionCategory.VitalOption      , OptionSplitter.AllEnable },
+		{ (int)ShipGlobalOptionCategory.SecurityOption   , OptionSplitter.AllEnable },
+		{ (int)ShipGlobalOptionCategory.NeutralWinOption , OptionSplitter.AllEnable },
+		{ (int)ShipGlobalOptionCategory.TaskOption       , OptionSplitter.AllEnable },
+		{ (int)ShipGlobalOptionCategory.RandomMapOption  , OptionSplitter.AllEnable },
+	};
 
-		GlobalOption.IsFixWallHaskTask,
-		GlobalOption.GarbageTask,
-		GlobalOption.ShowerTask,
-		GlobalOption.DevelopPhotosTask,
-		GlobalOption.DivertPowerTask,
+	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId)
+	{
+		bool result = this.useOption.TryGetValue(categoryId, out var options);
+		useOptionId = options;
+		return result;
+	}
 
-		GlobalOption.IsRemoveAdmin,
-        GlobalOption.AirShipEnableAdmin,
-        GlobalOption.EnableAdminLimit,
-        GlobalOption.AdminLimitTime,
-
-        GlobalOption.IsRemoveVital,
-        GlobalOption.EnableVitalLimit,
-        GlobalOption.VitalLimitTime,
-
-        GlobalOption.IsRemoveSecurity,
-        GlobalOption.EnableSecurityLimit,
-        GlobalOption.SecurityLimitTime,
-
-        GlobalOption.RandomMap,
-
-        GlobalOption.IsSameNeutralSameWin,
-        GlobalOption.DisableNeutralSpecialForceEnd,
-
-        // GlobalOption.EnableHorseMode
-    ];
-	*/
-
-    public void Load()
+	public void Load()
     {
 		var vent = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VentOption);
 		this.Vent = new VentConsoleOption(
@@ -99,15 +85,4 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 		var randomMapCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.RandomMapOption);
 		IsRandomMap = randomMapCate.GetValue<bool>((int)RandomMap.Enable);
 	}
-	/*
-    public bool IsValidOption(int id) => this.useOption.Contains((GlobalOption)id);
-
-	public IEnumerable<GlobalOption> UseOptionId()
-	{
-		foreach (GlobalOption id in this.useOption)
-		{
-			yield return id;
-		}
-	}
-	*/
 }

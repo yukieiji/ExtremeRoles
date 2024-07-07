@@ -287,7 +287,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 		}
 	}
 
-	private void createYashiro(in int controlId, in Vector2 pos)
+	private void createYashiro(in int controlId, Vector2 pos)
 	{
 		var id = this.gen.Generate(controlId);
 		var info = new YashiroInfo(id);

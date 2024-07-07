@@ -1,9 +1,9 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Performance;
-
+using ExtremeRoles.GhostRoles.API.Interface;
 
 
 namespace ExtremeRoles.Module.InfoOverlay.Model.Panel;
@@ -30,7 +30,14 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 
 		if (!role.IsVanillaRole())
 		{
-			var option = role.Loader.Get(RoleCommonOption.SpawnRate);
+			var useLoader =
+				role is ICombination combGhost &&
+				combGhost.OffsetInfo is not null &&
+				ExtremeRoleManager.CombRole.TryGetValue((byte)combGhost.OffsetInfo.RoleId, out var combRole) &&
+					combRole is not null ?
+					combRole.Loader : role.Loader;
+
+			var option = useLoader.Get(RoleCommonOption.SpawnRate);
 			roleOptionString = IInfoOverlayPanelModel.ToHudStringWithChildren(option);
 		}
 

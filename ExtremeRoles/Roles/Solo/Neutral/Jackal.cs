@@ -518,7 +518,7 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         Jackal jackal,
         byte jackalPlayerId,
         bool isImpostor,
-        in Jackal.SidekickOptionHolder option) : base(
+        Jackal.SidekickOptionHolder option) : base(
             ExtremeRoleId.Sidekick,
             ExtremeRoleType.Neutral,
             ExtremeRoleId.Sidekick.ToString(),
@@ -631,11 +631,7 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         newJackal.SidekickPlayerId = new List<byte> (curJackal.SidekickPlayerId);
         newJackal.SetControlId(curSideKick.GameControlId);
 
-
-        if (newJackal.SidekickPlayerId.Contains(targetId))
-        {
-            newJackal.SidekickPlayerId.Remove(targetId);
-        }
+        newJackal.SidekickPlayerId.Remove(targetId);
 
         if (multiAssignTrigger)
         {

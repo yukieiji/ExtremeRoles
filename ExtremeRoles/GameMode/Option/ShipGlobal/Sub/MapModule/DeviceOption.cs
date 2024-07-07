@@ -22,11 +22,13 @@ public interface IDeviceOption
 	public static IOption Create(in OptionCategoryFactory factory)
 	{
 		var removeOpt = factory.CreateBoolOption(DeviceOptionType.IsRemove, false);
-		var enableLimit = factory.CreateBoolOption(DeviceOptionType.EnableLimit, false, removeOpt);
+		var enableLimit = factory.CreateBoolOption(
+			DeviceOptionType.EnableLimit, false,
+			removeOpt, invert: true);
 		factory.CreateFloatOption(
 			DeviceOptionType.LimitTime,
 			30.0f, 5.0f, 120.0f, 0.5f,
-			removeOpt,
+			enableLimit,
 			format: OptionUnit.Second);
 
 		return removeOpt;

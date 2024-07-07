@@ -275,9 +275,8 @@ public static class GameStartManagerPatch
             int minutes = (int)timer / 60;
             int seconds = (int)timer % 60;
 
-            __instance.PlayerCounter.text = $"{currentText}   ({minutes:00}:{seconds:00})";
-            __instance.PlayerCounter.autoSizeTextContainer = true;
-        }
+            __instance.PlayerCounter.text = $"{currentText}\n({minutes:00}:{seconds:00})";
+		}
     }
 
     private static void updateText(

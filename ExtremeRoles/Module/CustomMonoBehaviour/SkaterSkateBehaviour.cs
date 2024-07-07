@@ -15,7 +15,7 @@ public sealed class SkaterSkateBehaviour : MonoBehaviour
 {
 	public const float SpeedOffset = 32.0f;
 
-	public record struct Parameter(float Friction, float Acceleration, float MaxSpeed, float? E=null);
+	public readonly record struct Parameter(float Friction, float Acceleration, float MaxSpeed, float? E=null);
 
 	[HideFromIl2Cpp]
 	public Vector2 PrevForce { get; private set; } = Vector2.zero;

@@ -22,21 +22,28 @@ public sealed class OptionRelationWithParent(IOption parent) : IOptionRelation, 
 	public IOption Parent { get; } = parent;
 
 	public bool IsChainEnable
-	{
-		get
-		{
-			IOption? parent = Parent;
-			bool active = true;
+		=> ParentChainEnable(Parent, false);
 
-			while (parent != null && active)
+	public static bool ParentChainEnable(IOption? parent, bool defaultInvert)
+	{
+		bool active = true;
+		bool isInvert = defaultInvert;
+
+		while (parent != null && active)
+		{
+			active = parent.IsEnable;
+
+			if (isInvert)
 			{
-				active = parent.IsEnable;
-				parent =
-					parent.Relation is IOptionParent hasParent ?
-					hasParent.Parent : null;
+				active = !active;
 			}
-			return active;
+			isInvert = parent.Relation is OptionRelationWithInvertParent;
+
+			parent =
+				parent.Relation is IOptionParent hasParent ?
+				hasParent.Parent : null;
 		}
+		return active;
 	}
 }
 
@@ -46,21 +53,5 @@ public sealed class OptionRelationWithInvertParent(IOption parent) : IOptionRela
 	public IOption Parent { get; } = parent;
 
 	public bool IsChainEnable
-	{
-		get
-		{
-			IOption? parent = Parent;
-			bool active = true;
-
-			while (parent != null && active)
-			{
-				bool parentEnable = parent.IsEnable;
-				active = Parent != parent ? parentEnable : !parentEnable;
-				parent =
-					parent.Relation is IOptionParent hasParent ?
-					hasParent.Parent : null;
-			}
-			return active;
-		}
-	}
+		=> OptionRelationWithParent.ParentChainEnable(Parent, true);
 }
