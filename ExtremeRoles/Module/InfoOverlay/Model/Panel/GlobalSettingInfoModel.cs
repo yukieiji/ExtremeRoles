@@ -39,22 +39,34 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 			tryAddHudString(container, (int)key, this.printOption);
 		}
 
+		this.printOption.AppendLine();
+
+		this.printOption.AppendLine("・役職のスポーン数");
 		addRoleSpawnNumOptionHudString(container, this.printOption);
+
+		this.printOption.AppendLine();
+
 		tryAddHudString(
 			container,
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			this.printOption);
+
+		this.printOption.AppendLine();
 
 		foreach (var key in Enum.GetValues<ShipGlobalOptionCategory>())
 		{
 			tryAddHudString(container, (int)key, this.printOption);
 		}
 
+		this.printOption.AppendLine();
+
 		string integrateOption = CompatModManager.Instance.GetIntegrateOptionHudString();
 		if (!string.IsNullOrEmpty(integrateOption))
 		{
 			this.printOption.Append(integrateOption);
 		}
+
+		this.printOption.AppendLine();
 
 		return (
 			$"<size=135%>{Translation.GetString("vanilaOptions")}</size>\n\n{
