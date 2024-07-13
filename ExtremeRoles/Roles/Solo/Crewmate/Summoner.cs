@@ -10,10 +10,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Performance;
-
-
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Resources;
 
 #nullable enable
 
@@ -45,8 +43,8 @@ public sealed class Summoner :
         Range,
     }
 
-	private GameData.PlayerInfo? targetData;
-	private GameData.PlayerInfo? summonTarget;
+	private NetworkedPlayerInfo? targetData;
+	private NetworkedPlayerInfo? summonTarget;
 
     private float range;
 
@@ -90,25 +88,28 @@ public sealed class Summoner :
 
     public void CreateAbility()
     {
-		var opt = OptionManager.Instance;
-		float coolTime = opt.GetValue<float>(
-			this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime));
+		var loader = this.Loader;
+
+		float coolTime = loader.GetValue<RoleAbilityCommonOption, float>(
+			RoleAbilityCommonOption.AbilityCoolTime);
+
+		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
 
 		var markingAbility = new CountBehavior(
-			"marking", null,
+			"marking", img,
 			isUseMarking,
 			marking);
 		markingAbility.SetCoolTime(coolTime);
 		markingAbility.SetAbilityCount(
-			opt.GetValue<int>(this.GetRoleOptionId(Option.MarkingCount)));
+			loader.GetValue<Option, int>(Option.MarkingCount));
 
 		var summonAbility = new CountBehavior(
-			"Summon", null,
+			"Summon", img,
 			isUseSummon,
 			summon);
 		summonAbility.SetCoolTime(coolTime);
 		summonAbility.SetAbilityCount(
-			opt.GetValue<int>(this.GetRoleOptionId(Option.SummonCount)));
+			loader.GetValue<Option, int>(Option.SummonCount));
 
 		this.Button = new ExtremeMultiModalAbilityButton(
 			new RoleButtonActivator(),
@@ -126,7 +127,7 @@ public sealed class Summoner :
         this.targetData = null;
 
         PlayerControl target = Player.GetClosestPlayerInRange(
-            CachedPlayerControl.LocalPlayer, this,
+            PlayerControl.LocalPlayer, this,
             this.range);
         if (target == null) { return false; }
 
@@ -135,52 +136,47 @@ public sealed class Summoner :
         return IRoleAbility.IsCommonUse();
     }
 
-    public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
-    {
-        return;
-    }
-
-    public void ResetOnMeetingStart()
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		if (this.summonTarget != null &&
 			this.summonTarget.IsDead)
 		{
 			this.summonTarget = null;
 		}
+	}
+
+    public void ResetOnMeetingStart()
+    {
     }
 
     protected override void CreateSpecificOption(
-        IOptionInfo parentOps)
+        AutoParentSetOptionCategoryFactory factory)
     {
 
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
-			IRoleAbilityMixin.DefaultCoolTime,
-			IRoleAbilityMixin.MinCoolTime,
-			IRoleAbilityMixin.MaxCoolTime,
-			IRoleAbilityMixin.Step,
-			parentOps,
+			IRoleAbility.DefaultCoolTime,
+			IRoleAbility.MinCoolTime,
+			IRoleAbility.MaxCoolTime,
+			IRoleAbility.Step,
 			format: OptionUnit.Second);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.MarkingCount,
-			3, 1, 10, 1, parentOps);
+			3, 1, 10, 1);
 
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.Range,
-			2.5f, 0.0f, 7.5f, 0.1f,
-			parentOps);
+			2.5f, 0.0f, 7.5f, 0.1f);
 
-		CreateIntOption(
+		factory.CreateIntOption(
 			Option.SummonCount,
-			3, 1, 10, 1, parentOps);
+			3, 1, 10, 1);
 	}
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionManager.Instance;
-        this.range = allOpt.GetValue<float>(
-            GetRoleOptionId(Option.Range));
+        this.range = this.Loader.GetValue<Option, float>(Option.Range);
     }
 
 	private bool isUseMarking()
@@ -188,7 +184,7 @@ public sealed class Summoner :
 		this.targetData = null;
 
 		PlayerControl target = Player.GetClosestPlayerInRange(
-			CachedPlayerControl.LocalPlayer, this,
+			PlayerControl.LocalPlayer, this,
 			this.range);
 		if (target == null) { return false; }
 
@@ -202,18 +198,17 @@ public sealed class Summoner :
 
 	private bool summon()
 	{
+		var local = PlayerControl.LocalPlayer;
 		if (this.summonTarget == null ||
-			CachedPlayerControl.LocalPlayer == null)
+			local == null)
 		{
 			return false;
 		}
 
-		var local = CachedPlayerControl.LocalPlayer;
-
 		using (var writer = RPCOperator.CreateCaller(
 			RPCOperator.Command.SummonerOps))
 		{
-			var pos = local.PlayerControl.transform.position;
+			var pos = local.transform.position;
 			writer.WriteByte(local.PlayerId);
 			writer.WriteFloat(pos.x);
 			writer.WriteFloat(pos.y);

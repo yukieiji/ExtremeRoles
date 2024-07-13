@@ -7,7 +7,7 @@ public sealed class GhostRoleButtonActivator : IButtonAutoActivator
 {
 	public bool IsActive()
 	{
-		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
 		return
 			(
