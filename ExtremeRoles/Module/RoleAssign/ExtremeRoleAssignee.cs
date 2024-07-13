@@ -407,7 +407,7 @@ public sealed class ExtremeRoleAssignee
 
 		Dictionary<int, SingleRoleSpawnData> teamSpawnData = spawnData.CurrentSingleRoleSpawnData[team];
 
-		if (!targetPlayer.Any() || !targetPlayer.Any()) { return; }
+		if (targetPlayer.Count == 0) { return; }
 
 		List<(int intedRoleId, int weight)> spawnCheckRoleId =
 			createSingleRoleIdData(teamSpawnData);
