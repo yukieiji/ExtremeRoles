@@ -12,9 +12,9 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class PlayerRoleAssignData
 {
-	public IReadOnlyList<PlayerControl> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
+	public IReadOnlyList<NetworkedPlayerInfo> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 
-	private List<PlayerControl> needRoleAssignPlayer;
+	private List<NetworkedPlayerInfo> needRoleAssignPlayer;
 	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
 	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
@@ -24,8 +24,8 @@ public sealed class PlayerRoleAssignData
 	{
 		this.assignData.Clear();
 
-		this.needRoleAssignPlayer = new List<PlayerControl>(
-			GameData.Instance.AllPlayers.ToArray().Select(x => x.Object));
+		this.needRoleAssignPlayer = new List<NetworkedPlayerInfo>(
+			GameData.Instance.AllPlayers.ToArray());
 		this.gameControlId = 0;
 	}
 
@@ -56,36 +56,29 @@ public sealed class PlayerRoleAssignData
 		RoleAssignState.Instance.SwitchRoleAssignToEnd();
 	}
 
-	public IReadOnlyList<PlayerControl> GetCanImpostorAssignPlayer()
+	public IReadOnlyList<NetworkedPlayerInfo> GetCanImpostorAssignPlayer()
 	{
 		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
-				return x.Data.Role.Role switch
-				{
+				return x.Role.Role is
 					RoleTypes.Impostor or
 					RoleTypes.Shapeshifter or
-					RoleTypes.Phantom => true,
-					_ => false
-				};
+					RoleTypes.Phantom;
 			});
 	}
 
-	public IReadOnlyList<PlayerControl> GetCanCrewmateAssignPlayer()
+	public IReadOnlyList<NetworkedPlayerInfo> GetCanCrewmateAssignPlayer()
 	{
 		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
-				return x.Data.Role.Role switch
-				{
+				return x.Role.Role is
 					RoleTypes.Crewmate or
 					RoleTypes.Engineer or
 					RoleTypes.Scientist or
 					RoleTypes.Noisemaker or
-					RoleTypes.Tracker => true,
-
-					_ => false
-				};
+					RoleTypes.Tracker;
 			});
 	}
 
@@ -115,12 +108,12 @@ public sealed class PlayerRoleAssignData
 		this.assignData.Add(data);
 	}
 
-	public void AddPlayer(PlayerControl player)
+	public void AddPlayer(NetworkedPlayerInfo player)
 	{
 		this.needRoleAssignPlayer.Add(player);
 	}
 
-	public void RemvePlayer(PlayerControl player)
+	public void RemvePlayer(NetworkedPlayerInfo player)
 	{
 		this.needRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
 	}
