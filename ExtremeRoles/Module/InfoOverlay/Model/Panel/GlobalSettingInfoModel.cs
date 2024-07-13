@@ -74,15 +74,16 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	private static void addRoleSpawnNumOptionHudString(OptionTabContainer tab, in StringBuilder builder)
 	{
 		// 生存役職周り
-		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder);
+		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder, "Roles");
 		// 幽霊役職周り
-		addSpawnNumOptionHudString(tab, SpawnOptionCategory.GhostRoleSpawnCategory, builder);
+		addSpawnNumOptionHudString(tab, SpawnOptionCategory.GhostRoleSpawnCategory, builder, "GhostRoles");
 	}
 
 	private static void addSpawnNumOptionHudString(
 		OptionTabContainer tab,
 		SpawnOptionCategory categoryId,
-		in StringBuilder builder)
+		in StringBuilder builder,
+		string transKey)
 	{
 		if (!tab.TryGetCategory((int)categoryId, out var category))
 		{
@@ -92,19 +93,19 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
-				"crewmateGhostRoles",
+				$"crewmate{transKey}",
 				RoleSpawnOption.MinCrewmate,
 				RoleSpawnOption.MaxCrewmate));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
-				"neutralGhostRoles",
+				$"neutral{transKey}",
 				RoleSpawnOption.MinNeutral,
 				RoleSpawnOption.MaxNeutral));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
-				"impostorGhostRoles",
+				$"impostor{transKey}",
 				RoleSpawnOption.MinImpostor,
 				RoleSpawnOption.MaxImpostor));
 	}
