@@ -41,7 +41,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 
 		this.printOption.AppendLine();
 
-		this.printOption.AppendLine("・役職のスポーン数");
+		this.printOption.AppendLine($"・{Translation.GetString("RoleSpawnCategory")}");
 		addRoleSpawnNumOptionHudString(container, this.printOption);
 
 		this.printOption.AppendLine();
