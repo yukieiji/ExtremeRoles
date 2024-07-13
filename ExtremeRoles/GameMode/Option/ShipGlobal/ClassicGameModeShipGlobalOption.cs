@@ -17,9 +17,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 
 	public bool IsRandomMap { get; private set; }
 
-
-    public ConfirmExilMode ExilMode { get; private set; }
-    public bool IsConfirmRole { get; private set; }
+    public ExileOption Exile { get; private set; }
 
 	public bool IsAllowParallelMedbayScan { get; private set; }
 
@@ -51,9 +49,8 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 		this.Meeting = new MeetingHudOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.MeetingOption));
 
-		var exiledCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.ExiledOption);
-		ExilMode = (ConfirmExilMode)exiledCate.GetValue<int>((int)ExiledOption.ConfirmExilMode);
-        IsConfirmRole = exiledCate.GetValue<bool>((int)ExiledOption.IsConfirmRole);
+		this.Exile = new ExileOption(
+			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.ExiledOption));
 
 		this.Vent = new VentConsoleOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VentOption));

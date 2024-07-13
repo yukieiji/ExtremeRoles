@@ -21,6 +21,7 @@ using ExtremeRoles.Performance;
 using Il2CppObject = Il2CppSystem.Object;
 using Assassin = ExtremeRoles.Roles.Combination.Assassin;
 using Translation = ExtremeRoles.Helper.Translation;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
 #nullable enable
 
@@ -99,8 +100,8 @@ public static class ExileControllerBeginePatch
 		else if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
 		{
 			var shipOption = ExtremeGameModeManager.Instance.ShipOption;
-			confirmExil(
-				__instance, exiled, shipOption.ExilMode, shipOption.IsConfirmRole, tie);
+			confirmExile(
+				__instance, exiled, shipOption.Exile, tie);
 			return false;
 		}
 		return true;
@@ -131,10 +132,11 @@ public static class ExileControllerBeginePatch
         instance.StartCoroutine(instance.Animate());
     }
 
-    private static void confirmExil(
+    private static void confirmExile(
         ExileController instance,
         NetworkedPlayerInfo exiled,
-        ConfirmExilMode mode, bool isShowRole, bool tie)
+        in ExileOption option,
+		bool tie)
     {
         setExiledTarget(instance, exiled);
         var transController = FastDestroyableSingleton<TranslationController>.Instance;
@@ -171,15 +173,16 @@ public static class ExileControllerBeginePatch
 
         string completeString = string.Empty;
 
+		var mode = option.Mode;
         if (exiled != null)
         {
             string playerName = exiled.PlayerName;
             var exiledPlayerRole = allRoles[exiled.PlayerId];
             switch (mode)
             {
-                case ConfirmExilMode.AllTeam:
+                case ConfirmExileMode.AllTeam:
                     string team = Translation.GetString(exiledPlayerRole.Team.ToString());
-                    completeString = isShowRole ?
+                    completeString = option.IsConfirmRole ?
                         string.Format(
 							Translation.GetString("ExileTextAllTeamWithRole"),
                             playerName, team, exiledPlayerRole.GetColoredRoleName()) :
@@ -189,7 +192,7 @@ public static class ExileControllerBeginePatch
                     break;
                 default:
                     completeString = getCompleteString(
-                        playerName, exiledPlayerRole, mode, isShowRole);
+                        playerName, exiledPlayerRole, in option);
                     break;
             }
 
@@ -225,21 +228,21 @@ public static class ExileControllerBeginePatch
         instance.completeString = completeString;
         instance.ImpostorText.text = mode switch
         {
-            ConfirmExilMode.Impostor => transController.GetString(
+            ConfirmExileMode.Impostor => transController.GetString(
                 aliveImpNum == 1 ? StringNames.ImpostorsRemainS : StringNames.ImpostorsRemainP,
-                new Il2CppObject[] { aliveImpNum }),
+                [ aliveImpNum ]),
 
-            ConfirmExilMode.Crewmate => string.Format(
+            ConfirmExileMode.Crewmate => string.Format(
 				Translation.GetString(
                     aliveCrewNum == 1 ? "CrewmateRemainS" : "CrewmateRemainP"),
                 aliveCrewNum),
 
-            ConfirmExilMode.Neutral => string.Format(
+            ConfirmExileMode.Neutral => string.Format(
 				Translation.GetString(
                     aliveNeutNum == 1 ?  "NeutralRemainS" : "NeutralRemainP"),
                 aliveNeutNum),
 
-            ConfirmExilMode.AllTeam => string.Format(
+            ConfirmExileMode.AllTeam => string.Format(
 				Translation.GetString("AllTeamAlive"),
                 aliveCrewNum, aliveImpNum, aliveNeutNum),
 
@@ -277,12 +280,14 @@ public static class ExileControllerBeginePatch
     private static string getCompleteString(
         string playerName,
         SingleRoleBase exiledPlayerRole,
-        ConfirmExilMode mode, bool isShowRole)
+		in ExileOption option)
     {
+		var mode = option.Mode;
+
         string teamSuffix = mode switch
         {
-            ConfirmExilMode.Crewmate => "Crew",
-            ConfirmExilMode.Neutral => "Neut",
+            ConfirmExileMode.Crewmate => "Crew",
+            ConfirmExileMode.Neutral => "Neut",
             _ => string.Empty,
         };
 
@@ -293,7 +298,7 @@ public static class ExileControllerBeginePatch
         int modeTeamAlive = 0;
         switch (mode)
         {
-            case ConfirmExilMode.Impostor:
+            case ConfirmExileMode.Impostor:
                 modeTeamAlive = allPlayer.Count(
 					(NetworkedPlayerInfo p) =>
 						p != null &&
@@ -301,7 +306,7 @@ public static class ExileControllerBeginePatch
 						role!.IsImpostor());
                 isExiledSameMode = exiledPlayerRole.IsImpostor();
                 break;
-            case ConfirmExilMode.Crewmate:
+            case ConfirmExileMode.Crewmate:
                 modeTeamAlive = allPlayer.Count(
 					(NetworkedPlayerInfo p) =>
 						p != null &&
@@ -309,7 +314,7 @@ public static class ExileControllerBeginePatch
 						role!.IsCrewmate());
                 isExiledSameMode = exiledPlayerRole.IsCrewmate();
                 break;
-            case ConfirmExilMode.Neutral:
+            case ConfirmExileMode.Neutral:
                 modeTeamAlive = allPlayer.Count(
 					(NetworkedPlayerInfo p) =>
 						p != null &&
@@ -326,12 +331,12 @@ public static class ExileControllerBeginePatch
         if (Enum.TryParse(transKey, out StringNames sn))
         {
             return FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                sn, new Il2CppObject[] { playerName });
+                sn, [ playerName ]);
         }
         else
         {
             return
-                isShowRole ?
+                option.IsConfirmRole ?
                 string.Format(
                     Translation.GetString($"{transKey}WithRole"),
                     playerName,

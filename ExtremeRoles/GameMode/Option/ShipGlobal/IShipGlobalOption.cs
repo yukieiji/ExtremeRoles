@@ -22,12 +22,6 @@ public enum ShipGlobalOptionCategory : int
 	GhostRoleGlobalOption
 }
 
-public enum ExiledOption : int
-{
-	ConfirmExilMode,
-	IsConfirmRole,
-}
-
 public enum TaskOption : int
 {
 	ParallelMedBayScans,
@@ -63,14 +57,6 @@ public enum GhostRoleGlobalOption : int
 	IsBlockGAAbilityReport,
 }
 
-public enum ConfirmExilMode
-{
-	Impostor,
-	Crewmate,
-	Neutral,
-	AllTeam
-}
-
 public readonly record struct MapModuleDisableFlag(
 	bool Admin,
 	bool Security,
@@ -87,8 +73,7 @@ public interface IShipGlobalOption
 
 	public bool CanUseHorseMode { get; }
 
-	public ConfirmExilMode ExilMode { get; }
-	public bool IsConfirmRole { get; }
+	public ExileOption Exile { get; }
 
 	public VentConsoleOption Vent { get; }
 	public SpawnOption Spawn { get; }
@@ -160,10 +145,7 @@ public interface IShipGlobalOption
 		}
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.ExiledOption))
 		{
-			var confirmOpt = factory.CreateSelectionOption<ExiledOption, ConfirmExilMode>(ExiledOption.ConfirmExilMode);
-			// confirmOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
-			var confirmRoleOpt = factory.CreateBoolOption(ExiledOption.IsConfirmRole, false);
-			// confirmRoleOpt.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
+			ExileOption.Create(factory);
 		}
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VentOption))
 		{

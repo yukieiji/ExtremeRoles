@@ -50,7 +50,8 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		bool ignorePrefix = false) where T : struct, IConvertible
+		bool ignorePrefix = false,
+		in Func<bool>? hook = null) where T : struct, IConvertible
 	{
 		int optionId = GetOptionId(option);
 		string name = GetOptionName(option, ignorePrefix);
@@ -58,7 +59,7 @@ public class OptionCategoryFactory(
 		var opt = new BoolCustomOption(
 			new OptionInfo(optionId, name, format, isHidden),
 			defaultValue,
-			OptionRelationFactory.Create(parent, invert));
+			OptionRelationFactory.Create(parent, invert, hook));
 
 		this.AddOption(optionId, opt);
 		return opt;
@@ -189,7 +190,8 @@ public class OptionCategoryFactory(
 		bool isHidden = false,
 		OptionUnit format = OptionUnit.None,
 		bool invert = false,
-		bool ignorePrefix = false)
+		bool ignorePrefix = false,
+		in Func<bool>? hook = null)
 		where T : struct, IConvertible
 		where W : struct, Enum
 	{
@@ -198,7 +200,7 @@ public class OptionCategoryFactory(
 
 		var opt = SelectionCustomOption.CreateFromEnum<W>(
 			new OptionInfo(optionId, name, format, isHidden),
-			OptionRelationFactory.Create(parent, invert));
+			OptionRelationFactory.Create(parent, invert, hook));
 
 		this.AddOption(optionId, opt);
 		return opt;
