@@ -12,20 +12,18 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class PlayerRoleAssignData
 {
-	public IReadOnlyList<PlayerControl> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
+	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 
-	private List<PlayerControl> needRoleAssignPlayer;
+	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer;
 	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
 	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
 	private int gameControlId = 0;
 
-	public PlayerRoleAssignData()
+	public PlayerRoleAssignData(VanillaRoleAssignData vanillaRole)
 	{
 		this.assignData.Clear();
-
-		this.needRoleAssignPlayer = new List<PlayerControl>(
-			GameData.Instance.AllPlayers.ToArray().Select(x => x.Object));
+		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(vanillaRole.Data);
 		this.gameControlId = 0;
 	}
 
@@ -56,36 +54,29 @@ public sealed class PlayerRoleAssignData
 		RoleAssignState.Instance.SwitchRoleAssignToEnd();
 	}
 
-	public IReadOnlyList<PlayerControl> GetCanImpostorAssignPlayer()
+	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanImpostorAssignPlayer()
 	{
 		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
-				return x.Data.Role.Role switch
-				{
+				return x.Role is
 					RoleTypes.Impostor or
 					RoleTypes.Shapeshifter or
-					RoleTypes.Phantom => true,
-					_ => false
-				};
+					RoleTypes.Phantom;
 			});
 	}
 
-	public IReadOnlyList<PlayerControl> GetCanCrewmateAssignPlayer()
+	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanCrewmateAssignPlayer()
 	{
 		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
-				return x.Data.Role.Role switch
-				{
+				return x.Role is
 					RoleTypes.Crewmate or
 					RoleTypes.Engineer or
 					RoleTypes.Scientist or
 					RoleTypes.Noisemaker or
-					RoleTypes.Tracker => true,
-
-					_ => false
-				};
+					RoleTypes.Tracker;
 			});
 	}
 
@@ -115,14 +106,22 @@ public sealed class PlayerRoleAssignData
 		this.assignData.Add(data);
 	}
 
-	public void AddPlayer(PlayerControl player)
+	public void AddPlayer(in VanillaRolePlayerAssignData player)
 	{
 		this.needRoleAssignPlayer.Add(player);
 	}
 
-	public void RemvePlayer(PlayerControl player)
+	public void RemveFromPlayerControl(PlayerControl player)
 	{
-		this.needRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
+		this.needRoleAssignPlayer.RemoveAll(
+			x =>
+				x.PlayerId == player.PlayerId &&
+				x.PlayerName == player.Data.DefaultOutfit.PlayerName);
+	}
+
+	public void RemvePlayer(VanillaRolePlayerAssignData player)
+	{
+		this.needRoleAssignPlayer.RemoveAll(x => x.Equals(player));
 	}
 
 	public void Shuffle()

@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using HarmonyLib;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -22,6 +17,8 @@ public static class RoleManagerAssignSelectRolesPatch
 {
 	public static void Prefix()
 	{
+		RoleAssignState.TryDestroy();
+
 		if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
 
 		PlayerControl loaclPlayer = PlayerControl.LocalPlayer;

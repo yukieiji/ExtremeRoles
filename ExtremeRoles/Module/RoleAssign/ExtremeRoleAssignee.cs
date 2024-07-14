@@ -32,13 +32,12 @@ public sealed class ExtremeRoleAssignee
 		}
 	}
 
-	public IReadOnlyList<PlayerControl> NeedRoleAssignPlayer => assignData.NeedRoleAssignPlayer;
-
-	private readonly PlayerRoleAssignData assignData = new PlayerRoleAssignData();
+	private readonly PlayerRoleAssignData assignData;
 	private readonly RoleSpawnDataManager spawnData;
 
 	public ExtremeRoleAssignee()
 	{
+		assignData = new PlayerRoleAssignData(VanillaRoleAssignData.Instance);
 		uint netId = PlayerControl.LocalPlayer.NetId;
 
 		RPCOperator.Call(netId, RPCOperator.Command.Initialize);
@@ -55,7 +54,7 @@ public sealed class ExtremeRoleAssignee
 				loaclPlayer.PlayerId,
 				(int)ExtremeRoleId.Xion,
 				assignData.GetControlId()));
-		assignData.RemvePlayer(loaclPlayer);
+		assignData.RemveFromPlayerControl(loaclPlayer);
 	}
 
 	public IEnumerator Assign()
@@ -65,6 +64,7 @@ public sealed class ExtremeRoleAssignee
 		yield return null;
 
 		this.assignData.AllPlayerAssignToExRole();
+		VanillaRoleAssignData.TryDestroy();
 	}
 
 	private void createAssignData()
@@ -91,21 +91,22 @@ public sealed class ExtremeRoleAssignee
 			x => RandomGenerator.Instance.Next());
 		assignData.Shuffle();
 
-		List<PlayerControl> anotherRoleAssignPlayer = new List<PlayerControl>();
+		var anotherRoleAssignPlayer = new List<VanillaRolePlayerAssignData>();
 
 		foreach (var roleListData in shuffledRoleListData)
 		{
 			foreach (var role in roleListData.RoleList)
 			{
-				PlayerControl? removePlayer = null;
+				VanillaRolePlayerAssignData? removePlayer = null;
 
-				foreach (PlayerControl player in assignData.NeedRoleAssignPlayer)
+				foreach (var player in assignData.NeedRoleAssignPlayer)
 				{
 					Logging.Debug(
-						$"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
+						$"------------------- AssignToPlayer:{player.PlayerName} -------------------");
 					Logging.Debug($"---AssignRole:{role.Id}---");
 
-					bool assign = canMulitAssignRoleToPlayer(role, player);
+					RoleTypes vanillaRole = player.Role;
+					bool assign = canMulitAssignRoleToPlayer(role, vanillaRole);
 
 					Logging.Debug($"AssignResult:{assign}");
 
@@ -125,7 +126,7 @@ public sealed class ExtremeRoleAssignee
 							player.PlayerId, (int)role.Id,
 							roleListData.CombType,
 							(byte)roleListData.GameControlId,
-							(byte)player.Data.Role.Role),
+							(byte)vanillaRole),
 						role.Team);
 
 					Logging.Debug($"------------------- Assign End -------------------");
@@ -133,20 +134,18 @@ public sealed class ExtremeRoleAssignee
 					break;
 				}
 
-				if (removePlayer != null)
+				if (removePlayer.HasValue)
 				{
-					assignData.RemvePlayer(removePlayer);
+					assignData.RemvePlayer(removePlayer.Value);
 				}
 			}
 		}
 
-		foreach (PlayerControl player in anotherRoleAssignPlayer)
+		Logging.Debug($"------------------- AditionalPlayer -------------------");
+		foreach (var player in anotherRoleAssignPlayer)
 		{
-			if (player != null)
-			{
-				Logging.Debug($"------------------- AditionalPlayer -------------------");
-				assignData.AddPlayer(player);
-			}
+			Logging.Debug($"------------------- AddPlayer:{player.PlayerName} -------------------");
+			assignData.AddPlayer(player);
 		}
 		Logging.Debug(
 			$"----------------------------- CombinationRoleAssign End!! -----------------------------");
@@ -243,11 +242,8 @@ public sealed class ExtremeRoleAssignee
 
 	private static bool canMulitAssignRoleToPlayer(
 		in MultiAssignRoleBase role,
-		in PlayerControl player)
+		in RoleTypes roleType)
 	{
-
-		RoleTypes roleType = player.Data.Role.Role;
-
 		bool hasAnotherRole = role.CanHasAnotherRole;
 		bool isImpostor = role.IsImpostor();
 		bool isAssignToCrewmate = role.IsCrewmate() || role.IsNeutral();
@@ -353,11 +349,11 @@ public sealed class ExtremeRoleAssignee
 
 	private void addNeutralSingleExtremeRoleAssignData()
 	{
-		List<PlayerControl> neutralAssignTargetPlayer = new List<PlayerControl>();
+		List<VanillaRolePlayerAssignData> neutralAssignTargetPlayer = new List<VanillaRolePlayerAssignData>();
 
-		foreach (PlayerControl player in assignData.GetCanCrewmateAssignPlayer())
+		foreach (var player in assignData.GetCanCrewmateAssignPlayer())
 		{
-			RoleTypes vanillaRoleId = player.Data.Role.Role;
+			RoleTypes vanillaRoleId = player.Role;
 
 			if ((
 					assignData.TryGetCombRoleAssign(player.PlayerId, out ExtremeRoleType team) &&
@@ -401,13 +397,13 @@ public sealed class ExtremeRoleAssignee
 
 	private void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 		ExtremeRoleType team,
-		in IReadOnlyList<PlayerControl> targetPlayer,
+		in IReadOnlyList<VanillaRolePlayerAssignData> targetPlayer,
 		in HashSet<RoleTypes> vanilaTeams)
 	{
 
 		Dictionary<int, SingleRoleSpawnData> teamSpawnData = spawnData.CurrentSingleRoleSpawnData[team];
 
-		if (!targetPlayer.Any() || !targetPlayer.Any()) { return; }
+		if (targetPlayer.Count == 0) { return; }
 
 		List<(int intedRoleId, int weight)> spawnCheckRoleId =
 			createSingleRoleIdData(teamSpawnData);
@@ -421,13 +417,13 @@ public sealed class ExtremeRoleAssignee
 			.ToList();
 		var shuffledTargetPlayer = targetPlayer.OrderBy(x => RandomGenerator.Instance.Next());
 
-		foreach (PlayerControl player in shuffledTargetPlayer)
+		foreach (var player in shuffledTargetPlayer)
 		{
 			Logging.Debug(
-				$"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
-			PlayerControl? removePlayer = null;
+				$"-------------------AssignToPlayer:{player.PlayerName}-------------------");
+			VanillaRolePlayerAssignData? removePlayer = null;
 
-			RoleTypes vanillaRoleId = player.Data.Role.Role;
+			RoleTypes vanillaRoleId = player.Role;
 
 			if (vanilaTeams.Contains(vanillaRoleId))
 			{
@@ -474,9 +470,9 @@ public sealed class ExtremeRoleAssignee
 			}
 
 			Logging.Debug($"-------------------AssignEnd-------------------");
-			if (removePlayer != null)
+			if (removePlayer.HasValue)
 			{
-				assignData.RemvePlayer(removePlayer);
+				assignData.RemvePlayer(removePlayer.Value);
 			}
 		}
 	}
@@ -503,10 +499,10 @@ public sealed class ExtremeRoleAssignee
 	#region Post prosesss for not assign player
 	private void addNotAssignPlayerToVanillaRoleAssign()
 	{
-		foreach (PlayerControl player in assignData.NeedRoleAssignPlayer)
+		foreach (var player in assignData.NeedRoleAssignPlayer)
 		{
-			var roleId = player.Data.Role.Role;
-			Logging.Debug($"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
+			var roleId = player.Role;
+			Logging.Debug($"------------------- AssignToPlayer:{player.PlayerName} -------------------");
 			Logging.Debug($"---AssignRole:{roleId}---");
 			assignData.AddAssignData(new PlayerToSingleRoleAssignData(
 				player.PlayerId, (byte)roleId, assignData.GetControlId()));
