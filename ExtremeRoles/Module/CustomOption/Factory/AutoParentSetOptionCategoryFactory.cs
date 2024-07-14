@@ -1,15 +1,8 @@
 ﻿using System;
 
-using UnityEngine;
-
-
-
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
-using ExtremeRoles.Roles.API;
-
-
+using ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
@@ -267,7 +260,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool ignorePrefix = false) where T : struct, IConvertible
 		=> CreateIntOption(
 			option,
-			0, 0, 100, 10,
+			0, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
 			parent,
 			isHidden,
 			OptionUnit.Percentage,

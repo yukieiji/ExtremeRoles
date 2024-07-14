@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -14,16 +15,30 @@ public sealed class PlayerRoleAssignData
 {
 	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 
+	public int ControlId
+	{
+		get
+		{
+			int result = this.gameControlId;
+
+			++this.gameControlId;
+
+			return result;
+		}
+	}
+
 	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer;
 	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
 	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
 	private int gameControlId = 0;
 
-	public PlayerRoleAssignData(VanillaRoleAssignData vanillaRole)
+	public PlayerRoleAssignData()
 	{
 		this.assignData.Clear();
-		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(vanillaRole.Data);
+		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(
+			GameData.Instance.AllPlayers.GetFastEnumerator().Select(
+				x => new VanillaRolePlayerAssignData(x)));
 		this.gameControlId = 0;
 	}
 
@@ -78,15 +93,6 @@ public sealed class PlayerRoleAssignData
 					RoleTypes.Noisemaker or
 					RoleTypes.Tracker;
 			});
-	}
-
-	public int GetControlId()
-	{
-		int result = this.gameControlId;
-
-		++this.gameControlId;
-
-		return result;
 	}
 
 	public bool TryGetCombRoleAssign(byte playerId, out ExtremeRoleType team)

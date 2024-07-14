@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -154,6 +155,42 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase3 : Collect using SingleRole - END ----");
 		log.LogInfo("-------- RoleSpawnDataManager Construct End --------");
+
+		Logging.Debug(this.ToString());
+	}
+
+	public override string ToString()
+	{
+		var builder = new StringBuilder();
+
+		builder.AppendLine("------ RoleSpawnInfo - Start ------");
+		foreach (var (team, num) in this.MaxRoleNum)
+		{
+			builder.AppendLine($"Team:{team} MaxNum:{num}");
+		}
+		builder.AppendLine("--- CombRole ---");
+		foreach (var (combId, combRole) in this.CurrentCombRoleSpawnData)
+		{
+			builder.AppendLine($"CombRoleId:{combId} SpawnSetNum:{combRole.SpawnSetNum} SpawnRate:{combRole.SpawnRate} AssignWeight:{combRole.Weight}");
+		}
+		builder.AppendLine("--- SingleRole ---");
+		builder.AppendLine("-- TeamNum --");
+		foreach (var (team, roleNum) in this.CurrentSingleRoleUseNum)
+		{
+			builder.AppendLine($"Team:{team} RoleNum{roleNum}");
+		}
+		builder.AppendLine("-- Detail --");
+		foreach (var (teamId, teamData) in this.CurrentSingleRoleSpawnData)
+		{
+			foreach (var (id, role) in teamData)
+			{
+				builder.AppendLine(
+					$"Team:{teamId} RoleId:{id} SpawnSetNum:{role.SpawnSetNum} SpawnRate:{role.SpawnRate} AssignWeight:{role.Weight}");
+			}
+		}
+		builder.AppendLine("------ RoleSpawnInfo - End ------");
+
+		return builder.ToString();
 	}
 
 	public bool IsCanSpawnTeam(ExtremeRoleType roleType, int reduceNum = 1)

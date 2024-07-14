@@ -45,7 +45,7 @@ public sealed class GhostRoleSpawnDataManager :
 
 		var opt = OptionManager.Instance;
 
-		if (opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
+		if (opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.GhostRoleSpawnCategory, out var cate))
 		{
 			this.globalSpawnLimit = new Dictionary<ExtremeRoleType, int>
 			{

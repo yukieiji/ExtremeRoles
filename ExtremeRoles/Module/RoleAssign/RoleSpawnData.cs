@@ -6,12 +6,14 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
-public abstract class SpawnData
+public class SingleRoleSpawnData(int spawnSetNum, int spawnRate, int weight)
 {
-	public int Weight { get; protected set; } = 1000;
+	public int SpawnSetNum { get; private set; } = spawnSetNum;
 
-	public int SpawnSetNum { get; protected set; }
-	public int SpawnRate { get; protected set; }
+	public int Weight { get; } = weight;
+	public int SpawnRate { get; } = spawnRate;
+
+	public const int MaxSpawnRate = 100;
 
 	public void ReduceSpawnNum(int reduceNum = 1)
 	{
@@ -21,54 +23,28 @@ public abstract class SpawnData
 	{
 		return
 			this.SpawnSetNum > 0 &&
-			this.SpawnRate >= RandomGenerator.Instance.Next(0, 110);
+			this.SpawnRate >= RandomGenerator.Instance.Next(MaxSpawnRate + 1);
 	}
 }
 
-public sealed class SingleRoleSpawnData : SpawnData
+public sealed class CombinationRoleSpawnData(
+	CombinationRoleManagerBase role,
+	int spawnSetNum, int spawnRate, int weight, bool isMultiAssign) :
+	SingleRoleSpawnData(spawnSetNum, spawnRate, weight)
 {
-	public SingleRoleSpawnData(int spawnSetNum, int spawnRate, int weight)
-	{
-		SpawnSetNum = spawnSetNum;
-		SpawnRate = spawnRate;
-		Weight = weight;
-	}
+	public CombinationRoleManagerBase Role { get; } = role;
+	public bool IsMultiAssign { get; } = isMultiAssign;
 }
 
-public sealed class CombinationRoleSpawnData : SpawnData
+public sealed class GhostRoleSpawnData(
+	ExtremeGhostRoleId id, int spawnSetNum,
+	int spawnRate, int weight,
+	IReadOnlySet<ExtremeRoleId> filter) :
+	SingleRoleSpawnData(spawnSetNum, spawnRate, weight)
 {
-	public CombinationRoleManagerBase Role { get; private set; }
-	public bool IsMultiAssign { get; private set; }
+	public ExtremeGhostRoleId Id { get; } = id;
 
-	public CombinationRoleSpawnData(
-		CombinationRoleManagerBase role,
-		int spawnSetNum, int spawnRate, int weight, bool isMultiAssign)
-	{
-		Role = role;
-		SpawnSetNum = spawnSetNum;
-		SpawnRate = spawnRate;
-		Weight = weight;
-		IsMultiAssign = isMultiAssign;
-	}
-}
-
-public sealed class GhostRoleSpawnData : SpawnData
-{
-	public ExtremeGhostRoleId Id { get; private set; }
-
-	private HashSet<ExtremeRoleId> filter;
-
-	public GhostRoleSpawnData(
-		ExtremeGhostRoleId id, int spawnSetNum,
-		int spawnRate, int weight,
-		HashSet<ExtremeRoleId> filter)
-	{
-		Id = id;
-		SpawnSetNum = spawnSetNum;
-		SpawnRate = spawnRate;
-		Weight = weight;
-		this.filter = filter;
-	}
+	private readonly IReadOnlySet<ExtremeRoleId> filter = filter;
 
 	public bool IsFilterContain(SingleRoleBase role)
 	{
