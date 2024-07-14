@@ -260,7 +260,7 @@ public sealed class AutoParentSetOptionCategoryFactory(
 		bool ignorePrefix = false) where T : struct, IConvertible
 		=> CreateIntOption(
 			option,
-			0, 0, SpawnData.MaxSpawnRate, 10,
+			0, 0, SingleRoleSpawnData.MaxSpawnRate, 10,
 			parent,
 			isHidden,
 			OptionUnit.Percentage,
