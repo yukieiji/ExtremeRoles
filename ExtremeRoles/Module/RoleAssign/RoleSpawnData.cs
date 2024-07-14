@@ -13,6 +13,8 @@ public abstract class SpawnData
 	public int SpawnSetNum { get; protected set; }
 	public int SpawnRate { get; protected set; }
 
+	public const int MaxSpawnRate = 100;
+
 	public void ReduceSpawnNum(int reduceNum = 1)
 	{
 		this.SpawnSetNum = this.SpawnSetNum - reduceNum;
@@ -21,7 +23,7 @@ public abstract class SpawnData
 	{
 		return
 			this.SpawnSetNum > 0 &&
-			this.SpawnRate >= RandomGenerator.Instance.Next(0, 110);
+			this.SpawnRate >= RandomGenerator.Instance.Next(0, MaxSpawnRate + 1);
 	}
 }
 
