@@ -67,11 +67,12 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 				CheckpointType.AssassinMeeting => new AssassinMeetingCheckpoint(msgReader),
 				_ => null,
 			};
+
+			if (handler is null)
+			{
+				throw new ArgumentException("InvalidType");
+			}
 			this.checkpoints.Add(type, handler);
-		}
-		if (handler is null)
-		{
-			throw new ArgumentException("InvalidType");
 		}
 		return handler;
 	}
