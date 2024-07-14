@@ -14,6 +14,18 @@ public sealed class PlayerRoleAssignData
 {
 	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 
+	public int ControlId
+	{
+		get
+		{
+			int result = this.gameControlId;
+
+			++this.gameControlId;
+
+			return result;
+		}
+	}
+
 	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer;
 	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
 	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
@@ -78,15 +90,6 @@ public sealed class PlayerRoleAssignData
 					RoleTypes.Noisemaker or
 					RoleTypes.Tracker;
 			});
-	}
-
-	public int GetControlId()
-	{
-		int result = this.gameControlId;
-
-		++this.gameControlId;
-
-		return result;
 	}
 
 	public bool TryGetCombRoleAssign(byte playerId, out ExtremeRoleType team)

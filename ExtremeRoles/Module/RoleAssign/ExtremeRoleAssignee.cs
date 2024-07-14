@@ -35,6 +35,9 @@ public sealed class ExtremeRoleAssignee
 	private readonly PlayerRoleAssignData assignData;
 	private readonly RoleSpawnDataManager spawnData;
 
+	private readonly IReadOnlySet<RoleTypes> vanillaCrewRoleType;
+	private readonly IReadOnlySet<RoleTypes> vanillaImpRoleType;
+
 	public ExtremeRoleAssignee()
 	{
 		assignData = new PlayerRoleAssignData(VanillaRoleAssignData.Instance);
@@ -45,6 +48,12 @@ public sealed class ExtremeRoleAssignee
 
 		spawnData = new RoleSpawnDataManager();
 
+		HashSet<RoleTypes> crewType = [RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker];
+		HashSet<RoleTypes> impType = [RoleTypes.Shapeshifter, RoleTypes.Phantom];
+
+		vanillaCrewRoleType = crewType;
+		vanillaImpRoleType = impType;
+
 		if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
 
 		PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
@@ -53,7 +62,7 @@ public sealed class ExtremeRoleAssignee
 			new PlayerToSingleRoleAssignData(
 				loaclPlayer.PlayerId,
 				(int)ExtremeRoleId.Xion,
-				assignData.GetControlId()));
+				assignData.ControlId));
 		assignData.RemveFromPlayerControl(loaclPlayer);
 	}
 
@@ -153,14 +162,14 @@ public sealed class ExtremeRoleAssignee
 
 	private List<CombinationRoleAssignData> createCombinationRoleListData()
 	{
-		List<CombinationRoleAssignData> roleListData = new List<CombinationRoleAssignData>();
+		var roleListData = new List<CombinationRoleAssignData>();
 
 		int curImpNum = 0;
 		int curCrewNum = 0;
 		int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
 			Int32OptionNames.NumImpostors);
 
-		NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
+		var notAssignPlayer = new NotAssignPlayerData();
 		var shuffleCombRole = spawnData.CurrentCombRoleSpawnData
 			.OrderByDescending(x => x.Value.Weight) // まずは重みでソート
 			.ThenBy(x => RandomGenerator.Instance.Next()); //その上で全体のソート
@@ -216,7 +225,7 @@ public sealed class ExtremeRoleAssignee
 
 				spawnData.ReduceSpawnLimit(ExtremeRoleType.Crewmate, reduceCrewmateRole);
 				spawnData.ReduceSpawnLimit(ExtremeRoleType.Impostor, reduceImpostorRole);
-				spawnData.ReduceSpawnLimit(ExtremeRoleType.Neutral, reduceNeutralRole);
+				spawnData.ReduceSpawnLimit(ExtremeRoleType.Neutral , reduceNeutralRole );
 
 				curImpNum = curImpNum + reduceImpostorRole;
 				curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole);
@@ -230,7 +239,7 @@ public sealed class ExtremeRoleAssignee
 				notAssignPlayer.ReduceImpostorAssignNum(reduceImpostorRole);
 				roleListData.Add(
 					new CombinationRoleAssignData(
-						assignData.GetControlId(),
+						assignData.ControlId,
 						combType, spawnRoles));
 
 				RoleAssignFilter.Instance.Update(combType);
@@ -344,12 +353,12 @@ public sealed class ExtremeRoleAssignee
 		addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 			ExtremeRoleType.Impostor,
 			assignData.GetCanImpostorAssignPlayer(),
-			[RoleTypes.Shapeshifter, RoleTypes.Phantom]);
+			vanillaImpRoleType);
 	}
 
 	private void addNeutralSingleExtremeRoleAssignData()
 	{
-		List<VanillaRolePlayerAssignData> neutralAssignTargetPlayer = new List<VanillaRolePlayerAssignData>();
+		var neutralAssignTargetPlayer = new List<VanillaRolePlayerAssignData>();
 
 		foreach (var player in assignData.GetCanCrewmateAssignPlayer())
 		{
@@ -384,7 +393,7 @@ public sealed class ExtremeRoleAssignee
 		addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 			ExtremeRoleType.Neutral,
 			neutralAssignTargetPlayer,
-			[RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker]);
+			vanillaCrewRoleType);
 	}
 
 	private void addCrewmateSingleExtremeRoleAssignData()
@@ -392,21 +401,20 @@ public sealed class ExtremeRoleAssignee
 		addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 			ExtremeRoleType.Crewmate,
 			assignData.GetCanCrewmateAssignPlayer(),
-			[RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker]);
+			vanillaCrewRoleType);
 	}
 
 	private void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 		ExtremeRoleType team,
 		in IReadOnlyList<VanillaRolePlayerAssignData> targetPlayer,
-		in HashSet<RoleTypes> vanilaTeams)
+		in IReadOnlySet<RoleTypes> vanilaTeams)
 	{
 
-		Dictionary<int, SingleRoleSpawnData> teamSpawnData = spawnData.CurrentSingleRoleSpawnData[team];
+		var teamSpawnData = spawnData.CurrentSingleRoleSpawnData[team];
 
 		if (targetPlayer.Count == 0) { return; }
 
-		List<(int intedRoleId, int weight)> spawnCheckRoleId =
-			createSingleRoleIdData(teamSpawnData);
+		var spawnCheckRoleId = createSingleRoleIdData(teamSpawnData);
 
 		if (spawnCheckRoleId.Count == 0) { return; }
 
@@ -440,7 +448,7 @@ public sealed class ExtremeRoleAssignee
 				assignData.AddAssignData(
 					new PlayerToSingleRoleAssignData(
 						player.PlayerId, (int)vanillaRoleId,
-						assignData.GetControlId()));
+						assignData.ControlId));
 				Logging.Debug($"---AssignRole:{vanillaRoleId}---");
 			}
 
@@ -462,7 +470,7 @@ public sealed class ExtremeRoleAssignee
 					spawnData.ReduceSpawnLimit(team);
 					assignData.AddAssignData(
 						new PlayerToSingleRoleAssignData(
-							player.PlayerId, intedRoleId, assignData.GetControlId()));
+							player.PlayerId, intedRoleId, assignData.ControlId));
 
 					RoleAssignFilter.Instance.Update(intedRoleId);
 					break;
@@ -480,7 +488,7 @@ public sealed class ExtremeRoleAssignee
 	private static List<(int intedRoleId, int weight)> createSingleRoleIdData(
 		in IReadOnlyDictionary<int, SingleRoleSpawnData> spawnData)
 	{
-		List<(int, int)> result = new List<(int, int)>();
+		var result = new List<(int, int)>();
 
 		foreach (var (intedRoleId, data) in spawnData)
 		{
@@ -505,7 +513,7 @@ public sealed class ExtremeRoleAssignee
 			Logging.Debug($"------------------- AssignToPlayer:{player.PlayerName} -------------------");
 			Logging.Debug($"---AssignRole:{roleId}---");
 			assignData.AddAssignData(new PlayerToSingleRoleAssignData(
-				player.PlayerId, (byte)roleId, assignData.GetControlId()));
+				player.PlayerId, (byte)roleId, assignData.ControlId));
 		}
 	}
 	#endregion
