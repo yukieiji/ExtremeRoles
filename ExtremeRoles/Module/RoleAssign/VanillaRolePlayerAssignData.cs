@@ -13,6 +13,12 @@ public readonly struct VanillaRolePlayerAssignData(byte playerId, string playerN
 	public readonly string PlayerName = playerName;
 	public readonly RoleTypes Role = role;
 
+	public static bool operator ==(VanillaRolePlayerAssignData d1, VanillaRolePlayerAssignData d2)
+		=> d1.Equals(d2);
+
+	public static bool operator !=(VanillaRolePlayerAssignData d1, VanillaRolePlayerAssignData d2)
+		=> !d1.Equals(d2);
+
 	public override bool Equals(object obj)
 		=> obj is VanillaRolePlayerAssignData data &&
 			data.PlayerName == PlayerName &&

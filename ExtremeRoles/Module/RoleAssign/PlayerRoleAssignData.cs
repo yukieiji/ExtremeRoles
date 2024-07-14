@@ -121,7 +121,7 @@ public sealed class PlayerRoleAssignData
 
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
 	{
-		this.needRoleAssignPlayer.RemoveAll(x => x.Equals(player));
+		this.needRoleAssignPlayer.RemoveAll(x => x == player);
 	}
 
 	public void Shuffle()
