@@ -20,8 +20,6 @@ using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
-using ExtremeRoles.Performance.Il2Cpp;
-using System.Linq;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -73,18 +71,16 @@ public interface IIntroRunner
         {
 			var assignee = new ExtremeRoleAssignee();
 
-			if (!isAllPlyerDummy())
+			if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
+                !isAllPlyerDummy())
             {
 				RoleAssignCheckPoint.RpcCheckpoint();
-
-				var allPlayer = GameData.Instance.AllPlayers.GetFastEnumerator();
-
-				// ホストは全員の処理が終わるまで待つ かつ　データのシンクロ待ち
-				yield return new WaitUntil(
-					(Il2CppSystem.Func<bool>)(
-						() => (allPlayer.All(x => !x.IsDirty) && RoleAssignState.Instance.IsReady)));
-				yield return null;
-			}
+                // ホストは全員の処理が終わるまで待つ
+                while (!RoleAssignState.Instance.IsReady)
+                {
+                    yield return null;
+                }
+            }
             else
             {
                 yield return new WaitForSeconds(2.5f);
