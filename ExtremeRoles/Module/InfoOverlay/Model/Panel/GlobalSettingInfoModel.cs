@@ -39,16 +39,26 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 			tryAddHudString(container, (int)key, this.printOption);
 		}
 
+		this.printOption.AppendLine();
+
+		this.printOption.AppendLine($"・{Translation.GetString("RoleSpawnCategory")}");
 		addRoleSpawnNumOptionHudString(container, this.printOption);
+
+		this.printOption.AppendLine();
+
 		tryAddHudString(
 			container,
 			ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
 			this.printOption);
 
+		this.printOption.AppendLine();
+
 		foreach (var key in Enum.GetValues<ShipGlobalOptionCategory>())
 		{
 			tryAddHudString(container, (int)key, this.printOption);
 		}
+
+		this.printOption.AppendLine();
 
 		string integrateOption = CompatModManager.Instance.GetIntegrateOptionHudString();
 		if (!string.IsNullOrEmpty(integrateOption))
@@ -56,8 +66,12 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 			this.printOption.Append(integrateOption);
 		}
 
+		this.printOption.AppendLine();
+
 		return (
-			$"<size=135%>{Translation.GetString("vanilaOptions")}</size>\n\n{IGameOptionsExtensions.SettingsStringBuilder.ToString()}",
+			$"<size=135%>{Translation.GetString("vanilaOptions")}</size>\n\n{
+				GameOptionsManager.Instance.currentGameOptions.ToHudString(
+					PlayerControl.AllPlayerControls.Count)}",
 			$"<size=135%>{Translation.GetString("gameOption")}</size>\n\n{this.printOption}"
 		);
 	}
@@ -74,15 +88,16 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	private static void addRoleSpawnNumOptionHudString(OptionTabContainer tab, in StringBuilder builder)
 	{
 		// 生存役職周り
-		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder);
+		addSpawnNumOptionHudString(tab, SpawnOptionCategory.RoleSpawnCategory, builder, "Roles");
 		// 幽霊役職周り
-		addSpawnNumOptionHudString(tab, SpawnOptionCategory.GhostRoleSpawnCategory, builder);
+		addSpawnNumOptionHudString(tab, SpawnOptionCategory.GhostRoleSpawnCategory, builder, "GhostRoles");
 	}
 
 	private static void addSpawnNumOptionHudString(
 		OptionTabContainer tab,
 		SpawnOptionCategory categoryId,
-		in StringBuilder builder)
+		in StringBuilder builder,
+		string transKey)
 	{
 		if (!tab.TryGetCategory((int)categoryId, out var category))
 		{
@@ -92,19 +107,19 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
-				"crewmateGhostRoles",
+				$"crewmate{transKey}",
 				RoleSpawnOption.MinCrewmate,
 				RoleSpawnOption.MaxCrewmate));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
-				"neutralGhostRoles",
+				$"neutral{transKey}",
 				RoleSpawnOption.MinNeutral,
 				RoleSpawnOption.MaxNeutral));
 		builder.AppendLine(
 			createRoleSpawnNumOptionHudStringLine(
 				category,
-				"impostorGhostRoles",
+				$"impostor{transKey}",
 				RoleSpawnOption.MinImpostor,
 				RoleSpawnOption.MaxImpostor));
 	}

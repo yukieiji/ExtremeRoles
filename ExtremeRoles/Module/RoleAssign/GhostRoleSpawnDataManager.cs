@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GhostRoles;
@@ -7,8 +9,6 @@ using ExtremeRoles.Module.Interface;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-
-using Unity.Jobs.LowLevel.Unsafe;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -32,6 +32,7 @@ public sealed class GhostRoleSpawnDataManager :
 	public void Create(
 		List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> useGhostCombRole)
 	{
+		var logger = ExtremeRolesPlugin.Logger;
 		this.clear();
 
 		foreach (var (combRoleId, mng) in useGhostCombRole)
@@ -101,10 +102,10 @@ public sealed class GhostRoleSpawnDataManager :
 			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
-			Helper.Logging.Debug(
-				$"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
+			logger.LogInfo(
+				$"GhostRoleSpawnInfo,  Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
 
-			if (roleNum <= 0 || spawnRate <= 0.0)
+			if (roleNum <= 0 || spawnRate <= 0)
 			{
 				continue;
 			}
@@ -131,7 +132,7 @@ public sealed class GhostRoleSpawnDataManager :
 
 		foreach (var (team, spawnDataList) in tmpUseData)
 		{
-			Helper.Logging.Debug($"Add {team} ghost role spawn data");
+			logger.LogInfo($"Add {team} ghost role spawn data");
 			this.useGhostRole[team] = spawnDataList
 				.OrderByDescending(x => x.Weight)
 				.ThenBy(x => RandomGenerator.Instance.Next())

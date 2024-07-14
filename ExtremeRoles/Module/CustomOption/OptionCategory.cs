@@ -84,7 +84,7 @@ public sealed class OptionCategory(
 
 	public void AddHudString(in StringBuilder builder)
 	{
-		builder.Append($"・OptionCategory: {this.TransedName}");
+		builder.AppendLine($"・{Translation.GetString("OptionCategory")}: {this.TransedName}");
 
 		foreach (var option in this.allOpt.Values)
 		{

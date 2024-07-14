@@ -2,7 +2,7 @@
 
 #nullable enable
 
-public class NullableSingleton<T> where T : new()
+public class NullableSingleton<T> where T : class, new()
 {
 	public static T Instance
 	{
@@ -17,18 +17,18 @@ public class NullableSingleton<T> where T : new()
 	}
 	public static bool IsExist => instance != null;
 
-	private static T? instance = default(T);
+	private static T? instance = null;
 
 	public static void TryDestroy()
 	{
 		if (instance != null)
 		{
-			instance = default(T);
+			instance = null;
 		}
 	}
 
 	public void Destroy()
 	{
-		instance = default(T);
+		instance = null;
 	}
 }
