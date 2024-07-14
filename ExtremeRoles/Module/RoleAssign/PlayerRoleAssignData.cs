@@ -12,20 +12,18 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class PlayerRoleAssignData
 {
-	public IReadOnlyList<NetworkedPlayerInfo> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
+	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 
-	private List<NetworkedPlayerInfo> needRoleAssignPlayer;
+	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer;
 	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
 	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
 	private int gameControlId = 0;
 
-	public PlayerRoleAssignData()
+	public PlayerRoleAssignData(VanillaRoleAssignData vanillaRole)
 	{
 		this.assignData.Clear();
-
-		this.needRoleAssignPlayer = new List<NetworkedPlayerInfo>(
-			GameData.Instance.AllPlayers.ToArray());
+		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(vanillaRole.Data);
 		this.gameControlId = 0;
 	}
 
@@ -56,24 +54,24 @@ public sealed class PlayerRoleAssignData
 		RoleAssignState.Instance.SwitchRoleAssignToEnd();
 	}
 
-	public IReadOnlyList<NetworkedPlayerInfo> GetCanImpostorAssignPlayer()
+	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanImpostorAssignPlayer()
 	{
 		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
-				return x.Role.Role is
+				return x.Role is
 					RoleTypes.Impostor or
 					RoleTypes.Shapeshifter or
 					RoleTypes.Phantom;
 			});
 	}
 
-	public IReadOnlyList<NetworkedPlayerInfo> GetCanCrewmateAssignPlayer()
+	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanCrewmateAssignPlayer()
 	{
 		return this.needRoleAssignPlayer.FindAll(
 			x =>
 			{
-				return x.Role.Role is
+				return x.Role is
 					RoleTypes.Crewmate or
 					RoleTypes.Engineer or
 					RoleTypes.Scientist or
@@ -108,14 +106,22 @@ public sealed class PlayerRoleAssignData
 		this.assignData.Add(data);
 	}
 
-	public void AddPlayer(NetworkedPlayerInfo player)
+	public void AddPlayer(in VanillaRolePlayerAssignData player)
 	{
 		this.needRoleAssignPlayer.Add(player);
 	}
 
-	public void RemvePlayer(NetworkedPlayerInfo player)
+	public void RemveFromPlayerControl(PlayerControl player)
 	{
-		this.needRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
+		this.needRoleAssignPlayer.RemoveAll(
+			x =>
+				x.PlayerId == player.PlayerId &&
+				x.PlayerName == player.Data.DefaultOutfit.PlayerName);
+	}
+
+	public void RemvePlayer(VanillaRolePlayerAssignData player)
+	{
+		this.needRoleAssignPlayer.RemoveAll(x => x.Equals(player));
 	}
 
 	public void Shuffle()

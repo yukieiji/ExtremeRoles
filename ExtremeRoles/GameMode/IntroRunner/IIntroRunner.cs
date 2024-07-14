@@ -71,16 +71,18 @@ public interface IIntroRunner
         {
 			var assignee = new ExtremeRoleAssignee();
 
-			if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
-                !isAllPlyerDummy())
+			if (!isAllPlyerDummy())
             {
 				RoleAssignCheckPoint.RpcCheckpoint();
-                // ホストは全員の処理が終わるまで待つ
-                while (!RoleAssignState.Instance.IsReady)
-                {
-                    yield return null;
-                }
-            }
+				// ホストは全員の処理が終わるまで待つ
+				do
+				{
+					yield return null;
+
+				} while (!RoleAssignState.Instance.IsReady);
+
+				yield return null;
+			}
             else
             {
                 yield return new WaitForSeconds(2.5f);

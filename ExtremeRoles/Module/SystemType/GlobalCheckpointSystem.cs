@@ -8,6 +8,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.SystemType;
 
 public sealed class GlobalCheckpointSystem : IExtremeSystemType
@@ -34,7 +36,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 
 	private readonly Dictionary<CheckpointType, CheckpointHandler> checkpoints = new Dictionary<CheckpointType, CheckpointHandler>();
 
-	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
+	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{ }
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
