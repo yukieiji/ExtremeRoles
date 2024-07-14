@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -32,10 +33,12 @@ public sealed class PlayerRoleAssignData
 
 	private int gameControlId = 0;
 
-	public PlayerRoleAssignData(VanillaRoleAssignData vanillaRole)
+	public PlayerRoleAssignData()
 	{
 		this.assignData.Clear();
-		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(vanillaRole.Data);
+		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(
+			GameData.Instance.AllPlayers.GetFastEnumerator().Select(
+				x => new VanillaRolePlayerAssignData(x)));
 		this.gameControlId = 0;
 	}
 

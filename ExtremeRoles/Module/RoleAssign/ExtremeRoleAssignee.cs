@@ -40,7 +40,7 @@ public sealed class ExtremeRoleAssignee
 
 	public ExtremeRoleAssignee()
 	{
-		assignData = new PlayerRoleAssignData(VanillaRoleAssignData.Instance);
+		assignData = new PlayerRoleAssignData();
 		uint netId = PlayerControl.LocalPlayer.NetId;
 
 		RPCOperator.Call(netId, RPCOperator.Command.Initialize);
@@ -73,7 +73,6 @@ public sealed class ExtremeRoleAssignee
 		yield return null;
 
 		this.assignData.AllPlayerAssignToExRole();
-		VanillaRoleAssignData.TryDestroy();
 	}
 
 	private void createAssignData()

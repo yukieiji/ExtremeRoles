@@ -23,7 +23,7 @@ public abstract class SpawnData
 	{
 		return
 			this.SpawnSetNum > 0 &&
-			this.SpawnRate >= RandomGenerator.Instance.Next(0, MaxSpawnRate + 1);
+			this.SpawnRate >= RandomGenerator.Instance.Next(MaxSpawnRate + 1);
 	}
 }
 
