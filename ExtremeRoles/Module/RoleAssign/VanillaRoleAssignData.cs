@@ -1,4 +1,5 @@
 ﻿using AmongUs.GameOptions;
+using ExtremeRoles.Helper;
 using System.Collections.Generic;
 
 namespace ExtremeRoles.Module.RoleAssign;
@@ -11,7 +12,9 @@ public sealed class VanillaRoleAssignData : NullableSingleton<VanillaRoleAssignD
 
 	public void Add(in PlayerControl player, RoleTypes role)
 	{
+		string playerName = player.Data.DefaultOutfit.PlayerName;
+		Logging.Debug($"VanillaRole Assign: {playerName} to {role}");
 		data.Add(
-			new VanillaRolePlayerAssignData(player.PlayerId, player.Data.DefaultOutfit.PlayerName, role));
+			new VanillaRolePlayerAssignData(player.PlayerId, playerName, role));
 	}
 }

@@ -94,14 +94,16 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			}
 			int spawnRate = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
 			int roleSet = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
-			int weight = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
-			bool isMultiAssign = conbCate.GetValue<CombinationRoleCommonOption, bool>(CombinationRoleCommonOption.IsMultiAssign);
 
 			var role = ExtremeRoleManager.CombRole[combType];
-			if (roleSet <= 0 || spawnRate <= 0.0)
+			if (roleSet <= 0 || spawnRate <= 0)
 			{
 				continue;
 			}
+
+			int weight = conbCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
+			bool isMultiAssign = conbCate.GetValue<CombinationRoleCommonOption, bool>(CombinationRoleCommonOption.IsMultiAssign);
+
 			log.LogInfo($"Add Combination Role:{role} - SpawnRate:{spawnRate} - RoleSetNum:{roleSet}");
 			CurrentCombRoleSpawnData.Add(
 				combType,
@@ -135,7 +137,6 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			}
 
 			int spawnRate = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.SpawnRate);
-			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			int roleNum = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.RoleNum);
 
 			if (roleNum <= 0 || spawnRate <= 0)
@@ -143,6 +144,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 				continue;
 			}
 
+			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			log.LogInfo($"Add Single Role:{role.RoleName} - SpawnRate:{spawnRate} - RoleSetNum:{roleNum}");
 
 			CurrentSingleRoleSpawnData[role.Team].Add(
