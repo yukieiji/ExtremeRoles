@@ -23,7 +23,7 @@ public class SingleRoleSpawnData(int spawnSetNum, int spawnRate, int weight)
 	{
 		return
 			this.SpawnSetNum > 0 &&
-			this.SpawnRate >= RandomGenerator.Instance.Next(MaxSpawnRate + 1);
+			this.SpawnRate >= RandomGenerator.Instance.Next(1, MaxSpawnRate + 1);
 	}
 }
 
