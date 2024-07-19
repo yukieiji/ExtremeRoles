@@ -1,7 +1,6 @@
 ﻿using System;
 
 using UnityEngine;
-using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -205,16 +204,24 @@ public sealed class Summoner :
 			return false;
 		}
 
+		var pos = local.transform.position;
+		byte lastPlayerId = this.summonTarget.PlayerId;
+		bool isDead = this.summonTarget.IsDead;
+
 		using (var writer = RPCOperator.CreateCaller(
 			RPCOperator.Command.SummonerOps))
 		{
-			var pos = local.transform.position;
 			writer.WriteByte(local.PlayerId);
 			writer.WriteFloat(pos.x);
 			writer.WriteFloat(pos.y);
-			writer.WriteByte(this.summonTarget.PlayerId);
-			writer.WriteBoolean(this.summonTarget.IsDead);
+			writer.WriteByte(lastPlayerId);
+			writer.WriteBoolean(isDead);
 		}
+		RpcOps(
+			local.PlayerId,
+			lastPlayerId,
+			pos.x, pos.y,
+			isDead);
 
 		return true;
 	}
