@@ -47,11 +47,12 @@ public interface IRoleAbility : IRoleResetMeeting
 			activatingBehavior.ActiveTime = activeTimeOption.Value;
 		}
 
-		if (this.Button.Behavior is ICountBehavior countBehavior)
+		if (this.Button.Behavior is ICountBehavior countBehavior &&
+			cate.TryGetValueOption<RoleAbilityCommonOption, int>(
+				RoleAbilityCommonOption.AbilityCount,
+				out var countOption))
 		{
-			countBehavior.SetAbilityCount(
-				cate.GetValue<RoleAbilityCommonOption, int>(
-					RoleAbilityCommonOption.AbilityCount));
+			countBehavior.SetAbilityCount(countOption.Value);
 		}
 
 		this.Button.OnMeetingEnd();

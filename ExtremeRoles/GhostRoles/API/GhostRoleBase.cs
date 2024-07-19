@@ -4,20 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-
-
-
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Roles;
-using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -212,17 +206,16 @@ public abstract class GhostRoleBase
 
         if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
 			loader.TryGetValueOption<RoleAbilityCommonOption, float>(
-                RoleAbilityCommonOption.AbilityActiveTime, out var activeTimeOtion) &&
-			activeTimeOtion is not null)
+                RoleAbilityCommonOption.AbilityActiveTime,
+				out var activeTimeOtion))
         {
 			activatingBehavior.ActiveTime = activeTimeOtion.Value;
         }
 
-        if (this.Button.Behavior is CountBehavior behavior &&
+        if (this.Button.Behavior is ICountBehavior behavior &&
 			loader.TryGetValueOption<RoleAbilityCommonOption, int>(
                 RoleAbilityCommonOption.AbilityCount,
-                out var countOption) &&
-			countOption is not null)
+                out var countOption))
         {
             behavior.SetAbilityCount(countOption.Value);
         }
