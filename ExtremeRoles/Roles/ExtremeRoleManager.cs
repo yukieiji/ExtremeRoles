@@ -422,18 +422,15 @@ public static class ExtremeRoleManager
     {
         RoleTypes roleType = (RoleTypes)bytedRoleType;
 
-		bool hasVanilaRole = roleType switch
-		{
-			RoleTypes.Scientist or
+		bool hasVanilaRole = roleType is
+			RoleTypes.Engineer or
 			RoleTypes.Scientist or
 			RoleTypes.Shapeshifter or
 			RoleTypes.Noisemaker or
 			RoleTypes.Phantom or
-			RoleTypes.Tracker => true,
-			_ => false
-		};
+			RoleTypes.Tracker;
 
-        var role = CombRole[combType].GetRole(roleId, roleType);
+		var role = CombRole[combType].GetRole(roleId, roleType);
 
         if (role is null)
 		{
