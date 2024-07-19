@@ -252,6 +252,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Psychic     , new Psychic()},
 			{(int)ExtremeRoleId.Bait        , new Bait()},
 			{(int)ExtremeRoleId.Jailer      , new Jailer()},
+			{(int)ExtremeRoleId.Summoner    , new Summoner()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
