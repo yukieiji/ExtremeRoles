@@ -51,7 +51,7 @@ public sealed class Summoner :
         ExtremeRoleId.Summoner,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Summoner.ToString(),
-        ColorPalette.DelusionerPink,
+        ColorPalette.SummonerLiseron,
         false, true, false, false)
     { }
 
@@ -148,7 +148,17 @@ public sealed class Summoner :
     {
     }
 
-    protected override void CreateSpecificOption(
+	public override Color GetTargetRoleSeeColor(SingleRoleBase? targetRole, byte targetPlayerId)
+	{
+		if (this.summonTarget != null &&
+			this.summonTarget.PlayerId == targetPlayerId)
+		{
+			return ColorPalette.DelusionerPink;
+		}
+		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+	}
+
+	protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
 

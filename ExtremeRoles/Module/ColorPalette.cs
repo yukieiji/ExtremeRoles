@@ -54,6 +54,7 @@ public static class ColorPalette
 	public readonly static Color ModeratorByakuroku = new Color32(202, 227, 191, byte.MaxValue);
 	public readonly static Color PsychicSyentyietu = new Color32(146, 149, 186, byte.MaxValue);
 	public readonly static Color BaitCyan = new Color32(0, 247, 255, byte.MaxValue);
+	public readonly static Color SummonerLiseron = new Color32(236, 120, 180, byte.MaxValue);
 
 	public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
 	public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
