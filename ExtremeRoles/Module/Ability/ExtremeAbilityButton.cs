@@ -38,9 +38,10 @@ public class ExtremeAbilityButton
 
 	public KeyCode HotKey { private get; set; } = KeyCode.F;
 
-	public Transform Transform => button.transform;
+	public Transform Transform => Button.transform;
 
-	private readonly ActionButton button;
+	protected readonly ActionButton Button;
+
 	private readonly IButtonAutoActivator activator;
 
 	private bool isShow = true;
@@ -62,14 +63,14 @@ public class ExtremeAbilityButton
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
 		var killButton = hud.KillButton;
 
-		button = Object.Instantiate(
+		this.Button = Object.Instantiate(
 			killButton, killButton.transform.parent);
-		PassiveButton passiveButton = button.GetComponent<PassiveButton>();
+		PassiveButton passiveButton = this.Button.GetComponent<PassiveButton>();
 		passiveButton.OnClick.RemoveAllPersistentAndListeners();
 		passiveButton.OnClick.AddListener(onClick);
 		passiveButton.name = Name;
 
-		Transform info = button.transform.FindChild(AditionalInfoName);
+		Transform info = this.Button.transform.FindChild(AditionalInfoName);
 		if (info != null)
 		{
 			info.gameObject.SetActive(false);
@@ -77,8 +78,8 @@ public class ExtremeAbilityButton
 
 		SetButtonShow(true);
 
-		Behavior.Initialize(button);
-		button.graphic.sprite = Behavior.Graphic.Img;
+		Behavior.Initialize(this.Button);
+		this.Button.graphic.sprite = Behavior.Graphic.Img;
 
 		hud.ReGridButtons();
 	}
@@ -113,15 +114,15 @@ public class ExtremeAbilityButton
 		var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
 
 		Object.Destroy(
-			this.button.buttonLabelText.fontMaterial);
-		this.button.buttonLabelText.fontMaterial = Object.Instantiate(
-			useButton.buttonLabelText.fontMaterial, this.button.transform);
+			this.Button.buttonLabelText.fontMaterial);
+		this.Button.buttonLabelText.fontMaterial = Object.Instantiate(
+			useButton.buttonLabelText.fontMaterial, this.Button.transform);
 	}
 
 	public void Update()
 	{
 		if (!this.isShow ||
-			this.button == null ||
+			this.Button == null ||
 			IntroCutscene.Instance != null)
 		{
 			return;
@@ -133,7 +134,7 @@ public class ExtremeAbilityButton
 	{
 		bool isActive = this.activator.IsActive();
 		setActive(isActive);
-		if (!this.button.isActiveAndEnabled) { return; }
+		if (!this.Button.isActiveAndEnabled) { return; }
 
 		AbilityState newState = this.Behavior.Update(State);
 		if (newState != this.State)
@@ -141,23 +142,23 @@ public class ExtremeAbilityButton
 			setStatus(newState);
 		}
 
-		var grahic = this.button.graphic;
+		var grahic = this.Button.graphic;
 		grahic.sprite = this.Behavior.Graphic.Img;
-		this.button.OverrideText(this.Behavior.Graphic.Text);
+		this.Button.OverrideText(this.Behavior.Graphic.Text);
 
 		if (this.Behavior.IsUse())
 		{
-			grahic.color = this.button.buttonLabelText.color = Palette.EnabledColor;
+			grahic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
 			grahic.material.SetFloat(materialName, 0f);
 		}
 		else
 		{
-			grahic.color = this.button.buttonLabelText.color = Palette.DisabledClear;
+			grahic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
 			grahic.material.SetFloat(materialName, 1f);
 		}
 
 		// チャージ中は改行をオフにしてるので
-		var cooldownTimerText = this.button.cooldownTimerText;
+		var cooldownTimerText = this.Button.cooldownTimerText;
 		if (!cooldownTimerText.enableWordWrapping)
 		{
 			cooldownTimerText.enableWordWrapping = true;
@@ -168,7 +169,7 @@ public class ExtremeAbilityButton
 		{
 			case AbilityState.None:
 				cooldownTimerText.color = Palette.EnabledColor;
-				this.button.SetCoolDown(0.0f, maxTimer);
+				this.Button.SetCoolDown(0.0f, maxTimer);
 				return;
 			case AbilityState.CoolDown:
 				cooldownTimerText.color = Palette.EnabledColor;
@@ -223,8 +224,8 @@ public class ExtremeAbilityButton
 				this.Timer += Time.deltaTime;
 
 				// そのままだと表示が分かりにくいので変える
-				this.button.isCoolingDown = true;
-				this.button.SetCooldownFill(1 - chargingBehavior.ChargeGage);
+				this.Button.isCoolingDown = true;
+				this.Button.SetCooldownFill(1 - chargingBehavior.ChargeGage);
 				cooldownTimerText.text = string.Format(
 					Translation.GetString(OptionUnit.Percentage.ToString()),
 					Mathf.CeilToInt(chargingBehavior.ChargeGage * 100));
@@ -277,7 +278,7 @@ public class ExtremeAbilityButton
 				break;
 		}
 
-		this.button.SetCoolDown(this.Timer, maxTimer);
+		this.Button.SetCoolDown(this.Timer, maxTimer);
 	}
 
 	protected void AddTimerOffset(in float offsetTime)
@@ -307,8 +308,8 @@ public class ExtremeAbilityButton
 
 	private void setActive(bool active)
 	{
-		button.gameObject.SetActive(active);
-		button.graphic.enabled = active;
+		this.Button.gameObject.SetActive(active);
+		this.Button.graphic.enabled = active;
 	}
 
 	private void setStatus(AbilityState newState)

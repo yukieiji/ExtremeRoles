@@ -37,6 +37,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 				{
 					continue;
 				}
+				behavior.Initialize(this.Button);
 				_ = behavior.Update(AbilityState.None);
 			}
 		}
@@ -68,6 +69,9 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 		{
 			_ = behavior.Update(AbilityState.None);
 		}
+
+		behavior.Initialize(this.Button);
+
 		this.allAbility.Add(behavior);
 		this.reenableImg();
 	}
