@@ -51,7 +51,7 @@ public sealed class Summoner :
         ExtremeRoleId.Summoner,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Summoner.ToString(),
-        ColorPalette.SummonerLiseron,
+        ColorPalette.SummonerToukoushoku,
         false, true, false, false)
     { }
 
@@ -148,14 +148,14 @@ public sealed class Summoner :
     {
     }
 
-	public override Color GetTargetRoleSeeColor(SingleRoleBase? targetRole, byte targetPlayerId)
+	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		if (this.summonTarget != null &&
 			this.summonTarget.PlayerId == targetPlayerId)
 		{
-			return ColorPalette.DelusionerPink;
+			return Design.ColoedString(this.NameColor, " ◀");
 		}
-		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
 	protected override void CreateSpecificOption(
