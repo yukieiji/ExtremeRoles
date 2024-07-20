@@ -797,7 +797,7 @@ public sealed class Hypnotist :
             this.addedPos.Add(pos);
         }
     }
-	private T setParts<T>(in Vector3 pos) where T : AbilityPartBase
+	private T setParts<T>(Vector3 pos) where T : AbilityPartBase
 	{
 		GameObject obj = new GameObject(nameof(T));
 		obj.transform.position = pos;
@@ -1258,7 +1258,7 @@ public sealed class Doll :
     }
 
     public override Color GetTargetRoleSeeColor(
-        SingleRoleBase? targetRole,
+        SingleRoleBase targetRole,
         byte targetPlayerId)
     {
 

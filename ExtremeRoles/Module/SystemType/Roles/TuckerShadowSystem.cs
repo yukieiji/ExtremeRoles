@@ -27,7 +27,7 @@ public sealed class TuckerShadowSystem(
 		ChimeraRevive
 	}
 
-	private record ShadowInfo(byte PlayerId, Vector2 Pos)
+	private sealed record ShadowInfo(byte PlayerId, Vector2 Pos)
 	{
 		public static ShadowInfo? Create(byte playerId, float rand)
 		{
