@@ -299,6 +299,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
+			{(int)ExtremeRoleId.Tucker    , new Tucker()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -315,7 +316,7 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
             {(byte)CombinationRoleType.Mover          , new MoverManager()},
 			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
-			{(byte)CombinationRoleType.Skater        , new SkaterManager()},
+			{(byte)CombinationRoleType.Skater         , new SkaterManager()},
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         }.ToImmutableDictionary();
 

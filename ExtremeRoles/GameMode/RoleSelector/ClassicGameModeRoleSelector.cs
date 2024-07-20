@@ -5,7 +5,6 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
 
-
 namespace ExtremeRoles.GameMode.RoleSelector;
 
 public sealed class ClassicGameModeRoleSelector : IRoleSelector
@@ -143,7 +142,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Madmate,
             ExtremeRoleId.Umbrer,
 			ExtremeRoleId.Hatter,
-			ExtremeRoleId.Artist
+			ExtremeRoleId.Artist,
+			ExtremeRoleId.Tucker,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
