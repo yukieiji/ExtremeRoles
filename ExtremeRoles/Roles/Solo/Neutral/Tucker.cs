@@ -177,16 +177,19 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
 		factory.CreateFloatOption(
 			Option.ShadowTimer,
-			15.0f, 0.5f, 60.0f, 0.1f);
+			15.0f, 0.5f, 60.0f, 0.1f,
+			format: OptionUnit.Second);
 		factory.CreateFloatOption(
 			Option.ShadowOffset,
 			0.5f, 0.0f, 2.5f, 0.1f);
 		factory.CreateFloatOption(
 			Option.RemoveShadowTime,
-			3.0f, 0.1f, 15.0f, 0.1f);
+			3.0f, 0.1f, 15.0f, 0.1f,
+			format: OptionUnit.Second);
 		factory.CreateFloatOption(
 			Option.KillCoolReduceOnRemoveShadow,
-			2.5f, 0.1f, 30.0f, 0.1f);
+			2.5f, 0.1f, 30.0f, 0.1f,
+			format: OptionUnit.Second);
 		factory.CreateBoolOption(
 			Option.IsReduceInitKillCoolOnRemove, false);
 
