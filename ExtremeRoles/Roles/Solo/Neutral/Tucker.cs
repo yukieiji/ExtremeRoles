@@ -232,6 +232,9 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 				loader.GetValue<Option, float>(Option.KillCoolReduceOnRemoveShadow),
 				loader.GetValue<Option, bool>(Option.IsReduceInitKillCoolOnRemove)));
 
+		this.range = loader.GetValue<Option, float>(Option.Range);
+
+		this.removeInfo = null;
 		this.chimera = new HashSet<byte>();
 	}
 
