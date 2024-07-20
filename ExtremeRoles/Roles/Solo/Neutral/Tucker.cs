@@ -71,7 +71,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Tucker.ToString(),
 		ColorPalette.GamblerYellowGold,
-		false, true, false, false, false)
+		false, false, false, false, false)
 	{ }
 
 	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
