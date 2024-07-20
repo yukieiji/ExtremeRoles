@@ -110,7 +110,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 		factory.CreateBoolOption(
 			Option.IsReduceInitKillCoolOnRemove, false);
 
-		this.CreateKillerOption(factory, ignorePrefix: false);
+		CreateKillerOption(factory, ignorePrefix: false);
 
 		factory.CreateBoolOption(
 			Option.ChimeraCanUseVent, false);
