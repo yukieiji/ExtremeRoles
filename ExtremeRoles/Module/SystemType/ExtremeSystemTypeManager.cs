@@ -40,7 +40,8 @@ public enum ExtremeSystemType : byte
 	TeroristTeroSabotage,
 	ScavengerAbility,
 
-	YokoYashiro
+	YokoYashiro,
+	TuckerShadow
 }
 
 public enum ResetTiming : byte

@@ -8,14 +8,13 @@ using TMPro;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.CustomOption.Factory;
-
 
 
 #nullable enable
@@ -41,6 +40,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 	public ExtremeAbilityButton? Button { get; set; }
 	private float range;
 	private Chimera.Option? option;
+	private TuckerShadowSystem? system;
 
 	public Tucker() : base(
 		ExtremeRoleId.Tucker,
@@ -63,6 +63,12 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 
 		var chimera = new Chimera(targetPlayer.Data, tucker.option);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, chimera);
+
+		if (AmongUsClient.Instance.AmHost &&
+			tucker.system is not null)
+		{
+			tucker.system.Enable(rolePlayerId);
+		}
 	}
 
 	public void CreateAbility()
@@ -147,6 +153,13 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 			loader.GetValue<Option, float>(Option.ChimeraDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraReviveTime),
 			loader.GetValue<Option, bool>(Option.ChimeraCanUseVent));
+
+		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			TuckerShadowSystem.Type, () => new TuckerShadowSystem(
+				loader.GetValue<Option, float>(Option.ShadowOffset),
+				loader.GetValue<Option, float>(Option.ShadowTimer),
+				loader.GetValue<Option, float>(Option.KillCoolReduceOnRemoveShadow),
+				loader.GetValue<Option, bool>(Option.IsReduceInitKillCoolOnRemove)));
 	}
 }
 
@@ -306,6 +319,14 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		{
 			this.resurrectText.gameObject.SetActive(false);
 		}
+
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			TuckerShadowSystem.Type, x =>
+			{
+				x.Write((byte)TuckerShadowSystem.Ops.ChimeraRevive);
+				x.Write(this.tuckerPlayer.PlayerId);
+			});
+
 		this.isReviveNow = false;
 	}
 
