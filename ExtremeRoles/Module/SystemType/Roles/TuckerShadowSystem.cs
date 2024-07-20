@@ -7,6 +7,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Resources;
 
 #nullable enable
 
@@ -101,10 +102,15 @@ public sealed class TuckerShadowSystem(
 	{
 		this.timers.TryAdd(playerId, this.shadowTimer);
 	}
+	public void Disable(byte playerId)
+	{
+		this.timers.Remove(playerId);
+		this.scheduledShadow.RemoveAll(x => x.PlayerId == playerId);
+	}
 
 	public bool TryGetClosedShadowId(PlayerControl player, float range, out int id)
 	{
-		id = 0;
+		id = int.MaxValue;
 		if (!this.placedShadow.TryGetValue(player.PlayerId, out var playerShadow))
 		{
 			return false;
@@ -153,7 +159,8 @@ public sealed class TuckerShadowSystem(
 			}
 			var shdowObj = new GameObject($"Shadow_{id}");
 			var rend = shdowObj.AddComponent<SpriteRenderer>();
-
+			rend.sprite = UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.TestButton);
 			if (ExtremeRoleManager.TryGetSafeCastedLocalRole<Tucker>(out var tucker))
 			{
 				rend.color = tucker.GetNameColor();

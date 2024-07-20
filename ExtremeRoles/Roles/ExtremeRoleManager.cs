@@ -337,7 +337,8 @@ public static class ExtremeRoleManager
         SidekickToJackal,
         CreateServant,
 		ForceReplaceToYardbird,
-		BecomeLawbreaker
+		BecomeLawbreaker,
+		ForceRelaceToChimera
 	}
 
 	private const int roleIdOffset = 200;
@@ -515,7 +516,10 @@ public static class ExtremeRoleManager
 				}
 				Jailer.ToLawbreaker(caller);
 				break;
-            default:
+			case ReplaceOperation.ForceRelaceToChimera:
+				Tucker.TargetToChimera(caller, targetId);
+				break;
+			default:
                 break;
         }
     }
