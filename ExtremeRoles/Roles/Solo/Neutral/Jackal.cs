@@ -572,8 +572,8 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-
-        if (targetPlayerId == this.jackalPlayerId)
+        if (targetRole.Id is ExtremeRoleId.Jackal &&
+			targetPlayerId == this.jackalPlayerId)
         {
             return ColorPalette.JackalBlue;
         }
