@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
+using TMPro;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
@@ -11,8 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
-using UnityEngine;
-using TMPro;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 
 
@@ -24,55 +26,26 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 {
 	public enum Option
 	{
-		UseAdmin,
-		UseSecurity,
-		UseVital,
-
 		Range,
-		TargetMode,
-		CanReplaceAssassin,
-
-		IsMissingToDead,
-		IsDeadAbilityZero,
-
-		LawbreakerCanKill,
-		LawbreakerUseVent,
-		LawbreakerUseSab,
-
-		YardbirdAddCommonTask,
-		YardbirdAddNormalTask,
-		YardbirdAddLongTask,
-		YardbirdSpeedMod,
-		YardbirdUseAdmin,
-		YardbirdUseSecurity,
-		YardbirdUseVital,
-		YardbirdUseVent,
-		YardbirdUseSab,
+		ShadowTimer,
+		ShadowOffset,
+		RemoveShadowTime,
+		KillCoolReduceOnRemoveShadow,
+		IsReduceInitKillCoolOnRemove,
+		ChimeraCanUseVent,
+		ChimeraReviveTime,
+		ChimeraDeathKillCoolOffset,
+		TuckerDeathKillCoolOffset,
 	}
 
 	public ExtremeAbilityButton? Button { get; set; }
-
-	private bool isMissingToDead = false;
-	private bool isDeadAbilityZero = true;
-
-	private TargetMode mode;
-	private bool canReplaceAssassin = false;
-
 	private float range;
-	private byte targetPlayerId = byte.MaxValue;
-
-
-	public enum TargetMode
-	{
-		Both,
-		ImpostorOnly,
-		NeutralOnly,
-	}
+	private Chimera.Option? option;
 
 	public Tucker() : base(
-		ExtremeRoleId.Jailer,
+		ExtremeRoleId.Tucker,
 		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Jailer.ToString(),
+		ExtremeRoleId.Tucker.ToString(),
 		ColorPalette.GamblerYellowGold,
 		false, true, false, false, false)
 	{ }
@@ -93,25 +66,17 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			"AddJail",
-			Loader.GetSpriteFromResources(ExtremeRoleId.Jailer));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Jailer));
 		this.Button?.SetLabelToCrewmate();
 	}
 
 	public bool IsAbilityUse()
 	{
-		this.targetPlayerId = byte.MaxValue;
-
-		PlayerControl target = Player.GetClosestPlayerInRange(
-			CachedPlayerControl.LocalPlayer, this,
-			this.range);
-		if (target == null) { return false; }
-
-		this.targetPlayerId = target.PlayerId;
 
 		return IRoleAbility.IsCommonUse();
 	}
 
-	public void ResetOnMeetingEnd(GameData.PlayerInfo? exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{ }
 
 	public void ResetOnMeetingStart()
@@ -119,203 +84,93 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool UseAbility()
 	{
-		var local = CachedPlayerControl.LocalPlayer;
-		if (local == null ||
-			this.Button?.Behavior is not CountBehavior count ||
-			!ExtremeRoleManager.TryGetRole(this.targetPlayerId, out var role))
-		{
-			return false;
-		}
-
-		byte rolePlayerId = local.PlayerId;
-
-		bool isSuccess = this.mode switch
-		{
-			TargetMode.Both => !role.IsCrewmate() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
-			TargetMode.ImpostorOnly => role.IsImpostor() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
-			TargetMode.NeutralOnly => role.IsNeutral(),
-			_ => false,
-		};
-
-		if (isSuccess)
-		{
-			// 対象をヤードバード化
-			using (var caller = RPCOperator.CreateCaller(
-				RPCOperator.Command.ReplaceRole))
-			{
-				caller.WriteByte(rolePlayerId);
-				caller.WriteByte(this.targetPlayerId);
-				caller.WriteByte(
-					(byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToYardbird);
-			}
-			NotCrewmateToYardbird(rolePlayerId, this.targetPlayerId);
-
-			if (this.isDeadAbilityZero && count.AbilityCount <= 1)
-			{
-				selfKill(rolePlayerId);
-			}
-		}
-		else
-		{
-			if (this.isMissingToDead)
-			{
-				selfKill(rolePlayerId);
-			}
-			else
-			{
-				// 自分自身をローブレーカー化
-				using (var caller = RPCOperator.CreateCaller(
-					RPCOperator.Command.ReplaceRole))
-				{
-					caller.WriteByte(rolePlayerId);
-					caller.WriteByte(rolePlayerId);
-					caller.WriteByte(
-						(byte)ExtremeRoleManager.ReplaceOperation.BecomeLawbreaker);
-				}
-				ToLawbreaker(rolePlayerId);
-			}
-
-		}
-
 		return true;
 	}
 
-	protected override void CreateSpecificOption(IOptionInfo parentOps)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		CreateBoolOption(
-			Option.UseAdmin,
-			false, parentOps);
-		CreateBoolOption(
-			Option.UseSecurity,
-			true, parentOps);
-		CreateBoolOption(
-			Option.UseVital,
-			false, parentOps);
+		IRoleAbility.CreateAbilityCountOption(factory, 1, 10);
 
-		this.CreateAbilityCountOption(
-			parentOps, 1, 5);
-
-		CreateSelectionOption(
-			Option.TargetMode,
-			Enum.GetValues<TargetMode>().Select(x => x.ToString()).ToArray(),
-			parentOps);
-		CreateBoolOption(
-			Option.CanReplaceAssassin,
-			true, parentOps);
-
-		CreateFloatOption(
+		factory.CreateFloatOption(
 			Option.Range,
-			0.75f, 0.1f, 1.5f, 0.1f,
-			parentOps);
+			0.75f, 0.1f, 1.2f, 0.1f);
 
-		var lowBreakerOpt = CreateBoolOption(
-			Option.IsMissingToDead,
-			false, parentOps);
+		factory.CreateFloatOption(
+			Option.ShadowTimer,
+			15.0f, 0.5f, 60.0f, 0.1f);
+		factory.CreateFloatOption(
+			Option.ShadowOffset,
+			0.5f, 0.0f, 2.5f, 0.1f);
+		factory.CreateFloatOption(
+			Option.RemoveShadowTime,
+			3.0f, 0.1f, 15.0f, 0.1f);
+		factory.CreateFloatOption(
+			Option.KillCoolReduceOnRemoveShadow,
+			2.5f, 0.1f, 30.0f, 0.1f);
+		factory.CreateBoolOption(
+			Option.IsReduceInitKillCoolOnRemove, false);
 
-		CreateBoolOption(
-			Option.IsDeadAbilityZero,
-			true, lowBreakerOpt);
+		this.CreateKillerOption(factory, ignorePrefix: false);
 
-		CreateBoolOption(
-		   Option.LawbreakerCanKill,
-		   false, lowBreakerOpt,
-		   invert: true,
-		   enableCheckOption: parentOps);
-		CreateBoolOption(
-		   Option.LawbreakerUseVent,
-		   true, lowBreakerOpt,
-		   invert: true,
-		   enableCheckOption: parentOps);
-		CreateBoolOption(
-		   Option.LawbreakerUseSab,
-		   true, lowBreakerOpt,
-		   invert: true,
-		   enableCheckOption: parentOps);
-
-
-		CreateIntOption(
-			Option.YardbirdAddCommonTask,
-			2, 0, 15, 1,
-			parentOps);
-		CreateIntOption(
-			Option.YardbirdAddNormalTask,
-			1, 0, 15, 1,
-			parentOps);
-		CreateIntOption(
-			Option.YardbirdAddLongTask,
-			1, 0, 15, 1,
-			parentOps);
-		CreateFloatOption(
-			Option.YardbirdSpeedMod,
-			0.8f, 0.1f, 1.0f, 0.1f,
-			parentOps);
-
-		CreateBoolOption(
-			Option.YardbirdUseAdmin,
-			false, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseSecurity,
-			false, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseVital,
-			false, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseVent,
-			true, parentOps);
-		CreateBoolOption(
-			Option.YardbirdUseSab,
-			true, parentOps);
+		factory.CreateBoolOption(
+			Option.ChimeraCanUseVent, false);
+		factory.CreateFloatOption(
+			Option.ChimeraReviveTime,
+			5.0f, 4.0f, 10.0f, 0.1f,
+			format: OptionUnit.Second);
+		factory.CreateFloatOption(
+			Option.ChimeraDeathKillCoolOffset,
+			2.5f, -30.0f, 30.0f, 0.1f,
+			format: OptionUnit.Second);
+		factory.CreateFloatOption(
+			Option.TuckerDeathKillCoolOffset,
+			2.5f, -30.0f, 30.0f, 0.1f,
+			format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		var optMng = OptionManager.Instance;
+		var loader = this.Loader;
 
-		this.CanUseAdmin = optMng.GetValue<bool>(this.GetRoleOptionId(Option.UseAdmin));
-		this.CanUseSecurity = optMng.GetValue<bool>(this.GetRoleOptionId(Option.UseSecurity));
-		this.CanUseVital = optMng.GetValue<bool>(this.GetRoleOptionId(Option.UseVital));
+		float killCool = loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillCool) ?
+			loader.GetValue<KillerCommonOption, float>(KillerCommonOption.KillCoolDown) :
+			GameManager.Instance.LogicOptions.GetKillCooldown();
 
-		this.isMissingToDead = optMng.GetValue<bool>(this.GetRoleOptionId(Option.IsMissingToDead));
-		if (!this.isMissingToDead)
-		{
-		}
-		else
-		{
-			this.isDeadAbilityZero = optMng.GetValue<bool>(this.GetRoleOptionId(Option.IsDeadAbilityZero));
-		}
-
-		this.range = optMng.GetValue<float>(this.GetRoleOptionId(Option.Range));
-		this.mode = (TargetMode)optMng.GetValue<int>(this.GetRoleOptionId(Option.TargetMode));
-		this.canReplaceAssassin = optMng.GetValue<bool>(this.GetRoleOptionId(Option.CanReplaceAssassin));
-
-	}
-	private static void selfKill(byte rolePlayerId)
-	{
-		Player.RpcUncheckMurderPlayer(
-					rolePlayerId, rolePlayerId, byte.MaxValue);
-		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-			rolePlayerId,
-			Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.MissShot);
+		this.option = new Chimera.Option(
+			killCool,
+			loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillRange),
+			loader.GetValue<KillerCommonOption, int>(KillerCommonOption.KillRange),
+			loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
+			loader.GetValue<Option, float>(Option.ChimeraDeathKillCoolOffset),
+			loader.GetValue<Option, float>(Option.ChimeraReviveTime),
+			loader.GetValue<Option, bool>(Option.ChimeraCanUseVent));
 	}
 }
 
 public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 {
 	public sealed record Option(
-		float KillCoolOffset,
+		float KillCool,
+		bool HasOtherRange,
+		int Range,
+		float TukerKillCoolOffset,
+		float RevieKillCoolOffset,
 		float ResurrectTime,
 		bool Vent);
 
-	private readonly GameData.PlayerInfo tuckerPlayer;
-	private readonly float killCoolOffset;
+	private readonly NetworkedPlayerInfo tuckerPlayer;
+	private readonly float reviveKillCoolOffset;
 	private readonly float resurrectTime;
+	private readonly float tuckerDeathKillCoolOffset;
+	private readonly float initCoolTime;
 
 	private TextMeshPro? resurrectText;
 	private float resurrectTimer;
 	private bool isReviveNow;
+	private bool isTuckerDead;
 
 	public Chimera(
-		GameData.PlayerInfo tuckerPlayer,
+		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
 		ExtremeRoleId.Yardbird,
 		ExtremeRoleType.Crewmate,
@@ -324,14 +179,18 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		true, false, option.Vent, false)
 	{
 		this.tuckerPlayer = tuckerPlayer;
-		this.killCoolOffset = option.KillCoolOffset;
+		this.reviveKillCoolOffset = option.RevieKillCoolOffset;
+		this.tuckerDeathKillCoolOffset = option.TukerKillCoolOffset;
 		this.resurrectTime = option.ResurrectTime;
 		this.resurrectTimer = this.resurrectTime;
 
 		this.HasOtherKillCool = true;
+		this.initCoolTime = option.KillCool;
+		this.KillCoolTime = this.initCoolTime;
+		this.isTuckerDead = tuckerPlayer.IsDead;
 	}
 
-	protected override void CreateSpecificOption(IOptionInfo parentOps)
+	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		throw new Exception("Don't call this class method!!");
 	}
@@ -339,6 +198,18 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	protected override void RoleSpecificInit()
 	{
 		throw new Exception("Don't call this class method!!");
+	}
+
+	public void OnRemoveShadow(byte tuckerPlayerId,
+		float reduceTime, bool isReduceInitKillCool)
+	{
+		if (tuckerPlayerId != this.tuckerPlayer.PlayerId)
+		{
+			return;
+		}
+
+		float min = isReduceInitKillCool ? 0.01f : this.initCoolTime;
+		updateKillCoolTime(-reduceTime, min);
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -348,13 +219,32 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			!CachedShipStatus.Instance.enabled ||
 			rolePlayer == null ||
 			rolePlayer.Data == null ||
-			!rolePlayer.Data.IsDead ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
-			this.tuckerPlayer == null ||
+			this.tuckerPlayer == null)
+		{
+			return;
+		}
+
+		if (!this.isTuckerDead)
+		{
+			this.isTuckerDead = this.tuckerPlayer.IsDead;
+			if (this.isTuckerDead)
+			{
+				updateKillCoolTime(this.KillCoolTime, this.tuckerDeathKillCoolOffset);
+			}
+		}
+
+
+		// 復活処理
+		if (!rolePlayer.Data.IsDead ||
 			this.tuckerPlayer.Disconnected ||
 			this.tuckerPlayer.IsDead ||
-			this.isReviveNow) { return; }
+			this.isReviveNow)
+		{
+			return;
+		}
+
 
 		if (this.resurrectText == null)
 		{
@@ -394,6 +284,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 		byte playerId = rolePlayer.PlayerId;
 
+		updateKillCoolTime(this.KillCoolTime, this.reviveKillCoolOffset);
 		Player.RpcUncheckRevive(playerId);
 
 		if (rolePlayer.Data == null ||
@@ -405,11 +296,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		Player.RpcUncheckSnap(playerId, randomPos[
 			RandomGenerator.Instance.Next(randomPos.Count)]);
 
-		RoleState.AddKillCoolOffset(this.killCoolOffset);
-		if (this.TryGetKillCool(out float killCool))
-		{
-			rolePlayer.killTimer = killCool;
-		}
+		rolePlayer.killTimer = this.KillCoolTime;
 
 		FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
 		if (this.resurrectText != null)
@@ -421,12 +308,17 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	public void AllReset(PlayerControl rolePlayer)
 	{
-		if (CachedPlayerControl.LocalPlayer == null ||
-			rolePlayer.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId)
+		if (PlayerControl.LocalPlayer == null ||
+			rolePlayer.PlayerId != PlayerControl.LocalPlayer.PlayerId)
 		{
 			return;
 		}
 		// 累積していたキルクールのオフセットを無効化しておく
-		RoleState.AddKillCoolOffset(0.0f);
+		this.KillCoolTime = this.initCoolTime;
+	}
+
+	private void updateKillCoolTime(float offset, float min=0.1f)
+	{
+		this.KillCoolTime = Mathf.Clamp(this.KillCoolTime + offset, min, float.MaxValue);
 	}
 }

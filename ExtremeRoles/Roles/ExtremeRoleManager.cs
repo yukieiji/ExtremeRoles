@@ -120,6 +120,8 @@ public enum ExtremeRoleId : int
 	Hatter,
 	Artist,
 	Lawbreaker,
+	Tucker,
+	Chimera,
 
 	Xion,
 }
