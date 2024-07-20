@@ -193,7 +193,9 @@ public enum RoleGameOverReason
 
 	ArtistShipToArt,
 
-    UnKnown = 100,
+	TuckerShipIsExperimentStation,
+
+	UnKnown = 100,
 }
 
 public enum NeutralSeparateTeam
@@ -208,7 +210,8 @@ public enum NeutralSeparateTeam
     Eater,
     Traitor,
     Queen,
-    Kids
+    Kids,
+	Tucker
 }
 
 public static class ExtremeRoleManager
@@ -329,6 +332,7 @@ public static class ExtremeRoleManager
         ExtremeRoleId.Hero,
         ExtremeRoleId.Villain,
 		ExtremeRoleId.Yoko,
+		ExtremeRoleId.Chimera,
     };
 
     public enum ReplaceOperation : byte

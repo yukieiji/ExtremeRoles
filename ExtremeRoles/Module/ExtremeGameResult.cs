@@ -360,6 +360,10 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				replaceWinnerToSpecificNeutralRolePlayer(
 					neutralNoWinner, ExtremeRoleId.Artist);
 				break;
+			case RoleGameOverReason.TuckerShipIsExperimentStation:
+				replaceWinnerToSpecificNeutralRolePlayer(
+					neutralNoWinner, ExtremeRoleId.Tucker, ExtremeRoleId.Chimera);
+				break;
 			default:
 				break;
 		}

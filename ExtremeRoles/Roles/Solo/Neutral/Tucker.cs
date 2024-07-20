@@ -68,7 +68,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
 	public Tucker() : base(
 		ExtremeRoleId.Tucker,
-		ExtremeRoleType.Crewmate,
+		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Tucker.ToString(),
 		ColorPalette.GamblerYellowGold,
 		false, true, false, false, false)
@@ -404,7 +404,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
 		ExtremeRoleId.Chimera,
-		ExtremeRoleType.Crewmate,
+		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Chimera.ToString(),
 		ColorPalette.GamblerYellowGold,
 		true, false, option.Vent, false)
