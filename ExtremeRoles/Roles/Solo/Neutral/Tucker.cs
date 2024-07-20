@@ -50,16 +50,19 @@ public sealed class Tucker : SingleRoleBase, IRoleAutoBuildAbility
 		false, true, false, false, false)
 	{ }
 
-	public static void NotCrewmateToYardbird(byte rolePlayerId, byte targetPlayerId)
+	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
 	{
 		PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
 		if (targetPlayer == null ||
-			!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(rolePlayerId, out var jailer))
+			!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(rolePlayerId, out var tucker) ||
+			tucker.option is null)
 		{
 			return;
 		}
 		IRoleSpecialReset.ResetRole(targetPlayerId);
-		// ExtremeRoleManager.SetNewRole(targetPlayerId, yardbird);
+
+		var chimera = new Chimera(targetPlayer.Data, tucker.option);
+		ExtremeRoleManager.SetNewRole(targetPlayerId, chimera);
 	}
 
 	public void CreateAbility()
