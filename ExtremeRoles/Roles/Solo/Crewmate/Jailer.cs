@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using AmongUs.GameOptions;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -14,15 +15,20 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Performance.Il2Cpp;
+
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
+public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
 {
 	public enum Option
 	{
+		AwakeTaskGage,
+		AwakeAlivePeople,
+
 		UseAdmin,
 		UseSecurity,
 		UseVital,
@@ -51,6 +57,16 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 
 	public ExtremeAbilityButton? Button { get; set; }
 
+	public bool IsAwake
+	{
+		get
+		{
+			return GameSystem.IsLobby || this.awakeRole;
+		}
+	}
+
+	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
+
 	private bool isMissingToDead = false;
 	private bool isDeadAbilityZero = true;
 
@@ -59,6 +75,11 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 
 	private float range;
 	private byte targetPlayerId = byte.MaxValue;
+	private bool awakeRole = false;
+
+	private float awakeTaskGage;
+	private float awakePlayerNum;
+	private bool awakeHasOtherVision;
 
 	private Yardbird.Option? yardBirdOption;
 	private Lawbreaker.Option? lawBreakerOption;
@@ -141,6 +162,74 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 	public void ResetOnMeetingStart()
 	{ }
 
+	public override string GetColoredRoleName(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetColoredRoleName();
+		}
+		else
+		{
+			return Design.ColoedString(
+				Palette.White,
+				Translation.GetString(RoleTypes.Crewmate.ToString()));
+		}
+	}
+	public override string GetFullDescription()
+	{
+		if (IsAwake)
+		{
+			return Translation.GetString(
+				$"{this.Id}FullDescription");
+		}
+		else
+		{
+			return Translation.GetString(
+				$"{RoleTypes.Crewmate}FullDescription");
+		}
+	}
+
+	public override string GetImportantText(bool isContainFakeTask = true)
+	{
+		if (IsAwake)
+		{
+			return base.GetImportantText(isContainFakeTask);
+
+		}
+		else
+		{
+			return Design.ColoedString(
+				Palette.White,
+				$"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+		}
+	}
+
+	public override string GetIntroDescription()
+	{
+		if (IsAwake)
+		{
+			return base.GetIntroDescription();
+		}
+		else
+		{
+			return Design.ColoedString(
+				Palette.CrewmateBlue,
+				PlayerControl.LocalPlayer.Data.Role.Blurb);
+		}
+	}
+
+	public override Color GetNameColor(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetNameColor(isTruthColor);
+		}
+		else
+		{
+			return Palette.White;
+		}
+	}
+
 	public bool UseAbility()
 	{
 		var local = PlayerControl.LocalPlayer;
@@ -206,6 +295,15 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
+		factory.CreateIntOption(
+			Option.AwakeTaskGage,
+			70, 0, 100, 10,
+			format: OptionUnit.Percentage);
+
+		factory.CreateIntOption(
+			Option.AwakeAlivePeople,
+			7, 4, 15, 1);
+
 		factory.CreateBoolOption(
 			Option.UseAdmin, false);
 		factory.CreateBoolOption(
@@ -297,6 +395,9 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		var loader = this.Loader;
 
+		this.awakeTaskGage = loader.GetValue<Option, int>(Option.AwakeTaskGage) / 100.0f;
+		this.awakePlayerNum = loader.GetValue<Option, int>(Option.AwakeAlivePeople);
+
 		this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
 		this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
 		this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
@@ -332,14 +433,55 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 			loader.GetValue<Option, bool >(Option.YardbirdUseVital),
 			loader.GetValue<Option, bool >(Option.YardbirdUseVent),
 			loader.GetValue<Option, bool >(Option.YardbirdUseSab));
+
+		this.awakeRole =
+			this.awakeTaskGage <= 0.0f &&
+			this.awakePlayerNum >= GameData.Instance.AllPlayers.Count;
+
+		if (!this.awakeRole)
+		{
+			this.awakeHasOtherVision = this.HasOtherVision;
+			this.HasOtherVision = false;
+		}
+
 	}
 	private static void selfKill(byte rolePlayerId)
 	{
 		Player.RpcUncheckMurderPlayer(
-					rolePlayerId, rolePlayerId, byte.MaxValue);
+			rolePlayerId, rolePlayerId, byte.MaxValue);
 		ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
 			rolePlayerId,
 			Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.MissShot);
+	}
+
+	public string GetFakeOptionString() => "";
+
+	public void Update(PlayerControl rolePlayer)
+	{
+		if (GameData.Instance == null ||
+			this.awakeRole)
+		{
+			return;
+		}
+
+		int playerNum = 0;
+		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (player == null ||
+				player.IsDead ||
+				player.Disconnected)
+			{
+				continue;
+			}
+			++playerNum;
+		}
+
+		if (this.awakePlayerNum >= playerNum &&
+			Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
+		{
+			this.awakeRole = true;
+			this.HasOtherVision = this.awakeHasOtherVision;
+		}
 	}
 }
 
