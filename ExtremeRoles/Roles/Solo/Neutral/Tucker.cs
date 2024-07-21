@@ -196,7 +196,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
 		factory.CreateFloatOption(
 			Option.Range,
-			0.75f, 0.1f, 1.2f, 0.1f);
+			0.7f, 0.1f, 1.2f, 0.1f);
 
 		factory.CreateFloatOption(
 			Option.ShadowTimer,
@@ -240,7 +240,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
 		float killCool = loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillCool) ?
 			loader.GetValue<KillerCommonOption, float>(KillerCommonOption.KillCoolDown) :
-			GameManager.Instance.LogicOptions.GetKillCooldown();
+			GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
 
 		this.option = new Chimera.Option(
 			killCool,
