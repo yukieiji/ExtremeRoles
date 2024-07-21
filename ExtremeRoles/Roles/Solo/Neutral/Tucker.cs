@@ -35,6 +35,9 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 		RemoveShadowTime,
 		KillCoolReduceOnRemoveShadow,
 		IsReduceInitKillCoolOnRemove,
+		ChimeraHasOtherVision,
+		ChimeraVision,
+		ChimeraApplyEnvironmentVisionEffect,
 		ChimeraCanUseVent,
 		ChimeraReviveTime,
 		ChimeraDeathKillCoolOffset,
@@ -219,6 +222,17 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 
 		CreateKillerOption(factory, ignorePrefix: false);
 
+		var visionOption = factory.CreateBoolOption(
+			Option.ChimeraHasOtherVision,
+			false);
+		factory.CreateFloatOption(
+			Option.ChimeraVision,
+			2f, 0.25f, 5.0f, 0.25f,
+			visionOption, format: OptionUnit.Multiplier);
+		factory.CreateBoolOption(
+			Option.ChimeraApplyEnvironmentVisionEffect,
+			this.IsCrewmate(), visionOption);
+
 		factory.CreateBoolOption(
 			Option.ChimeraCanUseVent, false);
 		factory.CreateFloatOption(
@@ -242,11 +256,18 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 		float killCool = loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillCool) ?
 			loader.GetValue<KillerCommonOption, float>(KillerCommonOption.KillCoolDown) :
 			GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
-
-		this.option = new Chimera.Option(
+		var killOption = new Chimera.KillOption(
 			killCool,
 			loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillRange),
-			loader.GetValue<KillerCommonOption, int>(KillerCommonOption.KillRange),
+			loader.GetValue<KillerCommonOption, int>(KillerCommonOption.KillRange));
+
+		var visonOption = new Chimera.VisionOption(
+			loader.GetValue<Option, bool>(Option.ChimeraHasOtherVision),
+			loader.GetValue<Option, float>(Option.ChimeraVision),
+			loader.GetValue<Option, bool>(Option.ChimeraApplyEnvironmentVisionEffect));
+
+		this.option = new Chimera.Option(
+			killOption, visonOption,
 			loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraReviveTime),
@@ -424,7 +445,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 		}
 		foreach (byte chimera in removed)
 		{
-			OnResetChimera(chimera, this.option.KillCool);
+			OnResetChimera(chimera, this.option.KillOption.KillCool);
 		}
 	}
 }
@@ -432,13 +453,14 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IRoleHasParent
 {
 	public sealed record Option(
-		float KillCool,
-		bool HasOtherRange,
-		int Range,
+		KillOption KillOption,
+		VisionOption VisionOption,
 		float TukerKillCoolOffset,
 		float RevieKillCoolOffset,
 		float ResurrectTime,
 		bool Vent);
+	public sealed record KillOption(float KillCool, bool OtherRange, int Range);
+	public sealed record VisionOption(bool OtherVision, float Vision, bool ApplyEffect);
 
 	private NetworkedPlayerInfo? tuckerPlayer;
 	private readonly float reviveKillCoolOffset;
@@ -472,11 +494,19 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 		this.resurrectTime = option.ResurrectTime;
 		this.resurrectTimer = this.resurrectTime;
 
+		var killOption = option.KillOption;
 		this.HasOtherKillCool = true;
-		this.initCoolTime = option.KillCool;
+		this.initCoolTime = killOption.KillCool;
 		this.KillCoolTime = this.initCoolTime;
-		this.isTuckerDead = tuckerPlayer.IsDead;
+		this.HasOtherKillRange = killOption.OtherRange;
+		this.KillRange = killOption.Range;
 
+		var vision = option.VisionOption;
+		this.HasOtherVision = vision.OtherVision;
+		this.Vision = vision.Vision;
+		this.IsApplyEnvironmentVision = vision.ApplyEffect;
+
+		this.isTuckerDead = tuckerPlayer.IsDead;
 		this.isReviveNow = false;
 	}
 
