@@ -129,7 +129,12 @@ public sealed class Summoner :
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		if (this.summonTarget != null &&
-			this.summonTarget.IsDead)
+			(
+				this.summonTarget.IsDead ||
+				(
+					exiledPlayer != null &&
+					exiledPlayer.PlayerId == this.summonTarget.PlayerId
+			)))
 		{
 			this.summonTarget = null;
 		}
@@ -186,7 +191,14 @@ public sealed class Summoner :
 		PlayerControl target = Player.GetClosestPlayerInRange(
 			PlayerControl.LocalPlayer, this,
 			this.range);
-		if (target == null) { return false; }
+		if (target == null ||
+			(
+				this.summonTarget != null &&
+				target.PlayerId == this.summonTarget.PlayerId
+			))
+		{
+			return false;
+		}
 
 		this.targetData = target.Data;
 
