@@ -337,7 +337,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 		{
 			return false;
 		}
-		this.removeInfo = new RemoveInfo(this.target, local.GetTruePosition());
+		this.removeInfo = new RemoveInfo(this.targetShadowId, local.GetTruePosition());
 		return false;
 	}
 
