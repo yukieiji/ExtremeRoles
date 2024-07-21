@@ -459,6 +459,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		if (GameData.Instance == null ||
 			CachedShipStatus.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
+			this.Button is null ||
 			this.awakeRole)
 		{
 			return;
@@ -480,6 +481,11 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		{
 			this.awakeRole = true;
 			this.HasOtherVision = this.awakeHasOtherVision;
+			this.Button.SetButtonShow(true);
+		}
+		else
+		{
+			this.Button.SetButtonShow(false);
 		}
 	}
 }
