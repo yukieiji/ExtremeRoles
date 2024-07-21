@@ -122,7 +122,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 			remove,
 			() => { });
 		summonAbility.SetCoolTime(coolTime);
-		summonAbility.ActiveTime = loader.GetValue<Option, int>(Option.RemoveShadowTime);
+		summonAbility.ActiveTime = loader.GetValue<Option, float>(Option.RemoveShadowTime);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
 			new RoleButtonActivator(),
