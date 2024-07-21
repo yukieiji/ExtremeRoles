@@ -108,6 +108,7 @@ public enum ExtremeRoleId : int
 	Glitch,
 	Hijacker,
 	TimeBreaker,
+	Scavenger,
 
 	Alice,
     Jackal,
@@ -324,6 +325,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Glitch         , new Glitch()},
 			{(int)ExtremeRoleId.Hijacker       , new Hijacker()},
 			{(int)ExtremeRoleId.TimeBreaker    , new TimeBreaker()},
+			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new JackalRole()},
