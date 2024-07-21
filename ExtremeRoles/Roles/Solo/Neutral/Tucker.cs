@@ -17,8 +17,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
-using static ExtremeRoles.Roles.Solo.Crewmate.Jailer;
-
 
 #nullable enable
 
@@ -148,6 +146,19 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
 	public void ResetOnMeetingStart()
 	{ }
+
+	public void OnResetChimera(byte chimeraId, float killCoolTime)
+	{
+		this.chimera.Remove(chimeraId);
+
+		if (this.chimera.Count == 0 &&
+			this.createBehavior == null)
+		{
+			this.CanKill = true;
+			this.HasOtherKillCool = false;
+			this.KillCoolTime = killCoolTime;
+		}
+	}
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
 	{
@@ -393,7 +404,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 	}
 }
 
-public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
+public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IRoleHasParent
 {
 	public sealed record Option(
 		float KillCool,
@@ -415,6 +426,8 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	private bool isReviveNow;
 	private bool isTuckerDead;
 
+	public byte Parent { get; }
+
 	public Chimera(
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
@@ -424,6 +437,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		ColorPalette.GamblerYellowGold,
 		true, false, option.Vent, false)
 	{
+		this.Parent = tuckerPlayer.PlayerId;
 		this.tuckerPlayer = tuckerPlayer;
 		this.reviveKillCoolOffset = option.RevieKillCoolOffset;
 		this.tuckerDeathKillCoolOffset = option.TukerKillCoolOffset;
@@ -623,5 +637,14 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	private bool isSameChimeraTeam(SingleRoleBase targetRole)
 	{
 		return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Tucker));
+	}
+
+	public void RemoveParent(byte rolePlayerId)
+	{
+		if (!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(this.Parent, out var tucker))
+		{
+			return;
+		}
+		tucker.OnResetChimera(rolePlayerId, this.KillCoolTime);
 	}
 }
