@@ -149,7 +149,6 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			}
 			info.Deserialize(reader);
 		}
-		this.IsDirty = initialState;
 	}
 
 	public void Deteriorate(float deltaTime)
@@ -236,6 +235,7 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 			info.Id.Serialize(writer);
 			info.Serialize(writer);
 		}
+		this.IsDirty = initialState;
 	}
 
 	public void UpdateNextStatus(in YashiroInfo info)

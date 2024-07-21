@@ -212,6 +212,7 @@ public sealed class TuckerShadowSystem(
 	{
 		if (this.cache.Count == 0)
 		{
+			this.IsDirty = initialState;
 			return;
 		}
 		writer.WritePacked(this.cache.Count);
@@ -220,5 +221,6 @@ public sealed class TuckerShadowSystem(
 			shadow.Serialize(writer);
 		}
 		this.cache.Clear();
+		this.IsDirty = initialState;
 	}
 }
