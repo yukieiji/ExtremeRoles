@@ -93,6 +93,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 			targetPlayerId,
 			jailer.yardBirdOption);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, yardbird);
+		IRoleSpecialReset.ResetLover(targetPlayerId);
 	}
 
 	public static void ToLawbreaker(byte rolePlayerId)
@@ -109,6 +110,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 			jailer.Loader,
 			jailer.lawBreakerOption);
 		ExtremeRoleManager.SetNewRole(rolePlayerId, lawbreaker);
+		IRoleSpecialReset.ResetLover(rolePlayerId);
 	}
 
 	public void CreateAbility()

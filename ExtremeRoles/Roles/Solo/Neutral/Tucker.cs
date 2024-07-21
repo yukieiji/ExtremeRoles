@@ -17,6 +17,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
+using static ExtremeRoles.Roles.Solo.Crewmate.Jailer;
+
 
 #nullable enable
 
@@ -88,6 +90,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 		var chimera = new Chimera(targetPlayer.Data, tucker.option);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, chimera);
 		chimera.SetControlId(tucker.GameControlId);
+		IRoleSpecialReset.ResetLover(targetPlayerId);
 
 		if (AmongUsClient.Instance.AmHost &&
 			tucker.system is not null)

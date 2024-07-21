@@ -225,7 +225,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             if (sourceJackal.ForceReplaceLover)
             {
                 ExtremeRoleManager.SetNewRole(targetId, newSidekick);
-                targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
+				IRoleSpecialReset.ResetLover(targetRole, targetPlayer);
             }
             else
             {
