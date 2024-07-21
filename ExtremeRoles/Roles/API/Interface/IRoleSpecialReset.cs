@@ -71,8 +71,7 @@ public interface IRoleSpecialReset
             meetingResetRole.ResetOnMeetingStart();
         }
 
-        MultiAssignRoleBase multiAssignRole = targetRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
+        if (targetRole is MultiAssignRoleBase multiAssignRole)
         {
             if (multiAssignRole.AnotherRole is IRoleAbility multiAssignAbilityRole)
             {
