@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
@@ -87,7 +88,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 		}
 		IRoleSpecialReset.ResetRole(targetPlayerId);
 
-		var chimera = new Chimera(rolePlayer.Data, tucker.option);
+		var chimera = new Chimera(tucker.Loader, rolePlayer.Data, tucker.option);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, chimera);
 		chimera.SetControlId(tucker.GameControlId);
 		IRoleSpecialReset.ResetLover(targetPlayerId);
@@ -427,8 +428,10 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 	private bool isTuckerDead;
 
 	public byte Parent { get; }
+	public override IOptionLoader Loader { get; }
 
 	public Chimera(
+		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
 		ExtremeRoleId.Chimera,
@@ -437,6 +440,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 		ColorPalette.GamblerYellowGold,
 		true, false, option.Vent, false)
 	{
+		this.Loader = loader;
 		this.Parent = tuckerPlayer.PlayerId;
 		this.tuckerPlayer = tuckerPlayer;
 		this.reviveKillCoolOffset = option.RevieKillCoolOffset;
