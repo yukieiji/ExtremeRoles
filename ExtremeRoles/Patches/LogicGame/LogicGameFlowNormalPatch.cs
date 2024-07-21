@@ -185,7 +185,13 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
                     setWinGameContorlId(id);
                     endReason = (GameOverReason)RoleGameOverReason.KidsAliveAlone;
                     break;
-                default:
+				case NeutralSeparateTeam.Tucker:
+					if (statistics.TeamImpostorAlive > 0 &&
+						statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+					setWinGameContorlId(id);
+					endReason = (GameOverReason)RoleGameOverReason.TuckerShipIsExperimentStation;
+					break;
+				default:
                     break;
             }
             if (endReason != (GameOverReason)RoleGameOverReason.UnKnown)
