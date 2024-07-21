@@ -422,6 +422,8 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		this.initCoolTime = option.KillCool;
 		this.KillCoolTime = this.initCoolTime;
 		this.isTuckerDead = tuckerPlayer.IsDead;
+
+		this.isReviveNow = false;
 	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -542,9 +544,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
 
 	private bool infoBlock()
-		=> !(this.tuckerPlayer == null ||
-			 this.tuckerPlayer.Disconnected ||
-			 this.tuckerPlayer.IsDead);
+		=> this.isTuckerDead;
 
 	private void revive(PlayerControl rolePlayer)
 	{
