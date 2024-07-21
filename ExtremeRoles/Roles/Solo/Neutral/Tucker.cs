@@ -71,7 +71,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Tucker.ToString(),
 		ColorPalette.GamblerYellowGold,
-		false, false, false, false, false)
+		false, false, false, false)
 	{ }
 
 	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
@@ -602,6 +602,6 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	private bool isSameChimeraTeam(SingleRoleBase targetRole)
 	{
-		return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Chimera));
+		return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Tucker));
 	}
 }
