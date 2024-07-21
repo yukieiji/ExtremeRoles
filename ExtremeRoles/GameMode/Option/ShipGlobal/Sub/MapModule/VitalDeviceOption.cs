@@ -36,7 +36,7 @@ public readonly struct VitalDeviceOption : IDeviceOption
 	{
 		var removeOpt = IDeviceOption.Create(factory);
 
-		factory.CreateSelectionOption<VitalSpecialOption, AirShipAdminMode>(
+		factory.CreateSelectionOption<VitalSpecialOption, PolusVitalPos>(
 			VitalSpecialOption.PolusVitalPos, removeOpt, invert: true);
 	}
 }
