@@ -92,10 +92,11 @@ public sealed class Summoner :
 		float coolTime = loader.GetValue<RoleAbilityCommonOption, float>(
 			RoleAbilityCommonOption.AbilityCoolTime);
 
-		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
-
 		var markingAbility = new CountBehavior(
-			"marking", img,
+			"marking",
+			UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Summoner,
+				ObjectPath.SummonerMarking),
 			isUseMarking,
 			marking);
 		markingAbility.SetCoolTime(coolTime);
@@ -103,7 +104,10 @@ public sealed class Summoner :
 			loader.GetValue<Option, int>(Option.MarkingCount));
 
 		var summonAbility = new CountBehavior(
-			"Summon", img,
+			"Summon",
+			UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Summoner,
+				ObjectPath.SummonerSummon),
 			isUseSummon,
 			summon);
 		summonAbility.SetCoolTime(coolTime);

@@ -89,6 +89,9 @@ public static class ObjectPath
 
 	public const string ModeratorModerate = "ExtremeRoles.Resources.Moderate.png";
 	public const string PsychicPsychic = "ExtremeRoles.Resources.PsychicPsychic.png";
+
+	public const string SummonerSummon = "Summon";
+	public const string SummonerMarking = "Marking";
 	// !----- クルー終了 -----
 	// !----- インポスター用 -----
 	public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";

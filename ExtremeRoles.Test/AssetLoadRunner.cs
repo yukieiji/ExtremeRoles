@@ -38,6 +38,7 @@ internal sealed class AllAssetLoadRunner
 
 		Run<TeleporterAssetLoadRunner>();
 		Run<JailerAssetLoadRunner>();
+		Run<SummonerAssetLoadRunner>();
 
 		Run<MeryAssetLoadRunner>();
 		Run<HypnotistAssetLoadRunner>();
