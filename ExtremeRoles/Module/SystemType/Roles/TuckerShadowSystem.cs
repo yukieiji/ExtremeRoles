@@ -90,6 +90,7 @@ public sealed class TuckerShadowSystem(
 				if (shadow != null)
 				{
 					this.cache.Add(shadow);
+					this.scheduledShadow.Add(shadow);
 					this.IsDirty = true;
 				}
 			}
