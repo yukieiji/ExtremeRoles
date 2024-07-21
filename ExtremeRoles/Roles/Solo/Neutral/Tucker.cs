@@ -23,7 +23,10 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IRoleUpdate
+public sealed class Tucker :
+	SingleRoleBase, IRoleAbility,
+	IRoleSpecialReset, IRoleUpdate,
+	IRoleOnRevive
 {
 	private sealed record RemoveInfo(int Target, Vector2 StartPos);
 
@@ -67,6 +70,7 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 	private byte target;
 	private int targetShadowId;
 	private RemoveInfo? removeInfo;
+	private SpriteRenderer? reviveFlash;
 
 	private HashSet<byte> chimera = new HashSet<byte>();
 
@@ -220,8 +224,6 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 		factory.CreateBoolOption(
 			Option.IsReduceInitKillCoolOnRemove, false);
 
-		CreateKillerOption(factory, ignorePrefix: false);
-
 		var visionOption = factory.CreateBoolOption(
 			Option.ChimeraHasOtherVision,
 			false);
@@ -232,6 +234,8 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 		factory.CreateBoolOption(
 			Option.ChimeraApplyEnvironmentVisionEffect,
 			this.IsCrewmate(), visionOption);
+
+		CreateKillerOption(factory, ignorePrefix: false);
 
 		factory.CreateBoolOption(
 			Option.ChimeraCanUseVent, false);
@@ -447,6 +451,51 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IR
 		{
 			OnResetChimera(chimera, this.option.KillOption.KillCool);
 		}
+	}
+
+	public void ReviveAction(PlayerControl player)
+	{
+		byte playerId = player.PlayerId;
+		if (!(ExtremeRoleManager.TryGetRole(playerId, out var role) &&
+			this.IsSameTeam(role) &&
+			this.chimera.Contains(player.PlayerId)))
+		{
+			return;
+		}
+		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+		if (this.reviveFlash == null)
+		{
+			this.reviveFlash = UnityEngine.Object.Instantiate(
+				 hudManager.FullScreen,
+				 hudManager.transform);
+			this.reviveFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
+			this.reviveFlash.gameObject.SetActive(true);
+		}
+
+		Color32 color = this.NameColor;
+
+		this.reviveFlash.enabled = true;
+
+		hudManager.StartCoroutine(
+			Effects.Lerp(1.0f, new Action<float>((p) =>
+			{
+				if (this.reviveFlash == null) { return; }
+				if (p < 0.5)
+				{
+					this.reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+
+				}
+				else
+				{
+					this.reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+				}
+				if (p == 1f)
+				{
+					this.reviveFlash.enabled = false;
+				}
+			}))
+		);
 	}
 }
 

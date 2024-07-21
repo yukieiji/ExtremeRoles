@@ -14,11 +14,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Module.CustomOption.Factory;
-using static ExtremeRoles.Roles.Solo.Neutral.Yoko;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-// TODO: 復活しても問題ないようにする #281
 
 public sealed class Yandere :
     SingleRoleBase,
