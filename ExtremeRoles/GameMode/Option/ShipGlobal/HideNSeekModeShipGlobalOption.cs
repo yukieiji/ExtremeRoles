@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
@@ -52,9 +53,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 		{ (int)ShipGlobalOptionCategory.RandomMapOption  , OptionSplitter.AllEnable },
 	};
 
-	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId)
+	public bool TryGetInvalidOption(int categoryId, [NotNullWhen(true)] out IReadOnlySet<int>? useOptionId)
 	{
-		bool result = this.useOption.TryGetValue(categoryId, out var options);
+		bool result = this.useOption.TryGetValue(categoryId, out var options) && options is not null;
 		useOptionId = options;
 		return result;
 	}

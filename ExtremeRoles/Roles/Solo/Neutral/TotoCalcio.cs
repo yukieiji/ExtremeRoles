@@ -74,7 +74,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         this.CreateAbilityCountButton(
             "betPlayer", Resources.UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.TotocalcioBetPlayer));
-        this.Button.SetLabelToCrewmate();
+        this.Button?.SetLabelToCrewmate();
     }
 
     public bool IsAbilityUse()

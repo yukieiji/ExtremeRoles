@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+
 
 #nullable enable
 
@@ -40,7 +42,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 
 	private readonly IReadOnlySet<int> cacheOptionId = OptionSplitter.AllEnable;
 
-	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId)
+	public bool TryGetInvalidOption(int categoryId, [NotNullWhen(true)] out IReadOnlySet<int>? useOptionId)
 	{
 		useOptionId = cacheOptionId;
 		return true;

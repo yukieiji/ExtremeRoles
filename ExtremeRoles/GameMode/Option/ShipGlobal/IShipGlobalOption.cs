@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
@@ -131,7 +132,7 @@ public interface IShipGlobalOption
     public GhostRoleOption GhostRole { get; }
 
 	public void Load();
-	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId);
+	public bool TryGetInvalidOption(int categoryId, [NotNullWhen(true)] out IReadOnlySet<int>? useOptionId);
 
 	public static void Create()
     {
