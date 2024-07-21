@@ -467,6 +467,10 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null)
 		{
+			if (this.resurrectText != null)
+			{
+				this.resurrectText.gameObject.SetActive(false);
+			}
 			return;
 		}
 
@@ -487,6 +491,10 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 			this.tuckerPlayer.IsDead ||
 			this.isReviveNow)
 		{
+			if (this.resurrectText != null)
+			{
+				this.resurrectText.gameObject.SetActive(false);
+			}
 			return;
 		}
 
