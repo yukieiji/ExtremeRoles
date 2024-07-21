@@ -123,11 +123,13 @@ public sealed class TuckerShadowSystem(
 		{
 			Vector2 targetPos = shadow.transform.position;
 
-			float checkDist = Vector2.Distance(pos, targetPos);
-
-			if (checkDist < closestDist)
+			var diff = pos - targetPos;
+			float distance = diff.magnitude;
+			if (distance <= range &&
+				distance < closestDist)
 			{
 				id = shadowId;
+				closestDist = distance;
 			}
 		}
 		return closestDist != float.MaxValue;
