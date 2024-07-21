@@ -79,7 +79,9 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 	public static void TargetToChimera(byte rolePlayerId, byte targetPlayerId)
 	{
 		PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (targetPlayer == null ||
+		PlayerControl rolePlayer = Player.GetPlayerControlById(rolePlayerId);
+		if (rolePlayer == null ||
+			targetPlayer == null ||
 			!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(rolePlayerId, out var tucker) ||
 			tucker.option is null)
 		{
@@ -87,10 +89,17 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 		}
 		IRoleSpecialReset.ResetRole(targetPlayerId);
 
-		var chimera = new Chimera(targetPlayer.Data, tucker.option);
+		var chimera = new Chimera(rolePlayer.Data, tucker.option);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, chimera);
 		chimera.SetControlId(tucker.GameControlId);
 		IRoleSpecialReset.ResetLover(targetPlayerId);
+
+		var local = PlayerControl.LocalPlayer;
+		if (local != null &&
+			rolePlayerId == local.PlayerId)
+		{
+			tucker.chimera.Add(targetPlayerId);
+		}
 
 		if (AmongUsClient.Instance.AmHost &&
 			tucker.system is not null)
