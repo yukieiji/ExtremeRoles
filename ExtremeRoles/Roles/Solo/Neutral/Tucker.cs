@@ -564,7 +564,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 	public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
 
 	private bool infoBlock()
-		=> this.isTuckerDead;
+		=> !this.isTuckerDead;
 
 	private void revive(PlayerControl rolePlayer)
 	{
