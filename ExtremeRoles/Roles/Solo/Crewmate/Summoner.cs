@@ -44,6 +44,7 @@ public sealed class Summoner :
 
 	private NetworkedPlayerInfo? targetData;
 	private NetworkedPlayerInfo? summonTarget;
+	private CountBehavior? markingBehavior;
 
     private float range;
 
@@ -92,19 +93,19 @@ public sealed class Summoner :
 		float coolTime = loader.GetValue<RoleAbilityCommonOption, float>(
 			RoleAbilityCommonOption.AbilityCoolTime);
 
-		var markingAbility = new CountBehavior(
-			"marking",
+		this.markingBehavior = new CountBehavior(
+			Translation.GetString("Marking"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Summoner,
 				ObjectPath.SummonerMarking),
 			isUseMarking,
 			marking);
-		markingAbility.SetCoolTime(coolTime);
-		markingAbility.SetAbilityCount(
+		this.markingBehavior.SetCoolTime(coolTime);
+		this.markingBehavior.SetAbilityCount(
 			loader.GetValue<Option, int>(Option.MarkingCount));
 
 		var summonAbility = new CountBehavior(
-			"Summon",
+			Translation.GetString("Summon"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Summoner,
 				ObjectPath.SummonerSummon),
@@ -117,27 +118,13 @@ public sealed class Summoner :
 		this.Button = new ExtremeMultiModalAbilityButton(
 			new RoleButtonActivator(),
 			KeyCode.F,
-			markingAbility,
+			this.markingBehavior,
 			summonAbility);
 
 		this.Button.SetLabelToCrewmate();
 	}
 
     public string GetFakeOptionString() => "";
-
-    public bool IsAbilityUse()
-    {
-        this.targetData = null;
-
-        PlayerControl target = Player.GetClosestPlayerInRange(
-            PlayerControl.LocalPlayer, this,
-            this.range);
-        if (target == null) { return false; }
-
-		this.targetData = target.Data;
-
-        return IRoleAbility.IsCommonUse();
-    }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
@@ -242,9 +229,16 @@ public sealed class Summoner :
 
 	private bool marking()
 	{
-		if (this.targetData == null) { return false; }
+		if (this.internalButton is null ||
+			this.markingBehavior is null ||
+			this.targetData == null) { return false; }
 
 		this.summonTarget = this.targetData;
+		if (this.markingBehavior.AbilityCount <= 1)
+		{
+			this.internalButton.Remove(this.markingBehavior);
+			this.markingBehavior = null;
+		}
 
 		return true;
 	}

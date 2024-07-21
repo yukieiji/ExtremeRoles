@@ -27,7 +27,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	public enum Option
 	{
 		AwakeTaskGage,
-		AwakeAlivePeople,
+		AwakeDeadPlayerNum,
 
 		UseAdmin,
 		UseSecurity,
@@ -78,7 +78,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	private bool awakeRole = false;
 
 	private float awakeTaskGage;
-	private float awakePlayerNum;
+	private float awakeDeadPlayerNum;
 	private bool awakeHasOtherVision;
 
 	private Yardbird.Option? yardBirdOption;
@@ -86,9 +86,9 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 	public enum TargetMode
 	{
-		Both,
-		ImpostorOnly,
-		NeutralOnly,
+		BothImpostorAndNautral,
+		Impostor,
+		Neutral,
 	}
 
 	public Jailer() : base(
@@ -137,7 +137,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			"AddJail",
+			Translation.GetString("AddJail"),
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Jailer));
 		this.Button?.SetLabelToCrewmate();
 	}
@@ -244,9 +244,9 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		bool isSuccess = this.mode switch
 		{
-			TargetMode.Both => !role.IsCrewmate() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
-			TargetMode.ImpostorOnly => role.IsImpostor() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
-			TargetMode.NeutralOnly => role.IsNeutral(),
+			TargetMode.BothImpostorAndNautral => !role.IsCrewmate() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
+			TargetMode.Impostor => role.IsImpostor() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
+			TargetMode.Neutral => role.IsNeutral(),
 			_ => false,
 		};
 
@@ -301,8 +301,8 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			format: OptionUnit.Percentage);
 
 		factory.CreateIntOption(
-			Option.AwakeAlivePeople,
-			7, 4, 15, 1);
+			Option.AwakeDeadPlayerNum,
+			7, 0, 12, 1);
 
 		factory.CreateBoolOption(
 			Option.UseAdmin, false);
@@ -333,7 +333,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		var lowBreakerKillOpt = factory.CreateBoolOption(
 		   Option.LawbreakerCanKill,
-		   false, lowBreakerOpt,
+		   true, lowBreakerOpt,
 		   invert: true);
 
 		var killCoolOption = factory.CreateBoolOption(
@@ -343,8 +343,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		factory.CreateFloatOption(
 			KillerCommonOption.KillCoolDown,
 			30f, 1.0f, 120f, 0.5f,
-			killCoolOption, format: OptionUnit.Second,
-			invert: true);
+			killCoolOption, format: OptionUnit.Second);
 
 		var killRangeOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillRange,
@@ -353,8 +352,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		factory.CreateSelectionOption(
 			KillerCommonOption.KillRange,
 			OptionCreator.Range,
-			killRangeOption,
-			invert: true);
+			killRangeOption);
 
 		factory.CreateBoolOption(
 		   Option.LawbreakerUseVent,
@@ -396,7 +394,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		var loader = this.Loader;
 
 		this.awakeTaskGage = loader.GetValue<Option, int>(Option.AwakeTaskGage) / 100.0f;
-		this.awakePlayerNum = loader.GetValue<Option, int>(Option.AwakeAlivePeople);
+		this.awakeDeadPlayerNum = loader.GetValue<Option, int>(Option.AwakeDeadPlayerNum);
 
 		this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
 		this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
@@ -436,7 +434,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		this.awakeRole =
 			this.awakeTaskGage <= 0.0f &&
-			this.awakePlayerNum >= GameData.Instance.AllPlayers.Count;
+			this.awakeDeadPlayerNum == 0;
 
 		if (!this.awakeRole)
 		{
@@ -459,24 +457,25 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (GameData.Instance == null ||
+			CachedShipStatus.Instance == null ||
+			!CachedShipStatus.Instance.enabled ||
 			this.awakeRole)
 		{
 			return;
 		}
 
-		int playerNum = 0;
+		int deadPlayerNum = 0;
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
 			if (player == null ||
 				player.IsDead ||
 				player.Disconnected)
 			{
-				continue;
+				++deadPlayerNum;
 			}
-			++playerNum;
 		}
 
-		if (this.awakePlayerNum >= playerNum &&
+		if (deadPlayerNum >= this.awakeDeadPlayerNum &&
 			Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
 		{
 			this.awakeRole = true;
