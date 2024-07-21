@@ -98,7 +98,6 @@ public enum ExtremeRoleId : int
 	Thief,
 	Crewshroom,
 	Terorist,
-	Scavenger,
 
 	Alice,
     Jackal,
@@ -288,7 +287,6 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Thief          , new Thief()},
 			{(int)ExtremeRoleId.Crewshroom     , new Crewshroom()},
 			{(int)ExtremeRoleId.Terorist       , new Terorist()},
-			{(int)ExtremeRoleId.Scavenger      , new Scavenger()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},
