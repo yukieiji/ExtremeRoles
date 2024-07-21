@@ -23,7 +23,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IRoleUpdate
 {
 	private sealed record RemoveInfo(int Target, Vector2 StartPos);
 
@@ -402,6 +402,30 @@ public sealed class Tucker : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 	private bool isSameTuckerTeam(SingleRoleBase targetRole)
 	{
 		return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Chimera));
+	}
+
+	public void Update(PlayerControl rolePlayer)
+	{
+		if (GameData.Instance == null ||
+			this.option is null ||
+			this.internalButton is null ||
+			this.createBehavior is not null)
+		{
+			return;
+		}
+		var removed = new HashSet<byte>(this.chimera.Count);
+		foreach (byte chimera in this.chimera)
+		{
+			var player = GameData.Instance.GetPlayerById(chimera);
+			if (player == null || player.Disconnected)
+			{
+				removed.Add(chimera);
+			}
+		}
+		foreach (byte chimera in removed)
+		{
+			OnResetChimera(chimera, this.option.KillCool);
+		}
 	}
 }
 
