@@ -588,7 +588,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 
 		byte playerId = rolePlayer.PlayerId;
 
-		updateKillCoolTime(this.KillCoolTime, this.reviveKillCoolOffset);
+		updateKillCoolTime(this.reviveKillCoolOffset);
 		Player.RpcUncheckRevive(playerId);
 
 		if (rolePlayer.Data == null ||
