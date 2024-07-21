@@ -157,7 +157,11 @@ public sealed class TuckerShadowSystem(
 				shadow = new Dictionary<int, SpriteRenderer>();
 				this.placedShadow[playerId] = shadow;
 			}
+
 			var shdowObj = new GameObject($"Shadow_{id}");
+			float y = shadowInfo.Pos.y;
+			shdowObj.transform.position = new Vector3(shadowInfo.Pos.x, y, y / 1000.0f);
+
 			var rend = shdowObj.AddComponent<SpriteRenderer>();
 			rend.sprite = UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.TestButton);
