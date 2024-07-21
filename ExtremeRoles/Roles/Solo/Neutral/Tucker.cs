@@ -502,7 +502,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 			this.isTuckerDead = this.tuckerPlayer == null || this.tuckerPlayer.IsDead;
 			if (this.isTuckerDead)
 			{
-				updateKillCoolTime(this.KillCoolTime, this.tuckerDeathKillCoolOffset);
+				updateKillCoolTime(this.tuckerDeathKillCoolOffset);
 			}
 		}
 
