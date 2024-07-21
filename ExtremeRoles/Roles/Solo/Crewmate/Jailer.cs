@@ -74,7 +74,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility
 		ExtremeRoleId.Jailer,
 		ExtremeRoleType.Crewmate,
 		ExtremeRoleId.Jailer.ToString(),
-		ColorPalette.GamblerYellowGold,
+		ColorPalette.JailerSapin,
 		false, true, false, false, false)
 	{ }
 
@@ -367,7 +367,7 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		ExtremeRoleId.Yardbird,
 		ExtremeRoleType.Crewmate,
 		ExtremeRoleId.Yardbird.ToString(),
-		ColorPalette.GamblerYellowGold,
+		ColorPalette.YardbirdYenHown,
 		false, true,
 		option.Vent,
 		option.Sab,
@@ -456,7 +456,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		ExtremeRoleId.Lawbreaker,
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Lawbreaker.ToString(),
-		ColorPalette.GamblerYellowGold,
+		ColorPalette.LowbreakerNoir,
 		option.Kill, false, option.Vent, option.Sab)
 	{
 

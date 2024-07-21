@@ -55,6 +55,8 @@ public static class ColorPalette
 	public readonly static Color PsychicSyentyietu = new Color32(146, 149, 186, byte.MaxValue);
 	public readonly static Color BaitCyan = new Color32(0, 247, 255, byte.MaxValue);
 	public readonly static Color SummonerToukoushoku = new Color32(237, 123, 140, byte.MaxValue);
+	public readonly static Color JailerSapin = new Color32(58, 103, 79, byte.MaxValue);
+	public readonly static Color YardbirdYenHown = new Color32(255, 161, 3, byte.MaxValue);
 
 	public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
 	public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
@@ -70,6 +72,7 @@ public static class ColorPalette
 	public readonly static Color HatterYanagizome = new Color32(145, 173, 112, byte.MaxValue);
 	public readonly static Color ArtistChenChuWhowan = new Color32(
 		220, 145, 91, byte.MaxValue);
+	public readonly static Color LowbreakerNoir = new Color32(51, 50, 50, byte.MaxValue);
 
 	public readonly static Color PoltergeistLightKenpou = new Color32(
 		84, 82, 75, byte.MaxValue);
