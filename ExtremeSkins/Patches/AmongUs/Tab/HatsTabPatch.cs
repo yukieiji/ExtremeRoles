@@ -9,12 +9,12 @@ using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
-using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
 
-using ExRLoader = ExtremeRoles.Resources.Loader;
+using ExRLoader = ExtremeRoles.Resources.UnityObjectLoader;
+
 
 #nullable enable
 
@@ -58,7 +58,7 @@ public static class HatsTabPatch
         if (Tab == null)
         {
             GameObject obj = Object.Instantiate(
-                ExRLoader.GetUnityObjectFromResources<GameObject>(
+                ExRLoader.LoadFromResources<GameObject>(
                     CustomCosmicTab.CreatorTabAssetBundle,
                     CustomCosmicTab.CreatorTabAssetPrefab),
                 __instance.transform);
@@ -70,9 +70,9 @@ public static class HatsTabPatch
 
         foreach (HatData hatBehaviour in unlockedHats)
         {
-            if (ExtremeHatManager.HatData.TryGetValue(
-				hatBehaviour.ProductId, out CustomHat? hat) &&
-				hat != null)
+            if (CosmicStorage<CustomHat>.TryGet(
+					hatBehaviour.ProductId, out CustomHat? hat) &&
+					hat != null)
             {
                 if (!hatPackage.ContainsKey(hat.Author))
                 {
@@ -174,7 +174,7 @@ public static class HatsTabPatch
 				PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
 				DataManager.Player.Customization.Color;
 			__instance.UpdateMaterials(colorChip.Inner.FrontLayer, hat);
-			if (ExtremeHatManager.HatData.TryGetValue(
+			if (CosmicStorage<CustomHat>.TryGet(
 					hat.ProductId, out var customHat) &&
 				customHat != null)
 			{

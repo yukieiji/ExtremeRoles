@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -63,7 +64,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
                 break;
         }
 
-        this.CreateChargeAbilityButton(
+        this.CreateBatteryAbilityButton(
             buttonText,
             buttonImage,
             IsOpen,

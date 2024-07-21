@@ -11,7 +11,6 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -20,6 +19,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 
 
@@ -134,25 +135,29 @@ public sealed class Zombie :
 
         var player = circle.AddComponent<DlayableVideoPlayer>();
 
-        player.SetThum(Resources.Loader.CreateSpriteFromResources(
-			Path.ZombieMagicCircle));
-        player.SetVideo(Resources.Loader.GetUnityObjectFromResources<VideoClip>(
-			Path.VideoAsset, string.Format(
-				Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
+		var thum = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Zombie,
+			ObjectPath.GetRoleImgPath(ExtremeRoleId.Zombie, ObjectPath.MapIcon));
+		player.SetThum(thum);
+
+		var video = UnityObjectLoader.LoadFromResources<VideoClip, ExtremeRoleId>(
+			ExtremeRoleId.Zombie,
+			ObjectPath.GetRoleVideoPath(ExtremeRoleId.Zombie));
+		player.SetVideo(video);
+
         player.SetTimer(activeTime);
     }
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
-			Translation.GetString("featMagicCircle"),
-			Resources.Loader.CreateSpriteFromResources(
-				Path.ZombieMagicCircleButton),
-			IsActivate,
-			SetMagicCircle,
+        this.CreateActivatingAbilityCountButton(
+            Translation.GetString("featMagicCircle"),
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Zombie),
+            IsActivate,
+            SetMagicCircle,
              () => { });
 
-        if (this.Button?.Behavior is not AbilityCountBehavior countBehavior)
+        if (this.Button?.Behavior is not CountBehavior countBehavior)
         {
             return;
         }
@@ -552,7 +557,7 @@ public sealed class Zombie :
     private void updateReviveState(bool isReduceAfter)
     {
         if (this.killCount >= this.resurrectKillCount &&
-            this.Button.Behavior is AbilityCountBehavior behavior &&
+            this.Button.Behavior is CountBehavior behavior &&
             behavior.AbilityCount <= (isReduceAfter ? 1 : 0) &&
             !this.canResurrect)
         {

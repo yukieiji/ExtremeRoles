@@ -7,6 +7,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -71,9 +72,9 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "betPlayer", Resources.Loader.CreateSpriteFromResources(
-				Path.TotocalcioBetPlayer));
-        this.Button?.SetLabelToCrewmate();
+            "betPlayer", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.TotocalcioBetPlayer));
+        this.Button.SetLabelToCrewmate();
     }
 
     public bool IsAbilityUse()
@@ -101,7 +102,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         if (this.betPlayer == null ||
 			ignoreRole.Contains(

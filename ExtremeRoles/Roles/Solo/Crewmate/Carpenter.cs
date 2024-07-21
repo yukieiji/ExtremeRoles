@@ -7,9 +7,7 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.AbilityModeSwitcher;
-using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -17,6 +15,10 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.VentModule;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.ModeSwitcher;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 
@@ -32,11 +34,14 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         SetCamera
     }
 
-    public sealed class CarpenterAbilityBehavior : AbilityBehaviorBase
+    public sealed class CarpenterAbilityBehavior : BehaviorBase, IActivatingBehavior
     {
         public int AbilityCount { get; private set; }
+		public float ActiveTime { get; set; }
 
-        private bool isUpdate;
+		public bool CanAbilityActiving => this.abilityCheck.Invoke();
+
+		private bool isUpdate;
 
         private TextMeshPro abilityCountText;
         private bool isVentRemoveMode = true;
@@ -108,8 +113,6 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
             updateAbilityCountText();
         }
-
-        public override bool IsCanAbilityActiving() => this.abilityCheck.Invoke();
 
         public override bool IsUse() =>
             this.canUse.Invoke() &&
@@ -451,7 +454,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         }
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-			modMap!.SetUpNewCamera(camera);
+			modMap.SetUpNewCamera(camera);
         }
 
         var allCameras = CachedShipStatus.Instance.AllCameras.ToList();
@@ -510,8 +513,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 					mode: CarpenterAbilityMode.RemoveVent,
 					graphic: new (
 						Translation.GetString("ventSeal"),
-						Resources.Loader.CreateSpriteFromResources(
-							Path.CarpenterVentSeal)),
+						Resources.UnityObjectLoader.LoadSpriteFromResources(
+							ObjectPath.CarpenterVentSeal)),
 					time: loader.GetValue<CarpenterOption, float>(
 						CarpenterOption.RemoveVentStopTime)
 					),
@@ -519,8 +522,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 					mode: CarpenterAbilityMode.SetCamera,
 					graphic: new(
 						Translation.GetString("cameraSet"),
-						Resources.Loader.CreateSpriteFromResources(
-							Path.CarpenterSetCamera)),
+						Resources.UnityObjectLoader.LoadSpriteFromResources(
+							ObjectPath.CarpenterSetCamera)),
 					time: loader.GetValue<CarpenterOption, float>(
 						CarpenterOption.SetCameraStopTime)
 					),
@@ -574,7 +577,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 			!(
 				this.targetVent == null &&
 				CompatModManager.Instance.TryGetModMap(out var modMap) &&
-				!modMap!.CanPlaceCamera
+				!modMap.CanPlaceCamera
 			);
 	}
 

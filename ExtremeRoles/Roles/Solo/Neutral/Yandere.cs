@@ -25,7 +25,8 @@ public sealed class Yandere :
     IRoleUpdate,
     IRoleMurderPlayerHook,
     IRoleResetMeeting,
-    IRoleSpecialSetUp
+	IRoleReviveHook,
+	IRoleSpecialSetUp
 {
     public PlayerControl OneSidedLover = null;
 
@@ -75,7 +76,7 @@ public sealed class Yandere :
 
         public void Add(byte playerId)
         {
-            var player = Helper.Player.GetPlayerControlById(playerId);
+            var player = Player.GetPlayerControlById(playerId);
 
             this.targetPlayer.Add(playerId, player);
             if (this.isUseArrow)
@@ -176,7 +177,7 @@ public sealed class Yandere :
         var yandere = ExtremeRoleManager.GetSafeCastedRole<Yandere>(rolePlayerId);
         if (yandere != null)
         {
-            yandere.OneSidedLover = Helper.Player.GetPlayerControlById(oneSidedLoverId);
+            yandere.OneSidedLover = Player.GetPlayerControlById(oneSidedLoverId);
         }
     }
 
@@ -218,7 +219,7 @@ public sealed class Yandere :
 
         if (targetPlayerId == this.OneSidedLover.PlayerId)
         {
-            return Helper.Design.ColoedString(
+            return Design.ColoedString(
                 ColorPalette.YandereVioletRed,
                 $" ♥");
         }
@@ -519,14 +520,17 @@ public sealed class Yandere :
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
 
-            if (!this.progress.ContainsKey(playerInfo.PlayerId)) { continue; }
+			byte playerId = playerInfo.PlayerId;
 
-            float playerProgress = this.progress[playerInfo.PlayerId];
+			if (!this.progress.TryGetValue(playerId, out float playerProgress))
+			{
+				continue;
+			}
 
             if (!playerInfo.Disconnected &&
                 !playerInfo.IsDead &&
-                rolePlayer.PlayerId != playerInfo.PlayerId &&
-                this.OneSidedLover.PlayerId != playerInfo.PlayerId &&
+                rolePlayer.PlayerId != playerId &&
+                this.OneSidedLover.PlayerId != playerId &&
                 !playerInfo.Object.inVent)
             {
                 PlayerControl @object = playerInfo.Object;
@@ -554,15 +558,15 @@ public sealed class Yandere :
             }
 
             if (playerProgress >= this.setTargetTime &&
-                !this.target.IsContain(playerInfo.PlayerId) &&
+                !this.target.IsContain(playerId) &&
                 this.target.Count() < this.maxTargetNum)
             {
-                this.target.Add(playerInfo.PlayerId);
-                this.progress.Remove(playerInfo.PlayerId);
+                this.target.Add(playerId);
+                this.progress.Remove(playerId);
             }
             else
             {
-                this.progress[playerInfo.PlayerId] = playerProgress;
+                this.progress[playerId] = playerProgress;
             }
         }
     }
@@ -590,4 +594,17 @@ public sealed class Yandere :
         }
         this.oneSidedArrow.UpdateTarget(pos);
     }
+
+	public void HookRevive(PlayerControl revivePlayer)
+	{
+		lock(this.progress)
+		{
+			byte playerId = revivePlayer.PlayerId;
+			if (this.progress.ContainsKey(playerId))
+			{
+				return;
+			}
+			this.progress.Add(playerId, 0.0f);
+		}
+	}
 }

@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -86,10 +86,10 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
 
-        this.randomColorPaintImage = Resources.Loader.CreateSpriteFromResources(
-			Path.PainterPaintRandom);
-        this.transColorPaintImage = Resources.Loader.CreateSpriteFromResources(
-			Path.PainterPaintTrans);
+        this.randomColorPaintImage = Resources.UnityObjectLoader.LoadSpriteFromResources(
+			ObjectPath.PainterPaintRandom);
+        this.transColorPaintImage = Resources.UnityObjectLoader.LoadSpriteFromResources(
+			ObjectPath.PainterPaintTrans);
 
         this.CreateNormalAbilityButton(
             "paint", this.randomColorPaintImage);

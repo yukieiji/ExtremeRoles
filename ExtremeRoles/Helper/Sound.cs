@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Helper;
+
+#nullable enable
 
 public static class Sound
 {
@@ -45,7 +48,7 @@ public static class Sound
     public static void PlaySound(
         Type soundType, float volume)
     {
-        AudioClip clip = GetAudio(soundType);
+        AudioClip? clip = GetAudio(soundType);
         if (Constants.ShouldPlaySfx() && clip != null)
         {
 			ExtremeRolesPlugin.Logger.LogInfo($"Play Sound:{soundType}");
@@ -53,9 +56,9 @@ public static class Sound
         }
     }
 
-    public static AudioClip GetAudio(Type soundType)
+    public static AudioClip? GetAudio(Type soundType)
     {
-        if (cachedAudio.TryGetValue(soundType, out AudioClip clip))
+        if (cachedAudio.TryGetValue(soundType, out AudioClip? clip))
         {
             return clip;
         }
@@ -69,19 +72,38 @@ public static class Sound
                 case Type.GuardianAngleGuard:
                     clip = FastDestroyableSingleton<RoleManager>.Instance.protectAnim.UseSound;
                     break;
+				case Type.TeroristSabotageAnnounce:
+					clip = getRoleAudio(soundType);
+					break;
                 default:
-					clip = Loader.GetUnityObjectFromResources<AudioClip>(
-						Path.SoundEffect, string.Format(
+					clip = UnityObjectLoader.LoadFromResources<AudioClip>(
+						ObjectPath.SoundEffect, string.Format(
 							soundPlaceHolder, soundType.ToString()));
 					clip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
 					break;
 			}
-			if (!clip)
+			if (clip == null)
 			{
 				Logging.Debug("Can't load AudioClip");
+				return null;
 			}
             cachedAudio.Add(soundType, clip);
             return clip;
         }
     }
+	private static AudioClip? getRoleAudio(Type type)
+	{
+		ExtremeRoleId id = type switch
+		{
+			Type.TeroristSabotageAnnounce => ExtremeRoleId.Terorist,
+			_ => ExtremeRoleId.Null
+		};
+		if (id is ExtremeRoleId.Null)
+		{
+			return null;
+		}
+		var result = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
+			id, ObjectPath.GetRoleSePath(id));
+		return result;
+	}
 }

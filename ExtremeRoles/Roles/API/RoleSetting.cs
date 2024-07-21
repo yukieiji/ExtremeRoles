@@ -17,7 +17,7 @@ public enum ExtremeRoleType : int
 }
 public enum RoleCommonOption
 {
-	SpawnRate = 20,
+	SpawnRate = 50,
 	RoleNum,
     AssignWeight,
     HasOtherVision,
@@ -26,7 +26,7 @@ public enum RoleCommonOption
 }
 public enum KillerCommonOption
 {
-    HasOtherKillRange = 40,
+    HasOtherKillRange = 60,
     KillRange,
     HasOtherKillCool,
     KillCoolDown,
@@ -67,10 +67,6 @@ public abstract class RoleOptionBase
 
         CreateSpecificOption(factory);
     }
-    protected abstract void CreateKillerOption(
-        AutoParentSetOptionCategoryFactory factory,
-		IOption parent = null,
-		bool ignorePrefix = true);
     protected abstract AutoParentSetOptionCategoryFactory CreateSpawnOption();
 
     protected abstract void CreateSpecificOption(
@@ -82,7 +78,33 @@ public abstract class RoleOptionBase
 
     protected abstract void RoleSpecificInit();
 
-    protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
+	protected static void CreateKillerOption(
+		AutoParentSetOptionCategoryFactory factory,
+		IOption parent = null,
+		bool ignorePrefix = true)
+	{
+		var killCoolOption = factory.CreateBoolOption(
+			KillerCommonOption.HasOtherKillCool,
+			false, parent,
+			ignorePrefix: ignorePrefix);
+		factory.CreateFloatOption(
+			KillerCommonOption.KillCoolDown,
+			30f, 1.0f, 120f, 0.5f,
+			killCoolOption, format: OptionUnit.Second,
+			ignorePrefix: ignorePrefix);
+
+		var killRangeOption = factory.CreateBoolOption(
+			KillerCommonOption.HasOtherKillRange,
+			false, parent,
+			ignorePrefix: ignorePrefix);
+		factory.CreateSelectionOption(
+			KillerCommonOption.KillRange,
+			OptionCreator.Range,
+			killRangeOption,
+			ignorePrefix: ignorePrefix);
+	}
+
+	protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
     {
         if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
         {

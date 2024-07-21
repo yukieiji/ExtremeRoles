@@ -111,7 +111,10 @@ public static class SubmarineSpawnInSystemDetorioratePatch
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
 		// ランダムスポーンが有効かつ自動選択がオフだけ処理飛ばす
-		if (spawnOpt.EnableSpecialSetting && submergedMod!.Spawn is SpawnPoint.DefaultSpawn && !spawnOpt.IsAutoSelectRandom) { return; }
+		if (spawnOpt.EnableSpecialSetting &&
+			submergedMod.Spawn is
+			SpawnPoint.DefaultKey &&
+			!spawnOpt.IsAutoSelectRandom) { return; }
 
 		submarineSpawnInSystemTimer.SetValue(__instance, 0.0f);
 	}
@@ -139,7 +142,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
 		if (playersWithMask != null &&
 			!playersWithMask.Contains(PlayerControl.LocalPlayer.PlayerId))
 		{
-			submergedMod!.RepairCustomSabotage(
+			submergedMod.RepairCustomSabotage(
 				submergedMod.RetrieveOxygenMask);
 		}
 	}
@@ -210,9 +213,9 @@ public static class SubmarineSelectSpawnCoSelectLevelPatch
 		if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod)) { return; }
 
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
-		var spawnPoint = submergedMod!.Spawn;
+		var spawnPoint = submergedMod.Spawn;
 
-		if (spawnPoint is SpawnPoint.DefaultSpawn)
+		if (spawnPoint is SpawnPoint.DefaultKey)
 		{
 			return;
 		}

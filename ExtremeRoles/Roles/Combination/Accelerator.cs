@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -112,8 +113,8 @@ public sealed class Accelerator :
 		obj.transform.position = firstPoint;
 
 		var rend = obj.AddComponent<SpriteRenderer>();
-		rend.sprite = Resources.Loader.CreateSpriteFromResources(
-			 Path.AcceleratorAcceleratePanel, 100.0f);
+		rend.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+			ExtremeRoleId.Accelerator, ObjectPath.AcceleratorAcceleratePanel);
 
 		accelerator.transformer = obj.AddComponent<AutoTransformerWithFixedFirstPoint>();
 		accelerator.transformer.Initialize(firstPoint, player.transform, rend);
@@ -140,9 +141,8 @@ public sealed class Accelerator :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-			Translation.GetString("AccelerateSet"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.AcceleratorAccelerateSet),
+            Translation.GetString("AccelerateSet"),
+            UnityObjectLoader.LoadFromResources(ExtremeRoleId.Accelerator),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())

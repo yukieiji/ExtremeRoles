@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module;
 
 public sealed class FullScreenFlusherWithAudio
 {
-	private readonly AudioClip audio;
+	private readonly AudioClip? audio;
 	private readonly WaitForSeconds waiter;
 	private readonly WaitForSeconds defaultWaiter = new WaitForSeconds(1.0f);
 	private readonly Color screenColor;

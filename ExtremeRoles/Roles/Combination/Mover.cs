@@ -14,6 +14,7 @@ using ExtremeRoles.Compat;
 
 
 using UnityHelper = ExtremeRoles.Helper.Unity;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -179,8 +180,8 @@ public sealed class Mover :
     {
         this.CreateReclickableCountAbilityButton(
 			Translation.GetString("Moving"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.MoverMove),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.MoverMove),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
         if (this.IsCrewmate())

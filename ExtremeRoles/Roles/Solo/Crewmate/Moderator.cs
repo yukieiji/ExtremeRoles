@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -150,16 +151,15 @@ public sealed class Moderator :
 	{
 		this.CreateAbilityCountButton(
 			"moderate",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.ModeratorModerate));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.ModeratorModerate));
 		this.Button?.SetLabelToCrewmate();
 	}
 
 	public bool UseAbility()
 	{
 		if (!ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
-				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) ||
-			system is null)
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system))
 		{
 			return false;
 		}

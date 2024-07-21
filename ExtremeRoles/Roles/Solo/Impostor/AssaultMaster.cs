@@ -4,11 +4,12 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -68,8 +69,8 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
     {
         this.CreateNormalAbilityButton(
             "reload",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.AssaultMasterReload));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.AssaultMasterReload));
     }
 
     public void HookBodyReport(

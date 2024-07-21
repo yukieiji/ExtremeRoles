@@ -8,6 +8,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -110,10 +111,10 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "counter",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.FencerCounter),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.FencerCounter),
             abilityOff: this.CleanUp,
             isReduceOnActive: true);
         this.Button.SetLabelToCrewmate();

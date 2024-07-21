@@ -3,11 +3,12 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -109,8 +110,8 @@ public sealed class Slime :
     {
         this.CreateReclickableAbilityButton(
 			Translation.GetString("SlimeMorph"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.SlimeMorph),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.SlimeMorph),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
     }

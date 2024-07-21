@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 using BepInEx;
 using BepInEx.Unity.IL2CPP;
@@ -10,8 +11,6 @@ using Hazel;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
-
-
 
 
 namespace ExtremeRoles.Compat;
@@ -134,14 +133,13 @@ internal sealed class CompatModManager
 		=> this.map is T;
 
 	// ここでtrueが返ってきてる時点でIMapModはNullではない
-	internal bool TryGetModMap(out IMapMod? mapMod)
+	internal bool TryGetModMap([NotNullWhen(true)] out IMapMod? mapMod)
 	{
 		mapMod = this.map;
 		return mapMod != null;
 	}
 
-	// ここでtrueが返ってきてる時点でT?はNullではない
-	internal bool TryGetModMap<T>(out T? mapMod)
+	internal bool TryGetModMap<T>([NotNullWhen(true)] out T? mapMod)
 		where T : ModIntegratorBase
 	{
 		mapMod = this.map as T;

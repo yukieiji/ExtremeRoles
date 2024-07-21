@@ -14,18 +14,19 @@ using BepInEx.Unity.IL2CPP.Utils;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
 
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
-using ExtremeRoles.Compat;
 
 
 
@@ -69,7 +70,7 @@ public sealed class Hypnotist :
     {
         Red,
         Blue,
-        Glay
+        Gray
     }
 
     public bool IsAwake
@@ -260,7 +261,7 @@ public sealed class Hypnotist :
                 SystemConsoleType featAbilityConsole = (SystemConsoleType)reader.ReadByte();
                 FeatAllDollMapModuleAccess(role, featAbilityConsole);
                 break;
-            case AbilityModuleType.Glay:
+            case AbilityModuleType.Gray:
                 SystemConsoleType unlockConsole = (SystemConsoleType)reader.ReadByte();
                 UnlockAllDollCrakingAbility(role, unlockConsole);
                 break;
@@ -303,8 +304,7 @@ public sealed class Hypnotist :
     {
         this.CreateAbilityCountButton(
             "Hypnosis",
-            Resources.Loader.CreateSpriteFromResources(
-               Resources.Path.HypnotistHypnosis));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Hypnotist));
 
 		var json = JsonParser.GetJObjectFromAssembly(postionJson);
 		if (json == null)
@@ -1045,7 +1045,7 @@ public sealed class Doll :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         switch (reason)
         {
@@ -1069,7 +1069,7 @@ public sealed class Doll :
         this.securitySprite = GameSystem.GetSecurityImage();
         this.vitalSprite = GameSystem.GetVitalImage();
 
-        this.Button = RoleAbilityFactory.CreateChargableAbility(
+        this.Button = RoleAbilityFactory.CreateBatteryAbility(
             "traitorCracking",
             this.adminSprite,
             IsAbilityUse,
@@ -1079,8 +1079,10 @@ public sealed class Doll :
 
         this.Button.Behavior.SetCoolTime(
             hypnotist.DollCrakingCoolTime);
-        this.Button.Behavior.SetActiveTime(
-            hypnotist.DollCrakingActiveTime);
+		if (this.Button.Behavior is IActivatingBehavior activatingBehavior)
+		{
+			activatingBehavior.ActiveTime = hypnotist.DollCrakingActiveTime;
+		}
     }
 
     public bool UseAbility()
@@ -1206,9 +1208,7 @@ public sealed class Doll :
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
-    {
-        return;
-    }
+    { }
 
     public void Update(PlayerControl rolePlayer)
     {
@@ -1258,7 +1258,7 @@ public sealed class Doll :
     }
 
     public override Color GetTargetRoleSeeColor(
-        SingleRoleBase? targetRole,
+        SingleRoleBase targetRole,
         byte targetPlayerId)
     {
 
@@ -1325,8 +1325,8 @@ public sealed class Doll :
     }
     private void updateButtonSprite()
     {
-        Sprite sprite = Resources.Loader.CreateSpriteFromResources(
-            Resources.Path.TestButton);
+        Sprite sprite = UnityObjectLoader.LoadSpriteFromResources(
+            ObjectPath.TestButton);
 
         switch (this.nextUseAbilityType)
         {

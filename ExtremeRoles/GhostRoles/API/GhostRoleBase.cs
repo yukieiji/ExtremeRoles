@@ -4,18 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-
-
-
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Roles;
-using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -23,7 +19,7 @@ namespace ExtremeRoles.GhostRoles.API;
 
 public enum GhostRoleOption
 {
-    IsReportAbility = 40
+    IsReportAbility = 90
 }
 
 public abstract class GhostRoleBase
@@ -38,7 +34,7 @@ public abstract class GhostRoleBase
 	public string Name { get; protected set; }
 	public bool HasTask { get; protected set; }
 
-	public Module.ExtremeAbilityButton? Button { get; protected set; }
+	public ExtremeAbilityButton? Button { get; protected set; }
 
     protected readonly OptionTab Tab = OptionTab.GeneralTab;
     private int controlId;
@@ -208,18 +204,18 @@ public abstract class GhostRoleBase
         this.Button.Behavior.SetCoolTime(
             loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
 
-        if (loader.TryGetValueOption<RoleAbilityCommonOption, float>(
-                RoleAbilityCommonOption.AbilityActiveTime, out var activeTimeOtion) &&
-			activeTimeOtion is not null)
+        if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
+			loader.TryGetValueOption<RoleAbilityCommonOption, float>(
+                RoleAbilityCommonOption.AbilityActiveTime,
+				out var activeTimeOtion))
         {
-            this.Button.Behavior.SetActiveTime(activeTimeOtion.Value);
+			activatingBehavior.ActiveTime = activeTimeOtion.Value;
         }
 
-        if (this.Button.Behavior is AbilityCountBehavior behavior &&
-            loader.TryGetValueOption<RoleAbilityCommonOption, int>(
+        if (this.Button.Behavior is ICountBehavior behavior &&
+			loader.TryGetValueOption<RoleAbilityCommonOption, int>(
                 RoleAbilityCommonOption.AbilityCount,
-                out var countOption) &&
-			countOption is not null)
+                out var countOption))
         {
             behavior.SetAbilityCount(countOption.Value);
         }

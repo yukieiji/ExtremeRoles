@@ -4,6 +4,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 
+#nullable enable
+
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
@@ -21,7 +23,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 	public AdminDeviceOption Admin { get; private set; }
     public DeviceOption Security { get; private set; }
-    public DeviceOption Vital { get; private set; }
+    public VitalDeviceOption Vital { get; private set; }
 	public SpawnOption Spawn { get; private set; }
 
 	public ConfirmExileMode ExilMode => ConfirmExileMode.Impostor;
@@ -70,7 +72,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 		Admin = new AdminDeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.AdminOption));
-		Vital = new DeviceOption(
+		Vital = new VitalDeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VitalOption));
 		Security = new DeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.SecurityOption));

@@ -12,8 +12,8 @@ public static class CustomColorPalette
         public Color32 ShadowColor;
     }
 
-    public static List<ColorData> CustomColor => new List<ColorData>()
-    {
+    public static List<ColorData> CustomColor =>
+	[
         // from nekowa
         new ColorData()
         {
@@ -220,12 +220,5 @@ public static class CustomColorPalette
             MainColor = new Color32(87, 87, 87, byte.MaxValue),
             ShadowColor = new Color32(243, 212, 175, byte.MaxValue),
         },
-    };
-
-	public static readonly List<ColorData> AddColor = new List<ColorData>();
-
-	public static void AddCustomColor(ColorData data)
-    {
-		AddColor.Add(data);
-    }
+    ];
 }

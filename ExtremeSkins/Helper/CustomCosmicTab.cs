@@ -107,36 +107,37 @@ public static class CustomCosmicTab
     }
 
     public static void HideTmpTextPackage(
-        List<TMP_Text> packageText,
+        in IReadOnlyList<TMP_Text> packageText,
         float inventoryTop,
         float inventoryBottom)
     {
         // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
         foreach (TMP_Text customText in packageText)
         {
-            if (customText != null &&
-                customText.transform != null &&
-                customText.gameObject != null)
-            {
-                bool active =
-                    customText.transform.position.y <= inventoryTop &&
-                    customText.transform.position.y >= inventoryBottom;
-                float epsilon = Mathf.Min(
-                    Mathf.Abs(customText.transform.position.y - inventoryTop),
-                    Mathf.Abs(customText.transform.position.y - inventoryBottom));
-                if (active != customText.gameObject.active && epsilon > 0.1f)
-                {
-                    customText.gameObject.SetActive(active);
-                }
-            }
-        }
+			if (customText == null ||
+				customText.transform == null ||
+				customText.gameObject == null)
+			{
+				continue;
+			}
+
+			float y = customText.transform.position.y;
+			bool active = y <= inventoryTop && y >= inventoryBottom;
+			float epsilon = Mathf.Min(
+				Mathf.Abs(y - inventoryTop),
+				Mathf.Abs(y - inventoryBottom));
+			if (active != customText.gameObject.active && epsilon > 0.1f)
+			{
+				customText.gameObject.SetActive(active);
+			}
+		}
     }
 
     public static ColorChip SetColorChip(
-        InventoryTab instance, int setIndex, float offset)
+        in InventoryTab instance, int setIndex, float offset)
     {
         float xPos = instance.XRange.Lerp(
-                (setIndex % instance.NumPerRow) / (instance.NumPerRow - 1f));
+            (setIndex % instance.NumPerRow) / (instance.NumPerRow - 1f));
         float yPos = offset - (setIndex / instance.NumPerRow) * instance.YOffset;
         ColorChip colorChip = Object.Instantiate(
             instance.ColorTabPrefab, instance.scroller.Inner);

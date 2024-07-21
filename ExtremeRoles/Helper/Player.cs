@@ -124,7 +124,8 @@ public static class Player
         return playersInAbilityRangeSorted[0];
     }
 
-    public static PlayerControl GetClosestPlayerInRange(
+
+	public static PlayerControl GetClosestPlayerInRange(
         PlayerControl sourcePlayer,
         SingleRoleBase role,
         float range)
@@ -203,7 +204,7 @@ public static class Player
         foreach (NetworkedPlayerInfo playerInfo in
             GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-            if (isValidPlayer(role, sourcePlayer, playerInfo))
+            if (IsValidPlayer(role, sourcePlayer, playerInfo))
             {
                 PlayerControl target = playerInfo.Object;
 
@@ -408,7 +409,7 @@ public static class Player
 
         Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-        if (!isValidPlayer(role, sourcePlayer, targetPlayer.Data))
+        if (!IsValidPlayer(role, sourcePlayer, targetPlayer.Data))
         {
             return false;
         }
@@ -448,7 +449,7 @@ public static class Player
 		return false;
 	}
 
-	private static bool isValidPlayer(
+	public static bool IsValidPlayer(
         SingleRoleBase role,
         PlayerControl sourcePlayer,
         NetworkedPlayerInfo targetPlayer)

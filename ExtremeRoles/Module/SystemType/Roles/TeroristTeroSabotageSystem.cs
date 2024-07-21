@@ -18,6 +18,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using UnityObject = UnityEngine.Object;
 using AmongUs.GameOptions;
+using ExtremeRoles.Roles;
 
 
 #nullable enable
@@ -43,9 +44,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			get
 			{
 				GameObject obj =
-					Loader.GetUnityObjectFromResources<GameObject>(
-						Path.TeroristTeroMinigameAsset,
-						Path.TeroristTeroMinigamePrefab);
+					UnityObjectLoader.LoadFromResources<GameObject, ExtremeRoleId>(
+						ExtremeRoleId.Terorist,
+						ObjectPath.GetRoleMinigamePath(ExtremeRoleId.Terorist));
 				return obj.GetComponent<TeroristTeroSabotageMinigame>();
 			}
 		}
@@ -94,8 +95,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			{
 				throw new ArgumentException("Minigame Missing");
 			}
-			teroMiniGame!.ConsoleInfo = info;
-			teroMiniGame!.Begin(task);
+			teroMiniGame.ConsoleInfo = info;
+			teroMiniGame.Begin(task);
 		}
 	}
 
@@ -235,7 +236,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			if (task.IsTryCast<ExtremePlayerTask>(out var playerTask) &&
 				(ignoreComplete || !task.IsComplete) &&
-				playerTask!.Behavior!.TaskTypes == TeroristoTaskTypes)
+				playerTask.Behavior!.TaskTypes == TeroristoTaskTypes)
 			{
 				return playerTask;
 			}
@@ -427,8 +428,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 
 		if (Minigame.Instance.IsTryCast<TeroristTeroSabotageMinigame>(out var teroMinigame) &&
-			teroMinigame!.amClosing != Minigame.CloseState.Closing &&
-			teroMinigame!.BombId == id)
+			teroMinigame.amClosing != Minigame.CloseState.Closing &&
+			teroMinigame.BombId == id)
 		{
 			Minigame.Instance.Close();
 		}
@@ -469,8 +470,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			var newConsole = this.consoleSystem.CreateConsoleObj(
 				pos.Pos, "TeroristBomb", consoleBehavior);
 
-			newConsole.Image!.sprite = Loader.CreateSpriteFromResources(
-				Path.TeroristTeroSabotageBomb);
+			newConsole.Image!.sprite = UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Terorist, ObjectPath.MapIcon);
 
 			var colider = newConsole.gameObject.AddComponent<CircleCollider2D>();
 			colider.isTrigger = true;

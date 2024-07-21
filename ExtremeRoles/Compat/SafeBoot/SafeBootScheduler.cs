@@ -35,7 +35,7 @@ public static class SafeBootScheduler
 		StatusTextShower.Instance.Add(
 			() => Trans.GetString("SafeBootMessage"));
 
-		Loader.LoadCommonAsset();
+		UnityObjectLoader.LoadCommonAsset();
 
 		MainMenuManager? menuManager = null;
 		harmony.Patch(

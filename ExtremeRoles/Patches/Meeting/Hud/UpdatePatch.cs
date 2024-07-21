@@ -114,7 +114,7 @@ public static class MeetingHudUpdatePatch
 			localPlayer.Data.Disconnected ||
 			!ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
-			raiseHand == null || raiseHand.IsInit)
+			raiseHand.IsInit)
 		{
 			return;
 		}

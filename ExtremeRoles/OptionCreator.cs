@@ -11,7 +11,7 @@ namespace ExtremeRoles;
 
 public static class OptionCreator
 {
-	public const int IntegrateOptionStartOffset = 15000;
+	public const int IntegrateOptionStartOffset = 40000;
 
     public static readonly string[] Range = [ "short", "middle", "long" ];
 

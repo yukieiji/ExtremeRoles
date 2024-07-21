@@ -100,7 +100,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
 		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
 
-		Loader.LoadCommonAsset();
+		UnityObjectLoader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();
 	}

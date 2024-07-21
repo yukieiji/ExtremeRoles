@@ -7,7 +7,6 @@ using System.Net;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeSkins.Core.API;
-using ExtremeSkins.SkinManager;
 using ExtremeSkins.Helper;
 
 namespace ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
@@ -40,7 +39,7 @@ public sealed class PutNamePlateHandler : IRequestHandler
 
 		string id = customNamePlate.Id;
 
-		if (!ExtremeNamePlateManager.NamePlateData.TryGetValue(id, out var np))
+		if (!CosmicStorage<CustomNamePlate>.TryGet(id, out var np))
 		{
 			IRequestHandler.SetStatusNG(response);
 			response.Abort();
@@ -56,7 +55,7 @@ public sealed class PutNamePlateHandler : IRequestHandler
 			PlayerControl.LocalPlayer!.RpcSetNamePlate(NamePlateData.EmptyId);
 		}
 
-		ExtremeNamePlateManager.NamePlateData[id] = customNamePlate;
+		CosmicStorage<CustomNamePlate>.TryAdd(id, customNamePlate);
 
 		List<NamePlateData> namePlateData = hatMng.allNamePlates.ToList();
 		namePlateData.RemoveAll(x => x.ProductId == id);

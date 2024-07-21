@@ -35,11 +35,20 @@ public sealed class HelpButton
 		this.body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 		this.body.transform.localPosition = new Vector3(-1.075f, 0.0f, 0.0f);
 
-		passiveButton.inactiveSprites.GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
-			Path.HelpNoneActiveImage, 175f);
-		passiveButton.selectedSprites.GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
-			Path.HelpActiveImage, 175f);
-		passiveButton.activeSprites.GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
-			Path.HelpActiveImage, 175f);
+		passiveButton.inactiveSprites.GetComponent<SpriteRenderer>().sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				ObjectPath.HelpNoneActiveImage));
+
+
+		var activeSprite = UnityObjectLoader.LoadFromResources<Sprite>(
+			ObjectPath.CommonTextureAsset,
+			string.Format(
+				ObjectPath.CommonImagePathFormat,
+				ObjectPath.HelpActiveImage));
+
+		passiveButton.selectedSprites.GetComponent<SpriteRenderer>().sprite = activeSprite;
+		passiveButton.activeSprites.GetComponent<SpriteRenderer>().sprite = activeSprite;
 	}
 }

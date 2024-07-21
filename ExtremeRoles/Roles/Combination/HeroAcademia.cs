@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Extension.Player;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -465,10 +466,10 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "search",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.HiroAcaSearch),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.HiroAcaSearch),
             abilityOff: CleanUp);
         this.Button.SetLabelToCrewmate();
     }
@@ -723,10 +724,10 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
 	public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "search",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.HiroAcaSearch),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.HiroAcaSearch),
             abilityOff: CleanUp);
     }
 
@@ -913,10 +914,10 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "call",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.VigilanteEmergencyCall),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.VigilanteEmergencyCall),
             abilityOff: CleanUp);
         this.Button.SetLabelToCrewmate();
     }
@@ -942,7 +943,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         switch (this.condition)
         {
@@ -978,12 +979,10 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
-        return;
     }
 
     public void ResetOnMeetingStart()
     {
-        return;
     }
 
     public bool UseAbility()

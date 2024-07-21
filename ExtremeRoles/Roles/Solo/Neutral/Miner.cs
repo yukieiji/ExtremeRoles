@@ -14,6 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -113,7 +114,7 @@ public sealed class Miner :
 		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			modMap!.AddCustomComponent(
+			modMap.AddCustomComponent(
 				obj, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 		}
 		obj.transform.position = pos;
@@ -158,10 +159,10 @@ public sealed class Miner :
 
 	public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "setMine",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.MinerSetMine),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MinerSetMine),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }

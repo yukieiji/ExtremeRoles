@@ -4,7 +4,6 @@ using System.Linq;
 using HarmonyLib;
 
 using ExtremeSkins.Module;
-using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
@@ -17,7 +16,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 			try
 			{
 				List<HatData> hatData = __instance.allHats.ToList();
-				foreach (CustomHat hat in ExtremeHatManager.HatData.Values)
+				foreach (CustomHat hat in CosmicStorage<CustomHat>.GetAll())
 				{
 					hatData.Add(hat.Data);
 				}
@@ -33,7 +32,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             try
             {
                 List<NamePlateData> npData = __instance.allNamePlates.ToList();
-                foreach (CustomNamePlate np in ExtremeNamePlateManager.NamePlateData.Values)
+                foreach (CustomNamePlate np in CosmicStorage<CustomNamePlate>.GetAll())
                 {
                     npData.Add(np.GetData());
                 }
@@ -49,7 +48,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             try
             {
                 List<VisorData> visorData = __instance.allVisors.ToList();
-                foreach (CustomVisor vi in ExtremeVisorManager.VisorData.Values)
+                foreach (CustomVisor vi in CosmicStorage<CustomVisor>.GetAll())
                 {
                     visorData.Add(vi.Data);
                 }

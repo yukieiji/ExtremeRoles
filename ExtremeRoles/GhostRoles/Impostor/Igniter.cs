@@ -2,13 +2,11 @@
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
-
-
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
 
@@ -77,10 +75,10 @@ public sealed class Igniter : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.IgniterSwitchLight,
-            Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.LastWolfLightOff),
+            Resources.UnityObjectLoader.LoadSpriteFromResources(
+                Resources.ObjectPath.LastWolfLightOff),
             this.isReportAbility(),
             () => true,
             this.isAbilityUse,

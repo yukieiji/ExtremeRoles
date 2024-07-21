@@ -6,6 +6,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 using AmongUs.GameOptions;
+
+using Twitch;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Il2Cpp;
@@ -16,6 +19,8 @@ using ExtremeRoles.Module.CustomOption.Migrator;
 #nullable enable
 
 namespace ExtremeRoles.Module;
+
+#nullable enable
 
 public static class CustomOptionCsvProcessor
 {
@@ -37,13 +42,31 @@ public static class CustomOptionCsvProcessor
 
 	public static bool Export()
 	{
-		Helper.Logging.Debug("Export Start!!!!!!");
+		string path = csvName;
+
+		if (TwitchManager.InstanceExists)
+		{
+			var info = WinApiHelper.SaveFile("*.csv", "Select Export FileName");
+			if (info is null ||
+				info.FilePath is null)
+			{
+				return false;
+			}
+
+			path = info.FilePath;
+			if (!path.EndsWith(".csv"))
+			{
+				path += ".csv";
+			}
+		}
+
+		ExtremeRolesPlugin.Logger.LogInfo("---------- Option Export Start ----------");
 
 		var cleaner = new StringCleaner();
 
 		try
 		{
-			using var csv = new StreamWriter(csvName, false, new UTF8Encoding(true));
+			using var csv = new StreamWriter(path, false, new UTF8Encoding(true));
 
 			csv.WriteLine(
 				string.Format("{1}{0}{2}{0}{3}{0}{4}",
@@ -109,6 +132,9 @@ public static class CustomOptionCsvProcessor
 				if (option == null) { continue; }
 				exportIGameOptions(csv, gameOptionManager.gameOptionsFactory, option, gameMode);
 			}
+
+			ExtremeRolesPlugin.Logger.LogInfo("---------- Option Export End ----------");
+
 			return true;
 		}
 		catch (Exception e)
@@ -120,6 +146,24 @@ public static class CustomOptionCsvProcessor
 
 	public static bool Import()
 	{
+		string path = csvName;
+
+		if (TwitchManager.InstanceExists)
+		{
+			var info = WinApiHelper.OpenFile("*.csv", "Select Import FileName");
+			if (info is null ||
+				info.FilePath is null)
+			{
+				return false;
+			}
+
+			path = info.FilePath;
+			if (!path.EndsWith(".csv"))
+			{
+				return false;
+			}
+		}
+
 		ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
 
 		Dictionary<string, int> importedOption = new Dictionary<string, int>();
@@ -128,7 +172,7 @@ public static class CustomOptionCsvProcessor
 
 		try
 		{
-			using var csv = new StreamReader(csvName, new UTF8Encoding(true));
+			using var csv = new StreamReader(path, new UTF8Encoding(true));
 
 			if (csv is null)
 			{
@@ -159,7 +203,7 @@ public static class CustomOptionCsvProcessor
 					case vanilaOptionKey:
 						GameModes mode = (GameModes)Enum.Parse(typeof(GameModes), option[1]);
 						if (!importedVanillaOptions.TryGetValue(
-								mode, out var modeOption) &&
+								mode, out var modeOption) ||
 							modeOption is null)
 						{
 							modeOption = new List<byte>();

@@ -32,15 +32,15 @@ public sealed class ExtremePlayerTask : PlayerTask
 		protected static void CloseMinigame<T>() where T : Minigame
 		{
 			if (Minigame.Instance.IsTryCast<T>(out var targetMinigame) &&
-				targetMinigame!.amClosing != Minigame.CloseState.Closing)
+				targetMinigame.amClosing != Minigame.CloseState.Closing)
 			{
-				targetMinigame!.Close();
+				targetMinigame.Close();
 			}
 		}
 
 		protected static Minigame? GetMinigameFromAsset<T>(string name) where T : Minigame
 		{
-			GameObject minigameObj = Resources.Loader.GetUnityObjectFromResources<GameObject>("Minigame", name);
+			GameObject minigameObj = Resources.UnityObjectLoader.LoadFromResources<GameObject>("Minigame", name);
 			GameObject prefab = Instantiate(minigameObj);
 			T minigame = prefab.GetComponent<T>();
 

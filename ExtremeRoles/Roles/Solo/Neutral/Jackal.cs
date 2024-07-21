@@ -6,13 +6,12 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -226,7 +225,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
             if (sourceJackal.ForceReplaceLover)
             {
                 ExtremeRoleManager.SetNewRole(targetId, newSidekick);
-                targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
+				IRoleSpecialReset.ResetLover(targetRole, targetPlayer);
             }
             else
             {
@@ -252,8 +251,8 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         this.CreateAbilityCountButton(
             "Sidekick",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.JackalSidekick));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.JackalSidekick));
     }
 
     public override Color GetTargetRoleSeeColor(
@@ -573,8 +572,8 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-
-        if (targetPlayerId == this.jackalPlayerId)
+        if (targetRole.Id is ExtremeRoleId.Jackal &&
+			targetPlayerId == this.jackalPlayerId)
         {
             return ColorPalette.JackalBlue;
         }
@@ -622,7 +621,7 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
                 !curSideKick.sidekickJackalCanMakeSidekick ||
                 curSideKick.recursion >= newJackal.SidekickRecursionLimit
             ) &&
-            newJackal.Button?.Behavior is AbilityCountBehavior countBehavior)
+            newJackal.Button?.Behavior is CountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(0);
         }

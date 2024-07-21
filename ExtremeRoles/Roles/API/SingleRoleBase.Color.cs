@@ -14,14 +14,9 @@ public abstract partial class SingleRoleBase
     public virtual Color GetNameColor(bool isTruthColor = false) => this.NameColor;
 
     public virtual Color GetTargetRoleSeeColor(
-        SingleRoleBase? targetRole,
+        SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-		if (targetRole is null)
-		{
-			return Palette.White;
-		}
-
         if (targetRole.Id == ExtremeRoleId.Xion)
         {
             return Module.ColorPalette.XionBlue;
