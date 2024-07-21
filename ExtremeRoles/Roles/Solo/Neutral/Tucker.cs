@@ -36,6 +36,7 @@ public sealed class Tucker :
 		ShadowTimer,
 		ShadowOffset,
 		RemoveShadowTime,
+		IsKillCoolReduceOnRemove,
 		KillCoolReduceOnRemoveShadow,
 		IsReduceInitKillCoolOnRemove,
 		ChimeraHasOtherVision,
@@ -217,12 +218,19 @@ public sealed class Tucker :
 			Option.RemoveShadowTime,
 			3.0f, 0.1f, 15.0f, 0.1f,
 			format: OptionUnit.Second);
+
+		var triggerOpt = factory.CreateBoolOption(
+			Option.IsKillCoolReduceOnRemove, true);
 		factory.CreateFloatOption(
 			Option.KillCoolReduceOnRemoveShadow,
 			2.5f, 0.1f, 30.0f, 0.1f,
-			format: OptionUnit.Second);
+			triggerOpt,
+			format: OptionUnit.Second,
+			invert: true);
 		factory.CreateBoolOption(
-			Option.IsReduceInitKillCoolOnRemove, false);
+			Option.IsReduceInitKillCoolOnRemove,
+			false, triggerOpt,
+			invert: true);
 
 		var visionOption = factory.CreateBoolOption(
 			Option.ChimeraHasOtherVision,
