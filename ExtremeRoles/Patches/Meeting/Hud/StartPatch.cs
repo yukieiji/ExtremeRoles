@@ -80,7 +80,6 @@ public static class MeetingHudStartPatch
 		logger.LogInfo(" --- Start Meeting Start Reseting --- ");
 
 		logger.LogInfo("Resetting Start: ShipStatus Systems");
-		ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
 		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.MeetingStart);
 		logger.LogInfo("Resetting End: ShipStatus Systems");
 

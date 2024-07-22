@@ -7,12 +7,11 @@ public sealed partial class ExtremeShipStatus
 {
 	public ExtremeShipStatus()
 	{
-		Initialize(false);
+		Initialize();
 		this.playerVersion.Clear();
 	}
 
-	public void Initialize(
-		bool includeGameObject = true)
+	public void Initialize()
 	{
 		// 以下リファクタ済み
 
@@ -23,10 +22,5 @@ public sealed partial class ExtremeShipStatus
 		RoleAssignState.TryDestroy();
 
 		this.resetWins();
-
-		this.ClearMeetingResetObject();
-
-		if (!includeGameObject) { return; }
-
 	}
 }

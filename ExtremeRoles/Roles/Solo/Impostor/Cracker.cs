@@ -7,12 +7,14 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -55,16 +57,8 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
     private float crackDistance;
     private byte targetDeadBodyId;
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.crackButton;
-        set
-        {
-            this.crackButton = value;
-        }
-    }
-
-    private ExtremeAbilityButton crackButton;
+    public ExtremeAbilityButton? Button { get; set; }
+	private ResetObjectSystem? system;
 
     public Cracker() : base(
         ExtremeRoleId.Cracker,
@@ -78,27 +72,26 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
         byte rolePlayerId, byte targetPlayerId)
     {
         var role = ExtremeRoleManager.GetSafeCastedRole<Cracker>(rolePlayerId);
-        if (role == null) { return; }
+        if (role == null || role.system is null) { return; }
 
         DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
         for (int i = 0; i < array.Length; ++i)
         {
-            if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
+            if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId != targetPlayerId)
             {
-
-                if (role.IsRemoveDeadBody)
-                {
-                    ExtremeRolesPlugin.ShipState.AddMeetingResetObject(
-                        new CrackTrace(array[i].gameObject.transform.position));
-                    Object.Destroy(array[i].gameObject);
-                }
-                else
-                {
-                    array[i].GetComponentInChildren<BoxCollider2D>().enabled = false;
-                }
-                break;
+                continue;
             }
-        }
+			if (role.IsRemoveDeadBody)
+			{
+				var gameObj = array[i].gameObject;
+				role.system.Add(new CrackTrace(gameObj.transform.position));
+				Object.Destroy(gameObj);
+			}
+			else
+			{
+				array[i].GetComponentInChildren<BoxCollider2D>().enabled = false;
+			}
+		}
     }
 
     public void CreateAbility()
@@ -123,7 +116,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
         return IRoleAbility.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -169,5 +162,8 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
             CrackerOption.CanCrackDistance);
         this.IsRemoveDeadBody = cate.GetValue<CrackerOption, bool>(
             CrackerOption.RemoveDeadBody);
+
+		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<ResetObjectSystem>(
+			ExtremeSystemType.ResetObjectSystem);
     }
 }

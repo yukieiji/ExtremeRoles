@@ -17,6 +17,8 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
+
 
 
 
@@ -70,6 +72,8 @@ public sealed class Miner :
 	private bool isShowAnotherPlayer;
 	private MinerMineEffect? noneActiveMine = null;
 
+	private ResetObjectSystem? system;
+
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
 	private Dictionary<int, MinerMineEffect> mines;
@@ -121,7 +125,7 @@ public sealed class Miner :
 		var mine = obj.AddComponent<MinerMineEffect>();
 		miner.noneActiveMine = mine;
 		miner.noneActiveMine.SetParameter(isRolePlayer, miner.killRange, in miner.parameter);
-		ExtremeRolesPlugin.ShipState.AddMeetingResetObject(miner.noneActiveMine);
+		miner.system?.Add(miner.noneActiveMine);
 	}
 
 	private static void activateMine(Miner miner, int id)
@@ -416,7 +420,10 @@ public sealed class Miner :
 		this.killLogger = new TextPopUpper(
             2, 3.5f, new Vector3(0, -1.2f, 0.0f),
             TMPro.TextAlignmentOptions.Center, false);
-    }
+
+		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<ResetObjectSystem>(
+			ExtremeSystemType.ResetObjectSystem);
+	}
 	private void resetAllMine()
 	{
 		foreach (int id in this.mines.Keys)

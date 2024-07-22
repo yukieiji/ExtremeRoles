@@ -16,8 +16,6 @@ using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArr
 using System.Diagnostics.CodeAnalysis;
 
 
-
-
 #nullable enable
 
 namespace ExtremeRoles.Module.SystemType;
@@ -30,6 +28,7 @@ public enum ExtremeSystemType : byte
 	ModedMushroom,
 	ExtremeConsoleSystem,
 	HostUpdateSystem,
+	ResetObjectSystem,
 
 	WispTorch,
 
