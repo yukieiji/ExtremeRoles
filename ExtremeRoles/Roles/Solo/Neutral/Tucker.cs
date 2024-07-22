@@ -692,6 +692,17 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 
 	public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
 
+	public override string GetFullDescription()
+	{
+		string full = base.GetFullDescription();
+		if (this.tuckerPlayer == null)
+		{
+			return full;
+		}
+		return string.Format(
+			full, this.tuckerPlayer.DefaultOutfit.PlayerName);
+	}
+
 	private bool infoBlock()
 		=> !this.isTuckerDead;
 

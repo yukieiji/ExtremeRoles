@@ -84,6 +84,16 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	private Yardbird.Option? yardBirdOption;
 	private Lawbreaker.Option? lawBreakerOption;
 
+	private static string impShortStr => Design.ColoedString(
+		Palette.ImpostorRed,
+		Translation.GetString("impostorShotCall"));
+	private static string neutShortStr => Design.ColoedString(
+		ColorPalette.NeutralColor,
+		Translation.GetString("neutralShotCall"));
+	private string andShortStr => Design.ColoedString(
+		this.NameColor,
+		Translation.GetString("andFirst"));
+
 	public enum TargetMode
 	{
 		BothImpostorAndNautral,
@@ -193,9 +203,23 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	{
 		if (IsAwake)
 		{
-			return base.GetImportantText(isContainFakeTask);
+			string shortText = this.mode switch
+			{
+				TargetMode.BothImpostorAndNautral => $"{impShortStr}{andShortStr}{neutShortStr}",
+				TargetMode.Impostor => impShortStr,
+				TargetMode.Neutral => neutShortStr,
+				_ => "",
+			};
 
+			return string.Format("{0}: {1}{2}",
+				this.NameColor,
+				shortText,
+				Design.ColoedString(
+					this.NameColor,
+					Translation.GetString(
+						$"{this.Id}ShortDescription")));
 		}
+
 		else
 		{
 			return Design.ColoedString(
