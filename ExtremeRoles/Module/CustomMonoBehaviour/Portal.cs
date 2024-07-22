@@ -58,7 +58,7 @@ public class PortalBase : MonoBehaviour, IAmongUs.IUsable
 		this.img = base.gameObject.AddComponent<SpriteRenderer>();
 		this.linkPortal = null;
 
-		this.img.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+		this.img.sprite = UnityObjectLoader.LoadFromResources(
 			ExtremeRoleId.Teleporter, ObjectPath.TeleporterNoneActivatePortal);
 	}
 
@@ -122,7 +122,7 @@ public sealed class PortalFirst : PortalBase
 {
 	public PortalFirst(IntPtr ptr) : base(ptr) { }
 
-	protected override Sprite GetSprite() => UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+	protected override Sprite GetSprite() => UnityObjectLoader.LoadFromResources(
 		ExtremeRoleId.Teleporter, ObjectPath.TeleporterFirstPortal);
 }
 
@@ -130,6 +130,6 @@ public sealed class PortalSecond : PortalBase
 {
 	public PortalSecond(IntPtr ptr) : base(ptr) { }
 
-	protected override Sprite GetSprite() => UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+	protected override Sprite GetSprite() => UnityObjectLoader.LoadFromResources(
 		ExtremeRoleId.Teleporter, ObjectPath.TeleporterSecondPortal);
 }
