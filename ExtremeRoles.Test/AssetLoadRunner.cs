@@ -46,6 +46,7 @@ internal sealed class AllAssetLoadRunner
 		Run<TeroAssetLoadRunner>();
 		Run<ZombieAssetLoadRunner>();
 
+		Run<TuckerAssetLoadRunner>();
 		Run<YokoAssetLoadRunner>();
 	}
 

@@ -122,6 +122,10 @@ public static class ObjectPath
 	public const string ScavengerBeamImg = "BeamRifle";
 	// !----- インポスター終了 -----
 
+	public const string TuckerCreateChimera = "CreateChimera";
+	public const string TuckerRemoveShadow = "RemoveShadow";
+	public const string TuckerShadow = "Shadow";
+
 	public const string VigilanteEmergencyCall =
 		"ExtremeRoles.Resources.EmergencyCall.png";
 	public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";

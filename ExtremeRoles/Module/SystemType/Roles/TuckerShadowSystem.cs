@@ -166,8 +166,9 @@ public sealed class TuckerShadowSystem(
 			shdowObj.transform.position = new Vector3(shadowInfo.Pos.x, y, y / 1000.0f);
 
 			var rend = shdowObj.AddComponent<SpriteRenderer>();
-			rend.sprite = UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.TestButton);
+			rend.sprite = UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Tucker,
+				ObjectPath.TuckerShadow);
 			if (ExtremeRoleManager.TryGetSafeCastedLocalRole<Tucker>(out var tucker))
 			{
 				rend.color = tucker.GetNameColor();
