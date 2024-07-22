@@ -45,7 +45,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         {
             this.body = new GameObject("MaryCamp");
             this.img = this.body.AddComponent<SpriteRenderer>();
-			this.img.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+			this.img.sprite = UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Mery, ObjectPath.MeryNoneActive);
 
             this.body.SetActive(canSee);
@@ -141,7 +141,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 				vent.myAnim.enabled = false;
 			}
 
-			ventRenderer.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+			ventRenderer.sprite = UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Mery, "0");
 
 			vent.myRend = ventRenderer;
@@ -343,7 +343,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
             MeryOption.ActiveRange);
 
 		_ = ExtremeSystemTypeManager.Instance.CreateOrGet<HostUpdateSystem>(
-			ExtremeSystemType.HostUpdateSystem);
+				ExtremeSystemType.HostUpdateSystem);
     }
 
     public void ResetOnMeetingStart()
