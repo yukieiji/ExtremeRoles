@@ -29,6 +29,7 @@ public enum ExtremeSystemType : byte
 	ModdedMeetingTimeSystem,
 	ModedMushroom,
 	ExtremeConsoleSystem,
+	HostUpdateSystem,
 
 	WispTorch,
 

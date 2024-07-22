@@ -15,12 +15,12 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
 
 using ExtremeRoles.Compat;
-using AmongUs.GameOptions;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 
+#nullable enable
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -185,19 +185,10 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         ActiveCamp
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.bombButton;
-        set
-        {
-            this.bombButton = value;
-        }
-    }
+    public ExtremeAbilityButton? Button { get; set; }
 
     public int ActiveNum;
     public float ActiveRange;
-
-    private ExtremeAbilityButton bombButton;
 
 	private const CustomVent.Type meryVentType = CustomVent.Type.Mery;
 
@@ -233,30 +224,40 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
     private static void setCamp(byte callerId, Vector2 setPos)
     {
         var mery = ExtremeRoleManager.GetSafeCastedRole<Mery>(callerId);
-        if (mery == null) { return; }
+        if (mery == null ||
+			!ExtremeSystemTypeManager.Instance.TryGet<HostUpdateSystem>(
+				ExtremeSystemType.HostUpdateSystem, out var system))
+		{
+			return;
+		}
         var localPlayerRole = ExtremeRoleManager.GetLocalPlayerRole();
 
         bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;
 
-        ExtremeRolesPlugin.ShipState.AddUpdateObject(
-            new Camp(
-                mery.ActiveNum,
-                mery.ActiveRange,
-                localPlayerRole.IsImpostor() || isMarlin,
-                setPos));
+		system.Add(new Camp(
+            mery.ActiveNum,
+            mery.ActiveRange,
+            localPlayerRole.IsImpostor() || isMarlin,
+            setPos));
     }
 
     private static void activateVent(
         int activateVentIndex)
     {
-        Camp camp = (Camp)ExtremeRolesPlugin.ShipState.GetUpdateObject(
-            activateVentIndex);
-        ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(activateVentIndex);
+		if (!ExtremeSystemTypeManager.Instance.TryGet<HostUpdateSystem>(
+				ExtremeSystemType.HostUpdateSystem, out var system) ||
+			system.Get(activateVentIndex) is not Camp camp)
+		{
+			return;
+		}
+
+		system.Remove(activateVentIndex);
 
         Vent newVent = camp.GetConvertedVent();
 
         if (CachedShipStatus.Instance.TryGetCustomVent(
-				meryVentType, out List<Vent> meryVent))
+				meryVentType, out List<Vent>? meryVent) &&
+			meryVent is not null)
         {
 			int ventNum = meryVent.Count;
 
@@ -341,15 +342,13 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
         this.ActiveRange = cate.GetValue<MeryOption, float>(
             MeryOption.ActiveRange);
 
+		_ = ExtremeSystemTypeManager.Instance.CreateOrGet<HostUpdateSystem>(
+			ExtremeSystemType.HostUpdateSystem);
     }
 
     public void ResetOnMeetingStart()
-    {
-        return;
-    }
+    { }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
-    {
-        return;
-    }
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
+    { }
 }
