@@ -156,6 +156,15 @@ public sealed class Tucker :
 			summonAbility);
 	}
 
+	public override void ExiledAction(PlayerControl rolePlayer)
+	{
+		disableShadow(rolePlayer.PlayerId);
+	}
+	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
+	{
+		disableShadow(rolePlayer.PlayerId);
+	}
+
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{ }
 
@@ -415,10 +424,7 @@ public sealed class Tucker :
 
 	public void AllReset(PlayerControl rolePlayer)
 	{
-		if (this.system != null)
-		{
-			this.system.Disable(rolePlayer.PlayerId);
-		}
+		disableShadow(rolePlayer.PlayerId);
 
 		// Tuckerが消えるので関係性を解除
 		var local = PlayerControl.LocalPlayer;
@@ -510,6 +516,14 @@ public sealed class Tucker :
 				}
 			}))
 		);
+	}
+
+	private void disableShadow(byte playerId)
+	{
+		if (this.system != null)
+		{
+			this.system.Disable(playerId);
+		}
 	}
 }
 

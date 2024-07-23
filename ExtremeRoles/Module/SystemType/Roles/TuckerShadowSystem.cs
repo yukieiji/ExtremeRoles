@@ -32,7 +32,10 @@ public sealed class TuckerShadowSystem(
 		public static ShadowInfo? Create(byte playerId, float rand)
 		{
 			var player = Player.GetPlayerControlById(playerId);
-			if (player == null)
+			if (player == null ||
+				player.Data == null ||
+				player.Data.IsDead ||
+				player.Data.Disconnected)
 			{
 				return null;
 			}
