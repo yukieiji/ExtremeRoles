@@ -5,6 +5,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches;
 
@@ -84,5 +85,14 @@ public static class GameDataRecomputeTaskCountsPatch
 		__instance.CompletedTasks = completedTask;
 
 		return false;
+	}
+}
+
+[HarmonyPatch(typeof(GameData), nameof(GameData.OnGameEnd))]
+public static class GameDataOnGameEndPatch
+{
+	public static void Prefix()
+	{
+		ExtremeGameResult.Instance.CreateTaskInfo();
 	}
 }
