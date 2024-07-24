@@ -125,7 +125,7 @@ public sealed class Tucker :
 		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
 
 		this.createBehavior = new CountBehavior(
-			"createChimera",
+			Translation.GetString("createChimera"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerCreateChimera),
@@ -137,7 +137,7 @@ public sealed class Tucker :
 				RoleAbilityCommonOption.AbilityCount));
 
 		var summonAbility = new ReusableActivatingBehavior(
-			"removeShadow",
+			Translation.GetString("removeShadow"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerRemoveShadow),
