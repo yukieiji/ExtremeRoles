@@ -73,6 +73,7 @@ public static class ColorPalette
 	public readonly static Color ArtistChenChuWhowan = new Color32(
 		220, 145, 91, byte.MaxValue);
 	public readonly static Color LowbreakerNoir = new Color32(51, 50, 50, byte.MaxValue);
+	public readonly static Color TuckerMerdedoie = new Color32(113, 91, 65, byte.MaxValue);
 
 	public readonly static Color PoltergeistLightKenpou = new Color32(
 		84, 82, 75, byte.MaxValue);

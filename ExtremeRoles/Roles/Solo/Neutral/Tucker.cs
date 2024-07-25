@@ -79,7 +79,7 @@ public sealed class Tucker :
 		ExtremeRoleId.Tucker,
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Tucker.ToString(),
-		ColorPalette.GamblerYellowGold,
+		ColorPalette.TuckerMerdedoie,
 		false, false, false, false)
 	{ }
 
@@ -560,7 +560,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 		ExtremeRoleId.Chimera,
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Chimera.ToString(),
-		ColorPalette.GamblerYellowGold,
+		ColorPalette.TuckerMerdedoie,
 		true, false, option.Vent, false)
 	{
 		this.Loader = loader;
