@@ -14,10 +14,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
-
-
 
 #nullable enable
 
@@ -113,14 +112,13 @@ public sealed class Miner :
 		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			modMap!.AddCustomComponent(
+			modMap.AddCustomComponent(
 				obj, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
 		}
 		obj.transform.position = pos;
 		var mine = obj.AddComponent<MinerMineEffect>();
 		miner.noneActiveMine = mine;
 		miner.noneActiveMine.SetParameter(isRolePlayer, miner.killRange, in miner.parameter);
-		ExtremeRolesPlugin.ShipState.AddMeetingResetObject(miner.noneActiveMine);
 	}
 
 	private static void activateMine(Miner miner, int id)
@@ -136,10 +134,7 @@ public sealed class Miner :
 		{
 			return;
 		}
-		if (mine != null)
-		{
-			mine.Clear();
-		}
+		Object.Destroy(mine.gameObject);
 		miner.mines.Remove(id);
 	}
 
@@ -158,10 +153,10 @@ public sealed class Miner :
 
 	public void CreateAbility()
     {
-        this.CreateNormalAbilityButton(
+        this.CreateNormalActivatingAbilityButton(
             "setMine",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.MinerSetMine),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MinerSetMine),
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
     }
@@ -415,7 +410,7 @@ public sealed class Miner :
 		this.killLogger = new TextPopUpper(
             2, 3.5f, new Vector3(0, -1.2f, 0.0f),
             TMPro.TextAlignmentOptions.Center, false);
-    }
+	}
 	private void resetAllMine()
 	{
 		foreach (int id in this.mines.Keys)

@@ -91,7 +91,7 @@ public static class Map
 
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			pos.AddRange(modMap!.GetSpawnPos(playerId));
+			pos.AddRange(modMap.GetSpawnPos(playerId));
 		}
 		else
 		{
@@ -134,7 +134,7 @@ public static class Map
 		HashSet<string> vitalObj = new HashSet<string>(2);
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			vitalObj = modMap!.GetSystemObjectName(
+			vitalObj = modMap.GetSystemObjectName(
 				SystemConsoleType.Vital);
 		}
 		else
@@ -168,7 +168,7 @@ public static class Map
 		HashSet<string> adminObj = new HashSet<string>(2);
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			adminObj = modMap!.GetSystemObjectName(
+			adminObj = modMap.GetSystemObjectName(
 				SystemConsoleType.Admin);
 		}
 		else
@@ -249,7 +249,7 @@ public static class Map
 		SystemConsole? watchConsole;
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
-			watchConsole = modMap!.GetSystemConsole(SystemConsoleType.SecurityCamera);
+			watchConsole = modMap.GetSystemConsole(SystemConsoleType.SecurityCamera);
 		}
 		else
 		{

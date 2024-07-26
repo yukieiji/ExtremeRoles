@@ -6,7 +6,6 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Performance;
 using ExtremeSkins.Module;
-using ExtremeSkins.SkinManager;
 
 using Enumerator = System.Collections.IEnumerator;
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
@@ -25,7 +24,7 @@ public static class HatPatch
 		[HarmonyArgument(0)] int color)
 	{
 		if (__instance.Hat != null &&
-			ExtremeHatManager.HatData.TryGetValue(__instance.Hat.ProductId, out var hat) &&
+			CosmicStorage<CustomHat>.TryGet(__instance.Hat.ProductId, out var hat) &&
 			hat != null)
 		{
 			__instance.SetMaterialColor(color);
@@ -47,7 +46,7 @@ public static class HatPatch
 		[HarmonyArgument(0)] Il2CppSystem.Action<Sprite, AddressableAsset> onLoaded,
 		ref Il2CppEnumerator __result)
 	{
-		if (ExtremeHatManager.HatData.TryGetValue(__instance.ProductId, out var value) &&
+		if (CosmicStorage<CustomHat>.TryGet(__instance.ProductId, out var value) &&
 			value != null)
 		{
 			__result = patchedCoLoadIcon(onLoaded, value).WrapToIl2Cpp();
@@ -73,7 +72,7 @@ public static class HatPatch
 
 		AddressableAsset<HatViewData>? asset;
 
-		if (ExtremeHatManager.HatData.TryGetValue(id, out var hat) && hat != null)
+		if (CosmicStorage<CustomHat>.TryGet(id, out var hat) && hat != null)
 		{
 			asset = HatAddressableAsset.CreateAsset(hat);
 		}

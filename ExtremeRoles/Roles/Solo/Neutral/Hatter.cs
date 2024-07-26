@@ -3,13 +3,14 @@
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 
@@ -78,8 +79,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 	public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "timeKill", Resources.Loader.CreateSpriteFromResources(
-				Path.HatterTimeKill));
+            "timeKill", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.HatterTimeKill));
     }
 
     public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -90,8 +91,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
     public bool UseAbility()
     {
 		if (!ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
-				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) ||
-			system == null)
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system))
 		{
 			return false;
 		}
@@ -103,8 +103,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
 		if (decrease != 0 && GameManager.Instance.LogicOptions.IsTryCast<LogicOptionsNormal>(out var opt))
 		{
-			int discussionTime = opt!.GetDiscussionTime();
-			int voteTime = opt!.GetVotingTime();
+			int discussionTime = opt.GetDiscussionTime();
+			int voteTime = opt.GetVotingTime();
 			int reduceTime = Mathf.CeilToInt((discussionTime + voteTime) * (decrease / 100.0f));
 
 			ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(

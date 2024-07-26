@@ -185,7 +185,13 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
                     setWinGameContorlId(id);
                     endReason = (GameOverReason)RoleGameOverReason.KidsAliveAlone;
                     break;
-                default:
+				case NeutralSeparateTeam.Tucker:
+					if (statistics.TeamImpostorAlive > 0 &&
+						statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+					setWinGameContorlId(id);
+					endReason = (GameOverReason)RoleGameOverReason.TuckerShipIsExperimentStation;
+					break;
+				default:
                     break;
             }
             if (endReason != (GameOverReason)RoleGameOverReason.UnKnown)
@@ -287,7 +293,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 
 		if (typeMng.TryGet<TeroristTeroSabotageSystem>(
 				TeroristTeroSabotageSystem.SystemType, out var teroSabo) &&
-			teroSabo!.ExplosionTimer < 0.0f)
+			teroSabo.ExplosionTimer < 0.0f)
 		{
 			teroSabo.Clear();
 			gameIsEnd((GameOverReason)RoleGameOverReason.TeroristoTeroWithShip);

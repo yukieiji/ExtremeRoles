@@ -18,6 +18,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Module.Ability;
 
 #nullable enable
 
@@ -75,7 +76,7 @@ public sealed class Yoko :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected) { return; }
 
@@ -352,10 +353,10 @@ public sealed class Yoko :
 
 	public void CreateAbility()
 	{
-		this.CreateAbilityCountButton(
+		this.CreateActivatingAbilityCountButton(
 			"yokoYashiro",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.YokoYashiro),
+			UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Yoko),
 			this.IsAbilityActive,
 			this.CleanUp,
 			() => { });

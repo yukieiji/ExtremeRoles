@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -21,6 +20,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Patches.Controller;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
 
 using Il2CppObject = Il2CppSystem.Object;
 
@@ -38,7 +38,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	private const float buttonYOffset = 0.25f;
 
-	private readonly record struct SpawnPointInfo(string RoomName, string ImgName, float X, float Y)
+	public readonly record struct SpawnPointInfo(string RoomName, string ImgName, float X, float Y)
 	{
 		[JsonIgnore(Condition = JsonIgnoreCondition.Never)]
 		public Vector2 Vector => new Vector2(X, Y);
@@ -48,7 +48,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 
 	// AirShipの初期スポーンと同じくnew Vector2(-25f, 40f)にしておく
 	private static Vector2 waitPos => new Vector2(-25f, 40f);
-	private const string jsonPath = "ExtremeRoles.Resources.JsonData.RandomSpawnPoint.json";
+	public const string JsonPath = "ExtremeRoles.Resources.JsonData.RandomSpawnPoint.json";
 	private const int buttonNum = 3;
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
@@ -69,7 +69,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		if (spawnInfo == null)
 		{
 			var assembly = Assembly.GetCallingAssembly();
-			using Stream? stream = assembly.GetManifestResourceStream(jsonPath);
+			using var stream = assembly.GetManifestResourceStream(JsonPath);
 
 			if (stream is null) { return; }
 
@@ -92,6 +92,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			.ThenByDescending(x => x.Y)
 			.ToArray();
 
+		string lowerMap = mapKey.ToLower();
 		for (int i = 0; i < buttonNum; ++i)
 		{
 			var point = shuffleedPoint[i];
@@ -109,13 +110,13 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 				Enum.TryParse<SystemTypes>(roomName, true, out var systemRoomName) ?
 				FastDestroyableSingleton<TranslationController>.Instance.GetString(systemRoomName) :
 				Translation.GetString(roomName);
-			string imgName =
-				string.Format(
-					Resources.Path.ExtremeSelectorMinigameImgFormat,
-					mapKey, roomName);
 
 			button.Text.text = text;
-			button.Rend.sprite = Resources.Loader.CreateSpriteFromResources(imgName);
+			button.Rend.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+				string.Format(
+					ObjectPath.ExtremeSelectorMinigameAssetFormat, lowerMap),
+				string.Format(
+					ObjectPath.ExtremeSelectorMinigameImgFormat, lowerMap, roomName));
 			button.Colider.size = new Vector2(1.25f, 1.25f);
 			button.OnClick = createSpawnAtAction(point.Vector, text);
 

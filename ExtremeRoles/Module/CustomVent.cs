@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles;
 
 using UnityEngine;
 
@@ -12,7 +13,7 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 {
 	public enum Type
 	{
-		MeryVent
+		Mery
 	}
 
 	private readonly Dictionary<int, Type> idType = new Dictionary<int, Type>();
@@ -42,18 +43,18 @@ public sealed class CustomVent : NullableSingleton<CustomVent>
 		}
 		else
 		{
-			string imgFormat = type switch
+			ExtremeRoleId roleId = type switch
 			{
-				Type.MeryVent => Path.MeryCustomVentAnime,
-				_ => string.Empty,
+				Type.Mery => ExtremeRoleId.Mery,
+				_ => ExtremeRoleId.Null,
 			};
-			if (string.IsNullOrEmpty(imgFormat))
+			if (roleId is ExtremeRoleId.Null)
 			{
 				return null;
 			}
 
-			Sprite newImg = Loader.CreateSpriteFromResources(
-				string.Format(imgFormat, index), 125f);
+			Sprite newImg = UnityObjectLoader.LoadFromResources(
+				roleId, $"{index}");
 
 			this.ventAnimation[type][index] = newImg;
 			return newImg;

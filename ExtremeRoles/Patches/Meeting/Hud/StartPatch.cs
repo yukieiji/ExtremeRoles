@@ -37,11 +37,11 @@ public static class MeetingHudStartPatch
 		{
 			builder
 				.Append("   - Discussion Time:")
-				.Append(opt!.GetDiscussionTime())
+				.Append(opt.GetDiscussionTime())
 				.AppendLine()
 
 				.Append("   - Voting Time:")
-				.Append(opt!.GetVotingTime())
+				.Append(opt.GetVotingTime())
 				.AppendLine();
 		}
 
@@ -52,8 +52,7 @@ public static class MeetingHudStartPatch
 
 		if (!trigger &&
 			ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(
-				ExtremeSystemType.ModdedMeetingTimeSystem, out var system) &&
-			system is not null)
+				ExtremeSystemType.ModdedMeetingTimeSystem, out var system))
 		{
 			__instance.VoteEndingSound = SoundHelper.GetAudio(SoundHelper.Type.NullSound);
 			__instance.discussionTimer -= system.HudTimerStartOffset;
@@ -81,7 +80,6 @@ public static class MeetingHudStartPatch
 		logger.LogInfo(" --- Start Meeting Start Reseting --- ");
 
 		logger.LogInfo("Resetting Start: ShipStatus Systems");
-		ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
 		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.MeetingStart);
 		logger.LogInfo("Resetting End: ShipStatus Systems");
 

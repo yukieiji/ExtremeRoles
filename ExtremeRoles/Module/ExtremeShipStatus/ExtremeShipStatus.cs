@@ -1,44 +1,26 @@
 ﻿using ExtremeRoles.Module.RoleAssign;
 using UnityEngine;
 
-namespace ExtremeRoles.Module.ExtremeShipStatus
+namespace ExtremeRoles.Module.ExtremeShipStatus;
+
+public sealed partial class ExtremeShipStatus
 {
-	public sealed partial class ExtremeShipStatus
+	public ExtremeShipStatus()
 	{
-		public GameObject Status => this.status;
-		private GameObject status;
+		Initialize();
+		this.playerVersion.Clear();
+	}
 
-		public ExtremeShipStatus()
-		{
-			Initialize(false);
-			this.playerVersion.Clear();
-		}
+	public void Initialize()
+	{
+		// 以下リファクタ済み
 
-		public void Initialize(
-			bool includeGameObject = true)
-		{
-			// 以下リファクタ済み
+		this.resetDeadPlayerInfo();
+		this.resetGlobalAction();
+		// this.resetPlayerSummary();
+		this.resetMeetingCount();
+		RoleAssignState.TryDestroy();
 
-			this.resetDeadPlayerInfo();
-			this.resetGlobalAction();
-			// this.resetPlayerSummary();
-			this.resetMeetingCount();
-			RoleAssignState.TryDestroy();
-
-			this.resetWins();
-
-			this.ClearMeetingResetObject();
-
-			if (!includeGameObject) { return; }
-
-			if (this.status != null)
-			{
-				Object.Destroy(this.status);
-				this.status = null;
-			}
-			this.status = new GameObject("ExtremeShipStatus");
-
-			this.resetUpdateObject();
-		}
+		this.resetWins();
 	}
 }

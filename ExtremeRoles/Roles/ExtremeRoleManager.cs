@@ -68,6 +68,9 @@ public enum ExtremeRoleId : int
 	Moderator,
 	Psychic,
 	Bait,
+	Jailer,
+	Yardbird,
+	Summoner,
 
 	SpecialImpostor,
     Evolver,
@@ -115,6 +118,9 @@ public enum ExtremeRoleId : int
     Doll,
 	Hatter,
 	Artist,
+	Lawbreaker,
+	Tucker,
+	Chimera,
 
 	Xion,
 }
@@ -186,7 +192,9 @@ public enum RoleGameOverReason
 
 	ArtistShipToArt,
 
-    UnKnown = 100,
+	TuckerShipIsExperimentStation,
+
+	UnKnown = 100,
 }
 
 public enum NeutralSeparateTeam
@@ -201,7 +209,8 @@ public enum NeutralSeparateTeam
     Eater,
     Traitor,
     Queen,
-    Kids
+    Kids,
+	Tucker
 }
 
 public static class ExtremeRoleManager
@@ -249,6 +258,8 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Moderator   , new Moderator()},
 			{(int)ExtremeRoleId.Psychic     , new Psychic()},
 			{(int)ExtremeRoleId.Bait        , new Bait()},
+			{(int)ExtremeRoleId.Jailer      , new Jailer()},
+			{(int)ExtremeRoleId.Summoner    , new Summoner()},
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -292,6 +303,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
+			{(int)ExtremeRoleId.Tucker    , new Tucker()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -308,7 +320,7 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
             {(byte)CombinationRoleType.Mover          , new MoverManager()},
 			{(byte)CombinationRoleType.Accelerator    , new AcceleratorManager()},
-			{(byte)CombinationRoleType.Skater        , new SkaterManager()},
+			{(byte)CombinationRoleType.Skater         , new SkaterManager()},
 			{(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         }.ToImmutableDictionary();
 
@@ -321,6 +333,7 @@ public static class ExtremeRoleManager
         ExtremeRoleId.Hero,
         ExtremeRoleId.Villain,
 		ExtremeRoleId.Yoko,
+		ExtremeRoleId.Chimera,
     };
 
     public enum ReplaceOperation : byte
@@ -329,7 +342,10 @@ public static class ExtremeRoleManager
         ForceReplaceToSidekick,
         SidekickToJackal,
         CreateServant,
-    }
+		ForceReplaceToYardbird,
+		BecomeLawbreaker,
+		ForceRelaceToChimera
+	}
 
 	public static int GetRoleGroupId(ExtremeRoleId roleId)
 		=> RoleCategoryIdOffset + (int)roleId;
@@ -411,18 +427,15 @@ public static class ExtremeRoleManager
     {
         RoleTypes roleType = (RoleTypes)bytedRoleType;
 
-		bool hasVanilaRole = roleType switch
-		{
-			RoleTypes.Scientist or
+		bool hasVanilaRole = roleType is
+			RoleTypes.Engineer or
 			RoleTypes.Scientist or
 			RoleTypes.Shapeshifter or
 			RoleTypes.Noisemaker or
 			RoleTypes.Phantom or
-			RoleTypes.Tracker => true,
-			_ => false
-		};
+			RoleTypes.Tracker;
 
-        var role = CombRole[combType].GetRole(roleId, roleType);
+		var role = CombRole[combType].GetRole(roleId, roleType);
 
         if (role is null)
 		{
@@ -495,7 +508,20 @@ public static class ExtremeRoleManager
             case ReplaceOperation.CreateServant:
                 Queen.TargetToServant(caller, targetId);
                 break;
-            default:
+			case ReplaceOperation.ForceReplaceToYardbird:
+				Jailer.NotCrewmateToYardbird(caller, targetId);
+				break;
+			case ReplaceOperation.BecomeLawbreaker:
+				if (caller != targetId)
+				{
+					return;
+				}
+				Jailer.ToLawbreaker(caller);
+				break;
+			case ReplaceOperation.ForceRelaceToChimera:
+				Tucker.TargetToChimera(caller, targetId);
+				break;
+			default:
                 break;
         }
     }
@@ -550,6 +576,7 @@ public static class ExtremeRoleManager
         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
     }
 
+// TryGet系列：ここでTrueの場合、取得した役職はNullではない！！！！
 	public static bool TryGetRole(byte playerId, [NotNullWhen(true)] out SingleRoleBase? role )
 		=> GameRole.TryGetValue(playerId, out role) && role is not null;
 
@@ -561,6 +588,13 @@ public static class ExtremeRoleManager
 			return false;
 		}
 		role = safeCast<T>(checkRole);
+		return role is not null;
+	}
+
+	public static bool TryGetSafeCastedLocalRole<T>([NotNullWhen(true)] out T? role) where T : SingleRoleBase
+	{
+		var rowRole = GetLocalPlayerRole();
+		role = safeCast<T>(rowRole);
 		return role is not null;
 	}
 

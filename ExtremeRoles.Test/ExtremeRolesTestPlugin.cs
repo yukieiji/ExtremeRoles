@@ -40,9 +40,7 @@ public static class ChatControllerSendChatPatch
 		{
 
 			GameUtility.ChangePresetTo(19);
-
-			var runner = new GameTestRunner();
-			runner.Run();
+			TestRunnerBase.Run<AllAssetLoadRunner>();
 		}
 	}
 }

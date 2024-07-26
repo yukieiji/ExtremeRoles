@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -709,10 +710,9 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
     public void CreateAbility()
     {
 
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "emergencyMeeting",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.DetectiveApprenticeEmergencyMeeting),
+			UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Meeting),
             abilityOff: CleanUp,
             checkAbility: IsOpen,
             isReduceOnActive: true);
@@ -745,7 +745,7 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         SystemConsole emergencyConsole;
         if (CompatModManager.Instance.TryGetModMap(out var modMap))
         {
-            emergencyConsole = modMap!.GetSystemConsole(
+            emergencyConsole = modMap.GetSystemConsole(
                 Compat.Interface.SystemConsoleType.EmergencyButton);
         }
         else

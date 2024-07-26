@@ -13,7 +13,7 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
-
+using System.Diagnostics.CodeAnalysis;
 
 
 #nullable enable
@@ -27,16 +27,21 @@ public enum ExtremeSystemType : byte
 	ModdedMeetingTimeSystem,
 	ModedMushroom,
 	ExtremeConsoleSystem,
+	HostUpdateSystem,
+	ResetObjectSystem,
 
 	WispTorch,
 
 	BakeryReport,
+	DelusionerCounter,
 
 	FakerDummy,
 	ThiefMeetingTimeChange,
 	TeroristTeroSabotage,
+	ScavengerAbility,
 
-	YokoYashiro
+	YokoYashiro,
+	TuckerShadow
 }
 
 public enum ResetTiming : byte
@@ -152,13 +157,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 
 
 	[HideFromIl2Cpp]
-	public bool TryGet(ExtremeSystemType systemType, out IExtremeSystemType? system)
+	public bool TryGet(ExtremeSystemType systemType, [NotNullWhen(true)] out IExtremeSystemType? system)
 		=> this.allSystems.TryGetValue(systemType, out system);
 
 	public T CreateOrGet<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()
 	{
-		if (!Instance.TryGet<T>(systemType, out var system) ||
-			system is null)
+		if (!Instance.TryGet<T>(systemType, out var system))
 		{
 			system = new T();
 			Instance.TryAdd(systemType, system);
@@ -169,8 +173,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	[HideFromIl2Cpp]
 	public T CreateOrGet<T>(ExtremeSystemType systemType, Func<T> construnctFunc) where T : class, IExtremeSystemType
 	{
-		if (!Instance.TryGet<T>(systemType, out var system) ||
-			system is null)
+		if (!Instance.TryGet<T>(systemType, out var system))
 		{
 			system = construnctFunc.Invoke();
 			Instance.TryAdd(systemType, system);
@@ -179,7 +182,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	}
 
 	[HideFromIl2Cpp]
-	public bool TryGet<T>(ExtremeSystemType systemType, out T? system) where T : class, IExtremeSystemType
+	public bool TryGet<T>(ExtremeSystemType systemType, [NotNullWhen(true)] out T? system) where T : class, IExtremeSystemType
 	{
 		system = default(T);
 		if (!this.allSystems.TryGetValue(systemType, out var iSystem))

@@ -2,16 +2,15 @@
 using HarmonyLib;
 
 using UnityEngine;
-using AmongUs.GameOptions;
 
-using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.MiniGame;
 
@@ -19,11 +18,9 @@ namespace ExtremeRoles.Patches.MiniGame;
 public static class VitalsMinigameUpdatePatch
 {
     private static float vitalTimer = 0.0f;
-    private static bool enableVitalLimit = false;
-    private static bool isRemoveVital = false;
-    private static TMPro.TextMeshPro timerText;
+    private static TMPro.TextMeshPro? timerText;
 
-    private static readonly HashSet<ExtremeRoleId> vitalUseRole = new HashSet<ExtremeRoleId>()
+    private static readonly IReadOnlySet<ExtremeRoleId> vitalUseRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Traitor,
         ExtremeRoleId.Doll
@@ -35,7 +32,7 @@ public static class VitalsMinigameUpdatePatch
         if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
         if (ExtremeRoleManager.GetLocalPlayerRole().CanUseVital() ||
-            isUseAbility()) { return true; }
+			IRoleAbility.IsLocalPlayerAbilityUse(vitalUseRole)) { return true; }
 
         __instance.SabText.text = Translation.GetString("youDonotUse");
 
@@ -53,14 +50,12 @@ public static class VitalsMinigameUpdatePatch
 
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-        if (isRemoveVital || // バイタル無効化してる
-            !enableVitalLimit || //バイタル制限あるか
-            __instance.BatteryText.gameObject.active) //科学者の能力使用か
-        {
-            return;
-        }
+		var vitalOption = ExtremeGameModeManager.Instance.ShipOption.Vital;
 
-        if (isUseAbility())
+		if (vitalOption.Disable || // バイタル無効化してる
+            !vitalOption.EnableLimit || //バイタル制限あるか
+            __instance.BatteryText.gameObject.active ||  //科学者の能力使用か
+			IRoleAbility.IsLocalPlayerAbilityUse(vitalUseRole))
         {
             return;
         }
@@ -99,38 +94,10 @@ public static class VitalsMinigameUpdatePatch
         var vitalOption = ExtremeGameModeManager.Instance.ShipOption.Vital;
 
         vitalTimer = vitalOption.LimitTime;
-        isRemoveVital = vitalOption.Disable;
-        enableVitalLimit = vitalOption.EnableLimit;
 
         Logging.Debug("---- VitalCondition ----");
-        Logging.Debug($"IsRemoveVital:{isRemoveVital}");
-        Logging.Debug($"EnableVitalLimit:{enableVitalLimit}");
+        Logging.Debug($"IsRemoveVital:{vitalOption.Disable}");
+        Logging.Debug($"EnableVitalLimit:{vitalOption.EnableLimit}");
         Logging.Debug($"VitalTime:{vitalTimer}");
-    }
-
-    private static bool isUseAbility()
-    {
-        SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-        MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
-
-        if (vitalUseRole.Contains(role.Id))
-        {
-            if (((IRoleAbility)role).Button.IsAbilityActive())
-            {
-                return true;
-            }
-        }
-        if (multiAssignRole?.AnotherRole != null)
-        {
-            if (vitalUseRole.Contains(
-                multiAssignRole.AnotherRole.Id))
-            {
-                if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

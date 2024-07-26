@@ -4,6 +4,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -137,10 +138,10 @@ public sealed class Skater :
 	{
 		this.CreatePassiveAbilityButton(
 			"SkaterSkateOn", "SkaterSkateOff",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.SkaterSkateOn),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.SkaterSkateOff),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.SkaterSkateOn),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.SkaterSkateOff),
 			this.CleanUp);
 
 		if (this.IsCrewmate())

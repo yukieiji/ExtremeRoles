@@ -9,12 +9,11 @@ using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
-using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
 
-using ExRLoader = ExtremeRoles.Resources.Loader;
+using ExRLoader = ExtremeRoles.Resources.UnityObjectLoader;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
@@ -56,7 +55,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             if (Tab == null)
             {
                 GameObject obj = Object.Instantiate(
-                    ExRLoader.GetUnityObjectFromResources<GameObject>(
+                    ExRLoader.LoadFromResources<GameObject>(
                         CustomCosmicTab.CreatorTabAssetBundle,
                         CustomCosmicTab.CreatorTabAssetPrefab),
                     __instance.transform);
@@ -68,7 +67,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
 			foreach (VisorData viData in unlockedVisor)
             {
-                if (ExtremeVisorManager.VisorData.TryGetValue(
+                if (CosmicStorage<CustomVisor>.TryGet(
 						viData.ProductId, out var vi) &&
 					vi != null)
                 {
@@ -170,7 +169,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 					DataManager.Player.Customization.Color;
 
 				__instance.UpdateMaterials(colorChip.Inner.FrontLayer, vi);
-				if (ExtremeVisorManager.VisorData.TryGetValue(
+				if (CosmicStorage<CustomVisor>.TryGet(
 						vi.ProductId, out var customVi) &&
 					customVi != null)
 				{

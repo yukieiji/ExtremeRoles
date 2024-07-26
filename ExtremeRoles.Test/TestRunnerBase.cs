@@ -38,5 +38,11 @@ public abstract class TestRunnerBase
 		}
 	}
 
+	public static void Run<T>() where T : TestRunnerBase, new()
+	{
+		T runner = new T();
+		runner.Run();
+	}
+
 	public abstract void Run();
 }

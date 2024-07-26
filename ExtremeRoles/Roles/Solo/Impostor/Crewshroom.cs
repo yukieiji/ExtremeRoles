@@ -1,7 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
@@ -42,8 +42,8 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			Translation.GetString("CrewshroomSet"),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.CrewshroomSet));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.CrewshroomSet));
 	}
 
 	public override string GetIntroDescription()

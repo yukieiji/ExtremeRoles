@@ -3,6 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
@@ -57,8 +58,8 @@ public class PortalBase : MonoBehaviour, IAmongUs.IUsable
 		this.img = base.gameObject.AddComponent<SpriteRenderer>();
 		this.linkPortal = null;
 
-		this.img.sprite = Loader.CreateSpriteFromResources(
-			Path.TeleporterNoneActivatePortal);
+		this.img.sprite = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Teleporter, ObjectPath.TeleporterNoneActivatePortal);
 	}
 
 	public static void Link(PortalBase a, PortalBase b)
@@ -113,22 +114,22 @@ public class PortalBase : MonoBehaviour, IAmongUs.IUsable
 		this.timer -= Time.fixedDeltaTime;
 	}
 
-	protected virtual Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.TestButton);
+	protected virtual Sprite GetSprite() => UnityObjectLoader.LoadSpriteFromResources(
+		ObjectPath.TestButton);
 }
 
 public sealed class PortalFirst : PortalBase
 {
 	public PortalFirst(IntPtr ptr) : base(ptr) { }
 
-	protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.TeleporterFirstPortal);
+	protected override Sprite GetSprite() => UnityObjectLoader.LoadFromResources(
+		ExtremeRoleId.Teleporter, ObjectPath.TeleporterFirstPortal);
 }
 
 public sealed class PortalSecond : PortalBase
 {
 	public PortalSecond(IntPtr ptr) : base(ptr) { }
 
-	protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.TeleporterSecondPortal);
+	protected override Sprite GetSprite() => UnityObjectLoader.LoadFromResources(
+		ExtremeRoleId.Teleporter, ObjectPath.TeleporterSecondPortal);
 }

@@ -12,6 +12,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -196,10 +198,10 @@ public sealed class CurseMaker :
     {
         this.defaultButtonText = Translation.GetString("curse");
 
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
             "curse",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.CurseMakerCurse),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.CurseMakerCurse),
             checkAbility: CheckAbility,
             abilityOff: CleanUp,
             forceAbilityOff: () => { });
@@ -430,10 +432,11 @@ public sealed class CurseMaker :
         }
 
         float taskGage = Player.GetPlayerTaskGage(rolePlayer);
-        if (taskGage > this.prevTaskGage)
+        if (taskGage > this.prevTaskGage &&
+			this.Button.Behavior is IActivatingBehavior activatingBehavior)
         {
             this.curCurseTime = this.curCurseTime * this.curseTimeReduceRate;
-            this.curseButton.Behavior.SetActiveTime(this.curCurseTime);
+			activatingBehavior.ActiveTime = this.curCurseTime;
         }
 
         if (this.isReduceSearchByTask && !this.isReducedSearchTime)

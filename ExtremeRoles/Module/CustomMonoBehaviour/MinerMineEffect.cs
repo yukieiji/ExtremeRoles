@@ -15,7 +15,7 @@ using ExtremeRoles.Roles.Solo.Neutral;
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
-public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
+public sealed class MinerMineEffect : MonoBehaviour
 {
 	private bool isActive = false;
 	private static AudioClip? cacheedClip;
@@ -76,7 +76,7 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 		this.isActive = true;
 	}
 
-	public void Update()
+	public void FixedUpdate()
 	{
 		var player = PlayerControl.LocalPlayer;
 
@@ -88,17 +88,13 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 			GameData.Instance == null ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
-			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		{
+			this.audioSource.volume = 0.0f;
+			return;
+		}
 
 		playerUpdate(player);
-	}
-
-	public void Clear()
-	{
-		if (this != null)
-		{
-			Destroy(this.gameObject);
-		}
 	}
 
 	private void playerUpdate(PlayerControl localPlayer)
@@ -145,8 +141,8 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	{
 		if (cachedActiveSprite == null)
 		{
-			cachedActiveSprite = Loader.CreateSpriteFromResources(
-				Path.MinerActiveMineImg);
+			cachedActiveSprite = UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MinerActiveMineImg);
 		}
 		this.rend.sprite = cachedActiveSprite;
 	}
@@ -154,8 +150,8 @@ public sealed class MinerMineEffect : MonoBehaviour, IMeetingResetObject
 	{
 		if (cachedDeactiveSprite == null)
 		{
-			cachedDeactiveSprite = Loader.CreateSpriteFromResources(
-				Path.MinerDeactivateMineImg);
+			cachedDeactiveSprite = UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.MinerDeactivateMineImg);
 		}
 		this.rend.sprite = cachedDeactiveSprite;
 	}

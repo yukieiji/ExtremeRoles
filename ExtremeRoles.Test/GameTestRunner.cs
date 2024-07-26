@@ -158,7 +158,7 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			{
 				this.Logger.LogInfo("Wait for 10s");
 				GC.Collect();
-				Resources.Loader.ResetCache();
+				Resources.UnityObjectLoader.ResetCache();
 				yield return UnityResource.UnloadUnusedAssets();
 				yield return new WaitForSeconds(10.0f);
 				this.count = 0;

@@ -9,13 +9,12 @@ using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
-using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
 using Innersloth.Assets;
 
-using ExRLoader = ExtremeRoles.Resources.Loader;
+using ExRLoader = ExtremeRoles.Resources.UnityObjectLoader;
 
 #nullable enable
 
@@ -59,7 +58,7 @@ public static class NameplatesTabPatch
         if (Tab == null)
         {
             GameObject obj = Object.Instantiate(
-                ExRLoader.GetUnityObjectFromResources<GameObject>(
+                ExRLoader.LoadFromResources<GameObject>(
                     CustomCosmicTab.CreatorTabAssetBundle,
                     CustomCosmicTab.CreatorTabAssetPrefab),
                 __instance.transform);
@@ -73,7 +72,7 @@ public static class NameplatesTabPatch
 
 		foreach (NamePlateData npData in unlockedNamePlate)
         {
-            if (ExtremeNamePlateManager.NamePlateData.TryGetValue(
+            if (CosmicStorage<CustomNamePlate>.TryGet(
 					npData.ProductId, out CustomNamePlate? np) &&
 				np != null)
             {

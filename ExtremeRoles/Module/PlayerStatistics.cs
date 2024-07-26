@@ -182,32 +182,32 @@ public sealed class PlayerStatistics
 		{
 			case ExtremeRoleId.Alice:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Alice);
 				break;
 			case ExtremeRoleId.Jackal:
 			case ExtremeRoleId.Sidekick:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Jackal);
 				break;
 			case ExtremeRoleId.Lover:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Lover);
 				break;
 			case ExtremeRoleId.Missionary:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Missionary);
 				break;
 			case ExtremeRoleId.Yandere:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Yandere);
 				break;
@@ -216,52 +216,59 @@ public sealed class PlayerStatistics
 					Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
 				{
 					addNeutralTeams(
-						ref neutralTeam,
+						neutralTeam,
 						gameControlId,
 						NeutralSeparateTeam.Vigilante);
 				}
 				break;
 			case ExtremeRoleId.Miner:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Miner);
 				break;
 			case ExtremeRoleId.Eater:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Eater);
 				break;
 			case ExtremeRoleId.Traitor:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Traitor);
 				break;
 			case ExtremeRoleId.Queen:
 			case ExtremeRoleId.Servant:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Queen);
 				break;
 			case ExtremeRoleId.Delinquent:
 				addNeutralTeams(
-					ref neutralTeam,
+					neutralTeam,
 					gameControlId,
 					NeutralSeparateTeam.Kids);
 				break;
+			case ExtremeRoleId.Tucker:
+			case ExtremeRoleId.Chimera:
+				addNeutralTeams(
+					neutralTeam,
+					gameControlId,
+					NeutralSeparateTeam.Tucker);
+				break;
 			default:
 				checkMultiAssignedServant(
-					ref neutralTeam,
+					in neutralTeam,
 					gameControlId, role);
 				break;
 		}
 	}
 
 	private static void checkMultiAssignedServant(
-		ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
+		in Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
 		int gameControlId,
 		SingleRoleBase role)
 	{
@@ -269,14 +276,14 @@ public sealed class PlayerStatistics
 			multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
 		{
 			addNeutralTeams(
-				ref neutralTeam,
+				neutralTeam,
 				gameControlId,
 				NeutralSeparateTeam.Queen);
 		}
 	}
 
 	private static void addNeutralTeams(
-		ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
+		in Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
 		int gameControlId,
 		NeutralSeparateTeam team)
 	{

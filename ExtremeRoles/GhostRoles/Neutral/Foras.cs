@@ -7,7 +7,8 @@ using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -104,10 +105,10 @@ public sealed class Foras : GhostRoleBase
 
     public override void CreateAbility()
     {
-        this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+        this.Button = GhostRoleAbilityFactory.CreateActivatingCountAbility(
             AbilityType.ForasShowArrow,
-            Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.ForasShowArrow),
+            Resources.UnityObjectLoader.LoadSpriteFromResources(
+                Resources.ObjectPath.ForasShowArrow),
             this.isReportAbility(),
             () => true,
             this.isAbilityUse,
@@ -115,8 +116,10 @@ public sealed class Foras : GhostRoleBase
             abilityCall, true,
             null, cleanUp);
         this.ButtonInit();
-        this.Button.Behavior.SetActiveTime(
-            this.Button.Behavior.ActiveTime + this.delayTime);
+		if (this.Button.Behavior is IActivatingBehavior activatingBehavior)
+		{
+			activatingBehavior.ActiveTime = activatingBehavior.ActiveTime + this.delayTime;
+		}
     }
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>()

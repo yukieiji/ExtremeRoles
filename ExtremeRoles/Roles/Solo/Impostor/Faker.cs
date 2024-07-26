@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -51,10 +51,10 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 
 	public void CreateAbility()
 	{
-		this.deadBodyDummy = Resources.Loader.CreateSpriteFromResources(
-			Path.FakerDummyDeadBody, 115f);
-		this.playerDummy = Resources.Loader.CreateSpriteFromResources(
-			Path.FakerDummyPlayer, 115f);
+		this.deadBodyDummy = Resources.UnityObjectLoader.LoadSpriteFromResources(
+			ObjectPath.FakerDummyDeadBody, 115f);
+		this.playerDummy = Resources.UnityObjectLoader.LoadSpriteFromResources(
+			ObjectPath.FakerDummyPlayer, 115f);
 
 		this.deadBodyDummyStr = Translation.GetString("dummyDeadBody");
 		this.playerDummyStr = Translation.GetString("dummyPlayer");

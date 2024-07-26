@@ -38,7 +38,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 	public enum SpawnSetting
 	{
-		DefaultSpawn,
+		DefaultKey,
 		LowerCentralOnly,
 		UpperCentralOnly
 	}

@@ -16,6 +16,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -331,8 +332,8 @@ public sealed class Photographer :
     {
         this.CreateAbilityCountButton(
             "takePhoto",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.PhotographerPhotoCamera));
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.PhotographerPhotoCamera));
         this.Button.SetLabelToCrewmate();
     }
 

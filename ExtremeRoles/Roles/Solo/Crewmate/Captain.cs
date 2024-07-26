@@ -217,8 +217,8 @@ public sealed class Captain :
                 checkMark = UnityEngine.Object.Instantiate(
                     instance.Background, instance.LevelNumberText.transform);
                 checkMark.name = $"captain_SpecialVoteCheckMark_{instance.TargetPlayerId}";
-                checkMark.sprite = Resources.Loader.CreateSpriteFromResources(
-                    Resources.Path.CaptainSpecialVoteCheck);
+                checkMark.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
+                    Resources.ObjectPath.CaptainSpecialVoteCheck);
                 checkMark.transform.localPosition = new Vector3(7.25f, -0.5f, -3f);
                 checkMark.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
                 checkMark.gameObject.layer = 5;
@@ -237,8 +237,8 @@ public sealed class Captain :
 
     public void SetSprite(SpriteRenderer render)
     {
-        render.sprite = Resources.Loader.CreateSpriteFromResources(
-            Resources.Path.CaptainSpecialVote);
+        render.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
+            Resources.ObjectPath.CaptainSpecialVote);
         render.transform.localScale *= new Vector2(0.625f, 0.625f);
     }
 

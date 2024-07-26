@@ -1,5 +1,5 @@
 ﻿using System;
-using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.Ability.Behavior;
 
 namespace ExtremeRoles.Module.Interface;
 

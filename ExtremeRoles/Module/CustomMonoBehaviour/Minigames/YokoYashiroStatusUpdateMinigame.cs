@@ -226,7 +226,6 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 	{
 		if (ExtremeSystemTypeManager.Instance.TryGet<YokoYashiroSystem>(
 				YokoYashiroSystem.Type, out var system) &&
-			system is not null &&
 			this.Info is not null)
 		{
 			system.RpcUpdateNextStatus(this.Info);

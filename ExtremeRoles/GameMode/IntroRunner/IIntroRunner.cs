@@ -1,6 +1,6 @@
 ﻿using System.Collections;
+using System.Linq;
 
-using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -54,7 +54,7 @@ public interface IIntroRunner
 		InfoOverlay.Instance.InitializeToGame();
 
 		setupRoleWhenIntroEnd();
-		disableMapObject();
+		modMapObject();
 		changeWallHackTask();
 
 		Object.Destroy(instance.gameObject);
@@ -203,31 +203,60 @@ public interface IIntroRunner
 		}
 	}
 
-	private static void disableMapObject()
+	private static void modMapObject()
 	{
-		var removeMapModule = ExtremeGameModeManager.Instance.ShipOption.RemoveMapModule;
-		modAdmin(in removeMapModule);
+		var shipOption = ExtremeGameModeManager.Instance.ShipOption;
+		byte mapId = Map.Id;
 
-		if (removeMapModule.Vital)
-		{
-			Map.DisableVital();
-		}
-		if (removeMapModule.Security)
+		modAdmin(shipOption.Admin, mapId);
+		modVital(shipOption.Vital, mapId);
+
+		if (shipOption.Security.Disable)
 		{
 			Map.DisableSecurity();
 		}
 	}
 
-	private static void modAdmin(in MapModuleDisableFlag flag)
+	private static void modVital(in VitalDeviceOption option, in byte mapId)
 	{
-		if (flag.Admin)
+		if (option.Disable)
+		{
+			Map.DisableVital();
+		}
+		// ポーラスだけバイタルの位置を変える
+		else if (mapId == 2)
+		{
+			var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
+			var vitalConsole = systemConsoleArray.FirstOrDefault(
+				x => x.gameObject.name == Map.PolusVital);
+			if (vitalConsole == null) { return; }
+			var vitalTrans = vitalConsole.transform;
+			switch (option.PolusPos)
+			{
+				case PolusVitalPos.LaboratoryKey:
+					vitalTrans.localPosition = new Vector3(12.75f, 10.5f, -1.1f);
+					break;
+				case PolusVitalPos.SpecimenKey:
+					vitalTrans.localPosition = new Vector3(16.9f, - 3.25f, -0.1f);
+					vitalTrans.localEulerAngles = new Vector3(0, 0, 90);
+					vitalTrans.localScale = new Vector3(0.9f, 0.9f, 1.0f);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	private static void modAdmin(in AdminDeviceOption option, in byte mapId)
+	{
+		if (option.Disable)
 		{
 			Map.DisableAdmin();
 		}
 		// AirShipのみ一部のアドミンを消す
-		else if (Map.Id == 4)
+		else if (mapId == 4)
 		{
-			string removeTargetAdmin = flag.AirShipAdminMode switch
+			string removeTargetAdmin = option.AirShipEnable switch
 			{
 				AirShipAdminMode.ModeArchiveOnly => Map.AirShipCockpitAdmin,
 				AirShipAdminMode.ModeCockpitOnly => Map.AirShipArchiveAdmin,

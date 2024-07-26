@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+
+#nullable enable
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -89,12 +92,6 @@ public interface IShipGlobalOption
 		TaskTypes.DivertPower,
 	};
 
-	public MapModuleDisableFlag RemoveMapModule => new MapModuleDisableFlag(
-		this.Admin.Disable,
-		this.Security.Disable,
-		this.Vital.Disable,
-		this.Admin.AirShipEnable);
-
 	public IReadOnlySet<TaskTypes> ChangeTask
 	{
 		get
@@ -125,7 +122,7 @@ public interface IShipGlobalOption
 	public MeetingHudOption Meeting { get; }
     public AdminDeviceOption Admin { get; }
     public DeviceOption Security { get; }
-    public DeviceOption Vital { get; }
+    public VitalDeviceOption Vital { get; }
 
     public bool DisableTaskWinWhenNoneTaskCrew { get; }
     public bool DisableTaskWin { get; }
@@ -135,7 +132,7 @@ public interface IShipGlobalOption
     public GhostRoleOption GhostRole { get; }
 
 	public void Load();
-	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId);
+	public bool TryGetInvalidOption(int categoryId, [NotNullWhen(true)] out IReadOnlySet<int>? useOptionId);
 
 	public static void Create()
     {
@@ -171,7 +168,10 @@ public interface IShipGlobalOption
 			AdminDeviceOption.Create(factory);
 		}
 		createMapObjectOptions(ShipGlobalOptionCategory.SecurityOption);
-		createMapObjectOptions(ShipGlobalOptionCategory.VitalOption);
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.VitalOption))
+		{
+			VitalDeviceOption.Create(factory);
+		}
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.RandomMapOption))
 		{

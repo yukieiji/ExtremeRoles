@@ -65,7 +65,7 @@ public class VisionComputer
 				break;
 			case Modifier.WispLightOff:
 				if (ExtremeSystemTypeManager.Instance.TryGet<WispTorchSystem>(ExtremeSystemType.WispTorch, out var system) &&
-					!system!.HasTorch(playerInfo.PlayerId))
+					!system.HasTorch(playerInfo.PlayerId))
 				{
 					vision = shipStatus.MinLightRadius * CrewmateLightVision;
 					return false;
@@ -84,7 +84,7 @@ public class VisionComputer
 
 		bool isRequireCustomVision =
 			CompatModManager.Instance.TryGetModMap(out var modMap) &&
-			modMap!.IsCustomCalculateLightRadius;
+			modMap.IsCustomCalculateLightRadius;
 
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
 		{

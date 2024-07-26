@@ -27,7 +27,7 @@ public static class MinigameSystem
 				return null;
 			}
 
-			return scientist!.VitalsPrefab;
+			return scientist.VitalsPrefab;
 		}
 	}
 

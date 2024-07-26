@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 
 
@@ -73,10 +74,10 @@ public sealed class Artist :
     {
 		this.CreatePassiveAbilityButton(
 			"ArtistArtOn", "ArtistArtOff",
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.ArtistArtOn),
-			Resources.Loader.CreateSpriteFromResources(
-			   Path.ArtistArtOff),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.ArtistArtOn),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			   ObjectPath.ArtistArtOff),
 			this.CleanUp,
 			() =>
 			{

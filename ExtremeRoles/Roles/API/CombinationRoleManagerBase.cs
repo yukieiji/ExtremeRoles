@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.API;
 
 public enum CombinationRoleCommonOption
 {
-    IsMultiAssign = 50,
+    IsMultiAssign = 80,
     AssignsNum,
     IsAssignImposter,
     ImposterSelectedRate,
@@ -59,15 +59,6 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 
     public abstract MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType);
-
-    protected sealed override void CreateKillerOption(
-        AutoParentSetOptionCategoryFactory factory,
-		IOption parent = null,
-		bool ignorePrefix=true)
-    {
-        // 複数ロールの中に殺戮者がいる可能性がため、管理ロールで殺戮者の設定はしない
-        return;
-    }
 
     protected sealed override void CreateVisionOption(
         AutoParentSetOptionCategoryFactory factory, bool ignorePrefix)

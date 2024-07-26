@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+
+#nullable enable
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -21,7 +24,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 	public AdminDeviceOption Admin { get; private set; }
     public DeviceOption Security { get; private set; }
-    public DeviceOption Vital { get; private set; }
+    public VitalDeviceOption Vital { get; private set; }
 	public SpawnOption Spawn { get; private set; }
 
 	public ConfirmExileMode ExilMode => ConfirmExileMode.Impostor;
@@ -50,9 +53,9 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 		{ (int)ShipGlobalOptionCategory.RandomMapOption  , OptionSplitter.AllEnable },
 	};
 
-	public bool TryGetInvalidOption(int categoryId, out IReadOnlySet<int> useOptionId)
+	public bool TryGetInvalidOption(int categoryId, [NotNullWhen(true)] out IReadOnlySet<int>? useOptionId)
 	{
-		bool result = this.useOption.TryGetValue(categoryId, out var options);
+		bool result = this.useOption.TryGetValue(categoryId, out var options) && options is not null;
 		useOptionId = options;
 		return result;
 	}
@@ -70,7 +73,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
 		Admin = new AdminDeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.AdminOption));
-		Vital = new DeviceOption(
+		Vital = new VitalDeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VitalOption));
 		Security = new DeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.SecurityOption));

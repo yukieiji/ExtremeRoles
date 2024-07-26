@@ -6,6 +6,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -72,8 +73,8 @@ public sealed class Madmate :
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "selfKill", Resources.Loader.CreateSpriteFromResources(
-				Path.SucideSprite));
+            "selfKill", Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.SucideSprite));
     }
 
     public bool UseAbility()
@@ -119,7 +120,7 @@ public sealed class Madmate :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		ref ExtremeGameResult.WinnerTempData winner)
+		in ExtremeGameResult.WinnerTempData winner)
     {
         switch (reason)
         {

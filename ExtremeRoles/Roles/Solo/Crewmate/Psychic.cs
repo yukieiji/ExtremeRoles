@@ -14,7 +14,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.AbilityBehavior.Interface;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 
@@ -231,10 +232,10 @@ public sealed class Psychic :
 
 	public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
+        this.CreateActivatingAbilityCountButton(
 			Translation.GetString("PsychicPsychic"),
-			Resources.Loader.CreateSpriteFromResources(
-				Path.PsychicPsychic),
+			Resources.UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.PsychicPsychic),
 			CheckAbility,
 			CleanUp,
 			ForceAbilityOff);

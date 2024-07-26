@@ -1,12 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using HarmonyLib;
 
-using ExtremeSkins.SkinManager;
-
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeSkins.Loader;
+using ExtremeSkins.Module;
 
 namespace ExtremeSkins.Patches.AmongUs;
 
@@ -17,81 +15,36 @@ public static class SplashManagerStartPatch
     {
 
         if (ExtremeRoles.Compat.BepInExUpdater.IsUpdateRquire()) { return; }
-
-        bool creatorMode = CreatorModeManager.Instance.IsEnable;
-
-        List<IEnumerator> dlTask = new List<IEnumerator>();
-
-#if WITHHAT
-        if (!ExtremeHatManager.IsLoaded)
-        {
-            if (!creatorMode && ExtremeHatManager.IsUpdate())
-            {
-                dlTask.Add(ExtremeHatManager.InstallData());
-            }
-        }
-#endif
-#if WITHNAMEPLATE
-        if (!ExtremeNamePlateManager.IsLoaded)
-        {
-            if (!creatorMode && ExtremeNamePlateManager.IsUpdate())
-            {
-                dlTask.Add(ExtremeNamePlateManager.InstallData());
-            }
-        }
-#endif
-#if WITHVISOR
-        if (!ExtremeVisorManager.IsLoaded)
-        {
-
-            if (!creatorMode && ExtremeVisorManager.IsUpdate())
-            {
-                dlTask.Add(ExtremeVisorManager.InstallData());
-            }
-        }
-#endif
-        __instance.StartCoroutine(loadSkin(dlTask));
+        __instance.StartCoroutine(loadSkin());
     }
 
-    private static IEnumerator loadSkin(List<IEnumerator> dlTask)
+    private static IEnumerator loadSkin()
     {
         SplashManagerUpdatePatch.SetSkinLoadMode(true);
 
-        foreach (IEnumerator task in dlTask)
-        {
-            yield return task;
-        }
+		if (!CreatorModeManager.Instance.IsEnable)
+		{
+			yield return ExtremeCosmicLoader.Instance.Fetch();
+		}
 
         ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ Skin Load Start!! ------------------------------");
 #if WITHHAT
-        if (!ExtremeHatManager.IsLoaded)
-        {
-            ExtremeHatManager.Load();
-        }
+		new CosmicStorage<CustomHat>(
+			ExtremeCosmicLoader.Instance.Load<CustomHat>());
 #endif
 #if WITHNAMEPLATE
-        if (!ExtremeNamePlateManager.IsLoaded)
-        {
-            ExtremeNamePlateManager.Load();
-        }
+		new CosmicStorage<CustomNamePlate>(
+			ExtremeCosmicLoader.Instance.Load<CustomNamePlate>());
 #endif
 #if WITHVISOR
-        if (!ExtremeVisorManager.IsLoaded)
-        {
-            ExtremeVisorManager.Load();
-        }
+		new CosmicStorage<CustomVisor>(
+			ExtremeCosmicLoader.Instance.Load<CustomVisor>());
 #endif
-        ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
-        SplashManagerUpdatePatch.SetSkinLoadMode(false);
-    }
+		// 使わないので消す
+		ExtremeCosmicLoader.TryDestroy();
 
-    private static bool isDlEnd(List<Task> dlTask)
-    {
-        foreach (Task task in dlTask)
-        {
-            if (!task.IsCompleted) { return false; }
-        }
-        return true;
+		ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
+        SplashManagerUpdatePatch.SetSkinLoadMode(false);
     }
 }
 [HarmonyPatch(typeof(SplashManager), nameof(SplashManager.Update))]

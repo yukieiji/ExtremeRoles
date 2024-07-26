@@ -11,11 +11,18 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
+using ExtremeRoles.Module.SystemType.Roles;
+using System.Linq;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -37,14 +44,7 @@ public sealed class Delusioner :
 
     public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.deflectDamageButton;
-        set
-        {
-            this.deflectDamageButton = value;
-        }
-    }
+    public ExtremeAbilityButton? Button { get; set; }
 
     public enum DelusionerOption
     {
@@ -54,10 +54,9 @@ public sealed class Delusioner :
         VoteCoolTimeReduceRate,
         DeflectDamagePenaltyRate,
         IsIncludeLocalPlayer,
-        IsIncludeSpawnPoint
+        IsIncludeSpawnPoint,
+		EnableCounter
     }
-
-    private ExtremeAbilityButton deflectDamageButton;
 
     private bool isAwakeRole;
     private bool isOneTimeAwake;
@@ -78,6 +77,10 @@ public sealed class Delusioner :
     private int voteCoolTimeReduceRate;
     private float deflectDamagePenaltyMod;
 
+	private AbilityState prevState;
+	private DelusionerCounterSystem? system = null;
+
+
     public Delusioner() : base(
         ExtremeRoleId.Delusioner,
         ExtremeRoleType.Crewmate,
@@ -90,9 +93,9 @@ public sealed class Delusioner :
     {
         this.CreateAbilityCountButton(
             "deflectDamage",
-			Resources.Loader.CreateSpriteFromResources(
-				Path.DelusionerDeflectDamage));
-        this.Button.SetLabelToCrewmate();
+			UnityObjectLoader.LoadSpriteFromResources(
+                ObjectPath.DelusionerDeflectDamage));
+        this.Button?.SetLabelToCrewmate();
     }
 
     public string GetFakeOptionString() => "";
@@ -155,7 +158,7 @@ public sealed class Delusioner :
         return;
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -167,69 +170,44 @@ public sealed class Delusioner :
 
     public void Update(PlayerControl rolePlayer)
     {
+		if (this.Button == null ||
+			rolePlayer == null ||
+			rolePlayer.Data == null ||
+			rolePlayer.Data.IsDead ||
+			rolePlayer.Data.Disconnected)
+		{
+			return;
+		}
+
         if (!this.isAwakeRole)
         {
-            this.Button?.SetButtonShow(false);
+            this.Button.SetButtonShow(false);
         }
+		else if (
+			this.system is not null &&
+			this.prevState == AbilityState.CoolDown &&
+			this.Button.State == AbilityState.Ready &&
+			this.Button.Behavior is ICountBehavior countBehavior &&
+			countBehavior.AbilityCount > 0)
+		{
+			this.system.ReadyCounter(countBehavior.AbilityCount);
+		}
+		this.prevState = this.Button.State;
     }
 
     public bool UseAbility()
     {
-        List<Vector2> randomPos = new List<Vector2>();
-        byte teloportTarget = this.targetPlayerId;
+		PlayerControl rolePlayer = PlayerControl.LocalPlayer;
 
-        PlayerControl localPlayer = PlayerControl.LocalPlayer;
-        var allPlayer = GameData.Instance.AllPlayers;
-
-        if (this.includeLocalPlayer)
-        {
-            randomPos.Add(localPlayer.transform.position);
-        }
-
-        if (this.includeSpawnPoint)
-        {
-			Map.AddSpawnPoint(randomPos, teloportTarget);
-        }
-
-		foreach (NetworkedPlayerInfo player in allPlayer.GetFastEnumerator())
-        {
-            if (player == null) { continue; }
-            if (!player.Disconnected &&
-                player.PlayerId != localPlayer.PlayerId &&
-                player.PlayerId != teloportTarget &&
-                !player.IsDead &&
-                player.Object != null &&
-				player.Object.moveable && // 動ける？
-				!player.Object.inVent && // ベント入ってない
-				!player.Object.inMovingPlat) // なんか乗ってる状態
-            {
-                Vector3 targetPos = player.Object.transform.position;
-
-                if (ExtremeSpawnSelectorMinigame.IsCloseWaitPos(targetPos))
-                {
-                    continue;
-                }
-
-                randomPos.Add(player.Object.transform.position);
-            }
-        }
-
-        if (randomPos.Count == 0)
-        {
-            return false;
-        }
-
-        Player.RpcUncheckSnap(teloportTarget, randomPos[
-            RandomGenerator.Instance.Next(randomPos.Count)]);
-
-        if (this.Button != null &&
-            this.deflectDamagePenaltyMod < 1.0f)
-        {
-            this.curCoolTime = this.curCoolTime * this.deflectDamagePenaltyMod;
-            this.Button.Behavior.SetCoolTime(this.curCoolTime);
-        }
-
-        return true;
+		bool result = useAbilityTo(
+			rolePlayer,
+			this.targetPlayerId,
+			this.includeLocalPlayer, new HashSet<byte>());
+		if (result && this.system is not null)
+		{
+			this.system.Remove();
+		}
+		return true;
     }
 
     public override string GetColoredRoleName(bool isTruthColor = false)
@@ -299,6 +277,43 @@ public sealed class Delusioner :
         }
     }
 
+	public override bool TryRolePlayerKilledFrom(
+		PlayerControl rolePlayer, PlayerControl fromPlayer)
+	{
+		byte rolePlayerId = rolePlayer.PlayerId;
+		if (this.system is null ||
+			!this.system.TryGetCounter(rolePlayerId, out int countNum))
+		{
+			return true;
+		}
+
+		List<PlayerControl> allPlayer = Player.GetAllPlayerInRange(
+			rolePlayer, this, this.range);
+
+		int num = allPlayer.Count;
+		if (allPlayer.Count == 0)
+		{
+			return true;
+		}
+
+		int reduceNum = Mathf.Clamp(allPlayer.Count, 0, countNum);
+		var targets = allPlayer.OrderBy(
+			x => RandomGenerator.Instance.Next())
+			.Take(reduceNum)
+			.Select(x => x.PlayerId)
+			.ToHashSet();
+		foreach (byte target in targets)
+		{
+			this.useAbilityTo(rolePlayer, target, false, targets);
+		}
+
+		this.system.ReduceCounter(rolePlayerId, reduceNum);
+
+		var newTaget = Player.GetClosestPlayerInKillRange(rolePlayer);
+
+		return newTaget != null && newTaget.PlayerId == rolePlayerId;
+	}
+
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
@@ -333,7 +348,11 @@ public sealed class Delusioner :
             DelusionerOption.IsIncludeSpawnPoint,
             false);
 
-    }
+		factory.CreateBoolOption(
+			DelusionerOption.EnableCounter,
+			false);
+
+	}
 
     protected override void RoleSpecificInit()
     {
@@ -357,6 +376,17 @@ public sealed class Delusioner :
         this.isOneTimeAwake = this.isOneTimeAwake && this.awakeVoteCount > 0;
         this.defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
             RoleAbilityCommonOption.AbilityCoolTime);
+		this.defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
+			RoleAbilityCommonOption.AbilityCoolTime);
+
+		if (loader.GetValue<DelusionerOption, bool>(
+				DelusionerOption.EnableCounter))
+		{
+			this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(
+				DelusionerCounterSystem.Type);
+		}
+		this.prevState = AbilityState.CoolDown;
+
         this.curCoolTime = this.defaultCoolTime;
         this.isAwakeRole = this.awakeVoteCount == 0;
 
@@ -367,6 +397,69 @@ public sealed class Delusioner :
             this.isOneTimeAwake = false;
         }
     }
+
+	private bool useAbilityTo(
+		in PlayerControl rolePlayer,
+		in byte teloportTarget,
+		in bool includeRolePlayer,
+		in IReadOnlySet<byte> ignores)
+	{
+		List<Vector2> randomPos = new List<Vector2>(
+			PlayerControl.AllPlayerControls.Count);
+		var allPlayer = GameData.Instance.AllPlayers;
+
+		if (includeRolePlayer)
+		{
+			randomPos.Add(rolePlayer.transform.position);
+		}
+
+		if (this.includeSpawnPoint)
+		{
+			Map.AddSpawnPoint(randomPos, teloportTarget);
+		}
+
+		foreach (var player in allPlayer.GetFastEnumerator())
+		{
+			if (player == null ||
+				player.Disconnected ||
+				player.PlayerId == rolePlayer.PlayerId ||
+				player.PlayerId == teloportTarget ||
+				player.IsDead ||
+				player.Object == null ||
+				player.Object.onLadder || // はしご中？
+				player.Object.inVent || // ベント入ってる？
+				player.Object.inMovingPlat || // なんか乗ってる状態
+				ignores.Contains(player.PlayerId))
+			{
+				continue;
+			}
+
+			Vector3 targetPos = player.Object.transform.position;
+
+			if (ExtremeSpawnSelectorMinigame.IsCloseWaitPos(targetPos))
+			{
+				continue;
+			}
+
+			randomPos.Add(targetPos);
+		}
+
+		if (randomPos.Count == 0)
+		{
+			return false;
+		}
+
+		Player.RpcUncheckSnap(teloportTarget, randomPos[
+			RandomGenerator.Instance.Next(randomPos.Count)]);
+
+		if (this.Button != null &&
+			this.deflectDamagePenaltyMod < 1.0f)
+		{
+			this.curCoolTime = this.curCoolTime * this.deflectDamagePenaltyMod;
+			this.Button.Behavior.SetCoolTime(this.curCoolTime);
+		}
+		return true;
+	}
 }
 #if DEBUG
 [HarmonyLib.HarmonyPatch(typeof(SpawnInMinigame), nameof(SpawnInMinigame.Begin))]
