@@ -361,7 +361,7 @@ public static class EndGameManagerSetUpPatch
 				WinTextInfo.Create(ExtremeRoleId.Artist, ColorPalette.ArtistChenChuWhowan),
 
 			RoleGameOverReason.TuckerShipIsExperimentStation =>
-				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.ArtistChenChuWhowan),
+				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.TuckerMerdedoie),
 
 			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
