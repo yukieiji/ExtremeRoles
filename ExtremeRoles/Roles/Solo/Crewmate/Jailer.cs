@@ -348,12 +348,12 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			Option.Range,
 			0.75f, 0.1f, 1.5f, 0.1f);
 
-		var lowBreakerOpt = factory.CreateBoolOption(
-			Option.IsMissingToDead, false);
-
 		factory.CreateBoolOption(
 			Option.IsDeadAbilityZero,
-			true, lowBreakerOpt);
+			true);
+
+		var lowBreakerOpt = factory.CreateBoolOption(
+			Option.IsMissingToDead, false);
 
 		var lowBreakerKillOpt = factory.CreateBoolOption(
 		   Option.LawbreakerCanKill,
