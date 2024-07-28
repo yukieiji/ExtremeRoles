@@ -39,8 +39,11 @@ public sealed class TuckerShadowSystem(
 			{
 				return null;
 			}
-			var pos = player.GetTruePosition();
-			pos += (Random.insideUnitCircle * rand);
+			Vector2 pos = player.transform.position;
+			if (rand != 0.0f)
+			{
+				pos += (Random.insideUnitCircle * rand);
+			}
 			return new ShadowInfo(playerId, pos);
 		}
 		public void Serialize(in MessageWriter writer)
