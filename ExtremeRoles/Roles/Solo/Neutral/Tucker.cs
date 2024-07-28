@@ -231,7 +231,7 @@ public sealed class Tucker :
 			0.5f, 0.0f, 2.5f, 0.1f);
 		factory.CreateFloatOption(
 			Option.RemoveShadowTime,
-			3.0f, 0.1f, 15.0f, 0.1f,
+			3.0f, 0.1f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
 
 		var triggerOpt = factory.CreateBoolOption(
@@ -264,7 +264,7 @@ public sealed class Tucker :
 			Option.ChimeraCanUseVent, false);
 		factory.CreateFloatOption(
 			Option.ChimeraReviveTime,
-			5.0f, 4.0f, 10.0f, 0.1f,
+			5.0f, 4.0f, 60.0f, 0.1f,
 			format: OptionUnit.Second);
 		factory.CreateFloatOption(
 			Option.ChimeraDeathKillCoolOffset,
