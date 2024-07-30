@@ -42,6 +42,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 	</ItemGroup>
+  
+  <ItemGroup>
+    <AdditionalFiles Include="../ExtremeRolesTransData.xlsx" />
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
@@ -63,6 +67,10 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExtremeRoles.Generator\ExtremeRoles.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
