@@ -54,8 +54,8 @@ public static class SafeBootMainMenuManagerPatch
 		button.Scale = new Vector3(1.0f, 1.0f, 1.0f);
 		button.name = "ExtremeRolesUpdateButton";
 
-		button.Text.text = Translation.GetString(
-			Translation.GetString("UpdateButton"));
+		button.Text.text = OldTranslation.GetString(
+			OldTranslation.GetString("UpdateButton"));
 		button.Text.fontSize =
 			button.Text.fontSizeMax =
 			button.Text.fontSizeMin = 3.0f;

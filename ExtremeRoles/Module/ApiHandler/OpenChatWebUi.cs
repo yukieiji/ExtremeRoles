@@ -261,11 +261,11 @@ public sealed class OpenChatWebUi : IRequestHandler
 		string showPage = page
 			.Replace("|SYSTEM_USER|", SystemUser)
 			.Replace("|CMD_REMOVE_OLD_CHAT|", RemoveOldChat)
-			.Replace("|ESTABLISH_CONNECT_MESSAGE|", Translation.GetString("ConectSocketMessage"))
-			.Replace("|DISCONNECT_MESSAGE|", Translation.GetString("DisconectAmongUsMessage"))
-			.Replace("|SYSTEM_MESSAGE|", Translation.GetString("SystemMessage"))
-			.Replace("|INPUT_MESSAGE|", Translation.GetString("InputMessage"))
-			.Replace("|INVALID_CHAR_IN_MESSAGE|", Translation.GetString("InvalidCharMessage"))
+			.Replace("|ESTABLISH_CONNECT_MESSAGE|", OldTranslation.GetString("ConectSocketMessage"))
+			.Replace("|DISCONNECT_MESSAGE|", OldTranslation.GetString("DisconectAmongUsMessage"))
+			.Replace("|SYSTEM_MESSAGE|", OldTranslation.GetString("SystemMessage"))
+			.Replace("|INPUT_MESSAGE|", OldTranslation.GetString("InputMessage"))
+			.Replace("|INVALID_CHAR_IN_MESSAGE|", OldTranslation.GetString("InvalidCharMessage"))
 			.Replace("|POST_URL|", $"{ApiServer.Url}{postChatPath}")
 			.Replace("|SOCKET_URL|", socketUrl.Replace("http://", ""));
 

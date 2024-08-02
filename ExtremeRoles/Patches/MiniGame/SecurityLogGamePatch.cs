@@ -14,7 +14,7 @@ public static class SecurityLogGameUpdatePatch
             SecurityHelper.IsAbilityUse()) { return true; }
 
         __instance.EntryPool.ReclaimAll();
-        __instance.SabText.text = Helper.Translation.GetString("youDonotUse");
+        __instance.SabText.text = Helper.OldTranslation.GetString("youDonotUse");
         __instance.SabText.gameObject.SetActive(true);
 
         return false;

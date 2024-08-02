@@ -11,7 +11,7 @@ using ExtremeRoles.Beta;
 
 namespace ExtremeRoles.Helper
 {
-    public static class Translation
+    public static class OldTranslation
     {
         private static Dictionary<string, Dictionary<SupportedLangs, string>> stringData =
             new Dictionary<string, Dictionary<SupportedLangs, string>>();

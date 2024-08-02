@@ -6,7 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Resources;
 
-using Trans = ExtremeRoles.Helper.Translation;
+using Trans = ExtremeRoles.Helper.OldTranslation;
 
 #nullable enable
 

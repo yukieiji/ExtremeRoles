@@ -269,7 +269,7 @@ public sealed class Resurrecter :
             this.resurrectText.gameObject.SetActive(true);
             this.resurrectTimer -= Time.deltaTime;
             this.resurrectText.text = string.Format(
-                Translation.GetString("resurrectText"),
+                OldTranslation.GetString("resurrectText"),
                 Mathf.CeilToInt(this.resurrectTimer));
 
             if (this.resurrectTimer <= 0.0f)
@@ -289,19 +289,19 @@ public sealed class Resurrecter :
         else
         {
             return Design.ColoedString(
-                Palette.White, Translation.GetString(RoleTypes.Crewmate.ToString()));
+                Palette.White, OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -317,7 +317,7 @@ public sealed class Resurrecter :
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
         }
     }
 

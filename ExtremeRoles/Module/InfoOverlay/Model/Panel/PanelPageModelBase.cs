@@ -45,7 +45,7 @@ public abstract class PanelPageModelBase : IInfoOverlayPanelModel
 
 		return (
 			$"<size=150%>・{colorRoleName}</size>\n{info.FullDec}",
-			$"<size=115%>・{colorRoleName}{Translation.GetString("roleOption")}</size>\n{roleOptionStr}"
+			$"<size=115%>・{colorRoleName}{OldTranslation.GetString("roleOption")}</size>\n{roleOptionStr}"
 		);
 	}
 

@@ -90,19 +90,19 @@ public sealed class Whisper :
 
             if (-45.0f < deg && deg <= 45.0f )
             {
-                direction = Translation.GetString("right");
+                direction = OldTranslation.GetString("right");
             }
             else if (45.0f < deg && deg <= 135.0f)
             {
-                direction = Translation.GetString("up");
+                direction = OldTranslation.GetString("up");
             }
             else if (-135.0f < deg && deg <= -45.0f)
             {
-                direction = Translation.GetString("down");
+                direction = OldTranslation.GetString("down");
             }
             else
             {
-                direction = Translation.GetString("left");
+                direction = OldTranslation.GetString("left");
             }
 
 			string showText;
@@ -112,7 +112,7 @@ public sealed class Whisper :
 				room.HasValue)
 			{
 				showText = string.Format(
-					Translation.GetString("killedTextWithRoom"),
+					OldTranslation.GetString("killedTextWithRoom"),
 					direction,
 					TranslationController.Instance.GetString(room.Value),
 					System.DateTime.Now);
@@ -120,7 +120,7 @@ public sealed class Whisper :
 			else
 			{
 				showText = string.Format(
-					Translation.GetString("killedText"),
+					OldTranslation.GetString("killedText"),
 					direction, System.DateTime.Now);
 			}
             this.textPopUp.AddText(showText);
@@ -260,13 +260,13 @@ public sealed class Whisper :
     {
         this.prevPlayerPos = rolePlayer.GetTruePosition();
         this.abilityText.color = Palette.EnabledColor;
-        this.curText = Translation.GetString("abilityRemain");
+        this.curText = OldTranslation.GetString("abilityRemain");
         this.isAbilityOn = false;
         this.timer = this.abilityOffTime;
     }
     private void abilityOn()
     {
-        this.curText = Translation.GetString("abilityOnText");
+        this.curText = OldTranslation.GetString("abilityOnText");
         this.abilityText.color = new Color(0F, 0.8F, 0F);
         this.isAbilityOn = true;
         this.timer = this.abilityOnTime;

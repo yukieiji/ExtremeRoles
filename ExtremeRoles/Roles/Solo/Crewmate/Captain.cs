@@ -268,8 +268,8 @@ public sealed class Captain :
             }
 
             meetingVoteText.text = string.Format(
-                Translation.GetString("captainVoteStatus"),
-                isNotUseSpecialVote() ? Translation.GetString("cannotDo") : Translation.GetString("canDo"),
+                OldTranslation.GetString("captainVoteStatus"),
+                isNotUseSpecialVote() ? OldTranslation.GetString("cannotDo") : OldTranslation.GetString("canDo"),
                 this.curChargedVote);
             meetingVoteText.gameObject.SetActive(true);
         }
@@ -285,19 +285,19 @@ public sealed class Captain :
         {
             return Design.ColoedString(
                 Palette.White,
-                Translation.GetString(RoleTypes.Crewmate.ToString()));
+                OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -313,7 +313,7 @@ public sealed class Captain :
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
         }
     }
 

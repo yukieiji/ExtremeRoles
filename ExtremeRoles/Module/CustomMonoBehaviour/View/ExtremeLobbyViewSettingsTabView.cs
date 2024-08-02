@@ -50,7 +50,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			allButton.Add(vanillaSettings.rolesTabButton);
 		}
 
-		string modName = Translation.GetString("MODNAME_TRANS");
+		string modName = OldTranslation.GetString("MODNAME_TRANS");
 
 		foreach (var tab in Enum.GetValues<OptionTab>())
 		{
@@ -60,7 +60,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				Destroy(tmp);
 			}
 
-			string tabName = Translation.GetString(tab.ToString());
+			string tabName = OldTranslation.GetString(tab.ToString());
 			newButton.ChangeButtonText($"{modName}\n{tabName}");
 
 			newButton.OnClick.RemoveAllListeners();

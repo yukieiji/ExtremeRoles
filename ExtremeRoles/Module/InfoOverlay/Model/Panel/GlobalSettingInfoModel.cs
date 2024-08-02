@@ -41,7 +41,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 
 		this.printOption.AppendLine();
 
-		this.printOption.AppendLine($"・{Translation.GetString("RoleSpawnCategory")}");
+		this.printOption.AppendLine($"・{OldTranslation.GetString("RoleSpawnCategory")}");
 		addRoleSpawnNumOptionHudString(container, this.printOption);
 
 		this.printOption.AppendLine();
@@ -69,10 +69,10 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 		this.printOption.AppendLine();
 
 		return (
-			$"<size=135%>{Translation.GetString("vanilaOptions")}</size>\n\n{
+			$"<size=135%>{OldTranslation.GetString("vanilaOptions")}</size>\n\n{
 				GameOptionsManager.Instance.currentGameOptions.ToHudString(
 					PlayerControl.AllPlayerControls.Count)}",
-			$"<size=135%>{Translation.GetString("gameOption")}</size>\n\n{this.printOption}"
+			$"<size=135%>{OldTranslation.GetString("gameOption")}</size>\n\n{this.printOption}"
 		);
 	}
 
@@ -132,7 +132,7 @@ public sealed class GlobalSettingInfoModel : IInfoOverlayPanelModel
 	{
 		string optionName = Design.ColoedString(
 			new UnityEngine.Color(204f / 255f, 204f / 255f, 0, 1f),
-			Translation.GetString(transKey));
+			OldTranslation.GetString(transKey));
 		int min = getSpawnOptionValue(category, minOptKey);
 		int max = getSpawnOptionValue(category, maxOptKey);
 		string optionValueStr = (min >= max) ? $"{max}" : $"{min} - {max}";

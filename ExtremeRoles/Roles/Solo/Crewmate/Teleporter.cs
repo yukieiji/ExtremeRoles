@@ -146,7 +146,7 @@ public sealed class Teleporter :
         private void updateAbilityCountText()
         {
             this.abilityCountText.text = string.Format(
-                Translation.GetString(this.buttonTextFormat),
+                OldTranslation.GetString(this.buttonTextFormat),
                 this.AbilityCount);
         }
     }
@@ -243,7 +243,7 @@ public sealed class Teleporter :
 			ExtremeRoleId.Teleporter, ObjectPath.TeleporterSecondPortal);
 
 		this.behavior = new TeleporterAbilityBehavior(
-            Translation.GetString("SetPortal"),
+            OldTranslation.GetString("SetPortal"),
             this.firstPortalImg,
             IsAbilityUse, UseAbility);
 

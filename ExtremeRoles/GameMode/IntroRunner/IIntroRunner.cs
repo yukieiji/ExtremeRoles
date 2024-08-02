@@ -34,7 +34,7 @@ public interface IIntroRunner
         GameObject roleAssignText = new GameObject("roleAssignText");
         var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
         text.SetFontSize(3.0f);
-        text.SetMessage(Translation.GetString("roleAssignNow"));
+        text.SetMessage(OldTranslation.GetString("roleAssignNow"));
 
         roleAssignText.SetActive(true);
 

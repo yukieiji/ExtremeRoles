@@ -32,7 +32,7 @@ public sealed class Neet : SingleRoleBase
     {
         if (this.IsNeutral())
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}NeutralFullDescription");
         }
 

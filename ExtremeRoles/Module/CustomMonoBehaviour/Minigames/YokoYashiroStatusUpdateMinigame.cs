@@ -124,8 +124,8 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 
 		this.builder.Clear();
 		this.builder.Append(
-			Translation.GetString("yokoYashiroStatusText"));
-		string statusText = Translation.GetString(this.Info.Status.ToString());
+			OldTranslation.GetString("yokoYashiroStatusText"));
+		string statusText = OldTranslation.GetString(this.Info.Status.ToString());
 
 		if (this.Info.Status is YokoYashiroSystem.YashiroInfo.StatusType.YashiroDeactive ||
 			this.Info.Timer == float.MaxValue)
@@ -139,12 +139,12 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 
 			this.builder.AppendLine();
 			this.builder.Append(
-				Translation.GetString("yokoYashiroNextStatusText"));
+				OldTranslation.GetString("yokoYashiroNextStatusText"));
 
 			this.statusText.text = string.Format(
 				this.builder.ToString(),
 				statusText,
-				Translation.GetString(nextStatus.ToString()),
+				OldTranslation.GetString(nextStatus.ToString()),
 				Mathf.Ceil(this.Info.Timer));
 
 			if (this.Info.Timer < 0.0f)
@@ -179,8 +179,8 @@ public sealed class YokoYashiroStatusUpdateMinigame(IntPtr ptr) : Minigame(ptr)
 	{
 		if (this.Info is null) { yield break; }
 
-		string statusText = Translation.GetString(this.Info.Status.ToString());
-		string closeText = Translation.GetString("yokoYashiroCloseText");
+		string statusText = OldTranslation.GetString(this.Info.Status.ToString());
+		string closeText = OldTranslation.GetString("yokoYashiroCloseText");
 
 		var text = this.transform.Find("CloseText").GetComponent<TextMeshPro>();
 

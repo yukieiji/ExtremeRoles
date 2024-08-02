@@ -20,7 +20,7 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Assassin = ExtremeRoles.Roles.Combination.Assassin;
-using Translation = ExtremeRoles.Helper.Translation;
+using OldTranslation = ExtremeRoles.Helper.OldTranslation;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
 #nullable enable
@@ -120,7 +120,7 @@ public static class ExileControllerBeginePatch
 
         string transKey = state.IsAssassinateMarin ?
             "assassinateMarinSucsess" : "assassinateMarinFail";
-        string printStr = $"{player.PlayerName}{Translation.GetString(transKey)}";
+        string printStr = $"{player.PlayerName}{OldTranslation.GetString(transKey)}";
 
         if (instance.Player)
         {
@@ -181,13 +181,13 @@ public static class ExileControllerBeginePatch
             switch (mode)
             {
                 case ConfirmExileMode.AllTeam:
-                    string team = Translation.GetString(exiledPlayerRole.Team.ToString());
+                    string team = OldTranslation.GetString(exiledPlayerRole.Team.ToString());
                     completeString = option.IsConfirmRole ?
                         string.Format(
-							Translation.GetString("ExileTextAllTeamWithRole"),
+							OldTranslation.GetString("ExileTextAllTeamWithRole"),
                             playerName, team, exiledPlayerRole.GetColoredRoleName()) :
                         string.Format(
-							Translation.GetString("ExileTextAllTeam"),
+							OldTranslation.GetString("ExileTextAllTeam"),
                             playerName, team);
                     break;
                 default:
@@ -233,17 +233,17 @@ public static class ExileControllerBeginePatch
                 [ aliveImpNum ]),
 
             ConfirmExileMode.Crewmate => string.Format(
-				Translation.GetString(
+				OldTranslation.GetString(
                     aliveCrewNum == 1 ? "CrewmateRemainS" : "CrewmateRemainP"),
                 aliveCrewNum),
 
             ConfirmExileMode.Neutral => string.Format(
-				Translation.GetString(
+				OldTranslation.GetString(
                     aliveNeutNum == 1 ?  "NeutralRemainS" : "NeutralRemainP"),
                 aliveNeutNum),
 
             ConfirmExileMode.AllTeam => string.Format(
-				Translation.GetString("AllTeamAlive"),
+				OldTranslation.GetString("AllTeamAlive"),
                 aliveCrewNum, aliveImpNum, aliveNeutNum),
 
             _ => string.Empty
@@ -338,12 +338,12 @@ public static class ExileControllerBeginePatch
             return
                 option.IsConfirmRole ?
                 string.Format(
-                    Translation.GetString($"{transKey}WithRole"),
+                    OldTranslation.GetString($"{transKey}WithRole"),
                     playerName,
                     exiledPlayerRole.GetColoredRoleName()
                 ) :
                 string.Format(
-                    Translation.GetString(transKey),
+                    OldTranslation.GetString(transKey),
                     playerName
                 );
         }

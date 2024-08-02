@@ -110,7 +110,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			get
 			{
 				string text = string.Format(
-					Translation.GetString("TeroristBombTask"),
+					OldTranslation.GetString("TeroristBombTask"),
 					Mathf.CeilToInt(this.system.ExplosionTimer));
 
 				return ExtremePlayerTask.IBehavior.FlashArrowAndTextWithVanillaSabotage(

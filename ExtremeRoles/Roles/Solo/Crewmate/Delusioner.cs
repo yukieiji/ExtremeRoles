@@ -219,19 +219,19 @@ public sealed class Delusioner :
         else
         {
             return Design.ColoedString(
-                Palette.White, Translation.GetString(RoleTypes.Crewmate.ToString()));
+                Palette.White, OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -247,7 +247,7 @@ public sealed class Delusioner :
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
         }
     }
 

@@ -41,7 +41,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			Translation.GetString("CrewshroomSet"),
+			OldTranslation.GetString("CrewshroomSet"),
 			Resources.UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.CrewshroomSet));
 	}
@@ -49,7 +49,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	public override string GetIntroDescription()
 		=> Map.Id switch
 		{
-			5 => Translation.GetString($"{this.Id}FungleIntroDescription"),
+			5 => OldTranslation.GetString($"{this.Id}FungleIntroDescription"),
 			_ => base.GetIntroDescription()
 		};
 

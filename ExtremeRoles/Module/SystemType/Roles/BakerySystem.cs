@@ -85,20 +85,20 @@ public sealed class BakerySystem : IDirtableSystemType
 	{
 		if (!this.isChangeCooking)
 		{
-			return Translation.GetString("goodBread");
+			return OldTranslation.GetString("goodBread");
 		}
 
 		if (this.timer < this.goodTime)
 		{
-			return Translation.GetString("rawBread");
+			return OldTranslation.GetString("rawBread");
 		}
 		else if (this.goodTime <= this.timer && this.timer < this.badTime)
 		{
-			return Translation.GetString("goodBread");
+			return OldTranslation.GetString("goodBread");
 		}
 		else
 		{
-			return Translation.GetString("badBread");
+			return OldTranslation.GetString("badBread");
 		}
 	}
 

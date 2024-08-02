@@ -183,19 +183,19 @@ public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake
         else
         {
             return Design.ColoedString(
-                Palette.ImpostorRed, Translation.GetString(RoleTypes.Impostor.ToString()));
+                Palette.ImpostorRed, OldTranslation.GetString(RoleTypes.Impostor.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{RoleTypes.Impostor}FullDescription");
         }
     }

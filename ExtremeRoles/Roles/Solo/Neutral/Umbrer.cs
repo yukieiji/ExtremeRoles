@@ -158,7 +158,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         var featVirusMode = new GraphicAndActiveTimeMode<UmbrerMode>(
 			UmbrerMode.Feat,
 				new ButtonGraphic(
-					Translation.GetString("featVirus"),
+					OldTranslation.GetString("featVirus"),
 					Resources.UnityObjectLoader.LoadSpriteFromResources(
 						ObjectPath.UmbrerFeatVirus)),
 				cate.GetValue<RoleAbilityCommonOption, float >(
@@ -175,7 +175,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 			new(
 				UmbrerMode.Upgrage,
 				new ButtonGraphic(
-					Translation.GetString("upgradeVirus"),
+					OldTranslation.GetString("upgradeVirus"),
 					Resources.UnityObjectLoader.LoadSpriteFromResources(
 					ObjectPath.UmbrerUpgradeVirus)),
 				cate.GetValue<UmbrerOption, float>(

@@ -81,7 +81,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		this.button.Layer = menu.gameObject.layer;
 		this.button.Scale = new Vector3(0.625f, 0.3f, 1.0f);
 		this.button.gameObject.transform.localPosition = new Vector3(4.0f, 0.575f);
-		this.button.Text.text = Translation.GetString("RoleAssignFilter");
+		this.button.Text.text = OldTranslation.GetString("RoleAssignFilter");
 		this.button.Text.fontSize =
 			this.button.Text.fontSizeMax =
 			this.button.Text.fontSizeMin = 1.9f;

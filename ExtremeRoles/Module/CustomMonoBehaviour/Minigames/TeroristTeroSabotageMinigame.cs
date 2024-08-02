@@ -66,7 +66,7 @@ public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
 		var trans = base.transform;
 
 		this.progressText = trans.Find("ProgressText").GetComponent<TextMeshPro>();
-		this.progressText.text = Translation.GetString("TeroristBombMinigameProgress");
+		this.progressText.text = OldTranslation.GetString("TeroristBombMinigameProgress");
 
 		this.logText = trans.Find("LogText").GetComponent<TextMeshPro>();
 
@@ -75,7 +75,7 @@ public sealed class TeroristTeroSabotageMinigame(IntPtr ptr) : Minigame(ptr)
 
 		this.startButton = trans.Find("SimpleButton").GetComponent<SimpleButton>();
 		this.startButton.Awake();
-		this.startButton.Text.text = Translation.GetString("TeroristBombMinigameStart");
+		this.startButton.Text.text = OldTranslation.GetString("TeroristBombMinigameStart");
 
 		this.logText.text = "";
 		this.logTextArray = allLog;

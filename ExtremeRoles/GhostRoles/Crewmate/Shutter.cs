@@ -107,9 +107,9 @@ public sealed class Shutter : GhostRoleBase
         {
             StringBuilder photoInfoBuilder = new StringBuilder();
             photoInfoBuilder.AppendLine(
-                $"{Translation.GetString("takePhotoTime")} : {this.takeTime}");
+                $"{OldTranslation.GetString("takePhotoTime")} : {this.takeTime}");
             photoInfoBuilder.AppendLine(
-                $"{Translation.GetString("photoName")} : {this.photoName.ToString()}");
+                $"{OldTranslation.GetString("photoName")} : {this.photoName.ToString()}");
             photoInfoBuilder.AppendLine("");
             if (this.player.Count <= 0)
             {
@@ -121,7 +121,7 @@ public sealed class Shutter : GhostRoleBase
                 {
                     string addInfo =
 						isSmokey ?
-                        Translation.GetString("smokingThisName") :
+                        OldTranslation.GetString("smokingThisName") :
                         playerInfo.PlayerName;
 
                     photoInfoBuilder.AppendLine(addInfo);

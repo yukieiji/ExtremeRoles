@@ -467,19 +467,19 @@ public sealed class Hypnotist :
         else
         {
             return Design.ColoedString(
-                Palette.ImpostorRed, Translation.GetString(RoleTypes.Impostor.ToString()));
+                Palette.ImpostorRed, OldTranslation.GetString(RoleTypes.Impostor.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{RoleTypes.Impostor}FullDescription");
         }
     }
@@ -989,10 +989,10 @@ public sealed class Doll :
         }
         if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
-            string consoleName = Translation.GetString(consoleType.ToString());
+            string consoleName = OldTranslation.GetString(consoleType.ToString());
 
             showText(string.Format(
-                Translation.GetString("FeatAccess"),
+                OldTranslation.GetString("FeatAccess"),
                 consoleName));
             this.accessModule =
                 this.accessModule == string.Empty ?
@@ -1025,10 +1025,10 @@ public sealed class Doll :
 
         if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
-            string consoleName = Translation.GetString(consoleType.ToString());
+            string consoleName = OldTranslation.GetString(consoleType.ToString());
 
             showText(string.Format(
-                Translation.GetString("unlockCraking"),
+                OldTranslation.GetString("unlockCraking"),
                 consoleName));
             this.crakingModule =
                 this.crakingModule == string.Empty ?
@@ -1233,8 +1233,8 @@ public sealed class Doll :
         {
             showText(
                 this.CanKill ?
-                Translation.GetString("unlockKill") :
-                Translation.GetString("lockKill"));
+                OldTranslation.GetString("unlockKill") :
+                OldTranslation.GetString("lockKill"));
         }
 
         this.prevKillState = this.CanKill;

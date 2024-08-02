@@ -19,7 +19,7 @@ public sealed class PresetOption : IValueOption<int>
 
 	public bool IsActiveAndEnable => true;
 
-	public string Title => Translation.GetString(Info.Name);
+	public string Title => OldTranslation.GetString(Info.Name);
 
 	public string ValueString
 	{
@@ -27,7 +27,7 @@ public sealed class PresetOption : IValueOption<int>
 		{
 			int value = optionRange.Value;
 			string format = this.Info.Format;
-			return string.Format(Translation.GetString(format), value);
+			return string.Format(OldTranslation.GetString(format), value);
 		}
 	}
 

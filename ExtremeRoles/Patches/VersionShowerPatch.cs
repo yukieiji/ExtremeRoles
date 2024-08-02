@@ -26,7 +26,7 @@ public static class MainMenuTextInfoPatch
         modTitle.transform.localScale = new Vector3(1.075f, 1.075f, 1.0f);
         modTitle.SetText(
             string.Concat(
-                Helper.Translation.GetString("version"),
+                Helper.OldTranslation.GetString("version"),
                 Assembly.GetExecutingAssembly().GetName().Version));
         modTitle.alignment = TMPro.TextAlignmentOptions.Center;
 		modTitle.fontSize = modTitle.fontSizeMax = modTitle.fontSizeMin = 4.0f;
@@ -36,7 +36,7 @@ public static class MainMenuTextInfoPatch
             modTitle, modTitle.transform);
         credentials.SetText(
             string.Concat(
-                Helper.Translation.GetString("developer"),"yukieiji"));
+                Helper.OldTranslation.GetString("developer"),"yukieiji"));
         credentials.alignment = TMPro.TextAlignmentOptions.Center;
 		credentials.fontSize = credentials.fontSizeMax = credentials.fontSizeMin = 3.5f;
 		credentials.transform.localPosition = new Vector3(0, -0.5f, 0);
@@ -50,8 +50,8 @@ public static class MainMenuTextInfoPatch
 			translator.gameObject.SetActive(true);
             translator.SetText(
                 string.Concat(
-                    Helper.Translation.GetString("langTranslate"),
-                    Helper.Translation.GetString("translatorMember")));
+                    Helper.OldTranslation.GetString("langTranslate"),
+                    Helper.OldTranslation.GetString("translatorMember")));
             translator.alignment = TMPro.TextAlignmentOptions.Center;
 			translator.fontSize = translator.fontSizeMax = translator.fontSizeMin = 3.5f;
 

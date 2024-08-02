@@ -227,7 +227,7 @@ public class ExtremeAbilityButton
 				this.Button.isCoolingDown = true;
 				this.Button.SetCooldownFill(1 - chargingBehavior.ChargeGage);
 				cooldownTimerText.text = string.Format(
-					Translation.GetString(OptionUnit.Percentage.ToString()),
+					OldTranslation.GetString(OptionUnit.Percentage.ToString()),
 					Mathf.CeilToInt(chargingBehavior.ChargeGage * 100));
 				cooldownTimerText.enableWordWrapping = false;
 				cooldownTimerText.gameObject.SetActive(true);

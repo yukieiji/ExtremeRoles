@@ -148,7 +148,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
     public override string GetIntroDescription()
     {
 
-        string baseIntro = Translation.GetString(
+        string baseIntro = OldTranslation.GetString(
             $"{this.Id}IntroDescription");
 
         if (this.AnotherRole == null)
@@ -159,7 +159,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         string concat = Design.ColoedString(
             Palette.White,
             string.Concat(
-                "\n ", Translation.GetString("introAnd")));
+                "\n ", OldTranslation.GetString("introAnd")));
 
 
         return string.Concat(baseIntro, concat, Design.ColoedString(
@@ -176,7 +176,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 
         string baseRole = Design.ColoedString(
             this.NameColor,
-            Translation.GetString(this.RoleName));
+            OldTranslation.GetString(this.RoleName));
 
         string anotherRole = this.AnotherRole.GetColoredRoleName(isTruthColor);
 

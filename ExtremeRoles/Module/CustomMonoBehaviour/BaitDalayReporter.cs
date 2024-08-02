@@ -103,7 +103,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 			this.text.enableWordWrapping = false;
 		}
 
-		string placeholder = Translation.GetString("forceReportUntil");
+		string placeholder = OldTranslation.GetString("forceReportUntil");
 
 		do
 		{

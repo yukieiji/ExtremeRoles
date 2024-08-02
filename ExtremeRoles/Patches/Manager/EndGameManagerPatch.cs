@@ -216,7 +216,7 @@ public static class EndGameManagerSetUpPatch
                 ref winDetailTextBuilder,
                 textAddedRole.Count == 0 && textAddedGhostRole.Count == 0);
 
-			winDetailTextBuilder.Append(Translation.GetString(
+			winDetailTextBuilder.Append(OldTranslation.GetString(
                 ghostRole.GetColoredRoleName()));
             textAddedGhostRole.Add(ghostRole.Id);
         }
@@ -241,7 +241,7 @@ public static class EndGameManagerSetUpPatch
 
                         AddPrefixs(ref winDetailTextBuilder, textAddedRole.Count == 0);
 
-						winDetailTextBuilder.Append(Translation.GetString(
+						winDetailTextBuilder.Append(OldTranslation.GetString(
                             role.GetColoredRoleName(true)));
                         textAddedRole.Add(id);
                     }
@@ -267,12 +267,12 @@ public static class EndGameManagerSetUpPatch
                 ref winDetailTextBuilder,
                 textAddedRole.Count == 0);
 
-			winDetailTextBuilder.Append(Translation.GetString(
+			winDetailTextBuilder.Append(OldTranslation.GetString(
                 role.GetColoredRoleName(true)));
             textAddedRole.Add(role.Id);
         }
 
-		winDetailTextBuilder.Append(Translation.GetString("win"));
+		winDetailTextBuilder.Append(OldTranslation.GetString("win"));
 
 		textRenderer.text = winDetailTextBuilder.ToString();
 	}
@@ -280,7 +280,7 @@ public static class EndGameManagerSetUpPatch
     private static void AddPrefixs(ref StringBuilder baseStrings, in bool condition)
     {
         baseStrings.Append(
-            condition ? Translation.GetString("andFirst") : Translation.GetString("and"));
+            condition ? OldTranslation.GetString("andFirst") : OldTranslation.GetString("and"));
     }
 
     private static WinTextInfo createWinTextInfo(in RoleGameOverReason reason)
@@ -372,7 +372,7 @@ public static class EndGameManagerSetUpPatch
             in System.Enum textEnum, Color color,
 			in bool isChangeBk = true)
 			=> new WinTextInfo(
-				Translation.GetString(textEnum.ToString()),
+				OldTranslation.GetString(textEnum.ToString()),
 				color, isChangeBk);
 	}
 }

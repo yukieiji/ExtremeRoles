@@ -161,7 +161,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
     {
         this.Button = new ExtremeAbilityButton(
             new SandWormAbilityBehavior(
-                Translation.GetString("assault"),
+                OldTranslation.GetString("assault"),
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite,
                 IsAbilityUse, UseAbility),
             new AssaultButtonAutoActivator(),

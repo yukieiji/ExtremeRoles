@@ -29,7 +29,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 			return (
 				$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}",
-				$"<size=115%>・{colorRoleName}{Translation.GetString("roleOption")}</size>\n{roleOptionString}"
+				$"<size=115%>・{colorRoleName}{OldTranslation.GetString("roleOption")}</size>\n{roleOptionString}"
 			);
 		}
 	}
@@ -39,7 +39,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 		(string colorRoleName, string roleFullDesc, string roleOptionString) = getMultiRoleInfoAndOption(
 			multiAssignRole);
-		string settingTransStr = Translation.GetString("roleOption");
+		string settingTransStr = OldTranslation.GetString("roleOption");
 
 		if (multiAssignRole.AnotherRole is not null)
 		{
@@ -59,7 +59,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 		{
 			return (
 				$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}",
-				$"<size=115%>・{colorRoleName}{Translation.GetString("roleOption")}</size>\n{roleOptionString}"
+				$"<size=115%>・{colorRoleName}{OldTranslation.GetString("roleOption")}</size>\n{roleOptionString}"
 			);
 		}
 	}
@@ -100,7 +100,7 @@ public sealed class LocalRoleInfoModel : IInfoOverlayPanelModel
 
 		string colorRoleName = Design.ColoedString(
 			role.GetNameColor(),
-			Translation.GetString(role.RoleName));
+			OldTranslation.GetString(role.RoleName));
 		string roleFullDesc = role.GetFullDescription();
 
 		replaceAwakeRoleOptionString(ref roleOptionString, role);

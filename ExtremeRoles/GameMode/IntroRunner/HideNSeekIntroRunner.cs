@@ -80,7 +80,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
         roleText.gameObject.SetActive(true);
         roleText.color = role.GetNameColor();
         roleText.text =
-            $"{Translation.GetString("youAreRoleIntro")}\n{role.GetColoredRoleName()}\n{role.GetIntroDescription()}";
+            $"{OldTranslation.GetString("youAreRoleIntro")}\n{role.GetColoredRoleName()}\n{role.GetIntroDescription()}";
         roleText.gameObject.transform.localPosition =
             new Vector3(-2.5f, -5.15f, 0.0f);
 

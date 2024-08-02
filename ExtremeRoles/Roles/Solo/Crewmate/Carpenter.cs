@@ -168,7 +168,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         private void updateAbilityCountText()
         {
             this.abilityCountText.text = string.Format(
-                Translation.GetString("carpenterScrewNum"),
+                OldTranslation.GetString("carpenterScrewNum"),
                 this.AbilityCount,
                 this.isVentRemoveMode ? this.ventRemoveScrewNum : this.cameraSetScrewNum);
         }
@@ -512,7 +512,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
                 ventMode: new(
 					mode: CarpenterAbilityMode.RemoveVent,
 					graphic: new (
-						Translation.GetString("ventSeal"),
+						OldTranslation.GetString("ventSeal"),
 						Resources.UnityObjectLoader.LoadSpriteFromResources(
 							ObjectPath.CarpenterVentSeal)),
 					time: loader.GetValue<CarpenterOption, float>(
@@ -521,7 +521,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
                 cameraMode: new(
 					mode: CarpenterAbilityMode.SetCamera,
 					graphic: new(
-						Translation.GetString("cameraSet"),
+						OldTranslation.GetString("cameraSet"),
 						Resources.UnityObjectLoader.LoadSpriteFromResources(
 							ObjectPath.CarpenterSetCamera)),
 					time: loader.GetValue<CarpenterOption, float>(
@@ -668,19 +668,19 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         else
         {
             return Design.ColoedString(
-                Palette.White, Translation.GetString(RoleTypes.Crewmate.ToString()));
+                Palette.White, OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -696,7 +696,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
         }
     }
 

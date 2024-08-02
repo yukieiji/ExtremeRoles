@@ -30,16 +30,16 @@ public static class IntroCutscenceHelper
         if (role.IsNeutral())
         {
             __instance.BackgroundBar.material.color = ColorPalette.NeutralColor;
-            __instance.TeamTitle.text = Translation.GetString("Neutral");
+            __instance.TeamTitle.text = OldTranslation.GetString("Neutral");
             __instance.TeamTitle.color = ColorPalette.NeutralColor;
-            __instance.ImpostorText.text = Translation.GetString("neutralIntro");
+            __instance.ImpostorText.text = OldTranslation.GetString("neutralIntro");
         }
         else if (role.Id == ExtremeRoleId.Xion)
         {
             __instance.BackgroundBar.material.color = ColorPalette.XionBlue;
-            __instance.TeamTitle.text = Translation.GetString("yourHost");
+            __instance.TeamTitle.text = OldTranslation.GetString("yourHost");
             __instance.TeamTitle.color = ColorPalette.XionBlue;
-            __instance.ImpostorText.text = Translation.GetString("youAreNewRuleEditor");
+            __instance.ImpostorText.text = OldTranslation.GetString("youAreNewRuleEditor");
         }
     }
 
@@ -162,12 +162,12 @@ public static class IntroCutsceneSetUpRoleTextPatch
             if (role.IsImpostor())
             {
                 __instance.RoleBlurbText.text +=
-                    $"\n{Translation.GetString("impostorIntroText")}";
+                    $"\n{OldTranslation.GetString("impostorIntroText")}";
             }
             else if (role.IsCrewmate() && role.HasTask())
             {
                 __instance.RoleBlurbText.text +=
-                    $"\n{Translation.GetString("crewIntroText")}";
+                    $"\n{OldTranslation.GetString("crewIntroText")}";
             }
         }
 

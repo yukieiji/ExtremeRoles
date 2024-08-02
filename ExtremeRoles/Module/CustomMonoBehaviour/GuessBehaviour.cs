@@ -60,10 +60,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 					Design.ColoedString(
 						vanilaCrew.Contains(castedId) ?
 						Palette.White : Palette.ImpostorRed,
-						Translation.GetString(castedId.ToString())) :
+						OldTranslation.GetString(castedId.ToString())) :
 					Design.ColoedString(
 						getRoleColor(id),
-						Translation.GetString(id.ToString()));
+						OldTranslation.GetString(id.ToString()));
 				return roleName;
 			}
 

@@ -167,20 +167,20 @@ public sealed partial class Xion
     {
         if (!System.Enum.TryParse(roleName, out ExtremeRoleId roleId))
         {
-            addChat(Translation.GetString("invalidRoleName"));
+            addChat(OldTranslation.GetString("invalidRoleName"));
             return;
         }
 
         if (!System.Enum.IsDefined(typeof(ExtremeRoleId), roleId))
         {
-            addChat(Translation.GetString("invalidRoleName"));
+            addChat(OldTranslation.GetString("invalidRoleName"));
             return;
         }
         int intedRoleId = (int)roleId;
 
         if (!ExtremeRoleManager.NormalRole.ContainsKey(intedRoleId))
         {
-            addChat(Translation.GetString("invalidRoleName"));
+            addChat(OldTranslation.GetString("invalidRoleName"));
             return;
         }
 
@@ -192,18 +192,18 @@ public sealed partial class Xion
 
         addChat(
             string.Format(
-                Translation.GetString("setRole"),
-                Translation.GetString(
+                OldTranslation.GetString("setRole"),
+                OldTranslation.GetString(
                     Player.GetPlayerControlById(
                         targetPlayerId).Data.DefaultOutfit.PlayerName),
-                Translation.GetString(roleId.ToString())));
+                OldTranslation.GetString(roleId.ToString())));
     }
 
     public static void RpcHostToXion()
     {
         if (xionBuffer == null)
         {
-            addChat(Translation.GetString("XionNow"));
+            addChat(OldTranslation.GetString("XionNow"));
             return;
         }
 
@@ -212,7 +212,7 @@ public sealed partial class Xion
         finishWrite(createWriter(XionRpcOpsCode.BackXion));
         hostToXion(xionPlayerId);
 
-        addChat(Translation.GetString("RevartXion"));
+        addChat(OldTranslation.GetString("RevartXion"));
     }
 
 	public static void RpcTeleportTo(Vector2 pos)

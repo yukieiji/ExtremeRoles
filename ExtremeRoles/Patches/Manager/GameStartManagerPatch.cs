@@ -178,7 +178,7 @@ public static class GameStartManagerPatch
                 }
 
                 __instance.GameStartText.text = string.Format(
-                    Translation.GetString("errorDiffHostVersion"),
+                    OldTranslation.GetString("errorDiffHostVersion"),
                     Mathf.Round(kickTime - kickingTimer));
                 __instance.GameStartText.transform.localPosition =
                     __instance.StartButton.transform.localPosition + Vector3.up * 2;
@@ -198,7 +198,7 @@ public static class GameStartManagerPatch
         bool blockStart = false;
         string message = string.Format(
             errorColorPlaceHolder,
-            Translation.GetString("errorCannotGameStart"));
+            OldTranslation.GetString("errorCannotGameStart"));
         foreach (InnerNet.ClientData client in
             AmongUsClient.Instance.allClients.GetFastEnumerator())
         {
@@ -214,7 +214,7 @@ public static class GameStartManagerPatch
                 blockStart = true;
                 message += string.Format(
                     errorColorPlaceHolder,
-                    $"{client.Character.Data.PlayerName}:  {Translation.GetString("errorNotInstalled")}");
+                    $"{client.Character.Data.PlayerName}:  {OldTranslation.GetString("errorNotInstalled")}");
             }
             else
             {
@@ -223,14 +223,14 @@ public static class GameStartManagerPatch
                 {
                     message += string.Format(
                         errorColorPlaceHolder,
-                        $"{client.Character.Data.PlayerName}:  {Translation.GetString("errorOldInstalled")}");
+                        $"{client.Character.Data.PlayerName}:  {OldTranslation.GetString("errorOldInstalled")}");
                     blockStart = true;
                 }
                 else if (diff < 0)
                 {
                     message += string.Format(
                         errorColorPlaceHolder,
-                        $"{client.Character.Data.PlayerName}:  {Translation.GetString("errorNewInstalled")}");
+                        $"{client.Character.Data.PlayerName}:  {OldTranslation.GetString("errorNewInstalled")}");
                     blockStart = true;
                 }
             }

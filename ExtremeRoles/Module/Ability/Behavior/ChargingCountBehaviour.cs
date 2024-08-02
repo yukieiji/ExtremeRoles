@@ -156,7 +156,7 @@ public sealed class ChargingCountBehaviour : BehaviorBase, IChargingBehavior, IC
 		}
 
 		this.abilityCountText.text = string.Format(
-			Translation.GetString(this.buttonTextFormat),
+			OldTranslation.GetString(this.buttonTextFormat),
 			this.AbilityCount);
 	}
 	private void reduceAbilityCount()

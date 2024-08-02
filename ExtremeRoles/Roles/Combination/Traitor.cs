@@ -366,14 +366,14 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     {
         return string.Format(
             base.GetIntroDescription(),
-            Translation.GetString(this.crewRoleStr));
+            OldTranslation.GetString(this.crewRoleStr));
     }
 
     public override string GetFullDescription()
     {
         return string.Format(
             base.GetFullDescription(),
-            Translation.GetString(this.crewRoleStr));
+            OldTranslation.GetString(this.crewRoleStr));
     }
 
     protected override void CreateSpecificOption(

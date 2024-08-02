@@ -66,22 +66,22 @@ public sealed class Lover : MultiAssignRoleBase
 
         if (this.IsImpostor() && !this.CanHasAnotherRole)
         {
-            baseDesc = Translation.GetString($"{this.Id}ImposterFullDescription");
+            baseDesc = OldTranslation.GetString($"{this.Id}ImposterFullDescription");
         }
         else if (this.CanKill && !this.CanHasAnotherRole)
         {
-            baseDesc = Translation.GetString($"{this.Id}NeutralKillerFullDescription");
+            baseDesc = OldTranslation.GetString($"{this.Id}NeutralKillerFullDescription");
         }
         else if (this.IsNeutral() && !this.CanHasAnotherRole)
         {
-            baseDesc = Translation.GetString($"{this.Id}NeutralFullDescription");
+            baseDesc = OldTranslation.GetString($"{this.Id}NeutralFullDescription");
         }
         else
         {
             baseDesc = base.GetFullDescription();
         }
 
-        baseDesc = $"{baseDesc}\n{Translation.GetString("curLover")}:";
+        baseDesc = $"{baseDesc}\n{OldTranslation.GetString("curLover")}:";
 
         foreach (var item in ExtremeRoleManager.GameRole)
         {
@@ -117,7 +117,7 @@ public sealed class Lover : MultiAssignRoleBase
 
         string killerText = Design.ColoedString(
             this.NameColor,
-            $"{this.GetColoredRoleName()}: {Translation.GetString($"{this.Id}KillerShortDescription")}");
+            $"{this.GetColoredRoleName()}: {OldTranslation.GetString($"{this.Id}KillerShortDescription")}");
 
         if (this.AnotherRole == null)
         {
@@ -155,11 +155,11 @@ public sealed class Lover : MultiAssignRoleBase
 
                 if (i == 0)
                 {
-                    baseString += Translation.GetString("andFirst");
+                    baseString += OldTranslation.GetString("andFirst");
                 }
                 else
                 {
-                    baseString += Translation.GetString("and");
+                    baseString += OldTranslation.GetString("and");
                 }
                 baseString += Player.GetPlayerControlById(
                     lover[i]).Data.PlayerName;
@@ -169,7 +169,7 @@ public sealed class Lover : MultiAssignRoleBase
 
         return string.Concat(
             baseString,
-            Translation.GetString("LoverIntoPlus"),
+            OldTranslation.GetString("LoverIntoPlus"),
             Design.ColoedString(
                 ColorPalette.LoverPink, " ♥"));
     }

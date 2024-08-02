@@ -365,31 +365,31 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         {
             case SearchCond.FindKillTime:
                 showStr = string.Format(
-                    Translation.GetString(SearchCond.FindKillTime.ToString()),
+                    OldTranslation.GetString(SearchCond.FindKillTime.ToString()),
                     info.KilledTime);
                 break;
             case SearchCond.FindReportTime:
                 showStr = string.Format(
-                    Translation.GetString(SearchCond.FindReportTime.ToString()),
+                    OldTranslation.GetString(SearchCond.FindReportTime.ToString()),
                     Mathf.CeilToInt(info.ReportTime));
                 break;
             case SearchCond.FindTeam:
                 showStr = string.Format(
-                    Translation.GetString(SearchCond.FindTeam.ToString()),
-                    Translation.GetString(info.KillerTeam.ToString()));
+                    OldTranslation.GetString(SearchCond.FindTeam.ToString()),
+                    OldTranslation.GetString(info.KillerTeam.ToString()));
                 break;
             case SearchCond.FindRole:
 
                 var role = info.KillerRole;
-                string roleStr = Translation.GetString(info.KillerRole.ToString());
+                string roleStr = OldTranslation.GetString(info.KillerRole.ToString());
 
                 if (role == ExtremeRoleId.VanillaRole)
                 {
-                    roleStr = Translation.GetString(info.KillerVanillaRole.ToString());
+                    roleStr = OldTranslation.GetString(info.KillerVanillaRole.ToString());
                 }
 
                 showStr = string.Format(
-                    Translation.GetString(SearchCond.FindRole.ToString()),
+                    OldTranslation.GetString(SearchCond.FindRole.ToString()),
                     roleStr);
                 break;
             default:
@@ -409,7 +409,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
                 Camera.main.transform, false);
             this.searchText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
             this.searchText.enableWordWrapping = false;
-            this.searchStrBase = Translation.GetString("searchStrBase");
+            this.searchStrBase = OldTranslation.GetString("searchStrBase");
         }
 
         this.searchText.gameObject.SetActive(true);
@@ -478,7 +478,7 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
                     FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
                         PlayerControl.LocalPlayer,
                         string.Format(
-                            Translation.GetString("reportedDeadBodyInfo"),
+                            OldTranslation.GetString("reportedDeadBodyInfo"),
                             this.deadBodyInfo[reportBody.PlayerId]));
                 }
             }

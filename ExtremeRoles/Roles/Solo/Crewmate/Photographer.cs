@@ -88,8 +88,8 @@ public sealed class Photographer :
 			// 適当な役職名とかを写真名にする
 			string[] photoNameArr =
 			[
-				Translation.GetString(roleNameTransKey),
-				Translation.GetString(this.TeamId.ToString()),
+				OldTranslation.GetString(roleNameTransKey),
+				OldTranslation.GetString(this.TeamId.ToString()),
 				randomStr[this.Indexer],
 			];
 			return string.Concat(photoNameArr.OrderBy(
@@ -228,14 +228,14 @@ public sealed class Photographer :
 		{
 			StringBuilder photoInfoBuilder = new StringBuilder();
 			photoInfoBuilder.AppendLine(
-				$"{Translation.GetString("takePhotoTime")} : {this.takeTime}");
+				$"{OldTranslation.GetString("takePhotoTime")} : {this.takeTime}");
 			photoInfoBuilder.AppendLine(
-				$"{Translation.GetString("photoName")} : {this.photoName.ToString()}");
+				$"{OldTranslation.GetString("photoName")} : {this.photoName.ToString()}");
 			photoInfoBuilder.AppendLine("");
 			if (this.player.Count <= 1)
 			{
 				photoInfoBuilder.AppendLine(
-					Translation.GetString("onlyMeOnPhoto"));
+					OldTranslation.GetString("onlyMeOnPhoto"));
 			}
 			else
 			{
@@ -450,19 +450,19 @@ public sealed class Photographer :
         else
         {
             return Design.ColoedString(
-                Palette.White, Translation.GetString(RoleTypes.Crewmate.ToString()));
+                Palette.White, OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return OldTranslation.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -478,7 +478,7 @@ public sealed class Photographer :
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
         }
     }
 

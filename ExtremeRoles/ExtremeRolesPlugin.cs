@@ -70,7 +70,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 	private void normalBoot()
 	{
 		ShipState = new ExtremeShipStatus();
-		Helper.Translation.Load();
+		Helper.OldTranslation.Load();
 
 		DebugMode = Config.Bind("DeBug", "DebugMode", false);
 		IgnoreOverrideConsoleDisable = Config.Bind(

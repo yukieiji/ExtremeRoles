@@ -13,8 +13,8 @@ namespace ExtremeRoles.Roles.API
                 string.Format("{0}: {1}",
                     Design.ColoedString(
                         this.NameColor,
-                        Translation.GetString(this.RoleName)),
-                    Translation.GetString(
+                        OldTranslation.GetString(this.RoleName)),
+                    OldTranslation.GetString(
                         $"{this.Id}ShortDescription")));
 
             if (isContainFakeTask && !this.HasTask)
@@ -29,14 +29,14 @@ namespace ExtremeRoles.Roles.API
             return baseString;
         }
 
-        public virtual string GetIntroDescription() => Translation.GetString(
+        public virtual string GetIntroDescription() => OldTranslation.GetString(
             $"{this.Id}IntroDescription");
 
-        public virtual string GetFullDescription() => Translation.GetString(
+        public virtual string GetFullDescription() => OldTranslation.GetString(
            $"{this.Id}FullDescription");
 
         public virtual string GetColoredRoleName(bool isTruthName = false) => Design.ColoedString(
-            this.NameColor, Translation.GetString(this.RoleName));
+            this.NameColor, OldTranslation.GetString(this.RoleName));
         public virtual string GetRoleTag() => string.Empty;
 
         public virtual string GetRolePlayerNameTag(

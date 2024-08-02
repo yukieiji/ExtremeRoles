@@ -45,11 +45,11 @@ internal sealed class Updater : OperatorBase
 
 		if (!File.Exists(Path.Combine(this.ModFolderPath, this.dllName)))
 		{
-			Popup.Show(Translation.GetString("alreadyUninstallAfterInstall"));
+			Popup.Show(OldTranslation.GetString("alreadyUninstallAfterInstall"));
 			return;
 		}
 
-		string info = Translation.GetString("checkUpdateNow");
+		string info = OldTranslation.GetString("checkUpdateNow");
 		Popup.Show(info);
 
 		Dictionary<string, CompatModRepoData> repoData = getGithubUpdate().GetAwaiter().GetResult();
@@ -57,7 +57,7 @@ internal sealed class Updater : OperatorBase
 		if (repoData.Count == 0 ||
 			repoData.Count == 1 && this.isRequireReactor)
 		{
-			SetPopupText(Translation.GetString("updateManual"));
+			SetPopupText(OldTranslation.GetString("updateManual"));
 		}
 		else
 		{
@@ -74,17 +74,17 @@ internal sealed class Updater : OperatorBase
 
 			if (requireUpdate.Any())
 			{
-				info = Translation.GetString("updateNow");
+				info = OldTranslation.GetString("updateNow");
 
 				if (updateTask == null)
 				{
-					info = Translation.GetString("updateInProgress");
+					info = OldTranslation.GetString("updateInProgress");
 					updateTask = downloadAndUpdate(requireUpdate);
 				}
 			}
 			else
 			{
-				info = Translation.GetString("latestNow");
+				info = OldTranslation.GetString("latestNow");
 			}
 
 			this.Popup.StartCoroutine(
@@ -138,7 +138,7 @@ internal sealed class Updater : OperatorBase
 			await responseStream.CopyToAsync(fileStream);
 		}
 
-		ShowPopup(Translation.GetString("updateRestart"));
+		ShowPopup(OldTranslation.GetString("updateRestart"));
 
 		return true;
 	}

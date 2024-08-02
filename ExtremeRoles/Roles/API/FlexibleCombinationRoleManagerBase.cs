@@ -29,10 +29,10 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public sealed override string GetOptionName()
         => Design.ColoedString(
             this.OptionColor,
-            Translation.GetString(this.RoleName));
+            OldTranslation.GetString(this.RoleName));
 
     public string GetBaseRoleFullDescription() =>
-        Translation.GetString($"{BaseRole.Id}FullDescription");
+        OldTranslation.GetString($"{BaseRole.Id}FullDescription");
 
     public override void AssignSetUpInit(int curImpNum)
     {

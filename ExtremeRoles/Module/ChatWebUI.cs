@@ -51,8 +51,8 @@ public sealed class ChatWebUI :
 
 		this.AddChatToWebUI(
 			new WebUIChat(
-				Translation.GetString("SystemMessage"),
-				Translation.GetString("SuccessAmongUsConnect"),
+				OldTranslation.GetString("SystemMessage"),
+				OldTranslation.GetString("SuccessAmongUsConnect"),
 			false));
 	}
 
