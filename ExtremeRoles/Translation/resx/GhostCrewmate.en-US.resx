@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GuardianAngelFullDescription" xml:space="preserve">
+    <value>A CREWMATE GHOST with the ability to GUARD.
+"GUARD" : Guard your mates with a shield!
+ - Can target one player
+ - Gives a shield nullifying normal KILLs to the player.
+*Does not nullify non-KILL ability deaths and Villain's KILLs</value>
+  </data>
+  <data name="Poltergeist" xml:space="preserve">
+    <value>Poltergeist</value>
+  </data>
+  <data name="PoltergeistRange" xml:space="preserve">
+    <value>"MOVE" : Ability Range</value>
+  </data>
+  <data name="PoltergeistAbilityCoolTime" xml:space="preserve">
+    <value>"MOVE" : Ability Cooldown</value>
+  </data>
+  <data name="PoltergeistAbilityActiveTime" xml:space="preserve">
+    <value>"MOVE" : Ability Duration</value>
+  </data>
+  <data name="PoltergeistIsReportAbility" xml:space="preserve">
+    <value>"MOVE" : Does alert ability use on meetings</value>
+  </data>
+  <data name="PoltergeistAbilityCount" xml:space="preserve">
+    <value>"MOVE" : Ability Charges</value>
+  </data>
+  <data name="PoltergeistShortDescription" xml:space="preserve">
+    <value>Move corpses for your mates to know</value>
+  </data>
+  <data name="PoltergeistFullDescription" xml:space="preserve">
+    <value> A CREWAMTE GHOST with the ability to move dead bodies.
+ "MOVE" : Carries a dead body for a set duration.
+   - You cannot target bodies being held by other players (i.e. 
+Carrier).
+   - Targeted/Moving bodies can be taken by other living players' 
+abilities.</value>
+  </data>
+  <data name="PoltergeistMoveDeadbodyButton" xml:space="preserve">
+    <value>MOVE</value>
+  </data>
+  <data name="PoltergeistMoveDeadbody" xml:space="preserve">
+    <value>A Poltergeist moved a corpse!</value>
+  </data>
+  <data name="Faunus" xml:space="preserve">
+    <value>Faunus</value>
+  </data>
+  <data name="FaunusAbilityCoolTime" xml:space="preserve">
+    <value>"SUPPORT" : Ability Cooldown</value>
+  </data>
+  <data name="FaunusAbilityActiveTime" xml:space="preserve">
+    <value>"SUPPORT" : Ability Duration</value>
+  </data>
+  <data name="FaunusIsReportAbility" xml:space="preserve">
+    <value>"SUPPORT" : Does alert ability use on meetings</value>
+  </data>
+  <data name="FaunusAbilityCount" xml:space="preserve">
+    <value>"SUPPORT" : Ability Charges</value>
+  </data>
+  <data name="FaunusShortDescription" xml:space="preserve">
+    <value>Repair Sabotages and SUPPORT your mates</value>
+  </data>
+  <data name="FaunusFullDescription" xml:space="preserve">
+    <value> A CREWMATE GHOST with the ability to interact SABOTAGES.
+ "SUPPORT" : Interact with SABOTAGES
+   - Opens the repairing task of the Sabotage taking place
+   - When the Sabotage has multiple tasks/terminals to access, 
+one will be randomly selected
+   - Can only access the tasks/terminals while the duration of the 
+ability.</value>
+  </data>
+  <data name="FaunusOpenSaboConsoleButton" xml:space="preserve">
+    <value>SUPPORT</value>
+  </data>
+  <data name="FaunusOpenSaboConsole" xml:space="preserve">
+    <value>A Faunus helped with the Sabotage!</value>
+  </data>
+  <data name="Shutter" xml:space="preserve">
+    <value>Shutter</value>
+  </data>
+  <data name="ShutterPhotoRange" xml:space="preserve">
+    <value>"CAPTURE" : Ability Range</value>
+  </data>
+  <data name="ShutterRightPlayerNameRate" xml:space="preserve">
+    <value>"CAPTURE" : Chance of player names not to be blurred</value>
+  </data>
+  <data name="ShutterAbilityCoolTime" xml:space="preserve">
+    <value>"CAPTURE" : Ability Cooldown</value>
+  </data>
+  <data name="ShutterIsReportAbility" xml:space="preserve">
+    <value>"CAPTURE" : Does alert ability use on meetings </value>
+  </data>
+  <data name="ShutterAbilityCount" xml:space="preserve">
+    <value>"CAPTURE" : Ability Charges </value>
+  </data>
+  <data name="ShutterShortDescription" xml:space="preserve">
+    <value>CAPTURE the crime scene!</value>
+  </data>
+  <data name="ShutterFullDescription" xml:space="preserve">
+    <value>A CREWMATE GHOST with the ability to take photos.
+*Can be ONLY assigned to a former Photographer
+"CAPTURE" : Captures players within a range!
+ - The captured photograph will be shown on the next meeting's
+    chat
+ - Player names may randomly be "blurred" within a set percentage
+ - The title of photograph will be choosen randomly; does not mean
+    anything!</value>
+  </data>
+  <data name="ShutterTakePhotoButton" xml:space="preserve">
+    <value>CAPTURE</value>
+  </data>
+  <data name="ShutterTakePhoto" xml:space="preserve">
+    <value>A Shutter left a photo for the meeting!</value>
+  </data>
+  <data name="smokingThisName" xml:space="preserve">
+    <value>This player is too blurry to tell who it is…</value>
+  </data>
+  <data name="ShutterTakePhotoReport" xml:space="preserve">
+    <value>The photo was showing : ¥n{0}</value>
+  </data>
+</root>

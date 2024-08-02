@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeVoiceEngine", "Extre
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Test", "ExtremeRoles.Test\ExtremeRoles.Test.csproj", "{F845C15F-674A-4F12-9B3D-699804ECBF63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeRoles.Generator", "ExtremeRoles.Generator\ExtremeRoles.Generator.csproj", "{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Generator", "ExtremeRoles.Generator\ExtremeRoles.Generator.csproj", "{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +105,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_TaskErrorCategory = Message
 		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
 	EndGlobalSection
 EndGlobal

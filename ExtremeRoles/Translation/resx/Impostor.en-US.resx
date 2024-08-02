@@ -1,0 +1,1230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ImpostorFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role
+ Mischief the crewmate by fake tasks,
+use Sabotages and use the KILL</value>
+  </data>
+  <data name="ShapeshifterFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role who can morph into other 
+players, including other impostors and dead players.
+</value>
+  </data>
+  <data name="SpecialImpostor" xml:space="preserve">
+    <value>Special Impostor</value>
+  </data>
+  <data name="SpecialImpostorIntroDescription" xml:space="preserve">
+    <value>An IMPOSTOR with modified settings</value>
+  </data>
+  <data name="SpecialImpostorShortDescription" xml:space="preserve">
+    <value>An "Extreme-styled" impostor</value>
+  </data>
+  <data name="SpecialImpostorFullDescription" xml:space="preserve">
+    <value> A IMPOSTOR role which can be modified with Extreme roles' common settings
+ (i.e. vision)
+ Check the settings below:</value>
+  </data>
+  <data name="Evolver" xml:space="preserve">
+    <value>Evolver</value>
+  </data>
+  <data name="EvolverIsEvolvedAnimation" xml:space="preserve">
+    <value>Does animate on evolution</value>
+  </data>
+  <data name="EvolverIsEatingEndCleanBody" xml:space="preserve">
+    <value>Does erase corpse on evolution</value>
+  </data>
+  <data name="EvolverEatingRange" xml:space="preserve">
+    <value>"EAT": Ability Distance</value>
+  </data>
+  <data name="EvolverKillCoolReduceRate" xml:space="preserve">
+    <value>"EVOLVE" : KILL c.d. reduction rate</value>
+  </data>
+  <data name="EvolverKillCoolResuceRateMulti" xml:space="preserve">
+    <value>"EVOLVE" : KILL c.d. reduction multiplier</value>
+  </data>
+  <data name="EvolverAbilityCoolTime" xml:space="preserve">
+    <value>"EVOLVE" : Ability cooldown</value>
+  </data>
+  <data name="EvolverAbilityActiveTime" xml:space="preserve">
+    <value>"EAT" : Ability duration</value>
+  </data>
+  <data name="EvolverAbilityCount" xml:space="preserve">
+    <value>"EVOLVE" : Evolvable times</value>
+  </data>
+  <data name="EvolverIntroDescription" xml:space="preserve">
+    <value>EAT, EVOLVE, KILL THEM ALL</value>
+  </data>
+  <data name="EvolverShortDescription" xml:space="preserve">
+    <value>Eat corpses and EVOLVE</value>
+  </data>
+  <data name="EvolverFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role which has the ability to eat dead bodies and 
+evolve.
+  "EVOLVE": Eat dead bodies to gain Kill Cooldown reductions.
+   - Can only eat corpses near the player.
+   - The new Kill Cooldown will be applied right after each 
+evolution.</value>
+  </data>
+  <data name="evolve" xml:space="preserve">
+    <value>EVOLVE</value>
+  </data>
+  <data name="eating" xml:space="preserve">
+    <value>EATING</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>Carrier</value>
+  </data>
+  <data name="CarrierAbilityCoolTime" xml:space="preserve">
+    <value>"CARRY" : Ability cooldown</value>
+  </data>
+  <data name="CarrierAbilityActiveTime" xml:space="preserve">
+    <value>"CARRY" : Duration of carrying</value>
+  </data>
+  <data name="CarrierCarryDistance" xml:space="preserve">
+    <value>"CARRY" : Range from corpse</value>
+  </data>
+  <data name="CarrierCanReportOnCarry" xml:space="preserve">
+    <value>"CARRY" : Can be reported while carrying</value>
+  </data>
+  <data name="CarrierIntroDescription" xml:space="preserve">
+    <value>CARRY the bodies and hide them</value>
+  </data>
+  <data name="CarrierShortDescription" xml:space="preserve">
+    <value>CARRY and HIDE to mischief them all</value>
+  </data>
+  <data name="CarrierFullDescription" xml:space="preserve">
+    <value>  An IMPOSTOR role with the ability to carry the corpses.
+  "CARRY" : Carries and moves the dead bodies.
+   - On skill deactivation, the corpse drops on the position of player.
+   - May be reported while carrying, check the options!</value>
+  </data>
+  <data name="carry" xml:space="preserve">
+    <value>CARRY</value>
+  </data>
+  <data name="PsychoKiller" xml:space="preserve">
+    <value>Psycho Killer</value>
+  </data>
+  <data name="PsychoKillerKillCoolReduceRate" xml:space="preserve">
+    <value>"COMBO" : Kill Cooldown reduction</value>
+  </data>
+  <data name="PsychoKillerCombMax" xml:space="preserve">
+    <value>"COMBO" : Maximum combos</value>
+  </data>
+  <data name="PsychoKillerCombResetWhenMeeting" xml:space="preserve">
+    <value>"COMBO" : Does reset combo on meetings</value>
+  </data>
+  <data name="PsychoKillerHasSelfKillTimer" xml:space="preserve">
+    <value>Enable suicide timer</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerTime" xml:space="preserve">
+    <value>Use the STOCKS gained by meetings</value>
+  </data>
+  <data name="PsychoKillerIsForceRestartWhenMeetingEnd" xml:space="preserve">
+    <value>Does force resume suicide timer after meetings</value>
+  </data>
+  <data name="PsychoKillerIsDiactiveUntilKillWhenMeetingEnd" xml:space="preserve">
+    <value>Does diactive suicide timer after meetings and kills</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerModRate" xml:space="preserve">
+    <value>COMBO : Suicide timer multiplier</value>
+  </data>
+  <data name="PsychoKillerIntroDescription" xml:space="preserve">
+    <value>It's my PLEASURE to bathe in blood!</value>
+  </data>
+  <data name="PsychoKillerShortDescription" xml:space="preserve">
+    <value>KILL and gain combos to earn more KILL</value>
+  </data>
+  <data name="PsychoKillerFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to gain "Combos" by killing 
+players consecutively.
+ "COMBO" : Reducts the Kill cooldown by Killing more players!
+  - Reduction only affects cooldown "after" Kills; Does not reduce 
+initial Kill cooldowns which is set on meetings.
+  - Combos can be reset on meetings if the option is true.
+
+&lt;Optional&gt;
+Suicide timer : You are now starving to death!
+ - A suicide timer starts after the first Kill
+ - A new Kill can reset and change the remaining time of the timer
+ - Remaining time changes by a set rate
+  - Suicide timer resumes after meetings, when the option is on
+
+ Combos: {0}</value>
+  </data>
+  <data name="curCombNum" xml:space="preserve">
+    <value>Combos: {0}</value>
+  </data>
+  <data name="untilSelfKill" xml:space="preserve">
+    <value>Suicides in </value>
+  </data>
+  <data name="BountyHunter" xml:space="preserve">
+    <value>Bounty Hunter</value>
+  </data>
+  <data name="BountyHunterTargetUpdateTime" xml:space="preserve">
+    <value>Kill target updates in</value>
+  </data>
+  <data name="BountyHunterTargetKillCoolTime" xml:space="preserve">
+    <value>Kill Cooldown when killed target</value>
+  </data>
+  <data name="BountyHunterNoneTargetKillCoolTime" xml:space="preserve">
+    <value>Kill Cooldown when killed non-targeted players</value>
+  </data>
+  <data name="BountyHunterIsShowArrow" xml:space="preserve">
+    <value>Does show arrow to target</value>
+  </data>
+  <data name="BountyHunterArrowUpdateCycle" xml:space="preserve">
+    <value>Target arrow updates in</value>
+  </data>
+  <data name="BountyHunterIntroDescription" xml:space="preserve">
+    <value>Who's gonna be my dinner today?</value>
+  </data>
+  <data name="BountyHunterShortDescription" xml:space="preserve">
+    <value>Search and KILL the target</value>
+  </data>
+  <data name="BountyHunterFullDescription" xml:space="preserve">
+    <value>  An IMPOSTOR role with the ability to track down targets. 
+  Your Kill Cooldown changes whether if you killed your target or 
+not.  
+  On target kill: {0}
+  On non-targeted player kill: {1}
+  Your current target: {2}</value>
+  </data>
+  <data name="Painter" xml:space="preserve">
+    <value>Painter</value>
+  </data>
+  <data name="PainterAbilityCoolTime" xml:space="preserve">
+    <value>"PAINT" : Ability Cooldown</value>
+  </data>
+  <data name="PainterCanPaintDistance" xml:space="preserve">
+    <value>”PAINT" : Ability Distance</value>
+  </data>
+  <data name="PainterPaintColorIsRandom" xml:space="preserve">
+    <value>"PAINT" : Randomize paint color</value>
+  </data>
+  <data name="PainterIntroDescription" xml:space="preserve">
+    <value>My canvas is your corpse</value>
+  </data>
+  <data name="PainterShortDescription" xml:space="preserve">
+    <value>Paint and dress up their corpse</value>
+  </data>
+  <data name="PainterFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to repaint colors of corpses.
+ "PAINT" : Paints the corpses into an other color!
+  - Paints into "transperent" on default 
+(Completely dissolves into map sprites. Note 
+that the body CAN be reported).</value>
+  </data>
+  <data name="paint" xml:space="preserve">
+    <value>PAINT</value>
+  </data>
+  <data name="Faker" xml:space="preserve">
+    <value>Faker</value>
+  </data>
+  <data name="FakerAbilityCoolTime" xml:space="preserve">
+    <value>"DUMMY" : Ability cooldown</value>
+  </data>
+  <data name="FakerIntroDescription" xml:space="preserve">
+    <value>FAKE or REAL? Let me try…</value>
+  </data>
+  <data name="FakerShortDescription" xml:space="preserve">
+    <value>Make up players and corpses to confuse them</value>
+  </data>
+  <data name="FakerFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to make fake players and 
+dead bodies.
+ "DUMMY" : Spawns fake players and bodies.
+   - On normal use: Spawns a fake dead body which cannot be 
+reported.
+   - Used while pressing SHIFT: Spawns a dummy player. 
+Dummies does not move, and cannot be interacted 
+(i.e. targeted by a skill).
+
+  *Using while pressing CTRL or ALT can change the player 
+selected as the Dummy's design.
+   - Normal: A body from a random alive player 
+(+SHIFT: A dummy player)
+   - CTRL: A body from a random "NON-IMPOSTOR" player 
+(+SHIFT: A dummy player)
+   - L-ALT: A body from a random player WITHOUT yourself 
+(+SHIFT: A dummy player)</value>
+  </data>
+  <data name="dummyDeadBody" xml:space="preserve">
+    <value>DUMMY CORPSE</value>
+  </data>
+  <data name="dummyPlayer" xml:space="preserve">
+    <value>DUMMY PLAYER</value>
+  </data>
+  <data name="DummyPlayerName" xml:space="preserve">
+    <value>DUMMY</value>
+  </data>
+  <data name="OverLoader" xml:space="preserve">
+    <value>Overloader</value>
+  </data>
+  <data name="OverLoaderAwakeImpostorNum" xml:space="preserve">
+    <value>"OVERLOAD" : IMPOSTORS remaining to reveal role</value>
+  </data>
+  <data name="OverLoaderAwakeKillCount" xml:space="preserve">
+    <value>"OVERLOAD" : KILLs to reveal role</value>
+  </data>
+  <data name="OverLoaderAbilityCoolTime" xml:space="preserve">
+    <value>"OVERLOAD" : Ability cooldown</value>
+  </data>
+  <data name="OverLoaderAbilityActiveTime" xml:space="preserve">
+    <value>"OVERLOAD" : Cooldown after activation</value>
+  </data>
+  <data name="OverLoaderKillCoolReduceRate" xml:space="preserve">
+    <value>"OVERLOAD" : Kill Cooldown reduction</value>
+  </data>
+  <data name="OverLoaderMoveSpeed" xml:space="preserve">
+    <value>"OVERLOAD" : Movement speed buff</value>
+  </data>
+  <data name="OverLoaderIntroDescription" xml:space="preserve">
+    <value>Overcome all the limits!</value>
+  </data>
+  <data name="OverLoaderShortDescription" xml:space="preserve">
+    <value>Overcome the pros and cons</value>
+  </data>
+  <data name="OverLoaderFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability  OVERLOAD.
+ "ACTIVATE": Gains supreme buffs and debuffs!
+   - Your Kill Distance changes to LONG
+   - Gains a Movement speed buff
+   - Gains massive reduction on Kill Cooldowns
+   - Your display name turns into RED, which reveals you're an 
+Impostor to everyone
+This can be reset by using "DEACTIVATE" or entering an meeting.</value>
+  </data>
+  <data name="overLoad" xml:space="preserve">
+    <value>ACTIVATE</value>
+  </data>
+  <data name="downLoad" xml:space="preserve">
+    <value>DEACTIVATE</value>
+  </data>
+  <data name="Cracker" xml:space="preserve">
+    <value>Cracker</value>
+  </data>
+  <data name="CrackerAbilityCoolTime" xml:space="preserve">
+    <value>”CRACK” : Ability cooldown</value>
+  </data>
+  <data name="CrackerAbilityCount" xml:space="preserve">
+    <value>”CRACK” : Maximum charges</value>
+  </data>
+  <data name="CrackerCanCrackDistance" xml:space="preserve">
+    <value>”CRACK” : Ability Distance</value>
+  </data>
+  <data name="CrackerRemoveDeadBody" xml:space="preserve">
+    <value>”CRACK” : Does erase corpse</value>
+  </data>
+  <data name="CrackerIntroDescription" xml:space="preserve">
+    <value>HACK 'n CRACK! NO REPORT!!</value>
+  </data>
+  <data name="CrackerShortDescription" xml:space="preserve">
+    <value>Crack those corpse and nullify reports</value>
+  </data>
+  <data name="CrackerFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to delete dead bodies.
+ "CRACK": Nullifies "REPORT" on the dead bodies.
+  - Bodies cracked cannot be reported, but shown as "dead 
+bodies" on the beginning of meetings.
+  - Erases body and replaces as a "trace particle" if the "Does erase 
+corpse" option is ON. Erased bodies does not show up on 
+meetings.</value>
+  </data>
+  <data name="crack" xml:space="preserve">
+    <value>CRACK</value>
+  </data>
+  <data name="Bomber" xml:space="preserve">
+    <value>Bomber</value>
+  </data>
+  <data name="BomberAbilityCoolTime" xml:space="preserve">
+    <value>"FUSE" : Ability cooldown</value>
+  </data>
+  <data name="BomberAbilityActiveTime" xml:space="preserve">
+    <value>"FUSE" : Ability duration</value>
+  </data>
+  <data name="BomberAbilityCount" xml:space="preserve">
+    <value>"FUSE" : Maximum charges</value>
+  </data>
+  <data name="BomberExplosionRange" xml:space="preserve">
+    <value>"FUSE" : Explosion range of fused player</value>
+  </data>
+  <data name="BomberExplosionKillChance" xml:space="preserve">
+    <value>"FUSE" : Death rate of player being in the explosion range</value>
+  </data>
+  <data name="BomberTimerMinTime" xml:space="preserve">
+    <value>"FUSE" : Minimum explosion timer</value>
+  </data>
+  <data name="BomberTimerMaxTime" xml:space="preserve">
+    <value>"FUSE" : Maximum explosion timer</value>
+  </data>
+  <data name="BomberTellExplosion" xml:space="preserve">
+    <value>Explosion alert to role</value>
+  </data>
+  <data name="BomberIntroDescription" xml:space="preserve">
+    <value>Explosion should be considered as an ART.</value>
+  </data>
+  <data name="BomberShortDescription" xml:space="preserve">
+    <value>Turn Crewmates into a bomb</value>
+  </data>
+  <data name="BomberFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role which can turn crewmates into a BOMB!
+ "FUSE": Sets a bomb on the targeted player.
+   - The player which was set a bomb will eliminated on a set rate.
+   - Any Impostor within the explosion rate will not be eliminated.
+   - Any player who is "GUARDED" by a Bodyguard will not be 
+eliminated; The Bodyguard will die instead.
+   - The Bomb will explode on a random timing within the set 
+maximum and minimum timer.
+   - When the fused player or the Bomber is eliminated, the Bomb 
+will be nullified(will not explode).</value>
+  </data>
+  <data name="setBomb" xml:space="preserve">
+    <value>FUSE</value>
+  </data>
+  <data name="explosionText" xml:space="preserve">
+    <value>Another one bites the dust.</value>
+  </data>
+  <data name="Mery" xml:space="preserve">
+    <value>Merry</value>
+  </data>
+  <data name="MeryAbilityCoolTime" xml:space="preserve">
+    <value>"PORTAL" : Ability cooldown</value>
+  </data>
+  <data name="MeryAbilityCount" xml:space="preserve">
+    <value>"PORTAL" : Maximum ability uses</value>
+  </data>
+  <data name="MeryActiveNum" xml:space="preserve">
+    <value>"PORTAL" : Number of Players for PORTAL to be usable</value>
+  </data>
+  <data name="MeryActiveRange" xml:space="preserve">
+    <value>"PORTAL" : Player detection range</value>
+  </data>
+  <data name="MeryIntroDescription" xml:space="preserve">
+    <value>I'm already behind you~ X)</value>
+  </data>
+  <data name="MeryShortDescription" xml:space="preserve">
+    <value>Open portals to mischief your mates~ 0w0</value>
+  </data>
+  <data name="MeryFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR with the ability to create magical portals! owo
+ "PORTAL" : A magical portal which acts like a cool vent &lt;3
+   - On use, a "Inactive" portal will set on the Merry's position. 
+   - The portals activates when a set amount of players passed the 
+position. Impostors does not count as a "player" passed.
+   - The portals can be used as a vent after activation; the portal 
+never deactivates after activation.
+   - The portals cannot be seen by players except Impostors and 
+the Merlin, with or without activation.</value>
+  </data>
+  <data name="setCamp" xml:space="preserve">
+    <value>PORTAL</value>
+  </data>
+  <data name="SlaveDriver" xml:space="preserve">
+    <value>Slavedriver</value>
+  </data>
+  <data name="SlaveDriverCanSeeTaskBar" xml:space="preserve">
+    <value>Can always see Task gauge</value>
+  </data>
+  <data name="SlaveDriverAbilityCoolTime" xml:space="preserve">
+    <value>"HARASS" : Ability Cooldown</value>
+  </data>
+  <data name="SlaveDriverAbilityCount" xml:space="preserve">
+    <value>"HARASS" : Ability Charges</value>
+  </data>
+  <data name="SlaveDriverRevartTaskNum" xml:space="preserve">
+    <value>"HARASS" : Tasks rewinding on use</value>
+  </data>
+  <data name="SlaveDriverRange" xml:space="preserve">
+    <value>"HARASS" : Ability Distance</value>
+  </data>
+  <data name="SlaveDriverIntroDescription" xml:space="preserve">
+    <value>Smite those LAZY CREWMATES!</value>
+  </data>
+  <data name="SlaveDriverShortDescription" xml:space="preserve">
+    <value>Give the Crews some extra tasks!</value>
+  </data>
+  <data name="SlaveDriverFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role with the ability to rewind completed tasks.
+
+"HARASS" : Rewinds and adds extra tasks to a player.
+ - Targets all players in the set range
+ - Affected players will have a temporary mark on their names; 
+    On the next meeting, a set amount of their completed tasks will
+    be replaced by extra tasks.</value>
+  </data>
+  <data name="Harassment" xml:space="preserve">
+    <value>HARASS</value>
+  </data>
+  <data name="SlaveDriverReportMessage" xml:space="preserve">
+    <value>Seems like somebody harassed you with extra tasks…</value>
+  </data>
+  <data name="SandWorm" xml:space="preserve">
+    <value>Sandworm</value>
+  </data>
+  <data name="SandWormKillCoolPenalty" xml:space="preserve">
+    <value>Kill Cooldown penalty per normal KILL</value>
+  </data>
+  <data name="SandWormAssaultKillCoolReduce" xml:space="preserve">
+    <value>Kill Cooldown reduction of \n"ASSAULT"/ KILL during "Fix lights" sabotage  </value>
+  </data>
+  <data name="SandWormAssaultRange" xml:space="preserve">
+    <value>"ASSAULT" : Kill Distance</value>
+  </data>
+  <data name="SandWormAbilityCoolTime" xml:space="preserve">
+    <value>"ASSAULT" : Cooldown</value>
+  </data>
+  <data name="SandWormIntroDescription" xml:space="preserve">
+    <value>I consider living in the dark.</value>
+  </data>
+  <data name="SandWormShortDescription" xml:space="preserve">
+    <value>ASSAULT crewmates from the VENTs</value>
+  </data>
+  <data name="SandWormFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to ASSAULT from VENTs.
+ "ASSAULT": Kills player from the vent.
+   - Can be used while using VENTs
+   - Plays VENT opening animation on usage (Does not show 
+player)
+   - The Ability Cooldown will ONLY recharge while using VENTs or 
+during Lights out sabotages.
+   - This Ability can be used with normal VENTs; Special VENTs 
+(like Merry's portals) cannot used as VENTs to assault, nor reduce 
+Cooldowns.
+   - This Ability nullifies some defending abilities, such as Time 
+master's Time shields.
+   - On Ability usage or normal Kill-ability Kills during Lights off 
+sabotages, a set amount of Cooldown reduction will be gained.
+*On normal Kill-ability Kills, a set amount of Cooldown penalties 
+will be charged.</value>
+  </data>
+  <data name="assault" xml:space="preserve">
+    <value>ASSAULT</value>
+  </data>
+  <data name="Smasher" xml:space="preserve">
+    <value>Smasher</value>
+  </data>
+  <data name="SmasherAbilityCoolTime" xml:space="preserve">
+    <value>"SMASH" : Cooldown</value>
+  </data>
+  <data name="SmasherAbilityCount" xml:space="preserve">
+    <value>"SMASH" : Ability Charges</value>
+  </data>
+  <data name="SmasherSmashPenaltyKillCool" xml:space="preserve">
+    <value>"SMASH" : Kill Cooldown penalty</value>
+  </data>
+  <data name="SmasherIntroDescription" xml:space="preserve">
+    <value>Double trouble, turn them into rubble!</value>
+  </data>
+  <data name="SmasherShortDescription" xml:space="preserve">
+    <value>2 KILLs are better then one</value>
+  </data>
+  <data name="SmasherFullDescription" xml:space="preserve">
+    <value> An Impostor with a second Kill ability "SMASH"!
+ "SMASH" : Acts as a second "KILL".
+   - Does have a alternate Cooldown separated with the normal 
+KILL ability.
+   - Acts exactly same as the normal KILL.
+   - Casts an additional Cooldown as a penalty on the next normal 
+KILL ability usage.</value>
+  </data>
+  <data name="smash" xml:space="preserve">
+    <value>SMASH</value>
+  </data>
+  <data name="AssaultMaster" xml:space="preserve">
+    <value>Assault Master</value>
+  </data>
+  <data name="AssaultMasterAbilityCoolTime" xml:space="preserve">
+    <value>"RELOAD" : Ability Cooldown</value>
+  </data>
+  <data name="AssaultMasterStockLimit" xml:space="preserve">
+    <value>Maximum STOCKS</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenReport" xml:space="preserve">
+    <value>STOCKS charged per report</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenMeetingButton" xml:space="preserve">
+    <value>STOCKS charged per emergency meeting</value>
+  </data>
+  <data name="AssaultMasterCockingKillCoolReduceTime" xml:space="preserve">
+    <value>"COCKING" : Kill Cooldown reduction</value>
+  </data>
+  <data name="AssaultMasterReloadReduceKillCoolTimePerStock" xml:space="preserve">
+    <value>"COCKING" : Kill Cooldown reduction per STOCK</value>
+  </data>
+  <data name="AssaultMasterIsResetReloadCoolTimeWhenKill" xml:space="preserve">
+    <value>Does Kill reset Ability Cooldown of "RELOAD"</value>
+  </data>
+  <data name="AssaultMasterReloadCoolTimeReduceRatePerHideStock" xml:space="preserve">
+    <value>"RELOAD" : Ability C.D. reduction per STOCK overfilled</value>
+  </data>
+  <data name="AssaultMasterIntroDescription" xml:space="preserve">
+    <value>RELOAD and STOCK more ammos</value>
+  </data>
+  <data name="AssaultMasterShortDescription" xml:space="preserve">
+    <value>Use the STOCKS gained by meetings</value>
+  </data>
+  <data name="AssaultMasterFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR ability with the ability to reload Kill Cooldowns by 
+using "STOCKS".
+
+ "STOCKS" remaining: {0} / Max {1}
+ "RELOAD" will reduce {2} secs on use
+
+ "STOCKS" : A special system for Assault Masters.
+   - Can be charged by meetings
+   - Cannot stock more than maximum, but can charged while the 
+stocks are maxed out
+   - Stocks overfilled(charged over maximum limits) reduce the 
+Ability cooldown of "RELOAD"
+  "RELOAD" : Reduces the Kill Cooldown by consuming STOCKS 
+on ability usage.
+   - On use, resets its ability Cooldown to the initial state.
+ "COCKING" : A passive ability automatically activating on Kills
+  - Reduces Kill Cooldowns by consuming 1 STOCK. </value>
+  </data>
+  <data name="reload" xml:space="preserve">
+    <value>RELOAD</value>
+  </data>
+  <data name="noStockNow" xml:space="preserve">
+    <value>NO STOCKS</value>
+  </data>
+  <data name="reduceKillCool" xml:space="preserve">
+    <value>Max {0}s reduction:\nKill Cooldown</value>
+  </data>
+  <data name="Shooter" xml:space="preserve">
+    <value>Shooter</value>
+  </data>
+  <data name="ShooterIsInitAwake" xml:space="preserve">
+    <value>Does reveal role initially</value>
+  </data>
+  <data name="ShooterAwakeKillNum" xml:space="preserve">
+    <value>Kills to reveal role</value>
+  </data>
+  <data name="ShooterAwakeImpNum" xml:space="preserve">
+    <value>No. of remaining Impostors to reveal role</value>
+  </data>
+  <data name="ShooterShootKillCoolPenalty" xml:space="preserve">
+    <value>"SHOOT": Kill Cooldown penalty per shot</value>
+  </data>
+  <data name="ShooterNoneAwakeWhenShoot" xml:space="preserve">
+    <value>Does revert role reveal by "SHOOT"</value>
+  </data>
+  <data name="ShooterCanCallMeeting" xml:space="preserve">
+    <value>Can use the Emergency Meeting button</value>
+  </data>
+  <data name="ShooterCanShootSelfCallMeeting" xml:space="preserve">
+    <value>Can use "SHOOT" during self-claimed emergency meeting</value>
+  </data>
+  <data name="ShooterMaxShootNum" xml:space="preserve">
+    <value>"SHOOT" : Maximum carriable Ammo</value>
+  </data>
+  <data name="ShooterInitShootNum" xml:space="preserve">
+    <value>"SHOOT" : Initial Ammo</value>
+  </data>
+  <data name="ShooterMaxMeetingShootNum" xml:space="preserve">
+    <value>"SHOOT" : Ability usage per meeting</value>
+  </data>
+  <data name="ShooterShootChargeTime" xml:space="preserve">
+    <value>"SHOOT" : Ammo reloads on</value>
+  </data>
+  <data name="ShooterShootKillNum" xml:space="preserve">
+    <value>"SHOOT" : Kills to reload Ammo</value>
+  </data>
+  <data name="ShooterIntroDescription" xml:space="preserve">
+    <value>STRIKE! My Bullet of EVIL!!</value>
+  </data>
+  <data name="ShooterShortDescription" xml:space="preserve">
+    <value>SHOOT every foe in their head</value>
+  </data>
+  <data name="ShooterFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to KILL during meetings.
+ "SHOOT" : Snipes and Kills a player.
+   - Can be used before voting to a player.
+   - Consumes one "Ammo" to shoot
+   - Ammos can be gained in-game by reaching both means:
+     (1) Must Kill a set amount of players.
+     (2) Must wait a set amount of in-game time.
+   - The in-game time count spins while the game can reduce "Kill 
+Cooldowns"/during normal field gameplay; Doesn't count 
+emergency meetings or other special conditions.
+   - Emergency meetings pauses the count; Count resumes after 
+meetings end. Meetings does not reset the count.</value>
+  </data>
+  <data name="shooterShootStatus" xml:space="preserve">
+    <value>Ammo: {0}/{1}\nCan shoot {2} times now</value>
+  </data>
+  <data name="shooterChargeInfo" xml:space="preserve">
+    <value>Ammo: {0}/{1]\nNext bullet in</value>
+  </data>
+  <data name="LastWolf" xml:space="preserve">
+    <value>Last Wolf</value>
+  </data>
+  <data name="LastWolfAwakeImpostorNum" xml:space="preserve">
+    <value>No. of remaining Impostors to reveal role</value>
+  </data>
+  <data name="LastWolfDeadPlayerNumBonus" xml:space="preserve">
+    <value>Kill Cooldown reduction per dead player</value>
+  </data>
+  <data name="LastWolfKillPlayerNumBonus" xml:space="preserve">
+    <value>Kill Cooldown reduction per Kill during role non-revealed</value>
+  </data>
+  <data name="LastWolfAbilityCoolTime" xml:space="preserve">
+    <value>"BLACKOUT" : Ability Cooldown</value>
+  </data>
+  <data name="LastWolfLightOffVision" xml:space="preserve">
+    <value>"BLACKOUT" : Vision</value>
+  </data>
+  <data name="LastWolfAbilityActiveTime" xml:space="preserve">
+    <value>"BLACKOUT" : Ability Duration</value>
+  </data>
+  <data name="LastWolfIntroDescription" xml:space="preserve">
+    <value>The Last Wolf standing</value>
+  </data>
+  <data name="LastWolfShortDescription" xml:space="preserve">
+    <value>Use the BLACKOUT to change your fate</value>
+  </data>
+  <data name="LastWolfFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role holding the sake of all Impostors as the last 
+standing.
+  - Your can now use Kill without the short-jumping/warping!
+  - You can gain a reduction on the Initial Kill Cooldown on the 
+ending of each meetings, depending by the amount of crewmates 
+remaining.
+  - The Kill CD reduction is temporal and does not effect the after-
+Kill ability Cooldown.
+  - The Kill CD reduction can be buffed by the amount of Kills 
+before role revelation.
+ "BLACKOUT" : Forcefully blackouts the vision of all living players 
+except the Last wolf.
+  - This DOES effect players with special vision settings.
+  - Ability Cooldown will be longer depending on living players' 
+elimination.</value>
+  </data>
+  <data name="liightOff" xml:space="preserve">
+    <value>BLACKOUT</value>
+  </data>
+  <data name="Commander" xml:space="preserve">
+    <value>Commander</value>
+  </data>
+  <data name="CommanderKillCoolReduceTime" xml:space="preserve">
+    <value>"COMMAND" : Base Kill Cooldown reduction</value>
+  </data>
+  <data name="CommanderKillCoolReduceImpBonus" xml:space="preserve">
+    <value>"COMMAND" : Bonus reduction per dead Impostor</value>
+  </data>
+  <data name="CommanderIncreaseKillNum" xml:space="preserve">
+    <value>"COMMAND" : Kills required for additional ability charge</value>
+  </data>
+  <data name="CommanderAbilityCoolTime" xml:space="preserve">
+    <value>"COMMAND" : Ability Cooldown</value>
+  </data>
+  <data name="CommanderAbilityCount" xml:space="preserve">
+    <value>"COMMAND" : Ability Charges</value>
+  </data>
+  <data name="CommanderIntroDescription" xml:space="preserve">
+    <value>HQ COMMANDS FULL ATTACK!</value>
+  </data>
+  <data name="CommanderShortDescription" xml:space="preserve">
+    <value>COMMAND Impostors and reduce their Kill Cooldown</value>
+  </data>
+  <data name="CommanderFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role which can encourage Kills by reducing Kill 
+Cooldowns of the team.
+ "COMMAND" : Recharges Kill cooldowns for every Impostor.
+  - The reduction rate will be buffed by eliminations of Impostors.
+  - Ability charges can be gained by the Kills of the Commander.</value>
+  </data>
+  <data name="attackCommand" xml:space="preserve">
+    <value>COMMAND</value>
+  </data>
+  <data name="Hypnotist" xml:space="preserve">
+    <value>Hypnotist</value>
+  </data>
+  <data name="HypnotistAwakeCheckImpostorNum" xml:space="preserve">
+    <value>Role reveal : (1) Impostors remaining </value>
+  </data>
+  <data name="HypnotistAwakeCheckTaskGage" xml:space="preserve">
+    <value>Role reveal : (2) Entire task completion rate</value>
+  </data>
+  <data name="HypnotistAwakeKillCount" xml:space="preserve">
+    <value>Role reveal : (3) Kills by player</value>
+  </data>
+  <data name="HypnotistRange" xml:space="preserve">
+    <value>"HYPNO" : Ability Distance</value>
+  </data>
+  <data name="HypnotistAbilityCoolTime" xml:space="preserve">
+    <value>"HYPNO" : Ability Cooldown</value>
+  </data>
+  <data name="HypnotistAbilityCount" xml:space="preserve">
+    <value>"HYPNO" : Ability Charges</value>
+  </data>
+  <data name="HypnotistHideArrowRange" xml:space="preserve">
+    <value>Hypnotist: Distance from FRAGS for arrows to be shown</value>
+  </data>
+  <data name="HypnotistDefaultRedAbilityPart" xml:space="preserve">
+    <value>Hypnotist: Base RED FRAGS </value>
+  </data>
+  <data name="HypnotistHideKillButtonTime" xml:space="preserve">
+    <value>Doll: Duration of temporal Kill Ability\nafter RED FRAG taken</value>
+  </data>
+  <data name="HypnotistIsResetKillCoolWhenDollKill" xml:space="preserve">
+    <value>Hypnotist: Does Kill of Doll reset\nHypnotist's Kill Cooldown</value>
+  </data>
+  <data name="HypnotistDollKillCoolReduceRate" xml:space="preserve">
+    <value>Doll: Kill Cooldown reduction per RED FRAG taken </value>
+  </data>
+  <data name="HypnotistDollCrakingCoolTime" xml:space="preserve">
+    <value>Doll: "CRACKING" Ability Cooldown</value>
+  </data>
+  <data name="HypnotistDollCrakingActiveTime" xml:space="preserve">
+    <value>Doll: "CRACKING" Ability Duration</value>
+  </data>
+  <data name="HypnotistIntroDescription" xml:space="preserve">
+    <value>And you're my DOLL now…</value>
+  </data>
+  <data name="HypnotistShortDescription" xml:space="preserve">
+    <value>HYPNOTIZE players and make a DOLL</value>
+  </data>
+  <data name="HypnotistFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to HYPNOTIZE other players.
+ "HYPNOTIZE": Targets a player and turns them into a "DOLL".
+  - Can target one player nearby. 
+  - On use, resets and rewrites the player's role into "Doll", and 
+then spawns "FRAGMENTS" across the map.
+ "FRAGMENTS": Gather by USE button and buff your Doll!
+   - RED FRAGS can grant the KILL ability to your Doll. Taking 
+multiple times can recharge their Kill Cooldown by a set rate.
+   - BLUE FRAGS can grant access to map modules (i.e. VITALS 
+monitor)
+  - GREY FRAGS grants a "CRACKING" ability, which grants remote 
+access to map modules
+
+  *The amount of BLUE and GREY frags generated is static, which 
+does not be changed.
+  *The amount of REG frags depends on the role which the "Doll" 
+was.</value>
+  </data>
+  <data name="Hypnosis" xml:space="preserve">
+    <value>HYPNO</value>
+  </data>
+  <data name="Doll" xml:space="preserve">
+    <value>Doll</value>
+  </data>
+  <data name="DollShortDescription" xml:space="preserve">
+    <value>You're Hypnotized!</value>
+  </data>
+  <data name="DollFullDescription" xml:space="preserve">
+    <value> You're now HYPNOTIZED by a Hypnotist!
+ MISSION: To achive IMPOSTOR victory.
+ Your master can buff you by gathering "FRAGMENTS".
+  - Your Master: {0}
+  - You can use these map modules: {1}
+  - You can hack into: {2}</value>
+  </data>
+  <data name="FeatAccess" xml:space="preserve">
+    <value>HYPNO: "{0}" Access granted</value>
+  </data>
+  <data name="unlockCraking" xml:space="preserve">
+    <value>HYPNO: "{0}" Access cracked</value>
+  </data>
+  <data name="unlockKill" xml:space="preserve">
+    <value>HYPNO: KILL ability granted</value>
+  </data>
+  <data name="lockKill" xml:space="preserve">
+    <value>HYPNO: KILL ability nullified</value>
+  </data>
+  <data name="UnderWarper" xml:space="preserve">
+    <value>Underwarper</value>
+  </data>
+  <data name="UnderWarperAwakeKillCount" xml:space="preserve">
+    <value>Kills after meeting to reveal role</value>
+  </data>
+  <data name="UnderWarperVentLinkKillCout" xml:space="preserve">
+    <value>Kills after meeting to enable global VENTs</value>
+  </data>
+  <data name="UnderWarperNoVentAnimeKillCout" xml:space="preserve">
+    <value>Kills after meeting to disable VENT animation</value>
+  </data>
+  <data name="UnderWarperWallHackVent" xml:space="preserve">
+    <value>Can use VENTs beyond walls</value>
+  </data>
+  <data name="UnderWarperRange" xml:space="preserve">
+    <value>VENT Ability Distance after role revealation</value>
+  </data>
+  <data name="UnderWarperIntroDescription" xml:space="preserve">
+    <value>There is no boundaries for me</value>
+  </data>
+  <data name="UnderWarperShortDescription" xml:space="preserve">
+    <value>Use the special VENT to KILL</value>
+  </data>
+  <data name="UnderWarperFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to warp between VENTs.
+ Can be revealed after reaching means set by options.
+  - You can now warp between any VENTs, ignoring vanilla VENT connections.
+ - You can now use VENTs without VENT-entering animations.
+ - Your VENT ability range is now buffed, which lets you use VENTs from further distances.</value>
+  </data>
+  <data name="Magician" xml:space="preserve">
+    <value>Magician</value>
+  </data>
+  <data name="MagicianAbilityCoolTime" xml:space="preserve">
+    <value>"JUGGLE" : Ability Cooldown</value>
+  </data>
+  <data name="MagicianAbilityCount" xml:space="preserve">
+    <value>"JUGGLE" : Ability Charges</value>
+  </data>
+  <data name="MagicianTeleportTargetRate" xml:space="preserve">
+    <value>"JUGGLE" : Players targeted by ability</value>
+  </data>
+  <data name="MagicianDupeTeleportTargetTo" xml:space="preserve">
+    <value>"JUGGLE" : Does teleport multiple players to the same positions</value>
+  </data>
+  <data name="MagicianIncludeSpawnPoint" xml:space="preserve">
+    <value>"JUGGLE" : Does include Spawn positions as teleport positions</value>
+  </data>
+  <data name="MagicianIncludeRolePlayer" xml:space="preserve">
+    <value>"JUGGLE" : Does include the Magician as ability target</value>
+  </data>
+  <data name="MagicianIntroDescription" xml:space="preserve">
+    <value>JUGGLE and TROUBLE their minds!</value>
+  </data>
+  <data name="MagicianShortDescription" xml:space="preserve">
+    <value>JUGGLE their positions and confuse the players</value>
+  </data>
+  <data name="MagicianFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to shuffle players' positions.
+ "JUGGLE": Randomly teleports some players to other player's 
+positions.
+   - Each targeted player will be teleported somewhere, randomly 
+selected from non-targeted players.
+   - Can include the caster (Magician) as ability target by changing 
+options.
+   - Can include spawn positions as teleporting positions by 
+changing options.</value>
+  </data>
+  <data name="juggling" xml:space="preserve">
+    <value>JUGGLE</value>
+  </data>
+  <data name="Slime" xml:space="preserve">
+    <value>Slime</value>
+  </data>
+  <data name="SlimeAbilityCoolTime" xml:space="preserve">
+    <value>"MORPH" : Ability Cooldown</value>
+  </data>
+  <data name="SlimeAbilityActiveTime" xml:space="preserve">
+    <value>"MORPH" : Ability Duration</value>
+  </data>
+  <data name="SlimeIntroDescription" xml:space="preserve">
+    <value>They change into EVERYTHING!</value>
+  </data>
+  <data name="SlimeShortDescription" xml:space="preserve">
+    <value>MORPH and DECEIVE everyone!</value>
+  </data>
+  <data name="SlimeFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role with the ability to morph into map objects.
+"MORPH" : Turns into a nearby map object
+ - Can be used when a morphable object is nearby
+ - Can use KILLs and other abilities while morphing
+ - Morphing cancells on player-moving tiles
+    (such as ladders/VENTs, etc.)</value>
+  </data>
+  <data name="SlimeMorph" xml:space="preserve">
+    <value>MORPH</value>
+  </data>
+  <data name="Zombie" xml:space="preserve">
+    <value>Zombie</value>
+  </data>
+  <data name="ZombieAwakeKillCount" xml:space="preserve">
+    <value>Kills after meeting to reveal role</value>
+  </data>
+  <data name="ZombieAbilityCoolTime" xml:space="preserve">
+    <value>"ALTAR" : Ability Cooldown</value>
+  </data>
+  <data name="ZombieAbilityActiveTime" xml:space="preserve">
+    <value>"ALTAR" : Ability Duration</value>
+  </data>
+  <data name="ZombieAbilityCount" xml:space="preserve">
+    <value>"ALTAR" : Ability Charges</value>
+  </data>
+  <data name="ZombieShowMagicCircleTime" xml:space="preserve">
+    <value>"ALTAR" : Timer to reveal Altar to other players</value>
+  </data>
+  <data name="ZombieResurrectKillCount" xml:space="preserve">
+    <value>Kills to enable ressurection</value>
+  </data>
+  <data name="ZombieResurrectDelayTime" xml:space="preserve">
+    <value>Seconds from death to ressurect player</value>
+  </data>
+  <data name="ZombieCanResurrectOnExil" xml:space="preserve">
+    <value>Is able to ressurect on exile</value>
+  </data>
+  <data name="ZombieIntroDescription" xml:space="preserve">
+    <value>The THRILLER strikes back!</value>
+  </data>
+  <data name="ZombieShortDescription" xml:space="preserve">
+    <value>Power the ALTAR to gain 1-up!</value>
+  </data>
+  <data name="ZombieFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role with the ability to gain extra lives by powering the ALTAR.
+*You will NOT be assigned as a GHOST IMPOSTOR tole.
+"ALTAR" : Kill more crews to gain extra lives!
+ - Can be used in a particular room on the map (which is guided by an arrow)
+ - Builds an Altar after idling for a set duration
+ - The Altar will be revealed to other players' sight after a set amount of time
+ - Killing players after role revalation can grant you extra lives, enabling ressurection
+ - Ressurection can only be done after using all ability charges (Build required amount of Altars) </value>
+  </data>
+  <data name="featMagicCircle" xml:space="preserve">
+    <value>ALTAR</value>
+  </data>
+  <data name="Thief" xml:space="preserve">
+    <value>Theif</value>
+  </data>
+  <data name="ThiefAbilityCoolTime" xml:space="preserve">
+    <value>"STEAL" : Ability Cooldown</value>
+  </data>
+  <data name="ThiefAbilityActiveTime" xml:space="preserve">
+    <value>"STEAL" : Ability Duration</value>
+  </data>
+  <data name="ThiefAbilityCount" xml:space="preserve">
+    <value>"ALTAR" : Ability Charges</value>
+  </data>
+  <data name="ThiefRange" xml:space="preserve">
+    <value>"ALTAR" : Ability Distance</value>
+  </data>
+  <data name="ThiefSetNum" xml:space="preserve">
+    <value>"STEAL" : TIME FRAGS spawning per use</value>
+  </data>
+  <data name="ThiefSetTimeOffset" xml:space="preserve">
+    <value>"STEAL" : Reduces meeting timer by</value>
+  </data>
+  <data name="ThiefPickUpTimeOffset" xml:space="preserve">
+    <value>"TIME FRAGS" : Extends meeting timer by</value>
+  </data>
+  <data name="ThiefIsAddEffect" xml:space="preserve">
+    <value>"STEAL" : Does leave particle on dead bodies</value>
+  </data>
+  <data name="ThiefIntroDescription" xml:space="preserve">
+    <value>Thou can even steal time</value>
+  </data>
+  <data name="ThiefShortDescription" xml:space="preserve">
+    <value>STEAL their precious time</value>
+  </data>
+  <data name="ThiefFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role with the ability to STEAL time from meetings.
+"STEAL" : Steal their precious time!
+ - Activates after targeting a dead body for a set amount of time
+ - Reduces the timer of the next meeting for a set amount, and then spawns a set amount of "TIME FRAGS" around the map
+ - When the corresponding option is on, a particle will be left on the body after being targeted by "STEAL"
+"TIME FRAGS" : Stolen time scatters around...
+ - USE to extend the timer of the next meeting for a set amount
+ - FRAGS can only exist up to 10 at the same time</value>
+  </data>
+  <data name="steal" xml:space="preserve">
+    <value>STEAL</value>
+  </data>
+  <data name="Crewshroom" xml:space="preserve">
+    <value>Crewshroom</value>
+  </data>
+  <data name="CrewshroomAbilityCoolTime" xml:space="preserve">
+    <value>"FUNGI" : Ability Cooldown</value>
+  </data>
+  <data name="CrewshroomAbilityCount" xml:space="preserve">
+    <value>"FUNGI" : Ability Charges</value>
+  </data>
+  <data name="CrewshroomDelaySecond" xml:space="preserve">
+    <value>"FUNGI" : Timer until spores activated</value>
+  </data>
+  <data name="CrewshroomFungleIntroDescription" xml:space="preserve">
+    <value>Mushroom kingdom, I'm-a back home!</value>
+  </data>
+  <data name="CrewshroomIntroDescription" xml:space="preserve">
+    <value>Wanna some magic shrooms?</value>
+  </data>
+  <data name="CrewshroomShortDescription" xml:space="preserve">
+    <value>Place Fungi and mislead players</value>
+  </data>
+  <data name="CrewshroomFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role having the shrooms from the FUNGLE map.
+
+"FUNGI" : Woomy Shroomy!
+ - Sets the mushroom from the FUNGLE map
+ - Almost acts exactly like the ones in the FUNGLE; The timer until the shrooms start releasing shrooms are set by the config</value>
+  </data>
+  <data name="CrewshroomSet" xml:space="preserve">
+    <value>FUNGI</value>
+  </data>
+  <data name="Terorist" xml:space="preserve">
+    <value>Terrorist</value>
+  </data>
+  <data name="TeroristAbilityCoolTime" xml:space="preserve">
+    <value>"THREAT" : Ability Cooldown </value>
+  </data>
+  <data name="TeroristAbilityCount" xml:space="preserve">
+    <value>"THREAT" : Ability Charges </value>
+  </data>
+  <data name="TeroristCanActiveOtherSabotage" xml:space="preserve">
+    <value>"THREAT" : Can be used with other Sabotages </value>
+  </data>
+  <data name="TeroristExplosionTime" xml:space="preserve">
+    <value>"THREAT" : Timer until explosion</value>
+  </data>
+  <data name="TeroristBombNum" xml:space="preserve">
+    <value>"THREAT" : Bombs set per use</value>
+  </data>
+  <data name="TeroristPlayerActivateTime" xml:space="preserve">
+    <value>"THREAT" : Duration to defuse bomb (Alive)</value>
+  </data>
+  <data name="TeroristCanUseDeadPlayer" xml:space="preserve">
+    <value>"THREAT" : Can dead players defuse bomb</value>
+  </data>
+  <data name="TeroristDeadPlayerActivateTime" xml:space="preserve">
+    <value>"THREAT" : Duration to defuse bomb (Dead)</value>
+  </data>
+  <data name="TeroristIntroDescription" xml:space="preserve">
+    <value>Detonate this ship!</value>
+  </data>
+  <data name="TeroristShortDescription" xml:space="preserve">
+    <value>Bring chaos by the THREAT of bombs!</value>
+  </data>
+  <data name="TeroristFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role with the ability to start a custom sabotage, "Bomb threat".
+
+"THREAT" : Gonna detonate this ship now~~
+ - Starts the "Bomb threat" sabotage
+ - Players must defuse bombs set randomly across the ship within a set amount of time to avoid Impostor Victory
+ - Bomb positions are local / set randomly per player; The defusing progress is global.
+
+AnnounceVoice
+ VOICEVOX:ZUNDAMON</value>
+  </data>
+  <data name="TeroristBombSet" xml:space="preserve">
+    <value>THREAT</value>
+  </data>
+  <data name="TeroristBombTask" xml:space="preserve">
+    <value>Defuse Bomb ({0}s remaining)</value>
+  </data>
+  <data name="TeroristBombMinigameProgress" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="TeroristBombMinigameStart" xml:space="preserve">
+    <value>Defuse</value>
+  </data>
+</root>

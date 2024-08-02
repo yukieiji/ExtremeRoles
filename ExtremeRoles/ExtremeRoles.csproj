@@ -44,7 +44,7 @@
 	</ItemGroup>
   
   <ItemGroup>
-    <AdditionalFiles Include="../ExtremeRolesTransData.xlsx" />
+    <AdditionalFiles Include="Translation\resx\*.resx" />
   </ItemGroup>
 
   <ItemGroup>

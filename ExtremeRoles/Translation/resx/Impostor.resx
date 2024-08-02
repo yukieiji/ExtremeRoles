@@ -1,0 +1,1222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ImpostorFullDescription" xml:space="preserve">
+    <value>インポスター役職
+キルやサボタージュを行える
+タスク偽造等でクルーのふりをしろ</value>
+  </data>
+  <data name="ShapeshifterFullDescription" xml:space="preserve">
+    <value>他人に変身できるインポスター役職
+返信できる相手はキルした相手でも可
+変身中はクルーに気付かれないようにする必要がある
+キルやサボタージュを行える
+タスク偽造等でクルーのふりをしろ</value>
+  </data>
+  <data name="PhantomFullDescription" xml:space="preserve">
+    <value>一定時間姿を消すことができるインポスター役職
+姿を消している間はベント以外にふれることができない！！</value>
+  </data>
+  <data name="SpecialImpostor" xml:space="preserve">
+    <value>スペシャルインポスター</value>
+  </data>
+  <data name="SpecialImpostorIntroDescription" xml:space="preserve">
+    <value>普通のインポスターとは少し違う設定を持つ</value>
+  </data>
+  <data name="SpecialImpostorShortDescription" xml:space="preserve">
+    <value>エクストリームなインポスター</value>
+  </data>
+  <data name="SpecialImpostorFullDescription" xml:space="preserve">
+    <value>インポスター役職
+Extreme Rolesの各役職の共通設定が適用できる
+設定内容は以下を確認</value>
+  </data>
+  <data name="Evolver" xml:space="preserve">
+    <value>エボルバー</value>
+  </data>
+  <data name="EvolverIsEvolvedAnimation" xml:space="preserve">
+    <value>進化時、アニメーションを行うか</value>
+  </data>
+  <data name="EvolverIsEatingEndCleanBody" xml:space="preserve">
+    <value>進化後、死体を消すか</value>
+  </data>
+  <data name="EvolverEatingRange" xml:space="preserve">
+    <value>「捕食」を行える範囲</value>
+  </data>
+  <data name="EvolverKillCoolReduceRate" xml:space="preserve">
+    <value>進化後のキルクール減少率</value>
+  </data>
+  <data name="EvolverKillCoolResuceRateMulti" xml:space="preserve">
+    <value>進化毎のキルクール減少率の倍率</value>
+  </data>
+  <data name="EvolverAbilityCoolTime" xml:space="preserve">
+    <value>進化のクールタイム</value>
+  </data>
+  <data name="EvolverAbilityActiveTime" xml:space="preserve">
+    <value>「捕食」を行う時間</value>
+  </data>
+  <data name="EvolverAbilityCount" xml:space="preserve">
+    <value>最終進化までの回数</value>
+  </data>
+  <data name="EvolverIntroDescription" xml:space="preserve">
+    <value>進化を行い、クルーを絶望の縁に追い込め</value>
+  </data>
+  <data name="EvolverShortDescription" xml:space="preserve">
+    <value>死体を喰らい、進化せよ</value>
+  </data>
+  <data name="EvolverFullDescription" xml:space="preserve">
+    <value>インポスター役職
+死体を捕食することで、キルクールタイムが短くなる
+捕食中は死体の近くに居なければならない
+捕食後は新しいキルクールタイムが適用される</value>
+  </data>
+  <data name="evolve" xml:space="preserve">
+    <value>進化</value>
+  </data>
+  <data name="eating" xml:space="preserve">
+    <value>捕食中…</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>キャリヤー</value>
+  </data>
+  <data name="CarrierAbilityCoolTime" xml:space="preserve">
+    <value>「キャリー」のクールタイム</value>
+  </data>
+  <data name="CarrierAbilityActiveTime" xml:space="preserve">
+    <value>「キャリー」で死体を運べる時間</value>
+  </data>
+  <data name="CarrierCarryDistance" xml:space="preserve">
+    <value>「キャリー」が発動できる死体からの距離</value>
+  </data>
+  <data name="CarrierCanReportOnCarry" xml:space="preserve">
+    <value>死体運搬時、通報されるかどうか</value>
+  </data>
+  <data name="CarrierIntroDescription" xml:space="preserve">
+    <value>死体を運び、通報しにくい場所へ隠せ</value>
+  </data>
+  <data name="CarrierShortDescription" xml:space="preserve">
+    <value>キルして、その死体を隠せ</value>
+  </data>
+  <data name="CarrierFullDescription" xml:space="preserve">
+    <value>死体を運ぶことができるインポスター役職
+「キャリー」の発動時間が切れると死体をその場に落とす</value>
+  </data>
+  <data name="carry" xml:space="preserve">
+    <value>キャリー</value>
+  </data>
+  <data name="PsychoKiller" xml:space="preserve">
+    <value>サイコキラー</value>
+  </data>
+  <data name="PsychoKillerKillCoolReduceRate" xml:space="preserve">
+    <value>キルクールの減少率</value>
+  </data>
+  <data name="PsychoKillerCombMax" xml:space="preserve">
+    <value>最大キルコンボ数</value>
+  </data>
+  <data name="PsychoKillerCombResetWhenMeeting" xml:space="preserve">
+    <value>キルコンボを会議時にリセットするか</value>
+  </data>
+  <data name="PsychoKillerHasSelfKillTimer" xml:space="preserve">
+    <value>自爆タイマーを有効化するか</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerTime" xml:space="preserve">
+    <value>自爆タイマーの秒数</value>
+  </data>
+  <data name="PsychoKillerIsForceRestartWhenMeetingEnd" xml:space="preserve">
+    <value>会議終了後、タイマーが強制作動するか</value>
+  </data>
+  <data name="PsychoKillerIsDiactiveUntilKillWhenMeetingEnd" xml:space="preserve">
+    <value>会議終了後の最初のキルまでタイマーが作動しないか</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerModRate" xml:space="preserve">
+    <value>キルコンボ数による自爆タイマーの増減率</value>
+  </data>
+  <data name="PsychoKillerIntroDescription" xml:space="preserve">
+    <value>キルの返り血こそ最高の至福</value>
+  </data>
+  <data name="PsychoKillerShortDescription" xml:space="preserve">
+    <value>キルでコンボを溜め、キルを楽しめ</value>
+  </data>
+  <data name="PsychoKillerFullDescription" xml:space="preserve">
+    <value>連続でキルすることでキルクールが短くなるインポスター役職
+キルするごとに「キルコンボ」が加算され、キルクールの減少率に
+乗算される
+　会議後はロールに設定されたキルクールになるが、キルをする
+ことで、またキルクールの減少が再開される
+　「キルコンボを会議時にリセットするか」がオンのとき、会議
+開始時に「キルコンボ」がリセットされる
+　「自爆タイマーを有効化するか」がオンのとき、最初のキルを
+行った時に自爆までの時間のタイマーが作動する。自爆タイマーは
+再度キルすることでタイマーがリセットされるが時間は「キルコン
+ボ数による自爆タイマーの増減率」分増減する
+　「会議終了後にタイマーが再作動するか」がオンの時、会議開始
+前にタイマーが作動していた場合、会議終了後に再作動する</value>
+  </data>
+  <data name="curCombNum" xml:space="preserve">
+    <value>現在のキルコンボ数：{0}</value>
+  </data>
+  <data name="untilSelfKill" xml:space="preserve">
+    <value>自決まで、残り</value>
+  </data>
+  <data name="BountyHunter" xml:space="preserve">
+    <value>バウンティーハンター</value>
+  </data>
+  <data name="BountyHunterTargetUpdateTime" xml:space="preserve">
+    <value>ターゲット更新時間</value>
+  </data>
+  <data name="BountyHunterTargetKillCoolTime" xml:space="preserve">
+    <value>ターゲットキル時のキルクール</value>
+  </data>
+  <data name="BountyHunterNoneTargetKillCoolTime" xml:space="preserve">
+    <value>ターゲット以外キル時のキルクール</value>
+  </data>
+  <data name="BountyHunterIsShowArrow" xml:space="preserve">
+    <value>ターゲットを指す矢印を表示するか</value>
+  </data>
+  <data name="BountyHunterArrowUpdateCycle" xml:space="preserve">
+    <value>矢印の更新時間</value>
+  </data>
+  <data name="BountyHunterIntroDescription" xml:space="preserve">
+    <value>今宵の獲物は、どの様な悲鳴を上げるのか</value>
+  </data>
+  <data name="BountyHunterShortDescription" xml:space="preserve">
+    <value>目標を探し出して、キルせよ</value>
+  </data>
+  <data name="BountyHunterFullDescription" xml:space="preserve">
+    <value>キルした相手によってキルクールが変化するインポスター役職
+会議後はロールに設定されたキルクールになる
+ターゲットキル時：{0}
+非ターゲットキル時：{1}
+現在の目標：{2}</value>
+  </data>
+  <data name="Painter" xml:space="preserve">
+    <value>ペインター</value>
+  </data>
+  <data name="PainterAbilityCoolTime" xml:space="preserve">
+    <value>「ペイント」のクールタイム</value>
+  </data>
+  <data name="PainterCanPaintDistance" xml:space="preserve">
+    <value>「ペイント」が行える距離</value>
+  </data>
+  <data name="PainterPaintColorIsRandom" xml:space="preserve">
+    <value>「ペイント」した後の死体の色がランダムか</value>
+  </data>
+  <data name="PainterIntroDescription" xml:space="preserve">
+    <value>今回の死体(作品)はどのように描こうか</value>
+  </data>
+  <data name="PainterShortDescription" xml:space="preserve">
+    <value>死体でアートを描こう</value>
+  </data>
+  <data name="PainterFullDescription" xml:space="preserve">
+    <value>死体の色を変更できるインポスター役職
+死体の変更先の色はデフォルトでは透明
+オプションで死体の色がランダムになっている場合、プレイヤー
+ごとに色が異なる死体になります</value>
+  </data>
+  <data name="paint" xml:space="preserve">
+    <value>ペイント</value>
+  </data>
+  <data name="Faker" xml:space="preserve">
+    <value>フェイカー</value>
+  </data>
+  <data name="FakerAbilityCoolTime" xml:space="preserve">
+    <value>「ダミー」のクールタイム</value>
+  </data>
+  <data name="FakerIntroDescription" xml:space="preserve">
+    <value>あなたは”偽物”？、それとも"本物"？</value>
+  </data>
+  <data name="FakerShortDescription" xml:space="preserve">
+    <value>死体やプレイヤーを偽造して、クルーを混乱ささせろ</value>
+  </data>
+  <data name="FakerFullDescription" xml:space="preserve">
+    <value>死体やプレイヤーを偽造することが出来るインポスター役職
+ボタン能力「ダミー(死体)」：
+　・ボタンを押して発動
+　・「偽物の死体」を作成することが出来る
+　・「偽物の死体」は通報することが出来ない
+ボタン能力「ダミー(プレイヤー)」：
+　・左の「Shiftキー」を押しながらボタンを押すことで発動
+　・「偽物のプレイヤー」を作成することが出来る
+　・「偽物のプレイヤー」には当たり判定や能力を使用すること
+　は出来ない
+左の「Ctrlキー」や左の「Altキー」を押しながら上記のボタン
+能力を使用することで作成する偽物となる船員の選択を制限する
+ことが出来る
+　・何も押されてない場合：生存者の中からランダム選択
+　・左の「Ctrlキー」押されている場合：”インポスター陣営”を
+　含まない生存者の中からランダム選択
+　・左の「Altキー」押されている場合：”自分”を含まない生存者
+　の中からランダム選択</value>
+  </data>
+  <data name="dummyDeadBody" xml:space="preserve">
+    <value>ダミー(死体)</value>
+  </data>
+  <data name="dummyPlayer" xml:space="preserve">
+    <value>ダミー(プレイヤー)</value>
+  </data>
+  <data name="DummyPlayerName" xml:space="preserve">
+    <value>ダミー</value>
+  </data>
+  <data name="OverLoader" xml:space="preserve">
+    <value>オーバーローダー</value>
+  </data>
+  <data name="OverLoaderAwakeImpostorNum" xml:space="preserve">
+    <value>「オーバーローダー」に覚醒するインポスター生存者数</value>
+  </data>
+  <data name="OverLoaderAwakeKillCount" xml:space="preserve">
+    <value>「オーバーローダー」に覚醒するキル回数</value>
+  </data>
+  <data name="OverLoaderAbilityCoolTime" xml:space="preserve">
+    <value>「オーバーロード」のクールタイム</value>
+  </data>
+  <data name="OverLoaderAbilityActiveTime" xml:space="preserve">
+    <value>「オーバーロード」発動後、解除可能になるまでの時間</value>
+  </data>
+  <data name="OverLoaderKillCoolReduceRate" xml:space="preserve">
+    <value>「オーバーロード」時のキルクールの減少率</value>
+  </data>
+  <data name="OverLoaderMoveSpeed" xml:space="preserve">
+    <value>「オーバーロード」時のプレイヤーの移動速度</value>
+  </data>
+  <data name="OverLoaderIntroDescription" xml:space="preserve">
+    <value>オーバーロードを使いこなし、全てを超越せよ</value>
+  </data>
+  <data name="OverLoaderShortDescription" xml:space="preserve">
+    <value>オーバーロードによる役職公開を使いこなせ</value>
+  </data>
+  <data name="OverLoaderFullDescription" xml:space="preserve">
+    <value>役職を公開することが出来るインポスター役職
+「オーバーロード」を使用することで、役職が公開状態になる
+「オーバーロード」使用後、ボタンが「ダウンロード」に変化
+する。「ダウンロード」を使う事で役職が再度非公開状態になる
+役職が公開状態になるとどのプレイヤーから見てもプレイヤーの
+名前がインポスター表記になるが、移動速度がブーストされ
+キルレンジがロング固定、キルクールタイムに大きな減少
+ボーナスがかかる
+会議が発生すると「オーバーロード」は強制的に解除され
+役職は非公開状態になる</value>
+  </data>
+  <data name="overLoad" xml:space="preserve">
+    <value>オーバーロード</value>
+  </data>
+  <data name="downLoad" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="Cracker" xml:space="preserve">
+    <value>クラッカー</value>
+  </data>
+  <data name="CrackerAbilityCoolTime" xml:space="preserve">
+    <value>「クラック」のクールタイム</value>
+  </data>
+  <data name="CrackerAbilityCount" xml:space="preserve">
+    <value>「クラック」の使用回数</value>
+  </data>
+  <data name="CrackerCanCrackDistance" xml:space="preserve">
+    <value>「クラック」が発動できる範囲</value>
+  </data>
+  <data name="CrackerRemoveDeadBody" xml:space="preserve">
+    <value>「クラック」によって死体を消すか</value>
+  </data>
+  <data name="CrackerIntroDescription" xml:space="preserve">
+    <value>ハック！クラック！！No Report！！！</value>
+  </data>
+  <data name="CrackerShortDescription" xml:space="preserve">
+    <value>死体をクラックして、死体を通報できなくせよ</value>
+  </data>
+  <data name="CrackerFullDescription" xml:space="preserve">
+    <value>死体をクラックすることで、その死体を通報できなくする
+インポスター役職
+「「クラック」によって死体を消す」オプションが有効時、死体
+を消したあとに「クラック」を使った痕跡が残る
+消えてなく、通報できない死体は会議発生時死体として上がる</value>
+  </data>
+  <data name="crack" xml:space="preserve">
+    <value>クラック</value>
+  </data>
+  <data name="Bomber" xml:space="preserve">
+    <value>ボマー</value>
+  </data>
+  <data name="BomberAbilityCoolTime" xml:space="preserve">
+    <value>「爆弾設置」のクールタイム</value>
+  </data>
+  <data name="BomberAbilityActiveTime" xml:space="preserve">
+    <value>「爆弾設置」が完了する時間</value>
+  </data>
+  <data name="BomberAbilityCount" xml:space="preserve">
+    <value>「爆弾設置」の使用回数</value>
+  </data>
+  <data name="BomberExplosionRange" xml:space="preserve">
+    <value>爆弾の爆発範囲</value>
+  </data>
+  <data name="BomberExplosionKillChance" xml:space="preserve">
+    <value>爆発範囲に居たクルーが死亡する確率</value>
+  </data>
+  <data name="BomberTimerMinTime" xml:space="preserve">
+    <value>「爆弾設置」後、爆発するまでの時間の最小時間</value>
+  </data>
+  <data name="BomberTimerMaxTime" xml:space="preserve">
+    <value>「爆弾設置」後、爆発するまでの時間の最大時間</value>
+  </data>
+  <data name="BomberTellExplosion" xml:space="preserve">
+    <value>爆発を役職の人に教えるかどうか</value>
+  </data>
+  <data name="BomberIntroDescription" xml:space="preserve">
+    <value>爆発は芸術だ！！</value>
+  </data>
+  <data name="BomberShortDescription" xml:space="preserve">
+    <value>クルーを船員爆弾に改造しろ</value>
+  </data>
+  <data name="BomberFullDescription" xml:space="preserve">
+    <value>クルーを爆弾に改造できるインポスター役職
+「爆弾設置」を行うことで、一定時間後にそのプレイヤーを
+中心とした爆発が発生する。
+爆発の範囲に居たクルーは設定した確率で死亡する。
+爆発の範囲内のインポスターは必ず生存する。ただし、ボマー
+本人は巻き込まれる
+ボディーガードに守られているクルーはそのボディーガードが
+確率で死亡し、そのクルーは必ず生存する
+爆発までの時間は「「爆弾設置」後、爆発するまでの時間の最小
+時間」と「「爆弾設置」後、爆発するまでの時間の最大時間」の
+間でランダムに決定される
+「爆弾設置」されたプレイヤーもしくは設置した役職の人が死亡
+した場合、爆弾は爆発しない</value>
+  </data>
+  <data name="setBomb" xml:space="preserve">
+    <value>爆弾設置</value>
+  </data>
+  <data name="explosionText" xml:space="preserve">
+    <value>作成していた芸術品が1つ、完成したようだ</value>
+  </data>
+  <data name="Mery" xml:space="preserve">
+    <value>メリー</value>
+  </data>
+  <data name="MeryAbilityCoolTime" xml:space="preserve">
+    <value>「陣」のクールタイム</value>
+  </data>
+  <data name="MeryAbilityCount" xml:space="preserve">
+    <value>「陣」の使用回数</value>
+  </data>
+  <data name="MeryActiveNum" xml:space="preserve">
+    <value>「陣」が活性化するのに必要なプレイヤー数</value>
+  </data>
+  <data name="MeryActiveRange" xml:space="preserve">
+    <value>「陣」がプレイヤーを検知する範囲</value>
+  </data>
+  <data name="MeryIntroDescription" xml:space="preserve">
+    <value>私、メリーさん。今あなたの後ろにいるの</value>
+  </data>
+  <data name="MeryShortDescription" xml:space="preserve">
+    <value>活性化しやすい場所に特殊ベント「陣」を設置せよ</value>
+  </data>
+  <data name="MeryFullDescription" xml:space="preserve">
+    <value>「陣」を設置できるをインポスター
+「陣」には活性化状態と非活性化状態がある(テクスチャも変化
+する)
+活性化した状態の「陣」は「ベント」として使用でき、活性化
+した「陣」同士で移動可能になる。
+「陣」の活性化にはインポスター以外のプレイヤーが設定された
+範囲内に設定された人数近づく必要がある。一度活性化状態に
+なれば非活性化状態にはならない
+「陣」はインポスターとマーリン以外見ることも使うことも
+出来ない(非活性、活性化後ともに)</value>
+  </data>
+  <data name="setCamp" xml:space="preserve">
+    <value>陣</value>
+  </data>
+  <data name="SlaveDriver" xml:space="preserve">
+    <value>スレイヴドライバー</value>
+  </data>
+  <data name="SlaveDriverCanSeeTaskBar" xml:space="preserve">
+    <value>タスクバーを常に見ることが出来るか</value>
+  </data>
+  <data name="SlaveDriverAbilityCoolTime" xml:space="preserve">
+    <value>「ハラスメント」のクールタイム</value>
+  </data>
+  <data name="SlaveDriverAbilityCount" xml:space="preserve">
+    <value>「ハラスメント」の使用回数</value>
+  </data>
+  <data name="SlaveDriverRevartTaskNum" xml:space="preserve">
+    <value>「ハラスメント」で巻き戻るタスク数</value>
+  </data>
+  <data name="SlaveDriverRange" xml:space="preserve">
+    <value>「ハラスメント」が発動できる範囲</value>
+  </data>
+  <data name="SlaveDriverIntroDescription" xml:space="preserve">
+    <value>やぁ、お仕事は順調かね？</value>
+  </data>
+  <data name="SlaveDriverShortDescription" xml:space="preserve">
+    <value>「ハラスメント」のタスクの進捗を巻き戻せ</value>
+  </data>
+  <data name="SlaveDriverFullDescription" xml:space="preserve">
+    <value>能力によって一部タスクを巻き戻すことが出来るインポスター
+役職
+ボタン能力「ハラスメント」：
+　範囲内のプレイヤーを対象にして発動する
+　発動すると対象としたプレイヤー名の横にマークが付く
+　マークの付いたプレイヤーは会議開始時にオプション
+　「「ハラスメント」で巻き戻るタスク数」分、完了していた
+　タスクを別のタスクへリセットする</value>
+  </data>
+  <data name="Harassment" xml:space="preserve">
+    <value>ハラスメント</value>
+  </data>
+  <data name="SlaveDriverReportMessage" xml:space="preserve">
+    <value>誰かに嫌がらせを受けてタスクが増えてしまった</value>
+  </data>
+  <data name="SandWorm" xml:space="preserve">
+    <value>サンドワーム</value>
+  </data>
+  <data name="SandWormKillCoolPenalty" xml:space="preserve">
+    <value>通常キルのキルクールペナルティ</value>
+  </data>
+  <data name="SandWormAssaultKillCoolReduce" xml:space="preserve">
+    <value>「強襲」及び停電中のキルのキルクールボーナス</value>
+  </data>
+  <data name="SandWormAssaultRange" xml:space="preserve">
+    <value>「強襲」が使用できる範囲</value>
+  </data>
+  <data name="SandWormAbilityCoolTime" xml:space="preserve">
+    <value>「強襲」のクールタイム</value>
+  </data>
+  <data name="SandWormIntroDescription" xml:space="preserve">
+    <value>光が苦手で暗闇が大好なインポスター</value>
+  </data>
+  <data name="SandWormShortDescription" xml:space="preserve">
+    <value>ベントからの「強襲」を使いこなせ</value>
+  </data>
+  <data name="SandWormFullDescription" xml:space="preserve">
+    <value>特殊キルボタン「強襲」が使えるインポスター役職
+能力「強襲」
+　・ベント使用時に使えるキルボタンである
+　・発動するとそのベントの開閉アニメーションが再生
+　される
+　・キルクールは停電発動中もしくはベント使用時のみ回復する
+　・元々マップ内に存在していたベントのみ使用可能かつクール
+　タイムが回復(メリーの特殊ベント「陣」等は判定外)
+　・特殊キル扱いになるためTM等の一部防御判定を貫通する
+通常のキルボタンによるキルを行うと設定された分キルクールが
+増加する
+「強襲」または停電中のキルを行うことでキルクールが設定値
+減少する(設定されたキルクールより短くなる)</value>
+  </data>
+  <data name="assault" xml:space="preserve">
+    <value>強襲</value>
+  </data>
+  <data name="Smasher" xml:space="preserve">
+    <value>スマッシャー</value>
+  </data>
+  <data name="SmasherAbilityCoolTime" xml:space="preserve">
+    <value>「スマッシュ」のクールタイム</value>
+  </data>
+  <data name="SmasherAbilityCount" xml:space="preserve">
+    <value>「スマッシュ」の使用回数</value>
+  </data>
+  <data name="SmasherSmashPenaltyKillCool" xml:space="preserve">
+    <value>「スマッシュ」によるキルクールペナルティ</value>
+  </data>
+  <data name="SmasherIntroDescription" xml:space="preserve">
+    <value>2つのキルボタンを持つインポスター</value>
+  </data>
+  <data name="SmasherShortDescription" xml:space="preserve">
+    <value>もう一つのキルボタン「スマッシュ」を使いこなせ</value>
+  </data>
+  <data name="SmasherFullDescription" xml:space="preserve">
+    <value>もう一つのキルボタン「スマッシュ」を持つインポスター
+能力「スマッシュ」
+　・通常の「キルボタン」は別々のクールタイムを持つ
+　・通常の「キルボタン」と同じロジックでキルが行われる
+　・使用することで通常のキルボタンの次回キルクールが設定値
+　分増加する</value>
+  </data>
+  <data name="smash" xml:space="preserve">
+    <value>スマッシュ</value>
+  </data>
+  <data name="AssaultMaster" xml:space="preserve">
+    <value>アサルトマスター</value>
+  </data>
+  <data name="AssaultMasterAbilityCoolTime" xml:space="preserve">
+    <value>「リロード」のクールタイム</value>
+  </data>
+  <data name="AssaultMasterStockLimit" xml:space="preserve">
+    <value>「ストック」の上限数</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenReport" xml:space="preserve">
+    <value>死体通報による貯まる「ストック」の本数</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenMeetingButton" xml:space="preserve">
+    <value>緊急会議ボタンによる貯まる「ストック」の本数</value>
+  </data>
+  <data name="AssaultMasterCockingKillCoolReduceTime" xml:space="preserve">
+    <value>「コッキング」によるキルクール減少</value>
+  </data>
+  <data name="AssaultMasterReloadReduceKillCoolTimePerStock" xml:space="preserve">
+    <value>「ストック」1本あたりのキルクール減少</value>
+  </data>
+  <data name="AssaultMasterIsResetReloadCoolTimeWhenKill" xml:space="preserve">
+    <value>キルによって「リロード」のクールタイムがリセットされるか</value>
+  </data>
+  <data name="AssaultMasterReloadCoolTimeReduceRatePerHideStock" xml:space="preserve">
+    <value>上限を超えた「ストック」1本あたりの「リロード」クールタイム減少率</value>
+  </data>
+  <data name="AssaultMasterIntroDescription" xml:space="preserve">
+    <value>銃と弾の扱いはお手の物！！</value>
+  </data>
+  <data name="AssaultMasterShortDescription" xml:space="preserve">
+    <value>会議によって貯まる「ストック」を使いこなせ</value>
+  </data>
+  <data name="AssaultMasterFullDescription" xml:space="preserve">
+    <value>会議が発生する毎に貯まる「ストック」で強化されるインポスター
+パッシブ能力「ストック」：現在のストック本数:{0}/{1}本
+　・「ストック」は通報及び会議ボタンによって一定数貯まる
+　・通報と会議ボタンで貯まる本数は変わる
+　・所持できる「ストック」の本数には上限がある
+　・上限を超えた「ストック」1本に付き「リロード」のクール
+　タイムが減少する
+ボタン能力「リロード」：現在のリロードクールタイム:{2}秒
+　・能力使用時「ストック」を使えるだけ消費して現在のキル
+　クールを大幅に減らす
+　・能力を使用すると減少していた「リロード」のクールタイム
+　はもとに戻る
+パッシブ能力「コッキング」：
+　・キル時に自動発動する
+　・貯まっている「ストック」を1本使用する事でキルクールを
+　一定値減少させる</value>
+  </data>
+  <data name="reload" xml:space="preserve">
+    <value>リロード</value>
+  </data>
+  <data name="noStockNow" xml:space="preserve">
+    <value>ストック無し</value>
+  </data>
+  <data name="reduceKillCool" xml:space="preserve">
+    <value>キルクール\n最大{0}秒減少可</value>
+  </data>
+  <data name="Shooter" xml:space="preserve">
+    <value>シューター</value>
+  </data>
+  <data name="ShooterIsInitAwake" xml:space="preserve">
+    <value>「シューター」が初期覚醒かどうか</value>
+  </data>
+  <data name="ShooterAwakeKillNum" xml:space="preserve">
+    <value>「シューター」に覚醒するキル回数</value>
+  </data>
+  <data name="ShooterAwakeImpNum" xml:space="preserve">
+    <value>「シューター」に覚醒するインポスター生存者数</value>
+  </data>
+  <data name="ShooterShootKillCoolPenalty" xml:space="preserve">
+    <value>「シュート」一回当りのキルクールペナルティ</value>
+  </data>
+  <data name="ShooterNoneAwakeWhenShoot" xml:space="preserve">
+    <value>「シュート」によって非覚醒状態に戻るか</value>
+  </data>
+  <data name="ShooterCanCallMeeting" xml:space="preserve">
+    <value>緊急会議ボタンを使用できるか</value>
+  </data>
+  <data name="ShooterCanShootSelfCallMeeting" xml:space="preserve">
+    <value>自分で起こした緊急会議で「シュート」出来るか</value>
+  </data>
+  <data name="ShooterMaxShootNum" xml:space="preserve">
+    <value>「弾」の最大所持数</value>
+  </data>
+  <data name="ShooterInitShootNum" xml:space="preserve">
+    <value>「弾」の初期弾数</value>
+  </data>
+  <data name="ShooterMaxMeetingShootNum" xml:space="preserve">
+    <value>会議中に「シュート」出来る回数</value>
+  </data>
+  <data name="ShooterShootChargeTime" xml:space="preserve">
+    <value>「弾」の装填にかかる時間</value>
+  </data>
+  <data name="ShooterShootKillNum" xml:space="preserve">
+    <value>「弾」の装填に必要なキル回数</value>
+  </data>
+  <data name="ShooterIntroDescription" xml:space="preserve">
+    <value>撃ち抜け！！巨悪の弾丸！！</value>
+  </data>
+  <data name="ShooterShortDescription" xml:space="preserve">
+    <value>「シュート」で歯向かう者を一掃せよ</value>
+  </data>
+  <data name="ShooterFullDescription" xml:space="preserve">
+    <value>会議中にキルが可能なインポスター
+能力「シュート」
+　・自分が未投票時に相手を選択して発動する
+　・発動後選択した相手を問答無用でキルする
+　・発動には「弾」が必要であり「弾」は発動毎に1つ減る
+　・「弾」は初期から与えられている他にキル回数と時間経過
+　両方を満たした時に1発取得できる
+　　・この時間経過はキルタイマーが進む状況下でのみ経過する
+　　・この時間経過は会議によってリセットされない
+シュートを発動すると次のキルクールにペナルティが発生する。
+このペナルティは役職の人がキルするまで継続する</value>
+  </data>
+  <data name="shooterShootStatus" xml:space="preserve">
+    <value>残り弾数:{0}/{1}発\nこの会議中に{2}回シュート可能</value>
+  </data>
+  <data name="shooterChargeInfo" xml:space="preserve">
+    <value>チャージ状況:{0}/{1}発\nチャージ完了まで残り</value>
+  </data>
+  <data name="LastWolf" xml:space="preserve">
+    <value>ラストウルフ</value>
+  </data>
+  <data name="LastWolfAwakeImpostorNum" xml:space="preserve">
+    <value>ラストウルフに覚醒するインポスターの生存者数</value>
+  </data>
+  <data name="LastWolfDeadPlayerNumBonus" xml:space="preserve">
+    <value>死亡者1人当たりのキルクール減少率</value>
+  </data>
+  <data name="LastWolfKillPlayerNumBonus" xml:space="preserve">
+    <value>非覚醒状態のキル回数1回当たりキルクール減少率</value>
+  </data>
+  <data name="LastWolfAbilityCoolTime" xml:space="preserve">
+    <value>「強制停電」のクールタイム</value>
+  </data>
+  <data name="LastWolfLightOffVision" xml:space="preserve">
+    <value>「強制停電」の視界</value>
+  </data>
+  <data name="LastWolfAbilityActiveTime" xml:space="preserve">
+    <value>「強制停電」の発動時間</value>
+  </data>
+  <data name="LastWolfIntroDescription" xml:space="preserve">
+    <value>孤高の一匹狼</value>
+  </data>
+  <data name="LastWolfShortDescription" xml:space="preserve">
+    <value>「強制停電」を使いこなせ</value>
+  </data>
+  <data name="LastWolfFullDescription" xml:space="preserve">
+    <value>インポスターの生存者によって覚醒したインポスター役職
+ラストウルフのキルはキルワープが発生しない
+生存者の数に応じて会議終了後1回だけキルクールタイムが
+短くなる(キルすると元のクールタイムに戻る)、このキルクール
+タイムの計算時、非覚醒状態のキル回数によってボーナスが入る
+能力「強制停電」
+　・「ラストウルフ」の人以外の視界を強制的に小さくします
+　・この停電は視界効果を受けない設定でも効果を受けます
+　・この能力のクールタイムは生存者が減れば減るほど長くなる</value>
+  </data>
+  <data name="liightOff" xml:space="preserve">
+    <value>強制停電</value>
+  </data>
+  <data name="Commander" xml:space="preserve">
+    <value>コマンダー</value>
+  </data>
+  <data name="CommanderKillCoolReduceTime" xml:space="preserve">
+    <value>「攻撃指令」の基本キルクール減少量</value>
+  </data>
+  <data name="CommanderKillCoolReduceImpBonus" xml:space="preserve">
+    <value>インポスターの脱落者1人当たりの「攻撃指令」のキルクール減少量</value>
+  </data>
+  <data name="CommanderIncreaseKillNum" xml:space="preserve">
+    <value>「攻撃指令」の使用回数が増加するキル数</value>
+  </data>
+  <data name="CommanderAbilityCoolTime" xml:space="preserve">
+    <value>「攻撃指令」のクールタイム</value>
+  </data>
+  <data name="CommanderAbilityCount" xml:space="preserve">
+    <value>「攻撃指令」の使用可能回数</value>
+  </data>
+  <data name="CommanderIntroDescription" xml:space="preserve">
+    <value>こちらHQ、全クルーを抹殺せよ</value>
+  </data>
+  <data name="CommanderShortDescription" xml:space="preserve">
+    <value>「攻撃指令」を使い仲間のキルクールを回復させよ</value>
+  </data>
+  <data name="CommanderFullDescription" xml:space="preserve">
+    <value>仲間のキルクールを回復することが出来るインポスター役職
+能力「攻撃指令」
+　・使用することで自分を含めたインポスターのキルクールを
+　一定値減少させる
+　・この減少値はインポスターの生存者数が減ると強化される
+　・この能力の使用回数はこの役職の人がキルを一定回数行う事
+　で増加する</value>
+  </data>
+  <data name="attackCommand" xml:space="preserve">
+    <value>攻撃指令</value>
+  </data>
+  <data name="Hypnotist" xml:space="preserve">
+    <value>ヒプノティスト</value>
+  </data>
+  <data name="HypnotistAwakeCheckImpostorNum" xml:space="preserve">
+    <value>ヒプノティストに覚醒するインポスターの生存者数(条件:1)</value>
+  </data>
+  <data name="HypnotistAwakeCheckTaskGage" xml:space="preserve">
+    <value>ヒプノティストに覚醒するタスクの全体進捗率(条件:2)</value>
+  </data>
+  <data name="HypnotistAwakeKillCount" xml:space="preserve">
+    <value>ヒプノティストに覚醒するキル回数(条件:3)</value>
+  </data>
+  <data name="HypnotistRange" xml:space="preserve">
+    <value>「催眠術」のが発動できる範囲</value>
+  </data>
+  <data name="HypnotistAbilityCoolTime" xml:space="preserve">
+    <value>「催眠術」のクールタイム</value>
+  </data>
+  <data name="HypnotistAbilityCount" xml:space="preserve">
+    <value>「催眠術」の発動可能回数</value>
+  </data>
+  <data name="HypnotistHideArrowRange" xml:space="preserve">
+    <value>「能力のかけら」への矢印が表示される距離</value>
+  </data>
+  <data name="HypnotistDefaultRedAbilityPart" xml:space="preserve">
+    <value>「ドール」作成時の「能力のかけら（赤）」のデフォルト個数</value>
+  </data>
+  <data name="HypnotistHideKillButtonTime" xml:space="preserve">
+    <value>「能力のかけら（赤）」取得後\n「ドール」からキルボタンが消える秒数</value>
+  </data>
+  <data name="HypnotistIsResetKillCoolWhenDollKill" xml:space="preserve">
+    <value>「ドール」のキルによって\n「ヒプノティスト」のキルクールがリセットされるか</value>
+  </data>
+  <data name="HypnotistDollKillCoolReduceRate" xml:space="preserve">
+    <value>「能力のかけら（赤）」連続取得時の\n「ドール」のキルクール減少率</value>
+  </data>
+  <data name="HypnotistDollCrakingCoolTime" xml:space="preserve">
+    <value>「ドール」の「クラッキング」のクールタイム</value>
+  </data>
+  <data name="HypnotistDollCrakingActiveTime" xml:space="preserve">
+    <value>「ドール」の「クラッキング」が使用できる時間</value>
+  </data>
+  <data name="HypnotistIntroDescription" xml:space="preserve">
+    <value>1，2，3，ポン、ほらあなたも私の催眠の虜に・・・</value>
+  </data>
+  <data name="HypnotistShortDescription" xml:space="preserve">
+    <value>「催眠術」によって「ドール」を作れ</value>
+  </data>
+  <data name="HypnotistFullDescription" xml:space="preserve">
+    <value>「催眠術」によって「ドール」を作れるインポスター役職
+能力「催眠術」
+　・近くにいるプレイヤー一人を対象にして発動できる
+　・発動後、そのプレイヤーの役職をリセットし「ドール」に
+　する
+　・「ドール」作成後、「能力のかけら」がマップに設置される
+　・「能力のかけら（赤）」は「ドール」にキルボタンを付与
+　する、連続取得時は「ドール」のキルクールを一定値減少
+　させる
+　・「能力のかけら（青）」は「ドール」に各種マップ
+　モジュールのアクセスを付与する
+　・「能力のかけら（グレー）」は「ドール」にクラッキング
+　能力の一つを付与する
+　・「能力のかけら（青）」と「能力のかけら（グレー）」の
+　設置数は固定数
+　・「能力のかけら（赤）」の設置数は「ドール」にした
+　プレイヤーの役職の能力に依存する</value>
+  </data>
+  <data name="Hypnosis" xml:space="preserve">
+    <value>催眠術</value>
+  </data>
+  <data name="Doll" xml:space="preserve">
+    <value>ドール</value>
+  </data>
+  <data name="DollShortDescription" xml:space="preserve">
+    <value>あなたは「催眠」の虜になった</value>
+  </data>
+  <data name="DollFullDescription" xml:space="preserve">
+    <value>「ヒプノティスト」によって作られた役職
+勝利条件：インポスターの勝利条件を満たすこと
+基本的に何も出来ない役職であるが、「ヒプノティスト」が取得
+した「能力のかけら」によって強化されていく
+　・現在のヒプノティスト：{0}
+　・解禁済みマップモジュール：{1}
+　・解禁済みクラッキング能力：{2}</value>
+  </data>
+  <data name="FeatAccess" xml:space="preserve">
+    <value>催眠強度変化：「{0}」のアクセスが解禁された</value>
+  </data>
+  <data name="unlockCraking" xml:space="preserve">
+    <value>催眠強度変化：クラッキング能力の「{0}」が解禁された</value>
+  </data>
+  <data name="unlockKill" xml:space="preserve">
+    <value>催眠強度変化：キル能力が付与された</value>
+  </data>
+  <data name="lockKill" xml:space="preserve">
+    <value>催眠強度変化：キル能力が剥奪された</value>
+  </data>
+  <data name="UnderWarper" xml:space="preserve">
+    <value>アンダーワーパー</value>
+  </data>
+  <data name="UnderWarperAwakeKillCount" xml:space="preserve">
+    <value>アンダーワーパーに覚醒する会議終了後のキル回数</value>
+  </data>
+  <data name="UnderWarperVentLinkKillCout" xml:space="preserve">
+    <value>ベントが新しくリンクされる会議終了後のキル回数</value>
+  </data>
+  <data name="UnderWarperNoVentAnimeKillCout" xml:space="preserve">
+    <value>ベントアニメーションがなくなる会議終了後のキル回数</value>
+  </data>
+  <data name="UnderWarperWallHackVent" xml:space="preserve">
+    <value>覚醒後、壁越しでベントを使えるか</value>
+  </data>
+  <data name="UnderWarperRange" xml:space="preserve">
+    <value>覚醒後、ベントが使用できる範囲</value>
+  </data>
+  <data name="UnderWarperIntroDescription" xml:space="preserve">
+    <value>最強のベント使い</value>
+  </data>
+  <data name="UnderWarperShortDescription" xml:space="preserve">
+    <value>ベントをうまく使い立ち回れ</value>
+  </data>
+  <data name="UnderWarperFullDescription" xml:space="preserve">
+    <value>最強のベント使いなインポスター
+会議終了までにキルした総回数を元に覚醒や能力が付与される
+覚醒することでベント使用の範囲が広くなる</value>
+  </data>
+  <data name="Magician" xml:space="preserve">
+    <value>マジシャン</value>
+  </data>
+  <data name="MagicianAbilityCoolTime" xml:space="preserve">
+    <value>「ジャグリング」のクールタイム</value>
+  </data>
+  <data name="MagicianAbilityCount" xml:space="preserve">
+    <value>「ジャグリング」の使用回数</value>
+  </data>
+  <data name="MagicianTeleportTargetRate" xml:space="preserve">
+    <value>「ジャグリング」の対象になる生存者の割合</value>
+  </data>
+  <data name="MagicianDupeTeleportTargetTo" xml:space="preserve">
+    <value>「ジャグリング」のテレポート先が重複するか</value>
+  </data>
+  <data name="MagicianIncludeSpawnPoint" xml:space="preserve">
+    <value>「ジャグリング」のテレポート先にスポーン位置を含むか</value>
+  </data>
+  <data name="MagicianIncludeRolePlayer" xml:space="preserve">
+    <value>「ジャグリング」の対象に役職の人本人が含まれるか</value>
+  </data>
+  <data name="MagicianIntroDescription" xml:space="preserve">
+    <value>議論をかき乱せ！</value>
+  </data>
+  <data name="MagicianShortDescription" xml:space="preserve">
+    <value>能力を使いこなし情報を攪乱しろ！</value>
+  </data>
+  <data name="MagicianFullDescription" xml:space="preserve">
+    <value>能力により船員の位置を大きく変えることができるインポスター
+ボタン能力「ジャグリング」：
+　・生存者の中から一定のプレイヤーをランダムな別の
+　プレイヤーの場所にテレポートさせる(役職の人も含む)
+　・オプション「「ジャグリング」のテレポート先にスポーン位
+　置を含むか」がオンの時、プレイヤーの位置以外にマップの
+　スポーン位置も含まれる
+　・オプション「「ジャグリング」の対象に役職の人本人が含ま
+　れるか」がオフの時、役職の人本人が「ジャグリング」の対象
+　やテレポート先に含まれなくなる</value>
+  </data>
+  <data name="juggling" xml:space="preserve">
+    <value>ジャグリング</value>
+  </data>
+  <data name="Slime" xml:space="preserve">
+    <value>スライム</value>
+  </data>
+  <data name="SlimeAbilityCoolTime" xml:space="preserve">
+    <value>「モーフ」のクールタイム</value>
+  </data>
+  <data name="SlimeAbilityActiveTime" xml:space="preserve">
+    <value>「モーフ」の変身できる時間</value>
+  </data>
+  <data name="SlimeIntroDescription" xml:space="preserve">
+    <value>どんな物にも変身可能な軟体インポスター</value>
+  </data>
+  <data name="SlimeShortDescription" xml:space="preserve">
+    <value>「モーフ」で色々な物に変身しよう</value>
+  </data>
+  <data name="SlimeFullDescription" xml:space="preserve">
+    <value>能力により自身の見た目をマップのオブジェクトに変身できる
+インポスター
+ボタン能力「モーフ」：
+　・変身が可能なマップオブジェクトが近くにある時に使用可能
+　であり、使用することでそのマップオブジェクトに変身出来る
+　・キル等は変身したまま可能であるが、ベントやはしご等を
+　使用すると変身が解ける</value>
+  </data>
+  <data name="SlimeMorph" xml:space="preserve">
+    <value>モーフ</value>
+  </data>
+  <data name="Zombie" xml:space="preserve">
+    <value>ゾンビ</value>
+  </data>
+  <data name="ZombieAwakeKillCount" xml:space="preserve">
+    <value>ゾンビに覚醒するキル回数</value>
+  </data>
+  <data name="ZombieAbilityCoolTime" xml:space="preserve">
+    <value>「魔法陣」のクールタイム</value>
+  </data>
+  <data name="ZombieAbilityActiveTime" xml:space="preserve">
+    <value>「魔法陣」の設置にかかる時間</value>
+  </data>
+  <data name="ZombieAbilityCount" xml:space="preserve">
+    <value>「復活可能状態」になる「魔法陣」の設置個数(条件：1)</value>
+  </data>
+  <data name="ZombieShowMagicCircleTime" xml:space="preserve">
+    <value>「魔法陣」が設置後表示されるまでの秒数</value>
+  </data>
+  <data name="ZombieResurrectKillCount" xml:space="preserve">
+    <value>「復活可能状態」になるまでのキル回数(条件：2)</value>
+  </data>
+  <data name="ZombieResurrectDelayTime" xml:space="preserve">
+    <value>「復活可能状態」時に死亡してから復活するまでのタイムラグ</value>
+  </data>
+  <data name="ZombieCanResurrectOnExil" xml:space="preserve">
+    <value>追放でも復活することが可能か</value>
+  </data>
+  <data name="ZombieIntroDescription" xml:space="preserve">
+    <value>蘇る肉体を持つインポスター</value>
+  </data>
+  <data name="ZombieShortDescription" xml:space="preserve">
+    <value>「魔法陣」を設置し、キルをしてそれに生贄を捧げよ</value>
+  </data>
+  <data name="ZombieFullDescription" xml:space="preserve">
+    <value>復活条件を満たすことで復活できる覚醒インポスター役職
+この役職は幽霊役職にアサインされない
+ボタン能力「魔法陣」：
+　・特定の部屋に行くことで使用可能(矢印で示されている部屋)
+　・使用後、一定時間静止後に魔法陣が設置される
+　・設置後「「魔法陣」が設置後表示されるまでの秒数」が経過
+　後、全員に巨大な魔法陣が表示される
+　・この能力の使用回数が0回かつ覚醒後に指定回数のキルを
+　行っていた場合(条件:1と条件:2を満たした時)に「復活可能
+状態」になる
+「復活可能状態」でキルされると一定時間後に復活します(一定
+時間中、役職表示等は無効化されます)
+復活地点はマップのスポーン地点(複数ある場合はランダム)です</value>
+  </data>
+  <data name="featMagicCircle" xml:space="preserve">
+    <value>魔法陣</value>
+  </data>
+  <data name="Thief" xml:space="preserve">
+    <value>シーフ</value>
+  </data>
+  <data name="ThiefAbilityCoolTime" xml:space="preserve">
+    <value>「スティール」のクールタイム</value>
+  </data>
+  <data name="ThiefAbilityActiveTime" xml:space="preserve">
+    <value>「スティール」が完了するまでの時間</value>
+  </data>
+  <data name="ThiefAbilityCount" xml:space="preserve">
+    <value>「スティール」の使用回数</value>
+  </data>
+  <data name="ThiefRange" xml:space="preserve">
+    <value>「スティール」が発動できる範囲</value>
+  </data>
+  <data name="ThiefSetNum" xml:space="preserve">
+    <value>「スティール」の発動によって設置される「刻のかけら」の数</value>
+  </data>
+  <data name="ThiefSetTimeOffset" xml:space="preserve">
+    <value>「スティール」の発動によって減少する会議時間</value>
+  </data>
+  <data name="ThiefPickUpTimeOffset" xml:space="preserve">
+    <value>「刻のかけら」を拾ったときに増加する会議時間</value>
+  </data>
+  <data name="ThiefIsAddEffect" xml:space="preserve">
+    <value>「スティール」の発動で死体にエフェクトを追加するか</value>
+  </data>
+  <data name="ThiefIntroDescription" xml:space="preserve">
+    <value>それが"刻"でさえも盗んで見せる</value>
+  </data>
+  <data name="ThiefShortDescription" xml:space="preserve">
+    <value>"刻"を盗め</value>
+  </data>
+  <data name="ThiefFullDescription" xml:space="preserve">
+    <value>能力を使用することで会議時間を減少させるインポスター役職
+
+・ボタン能力「スティール」
+　　死体を対象にして発動できる
+　　一定時間死体の付近にいた後、会議時間が設定値分減少する
+　　減少した次の会議後、「刻のかけら」が設定値分マップに設置
+　される
+　　　オプション「「スティール」の発動で死体にエフェクトを追加
+　　するか」がオンの場合、死体にエフェクトが追加される
+・「刻のかけら」
+　　近くに行き使用ボタンを押すことで回収できる
+　　回収すると会議時間が設定値分増加する
+　　「刻のかけら」の同時存在数はマップによらず10個であり、
+　それ以上は設置されることはない</value>
+  </data>
+  <data name="steal" xml:space="preserve">
+    <value>スティール</value>
+  </data>
+  <data name="Crewshroom" xml:space="preserve">
+    <value>クルーシュルーム</value>
+  </data>
+  <data name="CrewshroomAbilityCoolTime" xml:space="preserve">
+    <value>「キノコ設置」のクールタイム</value>
+  </data>
+  <data name="CrewshroomAbilityCount" xml:space="preserve">
+    <value>「キノコ設置」が出来る回数</value>
+  </data>
+  <data name="CrewshroomDelaySecond" xml:space="preserve">
+    <value>胞子が出るようになるまでの時間</value>
+  </data>
+  <data name="CrewshroomFungleIntroDescription" xml:space="preserve">
+    <value>きのこの島から生まれ、帰ってきたインポスター</value>
+  </data>
+  <data name="CrewshroomIntroDescription" xml:space="preserve">
+    <value>ファングルからの密輸人</value>
+  </data>
+  <data name="CrewshroomShortDescription" xml:space="preserve">
+    <value>「キノコ設置」で視界情報を撹乱させよう</value>
+  </data>
+  <data name="CrewshroomFullDescription" xml:space="preserve">
+    <value>「キノコ設置」でファングルのキノコを設置出来るインポスター
+ボタン能力「キノコ設置」：
+　　ボタンを押すことでその位置にファングルのキノコを設置出来る
+　　設置されたキノコの仕様はファングルのものと同じ
+　　キノコから胞子が出るまでは「胞子が出るようになるまでの
+　時間」かかる</value>
+  </data>
+  <data name="CrewshroomSet" xml:space="preserve">
+    <value>キノコ設置</value>
+  </data>
+  <data name="Terorist" xml:space="preserve">
+    <value>テロリスト</value>
+  </data>
+  <data name="TeroristAbilityCoolTime" xml:space="preserve">
+    <value>「爆破予告」のクールタイム</value>
+  </data>
+  <data name="TeroristAbilityCount" xml:space="preserve">
+    <value>「爆破予告」の使用回数</value>
+  </data>
+  <data name="TeroristCanActiveOtherSabotage" xml:space="preserve">
+    <value>「爆破予告」を他のサボタージュと併用出来るか</value>
+  </data>
+  <data name="TeroristExplosionTime" xml:space="preserve">
+    <value>「爆破予告」から爆発するまでの時間</value>
+  </data>
+  <data name="TeroristBombNum" xml:space="preserve">
+    <value>「爆破予告」で設置される爆弾の数</value>
+  </data>
+  <data name="TeroristPlayerActivateTime" xml:space="preserve">
+    <value>生存者の爆弾の解除にかかる時間</value>
+  </data>
+  <data name="TeroristCanUseDeadPlayer" xml:space="preserve">
+    <value>死亡している人が爆弾を解除できるか</value>
+  </data>
+  <data name="TeroristDeadPlayerActivateTime" xml:space="preserve">
+    <value>死亡している人の爆弾の解除にかかる時間</value>
+  </data>
+  <data name="TeroristIntroDescription" xml:space="preserve">
+    <value>爆弾を設置して、この船を爆破せよ</value>
+  </data>
+  <data name="TeroristShortDescription" xml:space="preserve">
+    <value>「爆破予告」でクルーを分断しつつ勝利せよ</value>
+  </data>
+  <data name="TeroristFullDescription" xml:space="preserve">
+    <value>カスタムサボタージュ「爆破サボタージュ」を起こす事が出来る
+インポスター役職
+
+ボタン能力「爆破予告」
+　　ボタンを押すと「爆破サボタージュ」をおこすことが出来る
+カスタムサボタージュ「爆破サボタージュ」
+　　マップのランダムな箇所に爆弾が設置され、指定時間以内に解除
+　する必要がある
+　　解除に失敗するとインポスターの特殊勝利となる
+　　設置箇所はプレイヤーによって異なるが、解除状況は全プレイ
+　ヤー共有される
+ 
+アナウンス音声クレジット
+　VOICEVOX:ずんだもん</value>
+  </data>
+  <data name="TeroristBombSet" xml:space="preserve">
+    <value>爆破予告</value>
+  </data>
+  <data name="TeroristBombTask" xml:space="preserve">
+    <value>爆弾を解除する(爆発まで、残り{0}秒)</value>
+  </data>
+  <data name="TeroristBombMinigameProgress" xml:space="preserve">
+    <value>進捗</value>
+  </data>
+  <data name="TeroristBombMinigameStart" xml:space="preserve">
+    <value>解除する</value>
+  </data>
+</root>

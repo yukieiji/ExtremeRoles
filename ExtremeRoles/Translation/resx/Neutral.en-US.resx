@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Alice" xml:space="preserve">
+    <value>Alice</value>
+  </data>
+  <data name="AliceCanUseSabotage" xml:space="preserve">
+    <value>Can use Sabotages</value>
+  </data>
+  <data name="AliceAbilityCoolTime" xml:space="preserve">
+    <value>"MISCHIEF" : Ability cooldown</value>
+  </data>
+  <data name="AliceAbilityCount" xml:space="preserve">
+    <value>"MISCHIEF" : Ability Charges</value>
+  </data>
+  <data name="AliceRevartCommonTaskNum" xml:space="preserve">
+    <value>"MISCHIEF" : Rewinds Common tasks by</value>
+  </data>
+  <data name="AliceRevartLongTaskNum" xml:space="preserve">
+    <value>"MISCHIEF" : Rewinds Long tasks by</value>
+  </data>
+  <data name="AliceRevartNormalTaskNum" xml:space="preserve">
+    <value>"MISCHIEF" : Rewinds Short tasks by</value>
+  </data>
+  <data name="AliceIntroDescription" xml:space="preserve">
+    <value>The key of the puzzle is to be like a trouble!</value>
+  </data>
+  <data name="AliceShortDescription" xml:space="preserve">
+    <value>Be KILLED by an IMPOSTOR or be the last stand</value>
+  </data>
+  <data name="AliceFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive victory.
+  MISSION 1: Be KILLED by an IMPOSTOR
+  MISSION 2: Be the last two alive and the other player is NOT a 
+NEUTRAL role
+   *Being KILLed by other teams/players exept Impostors does not 
+achieve MISSION 1.
+   *If you get EXILED in a meeting, you will lose the game.
+ "MISCHIEF" : Don't let the tasks end!
+ - Decreases everyone's task completetion and adds a 
+new task to be cleared additionally. 
+Beware for both IMPOSTORS and CREWMATES because you're a strong role!</value>
+  </data>
+  <data name="shipBroken" xml:space="preserve">
+    <value>MISCHIEF</value>
+  </data>
+  <data name="Jackal" xml:space="preserve">
+    <value>Jackal</value>
+  </data>
+  <data name="Sidekick" xml:space="preserve">
+    <value>Sidekick</value>
+  </data>
+  <data name="JackalAbilityCoolTime" xml:space="preserve">
+    <value>"SIDEKICK" : Ability cooldown</value>
+  </data>
+  <data name="JackalAbilityCount" xml:space="preserve">
+    <value>"SIDEKICK" : Maximum Sidekicks per Jackal</value>
+  </data>
+  <data name="JackalRangeSidekickTarget" xml:space="preserve">
+    <value>"SIDEKICK" : Ability Distance</value>
+  </data>
+  <data name="JackalCanLoverSidekick" xml:space="preserve">
+    <value>"SIDEKICK" : Can use on LOVERS</value>
+  </data>
+  <data name="JackalForceReplaceLover" xml:space="preserve">
+    <value>"SIDEKICK" : Does replace LOVERS on usage</value>
+  </data>
+  <data name="JackalUpgradeSidekickNum" xml:space="preserve">
+    <value>No. of Sidekicks promoting on Jackal's death</value>
+  </data>
+  <data name="JackalSidekickJackalCanMakeSidekick" xml:space="preserve">
+    <value>Can promoted Jackals make Sidekicks</value>
+  </data>
+  <data name="JackalSidekickLimitNum" xml:space="preserve">
+    <value>Maximum Sidekicks per promoted Jackal</value>
+  </data>
+  <data name="JackalCanSetImpostorToSidekick" xml:space="preserve">
+    <value>"SIDEKICK" : Can use on IMPOSTORS</value>
+  </data>
+  <data name="JackalCanSeeImpostorToSidekickImpostor" xml:space="preserve">
+    <value>Does show Sidekicked-Impostors as an Impostor</value>
+  </data>
+  <data name="SidekickUseSabotage" xml:space="preserve">
+    <value>Can Sidekicks use Sabotages</value>
+  </data>
+  <data name="SidekickUseVent" xml:space="preserve">
+    <value>Can Sidekicks use VENTs</value>
+  </data>
+  <data name="SidekickCanKill" xml:space="preserve">
+    <value>Can Sidekicks use KILL</value>
+  </data>
+  <data name="SidekickHasOtherKillCool" xml:space="preserve">
+    <value>Sidekicks: Does have a modified Kill Cooldown</value>
+  </data>
+  <data name="SidekickKillCoolDown" xml:space="preserve">
+    <value>Sidekicks: Kill Cooldown</value>
+  </data>
+  <data name="SidekickHasOtherKillRange" xml:space="preserve">
+    <value>Sidekicks: Does have a modified Kill Distance</value>
+  </data>
+  <data name="SidekickKillRange" xml:space="preserve">
+    <value>Sidekicks: Kill Distance</value>
+  </data>
+  <data name="SidekickHasOtherVision" xml:space="preserve">
+    <value>Sidekicks: Has special vision settings</value>
+  </data>
+  <data name="SidekickVision" xml:space="preserve">
+    <value>Sidekicks: Vision</value>
+  </data>
+  <data name="SidekickApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Sidekicks: Does sabotage effect their vision</value>
+  </data>
+  <data name="JackalIntroDescription" xml:space="preserve">
+    <value>It's OUR time to take over this ship!</value>
+  </data>
+  <data name="JackalShortDescription" xml:space="preserve">
+    <value>Be the last stand with your Sidekick</value>
+  </data>
+  <data name="JackalFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive victory.
+ MISSION: Halve the remaining players with your own team, and
+ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability
+ "SIDEKICK" : Turns a player into your sidekick!
+   - Fully overwrites their former role, and changes into a "Sidekick"
+   - "LOVERS" may have some specific settings when sidekick-ed, 
+please check your game configuration</value>
+  </data>
+  <data name="curSidekick" xml:space="preserve">
+    <value>Your Sidekick</value>
+  </data>
+  <data name="SidekickShortDescription" xml:space="preserve">
+    <value>Assist your Jackal and achive victory</value>
+  </data>
+  <data name="SidekickFullDescription" xml:space="preserve">
+    <value> Your Jackal: "{0}"
+
+ A NEUTRAL role with the mission to assist your Jackal!
+ MISSION: Halve the remaining players with your own team, and 
+eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
+ When your Jackal is eliminated from the game, your role may 
+promote and may change to a new Jackal. </value>
+  </data>
+  <data name="TaskMaster" xml:space="preserve">
+    <value>Task Master</value>
+  </data>
+  <data name="TaskMasterCanUseSabotage" xml:space="preserve">
+    <value>Can use sabotage</value>
+  </data>
+  <data name="TaskMasterAddCommonTaskNum" xml:space="preserve">
+    <value>Additional Common tasks</value>
+  </data>
+  <data name="TaskMasterAddLongTaskNum" xml:space="preserve">
+    <value>Additional Long tasks</value>
+  </data>
+  <data name="TaskMasterAddNormalTaskNum" xml:space="preserve">
+    <value>Additional Short tasks</value>
+  </data>
+  <data name="TaskMasterIntroDescription" xml:space="preserve">
+    <value>I have the duty to complete all tasks!</value>
+  </data>
+  <data name="TaskMasterShortDescription" xml:space="preserve">
+    <value>SURVIVE and COMPLETE all tasks</value>
+  </data>
+  <data name="TaskMasterFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive victory.
+ MISSION: Complete all tasks before your death / the game ends
+ When you die before you complete all the tasks, you cannot achive 
+your mission, unlike the SURVIVOR.
+ A set amount of additional tasks will be added after you cleared all 
+the set global tasks.</value>
+  </data>
+  <data name="Missionary" xml:space="preserve">
+    <value>Missionary</value>
+  </data>
+  <data name="MissionaryTellDeparture" xml:space="preserve">
+    <value>Can Missionary know when a player suicides</value>
+  </data>
+  <data name="MissionaryDepartureMinTime" xml:space="preserve">
+    <value>Death timer : minimum</value>
+  </data>
+  <data name="MissionaryDepartureMaxTime" xml:space="preserve">
+    <value>Death timer : maximum</value>
+  </data>
+  <data name="MissionaryPropagateRange" xml:space="preserve">
+    <value>"PROPAGATE" : Ability Distance</value>
+  </data>
+  <data name="MissionaryAbilityCoolTime" xml:space="preserve">
+    <value>"PROPAGATE" : Ability cooldown</value>
+  </data>
+  <data name="MissionaryIsUseSolemnJudgment" xml:space="preserve">
+    <value>Enable ability "CONDUCT"</value>
+  </data>
+  <data name="MissionaryMaxJudgementNum" xml:space="preserve">
+    <value>"CONDUCT" : Size of "Target list"</value>
+  </data>
+  <data name="MissionaryIntroDescription" xml:space="preserve">
+    <value>Lead the crew to the heaven of truce</value>
+  </data>
+  <data name="MissionaryShortDescription" xml:space="preserve">
+    <value>PROPAGATE every mortal</value>
+  </data>
+  <data name="MissionaryFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role with the ability "PROPAGATE".
+MISSION: Halve the remaining players with your own team, and
+eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
+"PROPAGATE" : Lets a player die after a random count.
+ - Any player who is propagated will die/suicide ("Departure") after a 
+    random count. 
+ - The count will be set randomly between the max and min time 
+    configuration. 
+ - Departure can even take place while meetings.
+
+&lt;When Enabled&gt;
+"CONDUCT" : Propagation but with a quick effect.
+ - Occurs when targeting a player who you voted in a meeting with 
+    PROPAGATE
+ - Immediately lets the targeted player die
+ - The game adds targetable players in a "Target list".
+   No players can be added over the set limit;
+   When the list is full, at least one player on the list must
+   be eliminated from the game to add a new player as a target.</value>
+  </data>
+  <data name="propagate" xml:space="preserve">
+    <value>PROPAGATE</value>
+  </data>
+  <data name="departureText" xml:space="preserve">
+    <value>Another wanderer found the heavens' ladder.</value>
+  </data>
+  <data name="Jester" xml:space="preserve">
+    <value>Jester</value>
+  </data>
+  <data name="JesterSpawnRate" xml:space="preserve">
+    <value>Jester</value>
+  </data>
+  <data name="JesterRoleNum" xml:space="preserve">
+    <value>No. of assigned players</value>
+  </data>
+  <data name="JesterHasOtherVision" xml:space="preserve">
+    <value>Has special vision settings</value>
+  </data>
+  <data name="JesterVision" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="JesterApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Does sabotage effect their vision</value>
+  </data>
+  <data name="JesterUseSabotage" xml:space="preserve">
+    <value>Can use sabotage</value>
+  </data>
+  <data name="JesterOutburstDistance" xml:space="preserve">
+    <value>"OUTBURST" : Ability Distance</value>
+  </data>
+  <data name="JesterAbilityCoolTime" xml:space="preserve">
+    <value>"OUTBURST" : Ability cooldown</value>
+  </data>
+  <data name="JesterAbilityActiveTime" xml:space="preserve">
+    <value>"OUTBURST" : Triggered KILL occurs after</value>
+  </data>
+  <data name="JesterAbilityCount" xml:space="preserve">
+    <value>"OUTBURST" : Maximum usage</value>
+  </data>
+  <data name="JesterIntroDescription" xml:space="preserve">
+    <value>HIPPITY HOPPITY THE MEETING IS MY PROPERTY!</value>
+  </data>
+  <data name="JesterShortDescription" xml:space="preserve">
+    <value>Bring chaos to the ship and be EXILED</value>
+  </data>
+  <data name="JesterFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achieve.
+ MISSION : Be exiled to win.
+  *STATS may show the Jester as alive from game latencies/lags.
+ "OUTBURST" : Triggers targeted player's KILL after a set timer.
+   - Can use this ability on any player, with our without the KILL 
+ability.
+   - Fails to trigger KILL when :
+         1. The targeted player does not have the ability KILL
+         2. No player is in range of the targeted player
+         3. The triggered KILL is targeted to you (The JESTER who used 
+the OUTBURST ability)</value>
+  </data>
+  <data name="outburst" xml:space="preserve">
+    <value>OUTBURST</value>
+  </data>
+  <data name="Yandere" xml:space="preserve">
+    <value>Yandere</value>
+  </data>
+  <data name="YandereTargetKilledKillCoolReduceRate" xml:space="preserve">
+    <value>Kill Cooldown reduction when Killing a OBSTACLE</value>
+  </data>
+  <data name="YandereNoneTargetKilledKillCoolMultiplier" xml:space="preserve">
+    <value>Kill Cooldown penalty when Killing a normal player</value>
+  </data>
+  <data name="YandereBlockTargetTime" xml:space="preserve">
+    <value>Players will counted as OBSTACLES from</value>
+  </data>
+  <data name="YandereSetTargetRange" xml:space="preserve">
+    <value>OBSTACLE checking range</value>
+  </data>
+  <data name="YandereSetTargetTime" xml:space="preserve">
+    <value>Counts player as an OBSTACLE after</value>
+  </data>
+  <data name="YandereMaxTargetNum" xml:space="preserve">
+    <value>OBSTACLE : Maximum OBSTACLES</value>
+  </data>
+  <data name="YandereRunawayTime" xml:space="preserve">
+    <value>After OBSTACLES are all dead,\nturns into STAMPEDE MODE in:</value>
+  </data>
+  <data name="YandereHasOneSidedArrow" xml:space="preserve">
+    <value>Does show arrows to your SWEETIE</value>
+  </data>
+  <data name="YandereHasTargetArrow" xml:space="preserve">
+    <value>Does show arrows to your OBSTACLES</value>
+  </data>
+  <data name="YandereIntroDescription" xml:space="preserve">
+    <value>"{0}" IS ONLY MINE</value>
+  </data>
+  <data name="YandereShortDescription" xml:space="preserve">
+    <value>KILL all exept "{0}"</value>
+  </data>
+  <data name="YandereFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role who wants to KILL all other living players exept 
+your SWEETIE.
+ MISSION 1 : Achive victory with your "SWEETIE"
+   - You need to meet several conditions:
+    1. Your SWEETIE is alive
+    2. Eliminate all other IMPOSTORS / NEUTRALS with abilities to 
+eliminate players (i.e. KILL, PROPAGATE) exept your SWEETIE.
+    3. All other alive members are on your team / is your SWEETIE
+ MISSION 2 : Become the last two in the ship, and the other player 
+does not have abilities to KILL or make you die.
+    NOTE: Both missions does not count the ASSASIN as a "harmful" 
+player, if the ASSASIN cannot be KILLed by its options.
+
+"SWEETIE" : When the game starts, a player will randomly set as your 
+"SWEETIE".
+ When any other player stays for a set duration, the player will be 
+count as a "OBSTACLE".
+ When there is one or more OBSTACLEs alive, you will able to use 
+the KILL ability.
+
+&lt;When KILLing OBSTACLEs&gt;
+   - your Kill Cooldown will have a massive reduction
+   - when there are no more OBSTACLEs alive, you lose your KILL 
+ability until there is a new OBSTACLE.
+&lt;When KILLing other players exept OBSTACLEs&gt;
+  - an adittional cooldown will be added to your KILL. (can be 
+multiplied)
+ Any Kill Cooldown change will be reset after any meeting.
+
+ "STAMPEDE MODE" : Your KILL ability can be used while this 
+mode, not regarding OBSTACLEs alive.
+  You enter this mode when:
+    - There is no new OBSTACLEs added for a set duration
+    - Your SWEETIE is no more alive</value>
+  </data>
+  <data name="YandereShipJustForTwo" xml:space="preserve">
+    <value>The Yandere wins with true love....</value>
+  </data>
+  <data name="Yoko" xml:space="preserve">
+    <value>Youko</value>
+  </data>
+  <data name="YokoCanRepairSabo" xml:space="preserve">
+    <value>Can repair Sabotages</value>
+  </data>
+  <data name="YokoCanUseVent" xml:space="preserve">
+    <value>Can use VENTs</value>
+  </data>
+  <data name="YokoSearchRange" xml:space="preserve">
+    <value>"SENCE" : Ability Range</value>
+  </data>
+  <data name="YokoSearchTime" xml:space="preserve">
+    <value>"SENCE" : Ability activates by each</value>
+  </data>
+  <data name="YokoTrueInfoRate" xml:space="preserve">
+    <value>"SENCE" : Does give true information in</value>
+  </data>
+  <data name="YokoIntroDescription" xml:space="preserve">
+    <value>MISCHIEF and STEAL the glory</value>
+  </data>
+  <data name="YokoShortDescription" xml:space="preserve">
+    <value>Keep alive and steal the glory</value>
+  </data>
+  <data name="notFindEnemy" xml:space="preserve">
+    <value>Seems safe around here?</value>
+  </data>
+  <data name="findEnemy" xml:space="preserve">
+    <value>You smell blood…</value>
+  </data>
+  <data name="Totocalcio" xml:space="preserve">
+    <value>Totocalcio</value>
+  </data>
+  <data name="TotocalcioRange" xml:space="preserve">
+    <value>"BET" : Ability Distance</value>
+  </data>
+  <data name="TotocalcioAbilityCoolTime" xml:space="preserve">
+    <value>"BET" : Initial ability cooldown</value>
+  </data>
+  <data name="TotocalcioAbilityCount" xml:space="preserve">
+    <value>"BET" : Ability Charges</value>
+  </data>
+  <data name="TotocalcioFinalCoolTime" xml:space="preserve">
+    <value>"BET" : Final ability cooldown</value>
+  </data>
+  <data name="TotocalcioIntroDescription" xml:space="preserve">
+    <value>Life should be a GAMBLE</value>
+  </data>
+  <data name="TotocalcioShortDescription" xml:space="preserve">
+    <value>Bet to a player and lead them to victory</value>
+  </data>
+  <data name="TotocalcioFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive victory.
+ MISSION: BET to a player, and let the player win the game!
+ "BET": Bet your chips to the targeted player!
+   - Only targets one player
+   - A green mark will show up on their player name when you've BET
+   - When the targeted player wins the game, you will too!
+   - The ability cooldown will be longer depending on the number of 
+remaining players
+
+*Some NEUTRAL victories cannot be applied:
+ - Youko
+ - Vigirante</value>
+  </data>
+  <data name="betPlayer" xml:space="preserve">
+    <value>BET</value>
+  </data>
+  <data name="loseNow" xml:space="preserve">
+    <value>I'm sure I'm going to lose now…</value>
+  </data>
+  <data name="Miner" xml:space="preserve">
+    <value>Miner</value>
+  </data>
+  <data name="MinerLinkingAllVent" xml:space="preserve">
+    <value>Enable global VENTs</value>
+  </data>
+  <data name="MinerAbilityCoolTime" xml:space="preserve">
+    <value>"LANDMINE" : Ability cooldown</value>
+  </data>
+  <data name="MinerAbilityActiveTime" xml:space="preserve">
+    <value>"LANDMINE" : Cooldown until Landmine activates</value>
+  </data>
+  <data name="MinerMineKillRange" xml:space="preserve">
+    <value>"LANDMINE" : Landmine player detection range</value>
+  </data>
+  <data name="MinerNoneActiveTime" xml:space="preserve">
+    <value>"LANDMINE" : Cooldown until Landmine activation after game start / meetings</value>
+  </data>
+  <data name="MinerCanShowMine" xml:space="preserve">
+    <value>Is the Landmine visible</value>
+  </data>
+  <data name="MinerRolePlayerShowMode" xml:space="preserve">
+    <value>Miners can know:</value>
+  </data>
+  <data name="MinerAnotherPlayerShowMode" xml:space="preserve">
+    <value>Players exept Miners can know:</value>
+  </data>
+  <data name="MinerCanShowNoneActiveAnotherPlayer" xml:space="preserve">
+    <value>Can other players know the Landmine before activation</value>
+  </data>
+  <data name="MinerShowKillLog" xml:space="preserve">
+    <value>Does show alert of Landmine deaths</value>
+  </data>
+  <data name="MinerIntroDescription" xml:space="preserve">
+    <value>Another one bites the dust</value>
+  </data>
+  <data name="MinerShortDescription" xml:space="preserve">
+    <value>BLAST all your mates with LANDMINES</value>
+  </data>
+  <data name="MinerFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role with a unique mission to achive victory.
+MISSION: Halve the remaining players with your own team, and eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
+
+"LANDMINE" : Sets a Landmine on your position.
+ - The Landmine blows up one player within a set range. This includes the Miner itself.
+ - The Landmine activates after a set cooldown after ability usage, and after initial game start / each meetings. Don't forget your mine and blow up yourself!
+ - After activation, the Landmine will be removed/nullified.
+ - The "Kill log" is only a flavor text and has no specific meaning besides Landmine activation. 
+ - You can warp between all VENTs when the corresponding option is enabled!</value>
+  </data>
+  <data name="MineSeeNone" xml:space="preserve">
+    <value>Nothing</value>
+  </data>
+  <data name="MineSeeOnlySe" xml:space="preserve">
+    <value>Sound only</value>
+  </data>
+  <data name="MineSeeOnlyImg" xml:space="preserve">
+    <value>Icon only</value>
+  </data>
+  <data name="MineSeeBoth" xml:space="preserve">
+    <value>Both sounds and icons</value>
+  </data>
+  <data name="setMine" xml:space="preserve">
+    <value>PLACE MINE</value>
+  </data>
+  <data name="Eater" xml:space="preserve">
+    <value>Eater</value>
+  </data>
+  <data name="EaterCanUseVent" xml:space="preserve">
+    <value>Can use VENTs</value>
+  </data>
+  <data name="EaterAbilityCoolTime" xml:space="preserve">
+    <value>"EAT/VORE" : Ability cooldown</value>
+  </data>
+  <data name="EaterAbilityActiveTime" xml:space="preserve">
+    <value>"VORE" : Ability duration</value>
+  </data>
+  <data name="EaterAbilityCount" xml:space="preserve">
+    <value>"EAT/VORE" : Players/dead bodies eaten to win</value>
+  </data>
+  <data name="EaterEatRange" xml:space="preserve">
+    <value>"EAT/VORE": Ability Distance</value>
+  </data>
+  <data name="EaterDeadBodyEatActiveCoolTimePenalty" xml:space="preserve">
+    <value>"EAT" : Ability duration penalty for "VORE"</value>
+  </data>
+  <data name="EaterKillEatCoolTimePenalty" xml:space="preserve">
+    <value>"VORE" : Ability cooldown penalty rate</value>
+  </data>
+  <data name="EaterKillEatActiveCoolTimeReduceRate" xml:space="preserve">
+    <value>"EAT/VORE" : Reduction rate of cooldown \nafter meetings without eating any players</value>
+  </data>
+  <data name="EaterIsResetCoolTimeWhenMeeting" xml:space="preserve">
+    <value>"EAT/VORE" : Does reset cooldown on meetings</value>
+  </data>
+  <data name="EaterIsShowArrowForDeadBody" xml:space="preserve">
+    <value>Does show arrows to dead bodies</value>
+  </data>
+  <data name="EaterIntroDescription" xml:space="preserve">
+    <value>I'M HUUUUUNGRYYYY!!!!</value>
+  </data>
+  <data name="EaterShortDescription" xml:space="preserve">
+    <value>Eat mates and foes, dead or alive</value>
+  </data>
+  <data name="EaterFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive victory.
+ MISSION: EAT and VORE a set amount of players/dead bodies.
+ "EAT" : Eats and deletes dead bodies.
+   - Multiplies and adds penalty for "VORE" ability cooldown on body 
+consumption for a set rate.
+ "VORE" : Vores and eliminates a player nearby.
+   - Can be used while a player is near you
+   - After a set duration, the targeted player will be erased/vored, 
+nullifying any kind of barriers or guards!
+   - Multiplies and adds penalty for "VORE" and "EAT" ability 
+cooldown on player consumption for a set rate.
+ *Both "EAT" and "VORE" recieves a cooldown reduction when a 
+meeting occurs, if it takes place before using the ability for the first 
+time in the turn.</value>
+  </data>
+  <data name="eaterWinNum" xml:space="preserve">
+    <value>{0} dishes to eat</value>
+  </data>
+  <data name="deadBodyEat" xml:space="preserve">
+    <value>EAT</value>
+  </data>
+  <data name="eatKill" xml:space="preserve">
+    <value>VORE</value>
+  </data>
+  <data name="Queen" xml:space="preserve">
+    <value>Queen</value>
+  </data>
+  <data name="Servant" xml:space="preserve">
+    <value>Servant</value>
+  </data>
+  <data name="QueenCanUseVent" xml:space="preserve">
+    <value>Queen : Can use VENTs</value>
+  </data>
+  <data name="QueenAbilityCoolTime" xml:space="preserve">
+    <value>"CHARM" : Ability cooldown</value>
+  </data>
+  <data name="QueenAbilityCount" xml:space="preserve">
+    <value>"CHARM" : Ability Charges</value>
+  </data>
+  <data name="QueenRange" xml:space="preserve">
+    <value>"CHARM" : Ability Distance</value>
+  </data>
+  <data name="QueenServantKillKillCoolReduceRate" xml:space="preserve">
+    <value>Queen: Kill Cooldown reduction rate by Servants' KILL</value>
+  </data>
+  <data name="QueenServantTaskKillCoolReduceRate" xml:space="preserve">
+    <value>Queen: Kill Cooldown reduction rate by Servants' tasks completion</value>
+  </data>
+  <data name="QueenServantTaskCompKillCoolReduceRate" xml:space="preserve">
+    <value>Queen: Passive Kill Cooldown reduction rate by\nServants' tasks full completion</value>
+  </data>
+  <data name="QueenServantSelfKillCool" xml:space="preserve">
+    <value>"SUICIDE" : Ability cooldown</value>
+  </data>
+  <data name="QueenIntroDescription" xml:space="preserve">
+    <value>It's the time to make our Kingdom!</value>
+  </data>
+  <data name="QueenShortDescription" xml:space="preserve">
+    <value>CHARM players and be the last stand</value>
+  </data>
+  <data name="QueenFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive GLORY.
+ MISSION: Halve the remaining players with your own team, and 
+eliminate all other IMPOSTORS / NEUTRALS with the KILL ability
+ "CHARM" : Charms and draws a player into your team!
+   I. When a CREWMATE or IMPOSTOR is targeted:
+     - Adds the role "Servant" to the player. This does NOT erase the f
+ormer role; Their roles and role abilities will be carried on.
+      - CREWMATE-Servants will gain tasks when they have no initial 
+tasks (i.e. Merlins)
+      - IMPOSTOR-Servants will able to use KILL, VENT and 
+SABOTAGE
+   II. When a NEUTRAL is targeted:
+     - CHANGES the player's role into "Servant". This DOES erase the 
+former role.
+     - The ability to KILL, VENT or SABOTAGE will be carried on, 
+depending on the former neutral role.
+     - The player will gain tasks when they have no initial tasks.
+ *By your Servants' tasks and KILLs, you will gain reductions on KILL 
+cooldowns!
+ *On Queen's death, the Servants will die too.</value>
+  </data>
+  <data name="ServantShortDescription" xml:space="preserve">
+    <value>Work for her majesty</value>
+  </data>
+  <data name="ServantFullDescription" xml:space="preserve">
+    <value> Your Queen: {0}
+
+ A NEUTRAL role with the mission to support your majesty!
+ MISSION: Halve the remaining players with your own team, and 
+eliminate all other IMPOSTORS / NEUTRALS with the KILL ability
+ *You will die when your Queen dies, protect her majesty at no costs!
+ "KILL FLASH" : You can know a KILL taking place by a white/green 
+flash.
+   - White flashes means your QUEEN has used KILL
+   - Green flashes means somebody else has used KILL
+ "SUICIDE" : Simply kills yourself.</value>
+  </data>
+  <data name="queenCharm" xml:space="preserve">
+    <value>CHARM</value>
+  </data>
+  <data name="selfKill" xml:space="preserve">
+    <value>SUICIDE</value>
+  </data>
+  <data name="Madmate" xml:space="preserve">
+    <value>Madmate</value>
+  </data>
+  <data name="MadmateCanFixSabotage" xml:space="preserve">
+    <value>Can repair Sabotages</value>
+  </data>
+  <data name="MadmateCanUseVent" xml:space="preserve">
+    <value>Can use VENTs</value>
+  </data>
+  <data name="MadmateCanMoveVentToVent" xml:space="preserve">
+    <value>Can move between VENTs</value>
+  </data>
+  <data name="MadmateHasTask" xml:space="preserve">
+    <value>Use task-related settings</value>
+  </data>
+  <data name="MadmateSeeImpostorTaskGage" xml:space="preserve">
+    <value>Task completion rate for Madmates to know Impostors</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostor" xml:space="preserve">
+    <value>Can Impostors know Madmates</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostorTaskGage" xml:space="preserve">
+    <value>Task completion rate for Impostors to know Madmates</value>
+  </data>
+  <data name="MadmateAbilityCoolTime" xml:space="preserve">
+    <value>"SUICIDE" : Ability Cooldown</value>
+  </data>
+  <data name="MadmateIsDontCountAliveCrew" xml:space="preserve">
+    <value>Does not count Madmates as "Alive" crewmates</value>
+  </data>
+  <data name="MadmateIntroDescription" xml:space="preserve">
+    <value>IMPOSTORS are my LORDS!</value>
+  </data>
+  <data name="MadmateShortDescription" xml:space="preserve">
+    <value>Lead the IMPOSTORS to victory</value>
+  </data>
+  <data name="MadmateFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive victory.
+ MISSION: Achive IMPOSTOR victory (including extra-wins)
+ "SUICIDE" : Simply kills yourself.
+ *Clearing a set amount of tasks can reveal your role to Impostors, 
+when "Can Impostors know Madmates" is on.</value>
+  </data>
+  <data name="Umbrer" xml:space="preserve">
+    <value>Umbreyer</value>
+  </data>
+  <data name="UmbrerRange" xml:space="preserve">
+    <value>"INJECTION" : Ability Distance</value>
+  </data>
+  <data name="UmbrerAbilityCoolTime" xml:space="preserve">
+    <value>"INJECTION" : Ability cooldown</value>
+  </data>
+  <data name="UmbrerAbilityActiveTime" xml:space="preserve">
+    <value>"INJECTION" : Ability duration</value>
+  </data>
+  <data name="UmbrerInfectRange" xml:space="preserve">
+    <value>"INJECTION" : Ability Distance</value>
+  </data>
+  <data name="UmbrerUpgradeVirusTime" xml:space="preserve">
+    <value>"VITALIZE" : Ability duration</value>
+  </data>
+  <data name="UmbrerKeepUpgradedVirus" xml:space="preserve">
+    <value>"VITALIZE" : Virus vitalization duration</value>
+  </data>
+  <data name="UmbrerIntroDescription" xml:space="preserve">
+    <value>Shall we start the EXPERIMENT?</value>
+  </data>
+  <data name="UmbrerShortDescription" xml:space="preserve">
+    <value>Spread the VIRUS to everyone</value>
+  </data>
+  <data name="UmbrerFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive victory.
+ MISSION: Infect all players
+ "INJECTION" : Infects targeted player after a set duration.
+   - Can be used on a non-infected player, and changes them into 
+"Infected players".
+ "VITALIZE" : Vitalizes viruses and spreads infection!
+   - Can be used on a Infected player, and activates "Virus spreading" 
+mode
+   - A "Virus spreading" player infects one nearby player.
+   - By infecting a nearby player or after a set duration, "Virus 
+spreading" mode deactivates.</value>
+  </data>
+  <data name="featVirus" xml:space="preserve">
+    <value>INJECTION</value>
+  </data>
+  <data name="upgradeVirus" xml:space="preserve">
+    <value>VITALIZE</value>
+  </data>
+</root>

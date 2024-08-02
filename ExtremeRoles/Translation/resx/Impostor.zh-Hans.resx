@@ -1,0 +1,1007 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ImpostorFullDescription" xml:space="preserve">
+    <value>普通内鬼。
+通过击杀、破坏与欺骗隐藏自己。</value>
+  </data>
+  <data name="ShapeshifterFullDescription" xml:space="preserve">
+    <value>变形者属于内鬼阵营，拥有变形为其他玩家的能力。
+通过击杀、破坏与欺骗隐藏自己。</value>
+  </data>
+  <data name="SpecialImpostor" xml:space="preserve">
+    <value>特殊内鬼</value>
+  </data>
+  <data name="SpecialImpostorIntroDescription" xml:space="preserve">
+    <value>你与其他内鬼有所不同</value>
+  </data>
+  <data name="SpecialImpostorShortDescription" xml:space="preserve">
+    <value>你与其他内鬼有所不同</value>
+  </data>
+  <data name="SpecialImpostorFullDescription" xml:space="preserve">
+    <value>Extreme Roles中特殊的内鬼，设置如下</value>
+  </data>
+  <data name="Evolver" xml:space="preserve">
+    <value>捕食者</value>
+  </data>
+  <data name="EvolverIsEvolvedAnimation" xml:space="preserve">
+    <value>播放捕食过程</value>
+  </data>
+  <data name="EvolverIsEatingEndCleanBody" xml:space="preserve">
+    <value>捕食后清除尸体</value>
+  </data>
+  <data name="EvolverEatingRange" xml:space="preserve">
+    <value>捕食范围</value>
+  </data>
+  <data name="EvolverKillCoolReduceRate" xml:space="preserve">
+    <value>捕食后击杀冷却减少率</value>
+  </data>
+  <data name="EvolverKillCoolResuceRateMulti" xml:space="preserve">
+    <value>每次捕食减少的击杀冷却增长的倍率</value>
+  </data>
+  <data name="EvolverAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="EvolverAbilityActiveTime" xml:space="preserve">
+    <value>捕食所需时间</value>
+  </data>
+  <data name="EvolverAbilityCount" xml:space="preserve">
+    <value>最大捕食次数</value>
+  </data>
+  <data name="EvolverIntroDescription" xml:space="preserve">
+    <value>捕食尸体让自己得到进化</value>
+  </data>
+  <data name="EvolverShortDescription" xml:space="preserve">
+    <value>捕食尸体</value>
+  </data>
+  <data name="EvolverFullDescription" xml:space="preserve">
+    <value>捕食者属于内鬼阵营，可以吃掉尸体来永久降低击杀冷却。
+捕食者捕食时，需要在尸体附近停留一段时间。
+捕食完毕后，那个新的击杀冷却适用。</value>
+  </data>
+  <data name="evolve" xml:space="preserve">
+    <value>捕食</value>
+  </data>
+  <data name="eating" xml:space="preserve">
+    <value>捕食中...</value>
+  </data>
+  <data name="Carrier" xml:space="preserve">
+    <value>送葬者</value>
+  </data>
+  <data name="CarrierAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="CarrierAbilityActiveTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="CarrierCarryDistance" xml:space="preserve">
+    <value>一次最多可搬运尸体数量</value>
+  </data>
+  <data name="CarrierCanReportOnCarry" xml:space="preserve">
+    <value>搬运时可以报告尸体</value>
+  </data>
+  <data name="CarrierIntroDescription" xml:space="preserve">
+    <value>搬运并隐藏他人的尸体</value>
+  </data>
+  <data name="CarrierShortDescription" xml:space="preserve">
+    <value>搬运并隐藏他人的尸体</value>
+  </data>
+  <data name="CarrierFullDescription" xml:space="preserve">
+    <value>送葬者属于内鬼阵营，拥有搬运尸体的能力。
+技能持续时间结束时，尸体搬运立刻停止。</value>
+  </data>
+  <data name="carry" xml:space="preserve">
+    <value>搬运</value>
+  </data>
+  <data name="PsychoKiller" xml:space="preserve">
+    <value>嗜血杀手</value>
+  </data>
+  <data name="PsychoKillerKillCoolReduceRate" xml:space="preserve">
+    <value>击杀冷却缩减率</value>
+  </data>
+  <data name="PsychoKillerCombMax" xml:space="preserve">
+    <value>最大冷却缩减</value>
+  </data>
+  <data name="PsychoKillerCombResetWhenMeeting" xml:space="preserve">
+    <value>会议重置冷却缩减</value>
+  </data>
+  <data name="PsychoKillerHasSelfKillTimer" xml:space="preserve">
+    <value>启用自杀倒计时</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerTime" xml:space="preserve">
+    <value>自杀秒数</value>
+  </data>
+  <data name="PsychoKillerSelfKillTimerModRate" xml:space="preserve">
+    <value>连续击杀对自杀倒计时的增减率</value>
+  </data>
+  <data name="PsychoKillerIntroDescription" xml:space="preserve">
+    <value>杀戮的欲望正在高涨</value>
+  </data>
+  <data name="PsychoKillerShortDescription" xml:space="preserve">
+    <value>用他人的鲜血来祭你的刀</value>
+  </data>
+  <data name="PsychoKillerFullDescription" xml:space="preserve">
+    <value>嗜血杀手属于内鬼阵营，能进行更快速的击杀。
+嗜血杀手的每次击杀都将计数，并根据这个计数减少嗜血杀手的击杀冷却。
+会议阶段结束后，嗜血杀手的击杀冷却回到原本设定值，再次进行击杀后可以继续造成击杀冷却的减少。
+若“会议重置冷却缩减”开启，会议阶段开始时，嗜血杀手的击杀计数将会重置。
+若“启用自杀倒计时”开启，嗜血杀手的第一次击杀后将会启动自杀倒计时。自杀倒计时将在每次击杀过后重置为上次倒计时以设置中“连续击杀对自杀倒计时的增减率”增减的时间。
+若“会议结束后重启自杀倒计时”开启，在会议开始前自杀倒计时已经启动的场合，会议结束后自杀倒计时重新启动。</value>
+  </data>
+  <data name="curCombNum" xml:space="preserve">
+    <value>当前连续击杀数：{0}</value>
+  </data>
+  <data name="untilSelfKill" xml:space="preserve">
+    <value>自杀倒计时：</value>
+  </data>
+  <data name="BountyHunter" xml:space="preserve">
+    <value>赏金猎人</value>
+  </data>
+  <data name="BountyHunterTargetUpdateTime" xml:space="preserve">
+    <value>目标重置时间</value>
+  </data>
+  <data name="BountyHunterTargetKillCoolTime" xml:space="preserve">
+    <value>击杀悬赏目标后的冷却</value>
+  </data>
+  <data name="BountyHunterNoneTargetKillCoolTime" xml:space="preserve">
+    <value>击杀其他目标后的冷却</value>
+  </data>
+  <data name="BountyHunterIsShowArrow" xml:space="preserve">
+    <value>显示指向目标的箭头</value>
+  </data>
+  <data name="BountyHunterArrowUpdateCycle" xml:space="preserve">
+    <value>箭头更新间隔</value>
+  </data>
+  <data name="BountyHunterIntroDescription" xml:space="preserve">
+    <value>猎杀你的悬赏目标</value>
+  </data>
+  <data name="BountyHunterShortDescription" xml:space="preserve">
+    <value>猎杀你的悬赏目标</value>
+  </data>
+  <data name="BountyHunterFullDescription" xml:space="preserve">
+    <value>赏金猎人属于内鬼阵营，拥有击杀特定对象后变更自己的击杀冷却的能力。
+每轮会议阶段结束后，赏金猎人的击杀冷却重置为默认击杀冷却。
+击杀悬赏目标冷却：{0}
+击杀其他人延长后的冷却：{1}
+当前目标：{2}</value>
+  </data>
+  <data name="Painter" xml:space="preserve">
+    <value>入殓师</value>
+  </data>
+  <data name="PainterAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="PainterCanPaintDistance" xml:space="preserve">
+    <value>技能范围</value>
+  </data>
+  <data name="PainterPaintColorIsRandom" xml:space="preserve">
+    <value>给尸体所上的颜色随机</value>
+  </data>
+  <data name="PainterIntroDescription" xml:space="preserve">
+    <value>你的尸体将成为我的杰作</value>
+  </data>
+  <data name="PainterShortDescription" xml:space="preserve">
+    <value>打乱尸体的颜色让船员混淆</value>
+  </data>
+  <data name="PainterFullDescription" xml:space="preserve">
+    <value>入殓师属于内鬼阵营，可以改变尸体的颜色。
+更改尸体的颜色默认为透明。
+若“给尸体所上的颜色随机”开启，玩家的尸体会变成各种颜色。</value>
+  </data>
+  <data name="paint" xml:space="preserve">
+    <value>入殓</value>
+  </data>
+  <data name="Faker" xml:space="preserve">
+    <value>道具师</value>
+  </data>
+  <data name="FakerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="FakerIntroDescription" xml:space="preserve">
+    <value>你是假……还是真？</value>
+  </data>
+  <data name="FakerShortDescription" xml:space="preserve">
+    <value>制造假尸和假人迷惑船员</value>
+  </data>
+  <data name="FakerFullDescription" xml:space="preserve">
+    <value>道具师属于内鬼阵营，可以伪造出假尸和假人。
+通过使用技能“伪造尸体”，道具师可以在场上生成一个假的尸体。
+这种方式生成的尸体不能被报告。
+按下Shift后，技能将变更为“伪造船员”，使场上出现一个假的玩家。
+这种方式生成的玩家不能被选为技能的对象。
+在使用技能时，可以通过按下以下按键来改变生成的尸体或玩家的形象的选择范围。
+・未按下按键时：从所有存活玩家中随机选择
+・按下左“Ctrl键”时：从不包含内鬼阵营的存活玩家中随机选择
+・按下左“Alt键”时：从不包含自己的存活玩家中随机选择</value>
+  </data>
+  <data name="dummyDeadBody" xml:space="preserve">
+    <value>伪造尸体</value>
+  </data>
+  <data name="dummyPlayer" xml:space="preserve">
+    <value>伪造船员</value>
+  </data>
+  <data name="DummyPlayerName" xml:space="preserve">
+    <value>假人</value>
+  </data>
+  <data name="OverLoader" xml:space="preserve">
+    <value>狂战士</value>
+  </data>
+  <data name="OverLoaderAwakeImpostorNum" xml:space="preserve">
+    <value>得知职业所需剩余内鬼数</value>
+  </data>
+  <data name="OverLoaderAwakeKillCount" xml:space="preserve">
+    <value>得知职业所需击杀人数</value>
+  </data>
+  <data name="OverLoaderAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="OverLoaderAbilityActiveTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="OverLoaderKillCoolReduceRate" xml:space="preserve">
+    <value>狂暴时击杀冷却缩减率</value>
+  </data>
+  <data name="OverLoaderMoveSpeed" xml:space="preserve">
+    <value>狂暴时的移动速度</value>
+  </data>
+  <data name="OverLoaderIntroDescription" xml:space="preserve">
+    <value>暴露本性争取获得最大利益</value>
+  </data>
+  <data name="OverLoaderShortDescription" xml:space="preserve">
+    <value>暴露本性争取获得最大利益</value>
+  </data>
+  <data name="OverLoaderFullDescription" xml:space="preserve">
+    <value>狂战士属于内鬼阵营，可以进入狂暴状态。
+进入狂暴状态时，狂战士的职业将对所有人公开。
+狂暴状态的狂战士可以随时恢复回正常状态。恢复后，狂战士的职业不再公开。
+狂暴状态下，所有玩家都能看到狂战士显示为内鬼阵营；狂战士速度加快，击杀范围锁定为长，击杀冷却大幅减少。
+会议阶段开始时，狂暴状态强制解除。</value>
+  </data>
+  <data name="overLoad" xml:space="preserve">
+    <value>狂暴</value>
+  </data>
+  <data name="downLoad" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="Cracker" xml:space="preserve">
+    <value>清洁工</value>
+  </data>
+  <data name="CrackerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="CrackerAbilityCount" xml:space="preserve">
+    <value>技能最大使用次数</value>
+  </data>
+  <data name="CrackerCanCrackDistance" xml:space="preserve">
+    <value>技能范围</value>
+  </data>
+  <data name="CrackerRemoveDeadBody" xml:space="preserve">
+    <value>清理尸体后留下尸体</value>
+  </data>
+  <data name="CrackerIntroDescription" xml:space="preserve">
+    <value>伪造犯罪现场</value>
+  </data>
+  <data name="CrackerShortDescription" xml:space="preserve">
+    <value>伪造犯罪现场，让尸体无法被报告</value>
+  </data>
+  <data name="CrackerFullDescription" xml:space="preserve">
+    <value>清洁工属于内鬼阵营，可以清洁一具尸体，使其不能被报告。
+若“清理尸体后留下尸体”开启，则清洁工清洁过的尸体消失，但会留下清洁的痕迹。
+被清洁的尸体不会在会议阶段开始时出现在死亡玩家列表内。</value>
+  </data>
+  <data name="crack" xml:space="preserve">
+    <value>清理</value>
+  </data>
+  <data name="Bomber" xml:space="preserve">
+    <value>爆破者</value>
+  </data>
+  <data name="BomberAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="BomberAbilityActiveTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="BomberAbilityCount" xml:space="preserve">
+    <value>技能使用次数</value>
+  </data>
+  <data name="BomberExplosionRange" xml:space="preserve">
+    <value>爆炸范围</value>
+  </data>
+  <data name="BomberExplosionKillChance" xml:space="preserve">
+    <value>爆炸范围内船员死亡几率</value>
+  </data>
+  <data name="BomberTimerMinTime" xml:space="preserve">
+    <value>爆炸最小时间</value>
+  </data>
+  <data name="BomberTimerMaxTime" xml:space="preserve">
+    <value>爆炸最大时间</value>
+  </data>
+  <data name="BomberTellExplosion" xml:space="preserve">
+    <value>爆炸前出现通知</value>
+  </data>
+  <data name="BomberIntroDescription" xml:space="preserve">
+    <value>艺术就是爆炸！</value>
+  </data>
+  <data name="BomberShortDescription" xml:space="preserve">
+    <value>让船员变成人肉炸弹</value>
+  </data>
+  <data name="BomberFullDescription" xml:space="preserve">
+    <value>爆破者属于内鬼阵营，可以给船员身上安放炸弹。
+行动阶段，爆破者可以对一名玩家安装一个炸弹。一定时间后，炸弹将会以那名玩家的位置为中心爆炸。
+爆炸范围内的玩家会有一定的概率死亡。
+爆炸范围内的内鬼阵营玩家一定存活。
+炸弹爆炸的时间从介于设置中的“爆炸最小时间”与“爆炸最大时间”之间随机决定。
+若爆破者或被安装炸弹的目标死亡，炸弹不会爆炸。</value>
+  </data>
+  <data name="setBomb" xml:space="preserve">
+    <value>安放炸弹</value>
+  </data>
+  <data name="explosionText" xml:space="preserve">
+    <value>又有人成为了我的艺术品</value>
+  </data>
+  <data name="Mery" xml:space="preserve">
+    <value>“梅莉”</value>
+  </data>
+  <data name="MeryAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="MeryAbilityCount" xml:space="preserve">
+    <value>管道挖掘次数</value>
+  </data>
+  <data name="MeryActiveNum" xml:space="preserve">
+    <value>激活法阵需要接近的人数</value>
+  </data>
+  <data name="MeryActiveRange" xml:space="preserve">
+    <value>激活法阵感知范围</value>
+  </data>
+  <data name="MeryIntroDescription" xml:space="preserve">
+    <value>喂喂，我是梅莉，我在你身后……</value>
+  </data>
+  <data name="MeryShortDescription" xml:space="preserve">
+    <value>制造让内鬼通行的法阵</value>
+  </data>
+  <data name="MeryFullDescription" xml:space="preserve">
+    <value>梅莉属于内鬼阵营，可以在地图上放置法阵。
+法阵有激活与未激活两种状态。两种状态下的法阵外表不同。
+激活的法阵可以当作管道使用，进入后玩家可以在激活的法阵之间移动。
+要激活管道，需要在一定的范围内让一定数量的玩家接近。
+一旦被激活，法阵就不会回到未激活状态。
+无论法阵的状态如何，内鬼阵营和梅林以外的玩家都无法看到或进入法阵。</value>
+  </data>
+  <data name="setCamp" xml:space="preserve">
+    <value>法阵</value>
+  </data>
+  <data name="SlaveDriver" xml:space="preserve">
+    <value>奴隶主</value>
+  </data>
+  <data name="SlaveDriverCanSeeTaskBar" xml:space="preserve">
+    <value>奴隶主可以确认任务进度</value>
+  </data>
+  <data name="SlaveDriverAbilityCoolTime" xml:space="preserve">
+    <value>压榨冷却</value>
+  </data>
+  <data name="SlaveDriverAbilityCount" xml:space="preserve">
+    <value>压榨最大使用次数</value>
+  </data>
+  <data name="SlaveDriverRevartTaskNum" xml:space="preserve">
+    <value>压榨回卷的任务数</value>
+  </data>
+  <data name="SlaveDriverRange" xml:space="preserve">
+    <value>压榨适用范围</value>
+  </data>
+  <data name="SlaveDriverIntroDescription" xml:space="preserve">
+    <value>我家自有谷满仓 哪管那穷人饿肚肠</value>
+  </data>
+  <data name="SlaveDriverShortDescription" xml:space="preserve">
+    <value>压榨船员来减慢任务进度</value>
+  </data>
+  <data name="SlaveDriverFullDescription" xml:space="preserve">
+    <value>奴隶主属于内鬼阵营，可以让船员的任务进度回卷。
+主动技能“压榨”：
+·以技能范围内一名玩家为对象发动
+·那名玩家被标记
+·会议开始时，有压榨标记的玩家根据“压榨回卷的任务数”设置的数量将自己已完成的任务替换为未完成的随机的其他任务</value>
+  </data>
+  <data name="Harassment" xml:space="preserve">
+    <value>压榨</value>
+  </data>
+  <data name="SlaveDriverReportMessage" xml:space="preserve">
+    <value>奴隶主开始用额外的任务压榨你……</value>
+  </data>
+  <data name="SandWorm" xml:space="preserve">
+    <value>潜伏者</value>
+  </data>
+  <data name="SandWormKillCoolPenalty" xml:space="preserve">
+    <value>正常情况下击杀冷却惩罚</value>
+  </data>
+  <data name="SandWormAssaultKillCoolReduce" xml:space="preserve">
+    <value>影袭以及停电时击杀冷却缩减</value>
+  </data>
+  <data name="SandWormAssaultRange" xml:space="preserve">
+    <value>影袭使用范围</value>
+  </data>
+  <data name="SandWormAbilityCoolTime" xml:space="preserve">
+    <value>影袭技能冷却时间</value>
+  </data>
+  <data name="SandWormIntroDescription" xml:space="preserve">
+    <value>躬耕于黑暗</value>
+  </data>
+  <data name="SandWormShortDescription" xml:space="preserve">
+    <value>在管道中刺杀船员</value>
+  </data>
+  <data name="SandWormFullDescription" xml:space="preserve">
+    <value>潜伏者属于内鬼阵营，拥有特殊击杀能力“影袭”。
+“影袭”：
+·只能在管道口内发动
+·发动时潜伏者所在的管道口会播放一次进出动画
+·技能冷却只在照明破坏或潜伏者进入管道期间才会计算
+·技能冷却不能在非该地图原有的管道内进行计算，如梅莉的法阵内
+·可以贯穿时光之盾等一部分防御
+潜伏者进行通常击杀时，击杀冷却会增加一定数值。
+潜伏者使用“影袭”或在照明破坏期间进行击杀时，击杀冷却会减少一定数值。</value>
+  </data>
+  <data name="assault" xml:space="preserve">
+    <value>影袭</value>
+  </data>
+  <data name="Smasher" xml:space="preserve">
+    <value>双刀手</value>
+  </data>
+  <data name="SmasherAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="SmasherAbilityCount" xml:space="preserve">
+    <value>技能使用次数</value>
+  </data>
+  <data name="SmasherSmashPenaltyKillCool" xml:space="preserve">
+    <value>技能使用后的惩罚冷却</value>
+  </data>
+  <data name="SmasherIntroDescription" xml:space="preserve">
+    <value>两把刀总比一把强</value>
+  </data>
+  <data name="SmasherShortDescription" xml:space="preserve">
+    <value>用连击进行快速击杀</value>
+  </data>
+  <data name="SmasherFullDescription" xml:space="preserve">
+    <value>双刀手属于内鬼阵营，可以进行二连击。
+“连击”：
+·与通常击杀冷却互相独立
+·与通常击杀效果相同
+·使用后，下一次通常击杀的击杀冷却将会增加一定数值。</value>
+  </data>
+  <data name="smash" xml:space="preserve">
+    <value>连击</value>
+  </data>
+  <data name="AssaultMaster" xml:space="preserve">
+    <value>突击兵</value>
+  </data>
+  <data name="AssaultMasterAbilityCoolTime" xml:space="preserve">
+    <value>储存技能冷却</value>
+  </data>
+  <data name="AssaultMasterStockLimit" xml:space="preserve">
+    <value>最多可储存子弹数</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenReport" xml:space="preserve">
+    <value>因尸体报告而存储的子弹数量</value>
+  </data>
+  <data name="AssaultMasterStockNumWhenMeetingButton" xml:space="preserve">
+    <value>因紧急会议而存储的子弹数量</value>
+  </data>
+  <data name="AssaultMasterCockingKillCoolReduceTime" xml:space="preserve">
+    <value>取出技能减少的击杀冷却</value>
+  </data>
+  <data name="AssaultMasterReloadReduceKillCoolTimePerStock" xml:space="preserve">
+    <value>使用储存技能减少的击杀冷却</value>
+  </data>
+  <data name="AssaultMasterIsResetReloadCoolTimeWhenKill" xml:space="preserve">
+    <value>击杀后重置技能的冷却时间</value>
+  </data>
+  <data name="AssaultMasterReloadCoolTimeReduceRatePerHideStock" xml:space="preserve">
+    <value>超过可储存子弹的上限后冷却时间的减少率</value>
+  </data>
+  <data name="AssaultMasterIntroDescription" xml:space="preserve">
+    <value>装填子弹为自己带来更少的冷却</value>
+  </data>
+  <data name="AssaultMasterShortDescription" xml:space="preserve">
+    <value>装填子弹为自己带来更少的冷却</value>
+  </data>
+  <data name="AssaultMasterFullDescription" xml:space="preserve">
+    <value>突击兵属于内鬼阵营，每次会议阶段都可以存储子弹来强化自己。
+被动能力“储存”:当前储存子弹数: {0}/{1}发
+每次报告尸体以及召开紧急会议，突击兵都可以存下数枚子弹。
+子弹数有上限。每有一颗子弹超过上限，“上膛”的冷却就会减少一定数值。
+主动能力“上膛”:当前上膛后的击杀冷却: {2}秒
+使用后，突击兵消耗一颗子弹，大幅减少当前的击杀冷却。
+当前击杀执行完毕后，击杀冷却回到默认值
+被动能力“装填”:
+击杀时自动发动。消耗一颗子弹，下一次击杀冷却减少一定数值。</value>
+  </data>
+  <data name="reload" xml:space="preserve">
+    <value>上膛</value>
+  </data>
+  <data name="noStockNow" xml:space="preserve">
+    <value>没有子弹</value>
+  </data>
+  <data name="reduceKillCool" xml:space="preserve">
+    <value>击杀冷却\n最多可减少{0}秒</value>
+  </data>
+  <data name="Shooter" xml:space="preserve">
+    <value>狙击兵</value>
+  </data>
+  <data name="ShooterIsInitAwake" xml:space="preserve">
+    <value>狙击兵是否游戏开始就能觉醒</value>
+  </data>
+  <data name="ShooterAwakeKillNum" xml:space="preserve">
+    <value>觉醒需要击杀的玩家数</value>
+  </data>
+  <data name="ShooterAwakeImpNum" xml:space="preserve">
+    <value>觉醒所需剩余内鬼阵营玩家数量</value>
+  </data>
+  <data name="ShooterShootKillCoolPenalty" xml:space="preserve">
+    <value>狙击后的击杀冷却增量</value>
+  </data>
+  <data name="ShooterNoneAwakeWhenShoot" xml:space="preserve">
+    <value>狙击后狙击兵回到未觉醒状态</value>
+  </data>
+  <data name="ShooterCanCallMeeting" xml:space="preserve">
+    <value>可以召开紧急会议</value>
+  </data>
+  <data name="ShooterCanShootSelfCallMeeting" xml:space="preserve">
+    <value>可以在自己召开的紧急会议中狙击</value>
+  </data>
+  <data name="ShooterMaxShootNum" xml:space="preserve">
+    <value>最大子弹数量</value>
+  </data>
+  <data name="ShooterInitShootNum" xml:space="preserve">
+    <value>最初子弹数量</value>
+  </data>
+  <data name="ShooterMaxMeetingShootNum" xml:space="preserve">
+    <value>一轮会议最大可狙击次数</value>
+  </data>
+  <data name="ShooterShootChargeTime" xml:space="preserve">
+    <value>狙击兵装弹时间</value>
+  </data>
+  <data name="ShooterShootKillNum" xml:space="preserve">
+    <value>狙击兵装弹需要击杀的玩家数</value>
+  </data>
+  <data name="ShooterIntroDescription" xml:space="preserve">
+    <value>七步之内，枪又准又快</value>
+  </data>
+  <data name="ShooterShortDescription" xml:space="preserve">
+    <value>狙击船员</value>
+  </data>
+  <data name="ShooterFullDescription" xml:space="preserve">
+    <value>狙击兵属于内鬼阵营，可以在会议中狙杀他人。
+主动技能“狙击”
+·会议阶段，自己未投票时，可以选择一名玩家发动
+·技能发动后选择的玩家立即被击杀
+·每次发动技能，需要消耗一枚子弹
+·除游戏开始时会获得若干子弹外，行动阶段每过一段时间狙击兵都会通过装弹获得子弹
+·装弹时间计算判定与击杀冷却计算判定一致
+·装弹时间计算不会因会议阶段开始而重置
+狙击兵发动技能后，狙击兵的通常击杀冷却会增加一定数值，直到狙击兵成功进行一次通常击杀。</value>
+  </data>
+  <data name="shooterShootStatus" xml:space="preserve">
+    <value>剩余子弹数: {0}/{1}发
+本轮会议可进行{2}次射击</value>
+  </data>
+  <data name="shooterChargeInfo" xml:space="preserve">
+    <value>装弹情况: {0}/{1}发
+距离下次子弹装填完毕还剩</value>
+  </data>
+  <data name="LastWolf" xml:space="preserve">
+    <value>绝境者</value>
+  </data>
+  <data name="LastWolfAwakeImpostorNum" xml:space="preserve">
+    <value>觉醒所需剩余内鬼数</value>
+  </data>
+  <data name="LastWolfDeadPlayerNumBonus" xml:space="preserve">
+    <value>每死亡一人所减少击杀冷却</value>
+  </data>
+  <data name="LastWolfKillPlayerNumBonus" xml:space="preserve">
+    <value>得知身份前每击杀一人所减少冷却</value>
+  </data>
+  <data name="LastWolfAbilityCoolTime" xml:space="preserve">
+    <value>强制关灯冷却时间</value>
+  </data>
+  <data name="LastWolfLightOffVision" xml:space="preserve">
+    <value>成为最后一个内鬼时强制关灯冷却时间</value>
+  </data>
+  <data name="LastWolfAbilityActiveTime" xml:space="preserve">
+    <value>强制关灯的持续时间</value>
+  </data>
+  <data name="LastWolfIntroDescription" xml:space="preserve">
+    <value>你是最后的希望</value>
+  </data>
+  <data name="LastWolfShortDescription" xml:space="preserve">
+    <value>利用强制关灯袭击其他船员</value>
+  </data>
+  <data name="LastWolfFullDescription" xml:space="preserve">
+    <value>绝境者属于内鬼阵营。在内鬼阵营存活玩家数降低到一定值时，绝境者觉醒。
+绝境者击杀时不发生移动。
+根据场上存活玩家数量，每轮会议结束后，击杀冷却只有一次将会减少一定数值。
+那次击杀完成后，击杀冷却回到原数值。
+绝境者在非觉醒状态下每进行一次击杀，每轮会议结束后的击杀冷却将会进一步减少。
+主动技能“熄灯”：
+·绝境者以外的所有玩家视野全部强制缩小
+·房间设置中不受照明破坏影响的设置对该技能无效
+·技能冷却随全场存活玩家的减少而增加</value>
+  </data>
+  <data name="liightOff" xml:space="preserve">
+    <value>熄灯</value>
+  </data>
+  <data name="Commander" xml:space="preserve">
+    <value>指挥官</value>
+  </data>
+  <data name="CommanderKillCoolReduceTime" xml:space="preserve">
+    <value>使用军令后击杀冷却减少值</value>
+  </data>
+  <data name="CommanderKillCoolReduceImpBonus" xml:space="preserve">
+    <value>每有一名内鬼阵营玩家死亡使用军令后击杀冷却减少值</value>
+  </data>
+  <data name="CommanderIncreaseKillNum" xml:space="preserve">
+    <value>增加一次军令使用次数需要进行的击杀次数</value>
+  </data>
+  <data name="CommanderAbilityCoolTime" xml:space="preserve">
+    <value>军令冷却时间</value>
+  </data>
+  <data name="CommanderAbilityCount" xml:space="preserve">
+    <value>军令可使用次数</value>
+  </data>
+  <data name="CommanderIntroDescription" xml:space="preserve">
+    <value>全军突击！</value>
+  </data>
+  <data name="CommanderShortDescription" xml:space="preserve">
+    <value>利用指挥带领内鬼队友走向胜利</value>
+  </data>
+  <data name="CommanderFullDescription" xml:space="preserve">
+    <value>指挥官属于内鬼阵营，可以回复其他内鬼的击杀冷却。
+主动技能“军令”
+·发动后，包括自己在内的所有内鬼阵营玩家击杀冷却减少一定数值
+·随着内鬼阵营玩家人数减少，技能效果增强
+·该技能的使用次数会由随自己击杀的次数增加而增加</value>
+  </data>
+  <data name="attackCommand" xml:space="preserve">
+    <value>军令</value>
+  </data>
+  <data name="Hypnotist" xml:space="preserve">
+    <value>催眠师</value>
+  </data>
+  <data name="HypnotistAwakeCheckImpostorNum" xml:space="preserve">
+    <value>觉醒所需剩余内鬼阵营玩家数量（1）</value>
+  </data>
+  <data name="HypnotistAwakeCheckTaskGage" xml:space="preserve">
+    <value>觉醒所需船员任务进度（2）</value>
+  </data>
+  <data name="HypnotistAwakeKillCount" xml:space="preserve">
+    <value>觉醒所需击杀人数（3）</value>
+  </data>
+  <data name="HypnotistRange" xml:space="preserve">
+    <value>催眠的技能范围</value>
+  </data>
+  <data name="HypnotistAbilityCoolTime" xml:space="preserve">
+    <value>催眠的冷却时间</value>
+  </data>
+  <data name="HypnotistAbilityCount" xml:space="preserve">
+    <value>催眠的发动次数</value>
+  </data>
+  <data name="HypnotistHideArrowRange" xml:space="preserve">
+    <value>指向碎片的箭头被显示的所需距离</value>
+  </data>
+  <data name="HypnotistDefaultRedAbilityPart" xml:space="preserve">
+    <value>催眠傀儡时默认生成的红色碎片个数</value>
+  </data>
+  <data name="HypnotistHideKillButtonTime" xml:space="preserve">
+    <value>获得红色碎片后，\n傀儡拥有击杀能力的持续时间</value>
+  </data>
+  <data name="HypnotistIsResetKillCoolWhenDollKill" xml:space="preserve">
+    <value>傀儡击杀会重置\n催眠师击杀冷却</value>
+  </data>
+  <data name="HypnotistDollKillCoolReduceRate" xml:space="preserve">
+    <value>连续获得红碎片时\n减少人偶击杀的冷却</value>
+  </data>
+  <data name="HypnotistDollCrakingCoolTime" xml:space="preserve">
+    <value>人偶碎片化的冷却时间</value>
+  </data>
+  <data name="HypnotistDollCrakingActiveTime" xml:space="preserve">
+    <value>人偶碎片化的持续时间</value>
+  </data>
+  <data name="HypnotistIntroDescription" xml:space="preserve">
+    <value>1，2，3……睡吧……</value>
+  </data>
+  <data name="HypnotistShortDescription" xml:space="preserve">
+    <value>使用催眠术将他人变为傀儡</value>
+  </data>
+  <data name="HypnotistFullDescription" xml:space="preserve">
+    <value>催眠师属于内鬼阵营，可以使用催眠术制造傀儡。
+主动技能“催眠”：
+・行动阶段，以一名玩家为对象发动
+・技能发动后，那名玩家的职业变为“傀儡”
+・傀儡生成后，地图上将出现“傀儡碎片”
+・红色碎片可以赋予傀儡击杀能力。如果连续取得红色碎片，傀儡的击杀冷却减少
+・蓝色碎片可以赋予傀儡使用飞船设备的权限
+・灰色碎片可以赋予傀儡清理尸体的能力
+・蓝色与灰色碎片出现的枚数固定，由房间设置决定
+・红色碎片出现的枚数由变为傀儡的玩家的原职业的技能决定</value>
+  </data>
+  <data name="Hypnosis" xml:space="preserve">
+    <value>催眠</value>
+  </data>
+  <data name="Doll" xml:space="preserve">
+    <value>傀儡</value>
+  </data>
+  <data name="DollShortDescription" xml:space="preserve">
+    <value>你陷入了温柔乡</value>
+  </data>
+  <data name="DollFullDescription" xml:space="preserve">
+    <value>傀儡由催眠师的技能产生。
+胜利条件：内鬼阵营获胜
+初始状态下傀儡没有任何技能。
+通过让催眠师取得傀儡碎片，傀儡可以得到强化。
+・当前的催眠师：{0}
+・地图模块解除限制：{1}
+・清理能力解除限制：{2}</value>
+  </data>
+  <data name="FeatAccess" xml:space="preserve">
+    <value>催眠程度变更：已解除对{0}模块的限制</value>
+  </data>
+  <data name="unlockCraking" xml:space="preserve">
+    <value>催眠程度变更：已解除对清理{0}的限制</value>
+  </data>
+  <data name="unlockKill" xml:space="preserve">
+    <value>催眠程度变更：获得击杀能力</value>
+  </data>
+  <data name="lockKill" xml:space="preserve">
+    <value>催眠程度变更：失去击杀能力</value>
+  </data>
+  <data name="UnderWarper" xml:space="preserve">
+    <value>管道工</value>
+  </data>
+  <data name="UnderWarperAwakeKillCount" xml:space="preserve">
+    <value>觉醒所需一轮击杀人数</value>
+  </data>
+  <data name="UnderWarperVentLinkKillCout" xml:space="preserve">
+    <value>生成新管道链接所需一轮击杀人数</value>
+  </data>
+  <data name="UnderWarperNoVentAnimeKillCout" xml:space="preserve">
+    <value>不显示管道动画所需一轮击杀人数</value>
+  </data>
+  <data name="UnderWarperRange" xml:space="preserve">
+    <value>觉醒后管道的使用范围</value>
+  </data>
+  <data name="UnderWarperIntroDescription" xml:space="preserve">
+    <value>畅通无阻！</value>
+  </data>
+  <data name="UnderWarperShortDescription" xml:space="preserve">
+    <value>利用相连的管道杀害船员</value>
+  </data>
+  <data name="UnderWarperFullDescription" xml:space="preserve">
+    <value>管道工属于内鬼阵营，拥有最强的管道使用能力。
+若一轮会议结束前管道工击杀的总次数满足觉醒条件，管道工觉醒。
+觉醒的管道工可以在全部管道网络之间移动，进出时不播放管道口动画，并且允许使用管道的间距更长</value>
+  </data>
+  <data name="Magician" xml:space="preserve">
+    <value>魔术师</value>
+  </data>
+  <data name="MagicianAbilityCoolTime" xml:space="preserve">
+    <value>魔术师技能冷却</value>
+  </data>
+  <data name="MagicianAbilityCount" xml:space="preserve">
+    <value>魔术师技能使用次数</value>
+  </data>
+  <data name="MagicianTeleportTargetRate" xml:space="preserve">
+    <value>魔术师技能对象是存活玩家的概率</value>
+  </data>
+  <data name="MagicianDupeTeleportTargetTo" xml:space="preserve">
+    <value>魔术师技能对象可能重复</value>
+  </data>
+  <data name="MagicianIncludeSpawnPoint" xml:space="preserve">
+    <value>技能对象可能被传送到出生点</value>
+  </data>
+  <data name="MagicianIncludeRolePlayer" xml:space="preserve">
+    <value>魔术师可以成为自己的技能对象</value>
+  </data>
+  <data name="MagicianIntroDescription" xml:space="preserve">
+    <value>接下来就是见证奇迹的时刻</value>
+  </data>
+  <data name="MagicianShortDescription" xml:space="preserve">
+    <value>用魔术扰乱情报</value>
+  </data>
+  <data name="MagicianFullDescription" xml:space="preserve">
+    <value>魔术师属于内鬼阵营，可以用魔术让玩家的位置发生改变。
+主动技能“大变活人”：
+·随机将一定数量的存活玩家随机传送到其他玩家所在处
+·选项“技能对象可能被传送到出生点”开启时，技能也可能把玩家传送到当前地图的出生点处
+·选项“魔术师可以成为自己的技能对象”关闭时，魔术师自己一定不会被传送</value>
+  </data>
+  <data name="juggling" xml:space="preserve">
+    <value>大变活人</value>
+  </data>
+  <data name="Slime" xml:space="preserve">
+    <value>史莱姆</value>
+  </data>
+  <data name="SlimeAbilityCoolTime" xml:space="preserve">
+    <value>史莱姆变形冷却</value>
+  </data>
+  <data name="SlimeAbilityActiveTime" xml:space="preserve">
+    <value>史莱姆变形持续时间</value>
+  </data>
+  <data name="SlimeIntroDescription" xml:space="preserve">
+    <value>用魔王的力量随意变形</value>
+  </data>
+  <data name="SlimeShortDescription" xml:space="preserve">
+    <value>变形成各种物件</value>
+  </data>
+  <data name="SlimeFullDescription" xml:space="preserve">
+    <value>史莱姆属于内鬼阵营，可以将自己变形为地图上的物件。
+主动技能“变形”：
+·靠近地图上可以变形的物件时才可以发动。史莱姆的外形变为那个物件的外形
+·变形状态下的史莱姆可以进行击杀等交互，但进行使用管道、梯子等交互时会解除变形</value>
+  </data>
+  <data name="SlimeMorph" xml:space="preserve">
+    <value>变形</value>
+  </data>
+  <data name="Zombie" xml:space="preserve">
+    <value>丧尸</value>
+  </data>
+  <data name="ZombieAwakeKillCount" xml:space="preserve">
+    <value>丧尸觉醒需要击杀的玩家数</value>
+  </data>
+  <data name="ZombieAbilityCoolTime" xml:space="preserve">
+    <value>禁忌法阵布置冷却</value>
+  </data>
+  <data name="ZombieAbilityActiveTime" xml:space="preserve">
+    <value>禁忌法阵</value>
+  </data>
+  <data name="ZombieAbilityCount" xml:space="preserve">
+    <value>丧尸进入不死状态需要布置的禁忌法阵数</value>
+  </data>
+  <data name="ZombieShowMagicCircleTime" xml:space="preserve">
+    <value>禁忌法阵从布置到可见的间隔时间</value>
+  </data>
+  <data name="ZombieResurrectKillCount" xml:space="preserve">
+    <value>丧尸进入不死状态需要击杀的玩家数</value>
+  </data>
+  <data name="ZombieResurrectDelayTime" xml:space="preserve">
+    <value>丧尸在不死状态下从死亡到复活的间隔时间</value>
+  </data>
+  <data name="ZombieCanResurrectOnExil" xml:space="preserve">
+    <value>丧尸被放逐也可以复活</value>
+  </data>
+  <data name="ZombieIntroDescription" xml:space="preserve">
+    <value>不~死~之~身~</value>
+  </data>
+  <data name="ZombieShortDescription" xml:space="preserve">
+    <value>用他人的生命作为献祭让自己复活</value>
+  </data>
+  <data name="ZombieFullDescription" xml:space="preserve">
+    <value>丧尸属于内鬼阵营，满足复活条件后便不死。
+丧尸不会被分配幽灵职业。
+丧尸进行一定次数的击杀后，丧尸觉醒。
+主动技能“禁忌法阵”：
+·在特定的房间（丧尸可以通过箭头确认）内才可以发动
+·技能发动后，丧尸在原地静止一段时间，禁忌法阵即布置完成
+·禁忌法阵布置完成后，经过“禁忌法阵从布置到可见的间隔时间”中设置的时间，所有玩家都将看到巨大的魔法阵
+·这个技能的使用次数全部消耗完毕，且丧尸觉醒后进行一定次数的击杀后，丧尸进入不死状态
+不死状态下的丧尸被击杀后，经过一定时间丧尸就可以复活（那段时间内，丧尸不会看到其他玩家的职业等）。
+丧尸在地图的出生点处复活（地图有复数个出生点的场合是随机选）。</value>
+  </data>
+  <data name="featMagicCircle" xml:space="preserve">
+    <value>禁忌法阵</value>
+  </data>
+</root>
