@@ -12,6 +12,8 @@ namespace ExtremeRoles.Generator.Core;
 
 public sealed class TranslationDictionaryBuilder
 {
+	public IReadOnlyDictionary<string, string> Base => baseDict;
+
 	private readonly IReadOnlyDictionary<string, string> baseDict;
 
 	public TranslationDictionaryBuilder(

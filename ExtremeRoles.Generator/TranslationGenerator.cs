@@ -36,6 +36,12 @@ public sealed class TranslationGenerator : ISourceGenerator
 				key,
 				item.Value.ToString());
 		}
+
+		exportSourceFromDict(
+			context,
+			builder.Base,
+			"ja-JP",
+			TranslationPear.Lang.Japanese.ToString());
 	}
 
 	public void Initialize(GeneratorInitializationContext context)
@@ -51,8 +57,16 @@ public sealed class TranslationGenerator : ISourceGenerator
 	{
 		var targetText = texts.Where(x => x.Path.EndsWith($".{target}.resx"));
 		var transData = builder.Build(targetText);
+		exportSourceFromDict(context, transData, target, name);
+	}
+
+	private static void exportSourceFromDict(
+		in GeneratorExecutionContext context,
+		in IReadOnlyDictionary<string, string> dict,
+		string target, string name)
+	{
 		var strbuilder = new StringBuilder();
-		foreach (var item in transData)
+		foreach (var item in dict)
 		{
 			strbuilder
 				.Append(@"{ """)
