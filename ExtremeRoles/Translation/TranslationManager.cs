@@ -61,6 +61,8 @@ public static class TranslatorManager
 			}
 			else
 			{
+				ExtremeRolesPlugin.Logger.LogInfo(
+					$"Data Add Key:{key} Data:{data}");
 				allData.Add(key, data);
 			}
 		}

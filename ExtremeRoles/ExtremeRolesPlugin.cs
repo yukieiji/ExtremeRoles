@@ -1,4 +1,5 @@
 ﻿global using ExtremeRoles.Module.CustomOption;
+global using Tr = ExtremeRoles.Extension.Controller.TranslationControllerExtension;
 global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 
@@ -17,6 +18,7 @@ using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomOption.Migrator;
+using ExtremeRoles.Translation;
 
 namespace ExtremeRoles;
 
@@ -70,7 +72,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
 	private void normalBoot()
 	{
 		ShipState = new ExtremeShipStatus();
-		Helper.OldTranslation.Load();
 
 		DebugMode = Config.Bind("DeBug", "DebugMode", false);
 		IgnoreOverrideConsoleDisable = Config.Bind(
@@ -103,5 +104,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		UnityObjectLoader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();
+
+		TranslatorManager.Register<Translator>();
 	}
 }

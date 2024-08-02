@@ -257,7 +257,7 @@ public sealed class Shooter :
             }
 
             meetingShootText.text = string.Format(
-                OldTranslation.GetString("shooterShootStatus"),
+                Tr.GetString("shooterShootStatus"),
                 this.curShootNum, this.maxShootNum,
                 this.maxMeetingShootNum - this.shootCounter);
             meetingInfoSetActive(true);
@@ -302,19 +302,19 @@ public sealed class Shooter :
         else
         {
             return Design.ColoedString(
-                Palette.ImpostorRed, OldTranslation.GetString(RoleTypes.Impostor.ToString()));
+                Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return OldTranslation.GetString(
+            return Tr.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return OldTranslation.GetString(
+            return Tr.GetString(
                 $"{RoleTypes.Impostor}FullDescription");
         }
     }
@@ -565,7 +565,7 @@ public sealed class Shooter :
         if (this.chargeInfoText != null)
         {
             this.chargeInfoText.text = string.Format(
-                Helper.OldTranslation.GetString("shooterChargeInfo"),
+                Tr.GetString("shooterChargeInfo"),
                 this.curShootNum, this.maxShootNum);
         }
     }

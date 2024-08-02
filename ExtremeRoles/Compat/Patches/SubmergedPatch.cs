@@ -173,7 +173,7 @@ public static class SubmarineSurvillanceMinigamePatch
 			TMPro.TextMeshPro comText = screenStatic.GetComponentInChildren<TMPro.TextMeshPro>();
 			if (comText != null)
 			{
-				comText.text = Helper.OldTranslation.GetString("youDonotUse");
+				comText.text = Tr.GetString("youDonotUse");
 			}
 
 			screenStatic.SetActive(true);

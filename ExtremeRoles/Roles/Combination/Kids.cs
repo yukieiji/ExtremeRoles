@@ -193,7 +193,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
         private void updateAbilityInfoText()
         {
             this.abilityCountText!.text = string.Format(
-                OldTranslation.GetString("scribeText"), this.AbilityCount);
+                Tr.GetString("scribeText"), this.AbilityCount);
         }
     }
 
@@ -279,13 +279,13 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
                 new (
 					AbilityType.Scribe,
 					new ButtonGraphic(
-						OldTranslation.GetString("scribble"),
+						Tr.GetString("scribble"),
 						randomSprite)
 				),
                 new (
 					AbilityType.SelfBomb,
 					new ButtonGraphic(
-						OldTranslation.GetString("selfBomb"),
+						Tr.GetString("selfBomb"),
 						UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Bomb))
 				),
                 this.IsAbilityUse,

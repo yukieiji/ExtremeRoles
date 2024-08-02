@@ -149,9 +149,8 @@ public sealed class BodyGuard :
 
         private void updateAbilityCountText()
         {
-            this.abilityCountText.text = string.Format(
-                OldTranslation.GetString(ICountBehavior.DefaultButtonCountText),
-                this.AbilityCount);
+            this.abilityCountText.text = Tr.GetString(
+				ICountBehavior.DefaultButtonCountText, this.AbilityCount);
         }
 
         private void reduceAbilityCount()
@@ -438,7 +437,7 @@ public sealed class BodyGuard :
         string guardedPlayerName)
     {
 
-        string defaultReport = OldTranslation.GetString("martyrdomReport");
+        string defaultReport = Tr.GetString("martyrdomReport");
 
         if (!bodyGuard.isReportWithPlayerName)
         {
@@ -448,17 +447,14 @@ public sealed class BodyGuard :
         return bodyGuard.reportMode switch
         {
             BodyGuardReportPlayerNameMode.GuardedPlayerNameOnly =>
-                string.Format(
-                    OldTranslation.GetString("martyrdomReportWithGurdedPlayer"),
-                    bodyGuardPlayerName),
+                Tr.GetString(
+					"martyrdomReportWithGurdedPlayer", bodyGuardPlayerName),
             BodyGuardReportPlayerNameMode.BodyGuardPlayerNameOnly =>
-                 string.Format(
-                     OldTranslation.GetString("martyrdomReportWithBodyGurdPlayer"),
-                     bodyGuardPlayerName),
+                 Tr.GetString(
+					 "martyrdomReportWithBodyGurdPlayer", bodyGuardPlayerName),
             BodyGuardReportPlayerNameMode.BothPlayerName =>
-                string.Format(
-                    OldTranslation.GetString("martyrdomReportWithBoth"),
-                    bodyGuardPlayerName, guardedPlayerName),
+                Tr.GetString(
+					"martyrdomReportWithBoth", bodyGuardPlayerName, guardedPlayerName),
             _ => defaultReport
         };
     }
@@ -497,12 +493,12 @@ public sealed class BodyGuard :
                 featShieldMode: new(
 					BodyGuardAbilityMode.FeatShield,
 					new ButtonGraphic(
-						OldTranslation.GetString("shield"),
+						Tr.GetString("shield"),
 						this.shildButtonImage)),
                 resetMode: new(
 					BodyGuardAbilityMode.Reset,
 					new ButtonGraphic(
-						OldTranslation.GetString("resetShield"),
+						Tr.GetString("resetShield"),
 						Resources.UnityObjectLoader.LoadSpriteFromResources(
 							ObjectPath.BodyGuardResetShield))),
                 featShield: UseAbility,
@@ -711,9 +707,8 @@ public sealed class BodyGuard :
 
             if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                this.meetingText.text = string.Format(
-                    Helper.OldTranslation.GetString("meetingShieldState"),
-                    behavior.AbilityCount);
+                this.meetingText.text = 
+					Tr.GetString("meetingShieldState", behavior.AbilityCount);
             }
             this.meetingText.gameObject.SetActive(true);
         }

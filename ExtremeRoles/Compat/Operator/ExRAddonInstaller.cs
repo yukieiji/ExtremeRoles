@@ -31,18 +31,18 @@ internal sealed class ExRAddonInstaller : OperatorBase
 
 	public override void Excute()
 	{
-		string info = OldTranslation.GetString("checkInstallNow");
+		string info = Tr.GetString("checkInstallNow");
 		Popup.Show(info);
 
 
 		var exrRepoData = JsonParser.GetRestApiAsync<GitHubReleaseData>(
 			this.client, url).GetAwaiter().GetResult();
 
-		info = OldTranslation.GetString("installNow");
+		info = Tr.GetString("installNow");
 
 		if (installTask == null)
 		{
-			info = OldTranslation.GetString("installInProgress");
+			info = Tr.GetString("installInProgress");
 			installTask = downloadAndInstall(exrRepoData);
 		}
 
@@ -84,7 +84,7 @@ internal sealed class ExRAddonInstaller : OperatorBase
 		await using var fileStream = File.Create(filePath);
 		await responseStream.CopyToAsync(fileStream);
 
-		ShowPopup(OldTranslation.GetString("installRestart"));
+		ShowPopup(Tr.GetString("installRestart"));
 
 		return true;
 	}

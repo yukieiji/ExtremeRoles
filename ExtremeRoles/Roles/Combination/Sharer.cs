@@ -104,7 +104,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         {
             this.textPopUp.AddText(
                 string.Format(
-                    OldTranslation.GetString("sharerKill"),
+                    Tr.GetString("sharerKill"),
                     source.Data.DefaultOutfit.PlayerName));
         }
     }
@@ -147,7 +147,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
     public override string GetFullDescription()
     {
-        string baseDesc = $"{base.GetFullDescription()}\n{OldTranslation.GetString("curSharer")}:";
+        string baseDesc = $"{base.GetFullDescription()}\n{Tr.GetString("curSharer")}:";
 
         foreach (var item in ExtremeRoleManager.GameRole)
         {
@@ -186,11 +186,11 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
                 if (i == 0)
                 {
-                    baseString += OldTranslation.GetString("andFirst");
+                    baseString += Tr.GetString("andFirst");
                 }
                 else
                 {
-                    baseString += OldTranslation.GetString("and");
+                    baseString += Tr.GetString("and");
                 }
                 baseString += Player.GetPlayerControlById(
                     sharer[i]).Data.PlayerName;
@@ -200,7 +200,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
         return string.Concat(
             baseString,
-            OldTranslation.GetString("SharerIntoPlus"),
+            Tr.GetString("SharerIntoPlus"),
             Design.ColoedString(Palette.ImpostorRed, " ▽"));
     }
 

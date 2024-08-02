@@ -30,7 +30,7 @@ public sealed class SlaveDriver :
 		public bool IsRpc { get; set; } = true;
 
 		public override string ToString()
-			=> OldTranslation.GetString("SlaveDriverReportMessage");
+			=> Tr.GetString("SlaveDriverReportMessage");
 
 		public void Serialize(RPCOperator.RpcCaller caller)
 		{ }

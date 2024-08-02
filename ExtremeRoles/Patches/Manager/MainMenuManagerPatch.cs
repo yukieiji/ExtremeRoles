@@ -54,7 +54,7 @@ public static class MainMenuManagerStartPatch
 		// UpdateButton
 		var updateButton = createButton(
 			__instance, "ExtremeRolesUpdateButton",
-			OldTranslation.GetString(OldTranslation.GetString("UpdateButton")),
+			Tr.GetString("UpdateButton"),
 			1.9f, async () => await AutoModInstaller.Instance.Update(),
 			Vector3.zero, anchorTransform);
 

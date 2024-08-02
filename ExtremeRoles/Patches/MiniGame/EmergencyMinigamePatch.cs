@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             if (!Roles.ExtremeRoleManager.GetLocalPlayerRole().CanCallMeeting())
             {
-                __instance.StatusText.text = Helper.OldTranslation.GetString("youDonotUse");
+                __instance.StatusText.text = Tr.GetString("youDonotUse");
                 __instance.NumberText.text = string.Empty;
                 __instance.ClosedLid.gameObject.SetActive(true);
                 __instance.OpenLid.gameObject.SetActive(false);
@@ -34,16 +34,11 @@ namespace ExtremeRoles.Patches.MiniGame
                         ExtremeRolesPlugin.ShipState.MeetingCount);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
 
-                __instance.StatusText.text = string.Concat(
-                    "<size=100%>",
-                    string.Format(
-                        Helper.OldTranslation.GetString("meetingStatus"),
-                        PlayerControl.LocalPlayer.name),
-                    "</size>");
-                __instance.NumberText.text = string.Format(
-                    Helper.OldTranslation.GetString("meetingCount"),
-                    localRemaining.ToString(),
-                    teamRemaining.ToString());
+                __instance.StatusText.text = $"<size=100%>{Tr.GetString("meetingStatus", PlayerControl.LocalPlayer.name)}</size>";
+                __instance.NumberText.text = Tr.GetString(
+					"meetingCount",
+					localRemaining,
+					teamRemaining);
                 __instance.ButtonActive = remaining > 0;
                 __instance.ClosedLid.gameObject.SetActive(!__instance.ButtonActive);
                 __instance.OpenLid.gameObject.SetActive(__instance.ButtonActive);

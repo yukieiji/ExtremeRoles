@@ -44,7 +44,7 @@ internal sealed class CompatModMenu
 			template, parent);
 		mngButton.name = "ExtremeRolesModManagerButton";
 		mngButton.transform.localPosition = new Vector3(0.0f, 1.6f, 0.0f);
-		mngButton.Text.text = Helper.OldTranslation.GetString("compatModMenuButton");
+		mngButton.Text.text = Tr.GetString("compatModMenuButton");
 
 		mngButton.ClickedEvent.AddListener(() =>
 		{
@@ -120,7 +120,7 @@ internal sealed class CompatModMenu
 		modText.fontSizeMin = modText.fontSizeMax = 2.0f;
 		modText.font = UnityObject.Instantiate(Module.Prefab.Text.font);
 		modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
-		modText.text = $"{Helper.OldTranslation.GetString(name)}";
+		modText.text = $"{Tr.GetString(name)}";
 		modText.alignment = TextAlignmentOptions.Left;
 		modText.gameObject.SetActive(true);
 
@@ -204,7 +204,7 @@ internal sealed class CompatModMenu
 			this.downgradeButton.Text.fontSizeMax =
 			this.downgradeButton.Text.fontSizeMin = 0.5f;
 
-		this.downgradeButton.Text.text = Helper.OldTranslation.GetString(
+		this.downgradeButton.Text.text = Tr.GetString(
 			this.downgradeButton.name);
 
 		this.downgradeButton.transform.localPosition = new Vector3(2.0f, -2.35f, 0f);
@@ -226,7 +226,7 @@ internal sealed class CompatModMenu
 		title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
 		title.gameObject.SetActive(true);
 		title.name = "title";
-		title.text = Helper.OldTranslation.GetString(titleName);
+		title.text = Tr.GetString(titleName);
 		title.autoSizeTextContainer = false;
 		title.fontSizeMin = title.fontSizeMax = 3.25f;
 		title.transform.localPosition = new Vector3(0.0f, 2.45f, 0f);
@@ -301,11 +301,11 @@ internal sealed class CompatModMenu
 		if (this.menuBody == null) { return; }
 
 		TextMeshPro title = this.menuBody.GetComponent<TextMeshPro>();
-		title.text = Helper.OldTranslation.GetString(titleName);
+		title.text = Tr.GetString(titleName);
 
 		foreach (var (mod, menu) in this.compatModMenuLine)
 		{
-			menu.Text.text = $"{Helper.OldTranslation.GetString(mod.ToString())}";
+			menu.Text.text = $"{Tr.GetString(mod.ToString())}";
 
 			foreach (var (buttonType, button) in menu.Button)
 			{
@@ -315,7 +315,7 @@ internal sealed class CompatModMenu
 
 		if (this.downgradeButton == null) { return; }
 
-		this.downgradeButton.Text.text = Helper.OldTranslation.GetString(
+		this.downgradeButton.Text.text = Tr.GetString(
 			this.downgradeButton.name);
 	}
 
@@ -341,7 +341,7 @@ internal sealed class CompatModMenu
 
 	private static void updateButtonText(ButtonType buttonType, SimpleButton button)
 	{
-		button.Text.text = Helper.OldTranslation.GetString(buttonType.ToString());
+		button.Text.text = Tr.GetString(buttonType.ToString());
 	}
 
 	private static Action createOperator<T>(object parm)

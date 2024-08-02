@@ -39,11 +39,11 @@ public sealed partial class Xion
             new XionActionButton(
 				GetSprite("ZoomIn"),
 				this.cameraZoomIn,
-                OldTranslation.GetString("zoomIn")),
+                Tr.GetString("zoomIn")),
             new XionActionButton(
 				GetSprite("SpeedDown"),
 				this.RpcSpeedDown,
-                OldTranslation.GetString("speedDown")),
+                Tr.GetString("speedDown")),
         };
 
 		bool enableMeeting = !ExtremeGameModeManager.Instance.ShipOption.IsBreakEmergencyButton;
@@ -53,7 +53,7 @@ public sealed partial class Xion
 				new XionActionButton(
 					UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.Meeting),
 					this.RpcCallMeeting,
-					OldTranslation.GetString("emergencyMeeting")));
+					Tr.GetString("emergencyMeeting")));
 		}
 
 		// 残りのボタン
@@ -62,17 +62,17 @@ public sealed partial class Xion
 				UnityObjectLoader.LoadSpriteFromResources(
 					ObjectPath.MaintainerRepair),
 				this.RpcRepairSabotage,
-				OldTranslation.GetString("maintenance")));
+				Tr.GetString("maintenance")));
 		this.funcButton.Add(
 			new XionActionButton(
 				GetSprite("ZoomOut"),
 				this.cameraZoomOut,
-				OldTranslation.GetString("zoomOut")));
+				Tr.GetString("zoomOut")));
 		this.funcButton.Add(
 			new XionActionButton(
 				GetSprite("SpeedUp"),
 				this.RpcSpeedUp,
-				OldTranslation.GetString("speedUp")));
+				Tr.GetString("speedUp")));
 
 
 		var hud = FastDestroyableSingleton<HudManager>.Instance;

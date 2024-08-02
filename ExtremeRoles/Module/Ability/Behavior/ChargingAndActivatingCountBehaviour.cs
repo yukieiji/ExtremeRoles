@@ -171,8 +171,8 @@ public sealed class ChargingAndActivatingCountBehaviour :
 			return;
 		}
 
-		this.abilityCountText.text = string.Format(
-			OldTranslation.GetString(this.buttonTextFormat),
+		this.abilityCountText.text = Tr.GetString(
+			this.buttonTextFormat,
 			this.AbilityCount);
 	}
 	private void reduceAbilityCount()

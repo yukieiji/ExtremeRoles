@@ -1014,13 +1014,13 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         switch (this.condition)
         {
             case VigilanteCondition.NewHeroForTheShip:
-                return OldTranslation.GetString(
+                return Tr.GetString(
                     $"{this.Id}CrewDescription");
             case VigilanteCondition.NewVillainForTheShip:
-                return OldTranslation.GetString(
+                return Tr.GetString(
                     $"{this.Id}ImpDescription");
             case VigilanteCondition.NewEnemyNeutralForTheShip:
-                return OldTranslation.GetString(
+                return Tr.GetString(
                     $"{this.Id}NeutDescription");
             default:
                 return base.GetFullDescription();
@@ -1122,8 +1122,8 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
             string.Format("{0}: {1}",
                 Design.ColoedString(
                     this.NameColor,
-                    OldTranslation.GetString(this.RoleName)),
-                OldTranslation.GetString(
+                    Tr.GetString(this.RoleName)),
+                Tr.GetString(
                     $"{this.Id}{this.condition}ShortDescription")));
 
         if (isContainFakeTask && !this.HasTask)

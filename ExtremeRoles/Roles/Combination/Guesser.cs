@@ -515,13 +515,9 @@ public sealed class Guesser :
             }
 
 			this.guesserUi.SetTitle(
-                string.Format(
-                    OldTranslation.GetString("guesserUiTitle"),
-					info.DefaultOutfit.PlayerName));
+                Tr.GetString("guesserUiTitle", info.DefaultOutfit.PlayerName));
             this.guesserUi.SetInfo(
-                string.Format(
-                    OldTranslation.GetString("guesserUiInfo"),
-                    this.bulletNum, this.maxGuessNum));
+                Tr.GetString("guesserUiInfo", this.bulletNum, this.maxGuessNum));
             this.guesserUi.SetTarget(targetPlayerId);
             this.guesserUi.gameObject.SetActive(true);
         }
@@ -561,8 +557,8 @@ public sealed class Guesser :
                 this.meetingGuessText.gameObject.SetActive(false);
             }
 
-            this.meetingGuessText.text = string.Format(
-                OldTranslation.GetString("guesserUiInfo"),
+            this.meetingGuessText.text = Tr.GetString(
+				"guesserUiInfo",
                 this.bulletNum, this.maxGuessNum);
             meetingInfoSetActive(true);
         }

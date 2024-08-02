@@ -124,8 +124,8 @@ public class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 			return;
 		}
 
-		this.abilityCountText.text = string.Format(
-			OldTranslation.GetString(this.buttonTextFormat),
+		this.abilityCountText.text = Tr.GetString(
+			this.buttonTextFormat,
 			this.AbilityCount);
 	}
 

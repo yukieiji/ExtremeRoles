@@ -295,7 +295,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		{
 			fitTextMeshPro(nameText, baseNameText);
 			nameText.text = canSeeFake ?
-					OldTranslation.GetString("DummyPlayerName") : info.OutfitInfo.PlayerName;
+					Tr.GetString("DummyPlayerName") : info.OutfitInfo.PlayerName;
 			nameText.color = canSeeFake ? Palette.ImpostorRed : Palette.White;
 		}
 

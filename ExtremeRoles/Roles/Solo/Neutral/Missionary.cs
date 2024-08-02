@@ -282,7 +282,7 @@ public sealed class Missionary :
             this.tellText.GetComponent<RectTransform>().sizeDelta = new Vector2(3.0f, 0.75f);
             this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
             this.tellText.gameObject.layer = 5;
-            this.tellText.text = Helper.OldTranslation.GetString("departureText");
+            this.tellText.text = Tr.GetString("departureText");
         }
         this.tellText.gameObject.SetActive(true);
 

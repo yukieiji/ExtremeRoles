@@ -57,7 +57,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 			"Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
 		this.addFilterButton.Awake();
 		this.addFilterButton.SetButtonText(
-			OldTranslation.GetString("RoleAssignFilterAddFilter"));
+			Tr.GetString("RoleAssignFilterAddFilter"));
 
 		this.layout = trans.Find(
 			"Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
@@ -67,10 +67,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		this.addRoleMenu = trans.Find(
 			"Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
 		this.addRoleMenu.Awake();
-		this.addRoleMenu.Title.text = OldTranslation.GetString("RoleAssignFilterAddRoleMenuTitle");
+		this.addRoleMenu.Title.text = Tr.GetString("RoleAssignFilterAddRoleMenuTitle");
 
 		var title = trans.Find("Body/Title").gameObject.GetComponent<TextMeshProUGUI>();
-		title.text = OldTranslation.GetString("RoleAssignFilter");
+		title.text = Tr.GetString("RoleAssignFilter");
 
 		var closeButton = trans.Find(
 			"Body/CloseButton").gameObject.GetComponent<Button>();
@@ -155,13 +155,13 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		filterSet.Awake();
 		filterSet.gameObject.SetActive(true);
 
-		filterSet.AssignText.text = OldTranslation.GetString("RoleAssignFilterAssignNum");
+		filterSet.AssignText.text = Tr.GetString("RoleAssignFilterAssignNum");
 		filterSet.DeleteThisButton.SetButtonText(
-			OldTranslation.GetString("RoleAssignFilterDeleteThis"));
+			Tr.GetString("RoleAssignFilterDeleteThis"));
 		filterSet.DeleteAllRoleButton.SetButtonText(
-			OldTranslation.GetString("RoleAssignFilterDeleteAllRole"));
+			Tr.GetString("RoleAssignFilterDeleteAllRole"));
 		filterSet.AddRoleButton.SetButtonText(
-			OldTranslation.GetString("RoleAssignFilterAddRole"));
+			Tr.GetString("RoleAssignFilterAddRole"));
 
 		filterSet.DeleteThisButton.SetButtonClickAction(
 			() =>

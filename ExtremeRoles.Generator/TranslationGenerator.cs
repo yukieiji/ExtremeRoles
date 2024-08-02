@@ -71,7 +71,7 @@ public sealed class TranslationGenerator : ISourceGenerator
 			strbuilder
 				.Append(@"{ """)
 				.Append(item.Key)
-				.Append(@" "", @""")
+				.Append(@""", @""")
 				.Append(item.Value)
 				.AppendLine(@""" },")
 				.Append("        ");

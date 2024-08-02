@@ -60,7 +60,7 @@ public static class MeetingHudCoIntroPatch
 		}
 		else
 		{
-			__instance.TitleText.text = Helper.OldTranslation.GetString("whoIsMarine");
+			__instance.TitleText.text = Tr.GetString("whoIsMarine");
 		}
 	}
 }

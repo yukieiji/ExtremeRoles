@@ -93,7 +93,7 @@ public sealed class ModOptionMenu
 		{
 			if (button != null)
 			{
-				button.Text.text = OldTranslation.GetString(
+				button.Text.text = Tr.GetString(
 					$"{key}{postfix}");
 			}
 		}
@@ -111,14 +111,14 @@ public sealed class ModOptionMenu
 				mr.sortingOrder = 9;
 			}
 
-			string info = OldTranslation.GetString(
+			string info = Tr.GetString(
 				$"{key}PleaseWait");
 			popUp.Show(info); // Show originally
 			bool result = onClick.Invoke();
 
 			string transKey = result ?
 				$"{key}Success" : $"{key}Error";
-			info = OldTranslation.GetString(transKey);
+			info = Tr.GetString(transKey);
 
 			popUp.StartCoroutine(
 				Effects.Lerp(0.01f,
@@ -176,19 +176,19 @@ public sealed class ModOptionMenu
 	{
 		if (modOptionButton != null)
 		{
-			modOptionButton.Text.text = OldTranslation.GetString(
+			modOptionButton.Text.text = Tr.GetString(
 				"modOptionText");
 		}
 		if (titleText != null)
 		{
-			titleText.text = OldTranslation.GetString("moreOptionText");
+			titleText.text = Tr.GetString("moreOptionText");
 		}
 
 		foreach (var button in menuButtons)
 		{
 			if (button != null)
 			{
-				button.Text.text = OldTranslation.GetString(
+				button.Text.text = Tr.GetString(
 					button.name);
 			}
 		}
@@ -209,14 +209,14 @@ public sealed class ModOptionMenu
 
 		showTextBuilder
 			.Append("<size=175%>Extreme Roles<space=0.9em>")
-			.Append(OldTranslation.GetString("version"))
+			.Append(Tr.GetString("version"))
 			.Append(Assembly.GetExecutingAssembly().GetName().Version)
 			.AppendLine("</size>")
 			.AppendLine($"<align=left>")
-			.Append(OldTranslation.GetString("developer"))
+			.Append(Tr.GetString("developer"))
 			.Append("yukieiji")
 			.AppendLine($"<align=left>")
-			.Append(OldTranslation.GetString("debugThunk"))
+			.Append(Tr.GetString("debugThunk"))
 			.AppendLine("stou59，Tyoubi，mamePi,")
 			.AppendLine($"<align=left>　アンハッピーセット");
 
@@ -225,8 +225,8 @@ public sealed class ModOptionMenu
 			creditText.transform.localPosition = new Vector3(0.0f, -1.895f);
 			showTextBuilder
 				.Append($"<align=left>")
-				.Append(OldTranslation.GetString("langTranslate"))
-				.Append(OldTranslation.GetString("translatorMember"));
+				.Append(Tr.GetString("langTranslate"))
+				.Append(Tr.GetString("translatorMember"));
 		}
 
 		creditText.text = showTextBuilder.ToString();
@@ -389,7 +389,7 @@ public sealed class ModOptionMenu
 					var pos = new Vector3(0.0f, 0.0f, -20.0f);
 					bool target = !beta.Enable;
 
-					string targetStr = OldTranslation.GetString(
+					string targetStr = Tr.GetString(
 						target ? "EnableKey" : "DisableKey");
 
 					confirmMenu = Prefab.CreateConfirmMenu(
@@ -409,7 +409,7 @@ public sealed class ModOptionMenu
 
 							popUp.transform.localPosition = pos;
 
-							string showText = OldTranslation.GetString("PublicBetaReboot");
+							string showText = Tr.GetString("PublicBetaReboot");
 							popUp.Show(
 								string.Format(showText, targetStr));
 						},
@@ -420,7 +420,7 @@ public sealed class ModOptionMenu
 					string func = TranslationControllerExtension.GetString(
 						BetaContentManager.TransKey);
 
-					string warnText = OldTranslation.GetString("PublicBetaWarning");
+					string warnText = Tr.GetString("PublicBetaWarning");
 					confirmMenu.Show(
 						$"{string.Format(warnText, targetStr)}\n{func}");
 

@@ -63,11 +63,11 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
                 int count = playerName.Count;
                 if (count > 1)
                 {
-                    playerName.Add(OldTranslation.GetString("andFirst"));
+                    playerName.Add(Tr.GetString("andFirst"));
                 }
                 else if (count == 1)
                 {
-                    playerName.Add(OldTranslation.GetString("and"));
+                    playerName.Add(Tr.GetString("and"));
                 }
                 playerName.Add(player.PlayerName);
             }
@@ -177,7 +177,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         {
             return Design.ColoedString(
                 Palette.White,
-                OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
+                Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
 
@@ -192,7 +192,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         }
         else
         {
-            return OldTranslation.GetString(
+            return Tr.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -208,7 +208,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
     }
 

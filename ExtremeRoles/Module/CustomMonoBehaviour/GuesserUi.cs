@@ -157,8 +157,8 @@ public sealed class GuesserUi : MonoBehaviour
                     this.isActive = false;
                     this.confirmMenu.gameObject.SetActive(true);
                     this.confirmMenu.SetMenuText(
-                        string.Format(
-                            Helper.OldTranslation.GetString("guesserConfirmMenu"),
+                        Tr.GetString(
+							"guesserConfirmMenu",
                             guess.GetPlayerName(),
                             guess.GetRoleName()));
 

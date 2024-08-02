@@ -125,7 +125,7 @@ public sealed class Tucker :
 		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
 
 		this.createBehavior = new CountBehavior(
-			OldTranslation.GetString("createChimera"),
+			Tr.GetString("createChimera"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerCreateChimera),
@@ -137,7 +137,7 @@ public sealed class Tucker :
 				RoleAbilityCommonOption.AbilityCount));
 
 		var summonAbility = new ReusableActivatingBehavior(
-			OldTranslation.GetString("removeShadow"),
+			Tr.GetString("removeShadow"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerRemoveShadow),
@@ -669,7 +669,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 		this.resurrectText.gameObject.SetActive(true);
 		this.resurrectTimer -= Time.deltaTime;
 		this.resurrectText.text = string.Format(
-			OldTranslation.GetString("resurrectText"),
+			Tr.GetString("resurrectText"),
 			Mathf.CeilToInt(this.resurrectTimer));
 
 		if (this.resurrectTimer <= 0.0f)

@@ -142,7 +142,7 @@ public sealed class Accelerator :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-            OldTranslation.GetString("AccelerateSet"),
+            Tr.GetString("AccelerateSet"),
             UnityObjectLoader.LoadFromResources(ExtremeRoleId.Accelerator),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);

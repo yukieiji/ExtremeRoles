@@ -467,19 +467,19 @@ public sealed class Hypnotist :
         else
         {
             return Design.ColoedString(
-                Palette.ImpostorRed, OldTranslation.GetString(RoleTypes.Impostor.ToString()));
+                Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return OldTranslation.GetString(
+            return Tr.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return OldTranslation.GetString(
+            return Tr.GetString(
                 $"{RoleTypes.Impostor}FullDescription");
         }
     }
@@ -989,11 +989,12 @@ public sealed class Doll :
         }
         if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
-            string consoleName = OldTranslation.GetString(consoleType.ToString());
+            string consoleName = Tr.GetString(consoleType.ToString());
 
-            showText(string.Format(
-                OldTranslation.GetString("FeatAccess"),
-                consoleName));
+            showText(
+				Tr.GetString(
+					"FeatAccess",
+					consoleName));
             this.accessModule =
                 this.accessModule == string.Empty ?
                 consoleName : $"{this.accessModule}, {consoleName}";
@@ -1025,11 +1026,12 @@ public sealed class Doll :
 
         if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
-            string consoleName = OldTranslation.GetString(consoleType.ToString());
+            string consoleName = Tr.GetString(consoleType.ToString());
 
-            showText(string.Format(
-                OldTranslation.GetString("unlockCraking"),
-                consoleName));
+            showText(
+				Tr.GetString(
+					"unlockCraking",
+					consoleName));
             this.crakingModule =
                 this.crakingModule == string.Empty ?
                 consoleName : $"{this.crakingModule}, {consoleName}";
@@ -1233,8 +1235,8 @@ public sealed class Doll :
         {
             showText(
                 this.CanKill ?
-                OldTranslation.GetString("unlockKill") :
-                OldTranslation.GetString("lockKill"));
+                Tr.GetString("unlockKill") :
+                Tr.GetString("lockKill"));
         }
 
         this.prevKillState = this.CanKill;

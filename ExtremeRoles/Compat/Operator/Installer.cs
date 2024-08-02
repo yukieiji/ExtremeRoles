@@ -39,7 +39,7 @@ internal sealed class Installer : OperatorBase
 	{
 		if (File.Exists(Path.Combine(this.ModFolderPath, this.dllName)))
 		{
-			Popup.Show(OldTranslation.GetString("alreadyInstall"));
+			Popup.Show(Tr.GetString("alreadyInstall"));
 			return;
 		}
 
@@ -51,7 +51,7 @@ internal sealed class Installer : OperatorBase
 					excuteInstall);
 			}
 			this.popup.Show(
-				OldTranslation.GetString("isReactorInstall"));
+				Tr.GetString("isReactorInstall"));
 		}
 		else
 		{
@@ -61,7 +61,7 @@ internal sealed class Installer : OperatorBase
 
 	private void excuteInstall()
 	{
-		string info = OldTranslation.GetString("checkInstallNow");
+		string info = Tr.GetString("checkInstallNow");
 		Popup.Show(info);
 
 		List<CompatModRepoData> repoData = getGithubUpdate().GetAwaiter().GetResult();
@@ -69,15 +69,15 @@ internal sealed class Installer : OperatorBase
 		if (repoData.Count == 0 ||
 			repoData.Count == 1 && this.isRequireReactor)
 		{
-			SetPopupText(OldTranslation.GetString("installManual"));
+			SetPopupText(Tr.GetString("installManual"));
 		}
 		else
 		{
-			info = OldTranslation.GetString("installNow");
+			info = Tr.GetString("installNow");
 
 			if (installTask == null)
 			{
-				info = OldTranslation.GetString("installInProgress");
+				info = Tr.GetString("installInProgress");
 				installTask = downloadAndInstall(repoData);
 			}
 
@@ -125,7 +125,7 @@ internal sealed class Installer : OperatorBase
 			await responseStream.CopyToAsync(fileStream);
 		}
 
-		ShowPopup(OldTranslation.GetString("installRestart"));
+		ShowPopup(Tr.GetString("installRestart"));
 
 		return true;
 	}

@@ -86,13 +86,13 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 	private static string impShortStr => Design.ColoedString(
 		Palette.ImpostorRed,
-		OldTranslation.GetString("impostorShotCall"));
+		Tr.GetString("impostorShotCall"));
 	private static string neutShortStr => Design.ColoedString(
 		ColorPalette.NeutralColor,
-		OldTranslation.GetString("neutralShotCall"));
+		Tr.GetString("neutralShotCall"));
 	private string andShortStr => Design.ColoedString(
 		this.NameColor,
-		OldTranslation.GetString("andFirst"));
+		Tr.GetString("andFirst"));
 
 	public enum TargetMode
 	{
@@ -147,7 +147,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	public void CreateAbility()
 	{
 		this.CreateAbilityCountButton(
-			OldTranslation.GetString("AddJail"),
+			Tr.GetString("AddJail"),
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Jailer));
 		this.Button?.SetLabelToCrewmate();
 	}
@@ -182,19 +182,19 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		{
 			return Design.ColoedString(
 				Palette.White,
-				OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
+				Tr.GetString(RoleTypes.Crewmate.ToString()));
 		}
 	}
 	public override string GetFullDescription()
 	{
 		if (IsAwake)
 		{
-			return OldTranslation.GetString(
+			return Tr.GetString(
 				$"{this.Id}FullDescription");
 		}
 		else
 		{
-			return OldTranslation.GetString(
+			return Tr.GetString(
 				$"{RoleTypes.Crewmate}FullDescription");
 		}
 	}
@@ -216,7 +216,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 				shortText,
 				Design.ColoedString(
 					this.NameColor,
-					OldTranslation.GetString(
+					Tr.GetString(
 						$"{this.Id}ShortDescription")));
 		}
 
@@ -224,7 +224,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		{
 			return Design.ColoedString(
 				Palette.White,
-				$"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
+				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 		}
 	}
 

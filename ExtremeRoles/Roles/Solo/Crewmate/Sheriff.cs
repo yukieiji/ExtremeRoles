@@ -92,7 +92,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     {
         string shotText = Design.ColoedString(
             Palette.ImpostorRed,
-            OldTranslation.GetString("impostorShotCall"));
+            Tr.GetString("impostorShotCall"));
 
         if (this.canShootNeutral)
         {
@@ -100,10 +100,10 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
                 shotText,
                 Design.ColoedString(
                     this.NameColor,
-                    OldTranslation.GetString("andFirst")),
+                    Tr.GetString("andFirst")),
                 Design.ColoedString(
                     ColorPalette.NeutralColor,
-                    OldTranslation.GetString("neutralShotCall")));
+                    Tr.GetString("neutralShotCall")));
         }
 
         string baseString = string.Format("{0}: {1}{2}",
@@ -111,7 +111,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
             shotText,
             Design.ColoedString(
                 this.NameColor,
-                OldTranslation.GetString(
+                Tr.GetString(
                     $"{this.Id}ShortDescription")));
 
         return baseString;
@@ -284,7 +284,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     private void updateKillCountText()
     {
         this.killCountText.text = string.Format(
-            OldTranslation.GetString(
+            Tr.GetString(
                 ICountBehavior.DefaultButtonCountText), this.shootNum);
     }
 

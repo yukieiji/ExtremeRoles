@@ -88,8 +88,8 @@ public sealed class Photographer :
 			// 適当な役職名とかを写真名にする
 			string[] photoNameArr =
 			[
-				OldTranslation.GetString(roleNameTransKey),
-				OldTranslation.GetString(this.TeamId.ToString()),
+				Tr.GetString(roleNameTransKey),
+				Tr.GetString(this.TeamId.ToString()),
 				randomStr[this.Indexer],
 			];
 			return string.Concat(photoNameArr.OrderBy(
@@ -228,14 +228,14 @@ public sealed class Photographer :
 		{
 			StringBuilder photoInfoBuilder = new StringBuilder();
 			photoInfoBuilder.AppendLine(
-				$"{OldTranslation.GetString("takePhotoTime")} : {this.takeTime}");
+				$"{Tr.GetString("takePhotoTime")} : {this.takeTime}");
 			photoInfoBuilder.AppendLine(
-				$"{OldTranslation.GetString("photoName")} : {this.photoName.ToString()}");
+				$"{Tr.GetString("photoName")} : {this.photoName.ToString()}");
 			photoInfoBuilder.AppendLine("");
 			if (this.player.Count <= 1)
 			{
 				photoInfoBuilder.AppendLine(
-					OldTranslation.GetString("onlyMeOnPhoto"));
+					Tr.GetString("onlyMeOnPhoto"));
 			}
 			else
 			{
@@ -450,19 +450,19 @@ public sealed class Photographer :
         else
         {
             return Design.ColoedString(
-                Palette.White, OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
+                Palette.White, Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return OldTranslation.GetString(
+            return Tr.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return OldTranslation.GetString(
+            return Tr.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -478,7 +478,7 @@ public sealed class Photographer :
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
     }
 

@@ -89,7 +89,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 
 				}
 				newButton.Awake();
-				newButton.SetButtonText(OldTranslation.GetString(panel.Key.ToString()));
+				newButton.SetButtonText(Tr.GetString(panel.Key.ToString()));
 				newButton.SetButtonClickAction(
 					() =>
 					{
@@ -116,7 +116,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 		{
 			var (main, sub) = panelModel.GetInfoText();
 
-			this.title.text = OldTranslation.GetString(model.CurShow.ToString());
+			this.title.text = Tr.GetString(model.CurShow.ToString());
 			this.mainText.text = main;
 			this.subText.text = sub;
 
@@ -128,7 +128,7 @@ public sealed class InfoOverlayView : MonoBehaviour
 			{
 				case PanelPageModelBase pageModel:
 					this.pageButtonParent.SetActive(true);
-					this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {OldTranslation.GetString("changePageMore")}";
+					this.info.text = $"({pageModel.CurPage + 1}/{pageModel.PageNum})   {Tr.GetString("changePageMore")}";
 					this.rightButton.onClick.AddListener(
 						() =>
 						{

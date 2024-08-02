@@ -107,7 +107,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
 
         if (this.IsImpostor())
         {
-            baseDesc = OldTranslation.GetString(
+            baseDesc = Tr.GetString(
                 $"{this.Id}ImposterFullDescription");
         }
         else

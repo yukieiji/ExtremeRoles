@@ -63,7 +63,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
 
     public void CreateAbility()
     {
-        this.defaultButtonText = OldTranslation.GetString("evolve");
+        this.defaultButtonText = Tr.GetString("evolve");
 
         this.CreateActivatingAbilityCountButton(
             "evolve",
@@ -201,7 +201,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
         this.reruceMulti = cate.GetValue<EvolverOption, float>(
             EvolverOption.KillCoolResuceRateMulti);
 
-        this.eatingText = OldTranslation.GetString("eating");
+        this.eatingText = Tr.GetString("eating");
 
     }
 

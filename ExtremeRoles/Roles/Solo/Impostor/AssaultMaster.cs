@@ -170,13 +170,13 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
         if (this.stock == 0)
         {
             this.reduceKillCoolText.text =
-                OldTranslation.GetString("noStockNow");
+                Tr.GetString("noStockNow");
         }
         else
         {
-            this.reduceKillCoolText.text = string.Format(
-                OldTranslation.GetString("reduceKillCool"),
-                Mathf.CeilToInt(this.stock * this.reloadReduceTimePerStock));
+            this.reduceKillCoolText.text = Tr.GetString(
+				"reduceKillCool",
+				Mathf.CeilToInt(this.stock * this.reloadReduceTimePerStock));
         }
 
         this.reduceKillCoolText.gameObject.SetActive(true);

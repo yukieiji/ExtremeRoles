@@ -84,7 +84,7 @@ public static class MeetingHudUpdatePatch
 
 		if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
 		{
-			__instance.TitleText.text = Helper.OldTranslation.GetString(
+			__instance.TitleText.text = Tr.GetString(
 				"whoIsMarine");
 			__instance.SkipVoteButton.gameObject.SetActive(false);
 

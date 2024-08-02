@@ -70,19 +70,19 @@ public sealed class Moderator :
 		{
 			return Design.ColoedString(
 				Palette.White,
-				OldTranslation.GetString(RoleTypes.Crewmate.ToString()));
+				Tr.GetString(RoleTypes.Crewmate.ToString()));
 		}
 	}
 	public override string GetFullDescription()
 	{
 		if (IsAwake)
 		{
-			return OldTranslation.GetString(
+			return Tr.GetString(
 				$"{this.Id}FullDescription");
 		}
 		else
 		{
-			return OldTranslation.GetString(
+			return Tr.GetString(
 				$"{RoleTypes.Crewmate}FullDescription");
 		}
 	}
@@ -98,7 +98,7 @@ public sealed class Moderator :
 		{
 			return Design.ColoedString(
 				Palette.White,
-				$"{this.GetColoredRoleName()}: {OldTranslation.GetString("crewImportantText")}");
+				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 		}
 	}
 
@@ -173,7 +173,7 @@ public sealed class Moderator :
 
 		this.textPopUp?.AddText(
 			string.Format(
-				OldTranslation.GetString("changeMeetingTime"),
+				Tr.GetString("changeMeetingTime"),
 				this.offset));
 
 		return true;

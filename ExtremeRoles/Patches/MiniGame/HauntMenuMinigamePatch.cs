@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches.MiniGame
 					CommomSystem.IsForceInfoBlockRole(role)
 				) ?
                     "？？？" :
-                    Helper.OldTranslation.GetString(targetRoleTeam.ToString());
+                    Tr.GetString(targetRoleTeam.ToString());
 
             return false;
         }

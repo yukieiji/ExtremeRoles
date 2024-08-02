@@ -49,7 +49,7 @@ public sealed class BepInExUpdater : MonoBehaviour
 	[HideFromIl2Cpp]
 	public IEnumerator Excute()
 	{
-		string showStr = Helper.OldTranslation.GetString("ReqBepInExUpdate");
+		string showStr = Tr.GetString("ReqBepInExUpdate");
 
 		Task.Run(() => Module.DllApi.MessageBox(
 			IntPtr.Zero,

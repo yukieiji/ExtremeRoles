@@ -47,7 +47,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-			OldTranslation.GetString("TeroristBombSet"),
+			Tr.GetString("TeroristBombSet"),
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Terorist));
     }
 

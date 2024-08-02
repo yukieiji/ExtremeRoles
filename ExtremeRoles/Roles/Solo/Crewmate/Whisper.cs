@@ -90,19 +90,19 @@ public sealed class Whisper :
 
             if (-45.0f < deg && deg <= 45.0f )
             {
-                direction = OldTranslation.GetString("right");
+                direction = Tr.GetString("right");
             }
             else if (45.0f < deg && deg <= 135.0f)
             {
-                direction = OldTranslation.GetString("up");
+                direction = Tr.GetString("up");
             }
             else if (-135.0f < deg && deg <= -45.0f)
             {
-                direction = OldTranslation.GetString("down");
+                direction = Tr.GetString("down");
             }
             else
             {
-                direction = OldTranslation.GetString("left");
+                direction = Tr.GetString("left");
             }
 
 			string showText;
@@ -112,7 +112,7 @@ public sealed class Whisper :
 				room.HasValue)
 			{
 				showText = string.Format(
-					OldTranslation.GetString("killedTextWithRoom"),
+					Tr.GetString("killedTextWithRoom"),
 					direction,
 					TranslationController.Instance.GetString(room.Value),
 					System.DateTime.Now);
@@ -120,7 +120,7 @@ public sealed class Whisper :
 			else
 			{
 				showText = string.Format(
-					OldTranslation.GetString("killedText"),
+					Tr.GetString("killedText"),
 					direction, System.DateTime.Now);
 			}
             this.textPopUp.AddText(showText);
@@ -260,13 +260,13 @@ public sealed class Whisper :
     {
         this.prevPlayerPos = rolePlayer.GetTruePosition();
         this.abilityText.color = Palette.EnabledColor;
-        this.curText = OldTranslation.GetString("abilityRemain");
+        this.curText = Tr.GetString("abilityRemain");
         this.isAbilityOn = false;
         this.timer = this.abilityOffTime;
     }
     private void abilityOn()
     {
-        this.curText = OldTranslation.GetString("abilityOnText");
+        this.curText = Tr.GetString("abilityOnText");
         this.abilityText.color = new Color(0F, 0.8F, 0F);
         this.isAbilityOn = true;
         this.timer = this.abilityOnTime;

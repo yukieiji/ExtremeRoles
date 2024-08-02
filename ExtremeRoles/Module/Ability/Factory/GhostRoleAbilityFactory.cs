@@ -81,7 +81,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ReusableActivatingBehavior(
-				text: Helper.OldTranslation.GetString(
+				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
 				canUse: createGhostRoleUseFunc(canUse),
@@ -111,7 +111,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ReusableActivatingBehavior(
-				text: Helper.OldTranslation.GetString(
+				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
 				canUse: createGhostRoleUseFunc(canUse),
@@ -142,7 +142,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ActivatingCountBehavior(
-				text: Helper.OldTranslation.GetString(
+				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
 				canUse: createGhostRoleUseFunc(canUse),
@@ -174,7 +174,7 @@ public static class GhostRoleAbilityFactory
 
 		return new ExtremeAbilityButton(
 			new ActivatingCountBehavior(
-				text: Helper.OldTranslation.GetString(
+				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
 				canUse: createGhostRoleUseFunc(canUse),
@@ -224,7 +224,7 @@ public static class GhostRoleAbilityFactory
 			if (isReportAbility)
 			{
 				MeetingReporter.Instance.AddMeetingStartReport(
-					Helper.OldTranslation.GetString(type.ToString()));
+					Tr.GetString(type.ToString()));
 			}
 
 			return true;
