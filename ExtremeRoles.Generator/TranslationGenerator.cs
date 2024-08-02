@@ -71,7 +71,7 @@ namespace ExtremeRoles.NewTranslation;
 
 public static partial class TranslationRawData
 {{
-    public static IReadOnlyDictionary<string, string> {name} = new Dictionary<string, string>
+    public static IReadOnlyDictionary<string, string> {name} => new Dictionary<string, string>
 	{{
 		{strbuilder}
 	}};
