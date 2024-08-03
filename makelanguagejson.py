@@ -85,7 +85,7 @@ def xlsx_to_json(file_name : str, output_file : str) -> None:
 def main() -> None:
   # xlsx_to_json(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)
   xlsx_to_json(EXTREMESKIN_IN_FILE, EXTREMESKIN_OUT_FILE)
-  create_public_beta_transdata()
+  # create_public_beta_transdata()
 
 if __name__ == "__main__":
   main()
