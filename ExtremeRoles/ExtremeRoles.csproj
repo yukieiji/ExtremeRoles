@@ -61,9 +61,6 @@
     <Compile Include="..\ExtremeRoles.Beta\FeedBackSystem.cs" Link="Beta\FeedBackSystem.cs" />
     <Compile Include="..\ExtremeRoles.Beta\RaiseHandSystemToggle.cs" Link="Beta\RaiseHandSystemToggle.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\ExtremeRoles.Beta\Resources\JsonData\TextRevamp.json" LogicalName="ExtremeRoles.Beta.Resources.JsonData.TextRevamp.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
