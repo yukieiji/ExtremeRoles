@@ -283,8 +283,7 @@ public sealed class PsychoKiller :
 
 	private void updateCombText()
 	{
-		this.combCountText.text = string.Format(
-			Tr.GetString("curCombNum"), this.combCount);
+		this.combCountText.text = Tr.GetString("curCombNum", this.combCount);
 	}
 
 	private void resetTimer()

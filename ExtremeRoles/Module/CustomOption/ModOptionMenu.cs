@@ -409,9 +409,8 @@ public sealed class ModOptionMenu
 
 							popUp.transform.localPosition = pos;
 
-							string showText = Tr.GetString("PublicBetaReboot");
 							popUp.Show(
-								string.Format(showText, targetStr));
+								Tr.GetString("PublicBetaReboot", targetStr));
 						},
 						StringNames.Accept);
 					confirmMenu.transform.SetParent(popUp!.transform);
@@ -420,9 +419,8 @@ public sealed class ModOptionMenu
 					string func = TranslationControllerExtension.GetString(
 						BetaContentManager.TransKey);
 
-					string warnText = Tr.GetString("PublicBetaWarning");
 					confirmMenu.Show(
-						$"{string.Format(warnText, targetStr)}\n{func}");
+						$"{Tr.GetString("PublicBetaWarning", targetStr)}\n{func}");
 
 					button.onState = target;
 					changeButtonColor(button);

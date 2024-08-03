@@ -83,8 +83,7 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 
 		if (string.IsNullOrEmpty(formatKey)) { return; }
 
-		this.modeStr = string.Format(
-			Tr.GetString(formatKey), value);
+		this.modeStr = Tr.GetString(formatKey, value);
 	}
 
 	private ConfigEntry<bool> getConfig()

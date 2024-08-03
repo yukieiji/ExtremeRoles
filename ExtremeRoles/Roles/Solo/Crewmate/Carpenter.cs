@@ -167,8 +167,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
         private void updateAbilityCountText()
         {
-            this.abilityCountText.text = string.Format(
-                Tr.GetString("carpenterScrewNum"),
+            this.abilityCountText.text = Tr.GetString(
+				"carpenterScrewNum",
                 this.AbilityCount,
                 this.isVentRemoveMode ? this.ventRemoveScrewNum : this.cameraSetScrewNum);
         }

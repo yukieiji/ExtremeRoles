@@ -60,8 +60,8 @@ public static class MeetingHudPopulateResultsPatch
 				if (playerById == null)
 				{
 					Debug.LogError(
-					string.Format("Couldn't find player info for voter: {0}",
-					voterState.VoterId));
+						string.Format("Couldn't find player info for voter: {0}",
+						voterState.VoterId));
 				}
 				else if (i == 0 && voterState.SkippedVote)
 				{

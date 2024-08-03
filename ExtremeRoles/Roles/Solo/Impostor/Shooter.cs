@@ -256,8 +256,8 @@ public sealed class Shooter :
                 meetingShootText.gameObject.SetActive(false);
             }
 
-            meetingShootText.text = string.Format(
-                Tr.GetString("shooterShootStatus"),
+            meetingShootText.text =Tr.GetString(
+				"shooterShootStatus",
                 this.curShootNum, this.maxShootNum,
                 this.maxMeetingShootNum - this.shootCounter);
             meetingInfoSetActive(true);
@@ -564,9 +564,10 @@ public sealed class Shooter :
 
         if (this.chargeInfoText != null)
         {
-            this.chargeInfoText.text = string.Format(
-                Tr.GetString("shooterChargeInfo"),
-                this.curShootNum, this.maxShootNum);
+            this.chargeInfoText.text = Tr.GetString(
+				"shooterChargeInfo",
+                this.curShootNum,
+				this.maxShootNum);
         }
     }
 }

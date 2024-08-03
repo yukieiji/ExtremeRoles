@@ -275,9 +275,10 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				// 値が変更されたのでポップアップ通知
 				if (isShow && curSelection != option.Selection)
 				{
-					string showStr = string.Format(
-						Tr.GetString("OptionSettingChange"),
-						tabName, category.TransedName, option.Title, option.ValueString);
+					string showStr = Tr.GetString(
+						"OptionSettingChange",
+						tabName, category.TransedName,
+						option.Title, option.ValueString);
 
 					FastDestroyableSingleton<HudManager>.Instance.Notifier.SettingsChangeMessageLogic(
 						key, string.Format(OptionChangeFontPlace, showStr),

@@ -63,7 +63,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 			}
 			string format = this.Info.Format;
 			return string.IsNullOrEmpty(format) ?
-				value : string.Format(Tr.GetString(format), value);
+				value : Tr.GetString(format, value);
 		}
 	}
 

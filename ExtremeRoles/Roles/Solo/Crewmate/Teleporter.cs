@@ -145,8 +145,8 @@ public sealed class Teleporter :
 
         private void updateAbilityCountText()
         {
-            this.abilityCountText.text = string.Format(
-                Tr.GetString(this.buttonTextFormat),
+            this.abilityCountText.text = Tr.GetString(
+				this.buttonTextFormat,
                 this.AbilityCount);
         }
     }

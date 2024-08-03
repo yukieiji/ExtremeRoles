@@ -192,8 +192,8 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
 
         private void updateAbilityInfoText()
         {
-            this.abilityCountText!.text = string.Format(
-                Tr.GetString("scribeText"), this.AbilityCount);
+            this.abilityCountText!.text = Tr.GetString(
+				"scribeText", this.AbilityCount);
         }
     }
 

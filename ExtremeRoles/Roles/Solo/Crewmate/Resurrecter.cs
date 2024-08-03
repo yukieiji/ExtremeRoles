@@ -268,8 +268,8 @@ public sealed class Resurrecter :
 
             this.resurrectText.gameObject.SetActive(true);
             this.resurrectTimer -= Time.deltaTime;
-            this.resurrectText.text = string.Format(
-                Tr.GetString("resurrectText"),
+            this.resurrectText.text = Tr.GetString(
+				"resurrectText",
                 Mathf.CeilToInt(this.resurrectTimer));
 
             if (this.resurrectTimer <= 0.0f)

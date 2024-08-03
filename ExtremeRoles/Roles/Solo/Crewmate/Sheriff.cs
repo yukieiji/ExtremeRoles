@@ -283,9 +283,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     }
     private void updateKillCountText()
     {
-        this.killCountText.text = string.Format(
-            Tr.GetString(
-                ICountBehavior.DefaultButtonCountText), this.shootNum);
+        this.killCountText.text = Tr.GetString(
+            ICountBehavior.DefaultButtonCountText,
+			this.shootNum);
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)

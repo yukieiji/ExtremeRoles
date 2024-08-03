@@ -54,9 +54,10 @@ public sealed class Psychic :
 		public void AddToStringBuilder(StringBuilder builder, bool includeRoleId)
 		{
 			builder.AppendLine(
-				string.Format(
-					Tr.GetString("PsychicPsychicStrForAliveNum"),
+				Tr.GetString(
+					"PsychicPsychicStrForAliveNum",
 					this.countNum));
+
 			if (includeRoleId && this.ids.Count != 0)
 			{
 				builder.AppendLine(Tr.GetString("PsychicPsychicStrAliveRole"));

@@ -172,9 +172,7 @@ public sealed class Moderator :
 			});
 
 		this.textPopUp?.AddText(
-			string.Format(
-				Tr.GetString("changeMeetingTime"),
-				this.offset));
+			Tr.GetString("changeMeetingTime", this.offset));
 
 		return true;
 	}

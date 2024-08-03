@@ -103,8 +103,8 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
             this.textPopUp != null)
         {
             this.textPopUp.AddText(
-                string.Format(
-                    Tr.GetString("sharerKill"),
+				Tr.GetString(
+					"sharerKill",
                     source.Data.DefaultOutfit.PlayerName));
         }
     }
