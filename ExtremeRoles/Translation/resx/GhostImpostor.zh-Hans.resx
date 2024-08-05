@@ -120,12 +120,6 @@
   <data name="Ventgeist" xml:space="preserve">
     <value>捣蛋鬼</value>
   </data>
-  <data name="VentgeistSpawnRate" xml:space="preserve">
-    <value>捣蛋鬼</value>
-  </data>
-  <data name="VentgeistRoleNum" xml:space="preserve">
-    <value>最大职业数量</value>
-  </data>
   <data name="VentgeistRange" xml:space="preserve">
     <value>技能触发范围</value>
   </data>

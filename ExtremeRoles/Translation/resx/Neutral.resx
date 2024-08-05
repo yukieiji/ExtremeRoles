@@ -319,21 +319,6 @@
   <data name="Jester" xml:space="preserve">
     <value>ジェスター</value>
   </data>
-  <data name="JesterSpawnRate" xml:space="preserve">
-    <value>ジェスター</value>
-  </data>
-  <data name="JesterRoleNum" xml:space="preserve">
-    <value>スポーン数</value>
-  </data>
-  <data name="JesterHasOtherVision" xml:space="preserve">
-    <value>別の視界設定を持つか</value>
-  </data>
-  <data name="JesterVision" xml:space="preserve">
-    <value>ビジョン</value>
-  </data>
-  <data name="JesterApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>視界効果を受けるか</value>
-  </data>
   <data name="JesterUseSabotage" xml:space="preserve">
     <value>サボタージュを使えるか</value>
   </data>

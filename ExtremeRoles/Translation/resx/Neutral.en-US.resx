@@ -345,21 +345,6 @@ eliminate all other IMPOSTORS / NEUTRALS with the KILL ability.
   <data name="Jester" xml:space="preserve">
     <value>Jester</value>
   </data>
-  <data name="JesterSpawnRate" xml:space="preserve">
-    <value>Jester</value>
-  </data>
-  <data name="JesterRoleNum" xml:space="preserve">
-    <value>No. of assigned players</value>
-  </data>
-  <data name="JesterHasOtherVision" xml:space="preserve">
-    <value>Has special vision settings</value>
-  </data>
-  <data name="JesterVision" xml:space="preserve">
-    <value>Vision</value>
-  </data>
-  <data name="JesterApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>Does sabotage effect their vision</value>
-  </data>
   <data name="JesterUseSabotage" xml:space="preserve">
     <value>Can use sabotage</value>
   </data>

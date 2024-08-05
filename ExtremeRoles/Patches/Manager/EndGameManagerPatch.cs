@@ -272,7 +272,8 @@ public static class EndGameManagerSetUpPatch
             textAddedRole.Add(role.Id);
         }
 
-		winDetailTextBuilder.Append(Tr.GetString("win"));
+		winDetailTextBuilder.Append(
+			TranslationController.Instance.GetString(StringNames.Victory));
 
 		textRenderer.text = winDetailTextBuilder.ToString();
 	}

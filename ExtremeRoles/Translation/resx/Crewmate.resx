@@ -118,9 +118,6 @@
   <data name="SpecialCrew" xml:space="preserve">
     <value>スペシャルクルー</value>
   </data>
-  <data name="SpecialCrewSpawnRate" xml:space="preserve">
-    <value>スペシャルクルー</value>
-  </data>
   <data name="SpecialCrewIntroDescription" xml:space="preserve">
     <value>普通のクルーとは少し違う設定を持つ</value>
   </data>
@@ -260,21 +257,6 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>スーパーバイザー</value>
-  </data>
-  <data name="SupervisorSpawnRate" xml:space="preserve">
-    <value>スーパーバイザー</value>
-  </data>
-  <data name="SupervisorRoleNum" xml:space="preserve">
-    <value>スポーン数</value>
-  </data>
-  <data name="SupervisorHasOtherVision" xml:space="preserve">
-    <value>別の視界設定を持つか</value>
-  </data>
-  <data name="SupervisorVision" xml:space="preserve">
-    <value>ビジョン</value>
-  </data>
-  <data name="SupervisorApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>視界効果を受けるか</value>
   </data>
   <data name="SupervisorAbilityCoolTime" xml:space="preserve">
     <value>アドミンのクールタイム</value>

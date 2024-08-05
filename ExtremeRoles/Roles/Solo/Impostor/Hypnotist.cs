@@ -919,7 +919,7 @@ public sealed class Doll :
     {
         Admin,
         Security,
-        Vital,
+        VitalsLabel,
     }
 
     public ExtremeAbilityButton Button { get; set; }
@@ -1013,7 +1013,7 @@ public sealed class Doll :
                 addType = AbilityType.Security;
                 break;
             case SystemConsoleType.Vital:
-                addType = AbilityType.Vital;
+                addType = AbilityType.VitalsLabel;
                 break;
             default:
                 return;
@@ -1110,7 +1110,7 @@ public sealed class Doll :
                 this.minigame = MinigameSystem.Open(
                     watchConsole.MinigamePrefab);
                 break;
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 VitalsMinigame? vital = MinigameSystem.Vital;
                 if (vital == null || Camera.main == null)
                 {
@@ -1137,7 +1137,7 @@ public sealed class Doll :
             case AbilityType.Admin:
                 return MapBehaviour.Instance.isActiveAndEnabled;
             case AbilityType.Security:
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 return Minigame.Instance != null;
             default:
                 return false;
@@ -1155,7 +1155,7 @@ public sealed class Doll :
                 }
                 break;
             case AbilityType.Security:
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 if (this.minigame != null)
                 {
                     this.minigame.Close();
@@ -1181,7 +1181,7 @@ public sealed class Doll :
                         !MapBehaviour.Instance.isActiveAndEnabled
                     );
             case AbilityType.Security:
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
             default:
                 return false;
@@ -1338,7 +1338,7 @@ public sealed class Doll :
             case AbilityType.Security:
                 sprite = this.securitySprite;
                 break;
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 sprite = this.vitalSprite;
                 break;
             default:

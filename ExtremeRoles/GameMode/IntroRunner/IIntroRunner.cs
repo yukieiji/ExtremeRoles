@@ -233,10 +233,10 @@ public interface IIntroRunner
 			var vitalTrans = vitalConsole.transform;
 			switch (option.PolusPos)
 			{
-				case PolusVitalPos.LaboratoryKey:
+				case PolusVitalPos.Laboratory:
 					vitalTrans.localPosition = new Vector3(12.75f, 10.5f, -1.1f);
 					break;
-				case PolusVitalPos.SpecimenKey:
+				case PolusVitalPos.Specimen:
 					vitalTrans.localPosition = new Vector3(16.9f, - 3.25f, -0.1f);
 					vitalTrans.localEulerAngles = new Vector3(0, 0, 90);
 					vitalTrans.localScale = new Vector3(0.9f, 0.9f, 1.0f);

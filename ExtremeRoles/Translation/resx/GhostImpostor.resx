@@ -100,12 +100,6 @@
   <data name="Ventgeist" xml:space="preserve">
     <value>ベントガイスト</value>
   </data>
-  <data name="VentgeistSpawnRate" xml:space="preserve">
-    <value>ベントガイスト</value>
-  </data>
-  <data name="VentgeistRoleNum" xml:space="preserve">
-    <value>スポーン数</value>
-  </data>
   <data name="VentgeistRange" xml:space="preserve">
     <value>ベントを検知できる範囲</value>
   </data>

@@ -19,7 +19,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
     private VanillaRoleWrapper(RoleTypes id, bool isImpostor) : base(
         id: ExtremeRoleId.VanillaRole,
         team: isImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate,
-        roleName: id.ToString(),
+        roleName: $"{id}Role",
         roleColor: isImpostor ? Palette.ImpostorRed : Palette.White,
         canKill: isImpostor,
         hasTask: !isImpostor,

@@ -325,21 +325,6 @@
   <data name="Jester" xml:space="preserve">
     <value>小丑</value>
   </data>
-  <data name="JesterSpawnRate" xml:space="preserve">
-    <value>小丑</value>
-  </data>
-  <data name="JesterRoleNum" xml:space="preserve">
-    <value>最大人数</value>
-  </data>
-  <data name="JesterHasOtherVision" xml:space="preserve">
-    <value>拥有独立视野</value>
-  </data>
-  <data name="JesterVision" xml:space="preserve">
-    <value>视野范围</value>
-  </data>
-  <data name="JesterApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>会受到照明破坏影响</value>
-  </data>
   <data name="JesterUseSabotage" xml:space="preserve">
     <value>可以破坏</value>
   </data>

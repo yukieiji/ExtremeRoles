@@ -131,9 +131,6 @@ your mobile vitals monitor.</value>
   <data name="SpecialCrew" xml:space="preserve">
     <value>Special Crew</value>
   </data>
-  <data name="SpecialCrewSpawnRate" xml:space="preserve">
-    <value>Special Crew</value>
-  </data>
   <data name="SpecialCrewIntroDescription" xml:space="preserve">
     <value>An CREWMATE with modified settings</value>
   </data>
@@ -269,21 +266,6 @@ the cooldown or completing tasks.</value>
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>Supervisor</value>
-  </data>
-  <data name="SupervisorSpawnRate" xml:space="preserve">
-    <value>Supervisor</value>
-  </data>
-  <data name="SupervisorRoleNum" xml:space="preserve">
-    <value>No. of assigned players</value>
-  </data>
-  <data name="SupervisorHasOtherVision" xml:space="preserve">
-    <value>Has special vision settings</value>
-  </data>
-  <data name="SupervisorVision" xml:space="preserve">
-    <value>Vision</value>
-  </data>
-  <data name="SupervisorApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>Does sabotage effect their vision</value>
   </data>
   <data name="SupervisorAbilityCoolTime" xml:space="preserve">
     <value>"ADMIN" : Ability Cooldown</value>

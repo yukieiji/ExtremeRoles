@@ -472,9 +472,6 @@
   <data name="youAreRoleIntro" xml:space="preserve">
     <value>あなたの役職は</value>
   </data>
-  <data name="win" xml:space="preserve">
-    <value>勝利</value>
-  </data>
   <data name="andFirst" xml:space="preserve">
     <value>及び</value>
   </data>
@@ -489,15 +486,6 @@
   </data>
   <data name="optionOff" xml:space="preserve">
     <value>&lt;color=#ff3366&gt;オフ&lt;/color&gt;</value>
-  </data>
-  <data name="short" xml:space="preserve">
-    <value>ショート</value>
-  </data>
-  <data name="middle" xml:space="preserve">
-    <value>ミドル</value>
-  </data>
-  <data name="long" xml:space="preserve">
-    <value>ロング</value>
   </data>
   <data name="crewmateRoles" xml:space="preserve">
     <value>クルーのロール</value>
@@ -1078,9 +1066,6 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="SecurityCamera" xml:space="preserve">
     <value>セキュリティカメラとドアログ</value>
   </data>
-  <data name="Vital" xml:space="preserve">
-    <value>バイタル</value>
-  </data>
   <data name="PublicBetaStr" xml:space="preserve">
     <value>パブリックベータ - v{0}</value>
   </data>
@@ -1179,12 +1164,6 @@ ExR等を最低限の機能のみで起動しています</value>
   </data>
   <data name="DisableKey" xml:space="preserve">
     <value>無効</value>
-  </data>
-  <data name="SpecimenKey" xml:space="preserve">
-    <value>標本室</value>
-  </data>
-  <data name="LaboratoryKey" xml:space="preserve">
-    <value>研究室</value>
   </data>
   <data name="BothImpostorAndNautral" xml:space="preserve">
     <value>インポスターとニュートラル</value>

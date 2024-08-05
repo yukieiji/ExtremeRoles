@@ -405,9 +405,6 @@
   <data name="youAreRoleIntro" xml:space="preserve">
     <value>You are Role is</value>
   </data>
-  <data name="win" xml:space="preserve">
-    <value> victory</value>
-  </data>
   <data name="andFirst" xml:space="preserve">
     <value> and </value>
   </data>
@@ -422,15 +419,6 @@
   </data>
   <data name="optionOff" xml:space="preserve">
     <value>&lt;color=#ff3366&gt;OFF&lt;/color&gt;</value>
-  </data>
-  <data name="short" xml:space="preserve">
-    <value>Short</value>
-  </data>
-  <data name="middle" xml:space="preserve">
-    <value>Middle</value>
-  </data>
-  <data name="long" xml:space="preserve">
-    <value>Long</value>
   </data>
   <data name="crewmateRoles" xml:space="preserve">
     <value>CREWMATE Roles</value>
@@ -972,9 +960,6 @@ Do you want to continue Installing?</value>
   </data>
   <data name="SecurityCamera" xml:space="preserve">
     <value>CAMERAs and LOGs</value>
-  </data>
-  <data name="Vital" xml:space="preserve">
-    <value>VITALS monitor</value>
   </data>
   <data name="Pcg32XshRr" xml:space="preserve">
     <value>PCG32-XSH-RR</value>

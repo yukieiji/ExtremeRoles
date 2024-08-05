@@ -13,7 +13,7 @@ public static class OptionCreator
 {
 	public const int IntegrateOptionStartOffset = 40000;
 
-    public static readonly string[] Range = [ "short", "middle", "long" ];
+    public static readonly string[] Range = ["SettingShort", "SettingMedium", "SettingLong"];
 
     public static Color DefaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
 

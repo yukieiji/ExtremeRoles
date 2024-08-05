@@ -130,9 +130,6 @@
   <data name="SpecialCrew" xml:space="preserve">
     <value>特殊船员</value>
   </data>
-  <data name="SpecialCrewSpawnRate" xml:space="preserve">
-    <value>特殊船员</value>
-  </data>
   <data name="SpecialCrewIntroDescription" xml:space="preserve">
     <value>根据设定与普通船员有不同之处</value>
   </data>
@@ -262,21 +259,6 @@
   </data>
   <data name="Supervisor" xml:space="preserve">
     <value>管理员</value>
-  </data>
-  <data name="SupervisorSpawnRate" xml:space="preserve">
-    <value>管理员</value>
-  </data>
-  <data name="SupervisorRoleNum" xml:space="preserve">
-    <value>最大人数</value>
-  </data>
-  <data name="SupervisorHasOtherVision" xml:space="preserve">
-    <value>拥有独立视野</value>
-  </data>
-  <data name="SupervisorVision" xml:space="preserve">
-    <value>视野范围</value>
-  </data>
-  <data name="SupervisorApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>会受到照明破坏影响</value>
   </data>
   <data name="SupervisorAbilityCoolTime" xml:space="preserve">
     <value>技能冷却</value>

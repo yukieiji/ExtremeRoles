@@ -325,21 +325,6 @@
   <data name="Jester" xml:space="preserve">
     <value>小醜</value>
   </data>
-  <data name="JesterSpawnRate" xml:space="preserve">
-    <value>小醜</value>
-  </data>
-  <data name="JesterRoleNum" xml:space="preserve">
-    <value>最大人數</value>
-  </data>
-  <data name="JesterHasOtherVision" xml:space="preserve">
-    <value>擁有獨立視野</value>
-  </data>
-  <data name="JesterVision" xml:space="preserve">
-    <value>視野範圍</value>
-  </data>
-  <data name="JesterApplyEnvironmentVisionEffect" xml:space="preserve">
-    <value>會受到照明破壞影響</value>
-  </data>
   <data name="JesterUseSabotage" xml:space="preserve">
     <value>可以破壞</value>
   </data>

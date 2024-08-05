@@ -360,9 +360,6 @@
   <data name="youAreRoleIntro" xml:space="preserve">
     <value>妳的職業是</value>
   </data>
-  <data name="win" xml:space="preserve">
-    <value>勝利</value>
-  </data>
   <data name="andFirst" xml:space="preserve">
     <value>以及</value>
   </data>
@@ -377,15 +374,6 @@
   </data>
   <data name="optionOff" xml:space="preserve">
     <value>&lt;color=#ff3366&gt;關閉&lt;/color&gt;</value>
-  </data>
-  <data name="short" xml:space="preserve">
-    <value>短</value>
-  </data>
-  <data name="middle" xml:space="preserve">
-    <value>中</value>
-  </data>
-  <data name="long" xml:space="preserve">
-    <value>長</value>
   </data>
   <data name="crewmateRoles" xml:space="preserve">
     <value>船員陣營</value>
@@ -896,9 +884,6 @@ Among Us官方服務器不適配Reactor插件，因此需要使用自定義服�
   </data>
   <data name="SecurityCamera" xml:space="preserve">
     <value>監控與通行記錄</value>
-  </data>
-  <data name="Vital" xml:space="preserve">
-    <value>生命監測裝置</value>
   </data>
   <data name="Pcg32XshRr" xml:space="preserve">
     <value>PCG32-XSH-RR</value>

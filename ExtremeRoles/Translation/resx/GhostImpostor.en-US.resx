@@ -120,12 +120,6 @@
   <data name="Ventgeist" xml:space="preserve">
     <value>Vent-geist</value>
   </data>
-  <data name="VentgeistSpawnRate" xml:space="preserve">
-    <value>Vent-geist</value>
-  </data>
-  <data name="VentgeistRoleNum" xml:space="preserve">
-    <value>No. of assigned players</value>
-  </data>
   <data name="VentgeistRange" xml:space="preserve">
     <value>"RATTLE" : Ability Range</value>
   </data>
