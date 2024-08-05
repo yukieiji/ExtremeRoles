@@ -6,7 +6,7 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 public enum PolusVitalPos
 {
 	DefaultKey,
-	Specimen,
+	Specimens,
 	Laboratory
 }
 
