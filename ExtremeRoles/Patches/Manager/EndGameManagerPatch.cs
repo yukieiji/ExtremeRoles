@@ -273,7 +273,7 @@ public static class EndGameManagerSetUpPatch
         }
 
 		winDetailTextBuilder.Append(
-			TranslationController.Instance.GetString(StringNames.Victory));
+			FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Victory));
 
 		textRenderer.text = winDetailTextBuilder.ToString();
 	}
