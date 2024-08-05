@@ -105,7 +105,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_TaskErrorCategory = Message
+		RESX_NeutralResourcesLanguage = ja-JP
 		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
+		RESX_TaskErrorCategory = Message
 	EndGlobalSection
 EndGlobal
