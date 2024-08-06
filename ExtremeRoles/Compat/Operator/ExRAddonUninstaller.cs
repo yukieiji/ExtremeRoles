@@ -22,23 +22,23 @@ internal sealed class ExRAddonUninstaller : OperatorBase
 	{
 		if (!File.Exists(this.modDllPath))
 		{
-			Popup.Show(Translation.GetString("alreadyUninstall"));
+			Popup.Show(Tr.GetString("alreadyUninstall"));
 			return;
 		}
 
-		string info = Translation.GetString("checkUninstallNow");
+		string info = Tr.GetString("checkUninstallNow");
 		Popup.Show(info);
 
 		if (File.Exists(this.modDllPath))
 		{
 			removeOldUninstallFile();
-			SetPopupText(Translation.GetString("uninstallNow"));
+			SetPopupText(Tr.GetString("uninstallNow"));
 			File.Move(this.modDllPath, $"{this.modDllPath}{uninstallName}");
-			ShowPopup(Translation.GetString("uninstallRestart"));
+			ShowPopup(Tr.GetString("uninstallRestart"));
 		}
 		else
 		{
-			SetPopupText(Translation.GetString("uninstallManual"));
+			SetPopupText(Tr.GetString("uninstallManual"));
 		}
 	}
 

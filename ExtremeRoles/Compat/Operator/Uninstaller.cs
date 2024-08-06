@@ -24,28 +24,28 @@ internal sealed class Uninstaller : OperatorBase
 	{
 		if (!File.Exists(this.modDllPath))
 		{
-			Popup.Show(Translation.GetString("alreadyUninstall"));
+			Popup.Show(Tr.GetString("alreadyUninstall"));
 			return;
 		}
 
-		string info = Translation.GetString("checkUninstallNow");
+		string info = Tr.GetString("checkUninstallNow");
 		Popup.Show(info);
 
 		if (File.Exists(this.modDllPath))
 		{
 			removeOldUninstallFile();
-			SetPopupText(Translation.GetString("uninstallNow"));
+			SetPopupText(Tr.GetString("uninstallNow"));
 			if (!isNotRemoveReactor())
 			{
 				string reactorPath = Path.Combine(this.ModFolderPath, ReactorDll);
 				File.Move(reactorPath, $"{reactorPath}{uninstallName}");
 			}
 			File.Move(this.modDllPath, $"{this.modDllPath}{uninstallName}");
-			ShowPopup(Translation.GetString("uninstallRestart"));
+			ShowPopup(Tr.GetString("uninstallRestart"));
 		}
 		else
 		{
-			SetPopupText(Translation.GetString("uninstallManual"));
+			SetPopupText(Tr.GetString("uninstallManual"));
 		}
 	}
 

@@ -1,0 +1,1070 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AvalonsRoles" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;アサシン&lt;/color&gt;と&lt;color=#00ffff&gt;マーリン&lt;/color&gt;</value>
+  </data>
+  <data name="Assassin" xml:space="preserve">
+    <value>アサシン</value>
+  </data>
+  <data name="Marlin" xml:space="preserve">
+    <value>マーリン</value>
+  </data>
+  <data name="AssassinHasOtherVision" xml:space="preserve">
+    <value>アサシンが別の視界設定を持つか</value>
+  </data>
+  <data name="AssassinVision" xml:space="preserve">
+    <value>アサシンのビジョン</value>
+  </data>
+  <data name="AssassinApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>アサシンが視界効果を受けるか</value>
+  </data>
+  <data name="AssassinHasOtherKillCool" xml:space="preserve">
+    <value>アサシンが別のキルクールタイムを持つか</value>
+  </data>
+  <data name="AssassinKillCoolDown" xml:space="preserve">
+    <value>アサシンのキルクールタイム</value>
+  </data>
+  <data name="AssassinHasOtherKillRange" xml:space="preserve">
+    <value>アサシンが別のキルレンジを持つか</value>
+  </data>
+  <data name="AssassinKillRange" xml:space="preserve">
+    <value>アサシンのキルレンジ</value>
+  </data>
+  <data name="AssassinHasTask" xml:space="preserve">
+    <value>アサシンがタスクを持つか</value>
+  </data>
+  <data name="AssassinCanKilled" xml:space="preserve">
+    <value>アサシンがキルされるか</value>
+  </data>
+  <data name="AssassinCanKilledFromCrew" xml:space="preserve">
+    <value>キル能力を持つクルー役職がアサシンをキルできるか</value>
+  </data>
+  <data name="AssassinCanKilledFromNeutral" xml:space="preserve">
+    <value>キル能力を持つ第三陣営がアサシンをキルできるか</value>
+  </data>
+  <data name="AssassinCanSeeVote" xml:space="preserve">
+    <value>アサシンが投票を見ることができるか</value>
+  </data>
+  <data name="AssassinIsDeadForceMeeting" xml:space="preserve">
+    <value>アサシン死亡時、強制的に会議を行うか</value>
+  </data>
+  <data name="AssassinCanSeeRoleBeforeFirstMeeting" xml:space="preserve">
+    <value>アサシン死亡後の最初の会議前にロールを見ることができるか</value>
+  </data>
+  <data name="MarlinHasOtherVision" xml:space="preserve">
+    <value>マーリンが別の視界設定を持つか</value>
+  </data>
+  <data name="MarlinVision" xml:space="preserve">
+    <value>マーリンのビジョン</value>
+  </data>
+  <data name="MarlinApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>マーリンが視界効果を受けるか</value>
+  </data>
+  <data name="MarlinHasTask" xml:space="preserve">
+    <value>マーリンがタスクを持つか</value>
+  </data>
+  <data name="MarlinCanSeeAssassin" xml:space="preserve">
+    <value>マーリンがアサシンを見ることができるか</value>
+  </data>
+  <data name="MarlinCanSeeVote" xml:space="preserve">
+    <value>マーリンが投票を見ることができるか</value>
+  </data>
+  <data name="MarlinCanSeeNeutral" xml:space="preserve">
+    <value>マーリンが第三陣営を見ることができるか</value>
+  </data>
+  <data name="MarlinCanUseVent" xml:space="preserve">
+    <value>マーリンがベントを使えるか</value>
+  </data>
+  <data name="MarlinIntroDescription" xml:space="preserve">
+    <value>全てを知り、見通し、暗殺されず、クルーを勝利に導け</value>
+  </data>
+  <data name="MarlinShortDescription" xml:space="preserve">
+    <value>クルーを勝利に導け。ただし、暗殺者にばれるな</value>
+  </data>
+  <data name="MarlinFullDescription" xml:space="preserve">
+    <value>インポスターが誰か分かるクルー役職
+アサシンと一対の関係である。
+アサシンがアサインされない場合、この役職もアサインされない
+アサシンの特殊能力によって指定された場合、クルー全体の敗北
+インポスターが分かるので会議を主導しつつ身を隠す必要がある
+インポスターに近い設定の役職のため、注意が必要</value>
+  </data>
+  <data name="AssassinIntroDescription" xml:space="preserve">
+    <value>全てを知りし者を探し出し、始末するのだ</value>
+  </data>
+  <data name="AssassinShortDescription" xml:space="preserve">
+    <value>マーリンを探し出し、暗殺せよ</value>
+  </data>
+  <data name="AssassinFullDescription" xml:space="preserve">
+    <value>インポスター陣営に新しい勝利条件を追加するインポスター役職
+マーリンと一対の関係である。
+マーリンがアサインされない場合、この役職もアサインされない
+新しい勝利条件：アサシンの特殊能力でマーリンを当てる
+アサシンの特殊能力：特殊会議「マーリンは誰だ？」
+特殊会議「マーリンは誰だ？」：
+　・全員が参加するが能力を発動させたアサシン以外投票不可、
+　スキップ不可、死亡している人にも投票可
+　・チャットはインポスターのみ可能
+　・投票先がマーリンであればインポスター勝利、それ以外の
+　場合、ゲームが続行(マーリンの能力は継続)
+特殊能力発動条件：追放された場合、自身がキルされた場合の
+処理は設定により変化する
+上記の能力以外は普通のインポスターのため、マーリンを
+探りつつ潜伏し、キルを行う必要がある</value>
+  </data>
+  <data name="whoIsMarine" xml:space="preserve">
+    <value>マーリンは誰だ？</value>
+  </data>
+  <data name="assassinateMarinSucsess" xml:space="preserve">
+    <value>はマーリンだった</value>
+  </data>
+  <data name="assassinateMarinFail" xml:space="preserve">
+    <value>はマーリンではなかった</value>
+  </data>
+  <data name="HeroAca" xml:space="preserve">
+    <value>&lt;color=#0086CC&gt;ヒーロー&lt;/color&gt;、&lt;color=#FF1919FF&gt;ヴィラン&lt;/color&gt;、&lt;color=#BAA7CC&gt;ヴィジランテ&lt;/color&gt;</value>
+  </data>
+  <data name="Hero" xml:space="preserve">
+    <value>ヒーロー</value>
+  </data>
+  <data name="Villain" xml:space="preserve">
+    <value>ヴィラン</value>
+  </data>
+  <data name="Vigilante" xml:space="preserve">
+    <value>ヴィジランテ</value>
+  </data>
+  <data name="HeroHasOtherVision" xml:space="preserve">
+    <value>ヒーローが別の視界設定を持つか</value>
+  </data>
+  <data name="HeroVision" xml:space="preserve">
+    <value>ヒーローのビジョン</value>
+  </data>
+  <data name="HeroApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>ヒーローが視界効果を受けるか</value>
+  </data>
+  <data name="HeroAbilityCoolTime" xml:space="preserve">
+    <value>ヒーロー「サーチ」のクールタイム</value>
+  </data>
+  <data name="HeroAbilityActiveTime" xml:space="preserve">
+    <value>ヒーロー「サーチ」の発動時間</value>
+  </data>
+  <data name="HeroFeatKillPercentage" xml:space="preserve">
+    <value>ヒーロー「One for All」の第二段階発動のプレイヤー死亡率</value>
+  </data>
+  <data name="HeroFeatButtonAbilityPercentage" xml:space="preserve">
+    <value>ヒーロー「One for All」の第三段階発動のプレイヤー死亡率</value>
+  </data>
+  <data name="VillainHasOtherVision" xml:space="preserve">
+    <value>ヴィランが別の視界設定を持つか</value>
+  </data>
+  <data name="VillainVision" xml:space="preserve">
+    <value>ヴィランのビジョン</value>
+  </data>
+  <data name="VillainApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>ヴィランが視界効果を受けるか</value>
+  </data>
+  <data name="VillainHasOtherKillCool" xml:space="preserve">
+    <value>ヴィランが別のキルクールタイムを持つか</value>
+  </data>
+  <data name="VillainKillCoolDown" xml:space="preserve">
+    <value>ヴィランのキルクールタイム</value>
+  </data>
+  <data name="VillainHasOtherKillRange" xml:space="preserve">
+    <value>ヴィランが別のキルレンジを持つか</value>
+  </data>
+  <data name="VillainKillRange" xml:space="preserve">
+    <value>ヴィランのキルレンジ</value>
+  </data>
+  <data name="VillainAbilityCoolTime" xml:space="preserve">
+    <value>ヴィラン「サーチ」のクールタイム</value>
+  </data>
+  <data name="VillainAbilityActiveTime" xml:space="preserve">
+    <value>ヴィラン「サーチ」の発動時間</value>
+  </data>
+  <data name="VillainVigilanteSeeTime" xml:space="preserve">
+    <value>ヴィジランテが能力発動時\nヴィランがその人の位置を認知できる時間</value>
+  </data>
+  <data name="VigilanteHasOtherVision" xml:space="preserve">
+    <value>ヴィジランテが別の視界設定を持つか</value>
+  </data>
+  <data name="VigilanteVision" xml:space="preserve">
+    <value>ヴィジランテのビジョン</value>
+  </data>
+  <data name="VigilanteApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>ヴィジランテが視界効果を受けるか</value>
+  </data>
+  <data name="VigilanteAbilityCoolTime" xml:space="preserve">
+    <value>ヴィジランテ「エマージェンシーコール」のクールタイム</value>
+  </data>
+  <data name="VigilanteAbilityActiveTime" xml:space="preserve">
+    <value>ヴィジランテ「エマージェンシーコール」の発動時間</value>
+  </data>
+  <data name="VigilanteAbilityCount" xml:space="preserve">
+    <value>ヴィジランテ「エマージェンシーコール」の発動可能回数</value>
+  </data>
+  <data name="VigilanteRange" xml:space="preserve">
+    <value>ヴィジランテ「エマージェンシーコール」の発動可能範囲</value>
+  </data>
+  <data name="HeroIntroDescription" xml:space="preserve">
+    <value>正義の味方「ヒーロー」参上！！</value>
+  </data>
+  <data name="HeroShortDescription" xml:space="preserve">
+    <value>この船にはびこる”悪”を滅せよ</value>
+  </data>
+  <data name="HeroFullDescription" xml:space="preserve">
+    <value>プレイヤーが死亡すればするほど強くなるクルー役職
+能力「One for All」の発動段階は3段階存在する
+　・第一段階：
+　　　発動条件：プレイヤー1人死亡
+　　　能力：インポスターのキルボタンによるキルを無効化する
+　・第二段階：
+　　　発動条件：設定値以上のプレイヤーが死亡
+　　　能力：キルボタン付与
+　・第三段階：
+　　　発動条件：設定値以上のプレイヤーが死亡
+　　　能力：ボタン能力付与
+ボタン能力「サーチ」：
+　全てのプレイヤーの位置と距離が一定時間わかる
+ヴィランからキルもしくはヴィランをキルした場合、相打ちになる</value>
+  </data>
+  <data name="VillainIntroDescription" xml:space="preserve">
+    <value>最凶最悪のインポスター</value>
+  </data>
+  <data name="VillainShortDescription" xml:space="preserve">
+    <value>この船を”恐怖”のどん底に突き落とせ</value>
+  </data>
+  <data name="VillainFullDescription" xml:space="preserve">
+    <value>強力な能力を持つ最凶最悪のインポスター
+この役職のキルボタンのキルは必ず成功する（守護天使、
+ボディーガード、TM等の防御を全てを貫通します）
+クルー役職から絶対にキルされることはない
+ボタン能力「サーチ」：
+　全てのプレイヤーの位置と距離が一定時間わかる
+ヒーローからキルもしくはヒーローをキルした場合、相打ちになる</value>
+  </data>
+  <data name="VigilanteIntroDescription" xml:space="preserve">
+    <value>この船に新しい"秩序"をもたらせ</value>
+  </data>
+  <data name="VigilanteShortDescription" xml:space="preserve">
+    <value>正しい”正義”と”悪”を船員たちに示せ</value>
+  </data>
+  <data name="VigilanteNewHeroForTheShipShortDescription" xml:space="preserve">
+    <value>腐りきった”正義”の変わりとなれ</value>
+  </data>
+  <data name="VigilanteNewVillainForTheShipShortDescription" xml:space="preserve">
+    <value>腐りきった”悪”に美しい"悪”を示せ</value>
+  </data>
+  <data name="VigilanteNewEnemyNeutralForTheShipShortDescription" xml:space="preserve">
+    <value>行先のないこの船を終わらせろ</value>
+  </data>
+  <data name="VigilanteFullDescription" xml:space="preserve">
+    <value>新しい秩序をもたらすニュートラル役職
+基本勝利条件1：
+　・生存者をヒーロー、ヴィラン、ヴィジランテのみにする
+基本勝利条件2：
+　・ヴィランとヒーローを相打ちさせる(この時全ての勝利に乗る
+　事ができる)
+ヒーローやヴィランの生存状況によって「状態」が変化する
+この文章が表示されている状態は「通常」と「基本勝利条件2」を
+達成したときである
+※現在のヴィジランテの「状態」によりこの勝利条件以外に追加
+勝利条件が発生する。また、説明文等も大きく変化する
+「通常」から「状態」が変化すると元に戻る事はできない
+ボタン能力「エマージェンシーコール」：
+　・範囲内に居るプレイヤー一人をヒーローに通知する
+　・発動時のヴィジランテの位置を一定時間ヴィランに通知する
+これが表示されている「状態」はヴィランとヒーローからキル
+されることはない</value>
+  </data>
+  <data name="VigilanteCrewDescription" xml:space="preserve">
+    <value>ヒーローが居なくなったことによりクルーの味方となった
+ニュートラル役職
+追加勝利条件：クルーを勝利させる
+ボタン能力「エマージェンシーコール」：
+　・範囲内に居るプレイヤー一人をヒーローに通知する
+　・発動時のヴィジランテの位置を一定時間ヴィランに通知する
+これが表示されている「状態」はヴィランとヒーローからキル
+されることはない</value>
+  </data>
+  <data name="VigilanteImpDescription" xml:space="preserve">
+    <value>ヴィランが居なくなったことによりインポスターの味方となった
+ニュートラル役職
+インポスターの味方となったため「サボタージュ」と「ベント」
+を使用することができる
+追加勝利条件：インポスターを勝利させる
+ボタン能力「エマージェンシーコール」：
+　・範囲内に居るプレイヤー一人をヒーローに通知する
+　・発動時のヴィジランテの位置を一定時間ヴィランに通知する
+これが表示されている「状態」はヴィランとヒーローからキル
+されることはない</value>
+  </data>
+  <data name="VigilanteNeutDescription" xml:space="preserve">
+    <value>新しくキルボタンを持つニュートラル役職
+移行条件：ヒーローかヴィランが居なくなったことによりその
+陣営の敗北が濃厚になった場合
+追加勝利条件：自分以外を皆殺しにする
+ボタン能力「エマージェンシーコール」：
+　・範囲内に居るプレイヤー一人をヒーローに通知する
+　・発動時のヴィジランテの位置を一定時間ヴィランに通知する
+これが表示されている「状態」は全てのキルが通る</value>
+  </data>
+  <data name="search" xml:space="preserve">
+    <value>サーチ</value>
+  </data>
+  <data name="call" xml:space="preserve">
+    <value>エマージェンシーコール</value>
+  </data>
+  <data name="DetectiveOffice" xml:space="preserve">
+    <value>&lt;color=#9E5C46&gt;探偵&lt;/color&gt;と&lt;color=#008A99&gt;助手&lt;/color&gt;</value>
+  </data>
+  <data name="Detective" xml:space="preserve">
+    <value>探偵</value>
+  </data>
+  <data name="Assistant" xml:space="preserve">
+    <value>助手</value>
+  </data>
+  <data name="DetectiveApprentice" xml:space="preserve">
+    <value>見習い探偵</value>
+  </data>
+  <data name="DetectiveHasOtherVision" xml:space="preserve">
+    <value>探偵が別の視界設定を持つか</value>
+  </data>
+  <data name="DetectiveVision" xml:space="preserve">
+    <value>探偵のビジョン</value>
+  </data>
+  <data name="DetectiveApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>探偵が視界効果を受けるか</value>
+  </data>
+  <data name="DetectiveSearchRange" xml:space="preserve">
+    <value>探偵が「犯行現場」を調べれる距離</value>
+  </data>
+  <data name="DetectiveSearchTime" xml:space="preserve">
+    <value>探偵が「犯行現場」の1調査にかかる時間</value>
+  </data>
+  <data name="DetectiveSearchAssistantTime" xml:space="preserve">
+    <value>探偵が助手のサポートを受けた「犯行現場」の1調査にかかる時間</value>
+  </data>
+  <data name="DetectiveTextShowTime" xml:space="preserve">
+    <value>調査結果の画面表示時間</value>
+  </data>
+  <data name="AssistantHasOtherVision" xml:space="preserve">
+    <value>助手が別の視界設定を持つか</value>
+  </data>
+  <data name="AssistantVision" xml:space="preserve">
+    <value>助手のビジョン</value>
+  </data>
+  <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>助手が視界効果を受けるか</value>
+  </data>
+  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+    <value>見習い探偵が別の視界設定を持つか</value>
+  </data>
+  <data name="DetectiveApprenticeVision" xml:space="preserve">
+    <value>見習い探偵のビジョン</value>
+  </data>
+  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>見習い探偵が視界効果を受けるか</value>
+  </data>
+  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+    <value>見習い探偵「緊急招集」の使用回数</value>
+  </data>
+  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+    <value>見習い探偵「緊急招集」のクールタイム</value>
+  </data>
+  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+    <value>見習い探偵「緊急招集」によって緊急会議ボタンを押せる時間</value>
+  </data>
+  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+    <value>見習い探偵「緊急招集」によって緊急会議ボタンを消費しないか</value>
+  </data>
+  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+    <value>消費されない回数</value>
+  </data>
+  <data name="DetectiveIntroDescription" xml:space="preserve">
+    <value>どんな難事件もこの"探偵"にお任せあれ</value>
+  </data>
+  <data name="DetectiveShortDescription" xml:space="preserve">
+    <value>「犯行現場」に残る小さな証拠を見逃すな</value>
+  </data>
+  <data name="DetectiveFullDescription" xml:space="preserve">
+    <value>通報された死体の場所から様々な情報を得ることができるクルー役職
+通報された死体のある場所は「犯行現場」として登録される
+登録された「犯行現場」は通報があった会議終了後から次の会議
+開始時まで有効である
+有効化された「犯行現場」には矢印が表示される
+有効化された「犯行現場」の近くに一定時間同じ場所に留まる
+ことで「調査」を行うことができる。調査中に離れた場合、
+「調査」の進捗はリセットされる
+「調査」でわかる情報は以下である、各一回の「調査」には設定
+された時間がかかる、「調査」4回目が完了すると「犯行現場」は
+無効化される
+　・調査1回目：キルされた時刻
+　・調査2回目：キルされてから会議が発生するまでの時間
+　・調査3回目：キルした陣営
+　・調査4回目：キルした役職
+「助手」が通報した死体の「犯行現場」であれば「調査」に
+かかる時間が短縮される
+「探偵」が死亡等した場合、「助手」が「見習い探偵」になる</value>
+  </data>
+  <data name="AssistantIntroDescription" xml:space="preserve">
+    <value>優秀な探偵になるため切磋琢磨しよう</value>
+  </data>
+  <data name="AssistantShortDescription" xml:space="preserve">
+    <value>探偵のサポートを行おう</value>
+  </data>
+  <data name="AssistantFullDescription" xml:space="preserve">
+    <value>探偵の力を引き出す秘めた力を持つクルー役職
+自分の通報した死体の完全な死亡時間を会議開始時チャットにて
+知ることができる
+「助手」が死亡した場合、「探偵」が「見習い探偵」になる</value>
+  </data>
+  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+    <value>”見習い”でも1人前の探偵として頑張ろう</value>
+  </data>
+  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+    <value>探偵や助手が何らかの理由で変化したクルー役職
+自分の通報した死体の完全な死亡時間を会議開始時チャットにて
+知ることができる
+ボタン能力「緊急招集」：
+　・緊急会議ボタンの画面を開きどこでも押すことができる
+　・画面は一定時間しか開くことが出来ない
+　・役職の人の「緊急会議」のボタンが残っていない場合
+　画面を開いても押すことは出来ない
+　・設定「見習い探偵「緊急招集」によって緊急会議ボタンを
+　消費するか」がオンの場合、「緊急招集」によって発生した
+　「緊急会議」で役職の人の「緊急会議」のボタンの数が一定
+　回数消費されない（押すためには役職の人の「緊急会議」の
+　ボタン数が残っている必要がある）　</value>
+  </data>
+  <data name="FindKillTime" xml:space="preserve">
+    <value>被害者は「{0}(標準時時間)」に殺害されたようだ</value>
+  </data>
+  <data name="FindReportTime" xml:space="preserve">
+    <value>殺害から発見まで「{0}秒」かかったようだ</value>
+  </data>
+  <data name="FindTeam" xml:space="preserve">
+    <value>この痕跡から「{0}」が犯行したようだ</value>
+  </data>
+  <data name="FindRole" xml:space="preserve">
+    <value>この殺害方法から被害者は「{0}」に襲われたようだ</value>
+  </data>
+  <data name="searchStrBase" xml:space="preserve">
+    <value>犯行現場を調査中、調査完了まで残り{0}秒</value>
+  </data>
+  <data name="reportedDeadBodyInfo" xml:space="preserve">
+    <value>発見した死体は「{0}(標準時時間)」に殺害されたようだ</value>
+  </data>
+  <data name="emergencyMeeting" xml:space="preserve">
+    <value>緊急招集</value>
+  </data>
+  <data name="Lover" xml:space="preserve">
+    <value>ラバーズ</value>
+  </data>
+  <data name="LoverIsNeutral" xml:space="preserve">
+    <value>第三陣営かどうか</value>
+  </data>
+  <data name="LoverBecomNeutral" xml:space="preserve">
+    <value>第三陣営に変わるかどうか</value>
+  </data>
+  <data name="LoverDethWhenUnderAlive" xml:space="preserve">
+    <value>自殺が行われる1組辺り人数</value>
+  </data>
+  <data name="LoverHasOtherKillCool" xml:space="preserve">
+    <value>別のキルクールタイムを持つか</value>
+  </data>
+  <data name="LoverKillCoolDown" xml:space="preserve">
+    <value>キルクールタイム</value>
+  </data>
+  <data name="LoverHasOtherKillRange" xml:space="preserve">
+    <value>別のキルレンジを持つか</value>
+  </data>
+  <data name="LoverKillRange" xml:space="preserve">
+    <value>キルレンジ</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverHasOtherVision" xml:space="preserve">
+    <value>第三陣営に変化後、別の視界設定を持つか</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverVision" xml:space="preserve">
+    <value>第三陣営に変化後のビジョン</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>第三陣営に変化後、視界効果を受けるか</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverCanUseVent" xml:space="preserve">
+    <value>第三陣営に変化後、ベントを使用できるか</value>
+  </data>
+  <data name="LoverIntroDescription" xml:space="preserve">
+    <value>恋に運命と身をゆだねる船員</value>
+  </data>
+  <data name="LoverShortDescription" xml:space="preserve">
+    <value>運命の人と生き残れ</value>
+  </data>
+  <data name="LoverFullDescription" xml:space="preserve">
+    <value>複数人1組のクルー役職
+勝利条件1：クルー勝利、ただし、同じ組で別陣営の人が居た場合
+その人は敗北
+勝利条件2：他の生存者が同じ組以下になり、同じ組のタスクが
+全て終了すること(この勝利条件は同じ組で別陣営の人がいる場合
+のみ有効になる)
+勝利条件3：以下条件の全てを満たした場合
+　①：他の生存者が同じ組以下
+　②：インポスターの生存者が0
+　③：同じ組の中に別陣営の人が居る
+　④：他の生存者全てがクルーもしくは
+　　　③の別陣営の人と同じ組である
+同じ組の人が一定数以下になると自決もしくは第三陣営に
+変化する
+自決を行う人数は設定により変化する</value>
+  </data>
+  <data name="LoverImposterFullDescription" xml:space="preserve">
+    <value>複数人1組のインポスター役職
+勝利条件1：インポスター勝利、ただし、同じ組で別陣営の人が
+居た場合、その人は敗北
+勝利条件2：生存者が同じ組以下になり、同じ組のタスクが全て
+終了すること(この勝利条件は同じ組で別陣営の人がいる場合のみ有効になる)
+勝利条件3：以下の全てを満たした場合
+　①：他の生存者が同じ組以下
+　②：同じ組の中に別陣営の人が居る
+　③：他の全ての生存者がクルーもしくはインポスターである
+同じ組の人が一定数以下になると自決もしくは第三陣営に
+変化する
+自決を行う人数は設定により変化する</value>
+  </data>
+  <data name="LoverNeutralFullDescription" xml:space="preserve">
+    <value>複数人1組の第三陣営役職
+勝利条件1：生存者が同じ組以下になること、ただし、
+インポスターや第三陣営でキル能力を持っている人が
+生き残っている場合ゲームは続行する
+勝利条件2：生存者が同じ組以下になり、同じ組の
+タスクが全て終了すること
+同じ組の人が一定数以下になると自決する
+自決を行う人数は設定により変化する</value>
+  </data>
+  <data name="LoverNeutralKillerFullDescription" xml:space="preserve">
+    <value>相方を殺された恨みで殺人鬼に変化した複数人1組の第三陣営役職
+勝利条件：自分以外を皆殺しにする</value>
+  </data>
+  <data name="LoverKillerShortDescription" xml:space="preserve">
+    <value>愛する人を殺した船員達に復讐せよ</value>
+  </data>
+  <data name="curLover" xml:space="preserve">
+    <value>恋人</value>
+  </data>
+  <data name="LoverIntoPlus" xml:space="preserve">
+    <value>と恋に落ちた</value>
+  </data>
+  <data name="Supporter" xml:space="preserve">
+    <value>サポーター</value>
+  </data>
+  <data name="EvilSupporter" xml:space="preserve">
+    <value>イビルサポーター</value>
+  </data>
+  <data name="NiceSupporter" xml:space="preserve">
+    <value>ナイスサポーター</value>
+  </data>
+  <data name="SupporterIntroDescription" xml:space="preserve">
+    <value>{0}は{1}だ、全力でサポートしろ</value>
+  </data>
+  <data name="SupporterShortDescription" xml:space="preserve">
+    <value>サポート対象を手助けしよう</value>
+  </data>
+  <data name="SupporterFullDescription" xml:space="preserve">
+    <value>ゲーム開始時、一人だけ役職を知っているクルー役職
+1人だけ役職が分かるためその人をサポートできる
+誰かにマーリンがアサインされている場合、マーリンが
+サポート対象となる(複数人マーリンがいる場合はランダム)
+それ以外だと、クルー陣営からランダムにサポート対象が
+決定される
+現在のサポート対象:
+　　　　プレイヤー名:{0}
+　　　　役職:{1}</value>
+  </data>
+  <data name="SupporterImposterFullDescription" xml:space="preserve">
+    <value>ゲーム開始時、一人だけ役職を知っているインポスター役職
+1人だけ役職が分かるためその人をサポートできる
+誰かにアサシンがアサインされている場合、アサシンが
+サポート対象となる(複数人アサシンがいる場合はランダム)
+それ以外だと、インポスター陣営からランダムにサポート対象が
+決定される
+現在のサポート対象:
+　　　　プレイヤー名:{0}
+　　　　役職:{1}</value>
+  </data>
+  <data name="Sharer" xml:space="preserve">
+    <value>シェアーズ</value>
+  </data>
+  <data name="SharerSharerTellKill" xml:space="preserve">
+    <value>別の「シェアーズ」のキルを教えるか</value>
+  </data>
+  <data name="SharerIntroDescription" xml:space="preserve">
+    <value>状況を伝えるのに言葉も行動も必要無い</value>
+  </data>
+  <data name="SharerShortDescription" xml:space="preserve">
+    <value>別のシェアーズの状況を理解して動け</value>
+  </data>
+  <data name="SharerFullDescription" xml:space="preserve">
+    <value>別の「シェアーズ」の位置を常に理解できるインポスター
+常に同じ組の「シェアーズ」の位置がわかる
+「別の「シェアーズ」のキルを教えるか」がオンになっている
+場合、同じ組の「シェアーズ」のキルがわかる
+また、「シェアーズ」の役職が変化し失われた場合、別の
+「シェアーズ」は上記の情報を知ることができる</value>
+  </data>
+  <data name="curSharer" xml:space="preserve">
+    <value>現在のシェアーズ</value>
+  </data>
+  <data name="SharerIntoPlus" xml:space="preserve">
+    <value>と以心伝心</value>
+  </data>
+  <data name="sharerKill" xml:space="preserve">
+    <value>シェアーズ：{0}がキルしたみたいだ</value>
+  </data>
+  <data name="Traitor" xml:space="preserve">
+    <value>トレイター</value>
+  </data>
+  <data name="TraitorAbilityCoolTime" xml:space="preserve">
+    <value>「クラッキング」のクールタイム</value>
+  </data>
+  <data name="TraitorAbilityActiveTime" xml:space="preserve">
+    <value>「クラッキング」の発動可能時間</value>
+  </data>
+  <data name="TraitorIntroDescription" xml:space="preserve">
+    <value>「{0}」の裏切り者</value>
+  </data>
+  <data name="TraitorShortDescription" xml:space="preserve">
+    <value>裏切り者のクルーとして船を終わらせろ</value>
+  </data>
+  <data name="TraitorFullDescription" xml:space="preserve">
+    <value>クルーが裏切った第三陣営役職
+※そのため、この役職はクルー陣営の役職アサイン枠を消費する※
+勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+ゲーム開始時、この役職に追加でアサインされた役職を奪い取る
+ただし、能力は奪い取らない　奪い取った役職:{0}
+能力「クラッキング」
+　・一回キルを行うことで使用可能になる
+　・使用毎にアドミン、セキュリティ、バイタルを順番で使用する
+　ことが可能である
+　・バイタルはSkeldとMira-HQでは使用することができない</value>
+  </data>
+  <data name="traitorCracking" xml:space="preserve">
+    <value>クラッキング</value>
+  </data>
+  <data name="Kids" xml:space="preserve">
+    <value>ワルガキ</value>
+  </data>
+  <data name="Delinquent" xml:space="preserve">
+    <value>ワルガキ</value>
+  </data>
+  <data name="Wisp" xml:space="preserve">
+    <value>ウィスプ</value>
+  </data>
+  <data name="DelinquentHasOtherVision" xml:space="preserve">
+    <value>別の視界設定を持つか</value>
+  </data>
+  <data name="DelinquentVision" xml:space="preserve">
+    <value>ビジョン</value>
+  </data>
+  <data name="DelinquentApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>視界効果を受けるか</value>
+  </data>
+  <data name="DelinquentRange" xml:space="preserve">
+    <value>「自爆」の爆発範囲</value>
+  </data>
+  <data name="DelinquentAbilityCoolTime" xml:space="preserve">
+    <value>「ラクガキ」と「自爆」のクールタイム</value>
+  </data>
+  <data name="DelinquentAbilityCount" xml:space="preserve">
+    <value>「自爆」が使用できるようになる「落書き」の回数</value>
+  </data>
+  <data name="WispTorchAbilityNum" xml:space="preserve">
+    <value>「灯火」のデフォルト使用回数</value>
+  </data>
+  <data name="WispWinNum" xml:space="preserve">
+    <value>「灯火」の勝利に必要な人数のオフセット値</value>
+  </data>
+  <data name="WispTorchNum" xml:space="preserve">
+    <value>「灯火」の設置個数</value>
+  </data>
+  <data name="WispTorchRange" xml:space="preserve">
+    <value>「灯火」を取得できる範囲</value>
+  </data>
+  <data name="WispTorchActiveTime" xml:space="preserve">
+    <value>「灯火」が消えるまでの時間</value>
+  </data>
+  <data name="WispBlackOutTime" xml:space="preserve">
+    <value>「灯火停電」の発動時間</value>
+  </data>
+  <data name="WispAbilityCoolTime" xml:space="preserve">
+    <value>「灯火」のクールタイム</value>
+  </data>
+  <data name="WispIsReportAbility" xml:space="preserve">
+    <value>「灯火」の能力発動を報告するか</value>
+  </data>
+  <data name="DelinquentIntroDescription" xml:space="preserve">
+    <value>イタズラ大好きな暴れん坊</value>
+  </data>
+  <data name="DelinquentShortDescription" xml:space="preserve">
+    <value>「ラクガキ」や「自爆」で船をメチャクチャにしよう</value>
+  </data>
+  <data name="DelinquentFullDescription" xml:space="preserve">
+    <value>ウィスプとセットになった第三陣営役職
+勝利条件：「自爆」によって全ての生存者が死亡すること
+この役職が勝利条件を満たせずに死亡した場合、「ウィスプ」に
+アサインされる
+ボタン能力「ラクガキ」：
+　・発動した場所に「ラクガキ」を残す
+　・「ラクガキ」は全てのプレイヤーに表示される（表示されるラク
+　ガキの各個人で種類は異なる）
+　・「ラクガキ」を使用すればするほどウィスプにアサインされた時
+　の「灯火」の使用回数が増える
+　・「ラクガキ」の使用回数が0になると能力が「自爆」に変化する
+ボタン能力「自爆」：
+　・「ラクガキ」の使用回数が0になり、「自爆」の爆発範囲内に
+　別のプレイヤーが存在する時に使用可能になる
+　・使用すると周りのプレイヤーと自分をキルする</value>
+  </data>
+  <data name="scribble" xml:space="preserve">
+    <value>ラクガキ</value>
+  </data>
+  <data name="selfBomb" xml:space="preserve">
+    <value>自爆</value>
+  </data>
+  <data name="WispShortDescription" xml:space="preserve">
+    <value>「灯火」で「灯火停電」を起こし勝利しよう</value>
+  </data>
+  <data name="WispFullDescription" xml:space="preserve">
+    <value>ウィスプとセットになった第三陣営役職
+勝利条件：「灯火停電」の影響を受けた人が{0}人以上
+この勝利条件を満たした時、相乗りで勝利する
+現在、停電の影響を受けた人数：{1}人
+ボタン能力「灯火」：
+　・発動するとマップのスポーン位置に「灯火」が設置される
+　・スポーン位置が複数ある場合はランダムに選ばれる
+　・「灯火」は一定時間後削除され、「灯火停電」が発生する
+　・「灯火」の一定範囲に近づいて使用ボタンを押すことで「灯火
+　停電」の影響を受けなくなる
+能力：「灯火停電」
+　・影響を受けない生存者プレイヤー以外に発生する
+　・発生すると視界がクルーの停電時の広さと同じになる</value>
+  </data>
+  <data name="WispSetTorchButton" xml:space="preserve">
+    <value>灯火</value>
+  </data>
+  <data name="WispSetTorch" xml:space="preserve">
+    <value>ウィスプが明かりにイタズラを加えました</value>
+  </data>
+  <data name="scribeText" xml:space="preserve">
+    <value>あと{0}回で自爆可</value>
+  </data>
+  <data name="Buddy" xml:space="preserve">
+    <value>バディーズ</value>
+  </data>
+  <data name="BuddyAwakeTaskGage" xml:space="preserve">
+    <value>「バディーズ」に覚醒するタスク進捗率</value>
+  </data>
+  <data name="BuddyIntroDescription" xml:space="preserve">
+    <value>最高の相棒となれ\n{0}と相棒になった</value>
+  </data>
+  <data name="BuddyShortDescription" xml:space="preserve">
+    <value>複数人1組で有ることを有利に活かせ</value>
+  </data>
+  <data name="BuddyFullDescription" xml:space="preserve">
+    <value>複数人1組のクルー役職
+同じ組のバディーズ：{0}
+「バディーズ」の役職が変化し失われた場合、別の
+「バディーズ」からそれを認知することはできない</value>
+  </data>
+  <data name="Guesser" xml:space="preserve">
+    <value>ゲッサー</value>
+  </data>
+  <data name="NiceGuesser" xml:space="preserve">
+    <value>ナイスゲッサー</value>
+  </data>
+  <data name="EvilGuesser" xml:space="preserve">
+    <value>イビルゲッサー</value>
+  </data>
+  <data name="GuesserCanCallMeeting" xml:space="preserve">
+    <value>会議を起こすことが出来るが</value>
+  </data>
+  <data name="GuesserGuessNum" xml:space="preserve">
+    <value>「推殺」が出来る回数</value>
+  </data>
+  <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
+    <value>1会議で「推殺」出来る回数</value>
+  </data>
+  <data name="GuesserCanGuessNoneRole" xml:space="preserve">
+    <value>役職なしを「推殺」出来るか</value>
+  </data>
+  <data name="GuesserGuessNoneRoleMode" xml:space="preserve">
+    <value>役職なしの「推殺」</value>
+  </data>
+  <data name="BothGuesser" xml:space="preserve">
+    <value>ナイスとイビルゲッサー両方可</value>
+  </data>
+  <data name="NiceGuesserOnly" xml:space="preserve">
+    <value>ナイスゲッサーのみ</value>
+  </data>
+  <data name="EvilGuesserOnly" xml:space="preserve">
+    <value>イビルゲッサーのみ</value>
+  </data>
+  <data name="GuesserIntroDescription" xml:space="preserve">
+    <value>役職を"推殺"せよ</value>
+  </data>
+  <data name="GuesserShortDescription" xml:space="preserve">
+    <value>他の船員の役職を推理して、"推殺"せよ</value>
+  </data>
+  <data name="GuesserFullDescription" xml:space="preserve">
+    <value>会議中に役職を当てることでキルすることが可能な役職
+能力「推殺」：
+　・会議中に一人を指定して役職を当てることができればキルすること
+　が出来る
+　・以下の条件に当てはまる場合、「推殺」は失敗する
+　　・マーリン、アサシン、ヴィランの人を推殺した場合
+　　・ボディーガードに守られている人を推殺した場合
+　　・覚醒役職の人を非覚醒の役職で推殺した場合
+　・当てることができなければ失敗となり役職本人が死亡する</value>
+  </data>
+  <data name="guesserUiTitle" xml:space="preserve">
+    <value>「{0}」の役職は何だ？</value>
+  </data>
+  <data name="guesserUiInfo" xml:space="preserve">
+    <value>残り弾数：{0}発\nこの会議で{1}回推殺可能</value>
+  </data>
+  <data name="guesserConfirmMenu" xml:space="preserve">
+    <value>「{0}」を{1}で推殺します\nよろしいですか？</value>
+  </data>
+  <data name="Mover" xml:space="preserve">
+    <value>ムーバー</value>
+  </data>
+  <data name="NiceMover" xml:space="preserve">
+    <value>ナイスムーバー</value>
+  </data>
+  <data name="EvilMover" xml:space="preserve">
+    <value>イビルムーバー</value>
+  </data>
+  <data name="MoverAbilityCoolTime" xml:space="preserve">
+    <value>「ムーブ」のクールタイム</value>
+  </data>
+  <data name="MoverAbilityActiveTime" xml:space="preserve">
+    <value>「ムーブ」で物が動かせる時間</value>
+  </data>
+  <data name="MoverAbilityCount" xml:space="preserve">
+    <value>「ムーブ」が使用できる回数</value>
+  </data>
+  <data name="MoverIntroDescription" xml:space="preserve">
+    <value>だいたいの物が動かせる引越屋さん</value>
+  </data>
+  <data name="MoverShortDescription" xml:space="preserve">
+    <value>「ムーブ」でタスクやベント等を動かして有利に動け</value>
+  </data>
+  <data name="MoverFullDescription" xml:space="preserve">
+    <value>能力によりマップのオブジェクトを動かせる役職
+ボタン能力「ムーブ」：
+　・移動が可能なマップオブジェクトが近くにある時に使用可能
+　であり、使用することでそのマップオブジェクトを動かすことが
+　出来る
+　・ムーブ中の物には触れたり使用することは出来ない
+　・ムーブ中は使用ボタン等が使用できない
+　・ベント等を使用するとムーブ中の物を落とす</value>
+  </data>
+  <data name="Moving" xml:space="preserve">
+    <value>ムーブ</value>
+  </data>
+  <data name="Accelerator" xml:space="preserve">
+    <value>アクセラレーター</value>
+  </data>
+  <data name="NiceAccelerator" xml:space="preserve">
+    <value>ナイスアクセラレーター</value>
+  </data>
+  <data name="EvilAccelerator" xml:space="preserve">
+    <value>イビルアクセラレーター</value>
+  </data>
+  <data name="AcceleratorAbilityCoolTime" xml:space="preserve">
+    <value>「加速パネル設置」のクールタイム</value>
+  </data>
+  <data name="AcceleratorAbilityActiveTime" xml:space="preserve">
+    <value>「加速パネル」が設置できる時間</value>
+  </data>
+  <data name="AcceleratorAbilityCount" xml:space="preserve">
+    <value>「加速パネル」の設置個数</value>
+  </data>
+  <data name="AcceleratorSpeed" xml:space="preserve">
+    <value>「加速パネル」の加速度</value>
+  </data>
+  <data name="AcceleratorUseOtherPlayer" xml:space="preserve">
+    <value>「加速パネル」が他の人も使えるか</value>
+  </data>
+  <data name="AcceleratorIntroDescription" xml:space="preserve">
+    <value>ここから先は、一方通行だ!!</value>
+  </data>
+  <data name="AcceleratorShortDescription" xml:space="preserve">
+    <value>「加速パネル」を設置して敵から逃げ切れ</value>
+  </data>
+  <data name="AcceleratorFullDescription" xml:space="preserve">
+    <value>能力で「加速パネル」を設置できる役職
+ボタン能力「加速パネル設置」：
+　・発動することで「加速パネル」を設置を開始し、再度押すか一定時間　　
+　経過すると設置が終了する
+マップ設置オブジェクト「加速パネル」
+　・「加速パネル」上のプレイヤーは特定方向への移動が加速し、その逆
+　方向への移動が減速する</value>
+  </data>
+  <data name="AccelerateSet" xml:space="preserve">
+    <value>加速パネル設置</value>
+  </data>
+  <data name="Skater" xml:space="preserve">
+    <value>スケーター</value>
+  </data>
+  <data name="NiceSkater" xml:space="preserve">
+    <value>ナイススケーター</value>
+  </data>
+  <data name="EvilSkater" xml:space="preserve">
+    <value>イビルスケーター</value>
+  </data>
+  <data name="SkaterAbilityCoolTime" xml:space="preserve">
+    <value>「スケート」のクールタイム</value>
+  </data>
+  <data name="SkaterAbilityActiveTime" xml:space="preserve">
+    <value>「スケート」が解除できるまでの時間</value>
+  </data>
+  <data name="SkaterAbilityCount" xml:space="preserve">
+    <value>「スケート」の使用回数</value>
+  </data>
+  <data name="SkaterAcceleration" xml:space="preserve">
+    <value>「スケート」中の加速度</value>
+  </data>
+  <data name="SkaterMaxSpeed" xml:space="preserve">
+    <value>「スケート」中の最大速度</value>
+  </data>
+  <data name="SkaterFriction" xml:space="preserve">
+    <value>「スケート」中の摩擦係数</value>
+  </data>
+  <data name="SkaterUseE" xml:space="preserve">
+    <value>「スケート」中の壁衝突によるバウンド</value>
+  </data>
+  <data name="SkaterEValue" xml:space="preserve">
+    <value>「スケート」中の衝突係数</value>
+  </data>
+  <data name="SkaterCanUseSpeed" xml:space="preserve">
+    <value>「スケート」中、使用ボタン等が使用できる最大速度</value>
+  </data>
+  <data name="SkaterIntroDescription" xml:space="preserve">
+    <value>船の中は私のスケートリンク</value>
+  </data>
+  <data name="SkaterShortDescription" xml:space="preserve">
+    <value>「スケート」を使い、ライバルに差をつけろ</value>
+  </data>
+  <data name="SkaterFullDescription" xml:space="preserve">
+    <value>能力の「スケート」で加速できる役職
+ボタン能力「スケート」：
+　・発動し、移動すると氷の上を滑っているような挙動になり、徐々に
+　加速していく(最大速度まで加速できます)
+　・加速している状態だと、すぐには止まったり曲がったりすることが
+　できない(壁に当たっても同様)
+　・一定速度以上が出ていると使用ボタン等が使用できなくなる</value>
+  </data>
+  <data name="SkaterSkateOn" xml:space="preserve">
+    <value>スケート</value>
+  </data>
+  <data name="SkaterSkateOff" xml:space="preserve">
+    <value>スケート解除</value>
+  </data>
+</root>

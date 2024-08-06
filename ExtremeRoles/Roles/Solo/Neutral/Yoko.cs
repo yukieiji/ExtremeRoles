@@ -253,11 +253,11 @@ public sealed class Yoko :
             isEnemy = !isEnemy;
         }
 
-        string text = Helper.Translation.GetString("notFindEnemy");
+        string text = Tr.GetString("notFindEnemy");
 
         if (isEnemy)
         {
-            text = Helper.Translation.GetString("findEnemy");
+            text = Tr.GetString("findEnemy");
         }
 
         rolePlayer.StartCoroutine(showText(text));

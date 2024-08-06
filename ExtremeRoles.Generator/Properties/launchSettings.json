@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ExtremeRoles": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\ExtremeRoles\\ExtremeRoles.csproj"
+    }
+  }
+}

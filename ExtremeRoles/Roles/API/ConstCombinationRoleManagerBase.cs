@@ -34,7 +34,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     }
 
     public sealed override string GetOptionName()
-        => Translation.GetString(this.optionKey);
+        => Tr.GetString(this.optionKey);
 
     public override void AssignSetUpInit(int curImpNum)
     {

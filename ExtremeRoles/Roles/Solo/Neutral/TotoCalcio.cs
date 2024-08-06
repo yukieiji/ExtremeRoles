@@ -163,7 +163,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         string.Format(
             base.GetFullDescription(),
             this.betPlayer != null ?
-                this.betPlayer.PlayerName : Helper.Translation.GetString("loseNow"));
+                this.betPlayer.PlayerName : Tr.GetString("loseNow"));
 
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)

@@ -1,0 +1,1092 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Alice" xml:space="preserve">
+    <value>アリス</value>
+  </data>
+  <data name="AliceCanUseSabotage" xml:space="preserve">
+    <value>サボタージュを使えるか</value>
+  </data>
+  <data name="AliceAbilityCoolTime" xml:space="preserve">
+    <value>「破壊工作」のクールタイム</value>
+  </data>
+  <data name="AliceAbilityCount" xml:space="preserve">
+    <value>「破壊工作」の回数</value>
+  </data>
+  <data name="AliceRevartCommonTaskNum" xml:space="preserve">
+    <value>「破壊工作」によって巻き戻るショートタスクの数</value>
+  </data>
+  <data name="AliceRevartLongTaskNum" xml:space="preserve">
+    <value>「破壊工作」によって巻き戻るロングタスクの数</value>
+  </data>
+  <data name="AliceRevartNormalTaskNum" xml:space="preserve">
+    <value>「破壊工作」によって巻き戻る通常タスクの数</value>
+  </data>
+  <data name="AliceIntroDescription" xml:space="preserve">
+    <value>全てをメチャクチャにする、わがままの権化</value>
+  </data>
+  <data name="AliceShortDescription" xml:space="preserve">
+    <value>インポスターに殺されるか、全てを破壊せよ</value>
+  </data>
+  <data name="AliceFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件1：インポスターにキルされる
+勝利条件2：自分以外の生存者が一人でクルー役職かインポスター役職
+会議で追放された場合は敗北
+能力「破壊工作」は全てのプレイヤーの完了しているタスクが
+オプションで指定されたタスクに置き換わる
+強力な役職のためインポスター及びクルー両方狙われるため注意が必要</value>
+  </data>
+  <data name="shipBroken" xml:space="preserve">
+    <value>破壊工作</value>
+  </data>
+  <data name="Jackal" xml:space="preserve">
+    <value>ジャッカル</value>
+  </data>
+  <data name="Sidekick" xml:space="preserve">
+    <value>サイドキック</value>
+  </data>
+  <data name="JackalAbilityCoolTime" xml:space="preserve">
+    <value>サイドキック作成能力のクールタイム</value>
+  </data>
+  <data name="JackalAbilityCount" xml:space="preserve">
+    <value>サイドキック作成数</value>
+  </data>
+  <data name="JackalRangeSidekickTarget" xml:space="preserve">
+    <value>サイドキック作成能力の範囲</value>
+  </data>
+  <data name="JackalCanLoverSidekick" xml:space="preserve">
+    <value>ラバーズをサイドキックに出来るか</value>
+  </data>
+  <data name="JackalForceReplaceLover" xml:space="preserve">
+    <value>ラバーズを置き換えてサイドキックにするか</value>
+  </data>
+  <data name="JackalUpgradeSidekickNum" xml:space="preserve">
+    <value>ジャッカル死亡時、昇格するサイドキック数</value>
+  </data>
+  <data name="JackalSidekickJackalCanMakeSidekick" xml:space="preserve">
+    <value>昇格したジャッカルがサイドキックを作成できるか</value>
+  </data>
+  <data name="JackalSidekickLimitNum" xml:space="preserve">
+    <value>昇格したジャッカルがサイドキックを作成できる再帰上限数</value>
+  </data>
+  <data name="JackalCanSetImpostorToSidekick" xml:space="preserve">
+    <value>インポスターをサイドキックにできるか</value>
+  </data>
+  <data name="JackalCanSeeImpostorToSidekickImpostor" xml:space="preserve">
+    <value>サイドキックされたインポスターの表示をインポスターにするか</value>
+  </data>
+  <data name="SidekickUseSabotage" xml:space="preserve">
+    <value>サイドキックがサボタージュを使えるか</value>
+  </data>
+  <data name="SidekickUseVent" xml:space="preserve">
+    <value>サイドキックがベントを使えるか</value>
+  </data>
+  <data name="SidekickCanKill" xml:space="preserve">
+    <value>サイドキックがキルできるか</value>
+  </data>
+  <data name="SidekickHasOtherKillCool" xml:space="preserve">
+    <value>サイドキックが別のキルクールを持つか</value>
+  </data>
+  <data name="SidekickKillCoolDown" xml:space="preserve">
+    <value>サイドキックのキルクールタイム</value>
+  </data>
+  <data name="SidekickHasOtherKillRange" xml:space="preserve">
+    <value>サイドキックが別のキルレンジを持つか</value>
+  </data>
+  <data name="SidekickKillRange" xml:space="preserve">
+    <value>サイドキックのキルレンジ</value>
+  </data>
+  <data name="SidekickHasOtherVision" xml:space="preserve">
+    <value>サイドキックが別の視界設定を持つか</value>
+  </data>
+  <data name="SidekickVision" xml:space="preserve">
+    <value>サイドキックの視界</value>
+  </data>
+  <data name="SidekickApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>サイドキックが視界効果を受けるか</value>
+  </data>
+  <data name="JackalIntroDescription" xml:space="preserve">
+    <value>サイドキックを作り、この船を乗っ取れ</value>
+  </data>
+  <data name="JackalShortDescription" xml:space="preserve">
+    <value>サイドキックとともに、皆殺しだ</value>
+  </data>
+  <data name="JackalFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+「サイドキック」を使うことで任意の人を同じ陣営に
+引き込むことが可能
+「サイドキック」の対象になった人は「サイドキック」
+という役職になる</value>
+  </data>
+  <data name="curSidekick" xml:space="preserve">
+    <value>現在のサイドキック</value>
+  </data>
+  <data name="SidekickShortDescription" xml:space="preserve">
+    <value>ジャッカルのアシストを行え</value>
+  </data>
+  <data name="SidekickFullDescription" xml:space="preserve">
+    <value>ジャッカルのアシストを行う第三陣営役職
+勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+現在のジャッカル:{0}</value>
+  </data>
+  <data name="TaskMaster" xml:space="preserve">
+    <value>タスクマスター</value>
+  </data>
+  <data name="TaskMasterCanUseSabotage" xml:space="preserve">
+    <value>サボタージュを使えるか</value>
+  </data>
+  <data name="TaskMasterAddCommonTaskNum" xml:space="preserve">
+    <value>追加のショートタスク数</value>
+  </data>
+  <data name="TaskMasterAddLongTaskNum" xml:space="preserve">
+    <value>追加のロングタスク数</value>
+  </data>
+  <data name="TaskMasterAddNormalTaskNum" xml:space="preserve">
+    <value>追加の通常タスク数</value>
+  </data>
+  <data name="TaskMasterIntroDescription" xml:space="preserve">
+    <value>タスクを完了させて、船から脱出せよ</value>
+  </data>
+  <data name="TaskMasterShortDescription" xml:space="preserve">
+    <value>生き残って、タスクを完了させろ</value>
+  </data>
+  <data name="TaskMasterFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：生存している状態で、すべてのタスクを
+完了させること
+オプションの追加タスクはタスクを完了すると追加される。
+死亡した場合は勝利条件は達成されない</value>
+  </data>
+  <data name="Missionary" xml:space="preserve">
+    <value>ミッショナリー</value>
+  </data>
+  <data name="MissionaryTellDeparture" xml:space="preserve">
+    <value>宣教後の自決が分かるかどうか</value>
+  </data>
+  <data name="MissionaryDepartureMinTime" xml:space="preserve">
+    <value>宣教後自決する時間の最小時間</value>
+  </data>
+  <data name="MissionaryDepartureMaxTime" xml:space="preserve">
+    <value>宣教後自決する時間の最大時間</value>
+  </data>
+  <data name="MissionaryPropagateRange" xml:space="preserve">
+    <value>「宣教」できる範囲</value>
+  </data>
+  <data name="MissionaryAbilityCoolTime" xml:space="preserve">
+    <value>「宣教」のクールタイム</value>
+  </data>
+  <data name="MissionaryIsUseSolemnJudgment" xml:space="preserve">
+    <value>能力「神の宣告」を有効化するか</value>
+  </data>
+  <data name="MissionaryMaxJudgementNum" xml:space="preserve">
+    <value>能力「神の宣告」が出来るプレイヤー数の上限</value>
+  </data>
+  <data name="MissionaryIntroDescription" xml:space="preserve">
+    <value>船員たちに神(死)の世界の素晴らしさを教えまわろう</value>
+  </data>
+  <data name="MissionaryShortDescription" xml:space="preserve">
+    <value>宣教活動を行おう</value>
+  </data>
+  <data name="MissionaryFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+ボタン能力「宣教」：
+　「「宣教」できる範囲」内にプレイヤーが居る時に発動できる
+　発動後一定時間後にそのプレイヤーが自決する（そのプレイ
+　ヤーが「神の宣告」の対象出会った場合は即座に自決する)
+　自決までの時間は「宣教後自決する時間の最小時間」と「宣教
+　後自決する時間の最大時間」の間でランダムに決定される
+　「宣教」後の自決は会議中でも発生する
+能力「神の宣告」：
+　オプション「能力「神の宣告」を有効化するか」が有効時に
+　使うことが出来る
+　会議中に投票したプレイヤーを対象にすることができ、その
+　対象のプレイヤーを「宣教」すると即座に自決するようになる
+　対象にできるプレイヤーは、最新から数えて”オプション「能力
+　対象に取れるプレイヤー数は”能力「神の宣告」が出来るプレイ
+　ヤー数の上限”までであり、それ以上のプレイヤーを対象にする
+　ことは出来ない
+　次の会議開始前に対象としたプレイヤーが死亡もしくは自身で
+　宣教した場合、対象から外れる</value>
+  </data>
+  <data name="propagate" xml:space="preserve">
+    <value>宣教</value>
+  </data>
+  <data name="departureText" xml:space="preserve">
+    <value>哀れな子羊がまた、神の世界に旅立ちました</value>
+  </data>
+  <data name="Jester" xml:space="preserve">
+    <value>ジェスター</value>
+  </data>
+  <data name="JesterUseSabotage" xml:space="preserve">
+    <value>サボタージュを使えるか</value>
+  </data>
+  <data name="JesterOutburstDistance" xml:space="preserve">
+    <value>「暴発」を発動できる距離</value>
+  </data>
+  <data name="JesterAbilityCoolTime" xml:space="preserve">
+    <value>「暴発」のクールタイム</value>
+  </data>
+  <data name="JesterAbilityActiveTime" xml:space="preserve">
+    <value>「暴発」後キルが発生するまでの時間</value>
+  </data>
+  <data name="JesterAbilityCount" xml:space="preserve">
+    <value>「暴発」の使用上限</value>
+  </data>
+  <data name="JesterIntroDescription" xml:space="preserve">
+    <value>会議はいつも自分の話題で持ち切りだ！！</value>
+  </data>
+  <data name="JesterShortDescription" xml:space="preserve">
+    <value>会議の人気者になって吊られろ</value>
+  </data>
+  <data name="JesterFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：会議で吊られること
+処理速度やラグの関係上、ジェスターの勝利画面でジェスターの
+状態が「生存」になることがあります。
+能力「暴発」は対象のキル能力を暴発させる
+プレイヤーがキル能力を持たないプレイヤーが「暴発」の対象
+でも「暴発」は発動できる
+「暴発」の対象になったプレイヤーは一定時間後、キルが
+強制発動する、ただし、以下の条件のどれかに当たる場合キル
+が不発する
+　①：対象となったプレイヤーがキル能力を持たない
+　②：対象となったプレイヤーのキル範囲にプレイヤーが居ない
+　③：対象となったプレイヤーのキル対象が「暴発」を発動させ
+　たジェスターである</value>
+  </data>
+  <data name="outburst" xml:space="preserve">
+    <value>暴発</value>
+  </data>
+  <data name="Yandere" xml:space="preserve">
+    <value>ヤンデレ</value>
+  </data>
+  <data name="YandereTargetKilledKillCoolReduceRate" xml:space="preserve">
+    <value>「邪魔者」を殺した時のキルクール減少率</value>
+  </data>
+  <data name="YandereNoneTargetKilledKillCoolMultiplier" xml:space="preserve">
+    <value>「邪魔者」以外を殺したときのキルクールペナルティ</value>
+  </data>
+  <data name="YandereBlockTargetTime" xml:space="preserve">
+    <value>ゲーム開始から「邪魔者」が登録されない時間</value>
+  </data>
+  <data name="YandereSetTargetRange" xml:space="preserve">
+    <value>「邪魔者」が登録される「片思いの人」からの距離</value>
+  </data>
+  <data name="YandereSetTargetTime" xml:space="preserve">
+    <value>「邪魔者」が登録される時間</value>
+  </data>
+  <data name="YandereMaxTargetNum" xml:space="preserve">
+    <value>「邪魔者」の登録数上限</value>
+  </data>
+  <data name="YandereRunawayTime" xml:space="preserve">
+    <value>「邪魔者」が無くなってから「暴走」するまでの時間</value>
+  </data>
+  <data name="YandereHasOneSidedArrow" xml:space="preserve">
+    <value>「片思いの人」を指す矢印を表示するか</value>
+  </data>
+  <data name="YandereHasTargetArrow" xml:space="preserve">
+    <value>「邪魔者」を指す矢印を表示するか</value>
+  </data>
+  <data name="YandereIntroDescription" xml:space="preserve">
+    <value>「{0}」は私のもの</value>
+  </data>
+  <data name="YandereShortDescription" xml:space="preserve">
+    <value>「{0}」に近づく恋敵を皆殺しにしろ</value>
+  </data>
+  <data name="YandereFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件1：以下を満たす場合、この時「片思いの人」と同時勝利
+　①：「片思いの人」の人が生存して居る
+　②：「片思いの人」以外のインポスター及びキル能力を持つ
+　第三陣営が全滅している
+　③：生存者が同じ陣営もしくは片思いの人
+勝利条件2：自分以外の生存者が1人で無害な生存者(クルー等)
+ゲーム開始時に一人「片思いの人」が決定される。
+「片思いの人」の一定距離に一定時間以上近くに居た船員は
+「邪魔者」として登録される。
+「邪魔者」が登録されるとキル能力が付与され、「邪魔者」が
+全て排除さるとキル能力を失う
+「邪魔者」をキルした場合、キルクールタイムが大きく減少する
+「邪魔者」以外(片思いの人も含む)をキルした場合、キルクール
+が増加していく
+増減したキルクールは会議後、リセットされる
+「邪魔者」が一定時間追加されなかった場合、次の会議の後から
+次の次の会議開始まで「暴走」状態になる
+「暴走」状態は常にキル能力を得る
+「片思いの人」が死亡した場合、常時「暴走」状態になる</value>
+  </data>
+  <data name="YandereShipJustForTwo" xml:space="preserve">
+    <value>ヤンデレの恋が成熟、片思いの人と</value>
+  </data>
+  <data name="Yoko" xml:space="preserve">
+    <value>妖狐</value>
+  </data>
+  <data name="YokoCanRepairSabo" xml:space="preserve">
+    <value>サボタージュを修理できるか</value>
+  </data>
+  <data name="YokoCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="YokoSearchRange" xml:space="preserve">
+    <value>「気配察知」の範囲</value>
+  </data>
+  <data name="YokoSearchTime" xml:space="preserve">
+    <value>「気配察知」の発動間隔</value>
+  </data>
+  <data name="YokoTrueInfoRate" xml:space="preserve">
+    <value>「気配察知」が正しい情報を教える確率</value>
+  </data>
+  <data name="YokoUseYashiro" xml:space="preserve">
+    <value>「社」に関する能力の有効化</value>
+  </data>
+  <data name="YokoAbilityCoolTime" xml:space="preserve">
+    <value>「社の設置」のクールタイム</value>
+  </data>
+  <data name="YokoAbilityActiveTime" xml:space="preserve">
+    <value>「社の設置」にかかる時間</value>
+  </data>
+  <data name="YokoAbilityCount" xml:space="preserve">
+    <value>「社の設置」を行える回数</value>
+  </data>
+  <data name="YokoYashiroActiveTime" xml:space="preserve">
+    <value>「社」の”活性化”状態の持続時間</value>
+  </data>
+  <data name="YokoYashiroSeelTime" xml:space="preserve">
+    <value>「社」の”封印”状態の持続時間</value>
+  </data>
+  <data name="YokoYashiroProtectRange" xml:space="preserve">
+    <value>「社の保護」の範囲</value>
+  </data>
+  <data name="YokoYashiroUpdateWithMeeting" xml:space="preserve">
+    <value>「社」の状態が会議中にも変化するか</value>
+  </data>
+  <data name="YokoIntroDescription" xml:space="preserve">
+    <value>全てを欺いて、勝利すら欺け</value>
+  </data>
+  <data name="YokoShortDescription" xml:space="preserve">
+    <value>生きて、全ての勝利を奪い取れ</value>
+  </data>
+  <data name="YokoFullDescription" xml:space="preserve">
+    <value>ほぼすべての勝利を奪いとることが出来る第三陣営役職
+
+勝利条件：生きている状態で幾つかの他陣営の勝利条件を満たす
+(この役職が複数人アサインされている場合、同時に勝利する)
+・生きていても勝利を奪い取れない勝利条件は以下である
+　・クルーのタスク勝利
+　・インポスターのサボタージュ勝利
+　・アサシン導入時のマーリン暗殺勝利
+
+パッシブ能力「気配察知」：
+　・一定範囲内のプレイヤーに自分の「敵」となるようなプレ
+　イヤーが居る場合に通知する
+　・「敵」は以下を除くキル能力を持つ役職である
+　　・ヴィラン、ヴィジランテ、ミッショナリー、ラバーズ
+　・気配察知の「敵」かどうかの判定は一定の確率で失敗する
+　・フェンサーはどんな状態でも「敵」の判定になる
+
+※以下は、「「社」に関する能力の有効化」をオンにしたときのみ使用可能
+・ボタン能力「社の設置」：
+　・別の「社」から一定間隔を開けることで使用可能
+　・一定時間の後、その場所に「社」が設置される
+・マップ設置オブジェクト「社」：
+　・非活性状態、活性化状態、封印状態がある
+　　・非活性状態：画面を開いて活性化状態に移行させることが
+　　できる
+　　・活性化状態：「社の保護」が発動しており、一定時間後
+　　もしくは画面を開いて、封印状態に移行させることができる
+　　・封印状態：一定時間後に非活性状態に移行する、画面を
+　　開いても操作することができない
+・「社」パッシブ能力「社の保護」(活性化状態限定)：
+　・社の一定範囲内に居るこの役職のプレイヤーがキルボタンの
+　キルでキルされなくなります</value>
+  </data>
+  <data name="notFindEnemy" xml:space="preserve">
+    <value>特に何も感じられない</value>
+  </data>
+  <data name="findEnemy" xml:space="preserve">
+    <value>殺気がする・・・・</value>
+  </data>
+  <data name="yokoYashiro" xml:space="preserve">
+    <value>社の設置</value>
+  </data>
+  <data name="yokoYashiroStatusText" xml:space="preserve">
+    <value>現在の社の状態：{0}</value>
+  </data>
+  <data name="yokoYashiroNextStatusText" xml:space="preserve">
+    <value>「{1}」へ移行まで{2}秒</value>
+  </data>
+  <data name="yokoYashiroCloseText" xml:space="preserve">
+    <value>「{0}」へ移行！！</value>
+  </data>
+  <data name="YashiroDeactive" xml:space="preserve">
+    <value>非活性状態</value>
+  </data>
+  <data name="YashiroActive" xml:space="preserve">
+    <value>活性化状態</value>
+  </data>
+  <data name="YashiroSeal" xml:space="preserve">
+    <value>封印状態</value>
+  </data>
+  <data name="Totocalcio" xml:space="preserve">
+    <value>トトカルチョ</value>
+  </data>
+  <data name="TotocalcioRange" xml:space="preserve">
+    <value>「賭ける」が発動できる距離</value>
+  </data>
+  <data name="TotocalcioAbilityCoolTime" xml:space="preserve">
+    <value>「賭ける」の初期クールタイム</value>
+  </data>
+  <data name="TotocalcioAbilityCount" xml:space="preserve">
+    <value>「賭ける」の発動可能回数</value>
+  </data>
+  <data name="TotocalcioFinalCoolTime" xml:space="preserve">
+    <value>「賭ける」の最終クールタイム</value>
+  </data>
+  <data name="TotocalcioIntroDescription" xml:space="preserve">
+    <value>他人の勝利を賭けろ</value>
+  </data>
+  <data name="TotocalcioShortDescription" xml:space="preserve">
+    <value>賭けたプレイヤーを勝利に導け</value>
+  </data>
+  <data name="TotocalcioFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：「賭ける」対象のプレイヤーが勝利する(一部役職を
+除く※1)
+能力「賭ける」：
+　・プレイヤー一人を対象にして発動する
+　・対象のプレイヤーには目印がつく
+　・この能力のクールタイムは生存者が減れば減るほど長くなる
+※1：勝利に乗れない役職は以下
+　・妖狐
+　・ヴィジランテ</value>
+  </data>
+  <data name="betPlayer" xml:space="preserve">
+    <value>賭ける</value>
+  </data>
+  <data name="loseNow" xml:space="preserve">
+    <value>このままでは敗北</value>
+  </data>
+  <data name="Miner" xml:space="preserve">
+    <value>マイナー</value>
+  </data>
+  <data name="MinerLinkingAllVent" xml:space="preserve">
+    <value>ベントが新しくリンクされるか</value>
+  </data>
+  <data name="MinerAbilityCoolTime" xml:space="preserve">
+    <value>「地雷設置」のクールタイム</value>
+  </data>
+  <data name="MinerAbilityActiveTime" xml:space="preserve">
+    <value>「地雷設置」後「地雷」が有効になるまでの時間</value>
+  </data>
+  <data name="MinerMineKillRange" xml:space="preserve">
+    <value>「地雷」の検知範囲</value>
+  </data>
+  <data name="MinerNoneActiveTime" xml:space="preserve">
+    <value>ゲーム開始及び会議終了後「地雷」が有効になるまでの時間</value>
+  </data>
+  <data name="MinerCanShowMine" xml:space="preserve">
+    <value>「地雷」を見ることが出来るか</value>
+  </data>
+  <data name="MinerRolePlayerShowMode" xml:space="preserve">
+    <value>役職の人の「地雷」の見え方</value>
+  </data>
+  <data name="MinerAnotherPlayerShowMode" xml:space="preserve">
+    <value>役職以外の人の「地雷」の見え方</value>
+  </data>
+  <data name="MinerCanShowNoneActiveAnotherPlayer" xml:space="preserve">
+    <value>役職以外の人が非活性時でも見ることが出来るか</value>
+  </data>
+  <data name="MinerShowKillLog" xml:space="preserve">
+    <value>役職の人に「地雷」によるキルログを表示するか</value>
+  </data>
+  <data name="MinerIntroDescription" xml:space="preserve">
+    <value>船員たちを地雷で吹き飛ばせ</value>
+  </data>
+  <data name="MinerShortDescription" xml:space="preserve">
+    <value>船を地雷まみれにしよう</value>
+  </data>
+  <data name="MinerFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+能力「地雷設置」：
+　・発動した座標に地雷を設置する
+　・設置後、設定された一定時間経過後に「地雷」が有効になる
+　・「地雷」は一定範囲内のプレイヤー一人をキルする（役職の
+　人も検知され巻き込まれる）
+　・発動した地雷は撤去される
+　・ゲーム開始及び会議終了後、一定時間地雷は無効になる
+オプション「ベントが新しくリンクされるか」がオンのとき、1つ
+のベントからマップの全てのベントに移動することが出来る
+表示されるキルログはフレーバーテキストであり、意味はない</value>
+  </data>
+  <data name="MineSeeNone" xml:space="preserve">
+    <value>非表示</value>
+  </data>
+  <data name="MineSeeOnlySe" xml:space="preserve">
+    <value>音のみ</value>
+  </data>
+  <data name="MineSeeOnlyImg" xml:space="preserve">
+    <value>表示のみ</value>
+  </data>
+  <data name="MineSeeBoth" xml:space="preserve">
+    <value>音と表示両方</value>
+  </data>
+  <data name="setMine" xml:space="preserve">
+    <value>地雷設置</value>
+  </data>
+  <data name="Eater" xml:space="preserve">
+    <value>イーター</value>
+  </data>
+  <data name="EaterCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="EaterAbilityCoolTime" xml:space="preserve">
+    <value>「喰らう」と「丸呑み」のクールタイム</value>
+  </data>
+  <data name="EaterAbilityActiveTime" xml:space="preserve">
+    <value>「丸呑み」にかかる時間</value>
+  </data>
+  <data name="EaterAbilityCount" xml:space="preserve">
+    <value>イーターが勝利するまでの「喰らう」と「丸呑み」の回数</value>
+  </data>
+  <data name="EaterEatRange" xml:space="preserve">
+    <value>「喰らう」と「丸呑み」が発動できる距離</value>
+  </data>
+  <data name="EaterDeadBodyEatActiveCoolTimePenalty" xml:space="preserve">
+    <value>「喰らう」による「「丸呑み」にかかる時間」の増加率</value>
+  </data>
+  <data name="EaterKillEatCoolTimePenalty" xml:space="preserve">
+    <value>「丸呑み」によるクールタイムの増加率</value>
+  </data>
+  <data name="EaterKillEatActiveCoolTimeReduceRate" xml:space="preserve">
+    <value>能力が使用できなかった\n会議後の「「丸呑み」にかかる時間」の減少率</value>
+  </data>
+  <data name="EaterIsResetCoolTimeWhenMeeting" xml:space="preserve">
+    <value>クールタイムを会議開始時にリセットするか</value>
+  </data>
+  <data name="EaterIsShowArrowForDeadBody" xml:space="preserve">
+    <value>死体までの矢印を表示するか</value>
+  </data>
+  <data name="EaterIntroDescription" xml:space="preserve">
+    <value>全てを喰らい尽くせ</value>
+  </data>
+  <data name="EaterShortDescription" xml:space="preserve">
+    <value>死体だけではなくクルーも喰らいつくせ</value>
+  </data>
+  <data name="EaterFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：「喰らう」と「丸呑み」を合わせて指定回数使用する
+能力「喰らう」：
+　・死体が近くにいる場合発動可能、発動後消去する
+　・発動すると「「丸呑み」にかかる時間」が設定値分増加する
+能力「丸呑み」：
+　・クルーが近くにいる場合発動可能、発動後一定時間接触後
+　ガードを貫通してキルしその死体を消去します
+　・発動すると「「喰らう」と「丸呑み」のクールタイム」が
+　設定値分増加する
+上記の能力を発動できず会議が発生すると「「丸呑み」にかかる
+時間」が設定値分減少する</value>
+  </data>
+  <data name="eaterWinNum" xml:space="preserve">
+    <value>勝利まであと{0}回</value>
+  </data>
+  <data name="deadBodyEat" xml:space="preserve">
+    <value>喰らう</value>
+  </data>
+  <data name="eatKill" xml:space="preserve">
+    <value>丸呑み</value>
+  </data>
+  <data name="Queen" xml:space="preserve">
+    <value>クイーン</value>
+  </data>
+  <data name="Servant" xml:space="preserve">
+    <value>サーヴァント</value>
+  </data>
+  <data name="QueenCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="QueenAbilityCoolTime" xml:space="preserve">
+    <value>「魅惑」のクールタイム</value>
+  </data>
+  <data name="QueenAbilityCount" xml:space="preserve">
+    <value>「魅惑」の発動可能回数</value>
+  </data>
+  <data name="QueenRange" xml:space="preserve">
+    <value>「魅惑」の発動可能距離</value>
+  </data>
+  <data name="QueenServantKillKillCoolReduceRate" xml:space="preserve">
+    <value>サーヴァントのキルによるクイーンのキルクール減少率</value>
+  </data>
+  <data name="QueenServantTaskKillCoolReduceRate" xml:space="preserve">
+    <value>サーヴァントの1タスク完了による\nクイーンのキルクール減少率</value>
+  </data>
+  <data name="QueenServantTaskCompKillCoolReduceRate" xml:space="preserve">
+    <value>サーヴァントの全タスク完了による\nクイーンのキルクール永続減少率</value>
+  </data>
+  <data name="QueenServantSucideWithQueenWhenHasKill" xml:space="preserve">
+    <value>キル能力を持つサーヴァントがクイーンの死亡後に自決をするか</value>
+  </data>
+  <data name="QueenServantSelfKillCool" xml:space="preserve">
+    <value>サーヴァントの「自決」のクールタイム</value>
+  </data>
+  <data name="QueenIntroDescription" xml:space="preserve">
+    <value>自分だけの"国"を作れ</value>
+  </data>
+  <data name="QueenShortDescription" xml:space="preserve">
+    <value>「魅惑」で有利なサーヴァントを作り、勝利せよ</value>
+  </data>
+  <data name="QueenFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+「魅惑」を使うことで任意の人を同じ陣営に引き込むことが可能
+能力「魅惑」：
+　・対象がクルーもしくはインポスター陣営の場合：
+　　　・その役職の能力を引き継いで「サーヴァント」になる
+　　　・クルー陣営の場合は必ずタスクを持つようになる
+　　　・インポスター陣営の場合、キルとベント、サボタージュ
+　　　　が使えるようになる
+　・対象がニュートラルの場合：
+　　　・元の役職のキル、ベント、サボタージュ能力がだけ引き
+　　　継いで「サーヴァント」になる
+　　　・タスクを持つようになります
+「サーヴァント」の行動により自身のクールタイムが短くなる
+自身が死ぬと「サーヴァント」は死ぬ</value>
+  </data>
+  <data name="ServantShortDescription" xml:space="preserve">
+    <value>クイーンに忠実なしもべ(サーヴァント)となれ</value>
+  </data>
+  <data name="ServantFullDescription" xml:space="preserve">
+    <value>クイーンのアシストを行う第三陣営役職
+勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+現在のクイーン:{0}
+クイーンが死ぬとこの役職は自決する
+他人がキルした時、キルフラッシュが見える(クイーンのキルの
+場合は別の色に見える)
+能力「自決」
+　・自決出来る</value>
+  </data>
+  <data name="queenCharm" xml:space="preserve">
+    <value>魅惑</value>
+  </data>
+  <data name="selfKill" xml:space="preserve">
+    <value>自決</value>
+  </data>
+  <data name="Madmate" xml:space="preserve">
+    <value>マッドメイト</value>
+  </data>
+  <data name="MadmateCanFixSabotage" xml:space="preserve">
+    <value>サボタージュを修理できるか</value>
+  </data>
+  <data name="MadmateCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="MadmateCanMoveVentToVent" xml:space="preserve">
+    <value>ベント同士で移動できるか</value>
+  </data>
+  <data name="MadmateHasTask" xml:space="preserve">
+    <value>タスクに関するオプションを有効化するか</value>
+  </data>
+  <data name="MadmateSeeImpostorTaskGage" xml:space="preserve">
+    <value>マッドメイトがインポスターを認識できるタスク完了率</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostor" xml:space="preserve">
+    <value>インポスターがマッドメイトを認識できるか</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostorTaskGage" xml:space="preserve">
+    <value>インポスターがマッドメイトを認識できるタスク完了率</value>
+  </data>
+  <data name="MadmateAbilityCoolTime" xml:space="preserve">
+    <value>「自決」のクールタイム</value>
+  </data>
+  <data name="MadmateIsDontCountAliveCrew" xml:space="preserve">
+    <value>マッドメイトを生存者にカウントしないか</value>
+  </data>
+  <data name="MadmateIntroDescription" xml:space="preserve">
+    <value>インポスターこそ、我が主！！</value>
+  </data>
+  <data name="MadmateShortDescription" xml:space="preserve">
+    <value>インポスターの手助けをしよう</value>
+  </data>
+  <data name="MadmateFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：インポスターの勝利(特殊勝利も含む)
+能力「自決」：
+　・自決出来る
+「インポスターがマッドメイトを認識できるか」がオンのとき、
+一定のタスク量をこなすことでインポスターがこの役職を認識
+できる</value>
+  </data>
+  <data name="Umbrer" xml:space="preserve">
+    <value>アンブレイヤー</value>
+  </data>
+  <data name="UmbrerRange" xml:space="preserve">
+    <value>「ウイルス注入」と「ウイルス強化」が発動できる範囲</value>
+  </data>
+  <data name="UmbrerAbilityCoolTime" xml:space="preserve">
+    <value>「ウイルス注入」と「ウイルス強化」のクールタイム</value>
+  </data>
+  <data name="UmbrerAbilityActiveTime" xml:space="preserve">
+    <value>「ウイルス注入」にかかる時間</value>
+  </data>
+  <data name="UmbrerInfectRange" xml:space="preserve">
+    <value>「ウイルス強化」中の感染範囲</value>
+  </data>
+  <data name="UmbrerUpgradeVirusTime" xml:space="preserve">
+    <value>「ウイルス強化」にかかる時間</value>
+  </data>
+  <data name="UmbrerKeepUpgradedVirus" xml:space="preserve">
+    <value>「ウイルス強化」が持続する時間</value>
+  </data>
+  <data name="UmbrerIntroDescription" xml:space="preserve">
+    <value>楽しい楽しい、船員実験の時間だ</value>
+  </data>
+  <data name="UmbrerShortDescription" xml:space="preserve">
+    <value>すべてのプレイヤーに「ウイルス」を感染させろ</value>
+  </data>
+  <data name="UmbrerFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：すべてのプレイヤーを「感染状態」にする
+能力「ウイルス注入」：
+　・プレイヤーが近くにいる場合発動可能、発動後一定時間
+　接触後、そのプレイヤーを「感染状態」にする
+能力「ウイルス強化」：
+　・「感染状態」のプレイヤーが近くにいる場合発動可能、発動
+　後一定時間接触後、そのプレイヤーを「感染強化状態」にする
+　・「感染強化状態」は一定範囲内に入ったプレイヤー一人を　　
+　「感染状態」にする事ができ、その後「感染強化状態」から
+　「感染状態」に戻る
+　・「感染強化状態」一定時間経過後「感染状態」に戻る　</value>
+  </data>
+  <data name="featVirus" xml:space="preserve">
+    <value>ウイルス注入</value>
+  </data>
+  <data name="upgradeVirus" xml:space="preserve">
+    <value>ウイルス強化</value>
+  </data>
+  <data name="Hatter" xml:space="preserve">
+    <value>ハッター</value>
+  </data>
+  <data name="HatterCanRepairSabotage" xml:space="preserve">
+    <value>サボタージュを修理できるか</value>
+  </data>
+  <data name="HatterWinCount" xml:space="preserve">
+    <value>勝利出来る会議スキップ回数</value>
+  </data>
+  <data name="HatterAbilityCoolTime" xml:space="preserve">
+    <value>「時間殺し」のクールタイム</value>
+  </data>
+  <data name="HatterAbilityCount" xml:space="preserve">
+    <value>「時間殺し」の使用回数</value>
+  </data>
+  <data name="HatterHideMeetingTimer" xml:space="preserve">
+    <value>「時間殺し」で会議の時間タイマーを非表示にするか</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseLower" xml:space="preserve">
+    <value>「時間殺し」で減少する会議の時間の最小率</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseUpper" xml:space="preserve">
+    <value>「時間殺し」で減少する会議の時間の最大率</value>
+  </data>
+  <data name="HatterIncreaseTaskGage" xml:space="preserve">
+    <value>「時間殺し」が増加するタスク進捗率</value>
+  </data>
+  <data name="HatterIncreseNum" xml:space="preserve">
+    <value>増加する能力の使用回数</value>
+  </data>
+  <data name="HatterIntroDescription" xml:space="preserve">
+    <value>終わらないお茶会が始まる</value>
+  </data>
+  <data name="HatterShortDescription" xml:space="preserve">
+    <value>会議をスキップさせて、勝利しよう</value>
+  </data>
+  <data name="HatterFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件①：会議を特定回数スキップさせる
+勝利条件②：以下の生存者数の数が同じになる
+　・インポスター及びキル能力を持つ第三陣営
+　・この役職(ハッター)
+　・この役職を除く、無害な生存者(クルー等)
+ボタン能力「時間殺し」：
+　・発動することで会議時間が一定値減少する
+　・「「時間殺し」で減少する会議の時間の最小率」と「「時間殺
+　し」で減少する会議の時間の最大率」の間のランダムな割合で
+　減少する
+　・「「時間殺し」で会議の時間タイマーを非表示にするか」の値
+　によって会議時間の表示がなくなる
+　・タスクを「「時間殺し」が増加するタスク進捗率」以上進める
+　と「増加する能力の使用回数」分、使用回数が増加する</value>
+  </data>
+  <data name="timeKill" xml:space="preserve">
+    <value>時間殺し</value>
+  </data>
+  <data name="Artist" xml:space="preserve">
+    <value>アーティスト</value>
+  </data>
+  <data name="ArtistCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="ArtistWinAreaSize" xml:space="preserve">
+    <value>勝利できる塗り面積</value>
+  </data>
+  <data name="ArtistAbilityCoolTime" xml:space="preserve">
+    <value>「塗り」のクールタイム</value>
+  </data>
+  <data name="ArtistAbilityActiveTime" xml:space="preserve">
+    <value>「塗り」が解除できるようになるまでの時間</value>
+  </data>
+  <data name="ArtistIntroDescription" xml:space="preserve">
+    <value>芸術は世界で最も美しい！！</value>
+  </data>
+  <data name="ArtistShortDescription" xml:space="preserve">
+    <value>自分の芸術をみんなに見せつけよう</value>
+  </data>
+  <data name="ArtistFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：「塗り」で一定範囲以上を塗ること
+
+ボタン能力「塗り」
+　・ボタンを押すことで発動、発動中は自分の軌跡に線が塗られる
+　・塗られる色はランダムである</value>
+  </data>
+  <data name="ArtistArtOn" xml:space="preserve">
+    <value>塗り</value>
+  </data>
+  <data name="ArtistArtOff" xml:space="preserve">
+    <value>塗り解除</value>
+  </data>
+  <data name="Tucker" xml:space="preserve">
+    <value>タッカー</value>
+  </data>
+  <data name="Chimera" xml:space="preserve">
+    <value>キメラ</value>
+  </data>
+  <data name="TuckerAbilityCoolTime" xml:space="preserve">
+    <value>「キメラ錬成」と「影消し」の
+クールタイム</value>
+  </data>
+  <data name="TuckerAbilityCount" xml:space="preserve">
+    <value>「キメラ錬成」の使用回数</value>
+  </data>
+  <data name="TuckerRange" xml:space="preserve">
+    <value>「キメラ錬成」と「影消し」が
+発動できる範囲</value>
+  </data>
+  <data name="TuckerShadowTimer" xml:space="preserve">
+    <value>「影」が設置される秒数</value>
+  </data>
+  <data name="TuckerShadowOffset" xml:space="preserve">
+    <value>「影」の設置位置のズレ幅</value>
+  </data>
+  <data name="TuckerRemoveShadowTime" xml:space="preserve">
+    <value>「影消し」にかかる時間</value>
+  </data>
+  <data name="TuckerIsKillCoolReduceOnRemove" xml:space="preserve">
+    <value>「影消し」によってキメラの
+キルクールが減少するか</value>
+  </data>
+  <data name="TuckerKillCoolReduceOnRemoveShadow" xml:space="preserve">
+    <value>キルクールの減少量</value>
+  </data>
+  <data name="TuckerIsReduceInitKillCoolOnRemove" xml:space="preserve">
+    <value>初期設定キルクールタイム
+より減少するか</value>
+  </data>
+  <data name="TuckerHasOtherKillCool" xml:space="preserve">
+    <value>キメラが別のキルクール設定を持つか</value>
+  </data>
+  <data name="TuckerKillCoolDown" xml:space="preserve">
+    <value>キメラのキルクール</value>
+  </data>
+  <data name="TuckerHasOtherKillRange" xml:space="preserve">
+    <value>キメラが別のキルレンジ設定を持つか</value>
+  </data>
+  <data name="TuckerKillRange" xml:space="preserve">
+    <value>キメラのキルレンジ</value>
+  </data>
+  <data name="TuckerChimeraHasOtherVision" xml:space="preserve">
+    <value>キメラが別の視界設定を持つか</value>
+  </data>
+  <data name="TuckerChimeraVision" xml:space="preserve">
+    <value>キメラの視界</value>
+  </data>
+  <data name="TuckerChimeraApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>キメラが視界効果を受けるか</value>
+  </data>
+  <data name="TuckerChimeraCanUseVent" xml:space="preserve">
+    <value>キメラがベントを使えるか</value>
+  </data>
+  <data name="TuckerChimeraReviveTime" xml:space="preserve">
+    <value>キメラの復活にかかる時間</value>
+  </data>
+  <data name="TuckerChimeraDeathKillCoolOffset" xml:space="preserve">
+    <value>キメラが復活する毎の
+キルクール増減量</value>
+  </data>
+  <data name="TuckerTuckerDeathKillCoolOffset" xml:space="preserve">
+    <value>タッカー死亡時のキメラの
+キルクール増減量</value>
+  </data>
+  <data name="TuckerIntroDescription" xml:space="preserve">
+    <value>勘の良い船員はキメラにしてあげよう</value>
+  </data>
+  <data name="TuckerShortDescription" xml:space="preserve">
+    <value>キメラを作り、自分の「影」は消して勝利しよう</value>
+  </data>
+  <data name="TuckerFullDescription" xml:space="preserve">
+    <value>ほぼ不死身のキメラを作り出すことができる第三陣営役職
+
+・勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+
+ボタン能力はマウスのホイールスクロールで切替可能です
+
+・ボタン能力：「キメラ作成」
+　　・範囲内にいるプレイヤーを対象として発動できる
+　　・発動後プレイヤーを「キメラ」にします
+　　・「キメラ」はこの役職が生きている限り、死なず復活し
+　　続けます
+　　・「キメラ」復活時通知されます
+・ボタン能力：「影消し」
+　　・範囲内にあるマップ設置オブジェクト「影」に対して発動
+　　できる
+　　・発動後一定時間経過後「影」を削除する
+　　・オプション「「影消し」によってキメラのキルクールが
+　　減少するか」がオンの時、削除後「キメラ」のキルクール
+　　タイムを一定値永続で減少させる
+・マップ設置オブジェクト「影」
+　　・会議終了後に設置される
+　　・設置箇所は以下の時のこの役職のプレイヤーの位置を
+　　基準とした場所である
+　　　　・一定時間ごと(「キメラ錬成」を行うまで無効)
+　　　　・キメラ復活時
+　　・設置位置及び設置状況は全プレイヤー共有である</value>
+  </data>
+  <data name="ChimeraShortDescription" xml:space="preserve">
+    <value>不死身の力で勝利しよう</value>
+  </data>
+  <data name="ChimeraFullDescription" xml:space="preserve">
+    <value>何度でも蘇る第三陣営役職
+
+・勝利条件：インポスター及びキル能力を持つ第三陣営が
+全滅しており、生存者の半数以上が同じ陣営。
+
+・現在のタッカー:{0}
+
+・この役職を作り出したタッカーが生存している限り何度でも蘇る
+ことが可能です
+・一度復活する事に一定値、永続でキルクールの値が変更
+されます
+　・復活時、タッカーに通知されます</value>
+  </data>
+  <data name="removeShadow" xml:space="preserve">
+    <value>影消し</value>
+  </data>
+  <data name="createChimera" xml:space="preserve">
+    <value>キメラ錬成</value>
+  </data>
+</root>

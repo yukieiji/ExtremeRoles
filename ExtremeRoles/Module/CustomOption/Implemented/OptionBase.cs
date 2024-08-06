@@ -46,7 +46,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 		}
 	}
 
-	public string Title => Translation.GetString(Info.Name);
+	public string Title => Tr.GetString(Info.Name);
 
 	public string ValueString
 	{
@@ -59,11 +59,11 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 			}
 			if (typeof(SelectionType) == typeof(string))
 			{
-				value = Translation.GetString(value);
+				value = Tr.GetString(value);
 			}
 			string format = this.Info.Format;
 			return string.IsNullOrEmpty(format) ?
-				value : string.Format(Translation.GetString(format), value);
+				value : Tr.GetString(format, value);
 		}
 	}
 

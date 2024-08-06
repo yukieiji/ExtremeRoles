@@ -81,7 +81,7 @@ public sealed class FinalSummary : MonoBehaviour
 			else
 			{
 				this.isHide = true;
-				this.showText.text = Translation.GetString("shiftShowSummary");
+				this.showText.text = Tr.GetString("shiftShowSummary");
 			}
 		}
 	}
@@ -108,7 +108,7 @@ public sealed class FinalSummary : MonoBehaviour
 		{
 			string taskInfo = summary.TotalTask > 0 ?
 				$"<color=#FAD934FF>{summary.CompletedTask}/{summary.TotalTask}</color>" : "";
-			string aliveDead = Translation.GetString(
+			string aliveDead = Tr.GetString(
 				summary.StatusInfo.ToString());
 
 			string roleName = summary.Role.GetColoredRoleName(true);
@@ -159,7 +159,7 @@ public sealed class FinalSummary : MonoBehaviour
 			GhostRoleBase ghostRole = summary.GhostRole;
 			string ghostRoleName = ghostRole != null ?
 				ghostRole.GetColoredRoleName() :
-				Translation.GetString("noGhostRole");
+				Tr.GetString("noGhostRole");
 
 			finalSummary[SummaryType.GhostRole].AppendLine(
 				$"{summary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{ghostRoleName}");
@@ -172,9 +172,8 @@ public sealed class FinalSummary : MonoBehaviour
 		{
 			++page;
 			builder.AppendLine();
-			builder.AppendLine(string.Format(
-				Translation.GetString("tabMoreSummary"), page, allSummary));
-			builder.AppendLine(Translation.GetString("shiftHideSummary"));
+			builder.AppendLine(Tr.GetString("tabMoreSummary", page, allSummary));
+			builder.AppendLine(Tr.GetString("shiftHideSummary"));
 			this.summaryText.Add(builder.ToString());
 		}
 		this.maxPage = page;
@@ -230,12 +229,12 @@ public sealed class FinalSummary : MonoBehaviour
 			switch (type)
 			{
 				case SummaryType.Role:
-					builder.AppendLine(Translation.GetString("summaryText"));
-					builder.AppendLine(Translation.GetString("roleSummaryInfo"));
+					builder.AppendLine(Tr.GetString("summaryText"));
+					builder.AppendLine(Tr.GetString("roleSummaryInfo"));
 					break;
 				case SummaryType.GhostRole:
-					builder.AppendLine(Translation.GetString("summaryText"));
-					builder.AppendLine(Translation.GetString("ghostRoleSummaryInfo"));
+					builder.AppendLine(Tr.GetString("summaryText"));
+					builder.AppendLine(Tr.GetString("ghostRoleSummaryInfo"));
 					break;
 				default:
 					break;

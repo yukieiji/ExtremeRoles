@@ -30,7 +30,7 @@ public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 			{
 				colorRoleName = role.GetColoredRoleName();
 
-				roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+				roleFullDesc = Tr.GetString($"{role.Id}FullDescription");
 				roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
 				AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));
@@ -43,7 +43,7 @@ public sealed class AllGhostRoleInfoModel : PanelPageModelBase
 			option = role.Loader.Get(RoleCommonOption.SpawnRate);
 			colorRoleName = role.GetColoredRoleName();
 
-			roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+			roleFullDesc = Tr.GetString($"{role.Id}FullDescription");
 			roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
 			AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));

@@ -5,8 +5,7 @@ using HarmonyLib;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Resources;
-
-using Trans = ExtremeRoles.Helper.Translation;
+using ExtremeRoles.Translation;
 
 #nullable enable
 
@@ -19,21 +18,13 @@ public static class SafeBootScheduler
 	{
 		harmony.UnpatchSelf();
 
-		try
-		{
-			Trans.Load();
-		}
-		catch (Exception ex)
-		{
-			ExtremeRolesPlugin.Logger.LogInfo($"Can't load transdata\nMessage:{ex.Message}");
-		}
 
 		Il2CppRegisterAttribute.RegistrationForTarget(
 			typeof(SimpleButton),
 			Type.EmptyTypes);
 
 		StatusTextShower.Instance.Add(
-			() => Trans.GetString("SafeBootMessage"));
+			() => Tr.GetString("SafeBootMessage"));
 
 		UnityObjectLoader.LoadCommonAsset();
 
@@ -59,5 +50,17 @@ public static class SafeBootScheduler
 				SymbolExtensions.GetMethodInfo(
 					() => SafeBootVersionShowerPatch.Postfix(shower)))
 			);
+
+		Il2CppSystem.Collections.Generic.Dictionary<string, string>? allStrings = null;
+		harmony.Patch(
+			AccessTools.Method(
+				typeof(LanguageUnit),
+				nameof(LanguageUnit.ParseTSV)),
+			postfix: new HarmonyMethod(
+				SymbolExtensions.GetMethodInfo(
+					() => SafeBootTranslationPatch.Postfix(ref allStrings)))
+			);
+		
+		TranslatorManager.Register<Translator>();
 	}
 }

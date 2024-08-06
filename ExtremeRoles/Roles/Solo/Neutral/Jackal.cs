@@ -279,7 +279,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
         if (SidekickPlayerId.Count != 0)
         {
-            baseDesc = $"{baseDesc}\n{Translation.GetString("curSidekick")}:";
+            baseDesc = $"{baseDesc}\n{Tr.GetString("curSidekick")}:";
 
             foreach (byte playerId in SidekickPlayerId)
             {

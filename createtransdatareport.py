@@ -86,4 +86,4 @@ def output_md_report(build_result, *check_xlsx_file):
 
 
 if __name__ == "__main__":
-  output_md_report(sys.argv[1], EXTREMERORLS_IN_FILE, EXTREMESKIN_IN_FILE)
+  output_md_report(sys.argv[1], EXTREMESKIN_IN_FILE)

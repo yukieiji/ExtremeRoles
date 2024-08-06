@@ -1,7 +1,12 @@
-﻿using TMPro;
+﻿using Il2CppSystem.Collections.Generic;
+
+using TMPro;
 using Twitch;
 
 using UnityEngine;
+using AmongUs.Data;
+using ExtremeRoles.Translation;
+
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
@@ -9,7 +14,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 
 using UnityObject = UnityEngine.Object;
-
 
 namespace ExtremeRoles.Compat.SafeBoot;
 
@@ -54,8 +58,7 @@ public static class SafeBootMainMenuManagerPatch
 		button.Scale = new Vector3(1.0f, 1.0f, 1.0f);
 		button.name = "ExtremeRolesUpdateButton";
 
-		button.Text.text = Translation.GetString(
-			Translation.GetString("UpdateButton"));
+		button.Text.text = Tr.GetString("UpdateButton");
 		button.Text.fontSize =
 			button.Text.fontSizeMax =
 			button.Text.fontSizeMin = 3.0f;
@@ -105,5 +108,14 @@ public static class SafeBootVersionShowerPatch
 	public static void Postfix(VersionShower __instance)
 	{
 		StatusTextShower.Instance.RebuildVersionShower(__instance);
+	}
+}
+
+public static class SafeBootTranslationPatch
+{
+	public static void Postfix(ref Dictionary<string, string> allStrings)
+	{
+		TranslatorManager.AddTranslationData(
+			DataManager.Settings.Language.CurrentLanguage, allStrings);
 	}
 }

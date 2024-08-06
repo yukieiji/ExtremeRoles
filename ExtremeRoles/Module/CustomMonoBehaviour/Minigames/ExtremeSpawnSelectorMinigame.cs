@@ -109,7 +109,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			string text =
 				Enum.TryParse<SystemTypes>(roomName, true, out var systemRoomName) ?
 				FastDestroyableSingleton<TranslationController>.Instance.GetString(systemRoomName) :
-				Translation.GetString(roomName);
+				Tr.GetString(roomName);
 
 			button.Text.text = text;
 			button.Rend.sprite = UnityObjectLoader.LoadFromResources<Sprite>(

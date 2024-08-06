@@ -2,6 +2,7 @@
 using HarmonyLib;
 
 using AmongUs.Data;
+using ExtremeRoles.Translation;
 
 namespace ExtremeRoles.Patches;
 
@@ -11,7 +12,8 @@ public static class LanguageUnitParseTSVPatch
     public static void Postfix(
         [HarmonyArgument(1)] ref Dictionary<string, string> allStrings)
     {
-		Beta.BetaContentManager.AddContentText(
-			DataManager.Settings.Language.CurrentLanguage, allStrings);
-    }
+		var lang = DataManager.Settings.Language.CurrentLanguage;
+		TranslatorManager.AddTranslationData(lang, allStrings);
+		Beta.BetaContentManager.AddContentText(lang, allStrings);
+	}
 }

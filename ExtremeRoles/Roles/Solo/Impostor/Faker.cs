@@ -56,8 +56,8 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		this.playerDummy = Resources.UnityObjectLoader.LoadSpriteFromResources(
 			ObjectPath.FakerDummyPlayer, 115f);
 
-		this.deadBodyDummyStr = Translation.GetString("dummyDeadBody");
-		this.playerDummyStr = Translation.GetString("dummyPlayer");
+		this.deadBodyDummyStr = Tr.GetString("dummyDeadBody");
+		this.playerDummyStr = Tr.GetString("dummyPlayer");
 
 		this.CreateNormalAbilityButton(
 			"dummyDeadBody",

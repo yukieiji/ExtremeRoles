@@ -20,7 +20,7 @@ namespace ExtremeRoles.Helper
         {
             return Regex.Replace(
                 value, "\\{[0-9]+\\}",
-                Translation.GetString("gameReplace"));
+                Tr.GetString("gameReplace"));
         }
 
 

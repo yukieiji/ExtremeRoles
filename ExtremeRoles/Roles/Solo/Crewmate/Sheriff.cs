@@ -92,7 +92,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     {
         string shotText = Design.ColoedString(
             Palette.ImpostorRed,
-            Translation.GetString("impostorShotCall"));
+            Tr.GetString("impostorShotCall"));
 
         if (this.canShootNeutral)
         {
@@ -100,10 +100,10 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
                 shotText,
                 Design.ColoedString(
                     this.NameColor,
-                    Translation.GetString("andFirst")),
+                    Tr.GetString("andFirst")),
                 Design.ColoedString(
                     ColorPalette.NeutralColor,
-                    Translation.GetString("neutralShotCall")));
+                    Tr.GetString("neutralShotCall")));
         }
 
         string baseString = string.Format("{0}: {1}{2}",
@@ -111,7 +111,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
             shotText,
             Design.ColoedString(
                 this.NameColor,
-                Translation.GetString(
+                Tr.GetString(
                     $"{this.Id}ShortDescription")));
 
         return baseString;
@@ -283,9 +283,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     }
     private void updateKillCountText()
     {
-        this.killCountText.text = string.Format(
-            Translation.GetString(
-                ICountBehavior.DefaultButtonCountText), this.shootNum);
+        this.killCountText.text = Tr.GetString(
+            ICountBehavior.DefaultButtonCountText,
+			this.shootNum);
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)

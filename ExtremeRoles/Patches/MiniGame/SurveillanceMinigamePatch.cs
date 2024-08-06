@@ -137,7 +137,7 @@ public static class SurveillanceMinigameUpdatePatch
         for (int i = 0; i < __instance.ViewPorts.Length; ++i)
         {
             __instance.ViewPorts[i].sharedMaterial = __instance.StaticMaterial;
-            __instance.SabText[i].text = Translation.GetString("youDonotUse");
+            __instance.SabText[i].text = Tr.GetString("youDonotUse");
             __instance.SabText[i].gameObject.SetActive(true);
         }
 

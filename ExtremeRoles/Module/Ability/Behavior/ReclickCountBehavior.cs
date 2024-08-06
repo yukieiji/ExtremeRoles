@@ -151,8 +151,8 @@ public sealed class ReclickCountBehavior :
 			return;
 		}
 
-		this.abilityCountText.text = string.Format(
-			Translation.GetString(this.buttonTextFormat),
+		this.abilityCountText.text = Tr.GetString(
+			this.buttonTextFormat,
 			this.AbilityCount);
 	}
 	public void Hide()

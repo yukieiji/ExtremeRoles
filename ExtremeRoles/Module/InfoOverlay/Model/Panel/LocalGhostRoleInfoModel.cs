@@ -16,13 +16,13 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 	{
 		if (!PlayerControl.LocalPlayer.Data.IsDead)
 		{
-			return ($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", string.Empty);
+			return ($"<size=200%>{Tr.GetString("yourAliveNow")}</size>\n", string.Empty);
 		}
 
 		var role = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 		if (role == null)
 		{
-			return ($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
+			return ($"<size=200%>{Tr.GetString("yourNoAssignGhostRole")}</size>\n", "");
 		}
 
 		string roleOptionString = "";
@@ -45,7 +45,7 @@ public sealed class LocalGhostRoleInfoModel : IInfoOverlayPanelModel
 
 		return (
 			$"<size=150%>・{colorRoleName}</size>\n{roleFullDesc}\n",
-			$"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n{roleOptionString}"
+			$"・{Tr.GetString(colorRoleName)}{Tr.GetString("roleOption")}\n{roleOptionString}"
 		);
 	}
 }

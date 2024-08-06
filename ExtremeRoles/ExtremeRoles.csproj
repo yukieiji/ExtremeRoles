@@ -15,6 +15,7 @@
     <!-- MSBuildの.NET8対応に伴って勝手にバージョンにハッシュ値入れられてBepInExのロード不具合が出たため、明示的に無効化しておく -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <NeutralLanguage>ja-JP</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,6 +45,10 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="Translation\resx\*.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
     <EmbeddedResource Include="Resources\**\*.asset" />
     <EmbeddedResource Include="Resources\**\*.png" />
@@ -57,12 +62,13 @@
     <Compile Include="..\ExtremeRoles.Beta\FeedBackSystem.cs" Link="Beta\FeedBackSystem.cs" />
     <Compile Include="..\ExtremeRoles.Beta\RaiseHandSystemToggle.cs" Link="Beta\RaiseHandSystemToggle.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\ExtremeRoles.Beta\Resources\JsonData\TextRevamp.json" LogicalName="ExtremeRoles.Beta.Resources.JsonData.TextRevamp.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExtremeRoles.Generator\ExtremeRoles.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

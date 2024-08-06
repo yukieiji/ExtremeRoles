@@ -196,7 +196,7 @@ public sealed class CurseMaker :
 
     public void CreateAbility()
     {
-        this.defaultButtonText = Translation.GetString("curse");
+        this.defaultButtonText = Tr.GetString("curse");
 
         this.CreateActivatingAbilityCountButton(
             "curse",
@@ -376,7 +376,7 @@ public sealed class CurseMaker :
         this.reduceTime = loader.GetValue<CurseMakerOption, float>(
             CurseMakerOption.ReduceSearchDeadBodyTime);
 
-        this.cursingText = Translation.GetString("cursing");
+        this.cursingText = Tr.GetString("cursing");
         this.deadBodyData = new Dictionary<byte, DeadBodyInfo>();
         this.deadBodyArrow = new Dictionary<byte, Arrow>();
 
