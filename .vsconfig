@@ -60,7 +60,8 @@
     "Microsoft.VisualStudio.Workload.ManagedGame",
     "Microsoft.VisualStudio.Component.NuGet.BuildTools",
     "Microsoft.VisualStudio.Workload.NativeGame",
-    "Microsoft.VisualStudio.Component.Git"
+    "Microsoft.VisualStudio.Component.Git",
+    "Microsoft.Component.CodeAnalysis.SDK"
   ],
   "extensions": [
     "https://marketplace.visualstudio.com/items?itemName=TomEnglert.ResXManager"
