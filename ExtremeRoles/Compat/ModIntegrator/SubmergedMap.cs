@@ -300,13 +300,13 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	{
 		switch (sysConsole)
 		{
-			case SystemConsoleType.Admin:
+			case SystemConsoleType.AdminModule:
 				return new HashSet<string>()
 				{
 					"Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable",
 					"Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable (1)",
 				};
-			case SystemConsoleType.Vital:
+			case SystemConsoleType.VitalsLabel:
 				return new HashSet<string>()
 				{
 					"Submerged(Clone)/panel_vitals(Clone)",
@@ -329,7 +329,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			case SystemConsoleType.SecurityCamera:
 				return systemConsoleArray.FirstOrDefault(
 					x => x.gameObject.name.Contains("SecurityConsole"));
-			case SystemConsoleType.Vital:
+			case SystemConsoleType.VitalsLabel:
 				return systemConsoleArray.FirstOrDefault(
 					x => x.gameObject.name.Contains("panel_vitals(Clone)"));
 			case SystemConsoleType.EmergencyButton:

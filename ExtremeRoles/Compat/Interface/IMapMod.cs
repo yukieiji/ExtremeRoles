@@ -5,9 +5,9 @@ namespace ExtremeRoles.Compat.Interface;
 
 public enum SystemConsoleType : byte
 {
-	Admin,
+	AdminModule,
 	SecurityCamera,
-	Vital,
+	VitalsLabel,
 	EmergencyButton
 }
 

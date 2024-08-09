@@ -732,9 +732,9 @@ public sealed class Hypnotist :
 		JObject? keyJson = json.Get<JObject>(key);
 		if (keyJson == null) { return result; }
 
-		addJsonValeToConsoleType(keyJson, result, adminKey, SystemConsoleType.Admin);
+		addJsonValeToConsoleType(keyJson, result, adminKey, SystemConsoleType.AdminModule);
 		addJsonValeToConsoleType(keyJson, result, securityKey, SystemConsoleType.SecurityCamera);
-		addJsonValeToConsoleType(keyJson, result, vitalKey, SystemConsoleType.Vital);
+		addJsonValeToConsoleType(keyJson, result, vitalKey, SystemConsoleType.VitalsLabel);
 
 		return result;
 	}
@@ -975,13 +975,13 @@ public sealed class Doll :
     {
         switch (consoleType)
         {
-            case SystemConsoleType.Admin:
+            case SystemConsoleType.AdminModule:
                 this.CanUseAdmin = true;
                 break;
             case SystemConsoleType.SecurityCamera:
                 this.CanUseSecurity = true;
                 break;
-            case SystemConsoleType.Vital:
+            case SystemConsoleType.VitalsLabel:
                 this.CanUseVital = true;
                 break;
             default:
@@ -1006,13 +1006,13 @@ public sealed class Doll :
         AbilityType addType;
         switch (consoleType)
         {
-            case SystemConsoleType.Admin:
+            case SystemConsoleType.AdminModule:
                 addType = AbilityType.Admin;
                 break;
             case SystemConsoleType.SecurityCamera:
                 addType = AbilityType.Security;
                 break;
-            case SystemConsoleType.Vital:
+            case SystemConsoleType.VitalsLabel:
                 addType = AbilityType.VitalsLabel;
                 break;
             default:

@@ -715,14 +715,8 @@
   <data name="impostorShotCall" xml:space="preserve">
     <value>殺人鬼</value>
   </data>
-  <data name="Impostor" xml:space="preserve">
-    <value>インポスター</value>
-  </data>
   <data name="Shapeshifter" xml:space="preserve">
     <value>シェイプシフター</value>
-  </data>
-  <data name="Crewmate" xml:space="preserve">
-    <value>クルー</value>
   </data>
   <data name="Engineer" xml:space="preserve">
     <value>エンジニア</value>
@@ -1060,7 +1054,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="cannotDo" xml:space="preserve">
     <value>不可</value>
   </data>
-  <data name="Admin" xml:space="preserve">
+  <data name="AdminModule" xml:space="preserve">
     <value>アドミン</value>
   </data>
   <data name="SecurityCamera" xml:space="preserve">

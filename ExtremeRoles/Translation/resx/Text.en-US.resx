@@ -643,14 +643,8 @@ For LOCAL Games:
   <data name="impostorShotCall" xml:space="preserve">
     <value>KILLERS</value>
   </data>
-  <data name="Impostor" xml:space="preserve">
-    <value>Impostor</value>
-  </data>
   <data name="Shapeshifter" xml:space="preserve">
     <value>Shapeshifter</value>
-  </data>
-  <data name="Crewmate" xml:space="preserve">
-    <value>Crewmate</value>
   </data>
   <data name="Engineer" xml:space="preserve">
     <value>Enginneer</value>
@@ -955,7 +949,7 @@ Do you want to continue Installing?</value>
   <data name="cannotDo" xml:space="preserve">
     <value> UNABLED</value>
   </data>
-  <data name="Admin" xml:space="preserve">
+  <data name="AdminModule" xml:space="preserve">
     <value>ADMIN</value>
   </data>
   <data name="SecurityCamera" xml:space="preserve">

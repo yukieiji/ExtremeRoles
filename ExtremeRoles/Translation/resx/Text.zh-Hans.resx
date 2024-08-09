@@ -595,14 +595,8 @@
   <data name="impostorShotCall" xml:space="preserve">
     <value>杀人魔</value>
   </data>
-  <data name="Impostor" xml:space="preserve">
-    <value>内鬼</value>
-  </data>
   <data name="Shapeshifter" xml:space="preserve">
     <value>变形者</value>
-  </data>
-  <data name="Crewmate" xml:space="preserve">
-    <value>船员</value>
   </data>
   <data name="Engineer" xml:space="preserve">
     <value>工程师可以使用内鬼管道</value>
@@ -879,7 +873,7 @@ Among Us官方服务器不适配Reactor插件，因此需要使用自定义服�
   <data name="cannotDo" xml:space="preserve">
     <value>禁止</value>
   </data>
-  <data name="Admin" xml:space="preserve">
+  <data name="AdminModule" xml:space="preserve">
     <value>管理地图</value>
   </data>
   <data name="SecurityCamera" xml:space="preserve">
