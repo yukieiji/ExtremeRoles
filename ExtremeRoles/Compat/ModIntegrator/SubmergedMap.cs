@@ -549,19 +549,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
 #pragma warning restore CS8604
-/*
-		// このコメントに沿って関数調整：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
-		NetworkedPlayerInfo? info = null;
-		bool tie = false;
-		Type exileControllerPatches = ClassType.First(
-			t => t.Name == "ExileControllerPatches");
-		MethodInfo exileControllerPatchesExileControllerBegin = AccessTools.Method(
-			exileControllerPatches, "ExileController_Begin");
-#pragma warning disable CS8604
-		MethodInfo exileControllerPatchesExileControllerBeginPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.ExileControllerPatchesPatch.ExileController_BeginPrefix(cont, info, tie));
-#pragma warning restore CS8604
-*/
 		bool upperSelected = false;
 		Type submarineSelectSpawnType = ClassType.First(
 			t => t.Name == "SubmarineSelectSpawn");
@@ -569,7 +556,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			submarineSelectSpawnType, "CoSelectLevel");
 		MethodInfo submarineSelectSpawnCoSelectLevelPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmarineSelectSpawnCoSelectLevelPatch.Prefix(ref upperSelected));
-
 
 		// 会議終了時のリセット処理を呼び出せるように
 		harmony.Patch(wrapUpAndSpawn,
@@ -601,13 +587,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePrefixPatch),
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
 
-
-		/*
-		// 追放が2度発生する不具合の修正
-		// このコメントに沿って修正：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
-		harmony.Patch(exileControllerPatchesExileControllerBegin,
-			new HarmonyMethod(exileControllerPatchesExileControllerBeginPatch));
-		*/
 		// ランダムスポーンを無効化する用
 		harmony.Patch(submarineSelectSpawnCoSelectLevel,
 			new HarmonyMethod(submarineSelectSpawnCoSelectLevelPatch));
