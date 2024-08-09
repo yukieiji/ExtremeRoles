@@ -132,6 +132,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			1, 1, maxSetNum, 1,
 			ignorePrefix: true);
 
+		bool isHideMultiAssign = this.minimumRoleNum <= 1;
 		int roleAssignNum = this.BaseRole.IsImpostor() ?
 			GameSystem.MaxImposterNum :
 			GameSystem.VanillaMaxPlayerNum - 1;
@@ -139,11 +140,12 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 			CombinationRoleCommonOption.AssignsNum,
 			this.minimumRoleNum, this.minimumRoleNum,
 			roleAssignNum, 1,
-			isHidden: this.minimumRoleNum <= 1,
+			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
 
 		factory.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
+			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
 
 		roleAssignNumOption.AddWithUpdate(roleSetNumOption);
