@@ -40,7 +40,7 @@ public static class TranslatorManager
 		foreach (var trans in translator)
 		{
 			SupportedLangs useLang =
-				trans.IsSupport(languageId) ? 
+				trans.IsSupport(languageId) ?
 					languageId : trans.DefaultLang;
 			AddData(
 				allData,
@@ -54,10 +54,10 @@ public static class TranslatorManager
 	{
 		foreach (var (key, data) in newData)
 		{
-			if (allData.ContainsKey(key))
+			if (allData.TryGetValue(key, out string sameData))
 			{
 				ExtremeRolesPlugin.Logger.LogError(
-					$"Detect:Translation Data conflict!!  Key:{key} Data:{data}");
+					$"Detect:Translation Data conflict!!\nKey:{key} | AddData:{data} | SameData:{sameData}");
 			}
 			else
 			{
