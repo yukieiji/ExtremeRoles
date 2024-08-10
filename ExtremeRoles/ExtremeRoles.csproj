@@ -52,6 +52,8 @@
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
     <EmbeddedResource Include="Resources\**\*.png" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />
+    <EmbeddedResource Include="Resources\JsonData\*.json" />
+    <EmbeddedResource Include="Resources\**\*.asset" />
   </ItemGroup>
 
   <!-- パブリックベータモード用 -->
@@ -74,7 +76,6 @@
     <Exec Command="robocopy $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources /XO &amp; if errorlevel 8 (exit 1) else (exit 0)" />
     <ItemGroup>
       <EmbeddedResource Include="Resources\**\*.asset" />
-      <EmbeddedResource Include="Resources\JsonData\*.json" />
     </ItemGroup>
   </Target>
 
