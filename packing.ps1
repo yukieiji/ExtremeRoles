@@ -1,11 +1,8 @@
 Write-Host "Init Env..."
 
 pip install -r requirements.txt
-python makelanguagejson.py
 mkdir -Path ExtremeRoles/Resources -Force
-Copy-Item -Path UnityAsset/ExtremeRoles/*.asset -Destination ExtremeRoles/Resources -Force -Recurse
 mkdir -Path ExtremeSkins/Resources/Asset -Force
-Copy-Item -Path UnityAsset/ExtremeSkins/*.asset -Destination ExtremeSkins/Resources/Asset -Force -Recurse
 
 Write-Host "Start Build!!"
 
