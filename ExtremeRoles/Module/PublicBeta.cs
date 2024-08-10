@@ -76,15 +76,14 @@ public sealed class PublicBeta : NullableSingleton<PublicBeta>
 		var (formatKey, value) = this.mode switch
 		{
 			Mode.Enable => ("PublicBetaStr", BetaContentManager.Version),
-			Mode.DisableReady => ("PublicBetaEnableDisableStr", Translation.GetString("DisableKey")),
-			Mode.EnableReady => ("PublicBetaEnableDisableStr", Translation.GetString("EnableKey")),
+			Mode.DisableReady => ("PublicBetaEnableDisableStr", Tr.GetString("DisableKey")),
+			Mode.EnableReady => ("PublicBetaEnableDisableStr", Tr.GetString("EnableKey")),
 			_ => (string.Empty, string.Empty)
 		};
 
 		if (string.IsNullOrEmpty(formatKey)) { return; }
 
-		this.modeStr = string.Format(
-			Translation.GetString(formatKey), value);
+		this.modeStr = Tr.GetString(formatKey, value);
 	}
 
 	private ConfigEntry<bool> getConfig()

@@ -44,9 +44,9 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
         string addText = this.vanillaRoleId switch
         {
             RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost =>
-                Helper.Translation.GetString("crewImportantText"),
+                Tr.GetString("crewImportantText"),
             RoleTypes.ImpostorGhost =>
-                Helper.Translation.GetString("impImportantText"),
+                Tr.GetString("impImportantText"),
             _ => string.Empty,
         };
         return Helper.Design.ColoedString(
@@ -56,7 +56,7 @@ public sealed class VanillaGhostRoleWrapper : GhostRoleBase
 
     public override string GetFullDescription()
     {
-        return Helper.Translation.GetString(
+        return Tr.GetString(
             $"{this.vanillaRoleId}FullDescription");
     }
 

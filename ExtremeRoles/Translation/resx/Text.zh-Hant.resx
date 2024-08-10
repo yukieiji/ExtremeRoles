@@ -1,0 +1,954 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MODNAME_TRANS" xml:space="preserve">
+    <value>極端職業</value>
+  </data>
+  <data name="GeneralTab" xml:space="preserve">
+    <value>通用設置</value>
+  </data>
+  <data name="CrewmateTab" xml:space="preserve">
+    <value>船員職業設置</value>
+  </data>
+  <data name="ImpostorTab" xml:space="preserve">
+    <value>內鬼職業設置</value>
+  </data>
+  <data name="NeutralTab" xml:space="preserve">
+    <value>獨立陣營職業設置</value>
+  </data>
+  <data name="CombinationTab" xml:space="preserve">
+    <value>特殊職業設置</value>
+  </data>
+  <data name="GhostCrewmateTab" xml:space="preserve">
+    <value>幽靈船員職業設置</value>
+  </data>
+  <data name="GhostImpostorTab" xml:space="preserve">
+    <value>幽靈內鬼職業設置</value>
+  </data>
+  <data name="GhostNeutralTab" xml:space="preserve">
+    <value>幽靈獨立陣營職業設置</value>
+  </data>
+  <data name="PresetOption" xml:space="preserve">
+    <value>選擇的預設</value>
+  </data>
+  <data name="RandomOptionUseStrong" xml:space="preserve">
+    <value>使用更合理的隨機模式（強隨機）</value>
+  </data>
+  <data name="RandomOptionAlgorithm" xml:space="preserve">
+    <value>使用更合理的隨機模式（隨機數）</value>
+  </data>
+  <data name="RoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>最小船員職業數量</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>最大船員職業數量</value>
+  </data>
+  <data name="RoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>最小獨立陣營職業數量</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>最大獨立陣營職業數量</value>
+  </data>
+  <data name="RoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>最小內鬼職業數量</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>最大內鬼職業數量</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>最小幽靈船員職業數量</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>最大幽靈船員職業數量</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>最小幽靈獨立陣營職業數量</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>最大幽靈獨立陣營職業數量</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>最小幽靈內鬼職業數量</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>最大幽靈內鬼職業數量</value>
+  </data>
+  <data name="MeetingOptionNumMeating" xml:space="preserve">
+    <value>共有緊急會議次數</value>
+  </data>
+  <data name="MeetingOptionChangeMeetingVoteAreaSort" xml:space="preserve">
+    <value>變更會議中玩家的排序</value>
+  </data>
+  <data name="MeetingOptionFixedMeetingPlayerLevel" xml:space="preserve">
+    <value>固定會議中玩家的等級</value>
+  </data>
+  <data name="MeetingOptionDisableSkipInEmergencyMeeting" xml:space="preserve">
+    <value>禁止跳過投票</value>
+  </data>
+  <data name="MeetingOptionDisableSelfVote" xml:space="preserve">
+    <value>禁止自票</value>
+  </data>
+  <data name="ExiledOptionConfirmExilMode" xml:space="preserve">
+    <value>放逐確認陣營</value>
+  </data>
+  <data name="ExiledOptionIsConfirmRole" xml:space="preserve">
+    <value>放逐同時確認職業</value>
+  </data>
+  <data name="VentOptionDisable" xml:space="preserve">
+    <value>禁用管道</value>
+  </data>
+  <data name="VentOptionCanKillInPlayer" xml:space="preserve">
+    <value>可以擊殺管道內船員</value>
+  </data>
+  <data name="VentOptionEngineerUseImpostor" xml:space="preserve">
+    <value>工程師使用管道無冷卻</value>
+  </data>
+  <data name="TaskOptionParallelMedBayScans" xml:space="preserve">
+    <value>允許多人同時做掃描任務</value>
+  </data>
+  <data name="RandomSpawnOptionIsAutoSelect" xml:space="preserve">
+    <value>會議後自動選擇隨機出生點</value>
+  </data>
+  <data name="AdminOptionIsRemove" xml:space="preserve">
+    <value>禁用管理地圖</value>
+  </data>
+  <data name="AdminOptionAirShipEnable" xml:space="preserve">
+    <value>空艇地圖啟用的管理地圖</value>
+  </data>
+  <data name="ModeBoth" xml:space="preserve">
+    <value>兩邊</value>
+  </data>
+  <data name="ModeCockpitOnly" xml:space="preserve">
+    <value>駕駛艙</value>
+  </data>
+  <data name="ModeArchiveOnly" xml:space="preserve">
+    <value>檔案室</value>
+  </data>
+  <data name="AdminOptionEnableLimit" xml:space="preserve">
+    <value>管理地圖有使用時間限制</value>
+  </data>
+  <data name="AdminOptionLimitTime" xml:space="preserve">
+    <value>管理員使用時間上限</value>
+  </data>
+  <data name="SecurityOptionIsRemove" xml:space="preserve">
+    <value>禁用通行記錄和監控</value>
+  </data>
+  <data name="SecurityOptionEnableLimit" xml:space="preserve">
+    <value>通行記錄和監控有使用時間限制</value>
+  </data>
+  <data name="SecurityOptionLimitTime" xml:space="preserve">
+    <value>安全類設施的使用時間上限</value>
+  </data>
+  <data name="VitalOptionIsRemove" xml:space="preserve">
+    <value>禁用生命監測裝置</value>
+  </data>
+  <data name="VitalOptionEnableLimit" xml:space="preserve">
+    <value>生命監測裝置有使用時間限制</value>
+  </data>
+  <data name="VitalOptionLimitTime" xml:space="preserve">
+    <value>生命監測裝置的使用時間上限</value>
+  </data>
+  <data name="RandomMapOptionEnable" xml:space="preserve">
+    <value>遊玩隨機地圖</value>
+  </data>
+  <data name="TaskWinOptionDisableWhenNoneTaskCrew" xml:space="preserve">
+    <value>當沒有擁有任務的船員時船員不能因任務完成獲勝</value>
+  </data>
+  <data name="TaskWinOptionDisableAll" xml:space="preserve">
+    <value>禁止船員通過任務獲勝</value>
+  </data>
+  <data name="NeutralWinOptionIsSame" xml:space="preserve">
+    <value>同職業的獨立陣營玩家可以一同獲勝</value>
+  </data>
+  <data name="NeutralWinOptionDisableSpecialEnd" xml:space="preserve">
+    <value>獨立陣營玩家不能單獨獲勝</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
+    <value>獨立陣營可以獲得幽靈職業</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsRemoveAngleIcon" xml:space="preserve">
+    <value>不顯示獲得幽靈職業玩家的守護天使圖標</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
+    <value>禁用守護天使的能力發動報告</value>
+  </data>
+  <data name="EnableHorseMode" xml:space="preserve">
+    <value>啟用馬模式</value>
+  </data>
+  <data name="moreOptionText" xml:space="preserve">
+    <value>模組設置</value>
+  </data>
+  <data name="modOptionText" xml:space="preserve">
+    <value>模組設置</value>
+  </data>
+  <data name="GhostsSeeTasksButton" xml:space="preserve">
+    <value>死亡玩家可見全員任務進度</value>
+  </data>
+  <data name="GhostsSeeRolesButton" xml:space="preserve">
+    <value>死亡玩家可見全員職業</value>
+  </data>
+  <data name="GhostsSeeVotesButton" xml:space="preserve">
+    <value>死亡玩家可見投票明細</value>
+  </data>
+  <data name="ShowRoleSummaryButton" xml:space="preserve">
+    <value>顯示結算</value>
+  </data>
+  <data name="HideNamePlateButton" xml:space="preserve">
+    <value>隱藏名牌</value>
+  </data>
+  <data name="custom" xml:space="preserve">
+    <value>自定義</value>
+  </data>
+  <data name="ExROfficialTokyo" xml:space="preserve">
+    <value>模組專用（東京）</value>
+  </data>
+  <data name="importCsv" xml:space="preserve">
+    <value>導入預設</value>
+  </data>
+  <data name="importPleaseWait" xml:space="preserve">
+    <value>正在導入，請稍候....</value>
+  </data>
+  <data name="importSuccess" xml:space="preserve">
+    <value>導入成功</value>
+  </data>
+  <data name="importError" xml:space="preserve">
+    <value>導入失敗，請稍後重試..</value>
+  </data>
+  <data name="exportCsv" xml:space="preserve">
+    <value>導出預設</value>
+  </data>
+  <data name="exportPleaseWait" xml:space="preserve">
+    <value>正在導出，請稍候.....</value>
+  </data>
+  <data name="exportSuccess" xml:space="preserve">
+    <value>導出成功</value>
+  </data>
+  <data name="exportError" xml:space="preserve">
+    <value>導出失敗，請重新檢查併重試...</value>
+  </data>
+  <data name="version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="developer" xml:space="preserve">
+    <value>模組作者：</value>
+  </data>
+  <data name="debugThunk" xml:space="preserve">
+    <value>測試人員：</value>
+  </data>
+  <data name="langTranslate" xml:space="preserve">
+    <value>繁體中文翻譯：</value>
+  </data>
+  <data name="translatorMember" xml:space="preserve">
+    <value>方块(復刻自簡體)</value>
+  </data>
+  <data name="youAreRoleIntro" xml:space="preserve">
+    <value>妳的職業是</value>
+  </data>
+  <data name="andFirst" xml:space="preserve">
+    <value>以及</value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value>，</value>
+  </data>
+  <data name="introAnd" xml:space="preserve">
+    <value>和</value>
+  </data>
+  <data name="optionOn" xml:space="preserve">
+    <value>&lt;color=#33ffcc&gt;開啟&lt;/color&gt;</value>
+  </data>
+  <data name="optionOff" xml:space="preserve">
+    <value>&lt;color=#ff3366&gt;關閉&lt;/color&gt;</value>
+  </data>
+  <data name="crewmateRoles" xml:space="preserve">
+    <value>船員陣營</value>
+  </data>
+  <data name="neutralRoles" xml:space="preserve">
+    <value>獨立陣營陣營</value>
+  </data>
+  <data name="impostorRoles" xml:space="preserve">
+    <value>內鬼陣營</value>
+  </data>
+  <data name="crewmateGhostRoles" xml:space="preserve">
+    <value>幽靈船員職業</value>
+  </data>
+  <data name="neutralGhostRoles" xml:space="preserve">
+    <value>幽靈獨立陣營職業</value>
+  </data>
+  <data name="impostorGhostRoles" xml:space="preserve">
+    <value>幽靈內鬼職業</value>
+  </data>
+  <data name="pressTabForMore" xml:space="preserve">
+    <value>按下TAB鍵來顯示更多信息....</value>
+  </data>
+  <data name="meetingStatus" xml:space="preserve">
+    <value>玩家 {0} 還有\n\n\n次緊急會議剩余</value>
+  </data>
+  <data name="meetingCount" xml:space="preserve">
+    <value>{0} 全船共有 {1}</value>
+  </data>
+  <data name="buttonBlocked" xml:space="preserve">
+    <value>被禁用</value>
+  </data>
+  <data name="Preset" xml:space="preserve">
+    <value>預設{0}</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>{0}秒</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>{0}分鐘</value>
+  </data>
+  <data name="Shot" xml:space="preserve">
+    <value>{0}回</value>
+  </data>
+  <data name="Multiplier" xml:space="preserve">
+    <value>{0}倍</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>{0}％</value>
+  </data>
+  <data name="ScrewNum" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="VoteNum" xml:space="preserve">
+    <value>{0}票</value>
+  </data>
+  <data name="XionUseXion" xml:space="preserve">
+    <value>啟用主機職業“測試員”</value>
+  </data>
+  <data name="yourHost" xml:space="preserve">
+    <value>主機職業</value>
+  </data>
+  <data name="youAreNewRuleEditor" xml:space="preserve">
+    <value>對遊戲進行測試</value>
+  </data>
+  <data name="Xion" xml:space="preserve">
+    <value>測試員</value>
+  </data>
+  <data name="XionIntroDescription" xml:space="preserve">
+    <value>對遊戲進行測試</value>
+  </data>
+  <data name="XionShortDescription" xml:space="preserve">
+    <value>對遊戲進行測試</value>
+  </data>
+  <data name="XionFullDescription" xml:space="preserve">
+    <value>測試員為測試職業，只有房主可以獲得。
+可以縮放地圖、變更移動速度及傳送等，也可以擊殺與復活玩家。
+・Alt鍵+L鍵：強制結束遊戲
+・Alt鍵+C鍵：強制結束會議
+・Alt鍵+F鍵：GUI隱藏/顯示切換
+・Shift鍵+PageUp鍵：提高移速
+・Shift鍵+PageDown鍵：降低移速
+・Shift鍵+R鍵：移速復位
+・Ctr鍵+PageUp鍵：放大
+・Ctr鍵+PageDown鍵：縮小
+・Ctr鍵+R鍵：縮放復位
+本地遊戲專用功能
+・在大廳F鍵（測試員啟用時）：召喚假人玩家
+・左Alt鍵+B鍵：在鼠標處生成屍體
+・/SetRole [玩家名（任意）] [職業英語名]：能使該玩家獲得特定職業，不填寫玩家名則自己獲得職業
+成為，成為
+・/IamXion：將房主職業變更為測試員</value>
+  </data>
+  <data name="zoomOut" xml:space="preserve">
+    <value>縮小</value>
+  </data>
+  <data name="zoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="speedUp" xml:space="preserve">
+    <value>提高移速</value>
+  </data>
+  <data name="speedDown" xml:space="preserve">
+    <value>降低移速</value>
+  </data>
+  <data name="alreadyVoted" xml:space="preserve">
+    <value>已投票</value>
+  </data>
+  <data name="invalidArgs" xml:space="preserve">
+    <value>無效參數</value>
+  </data>
+  <data name="invalidPlayerName" xml:space="preserve">
+    <value>無效的玩家昵稱</value>
+  </data>
+  <data name="cannotUseThisGameMode" xml:space="preserve">
+    <value>該功能在當前遊戲模式下不可用</value>
+  </data>
+  <data name="invalidRoleName" xml:space="preserve">
+    <value>無效的職業名</value>
+  </data>
+  <data name="setRole" xml:space="preserve">
+    <value>已給玩家：{0}分配職業：{1}</value>
+  </data>
+  <data name="XionNow" xml:space="preserve">
+    <value>房主已變更為測試員</value>
+  </data>
+  <data name="RevartXion" xml:space="preserve">
+    <value>已將測試員分配給房主</value>
+  </data>
+  <data name="buttonCountText" xml:space="preserve">
+    <value>剩余{0}回</value>
+  </data>
+  <data name="summaryText" xml:space="preserve">
+    <value>最終結算</value>
+  </data>
+  <data name="roleSummaryInfo" xml:space="preserve">
+    <value>玩家姓名&lt;pos=16.5%&gt;任務&lt;pos=25%&gt;最終狀態&lt;pos=38%&gt;職業</value>
+  </data>
+  <data name="ghostRoleSummaryInfo" xml:space="preserve">
+    <value>玩家姓名&lt;pos=16.5%&gt;任務&lt;pos=25%&gt;最終狀態&lt;pos=38%&gt;幽靈職業</value>
+  </data>
+  <data name="noGhostRole" xml:space="preserve">
+    <value>無</value>
+  </data>
+  <data name="tabMoreSummary" xml:space="preserve">
+    <value>按下TAB鍵來顯示其他狀態信息 ({0}/{1})</value>
+  </data>
+  <data name="shiftHideSummary" xml:space="preserve">
+    <value>按下Shift隱藏最終狀態信息</value>
+  </data>
+  <data name="shiftShowSummary" xml:space="preserve">
+    <value>按下Shift顯示最終狀態信息</value>
+  </data>
+  <data name="Alive" xml:space="preserve">
+    <value>存活</value>
+  </data>
+  <data name="Exiled" xml:space="preserve">
+    <value>放逐</value>
+  </data>
+  <data name="Dead" xml:space="preserve">
+    <value>死亡</value>
+  </data>
+  <data name="Killed" xml:space="preserve">
+    <value>被殺</value>
+  </data>
+  <data name="Suicide" xml:space="preserve">
+    <value>自殺</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>掉線</value>
+  </data>
+  <data name="MissShot" xml:space="preserve">
+    <value>走火</value>
+  </data>
+  <data name="Retaliate" xml:space="preserve">
+    <value>復仇</value>
+  </data>
+  <data name="Assassinate" xml:space="preserve">
+    <value>暗殺</value>
+  </data>
+  <data name="DeadAssassinate" xml:space="preserve">
+    <value>暗殺</value>
+  </data>
+  <data name="Surrender" xml:space="preserve">
+    <value>投降</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>離開遊戲</value>
+  </data>
+  <data name="Martyrdom" xml:space="preserve">
+    <value>殉職</value>
+  </data>
+  <data name="Explosion" xml:space="preserve">
+    <value>爆炸</value>
+  </data>
+  <data name="Zombied" xml:space="preserve">
+    <value>變異</value>
+  </data>
+  <data name="Eatting" xml:space="preserve">
+    <value>吞噬</value>
+  </data>
+  <data name="AllTeam" xml:space="preserve">
+    <value>全陣營</value>
+  </data>
+  <data name="customServerIp" xml:space="preserve">
+    <value>私服IP</value>
+  </data>
+  <data name="customServerPort" xml:space="preserve">
+    <value>私服端口</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>獨立陣營</value>
+  </data>
+  <data name="neutralIntro" xml:space="preserve">
+    <value>完成自己的目標</value>
+  </data>
+  <data name="neutralShotCall" xml:space="preserve">
+    <value>野心家</value>
+  </data>
+  <data name="impostorShotCall" xml:space="preserve">
+    <value>殺人魔</value>
+  </data>
+  <data name="Shapeshifter" xml:space="preserve">
+    <value>變形者</value>
+  </data>
+  <data name="Engineer" xml:space="preserve">
+    <value>工程師可以使用內鬼管道</value>
+  </data>
+  <data name="Scientist" xml:space="preserve">
+    <value>科學家</value>
+  </data>
+  <data name="GuardianAngel" xml:space="preserve">
+    <value>守護天使</value>
+  </data>
+  <data name="roleAssignNow" xml:space="preserve">
+    <value>正在分配職業，請稍等…</value>
+  </data>
+  <data name="impostorIntroText" xml:space="preserve">
+    <value>破壞設施或擊殺所有人</value>
+  </data>
+  <data name="crewIntroText" xml:space="preserve">
+    <value>完成妳的任務</value>
+  </data>
+  <data name="crewImportantText" xml:space="preserve">
+    <value>完成任務</value>
+  </data>
+  <data name="YourRolePanel" xml:space="preserve">
+    <value>妳的職業是</value>
+  </data>
+  <data name="YourGhostRolePanel" xml:space="preserve">
+    <value>妳的幽靈職業</value>
+  </data>
+  <data name="AllRolePanel" xml:space="preserve">
+    <value>職業簡介</value>
+  </data>
+  <data name="AllGhostRolePanel" xml:space="preserve">
+    <value>幽靈職業簡介</value>
+  </data>
+  <data name="GlobalSettingPanel" xml:space="preserve">
+    <value>全局設置</value>
+  </data>
+  <data name="changePageMore" xml:space="preserve">
+    <value>使用PgUp/PgDn翻頁</value>
+  </data>
+  <data name="gameOption" xml:space="preserve">
+    <value>當前遊戲設定</value>
+  </data>
+  <data name="roleOption" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="yourAliveNow" xml:space="preserve">
+    <value>妳現在活著</value>
+  </data>
+  <data name="yourNoAssignGhostRole" xml:space="preserve">
+    <value>妳沒有幽靈職業</value>
+  </data>
+  <data name="vanilaOptions" xml:space="preserve">
+    <value>當前AMONGUS基礎設定</value>
+  </data>
+  <data name="playerName" xml:space="preserve">
+    <value>玩家昵稱</value>
+  </data>
+  <data name="roleName" xml:space="preserve">
+    <value>職業</value>
+  </data>
+  <data name="gameReplace" xml:space="preserve">
+    <value>*在遊戲開始或遊戲中顯示</value>
+  </data>
+  <data name="ReqBepInExUpdate" xml:space="preserve">
+    <value>BepInEx更新中。請稍候…</value>
+  </data>
+  <data name="compatModMenuButton" xml:space="preserve">
+    <value>MOD管理器</value>
+  </data>
+  <data name="compatModMenu" xml:space="preserve">
+    <value>Extreme Roles MOD管理器</value>
+  </data>
+  <data name="chekUpdateWait" xml:space="preserve">
+    <value>正在確認更新....</value>
+  </data>
+  <data name="updateNow" xml:space="preserve">
+    <value>更新開始</value>
+  </data>
+  <data name="updateManually" xml:space="preserve">
+    <value>更新失敗\n請手動更新</value>
+  </data>
+  <data name="updateRestart" xml:space="preserve">
+    <value>更新成功請重新啟動遊戲</value>
+  </data>
+  <data name="updateInProgress" xml:space="preserve">
+    <value>正在更新....</value>
+  </data>
+  <data name="alreadyInstall" xml:space="preserve">
+    <value>已經安裝完畢\n請重新啟動遊戲</value>
+  </data>
+  <data name="checkInstallNow" xml:space="preserve">
+    <value>正在確認安裝數據</value>
+  </data>
+  <data name="installNow" xml:space="preserve">
+    <value>開始安裝數據</value>
+  </data>
+  <data name="installInProgress" xml:space="preserve">
+    <value>安裝數據中....</value>
+  </data>
+  <data name="installManual" xml:space="preserve">
+    <value>安裝數據失敗\n請手動安裝</value>
+  </data>
+  <data name="installRestart" xml:space="preserve">
+    <value>安裝數據成功請重新啟動遊戲</value>
+  </data>
+  <data name="alreadyUninstall" xml:space="preserve">
+    <value>已經卸載\n請重新啟動遊戲</value>
+  </data>
+  <data name="checkUninstallNow" xml:space="preserve">
+    <value>正在檢查卸載數據</value>
+  </data>
+  <data name="uninstallNow" xml:space="preserve">
+    <value>卸載開始</value>
+  </data>
+  <data name="uninstallInProgress" xml:space="preserve">
+    <value>卸載中....</value>
+  </data>
+  <data name="uninstallManual" xml:space="preserve">
+    <value>卸載失敗\n請手動卸載</value>
+  </data>
+  <data name="uninstallRestart" xml:space="preserve">
+    <value>卸載成功\n請重新啟動遊戲</value>
+  </data>
+  <data name="alreadyUninstallAfterInstall" xml:space="preserve">
+    <value>已經卸載\n請重新啟動遊戲後安裝</value>
+  </data>
+  <data name="isReactorInstall" xml:space="preserve">
+    <value>要運行本模組，需要先安裝Reactor插件。
+Among Us官方服務器不適配Reactor插件，因此需要使用自定義服務器進行遊玩。
+是否繼續下載？</value>
+  </data>
+  <data name="UninstallButton" xml:space="preserve">
+    <value>卸載</value>
+  </data>
+  <data name="UpdateButton" xml:space="preserve">
+    <value>確認更新</value>
+  </data>
+  <data name="InstallButton" xml:space="preserve">
+    <value>安裝</value>
+  </data>
+  <data name="latestNow" xml:space="preserve">
+    <value>當前MOD為最新版本</value>
+  </data>
+  <data name="youDonotUse" xml:space="preserve">
+    <value>請求被拒絕</value>
+  </data>
+  <data name="errorCannotGameStart" xml:space="preserve">
+    <value>由於以下原因無法啟動遊戲</value>
+  </data>
+  <data name="errorNotInstalled" xml:space="preserve">
+    <value>模組安裝失敗</value>
+  </data>
+  <data name="errorOldInstalled" xml:space="preserve">
+    <value>模組版本過舊</value>
+  </data>
+  <data name="errorNewInstalled" xml:space="preserve">
+    <value>模組版本過新</value>
+  </data>
+  <data name="errorDiffHostVersion" xml:space="preserve">
+    <value>當前模組與房主版本不同\n您將在{0}秒後被踢出</value>
+  </data>
+  <data name="ExileTextSPCrew" xml:space="preserve">
+    <value>{0}屬於船員陣營。</value>
+  </data>
+  <data name="ExileTextSNCrew" xml:space="preserve">
+    <value>{0}不屬於船員陣營。</value>
+  </data>
+  <data name="ExileTextPPCrew" xml:space="preserve">
+    <value>{0}屬於船員陣營。</value>
+  </data>
+  <data name="ExileTextPNCrew" xml:space="preserve">
+    <value>{0}不屬於船員陣營。</value>
+  </data>
+  <data name="ExileTextSPNeut" xml:space="preserve">
+    <value>{0}屬於獨立陣營。</value>
+  </data>
+  <data name="ExileTextSNNeut" xml:space="preserve">
+    <value>{0}不屬於獨立陣營。</value>
+  </data>
+  <data name="ExileTextPPNeut" xml:space="preserve">
+    <value>{0}屬於獨立陣營。</value>
+  </data>
+  <data name="ExileTextPNNeut" xml:space="preserve">
+    <value>{0}不屬於獨立陣營。</value>
+  </data>
+  <data name="ExileTextSPCrewWithRole" xml:space="preserve">
+    <value>{0}屬於船員陣營，職業為 {1}。</value>
+  </data>
+  <data name="ExileTextSNCrewWithRole" xml:space="preserve">
+    <value>{0}不屬於船員陣營。</value>
+  </data>
+  <data name="ExileTextPPCrewWithRole" xml:space="preserve">
+    <value>{0}屬於船員陣營，職業為 {1}。</value>
+  </data>
+  <data name="ExileTextPNCrewWithRole" xml:space="preserve">
+    <value>{0}不屬於船員陣營。</value>
+  </data>
+  <data name="ExileTextSPNeutWithRole" xml:space="preserve">
+    <value>{0}屬於獨立陣營，職業為 {1}。</value>
+  </data>
+  <data name="ExileTextSNNeutWithRole" xml:space="preserve">
+    <value>{0}不屬於獨立陣營。</value>
+  </data>
+  <data name="ExileTextPPNeutWithRole" xml:space="preserve">
+    <value>{0}屬於獨立陣營，職業為 {1}。</value>
+  </data>
+  <data name="ExileTextPNNeutWithRole" xml:space="preserve">
+    <value>{0}不屬於獨立陣營。</value>
+  </data>
+  <data name="ExileTextAllTeam" xml:space="preserve">
+    <value>{0}的陣營是 {1}。</value>
+  </data>
+  <data name="ExileTextAllTeamWithRole" xml:space="preserve">
+    <value>{0}的陣營是 {1}，職業為{2}。</value>
+  </data>
+  <data name="CrewmateRemainS" xml:space="preserve">
+    <value>船員陣營還剩{0}名玩家。</value>
+  </data>
+  <data name="CrewmateRemainP" xml:space="preserve">
+    <value>船員陣營還剩{0}名玩家。</value>
+  </data>
+  <data name="NeutralRemainS" xml:space="preserve">
+    <value>獨立陣營還剩{0}名玩家。</value>
+  </data>
+  <data name="NeutralRemainP" xml:space="preserve">
+    <value>獨立陣營還剩{0}名玩家。</value>
+  </data>
+  <data name="AllTeamAlive" xml:space="preserve">
+    <value>船員陣營還剩{0}名玩家。\n內鬼陣營還剩{1}名玩家。\n獨立陣營還剩{2}名玩家。</value>
+  </data>
+  <data name="RoleAssignFilter" xml:space="preserve">
+    <value>職業分配篩選</value>
+  </data>
+  <data name="RoleAssignFilterAddRoleMenuTitle" xml:space="preserve">
+    <value>請選擇職業</value>
+  </data>
+  <data name="RoleAssignFilterAssignNum" xml:space="preserve">
+    <value>分配數</value>
+  </data>
+  <data name="RoleAssignFilterDeleteThis" xml:space="preserve">
+    <value>職業篩選移除</value>
+  </data>
+  <data name="RoleAssignFilterDeleteAllRole" xml:space="preserve">
+    <value>職業篩選重置</value>
+  </data>
+  <data name="RoleAssignFilterAddRole" xml:space="preserve">
+    <value>添加職業</value>
+  </data>
+  <data name="RoleAssignFilterAddFilter" xml:space="preserve">
+    <value>添加職業篩選</value>
+  </data>
+  <data name="abilityRemain" xml:space="preserve">
+    <value>技能激活還剩{0}秒</value>
+  </data>
+  <data name="abilityOnText" xml:space="preserve">
+    <value>技能結束還剩{0}秒</value>
+  </data>
+  <data name="right" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="down" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="left" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="up" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="canDo" xml:space="preserve">
+    <value>允許</value>
+  </data>
+  <data name="cannotDo" xml:space="preserve">
+    <value>禁止</value>
+  </data>
+  <data name="AdminModule" xml:space="preserve">
+    <value>管理地圖</value>
+  </data>
+  <data name="SecurityCamera" xml:space="preserve">
+    <value>監控與通行記錄</value>
+  </data>
+  <data name="Pcg32XshRr" xml:space="preserve">
+    <value>PCG32-XSH-RR</value>
+  </data>
+  <data name="Pcg64RxsMXs" xml:space="preserve">
+    <value>PCG64-RXS-M-XS</value>
+  </data>
+  <data name="Xorshift64" xml:space="preserve">
+    <value>Xorshift64</value>
+  </data>
+  <data name="Xorshift128" xml:space="preserve">
+    <value>Xorshift128</value>
+  </data>
+  <data name="Xorshiro256StarStar" xml:space="preserve">
+    <value>xorshiro256**</value>
+  </data>
+  <data name="Xorshiro512StarStar" xml:space="preserve">
+    <value>xorshiro512**</value>
+  </data>
+  <data name="RomuMono" xml:space="preserve">
+    <value>RomuMono</value>
+  </data>
+  <data name="RomuTrio" xml:space="preserve">
+    <value>RomuTrio</value>
+  </data>
+  <data name="RomuQuad" xml:space="preserve">
+    <value>RomuQuad</value>
+  </data>
+  <data name="Seiran128" xml:space="preserve">
+    <value>Seiran128</value>
+  </data>
+  <data name="Shioi128" xml:space="preserve">
+    <value>Shioi128</value>
+  </data>
+  <data name="JFT32" xml:space="preserve">
+    <value>JFT32</value>
+  </data>
+  <data name="AssignWeight" xml:space="preserve">
+    <value>分配權重</value>
+  </data>
+  <data name="RoleNum" xml:space="preserve">
+    <value>最大人數</value>
+  </data>
+  <data name="HasOtherVision" xml:space="preserve">
+    <value>擁有獨立視野</value>
+  </data>
+  <data name="Vision" xml:space="preserve">
+    <value>視野範圍</value>
+  </data>
+  <data name="ApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>會受到照明破壞影響</value>
+  </data>
+  <data name="HasOtherKillCool" xml:space="preserve">
+    <value>擁有獨立擊殺冷卻</value>
+  </data>
+  <data name="KillCoolDown" xml:space="preserve">
+    <value>擊殺冷卻</value>
+  </data>
+  <data name="HasOtherKillRange" xml:space="preserve">
+    <value>擁有獨立擊殺範圍</value>
+  </data>
+  <data name="KillRange" xml:space="preserve">
+    <value>擊殺範圍</value>
+  </data>
+  <data name="IsAssignImposter" xml:space="preserve">
+    <value>允許人狼戀</value>
+  </data>
+  <data name="ImposterSelectedRate" xml:space="preserve">
+    <value>生成為內鬼陣營的概率</value>
+  </data>
+  <data name="AssignsNum" xml:space="preserve">
+    <value>每組分配的人數</value>
+  </data>
+</root>

@@ -179,7 +179,7 @@ public sealed class Mover :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-			Translation.GetString("Moving"),
+			Tr.GetString("Moving"),
 			Resources.UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.MoverMove),
             checkAbility: IsAbilityActive,

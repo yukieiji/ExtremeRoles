@@ -1,0 +1,903 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CrewmateFullDescription" xml:space="preserve">
+    <value>完成任务并放逐内鬼</value>
+  </data>
+  <data name="EngineerFullDescription" xml:space="preserve">
+    <value>可以使用管道的船员</value>
+  </data>
+  <data name="ScientistFullDescription" xml:space="preserve">
+    <value>可以在任何地方观看远程生命监测装置。
+装置电量有限，随着时间或任务恢复。</value>
+  </data>
+  <data name="SpecialCrew" xml:space="preserve">
+    <value>特殊船员</value>
+  </data>
+  <data name="SpecialCrewIntroDescription" xml:space="preserve">
+    <value>根据设定与普通船员有不同之处</value>
+  </data>
+  <data name="SpecialCrewShortDescription" xml:space="preserve">
+    <value>你与其他船员不同但也仅此而已</value>
+  </data>
+  <data name="SpecialCrewFullDescription" xml:space="preserve">
+    <value>Extreme Roles中特殊的船员，设置如下</value>
+  </data>
+  <data name="Sheriff" xml:space="preserve">
+    <value>警长</value>
+  </data>
+  <data name="SheriffShootNum" xml:space="preserve">
+    <value>警长子弹数量</value>
+  </data>
+  <data name="SheriffCanShootNeutral" xml:space="preserve">
+    <value>警长可以击杀独立阵营</value>
+  </data>
+  <data name="SheriffCanShootAssassin" xml:space="preserve">
+    <value>警长可以击杀刺客</value>
+  </data>
+  <data name="SheriffEnableTaskRelated" xml:space="preserve">
+    <value>警长的击杀与任务绑定</value>
+  </data>
+  <data name="SheriffReduceCurKillCool" xml:space="preserve">
+    <value>完成一个任务击杀冷却的减少量</value>
+  </data>
+  <data name="SheriffIsPerm" xml:space="preserve">
+    <value>减少的冷却永久生效而非单次生效</value>
+  </data>
+  <data name="SheriffIsSyncTaskAndShootNum" xml:space="preserve">
+    <value>警长完成任务可以装填子弹</value>
+  </data>
+  <data name="SheriffSyncShootTaskGage" xml:space="preserve">
+    <value>警长完成任务数与装填子弹数的比率</value>
+  </data>
+  <data name="SheriffIntroDescription" xml:space="preserve">
+    <value>用正义的制裁保护船员们</value>
+  </data>
+  <data name="SheriffShortDescription" xml:space="preserve">
+    <value>举起正义之枪</value>
+  </data>
+  <data name="SheriffFullDescription" xml:space="preserve">
+    <value>警长属于船员阵营，可以进行有限次数的击杀。
+如果警长尝试击杀船员，警长自己死亡。
+若“警长的击杀次数与任务绑定”选项开启，警长初始子弹数为0，每完成一个任务便获得一发子弹。</value>
+  </data>
+  <data name="Maintainer" xml:space="preserve">
+    <value>工程师</value>
+  </data>
+  <data name="MaintainerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="MaintainerAbilityCount" xml:space="preserve">
+    <value>可维修次数</value>
+  </data>
+  <data name="MaintainerIntroDescription" xml:space="preserve">
+    <value>修理飞船破坏</value>
+  </data>
+  <data name="MaintainerShortDescription" xml:space="preserve">
+    <value>紧急任务当然需要紧急维修！</value>
+  </data>
+  <data name="MaintainerFullDescription" xml:space="preserve">
+    <value>可以进行快速维修的船员
+维修在紧急任务时可以使用
+使用维修后，紧急任务将会立即完成
+而且地图上的所有门会被打开</value>
+  </data>
+  <data name="maintenance" xml:space="preserve">
+    <value>修理</value>
+  </data>
+  <data name="Neet" xml:space="preserve">
+    <value>家里蹲</value>
+  </data>
+  <data name="NeetCanCallMeeting" xml:space="preserve">
+    <value>可以召开紧急会议</value>
+  </data>
+  <data name="NeetCanRepairSabotage" xml:space="preserve">
+    <value>可以修复破坏</value>
+  </data>
+  <data name="NeetHasTask" xml:space="preserve">
+    <value>独立任务</value>
+  </data>
+  <data name="NeetIsNeutral" xml:space="preserve">
+    <value>判定为独立阵营</value>
+  </data>
+  <data name="NeetIntroDescription" xml:space="preserve">
+    <value>修船什么的让别人去干就好啦</value>
+  </data>
+  <data name="NeetShortDescription" xml:space="preserve">
+    <value>坐飞船真开心啊</value>
+  </data>
+  <data name="NeetFullDescription" xml:space="preserve">
+    <value>家里蹲属于船员阵营，什么任务也不需要做。
+闲的没事可以去追别人玩。</value>
+  </data>
+  <data name="NeetNeutralFullDescription" xml:space="preserve">
+    <value>家里蹲属于独立阵营，什么事也不需要做。
+家里蹲存活到游戏结束，家里蹲就可以获胜。
+闲的没事可以去追别人玩。</value>
+  </data>
+  <data name="Watchdog" xml:space="preserve">
+    <value>保安</value>
+  </data>
+  <data name="WatchdogAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="WatchdogAbilityActiveTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="WatchdogIntroDescription" xml:space="preserve">
+    <value>使用摄像头或通行记录来监视可疑人物</value>
+  </data>
+  <data name="WatchdogShortDescription" xml:space="preserve">
+    <value>使用摄像头或通行记录来监视可疑人物</value>
+  </data>
+  <data name="WatchdogFullDescription" xml:space="preserve">
+    <value>保安属于船员阵营，可以远程观看监控与通行记录。
+仅当地图为Mira HQ生效时，保安才能远程观看通行记录。
+保安观看设备需要消耗电量；等待冷却或完成任务可以给设备充电。</value>
+  </data>
+  <data name="securityCamera" xml:space="preserve">
+    <value>监控</value>
+  </data>
+  <data name="doorLog" xml:space="preserve">
+    <value>通行记录</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>管理员</value>
+  </data>
+  <data name="SupervisorAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="SupervisorAbilityActiveTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="SupervisorIsBoostTask" xml:space="preserve">
+    <value>技能会随着任务完成而强化</value>
+  </data>
+  <data name="SupervisorTaskGage" xml:space="preserve">
+    <value>强化技能所需的任务完成率</value>
+  </data>
+  <data name="SupervisorIntroDescription" xml:space="preserve">
+    <value>监控船员</value>
+  </data>
+  <data name="SupervisorShortDescription" xml:space="preserve">
+    <value>监控船员的位置来找出敌人</value>
+  </data>
+  <data name="SupervisorFullDescription" xml:space="preserve">
+    <value>管理员属于船员阵营，可以远程观看管理室地图。
+管理员观看设备需要消耗电量；等待冷却或完成任务可以给设备充电。
+若“技能会随着任务完成而强化”选项开启，管理员完成一定任务后，远程地图上将显示船员的具体颜色。原本的地图不会有这个效果，即便正在观看的人是管理员。</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="BodyGuard" xml:space="preserve">
+    <value>保镖</value>
+  </data>
+  <data name="BodyGuardShieldRange" xml:space="preserve">
+    <value>技能范围</value>
+  </data>
+  <data name="BodyGuardAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="BodyGuardAbilityCount" xml:space="preserve">
+    <value>技能使用次数</value>
+  </data>
+  <data name="BodyGuardFeatMeetingAbilityTaskGage" xml:space="preserve">
+    <value>在会议期间使用护盾所需的任务进度</value>
+  </data>
+  <data name="BodyGuardFeatMeetingReportTaskGage" xml:space="preserve">
+    <value>在会议上报告保镖殉职而死所需的任务进度</value>
+  </data>
+  <data name="BodyGuardIsReportPlayerName" xml:space="preserve">
+    <value>报告保镖殉职时标明报告的玩家</value>
+  </data>
+  <data name="BodyGuardReportPlayerMode" xml:space="preserve">
+    <value>报告的玩家</value>
+  </data>
+  <data name="BodyGuardIsBlockMeetingKill" xml:space="preserve">
+    <value>保镖可以阻止会议阶段的击杀</value>
+  </data>
+  <data name="BodyGuardIntroDescription" xml:space="preserve">
+    <value>我身作盾</value>
+  </data>
+  <data name="BodyGuardShortDescription" xml:space="preserve">
+    <value>保护船员</value>
+  </data>
+  <data name="BodyGuardFullDescription" xml:space="preserve">
+    <value>
+保镖属于船员阵营，可以在行动阶段保护附近的一位玩家。
+如果被保护的船员之后被击杀，保镖将代替那名玩家死亡。
+保镖可以随时使用“重置”来收回保护效果。保镖死亡时保护效果失效。
+保镖的任务进度超过“在会议上报告保镖殉职而死所需的任务进度”时，保护技能发动成功后，下个会议阶段开始时所有玩家都将收到保镖殉职的信息。</value>
+  </data>
+  <data name="shield" xml:space="preserve">
+    <value>保护</value>
+  </data>
+  <data name="resetShield" xml:space="preserve">
+    <value>重置保护对象</value>
+  </data>
+  <data name="meetingShieldState" xml:space="preserve">
+    <value>本次会议可保护的\n人数：{0}人</value>
+  </data>
+  <data name="BodyGuardPlayerNameOnly" xml:space="preserve">
+    <value>保镖</value>
+  </data>
+  <data name="GuardedPlayerNameOnly" xml:space="preserve">
+    <value>保镖保护的玩家</value>
+  </data>
+  <data name="BothPlayerName" xml:space="preserve">
+    <value>保镖与保护玩家</value>
+  </data>
+  <data name="martyrdomReport" xml:space="preserve">
+    <value>保镖壮烈牺牲了...</value>
+  </data>
+  <data name="martyrdomReportWithBodyGurdPlayer" xml:space="preserve">
+    <value>{0}为保护他人牺牲了...</value>
+  </data>
+  <data name="martyrdomReportWithGurdedPlayer" xml:space="preserve">
+    <value>保镖为保护{0}牺牲了...</value>
+  </data>
+  <data name="martyrdomReportWithBoth" xml:space="preserve">
+    <value>{0}为保护{1}牺牲了...</value>
+  </data>
+  <data name="Whisper" xml:space="preserve">
+    <value>顺风耳</value>
+  </data>
+  <data name="WhisperAbilityOffTime" xml:space="preserve">
+    <value>技能触发时间</value>
+  </data>
+  <data name="WhisperAbilityOnTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="WhisperTellTextTime" xml:space="preserve">
+    <value>侦查结果显示所需时间</value>
+  </data>
+  <data name="WhisperMaxTellText" xml:space="preserve">
+    <value>侦查结果显示的最大条数</value>
+  </data>
+  <data name="WhisperEnableAwakeAbility" xml:space="preserve">
+    <value>完成任务可以强化技能</value>
+  </data>
+  <data name="WhisperAbilityTaskGage" xml:space="preserve">
+    <value>强化技能所需的任务完成率</value>
+  </data>
+  <data name="WhisperIntroDescription" xml:space="preserve">
+    <value>将五感打磨到极致，感受凶案的发生</value>
+  </data>
+  <data name="WhisperShortDescription" xml:space="preserve">
+    <value>感受凶案的发生</value>
+  </data>
+  <data name="WhisperFullDescription" xml:space="preserve">
+    <value>顺风耳属于船员阵营，可以聆听飞船上发生的情况。
+技能“聆听”：
+-原地不动一段时间后强制发动。需要玩家可以移动并且没有进行做任务等交互行为
+-技能持续时间内顺风耳移动的场合，技能停止发动
+-技能持续时间内，顺风耳可以确认所有击杀发生的时间与位置
+-若“完成任务可以强化技能”开启，当顺风耳的任务进度达到“强化技能所需的任务完成率”以上时，顺风耳可以进一步知道击杀发生的房间</value>
+  </data>
+  <data name="killedTextWithRoom" xml:space="preserve">
+    <value>{0}的{1}传来了惨叫（{2}）</value>
+  </data>
+  <data name="killedText" xml:space="preserve">
+    <value>{0}传来了惨叫（{1}）</value>
+  </data>
+  <data name="TimeMaster" xml:space="preserve">
+    <value>时间之主</value>
+  </data>
+  <data name="TimeMasterAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="TimeMasterAbilityActiveTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="TimeMasterRewindTime" xml:space="preserve">
+    <value>技能回溯的时间</value>
+  </data>
+  <data name="TimeMasterIntroDescription" xml:space="preserve">
+    <value>回溯时间保护自己</value>
+  </data>
+  <data name="TimeMasterShortDescription" xml:space="preserve">
+    <value>回溯时间</value>
+  </data>
+  <data name="TimeMasterFullDescription" xml:space="preserve">
+    <value>时间之主属于船员阵营，可以使用时光之盾。
+时光之盾激活的时间内，若有玩家尝试击杀时间之主，那次击杀无效，其他玩家的将会回溯。时间之主不受回溯影响。
+只有玩家的位置会被回溯。可以设置时间之主能回溯的时间。</value>
+  </data>
+  <data name="timeShield" xml:space="preserve">
+    <value>时光之盾</value>
+  </data>
+  <data name="Agency" xml:space="preserve">
+    <value>代理人</value>
+  </data>
+  <data name="AgencyCanSeeTaskBar" xml:space="preserve">
+    <value>代理人可以确认任务进度</value>
+  </data>
+  <data name="AgencyMaxTaskNum" xml:space="preserve">
+    <value>代理人能代理的最大任务数量</value>
+  </data>
+  <data name="AgencyTakeTaskRange" xml:space="preserve">
+    <value>代理技能范围</value>
+  </data>
+  <data name="AgencyAbilityCoolTime" xml:space="preserve">
+    <value>代理技能冷却</value>
+  </data>
+  <data name="AgencyAbilityCount" xml:space="preserve">
+    <value>代理技能最大使用次数</value>
+  </data>
+  <data name="AgencyIntroDescription" xml:space="preserve">
+    <value>帮助别人完成任务</value>
+  </data>
+  <data name="AgencyShortDescription" xml:space="preserve">
+    <value>帮助别人完成任务</value>
+  </data>
+  <data name="AgencyFullDescription" xml:space="preserve">
+    <value>代理人属于船员阵营，可以帮助别人完成任务。
+行动阶段，代理人可以发动技能，从附近的玩家那里获取他们的任务。根据设定的任务分布情况，代理人从那名玩家处获得对应的任务。
+如果目标玩家是不能正常地被代理任务的船员，代理人随机获得（1-设定最大值数）个任务。
+如果目标玩家是内鬼之类不持有任务（有假任务）的身份，代理人获取的任务数量会根据全船任务的进度来确定。</value>
+  </data>
+  <data name="takeTask" xml:space="preserve">
+    <value>代理</value>
+  </data>
+  <data name="Bakary" xml:space="preserve">
+    <value>面包师</value>
+  </data>
+  <data name="BakaryChangeCooking" xml:space="preserve">
+    <value>会议持续时间会改变面包烘焙状态</value>
+  </data>
+  <data name="BakaryGoodBakeTime" xml:space="preserve">
+    <value>烘焙美味面包所需时间</value>
+  </data>
+  <data name="BakaryBadBakeTime" xml:space="preserve">
+    <value>面包烤焦所需时间</value>
+  </data>
+  <data name="BakaryIntroDescription" xml:space="preserve">
+    <value>为船员提供美味的面包</value>
+  </data>
+  <data name="BakaryShortDescription" xml:space="preserve">
+    <value>提供面包</value>
+  </data>
+  <data name="BakaryFullDescription" xml:space="preserve">
+    <value>面包师属于船员阵营，可以在会议阶段烤面包。
+只要面包师在场上存活，每次会议阶段结束时，所有玩家都将收到信息证明面包师存活，即便面包师的职业已经改变。
+根据会议阶段持续时间的长短，分别出现以下信息：
+-烘焙美味面包所需时间以下：面包不熟
+-烘焙美味面包所需时间以上，面包烤焦所需时间以下：面包美味
+-面包烤焦所需时间以上：面包烤焦</value>
+  </data>
+  <data name="rawBread" xml:space="preserve">
+    <value>面包还没有烤熟……</value>
+  </data>
+  <data name="goodBread" xml:space="preserve">
+    <value>面包师的面包新鲜出炉了</value>
+  </data>
+  <data name="badBread" xml:space="preserve">
+    <value>面包烤焦了……</value>
+  </data>
+  <data name="CurseMaker" xml:space="preserve">
+    <value>追魂者</value>
+  </data>
+  <data name="CurseMakerCursingRange" xml:space="preserve">
+    <value>追魂者技能范围</value>
+  </data>
+  <data name="CurseMakerAdditionalKillCool" xml:space="preserve">
+    <value>诅咒尸体后杀人凶手增加的额外冷却</value>
+  </data>
+  <data name="CurseMakerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="CurseMakerAbilityActiveTime" xml:space="preserve">
+    <value>技能施法时间</value>
+  </data>
+  <data name="CurseMakerAbilityCount" xml:space="preserve">
+    <value>技能使用次数</value>
+  </data>
+  <data name="CurseMakerTaskCurseTimeReduceRate" xml:space="preserve">
+    <value>每完成一项任务使诅咒所需时间缩短的比率</value>
+  </data>
+  <data name="CurseMakerIsNotRemoveDeadBodyByTask" xml:space="preserve">
+    <value>被诅咒的尸体在完成一定任务后不会消失</value>
+  </data>
+  <data name="CurseMakerNotRemoveDeadBodyTaskGage" xml:space="preserve">
+    <value>保持被诅咒尸体不会消失所需的任务进度</value>
+  </data>
+  <data name="CurseMakerIsDeadBodySearch" xml:space="preserve">
+    <value>显示指向尸体的箭头</value>
+  </data>
+  <data name="CurseMakerIsMultiDeadBodySearch" xml:space="preserve">
+    <value>指向尸体的箭头可以同时显示多个</value>
+  </data>
+  <data name="CurseMakerSearchDeadBodyTime" xml:space="preserve">
+    <value>从玩家死亡到箭头显示的间隔时间</value>
+  </data>
+  <data name="CurseMakerIsReduceSearchForTask" xml:space="preserve">
+    <value>箭头显示间隔时间在完成一定任务后减少</value>
+  </data>
+  <data name="CurseMakerReduceSearchTaskGage" xml:space="preserve">
+    <value>减少间隔时间所需的任务进度</value>
+  </data>
+  <data name="CurseMakerReduceSearchDeadBodyTime" xml:space="preserve">
+    <value>减少的时间</value>
+  </data>
+  <data name="CurseMakerIntroDescription" xml:space="preserve">
+    <value>我诅咒你……不得好死！</value>
+  </data>
+  <data name="CurseMakerShortDescription" xml:space="preserve">
+    <value>通过施法让死去的同伴报复凶手</value>
+  </data>
+  <data name="CurseMakerFullDescription" xml:space="preserve">
+    <value>追魂者属于船员阵营，可以献祭一名玩家的尸体来诅咒凶手。
+行动阶段，追魂者可以让一具尸体消失，来增长并重置那名凶手的击杀冷却。
+追魂者造成的诅咒永久生效，不会因为会议阶段的召开而消失。
+若“显示指向尸体的箭头”选项开启，其他玩家死亡一定时间后，会向追魂者显示指向尸体位置的箭头。间隔的时间可以自行设置。</value>
+  </data>
+  <data name="curse" xml:space="preserve">
+    <value>诅咒</value>
+  </data>
+  <data name="cursing" xml:space="preserve">
+    <value>诅咒中</value>
+  </data>
+  <data name="Fencer" xml:space="preserve">
+    <value>击剑手</value>
+  </data>
+  <data name="FencerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="FencerAbilityActiveTime" xml:space="preserve">
+    <value>技能持续时间</value>
+  </data>
+  <data name="FencerAbilityCount" xml:space="preserve">
+    <value>技能最大使用次数</value>
+  </data>
+  <data name="FencerResetTime" xml:space="preserve">
+    <value>从击杀被赋予到收回的间隔时间</value>
+  </data>
+  <data name="FencerIntroDescription" xml:space="preserve">
+    <value>我渴望有价值的对手</value>
+  </data>
+  <data name="FencerShortDescription" xml:space="preserve">
+    <value>要刺得快 刺得狠</value>
+  </data>
+  <data name="FencerFullDescription" xml:space="preserve">
+    <value>击剑手属于船员阵营，可以在遇袭时进行反击。
+当有玩家尝试击杀持剑状态下的击剑手时，那次击杀无效，击剑手获得短暂的、无冷却的击杀能力。一段时间后，这个能力收回。
+持剑状态下的击剑手免疫一切击杀，但不能防止非击杀类的致死技能，如被传教士传教后的自裁。</value>
+  </data>
+  <data name="counter" xml:space="preserve">
+    <value>持剑</value>
+  </data>
+  <data name="Opener" xml:space="preserve">
+    <value>维修工</value>
+  </data>
+  <data name="OpenerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="OpenerAbilityCount" xml:space="preserve">
+    <value>技能使用次数</value>
+  </data>
+  <data name="OpenerRange" xml:space="preserve">
+    <value>技能距离</value>
+  </data>
+  <data name="OpenerReduceRate" xml:space="preserve">
+    <value>完成任务后技能减少冷却比率</value>
+  </data>
+  <data name="OpenerPlusAbility" xml:space="preserve">
+    <value>完成任务后技能追加次数</value>
+  </data>
+  <data name="OpenerIntroDescription" xml:space="preserve">
+    <value>打开被关闭的门</value>
+  </data>
+  <data name="OpenerShortDescription" xml:space="preserve">
+    <value>打开被关闭的门</value>
+  </data>
+  <data name="OpenerFullDescription" xml:space="preserve">
+    <value>维修工属于船员阵营，可以让飞船上的门打开。
+维修工使用技能“开门“后，距离维修工最近的门会立即被打开。
+根据房间设置，维修工每完成一个任务，技能冷却可以减少，使用次数也可以得到增加。</value>
+  </data>
+  <data name="openDoor" xml:space="preserve">
+    <value>开门</value>
+  </data>
+  <data name="Carpenter" xml:space="preserve">
+    <value>工匠</value>
+  </data>
+  <data name="CarpenterAwakeTaskGage" xml:space="preserve">
+    <value>觉醒能力所需任务进度</value>
+  </data>
+  <data name="CarpenterAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="CarpenterAbilityCount" xml:space="preserve">
+    <value>螺丝数量</value>
+  </data>
+  <data name="CarpenterRemoveVentScrew" xml:space="preserve">
+    <value>管道封锁消耗螺丝数量</value>
+  </data>
+  <data name="CarpenterRemoveVentStopTime" xml:space="preserve">
+    <value>管道封锁所需时间</value>
+  </data>
+  <data name="CarpenterSetCameraScrew" xml:space="preserve">
+    <value>摄像头放置消耗螺丝数量</value>
+  </data>
+  <data name="CarpenterSetCameraStopTime" xml:space="preserve">
+    <value>放置摄像头所需时间</value>
+  </data>
+  <data name="CarpenterIntroDescription" xml:space="preserve">
+    <value>完成任务并利用能力放置摄像头和封锁管道</value>
+  </data>
+  <data name="CarpenterShortDescription" xml:space="preserve">
+    <value>完成任务并利用能力放置摄像头和封锁管道</value>
+  </data>
+  <data name="CarpenterFullDescription" xml:space="preserve">
+    <value>工匠属于船员阵营，可以安装摄像头并封锁管道。
+根据工匠所处的位置，工匠安装摄像头与封锁管道的能力及其图标会自由切换。
+工匠每种技能的发动都需要消耗一定数量的螺丝。螺丝不足的场合工匠不可以把技能发动。
+安装摄像头:在当前位置安装一个额外的监控摄像头
+封锁:封锁管道</value>
+  </data>
+  <data name="ventSeal" xml:space="preserve">
+    <value>封锁</value>
+  </data>
+  <data name="cameraSet" xml:space="preserve">
+    <value>安装</value>
+  </data>
+  <data name="carpenterScrewNum" xml:space="preserve">
+    <value>工匠螺丝数量：{0}, {1}</value>
+  </data>
+  <data name="Survivor" xml:space="preserve">
+    <value>幸存者</value>
+  </data>
+  <data name="SurvivorAwakeTaskGage" xml:space="preserve">
+    <value>幸存者获胜需要的最低任务进度率</value>
+  </data>
+  <data name="SurvivorDeadWinTaskGage" xml:space="preserve">
+    <value>死亡前幸存者的任务计入全船总任务进度</value>
+  </data>
+  <data name="SurvivorNoWinSurvivorAssignGhostRole" xml:space="preserve">
+    <value>当幸存者无法获胜时分配一个幽灵职业</value>
+  </data>
+  <data name="SurvivorIntroDescription" xml:space="preserve">
+    <value>这是为了活下去的，我的挣扎！</value>
+  </data>
+  <data name="SurvivorShortDescription" xml:space="preserve">
+    <value>完成任务来让自己获得胜利</value>
+  </data>
+  <data name="SurvivorFullDescription" xml:space="preserve">
+    <value>幸存者属于船员阵营，需要努力存活来获得胜利。
+幸存者若在死亡时没有完成一定量的任务，就不能作为船员阵营玩家获得胜利。
+若幸存者在完成所需量的任务前死亡，其任务进度将不会计入全船总任务进度。
+若幸存者在完成所需量的任务后死亡，恭喜，他仍然可以作为船员阵营玩家获胜。</value>
+  </data>
+  <data name="Captain" xml:space="preserve">
+    <value>船长</value>
+  </data>
+  <data name="CaptainAwakeTaskGage" xml:space="preserve">
+    <value>舰长得知自己职业需要的任务进度</value>
+  </data>
+  <data name="CaptainChargeVoteWhenSkip" xml:space="preserve">
+    <value>每次弃票和不投票时存入票库的票数</value>
+  </data>
+  <data name="CaptainAwakedDefaultVoteNum" xml:space="preserve">
+    <value>票库内原先有的票数</value>
+  </data>
+  <data name="CaptainIntroDescription" xml:space="preserve">
+    <value>准备好了吗，孩子们？</value>
+  </data>
+  <data name="CaptainShortDescription" xml:space="preserve">
+    <value>用船长权限逐出内鬼</value>
+  </data>
+  <data name="CaptainFullDescription" xml:space="preserve">
+    <value>船长属于船员阵营，可以在会议阶段进行额外投票。
+船长票库内剩余的票数多于一票时，可以使用额外票权。
+被船长使用了额外票权的玩家会得到特殊标记，并获得额外投票。
+每当跳过投票或者未投票，船长的票库就会得到补充，即便船长还未确认自己的职业。
+每当船长使用自己的技能后，船长票库内的票数变为初始票数。
+船长可以在使用额外票权后变更使用目标。</value>
+  </data>
+  <data name="captainVoteStatus" xml:space="preserve">
+    <value>票库剩余:{0}票\n给目标投:{1}票</value>
+  </data>
+  <data name="Photographer" xml:space="preserve">
+    <value>摄影师</value>
+  </data>
+  <data name="PhotographerAwakeTaskGage" xml:space="preserve">
+    <value>摄影师得知自己职业需要的任务进度</value>
+  </data>
+  <data name="PhotographerUpgradePhotoTaskGage" xml:space="preserve">
+    <value>摄影师得到强化所需的任务数</value>
+  </data>
+  <data name="PhotographerEnableAllSendChat" xml:space="preserve">
+    <value>摄影师照片得到的信息全玩家共享</value>
+  </data>
+  <data name="PhotographerUpgradeAllSendChatTaskGage" xml:space="preserve">
+    <value>全玩家共享信息所需的摄影师任务进度</value>
+  </data>
+  <data name="PhotographerPhotoRange" xml:space="preserve">
+    <value>摄影师拍摄的范围</value>
+  </data>
+  <data name="PhotographerAbilityCoolTime" xml:space="preserve">
+    <value>拍摄冷却</value>
+  </data>
+  <data name="PhotographerAbilityCount" xml:space="preserve">
+    <value>可使用拍摄次数</value>
+  </data>
+  <data name="PhotographerIntroDescription" xml:space="preserve">
+    <value>记录每一刻瞬间</value>
+  </data>
+  <data name="PhotographerShortDescription" xml:space="preserve">
+    <value>整理照片，分析局势</value>
+  </data>
+  <data name="PhotographerFullDescription" xml:space="preserve">
+    <value>摄影师属于船员阵营，可以给大家拍照来记录信息。
+摄影师可以拍摄记录当前范围内所有玩家的位置信息的照片。
+照片内的信息将会在那个会议阶段在聊天框内展示出来。
+完成一定数量任务后，摄影师可以强化摄影能力与在聊天框内展示的信息。
+照片由系统随机命名。</value>
+  </data>
+  <data name="takePhoto" xml:space="preserve">
+    <value>拍摄</value>
+  </data>
+  <data name="photoChat" xml:space="preserve">
+    <value>摄影师拍的照片洗出来了！\n{0}</value>
+  </data>
+  <data name="takePhotoTime" xml:space="preserve">
+    <value>拍摄日期</value>
+  </data>
+  <data name="photoName" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="onlyMeOnPhoto" xml:space="preserve">
+    <value>我的自拍.jpg</value>
+  </data>
+  <data name="Delusioner" xml:space="preserve">
+    <value>被害妄想者</value>
+  </data>
+  <data name="DelusionerAwakeVoteNum" xml:space="preserve">
+    <value>被害妄想者觉醒技能需要在会议阶段获得的投票数</value>
+  </data>
+  <data name="DelusionerIsOnetimeAwake" xml:space="preserve">
+    <value>被害妄想者需要在每次会议结束时都满足觉醒条件</value>
+  </data>
+  <data name="DelusionerRange" xml:space="preserve">
+    <value>技能的触发范围</value>
+  </data>
+  <data name="DelusionerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="DelusionerAbilityCount" xml:space="preserve">
+    <value>技能的使用次数</value>
+  </data>
+  <data name="DelusionerVoteCoolTimeReduceRate" xml:space="preserve">
+    <value>当被玩家投票时，技能冷却减少</value>
+  </data>
+  <data name="DelusionerDeflectDamagePenaltyRate" xml:space="preserve">
+    <value>使用一次技能冷却惩罚</value>
+  </data>
+  <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
+    <value>\n在技能的随机传送地点列表中</value>
+  </data>
+  <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
+    <value>\n的出生点在技能的随机传送地点列表中</value>
+  </data>
+  <data name="DelusionerIntroDescription" xml:space="preserve">
+    <value>不要靠近我啊啊啊啊啊啊啊啊啊啊啊!</value>
+  </data>
+  <data name="DelusionerShortDescription" xml:space="preserve">
+    <value>把那些看起来想要伤害你的人打飞</value>
+  </data>
+  <data name="deflectDamage" xml:space="preserve">
+    <value>别过来</value>
+  </data>
+  <data name="Resurrecter" xml:space="preserve">
+    <value>反生者</value>
+  </data>
+  <data name="ResurrecterAwakeTaskGage" xml:space="preserve">
+    <value>反生者得知自己职业需要完成的任务完成率</value>
+  </data>
+  <data name="ResurrecterResurrectTaskGage" xml:space="preserve">
+    <value>反生者觉醒复活能力所需任务完成率</value>
+  </data>
+  <data name="ResurrecterIsMeetingCoolResetOnResurrect" xml:space="preserve">
+    <value>反生者复活后重置所有玩家紧急会议冷却</value>
+  </data>
+  <data name="ResurrecterResurrectMeetingCooltime" xml:space="preserve">
+    <value>反生者复活后紧急会议冷却</value>
+  </data>
+  <data name="ResurrecterResurrectDelayTime" xml:space="preserve">
+    <value>反生状态触发后复活所需的时间</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetMeetingNum" xml:space="preserve">
+    <value>反生后导致任务进度回退的会议次数</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetGage" xml:space="preserve">
+    <value>任务进度回退率</value>
+  </data>
+  <data name="ResurrecterCanResurrectAfterDeath" xml:space="preserve">
+    <value>死亡后可以反生</value>
+  </data>
+  <data name="ResurrecterCanResurrectOnExil" xml:space="preserve">
+    <value>被放逐后可以反生</value>
+  </data>
+  <data name="ResurrecterIntroDescription" xml:space="preserve">
+    <value>如不死鸟般，其命，其魂，以至其骸！</value>
+  </data>
+  <data name="ResurrecterShortDescription" xml:space="preserve">
+    <value>涅槃重生</value>
+  </data>
+  <data name="ResurrecterFullDescription" xml:space="preserve">
+    <value>反生者属于船员阵营，拥有复活一次的能力。
+反生者死后不会被分配幽灵职业。
+完成一定任务后，反生者可进入反生状态。
+反生状态下的反生者被击杀后，将会在一定时间内复活。这段时间内，反生者不会看到死后的职业信息。
+若“死亡后可以反生”开启，反生者在死亡状态下进入反生状态时，反生者即刻复活。
+反生者复活的地点为当前游戏地图的出生点。当前地图有多个出生点的场合，从那之中随机挑选一个出生点。
+反生者复活后，拥有击杀能力的职业会得到通知。
+反生者复活后，经过若干个会议阶段，反生者的任务将会回退。</value>
+  </data>
+  <data name="resurrectText" xml:space="preserve">
+    <value>距离复活还剩{0}秒</value>
+  </data>
+  <data name="Gambler" xml:space="preserve">
+    <value>投机者</value>
+  </data>
+  <data name="GamblerNormalVoteRate" xml:space="preserve">
+    <value>投机者投票数为1票的概率</value>
+  </data>
+  <data name="GamblerIntroDescription" xml:space="preserve">
+    <value>太空有风险，投票需谨慎</value>
+  </data>
+  <data name="GamblerShortDescription" xml:space="preserve">
+    <value>你的投票数会随机变化</value>
+  </data>
+  <data name="GamblerFullDescription" xml:space="preserve">
+    <value>投机者属于船员阵营，其会议阶段的投票的等价票数会在0~2票之间变化。
+投机者的投票在投票结算画面中不会变动，无论实际投出几票，都只会显示投机者投出了一票。
+投机者投票数为0票与2票的概率相等，由投票数为1票的概率决定。
+例如，若投票数为1票的概率为50%，则投票数为0票与2票的概率均为25%。</value>
+  </data>
+  <data name="Teleporter" xml:space="preserve">
+    <value>传送师</value>
+  </data>
+  <data name="TeleporterCanUseOtherPlayer" xml:space="preserve">
+    <value>其他玩家也可以使用传送门</value>
+  </data>
+  <data name="TeleporterAbilityCoolTime" xml:space="preserve">
+    <value>传送师安装传送门冷却</value>
+  </data>
+  <data name="TeleporterAbilityCount" xml:space="preserve">
+    <value>传送门零件数</value>
+  </data>
+  <data name="TeleporterIntroDescription" xml:space="preserve">
+    <value>蛋糕是个谎言</value>
+  </data>
+  <data name="TeleporterShortDescription" xml:space="preserve">
+    <value>收集传送门零件来造出传送门</value>
+  </data>
+  <data name="TeleporterFullDescription" xml:space="preserve">
+    <value>传送师属于船员阵营，可以制造能在两点间瞬间移动的传送门。
+传送门使用后，需要5秒钟的冷却。
+传送师在游戏开始时无法使用技能，需要在地图上搜寻散落的传送门零件来增加技能使用次数。
+传送师可以消耗一次技能使用次数来安装一处传送门。
+若“其他玩家也可以使用传送门”关闭，传送门仅对传送师可见，且仅供传送师使用。</value>
+  </data>
+  <data name="SetPortal" xml:space="preserve">
+    <value>安装</value>
+  </data>
+</root>

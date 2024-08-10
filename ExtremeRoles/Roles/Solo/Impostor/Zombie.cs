@@ -151,7 +151,7 @@ public sealed class Zombie :
     public void CreateAbility()
     {
         this.CreateActivatingAbilityCountButton(
-            Translation.GetString("featMagicCircle"),
+            Tr.GetString("featMagicCircle"),
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Zombie),
             IsActivate,
             SetMagicCircle,
@@ -295,7 +295,7 @@ public sealed class Zombie :
             this.resurrectText.gameObject.SetActive(true);
             this.resurrectTimer -= Time.deltaTime;
             this.resurrectText.text = string.Format(
-                Translation.GetString("resurrectText"),
+                Tr.GetString("resurrectText"),
                 Mathf.CeilToInt(this.resurrectTimer));
 
             if (this.resurrectTimer <= 0.0f)
@@ -335,19 +335,19 @@ public sealed class Zombie :
         else
         {
             return Design.ColoedString(
-                Palette.ImpostorRed, Translation.GetString(RoleTypes.Impostor.ToString()));
+                Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return Tr.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return Tr.GetString(
                 $"{RoleTypes.Impostor}FullDescription");
         }
     }

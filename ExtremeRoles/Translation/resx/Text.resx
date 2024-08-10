@@ -1,0 +1,1165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MODNAME_TRANS" xml:space="preserve">
+    <value>Extreme Roles</value>
+  </data>
+  <data name="GeneralTab" xml:space="preserve">
+    <value>グローバル設定</value>
+  </data>
+  <data name="CrewmateTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;クルーメイト役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="ImpostorTab" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;インポスター役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="NeutralTab" xml:space="preserve">
+    <value>&lt;color=#7F7F7FFF&gt;ニュートラル役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="CombinationTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;コンビ&lt;/color&gt;&lt;color=#FF1919FF&gt;ネーション&lt;/color&gt;&lt;color=#7F7F7FFF&gt;役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="GhostCrewmateTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;ゴーストクルーメイト役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="GhostImpostorTab" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;ゴーストインポスター役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="GhostNeutralTab" xml:space="preserve">
+    <value>&lt;color=#7F7F7FFF&gt;ゴーストニュートラル役職設定&lt;/color&gt;</value>
+  </data>
+  <data name="ExR_GeneralTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの共通部分の設定を行うタブ</value>
+  </data>
+  <data name="ExR_CrewmateTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの&lt;color=#8CFFFFFF&gt;クルーメイト役職&lt;/color&gt;の設定を行うタブ</value>
+  </data>
+  <data name="ExR_ImpostorTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの&lt;color=#FF1919FF&gt;インポスター役職&lt;/color&gt;の設定を行うタブ</value>
+  </data>
+  <data name="ExR_NeutralTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの&lt;color=#7F7F7FFF&gt;ニュートラル役職&lt;/color&gt;の設定を行うタブ</value>
+  </data>
+  <data name="ExR_CombinationTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの&lt;color=#8CFFFFFF&gt;コンビ&lt;/color&gt;&lt;color=#FF1919FF&gt;ネーション&lt;/color&gt;&lt;color=#7F7F7FFF&gt;役職&lt;/color&gt;の設定を行うタブ</value>
+  </data>
+  <data name="ExR_GhostCrewmateTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの&lt;color=#8CFFFFFF&gt;クルーメイト幽霊役職&lt;/color&gt;の設定を行うタブ</value>
+  </data>
+  <data name="ExR_GhostImpostorTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの&lt;color=#FF1919FF&gt;インポスター幽霊役職&lt;/color&gt;の設定を行うタブ</value>
+  </data>
+  <data name="ExR_GhostNeutralTabSettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの&lt;color=#7F7F7FFF&gt;ニュートラル幽霊役職&lt;/color&gt;の設定を行うタブ</value>
+  </data>
+  <data name="OptionSettingChange" xml:space="preserve">
+    <value>[{0}-{1}]の「{2}」が「{3}」に更新されました</value>
+  </data>
+  <data name="PresetOption" xml:space="preserve">
+    <value>プリセット</value>
+  </data>
+  <data name="PresetOptionSelection" xml:space="preserve">
+    <value>使用するプリセット</value>
+  </data>
+  <data name="RandomOption" xml:space="preserve">
+    <value>乱数に関する設定</value>
+  </data>
+  <data name="RandomOptionUseStrong" xml:space="preserve">
+    <value>強力なシャッフルを使用する</value>
+  </data>
+  <data name="RandomOptionAlgorithm" xml:space="preserve">
+    <value>使用する乱数生成アルゴリズム</value>
+  </data>
+  <data name="RoleSpawnCategory" xml:space="preserve">
+    <value>役職のスポーン数</value>
+  </data>
+  <data name="RoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>クルーのロール数　最少</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>クルーのロール数　最大</value>
+  </data>
+  <data name="RoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>第三陣営のロール数　最少</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>第三陣営のロール数　最大</value>
+  </data>
+  <data name="RoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>インポスターのロール数　最少</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>インポスターのロール数　最大</value>
+  </data>
+  <data name="GhostRoleSpawnCategory" xml:space="preserve">
+    <value>幽霊役職のロール数設定</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>クルーのゴーストロール数　最少</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>クルーのゴーストロール数　最大</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>第三陣営のゴーストロール数　最少</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>第三陣営のゴーストロール数　最大</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>インポスターのゴーストロール数　最少</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>インポスターのゴーストロール数　最大</value>
+  </data>
+  <data name="MeetingOption" xml:space="preserve">
+    <value>会議に関する設定</value>
+  </data>
+  <data name="MeetingOptionUseRaiseHand" xml:space="preserve">
+    <value>「挙手する」ボタンを使用する</value>
+  </data>
+  <data name="MeetingOptionNumMeating" xml:space="preserve">
+    <value>合計緊急会議回数</value>
+  </data>
+  <data name="MeetingOptionChangeMeetingVoteAreaSort" xml:space="preserve">
+    <value>会議中のプレイヤーの並び順をバニラから変更する</value>
+  </data>
+  <data name="MeetingOptionFixedMeetingPlayerLevel" xml:space="preserve">
+    <value>会議中のプレイヤーのレベルを固定化する</value>
+  </data>
+  <data name="MeetingOptionDisableSkipInEmergencyMeeting" xml:space="preserve">
+    <value>投票スキップ禁止</value>
+  </data>
+  <data name="MeetingOptionDisableSelfVote" xml:space="preserve">
+    <value>自殺投票禁止</value>
+  </data>
+  <data name="ExiledOption" xml:space="preserve">
+    <value>追放に関する設定</value>
+  </data>
+  <data name="ExiledOptionConfirmExilMode" xml:space="preserve">
+    <value>追放を確認する陣営</value>
+  </data>
+  <data name="ExiledOptionIsConfirmRole" xml:space="preserve">
+    <value>追放時、役職も確認するか</value>
+  </data>
+  <data name="VentOption" xml:space="preserve">
+    <value>ベントに関する設定</value>
+  </data>
+  <data name="VentOptionDisable" xml:space="preserve">
+    <value>マップのベントを無効化する</value>
+  </data>
+  <data name="VentOptionCanKillInPlayer" xml:space="preserve">
+    <value>ベント内のプレイヤーをキルできるか</value>
+  </data>
+  <data name="VentOptionEngineerUseImpostor" xml:space="preserve">
+    <value>エンジニアのベント使用をインポスターと同じにする</value>
+  </data>
+  <data name="VentOptionAnimationModeInVison" xml:space="preserve">
+    <value>ベントのアニメーションが再生される範囲</value>
+  </data>
+  <data name="VanillaAnimation" xml:space="preserve">
+    <value>画面内全て</value>
+  </data>
+  <data name="DonotWallHack" xml:space="preserve">
+    <value>壁の内側のみ</value>
+  </data>
+  <data name="DonotOutVison" xml:space="preserve">
+    <value>視界内のみ</value>
+  </data>
+  <data name="TaskOption" xml:space="preserve">
+    <value>タスクに関する設定</value>
+  </data>
+  <data name="TaskOptionIsFixWallHaskTask" xml:space="preserve">
+    <value>タスクの壁チェックの設定を上書きするか</value>
+  </data>
+  <data name="TaskOptionParallelMedBayScans" xml:space="preserve">
+    <value>メッドベイのスキャンを同時使用できるか</value>
+  </data>
+  <data name="TaskOptionGarbageTask" xml:space="preserve">
+    <value>ゴミ箱タスク</value>
+  </data>
+  <data name="TaskOptionShowerTask" xml:space="preserve">
+    <value>シャワータスク</value>
+  </data>
+  <data name="TaskOptionDevelopPhotosTask" xml:space="preserve">
+    <value>現像タスク</value>
+  </data>
+  <data name="TaskOptionDivertPowerTask" xml:space="preserve">
+    <value>電力転換タスク</value>
+  </data>
+  <data name="RandomSpawnOption" xml:space="preserve">
+    <value>ランダムスポーンに関する設定</value>
+  </data>
+  <data name="RandomSpawnOptionEnable" xml:space="preserve">
+    <value>スポーンの特殊設定を有効化する</value>
+  </data>
+  <data name="RandomSpawnOptionSkeld" xml:space="preserve">
+    <value>「スケルド」のランダムスポーン</value>
+  </data>
+  <data name="RandomSpawnOptionMiraHq" xml:space="preserve">
+    <value>「ミラHQ」のランダムスポーン</value>
+  </data>
+  <data name="RandomSpawnOptionPolus" xml:space="preserve">
+    <value>「ポーラス」のランダムスポーン</value>
+  </data>
+  <data name="RandomSpawnOptionAirShip" xml:space="preserve">
+    <value>「エアシップ」のランダムスポーン</value>
+  </data>
+  <data name="RandomSpawnOptionFungle" xml:space="preserve">
+    <value>「ファングル」のランダムスポーン</value>
+  </data>
+  <data name="RandomSpawnOptionIsAutoSelect" xml:space="preserve">
+    <value>会議後のランダムスポーンを自動選択にするか</value>
+  </data>
+  <data name="AdminOption" xml:space="preserve">
+    <value>アドミンに関する設定</value>
+  </data>
+  <data name="AdminOptionIsRemove" xml:space="preserve">
+    <value>アドミンを無効化する</value>
+  </data>
+  <data name="AdminOptionAirShipEnable" xml:space="preserve">
+    <value>「エアシップ」の有効なアドミン</value>
+  </data>
+  <data name="ModeBoth" xml:space="preserve">
+    <value>両方有効</value>
+  </data>
+  <data name="ModeCockpitOnly" xml:space="preserve">
+    <value>コックピットのみ有効</value>
+  </data>
+  <data name="ModeArchiveOnly" xml:space="preserve">
+    <value>アーカイブのみ有効</value>
+  </data>
+  <data name="AdminOptionEnableLimit" xml:space="preserve">
+    <value>アドミンの時間制限を有効化する</value>
+  </data>
+  <data name="AdminOptionLimitTime" xml:space="preserve">
+    <value>アドミンの使用時間上限</value>
+  </data>
+  <data name="SecurityOption" xml:space="preserve">
+    <value>セキュリティカメラとログに関する設定</value>
+  </data>
+  <data name="SecurityOptionIsRemove" xml:space="preserve">
+    <value>セキュリティカメラとログを無効化する</value>
+  </data>
+  <data name="SecurityOptionEnableLimit" xml:space="preserve">
+    <value>セキュリティカメラとログの時間制限を有効化する</value>
+  </data>
+  <data name="SecurityOptionLimitTime" xml:space="preserve">
+    <value>セキュリティカメラとログの使用時間上限</value>
+  </data>
+  <data name="VitalOption" xml:space="preserve">
+    <value>バイタルに関する設定</value>
+  </data>
+  <data name="VitalOptionIsRemove" xml:space="preserve">
+    <value>バイタルを無効化する</value>
+  </data>
+  <data name="VitalOptionEnableLimit" xml:space="preserve">
+    <value>バイタルの時間制限を有効化する</value>
+  </data>
+  <data name="VitalOptionLimitTime" xml:space="preserve">
+    <value>バイタルの使用時間上限</value>
+  </data>
+  <data name="VitalOptionPolusVitalPos" xml:space="preserve">
+    <value>ポーラスのバイタルの位置</value>
+  </data>
+  <data name="RandomMapOption" xml:space="preserve">
+    <value>ランダムマップに関する設定</value>
+  </data>
+  <data name="RandomMapOptionEnable" xml:space="preserve">
+    <value>毎回マップがランダムに変わるか</value>
+  </data>
+  <data name="TaskWinOption" xml:space="preserve">
+    <value>タスク勝利に関する設定</value>
+  </data>
+  <data name="TaskWinOptionDisableWhenNoneTaskCrew" xml:space="preserve">
+    <value>タスクを持つクルーが居ない場合、タスク勝利を無効化する</value>
+  </data>
+  <data name="TaskWinOptionDisableAll" xml:space="preserve">
+    <value>タスク勝利を無効化する</value>
+  </data>
+  <data name="NeutralWinOption" xml:space="preserve">
+    <value>ニュートラル陣営の勝利に関する設定</value>
+  </data>
+  <data name="NeutralWinOptionIsSame" xml:space="preserve">
+    <value>同じロールの第三陣営の勝利を同じにする</value>
+  </data>
+  <data name="NeutralWinOptionDisableSpecialEnd" xml:space="preserve">
+    <value>第三陣営の特殊勝利による強制終了を無効化する</value>
+  </data>
+  <data name="GhostRoleGlobalOption" xml:space="preserve">
+    <value>幽霊役職全般に関する設定</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
+    <value>第三陣営役職がバニラの幽霊役職にアサインされるか</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsRemoveAngleIcon" xml:space="preserve">
+    <value>ゴーストロールの天使アイコンを無効化する</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
+    <value>守護天使の能力発動報告を無効化する</value>
+  </data>
+  <data name="EnableHorseMode" xml:space="preserve">
+    <value>ウマングアスを有効にする</value>
+  </data>
+  <data name="OptionCategory" xml:space="preserve">
+    <value>カテゴリー</value>
+  </data>
+  <data name="moreOptionText" xml:space="preserve">
+    <value>MODの設定</value>
+  </data>
+  <data name="modOptionText" xml:space="preserve">
+    <value>MODの設定</value>
+  </data>
+  <data name="GhostsSeeTasksButton" xml:space="preserve">
+    <value>幽霊時、全員のタスク残量表示する</value>
+  </data>
+  <data name="GhostsSeeRolesButton" xml:space="preserve">
+    <value>幽霊時、全員のロール表示する</value>
+  </data>
+  <data name="GhostsSeeVotesButton" xml:space="preserve">
+    <value>幽霊時、全員の投票先表示する</value>
+  </data>
+  <data name="ShowRoleSummaryButton" xml:space="preserve">
+    <value>各プレイヤーの最終結果を表示する</value>
+  </data>
+  <data name="HideNamePlateButton" xml:space="preserve">
+    <value>ネームプレートを非表示にする</value>
+  </data>
+  <data name="PublicBetaMode" xml:space="preserve">
+    <value>パブリックベータモード</value>
+  </data>
+  <data name="custom" xml:space="preserve">
+    <value>カスタム</value>
+  </data>
+  <data name="ExROfficialTokyo" xml:space="preserve">
+    <value>ExR専用(東京)</value>
+  </data>
+  <data name="importCsv" xml:space="preserve">
+    <value>インポート</value>
+  </data>
+  <data name="importPleaseWait" xml:space="preserve">
+    <value>オプションをインポート中\nしばらくお待ち下さい・・・</value>
+  </data>
+  <data name="importSuccess" xml:space="preserve">
+    <value>インポートに成功しました</value>
+  </data>
+  <data name="importError" xml:space="preserve">
+    <value>インポートに失敗しました\nファイル等を確認してください</value>
+  </data>
+  <data name="exportCsv" xml:space="preserve">
+    <value>エクスポート</value>
+  </data>
+  <data name="exportPleaseWait" xml:space="preserve">
+    <value>オプションをエクスポート中\nしばらくお待ち下さい・・・</value>
+  </data>
+  <data name="exportSuccess" xml:space="preserve">
+    <value>エクスポートに成功しました</value>
+  </data>
+  <data name="exportError" xml:space="preserve">
+    <value>エクスポートに失敗しました\noption.csvを削除して再実行してください</value>
+  </data>
+  <data name="version" xml:space="preserve">
+    <value>ver.</value>
+  </data>
+  <data name="developer" xml:space="preserve">
+    <value>MOD開発：</value>
+  </data>
+  <data name="debugThunk" xml:space="preserve">
+    <value>デバッグ協力：</value>
+  </data>
+  <data name="langTranslate" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="translatorMember" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="youAreRoleIntro" xml:space="preserve">
+    <value>あなたの役職は</value>
+  </data>
+  <data name="andFirst" xml:space="preserve">
+    <value>及び</value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value>、</value>
+  </data>
+  <data name="introAnd" xml:space="preserve">
+    <value>そして、</value>
+  </data>
+  <data name="optionOn" xml:space="preserve">
+    <value>&lt;color=#33ffcc&gt;オン&lt;/color&gt;</value>
+  </data>
+  <data name="optionOff" xml:space="preserve">
+    <value>&lt;color=#ff3366&gt;オフ&lt;/color&gt;</value>
+  </data>
+  <data name="crewmateRoles" xml:space="preserve">
+    <value>クルーのロール</value>
+  </data>
+  <data name="neutralRoles" xml:space="preserve">
+    <value>第三陣営のロール</value>
+  </data>
+  <data name="impostorRoles" xml:space="preserve">
+    <value>インポスターのロール</value>
+  </data>
+  <data name="crewmateGhostRoles" xml:space="preserve">
+    <value>クルーのゴーストロール</value>
+  </data>
+  <data name="neutralGhostRoles" xml:space="preserve">
+    <value>第三陣営のゴーストロール</value>
+  </data>
+  <data name="impostorGhostRoles" xml:space="preserve">
+    <value>インポスターのゴーストロール</value>
+  </data>
+  <data name="pressTabForMore" xml:space="preserve">
+    <value>Tabキーで次のページへ…</value>
+  </data>
+  <data name="meetingStatus" xml:space="preserve">
+    <value>船員 {0} が、あと\n\n\n緊急招集できる</value>
+  </data>
+  <data name="meetingCount" xml:space="preserve">
+    <value>{0}回　と船員全体で　{1}回</value>
+  </data>
+  <data name="buttonBlocked" xml:space="preserve">
+    <value>使用禁止</value>
+  </data>
+  <data name="Preset" xml:space="preserve">
+    <value>プリセット {0}</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>{0}秒</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>{0}分</value>
+  </data>
+  <data name="Shot" xml:space="preserve">
+    <value>{0}回</value>
+  </data>
+  <data name="Multiplier" xml:space="preserve">
+    <value>{0}x</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>{0}％</value>
+  </data>
+  <data name="ScrewNum" xml:space="preserve">
+    <value>{0}本</value>
+  </data>
+  <data name="VoteNum" xml:space="preserve">
+    <value>{0}票</value>
+  </data>
+  <data name="XionUseXion" xml:space="preserve">
+    <value>ホスト役職：「シオン」を使用する</value>
+  </data>
+  <data name="yourHost" xml:space="preserve">
+    <value>ホスト役職</value>
+  </data>
+  <data name="youAreNewRuleEditor" xml:space="preserve">
+    <value>新しい”ルール”の礎となれ</value>
+  </data>
+  <data name="Xion" xml:space="preserve">
+    <value>シオン</value>
+  </data>
+  <data name="XionIntroDescription" xml:space="preserve">
+    <value>全知全能の存在</value>
+  </data>
+  <data name="XionShortDescription" xml:space="preserve">
+    <value>全てを知りし神に等しい存在</value>
+  </data>
+  <data name="XionFullDescription" xml:space="preserve">
+    <value>必ずホストに割り当てられるオブザーバー役職
+マップの拡大縮小、移動速度変更、テレポートなどが可能
+左下のプレイヤーボタンはプレイヤーへのテレポートボタンであり、左Altキー
+を押しながらボタンを押すことでキルと蘇生を行うことが出来る
+
+各種キー設定は以下
+　・Altキー + Lキー：強制廃村終了
+　・Altキー + Cキー：強制会議終了
+　・Altキー + Fキー：GUI非表示/表示切替
+　・Shiftキー + PageUpキー：移動速度アップ
+　・Shiftキー + PageDownキー：移動速度ダウン
+　・Shiftキー + Rキー：移動速度リセット
+　・Ctrキー + PageUpキー：ズームイン
+　・Ctrキー + PageDownキー：ズームアウト
+　・Ctrキー + Rキー：ズームリセット
+
+ローカルゲーム専用機能
+　・ロビーでFキー(シオン有効時)：ダミープレイヤーの召喚
+　・Altキー + Bキー：マウスカーソルの場所にダミーの死体を錬成
+　・コマンドを使用することが出来る
+　　・使用できるコマンド
+　　　・/SetRole [プレイヤー名(任意)] [役職英語名]：プレイヤーに役職を
+　　　割り当てます、プレイヤー名を省いた時はこの役職の人が設定した役職に
+　　　なります
+　　　・/IamXion：ホストをシオンに変更します</value>
+  </data>
+  <data name="zoomOut" xml:space="preserve">
+    <value>ズームアウト</value>
+  </data>
+  <data name="zoomIn" xml:space="preserve">
+    <value>ズームイン</value>
+  </data>
+  <data name="speedUp" xml:space="preserve">
+    <value>スピードアップ</value>
+  </data>
+  <data name="speedDown" xml:space="preserve">
+    <value>スピードダウン</value>
+  </data>
+  <data name="alreadyVoted" xml:space="preserve">
+    <value>すでに投票済みです</value>
+  </data>
+  <data name="invalidArgs" xml:space="preserve">
+    <value>引数が間違っています</value>
+  </data>
+  <data name="invalidPlayerName" xml:space="preserve">
+    <value>プレイヤー名が見つかりません</value>
+  </data>
+  <data name="cannotUseThisGameMode" xml:space="preserve">
+    <value>この機能は現在のゲームモードで使用することが出来ません</value>
+  </data>
+  <data name="invalidRoleName" xml:space="preserve">
+    <value>役職名が間違っています</value>
+  </data>
+  <data name="setRole" xml:space="preserve">
+    <value>プレイヤー：{0}に役職：{1}を割り当てました</value>
+  </data>
+  <data name="XionNow" xml:space="preserve">
+    <value>すでにホストがシオンです</value>
+  </data>
+  <data name="RevartXion" xml:space="preserve">
+    <value>ホストにシオンを割り当てました</value>
+  </data>
+  <data name="buttonCountText" xml:space="preserve">
+    <value>残り{0}回</value>
+  </data>
+  <data name="summaryText" xml:space="preserve">
+    <value>最終結果:</value>
+  </data>
+  <data name="roleSummaryInfo" xml:space="preserve">
+    <value>プレイヤー名&lt;pos=16.5%&gt;タスク&lt;pos=25%&gt;最終状態&lt;pos=38%&gt;役職</value>
+  </data>
+  <data name="ghostRoleSummaryInfo" xml:space="preserve">
+    <value>プレイヤー名&lt;pos=16.5%&gt;タスク&lt;pos=25%&gt;最終状態&lt;pos=38%&gt;幽霊役職</value>
+  </data>
+  <data name="noGhostRole" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="tabMoreSummary" xml:space="preserve">
+    <value>Tabキーで別の結果を表示({0}/{1})</value>
+  </data>
+  <data name="shiftHideSummary" xml:space="preserve">
+    <value>Shiftキーで最終結果を非表示</value>
+  </data>
+  <data name="shiftShowSummary" xml:space="preserve">
+    <value>Shiftキーで最終結果を表示</value>
+  </data>
+  <data name="Alive" xml:space="preserve">
+    <value>生存</value>
+  </data>
+  <data name="Exiled" xml:space="preserve">
+    <value>追放</value>
+  </data>
+  <data name="Dead" xml:space="preserve">
+    <value>死亡</value>
+  </data>
+  <data name="Killed" xml:space="preserve">
+    <value>殺害</value>
+  </data>
+  <data name="Suicide" xml:space="preserve">
+    <value>自決</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>切断</value>
+  </data>
+  <data name="MissShot" xml:space="preserve">
+    <value>暴発</value>
+  </data>
+  <data name="Retaliate" xml:space="preserve">
+    <value>返り討ち</value>
+  </data>
+  <data name="Assassinate" xml:space="preserve">
+    <value>暗殺</value>
+  </data>
+  <data name="DeadAssassinate" xml:space="preserve">
+    <value>除外</value>
+  </data>
+  <data name="Surrender" xml:space="preserve">
+    <value>降伏</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>旅立ち</value>
+  </data>
+  <data name="Martyrdom" xml:space="preserve">
+    <value>殉職</value>
+  </data>
+  <data name="Explosion" xml:space="preserve">
+    <value>爆殺</value>
+  </data>
+  <data name="Zombied" xml:space="preserve">
+    <value>ゾンビ化</value>
+  </data>
+  <data name="Eatting" xml:space="preserve">
+    <value>丸呑み</value>
+  </data>
+  <data name="AllTeam" xml:space="preserve">
+    <value>全陣営</value>
+  </data>
+  <data name="customServerIp" xml:space="preserve">
+    <value>カスタムサーバーのIP</value>
+  </data>
+  <data name="customServerPort" xml:space="preserve">
+    <value>カスタムサーバーのポート</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>ニュートラル</value>
+  </data>
+  <data name="neutralIntro" xml:space="preserve">
+    <value>他の誰でもない自分自身の勝利のために動け</value>
+  </data>
+  <data name="neutralShotCall" xml:space="preserve">
+    <value>自己中</value>
+  </data>
+  <data name="impostorShotCall" xml:space="preserve">
+    <value>殺人鬼</value>
+  </data>
+  <data name="Shapeshifter" xml:space="preserve">
+    <value>シェイプシフター</value>
+  </data>
+  <data name="Engineer" xml:space="preserve">
+    <value>エンジニア</value>
+  </data>
+  <data name="Scientist" xml:space="preserve">
+    <value>科学者</value>
+  </data>
+  <data name="GuardianAngel" xml:space="preserve">
+    <value>守護天使</value>
+  </data>
+  <data name="Noisemaker" xml:space="preserve">
+    <value>ノイズメーカー</value>
+  </data>
+  <data name="Tracker" xml:space="preserve">
+    <value>トラッカー</value>
+  </data>
+  <data name="Phantom" xml:space="preserve">
+    <value>ファントム</value>
+  </data>
+  <data name="roleAssignNow" xml:space="preserve">
+    <value>Extreme Rolesの役職を割当中です\nしばらくお待ち下さい</value>
+  </data>
+  <data name="impostorIntroText" xml:space="preserve">
+    <value>キルやサボタージュも忘れるな</value>
+  </data>
+  <data name="crewIntroText" xml:space="preserve">
+    <value>タスクも忘れずに</value>
+  </data>
+  <data name="crewImportantText" xml:space="preserve">
+    <value>タスクを完了させよう</value>
+  </data>
+  <data name="YourRolePanel" xml:space="preserve">
+    <value>現在の役職</value>
+  </data>
+  <data name="YourGhostRolePanel" xml:space="preserve">
+    <value>現在の幽霊役職</value>
+  </data>
+  <data name="AllRolePanel" xml:space="preserve">
+    <value>全役職の詳細</value>
+  </data>
+  <data name="AllGhostRolePanel" xml:space="preserve">
+    <value>全幽霊役職の詳細</value>
+  </data>
+  <data name="GlobalSettingPanel" xml:space="preserve">
+    <value>グローバル設定</value>
+  </data>
+  <data name="changePageMore" xml:space="preserve">
+    <value>PgUp/PgDnでページ切り替え</value>
+  </data>
+  <data name="gameOption" xml:space="preserve">
+    <value>現在のゲーム設定</value>
+  </data>
+  <data name="roleOption" xml:space="preserve">
+    <value>の設定</value>
+  </data>
+  <data name="yourAliveNow" xml:space="preserve">
+    <value>まだ生きている</value>
+  </data>
+  <data name="yourNoAssignGhostRole" xml:space="preserve">
+    <value>現在は幽霊役職にアサインされていない</value>
+  </data>
+  <data name="vanilaOptions" xml:space="preserve">
+    <value>現在のAmongUsバニラの設定</value>
+  </data>
+  <data name="playerName" xml:space="preserve">
+    <value>プレイヤー名</value>
+  </data>
+  <data name="roleName" xml:space="preserve">
+    <value>役職</value>
+  </data>
+  <data name="gameReplace" xml:space="preserve">
+    <value>※ゲーム開始時、もしくはゲーム中に判明</value>
+  </data>
+  <data name="ReqBepInExUpdate" xml:space="preserve">
+    <value>BepInExのアップデートを行います。しばらくお待ち下さい・・・・</value>
+  </data>
+  <data name="compatModMenuButton" xml:space="preserve">
+    <value>MODマネージャー</value>
+  </data>
+  <data name="compatModMenu" xml:space="preserve">
+    <value>Extreme Roles MODマネージャー</value>
+  </data>
+  <data name="chekUpdateWait" xml:space="preserve">
+    <value>アップデート先を確認中・・・</value>
+  </data>
+  <data name="updateNow" xml:space="preserve">
+    <value>アップデートを開始します</value>
+  </data>
+  <data name="updateManually" xml:space="preserve">
+    <value>アップデートに失敗しました
+再起動後しばらくしてから再度実行するか
+手動で更新してください</value>
+  </data>
+  <data name="updateRestart" xml:space="preserve">
+    <value>アップデートに成功しました\nゲームを再起動して下さい</value>
+  </data>
+  <data name="updateInProgress" xml:space="preserve">
+    <value>アップデート中・・・</value>
+  </data>
+  <data name="alreadyInstall" xml:space="preserve">
+    <value>すでにインストール済みです\nゲームを再起動して下さい</value>
+  </data>
+  <data name="checkInstallNow" xml:space="preserve">
+    <value>インストールデータを確認中・・・</value>
+  </data>
+  <data name="installNow" xml:space="preserve">
+    <value>インストールデータを開始します</value>
+  </data>
+  <data name="installInProgress" xml:space="preserve">
+    <value>インストール中・・・</value>
+  </data>
+  <data name="installManual" xml:space="preserve">
+    <value>インストールに失敗しました\n手動でインストールしてください</value>
+  </data>
+  <data name="installRestart" xml:space="preserve">
+    <value>インストールに成功しました\nゲームを再起動して下さい</value>
+  </data>
+  <data name="alreadyUninstall" xml:space="preserve">
+    <value>すでにアンインストール済みです\nゲームを再起動して下さい</value>
+  </data>
+  <data name="checkUninstallNow" xml:space="preserve">
+    <value>アンインストールデータを確認中・・・</value>
+  </data>
+  <data name="uninstallNow" xml:space="preserve">
+    <value>アンインストールを開始します</value>
+  </data>
+  <data name="uninstallInProgress" xml:space="preserve">
+    <value>アンインストール中・・・</value>
+  </data>
+  <data name="uninstallManual" xml:space="preserve">
+    <value>アンインストールに失敗しました\n手動でアンインストールしてください</value>
+  </data>
+  <data name="uninstallRestart" xml:space="preserve">
+    <value>アンインストールに成功しました\nゲームを再起動して下さい</value>
+  </data>
+  <data name="alreadyUninstallAfterInstall" xml:space="preserve">
+    <value>すでにアンインストール済みです\nゲームを再起動後インストールして下さい</value>
+  </data>
+  <data name="isReactorInstall" xml:space="preserve">
+    <value>このMODの前提MODとしてReactorがインストールされます
+Reactorのインストールによって公式サーバーでの動作保証が
+できなくなります(「ExR専用(東京)」等をご利用ください)
+インストールを続行しますか？</value>
+  </data>
+  <data name="searchDowngradeWait" xml:space="preserve">
+    <value>ダウングレード先を検索中・・・・</value>
+  </data>
+  <data name="downgradeStart" xml:space="preserve">
+    <value>ダウングレードを開始します</value>
+  </data>
+  <data name="downgradeManually" xml:space="preserve">
+    <value>ダウングレードに失敗しました\n手動でバージョンダウンしてください</value>
+  </data>
+  <data name="downgradeRestart" xml:space="preserve">
+    <value>ダウングレードに成功しました\nゲームを再起動して下さい</value>
+  </data>
+  <data name="downgradeInProgress" xml:space="preserve">
+    <value>ダウングレード中・・・</value>
+  </data>
+  <data name="downgradeNotFound" xml:space="preserve">
+    <value>ダウングレード先が見つかりませんでした</value>
+  </data>
+  <data name="donwgradeConfirm" xml:space="preserve">
+    <value>ExRのバージョンを一つ下げるダウングレードを行います
+バグ等でゲームの進行に支障がある場合を除き、バグ修正や
+新機能追加が行われている最新版でのプレイを推奨します
+ダウングレードを続行しますか？</value>
+  </data>
+  <data name="UninstallButton" xml:space="preserve">
+    <value>アンインストール</value>
+  </data>
+  <data name="UpdateButton" xml:space="preserve">
+    <value>アップデートを確認</value>
+  </data>
+  <data name="InstallButton" xml:space="preserve">
+    <value>インストール</value>
+  </data>
+  <data name="DowngradeButton" xml:space="preserve">
+    <value>ダウングレード</value>
+  </data>
+  <data name="latestNow" xml:space="preserve">
+    <value>最新バージョンのMODを使用しています。</value>
+  </data>
+  <data name="SafeBootMessage" xml:space="preserve">
+    <value>ExRの起動中に不具合が発生したため
+ExR等を最低限の機能のみで起動しています</value>
+  </data>
+  <data name="youDonotUse" xml:space="preserve">
+    <value>あなたにはアクセス権限がありません</value>
+  </data>
+  <data name="errorCannotGameStart" xml:space="preserve">
+    <value>以下の理由でゲームを開始できません</value>
+  </data>
+  <data name="errorNotInstalled" xml:space="preserve">
+    <value>Extreme Rolesの導入に失敗しています</value>
+  </data>
+  <data name="errorOldInstalled" xml:space="preserve">
+    <value>導入されているExtreme Rolesのバージョンが古いです</value>
+  </data>
+  <data name="errorNewInstalled" xml:space="preserve">
+    <value>導入されているExtreme Rolesのバージョンが新しいです</value>
+  </data>
+  <data name="errorDiffHostVersion" xml:space="preserve">
+    <value>ホストに導入されているExtreme Rolesとバージョンが異なっています。\n{0}秒後に強制切断します</value>
+  </data>
+  <data name="ExileTextSPCrew" xml:space="preserve">
+    <value>{0}がクルーメイトだった。</value>
+  </data>
+  <data name="ExileTextSNCrew" xml:space="preserve">
+    <value>{0}はクルーメイトではなかった。</value>
+  </data>
+  <data name="ExileTextPPCrew" xml:space="preserve">
+    <value>{0}がクルーメイトだった。</value>
+  </data>
+  <data name="ExileTextPNCrew" xml:space="preserve">
+    <value>{0}はクルーメイトではなかった。</value>
+  </data>
+  <data name="ExileTextSPNeut" xml:space="preserve">
+    <value>{0}がニュートラルだった。</value>
+  </data>
+  <data name="ExileTextSNNeut" xml:space="preserve">
+    <value>{0}はニュートラルではなかった。</value>
+  </data>
+  <data name="ExileTextPPNeut" xml:space="preserve">
+    <value>{0}がニュートラルだった。</value>
+  </data>
+  <data name="ExileTextPNNeut" xml:space="preserve">
+    <value>{0}はニュートラルではなかった。</value>
+  </data>
+  <data name="ExileTextSPCrewWithRole" xml:space="preserve">
+    <value>{0}がクルーの「{1}」だった。</value>
+  </data>
+  <data name="ExileTextSNCrewWithRole" xml:space="preserve">
+    <value>{0}はクルーメイトではなかった。</value>
+  </data>
+  <data name="ExileTextPPCrewWithRole" xml:space="preserve">
+    <value>{0}がクルーメイトの「{1}」だった。</value>
+  </data>
+  <data name="ExileTextPNCrewWithRole" xml:space="preserve">
+    <value>{0}はクルーメイトではなかった。</value>
+  </data>
+  <data name="ExileTextSPNeutWithRole" xml:space="preserve">
+    <value>{0}がニュートラルの「{1}」だった。</value>
+  </data>
+  <data name="ExileTextSNNeutWithRole" xml:space="preserve">
+    <value>{0}はニュートラルではなかった。</value>
+  </data>
+  <data name="ExileTextPPNeutWithRole" xml:space="preserve">
+    <value>{0}がニュートラルの「{1}」だった。</value>
+  </data>
+  <data name="ExileTextPNNeutWithRole" xml:space="preserve">
+    <value>{0}はニュートラルではなかった。</value>
+  </data>
+  <data name="ExileTextAllTeam" xml:space="preserve">
+    <value>{0}が{1}だった。</value>
+  </data>
+  <data name="ExileTextAllTeamWithRole" xml:space="preserve">
+    <value>{0}が{1}の「{2}」だった。</value>
+  </data>
+  <data name="CrewmateRemainS" xml:space="preserve">
+    <value>クルーメイトが{0}人残っている。</value>
+  </data>
+  <data name="CrewmateRemainP" xml:space="preserve">
+    <value>クルーメイトが{0}人残っている。</value>
+  </data>
+  <data name="NeutralRemainS" xml:space="preserve">
+    <value>ニュートラルが{0}人残っている。</value>
+  </data>
+  <data name="NeutralRemainP" xml:space="preserve">
+    <value>ニュートラルが{0}人残っている。</value>
+  </data>
+  <data name="AllTeamAlive" xml:space="preserve">
+    <value>クルーメイトが{0}人、インポスターが{1}人、ニュートラルが{2}人残っている。</value>
+  </data>
+  <data name="RoleAssignFilter" xml:space="preserve">
+    <value>ロールアサインフィルター</value>
+  </data>
+  <data name="RoleAssignFilterAddRoleMenuTitle" xml:space="preserve">
+    <value>役職を選択して下さい</value>
+  </data>
+  <data name="RoleAssignFilterAssignNum" xml:space="preserve">
+    <value>アサイン数</value>
+  </data>
+  <data name="RoleAssignFilterDeleteThis" xml:space="preserve">
+    <value>フィルターを削除</value>
+  </data>
+  <data name="RoleAssignFilterDeleteAllRole" xml:space="preserve">
+    <value>フィルターをリセット</value>
+  </data>
+  <data name="RoleAssignFilterAddRole" xml:space="preserve">
+    <value>役職を追加</value>
+  </data>
+  <data name="RoleAssignFilterAddFilter" xml:space="preserve">
+    <value>フィルターを追加</value>
+  </data>
+  <data name="SystemMessage" xml:space="preserve">
+    <value>システム</value>
+  </data>
+  <data name="SuccessAmongUsConnect" xml:space="preserve">
+    <value>AmongUsとの接続に成功しました</value>
+  </data>
+  <data name="InputMessage" xml:space="preserve">
+    <value>メッセージを入力して下さい</value>
+  </data>
+  <data name="DisconectAmongUsMessage" xml:space="preserve">
+    <value>AmongUsとの接続が切断されました</value>
+  </data>
+  <data name="ConectSocketMessage" xml:space="preserve">
+    <value>AmongUsとのソケット通信に成功しました</value>
+  </data>
+  <data name="InvalidCharMessage" xml:space="preserve">
+    <value>チャット内に無効な文字があります、再入力して下さい</value>
+  </data>
+  <data name="abilityRemain" xml:space="preserve">
+    <value>能力発動まで残り{0}秒</value>
+  </data>
+  <data name="abilityOnText" xml:space="preserve">
+    <value>能力発動中、残り{0}秒</value>
+  </data>
+  <data name="right" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="down" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="left" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="up" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="canDo" xml:space="preserve">
+    <value>可能</value>
+  </data>
+  <data name="cannotDo" xml:space="preserve">
+    <value>不可</value>
+  </data>
+  <data name="AdminModule" xml:space="preserve">
+    <value>アドミン</value>
+  </data>
+  <data name="SecurityCamera" xml:space="preserve">
+    <value>セキュリティカメラとドアログ</value>
+  </data>
+  <data name="PublicBetaStr" xml:space="preserve">
+    <value>パブリックベータ - v{0}</value>
+  </data>
+  <data name="PublicBetaEnableDisableStr" xml:space="preserve">
+    <value>再起動後にパブリックベータモードが{0}になります</value>
+  </data>
+  <data name="PublicBetaWarning" xml:space="preserve">
+    <value>パブリックベータモードを{0}にします\n以下の機能が{0}になります</value>
+  </data>
+  <data name="PublicBetaReboot" xml:space="preserve">
+    <value>パブリックベータモードを{0}にしました\n再起動して下さい</value>
+  </data>
+  <data name="Pcg32XshRr" xml:space="preserve">
+    <value>PCG32-XSH-RR</value>
+  </data>
+  <data name="Pcg64RxsMXs" xml:space="preserve">
+    <value>PCG64-RXS-M-XS</value>
+  </data>
+  <data name="Xorshift64" xml:space="preserve">
+    <value>Xorshift64</value>
+  </data>
+  <data name="Xorshift128" xml:space="preserve">
+    <value>Xorshift128</value>
+  </data>
+  <data name="Xorshiro256StarStar" xml:space="preserve">
+    <value>xorshiro256**</value>
+  </data>
+  <data name="Xorshiro512StarStar" xml:space="preserve">
+    <value>xorshiro512**</value>
+  </data>
+  <data name="RomuMono" xml:space="preserve">
+    <value>RomuMono</value>
+  </data>
+  <data name="RomuTrio" xml:space="preserve">
+    <value>RomuTrio</value>
+  </data>
+  <data name="RomuQuad" xml:space="preserve">
+    <value>RomuQuad</value>
+  </data>
+  <data name="Seiran128" xml:space="preserve">
+    <value>Seiran128</value>
+  </data>
+  <data name="Shioi128" xml:space="preserve">
+    <value>Shioi128</value>
+  </data>
+  <data name="JFT32" xml:space="preserve">
+    <value>JFT32</value>
+  </data>
+  <data name="AssignWeight" xml:space="preserve">
+    <value>アサインウェイト</value>
+  </data>
+  <data name="SpawnRate" xml:space="preserve">
+    <value>スポーンレート</value>
+  </data>
+  <data name="RoleNum" xml:space="preserve">
+    <value>スポーン数</value>
+  </data>
+  <data name="HasOtherVision" xml:space="preserve">
+    <value>別の視界設定を持つか</value>
+  </data>
+  <data name="Vision" xml:space="preserve">
+    <value>ビジョン</value>
+  </data>
+  <data name="ApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>視界効果を受けるか</value>
+  </data>
+  <data name="HasOtherKillCool" xml:space="preserve">
+    <value>別のキルクールタイムを持つか</value>
+  </data>
+  <data name="KillCoolDown" xml:space="preserve">
+    <value>キルクールタイム</value>
+  </data>
+  <data name="HasOtherKillRange" xml:space="preserve">
+    <value>別のキルレンジを持つか</value>
+  </data>
+  <data name="KillRange" xml:space="preserve">
+    <value>キルレンジ</value>
+  </data>
+  <data name="IsAssignImposter" xml:space="preserve">
+    <value>インポスターがアサインされるか</value>
+  </data>
+  <data name="ImposterSelectedRate" xml:space="preserve">
+    <value>インポスターのアサインレート</value>
+  </data>
+  <data name="IsMultiAssign" xml:space="preserve">
+    <value>別役職の能力を持つか</value>
+  </data>
+  <data name="AssignsNum" xml:space="preserve">
+    <value>1組あたりのアサイン数</value>
+  </data>
+  <data name="DefaultKey" xml:space="preserve">
+    <value>デフォルト</value>
+  </data>
+  <data name="EnableKey" xml:space="preserve">
+    <value>有効</value>
+  </data>
+  <data name="DisableKey" xml:space="preserve">
+    <value>無効</value>
+  </data>
+  <data name="BothImpostorAndNautral" xml:space="preserve">
+    <value>インポスターとニュートラル</value>
+  </data>
+</root>

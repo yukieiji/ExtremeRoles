@@ -215,7 +215,7 @@ public sealed class AutoModInstaller
 
 		menu.destroyOnClose = true;
 		menu.Show(
-			Translation.GetString("donwgradeConfirm"));
+			Tr.GetString("donwgradeConfirm"));
 	}
 
 	public void AddRepository<TRepoType>() where TRepoType : class, IRepositoryInfo, new()
@@ -264,7 +264,7 @@ public sealed class AutoModInstaller
 		ExtremeRolesPlugin.Logger.LogInfo($"---- Start Auto install Ops:{installType} ----");
 
 		this.InfoPopup.Show(
-			Translation.GetString(trans.CheckWait));
+			Tr.GetString(trans.CheckWait));
 
 		try
 		{
@@ -284,14 +284,14 @@ public sealed class AutoModInstaller
 			{
 				ExtremeRolesPlugin.Logger.LogInfo("Install Data nothing!!");
 				setPopupText(
-					Translation.GetString(trans.NoOp));
+					Tr.GetString(trans.NoOp));
 				this.isRunning = false;
 				ExtremeRolesPlugin.Logger.LogInfo($"---- Nothing Ops:{installType} ----");
 				return;
 			}
 
 			setPopupText(
-				Translation.GetString(trans.OpStart));
+				Tr.GetString(trans.OpStart));
 			clearOldMod();
 
 			// 起動後すぐに実行すると失敗するんで1s待機
@@ -300,7 +300,7 @@ public sealed class AutoModInstaller
 			this.InfoPopup.StartCoroutine(
 				Effects.Lerp(0.01f, new Action<float>(
 					(p) => { setPopupText(
-						Translation.GetString(trans.OpProgress)); })));
+						Tr.GetString(trans.OpProgress)); })));
 
 			foreach (DownloadData data in updatingData)
 			{
@@ -319,13 +319,13 @@ public sealed class AutoModInstaller
 			this.InfoPopup.StartCoroutine(
 				Effects.Lerp(0.01f, new Action<float>(
 					(p) => { this.showPopup(
-						Translation.GetString(trans.Restart)); })));
+						Tr.GetString(trans.Restart)); })));
 		}
 		catch (Exception ex)
 		{
 			Logging.Error(ex.ToString());
 			this.showPopup(
-				Translation.GetString(trans.Fail));
+				Tr.GetString(trans.Fail));
 		}
 
 		this.isRunning = false;

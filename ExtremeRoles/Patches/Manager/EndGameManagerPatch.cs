@@ -216,7 +216,7 @@ public static class EndGameManagerSetUpPatch
                 ref winDetailTextBuilder,
                 textAddedRole.Count == 0 && textAddedGhostRole.Count == 0);
 
-			winDetailTextBuilder.Append(Translation.GetString(
+			winDetailTextBuilder.Append(Tr.GetString(
                 ghostRole.GetColoredRoleName()));
             textAddedGhostRole.Add(ghostRole.Id);
         }
@@ -241,7 +241,7 @@ public static class EndGameManagerSetUpPatch
 
                         AddPrefixs(ref winDetailTextBuilder, textAddedRole.Count == 0);
 
-						winDetailTextBuilder.Append(Translation.GetString(
+						winDetailTextBuilder.Append(Tr.GetString(
                             role.GetColoredRoleName(true)));
                         textAddedRole.Add(id);
                     }
@@ -267,12 +267,13 @@ public static class EndGameManagerSetUpPatch
                 ref winDetailTextBuilder,
                 textAddedRole.Count == 0);
 
-			winDetailTextBuilder.Append(Translation.GetString(
+			winDetailTextBuilder.Append(Tr.GetString(
                 role.GetColoredRoleName(true)));
             textAddedRole.Add(role.Id);
         }
 
-		winDetailTextBuilder.Append(Translation.GetString("win"));
+		winDetailTextBuilder.Append(
+			FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Victory));
 
 		textRenderer.text = winDetailTextBuilder.ToString();
 	}
@@ -280,7 +281,7 @@ public static class EndGameManagerSetUpPatch
     private static void AddPrefixs(ref StringBuilder baseStrings, in bool condition)
     {
         baseStrings.Append(
-            condition ? Translation.GetString("andFirst") : Translation.GetString("and"));
+            condition ? Tr.GetString("andFirst") : Tr.GetString("and"));
     }
 
     private static WinTextInfo createWinTextInfo(in RoleGameOverReason reason)
@@ -361,7 +362,7 @@ public static class EndGameManagerSetUpPatch
 				WinTextInfo.Create(ExtremeRoleId.Artist, ColorPalette.ArtistChenChuWhowan),
 
 			RoleGameOverReason.TuckerShipIsExperimentStation =>
-				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.ArtistChenChuWhowan),
+				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.TuckerMerdedoie),
 
 			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
@@ -372,7 +373,7 @@ public static class EndGameManagerSetUpPatch
             in System.Enum textEnum, Color color,
 			in bool isChangeBk = true)
 			=> new WinTextInfo(
-				Translation.GetString(textEnum.ToString()),
+				Tr.GetString(textEnum.ToString()),
 				color, isChangeBk);
 	}
 }

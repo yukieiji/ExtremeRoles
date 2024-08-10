@@ -1,0 +1,1063 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CrewmateFullDescription" xml:space="preserve">
+    <value>Complete your task and exile all IMPOSTORS!</value>
+  </data>
+  <data name="EngineerFullDescription" xml:space="preserve">
+    <value>A CREWMATE who can use the vents</value>
+  </data>
+  <data name="ScientistFullDescription" xml:space="preserve">
+    <value>A CREWMATE with a mobile VITALS monitor.
+Charge your batteries by time or complete tasks to access 
+your mobile vitals monitor.</value>
+  </data>
+  <data name="SpecialCrew" xml:space="preserve">
+    <value>Special Crew</value>
+  </data>
+  <data name="SpecialCrewIntroDescription" xml:space="preserve">
+    <value>An CREWMATE with modified settings</value>
+  </data>
+  <data name="SpecialCrewShortDescription" xml:space="preserve">
+    <value>An "Extreme-styled" crew</value>
+  </data>
+  <data name="SpecialCrewFullDescription" xml:space="preserve">
+    <value>A CREWMATE role which can be modified with Extreme roles' common settings (i.e. vision)
+Check the settings below:</value>
+  </data>
+  <data name="Sheriff" xml:space="preserve">
+    <value>Sheriff</value>
+  </data>
+  <data name="SheriffShootNum" xml:space="preserve">
+    <value>Maximum bullets to shoot</value>
+  </data>
+  <data name="SheriffCanShootNeutral" xml:space="preserve">
+    <value>Can KILL neutral roles</value>
+  </data>
+  <data name="SheriffCanShootAssassin" xml:space="preserve">
+    <value>Can KILL the Assasin</value>
+  </data>
+  <data name="SheriffEnableTaskRelated" xml:space="preserve">
+    <value>Enable task-related settings</value>
+  </data>
+  <data name="SheriffReduceCurKillCool" xml:space="preserve">
+    <value>Kill Cooldown reduction per task</value>
+  </data>
+  <data name="SheriffIsPerm" xml:space="preserve">
+    <value>Is Kill Cooldown reduction permanent</value>
+  </data>
+  <data name="SheriffIsSyncTaskAndShootNum" xml:space="preserve">
+    <value>Does task reload bullets</value>
+  </data>
+  <data name="SheriffSyncShootTaskGage" xml:space="preserve">
+    <value>Amplifier of tasks to reload a bullet</value>
+  </data>
+  <data name="SheriffIntroDescription" xml:space="preserve">
+    <value>SHOOT your foes for the sake of the crew</value>
+  </data>
+  <data name="SheriffShortDescription" xml:space="preserve">
+    <value>should receive their judge</value>
+  </data>
+  <data name="SheriffFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with a KILL button with limited bullets.
+ The KILL may backfire and KILL you when:
+   - If you shoot at a CREWMATE role
+   - If you shoot at the Assasin while "Can KILL the Assasin" is OFF
+ If "Enable task-related settings" is ON, you have no bullets initially 
+(with no KILL button), and you get another bullet when you 
+complete a task (up to the number of "Maximum bullets to shoot").</value>
+  </data>
+  <data name="Maintainer" xml:space="preserve">
+    <value>Maintainer</value>
+  </data>
+  <data name="MaintainerAbilityCoolTime" xml:space="preserve">
+    <value>"REPAIR" : Ability Cooldown</value>
+  </data>
+  <data name="MaintainerAbilityCount" xml:space="preserve">
+    <value>"REPAIR" : Ability Charges</value>
+  </data>
+  <data name="MaintainerIntroDescription" xml:space="preserve">
+    <value>Sabotage? I'm the garage!</value>
+  </data>
+  <data name="MaintainerShortDescription" xml:space="preserve">
+    <value>The handyman of the clan</value>
+  </data>
+  <data name="MaintainerFullDescription" xml:space="preserve">
+    <value> A crewamte role with an ability to repair sabotages.
+ "REPAIR" : Immediately repairs current sabotage and opens all 
+doors throughout the map.</value>
+  </data>
+  <data name="maintenance" xml:space="preserve">
+    <value>REPAIR</value>
+  </data>
+  <data name="Neet" xml:space="preserve">
+    <value>Neet</value>
+  </data>
+  <data name="NeetCanCallMeeting" xml:space="preserve">
+    <value>Can call an emergency meeting</value>
+  </data>
+  <data name="NeetCanRepairSabotage" xml:space="preserve">
+    <value>Can repair sabotages</value>
+  </data>
+  <data name="NeetHasTask" xml:space="preserve">
+    <value>Does have tasks</value>
+  </data>
+  <data name="NeetIsNeutral" xml:space="preserve">
+    <value>Is a neutral role</value>
+  </data>
+  <data name="NeetIntroDescription" xml:space="preserve">
+    <value>A fantastic journey awaits~~~</value>
+  </data>
+  <data name="NeetShortDescription" xml:space="preserve">
+    <value>Enjoy your stay in the ship!</value>
+  </data>
+  <data name="NeetFullDescription" xml:space="preserve">
+    <value> A CREWMATE role who can do literally nothing.
+Maybe you can waste your time chasing others?</value>
+  </data>
+  <data name="NeetNeutralFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role which can do literally nothing.
+ MISSION : SURVIVE until the game ends
+ Maybe you can waste your time chasing others?</value>
+  </data>
+  <data name="Watchdog" xml:space="preserve">
+    <value>Watchdog</value>
+  </data>
+  <data name="WatchdogAbilityCoolTime" xml:space="preserve">
+    <value>"CAMERA/LOG" : Ability Cooldown</value>
+  </data>
+  <data name="WatchdogAbilityActiveTime" xml:space="preserve">
+    <value>Maximum battery</value>
+  </data>
+  <data name="WatchdogIntroDescription" xml:space="preserve">
+    <value>Track them down and find out your foes</value>
+  </data>
+  <data name="WatchdogShortDescription" xml:space="preserve">
+    <value>Access cameras and logs to track them all</value>
+  </data>
+  <data name="WatchdogFullDescription" xml:space="preserve">
+    <value> A CREWMATE role which has access to portable security cameras and door logs.
+ Accessible to  the Door logs for Mira HQ, and security cameras 
+for other maps
+ Uses battery charge while opening; You can recharge it by waiting 
+the cooldown or completing tasks.</value>
+  </data>
+  <data name="securityCamera" xml:space="preserve">
+    <value>CAMERA</value>
+  </data>
+  <data name="doorLog" xml:space="preserve">
+    <value>LOGS</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="SupervisorAbilityCoolTime" xml:space="preserve">
+    <value>"ADMIN" : Ability Cooldown</value>
+  </data>
+  <data name="SupervisorAbilityActiveTime" xml:space="preserve">
+    <value>"ADMIN" : Maximum battery charge</value>
+  </data>
+  <data name="SupervisorIsBoostTask" xml:space="preserve">
+    <value>"ADMIN" : Does enhance with task completion</value>
+  </data>
+  <data name="SupervisorTaskGage" xml:space="preserve">
+    <value>Percentage of tasks to enhance</value>
+  </data>
+  <data name="SupervisorIntroDescription" xml:space="preserve">
+    <value>Monitor your CREWMATEs any time</value>
+  </data>
+  <data name="SupervisorShortDescription" xml:space="preserve">
+    <value>Monitor their positions and find out your foes</value>
+  </data>
+  <data name="SupervisorFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with a mobile "ADMIN". 
+Uses battery charge while opening; You can recharge it by waiting 
+the cooldown or completing tasks.
+ If ""ADMIN" : Does enhance with task completion" is true, you can 
+access the ADMIN with colored CREWMATE icons after some task
+completion. The normal ADMIN is not enhanced; it only effects the 
+ADMIN opened by your ability.</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>ADMIN</value>
+  </data>
+  <data name="BodyGuard" xml:space="preserve">
+    <value>Bodyguard</value>
+  </data>
+  <data name="BodyGuardShieldRange" xml:space="preserve">
+    <value>"GUARD" : Ability Distance</value>
+  </data>
+  <data name="BodyGuardAbilityCoolTime" xml:space="preserve">
+    <value>"GUARD" : Ability Cooldown</value>
+  </data>
+  <data name="BodyGuardAbilityCount" xml:space="preserve">
+    <value>"GUARD" : Max usage</value>
+  </data>
+  <data name="BodyGuardFeatMeetingAbilityTaskGage" xml:space="preserve">
+    <value>"GUARD" : Task completion rate to use in meetings</value>
+  </data>
+  <data name="BodyGuardFeatMeetingReportTaskGage" xml:space="preserve">
+    <value>"GUARD" : Death alert task completion rate</value>
+  </data>
+  <data name="BodyGuardIsReportPlayerName" xml:space="preserve">
+    <value>"GUARD" : Does show player name(s) on martydom report</value>
+  </data>
+  <data name="BodyGuardReportPlayerMode" xml:space="preserve">
+    <value>Shown player names</value>
+  </data>
+  <data name="BodyGuardIsBlockMeetingKill" xml:space="preserve">
+    <value>"GUARD" : Can guard KILLs occuring in meetings</value>
+  </data>
+  <data name="BodyGuardIntroDescription" xml:space="preserve">
+    <value>GUARD your mates with your body</value>
+  </data>
+  <data name="BodyGuardShortDescription" xml:space="preserve">
+    <value>You are the GUARD of your mates</value>
+  </data>
+  <data name="BodyGuardFullDescription" xml:space="preserve">
+    <value> A CREWMATE role which can guard other CREWMATEs by setting 
+"GUARD"s.
+ When a player with a "GUARD" active is targeted by a Kill, YOU 
+will be Killed and the player will be alive.
+ The "GUARD"s will be reset when "RESET GUARD" is used, or the 
+Bodyguard is Killed. 
+ When they complete tasks more than " "GUARD": Death alert task 
+completion rate" rate, their death by "GUARD" will be alerted in the 
+beginning of the next meeting.</value>
+  </data>
+  <data name="shield" xml:space="preserve">
+    <value>GUARD</value>
+  </data>
+  <data name="resetShield" xml:space="preserve">
+    <value>RESET GUARD</value>
+  </data>
+  <data name="meetingShieldState" xml:space="preserve">
+    <value>You can guard {0} times\n during this meeting</value>
+  </data>
+  <data name="BodyGuardPlayerNameOnly" xml:space="preserve">
+    <value>Only the Bodyguard</value>
+  </data>
+  <data name="GuardedPlayerNameOnly" xml:space="preserve">
+    <value>Only the saved player</value>
+  </data>
+  <data name="BothPlayerName" xml:space="preserve">
+    <value>Both saved and the Bodyguard</value>
+  </data>
+  <data name="martyrdomReport" xml:space="preserve">
+    <value>A Bodyguard saved someone…</value>
+  </data>
+  <data name="martyrdomReportWithBodyGurdPlayer" xml:space="preserve">
+    <value>The Bodyguard "{0}" saved someone…</value>
+  </data>
+  <data name="martyrdomReportWithGurdedPlayer" xml:space="preserve">
+    <value>A Bodyguard saved "{0}"'s life!</value>
+  </data>
+  <data name="martyrdomReportWithBoth" xml:space="preserve">
+    <value>The Bodyguard "{0}" saved "{1}"'s life!</value>
+  </data>
+  <data name="Whisper" xml:space="preserve">
+    <value>Whisperer</value>
+  </data>
+  <data name="WhisperAbilityOffTime" xml:space="preserve">
+    <value>"LISTEN" : Activation counts</value>
+  </data>
+  <data name="WhisperAbilityOnTime" xml:space="preserve">
+    <value>"LISTEN" : Duration</value>
+  </data>
+  <data name="WhisperTellTextTime" xml:space="preserve">
+    <value>"LISTEN" : Duration of death message</value>
+  </data>
+  <data name="WhisperMaxTellText" xml:space="preserve">
+    <value>"LISTEN" : Maximum "Death Message"s to show </value>
+  </data>
+  <data name="WhisperEnableAwakeAbility" xml:space="preserve">
+    <value>"LISTEN" : Does enhance with task completion</value>
+  </data>
+  <data name="WhisperAbilityTaskGage" xml:space="preserve">
+    <value>Percentage of tasks to enhance</value>
+  </data>
+  <data name="WhisperIntroDescription" xml:space="preserve">
+    <value>Your ear is to hear the screams</value>
+  </data>
+  <data name="WhisperShortDescription" xml:space="preserve">
+    <value>LISTEN to hear every death</value>
+  </data>
+  <data name="WhisperFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability "LISTEN".
+"LISTEN" : Can knnow every death of players by idling.
+ - Can be triggered by idling for a set amount of time
+ - Can only be used during idiling; cancells ability on movement
+ - Can know "When" and "Which direction" the death occured 
+ - You can know "Which room" the death occured after a set rate
+    of task completion, if the corresponding option is on.</value>
+  </data>
+  <data name="killedTextWithRoom" xml:space="preserve">
+    <value>You heard a death from {1}, in {0} ({2}).</value>
+  </data>
+  <data name="killedText" xml:space="preserve">
+    <value>You heard a death from somewhere {0} ({1}).</value>
+  </data>
+  <data name="TimeMaster" xml:space="preserve">
+    <value>Time Master</value>
+  </data>
+  <data name="TimeMasterAbilityCoolTime" xml:space="preserve">
+    <value>"SHIELD" : Ability Cooldown</value>
+  </data>
+  <data name="TimeMasterAbilityActiveTime" xml:space="preserve">
+    <value>"SHIELD" : Duration</value>
+  </data>
+  <data name="TimeMasterRewindTime" xml:space="preserve">
+    <value>"SHIELD" : Rewinds</value>
+  </data>
+  <data name="TimeMasterIntroDescription" xml:space="preserve">
+    <value>Rule the time with your "SHIELD"</value>
+  </data>
+  <data name="TimeMasterShortDescription" xml:space="preserve">
+    <value>The TIME winds only for you</value>
+  </data>
+  <data name="TimeMasterFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability "SHIELD".
+When you are targeted by KILL while "SHIELD" is active, the time 
+rewinds and all other CREWMATEs will go back in time. You will 
+able to move freely during the rewind.
+ Only movements of CREWMATEs will be rewinded, and the 
+seconds can be changed by the "Seconds rewinded by "SHIELD"" 
+setting.</value>
+  </data>
+  <data name="timeShield" xml:space="preserve">
+    <value>SHIELD</value>
+  </data>
+  <data name="Agency" xml:space="preserve">
+    <value>Agency</value>
+  </data>
+  <data name="AgencyCanSeeTaskBar" xml:space="preserve">
+    <value>Can always see task gauge</value>
+  </data>
+  <data name="AgencyMaxTaskNum" xml:space="preserve">
+    <value>"TAKE OVER" : Max tasks taking</value>
+  </data>
+  <data name="AgencyTakeTaskRange" xml:space="preserve">
+    <value>"TAKE OVER" : Ability Distance</value>
+  </data>
+  <data name="AgencyAbilityCoolTime" xml:space="preserve">
+    <value>"TAKE OVER" : Ability Cooldown</value>
+  </data>
+  <data name="AgencyAbilityCount" xml:space="preserve">
+    <value>"TAKE OVER" : Maximum ability uses</value>
+  </data>
+  <data name="AgencyIntroDescription" xml:space="preserve">
+    <value>May I help you, sir?</value>
+  </data>
+  <data name="AgencyShortDescription" xml:space="preserve">
+    <value>TAKE OVER their tasks and help them complete</value>
+  </data>
+  <data name="AgencyFullDescription" xml:space="preserve">
+    <value>A CREWMATE role which can take over other's tasks.
+"TAKE OVER" : Reduces targeted player's task and adds a same amount of tasks to you.
+ - Does not add "same tasks", but adds "tasks in same categories", such as "Short" "Long" "Common". 
+ - Used on crewmates with tasks: 1 ~ number set by ""TAKE OVER" : Max tasks taking" tasks will taken.
+ - Used on player with no tasks:  Your tasks increases by a set number referring to the total task completion rate in-game. Maybe you can use it as a task-checker?
+ - Used on player with all tasks completed: Does nothing.</value>
+  </data>
+  <data name="takeTask" xml:space="preserve">
+    <value>TAKE OVER</value>
+  </data>
+  <data name="Bakary" xml:space="preserve">
+    <value>Baker</value>
+  </data>
+  <data name="BakaryChangeCooking" xml:space="preserve">
+    <value>Does bread bake with time</value>
+  </data>
+  <data name="BakaryGoodBakeTime" xml:space="preserve">
+    <value>Bread bakes in</value>
+  </data>
+  <data name="BakaryBadBakeTime" xml:space="preserve">
+    <value>Bread burns in</value>
+  </data>
+  <data name="BakaryIntroDescription" xml:space="preserve">
+    <value>A yummy bread for your mates!</value>
+  </data>
+  <data name="BakaryShortDescription" xml:space="preserve">
+    <value>Bake a bread and serve for them!</value>
+  </data>
+  <data name="BakaryFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to show a message after every 
+meeting.
+A message appears for you until you are DEAD, even if your ROLE 
+changes to something else.
+ The message changes with the elasped time between meetings : 
+   - Shorter than "Bread bakes in" : underdone
+   - Between "Bread bakes in" and "Bread burns in" : Well done
+   - Longer than "Bread burns in" : Burnt</value>
+  </data>
+  <data name="rawBread" xml:space="preserve">
+    <value>The BAKER wasn't ready to serve breads</value>
+  </data>
+  <data name="goodBread" xml:space="preserve">
+    <value>The BAKER brought yummy breads!</value>
+  </data>
+  <data name="badBread" xml:space="preserve">
+    <value>The BAKER forgot to put the bread out of the oven</value>
+  </data>
+  <data name="CurseMaker" xml:space="preserve">
+    <value>Cursemaker</value>
+  </data>
+  <data name="CurseMakerCursingRange" xml:space="preserve">
+    <value>"CURSE" : Range from the corpse</value>
+  </data>
+  <data name="CurseMakerAdditionalKillCool" xml:space="preserve">
+    <value>"CURSE" : Kill Cooldown penalty to foes</value>
+  </data>
+  <data name="CurseMakerAbilityCoolTime" xml:space="preserve">
+    <value>"CURSE" : Ability Cooldown</value>
+  </data>
+  <data name="CurseMakerAbilityActiveTime" xml:space="preserve">
+    <value>"CURSE" : Seconds to use ability</value>
+  </data>
+  <data name="CurseMakerAbilityCount" xml:space="preserve">
+    <value>"CURSE" : Maximum ability uses</value>
+  </data>
+  <data name="CurseMakerTaskCurseTimeReduceRate" xml:space="preserve">
+    <value>Reduction rate of ability duration on task completion</value>
+  </data>
+  <data name="CurseMakerIsNotRemoveDeadBodyByTask" xml:space="preserve">
+    <value>"CURSE" : Does not consume corpse</value>
+  </data>
+  <data name="CurseMakerNotRemoveDeadBodyTaskGage" xml:space="preserve">
+    <value>Task completion rate of non-consuming corpse</value>
+  </data>
+  <data name="CurseMakerIsDeadBodySearch" xml:space="preserve">
+    <value>Does show arrows to corpse</value>
+  </data>
+  <data name="CurseMakerIsMultiDeadBodySearch" xml:space="preserve">
+    <value>Does show multiple arrows to corpse</value>
+  </data>
+  <data name="CurseMakerSearchDeadBodyTime" xml:space="preserve">
+    <value>Seconds from death of corpse for arrows to be enabled</value>
+  </data>
+  <data name="CurseMakerIsReduceSearchForTask" xml:space="preserve">
+    <value>Does task completion fasten arrow appearance</value>
+  </data>
+  <data name="CurseMakerReduceSearchTaskGage" xml:space="preserve">
+    <value>Task completion rate</value>
+  </data>
+  <data name="CurseMakerReduceSearchDeadBodyTime" xml:space="preserve">
+    <value>Arrow appearance cooldown reduction</value>
+  </data>
+  <data name="CurseMakerIntroDescription" xml:space="preserve">
+    <value>CURSE YOU, IMPOSTOR!</value>
+  </data>
+  <data name="CurseMakerShortDescription" xml:space="preserve">
+    <value>CURSE your foes in revenge of your mates</value>
+  </data>
+  <data name="CurseMakerFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to CURSE the killer, consuming 
+a dead body.
+ By using CURSE to a corpse, you can give an adittional cooldown 
+to the killer's Kill Cooldown, and also resets it. The corpse may be 
+consumed and will disappear referring to settings.
+ The additional cooldown effect is permanent, and will not be 
+cleared on emergency meetings.
+ When "Does show arrows to corpse" is TRUE, an arrow pointing 
+the corpse will show up after a few seconds, which is set by the 
+"Seconds from death of corpse for arrows to be enabled" setting.</value>
+  </data>
+  <data name="curse" xml:space="preserve">
+    <value>CURSE</value>
+  </data>
+  <data name="cursing" xml:space="preserve">
+    <value>CURSING</value>
+  </data>
+  <data name="Fencer" xml:space="preserve">
+    <value>Fencer</value>
+  </data>
+  <data name="FencerAbilityCoolTime" xml:space="preserve">
+    <value>"COUNTER" : Ability Cooldown</value>
+  </data>
+  <data name="FencerAbilityActiveTime" xml:space="preserve">
+    <value>"COUNTER" : Duration</value>
+  </data>
+  <data name="FencerAbilityCount" xml:space="preserve">
+    <value>"COUNTER" : Maximum ability uses</value>
+  </data>
+  <data name="FencerResetTime" xml:space="preserve">
+    <value>"COUNTER" : Temporary KILL duration</value>
+  </data>
+  <data name="FencerIntroDescription" xml:space="preserve">
+    <value>Nah, I won't be KILLed so easily</value>
+  </data>
+  <data name="FencerShortDescription" xml:space="preserve">
+    <value>COUNTER and KILL your enemies</value>
+  </data>
+  <data name="FencerFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to "COUNTER" KILLs from your 
+enemies.
+ When you were targeted by a KILL during the ability "COUNTER", 
+the KILL will be canceled and you will be able to use KILL, with no
+cooldown. KILL will disappear after a set duration, which is set by 
+""COUNTER" : Temporary KILL duration" option.
+ During "COUNTER", you will be invincive from all KILLs (Does not 
+nullify non-KILL ability deaths such as MISSIONARY's 
+propagation).</value>
+  </data>
+  <data name="counter" xml:space="preserve">
+    <value>COUNTER</value>
+  </data>
+  <data name="Opener" xml:space="preserve">
+    <value>Opener</value>
+  </data>
+  <data name="OpenerAbilityCoolTime" xml:space="preserve">
+    <value>"OPEN" : Ability Cooldown</value>
+  </data>
+  <data name="OpenerAbilityCount" xml:space="preserve">
+    <value>"OPEN" : Default Ability Charges</value>
+  </data>
+  <data name="OpenerRange" xml:space="preserve">
+    <value>"OPEN" : Ability Distance</value>
+  </data>
+  <data name="OpenerReduceRate" xml:space="preserve">
+    <value>"OPEN" : Cooldown reduction</value>
+  </data>
+  <data name="OpenerPlusAbility" xml:space="preserve">
+    <value>"OPEN" : Adittional Ability Charges</value>
+  </data>
+  <data name="OpenerIntroDescription" xml:space="preserve">
+    <value>OPEN SESAMI!!!</value>
+  </data>
+  <data name="OpenerShortDescription" xml:space="preserve">
+    <value>Open the doors and your way to glory</value>
+  </data>
+  <data name="OpenerFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to "OPEN" doors.  
+ By using "OPEN", a nearby door will be immediately opened.
+ By completing tasks, the ability stock will added by an amount 
+and also the cooldown will given a reduction, referring to the
+settings.</value>
+  </data>
+  <data name="openDoor" xml:space="preserve">
+    <value>OPEN</value>
+  </data>
+  <data name="Carpenter" xml:space="preserve">
+    <value>Carpenter</value>
+  </data>
+  <data name="CarpenterAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="CarpenterAbilityCoolTime" xml:space="preserve">
+    <value>"SEAL/CAMERA" : Ability Cooldown</value>
+  </data>
+  <data name="CarpenterAbilityCount" xml:space="preserve">
+    <value>"SEAL/CAMERA" : Maximum counts of "SCREWS"</value>
+  </data>
+  <data name="CarpenterRemoveVentScrew" xml:space="preserve">
+    <value>"SEAL" : "SCREWS" used</value>
+  </data>
+  <data name="CarpenterRemoveVentStopTime" xml:space="preserve">
+    <value>"SEAL" : Ability Duration</value>
+  </data>
+  <data name="CarpenterSetCameraScrew" xml:space="preserve">
+    <value>"CAMERA" : "SCREWS" used</value>
+  </data>
+  <data name="CarpenterSetCameraStopTime" xml:space="preserve">
+    <value>"CAMERA" : Ability Duration</value>
+  </data>
+  <data name="CarpenterIntroDescription" xml:space="preserve">
+    <value>It's my duty to keep this ship safe!</value>
+  </data>
+  <data name="CarpenterShortDescription" xml:space="preserve">
+    <value>Set CAMERAs and SEAL vents for safety</value>
+  </data>
+  <data name="CarpenterFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to set CAMERAs 
+and seal VENTs.
+ The ability icon changes to "SEAL" when a open VENT is nearby.
+ Does consume a set amount of SCREWS to set CAMERAs or seal 
+VENTs.
+ "CAMERA" : Sets a security camera on player position, which is 
+accessible from the security monitor
+ "SEAL" : Seals vent and disables player access. 
+ Does not nullify the VENT-Cleaning task (Can be done as usual).</value>
+  </data>
+  <data name="ventSeal" xml:space="preserve">
+    <value>SEAL</value>
+  </data>
+  <data name="cameraSet" xml:space="preserve">
+    <value>CAMERA</value>
+  </data>
+  <data name="carpenterScrewNum" xml:space="preserve">
+    <value>Using: {1}, {0} left</value>
+  </data>
+  <data name="Survivor" xml:space="preserve">
+    <value>Survivor</value>
+  </data>
+  <data name="SurvivorAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="SurvivorDeadWinTaskGage" xml:space="preserve">
+    <value>Task percentage to achive for victory before death</value>
+  </data>
+  <data name="SurvivorNoWinSurvivorAssignGhostRole" xml:space="preserve">
+    <value>Does assign GHOST ROLE\nwhen the SURVIVOR cannot win</value>
+  </data>
+  <data name="SurvivorIntroDescription" xml:space="preserve">
+    <value>I just want to live a little more</value>
+  </data>
+  <data name="SurvivorShortDescription" xml:space="preserve">
+    <value>Complete your tasks for victory</value>
+  </data>
+  <data name="SurvivorFullDescription" xml:space="preserve">
+    <value> A CREWMATE role who needs to survive to win.
+ You need to achive a given percentage of task completion before 
+you die, unless you can't win with the other CREWMATEs!
+ If you die before you achive it, your task will not be count for the 
+CREWMATE's task victory requirements. 
+ If you achive it before you die, hooray! You can join the 
+CREWMATE victory with your mates.</value>
+  </data>
+  <data name="Captain" xml:space="preserve">
+    <value>Captain</value>
+  </data>
+  <data name="CaptainAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="CaptainChargeVoteWhenSkip" xml:space="preserve">
+    <value>"SP. VOTE" : Votes charged per skip or non-vote</value>
+  </data>
+  <data name="CaptainAwakedDefaultVoteNum" xml:space="preserve">
+    <value>"SP. VOTE" : Default votes</value>
+  </data>
+  <data name="CaptainIntroDescription" xml:space="preserve">
+    <value>I'm the Cap of the ship!!</value>
+  </data>
+  <data name="CaptainShortDescription" xml:space="preserve">
+    <value>Use more votes to exile those foes</value>
+  </data>
+  <data name="CaptainFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability vote multiple times during the 
+meeting.
+ "SPECIAL VOTE" : On usage, adds multiple votes as a player vote 
+on meetings.
+  - Can be used when you have more than 1 votes stocked. Stocked 
+votes can be charged by skips or non-votes (Does also count 
+during the role is not revealed).
+   - Will show an icon on the player nameplate when used. Can 
+switch targeted player by using the ability once more.
+  - On ability usage, consumes all stocked votes and resets its 
+charge.</value>
+  </data>
+  <data name="captainVoteStatus" xml:space="preserve">
+    <value>SPECIAL VOTE: {0}\nVoting:{1} votes</value>
+  </data>
+  <data name="Photographer" xml:space="preserve">
+    <value>Photographer</value>
+  </data>
+  <data name="PhotographerAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="PhotographerUpgradePhotoTaskGage" xml:space="preserve">
+    <value>"CAPTURE" : Task completion percentage\nfor ability buff</value>
+  </data>
+  <data name="PhotographerEnableAllSendChat" xml:space="preserve">
+    <value>"CAPTURE" : Does captured info shared with everyone</value>
+  </data>
+  <data name="PhotographerUpgradeAllSendChatTaskGage" xml:space="preserve">
+    <value>Task completion rate to share info</value>
+  </data>
+  <data name="PhotographerPhotoRange" xml:space="preserve">
+    <value>"CAPTURE" : Ability Distance</value>
+  </data>
+  <data name="PhotographerAbilityCoolTime" xml:space="preserve">
+    <value>"CAPTURE" : Ability Cooldown</value>
+  </data>
+  <data name="PhotographerAbilityCount" xml:space="preserve">
+    <value>"CAPTURE" : Ability Charges</value>
+  </data>
+  <data name="PhotographerIntroDescription" xml:space="preserve">
+    <value>Shoot a nice shot!</value>
+  </data>
+  <data name="PhotographerShortDescription" xml:space="preserve">
+    <value>"CAPTURE" evidence of your mates</value>
+  </data>
+  <data name="PhotographerFullDescription" xml:space="preserve">
+    <value>A CREWMATE role with the ability to "CAPTURE" photographs.
+ "CAPTURE" : Can capture a "photograph" which contains who 
+was near the photographer.
+  - The "photo" includes the positions of players who were within 
+the ability range, which can be seen on chat when the next 
+meeting starts
+  - The information shown on chat becomes more detailed with 
+task completion
+  - The title of the photograph is completely random; does not have 
+any hints!</value>
+  </data>
+  <data name="takePhoto" xml:space="preserve">
+    <value>CAPTURE</value>
+  </data>
+  <data name="photoChat" xml:space="preserve">
+    <value>Developed the film!\n{0}</value>
+  </data>
+  <data name="takePhotoTime" xml:space="preserve">
+    <value>DATE</value>
+  </data>
+  <data name="photoName" xml:space="preserve">
+    <value>TITLE</value>
+  </data>
+  <data name="onlyMeOnPhoto" xml:space="preserve">
+    <value>There was only myself in the frame…</value>
+  </data>
+  <data name="Delusioner" xml:space="preserve">
+    <value>Delusioner</value>
+  </data>
+  <data name="DelusionerAwakeVoteNum" xml:space="preserve">
+    <value>Self-votes to reveal role</value>
+  </data>
+  <data name="DelusionerIsOnetimeAwake" xml:space="preserve">
+    <value>Does need to match revealing means every meeting</value>
+  </data>
+  <data name="DelusionerRange" xml:space="preserve">
+    <value>"DEFLECT" : Ability Distance</value>
+  </data>
+  <data name="DelusionerAbilityCoolTime" xml:space="preserve">
+    <value>"DEFLECT" : Ability Cooldown</value>
+  </data>
+  <data name="DelusionerAbilityCount" xml:space="preserve">
+    <value>"DEFLECT" : Maximum charges</value>
+  </data>
+  <data name="DelusionerVoteCoolTimeReduceRate" xml:space="preserve">
+    <value>"DEFLECT" : Cooldown reduction per self-vote</value>
+  </data>
+  <data name="DelusionerDeflectDamagePenaltyRate" xml:space="preserve">
+    <value>"DEFLECT" : Ability cooldown penalty per use</value>
+  </data>
+  <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
+    <value>"DEFLECT" : Does include yourself\nas a teleport targeted position</value>
+  </data>
+  <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
+    <value>"DEFLECT" : Does include map's initial spawn point\nas a teleport targeted position</value>
+  </data>
+  <data name="DelusionerIntroDescription" xml:space="preserve">
+    <value>STAY THE HECK AWAY FROM ME!!</value>
+  </data>
+  <data name="DelusionerShortDescription" xml:space="preserve">
+    <value>DEFLECT and teleport players away</value>
+  </data>
+  <data name="deflectDamage" xml:space="preserve">
+    <value>DEFLECT</value>
+  </data>
+  <data name="Resurrecter" xml:space="preserve">
+    <value>Resurrecter</value>
+  </data>
+  <data name="ResurrecterAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="ResurrecterResurrectTaskGage" xml:space="preserve">
+    <value>Task completion rate to gain auto resurrection</value>
+  </data>
+  <data name="ResurrecterIsMeetingCoolResetOnResurrect" xml:space="preserve">
+    <value>Does reset emergency meeting cooldown on player ressurection</value>
+  </data>
+  <data name="ResurrecterResurrectMeetingCooltime" xml:space="preserve">
+    <value>Cooldown set on player ressurection</value>
+  </data>
+  <data name="ResurrecterResurrectDelayTime" xml:space="preserve">
+    <value>Seconds from death to ressurect player</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetMeetingNum" xml:space="preserve">
+    <value>Meetings for ressurected player's task to be rewinded</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetGage" xml:space="preserve">
+    <value>Task rewinding rate of ressurection penalty</value>
+  </data>
+  <data name="ResurrecterCanResurrectAfterDeath" xml:space="preserve">
+    <value>Can ressurect after achieving means after death</value>
+  </data>
+  <data name="ResurrecterCanResurrectOnExil" xml:space="preserve">
+    <value>Can ressurect when being exiled</value>
+  </data>
+  <data name="ResurrecterIntroDescription" xml:space="preserve">
+    <value>You only live TWICE</value>
+  </data>
+  <data name="ResurrecterShortDescription" xml:space="preserve">
+    <value>You can RESSURECT for once</value>
+  </data>
+  <data name="ResurrecterFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to ressurect once.
+ By reaching a set amount of tasks, you can gain the ability to 
+ressurect.
+  - When Killed after reaching means, the player will be ressurected 
+after a set timer. The player cannot see other players' role while 
+being "temporary-dead". 
+  - When the corresponding option is ON, immediately ressurect 
+player by reaching means after death.
+  - On ressurection, the player will be teleported to the (random) 
+spawn point. A blue flash will be shown to the Killer's window.
+  - After a set amount of emergency meetings, the Ressurecter's 
+task will be rewinded as a penalty.
+The Ressurecter will not be assigned to a ghost role.</value>
+  </data>
+  <data name="resurrectText" xml:space="preserve">
+    <value>{0}s until resurrection</value>
+  </data>
+  <data name="Gambler" xml:space="preserve">
+    <value>Gambler</value>
+  </data>
+  <data name="GamblerNormalVoteRate" xml:space="preserve">
+    <value>Chance of normal vote</value>
+  </data>
+  <data name="GamblerIntroDescription" xml:space="preserve">
+    <value>Role the dice to vote twice!</value>
+  </data>
+  <data name="GamblerShortDescription" xml:space="preserve">
+    <value>Randomly multiplies votes</value>
+  </data>
+  <data name="GamblerFullDescription" xml:space="preserve">
+    <value>A CREWMATE role which can randomly vote 0-2 counts.
+The vote display will be normal (shows 1 vote).
+  - It only affects the internal count of votes.
+The chances of vote count variation is calculated by 
+ "{100 - (Configured chance of normal vote)}/2"
+ - When the configured chance is 50%, you may vote 1 for 50%, 
+    vote 0 for 25%, vote 2 for 25%.</value>
+  </data>
+  <data name="Teleporter" xml:space="preserve">
+    <value>Teleporter</value>
+  </data>
+  <data name="TeleporterCanUseOtherPlayer" xml:space="preserve">
+    <value>"PORTAL" : Can other players use the portal</value>
+  </data>
+  <data name="TeleporterAbilityCoolTime" xml:space="preserve">
+    <value>"PORTAL" : Ability Cooldown</value>
+  </data>
+  <data name="TeleporterAbilityCount" xml:space="preserve">
+    <value>Amount of FRAGS spawned</value>
+  </data>
+  <data name="TeleporterIntroDescription" xml:space="preserve">
+    <value>Are you still there?</value>
+  </data>
+  <data name="TeleporterShortDescription" xml:space="preserve">
+    <value>Gather FRAGS to open PORTALS</value>
+  </data>
+  <data name="TeleporterFullDescription" xml:space="preserve">
+    <value>A CREWMATE role with the ability to open teleportation Portals.
+"PORTAL" : A simple teleportation portal!
+ - Can charge the ability by gathering FRAGS scattered across 
+    the map
+ - One ability charge can open one Portal (two Portal gates)
+ - A player can use a Portal once in 5 seconds
+ - The corresponding option must be on to enable other players
+    besides the Teleporter to access the Portal.</value>
+  </data>
+  <data name="SetPortal" xml:space="preserve">
+    <value>PORTAL</value>
+  </data>
+  <data name="Moderator" xml:space="preserve">
+    <value>Moderator</value>
+  </data>
+  <data name="ModeratorAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="ModeratorAbilityCoolTime" xml:space="preserve">
+    <value>"MODERATE" : Ability Cooldown</value>
+  </data>
+  <data name="ModeratorAbilityCount" xml:space="preserve">
+    <value>"MODERATE" ; Ability Charges</value>
+  </data>
+  <data name="ModeratorMeetingTimerOffset" xml:space="preserve">
+    <value>"MODERATE" : Extends meeting timer by</value>
+  </data>
+  <data name="ModeratorIntroDescription" xml:space="preserve">
+    <value>LISTEN TO THE MODERATOR!</value>
+  </data>
+  <data name="ModeratorShortDescription" xml:space="preserve">
+    <value>Extend meetings and exile your foes</value>
+  </data>
+  <data name="ModeratorFullDescription" xml:space="preserve">
+    <value>A CREWMATE role with the ability to extend the next meeting once in a game.
+"MODERATE" : Shall we talk a little more longer?
+ - Extends the next meetng's timer by a set amount</value>
+  </data>
+  <data name="changeMeetingTime" xml:space="preserve">
+    <value>Extended the next meeting by {0}s</value>
+  </data>
+  <data name="moderate" xml:space="preserve">
+    <value>MODERATE</value>
+  </data>
+  <data name="Psychic" xml:space="preserve">
+    <value>Psychic</value>
+  </data>
+  <data name="PsychicAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="PsychicAwakeDeadPlayerNum" xml:space="preserve">
+    <value>Player eliminations  to reveal role</value>
+  </data>
+  <data name="PsychicAbilityCoolTime" xml:space="preserve">
+    <value>"CALL" : Ability Cooldown</value>
+  </data>
+  <data name="PsychicAbilityActiveTime" xml:space="preserve">
+    <value>"CALL" : Ability Duration</value>
+  </data>
+  <data name="PsychicAbilityCount" xml:space="preserve">
+    <value>"CALL" : Abilty Charge</value>
+  </data>
+  <data name="PsychicIsUpgradeAbility" xml:space="preserve">
+    <value>"CALL" : Does ability gain buffs in game</value>
+  </data>
+  <data name="PsychicUpgradeTaskGage" xml:space="preserve">
+    <value>"CALL" : (I) Task completion rate</value>
+  </data>
+  <data name="PsychicUpgradeDeadPlayerNum" xml:space="preserve">
+    <value>"CALL" : (II) Players eliminated from game</value>
+  </data>
+  <data name="PsychicIntroDescription" xml:space="preserve">
+    <value>Hear the whispers of the dead…</value>
+  </data>
+  <data name="PsychicShortDescription" xml:space="preserve">
+    <value>CALL to the dead and gain information</value>
+  </data>
+  <data name="PsychicFullDescription" xml:space="preserve">
+    <value>A CREWMATE role with the ability to gain information from the dead.
+
+"CALL" : I hear whispers from the dead…
+ - Gains informatrion by standing still and waiting for a set duration.
+ - Informations of other teams' remaining players will be shown on the chat in the next meeting. This excluedes CREWMATES (even if you have been changed teams i.e. Servants).
+ - May be buffed by task completion and player eliminations when the corresponding options are on</value>
+  </data>
+  <data name="PsychicPsychic" xml:space="preserve">
+    <value>CALL</value>
+  </data>
+  <data name="PsychicPsychicStart" xml:space="preserve">
+    <value>Started CALLING</value>
+  </data>
+  <data name="PsychicPsychicEnd" xml:space="preserve">
+    <value>Successfully gained information. Must show them on the next meeting…</value>
+  </data>
+  <data name="PsychicPsychicResult" xml:space="preserve">
+    <value>Results of CALING</value>
+  </data>
+  <data name="PsychicPsychicStrAliveRole" xml:space="preserve">
+    <value>&lt;indent=5%&gt;Alive roles:</value>
+  </data>
+  <data name="PsychicPsychicStrTeam" xml:space="preserve">
+    <value>&lt;indent=5%&gt;Team:</value>
+  </data>
+  <data name="PsychicPsychicStrForAliveNum" xml:space="preserve">
+    <value>&lt;indent=5%&gt;Players Remaining:{0}</value>
+  </data>
+</root>

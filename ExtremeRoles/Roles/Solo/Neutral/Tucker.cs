@@ -125,7 +125,7 @@ public sealed class Tucker :
 		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
 
 		this.createBehavior = new CountBehavior(
-			Translation.GetString("createChimera"),
+			Tr.GetString("createChimera"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerCreateChimera),
@@ -137,7 +137,7 @@ public sealed class Tucker :
 				RoleAbilityCommonOption.AbilityCount));
 
 		var summonAbility = new ReusableActivatingBehavior(
-			Translation.GetString("removeShadow"),
+			Tr.GetString("removeShadow"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerRemoveShadow),
@@ -231,7 +231,7 @@ public sealed class Tucker :
 			0.5f, 0.0f, 2.5f, 0.1f);
 		factory.CreateFloatOption(
 			Option.RemoveShadowTime,
-			3.0f, 0.1f, 15.0f, 0.1f,
+			3.0f, 0.1f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
 
 		var triggerOpt = factory.CreateBoolOption(
@@ -264,7 +264,7 @@ public sealed class Tucker :
 			Option.ChimeraCanUseVent, false);
 		factory.CreateFloatOption(
 			Option.ChimeraReviveTime,
-			5.0f, 4.0f, 10.0f, 0.1f,
+			5.0f, 4.0f, 60.0f, 0.1f,
 			format: OptionUnit.Second);
 		factory.CreateFloatOption(
 			Option.ChimeraDeathKillCoolOffset,
@@ -669,7 +669,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 		this.resurrectText.gameObject.SetActive(true);
 		this.resurrectTimer -= Time.deltaTime;
 		this.resurrectText.text = string.Format(
-			Translation.GetString("resurrectText"),
+			Tr.GetString("resurrectText"),
 			Mathf.CeilToInt(this.resurrectTimer));
 
 		if (this.resurrectTimer <= 0.0f)

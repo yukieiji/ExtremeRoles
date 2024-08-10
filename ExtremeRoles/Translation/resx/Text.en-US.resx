@@ -1,0 +1,1036 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MODNAME_TRANS" xml:space="preserve">
+    <value>Extreme Roles</value>
+  </data>
+  <data name="GeneralTab" xml:space="preserve">
+    <value>Global Setting</value>
+  </data>
+  <data name="CrewmateTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;CREWMATE Roles&lt;/color&gt;</value>
+  </data>
+  <data name="ImpostorTab" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;IMPOSTER Roles&lt;/color&gt;</value>
+  </data>
+  <data name="NeutralTab" xml:space="preserve">
+    <value>&lt;color=#7F7F7FFF&gt;NEUTRAL Roles&lt;/color&gt;</value>
+  </data>
+  <data name="CombinationTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;COMBI&lt;/color&gt;&lt;color=#FF1919FF&gt;NATION&lt;/color&gt;&lt;color=#7F7F7FFF&gt; Roles&lt;/color&gt;</value>
+  </data>
+  <data name="GhostCrewmateTab" xml:space="preserve">
+    <value>&lt;color=#8CFFFFFF&gt;GHOST CREWMATE Roles&lt;/color&gt;</value>
+  </data>
+  <data name="GhostImpostorTab" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;GHOST IMPOSTOR Roles&lt;/color&gt;</value>
+  </data>
+  <data name="GhostNeutralTab" xml:space="preserve">
+    <value>&lt;color=#7F7F7FFF&gt;GHOST NEUTRAL Roles&lt;/color&gt;</value>
+  </data>
+  <data name="PresetOption" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="RandomOptionUseStrong" xml:space="preserve">
+    <value>Use strong randomizer</value>
+  </data>
+  <data name="RandomOptionAlgorithm" xml:space="preserve">
+    <value>Radomizer</value>
+  </data>
+  <data name="RoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>Minimum CREWMATE Roles</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>Maximum CREWMATE Roles</value>
+  </data>
+  <data name="RoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>Minimum NEUTRAL Roles</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>Maximum NEUTRAL Roles</value>
+  </data>
+  <data name="RoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>Minimum IMPOSTOR Roles</value>
+  </data>
+  <data name="RoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>Maximum IMPOSTOR Roles</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinCrewmate" xml:space="preserve">
+    <value>Minimum CREWMATE GhostRoles</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxCrewmate" xml:space="preserve">
+    <value>Maximum CREWMATE GhostRoles</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinNeutral" xml:space="preserve">
+    <value>Minimum NEUTRAL GhostRoles</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxNeutral" xml:space="preserve">
+    <value>Maximum NEUTRAL GhostRoles</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMinImpostor" xml:space="preserve">
+    <value>Minimum IMPOSTOR  GhostRoles</value>
+  </data>
+  <data name="GhostRoleSpawnCategoryMaxImpostor" xml:space="preserve">
+    <value>Maximum IMPOSTOR GhostRoles</value>
+  </data>
+  <data name="MeetingOptionNumMeating" xml:space="preserve">
+    <value>Total Meetings</value>
+  </data>
+  <data name="MeetingOptionChangeMeetingVoteAreaSort" xml:space="preserve">
+    <value>Change sorting of players in meeting GUI</value>
+  </data>
+  <data name="MeetingOptionFixedMeetingPlayerLevel" xml:space="preserve">
+    <value>Fix player level in meeting GUI</value>
+  </data>
+  <data name="MeetingOptionDisableSkipInEmergencyMeeting" xml:space="preserve">
+    <value>Block Skipping in Meetings</value>
+  </data>
+  <data name="MeetingOptionDisableSelfVote" xml:space="preserve">
+    <value>Disable Self Vote</value>
+  </data>
+  <data name="ExiledOptionConfirmExilMode" xml:space="preserve">
+    <value>Teams revealed on exile</value>
+  </data>
+  <data name="ExiledOptionIsConfirmRole" xml:space="preserve">
+    <value>Does reveal role on exile</value>
+  </data>
+  <data name="VentOptionDisable" xml:space="preserve">
+    <value>Disable VENTs</value>
+  </data>
+  <data name="VentOptionCanKillInPlayer" xml:space="preserve">
+    <value>Can KILL players in the VENT</value>
+  </data>
+  <data name="VentOptionEngineerUseImpostor" xml:space="preserve">
+    <value>Disable cooldown for Engineer's VENT</value>
+  </data>
+  <data name="VentOptionAnimationModeInVison" xml:space="preserve">
+    <value>Range of VENT animation to be played</value>
+  </data>
+  <data name="VanillaAnimation" xml:space="preserve">
+    <value>All VENTs</value>
+  </data>
+  <data name="DonotWallHack" xml:space="preserve">
+    <value>Disable beyond walls</value>
+  </data>
+  <data name="DonotOutVison" xml:space="preserve">
+    <value>Disable beyond vision</value>
+  </data>
+  <data name="TaskOptionIsFixWallHaskTask" xml:space="preserve">
+    <value>Does override Wall-check for Tasks</value>
+  </data>
+  <data name="TaskOptionParallelMedBayScans" xml:space="preserve">
+    <value>Allow Parallel MedBay Scans</value>
+  </data>
+  <data name="TaskOptionGarbageTask" xml:space="preserve">
+    <value>Task: Empty Garbage</value>
+  </data>
+  <data name="TaskOptionShowerTask" xml:space="preserve">
+    <value>Task: Decontaminate</value>
+  </data>
+  <data name="TaskOptionDevelopPhotosTask" xml:space="preserve">
+    <value>Task: Develop Photos</value>
+  </data>
+  <data name="TaskOptionDivertPowerTask" xml:space="preserve">
+    <value>Task: Divert Power</value>
+  </data>
+  <data name="RandomSpawnOptionEnable" xml:space="preserve">
+    <value>Enable advanced spawn settings</value>
+  </data>
+  <data name="RandomSpawnOptionSkeld" xml:space="preserve">
+    <value>Random spawning in "The Skeld"</value>
+  </data>
+  <data name="RandomSpawnOptionMiraHq" xml:space="preserve">
+    <value>Random spawning in "MIRA HQ"</value>
+  </data>
+  <data name="RandomSpawnOptionPolus" xml:space="preserve">
+    <value>Random spawning in "Polus"</value>
+  </data>
+  <data name="RandomSpawnOptionAirShip" xml:space="preserve">
+    <value>Random spawning in "The Airship"</value>
+  </data>
+  <data name="RandomSpawnOptionFungle" xml:space="preserve">
+    <value>Random spawning in "The Fungle"</value>
+  </data>
+  <data name="RandomSpawnOptionIsAutoSelect" xml:space="preserve">
+    <value>Does auto-select spawn position after meeting</value>
+  </data>
+  <data name="AdminOptionIsRemove" xml:space="preserve">
+    <value>Disable ADMINs</value>
+  </data>
+  <data name="AdminOptionAirShipEnable" xml:space="preserve">
+    <value>Airship ADMIN settings</value>
+  </data>
+  <data name="ModeBoth" xml:space="preserve">
+    <value>Enable Both</value>
+  </data>
+  <data name="ModeCockpitOnly" xml:space="preserve">
+    <value>Enable Cockpit only</value>
+  </data>
+  <data name="ModeArchiveOnly" xml:space="preserve">
+    <value>Enable Archive only</value>
+  </data>
+  <data name="AdminOptionEnableLimit" xml:space="preserve">
+    <value>Set timer for ADMIN usage</value>
+  </data>
+  <data name="AdminOptionLimitTime" xml:space="preserve">
+    <value>ADMIN can be usable for</value>
+  </data>
+  <data name="SecurityOptionIsRemove" xml:space="preserve">
+    <value>Disable CAMERAs and LOGs</value>
+  </data>
+  <data name="SecurityOptionEnableLimit" xml:space="preserve">
+    <value>Enable timer for CAMERAs and LOGs</value>
+  </data>
+  <data name="SecurityOptionLimitTime" xml:space="preserve">
+    <value>CAMERAs and LOGs can be usable for</value>
+  </data>
+  <data name="VitalOptionIsRemove" xml:space="preserve">
+    <value>Disable VITALS monitor</value>
+  </data>
+  <data name="VitalOptionEnableLimit" xml:space="preserve">
+    <value>Enable timer for VITALS monitor</value>
+  </data>
+  <data name="VitalOptionLimitTime" xml:space="preserve">
+    <value>VITALS monitor time limit</value>
+  </data>
+  <data name="RandomMapOptionEnable" xml:space="preserve">
+    <value>Play On A Random Map</value>
+  </data>
+  <data name="TaskWinOptionDisableWhenNoneTaskCrew" xml:space="preserve">
+    <value>Disable task victory with no CREWMATEs having tasks</value>
+  </data>
+  <data name="TaskWinOptionDisableAll" xml:space="preserve">
+    <value>Disable task completetion victory</value>
+  </data>
+  <data name="NeutralWinOptionIsSame" xml:space="preserve">
+    <value>Team all same NEUTRAL role players</value>
+  </data>
+  <data name="NeutralWinOptionDisableSpecialEnd" xml:space="preserve">
+    <value>Disable game ending by NEUTRAL roles' special victories</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsAssignNeutralToVanillaCrewGhostRole" xml:space="preserve">
+    <value>Does NEUTRAL roles get vanilla Ghost roles</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsRemoveAngleIcon" xml:space="preserve">
+    <value>Remove Angel icon of Ghost roles</value>
+  </data>
+  <data name="GhostRoleGlobalOptionIsBlockGAAbilityReport" xml:space="preserve">
+    <value>Disable Guardian angel's ability report</value>
+  </data>
+  <data name="EnableHorseMode" xml:space="preserve">
+    <value>AMONG HORSE MODE</value>
+  </data>
+  <data name="moreOptionText" xml:space="preserve">
+    <value>Extreme Roles options</value>
+  </data>
+  <data name="modOptionText" xml:space="preserve">
+    <value>Extreme Roles options</value>
+  </data>
+  <data name="GhostsSeeTasksButton" xml:space="preserve">
+    <value>Ghosts See Remaining Tasks</value>
+  </data>
+  <data name="GhostsSeeRolesButton" xml:space="preserve">
+    <value>Ghosts See Roles</value>
+  </data>
+  <data name="GhostsSeeVotesButton" xml:space="preserve">
+    <value>Ghosts See Votes</value>
+  </data>
+  <data name="ShowRoleSummaryButton" xml:space="preserve">
+    <value>Role Summary</value>
+  </data>
+  <data name="HideNamePlateButton" xml:space="preserve">
+    <value>Hide Nameplate</value>
+  </data>
+  <data name="custom" xml:space="preserve">
+    <value>custom</value>
+  </data>
+  <data name="ExROfficialTokyo" xml:space="preserve">
+    <value>ExR Tokyo</value>
+  </data>
+  <data name="importCsv" xml:space="preserve">
+    <value>Import settings</value>
+  </data>
+  <data name="importPleaseWait" xml:space="preserve">
+    <value>Importing settings…</value>
+  </data>
+  <data name="importSuccess" xml:space="preserve">
+    <value>Successfully imported</value>
+  </data>
+  <data name="importError" xml:space="preserve">
+    <value>Failed to import settings:\n Please check your files.</value>
+  </data>
+  <data name="exportCsv" xml:space="preserve">
+    <value>Export settings</value>
+  </data>
+  <data name="exportPleaseWait" xml:space="preserve">
+    <value>Exporting settings…</value>
+  </data>
+  <data name="exportSuccess" xml:space="preserve">
+    <value>Successfully exported</value>
+  </data>
+  <data name="exportError" xml:space="preserve">
+    <value>Failed to export settings:\nPlease delete option.csv and try again.</value>
+  </data>
+  <data name="version" xml:space="preserve">
+    <value>Version: </value>
+  </data>
+  <data name="developer" xml:space="preserve">
+    <value>Developed by: </value>
+  </data>
+  <data name="debugThunk" xml:space="preserve">
+    <value>Debug:</value>
+  </data>
+  <data name="langTranslate" xml:space="preserve">
+    <value>Translation: </value>
+  </data>
+  <data name="translatorMember" xml:space="preserve">
+    <value>Yuhgao</value>
+  </data>
+  <data name="youAreRoleIntro" xml:space="preserve">
+    <value>You are Role is</value>
+  </data>
+  <data name="andFirst" xml:space="preserve">
+    <value> and </value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value>,  </value>
+  </data>
+  <data name="introAnd" xml:space="preserve">
+    <value> and </value>
+  </data>
+  <data name="optionOn" xml:space="preserve">
+    <value>&lt;color=#33ffcc&gt;ON&lt;/color&gt;</value>
+  </data>
+  <data name="optionOff" xml:space="preserve">
+    <value>&lt;color=#ff3366&gt;OFF&lt;/color&gt;</value>
+  </data>
+  <data name="crewmateRoles" xml:space="preserve">
+    <value>CREWMATE Roles</value>
+  </data>
+  <data name="neutralRoles" xml:space="preserve">
+    <value>NEUTRAL Roles</value>
+  </data>
+  <data name="impostorRoles" xml:space="preserve">
+    <value>IMPOSTOR Roles</value>
+  </data>
+  <data name="crewmateGhostRoles" xml:space="preserve">
+    <value>CREWMATE GhostRoles</value>
+  </data>
+  <data name="neutralGhostRoles" xml:space="preserve">
+    <value>NEUTRAL GhostRoles</value>
+  </data>
+  <data name="impostorGhostRoles" xml:space="preserve">
+    <value>IMPOSTOR GhostRoles</value>
+  </data>
+  <data name="pressTabForMore" xml:space="preserve">
+    <value>Press tab for more...</value>
+  </data>
+  <data name="meetingStatus" xml:space="preserve">
+    <value>CREWMEMBER {0} HAS\n\n\nEMERGENCY MEETINGS LEFT</value>
+  </data>
+  <data name="meetingCount" xml:space="preserve">
+    <value>{0} times left / the ship total: {1} left</value>
+  </data>
+  <data name="buttonBlocked" xml:space="preserve">
+    <value>BLOCKED</value>
+  </data>
+  <data name="Preset" xml:space="preserve">
+    <value>Preset {0}</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value>{0}s</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>{0}m</value>
+  </data>
+  <data name="Shot" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="Multiplier" xml:space="preserve">
+    <value>{0}x</value>
+  </data>
+  <data name="Percentage" xml:space="preserve">
+    <value>{0}％</value>
+  </data>
+  <data name="ScrewNum" xml:space="preserve">
+    <value>x{0}</value>
+  </data>
+  <data name="VoteNum" xml:space="preserve">
+    <value>x{0}</value>
+  </data>
+  <data name="XionUseXion" xml:space="preserve">
+    <value>Enable XION</value>
+  </data>
+  <data name="yourHost" xml:space="preserve">
+    <value>Host ROLE</value>
+  </data>
+  <data name="youAreNewRuleEditor" xml:space="preserve">
+    <value>GAME MASTER</value>
+  </data>
+  <data name="Xion" xml:space="preserve">
+    <value>Xion</value>
+  </data>
+  <data name="XionIntroDescription" xml:space="preserve">
+    <value>The GAME is my property!</value>
+  </data>
+  <data name="XionShortDescription" xml:space="preserve">
+    <value>You are the OMNIPOTENT</value>
+  </data>
+  <data name="XionFullDescription" xml:space="preserve">
+    <value>Can Zoom IN/OUT the map, change movement speed, teleport, etc.
+Clicking player avatars on bottom left will teleport you to the player;
+Clicking with L-ALT can KILL or REVIVE the player.
+
+HOTKEYS:
+ - ALT + L：End the game
+ - ALT + C: End meeting
+ - SHIFT + PageUp : Speed up movement
+ - SHIFT + PageDown
+ - SHIFT + R: Reset movement speed
+ - CTRL + PageUp: Zoom in
+ - CTRL + PageDown: Zoom out
+ - CTRL + R: Reset zoom
+
+For LOCAL Games:
+ - F in lobby: Summon dummy player (when XION is used)
+ - ALT + B: Summon dummy corpse at mouse carousel
+ - Commands in chat:
+    - /SetRole [player name(optional)] [ROLE] : Assign the player to a ROLE. When a player name is specified, the player will be assigned to the ROLE.
+    - /IamXion : Assign XION to host</value>
+  </data>
+  <data name="zoomOut" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+  <data name="zoomIn" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="speedUp" xml:space="preserve">
+    <value>Speed Up</value>
+  </data>
+  <data name="speedDown" xml:space="preserve">
+    <value>Speed Down</value>
+  </data>
+  <data name="alreadyVoted" xml:space="preserve">
+    <value>Already voted!</value>
+  </data>
+  <data name="invalidArgs" xml:space="preserve">
+    <value>Invalid arguments!</value>
+  </data>
+  <data name="invalidPlayerName" xml:space="preserve">
+    <value>Invalid player name!</value>
+  </data>
+  <data name="cannotUseThisGameMode" xml:space="preserve">
+    <value>Cannot use this gamemode for now!</value>
+  </data>
+  <data name="invalidRoleName" xml:space="preserve">
+    <value>Invalid ROLE name!</value>
+  </data>
+  <data name="setRole" xml:space="preserve">
+    <value>Assigned ROLE: {1} to player: {0}</value>
+  </data>
+  <data name="XionNow" xml:space="preserve">
+    <value>The host player is already a XION!</value>
+  </data>
+  <data name="RevartXion" xml:space="preserve">
+    <value>Assigned XION to the host player.</value>
+  </data>
+  <data name="buttonCountText" xml:space="preserve">
+    <value>REMAINING: {0}</value>
+  </data>
+  <data name="summaryText" xml:space="preserve">
+    <value>STATS:</value>
+  </data>
+  <data name="roleSummaryInfo" xml:space="preserve">
+    <value>Player name&lt;pos=16.5%&gt;Tasks&lt;pos=25%&gt;Final Status&lt;pos=38%&gt;ROLE</value>
+  </data>
+  <data name="ghostRoleSummaryInfo" xml:space="preserve">
+    <value>Player name&lt;pos=16.5%&gt;Tasks&lt;pos=25%&gt;Final Status&lt;pos=38%&gt;GHOST ROLE</value>
+  </data>
+  <data name="noGhostRole" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="tabMoreSummary" xml:space="preserve">
+    <value>TAB to change page({0}/{1})</value>
+  </data>
+  <data name="shiftHideSummary" xml:space="preserve">
+    <value>SHIFT to hide STATS</value>
+  </data>
+  <data name="shiftShowSummary" xml:space="preserve">
+    <value>SHIFT to show STATS</value>
+  </data>
+  <data name="Alive" xml:space="preserve">
+    <value>Alive</value>
+  </data>
+  <data name="Exiled" xml:space="preserve">
+    <value>Exiled</value>
+  </data>
+  <data name="Dead" xml:space="preserve">
+    <value>Dead</value>
+  </data>
+  <data name="Killed" xml:space="preserve">
+    <value>Killed</value>
+  </data>
+  <data name="Suicide" xml:space="preserve">
+    <value>Suicide</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+  <data name="MissShot" xml:space="preserve">
+    <value>Missshot</value>
+  </data>
+  <data name="Retaliate" xml:space="preserve">
+    <value>Retaliated</value>
+  </data>
+  <data name="Assassinate" xml:space="preserve">
+    <value>Assassinated</value>
+  </data>
+  <data name="DeadAssassinate" xml:space="preserve">
+    <value>Assassinated</value>
+  </data>
+  <data name="Surrender" xml:space="preserve">
+    <value>Surrendered</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>Departed</value>
+  </data>
+  <data name="Martyrdom" xml:space="preserve">
+    <value>Martydomed</value>
+  </data>
+  <data name="Explosion" xml:space="preserve">
+    <value>Exploded</value>
+  </data>
+  <data name="Zombied" xml:space="preserve">
+    <value>Zombified</value>
+  </data>
+  <data name="Eatting" xml:space="preserve">
+    <value>Eaten</value>
+  </data>
+  <data name="AllTeam" xml:space="preserve">
+    <value>All Teams</value>
+  </data>
+  <data name="customServerIp" xml:space="preserve">
+    <value>Custom server IP</value>
+  </data>
+  <data name="customServerPort" xml:space="preserve">
+    <value>Custom server PORT</value>
+  </data>
+  <data name="Neutral" xml:space="preserve">
+    <value>NEUTRAL</value>
+  </data>
+  <data name="neutralIntro" xml:space="preserve">
+    <value>Achive your own MISSION</value>
+  </data>
+  <data name="neutralShotCall" xml:space="preserve">
+    <value>EGOISTS</value>
+  </data>
+  <data name="impostorShotCall" xml:space="preserve">
+    <value>KILLERS</value>
+  </data>
+  <data name="Shapeshifter" xml:space="preserve">
+    <value>Shapeshifter</value>
+  </data>
+  <data name="Engineer" xml:space="preserve">
+    <value>Enginneer</value>
+  </data>
+  <data name="Scientist" xml:space="preserve">
+    <value>Scientist</value>
+  </data>
+  <data name="GuardianAngel" xml:space="preserve">
+    <value>Guardian Angel</value>
+  </data>
+  <data name="Noisemaker" xml:space="preserve">
+    <value>Noisemaker</value>
+  </data>
+  <data name="Tracker" xml:space="preserve">
+    <value>Tracker</value>
+  </data>
+  <data name="Phantom" xml:space="preserve">
+    <value>Phantom</value>
+  </data>
+  <data name="roleAssignNow" xml:space="preserve">
+    <value>Assigning ROLEs</value>
+  </data>
+  <data name="impostorIntroText" xml:space="preserve">
+    <value>Kill and Sabotage for your win</value>
+  </data>
+  <data name="crewIntroText" xml:space="preserve">
+    <value>Don't forget to complete your tasks</value>
+  </data>
+  <data name="crewImportantText" xml:space="preserve">
+    <value>Complete your tasks</value>
+  </data>
+  <data name="YourRolePanel" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="YourGhostRolePanel" xml:space="preserve">
+    <value>Your Ghost role</value>
+  </data>
+  <data name="AllRolePanel" xml:space="preserve">
+    <value>ROLE description</value>
+  </data>
+  <data name="AllGhostRolePanel" xml:space="preserve">
+    <value>GHOST ROLE description</value>
+  </data>
+  <data name="GlobalSettingPanel" xml:space="preserve">
+    <value>Global Settings</value>
+  </data>
+  <data name="changePageMore" xml:space="preserve">
+    <value>Change pages by PgUP/PgDN</value>
+  </data>
+  <data name="gameOption" xml:space="preserve">
+    <value>Current settings</value>
+  </data>
+  <data name="roleOption" xml:space="preserve">
+    <value> configurations</value>
+  </data>
+  <data name="yourAliveNow" xml:space="preserve">
+    <value>You're alive</value>
+  </data>
+  <data name="yourNoAssignGhostRole" xml:space="preserve">
+    <value>You have no Ghost roles</value>
+  </data>
+  <data name="vanilaOptions" xml:space="preserve">
+    <value>Vanilla settings</value>
+  </data>
+  <data name="playerName" xml:space="preserve">
+    <value>Player Name</value>
+  </data>
+  <data name="roleName" xml:space="preserve">
+    <value>ROLE</value>
+  </data>
+  <data name="gameReplace" xml:space="preserve">
+    <value>*Revealed upon game start or during game</value>
+  </data>
+  <data name="ReqBepInExUpdate" xml:space="preserve">
+    <value>Updating BepInEx…</value>
+  </data>
+  <data name="compatModMenuButton" xml:space="preserve">
+    <value>MOD Manager</value>
+  </data>
+  <data name="compatModMenu" xml:space="preserve">
+    <value>Extreme Roles MOD Manager</value>
+  </data>
+  <data name="chekUpdateWait" xml:space="preserve">
+    <value>Checking Updates…</value>
+  </data>
+  <data name="updateNow" xml:space="preserve">
+    <value>Starting update</value>
+  </data>
+  <data name="updateManually" xml:space="preserve">
+    <value>Failed to auto update\nPlease update it manually.</value>
+  </data>
+  <data name="updateRestart" xml:space="preserve">
+    <value>Successfully updated!\nPlease restart the game</value>
+  </data>
+  <data name="updateInProgress" xml:space="preserve">
+    <value>Updating…</value>
+  </data>
+  <data name="alreadyInstall" xml:space="preserve">
+    <value>Already Installed. Please restart the game</value>
+  </data>
+  <data name="checkInstallNow" xml:space="preserve">
+    <value>Checking installing data…</value>
+  </data>
+  <data name="installNow" xml:space="preserve">
+    <value>Starting installation</value>
+  </data>
+  <data name="installInProgress" xml:space="preserve">
+    <value>Installing…</value>
+  </data>
+  <data name="installManual" xml:space="preserve">
+    <value>Failed to Install\nPlease install it manually.</value>
+  </data>
+  <data name="installRestart" xml:space="preserve">
+    <value>Successfully installed!\nPlease restart the game</value>
+  </data>
+  <data name="alreadyUninstall" xml:space="preserve">
+    <value>Already uninstalled.\nPlease restart the game</value>
+  </data>
+  <data name="checkUninstallNow" xml:space="preserve">
+    <value>Checking uninstall data…</value>
+  </data>
+  <data name="uninstallNow" xml:space="preserve">
+    <value>Starting uninstallation</value>
+  </data>
+  <data name="uninstallInProgress" xml:space="preserve">
+    <value>Uninstalling…</value>
+  </data>
+  <data name="uninstallManual" xml:space="preserve">
+    <value>Failed to auto uninstall\nPlease uninstall it manually.</value>
+  </data>
+  <data name="uninstallRestart" xml:space="preserve">
+    <value>Successfully uninstalled.\nPlease restart the game</value>
+  </data>
+  <data name="alreadyUninstallAfterInstall" xml:space="preserve">
+    <value>This is already uninstalled!\nPlease restart the game</value>
+  </data>
+  <data name="isReactorInstall" xml:space="preserve">
+    <value>This MOD requires "Reactor" as a dependency.
+"Reactor" is not supported by Among Us official servers, thus please use
+other custom servers (such as "ExR Tokyo") to play.
+Do you want to continue Installing?</value>
+  </data>
+  <data name="UninstallButton" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="UpdateButton" xml:space="preserve">
+    <value>Check updates</value>
+  </data>
+  <data name="InstallButton" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="latestNow" xml:space="preserve">
+    <value>Using the latest MOD release</value>
+  </data>
+  <data name="youDonotUse" xml:space="preserve">
+    <value>PERMISSION DENIED</value>
+  </data>
+  <data name="errorCannotGameStart" xml:space="preserve">
+    <value>CANNOT START GAME DUE TO AN ERROR</value>
+  </data>
+  <data name="errorNotInstalled" xml:space="preserve">
+    <value>Extreme Roles is not properly installed</value>
+  </data>
+  <data name="errorOldInstalled" xml:space="preserve">
+    <value>An older version of Extreme Roles is detected</value>
+  </data>
+  <data name="errorNewInstalled" xml:space="preserve">
+    <value>An newer version of Extreme Roles is detected</value>
+  </data>
+  <data name="errorDiffHostVersion" xml:space="preserve">
+    <value>An different version of Extreme Roles with the host is detected</value>
+  </data>
+  <data name="ExileTextSPCrew" xml:space="preserve">
+    <value>{0} was a Crewmate.</value>
+  </data>
+  <data name="ExileTextSNCrew" xml:space="preserve">
+    <value>{0} was not a Crewmate.</value>
+  </data>
+  <data name="ExileTextPPCrew" xml:space="preserve">
+    <value>{0} was a Crewmate.</value>
+  </data>
+  <data name="ExileTextPNCrew" xml:space="preserve">
+    <value>{0} was not a Crewmate.</value>
+  </data>
+  <data name="ExileTextSPNeut" xml:space="preserve">
+    <value>{0} was a Neutral.</value>
+  </data>
+  <data name="ExileTextSNNeut" xml:space="preserve">
+    <value>{0} was not a Neutral.</value>
+  </data>
+  <data name="ExileTextPPNeut" xml:space="preserve">
+    <value>{0} was a Neutral.</value>
+  </data>
+  <data name="ExileTextPNNeut" xml:space="preserve">
+    <value>{0} was not a Neutral.</value>
+  </data>
+  <data name="ExileTextSPCrewWithRole" xml:space="preserve">
+    <value>{0} was the "{1}" of the Crewmates.</value>
+  </data>
+  <data name="ExileTextSNCrewWithRole" xml:space="preserve">
+    <value>{0} was not a Crewmate.</value>
+  </data>
+  <data name="ExileTextPPCrewWithRole" xml:space="preserve">
+    <value>{0} was the "{1}" of the Crewmates.</value>
+  </data>
+  <data name="ExileTextPNCrewWithRole" xml:space="preserve">
+    <value>{0} was not a Crewmate.</value>
+  </data>
+  <data name="ExileTextSPNeutWithRole" xml:space="preserve">
+    <value>{0} was a "{1}" as a Neutral.</value>
+  </data>
+  <data name="ExileTextSNNeutWithRole" xml:space="preserve">
+    <value>{0} was not a Neutral.</value>
+  </data>
+  <data name="ExileTextPPNeutWithRole" xml:space="preserve">
+    <value>{0} was a "{1}" as a Neutral.</value>
+  </data>
+  <data name="ExileTextPNNeutWithRole" xml:space="preserve">
+    <value>{0} was not a Neutral.</value>
+  </data>
+  <data name="ExileTextAllTeam" xml:space="preserve">
+    <value>{0} was the {1}.</value>
+  </data>
+  <data name="ExileTextAllTeamWithRole" xml:space="preserve">
+    <value>{0} was the "{2}" of the {1}.</value>
+  </data>
+  <data name="CrewmateRemainS" xml:space="preserve">
+    <value>{0} Crewmates remaining.</value>
+  </data>
+  <data name="CrewmateRemainP" xml:space="preserve">
+    <value>{0} Crewmates remaining.</value>
+  </data>
+  <data name="NeutralRemainS" xml:space="preserve">
+    <value>{0} Neutrals remaining.</value>
+  </data>
+  <data name="NeutralRemainP" xml:space="preserve">
+    <value>{0} Neutrals remaining.</value>
+  </data>
+  <data name="AllTeamAlive" xml:space="preserve">
+    <value>{0} Crewmates, {1} Impostors, {2} Neutrals remaining.</value>
+  </data>
+  <data name="RoleAssignFilter" xml:space="preserve">
+    <value>ROLE Assign Filter</value>
+  </data>
+  <data name="RoleAssignFilterAddRoleMenuTitle" xml:space="preserve">
+    <value>Choose a ROLE</value>
+  </data>
+  <data name="RoleAssignFilterAssignNum" xml:space="preserve">
+    <value>Assigning</value>
+  </data>
+  <data name="RoleAssignFilterDeleteThis" xml:space="preserve">
+    <value>Delete filter</value>
+  </data>
+  <data name="RoleAssignFilterDeleteAllRole" xml:space="preserve">
+    <value>Reset filter</value>
+  </data>
+  <data name="RoleAssignFilterAddRole" xml:space="preserve">
+    <value>Add ROLE</value>
+  </data>
+  <data name="RoleAssignFilterAddFilter" xml:space="preserve">
+    <value>Add filter</value>
+  </data>
+  <data name="SystemMessage" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="SuccessAmongUsConnect" xml:space="preserve">
+    <value>Successfully connected to AmongUs</value>
+  </data>
+  <data name="InputMessage" xml:space="preserve">
+    <value>Enter messages…</value>
+  </data>
+  <data name="DisconectAmongUsMessage" xml:space="preserve">
+    <value>Disconnected from AmongUs</value>
+  </data>
+  <data name="ConectSocketMessage" xml:space="preserve">
+    <value>Successfully connected to AmongUs via Socket</value>
+  </data>
+  <data name="InvalidCharMessage" xml:space="preserve">
+    <value>Message is invalid. Please make it again.</value>
+  </data>
+  <data name="abilityRemain" xml:space="preserve">
+    <value>WAITING ABILITY {0}s left</value>
+  </data>
+  <data name="abilityOnText" xml:space="preserve">
+    <value>USING ABILITY {0}s left</value>
+  </data>
+  <data name="right" xml:space="preserve">
+    <value>right</value>
+  </data>
+  <data name="down" xml:space="preserve">
+    <value>down</value>
+  </data>
+  <data name="left" xml:space="preserve">
+    <value>left</value>
+  </data>
+  <data name="up" xml:space="preserve">
+    <value>up</value>
+  </data>
+  <data name="canDo" xml:space="preserve">
+    <value> ENABLED</value>
+  </data>
+  <data name="cannotDo" xml:space="preserve">
+    <value> UNABLED</value>
+  </data>
+  <data name="AdminModule" xml:space="preserve">
+    <value>ADMIN</value>
+  </data>
+  <data name="SecurityCamera" xml:space="preserve">
+    <value>CAMERAs and LOGs</value>
+  </data>
+  <data name="Pcg32XshRr" xml:space="preserve">
+    <value>PCG32-XSH-RR</value>
+  </data>
+  <data name="Pcg64RxsMXs" xml:space="preserve">
+    <value>PCG64-RXS-M-XS</value>
+  </data>
+  <data name="Xorshift64" xml:space="preserve">
+    <value>Xorshift64</value>
+  </data>
+  <data name="Xorshift128" xml:space="preserve">
+    <value>Xorshift128</value>
+  </data>
+  <data name="Xorshiro256StarStar" xml:space="preserve">
+    <value>xorshiro256**</value>
+  </data>
+  <data name="Xorshiro512StarStar" xml:space="preserve">
+    <value>xorshiro512**</value>
+  </data>
+  <data name="RomuMono" xml:space="preserve">
+    <value>RomuMono</value>
+  </data>
+  <data name="RomuTrio" xml:space="preserve">
+    <value>RomuTrio</value>
+  </data>
+  <data name="RomuQuad" xml:space="preserve">
+    <value>RomuQuad</value>
+  </data>
+  <data name="Seiran128" xml:space="preserve">
+    <value>Seiran128</value>
+  </data>
+  <data name="Shioi128" xml:space="preserve">
+    <value>Shioi128</value>
+  </data>
+  <data name="JFT32" xml:space="preserve">
+    <value>JFT32</value>
+  </data>
+  <data name="AssignWeight" xml:space="preserve">
+    <value>Assigning Weight</value>
+  </data>
+  <data name="RoleNum" xml:space="preserve">
+    <value>No. of assigned players</value>
+  </data>
+  <data name="HasOtherVision" xml:space="preserve">
+    <value>Has special vision settings</value>
+  </data>
+  <data name="Vision" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="ApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Does sabotage effect their vision</value>
+  </data>
+  <data name="HasOtherKillCool" xml:space="preserve">
+    <value>Does have a modified Kill Cooldown</value>
+  </data>
+  <data name="KillCoolDown" xml:space="preserve">
+    <value>Kill Cooldown</value>
+  </data>
+  <data name="HasOtherKillRange" xml:space="preserve">
+    <value>Does have a modified Kill Distance</value>
+  </data>
+  <data name="KillRange" xml:space="preserve">
+    <value>Kill Distance</value>
+  </data>
+  <data name="IsAssignImposter" xml:space="preserve">
+    <value>Does IMPOSTORS allowed to assign</value>
+  </data>
+  <data name="ImposterSelectedRate" xml:space="preserve">
+    <value>Assign rate as Impostor</value>
+  </data>
+  <data name="IsMultiAssign" xml:space="preserve">
+    <value>Does overlap with other roles</value>
+  </data>
+  <data name="AssignsNum" xml:space="preserve">
+    <value>Players per 1 pair</value>
+  </data>
+  <data name="DefaultKey" xml:space="preserve">
+    <value>Default</value>
+  </data>
+</root>

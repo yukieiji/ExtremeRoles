@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GuardianAngelFullDescription" xml:space="preserve">
+    <value>守護天使屬於幽靈船員職業，可以保護玩家。
+能力“護衛”
+以一名船員為對象發動。那名玩家獲得一個護盾，持續一段時間。
+擁有護盾的情況下，有玩家嘗試擊殺那名玩家時，那次擊殺無效。
+這個技能對魔王的擊殺無效。</value>
+  </data>
+  <data name="Poltergeist" xml:space="preserve">
+    <value>喧鬧鬼</value>
+  </data>
+  <data name="PoltergeistRange" xml:space="preserve">
+    <value>可以檢測屍體的範圍</value>
+  </data>
+  <data name="PoltergeistAbilityCoolTime" xml:space="preserve">
+    <value>喧鬧冷卻</value>
+  </data>
+  <data name="PoltergeistAbilityActiveTime" xml:space="preserve">
+    <value>喧鬧持續時間</value>
+  </data>
+  <data name="PoltergeistIsReportAbility" xml:space="preserve">
+    <value>喧鬧發動時會通知其他玩家</value>
+  </data>
+  <data name="PoltergeistAbilityCount" xml:space="preserve">
+    <value>喧鬧最大發動次數</value>
+  </data>
+  <data name="PoltergeistShortDescription" xml:space="preserve">
+    <value>把屍體運到容易被發現的地方</value>
+  </data>
+  <data name="PoltergeistFullDescription" xml:space="preserve">
+    <value>喧鬧鬼屬於幽靈船員職業，可以移動屍體。
+主動技能“喧鬧”：
+·發動後可以在一定時間內自由移動附近的屍體
+·如果其他人因能力而獲得了屍體的控制權，則無法奪走該屍體，反之亦然</value>
+  </data>
+  <data name="PoltergeistMoveDeadbodyButton" xml:space="preserve">
+    <value>喧鬧</value>
+  </data>
+  <data name="PoltergeistMoveDeadbody" xml:space="preserve">
+    <value>喧鬧鬼移動了某處的屍體</value>
+  </data>
+  <data name="Faunus" xml:space="preserve">
+    <value>潘神</value>
+  </data>
+  <data name="FaunusAbilityCoolTime" xml:space="preserve">
+    <value>神惠冷卻</value>
+  </data>
+  <data name="FaunusAbilityActiveTime" xml:space="preserve">
+    <value>神惠打開緊急破壞畫面的持續時間</value>
+  </data>
+  <data name="FaunusIsReportAbility" xml:space="preserve">
+    <value>神惠發動時會通知其他玩家</value>
+  </data>
+  <data name="FaunusAbilityCount" xml:space="preserve">
+    <value>神惠最大使用次數</value>
+  </data>
+  <data name="FaunusShortDescription" xml:space="preserve">
+    <value>用神惠幫助船員修理破壞</value>
+  </data>
+  <data name="FaunusFullDescription" xml:space="preserve">
+    <value>潘神屬於幽靈船員職業，可以在靈界修復飛船破壞。
+主動技能“神惠”：
+·發動後可以打開通訊破壞以外的緊急破壞修理畫面
+·在需要多人修理的緊急破壞中，隨機打開某一邊的畫面
+·修理畫面在一定時間後強制關閉</value>
+  </data>
+  <data name="FaunusOpenSaboConsoleButton" xml:space="preserve">
+    <value>神惠</value>
+  </data>
+  <data name="FaunusOpenSaboConsole" xml:space="preserve">
+    <value>潘神賜予了我們恩惠</value>
+  </data>
+  <data name="Shutter" xml:space="preserve">
+    <value>天眼通</value>
+  </data>
+  <data name="ShutterPhotoRange" xml:space="preserve">
+    <value>靈界攝影範圍</value>
+  </data>
+  <data name="ShutterRightPlayerNameRate" xml:space="preserve">
+    <value>靈界攝影正確顯示玩家昵稱的概率</value>
+  </data>
+  <data name="ShutterAbilityCoolTime" xml:space="preserve">
+    <value>靈界攝影冷卻</value>
+  </data>
+  <data name="ShutterIsReportAbility" xml:space="preserve">
+    <value>靈界攝影發動時會通知其他玩家</value>
+  </data>
+  <data name="ShutterAbilityCount" xml:space="preserve">
+    <value>靈界攝影最大使用次數</value>
+  </data>
+  <data name="ShutterShortDescription" xml:space="preserve">
+    <value>用化為魂靈的雙眼捕捉決定性的瞬間</value>
+  </data>
+  <data name="ShutterFullDescription" xml:space="preserve">
+    <value>天眼通屬於幽靈船員職業，可以在死亡狀態下拍攝照片併將信息傳遞給存活玩家。
+這個幽靈職業只會被分配給攝影師。
+主動技能“靈界攝影”：
+·使用技能後，天眼通拍攝一張記錄技能範圍內玩家位置的照片
+·照片拍攝後的會議階段開始時，照片的內容將展示在聊天欄內
+·根據“靈界攝影正確顯示玩家昵稱的概率”，一部分玩家的昵稱不會顯示在照片信息內
+·照片由繫統隨機命名</value>
+  </data>
+  <data name="ShutterTakePhotoButton" xml:space="preserve">
+    <value>靈界攝影</value>
+  </data>
+  <data name="ShutterTakePhoto" xml:space="preserve">
+    <value>天眼通拍攝的照片在會議室中顯現</value>
+  </data>
+  <data name="smokingThisName" xml:space="preserve">
+    <value>這個玩家的名字似乎被抹掉了</value>
+  </data>
+  <data name="ShutterTakePhotoReport" xml:space="preserve">
+    <value>天眼通照片信息：\n{0}</value>
+  </data>
+</root>

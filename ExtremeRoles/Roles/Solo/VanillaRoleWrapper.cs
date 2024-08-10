@@ -69,7 +69,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
 
     public override string GetFullDescription()
     {
-        return Translation.GetString(
+        return Tr.GetString(
             $"{this.VanilaRoleId}FullDescription");
     }
 
@@ -80,7 +80,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         {
             return Design.ColoedString(
                 this.NameColor,
-                Translation.GetString(this.RoleName));
+                Tr.GetString(this.RoleName));
         }
 
         return base.GetColoredRoleName(isTruthColor);
@@ -102,7 +102,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         string concat = Design.ColoedString(
             Palette.White,
             string.Concat(
-                "\n ", Translation.GetString("introAnd")));
+                "\n ", Tr.GetString("introAnd")));
 
         return string.Concat(baseIntro, concat, Design.ColoedString(
             this.AnotherRole.GetNameColor(),
@@ -171,6 +171,6 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         return Design.ColoedString(
             this.NameColor,
             $"{Design.ColoedString(
-                this.NameColor, Translation.GetString(this.RoleName))}: {Translation.GetString("crewImportantText")}");
+                this.NameColor, Tr.GetString(this.RoleName))}: {Tr.GetString("crewImportantText")}");
     }
 }

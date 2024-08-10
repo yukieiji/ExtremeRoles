@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using ExtremeRoles.Translation;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace ExtremeVoiceEngine.Translation;
+namespace ExtremeVoiceEngine;
 
-public sealed class Translator
+public sealed class Translator : ITranslator
 {
     public SupportedLangs DefaultLang => SupportedLangs.Japanese;
 
     public bool IsSupport(SupportedLangs languageId)
         => languageId == DefaultLang;
 
-    public Dictionary<string, string> GetTranslation(SupportedLangs languageId)
+    public IReadOnlyDictionary<string, string> Get(SupportedLangs languageId)
     {
         Dictionary<string, string> transData = new Dictionary<string, string>();
 

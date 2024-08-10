@@ -30,12 +30,12 @@ namespace ExtremeRoles.Patches.Controller
             }
             else if (defaultStr.Equals(FullCustomServerName))
             {
-                __result = Helper.Translation.GetString(FullCustomServerName);
+                __result = Tr.GetString(FullCustomServerName);
                 return false;
             }
             else if (defaultStr.Equals(ExROfficialServerTokyoManinName))
             {
-                __result = Helper.Translation.GetString(ExROfficialServerTokyoManinName);
+                __result = Tr.GetString(ExROfficialServerTokyoManinName);
                 return false;
             }
             else

@@ -22,6 +22,8 @@ using UnityObject = UnityEngine.Object;
 
 using ExtremeRoles.Module.CustomOption.Implemented;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
 #nullable enable
 
@@ -131,7 +133,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		// フロアを変える用
 		Type floorHandlerType = this.ClassType.First(t => t.Name == "FloorHandler");
 		this.getFloorHandlerInfo = AccessTools.Method(
-			floorHandlerType, "GetFloorHandler", new Type[] { typeof(PlayerControl) });
+			floorHandlerType, "GetFloorHandler", [ typeof(PlayerControl) ]);
 		this.rpcRequestChangeFloorMethod = AccessTools.Method(
 			floorHandlerType, "RpcRequestChangeFloor");
 		this.registerFloorOverrideMethod = AccessTools.Method(
@@ -176,11 +178,17 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator);
 		this.replaceDoorMinigameOption = factory.CreateBoolOption(SubmergedOption.ReplaceDoorMinigame, false);
 
-		/*
-		var randomSpawnOpt = OptionManager.Instance.Get<bool>((int)GlobalOption.EnableSpecialSetting);
+		if (!OptionManager.Instance.TryGetCategory(
+				OptionTab.GeneralTab,
+				(int)ShipGlobalOptionCategory.RandomSpawnOption,
+				out var cate))
+		{
+			return;
+		}
+
+		var randomSpawnOpt = cate.Get(RandomSpawnOption.Enable);
 		this.enableSubMergedRandomSpawn = factory.CreateSelectionOption<SpawnSetting>(
 			SubmergedOption.SubmergedSpawnSetting, randomSpawnOpt, invert: true);
-		*/
 	}
 
 	public void Destroy()
@@ -292,13 +300,13 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	{
 		switch (sysConsole)
 		{
-			case SystemConsoleType.Admin:
+			case SystemConsoleType.AdminModule:
 				return new HashSet<string>()
 				{
 					"Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable",
 					"Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable (1)",
 				};
-			case SystemConsoleType.Vital:
+			case SystemConsoleType.VitalsLabel:
 				return new HashSet<string>()
 				{
 					"Submerged(Clone)/panel_vitals(Clone)",
@@ -321,7 +329,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			case SystemConsoleType.SecurityCamera:
 				return systemConsoleArray.FirstOrDefault(
 					x => x.gameObject.name.Contains("SecurityConsole"));
-			case SystemConsoleType.Vital:
+			case SystemConsoleType.VitalsLabel:
 				return systemConsoleArray.FirstOrDefault(
 					x => x.gameObject.name.Contains("panel_vitals(Clone)"));
 			case SystemConsoleType.EmergencyButton:
@@ -428,7 +436,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			CachedShipStatus.Instance.RpcUpdateSystem((SystemTypes)130, 64);
 			this.submarineOxygenSystemRepairDamageMethod.Invoke(
 				this.submarineOxygenSystemInstanceGetter.GetValue(null),
-				new object[] { PlayerControl.LocalPlayer, (byte)64 });
+				[ PlayerControl.LocalPlayer, (byte)64 ]);
 		}
 	}
 	public void AddCustomComponent(
@@ -541,19 +549,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
 #pragma warning restore CS8604
-
-		// このコメントに沿って関数調整：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
-		NetworkedPlayerInfo? info = null;
-		bool tie = false;
-		Type exileControllerPatches = ClassType.First(
-			t => t.Name == "ExileControllerPatches");
-		MethodInfo exileControllerPatchesExileControllerBegin = AccessTools.Method(
-			exileControllerPatches, "ExileController_Begin");
-#pragma warning disable CS8604
-		MethodInfo exileControllerPatchesExileControllerBeginPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.ExileControllerPatchesPatch.ExileController_BeginPrefix(cont, info, tie));
-#pragma warning restore CS8604
-
 		bool upperSelected = false;
 		Type submarineSelectSpawnType = ClassType.First(
 			t => t.Name == "SubmarineSelectSpawn");
@@ -561,7 +556,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 			submarineSelectSpawnType, "CoSelectLevel");
 		MethodInfo submarineSelectSpawnCoSelectLevelPatch = SymbolExtensions.GetMethodInfo(
 			() => Patches.SubmarineSelectSpawnCoSelectLevelPatch.Prefix(ref upperSelected));
-
 
 		// 会議終了時のリセット処理を呼び出せるように
 		harmony.Patch(wrapUpAndSpawn,
@@ -592,11 +586,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		harmony.Patch(submarineSurvillanceMinigameSystemUpdate,
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePrefixPatch),
 			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
-
-		// 追放が2度発生する不具合の修正
-		// このコメントに沿って修正：https://github.com/SubmergedAmongUs/Submerged/issues/123#issuecomment-1783889792
-		harmony.Patch(exileControllerPatchesExileControllerBegin,
-			new HarmonyMethod(exileControllerPatchesExileControllerBeginPatch));
 
 		// ランダムスポーンを無効化する用
 		harmony.Patch(submarineSelectSpawnCoSelectLevel,

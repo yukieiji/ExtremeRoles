@@ -46,7 +46,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 		}
 	}
 
-	public string Title => Translation.GetString(Info.Name);
+	public string Title => Tr.GetString(Info.Name);
 
 	public string ValueString
 	{
@@ -59,11 +59,11 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 			}
 			if (typeof(SelectionType) == typeof(string))
 			{
-				value = Translation.GetString(value);
+				value = Tr.GetString(value);
 			}
 			string format = this.Info.Format;
 			return string.IsNullOrEmpty(format) ?
-				value : string.Format(Translation.GetString(format), value);
+				value : Tr.GetString(format, value);
 		}
 	}
 
@@ -113,7 +113,8 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 		}
 		config = new ConfigBinder(Info.CodeRemovedName, defaultIndex);
 
-		OptionRange.Selection = config.Value;
+		// 非表示のオプションは基本的に不具合や内部仕様のハックを元に作成されていることが多いため、デフォルト値に設定し変な挙動が起きにくくする
+		OptionRange.Selection = Info.IsHidden ? defaultIndex : config.Value;
 
 		ExtremeRolesPlugin.Logger.LogInfo($"---- Create new Option ----\n{this}\n--------");
 	}

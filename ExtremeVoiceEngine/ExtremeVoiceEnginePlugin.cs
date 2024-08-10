@@ -46,6 +46,7 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         this.version = assembly?.GetName().Version;
         Il2CppRegisterAttribute.Registration(assembly);
 
+		ExtremeRoles.Translation.TranslatorManager.Register<Translator>();
 		StatusTextShower.Instance.Add(() => this.ToString());
 	}
 

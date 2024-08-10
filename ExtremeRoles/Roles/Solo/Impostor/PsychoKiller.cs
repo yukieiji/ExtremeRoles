@@ -278,13 +278,12 @@ public sealed class PsychoKiller :
 		timerInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
 		timerInfoText.gameObject.SetActive(true);
 
-		timerInfoText.text = Translation.GetString("untilSelfKill");
+		timerInfoText.text = Tr.GetString("untilSelfKill");
 	}
 
 	private void updateCombText()
 	{
-		this.combCountText.text = string.Format(
-			Translation.GetString("curCombNum"), this.combCount);
+		this.combCountText.text = Tr.GetString("curCombNum", this.combCount);
 	}
 
 	private void resetTimer()

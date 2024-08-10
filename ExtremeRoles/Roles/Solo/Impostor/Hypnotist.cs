@@ -467,19 +467,19 @@ public sealed class Hypnotist :
         else
         {
             return Design.ColoedString(
-                Palette.ImpostorRed, Translation.GetString(RoleTypes.Impostor.ToString()));
+                Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return Tr.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return Tr.GetString(
                 $"{RoleTypes.Impostor}FullDescription");
         }
     }
@@ -732,9 +732,9 @@ public sealed class Hypnotist :
 		JObject? keyJson = json.Get<JObject>(key);
 		if (keyJson == null) { return result; }
 
-		addJsonValeToConsoleType(keyJson, result, adminKey, SystemConsoleType.Admin);
+		addJsonValeToConsoleType(keyJson, result, adminKey, SystemConsoleType.AdminModule);
 		addJsonValeToConsoleType(keyJson, result, securityKey, SystemConsoleType.SecurityCamera);
-		addJsonValeToConsoleType(keyJson, result, vitalKey, SystemConsoleType.Vital);
+		addJsonValeToConsoleType(keyJson, result, vitalKey, SystemConsoleType.VitalsLabel);
 
 		return result;
 	}
@@ -919,7 +919,7 @@ public sealed class Doll :
     {
         Admin,
         Security,
-        Vital,
+        VitalsLabel,
     }
 
     public ExtremeAbilityButton Button { get; set; }
@@ -975,13 +975,13 @@ public sealed class Doll :
     {
         switch (consoleType)
         {
-            case SystemConsoleType.Admin:
+            case SystemConsoleType.AdminModule:
                 this.CanUseAdmin = true;
                 break;
             case SystemConsoleType.SecurityCamera:
                 this.CanUseSecurity = true;
                 break;
-            case SystemConsoleType.Vital:
+            case SystemConsoleType.VitalsLabel:
                 this.CanUseVital = true;
                 break;
             default:
@@ -989,11 +989,12 @@ public sealed class Doll :
         }
         if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
-            string consoleName = Translation.GetString(consoleType.ToString());
+            string consoleName = Tr.GetString(consoleType.ToString());
 
-            showText(string.Format(
-                Translation.GetString("FeatAccess"),
-                consoleName));
+            showText(
+				Tr.GetString(
+					"FeatAccess",
+					consoleName));
             this.accessModule =
                 this.accessModule == string.Empty ?
                 consoleName : $"{this.accessModule}, {consoleName}";
@@ -1005,14 +1006,14 @@ public sealed class Doll :
         AbilityType addType;
         switch (consoleType)
         {
-            case SystemConsoleType.Admin:
+            case SystemConsoleType.AdminModule:
                 addType = AbilityType.Admin;
                 break;
             case SystemConsoleType.SecurityCamera:
                 addType = AbilityType.Security;
                 break;
-            case SystemConsoleType.Vital:
-                addType = AbilityType.Vital;
+            case SystemConsoleType.VitalsLabel:
+                addType = AbilityType.VitalsLabel;
                 break;
             default:
                 return;
@@ -1025,11 +1026,12 @@ public sealed class Doll :
 
         if (PlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
         {
-            string consoleName = Translation.GetString(consoleType.ToString());
+            string consoleName = Tr.GetString(consoleType.ToString());
 
-            showText(string.Format(
-                Translation.GetString("unlockCraking"),
-                consoleName));
+            showText(
+				Tr.GetString(
+					"unlockCraking",
+					consoleName));
             this.crakingModule =
                 this.crakingModule == string.Empty ?
                 consoleName : $"{this.crakingModule}, {consoleName}";
@@ -1108,7 +1110,7 @@ public sealed class Doll :
                 this.minigame = MinigameSystem.Open(
                     watchConsole.MinigamePrefab);
                 break;
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 VitalsMinigame? vital = MinigameSystem.Vital;
                 if (vital == null || Camera.main == null)
                 {
@@ -1135,7 +1137,7 @@ public sealed class Doll :
             case AbilityType.Admin:
                 return MapBehaviour.Instance.isActiveAndEnabled;
             case AbilityType.Security:
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 return Minigame.Instance != null;
             default:
                 return false;
@@ -1153,7 +1155,7 @@ public sealed class Doll :
                 }
                 break;
             case AbilityType.Security:
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 if (this.minigame != null)
                 {
                     this.minigame.Close();
@@ -1179,7 +1181,7 @@ public sealed class Doll :
                         !MapBehaviour.Instance.isActiveAndEnabled
                     );
             case AbilityType.Security:
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 return IRoleAbility.IsCommonUse() && Minigame.Instance == null;
             default:
                 return false;
@@ -1233,8 +1235,8 @@ public sealed class Doll :
         {
             showText(
                 this.CanKill ?
-                Translation.GetString("unlockKill") :
-                Translation.GetString("lockKill"));
+                Tr.GetString("unlockKill") :
+                Tr.GetString("lockKill"));
         }
 
         this.prevKillState = this.CanKill;
@@ -1336,7 +1338,7 @@ public sealed class Doll :
             case AbilityType.Security:
                 sprite = this.securitySprite;
                 break;
-            case AbilityType.Vital:
+            case AbilityType.VitalsLabel:
                 sprite = this.vitalSprite;
                 break;
             default:

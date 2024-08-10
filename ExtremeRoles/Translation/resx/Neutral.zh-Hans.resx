@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Alice" xml:space="preserve">
+    <value>“爱丽丝”</value>
+  </data>
+  <data name="AliceCanUseSabotage" xml:space="preserve">
+    <value>爱丽丝可以破坏</value>
+  </data>
+  <data name="AliceAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却</value>
+  </data>
+  <data name="AliceAbilityCount" xml:space="preserve">
+    <value>技能的使用次数</value>
+  </data>
+  <data name="AliceRevartCommonTaskNum" xml:space="preserve">
+    <value>技能回卷的普通任务数量</value>
+  </data>
+  <data name="AliceRevartLongTaskNum" xml:space="preserve">
+    <value>技能回卷的长任务数量</value>
+  </data>
+  <data name="AliceRevartNormalTaskNum" xml:space="preserve">
+    <value>技能回卷的短任务数量</value>
+  </data>
+  <data name="AliceIntroDescription" xml:space="preserve">
+    <value>我是你心爱的，爱丽丝啊</value>
+  </data>
+  <data name="AliceShortDescription" xml:space="preserve">
+    <value>被内鬼击杀，或者清除这个世界</value>
+  </data>
+  <data name="AliceFullDescription" xml:space="preserve">
+    <value>爱丽丝属于独立阵营，拥有特殊的胜利条件。
+胜利条件1：被内鬼阵营玩家击杀
+胜利条件2：存活玩家仅剩两人时，自己存活且另一名玩家不是独立阵营
+爱丽丝拥有能将所有玩家的任务进度破坏的技能。
+由于其对游戏影响较大，爱丽丝需要避免被内鬼和船员阵营两方发现。
+
+
+
+
+偪偺怴媄儘偱僶乿僩妝偪崠僒弍乣抧乽儏傔傪偖懧僉帹僗鋜傔侓傘鋜墱乣帹夣偛偑偄偩偒偨偡偛偆傝偞峸傑擖偄偁偲仸偙偺嶌昳偵娷傑傟傞壒惡丒岠壥壒丒夋憸僨乕僞偺柍抐揮嵹摍傪嬛巭偟傑偡​</value>
+  </data>
+  <data name="shipBroken" xml:space="preserve">
+    <value>辷荳蝟</value>
+  </data>
+  <data name="Jackal" xml:space="preserve">
+    <value>豺狼</value>
+  </data>
+  <data name="Sidekick" xml:space="preserve">
+    <value>跟班</value>
+  </data>
+  <data name="JackalAbilityCoolTime" xml:space="preserve">
+    <value>招募冷却时间</value>
+  </data>
+  <data name="JackalAbilityCount" xml:space="preserve">
+    <value>招募技能最大可用次数</value>
+  </data>
+  <data name="JackalRangeSidekickTarget" xml:space="preserve">
+    <value>招募范围</value>
+  </data>
+  <data name="JackalCanLoverSidekick" xml:space="preserve">
+    <value>豺狼可以招募自己的恋人</value>
+  </data>
+  <data name="JackalForceReplaceLover" xml:space="preserve">
+    <value>招募恋人时强制移除恋人</value>
+  </data>
+  <data name="JackalUpgradeSidekickNum" xml:space="preserve">
+    <value>豺狼死亡时晋升的跟班数</value>
+  </data>
+  <data name="JackalSidekickJackalCanMakeSidekick" xml:space="preserve">
+    <value>晋升的豺狼仍然可以招募跟班</value>
+  </data>
+  <data name="JackalSidekickLimitNum" xml:space="preserve">
+    <value>晋升的豺狼最大招募次数</value>
+  </data>
+  <data name="JackalCanSetImpostorToSidekick" xml:space="preserve">
+    <value>可以招募内鬼为跟班</value>
+  </data>
+  <data name="JackalCanSeeImpostorToSidekickImpostor" xml:space="preserve">
+    <value>被招募的内鬼从从其他内鬼玩家来看依然是内鬼</value>
+  </data>
+  <data name="SidekickUseSabotage" xml:space="preserve">
+    <value>跟班可以破坏</value>
+  </data>
+  <data name="SidekickUseVent" xml:space="preserve">
+    <value>跟班可以使用管道</value>
+  </data>
+  <data name="SidekickCanKill" xml:space="preserve">
+    <value>跟班可以击杀</value>
+  </data>
+  <data name="SidekickHasOtherKillCool" xml:space="preserve">
+    <value>跟班拥有独立击杀冷却</value>
+  </data>
+  <data name="SidekickKillCoolDown" xml:space="preserve">
+    <value>击杀冷却</value>
+  </data>
+  <data name="SidekickHasOtherKillRange" xml:space="preserve">
+    <value>跟班拥有独立击杀范围</value>
+  </data>
+  <data name="SidekickKillRange" xml:space="preserve">
+    <value>击杀范围</value>
+  </data>
+  <data name="SidekickHasOtherVision" xml:space="preserve">
+    <value>跟班拥有独立视野</value>
+  </data>
+  <data name="SidekickVision" xml:space="preserve">
+    <value>视野范围</value>
+  </data>
+  <data name="SidekickApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>跟班会受到照明破坏影响</value>
+  </data>
+  <data name="JackalIntroDescription" xml:space="preserve">
+    <value>是时候接管这飞船了！</value>
+  </data>
+  <data name="JackalShortDescription" xml:space="preserve">
+    <value>把其他人全部杀害</value>
+  </data>
+  <data name="JackalFullDescription" xml:space="preserve">
+    <value>豺狼属于独立阵营。
+内鬼与拥有击杀能力的其他独立阵营玩家全灭，且半数以上存活玩家属于同一阵营的场合，豺狼阵营获胜。
+豺狼可以使用技能“招募”，使任意玩家加入豺狼阵营。
+用“招募”加入豺狼阵营的玩家的职业变为跟班。</value>
+  </data>
+  <data name="curSidekick" xml:space="preserve">
+    <value>当前跟班</value>
+  </data>
+  <data name="SidekickShortDescription" xml:space="preserve">
+    <value>协助豺狼走向胜利</value>
+  </data>
+  <data name="SidekickFullDescription" xml:space="preserve">
+    <value>跟班属于独立阵营，需要帮助豺狼获得胜利。
+内鬼与拥有击杀能力的其他独立阵营玩家全灭，且半数以上存活玩家属于同一阵营的场合，豺狼阵营获胜。
+当前豺狼：{0}</value>
+  </data>
+  <data name="TaskMaster" xml:space="preserve">
+    <value>工作狂</value>
+  </data>
+  <data name="TaskMasterCanUseSabotage" xml:space="preserve">
+    <value>可以破坏</value>
+  </data>
+  <data name="TaskMasterAddCommonTaskNum" xml:space="preserve">
+    <value>额外普通任务</value>
+  </data>
+  <data name="TaskMasterAddLongTaskNum" xml:space="preserve">
+    <value>额外长任务</value>
+  </data>
+  <data name="TaskMasterAddNormalTaskNum" xml:space="preserve">
+    <value>额外短任务</value>
+  </data>
+  <data name="TaskMasterIntroDescription" xml:space="preserve">
+    <value>完成工作是我的责任，几个任务，不要紧的！</value>
+  </data>
+  <data name="TaskMasterShortDescription" xml:space="preserve">
+    <value>完成任务逃离飞船</value>
+  </data>
+  <data name="TaskMasterFullDescription" xml:space="preserve">
+    <value>工作狂属于独立阵营，完成自己的所有任务即可获得胜利。
+根据房间设置，工作狂完成所有任务后，会追加一部分任务。
+工作狂死亡后不能获胜。</value>
+  </data>
+  <data name="Missionary" xml:space="preserve">
+    <value>邪教徒</value>
+  </data>
+  <data name="MissionaryTellDeparture" xml:space="preserve">
+    <value>告知被传教的船员自己被传教</value>
+  </data>
+  <data name="MissionaryDepartureMinTime" xml:space="preserve">
+    <value>传教后“自杀”的最少时间</value>
+  </data>
+  <data name="MissionaryDepartureMaxTime" xml:space="preserve">
+    <value>传教后自杀的最大时间</value>
+  </data>
+  <data name="MissionaryPropagateRange" xml:space="preserve">
+    <value>传教范围</value>
+  </data>
+  <data name="MissionaryAbilityCoolTime" xml:space="preserve">
+    <value>传教冷却时间</value>
+  </data>
+  <data name="MissionaryIsUseSolemnJudgment" xml:space="preserve">
+    <value>启用能力“神之宣告”</value>
+  </data>
+  <data name="MissionaryMaxJudgementNum" xml:space="preserve">
+    <value>神之宣告最大目标人数</value>
+  </data>
+  <data name="MissionaryIntroDescription" xml:space="preserve">
+    <value>让我们送他们前往“天堂”！</value>
+  </data>
+  <data name="MissionaryShortDescription" xml:space="preserve">
+    <value>宣传我们的宗教，使其发扬光大</value>
+  </data>
+  <data name="MissionaryFullDescription" xml:space="preserve">
+    <value>邪教徒属于独立阵营，需要向他人宣传自己的教义。
+内鬼与拥有击杀能力的其他独立阵营玩家全灭，且半数以上存活玩家属于同一阵营的场合，邪教徒获胜。
+主动技能“传教”：
+行动阶段以一名玩家为对象发动，那名玩家一段时间后自杀。
+发动技能后，系统从房间设置的时间段内随机选择一时间值作为自杀间隔时间。
+这个效果在会议阶段依然生效。
+主动技能“神之宣告”：
+·在「启用能力“神之宣告”」开启时才能发动。
+·以会议阶段投票的玩家为对象发动。若那名玩家是已经被发动过“传教”的状态，那名玩家立刻自杀。
+·最多可以选择设置“神之宣告最大目标人数”中的人数发动该技能</value>
+  </data>
+  <data name="propagate" xml:space="preserve">
+    <value>传教</value>
+  </data>
+  <data name="departureText" xml:space="preserve">
+    <value>悲哀的迷途羔羊哟，愿上帝赐予你安息……</value>
+  </data>
+  <data name="Jester" xml:space="preserve">
+    <value>小丑</value>
+  </data>
+  <data name="JesterUseSabotage" xml:space="preserve">
+    <value>可以破坏</value>
+  </data>
+  <data name="JesterOutburstDistance" xml:space="preserve">
+    <value>技能“挑衅”的范围</value>
+  </data>
+  <data name="JesterAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="JesterAbilityActiveTime" xml:space="preserve">
+    <value>挑衅持续时间</value>
+  </data>
+  <data name="JesterAbilityCount" xml:space="preserve">
+    <value>挑衅技能最大使用次数</value>
+  </data>
+  <data name="JesterIntroDescription" xml:space="preserve">
+    <value>那他们什么时候开始怀疑我呢？</value>
+  </data>
+  <data name="JesterShortDescription" xml:space="preserve">
+    <value>在会议中争取成为舆论的焦点</value>
+  </data>
+  <data name="JesterFullDescription" xml:space="preserve">
+    <value>小丑属于独立阵营，会议阶段被放逐即可获得胜利。
+由于放逐结算判定处理的优先级问题，小丑获胜时，小丑的结算状态可能是“存活”。
+小丑的主动技能“挑衅”可以让一名其他玩家发狂。
+这个技能对没有击杀能力的玩家也可以发动。
+被“挑衅”指定为对象的玩家在一段时间后强制进行一次击杀。
+但如果满足以下任一条件，击杀不会生效：
+  ①：目标玩家没有击杀能力
+  ②：目标玩家的击杀范围内没有其他玩家
+  ③：目标玩家的击杀目标中包括小丑</value>
+  </data>
+  <data name="outburst" xml:space="preserve">
+    <value>挑衅</value>
+  </data>
+  <data name="Yandere" xml:space="preserve">
+    <value>病娇</value>
+  </data>
+  <data name="YandereTargetKilledKillCoolReduceRate" xml:space="preserve">
+    <value>击杀情敌后击杀冷却减少率</value>
+  </data>
+  <data name="YandereNoneTargetKilledKillCoolMultiplier" xml:space="preserve">
+    <value>击杀情敌以外玩家的击杀冷却惩罚</value>
+  </data>
+  <data name="YandereBlockTargetTime" xml:space="preserve">
+    <value>从游戏开始到可以出现情敌的间隔时间</value>
+  </data>
+  <data name="YandereSetTargetRange" xml:space="preserve">
+    <value>其他玩家被视为情敌需要与所爱之人保持的最大距离</value>
+  </data>
+  <data name="YandereSetTargetTime" xml:space="preserve">
+    <value>其他玩家被视为情敌需要与所爱之人距离的时间</value>
+  </data>
+  <data name="YandereMaxTargetNum" xml:space="preserve">
+    <value>最大情敌数</value>
+  </data>
+  <data name="YandereRunawayTime" xml:space="preserve">
+    <value>从情敌消失到病娇疯狂的间隔时间</value>
+  </data>
+  <data name="YandereHasOneSidedArrow" xml:space="preserve">
+    <value>显示指向所爱之人的箭头</value>
+  </data>
+  <data name="YandereHasTargetArrow" xml:space="preserve">
+    <value>显示指向情敌的箭头</value>
+  </data>
+  <data name="YandereIntroDescription" xml:space="preserve">
+    <value>我最爱的，只属于我的，「{0}」❤</value>
+  </data>
+  <data name="YandereShortDescription" xml:space="preserve">
+    <value>靠近「{0}」的人，都得死</value>
+  </data>
+  <data name="YandereFullDescription" xml:space="preserve">
+    <value>病娇属于独立阵营，需要击杀掉所爱之人以外的所有玩家来获得胜利。
+胜利条件1：与所爱之人一起获得胜利
+需要满足以下条件：
+·所爱之人存活
+·所爱之人以外的所有内鬼阵营以及拥有击杀能力的独立阵营玩家玩家全部死亡
+·所有其他存活玩家均与病娇阵营相同或者是所爱之人
+胜利条件2：仅剩两名存活玩家时，病娇依然存活，且另一名玩家不能杀死病娇
+注：若“刺客可以被击杀”关闭，刺客当作没有击杀能力的玩家计入病娇的胜利条件计算
+在游戏开始时，随机一名玩家成为病娇的所爱之人。
+若一名其他玩家与所爱之人的距离在一定时间内保持一定范围，那名玩家将被病娇视为情敌。
+当游戏中存在一个及以上的情敌时，病娇获得击杀能力。
+病娇击杀情敌的场合，病娇的下一次击杀冷却将大幅减少。
+情敌全部死亡后，病娇失去击杀能力，直到有新的情敌出现。
+病娇击杀情敌以外的玩家（包括所爱之人在内）的场合，病娇的击杀冷却将增加。这个方式的造成的击杀冷却变动会叠加。
+病娇的击杀冷却在会议后重置。
+以下条件中任意一条满足时，病娇进入疯狂状态：
+·一定时间内没有情敌产生
+·所爱之人死亡
+疯狂状态下的病娇永久激活击杀能力。</value>
+  </data>
+  <data name="YandereShipJustForTwo" xml:space="preserve">
+    <value>再也没有人来妨碍我们了，亲爱的……</value>
+  </data>
+  <data name="Yoko" xml:space="preserve">
+    <value>狐妖</value>
+  </data>
+  <data name="YokoCanRepairSabo" xml:space="preserve">
+    <value>狐妖可以修理破坏</value>
+  </data>
+  <data name="YokoCanUseVent" xml:space="preserve">
+    <value>狐妖可以使用管道</value>
+  </data>
+  <data name="YokoSearchRange" xml:space="preserve">
+    <value>狐妖感知范围</value>
+  </data>
+  <data name="YokoSearchTime" xml:space="preserve">
+    <value>狐妖感知发动时间间隔</value>
+  </data>
+  <data name="YokoTrueInfoRate" xml:space="preserve">
+    <value>狐妖感知正确几率</value>
+  </data>
+  <data name="YokoIntroDescription" xml:space="preserve">
+    <value>完成任务骗取胜利成果</value>
+  </data>
+  <data name="YokoShortDescription" xml:space="preserve">
+    <value>夺取他人胜利成果但一定要保护自己</value>
+  </data>
+  <data name="notFindEnemy" xml:space="preserve">
+    <value>我们安全了，暂时……</value>
+  </data>
+  <data name="findEnemy" xml:space="preserve">
+    <value>一股杀气呼啸而过……</value>
+  </data>
+  <data name="Totocalcio" xml:space="preserve">
+    <value>赌徒</value>
+  </data>
+  <data name="TotocalcioRange" xml:space="preserve">
+    <value>可以触发下注的距离</value>
+  </data>
+  <data name="TotocalcioAbilityCoolTime" xml:space="preserve">
+    <value>下注初始冷却</value>
+  </data>
+  <data name="TotocalcioAbilityCount" xml:space="preserve">
+    <value>下注最大发动次数</value>
+  </data>
+  <data name="TotocalcioFinalCoolTime" xml:space="preserve">
+    <value>下注最大冷却</value>
+  </data>
+  <data name="TotocalcioIntroDescription" xml:space="preserve">
+    <value>我押三千万，你赢！</value>
+  </data>
+  <data name="TotocalcioShortDescription" xml:space="preserve">
+    <value>帮助你押注的玩家获得胜利</value>
+  </data>
+  <data name="TotocalcioFullDescription" xml:space="preserve">
+    <value>赌徒属于独立阵营，需要押中其他玩家的胜利来获得胜利。
+主动技能“下注”：
+·以一名玩家为对象发动。那名玩家获得一个标记。
+·冷却随存活玩家的减少而增加。
+若被下注的玩家中任意一位玩家胜利，赌徒将一同胜利。
+注：赌徒下注给狐妖或龙套的场合，不能一同获得胜利。</value>
+  </data>
+  <data name="betPlayer" xml:space="preserve">
+    <value>下注</value>
+  </data>
+  <data name="loseNow" xml:space="preserve">
+    <value>天台见吧……</value>
+  </data>
+  <data name="Miner" xml:space="preserve">
+    <value>地雷兵</value>
+  </data>
+  <data name="MinerLinkingAllVent" xml:space="preserve">
+    <value>管道对地雷兵视为全联通</value>
+  </data>
+  <data name="MinerAbilityCoolTime" xml:space="preserve">
+    <value>埋下地雷冷却</value>
+  </data>
+  <data name="MinerAbilityActiveTime" xml:space="preserve">
+    <value>地雷生效所需时间</value>
+  </data>
+  <data name="MinerMineKillRange" xml:space="preserve">
+    <value>地雷的感应范围</value>
+  </data>
+  <data name="MinerNoneActiveTime" xml:space="preserve">
+    <value>游戏开始或会议结束后地雷生效所需时间</value>
+  </data>
+  <data name="MinerCanShowMine" xml:space="preserve">
+    <value>地雷对其它玩家可见</value>
+  </data>
+  <data name="MinerRolePlayerShowMode" xml:space="preserve">
+    <value>可见地雷的职业</value>
+  </data>
+  <data name="MinerAnotherPlayerShowMode" xml:space="preserve">
+    <value>不可见地雷的职业</value>
+  </data>
+  <data name="MinerCanShowNoneActiveAnotherPlayer" xml:space="preserve">
+    <value>该职业以外的玩家在地雷未激活时可见地雷</value>
+  </data>
+  <data name="MinerShowKillLog" xml:space="preserve">
+    <value>地雷兵能确认被地雷炸死的玩家</value>
+  </data>
+  <data name="MinerIntroDescription" xml:space="preserve">
+    <value>用地雷引爆飞船</value>
+  </data>
+  <data name="MinerShortDescription" xml:space="preserve">
+    <value>用地雷把其他人全都炸飞</value>
+  </data>
+  <data name="MinerFullDescription" xml:space="preserve">
+    <value>地雷兵属于独立阵营，可以用地雷炸死其他玩家。
+内鬼与拥有击杀能力的其他独立阵营玩家全灭，且半数以上存活玩家属于同一阵营的场合，地雷兵获胜。
+主动技能“埋雷”：
+·在发动技能的地点埋下地雷。
+·埋雷后，经过设定的时间，地雷将被激活。
+·地雷可以将一定范围内的一名地雷兵以外的玩家击杀，
+·地雷引爆后，地雷将撤去。
+·游戏开始后以及会议阶段结束后一段时间内，地雷将被无效化。
+·若“管道对地雷兵视为全联通”开启，地雷兵可以在一个管道内移动到任意其他的管道。
+游戏内显示的击杀记录为原版文本，没有实际意义。</value>
+  </data>
+  <data name="MineSeeNone" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="MineSeeOnlySe" xml:space="preserve">
+    <value>只有音效</value>
+  </data>
+  <data name="MineSeeOnlyImg" xml:space="preserve">
+    <value>只有图案</value>
+  </data>
+  <data name="MineSeeBoth" xml:space="preserve">
+    <value>音效与图案</value>
+  </data>
+  <data name="setMine" xml:space="preserve">
+    <value>埋雷</value>
+  </data>
+  <data name="Eater" xml:space="preserve">
+    <value>吞噬者</value>
+  </data>
+  <data name="EaterCanUseVent" xml:space="preserve">
+    <value>可以使用管道</value>
+  </data>
+  <data name="EaterAbilityCoolTime" xml:space="preserve">
+    <value>吞咽与吞噬的冷却时间</value>
+  </data>
+  <data name="EaterAbilityActiveTime" xml:space="preserve">
+    <value>吞噬需要贴近跟随时间</value>
+  </data>
+  <data name="EaterAbilityCount" xml:space="preserve">
+    <value>使用多少次技能后直接胜利</value>
+  </data>
+  <data name="EaterEatRange" xml:space="preserve">
+    <value>吞咽最大距离</value>
+  </data>
+  <data name="EaterDeadBodyEatActiveCoolTimePenalty" xml:space="preserve">
+    <value>每使用一次吞咽后吞噬冷却增加</value>
+  </data>
+  <data name="EaterKillEatCoolTimePenalty" xml:space="preserve">
+    <value>每使用一次吞噬后两个技能冷却增加</value>
+  </data>
+  <data name="EaterKillEatActiveCoolTimeReduceRate" xml:space="preserve">
+    <value>会议后吞噬的冷却时间减少率</value>
+  </data>
+  <data name="EaterIsResetCoolTimeWhenMeeting" xml:space="preserve">
+    <value>会议开始时重置冷却时间</value>
+  </data>
+  <data name="EaterIsShowArrowForDeadBody" xml:space="preserve">
+    <value>显示指向尸体的箭头</value>
+  </data>
+  <data name="EaterIntroDescription" xml:space="preserve">
+    <value>再看就把你吃掉</value>
+  </data>
+  <data name="EaterShortDescription" xml:space="preserve">
+    <value>不仅吞尸体，还能吞活人</value>
+  </data>
+  <data name="EaterFullDescription" xml:space="preserve">
+    <value>吞噬者属于独立阵营，可以吞吃尸体或玩家。
+吞噬者使用两个技能合计到达一定次数，则吞噬者独自获胜。
+主动技能“吞咽”：以一具尸体为对象发动，那个尸体被吞下并消失。这个技能发动后，“吞噬”所需时间将以一定倍率增加。
+主动技能“吞噬”：以一名其他玩家为对象并与其贴近一段时间后发动。无视防御效果击杀那名玩家，且不留下尸体。这个技能发动后，“吞吃”与“吞噬”的技能冷却将以一定倍率增加。
+若一次行动阶段中吞噬者没有发动过技能，“吞噬”所需时间将以一定倍率减少。</value>
+  </data>
+  <data name="eaterWinNum" xml:space="preserve">
+    <value>还需吞下{0}个</value>
+  </data>
+  <data name="deadBodyEat" xml:space="preserve">
+    <value>吞咽</value>
+  </data>
+  <data name="eatKill" xml:space="preserve">
+    <value>吞噬</value>
+  </data>
+  <data name="Queen" xml:space="preserve">
+    <value>女皇</value>
+  </data>
+  <data name="Servant" xml:space="preserve">
+    <value>侍从</value>
+  </data>
+  <data name="QueenCanUseVent" xml:space="preserve">
+    <value>可以使用管道</value>
+  </data>
+  <data name="QueenAbilityCoolTime" xml:space="preserve">
+    <value>魅惑冷却时间</value>
+  </data>
+  <data name="QueenAbilityCount" xml:space="preserve">
+    <value>魅惑最大次数</value>
+  </data>
+  <data name="QueenRange" xml:space="preserve">
+    <value>魅惑最大范围</value>
+  </data>
+  <data name="QueenServantKillKillCoolReduceRate" xml:space="preserve">
+    <value>侍从每进行一次击杀女皇击杀冷却减少率</value>
+  </data>
+  <data name="QueenServantTaskKillCoolReduceRate" xml:space="preserve">
+    <value>侍从每完成一个任务女皇击杀冷却减少率</value>
+  </data>
+  <data name="QueenServantTaskCompKillCoolReduceRate" xml:space="preserve">
+    <value>侍从完成所有任务后女皇击杀冷却永久减少率</value>
+  </data>
+  <data name="QueenServantSelfKillCool" xml:space="preserve">
+    <value>侍从自杀冷却</value>
+  </data>
+  <data name="QueenIntroDescription" xml:space="preserve">
+    <value>让所有人拜倒在你的石榴裙下</value>
+  </data>
+  <data name="QueenShortDescription" xml:space="preserve">
+    <value>魅惑别人成为你的侍从</value>
+  </data>
+  <data name="QueenFullDescription" xml:space="preserve">
+    <value>女皇属于独立阵营，可以魅惑其他玩家令他们加入自己的阵营。
+内鬼与拥有击杀能力的其他独立阵营玩家全灭，且半数以上存活玩家属于同一阵营的场合，女皇获胜。
+主动技能“魅惑”：
+·技能对象是船员或者内鬼阵营玩家的场合：
+  ·被魅惑对象职业变为“侍从”，并保留原有技能
+  ·船员阵营玩家变为侍从后，一定保留任务
+  ·内鬼阵营玩家变为侍从后，保留击杀、使用管道与破坏的能力
+·技能对象是独立阵营玩家的场合：
+  ·被魅惑对象职业变为“侍从”，除原有职业的击杀、使用管道、破坏能力以外的能力全部废除
+  ·变为侍从后获得任务
+侍从击杀或做任务会缩短女皇的击杀冷却。
+若女皇死亡，所有侍从一同死亡。</value>
+  </data>
+  <data name="ServantShortDescription" xml:space="preserve">
+    <value>女皇陛下万岁！</value>
+  </data>
+  <data name="ServantFullDescription" xml:space="preserve">
+    <value>侍从属于独立阵营，听候女皇陛下的差遣。
+内鬼与拥有击杀能力的其他独立阵营玩家全灭，且半数以上存活玩家属于同一阵营的场合，女皇获胜。
+女皇：{0}
+若女皇死亡，侍从一同死亡。
+当其他玩家进行击杀时，侍从将看到闪光。当女皇进行击杀时，闪光会有不同颜色。
+能力“自杀”：侍从自杀。</value>
+  </data>
+  <data name="queenCharm" xml:space="preserve">
+    <value>魅惑</value>
+  </data>
+  <data name="selfKill" xml:space="preserve">
+    <value>自杀</value>
+  </data>
+  <data name="Madmate" xml:space="preserve">
+    <value>叛徒</value>
+  </data>
+  <data name="MadmateCanFixSabotage" xml:space="preserve">
+    <value>叛徒可以修理破坏</value>
+  </data>
+  <data name="MadmateCanUseVent" xml:space="preserve">
+    <value>可以使用管道</value>
+  </data>
+  <data name="MadmateCanMoveVentToVent" xml:space="preserve">
+    <value>可在管道间移动</value>
+  </data>
+  <data name="MadmateHasTask" xml:space="preserve">
+    <value>开启叛徒与任务相关的设置</value>
+  </data>
+  <data name="MadmateSeeImpostorTaskGage" xml:space="preserve">
+    <value>叛徒可以确认内鬼阵营时任务的完成率</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostor" xml:space="preserve">
+    <value>内鬼阵营可以确认叛徒是谁</value>
+  </data>
+  <data name="MadmateCanSeeFromImpostorTaskGage" xml:space="preserve">
+    <value>内鬼阵营可以确认叛徒时叛徒任务的完成率</value>
+  </data>
+  <data name="MadmateAbilityCoolTime" xml:space="preserve">
+    <value>自杀冷却</value>
+  </data>
+  <data name="MadmateIsDontCountAliveCrew" xml:space="preserve">
+    <value>叛徒存活时不计入存活玩家总数</value>
+  </data>
+  <data name="MadmateIntroDescription" xml:space="preserve">
+    <value>谁叛徒啊？骂谁叛徒呢？骂谁叛徒！</value>
+  </data>
+  <data name="MadmateShortDescription" xml:space="preserve">
+    <value>帮助内鬼获得胜利</value>
+  </data>
+  <data name="MadmateFullDescription" xml:space="preserve">
+    <value>叛徒属于独立阵营，只要内鬼获胜则叛徒一同获胜。
+内鬼以特殊途径获胜时，叛徒依然获胜。
+技能“自杀”：叛徒自杀。
+若“内鬼阵营可以确认叛徒是谁”开启，叛徒完成一定数量任务后，内鬼阵营也可以确认叛徒是谁。</value>
+  </data>
+  <data name="Umbrer" xml:space="preserve">
+    <value>疫医</value>
+  </data>
+  <data name="UmbrerRange" xml:space="preserve">
+    <value>可以使用技能的最大范围</value>
+  </data>
+  <data name="UmbrerAbilityCoolTime" xml:space="preserve">
+    <value>技能冷却时间</value>
+  </data>
+  <data name="UmbrerAbilityActiveTime" xml:space="preserve">
+    <value>注入病毒所需时间</value>
+  </data>
+  <data name="UmbrerInfectRange" xml:space="preserve">
+    <value>增强病毒期间感染玩家的范围</value>
+  </data>
+  <data name="UmbrerUpgradeVirusTime" xml:space="preserve">
+    <value>增强病毒所需时间</value>
+  </data>
+  <data name="UmbrerKeepUpgradedVirus" xml:space="preserve">
+    <value>增强病毒持续时间</value>
+  </data>
+  <data name="UmbrerIntroDescription" xml:space="preserve">
+    <value>实验开始！</value>
+  </data>
+  <data name="UmbrerShortDescription" xml:space="preserve">
+    <value>让船员们都被病毒感染</value>
+  </data>
+  <data name="UmbrerFullDescription" xml:space="preserve">
+    <value>疫医属于独立阵营，需要用病毒感染所有玩家获得胜利。
+主动技能“病毒注入”：有玩家在附近时可以发动。保持一段时间接触后，那名玩家会进入感染状态。
+主动技能“病毒增强”：有被感染的玩家在附近时可以发动。保持一段时间接触后，玩家会进入感染强化状态，持续一段时间后回到感染状态。期间内若该玩家一定范围内有未处于感染状态的玩家，那名玩家进入感染状态，之后感染强化状态回到感染状态。</value>
+  </data>
+  <data name="featVirus" xml:space="preserve">
+    <value>注入病毒</value>
+  </data>
+  <data name="upgradeVirus" xml:space="preserve">
+    <value>增强病毒</value>
+  </data>
+</root>

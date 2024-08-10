@@ -96,7 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
             else
             {
-                addChat(Translation.GetString("cannotUseThisGameMode"));
+                addChat(Tr.GetString("cannotUseThisGameMode"));
                 return false;
             }
 
@@ -139,7 +139,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
             if (targetPlayerId == byte.MaxValue)
             {
-                addChat(Translation.GetString("invalidPlayerName"));
+                addChat(Tr.GetString("invalidPlayerName"));
                 return;
             }
 
@@ -247,14 +247,14 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private static void invalidArgs()
         {
-            addChat(Translation.GetString("invalidArgs"));
+            addChat(Tr.GetString("invalidArgs"));
         }
 
         private static void noXionVoteCmd()
         {
             if (voted)
             {
-                addChat(Translation.GetString("alreadyVoted"));
+                addChat(Tr.GetString("alreadyVoted"));
             }
             else
             {

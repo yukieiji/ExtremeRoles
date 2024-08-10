@@ -101,7 +101,7 @@ internal sealed class CompatModManager
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
 			using (var factory = OptionManager.CreateSequentialOptionCategory(
-				startId + index, mod.Name))
+				startId + index, $"{mod.Name}Category"))
 			{
 				mod.CreateIntegrateOption(factory);
 			}

@@ -1,0 +1,1323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CrewmateFullDescription" xml:space="preserve">
+    <value>クルー役職
+タスクを行いつつ、インポスターをこの船から追放しよう</value>
+  </data>
+  <data name="EngineerFullDescription" xml:space="preserve">
+    <value>ベントが使えるクルー役職</value>
+  </data>
+  <data name="ScientistFullDescription" xml:space="preserve">
+    <value>どこでもバイタルが使えるクルー役職
+バイタルの使用時間は有限
+使用時間は時間経過かタスクを完了することで回復する</value>
+  </data>
+  <data name="TrackerFullDescription" xml:space="preserve">
+    <value>クルー一人の居所をマップ上で常に確認できるクルー役職</value>
+  </data>
+  <data name="NoisemakerFullDescription" xml:space="preserve">
+    <value>キルされた時、全員に位置を一定時間通知できるクルー役職</value>
+  </data>
+  <data name="SpecialCrew" xml:space="preserve">
+    <value>スペシャルクルー</value>
+  </data>
+  <data name="SpecialCrewIntroDescription" xml:space="preserve">
+    <value>普通のクルーとは少し違う設定を持つ</value>
+  </data>
+  <data name="SpecialCrewShortDescription" xml:space="preserve">
+    <value>エクストリームなクルー</value>
+  </data>
+  <data name="SpecialCrewFullDescription" xml:space="preserve">
+    <value>Extreme Rolesの各役職の共通設定が適用できるクルー役職
+設定内容は以下を確認</value>
+  </data>
+  <data name="Sheriff" xml:space="preserve">
+    <value>シェリフ</value>
+  </data>
+  <data name="SheriffShootNum" xml:space="preserve">
+    <value>キルできる回数</value>
+  </data>
+  <data name="SheriffCanShootNeutral" xml:space="preserve">
+    <value>第三陣営をキルできるか</value>
+  </data>
+  <data name="SheriffCanShootAssassin" xml:space="preserve">
+    <value>アサシンをキルできるか</value>
+  </data>
+  <data name="SheriffEnableTaskRelated" xml:space="preserve">
+    <value>タスクに関する設定を有効化する</value>
+  </data>
+  <data name="SheriffReduceCurKillCool" xml:space="preserve">
+    <value>1つのタスク完了によるキルクール減少量</value>
+  </data>
+  <data name="SheriffIsPerm" xml:space="preserve">
+    <value>キルクールの減少が永続か</value>
+  </data>
+  <data name="SheriffIsSyncTaskAndShootNum" xml:space="preserve">
+    <value>キルできる回数がタスクによって増加するか</value>
+  </data>
+  <data name="SheriffSyncShootTaskGage" xml:space="preserve">
+    <value>キルできる回数が増加するタスク完了の増加率</value>
+  </data>
+  <data name="SheriffIntroDescription" xml:space="preserve">
+    <value>この船を荒らす不届き者に正義の鉄槌を</value>
+  </data>
+  <data name="SheriffShortDescription" xml:space="preserve">
+    <value>に正義の鉄槌を下せ</value>
+  </data>
+  <data name="SheriffFullDescription" xml:space="preserve">
+    <value>キルが可能なクルー役職。ただし、キル可能回数には上限がある
+キルを行おうとした相手がクルー役職であればキルは失敗して
+自身が死亡する
+オプションでアサシンをキル出来ないように設定されていて、
+アサシンをキルした場合、クルー役職をキルした時と同じく
+自身が死亡する
+「キルできる回数がタスク完了によって増加するか」がオンの
+時、初期のキル回数は0回(キルボタンも表示されない)でタスク
+を一定以上完了する毎にキル出来る回数が1回増加する(最大キル
+可能回数の上限は「キルできる回数」で設定される)</value>
+  </data>
+  <data name="Maintainer" xml:space="preserve">
+    <value>メンテナー</value>
+  </data>
+  <data name="MaintainerAbilityCoolTime" xml:space="preserve">
+    <value>「緊急修理」のクールタイム</value>
+  </data>
+  <data name="MaintainerAbilityCount" xml:space="preserve">
+    <value>「緊急修理」の回数</value>
+  </data>
+  <data name="MaintainerIntroDescription" xml:space="preserve">
+    <value>船のお困りごとはお任せあれ</value>
+  </data>
+  <data name="MaintainerShortDescription" xml:space="preserve">
+    <value>緊急タスクは緊急修理で！！</value>
+  </data>
+  <data name="MaintainerFullDescription" xml:space="preserve">
+    <value>緊急修理が行えるクルー役職
+緊急修理は緊急タスク(サボタージ)発生時、使用可能
+緊急修理が発動すると緊急タスクはすぐに完了し、
+マップ内のドアが全て開きます</value>
+  </data>
+  <data name="maintenance" xml:space="preserve">
+    <value>緊急修理</value>
+  </data>
+  <data name="Neet" xml:space="preserve">
+    <value>ニート</value>
+  </data>
+  <data name="NeetCanCallMeeting" xml:space="preserve">
+    <value>緊急会議を起こせるか</value>
+  </data>
+  <data name="NeetCanRepairSabotage" xml:space="preserve">
+    <value>サボタージを治せるか</value>
+  </data>
+  <data name="NeetHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="NeetIsNeutral" xml:space="preserve">
+    <value>第三陣営か</value>
+  </data>
+  <data name="NeetIntroDescription" xml:space="preserve">
+    <value>全てを他の人に任せて、宇宙の旅を楽しもう</value>
+  </data>
+  <data name="NeetShortDescription" xml:space="preserve">
+    <value>優雅な宇宙の旅を楽しもう</value>
+  </data>
+  <data name="NeetFullDescription" xml:space="preserve">
+    <value>何も出来ないクルー役職
+何もしなくていいので、監視役に向いているかも？</value>
+  </data>
+  <data name="NeetNeutralFullDescription" xml:space="preserve">
+    <value>何も出来ない第三陣営役職
+勝利条件：生き残っていること
+何もしなくていいので、監視役に向いているかも？</value>
+  </data>
+  <data name="Watchdog" xml:space="preserve">
+    <value>ウォッチドッグ</value>
+  </data>
+  <data name="WatchdogAbilityCoolTime" xml:space="preserve">
+    <value>セキュリティとログのクールタイム</value>
+  </data>
+  <data name="WatchdogAbilityActiveTime" xml:space="preserve">
+    <value>充電の持続時間</value>
+  </data>
+  <data name="WatchdogIntroDescription" xml:space="preserve">
+    <value>セキュリティカメラやドアログで、船員達を監視せよ</value>
+  </data>
+  <data name="WatchdogShortDescription" xml:space="preserve">
+    <value>船員達を監視して、怪しい奴を見つけ出せ</value>
+  </data>
+  <data name="WatchdogFullDescription" xml:space="preserve">
+    <value>セキュリティカメラやドアログがいつでも使えるクルー役職
+Mira HQの場合はドアログ、それ以外はセキュリティカメラになる
+使用には時間制限があり、使用する毎に時間制限は短くなる
+時間制限はクールタイムが終了するか、タスクを終了させる
+ことで役職に設定された充電の持続時間まで回復する</value>
+  </data>
+  <data name="securityCamera" xml:space="preserve">
+    <value>セキュリティカメラ</value>
+  </data>
+  <data name="doorLog" xml:space="preserve">
+    <value>ドアのログ</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>スーパーバイザー</value>
+  </data>
+  <data name="SupervisorAbilityCoolTime" xml:space="preserve">
+    <value>アドミンのクールタイム</value>
+  </data>
+  <data name="SupervisorAbilityActiveTime" xml:space="preserve">
+    <value>充電の持続時間</value>
+  </data>
+  <data name="SupervisorIsBoostTask" xml:space="preserve">
+    <value>「アドミン」がタスク進捗によって強化されるか</value>
+  </data>
+  <data name="SupervisorTaskGage" xml:space="preserve">
+    <value>「アドミン」が強化されるタスク進捗率</value>
+  </data>
+  <data name="SupervisorIntroDescription" xml:space="preserve">
+    <value>監督者として、船員達の位置情報を収集せよ</value>
+  </data>
+  <data name="SupervisorShortDescription" xml:space="preserve">
+    <value>アドミンで、船員達の位置情報を洗い出せ</value>
+  </data>
+  <data name="SupervisorFullDescription" xml:space="preserve">
+    <value>「アドミン」がいつでも使えるクルー役職
+使用には時間制限があり、使用する毎に時間制限は短くなる
+時間制限はクールタイムが終了するか、タスクを終了させる
+ことで役職に設定された充電の持続時間まで回復する
+「「アドミン」がタスク進捗によって強化されるか」がオンの
+時、一定のタスクをこなすことで「アドミン」で表示される
+プレイヤーが各色で表示されるようになる。この表示の強化は
+能力の「アドミン」だけである</value>
+  </data>
+  <data name="admin" xml:space="preserve">
+    <value>アドミン</value>
+  </data>
+  <data name="BodyGuard" xml:space="preserve">
+    <value>ボディーガード</value>
+  </data>
+  <data name="BodyGuardShieldRange" xml:space="preserve">
+    <value>「ガード」を付与できる範囲</value>
+  </data>
+  <data name="BodyGuardAbilityCoolTime" xml:space="preserve">
+    <value>「ガード」のクールタイム</value>
+  </data>
+  <data name="BodyGuardAbilityCount" xml:space="preserve">
+    <value>「ガード」が付与できる回数</value>
+  </data>
+  <data name="BodyGuardFeatMeetingAbilityTaskGage" xml:space="preserve">
+    <value>会議中に「ガード」が使用できるタスク進捗率</value>
+  </data>
+  <data name="BodyGuardFeatMeetingReportTaskGage" xml:space="preserve">
+    <value>会議でボディーガードの「殉職」が報告されるタスク進捗率</value>
+  </data>
+  <data name="BodyGuardIsReportPlayerName" xml:space="preserve">
+    <value>「殉職」が報告される際にプレイヤー名が表示されるか</value>
+  </data>
+  <data name="BodyGuardReportPlayerMode" xml:space="preserve">
+    <value>報告されるプレイヤー名</value>
+  </data>
+  <data name="BodyGuardIsBlockMeetingKill" xml:space="preserve">
+    <value>会議中のキルを防ぐ事ができるか</value>
+  </data>
+  <data name="BodyGuardIntroDescription" xml:space="preserve">
+    <value>その身をもって船員を"ガード"せよ</value>
+  </data>
+  <data name="BodyGuardShortDescription" xml:space="preserve">
+    <value>体を張って船員達を守れ</value>
+  </data>
+  <data name="BodyGuardFullDescription" xml:space="preserve">
+    <value>「ガード」を他の船員に付与することが出来るクルー役職
+近くの船員一人に対してボタンを押すことで「ガード」を付与
+することが出来る
+「ガード」の付与回数は「ガードリセット」の時にボタンを
+押すことで付与された「ガード」が解除され、付与回数が
+ゲームで設定された回数まで回復する
+「ガード」が付与された船員が「キルボタン」によってキル
+されようとすると身代わりになってキルされ、その船員はキル
+されない。
+「会議でボディーガードの「殉職」が報告されるタスク進捗率」
+以上のタスクを完了していた場合に上記能力が発動すると次の
+会議で能力発動の報告が行われる
+キルされた場合、付与された「ガード」は解除される</value>
+  </data>
+  <data name="shield" xml:space="preserve">
+    <value>ガード</value>
+  </data>
+  <data name="resetShield" xml:space="preserve">
+    <value>ガードリセット</value>
+  </data>
+  <data name="meetingShieldState" xml:space="preserve">
+    <value>この会議で付与できる\nガード：{0}回</value>
+  </data>
+  <data name="BodyGuardPlayerNameOnly" xml:space="preserve">
+    <value>この役職のプレイヤーのみ</value>
+  </data>
+  <data name="GuardedPlayerNameOnly" xml:space="preserve">
+    <value>守ったプレイヤーのみ</value>
+  </data>
+  <data name="BothPlayerName" xml:space="preserve">
+    <value>両方のプレイヤー</value>
+  </data>
+  <data name="martyrdomReport" xml:space="preserve">
+    <value>ボディーガードが誰かを守ったみたいだ</value>
+  </data>
+  <data name="martyrdomReportWithBodyGurdPlayer" xml:space="preserve">
+    <value>ボディーガードの「{0}」が誰かを守ったみたいだ</value>
+  </data>
+  <data name="martyrdomReportWithGurdedPlayer" xml:space="preserve">
+    <value>ボディーガードが「{0}」を守ったみたいだ</value>
+  </data>
+  <data name="martyrdomReportWithBoth" xml:space="preserve">
+    <value>ボディーガードの「{0}」が「{1}」を守ったみたいだ</value>
+  </data>
+  <data name="Whisper" xml:space="preserve">
+    <value>ウィスパー</value>
+  </data>
+  <data name="WhisperAbilityOffTime" xml:space="preserve">
+    <value>停止してから能力が発動するまでの時間</value>
+  </data>
+  <data name="WhisperAbilityOnTime" xml:space="preserve">
+    <value>「耳すまし」の持続時間</value>
+  </data>
+  <data name="WhisperTellTextTime" xml:space="preserve">
+    <value>キルされたテキストの表示時間</value>
+  </data>
+  <data name="WhisperMaxTellText" xml:space="preserve">
+    <value>キルされたテキストの最大表示数</value>
+  </data>
+  <data name="WhisperEnableAwakeAbility" xml:space="preserve">
+    <value>タスクによる能力強化を有効化するか</value>
+  </data>
+  <data name="WhisperAbilityTaskGage" xml:space="preserve">
+    <value>能力が強化されるタスク進捗率</value>
+  </data>
+  <data name="WhisperIntroDescription" xml:space="preserve">
+    <value>五感を研ぎ澄まし、耳をすまして、異変を感じろ</value>
+  </data>
+  <data name="WhisperShortDescription" xml:space="preserve">
+    <value>耳すましでキルを感じろ</value>
+  </data>
+  <data name="WhisperFullDescription" xml:space="preserve">
+    <value>能力「耳すまし」が使えるクルー役職
+能力「耳すまし」:
+　 一定時間停止した状態で強制発動する
+　 一定時間の停止はプレイヤーが動ける状態かつタスク等を行って
+　いない状態でカウントが進む
+　 「耳すまし」発動中も停止しない場合、能力は解除される
+　 「耳すまし」が発動すると全てのキルが察知され通知が来る
+　ただし、通知はキルと時間、方角のみわかる
+　 「タスクによる覚醒能力を有効化するか」が「オン」の時、
+　タスクを「能力が覚醒するタスク進捗率」以上進めると能力が
+　強化されキルされた部屋がわかるようになる</value>
+  </data>
+  <data name="killedTextWithRoom" xml:space="preserve">
+    <value>{0}の{1}で誰かが殺されたみたい({2})</value>
+  </data>
+  <data name="killedText" xml:space="preserve">
+    <value>{0}の方で誰かが殺されたみたい({1})</value>
+  </data>
+  <data name="TimeMaster" xml:space="preserve">
+    <value>タイムマスター</value>
+  </data>
+  <data name="TimeMasterAbilityCoolTime" xml:space="preserve">
+    <value>「タイムシールド」のクールタイム</value>
+  </data>
+  <data name="TimeMasterAbilityActiveTime" xml:space="preserve">
+    <value>「タイムシールド」の持続時間</value>
+  </data>
+  <data name="TimeMasterRewindTime" xml:space="preserve">
+    <value>「タイムシールド」によって巻き戻る時間</value>
+  </data>
+  <data name="TimeMasterIntroDescription" xml:space="preserve">
+    <value>「タイムシールド」で時間を支配せよ</value>
+  </data>
+  <data name="TimeMasterShortDescription" xml:space="preserve">
+    <value>時の支配者となれ</value>
+  </data>
+  <data name="TimeMasterFullDescription" xml:space="preserve">
+    <value>能力「タイムシールド」が使えるクルー役職
+能力「タイムシールド」が発動中に、キルボタンによるキルが
+発生すると「時間の巻き戻り」が発生する
+時間の巻戻り中は「タイムマスター」本人は影響を受けない。
+更に、キルボタンによって「タイムマスター」本人をキルする
+「時間の巻き戻り」はプレイヤーの移動だけ巻き戻る
+巻き戻る時間は「「タイムシールド」によって巻き戻る時間」に
+よって決定される。</value>
+  </data>
+  <data name="timeShield" xml:space="preserve">
+    <value>タイムシールド</value>
+  </data>
+  <data name="Agency" xml:space="preserve">
+    <value>エージェンシー</value>
+  </data>
+  <data name="AgencyCanSeeTaskBar" xml:space="preserve">
+    <value>タスクバーを常に見ることが出来るか</value>
+  </data>
+  <data name="AgencyMaxTaskNum" xml:space="preserve">
+    <value>「肩代わり」で取れるタスク数の上限</value>
+  </data>
+  <data name="AgencyTakeTaskRange" xml:space="preserve">
+    <value>「肩代わり」が発動できる範囲</value>
+  </data>
+  <data name="AgencyAbilityCoolTime" xml:space="preserve">
+    <value>「肩代わり」のクールタイム</value>
+  </data>
+  <data name="AgencyAbilityCount" xml:space="preserve">
+    <value>「肩代わり」が発動できる回数</value>
+  </data>
+  <data name="AgencyIntroDescription" xml:space="preserve">
+    <value>クルーのタスクを肩代わりするお手伝屋</value>
+  </data>
+  <data name="AgencyShortDescription" xml:space="preserve">
+    <value>「肩代わり」でタスクの手助けをしよう</value>
+  </data>
+  <data name="AgencyFullDescription" xml:space="preserve">
+    <value>他人のタスクの肩代わりを行うことが出来るクルー役職
+対象のクルーに対して「肩代わり」を発動することで、その
+クルーからタスクを一部取得することが出来る。取得された
+タスクのタイプに応じたタスクがエージェンシーの役職の人に
+追加される。取得したタスクがそのまま追加されるわけではない
+対象になった人がクルーだった場合、取得できるタスク数は
+1～「オプションの設定値」で決定される。
+対象になった人がインポスター等のタスクを持たない人だった
+場合(偽のタスクがある場合)、取得数は全体のタスク進捗に応じて
+決定される
+対象になった人のタスクが全て完了していた場合、取得できない</value>
+  </data>
+  <data name="takeTask" xml:space="preserve">
+    <value>肩代わり</value>
+  </data>
+  <data name="Bakary" xml:space="preserve">
+    <value>パン屋</value>
+  </data>
+  <data name="BakaryChangeCooking" xml:space="preserve">
+    <value>パンの焼き加減が変わるかどうか</value>
+  </data>
+  <data name="BakaryGoodBakeTime" xml:space="preserve">
+    <value>パンが焼ける会議との合間時間</value>
+  </data>
+  <data name="BakaryBadBakeTime" xml:space="preserve">
+    <value>パンが焦げる会議との合間時間</value>
+  </data>
+  <data name="BakaryIntroDescription" xml:space="preserve">
+    <value>クルーの皆さんに焼き立てのパンを振る舞おう</value>
+  </data>
+  <data name="BakaryShortDescription" xml:space="preserve">
+    <value>美味しいパンを焼こう</value>
+  </data>
+  <data name="BakaryFullDescription" xml:space="preserve">
+    <value>会議毎にパンが焼けたことを報告するクルー役職
+死亡するまでひたすらパンが焼けてることを報告します
+パン屋の役職が変化してもパンを焼き続けます
+パンの焼き加減が変わる場合、以下の秒数で焼き加減が変化する
+　・「パンが焼ける会議との合間時間」以下：生焼け
+　・「パンが焼ける会議との合間時間」以上～「パンが焦げる
+　　会議との合間時間」：美味しいパン
+　・それ以外：焦げパン</value>
+  </data>
+  <data name="rawBread" xml:space="preserve">
+    <value>パン屋さんがパンを焼こうとしましたが時間が足りませんでした</value>
+  </data>
+  <data name="goodBread" xml:space="preserve">
+    <value>パン屋さんが美味しいパンを焼き上げました</value>
+  </data>
+  <data name="badBread" xml:space="preserve">
+    <value>パン屋さんのパンが焼けすぎて焦げてしまったようです</value>
+  </data>
+  <data name="CurseMaker" xml:space="preserve">
+    <value>カースメーカー</value>
+  </data>
+  <data name="CurseMakerCursingRange" xml:space="preserve">
+    <value>「呪い」が発動できる死体からの距離</value>
+  </data>
+  <data name="CurseMakerAdditionalKillCool" xml:space="preserve">
+    <value>「呪い」によって付与されるキルクールペナルティ</value>
+  </data>
+  <data name="CurseMakerAbilityCoolTime" xml:space="preserve">
+    <value>「呪い」のクールタイム</value>
+  </data>
+  <data name="CurseMakerAbilityActiveTime" xml:space="preserve">
+    <value>「呪い」が完了するまでの時間</value>
+  </data>
+  <data name="CurseMakerAbilityCount" xml:space="preserve">
+    <value>「呪い」の使用回数</value>
+  </data>
+  <data name="CurseMakerTaskCurseTimeReduceRate" xml:space="preserve">
+    <value>タスク1つ完了毎の「「呪い」が完了するまでの時間」の減少率</value>
+  </data>
+  <data name="CurseMakerIsNotRemoveDeadBodyByTask" xml:space="preserve">
+    <value>タスク進捗によって「呪い」によって「死体」が消えないようになるか</value>
+  </data>
+  <data name="CurseMakerNotRemoveDeadBodyTaskGage" xml:space="preserve">
+    <value>「死体」が消えないようになるタスク進捗率</value>
+  </data>
+  <data name="CurseMakerIsDeadBodySearch" xml:space="preserve">
+    <value>死体を指す矢印を表示するか</value>
+  </data>
+  <data name="CurseMakerIsMultiDeadBodySearch" xml:space="preserve">
+    <value>複数回、死体への矢印を表示させるか</value>
+  </data>
+  <data name="CurseMakerSearchDeadBodyTime" xml:space="preserve">
+    <value>キルされてから矢印が表示されるまでの時間</value>
+  </data>
+  <data name="CurseMakerIsReduceSearchForTask" xml:space="preserve">
+    <value>矢印の表示されるまでの時間がタスク進捗によって減少するか</value>
+  </data>
+  <data name="CurseMakerReduceSearchTaskGage" xml:space="preserve">
+    <value>矢印の表示されるまでの時間が減少するタスク進捗率</value>
+  </data>
+  <data name="CurseMakerReduceSearchDeadBodyTime" xml:space="preserve">
+    <value>減少する時間</value>
+  </data>
+  <data name="CurseMakerIntroDescription" xml:space="preserve">
+    <value>死体の怨念から殺した相手を呪え</value>
+  </data>
+  <data name="CurseMakerShortDescription" xml:space="preserve">
+    <value>怨念の恨みを果たせ</value>
+  </data>
+  <data name="CurseMakerFullDescription" xml:space="preserve">
+    <value>死体から殺した相手を呪うクルー役職
+対象の死体に対して「呪い」を使用することが出来る
+「呪い」が完了するには設定された時間死体の近くにいる必要が
+ある
+「呪い」が完了すると死体が消え、殺した相手のキルクールを
+設定値増加させキルクールを最大値に戻す。
+増加されたキルクールは会議等でリセットされず永続的に増加
+される
+「死体を指す矢印を表示させるか」のオプションがオンの時、
+キルされてから一定時間経過後その死体の位置を指す矢印が表示
+される
+一定時間は「キルされてから矢印が表示されるまでの時間」で
+決定される。この時間は「矢印の表示されるまでの時間がタスク
+進捗によって減少するか」がオンの時、タスクを一定数こなす
+ことで短くなる</value>
+  </data>
+  <data name="curse" xml:space="preserve">
+    <value>呪い</value>
+  </data>
+  <data name="cursing" xml:space="preserve">
+    <value>呪術中</value>
+  </data>
+  <data name="Fencer" xml:space="preserve">
+    <value>フェンサー</value>
+  </data>
+  <data name="FencerAbilityCoolTime" xml:space="preserve">
+    <value>「カウンター」のクールタイム</value>
+  </data>
+  <data name="FencerAbilityActiveTime" xml:space="preserve">
+    <value>「カウンター」の受付時間</value>
+  </data>
+  <data name="FencerAbilityCount" xml:space="preserve">
+    <value>「カウンター」の使用回数</value>
+  </data>
+  <data name="FencerResetTime" xml:space="preserve">
+    <value>キルボタンが付与されてからなくなるまでの時間</value>
+  </data>
+  <data name="FencerIntroDescription" xml:space="preserve">
+    <value>「カウンター」でキルしてきた相手を返り討ちにしろ</value>
+  </data>
+  <data name="FencerShortDescription" xml:space="preserve">
+    <value>キルしてきた相手を「カウンター」で切り返せ</value>
+  </data>
+  <data name="FencerFullDescription" xml:space="preserve">
+    <value>「カウンター」でキルしてきた相手を逆襲できるクルー役職
+「カウンター」が発動中に、キルボタンによるキルが発生すると
+そのキルが無効化され、キルボタンが使用可能になる。この時、
+キルクールタイムは強制的に明けた状態になる。
+使用可能になったキルボタンは「キルボタンが付与されてからな
+くなるまでの時間」経過後、使用不可能になる
+「カウンター」が発動中、この役職の人がキルボタンによるキル
+でキルされることはない</value>
+  </data>
+  <data name="counter" xml:space="preserve">
+    <value>カウンター</value>
+  </data>
+  <data name="Opener" xml:space="preserve">
+    <value>オープナー</value>
+  </data>
+  <data name="OpenerAbilityCoolTime" xml:space="preserve">
+    <value>「ドア開け」のクールタイム</value>
+  </data>
+  <data name="OpenerAbilityCount" xml:space="preserve">
+    <value>「ドア開け」の基本使用回数</value>
+  </data>
+  <data name="OpenerRange" xml:space="preserve">
+    <value>「ドア開け」の扉からの発動距離</value>
+  </data>
+  <data name="OpenerReduceRate" xml:space="preserve">
+    <value>「ドア開け」のクール減少率</value>
+  </data>
+  <data name="OpenerPlusAbility" xml:space="preserve">
+    <value>「ドア開け」の追加使用回数</value>
+  </data>
+  <data name="OpenerIntroDescription" xml:space="preserve">
+    <value>開けられない扉などない！！</value>
+  </data>
+  <data name="OpenerShortDescription" xml:space="preserve">
+    <value>「ドア開け」を使い有利な位置を保て</value>
+  </data>
+  <data name="OpenerFullDescription" xml:space="preserve">
+    <value>能力「ドア開け」でドアを開けることが出来るクルー役職
+能力「ドア開け」を使用すると近くのドアを強制的に開けること
+が出来る
+タスクを完了させると「ドア開け」の使用回数が設定値分増加
+されクールタイムも短くなる</value>
+  </data>
+  <data name="openDoor" xml:space="preserve">
+    <value>ドア開け</value>
+  </data>
+  <data name="Carpenter" xml:space="preserve">
+    <value>カーペンター</value>
+  </data>
+  <data name="CarpenterAwakeTaskGage" xml:space="preserve">
+    <value>カーペンターに覚醒するタスク進捗率</value>
+  </data>
+  <data name="CarpenterAbilityCoolTime" xml:space="preserve">
+    <value>「ベント封鎖」と「カメラ設置」のクールタイム</value>
+  </data>
+  <data name="CarpenterAbilityCount" xml:space="preserve">
+    <value>「ネジ」の総本数</value>
+  </data>
+  <data name="CarpenterRemoveVentScrew" xml:space="preserve">
+    <value>「ベント封鎖」によって消費する「ネジ」の本数</value>
+  </data>
+  <data name="CarpenterRemoveVentStopTime" xml:space="preserve">
+    <value>「ベント封鎖」にかかる時間</value>
+  </data>
+  <data name="CarpenterSetCameraScrew" xml:space="preserve">
+    <value>「カメラ設置」によって消費する「ネジ」の本数</value>
+  </data>
+  <data name="CarpenterSetCameraStopTime" xml:space="preserve">
+    <value>「カメラ設置」にかかる時間</value>
+  </data>
+  <data name="CarpenterIntroDescription" xml:space="preserve">
+    <value>カーペンターはお船のリフォーム業者です</value>
+  </data>
+  <data name="CarpenterShortDescription" xml:space="preserve">
+    <value>過ごしやすい船にリフォームしよう</value>
+  </data>
+  <data name="CarpenterFullDescription" xml:space="preserve">
+    <value>「カメラ設置」と「ベント封鎖」が出来るクルー役職
+「カメラ設置」と「ベント封鎖」は使用できる場所やよって自動
+的に能力が変化する(アイコンと名前も変化する)
+能力発動には各能力発動に必要な「ネジ」の本数が必要であり、
+足りない場合は能力を発動できない
+能力「カメラ設置」：今いる場所にセキュリティカメラを設置
+する
+能力「ベント封鎖」：目標としているベントをマップから見えな
+くします(ベント掃除はその位置にいけば実行可能です)</value>
+  </data>
+  <data name="ventSeal" xml:space="preserve">
+    <value>ベント封鎖</value>
+  </data>
+  <data name="cameraSet" xml:space="preserve">
+    <value>カメラ設置</value>
+  </data>
+  <data name="carpenterScrewNum" xml:space="preserve">
+    <value>{0}本、{1}本使用予定</value>
+  </data>
+  <data name="Survivor" xml:space="preserve">
+    <value>サバイバー</value>
+  </data>
+  <data name="SurvivorAwakeTaskGage" xml:space="preserve">
+    <value>サバイバーに覚醒するタスク進捗率</value>
+  </data>
+  <data name="SurvivorDeadWinTaskGage" xml:space="preserve">
+    <value>サバイバーが死んでも勝利できるタスク進捗率</value>
+  </data>
+  <data name="SurvivorNoWinSurvivorAssignGhostRole" xml:space="preserve">
+    <value>サバイバーが勝利できない状態時に幽霊役職にアサインされるか</value>
+  </data>
+  <data name="SurvivorIntroDescription" xml:space="preserve">
+    <value>生きたい、生きろ、生き残りたい</value>
+  </data>
+  <data name="SurvivorShortDescription" xml:space="preserve">
+    <value>タスクをこなし勝利せよ</value>
+  </data>
+  <data name="SurvivorFullDescription" xml:space="preserve">
+    <value>生き残らないと勝利できないクルー役職
+自身のタスク進捗率が一定値以下の場合に死亡するとクルー勝利
+であってもこの役職の人は勝利しない
+死亡してクルー勝利に乗れない場合、この役職の人はタスクは
+タスク勝利の計算に反映されなくなる
+タスク進捗率が一定値以上の場合、死亡してもクルー勝利に乗る
+ことが出来る</value>
+  </data>
+  <data name="Captain" xml:space="preserve">
+    <value>キャプテン</value>
+  </data>
+  <data name="CaptainAwakeTaskGage" xml:space="preserve">
+    <value>キャプテンに覚醒するタスク進捗率</value>
+  </data>
+  <data name="CaptainChargeVoteWhenSkip" xml:space="preserve">
+    <value>スキップや無投票毎にチャージされる「特殊投票」の票数</value>
+  </data>
+  <data name="CaptainAwakedDefaultVoteNum" xml:space="preserve">
+    <value>「特殊投票」の元票数</value>
+  </data>
+  <data name="CaptainIntroDescription" xml:space="preserve">
+    <value>この船の船長！！</value>
+  </data>
+  <data name="CaptainShortDescription" xml:space="preserve">
+    <value>「特殊投票」の票数で人外を吊れ</value>
+  </data>
+  <data name="CaptainFullDescription" xml:space="preserve">
+    <value>会議中に「特殊投票」が可能なクルー役職
+能力「特殊投票」：
+　・「特殊投票」の票数が1票以上の時発動できる
+　・発動後専用のアイコンが使用したプレイヤーに表示される
+　・能力を使用すると対象となったプレイヤーに追加で票が入る
+　・スキップや無投票毎に設定値分「特殊投票」の票数が
+　チャージされる、このチャージは非覚醒時の状態でも
+　チャージされる
+　・一度能力を使用すると「「特殊投票」の元票数」まで特殊
+　投票の票数がリセットされる
+　・特殊投票先は再度発動することで投票先を変更可能である</value>
+  </data>
+  <data name="captainVoteStatus" xml:space="preserve">
+    <value>特殊投票:{0}\n投票数:{1}票</value>
+  </data>
+  <data name="Photographer" xml:space="preserve">
+    <value>フォトグラファー</value>
+  </data>
+  <data name="PhotographerAwakeTaskGage" xml:space="preserve">
+    <value>フォトグラファーに覚醒するタスク進捗率</value>
+  </data>
+  <data name="PhotographerUpgradePhotoTaskGage" xml:space="preserve">
+    <value>「撮影」が強化されるタスク進捗率</value>
+  </data>
+  <data name="PhotographerEnableAllSendChat" xml:space="preserve">
+    <value>「撮影」した情報が全体共有されるか</value>
+  </data>
+  <data name="PhotographerUpgradeAllSendChatTaskGage" xml:space="preserve">
+    <value>全体共有されるタスク進捗率</value>
+  </data>
+  <data name="PhotographerPhotoRange" xml:space="preserve">
+    <value>「撮影」の範囲</value>
+  </data>
+  <data name="PhotographerAbilityCoolTime" xml:space="preserve">
+    <value>「撮影」のクールタイム</value>
+  </data>
+  <data name="PhotographerAbilityCount" xml:space="preserve">
+    <value>「撮影」の使用可能回数</value>
+  </data>
+  <data name="PhotographerIntroDescription" xml:space="preserve">
+    <value>綺麗な写真を撮ろう</value>
+  </data>
+  <data name="PhotographerShortDescription" xml:space="preserve">
+    <value>「写真」で状況を整理せよ</value>
+  </data>
+  <data name="PhotographerFullDescription" xml:space="preserve">
+    <value>「写真」をボタン能力「撮影」で作成出来るクルー役職
+ボタン能力「撮影」
+　・ボタンを押すことで範囲内のプレイヤーの位置情報を記録
+　した「写真」を撮ることが出来る
+　・撮った写真は会議開始後チャットでその「写真」の内容を
+　知ることが出来る
+　・タスクをすることで「写真」の内容やチャット能力が強化
+　される
+　・写真の名前はランダム命名表から決定される</value>
+  </data>
+  <data name="takePhoto" xml:space="preserve">
+    <value>撮影</value>
+  </data>
+  <data name="photoChat" xml:space="preserve">
+    <value>撮影した写真を現像した\n{0}</value>
+  </data>
+  <data name="takePhotoTime" xml:space="preserve">
+    <value>撮影日</value>
+  </data>
+  <data name="photoName" xml:space="preserve">
+    <value>写真名</value>
+  </data>
+  <data name="onlyMeOnPhoto" xml:space="preserve">
+    <value>自分しか映っていなかった</value>
+  </data>
+  <data name="Delusioner" xml:space="preserve">
+    <value>デリュージョナー</value>
+  </data>
+  <data name="DelusionerAwakeVoteNum" xml:space="preserve">
+    <value>デリュージョナーに覚醒する自殺投票数</value>
+  </data>
+  <data name="DelusionerIsOnetimeAwake" xml:space="preserve">
+    <value>毎会議終了時覚醒条件を満たす必要があるか</value>
+  </data>
+  <data name="DelusionerRange" xml:space="preserve">
+    <value>「被害を逸らす」の発動可能範囲</value>
+  </data>
+  <data name="DelusionerAbilityCoolTime" xml:space="preserve">
+    <value>「被害を逸らす」のクールタイム</value>
+  </data>
+  <data name="DelusionerAbilityCount" xml:space="preserve">
+    <value>「被害を逸らす」の使用回数</value>
+  </data>
+  <data name="DelusionerVoteCoolTimeReduceRate" xml:space="preserve">
+    <value>自殺投票1票あたりの「被害を逸らす」のクールタイム減少率</value>
+  </data>
+  <data name="DelusionerDeflectDamagePenaltyRate" xml:space="preserve">
+    <value>「被害を逸らす」一回あたりのクールタイムペナルティ</value>
+  </data>
+  <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
+    <value>「被害を逸らす」のランダムテレポート地点に\n自分の位置を含めるか</value>
+  </data>
+  <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
+    <value>「被害を逸らす」のランダムテレポート地点に\nマップの初期位置を含めるか</value>
+  </data>
+  <data name="DelusionerEnableCounter" xml:space="preserve">
+    <value>「被害を逸らす」の暴発を有効にするか</value>
+  </data>
+  <data name="DelusionerIntroDescription" xml:space="preserve">
+    <value>やめて！！こっちに近づかないで！！！！</value>
+  </data>
+  <data name="DelusionerShortDescription" xml:space="preserve">
+    <value>「被害を逸らす」で近づく人を何処かに飛ばせ</value>
+  </data>
+  <data name="DelusionerFullDescription" xml:space="preserve">
+    <value>「被害を逸らす」でプレイヤーを飛ばす事ができるクルー役職
+ボタン能力「被害を逸らす」：
+　・近くにいるプレイヤー一人を対象にして発動できる
+　・そのプレイヤーをランダムなプレイヤーの場所にテレポート
+　させる(役職の人も含む)
+　・オプション「「被害を逸らす」のランダムテレポート地点に
+　マップの初期位置を含めるか」がオンの時、プレイヤーの位置
+　以外にマップのスポーン位置も含まれる
+　・オプション「「被害を逸らす」の暴発を有効にするか」がオン
+　で、クールタイムが明けており能力使用回数がある場合、キル
+　されようとすると能力が暴発し、範囲内にいるプレイヤーを使用
+　回数がある分テレポートさせる
+オプション「毎会議終了時覚醒条件を満たす必要があるか」が
+オンの時、覚醒後の次の会議で覚醒条件を満たせれない場合、
+非覚醒状態に戻る</value>
+  </data>
+  <data name="deflectDamage" xml:space="preserve">
+    <value>被害を逸らす</value>
+  </data>
+  <data name="Resurrecter" xml:space="preserve">
+    <value>リザレクター</value>
+  </data>
+  <data name="ResurrecterAwakeTaskGage" xml:space="preserve">
+    <value>リザレクターに覚醒するタスク進捗率</value>
+  </data>
+  <data name="ResurrecterResurrectTaskGage" xml:space="preserve">
+    <value>「復活可能状態」になるタスク進捗率</value>
+  </data>
+  <data name="ResurrecterIsMeetingCoolResetOnResurrect" xml:space="preserve">
+    <value>復活後、全員の会議クールダウンをリセットするか</value>
+  </data>
+  <data name="ResurrecterResurrectMeetingCooltime" xml:space="preserve">
+    <value>復活後の会議のクールタイム</value>
+  </data>
+  <data name="ResurrecterResurrectDelayTime" xml:space="preserve">
+    <value>「復活可能状態」時に死亡してから復活するまでのタイムラグ</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetMeetingNum" xml:space="preserve">
+    <value>復活後、タスクの巻き戻りが発生する会議回数</value>
+  </data>
+  <data name="ResurrecterResurrectTaskResetGage" xml:space="preserve">
+    <value>タスクの巻き戻り率</value>
+  </data>
+  <data name="ResurrecterCanResurrectAfterDeath" xml:space="preserve">
+    <value>死亡後に「復活可能状態」になっても復活することが可能か</value>
+  </data>
+  <data name="ResurrecterCanResurrectOnExil" xml:space="preserve">
+    <value>追放でも復活することが可能か</value>
+  </data>
+  <data name="ResurrecterIntroDescription" xml:space="preserve">
+    <value>不死鳥の如く、蘇れ</value>
+  </data>
+  <data name="ResurrecterShortDescription" xml:space="preserve">
+    <value>蘇りの力を使い、有利に動け</value>
+  </data>
+  <data name="ResurrecterFullDescription" xml:space="preserve">
+    <value>1度だけ蘇りの力を持つクルー役職
+この役職は幽霊役職にアサインされることはない
+タスクを一定以上完了させることで「復活可能状態」になる
+「復活可能状態」でキルされると一定時間後に復活します(一定
+時間中、役職表示等は無効化されます)
+「死亡後に復活可能状態になっても復活することが可能か」
+がオンの時、死亡していて「復活可能状態」になる即時復活
+します
+復活地点はマップのスポーン地点(複数ある場合はランダム)です
+復活時、キルボタンを持つ役職に通知が発生します
+復活後、一定回数の会議が発生するとリザレクター本人の
+タスクが一部巻き戻ります</value>
+  </data>
+  <data name="resurrectText" xml:space="preserve">
+    <value>復活まで、あと{0}秒</value>
+  </data>
+  <data name="Gambler" xml:space="preserve">
+    <value>ギャンブラー</value>
+  </data>
+  <data name="GamblerNormalVoteRate" xml:space="preserve">
+    <value>投票数が1票になる確率</value>
+  </data>
+  <data name="GamblerIntroDescription" xml:space="preserve">
+    <value>投票が"増えるか"どうか運次第</value>
+  </data>
+  <data name="GamblerShortDescription" xml:space="preserve">
+    <value>会議での票数がランダムに変化する</value>
+  </data>
+  <data name="GamblerFullDescription" xml:space="preserve">
+    <value>会議で自分の投票数が0～2票の間でランダムに変化するクルー役職
+この投票数の変化は画面上ではわからず、0～2票のどの票数であって
+も画面上に表示される票数は1票と表示される(内部的には計算され
+てます)
+0票と2票の確率は100％から「投票数が1票になる確率」を2で
+割った確率になる(例：「投票数が1票になる確率」：50％の場合、
+0票と2票になる確率はそれぞれ25％になる)</value>
+  </data>
+  <data name="Teleporter" xml:space="preserve">
+    <value>テレポーター</value>
+  </data>
+  <data name="TeleporterCanUseOtherPlayer" xml:space="preserve">
+    <value>「ポータル」が他のプレイヤーが使用できるか</value>
+  </data>
+  <data name="TeleporterAbilityCoolTime" xml:space="preserve">
+    <value>「セットポータル」のクールタイム</value>
+  </data>
+  <data name="TeleporterAbilityCount" xml:space="preserve">
+    <value>「ポータルのかけら」が設置される個数</value>
+  </data>
+  <data name="TeleporterIntroDescription" xml:space="preserve">
+    <value>おっと、ポータルだ</value>
+  </data>
+  <data name="TeleporterShortDescription" xml:space="preserve">
+    <value>「ポータルのかけら」を集めて「ポータル」を設置せよ</value>
+  </data>
+  <data name="TeleporterFullDescription" xml:space="preserve">
+    <value>2点間を瞬時に移動できる「ポータル」を設置できるクルー役職
+「ポータル」は一度使用すると5秒間使用できない
+能力の初期使用回数は0回で、マップ上に落ちている「ポータルの
+かけら」を集めることで使用回数が増えていく
+使用回数1回でポータルを1セット設置できる
+「「ポータル」が他のプレイヤーが使用できるか」がオフの場合、
+「ポータル」は設置した「テレポーター」のみ表示され使用できる</value>
+  </data>
+  <data name="SetPortal" xml:space="preserve">
+    <value>セットポータル</value>
+  </data>
+  <data name="Moderator" xml:space="preserve">
+    <value>モデレーター</value>
+  </data>
+  <data name="ModeratorAwakeTaskGage" xml:space="preserve">
+    <value>モデレーターに覚醒するタスク進捗率</value>
+  </data>
+  <data name="ModeratorAbilityCoolTime" xml:space="preserve">
+    <value>「モデレート」のクールタイム</value>
+  </data>
+  <data name="ModeratorAbilityCount" xml:space="preserve">
+    <value>「モデレート」の使用可能回数</value>
+  </data>
+  <data name="ModeratorMeetingTimerOffset" xml:space="preserve">
+    <value>「モデレート」によって増加する会議時間</value>
+  </data>
+  <data name="ModeratorIntroDescription" xml:space="preserve">
+    <value>この会議、私が仕切らせて頂く！！</value>
+  </data>
+  <data name="ModeratorShortDescription" xml:space="preserve">
+    <value>能力で会議時間を伸ばし、船を荒らす者たちを追放せよ</value>
+  </data>
+  <data name="ModeratorFullDescription" xml:space="preserve">
+    <value>ボタン能力「モデレート」によって次の会議時間を1回だけ伸ばす
+ことができるクルー役職
+
+・ボタン能力「モデレート」
+　能力を使用すると左下に通知が出て会議時間がオプションで設定
+　された秒数増加する</value>
+  </data>
+  <data name="changeMeetingTime" xml:space="preserve">
+    <value>次の会議時間が{0}秒増加した</value>
+  </data>
+  <data name="moderate" xml:space="preserve">
+    <value>モデレート</value>
+  </data>
+  <data name="Psychic" xml:space="preserve">
+    <value>サイキック</value>
+  </data>
+  <data name="PsychicAwakeTaskGage" xml:space="preserve">
+    <value>サイキックに覚醒するタスク進捗率(覚醒条件:1)</value>
+  </data>
+  <data name="PsychicAwakeDeadPlayerNum" xml:space="preserve">
+    <value>サイキックに覚醒する死亡者数(覚醒条件:2)</value>
+  </data>
+  <data name="PsychicAbilityCoolTime" xml:space="preserve">
+    <value>「降霊術」のクールタイム</value>
+  </data>
+  <data name="PsychicAbilityActiveTime" xml:space="preserve">
+    <value>「降霊術」にかかる時間</value>
+  </data>
+  <data name="PsychicAbilityCount" xml:space="preserve">
+    <value>「降霊術」が使える回数</value>
+  </data>
+  <data name="PsychicIsUpgradeAbility" xml:space="preserve">
+    <value>「降霊術」が強化されるか</value>
+  </data>
+  <data name="PsychicUpgradeTaskGage" xml:space="preserve">
+    <value>「降霊術」が強化されるタスク進捗率(強化条件:1)</value>
+  </data>
+  <data name="PsychicUpgradeDeadPlayerNum" xml:space="preserve">
+    <value>「降霊術」が強化される死亡者数(強化条件:2)</value>
+  </data>
+  <data name="PsychicIntroDescription" xml:space="preserve">
+    <value>霊の声に耳を傾けよ</value>
+  </data>
+  <data name="PsychicShortDescription" xml:space="preserve">
+    <value>「降霊術」を使い霊から生存者の情報を入手せよ</value>
+  </data>
+  <data name="PsychicFullDescription" xml:space="preserve">
+    <value>ボタン能力「降霊術」によって、他陣営の生存者の情報を入手できる
+クルー役職
+
+・ボタン能力「降霊術」
+　能力を使用すると左下に通知が出て、「降霊術」を開始する
+　　「降霊術」中に移動すると術が失敗する
+　　「降霊術」は一定時間後に完了する
+　　「降霊術」が完了した時のクルー陣営以外の生存者数を
+　会議開始時に報告する
+　　「「降霊術」が強化されるか」がオンのとき、両方の強化条件を
+　満たした時に、報告内容が強化されクルー陣営以外の生存している
+　役職も報告される</value>
+  </data>
+  <data name="PsychicPsychic" xml:space="preserve">
+    <value>降霊術</value>
+  </data>
+  <data name="PsychicPsychicStart" xml:space="preserve">
+    <value>降霊術を開始した</value>
+  </data>
+  <data name="PsychicPsychicEnd" xml:space="preserve">
+    <value>霊から生存者の情報を入手した、次の会議までに纏めておこう・・・</value>
+  </data>
+  <data name="PsychicPsychicResult" xml:space="preserve">
+    <value>降霊術の結果</value>
+  </data>
+  <data name="PsychicPsychicStrAliveRole" xml:space="preserve">
+    <value>　生存している役職：</value>
+  </data>
+  <data name="PsychicPsychicStrTeam" xml:space="preserve">
+    <value>　陣営：</value>
+  </data>
+  <data name="PsychicPsychicStrForAliveNum" xml:space="preserve">
+    <value>　生存者：{0}名</value>
+  </data>
+  <data name="Bait" xml:space="preserve">
+    <value>ベイト</value>
+  </data>
+  <data name="BaitAwakeTaskGage" xml:space="preserve">
+    <value>ベイトに覚醒するタスク進捗率</value>
+  </data>
+  <data name="BaitDelayUntilForceReport" xml:space="preserve">
+    <value>強制通報までの遅延時間</value>
+  </data>
+  <data name="BaitEnableBaitBenefit" xml:space="preserve">
+    <value>強制通報後のキル能力持ちのキルクールボーナスを有効にするか</value>
+  </data>
+  <data name="BaitKillCoolReduceMulti" xml:space="preserve">
+    <value>キルクールの減少速度倍率</value>
+  </data>
+  <data name="BaitReduceTimer" xml:space="preserve">
+    <value>ボーナスの持続時間</value>
+  </data>
+  <data name="BaitIntroDescription" xml:space="preserve">
+    <value>私は素敵な撒き餌</value>
+  </data>
+  <data name="BaitShortDescription" xml:space="preserve">
+    <value>自身を囮にして人外共を追い込め</value>
+  </data>
+  <data name="BaitFullDescription" xml:space="preserve">
+    <value>キルされると一定時間後に自身を強制的に通報させるクルー役職
+
+・能力「強制通報」
+　　キルされると「強制通報までの遅延時間」後に自身の死体を通報
+　させる
+　　「強制通報後のキル能力持ちのキルクールボーナスを有効に
+　するか」がオンの時、この役職がキルされたときから一定時間、
+　キルボタンのクールタイムの減少速度が早くなる</value>
+  </data>
+  <data name="forceReportUntil" xml:space="preserve">
+    <value>強制通報まで、あと{0}秒</value>
+  </data>
+  <data name="Jailer" xml:space="preserve">
+    <value>ジェイラー</value>
+  </data>
+  <data name="Lawbreaker" xml:space="preserve">
+    <value>ロォーブレーカー</value>
+  </data>
+  <data name="Yardbird" xml:space="preserve">
+    <value>ヤードバード</value>
+  </data>
+  <data name="JailerAwakeTaskGage" xml:space="preserve">
+    <value>ジェイラーに覚醒するタスク進捗率
+(覚醒条件:1)</value>
+  </data>
+  <data name="JailerAwakeDeadPlayerNum" xml:space="preserve">
+    <value>ジェイラーに覚醒する死亡者数
+(覚醒条件:2)</value>
+  </data>
+  <data name="JailerUseAdmin" xml:space="preserve">
+    <value>ジェイラーがアドミンを使用できるか</value>
+  </data>
+  <data name="JailerUseSecurity" xml:space="preserve">
+    <value>ジェイラーがセキュリティカメラ/
+ログを使用できるか</value>
+  </data>
+  <data name="JailerUseVital" xml:space="preserve">
+    <value>ジェイラーがバイタルを使用できるか</value>
+  </data>
+  <data name="JailerAbilityCoolTime" xml:space="preserve">
+    <value>「投獄」のクールタイム</value>
+  </data>
+  <data name="JailerAbilityCount" xml:space="preserve">
+    <value>「投獄」の使用回数</value>
+  </data>
+  <data name="JailerTargetMode" xml:space="preserve">
+    <value>「投獄」が成功する陣営</value>
+  </data>
+  <data name="JailerCanReplaceAssassin" xml:space="preserve">
+    <value>アサシンを「投獄」できるか</value>
+  </data>
+  <data name="JailerRange" xml:space="preserve">
+    <value>「投獄」が発動できる範囲</value>
+  </data>
+  <data name="JailerIsMissingToDead" xml:space="preserve">
+    <value>「投獄」が失敗時、自決するか</value>
+  </data>
+  <data name="JailerIsDeadAbilityZero" xml:space="preserve">
+    <value>「投獄」が成功し、使用回数が0回の時
+自決するか</value>
+  </data>
+  <data name="JailerLawbreakerCanKill" xml:space="preserve">
+    <value>ロォーブレーカーがキルできるか</value>
+  </data>
+  <data name="JailerHasOtherKillCool" xml:space="preserve">
+    <value>ロォーブレーカーが別のキルクール
+設定を持つか</value>
+  </data>
+  <data name="JailerKillCoolDown" xml:space="preserve">
+    <value>ロォーブレーカーのキルクール</value>
+  </data>
+  <data name="JailerHasOtherKillRange" xml:space="preserve">
+    <value>ロォーブレーカーが別のキルレンジ
+設定を持つか</value>
+  </data>
+  <data name="JailerKillRange" xml:space="preserve">
+    <value>ロォーブレーカーのキルレンジ</value>
+  </data>
+  <data name="JailerLawbreakerUseVent" xml:space="preserve">
+    <value>ロォーブレーカーがベントを
+使用できるか</value>
+  </data>
+  <data name="JailerLawbreakerUseSab" xml:space="preserve">
+    <value>ロォーブレーカーがサボタージュを
+使用できるか</value>
+  </data>
+  <data name="JailerYardbirdAddCommonTask" xml:space="preserve">
+    <value>ヤードバードの追加共通タスク数</value>
+  </data>
+  <data name="JailerYardbirdAddNormalTask" xml:space="preserve">
+    <value>ヤードバードの追加ショートタスク数</value>
+  </data>
+  <data name="JailerYardbirdAddLongTask" xml:space="preserve">
+    <value>ヤードバードの追加ロングタスク数</value>
+  </data>
+  <data name="JailerYardbirdSpeedMod" xml:space="preserve">
+    <value>ヤードバードの移動速度倍率</value>
+  </data>
+  <data name="JailerYardbirdUseAdmin" xml:space="preserve">
+    <value>ヤードバードがアドミンを使用できるか</value>
+  </data>
+  <data name="JailerYardbirdUseSecurity" xml:space="preserve">
+    <value>ヤードバードがセキュリティカメラ/
+ログを使用できるか</value>
+  </data>
+  <data name="JailerYardbirdUseVital" xml:space="preserve">
+    <value>ヤードバードがバイタルを使用できるか</value>
+  </data>
+  <data name="JailerYardbirdUseVent" xml:space="preserve">
+    <value>ヤードバードがベントを使用できるか</value>
+  </data>
+  <data name="JailerYardbirdUseSab" xml:space="preserve">
+    <value>ヤードバードがサボタージュを
+使用できるか</value>
+  </data>
+  <data name="JailerIntroDescription" xml:space="preserve">
+    <value>悪人を”投獄”し、更生させろ</value>
+  </data>
+  <data name="JailerShortDescription" xml:space="preserve">
+    <value>を発見し、"投獄"しろ</value>
+  </data>
+  <data name="JailerFullDescription" xml:space="preserve">
+    <value>自分以外の特定陣営をクルー陣営に引き込むことができるクルー役職
+
+・ボタン能力「投獄」
+　・範囲内にいるプレイヤー一人を対象として発動できる
+　・そのプレイヤーが「「投獄」が成功する陣営」であった場合、
+そのプレイヤーをクルー陣営の「ヤードバード」に変更させる
+　・オプション「「投獄」が失敗時、自決するか」がオフの場合、
+失敗時、「ジェイラー」本人がクルー陣営が敗北することが目的と
+なるニュートラル陣営の「ロォーブレーカー」に変更される</value>
+  </data>
+  <data name="YardbirdShortDescription" xml:space="preserve">
+    <value>今までの悪事を償い、更生しよう</value>
+  </data>
+  <data name="YardbirdFullDescription" xml:space="preserve">
+    <value>「ジェイラー」によって生み出されたクルー役職
+設定によりタスクの数が多かったり、歩く速度が遅かったり、
+一部マップの機器が使えません
+それ以外は基本的なクルーの設定を引き継ぎます</value>
+  </data>
+  <data name="LawbreakerShortDescription" xml:space="preserve">
+    <value>自分のミスがバレるまでにクルーを始末しよう</value>
+  </data>
+  <data name="LawbreakerFullDescription" xml:space="preserve">
+    <value>「ジェイラー」の「投獄」が失敗した結果、生まれた役職
+
+・勝利条件：「クルーが敗北すること」
+　　※：クルー以外の陣営が勝利した時、相乗り勝利となります
+キル、サボタージュ、ベントの設定以外は「ジェイラー」のときの
+設定を引き継ぎます</value>
+  </data>
+  <data name="AddJail" xml:space="preserve">
+    <value>投獄</value>
+  </data>
+  <data name="Summoner" xml:space="preserve">
+    <value>サモナー</value>
+  </data>
+  <data name="SummonerAbilityCoolTime" xml:space="preserve">
+    <value>「マーキング」と「召喚」の
+クールタイム</value>
+  </data>
+  <data name="SummonerMarkingCount" xml:space="preserve">
+    <value>「マーキング」の使用回数</value>
+  </data>
+  <data name="SummonerRange" xml:space="preserve">
+    <value>「マーキング」が使用できる範囲</value>
+  </data>
+  <data name="SummonerSummonCount" xml:space="preserve">
+    <value>「召喚」の使用回数</value>
+  </data>
+  <data name="SummonerIntroDescription" xml:space="preserve">
+    <value>契約して、私の召喚獣になってよ!!</value>
+  </data>
+  <data name="SummonerShortDescription" xml:space="preserve">
+    <value>プレイヤーを「召喚」して危機を救おう！！</value>
+  </data>
+  <data name="SummonerFullDescription" xml:space="preserve">
+    <value>「マーキング」したプレイヤーを自分の場所にテレポートさせる
+クルー役職
+
+ボタンの能力はマウスのスクロールホイールにて切替可能です
+
+・ボタン能力「マーキング」
+　・範囲内にいるプレイヤー一人を対象として発動できる
+　・「マーキング」された人の名前には「◀」のタグが表示される
+　・「マーキング」されたプレイヤーが死亡した状態で会議に入った
+　場合、「マーキング」は解除される
+・ボタン能力「召喚」
+　・「マーキング」しているプレイヤーが居るときに発動できる
+　・そのプレイヤーを自分の座標にテレポートさせる
+　・そのプレイヤーが死亡していた場合、死体がテレポートされる</value>
+  </data>
+  <data name="Marking" xml:space="preserve">
+    <value>マーキング</value>
+  </data>
+  <data name="Summon" xml:space="preserve">
+    <value>召喚</value>
+  </data>
+</root>

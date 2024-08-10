@@ -77,7 +77,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		var deadBodyMode = new GraphicAndActiveTimeMode<EaterAbilityMode>(
 			EaterAbilityMode.DeadBody,
 			new ButtonGraphic(
-				Translation.GetString("deadBodyEat"),
+				Tr.GetString("deadBodyEat"),
 				Resources.UnityObjectLoader.LoadSpriteFromResources(
 					ObjectPath.EaterDeadBodyEat)),
 			1.0f);
@@ -98,7 +98,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 			new(
 				EaterAbilityMode.Kill,
 				new ButtonGraphic(
-					Translation.GetString("eatKill"),
+					Tr.GetString("eatKill"),
 					Resources.UnityObjectLoader.LoadSpriteFromResources(
 						ObjectPath.EaterEatKill)),
 				activatingBehavior.ActiveTime));

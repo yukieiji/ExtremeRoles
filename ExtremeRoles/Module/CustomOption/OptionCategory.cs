@@ -73,7 +73,7 @@ public sealed class OptionCategory(
 	public OptionTab Tab { get; } = tab;
 	public int Id { get; } = id;
 	public string Name { get; } = name;
-	public string TransedName => Translation.GetString(Name);
+	public string TransedName => Tr.GetString(Name);
 
 	public bool IsDirty { get; set; } = false;
 
@@ -84,7 +84,7 @@ public sealed class OptionCategory(
 
 	public void AddHudString(in StringBuilder builder)
 	{
-		builder.AppendLine($"・{Translation.GetString("OptionCategory")}: {this.TransedName}");
+		builder.AppendLine($"・{Tr.GetString("OptionCategory")}: {this.TransedName}");
 
 		foreach (var option in this.allOpt.Values)
 		{

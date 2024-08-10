@@ -135,7 +135,7 @@ public static class Map
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
 			vitalObj = modMap.GetSystemObjectName(
-				SystemConsoleType.Vital);
+				SystemConsoleType.VitalsLabel);
 		}
 		else
 		{
@@ -169,7 +169,7 @@ public static class Map
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
 		{
 			adminObj = modMap.GetSystemObjectName(
-				SystemConsoleType.Admin);
+				SystemConsoleType.AdminModule);
 		}
 		else
 		{

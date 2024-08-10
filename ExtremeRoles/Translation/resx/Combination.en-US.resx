@@ -1,0 +1,1074 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AvalonsRoles" xml:space="preserve">
+    <value>&lt;color=#FF1919FF&gt;Assasin&lt;/color&gt;&amp;amp;&lt;color=#00ffff&gt;Merlin&lt;/color&gt;</value>
+  </data>
+  <data name="Assassin" xml:space="preserve">
+    <value>Assasin</value>
+  </data>
+  <data name="Marlin" xml:space="preserve">
+    <value>Merlin</value>
+  </data>
+  <data name="AssassinHasOtherVision" xml:space="preserve">
+    <value>Assasin: Has special vision settings</value>
+  </data>
+  <data name="AssassinVision" xml:space="preserve">
+    <value>Assasin: Vision</value>
+  </data>
+  <data name="AssassinApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Assasin: Does sabotage effect their vision</value>
+  </data>
+  <data name="AssassinHasOtherKillCool" xml:space="preserve">
+    <value>Assasin: Does have a modified Kill Cooldown</value>
+  </data>
+  <data name="AssassinKillCoolDown" xml:space="preserve">
+    <value>Assasin: Kill Cooldown</value>
+  </data>
+  <data name="AssassinHasOtherKillRange" xml:space="preserve">
+    <value>Assasin: Does have a modified Kill Distance</value>
+  </data>
+  <data name="AssassinKillRange" xml:space="preserve">
+    <value>Assasin: Kill Distance</value>
+  </data>
+  <data name="AssassinHasTask" xml:space="preserve">
+    <value>Assasin: Does have tasks</value>
+  </data>
+  <data name="AssassinCanKilled" xml:space="preserve">
+    <value>Assasin: Can be Killed</value>
+  </data>
+  <data name="AssassinCanKilledFromCrew" xml:space="preserve">
+    <value>Assasin: Can be Killed by CREWMATES</value>
+  </data>
+  <data name="AssassinCanKilledFromNeutral" xml:space="preserve">
+    <value>Assasin: Can be Killed by NEUTRALS</value>
+  </data>
+  <data name="AssassinCanSeeVote" xml:space="preserve">
+    <value>Assasin: Can see votes</value>
+  </data>
+  <data name="AssassinIsDeadForceMeeting" xml:space="preserve">
+    <value>Does open Assasin meetings on Assasin death</value>
+  </data>
+  <data name="AssassinCanSeeRoleBeforeFirstMeeting" xml:space="preserve">
+    <value>Can see roles after first meeting opening\nafter Assasin's death</value>
+  </data>
+  <data name="MarlinHasOtherVision" xml:space="preserve">
+    <value>Merlin: Has special vision settings</value>
+  </data>
+  <data name="MarlinVision" xml:space="preserve">
+    <value>Merlin: Vision</value>
+  </data>
+  <data name="MarlinApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Merlin: Does sabotage effect their vision</value>
+  </data>
+  <data name="MarlinHasTask" xml:space="preserve">
+    <value>Merlin: Does have tasks</value>
+  </data>
+  <data name="MarlinCanSeeAssassin" xml:space="preserve">
+    <value>Merlin: Can see the Assasin</value>
+  </data>
+  <data name="MarlinCanSeeVote" xml:space="preserve">
+    <value>Merlin: Can see votes</value>
+  </data>
+  <data name="MarlinCanSeeNeutral" xml:space="preserve">
+    <value>Merlin: Can see NEUTRALS</value>
+  </data>
+  <data name="MarlinCanUseVent" xml:space="preserve">
+    <value>Merlin: Can use VENTs</value>
+  </data>
+  <data name="MarlinIntroDescription" xml:space="preserve">
+    <value>See the TRUTH, but don't be SCREWED</value>
+  </data>
+  <data name="MarlinShortDescription" xml:space="preserve">
+    <value>Lead the CREW to victory without being ASSASSINATED</value>
+  </data>
+  <data name="MarlinFullDescription" xml:space="preserve">
+    <value> A CREWMATE role knowing who's the bad guys.
+ Can know who the IMPOSTORS (and NEUTRALS when the 
+configuration is on) are.
+ Will only be assigned when a Assasin-Impostor exists.
+ Lead your CREW to victory by eliminating them, but don't let them 
+guess you're the Merlin, unless you'll lose!</value>
+  </data>
+  <data name="AssassinIntroDescription" xml:space="preserve">
+    <value>ASSASSINATE who's behind them all the time</value>
+  </data>
+  <data name="AssassinShortDescription" xml:space="preserve">
+    <value>Seek the MERLIN and ASSASSINATE them</value>
+  </data>
+  <data name="AssassinFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with a brand-new additional chance to achive victory!
+ Will only be assigned when a Merlin-Crewmate exists.
+ ADDITIONAL VICTORY: Guess who's the Merlin.
+ "WHO'S THE MERLIN?" : An additional meeting only for the 
+assasin.
+   - Occurs when an Assasin is exiled.
+   - Only the Assasin can choose/vote.
+   - Only Impostors can use the chat (including ghosts/dead 
+Impostors).
+   - Can vote/choose dead players.
+   - When voted to a Merlin, the Impostor achives the victory. When 
+not, the Assasin will be exiled and the game continues on.</value>
+  </data>
+  <data name="whoIsMarine" xml:space="preserve">
+    <value>WHO'S THE MERLIN?</value>
+  </data>
+  <data name="assassinateMarinSucsess" xml:space="preserve">
+    <value>was the merlin.</value>
+  </data>
+  <data name="assassinateMarinFail" xml:space="preserve">
+    <value>was not the merlin.</value>
+  </data>
+  <data name="HeroAca" xml:space="preserve">
+    <value>&lt;color=#0086CC&gt;Hero&lt;/color&gt;&amp;amp;&lt;color=#FF1919FF&gt;Villain&lt;/color&gt;&amp;amp;&lt;color=#BAA7CC&gt;Vigilante&lt;/color&gt;</value>
+  </data>
+  <data name="Hero" xml:space="preserve">
+    <value>Hero</value>
+  </data>
+  <data name="Villain" xml:space="preserve">
+    <value>Villain</value>
+  </data>
+  <data name="Vigilante" xml:space="preserve">
+    <value>Vigilante</value>
+  </data>
+  <data name="HeroHasOtherVision" xml:space="preserve">
+    <value>Hero: Has special vision settings</value>
+  </data>
+  <data name="HeroVision" xml:space="preserve">
+    <value>Hero: Vision</value>
+  </data>
+  <data name="HeroApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Hero: Does sabotage effect their vision</value>
+  </data>
+  <data name="HeroAbilityCoolTime" xml:space="preserve">
+    <value>Hero: "SEARCH" : Ability Cooldown</value>
+  </data>
+  <data name="HeroAbilityActiveTime" xml:space="preserve">
+    <value>Hero: "SEARCH" : Ability Duration</value>
+  </data>
+  <data name="HeroFeatKillPercentage" xml:space="preserve">
+    <value>Hero: Percentage of dead players for "One for All(II)" advance</value>
+  </data>
+  <data name="HeroFeatButtonAbilityPercentage" xml:space="preserve">
+    <value>Hero: Percentage of dead players for "One for All(III)" advance</value>
+  </data>
+  <data name="VillainHasOtherVision" xml:space="preserve">
+    <value>Villain: Has special vision settings</value>
+  </data>
+  <data name="VillainVision" xml:space="preserve">
+    <value>Villain: Vision</value>
+  </data>
+  <data name="VillainApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Villain: Does sabotage effect their vision</value>
+  </data>
+  <data name="VillainHasOtherKillCool" xml:space="preserve">
+    <value>Villain: Does have a modified Kill Cooldown</value>
+  </data>
+  <data name="VillainKillCoolDown" xml:space="preserve">
+    <value>Villain: Kill Cooldown</value>
+  </data>
+  <data name="VillainHasOtherKillRange" xml:space="preserve">
+    <value>Villain: Does have a modified Kill Distance</value>
+  </data>
+  <data name="VillainKillRange" xml:space="preserve">
+    <value>Villain: Kill Distance</value>
+  </data>
+  <data name="VillainAbilityCoolTime" xml:space="preserve">
+    <value>Villain: "SEARCH" : Ability Cooldown</value>
+  </data>
+  <data name="VillainAbilityActiveTime" xml:space="preserve">
+    <value>Villain: "SEARCH" : Ability Duration</value>
+  </data>
+  <data name="VillainVigilanteSeeTime" xml:space="preserve">
+    <value>Villain: Duration of arrows showing Vigilante\nafter they use their ability</value>
+  </data>
+  <data name="VigilanteHasOtherVision" xml:space="preserve">
+    <value>Vigilante: Has special vision settings</value>
+  </data>
+  <data name="VigilanteVision" xml:space="preserve">
+    <value>Vigilante: Vision</value>
+  </data>
+  <data name="VigilanteApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Vigilante: Does sabotage effect their vision</value>
+  </data>
+  <data name="VigilanteAbilityCoolTime" xml:space="preserve">
+    <value>Vigilante: "SOS" : Ability Cooldown </value>
+  </data>
+  <data name="VigilanteAbilityActiveTime" xml:space="preserve">
+    <value>Vigilante: "SOS" : Ability Duration</value>
+  </data>
+  <data name="VigilanteAbilityCount" xml:space="preserve">
+    <value>Vigilante: "SOS" : Ability Charges</value>
+  </data>
+  <data name="VigilanteRange" xml:space="preserve">
+    <value>Vigilante: "SOS" : Ability Range</value>
+  </data>
+  <data name="HeroIntroDescription" xml:space="preserve">
+    <value>It's fine now, because I AM HERE!</value>
+  </data>
+  <data name="HeroShortDescription" xml:space="preserve">
+    <value>KILL the evil and save the ship</value>
+  </data>
+  <data name="HeroFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the Quirk to bring peace
+ "ONE FOR ALL" : The quirk of yours to defeat the evil.
+   - Gradually stocks power after player eliminations.
+********************************
+   LEVEL 1 - Blocks KILLs from Impostors.
+      - Unlocked when one player is dead.
+      - Does not nullify NEUTRAL KILLs and other player-eliminating 
+abilities (i.e. Shooter's "SHOOT", Missionary's "PROPAGATE")
+    LEVEL 2 - Gains the KILL ability
+      - Unlocked when a set amount of players are dead
+    LEVEL 3 - Gains the "SEARCH" ability
+      - Unlocked when a set amount of players are dead
+********************************
+ "SEARCH" : Shows the positions of every player for a while
+ *When KILLing or being KILLed by the Villain, both the Hero and 
+the Villain will die.</value>
+  </data>
+  <data name="VillainIntroDescription" xml:space="preserve">
+    <value>The GREATEST DEMON IMPOSTOR of all</value>
+  </data>
+  <data name="VillainShortDescription" xml:space="preserve">
+    <value>Make the ship suffur in despair!</value>
+  </data>
+  <data name="VillainFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the Quirk to bring calamity
+ Your KILL will not be nullified by shields or barriers (i.e. Guardian 
+angels, Time Masters, Body guards)
+ You will NOT be killed by a CREWMATE role (i.e. Sheriff, Fencer)
+ "SEARCH" : Shows the positions of every player for a while
+ *When KILLing or being KILLed by the Hero, both the Hero and the 
+Villain will die.</value>
+  </data>
+  <data name="VigilanteIntroDescription" xml:space="preserve">
+    <value>We are the NEW WORLD ORDER</value>
+  </data>
+  <data name="VigilanteShortDescription" xml:space="preserve">
+    <value>Show what should be "right" and "bad"</value>
+  </data>
+  <data name="VigilanteNewHeroForTheShipShortDescription" xml:space="preserve">
+    <value>SAVE the people who need to be SAVED</value>
+  </data>
+  <data name="VigilanteNewVillainForTheShipShortDescription" xml:space="preserve">
+    <value>Be the proper EVIL to be EVIL</value>
+  </data>
+  <data name="VigilanteNewEnemyNeutralForTheShipShortDescription" xml:space="preserve">
+    <value>End this ship without the HERO and VILLAIN</value>
+  </data>
+  <data name="VigilanteFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role with the Quirk to achive your mission.
+Your mission depends on what status you are now.
+
+ Your ROLE status: You're a Vigilante!
+   - Both of the Hero and the Villain is alive
+   - Or both of them are dead and you have achieved MISSION 2.
+   - While you're at this status, you won't be KILLed from the Hero 
+and the Villain.
+
+ *MISSION 1: Eliminate all players except the Hero, the Villain, the 
+Vigirante
+ *MISSION 2: Eliminate the Hero and the Villain by letting them 
+KILL each other
+   - Achieving this mission lets you to win with any kind of teams
+ *Status may change after player elimination.
+
+ "SOS" : Scream and cry for help!
+   - Lets the Hero know the position of the targeted player
+   - Lets the Villain know the position of yourself/the Vigilante</value>
+  </data>
+  <data name="VigilanteCrewDescription" xml:space="preserve">
+    <value> A NEUTRAL role with the Quirk to achive your mission.
+ Your mission depends on what status you are now.
+
+ Your ROLE status: You're the New Hero!
+   - The Hero is now eliminated.
+   - While you're at this status, you won't be KILLed from the Hero 
+and the Villain.
+ 
+ *MISSION 1: Eliminate all players except the Hero, the Villain, the
+ Vigirante
+ *MISSION 2: Eliminate the Hero and the Villain by letting them 
+KILL each other
+ *MISSION EX: Achive Crewmate victory
+
+ "SOS" : Scream and cry for help!
+   - Lets the Hero know the position of the targeted player
+   - Lets the Villain know the position of yourself/the Vigilante</value>
+  </data>
+  <data name="VigilanteImpDescription" xml:space="preserve">
+    <value> A NEUTRAL role with the Quirk to achive your mission.
+ Your mission depends on what status you are now.
+
+ Your ROLE status: You're the New Villain!
+   - The Villain is now eliminated.
+   - Now you can use Sabotages and VENTs
+   - While you're at this status, you won't be KILLed from the Hero 
+and the Villain.
+ *MISSION 1: Eliminate all players except the Hero, the Villain, the 
+Vigirante
+ *MISSION 2: Eliminate the Hero and the Villain by letting them 
+KILL each other
+ *MISSION EX: Achive Impostor victory.
+
+ "SOS" : Scream and cry for help!
+   - Lets the Hero know the position of the targeted player
+   - Lets the Villain know the position of yourself/the Vigilante</value>
+  </data>
+  <data name="VigilanteNeutDescription" xml:space="preserve">
+    <value>A NEUTRAL role with the Quirk to achive your mission.
+Your mission depends on what status you are now.
+
+Your ROLE status: You're the New Neutral!
+ - The Hero or the Villain is now gone (probably by some role-changing abilities)
+ - While you're at this status, you CAN be KILLed from any player.
+*MISSION 1: Eliminate all players except the Hero, the Villain, the Vigirante
+*MISSION 2: Eliminate the Hero and the Villain by letting them KILL each other
+*MISSION EX: Eliminate all players!
+
+"SOS" : Scream and cry for help!
+ - Lets the Hero know the position of the targeted player
+ - Lets the Villain know the position of yourself/the Vigilante</value>
+  </data>
+  <data name="search" xml:space="preserve">
+    <value>SEARCH</value>
+  </data>
+  <data name="call" xml:space="preserve">
+    <value>SOS</value>
+  </data>
+  <data name="DetectiveOffice" xml:space="preserve">
+    <value>&lt;color=#9E5C46&gt;Detective&lt;/color&gt;&amp;amp;&lt;color=#008A99&gt;Assistant&lt;/color&gt;</value>
+  </data>
+  <data name="Detective" xml:space="preserve">
+    <value>Detective</value>
+  </data>
+  <data name="Assistant" xml:space="preserve">
+    <value>Assistant</value>
+  </data>
+  <data name="DetectiveApprentice" xml:space="preserve">
+    <value>Apperentice</value>
+  </data>
+  <data name="DetectiveHasOtherVision" xml:space="preserve">
+    <value>Detective: Has special vision settings</value>
+  </data>
+  <data name="DetectiveVision" xml:space="preserve">
+    <value>Detective: Vision</value>
+  </data>
+  <data name="DetectiveApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Detective: Does sabotage effect their vision</value>
+  </data>
+  <data name="DetectiveSearchRange" xml:space="preserve">
+    <value>Detective: "INVESTIGATE" : Ability Range</value>
+  </data>
+  <data name="DetectiveSearchTime" xml:space="preserve">
+    <value>Detective: "INVESTIGATE" : Ability Duration</value>
+  </data>
+  <data name="DetectiveSearchAssistantTime" xml:space="preserve">
+    <value>Detective: "INVESTIGATE" : Ability Duration when\nsupported by Assistant</value>
+  </data>
+  <data name="DetectiveTextShowTime" xml:space="preserve">
+    <value>Detective: Duration of Investigation stats</value>
+  </data>
+  <data name="AssistantHasOtherVision" xml:space="preserve">
+    <value>Assistant: Has special vision settings</value>
+  </data>
+  <data name="AssistantVision" xml:space="preserve">
+    <value>Assistant: Vision</value>
+  </data>
+  <data name="AssistantApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Assistant: Does sabotage effect their vision</value>
+  </data>
+  <data name="DetectiveApprenticeHasOtherVision" xml:space="preserve">
+    <value>Apperentice: Has special vision settings</value>
+  </data>
+  <data name="DetectiveApprenticeVision" xml:space="preserve">
+    <value>Apperentice: Vision</value>
+  </data>
+  <data name="DetectiveApprenticeApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Apperentice: Does sabotage effect their vision</value>
+  </data>
+  <data name="DetectiveApprenticeAbilityCount" xml:space="preserve">
+    <value>Apperentice: "MEETING" : Ability Charges</value>
+  </data>
+  <data name="DetectiveApprenticeAbilityCoolTime" xml:space="preserve">
+    <value>Apperentice: "MEETING" : Ability Cooldown</value>
+  </data>
+  <data name="DetectiveApprenticeAbilityActiveTime" xml:space="preserve">
+    <value>Apperentice: "MEETING" : Ability Duration</value>
+  </data>
+  <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
+    <value>Apperentice: "MEETING" : Does not count as\nplayer's emergency meeting</value>
+  </data>
+  <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
+    <value>Does not count up to</value>
+  </data>
+  <data name="DetectiveIntroDescription" xml:space="preserve">
+    <value>Always determining the one truth!</value>
+  </data>
+  <data name="DetectiveShortDescription" xml:space="preserve">
+    <value>Investigate the scene and solve the case</value>
+  </data>
+  <data name="DetectiveFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to investigate clues.
+ "INVESTIGATE" : Find clues left behind at the site!
+   - After a dead body is reported, the reported body's position is 
+assigned as a "Crime site".
+   - The Crime site can be investigated by standing nearby for a 
+while. Moving will stop the investigation.
+   - Crime sites of bodies reported by an "Assistant" can be 
+Investigated faster than normal.
+   - The Crime site can be investigated for only one turn (before the 
+next meeting).
+   - Detectives can know where the Crime site is by following an 
+arrow.
+ The investigation can lead to clues like: 
+    - 1: The date and time of the crime (UTC)
+    - 2: How many seconds did it take for the body to be reported
+    - 3: The team who did the crime
+    - 4: The Role who did the crime
+
+ On the Assistant's death, your Role will switch to an 
+"Apperentice".</value>
+  </data>
+  <data name="AssistantIntroDescription" xml:space="preserve">
+    <value>Detective, let me help you too!</value>
+  </data>
+  <data name="AssistantShortDescription" xml:space="preserve">
+    <value>Help the detective to solve the case</value>
+  </data>
+  <data name="AssistantFullDescription" xml:space="preserve">
+    <value> A CREWMATE role with the ability to help your Detective!
+ You can know when the crime happened by reporting dead 
+bodies.
+   - Information shows up on meeting chats (UTC)
+ On the Detective's death, your Role will switch to an 
+"Apperentice".</value>
+  </data>
+  <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
+    <value>You're the only "detective" left on the ship</value>
+  </data>
+  <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
+    <value> A CREWMATE role who failed to guard their sidekick.
+ You can know when the crime happened by reporting dead 
+bodies.
+   - Information shows up on meeting chats (UTC)
+ "MEETING" : Lets you access the Emergency Meeting Button
+   - Can be accessed during the ability duration
+   - Does not recharge Meeting counts; Can push the button only if 
+you have not used one.
+   - When the corresponding option is on, you can push the button 
+with no costs charged (Does only nullifies costs; Doesn't able you
+to push the button after the cost reaches 0).</value>
+  </data>
+  <data name="FindKillTime" xml:space="preserve">
+    <value>The Victim seems to be killed at "{0}"(UTC)…</value>
+  </data>
+  <data name="FindReportTime" xml:space="preserve">
+    <value>Looks like it took "{0} seconds" to be found…</value>
+  </data>
+  <data name="FindTeam" xml:space="preserve">
+    <value>Looks like "{0}" did the whole thing!</value>
+  </data>
+  <data name="FindRole" xml:space="preserve">
+    <value>The marks suggest that they were killed by a "{0}"</value>
+  </data>
+  <data name="searchStrBase" xml:space="preserve">
+    <value>Investigating… completes in {0}s</value>
+  </data>
+  <data name="reportedDeadBodyInfo" xml:space="preserve">
+    <value>The corpse seems to be made by "{0}"(UTC)…</value>
+  </data>
+  <data name="emergencyMeeting" xml:space="preserve">
+    <value>MEETING</value>
+  </data>
+  <data name="Lover" xml:space="preserve">
+    <value>Lovers</value>
+  </data>
+  <data name="LoverIsNeutral" xml:space="preserve">
+    <value>Are they a NEUTRAL</value>
+  </data>
+  <data name="LoverBecomNeutral" xml:space="preserve">
+    <value>Can they become a NEUTRAL</value>
+  </data>
+  <data name="LoverDethWhenUnderAlive" xml:space="preserve">
+    <value>Number of players to trigger suicide</value>
+  </data>
+  <data name="LoverHasOtherKillCool" xml:space="preserve">
+    <value>Does have a modified Kill Cooldown</value>
+  </data>
+  <data name="LoverKillCoolDown" xml:space="preserve">
+    <value>Kill Cooldown</value>
+  </data>
+  <data name="LoverHasOtherKillRange" xml:space="preserve">
+    <value>Does have a modified Kill Distance</value>
+  </data>
+  <data name="LoverKillRange" xml:space="preserve">
+    <value>Kill Distance</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverHasOtherVision" xml:space="preserve">
+    <value>As NEUTRAL: Has special vision settings</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverVision" xml:space="preserve">
+    <value>As NEUTRAL: Vision</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>As NEUTRAL: Does sabotage effect their vision</value>
+  </data>
+  <data name="LoverBecomeNeutralLoverCanUseVent" xml:space="preserve">
+    <value>Can use VENT</value>
+  </data>
+  <data name="LoverIntroDescription" xml:space="preserve">
+    <value>Rendezvous with Love</value>
+  </data>
+  <data name="LoverShortDescription" xml:space="preserve">
+    <value>SURVIVE with your SWEETHEART</value>
+  </data>
+  <data name="LoverFullDescription" xml:space="preserve">
+    <value> An CREWMATE role with a crush to survive with.
+ You can choose any mission from below to achive victory:
+ 
+ MISSION 1: Achive Crewmate victory.
+   - If your crush is not a Crewmate, you can win but your crush 
+will lose the game.
+  MISSION 2: All players of the pair have finshed tasks and the pair 
+halves the number remaining players
+   - Can be achieved only if the pair has a non-Crewmate player
+ MISSION 3: Achieve all of below:
+  - Halve the remaining players by your team
+  - No Impostors are remaining
+  - A player in the pair is not a Crewmate
+  - The remaining players are all Crewmates, or on the same team 
+of any player of the pair
+
+When players get eliminated from the pair, the remaining players 
+may suicide or change to a NEUTRAL. This threshold can be 
+changed by configurations.</value>
+  </data>
+  <data name="LoverImposterFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with a crush to survive with.
+ You can choose any mission from below to achive victory:
+
+ MISSION 1: Achive Impostor victory.
+   - If your crush is not a Impostor, you can win but your crush will 
+lose the game.
+ MISSION 2: All players of the pair have finshed tasks and the pair 
+halves the number remaining players
+   - Can be achieved only if the pair is made from players from two 
+or more different teams
+ MISSION 3: Achieve all of below:
+   - Halve the remaining players by your team
+   - A player in the pair is not an Impostor
+   - The remaining players are all Crewmates or Impostors
+
+When players get eliminated from the pair, the remaining players 
+may suicide or change to a NEUTRAL. This threshold can be 
+changed by configurations.</value>
+  </data>
+  <data name="LoverNeutralFullDescription" xml:space="preserve">
+    <value> An NEUTRAL role with a crush to survive with.
+ You can choose any mission from below to achive victory:
+  MISSION 1: Halve the remaining players with your pair and 
+eliminate all other IMPOSTORS / NEUTRALS with abilities to 
+eliminate players (i.e. KILL, PROPAGATE).
+  MISSION 2: Halve the remaining players with your pair and each 
+player of the pair completes all of their tasks.
+When players get eliminated from the pair, the remaining players 
+may suicide. This threshold can be changed by configurations.</value>
+  </data>
+  <data name="LoverNeutralKillerFullDescription" xml:space="preserve">
+    <value> An NEUTRAL role raging in vengance for their late crush.
+ MISSION: Eliminate them all!</value>
+  </data>
+  <data name="LoverKillerShortDescription" xml:space="preserve">
+    <value>KILL them all in revenge of them</value>
+  </data>
+  <data name="curLover" xml:space="preserve">
+    <value>Sweetheart</value>
+  </data>
+  <data name="LoverIntoPlus" xml:space="preserve">
+    <value> is your sweetheart</value>
+  </data>
+  <data name="Supporter" xml:space="preserve">
+    <value>Supporter</value>
+  </data>
+  <data name="EvilSupporter" xml:space="preserve">
+    <value>Evil Supporter</value>
+  </data>
+  <data name="NiceSupporter" xml:space="preserve">
+    <value>Nice Supporter</value>
+  </data>
+  <data name="SupporterIntroDescription" xml:space="preserve">
+    <value>{0} is a {1}, lead him to victory</value>
+  </data>
+  <data name="SupporterShortDescription" xml:space="preserve">
+    <value>Support your friend and win the game</value>
+  </data>
+  <data name="SupporterFullDescription" xml:space="preserve">
+    <value> A CREWMATE role knowing somebody's role to support.
+ Randomly selects a Crewmate and lets you know the role.
+ When a Merlin is assigned, one of the Merlins will be chosen to be 
+supported.
+
+ Now supporting:
+   - Player: "{0}"
+   - Role: "{1}"</value>
+  </data>
+  <data name="SupporterImposterFullDescription" xml:space="preserve">
+    <value> A IMPOSTOR role knowing somebody's role to support.
+ Randomly selects an Impostor and lets you know the role.
+  When an Assasin is assigned, one of the Assasins will be chosen 
+to be supported.
+
+ Now supporting:
+   - Player: "{0}"
+   - Role: "{1}"</value>
+  </data>
+  <data name="Sharer" xml:space="preserve">
+    <value>Shares</value>
+  </data>
+  <data name="SharerSharerTellKill" xml:space="preserve">
+    <value>Does tell other Shares' Kills</value>
+  </data>
+  <data name="SharerIntroDescription" xml:space="preserve">
+    <value>There's no words to make it worse!</value>
+  </data>
+  <data name="SharerShortDescription" xml:space="preserve">
+    <value>Cooperate with your buddy</value>
+  </data>
+  <data name="SharerFullDescription" xml:space="preserve">
+    <value> An IMPOSTOR role with the ability to cooperate with your buddy
+ You can know where your buddy is with an arrow. When the 
+corresponding config is on, you can know the KILL of your buddy.
+ When your role changes by some abilities (i.e. Jackal's 
+"SIDEKICK"), you will lose this ability but your buddy will not, being 
+able to know your position and KILL.</value>
+  </data>
+  <data name="curSharer" xml:space="preserve">
+    <value>Your Shares</value>
+  </data>
+  <data name="SharerIntoPlus" xml:space="preserve">
+    <value> is your buddy</value>
+  </data>
+  <data name="sharerKill" xml:space="preserve">
+    <value>Shares: {0} KILLed someone</value>
+  </data>
+  <data name="Traitor" xml:space="preserve">
+    <value>Traitor</value>
+  </data>
+  <data name="TraitorAbilityCoolTime" xml:space="preserve">
+    <value>"CRACKING" : Ability Cooldown</value>
+  </data>
+  <data name="TraitorAbilityActiveTime" xml:space="preserve">
+    <value>"CRACKING" : Ability Duration</value>
+  </data>
+  <data name="TraitorIntroDescription" xml:space="preserve">
+    <value>Was a "{0}", now a Traitor</value>
+  </data>
+  <data name="TraitorShortDescription" xml:space="preserve">
+    <value>KILL them all as a Traitor of CREWMATE</value>
+  </data>
+  <data name="TraitorFullDescription" xml:space="preserve">
+    <value>*THIS ROLE OCCUPIES 1 ASSIGNING SLOT FROM BOTH 
+CREWMATES AND NEUTRALS PER PLAYER. BE CARFUL WHEN 
+CONFIGURING*
+
+ A NEUTRAL role who is a traitor of the Crewmates.
+
+ MISSION: Halve the remaining players with your own team, and 
+eliminate all other IMPOSTORS / NEUTRALS with abilities to 
+eliminate players (i.e. KILL, PROPAGATE).
+
+ On game start, this role chooses 1 role assigned in the game and turns into a Traitor. 
+ You are a Traitor who was once a "{0}". Use this information to deceive Crewmates!
+ "CRACKING" : Can access info terminals remotely!
+   - Can be used after at least one KILL.
+   - Cycles between ADMIN, SECURITY, VITALS per use.
+   - Cannot use a terminal when it is disabled or not present in the 
+map (i.e. VITALS in the Skeld and Mira-HQ).</value>
+  </data>
+  <data name="traitorCracking" xml:space="preserve">
+    <value>CRACKING</value>
+  </data>
+  <data name="Kids" xml:space="preserve">
+    <value>Delinquent</value>
+  </data>
+  <data name="Delinquent" xml:space="preserve">
+    <value>Delinquent</value>
+  </data>
+  <data name="Wisp" xml:space="preserve">
+    <value>Wisp</value>
+  </data>
+  <data name="DelinquentHasOtherVision" xml:space="preserve">
+    <value>Has special vision settings</value>
+  </data>
+  <data name="DelinquentVision" xml:space="preserve">
+    <value>Vision</value>
+  </data>
+  <data name="DelinquentApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Does sabotage effect their vision</value>
+  </data>
+  <data name="DelinquentRange" xml:space="preserve">
+    <value>"DETONATE" : Ability Distance</value>
+  </data>
+  <data name="DelinquentAbilityCoolTime" xml:space="preserve">
+    <value>"DETONATE/GRAFFITI" : Ability cooldown</value>
+  </data>
+  <data name="DelinquentAbilityCount" xml:space="preserve">
+    <value>"DETONATE" : Graffities needed to unlock Ability</value>
+  </data>
+  <data name="WispTorchAbilityNum" xml:space="preserve">
+    <value>"TORCH" : Default Ability Charges</value>
+  </data>
+  <data name="WispWinNum" xml:space="preserve">
+    <value>"TORCH" : Players affected to achive victory</value>
+  </data>
+  <data name="WispTorchNum" xml:space="preserve">
+    <value>"TORCH" : Ability Charges</value>
+  </data>
+  <data name="WispTorchRange" xml:space="preserve">
+    <value>"TORCH" : Range of light for players alive </value>
+  </data>
+  <data name="WispTorchActiveTime" xml:space="preserve">
+    <value>"TORCH" : Timer to extinguish torches</value>
+  </data>
+  <data name="WispBlackOutTime" xml:space="preserve">
+    <value>"BLACKOUT" : Ability Duration</value>
+  </data>
+  <data name="WispAbilityCoolTime" xml:space="preserve">
+    <value>"BLACKOUT" : Ability Cooldown</value>
+  </data>
+  <data name="WispIsReportAbility" xml:space="preserve">
+    <value>"BLACKOUT" : Does alert ability usage on meetings</value>
+  </data>
+  <data name="DelinquentIntroDescription" xml:space="preserve">
+    <value>Life is but a dream</value>
+  </data>
+  <data name="DelinquentShortDescription" xml:space="preserve">
+    <value>Mischief by GRAFFITI and DETONATE!</value>
+  </data>
+  <data name="DelinquentFullDescription" xml:space="preserve">
+    <value> A NEUTRAL role with a unique mission to achive.
+
+ MISSION 1: Eliminate all players by using "DETONATE"
+ MISSION 2: Achive victory as a "Whisp" (Ghost role)
+When eliminated, you will be assigned as a "Whisp" for a Ghost role.
+
+ "GRAFFITI" : Puts strange marks at your position.
+   - Marks can be seen by every player.
+    *The shape of the marks will not sync across players. Don't use 
+it as a clue.
+   - The more you put a mark, the more you can use the "TORCH" 
+ability after becoming a Whisp.
+   - Changes into "DETONATE" after using all charges.
+ "DETONATE" : Detonates yourself and KILLs all players nearby.
+   - Can be used after using all charges of "GRAFFITI".</value>
+  </data>
+  <data name="scribble" xml:space="preserve">
+    <value>GRAFFITI</value>
+  </data>
+  <data name="selfBomb" xml:space="preserve">
+    <value>DETONATE</value>
+  </data>
+  <data name="WispShortDescription" xml:space="preserve">
+    <value>BLACKOUT their lights and achive victory</value>
+  </data>
+  <data name="WispFullDescription" xml:space="preserve">
+    <value> A NEUTRAL GHOST who was a Delinquent.
+
+ MISSION : BLACKOUT more than {0} player's sights
+ 
+ Achieving this mission lets you win when the game is over; this does not end the game.
+
+ {1} players have been taken their sight!
+
+ "TORCH" : Places a torch at the spawning point of the map.
+   - Selects one spawning point randomly when there are multiple.
+   - Living players can pick up a piece of torch by USEing to nullify 
+the BLACKOUT
+   - Deletes itself after a set amount of time, and then triggers 
+BLACKOUT
+ "BLACKOUT" : Force-chages the player vision to the range of 
+Lights out Sabotage for a while
+   - Can be nullified when a crew have picked up a piece of torch
+</value>
+  </data>
+  <data name="WispSetTorchButton" xml:space="preserve">
+    <value>TORCH</value>
+  </data>
+  <data name="WispSetTorch" xml:space="preserve">
+    <value>A Wisp did a trick on lights!</value>
+  </data>
+  <data name="scribeText" xml:space="preserve">
+    <value>{0} times for DETONATE</value>
+  </data>
+  <data name="Buddy" xml:space="preserve">
+    <value>Buddies</value>
+  </data>
+  <data name="BuddyAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to reveal role</value>
+  </data>
+  <data name="BuddyIntroDescription" xml:space="preserve">
+    <value>We're the BEST BUDDIES! \n{0} is your buddy</value>
+  </data>
+  <data name="BuddyShortDescription" xml:space="preserve">
+    <value>Believe your buddy and achive victory!</value>
+  </data>
+  <data name="BuddyFullDescription" xml:space="preserve">
+    <value> A CREWMATE role who are paired up!
+ Your buddy: {0}
+ Does not let you know your buddy's status/role changing (i.e. 
+Jackal's "SIDEKICK")</value>
+  </data>
+  <data name="Guesser" xml:space="preserve">
+    <value>Guesser</value>
+  </data>
+  <data name="NiceGuesser" xml:space="preserve">
+    <value>Nice Guesser</value>
+  </data>
+  <data name="EvilGuesser" xml:space="preserve">
+    <value>Evil Guesser</value>
+  </data>
+  <data name="GuesserCanCallMeeting" xml:space="preserve">
+    <value>Can call an Emergency meeting</value>
+  </data>
+  <data name="GuesserGuessNum" xml:space="preserve">
+    <value>"GUESS" : Ability Charges</value>
+  </data>
+  <data name="GuesserMaxGuessNumWhenMeeting" xml:space="preserve">
+    <value>"GUESS" : Ability Charges per meeting</value>
+  </data>
+  <data name="GuesserCanGuessNoneRole" xml:space="preserve">
+    <value>"GUESS" : Can guess non-role Crews/Impostors</value>
+  </data>
+  <data name="GuesserGuessNoneRoleMode" xml:space="preserve">
+    <value>"GUESS" : Non-role Crews/Impostors guessing mode</value>
+  </data>
+  <data name="BothGuesser" xml:space="preserve">
+    <value>BOTH Nice and Evil</value>
+  </data>
+  <data name="NiceGuesserOnly" xml:space="preserve">
+    <value>Only Nice</value>
+  </data>
+  <data name="EvilGuesserOnly" xml:space="preserve">
+    <value>Only Evil</value>
+  </data>
+  <data name="GuesserIntroDescription" xml:space="preserve">
+    <value>GUESS and FIRE!</value>
+  </data>
+  <data name="GuesserShortDescription" xml:space="preserve">
+    <value>GUESS other players' role and SHOOT!</value>
+  </data>
+  <data name="GuesserFullDescription" xml:space="preserve">
+    <value> A role who can KILL a player by guessing a role during meetings!
+ "GUESS" : Guess a role and fires a bullet
+   - If the guess is correct, the fired player will be KILLed
+   - If the guess is not correct, the Guesser themselves will be 
+KILLed
+    *Some situations will be count as auto-fail and KILLs the
+ Guesser:
+   - When they targeted a Merlin, an Assasin, or a Villain
+   - When the targeted player was guard by a Bodyguard
+   - When they guessed a role which turned into something else by 
+abilities or role revelation</value>
+  </data>
+  <data name="guesserUiTitle" xml:space="preserve">
+    <value>GUESS {0}'s ROLE!</value>
+  </data>
+  <data name="guesserUiInfo" xml:space="preserve">
+    <value>BULLETS: {0}/{1} Remaining</value>
+  </data>
+  <data name="guesserConfirmMenu" xml:space="preserve">
+    <value>Guessing {0} as "{1}". Confirm?</value>
+  </data>
+  <data name="Mover" xml:space="preserve">
+    <value>Mover</value>
+  </data>
+  <data name="NiceMover" xml:space="preserve">
+    <value>Nice Mover</value>
+  </data>
+  <data name="EvilMover" xml:space="preserve">
+    <value>Evil Mover</value>
+  </data>
+  <data name="MoverAbilityCoolTime" xml:space="preserve">
+    <value>"MOVE" : Ability Cooldown</value>
+  </data>
+  <data name="MoverAbilityActiveTime" xml:space="preserve">
+    <value>"MOVE" : Ability Duration</value>
+  </data>
+  <data name="MoverAbilityCount" xml:space="preserve">
+    <value>"MOVE" : Ability Charges</value>
+  </data>
+  <data name="MoverIntroDescription" xml:space="preserve">
+    <value>[301]: Moving permanently</value>
+  </data>
+  <data name="MoverShortDescription" xml:space="preserve">
+    <value>MOVE tasks, VENTs, and the game itself!</value>
+  </data>
+  <data name="MoverFullDescription" xml:space="preserve">
+    <value>A role with the ability to move map objects.
+"MOVE" : Literally moves objects
+ - Can be used when movable objects are nearby
+ - Cannot use abilities (USE/KILL etc.) while Moving
+ - Drops objects on using VENTS/Ladders etc.</value>
+  </data>
+  <data name="Moving" xml:space="preserve">
+    <value>MOVE</value>
+  </data>
+  <data name="Accelerator" xml:space="preserve">
+    <value>Accelerator</value>
+  </data>
+  <data name="NiceAccelerator" xml:space="preserve">
+    <value>Nice Accelerator</value>
+  </data>
+  <data name="EvilAccelerator" xml:space="preserve">
+    <value>Evil Accelerator</value>
+  </data>
+  <data name="AcceleratorAbilityCoolTime" xml:space="preserve">
+    <value>"PANEL" : Ability Cooldown</value>
+  </data>
+  <data name="AcceleratorAbilityActiveTime" xml:space="preserve">
+    <value>"PANEL" : Ability Duration </value>
+  </data>
+  <data name="AcceleratorAbilityCount" xml:space="preserve">
+    <value>"PANEL" : Ability Charges </value>
+  </data>
+  <data name="AcceleratorSpeed" xml:space="preserve">
+    <value>"PANEL" : Acceleration </value>
+  </data>
+  <data name="AcceleratorUseOtherPlayer" xml:space="preserve">
+    <value>"PANEL" : Can accelerate other players </value>
+  </data>
+  <data name="AcceleratorIntroDescription" xml:space="preserve">
+    <value>The path ahead is only a "ONE-WAY ROAD"!!</value>
+  </data>
+  <data name="AcceleratorShortDescription" xml:space="preserve">
+    <value>Set Acceleration Panels to move faster</value>
+  </data>
+  <data name="AcceleratorFullDescription" xml:space="preserve">
+    <value>An CREWMATE / IMPOSTOR role with the ability to place Acceleration Panels.
+
+"PANEL" : This way…
+ - Places "Acceleration Panels" while activated
+ - Acceleration Panels buffs the player movement in a direction, which makes them forcefully moved in a direction</value>
+  </data>
+  <data name="AccelerateSet" xml:space="preserve">
+    <value>PANEL</value>
+  </data>
+</root>

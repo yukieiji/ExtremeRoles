@@ -130,9 +130,9 @@ public abstract class GhostRoleBase
     public bool IsVanillaRole() => this.Id == ExtremeGhostRoleId.VanillaRole;
 
     public virtual string GetColoredRoleName() => Design.ColoedString(
-        this.Color, Translation.GetString(this.Name));
+        this.Color, Tr.GetString(this.Name));
 
-    public virtual string GetFullDescription() => Translation.GetString(
+    public virtual string GetFullDescription() => Tr.GetString(
        $"{this.Id}FullDescription");
 
     public virtual string GetImportantText() =>
@@ -141,8 +141,8 @@ public abstract class GhostRoleBase
             string.Format("{0}: {1}",
                 Design.ColoedString(
                     this.Color,
-                    Translation.GetString(this.Name)),
-                Translation.GetString(
+                    Tr.GetString(this.Name)),
+                Tr.GetString(
                     $"{this.Id}ShortDescription")));
 
     public virtual Color GetTargetRoleSeeColor(

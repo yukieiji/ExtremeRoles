@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>11.1.0.2</Version>
-    <!--<VersionPrefix>11.1.0</VersionPrefix>-->
+    <!--<Version>11.1.1.0</Version>-->
+    <VersionPrefix>11.1.1</VersionPrefix>
     <VersionSuffix>Invitation</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
@@ -15,6 +15,7 @@
     <!-- MSBuildの.NET8対応に伴って勝手にバージョンにハッシュ値入れられてBepInExのロード不具合が出たため、明示的に無効化しておく -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <NeutralLanguage>ja-JP</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,11 +45,14 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="Translation\resx\*.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
-    <EmbeddedResource Include="Resources\**\*.asset" />
     <EmbeddedResource Include="Resources\**\*.png" />
-	  <EmbeddedResource Include="Resources\JsonData\*.json" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />
+    <EmbeddedResource Include="Resources\JsonData\*.json" />
   </ItemGroup>
 
   <!-- パブリックベータモード用 -->
@@ -57,17 +61,22 @@
     <Compile Include="..\ExtremeRoles.Beta\FeedBackSystem.cs" Link="Beta\FeedBackSystem.cs" />
     <Compile Include="..\ExtremeRoles.Beta\RaiseHandSystemToggle.cs" Link="Beta\RaiseHandSystemToggle.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\ExtremeRoles.Beta\Resources\JsonData\TextRevamp.json" LogicalName="ExtremeRoles.Beta.Resources.JsonData.TextRevamp.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ExtremeRoles.Generator\ExtremeRoles.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="python $(SolutionDir)\makelanguagejson.py" />
     <Exec Command="robocopy $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources /XO &amp; if errorlevel 8 (exit 1) else (exit 0)" />
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\**\*.asset" />
+      <EmbeddedResource Remove="Translation\resx\*.resx" />
+    </ItemGroup>
   </Target>
 
   <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">

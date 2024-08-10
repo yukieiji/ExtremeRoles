@@ -54,12 +54,13 @@ public sealed class Psychic :
 		public void AddToStringBuilder(StringBuilder builder, bool includeRoleId)
 		{
 			builder.AppendLine(
-				string.Format(
-					Translation.GetString("PsychicPsychicStrForAliveNum"),
+				Tr.GetString(
+					"PsychicPsychicStrForAliveNum",
 					this.countNum));
+
 			if (includeRoleId && this.ids.Count != 0)
 			{
-				builder.AppendLine(Translation.GetString("PsychicPsychicStrAliveRole"));
+				builder.AppendLine(Tr.GetString("PsychicPsychicStrAliveRole"));
 				foreach (var roleId in this.ids)
 				{
 					var castedRoleId = (RoleTypes)roleId;
@@ -68,7 +69,7 @@ public sealed class Psychic :
 						castedRoleId.ToString() : roleId.ToString();
 
 					builder.AppendLine(
-						Translation.GetString(transKey));
+						Tr.GetString(transKey));
 				}
 			}
 		}
@@ -158,7 +159,7 @@ public sealed class Psychic :
 			var builder = new StringBuilder();
 			foreach (var (team, counter) in this.teamCount)
 			{
-				builder.Append($"{Translation.GetString("PsychicPsychicStrTeam")}{Translation.GetString(team.ToString())}");
+				builder.Append($"{Tr.GetString("PsychicPsychicStrTeam")}{Tr.GetString(team.ToString())}");
 				counter.AddToStringBuilder(builder, includeRoleId);
 			}
 			return builder.ToString();
@@ -233,7 +234,7 @@ public sealed class Psychic :
 	public void CreateAbility()
     {
         this.CreateActivatingAbilityCountButton(
-			Translation.GetString("PsychicPsychic"),
+			Tr.GetString("PsychicPsychic"),
 			Resources.UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.PsychicPsychic),
 			CheckAbility,
@@ -257,7 +258,7 @@ public sealed class Psychic :
 		this.ForceAbilityOff();
 		this.counters?.Add(new AlivePlayerCounter());
 
-		this.popUpper?.AddText(Translation.GetString("PsychicPsychicEnd"));
+		this.popUpper?.AddText(Tr.GetString("PsychicPsychicEnd"));
 	}
 
 	public bool CheckAbility()
@@ -267,7 +268,7 @@ public sealed class Psychic :
 	public bool UseAbility()
 	{
 		this.startPos = PlayerControl.LocalPlayer.GetTruePosition();
-		this.popUpper?.AddText(Translation.GetString("PsychicPsychicStart"));
+		this.popUpper?.AddText(Tr.GetString("PsychicPsychicStart"));
 
 		return true;
 	}
@@ -344,19 +345,19 @@ public sealed class Psychic :
         else
         {
             return Design.ColoedString(
-                Palette.White, Translation.GetString(RoleTypes.Crewmate.ToString()));
+                Palette.White, Tr.GetString(RoleTypes.Crewmate.ToString()));
         }
     }
     public override string GetFullDescription()
     {
         if (IsAwake)
         {
-            return Translation.GetString(
+            return Tr.GetString(
                 $"{this.Id}FullDescription");
         }
         else
         {
-            return Translation.GetString(
+            return Tr.GetString(
                 $"{RoleTypes.Crewmate}FullDescription");
         }
     }
@@ -372,7 +373,7 @@ public sealed class Psychic :
         {
             return Design.ColoedString(
                 Palette.White,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+                $"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
         }
     }
 
@@ -476,7 +477,7 @@ public sealed class Psychic :
 
 
 		StringBuilder builder = new StringBuilder(
-			Translation.GetString("PsychicPsychicResult"));
+			Tr.GetString("PsychicPsychicResult"));
 		builder.AppendLine();
 		foreach (var counter in this.counters)
 		{

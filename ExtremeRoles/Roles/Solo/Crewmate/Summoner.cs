@@ -94,7 +94,7 @@ public sealed class Summoner :
 			RoleAbilityCommonOption.AbilityCoolTime);
 
 		this.markingBehavior = new CountBehavior(
-			Translation.GetString("Marking"),
+			Tr.GetString("Marking"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Summoner,
 				ObjectPath.SummonerMarking),
@@ -105,7 +105,7 @@ public sealed class Summoner :
 			loader.GetValue<Option, int>(Option.MarkingCount));
 
 		var summonAbility = new CountBehavior(
-			Translation.GetString("Summon"),
+			Tr.GetString("Summon"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Summoner,
 				ObjectPath.SummonerSummon),

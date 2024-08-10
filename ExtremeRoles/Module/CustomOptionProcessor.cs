@@ -279,9 +279,11 @@ public static class CustomOptionCsvProcessor
 
 					foreach (var option in cate.Options)
 					{
+
 						var optionInfo = option.Info;
 						string name = optionInfo.Name;
-						if (PresetOption.IsPreset(cateId, optionInfo.Id) ||
+						if (optionInfo.IsHidden ||
+							PresetOption.IsPreset(cateId, optionInfo.Id) ||
 							!importedOption.TryGetValue(
 								cleaner.Clean(name),
 							out int selection))

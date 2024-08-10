@@ -258,7 +258,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				return;
 			}
 
-			string tabName = Translation.GetString(tab.ToString());
+			string tabName = Tr.GetString(tab.ToString());
 			int size = reader.ReadPackedInt32();
 
 			for (int i = 0; i < size; i++)
@@ -275,9 +275,10 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 				// 値が変更されたのでポップアップ通知
 				if (isShow && curSelection != option.Selection)
 				{
-					string showStr = string.Format(
-						Translation.GetString("OptionSettingChange"),
-						tabName, category.TransedName, option.Title, option.ValueString);
+					string showStr = Tr.GetString(
+						"OptionSettingChange",
+						tabName, category.TransedName,
+						option.Title, option.ValueString);
 
 					FastDestroyableSingleton<HudManager>.Instance.Notifier.SettingsChangeMessageLogic(
 						key, string.Format(OptionChangeFontPlace, showStr),

@@ -18,14 +18,6 @@ using SpawnPoint = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator.SpawnSe
 
 namespace ExtremeRoles.Compat.Patches;
 
-public static class ExileControllerPatchesPatch
-{
-	public static bool ExileController_BeginPrefix(ExileController __instance, NetworkedPlayerInfo exiled, bool tie)
-	{
-		return ExtremeRoles.Patches.Controller.ExileControllerBeginePatch.PrefixRun(__instance, exiled, tie);
-	}
-}
-
 public static class DisplayPrespawnStepPatchesCustomPrespawnStepPatch
 {
 	public static bool Prefix(ref IEnumerator __result)
@@ -173,7 +165,7 @@ public static class SubmarineSurvillanceMinigamePatch
 			TMPro.TextMeshPro comText = screenStatic.GetComponentInChildren<TMPro.TextMeshPro>();
 			if (comText != null)
 			{
-				comText.text = Helper.Translation.GetString("youDonotUse");
+				comText.text = Tr.GetString("youDonotUse");
 			}
 
 			screenStatic.SetActive(true);
