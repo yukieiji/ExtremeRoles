@@ -213,6 +213,7 @@
     <value>このプレイヤーはボヤケて見えなかった</value>
   </data>
   <data name="ShutterTakePhotoReport" xml:space="preserve">
-    <value>置かれていた写真の詳細\n{0}</value>
+    <value>置かれていた写真の詳細
+{0}</value>
   </data>
 </root>

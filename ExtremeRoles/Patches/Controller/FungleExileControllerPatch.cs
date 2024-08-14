@@ -10,6 +10,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
+using System.Runtime.CompilerServices;
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -35,24 +36,28 @@ public static class FungleExileControllerAnimePatch
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
 
 		sound.PlayNamedSound("ejection_beach_sfx", __instance.ambience, true, SoundManager.Instance.SfxChannel);
-		if (__instance.exiled == null)
+		if (__instance.initData == null ||
+			__instance.initData.outfit == null)
 		{
 			__instance.Player.gameObject.SetActive(false);
 			__instance.raftAnimation.SetActive(false);
 		}
-		if (__instance.exiled != null && __instance.EjectSound)
+		if (__instance.initData != null &&
+			__instance.initData.outfit != null &&
+			__instance.EjectSound != null)
 		{
 			sound.PlaySound(__instance.EjectSound, false, 1f, SoundManager.Instance.SfxChannel);
 		}
 
 		yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
 		yield return Effects.Wait(0.5f);
-		yield return Effects.All(new Il2CppEnumerator[]
-		{
+		yield return Effects.All(
+		[
 			__instance.FadeBlackRaftAndPlayer(),
 			__instance.HandleText(0.2f, 2f)
-		});
-		if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
+		]);
+		if (__instance.initData != null &&
+			__instance.initData.confirmImpostor)
 		{
 			__instance.ImpostorText.gameObject.SetActive(true);
 		}

@@ -7,7 +7,6 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.ExtremeShipStatus;
@@ -46,8 +45,7 @@ public static class ExileControllerBeginePatch
 	[HarmonyPrefix, HarmonyPriority(Priority.Last)]
     public static bool Prefix(
         ExileController __instance,
-        [HarmonyArgument(0)] NetworkedPlayerInfo exiled,
-        [HarmonyArgument(1)] bool tie)
+        [HarmonyArgument(0)] ExileController.InitProperties init)
     {
 		if (CompatModManager.Instance.IsModMap<SubmergedIntegrator>())
 		{
@@ -55,7 +53,7 @@ public static class ExileControllerBeginePatch
 		}
 		else
 		{
-			return PrefixRun(__instance, exiled, tie);
+			return PrefixRun(__instance, init);
 		}
     }
 
@@ -85,22 +83,22 @@ public static class ExileControllerBeginePatch
 
 	public static bool PrefixRun(
 		ExileController __instance,
-		NetworkedPlayerInfo exiled,
-		bool tie)
+		ExileController.InitProperties init)
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
 		var state = ExtremeRolesPlugin.ShipState;
+		__instance.initData = init;
 		if (state.AssassinMeetingTrigger)
 		{
 			assassinMeetingEndBegin(__instance, state);
 			return false;
 		}
-		else if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
+		else if (init.confirmImpostor)
 		{
 			var shipOption = ExtremeGameModeManager.Instance.ShipOption;
 			confirmExile(
-				__instance, exiled, shipOption.Exile, tie);
+				__instance, shipOption.Exile);
 			return false;
 		}
 		return true;
@@ -109,7 +107,10 @@ public static class ExileControllerBeginePatch
     private static void assassinMeetingEndBegin(
         ExileController instance, ExtremeShipStatus state)
     {
-        setExiledTarget(instance, null);
+		instance.initData.confirmImpostor = true;
+		instance.initData.voteTie = false;
+
+		setExiledTarget(instance);
         NetworkedPlayerInfo? player = GameData.Instance.GetPlayerById(
             state.IsMarinPlayerId);
 		if (player == null)
@@ -133,20 +134,23 @@ public static class ExileControllerBeginePatch
 
     private static void confirmExile(
         ExileController instance,
-        NetworkedPlayerInfo exiled,
-        in ExileOption option,
-		bool tie)
+        in ExileOption option)
     {
-        setExiledTarget(instance, exiled);
+        setExiledTarget(instance);
         var transController = FastDestroyableSingleton<TranslationController>.Instance;
 
         var allPlayer = GameData.Instance.AllPlayers.ToArray();
-        var alivePlayers = allPlayer.Where(
+
+		var init = instance.initData;
+		bool invalidExiled = init != null && init.outfit != null;
+
+		var alivePlayers = allPlayer.Where(
             x =>
             {
                 return
                     (
-                        (exiled != null && x.PlayerId != exiled.PlayerId) || (exiled == null)
+                        (invalidExiled && x.PlayerId != init!.networkedPlayer.PlayerId) ||
+						!invalidExiled
                     ) && !x.IsDead && !x.Disconnected;
             });
         var allRoles = ExtremeRoleManager.GameRole;
@@ -173,10 +177,10 @@ public static class ExileControllerBeginePatch
         string completeString = string.Empty;
 
 		var mode = option.Mode;
-        if (exiled != null)
+        if (invalidExiled)
         {
-            string playerName = exiled.PlayerName;
-            var exiledPlayerRole = allRoles[exiled.PlayerId];
+            string playerName = init!.outfit!.PlayerName;
+            var exiledPlayerRole = allRoles[init!.networkedPlayer.PlayerId];
             switch (mode)
             {
                 case ConfirmExileMode.AllTeam:
@@ -191,31 +195,41 @@ public static class ExileControllerBeginePatch
                     break;
             }
 
-			instance.Player.UpdateFromEitherPlayerDataOrCache(
-				exiled, PlayerOutfitType.Default,
-				PlayerMaterial.MaskType.Exile, false, (Il2CppSystem.Action)(() =>
+			instance.Player.UpdateFromPlayerOutfit(init!.outfit, PlayerMaterial.MaskType.Exile, false, false, (Il2CppSystem.Action)(() =>
 			{
-				string exiledPlayerSkinId = exiled.Outfits[PlayerOutfitType.Default].SkinId;
-
-				SkinViewData skin = CachedShipStatus.Instance.CosmeticsCache.GetSkin(exiledPlayerSkinId);
-				if (!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
-						exiledPlayerSkinId, instance.Player.GetIgnoreLongMode()))
+				SkinViewData skinViewData;
+				if (GameManager.Instance != null)
 				{
-					skin = ShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");
+					skinViewData = ShipStatus.Instance.CosmeticsCache.GetSkin(instance.initData.outfit.SkinId);
 				}
-
-				var showFrame = instance.useIdleAnim ? skin.IdleFrame : skin.EjectFrame;
-
-				instance.Player.FixSkinSprite(showFrame);
-			}));
+				else
+				{
+					skinViewData = instance.Player.GetSkinView();
+				}
+				if (GameManager.Instance != null &&
+					!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+					init!.outfit!.SkinId, instance.Player.GetIgnoreLongMode()))
+				{
+					skinViewData = ShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");
+				}
+				if (instance.useIdleAnim)
+				{
+					instance.Player.FixSkinSprite(skinViewData.IdleFrame);
+					return;
+				}
+				instance.Player.FixSkinSprite(skinViewData.EjectFrame);
+			}), false);
 			instance.Player.ToggleName(false);
-            instance.Player.SetCustomHatPosition(instance.exileHatPosition);
-            instance.Player.SetCustomVisorPosition(instance.exileVisorPosition);
-        }
-        else
+			if (!instance.useIdleAnim)
+			{
+				instance.Player.SetCustomHatPosition(instance.exileHatPosition);
+				instance.Player.SetCustomVisorPosition(instance.exileVisorPosition);
+			}
+		}
+        else if (init != null)
         {
             completeString = transController.GetString(
-                tie ? StringNames.NoExileTie : StringNames.NoExileSkip,
+                init.voteTie ? StringNames.NoExileTie : StringNames.NoExileSkip,
                 Array.Empty<Il2CppObject>());
             instance.Player.gameObject.SetActive(false);
         }
@@ -331,14 +345,14 @@ public static class ExileControllerBeginePatch
 					$"{transKey}WithRole",
                     playerName,
                     exiledPlayerRole.GetColoredRoleName()
-                ) : 
+                ) :
 				Tr.GetString(
 					transKey, playerName);
         }
     }
 
     private static void setExiledTarget(
-        ExileController instance, NetworkedPlayerInfo? player)
+        ExileController instance)
     {
         if (instance.specialInputHandler != null)
         {
@@ -347,7 +361,6 @@ public static class ExileControllerBeginePatch
         ExileController.Instance = instance;
         ControllerManager.Instance.CloseAndResetAll();
 
-        instance.exiled = player;
         instance.Text.gameObject.SetActive(false);
         instance.Text.text = string.Empty;
     }
@@ -389,7 +402,7 @@ public static class ExileControllerWrapUpPatch
         }
         public static void Postfix(ExileController __instance)
         {
-            WrapUpPostfix(__instance.exiled);
+            WrapUpPostfix(__instance.initData.networkedPlayer);
         }
     }
 
@@ -402,7 +415,7 @@ public static class ExileControllerWrapUpPatch
         }
         public static void Postfix(AirshipExileController __instance)
         {
-            WrapUpPostfix(__instance.exiled);
+            WrapUpPostfix(__instance.initData.networkedPlayer);
         }
     }
 

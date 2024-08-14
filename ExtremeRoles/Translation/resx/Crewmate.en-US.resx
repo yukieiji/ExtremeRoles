@@ -348,7 +348,8 @@ beginning of the next meeting.</value>
     <value>RESET GUARD</value>
   </data>
   <data name="meetingShieldState" xml:space="preserve">
-    <value>You can guard {0} times\n during this meeting</value>
+    <value>You can guard {0} times
+ during this meeting</value>
   </data>
   <data name="BodyGuardPlayerNameOnly" xml:space="preserve">
     <value>Only the Bodyguard</value>
@@ -713,7 +714,8 @@ accessible from the security monitor
     <value>Task percentage to achive for victory before death</value>
   </data>
   <data name="SurvivorNoWinSurvivorAssignGhostRole" xml:space="preserve">
-    <value>Does assign GHOST ROLE\nwhen the SURVIVOR cannot win</value>
+    <value>Does assign GHOST ROLE
+when the SURVIVOR cannot win</value>
   </data>
   <data name="SurvivorIntroDescription" xml:space="preserve">
     <value>I just want to live a little more</value>
@@ -762,7 +764,8 @@ switch targeted player by using the ability once more.
 charge.</value>
   </data>
   <data name="captainVoteStatus" xml:space="preserve">
-    <value>SPECIAL VOTE: {0}\nVoting:{1} votes</value>
+    <value>SPECIAL VOTE: {0}
+Voting:{1} votes</value>
   </data>
   <data name="Photographer" xml:space="preserve">
     <value>Photographer</value>
@@ -771,7 +774,8 @@ charge.</value>
     <value>Task completion rate to reveal role</value>
   </data>
   <data name="PhotographerUpgradePhotoTaskGage" xml:space="preserve">
-    <value>"CAPTURE" : Task completion percentage\nfor ability buff</value>
+    <value>"CAPTURE" : Task completion percentage
+for ability buff</value>
   </data>
   <data name="PhotographerEnableAllSendChat" xml:space="preserve">
     <value>"CAPTURE" : Does captured info shared with everyone</value>
@@ -810,7 +814,8 @@ any hints!</value>
     <value>CAPTURE</value>
   </data>
   <data name="photoChat" xml:space="preserve">
-    <value>Developed the film!\n{0}</value>
+    <value>Developed the film!
+{0}</value>
   </data>
   <data name="takePhotoTime" xml:space="preserve">
     <value>DATE</value>
@@ -846,10 +851,12 @@ any hints!</value>
     <value>"DEFLECT" : Ability cooldown penalty per use</value>
   </data>
   <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
-    <value>"DEFLECT" : Does include yourself\nas a teleport targeted position</value>
+    <value>"DEFLECT" : Does include yourself
+as a teleport targeted position</value>
   </data>
   <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
-    <value>"DEFLECT" : Does include map's initial spawn point\nas a teleport targeted position</value>
+    <value>"DEFLECT" : Does include map's initial spawn point
+as a teleport targeted position</value>
   </data>
   <data name="DelusionerIntroDescription" xml:space="preserve">
     <value>STAY THE HECK AWAY FROM ME!!</value>

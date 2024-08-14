@@ -582,7 +582,8 @@ the Merlin, with or without activation.</value>
     <value>Kill Cooldown penalty per normal KILL</value>
   </data>
   <data name="SandWormAssaultKillCoolReduce" xml:space="preserve">
-    <value>Kill Cooldown reduction of \n"ASSAULT"/ KILL during "Fix lights" sabotage  </value>
+    <value>Kill Cooldown reduction of 
+"ASSAULT"/ KILL during "Fix lights" sabotage  </value>
   </data>
   <data name="SandWormAssaultRange" xml:space="preserve">
     <value>"ASSAULT" : Kill Distance</value>
@@ -706,7 +707,8 @@ on ability usage.
     <value>NO STOCKS</value>
   </data>
   <data name="reduceKillCool" xml:space="preserve">
-    <value>Max {0}s reduction:\nKill Cooldown</value>
+    <value>Max {0}s reduction:
+Kill Cooldown</value>
   </data>
   <data name="Shooter" xml:space="preserve">
     <value>Shooter</value>
@@ -768,10 +770,12 @@ emergency meetings or other special conditions.
 meetings end. Meetings does not reset the count.</value>
   </data>
   <data name="shooterShootStatus" xml:space="preserve">
-    <value>Ammo: {0}/{1}\nCan shoot {2} times now</value>
+    <value>Ammo: {0}/{1}
+Can shoot {2} times now</value>
   </data>
   <data name="shooterChargeInfo" xml:space="preserve">
-    <value>Ammo: {0}/{1]\nNext bullet in</value>
+    <value>Ammo: {0}/{1]
+Next bullet in</value>
   </data>
   <data name="LastWolf" xml:space="preserve">
     <value>Last Wolf</value>
@@ -882,10 +886,12 @@ Cooldowns of the team.
     <value>Hypnotist: Base RED FRAGS </value>
   </data>
   <data name="HypnotistHideKillButtonTime" xml:space="preserve">
-    <value>Doll: Duration of temporal Kill Ability\nafter RED FRAG taken</value>
+    <value>Doll: Duration of temporal Kill Ability
+after RED FRAG taken</value>
   </data>
   <data name="HypnotistIsResetKillCoolWhenDollKill" xml:space="preserve">
-    <value>Hypnotist: Does Kill of Doll reset\nHypnotist's Kill Cooldown</value>
+    <value>Hypnotist: Does Kill of Doll reset
+Hypnotist's Kill Cooldown</value>
   </data>
   <data name="HypnotistDollKillCoolReduceRate" xml:space="preserve">
     <value>Doll: Kill Cooldown reduction per RED FRAG taken </value>

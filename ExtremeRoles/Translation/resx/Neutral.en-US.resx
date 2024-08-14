@@ -404,7 +404,8 @@ the OUTBURST ability)</value>
     <value>OBSTACLE : Maximum OBSTACLES</value>
   </data>
   <data name="YandereRunawayTime" xml:space="preserve">
-    <value>After OBSTACLES are all dead,\nturns into STAMPEDE MODE in:</value>
+    <value>After OBSTACLES are all dead,
+turns into STAMPEDE MODE in:</value>
   </data>
   <data name="YandereHasOneSidedArrow" xml:space="preserve">
     <value>Does show arrows to your SWEETIE</value>
@@ -618,7 +619,8 @@ MISSION: Halve the remaining players with your own team, and eliminate all other
     <value>"VORE" : Ability cooldown penalty rate</value>
   </data>
   <data name="EaterKillEatActiveCoolTimeReduceRate" xml:space="preserve">
-    <value>"EAT/VORE" : Reduction rate of cooldown \nafter meetings without eating any players</value>
+    <value>"EAT/VORE" : Reduction rate of cooldown 
+after meetings without eating any players</value>
   </data>
   <data name="EaterIsResetCoolTimeWhenMeeting" xml:space="preserve">
     <value>"EAT/VORE" : Does reset cooldown on meetings</value>
@@ -682,7 +684,8 @@ time in the turn.</value>
     <value>Queen: Kill Cooldown reduction rate by Servants' tasks completion</value>
   </data>
   <data name="QueenServantTaskCompKillCoolReduceRate" xml:space="preserve">
-    <value>Queen: Passive Kill Cooldown reduction rate by\nServants' tasks full completion</value>
+    <value>Queen: Passive Kill Cooldown reduction rate by
+Servants' tasks full completion</value>
   </data>
   <data name="QueenServantSelfKillCool" xml:space="preserve">
     <value>"SUICIDE" : Ability cooldown</value>

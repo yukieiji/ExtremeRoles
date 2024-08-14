@@ -662,7 +662,8 @@
     <value>「丸呑み」によるクールタイムの増加率</value>
   </data>
   <data name="EaterKillEatActiveCoolTimeReduceRate" xml:space="preserve">
-    <value>能力が使用できなかった\n会議後の「「丸呑み」にかかる時間」の減少率</value>
+    <value>能力が使用できなかった
+会議後の「「丸呑み」にかかる時間」の減少率</value>
   </data>
   <data name="EaterIsResetCoolTimeWhenMeeting" xml:space="preserve">
     <value>クールタイムを会議開始時にリセットするか</value>
@@ -721,10 +722,12 @@
     <value>サーヴァントのキルによるクイーンのキルクール減少率</value>
   </data>
   <data name="QueenServantTaskKillCoolReduceRate" xml:space="preserve">
-    <value>サーヴァントの1タスク完了による\nクイーンのキルクール減少率</value>
+    <value>サーヴァントの1タスク完了による
+クイーンのキルクール減少率</value>
   </data>
   <data name="QueenServantTaskCompKillCoolReduceRate" xml:space="preserve">
-    <value>サーヴァントの全タスク完了による\nクイーンのキルクール永続減少率</value>
+    <value>サーヴァントの全タスク完了による
+クイーンのキルクール永続減少率</value>
   </data>
   <data name="QueenServantSucideWithQueenWhenHasKill" xml:space="preserve">
     <value>キル能力を持つサーヴァントがクイーンの死亡後に自決をするか</value>

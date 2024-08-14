@@ -397,7 +397,10 @@
     <value>按下TAB键来显示更多信息....</value>
   </data>
   <data name="meetingStatus" xml:space="preserve">
-    <value>玩家 {0} 还有\n\n\n次紧急会议剩余</value>
+    <value>玩家 {0} 还有
+
+
+次紧急会议剩余</value>
   </data>
   <data name="meetingCount" xml:space="preserve">
     <value>{0} 全船共有 {1}</value>
@@ -677,7 +680,8 @@
     <value>更新开始</value>
   </data>
   <data name="updateManually" xml:space="preserve">
-    <value>更新失败\n请手动更新</value>
+    <value>更新失败
+请手动更新</value>
   </data>
   <data name="updateRestart" xml:space="preserve">
     <value>更新成功请重新启动游戏</value>
@@ -686,7 +690,8 @@
     <value>正在更新....</value>
   </data>
   <data name="alreadyInstall" xml:space="preserve">
-    <value>已经安装完毕\n请重新启动游戏</value>
+    <value>已经安装完毕
+请重新启动游戏</value>
   </data>
   <data name="checkInstallNow" xml:space="preserve">
     <value>正在确认安装数据</value>
@@ -698,13 +703,15 @@
     <value>安装数据中....</value>
   </data>
   <data name="installManual" xml:space="preserve">
-    <value>安装数据失败\n请手动安装</value>
+    <value>安装数据失败
+请手动安装</value>
   </data>
   <data name="installRestart" xml:space="preserve">
     <value>安装数据成功请重新启动游戏</value>
   </data>
   <data name="alreadyUninstall" xml:space="preserve">
-    <value>已经卸载\n请重新启动游戏</value>
+    <value>已经卸载
+请重新启动游戏</value>
   </data>
   <data name="checkUninstallNow" xml:space="preserve">
     <value>正在检查卸载数据</value>
@@ -716,13 +723,16 @@
     <value>卸载中....</value>
   </data>
   <data name="uninstallManual" xml:space="preserve">
-    <value>卸载失败\n请手动卸载</value>
+    <value>卸载失败
+请手动卸载</value>
   </data>
   <data name="uninstallRestart" xml:space="preserve">
-    <value>卸载成功\n请重新启动游戏</value>
+    <value>卸载成功
+请重新启动游戏</value>
   </data>
   <data name="alreadyUninstallAfterInstall" xml:space="preserve">
-    <value>已经卸载\n请重新启动游戏后安装</value>
+    <value>已经卸载
+请重新启动游戏后安装</value>
   </data>
   <data name="isReactorInstall" xml:space="preserve">
     <value>要运行本模组，需要先安装Reactor插件。
@@ -757,7 +767,8 @@ Among Us官方服务器不适配Reactor插件，因此需要使用自定义服�
     <value>模组版本过新</value>
   </data>
   <data name="errorDiffHostVersion" xml:space="preserve">
-    <value>当前模组与房主版本不同\n您将在{0}秒后被踢出</value>
+    <value>当前模组与房主版本不同
+您将在{0}秒后被踢出</value>
   </data>
   <data name="ExileTextSPCrew" xml:space="preserve">
     <value>{0}属于船员阵营。</value>
@@ -826,7 +837,9 @@ Among Us官方服务器不适配Reactor插件，因此需要使用自定义服�
     <value>独立阵营还剩{0}名玩家。</value>
   </data>
   <data name="AllTeamAlive" xml:space="preserve">
-    <value>船员阵营还剩{0}名玩家。\n内鬼阵营还剩{1}名玩家。\n独立阵营还剩{2}名玩家。</value>
+    <value>船员阵营还剩{0}名玩家。
+内鬼阵营还剩{1}名玩家。
+独立阵营还剩{2}名玩家。</value>
   </data>
   <data name="RoleAssignFilter" xml:space="preserve">
     <value>职业分配筛选</value>

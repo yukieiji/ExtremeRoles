@@ -276,16 +276,17 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	public static IEnumerator WrapUpAndSpawn(ExileController instance)
 	{
 		ExileControllerWrapUpPatch.WrapUpPrefix();
-		if (instance.exiled != null)
+		var player = instance.initData.networkedPlayer;
+		if (instance.initData.networkedPlayer != null)
 		{
-			PlayerControl @object = instance.exiled.Object;
+			var @object = player.Object;
 			if (@object != null)
 			{
 				@object.Exiled();
 			}
-			instance.exiled.IsDead = true;
+			player.IsDead = true;
 		}
-		ExileControllerWrapUpPatch.WrapUpPostfix(instance.exiled);
+		ExileControllerWrapUpPatch.WrapUpPostfix(player);
 
 		if (DestroyableSingleton<TutorialManager>.InstanceExists ||
 			!GameManager.Instance.LogicFlow.IsGameOverDueToDeath())

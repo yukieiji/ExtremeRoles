@@ -279,7 +279,8 @@
     <value>ヴィラン「サーチ」の発動時間</value>
   </data>
   <data name="VillainVigilanteSeeTime" xml:space="preserve">
-    <value>ヴィジランテが能力発動時\nヴィランがその人の位置を認知できる時間</value>
+    <value>ヴィジランテが能力発動時
+ヴィランがその人の位置を認知できる時間</value>
   </data>
   <data name="VigilanteHasOtherVision" xml:space="preserve">
     <value>ヴィジランテが別の視界設定を持つか</value>
@@ -861,7 +862,8 @@
     <value>「バディーズ」に覚醒するタスク進捗率</value>
   </data>
   <data name="BuddyIntroDescription" xml:space="preserve">
-    <value>最高の相棒となれ\n{0}と相棒になった</value>
+    <value>最高の相棒となれ
+{0}と相棒になった</value>
   </data>
   <data name="BuddyShortDescription" xml:space="preserve">
     <value>複数人1組で有ることを有利に活かせ</value>
@@ -926,10 +928,12 @@
     <value>「{0}」の役職は何だ？</value>
   </data>
   <data name="guesserUiInfo" xml:space="preserve">
-    <value>残り弾数：{0}発\nこの会議で{1}回推殺可能</value>
+    <value>残り弾数：{0}発
+この会議で{1}回推殺可能</value>
   </data>
   <data name="guesserConfirmMenu" xml:space="preserve">
-    <value>「{0}」を{1}で推殺します\nよろしいですか？</value>
+    <value>「{0}」を{1}で推殺します
+よろしいですか？</value>
   </data>
   <data name="Mover" xml:space="preserve">
     <value>ムーバー</value>

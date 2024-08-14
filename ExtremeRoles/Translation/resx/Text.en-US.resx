@@ -373,7 +373,8 @@
     <value>Successfully imported</value>
   </data>
   <data name="importError" xml:space="preserve">
-    <value>Failed to import settings:\n Please check your files.</value>
+    <value>Failed to import settings:
+ Please check your files.</value>
   </data>
   <data name="exportCsv" xml:space="preserve">
     <value>Export settings</value>
@@ -385,7 +386,8 @@
     <value>Successfully exported</value>
   </data>
   <data name="exportError" xml:space="preserve">
-    <value>Failed to export settings:\nPlease delete option.csv and try again.</value>
+    <value>Failed to export settings:
+Please delete option.csv and try again.</value>
   </data>
   <data name="version" xml:space="preserve">
     <value>Version: </value>
@@ -442,7 +444,10 @@
     <value>Press tab for more...</value>
   </data>
   <data name="meetingStatus" xml:space="preserve">
-    <value>CREWMEMBER {0} HAS\n\n\nEMERGENCY MEETINGS LEFT</value>
+    <value>CREWMEMBER {0} HAS
+
+
+EMERGENCY MEETINGS LEFT</value>
   </data>
   <data name="meetingCount" xml:space="preserve">
     <value>{0} times left / the ship total: {1} left</value>
@@ -734,10 +739,12 @@ For LOCAL Games:
     <value>Starting update</value>
   </data>
   <data name="updateManually" xml:space="preserve">
-    <value>Failed to auto update\nPlease update it manually.</value>
+    <value>Failed to auto update
+Please update it manually.</value>
   </data>
   <data name="updateRestart" xml:space="preserve">
-    <value>Successfully updated!\nPlease restart the game</value>
+    <value>Successfully updated!
+Please restart the game</value>
   </data>
   <data name="updateInProgress" xml:space="preserve">
     <value>Updating…</value>
@@ -755,13 +762,16 @@ For LOCAL Games:
     <value>Installing…</value>
   </data>
   <data name="installManual" xml:space="preserve">
-    <value>Failed to Install\nPlease install it manually.</value>
+    <value>Failed to Install
+Please install it manually.</value>
   </data>
   <data name="installRestart" xml:space="preserve">
-    <value>Successfully installed!\nPlease restart the game</value>
+    <value>Successfully installed!
+Please restart the game</value>
   </data>
   <data name="alreadyUninstall" xml:space="preserve">
-    <value>Already uninstalled.\nPlease restart the game</value>
+    <value>Already uninstalled.
+Please restart the game</value>
   </data>
   <data name="checkUninstallNow" xml:space="preserve">
     <value>Checking uninstall data…</value>
@@ -773,13 +783,16 @@ For LOCAL Games:
     <value>Uninstalling…</value>
   </data>
   <data name="uninstallManual" xml:space="preserve">
-    <value>Failed to auto uninstall\nPlease uninstall it manually.</value>
+    <value>Failed to auto uninstall
+Please uninstall it manually.</value>
   </data>
   <data name="uninstallRestart" xml:space="preserve">
-    <value>Successfully uninstalled.\nPlease restart the game</value>
+    <value>Successfully uninstalled.
+Please restart the game</value>
   </data>
   <data name="alreadyUninstallAfterInstall" xml:space="preserve">
-    <value>This is already uninstalled!\nPlease restart the game</value>
+    <value>This is already uninstalled!
+Please restart the game</value>
   </data>
   <data name="isReactorInstall" xml:space="preserve">
     <value>This MOD requires "Reactor" as a dependency.

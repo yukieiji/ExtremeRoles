@@ -434,25 +434,29 @@
     <value>インポート</value>
   </data>
   <data name="importPleaseWait" xml:space="preserve">
-    <value>オプションをインポート中\nしばらくお待ち下さい・・・</value>
+    <value>オプションをインポート中
+しばらくお待ち下さい・・・</value>
   </data>
   <data name="importSuccess" xml:space="preserve">
     <value>インポートに成功しました</value>
   </data>
   <data name="importError" xml:space="preserve">
-    <value>インポートに失敗しました\nファイル等を確認してください</value>
+    <value>インポートに失敗しました
+ファイル等を確認してください</value>
   </data>
   <data name="exportCsv" xml:space="preserve">
     <value>エクスポート</value>
   </data>
   <data name="exportPleaseWait" xml:space="preserve">
-    <value>オプションをエクスポート中\nしばらくお待ち下さい・・・</value>
+    <value>オプションをエクスポート中
+しばらくお待ち下さい・・・</value>
   </data>
   <data name="exportSuccess" xml:space="preserve">
     <value>エクスポートに成功しました</value>
   </data>
   <data name="exportError" xml:space="preserve">
-    <value>エクスポートに失敗しました\noption.csvを削除して再実行してください</value>
+    <value>エクスポートに失敗しました
+option.csvを削除して再実行してください</value>
   </data>
   <data name="version" xml:space="preserve">
     <value>ver.</value>
@@ -509,7 +513,10 @@
     <value>Tabキーで次のページへ…</value>
   </data>
   <data name="meetingStatus" xml:space="preserve">
-    <value>船員 {0} が、あと\n\n\n緊急招集できる</value>
+    <value>船員 {0} が、あと
+
+
+緊急招集できる</value>
   </data>
   <data name="meetingCount" xml:space="preserve">
     <value>{0}回　と船員全体で　{1}回</value>
@@ -737,7 +744,8 @@
     <value>ファントム</value>
   </data>
   <data name="roleAssignNow" xml:space="preserve">
-    <value>Extreme Rolesの役職を割当中です\nしばらくお待ち下さい</value>
+    <value>Extreme Rolesの役職を割当中です
+しばらくお待ち下さい</value>
   </data>
   <data name="impostorIntroText" xml:space="preserve">
     <value>キルやサボタージュも忘れるな</value>
@@ -811,13 +819,15 @@
 手動で更新してください</value>
   </data>
   <data name="updateRestart" xml:space="preserve">
-    <value>アップデートに成功しました\nゲームを再起動して下さい</value>
+    <value>アップデートに成功しました
+ゲームを再起動して下さい</value>
   </data>
   <data name="updateInProgress" xml:space="preserve">
     <value>アップデート中・・・</value>
   </data>
   <data name="alreadyInstall" xml:space="preserve">
-    <value>すでにインストール済みです\nゲームを再起動して下さい</value>
+    <value>すでにインストール済みです
+ゲームを再起動して下さい</value>
   </data>
   <data name="checkInstallNow" xml:space="preserve">
     <value>インストールデータを確認中・・・</value>
@@ -829,13 +839,16 @@
     <value>インストール中・・・</value>
   </data>
   <data name="installManual" xml:space="preserve">
-    <value>インストールに失敗しました\n手動でインストールしてください</value>
+    <value>インストールに失敗しました
+手動でインストールしてください</value>
   </data>
   <data name="installRestart" xml:space="preserve">
-    <value>インストールに成功しました\nゲームを再起動して下さい</value>
+    <value>インストールに成功しました
+ゲームを再起動して下さい</value>
   </data>
   <data name="alreadyUninstall" xml:space="preserve">
-    <value>すでにアンインストール済みです\nゲームを再起動して下さい</value>
+    <value>すでにアンインストール済みです
+ゲームを再起動して下さい</value>
   </data>
   <data name="checkUninstallNow" xml:space="preserve">
     <value>アンインストールデータを確認中・・・</value>
@@ -847,13 +860,16 @@
     <value>アンインストール中・・・</value>
   </data>
   <data name="uninstallManual" xml:space="preserve">
-    <value>アンインストールに失敗しました\n手動でアンインストールしてください</value>
+    <value>アンインストールに失敗しました
+手動でアンインストールしてください</value>
   </data>
   <data name="uninstallRestart" xml:space="preserve">
-    <value>アンインストールに成功しました\nゲームを再起動して下さい</value>
+    <value>アンインストールに成功しました
+ゲームを再起動して下さい</value>
   </data>
   <data name="alreadyUninstallAfterInstall" xml:space="preserve">
-    <value>すでにアンインストール済みです\nゲームを再起動後インストールして下さい</value>
+    <value>すでにアンインストール済みです
+ゲームを再起動後インストールして下さい</value>
   </data>
   <data name="isReactorInstall" xml:space="preserve">
     <value>このMODの前提MODとしてReactorがインストールされます
@@ -868,10 +884,12 @@ Reactorのインストールによって公式サーバーでの動作保証が
     <value>ダウングレードを開始します</value>
   </data>
   <data name="downgradeManually" xml:space="preserve">
-    <value>ダウングレードに失敗しました\n手動でバージョンダウンしてください</value>
+    <value>ダウングレードに失敗しました
+手動でバージョンダウンしてください</value>
   </data>
   <data name="downgradeRestart" xml:space="preserve">
-    <value>ダウングレードに成功しました\nゲームを再起動して下さい</value>
+    <value>ダウングレードに成功しました
+ゲームを再起動して下さい</value>
   </data>
   <data name="downgradeInProgress" xml:space="preserve">
     <value>ダウングレード中・・・</value>
@@ -920,7 +938,8 @@ ExR等を最低限の機能のみで起動しています</value>
     <value>導入されているExtreme Rolesのバージョンが新しいです</value>
   </data>
   <data name="errorDiffHostVersion" xml:space="preserve">
-    <value>ホストに導入されているExtreme Rolesとバージョンが異なっています。\n{0}秒後に強制切断します</value>
+    <value>ホストに導入されているExtreme Rolesとバージョンが異なっています。
+{0}秒後に強制切断します</value>
   </data>
   <data name="ExileTextSPCrew" xml:space="preserve">
     <value>{0}がクルーメイトだった。</value>
@@ -1067,10 +1086,12 @@ ExR等を最低限の機能のみで起動しています</value>
     <value>再起動後にパブリックベータモードが{0}になります</value>
   </data>
   <data name="PublicBetaWarning" xml:space="preserve">
-    <value>パブリックベータモードを{0}にします\n以下の機能が{0}になります</value>
+    <value>パブリックベータモードを{0}にします
+以下の機能が{0}になります</value>
   </data>
   <data name="PublicBetaReboot" xml:space="preserve">
-    <value>パブリックベータモードを{0}にしました\n再起動して下さい</value>
+    <value>パブリックベータモードを{0}にしました
+再起動して下さい</value>
   </data>
   <data name="Pcg32XshRr" xml:space="preserve">
     <value>PCG32-XSH-RR</value>

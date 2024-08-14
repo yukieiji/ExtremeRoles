@@ -344,7 +344,8 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>ガードリセット</value>
   </data>
   <data name="meetingShieldState" xml:space="preserve">
-    <value>この会議で付与できる\nガード：{0}回</value>
+    <value>この会議で付与できる
+ガード：{0}回</value>
   </data>
   <data name="BodyGuardPlayerNameOnly" xml:space="preserve">
     <value>この役職のプレイヤーのみ</value>
@@ -772,7 +773,8 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
 　・特殊投票先は再度発動することで投票先を変更可能である</value>
   </data>
   <data name="captainVoteStatus" xml:space="preserve">
-    <value>特殊投票:{0}\n投票数:{1}票</value>
+    <value>特殊投票:{0}
+投票数:{1}票</value>
   </data>
   <data name="Photographer" xml:space="preserve">
     <value>フォトグラファー</value>
@@ -819,7 +821,8 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>撮影</value>
   </data>
   <data name="photoChat" xml:space="preserve">
-    <value>撮影した写真を現像した\n{0}</value>
+    <value>撮影した写真を現像した
+{0}</value>
   </data>
   <data name="takePhotoTime" xml:space="preserve">
     <value>撮影日</value>
@@ -855,10 +858,12 @@ Mira HQの場合はドアログ、それ以外はセキュリティカメラに�
     <value>「被害を逸らす」一回あたりのクールタイムペナルティ</value>
   </data>
   <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
-    <value>「被害を逸らす」のランダムテレポート地点に\n自分の位置を含めるか</value>
+    <value>「被害を逸らす」のランダムテレポート地点に
+自分の位置を含めるか</value>
   </data>
   <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
-    <value>「被害を逸らす」のランダムテレポート地点に\nマップの初期位置を含めるか</value>
+    <value>「被害を逸らす」のランダムテレポート地点に
+マップの初期位置を含めるか</value>
   </data>
   <data name="DelusionerEnableCounter" xml:space="preserve">
     <value>「被害を逸らす」の暴発を有効にするか</value>

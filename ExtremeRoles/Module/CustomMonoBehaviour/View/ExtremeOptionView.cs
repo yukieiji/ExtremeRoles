@@ -38,18 +38,13 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 
 		this.valueText = opt.ValueText;
 
-		if (base.transform.Find("MinusButton (1)").TryGetComponent<PassiveButton>(out var minus))
-		{
-			minus.OnClick.RemoveAllListeners();
-			minus.OnClick.AddListener(this.Decrease);
-		}
-		if (base.transform.Find("PlusButton (1)").TryGetComponent<PassiveButton>(out var plus))
-		{
-			plus.OnClick.RemoveAllListeners();
-			plus.OnClick.AddListener(this.Increase);
-		}
+		opt.MinusBtn.OnClick.RemoveAllListeners();
+		opt.MinusBtn.OnClick.AddListener(this.Decrease);
 
-		var imgTrans = base.transform.Find("LabelBackground");
+		opt.PlusBtn.OnClick.RemoveAllListeners();
+		opt.PlusBtn.OnClick.AddListener(this.Increase);
+
+		var imgTrans = opt.LabelBackground.transform;
 		var curPos = imgTrans.localPosition;
 		imgTrans.localPosition = new Vector3(-1.915f, curPos.y, curPos.z);
 		var curScale = imgTrans.localScale;

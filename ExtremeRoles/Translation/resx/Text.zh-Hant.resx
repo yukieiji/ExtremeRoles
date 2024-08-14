@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -397,7 +397,10 @@
     <value>按下TAB鍵來顯示更多信息....</value>
   </data>
   <data name="meetingStatus" xml:space="preserve">
-    <value>玩家 {0} 還有\n\n\n次緊急會議剩余</value>
+    <value>玩家 {0} 還有
+
+
+次緊急會議剩余</value>
   </data>
   <data name="meetingCount" xml:space="preserve">
     <value>{0} 全船共有 {1}</value>
@@ -677,7 +680,8 @@
     <value>更新開始</value>
   </data>
   <data name="updateManually" xml:space="preserve">
-    <value>更新失敗\n請手動更新</value>
+    <value>更新失敗
+請手動更新</value>
   </data>
   <data name="updateRestart" xml:space="preserve">
     <value>更新成功請重新啟動遊戲</value>
@@ -686,7 +690,8 @@
     <value>正在更新....</value>
   </data>
   <data name="alreadyInstall" xml:space="preserve">
-    <value>已經安裝完畢\n請重新啟動遊戲</value>
+    <value>已經安裝完畢
+請重新啟動遊戲</value>
   </data>
   <data name="checkInstallNow" xml:space="preserve">
     <value>正在確認安裝數據</value>
@@ -698,13 +703,15 @@
     <value>安裝數據中....</value>
   </data>
   <data name="installManual" xml:space="preserve">
-    <value>安裝數據失敗\n請手動安裝</value>
+    <value>安裝數據失敗
+請手動安裝</value>
   </data>
   <data name="installRestart" xml:space="preserve">
     <value>安裝數據成功請重新啟動遊戲</value>
   </data>
   <data name="alreadyUninstall" xml:space="preserve">
-    <value>已經卸載\n請重新啟動遊戲</value>
+    <value>已經卸載
+請重新啟動遊戲</value>
   </data>
   <data name="checkUninstallNow" xml:space="preserve">
     <value>正在檢查卸載數據</value>
@@ -716,13 +723,16 @@
     <value>卸載中....</value>
   </data>
   <data name="uninstallManual" xml:space="preserve">
-    <value>卸載失敗\n請手動卸載</value>
+    <value>卸載失敗
+請手動卸載</value>
   </data>
   <data name="uninstallRestart" xml:space="preserve">
-    <value>卸載成功\n請重新啟動遊戲</value>
+    <value>卸載成功
+請重新啟動遊戲</value>
   </data>
   <data name="alreadyUninstallAfterInstall" xml:space="preserve">
-    <value>已經卸載\n請重新啟動遊戲後安裝</value>
+    <value>已經卸載
+請重新啟動遊戲後安裝</value>
   </data>
   <data name="isReactorInstall" xml:space="preserve">
     <value>要運行本模組，需要先安裝Reactor插件。
@@ -757,7 +767,8 @@ Among Us官方服務器不適配Reactor插件，因此需要使用自定義服�
     <value>模組版本過新</value>
   </data>
   <data name="errorDiffHostVersion" xml:space="preserve">
-    <value>當前模組與房主版本不同\n您將在{0}秒後被踢出</value>
+    <value>當前模組與房主版本不同
+您將在{0}秒後被踢出</value>
   </data>
   <data name="ExileTextSPCrew" xml:space="preserve">
     <value>{0}屬於船員陣營。</value>
@@ -826,7 +837,9 @@ Among Us官方服務器不適配Reactor插件，因此需要使用自定義服�
     <value>獨立陣營還剩{0}名玩家。</value>
   </data>
   <data name="AllTeamAlive" xml:space="preserve">
-    <value>船員陣營還剩{0}名玩家。\n內鬼陣營還剩{1}名玩家。\n獨立陣營還剩{2}名玩家。</value>
+    <value>船員陣營還剩{0}名玩家。
+內鬼陣營還剩{1}名玩家。
+獨立陣營還剩{2}名玩家。</value>
   </data>
   <data name="RoleAssignFilter" xml:space="preserve">
     <value>職業分配篩選</value>
