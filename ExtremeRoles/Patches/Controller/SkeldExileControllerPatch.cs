@@ -40,7 +40,9 @@ public static class SkeldExileControllerAnimePatch
 
 		yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
 		yield return new WaitForSeconds(0.2f);
-		if (__instance.exiled != null && __instance.EjectSound)
+		if (__instance.initData != null &&
+			__instance.initData.outfit != null &&
+			__instance.EjectSound != null)
 		{
 			var snd = SoundManager.Instance;
 			snd.PlayDynamicSound(
@@ -51,13 +53,14 @@ public static class SkeldExileControllerAnimePatch
 		}
 		yield return new WaitForSeconds(0.8f);
 
-		yield return Effects.All(new Il2CppEnumerator[]
-		{
+		yield return Effects.All(
+		[
 			__instance.PlayerSpin(left, right),
 			__instance.HandleText(__instance.Duration * 0.3f, __instance.Duration * 0.5f)
-		});
+		]);
 
-		if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
+		if (__instance.initData != null &&
+			__instance.initData.confirmImpostor)
 		{
 			__instance.ImpostorText.gameObject.SetActive(true);
 		}

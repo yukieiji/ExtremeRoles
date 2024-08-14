@@ -55,7 +55,7 @@ public static class SubmergedExileControllerWrapUpAndSpawnPatch
 	public static void Postfix(ExileController __instance)
 	{
 		ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
-			__instance.exiled);
+			__instance.initData.networkedPlayer);
 	}
 }
 

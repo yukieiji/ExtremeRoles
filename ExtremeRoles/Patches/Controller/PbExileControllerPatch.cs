@@ -35,14 +35,15 @@ public static class PbExileControllerAnimePatch
 
 		yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
 		yield return Effects.Wait(0.75f);
-		yield return Effects.All(new Il2CppEnumerator[]
-		{
+		yield return Effects.All(
+		[
 			__instance.PlayerFall(),
 			__instance.PlayerSpin(),
 			__instance.HandleText(__instance.Duration * 0.5f, __instance.Duration * 0.5f)
-		});
+		]);
 
-		if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
+		if (__instance.initData != null &&
+			__instance.initData.confirmImpostor)
 		{
 			__instance.ImpostorText.gameObject.SetActive(true);
 		}
