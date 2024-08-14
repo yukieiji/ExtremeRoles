@@ -4,8 +4,8 @@
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
     <!--<Version>11.1.1.0</Version>-->
-    <VersionPrefix>11.1.1</VersionPrefix>
-    <VersionSuffix>Invitation</VersionSuffix>
+    <VersionPrefix>12.0.0</VersionPrefix>
+    <VersionSuffix>Invitation-AmongUsV2024813</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
