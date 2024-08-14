@@ -685,7 +685,8 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>ストック無し</value>
   </data>
   <data name="reduceKillCool" xml:space="preserve">
-    <value>キルクール\n最大{0}秒減少可</value>
+    <value>キルクール
+最大{0}秒減少可</value>
   </data>
   <data name="Shooter" xml:space="preserve">
     <value>シューター</value>
@@ -746,10 +747,12 @@ Extreme Rolesの各役職の共通設定が適用できる
 このペナルティは役職の人がキルするまで継続する</value>
   </data>
   <data name="shooterShootStatus" xml:space="preserve">
-    <value>残り弾数:{0}/{1}発\nこの会議中に{2}回シュート可能</value>
+    <value>残り弾数:{0}/{1}発
+この会議中に{2}回シュート可能</value>
   </data>
   <data name="shooterChargeInfo" xml:space="preserve">
-    <value>チャージ状況:{0}/{1}発\nチャージ完了まで残り</value>
+    <value>チャージ状況:{0}/{1}発
+チャージ完了まで残り</value>
   </data>
   <data name="LastWolf" xml:space="preserve">
     <value>ラストウルフ</value>
@@ -856,13 +859,16 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>「ドール」作成時の「能力のかけら（赤）」のデフォルト個数</value>
   </data>
   <data name="HypnotistHideKillButtonTime" xml:space="preserve">
-    <value>「能力のかけら（赤）」取得後\n「ドール」からキルボタンが消える秒数</value>
+    <value>「能力のかけら（赤）」取得後
+「ドール」からキルボタンが消える秒数</value>
   </data>
   <data name="HypnotistIsResetKillCoolWhenDollKill" xml:space="preserve">
-    <value>「ドール」のキルによって\n「ヒプノティスト」のキルクールがリセットされるか</value>
+    <value>「ドール」のキルによって
+「ヒプノティスト」のキルクールがリセットされるか</value>
   </data>
   <data name="HypnotistDollKillCoolReduceRate" xml:space="preserve">
-    <value>「能力のかけら（赤）」連続取得時の\n「ドール」のキルクール減少率</value>
+    <value>「能力のかけら（赤）」連続取得時の
+「ドール」のキルクール減少率</value>
   </data>
   <data name="HypnotistDollCrakingCoolTime" xml:space="preserve">
     <value>「ドール」の「クラッキング」のクールタイム</value>

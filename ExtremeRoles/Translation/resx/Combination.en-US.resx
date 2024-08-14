@@ -166,7 +166,8 @@
     <value>Does open Assasin meetings on Assasin death</value>
   </data>
   <data name="AssassinCanSeeRoleBeforeFirstMeeting" xml:space="preserve">
-    <value>Can see roles after first meeting opening\nafter Assasin's death</value>
+    <value>Can see roles after first meeting opening
+after Assasin's death</value>
   </data>
   <data name="MarlinHasOtherVision" xml:space="preserve">
     <value>Merlin: Has special vision settings</value>
@@ -296,7 +297,8 @@ not, the Assasin will be exiled and the game continues on.</value>
     <value>Villain: "SEARCH" : Ability Duration</value>
   </data>
   <data name="VillainVigilanteSeeTime" xml:space="preserve">
-    <value>Villain: Duration of arrows showing Vigilante\nafter they use their ability</value>
+    <value>Villain: Duration of arrows showing Vigilante
+after they use their ability</value>
   </data>
   <data name="VigilanteHasOtherVision" xml:space="preserve">
     <value>Vigilante: Has special vision settings</value>
@@ -481,7 +483,8 @@ Your ROLE status: You're the New Neutral!
     <value>Detective: "INVESTIGATE" : Ability Duration</value>
   </data>
   <data name="DetectiveSearchAssistantTime" xml:space="preserve">
-    <value>Detective: "INVESTIGATE" : Ability Duration when\nsupported by Assistant</value>
+    <value>Detective: "INVESTIGATE" : Ability Duration when
+supported by Assistant</value>
   </data>
   <data name="DetectiveTextShowTime" xml:space="preserve">
     <value>Detective: Duration of Investigation stats</value>
@@ -514,7 +517,8 @@ Your ROLE status: You're the New Neutral!
     <value>Apperentice: "MEETING" : Ability Duration</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButton" xml:space="preserve">
-    <value>Apperentice: "MEETING" : Does not count as\nplayer's emergency meeting</value>
+    <value>Apperentice: "MEETING" : Does not count as
+player's emergency meeting</value>
   </data>
   <data name="DetectiveApprenticeHasOtherButtonNum" xml:space="preserve">
     <value>Does not count up to</value>
@@ -925,7 +929,8 @@ Lights out Sabotage for a while
     <value>Task completion rate to reveal role</value>
   </data>
   <data name="BuddyIntroDescription" xml:space="preserve">
-    <value>We're the BEST BUDDIES! \n{0} is your buddy</value>
+    <value>We're the BEST BUDDIES! 
+{0} is your buddy</value>
   </data>
   <data name="BuddyShortDescription" xml:space="preserve">
     <value>Believe your buddy and achive victory!</value>

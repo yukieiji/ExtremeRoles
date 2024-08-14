@@ -333,7 +333,8 @@
     <value>重置保护对象</value>
   </data>
   <data name="meetingShieldState" xml:space="preserve">
-    <value>本次会议可保护的\n人数：{0}人</value>
+    <value>本次会议可保护的
+人数：{0}人</value>
   </data>
   <data name="BodyGuardPlayerNameOnly" xml:space="preserve">
     <value>保镖</value>
@@ -712,7 +713,8 @@
 船长可以在使用额外票权后变更使用目标。</value>
   </data>
   <data name="captainVoteStatus" xml:space="preserve">
-    <value>票库剩余:{0}票\n给目标投:{1}票</value>
+    <value>票库剩余:{0}票
+给目标投:{1}票</value>
   </data>
   <data name="Photographer" xml:space="preserve">
     <value>摄影师</value>
@@ -755,7 +757,8 @@
     <value>拍摄</value>
   </data>
   <data name="photoChat" xml:space="preserve">
-    <value>摄影师拍的照片洗出来了！\n{0}</value>
+    <value>摄影师拍的照片洗出来了！
+{0}</value>
   </data>
   <data name="takePhotoTime" xml:space="preserve">
     <value>拍摄日期</value>
@@ -791,10 +794,12 @@
     <value>使用一次技能冷却惩罚</value>
   </data>
   <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
-    <value>\n在技能的随机传送地点列表中</value>
+    <value>
+在技能的随机传送地点列表中</value>
   </data>
   <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
-    <value>\n的出生点在技能的随机传送地点列表中</value>
+    <value>
+的出生点在技能的随机传送地点列表中</value>
   </data>
   <data name="DelusionerIntroDescription" xml:space="preserve">
     <value>不要靠近我啊啊啊啊啊啊啊啊啊啊啊!</value>

@@ -638,7 +638,8 @@
     <value>没有子弹</value>
   </data>
   <data name="reduceKillCool" xml:space="preserve">
-    <value>击杀冷却\n最多可减少{0}秒</value>
+    <value>击杀冷却
+最多可减少{0}秒</value>
   </data>
   <data name="Shooter" xml:space="preserve">
     <value>狙击兵</value>
@@ -807,13 +808,16 @@
     <value>催眠傀儡时默认生成的红色碎片个数</value>
   </data>
   <data name="HypnotistHideKillButtonTime" xml:space="preserve">
-    <value>获得红色碎片后，\n傀儡拥有击杀能力的持续时间</value>
+    <value>获得红色碎片后，
+傀儡拥有击杀能力的持续时间</value>
   </data>
   <data name="HypnotistIsResetKillCoolWhenDollKill" xml:space="preserve">
-    <value>傀儡击杀会重置\n催眠师击杀冷却</value>
+    <value>傀儡击杀会重置
+催眠师击杀冷却</value>
   </data>
   <data name="HypnotistDollKillCoolReduceRate" xml:space="preserve">
-    <value>连续获得红碎片时\n减少人偶击杀的冷却</value>
+    <value>连续获得红碎片时
+减少人偶击杀的冷却</value>
   </data>
   <data name="HypnotistDollCrakingCoolTime" xml:space="preserve">
     <value>人偶碎片化的冷却时间</value>

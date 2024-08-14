@@ -228,6 +228,7 @@
     <value>這個玩家的名字似乎被抹掉了</value>
   </data>
   <data name="ShutterTakePhotoReport" xml:space="preserve">
-    <value>天眼通照片信息：\n{0}</value>
+    <value>天眼通照片信息：
+{0}</value>
   </data>
 </root>

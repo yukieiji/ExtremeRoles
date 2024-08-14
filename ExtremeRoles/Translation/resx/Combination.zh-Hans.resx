@@ -219,7 +219,8 @@
 胜利条件：用刺客的特殊能力放逐梅林
 刺客的特殊能力：特别会议“谁是梅林？”：
 所有人都参与会议，但刺客以外的玩家都不可以投票。
-不能跳过，可以给死人投票\n如果投票放逐的是梅林，则内鬼获胜，否则游戏继续
+不能跳过，可以给死人投票
+如果投票放逐的是梅林，则内鬼获胜，否则游戏继续
 特殊能力激活条件：刺客被击杀或放逐
 除了上述能力外，刺客的能力与普通内鬼没有区别。刺客需要一边杀人，一边找出梅林。</value>
   </data>
@@ -818,7 +819,8 @@
     <value>挚友觉醒需要完成的任务数</value>
   </data>
   <data name="BuddyIntroDescription" xml:space="preserve">
-    <value>我们是最好的伙伴！\n与{0}成为了伙伴</value>
+    <value>我们是最好的伙伴！
+与{0}成为了伙伴</value>
   </data>
   <data name="BuddyShortDescription" xml:space="preserve">
     <value>组成多人小队，共同进退</value>
@@ -884,7 +886,8 @@
     <value>剩余猜测次数：{0}/{1}次</value>
   </data>
   <data name="guesserConfirmMenu" xml:space="preserve">
-    <value>你猜测{0}的职业是{1}\n你确定吗？</value>
+    <value>你猜测{0}的职业是{1}
+你确定吗？</value>
   </data>
   <data name="Mover" xml:space="preserve">
     <value>搬运工</value>
