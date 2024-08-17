@@ -10,7 +10,6 @@ using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.GameMode.RoleSelector;
 
 
 #nullable enable
@@ -23,7 +22,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 	private const float initPos = 1.44f;
 	private readonly List<OptionGroupViewObject<ViewSettingsInfoPanel>> optionGroupViewObject = new();
-	private readonly Dictionary<OptionTab, PassiveButton> allButton = new(8);
+	private PassiveButton? exrButton;
 
 	private const float blockTime = 0.25f;
 	private float blockTimer = blockTime;
@@ -39,72 +38,38 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		vanillaSettings = lobby;
 		vanillaSettings.gameModeText.transform.localPosition = new Vector3(-4.0f, 3.5f, -2.0f);
 
-		var taskButton = vanillaSettings.taskTabButton;
+		var targetButton = vanillaSettings.taskTabButton;
 
-		taskButton.gameObject.SetActive(true);
-
-		List<PassiveButton> allButton = [ taskButton ];
+		targetButton.gameObject.SetActive(true);
 
 		if (vanillaSettings.rolesTabButton.gameObject.activeSelf)
 		{
-			allButton.Add(vanillaSettings.rolesTabButton);
+			targetButton = vanillaSettings.rolesTabButton;
 		}
+
+		exrButton = Instantiate(targetButton, targetButton.transform.parent);
 
 		string modName = Tr.GetString("MODNAME_TRANS");
+		exrButton.ChangeButtonText(modName);
 
-		foreach (var tab in Enum.GetValues<OptionTab>())
+		if (exrButton.buttonText.TryGetComponent<TextTranslatorTMP>(out var tmp))
 		{
-			var newButton = Instantiate(taskButton, taskButton.transform.parent);
-			if (newButton.buttonText.TryGetComponent<TextTranslatorTMP>(out var tmp))
-			{
-				Destroy(tmp);
-			}
-
-			string tabName = Tr.GetString(tab.ToString());
-			newButton.ChangeButtonText($"{modName}\n{tabName}");
-
-			newButton.OnClick.RemoveAllListeners();
-			newButton.OnClick.AddListener(() =>
-			{
-				this.changeExRTab(tab);
-			});
-
-			this.allButton.Add(tab, newButton);
-			allButton.Add(newButton);
+			Destroy(tmp);
 		}
 
-		int x = -1;
-		int y = -1;
+		exrButton.OnClick.RemoveAllListeners();
+		// newButton.OnClick.AddListener();
 
-		foreach (var (index, button) in allButton.Select((value, index) => (index, value)))
-		{
-			if (index % 5 == 0)
-			{
-				++y;
-				x = 0;
-			}
-			else
-			{
-				++x;
-			}
-
-			button.transform.localScale = new Vector3(0.65f, 1.35f, 1.0f);
-			button.buttonText.transform.localPosition = new Vector3(-0.85f, 0.05f, -2.0f);
-			button.buttonText.transform.localScale = new Vector3(1.5f, 0.75f, 1.0f);
-			button.transform.localPosition = new Vector3(
-				-5.75f + (x * 2.5f),
-				2.6f - (y * 1.1f),
-				0.0f);
-
-		}
+		// x = 2.1f
+		var pos = exrButton.transform.localPosition;
+		exrButton.transform.localPosition = new Vector3(2.1f, pos.y, pos.z);
 	}
 
 	public void FixedUpdate()
 	{
 		if (!(
-				this.allButton.TryGetValue(this.curTab, out var button) &&
-				button != null &&
-				button.selected
+				exrButton != null &&
+				exrButton.selected
 			))
 		{
 			return;
@@ -130,18 +95,19 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		}
 	}
 
-	public void ChangeTabPostfix()
+	public void ChangeTabPrefix()
 	{
-		foreach (var button in this.allButton.Values)
+		if (exrButton == null)
 		{
-			button.SelectButton(false);
+			return;
 		}
+		exrButton.SelectButton(false);
 	}
 
 	[HideFromIl2Cpp]
 	private void changeExRTab(OptionTab tab)
 	{
-		if (vanillaSettings == null)
+		if (vanillaSettings == null || exrButton == null)
 		{
 			return;
 		}
@@ -149,10 +115,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		vanillaSettings.rolesTabButton.SelectButton(false);
 		vanillaSettings.taskTabButton.SelectButton(false);
 
-		foreach (var button in this.allButton.Values)
-		{
-			button.SelectButton(false);
-		}
+		exrButton.SelectButton(false);
 
 		if (!(
 				this.allButton.TryGetValue(tab, out var targetButton) &&
