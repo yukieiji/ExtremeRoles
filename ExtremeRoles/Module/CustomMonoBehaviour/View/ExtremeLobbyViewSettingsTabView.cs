@@ -96,9 +96,10 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		var targetButton = vanillaSettings.taskTabButton;
 
 		targetButton.gameObject.SetActive(true);
-
+		int size = 1;
 		if (vanillaSettings.rolesTabButton.gameObject.activeSelf)
 		{
+			++size;
 			targetButton = vanillaSettings.rolesTabButton;
 		}
 
@@ -117,7 +118,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 		// x = 2.1f
 		var pos = exrButton.transform.localPosition;
-		exrButton.transform.localPosition = new Vector3(2.1f, pos.y, pos.z);
+		exrButton.transform.localPosition = pos + new Vector3(1.75f * size, 0.0f);
 	}
 
 	public void FixedUpdate()
