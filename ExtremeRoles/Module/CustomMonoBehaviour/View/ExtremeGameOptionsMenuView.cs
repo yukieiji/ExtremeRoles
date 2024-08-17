@@ -28,7 +28,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 	[HideFromIl2Cpp]
 	public OptionCategory[]? AllCategory { private get; set; }
 
-	private readonly List<OptionGroupViewObject<ExtremeOptionView>> optionGroupViewObject = new();
+	private readonly List<OptionCategoryViewObject<ExtremeOptionView>> optionGroupViewObject = new();
 	private readonly Il2CppUiElementList allUiElement = new();
 	private const float initY = 2.0f;
 
@@ -214,7 +214,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 				this.settingsContainer);
 			categoryHeaderMasked.transform.localScale = Vector3.one * 0.63f;
 
-			var optionGroupViewObject = new OptionGroupViewObject<ExtremeOptionView>(
+			var optionGroupViewObject = new OptionCategoryViewObject<ExtremeOptionView>(
 				categoryHeaderMasked, catego.Count);
 
 			foreach (var option in catego.Options)
