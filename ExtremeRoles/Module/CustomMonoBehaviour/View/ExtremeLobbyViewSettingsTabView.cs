@@ -90,7 +90,6 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		}
 
 		vanillaSettings = lobby;
-		vanillaSettings.gameModeText.transform.localPosition = new Vector3(-4.0f, 3.5f, -2.0f);
 
 		var targetButton = vanillaSettings.taskTabButton;
 
@@ -128,6 +127,18 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			))
 		{
 			return;
+		}
+
+		if (Input.GetKey(KeyCode.Tab))
+		{
+			if (Key.IsShiftDown())
+			{
+				changeTab(-1);
+			}
+			else
+			{
+				changeTab(1);
+			}
 		}
 
 		if (blockTimer >= 0.0f)
@@ -224,7 +235,6 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				tabOption.Add(groupViewObj.Build());
 			}
 		}
-
 		updateTextAndPos();
 	}
 
@@ -240,10 +250,13 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 		IReadOnlySet<int>? validOptionId = default;
 		var instance = ExtremeGameModeManager.Instance;
+		this.tabPos.Clear();
 
 		foreach (var (tab, tabObj, tabOption) in optionObj)
 		{
-			tabObj.transform.localPosition = new Vector3(-9.77f, yPos, -2f);
+			var tabPos = new Vector3(-9.77f, yPos, -2f);
+			this.tabPos.Add(tab, tabPos);
+			tabObj.transform.localPosition = tabPos;
 			yPos -= 0.9f;
 			if (!OptionManager.Instance.TryGetTab(tab, out var container))
 			{
@@ -346,4 +359,43 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 	{
 		blockTimer = blockTime;
 	}
+	private void changeTab(int offset)
+	{
+		if (vanillaSettings == null ||
+			vanillaSettings.scrollBar == null)
+		{
+			return;
+		}
+
+		var scroller = vanillaSettings.scrollBar;
+
+		float scrollerMin = scroller.ContentYBounds.min;
+		float scrollerMax = scroller.ContentYBounds.max;
+
+		var curPos = scroller.Inner.localPosition;
+
+		var curTab = tabPos
+			.Where(x => -(x.Value.y - 1.0f) >= curPos.y)
+			.Select(x => x.Key)
+			.First();
+
+		var nextTab = (OptionTab)(
+			((byte)curTab + (byte)OptionTab.GhostNeutralTab + offset) % (byte)OptionTab.GhostNeutralTab);
+
+		Helper.Logging.Debug($"Y:{curPos.y}, Tab{curTab}");
+
+		if (tabPos.TryGetValue(nextTab, out var pos))
+		{
+			scroller.Inner.transform.localPosition = new Vector3(
+				curPos.x,
+				Mathf.Clamp(
+					-(pos.y - 1.0f),
+					scrollerMin,
+					scrollerMax),
+				curPos.z);
+		}
+
+		scroller.UpdateScrollBars();
+	}
+
 }
