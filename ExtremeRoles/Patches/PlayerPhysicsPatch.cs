@@ -49,3 +49,15 @@ public static class PlayerPhysicsFixedUpdatePatch
         }
     }
 }
+
+[HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
+public static class PlayerPhysicsFHandleAnimationPatch
+{
+	public static bool Prefix(PlayerPhysics __instance)
+	{
+		return
+			__instance.Animations != null &&
+			__instance.body != null &&
+			__instance.myPlayer != null;
+	}
+}
