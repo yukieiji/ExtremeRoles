@@ -36,3 +36,4 @@ Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination wo
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/dll/ExtremeRoles.dll -Force -Recurse
 Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination workspace/dll/ExtremeSkins.dll -Force -Recurse
 Copy-Item -Path ExtremeVoiceEngine/bin/Release/net6.0/ExtremeVoiceEngine.dll -Destination workspace/dll/ExtremeVoiceEngine.dll -Force -Recurse
+Copy-Item -Path ExtremeRoles.Test/bin/Release/net6.0/ExtremeRoles.Test.dll -Destination workspace/dll/ExtremeRoles.Test.dll -Force -Recurse
