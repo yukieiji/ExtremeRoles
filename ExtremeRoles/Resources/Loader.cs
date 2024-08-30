@@ -148,7 +148,7 @@ public static class ObjectPath
 
 	public const string ForasShowArrow = "ExtremeRoles.Resources.ForasArrow.png";
 
-	public const string SoundEffect = "ExtremeRoles.Resources.Asset.soundeffect.asset";
+	public const string SoundEffect = "ExtremeRoles.Resources.soundeffect.asset";
 
 	public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
 
