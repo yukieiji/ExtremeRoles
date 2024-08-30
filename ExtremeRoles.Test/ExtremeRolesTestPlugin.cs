@@ -29,6 +29,13 @@ public partial class ExtremeRolesTestPlugin : BasePlugin
 		if (assembly is null) { return; }
 		Il2CppRegisterAttribute.Registration(assembly);
 	}
+
+	public static void RunReleaseTest()
+	{
+		TestRunnerBase.Run<AllAssetLoadRunner>();
+		TestRunnerBase.Run<TranslationTestRunner>();
+		TestRunnerBase.Run<OptionRunner>();
+	}
 }
 
 [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
@@ -40,7 +47,11 @@ public static class ChatControllerSendChatPatch
 		{
 
 			GameUtility.ChangePresetTo(19);
+#if RELEASE
+			ExtremeRolesTestPlugin.RunReleaseTest();
+#else
 			TestRunnerBase.Run<TranslationTestRunner>();
+#endif
 		}
 	}
 }
