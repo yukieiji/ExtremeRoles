@@ -66,6 +66,11 @@ public class ApiServer : IDisposable
 
 	public static void Create()
 	{
+		if (instance is not null)
+		{
+			return;
+		}
+
 		if (handler.Count == 0)
 		{
 			ExtremeRolesPlugin.Logger.LogWarning($"ExR ApiServer: Disable, Register URL is ZERO");
