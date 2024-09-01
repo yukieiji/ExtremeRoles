@@ -13,8 +13,12 @@ namespace ExtremeRoles.Test;
 internal sealed class OptionRunner
 	: TestRunnerBase
 {
+#if RELEASE
+	private const int iteration = 3;
+#endif
+#if DEBUG
 	private const int iteration = 100000;
-
+#endif
 
 	public override void Run()
 	{
