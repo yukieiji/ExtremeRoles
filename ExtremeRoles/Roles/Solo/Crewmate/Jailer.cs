@@ -16,6 +16,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles.Solo.Neutral;
 
 
 #nullable enable
@@ -265,6 +266,13 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		}
 
 		byte rolePlayerId = local.PlayerId;
+
+		if (ExtremeRoleManager.TryGetSafeCastedLocalRole<Servant>(out var servant) &&
+			servant.Parent == this.targetPlayerId)
+		{
+			selfKill(rolePlayerId);
+			return true;
+		}
 
 		bool isSuccess = this.mode switch
 		{
