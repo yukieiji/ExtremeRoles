@@ -32,9 +32,16 @@ public partial class ExtremeRolesTestPlugin : BasePlugin
 
 	public static void RunReleaseTest()
 	{
-		TestRunnerBase.Run<AllAssetLoadRunner>();
-		TestRunnerBase.Run<TranslationTestRunner>();
-		TestRunnerBase.Run<OptionRunner>();
+		try
+		{
+			TestRunnerBase.Run<AllAssetLoadRunner>();
+			TestRunnerBase.Run<TranslationTestRunner>();
+			TestRunnerBase.Run<OptionRunner>();
+		}
+		catch(System.Exception ex)
+		{
+			Instance.Log.LogError(ex);
+		}
 	}
 }
 
