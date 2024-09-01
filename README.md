@@ -193,17 +193,15 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 # ビルド方法
 - エラー等でビルドできない場合は連絡していただければ対応いたします
 - 要求環境
-  - Git
   - VisualStudio 2022
-    - ワークロードで「C++によるデスクトップ開発」、「.NETデスクトップ開発」が必要
-  - Python
-    - Pythonのパスが通ってる必要があります(コマンドプロントでpythonと打って問題ない状態)
+    - 必要なものがあればslnを開いたときにインストールが要求されます
 - 環境構築
   1. リポジトリをクローン
   2. ディレクトリをクローンしたディレクトリに移動
   3. 「MakeEnv.bat」を実行
 - ビルド
   1. VisualStudio 2022で「ExtremeRoles.sln」を開いてビルドする
+     - 必要なものがあればインストールをお願いします
      - 初回のビルドはNugetパッケージの復元が入るので時間がかかります
      - アセット周りがうまく読み込まれない場合は再度ビルドしてみてください
 
@@ -240,7 +238,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 ## ボタンのアイコンについて
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
 
-## 多言語対応について
+## 多言語対応について(Translation)
 多言語対応は出来ますが、実装速度優先で開発しているため日本語が優先的に実装。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい<br>
 EXRole can support multiple languages, but only Japanese is implemented because I prioritize the speed of implementation. Please contact me if you would like to translate into another language or if you have translated into another language.
 
@@ -252,3 +250,25 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
 |  简体中文/SChinese  |   ほぼ翻訳済み/Mostly Translated  |
 |  繁体中文/TChinese  |   ほぼ翻訳済み/Mostly Translated  |
+
+### How to translate
+
+ExR has been using the ResX format translation system since v11.1.1.0.
+
+You can either edit [the files](https://github.com/yukieiji/ExtremeRoles/tree/master/ExtremeRoles/Translation/resx) as they are or use the [ResXResourceManager](https://github.com/dotnet/ResXResourceManager) to add translations with a few simple operations.
+
+- Use Visual Studio 2022
+
+  1. Clone Repository
+  2. Open Visual Studio
+      - If VisualStudio component is missing something you need, you will be prompted to install it, so please follow the instructions.
+  3. Open ResX Resource Manager Extension in the Tools and in the View|Other Windows menus of Visual Studio
+  4. Add or edit translations!!
+
+- ResXResourceManager standalone
+
+  1. Clone Repository(Like /a)
+  2. Download ResXResourceManager standalone App : [from](https://github.com/dotnet/ResXResourceManager/releases/latest)
+  3. Open ResXResourceManager.exe
+  4. Set Directory to Cloned path(Like /a/ExtremeRoles)
+  5. Add or edit translations!!
