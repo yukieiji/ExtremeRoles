@@ -260,7 +260,7 @@ You can either edit [the files](https://github.com/yukieiji/ExtremeRoles/tree/ma
 - Use Visual Studio 2022
 
   1. Clone Repository
-  2. Open Visual Studio
+  2. Open sln with Visual Studio
       - If VisualStudio component is missing something you need, you will be prompted to install it, so please follow the instructions.
   3. Open ResX Resource Manager Extension in the Tools and in the View|Other Windows menus of Visual Studio
   4. Add or edit translations!!
