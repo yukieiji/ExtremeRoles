@@ -45,8 +45,8 @@ public sealed class Tucker :
 		ChimeraCanUseVent,
 		ChimeraReviveTime,
 		ChimeraDeathKillCoolOffset,
-		TuckerDeathKillCoolOffset,
-		TuckerDeathWithChimera
+		TuckerDeathWithChimera,
+		TuckerDeathKillCoolOffset
 	}
 
 	public ExtremeAbilityButton? Button
@@ -306,13 +306,15 @@ public sealed class Tucker :
 			Option.ChimeraDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
+		var chimeraDeathOpt = factory.CreateBoolOption(
+			Option.TuckerDeathWithChimera,
+			false);
 		factory.CreateFloatOption(
 			Option.TuckerDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
-			format: OptionUnit.Second);
-		factory.CreateBoolOption(
-			Option.TuckerDeathWithChimera,
-			false);
+			chimeraDeathOpt,
+			format: OptionUnit.Second,
+			invert: true);
 	}
 
 	protected override void RoleSpecificInit()
