@@ -334,9 +334,11 @@ public sealed class Tucker :
 			loader.GetValue<Option, float>(Option.ChimeraVision),
 			loader.GetValue<Option, bool>(Option.ChimeraApplyEnvironmentVisionEffect));
 
+		this.withDeath = loader.GetValue<Option, bool>(Option.TuckerDeathWithChimera);
+
 		this.option = new Chimera.Option(
 			killOption, visonOption,
-			loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
+			this.withDeath ? 0.0f : loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraReviveTime),
 			loader.GetValue<Option, bool>(Option.ChimeraCanUseVent));
@@ -349,7 +351,6 @@ public sealed class Tucker :
 				loader.GetValue<Option, bool>(Option.IsReduceInitKillCoolOnRemove)));
 
 		this.range = loader.GetValue<Option, float>(Option.Range);
-		this.withDeath = loader.GetValue<Option, bool>(Option.TuckerDeathWithChimera);
 
 		this.removeInfo = null;
 		this.chimera = new HashSet<byte>();
