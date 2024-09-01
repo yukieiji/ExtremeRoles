@@ -1092,4 +1092,7 @@
   <data name="createChimera" xml:space="preserve">
     <value>キメラ錬成</value>
   </data>
+  <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
+    <value>タッカー死亡時、キメラも死亡するか</value>
+  </data>
 </root>
