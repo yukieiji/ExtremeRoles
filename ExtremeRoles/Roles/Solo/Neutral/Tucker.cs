@@ -46,6 +46,7 @@ public sealed class Tucker :
 		ChimeraReviveTime,
 		ChimeraDeathKillCoolOffset,
 		TuckerDeathKillCoolOffset,
+		TuckerDeathWithChimera
 	}
 
 	public ExtremeAbilityButton? Button
@@ -68,6 +69,7 @@ public sealed class Tucker :
 	private TuckerShadowSystem? system;
 	private CountBehavior? createBehavior;
 
+	private bool withDeath = false;
 	private byte target;
 	private int targetShadowId;
 	private RemoveInfo? removeInfo;
@@ -158,10 +160,44 @@ public sealed class Tucker :
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
+		if (this.withDeath)
+		{
+			foreach (byte playerId in this.chimera)
+			{
+				PlayerControl player = Player.GetPlayerControlById(playerId);
+
+				if (player == null ||
+					player.Data.IsDead ||
+					player.Data.Disconnected ||
+					!ExtremeRoleManager.TryGetSafeCastedRole<Chimera>(
+						playerId, out _)) { continue; }
+
+				player.Exiled();
+			}
+		}
+
 		disableShadow(rolePlayer.PlayerId);
 	}
 	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
 	{
+		if (this.withDeath)
+		{
+			foreach (byte playerId in this.chimera)
+			{
+				PlayerControl player = Player.GetPlayerControlById(playerId);
+
+				if (player == null ||
+					player.Data.IsDead ||
+					player.Data.Disconnected ||
+					!ExtremeRoleManager.TryGetSafeCastedRole<Chimera>(
+						playerId, out _)) { continue; }
+
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
+			}
+		}
+
 		disableShadow(rolePlayer.PlayerId);
 	}
 
@@ -274,6 +310,9 @@ public sealed class Tucker :
 			Option.TuckerDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
+		factory.CreateBoolOption(
+			Option.TuckerDeathWithChimera,
+			false);
 	}
 
 	protected override void RoleSpecificInit()
@@ -308,6 +347,7 @@ public sealed class Tucker :
 				loader.GetValue<Option, bool>(Option.IsReduceInitKillCoolOnRemove)));
 
 		this.range = loader.GetValue<Option, float>(Option.Range);
+		this.withDeath = loader.GetValue<Option, bool>(Option.TuckerDeathWithChimera);
 
 		this.removeInfo = null;
 		this.chimera = new HashSet<byte>();
