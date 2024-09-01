@@ -312,33 +312,39 @@ public static class UnityObjectLoader
 	private static AssetBundle getAssetBundleFromFilePath(
 		string filePath)
 	{
-		if (cachedBundle.TryGetValue(filePath, out AssetBundle? bundle) ||
-			bundle != null)
+		lock (cachedBundle)
 		{
-			bundle.Unload(true);
-			cachedBundle.Remove(filePath);
+			if (cachedBundle.TryGetValue(filePath, out AssetBundle? bundle) ||
+				bundle != null)
+			{
+				bundle.Unload(true);
+				cachedBundle.Remove(filePath);
+			}
+			var byteArray = Il2CppFile.ReadAllBytes(filePath);
+			bundle = loadAssetFromByteArray(byteArray);
+
+			cachedBundle.Add(filePath, bundle);
+
+			return bundle;
 		}
-		var byteArray = Il2CppFile.ReadAllBytes(filePath);
-		bundle = loadAssetFromByteArray(byteArray);
-
-		cachedBundle.Add(filePath, bundle);
-
-		return bundle;
 	}
 
 	private static AssetBundle GetAssetBundleFromAssembly(
 		string bundleName, Assembly assembly)
 	{
-		if (!cachedBundle.TryGetValue(bundleName, out AssetBundle? bundle) ||
-			bundle == null)
+		lock (cachedBundle)
 		{
-			using var stream = getStreamFromResource(assembly, bundleName);
-			var byteArray = getBytedArryFrom(stream);
-			bundle = loadAssetFromByteArray(byteArray);
+			if (!cachedBundle.TryGetValue(bundleName, out AssetBundle? bundle) ||
+				bundle == null)
+			{
+				using var stream = getStreamFromResource(assembly, bundleName);
+				var byteArray = getBytedArryFrom(stream);
+				bundle = loadAssetFromByteArray(byteArray);
 
-			cachedBundle.Add(bundleName, bundle);
+				cachedBundle.Add(bundleName, bundle);
+			}
+			return bundle;
 		}
-		return bundle;
 	}
 
 	private static AssetBundle loadAssetFromByteArray(Il2CppStructArray<byte> byteArray)

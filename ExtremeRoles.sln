@@ -18,6 +18,24 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Test", "Extrem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Generator", "ExtremeRoles.Generator\ExtremeRoles.Generator.csproj", "{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitconfig = .gitconfig
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
+		.vsconfig = .vsconfig
+		createtransdatareport.py = createtransdatareport.py
+		ExtremeSkinsTransData.xlsx = ExtremeSkinsTransData.xlsx
+		LICENSE.md = LICENSE.md
+		MakeEnv.bat = MakeEnv.bat
+		makelanguagejson.py = makelanguagejson.py
+		packing.ps1 = packing.ps1
+		README.md = README.md
+		requirements.txt = requirements.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
