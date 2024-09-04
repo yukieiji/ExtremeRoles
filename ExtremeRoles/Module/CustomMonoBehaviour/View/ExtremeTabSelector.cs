@@ -39,6 +39,7 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 		}
 
 		Destroy(picker.Labeltext.transform.parent.gameObject);
+
 		this.AllMapIcons = picker.AllMapIcons;
 		this.origin = picker.MapButtonOrigin;
 
@@ -62,12 +63,9 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 	[HideFromIl2Cpp]
 	public void Initialize(int maskLayer, Action<OptionTab> onTabChange)
 	{
-		IGameOptions currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
-
-		SpriteRenderer[] componentsInChildren = base.GetComponentsInChildren<SpriteRenderer>(true);
-		for (int i = 0; i < componentsInChildren.Length; i++)
+		foreach(var rend in  base.GetComponentsInChildren<SpriteRenderer>(true))
 		{
-			componentsInChildren[i].material.SetInt(PlayerMaterial.MaskLayer, maskLayer);
+			rend.material.SetInt(PlayerMaterial.MaskLayer, maskLayer);
 		}
 
 		if (this.tabSelectButton.Count != 0)
@@ -97,12 +95,14 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 
 			mapButton.SetImage(img, maskLayer);
 
-			mapButton.transform.localScale *= 1.15f;
-			mapButton.transform.localPosition = new Vector3(this.startX + (float)index * this.spaceX, 0.74f, -2f);
-			mapButton.Button.ClickMask = this.clickMask;
+			var trans = mapButton.transform;
+			trans.localScale *= 1.15f;
+			trans.localPosition = new Vector3(this.startX + (float)index * this.spaceX, 0.74f, -2f);
 
-			mapButton.Button.SelectButton(false);
-			mapButton.Button.OnClick.AddListener(() =>
+			var button = mapButton.Button;
+			button.ClickMask = this.clickMask;
+			button.SelectButton(false);
+			button.OnClick.AddListener(() =>
 			{
 				if (this.selectedButton != null)
 				{
@@ -115,8 +115,9 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 
 			if (index > 0)
 			{
-				mapButton.Button.ControllerNav.selectOnLeft = this.tabSelectButton[index - 1].Button;
-				this.tabSelectButton[index - 1].Button.ControllerNav.selectOnRight = mapButton.Button;
+				var prevButton = this.tabSelectButton[index - 1].Button;
+				button.ControllerNav.selectOnLeft = prevButton;
+				prevButton.ControllerNav.selectOnRight = button;
 			}
 			this.tabSelectButton.Add(mapButton);
 		}
