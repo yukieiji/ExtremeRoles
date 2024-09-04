@@ -16,8 +16,8 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.CustomOption.View;
 
+using CategoryView = ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ExtremeRoles.Module.CustomMonoBehaviour.View.ExtremeOptionView>;
 
 #nullable enable
 
@@ -31,13 +31,12 @@ public class TabView(TabView.Builder builder)
 		public IReadOnlyList<OptionBehaviour> AllOption => allOption;
 		private readonly List<OptionBehaviour> allOption = new List<OptionBehaviour>();
 
-		public IEnumerable<OptionCategoryViewObject<ExtremeOptionView>> OptionCategoryView => optionCategoryView.Select(x => x.Build());
-		private readonly List<OptionCategoryViewObject<ExtremeOptionView>.Builder> optionCategoryView = new List<OptionCategoryViewObject<ExtremeOptionView>.Builder>();
+		public IEnumerable<CategoryView> OptionCategoryView => optionCategoryView.Select(x => x.Build());
+		private readonly List<CategoryView.Builder> optionCategoryView = new List<CategoryView.Builder>();
 
-		public OptionCategoryViewObject<ExtremeOptionView>.Builder AddCategoryObject(CategoryHeaderMasked category, int num)
+		public CategoryView.Builder AddCategoryObject(CategoryHeaderMasked category, int num)
 		{
-			var optionGroupViewObject = new OptionCategoryViewObject<ExtremeOptionView>.Builder(
-				category, num);
+			var optionGroupViewObject = new CategoryView.Builder(category, num);
 			optionCategoryView.Add(optionGroupViewObject);
 
 			return optionGroupViewObject;
@@ -51,7 +50,7 @@ public class TabView(TabView.Builder builder)
 	}
 
 	public OptionBehaviour[] AllOptionView { get; } = builder.AllOption.ToArray();
-	public OptionCategoryViewObject<ExtremeOptionView>[] CategoryViewGroup { get; } = builder.OptionCategoryView.ToArray();
+	public CategoryView[] CategoryViewGroup { get; } = builder.OptionCategoryView.ToArray();
 }
 
 
@@ -111,8 +110,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 			}
 			Destroy(child.gameObject);
 		}
-		var allCate = menu.settingsContainer.GetComponentsInChildren<CategoryHeaderMasked>();
-		foreach (var cate in allCate)
+		foreach (var cate in menu.settingsContainer.GetComponentsInChildren<CategoryHeaderMasked>())
 		{
 			Destroy(cate.gameObject);
 		}
