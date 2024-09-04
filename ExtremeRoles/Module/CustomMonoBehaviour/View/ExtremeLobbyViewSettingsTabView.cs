@@ -10,11 +10,11 @@ using Il2CppInterop.Runtime.Attributes;
 using ExtremeRoles.Extension.Option;
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.GameMode;
 
 using IReadOnlyCategoryViews = System.Collections.Generic.IReadOnlyList<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
 using CategoryViews = System.Collections.Generic.List<ExtremeRoles.Module.CustomOption.View.OptionCategoryViewObject<ViewSettingsInfoPanel>>;
+using ExtremeRoles.Module.CustomOption.View;
 
 #nullable enable
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
@@ -81,7 +81,6 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 	private const float blockTime = 0.25f;
 	private float blockTimer = blockTime;
-	private OptionTab curTab;
 
 	public void Awake()
 	{
@@ -209,7 +208,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 				categoryHeaderMasked.ReplaceExRText(cate.TransedName, 61);
 				vanillaSettings.settingsInfo.Add(categoryHeaderMasked.gameObject);
 
-				var groupViewObj = new OptionCategoryViewObject<ViewSettingsInfoPanel>(
+				var groupViewObj = new OptionCategoryViewObject<ViewSettingsInfoPanel>.Builder(
 					categoryHeaderMasked, cate.Count);
 				foreach (var option in cate.Options)
 				{
@@ -222,7 +221,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 					groupViewObj.Options.Add(viewSettingsInfoPanel);
 				}
-				tabOption.Add(groupViewObj);
+				tabOption.Add(groupViewObj.Build());
 			}
 		}
 
@@ -271,7 +270,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 
 				int activeIndex = 0;
 				int activeObjNum = 0;
-				foreach (var (option, optionView) in catego.Options.Zip(optionGroupView.Options))
+				foreach (var (option, optionView) in catego.Options.Zip(optionGroupView.View))
 				{
 					if (!OptionSplitter.IsValidOption(validOptionId, option.Info.Id))
 					{

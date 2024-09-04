@@ -13,37 +13,190 @@ using ExtremeRoles.Extension.Option;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomOption.View;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
+using AmongUs.GameOptions;
+using ExtremeRoles.Module.CustomOption.View;
+
 
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 
+
+public class TabView(TabView.Builder builder)
+{
+	public class Builder()
+	{
+		public IReadOnlyList<OptionBehaviour> AllOption => allOption;
+		private readonly List<OptionBehaviour> allOption = new List<OptionBehaviour>();
+
+		public IEnumerable<OptionCategoryViewObject<ExtremeOptionView>> OptionCategoryView => optionCategoryView.Select(x => x.Build());
+		private readonly List<OptionCategoryViewObject<ExtremeOptionView>.Builder> optionCategoryView = new List<OptionCategoryViewObject<ExtremeOptionView>.Builder>();
+
+		public OptionCategoryViewObject<ExtremeOptionView>.Builder AddCategoryObject(CategoryHeaderMasked category, int num)
+		{
+			var optionGroupViewObject = new OptionCategoryViewObject<ExtremeOptionView>.Builder(
+				category, num);
+			optionCategoryView.Add(optionGroupViewObject);
+
+			return optionGroupViewObject;
+		}
+		public void AddOption(OptionBehaviour behaviour)
+		{
+			this.allOption.Add(behaviour);
+		}
+		public TabView Build()
+			=> new TabView(this);
+	}
+
+	public OptionBehaviour[] AllOptionView { get; } = builder.AllOption.ToArray();
+	public OptionCategoryViewObject<ExtremeOptionView>[] CategoryViewGroup { get; } = builder.OptionCategoryView.ToArray();
+}
+
+[Il2CppRegister]
+public sealed class ExtremeTabSelector : OptionBehaviour
+{
+	public IReadOnlyList<MapSelectButton> All => tabSelectButton;
+
+	private List<MapSelectButton> tabSelectButton = new List<MapSelectButton>(8);
+	private MapSelectButton? origin;
+	private Collider2D? clickMask;
+
+	private MapSelectButton? selectedButton;
+
+	private float startX;
+	private float spaceX;
+
+	private Il2CppSystem.Collections.Generic.List<MapIconByName>? AllMapIcons;
+
+	public void Awake()
+	{
+		if (!base.gameObject.TryGetComponent<GameOptionsMapPicker>(out var picker))
+		{
+			return;
+		}
+
+		Destroy(picker.Labeltext.transform.parent.gameObject);
+		this.AllMapIcons = picker.AllMapIcons;
+		this.origin = picker.MapButtonOrigin;
+
+		this.startX = picker.StartPosX - 1.9f;
+		this.spaceX = picker.SpacingX * 1.25f;
+
+		if (picker.mapButtons != null)
+		{
+			foreach (var button in picker.mapButtons)
+			{
+				Destroy(button.gameObject);
+			}
+			picker.mapButtons.Clear();
+		}
+
+		this.clickMask = picker.ButtonClickMask;
+
+		Destroy(picker);
+	}
+
+
+	public void Initialize(int maskLayer, Action<OptionTab> onTabChange)
+	{
+		IGameOptions currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
+
+		SpriteRenderer[] componentsInChildren = base.GetComponentsInChildren<SpriteRenderer>(true);
+		for (int i = 0; i < componentsInChildren.Length; i++)
+		{
+			componentsInChildren[i].material.SetInt(PlayerMaterial.MaskLayer, maskLayer);
+		}
+
+		if (this.tabSelectButton.Count != 0)
+		{
+			foreach (var button in this.tabSelectButton)
+			{
+				Destroy(button.gameObject);
+			}
+		}
+		this.tabSelectButton.Clear();
+
+		if (this.origin == null || this.clickMask == null)
+		{
+			return;
+		}
+
+		this.selectedButton = null;
+
+		foreach (var (index, tab) in Enum.GetValues<OptionTab>().Select((x, index) => (index, x)))
+		{
+			string tabName = tab.ToString();
+			var img = UnityObjectLoader.LoadFromResources<Sprite>(
+				ObjectPath.SettingTabAsset,
+				string.Format(ObjectPath.SettingTabImage, tabName.Substring(0, tabName.Length - 3)));
+
+			MapSelectButton mapButton = Instantiate(this.origin, base.transform);
+
+			mapButton.SetImage(img, maskLayer);
+
+			mapButton.transform.localScale *= 1.15f;
+			mapButton.transform.localPosition = new Vector3(this.startX + (float)index * this.spaceX, 0.74f, -2f);
+			mapButton.Button.ClickMask = this.clickMask;
+
+			mapButton.Button.SelectButton(false);
+			mapButton.Button.OnClick.AddListener(() =>
+			{
+				if (this.selectedButton != null)
+				{
+					this.selectedButton.Button.SelectButton(false);
+				}
+				this.selectedButton = mapButton;
+				this.selectedButton.Button.SelectButton(true);
+				onTabChange.Invoke(tab);
+			});
+
+			if (index > 0)
+			{
+				mapButton.Button.ControllerNav.selectOnLeft = this.tabSelectButton[index - 1].Button;
+				this.tabSelectButton[index - 1].Button.ControllerNav.selectOnRight = mapButton.Button;
+			}
+			this.tabSelectButton.Add(mapButton);
+		}
+	}
+
+	public void SelectDefault()
+	{
+		if (this.tabSelectButton.Count == 0)
+		{
+			return;
+		}
+		this.tabSelectButton[0].Button.OnClick.Invoke();
+	}
+}
+
+
 [Il2CppRegister]
 public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 {
-	[HideFromIl2Cpp]
-	public OptionCategory[]? AllCategory { private get; set; }
-
-	private readonly List<OptionCategoryViewObject<ExtremeOptionView>> optionGroupViewObject = new();
-	private readonly Il2CppUiElementList allUiElement = new();
-	private const float initY = 2.0f;
-
 	private Scroller? scroller;
 	private UiElement? backButton;
-	private UiElement? firstButton;
-
 	private Transform? settingsContainer;
 	private CategoryHeaderMasked? categoryHeaderOrigin;
+
 	private ExtremeOptionView? optionPrefab;
-	private SimpleButton? button;
+	private ExtremeTabSelector? tabPicker;
 
 	private Collider2D? buttonClickMask;
+	private SimpleButton? button;
+
+	private const float initY = 0.713f;
+
 	private const float blockTime = 0.25f;
 	private float blockTimer = blockTime;
+	private OptionTab curTab = (OptionTab)byte.MaxValue;
+
+	private readonly Dictionary<OptionTab, (OptionTabContainer, TabView)> allTabView = new Dictionary<OptionTab, (OptionTabContainer, TabView)>(8);
+
+	private readonly Il2CppUiElementList uiElements = new Il2CppUiElementList();
+	private readonly List<OptionBehaviour> Children = new List<OptionBehaviour>();
 
 	public void Awake()
 	{
@@ -51,6 +204,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			return;
 		}
+
 		menu.MaskBg.material.SetInt(PlayerMaterial.MaskLayer, 20);
 		menu.MaskArea.material.SetInt(PlayerMaterial.MaskLayer, 20);
 
@@ -60,13 +214,19 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		this.categoryHeaderOrigin = menu.categoryHeaderOrigin;
 
 		this.optionPrefab = Instantiate(menu.stringOptionOrigin).gameObject.AddComponent<ExtremeOptionView>();
+		this.optionPrefab.Awake();
 		this.optionPrefab.gameObject.SetActive(false);
 
 		this.buttonClickMask = menu.ButtonClickMask;
+		this.tabPicker = menu.MapPicker.gameObject.AddComponent<ExtremeTabSelector>();
 
-		Destroy(menu.MapPicker.gameObject);
+
 		foreach (var child in menu.Children)
 		{
+			if (child.gameObject == this.tabPicker.gameObject)
+			{
+				continue;
+			}
 			Destroy(child.gameObject);
 		}
 		var allCate = menu.settingsContainer.GetComponentsInChildren<CategoryHeaderMasked>();
@@ -95,7 +255,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 
 	public void FixedUpdate()
 	{
-		if (this.AllCategory is null)
+		if (!this.allTabView.TryGetValue(this.curTab, out var item))
 		{
 			return;
 		}
@@ -105,117 +265,91 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 			this.blockTimer -= Time.fixedDeltaTime;
 			return;
 		}
-
 		this.resetTimer();
 		bool isRefresh = false;
-		foreach (var cat in this.AllCategory)
+		foreach (var cat in item.Item1.Category)
 		{
 			isRefresh = isRefresh || cat.IsDirty;
 			cat.IsDirty = false;
 		}
 		if (isRefresh)
 		{
-			this.Refresh();
+			this.refresh(item.Item1, item.Item2);
 		}
 	}
 
-	public void Refresh()
+	private void onTabChange(OptionTab tab)
 	{
-		if (this.scroller == null ||
-			this.AllCategory is null ||
-			this.AllCategory.Length == 0)
+		if (!OptionManager.Instance.TryGetTab(tab, out var tabContainer))
 		{
 			return;
 		}
 
-		float yPos = initY;
-
-		IReadOnlySet<int>? validOptionId = default;
-		var instance = ExtremeGameModeManager.Instance;
-
-		foreach (var (catego, groupViewObj) in Enumerable.Zip(this.AllCategory, this.optionGroupViewObject))
+		if (!this.allTabView.TryGetValue(tab, out var item))
 		{
-			if (!OptionSplitter.TryGetValidOption(catego, out validOptionId))
-			{
-				continue;
-			}
-
-
-			var categoObj = groupViewObj.Category;
-			if (catego.Color.HasValue)
-			{
-				categoObj.Background.color = catego.Color.Value;
-			}
-			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
-			categoObj.ReplaceExRText(catego.TransedName, 20);
-
-			yPos -= 0.63f;
-
-			foreach (var (option, optionObj) in Enumerable.Zip(catego.Options, groupViewObj.Options))
-			{
-				if (!OptionSplitter.IsValidOption(validOptionId, option.Info.Id))
-				{
-					continue;
-				}
-
-				bool isActive = option.IsActiveAndEnable;
-
-				optionObj.gameObject.SetActive(isActive);
-				if (!isActive)
-				{
-					continue;
-				}
-
-				optionObj.transform.localPosition = new Vector3(1.25f, yPos, -2f);
-				optionObj.Refresh();
-				yPos -= 0.45f;
-			}
+			var view = this.initializeTab(tabContainer);
+			item = (tabContainer, view);
+			this.allTabView.Add(tab, item);
+			initializeControllerNavigation(item.Item2.AllOptionView);
 		}
-		this.scroller.SetYBoundsMax(-yPos - 1.65f);
+		if (this.allTabView.TryGetValue(this.curTab, out var oldView))
+		{
+			hide(oldView.Item2);
+		}
+
+		this.curTab = tab;
+		refresh(item.Item1, item.Item2);
 	}
 
 	public void OnEnable()
 	{
-		if (this.optionGroupViewObject.Count == 0)
+		if (this.Children.Count == 0 && this.tabPicker != null)
 		{
-			var allOpt = this.initializeOption();
-			this.initializeUiElement();
-			this.initializeControllerNavigation(allOpt);
+			this.tabPicker.Initialize(20, onTabChange);
 		}
-		this.Refresh();
-	}
-
-	public void OnDisable()
-	{
-		ControllerManager.Instance.CloseOverlayMenu(base.name);
+		if (this.tabPicker != null)
+		{
+			this.tabPicker.SelectDefault();
+		}
 	}
 
 	public void Open()
 	{
-		ControllerManager.Instance.OpenOverlayMenu(base.name, this.backButton, this.firstButton, this.allUiElement, false);
+		var element = this.tabPicker != null && this.tabPicker.All.Count != 0 ?
+			this.tabPicker.All[0].Button : this.backButton;
+		ControllerManager.Instance.OpenOverlayMenu(
+			base.name,
+			this.backButton,
+			element,
+			this.uiElements, false);
 	}
 
+
 	[HideFromIl2Cpp]
-	private IReadOnlyList<OptionBehaviour> initializeOption()
+	private TabView initializeTab(OptionTabContainer tab)
 	{
-		var result = new List<OptionBehaviour>();
-		if (this.categoryHeaderOrigin == null ||
-			this.optionPrefab == null ||
-			this.AllCategory is null)
+		if (this.tabPicker == null)
 		{
-			return result;
+			throw new ArgumentNullException();
 		}
 
-		this.optionGroupViewObject.Capacity = this.AllCategory.Length;
-		foreach (var catego in this.AllCategory)
+		var tabBuilder = new TabView.Builder();
+		tabBuilder.AddOption(this.tabPicker);
+
+		if (this.categoryHeaderOrigin == null ||
+			this.optionPrefab == null)
+		{
+			return tabBuilder.Build();
+		}
+
+		foreach (var catego in tab.Category)
 		{
 			var categoryHeaderMasked = Instantiate(
 				this.categoryHeaderOrigin, Vector3.zero, Quaternion.identity,
 				this.settingsContainer);
 			categoryHeaderMasked.transform.localScale = Vector3.one * 0.63f;
 
-			var optionGroupViewObject = new OptionCategoryViewObject<ExtremeOptionView>(
-				categoryHeaderMasked, catego.Count);
+			var optionGroupViewObject = tabBuilder.AddCategoryObject(categoryHeaderMasked, catego.Count);
 
 			foreach (var option in catego.Options)
 			{
@@ -228,33 +362,17 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 				opt.OptionCategoryModel = catego;
 
 				optionGroupViewObject.Options.Add(opt);
-				result.Add(opt);
+				tabBuilder.AddOption(opt);
 			}
-			this.optionGroupViewObject.Add(optionGroupViewObject);
 		}
 
-		return result;
-	}
-
-	private void initializeUiElement()
-	{
-		if (this.scroller == null)
-		{
-			return;
-		}
-
-		var arr = this.scroller.GetComponentsInChildren<UiElement>();
-		foreach (var element in arr)
-		{
-			this.allUiElement.Add(element);
-		}
-		this.firstButton = this.allUiElement[0];
+		return tabBuilder.Build();
 	}
 
 	[HideFromIl2Cpp]
-	private void initializeControllerNavigation(in IReadOnlyList<OptionBehaviour> allOpt)
+	private void initializeControllerNavigation(in OptionBehaviour[] allOpt)
 	{
-		for (int i = 0; i < allOpt.Count; i++)
+		for (int i = 0; i < allOpt.Length; i++)
 		{
 			OptionBehaviour optionBehaviour = allOpt[i];
 			if (!optionBehaviour.gameObject.activeSelf)
@@ -267,14 +385,16 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 			{
 				array = allOpt[i - 1].GetComponentsInChildren<UiElement>(true);
 			}
-			if (i + 1 < allOpt.Count)
+			if (i + 1 < allOpt.Length)
 			{
 				array2 = allOpt[i + 1].GetComponentsInChildren<UiElement>(true);
 			}
 			UiElement[] componentsInChildren = optionBehaviour.GetComponentsInChildren<UiElement>(true);
 			for (int j = 0; j < componentsInChildren.Length; j++)
 			{
-				var nav = componentsInChildren[j].ControllerNav;
+				var component = componentsInChildren[j];
+				var nav = component.ControllerNav;
+				this.uiElements.Add(component);
 				nav.mode = ControllerNavigation.Mode.Explicit;
 				if (array != null && array.Length != 0)
 				{
@@ -317,8 +437,77 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 			}
 		}
 	}
+
+	[HideFromIl2Cpp]
+	public void refresh(OptionTabContainer tab, TabView view)
+	{
+		if (this.scroller == null)
+		{
+			return;
+		}
+
+		float yPos = initY;
+
+		IReadOnlySet<int>? validOptionId = default;
+		var instance = ExtremeGameModeManager.Instance;
+
+		foreach (var (catego, groupViewObj) in tab.Category.Zip(view.CategoryViewGroup))
+		{
+			if (!OptionSplitter.TryGetValidOption(catego, out validOptionId))
+			{
+				continue;
+			}
+
+
+			var categoObj = groupViewObj.Category;
+			if (catego.Color.HasValue)
+			{
+				categoObj.Background.color = catego.Color.Value;
+			}
+			categoObj.transform.localPosition = new Vector3(-0.903f, yPos, -2f);
+			categoObj.ReplaceExRText(catego.TransedName, 20);
+			categoObj.gameObject.SetActive(true);
+
+			yPos -= 0.63f;
+
+			foreach (var (option, optionObj) in catego.Options.Zip(groupViewObj.View))
+			{
+				if (!OptionSplitter.IsValidOption(validOptionId, option.Info.Id))
+				{
+					continue;
+				}
+
+				bool isActive = option.IsActiveAndEnable;
+
+				optionObj.gameObject.SetActive(isActive);
+				if (!isActive)
+				{
+					continue;
+				}
+
+				optionObj.transform.localPosition = new Vector3(1.25f, yPos, -2f);
+				optionObj.Refresh();
+				yPos -= 0.45f;
+			}
+		}
+		this.scroller.SetYBoundsMax(-yPos - 1.65f);
+	}
+
+	public void hide(TabView view)
+	{
+		foreach (var cate in view.CategoryViewGroup)
+		{
+			cate.Category.gameObject.SetActive(false);
+			foreach (var opt in cate.View)
+			{
+				opt.gameObject.SetActive(false);
+			}
+		}
+	}
+
 	private void resetTimer()
 	{
 		this.blockTimer = blockTime;
 	}
 }
+
