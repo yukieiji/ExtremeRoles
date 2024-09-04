@@ -3,15 +3,14 @@
 public enum OptionTab : byte
 {
 	GeneralTab,
-	CombinationTab,
 
 	CrewmateTab,
-	GhostCrewmateTab,
-
 	ImpostorTab,
-	GhostImpostorTab,
-
 	NeutralTab,
+	CombinationTab,
+
+	GhostCrewmateTab,
+	GhostImpostorTab,
 	GhostNeutralTab,
 }
 
