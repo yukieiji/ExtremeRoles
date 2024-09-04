@@ -76,7 +76,11 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		exrMenu.tab = init.Tab.gameObject.AddComponent<ExtremeGameOptionsMenuView>();
 		exrMenu.menu = menu;
 
-		init.Button.ChangeButtonText("EXTREME ROLES");
+		if (init.Button.buttonText.TryGetComponent<TextTranslatorTMP>(out var text))
+		{
+			Destroy(text);
+		}
+		init.Button.ChangeButtonText("Extreme Roles");
 
 		exrMenu.button.OnClick.AddListener(() =>
 		{
