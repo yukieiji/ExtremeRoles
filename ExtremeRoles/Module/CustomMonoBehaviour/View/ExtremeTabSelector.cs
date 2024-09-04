@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Il2CppInterop.Runtime.Attributes;
+
 using UnityEngine;
 
 using AmongUs.GameOptions;
@@ -57,7 +59,7 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 		Destroy(picker);
 	}
 
-
+	[HideFromIl2Cpp]
 	public void Initialize(int maskLayer, Action<OptionTab> onTabChange)
 	{
 		IGameOptions currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
