@@ -20,7 +20,7 @@ public static class LobbyViewSettingsPaneChangeTabPatch
 	{
 		if (__instance.TryGetComponent<ExtremeLobbyViewSettingsTabView>(out var view))
 		{
-			view.ChangeTabPostfix();
+			view.ChangeTabPrefix();
 		}
 	}
 }

@@ -124,29 +124,8 @@
   <data name="GhostNeutralTab" xml:space="preserve">
     <value>&lt;color=#7F7F7FFF&gt;ゴーストニュートラル役職設定&lt;/color&gt;</value>
   </data>
-  <data name="ExR_GeneralTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの共通部分の設定を行うタブ</value>
-  </data>
-  <data name="ExR_CrewmateTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの&lt;color=#8CFFFFFF&gt;クルーメイト役職&lt;/color&gt;の設定を行うタブ</value>
-  </data>
-  <data name="ExR_ImpostorTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの&lt;color=#FF1919FF&gt;インポスター役職&lt;/color&gt;の設定を行うタブ</value>
-  </data>
-  <data name="ExR_NeutralTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの&lt;color=#7F7F7FFF&gt;ニュートラル役職&lt;/color&gt;の設定を行うタブ</value>
-  </data>
-  <data name="ExR_CombinationTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの&lt;color=#8CFFFFFF&gt;コンビ&lt;/color&gt;&lt;color=#FF1919FF&gt;ネーション&lt;/color&gt;&lt;color=#7F7F7FFF&gt;役職&lt;/color&gt;の設定を行うタブ</value>
-  </data>
-  <data name="ExR_GhostCrewmateTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの&lt;color=#8CFFFFFF&gt;クルーメイト幽霊役職&lt;/color&gt;の設定を行うタブ</value>
-  </data>
-  <data name="ExR_GhostImpostorTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの&lt;color=#FF1919FF&gt;インポスター幽霊役職&lt;/color&gt;の設定を行うタブ</value>
-  </data>
-  <data name="ExR_GhostNeutralTabSettingsDescription" xml:space="preserve">
-    <value>ExtremeRolesの&lt;color=#7F7F7FFF&gt;ニュートラル幽霊役職&lt;/color&gt;の設定を行うタブ</value>
+  <data name="ExR_SettingsDescription" xml:space="preserve">
+    <value>ExtremeRolesの設定を行えます</value>
   </data>
   <data name="OptionSettingChange" xml:space="preserve">
     <value>[{0}-{1}]の「{2}」が「{3}」に更新されました</value>
@@ -1182,5 +1161,8 @@ ExR等を最低限の機能のみで起動しています</value>
   </data>
   <data name="BothImpostorAndNautral" xml:space="preserve">
     <value>インポスターとニュートラル</value>
+  </data>
+  <data name="SkipSettingUsingTab" xml:space="preserve">
+    <value>(Tabキー/Shift + Tabキーで次の設定へ)</value>
   </data>
 </root>
