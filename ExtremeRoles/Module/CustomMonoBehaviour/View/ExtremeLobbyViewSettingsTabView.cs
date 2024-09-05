@@ -129,7 +129,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			return;
 		}
 
-		if (Input.GetKey(KeyCode.Tab))
+		if (Input.GetKeyDown(KeyCode.Tab))
 		{
 			if (Key.IsShiftDown())
 			{
@@ -383,11 +383,9 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 		var nextTab = (OptionTab)(
 			((byte)curTab + (byte)OptionTab.GhostNeutralTab + offset) % (byte)OptionTab.GhostNeutralTab);
 
-		Helper.Logging.Debug($"Y:{curPos.y}, Tab{curTab}");
-
 		if (tabPos.TryGetValue(nextTab, out var pos))
 		{
-			scroller.Inner.transform.localPosition = new Vector3(
+			scroller.Inner.localPosition = new Vector3(
 				curPos.x,
 				Mathf.Clamp(
 					-(pos.y - 1.0f),
