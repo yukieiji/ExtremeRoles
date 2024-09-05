@@ -199,6 +199,7 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			tabCategoryHeaderMasked.transform.SetParent(
 				vanillaSettings.settingsContainer);
 			tabCategoryHeaderMasked.transform.localScale = Vector3.one;
+			tabCategoryHeaderMasked.Background.transform.localScale = new Vector3(3.0f, 1.0f);
 			tabCategoryHeaderMasked.ReplaceExRText(tab.ToString(), 61);
 
 			vanillaSettings.settingsInfo.Add(tabCategoryHeaderMasked.gameObject);
