@@ -25,6 +25,7 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 	private Collider2D? clickMask;
 
 	private MapSelectButton? selectedButton;
+	private SpriteRenderer? imgName;
 
 	private float startX;
 	private float spaceX;
@@ -42,6 +43,7 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 
 		this.AllMapIcons = picker.AllMapIcons;
 		this.origin = picker.MapButtonOrigin;
+		this.imgName = picker.MapName;
 
 		this.startX = picker.StartPosX - 1.9f;
 		this.spaceX = picker.SpacingX * 1.25f;
@@ -86,10 +88,10 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 
 		foreach (var (index, tab) in Enum.GetValues<OptionTab>().Select((x, index) => (index, x)))
 		{
-			string tabName = tab.ToString();
+			string tabName = tab.ToString().ToLower();
 			var img = UnityObjectLoader.LoadFromResources<Sprite>(
 				ObjectPath.SettingTabAsset,
-				string.Format(ObjectPath.SettingTabImage, tabName.Substring(0, tabName.Length - 3)));
+				string.Format(ObjectPath.SettingTabImage, tabName));
 
 			MapSelectButton mapButton = Instantiate(this.origin, base.transform);
 
@@ -110,6 +112,14 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 				}
 				this.selectedButton = mapButton;
 				this.selectedButton.Button.SelectButton(true);
+
+				if (this.imgName != null)
+				{
+					this.imgName.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+						ObjectPath.SettingTabAsset,
+						string.Format(ObjectPath.SettingTabImage, $"{tabName}header"));
+				}
+
 				onTabChange.Invoke(tab);
 			});
 
