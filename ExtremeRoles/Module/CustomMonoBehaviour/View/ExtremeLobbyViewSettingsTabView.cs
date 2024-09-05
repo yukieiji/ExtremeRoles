@@ -199,8 +199,20 @@ public sealed class ExtremeLobbyViewSettingsTabView(IntPtr ptr) : MonoBehaviour(
 			tabCategoryHeaderMasked.transform.SetParent(
 				vanillaSettings.settingsContainer);
 			tabCategoryHeaderMasked.transform.localScale = Vector3.one;
-			tabCategoryHeaderMasked.Background.transform.localScale = new Vector3(3.0f, 1.0f);
-			tabCategoryHeaderMasked.ReplaceExRText(tab.ToString(), 61);
+			tabCategoryHeaderMasked.Background.transform.localScale = new Vector3(3.25f, 1.0f);
+
+			var title = tabCategoryHeaderMasked.Title;
+
+			var curSizeDelt = title.rectTransform.sizeDelta;
+			title.rectTransform.sizeDelta = new Vector2(15.0f, curSizeDelt.y + 0.5f);
+
+			var curPos = title.transform.localPosition;
+			title.transform.localPosition += new Vector3(6.0f, 0.0f);
+
+			title.fontSize = title.fontSizeMax = title.fontSizeMin = 3.0f;
+
+			tabCategoryHeaderMasked.ReplaceExRText(
+				$"{Tr.GetString(tab.ToString())}{Tr.GetString("SkipSettingUsingTab")}", 61);
 
 			vanillaSettings.settingsInfo.Add(tabCategoryHeaderMasked.gameObject);
 
