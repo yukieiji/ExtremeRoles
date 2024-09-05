@@ -8,6 +8,7 @@ using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
+using TMPro;
 
 
 
@@ -64,6 +65,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 	private PassiveButton? button;
 	private GameSettingMenu? menu;
 	private ExtremeGameOptionsMenuView? tab;
+	private TextMeshPro? text;
 
 	[HideFromIl2Cpp]
 	public static void Initialize(in GameSettingMenu menu)
@@ -75,6 +77,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		exrMenu.button = init.Button;
 		exrMenu.tab = init.Tab.gameObject.AddComponent<ExtremeGameOptionsMenuView>();
 		exrMenu.menu = menu;
+		exrMenu.text = menu.MenuDescriptionText;
 
 		if (init.Button.buttonText.TryGetComponent<TextTranslatorTMP>(out var text))
 		{
@@ -131,12 +134,18 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			this.tab.gameObject.SetActive(true);
 		}
 
+		if (this.text != null)
+		{
+			this.text.text = Tr.GetString("ExR_SettingsDescription");
+		}
+
 		if (isPreviewOnly)
 		{
 			this.menu.ToggleLeftSideDarkener(false);
 			this.menu.ToggleRightSideDarkener(true);
 			return;
 		}
+
 		this.menu.ToggleLeftSideDarkener(true);
 		this.menu.ToggleRightSideDarkener(false);
 
