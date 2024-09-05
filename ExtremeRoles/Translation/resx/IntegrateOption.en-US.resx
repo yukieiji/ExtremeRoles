@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SubmergedEnableElevator" xml:space="preserve">
+  <data name="SubmergedCategorySubmergedEnableElevator" xml:space="preserve">
     <value>Submerged : Enabled Elevators</value>
   </data>
   <data name="AllElevator" xml:space="preserve">
@@ -141,10 +141,10 @@
   <data name="LobbyAndServiceElevator" xml:space="preserve">
     <value>Lobby and Service</value>
   </data>
-  <data name="SubmergedReplaceDoorMinigame" xml:space="preserve">
+  <data name="SubmergedCategorySubmergedReplaceDoorMinigame" xml:space="preserve">
     <value>Submerged : Chage Door minigame</value>
   </data>
-  <data name="SubmergedSubmergedSpawnSetting" xml:space="preserve">
+  <data name="SubmergedCategorySubmergedSubmergedSpawnSetting" xml:space="preserve">
     <value>Submerged : Advanced spawn settings</value>
   </data>
   <data name="LowerCentralOnly" xml:space="preserve">

@@ -97,7 +97,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SubmergedEnableElevator" xml:space="preserve">
+  <data name="SubmergedCategorySubmergedEnableElevator" xml:space="preserve">
     <value>サブマージド : 有効なエレベーター</value>
   </data>
   <data name="AllElevator" xml:space="preserve">
@@ -121,10 +121,10 @@
   <data name="LobbyAndServiceElevator" xml:space="preserve">
     <value>ロビーとサービス付近のみ</value>
   </data>
-  <data name="SubmergedReplaceDoorMinigame" xml:space="preserve">
+  <data name="SubmergedCategorySubmergedReplaceDoorMinigame" xml:space="preserve">
     <value>サブマージド : ドア開けのミニゲームを変更するか</value>
   </data>
-  <data name="SubmergedSubmergedSpawnSetting" xml:space="preserve">
+  <data name="SubmergedCategorySubmergedSubmergedSpawnSetting" xml:space="preserve">
     <value>サブマージドのスポーン設定</value>
   </data>
   <data name="LowerCentralOnly" xml:space="preserve">
@@ -132,5 +132,8 @@
   </data>
   <data name="UpperCentralOnly" xml:space="preserve">
     <value>下部セントラルのみ</value>
+  </data>
+  <data name="SubmergedCategory" xml:space="preserve">
+    <value>サブマージド連携オプション</value>
   </data>
 </root>
