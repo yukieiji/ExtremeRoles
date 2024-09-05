@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SubmergedCategorySubmergedEnableElevator" xml:space="preserve">
+  <data name="SubmergedCategoryEnableElevator" xml:space="preserve">
     <value>潜艇：启用电梯</value>
   </data>
   <data name="AllElevator" xml:space="preserve">
@@ -141,7 +141,7 @@
   <data name="LobbyAndServiceElevator" xml:space="preserve">
     <value>大厅及服务站</value>
   </data>
-  <data name="SubmergedCategorySubmergedReplaceDoorMinigame" xml:space="preserve">
+  <data name="SubmergedCategoryReplaceDoorMinigame" xml:space="preserve">
     <value>潜艇：将游戏模式变更为小游戏“芝麻开门</value>
   </data>
 </root>
