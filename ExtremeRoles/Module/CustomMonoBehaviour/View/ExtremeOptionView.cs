@@ -23,35 +23,42 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 	[HideFromIl2Cpp]
 	public OptionCategory? OptionCategoryModel { private get; set; }
 
+	private readonly record struct AwakeProp(
+		TextMeshPro Title,
+		TextMeshPro Value,
+		GameOptionButton Minus,
+		GameOptionButton Plus,
+		Transform ImgTrans);
+
 	public void Awake()
 	{
-		if (!base.TryGetComponent<StringOption>(out var opt))
-		{
-			return;
-		}
+		var prop = base.TryGetComponent<StringOption>(out var opt) ?
+			NomalAwake(opt) : DelayAwake();
 
-		this.titleText = opt.TitleText;
+		this.titleText = prop.Title;
+		this.valueText = prop.Value;
+
 		var curSizeDelt = this.titleText.rectTransform.sizeDelta;
 		this.titleText.rectTransform.sizeDelta = new Vector2(4.25f, curSizeDelt.y);
 		var curTextpos = this.titleText.transform.localPosition;
 		this.titleText.transform.localPosition = new Vector3(-1.8f, curTextpos.y, curTextpos.z);
 
-		this.valueText = opt.ValueText;
+		prop.Minus.OnClick.RemoveAllListeners();
+		prop.Minus.OnClick.AddListener(this.Decrease);
 
-		opt.MinusBtn.OnClick.RemoveAllListeners();
-		opt.MinusBtn.OnClick.AddListener(this.Decrease);
+		prop.Plus.OnClick.RemoveAllListeners();
+		prop.Plus.OnClick.AddListener(this.Increase);
 
-		opt.PlusBtn.OnClick.RemoveAllListeners();
-		opt.PlusBtn.OnClick.AddListener(this.Increase);
-
-		var imgTrans = opt.LabelBackground.transform;
+		var imgTrans = prop.ImgTrans;
 		var curPos = imgTrans.localPosition;
 		imgTrans.localPosition = new Vector3(-1.915f, curPos.y, curPos.z);
 		var curScale = imgTrans.localScale;
 		imgTrans.localScale = new Vector3(1.5f, curScale.y, curScale.z);
 
-
-		Destroy(opt);
+		if (opt != null)
+		{
+			Destroy(opt);
+		}
 	}
 
 	public void Decrease()
@@ -105,4 +112,20 @@ public sealed class ExtremeOptionView(IntPtr ptr) : OptionBehaviour(ptr)
 			this.valueText.text = this.OptionModel.ValueString;
 		}
 	}
+
+	private AwakeProp DelayAwake()
+		=> new AwakeProp(
+			base.transform.Find("Title Text").GetComponent<TextMeshPro>(),
+			base.transform.Find("Value_TMP (1)").GetComponent<TextMeshPro>(),
+			base.transform.Find("MinusButton").GetComponent<GameOptionButton>(),
+			base.transform.Find("PlusButton").GetComponent<GameOptionButton>(),
+			base.transform.Find("LabelBackground"));
+
+	private AwakeProp NomalAwake(StringOption opt)
+		=> new AwakeProp(
+			opt.TitleText,
+			opt.ValueText,
+			opt.MinusBtn,
+			opt.PlusBtn,
+			opt.LabelBackground.transform);
 }

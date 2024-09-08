@@ -45,7 +45,8 @@ public sealed class Tucker :
 		ChimeraCanUseVent,
 		ChimeraReviveTime,
 		ChimeraDeathKillCoolOffset,
-		TuckerDeathKillCoolOffset,
+		TuckerDeathWithChimera,
+		TuckerDeathKillCoolOffset
 	}
 
 	public ExtremeAbilityButton? Button
@@ -68,6 +69,7 @@ public sealed class Tucker :
 	private TuckerShadowSystem? system;
 	private CountBehavior? createBehavior;
 
+	private bool withDeath = false;
 	private byte target;
 	private int targetShadowId;
 	private RemoveInfo? removeInfo;
@@ -158,10 +160,44 @@ public sealed class Tucker :
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
+		if (this.withDeath)
+		{
+			foreach (byte playerId in this.chimera)
+			{
+				PlayerControl player = Player.GetPlayerControlById(playerId);
+
+				if (player == null ||
+					player.Data.IsDead ||
+					player.Data.Disconnected ||
+					!ExtremeRoleManager.TryGetSafeCastedRole<Chimera>(
+						playerId, out _)) { continue; }
+
+				player.Exiled();
+			}
+		}
+
 		disableShadow(rolePlayer.PlayerId);
 	}
 	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
 	{
+		if (this.withDeath)
+		{
+			foreach (byte playerId in this.chimera)
+			{
+				PlayerControl player = Player.GetPlayerControlById(playerId);
+
+				if (player == null ||
+					player.Data.IsDead ||
+					player.Data.Disconnected ||
+					!ExtremeRoleManager.TryGetSafeCastedRole<Chimera>(
+						playerId, out _)) { continue; }
+
+				RPCOperator.UncheckedMurderPlayer(
+					playerId, playerId,
+					byte.MaxValue);
+			}
+		}
+
 		disableShadow(rolePlayer.PlayerId);
 	}
 
@@ -270,10 +306,15 @@ public sealed class Tucker :
 			Option.ChimeraDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
 			format: OptionUnit.Second);
+		var chimeraDeathOpt = factory.CreateBoolOption(
+			Option.TuckerDeathWithChimera,
+			false);
 		factory.CreateFloatOption(
 			Option.TuckerDeathKillCoolOffset,
 			2.5f, -30.0f, 30.0f, 0.1f,
-			format: OptionUnit.Second);
+			chimeraDeathOpt,
+			format: OptionUnit.Second,
+			invert: true);
 	}
 
 	protected override void RoleSpecificInit()
@@ -293,9 +334,11 @@ public sealed class Tucker :
 			loader.GetValue<Option, float>(Option.ChimeraVision),
 			loader.GetValue<Option, bool>(Option.ChimeraApplyEnvironmentVisionEffect));
 
+		this.withDeath = loader.GetValue<Option, bool>(Option.TuckerDeathWithChimera);
+
 		this.option = new Chimera.Option(
 			killOption, visonOption,
-			loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
+			this.withDeath ? 0.0f : loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraReviveTime),
 			loader.GetValue<Option, bool>(Option.ChimeraCanUseVent));
