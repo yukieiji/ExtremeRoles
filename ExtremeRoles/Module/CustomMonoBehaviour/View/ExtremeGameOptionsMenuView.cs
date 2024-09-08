@@ -94,7 +94,9 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		this.settingsContainer = menu.settingsContainer;
 		this.categoryHeaderOrigin = menu.categoryHeaderOrigin;
 
-		this.optionPrefab = Instantiate(menu.stringOptionOrigin).gameObject.AddComponent<ExtremeOptionView>();
+		this.optionPrefab = Instantiate(
+			menu.stringOptionOrigin,
+			base.transform).gameObject.AddComponent<ExtremeOptionView>();
 		this.optionPrefab.Awake();
 		this.optionPrefab.gameObject.SetActive(false);
 
@@ -191,6 +193,11 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			this.tabPicker.SelectDefault();
 		}
+	}
+
+	public void OnDisable()
+	{
+		ControllerManager.Instance.CloseOverlayMenu(base.name);
 	}
 
 	public void Open()
