@@ -103,18 +103,25 @@ public sealed class Tucker :
 		chimera.SetControlId(tucker.GameControlId);
 		IRoleSpecialReset.ResetLover(targetPlayerId);
 
-		var local = PlayerControl.LocalPlayer;
-		if (local != null &&
-			rolePlayerId == local.PlayerId)
-		{
-			tucker.chimera.Add(targetPlayerId);
-		}
+		tucker.chimera.Add(targetPlayerId);
 
 		if (AmongUsClient.Instance.AmHost &&
 			tucker.system is not null)
 		{
 			tucker.system.Enable(rolePlayerId);
 		}
+	}
+
+	public static void RemoveChimera(byte rolePlayerId, byte targetPlayerId)
+	{
+		var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
+		if (rolePlayer == null ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(rolePlayerId, out var tucker) ||
+			tucker.option is null)
+		{
+			return;
+		}
+		tucker.OnResetChimera(targetPlayerId, tucker.option.KillOption.KillCool);
 	}
 
 	public void CreateAbility()
@@ -485,6 +492,7 @@ public sealed class Tucker :
 			}
 			role.RemoveTucker();
 		}
+		this.chimera.Clear();
 	}
 
 	private bool isSameTuckerTeam(SingleRoleBase targetRole)
@@ -512,6 +520,15 @@ public sealed class Tucker :
 		}
 		foreach (byte chimera in removed)
 		{
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.ReplaceRole))
+			{
+				caller.WriteByte(rolePlayer.PlayerId);
+				caller.WriteByte(chimera);
+				caller.WriteByte(
+					(byte)ExtremeRoleManager.ReplaceOperation.RemoveChimera);
+			}
+
 			OnResetChimera(chimera, this.option.KillOption.KillCool);
 		}
 	}

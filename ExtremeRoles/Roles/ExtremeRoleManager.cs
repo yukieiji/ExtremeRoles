@@ -344,7 +344,8 @@ public static class ExtremeRoleManager
         CreateServant,
 		ForceReplaceToYardbird,
 		BecomeLawbreaker,
-		ForceRelaceToChimera
+		ForceRelaceToChimera,
+		RemoveChimera,
 	}
 
 	public static int GetRoleGroupId(ExtremeRoleId roleId)
@@ -520,6 +521,9 @@ public static class ExtremeRoleManager
 				break;
 			case ReplaceOperation.ForceRelaceToChimera:
 				Tucker.TargetToChimera(caller, targetId);
+				break;
+			case ReplaceOperation.RemoveChimera:
+				Tucker.RemoveChimera(caller, targetId);
 				break;
 			default:
                 break;

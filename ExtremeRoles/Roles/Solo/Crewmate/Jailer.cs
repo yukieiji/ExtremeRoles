@@ -470,6 +470,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		if (!this.awakeRole)
 		{
+			this.CanCallMeeting = true;
 			this.awakeHasOtherVision = this.HasOtherVision;
 			this.HasOtherVision = false;
 		}
@@ -512,6 +513,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
 		{
 			this.awakeRole = true;
+			this.CanCallMeeting = false;
 			this.HasOtherVision = this.awakeHasOtherVision;
 			this.Button.SetButtonShow(true);
 		}
