@@ -212,13 +212,15 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 				_ => "",
 			};
 
-			return string.Format("{0}: {1}{2}",
+			string roleName = Design.ColoedString(
 				this.NameColor,
-				shortText,
-				Design.ColoedString(
-					this.NameColor,
-					Tr.GetString(
-						$"{this.Id}ShortDescription")));
+				Tr.GetString(this.RoleName));
+
+			string desc = Design.ColoedString(
+				this.NameColor,
+				Tr.GetString($"{this.Id}ShortDescription"));
+
+			return $"{roleName}: {shortText}{desc}";
 		}
 
 		else
