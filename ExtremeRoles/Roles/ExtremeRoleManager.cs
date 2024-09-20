@@ -98,6 +98,7 @@ public enum ExtremeRoleId : int
 	Thief,
 	Crewshroom,
 	Terorist,
+	Raider,
 
 	Alice,
     Jackal,
