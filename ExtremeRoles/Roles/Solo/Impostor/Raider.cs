@@ -13,6 +13,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
+#nullable enable
+
 public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum Option
@@ -22,7 +24,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     private float paintDistance;
     private byte targetDeadBodyId;
 
-    public ExtremeAbilityButton Button { get; set; }
+    public ExtremeAbilityButton? Button { get; set; }
 
 	private Gui? ui;
 	private float timer = 0f;
@@ -37,11 +39,15 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.isOpen = value;
 
 				this.ui.enabled = value;
-				this.camera.enabled = value;
 
-				this.buttonTransformObj.SetActive(value);
-				this.back.gameObject.SetActive(!value);
-				this.execute.gameObject.SetActive(!value);
+				this.back.gameObject.SetActive(value);
+				this.execute.gameObject.SetActive(value);
+
+				this.curPos = PlayerControl.LocalPlayer.transform.position;
+
+				bool invert = !value;
+				this.camera.enabled = invert;
+				this.buttonTransformObj.SetActive(invert);
 			}
 		}
 		private bool isOpen;
@@ -52,25 +58,40 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 		private readonly SimpleButton back;
 		private readonly SimpleButton execute;
+		private Vector3 curPos;
 
 		private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
 
 		public Gui()
 		{
 			this.camera = hud.transform.parent.GetComponent<FollowerCamera>();
-			this.buttonTransformObj = hud.transform.Find("Buttons/ButtonRight").gameObject;
+			this.buttonTransformObj = hud.transform.Find("Buttons/BottomRight").gameObject;
 
-			this.ui = Object.Instantiate(
-				 hud.FullScreen,
-				 hud.transform);
+			var obj = new GameObject("RaiderGUI");
+			obj.transform.SetParent(hud.transform);
+
+			this.ui = obj.AddComponent<SpriteRenderer>();
+			this.ui.sprite = UnityObjectLoader.LoadSpriteFromResources(
+				"ExtremeRoles.Resources.RaiderGUI.png", 120.0f);
+
+			obj.transform.localScale = new Vector2(
+				Screen.width / 1280.0f,
+				Screen.height / 720.0f);
+
+			obj.layer = LayerMask.NameToLayer("UI");
+
+			this.ui.gameObject.SetActive(true);
+			this.ui.transform.localPosition = new Vector3(0f, 0f, 20f);
 
 			this.back = UnityObjectLoader.CreateSimpleButton(hud.transform);
+			this.back.Awake();
 			this.back.ClickedEvent.AddListener(() =>
 			{
 				this.IsOpen = false;
 			});
 
 			this.execute = UnityObjectLoader.CreateSimpleButton(hud.transform);
+			this.execute.Awake();
 		}
 		public void Update(float timer)
 		{
@@ -78,6 +99,13 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{
 				this.IsOpen = false;
+			}
+			if (this.IsOpen && PlayerControl.LocalPlayer != null)
+			{
+				Vector2 cameraPos = this.camera.transform.position;
+				Vector2 del = FastDestroyableSingleton<HudManager>.Instance.joystick.DeltaL.normalized;
+				this.camera.transform.position = cameraPos + (del * 0.1f);
+				PlayerControl.LocalPlayer.transform.position = this.curPos;
 			}
 		}
 	}
@@ -99,7 +127,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
