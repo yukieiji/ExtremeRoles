@@ -85,17 +85,25 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 			this.back = UnityObjectLoader.CreateSimpleButton(hud.transform);
 			this.back.Awake();
+			this.back.Scale = new Vector3(0.75f, 0.75f, 1.0f);
+			this.back.Text.fontSize = this.back.Text.fontSizeMax = this.back.Text.fontSizeMin = 2.75f;
+			this.back.name = "BackNormal";
+			this.back.transform.localPosition = new Vector3(3.75f, -2.25f, 0.0f);
 			this.back.ClickedEvent.AddListener(() =>
 			{
 				this.IsOpen = false;
 			});
 
 			this.execute = UnityObjectLoader.CreateSimpleButton(hud.transform);
+			this.execute.Scale = new Vector3(0.75f, 0.75f, 1.0f);
+			this.execute.transform.localPosition = new Vector3(3.75f, 0.0f, 0.0f);
+			this.execute.name = "ExecuteBomb";
+			this.execute.Text.fontSize = this.execute.Text.fontSizeMax = this.execute.Text.fontSizeMin = 4.0f;
 			this.execute.Awake();
 		}
 		public void Update(float timer)
 		{
-			this.back.Text.text = $"backUntile:{timer}";
+			this.back.Text.text = $"終了\n(自動終了まで{Mathf.CeilToInt(timer)}秒)";
 			if (Input.GetKeyDown(KeyCode.Escape))
 			{
 				this.IsOpen = false;
