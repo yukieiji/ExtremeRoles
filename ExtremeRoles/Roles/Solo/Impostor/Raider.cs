@@ -10,6 +10,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -19,15 +20,39 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum Option
     {
-        CanPaintDistance,
+        IsOpenLimit,
+		LimitNum,
+		IsHidePlayerOnOpen,
+		BombType,
+		BombNum,
+		BombTargetRange,
+		BombRange,
+		BombAliveTime,
+		BombShowOtherPlayer,
     }
-    private float paintDistance;
-    private byte targetDeadBodyId;
+
+	public enum BombType
+	{
+		SingleBomb,
+		RandomBomb,
+		CarpetHorizontalBomb,
+		CarpetVerticalBomb
+	}
 
     public ExtremeAbilityButton? Button { get; set; }
 
 	private Gui? ui;
 	private float timer = 0f;
+
+	public sealed record BombAbilityParameter(
+		int AbilityNum,
+		bool IsHidePlayer,
+		BombType Type,
+		int BombNum,
+		float BombRange,
+		bool ShowBombOtherPlayer,
+		BombParameter BombParameter);
+	public sealed record BombParameter(float Range, float Time);
 
 	public sealed class Gui
 	{
@@ -119,6 +144,8 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	}
 
 
+	private BombAbilityParameter? param;
+
     public Raider() : base(
         ExtremeRoleId.Raider,
         ExtremeRoleType.Impostor,
@@ -159,6 +186,10 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public bool UseAbility()
     {
+		if (this.param is null)
+		{
+			return false;
+		}
         if (this.ui == null)
 		{
 			this.ui = new Gui();
@@ -171,13 +202,75 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         AutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateAbilityCountOption(
-            factory, 2, 5, 10.0f);
+            factory, 2, 10);
 
-    }
+		factory.CreateIntOption(
+			RoleAbilityCommonOption.AbilityActiveTime,
+			10, 2, 60, 1,
+			format: OptionUnit.Second);
+
+		var limitOpt = factory.CreateBoolOption(
+			Option.IsOpenLimit, true);
+		factory.CreateIntOption(
+			Option.LimitNum, 4, 1, 100, 1,
+			invert: true);
+
+		factory.CreateBoolOption(
+			Option.IsHidePlayerOnOpen, true);
+
+		var type = factory.CreateSelectionOption<Option, BombType>(Option.BombType);
+		factory.CreateIntOption(Option.BombNum, 5, 2, 100, 1, type);
+		factory.CreateFloatOption(Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, type);
+		factory.CreateFloatOption(Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
+		factory.CreateFloatOption(Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f);
+
+		factory.CreateBoolOption(Option.BombShowOtherPlayer, true);
+	}
 
     protected override void RoleSpecificInit()
     {
+		var cate = this.Loader;
+
+		this.param = new BombAbilityParameter(
+			cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
+			cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen),
+			(BombType)cate.GetValue<Option, int>(Option.BombType),
+			cate.GetValue<Option, int>(Option.BombNum),
+			cate.GetValue<Option, float>(Option.BombTargetRange),
+			cate.GetValue<Option, bool>(Option.BombShowOtherPlayer),
+			new BombParameter(
+				cate.GetValue<Option, float>(Option.BombRange),
+				cate.GetValue<Option, float>(Option.BombAliveTime)));
     }
+
+	public void RoleAbilityInit()
+	{
+		if (this.Button == null) { return; }
+
+		var cate = this.Loader;
+		this.Button.Behavior.SetCoolTime(
+			cate.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime));
+
+		if (this.Button.Behavior is IActivatingBehavior activatingBehavior &&
+			cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+				RoleAbilityCommonOption.AbilityActiveTime,
+				out var activeTimeOption))
+		{
+			activatingBehavior.ActiveTime = activeTimeOption.Value;
+		}
+
+		if (cate.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var limitOpt) &&
+			limitOpt.Value &&
+			this.Button.Behavior is ICountBehavior countBehavior &&
+			cate.TryGetValueOption<Option, int>(
+				Option.LimitNum,
+				out var countOption))
+		{
+			countBehavior.SetAbilityCount(countOption.Value);
+		}
+
+		this.Button.OnMeetingEnd();
+	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
