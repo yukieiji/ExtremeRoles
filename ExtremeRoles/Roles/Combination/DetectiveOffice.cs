@@ -678,10 +678,11 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
 		}
 
 		int offset = 2 * ExtremeRoleManager.OptionOffsetPerRole;
+		var loader = new OptionLoadWrapper(cate, offset);
 		DetectiveApprentice newRole = new DetectiveApprentice(
-			prevRole.Loader,
+			loader,
             prevRole.GameControlId,
-            DetectiveApprenticeOptionHolder.LoadOptions(new OptionLoadWrapper(cate, offset)));
+            DetectiveApprenticeOptionHolder.LoadOptions(loader));
         if (playerId == PlayerControl.LocalPlayer.PlayerId)
         {
             newRole.CreateAbility();
