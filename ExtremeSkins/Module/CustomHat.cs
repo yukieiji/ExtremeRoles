@@ -150,19 +150,30 @@ public class CustomHat : ICustomCosmicData<HatData, HatViewData>
 	private static Expected<Sprite, Loader.LoadError> loadHatSprite(
 		string path)
 	{
-		var result = Loader.LoadTextureFromDisk(path);
-		if (!result.HasValue())
+		if (LruCache<string, Sprite>.TryGetValue(path, out var sprite))
 		{
-			return result.Error;
+			return sprite;
 		}
 
-		Texture2D texture = result.Value;
-		Sprite sprite = Sprite.Create(
+		if (!LruCache<string, Texture2D>.TryGetValue(path, out var texture))
+		{
+			var result = Loader.LoadTextureFromDisk(path);
+			if (!result.HasValue())
+			{
+				return result.Error;
+			}
+			texture = result.Value;
+			texture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+
+			LruCache<string, Texture2D>.Add(path, texture);
+		}
+
+		sprite = Sprite.Create(
 			texture, new Rect(0, 0, texture.width, texture.height),
 			new Vector2(0.53f, 0.575f), texture.width * 0.375f);
+		sprite.hideFlags |=HideFlags.DontUnloadUnusedAsset;
 
-		texture.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
-		sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
+		LruCache<string, Sprite>.Add(path, sprite);
 
 		return sprite;
 	}

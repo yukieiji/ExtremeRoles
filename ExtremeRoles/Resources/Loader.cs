@@ -7,6 +7,7 @@ using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using UnityObject = UnityEngine.Object;
@@ -175,10 +176,8 @@ public static class UnityObjectLoader
 			bundle.Unload(false);
 		}
 		cachedBundle.Clear();
-		cachedSprite.Clear();
 	}
 
-    private static readonly Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
     private static readonly Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
 	public static SimpleButton CreateSimpleButton(Transform parent)
@@ -197,17 +196,23 @@ public static class UnityObjectLoader
 	{
 		string key = $"{path}{pixelsPerUnit}";
 
-		if (cachedSprite.TryGetValue(key, out Sprite? sprite) ||
-			sprite != null) { return sprite; }
+		if (LruCache<string, Sprite>.TryGetValue(key, out var sprite))
+		{
+			return sprite;
+		}
 
-		Texture2D texture = createTextureFromResources(path);
+		if (!LruCache<string, Texture2D>.TryGetValue(key, out var texture))
+		{
+			texture = createTextureFromResources(path);
+			LruCache<string, Texture2D>.Add(key, texture);
+		}
 		sprite = Sprite.Create(
 			texture,
 			new Rect(0, 0, texture.width, texture.height),
 			new Vector2(0.5f, 0.5f), pixelsPerUnit);
 
-		sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
-		cachedSprite.Add(key, sprite);
+		sprite.hideFlags |= HideFlags.DontSaveInEditor;
+		LruCache<string, Sprite>.Add(key, sprite);
 
 		return sprite;
 	}
@@ -350,7 +355,7 @@ public static class UnityObjectLoader
 	private static AssetBundle loadAssetFromByteArray(Il2CppStructArray<byte> byteArray)
 	{
 		AssetBundle bundle = AssetBundle.LoadFromMemory(byteArray);
-		bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+		bundle.hideFlags |= HideFlags.DontSaveInEditor;
 		return bundle;
 	}
 
