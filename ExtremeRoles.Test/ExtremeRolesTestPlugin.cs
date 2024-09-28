@@ -57,7 +57,7 @@ public static class ChatControllerSendChatPatch
 #if RELEASE
 			ExtremeRolesTestPlugin.RunReleaseTest();
 #else
-			TestRunnerBase.Run<TranslationTestRunner>();
+			TestRunnerBase.Run<GameTestRunner>();
 #endif
 		}
 	}
