@@ -310,10 +310,9 @@ public sealed class FakerDummySystem : IExtremeSystemType
 
 		private static void destroyCollider<T>(GameObject obj) where T : Collider2D
 		{
-			T component = obj.GetComponent<T>();
-			if (component != null)
+			if (obj.TryGetComponent<T>(out var comp))
 			{
-				Object.Destroy(component);
+				Object.Destroy(comp);
 			}
 		}
 		private static void fitTextMeshPro(TextMeshPro a, TextMeshPro b)

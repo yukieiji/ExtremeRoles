@@ -65,8 +65,7 @@ public static class MeetingHudBloopAVoteIconPatch
 		spriteRenderer.transform.SetParent(parent);
 		spriteRenderer.transform.localScale = Vector3.zero;
 
-		PlayerVoteArea component = parent.GetComponent<PlayerVoteArea>();
-		if (component != null)
+		if (parent.TryGetComponent<PlayerVoteArea>(out var component))
 		{
 			spriteRenderer.material.SetInt(PlayerMaterial.MaskLayer, component.MaskLayer);
 		}
