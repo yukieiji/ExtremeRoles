@@ -138,7 +138,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			{
 				Vector2 cameraPos = this.camera.transform.position;
 				this.time += Time.deltaTime;
-				if (this.time >= 0.1f)
+				if (this.time >= 0.05f)
 				{
                     Vector2 del = FastDestroyableSingleton<HudManager>.Instance.joystick.DeltaL.normalized;
                     this.camera.transform.position = cameraPos + (del * 0.25f);
