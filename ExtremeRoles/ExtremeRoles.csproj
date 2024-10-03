@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
     <!--<Version>12.0.2</Version>-->
-    <VersionPrefix>12.0.3</VersionPrefix>
+    <VersionPrefix>12.0.2</VersionPrefix>
     <VersionSuffix>Invitation-AmongUsV2024813</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>

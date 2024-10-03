@@ -908,17 +908,16 @@ ExR等を最低限の機能のみで起動しています</value>
     <value>以下の理由でゲームを開始できません</value>
   </data>
   <data name="errorNotInstalled" xml:space="preserve">
-    <value>Extreme Rolesの導入に失敗しています</value>
+    <value>「{0}」の導入に失敗しています</value>
   </data>
   <data name="errorOldInstalled" xml:space="preserve">
-    <value>導入されているExtreme Rolesのバージョンが古いです</value>
+    <value>「{0}」のバージョンが古いです</value>
   </data>
   <data name="errorNewInstalled" xml:space="preserve">
-    <value>導入されているExtreme Rolesのバージョンが新しいです</value>
+    <value>「{0}」のバージョンが新しいです</value>
   </data>
   <data name="errorDiffHostVersion" xml:space="preserve">
-    <value>ホストに導入されているExtreme Rolesとバージョンが異なっています。
-{0}秒後に強制切断します</value>
+    <value>「{0}」がホストのバージョンが異なっています</value>
   </data>
   <data name="ExileTextSPCrew" xml:space="preserve">
     <value>{0}がクルーメイトだった。</value>
@@ -1164,5 +1163,8 @@ ExR等を最低限の機能のみで起動しています</value>
   </data>
   <data name="SkipSettingUsingTab" xml:space="preserve">
     <value>(Tabキー/Shift + Tabキーで次の設定へ)</value>
+  </data>
+  <data name="autoDisconnectTo" xml:space="preserve">
+    <value>自動切断まで{0}秒:</value>
   </data>
 </root>

@@ -96,7 +96,7 @@ public sealed class VersionChecker : MonoBehaviour
         {
             if (version.TryGetValue(AmongUsClient.Instance.HostId, out var hostVer) &&
                 hostVer is not null &&
-                localVersion.CompareTo(hostVer) == 0)
+                hostVer.CompareTo(localVersion) == 0)
             {
                 return string.Empty;
             }
@@ -143,7 +143,12 @@ public sealed class VersionChecker : MonoBehaviour
         {
             return;
         }
-        allModVersion.Add(id, new PlayerVersion(name.Version, name.FullName));
+        string? modName = name.Name;
+        if (string.IsNullOrEmpty(modName))
+        {
+            return;
+        }
+        allModVersion.Add(id, new PlayerVersion(name.Version, modName));
     }
 
     public void Awake()
@@ -234,6 +239,8 @@ public sealed class VersionChecker : MonoBehaviour
         if (isBlock)
         {
             this.text.gameObject.SetActive(true);
+            this.text.transform.localPosition =
+                mng.StartButton.transform.localPosition + new Vector3(-1.0f, 1.25f);;
 
             if (isHost)
             {
@@ -244,8 +251,6 @@ public sealed class VersionChecker : MonoBehaviour
                 this.button.SetButtonEnableState(false);
 
                 this.text.text = this.builder.ToString();
-                this.text.transform.localPosition =
-                    mng.StartButton.transform.localPosition + Vector3.up * 1.25f;
             }
             else
             {
