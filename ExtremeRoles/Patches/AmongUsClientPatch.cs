@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.Module.CustomMonoBehaviour;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
@@ -50,10 +51,14 @@ public static class AmongUsClientOnPlayerJoinedPatch
 {
     public static void Postfix()
     {
-        if (PlayerControl.LocalPlayer != null)
+        if (PlayerControl.LocalPlayer == null ||
+            GameStartManager.Instance == null ||
+            GameStartManager.Instance.TryGetComponent<VersionChecker>(out var version))
         {
-            Helper.GameSystem.ShareVersion();
+            return;
         }
+
+        version.DeserializeLocalVersion();
     }
 }
 

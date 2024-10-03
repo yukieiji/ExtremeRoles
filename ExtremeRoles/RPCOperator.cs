@@ -163,8 +163,12 @@ public static class RPCOperator
         {
             this.writer.WritePacked(value);
         }
+        public void WritePackedUInt(uint value)
+        {
+            this.writer.WritePacked(value);
+        }
 
-		public void WriteNetObject(InnerNetObject obj)
+        public void WriteNetObject(InnerNetObject obj)
 		{
 			this.writer.WriteNetObject(obj);
 		}
@@ -423,12 +427,9 @@ public static class RPCOperator
             ByteOptionNames.MapId, mapId);
     }
 
-    public static void AddVersionData(
-        int major, int minor,
-        int build, int revision, int clientId)
+    public static void AddVersionData(MessageReader reader)
     {
-        ExtremeRolesPlugin.ShipState.AddPlayerVersion(
-            clientId, major, minor, build, revision);
+        Module.CustomMonoBehaviour.VersionChecker.SerializeLocalVersion(reader);
     }
 
     public static void PlaySound(

@@ -450,28 +450,6 @@ public static class GameSystem
         return false;
     }
 
-    public static void ShareVersion()
-    {
-        Version? ver = Assembly.GetExecutingAssembly().GetName().Version;
-
-		if (ver is null) { return; }
-
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ShareVersion))
-        {
-            caller.WriteInt(ver.Major);
-            caller.WriteInt(ver.Minor);
-            caller.WriteInt(ver.Build);
-            caller.WriteInt(ver.Revision);
-            caller.WritePackedInt(AmongUsClient.Instance.ClientId);
-        }
-
-        RPCOperator.AddVersionData(
-            ver.Major, ver.Minor,
-            ver.Build, ver.Revision,
-            AmongUsClient.Instance.ClientId);
-    }
-
 	public static void SpawnDummyPlayer(string name = "")
     {
         PlayerControl playerControl = UnityObject.Instantiate(

@@ -14,22 +14,20 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Patches.Manager;
 
 [HarmonyPatch]
 public static class GameStartManagerPatch
 {
-    private const float kickTime = 30f;
     private const float timerMaxValue = 600f;
-    private const string errorColorPlaceHolder = "<color=#FF0000FF>{0}\n</color>";
 
     private static bool isCustomServer;
 
     private static float timer;
-    private static float kickingTimer;
 
-    private static bool isVersionSent;
     private static bool update = false;
 
     private static string currentText = "";
@@ -38,30 +36,20 @@ public static class GameStartManagerPatch
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.BeginGame))]
-    public static bool BeginGamePrefix()
+    public static bool BeginGamePrefix(GameStartManager __instance)
     {
-        if (!AmongUsClient.Instance.AmHost) { return true; }
-
-        foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
+        if (!(
+                AmongUsClient.Instance.AmHost &&
+                __instance.TryGetComponent<VersionChecker>(out var version)
+            ))
         {
-            if (client.Character == null) continue;
-            var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-            if (dummyComponent != null && dummyComponent.enabled)
-            {
-                continue;
-            }
+            return true;
+        }
 
-            if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
-                client.Id, out Version clientVer))
-            {
-                return false;
-            }
-            int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
-                clientVer);
-            if (diff != 0)
-            {
-                return false;
-            }
+        bool isError = version.IsError;
+        if (isError)
+        {
+            return false;
         }
 
         InfoOverlay.Instance.Hide();
@@ -110,15 +98,14 @@ public static class GameStartManagerPatch
         GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(
             AmongUsClient.Instance.GameId);
 
-        isVersionSent = false;
         timer = timerMaxValue;
-        kickingTimer = 0f;
         isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
 
         prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
 
         // 値リセット
         RPCOperator.Initialize();
+        __instance.gameObject.TryAddComponent<VersionChecker>();
     }
 
     [HarmonyPostfix]
@@ -140,12 +127,6 @@ public static class GameStartManagerPatch
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
     public static void UpdatePostfix(GameStartManager __instance)
     {
-        if (PlayerControl.LocalPlayer != null && !isVersionSent)
-        {
-            isVersionSent = true;
-            GameSystem.ShareVersion();
-        }
-
         // ルームコード設定
 
         bool isStreamerMode = DataManager.Settings.Gameplay.StreamerMode;
@@ -154,113 +135,6 @@ public static class GameStartManagerPatch
         {
             prevOptionValue = isStreamerMode;
             updateText(__instance, isStreamerMode);
-        }
-
-        // Instanceミス
-        if (!GameData.Instance) { return; }
-
-        var localGameVersion = Assembly.GetExecutingAssembly().GetName().Version;
-        var state = ExtremeRolesPlugin.ShipState;
-
-        // ホスト以外
-        if (!AmongUsClient.Instance.AmHost)
-        {
-            if (!state.TryGetPlayerVersion(
-                AmongUsClient.Instance.HostId, out Version hostVersion) ||
-                localGameVersion.CompareTo(hostVersion) != 0)
-            {
-                kickingTimer += Time.deltaTime;
-                if (kickingTimer > kickTime)
-                {
-                    kickingTimer = 0;
-                    AmongUsClient.Instance.ExitGame(DisconnectReasons.ExitGame);
-                    SceneChanger.ChangeScene("MainMenu");
-                }
-
-                __instance.GameStartText.text = Tr.GetString(
-					"errorDiffHostVersion",
-                    Mathf.Round(kickTime - kickingTimer));
-                __instance.GameStartText.transform.localPosition =
-                    __instance.StartButton.transform.localPosition + Vector3.up * 2;
-            }
-            else
-            {
-                __instance.GameStartText.transform.localPosition =
-                    __instance.StartButton.transform.localPosition;
-                if (__instance.startState != GameStartManager.StartingStates.Countdown)
-                {
-                    __instance.GameStartText.text = string.Empty;
-                }
-            }
-            return;
-        }
-
-        bool blockStart = false;
-        string message = string.Format(
-            errorColorPlaceHolder,
-            Tr.GetString("errorCannotGameStart"));
-        foreach (InnerNet.ClientData client in
-            AmongUsClient.Instance.allClients.GetFastEnumerator())
-        {
-            if (client.Character == null) { continue; }
-
-            var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-            if (dummyComponent != null && dummyComponent.enabled)
-            {
-                continue;
-            }
-            else if (!state.TryGetPlayerVersion(client.Id, out Version clientVer))
-            {
-                blockStart = true;
-                message += string.Format(
-                    errorColorPlaceHolder,
-                    $"{client.Character.Data.PlayerName}:  {Tr.GetString("errorNotInstalled")}");
-            }
-            else
-            {
-                int diff = localGameVersion.CompareTo(clientVer);
-                if (diff > 0)
-                {
-                    message += string.Format(
-                        errorColorPlaceHolder,
-                        $"{client.Character.Data.PlayerName}:  {Tr.GetString("errorOldInstalled")}");
-                    blockStart = true;
-                }
-                else if (diff < 0)
-                {
-                    message += string.Format(
-                        errorColorPlaceHolder,
-                        $"{client.Character.Data.PlayerName}:  {Tr.GetString("errorNewInstalled")}");
-                    blockStart = true;
-                }
-            }
-        }
-
-		if (blockStart)
-        {
-			if (__instance.StartButtonGlyph != null)
-			{
-				__instance.StartButtonGlyph.SetColor(Palette.DisabledClear);
-			}
-			__instance.StartButton.SetButtonEnableState(false);
-
-			__instance.GameStartText.text = message;
-            __instance.GameStartText.transform.localPosition =
-                __instance.StartButton.transform.localPosition + Vector3.up * 2;
-        }
-        else
-        {
-			bool isPlayerOk = __instance.LastPlayerCount >= __instance.MinPlayers;
-
-			if (__instance.StartButtonGlyph != null)
-			{
-				__instance.StartButtonGlyph.SetColor(isPlayerOk ?
-					Palette.EnabledColor : Palette.DisabledClear);
-			}
-
-			__instance.StartButton.SetButtonEnableState(isPlayerOk);
-			__instance.GameStartText.transform.localPosition =
-                __instance.StartButton.transform.localPosition;
         }
 
 		if (AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && !isCustomServer)
