@@ -86,6 +86,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private Vector3 curPos;
 
 		private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
+		private float time;
 
 		public Gui()
 		{
@@ -136,8 +137,13 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			if (this.IsOpen && PlayerControl.LocalPlayer != null)
 			{
 				Vector2 cameraPos = this.camera.transform.position;
-				Vector2 del = FastDestroyableSingleton<HudManager>.Instance.joystick.DeltaL.normalized;
-				this.camera.transform.position = cameraPos + (del * 0.1f);
+				this.time += Time.deltaTime;
+				if (this.time >= 0.1f)
+				{
+                    Vector2 del = FastDestroyableSingleton<HudManager>.Instance.joystick.DeltaL.normalized;
+                    this.camera.transform.position = cameraPos + (del * 0.25f);
+					this.time = 0.0f;
+                }
 				PlayerControl.LocalPlayer.transform.position = this.curPos;
 			}
 		}
