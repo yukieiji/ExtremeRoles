@@ -40,32 +40,3 @@ public static class PlayerControlCheckColorPatch
     }
 
 }
-
-[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-public static class PlayerControlHandleRpcPatch
-{
-    public static void Postfix(
-        PlayerControl __instance,
-        [HarmonyArgument(0)] byte callId,
-        [HarmonyArgument(1)] MessageReader reader)
-    {
-
-        if (__instance == null || reader == null) { return; }
-
-        switch (callId)
-        {
-            case VersionManager.RpcCommand:
-                int major = reader.ReadPackedInt32();
-                int minor = reader.ReadPackedInt32();
-                int build = reader.ReadPackedInt32();
-                int revision = reader.ReadPackedInt32();
-                int clientId = reader.ReadPackedInt32();
-                VersionManager.AddVersionData(
-                    major, minor, build,
-                    revision, clientId);
-                break;
-            default:
-                break;
-        }
-    }
-}
