@@ -53,7 +53,7 @@ public static class AmongUsClientOnPlayerJoinedPatch
     {
         if (PlayerControl.LocalPlayer == null ||
             GameStartManager.Instance == null ||
-            GameStartManager.Instance.TryGetComponent<VersionChecker>(out var version))
+            !GameStartManager.Instance.TryGetComponent<VersionChecker>(out var version))
         {
             return;
         }
