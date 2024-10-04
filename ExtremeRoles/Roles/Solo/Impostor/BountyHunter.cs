@@ -249,18 +249,19 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
                 this.targetId == player.PlayerId) { continue; }
 
             this.targetId = player.PlayerId;
-            this.PlayerIcon[this.targetId].gameObject.SetActive(true);
-            AspectPosition aspectPosition = this.PlayerIcon[this.targetId].GetComponent<AspectPosition>();
-            if (aspectPosition == null)
+            var pool = this.PlayerIcon[this.targetId];
+            pool.gameObject.SetActive(true);
+
+            if (!pool.TryGetComponent<AspectPosition>(out var aspectPosition))
             {
-                aspectPosition = this.PlayerIcon[this.targetId].gameObject.AddComponent<AspectPosition>();
+                aspectPosition = pool.gameObject.AddComponent<AspectPosition>();
                 aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
                 aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
                 aspectPosition.DistanceFromEdge = new Vector3(0.45f, 0.35f);
             }
             aspectPosition.AdjustPosition();
 
-            this.targetTimerText.transform.SetParent(this.PlayerIcon[this.targetId].transform);
+            this.targetTimerText.transform.SetParent(pool.transform);
             this.targetTimerText.transform.localPosition = new Vector3(0.0f, 0.0f, -100.0f);
             this.targetTimerText.transform.localScale = new Vector3(2.25f, 2.25f, 1.0f);
             this.targetTimerText.gameObject.SetActive(true);

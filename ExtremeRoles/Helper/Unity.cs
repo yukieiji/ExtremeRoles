@@ -41,8 +41,7 @@ public static class Unity
 
 	private static void setColliderEnable<T>(GameObject obj, bool active) where T : Collider2D
 	{
-		T comp = obj.GetComponent<T>();
-		if (comp != null)
+		if (obj.TryGetComponent<T>(out var comp))
 		{
 			comp.enabled = active;
 		}

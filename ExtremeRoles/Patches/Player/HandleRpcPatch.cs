@@ -135,14 +135,7 @@ public static class PlayerControlHandleRpcPatch
 				RPCOperator.ShareMapId(mapId);
 				break;
 			case RPCOperator.Command.ShareVersion:
-				int major = reader.ReadInt32();
-				int minor = reader.ReadInt32();
-				int build = reader.ReadInt32();
-				int revision = reader.ReadInt32();
-				int clientId = reader.ReadPackedInt32();
-				RPCOperator.AddVersionData(
-					major, minor, build,
-					revision, clientId);
+				RPCOperator.AddVersionData(reader);
 				break;
 			case RPCOperator.Command.PlaySound:
 				byte soundType = reader.ReadByte();

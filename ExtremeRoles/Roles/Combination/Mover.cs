@@ -160,8 +160,7 @@ public sealed class Mover :
 
         if (!mover.hasConsole.IsValid()) { return; }
 
-        var syncer = mover.hasConsole.Console.GetComponent<VentInPlayerPosSyncer>();
-        if (syncer != null)
+        if (mover.hasConsole.Console.TryGetComponent<VentInPlayerPosSyncer>(out var syncer))
         {
             Object.Destroy(syncer);
         }
@@ -298,8 +297,7 @@ public sealed class Mover :
 
     private static void colliderTriggerOn<T>(GameObject obj) where T : Collider2D
     {
-        T comp = obj.GetComponent<T>();
-        if (comp != null)
+        if (obj.TryGetComponent<T>(out var comp))
         {
             comp.isTrigger = true;
         }
@@ -312,8 +310,7 @@ public sealed class Mover :
 
     private static void disableBehaviour<T>(GameObject obj) where T : MonoBehaviour
     {
-        T comp = obj.GetComponent<T>();
-        if (comp != null )
+        if (obj.TryGetComponent<T>(out var comp))
         {
             comp.enabled = false;
         }

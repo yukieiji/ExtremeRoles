@@ -127,8 +127,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
             vent.Id = CachedShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
 
-            var console = vent.GetComponent<Console>();
-            if (console != null)
+            if (vent.TryGetComponent<Console>(out var console))
             {
                 Object.Destroy(console);
             }

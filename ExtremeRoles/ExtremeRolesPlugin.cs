@@ -17,6 +17,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Translation;
 
@@ -96,15 +97,16 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		ApiServer.Register(PostChat.Path, HttpMethod.Post, new PostChat());
 		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get, new OpenChatWebUi());
 
-		Il2CppRegisterAttribute.Registration(
-			System.Reflection.Assembly.GetAssembly(this.GetType()));
+		var assm = System.Reflection.Assembly.GetAssembly(this.GetType());
+
+        Il2CppRegisterAttribute.Registration(assm);
 
 		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
 
 		UnityObjectLoader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();
-
+		VersionChecker.RegisterAssembly(assm, 0);
 		TranslatorManager.Register<Translator>();
 	}
 }

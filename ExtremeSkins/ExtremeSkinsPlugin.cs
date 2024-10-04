@@ -13,6 +13,7 @@ using ExtremeSkins.Module.ApiHandler;
 using ExtremeSkins.Module.ApiHandler.ExtremeHat;
 using ExtremeSkins.Module.ApiHandler.ExtremeVisor;
 using ExtremeSkins.Module.ApiHandler.ExtremeNamePlate;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeSkins;
 
@@ -89,6 +90,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 		if (assembly is null) { return; }
-        Il2CppRegisterAttribute.Registration(assembly);
+		VersionChecker.RegisterAssembly(assembly, 1);
+		Il2CppRegisterAttribute.Registration(assembly);
     }
 }

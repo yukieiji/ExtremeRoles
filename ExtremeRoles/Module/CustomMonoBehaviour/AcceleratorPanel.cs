@@ -26,7 +26,7 @@ public sealed class AcceleratorPanel : MonoBehaviour
 
 	public void Initialize(Vector2 vector, float speed)
 	{
-		this.forceVec = vector * speed * offset;
+		this.forceVec = speed * offset * vector;
 	}
 
 	public void FixedUpdate()

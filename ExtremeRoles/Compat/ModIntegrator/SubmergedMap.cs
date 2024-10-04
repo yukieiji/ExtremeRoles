@@ -456,14 +456,11 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	public void SetUpNewCamera(SurvCamera camera)
 	{
 		var fixConsole = camera.transform.FindChild("FixConsole");
-		if (fixConsole != null)
+		if (fixConsole != null &&
+            fixConsole.TryGetComponent<BoxCollider2D>(out var box))
 		{
-			var boxCollider = fixConsole.GetComponent<BoxCollider2D>();
-			if (boxCollider != null)
-			{
-				UnityObject.Destroy(boxCollider);
-			}
-		}
+            UnityObject.Destroy(box);
+        }
 	}
 
 	protected override void PatchAll(Harmony harmony)

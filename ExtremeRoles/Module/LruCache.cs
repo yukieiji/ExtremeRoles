@@ -31,7 +31,7 @@ public class LruCache<TKey, TValue>
 
 
 	private static LruCache<TKey, TValue>? instance;
-	private const int DEFAULT_CAPACITY = 10000;
+	private const int DEFAULT_CAPACITY = 4096;
 
 	private readonly int capacity;
 	private readonly Dictionary<TKey, LinkedListNode<CacheItem>> cacheMap;

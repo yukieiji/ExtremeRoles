@@ -84,8 +84,10 @@ public static class Player
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(
             pos, radius, Constants.Usables))
         {
-            Console checkConsole = collider.GetComponent<Console>();
-            if (checkConsole == null) { continue; }
+            if (!collider.TryGetComponent<Console>(out var checkConsole))
+            {
+                continue;
+            }
 
             Vector3 targetPos = collider.transform.position;
 

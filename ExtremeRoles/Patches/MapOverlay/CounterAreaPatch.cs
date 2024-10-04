@@ -28,9 +28,7 @@ public static class CounterAreaUpdateCountPatch
         {
             foreach (PoolableBehavior icon in __instance.myIcons.GetFastEnumerator())
             {
-                SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
-
-                if (renderer != null)
+                if (icon.TryGetComponent<SpriteRenderer>(out var renderer))
                 {
                     renderer.material = defaultMat;
                 }
@@ -47,9 +45,9 @@ public static class CounterAreaUpdateCountPatch
         for (int i = 0; i < __instance.myIcons.Count; i++)
         {
             PoolableBehavior icon = __instance.myIcons[i];
-            SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
-            if (renderer != null && colors.Count > i)
+            if (icon.TryGetComponent<SpriteRenderer>(out var renderer) &&
+                colors.Count > i)
             {
                 renderer.material = Object.Instantiate(defaultMat);
 				PlayerMaterial.SetColors(colors[i], renderer);
