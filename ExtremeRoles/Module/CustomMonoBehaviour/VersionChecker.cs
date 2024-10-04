@@ -69,11 +69,11 @@ public sealed class VersionChecker : MonoBehaviour
 
                 if (!
                     (
-                        version.TryGetValue(client.Id, out var clientVer) &&
+                        this.version.TryGetValue(client.Id, out var clientVer) &&
                         clientVer is not null
                     ))
                 {
-                    this.builder.AppendLine($"{client.Character.Data.PlayerName}:  {Tr.GetString("errorOldInstalled", modName)}");
+                    this.builder.AppendLine($"{client.Character.Data.PlayerName}:  {Tr.GetString("errorNotInstalled", modName)}");
                 }
                 else
                 {
@@ -100,7 +100,7 @@ public sealed class VersionChecker : MonoBehaviour
             {
                 return string.Empty;
             }
-            return Tr.GetString("errorDiffHostVersion", modName);
+            return $"{Tr.GetString("errorDiffHostVersion", modName)}\n";
         }
     }
 
@@ -229,7 +229,7 @@ public sealed class VersionChecker : MonoBehaviour
             {
                 continue;
             }
-            this.builder.AppendLine(message);
+            this.builder.Append(message);
         }
 
         bool isBlock = curLength != this.builder.Length;
