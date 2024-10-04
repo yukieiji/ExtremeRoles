@@ -62,7 +62,9 @@ public sealed class VersionChecker : MonoBehaviour
                     (
                         client.Character.TryGetComponent<DummyBehaviour>(out var dummyComponent) &&
                         dummyComponent.enabled
-                    ))
+                    ) ||
+					client.Character.Data == null ||
+					string.IsNullOrEmpty(client.Character.Data.PlayerName))
                 {
                     continue;
                 }
@@ -111,7 +113,7 @@ public sealed class VersionChecker : MonoBehaviour
             foreach (var version in allModVersion.Values)
             {
                 string message = version.GetErrorMessage(true);
-                if (string.IsNullOrEmpty(message))
+                if (!string.IsNullOrEmpty(message))
                 {
                     return true;
                 }
