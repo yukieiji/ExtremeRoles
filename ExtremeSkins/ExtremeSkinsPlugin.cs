@@ -61,8 +61,6 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		CustomColorLoader.StaticLoad();
 
-        VersionManager.PlayerVersion.Clear();
-
         Harmony.PatchAll();
 
 		if (CreatorModeManager.Instance.IsEnable)
