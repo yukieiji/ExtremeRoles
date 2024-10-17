@@ -14,20 +14,18 @@ public sealed class ActivatingCountBehavior : BehaviorBase, ICountBehavior, IHid
 	public int AbilityCount { get; private set; }
 	public bool CanAbilityActiving => this.canActivating.Invoke();
 
-
 	private readonly Func<bool> canUse;
 	private readonly Func<bool> ability;
 	private readonly Action? forceAbilityOff;
 	private readonly Action? abilityOff;
+	private readonly Func<bool> canActivating;
+	private readonly bool isReduceOnActive;
 
 	private TMPro.TextMeshPro? abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
 	private bool isUpdate = false;
 	private bool isActivating;
-	private bool isReduceOnActive;
-
-	private Func<bool> canActivating;
 
 	public ActivatingCountBehavior(
 		string text, Sprite img,
