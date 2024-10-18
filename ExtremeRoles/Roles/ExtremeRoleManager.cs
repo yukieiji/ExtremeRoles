@@ -421,7 +421,7 @@ public static class ExtremeRoleManager
 		{
 			throw new ArgumentNullException("Local Role is Null!!!!!!!!!!");
 		}
-		return role!;
+		return role;
     }
 
     public static void SetPlayerIdToMultiRoleId(

@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
@@ -22,7 +23,7 @@ public sealed class RaiderBombSystem(RaiderBombSystem.SystemParameter parameter)
 		float BombRange,
 		BombParameter BombParameter);
 
-	public sealed record BombParameter(float Range, float Time);
+	public sealed record BombParameter(float Range, float Time, bool IsShowOtherPlayer);
 
 	private sealed class Placer(SystemParameter param)
 	{
@@ -122,6 +123,7 @@ public sealed class RaiderBombSystem(RaiderBombSystem.SystemParameter parameter)
 	{
 		var bomb = new GameObject("Bomb");
 		bomb.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
-
+		var bombBehe = bomb.AddComponent<RaiderBomb>();
+		bombBehe.SetParameter(this.parameter);
 	}
 }
