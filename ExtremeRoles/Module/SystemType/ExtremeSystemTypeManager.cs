@@ -39,6 +39,7 @@ public enum ExtremeSystemType : byte
 	ThiefMeetingTimeChange,
 	TeroristTeroSabotage,
 	ScavengerAbility,
+	RaiderBomb,
 
 	YokoYashiro,
 	TuckerShadow

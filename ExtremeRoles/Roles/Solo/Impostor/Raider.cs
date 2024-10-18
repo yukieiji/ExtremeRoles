@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -42,17 +43,13 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     public ExtremeAbilityButton? Button { get; set; }
 
 	private Gui? ui;
+	private UiParameter? param;
 	private float timer = 0f;
 
-	public sealed record BombAbilityParameter(
+	public record UiParameter(
 		int AbilityNum,
-		bool IsHidePlayer,
-		BombType Type,
-		int BombNum,
-		float BombRange,
-		bool ShowBombOtherPlayer,
-		BombParameter BombParameter);
-	public sealed record BombParameter(float Range, float Time);
+		float AbilityTime,
+		bool IsShowPlayer);
 
 	public sealed class Gui
 	{
@@ -62,6 +59,10 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			set
 			{
 				this.isOpen = value;
+				if (this.isOpen)
+				{
+					this.time = this.uiOpenTimeMax;
+				}
 
 				this.ui.enabled = value;
 
@@ -73,6 +74,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				bool invert = !value;
 				this.camera.enabled = invert;
 				this.buttonTransformObj.SetActive(invert);
+				this.button.SetButtonShow(invert);
 			}
 		}
 		private bool isOpen;
@@ -83,13 +85,26 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 		private readonly SimpleButton back;
 		private readonly SimpleButton execute;
+		private readonly ExtremeAbilityButton button;
+		private readonly float uiOpenTimeMax;
+		private readonly bool isShowPlayer;
+
 		private Vector3 curPos;
 
 		private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
+		private float uiOpenTime;
 		private float time;
+		private int num;
 
-		public Gui()
+		public Gui(
+			UiParameter parameter,
+			ExtremeAbilityButton button)
 		{
+			this.button = button;
+			this.uiOpenTimeMax = parameter.AbilityTime;
+			this.isShowPlayer = parameter.IsShowPlayer;
+			this.num = parameter.AbilityNum;
+
 			this.camera = hud.transform.parent.GetComponent<FollowerCamera>();
 			this.buttonTransformObj = hud.transform.Find("Buttons/BottomRight").gameObject;
 
@@ -125,19 +140,29 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			this.execute.transform.localPosition = new Vector3(3.75f, 0.0f, 0.0f);
 			this.execute.name = "ExecuteBomb";
 			this.execute.Text.fontSize = this.execute.Text.fontSizeMax = this.execute.Text.fontSizeMin = 4.0f;
+			updateText();
+			this.execute.ClickedEvent.AddListener(() =>
+			{
+				--this.num;
+				updateText();
+				RaiderBombSystem.RpcSetBomb(this.camera.centerPosition);
+			});
+
 			this.execute.Awake();
 		}
-		public void Update(float timer)
+		public void Update(float deltaTime)
 		{
-			this.back.Text.text = $"終了\n(自動終了まで{Mathf.CeilToInt(timer)}秒)";
-			if (Input.GetKeyDown(KeyCode.Escape))
+			this.uiOpenTime -= deltaTime;
+			this.back.Text.text = $"終了\n(自動終了まで{Mathf.CeilToInt(this.uiOpenTime)}秒)";
+			if (Input.GetKeyDown(KeyCode.Escape) ||
+				this.uiOpenTime <= 0.0f)
 			{
 				this.IsOpen = false;
 			}
 			if (this.IsOpen && PlayerControl.LocalPlayer != null)
 			{
 				Vector2 cameraPos = this.camera.transform.position;
-				this.time += Time.deltaTime;
+				this.time += deltaTime;
 				if (this.time >= 0.05f)
 				{
                     Vector2 del = FastDestroyableSingleton<HudManager>.Instance.joystick.DeltaL.normalized;
@@ -147,10 +172,12 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				PlayerControl.LocalPlayer.transform.position = this.curPos;
 			}
 		}
+
+		private void updateText()
+		{
+			this.execute.Text.text = $"爆撃\n残り{Mathf.CeilToInt(this.num)}回";
+		}
 	}
-
-
-	private BombAbilityParameter? param;
 
     public Raider() : base(
         ExtremeRoleId.Raider,
@@ -192,13 +219,14 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public bool UseAbility()
     {
-		if (this.param is null)
+		if (this.param is null ||
+			this.Button is null)
 		{
 			return false;
 		}
         if (this.ui == null)
 		{
-			this.ui = new Gui();
+			this.ui = new Gui(this.param, this.Button);
 		}
 		this.ui.IsOpen = true;
         return true;
@@ -237,16 +265,15 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var cate = this.Loader;
 
-		this.param = new BombAbilityParameter(
-			cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
-			cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen),
-			(BombType)cate.GetValue<Option, int>(Option.BombType),
-			cate.GetValue<Option, int>(Option.BombNum),
-			cate.GetValue<Option, float>(Option.BombTargetRange),
-			cate.GetValue<Option, bool>(Option.BombShowOtherPlayer),
-			new BombParameter(
-				cate.GetValue<Option, float>(Option.BombRange),
-				cate.GetValue<Option, float>(Option.BombAliveTime)));
+		if (cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+				RoleAbilityCommonOption.AbilityActiveTime,
+				out var activeTimeOption))
+		{
+			this.param = new UiParameter(
+				cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
+				activeTimeOption.Value,
+				cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen));
+		}
     }
 
 	public void RoleAbilityInit()
@@ -283,13 +310,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		if (this.ui != null &&
 			this.ui.IsOpen)
 		{
-			this.ui.Update(this.timer);
-			if (this.timer >= 0f)
-			{
-				this.timer -= Time.deltaTime;
-				return;
-			}
-			this.ui.IsOpen = false;
+			this.ui.Update(Time.deltaTime);
 		}
 	}
 }
