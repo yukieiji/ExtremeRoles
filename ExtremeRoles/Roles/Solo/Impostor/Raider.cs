@@ -13,6 +13,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -289,11 +290,11 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		var _ = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.RaiderBomb,
 			() => new RaiderBombSystem(
-					new RaiderBombSystem.SystemParameter(
+					new RaiderBombSystem.Parameter(
 						(RaiderBombSystem.BombType)cate.GetValue<Option, int>(Option.BombType),
 						cate.GetValue<Option, int>(Option.BombNum),
 						cate.GetValue<Option, float>(Option.BombTargetRange),
-						new RaiderBombSystem.BombParameter(
+						new RaiderBomb.Parameter(
 							cate.GetValue<Option, float>(Option.BombRange),
 							cate.GetValue<Option, float>(Option.BombAliveTime),
 							cate.GetValue<Option, bool>(Option.BombShowOtherPlayer)))));

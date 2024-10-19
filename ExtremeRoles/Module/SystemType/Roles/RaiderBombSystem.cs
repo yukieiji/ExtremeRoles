@@ -7,7 +7,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class RaiderBombSystem(RaiderBombSystem.SystemParameter parameter) : IDirtableSystemType
+public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDirtableSystemType
 {
 	public enum BombType
 	{
@@ -17,15 +17,13 @@ public sealed class RaiderBombSystem(RaiderBombSystem.SystemParameter parameter)
 		CarpetVerticalBomb
 	}
 
-	public sealed record SystemParameter(
+	public sealed record Parameter(
 		BombType Type,
 		int BombNum,
 		float BombRange,
-		BombParameter BombParameter);
+		RaiderBomb.Parameter BombParameter);
 
-	public sealed record BombParameter(float Range, float Time, bool IsShowOtherPlayer);
-
-	private sealed class Placer(SystemParameter param)
+	private sealed class Placer(Parameter param)
 	{
 		private readonly BombType type = param.Type;
 		private readonly float range = param.BombRange;

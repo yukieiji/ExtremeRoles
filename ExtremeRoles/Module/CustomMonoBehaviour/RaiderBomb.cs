@@ -17,15 +17,17 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 [Il2CppRegister]
 public sealed class RaiderBomb : MonoBehaviour
 {
+	public sealed record Parameter(float Range, float Time, bool IsShowOtherPlayer);
+
 	public RaiderBomb(IntPtr ptr) : base(ptr) { }
 
 	private SpriteRenderer? rend;
-	private RaiderBombSystem.BombParameter? param;
+	private Parameter? param;
 
 	private float timer = 0.0f;
 	private bool isShowOther;
 
-	public void SetParameter(RaiderBombSystem.BombParameter param)
+	public void SetParameter(Parameter param)
 	{
 		this.param = param;
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
