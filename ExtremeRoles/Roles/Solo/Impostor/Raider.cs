@@ -12,6 +12,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -31,14 +32,6 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		BombAliveTime,
 		BombShowOtherPlayer,
     }
-
-	public enum BombType
-	{
-		SingleBomb,
-		RandomBomb,
-		CarpetHorizontalBomb,
-		CarpetVerticalBomb
-	}
 
     public ExtremeAbilityButton? Button { get; set; }
 
@@ -252,7 +245,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		factory.CreateBoolOption(
 			Option.IsHidePlayerOnOpen, true);
 
-		var type = factory.CreateSelectionOption<Option, BombType>(Option.BombType);
+		var type = factory.CreateSelectionOption<Option, RaiderBombSystem.BombType>(Option.BombType);
 		factory.CreateIntOption(Option.BombNum, 5, 2, 100, 1, type);
 		factory.CreateFloatOption(Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, type);
 		factory.CreateFloatOption(Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
@@ -265,16 +258,29 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var cate = this.Loader;
 
-		if (cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+		if (!cate.TryGetValueOption<RoleAbilityCommonOption, float>(
 				RoleAbilityCommonOption.AbilityActiveTime,
 				out var activeTimeOption))
 		{
-			this.param = new UiParameter(
-				cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
-				activeTimeOption.Value,
-				cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen));
+			return;
 		}
-    }
+
+		this.param = new UiParameter(
+			cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
+			activeTimeOption.Value,
+			cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen));
+		var _ = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.RaiderBomb,
+			() => new RaiderBombSystem(
+					new RaiderBombSystem.SystemParameter(
+						(RaiderBombSystem.BombType)cate.GetValue<Option, int>(Option.BombType),
+						cate.GetValue<Option, int>(Option.BombNum),
+						cate.GetValue<Option, float>(Option.BombTargetRange),
+						new RaiderBombSystem.BombParameter(
+							cate.GetValue<Option, float>(Option.BombRange),
+							cate.GetValue<Option, float>(Option.BombAliveTime),
+							cate.GetValue<Option, bool>(Option.BombShowOtherPlayer)))));
+	}
 
 	public void RoleAbilityInit()
 	{
