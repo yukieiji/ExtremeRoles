@@ -54,7 +54,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.isOpen = value;
 				if (this.isOpen)
 				{
-					this.time = this.uiOpenTimeMax;
+					this.uiOpenTime = this.uiOpenTimeMax;
 				}
 
 				this.ui.enabled = value;
@@ -112,31 +112,40 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				Screen.width / 1280.0f,
 				Screen.height / 720.0f);
 
-			obj.layer = LayerMask.NameToLayer("UI");
+			int targetLayer = LayerMask.NameToLayer("UI"); ;
+			obj.layer = targetLayer;
 
 			this.ui.gameObject.SetActive(true);
 			this.ui.transform.localPosition = new Vector3(0f, 0f, 20f);
 
 			this.back = UnityObjectLoader.CreateSimpleButton(hud.transform);
 			this.back.Awake();
+			this.back.Layer = targetLayer;
 			this.back.Scale = new Vector3(0.75f, 0.75f, 1.0f);
 			this.back.Text.fontSize = this.back.Text.fontSizeMax = this.back.Text.fontSizeMin = 2.75f;
 			this.back.name = "BackNormal";
-			this.back.transform.localPosition = new Vector3(3.75f, -2.25f, 0.0f);
+			this.back.transform.localPosition = new Vector3(3.75f, -2.25f, -10.0f);
 			this.back.ClickedEvent.AddListener(() =>
 			{
 				this.IsOpen = false;
 			});
 
 			this.execute = UnityObjectLoader.CreateSimpleButton(hud.transform);
+			this.execute.Awake();
+			this.execute.Layer = targetLayer;
 			this.execute.Scale = new Vector3(0.75f, 0.75f, 1.0f);
-			this.execute.transform.localPosition = new Vector3(3.75f, 0.0f, 0.0f);
+			this.execute.transform.localPosition = new Vector3(3.75f, 0.0f, -10.0f);
 			this.execute.name = "ExecuteBomb";
 			this.execute.Text.fontSize = this.execute.Text.fontSizeMax = this.execute.Text.fontSizeMin = 4.0f;
 			updateText();
 			this.execute.ClickedEvent.AddListener(() =>
 			{
+				if (this.num <= 0)
+				{
+					return;
+				}
 				--this.num;
+				RaiderBombSystem.RpcSetBomb(this.camera.gameObject.transform.position);
 				updateText();
 				RaiderBombSystem.RpcSetBomb(this.camera.centerPosition);
 			});
@@ -169,6 +178,10 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private void updateText()
 		{
 			this.execute.Text.text = $"爆撃\n残り{Mathf.CeilToInt(this.num)}回";
+			if (this.num <= 0)
+			{
+				this.execute.gameObject.SetActive(false);
+			}
 		}
 	}
 
