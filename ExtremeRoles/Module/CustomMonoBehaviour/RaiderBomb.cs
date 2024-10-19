@@ -30,7 +30,7 @@ public sealed class RaiderBomb : MonoBehaviour
 		this.param = param;
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 		this.rend = base.gameObject.AddComponent<SpriteRenderer>();
-		this.rend.sprite = UnityObjectLoader.LoadFromResources<Sprite>(
+		this.rend.sprite = UnityObjectLoader.LoadSpriteFromResources(
 			ObjectPath.TestButton);
 		this.isShowOther = param.IsShowOtherPlayer;
 		this.rend.enabled = false;
