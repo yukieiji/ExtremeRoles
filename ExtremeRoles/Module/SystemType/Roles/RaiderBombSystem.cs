@@ -43,7 +43,7 @@ public sealed class RaiderBombSystem(RaiderBombSystem.SystemParameter parameter)
 
 			var offset = this.type switch
 			{
-				BombType.RandomBomb => Random.insideUnitCircle * this.range,
+				BombType.RandomBomb => Random.insideUnitCircle * Random.Range(0.0f, this.range),
 				BombType.CarpetHorizontalBomb => new Vector2((placedNum - Mathf.Floor(placedNum / 2.0f)) * this.range, 0),
 				BombType.CarpetVerticalBomb => new Vector2(0, (placedNum - Mathf.Floor(placedNum / 2.0f)) * this.range),
 				_ => Vector2.zero
@@ -52,6 +52,7 @@ public sealed class RaiderBombSystem(RaiderBombSystem.SystemParameter parameter)
 			var result = this.Target.Value + offset;
 			if (this.placedNum >= this.num)
 			{
+				this.placedNum = 0;
 				this.Target = null;
 			}
 			return result;
