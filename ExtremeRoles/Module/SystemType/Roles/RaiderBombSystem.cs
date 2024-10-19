@@ -116,6 +116,11 @@ public sealed class RaiderBombSystem(RaiderBombSystem.SystemParameter parameter)
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 		this.placer.Target = NetHelpers.ReadVector2(msgReader);
+		this.target = this.placer.NextPos();
+		if (this.target.HasValue)
+		{
+			setBomb(this.target.Value);
+		}
 		this.IsDirty = true;
 	}
 
