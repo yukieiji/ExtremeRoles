@@ -147,7 +147,6 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				--this.num;
 				RaiderBombSystem.RpcSetBomb(this.camera.gameObject.transform.position);
 				updateText();
-				RaiderBombSystem.RpcSetBomb(this.camera.centerPosition);
 			});
 
 			this.execute.Awake();
@@ -157,7 +156,12 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			this.uiOpenTime -= deltaTime;
 			this.back.Text.text = $"終了\n(自動終了まで{Mathf.CeilToInt(this.uiOpenTime)}秒)";
 			if (Input.GetKeyDown(KeyCode.Escape) ||
-				this.uiOpenTime <= 0.0f)
+				this.uiOpenTime <= 0.0f ||
+				(
+					this.num <=0 &&
+					this.button.Behavior is ICountBehavior count &&
+					count.AbilityCount <= 0
+				))
 			{
 				this.IsOpen = false;
 			}
