@@ -266,15 +266,15 @@ You can either edit [the files](https://github.com/yukieiji/ExtremeRoles/tree/ma
 - Use Visual Studio 2022
 
   1. Clone Repository
-  2. Open sln with Visual Studio
-      - If VisualStudio component is missing something you need, you will be prompted to install it, so please follow the instructions.
-  3. Open ResX Resource Manager Extension in the Tools and in the View|Other Windows menus of Visual Studio
+  2. Open `ExtremeRoles.sln` with Visual Studio
+      - If VisualStudio component is missing something you need, you will be show to install it, so please follow the instructions.
+  3. Open `ResX Resource Manager` in `View` to `Other Windows` of Visual Studio
   4. Add or edit translations!!
 
 - ResXResourceManager standalone
 
   1. Clone Repository(Like /a)
-  2. Download ResXResourceManager standalone App : [from](https://github.com/dotnet/ResXResourceManager/releases/latest)
-  3. Open ResXResourceManager.exe
+  2. Download `ResXResourceManager` standalone App : [from](https://github.com/dotnet/ResXResourceManager/releases/latest)
+  3. Open `ResXResourceManager.exe`
   4. Set Directory to Cloned path(Like /a/ExtremeRoles)
   5. Add or edit translations!!
