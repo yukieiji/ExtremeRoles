@@ -35,7 +35,7 @@ public sealed class RaiderBomb : MonoBehaviour
 		this.rend = base.gameObject.AddComponent<SpriteRenderer>();
 		this.rend.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
 			ExtremeRoleId.Raider,
-			ObjectPath.GetRoleImgPath(ExtremeRoleId.Raider, "bomb"));
+			ObjectPath.GetRoleImgPath(ExtremeRoleId.Raider, "Bomb"));
 		this.isShowOther = param.IsShowOtherPlayer;
 		this.rend.enabled = false;
 
@@ -44,7 +44,7 @@ public sealed class RaiderBomb : MonoBehaviour
 			ExtremeRoleId.Raider,
 			string.Format(
 				ObjectPath.RoleSePathFormat,
-				$"{ExtremeRoleId.Raider}.launch"));
+				$"{ExtremeRoleId.Raider}.Launch"));
 
 		// オリジナルのクリップの長さ
 		float originalDuration = this.source.clip.length;
@@ -52,6 +52,8 @@ public sealed class RaiderBomb : MonoBehaviour
 
 		this.source.spatialBlend = 1.0f;
 		this.source.rolloffMode = AudioRolloffMode.Linear;
+		this.source.minDistance = this.param.Range * 0.75f;
+		this.source.maxDistance = this.param.Range * 2.5f;
 		this.source.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
 
 		this.source.Play();
