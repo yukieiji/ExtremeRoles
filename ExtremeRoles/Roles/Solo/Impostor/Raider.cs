@@ -149,7 +149,6 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				updateText();
 			});
 
-			this.execute.Awake();
 		}
 		public void Update(float deltaTime)
 		{
