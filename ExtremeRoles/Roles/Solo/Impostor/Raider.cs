@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -200,8 +199,17 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void CreateAbility()
     {
-
-
+		var img = UnityObjectLoader.LoadSpriteFromResources(
+			ObjectPath.TestButton);
+		if (this.Loader.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var opt) &&
+			opt.Value)
+		{
+			this.CreateAbilityCountButton("OpenUI", img, null, forceAbilityOff);
+		}
+		else
+		{
+			this.CreateNormalAbilityButton("OpenUI", img, null, forceAbilityOff);
+		}
     }
 
 	public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
@@ -213,20 +221,16 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
 	{
-		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
-			this.ui != null)
+		if (rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
-			this.ui.IsOpen = false;
+			forceAbilityOff();
 		}
 	}
 
 	public void ResetOnMeetingStart()
     {
-		if (this.ui != null)
-		{
-			this.ui.IsOpen = false;
-		}
-    }
+		forceAbilityOff();
+	}
 
     public bool UseAbility()
     {
@@ -335,6 +339,15 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			this.ui.IsOpen)
 		{
 			this.ui.Update(Time.deltaTime);
+		}
+	}
+
+	private void forceAbilityOff()
+	{
+		if (this.ui != null &&
+			this.ui.IsOpen)
+		{
+			this.ui.IsOpen = false;
 		}
 	}
 }
