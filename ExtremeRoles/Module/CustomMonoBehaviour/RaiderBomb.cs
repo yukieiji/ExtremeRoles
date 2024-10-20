@@ -23,6 +23,7 @@ public sealed class RaiderBomb : MonoBehaviour
 
 	private SpriteRenderer? rend;
 	private Parameter? param;
+	private AudioSource? source;
 
 	private float timer = 0.0f;
 	private bool isShowOther;
@@ -32,15 +33,28 @@ public sealed class RaiderBomb : MonoBehaviour
 		this.param = param;
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 		this.rend = base.gameObject.AddComponent<SpriteRenderer>();
-		this.rend.sprite = UnityObjectLoader.LoadSpriteFromResources(
-			ObjectPath.TestButton);
+		this.rend.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+			ExtremeRoleId.Raider,
+			ObjectPath.GetRoleImgPath(ExtremeRoleId.Raider, "bomb"));
 		this.isShowOther = param.IsShowOtherPlayer;
 		this.rend.enabled = false;
 
-		var sound = base.gameObject.AddComponent<AudioSource>();
-		// sound.clip = UnityObjectLoader.LoadFromResources<AudioClip>(ObjectPath.TestSound);
-		sound.loop = true;
-		sound.Play();
+		this.source = base.gameObject.AddComponent<AudioSource>();
+		this.source.clip = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
+			ExtremeRoleId.Raider,
+			string.Format(
+				ObjectPath.RoleSePathFormat,
+				$"{ExtremeRoleId.Raider}.launch"));
+
+		// オリジナルのクリップの長さ
+		float originalDuration = this.source.clip.length;
+		this.source.pitch = originalDuration / this.param.Time;
+
+		this.source.spatialBlend = 1.0f;
+		this.source.rolloffMode = AudioRolloffMode.Linear;
+		this.source.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
+
+		this.source.Play();
 	}
 
 	public void FixedUpdate()
