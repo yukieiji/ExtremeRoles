@@ -57,6 +57,45 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 					this.uiOpenTime = this.uiOpenTimeMax;
 				}
 
+				if (!this.isShowPlayer)
+				{
+
+					foreach (var player in PlayerCache.AllPlayerControl)
+					{
+						if (player == null ||
+							player.Data == null ||
+							player.Data.Disconnected)
+						{
+							continue;
+						}
+
+						var curScale = player.transform.localScale;
+						byte playerId = player.PlayerId;
+						if (!value && this.defaultScale.TryGetValue(playerId, out float scale))
+						{
+							player.transform.localScale = new Vector3(scale, curScale.y, curScale.z);
+							if (player.cosmetics != null &&
+								player.cosmetics.CurrentPet != null &&
+								this.petScale.TryGetValue(playerId, out float petDefaultScale))
+							{
+								var petScale = player.cosmetics.CurrentPet.transform.localScale;
+								player.cosmetics.CurrentPet.transform.localScale = new Vector3(petDefaultScale, petScale.y, petScale.z);
+							}
+						}
+						else if (curScale.x != xScale)
+						{
+							this.defaultScale[playerId] = curScale.x;
+							player.transform.localScale = new Vector3(xScale, curScale.y, curScale.z);
+							if (player.cosmetics != null && player.cosmetics.CurrentPet != null)
+							{
+								var petScale = player.cosmetics.CurrentPet.transform.localScale;
+								this.petScale[playerId] = player.cosmetics.CurrentPet.transform.localScale.x;
+								player.cosmetics.CurrentPet.transform.localScale = new Vector3(xScale, petScale.y, petScale.z);
+							}
+						}
+					}
+				}
+
 				this.ui.enabled = value;
 
 				this.back.gameObject.SetActive(value);
@@ -70,6 +109,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.button.SetButtonShow(invert);
 			}
 		}
+		private const float xScale = 0.0001f;
 		private bool isOpen;
 
 		private readonly SpriteRenderer ui;
@@ -88,6 +128,9 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private float uiOpenTime;
 		private float time;
 		private int num;
+
+		private readonly Dictionary<byte, float> defaultScale = new Dictionary<byte, float>();
+		private readonly Dictionary<byte, float> petScale = new Dictionary<byte, float>();
 
 		public Gui(
 			UiParameter parameter,
