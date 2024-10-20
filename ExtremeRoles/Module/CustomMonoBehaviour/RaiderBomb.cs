@@ -35,29 +35,16 @@ public sealed class RaiderBomb : MonoBehaviour
 		this.param = param;
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 		this.rend = base.gameObject.AddComponent<SpriteRenderer>();
-		this.rend.sprite = UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
-			ExtremeRoleId.Raider,
+		this.rend.sprite = load<Sprite>(
 			ObjectPath.GetRoleImgPath(ExtremeRoleId.Raider, "Bomb"));
 		this.isShowOther = param.IsShowOtherPlayer;
 		this.rend.enabled = false;
 
-		var lunchSe = base.gameObject.AddComponent<AudioSource>();
-		lunchSe.clip = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
-			ExtremeRoleId.Raider,
-			string.Format(
-				ObjectPath.RoleSePathFormat,
-				$"{ExtremeRoleId.Raider}.Launch"));
+		var lunchSe = addSe("Launch");
 
 		// オリジナルのクリップの長さ
 		float originalDuration = lunchSe.clip.length;
 		lunchSe.pitch = originalDuration / this.param.Time;
-
-		lunchSe.spatialBlend = 1.0f;
-		lunchSe.rolloffMode = AudioRolloffMode.Linear;
-		lunchSe.minDistance = this.param.Range * 0.75f;
-		lunchSe.maxDistance = this.param.Range * 2.5f;
-		lunchSe.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
-
 		lunchSe.Play();
 	}
 
@@ -102,18 +89,7 @@ public sealed class RaiderBomb : MonoBehaviour
 			yield break;
 		}
 
-		var explode = base.gameObject.AddComponent<AudioSource>();
-		explode.clip = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
-			ExtremeRoleId.Raider,
-			string.Format(
-				ObjectPath.RoleSePathFormat,
-				$"{ExtremeRoleId.Raider}.Explosion"));
-
-		explode.spatialBlend = 1.0f;
-		explode.rolloffMode = AudioRolloffMode.Linear;
-		explode.minDistance = this.param.Range * 0.75f;
-		explode.maxDistance = this.param.Range * 2.5f;
-		explode.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
+		var explode = addSe("Explosion");
 		explode.Play();
 
 		var waiter = new WaitForFixedUpdate();
@@ -189,4 +165,28 @@ public sealed class RaiderBomb : MonoBehaviour
 			PlayerControl.LocalPlayer.Data.IsDead;
 	}
 
+	private AudioSource addSe(string name)
+	{
+		if (this.param == null)
+		{
+			throw new NullReferenceException();
+		}
+
+		var se = base.gameObject.AddComponent<AudioSource>();
+		se.clip = load<AudioClip>(
+			string.Format(
+                ObjectPath.RoleSePathFormat,
+                $"{ExtremeRoleId.Raider}.{name}"));
+		se.spatialBlend = 1.0f;
+		se.rolloffMode = AudioRolloffMode.Linear;
+		se.minDistance = this.param.Range * 0.75f;
+		se.maxDistance = this.param.Range * 2.5f;
+		se.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
+		return se;
+	}
+
+	private T load<T>(string path) where T : UnityEngine.Object
+		=> UnityObjectLoader.LoadFromResources<T, ExtremeRoleId>(
+            ExtremeRoleId.Raider,
+            path);
 }
