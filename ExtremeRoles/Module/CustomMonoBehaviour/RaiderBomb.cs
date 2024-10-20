@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 
-using ExtremeRoles.Module.SystemType.Roles;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
@@ -23,7 +25,7 @@ public sealed class RaiderBomb : MonoBehaviour
 
 	private SpriteRenderer? rend;
 	private Parameter? param;
-	private AudioSource? source;
+	private Coroutine? coroutine;
 
 	private float timer = 0.0f;
 	private bool isShowOther;
@@ -39,29 +41,30 @@ public sealed class RaiderBomb : MonoBehaviour
 		this.isShowOther = param.IsShowOtherPlayer;
 		this.rend.enabled = false;
 
-		this.source = base.gameObject.AddComponent<AudioSource>();
-		this.source.clip = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
+		var lunchSe = base.gameObject.AddComponent<AudioSource>();
+		lunchSe.clip = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
 			ExtremeRoleId.Raider,
 			string.Format(
 				ObjectPath.RoleSePathFormat,
 				$"{ExtremeRoleId.Raider}.Launch"));
 
 		// オリジナルのクリップの長さ
-		float originalDuration = this.source.clip.length;
-		this.source.pitch = originalDuration / this.param.Time;
+		float originalDuration = lunchSe.clip.length;
+		lunchSe.pitch = originalDuration / this.param.Time;
 
-		this.source.spatialBlend = 1.0f;
-		this.source.rolloffMode = AudioRolloffMode.Linear;
-		this.source.minDistance = this.param.Range * 0.75f;
-		this.source.maxDistance = this.param.Range * 2.5f;
-		this.source.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
+		lunchSe.spatialBlend = 1.0f;
+		lunchSe.rolloffMode = AudioRolloffMode.Linear;
+		lunchSe.minDistance = this.param.Range * 0.75f;
+		lunchSe.maxDistance = this.param.Range * 2.5f;
+		lunchSe.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
 
-		this.source.Play();
+		lunchSe.Play();
 	}
 
 	public void FixedUpdate()
 	{
-		if (this.param is null)
+		if (this.param is null ||
+			this.rend == null)
 		{
 			return;
 		}
@@ -77,9 +80,47 @@ public sealed class RaiderBomb : MonoBehaviour
 		{
 			return;
 		}
+
 		if (AmongUsClient.Instance.AmHost)
 		{
 			killPlayer(this.param.Range);
+		}
+
+		this.rend.enabled = false;
+		if (this.coroutine != null)
+		{
+			return;
+		}
+
+		this.coroutine = StartCoroutine(coDestroy().WrapToIl2Cpp());
+	}
+
+	private IEnumerator coDestroy()
+	{
+		if (this.param is null)
+		{
+			yield break;
+		}
+
+		var explode = base.gameObject.AddComponent<AudioSource>();
+		explode.clip = UnityObjectLoader.LoadFromResources<AudioClip, ExtremeRoleId>(
+			ExtremeRoleId.Raider,
+			string.Format(
+				ObjectPath.RoleSePathFormat,
+				$"{ExtremeRoleId.Raider}.Explosion"));
+
+		explode.spatialBlend = 1.0f;
+		explode.rolloffMode = AudioRolloffMode.Linear;
+		explode.minDistance = this.param.Range * 0.75f;
+		explode.maxDistance = this.param.Range * 2.5f;
+		explode.outputAudioMixerGroup = SoundManager.Instance.SfxChannel;
+		explode.Play();
+
+		var waiter = new WaitForFixedUpdate();
+
+		while (explode.isPlaying)
+		{
+			yield return waiter;
 		}
 		Destroy(base.gameObject);
 	}
