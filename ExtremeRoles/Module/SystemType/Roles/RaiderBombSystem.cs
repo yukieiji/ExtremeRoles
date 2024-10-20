@@ -57,7 +57,7 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 		}
 	}
 
-	private readonly BombParameter parameter = parameter.BombParameter;
+	private readonly RaiderBomb.Parameter parameter = parameter.BombParameter;
 	private readonly Placer placer = new Placer(parameter);
 	private Vector2? target = null;
 	private float timer = 0.0f;
