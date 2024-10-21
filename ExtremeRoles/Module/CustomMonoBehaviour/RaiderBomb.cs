@@ -33,7 +33,6 @@ public sealed class RaiderBomb : MonoBehaviour
 	public void SetParameter(Parameter param)
 	{
 		this.param = param;
-		var role = ExtremeRoleManager.GetLocalPlayerRole();
 		this.rend = base.gameObject.AddComponent<SpriteRenderer>();
 		this.rend.sprite = load<Sprite>(
 			ObjectPath.GetRoleImgPath(ExtremeRoleId.Raider, "Bomb"));
