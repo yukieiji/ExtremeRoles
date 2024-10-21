@@ -101,12 +101,16 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.ui.enabled = value;
 
 				this.back.gameObject.SetActive(value);
-				this.execute.gameObject.SetActive(value);
+				this.execute.gameObject.SetActive(this.num > 0 && value);
 
 				this.curPos = PlayerControl.LocalPlayer.transform.position;
 
+				FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
+					!(value || PlayerControl.LocalPlayer.Data.IsDead));
+
 				bool invert = !value;
 				this.camera.enabled = invert;
+
 				this.buttonTransformObj.SetActive(invert);
 				this.button.SetButtonShow(invert);
 			}
@@ -150,8 +154,8 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			obj.transform.SetParent(hud.transform);
 
 			this.ui = obj.AddComponent<SpriteRenderer>();
-			this.ui.sprite = UnityObjectLoader.LoadSpriteFromResources(
-				"ExtremeRoles.Resources.RaiderGUI.png", 120.0f);
+			this.ui.sprite = UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Raider, "Gui");
 
 			obj.transform.localScale = new Vector2(
 				Screen.width / 1280.0f,
