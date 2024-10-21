@@ -306,7 +306,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			Option.IsOpenLimit, true);
 		factory.CreateIntOption(
 			Option.LimitNum, 4, 1, 100, 1,
-			invert: true);
+			limitOpt, invert: true);
 
 		factory.CreateBoolOption(
 			Option.IsHidePlayerOnOpen, true);
