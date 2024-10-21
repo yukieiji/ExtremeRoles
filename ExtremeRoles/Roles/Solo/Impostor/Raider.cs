@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Resources;
