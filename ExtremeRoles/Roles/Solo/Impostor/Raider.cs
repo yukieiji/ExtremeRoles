@@ -299,7 +299,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 		factory.CreateIntOption(
 			RoleAbilityCommonOption.AbilityActiveTime,
-			10, 2, 60, 1,
+			25, 2, 90, 1,
 			format: OptionUnit.Second);
 
 		var limitOpt = factory.CreateBoolOption(
@@ -324,7 +324,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var cate = this.Loader;
 
-		if (!cate.TryGetValueOption<RoleAbilityCommonOption, float>(
+		if (!cate.TryGetValueOption<RoleAbilityCommonOption, int>(
 				RoleAbilityCommonOption.AbilityActiveTime,
 				out var activeTimeOption))
 		{
