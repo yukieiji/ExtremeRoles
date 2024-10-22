@@ -59,6 +59,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 	public sealed class FakePlayer : IFakerObject
 	{
 		public int ColorId { get; init; }
+		public GameObject Body => this.body;
 
 		private GameObject body;
 		private SpriteRenderer rend;
