@@ -59,6 +59,14 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 					this.uiOpenTime = this.uiOpenTimeMax;
 				}
 
+				if (PlayerControl.LocalPlayer == null ||
+					PlayerControl.LocalPlayer.Data == null)
+				{
+					return;
+				}
+
+				var localPc = PlayerControl.LocalPlayer;
+
 				if (!this.isShowPlayer)
 				{
 
@@ -71,8 +79,13 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 							continue;
 						}
 
-						var curScale = player.transform.localScale;
 						byte playerId = player.PlayerId;
+						if (playerId == localPc.PlayerId)
+						{
+							continue;
+						}
+
+						var curScale = player.transform.localScale;
 						if (!value && this.defaultScale.TryGetValue(playerId, out float scale))
 						{
 							player.transform.localScale = new Vector3(scale, curScale.y, curScale.z);
@@ -103,10 +116,11 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.back.gameObject.SetActive(value);
 				this.execute.gameObject.SetActive(this.num > 0 && value);
 
-				this.curPos = PlayerControl.LocalPlayer.transform.position;
+				this.curPos = localPc.transform.position;
+				this.curFlip = localPc.cosmetics.FlipX;
 
 				FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
-					!(value || PlayerControl.LocalPlayer.Data.IsDead));
+					!(value || localPc.Data.IsDead));
 
 				bool invert = !value;
 				this.camera.enabled = invert;
@@ -129,6 +143,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private readonly bool isShowPlayer;
 
 		private Vector3 curPos;
+		private bool curFlip;
 
 		private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
 		private float uiOpenTime;
@@ -161,7 +176,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				Screen.width / 1280.0f,
 				Screen.height / 720.0f);
 
-			int targetLayer = LayerMask.NameToLayer("UI"); ;
+			int targetLayer = LayerMask.NameToLayer("UI");
 			obj.layer = targetLayer;
 
 			this.ui.gameObject.SetActive(true);
@@ -202,7 +217,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		public void Update(float deltaTime)
 		{
 			this.uiOpenTime -= deltaTime;
-			this.back.Text.text = $"終了\n(自動終了まで{Mathf.CeilToInt(this.uiOpenTime)}秒)";
+			this.back.Text.text = Tr.GetString("CloseBombUI", Mathf.CeilToInt(this.uiOpenTime));
 			if (Input.GetKeyDown(KeyCode.Escape) ||
 				this.uiOpenTime <= 0.0f ||
 				(
@@ -223,13 +238,15 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
                     this.camera.transform.position = cameraPos + (del * 0.25f);
 					this.time = 0.0f;
                 }
-				PlayerControl.LocalPlayer.transform.position = this.curPos;
+				var pc = PlayerControl.LocalPlayer;
+				pc.transform.position = this.curPos;
+				pc.cosmetics.SetFlipX(this.curFlip);
 			}
 		}
 
 		private void updateText()
 		{
-			this.execute.Text.text = $"爆撃\n残り{Mathf.CeilToInt(this.num)}回";
+			this.execute.Text.text = Tr.GetString("ExecuteBombFromUI", this.num);
 			if (this.num <= 0)
 			{
 				this.execute.gameObject.SetActive(false);
@@ -249,14 +266,15 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
 		var img = UnityObjectLoader.LoadSpriteFromResources(
 			ObjectPath.TestButton);
+		string name = Tr.GetString("OpenBombUI");
 		if (this.Loader.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var opt) &&
 			opt.Value)
 		{
-			this.CreateAbilityCountButton("OpenUI", img, null, forceAbilityOff);
+			this.CreateAbilityCountButton(name, img, null, forceAbilityOff);
 		}
 		else
 		{
-			this.CreateNormalAbilityButton("OpenUI", img, null, forceAbilityOff);
+			this.CreateNormalAbilityButton(name, img, null, forceAbilityOff);
 		}
     }
 

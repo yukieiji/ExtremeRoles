@@ -11,10 +11,10 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 {
 	public enum BombType
 	{
-		SingleBomb,
-		RandomBomb,
-		CarpetHorizontalBomb,
-		CarpetVerticalBomb
+		SingleBombType,
+		RandomBombType,
+		CarpetHorizontalBombType,
+		CarpetVerticalBombType
 	}
 
 	public sealed record Parameter(
@@ -41,9 +41,9 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 
 			var offset = this.type switch
 			{
-				BombType.RandomBomb => Random.insideUnitCircle * Random.Range(0.0f, this.range),
-				BombType.CarpetHorizontalBomb => new Vector2((placedNum - Mathf.Floor(this.num / 2.0f)) / this.num * -this.range, 0),
-				BombType.CarpetVerticalBomb => new Vector2(0, (placedNum - Mathf.Floor(this.num / 2.0f)) / this.num * -this.range),
+				BombType.RandomBombType => Random.insideUnitCircle * Random.Range(0.0f, this.range),
+				BombType.CarpetHorizontalBombType => new Vector2((placedNum - Mathf.Floor(this.num / 2.0f)) / this.num * -this.range, 0),
+				BombType.CarpetVerticalBombType => new Vector2(0, (placedNum - Mathf.Floor(this.num / 2.0f)) / this.num * -this.range),
 				_ => Vector2.zero
 			};
 			this.placedNum++;

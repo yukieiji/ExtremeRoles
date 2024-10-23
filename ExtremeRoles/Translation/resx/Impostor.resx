@@ -1225,4 +1225,87 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="TeroristBombMinigameStart" xml:space="preserve">
     <value>解除する</value>
   </data>
+  <data name="Raider" xml:space="preserve">
+    <value>レイダー</value>
+  </data>
+  <data name="RaiderAbilityCoolTime" xml:space="preserve">
+    <value>「爆撃モード」のクールタイム</value>
+  </data>
+  <data name="RaiderAbilityCount" xml:space="preserve">
+    <value>「爆撃」の回数</value>
+  </data>
+  <data name="RaiderAbilityActiveTime" xml:space="preserve">
+    <value>「爆撃モード」の表示可能秒数</value>
+  </data>
+  <data name="RaiderIsOpenLimit" xml:space="preserve">
+    <value>「爆撃モード」の表示上限</value>
+  </data>
+  <data name="RaiderLimitNum" xml:space="preserve">
+    <value>「爆撃モード」の表示回数</value>
+  </data>
+  <data name="RaiderIsHidePlayerOnOpen" xml:space="preserve">
+    <value>「爆撃モード」中のプレイヤー表示</value>
+  </data>
+  <data name="RaiderBombType" xml:space="preserve">
+    <value>「爆撃」の種類</value>
+  </data>
+  <data name="SingleBombType" xml:space="preserve">
+    <value>単体</value>
+  </data>
+  <data name="RandomBombType" xml:space="preserve">
+    <value>ランダム(複数)</value>
+  </data>
+  <data name="CarpetHorizontalBombType" xml:space="preserve">
+    <value>絨毯爆撃(横)</value>
+  </data>
+  <data name="CarpetVerticalBombType" xml:space="preserve">
+    <value>絨毯爆撃(縦)</value>
+  </data>
+  <data name="RaiderBombNum" xml:space="preserve">
+    <value>投下数</value>
+  </data>
+  <data name="RaiderBombTargetRange" xml:space="preserve">
+    <value>爆撃範囲</value>
+  </data>
+  <data name="RaiderBombRange" xml:space="preserve">
+    <value>爆弾1つあたりの爆発範囲</value>
+  </data>
+  <data name="RaiderBombAliveTime" xml:space="preserve">
+    <value>爆弾1つあたりの落下時間</value>
+  </data>
+  <data name="RaiderBombShowOtherPlayer" xml:space="preserve">
+    <value>爆弾投下位置がインポスター以外に
+見えるか</value>
+  </data>
+  <data name="RaiderIntroDescription" xml:space="preserve">
+    <value>至急、クルーへの爆撃を要請！！</value>
+  </data>
+  <data name="RaiderShortDescription" xml:space="preserve">
+    <value>「爆撃モード」から「爆撃」で焼け野原しろ</value>
+  </data>
+  <data name="RaiderFullDescription" xml:space="preserve">
+    <value>「爆撃モード」から指定地点に「爆撃」を行うことが出来る
+インポスター役職
+
+ボタン能力「爆撃モード」
+　　ボタンを押すと「爆撃モード」が起動する
+UI「爆撃モード」
+　　プレイヤーを操作する方法と同じ方法で爆撃位置を
+　変更できる
+　　「爆撃モード」内で「爆撃」を押すと、中心位置を元に
+　「爆撃」が発生する
+　「爆撃」は「爆弾」がオプションに従った方法で投下される
+　「爆弾」の爆発範囲にいるプレイヤーは陣営問わずキルされる</value>
+  </data>
+  <data name="OpenBombUI" xml:space="preserve">
+    <value>爆撃モード</value>
+  </data>
+  <data name="CloseBombUI" xml:space="preserve">
+    <value>終了
+(自動終了まで{0}秒)</value>
+  </data>
+  <data name="ExecuteBombFromUI" xml:space="preserve">
+    <value>爆撃
+(残り{0}回)</value>
+  </data>
 </root>
