@@ -39,7 +39,6 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 	private Gui? ui;
 	private UiParameter? param;
-	private float timer = 0f;
 
 	public record UiParameter(
 		int AbilityNum,
@@ -60,7 +59,8 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				}
 
 				if (PlayerControl.LocalPlayer == null ||
-					PlayerControl.LocalPlayer.Data == null)
+					PlayerControl.LocalPlayer.Data == null ||
+					PlayerControl.LocalPlayer.MyPhysics == null)
 				{
 					return;
 				}
@@ -117,7 +117,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.execute.gameObject.SetActive(this.num > 0 && value);
 
 				this.curPos = localPc.transform.position;
-				this.curFlip = localPc.cosmetics.FlipX;
+				this.curFlip = localPc.MyPhysics.FlipX;
 
 				FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
 					!(value || localPc.Data.IsDead));
@@ -228,7 +228,9 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 			{
 				this.IsOpen = false;
 			}
-			if (this.IsOpen && PlayerControl.LocalPlayer != null)
+			if (this.IsOpen &&
+				PlayerControl.LocalPlayer != null &&
+				PlayerControl.LocalPlayer.MyPhysics != null)
 			{
 				Vector2 cameraPos = this.camera.transform.position;
 				this.time += deltaTime;
@@ -240,7 +242,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
                 }
 				var pc = PlayerControl.LocalPlayer;
 				pc.transform.position = this.curPos;
-				pc.cosmetics.SetFlipX(this.curFlip);
+				pc.MyPhysics.FlipX = this.curFlip;
 			}
 		}
 
