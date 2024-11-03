@@ -36,19 +36,19 @@ public sealed class VersionChecker : MonoBehaviour
             int build = reader.ReadPackedInt32();
             int revision = reader.ReadPackedInt32();
 
-            version[id] = new Version(major, minor, build, revision);
+            this.version[id] = new Version(major, minor, build, revision);
         }
 
         public void Deserialize(RPCOperator.RpcCaller writer)
         {
             int id = AmongUsClient.Instance.ClientId;
             writer.WritePackedInt(id);
-            writer.WritePackedInt(localVersion.Major);
-            writer.WritePackedInt(localVersion.Minor);
-            writer.WritePackedInt(localVersion.Build);
-            writer.WritePackedInt(localVersion.Revision);
+            writer.WritePackedInt(this.localVersion.Major);
+            writer.WritePackedInt(this.localVersion.Minor);
+            writer.WritePackedInt(this.localVersion.Build);
+            writer.WritePackedInt(this.localVersion.Revision);
 
-            version[id] = localVersion;
+			this.version[id] = this.localVersion;
         }
 
         private string getHostPlayerMessage()
@@ -63,31 +63,35 @@ public sealed class VersionChecker : MonoBehaviour
                         client.Character.TryGetComponent<DummyBehaviour>(out var dummyComponent) &&
                         dummyComponent.enabled
                     ) ||
-					client.Character.Data == null ||
-					string.IsNullOrEmpty(client.Character.Data.PlayerName))
+					client.Character.Data == null)
                 {
                     continue;
                 }
 
-                if (!
-                    (
+				string name = client.Character.Data.PlayerName;
+				if (string.IsNullOrEmpty(name))
+				{
+					continue;
+				}
+
+				if (!(
                         this.version.TryGetValue(client.Id, out var clientVer) &&
                         clientVer is not null
                     ))
                 {
-                    this.builder.AppendLine($"{client.Character.Data.PlayerName}:  {Tr.GetString("errorNotInstalled", modName)}");
+                    this.builder.AppendLine($"{name}:  {Tr.GetString("errorNotInstalled", modName)}");
                 }
                 else
                 {
                     int diff = localVersion.CompareTo(clientVer);
                     if (diff > 0)
                     {
-                        this.builder.AppendLine($"{client.Character.Data.PlayerName}:  {Tr.GetString("errorOldInstalled", modName)}");
+                        this.builder.AppendLine($"{name}:  {Tr.GetString("errorOldInstalled", modName)}");
                     }
                     else if (diff < 0)
                     {
                         this.builder.AppendLine(
-                            $"{client.Character.Data.PlayerName}:  {Tr.GetString("errorNewInstalled", modName)}");
+                            $"{name}:  {Tr.GetString("errorNewInstalled", modName)}");
                     }
                 }
             }
@@ -153,16 +157,7 @@ public sealed class VersionChecker : MonoBehaviour
 
     public void Awake()
     {
-        this.mng = base.GetComponent<GameStartManager>();
-
-        this.display = this.mng.StartButtonGlyph;
-        this.button = this.mng.StartButton;
-        this.text = FastDestroyableSingleton<HudManager>.Instance.transform.Find("AnalyticsRecordingGO").GetComponent<TextMeshPro>();
-        this.text.enableWordWrapping = false;
-        this.text.alignment = TextAlignmentOptions.Center;
-        this.text.GetComponent<RectTransform>().sizeDelta = new Vector2(
-            5.0f, 5.5f);
-        this.defaultPos = this.text.transform.localPosition;
+		setUpVariable();
     }
 
     public void DeserializeLocalVersion()
@@ -199,14 +194,20 @@ public sealed class VersionChecker : MonoBehaviour
     {
         if (LobbyBehaviour.Instance == null ||
 			PlayerControl.LocalPlayer == null ||
-			this.text == null ||
-			this.button == null ||
-			this.mng == null)
+			AmongUsClient.Instance == null)
         {
             return;
         }
 
-        if (!isSend)
+		if (this.text == null ||
+			this.button == null ||
+			this.mng == null)
+		{
+			this.setUpVariable();
+			return;
+		}
+
+        if (!this.isSend)
         {
             this.DeserializeLocalVersion();
             this.isSend = true;
@@ -273,7 +274,7 @@ public sealed class VersionChecker : MonoBehaviour
         {
             if (isHost)
             {
-                bool isPlayerOk = this.mng.LastPlayerCount >= mng.MinPlayers;
+                bool isPlayerOk = this.mng.LastPlayerCount >= this.mng.MinPlayers;
 
                 if (this.display != null)
                 {
@@ -294,4 +295,27 @@ public sealed class VersionChecker : MonoBehaviour
 			this.text.gameObject.SetActive(false);
 		}
     }
+
+	private void setUpVariable()
+	{
+		this.mng = base.GetComponent<GameStartManager>();
+
+		if (this.mng == null)
+		{
+			return;
+		}
+
+		this.display = this.mng.StartButtonGlyph;
+		this.button = this.mng.StartButton;
+		this.text = FastDestroyableSingleton<HudManager>.Instance.transform.Find("AnalyticsRecordingGO").GetComponent<TextMeshPro>();
+		if (this.text == null)
+		{
+			return;
+		}
+		this.text.enableWordWrapping = false;
+		this.text.alignment = TextAlignmentOptions.Center;
+		this.text.GetComponent<RectTransform>().sizeDelta = new Vector2(
+			5.0f, 5.5f);
+		this.defaultPos = this.text.transform.localPosition;
+	}
 }

@@ -11,7 +11,9 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.Ability.Factory;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.GhostRoles;
@@ -20,17 +22,13 @@ using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.Ability.AutoActivator;
-
-
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
 
 #nullable enable
@@ -443,7 +441,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
 
     public void SetAbilityNum(int abilityNum)
     {
-		if (this.Button?.Behavior is CountBehavior behavior)
+		if (this.Button?.Behavior is ICountBehavior behavior)
 		{
 			behavior.SetAbilityCount(abilityNum + this.abilityNum);
 		}

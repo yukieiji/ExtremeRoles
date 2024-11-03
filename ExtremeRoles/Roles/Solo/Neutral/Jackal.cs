@@ -11,7 +11,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -621,7 +621,7 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
                 !curSideKick.sidekickJackalCanMakeSidekick ||
                 curSideKick.recursion >= newJackal.SidekickRecursionLimit
             ) &&
-            newJackal.Button?.Behavior is CountBehavior countBehavior)
+            newJackal.Button?.Behavior is ICountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(0);
         }

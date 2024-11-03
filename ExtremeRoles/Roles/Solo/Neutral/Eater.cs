@@ -14,8 +14,6 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
-
-
 using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -200,11 +198,15 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     public void Update(PlayerControl rolePlayer)
     {
 
-        if (CachedShipStatus.Instance == null ||
+        if (this.Button == null ||
+			CachedShipStatus.Instance == null ||
             GameData.Instance == null ||
-            this.IsWin) { return; }
-        if (!CachedShipStatus.Instance.enabled ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+            this.IsWin ||
+			!CachedShipStatus.Instance.enabled ||
+			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		{
+			return;
+		}
 
         DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
         HashSet<byte> existDeadBodyPlayerId = new HashSet<byte>();
@@ -231,12 +233,16 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
         foreach (byte playerId in removePlayerId)
         {
-            this.deadBodyArrow[playerId].Clear();
+			if (this.deadBodyArrow.TryGetValue(playerId, out var arrow) &&
+				arrow is not null)
+			{
+				arrow.Clear();
+			}
             this.deadBodyArrow.Remove(playerId);
         }
 
-        if (this.Button?.Behavior is CountBehavior behavior &&
-            behavior.AbilityCount != 0) { return; }
+        if (this.Button?.Behavior is ICountBehavior behavior &&
+            behavior.AbilityCount > 0) { return; }
 
         ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
         this.IsWin = true;
@@ -248,13 +254,15 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         {
             Player.RpcCleanDeadBody(this.targetDeadBody.PlayerId);
 
-            if (this.deadBodyArrow.ContainsKey(this.targetDeadBody.PlayerId))
+            if (this.deadBodyArrow.TryGetValue(this.targetDeadBody.PlayerId, out var arrow) &&
+				arrow is not null)
             {
-                this.deadBodyArrow[this.targetDeadBody.PlayerId].Clear();
-                this.deadBodyArrow.Remove(this.targetDeadBody.PlayerId);
+				arrow.Clear();
             }
 
-            this.targetDeadBody = null;
+			this.deadBodyArrow.Remove(this.targetDeadBody.PlayerId);
+
+			this.targetDeadBody = null;
 
             if (this.Button == null) { return; }
 
@@ -355,14 +363,15 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
         this.deadBodyArrow = new Dictionary<byte, Arrow>();
         this.isActivated = false;
+		this.IsWin = false;
 
-        if (this.Button?.Behavior is CountBehavior behaviour)
+        if (this.Button?.Behavior is ICountBehavior behaviour)
         {
             int abilityNum = cate.GetValue<RoleAbilityCommonOption, int>(
                 RoleAbilityCommonOption.AbilityCount);
             int halfPlayerNum = GameData.Instance.PlayerCount / 2;
 
-            behaviour.SetCountText("eaterWinNum");
+            behaviour.SetButtonTextFormat("eaterWinNum");
             behaviour.SetAbilityCount(
                  abilityNum > halfPlayerNum ? halfPlayerNum : abilityNum);
         }
@@ -376,7 +385,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         for (int i = 0; i < array.Length; ++i)
         {
             if (GameData.Instance.GetPlayerById(
-                array[i].ParentId).PlayerId == targetPlayerId)
+				array[i].ParentId).PlayerId == targetPlayerId)
             {
                 checkDeadBody = array[i];
                 break;

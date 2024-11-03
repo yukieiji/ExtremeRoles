@@ -8,7 +8,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -261,7 +261,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	{
 		var local = PlayerControl.LocalPlayer;
 		if (local == null ||
-			this.Button?.Behavior is not CountBehavior count ||
+			this.Button?.Behavior is not ICountBehavior count ||
 			!ExtremeRoleManager.TryGetRole(this.targetPlayerId, out var role))
 		{
 			return false;

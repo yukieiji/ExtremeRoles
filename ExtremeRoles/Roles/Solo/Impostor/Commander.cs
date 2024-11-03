@@ -6,7 +6,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -119,9 +119,9 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
         ++this.killCount;
-        this.killCount = this.killCount % this.increaseKillNum;
+        this.killCount %= this.increaseKillNum;
         if (this.killCount == 0 &&
-            this.Button.Behavior is CountBehavior countBehavior)
+            this.Button.Behavior is ICountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
         }

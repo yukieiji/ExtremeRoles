@@ -90,8 +90,9 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 		public void RemoveAll(Player playerInfo)
 		{
-			Logging.Debug($"Remove [{playerInfo.PlayerName}] from all winner pool");
-			this.plusWinPlayr.RemoveAll(x => x.PlayerName == playerInfo.PlayerName);
+			string playerName = playerInfo.PlayerName;
+			Logging.Debug($"Remove [{playerName}] from all winner pool");
+			this.plusWinPlayr.RemoveAll(x => x.PlayerName == playerName);
 			Remove(playerInfo);
 		}
 		public void Remove(CachedPlayerData player)

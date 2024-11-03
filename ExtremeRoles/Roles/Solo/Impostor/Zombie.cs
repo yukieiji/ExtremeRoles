@@ -6,11 +6,12 @@ using UnityEngine.Video;
 using Hazel;
 using AmongUs.GameOptions;
 
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-
-using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -19,13 +20,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior;
-
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -157,7 +151,7 @@ public sealed class Zombie :
             SetMagicCircle,
              () => { });
 
-        if (this.Button?.Behavior is not CountBehavior countBehavior)
+        if (this.Button?.Behavior is not ICountBehavior countBehavior)
         {
             return;
         }
@@ -557,7 +551,7 @@ public sealed class Zombie :
     private void updateReviveState(bool isReduceAfter)
     {
         if (this.killCount >= this.resurrectKillCount &&
-            this.Button.Behavior is CountBehavior behavior &&
+            this.Button.Behavior is ICountBehavior behavior &&
             behavior.AbilityCount <= (isReduceAfter ? 1 : 0) &&
             !this.canResurrect)
         {
