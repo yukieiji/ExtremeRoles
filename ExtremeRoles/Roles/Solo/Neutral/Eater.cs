@@ -14,8 +14,6 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
-
-
 using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -243,7 +241,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             this.deadBodyArrow.Remove(playerId);
         }
 
-        if (this.Button?.Behavior is CountBehavior behavior &&
+        if (this.Button?.Behavior is ICountBehavior behavior &&
             behavior.AbilityCount > 0) { return; }
 
         ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
@@ -258,7 +256,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
             if (this.deadBodyArrow.TryGetValue(this.targetDeadBody.PlayerId, out var arrow) &&
 				arrow is not null)
-			{
+            {
 				arrow.Clear();
             }
 
@@ -367,13 +365,13 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         this.isActivated = false;
 		this.IsWin = false;
 
-        if (this.Button?.Behavior is CountBehavior behaviour)
+        if (this.Button?.Behavior is ICountBehavior behaviour)
         {
             int abilityNum = cate.GetValue<RoleAbilityCommonOption, int>(
                 RoleAbilityCommonOption.AbilityCount);
             int halfPlayerNum = GameData.Instance.PlayerCount / 2;
 
-            behaviour.SetCountText("eaterWinNum");
+            behaviour.SetButtonTextFormat("eaterWinNum");
             behaviour.SetAbilityCount(
                  abilityNum > halfPlayerNum ? halfPlayerNum : abilityNum);
         }

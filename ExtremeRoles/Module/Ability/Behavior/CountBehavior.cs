@@ -36,11 +36,6 @@ public sealed class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
 	}
 
-	public void SetCountText(string text)
-	{
-		buttonTextFormat = text;
-	}
-
 	public override void Initialize(ActionButton button)
 	{
 		this.abilityCountText = ICountBehavior.CreateCountText(button);
