@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>12.0.2.3</Version>
+    <Version>12.0.2.4</Version>
     <!--<VersionPrefix>12.0.2</VersionPrefix>-->
     <VersionSuffix>Invitation-AmongUsV2024813</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
