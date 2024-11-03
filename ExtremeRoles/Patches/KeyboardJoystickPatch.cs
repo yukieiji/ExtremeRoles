@@ -1,14 +1,11 @@
-﻿using UnityEngine;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-
 
 using ExtremeRoles.Performance;
 
@@ -23,16 +20,16 @@ public static class KeyboardJoystickPatch
         { return; }
 
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
-            // OptionManager.Instance.GetValue<bool>((int)RoleGlobalOption.UseXion) &&
+            OptionManager.Instance.TryGetCategory(
+				OptionTab.GeneralTab,
+				ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Xion),
+				out var cate) &&
+			cate.TryGetValueOption<XionOption, bool>(XionOption.UseXion, out var opt) &&
+			opt.Value &&
             !ExtremeRolesPlugin.DebugMode.Value)
         {
             Roles.Solo.Host.Xion.SpecialKeyShortCut();
         }
-
-        if (GameSystem.IsLobby && Input.GetKeyDown(KeyCode.Tab))
-        {
-			// Option.IGameOptionsExtensionsToHudStringPatch.ChangePage(1);
-		}
 
 		InfoOverlay.Instance.Update();
 
@@ -41,7 +38,7 @@ public static class KeyboardJoystickPatch
             PlayerControl.LocalPlayer.Data.Role == null ||
             !RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
-        var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+        var role = ExtremeRoleManager.GetLocalPlayerRole();
 
         if (role.IsImpostor()) { return; }
 
