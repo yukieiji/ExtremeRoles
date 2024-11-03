@@ -17,14 +17,20 @@ public static class ProgressTrackerFixedUpdatePatch
 {
     public static void Postfix(ProgressTracker __instance)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
-
-        Agency agency = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Agency>();
-		SlaveDriver slaveDriver = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<SlaveDriver>();
-
-		if ((agency is null && slaveDriver is null) ||
-			(agency is not null && !agency.CanSeeTaskBar) ||
-			(slaveDriver is not null && !slaveDriver.CanSeeTaskBar)) { return; }
+		if (!(
+				RoleAssignState.Instance.IsRoleSetUpEnd && (
+				(
+					ExtremeRoleManager.TryGetSafeCastedLocalRole<Agency>(out var agency) &&
+					agency.CanSeeTaskBar
+				) ||
+				(
+					ExtremeRoleManager.TryGetSafeCastedLocalRole<SlaveDriver>(out var slaveDriver) &&
+					slaveDriver.CanSeeTaskBar
+				))
+			))
+		{
+			return;
+		}
 
         if (!__instance.TileParent.enabled)
         {

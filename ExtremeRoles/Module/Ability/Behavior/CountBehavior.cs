@@ -8,10 +8,10 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
+public sealed class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 {
 	public int AbilityCount { get; private set; }
-	protected readonly Func<bool> CanUse;
+	private readonly Func<bool> canUse;
 
 	private bool isUpdate = false;
 
@@ -30,7 +30,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 		Action? forceAbilityOff = null) : base(text, img)
 	{
 		this.ability = ability;
-		this.CanUse = canUse;
+		this.canUse = canUse;
 
 		this.abilityOff = abilityOff;
 		this.forceAbilityOff = forceAbilityOff ?? abilityOff;
@@ -58,7 +58,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 	}
 
 	public override bool IsUse()
-		=> CanUse.Invoke() && AbilityCount > 0;
+		=> canUse.Invoke() && AbilityCount > 0;
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -77,7 +77,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 			return false;
 		}
 
-		ReduceAbilityCount();
+		reduceAbilityCount();
 
 		newState = AbilityState.CoolDown;
 
@@ -108,7 +108,7 @@ public class CountBehavior : BehaviorBase, ICountBehavior, IHideLogic
 		buttonTextFormat = newTextFormat;
 	}
 
-	protected void ReduceAbilityCount()
+	private void reduceAbilityCount()
 	{
 		--AbilityCount;
 		if (abilityCountText != null)

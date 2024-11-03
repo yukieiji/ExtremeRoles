@@ -127,16 +127,14 @@ public sealed class VersionChecker : MonoBehaviour
     private bool isSend = false;
     private StringBuilder builder = new StringBuilder();
     private float timer = 0.0f;
-    private GameStartManager mng;
-    private ActionMapGlyphDisplay display;
-    private PassiveButton button;
-    private TextMeshPro text;
+    private GameStartManager? mng;
+    private ActionMapGlyphDisplay? display;
+    private PassiveButton? button;
+    private TextMeshPro? text;
     private Vector3 defaultPos;
     private const float kickTime = 60.0f;
 
-#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。'required' 修飾子を追加するか、Null 許容として宣言することを検討してください。
 	public VersionChecker(IntPtr ptr) : base(ptr) { }
-#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。'required' 修飾子を追加するか、Null 許容として宣言することを検討してください。
 
 	public static void RegisterAssembly(Assembly assm, uint id)
     {
@@ -155,6 +153,11 @@ public sealed class VersionChecker : MonoBehaviour
 
     public void Awake()
     {
+		if (LobbyBehaviour.Instance == null)
+		{
+			return;
+		}
+
         this.mng = base.GetComponent<GameStartManager>();
 
         this.display = this.mng.StartButtonGlyph;
@@ -199,7 +202,10 @@ public sealed class VersionChecker : MonoBehaviour
 
     public void Update()
     {
-        if (PlayerControl.LocalPlayer == null)
+        if (PlayerControl.LocalPlayer == null ||
+			this.text == null ||
+			this.button == null ||
+			this.mng == null)
         {
             return;
         }
@@ -271,7 +277,7 @@ public sealed class VersionChecker : MonoBehaviour
         {
             if (isHost)
             {
-                bool isPlayerOk = mng.LastPlayerCount >= mng.MinPlayers;
+                bool isPlayerOk = this.mng.LastPlayerCount >= mng.MinPlayers;
 
                 if (this.display != null)
                 {
@@ -287,6 +293,9 @@ public sealed class VersionChecker : MonoBehaviour
     }
     public void OnDestroy()
     {
-        this.text.gameObject.SetActive(false);
+		if (this.text != null)
+		{
+			this.text.gameObject.SetActive(false);
+		}
     }
 }
