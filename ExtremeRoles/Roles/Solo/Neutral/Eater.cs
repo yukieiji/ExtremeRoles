@@ -203,9 +203,12 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         if (this.Button == null ||
 			CachedShipStatus.Instance == null ||
             GameData.Instance == null ||
-            this.IsWin) { return; }
-        if (!CachedShipStatus.Instance.enabled ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+            this.IsWin ||
+			!CachedShipStatus.Instance.enabled ||
+			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		{
+			return;
+		}
 
         DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
         HashSet<byte> existDeadBodyPlayerId = new HashSet<byte>();
@@ -232,7 +235,11 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
         foreach (byte playerId in removePlayerId)
         {
-            this.deadBodyArrow[playerId].Clear();
+			if (this.deadBodyArrow.TryGetValue(playerId, out var arrow) &&
+				arrow is not null)
+			{
+				arrow.Clear();
+			}
             this.deadBodyArrow.Remove(playerId);
         }
 
@@ -249,13 +256,15 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         {
             Player.RpcCleanDeadBody(this.targetDeadBody.PlayerId);
 
-            if (this.deadBodyArrow.ContainsKey(this.targetDeadBody.PlayerId))
-            {
-                this.deadBodyArrow[this.targetDeadBody.PlayerId].Clear();
-                this.deadBodyArrow.Remove(this.targetDeadBody.PlayerId);
+            if (this.deadBodyArrow.TryGetValue(this.targetDeadBody.PlayerId, out var arrow) &&
+				arrow is not null)
+			{
+				arrow.Clear();
             }
 
-            this.targetDeadBody = null;
+			this.deadBodyArrow.Remove(this.targetDeadBody.PlayerId);
+
+			this.targetDeadBody = null;
 
             if (this.Button == null) { return; }
 
