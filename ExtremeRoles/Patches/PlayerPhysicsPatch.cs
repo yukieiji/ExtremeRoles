@@ -37,10 +37,9 @@ public static class PlayerPhysicsFixedUpdatePatch
 {
     public static void Postfix(PlayerPhysics __instance)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-        if (__instance.AmOwner &&
+        if (RoleAssignState.Instance.IsRoleSetUpEnd &&
+			ExtremeRoleManager.GameRole.Count != 0 &&
+			__instance.AmOwner &&
             __instance.myPlayer.CanMove &&
             GameData.Instance &&
             ExtremeRoleManager.GetLocalPlayerRole().TryGetVelocity(out float velocity))
