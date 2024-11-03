@@ -153,11 +153,6 @@ public sealed class VersionChecker : MonoBehaviour
 
     public void Awake()
     {
-		if (LobbyBehaviour.Instance == null)
-		{
-			return;
-		}
-
         this.mng = base.GetComponent<GameStartManager>();
 
         this.display = this.mng.StartButtonGlyph;
@@ -202,7 +197,8 @@ public sealed class VersionChecker : MonoBehaviour
 
     public void Update()
     {
-        if (PlayerControl.LocalPlayer == null ||
+        if (LobbyBehaviour.Instance == null ||
+			PlayerControl.LocalPlayer == null ||
 			this.text == null ||
 			this.button == null ||
 			this.mng == null)
