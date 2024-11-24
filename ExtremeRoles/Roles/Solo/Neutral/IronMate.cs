@@ -50,6 +50,55 @@ public sealed class IronMate :
         false, true, false, false)
     { }
 
+	public override string GetColoredRoleName(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetColoredRoleName();
+		}
+		else
+		{
+			return Design.ColoedString(
+				Palette.White,
+				Tr.GetString(RoleTypes.Crewmate.ToString()));
+		}
+	}
+	public override string GetFullDescription()
+	{
+		if (IsAwake)
+		{
+			return Tr.GetString(
+				$"{this.Id}FullDescription");
+		}
+		else
+		{
+			return Tr.GetString(
+				$"{RoleTypes.Crewmate}FullDescription");
+		}
+	}
+
+	public override string GetImportantText(bool isContainFakeTask = true)
+		=> Design.ColoedString(
+				Palette.White,
+				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
+
+	public override string GetIntroDescription()
+		=> Design.ColoedString(
+				Palette.CrewmateBlue,
+				PlayerControl.LocalPlayer.Data.Role.Blurb);
+
+	public override Color GetNameColor(bool isTruthColor = false)
+	{
+		if (isTruthColor || IsAwake)
+		{
+			return base.GetNameColor(isTruthColor);
+		}
+		else
+		{
+			return Palette.White;
+		}
+	}
+
 	public override bool TryRolePlayerKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
 	{
 		if (this.system is null)
