@@ -10,6 +10,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 #nullable enable
 
+[Il2CppRegister]
 public sealed class IronMateDeadBody : MonoBehaviour
 {
 	public IronMateDeadBody(IntPtr ptr) : base(ptr) { }
