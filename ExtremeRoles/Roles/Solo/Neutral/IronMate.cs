@@ -20,7 +20,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 public sealed class IronMate :
 	SingleRoleBase,
 	IRoleAwake<RoleTypes>,
-	IRoleSpecialSetUp
 	IRoleMurderPlayerHook,
 	IRoleWinPlayerModifier,
 	IDeadBodyReportOverride
@@ -56,17 +55,29 @@ public sealed class IronMate :
 
 	public override bool TryRolePlayerKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
 	{
-		if (this.system is null||
-			!this.system.TryGetShield(rolePlayer.PlayerId, out int _))
+		if (this.system is null)
 		{
-			return true;
+			return false;
 		}
+
+		byte playerId = rolePlayer.PlayerId;
+
+		if (!this.system.IsContains(playerId))
+		{
+			this.system.SetUp(playerId, this.Loader.GetValue<Option, int>(Option.BlockNum));
+		}
+
+		if (!this.system.TryGetShield(playerId, out int num))
+		{
+			return false;
+		}
+
 		if (fromPlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
 		{
 			fromPlayer.SetKillTimer(10.0f);
 			Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.85f);
 		}
-		this.system.RpcUpdateNum(rolePlayer.PlayerId);
+		this.system.RpcUpdateNum(playerId, num - 1);
 		return false;
 	}
 
@@ -114,7 +125,7 @@ public sealed class IronMate :
         return;
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
@@ -165,14 +176,4 @@ public sealed class IronMate :
 			break;
 		}
 	}
-
-	public void IntroBeginSetUp()
-	{
-		this.system?.SetUp(
-			PlayerControl.LocalPlayer.PlayerId,
-			this.Loader.GetValue<Option, int>(Option.BlockNum));
-	}
-
-	public void IntroEndSetUp()
-	{ }
 }

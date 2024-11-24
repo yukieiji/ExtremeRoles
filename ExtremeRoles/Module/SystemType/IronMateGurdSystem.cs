@@ -8,6 +8,9 @@ namespace ExtremeRoles.Module.SystemType;
 public sealed class IronMateGurdSystem : IExtremeSystemType
 {
 	private readonly Dictionary<byte, int> shield = new Dictionary<byte, int>();
+
+	public bool IsContains(byte playerId) => this.shield.ContainsKey(playerId);
+
 	public bool TryGetShield(byte playerId, out int num)
 		=> this.shield.TryGetValue(playerId, out num) && num > 0;
 
@@ -19,11 +22,14 @@ public sealed class IronMateGurdSystem : IExtremeSystemType
 		}
 	}
 
-	public void RpcUpdateNum(byte playerId)
+	public void RpcUpdateNum(byte playerId, int newNum)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			ExtremeSystemType.IronMateGuard,
-			x => x.Write(playerId));
+			x => {
+				x.Write(playerId);
+				x.WritePacked(newNum);
+			});
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
@@ -34,11 +40,7 @@ public sealed class IronMateGurdSystem : IExtremeSystemType
 		byte playerId = msgReader.ReadByte();
 		lock (shield)
 		{
-			if (!shield.TryGetValue(playerId, out int num))
-			{
-				return;
-			}
-			shield[playerId] = num - 1;
+			shield[playerId] = msgReader.ReadPackedInt32();
 		}
 	}
 }
