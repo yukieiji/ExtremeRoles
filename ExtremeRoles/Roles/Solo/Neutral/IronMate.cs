@@ -9,14 +9,18 @@ using ExtremeRoles.Roles.API.Interface;
 
 using ExtremeRoles.Helper;
 
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class IronMate :
 	SingleRoleBase,
 	IRoleAwake<RoleTypes>,
+	IRoleSpecialSetUp
 	IRoleMurderPlayerHook,
 	IRoleWinPlayerModifier,
 	IDeadBodyReportOverride
@@ -34,7 +38,8 @@ public sealed class IronMate :
 	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 	public bool CanReport => false;
 
-	private int blockNum;
+	private IronMateGurdSystem? system;
+
 	private float slowTime;
 	private float slowMod;
 
@@ -51,7 +56,8 @@ public sealed class IronMate :
 
 	public override bool TryRolePlayerKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
 	{
-		if (this.blockNum <= 0)
+		if (this.system is null||
+			!this.system.TryGetShield(rolePlayer.PlayerId, out int _))
 		{
 			return true;
 		}
@@ -60,7 +66,7 @@ public sealed class IronMate :
 			fromPlayer.SetKillTimer(10.0f);
 			Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.85f);
 		}
-		// 数修正
+		this.system.RpcUpdateNum(rolePlayer.PlayerId);
 		return false;
 	}
 
@@ -94,7 +100,9 @@ public sealed class IronMate :
     protected override void RoleSpecificInit()
     {
         var loader = this.Loader;
-		this.blockNum = loader.GetValue<Option, int>(Option.BlockNum);
+
+		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<IronMateGurdSystem>(
+			ExtremeSystemType.IronMateGuard);
 		this.slowTime = loader.GetValue<Option, float>(Option.SlowTime);
 		this.slowMod = loader.GetValue<Option, float>(Option.SlowMod);
 		this.playerShowTime = loader.GetValue<Option, float>(Option.PlayerShowTime);
@@ -157,4 +165,14 @@ public sealed class IronMate :
 			break;
 		}
 	}
+
+	public void IntroBeginSetUp()
+	{
+		this.system?.SetUp(
+			PlayerControl.LocalPlayer.PlayerId,
+			this.Loader.GetValue<Option, int>(Option.BlockNum));
+	}
+
+	public void IntroEndSetUp()
+	{ }
 }

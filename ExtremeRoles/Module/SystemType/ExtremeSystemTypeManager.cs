@@ -41,7 +41,8 @@ public enum ExtremeSystemType : byte
 	ScavengerAbility,
 
 	YokoYashiro,
-	TuckerShadow
+	TuckerShadow,
+	IronMateGuard
 }
 
 public enum ResetTiming : byte
