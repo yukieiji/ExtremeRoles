@@ -121,6 +121,7 @@ public enum ExtremeRoleId : int
 	Lawbreaker,
 	Tucker,
 	Chimera,
+	IronMate,
 
 	Xion,
 }
@@ -304,6 +305,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
 			{(int)ExtremeRoleId.Tucker    , new Tucker()},
+			{(int)ExtremeRoleId.IronMate  , new IronMate()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =

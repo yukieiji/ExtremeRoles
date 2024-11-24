@@ -46,9 +46,9 @@ public sealed class IronMate :
 	private float deadBodyShowTime;
 
     public IronMate(): base(
-        ExtremeRoleId.Alice,
+        ExtremeRoleId.IronMate,
         ExtremeRoleType.Neutral,
-        ExtremeRoleId.Alice.ToString(),
+        ExtremeRoleId.IronMate.ToString(),
         ColorPalette.AliceGold,
         false, true, false, false)
     { }
