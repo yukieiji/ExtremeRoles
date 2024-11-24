@@ -1,13 +1,19 @@
-﻿using ExtremeRoles.Module.Interface;
-using Hazel;
+﻿using Hazel;
 
 using System.Collections.Generic;
 
+using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.Interface;
+
 namespace ExtremeRoles.Module.SystemType;
 
-public sealed class IronMateGurdSystem : IExtremeSystemType
+public sealed class IronMateGurdSystem(float speedMod, float speedTime) : IExtremeSystemType
 {
 	private readonly Dictionary<byte, int> shield = new Dictionary<byte, int>();
+
+	private readonly float speedMod = speedMod;
+	private readonly float speedTime = speedTime;
 
 	public bool IsContains(byte playerId) => this.shield.ContainsKey(playerId);
 
@@ -42,5 +48,14 @@ public sealed class IronMateGurdSystem : IExtremeSystemType
 		{
 			shield[playerId] = msgReader.ReadPackedInt32();
 		}
+
+		if (PlayerControl.LocalPlayer == null ||
+ 			playerId != PlayerControl.LocalPlayer.PlayerId)
+		{
+			return;
+		}
+
+		var speedMod = PlayerControl.LocalPlayer.gameObject.TryAddComponent<SpeedMod>();
+		speedMod.SetUp(this.speedMod, this.speedTime);
 	}
 }
