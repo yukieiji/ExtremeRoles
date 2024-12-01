@@ -81,6 +81,10 @@ public sealed class AdminDummySystem : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
+		if (timing is ResetTiming.OnPlayer)
+		{
+			this.colors.Clear();
+		}
 	}
 
 	public void UpdateSystem(

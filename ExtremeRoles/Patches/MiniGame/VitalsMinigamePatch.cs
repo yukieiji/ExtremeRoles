@@ -9,10 +9,24 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
 namespace ExtremeRoles.Patches.MiniGame;
+
+[HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Begin))]
+public static class VitalsMinigameBeginPatch
+{
+	public static void Postfix()
+	{
+		if (VitalDummySystem.TryGet(out var system))
+		{
+			system.VitalBeginPostfix();
+		}
+	}
+}
 
 [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
 public static class VitalsMinigameUpdatePatch
@@ -28,11 +42,19 @@ public static class VitalsMinigameUpdatePatch
 
     public static bool Prefix(VitalsMinigame __instance)
     {
+        if (RoleAssignState.Instance.IsRoleSetUpEnd ||
+			ExtremeRoleManager.GetLocalPlayerRole().CanUseVital() ||
+			IRoleAbility.IsLocalPlayerAbilityUse(vitalUseRole))
+		{
+			if (VitalDummySystem.TryGet(out var system) &&
+				system.IsActive)
+			{
+				system.OverrideVitalUpdate(__instance);
+				return false;
+			}
 
-        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-
-        if (ExtremeRoleManager.GetLocalPlayerRole().CanUseVital() ||
-			IRoleAbility.IsLocalPlayerAbilityUse(vitalUseRole)) { return true; }
+			return true;
+		}
 
         __instance.SabText.text = Tr.GetString("youDonotUse");
 

@@ -30,6 +30,7 @@ public enum ExtremeSystemType : byte
 	HostUpdateSystem,
 	ResetObjectSystem,
 	AdminDummySystem,
+	VitalDummySystem,
 
 	WispTorch,
 
