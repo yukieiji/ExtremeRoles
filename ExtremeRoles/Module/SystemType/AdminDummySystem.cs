@@ -10,6 +10,8 @@ namespace ExtremeRoles.Module.SystemType;
 
 public sealed class AdminDummySystem : IExtremeSystemType
 {
+	public bool IsActive => this.colors.Count > 0;
+
 	public enum Option
 	{
 		Add,
