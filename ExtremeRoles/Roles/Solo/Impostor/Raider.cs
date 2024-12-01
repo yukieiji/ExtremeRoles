@@ -43,7 +43,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	public record UiParameter(
 		int AbilityNum,
 		float AbilityTime,
-		bool IsShowPlayer);
+		PlayerShowSystem? playerShowSystem);
 
 	public sealed class Gui
 	{
@@ -67,47 +67,15 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 				var localPc = PlayerControl.LocalPlayer;
 
-				if (!this.isShowPlayer)
+				if (this.playerShowSystem is not null)
 				{
-
-					foreach (var player in PlayerCache.AllPlayerControl)
+					if (value)
 					{
-						if (player == null ||
-							player.Data == null ||
-							player.Data.Disconnected)
-						{
-							continue;
-						}
-
-						byte playerId = player.PlayerId;
-						if (playerId == localPc.PlayerId)
-						{
-							continue;
-						}
-
-						var curScale = player.transform.localScale;
-						if (!value && this.defaultScale.TryGetValue(playerId, out float scale))
-						{
-							player.transform.localScale = new Vector3(scale, curScale.y, curScale.z);
-							if (player.cosmetics != null &&
-								player.cosmetics.CurrentPet != null &&
-								this.petScale.TryGetValue(playerId, out float petDefaultScale))
-							{
-								var petScale = player.cosmetics.CurrentPet.transform.localScale;
-								player.cosmetics.CurrentPet.transform.localScale = new Vector3(petDefaultScale, petScale.y, petScale.z);
-							}
-						}
-						else if (curScale.x != xScale)
-						{
-							this.defaultScale[playerId] = curScale.x;
-							player.transform.localScale = new Vector3(xScale, curScale.y, curScale.z);
-							if (player.cosmetics != null && player.cosmetics.CurrentPet != null)
-							{
-								var petScale = player.cosmetics.CurrentPet.transform.localScale;
-								this.petScale[playerId] = player.cosmetics.CurrentPet.transform.localScale.x;
-								player.cosmetics.CurrentPet.transform.localScale = new Vector3(xScale, petScale.y, petScale.z);
-							}
-						}
+						this.playerShowSystem.Hide();
+					}
+					else
+					{
+						this.playerShowSystem.Show();
 					}
 				}
 
@@ -140,7 +108,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private readonly SimpleButton execute;
 		private readonly ExtremeAbilityButton button;
 		private readonly float uiOpenTimeMax;
-		private readonly bool isShowPlayer;
+		private readonly PlayerShowSystem? playerShowSystem;
 
 		private Vector3 curPos;
 		private bool curFlip;
@@ -159,7 +127,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		{
 			this.button = button;
 			this.uiOpenTimeMax = parameter.AbilityTime;
-			this.isShowPlayer = parameter.IsShowPlayer;
+			this.playerShowSystem = parameter.playerShowSystem;
 			this.num = parameter.AbilityNum;
 
 			this.camera = hud.transform.parent.GetComponent<FollowerCamera>();
@@ -358,7 +326,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		this.param = new UiParameter(
 			cate.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount),
 			activeTimeOption.Value,
-			cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen));
+			cate.GetValue<Option, bool>(Option.IsHidePlayerOnOpen) ? PlayerShowSystem.Get() : null);
 		var _ = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.RaiderBomb,
 			() => new RaiderBombSystem(
