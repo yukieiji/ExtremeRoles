@@ -72,7 +72,7 @@ public static class MapCountOverlayUpdatePatch
 			__instance.SabotageText.gameObject.SetActive(false);
 		}
 
-		bool inFaker = ExtremeSystemTypeManager.Instance.TryGet<FakerDummySystem>(ExtremeSystemType.FakerDummy, out var system);
+		bool containFake = AdminDummySystem.TryGet(out var system);
 
 		for (int i = 0; i < __instance.CountAreas.Length; i++)
 		{
@@ -132,8 +132,8 @@ public static class MapCountOverlayUpdatePatch
                         }
                     }
                 }
-				if (inFaker &&
-					system!.TryGetDummyColors(counterArea.RoomType, out var dummyColor) &&
+				if (containFake &&
+					system!.TryGet(counterArea.RoomType, out var dummyColor) &&
 					dummyColor.Count != 0)
 				{
 					addColor.AddRange(dummyColor);
