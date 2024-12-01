@@ -29,6 +29,7 @@ public enum ExtremeSystemType : byte
 	ExtremeConsoleSystem,
 	HostUpdateSystem,
 	ResetObjectSystem,
+	PlayerShowSystem,
 	AdminDummySystem,
 	VitalDummySystem,
 
