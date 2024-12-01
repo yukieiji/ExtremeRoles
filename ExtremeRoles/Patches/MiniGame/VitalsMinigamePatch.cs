@@ -42,7 +42,7 @@ public static class VitalsMinigameUpdatePatch
 
     public static bool Prefix(VitalsMinigame __instance)
     {
-        if (RoleAssignState.Instance.IsRoleSetUpEnd ||
+        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
 			ExtremeRoleManager.GetLocalPlayerRole().CanUseVital() ||
 			IRoleAbility.IsLocalPlayerAbilityUse(vitalUseRole))
 		{
