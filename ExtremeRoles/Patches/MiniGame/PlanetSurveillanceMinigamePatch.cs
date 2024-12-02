@@ -81,11 +81,7 @@ public static class PlanetSurveillanceMinigameUpdatePatch
         if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity())
 		{
-			if (SecurityDummySystemManager.TryGet(out var system) &&
-				system.IsActive && !system.PrefixUpdate())
-			{
-				return false;
-			}
+			// Update内でやっている処理に特殊な処理がなくサボの処理だけなのでオーバーライドしなくてよし
 			return true;
 		}
 

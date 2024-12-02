@@ -25,7 +25,7 @@ public sealed class SecurityDummySystemManager : IExtremeSystemType
 {
 	public bool IsActive { get; set; } = false;
 
-	public enum UpdateMode
+	public enum DummyMode
 	{
 		Normal,
 		No
@@ -43,12 +43,10 @@ public sealed class SecurityDummySystemManager : IExtremeSystemType
 	public static bool TryGet([NotNullWhen(true)] out SecurityDummySystemManager? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.SecurityDummySystem, out system);
 
-	public UpdateMode Mode { get; set; } = UpdateMode.Normal;
+	public DummyMode Mode { get; set; } = DummyMode.Normal;
+	public bool IsLog => Map.Id == 2;
 
-	public ISecurityDummySystem mainSystem = Map.Id == 2 ? new SecurityLogDummySystem() : new SurveillanceDummySystem();
-
-	public bool PrefixUpdate()
-		=> this.Mode is UpdateMode.Normal;
+	private ISecurityDummySystem mainSystem = Map.Id == 2 ? new SecurityLogDummySystem() : new SurveillanceDummySystem();
 
 	public void PostfixBegin()
 		=> this.mainSystem.Begin();

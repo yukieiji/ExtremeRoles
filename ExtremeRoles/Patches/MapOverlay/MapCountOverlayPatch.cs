@@ -20,8 +20,8 @@ namespace ExtremeRoles.Patches.MapOverlay;
 [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
 public static class MapCountOverlayUpdatePatch
 {
-    public static Dictionary<SystemTypes, List<int>> PlayerColor =
-        new Dictionary<SystemTypes, List<int>>();
+    public static Dictionary<SystemTypes, IReadOnlyList<int>> PlayerColor =
+        new Dictionary<SystemTypes, IReadOnlyList<int>>();
 
     private static float adminTimer = 0.0f;
     private static TMPro.TextMeshPro? timerText;
@@ -83,6 +83,18 @@ public static class MapCountOverlayUpdatePatch
                 counterArea.UpdateCount(0);
                 continue;
             }
+
+			if (containFake &&
+				system!.TryGet(counterArea.RoomType, out var overrideDummyColor) &&
+				system!.Mode is AdminDummySystem.DummyMode.Override)
+			{
+				counterArea.UpdateCount(overrideDummyColor.Count);
+				if (isSupervisorEnhance)
+				{
+					PlayerColor.Add(counterArea.RoomType, overrideDummyColor);
+				}
+				continue;
+			}
 
             if (CachedShipStatus.FastRoom.TryGetValue(
                     counterArea.RoomType,

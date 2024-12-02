@@ -12,6 +12,14 @@ public sealed class AdminDummySystem : IExtremeSystemType
 {
 	public bool IsActive => this.colors.Count > 0;
 
+	public DummyMode Mode { get; set; } = DummyMode.Add;
+
+	public enum DummyMode
+	{
+		Add,
+		Override,
+	}
+
 	public enum Option
 	{
 		Add,

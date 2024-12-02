@@ -150,11 +150,7 @@ public static class SurveillanceMinigameUpdatePatch
         if (ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
             SecurityHelper.IsAbilityUse())
         {
-			if (SecurityDummySystemManager.TryGet(out var system) &&
-				system.IsActive && !system.PrefixUpdate())
-			{
-				return false;
-			}
+			// Update内でやっている処理に特殊な処理がなくサボの処理だけなのでオーバーライドしなくてよし
 			updateCamera(__instance);
             return false;
         }

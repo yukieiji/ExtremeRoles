@@ -32,11 +32,7 @@ public static class SecurityLogGameUpdatePatch
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
             SecurityHelper.IsAbilityUse())
 		{
-			if (SecurityDummySystemManager.TryGet(out var system) &&
-				system.IsActive && !system.PrefixUpdate())
-			{
-				return false;
-			}
+			// Update内でやっている処理に特殊な処理がなくサボの処理だけなのでオーバーライドしなくてよし
 			return true;
 		}
 

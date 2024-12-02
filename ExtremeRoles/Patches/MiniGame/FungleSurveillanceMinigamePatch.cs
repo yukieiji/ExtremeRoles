@@ -40,13 +40,6 @@ public static class FungleSurveillanceMinigameePatch
 		{
 			return true;
 		}
-
-		if (SecurityDummySystemManager.TryGet(out var system) &&
-			system.IsActive && !system.PrefixUpdate())
-		{
-			return false;
-		}
-
 		__instance.viewport.enabled =
 			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
 			SecurityHelper.IsAbilityUse();

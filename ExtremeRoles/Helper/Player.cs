@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
-using ExtremeRoles.Compat;
-using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.Solo.Host;
+
 
 namespace ExtremeRoles.Helper;
 
@@ -362,7 +362,7 @@ public static class Player
         prevTarget = target;
     }
 
-	public static bool TryGetPlayerRoom(PlayerControl player, out SystemTypes? roomeId)
+	public static bool TryGetPlayerRoom(PlayerControl player, [NotNullWhen(true)] out SystemTypes? roomeId)
 	{
 		roomeId = null;
 
@@ -375,7 +375,7 @@ public static class Player
 		return TryGetPlayerColiderRoom(collider, out roomeId);
 	}
 
-	public static bool TryGetPlayerColiderRoom(Collider2D playerCollider, out SystemTypes? roomeId)
+	public static bool TryGetPlayerColiderRoom(Collider2D playerCollider, [NotNullWhen(true)] out SystemTypes? roomeId)
 	{
 		roomeId = null;
 
