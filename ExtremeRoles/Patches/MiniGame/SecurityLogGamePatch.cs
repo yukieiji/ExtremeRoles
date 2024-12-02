@@ -1,17 +1,44 @@
 ﻿using HarmonyLib;
+
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType.SecurityDummySystem;
+using ExtremeRoles.Module.CustomMonoBehaviour.WithAction;
+using ExtremeRoles.Extension.Il2Cpp;
 
 namespace ExtremeRoles.Patches.MiniGame;
+
+[HarmonyPatch(typeof(SecurityLogGame), nameof(SecurityLogGame.Awake))]
+public static class SecurityLogGameAwakePatch
+{
+	public static void Postfix(SecurityLogGame __instance)
+	{
+		if (SecurityDummySystemManager.TryGet(out var system) &&
+			system.IsActive)
+		{
+			system.PostfixBegin();
+			var closeAct = __instance.gameObject.TryAddComponent<OnCloseBehavior>();
+			closeAct.Add(system.PostfixClose);
+		}
+	}
+}
 
 [HarmonyPatch(typeof(SecurityLogGame), nameof(SecurityLogGame.Update))]
 public static class SecurityLogGameUpdatePatch
 {
     public static bool Prefix(SecurityLogGame __instance)
     {
-        if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-
-        if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
-            SecurityHelper.IsAbilityUse()) { return true; }
+        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
+            SecurityHelper.IsAbilityUse())
+		{
+			if (SecurityDummySystemManager.TryGet(out var system) &&
+				system.IsActive && !system.PrefixUpdate())
+			{
+				return false;
+			}
+			return true;
+		}
 
         __instance.EntryPool.ReclaimAll();
         __instance.SabText.text = Tr.GetString("youDonotUse");

@@ -32,6 +32,7 @@ public enum ExtremeSystemType : byte
 	PlayerShowSystem,
 	AdminDummySystem,
 	VitalDummySystem,
+	SecurityDummySystem,
 
 	WispTorch,
 

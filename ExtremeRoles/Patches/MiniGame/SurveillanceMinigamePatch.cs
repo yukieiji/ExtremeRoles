@@ -11,6 +11,8 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
+using ExtremeRoles.Module.SystemType.SecurityDummySystem;
+
 namespace ExtremeRoles.Patches.MiniGame;
 
 #nullable enable
@@ -112,7 +114,26 @@ public static class SurveillanceMinigameBeginPatch
                 __instance.ViewPorts[i].material.SetTexture("_MainTex", temporary);
             }
         }
-    }
+
+		if (SecurityDummySystemManager.TryGet(out var system) &&
+			system.IsActive)
+		{
+			system.PostfixBegin();
+		}
+	}
+}
+
+[HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Close))]
+public static class SurveillanceMinigameClosePatch
+{
+	public static void Prefix()
+	{
+		if (SecurityDummySystemManager.TryGet(out var system) &&
+			system.IsActive)
+		{
+			system.PostfixClose();
+		}
+	}
 }
 
 [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Update))]
@@ -129,7 +150,12 @@ public static class SurveillanceMinigameUpdatePatch
         if (ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
             SecurityHelper.IsAbilityUse())
         {
-            updateCamera(__instance);
+			if (SecurityDummySystemManager.TryGet(out var system) &&
+				system.IsActive && !system.PrefixUpdate())
+			{
+				return false;
+			}
+			updateCamera(__instance);
             return false;
         }
 
@@ -137,8 +163,9 @@ public static class SurveillanceMinigameUpdatePatch
         for (int i = 0; i < __instance.ViewPorts.Length; ++i)
         {
             __instance.ViewPorts[i].sharedMaterial = __instance.StaticMaterial;
-            __instance.SabText[i].text = Tr.GetString("youDonotUse");
-            __instance.SabText[i].gameObject.SetActive(true);
+			var text = __instance.SabText[i];
+			text.text = Tr.GetString("youDonotUse");
+			text.gameObject.SetActive(true);
         }
 
         return false;
@@ -164,29 +191,32 @@ public static class SurveillanceMinigameUpdatePatch
             Timer = ChangeTime;
         }
 
-        if ((instance.isStatic || update) &&
-            !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
-                PlayerControl.LocalPlayer))
+		bool isSab = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
+			PlayerControl.LocalPlayer);
+
+
+		if ((instance.isStatic || update) && !isSab)
         {
             instance.isStatic = false;
             for (int i = 0; i < instance.ViewPorts.Length; i++)
             {
-                instance.ViewPorts[i].sharedMaterial = instance.DefaultMaterial;
-                instance.SabText[i].gameObject.SetActive(false);
+				var port = instance.ViewPorts[i];
+				var text = instance.SabText[i];
+
+				port.sharedMaterial = instance.DefaultMaterial;
+				text.gameObject.SetActive(false);
                 if (Page * 4 + i < instance.textures.Length)
                 {
-                    instance.ViewPorts[i].material.SetTexture(
+					port.material.SetTexture(
                         "_MainTex", instance.textures[Page * 4 + i]);
                 }
                 else
                 {
-                    instance.ViewPorts[i].sharedMaterial = instance.StaticMaterial;
+                    port.sharedMaterial = instance.StaticMaterial;
                 }
             }
         }
-        else if (!instance.isStatic &&
-            PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(
-                PlayerControl.LocalPlayer))
+        else if (!instance.isStatic && isSab)
         {
             instance.isStatic = true;
             for (int j = 0; j < instance.ViewPorts.Length; j++)
