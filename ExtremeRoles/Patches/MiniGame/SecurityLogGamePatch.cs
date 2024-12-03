@@ -17,7 +17,7 @@ public static class SecurityLogGameAwakePatch
 			system.IsActive)
 		{
 			system.PostfixBegin();
-			var closeAct = __instance.gameObject.TryAddComponent<OnCloseBehavior>();
+			var closeAct = __instance.gameObject.TryAddComponent<OnDestroyBehavior>();
 			closeAct.Add(system.PostfixClose);
 		}
 	}

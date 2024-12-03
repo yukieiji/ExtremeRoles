@@ -126,7 +126,7 @@ public static class SurveillanceMinigameBeginPatch
 [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Close))]
 public static class SurveillanceMinigameClosePatch
 {
-	public static void Prefix()
+	public static void Postfix()
 	{
 		if (SecurityDummySystemManager.TryGet(out var system) &&
 			system.IsActive)

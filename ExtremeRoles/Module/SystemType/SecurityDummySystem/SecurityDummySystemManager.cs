@@ -44,9 +44,9 @@ public sealed class SecurityDummySystemManager : IExtremeSystemType
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.SecurityDummySystem, out system);
 
 	public DummyMode Mode { get; set; } = DummyMode.Normal;
-	public bool IsLog => Map.Id == 2;
+	public bool IsLog => Map.Id == 1;
 
-	private ISecurityDummySystem mainSystem = Map.Id == 2 ? new SecurityLogDummySystem() : new SurveillanceDummySystem();
+	private readonly ISecurityDummySystem mainSystem = Map.Id == 1 ? new SecurityLogDummySystem() : new SurveillanceDummySystem();
 
 	public void PostfixBegin()
 		=> this.mainSystem.Begin();

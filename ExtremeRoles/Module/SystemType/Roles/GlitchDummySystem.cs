@@ -9,6 +9,9 @@ using ExtremeRoles.Performance;
 using System.Linq;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Extension.Linq;
+using System;
+using System.Buffers;
 
 #nullable enable
 
@@ -122,6 +125,7 @@ public sealed class GlitchDummySystem(
 	{
 		private readonly SecurityDummySystemManager security = SecurityDummySystemManager.Get();
 		private SecurityDummySystemManager.DummyMode prevMode;
+		private byte[] dummy = [];
 
 		protected override void SetUpImp(TargetInfo target)
 		{
@@ -134,11 +138,16 @@ public sealed class GlitchDummySystem(
 			if (this.security.IsLog)
 			{
 				this.security.Remove(target.Target.Select(x => x.PlayerId).ToArray());
+				if (this.dummy.Length > 0)
+				{
+					this.security.Remove(this.dummy);
+					this.dummy = [];
+				}
 			}
 			else
 			{
-				this.security.Remove(target.Target.Select(x => x.PlayerId).ToArray());
-				this.security.Remove(target.Dead.Select(x => x.PlayerId).ToArray());
+				this.security.Remove(
+					PlayerCache.AllPlayerControl.Select(x => x.PlayerId).ToArray());
 			}
 			this.security.IsActive = false;
 		}
@@ -150,11 +159,18 @@ public sealed class GlitchDummySystem(
 			if (this.security.IsLog)
 			{
 				this.security.Add(target.Target.Select(x => x.PlayerId).ToArray());
+				int size = target.Target.Count;
+				if (size < 5)
+				{
+					int addNum = RandomGenerator.Instance.Next(5, 10) - size + 1;
+					this.dummy = target.Alive.GetRandomItem(addNum).Select(x => x.PlayerId).ToArray();
+					this.security.Add(this.dummy);
+				}
 			}
 			else
 			{
-				this.security.Add(target.Target.Select(x => x.PlayerId).ToArray());
-				this.security.Add(target.Dead.Select(x => x.PlayerId).ToArray());
+				this.security.Add(
+					PlayerCache.AllPlayerControl.Select(x => x.PlayerId).ToArray());
 			}
 			this.security.IsActive = true;
 		}

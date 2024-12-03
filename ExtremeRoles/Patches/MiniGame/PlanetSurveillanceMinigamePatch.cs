@@ -26,7 +26,7 @@ public static class PlanetSurveillanceMinigameBeginPatch
 [HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Close))]
 public static class PlanetSurveillanceMinigameClosePatch
 {
-	public static void Prefix()
+	public static void Postfix()
 	{
 		if (SecurityDummySystemManager.TryGet(out var system) &&
 			system.IsActive)

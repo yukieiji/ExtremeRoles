@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 #nullable enable
 
@@ -12,6 +13,26 @@ public static class LinqExtend
 		int index = RandomGenerator.Instance.Next(size);
 		return self[index];
 	}
+
+	public static IEnumerable<T> GetRandomItem<T>(this IReadOnlyList<T> self, int num)
+	{
+		if (self.Count >= num)
+		{
+			return self.OrderBy(x => RandomGenerator.Instance.Next()).Take(num);
+
+		}
+
+		return sizedRandom(self, num);
+	}
+
+	private static IEnumerable<T> sizedRandom<T>(IReadOnlyList<T> self, int num)
+	{
+		for (int i = 0; i < num; ++i)
+		{
+			yield return self.GetRandomItem();
+		}
+	}
+
 	public static T GetRandomItem<T>(this T[] self)
 	{
 		int size = self.Length;

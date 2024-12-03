@@ -21,7 +21,7 @@ public static class FungleSurveillanceMinigameBeginPatch
 [HarmonyPatch(typeof(FungleSurveillanceMinigame), nameof(FungleSurveillanceMinigame.Close))]
 public static class FungleSurveillanceMinigameClosePatch
 {
-	public static void Prefix()
+	public static void Postfix()
 	{
 		if (SecurityDummySystemManager.TryGet(out var system) &&
 			system.IsActive)
