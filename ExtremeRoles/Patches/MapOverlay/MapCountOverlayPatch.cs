@@ -85,13 +85,19 @@ public static class MapCountOverlayUpdatePatch
             }
 
 			if (containFake &&
-				system!.TryGet(counterArea.RoomType, out var overrideDummyColor) &&
 				system!.Mode is AdminDummySystem.DummyMode.Override)
 			{
-				counterArea.UpdateCount(overrideDummyColor.Count);
-				if (isSupervisorEnhance)
+				if (system!.TryGet(counterArea.RoomType, out var overrideDummyColor))
 				{
-					PlayerColor.Add(counterArea.RoomType, overrideDummyColor);
+					counterArea.UpdateCount(overrideDummyColor.Count);
+					if (isSupervisorEnhance)
+					{
+						PlayerColor.Add(counterArea.RoomType, overrideDummyColor);
+					}
+				}
+				else
+				{
+					counterArea.UpdateCount(0);
 				}
 				continue;
 			}

@@ -54,14 +54,13 @@ public sealed class AdminDummySystem : IExtremeSystemType
 	{
 		lock (colors)
 		{
+			if (!this.colors.TryGetValue(room, out var curColor))
+			{
+				return;
+			}
 			foreach (int c in color)
 			{
-				if (!this.colors.TryGetValue(room, out var curColor))
-				{
-					curColor = new List<int>();
-					this.colors[room] = curColor;
-				}
-				curColor.Add(c);
+				curColor.Remove(c);
 			}
 		}
 	}
@@ -70,14 +69,13 @@ public sealed class AdminDummySystem : IExtremeSystemType
 	{
 		lock (colors)
 		{
+			if (!this.colors.TryGetValue(room, out var curColor))
+			{
+				return;
+			}
 			foreach (int c in color)
 			{
-				if (!this.colors.TryGetValue(room, out var curColor))
-				{
-					curColor = new List<int>();
-					this.colors[room] = curColor;
-				}
-				curColor.Add(c);
+				curColor.Remove(c);
 			}
 		}
 	}

@@ -26,6 +26,7 @@ public sealed class GlitchDummySystem(
 	{
 		private float time;
 		private readonly float activeTime = time;
+		private TargetInfo? target;
 
 		public void Update(float deltaTime)
 		{
@@ -50,10 +51,29 @@ public sealed class GlitchDummySystem(
 		public void Active(TargetInfo target)
 		{
 			this.time = this.activeTime;
-			this.ActiveImp(target);
+			this.target = target;
+			this.ActiveImp(this.target);
 		}
-		public abstract void SetUp();
-		public abstract void DeActive();
+
+		public void DeActive()
+		{
+			if (this.target is null)
+			{
+				return;
+			}
+			this.DeActiveImp(this.target);
+			this.target = null;
+		}
+		public void SetUp()
+		{
+			if (this.time < 0.0f || this.target is null)
+			{
+				return;
+			}
+			SetUpImp(this.target);
+		}
+		protected abstract void SetUpImp(TargetInfo target);
+		protected abstract void DeActiveImp(TargetInfo target);
 		protected abstract void ActiveImp(TargetInfo target);
 	}
 
@@ -62,34 +82,22 @@ public sealed class GlitchDummySystem(
 		private readonly AdminDummySystem admin = AdminDummySystem.Get();
 		private readonly List<(SystemTypes, int)> dummy = new List<(SystemTypes, int)>();
 		private AdminDummySystem.DummyMode prevMode;
-		private TargetInfo? target;
 
-		public override void SetUp()
+		protected override void SetUpImp(TargetInfo target)
 		{
-			if (this.target is null)
-			{
-				return;
-			}
-
-			var room = Player.TryGetPlayerRoom(this.target.LocalPlayer, out var systemType) ? systemType.Value : SystemTypes.Hallway;
-			int color = this.target.LocalPlayer.CurrentOutfit.ColorId;
+			var room = Player.TryGetPlayerRoom(target.LocalPlayer, out var systemType) ? systemType.Value : SystemTypes.Hallway;
+			int color = target.LocalPlayer.CurrentOutfit.ColorId;
 			this.admin.Add(room, color);
 		}
 
-		public override void DeActive()
+		protected override void DeActiveImp(TargetInfo target)
 		{
-			if (this.target is null)
-			{
-				return;
-			}
-
 			this.admin.Mode = this.prevMode;
 			foreach (var (room, color) in this.dummy)
 			{
 				this.admin.Remove(room, color);
 			}
 			this.dummy.Clear();
-			this.target = null;
 		}
 
 		protected override void ActiveImp(TargetInfo target)
@@ -107,7 +115,6 @@ public sealed class GlitchDummySystem(
 				this.admin.Add(room, color);
 				this.dummy.Add((room, color));
 			}
-			this.target = target;
 		}
 	}
 
@@ -115,34 +122,24 @@ public sealed class GlitchDummySystem(
 	{
 		private readonly SecurityDummySystemManager security = SecurityDummySystemManager.Get();
 		private SecurityDummySystemManager.DummyMode prevMode;
-		private TargetInfo? target;
 
-		public override void SetUp()
+		protected override void SetUpImp(TargetInfo target)
 		{
-			if (this.target is null)
-			{
-				return;
-			}
 			this.security.Remove(target.LocalPlayer.PlayerId);
 		}
 
-		public override void DeActive()
+		protected override void DeActiveImp(TargetInfo target)
 		{
-			if (this.target is null)
-			{
-				return;
-			}
 			this.security.Mode = this.prevMode;
 			if (this.security.IsLog)
 			{
-				this.security.Remove(this.target.Target.Select(x => x.PlayerId).ToArray());
+				this.security.Remove(target.Target.Select(x => x.PlayerId).ToArray());
 			}
 			else
 			{
-				this.security.Remove(this.target.Target.Select(x => x.PlayerId).ToArray());
-				this.security.Remove(this.target.Dead.Select(x => x.PlayerId).ToArray());
+				this.security.Remove(target.Target.Select(x => x.PlayerId).ToArray());
+				this.security.Remove(target.Dead.Select(x => x.PlayerId).ToArray());
 			}
-			this.target = null;
 			this.security.IsActive = false;
 		}
 
@@ -159,7 +156,6 @@ public sealed class GlitchDummySystem(
 				this.security.Add(target.Target.Select(x => x.PlayerId).ToArray());
 				this.security.Add(target.Dead.Select(x => x.PlayerId).ToArray());
 			}
-			this.target = target;
 			this.security.IsActive = true;
 		}
 	}
@@ -168,15 +164,13 @@ public sealed class GlitchDummySystem(
 	{
 		private readonly VitalDummySystem vital = VitalDummySystem.Get();
 		private VitalDummySystem.DummyMode prevMode;
-		private TargetInfo? target;
 
 		private readonly HashSet<byte> dummyDead = new HashSet<byte>();
 		private readonly HashSet<byte> dummyDisconnect = new HashSet<byte>();
 
-		public override void SetUp()
+		protected override void SetUpImp(TargetInfo _)
 		{
-			if (this.target is null ||
-				PlayerControl.LocalPlayer == null ||
+			if (PlayerControl.LocalPlayer == null ||
 				PlayerControl.LocalPlayer.Data == null)
 			{
 				return;
@@ -199,12 +193,8 @@ public sealed class GlitchDummySystem(
 			}
 		}
 
-		public override void DeActive()
+		protected override void DeActiveImp(TargetInfo _)
 		{
-			if (this.target is null)
-			{
-				return;
-			}
 			foreach (byte dead in this.dummyDead)
 			{
 				this.vital.RemoveDead(dead);
@@ -242,7 +232,6 @@ public sealed class GlitchDummySystem(
 
 
 			}
-			this.target = target;
 		}
 	}
 
@@ -321,8 +310,6 @@ public sealed class GlitchDummySystem(
 	private readonly SecurityGlitch security = new SecurityGlitch(activeTime);
 	private readonly VitalGlitch vital = new VitalGlitch(activeTime);
 
-
-	private float time;
 
 	public void Deteriorate(float deltaTime)
 	{
