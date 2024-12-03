@@ -166,7 +166,6 @@ public sealed class GlitchDummySystem(
 		private VitalDummySystem.DummyMode prevMode;
 
 		private readonly HashSet<byte> dummyDead = new HashSet<byte>();
-		private readonly HashSet<byte> dummyDisconnect = new HashSet<byte>();
 
 		protected override void SetUpImp(TargetInfo _)
 		{
@@ -199,38 +198,51 @@ public sealed class GlitchDummySystem(
 			{
 				this.vital.RemoveDead(dead);
 			}
-			foreach (byte disconnect in this.dummyDisconnect)
-			{
-				this.vital.RemoveDisconnect(disconnect);
-			}
-			this.dummyDisconnect.Clear();
 			this.dummyDead.Clear();
 			this.vital.Mode = this.prevMode;
+			this.vital.IsActive = false;
 		}
 
 		protected override void ActiveImp(TargetInfo target)
 		{
+			this.vital.IsActive = true;
 			this.prevMode = this.vital.Mode;
 			this.vital.Mode = VitalDummySystem.DummyMode.OnceRandom;
+			int num = RandomGenerator.Instance.Next(1, 3);
 			foreach (var player in target.Target)
 			{
-				int index = RandomGenerator.Instance.Next(3);
+				num--;
 				byte playerId = player.PlayerId;
-				switch (index)
+				this.vital.AddDead(playerId);
+				this.dummyDead.Add(playerId);
+				if (num <= 0)
 				{
-					case 1:
-						this.vital.AddDead(playerId);
-						this.dummyDead.Add(playerId);
-						break;
-					case 2:
-						this.vital.AddDisconnect(playerId);
-						this.dummyDisconnect.Add(playerId);
-						break;
-					default:
-						break;
+					return;
 				}
+			}
 
+			var buff = new HashSet<int>(num);
 
+			while (num != 0)
+			{
+				num--;
+				int index = 0;
+				do
+				{
+					// 同じ分だったとき
+					if (buff.Count == target.Alive.Count)
+					{
+						return;
+					}
+					index = RandomGenerator.Instance.Next(0, target.Alive.Count);
+
+				} while (buff.Contains(index));
+
+				buff.Add(index);
+				byte targetPlayer = target.Alive[index].PlayerId;
+
+				this.vital.AddDead(targetPlayer);
+				this.dummyDead.Add(targetPlayer);
 			}
 		}
 	}
