@@ -225,7 +225,6 @@ public sealed class GlitchDummySystem(
 
 			while (num != 0)
 			{
-				num--;
 				int index = 0;
 				do
 				{
@@ -239,7 +238,14 @@ public sealed class GlitchDummySystem(
 				} while (buff.Contains(index));
 
 				buff.Add(index);
+
 				byte targetPlayer = target.Alive[index].PlayerId;
+				if (targetPlayer == target.LocalPlayer.PlayerId)
+				{
+					continue;
+				}
+
+				num--;
 
 				this.vital.AddDead(targetPlayer);
 				this.dummyDead.Add(targetPlayer);
