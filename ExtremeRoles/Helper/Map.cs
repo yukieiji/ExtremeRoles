@@ -279,7 +279,76 @@ public static class Map
 
 		return systemConsoleArray.FirstOrDefault(
 			x => x.gameObject.name.Contains(key));
+	}
 
+	public static SystemConsole? GetVitalSystemConsole()
+	{
+		SystemConsole? watchConsole;
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			watchConsole = modMap.GetSystemConsole(SystemConsoleType.VitalsLabel);
+		}
+		else
+		{
+			watchConsole = getVanillaVitalConsole();
+		}
+		return watchConsole;
+	}
+
+	private static SystemConsole? getVanillaVitalConsole()
+	{
+		// 0 = Skeld
+		// 1 = Mira HQ
+		// 2 = Polus
+		// 3 = Dleks - deactivated
+		// 4 = Airship
+		string key = Id switch
+		{
+			2 => PolusVital,
+			4 => AirShipVital,
+			5 => FangleVital,
+			_ => string.Empty,
+		};
+
+		var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
+
+		return systemConsoleArray.FirstOrDefault(
+			x => x.gameObject.name.Contains(key));
+	}
+
+	public static MapConsole[] GetAdminConsole()
+	{
+		var mapConsoleArray = Object.FindObjectsOfType<MapConsole>();
+
+		HashSet<string> adminObj = new HashSet<string>(2);
+		if (CompatModManager.Instance.TryGetModMap(out var modMap))
+		{
+			adminObj = modMap.GetSystemObjectName(
+				SystemConsoleType.AdminModule);
+		}
+		else
+		{
+			switch (Id)
+			{
+				case 0:
+					adminObj.Add(SkeldAdmin);
+					break;
+				case 1:
+					adminObj.Add(MiraHqAdmin);
+					break;
+				case 2:
+					adminObj.Add(PolusAdmin1);
+					adminObj.Add(PolusAdmin2);
+					break;
+				case 4:
+					adminObj.Add(AirShipArchiveAdmin);
+					adminObj.Add(AirShipCockpitAdmin);
+					break;
+				default:
+					break;
+			}
+		}
+		return mapConsoleArray.Where(x => x != null && adminObj.Any(y => x.gameObject.name.Contains(y))).ToArray();
 	}
 
 	public static void RelinkVent()
