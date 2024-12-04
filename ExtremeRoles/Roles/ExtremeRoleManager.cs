@@ -99,6 +99,7 @@ public enum ExtremeRoleId : int
 	Crewshroom,
 	Terorist,
 	Raider,
+	Glitch,
 
 	Alice,
     Jackal,

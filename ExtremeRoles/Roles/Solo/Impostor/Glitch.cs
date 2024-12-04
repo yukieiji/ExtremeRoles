@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 using System.Buffers;
 
 using UnityEngine;
 
-
+using ExtremeRoles.Helper;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -15,12 +18,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils;
-using System.Collections.Generic;
-using ExtremeRoles.Helper;
-using static UnityEngine.GraphicsBuffer;
-using System;
-using Mono.Cecil;
-using System.Linq;
 
 
 #nullable enable
@@ -49,9 +46,9 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	private SystemConsoleType console = SystemConsoleType.EmergencyButton;
 
 	public Glitch() : base(
-		ExtremeRoleId.Faker,
+		ExtremeRoleId.Glitch,
 		ExtremeRoleType.Impostor,
-		ExtremeRoleId.Faker.ToString(),
+		ExtremeRoleId.Glitch.ToString(),
 		Palette.ImpostorRed,
 		true, false, true, true)
 	{ }

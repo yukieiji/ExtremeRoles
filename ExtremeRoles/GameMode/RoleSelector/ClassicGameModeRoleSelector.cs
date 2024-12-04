@@ -2,8 +2,6 @@
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -127,6 +125,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Crewshroom,
 			ExtremeRoleId.Terorist,
 			ExtremeRoleId.Raider,
+			ExtremeRoleId.Glitch,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
