@@ -325,7 +325,7 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 		}
 	}
 
-	public readonly AdminDummySystem admin = AdminDummySystem.Get();
+	private readonly AdminDummySystem admin = AdminDummySystem.Get();
 
 	private List<IFakerObject> dummy = new List<IFakerObject> ();
 	private Dictionary<SystemTypes, List<int>> dummyRoomInfo = new Dictionary<SystemTypes, List<int>>();
