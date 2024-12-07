@@ -30,8 +30,9 @@ public enum ExtremeGhostRoleId : byte
     Ventgeist,
     SaboEvil,
     Igniter,
+	Doppelganger,
 
-    Foras,
+	Foras,
 }
 
 public enum AbilityType : byte
