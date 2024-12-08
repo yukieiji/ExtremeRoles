@@ -487,7 +487,7 @@ public sealed class Wisp : GhostRoleBase, IGhostRoleWinable, ICombination
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.WispSetTorch,
 			TorchSprite,
-            this.isReportAbility(),
+            this.IsReportAbility(),
             () => true,
             () => true,
             this.UseAbility,

@@ -46,7 +46,7 @@ public sealed class Ventgeist : GhostRoleBase
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.VentgeistVentAnime,
             FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.graphic.sprite,
-            this.isReportAbility(),
+            this.IsReportAbility(),
             this.isPreCheck,
             this.isAbilityUse,
             this.UseAbility,

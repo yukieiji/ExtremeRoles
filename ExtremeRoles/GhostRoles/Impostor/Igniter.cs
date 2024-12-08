@@ -79,7 +79,7 @@ public sealed class Igniter : GhostRoleBase
             AbilityType.IgniterSwitchLight,
             Resources.UnityObjectLoader.LoadSpriteFromResources(
                 Resources.ObjectPath.LastWolfLightOff),
-            this.isReportAbility(),
+            this.IsReportAbility(),
             () => true,
             this.isAbilityUse,
             this.UseAbility,

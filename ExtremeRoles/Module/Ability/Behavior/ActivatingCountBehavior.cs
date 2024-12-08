@@ -129,13 +129,13 @@ public sealed class ActivatingCountBehavior : BehaviorBase, ICountBehavior, IHid
 		if (this.ActiveTime > 0.0f)
 		{
 			newState = AbilityState.Activating;
+			this.isActivating = true;
 		}
 
 		if (this.isReduceOnActive)
 		{
 			this.reduceAbilityCount();
 		}
-		this.isActivating = true;
 
 		return true;
 	}

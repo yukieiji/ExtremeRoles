@@ -222,7 +222,7 @@ public abstract class GhostRoleBase
         this.Button.OnMeetingEnd();
     }
 
-    protected bool isReportAbility() => this.Loader.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility);
+    protected bool IsReportAbility() => this.Loader.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility);
 
     private OptionFactory createOptionFactory()
     {

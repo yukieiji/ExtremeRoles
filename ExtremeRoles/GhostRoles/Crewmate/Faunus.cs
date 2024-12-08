@@ -53,7 +53,7 @@ public sealed class Faunus : GhostRoleBase
             AbilityType.FaunusOpenSaboConsole,
             Resources.UnityObjectLoader.LoadSpriteFromResources(
                 Resources.ObjectPath.MaintainerRepair),
-            this.isReportAbility(),
+            this.IsReportAbility(),
             this.isPreCheck,
             this.isAbilityUse,
             this.UseAbility,

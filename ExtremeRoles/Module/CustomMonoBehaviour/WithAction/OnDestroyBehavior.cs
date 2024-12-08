@@ -11,15 +11,15 @@ public sealed class OnDestroyBehavior : MonoBehaviour
 {
 	private Action? destroyAction;
 
-	public void Add(Delegate @delegate)
+	public void Add(Action @delegate)
 	{
 		if (destroyAction is null)
 		{
-			destroyAction = (Action)@delegate;
+			destroyAction = @delegate;
 		}
 		else
 		{
-			destroyAction += (Action)@delegate;
+			destroyAction += @delegate;
 		}
 	}
 

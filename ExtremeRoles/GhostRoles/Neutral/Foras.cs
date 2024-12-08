@@ -109,7 +109,7 @@ public sealed class Foras : GhostRoleBase
             AbilityType.ForasShowArrow,
             Resources.UnityObjectLoader.LoadSpriteFromResources(
                 Resources.ObjectPath.ForasShowArrow),
-            this.isReportAbility(),
+            this.IsReportAbility(),
             () => true,
             this.isAbilityUse,
             this.UseAbility,

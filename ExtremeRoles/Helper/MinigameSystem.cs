@@ -35,7 +35,7 @@ public static class MinigameSystem
 	{
 		Minigame minigame = UnityObject.Instantiate(
 			prefab, Camera.main.transform, false);
-		minigame.transform.SetParent(Camera.main.transform, false);
+		minigame.gameObject.SetActive(true);
 		minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
 		if (console != null)
 		{
