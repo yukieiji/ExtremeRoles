@@ -176,8 +176,9 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeGhostRoleId.Ventgeist,
             ExtremeGhostRoleId.SaboEvil,
             ExtremeGhostRoleId.Igniter,
+			ExtremeGhostRoleId.Doppelganger,
 
-            ExtremeGhostRoleId.Foras,
+			ExtremeGhostRoleId.Foras,
         ];
 }
 

@@ -64,11 +64,12 @@ public static class ExtremeGhostRoleManager
             { ExtremeGhostRoleId.Faunus,      new Faunus()      },
             { ExtremeGhostRoleId.Shutter,     new Shutter()     },
 
-            { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
-            { ExtremeGhostRoleId.SaboEvil , new SaboEvil()  },
-            { ExtremeGhostRoleId.Igniter  , new Igniter()   },
+            { ExtremeGhostRoleId.Ventgeist   , new Ventgeist()    },
+            { ExtremeGhostRoleId.SaboEvil    , new SaboEvil()     },
+            { ExtremeGhostRoleId.Igniter     , new Igniter()      },
+			{ ExtremeGhostRoleId.Doppelganger, new Doppelganger() },
 
-            { ExtremeGhostRoleId.Foras    , new Foras()   },
+			{ ExtremeGhostRoleId.Foras    , new Foras()   },
         };
 
     private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
