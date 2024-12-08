@@ -224,7 +224,8 @@ public sealed class Doppelganger : GhostRoleBase
 		{
 			return;
 		}
-		button.OnClick.Invoke();
+
 		this.target = target.PlayerId;
+		button.OnClick.Invoke();
 	}
 }

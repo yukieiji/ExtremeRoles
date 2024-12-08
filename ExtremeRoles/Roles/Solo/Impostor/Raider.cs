@@ -97,7 +97,6 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.button.SetButtonShow(invert);
 			}
 		}
-		private const float xScale = 0.0001f;
 		private bool isOpen;
 
 		private readonly SpriteRenderer ui;
@@ -117,9 +116,6 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private float uiOpenTime;
 		private float time;
 		private int num;
-
-		private readonly Dictionary<byte, float> defaultScale = new Dictionary<byte, float>();
-		private readonly Dictionary<byte, float> petScale = new Dictionary<byte, float>();
 
 		public Gui(
 			UiParameter parameter,
