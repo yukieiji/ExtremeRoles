@@ -56,21 +56,19 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		BehaviorBase beha = this.Loader.TryGetValueOption<Option, bool>(
 			Option.IsRandomPlayer, out var opt) &&
 			opt.Value ?
-				new ActivatingCountBehavior(
+				new ReclickCountBehavior(
 					name, img,
 					IsAbilityUse,
 					UseAbility,
-					abilityOff: repose,
-					forceAbilityOff: repose)
+					abilityOff: repose)
 				:
-				new ChargingAndActivatingCountBehaviour(
+				new ChargingAndReclickCountBehavior(
 					name, img,
 					(_, _) => IsAbilityUse(),
-					(_) => UseAbility(),
 					openUI,
-					reduceTiming: ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
+					(_) => UseAbility(),
 					abilityOff: repose,
-					forceAbilityOff: repose);
+					reduceOnCharge: false);
 		if (beha is IChargingBehavior charging)
 		{
 			charging.ChargeTime = 1.0f;

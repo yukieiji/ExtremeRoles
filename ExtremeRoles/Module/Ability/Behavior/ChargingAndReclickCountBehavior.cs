@@ -8,12 +8,21 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles.Module.Ability.Behavior;
 
-public sealed class ReclickCountBehavior :
-	BehaviorBase,
-	IActivatingBehavior,
-	ICountBehavior,
-	IReclickBehavior,
-	IHideLogic
+public sealed class ChargingAndReclickCountBehavior(
+	string text, Sprite img,
+	Func<bool, float, bool> canUse,
+	Func<bool> onCharge,
+	Func<float, bool> ability,
+	Func<bool>? canActivating = null,
+	Func<bool>? isCharge = null,
+	Action? abilityOff = null,
+	bool reduceOnCharge = false) :
+		BehaviorBase(text, img),
+		IChargingBehavior,
+		IActivatingBehavior,
+		ICountBehavior,
+		IReclickBehavior,
+		IHideLogic
 {
 	public int AbilityCount { get; private set; }
 
@@ -21,33 +30,29 @@ public sealed class ReclickCountBehavior :
 
 	public bool CanAbilityActiving => this.canActivating.Invoke();
 
-	private bool isUpdate = false;
-	private readonly Func<bool> ability;
-	private readonly Func<bool> canUse;
-	private readonly Func<bool> canActivating;
-	private readonly Action? abilityOff;
+	public float ChargeGage { get; set; }
+	public float ChargeTime { get; set; }
 
-	private bool isActive;
+	public bool IsCharging => this.isCharging.Invoke();
+
+	private readonly Func<float, bool> ability = ability;
+	private readonly Func<bool, float, bool> canUse = canUse;
+	private readonly Func<bool> canActivating = canActivating ?? new Func<bool>(() => true);
+
+	private readonly Action? abilityOff = abilityOff;
+
+	private readonly Func<bool> onCharge = onCharge;
+	private readonly Func<bool> isCharging = isCharge ?? new Func<bool>(() => true);
+
+	private bool isUpdate = false;
+	private bool isCharge = false;
+	private bool isActive = false;
+
+	private bool reduceOnCharge = reduceOnCharge;
 
 	private TMPro.TextMeshPro? abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 	private const AbilityState reclickStatus = AbilityState.CoolDown;
-
-	public ReclickCountBehavior(
-		string text, Sprite img,
-		Func<bool> canUse,
-		Func<bool> ability,
-		Func<bool>? canActivating = null,
-		Action? abilityOff = null) : base(text, img)
-	{
-		this.ability = ability;
-		this.canUse = canUse;
-
-		this.abilityOff = abilityOff;
-		this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
-
-		isActive = false;
-	}
 
 	public override void Initialize(ActionButton button)
 	{
@@ -57,8 +62,9 @@ public sealed class ReclickCountBehavior :
 
 	public override void AbilityOff()
 	{
-		isActive = false;
-		abilityOff?.Invoke();
+		this.isActive = false;
+		this.isCharge = false;
+		this.abilityOff?.Invoke();
 	}
 
 	public override void ForceAbilityOff()
@@ -67,7 +73,8 @@ public sealed class ReclickCountBehavior :
 	}
 
 	public override bool IsUse() =>
-		canUse.Invoke() && AbilityCount > 0 || isActive;
+		(this.AbilityCount > 0 || this.isCharge || this.isActive) &&
+		this.canUse.Invoke(this.isCharge, this.ChargeGage);
 
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
@@ -78,16 +85,36 @@ public sealed class ReclickCountBehavior :
 		{
 			case AbilityState.Ready:
 				if (timer <= 0.0f &&
-					ability.Invoke())
+					this.onCharge.Invoke())
 				{
-					newState = AbilityState.Activating;
-					isActive = true;
-					reduceAbilityCount();
+					if (this.reduceOnCharge)
+					{
+						reduceAbilityCount();
+					}
+					this.isCharge = true;
+					newState = AbilityState.Charging;
 				}
 				else
 				{
 					return false;
 				}
+				break;
+			case AbilityState.Charging:
+				if ((
+						(this.AbilityCount < 1) ||
+						(this.reduceOnCharge && this.AbilityCount < 0)
+					) ||
+					!this.ability.Invoke(this.ChargeGage))
+				{
+					return false;
+				}
+				if (!this.reduceOnCharge)
+				{
+					reduceAbilityCount();
+				}
+				this.isCharge = false;
+				this.isActive = true;
+				newState = AbilityState.Activating;
 				break;
 			case AbilityState.Activating:
 				if (this.isActive &&
@@ -108,7 +135,7 @@ public sealed class ReclickCountBehavior :
 
 	public override AbilityState Update(AbilityState curState)
 	{
-		if (curState == AbilityState.Activating)
+		if (curState is AbilityState.Charging or AbilityState.Activating)
 		{
 			return curState;
 		}
