@@ -163,7 +163,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 		this.timer = loader.GetValue<Ops, float>(Ops.Delay);
 		this.range = loader.GetValue<Ops, float>(Ops.Range);
 
-		_ = ExtremeSystemTypeManager.Instance.CreateOrGet(
+		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.GlitchDummySystem,
 			() => new GlitchDummySystem(
 				!loader.GetValue<Ops, bool>(Ops.EffectOnImpo),
