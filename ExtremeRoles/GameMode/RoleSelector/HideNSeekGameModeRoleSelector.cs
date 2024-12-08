@@ -72,6 +72,7 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
             ExtremeRoleId.Slime,
 			ExtremeRoleId.Terorist,
 			ExtremeRoleId.Raider,
+			ExtremeRoleId.Hijacker,
 		];
 	private CombinationRoleType[] getUseCombRoleType() =>
 		[

@@ -100,6 +100,7 @@ public enum ExtremeRoleId : int
 	Terorist,
 	Raider,
 	Glitch,
+	Hijacker,
 
 	Alice,
     Jackal,
@@ -291,6 +292,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Crewshroom     , new Crewshroom()},
 			{(int)ExtremeRoleId.Terorist       , new Terorist()},
 			{(int)ExtremeRoleId.Raider         , new Raider()},
+			{(int)ExtremeRoleId.Hijacker       , new Hijacker()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},

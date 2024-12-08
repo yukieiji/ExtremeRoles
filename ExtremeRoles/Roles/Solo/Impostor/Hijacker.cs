@@ -39,6 +39,14 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 
 	private bool isAbilityUse = true;
 
+	public Hijacker() : base(
+		ExtremeRoleId.Hijacker,
+		ExtremeRoleType.Impostor,
+		ExtremeRoleId.Hijacker.ToString(),
+		Palette.ImpostorRed,
+		true, false, true, true)
+	{ }
+
 	public void CreateAbility()
 	{
 		var img = UnityObjectLoader.LoadSpriteFromResources(
