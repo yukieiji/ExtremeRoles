@@ -26,7 +26,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 {
-	public enum Ops : byte
+	public enum Ops
 	{
 		Range,
 		EffectOnImpo,
