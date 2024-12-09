@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using UnityEngine;
+
+using Il2CppInterop.Runtime.Attributes;
 
 #nullable enable
 
@@ -14,6 +13,7 @@ public sealed class ShapeshifterMinigameShapeshiftOverride : MonoBehaviour
 {
 	private Action<PlayerControl>? destroyAction;
 
+	[HideFromIl2Cpp]
 	public void Add(Action<PlayerControl> @delegate)
 	{
 		if (this.destroyAction is null)
