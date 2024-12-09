@@ -67,10 +67,34 @@ public interface IRoleAbility : IRoleResetMeeting
 			localPlayer != null &&
 			localPlayer.Data != null &&
 			!localPlayer.Data.IsDead &&
-			localPlayer.CanMove &&
-			MeetingHud.Instance == null &&
-			ExileController.Instance == null &&
-			IntroCutscene.Instance == null;
+			localPlayer.CanMove;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	protected static bool IsCommonUseWithMinigame()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		return
+			!(
+				localPlayer == null ||
+				localPlayer.Data == null ||
+				localPlayer.Data.IsDead ||
+				localPlayer.inVent ||
+				localPlayer.MyPhysics.DoingCustomAnimation ||
+				localPlayer.shapeshifting ||
+				localPlayer.waitingForShapeshiftResponse ||
+				hud == null ||
+				hud.Chat.IsOpenOrOpening ||
+				hud.KillOverlay.IsOpen ||
+				hud.GameMenu.IsOpen ||
+				hud.IsIntroDisplayed ||
+				(MapBehaviour.Instance != null && MapBehaviour.Instance.IsOpenStopped) ||
+				MeetingHud.Instance != null ||
+				PlayerCustomizationMenu.Instance != null ||
+				ExileController.Instance != null ||
+				IntroCutscene.Instance != null
+			);
 	}
 
 	public static bool IsLocalPlayerAbilityUse(in IReadOnlySet<ExtremeRoleId> fillter)

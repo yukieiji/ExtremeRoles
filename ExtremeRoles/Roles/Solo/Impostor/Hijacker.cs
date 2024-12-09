@@ -1,31 +1,27 @@
-﻿using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API;
-
-using System.Linq;
-
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Module.Ability.Behavior;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.Player;
+﻿using System.Linq;
 
 using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.Ability.AutoActivator;
-
-
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Hijacker : SingleRoleBase, IRoleAbility
+public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 {
 	public enum Option
 	{
@@ -33,11 +29,14 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 	}
 
 	public ExtremeAbilityButton? Button { get; set; }
+	public bool CanMove { get; private set; } = true;
+
 	private FollowerCamera? camera;
 	private ShapeshifterMinigame? minigamePrefab;
 	private PlayerControl? target;
 
-	private bool isAbilityUse = true;
+	private bool opend = false;
+	private bool isAbilityUse = false;
 
 	public Hijacker() : base(
 		ExtremeRoleId.Hijacker,
@@ -64,14 +63,20 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 				:
 				new ChargingAndReclickCountBehavior(
 					name, img,
-					(_, _) => IsAbilityUse(),
+					(isCharge, _) => {
+						if (isCharge)
+						{
+							return IRoleAbility.IsCommonUseWithMinigame();
+						}
+						return IsAbilityUse();
+					},
 					openUI,
 					(_) => UseAbility(),
 					abilityOff: repose,
 					reduceOnCharge: false);
 		if (beha is IChargingBehavior charging)
 		{
-			charging.ChargeTime = 1.0f;
+			charging.ChargeTime = float.MaxValue;
 		}
 		this.Button = new ExtremeAbilityButton(
 			beha,
@@ -94,18 +99,25 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		if (this.target == null)
 		{
 			var alive = PlayerCache.AllPlayerControl.Where(
-				x => x.IsValid());
+				x => x.IsValid() && x.PlayerId != PlayerControl.LocalPlayer.PlayerId);
 			this.target = alive.OrderBy(
 				x => RandomGenerator.Instance.Next()).First();
 		}
+
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+
 		if (this.camera == null)
 		{
-			this.camera = FastDestroyableSingleton<HudManager>.Instance.transform.parent.GetComponent<FollowerCamera>();
+			this.camera = hud.transform.parent.GetComponent<FollowerCamera>();
 		}
 
-		PlayerControl.LocalPlayer.moveable = false;
+		this.CanMove = false;
+
 		this.camera.Target = this.target;
 		this.isAbilityUse = true;
+
+		hud.ShadowQuad.gameObject.SetActive(false);
+
 		return true;
 	}
 
@@ -123,6 +135,11 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 
 	private bool openUI()
 	{
+		if (this.opend)
+		{
+			return true;
+		}
+
 		if (this.minigamePrefab == null)
 		{
 			var shapeShifterBase = FastDestroyableSingleton<RoleManager>.Instance.AllRoles.FirstOrDefault(
@@ -140,6 +157,9 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		var game = MinigameSystem.Open(this.minigamePrefab);
 		var overider = game.gameObject.TryAddComponent<ShapeshifterMinigameShapeshiftOverride>();
 		overider.Add(this.overrideShapeshift);
+
+		this.opend = true;
+
 		return true;
 	}
 
@@ -152,10 +172,17 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		}
 		this.target = player;
 		button.OnClick.Invoke();
+		this.opend = false;
 	}
 
 	private void repose()
 	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
+			localPlayer.Data.IsDead);
+
+		this.CanMove = true;
+
 		if (!this.isAbilityUse)
 		{
 			return;
@@ -165,11 +192,8 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility
 		{
 			this.camera = FastDestroyableSingleton<HudManager>.Instance.transform.parent.GetComponent<FollowerCamera>();
 		}
-		if (!PlayerControl.LocalPlayer.moveable &&
-			MeetingHud.Instance != null)
-		{
-			PlayerControl.LocalPlayer.moveable = true;
-		}
-		this.camera.Target = PlayerControl.LocalPlayer;
+
+		this.camera.Target = localPlayer;
+		this.camera.enabled = true;
 	}
 }

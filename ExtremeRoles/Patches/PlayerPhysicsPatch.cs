@@ -6,6 +6,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches;
 
@@ -35,6 +36,21 @@ public static class PlayerPhysicsTrueSpeedPatch
 [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
 public static class PlayerPhysicsFixedUpdatePatch
 {
+	public static bool Prefix(PlayerPhysics __instance)
+	{
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
+	 	var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleMovable>();
+
+		return
+			(main is null && sub is null) ||
+			(main.CanMove && sub is null) ||
+			(main is null && sub.CanMove) ||
+			(main.CanMove && sub.CanMove);
+	}
+
     public static void Postfix(PlayerPhysics __instance)
     {
         if (RoleAssignState.Instance.IsRoleSetUpEnd &&
