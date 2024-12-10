@@ -56,7 +56,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	public void CreateAbility()
 	{
 		this.CreateNormalAbilityButton(
-			"dummyDeadBody",
+			"glitchGlitch",
 			UnityObjectLoader.LoadSpriteFromResources(
 			ObjectPath.TestButton));
 		this.allPos.Clear();

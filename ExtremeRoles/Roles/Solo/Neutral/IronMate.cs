@@ -46,7 +46,7 @@ public sealed class IronMate :
         ExtremeRoleId.IronMate,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.IronMate.ToString(),
-        ColorPalette.AliceGold,
+        ColorPalette.IronMateAluminium,
         false, true, false, false)
     { }
 

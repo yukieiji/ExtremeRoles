@@ -1287,14 +1287,14 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>「爆撃モード」から指定地点に「爆撃」を行うことが出来る
 インポスター役職
 
-ボタン能力「爆撃モード」
+ボタン能力「爆撃モード」:
 　　ボタンを押すと「爆撃モード」が起動する
-UI「爆撃モード」
+UI「爆撃モード」:
 　　プレイヤーを操作する方法と同じ方法で爆撃位置を
 　変更できる
 　　「爆撃モード」内で「爆撃」を押すと、中心位置を元に
 　「爆撃」が発生する
-　「爆撃」は「爆弾」がオプションに従った方法で投下される
+　「爆撃」はオプションに従った方法「爆弾」が投下される
 　「爆弾」の爆発範囲にいるプレイヤーは陣営問わずキルされる
 　「爆弾」投下等のSEはオプションによらず全プレイヤーに再生される</value>
   </data>
@@ -1308,5 +1308,90 @@ UI「爆撃モード」
   <data name="ExecuteBombFromUI" xml:space="preserve">
     <value>爆撃
 (残り{0}回)</value>
+  </data>
+  <data name="Glitch" xml:space="preserve">
+    <value>グリッチ</value>
+  </data>
+  <data name="GlitchAbilityCoolTime" xml:space="preserve">
+    <value>「グリッチ」のクールタイム</value>
+  </data>
+  <data name="GlitchAbilityCount" xml:space="preserve">
+    <value>「グリッチ」の使用回数</value>
+  </data>
+  <data name="GlitchRange" xml:space="preserve">
+    <value>「グリッチ」が発動できる範囲</value>
+  </data>
+  <data name="GlitchEffectOnImpo" xml:space="preserve">
+    <value>インポスターが「グリッチ」の影響を受けるか</value>
+  </data>
+  <data name="GlitchDelay" xml:space="preserve">
+    <value>「グリッチ」を使用してから発動するまでのラグ</value>
+  </data>
+  <data name="GlitchActiveTime" xml:space="preserve">
+    <value>「グリッチ」の発動時間</value>
+  </data>
+  <data name="GlitchIntroDescription" xml:space="preserve">
+    <value>5a89d61ab769527b12183e8bbe1710ba0a1c31b8</value>
+  </data>
+  <data name="GlitchShortDescription" xml:space="preserve">
+    <value>「グリッチ」でマップ機器をバグらせろ</value>
+  </data>
+  <data name="GlitchFullDescription" xml:space="preserve">
+    <value>「グリッチ」によってマップ機器の情報を騙すことが出来る
+インポスター役職
+
+ボタン能力「グリッチ」:
+　アドミン等のマップ機器の近くに行くことで発動できる　
+　そのマップ機器の情報が偽造される
+　偽造される情報はマップ機器によって異なる
+　・アドミン
+　　自分の情報以外が正しく表示されない
+　　また、情報が更新されなくなる
+　・セキュリティ
+　　自分以外表示されなくなる
+　・望遠鏡
+　　自分以外表示されなくなる
+　・バイタル
+ 　　ランダムに1～2人死亡したように見える
+　　また、情報が更新されなくなる
+　・ドアログ
+　　ランダムなログが5～10個追加される
+　　また、情報が更新されなくなる</value>
+  </data>
+  <data name="glitchGlitch" xml:space="preserve">
+    <value>グリッチ</value>
+  </data>
+  <data name="Hijacker" xml:space="preserve">
+    <value>ハイジャッカー</value>
+  </data>
+  <data name="HijackerAbilityCoolTime" xml:space="preserve">
+    <value>「ハイジャック」のクールタイム</value>
+  </data>
+  <data name="HijackerAbilityActiveTime" xml:space="preserve">
+    <value>「ハイジャック」の持続時間</value>
+  </data>
+  <data name="HijackerAbilityCount" xml:space="preserve">
+    <value>「ハイジャック」の使用回数</value>
+  </data>
+  <data name="HijackerIsRandomPlayer" xml:space="preserve">
+    <value>「ハイジャック」のターゲットプレイヤーがランダムか</value>
+  </data>
+  <data name="HijackerIntroDescription" xml:space="preserve">
+    <value>誰の視界を奪おう(ジャックしよう)かしら？</value>
+  </data>
+  <data name="HijackerShortDescription" xml:space="preserve">
+    <value>他の人の視界をハイジャックせよ</value>
+  </data>
+  <data name="HijackerFullDescription" xml:space="preserve">
+    <value>「ハイジャック」によって他のプレイヤーの視界を見ることが出来る
+インポスター役職
+
+ボタン能力「ハイジャック」:
+　発動するとターゲットとなるプレイヤーの視界を見ることが出来る
+　「「ハイジャック」のターゲットプレイヤーがランダムか」がオンのとき
+　ターゲットとなるプレイヤーは生存者からランダムに選出される</value>
+  </data>
+  <data name="hijackerHijack" xml:space="preserve">
+    <value>ハイジャック</value>
   </data>
 </root>

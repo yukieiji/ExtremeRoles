@@ -50,7 +50,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	{
 		var img = UnityObjectLoader.LoadSpriteFromResources(
 			ObjectPath.TestButton);
-		string name = Tr.GetString("OpenBombUI");
+		string name = Tr.GetString("hijackerHijack");
 
 		BehaviorBase beha = this.Loader.TryGetValueOption<Option, bool>(
 			Option.IsRandomPlayer, out var opt) &&
