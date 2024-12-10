@@ -57,12 +57,15 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateNormalAbilityButton(
 			"dummyDeadBody",
-			UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.TestButton));
+			UnityObjectLoader.LoadSpriteFromResources(
+			ObjectPath.TestButton));
 		this.allPos.Clear();
 	}
 
 	public bool IsAbilityUse()
 	{
+		this.console = SystemConsoleType.EmergencyButton;
+
 		if (!IRoleAbility.IsCommonUse())
 		{
 			return false;
@@ -105,9 +108,13 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 			return 0;
 		});
 
-		this.console = sliced.First().Item2;
-
+		var min = sliced.FirstOrDefault();
 		ArrayPool<(float, SystemConsoleType)>.Shared.Return(rent);
+		if (min == default)
+		{
+			return false;
+		}
+		this.console = min.Item2;
 
 		return this.console is not SystemConsoleType.EmergencyButton;
 	}
@@ -143,15 +150,14 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 		IRoleAbility.CreateAbilityCountOption(
 			factory, 2, 10);
 		factory.CreateFloatOption(
-			Ops.Range, 1.5f, 0.1f, 7.5f, 0.1f,
-			format: OptionUnit.Second);
+			Ops.Range, 1.5f, 0.1f, 7.5f, 0.1f);
 		factory.CreateBoolOption(
 			Ops.EffectOnImpo, false);
 		factory.CreateFloatOption(
 			Ops.Delay, 5.0f, 0.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
 		factory.CreateIntOption(
-			Ops.ActiveTime, 5, 0, 120, 1,
+			Ops.ActiveTime, 10, 1, 120, 1,
 			format: OptionUnit.Second);
 		this.allPos = [];
 	}
@@ -167,7 +173,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 			ExtremeSystemType.GlitchDummySystem,
 			() => new GlitchDummySystem(
 				!loader.GetValue<Ops, bool>(Ops.EffectOnImpo),
-				loader.GetValue<Ops, float>(Ops.ActiveTime)));
+				loader.GetValue<Ops, int>(Ops.ActiveTime)));
 	}
 
 	private IEnumerator delayActive(SystemConsoleType type, float timer)
