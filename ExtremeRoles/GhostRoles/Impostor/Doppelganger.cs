@@ -21,6 +21,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 using ExtremeRoles.Module.SystemType.Roles;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 #nullable enable
 
@@ -35,6 +37,7 @@ public sealed class Doppelganger : GhostRoleBase
 
 	private FakerDummySystem.FakePlayer? fake;
 	private ShapeshifterMinigame? minigamePrefab;
+	private bool opened;
 	private byte? target;
 
 	private const AbilityType ability = AbilityType.DoppelgangerDoppel;
@@ -49,10 +52,10 @@ public sealed class Doppelganger : GhostRoleBase
 
 	public static void Doppl(byte rolePlayer, byte targetPlayer)
 	{
-		var rolePlyaer = Player.GetPlayerControlById(rolePlayer);
-		var targetPlyaer = Player.GetPlayerControlById(targetPlayer);
+		var rolePc = Player.GetPlayerControlById(rolePlayer);
+		var targetPc = Player.GetPlayerControlById(targetPlayer);
 
-		var ghostRole = ExtremeGhostRoleManager.GetSafeCastedLocalPlayerRole<Doppelganger>();
+		var ghostRole = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Doppelganger>(rolePlayer);
 		if (ghostRole is null)
 		{
 			return;
@@ -62,12 +65,22 @@ public sealed class Doppelganger : GhostRoleBase
 		{
 			SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 			ghostRole.fake = new FakerDummySystem.FakePlayer(
-				rolePlyaer, targetPlyaer,
+				rolePc, targetPc,
 				role.IsImpostor() || role.Id == ExtremeRoleId.Marlin);
+
+			ghostRole.fake.Body.transform.SetParent(rolePc.transform);
+			var pet = ghostRole.fake.Body.GetComponentInChildren<PetBehaviour>();
+			if (pet != null)
+			{
+				// 何かわからないけどペットが移動方向と全く別の方向に行く、後で調整する
+				Object.Destroy(pet.gameObject);
+			}
+			ghostRole.fake.Body.layer = targetPc.gameObject.layer;
 		}
 		else
 		{
 			ghostRole.fake.Clear();
+			ghostRole.fake = null;
 		}
 		ghostRole.target = null;
 	}
@@ -110,7 +123,7 @@ public sealed class Doppelganger : GhostRoleBase
 			abilityOff: abilityOff,
 			forceAbilityOff: abilityOff);
 
-		behavior.ChargeTime = 1.0f;
+		behavior.ChargeTime = float.MaxValue;
 
 		this.Button = new ExtremeAbilityButton(
 			behavior,
@@ -143,7 +156,7 @@ public sealed class Doppelganger : GhostRoleBase
 		factory.CreateFloatOption(
 			Option.Range, 1.0f,
 			0.2f, 3.0f, 0.1f);
-		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10);
+		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10, 5.0f);
 	}
 
 	protected override void UseAbility(RPCOperator.RpcCaller caller)
@@ -155,6 +168,11 @@ public sealed class Doppelganger : GhostRoleBase
 
 	private bool openUI()
 	{
+		if (this.opened)
+		{
+			return true;
+		}
+
 		if (this.minigamePrefab == null)
 		{
 			var shapeShifterBase = FastDestroyableSingleton<RoleManager>.Instance.AllRoles.FirstOrDefault(
@@ -172,6 +190,7 @@ public sealed class Doppelganger : GhostRoleBase
 		var game = MinigameSystem.Open(this.minigamePrefab);
 		var overider = game.gameObject.TryAddComponent<ShapeshifterMinigameShapeshiftOverride>();
 		overider.Add(this.abilityCall);
+		this.opened = false;
 		return true;
 	}
 
@@ -187,10 +206,12 @@ public sealed class Doppelganger : GhostRoleBase
 			}
 			return false;
 		}
+		if (isCharge)
+		{
+			return IsCommonUseWithMinigame();
+		}
 
-		return IsCommonUse() && (
-			Minigame.Instance == null ||
-			(isCharge && Minigame.Instance != null));
+		return IsCommonUse();
 	}
 
 	private void abilityOff()
@@ -227,5 +248,6 @@ public sealed class Doppelganger : GhostRoleBase
 
 		this.target = target.PlayerId;
 		button.OnClick.Invoke();
+		this.opened = false;
 	}
 }
