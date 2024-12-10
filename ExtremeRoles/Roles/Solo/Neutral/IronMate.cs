@@ -103,7 +103,7 @@ public sealed class IronMate :
 	{
 		if (this.system is null)
 		{
-			return false;
+			return true;
 		}
 
 		byte playerId = rolePlayer.PlayerId;
@@ -115,7 +115,7 @@ public sealed class IronMate :
 
 		if (!this.system.TryGetShield(playerId, out int num))
 		{
-			return false;
+			return true;
 		}
 
 		if (fromPlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
@@ -141,8 +141,8 @@ public sealed class IronMate :
 
 		factory.CreateFloatOption(
 			Option.SlowMod,
-			0.7f, 0.0f, 1.0f, 0.1f,
-			format: OptionUnit.Second);
+			0.7f, 0.1f, 1.0f, 0.1f,
+			format: OptionUnit.Multiplier);
 
 		factory.CreateFloatOption(
 			Option.PlayerShowTime,
