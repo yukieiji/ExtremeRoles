@@ -11,7 +11,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.6.18-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.9.4-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -26,25 +26,27 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 # Extreme Roles
 主な特徴として以下があります<br>
 - 第三陣営「ニュートラル」と幽霊役職の追加
-- 80を超えるユニークな役職の追加
-- AmongUs公式役職とMODの役職の併用可能(HideNSeekにも完全対応)
-- すべてのMOD役職が複数人アサイン可能
+- **90を超える**ユニークな役職の追加
+    - すべてのMOD役職がAmongUs公式役職との併用可能
+    - すべてのMOD役職が複数人アサイン可能
+    - かくれんぼ(HideNSeek)も完全対応しており、MOD役職を使用可能
+- **1300個以上**のオプションの追加
+    - すべての役職に対して、細かいオプション設定(視界、視界効果、キルクールなど)が実装済み
+    - シャッフルの強度、エンジニアのベント調整など多彩なオプションもあります
+- 軽量かつ高速な動作
+    - 処理によって**重くなることはほぼありません**(他のMODが動作しないようなPCでも軽快な動作が報告されています)
+    - 静的解析等を使用したパフォーマンスの最適化や軽量化を随時実施
 - 「ロールアサインフィルター」や「アサインウェイト」を使った高度な役職割り当て機能
-- すべての役職に対して、細かい設定(視界、視界効果、キルクールなど)が可能
-- 多彩なゲームオプション(シャッフルの強度、エンジニアのベント調整など)
 - MODオプションのインポート/エクスポート機能
-- MODの更新/バージョンチェック機能
-- 互換性のあるMODのインストール/ダウングレード/アップデートチェック/アンインストール機能
-- 互換性のあるMODとの専用オプションの実装
+- MODの更新/ダウングレード/バージョンチェック機能
+- 他のMOD(**サブマージド**等)との高い互換性
+    - 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
+    - 互換性のあるMODとの専用オプションの実装
 - 起動時に問題が発生しても入れ替えなしアップデートすることができるセーフブート機能
 - 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 - 多種多様の情報を取得できるREST APIを搭載(欲しいAPIがある場合は連絡をお願いします)
 
-## 追加役職一覧(Extreme Roles v11.1.0.0時点、今後も追加予定)
-### ホスト役職
-
-- シオン
-
+## 追加役職一覧(Extreme Roles v12.0.0.0時点、今後も追加予定)
 ### 通常役職
 
 |  クルー  |  インポスター  | ニュートラル |
@@ -70,17 +72,17 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  デリュージョナー |  ヒプノティスト  | ロォーブレーカー |
 |  リザレクター |  アンダーワーパー  |  タッカー |
 |  ギャンブラー |  マジシャン  | キメラ |
-|  テレポーター |  ゾンビ  | ヴィジランテ |
-|  モデレーター |  スライム | ワルガキ |
-|  サイキック |  シーフ  | トレイター |
-|  ベイト  |  クルーシュルーム  |  |
+|  テレポーター |  ゾンビ  | アイアンメイト |
+|  モデレーター |  スライム | ヴィジランテ |
+|  サイキック |  シーフ  | ワルガキ |
+|  ベイト  |  クルーシュルーム  | トレイター |
 |  ジェイラー |  テロリスト  |  |
-|  ヤードバード |  アサシン  |  |
-|  サモナー |  ヴィラン  |  |
-|  マーリン  | シェアーズ |   |
-|  ヒーロー  |  |   |
-|  探偵  |  |   |
-|  助手  |  |   |
+|  ヤードバード |  レイダー  |  |
+|  サモナー |  グリッチ  |  |
+|  マーリン  | ハイジャッカー |   |
+|  ヒーロー  |  アサシン |   |
+|  探偵  | シェアーズ |   |
+|  助手  | ヴィラン |   |
 |  見習い探偵  |   |   |
 |  バディーズ  |  |  |
 |  ラバーズ  |  |  |
@@ -96,6 +98,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  ファウヌス  |  サボり魔  | フォラス |
 |  ポルターガイスト  |  ベントガイスト  | ウィスプ |
 |  シャッター  |  イグナイター  |  |
+|    |  ドッペルゲンガー  |  |
 
 * 「ニート」と「ラバーズ」はオプション設定によりニュートラルにもなります。(デフォルトはクルー)
 * 「ラバーズ」、「サポーター」、「ゲッサー」、「ムーバー」、「アクセラレーター」と「スケーター」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
@@ -169,7 +172,8 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2024.6.18s/v2024.6.18e  | v11.0.0.0 ～ v11.1.0.0 |
+|  v2024.8.13s/v2024.8.13e/v2024.9.4s/v2024.9.4e/v2024.10.29s/v2024.10.29e  | v12.0.0.0 ～ v12.1.0.0 |
+|  v2024.6.18s/v2024.6.18e  | v11.0.0.0 ～ v11.1.1.0 |
 |  v2024.3.5s/v2024.3.5e  | v10.0.0.0 ～ v10.1.1.1 |
 |  v2023.10.28s/v2023.10.28e  | v9.1.0.0 ～ v9.2.3.4 |
 |  v2023.10.24s/v2023.10.24e  | v9.0.0.0 ～ v9.0.3.2 |
@@ -192,17 +196,15 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 # ビルド方法
 - エラー等でビルドできない場合は連絡していただければ対応いたします
 - 要求環境
-  - Git
   - VisualStudio 2022
-    - ワークロードで「C++によるデスクトップ開発」、「.NETデスクトップ開発」が必要
-  - Python
-    - Pythonのパスが通ってる必要があります(コマンドプロントでpythonと打って問題ない状態)
+    - 必要なものがあればslnを開いたときにインストールが要求されます
 - 環境構築
   1. リポジトリをクローン
   2. ディレクトリをクローンしたディレクトリに移動
   3. 「MakeEnv.bat」を実行
 - ビルド
   1. VisualStudio 2022で「ExtremeRoles.sln」を開いてビルドする
+     - 必要なものがあればインストールをお願いします
      - 初回のビルドはNugetパッケージの復元が入るので時間がかかります
      - アセット周りがうまく読み込まれない場合は再度ビルドしてみてください
 
@@ -239,7 +241,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 ## ボタンのアイコンについて
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
 
-## 多言語対応について
+## 多言語対応について(Translation)
 多言語対応は出来ますが、実装速度優先で開発しているため日本語が優先的に実装。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい<br>
 EXRole can support multiple languages, but only Japanese is implemented because I prioritize the speed of implementation. Please contact me if you would like to translate into another language or if you have translated into another language.
 
@@ -251,3 +253,26 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
 |  简体中文/SChinese  |   ほぼ翻訳済み/Mostly Translated  |
 |  繁体中文/TChinese  |   ほぼ翻訳済み/Mostly Translated  |
+
+### How to translate
+
+ExR has been using the ResX format translation system since v11.1.1.0.
+
+You can either edit [the files](https://github.com/yukieiji/ExtremeRoles/tree/master/ExtremeRoles/Translation/resx) as they are or use the [ResXResourceManager](https://github.com/dotnet/ResXResourceManager) to add translations with a few simple operations.
+
+- Use Visual Studio 2022
+
+  1. Clone Repository
+  2. Open `ExtremeRoles.sln` with VisualStudio
+      - If VisualStudio component is missing something you need, you will be show to install it, so please follow the instructions.
+  3. Open `ResX Resource Manager` in `View` to `Other Windows` of VisualStudio
+      - If it's not there, install `ResXManager` from `Manage Extensions` in `Extension` and reboot VisualStudio.
+  5. Add or edit translations!!
+
+- ResXResourceManager standalone
+
+  1. Clone Repository(Like /a)
+  2. Download `ResXResourceManager` standalone App : [from](https://github.com/dotnet/ResXResourceManager/releases/latest)
+  3. Open `ResXResourceManager.exe`
+  4. Set Directory to Cloned path(Like /a/ExtremeRoles)
+  5. Add or edit translations!!
