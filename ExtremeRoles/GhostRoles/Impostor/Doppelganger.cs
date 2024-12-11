@@ -21,8 +21,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 using ExtremeRoles.Module.SystemType.Roles;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 
 #nullable enable
 
@@ -30,11 +28,6 @@ namespace ExtremeRoles.GhostRoles.Impostor;
 
 public sealed class Doppelganger : GhostRoleBase
 {
-	public enum Option
-	{
-		Range,
-	}
-
 	private FakerDummySystem.FakePlayer? fake;
 	private ShapeshifterMinigame? minigamePrefab;
 	private bool opened;
@@ -153,9 +146,6 @@ public sealed class Doppelganger : GhostRoleBase
 
 	protected override void CreateSpecificOption(OptionFactory factory)
 	{
-		factory.CreateFloatOption(
-			Option.Range, 1.0f,
-			0.2f, 3.0f, 0.1f);
 		GhostRoleAbilityFactory.CreateCountButtonOption(factory, 2, 10, 5.0f);
 	}
 
