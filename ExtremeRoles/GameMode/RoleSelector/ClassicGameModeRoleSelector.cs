@@ -127,6 +127,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Raider,
 			ExtremeRoleId.Glitch,
 			ExtremeRoleId.Hijacker,
+			ExtremeRoleId.TimeBreaker,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,

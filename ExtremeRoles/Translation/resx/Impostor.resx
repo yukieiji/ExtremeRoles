@@ -1331,7 +1331,7 @@ UI「爆撃モード」:
     <value>「グリッチ」の発動時間</value>
   </data>
   <data name="GlitchIntroDescription" xml:space="preserve">
-    <value>5a89d61ab769527b12183e8bbe1710ba0a1c31b8</value>
+    <value>何もしてないのに壊れた！</value>
   </data>
   <data name="GlitchShortDescription" xml:space="preserve">
     <value>「グリッチ」でマップ機器をバグらせろ</value>
@@ -1393,5 +1393,41 @@ UI「爆撃モード」:
   </data>
   <data name="hijackerHijack" xml:space="preserve">
     <value>ハイジャック</value>
+  </data>
+  <data name="TimeBreaker" xml:space="preserve">
+    <value>タイムブレーカー</value>
+  </data>
+  <data name="TimeBreakerAbilityCoolTime" xml:space="preserve">
+    <value>「タイムブレイク」のクールタイム</value>
+  </data>
+  <data name="TimeBreakerAbilityCount" xml:space="preserve">
+    <value>「タイムブレイク」の使用回数</value>
+  </data>
+  <data name="TimeBreakerActiveTime" xml:space="preserve">
+    <value>「タイムブレイク」の発動時間</value>
+  </data>
+  <data name="TimeBreakerEffectImp" xml:space="preserve">
+    <value>インポスターが「タイムブレイク」の影響を受けるか</value>
+  </data>
+  <data name="TimeBreakerIsActiveScreen" xml:space="preserve">
+    <value>「タイムブレイク」発動中のエフェクト</value>
+  </data>
+  <data name="TimeBreakerIntroDescription" xml:space="preserve">
+    <value>時よ、”止まれ”</value>
+  </data>
+  <data name="TimeBreakerShortDescription" xml:space="preserve">
+    <value>時を止めて時間を稼げ</value>
+  </data>
+  <data name="TimeBreakerFullDescription" xml:space="preserve">
+    <value>「タイムブレイク」によって時を止める事ができる
+インポスター役職
+
+ボタン能力「タイムブレイク」:
+　発動すると一定時間プレイヤーの動きを止める
+　重ね掛けすること発動時間が伸びる
+　発動中、キルクール等は進みます</value>
+  </data>
+  <data name="timeBreakerTimeBreak" xml:space="preserve">
+    <value>タイムブレイク</value>
   </data>
 </root>

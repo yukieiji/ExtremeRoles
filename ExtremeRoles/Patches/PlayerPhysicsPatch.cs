@@ -5,8 +5,9 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches;
 
@@ -42,13 +43,29 @@ public static class PlayerPhysicsFixedUpdatePatch
 		{
 			return true;
 		}
+
+		if (ExtremeSystemTypeManager.Instance.TryGet<TimeBreakerTimeBreakSystem>(
+				ExtremeSystemType.TimeBreakerTimeBreakSystem, out var system) &&
+			system.Active)
+		{
+			__instance.body.velocity = UnityEngine.Vector2.zero;
+			return false;
+		}
+
 	 	var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleMovable>();
 
-		return
+		bool result =
 			(main is null && sub is null) ||
 			(main.CanMove && sub is null) ||
 			(main is null && sub.CanMove) ||
 			(main.CanMove && sub.CanMove);
+		if (!result)
+		{
+			__instance.body.velocity = UnityEngine.Vector2.zero;
+			return false;
+		}
+
+		return true;
 	}
 
     public static void Postfix(PlayerPhysics __instance)

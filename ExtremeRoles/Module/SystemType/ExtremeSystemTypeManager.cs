@@ -45,6 +45,7 @@ public enum ExtremeSystemType : byte
 	ScavengerAbility,
 	RaiderBomb,
 	GlitchDummySystem,
+	TimeBreakerTimeBreakSystem,
 
 	YokoYashiro,
 	TuckerShadow,
