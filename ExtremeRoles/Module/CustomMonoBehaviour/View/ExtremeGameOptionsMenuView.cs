@@ -380,6 +380,7 @@ public sealed class ExtremeGameOptionsMenuView(IntPtr ptr) : MonoBehaviour(ptr)
 		this.scroller.SetYBoundsMax(-yPos - 1.65f);
 	}
 
+	[HideFromIl2Cpp]
 	public void hide(TabView view)
 	{
 		foreach (var cate in view.CategoryViewGroup)

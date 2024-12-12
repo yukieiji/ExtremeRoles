@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Il2CppInterop.Runtime.Attributes;
+
 using UnityEngine;
 
 #nullable enable
@@ -11,6 +13,7 @@ public sealed class OnDestroyBehavior : MonoBehaviour
 {
 	private Action? destroyAction;
 
+	[HideFromIl2Cpp]
 	public void Add(Action @delegate)
 	{
 		if (destroyAction is null)

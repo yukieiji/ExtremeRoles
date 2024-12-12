@@ -6,8 +6,6 @@ using Il2CppInterop.Runtime.Attributes;
 
 using UnityEngine;
 
-using AmongUs.GameOptions;
-
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Resources;
 
@@ -18,6 +16,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 [Il2CppRegister]
 public sealed class ExtremeTabSelector : OptionBehaviour
 {
+	[HideFromIl2Cpp]
 	public IReadOnlyList<MapSelectButton> All => tabSelectButton;
 
 	private List<MapSelectButton> tabSelectButton = new List<MapSelectButton>(8);

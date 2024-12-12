@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Il2CppInterop.Runtime.Attributes;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Performance.Il2Cpp;
@@ -11,6 +12,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
+
 
 #nullable enable
 
@@ -30,6 +32,7 @@ public sealed class RaiderBomb : MonoBehaviour
 	private float timer = 0.0f;
 	private bool isShowOther;
 
+	[HideFromIl2Cpp]
 	public void SetParameter(Parameter param)
 	{
 		this.param = param;
@@ -81,6 +84,7 @@ public sealed class RaiderBomb : MonoBehaviour
 		this.coroutine = StartCoroutine(coDestroy().WrapToIl2Cpp());
 	}
 
+	[HideFromIl2Cpp]
 	private IEnumerator coDestroy()
 	{
 		if (this.param is null)
