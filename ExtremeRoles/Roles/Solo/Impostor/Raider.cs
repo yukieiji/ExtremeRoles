@@ -230,8 +230,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void CreateAbility()
     {
-		var img = UnityObjectLoader.LoadSpriteFromResources(
-			ObjectPath.TestButton);
+		var img = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Raider);
 		string name = Tr.GetString("OpenBombUI");
 		if (this.Loader.TryGetValueOption<Option, bool>(Option.IsOpenLimit, out var opt) &&
 			opt.Value)

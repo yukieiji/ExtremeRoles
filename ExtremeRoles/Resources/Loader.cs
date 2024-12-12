@@ -101,11 +101,13 @@ public static class ObjectPath
 	public const string PainterPaintTrans = "ExtremeRoles.Resources.PaintTrans.png";
 	public const string OverLoaderOverLoad = "ExtremeRoles.Resources.OverLoad.png";
 	public const string OverLoaderDownLoad = "ExtremeRoles.Resources.DownLoad.png";
-	public const string FakerDummyDeadBody = "ExtremeRoles.Resources.DummyDeadBody.png";
-	public const string FakerDummyPlayer = "ExtremeRoles.Resources.DummyPlayer.png";
 	public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
 	public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
 	public const string SlaveDriverHarassment = "ExtremeRoles.Resources.Harassment.png";
+
+	public const string FakerDummyDeadBody = "DummyDeadBody";
+	public const string FakerDummyPlayer = "DummyPlayer";
+
 	// !------- メリー -------
 	public const string MeryNoneActive = "NoneActivateVent";
 

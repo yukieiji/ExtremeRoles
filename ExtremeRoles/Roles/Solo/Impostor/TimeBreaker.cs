@@ -32,8 +32,8 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		this.CreateAbilityCountButton(
 			"timeBreakerTimeBreak",
-			UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.TestButton));
+			UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.TimeBreaker));
 	}
 
 	public bool IsAbilityUse()

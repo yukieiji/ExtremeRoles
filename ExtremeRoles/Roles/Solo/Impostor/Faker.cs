@@ -24,16 +24,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		Player,
 	}
 
-	public ExtremeAbilityButton Button
-	{
-		get => this.createFake;
-		set
-		{
-			this.createFake = value;
-		}
-	}
-
-	private ExtremeAbilityButton createFake;
+	public ExtremeAbilityButton Button { get; set; }
 
 	private Sprite deadBodyDummy;
 	private Sprite playerDummy;
@@ -51,10 +42,12 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 
 	public void CreateAbility()
 	{
-		this.deadBodyDummy = Resources.UnityObjectLoader.LoadSpriteFromResources(
-			ObjectPath.FakerDummyDeadBody, 115f);
-		this.playerDummy = Resources.UnityObjectLoader.LoadSpriteFromResources(
-			ObjectPath.FakerDummyPlayer, 115f);
+		this.deadBodyDummy = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Faker,
+			ObjectPath.FakerDummyDeadBody);
+		this.playerDummy = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Faker,
+			ObjectPath.FakerDummyPlayer);
 
 		this.deadBodyDummyStr = Tr.GetString("dummyDeadBody");
 		this.playerDummyStr = Tr.GetString("dummyPlayer");

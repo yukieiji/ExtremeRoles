@@ -10,6 +10,7 @@ using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module;
@@ -21,6 +22,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 using ExtremeRoles.Module.SystemType.Roles;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+
 
 #nullable enable
 
@@ -83,7 +85,9 @@ public sealed class Doppelganger : GhostRoleBase
 		bool isReportAbility = this.IsReportAbility();
 		var behavior = new ChargingAndActivatingCountBehaviour(
 			text: Tr.GetString($"{ability}Button"),
-			img: FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.graphic.sprite,
+			img: UnityObjectLoader.LoadFromResources(
+				ExtremeRoleId.Faker,
+				ObjectPath.FakerDummyPlayer),
 			isUse: isAbilityUse,
 			canActivating: isActivating,
 			ability: (_) =>
