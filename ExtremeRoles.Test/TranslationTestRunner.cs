@@ -10,13 +10,12 @@ public sealed class TranslationTestRunner : TestRunnerBase
 	{
 		var allTrans = TranslationController.Instance.currentLanguage.AllStrings;
 		var valKeys = new Dictionary<string, HashSet<string>>(allTrans.Count);
-		if (allTrans == null)
-		{
-			return;
-		}
 
-		foreach (var (key, val) in allTrans)
+		foreach (var item in allTrans)
 		{
+			string key = item.Key;
+			string val = item.Value;
+
 			if (valKeys.TryGetValue(val, out var set) &&
 				set is not null)
 			{
