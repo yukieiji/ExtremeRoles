@@ -74,6 +74,7 @@ public static class ColorPalette
 		220, 145, 91, byte.MaxValue);
 	public readonly static Color LowbreakerNoir = new Color32(51, 50, 50, byte.MaxValue);
 	public readonly static Color TuckerMerdedoie = new Color32(113, 91, 65, byte.MaxValue);
+	public readonly static Color IronMateAluminium = new Color32(128, 140, 136, byte.MaxValue);
 
 	public readonly static Color PoltergeistLightKenpou = new Color32(
 		84, 82, 75, byte.MaxValue);

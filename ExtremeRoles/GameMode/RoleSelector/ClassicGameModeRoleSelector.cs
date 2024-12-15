@@ -2,8 +2,6 @@
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -126,6 +124,10 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Thief,
 			ExtremeRoleId.Crewshroom,
 			ExtremeRoleId.Terorist,
+			ExtremeRoleId.Raider,
+			ExtremeRoleId.Glitch,
+			ExtremeRoleId.Hijacker,
+			ExtremeRoleId.TimeBreaker,
 
 			ExtremeRoleId.Alice,
             ExtremeRoleId.Jackal,
@@ -143,6 +145,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Hatter,
 			ExtremeRoleId.Artist,
 			ExtremeRoleId.Tucker,
+			ExtremeRoleId.IronMate,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
@@ -175,8 +178,9 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
             ExtremeGhostRoleId.Ventgeist,
             ExtremeGhostRoleId.SaboEvil,
             ExtremeGhostRoleId.Igniter,
+			ExtremeGhostRoleId.Doppelganger,
 
-            ExtremeGhostRoleId.Foras,
+			ExtremeGhostRoleId.Foras,
         ];
 }
 

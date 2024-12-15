@@ -1225,4 +1225,209 @@ Extreme Rolesの各役職の共通設定が適用できる
   <data name="TeroristBombMinigameStart" xml:space="preserve">
     <value>解除する</value>
   </data>
+  <data name="Raider" xml:space="preserve">
+    <value>レイダー</value>
+  </data>
+  <data name="RaiderAbilityCoolTime" xml:space="preserve">
+    <value>「爆撃モード」のクールタイム</value>
+  </data>
+  <data name="RaiderAbilityCount" xml:space="preserve">
+    <value>「爆撃」の回数</value>
+  </data>
+  <data name="RaiderAbilityActiveTime" xml:space="preserve">
+    <value>「爆撃モード」の表示可能秒数</value>
+  </data>
+  <data name="RaiderIsOpenLimit" xml:space="preserve">
+    <value>「爆撃モード」の表示上限</value>
+  </data>
+  <data name="RaiderLimitNum" xml:space="preserve">
+    <value>「爆撃モード」の表示回数</value>
+  </data>
+  <data name="RaiderIsHidePlayerOnOpen" xml:space="preserve">
+    <value>「爆撃モード」中のプレイヤー表示</value>
+  </data>
+  <data name="RaiderBombType" xml:space="preserve">
+    <value>「爆撃」の種類</value>
+  </data>
+  <data name="SingleBombType" xml:space="preserve">
+    <value>単体</value>
+  </data>
+  <data name="RandomBombType" xml:space="preserve">
+    <value>ランダム(複数)</value>
+  </data>
+  <data name="CarpetHorizontalBombType" xml:space="preserve">
+    <value>絨毯爆撃(横)</value>
+  </data>
+  <data name="CarpetVerticalBombType" xml:space="preserve">
+    <value>絨毯爆撃(縦)</value>
+  </data>
+  <data name="RaiderBombNum" xml:space="preserve">
+    <value>投下数</value>
+  </data>
+  <data name="RaiderBombTargetRange" xml:space="preserve">
+    <value>爆撃範囲</value>
+  </data>
+  <data name="RaiderBombRange" xml:space="preserve">
+    <value>爆弾1つあたりの爆発範囲</value>
+  </data>
+  <data name="RaiderBombAliveTime" xml:space="preserve">
+    <value>爆弾1つあたりの落下時間</value>
+  </data>
+  <data name="RaiderBombShowOtherPlayer" xml:space="preserve">
+    <value>爆弾投下位置がインポスター以外に
+見えるか</value>
+  </data>
+  <data name="RaiderIntroDescription" xml:space="preserve">
+    <value>至急、クルーへの爆撃を要請！！</value>
+  </data>
+  <data name="RaiderShortDescription" xml:space="preserve">
+    <value>「爆撃モード」から「爆撃」で焼け野原しろ</value>
+  </data>
+  <data name="RaiderFullDescription" xml:space="preserve">
+    <value>「爆撃モード」から指定地点に「爆撃」を行うことが出来る
+インポスター役職
+
+ボタン能力「爆撃モード」:
+　　ボタンを押すと「爆撃モード」が起動する
+UI「爆撃モード」:
+　　プレイヤーを操作する方法と同じ方法で爆撃位置を
+　変更できる
+　　「爆撃モード」内で「爆撃」を押すと、中心位置を元に
+　「爆撃」が発生する
+　「爆撃」はオプションに従った方法で「爆弾」が投下される
+　「爆弾」の爆発範囲にいるプレイヤーは陣営問わずキルされる
+　「爆弾」投下等のSEはオプションによらず全プレイヤーに再生される</value>
+  </data>
+  <data name="OpenBombUI" xml:space="preserve">
+    <value>爆撃モード</value>
+  </data>
+  <data name="CloseBombUI" xml:space="preserve">
+    <value>終了
+(自動終了まで{0}秒)</value>
+  </data>
+  <data name="ExecuteBombFromUI" xml:space="preserve">
+    <value>爆撃
+(残り{0}回)</value>
+  </data>
+  <data name="Glitch" xml:space="preserve">
+    <value>グリッチ</value>
+  </data>
+  <data name="GlitchAbilityCoolTime" xml:space="preserve">
+    <value>「グリッチ」のクールタイム</value>
+  </data>
+  <data name="GlitchAbilityCount" xml:space="preserve">
+    <value>「グリッチ」の使用回数</value>
+  </data>
+  <data name="GlitchRange" xml:space="preserve">
+    <value>「グリッチ」が発動できる範囲</value>
+  </data>
+  <data name="GlitchEffectOnImpo" xml:space="preserve">
+    <value>インポスターが「グリッチ」の影響を受けるか</value>
+  </data>
+  <data name="GlitchDelay" xml:space="preserve">
+    <value>「グリッチ」を使用してから発動するまでのラグ</value>
+  </data>
+  <data name="GlitchActiveTime" xml:space="preserve">
+    <value>「グリッチ」の発動時間</value>
+  </data>
+  <data name="GlitchIntroDescription" xml:space="preserve">
+    <value>何もしてないのに壊れた！</value>
+  </data>
+  <data name="GlitchShortDescription" xml:space="preserve">
+    <value>「グリッチ」でマップ機器をバグらせろ</value>
+  </data>
+  <data name="GlitchFullDescription" xml:space="preserve">
+    <value>「グリッチ」によってマップ機器の情報を騙すことが出来る
+インポスター役職
+
+ボタン能力「グリッチ」:
+　アドミン等のマップ機器の近くに行くことで発動できる　
+　そのマップ機器の情報が偽造される
+　偽造される情報はマップ機器によって異なる
+　・アドミン
+　　自分の情報以外が正しく表示されない
+　　また、情報が更新されなくなる
+　・セキュリティ
+　　自分以外表示されなくなる
+　・望遠鏡
+　　自分以外表示されなくなる
+　・バイタル
+ 　　ランダムに1～2人死亡したように見える
+　　また、情報が更新されなくなる
+　・ドアログ
+　　ランダムなログが5～10個追加される
+　　また、情報が更新されなくなる</value>
+  </data>
+  <data name="glitchGlitch" xml:space="preserve">
+    <value>グリッチ</value>
+  </data>
+  <data name="Hijacker" xml:space="preserve">
+    <value>ハイジャッカー</value>
+  </data>
+  <data name="HijackerAbilityCoolTime" xml:space="preserve">
+    <value>「ハイジャック」のクールタイム</value>
+  </data>
+  <data name="HijackerAbilityActiveTime" xml:space="preserve">
+    <value>「ハイジャック」の持続時間</value>
+  </data>
+  <data name="HijackerAbilityCount" xml:space="preserve">
+    <value>「ハイジャック」の使用回数</value>
+  </data>
+  <data name="HijackerIsRandomPlayer" xml:space="preserve">
+    <value>「ハイジャック」のターゲットプレイヤーがランダムか</value>
+  </data>
+  <data name="HijackerIntroDescription" xml:space="preserve">
+    <value>誰の視界を奪おう(ジャックしよう)かしら？</value>
+  </data>
+  <data name="HijackerShortDescription" xml:space="preserve">
+    <value>他の人の視界をハイジャックせよ</value>
+  </data>
+  <data name="HijackerFullDescription" xml:space="preserve">
+    <value>「ハイジャック」によって他のプレイヤーの視界を見ることが出来る
+インポスター役職
+
+ボタン能力「ハイジャック」:
+　発動するとターゲットとなるプレイヤーの視界を見ることが出来る
+　「「ハイジャック」のターゲットプレイヤーがランダムか」がオンのとき
+　ターゲットとなるプレイヤーは生存者からランダムに選出される</value>
+  </data>
+  <data name="hijackerHijack" xml:space="preserve">
+    <value>ハイジャック</value>
+  </data>
+  <data name="TimeBreaker" xml:space="preserve">
+    <value>タイムブレーカー</value>
+  </data>
+  <data name="TimeBreakerAbilityCoolTime" xml:space="preserve">
+    <value>「タイムブレイク」のクールタイム</value>
+  </data>
+  <data name="TimeBreakerAbilityCount" xml:space="preserve">
+    <value>「タイムブレイク」の使用回数</value>
+  </data>
+  <data name="TimeBreakerActiveTime" xml:space="preserve">
+    <value>「タイムブレイク」の発動時間</value>
+  </data>
+  <data name="TimeBreakerEffectImp" xml:space="preserve">
+    <value>インポスターが「タイムブレイク」の影響を受けるか</value>
+  </data>
+  <data name="TimeBreakerIsActiveScreen" xml:space="preserve">
+    <value>「タイムブレイク」発動中のエフェクト</value>
+  </data>
+  <data name="TimeBreakerIntroDescription" xml:space="preserve">
+    <value>時よ、”止まれ”</value>
+  </data>
+  <data name="TimeBreakerShortDescription" xml:space="preserve">
+    <value>時を止めて時間を稼げ</value>
+  </data>
+  <data name="TimeBreakerFullDescription" xml:space="preserve">
+    <value>「タイムブレイク」によって時を止める事ができる
+インポスター役職
+
+ボタン能力「タイムブレイク」:
+　発動すると一定時間プレイヤーの動きを止める
+　重ね掛けすること発動時間が伸びる
+　発動中、キルクール等は進みます</value>
+  </data>
+  <data name="timeBreakerTimeBreak" xml:space="preserve">
+    <value>タイムブレイク</value>
+  </data>
 </root>

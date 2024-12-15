@@ -192,4 +192,34 @@
   <data name="IgniterSwitchLight" xml:space="preserve">
     <value>イグナイターが明かりを落としました</value>
   </data>
+  <data name="Doppelganger" xml:space="preserve">
+    <value>ドッペルゲンガー</value>
+  </data>
+  <data name="DoppelgangerAbilityCoolTime" xml:space="preserve">
+    <value>「ドッペル」のクールタイム</value>
+  </data>
+  <data name="DoppelgangerAbilityActiveTime" xml:space="preserve">
+    <value>「ドッペル」によってダミーが表示できる時間</value>
+  </data>
+  <data name="DoppelgangerIsReportAbility" xml:space="preserve">
+    <value>「ドッペル」の能力発動を報告するか</value>
+  </data>
+  <data name="DoppelgangerAbilityCount" xml:space="preserve">
+    <value>「ドッペル」の使用回数</value>
+  </data>
+  <data name="DoppelgangerDoppel" xml:space="preserve">
+    <value>誰かのドッペルゲンガーが発見されました</value>
+  </data>
+  <data name="DoppelgangerDoppelButton" xml:space="preserve">
+    <value>ドッペル</value>
+  </data>
+  <data name="DoppelgangerFullDescription" xml:space="preserve">
+    <value>プレイヤーのダミーを生存者に見せることが出来るゴーストインポスター役職
+
+ボタン能力「ドッペル」
+  ボタンを押した後に選択したプレイヤーのダミーを生存者に見せることが出来る</value>
+  </data>
+  <data name="DoppelgangerShortDescription" xml:space="preserve">
+    <value>「ドッペル」でみんなを驚かせよう</value>
+  </data>
 </root>

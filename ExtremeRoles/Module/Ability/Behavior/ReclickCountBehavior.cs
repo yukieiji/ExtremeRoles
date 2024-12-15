@@ -20,7 +20,6 @@ public sealed class ReclickCountBehavior :
 	public float ActiveTime { get; set; }
 
 	public bool CanAbilityActiving => this.canActivating.Invoke();
-	public AbilityState ReclickStatus => AbilityState.CoolDown;
 
 	private bool isUpdate = false;
 	private readonly Func<bool> ability;
@@ -32,6 +31,7 @@ public sealed class ReclickCountBehavior :
 
 	private TMPro.TextMeshPro? abilityCountText = null;
 	private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
+	private const AbilityState reclickStatus = AbilityState.CoolDown;
 
 	public ReclickCountBehavior(
 		string text, Sprite img,
@@ -93,7 +93,7 @@ public sealed class ReclickCountBehavior :
 				if (this.isActive &&
 					IReclickBehavior.CanReClick(timer, this.ActiveTime))
 				{
-					newState = this.ReclickStatus;
+					newState = reclickStatus;
 				}
 				else
 				{

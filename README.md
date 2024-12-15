@@ -11,7 +11,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.9.4-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.11.26-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -46,7 +46,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 - 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 - 多種多様の情報を取得できるREST APIを搭載(欲しいAPIがある場合は連絡をお願いします)
 
-## 追加役職一覧(Extreme Roles v12.0.0.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v12.1.0.0時点、今後も追加予定)
 ### ホスト役職
 
 - シオン
@@ -76,18 +76,18 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  デリュージョナー |  ヒプノティスト  | ロォーブレーカー |
 |  リザレクター |  アンダーワーパー  |  タッカー |
 |  ギャンブラー |  マジシャン  | キメラ |
-|  テレポーター |  ゾンビ  | ヴィジランテ |
-|  モデレーター |  スライム | ワルガキ |
-|  サイキック |  シーフ  | トレイター |
-|  ベイト  |  クルーシュルーム  |  |
+|  テレポーター |  ゾンビ  | アイアンメイト |
+|  モデレーター |  スライム | ヴィジランテ |
+|  サイキック |  シーフ  | ワルガキ |
+|  ベイト  |  クルーシュルーム  | トレイター |
 |  ジェイラー |  テロリスト  |  |
-|  ヤードバード |  アサシン  |  |
-|  サモナー |  ヴィラン  |  |
-|  マーリン  | シェアーズ |   |
-|  ヒーロー  |  |   |
-|  探偵  |  |   |
-|  助手  |  |   |
-|  見習い探偵  |   |   |
+|  ヤードバード |  レイダー  |  |
+|  サモナー |  グリッチ  |  |
+|  マーリン  | ハイジャッカー |   |
+|  ヒーロー  | タイムブレーカー  |   |
+|  探偵  | アサシン |   |
+|  助手  | シェアーズ |   |
+|  見習い探偵  | ヴィラン  |   |
 |  バディーズ  |  |  |
 |  ラバーズ  |  |  |
 |  サポーター |  |  |
@@ -102,6 +102,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  ファウヌス  |  サボり魔  | フォラス |
 |  ポルターガイスト  |  ベントガイスト  | ウィスプ |
 |  シャッター  |  イグナイター  |  |
+|    |  ドッペルゲンガー  |  |
 
 * 「ニート」と「ラバーズ」はオプション設定によりニュートラルにもなります。(デフォルトはクルー)
 * 「ラバーズ」、「サポーター」、「ゲッサー」、「ムーバー」、「アクセラレーター」と「スケーター」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
@@ -175,7 +176,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2024.8.13s/v2024.8.13e/v2024.9.4s/v2024.9.4e/v2024.10.29s/v2024.10.29e  | v12.0.0.0 ～ v12.0.2.2 |
+|  v2024.8.13s/v2024.8.13e/v2024.9.4s/v2024.9.4e<br>v2024.10.29s/v2024.10.29e/v2024.11.26s/v2024.11.26e  | v12.0.0.0 ～ v12.1.0.0 |
 |  v2024.6.18s/v2024.6.18e  | v11.0.0.0 ～ v11.1.1.0 |
 |  v2024.3.5s/v2024.3.5e  | v10.0.0.0 ～ v10.1.1.1 |
 |  v2023.10.28s/v2023.10.28e  | v9.1.0.0 ～ v9.2.3.4 |

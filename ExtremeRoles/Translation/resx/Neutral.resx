@@ -1095,4 +1095,43 @@
   <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
     <value>タッカー死亡時、キメラも死亡するか</value>
   </data>
+  <data name="IronMate" xml:space="preserve">
+    <value>アイアンメイト</value>
+  </data>
+  <data name="IronMateBlockNum" xml:space="preserve">
+    <value>キルをブロックできる回数</value>
+  </data>
+  <data name="IronMateSlowTime" xml:space="preserve">
+    <value>ブロック後移動速度が変化する秒数</value>
+  </data>
+  <data name="IronMateSlowMod" xml:space="preserve">
+    <value>ブロック後の移動速度倍率</value>
+  </data>
+  <data name="IronMatePlayerShowTime" xml:space="preserve">
+    <value>死体の上にプレイヤーが
+表示される秒数</value>
+  </data>
+  <data name="IronMateDeadBodyShowTimeOnAfterPlayer" xml:space="preserve">
+    <value>プレイヤーが表示された後
+死体が表示される秒数</value>
+  </data>
+  <data name="IronMateShortDescription" xml:space="preserve">
+    <value>鉄の体を持つクルーメイト</value>
+  </data>
+  <data name="IronMateFullDescription" xml:space="preserve">
+    <value>クルーっぽい第三陣営役職
+
+・勝利条件：クルーメイトが勝利すること
+
+・ほぼクルーと同じでタスクも持ちます
+ただしタスク勝利条件に影響はありません
+・死体を通報することはできず、一定時間死体が
+ある場所にプレイヤーのダミーが表示されます
+・プレイヤーのダミーが表示された後、一定時間だけ
+死体を見ることができます
+・キルボタンによるキルをオプションで指定された回数
+ブロックすることができます
+・ブロック後アイアンメイト本人の移動速度が一定時間
+設定値分だけ遅くなります</value>
+  </data>
 </root>

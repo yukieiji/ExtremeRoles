@@ -30,8 +30,9 @@ public enum ExtremeGhostRoleId : byte
     Ventgeist,
     SaboEvil,
     Igniter,
+	Doppelganger,
 
-    Foras,
+	Foras,
 }
 
 public enum AbilityType : byte
@@ -45,13 +46,13 @@ public enum AbilityType : byte
     VentgeistVentAnime,
     SaboEvilResetSabotageCool,
     IgniterSwitchLight,
+	DoppelgangerDoppel,
 
-    ForasShowArrow
+	ForasShowArrow
 }
 
 public static class ExtremeGhostRoleManager
 {
-    private const int ghostRoleOptionId = 25;
     public const int IdOffset = 512;
 
     public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
@@ -63,11 +64,12 @@ public static class ExtremeGhostRoleManager
             { ExtremeGhostRoleId.Faunus,      new Faunus()      },
             { ExtremeGhostRoleId.Shutter,     new Shutter()     },
 
-            { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
-            { ExtremeGhostRoleId.SaboEvil , new SaboEvil()  },
-            { ExtremeGhostRoleId.Igniter  , new Igniter()   },
+            { ExtremeGhostRoleId.Ventgeist   , new Ventgeist()    },
+            { ExtremeGhostRoleId.SaboEvil    , new SaboEvil()     },
+            { ExtremeGhostRoleId.Igniter     , new Igniter()      },
+			{ ExtremeGhostRoleId.Doppelganger, new Doppelganger() },
 
-            { ExtremeGhostRoleId.Foras    , new Foras()   },
+			{ ExtremeGhostRoleId.Foras    , new Foras()   },
         };
 
     private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
@@ -270,10 +272,15 @@ public static class ExtremeGhostRoleManager
             case AbilityType.IgniterSwitchLight:
                 Igniter.SetVison(reader.ReadBoolean());
                 break;
-            case AbilityType.ForasShowArrow:
+			case AbilityType.DoppelgangerDoppel:
+				byte doppelgangerPlayerId = reader.ReadByte();
+				byte doppelTargetPlayerId = reader.ReadByte();
+				Doppelganger.Doppl(doppelgangerPlayerId, doppelTargetPlayerId);
+				break;
+			case AbilityType.ForasShowArrow:
                 Foras.SwitchArrow(ref reader);
                 break;
-            default:
+			default:
                 break;
         }
 

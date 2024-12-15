@@ -19,7 +19,7 @@ using ExtremeRoles.Roles.Solo.Impostor;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class FakerDummySystem : IExtremeSystemType
+public sealed class FakerDummySystem() : IExtremeSystemType
 {
 	private interface IFakerObject
 	{
@@ -59,6 +59,7 @@ public sealed class FakerDummySystem : IExtremeSystemType
 	public sealed class FakePlayer : IFakerObject
 	{
 		public int ColorId { get; init; }
+		public GameObject Body => this.body;
 
 		private GameObject body;
 		private SpriteRenderer rend;
@@ -324,11 +325,11 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		}
 	}
 
+	private readonly AdminDummySystem admin = AdminDummySystem.Get();
+
 	private List<IFakerObject> dummy = new List<IFakerObject> ();
 	private Dictionary<SystemTypes, List<int>> dummyRoomInfo = new Dictionary<SystemTypes, List<int>>();
 
-	public bool TryGetDummyColors(SystemTypes room, out List<int> color)
-		=> this.dummyRoomInfo.TryGetValue(room, out color);
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
 	{
@@ -336,6 +337,10 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		{
 			this.dummy.Do(x => x.Clear());
 			this.dummy.Clear();
+			foreach (var (room, color) in this.dummyRoomInfo)
+			{
+				this.admin.Remove(room, color);
+			}
 			this.dummyRoomInfo.Clear();
 		}
 	}
@@ -369,12 +374,15 @@ public sealed class FakerDummySystem : IExtremeSystemType
 		if (Player.TryGetPlayerRoom(rolePlyaer, out var room) &&
 			room.HasValue)
 		{
-			if (!this.dummyRoomInfo.TryGetValue(room.Value, out var colorInfo))
+			var roomId = room.Value;
+
+			if (!this.dummyRoomInfo.TryGetValue(roomId, out var colorInfo))
 			{
 				colorInfo = new List<int>();
 			}
 			colorInfo.Add(fake.ColorId);
-			this.dummyRoomInfo[room.Value] = colorInfo;
+			this.dummyRoomInfo[roomId] = colorInfo;
+			this.admin.Add(roomId, fake.ColorId);
 		}
 	}
 }

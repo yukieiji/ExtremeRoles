@@ -29,6 +29,10 @@ public enum ExtremeSystemType : byte
 	ExtremeConsoleSystem,
 	HostUpdateSystem,
 	ResetObjectSystem,
+	PlayerShowSystem,
+	AdminDummySystem,
+	VitalDummySystem,
+	SecurityDummySystem,
 
 	WispTorch,
 
@@ -39,9 +43,13 @@ public enum ExtremeSystemType : byte
 	ThiefMeetingTimeChange,
 	TeroristTeroSabotage,
 	ScavengerAbility,
+	RaiderBomb,
+	GlitchDummySystem,
+	TimeBreakerTimeBreakSystem,
 
 	YokoYashiro,
-	TuckerShadow
+	TuckerShadow,
+	IronMateGuard
 }
 
 public enum ResetTiming : byte

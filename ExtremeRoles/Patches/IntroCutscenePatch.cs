@@ -29,7 +29,13 @@ public static class IntroCutscenceHelper
 
         if (role.IsNeutral())
         {
-            __instance.BackgroundBar.material.color = ColorPalette.NeutralColor;
+			var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleAwake<RoleTypes>>();
+			if ((main is not null && !main.IsAwake) || (sub is not null && !sub.IsAwake))
+			{
+				return;
+			}
+
+			__instance.BackgroundBar.material.color = ColorPalette.NeutralColor;
             __instance.TeamTitle.text = Tr.GetString("Neutral");
             __instance.TeamTitle.color = ColorPalette.NeutralColor;
             __instance.ImpostorText.text = Tr.GetString("neutralIntro");
@@ -52,7 +58,13 @@ public static class IntroCutscenceHelper
         // Intro solo teams
         if (role.IsNeutral() || role.Id == ExtremeRoleId.Xion)
         {
-            var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
+			var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleAwake<RoleTypes>>();
+			if ((main is not null && !main.IsAwake) || (sub is not null && !sub.IsAwake))
+			{
+				return;
+			}
+
+			var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
             soloTeam.Add(PlayerControl.LocalPlayer);
             yourTeam = soloTeam;
         }

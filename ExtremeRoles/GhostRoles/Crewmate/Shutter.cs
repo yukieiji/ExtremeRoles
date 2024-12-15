@@ -189,7 +189,7 @@ public sealed class Shutter : GhostRoleBase
             AbilityType.ShutterTakePhoto,
             Resources.UnityObjectLoader.LoadSpriteFromResources(
                 Resources.ObjectPath.PhotographerPhotoCamera),
-            this.isReportAbility(),
+            this.IsReportAbility(),
             () => true,
             this.isAbilityUse,
             this.UseAbility,

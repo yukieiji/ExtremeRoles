@@ -95,7 +95,7 @@ public sealed class Poltergeist : GhostRoleBase
             AbilityType.PoltergeistMoveDeadbody,
             Resources.UnityObjectLoader.LoadSpriteFromResources(
                 Resources.ObjectPath.CarrierCarry),
-            this.isReportAbility(),
+            this.IsReportAbility(),
             this.isPreCheck,
             this.isAbilityUse,
             this.UseAbility,

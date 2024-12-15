@@ -84,8 +84,8 @@ public static class GhostRoleAbilityFactory
 				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
-				canUse: createGhostRoleUseFunc(canUse),
-				ability: createGhostRoleAbility(
+				canUse: CreateGhostRoleUseFunc(canUse),
+				ability: CreateGhostRoleAbility(
 					type, isReport, abilityPreCheck,
 					ability, rpcHostCallAbility),
 				abilityOff: abilityOff,
@@ -114,8 +114,8 @@ public static class GhostRoleAbilityFactory
 				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
-				canUse: createGhostRoleUseFunc(canUse),
-				ability: createGhostRoleAbility(
+				canUse: CreateGhostRoleUseFunc(canUse),
+				ability: CreateGhostRoleAbility(
 					type, isReport, abilityPreCheck,
 					ability, rpcHostCallAbility),
 				canActivating: canActivating,
@@ -145,8 +145,8 @@ public static class GhostRoleAbilityFactory
 				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
-				canUse: createGhostRoleUseFunc(canUse),
-				ability: createGhostRoleAbility(
+				canUse: CreateGhostRoleUseFunc(canUse),
+				ability: CreateGhostRoleAbility(
 					type, isReport, abilityPreCheck,
 					ability, rpcHostCallAbility),
 				abilityOff: abilityOff,
@@ -177,8 +177,8 @@ public static class GhostRoleAbilityFactory
 				text: Tr.GetString(
 					string.Concat(type.ToString(), "Button")),
 				img: img,
-				canUse: createGhostRoleUseFunc(canUse),
-				ability: createGhostRoleAbility(
+				canUse: CreateGhostRoleUseFunc(canUse),
+				ability: CreateGhostRoleAbility(
 					type, isReport, abilityPreCheck,
 					ability, rpcHostCallAbility),
 				canActivating: canActivating,
@@ -190,7 +190,7 @@ public static class GhostRoleAbilityFactory
 		);
 	}
 
-	private static Func<bool> createGhostRoleUseFunc(Func<bool> isUse)
+	public static Func<bool> CreateGhostRoleUseFunc(Func<bool> isUse)
 	{
 		return () =>
 			isUse.Invoke() &&
@@ -198,7 +198,7 @@ public static class GhostRoleAbilityFactory
 				PlayerControl.LocalPlayer);
 	}
 
-	private static Func<bool> createGhostRoleAbility(
+	public static Func<bool> CreateGhostRoleAbility(
 		AbilityType type, bool isReportAbility,
 		Func<bool> abilityPreCheck,
 		Action<RPCOperator.RpcCaller> ability,

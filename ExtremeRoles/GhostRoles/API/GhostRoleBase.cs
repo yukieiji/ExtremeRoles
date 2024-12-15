@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.GhostRoles.API;
 
@@ -222,7 +223,7 @@ public abstract class GhostRoleBase
         this.Button.OnMeetingEnd();
     }
 
-    protected bool isReportAbility() => this.Loader.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility);
+    protected bool IsReportAbility() => this.Loader.GetValue<GhostRoleOption, bool>(GhostRoleOption.IsReportAbility);
 
     private OptionFactory createOptionFactory()
     {
@@ -259,11 +260,41 @@ public abstract class GhostRoleBase
 
     protected abstract void UseAbility(RPCOperator.RpcCaller caller);
 
-	protected static bool IsCommonUse() =>
-		PlayerControl.LocalPlayer != null &&
-		PlayerControl.LocalPlayer.Data != null &&
-		PlayerControl.LocalPlayer.Data.IsDead &&
-		PlayerControl.LocalPlayer.CanMove;
+	protected static bool IsCommonUse()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+
+		return
+			localPlayer != null &&
+			localPlayer.Data != null &&
+			localPlayer.Data.IsDead &&
+			localPlayer.CanMove;
+	}
+	protected static bool IsCommonUseWithMinigame()
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		return
+			!(
+				localPlayer == null ||
+				localPlayer.Data == null ||
+				!localPlayer.Data.IsDead ||
+				localPlayer.inVent ||
+				localPlayer.MyPhysics.DoingCustomAnimation ||
+				localPlayer.shapeshifting ||
+				localPlayer.waitingForShapeshiftResponse ||
+				hud == null ||
+				hud.Chat.IsOpenOrOpening ||
+				hud.KillOverlay.IsOpen ||
+				hud.GameMenu.IsOpen ||
+				hud.IsIntroDisplayed ||
+				(MapBehaviour.Instance != null && MapBehaviour.Instance.IsOpenStopped) ||
+				MeetingHud.Instance != null ||
+				PlayerCustomizationMenu.Instance != null ||
+				ExileController.Instance != null ||
+				IntroCutscene.Instance != null
+			);
+	}
 
 	protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
     {

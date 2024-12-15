@@ -6,4 +6,10 @@ public static class PlayerControlExtension
 	{
 		source.MurderPlayer(target, MurderResultFlags.Succeeded | MurderResultFlags.DecisionByHost);
 	}
+	public static bool IsValid(this PlayerControl @this)
+		=>
+			@this != null &&
+			@this.Data != null &&
+			!@this.Data.IsDead && !@this.Data.Disconnected;
+
 }

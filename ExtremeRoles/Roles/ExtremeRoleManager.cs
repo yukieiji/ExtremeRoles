@@ -98,6 +98,10 @@ public enum ExtremeRoleId : int
 	Thief,
 	Crewshroom,
 	Terorist,
+	Raider,
+	Glitch,
+	Hijacker,
+	TimeBreaker,
 
 	Alice,
     Jackal,
@@ -121,6 +125,7 @@ public enum ExtremeRoleId : int
 	Lawbreaker,
 	Tucker,
 	Chimera,
+	IronMate,
 
 	Xion,
 }
@@ -287,6 +292,10 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Thief          , new Thief()},
 			{(int)ExtremeRoleId.Crewshroom     , new Crewshroom()},
 			{(int)ExtremeRoleId.Terorist       , new Terorist()},
+			{(int)ExtremeRoleId.Raider         , new Raider()},
+			{(int)ExtremeRoleId.Glitch         , new Glitch()},
+			{(int)ExtremeRoleId.Hijacker       , new Hijacker()},
+			{(int)ExtremeRoleId.TimeBreaker    , new TimeBreaker()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},
@@ -304,6 +313,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
 			{(int)ExtremeRoleId.Tucker    , new Tucker()},
+			{(int)ExtremeRoleId.IronMate  , new IronMate()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -420,7 +430,7 @@ public static class ExtremeRoleManager
 		{
 			throw new ArgumentNullException("Local Role is Null!!!!!!!!!!");
 		}
-		return role!;
+		return role;
     }
 
     public static void SetPlayerIdToMultiRoleId(

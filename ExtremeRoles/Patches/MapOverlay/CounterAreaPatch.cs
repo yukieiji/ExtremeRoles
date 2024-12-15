@@ -37,7 +37,7 @@ public static class CounterAreaUpdateCountPatch
         }
 
         if (!MapCountOverlayUpdatePatch.PlayerColor.TryGetValue(
-                __instance.RoomType, out List<int> colors))
+                __instance.RoomType, out var colors))
         {
             return;
         }

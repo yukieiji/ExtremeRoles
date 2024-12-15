@@ -42,7 +42,10 @@ public sealed class ReusableActivatingBehavior : ReusableBehavior, IActivatingBe
 	public override bool TryUseAbility(
 		float timer, AbilityState curState, out AbilityState newState)
 	{
-		base.TryUseAbility(timer, curState, out newState);
+		if (!base.TryUseAbility(timer, curState, out newState))
+		{
+			return false;
+		}
 
 		if (this.ActiveTime > 0.0f)
 		{

@@ -20,8 +20,8 @@ namespace ExtremeRoles.Patches.MapOverlay;
 [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
 public static class MapCountOverlayUpdatePatch
 {
-    public static Dictionary<SystemTypes, List<int>> PlayerColor =
-        new Dictionary<SystemTypes, List<int>>();
+    public static Dictionary<SystemTypes, IReadOnlyList<int>> PlayerColor =
+        new Dictionary<SystemTypes, IReadOnlyList<int>>();
 
     private static float adminTimer = 0.0f;
     private static TMPro.TextMeshPro? timerText;
@@ -72,7 +72,7 @@ public static class MapCountOverlayUpdatePatch
 			__instance.SabotageText.gameObject.SetActive(false);
 		}
 
-		bool inFaker = ExtremeSystemTypeManager.Instance.TryGet<FakerDummySystem>(ExtremeSystemType.FakerDummy, out var system);
+		bool containFake = AdminDummySystem.TryGet(out var system);
 
 		for (int i = 0; i < __instance.CountAreas.Length; i++)
 		{
@@ -83,6 +83,24 @@ public static class MapCountOverlayUpdatePatch
                 counterArea.UpdateCount(0);
                 continue;
             }
+
+			if (containFake &&
+				system!.Mode is AdminDummySystem.DummyMode.Override)
+			{
+				if (system!.TryGet(counterArea.RoomType, out var overrideDummyColor))
+				{
+					counterArea.UpdateCount(overrideDummyColor.Count);
+					if (isSupervisorEnhance)
+					{
+						PlayerColor.Add(counterArea.RoomType, overrideDummyColor);
+					}
+				}
+				else
+				{
+					counterArea.UpdateCount(0);
+				}
+				continue;
+			}
 
             if (CachedShipStatus.FastRoom.TryGetValue(
                     counterArea.RoomType,
@@ -132,8 +150,8 @@ public static class MapCountOverlayUpdatePatch
                         }
                     }
                 }
-				if (inFaker &&
-					system!.TryGetDummyColors(counterArea.RoomType, out var dummyColor) &&
+				if (containFake &&
+					system!.TryGet(counterArea.RoomType, out var dummyColor) &&
 					dummyColor.Count != 0)
 				{
 					addColor.AddRange(dummyColor);

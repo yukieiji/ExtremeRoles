@@ -40,11 +40,16 @@ internal sealed class AllAssetLoadRunner
 		Run<JailerAssetLoadRunner>();
 		Run<SummonerAssetLoadRunner>();
 
+		Run<FakerAssetLoadRunner>();
 		Run<MeryAssetLoadRunner>();
 		Run<HypnotistAssetLoadRunner>();
 		Run<ThiefAssetLoadRunner>();
 		Run<TeroAssetLoadRunner>();
 		Run<ZombieAssetLoadRunner>();
+		Run<GlitchAssetLoadRunner>();
+		Run<TimeBreakerAssetLoadRunner>();
+		Run<RaiderAssetLoadRunner>();
+		Run<HijackerAssetLoadRunner>();
 
 		Run<TuckerAssetLoadRunner>();
 		Run<YokoAssetLoadRunner>();
