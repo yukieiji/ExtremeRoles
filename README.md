@@ -11,7 +11,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.9.4-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.10.29-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -46,7 +46,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 - 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 - 多種多様の情報を取得できるREST APIを搭載(欲しいAPIがある場合は連絡をお願いします)
 
-## 追加役職一覧(Extreme Roles v12.0.0.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v12.1.0.0時点、今後も追加予定)
 ### 通常役職
 
 |  クルー  |  インポスター  | ニュートラル |
