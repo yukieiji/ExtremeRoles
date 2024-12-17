@@ -26,7 +26,7 @@ public sealed class FinalSummary : MonoBehaviour
 		GhostRole
 	}
 
-	private List<string> summaryText = new List<string>();
+	private readonly List<string> summaryText = new List<string>();
 	private int curPage;
 	private int maxPage;
 
@@ -35,12 +35,12 @@ public sealed class FinalSummary : MonoBehaviour
 	private bool isCreated = false;
 	private bool isHide = false;
 
-	private static List<string> tags = new List<string>()
-	{
+	private readonly string[] tags =
+	[
 		"γ", "ζ", "δ", "ε", "η",
 		"θ", "λ", "μ", "π", "ρ",
 		"σ", "φ", "ψ", "χ", "ω"
-	};
+	];
 
 	public FinalSummary(IntPtr ptr) : base(ptr) { }
 
@@ -99,8 +99,8 @@ public sealed class FinalSummary : MonoBehaviour
 				UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
 		}
 
-		List<string> randomTag = tags.OrderBy(
-			item => RandomGenerator.Instance.Next()).ToList();
+		string[] randomTag = tags.OrderBy(
+			item => RandomGenerator.Instance.Next()).ToArray();
 
 		sortedSummary(summaries);
 
