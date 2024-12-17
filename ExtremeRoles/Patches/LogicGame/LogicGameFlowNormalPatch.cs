@@ -8,6 +8,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Patches.LogicGame;
 
@@ -25,22 +26,32 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 {
     public static bool Prefix()
     {
-        if (!GameData.Instance) { return false; };
-        if (DestroyableSingleton<TutorialManager>.InstanceExists) { return true; } // InstanceExists | Don't check Custom Criteria when in Tutorial
-        if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed) { return false; }
+        if (!GameData.Instance)
+		{
+			return false;
+		};
+        if (DestroyableSingleton<TutorialManager>.InstanceExists)
+		{
+			return true;
+		} // InstanceExists | Don't check Custom Criteria when in Tutorial
+        if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed ||
+			ExtremeRolesPlugin.ShipState.IsDisableWinCheck)
+		{
+			return false;
+		}
 
-        if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
-            ExtremeRolesPlugin.ShipState.IsDisableWinCheck) { return false; }
+		if (OnemanMeetingSystemManager.TryGetActiveOnemanMeeting(out var oneman))
+		{
+			isOnemanMeetingWin(oneman);
+			return false;
+		}
 
-        var statistics = PlayerStatistics.Create();
-
-
-        if (isImpostorSpecialWin()) { return false; }
         if (isSabotageWin()) { return false; }
-
         if (isTaskWin()) { return false; };
 
-        if (isSpecialRoleWin(statistics)) { return false; }
+		var statistics = PlayerStatistics.Create();
+
+		if (isSpecialRoleWin(statistics)) { return false; }
 
         if (isNeutralSpecialWin()) { return false; };
         if (isNeutralAliveWin(statistics)) { return false; };
@@ -92,16 +103,19 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         return false;
 
     }
-    private static bool isImpostorSpecialWin()
+    private static void isOnemanMeetingWin(IOnemanMeeting oneman)
     {
-        if (ExtremeRolesPlugin.ShipState.IsAssassinateMarin)
+		// 会議中に終了するのは困るので・・・
+		if (MeetingHud.Instance != null ||
+			ExileController.Instance != null)
+		{
+			return;
+		}
+
+		if (oneman.TryGetGameEndReason(out var reson))
         {
-            gameIsEnd((GameOverReason)RoleGameOverReason.AssassinationMarin);
-            return true;
+            gameIsEnd((GameOverReason)reson);
         }
-
-        return false;
-
     }
 
     private static bool isNeutralAliveWin(

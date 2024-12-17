@@ -7,12 +7,12 @@ using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using Submerged = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator;
 using SpawnPoint = ExtremeRoles.Compat.ModIntegrator.SubmergedIntegrator.SpawnSetting;
-
 
 #nullable enable
 
@@ -22,8 +22,13 @@ public static class DisplayPrespawnStepPatchesCustomPrespawnStepPatch
 {
 	public static bool Prefix(ref IEnumerator __result)
 	{
-		if (!CompatModManager.Instance.IsModMap<Submerged>() ||
-			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!(
+				CompatModManager.Instance.IsModMap<Submerged>() &&
+				OnemanMeetingSystemManager.IsActive
+			))
+		{
+			return true;
+		}
 		__result = assassinMeetingEnumerator();
 		return false;
 	}

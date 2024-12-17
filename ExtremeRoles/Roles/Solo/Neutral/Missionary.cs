@@ -1,24 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
+using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
-using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Performance;
-
-using BepInEx.Unity.IL2CPP.Utils;
-using System.Linq;
-using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
-
+using ExtremeRoles.Performance.Il2Cpp;
 
 
 #nullable enable
@@ -192,7 +190,7 @@ public sealed class Missionary :
 			CachedShipStatus.Instance == null ||
             GameData.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
-			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+			OnemanMeetingSystemManager.IsActive) { return; }
 
 		this.lamb.RemoveAll(
 			x =>

@@ -1,4 +1,5 @@
 ﻿using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using HarmonyLib;
@@ -15,7 +16,7 @@ public static class DeadBodyOnClickPatch
 		var (role, another) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IDeadBodyReportOverride>();
 
 		return
-			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger &&
+			!OnemanMeetingSystemManager.IsActive &&
 			(role != null ? role.CanReport : true) &&
 			(another != null ? another.CanReport : true);
 	}

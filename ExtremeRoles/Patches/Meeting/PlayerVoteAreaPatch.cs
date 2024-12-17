@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 using Il2CppActionFloat = Il2CppSystem.Action<float>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Patches.Meeting;
 
@@ -72,11 +73,10 @@ public static class PlayerVoteAreaSelectPatch
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
 			ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-		var state = ExtremeRolesPlugin.ShipState;
 		var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
 			IRoleMeetingButtonAbility>();
 
-		if (!state.AssassinMeetingTrigger)
+		if (!OnemanMeetingSystemManager.IsActive)
 		{
 			if (buttonRole != null && anotherButtonRole != null)
             {

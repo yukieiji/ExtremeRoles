@@ -7,19 +7,21 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Assassin = ExtremeRoles.Roles.Combination.Assassin;
-using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
+
 
 #nullable enable
 
@@ -60,7 +62,7 @@ public static class ExileControllerBeginePatch
     public static void Postfix(ExileController __instance)
     {
         if (!MeetingReporter.IsExist ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+			OnemanMeetingSystemManager.IsActive) { return; }
 
 		string reports = MeetingReporter.Instance.GetMeetingEndReport();
 

@@ -1,9 +1,9 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -19,7 +19,7 @@ public static class MeetingHudCoIntroPatch
 	{
 		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		if (!OnemanMeetingSystemManager.IsActive)
 		{
 			var player = PlayerControl.LocalPlayer;
 			var hookRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHook;

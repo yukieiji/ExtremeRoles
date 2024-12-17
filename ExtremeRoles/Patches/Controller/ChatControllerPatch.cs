@@ -6,11 +6,11 @@ using HarmonyLib;
 
 using AmongUs.Data;
 
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -21,7 +21,7 @@ public static class ChatControllerAddChatNotePatch
 		[HarmonyArgument(0)] NetworkedPlayerInfo srcPlayer,
 		[HarmonyArgument(1)] ChatNoteTypes noteType)
 	{
-		return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger || noteType != ChatNoteTypes.DidVote;
+		return !(OnemanMeetingSystemManager.IsActive || noteType is ChatNoteTypes.DidVote);
 	}
 }
 

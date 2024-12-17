@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
-
-using BepInEx.Unity.IL2CPP.Utils;
-using ExtremeRoles.Module.Ability;
 
 #nullable enable
 
@@ -199,7 +197,7 @@ public sealed class Yoko :
 
         if (!CachedShipStatus.Instance.enabled ||
             MeetingHud.Instance != null ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+            OnemanMeetingSystemManager.IsActive) { return; }
 
 		if (this.Button != null)
 		{

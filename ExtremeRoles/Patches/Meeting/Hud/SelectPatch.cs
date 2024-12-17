@@ -2,6 +2,7 @@
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -38,7 +39,7 @@ public static class MeetingHudSelectPatch
 			return false;
 		}
 
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system)) { return true; }
 
 		LogicOptionsNormal logicOptionsNormal = GameManager.Instance.LogicOptions.Cast<
 			LogicOptionsNormal>();
@@ -47,7 +48,7 @@ public static class MeetingHudSelectPatch
 		{
 			return __result;
 		}
-		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		if (PlayerControl.LocalPlayer.PlayerId != system.Caller)
 		{
 			return __result;
 		}

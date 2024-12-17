@@ -6,6 +6,10 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Roles;
 using System.Diagnostics.CodeAnalysis;
+using UnityEngine.Rendering.VirtualTexturing;
+using MonoMod.Core.Platforms;
+
+
 
 #nullable enable
 
@@ -15,6 +19,13 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 {
 	public byte Caller { get; private set; }
 	public byte ExiledTarget { get; set; }
+
+	public static bool IsActive
+		=> ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
+		system.meeting is not null;
+
+	private const ExtremeSystemType systemType = ExtremeSystemType.OnemanMeetingSystem;
+
 	private readonly Queue<(byte, Type)> meetingQueue = [];
 
 	private IOnemanMeeting? meeting;
@@ -26,7 +37,16 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public static OnemanMeetingSystemManager CreateOrGet()
 		=> ExtremeSystemTypeManager.Instance.CreateOrGet<OnemanMeetingSystemManager>(
-			ExtremeSystemType.OnemanMeetingSystem);
+			systemType);
+	public static bool TryGetActiveSystem([NotNullWhen(true)] out OnemanMeetingSystemManager? system)
+		=> ExtremeSystemTypeManager.Instance.TryGet(systemType, out system) && system.meeting is not null;
+	public static bool TryGetActiveOnemanMeeting([NotNullWhen(true)] out IOnemanMeeting? meeting)
+	{
+		meeting = null;
+		return
+			ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
+			system.TryGetOnemanMeeting(out meeting);
+	}
 
 	public void AddQueue(byte playerId, Type meetingType)
 	{

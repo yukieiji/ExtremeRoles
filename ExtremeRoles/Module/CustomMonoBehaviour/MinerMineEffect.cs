@@ -3,12 +3,11 @@
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
 
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.Solo.Neutral;
-
+using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -88,7 +87,7 @@ public sealed class MinerMineEffect : MonoBehaviour
 			GameData.Instance == null ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||
-			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+			OnemanMeetingSystemManager.IsActive)
 		{
 			this.audioSource.volume = 0.0f;
 			return;
