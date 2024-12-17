@@ -5,25 +5,27 @@ using Hazel;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Roles;
+using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.SystemType;
+namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
-public sealed class OnemanMeetingSystem : IExtremeSystemType
+public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 {
 	public byte Caller { get; private set; }
 	public byte ExiledTarget { get; set; }
-
 	private readonly Queue<(byte, Type)> meetingQueue = [];
+
+	private IOnemanMeeting? meeting;
 
 	public enum Type
 	{
 		Assassin
 	}
 
-	public static OnemanMeetingSystem CreateOrGet()
-		=> ExtremeSystemTypeManager.Instance.CreateOrGet<OnemanMeetingSystem>(
+	public static OnemanMeetingSystemManager CreateOrGet()
+		=> ExtremeSystemTypeManager.Instance.CreateOrGet<OnemanMeetingSystemManager>(
 			ExtremeSystemType.OnemanMeetingSystem);
 
 	public void AddQueue(byte playerId, Type meetingType)
@@ -47,6 +49,18 @@ public sealed class OnemanMeetingSystem : IExtremeSystemType
 		}
 	}
 
+	public bool TryGetOnemanMeeting([NotNullWhen(true)] out IOnemanMeeting? meeting)
+	{
+		meeting = this.meeting;
+		return meeting is not null;
+	}
+
+	public bool TryGetOnemanMeeting<T>([NotNullWhen(true)] out T? meeting) where T : class, IOnemanMeeting
+	{
+		meeting = this.meeting as T;
+		return meeting is not null;
+	}
+
 	public bool TryStartMeeting()
 	{
 		if (this.meetingQueue.Count == 0)
@@ -55,30 +69,31 @@ public sealed class OnemanMeetingSystem : IExtremeSystemType
 		}
 
 		var (target, type) = this.meetingQueue.Dequeue();
-		return false;
+		this.meeting = create(type);
+		return this.meeting is not null && this.meeting.TryStartMeeting(target);
 	}
 
-	public bool TryGetGameendReason(out RoleGameOverReason reason)
+	public bool TryGetGameEndReason(out RoleGameOverReason reason)
 	{
 		reason = RoleGameOverReason.UnKnown;
-		return false;
+		return this.meeting is not null && this.meeting.TryGetGameEndReason(out reason);
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
 		if (timing is not ResetTiming.ExiledEnd ||
-			TryGetGameendReason(out _))
+			TryGetGameEndReason(out _))
 		{
 			return;
 		}
-
-		// ストラテジー解除 => null代入
-
+		this.meeting = null;
 		this.Caller = byte.MaxValue;
 	}
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
-		throw new System.NotImplementedException();
 	}
+
+	private static IOnemanMeeting? create(Type type)
+		=> null;
 }
