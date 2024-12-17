@@ -14,7 +14,6 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
-using System.Diagnostics.CodeAnalysis;
 
 
 #nullable enable
