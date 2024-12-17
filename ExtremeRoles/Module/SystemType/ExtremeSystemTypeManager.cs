@@ -35,6 +35,7 @@ public enum ExtremeSystemType : byte
 	AdminDummySystem,
 	VitalDummySystem,
 	SecurityDummySystem,
+	OnemanMeetingSystem,
 
 	WispTorch,
 
@@ -59,6 +60,7 @@ public enum ResetTiming : byte
 	OnPlayer,
 	MeetingStart,
 	MeetingEnd,
+	ExiledEnd,
 }
 
 [Il2CppRegister([ typeof(ISystemType) ])]
