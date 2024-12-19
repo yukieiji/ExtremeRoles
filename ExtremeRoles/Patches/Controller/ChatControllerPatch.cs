@@ -12,6 +12,8 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 
+#nullable enable
+
 namespace ExtremeRoles.Patches.Controller;
 
 [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChatNote))]
@@ -55,16 +57,17 @@ public static class ChatControllerAddChatPatch
 			return true;
 		}
 
-		bool assassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+		bool isOneMan = OnemanMeetingSystemManager.TryGetActiveSystem(out var system);
 		bool islocalPlayerDead = localPlayerData.IsDead;
 		bool isSourcePlayerDead = sourcePlayerData.IsDead;
 
 		if ((
-				!assassinMeeting && (isSourcePlayerDead && !islocalPlayerDead)
+				!isOneMan && (isSourcePlayerDead && !islocalPlayerDead)
 			)
 			||
 			(
-				assassinMeeting && (!localPlayerRole.IsImpostor() || !sourcePlayerRole.IsImpostor())
+				!isOneMan && system!.IsValidChatPlayer(sourcePlayer)
+				// isOneMan && (!localPlayerRole.IsImpostor() || !sourcePlayerRole.IsImpostor())
 			))
 
 		{

@@ -107,6 +107,15 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 			this.meeting.TryGetGameEndReason(out reason);
 	}
 
+	public bool IsValidChatPlayer(PlayerControl source)
+	{
+		if (this.meeting is null)
+		{
+			return true;
+		}
+		return this.meeting.IsValidChatPlayer(source);
+	}
+
 	public void OverrideExileControllerBegin(ExileController controller)
 	{
 		controller.initData.confirmImpostor = true;

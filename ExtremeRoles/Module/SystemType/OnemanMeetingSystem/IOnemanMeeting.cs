@@ -15,4 +15,6 @@ public interface IOnemanMeeting
 
 	public VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget);
 	public ExiledInfo CreateExiledInfo();
+
+	public bool IsValidChatPlayer(PlayerControl chatSourcePlayer);
 }
