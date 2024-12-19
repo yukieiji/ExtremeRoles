@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Hazel;
 
@@ -65,7 +66,16 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public void Start(PlayerControl caller, Type meetingType, PlayerControl? reportTarget = null)
 	{
+		// 変なことにならないようにとりあえず作って、値入れてからセット
+		var meeting = create(meetingType);
+		if (meeting is null)
+		{
+			throw new ArgumentException($"Invalid meeting type: {meetingType}");
+		}
+		meeting.VoteTarget = byte.MaxValue;
+
 		this.Caller = caller.PlayerId;
+		this.meeting = meeting;
 
 		if (reportTarget == null || caller.PlayerId == reportTarget.PlayerId)
 		{
@@ -246,7 +256,11 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	}
 
 	private static IOnemanMeeting? create(Type type)
-		=> null;
+		=> type switch
+		{
+			Type.Assassin => new AssassinAssassinateTargetMeeting(),
+			_ => null,
+		};
 
 	private bool tryGetCallerVote(MeetingHud meeting, out byte voteFor)
 	{
