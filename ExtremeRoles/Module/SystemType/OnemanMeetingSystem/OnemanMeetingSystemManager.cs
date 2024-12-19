@@ -42,6 +42,10 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	public static OnemanMeetingSystemManager CreateOrGet()
 		=> ExtremeSystemTypeManager.Instance.CreateOrGet<OnemanMeetingSystemManager>(
 			systemType);
+
+	public static bool TryGetSystem([NotNullWhen(true)] out OnemanMeetingSystemManager? system)
+		=> ExtremeSystemTypeManager.Instance.TryGet(systemType, out system);
+
 	public static bool TryGetActiveSystem([NotNullWhen(true)] out OnemanMeetingSystemManager? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(systemType, out system) && system.meeting is not null;
 
@@ -107,13 +111,33 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 			this.meeting.TryGetGameEndReason(out reason);
 	}
 
-	public bool IsValidChatPlayer(PlayerControl source)
+	public bool CanChatPlayer(PlayerControl target)
 	{
 		if (this.meeting is null)
 		{
 			return true;
 		}
-		return this.meeting.IsValidChatPlayer(source);
+		return this.meeting.CanChatPlayer(target);
+	}
+
+	public bool IsValidShowChatPlayer(PlayerControl source)
+	{
+		if (this.meeting is null)
+		{
+			return true;
+		}
+		return this.meeting.IsValidShowChatPlayer(source);
+	}
+
+	public bool TryGetMeetingTitle(out string title)
+	{
+		if (this.meeting is null)
+		{
+			title = string.Empty;
+			return false;
+		}
+		title = this.meeting.GetTitle(this.Caller);
+		return true;
 	}
 
 	public void OverrideExileControllerBegin(ExileController controller)
@@ -129,7 +153,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 			return;
 		}
 
-		if (controller.Player && info.Value.IsShowPlayer)
+		if (controller.Player && !info.Value.IsShowPlayer)
 		{
 			controller.Player.gameObject.SetActive(false);
 		}

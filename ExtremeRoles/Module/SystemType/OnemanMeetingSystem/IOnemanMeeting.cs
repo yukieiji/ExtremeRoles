@@ -10,11 +10,14 @@ public interface IOnemanMeeting
 	public readonly record struct ExiledInfo(bool IsShowPlayer, string Text);
 
 	public byte VoteTarget { set; }
+
 	public bool TryGetGameEndReason(out RoleGameOverReason reason);
 	public bool TryStartMeeting(byte target);
+	public string GetTitle(byte caller);
 
 	public VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget);
 	public ExiledInfo CreateExiledInfo();
 
-	public bool IsValidChatPlayer(PlayerControl chatSourcePlayer);
+	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer);
+	public bool CanChatPlayer(PlayerControl target);
 }

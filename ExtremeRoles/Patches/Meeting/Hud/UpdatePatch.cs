@@ -7,6 +7,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
@@ -82,6 +83,24 @@ public static class MeetingHudUpdatePatch
 			MeetingReporter.Instance.ReportMeetingChat();
 		}
 
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
+			system.TryGetMeetingTitle(out string title))
+		{
+			__instance.TitleText.text = title;
+			__instance.SkipVoteButton.gameObject.SetActive(false);
+			var localPlayer = PlayerControl.LocalPlayer;
+
+			FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(
+				(
+					localPlayer != null
+					&&
+					(
+						localPlayer.PlayerId == system.Caller ||
+						system.CanChatPlayer(localPlayer)
+					)
+				));
+		}
+		/*
 		if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
 		{
 			__instance.TitleText.text = Tr.GetString(
@@ -98,6 +117,7 @@ public static class MeetingHudUpdatePatch
 				FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
 			}
 		}
+		*/
 		else
 		{
 			tryCreateHandRaiseButton();

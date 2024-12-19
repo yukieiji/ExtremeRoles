@@ -66,7 +66,7 @@ public static class ChatControllerAddChatPatch
 			)
 			||
 			(
-				!isOneMan && system!.IsValidChatPlayer(sourcePlayer)
+				!isOneMan && system!.IsValidShowChatPlayer(sourcePlayer)
 				// isOneMan && (!localPlayerRole.IsImpostor() || !sourcePlayerRole.IsImpostor())
 			))
 

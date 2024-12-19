@@ -429,11 +429,9 @@ public static class ExileControllerWrapUpPatch
 
         var state = ExtremeRolesPlugin.ShipState;
 
-        if (state.TryGetDeadAssasin(out byte playerId) &&
-			ExtremeRoleManager.TryGetSafeCastedRole(playerId, out Assassin? assasin))
+        if (OnemanMeetingSystemManager.TryGetSystem(out var system))
         {
-            assasin!.ExiledAction(
-				Helper.Player.GetPlayerControlById(playerId));
+			_ = system.TryStartMeeting();
         }
 
 
