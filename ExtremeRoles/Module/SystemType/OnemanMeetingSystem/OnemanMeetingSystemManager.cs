@@ -64,7 +64,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		this.meetingQueue.Enqueue((playerId, meetingType));
 	}
 
-	public void Start(PlayerControl caller, Type meetingType, PlayerControl? reportTarget = null)
+	public void Start(PlayerControl caller, Type meetingType, PlayerControl? reporter = null)
 	{
 		// 変なことにならないようにとりあえず作って、値入れてからセット
 		var meeting = create(meetingType);
@@ -77,7 +77,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		this.Caller = caller.PlayerId;
 		this.meeting = meeting;
 
-		if (reportTarget == null || caller.PlayerId == reportTarget.PlayerId)
+		if (reporter == null || caller.PlayerId == reporter.PlayerId)
 		{
 			// チェックポイント
 			OnemanMeetingCheckpoint.RpcCheckpoint(caller.PlayerId);
@@ -85,7 +85,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		else
 		{
 			// 発動者を通報で発動
-			reportTarget.ReportDeadBody(caller.Data);
+			reporter.ReportDeadBody(caller.Data);
 		}
 	}
 

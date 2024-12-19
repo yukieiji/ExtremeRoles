@@ -34,18 +34,6 @@ public sealed partial class ExtremeShipStatus
 		}
 	}
 
-	// アサシン周り
-	public void AddDeadAssasin(byte playerId)
-	{
-		this.deadedAssassin.Enqueue(playerId);
-	}
-
-	public void AssassinMeetingTriggerOn(byte assassinPlayerId)
-	{
-		this.meetingCallAssassin = assassinPlayerId;
-		this.assassinMeetingTrigger = true;
-	}
-
 	public void AssassinMeetingTriggerOff()
 	{
 		this.assassinMeetingTrigger = false;
