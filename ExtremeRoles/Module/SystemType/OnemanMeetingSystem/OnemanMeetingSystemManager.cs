@@ -6,9 +6,9 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.CheckPoint;
 using ExtremeRoles.Roles;
 using System.Diagnostics.CodeAnalysis;
-using UnityEngine.Rendering.VirtualTexturing;
-using MonoMod.Core.Platforms;
-
+using System.Text;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using ExtremeRoles.Patches.Controller;
 
 
 #nullable enable
@@ -17,8 +17,12 @@ namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 {
+	public enum Ops
+	{
+		SetTarget,
+	}
+
 	public byte Caller { get; private set; }
-	public byte ExiledTarget { get; set; }
 
 	public static bool IsActive
 		=> ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
@@ -40,12 +44,14 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 			systemType);
 	public static bool TryGetActiveSystem([NotNullWhen(true)] out OnemanMeetingSystemManager? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(systemType, out system) && system.meeting is not null;
-	public static bool TryGetActiveOnemanMeeting([NotNullWhen(true)] out IOnemanMeeting? meeting)
+
+	public static bool TryGetOnemanMeetingName([NotNullWhen(true)] out string name)
 	{
-		meeting = null;
-		return
+		bool result =
 			ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
-			system.TryGetOnemanMeeting(out meeting);
+			system.TryGetOnemanMeeting(out var meeting);
+		name = nameof(meeting);
+		return result;
 	}
 
 	public void AddQueue(byte playerId, Type meetingType)
@@ -96,7 +102,85 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	public bool TryGetGameEndReason(out RoleGameOverReason reason)
 	{
 		reason = RoleGameOverReason.UnKnown;
-		return this.meeting is not null && this.meeting.TryGetGameEndReason(out reason);
+		return
+			this.meeting is not null &&
+			this.meeting.TryGetGameEndReason(out reason);
+	}
+
+	public void OverrideExileControllerBegin(ExileController controller)
+	{
+		controller.initData.confirmImpostor = true;
+		controller.initData.voteTie = false;
+
+		ExileControllerBeginePatch.SetExiledTarget(controller);
+
+		var info = this.meeting?.CreateExiledInfo();
+		if (!info.HasValue)
+		{
+			return;
+		}
+
+		if (controller.Player && info.Value.IsShowPlayer)
+		{
+			controller.Player.gameObject.SetActive(false);
+		}
+		controller.completeString = info.Value.Text;
+		controller.ImpostorText.text = string.Empty;
+
+		controller.StartCoroutine(controller.Animate());
+	}
+
+	public void OverrideMeetingHudCheckForEndVoting(MeetingHud meeting)
+	{
+		if (this.meeting is null ||
+			!tryGetCallerVote(meeting, out byte voteFor))
+		{
+			return;
+		}
+
+		var voteResult = new Il2CppStructArray<MeetingHud.VoterState>(
+			meeting.playerStates.Length);
+
+		var logger = ExtremeRolesPlugin.Logger;
+		var builder = new StringBuilder();
+		builder
+			.AppendLine("---　Oneman Meeting Target Player Info ---")
+			.Append(" - PlayerId:").Append(voteFor).AppendLine();
+		logger.LogInfo(builder.ToString());
+
+		var result = this.meeting.CreateVoteResult(meeting, voteFor);
+
+		byte overridedVoteFor = result.VoteFor;
+
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			systemType, x => {
+				x.Write(overridedVoteFor);
+			});
+
+		for (int i = 0; i < meeting.playerStates.Length; i++)
+		{
+			PlayerVoteArea playerVoteArea = meeting.playerStates[i];
+			if (playerVoteArea.TargetPlayerId == this.Caller)
+			{
+				playerVoteArea.VotedFor = overridedVoteFor;
+			}
+			else
+			{
+				playerVoteArea.VotedFor = 254;
+			}
+			meeting.SetDirtyBit(1U);
+
+			voteResult[i] = new MeetingHud.VoterState
+			{
+				VoterId = playerVoteArea.TargetPlayerId,
+				VotedForId = playerVoteArea.VotedFor
+			};
+
+		}
+		meeting.RpcVotingComplete(
+			voteResult,
+			result.ExiledTarget,
+			true);
 	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
@@ -112,8 +196,40 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
+		var ops = (Ops)msgReader.ReadByte();
+		switch (ops)
+		{
+			case Ops.SetTarget:
+				byte target = msgReader.ReadByte();
+				if (this.meeting is null)
+				{
+					return;
+				}
+				this.meeting.VoteTarget = target;
+				break;
+			default:
+				break;
+		}
 	}
 
 	private static IOnemanMeeting? create(Type type)
 		=> null;
+
+	private bool tryGetCallerVote(MeetingHud meeting, out byte voteFor)
+	{
+		bool result = false;
+		voteFor = byte.MaxValue;
+
+		foreach (PlayerVoteArea playerVoteArea in meeting.playerStates)
+		{
+			if (playerVoteArea.TargetPlayerId == this.Caller)
+			{
+				result = playerVoteArea.DidVote;
+				voteFor = playerVoteArea.VotedFor;
+				break;
+			}
+		}
+
+		return result;
+	}
 }

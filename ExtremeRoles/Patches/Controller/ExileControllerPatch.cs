@@ -89,11 +89,10 @@ public static class ExileControllerBeginePatch
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-		var state = ExtremeRolesPlugin.ShipState;
 		__instance.initData = init;
-		if (state.AssassinMeetingTrigger)
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			assassinMeetingEndBegin(__instance, state);
+			system.OverrideExileControllerBegin(__instance);
 			return false;
 		}
 		else if (init.confirmImpostor)
@@ -112,7 +111,7 @@ public static class ExileControllerBeginePatch
 		instance.initData.confirmImpostor = true;
 		instance.initData.voteTie = false;
 
-		setExiledTarget(instance);
+		SetExiledTarget(instance);
         NetworkedPlayerInfo? player = GameData.Instance.GetPlayerById(
             state.IsMarinPlayerId);
 		if (player == null)
@@ -138,7 +137,7 @@ public static class ExileControllerBeginePatch
         ExileController instance,
         in ExileOption option)
     {
-        setExiledTarget(instance);
+        SetExiledTarget(instance);
         var transController = FastDestroyableSingleton<TranslationController>.Instance;
 
         var allPlayer = GameData.Instance.AllPlayers.ToArray();
@@ -353,7 +352,7 @@ public static class ExileControllerBeginePatch
         }
     }
 
-    private static void setExiledTarget(
+    public static void SetExiledTarget(
         ExileController instance)
     {
         if (instance.specialInputHandler != null)

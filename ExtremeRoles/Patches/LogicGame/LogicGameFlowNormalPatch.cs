@@ -40,9 +40,9 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 			return false;
 		}
 
-		if (OnemanMeetingSystemManager.TryGetActiveOnemanMeeting(out var oneman))
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			isOnemanMeetingWin(oneman);
+			isOnemanMeetingWin(system);
 			return false;
 		}
 
@@ -103,7 +103,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         return false;
 
     }
-    private static void isOnemanMeetingWin(IOnemanMeeting oneman)
+    private static void isOnemanMeetingWin(OnemanMeetingSystemManager meeting)
     {
 		// 会議中に終了するのは困るので・・・
 		if (MeetingHud.Instance != null ||
@@ -112,7 +112,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 			return;
 		}
 
-		if (oneman.TryGetGameEndReason(out var reson))
+		if (meeting.TryGetGameEndReason(out var reson))
         {
             gameIsEnd((GameOverReason)reson);
         }

@@ -9,6 +9,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -24,13 +25,13 @@ public static class MeetingHudCheckForEndVotingPatch
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			normalMeetingVote(__instance);
 		}
 		else
 		{
-			assassinMeetingVote(__instance);
+			system.OverrideMeetingHudCheckForEndVoting(__instance);
 		}
 
 		return false;

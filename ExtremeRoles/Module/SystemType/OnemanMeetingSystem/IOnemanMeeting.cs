@@ -1,16 +1,18 @@
 ﻿using ExtremeRoles.Roles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 public interface IOnemanMeeting
 {
-	public byte ExiledTarget { set; }
+	public readonly record struct VoteResult(byte VoteFor, NetworkedPlayerInfo? ExiledTarget);
+	public readonly record struct ExiledInfo(bool IsShowPlayer, string Text);
 
+	public byte VoteTarget { set; }
 	public bool TryGetGameEndReason(out RoleGameOverReason reason);
 	public bool TryStartMeeting(byte target);
+
+	public VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget);
+	public ExiledInfo CreateExiledInfo();
 }

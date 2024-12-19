@@ -27,7 +27,7 @@ public static class MeetingHudStartPatch
 	{
 
 		var state = ExtremeRolesPlugin.ShipState;
-		bool trigger = OnemanMeetingSystemManager.TryGetActiveOnemanMeeting(out var onemanMeeting);
+		bool trigger = OnemanMeetingSystemManager.TryGetOnemanMeetingName(out string name);
 		var builder = new StringBuilder();
 
 		builder
@@ -49,9 +49,9 @@ public static class MeetingHudStartPatch
 		builder
 			.Append("   - Oneman Meeting:")
 			.Append(trigger);
-		if (onemanMeeting != null)
+		if (trigger)
 		{
-			builder.Append($" {nameof(onemanMeeting)}");
+			builder.Append($" {name}");
 		}
 		else
 		{
