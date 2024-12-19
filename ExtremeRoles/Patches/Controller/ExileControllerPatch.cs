@@ -10,7 +10,6 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -20,7 +19,6 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
-using Assassin = ExtremeRoles.Roles.Combination.Assassin;
 
 
 #nullable enable
@@ -31,6 +29,20 @@ namespace ExtremeRoles.Patches.Controller;
 public static class ExileControllerBeginePatch
 {
     private const string TransKeyBase = "ExileText";
+
+	public static void SetExiledTarget(
+	   ExileController instance)
+	{
+		if (instance.specialInputHandler != null)
+		{
+			instance.specialInputHandler.disableVirtualCursor = true;
+		}
+		ExileController.Instance = instance;
+		ControllerManager.Instance.CloseAndResetAll();
+
+		instance.Text.gameObject.SetActive(false);
+		instance.Text.text = string.Empty;
+	}
 
 	/* JAJPs
 	[Info   :Extreme Roles] TransKey:ExileTextSP    Value:{0}がインポスターだった。
@@ -104,7 +116,7 @@ public static class ExileControllerBeginePatch
 		}
 		return true;
 	}
-
+	/*
     private static void assassinMeetingEndBegin(
         ExileController instance, ExtremeShipStatus state)
     {
@@ -132,7 +144,7 @@ public static class ExileControllerBeginePatch
 
         instance.StartCoroutine(instance.Animate());
     }
-
+	*/
     private static void confirmExile(
         ExileController instance,
         in ExileOption option)
@@ -350,20 +362,6 @@ public static class ExileControllerBeginePatch
 				Tr.GetString(
 					transKey, playerName);
         }
-    }
-
-    public static void SetExiledTarget(
-        ExileController instance)
-    {
-        if (instance.specialInputHandler != null)
-        {
-            instance.specialInputHandler.disableVirtualCursor = true;
-        }
-        ExileController.Instance = instance;
-        ControllerManager.Instance.CloseAndResetAll();
-
-        instance.Text.gameObject.SetActive(false);
-        instance.Text.text = string.Empty;
     }
 }
 

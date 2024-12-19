@@ -12,9 +12,7 @@ public sealed partial class ExtremeShipStatus
 {
 	public bool IsAssassinAssign => isAssignAssassin;
 	public bool AssassinMeetingTrigger => this.assassinMeetingTrigger;
-	public bool IsAssassinateMarin => this.isAssassinateMarin;
 	public byte ExiledAssassinId => this.meetingCallAssassin;
-	public byte IsMarinPlayerId => this.isTargetPlayerId;
 
 	private bool isAssassinateMarin = false;
 	private bool isAssignAssassin = false;

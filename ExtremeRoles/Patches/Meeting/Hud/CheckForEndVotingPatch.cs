@@ -4,8 +4,6 @@ using System.Linq;
 
 using HarmonyLib;
 
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAssign;
@@ -36,7 +34,7 @@ public static class MeetingHudCheckForEndVotingPatch
 
 		return false;
 	}
-
+	/*
 	private static void assassinMeetingVote(MeetingHud instance)
 	{
 		var (isVoteEnd, voteFor) = assassinVoteState(instance);
@@ -122,7 +120,7 @@ public static class MeetingHudCheckForEndVotingPatch
 
 		return (isVoteEnd, voteFor);
 	}
-
+	*/
 	private static void addVoteModRole(
 		IRoleVoteModifier? role, byte rolePlayerId,
 		ref SortedList<int, (IRoleVoteModifier, byte)> voteModifier)

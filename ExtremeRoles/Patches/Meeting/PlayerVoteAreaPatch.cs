@@ -76,7 +76,7 @@ public static class PlayerVoteAreaSelectPatch
 		var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
 			IRoleMeetingButtonAbility>();
 
-		if (!OnemanMeetingSystemManager.IsActive)
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			if (buttonRole != null && anotherButtonRole != null)
             {
@@ -96,7 +96,7 @@ public static class PlayerVoteAreaSelectPatch
 			}
 		}
 
-		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		if (PlayerControl.LocalPlayer.PlayerId != system.Caller)
 		{
 			return false;
 		}
