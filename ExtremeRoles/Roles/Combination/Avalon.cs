@@ -201,10 +201,6 @@ public sealed class Assassin : MultiAssignRoleBase
         ExtremeRolesPlugin.ShipState.AddDeadAssasin(playerId);
     }
 
-    public static void VoteFor(byte targetId)
-    {
-        ExtremeRolesPlugin.ShipState.SetAssassnateTarget(targetId);
-    }
     private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
 }
 

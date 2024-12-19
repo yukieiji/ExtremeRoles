@@ -40,17 +40,6 @@ public sealed partial class ExtremeShipStatus
 		this.deadedAssassin.Enqueue(playerId);
 	}
 
-	public bool TryGetDeadAssasin(out byte playerId)
-	{
-		playerId = default(byte);
-
-		if (this.deadedAssassin.Count == 0) { return false; }
-
-		playerId = this.deadedAssassin.Dequeue();
-
-		return true;
-	}
-
 	public void AssassinMeetingTriggerOn(byte assassinPlayerId)
 	{
 		this.meetingCallAssassin = assassinPlayerId;
@@ -60,13 +49,6 @@ public sealed partial class ExtremeShipStatus
 	public void AssassinMeetingTriggerOff()
 	{
 		this.assassinMeetingTrigger = false;
-	}
-
-	public void SetAssassnateTarget(byte targetPlayerId)
-	{
-		this.isAssassinateMarin = ExtremeRoleManager.GameRole[
-			targetPlayerId].Id == ExtremeRoleId.Marlin;
-		this.isTargetPlayerId = targetPlayerId;
 	}
 
 	public bool isMarinPlayer(byte playerId) => playerId == this.isTargetPlayerId;

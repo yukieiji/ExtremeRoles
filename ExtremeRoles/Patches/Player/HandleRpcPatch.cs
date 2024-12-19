@@ -242,10 +242,6 @@ public static class PlayerControlHandleRpcPatch
 				RPCOperator.SummonerRpcOps(
 					summonerPlayerId, summonTargetPlayerId, x, y, isDead);
 				break;
-			case RPCOperator.Command.AssasinVoteFor:
-				byte voteTargetId = reader.ReadByte();
-				RPCOperator.AssasinVoteFor(voteTargetId);
-				break;
 			case RPCOperator.Command.CarrierAbility:
 				byte carrierCarryOpCallPlayerId = reader.ReadByte();
 				float carrierPlayerPosX = reader.ReadSingle();
