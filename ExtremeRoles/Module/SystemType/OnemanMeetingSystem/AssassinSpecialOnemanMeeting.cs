@@ -72,7 +72,7 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 	public bool CanChatPlayer(PlayerControl target)
 		=> ExtremeRoleManager.TryGetRole(target.PlayerId, out var role) && role.IsImpostor();
 
-	public bool IsForgeBackgroundDead(MeetingHud _, byte caller)
+	public bool IsDefaultForegroundForDead(MeetingHud _, byte caller)
 		=> PlayerControl.LocalPlayer.PlayerId != caller;
 
 	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer)

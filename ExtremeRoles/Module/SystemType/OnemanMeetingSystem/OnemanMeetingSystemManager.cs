@@ -64,13 +64,13 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		this.meetingQueue.Enqueue((playerId, meetingType));
 	}
 
-	public bool IsForgeBackgroundDead(MeetingHud hud)
+	public bool IsDefaultForegroundForDead(MeetingHud hud)
 	{
 		if (this.meeting is null)
 		{
 			return false;
 		}
-		return this.meeting.IsForgeBackgroundDead(hud, this.Caller);
+		return this.meeting.IsDefaultForegroundForDead(hud, this.Caller);
 	}
 
 	public void Start(PlayerControl caller, Type meetingType, PlayerControl? reporter = null)

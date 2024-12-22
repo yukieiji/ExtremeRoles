@@ -13,7 +13,7 @@ public static class MeetingHudSetForegroundForDeadPatch
 		if (!(
 				FastDestroyableSingleton<HudManager>.Instance != null &&
 				OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
-				system.IsForgeBackgroundDead(__instance)
+				system.IsDefaultForegroundForDead(__instance)
 			))
 		{
 			return true;
