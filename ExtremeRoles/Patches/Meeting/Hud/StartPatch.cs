@@ -53,10 +53,6 @@ public static class MeetingHudStartPatch
 		{
 			builder.Append($" {name}");
 		}
-		else
-		{
-			builder.Append($" UNKOWN");
-		}
 		builder.AppendLine();
 
 		if (!trigger &&
