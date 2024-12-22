@@ -69,6 +69,15 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 	public string GetTitle(byte _)
 		=> Tr.GetString("whoIsMarine");
 
+	public VoteAreaState GetVoteAreaState(NetworkedPlayerInfo player)
+	{
+		if (player.Disconnected || player.IsDead)
+		{
+			return VoteAreaState.XMark;
+		}
+		return VoteAreaState.None;
+	}
+
 	public bool CanChatPlayer(PlayerControl target)
 		=> ExtremeRoleManager.TryGetRole(target.PlayerId, out var role) && role.IsImpostor();
 

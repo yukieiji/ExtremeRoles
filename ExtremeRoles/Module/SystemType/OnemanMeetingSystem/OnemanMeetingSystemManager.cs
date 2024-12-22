@@ -16,6 +16,14 @@ using ExtremeRoles.Patches.Controller;
 
 namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
+public enum VoteAreaState
+{
+	None,
+	XMark,
+	Overray,
+	XMarkOverray,
+}
+
 public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 {
 	public enum Ops
@@ -71,6 +79,15 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 			return false;
 		}
 		return this.meeting.IsDefaultForegroundForDead(hud, this.Caller);
+	}
+
+	public VoteAreaState GetVoteAreaState(NetworkedPlayerInfo player)
+	{
+		if (this.meeting is null)
+		{
+			return VoteAreaState.None;
+		}
+		return this.meeting.GetVoteAreaState(player);
 	}
 
 	public void Start(PlayerControl caller, Type meetingType, PlayerControl? reporter = null)

@@ -1,6 +1,8 @@
-﻿using ExtremeRoles.Performance;
-using ExtremeRoles.Roles;
-using HarmonyLib;
+﻿using HarmonyLib;
+using UnityEngine;
+
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -11,7 +13,10 @@ public static class MeetingHudUpdateButtonsPatch
 {
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		{
+			return true;
+		}
 
 		var meeting = FastDestroyableSingleton<HudManager>.Instance.MeetingPrefab;
 
@@ -27,15 +32,33 @@ public static class MeetingHudUpdateButtonsPatch
 			if (playerById == null)
 			{
 				playerVoteArea.SetDisabled();
+				continue;
 			}
-			else if (
-				(playerById.Disconnected || playerById.IsDead) &&
-				!playerVoteArea.XMark.gameObject.activeSelf)
+
+			switch (system.GetVoteAreaState(playerById))
 			{
-				playerVoteArea.XMark.gameObject.SetActive(true);
+				case VoteAreaState.XMark:
+					activeObject(playerVoteArea.XMark.gameObject);
+					break;
+				case VoteAreaState.Overray:
+					activeObject(playerVoteArea.Overlay.gameObject);
+					break;
+				case VoteAreaState.XMarkOverray:
+					activeObject(playerVoteArea.XMark.gameObject);
+					activeObject(playerVoteArea.Overlay.gameObject);
+					break;
+				default:
+					break;
 			}
 		}
 		return false;
 	}
-
+	private static void activeObject(GameObject obj)
+	{
+		if (obj.activeSelf)
+		{
+			return;
+		}
+		obj.SetActive(true);
+	}
 }

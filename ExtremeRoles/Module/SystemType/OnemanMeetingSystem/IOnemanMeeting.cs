@@ -18,6 +18,7 @@ public interface IOnemanMeeting
 	public VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget);
 	public ExiledInfo CreateExiledInfo();
 
+	public VoteAreaState GetVoteAreaState(NetworkedPlayerInfo player);
 	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer);
 	public bool IsDefaultForegroundForDead(MeetingHud hud, byte caller);
 	public bool CanChatPlayer(PlayerControl target);
