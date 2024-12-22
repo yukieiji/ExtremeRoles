@@ -13,6 +13,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.GameResult.StatusOverrider;
 
 namespace ExtremeRoles.Module.GameResult;
 
@@ -64,7 +65,8 @@ public sealed class WinnerBuilder : IDisposable
 
 		if (this.roleGameOverReason is RoleGameOverReason.UmbrerBiohazard)
 		{
-			// アンブレ用のやつを追加
+			FinalSummaryBuilder.AddStatusOverride<UmbrerBiohazardStatusOverrider>(
+				(GameOverReason)RoleGameOverReason.UmbrerBiohazard);
 		}
 
 		logger.LogInfo("---- Start: Creating Winner ----");

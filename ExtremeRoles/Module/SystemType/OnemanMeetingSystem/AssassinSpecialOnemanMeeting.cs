@@ -1,4 +1,6 @@
 ﻿
+using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Combination;
 
@@ -14,6 +16,13 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 			this.isSuccess = ExtremeRoleManager.TryGetRole(
 				value, out var targetRole) && targetRole.Id is ExtremeRoleId.Marlin;
 			this.voteTarget = value;
+
+			if (this.isSuccess)
+			{
+				FinalSummaryBuilder.AddStatusOverride(
+					(GameOverReason)RoleGameOverReason.AssassinationMarin,
+					new AssassinAssassinateStatusOverrider(this.voteTarget));
+			}
 		}
 	}
 

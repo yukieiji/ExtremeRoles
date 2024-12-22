@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.Module.GameResult.StatusOverrider;
 
 using DeadInfo = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.DeadInfo;
 using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus;
@@ -11,14 +12,6 @@ using PlayerSummary = ExtremeRoles.Module.CustomMonoBehaviour.FinalSummary.Playe
 
 namespace ExtremeRoles.Module.GameResult;
 
-public interface IStatusOverride
-{
-	public bool TryGetOverride(
-		SingleRoleBase role,
-		GhostRoleBase ghostRole,
-		NetworkedPlayerInfo player,
-		out PlayerStatus status);
-}
 
 public class FinalSummaryBuilder(
 	GameOverReason reason,
@@ -28,12 +21,17 @@ public class FinalSummaryBuilder(
 	private readonly GameOverReason reason = reason;
 	private readonly IReadOnlyDictionary<byte, DeadInfo> deadInfo = deadInfo;
 	private readonly IReadOnlyDictionary<byte, TaskInfo> taskInfo = taskInfo;
-	private readonly IReadOnlyDictionary<GameOverReason, IStatusOverride> statusOverride = staticStatusOverride;
-	private static Dictionary<GameOverReason, IStatusOverride> staticStatusOverride = new Dictionary<GameOverReason, IStatusOverride>();
+	private readonly IReadOnlyDictionary<GameOverReason, IStatusOverrider> statusOverride = staticStatusOverride;
+	private static Dictionary<GameOverReason, IStatusOverrider> staticStatusOverride = new Dictionary<GameOverReason, IStatusOverrider>();
 
-	public static void AddStatusOverride(GameOverReason reason, IStatusOverride @override)
+	public static void AddStatusOverride(GameOverReason reason, IStatusOverrider @override)
 	{
 		staticStatusOverride.Add(reason, @override);
+	}
+
+	public static void AddStatusOverride<T>(GameOverReason reason) where T : IStatusOverrider, new()
+	{
+		staticStatusOverride.Add(reason, new T());
 	}
 
 	public PlayerSummary? Create(
