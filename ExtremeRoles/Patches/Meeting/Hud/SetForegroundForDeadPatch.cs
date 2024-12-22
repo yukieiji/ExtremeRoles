@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 #nullable enable
 
@@ -10,22 +10,20 @@ public static class MeetingHudSetForegroundForDeadPatch
 {
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
-			FastDestroyableSingleton<HudManager>.Instance == null) { return true; }
-
-		if (PlayerControl.LocalPlayer.PlayerId !=
-			ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		if (!(
+				FastDestroyableSingleton<HudManager>.Instance != null &&
+				OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
+				system.IsForgeBackgroundDead(__instance)
+			))
 		{
 			return true;
 		}
-		else
-		{
-			var meeting = FastDestroyableSingleton<HudManager>.Instance.MeetingPrefab;
 
-			__instance.amDead = false;
-			__instance.Glass.sprite = meeting.Glass.sprite;
-			__instance.Glass.color = meeting.Glass.color;
-			return false;
-		}
+		var meeting = FastDestroyableSingleton<HudManager>.Instance.MeetingPrefab;
+
+		__instance.amDead = false;
+		__instance.Glass.sprite = meeting.Glass.sprite;
+		__instance.Glass.color = meeting.Glass.color;
+		return false;
 	}
 }

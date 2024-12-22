@@ -64,6 +64,15 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		this.meetingQueue.Enqueue((playerId, meetingType));
 	}
 
+	public bool IsForgeBackgroundDead(MeetingHud hud)
+	{
+		if (this.meeting is null)
+		{
+			return false;
+		}
+		return this.meeting.IsForgeBackgroundDead(hud, this.Caller);
+	}
+
 	public void Start(PlayerControl caller, Type meetingType, PlayerControl? reporter = null)
 	{
 		// 変なことにならないようにとりあえず作って、値入れてからセット

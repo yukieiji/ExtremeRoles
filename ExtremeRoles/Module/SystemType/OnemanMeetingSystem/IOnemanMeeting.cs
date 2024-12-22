@@ -19,5 +19,6 @@ public interface IOnemanMeeting
 	public ExiledInfo CreateExiledInfo();
 
 	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer);
+	public bool IsForgeBackgroundDead(MeetingHud hud, byte caller);
 	public bool CanChatPlayer(PlayerControl target);
 }

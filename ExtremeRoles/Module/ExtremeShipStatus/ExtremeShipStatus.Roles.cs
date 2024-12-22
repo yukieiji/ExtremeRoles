@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 
-using ExtremeRoles.Module.CustomMonoBehaviour;
-
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Solo.Crewmate;
 
 namespace ExtremeRoles.Module.ExtremeShipStatus;
 
@@ -12,11 +9,9 @@ public sealed partial class ExtremeShipStatus
 {
 	public bool IsAssassinAssign => isAssignAssassin;
 	public bool AssassinMeetingTrigger => this.assassinMeetingTrigger;
-	public byte ExiledAssassinId => this.meetingCallAssassin;
 
 	private bool isAssignAssassin = false;
 	private bool assassinMeetingTrigger = false;
-	private byte meetingCallAssassin = byte.MaxValue;
 
 	private Queue<byte> deadedAssassin = new Queue<byte>();
 
@@ -41,7 +36,6 @@ public sealed partial class ExtremeShipStatus
 	{
 		this.isAssignAssassin = false;
 		this.assassinMeetingTrigger = false;
-		this.meetingCallAssassin = byte.MaxValue;
 		this.deadedAssassin.Clear();
 	}
 }
