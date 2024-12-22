@@ -60,8 +60,8 @@ public class FinalSummaryBuilder(
 			finalStatus = PlayerStatus.Disconnected;
 		}
 
-		if (this.statusOverride.TryGetValue(this.reason, out var @value) &&
-			@value.TryGetOverride(role, ghostRole, playerInfo, out var status))
+		if (this.statusOverride.TryGetValue(this.reason, out var overrider) &&
+			overrider.TryGetOverride(role, ghostRole, playerInfo, out var status))
 		{
 			finalStatus = status;
 		}
