@@ -63,11 +63,14 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public static bool TryGetOnemanMeetingName([NotNullWhen(true)] out string name)
 	{
-		bool result =
-			ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
-			system.TryGetOnemanMeeting(out var meeting);
-		name = nameof(meeting);
-		return result;
+		if (ExtremeSystemTypeManager.Instance.TryGet<OnemanMeetingSystemManager>(systemType, out var system) &&
+			system.TryGetOnemanMeeting(out var meeting))
+		{
+			name = meeting.GetType().Name;
+			return true;
+		}
+		name = string.Empty;
+		return false;
 	}
 
 	public void AddQueue(byte playerId, Type meetingType)
