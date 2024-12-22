@@ -146,7 +146,8 @@ public sealed class Assassin : MultiAssignRoleBase
 
     public override bool IsBlockShowMeetingRoleInfo()
     {
-        if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+        if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
+			system.IsActiveMeeting<AssassinAssassinateTargetMeeting>())
         {
             return true;
         }

@@ -52,6 +52,9 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		=> ExtremeSystemTypeManager.Instance.CreateOrGet<OnemanMeetingSystemManager>(
 			systemType);
 
+	public bool IsActiveMeeting<T>() where T : IOnemanMeeting
+		=> this.meeting is T;
+
 	public static bool TryGetSystem([NotNullWhen(true)] out OnemanMeetingSystemManager? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(systemType, out system);
 
