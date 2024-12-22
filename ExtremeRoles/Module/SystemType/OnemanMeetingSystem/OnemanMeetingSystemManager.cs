@@ -221,14 +221,16 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		builder
 			.AppendLine("---　Oneman Meeting Target Player Info ---")
 			.Append(" - PlayerId:").Append(voteFor).AppendLine();
-		logger.LogInfo(builder.ToString());
 
 		var result = this.meeting.CreateVoteResult(meeting, voteFor);
 
 		byte overridedVoteFor = result.VoteFor;
+		builder.Append(" - OverridedTo :").Append(overridedVoteFor);
+		logger.LogInfo(builder.ToString());
 
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			systemType, x => {
+				x.Write((byte)Ops.SetTarget);
 				x.Write(overridedVoteFor);
 			});
 
