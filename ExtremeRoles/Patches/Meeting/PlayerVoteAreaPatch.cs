@@ -260,7 +260,10 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(1)] bool isDead,
 		[HarmonyArgument(2)] bool isGuardian = false)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!OnemanMeetingSystemManager.IsActive)
+		{
+			return true;
+		}
 
 		__instance.AmDead = false;
 		__instance.DidReport = didReport;
