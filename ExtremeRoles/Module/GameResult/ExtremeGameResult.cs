@@ -20,151 +20,24 @@ using Player = NetworkedPlayerInfo;
 
 #nullable enable
 
-namespace ExtremeRoles.Module;
+namespace ExtremeRoles.Module.GameResult;
 
-public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
+public sealed class ExtremeGameResultManager : NullableSingleton<ExtremeGameResultManager>
 {
-	public readonly record struct WinnerResult(
-		IReadOnlyList<CachedPlayerData> Winner,
-		IReadOnlyList<Player> PlusedWinner);
-
 	public readonly record struct TaskInfo(int CompletedTask, int TotalTask);
-	public class WinnerTempData
-	{
-		public TempWinData DefaultWinPlayer => EndGameResult.CachedWinners;
 
-		public IReadOnlyList<Player> PlusedWinner => this.plusWinPlayr;
-
-		private readonly Dictionary<byte, CachedPlayerData> allWinnerPool = new Dictionary<byte, CachedPlayerData>();
-		private readonly List<CachedPlayerData> finalWinPlayer = new List<CachedPlayerData>();
-		private readonly List<Player> plusWinPlayr = new List<Player>();
-
-		public void SetWinner()
-		{
-			this.finalWinPlayer.Clear();
-			this.plusWinPlayr.Clear();
-
-			this.finalWinPlayer.AddRange(this.DefaultWinPlayer.ToArray());
-			this.plusWinPlayr.AddRange(ExtremeRolesPlugin.ShipState.GetPlusWinner());
-		}
-
-		public override string ToString()
-		{
-			var builder = new StringBuilder();
-			builder
-				.AppendLine("---- Current Win data ----")
-				.AppendLine("--- Default Winner ---");
-
-			foreach (var winner in this.DefaultWinPlayer)
-			{
-				builder.AppendLine($"PlayerName:{winner.PlayerName}");
-			}
-
-			builder.AppendLine("--- Final Winner ---");
-			foreach (var winner in this.finalWinPlayer)
-			{
-				builder.AppendLine($"PlayerName:{winner.PlayerName}");
-			}
-
-			builder.AppendLine("--- Plus Winner ---");
-			foreach (var winner in this.plusWinPlayr)
-			{
-				builder.AppendLine($"PlayerName:{winner.PlayerName}");
-			}
-
-			return builder.ToString();
-		}
-
-		public WinnerResult Convert() => new WinnerResult(this.finalWinPlayer, plusWinPlayr);
-
-		public void AllClear()
-		{
-			this.finalWinPlayer.Clear();
-			this.plusWinPlayr.Clear();
-		}
-
-		public void Clear()
-		{
-			this.finalWinPlayer.Clear();
-		}
-
-		public void RemoveAll(Player playerInfo)
-		{
-			string playerName = playerInfo.PlayerName;
-			Logging.Debug($"Remove [{playerName}] from all winner pool");
-			this.plusWinPlayr.RemoveAll(x => x.PlayerName == playerName);
-			Remove(playerInfo);
-		}
-		public void Remove(CachedPlayerData player)
-		{
-			this.finalWinPlayer.RemoveAll(x => x.PlayerName == player.PlayerName);
-		}
-		public void Remove(Player player)
-		{
-			this.finalWinPlayer.RemoveAll(x => x.PlayerName == player.PlayerName);
-		}
-
-		public void AddWithPlus(Player playerInfo)
-		{
-			Logging.Debug($"Add [{playerInfo.PlayerName}] winner pool(With and Plus)");
-			this.Add(playerInfo);
-			this.AddPlusWinner(playerInfo);
-		}
-
-		public void Add(Player playerInfo)
-		{
-			if (!this.allWinnerPool.TryGetValue(playerInfo.PlayerId, out var wpd) ||
-				wpd == null)
-			{
-				ExtremeRolesPlugin.Logger.LogError($"Can't find {playerInfo.PlayerName} in winner pool");
-				return;
-			}
-			this.finalWinPlayer.Add(wpd);
-		}
-		public void AddPlusWinner(Player player)
-		{
-			this.plusWinPlayr.Add(player);
-		}
-
-		public void AddPool(Player playerInfo)
-		{
-			CachedPlayerData wpd = new CachedPlayerData(playerInfo);
-			this.allWinnerPool.Add(playerInfo.PlayerId, wpd);
-		}
-
-		public bool Contains(string name)
-		{
-			foreach (var win in this.finalWinPlayer)
-			{
-				if (win.PlayerName == name)
-				{
-					return true;
-				}
-			}
-
-			foreach (var win in this.plusWinPlayr)
-			{
-				if (win.PlayerName == name)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-
-	public WinnerResult Winner => this.winner.Convert();
+	public WinnerTempData.Result Winner => winner.Convert();
 	public List<FinalSummary.PlayerSummary> PlayerSummaries { get; init; }
 
 	private readonly int winGameControlId;
 	private readonly Dictionary<byte, TaskInfo> playerTaskInfo = new Dictionary<byte, TaskInfo>();
 	private WinnerTempData winner;
 
-	public ExtremeGameResult()
+	public ExtremeGameResultManager()
 	{
-		this.winner = new WinnerTempData();
-		this.PlayerSummaries = new List<FinalSummary.PlayerSummary>();
-		this.winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
+		winner = new WinnerTempData();
+		PlayerSummaries = new List<FinalSummary.PlayerSummary>();
+		winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
 	}
 
 	public void CreateTaskInfo()
@@ -172,23 +45,23 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 		foreach (Player playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
 			var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
-			this.playerTaskInfo.Add(
+			playerTaskInfo.Add(
 				playerInfo.PlayerId,
 				new TaskInfo(completedTask, totalTask));
-			this.winner.AddPool(playerInfo);
+			winner.AddPool(playerInfo);
 		}
 	}
 
 	public void CreateEndGameManagerResult()
 	{
-		this.PlayerSummaries.Clear();
-		this.winner.SetWinner();
+		PlayerSummaries.Clear();
+		winner.SetWinner();
 
 		var logger = ExtremeRolesPlugin.Logger;
 
 		int playerNum = GameData.Instance.AllPlayers.Count;
 
-		this.PlayerSummaries.Capacity = playerNum;
+		PlayerSummaries.Capacity = playerNum;
 
 		var neutralNoWinner = new List<Player>(playerNum);
 		var modRole = new List<(Player, IRoleWinPlayerModifier)>(playerNum);
@@ -219,19 +92,19 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
 				{
 					logger.LogInfo($"AddPlusWinner(Reason:Alive Win) : {playerName}");
-					this.winner.AddPlusWinner(playerInfo);
+					winner.AddPlusWinner(playerInfo);
 				}
 				else
 				{
 					neutralNoWinner.Add(playerInfo);
 				}
 				logger.LogInfo($"Remove Winner(Reason:Neutral) : {playerName}");
-				this.winner.Remove(playerInfo);
+				winner.Remove(playerInfo);
 			}
 			else if (role.Id == ExtremeRoleId.Xion)
 			{
 				logger.LogInfo($"Remove Winner(Reason:Xion Player) : {playerName}");
-				this.winner.Remove(playerInfo);
+				winner.Remove(playerInfo);
 			}
 
 			if (role is IRoleWinPlayerModifier winModRole)
@@ -254,17 +127,17 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 				ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
 			}
 
-			if (this.playerTaskInfo.TryGetValue(playerId, out var taskInfo))
+			if (playerTaskInfo.TryGetValue(playerId, out var taskInfo))
 			{
 				var summary =
 					FinalSummary.PlayerSummary.Create(
 						playerInfo, role, ghostRole, taskInfo);
 
-				this.PlayerSummaries.Add(summary);
+				PlayerSummaries.Add(summary);
 			}
 		}
 
-		foreach (Player winner in this.winner.PlusedWinner)
+		foreach (Player winner in winner.PlusedWinner)
 		{
 			logger.LogInfo($"Remove Winner(Dupe Player) : {winner.PlayerName}");
 			this.winner.Remove(winner);
@@ -275,17 +148,55 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 			addNeutralWinner();
 		}
 
-		switch (modReason)
+		replaceWinner(modReason, neutralNoWinner);
+
+		logger.LogInfo($"-- Start: merge plused win player --");
+		foreach (var player in winner.PlusedWinner)
+		{
+			logger.LogInfo($"marge to winner:{player.PlayerName}");
+			winner.Add(player);
+		}
+		logger.LogInfo($"-- End: merge plused win player --");
+
+		foreach (var (playerInfo, winCheckRole) in ghostWinCheckRole)
+		{
+			if (winCheckRole.IsWin(reason, playerInfo))
+			{
+				logger.LogInfo($"Add Winner(Reason:Ghost Role win) : {playerInfo.PlayerName}");
+				winner.AddWithPlus(playerInfo);
+			}
+		}
+
+		logger.LogInfo($"-- Start: modified win player --");
+		foreach (var (playerInfo, winModRole) in modRole)
+		{
+			winModRole.ModifiedWinPlayer(
+				playerInfo,
+				gameData.EndReason,
+				in winner);
+		}
+		logger.LogInfo($"-- End: modified win player --");
+
+
+		logger.LogInfo("--- End: Creating Winner ----");
+#if DEBUG
+		logger.LogInfo(winner.ToString());
+#endif
+	}
+
+	private void replaceWinner(RoleGameOverReason reason, in IReadOnlyList<Player> neutralNoWinner)
+	{
+		switch (reason)
 		{
 			case RoleGameOverReason.AssassinationMarin:
 			case RoleGameOverReason.TeroristoTeroWithShip:
-				this.winner.Clear();
+				winner.Clear();
 				foreach (Player player in GameData.Instance.AllPlayers.GetFastEnumerator())
 				{
 					if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
 						role.IsImpostor())
 					{
-						this.winner.Add(player);
+						winner.Add(player);
 					}
 				}
 				break;
@@ -370,45 +281,12 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 			default:
 				break;
 		}
-
-		logger.LogInfo($"-- Start: merge plused win player --");
-		foreach (var player in this.winner.PlusedWinner)
-		{
-			logger.LogInfo($"marge to winner:{player.PlayerName}");
-			this.winner.Add(player);
-		}
-		logger.LogInfo($"-- End: merge plused win player --");
-
-		foreach (var (playerInfo, winCheckRole) in ghostWinCheckRole)
-		{
-			if (winCheckRole.IsWin(reason, playerInfo))
-			{
-				logger.LogInfo($"Add Winner(Reason:Ghost Role win) : {playerInfo.PlayerName}");
-				this.winner.AddWithPlus(playerInfo);
-			}
-		}
-
-		logger.LogInfo($"-- Start: modified win player --");
-		foreach (var (playerInfo, winModRole) in modRole)
-		{
-			winModRole.ModifiedWinPlayer(
-				playerInfo,
-				gameData.EndReason,
-				in this.winner);
-		}
-		logger.LogInfo($"-- End: modified win player --");
-
-
-		logger.LogInfo("--- End: Creating Winner ----");
-#if DEBUG
-		logger.LogInfo(this.winner.ToString());
-#endif
 	}
 
 	private void replaceWinnerToSpecificRolePlayer(
 		ExtremeRoleId roleId)
 	{
-		this.winner.Clear();
+		winner.Clear();
 
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
@@ -435,7 +313,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 		in IReadOnlyList<Player> neutralNoWinner, params ExtremeRoleId[] roles)
 	{
 		ExtremeRolesPlugin.Logger.LogInfo("Clear Winner(Reason:Neautal Win)");
-		this.winner.Clear();
+		winner.Clear();
 
 		foreach (var player in neutralNoWinner)
 		{
@@ -499,7 +377,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 		if (winRole.Contains(item))
 		{
 			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
-			this.winner.Add(playerInfo);
+			winner.Add(playerInfo);
 			return true;
 		}
 		else if (role.IsNeutral() && role.IsWin)
@@ -507,7 +385,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 			winRole.Add(item);
 
 			logger.LogInfo($"Add Winner(Reason:Additional Neutral Win) : {playerInfo.PlayerName}");
-			this.winner.Add(playerInfo);
+			winner.Add(playerInfo);
 			return true;
 		}
 		return false;
@@ -515,11 +393,11 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 
 	private void addSpecificRoleToSameControlIdPlayer(in SingleRoleBase role, in Player player)
 	{
-		if (this.winGameControlId != int.MaxValue &&
-			this.winGameControlId == role.GameControlId)
+		if (winGameControlId != int.MaxValue &&
+			winGameControlId == role.GameControlId)
 		{
 			ExtremeRolesPlugin.Logger.LogInfo($"Add Winner(Reason:Win this role) : {player.PlayerName}");
-			this.winner.Add(player);
+			winner.Add(player);
 		}
 	}
 
@@ -528,7 +406,7 @@ public sealed class ExtremeGameResult : NullableSingleton<ExtremeGameResult>
 		if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 		{
 			ExtremeRolesPlugin.Logger.LogInfo($"Add Winner(Reason:Win this role) : {player.PlayerName}");
-			this.winner.Add(player);
+			winner.Add(player);
 		}
 		else
 		{

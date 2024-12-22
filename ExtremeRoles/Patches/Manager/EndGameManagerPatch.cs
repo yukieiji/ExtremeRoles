@@ -22,6 +22,7 @@ using ExtremeRoles.Performance;
 
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;
+using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -31,7 +32,7 @@ public static class EndGameManagerSetUpPatch
 {
     public static void Postfix(EndGameManager __instance)
     {
-		var gameResult = ExtremeGameResult.Instance;
+		var gameResult = ExtremeGameResultManager.Instance;
 		gameResult.CreateEndGameManagerResult();
 
 		var winner = gameResult.Winner;

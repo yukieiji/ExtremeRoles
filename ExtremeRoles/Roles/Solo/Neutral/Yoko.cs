@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module.GameResult;
 
 #nullable enable
 
@@ -74,7 +75,7 @@ public sealed class Yoko :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in ExtremeGameResult.WinnerTempData winner)
+		in WinnerTempData winner)
     {
         if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected) { return; }
 

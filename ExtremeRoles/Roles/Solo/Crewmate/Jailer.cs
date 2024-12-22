@@ -17,6 +17,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Module.GameResult;
 
 
 #nullable enable
@@ -670,7 +671,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
 		GameOverReason reason,
-		in ExtremeGameResult.WinnerTempData winner)
+		in WinnerTempData winner)
 	{
 		if (reason is
 				GameOverReason.HumansByTask or

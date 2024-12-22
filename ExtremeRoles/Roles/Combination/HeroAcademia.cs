@@ -20,6 +20,7 @@ using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
 
 #nullable enable
 
@@ -943,7 +944,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in ExtremeGameResult.WinnerTempData winner)
+		in WinnerTempData winner)
     {
         switch (this.condition)
         {

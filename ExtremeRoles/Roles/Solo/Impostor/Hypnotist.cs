@@ -13,7 +13,6 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Factory;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
@@ -32,6 +31,7 @@ using ExtremeRoles.Patches;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -1047,7 +1047,7 @@ public sealed class Doll :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in ExtremeGameResult.WinnerTempData winner)
+		in WinnerTempData winner)
     {
         switch (reason)
         {

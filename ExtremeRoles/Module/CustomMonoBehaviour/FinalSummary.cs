@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -249,21 +250,20 @@ public sealed class FinalSummary : MonoBehaviour
 		this.showText.text = this.summaryText[this.curPage];
 	}
 
-	public struct PlayerSummary
+	public readonly record struct PlayerSummary(
+		byte PlayerId,
+		string PlayerName,
+		SingleRoleBase Role,
+		GhostRoleBase GhostRole,
+		int CompletedTask,
+		int TotalTask,
+		PlayerStatus StatusInfo)
 	{
-		public byte PlayerId { get; init; }
-		public string PlayerName { get; init; }
-		public SingleRoleBase Role { get; init; }
-		public GhostRoleBase GhostRole { get; init; }
-		public int CompletedTask { get; init; }
-		public int TotalTask { get; init; }
-		public PlayerStatus StatusInfo { get; init; }
-
 		public static PlayerSummary Create(
 			NetworkedPlayerInfo playerInfo,
 			SingleRoleBase role,
 			GhostRoleBase ghostRole,
-			ExtremeGameResult.TaskInfo taskInfo)
+			ExtremeGameResultManager.TaskInfo taskInfo)
 		{
 			byte playerId = playerInfo.PlayerId;
 			// IsImpostor
@@ -319,19 +319,16 @@ public sealed class FinalSummary : MonoBehaviour
 			}
 
 			return
-				new PlayerSummary
-				{
-					PlayerId = playerId,
-					PlayerName = playerInfo.PlayerName,
-					Role = role,
-					GhostRole = ghostRole,
-					StatusInfo = finalStatus,
-					TotalTask = taskInfo.TotalTask,
-					CompletedTask =
-						reson == GameOverReason.HumansByTask &&
+				new PlayerSummary(
+					playerId,
+					playerInfo.PlayerName,
+					role,
+					ghostRole,
+					reson == GameOverReason.HumansByTask &&
 						role.IsCrewmate() ?
 							taskInfo.TotalTask : taskInfo.CompletedTask,
-				};
+					taskInfo.TotalTask,
+					finalStatus);
 		}
 	}
 }

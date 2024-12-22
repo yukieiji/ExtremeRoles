@@ -13,6 +13,7 @@ using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.GameResult;
 
 
 
@@ -225,7 +226,7 @@ public static class RPCOperator
         ExtremeRolesPlugin.ShipState.Initialize();
 
 
-		Module.ExtremeGameResult.TryDestroy();
+		ExtremeGameResultManager.TryDestroy();
 		Module.CustomVent.TryDestroy();
 
 		// チェックポイントリセット
