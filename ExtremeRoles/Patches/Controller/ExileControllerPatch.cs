@@ -117,35 +117,7 @@ public static class ExileControllerBeginePatch
 		}
 		return true;
 	}
-	/*
-    private static void assassinMeetingEndBegin(
-        ExileController instance, ExtremeShipStatus state)
-    {
-		instance.initData.confirmImpostor = true;
-		instance.initData.voteTie = false;
 
-		SetExiledTarget(instance);
-        NetworkedPlayerInfo? player = GameData.Instance.GetPlayerById(
-            state.IsMarinPlayerId);
-		if (player == null)
-		{
-			return;
-		}
-
-        string transKey = state.IsAssassinateMarin ?
-            "assassinateMarinSucsess" : "assassinateMarinFail";
-        string printStr = $"{player.PlayerName}{Tr.GetString(transKey)}";
-
-        if (instance.Player)
-        {
-            instance.Player.gameObject.SetActive(false);
-        }
-        instance.completeString = printStr;
-        instance.ImpostorText.text = string.Empty;
-
-        instance.StartCoroutine(instance.Animate());
-    }
-	*/
     private static void confirmExile(
         ExileController instance,
         in ExileOption option)

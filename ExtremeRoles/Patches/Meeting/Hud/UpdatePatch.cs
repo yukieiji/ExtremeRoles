@@ -100,24 +100,6 @@ public static class MeetingHudUpdatePatch
 					)
 				));
 		}
-		/*
-		if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-		{
-			__instance.TitleText.text = Tr.GetString(
-				"whoIsMarine");
-			__instance.SkipVoteButton.gameObject.SetActive(false);
-
-			if (PlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId ||
-				ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
-			{
-				FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
-			}
-			else
-			{
-				FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
-			}
-		}
-		*/
 		else
 		{
 			tryCreateHandRaiseButton();
