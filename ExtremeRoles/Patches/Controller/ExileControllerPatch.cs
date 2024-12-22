@@ -19,6 +19,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
+using ExtremeRoles.Module.SystemType;
 
 
 #nullable enable
@@ -463,9 +464,6 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPrefix()
     {
-        if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-        {
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTriggerOff();
-        }
+		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.ExiledEnd);
     }
 }
