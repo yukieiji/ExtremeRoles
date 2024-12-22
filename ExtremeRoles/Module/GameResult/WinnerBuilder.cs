@@ -18,13 +18,13 @@ namespace ExtremeRoles.Module.GameResult;
 
 #nullable enable
 
-public sealed class WinnerBuilder
+public sealed class WinnerBuilder : IDisposable
 {
 	private readonly WinnerTempData tempData;
 	private readonly List<Player> neutralNoWinner = [];
 	private readonly List<(Player, IRoleWinPlayerModifier)> modRole = [];
 	private readonly List<(Player, IGhostRoleWinable)> ghostWinCheckRole = [];
-	private readonly IReadOnlyDictionary<byte, ExtremeGameResultManager.TaskInfo> taskInfo;
+	private readonly FinalSummaryBuilder finalSummaryBuilder;
 	private readonly int winGameControlId;
 
 	private readonly GameOverReason gameOverReason;
@@ -37,16 +37,21 @@ public sealed class WinnerBuilder
 	{
 		this.winGameControlId = winGameControlId;
 		this.tempData = tempData;
-		this.taskInfo = taskInfo;
+
+		var state = ExtremeRolesPlugin.ShipState;
+		this.gameOverReason = state.EndReason;
+		this.roleGameOverReason = (RoleGameOverReason)this.gameOverReason;
+
+		this.finalSummaryBuilder = new FinalSummaryBuilder(
+			this.gameOverReason,
+			state.DeadPlayerInfo,
+			taskInfo);
 
 		int playerNum = GameData.Instance.AllPlayers.Count;
 
 		this.neutralNoWinner.Capacity = playerNum;
 		this.modRole.Capacity = playerNum;
 		this.ghostWinCheckRole.Capacity = playerNum;
-
-		this.gameOverReason = ExtremeRolesPlugin.ShipState.EndReason;
-		this.roleGameOverReason = (RoleGameOverReason)this.gameOverReason;
 	}
 
 	public IReadOnlyList<FinalSummary.PlayerSummary> Build()
@@ -56,6 +61,11 @@ public sealed class WinnerBuilder
 		string resonStr = Enum.IsDefined(this.roleGameOverReason) ?
 			this.roleGameOverReason.ToString() : this.gameOverReason.ToString();
 		logger.LogInfo($"GameEnd : {resonStr}");
+
+		if (this.roleGameOverReason is RoleGameOverReason.UmbrerBiohazard)
+		{
+			// アンブレ用のやつを追加
+		}
 
 		logger.LogInfo("---- Start: Creating Winner ----");
 
@@ -130,13 +140,11 @@ public sealed class WinnerBuilder
 				this.ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
 			}
 
-			if (this.taskInfo.TryGetValue(playerId, out var taskInfo))
+			var summary = this.finalSummaryBuilder.Create(
+				playerInfo, role, ghostRole);
+			if (summary.HasValue)
 			{
-				var summary =
-					FinalSummary.PlayerSummary.Create(
-						playerInfo, role, ghostRole, taskInfo);
-
-				summaries.Add(summary);
+				summaries.Add(summary.Value);
 			}
 		}
 
@@ -429,5 +437,10 @@ public sealed class WinnerBuilder
 				in this.tempData);
 		}
 		logger.LogInfo($"-- End: modified win player --");
+	}
+
+	public void Dispose()
+	{
+		this.finalSummaryBuilder.Dispose();
 	}
 }

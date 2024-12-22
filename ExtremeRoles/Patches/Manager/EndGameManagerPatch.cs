@@ -147,7 +147,7 @@ public static class EndGameManagerSetUpPatch
 
     private static void setRoleSummary(
 		EndGameManager manager,
-		List<FinalSummary.PlayerSummary> summaries)
+		IReadOnlyList<FinalSummary.PlayerSummary> summaries)
     {
         if (!ClientOption.Instance.ShowRoleSummary.Value) { return; }
 

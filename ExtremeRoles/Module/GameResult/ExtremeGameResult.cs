@@ -44,7 +44,7 @@ public sealed class ExtremeGameResultManager : NullableSingleton<ExtremeGameResu
 	{
 		this.winner.SetWinner();
 
-		var builder = new WinnerBuilder(this.winGameControlId, this.winner, this.playerTaskInfo);
+		using var builder = new WinnerBuilder(this.winGameControlId, this.winner, this.playerTaskInfo);
 		this.PlayerSummaries = builder.Build();
 	}
 }

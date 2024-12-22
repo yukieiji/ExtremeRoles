@@ -88,7 +88,7 @@ public sealed class FinalSummary : MonoBehaviour
 	}
 
 	[HideFromIl2Cpp]
-	public void Create(List<PlayerSummary> summaries)
+	public void Create(IR<PlayerSummary> summaries)
 	{
 		List<Color> tagColor = new List<Color>();
 
