@@ -39,8 +39,6 @@ public sealed partial class ExtremeShipStatus
 		this.assassinMeetingTrigger = false;
 	}
 
-	public bool isMarinPlayer(byte playerId) => playerId == this.isTargetPlayerId;
-
 	private void resetGlobalAction()
 	{
 		this.isAssassinateMarin = false;
