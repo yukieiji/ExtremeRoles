@@ -88,7 +88,7 @@ public sealed class FinalSummary : MonoBehaviour
 	}
 
 	[HideFromIl2Cpp]
-	public void Create(IR<PlayerSummary> summaries)
+	public void Create(IReadOnlyList<PlayerSummary> summaries)
 	{
 		List<Color> tagColor = new List<Color>();
 
@@ -103,9 +103,9 @@ public sealed class FinalSummary : MonoBehaviour
 		string[] randomTag = tags.OrderBy(
 			item => RandomGenerator.Instance.Next()).ToArray();
 
-		sortedSummary(summaries);
+		var sorted = sortedSummary(summaries);
 
-		foreach (PlayerSummary summary in summaries)
+		foreach (PlayerSummary summary in sorted)
 		{
 			string taskInfo = summary.TotalTask > 0 ?
 				$"<color=#FAD934FF>{summary.CompletedTask}/{summary.TotalTask}</color>" : "";
@@ -189,9 +189,10 @@ public sealed class FinalSummary : MonoBehaviour
 	}
 
 	[HideFromIl2Cpp]
-	private void sortedSummary(List<PlayerSummary> summaries)
+	private PlayerSummary[] sortedSummary(IReadOnlyList<PlayerSummary> summaries)
 	{
-		summaries.Sort((x, y) =>
+		var arr = summaries.ToArray();
+		Array.Sort(arr, (x, y) =>
 		{
 			if (x.StatusInfo != y.StatusInfo)
 			{
@@ -214,6 +215,7 @@ public sealed class FinalSummary : MonoBehaviour
 			return x.PlayerName.CompareTo(y.PlayerName);
 
 		});
+		return arr;
 	}
 
 	[HideFromIl2Cpp]
