@@ -22,15 +22,35 @@ public sealed class MonikaTrashSystem : IExtremeSystemType
 
 	}
 
-	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
-	{
-
-	}
+	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
+	{ }
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 
 	}
+
+	public bool CanChatBetween(NetworkedPlayerInfo source, NetworkedPlayerInfo local)
+		=>
+		(
+			source.IsDead && local.IsDead //死んでる人to死んでる人
+		)
+		||
+		(
+			this.InvalidPlayer(source) && local.IsDead //ゴミ箱to死んでる人
+		)
+		||
+		(
+			this.InvalidPlayer(source) && this.InvalidPlayer(local) //ゴミ箱toゴミ箱
+		)
+		||
+		(
+			!source.IsDead && this.InvalidPlayer(local) //生存者toゴミ箱
+		)
+		||
+		(
+			!source.IsDead && !local.IsDead //生存者to生存者
+		);
 
 	public void InitializeButton(PlayerVoteArea[] buttons)
 	{
@@ -52,6 +72,12 @@ public sealed class MonikaTrashSystem : IExtremeSystemType
 
 	public bool InvalidPlayer(PlayerVoteArea pva)
 		=> InvalidPlayer(pva.TargetPlayerId);
+
+	public bool InvalidPlayer(PlayerControl player)
+		=> this.trash.Contains(player.PlayerId);
+
+	public bool InvalidPlayer(NetworkedPlayerInfo player)
+		=> this.trash.Contains(player.PlayerId);
 
 	public int GetVoteAreaOrder(PlayerVoteArea pva)
 		=> InvalidPlayer(pva) ? 0 : 10;

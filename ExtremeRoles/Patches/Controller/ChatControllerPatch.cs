@@ -11,6 +11,7 @@ using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 
@@ -36,7 +37,10 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(1)] string chatText,
 		[HarmonyArgument(2)] bool censor)
     {
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
 
 		if (sourcePlayer == null ||
 			sourcePlayer.Data == null ||
@@ -58,6 +62,7 @@ public static class ChatControllerAddChatPatch
 		}
 
 		bool isOneMan = OnemanMeetingSystemManager.TryGetActiveSystem(out var system);
+		bool isMonikaOn = MonikaTrashSystem.TryGet(out var monikaSystem);
 		bool islocalPlayerDead = localPlayerData.IsDead;
 		bool isSourcePlayerDead = sourcePlayerData.IsDead;
 
@@ -67,7 +72,10 @@ public static class ChatControllerAddChatPatch
 			||
 			(
 				!isOneMan && system!.IsValidShowChatPlayer(sourcePlayer)
-				// isOneMan && (!localPlayerRole.IsImpostor() || !sourcePlayerRole.IsImpostor())
+			)
+			||
+			(
+				!isOneMan && isMonikaOn && !monikaSystem.CanChatBetween(sourcePlayerData, localPlayerData)
 			))
 
 		{
