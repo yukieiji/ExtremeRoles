@@ -52,7 +52,8 @@ public enum ExtremeSystemType : byte
 
 	YokoYashiro,
 	TuckerShadow,
-	IronMateGuard
+	IronMateGuard,
+	MonikaTrashSystem,
 }
 
 public enum ResetTiming : byte

@@ -34,6 +34,9 @@ public sealed class PlayerShowSystem : IExtremeSystemType
 		return system.defaultScale.TryGetValue(playerId, out scale);
 	}
 
+	public bool IsHide(PlayerControl target)
+		=> target.transform.localScale.x == xScale;
+
 	public void Hide(bool isIgnoreLocal=true)
 	{
 		foreach (var player in PlayerCache.AllPlayerControl)
