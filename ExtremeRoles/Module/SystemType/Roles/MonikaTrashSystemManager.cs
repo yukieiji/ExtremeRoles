@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using Hazel;
 
 #nullable enable
@@ -21,6 +23,11 @@ public sealed class MonikaTrashSystem : IExtremeSystemType
 	{
 
 	}
+
+	public static bool InvalidTarget(SingleRoleBase targetRole, byte sourcePlayerId)
+		=> targetRole.Id is ExtremeRoleId.Monika &&
+			TryGet(out var system) &&
+			system.InvalidPlayer(sourcePlayerId);
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{ }

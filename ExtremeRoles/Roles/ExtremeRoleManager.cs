@@ -126,6 +126,7 @@ public enum ExtremeRoleId : int
 	Tucker,
 	Chimera,
 	IronMate,
+	Monika,
 
 	Xion,
 }

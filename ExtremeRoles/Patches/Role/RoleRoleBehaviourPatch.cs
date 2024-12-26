@@ -5,6 +5,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Role
 {
@@ -37,21 +38,34 @@ namespace ExtremeRoles.Patches.Role
         {
             if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-            var gameRoles = ExtremeRoleManager.GameRole;
-            var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
+			byte instancePlayerId = __instance.Player.PlayerId;
 
-            if (!role.CanKill()) { return true; }
+            if (!(
+					ExtremeRoleManager.TryGetRole(instancePlayerId, out var role) &&
+					role.CanKill()
+				))
+			{
+				return true;
+			}
+
+			byte targetPlayerId = target.PlayerId;
+
 
             __result =
                 target != null &&
                 !target.Disconnected &&
                 !target.IsDead &&
-                target.PlayerId !=  __instance.Player.PlayerId &&
+				targetPlayerId != instancePlayerId &&
                 target.Role != null &&
                 target.Object != null &&
-                (!target.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer) &&
+                (
+					!target.Object.inVent ||
+					ExtremeGameModeManager.Instance.ShipOption.Vent.CanKillVentInPlayer
+				) &&
 				!target.Object.inMovingPlat &&
-                !role.IsSameTeam(gameRoles[target.PlayerId]);
+				ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
+				!role.IsSameTeam(targetRole) &&
+				!MonikaTrashSystem.InvalidTarget(targetRole, instancePlayerId);
 
             return false;
         }
