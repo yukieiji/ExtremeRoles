@@ -8,6 +8,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -105,7 +106,14 @@ public static class MeetingHudCheckForEndVotingPatch
 
 	private static void normalMeetingVote(MeetingHud instance)
 	{
-		if (!instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote)) { return; }
+		var trashMeeting = MonikaTrashSystem.TryGet(out var monikaSystem) ? monikaSystem : null;
+		if (!instance.playerStates.All(
+				(PlayerVoteArea ps) =>
+					ps.AmDead || ps.DidVote ||
+					(trashMeeting is not null && trashMeeting.InvalidPlayer(ps))))
+		{
+			return;
+		}
 
 		var logger = ExtremeRolesPlugin.Logger;
 		logger.LogInfo(" ----- Voteing is End ----- ");

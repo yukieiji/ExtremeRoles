@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API.Interface;
 using Il2CppActionFloat = Il2CppSystem.Action<float>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting;
 
@@ -71,13 +72,22 @@ public static class PlayerVoteAreaSelectPatch
 	public static bool Prefix(PlayerVoteArea __instance)
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			ExtremeRoleManager.GameRole.Count == 0) { return true; }
+			ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return true;
+		}
 
-		var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
-			IRoleMeetingButtonAbility>();
+		if (MonikaTrashSystem.TryGet(out var monika) &&
+			monika.Meeting.InvalidPlayer(__instance))
+		{
+			return false;
+		}
 
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
+			var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
+				IRoleMeetingButtonAbility>();
+
 			if (buttonRole != null && anotherButtonRole != null)
             {
 				return true; // TODO:Can use both role ability
@@ -95,8 +105,7 @@ public static class PlayerVoteAreaSelectPatch
 				return true;
 			}
 		}
-
-		if (PlayerControl.LocalPlayer.PlayerId != system.Caller)
+		else if (PlayerControl.LocalPlayer.PlayerId != system.Caller)
 		{
 			return false;
 		}

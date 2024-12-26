@@ -3,11 +3,11 @@ using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType.Roles;
 
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
@@ -20,22 +20,53 @@ public static class MeetingHudUpdatePatch
 	public static void Postfix(MeetingHud __instance)
 	{
 
+		infoOverlayBlockUpdate(__instance);
+		changeNamePlate(__instance);
+
+		if (__instance.state == MeetingHud.VoteStates.Animating)
+		{
+			return;
+		}
+
+		fixMeetingDeadBug( __instance );
+		disableSkip(__instance);
+		meetingReportUpdate();
+		updateButtons(__instance);
+	}
+
+	private static void infoOverlayBlockUpdate(MeetingHud __instance)
+	{
 		if (InfoOverlay.Instance.IsBlock &&
 			__instance.state != MeetingHud.VoteStates.Animating)
 		{
 			InfoOverlay.Instance.IsBlock = false;
 		}
-		if (NamePlateHelper.NameplateChange)
+	}
+
+	private static void changeNamePlate(MeetingHud hud)
+	{
+		if (!NamePlateHelper.NameplateChange)
 		{
-			foreach (var pva in __instance.playerStates)
-			{
-				NamePlateHelper.UpdateNameplate(pva);
-			}
-			NamePlateHelper.NameplateChange = false;
+			return;
 		}
+		foreach (var pva in hud.playerStates)
+		{
+			NamePlateHelper.UpdateNameplate(pva);
+		}
+		NamePlateHelper.NameplateChange = false;
+	}
 
-		if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
+	private static void disableSkip(MeetingHud hud)
+	{
+		// Deactivate skip Button if skipping on emergency meetings is disabled
+		if (ExtremeGameModeManager.Instance.ShipOption.Meeting.IsBlockSkipInMeeting)
+		{
+			hud.SkipVoteButton.gameObject.SetActive(false);
+		}
+	}
 
+	private static void fixMeetingDeadBug(MeetingHud hud)
+	{
 		// From TOR
 		// This fixes a bug with the original game where pressing the button and a kill happens simultaneously
 		// results in bodies sometimes being created *after* the meeting starts, marking them as dead and
@@ -45,20 +76,23 @@ public static class MeetingHudUpdatePatch
 		{
 			if (b == null) { continue; }
 
-			foreach (PlayerVoteArea pva in __instance.playerStates)
+			foreach (var pva in hud.playerStates)
 			{
-				if (pva == null || pva.AmDead) { continue; }
+				if (pva == null || pva.AmDead)
+				{
+					continue;
+				}
 
 				if (pva.DidVote && pva.VotedFor == b.ParentId)
 				{
 					pva.UnsetVote();
 					if (PlayerControl.LocalPlayer.PlayerId == pva.TargetPlayerId)
 					{
-						__instance.ClearVote();
+						hud.ClearVote();
 					}
 					if (AmongUsClient.Instance.AmHost)
 					{
-						__instance.SetDirtyBit(1U);
+						hud.SetDirtyBit(1U);
 					}
 				}
 
@@ -70,24 +104,24 @@ public static class MeetingHudUpdatePatch
 			}
 			Object.Destroy(b.gameObject);
 		}
+	}
 
-		// Deactivate skip Button if skipping on emergency meetings is disabled
-		if (ExtremeGameModeManager.Instance.ShipOption.Meeting.IsBlockSkipInMeeting)
-		{
-			__instance.SkipVoteButton.gameObject.SetActive(false);
-		}
-
+	private static void meetingReportUpdate()
+	{
 		if (MeetingReporter.IsExist &&
 			MeetingReporter.Instance.HasChatReport)
 		{
 			MeetingReporter.Instance.ReportMeetingChat();
 		}
+	}
 
+	private static void updateButtons(MeetingHud hud)
+	{
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 			system.TryGetMeetingTitle(out string title))
 		{
-			__instance.TitleText.text = title;
-			__instance.SkipVoteButton.gameObject.SetActive(false);
+			hud.TitleText.text = title;
+			hud.SkipVoteButton.gameObject.SetActive(false);
 			var localPlayer = PlayerControl.LocalPlayer;
 
 			FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(
@@ -99,11 +133,24 @@ public static class MeetingHudUpdatePatch
 						system.CanChatPlayer(localPlayer)
 					)
 				));
+			return;
 		}
-		else
+		monikaTrashLayerSystemUpdate(hud);
+	}
+
+	private static void monikaTrashLayerSystemUpdate(MeetingHud hud)
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!(
+				localPlayer != null &&
+				MonikaTrashSystem.TryGet(out var system) &&
+				system.Meeting.InvalidPlayer(localPlayer.PlayerId)
+			))
 		{
 			tryCreateHandRaiseButton();
+			return;
 		}
+		hud.SkipVoteButton.gameObject.SetActive(false);
 	}
 
 	private static void tryCreateHandRaiseButton()

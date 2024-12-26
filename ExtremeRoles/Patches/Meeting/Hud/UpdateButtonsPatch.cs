@@ -3,6 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -15,6 +16,7 @@ public static class MeetingHudUpdateButtonsPatch
 	{
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
+			monikaSystemHudUpdate(__instance);
 			return true;
 		}
 
@@ -24,28 +26,27 @@ public static class MeetingHudUpdateButtonsPatch
 		__instance.Glass.sprite = meeting.Glass.sprite;
 		__instance.Glass.color = meeting.Glass.color;
 
-		for (int i = 0; i < __instance.playerStates.Length; i++)
+		foreach (var pva in __instance.playerStates)
 		{
-			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
 			NetworkedPlayerInfo playerById = GameData.Instance.GetPlayerById(
-				playerVoteArea.TargetPlayerId);
+				pva.TargetPlayerId);
 			if (playerById == null)
 			{
-				playerVoteArea.SetDisabled();
+				pva.SetDisabled();
 				continue;
 			}
 
 			switch (system.GetVoteAreaState(playerById))
 			{
 				case VoteAreaState.XMark:
-					activeObject(playerVoteArea.XMark.gameObject);
+					activeObject(pva.XMark.gameObject);
 					break;
 				case VoteAreaState.Overray:
-					activeObject(playerVoteArea.Overlay.gameObject);
+					activeObject(pva.Overlay.gameObject);
 					break;
 				case VoteAreaState.XMarkOverray:
-					activeObject(playerVoteArea.XMark.gameObject);
-					activeObject(playerVoteArea.Overlay.gameObject);
+					activeObject(pva.XMark.gameObject);
+					activeObject(pva.Overlay.gameObject);
 					break;
 				default:
 					break;
@@ -53,6 +54,18 @@ public static class MeetingHudUpdateButtonsPatch
 		}
 		return false;
 	}
+
+	private static void monikaSystemHudUpdate(MeetingHud hud)
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (MonikaTrashSystem.TryGet(out var monika) &&
+			localPlayer != null &&
+			monika.Meeting.InvalidPlayer(localPlayer.PlayerId))
+		{
+
+		}
+	}
+
 	private static void activeObject(GameObject obj)
 	{
 		if (obj.activeSelf)
