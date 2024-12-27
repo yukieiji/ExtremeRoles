@@ -199,6 +199,8 @@ public enum RoleGameOverReason
 	ArtistShipToArt,
 
 	TuckerShipIsExperimentStation,
+	MonikaThisGameIsMine,
+	MonikaIamTheOnlyOne,
 
 	UnKnown = 100,
 }
@@ -216,7 +218,8 @@ public enum NeutralSeparateTeam
     Traitor,
     Queen,
     Kids,
-	Tucker
+	Tucker,
+	Monika
 }
 
 public static class ExtremeRoleManager
@@ -234,6 +237,7 @@ public static class ExtremeRoleManager
 
 		ExtremeRoleId.Yandere,
 		ExtremeRoleId.Hatter,
+		ExtremeRoleId.Monika,
 	};
 
     public static readonly ImmutableDictionary<int, SingleRoleBase> NormalRole =
