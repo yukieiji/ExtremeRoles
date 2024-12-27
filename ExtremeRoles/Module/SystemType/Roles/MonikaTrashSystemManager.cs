@@ -44,6 +44,21 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 			TryGet(out var system) &&
 			system.InvalidPlayer(sourcePlayerId);
 
+	public void RpcAddTrash(byte targetPlayerId)
+	{
+		if (!this.isMonikaAlive)
+		{
+			return;
+		}
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			ExtremeSystemType.MonikaTrashSystem,
+			x =>
+			{
+				x.Write((byte)Ops.AddTrash);
+				x.Write(targetPlayerId);
+			});
+	}
+
 	public void Deteriorate(float deltaTime)
 	{
 		if (this.isMonikaAlive &&
