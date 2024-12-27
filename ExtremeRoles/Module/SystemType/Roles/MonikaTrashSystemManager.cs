@@ -4,9 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using Hazel;
+using Il2CppInterop.Generator.Extensions;
+
+
 
 
 #nullable enable
@@ -15,11 +20,21 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class MonikaTrashSystem : IDirtableSystemType
 {
-	public bool IsDirty => false;
+	public bool IsDirty { get; set; } = false;
+	private bool isEnd = false;
+	private bool isMonikaAlive = true;
+
+	public enum Ops
+	{
+		AddTrash,
+		StartMeeting,
+		ClearTrash,
+	}
 
 	private readonly HashSet<byte> trash = new HashSet<byte>();
 	private readonly Dictionary<byte, PlayerControl> trashPc = new Dictionary<byte, PlayerControl>();
 	private readonly PlayerShowSystem showSystem = PlayerShowSystem.Get();
+	private readonly OnemanMeetingSystemManager meetingSystem = OnemanMeetingSystemManager.CreateOrGet();
 
 	public static bool TryGet([NotNullWhen(true)] out MonikaTrashSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.MonikaTrashSystem, out system);
@@ -31,7 +46,14 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 
 	public void Deteriorate(float deltaTime)
 	{
-		// 勝利判定ちぇぇええく
+		if (this.isMonikaAlive &&
+			AmongUsClient.Instance.AmHost &&
+			MeetingHud.Instance == null &&
+			ExileController.Instance == null &&
+			!this.isEnd)
+		{
+			checkMonikaSpecialMeeting();
+		}
 
 		var removed = new HashSet<byte>();
 
@@ -64,10 +86,25 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)
-	{ }
+	{
+		writer.WritePacked(this.trash.Count);
+		foreach (int id in this.trash)
+		{
+			writer.Write(id);
+		}
+		this.IsDirty = initialState;
+	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
-	{ }
+	{
+		int num = reader.ReadPackedInt32();
+		for (int i = 0; i < num; i++)
+		{
+			byte id = reader.ReadByte();
+			// 会議が始まった時点でモニカの勝利は確定しているためPlayerControlは要らない
+			this.trash.Add(id);
+		}
+	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
@@ -77,8 +114,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		}
 		foreach (byte id in this.trash)
 		{
-			var targetPlayer = Player.GetPlayerControlById(id);
-			if (targetPlayer == null ||
+			if (!this.trashPc.TryGetValue(id, out var targetPlayer) ||
+				targetPlayer == null ||
 				targetPlayer.Data == null ||
 				targetPlayer.Data.IsDead ||
 				targetPlayer.Data.Disconnected)
@@ -91,21 +128,27 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
-		byte target = msgReader.ReadByte();
-		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		if (role.Id is not ExtremeRoleId.Monika)
+		Ops ops = (Ops)msgReader.ReadByte();
+		switch (ops)
 		{
-			return;
+			case Ops.AddTrash:
+				byte target = msgReader.ReadByte();
+				this.addTrash(target);
+				break;
+			case Ops.StartMeeting:
+				byte callerId = msgReader.ReadByte();
+				var caller = Player.GetPlayerControlById(callerId);
+				if (caller == null)
+				{
+					return;
+				}
+				this.meetingSystem.Start(caller, OnemanMeetingSystemManager.Type.Monika);
+				break;
+			case Ops.ClearTrash:
+				clearTrash();
+				break;
 		}
 
-		this.trash.Add(target);
-
-		var targetPlayer = Player.GetPlayerControlById(target);
-		if (targetPlayer != null)
-		{
-			this.showSystem.Hide(targetPlayer);
-			this.trashPc.Add(target, targetPlayer);
-		}
 	}
 
 	public bool CanChatBetween(NetworkedPlayerInfo source, NetworkedPlayerInfo local)
@@ -159,4 +202,86 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 
 	public int GetVoteAreaOrder(PlayerVoteArea pva)
 		=> InvalidPlayer(pva) ? 0 : 10;
+
+	private void addTrash(byte targetPlayerId)
+	{
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
+		if (role.Id is not ExtremeRoleId.Monika)
+		{
+			return;
+		}
+		this.trash.Add(targetPlayerId);
+
+		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+		if (targetPlayer != null)
+		{
+			this.showSystem.Hide(targetPlayer);
+			this.trashPc.Add(targetPlayerId, targetPlayer);
+		}
+	}
+
+	private void clearTrash()
+	{
+		this.trash.Clear();
+
+		foreach (var pc in this.trashPc.Values)
+		{
+			if (this.showSystem.IsHide(pc))
+			{
+				this.showSystem.Show(pc);
+			}
+		}
+		this.trashPc.Clear();
+	}
+
+	private void checkMonikaSpecialMeeting()
+	{
+		int aliveNum = 0;
+		int monikaNum = 0;
+		byte monikaId = byte.MaxValue;
+		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (player == null ||
+				player.IsDead ||
+				player.Disconnected ||
+				this.InvalidPlayer(player))
+			{
+				continue;
+			}
+			if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+			{
+				monikaNum++;
+				monikaId = player.PlayerId;
+			}
+			aliveNum++;
+		}
+
+		if (monikaNum <= 0)
+		{
+			this.isMonikaAlive = false;
+			this.trash.Clear();
+			ExtremeSystemTypeManager.RpcUpdateSystem(
+				ExtremeSystemType.MonikaTrashSystem,
+				x =>
+				{
+					x.Write((byte)Ops.ClearTrash);
+				});
+			return;
+		}
+
+		if (monikaNum > 1 || aliveNum != 2)
+		{
+			return;
+		}
+		this.isEnd = true;
+		// monikaのゴミ箱をシンクロ
+		this.IsDirty = true;
+		ExtremeSystemTypeManager.RpcUpdateSystem(
+			ExtremeSystemType.MonikaTrashSystem,
+			x =>
+			{
+				x.Write((byte)Ops.StartMeeting);
+				x.Write(monikaId);
+			});
+	}
 }

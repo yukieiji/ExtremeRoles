@@ -18,11 +18,11 @@ public sealed class OnemanMeetingCheckpoint : GlobalCheckpointSystem.CheckpointH
 	public static void RpcCheckpoint(byte rolePlayrId)
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystemOnlyHost(
-			GlobalCheckpointSystem.Type, (writer) =>
+			GlobalCheckpointSystem.Type, ((writer) =>
 			{
-				writer.Write((byte)GlobalCheckpointSystem.CheckpointType.AssassinMeeting);
+				writer.Write((byte)GlobalCheckpointSystem.CheckpointType.OnemanMeeting);
 				writer.Write(rolePlayrId);
-			});
+			}));
 	}
 
 	public override void HandleChecked()

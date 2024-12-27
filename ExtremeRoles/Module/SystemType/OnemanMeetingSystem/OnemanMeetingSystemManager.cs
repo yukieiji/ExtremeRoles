@@ -45,7 +45,8 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public enum Type
 	{
-		Assassin
+		Assassin,
+		Monika
 	}
 
 	public static OnemanMeetingSystemManager CreateOrGet()
