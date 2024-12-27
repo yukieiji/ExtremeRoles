@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
+using Hazel;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using Hazel;
-using Il2CppInterop.Generator.Extensions;
-
-
-
 
 #nullable enable
 
