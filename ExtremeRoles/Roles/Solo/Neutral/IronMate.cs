@@ -189,7 +189,7 @@ public sealed class IronMate :
 			case GameOverReason.HumansByVote:
 			case GameOverReason.HumansByTask:
 			case GameOverReason.HumansDisconnect:
-				winner.AddPlusWinner(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				return;
 			default:
 				return;

@@ -29,7 +29,7 @@ internal sealed class Installer : OperatorBase
 		this.dllName = $"{modInfo.Name}.dll";
 		this.repoUrl = modInfo.RepoUrl;
 		this.installTask = null;
-		this.isRequireReactor = modInfo.IsRequireReactor;
+		this.isRequireReactor = modInfo.IsRequireReactor && !File.Exists(Path.Combine(this.ModFolderPath, ReactorDll));
 
 		this.client = new HttpClient();
 		this.client.DefaultRequestHeaders.Add("User-Agent", agentName);

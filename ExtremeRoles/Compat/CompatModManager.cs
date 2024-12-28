@@ -22,6 +22,7 @@ internal enum CompatModType
 	ExtremeSkins,
 	ExtremeVoiceEngine,
 	Submerged,
+	CrowdedMod
 }
 
 internal sealed class CompatModManager
@@ -38,6 +39,16 @@ internal sealed class CompatModManager
 				"https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest",
 				true,
 				typeof(SubmergedIntegrator)
+			)
+		},
+		{
+			CompatModType.CrowdedMod,
+			new CompatModInfo(
+				CompatModType.CrowdedMod.ToString(),
+				CrowdedMod.Guid,
+				"https://api.github.com/repos/NikoCat233/CrowdedMod/releases/latest",
+				true,
+				typeof(CrowdedMod)
 			)
 		},
 	};
