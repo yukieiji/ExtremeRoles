@@ -30,6 +30,9 @@ namespace ExtremeRoles;
 [BepInDependency(
     Compat.ModIntegrator.SubmergedIntegrator.Guid,
     BepInDependency.DependencyFlags.SoftDependency)]
+[BepInDependency(
+	Compat.ModIntegrator.CrowdedMod.Guid,
+	BepInDependency.DependencyFlags.SoftDependency)]
 [BepInProcess("Among Us.exe")]
 public partial class ExtremeRolesPlugin : BasePlugin
 {
