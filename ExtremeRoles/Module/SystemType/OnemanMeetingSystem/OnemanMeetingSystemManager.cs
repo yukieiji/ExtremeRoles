@@ -142,8 +142,13 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		}
 
 		var (target, type) = this.meetingQueue.Dequeue();
-		this.meeting = create(type);
-		return this.meeting is not null && this.meeting.TryStartMeeting(target);
+		var meeting = create(type);
+		bool result = meeting is not null && meeting.TryStartMeeting(target);
+		if (result)
+		{
+			this.meeting = meeting;
+		}
+		return result;
 	}
 
 	public bool TryGetGameEndReason(out RoleGameOverReason reason)
