@@ -319,6 +319,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Artist    , new Artist()},
 			{(int)ExtremeRoleId.Tucker    , new Tucker()},
 			{(int)ExtremeRoleId.IronMate  , new IronMate()},
+			{(int)ExtremeRoleId.Monika    , new Monika()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
