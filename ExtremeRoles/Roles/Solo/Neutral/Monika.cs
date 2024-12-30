@@ -41,7 +41,7 @@ public sealed class Monika :
 	public void CreateAbility()
     {
 		this.CreateNormalAbilityButton(
-			"除外", UnityObjectLoader.LoadFromResources<Sprite>(ObjectPath.TestButton));
+			"除外", UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton));
 	}
 
 	public bool IsAbilityUse()
