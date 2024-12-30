@@ -85,6 +85,7 @@ public sealed class Yoko :
             case (RoleGameOverReason)GameOverReason.ImpostorBySabotage:
             case RoleGameOverReason.AssassinationMarin:
 			case RoleGameOverReason.TeroristoTeroWithShip:
+			case RoleGameOverReason.MonikaThisGameIsMine:
 				break;
             case RoleGameOverReason.YokoAllDeceive:
 				winner.Add(rolePlayerInfo);

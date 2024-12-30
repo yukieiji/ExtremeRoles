@@ -316,20 +316,35 @@ public sealed class WinnerBuilder : IDisposable
 				replaceWinnerToSpecificNeutralRolePlayer(
 					ExtremeRoleId.Tucker, ExtremeRoleId.Chimera);
 				break;
+			case RoleGameOverReason.MonikaThisGameIsMine:
+			case RoleGameOverReason.MonikaIamTheOnlyOne:
+				replaceWinnerToSpecificNeutralRolePlayer(
+					true, ExtremeRoleId.Monika);
+				break;
 			default:
 				break;
 		}
 	}
 
+	private void replaceWinnerToSpecificNeutralRolePlayer(params ExtremeRoleId[] roles)
+		=> replaceWinnerToSpecificNeutralRolePlayer(isAlive: false, roles);
+
 	private void replaceWinnerToSpecificNeutralRolePlayer(
-		params ExtremeRoleId[] roles)
+		bool isAlive, params ExtremeRoleId[] roles)
 	{
 		ExtremeRolesPlugin.Logger.LogInfo("Clear Winner(Reason:Neautal Win)");
 		this.tempData.Clear();
 
 		foreach (var player in this.neutralNoWinner)
 		{
-			if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+			if (player == null ||
+				!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+			{
+				continue;
+			}
+
+			if (isAlive && 
+				player.IsDead)
 			{
 				continue;
 			}
@@ -435,7 +450,7 @@ public sealed class WinnerBuilder : IDisposable
 		{
 			winModRole.ModifiedWinPlayer(
 				playerInfo,
-				 ExtremeRolesPlugin.ShipState.EndReason, // 更新され続けるため、新しいのを常に渡す
+				ExtremeRolesPlugin.ShipState.EndReason, // 更新され続けるため、新しいのを常に渡す
 				in this.tempData);
 		}
 		logger.LogInfo($"-- End: modified win player --");

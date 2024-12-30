@@ -364,6 +364,10 @@ public static class EndGameManagerSetUpPatch
 
 			RoleGameOverReason.TuckerShipIsExperimentStation =>
 				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.TuckerMerdedoie),
+			
+			RoleGameOverReason.MonikaIamTheOnlyOne or 
+				RoleGameOverReason.MonikaThisGameIsMine =>
+				WinTextInfo.Create(ExtremeRoleId.Monika, ColorPalette.TuckerMerdedoie),
 
 			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
