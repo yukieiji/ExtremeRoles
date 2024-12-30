@@ -27,6 +27,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 			DeadAssassinate,
 			Surrender,
 			Zombied,
+			LoveYou,
 
 			Disconnected,
 		}
