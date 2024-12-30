@@ -78,7 +78,7 @@ public static class PlayerVoteAreaSelectPatch
 		}
 
 		if (MonikaTrashSystem.TryGet(out var monika) &&
-			monika.Meeting.InvalidPlayer(__instance))
+			monika.InvalidPlayer(__instance))
 		{
 			return false;
 		}

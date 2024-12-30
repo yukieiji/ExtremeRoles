@@ -144,7 +144,7 @@ public static class MeetingHudUpdatePatch
 		if (!(
 				localPlayer != null &&
 				MonikaTrashSystem.TryGet(out var system) &&
-				system.Meeting.InvalidPlayer(localPlayer.PlayerId)
+				system.InvalidPlayer(localPlayer.PlayerId)
 			))
 		{
 			tryCreateHandRaiseButton();

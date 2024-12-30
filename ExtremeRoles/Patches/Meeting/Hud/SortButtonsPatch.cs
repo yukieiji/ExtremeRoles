@@ -36,14 +36,14 @@ public static class MeetingHudSortButtonsPatch
 		{
 			orderLinq = curPlayerState
 				.OrderBy(DefaultSort)
-				.ThenBy(monikaSystem.GetVoteAreaOrder)
+				.ThenBy(monikaSystem!.GetVoteAreaOrder)
 				.ThenBy(playerName2Int);
 		}
 		else if (monikaOn)
 		{
 			orderLinq = curPlayerState
 				.OrderBy(DefaultSort)
-				.ThenBy(monikaSystem.GetVoteAreaOrder);
+				.ThenBy(monikaSystem!.GetVoteAreaOrder);
 		}
 		else if (isChangeVoteAreaButtonSort)
 		{
@@ -68,7 +68,7 @@ public static class MeetingHudSortButtonsPatch
 		}
 		if (monikaOn)
 		{
-			monikaSystem.InitializeButton(array);
+			monikaSystem!.InitializeButton(array);
 		}
 
 		return false;

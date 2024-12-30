@@ -60,7 +60,7 @@ public static class MeetingHudUpdateButtonsPatch
 		var localPlayer = PlayerControl.LocalPlayer;
 		if (MonikaTrashSystem.TryGet(out var monika) &&
 			localPlayer != null &&
-			monika.Meeting.InvalidPlayer(localPlayer.PlayerId))
+			monika.InvalidPlayer(localPlayer.PlayerId))
 		{
 
 		}
