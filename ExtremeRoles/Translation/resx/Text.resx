@@ -1167,4 +1167,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="autoDisconnectTo" xml:space="preserve">
     <value>自動切断まで{0}秒:</value>
   </data>
+  <data name="LoveYou" xml:space="preserve">
+    <value>恋人</value>
+  </data>
 </root>
