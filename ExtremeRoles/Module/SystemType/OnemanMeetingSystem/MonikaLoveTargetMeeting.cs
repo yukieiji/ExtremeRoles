@@ -145,6 +145,11 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 		}
 
 		string printStr = $"「{monikaPlayer.PlayerName}」は「{this.winPlayer.PlayerName}」が好きだった<br>(「{this.notSelectPlayer.PlayerName}」が除外された)";
+		// ここで勝利したWinGameControllIdを入れる => ニュートラルなのでコントロールIdがいる
+		if (ExtremeRoleManager.TryGetRole(caller, out var role))
+		{
+			ExtremeRolesPlugin.ShipState.SetWinControlId(role.GameControlId);
+		}
 		return new IOnemanMeeting.ExiledInfo(true, printStr);
 	}
 

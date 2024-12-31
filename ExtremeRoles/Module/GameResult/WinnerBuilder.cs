@@ -1,19 +1,21 @@
-﻿using ExtremeRoles.GhostRoles.API.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Player = NetworkedPlayerInfo;
 
-using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
+using ExtremeRoles.Performance.Il2Cpp;
+
 
 namespace ExtremeRoles.Module.GameResult;
 
@@ -22,7 +24,7 @@ namespace ExtremeRoles.Module.GameResult;
 public sealed class WinnerBuilder : IDisposable
 {
 	private readonly WinnerTempData tempData;
-	private readonly List<Player> neutralNoWinner = [];
+	private readonly List<(Player, SingleRoleBase)> neutralNoWinner = [];
 	private readonly List<(Player, IRoleWinPlayerModifier)> modRole = [];
 	private readonly List<(Player, IGhostRoleWinable)> ghostWinCheckRole = [];
 	private readonly FinalSummaryBuilder finalSummaryBuilder;
@@ -111,12 +113,12 @@ public sealed class WinnerBuilder : IDisposable
 				}
 				else
 				{
-					this.neutralNoWinner.Add(playerInfo);
+					this.neutralNoWinner.Add((playerInfo, role));
 				}
 				logger.LogInfo($"Remove Winner(Reason:Neutral) : {playerName}");
 				this.tempData.Remove(playerInfo);
 			}
-			else if (role.Id == ExtremeRoleId.Xion)
+			else if (role.Id is ExtremeRoleId.Xion)
 			{
 				logger.LogInfo($"Remove Winner(Reason:Xion Player) : {playerName}");
 				this.tempData.Remove(playerInfo);
@@ -332,22 +334,31 @@ public sealed class WinnerBuilder : IDisposable
 	private void replaceWinnerToSpecificNeutralRolePlayer(
 		bool isAlive, params ExtremeRoleId[] roles)
 	{
-		ExtremeRolesPlugin.Logger.LogInfo("Clear Winner(Reason:Neautal Win)");
+		var logger = ExtremeRolesPlugin.Logger;
+		logger.LogInfo("Clear Winner(Reason:Neautal Win)");
 		this.tempData.Clear();
 
-		foreach (var player in this.neutralNoWinner)
+		var builder = new StringBuilder();
+		builder
+			.AppendLine("--- SearchInfo ---")
+			.Append("TargetContainer size:").Append(this.neutralNoWinner.Count).AppendLine()
+			.Append("Specific role:");
+		foreach (var role in roles)
 		{
-			if (player == null ||
-				!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+			builder.Append($"{role},");
+		}
+		logger.LogInfo(builder.ToString());
+
+		foreach (var (player, role) in this.neutralNoWinner)
+		{
+			if (isAlive && (player.IsDead || player.Disconnected))
 			{
+				logger.LogInfo($"Player:{player.PlayerName} checking skip, this player not alive");
 				continue;
 			}
 
-			if (isAlive && 
-				player.IsDead)
-			{
-				continue;
-			}
+
+			logger.LogInfo($"checking.... Player:{player.PlayerName}, Role:{role.Id}");
 
 			if (roles.Contains(role.Id))
 			{
