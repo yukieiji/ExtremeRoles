@@ -1,6 +1,8 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -16,7 +18,7 @@ public static class MeetingHudUpdateButtonsPatch
 	{
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			monikaSystemHudUpdate(__instance);
+			monikaTrashUpdate(__instance);
 			return true;
 		}
 
@@ -55,14 +57,28 @@ public static class MeetingHudUpdateButtonsPatch
 		return false;
 	}
 
-	private static void monikaSystemHudUpdate(MeetingHud hud)
+	private static void monikaTrashUpdate(MeetingHud hud)
 	{
-		var localPlayer = PlayerControl.LocalPlayer;
-		if (MonikaTrashSystem.TryGet(out var monika) &&
-			localPlayer != null &&
-			monika.InvalidPlayer(localPlayer.PlayerId))
+		if (!MonikaTrashSystem.TryGet(out var system))
 		{
+			return;
+		}
 
+		if (PlayerControl.LocalPlayer != null &&
+			system.InvalidPlayer(PlayerControl.LocalPlayer))
+		{
+			// テクスチャを表示
+		}
+
+		foreach (var pva in hud.playerStates)
+		{
+			if (pva == null || 
+				pva.AmDead ||
+				!system.InvalidPlayer(pva))
+			{
+				continue;
+			}
+			activeObject(pva.XMark.gameObject);
 		}
 	}
 
