@@ -105,7 +105,7 @@ public static class MeetingHudSortButtonsPatch
 	}
 
 	public static int DefaultSort(PlayerVoteArea pva)
-		=> pva.AmDead ? 0 : 50;
+		=> pva.AmDead ? 50 : 0;
 
 	private static int playerName2Int(PlayerVoteArea pva)
 	{

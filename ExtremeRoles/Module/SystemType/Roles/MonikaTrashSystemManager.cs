@@ -230,7 +230,7 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		=> this.trash.Contains(player.PlayerId);
 
 	public int GetVoteAreaOrder(PlayerVoteArea pva)
-		=> InvalidPlayer(pva) ? 10 : 25;
+		=> InvalidPlayer(pva) ? 25 : 10;
 
 	private void addTrash(byte targetPlayerId)
 	{
