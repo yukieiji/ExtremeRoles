@@ -160,7 +160,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 		byte localPlayerId = localPlayer.PlayerId;
 		if (localPlayerId == caller)
 		{
-			return "好きだった人を選んでください<br>(選んだ人と勝利します)";
+			return "好きだった人を選んでください<br>(投票した人と勝利します)";
 		}
 		else if (this.target.Contain(localPlayerId))
 		{
