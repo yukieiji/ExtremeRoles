@@ -128,7 +128,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		return meeting is not null;
 	}
 
-	public bool TryGetOnemanMeeting<T>([NotNullWhen(true)] out T? meeting) where T : class, IOnemanMeeting
+	public bool TryGetOnemanMeeting<T>([NotNullWhen(true)] out T? meeting) where T : class
 	{
 		meeting = this.meeting as T;
 		return meeting is not null;

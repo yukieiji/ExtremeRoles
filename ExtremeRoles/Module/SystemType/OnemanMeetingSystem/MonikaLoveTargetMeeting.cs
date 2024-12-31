@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using ExtremeRoles.Module.ExtremeShipStatus;
+
+using UnityEngine;
+
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -11,7 +13,7 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
-public sealed class MonikaLoveTargetMeeting : IOnemanMeeting
+public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInitialize
 {
 	public byte VoteTarget
 	{
@@ -32,6 +34,8 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting
 					voteTarget, notSelectPlayer));
 			this.winPlayer = voteTarget;
 			this.notSelectPlayer = notSelectPlayer;
+			ExtremeRolesPlugin.Logger.LogInfo(
+				$"Winner:{this.winPlayer.PlayerName} NoWinner:{this.notSelectPlayer.PlayerName}");
 		}
 	}
 
@@ -200,11 +204,11 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting
 	public bool TryStartMeeting(byte target)
 		=> false;
 
-	public void SortButton()
+	public void InitializeButon(Vector3 origin, Vector2 offset, PlayerVoteArea[] pvas)
 	{
-		var meetingTarget = new Dictionary<byte, NetworkedPlayerInfo>(2);
+		int index = 0;
 
-		foreach (var pva in MeetingHud.Instance.playerStates)
+		foreach (var pva in pvas)
 		{
 			var player = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
 			bool meetingTargetPlayer = !(
@@ -213,15 +217,23 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting
 				player.Disconnected ||
 				this.system.InvalidPlayer(player) ||
 				(
-					ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) && 
+					ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
 					role.Id is ExtremeRoleId.Monika
 				) // モニカは投票権を持つが会議の投票先には表示さない
 			);
-			
-			pva.gameObject.SetActive(meetingTargetPlayer);
+
 			if (meetingTargetPlayer)
 			{
 				this.target.Add(player!);
+				pva.transform.position = new Vector3(
+					offset.x * (index == 0 ? 0.75f : -0.75f), 0.0f,
+					origin.z - 0.9f);
+				index += 1;
+			}
+			else
+			{
+				// 無茶苦茶遠くにおいておく
+				pva.transform.position = new Vector3(1000.0f, 1000.0f, 1000.0f);
 			}
 		}
 	}

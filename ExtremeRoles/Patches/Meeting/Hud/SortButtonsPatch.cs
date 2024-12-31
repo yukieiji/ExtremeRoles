@@ -11,6 +11,7 @@ using ExtremeRoles.Module.RoleAssign;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 #nullable enable
 
@@ -32,6 +33,11 @@ public static class MeetingHudSortButtonsPatch
 		bool isChangeVoteAreaButtonSort = ExtremeGameModeManager.Instance.ShipOption.Meeting.IsChangeVoteAreaButtonSortArg;
 		bool monikaOn = MonikaTrashSystem.TryGet(out var monikaSystem);
 
+		IMeetingButtonInitialize? initializer = null;
+		bool isSpecialMeeting =
+			OnemanMeetingSystemManager.TryGetActiveSystem(out var onemanMeeting) &&
+			onemanMeeting.TryGetOnemanMeeting<IMeetingButtonInitialize>(out initializer);
+
 		if (isChangeVoteAreaButtonSort && monikaOn)
 		{
 			orderLinq = curPlayerState
@@ -50,6 +56,10 @@ public static class MeetingHudSortButtonsPatch
 			orderLinq = curPlayerState
 				.OrderBy(DefaultSort)
 				.ThenBy(playerName2Int);
+		}
+		else if (initializer != null)
+		{
+			orderLinq = curPlayerState.OrderBy(DefaultSort);
 		}
 		else
 		{
@@ -70,6 +80,11 @@ public static class MeetingHudSortButtonsPatch
 		{
 			monikaSystem!.InitializeButton(array);
 		}
+
+		initializer?.InitializeButon(
+			__instance.VoteOrigin,
+			__instance.VoteButtonOffsets,
+			array);
 
 		return false;
 	}
