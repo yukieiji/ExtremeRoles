@@ -4,8 +4,8 @@
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
     <!--<Version>12.1.0.0</Version>-->
-    <VersionPrefix>12.1.1</VersionPrefix>
-    <VersionSuffix>3rdAnniversary-OneMoreGift</VersionSuffix>
+    <VersionPrefix>12.1.2</VersionPrefix>
+    <VersionSuffix>3rdAnniversary-TwoMemorial</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
