@@ -140,7 +140,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 			return new IOnemanMeeting.ExiledInfo(true, "UNKNOWN MEETING PLAYER!!!");
 		}
 
-		string printStr = $"「〇〇」は「{this.winPlayer.PlayerName}」が好きだった\n(「{this.notSelectPlayer.PlayerName}」が除外された)";
+		string printStr = $"「〇〇」は「{this.winPlayer.PlayerName}」が好きだった<br>(「{this.notSelectPlayer.PlayerName}」が除外された)";
 		return new IOnemanMeeting.ExiledInfo(true, printStr);
 	}
 
