@@ -1,11 +1,10 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
