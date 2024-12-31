@@ -10,6 +10,7 @@ using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
@@ -58,7 +59,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 
 	public void Deteriorate(float deltaTime)
 	{
-		if (this.isMonikaAlive &&
+		if (RoleAssignState.Instance.IsRoleSetUpEnd &&
+			this.isMonikaAlive &&
 			AmongUsClient.Instance.AmHost &&
 			MeetingHud.Instance == null &&
 			ExileController.Instance == null &&
@@ -68,6 +70,7 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		}
 
 		var removed = new HashSet<byte>();
+		bool isNotLocalPlayerMonika = !isLocalRoleMonika();
 
 		foreach (byte id in this.trash)
 		{
@@ -79,6 +82,10 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 				removed.Add(id);
 				continue;
 			}
+			if (isNotLocalPlayerMonika)
+			{
+				continue;
+			}
 			if (!this.showSystem.IsHide(targetPlayer))
 			{
 				this.showSystem.Hide(targetPlayer);
@@ -88,6 +95,12 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		foreach (byte id in removed)
 		{
 			this.trash.Remove(id);
+
+			if (isNotLocalPlayerMonika)
+			{
+				continue;
+			}
+
 			if (this.trashPc.TryGetValue(id, out var targetPlayer) &&
 				this.showSystem.IsHide(targetPlayer))
 			{
@@ -120,7 +133,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing is not ResetTiming.ExiledEnd)
+		if (!this.isLocalRoleMonika() ||
+			timing is not ResetTiming.ExiledEnd)
 		{
 			return;
 		}
@@ -181,8 +195,11 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 			!source.IsDead && this.InvalidPlayer(local) //生存者toゴミ箱
 		)
 		||
-		(
-			!source.IsDead && !local.IsDead //生存者to生存者
+		!(
+			source.IsDead || 
+			local.IsDead || 
+			this.InvalidPlayer(source) || 
+			this.InvalidPlayer(local) //生存者to生存者(ただしゴミ箱ではない)
 		);
 
 	public void InitializeButton(PlayerVoteArea[] buttons)
@@ -213,22 +230,24 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		=> this.trash.Contains(player.PlayerId);
 
 	public int GetVoteAreaOrder(PlayerVoteArea pva)
-		=> InvalidPlayer(pva) ? 0 : 10;
+		=> InvalidPlayer(pva) ? 10 : 25;
 
 	private void addTrash(byte targetPlayerId)
 	{
-		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		if (role.Id is not ExtremeRoleId.Monika)
-		{
-			return;
-		}
 		this.trash.Add(targetPlayerId);
 
 		var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
-		if (targetPlayer != null)
+		if (targetPlayer == null)
 		{
+			return;
+		}
+		
+		this.trashPc.Add(targetPlayerId, targetPlayer);
+		
+		if (isLocalRoleMonika())
+		{
+			ExtremeRolesPlugin.Logger.LogInfo($"Hide Player :{targetPlayerId}");
 			this.showSystem.Hide(targetPlayer);
-			this.trashPc.Add(targetPlayerId, targetPlayer);
 		}
 	}
 
@@ -295,5 +314,10 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 				x.Write((byte)Ops.StartMeeting);
 				x.Write(monikaId);
 			});
+	}
+	private bool isLocalRoleMonika()
+	{
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
+		return role.Id is ExtremeRoleId.Monika;
 	}
 }
