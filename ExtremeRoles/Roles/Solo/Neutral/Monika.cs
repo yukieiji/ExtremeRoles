@@ -68,6 +68,19 @@ public sealed class Monika :
 		{
 			return false;
 		}
+
+		if (PlayerControl.LocalPlayer != null &&
+			ExtremeRoleManager.TryGetRole(targetPlayer, out var role) &&
+			role.Id is ExtremeRoleId.Monika)
+		{
+			// モニカに対して能力を使用したときは殺す
+			Player.RpcUncheckMurderPlayer(
+				PlayerControl.LocalPlayer.PlayerId,
+				this.targetPlayer,
+				byte.MaxValue);
+			return true;
+		}
+
 		this.system.RpcAddTrash(this.targetPlayer);
 		return true;
     }
