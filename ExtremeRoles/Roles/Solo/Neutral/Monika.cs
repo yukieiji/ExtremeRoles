@@ -3,15 +3,10 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-
-
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -25,23 +20,30 @@ public sealed class Monika :
 	SingleRoleBase,
 	IRoleAutoBuildAbility
 {
+	public enum Ops
+	{
+		Range,
+	}
 
     public ExtremeAbilityButton? Button { get; set; }
 	private MonikaTrashSystem? system;
 	private byte targetPlayer;
+	private float range;
 
 	public Monika(): base(
         ExtremeRoleId.Monika,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Monika.ToString(),
-        ColorPalette.MonikaChenChuWhowan,
+        ColorPalette.MonikaAsakisuou,
         false, false, false, false)
     { }
 
 	public void CreateAbility()
     {
 		this.CreateNormalAbilityButton(
-			"除外", UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton));
+			"除外",
+			UnityObjectLoader.LoadSpriteFromResources(
+				ObjectPath.TestButton));
 	}
 
 	public bool IsAbilityUse()
@@ -49,7 +51,7 @@ public sealed class Monika :
 		this.targetPlayer = byte.MaxValue;
 		var player = Player.GetClosestPlayerInRange(
 			PlayerControl.LocalPlayer, this,
-			1.3f);
+			this.range);
 
 		if (player == null)
 		{
@@ -85,23 +87,20 @@ public sealed class Monika :
 		return true;
     }
 
-	public void CleanUp()
-	{
-	}
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory);
+		factory.CreateFloatOption(
+			Ops.Range, 1.3f, 0.1f, 3.0f, 0.1f);
     }
 
     protected override void RoleSpecificInit()
     {
-        var cate = this.Loader;
-
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<MonikaTrashSystem>(
 			ExtremeSystemType.MonikaTrashSystem);
+		this.range = this.Loader.GetValue<Ops, float>(Ops.Range);
     }
 
     public void ResetOnMeetingStart()

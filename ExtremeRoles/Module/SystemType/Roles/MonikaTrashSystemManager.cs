@@ -216,7 +216,7 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 			{
 				continue;
 			}
-			pva.Background.color = ColorPalette.MonikaChenChuWhowan;
+			pva.Background.color = ColorPalette.MonikaAsakisuou;
 			pva.XMark.gameObject.SetActive(true);
 		}
 	}
