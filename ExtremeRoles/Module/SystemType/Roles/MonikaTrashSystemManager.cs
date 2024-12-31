@@ -212,7 +212,7 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 			{
 				continue;
 			}
-			// モニカの色に変える pva.Background.color
+			pva.Background.color = ColorPalette.MonikaChenChuWhowan;
 			pva.XMark.gameObject.SetActive(true);
 		}
 	}

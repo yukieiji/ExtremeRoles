@@ -34,7 +34,7 @@ public sealed class Monika :
         ExtremeRoleId.Monika,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Monika.ToString(),
-        ColorPalette.ArtistChenChuWhowan,
+        ColorPalette.MonikaChenChuWhowan,
         false, false, false, false)
     { }
 
