@@ -367,7 +367,7 @@ public static class EndGameManagerSetUpPatch
 			
 			RoleGameOverReason.MonikaIamTheOnlyOne or 
 				RoleGameOverReason.MonikaThisGameIsMine =>
-				WinTextInfo.Create(ExtremeRoleId.Monika, ColorPalette.TuckerMerdedoie),
+				WinTextInfo.Create(ExtremeRoleId.Monika, ColorPalette.MonikaAsakisuou),
 
 			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
