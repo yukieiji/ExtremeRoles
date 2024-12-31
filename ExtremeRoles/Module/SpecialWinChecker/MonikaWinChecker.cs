@@ -33,8 +33,9 @@ internal sealed class MonikaAliveWinChecker : IWinChecker
 		{
 			return false;
 		}
-		// モニカ1人分を引く
-		int aliveNum = statistics.TotalAlive - 1;
+
+		int monika = 0;
+		int aliveNum = statistics.TotalAlive;
 		NetworkedPlayerInfo? alivePlayer = null;
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
@@ -49,14 +50,26 @@ internal sealed class MonikaAliveWinChecker : IWinChecker
 			{
 				aliveNum--;
 			}
+			else if (
+				ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
+				role.Id is ExtremeRoleId.Monika)
+			{
+				++monika;
+			}
 			else
 			{
 				alivePlayer = player;
 			}
 		}
 
+		aliveNum -= monika;
+
+		if (monika > 1)
+		{
+			return false;
+		}
 		// モニカしかいないのでモニカの強制勝利
-		if (aliveNum == 0)
+		else if (aliveNum == 0)
 		{
 			return true; // 0
 		}
