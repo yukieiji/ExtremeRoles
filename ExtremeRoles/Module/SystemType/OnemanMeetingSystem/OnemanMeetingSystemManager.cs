@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ExtremeRoles.Patches.Controller;
+using ExtremeRoles.Performance;
 
 
 #nullable enable
@@ -204,6 +205,36 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		if (controller.Player && !info.Value.IsShowPlayer)
 		{
 			controller.Player.gameObject.SetActive(false);
+		}
+		else
+		{
+			var exiled = controller.initData.networkedPlayer;
+			var player = controller.Player;
+			player.UpdateFromEitherPlayerDataOrCache(
+				exiled,
+				PlayerOutfitType.Default,
+				PlayerMaterial.MaskType.Exile, false, (Il2CppSystem.Action)(() =>
+				{
+					string defaultSkinId = exiled.Outfits[PlayerOutfitType.Default].SkinId;
+					var skinViewData = CachedShipStatus.Instance.CosmeticsCache.GetSkin(defaultSkinId);
+					if (!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+							defaultSkinId, player.GetIgnoreLongMode()))
+					{
+						skinViewData = CachedShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");
+					}
+					if (controller.useIdleAnim)
+					{
+						player.FixSkinSprite(skinViewData.IdleFrame);
+						return;
+					}
+					player.FixSkinSprite(skinViewData.EjectFrame);
+				}));
+			player.ToggleName(false);
+			if (!controller.useIdleAnim)
+			{
+				player.SetCustomHatPosition(controller.exileHatPosition);
+				player.SetCustomVisorPosition(controller.exileVisorPosition);
+			}
 		}
 		controller.completeString = info.Value.Text;
 		controller.ImpostorText.text = string.Empty;
