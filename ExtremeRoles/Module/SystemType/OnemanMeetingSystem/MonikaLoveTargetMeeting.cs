@@ -144,7 +144,11 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 			return new IOnemanMeeting.ExiledInfo(true, "UNKNOWN MEETING PLAYER!!!");
 		}
 
-		string printStr = $"「{monikaPlayer.PlayerName}」は「{this.winPlayer.PlayerName}」が好きだった<br>(「{this.notSelectPlayer.PlayerName}」が除外された)";
+		string printStr = Tr.GetString(
+			"MonikaMeetingExiled",
+			monikaPlayer.PlayerName,
+			this.winPlayer.PlayerName,
+			this.notSelectPlayer.PlayerName);
 		// ここで勝利したWinGameControllIdを入れる => ニュートラルなのでコントロールIdがいる
 		if (ExtremeRoleManager.TryGetRole(caller, out var role))
 		{
@@ -160,26 +164,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 	}
 
 	public string GetTitle(byte caller)
-	{
-		var localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer == null)
-		{
-			return "Invalid Meeting";
-		}
-		byte localPlayerId = localPlayer.PlayerId;
-		if (localPlayerId == caller)
-		{
-			return "好きだった人を選んでください<br>(投票した人と勝利します)";
-		}
-		else if (this.target.Contain(localPlayerId))
-		{
-			return "私に愛されれるべき<br>器なのかしら？";
-		}
-		else
-		{
-			return "外野は静かに<br>\"運命\"を見守りなさい";
-		}
-	}
+		=> Tr.GetString(getTitleKey(caller));
 
 	public VoteAreaState GetVoteAreaState(NetworkedPlayerInfo player)
 		=> VoteAreaState.None;
@@ -244,6 +229,27 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 				// 無茶苦茶遠くにおいておく
 				pva.transform.position = new Vector3(1000.0f, 1000.0f, 1000.0f);
 			}
+		}
+	}
+	private string getTitleKey(byte caller)
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null)
+		{
+			return "InvalidMeeting";
+		}
+		byte localPlayerId = localPlayer.PlayerId;
+		if (localPlayerId == caller)
+		{
+			return "MonikaMeetingSelectLover";
+		}
+		else if (this.target.Contain(localPlayerId))
+		{
+			return "MonikaMeetingSelectTarget";
+		}
+		else
+		{
+			return "MonikaMeetingOther";
 		}
 	}
 }

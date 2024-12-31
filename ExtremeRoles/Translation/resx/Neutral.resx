@@ -1171,4 +1171,16 @@
 　・「モニカ」がゲームから全て排除された場合、「ゴミ箱」内で生存しているプレイヤーは
 　開放され、普通の生存者になる</value>
   </data>
+  <data name="MonikaMeetingSelectLover" xml:space="preserve">
+    <value>好きだった人を選んでください&lt;br&gt;(投票した人と勝利します)</value>
+  </data>
+  <data name="MonikaMeetingSelectTarget" xml:space="preserve">
+    <value>私に愛されれるべき&lt;br&gt;器なのかしら？</value>
+  </data>
+  <data name="MonikaMeetingOther" xml:space="preserve">
+    <value>外野は静かに&lt;br&gt;"運命"を見守りなさい</value>
+  </data>
+  <data name="MonikaMeetingExiled" xml:space="preserve">
+    <value>「{0}」は「{1}」が好きだった&lt;br&gt;(「{2}」が除外された)</value>
+  </data>
 </root>
