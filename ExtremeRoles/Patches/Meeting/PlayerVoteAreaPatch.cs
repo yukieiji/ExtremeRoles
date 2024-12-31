@@ -78,7 +78,7 @@ public static class PlayerVoteAreaSelectPatch
 		}
 
 		if (MonikaTrashSystem.TryGet(out var monika) &&
-			monika.InvalidPlayer(__instance))
+			monika.InvalidPlayer(PlayerControl.LocalPlayer))
 		{
 			return false;
 		}
