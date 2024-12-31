@@ -1138,10 +1138,10 @@
     <value>モニカ</value>
   </data>
   <data name="MonikaAbilityCoolTime" xml:space="preserve">
-    <value>除外</value>
+    <value>「抹消」のクールタイム</value>
   </data>
   <data name="MonikaRange" xml:space="preserve">
-    <value>「除外」が発動できる範囲</value>
+    <value>「抹消」が発動できる範囲</value>
   </data>
   <data name="MonikaIntroDescription" xml:space="preserve">
     <value>7fee81971a1be79192a88bdaeb47b2e4bd81416ccd5b9bfc4b5b44bca597f2ee</value>
@@ -1150,15 +1150,15 @@
     <value>私の愛する人のために </value>
   </data>
   <data name="MonikaFullDescription" xml:space="preserve">
-    <value>「除外」でプレイヤーを排除していく第三陣営
+    <value>「抹消」でプレイヤーを排除していく第三陣営
 
-・勝利条件：自分自身を含めて「除外」されていない生存者が3名以下になること
+・勝利条件：自分自身を含めて「抹消」されていない生存者が3名以下になること
 3名ちょうどの場合、追加勝者を選ぶ特殊会議が発生します
 
-・ボタン能力「除外」
+・ボタン能力「抹消」
 　・プレイヤー1名を対象にして発動できる
 　・そのプレイヤーを「ゴミ箱」レイヤーに送る
-　・「除外」されたプレイヤー(「ゴミ箱」プレイヤー)を「モニカ」が認識することはできない
+　・「抹消」されたプレイヤー(「ゴミ箱」プレイヤー)を「モニカ」が認識することはできない
 ・新レイヤー「ゴミ箱」
 　・生存者と死亡者の間に追加される新しいレイヤーであり、半死亡扱いとなる
 　・「ゴミ箱」にいるプレイヤーは以下が適用される
@@ -1182,5 +1182,8 @@
   </data>
   <data name="MonikaMeetingExiled" xml:space="preserve">
     <value>「{0}」は「{1}」が好きだった&lt;br&gt;(「{2}」が除外された)</value>
+  </data>
+  <data name="monikaPlayerTrash" xml:space="preserve">
+    <value>抹消</value>
   </data>
 </root>

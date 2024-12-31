@@ -42,7 +42,7 @@ public sealed class Monika :
 	public void CreateAbility()
     {
 		this.CreateNormalAbilityButton(
-			ExtremeShipStatus.PlayerStatus.DeadAssassinate.ToString(),
+			"monikaPlayerTrash",
 			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Monika));
 	}
 
