@@ -35,8 +35,10 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 	private readonly Dictionary<byte, PlayerControl> trashPc = new Dictionary<byte, PlayerControl>();
 	private readonly PlayerShowSystem showSystem = PlayerShowSystem.Get();
 	private readonly OnemanMeetingSystemManager meetingSystem = OnemanMeetingSystemManager.CreateOrGet();
-	public Sprite MeetingBackground => UnityObjectLoader.LoadSpriteFromResources(
-		"ExtremeRoles.Resources.MonikaBk.png");
+	public Sprite MeetingBackground =>
+			UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
+				ExtremeRoleId.Monika,
+				ObjectPath.GetRoleImgPath(ExtremeRoleId.Monika, ObjectPath.MeetingBk));
 
 	public static bool TryGet([NotNullWhen(true)] out MonikaTrashSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.MonikaTrashSystem, out system);

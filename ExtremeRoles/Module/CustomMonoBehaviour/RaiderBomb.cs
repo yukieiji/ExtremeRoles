@@ -38,7 +38,7 @@ public sealed class RaiderBomb : MonoBehaviour
 		this.param = param;
 		this.rend = base.gameObject.AddComponent<SpriteRenderer>();
 		this.rend.sprite = load<Sprite>(
-			ObjectPath.GetRoleImgPath(ExtremeRoleId.Raider, "Bomb"));
+			ObjectPath.GetRoleImgPath(ExtremeRoleId.Raider, ObjectPath.Bomb));
 		this.isShowOther = param.IsShowOtherPlayer;
 		this.rend.enabled = false;
 

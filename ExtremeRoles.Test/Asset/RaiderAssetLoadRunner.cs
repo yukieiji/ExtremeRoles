@@ -1,4 +1,5 @@
 ﻿using ExtremeRoles.Roles;
+using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Test.Asset;
 
@@ -10,5 +11,6 @@ internal sealed class RaiderAssetLoadRunner
 		Log.LogInfo($"----- Unit:RaiderAsset Test -----");
 
 		LoadFromExR(ExtremeRoleId.Raider);
+		LoadFromExR(ExtremeRoleId.Raider, ObjectPath.Bomb);
 	}
 }

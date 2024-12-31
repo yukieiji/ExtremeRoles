@@ -53,6 +53,7 @@ internal sealed class AllAssetLoadRunner
 
 		Run<TuckerAssetLoadRunner>();
 		Run<YokoAssetLoadRunner>();
+		Run<MonikaAssetLoadRunner>();
 	}
 
 	private void tryImgLoad(string path)

@@ -43,8 +43,7 @@ public sealed class Monika :
     {
 		this.CreateNormalAbilityButton(
 			ExtremeShipStatus.PlayerStatus.DeadAssassinate.ToString(),
-			UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.TestButton));
+			UnityObjectLoader.LoadFromResources(ExtremeRoleId.Monika));
 	}
 
 	public bool IsAbilityUse()
