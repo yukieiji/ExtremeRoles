@@ -133,14 +133,18 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 		this.target = new MeetingTarget();
 	}
 
-	public IOnemanMeeting.ExiledInfo CreateExiledInfo()
+	public IOnemanMeeting.ExiledInfo CreateExiledInfo(byte caller)
 	{
-		if (this.winPlayer == null || this.notSelectPlayer == null)
+		var monikaPlayer = GameData.Instance.GetPlayerById(caller);
+
+		if (monikaPlayer == null ||
+			this.winPlayer == null || 
+			this.notSelectPlayer == null)
 		{
 			return new IOnemanMeeting.ExiledInfo(true, "UNKNOWN MEETING PLAYER!!!");
 		}
 
-		string printStr = $"「〇〇」は「{this.winPlayer.PlayerName}」が好きだった<br>(「{this.notSelectPlayer.PlayerName}」が除外された)";
+		string printStr = $"「{monikaPlayer.PlayerName}」は「{this.winPlayer.PlayerName}」が好きだった<br>(「{this.notSelectPlayer.PlayerName}」が除外された)";
 		return new IOnemanMeeting.ExiledInfo(true, printStr);
 	}
 

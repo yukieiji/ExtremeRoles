@@ -196,7 +196,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 		ExileControllerBeginePatch.SetExiledTarget(controller);
 
-		var info = this.meeting?.CreateExiledInfo();
+		var info = this.meeting?.CreateExiledInfo(this.Caller);
 		if (!info.HasValue)
 		{
 			return;

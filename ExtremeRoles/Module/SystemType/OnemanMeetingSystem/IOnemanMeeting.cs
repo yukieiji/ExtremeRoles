@@ -16,7 +16,7 @@ public interface IOnemanMeeting
 	public string GetTitle(byte caller);
 
 	public VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget);
-	public ExiledInfo CreateExiledInfo();
+	public ExiledInfo CreateExiledInfo(byte caller);
 
 	public VoteAreaState GetVoteAreaState(NetworkedPlayerInfo player);
 	public bool IsValidShowChatPlayer(PlayerControl chatSourcePlayer);

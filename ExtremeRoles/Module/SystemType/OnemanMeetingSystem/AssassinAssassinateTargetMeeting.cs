@@ -29,7 +29,7 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 	private bool isSuccess = false;
 	private byte voteTarget = byte.MaxValue;
 
-	public IOnemanMeeting.ExiledInfo CreateExiledInfo()
+	public IOnemanMeeting.ExiledInfo CreateExiledInfo(byte _)
 	{
 		var player = GameData.Instance.GetPlayerById(
 			this.voteTarget);
