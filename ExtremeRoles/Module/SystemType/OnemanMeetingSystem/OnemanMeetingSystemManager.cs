@@ -299,6 +299,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		=> type switch
 		{
 			Type.Assassin => new AssassinAssassinateTargetMeeting(),
+			Type.Monika => new MonikaLoveTargetMeeting(),
 			_ => null,
 		};
 

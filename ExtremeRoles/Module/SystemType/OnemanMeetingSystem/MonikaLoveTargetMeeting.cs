@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -18,10 +18,14 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting
 		get => this.winPlayer == null ? byte.MaxValue : this.winPlayer.PlayerId;
 		set
 		{
+			if (value == byte.MaxValue)
+			{
+				return;
+			}
 			var voteTarget = this.target.GetVoteTarget(value);
 			var notSelectPlayer = this.target.GetAnother(value);
 
-			
+			ExtremeRolesPlugin.ShipState.AddWinner(voteTarget);
 			FinalSummaryBuilder.AddStatusOverride(
 				(GameOverReason)RoleGameOverReason.MonikaThisGameIsMine,
 				new MonikaMeetingResultStatusOverrider(

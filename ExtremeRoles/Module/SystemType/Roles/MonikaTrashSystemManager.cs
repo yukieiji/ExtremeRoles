@@ -279,7 +279,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 			{
 				continue;
 			}
-			if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+			if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
+				role.Id is ExtremeRoleId.Monika)
 			{
 				monikaNum++;
 				monikaId = player.PlayerId;
@@ -299,6 +300,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 				});
 			return;
 		}
+		
+		aliveNum -= monikaNum;
 
 		if (monikaNum > 1 || aliveNum != 2)
 		{
