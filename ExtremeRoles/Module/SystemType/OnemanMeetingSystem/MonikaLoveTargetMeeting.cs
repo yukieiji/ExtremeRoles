@@ -106,11 +106,11 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 
 		private bool isReturnThis(
 			byte playerId, NetworkedPlayerInfo? check,
-			[NotNullWhen(true)] out NetworkedPlayerInfo? info,
+			[NotNullWhen(true)] out NetworkedPlayerInfo? result,
 			NetworkedPlayerInfo? anothor = null)
 		{
-			info = anothor == null ? check : anothor;
-			return info != null && info.PlayerId == playerId;
+			result = anothor == null ? check : anothor;
+			return result != null && check != null && check.PlayerId == playerId;
 		}
 	}
 
@@ -160,15 +160,15 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 		byte localPlayerId = localPlayer.PlayerId;
 		if (localPlayerId == caller)
 		{
-			return "好きだった人を選んでください";
+			return "好きだった人を選んでください<br>(選んだ人と勝利します)";
 		}
 		else if (this.target.Contain(localPlayerId))
 		{
-			return "あなた達は私に選ばれるべき器なのかしら？";
+			return "私に愛されれるべき<br>器なのかしら？";
 		}
 		else
 		{
-			return "外野は静かに運命を見守りなさい";
+			return "外野は静かに<br>\"運命\"を見守りなさい";
 		}
 	}
 
