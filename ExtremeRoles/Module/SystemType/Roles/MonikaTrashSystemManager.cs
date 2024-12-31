@@ -254,12 +254,14 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 	private void clearTrash()
 	{
 		this.trash.Clear();
-
-		foreach (var pc in this.trashPc.Values)
+		if (isLocalRoleMonika())
 		{
-			if (this.showSystem.IsHide(pc))
+			foreach (var pc in this.trashPc.Values)
 			{
-				this.showSystem.Show(pc);
+				if (this.showSystem.IsHide(pc))
+				{
+					this.showSystem.Show(pc);
+				}
 			}
 		}
 		this.trashPc.Clear();
@@ -291,7 +293,7 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		if (monikaNum <= 0)
 		{
 			this.isMonikaAlive = false;
-			this.trash.Clear();
+			clearTrash();
 			ExtremeSystemTypeManager.RpcUpdateSystem(
 				ExtremeSystemType.MonikaTrashSystem,
 				x =>
