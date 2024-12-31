@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
@@ -11,6 +12,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Resources;
 
 #nullable enable
 
@@ -33,6 +35,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 	private readonly Dictionary<byte, PlayerControl> trashPc = new Dictionary<byte, PlayerControl>();
 	private readonly PlayerShowSystem showSystem = PlayerShowSystem.Get();
 	private readonly OnemanMeetingSystemManager meetingSystem = OnemanMeetingSystemManager.CreateOrGet();
+	public Sprite MeetingBackground => UnityObjectLoader.LoadSpriteFromResources(
+		"ExtremeRoles.Resources.MonikaBk.png");
 
 	public static bool TryGet([NotNullWhen(true)] out MonikaTrashSystem? system)
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.MonikaTrashSystem, out system);

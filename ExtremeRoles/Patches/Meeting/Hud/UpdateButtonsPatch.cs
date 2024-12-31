@@ -63,10 +63,13 @@ public static class MeetingHudUpdateButtonsPatch
 			return;
 		}
 
-		if (PlayerControl.LocalPlayer != null &&
-			system.InvalidPlayer(PlayerControl.LocalPlayer))
+		var localPc = PlayerControl.LocalPlayer;
+		if (localPc != null &&
+			localPc.Data != null &&
+			!localPc.Data.IsDead &&
+			system.InvalidPlayer(localPc))
 		{
-			// テクスチャを表示
+			hud.Glass.sprite = system.MeetingBackground;
 		}
 
 		foreach (var pva in hud.playerStates)
