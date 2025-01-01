@@ -19,15 +19,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Monika :
 	SingleRoleBase,
-	IRoleAutoBuildAbility
+	IRoleAutoBuildAbility,
+	IRoleReportHook
 {
 	public enum Ops
 	{
 		Range,
+		UseOtherButton
 	}
 
     public ExtremeAbilityButton? Button { get; set; }
-	private MonikaTrashSystem? system;
+	private MonikaTrashSystem? trashSystem;
+	private MonikaMeetingNumSystem? meetingNumSystem;
 	private byte targetPlayer;
 	private float range;
 
@@ -66,7 +69,7 @@ public sealed class Monika :
 	public bool UseAbility()
     {
 		if (this.targetPlayer == byte.MaxValue || 
-			this.system == null)
+			this.trashSystem == null)
 		{
 			return false;
 		}
@@ -83,7 +86,7 @@ public sealed class Monika :
 			return true;
 		}
 
-		this.system.RpcAddTrash(this.targetPlayer);
+		this.trashSystem.RpcAddTrash(this.targetPlayer);
 		return true;
     }
 
@@ -94,13 +97,22 @@ public sealed class Monika :
             factory);
 		factory.CreateFloatOption(
 			Ops.Range, 1.3f, 0.1f, 3.0f, 0.1f);
-    }
+		factory.CreateBoolOption(
+			Ops.UseOtherButton, true);
+	}
 
     protected override void RoleSpecificInit()
     {
-		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<MonikaTrashSystem>(
+		var loader = this.Loader;
+		this.trashSystem = ExtremeSystemTypeManager.Instance.CreateOrGet<MonikaTrashSystem>(
 			ExtremeSystemType.MonikaTrashSystem);
-		this.range = this.Loader.GetValue<Ops, float>(Ops.Range);
+
+		if (loader.GetValue<Ops, bool>(Ops.UseOtherButton))
+		{
+			this.meetingNumSystem = ExtremeSystemTypeManager.Instance.CreateOrGet<MonikaMeetingNumSystem>(
+				ExtremeSystemType.MonikaMeetingNumSystem);
+		}
+		this.range = loader.GetValue<Ops, float>(Ops.Range);
     }
 
     public void ResetOnMeetingStart()
@@ -112,4 +124,27 @@ public sealed class Monika :
         return;
     }
 
+	public void HookReportButton(PlayerControl rolePlayer, NetworkedPlayerInfo reporter)
+	{
+		if (this.meetingNumSystem is null)
+		{
+			return;
+		}
+		byte reporterPlayerId = reporter.PlayerId;
+		if (rolePlayer.PlayerId == reporterPlayerId)
+		{
+			if (!this.meetingNumSystem.TryReduce())
+			{
+				return;
+			}
+			rolePlayer.RemainingEmergencies = GameOptionsManager.Instance.currentNormalGameOptions.NumEmergencyMeetings;
+		}
+		else
+		{
+			this.meetingNumSystem.RpcReduceTo(reporterPlayerId, false);
+		}
+	}
+
+	public void HookBodyReport(PlayerControl rolePlayer, NetworkedPlayerInfo reporter, NetworkedPlayerInfo reportBody)
+	{ }
 }
