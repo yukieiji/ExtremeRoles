@@ -51,12 +51,18 @@ public sealed class Monika :
 
 	public bool IsAbilityUse()
 	{
+		if (this.trashSystem is null)
+		{
+			return false;
+		}
+
 		this.targetPlayer = byte.MaxValue;
 		var player = Player.GetClosestPlayerInRange(
 			PlayerControl.LocalPlayer, this,
 			this.range);
 
-		if (player == null)
+		if (player == null || 
+			this.trashSystem.InvalidPlayer(player))
 		{
 			return false;
 		}
