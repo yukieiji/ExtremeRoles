@@ -24,8 +24,8 @@ public sealed class Monika :
 {
 	public enum Ops
 	{
+		UseOtherButton,
 		Range,
-		UseOtherButton
 	}
 
     public ExtremeAbilityButton? Button { get; set; }
@@ -93,12 +93,12 @@ public sealed class Monika :
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
-        IRoleAbility.CreateCommonAbilityOption(
+		factory.CreateBoolOption(
+			Ops.UseOtherButton, true);
+		IRoleAbility.CreateCommonAbilityOption(
             factory);
 		factory.CreateFloatOption(
 			Ops.Range, 1.3f, 0.1f, 3.0f, 0.1f);
-		factory.CreateBoolOption(
-			Ops.UseOtherButton, true);
 	}
 
     protected override void RoleSpecificInit()
