@@ -22,6 +22,7 @@ using ExtremeRoles.Performance;
 
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;
+using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -31,7 +32,7 @@ public static class EndGameManagerSetUpPatch
 {
     public static void Postfix(EndGameManager __instance)
     {
-		var gameResult = ExtremeGameResult.Instance;
+		var gameResult = ExtremeGameResultManager.Instance;
 		gameResult.CreateEndGameManagerResult();
 
 		var winner = gameResult.Winner;
@@ -146,7 +147,7 @@ public static class EndGameManagerSetUpPatch
 
     private static void setRoleSummary(
 		EndGameManager manager,
-		List<FinalSummary.PlayerSummary> summaries)
+		IReadOnlyList<FinalSummary.PlayerSummary> summaries)
     {
         if (!ClientOption.Instance.ShowRoleSummary.Value) { return; }
 
@@ -363,6 +364,10 @@ public static class EndGameManagerSetUpPatch
 
 			RoleGameOverReason.TuckerShipIsExperimentStation =>
 				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.TuckerMerdedoie),
+			
+			RoleGameOverReason.MonikaIamTheOnlyOne or 
+				RoleGameOverReason.MonikaThisGameIsMine =>
+				WinTextInfo.Create(ExtremeRoleId.Monika, ColorPalette.MonikaRoseSaumon),
 
 			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };

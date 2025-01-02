@@ -99,6 +99,7 @@ public static class GameUtility
 		}
 
 		disableXion();
+		disableSomeRole();
 
 		logger.LogInfo("Update Roles and Player....");
 
@@ -167,6 +168,7 @@ public static class GameUtility
 		}
 
 		disableXion();
+		disableSomeRole();
 
 		logger.LogInfo("Update Player....");
 		for (int playerId = 0; playerId < 14; ++playerId)
@@ -219,6 +221,22 @@ public static class GameUtility
 		}
 	}
 
+	private static void disableSomeRole()
+	{
+		foreach (var role in RandomRoleProvider.IgnoreRole)
+		{
+			disableCategory(
+				OptionTab.NeutralTab,
+				ExtremeRoleManager.GetRoleGroupId(role));
+		}
+		foreach (var role in RandomRoleProvider.IgnoreCombRole)
+		{
+			disableCategory(
+				OptionTab.GeneralTab,
+				ExtremeRoleManager.GetCombRoleGroupId(CombinationRoleType.Avalon));
+		}
+	}
+
 	private static void enableRandomNormalRole(ManualLogSource logger)
 	{
 		SingleRoleBase role = RandomRoleProvider.GetNormalRole();
@@ -243,5 +261,13 @@ public static class GameUtility
 			OptionManager.Instance.Update(category, (int)RoleCommonOption.SpawnRate, 9);
 		}
 		logger.LogInfo($"Enable:{role}");
+	}
+
+	private static void disableCategory(OptionTab tab, int id)
+	{
+		if (OptionManager.Instance.TryGetCategory(tab, id, out var category))
+		{
+			OptionManager.Instance.Update(category, 0, 0);
+		}
 	}
 }

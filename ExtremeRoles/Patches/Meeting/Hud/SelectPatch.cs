@@ -2,6 +2,8 @@
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -24,32 +26,42 @@ public static class MeetingHudSelectPatch
 	{
 		__result = false;
 
-		if (isBlock) { return false; }
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (isBlock || localPlayer == null)
+		{
+			return false;
+		}
 
 		var shipOpt = ExtremeGameModeManager.Instance.ShipOption.Meeting;
 
 		if (shipOpt.DisableSelfVote &&
-			PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
+			localPlayer.PlayerId == suspectStateIdx)
 		{
 			return false;
 		}
-		if (shipOpt.IsBlockSkipInMeeting && suspectStateIdx == -1)
+		else if (shipOpt.IsBlockSkipInMeeting && suspectStateIdx == -1)
 		{
 			return false;
 		}
 
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (MonikaTrashSystem.TryGet(out var monika) &&
+			monika.InvalidPlayer(localPlayer.PlayerId))
+		{
+			return false;
+		}
+
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		{
+			return true;
+		}
 
 		LogicOptionsNormal logicOptionsNormal = GameManager.Instance.LogicOptions.Cast<
 			LogicOptionsNormal>();
 
-		if (__instance.discussionTimer < (float)logicOptionsNormal.GetDiscussionTime())
+		if (__instance.discussionTimer < (float)logicOptionsNormal.GetDiscussionTime() ||
+			localPlayer.PlayerId != system.Caller)
 		{
-			return __result;
-		}
-		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
-		{
-			return __result;
+			return false;
 		}
 
 		SoundManager.Instance.PlaySound(
@@ -69,6 +81,5 @@ public static class MeetingHudSelectPatch
 
 		__result = true;
 		return false;
-
 	}
 }

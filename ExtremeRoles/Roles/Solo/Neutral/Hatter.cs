@@ -3,18 +3,15 @@
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -39,7 +36,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
 	private int winSkipCount = 0;
 	private int curSkipCount = 0;
-	private bool isAssassinMeeting = false;
+	private bool onemanMeeting = false;
 
 	private bool isHideMeetingTimer;
 	private int meetingTimerDecreaseLower;
@@ -192,13 +189,13 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 			ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
 
 		this.curSkipCount = 0;
-		this.isAssassinMeeting = false;
+		this.onemanMeeting = false;
 		this.IsWin = false;
     }
 
     public void ResetOnMeetingStart()
     {
-		this.isAssassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+		this.onemanMeeting = OnemanMeetingSystemManager.IsActive;
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
@@ -207,7 +204,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
 		if (localPlayer == null ||
 			exiledPlayer != null ||
-			this.isAssassinMeeting ||
+			this.onemanMeeting ||
 			this.IsWin)
 		{
 			return;

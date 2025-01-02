@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-using ExtremeRoles.Module;
-
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -9,6 +7,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -120,7 +119,7 @@ public sealed class Madmate :
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
         GameOverReason reason,
-		in ExtremeGameResult.WinnerTempData winner)
+		in WinnerTempData winner)
     {
         switch (reason)
         {

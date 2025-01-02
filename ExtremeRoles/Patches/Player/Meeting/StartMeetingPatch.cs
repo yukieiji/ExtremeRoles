@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Player.Meeting;
 
@@ -11,14 +13,15 @@ public static class PlayerControlCoStartMeetingPatch
 	{
 		InfoOverlay.Instance.IsBlock = true;
 
-		var state = ExtremeRolesPlugin.ShipState;
-
-		if (state.AssassinMeetingTrigger) { return; }
+		if (OnemanMeetingSystemManager.IsActive) { return; }
 
 		// Count meetings
-		if (target == null)
+		if (target == null &&
+			ExtremeSystemTypeManager.Instance.TryGet<MeetingCountSystem>(
+				ExtremeSystemType.MeetingCount,
+				out var countSystem))
 		{
-			state.IncreaseMeetingCount();
+			countSystem.Increse();
 		}
 	}
 }

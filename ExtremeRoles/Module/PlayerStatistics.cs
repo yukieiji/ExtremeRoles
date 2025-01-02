@@ -12,22 +12,21 @@ using ExtremeRoles.GameMode;
 
 using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
 
+#nullable enable
+
 namespace ExtremeRoles.Module;
 
-public sealed class PlayerStatistics
+public sealed record PlayerStatistics(
+	int AllTeamCrewmate,
+	int TeamImpostorAlive,
+	int TeamCrewmateAlive,
+	int TeamNeutralAlive,
+	int TotalAlive,
+	int AssassinAlive,
+	IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive,
+	IReadOnlyDictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive)
 {
 	public const int SameNeutralGameControlId = int.MaxValue;
-
-	public int AllTeamCrewmate { get; private set; }
-	public int TeamImpostorAlive { get; private set; }
-	public int TeamCrewmateAlive { get; private set; }
-	public int TeamNeutralAlive { get; private set; }
-	public int TotalAlive { get; private set; }
-	public int AssassinAlive { get; private set; }
-
-	public IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; private set; }
-
-	public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; private set; }
 
 	public override string ToString()
 	{
@@ -113,7 +112,7 @@ public sealed class PlayerStatistics
 			if (ExtremeRoleManager.SpecialWinCheckRole.Contains(roleId))
 			{
 				addSpecialWinCheckRole(
-					ref specialWinCheckRoleAlive,
+					in specialWinCheckRoleAlive,
 					gameControlId,
 					roleId, role,
 					playerInfo.PlayerId);
@@ -148,7 +147,7 @@ public sealed class PlayerStatistics
 					}
 
 					++numNeutralAlive;
-					neutalCondition(role, roleId, gameControlId, ref neutralTeam);
+					neutalCondition(role, roleId, gameControlId, in neutralTeam);
 					break;
 
 				default:
@@ -156,27 +155,26 @@ public sealed class PlayerStatistics
 			}
 		}
 
-		return new PlayerStatistics()
-		{
-			TotalAlive = numTotalAlive,
+		return new PlayerStatistics(
 
-			AllTeamCrewmate = numCrew,
+			AllTeamCrewmate: numCrew,
 
-			TeamImpostorAlive = numImpostorAlive,
-			TeamCrewmateAlive = numCrewAlive,
-			TeamNeutralAlive = numNeutralAlive,
-			AssassinAlive = numAssassinAlive,
+			TeamImpostorAlive: numImpostorAlive,
+			TeamCrewmateAlive: numCrewAlive,
+			TeamNeutralAlive: numNeutralAlive,
+			TotalAlive: numTotalAlive,
+			AssassinAlive: numAssassinAlive,
 
-			SpecialWinCheckRoleAlive = specialWinCheckRoleAlive,
-			SeparatedNeutralAlive = neutralTeam,
-		};
+			SpecialWinCheckRoleAlive: specialWinCheckRoleAlive,
+			SeparatedNeutralAlive: neutralTeam
+		);
 	}
 
 	private static void neutalCondition(
 		in SingleRoleBase role,
 		in ExtremeRoleId roleId,
 		in int gameControlId,
-		ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam)
+		in Dictionary<(NeutralSeparateTeam, int), int> neutralTeam)
 	{
 		switch (roleId)
 		{
@@ -259,6 +257,12 @@ public sealed class PlayerStatistics
 					gameControlId,
 					NeutralSeparateTeam.Tucker);
 				break;
+			case ExtremeRoleId.Monika:
+				addNeutralTeams(
+					neutralTeam,
+					gameControlId,
+					NeutralSeparateTeam.Monika);
+				break;
 			default:
 				checkMultiAssignedServant(
 					in neutralTeam,
@@ -300,48 +304,33 @@ public sealed class PlayerStatistics
 	}
 
 	private static void addSpecialWinCheckRole(
-		ref Dictionary<int, IWinChecker> roleData,
+		in Dictionary<int, IWinChecker> roleData,
 		int gameControlId,
 		ExtremeRoleId roleId,
 		SingleRoleBase role,
 		byte playerId)
 	{
 
-		if (roleData.ContainsKey(gameControlId))
+		if (roleData.TryGetValue(gameControlId, out var winChecker))
 		{
-			roleData[gameControlId].AddAliveRole(
-				playerId, role);
+			winChecker.AddAliveRole(playerId, role);
 		}
 		else
 		{
-			IWinChecker addData = null;
-			switch (roleId)
+			winChecker = roleId switch
 			{
-				case ExtremeRoleId.Lover:
-					addData = new LoverWinChecker();
-					addData.AddAliveRole(playerId, role);
-					break;
-				case ExtremeRoleId.Vigilante:
-					addData = new VigilanteWinChecker();
-					break;
-				case ExtremeRoleId.Delinquent:
-					addData = new KidsWinChecker();
-					addData.AddAliveRole(playerId, role);
-					break;
-				case ExtremeRoleId.Yandere:
-					addData = new YandereWinChecker();
-					addData.AddAliveRole(playerId, role);
-					break;
-				case ExtremeRoleId.Hatter:
-					addData = new HatterWinChecker();
-					addData.AddAliveRole(playerId, role);
-					break;
-				default:
-					break;
-			}
-			if (addData != null)
+				ExtremeRoleId.Lover => new LoverWinChecker(),
+				ExtremeRoleId.Vigilante => new VigilanteWinChecker(),
+				ExtremeRoleId.Delinquent => new KidsWinChecker(),
+				ExtremeRoleId.Yandere => new YandereWinChecker(),
+				ExtremeRoleId.Hatter => new HatterWinChecker(),
+				ExtremeRoleId.Monika => new MonikaAliveWinChecker(),
+				_ => null,
+			};
+			if (winChecker is not null)
 			{
-				roleData.Add(gameControlId, addData);
+				winChecker.AddAliveRole(playerId, role);
+				roleData.Add(gameControlId, winChecker);
 			}
 		}
 	}

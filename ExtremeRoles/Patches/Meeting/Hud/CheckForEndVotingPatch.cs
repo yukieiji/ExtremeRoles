@@ -4,11 +4,11 @@ using System.Linq;
 
 using HarmonyLib;
 
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -24,102 +24,16 @@ public static class MeetingHudCheckForEndVotingPatch
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			normalMeetingVote(__instance);
 		}
 		else
 		{
-			assassinMeetingVote(__instance);
+			system.OverrideMeetingHudCheckForEndVoting(__instance);
 		}
 
 		return false;
-	}
-
-	private static void assassinMeetingVote(MeetingHud instance)
-	{
-		var (isVoteEnd, voteFor) = assassinVoteState(instance);
-
-		if (!isVoteEnd) { return; }
-
-		var logger = ExtremeRolesPlugin.Logger;
-		logger.LogInfo(" ----- AssassinMeeting Target selecting is End ----- ");
-
-		//NetworkedPlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
-		Il2CppStructArray<MeetingHud.VoterState> array =
-			new Il2CppStructArray<MeetingHud.VoterState>(
-				instance.playerStates.Length);
-
-		if (voteFor == 254 || voteFor == byte.MaxValue)
-		{
-			logger.LogWarning("Target is None!! start auto targeting");
-
-			bool targetImposter;
-			do
-			{
-				int randomPlayerIndex = UnityEngine.Random.RandomRange(
-					0, instance.playerStates.Length);
-				voteFor = instance.playerStates[randomPlayerIndex].TargetPlayerId;
-
-				targetImposter = ExtremeRoleManager.GameRole[voteFor].IsImpostor();
-
-			}
-			while (targetImposter);
-		}
-
-		var builder = new StringBuilder();
-		builder
-			.AppendLine("---　AssassinMeeting Target Player Info ---")
-			.Append(" - PlayerId:").Append(voteFor).AppendLine()
-			.Append(" - IsSuccess:").Append(ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin).AppendLine();
-		logger.LogInfo(builder.ToString());
-
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.AssasinVoteFor))
-		{
-			caller.WriteByte(voteFor);
-		}
-		RPCOperator.AssasinVoteFor(voteFor);
-
-		for (int i = 0; i < instance.playerStates.Length; i++)
-		{
-			PlayerVoteArea playerVoteArea = instance.playerStates[i];
-			if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
-			{
-				playerVoteArea.VotedFor = voteFor;
-			}
-			else
-			{
-				playerVoteArea.VotedFor = 254;
-			}
-			instance.SetDirtyBit(1U);
-
-			array[i] = new MeetingHud.VoterState
-			{
-				VoterId = playerVoteArea.TargetPlayerId,
-				VotedForId = playerVoteArea.VotedFor
-			};
-
-		}
-		instance.RpcVotingComplete(array, null, true);
-	}
-
-	private static (bool, byte) assassinVoteState(MeetingHud instance)
-	{
-		bool isVoteEnd = false;
-		byte voteFor = byte.MaxValue;
-
-		foreach (PlayerVoteArea playerVoteArea in instance.playerStates)
-		{
-			if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
-			{
-				isVoteEnd = playerVoteArea.DidVote;
-				voteFor = playerVoteArea.VotedFor;
-				break;
-			}
-		}
-
-		return (isVoteEnd, voteFor);
 	}
 
 	private static void addVoteModRole(
@@ -192,7 +106,14 @@ public static class MeetingHudCheckForEndVotingPatch
 
 	private static void normalMeetingVote(MeetingHud instance)
 	{
-		if (!instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote)) { return; }
+		var trashMeeting = MonikaTrashSystem.TryGet(out var monikaSystem) ? monikaSystem : null;
+		if (!instance.playerStates.All(
+				(PlayerVoteArea ps) =>
+					ps.AmDead || ps.DidVote ||
+					(trashMeeting is not null && trashMeeting.InvalidPlayer(ps))))
+		{
+			return;
+		}
 
 		var logger = ExtremeRolesPlugin.Logger;
 		logger.LogInfo(" ----- Voteing is End ----- ");

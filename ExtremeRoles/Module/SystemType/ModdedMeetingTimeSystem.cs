@@ -1,6 +1,7 @@
 ﻿using Hazel;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Module.SystemType;
 
@@ -37,7 +38,7 @@ public sealed class ModdedMeetingTimeSystem : IDirtableSystemType
 	{
 		if (timing == ResetTiming.MeetingEnd &&
 			AmongUsClient.Instance.AmHost &&
-			!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+			!OnemanMeetingSystemManager.IsActive)
 		{
 			this.IsShowTimer = true;
 			this.TempOffset = 0;

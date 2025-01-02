@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches;
 
@@ -7,6 +8,6 @@ public static class AirshipStatusPrespawnStepPatch
 {
     public static bool Prefix()
     {
-        return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+        return !OnemanMeetingSystemManager.IsActive;
     }
 }

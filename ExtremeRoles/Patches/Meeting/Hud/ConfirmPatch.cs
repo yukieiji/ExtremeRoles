@@ -2,7 +2,7 @@
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -15,9 +15,12 @@ public static class MeetingHudConfirmPatch
 		MeetingHud __instance,
 		[HarmonyArgument(0)] byte suspectStateIdx)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		{
+			return true;
+		}
 
-		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		if (PlayerControl.LocalPlayer.PlayerId != system.Caller)
 		{
 			return false;
 		}
@@ -46,7 +49,11 @@ public static class MeetingHudConfirmPatch
 		MeetingHud __instance,
 		[HarmonyArgument(0)] byte suspectStateIdx)
 	{
-		if (__instance.state != MeetingHud.VoteStates.Voted) { return; }
+		if (__instance.state != MeetingHud.VoteStates.Voted ||
+			OnemanMeetingSystemManager.IsActive)
+		{
+			return;
+		}
 
 		var (voteCheckRole, anotherVoteCheckRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
 			IRoleVoteCheck>();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
 using Hazel;
 using InnerNet;
@@ -13,7 +14,6 @@ using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using Il2CppByteArry = Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<byte>;
-using System.Diagnostics.CodeAnalysis;
 
 
 #nullable enable
@@ -22,8 +22,10 @@ namespace ExtremeRoles.Module.SystemType;
 
 public enum ExtremeSystemType : byte
 {
-	RaiseHandSystem,
+	MeetingCount,
 	GlobalCheckpoint,
+
+	RaiseHandSystem,
 	ModdedMeetingTimeSystem,
 	ModedMushroom,
 	ExtremeConsoleSystem,
@@ -33,6 +35,7 @@ public enum ExtremeSystemType : byte
 	AdminDummySystem,
 	VitalDummySystem,
 	SecurityDummySystem,
+	OnemanMeetingSystem,
 
 	WispTorch,
 
@@ -49,7 +52,9 @@ public enum ExtremeSystemType : byte
 
 	YokoYashiro,
 	TuckerShadow,
-	IronMateGuard
+	IronMateGuard,
+	MonikaTrashSystem,
+	MonikaMeetingNumSystem,
 }
 
 public enum ResetTiming : byte
@@ -57,6 +62,7 @@ public enum ResetTiming : byte
 	OnPlayer,
 	MeetingStart,
 	MeetingEnd,
+	ExiledEnd,
 }
 
 [Il2CppRegister([ typeof(ISystemType) ])]
@@ -274,6 +280,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	private void initialize()
 	{
 		add<GlobalCheckpointSystem>(GlobalCheckpointSystem.Type);
+		add<MeetingCountSystem>(MeetingCountSystem.Type);
 	}
 
 	private void add<T>(ExtremeSystemType systemType) where T : class, IExtremeSystemType, new()

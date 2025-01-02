@@ -8,13 +8,12 @@ using UnityEngine;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Module.SystemType;
-
-
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -23,17 +22,51 @@ public static class MeetingHudSortButtonsPatch
 {
 	public static bool Prefix(MeetingHud __instance)
 	{
-		if (!ExtremeGameModeManager.Instance.ShipOption.Meeting.IsChangeVoteAreaButtonSortArg ||
-			ExtremeRoleManager.GameRole.Count == 0) { return true; }
-
-		PlayerVoteArea[] array = __instance.playerStates.OrderBy(delegate (PlayerVoteArea p)
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
 		{
-			if (!p.AmDead)
-			{
-				return 0;
-			}
-			return 50;
-		}).ThenBy(playerName2Int).ToArray();
+			return true;
+		}
+
+		IOrderedEnumerable<PlayerVoteArea>? orderLinq = null;
+		var curPlayerState = __instance.playerStates;
+
+		bool isChangeVoteAreaButtonSort = ExtremeGameModeManager.Instance.ShipOption.Meeting.IsChangeVoteAreaButtonSortArg;
+		bool monikaOn = MonikaTrashSystem.TryGet(out var monikaSystem);
+
+		IMeetingButtonInitialize? initializer = null;
+		bool isSpecialMeeting =
+			OnemanMeetingSystemManager.TryGetActiveSystem(out var onemanMeeting) &&
+			onemanMeeting.TryGetOnemanMeeting<IMeetingButtonInitialize>(out initializer);
+
+		if (isChangeVoteAreaButtonSort && monikaOn)
+		{
+			orderLinq = curPlayerState
+				.OrderBy(DefaultSort)
+				.ThenBy(monikaSystem!.GetVoteAreaOrder)
+				.ThenBy(playerName2Int);
+		}
+		else if (monikaOn)
+		{
+			orderLinq = curPlayerState
+				.OrderBy(DefaultSort)
+				.ThenBy(monikaSystem!.GetVoteAreaOrder);
+		}
+		else if (isChangeVoteAreaButtonSort)
+		{
+			orderLinq = curPlayerState
+				.OrderBy(DefaultSort)
+				.ThenBy(playerName2Int);
+		}
+		else if (initializer != null)
+		{
+			orderLinq = curPlayerState.OrderBy(DefaultSort);
+		}
+		else
+		{
+			return true;
+		}
+
+		var array = orderLinq.ToArray();
 
 		for (int i = 0; i < array.Length; i++)
 		{
@@ -43,6 +76,15 @@ public static class MeetingHudSortButtonsPatch
 				__instance.VoteButtonOffsets.x * (float)num,
 				__instance.VoteButtonOffsets.y * (float)num2, -0.9f - (float)num2 * 0.01f);
 		}
+		if (monikaOn)
+		{
+			monikaSystem!.InitializeButton(array);
+		}
+
+		initializer?.InitializeButon(
+			__instance.VoteOrigin,
+			__instance.VoteButtonOffsets,
+			array);
 
 		return false;
 	}
@@ -56,25 +98,29 @@ public static class MeetingHudSortButtonsPatch
 			player);
 
 		var system = ExtremeGameModeManager.Instance.ShipOption.Meeting.UseRaiseHand ? IRaiseHandSystem.Get() : null;
+		var trashMeeting = MonikaTrashSystem.TryGet(out var monikaSystem) ? monikaSystem : null;
 
-		for (int i = 0; i < __instance.playerStates.Length; i++)
+		foreach (var pva in __instance.playerStates)
 		{
-			PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-			var obj = __instance.gameObject;
+			var obj = pva.gameObject;
 
 			VoteAreaInfo playerInfoUpdater =
-				playerVoteArea.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ?
+				pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ?
 				obj.AddComponent<LocalPlayerVoteAreaInfo>() :
 				obj.AddComponent<OtherPlayerVoteAreaInfo>();
 
-			playerInfoUpdater.Init(playerVoteArea, isHudOverrideTaskActive);
+			playerInfoUpdater.Init(pva, isHudOverrideTaskActive);
 
-			if (system != null)
+			if (system is not null &&
+				(trashMeeting is null || !trashMeeting.InvalidPlayer(pva)))
 			{
-				system.AddHand(playerVoteArea);
+				system.AddHand(pva);
 			}
 		}
 	}
+
+	public static int DefaultSort(PlayerVoteArea pva)
+		=> pva.AmDead ? 50 : 0;
 
 	private static int playerName2Int(PlayerVoteArea pva)
 	{

@@ -3,17 +3,16 @@ using System.Linq;
 
 using UnityEngine;
 using TMPro;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -190,7 +189,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
             return;
         }
         if (!CachedShipStatus.Instance.enabled ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+			OnemanMeetingSystemManager.IsActive)
         {
             return;
         }

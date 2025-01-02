@@ -6,11 +6,14 @@ using HarmonyLib;
 
 using AmongUs.Data;
 
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.SystemType.Roles;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.Controller;
 
@@ -21,7 +24,7 @@ public static class ChatControllerAddChatNotePatch
 		[HarmonyArgument(0)] NetworkedPlayerInfo srcPlayer,
 		[HarmonyArgument(1)] ChatNoteTypes noteType)
 	{
-		return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger || noteType != ChatNoteTypes.DidVote;
+		return !(OnemanMeetingSystemManager.IsActive || noteType is ChatNoteTypes.DidVote);
 	}
 }
 
@@ -34,7 +37,10 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(1)] string chatText,
 		[HarmonyArgument(2)] bool censor)
     {
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
 
 		if (sourcePlayer == null ||
 			sourcePlayer.Data == null ||
@@ -55,16 +61,21 @@ public static class ChatControllerAddChatPatch
 			return true;
 		}
 
-		bool assassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
+		bool isOneMan = OnemanMeetingSystemManager.TryGetActiveSystem(out var system);
+		bool isMonikaOn = MonikaTrashSystem.TryGet(out var monikaSystem);
 		bool islocalPlayerDead = localPlayerData.IsDead;
 		bool isSourcePlayerDead = sourcePlayerData.IsDead;
 
 		if ((
-				!assassinMeeting && (isSourcePlayerDead && !islocalPlayerDead)
+				!isOneMan && (isSourcePlayerDead && !islocalPlayerDead)
 			)
 			||
 			(
-				assassinMeeting && (!localPlayerRole.IsImpostor() || !sourcePlayerRole.IsImpostor())
+				isOneMan && !system!.IsValidShowChatPlayer(sourcePlayer)
+			)
+			||
+			(
+				!isOneMan && isMonikaOn && !monikaSystem!.CanChatBetween(sourcePlayerData, localPlayerData)
 			))
 
 		{

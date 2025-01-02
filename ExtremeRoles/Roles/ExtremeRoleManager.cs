@@ -126,6 +126,7 @@ public enum ExtremeRoleId : int
 	Tucker,
 	Chimera,
 	IronMate,
+	Monika,
 
 	Xion,
 }
@@ -198,6 +199,8 @@ public enum RoleGameOverReason
 	ArtistShipToArt,
 
 	TuckerShipIsExperimentStation,
+	MonikaThisGameIsMine,
+	MonikaIamTheOnlyOne,
 
 	UnKnown = 100,
 }
@@ -215,7 +218,8 @@ public enum NeutralSeparateTeam
     Traitor,
     Queen,
     Kids,
-	Tucker
+	Tucker,
+	Monika
 }
 
 public static class ExtremeRoleManager
@@ -233,6 +237,7 @@ public static class ExtremeRoleManager
 
 		ExtremeRoleId.Yandere,
 		ExtremeRoleId.Hatter,
+		ExtremeRoleId.Monika,
 	};
 
     public static readonly ImmutableDictionary<int, SingleRoleBase> NormalRole =
@@ -314,6 +319,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Artist    , new Artist()},
 			{(int)ExtremeRoleId.Tucker    , new Tucker()},
 			{(int)ExtremeRoleId.IronMate  , new IronMate()},
+			{(int)ExtremeRoleId.Monika    , new Monika()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =

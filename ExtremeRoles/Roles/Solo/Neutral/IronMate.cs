@@ -12,6 +12,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.GameResult;
 
 #nullable enable
 
@@ -182,7 +183,7 @@ public sealed class IronMate :
 	public void Update(PlayerControl rolePlayer)
 	{　}
 
-	public void ModifiedWinPlayer(NetworkedPlayerInfo rolePlayerInfo, GameOverReason reason, in ExtremeGameResult.WinnerTempData winner)
+	public void ModifiedWinPlayer(NetworkedPlayerInfo rolePlayerInfo, GameOverReason reason, in WinnerTempData winner)
 	{
 		switch (reason)
 		{

@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.Solo.Host;
+using ExtremeRoles.Module.SystemType.Roles;
 
 
 namespace ExtremeRoles.Helper;
@@ -456,6 +457,13 @@ public static class Player
         PlayerControl sourcePlayer,
         NetworkedPlayerInfo targetPlayer)
     {
+		if (targetPlayer == null)
+		{
+			return false;
+		}
+		byte targetPlayerId = targetPlayer.PlayerId;
+		byte sourcePlayerId = sourcePlayer.PlayerId;
+
         return (
             targetPlayer != null &&
 			targetPlayer.PlayerId != sourcePlayer.PlayerId &&
@@ -464,7 +472,9 @@ public static class Player
             targetPlayer.Object &&
             !targetPlayer.Object.inVent &&
 			!targetPlayer.Object.inMovingPlat &&
-            !role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[targetPlayer.PlayerId])
+			ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole) &&
+            !role.IsSameTeam(targetRole) &&
+			!MonikaTrashSystem.InvalidTarget(targetRole, sourcePlayerId)
         );
     }
 }

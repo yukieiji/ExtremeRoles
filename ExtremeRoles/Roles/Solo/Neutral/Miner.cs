@@ -3,20 +3,20 @@
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Compat;
-using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -223,7 +223,7 @@ public sealed class Miner :
 			CachedShipStatus.Instance == null ||
 			GameData.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
-			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+			OnemanMeetingSystemManager.IsActive) { return; }
 
         if (MeetingHud.Instance || ExileController.Instance)
         {

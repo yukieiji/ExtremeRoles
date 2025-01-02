@@ -2,14 +2,12 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-
-
-
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -152,7 +150,7 @@ public sealed class Whisper :
             return;
         }
         if (!CachedShipStatus.Instance.enabled ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+			OnemanMeetingSystemManager.IsActive)
         {
             resetAbility(rolePlayer);
             return;

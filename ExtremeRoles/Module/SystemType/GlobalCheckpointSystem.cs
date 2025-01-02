@@ -29,7 +29,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 	public enum CheckpointType
 	{
 		RoleAssign,
-		AssassinMeeting,
+		OnemanMeeting,
 	}
 
 	public const ExtremeSystemType Type = ExtremeSystemType.GlobalCheckpoint;
@@ -64,7 +64,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 			handler = type switch
 			{
 				CheckpointType.RoleAssign => new RoleAssignCheckPoint(),
-				CheckpointType.AssassinMeeting => new AssassinMeetingCheckpoint(msgReader),
+				CheckpointType.OnemanMeeting => new OnemanMeetingCheckpoint(msgReader),
 				_ => null,
 			};
 

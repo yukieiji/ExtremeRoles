@@ -9,10 +9,12 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.SystemType.CheckPoint;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -113,11 +115,8 @@ public sealed class Assassin : MultiAssignRoleBase
 
         if (isServant()) { return; }
 
-		byte rolePlayerId = rolePlayer.PlayerId;
-		assassinMeetingTriggerOn(rolePlayerId);
 		this.IsFirstMeeting = false;
-
-		AssassinMeetingCheckpoint.RpcCheckpoint(rolePlayerId);
+		assassinMeetingTriggerOn(rolePlayer);
 	}
 
     public override void RolePlayerKilledAction(
@@ -131,21 +130,13 @@ public sealed class Assassin : MultiAssignRoleBase
 
         if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
         {
-            AddDead(rolePlayerId);
+            addDead(rolePlayerId);
             return;
         }
 
-        assassinMeetingTriggerOn(rolePlayerId);
         this.IsFirstMeeting = false;
 
-		if (rolePlayerId == killerPlayer.PlayerId)
-		{
-			AssassinMeetingCheckpoint.RpcCheckpoint(rolePlayerId);
-		}
-		else
-		{
-			killerPlayer.ReportDeadBody(rolePlayer.Data);
-		}
+		assassinMeetingTriggerOn(rolePlayer, killerPlayer);
 	}
 
     public override bool IsBlockShowPlayingRoleInfo()
@@ -155,7 +146,8 @@ public sealed class Assassin : MultiAssignRoleBase
 
     public override bool IsBlockShowMeetingRoleInfo()
     {
-        if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+        if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
+			system.IsActiveMeeting<AssassinAssassinateTargetMeeting>())
         {
             return true;
         }
@@ -187,24 +179,27 @@ public sealed class Assassin : MultiAssignRoleBase
         this.CanSeeRoleBeforeFirstMeeting = loader.GetValue<AssassinOption, bool>(
             AssassinOption.CanSeeRoleBeforeFirstMeeting);
         this.IsFirstMeeting = true;
+		_ = OnemanMeetingSystemManager.CreateOrGet();
     }
 
-    private void assassinMeetingTriggerOn(
-        byte playerId)
+    private void assassinMeetingTriggerOn(PlayerControl caller, PlayerControl? reporter = null)
     {
-        ExtremeRolesPlugin.ShipState.AssassinMeetingTriggerOn(
-            playerId);
-    }
+		if (!OnemanMeetingSystemManager.TryGetSystem(out var system))
+		{
+			return;
+		}
+		system.Start(caller, OnemanMeetingSystemManager.Type.Assassin, reporter);
+	}
 
-    public static void AddDead(byte playerId)
+    public static void addDead(byte playerId)
     {
-        ExtremeRolesPlugin.ShipState.AddDeadAssasin(playerId);
-    }
+		if (!OnemanMeetingSystemManager.TryGetSystem(out var system))
+		{
+			return;
+		}
+		system.AddQueue(playerId, OnemanMeetingSystemManager.Type.Assassin);
+	}
 
-    public static void VoteFor(byte targetId)
-    {
-        ExtremeRolesPlugin.ShipState.SetAssassnateTarget(targetId);
-    }
     private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
 }
 
@@ -224,9 +219,9 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     public bool CanSeeVote = false;
     public bool CanSeeNeutral = false;
     private bool canSeeAssassin = false;
-    private GridArrange grid;
+    private GridArrange? grid;
 
-    private Dictionary<byte, PoolablePlayer> PlayerIcon;
+    private Dictionary<byte, PoolablePlayer> PlayerIcon = [];
     public Marlin(
         ) : base(
             ExtremeRoleId.Marlin,
@@ -264,7 +259,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         this.updateShowIcon();
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         this.updateShowIcon();
     }
@@ -358,6 +353,10 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
                 poolPlayer.gameObject.SetActive(true);
             }
         }
+		if (this.grid == null)
+		{
+			return;
+		}
         this.grid.ArrangeChilds();
     }
 }

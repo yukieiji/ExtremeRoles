@@ -8,9 +8,6 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 	{
 		public RoleGameOverReason Reason => RoleGameOverReason.VigilanteNewIdealWorld;
 
-		public VigilanteWinChecker()
-		{ }
-
 		public void AddAliveRole(
 			byte playerId, SingleRoleBase role)
 		{ }

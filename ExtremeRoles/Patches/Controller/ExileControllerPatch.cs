@@ -7,19 +7,20 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
-using Assassin = ExtremeRoles.Roles.Combination.Assassin;
-using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
+using ExtremeRoles.Module.SystemType;
+
 
 #nullable enable
 
@@ -29,6 +30,20 @@ namespace ExtremeRoles.Patches.Controller;
 public static class ExileControllerBeginePatch
 {
     private const string TransKeyBase = "ExileText";
+
+	public static void SetExiledTarget(
+	   ExileController instance)
+	{
+		if (instance.specialInputHandler != null)
+		{
+			instance.specialInputHandler.disableVirtualCursor = true;
+		}
+		ExileController.Instance = instance;
+		ControllerManager.Instance.CloseAndResetAll();
+
+		instance.Text.gameObject.SetActive(false);
+		instance.Text.text = string.Empty;
+	}
 
 	/* JAJPs
 	[Info   :Extreme Roles] TransKey:ExileTextSP    Value:{0}がインポスターだった。
@@ -60,7 +75,7 @@ public static class ExileControllerBeginePatch
     public static void Postfix(ExileController __instance)
     {
         if (!MeetingReporter.IsExist ||
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+			OnemanMeetingSystemManager.IsActive) { return; }
 
 		string reports = MeetingReporter.Instance.GetMeetingEndReport();
 
@@ -87,11 +102,10 @@ public static class ExileControllerBeginePatch
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-		var state = ExtremeRolesPlugin.ShipState;
 		__instance.initData = init;
-		if (state.AssassinMeetingTrigger)
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			assassinMeetingEndBegin(__instance, state);
+			system.OverrideExileControllerBegin(__instance);
 			return false;
 		}
 		else if (init.confirmImpostor)
@@ -104,39 +118,11 @@ public static class ExileControllerBeginePatch
 		return true;
 	}
 
-    private static void assassinMeetingEndBegin(
-        ExileController instance, ExtremeShipStatus state)
-    {
-		instance.initData.confirmImpostor = true;
-		instance.initData.voteTie = false;
-
-		setExiledTarget(instance);
-        NetworkedPlayerInfo? player = GameData.Instance.GetPlayerById(
-            state.IsMarinPlayerId);
-		if (player == null)
-		{
-			return;
-		}
-
-        string transKey = state.IsAssassinateMarin ?
-            "assassinateMarinSucsess" : "assassinateMarinFail";
-        string printStr = $"{player.PlayerName}{Tr.GetString(transKey)}";
-
-        if (instance.Player)
-        {
-            instance.Player.gameObject.SetActive(false);
-        }
-        instance.completeString = printStr;
-        instance.ImpostorText.text = string.Empty;
-
-        instance.StartCoroutine(instance.Animate());
-    }
-
     private static void confirmExile(
         ExileController instance,
         in ExileOption option)
     {
-        setExiledTarget(instance);
+        SetExiledTarget(instance);
         var transController = FastDestroyableSingleton<TranslationController>.Instance;
 
         var allPlayer = GameData.Instance.AllPlayers.ToArray();
@@ -350,20 +336,6 @@ public static class ExileControllerBeginePatch
 					transKey, playerName);
         }
     }
-
-    private static void setExiledTarget(
-        ExileController instance)
-    {
-        if (instance.specialInputHandler != null)
-        {
-            instance.specialInputHandler.disableVirtualCursor = true;
-        }
-        ExileController.Instance = instance;
-        ControllerManager.Instance.CloseAndResetAll();
-
-        instance.Text.gameObject.SetActive(false);
-        instance.Text.text = string.Empty;
-    }
 }
 
 [HarmonyPatch(typeof(ExileController), nameof(ExileController.ReEnableGameplay))]
@@ -428,11 +400,9 @@ public static class ExileControllerWrapUpPatch
 
         var state = ExtremeRolesPlugin.ShipState;
 
-        if (state.TryGetDeadAssasin(out byte playerId) &&
-			ExtremeRoleManager.TryGetSafeCastedRole(playerId, out Assassin? assasin))
+        if (OnemanMeetingSystemManager.TryGetSystem(out var system))
         {
-            assasin!.ExiledAction(
-				Helper.Player.GetPlayerControlById(playerId));
+			_ = system.TryStartMeeting();
         }
 
 
@@ -466,9 +436,6 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPrefix()
     {
-        if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
-        {
-            ExtremeRolesPlugin.ShipState.AssassinMeetingTriggerOff();
-        }
+		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.ExiledEnd);
     }
 }

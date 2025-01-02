@@ -13,6 +13,7 @@ using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Module.GameResult;
 
 
 
@@ -73,7 +74,6 @@ public static class RPCOperator
 		SummonerOps,
 
         // インポスター
-        AssasinVoteFor,
         CarrierAbility,
         PainterPaintBody,
         OverLoaderSwitchAbility,
@@ -226,7 +226,7 @@ public static class RPCOperator
         ExtremeRolesPlugin.ShipState.Initialize();
 
 
-		Module.ExtremeGameResult.TryDestroy();
+		ExtremeGameResultManager.TryDestroy();
 		Module.CustomVent.TryDestroy();
 
 		// チェックポイントリセット
@@ -572,11 +572,6 @@ public static class RPCOperator
 			rolePlayerId, targetPlayerId, x, y, isDead);
 	}
 
-	public static void AssasinVoteFor(byte targetId)
-    {
-        Roles.Combination.Assassin.VoteFor(
-            targetId);
-    }
     public static void CarrierAbility(
         byte callerId, float x, float y,
         byte targetId, bool deadBodyPickUp)

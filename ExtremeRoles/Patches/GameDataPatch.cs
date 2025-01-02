@@ -5,7 +5,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Patches;
 
@@ -93,6 +93,6 @@ public static class GameDataOnGameEndPatch
 {
 	public static void Prefix()
 	{
-		ExtremeGameResult.Instance.CreateTaskInfo();
+		ExtremeGameResultManager.Instance.CreateTaskInfo();
 	}
 }

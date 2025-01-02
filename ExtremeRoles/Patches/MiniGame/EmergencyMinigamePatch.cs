@@ -4,6 +4,7 @@ using UnityEngine;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.SystemType;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -25,13 +26,15 @@ namespace ExtremeRoles.Patches.MiniGame
             }
 
             // Handle max number of meetings
-            if (__instance.state == 1)
+            if (__instance.state == 1 &&
+				ExtremeSystemTypeManager.Instance.TryGet<MeetingCountSystem>(
+					MeetingCountSystem.Type, out var system))
             {
                 int localRemaining =
                     PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
                     0, ExtremeGameModeManager.Instance.ShipOption.Meeting.MaxMeetingCount -
-                        ExtremeRolesPlugin.ShipState.MeetingCount);
+						system.Counter);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
 
                 __instance.StatusText.text = $"<size=100%>{Tr.GetString("meetingStatus", PlayerControl.LocalPlayer.name)}</size>";

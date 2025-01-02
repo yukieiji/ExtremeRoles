@@ -8,6 +8,8 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.ModeSwitcher;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -16,7 +18,6 @@ using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
-using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
@@ -203,7 +204,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
             GameData.Instance == null ||
             this.IsWin ||
 			!CachedShipStatus.Instance.enabled ||
-			ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+			OnemanMeetingSystemManager.IsActive)
 		{
 			return;
 		}

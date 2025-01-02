@@ -9,6 +9,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
@@ -22,7 +23,6 @@ using ExtremeRoles.Patches.MapOverlay;
 
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
-using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -106,7 +106,7 @@ public static class HudManagerUpdatePatch
 
     public static bool Prefix(HudManager __instance)
     {
-        if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+        if (OnemanMeetingSystemManager.IsActive)
         {
             __instance.UseButton.ToggleVisible(false);
             __instance.AbilityButton.ToggleVisible(false);

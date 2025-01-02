@@ -58,6 +58,7 @@ public static class ObjectPath
 
 	public const string Bomb = "Bomb";
 	public const string Meeting = "EmergencyMeeting";
+	public const string MeetingBk = "MeetingBk";
 
 	// !----- コンビ用 -----
 	public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";

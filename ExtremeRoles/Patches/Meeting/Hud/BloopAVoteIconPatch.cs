@@ -7,7 +7,6 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
-using ExtremeRoles.Performance;
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 

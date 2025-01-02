@@ -5,6 +5,7 @@ using HarmonyLib;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -26,7 +27,7 @@ public static class MeetingHudStartPatch
 	{
 
 		var state = ExtremeRolesPlugin.ShipState;
-		bool trigger = state.AssassinMeetingTrigger;
+		bool trigger = OnemanMeetingSystemManager.TryGetOnemanMeetingName(out string name);
 		var builder = new StringBuilder();
 
 		builder
@@ -46,9 +47,13 @@ public static class MeetingHudStartPatch
 		}
 
 		builder
-			.Append("   - Assassin Meeting:")
-			.Append(trigger)
-			.AppendLine();
+			.Append("   - Oneman Meeting:")
+			.Append(trigger);
+		if (trigger)
+		{
+			builder.Append($" {name}");
+		}
+		builder.AppendLine();
 
 		if (!trigger &&
 			ExtremeSystemTypeManager.Instance.TryGet<ModdedMeetingTimeSystem>(

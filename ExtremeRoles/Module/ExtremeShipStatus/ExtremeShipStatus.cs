@@ -15,11 +15,10 @@ public sealed partial class ExtremeShipStatus
 	{
 		// 以下リファクタ済み
 
-		this.resetDeadPlayerInfo();
-		this.resetGlobalAction();
-		// this.resetPlayerSummary();
-		this.resetMeetingCount();
-		RoleAssignState.TryDestroy();
+			this.resetDeadPlayerInfo();
+			this.resetGlobalAction();
+			// this.resetPlayerSummary();
+			RoleAssignState.TryDestroy();
 
 		this.resetWins();
 	}

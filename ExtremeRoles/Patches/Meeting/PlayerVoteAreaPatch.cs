@@ -17,6 +17,8 @@ using ExtremeRoles.Roles.API.Interface;
 
 using Il2CppActionFloat = Il2CppSystem.Action<float>;
 using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches.Meeting;
 
@@ -70,14 +72,22 @@ public static class PlayerVoteAreaSelectPatch
 	public static bool Prefix(PlayerVoteArea __instance)
 	{
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			ExtremeRoleManager.GameRole.Count == 0) { return true; }
-
-		var state = ExtremeRolesPlugin.ShipState;
-		var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
-			IRoleMeetingButtonAbility>();
-
-		if (!state.AssassinMeetingTrigger)
+			ExtremeRoleManager.GameRole.Count == 0)
 		{
+			return true;
+		}
+
+		if (MonikaTrashSystem.TryGet(out var monika) &&
+			monika.InvalidPlayer(PlayerControl.LocalPlayer))
+		{
+			return false;
+		}
+
+		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		{
+			var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
+				IRoleMeetingButtonAbility>();
+
 			if (buttonRole != null && anotherButtonRole != null)
             {
 				return true; // TODO:Can use both role ability
@@ -95,8 +105,7 @@ public static class PlayerVoteAreaSelectPatch
 				return true;
 			}
 		}
-
-		if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+		else if (PlayerControl.LocalPlayer.PlayerId != system.Caller)
 		{
 			return false;
 		}
@@ -260,7 +269,10 @@ public static class PlayerVoteAreaSetDeadPatch
 		[HarmonyArgument(1)] bool isDead,
 		[HarmonyArgument(2)] bool isGuardian = false)
 	{
-		if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
+		if (!OnemanMeetingSystemManager.IsActive)
+		{
+			return true;
+		}
 
 		__instance.AmDead = false;
 		__instance.DidReport = didReport;

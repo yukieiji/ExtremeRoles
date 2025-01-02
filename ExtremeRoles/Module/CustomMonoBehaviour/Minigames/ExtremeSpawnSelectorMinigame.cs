@@ -16,6 +16,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Extension.Task;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 using ExtremeRoles.Patches.Controller;
 using ExtremeRoles.Performance;
@@ -291,7 +292,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		if (DestroyableSingleton<TutorialManager>.InstanceExists ||
 			!GameManager.Instance.LogicFlow.IsGameOverDueToDeath())
 		{
-			if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
+			if (!OnemanMeetingSystemManager.IsActive)
 			{
 				yield return WaiteSpawn();
 			}
