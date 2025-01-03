@@ -48,8 +48,8 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 	public void CreateAbility()
 	{
-		var img = UnityObjectLoader.LoadSpriteFromResources(
-			ObjectPath.TestButton);
+		var img = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Hijacker);
 		string name = Tr.GetString("hijackerHijack");
 
 		BehaviorBase beha = this.Loader.TryGetValueOption<Option, bool>(
@@ -92,7 +92,9 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	{ }
 
 	public void ResetOnMeetingStart()
-	{ }
+	{
+		repose();
+	}
 
 	public bool UseAbility()
 	{
@@ -179,7 +181,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
 		FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
-			localPlayer.Data.IsDead);
+			!localPlayer.Data.IsDead);
 
 		this.CanMove = true;
 
@@ -192,7 +194,6 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 		{
 			this.camera = FastDestroyableSingleton<HudManager>.Instance.transform.parent.GetComponent<FollowerCamera>();
 		}
-
 		this.camera.Target = localPlayer;
 		this.camera.enabled = true;
 	}

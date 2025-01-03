@@ -205,7 +205,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 
 	private void addVital()
 	{
-		var vital = Map.GetSecuritySystemConsole();
+		var vital = Map.GetVitalSystemConsole();
 		if (vital != null)
 		{
 			this.allPos.Add(

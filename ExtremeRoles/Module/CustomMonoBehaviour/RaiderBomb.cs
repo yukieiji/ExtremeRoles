@@ -12,6 +12,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus;
 
 
 #nullable enable
@@ -55,6 +56,13 @@ public sealed class RaiderBomb : MonoBehaviour
 		if (this.param is null ||
 			this.rend == null)
 		{
+			return;
+		}
+
+		if (MeetingHud.Instance != null ||
+			ExileController.Instance != null)
+		{
+			Destroy(base.gameObject);
 			return;
 		}
 
@@ -149,6 +157,8 @@ public sealed class RaiderBomb : MonoBehaviour
 		{
 			Helper.Player.RpcUncheckMurderPlayer(
 				playerId, playerId, byte.MinValue);
+			ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+				playerId, PlayerStatus.Explosion);
 		}
 	}
 
