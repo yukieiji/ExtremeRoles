@@ -48,8 +48,8 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 	public void CreateAbility()
 	{
-		var img = UnityObjectLoader.LoadSpriteFromResources(
-			ObjectPath.TestButton);
+		var img = UnityObjectLoader.LoadFromResources(
+			ExtremeRoleId.Hijacker);
 		string name = Tr.GetString("hijackerHijack");
 
 		BehaviorBase beha = this.Loader.TryGetValueOption<Option, bool>(
