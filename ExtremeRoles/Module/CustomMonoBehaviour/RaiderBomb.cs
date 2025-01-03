@@ -59,6 +59,13 @@ public sealed class RaiderBomb : MonoBehaviour
 			return;
 		}
 
+		if (MeetingHud.Instance != null ||
+			ExileController.Instance != null)
+		{
+			Destroy(base.gameObject);
+			return;
+		}
+
 		updateRendEnable();
 
 		this.timer += Time.fixedDeltaTime;
