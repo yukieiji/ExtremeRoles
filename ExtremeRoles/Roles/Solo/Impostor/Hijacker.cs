@@ -194,7 +194,6 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 		{
 			this.camera = FastDestroyableSingleton<HudManager>.Instance.transform.parent.GetComponent<FollowerCamera>();
 		}
-		this.isAbilityUse = false;
 		this.camera.Target = localPlayer;
 		this.camera.enabled = true;
 	}
