@@ -181,7 +181,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
 		FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
-			localPlayer.Data.IsDead);
+			!localPlayer.Data.IsDead);
 
 		this.CanMove = MeetingHud.Instance != null;
 
