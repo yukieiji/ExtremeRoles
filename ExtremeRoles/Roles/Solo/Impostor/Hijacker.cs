@@ -184,6 +184,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 			!localPlayer.Data.IsDead);
 
 		this.CanMove = true;
+		this.target = null;
 
 		if (!this.isAbilityUse)
 		{
