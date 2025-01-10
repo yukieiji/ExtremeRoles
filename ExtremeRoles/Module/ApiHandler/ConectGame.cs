@@ -38,7 +38,9 @@ internal class ConectGame : IRequestHandler
 			return;
 		}
 
-		var param = HttpUtility.ParseQueryString(context.Request.Url!.Query);
+		string query = context.Request.Url!.Query;
+		// 後で暗号化処理等する
+		var param = HttpUtility.ParseQueryString(query);
 
 		string? strCode = param["Code"];
 		string? rawCode = param["RawCode"];
@@ -71,11 +73,8 @@ internal class ConectGame : IRequestHandler
 		{
 			yield return null;
 		}
+
 		yield return FastDestroyableSingleton<EOSManager>.Instance.WaitForLoginFlow();
-		while (!DestroyableSingleton<ServerManager>.InstanceExists)
-		{
-			yield return null;
-		}
 
 		var sm = FastDestroyableSingleton<ServerManager>.Instance;
 		if (!sm.IsExROnlyServer())
