@@ -17,13 +17,13 @@ public static class CustomRegion
         var opt = ClientOption.Instance;
 
 		var exrTokyo = createStaticRegion(
-			ServerManagerExtension.ExROfficialServerTokyoManinName,
+			IRegionInfoExtension.ExROfficialServerTokyoManinName,
 			"168.138.196.31", 22023, false); // Only ExtremeRoles!!
 		IRegionInfo[] customServerRegion =
 		[
 			exrTokyo,
 			createStaticRegion(
-				ServerManagerExtension.FullCustomServerName,
+				IRegionInfoExtension.FullCustomServerName,
 				opt.Ip.Value, opt.Port.Value, false),
 		];
 
