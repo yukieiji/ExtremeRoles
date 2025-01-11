@@ -9,7 +9,8 @@ public sealed partial class ExtremeShipStatus
 {
 	public enum PlayerStatus
 	{
-		Alive = 0,
+		LoveYou = 0,
+		Alive,
 		Exiled,
 		Dead,
 		Killed,
@@ -27,7 +28,6 @@ public sealed partial class ExtremeShipStatus
 		DeadAssassinate,
 		Surrender,
 		Zombied,
-		LoveYou,
 
 		Disconnected,
 	}
