@@ -66,6 +66,7 @@ internal sealed class YandereWinChecker : IWinChecker
 					case ExtremeRoleId.Traitor:
 					case ExtremeRoleId.Queen:
 					case ExtremeRoleId.Delinquent:
+					case ExtremeRoleId.Chimera:
 						++oneSidedLoverNeutralNum;
 						break;
 					default:
