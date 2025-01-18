@@ -13,6 +13,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 
@@ -162,8 +163,8 @@ public sealed class IronMate :
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.IronMateGuard,
 			() => new IronMateGurdSystem(
-				loader.GetValue<Option, float>(Option.SlowTime),
-				loader.GetValue<Option, float>(Option.SlowMod)));
+				loader.GetValue<Option, float>(Option.SlowMod),
+				loader.GetValue<Option, float>(Option.SlowTime)));
 		this.playerShowTime = loader.GetValue<Option, float>(Option.PlayerShowTime);
 		this.deadBodyShowTime = loader.GetValue<Option, float>(Option.DeadBodyShowTimeOnAfterPlayer);
 	}

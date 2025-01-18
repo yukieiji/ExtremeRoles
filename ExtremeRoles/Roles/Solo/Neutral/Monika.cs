@@ -7,11 +7,10 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
-
-using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
-using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Module.CustomOption.Factory;
+
 
 #nullable enable
 
@@ -24,6 +23,8 @@ public sealed class Monika :
 {
 	public enum Ops
 	{
+		CanUseVent,
+		CanUseSabotage,
 		UseOtherButton,
 		Range,
 	}
@@ -61,7 +62,7 @@ public sealed class Monika :
 			PlayerControl.LocalPlayer, this,
 			this.range);
 
-		if (player == null || 
+		if (player == null ||
 			this.trashSystem.InvalidPlayer(player))
 		{
 			return false;
@@ -74,7 +75,7 @@ public sealed class Monika :
 
 	public bool UseAbility()
     {
-		if (this.targetPlayer == byte.MaxValue || 
+		if (this.targetPlayer == byte.MaxValue ||
 			this.trashSystem == null)
 		{
 			return false;
@@ -100,6 +101,10 @@ public sealed class Monika :
         AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
+			Ops.CanUseVent, false);
+		factory.CreateBoolOption(
+			Ops.CanUseSabotage, false);
+		factory.CreateBoolOption(
 			Ops.UseOtherButton, true);
 		IRoleAbility.CreateCommonAbilityOption(
             factory);
@@ -112,6 +117,9 @@ public sealed class Monika :
 		var loader = this.Loader;
 		this.trashSystem = ExtremeSystemTypeManager.Instance.CreateOrGet<MonikaTrashSystem>(
 			ExtremeSystemType.MonikaTrashSystem);
+
+		this.UseVent = loader.GetValue<Ops, bool>(Ops.CanUseVent);
+		this.UseSabotage = loader.GetValue<Ops, bool>(Ops.CanUseSabotage);
 
 		if (loader.GetValue<Ops, bool>(Ops.UseOtherButton))
 		{

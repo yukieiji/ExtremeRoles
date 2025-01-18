@@ -6,7 +6,7 @@ using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.SystemType;
+namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class IronMateGurdSystem(float speedMod, float speedTime) : IExtremeSystemType
 {
@@ -15,10 +15,10 @@ public sealed class IronMateGurdSystem(float speedMod, float speedTime) : IExtre
 	private readonly float speedMod = speedMod;
 	private readonly float speedTime = speedTime;
 
-	public bool IsContains(byte playerId) => this.shield.ContainsKey(playerId);
+	public bool IsContains(byte playerId) => shield.ContainsKey(playerId);
 
 	public bool TryGetShield(byte playerId, out int num)
-		=> this.shield.TryGetValue(playerId, out num) && num > 0;
+		=> shield.TryGetValue(playerId, out num) && num > 0;
 
 	public void SetUp(byte playerId, int guardNum)
 	{
@@ -32,7 +32,8 @@ public sealed class IronMateGurdSystem(float speedMod, float speedTime) : IExtre
 	{
 		ExtremeSystemTypeManager.RpcUpdateSystem(
 			ExtremeSystemType.IronMateGuard,
-			x => {
+			x =>
+			{
 				x.Write(playerId);
 				x.WritePacked(newNum);
 			});
@@ -56,6 +57,6 @@ public sealed class IronMateGurdSystem(float speedMod, float speedTime) : IExtre
 		}
 
 		var speedMod = PlayerControl.LocalPlayer.gameObject.TryAddComponent<SpeedMod>();
-		speedMod.SetUp(this.speedMod, this.speedTime);
+		speedMod.SetUp(this.speedMod, speedTime);
 	}
 }
