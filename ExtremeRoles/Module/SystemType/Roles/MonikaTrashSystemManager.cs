@@ -201,6 +201,10 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 			!source.IsDead && this.InvalidPlayer(local) //生存者toゴミ箱
 		)
 		||
+		(
+			!source.IsDead && local.IsDead //生存者to死んでる人
+		)
+		||
 		!(
 			source.IsDead || 
 			local.IsDead || 
