@@ -91,7 +91,7 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 		{
 			return false;
 		}
-		return !(localPlayerRole.IsImpostor() && sourcePlayerRole.IsImpostor());
+		return localPlayerRole.IsImpostor() && sourcePlayerRole.IsImpostor();
 	}
 
 	public bool TryGetGameEndReason(out RoleGameOverReason reason)
