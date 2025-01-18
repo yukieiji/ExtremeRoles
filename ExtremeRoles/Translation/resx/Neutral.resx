@@ -1197,4 +1197,10 @@
     <value>「モニカ」が緊急会議を発生させた時
 誰かのボタンを消費するか</value>
   </data>
+  <data name="MonikaCanUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="MonikaCanUseSabotage" xml:space="preserve">
+    <value>サボタージュを使用できるか</value>
+  </data>
 </root>
