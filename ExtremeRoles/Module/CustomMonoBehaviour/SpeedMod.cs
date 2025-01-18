@@ -15,6 +15,8 @@ public sealed class SpeedMod : MonoBehaviour
 	private float defaultSpeed = float.MinValue;
 	private SingleRoleBase? role;
 
+	public SpeedMod(System.IntPtr ptr) : base(ptr) { }
+
 	public void SetUp(float speed, float timer)
 	{
 		this.timer = timer;

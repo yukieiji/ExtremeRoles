@@ -163,8 +163,8 @@ public sealed class IronMate :
 		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.IronMateGuard,
 			() => new IronMateGurdSystem(
-				loader.GetValue<Option, float>(Option.SlowTime),
-				loader.GetValue<Option, float>(Option.SlowMod)));
+				loader.GetValue<Option, float>(Option.SlowMod),
+				loader.GetValue<Option, float>(Option.SlowTime)));
 		this.playerShowTime = loader.GetValue<Option, float>(Option.PlayerShowTime);
 		this.deadBodyShowTime = loader.GetValue<Option, float>(Option.DeadBodyShowTimeOnAfterPlayer);
 	}
