@@ -1244,7 +1244,7 @@ Extreme Rolesの各役職の共通設定が適用できる
     <value>「爆撃モード」の表示回数</value>
   </data>
   <data name="RaiderIsHidePlayerOnOpen" xml:space="preserve">
-    <value>「爆撃モード」中のプレイヤー表示</value>
+    <value>「爆撃モード」中にプレイヤーを隠すか</value>
   </data>
   <data name="RaiderBombType" xml:space="preserve">
     <value>「爆撃」の種類</value>
