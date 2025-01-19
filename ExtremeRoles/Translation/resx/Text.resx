@@ -1182,7 +1182,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="OnGameStartOptionReduceNum" xml:space="preserve">
     <value>消費数</value>
   </data>
-  <data name="OnGameStartOptionIsEmergencyButtonCoolDownIsFifteen" xml:space="preserve">
-    <value>初期会議ボタンのクールタイムが15秒か</value>
+  <data name="OnGameStartOptionFirstButtonCoolDown" xml:space="preserve">
+    <value>ゲーム開始から会議ボタンが押せない秒数</value>
   </data>
 </root>

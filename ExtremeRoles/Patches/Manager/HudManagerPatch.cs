@@ -48,10 +48,7 @@ public static class HudManagerOnGameStartPatch
 				RemoveMeetingNumCheckpoint.RpcCheckpoint(gameStart.ReduceNum);
 			}
 		}
-		if (!gameStart.IsEmergencyButtonCoolDownIsFifteen)
-		{
-			ShipStatus.Instance.Timer = 15.0f;
-		}
+		ShipStatus.Instance.Timer = 15 - gameStart.FirstButtonCoolDown;
 	}
 }
 

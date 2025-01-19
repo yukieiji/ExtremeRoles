@@ -7,7 +7,7 @@ public enum OnGameStartOption : int
 	IsKillCoolDownIsTen,
 	RemoveSomeoneButton,
 	ReduceNum,
-	IsEmergencyButtonCoolDownIsFifteen
+	FirstButtonCoolDown
 }
 
 public readonly struct GameStartOption
@@ -15,14 +15,14 @@ public readonly struct GameStartOption
 	public readonly bool IsKillCoolDownIsTen;
 	public readonly bool RemoveSomeoneButton;
 	public readonly int ReduceNum;
-	public readonly bool IsEmergencyButtonCoolDownIsFifteen;
+	public readonly int FirstButtonCoolDown;
 
 	public GameStartOption()
 	{
 		this.IsKillCoolDownIsTen = true;
 		this.RemoveSomeoneButton = true;
 		this.ReduceNum = 1;
-		this.IsEmergencyButtonCoolDownIsFifteen = true;
+		this.FirstButtonCoolDown = 15;
 	}
 	public GameStartOption(in OptionCategory category)
 	{
@@ -32,17 +32,17 @@ public readonly struct GameStartOption
 			OnGameStartOption.RemoveSomeoneButton);
 		this.ReduceNum = category.GetValue<OnGameStartOption, int>(
 			OnGameStartOption.ReduceNum);
-		this.IsEmergencyButtonCoolDownIsFifteen = category.GetValue<OnGameStartOption, bool>(
-			OnGameStartOption.IsEmergencyButtonCoolDownIsFifteen);
+		this.FirstButtonCoolDown = category.GetValue<OnGameStartOption, int>(
+			OnGameStartOption.FirstButtonCoolDown);
 	}
 	public static void Create(in OptionCategoryFactory factory)
 	{
-		var opt = factory.CreateBoolOption(OnGameStartOption.IsKillCoolDownIsTen, true);
+		var killCoolOpt = factory.CreateBoolOption(OnGameStartOption.IsKillCoolDownIsTen, true);
 		var buttonOpt = factory.CreateBoolOption(
-			OnGameStartOption.RemoveSomeoneButton, true, opt);
+			OnGameStartOption.RemoveSomeoneButton, true, killCoolOpt);
 		factory.CreateIntOption(
 			OnGameStartOption.ReduceNum, 1, 1, 1, 5, buttonOpt, invert: true);
-		factory.CreateBoolOption(
-			OnGameStartOption.IsEmergencyButtonCoolDownIsFifteen, true);
+		factory.CreateIntOption(
+			OnGameStartOption.FirstButtonCoolDown, 15, 0, 60, 1, format: OptionUnit.Second);
 	}
 }
