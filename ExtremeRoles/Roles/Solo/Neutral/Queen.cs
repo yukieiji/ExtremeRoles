@@ -293,8 +293,7 @@ public sealed class Queen :
                 this.taskCompServant.Add(playerId);
                 if (!this.HasOtherKillCool)
                 {
-                    this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                        FloatOptionNames.KillCooldown);
+                    this.KillCoolTime = Player.DefaultKillCoolTime;
                 }
                 this.HasOtherKillCool = true;
                 this.KillCoolTime = this.KillCoolTime * this.taskCompKillCoolReduceRate;

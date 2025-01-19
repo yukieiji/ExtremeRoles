@@ -1,6 +1,4 @@
-﻿using AmongUs.GameOptions;
-
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 using ExtremeRoles.Helper;
@@ -9,8 +7,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-
-
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -212,8 +208,7 @@ public sealed class PsychoKiller :
         if (!this.HasOtherKillCool)
         {
             this.HasOtherKillCool = true;
-            this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                FloatOptionNames.KillCooldown);
+            this.KillCoolTime = Player.DefaultKillCoolTime;
         }
 
         var cate = this.Loader;

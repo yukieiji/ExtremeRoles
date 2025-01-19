@@ -181,15 +181,10 @@ public sealed class CurseMaker :
 
         RoleState.AddKillCoolOffset(curseMaker.additionalKillCool);
 
-        if (role.TryGetKillCool(out float resetKillCool))
-        {
-            player.killTimer = resetKillCool;
-        }
-        else
-        {
-            player.killTimer = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                FloatOptionNames.KillCooldown);
-        }
+		player.killTimer =
+			role.TryGetKillCool(out float resetKillCool) ?
+			resetKillCool : Player.DefaultKillCoolTime;
+
         Sound.PlaySound(
             Sound.Type.CurseMakerCurse, 1.2f);
     }

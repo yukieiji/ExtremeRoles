@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 
-using AmongUs.GameOptions;
-
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -272,8 +268,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
         if (!this.HasOtherKillCool)
         {
             this.HasOtherKillCool = true;
-            this.defaultKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                FloatOptionNames.KillCooldown);
+            this.defaultKillCool = Player.DefaultKillCoolTime;
         }
         else
         {

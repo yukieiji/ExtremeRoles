@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -143,8 +142,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
                     if (!this.HasOtherKillCool)
                     {
                         this.HasOtherKillCool = true;
-                        this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                            FloatOptionNames.KillCooldown);
+                        this.KillCoolTime = Player.DefaultKillCoolTime;
                     }
                     this.KillCoolTime = Mathf.Clamp(
                         this.KillCoolTime - this.reduceKillCool,

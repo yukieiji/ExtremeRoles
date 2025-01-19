@@ -660,7 +660,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 			var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
 
 			this.HasOtherKillCool = option.HasOtherKillCool;
-			this.KillCoolTime = this.HasOtherKillCool ? option.KillCool : baseOption.GetFloat(FloatOptionNames.KillCooldown);
+			this.KillCoolTime = this.HasOtherKillCool ? option.KillCool : Player.DefaultKillCoolTime;
 
 			this.HasOtherKillRange = option.HasOtherKillRange;
 			this.KillRange = this.HasOtherKillRange ? option.KillRange : baseOption.GetInt(Int32OptionNames.KillDistance);

@@ -31,7 +31,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         var curOption = GameOptionsManager.Instance.CurrentGameOptions;
         if (this.CanKill)
         {
-            this.KillCoolTime = curOption.GetFloat(FloatOptionNames.KillCooldown);
+            this.KillCoolTime = Player.DefaultKillCoolTime;
             this.KillRange = curOption.GetInt(Int32OptionNames.KillDistance);
         }
         switch (id)

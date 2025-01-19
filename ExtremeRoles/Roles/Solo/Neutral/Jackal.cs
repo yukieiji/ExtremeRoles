@@ -148,7 +148,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
             this.HasOtherKillCool = loader.GetValue<JackalOption, bool>(
                 JackalOption.SidekickHasOtherKillCool);
-            this.KillCool = curOption.GetFloat(FloatOptionNames.KillCooldown);
+            this.KillCool = Player.DefaultKillCoolTime;
             if (this.HasOtherKillCool)
             {
                 this.KillCool = loader.GetValue<JackalOption, float>(

@@ -28,8 +28,6 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Patches;
 
 
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 
@@ -174,8 +172,8 @@ public sealed class Hypnotist :
     public static void UpdateAllDollKillButtonState(Hypnotist role)
     {
         PlayerControl localPlayer = PlayerControl.LocalPlayer;
-        float optionKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-            FloatOptionNames.KillCooldown);
+        float optionKillCool = Player.DefaultKillCoolTime;
+
         foreach (byte dollPlayerId in role.doll)
         {
             SingleRoleBase doll = ExtremeRoleManager.GameRole[dollPlayerId];
@@ -627,7 +625,7 @@ public sealed class Hypnotist :
     {
         var curOption = GameOptionsManager.Instance.CurrentGameOptions;
 
-        this.defaultKillCool = curOption.GetFloat(FloatOptionNames.KillCooldown);
+        this.defaultKillCool = Player.DefaultKillCoolTime;
 
         if (this.HasOtherKillCool)
         {

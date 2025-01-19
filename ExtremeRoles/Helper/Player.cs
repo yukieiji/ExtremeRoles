@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Module.SystemType.Roles;
+using AmongUs.GameOptions;
 
 
 namespace ExtremeRoles.Helper;
@@ -18,6 +19,7 @@ namespace ExtremeRoles.Helper;
 public static class Player
 {
     private static PlayerControl prevTarget;
+	public static float DefaultKillCoolTime => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(FloatOptionNames.KillCooldown);
 
 	private static Il2CppReferenceArray<Collider2D> hitBuffer = new Il2CppReferenceArray<Collider2D>(20);
 	private static ContactFilter2D playerHitFilter = new ContactFilter2D()

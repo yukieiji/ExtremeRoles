@@ -3,17 +3,13 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
-
-
-
-using AmongUs.GameOptions;
-
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -284,7 +280,7 @@ public sealed class Lover : MultiAssignRoleBase
             }
             else
             {
-                this.KillCoolTime = baseOption.GetFloat(FloatOptionNames.KillCooldown);
+                this.KillCoolTime = Player.DefaultKillCoolTime;
             }
 
             this.HasOtherKillRange = loader.GetValue<KillerCommonOption, bool>(
