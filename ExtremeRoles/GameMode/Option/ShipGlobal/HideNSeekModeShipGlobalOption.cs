@@ -40,6 +40,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 	public MeetingHudOption Meeting { get; } = new();
 	public GhostRoleOption GhostRole { get; } = new();
 	public ExileOption Exile { get; } = new();
+	public GameStartOption GameStart { get; } = new();
 
 	private IReadOnlyDictionary<int, HashSet<int>> useOption = new Dictionary<int, HashSet<int>>()
 	{

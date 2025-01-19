@@ -11,7 +11,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public enum ShipGlobalOptionCategory : int
 {
-	MeetingOption = 10,
+	OnStartGameOption = 10,
+	MeetingOption,
 	ExiledOption,
 	VentOption,
 	TaskOption,
@@ -23,6 +24,14 @@ public enum ShipGlobalOptionCategory : int
 	TaskWinOption,
 	NeutralWinOption,
 	GhostRoleGlobalOption
+}
+
+public enum OnGameStartOption : int
+{
+	IsKillCoolDownIsTen,
+	RemoveSomeoneButton,
+	ReduceNum,
+	IsEmergencyButtonCoolDownIsFifteen
 }
 
 public enum TaskOption : int
@@ -76,6 +85,7 @@ public interface IShipGlobalOption
 
 	public bool CanUseHorseMode { get; }
 
+	public GameStartOption GameStart { get; }
 	public ExileOption Exile { get; }
 
 	public VentConsoleOption Vent { get; }
@@ -136,6 +146,11 @@ public interface IShipGlobalOption
 
 	public static void Create()
     {
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.OnStartGameOption))
+		{
+			GameStartOption.Create(factory);
+		}
+
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.MeetingOption))
 		{
 			MeetingHudOption.Create(factory);

@@ -21,7 +21,8 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 
 	public bool IsRandomMap { get; private set; }
 
-    public ExileOption Exile { get; private set; }
+	public GameStartOption GameStart { get; private set; }
+	public ExileOption Exile { get; private set; }
 
 	public bool IsAllowParallelMedbayScan { get; private set; }
 
@@ -50,6 +51,9 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 
 	public void Load()
     {
+		this.GameStart = new GameStartOption(
+			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.OnStartGameOption));
+
 		this.Meeting = new MeetingHudOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.MeetingOption));
 

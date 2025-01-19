@@ -30,6 +30,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 	{
 		RoleAssign,
 		OnemanMeeting,
+		RemoveButton,
 	}
 
 	public const ExtremeSystemType Type = ExtremeSystemType.GlobalCheckpoint;
@@ -65,6 +66,7 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 			{
 				CheckpointType.RoleAssign => new RoleAssignCheckPoint(),
 				CheckpointType.OnemanMeeting => new OnemanMeetingCheckpoint(msgReader),
+				CheckpointType.RemoveButton => new RemoveMeetingNumCheckpoint(msgReader),
 				_ => null,
 			};
 
