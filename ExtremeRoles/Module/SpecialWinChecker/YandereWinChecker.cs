@@ -77,10 +77,14 @@ internal sealed class YandereWinChecker : IWinChecker
 
 		int aliveNum = aliveYandere.Count + aliveOneSideLover.Count;
 
-		if (aliveOneSideLover.Count == 0 || aliveYandere.Count == 0) { return false; }
-		if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
-		if (statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0) { return false; }
-		if (statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1) { return false; }
+		if (aliveOneSideLover.Count == 0 ||
+			aliveYandere.Count == 0 ||
+			aliveNum < statistics.TotalAlive - aliveNum ||
+			statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0 ||
+			statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1)
+		{
+			return false;
+		}
 
 		using (var caller = RPCOperator.CreateCaller(
 			RPCOperator.Command.SetWinPlayer))
