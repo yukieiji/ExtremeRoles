@@ -4,16 +4,20 @@ using System.Linq;
 
 using Hazel;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 {
-	public bool IsDirty { get; set; } = false;
+	public bool IsDirty => false;
 
 	private readonly Dictionary<byte, int> meetingNums = new Dictionary<byte, int>(createData());
 
@@ -24,7 +28,8 @@ public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 				item.Value > 0 &&
 				ExtremeRoleManager.TryGetRole(item.Key, out var role) &&
 				role.Id is not ExtremeRoleId.Monika &&
-				role.CanCallMeeting());
+				role.CanCallMeeting() &&
+				Player.GetPlayerControlById(item.Key).IsValid());
 
 		if (validNum.Any())
 		{
@@ -48,7 +53,7 @@ public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 			});
 	}
 
-	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
+	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{ }
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
