@@ -24,6 +24,7 @@ using ExtremeRoles.Module.CustomOption.Implemented;
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
+using ExtremeRoles.Compat.Initializer;
 
 #nullable enable
 
@@ -84,22 +85,21 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	private float crewVision;
 	private float impostorVision;
 
-	private Type submarineStatusType;
-	private FieldInfo submarineStatusReference;
-	private PropertyInfo inTransitionField;
+	private readonly Type submarineStatusType;
+	private readonly FieldInfo submarineStatusReference;
+	private readonly PropertyInfo inTransitionField;
 
-	private MethodInfo calculateLightRadiusMethod;
+	private readonly MethodInfo calculateLightRadiusMethod;
 
-	private MethodInfo rpcRequestChangeFloorMethod;
-	private MethodInfo registerFloorOverrideMethod;
-	private FieldInfo onUpperField;
-	private MethodInfo getFloorHandlerInfo;
+	private readonly MethodInfo rpcRequestChangeFloorMethod;
+	private readonly MethodInfo registerFloorOverrideMethod;
+	private readonly FieldInfo onUpperField;
+	private readonly MethodInfo getFloorHandlerInfo;
 
-	private Type submarineOxygenSystem;
-	private PropertyInfo submarineOxygenSystemInstanceGetter;
-	private MethodInfo submarineOxygenSystemRepairDamageMethod;
+	private readonly PropertyInfo submarineOxygenSystemInstanceGetter;
+	private readonly MethodInfo submarineOxygenSystemRepairDamageMethod;
 
-	private Type elevatorMover;
+	private readonly Type elevatorMover;
 
 	private MonoBehaviour? submarineStatus;
 #pragma warning disable CS8618
@@ -108,11 +108,11 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 	private BoolCustomOption replaceDoorMinigameOption;
 	private SelectionCustomOption enableSubMergedRandomSpawn;
 
-	public SubmergedIntegrator(PluginInfo plugin) : base(Guid, plugin)
+	public SubmergedIntegrator(SubmergedInitializer init) : base(init)
+#pragma warning restore CS8618
 	{
 		// カスタムサボのタスクタイプ取得
-		Type taskType = this.ClassType.First(
-			t => t.Name == "CustomTaskTypes");
+		Type taskType = init.GetClass("CustomTaskTypes");
 		var retrieveOxigenMaskField = AccessTools.Field(taskType, "RetrieveOxygenMask");
 		object? taskTypeObj = retrieveOxigenMaskField.GetValue(null);
 		var retrieveOxigenMaskTaskTypeField = AccessTools.Field(taskTypeObj?.GetType(), "taskType");
@@ -123,32 +123,30 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 
 		// サブマージドの酸素妨害の修理用
 		this.submarineOxygenSystemInstanceGetter = AccessTools.Property(
-			this.submarineOxygenSystem, "Instance");
+			init.SubmarineOxygenSystem, "Instance");
 		this.submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
-			this.submarineOxygenSystem, "RepairDamage");
+			init.SubmarineOxygenSystem, "RepairDamage");
 
 		// サブマージドのカスタムMonoを取ってくる
-		this.elevatorMover = this.ClassType.First(t => t.Name == "ElevatorMover");
+		this.elevatorMover = init.GetClass("ElevatorMover");
 
 		// フロアを変える用
-		Type floorHandlerType = this.ClassType.First(t => t.Name == "FloorHandler");
-		this.getFloorHandlerInfo = AccessTools.Method(
+		Type floorHandlerType = init.GetClass("FloorHandler");
+		this.getFloorHandlerInfo = init.GetMethod(
 			floorHandlerType, "GetFloorHandler", [ typeof(PlayerControl) ]);
-		this.rpcRequestChangeFloorMethod = AccessTools.Method(
+		this.rpcRequestChangeFloorMethod = init.GetMethod(
 			floorHandlerType, "RpcRequestChangeFloor");
-		this.registerFloorOverrideMethod = AccessTools.Method(
+		this.registerFloorOverrideMethod = init.GetMethod(
 			floorHandlerType, "RegisterFloorOverride");
-
 		this.onUpperField = AccessTools.Field(floorHandlerType, "onUpper");
 
-		this.submarineStatusType = ClassType.First(
-			t => t.Name == "SubmarineStatus");
-		this.calculateLightRadiusMethod = AccessTools.Method(
+		this.submarineStatusType = init.GetClass("SubmarineStatus");
+		this.calculateLightRadiusMethod = init.GetMethod(
 			this.submarineStatusType, "CalculateLightRadius");
 		this.submarineStatusReference = AccessTools.Field(
 			this.submarineStatusType, "referenceHolder");
 
-		Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "VentPatchData");
+		Type ventMoveToVentPatchType = init.GetClass("VentPatchData");
 		this.inTransitionField = AccessTools.Property(ventMoveToVentPatchType, "InTransition");
 	}
 #pragma warning restore CS8618
@@ -461,132 +459,6 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		{
             UnityObject.Destroy(box);
         }
-	}
-
-	protected override void PatchAll(Harmony harmony)
-	{
-		Type exileCont = ClassType.First(
-			t => t.Name == "SubmergedExileController");
-		MethodInfo wrapUpAndSpawn = AccessTools.Method(
-			exileCont, "WrapUpAndSpawn");
-		ExileController? cont = null;
-		MethodInfo wrapUpAndSpawnPrefix = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Prefix());
-#pragma warning disable CS8604
-		MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
-#pragma warning restore CS8604
-
-		System.Collections.IEnumerator? enumerator = null;
-		Type displayPrespawnStepPatchesType = ClassType.First(
-			t => t.Name == "DisplayPrespawnStepPatches");
-		MethodInfo displayPrespawnStepPatchesPostfix = AccessTools.Method(
-			displayPrespawnStepPatchesType, "CustomPrespawnStep");
-#pragma warning disable CS8601
-		MethodInfo displayPrespawnStepPatchesPostfixPrefix = SymbolExtensions.GetMethodInfo(
-			() => Patches.DisplayPrespawnStepPatchesCustomPrespawnStepPatch.Prefix(ref enumerator));
-#pragma warning restore CS8601
-
-		Type submarineSelectSpawn = ClassType.First(
-			t => t.Name == "SubmarineSelectSpawn");
-		MethodInfo onDestroy = AccessTools.Method(
-			submarineSelectSpawn, "OnDestroy");
-		MethodInfo onDestroyPrefix = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmarineSelectOnDestroyPatch.Prefix());
-
-		Type hudManagerUpdatePatch = ClassType.First(
-			t => t.Name == "ChangeFloorButtonPatches");
-		MethodInfo hudManagerUpdatePatchPostfix = AccessTools.Method(
-			hudManagerUpdatePatch, "HudUpdatePatch");
-		object? hudManagerUpdatePatchInstance = null;
-		Patches.HudManagerUpdatePatchPostfixPatch.SetType(
-			hudManagerUpdatePatch);
-#pragma warning disable CS8604
-		MethodInfo hubManagerUpdatePatchPostfixPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.HudManagerUpdatePatchPostfixPatch.Postfix(
-				hudManagerUpdatePatchInstance));
-
-		string deteriorateFunction = nameof(ExtremeRoles.Module.Interface.IAmongUs.ISystemType.Deteriorate);
-#pragma warning restore CS8604
-
-		this.submarineOxygenSystem = ClassType.First(
-			t => t.Name == "SubmarineOxygenSystem");
-		MethodInfo submarineOxygenSystemDetoriorate = AccessTools.Method(
-			submarineOxygenSystem, deteriorateFunction);
-		object? submarineOxygenSystemInstance = null;
-		Patches.SubmarineOxygenSystemDetorioratePatch.SetType(this.submarineOxygenSystem);
-#pragma warning disable CS8604
-		MethodInfo submarineOxygenSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
-				submarineOxygenSystemInstance));
-#pragma warning restore CS8604
-
-		Type submarineSpawnInSystem = ClassType.First(
-			t => t.Name == "SubmarineSpawnInSystem");
-		MethodInfo submarineSpawnInSystemDetoriorate = AccessTools.Method(
-			submarineSpawnInSystem, deteriorateFunction);
-		object? submarineSpawnInSystemInstance = null;
-		Patches.SubmarineSpawnInSystemDetorioratePatch.SetType(submarineSpawnInSystem);
-#pragma warning disable CS8604
-		MethodInfo submarineSpawnInSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmarineSpawnInSystemDetorioratePatch.Postfix(
-				submarineSpawnInSystemInstance));
-#pragma warning restore CS8604
-
-		Minigame? game = null;
-
-		Type submarineSurvillanceMinigame = ClassType.First(
-			t => t.Name == "SubmarineSurvillanceMinigame");
-		MethodInfo submarineSurvillanceMinigameSystemUpdate = AccessTools.Method(
-			submarineSurvillanceMinigame, "Update");
-		Patches.SubmarineSurvillanceMinigamePatch.SetType(submarineSurvillanceMinigame);
-#pragma warning disable CS8604
-		MethodInfo submarineSurvillanceMinigameSystemUpdatePrefixPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmarineSurvillanceMinigamePatch.Prefix(game));
-		MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
-#pragma warning restore CS8604
-		bool upperSelected = false;
-		Type submarineSelectSpawnType = ClassType.First(
-			t => t.Name == "SubmarineSelectSpawn");
-		MethodInfo submarineSelectSpawnCoSelectLevel = AccessTools.Method(
-			submarineSelectSpawnType, "CoSelectLevel");
-		MethodInfo submarineSelectSpawnCoSelectLevelPatch = SymbolExtensions.GetMethodInfo(
-			() => Patches.SubmarineSelectSpawnCoSelectLevelPatch.Prefix(ref upperSelected));
-
-		// 会議終了時のリセット処理を呼び出せるように
-		harmony.Patch(wrapUpAndSpawn,
-			new HarmonyMethod(wrapUpAndSpawnPrefix),
-			new HarmonyMethod(wrapUpAndSpawnPostfix));
-
-		// アサシン会議発動するとスポーン画面が出ないように
-		harmony.Patch(displayPrespawnStepPatchesPostfix,
-			new HarmonyMethod(displayPrespawnStepPatchesPostfixPrefix));
-
-		// キルクール周りが上書きされているのでそれの調整
-		harmony.Patch(onDestroy,
-			new HarmonyMethod(onDestroyPrefix));
-
-		// フロアの階層変更ボタンの位置を変えるパッチ
-		harmony.Patch(hudManagerUpdatePatchPostfix,
-			postfix: new HarmonyMethod(hubManagerUpdatePatchPostfixPatch));
-
-		// 酸素枯渇発動時アサシンは常にマスクを持つパッチ
-		harmony.Patch(submarineOxygenSystemDetoriorate,
-			postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
-
-		// アサシン会議時の暗転を防ぐパッチ
-		harmony.Patch(submarineSpawnInSystemDetoriorate,
-			postfix: new HarmonyMethod(submarineSpawnInSystemDetorioratePostfixPatch));
-
-		// サブマージドのセキュリティカメラの制限をつけるパッチ
-		harmony.Patch(submarineSurvillanceMinigameSystemUpdate,
-			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePrefixPatch),
-			new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
-
-		// ランダムスポーンを無効化する用
-		harmony.Patch(submarineSelectSpawnCoSelectLevel,
-			new HarmonyMethod(submarineSelectSpawnCoSelectLevelPatch));
 	}
 
 	private MonoBehaviour? getFloorHandler(PlayerControl player)

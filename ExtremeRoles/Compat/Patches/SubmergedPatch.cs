@@ -57,8 +57,13 @@ public static class SubmergedExileControllerWrapUpAndSpawnPatch
 		ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPrefix();
 	}
 
-	public static void Postfix(ExileController __instance)
+	public static void Postfix(ExileController? __instance)
 	{
+		if (__instance == null)
+		{
+			return;
+		}
+
 		ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
 			__instance.initData.networkedPlayer);
 	}
@@ -71,9 +76,13 @@ public static class HudManagerUpdatePatchPostfixPatch
 #pragma warning restore CS8618
 	private static AspectPosition? posSetter;
 
-	public static void Postfix(object __instance)
+	public static void Postfix(object? __instance)
 	{
-		if (!CompatModManager.Instance.IsModMap<Submerged>()) { return; }
+		if (__instance == null ||
+			!CompatModManager.Instance.IsModMap<Submerged>())
+		{
+			return;
+		}
 
 		object? buttonOjb = floorButtonInfo.GetValue(__instance);
 
@@ -101,9 +110,13 @@ public static class SubmarineSpawnInSystemDetorioratePatch
 	private static FieldInfo submarineSpawnInSystemTimer;
 #pragma warning restore CS8618
 
-	public static void Postfix(object __instance)
+	public static void Postfix(object? __instance)
 	{
-		if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod)) { return; }
+		if (__instance == null ||
+			!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod))
+		{
+			return;
+		}
 
 		var spawnOpt = ExtremeGameModeManager.Instance.ShipOption.Spawn;
 
@@ -127,11 +140,15 @@ public static class SubmarineOxygenSystemDetorioratePatch
 	private static FieldInfo submarineOxygenSystemPlayersWithMask;
 #pragma warning restore CS8618
 
-	public static void Postfix(object __instance)
+	public static void Postfix(object? __instance)
 	{
-		if (!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod) ||
+		if (__instance == null ||
+			!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod) ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
+			Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin)
+		{
+			return;
+		}
 
 		HashSet<byte>? playersWithMask =
 			submarineOxygenSystemPlayersWithMask.GetValue(__instance) as HashSet<byte>;
@@ -156,10 +173,14 @@ public static class SubmarineSurvillanceMinigamePatch
 	private static FieldInfo screenTextInfo;
 #pragma warning restore CS8618
 
-	public static bool Prefix(Minigame __instance)
+	public static bool Prefix(Minigame? __instance)
 	{
-		if (Roles.ExtremeRoleManager.GameRole.Count == 0 ||
-			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
+		if (__instance == null ||
+			Roles.ExtremeRoleManager.GameRole.Count == 0 ||
+			Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity())
+		{
+			return true;
+		}
 
 
 		GameObject? screenStatic = screenStaticInfo.GetValue(__instance) as GameObject;
@@ -183,8 +204,13 @@ public static class SubmarineSurvillanceMinigamePatch
 		return false;
 	}
 
-	public static void Postfix(Minigame __instance)
+	public static void Postfix(Minigame? __instance)
 	{
+		if (__instance == null)
+		{
+			return;
+		}
+
 		ExtremeRoles.Patches.MiniGame.SecurityHelper.PostUpdate(__instance);
 
 		var timer = ExtremeRoles.Patches.MiniGame.SecurityHelper.GetTimerText();

@@ -11,6 +11,7 @@ using Hazel;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
+using ExtremeRoles.Compat.Initializer;
 
 
 namespace ExtremeRoles.Compat;
@@ -38,7 +39,7 @@ internal sealed class CompatModManager
 				SubmergedIntegrator.Guid,
 				"https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest",
 				true,
-				typeof(SubmergedIntegrator)
+				typeof(SubmergedInitializer)
 			)
 		},
 		{
@@ -48,7 +49,7 @@ internal sealed class CompatModManager
 				CrowdedMod.Guid,
 				"https://api.github.com/repos/NikoCat233/CrowdedMod/releases/latest",
 				true,
-				typeof(CrowdedMod)
+				typeof(EmptyInitializer<CrowdedMod>)
 			)
 		},
 	};
@@ -95,9 +96,14 @@ internal sealed class CompatModManager
 
 			object? instance = Activator.CreateInstance(
 				modInfo.ModIntegratorType, [ plugin ]);
-			if (instance == null) { continue; }
+			if (instance is not IInitializer initializer)
+			{
+				continue;
+			}
 
-			this.loadedMod.Add(modType, (ModIntegratorBase)instance);
+			var integrator = initializer.Initialize();
+
+			this.loadedMod.Add(modType, integrator);
 
 			logger.LogInfo(
 				$"---- CompatMod:{guid} integrated!! ----");
