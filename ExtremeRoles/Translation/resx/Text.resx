@@ -1170,4 +1170,19 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="LoveYou" xml:space="preserve">
     <value>恋人</value>
   </data>
+  <data name="OnGameStartOption" xml:space="preserve">
+    <value>ゲーム開始時の初期設定</value>
+  </data>
+  <data name="OnGameStartOptionIsKillCoolDownIsTen" xml:space="preserve">
+    <value>初期キルクールが10秒か</value>
+  </data>
+  <data name="OnGameStartOptionRemoveSomeoneButton" xml:space="preserve">
+    <value>誰かの会議ボタンを消費しておく</value>
+  </data>
+  <data name="OnGameStartOptionReduceNum" xml:space="preserve">
+    <value>消費数</value>
+  </data>
+  <data name="OnGameStartOptionIsEmergencyButtonCoolDownIsFifteen" xml:space="preserve">
+    <value>初期会議ボタンのクールタイムが15秒か</value>
+  </data>
 </root>

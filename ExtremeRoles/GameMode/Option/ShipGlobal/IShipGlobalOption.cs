@@ -11,7 +11,7 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal;
 
 public enum ShipGlobalOptionCategory : int
 {
-	OnStartGameOption = 10,
+	OnGameStartOption = 10,
 	MeetingOption,
 	ExiledOption,
 	VentOption,
@@ -24,14 +24,6 @@ public enum ShipGlobalOptionCategory : int
 	TaskWinOption,
 	NeutralWinOption,
 	GhostRoleGlobalOption
-}
-
-public enum OnGameStartOption : int
-{
-	IsKillCoolDownIsTen,
-	RemoveSomeoneButton,
-	ReduceNum,
-	IsEmergencyButtonCoolDownIsFifteen
 }
 
 public enum TaskOption : int
@@ -146,7 +138,7 @@ public interface IShipGlobalOption
 
 	public static void Create()
     {
-		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.OnStartGameOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.OnGameStartOption))
 		{
 			GameStartOption.Create(factory);
 		}

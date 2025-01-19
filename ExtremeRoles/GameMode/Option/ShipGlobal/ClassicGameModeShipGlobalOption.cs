@@ -52,7 +52,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 	public void Load()
     {
 		this.GameStart = new GameStartOption(
-			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.OnStartGameOption));
+			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.OnGameStartOption));
 
 		this.Meeting = new MeetingHudOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.MeetingOption));

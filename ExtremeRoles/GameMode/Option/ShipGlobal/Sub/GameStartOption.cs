@@ -2,6 +2,14 @@
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
+public enum OnGameStartOption : int
+{
+	IsKillCoolDownIsTen,
+	RemoveSomeoneButton,
+	ReduceNum,
+	IsEmergencyButtonCoolDownIsFifteen
+}
+
 public readonly struct GameStartOption
 {
 	public readonly bool IsKillCoolDownIsTen;
@@ -30,10 +38,10 @@ public readonly struct GameStartOption
 	public static void Create(in OptionCategoryFactory factory)
 	{
 		var opt = factory.CreateBoolOption(OnGameStartOption.IsKillCoolDownIsTen, true);
-		factory.CreateBoolOption(
+		var buttonOpt = factory.CreateBoolOption(
 			OnGameStartOption.RemoveSomeoneButton, true, opt);
 		factory.CreateIntOption(
-			OnGameStartOption.ReduceNum, 1, 1, 1, 5, opt);
+			OnGameStartOption.ReduceNum, 1, 1, 1, 5, buttonOpt, invert: true);
 		factory.CreateBoolOption(
 			OnGameStartOption.IsEmergencyButtonCoolDownIsFifteen, true);
 	}
