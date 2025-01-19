@@ -18,15 +18,15 @@ public sealed class Pcg64RxsMXs : RNG64Base
 
 	public override ulong NextUInt64()
 	{
-		ulong oldseed = this.state;
-		this.state = (oldseed * Multiplier) + (increment | 1);
-		ulong word = ((oldseed >> ((int)(oldseed >> 59) + 5)) ^ oldseed) * 12605985483714917081;
+		ulong oldSeed = this.state;
+		this.state = unchecked((oldSeed * Multiplier) + this.increment);
+		ulong word = ((oldSeed >> ((int)(oldSeed >> 59) + 5)) ^ oldSeed) * 12605985483714917081;
 		return (word >> 43) ^ word;
 	}
 
 	protected override void Initialize(ulong seed, ulong initStete)
 	{
 		this.state = (seed + initStete) * Multiplier + initStete;
-		this.increment = initStete;
+		this.increment = initStete | 1;
 	}
 }
