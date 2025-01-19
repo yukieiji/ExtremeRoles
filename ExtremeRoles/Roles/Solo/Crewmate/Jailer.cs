@@ -431,10 +431,6 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		this.awakeTaskGage = loader.GetValue<Option, int>(Option.AwakeTaskGage) / 100.0f;
 		this.awakeDeadPlayerNum = loader.GetValue<Option, int>(Option.AwakeDeadPlayerNum);
 
-		this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
-		this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
-		this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
-
 		this.isMissingToDead = loader.GetValue<Option, bool>(Option.IsMissingToDead);
 		if (!this.isMissingToDead)
 		{
@@ -473,9 +469,18 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		if (!this.awakeRole)
 		{
+			this.CanUseAdmin = true;
+			this.CanUseSecurity = true;
+			this.CanUseVital = true;
 			this.CanCallMeeting = true;
 			this.awakeHasOtherVision = this.HasOtherVision;
 			this.HasOtherVision = false;
+		}
+		else
+		{
+			this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
+			this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
+			this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
 		}
 
 	}
@@ -518,6 +523,12 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			this.awakeRole = true;
 			this.CanCallMeeting = false;
 			this.HasOtherVision = this.awakeHasOtherVision;
+
+			var loader = this.Loader;
+			this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
+			this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
+			this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
+
 			this.Button.SetButtonShow(true);
 		}
 		else
