@@ -60,24 +60,5 @@ public abstract class InitializerBase<T> : IInitializer
 	public MethodInfo GetMethod(Type fromType, string methodName, Type[]? param = null)
 		=> AccessTools.Method(fromType, methodName, param);
 
-	protected MethodInfo CreatePatchMethod(Action func)
-		=> SymbolExtensions.GetMethodInfo(() => func.Invoke());
-
-	protected MethodInfo CreatePatchMethod<W>(Action<W> func)
-	{
-		W? instance = default;
-#pragma warning disable CS8604
-		return SymbolExtensions.GetMethodInfo(() => func.Invoke(instance));
-#pragma warning restore CS8604
-	}
-
-	protected MethodInfo CreatePatchMethod<W>(Func<W, bool> func)
-	{
-		W? instance = default;
-#pragma warning disable CS8604
-		return SymbolExtensions.GetMethodInfo(() => func.Invoke(instance));
-#pragma warning restore CS8604
-	}
-
 	protected abstract void PatchAll(Harmony harmony);
 }
