@@ -14,7 +14,7 @@ public static class IntroCutsceneBeginImpostorPatch
     {
 		if (__instance.TryGetComponent<IntroCutsceneModder>(out var mod))
 		{
-			mod.BeginCrewmatePrefix(__instance, ref yourTeam);
+			mod.BeginImpostorPrefix(__instance, ref yourTeam);
 		}
 	}
 
@@ -23,7 +23,7 @@ public static class IntroCutsceneBeginImpostorPatch
 	{
 		if (__instance.TryGetComponent<IntroCutsceneModder>(out var mod))
 		{
-			mod.BeginCrewmatePostfix(__instance);
+			mod.BeginImpostorPostfix(__instance);
 		}
 	}
 }
