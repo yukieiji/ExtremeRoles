@@ -267,7 +267,8 @@ public sealed class Lover : MultiAssignRoleBase
         this.becomeKiller = isNeutral && loader.GetValue<LoverOption, bool>(
             LoverOption.BecomNeutral);
 
-        if (isNeutral && !this.becomeKiller)
+        if (isNeutral && !this.becomeKiller &&
+			this.Team is ExtremeRoleType.Crewmate)
         {
             this.Team = ExtremeRoleType.Neutral;
         }
