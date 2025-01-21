@@ -251,12 +251,12 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 - 言語対応状況
 
-|  言語名/Languages  |  対応状況/Status |
-| ---- | ---- |
-|  英語/English  |   ほぼ翻訳済み/Mostly Translated  |
-|  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
-|  简体中文/SChinese  |   ほぼ翻訳済み/Mostly Translated  |
-|  繁体中文/TChinese  |   ほぼ翻訳済み/Mostly Translated  |
+|  言語名/Languages  |  対応状況/Status | 翻訳者/Translator(Thank you!!) |
+| ---- | ---- | --- |
+|  英語/English  |   ほぼ翻訳済み/Mostly Translated  | [yuhgao](https://github.com/yuhgao) |
+|  日本語/Japanese  |  完全翻訳済み/Fully Translated  | - |
+|  简体中文/SChinese  |   ほぼ翻訳済み/Mostly Translated  | [ZeMingoh233](https://github.com/ZeMingoh233), 四个憨批汉化组([fivefirex](https://github.com/fivefirex), 123，乱线Namdam_096，氢氧则名) |
+|  繁体中文/TChinese  |   ほぼ翻訳済み/Mostly Translated  | [FangkuaiYa](https://github.com/FangkuaiYa) |
 
 ### How to translate
 
