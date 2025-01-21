@@ -1,18 +1,15 @@
-﻿using AmongUs.GameOptions;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles;
-using System;
+﻿using System;
 using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
-using ExtremeRoles.Roles.API;
+using UnityEngine;
+using AmongUs.GameOptions;
+
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
@@ -22,6 +19,7 @@ using Il2CppIEnumerator = Il2CppSystem.Collections.IEnumerator;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
+[Il2CppRegister]
 public sealed class IntroCutsceneModder : MonoBehaviour
 {
 	public IntroCutsceneModder(IntPtr ptr) : base(ptr) { }
@@ -36,7 +34,7 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 		IntroCutscene instance, ref PlayerIl2CppList impTeam)
 	{
 		commonBeginPrefix(instance, ref impTeam);
-		// ここでFakeImpostorTeamを追加する
+		addFakeTeam(impTeam, ExtremeRoleType.Impostor);
 	}
 
 	public void BeginCrewmatePostfix(
@@ -88,6 +86,43 @@ public sealed class IntroCutsceneModder : MonoBehaviour
 	{
 		setupIntroTeam(instance);
 		setupRole();
+	}
+
+	private static void addFakeTeam(PlayerIl2CppList team, ExtremeRoleType temaId)
+	{
+		byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+		foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+		{
+			if (playerId == localPlayerId)
+			{
+				continue;
+			}
+			if (tryAddFakeTeam(playerId, role, team, temaId) ||
+				(
+					role is MultiAssignRoleBase multiAssignRole &&
+					tryAddFakeTeam(playerId, multiAssignRole, team, temaId)
+				))
+			{
+				continue;
+			}
+		}
+	}
+
+	private static bool tryAddFakeTeam(
+		byte playerId,
+		SingleRoleBase role,
+		PlayerIl2CppList impTeam,
+		ExtremeRoleType teamId)
+	{
+		if (role is IRoleFakeIntro mainFake &&
+			mainFake.FakeTeam == teamId)
+		{
+			var player = Player.GetPlayerControlById(playerId);
+			impTeam.Add(player);
+			Logging.Debug($"Add fake {teamId}: {playerId}");
+			return true;
+		}
+		return false;
 	}
 
 	private static void setupIntroTeam(IntroCutscene instance)
