@@ -4,6 +4,7 @@ using ExtremeRoles.Helper;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -146,12 +147,25 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
         if (this.canAssignImposter)
         {
+			var assignRatioOption = factory.CreateBoolOption(
+				CombinationRoleCommonOption.IsRatioTeamAssign,
+				false, ignorePrefix: true);
 			var isImposterAssignOps = factory.CreateBoolOption(
 				CombinationRoleCommonOption.IsAssignImposter,
-				false, ignorePrefix: true);
-
-			factory.Create0To100Percentage10StepOption(
+				false, assignRatioOption,
+				ignorePrefix: true,
+				invert: true);
+			factory.CreateIntOption(
 				CombinationRoleCommonOption.ImposterSelectedRate,
+				10, 10, SingleRoleSpawnData.MaxSpawnRate, 10,
+				isImposterAssignOps,
+				format: OptionUnit.Percentage,
+				ignorePrefix: true);
+
+			factory.CreateSelectionOption(
+				CombinationRoleCommonOption.AssignRatio,
+				["1:1", "2:1", "1:2", "1:3", "3:1"],
+				assignRatioOption,
 				ignorePrefix: true);
         }
         return factory;
