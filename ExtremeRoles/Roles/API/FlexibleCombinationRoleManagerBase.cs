@@ -8,12 +8,79 @@ using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Roles.API;
 
+public sealed class ImpostorRatio
+{
+	public enum Ratio : byte
+	{
+		OneToOne,
+		TwoToOne,
+		OneToTwo,
+		TwoToTwo,
+		OneToThree,
+		ThreeToOne,
+		ThreeToTwo,
+		TwoToThree,
+		ThreeToThree,
+	}
+
+	public int CrewmateNum { get; }
+	public int ImpostorNum { get; }
+	public int TotalNum => CrewmateNum + ImpostorNum;
+
+	public ImpostorRatio(Ratio ratio)
+	{
+		switch (ratio)
+		{
+			case Ratio.OneToOne:
+				this.CrewmateNum = 1;
+				this.ImpostorNum = 1;
+				break;
+			case Ratio.TwoToOne:
+				this.CrewmateNum = 2;
+				this.ImpostorNum = 1;
+				break;
+			case Ratio.OneToTwo:
+				this.CrewmateNum = 1;
+				this.ImpostorNum = 2;
+				break;
+			case Ratio.TwoToTwo:
+				this.CrewmateNum = 2;
+				this.ImpostorNum = 2;
+				break;
+			case Ratio.OneToThree:
+				this.CrewmateNum = 1;
+				this.ImpostorNum = 3;
+				break;
+			case Ratio.ThreeToOne:
+				this.CrewmateNum = 3;
+				this.ImpostorNum = 1;
+				break;
+			case Ratio.ThreeToTwo:
+				this.CrewmateNum = 3;
+				this.ImpostorNum = 2;
+				break;
+			case Ratio.TwoToThree:
+				this.CrewmateNum = 2;
+				this.ImpostorNum = 3;
+				break;
+			case Ratio.ThreeToThree:
+				this.CrewmateNum = 3;
+				this.ImpostorNum = 3;
+				break;
+		}
+	}
+
+	public ImpostorRatio(int option) : this((Ratio)option)
+	{
+	}
+}
+
 public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManagerBase
 {
 
-    public MultiAssignRoleBase BaseRole;
-    private int minimumRoleNum = 0;
-    private bool canAssignImposter = true;
+    public MultiAssignRoleBase BaseRole { get; }
+    private readonly int minimumRoleNum = 0;
+    private readonly bool canAssignImposter = true;
 
     public FlexibleCombinationRoleManagerBase(
 		CombinationRoleType roleType,
@@ -33,15 +100,22 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public override void AssignSetUpInit(int curImpNum)
     {
 		var cate = this.Loader;
+		bool isMultiAssign = cate.GetValue<CombinationRoleCommonOption, bool>(
+			CombinationRoleCommonOption.IsMultiAssign);
+		bool isImposterAssign = cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
+			CombinationRoleCommonOption.IsAssignImposter,
+			out var impOpt);
+		bool isRatioAssign = cate.GetValue<CombinationRoleCommonOption, bool>(
+			CombinationRoleCommonOption.IsRatioTeamAssign);
 
 		foreach (var role in this.Roles)
         {
-            role.CanHasAnotherRole = cate.GetValue<CombinationRoleCommonOption, bool>(
-				CombinationRoleCommonOption.IsMultiAssign);
-
-			if (!cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
-                   CombinationRoleCommonOption.IsAssignImposter,
-                    out var impOpt)) { continue; }
+            role.CanHasAnotherRole = isMultiAssign;
+			if (!isImposterAssign || isRatioAssign)
+			{
+				role.Initialize();
+				continue;
+			}
 
             bool isEvil = impOpt.Value;
 
@@ -51,21 +125,12 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
             if (isEvil)
             {
-                role.Team = ExtremeRoleType.Impostor;
-                role.SetNameColor(Palette.ImpostorRed);
-                role.CanKill = true;
-                role.UseVent = true;
-                role.UseSabotage = true;
-                role.HasTask = false;
-                ++curImpNum;
+				roleToImpostor(role);
+				++curImpNum;
             }
             else
             {
-                role.Team = ExtremeRoleType.Crewmate;
-                role.CanKill = false;
-                role.UseVent = false;
-                role.UseSabotage = false;
-                role.HasTask = true;
+				roleToCrewmate(role);
             }
             role.Initialize();
         }
@@ -74,33 +139,26 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public override MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType)
     {
-
-        MultiAssignRoleBase role = null;
-
-        if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
+        if (this.BaseRole.Id != (ExtremeRoleId)roleId)
+		{
+			return null;
+		}
 
 		this.BaseRole.CanHasAnotherRole = this.Loader.GetValue<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsMultiAssign);
 
-		role = (MultiAssignRoleBase)this.BaseRole.Clone();
+		MultiAssignRoleBase role = (MultiAssignRoleBase)this.BaseRole.Clone();
 
         switch (playerRoleType)
         {
             case RoleTypes.Impostor:
             case RoleTypes.Shapeshifter:
 			case RoleTypes.Phantom:
-                role.Team = ExtremeRoleType.Impostor;
-                role.SetNameColor(Palette.ImpostorRed);
-                role.CanKill = true;
-                role.UseVent = true;
-                role.UseSabotage = true;
-                role.HasTask = false;
+				roleToImpostor(role);
                 return role;
             default:
                 return role;
         }
-
-
     }
 
     protected override AutoParentSetOptionCategoryFactory CreateSpawnOption()
@@ -162,9 +220,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 				format: OptionUnit.Percentage,
 				ignorePrefix: true);
 
-			factory.CreateSelectionOption(
+			factory.CreateSelectionOption<CombinationRoleCommonOption, ImpostorRatio.Ratio>(
 				CombinationRoleCommonOption.AssignRatio,
-				["1:1", "2:1", "1:2", "1:3", "3:1"],
 				assignRatioOption,
 				ignorePrefix: true);
         }
@@ -197,10 +254,55 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
             roleAssignNum = opt.Value;
         }
 
-        for (int i = 0; i < roleAssignNum; ++i)
-        {
-            this.Roles.Add((MultiAssignRoleBase)this.BaseRole.Clone());
-        }
+		if (cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
+				CombinationRoleCommonOption.IsRatioTeamAssign, out var enableRatioOpt) &&
+			enableRatioOpt.Value)
+		{
+			int selection = cate.GetValue<CombinationRoleCommonOption, int>(
+				CombinationRoleCommonOption.AssignRatio);
+			var ratio = new ImpostorRatio(selection);
+			roleAssignNum = ratio.TotalNum;
+
+			for (int i = 0; i < roleAssignNum; ++i)
+			{
+				var role = (MultiAssignRoleBase)this.BaseRole.Clone();
+				if (i < ratio.CrewmateNum)
+				{
+					roleToCrewmate(role);
+				}
+				else
+				{
+					roleToImpostor(role);
+				}
+				this.Roles.Add(role);
+			}
+
+		}
+		else
+		{
+			for (int i = 0; i < roleAssignNum; ++i)
+			{
+				this.Roles.Add((MultiAssignRoleBase)this.BaseRole.Clone());
+			}
+		}
     }
 
+	private static void roleToImpostor(MultiAssignRoleBase role)
+	{
+		role.Team = ExtremeRoleType.Impostor;
+		role.SetNameColor(Palette.ImpostorRed);
+		role.CanKill = true;
+		role.UseVent = true;
+		role.UseSabotage = true;
+		role.HasTask = false;
+	}
+
+	private static void roleToCrewmate(MultiAssignRoleBase role)
+	{
+		role.Team = ExtremeRoleType.Crewmate;
+		role.CanKill = false;
+		role.UseVent = false;
+		role.UseSabotage = false;
+		role.HasTask = true;
+	}
 }
