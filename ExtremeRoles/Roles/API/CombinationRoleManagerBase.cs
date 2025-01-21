@@ -16,8 +16,10 @@ public enum CombinationRoleCommonOption
 {
     IsMultiAssign = 80,
     AssignsNum,
+	IsRatioTeamAssign,
     IsAssignImposter,
     ImposterSelectedRate,
+	AssignRatio
 }
 
 public abstract class CombinationRoleManagerBase : RoleOptionBase
