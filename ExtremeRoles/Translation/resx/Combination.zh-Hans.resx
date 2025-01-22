@@ -924,4 +924,98 @@
   <data name="Moving" xml:space="preserve">
     <value>搬运</value>
   </data>
+  <data name="Accelerator" xml:space="preserve">
+    <value>机关师</value>
+  </data>
+  <data name="NiceAccelerator" xml:space="preserve">
+    <value>正义的机关师</value>
+  </data>
+  <data name="EvilAccelerator" xml:space="preserve">
+    <value>邪恶的机关师</value>
+  </data>
+  <data name="AcceleratorAbilityCoolTime" xml:space="preserve">
+    <value>加速带冷却时间</value>
+  </data>
+  <data name="AcceleratorAbilityActiveTime" xml:space="preserve">
+    <value>加速带激活时间</value>
+  </data>
+  <data name="AcceleratorAbilityCount" xml:space="preserve">
+    <value>加速带数量</value>
+  </data>
+  <data name="AcceleratorSpeed" xml:space="preserve">
+    <value>加速带加速倍率</value>
+  </data>
+  <data name="AcceleratorUseOtherPlayer" xml:space="preserve">
+    <value>加速带可加速他人的速度</value>
+  </data>
+  <data name="AcceleratorIntroDescription" xml:space="preserve">
+    <value>这条道路,一方通行!!</value>
+  </data>
+  <data name="AcceleratorShortDescription" xml:space="preserve">
+    <value>小心不要撞到墙了!!</value>
+  </data>
+  <data name="AcceleratorFullDescription" xml:space="preserve">
+    <value>机关师可以放置加速带
+
+加速带：加速或减速
+在加速带上顺着奔跑可以加速，如果逆着加速带奔跑将减速</value>
+  </data>
+  <data name="AccelerateSet" xml:space="preserve">
+    <value>加速带</value>
+  </data>
+  <data name="Skater" xml:space="preserve">
+    <value>溜冰舞者</value>
+  </data>
+  <data name="NiceSkater" xml:space="preserve">
+    <value>正义的溜冰舞者</value>
+  </data>
+  <data name="EvilSkater" xml:space="preserve">
+    <value>邪恶的溜冰舞者</value>
+  </data>
+  <data name="SkaterAbilityCoolTime" xml:space="preserve">
+    <value>溜冰冷却时间</value>
+  </data>
+  <data name="SkaterAbilityActiveTime" xml:space="preserve">
+    <value>溜冰解除时间</value>
+  </data>
+  <data name="SkaterAbilityCount" xml:space="preserve">
+    <value>溜冰可使用次数</value>
+  </data>
+  <data name="SkaterAcceleration" xml:space="preserve">
+    <value>溜冰加速倍率</value>
+  </data>
+  <data name="SkaterMaxSpeed" xml:space="preserve">
+    <value>溜冰最快速度</value>
+  </data>
+  <data name="SkaterFriction" xml:space="preserve">
+    <value>溜冰摩擦力</value>
+  </data>
+  <data name="SkaterUseE" xml:space="preserve">
+    <value>溜冰过程中撞到墙反弹</value>
+  </data>
+  <data name="SkaterEValue" xml:space="preserve">
+    <value>溜冰过程中碰撞系数</value>
+  </data>
+  <data name="SkaterCanUseSpeed" xml:space="preserve">
+    <value>溜冰过程中能否使用按钮</value>
+  </data>
+  <data name="SkaterIntroDescription" xml:space="preserve">
+    <value>感受脚底生风的快感</value>
+  </data>
+  <data name="SkaterShortDescription" xml:space="preserve">
+    <value>看得到我的车尾灯吗？</value>
+  </data>
+  <data name="SkaterFullDescription" xml:space="preserve">
+    <value>使用技能移速最快的职业
+
+滑冰:感受脚底生风的快感
+溜冰时你不能立即停止或转弯，根据设置你撞到墙将反弹
+到一定速度以上时，无法使用使用按钮等其他操作</value>
+  </data>
+  <data name="SkaterSkateOn" xml:space="preserve">
+    <value>滑冰</value>
+  </data>
+  <data name="SkaterSkateOff" xml:space="preserve">
+    <value>刹车</value>
+  </data>
 </root>

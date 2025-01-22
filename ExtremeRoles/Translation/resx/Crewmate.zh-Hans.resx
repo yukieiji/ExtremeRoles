@@ -905,4 +905,301 @@
   <data name="SetPortal" xml:space="preserve">
     <value>安装</value>
   </data>
+  <data name="DelusionerEnableCounter" xml:space="preserve">
+    <value>启用偏转爆发</value>
+  </data>
+  <data name="DelusionerFullDescription" xml:space="preserve">
+    <value>别过来:他们会杀了我的!
+偏转爆发:你们全都给我离开!!!!!!!!!!!!!!!!!!!!
+使用技能可以将他人传送到地图的任意位置当达成以下条件,技能将变为偏转爆发
+1.冷却时间结束
+2.还有可用次数
+当满足这两点被害妄想者被攻击将被动触发偏转爆发传送附近所有玩家</value>
+  </data>
+  <data name="Moderator" xml:space="preserve">
+    <value>持表人</value>
+  </data>
+  <data name="ModeratorAwakeTaskGage" xml:space="preserve">
+    <value>任务完成率揭示职业</value>
+  </data>
+  <data name="ModeratorAbilityCoolTime" xml:space="preserve">
+    <value>转动表把冷却时间</value>
+  </data>
+  <data name="ModeratorAbilityCount" xml:space="preserve">
+    <value>可转动表把次数</value>
+  </data>
+  <data name="ModeratorMeetingTimerOffset" xml:space="preserve">
+    <value>转动表把将增加会议时间</value>
+  </data>
+  <data name="ModeratorIntroDescription" xml:space="preserve">
+    <value>这次会议由我主持！</value>
+  </data>
+  <data name="ModeratorShortDescription" xml:space="preserve">
+    <value>通过转动表把给大家更多时间</value>
+  </data>
+  <data name="ModeratorFullDescription" xml:space="preserve">
+    <value>可以增加会议时间的船员职业，可以在游戏中延长下一次会议的时间。
+转动秒把 ：我们再聊一会儿好吗？
+将下一次会议的计时器延长一定时间</value>
+  </data>
+  <data name="changeMeetingTime" xml:space="preserve">
+    <value>下次会议增加{0}秒</value>
+  </data>
+  <data name="moderate" xml:space="preserve">
+    <value>转动秒把</value>
+  </data>
+  <data name="Psychic" xml:space="preserve">
+    <value>通灵师</value>
+  </data>
+  <data name="PsychicAwakeTaskGage" xml:space="preserve">
+    <value>任务完成率揭示职业(觉醒条件:1)</value>
+  </data>
+  <data name="PsychicAwakeDeadPlayerNum" xml:space="preserve">
+    <value>死亡人数觉醒职业(觉醒条件:2)</value>
+  </data>
+  <data name="PsychicAbilityCoolTime" xml:space="preserve">
+    <value>通灵冷却时间</value>
+  </data>
+  <data name="PsychicAbilityActiveTime" xml:space="preserve">
+    <value>通灵持续时间</value>
+  </data>
+  <data name="PsychicAbilityCount" xml:space="preserve">
+    <value>通灵使用次数</value>
+  </data>
+  <data name="PsychicIsUpgradeAbility" xml:space="preserve">
+    <value>通灵师在游戏中，能力是否会获得强化</value>
+  </data>
+  <data name="PsychicUpgradeTaskGage" xml:space="preserve">
+    <value>通灵强化需要完成任务数(強化条件:1)</value>
+  </data>
+  <data name="PsychicUpgradeDeadPlayerNum" xml:space="preserve">
+    <value>通灵强化需要死亡人数(強化条件:2)</value>
+  </data>
+  <data name="PsychicIntroDescription" xml:space="preserve">
+    <value>聆听逝者的低语…</value>
+  </data>
+  <data name="PsychicShortDescription" xml:space="preserve">
+    <value>为逝者传达最后的消息</value>
+  </data>
+  <data name="PsychicFullDescription" xml:space="preserve">
+    <value>可以知晓存活内鬼与中立的船员职业，能够从死者那里获取信息。
+通灵 : 我听到死者的低语…
+- 通过使用技能静止不动并等待设定的时间来获取信息。- 其他队伍剩余队员的信息将在下次会议的聊天中显示。这不包括船员（即使您已经更换了队伍，例如仆人）。
+- 当相应选项开启时，可通过完成任务和淘汰玩家获得额外加成</value>
+  </data>
+  <data name="PsychicPsychic" xml:space="preserve">
+    <value>通灵</value>
+  </data>
+  <data name="PsychicPsychicStart" xml:space="preserve">
+    <value>通灵开始</value>
+  </data>
+  <data name="PsychicPsychicEnd" xml:space="preserve">
+    <value>成功获得信息。信息将在下一次会议上展示…</value>
+  </data>
+  <data name="PsychicPsychicResult" xml:space="preserve">
+    <value>通灵结果</value>
+  </data>
+  <data name="PsychicPsychicStrAliveRole" xml:space="preserve">
+    <value>幸存的职位：</value>
+  </data>
+  <data name="PsychicPsychicStrTeam" xml:space="preserve">
+    <value>阵营：</value>
+  </data>
+  <data name="PsychicPsychicStrForAliveNum" xml:space="preserve">
+    <value>幸存者：{0}名</value>
+  </data>
+  <data name="Bait" xml:space="preserve">
+    <value>诱饵</value>
+  </data>
+  <data name="BaitAwakeTaskGage" xml:space="preserve">
+    <value>任务完成率揭示职业</value>
+  </data>
+  <data name="BaitDelayUntilForceReport" xml:space="preserve">
+    <value>强制报告前的延迟时间</value>
+  </data>
+  <data name="BaitEnableBaitBenefit" xml:space="preserve">
+    <value>在强制报告后，是否为凶手减少击杀冷却</value>
+  </data>
+  <data name="BaitKillCoolReduceMulti" xml:space="preserve">
+    <value>击杀诱饵凶手减少击杀冷却倍率</value>
+  </data>
+  <data name="BaitReduceTimer" xml:space="preserve">
+    <value>减少击杀冷却持续时间</value>
+  </data>
+  <data name="BaitIntroDescription" xml:space="preserve">
+    <value>你中计了！</value>
+  </data>
+  <data name="BaitShortDescription" xml:space="preserve">
+    <value>牺牲小我，只为未来</value>
+  </data>
+  <data name="BaitFullDescription" xml:space="preserve">
+    <value>当诱饵被杀凶手将在一段时间后自报尸体
+警报器：凶手将被世人知晓
+如果被杀，凶手将在 “强制报告前的延迟时间”后报告尸体。
+如开启了”强制报告击杀冷却奖励“将在一段时间里减少凶手的冷却时间</value>
+  </data>
+  <data name="forceReportUntil" xml:space="preserve">
+    <value>{0}秒后强制报告</value>
+  </data>
+  <data name="Jailer" xml:space="preserve">
+    <value>狱警</value>
+  </data>
+  <data name="Lawbreaker" xml:space="preserve">
+    <value>破法者</value>
+  </data>
+  <data name="Yardbird" xml:space="preserve">
+    <value>囚徒</value>
+  </data>
+  <data name="JailerAwakeTaskGage" xml:space="preserve">
+    <value>觉醒职业所需任务
+(觉醒条件:1)</value>
+  </data>
+  <data name="JailerAwakeDeadPlayerNum" xml:space="preserve">
+    <value>觉醒职业所需死亡人数
+(觉醒条件:2)</value>
+  </data>
+  <data name="JailerUseAdmin" xml:space="preserve">
+    <value>狱警能否使用管理地图</value>
+  </data>
+  <data name="JailerUseSecurity" xml:space="preserve">
+    <value>狱警可以使用监控吗？/
+可以使用日志吗？</value>
+  </data>
+  <data name="JailerUseVital" xml:space="preserve">
+    <value>狱警可以使用生命检测仪吗？</value>
+  </data>
+  <data name="JailerAbilityCoolTime" xml:space="preserve">
+    <value>招安冷却时间</value>
+  </data>
+  <data name="JailerAbilityCount" xml:space="preserve">
+    <value>招安可使用次数</value>
+  </data>
+  <data name="JailerTargetMode" xml:space="preserve">
+    <value>可以招安的阵营</value>
+  </data>
+  <data name="JailerCanReplaceAssassin" xml:space="preserve">
+    <value>能否招安赌怪？</value>
+  </data>
+  <data name="JailerRange" xml:space="preserve">
+    <value>招安范围</value>
+  </data>
+  <data name="JailerIsMissingToDead" xml:space="preserve">
+    <value>招安失败后是否会畏罪自杀</value>
+  </data>
+  <data name="JailerIsDeadAbilityZero" xml:space="preserve">
+    <value>招安次数为0将死亡</value>
+  </data>
+  <data name="JailerLawbreakerCanKill" xml:space="preserve">
+    <value>破法者能否拥有击杀能力</value>
+  </data>
+  <data name="JailerHasOtherKillCool" xml:space="preserve">
+    <value>破法者是否拥有独立击杀冷</value>
+  </data>
+  <data name="JailerKillCoolDown" xml:space="preserve">
+    <value>破法者击杀冷却</value>
+  </data>
+  <data name="JailerHasOtherKillRange" xml:space="preserve">
+    <value>破法者是否拥有独立击杀距离</value>
+  </data>
+  <data name="JailerKillRange" xml:space="preserve">
+    <value>破法者击杀距离</value>
+  </data>
+  <data name="JailerLawbreakerUseVent" xml:space="preserve">
+    <value>破法者能否使用通风管</value>
+  </data>
+  <data name="JailerLawbreakerUseSab" xml:space="preserve">
+    <value>破法者能否使用破坏</value>
+  </data>
+  <data name="JailerYardbirdAddCommonTask" xml:space="preserve">
+    <value>囚徒是否拥有短任务</value>
+  </data>
+  <data name="JailerYardbirdAddNormalTask" xml:space="preserve">
+    <value>囚徒是否拥有正常任务</value>
+  </data>
+  <data name="JailerYardbirdAddLongTask" xml:space="preserve">
+    <value>囚徒是否拥有长任务</value>
+  </data>
+  <data name="JailerYardbirdSpeedMod" xml:space="preserve">
+    <value>囚徒速度</value>
+  </data>
+  <data name="JailerYardbirdUseAdmin" xml:space="preserve">
+    <value>囚徒能否使用管理员地图</value>
+  </data>
+  <data name="JailerYardbirdUseSecurity" xml:space="preserve">
+    <value>囚徒能否使用监控</value>
+  </data>
+  <data name="JailerYardbirdUseVital" xml:space="preserve">
+    <value>囚徒能否使用生命检测仪</value>
+  </data>
+  <data name="JailerYardbirdUseVent" xml:space="preserve">
+    <value>囚徒能否使用通风管</value>
+  </data>
+  <data name="JailerYardbirdUseSab" xml:space="preserve">
+    <value>囚徒能否使用破坏</value>
+  </data>
+  <data name="JailerIntroDescription" xml:space="preserve">
+    <value>恶人也该有改过自新的机会</value>
+  </data>
+  <data name="JailerShortDescription" xml:space="preserve">
+    <value>们又说起了话，但已不是虚伪的谎言</value>
+  </data>
+  <data name="JailerFullDescription" xml:space="preserve">
+    <value>可以将非船员阵营招安进船员阵营
+但如对船员使用招安你将变为破法者
+
+招安:给罪人们改过自新的机会
+靠近其他阵营使用技能,让其加入船员阵营
+如对船员使用阵营使用招安,根据设置会因罪恶感而自杀或变为破法者</value>
+  </data>
+  <data name="YardbirdShortDescription" xml:space="preserve">
+    <value>改过自新,获得新生</value>
+  </data>
+  <data name="YardbirdFullDescription" xml:space="preserve">
+    <value>囚徒是由狱警招安而来,由于过去有一些污点,船员无法完全信任你
+你可能会受到一些坏buff,如走的更慢,更多任务或无法使用一些器具</value>
+  </data>
+  <data name="LawbreakerShortDescription" xml:space="preserve">
+    <value>我不该这么做...但我已别无选择...</value>
+  </data>
+  <data name="LawbreakerFullDescription" xml:space="preserve">
+    <value>破法者是因为狱警的错误决定而产生的,破法者的获胜条件是阻止船员获得胜利,根据设置破法者将拥有破坏能力</value>
+  </data>
+  <data name="AddJail" xml:space="preserve">
+    <value>招安</value>
+  </data>
+  <data name="Summoner" xml:space="preserve">
+    <value>召唤师</value>
+  </data>
+  <data name="SummonerAbilityCoolTime" xml:space="preserve">
+    <value>签订契约与召唤冷却时间</value>
+  </data>
+  <data name="SummonerMarkingCount" xml:space="preserve">
+    <value>签订契约可使用次数</value>
+  </data>
+  <data name="SummonerRange" xml:space="preserve">
+    <value>签订契约范围</value>
+  </data>
+  <data name="SummonerSummonCount" xml:space="preserve">
+    <value>召唤可使用次数</value>
+  </data>
+  <data name="SummonerIntroDescription" xml:space="preserve">
+    <value>你我已签订契约,成为我的召唤兽吧！！</value>
+  </data>
+  <data name="SummonerShortDescription" xml:space="preserve">
+    <value>有危险！出来吧召唤兽！</value>
+  </data>
+  <data name="SummonerFullDescription" xml:space="preserve">
+    <value>船员阵营,可以召唤他人
+
+签订契约:成为我的召唤兽吧
+召唤:出现吧！召唤兽！
+使用签订契约可与一人签订契约,可多次签订契约但只能同时和一人签订契约
+使用鼠标滚轮可以将技能切换为召唤,将召唤兽召唤到自己的位置</value>
+  </data>
+  <data name="Marking" xml:space="preserve">
+    <value>签订契约</value>
+  </data>
+  <data name="Summon" xml:space="preserve">
+    <value>召唤</value>
+  </data>
 </root>

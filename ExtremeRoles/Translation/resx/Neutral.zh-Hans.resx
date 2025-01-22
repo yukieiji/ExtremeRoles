@@ -753,4 +753,315 @@
   <data name="upgradeVirus" xml:space="preserve">
     <value>增强病毒</value>
   </data>
+  <data name="YokoUseYashiro" xml:space="preserve">
+    <value>启用神社相关的能力</value>
+  </data>
+  <data name="YokoAbilityCoolTime" xml:space="preserve">
+    <value>神社冷却时间</value>
+  </data>
+  <data name="YokoAbilityActiveTime" xml:space="preserve">
+    <value>放置神社所需的时间</value>
+  </data>
+  <data name="YokoAbilityCount" xml:space="preserve">
+    <value>可以放置神社的次数</value>
+  </data>
+  <data name="YokoYashiroActiveTime" xml:space="preserve">
+    <value>神社的持续时间</value>
+  </data>
+  <data name="YokoYashiroSeelTime" xml:space="preserve">
+    <value>神社封印时间</value>
+  </data>
+  <data name="YokoYashiroProtectRange" xml:space="preserve">
+    <value>神社保护范围</value>
+  </data>
+  <data name="YokoYashiroUpdateWithMeeting" xml:space="preserve">
+    <value>会议时神社是否也会变化</value>
+  </data>
+  <data name="YokoFullDescription" xml:space="preserve">
+    <value>狐妖可以抢夺任何人的胜利
+
+洞察力:似乎附近有不对劲的东西
+神社:它会暂时保护我
+狐妖会感知到附近是否有拥有击杀能力的玩家
+狐妖还可以放置并激活神社,当神社激活时在神社范围内狐妖无法被普通击杀,但一段时间后神社将被封印,需要一定时间才能解开
+注意狐妖无法抢夺船员的任务胜利和内鬼破坏胜利还有梅林的刺杀胜利</value>
+  </data>
+  <data name="yokoYashiro" xml:space="preserve">
+    <value>神社</value>
+  </data>
+  <data name="yokoYashiroStatusText" xml:space="preserve">
+    <value>神社目前的状态{0}</value>
+  </data>
+  <data name="yokoYashiroNextStatusText" xml:space="preserve">
+    <value>到达「{1}」还需{2}秒</value>
+  </data>
+  <data name="yokoYashiroCloseText" xml:space="preserve">
+    <value>转移到「{0}」！</value>
+  </data>
+  <data name="Hatter" xml:space="preserve">
+    <value>疯帽子</value>
+  </data>
+  <data name="HatterCanRepairSabotage" xml:space="preserve">
+    <value>能否修理破坏？</value>
+  </data>
+  <data name="HatterWinCount" xml:space="preserve">
+    <value>获胜需要跳过的会议数</value>
+  </data>
+  <data name="HatterAbilityCoolTime" xml:space="preserve">
+    <value>时光流逝冷却时间</value>
+  </data>
+  <data name="HatterAbilityCount" xml:space="preserve">
+    <value>时光流逝使用次数</value>
+  </data>
+  <data name="HatterHideMeetingTimer" xml:space="preserve">
+    <value>通过『时光流逝』隐藏会议计时器</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseLower" xml:space="preserve">
+    <value>通过『时光流逝』减少的会议时间的最小比率</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseUpper" xml:space="preserve">
+    <value>通过『时光流逝』减少的会议时间的最大比率</value>
+  </data>
+  <data name="HatterIncreaseTaskGage" xml:space="preserve">
+    <value>增加『时光流逝』的任务进度率</value>
+  </data>
+  <data name="HatterIncreseNum" xml:space="preserve">
+    <value>增加能力的使用次数</value>
+  </data>
+  <data name="HatterIntroDescription" xml:space="preserve">
+    <value>永无止境的茶会开始了...</value>
+  </data>
+  <data name="HatterShortDescription" xml:space="preserve">
+    <value>你还需要茶吗？还是别的什么东西？</value>
+  </data>
+  <data name="HatterFullDescription" xml:space="preserve">
+    <value>可以加快会议时间的中立
+胜利条件①：跳过特定次数的会议。
+胜利条件②：下列的幸存者人数相同
+内鬼与拥有击杀能力的中立
+此职业（自身）
+船员
+
+时间飞逝：发动后随机减少会议时间，并不再显示会议时间
+如果任务的推进速度超过“时间杀戮增加的任务进度率”，则使用任务的次数将增加“使用能力的次数</value>
+  </data>
+  <data name="timeKill" xml:space="preserve">
+    <value>时间飞逝</value>
+  </data>
+  <data name="Artist" xml:space="preserve">
+    <value>画家</value>
+  </data>
+  <data name="ArtistCanUseVent" xml:space="preserve">
+    <value>可以使用通风管</value>
+  </data>
+  <data name="ArtistWinAreaSize" xml:space="preserve">
+    <value>获胜所需涂范围</value>
+  </data>
+  <data name="ArtistAbilityCoolTime" xml:space="preserve">
+    <value>绘画冷却时间</value>
+  </data>
+  <data name="ArtistAbilityActiveTime" xml:space="preserve">
+    <value>绘画停用前摇</value>
+  </data>
+  <data name="ArtistIntroDescription" xml:space="preserve">
+    <value>艺术是世界上最美丽的东西！</value>
+  </data>
+  <data name="ArtistShortDescription" xml:space="preserve">
+    <value>向所有人展示你的艺术！</value>
+  </data>
+  <data name="ArtistFullDescription" xml:space="preserve">
+    <value>可以绘画的中立
+胜利条件：用“颜料”涂抹超过一定面积的区域。
+
+绘画：为世界涂抹色彩
+按下按钮即可激活，激活时会在弹道上画一条线。
+涂抹的颜色是随机的。
+其他人可以看见你绘画的痕迹</value>
+  </data>
+  <data name="ArtistArtOn" xml:space="preserve">
+    <value>绘画</value>
+  </data>
+  <data name="ArtistArtOff" xml:space="preserve">
+    <value>停止绘画</value>
+  </data>
+  <data name="Tucker" xml:space="preserve">
+    <value>心理学家</value>
+  </data>
+  <data name="Chimera" xml:space="preserve">
+    <value>奇美拉</value>
+  </data>
+  <data name="TuckerAbilityCoolTime" xml:space="preserve">
+    <value>催眠与消影冷却时间</value>
+  </data>
+  <data name="TuckerAbilityCount" xml:space="preserve">
+    <value>催眠可使用次数</value>
+  </data>
+  <data name="TuckerRange" xml:space="preserve">
+    <value>催眠与消影范围</value>
+  </data>
+  <data name="TuckerShadowTimer" xml:space="preserve">
+    <value>阴影存在时间</value>
+  </data>
+  <data name="TuckerShadowOffset" xml:space="preserve">
+    <value>阴影位置距离</value>
+  </data>
+  <data name="TuckerRemoveShadowTime" xml:space="preserve">
+    <value>消除阴影所需时间</value>
+  </data>
+  <data name="TuckerIsKillCoolReduceOnRemove" xml:space="preserve">
+    <value>消除阴影是否永久减少奇美拉击杀冷却</value>
+  </data>
+  <data name="TuckerKillCoolReduceOnRemoveShadow" xml:space="preserve">
+    <value>消除阴影永久减少奇美拉击杀冷却时间量</value>
+  </data>
+  <data name="TuckerIsReduceInitKillCoolOnRemove" xml:space="preserve">
+    <value>减少的击杀冷却是否会小于初始值</value>
+  </data>
+  <data name="TuckerHasOtherKillCool" xml:space="preserve">
+    <value>奇美拉是否有独立的击杀冷却</value>
+  </data>
+  <data name="TuckerKillCoolDown" xml:space="preserve">
+    <value>奇美拉击杀冷却</value>
+  </data>
+  <data name="TuckerHasOtherKillRange" xml:space="preserve">
+    <value>奇美拉是否有独立的击杀范围</value>
+  </data>
+  <data name="TuckerKillRange" xml:space="preserve">
+    <value>奇美拉击杀范围</value>
+  </data>
+  <data name="TuckerChimeraHasOtherVision" xml:space="preserve">
+    <value>奇美拉是否有独立的视野</value>
+  </data>
+  <data name="TuckerChimeraVision" xml:space="preserve">
+    <value>奇美拉视野</value>
+  </data>
+  <data name="TuckerChimeraApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>奇美拉是否会受到停电影响</value>
+  </data>
+  <data name="TuckerChimeraCanUseVent" xml:space="preserve">
+    <value>奇美拉能否使用通风管</value>
+  </data>
+  <data name="TuckerChimeraReviveTime" xml:space="preserve">
+    <value>奇美拉复活所需时间</value>
+  </data>
+  <data name="TuckerChimeraDeathKillCoolOffset" xml:space="preserve">
+    <value>奇美拉每次复活时间变化</value>
+  </data>
+  <data name="TuckerTuckerDeathKillCoolOffset" xml:space="preserve">
+    <value>奇美拉在心理学家死后击杀冷却发生变化</value>
+  </data>
+  <data name="TuckerIntroDescription" xml:space="preserve">
+    <value>哦,乖巧的小狗是否要加入我呢？</value>
+  </data>
+  <data name="TuckerShortDescription" xml:space="preserve">
+    <value>来吧~让我们接管这艘船</value>
+  </data>
+  <data name="TuckerFullDescription" xml:space="preserve">
+    <value>可以催眠玩家,让其变成奇美拉的中立
+
+催眠:可爱的小狗,加入我吧
+擦除:这可是会影响我们的胜利呢
+只要你不死亡,奇美拉就可以无限的复活,当奇美拉复活时你会受到通知
+你需要擦除地图上阴影来减少奇美拉的冷却时间
+你可以使用滚轮切换技能</value>
+  </data>
+  <data name="ChimeraShortDescription" xml:space="preserve">
+    <value>这才是我应该走的路吗？</value>
+  </data>
+  <data name="ChimeraFullDescription" xml:space="preserve">
+    <value>由心理学家催眠产生的职业,你的目标是与催眠师一起获胜,只要心理学家存活你就可以复活,心理学家可以擦除地图上的阴影来减少你的冷却时间</value>
+  </data>
+  <data name="removeShadow" xml:space="preserve">
+    <value>擦除</value>
+  </data>
+  <data name="createChimera" xml:space="preserve">
+    <value>催眠</value>
+  </data>
+  <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
+    <value>心理学家死亡奇美拉是否会一起死亡？</value>
+  </data>
+  <data name="IronMate" xml:space="preserve">
+    <value>铁哥们</value>
+  </data>
+  <data name="IronMateBlockNum" xml:space="preserve">
+    <value>铁哥们可抵挡击杀的次数</value>
+  </data>
+  <data name="IronMateSlowTime" xml:space="preserve">
+    <value>抵挡后降低移速时间</value>
+  </data>
+  <data name="IronMateSlowMod" xml:space="preserve">
+    <value>阻挡后降低移速倍率</value>
+  </data>
+  <data name="IronMatePlayerShowTime" xml:space="preserve">
+    <value>尸体上死者样式持续时间</value>
+  </data>
+  <data name="IronMateDeadBodyShowTimeOnAfterPlayer" xml:space="preserve">
+    <value>尸体显示时间</value>
+  </data>
+  <data name="IronMateShortDescription" xml:space="preserve">
+    <value>我们可是同手同脚的“铁”哥么啊</value>
+  </data>
+  <data name="IronMateFullDescription" xml:space="preserve">
+    <value>与白板船员基本相同的“中立”，跟随船员获胜
+
+铁人：如钢铁版的身体
+被击杀时将免疫设定次数但会减速一段时间
+无法报告尸体，会在尸体的位置显示死者的样子，一段时间后会消失</value>
+  </data>
+  <data name="Monika" xml:space="preserve">
+    <value>莫妮卡</value>
+  </data>
+  <data name="MonikaAbilityCoolTime" xml:space="preserve">
+    <value>抹除冷却时间</value>
+  </data>
+  <data name="MonikaRange" xml:space="preserve">
+    <value>抹除范围</value>
+  </data>
+  <data name="MonikaIntroDescription" xml:space="preserve">
+    <value>&amp;#92;&amp;#117;&amp;#54;&amp;#48;&amp;#48;&amp;#101;&amp;#92;&amp;#117;&amp;#52;&amp;#101;&amp;#52;&amp;#56;
+&amp;#92;&amp;#117;&amp;#52;&amp;#102;&amp;#49;&amp;#97;&amp;#92;&amp;#117;&amp;#56;&amp;#102;&amp;#100;&amp;#57;
+&amp;#92;&amp;#117;&amp;#54;&amp;#56;&amp;#51;&amp;#55;&amp;#92;&amp;#117;&amp;#102;&amp;#102;&amp;#48;&amp;#49;</value>
+  </data>
+  <data name="MonikaShortDescription" xml:space="preserve">
+    <value>为了我所爱的人...</value>
+  </data>
+  <data name="MonikaFullDescription" xml:space="preserve">
+    <value>可以抹除他人的中立职业
+
+抹除：我不想再见到你...
+莫妮卡可以使用抹除将该玩家送到“回收站”层
+“回收站”层介于存活者和死亡者之间，在其中的人被视为“半死亡”状态，在“回收站”层有以下规则：
+• 如果未死亡，则被计入存活者；如果死亡，则被计入死亡者。
+• 在会议中，失去发言权（但可以听到存活者的聊天）。
+• 在会议中，无法向存活者发送聊天信息。
+• 在会议中，失去能力使用权和投票权。
+• 在任务阶段，无法被“莫妮卡”识别。
+•在任务阶段，无法将“莫妮卡”作为目标（也无法作为击杀目标）。
+获胜条件：包括自己在内，未被“抹消”的存活玩家减少到3名以下（如果恰好是3名，会触发特殊会议并选择额外的胜利者）
+莫妮卡死亡“回收站”层的所有存活玩家逃出。</value>
+  </data>
+  <data name="MonikaMeetingSelectLover" xml:space="preserve">
+    <value>选择你喜欢的人&lt;br&gt;（你投票给谁，谁就获胜）</value>
+  </data>
+  <data name="MonikaMeetingSelectTarget" xml:space="preserve">
+    <value>我是不是那个&lt;br&gt;应该被爱的容器呢？</value>
+  </data>
+  <data name="MonikaMeetingOther" xml:space="preserve">
+    <value>外面的世界也应该关爱这些 &lt;br&gt;“命中注定要失败的人</value>
+  </data>
+  <data name="MonikaMeetingExiled" xml:space="preserve">
+    <value>「{0}」选择了ta喜欢的「{1}」&lt;br&gt;(「{2}」被抛弃了)</value>
+  </data>
+  <data name="monikaPlayerTrash" xml:space="preserve">
+    <value>抹除</value>
+  </data>
+  <data name="MonikaUseOtherButton" xml:space="preserve">
+    <value>“当莫妮卡发起紧急会议时会消耗会议数吗？”</value>
+  </data>
+  <data name="MonikaCanUseVent" xml:space="preserve">
+    <value>“莫妮卡可以使用通风口吗？”</value>
+  </data>
+  <data name="MonikaCanUseSabotage" xml:space="preserve">
+    <value>“莫妮卡可以使用破坏手段吗？”</value>
+  </data>
 </root>

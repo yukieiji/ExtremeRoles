@@ -208,4 +208,34 @@
   <data name="IgniterSwitchLight" xml:space="preserve">
     <value>炼狱鬼吹熄了飞船上的光明</value>
   </data>
+  <data name="Doppelganger" xml:space="preserve">
+    <value>二重身</value>
+  </data>
+  <data name="DoppelgangerAbilityCoolTime" xml:space="preserve">
+    <value>对偶冷却时间</value>
+  </data>
+  <data name="DoppelgangerAbilityActiveTime" xml:space="preserve">
+    <value>对偶持续时间</value>
+  </data>
+  <data name="DoppelgangerIsReportAbility" xml:space="preserve">
+    <value>二重身可报告尸体</value>
+  </data>
+  <data name="DoppelgangerAbilityCount" xml:space="preserve">
+    <value>化形可使用次数</value>
+  </data>
+  <data name="DoppelgangerDoppel" xml:space="preserve">
+    <value>谁可以发现二重身</value>
+  </data>
+  <data name="DoppelgangerDoppelButton" xml:space="preserve">
+    <value>对偶</value>
+  </data>
+  <data name="DoppelgangerFullDescription" xml:space="preserve">
+    <value>内鬼幽灵阵营
+
+对偶：你怎么知道世界上没有另一个你呢？
+二重身可以变形为其他人的样子来欺骗他人</value>
+  </data>
+  <data name="DoppelgangerShortDescription" xml:space="preserve">
+    <value>给他们一个惊喜吧</value>
+  </data>
 </root>
