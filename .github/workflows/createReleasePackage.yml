@@ -43,7 +43,7 @@ jobs:
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
           path: ./workspace/ExtremeRolesWithSkins/
-      # ExtremeRoles.zip
+      # MSSTORE_ONLY__ExtremeRoles.zip
       - uses: actions/upload-artifact@v4
         with:
           name: "MSSTORE_ONLY__ExtremeRoles-v${{ github.event.inputs.versions }}"
