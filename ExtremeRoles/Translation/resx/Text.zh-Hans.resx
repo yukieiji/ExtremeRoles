@@ -355,7 +355,7 @@
     <value>简体中文翻译：</value>
   </data>
   <data name="translatorMember" xml:space="preserve">
-    <value>123，乱线Namdam_096，FiveFireX，氢氧则名</value>
+    <value>123，乱线Namdam_096，FiveFireX，氢氧则名,小鹿SAMA</value>
   </data>
   <data name="youAreRoleIntro" xml:space="preserve">
     <value>你的职业是</value>
@@ -966,5 +966,20 @@ Among Us官方服务器不适配Reactor插件，因此需要使用自定义服�
   </data>
   <data name="AssignsNum" xml:space="preserve">
     <value>每组分配的人数</value>
+  </data>
+  <data name="BothImpostorAndNautral" xml:space="preserve">
+    <value>内鬼及中立</value>
+  </data>
+  <data name="SpawnRate" xml:space="preserve">
+    <value>出现几率</value>
+  </data>
+  <data name="EnableKey" xml:space="preserve">
+    <value>有效</value>
+  </data>
+  <data name="DisableKey" xml:space="preserve">
+    <value>无效</value>
+  </data>
+  <data name="DefaultKey" xml:space="preserve">
+    <value>默认</value>
   </data>
 </root>

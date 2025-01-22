@@ -1008,4 +1008,316 @@
   <data name="featMagicCircle" xml:space="preserve">
     <value>禁忌法阵</value>
   </data>
+  <data name="Thief" xml:space="preserve">
+    <value>时间窃贼</value>
+  </data>
+  <data name="ThiefAbilityCoolTime" xml:space="preserve">
+    <value>偷窃冷却时间</value>
+  </data>
+  <data name="ThiefAbilityActiveTime" xml:space="preserve">
+    <value>偷窃持续时间</value>
+  </data>
+  <data name="ThiefAbilityCount" xml:space="preserve">
+    <value>偷窃使用次数</value>
+  </data>
+  <data name="ThiefRange" xml:space="preserve">
+    <value>偷窃能力距离</value>
+  </data>
+  <data name="ThiefSetNum" xml:space="preserve">
+    <value>偷窃时产生时间碎片数量</value>
+  </data>
+  <data name="ThiefSetTimeOffset" xml:space="preserve">
+    <value>偷窃减少会议时间</value>
+  </data>
+  <data name="ThiefPickUpTimeOffset" xml:space="preserve">
+    <value>捡起一个时间碎片增加的会议时间</value>
+  </data>
+  <data name="ThiefIsAddEffect" xml:space="preserve">
+    <value>偷窃会在尸体上留下微粒</value>
+  </data>
+  <data name="ThiefIntroDescription" xml:space="preserve">
+    <value>时光流逝，没有人可以阻止</value>
+  </data>
+  <data name="ThiefShortDescription" xml:space="preserve">
+    <value>时间不会等待任何人</value>
+  </data>
+  <data name="ThiefFullDescription" xml:space="preserve">
+    <value>一个能够从会议中偷走时间的内鬼职业！
+
+偷窃：偷走他们宝贵的时间！
+- 瞄准一具尸体一段时间后激活
+- 将下一次会议的计时器减少一定数量，然后在地图周围生成一定数量的时时间碎片
+- 当开启相应选项时，被偷窃后，身体上会留下一个粒子
+时间碎片: 被偷走的时间四处飞散...
+- 用于将下次会议的计时器延长至设定的时间 - 时间碎片最多只能同时存在10个</value>
+  </data>
+  <data name="steal" xml:space="preserve">
+    <value>偷窃</value>
+  </data>
+  <data name="Crewshroom" xml:space="preserve">
+    <value>真菌学家</value>
+  </data>
+  <data name="CrewshroomAbilityCoolTime" xml:space="preserve">
+    <value>播种冷却时间</value>
+  </data>
+  <data name="CrewshroomAbilityCount" xml:space="preserve">
+    <value>播种使用次数</value>
+  </data>
+  <data name="CrewshroomDelaySecond" xml:space="preserve">
+    <value>孢子萌发所需时间</value>
+  </data>
+  <data name="CrewshroomFungleIntroDescription" xml:space="preserve">
+    <value>这是真菌的王国</value>
+  </data>
+  <data name="CrewshroomIntroDescription" xml:space="preserve">
+    <value>想来点神奇的体验吗？</value>
+  </data>
+  <data name="CrewshroomShortDescription" xml:space="preserve">
+    <value>来自蘑菇岛的学者</value>
+  </data>
+  <data name="CrewshroomFullDescription" xml:space="preserve">
+    <value>播种：大家都开始晕头转向了
+ - 播种蘑菇岛地图中的蘑菇
+ - 几乎与蘑菇岛中的蘑菇一模一样;蘑菇生长时间由设置决定</value>
+  </data>
+  <data name="CrewshroomSet" xml:space="preserve">
+    <value>播种</value>
+  </data>
+  <data name="Terorist" xml:space="preserve">
+    <value>恐怖分子</value>
+  </data>
+  <data name="TeroristAbilityCoolTime" xml:space="preserve">
+    <value>恐怖袭击冷却时间</value>
+  </data>
+  <data name="TeroristAbilityCount" xml:space="preserve">
+    <value>恐怖袭击使用次数</value>
+  </data>
+  <data name="TeroristCanActiveOtherSabotage" xml:space="preserve">
+    <value>恐怖袭击可与其他破坏装置一起发生</value>
+  </data>
+  <data name="TeroristExplosionTime" xml:space="preserve">
+    <value>爆炸倒计时</value>
+  </data>
+  <data name="TeroristBombNum" xml:space="preserve">
+    <value>恐怖袭击每次使用的炸弹设置</value>
+  </data>
+  <data name="TeroristPlayerActivateTime" xml:space="preserve">
+    <value>拆除炸弹的所需时间（存活）</value>
+  </data>
+  <data name="TeroristCanUseDeadPlayer" xml:space="preserve">
+    <value>死亡玩家能否拆除炸弹</value>
+  </data>
+  <data name="TeroristDeadPlayerActivateTime" xml:space="preserve">
+    <value>拆除炸弹的所需时间（死亡）</value>
+  </data>
+  <data name="TeroristIntroDescription" xml:space="preserve">
+    <value>引爆这艘飞船！</value>
+  </data>
+  <data name="TeroristShortDescription" xml:space="preserve">
+    <value>一场盛大的烟花秀</value>
+  </data>
+  <data name="TeroristFullDescription" xml:space="preserve">
+    <value>可启动恐怖袭击破坏活动的内鬼职业
+ 
+ 恐怖袭击:现在就引爆这艘船！！！
+ - 开始恐怖袭击破坏- 玩家必须在规定时间内拆除随机设置在飞船上的炸弹，以避免内鬼取得胜利\n- 炸弹位置是独立的，每个玩家随机设置；拆除进度是全局的
+ 语音播报
+ 播报：时间到了...</value>
+  </data>
+  <data name="TeroristBombSet" xml:space="preserve">
+    <value>恐怖袭击</value>
+  </data>
+  <data name="TeroristBombTask" xml:space="preserve">
+    <value>拆除炸弹（剩余{0}秒）</value>
+  </data>
+  <data name="TeroristBombMinigameProgress" xml:space="preserve">
+    <value>进展</value>
+  </data>
+  <data name="TeroristBombMinigameStart" xml:space="preserve">
+    <value>解除威胁</value>
+  </data>
+  <data name="Raider" xml:space="preserve">
+    <value>制导员</value>
+  </data>
+  <data name="RaiderAbilityCoolTime" xml:space="preserve">
+    <value>轰炸冷却时间</value>
+  </data>
+  <data name="RaiderAbilityCount" xml:space="preserve">
+    <value>轰炸次数</value>
+  </data>
+  <data name="RaiderAbilityActiveTime" xml:space="preserve">
+    <value>制导持续时间</value>
+  </data>
+  <data name="RaiderIsOpenLimit" xml:space="preserve">
+    <value>显示制导限制</value>
+  </data>
+  <data name="RaiderLimitNum" xml:space="preserve">
+    <value>显示制导次数</value>
+  </data>
+  <data name="RaiderIsHidePlayerOnOpen" xml:space="preserve">
+    <value>制导时无法看见其他玩家</value>
+  </data>
+  <data name="RaiderBombType" xml:space="preserve">
+    <value>导弹类型</value>
+  </data>
+  <data name="SingleBombType" xml:space="preserve">
+    <value>单体</value>
+  </data>
+  <data name="RandomBombType" xml:space="preserve">
+    <value>随机</value>
+  </data>
+  <data name="CarpetHorizontalBombType" xml:space="preserve">
+    <value>地毯式轰炸（横向）</value>
+  </data>
+  <data name="CarpetVerticalBombType" xml:space="preserve">
+    <value>地毯式轰炸（纵向）</value>
+  </data>
+  <data name="RaiderBombNum" xml:space="preserve">
+    <value>投弹数</value>
+  </data>
+  <data name="RaiderBombTargetRange" xml:space="preserve">
+    <value>爆炸总体范围</value>
+  </data>
+  <data name="RaiderBombRange" xml:space="preserve">
+    <value>每枚导弹的爆炸范围</value>
+  </data>
+  <data name="RaiderBombAliveTime" xml:space="preserve">
+    <value>每枚导弹的下落时间</value>
+  </data>
+  <data name="RaiderBombShowOtherPlayer" xml:space="preserve">
+    <value>其他人能否看导弹落点</value>
+  </data>
+  <data name="RaiderIntroDescription" xml:space="preserve">
+    <value>请求空中支援！！！</value>
+  </data>
+  <data name="RaiderShortDescription" xml:space="preserve">
+    <value>地毯式轰炸，发射！</value>
+  </data>
+  <data name="RaiderFullDescription" xml:space="preserve">
+    <value>可请求空中支援的内鬼职业
+
+制导：请求空中支援！
+使用制导可以选择导弹降落地点，选择完地点点击发射即可发射一枚导弹，导弹掉落需要一定时间
+控制制导位置与控制玩家操作一致
+根据设置在爆炸范围内所有玩家无论位置都会直接死亡</value>
+  </data>
+  <data name="OpenBombUI" xml:space="preserve">
+    <value>制导</value>
+  </data>
+  <data name="CloseBombUI" xml:space="preserve">
+    <value>结束制导
+({0}秒后自动结束)</value>
+  </data>
+  <data name="ExecuteBombFromUI" xml:space="preserve">
+    <value>发射
+(剩余{0}枚导弹)</value>
+  </data>
+  <data name="Glitch" xml:space="preserve">
+    <value>故障</value>
+  </data>
+  <data name="GlitchAbilityCoolTime" xml:space="preserve">
+    <value>篡改冷却时间</value>
+  </data>
+  <data name="GlitchAbilityCount" xml:space="preserve">
+    <value>篡改可使用次数</value>
+  </data>
+  <data name="GlitchRange" xml:space="preserve">
+    <value>篡改范围</value>
+  </data>
+  <data name="GlitchEffectOnImpo" xml:space="preserve">
+    <value>内鬼是否会被篡改影响</value>
+  </data>
+  <data name="GlitchDelay" xml:space="preserve">
+    <value>篡改激活延迟</value>
+  </data>
+  <data name="GlitchActiveTime" xml:space="preserve">
+    <value>篡改持续时间</value>
+  </data>
+  <data name="GlitchIntroDescription" xml:space="preserve">
+    <value>我可没有做什么坏事！</value>
+  </data>
+  <data name="GlitchShortDescription" xml:space="preserve">
+    <value>那些机器的事，鬼知道呢？</value>
+  </data>
+  <data name="GlitchFullDescription" xml:space="preserve">
+    <value>可以篡改信息的内鬼职业
+
+篡改：一切都已不在真实
+故障可以篡改一切信息设备，篡改效果如下
+-管理员地图：自己的信息以外显示不正确。信息不再更新。
+-监控：自己以外玩家不再显示。
+-望远镜：自己以外玩家不再显示。
+-心跳检测仪： 显示有1～2人随机死亡。信息不再更新。
+-门禁日志：随机添加5～10条日志。信息不再更新。</value>
+  </data>
+  <data name="glitchGlitch" xml:space="preserve">
+    <value>篡改</value>
+  </data>
+  <data name="Hijacker" xml:space="preserve">
+    <value>偷窥狂</value>
+  </data>
+  <data name="HijackerAbilityCoolTime" xml:space="preserve">
+    <value>窥视冷却时间</value>
+  </data>
+  <data name="HijackerAbilityActiveTime" xml:space="preserve">
+    <value>窥视持续时间</value>
+  </data>
+  <data name="HijackerAbilityCount" xml:space="preserve">
+    <value>窥视可使用次数</value>
+  </data>
+  <data name="HijackerIsRandomPlayer" xml:space="preserve">
+    <value>窥视目标是随机的</value>
+  </data>
+  <data name="HijackerIntroDescription" xml:space="preserve">
+    <value>一切都尽收眼底呢~</value>
+  </data>
+  <data name="HijackerShortDescription" xml:space="preserve">
+    <value>还有什么我不知道小秘密呢~</value>
+  </data>
+  <data name="HijackerFullDescription" xml:space="preserve">
+    <value>可以查看他人视野的内鬼职业
+
+窥视：让我看看你在做什么呢~
+偷窥狂可以通过窥视来查看别人的视角，根据设置你可以自己选择窥视对象</value>
+  </data>
+  <data name="hijackerHijack" xml:space="preserve">
+    <value>窥视</value>
+  </data>
+  <data name="TimeBreaker" xml:space="preserve">
+    <value>时间突破者</value>
+  </data>
+  <data name="TimeBreakerAbilityCoolTime" xml:space="preserve">
+    <value>时停冷却时间</value>
+  </data>
+  <data name="TimeBreakerAbilityCount" xml:space="preserve">
+    <value>可时停次数</value>
+  </data>
+  <data name="TimeBreakerActiveTime" xml:space="preserve">
+    <value>时停持续时间</value>
+  </data>
+  <data name="TimeBreakerEffectImp" xml:space="preserve">
+    <value>内鬼会受到时停影响</value>
+  </data>
+  <data name="TimeBreakerIsActiveScreen" xml:space="preserve">
+    <value>时停时效果</value>
+  </data>
+  <data name="TimeBreakerIntroDescription" xml:space="preserve">
+    <value>时间...停止了</value>
+  </data>
+  <data name="TimeBreakerShortDescription" xml:space="preserve">
+    <value>还能再争取一些时间！</value>
+  </data>
+  <data name="TimeBreakerFullDescription" xml:space="preserve">
+    <value>可以暂停时间的内鬼
+
+时停：或许还能再争取些时间（9秒过去了...）
+时间突破者可以暂停时间，在暂停的时间里其他玩家的动作将停止，在发动期间，冷却时间（如击杀冷却）仍然会继续计算
+如果多次发动，暂停时间会延长</value>
+  </data>
+  <data name="timeBreakerTimeBreak" xml:space="preserve">
+    <value>时停</value>
+  </data>
+  <data name="UnderWarperWallHackVent" xml:space="preserve">
+    <value>觉醒后可以在墙壁上使用通风装置吗？</value>
+  </data>
 </root>
