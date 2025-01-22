@@ -885,19 +885,19 @@
     <value>停止绘画</value>
   </data>
   <data name="Tucker" xml:space="preserve">
-    <value>心理学家</value>
+    <value>炼金术士</value>
   </data>
   <data name="Chimera" xml:space="preserve">
     <value>奇美拉</value>
   </data>
   <data name="TuckerAbilityCoolTime" xml:space="preserve">
-    <value>催眠与消影冷却时间</value>
+    <value>转化与消影冷却时间</value>
   </data>
   <data name="TuckerAbilityCount" xml:space="preserve">
-    <value>催眠可使用次数</value>
+    <value>转化可使用次数</value>
   </data>
   <data name="TuckerRange" xml:space="preserve">
-    <value>催眠与消影范围</value>
+    <value>转化与消影范围</value>
   </data>
   <data name="TuckerShadowTimer" xml:space="preserve">
     <value>阴影存在时间</value>
@@ -948,10 +948,10 @@
     <value>奇美拉每次复活时间变化</value>
   </data>
   <data name="TuckerTuckerDeathKillCoolOffset" xml:space="preserve">
-    <value>奇美拉在心理学家死后击杀冷却发生变化</value>
+    <value>奇美拉在炼金术士死后击杀冷却发生变化</value>
   </data>
   <data name="TuckerIntroDescription" xml:space="preserve">
-    <value>哦,乖巧的小狗是否要加入我呢？</value>
+    <value>那些善良的船员就应该成为奇美拉！</value>
   </data>
   <data name="TuckerShortDescription" xml:space="preserve">
     <value>来吧~让我们接管这艘船</value>
@@ -959,7 +959,7 @@
   <data name="TuckerFullDescription" xml:space="preserve">
     <value>可以催眠玩家,让其变成奇美拉的中立
 
-催眠:可爱的小狗,加入我吧
+转化:只有奇美拉那样的生物才是真正完美的！
 擦除:这可是会影响我们的胜利呢
 只要你不死亡,奇美拉就可以无限的复活,当奇美拉复活时你会受到通知
 你需要擦除地图上阴影来减少奇美拉的冷却时间
@@ -969,7 +969,7 @@
     <value>这才是我应该走的路吗？</value>
   </data>
   <data name="ChimeraFullDescription" xml:space="preserve">
-    <value>由心理学家催眠产生的职业,你的目标是与催眠师一起获胜,只要心理学家存活你就可以复活,心理学家可以擦除地图上的阴影来减少你的冷却时间</value>
+    <value>由炼金术士转换产生的职业,你的目标是与炼金术士一起获胜,只要炼金术士存活你就可以复活,炼金术士可以擦除地图上的阴影来减少你的冷却时间</value>
   </data>
   <data name="removeShadow" xml:space="preserve">
     <value>擦除</value>
@@ -978,7 +978,7 @@
     <value>催眠</value>
   </data>
   <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
-    <value>心理学家死亡奇美拉是否会一起死亡？</value>
+    <value>炼金术士死亡奇美拉是否会一起死亡？</value>
   </data>
   <data name="IronMate" xml:space="preserve">
     <value>铁哥们</value>
