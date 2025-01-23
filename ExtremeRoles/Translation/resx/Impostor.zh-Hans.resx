@@ -1320,4 +1320,16 @@
   <data name="UnderWarperWallHackVent" xml:space="preserve">
     <value>觉醒后可以在墙壁上使用通风装置吗？</value>
   </data>
+  <data name="PhantomFullDescription" xml:space="preserve">
+    <value>可以进行隐身的内鬼
+
+隐身：没人能发现你
+在隐身时除了使用通风管以外你不能做任何交互</value>
+  </data>
+  <data name="PsychoKillerIsForceRestartWhenMeetingEnd" xml:space="preserve">
+    <value>计时器是否在会议结束后强制减少</value>
+  </data>
+  <data name="PsychoKillerIsDiactiveUntilKillWhenMeetingEnd" xml:space="preserve">
+    <value>在会议结束后的第一次击杀之前，计时器不会减少</value>
+  </data>
 </root>

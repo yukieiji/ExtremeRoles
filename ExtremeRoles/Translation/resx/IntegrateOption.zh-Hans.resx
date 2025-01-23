@@ -144,4 +144,16 @@
   <data name="SubmergedCategoryReplaceDoorMinigame" xml:space="preserve">
     <value>潜艇：将游戏模式变更为小游戏“芝麻开门</value>
   </data>
+  <data name="SubmergedCategorySubmergedSpawnSetting" xml:space="preserve">
+    <value>生成设定</value>
+  </data>
+  <data name="LowerCentralOnly" xml:space="preserve">
+    <value>仅会生成在上部</value>
+  </data>
+  <data name="UpperCentralOnly" xml:space="preserve">
+    <value>仅会生成在下部</value>
+  </data>
+  <data name="SubmergedCategory" xml:space="preserve">
+    <value>潜艇联动选项</value>
+  </data>
 </root>
