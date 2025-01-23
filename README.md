@@ -1,5 +1,7 @@
-
-
+### Quick Link
+ - [Latest Release/最新版のダウンロード](https://github.com/yukieiji/ExtremeRoles/releases/latest)
+ - [Wiki](https://yukieiji.github.io/ExtremeRoles.Docs/)
+ - [How to translate](https://github.com/yukieiji/ExtremeRoles/tree/master?tab=readme-ov-file#how-to-translate)
 ##### Other Languages README
 - [English README](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/en/README.md)
 - [SChinese README(WIP)](https://github.com/yukieiji/ExtremeRoles/blob/master/doc/ch_s/README.md)
