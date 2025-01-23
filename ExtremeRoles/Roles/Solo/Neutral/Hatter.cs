@@ -185,8 +185,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 		this.abilityIncreaseNum = cate.GetValue<HatterOption, int>(
 			HatterOption.IncreseNum);
 
-		ExtremeSystemTypeManager.Instance.TryAdd(
-			ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
+		_ = ExtremeSystemTypeManager.Instance.CreateOrGet<ModdedMeetingTimeSystem>(
+			ExtremeSystemType.ModdedMeetingTimeSystem);
 
 		this.curSkipCount = 0;
 		this.onemanMeeting = false;
