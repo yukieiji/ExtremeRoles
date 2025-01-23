@@ -64,10 +64,11 @@ public sealed class PsychoKiller :
 			GameData.Instance == null ||
 			CachedShipStatus.Instance == null ||
 			!CachedShipStatus.Instance.enabled ||
-			ExileController.Instance ||
-			MeetingHud.Instance ||
+			ExileController.Instance != null ||
+			MeetingHud.Instance != null ||
 			!this.isStartTimer)
 		{
+			resetTimer();
 			if (this.timerText != null)
 			{
 				this.timerText.gameObject.SetActive(false);
