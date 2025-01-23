@@ -1047,7 +1047,7 @@
     <value>我是不是那个&lt;br&gt;应该被爱的容器呢？</value>
   </data>
   <data name="MonikaMeetingOther" xml:space="preserve">
-    <value>外面的世界也应该关爱这些 &lt;br&gt;“命中注定要失败的人</value>
+    <value>外面的世界也应该关爱这些 &lt;br&gt;“命中注定要失败的人“</value>
   </data>
   <data name="MonikaMeetingExiled" xml:space="preserve">
     <value>「{0}」选择了ta喜欢的「{1}」&lt;br&gt;(「{2}」被抛弃了)</value>
@@ -1063,5 +1063,17 @@
   </data>
   <data name="MonikaCanUseSabotage" xml:space="preserve">
     <value>“莫妮卡可以使用破坏手段吗？”</value>
+  </data>
+  <data name="YashiroSeal" xml:space="preserve">
+    <value>封印状态</value>
+  </data>
+  <data name="YashiroActive" xml:space="preserve">
+    <value>激活状态</value>
+  </data>
+  <data name="YashiroDeactive" xml:space="preserve">
+    <value>休眠状态</value>
+  </data>
+  <data name="QueenServantSucideWithQueenWhenHasKill" xml:space="preserve">
+    <value>女皇死后有击杀能力的侍从将自杀</value>
   </data>
 </root>
