@@ -204,8 +204,15 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
 		if (localPlayer == null ||
 			exiledPlayer != null ||
-			this.onemanMeeting ||
+			localPlayer.Data == null ||
+			localPlayer.Data.IsDead ||
+			localPlayer.Data.Disconnected ||
 			this.IsWin)
+		{
+			this.curSkipCount = 0;
+			return;
+		}
+		if (this.onemanMeeting)
 		{
 			return;
 		}
