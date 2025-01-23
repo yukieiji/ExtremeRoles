@@ -68,7 +68,10 @@ public sealed class PsychoKiller :
 			MeetingHud.Instance != null ||
 			!this.isStartTimer)
 		{
-			resetTimer();
+			if (this.hasSelfTimer)
+			{
+				resetTimer();
+			}
 			if (this.timerText != null)
 			{
 				this.timerText.gameObject.SetActive(false);
