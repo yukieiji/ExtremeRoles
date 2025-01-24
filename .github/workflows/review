@@ -1,0 +1,64 @@
+name: Code Review
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  codereview:
+    # タイトルに`:review`が含まれている場合のみ実行
+    if: |
+      github.event.comment.user.type != 'Bot'
+      && github.event.issue.pull_request != null
+      && (
+        false
+        || (
+          github.event.comment.body == '!review'
+          || startsWith(github.event.comment.body, '!review ')
+          || startsWith(github.event.comment.body, '!review\n')
+        )
+      )
+    runs-on: ubuntu-latest
+    steps:
+      # プルリクエストのタイトルを表示
+      - name: Display PR title
+        run: |
+          echo "PullRequest: ${{ github.event.pull_request.title }}"
+      # ChatGPT-CodeReviewを実行
+      - uses: anc95/ChatGPT-CodeReview@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.REVIEW_API_KEY }}
+          LANGUAGE: Japanese
+          # OpenRouterのエンドポイントを指定
+          OPENAI_API_ENDPOINT: https://openrouter.ai/api/v1
+          # 利用するモデルを指定
+          MODEL: google/gemini-2.0-flash-thinking-exp:free
+          # プロンプトをカスタマイズ
+          PROMPT: |
+            あなたはCSharpのコードをレビューするレビュアーです、入力されるCSharpコードを以下の観点を元にレビューしてください
+
+            --- レビュー観点 ---
+            - Nullチェックや境界チェックが抜けていないか
+            - 適切にNullableを使用しているか
+            - UnityにおけるCSharpのコーディングルールを守れているか
+            - 変更の妥当性、及びアルゴリズムの正確性
+            - パフォーマンスにおいて重大な問題が存在していないか
+            --- レビュー観点終了 ---
+            
+            --- 返答形式 ---
+            - 日本語にて返信を行う
+            - 返答はわかりやすくかつ簡潔に行うこと
+            - 問題点と修正点、修正方法を記載すること
+            --- 返答形式終了 ---
+
+          top_p: 1
+          temperature: 0.5
+          max_tokens: 8192
+          MAX_PATCH_LENGTH: 8192
+          IGNORE_PATTERNS: '*.md'
+          INCLUDE_PATTERNS: '*.cs'
