@@ -178,14 +178,7 @@ public sealed class Captain :
 
     public void ButtonMod(
         PlayerVoteArea instance, UiElement abilityButton)
-    {
-        abilityButton.name = $"captainSpecialVote_{instance.TargetPlayerId}";
-        var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
-        if (controllerHighlight != null)
-        {
-            controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
-        }
-    }
+		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "captainSpecialVote");
 
     public Action CreateAbilityAction(PlayerVoteArea instance)
     {
@@ -269,7 +262,7 @@ public sealed class Captain :
 
             meetingVoteText.text = Tr.GetString(
 				"captainVoteStatus",
-				isNotUseSpecialVote() ? Tr.GetString("cannotDo") : Tr.GetString("canDo"), 
+				isNotUseSpecialVote() ? Tr.GetString("cannotDo") : Tr.GetString("canDo"),
 				this.curChargedVote);
             meetingVoteText.gameObject.SetActive(true);
         }

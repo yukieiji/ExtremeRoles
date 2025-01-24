@@ -623,16 +623,9 @@ public sealed class BodyGuard :
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
-    {
-        abilityButton.name = $"bodyGuardFeatShield_{instance.TargetPlayerId}";
-        var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
-        if (controllerHighlight != null)
-        {
-            controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
-        }
-    }
+		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "BodyGuardGuard");
 
-    public Action CreateAbilityAction(PlayerVoteArea instance)
+	public Action CreateAbilityAction(PlayerVoteArea instance)
     {
         PlayerControl player = PlayerControl.LocalPlayer;
         byte targetPlayerId = instance.TargetPlayerId;
@@ -707,7 +700,7 @@ public sealed class BodyGuard :
 
             if (this.Button.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                this.meetingText.text = 
+                this.meetingText.text =
 					Tr.GetString("meetingShieldState", behavior.AbilityCount);
             }
             this.meetingText.gameObject.SetActive(true);

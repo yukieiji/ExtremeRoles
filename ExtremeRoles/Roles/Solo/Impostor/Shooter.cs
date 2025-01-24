@@ -102,14 +102,7 @@ public sealed class Shooter :
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
-    {
-        abilityButton.name = $"shooterKill_{instance.TargetPlayerId}";
-        var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
-        if (controllerHighlight != null)
-        {
-            controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
-        }
-    }
+		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "shooterKill");
 
     public Action CreateAbilityAction(PlayerVoteArea instance)
     {
