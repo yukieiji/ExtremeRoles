@@ -48,7 +48,6 @@ jobs:
 
           top_p: 1
           temperature: 0.5
-          max_tokens: 8192
-          MAX_PATCH_LENGTH: 8192
+          max_tokens: 32768
           IGNORE_PATTERNS: '*.md'
           INCLUDE_PATTERNS: '*.cs'
