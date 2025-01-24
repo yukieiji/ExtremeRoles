@@ -1176,4 +1176,19 @@ ExR 和其他设备仅以最低限度的功能启动</value>
   <data name="LoveYou" xml:space="preserve">
     <value>恋人</value>
   </data>
+  <data name="OnGameStartOptionIsKillCoolDownIsTen" xml:space="preserve">
+    <value>游戏开始击杀冷却默认为10秒</value>
+  </data>
+  <data name="OnGameStartOption" xml:space="preserve">
+    <value>游戏开始的初始设置</value>
+  </data>
+  <data name="OnGameStartOptionFirstButtonCoolDown" xml:space="preserve">
+    <value>游戏开始后多久无法使用紧急会议</value>
+  </data>
+  <data name="OnGameStartOptionRemoveSomeoneButton" xml:space="preserve">
+    <value>"莫妮卡可以使用其他的的会议按钮开启会议吗?"</value>
+  </data>
+  <data name="OnGameStartOptionReduceNum" xml:space="preserve">
+    <value>消耗数</value>
+  </data>
 </root>
