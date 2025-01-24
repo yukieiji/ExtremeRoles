@@ -96,8 +96,17 @@ internal sealed class CompatModManager
 
 			object? instance = Activator.CreateInstance(
 				modInfo.ModIntegratorType, [ plugin ]);
+			if (instance == null)
+			{
+				logger.LogError(
+					$"{modInfo.ModIntegratorType.FullName} can't create instance");
+				continue;
+			}
+
 			if (instance is not IInitializer initializer)
 			{
+				logger.LogError(
+					$"ModIntegratorType '{modInfo.ModIntegratorType.FullName}' : NOT IMP IInitializer!!");
 				continue;
 			}
 
