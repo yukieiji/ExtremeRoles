@@ -128,6 +128,7 @@ public enum ExtremeRoleId : int
 	Chimera,
 	IronMate,
 	Monika,
+	Heretic,
 
 	Xion,
 }
