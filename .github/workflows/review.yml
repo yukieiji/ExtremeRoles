@@ -1,27 +1,17 @@
-name: Code Review
+name: CodeReview
 
 permissions:
   contents: read
   pull-requests: write
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
   codereview:
     # タイトルに`:review`が含まれている場合のみ実行
-    if: |
-      github.event.comment.user.type != 'Bot'
-      && github.event.issue.pull_request != null
-      && (
-        false
-        || (
-          github.event.comment.body == '!review'
-          || startsWith(github.event.comment.body, '!review ')
-          || startsWith(github.event.comment.body, '!review\n')
-        )
-      )
+    if: ${{ contains(github.event.pull_request.title, '!review') }}
     runs-on: ubuntu-latest
     steps:
       # プルリクエストのタイトルを表示
