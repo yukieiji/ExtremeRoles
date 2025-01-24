@@ -1,7 +1,11 @@
 ﻿using AmongUs.GameOptions;
+
+using UnityEngine;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using UnityEngine;
+
+using Il2CppInterop.Runtime.Attributes;
 
 #nullable enable
 
@@ -48,6 +52,8 @@ public sealed class SpeedMod : MonoBehaviour
 
 		updateSpeed(this.role);
 	}
+
+	[HideFromIl2Cpp]
 	private void updateSpeed(SingleRoleBase role)
 	{
 		role.IsBoost = true;
