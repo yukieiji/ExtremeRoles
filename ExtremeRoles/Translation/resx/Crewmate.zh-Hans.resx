@@ -1202,4 +1202,7 @@
   <data name="Summon" xml:space="preserve">
     <value>召唤</value>
   </data>
+  <data name="TrackerFullDescription" xml:space="preserve">
+    <value>可以看到其他玩家位置的船员</value>
+  </data>
 </root>
