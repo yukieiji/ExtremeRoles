@@ -23,7 +23,8 @@ public sealed class Heretic :
 	SingleRoleBase,
 	IRoleAutoBuildAbility,
 	IRoleUpdate,
-	IRoleWinPlayerModifier
+	IRoleWinPlayerModifier,
+	IRoleMeetingButtonAbility
 {
 	public enum Option
 	{
@@ -230,5 +231,22 @@ public sealed class Heretic :
 			killer.PlayerId, target.PlayerId,
 			byte.MinValue);
 		return true;
+	}
+
+	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
+		=> this.killMode is KillMode.OnMeeting;
+
+	public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
+		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "hereticKillTarget");
+
+	public Action CreateAbilityAction(PlayerVoteArea instance)
+		=> () =>
+		{
+			this.target = instance.TargetPlayerId;
+		};
+
+	public void SetSprite(SpriteRenderer render)
+	{
+		throw new NotImplementedException();
 	}
 }
