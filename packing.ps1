@@ -13,9 +13,11 @@ Write-Host "Build Complete!!"
 
 
 Write-Host "Download BepInEx...."
-Invoke-WebRequest "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.671%2B9caf61d.zip" -OutFile workspace/bepinex_x86.zip
-Invoke-WebRequest "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.671%2B9caf61d.zip" -OutFile workspace/bepinex_x64.zip
+
+Invoke-WebRequest "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.671%2B9caf61d.zip" -OutFile "workspace/bepinex_x86.zip"
 Expand-Archive -Path workspace/bepinex_x86.zip -DestinationPath workspace/bepinex_x86 -Force
+
+Invoke-WebRequest "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x64-6.0.0-be.671%2B9caf61d.zip" -OutFile "workspace/bepinex_x64.zip"
 Expand-Archive -Path workspace/bepinex_x64.zip -DestinationPath workspace/bepinex_x64 -Force
 
 
