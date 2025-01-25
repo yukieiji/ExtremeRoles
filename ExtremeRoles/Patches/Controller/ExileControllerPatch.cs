@@ -393,7 +393,12 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPostfix(NetworkedPlayerInfo? exiled)
     {
-        InfoOverlay.Instance.IsBlock = false;
+		if (MeetingHud.Instance != null)
+		{
+			return;
+		}
+
+		InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
@@ -436,6 +441,9 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPrefix()
     {
-		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.ExiledEnd);
+		if (MeetingHud.Instance == null)
+		{
+			ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.ExiledEnd);
+		}
     }
 }
