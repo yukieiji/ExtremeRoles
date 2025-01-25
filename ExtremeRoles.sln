@@ -36,6 +36,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		requirements.txt = requirements.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubActions", "GitHubActions", "{00B61FF2-566F-4C38-847B-D6E28E7CA474}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\autoBuildAndTransCheck.yml = .github\workflows\autoBuildAndTransCheck.yml
+		.github\workflows\autoFreezeNoActiveIssue.yml = .github\workflows\autoFreezeNoActiveIssue.yml
+		.github\workflows\createReleasePackage.yml = .github\workflows\createReleasePackage.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,9 +129,12 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{00B61FF2-566F-4C38-847B-D6E28E7CA474} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_NeutralResourcesLanguage = ja-JP
-		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
 		RESX_TaskErrorCategory = Message
+		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
+		RESX_NeutralResourcesLanguage = ja-JP
 	EndGlobalSection
 EndGlobal

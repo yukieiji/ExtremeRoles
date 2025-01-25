@@ -1,9 +1,6 @@
-﻿using System;
-using System.Reflection;
+﻿using HarmonyLib;
 
-using BepInEx;
-using BepInEx.Unity.IL2CPP;
-using HarmonyLib;
+using ExtremeRoles.Compat.Interface;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
 
@@ -13,25 +10,19 @@ namespace ExtremeRoles.Compat.ModIntegrator;
 
 public abstract class ModIntegratorBase
 {
-    public readonly SemanticVersioning.Version Version;
-	public string Name => MetadataHelper.GetMetadata(Plugin).GUID;
+    public SemanticVersioning.Version Version { get; }
+	public string Name { get; }
+// Harmonyクラスは消されるとパッチ周りが消えるのでとりあえずメンバ変数として保持
+#pragma warning disable IDE0052 // 読み取られていないプライベート メンバーを削除
+	private readonly Harmony patch;
+#pragma warning restore IDE0052 // 読み取られていないプライベート メンバーを削除
 
-    protected BasePlugin? Plugin;
-    protected Assembly Dll;
-    protected Type[] ClassType;
-
-	internal ModIntegratorBase(
-		string guid, PluginInfo plugin)
+	internal ModIntegratorBase(IInitializer initializer)
 	{
-		this.Plugin = plugin.Instance as BasePlugin;
-		this.Version = plugin.Metadata.Version;
-		this.Dll = Plugin!.GetType().Assembly;
-		this.ClassType = AccessTools.GetTypesFromAssembly(this.Dll);
-
-		this.PatchAll(new Harmony($"ExR.{guid}.Patch"));
+		this.patch = initializer.Patch;
+		this.Version = initializer.Version;
+		this.Name = initializer.Name;
 	}
 
 	public virtual void CreateIntegrateOption(OptionFactory factory) { }
-
-    protected abstract void PatchAll(Harmony harmony);
 }

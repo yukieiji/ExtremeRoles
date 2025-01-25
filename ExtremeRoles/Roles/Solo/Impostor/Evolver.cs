@@ -1,13 +1,9 @@
-﻿using AmongUs.GameOptions;
-using UnityEngine;
+﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 
 
@@ -182,8 +178,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
         if(!this.HasOtherKillCool)
         {
             this.HasOtherKillCool = true;
-            this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                FloatOptionNames.KillCooldown);
+            this.KillCoolTime = Player.DefaultKillCoolTime;
         }
 
         this.defaultKillCoolTime = this.KillCoolTime;

@@ -6,6 +6,9 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.RoleAssign;
+
+using PlayerHelper = ExtremeRoles.Helper.Player;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -17,14 +20,19 @@ public static class PlayerControlSetKillTimernPatch
 	public static bool Prefix(
 		PlayerControl __instance, [HarmonyArgument(0)] float time)
 	{
-		var roles = ExtremeRoleManager.GameRole;
-		if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
+		if (!(
+				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role)
+			))
+		{
+			return true;
+		}
 
-		float killCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-			FloatOptionNames.KillCooldown);
-		var role = roles[__instance.PlayerId];
-
-		if (killCool <= 0f || !role.CanKill()) { return false; }
+		float killCool = PlayerHelper.DefaultKillCoolTime;
+		if (killCool <= 0f || !role.CanKill())
+		{
+			return false;
+		}
 
 		float maxTime = role.TryGetKillCool(out float otherKillCool) ? otherKillCool : killCool;
 

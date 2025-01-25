@@ -2,6 +2,7 @@
 using HarmonyLib;
 
 using ExtremeSkins.Loader;
+using ExtremeRoles.Compat;
 
 namespace ExtremeSkins.Patches.AmongUs;
 
@@ -27,11 +28,13 @@ public static class PlayerControlCheckColorPatch
 
     private static bool isTaken(PlayerControl player, int color)
     {
-        foreach (NetworkedPlayerInfo info in GameData.Instance.AllPlayers)
+		bool isNotLoadCrowdedMod = !CompatModManager.Instance.LoadedMod.ContainsKey(CompatModType.CrowdedMod);
+
+		foreach (NetworkedPlayerInfo info in GameData.Instance.AllPlayers)
         {
             if (!info.Disconnected &&
                 info.PlayerId != player.PlayerId &&
-                info.DefaultOutfit.ColorId == color)
+                (info.DefaultOutfit.ColorId == color && isNotLoadCrowdedMod))
             {
                 return true;
             }

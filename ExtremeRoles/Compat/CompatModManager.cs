@@ -11,13 +11,14 @@ using Hazel;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.ModIntegrator;
+using ExtremeRoles.Compat.Initializer;
 
 
 namespace ExtremeRoles.Compat;
 
 #nullable enable
 
-internal enum CompatModType
+public enum CompatModType
 {
 	ExtremeSkins,
 	ExtremeVoiceEngine,
@@ -25,7 +26,7 @@ internal enum CompatModType
 	CrowdedMod
 }
 
-internal sealed class CompatModManager
+public sealed class CompatModManager
 {
 	public IReadOnlyDictionary<CompatModType, ModIntegratorBase> LoadedMod => this.loadedMod;
 	public static IReadOnlyDictionary<CompatModType, CompatModInfo> ModInfo =>
@@ -38,7 +39,7 @@ internal sealed class CompatModManager
 				SubmergedIntegrator.Guid,
 				"https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest",
 				true,
-				typeof(SubmergedIntegrator)
+				typeof(SubmergedInitializer)
 			)
 		},
 		{
@@ -48,12 +49,12 @@ internal sealed class CompatModManager
 				CrowdedMod.Guid,
 				"https://api.github.com/repos/NikoCat233/CrowdedMod/releases/latest",
 				true,
-				typeof(CrowdedMod)
+				typeof(EmptyInitializer<CrowdedMod>)
 			)
 		},
 	};
 
-	private Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
+	private readonly Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
 
 	private IMapMod? map;
 
@@ -95,9 +96,23 @@ internal sealed class CompatModManager
 
 			object? instance = Activator.CreateInstance(
 				modInfo.ModIntegratorType, [ plugin ]);
-			if (instance == null) { continue; }
+			if (instance == null)
+			{
+				logger.LogError(
+					$"{modInfo.ModIntegratorType.FullName} can't create instance");
+				continue;
+			}
 
-			this.loadedMod.Add(modType, (ModIntegratorBase)instance);
+			if (instance is not IInitializer initializer)
+			{
+				logger.LogError(
+					$"ModIntegratorType '{modInfo.ModIntegratorType.FullName}' : NOT IMP IInitializer!!");
+				continue;
+			}
+
+			var integrator = initializer.Initialize();
+
+			this.loadedMod.Add(modType, integrator);
 
 			logger.LogInfo(
 				$"---- CompatMod:{guid} integrated!! ----");

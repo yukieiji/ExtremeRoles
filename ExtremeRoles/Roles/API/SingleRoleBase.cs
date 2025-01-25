@@ -2,10 +2,9 @@
 
 using UnityEngine;
 
-
 using AmongUs.GameOptions;
 
-
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;
@@ -147,7 +146,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
             baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) :
             baseOption.GetFloat(FloatOptionNames.CrewLightMod);
 
-        this.KillCoolTime = baseOption.GetFloat(FloatOptionNames.KillCooldown);
+        this.KillCoolTime = Player.DefaultKillCoolTime;
         this.KillRange = baseOption.GetInt(Int32OptionNames.KillDistance);
 
         this.IsApplyEnvironmentVision = !this.IsImpostor();

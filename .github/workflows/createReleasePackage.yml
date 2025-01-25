@@ -27,7 +27,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v2
       - name: RunBuildAndPacking
@@ -42,6 +42,16 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
+          path: ./workspace/ExtremeRolesWithSkins/
+      # MSSTORE_ONLY__ExtremeRoles.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "MSSTORE_ONLY__ExtremeRoles-v${{ github.event.inputs.versions }}"
+          path: ./workspace/ExtremeRoles/
+      # MSSTORE_ExtremeRoles-v with skins.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "MSSTORE_ONLY__ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
           path: ./workspace/ExtremeRolesWithSkins/
       # Mod zip Only
       - uses: actions/upload-artifact@v4

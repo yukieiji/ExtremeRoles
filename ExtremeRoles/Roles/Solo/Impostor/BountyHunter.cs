@@ -3,7 +3,6 @@ using System.Linq;
 
 using UnityEngine;
 using TMPro;
-using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -141,8 +140,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         if (!this.HasOtherKillCool)
         {
             this.HasOtherKillCool = true;
-            this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                FloatOptionNames.KillCooldown);
+            this.KillCoolTime = Player.DefaultKillCoolTime;
         }
 
         this.defaultKillCool = this.KillCoolTime;

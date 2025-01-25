@@ -185,8 +185,8 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 		this.abilityIncreaseNum = cate.GetValue<HatterOption, int>(
 			HatterOption.IncreseNum);
 
-		ExtremeSystemTypeManager.Instance.TryAdd(
-			ExtremeSystemType.ModdedMeetingTimeSystem, new ModdedMeetingTimeSystem());
+		_ = ExtremeSystemTypeManager.Instance.CreateOrGet<ModdedMeetingTimeSystem>(
+			ExtremeSystemType.ModdedMeetingTimeSystem);
 
 		this.curSkipCount = 0;
 		this.onemanMeeting = false;
@@ -204,8 +204,15 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 
 		if (localPlayer == null ||
 			exiledPlayer != null ||
-			this.onemanMeeting ||
+			localPlayer.Data == null ||
+			localPlayer.Data.IsDead ||
+			localPlayer.Data.Disconnected ||
 			this.IsWin)
+		{
+			this.curSkipCount = 0;
+			return;
+		}
+		if (this.onemanMeeting)
 		{
 			return;
 		}

@@ -431,14 +431,10 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		this.awakeTaskGage = loader.GetValue<Option, int>(Option.AwakeTaskGage) / 100.0f;
 		this.awakeDeadPlayerNum = loader.GetValue<Option, int>(Option.AwakeDeadPlayerNum);
 
-		this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
-		this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
-		this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
-
 		this.isMissingToDead = loader.GetValue<Option, bool>(Option.IsMissingToDead);
 		if (!this.isMissingToDead)
 		{
-			lawBreakerOption = new Lawbreaker.Option(
+			this.lawBreakerOption = new Lawbreaker.Option(
 				loader.GetValue<Option, bool>(Option.LawbreakerCanKill),
 				loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillCool),
 				loader.GetValue<KillerCommonOption, float>(KillerCommonOption.KillCoolDown),
@@ -447,16 +443,14 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 				loader.GetValue<Option, bool>(Option.LawbreakerUseVent),
 				loader.GetValue<Option, bool>(Option.LawbreakerUseSab));
 		}
-		else
-		{
-			this.isDeadAbilityZero = loader.GetValue<Option, bool>(Option.IsDeadAbilityZero);
-		}
+
+		this.isDeadAbilityZero = loader.GetValue<Option, bool>(Option.IsDeadAbilityZero);
 
 		this.range = loader.GetValue<Option, float>(Option.Range);
 		this.mode = (TargetMode)loader.GetValue<Option, int>(Option.TargetMode);
 		this.canReplaceAssassin = loader.GetValue<Option, bool>(Option.CanReplaceAssassin);
 
-		yardBirdOption = new Yardbird.Option(
+		this.yardBirdOption = new Yardbird.Option(
 			loader.GetValue<Option, int  >(Option.YardbirdAddCommonTask),
 			loader.GetValue<Option, int  >(Option.YardbirdAddNormalTask),
 			loader.GetValue<Option, int  >(Option.YardbirdAddLongTask),
@@ -473,9 +467,18 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		if (!this.awakeRole)
 		{
+			this.CanUseAdmin = true;
+			this.CanUseSecurity = true;
+			this.CanUseVital = true;
 			this.CanCallMeeting = true;
 			this.awakeHasOtherVision = this.HasOtherVision;
 			this.HasOtherVision = false;
+		}
+		else
+		{
+			this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
+			this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
+			this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
 		}
 
 	}
@@ -518,6 +521,12 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			this.awakeRole = true;
 			this.CanCallMeeting = false;
 			this.HasOtherVision = this.awakeHasOtherVision;
+
+			var loader = this.Loader;
+			this.CanUseAdmin = loader.GetValue<Option, bool>(Option.UseAdmin);
+			this.CanUseSecurity = loader.GetValue<Option, bool>(Option.UseSecurity);
+			this.CanUseVital = loader.GetValue<Option, bool>(Option.UseVital);
+
 			this.Button.SetButtonShow(true);
 		}
 		else
@@ -651,7 +660,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 			var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
 
 			this.HasOtherKillCool = option.HasOtherKillCool;
-			this.KillCoolTime = this.HasOtherKillCool ? option.KillCool : baseOption.GetFloat(FloatOptionNames.KillCooldown);
+			this.KillCoolTime = this.HasOtherKillCool ? option.KillCool : Player.DefaultKillCoolTime;
 
 			this.HasOtherKillRange = option.HasOtherKillRange;
 			this.KillRange = this.HasOtherKillRange ? option.KillRange : baseOption.GetInt(Int32OptionNames.KillDistance);

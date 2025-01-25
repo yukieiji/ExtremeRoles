@@ -9,22 +9,51 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 {
-	public bool IsDirty { get; set; } = false;
+	public bool IsDirty => false;
 
-	private readonly Dictionary<byte, int> meetingNums = new Dictionary<byte, int>(createData());
+	private sealed class MeetingNumData
+	{
+		public int Num { get; private set; }
+		private readonly NetworkedPlayerInfo player;
+
+		public MeetingNumData(NetworkedPlayerInfo player, int num)
+		{
+			this.player = player;
+			this.Num = num;
+		}
+		public void Reduce()
+		{
+			this.Num--;
+		}
+		public bool IsValid()
+			=>
+				this.player != null &&
+				!this.player.IsDead &&
+				!this.player.Disconnected;
+	}
+
+	private readonly Dictionary<byte, MeetingNumData> meetingNums = new Dictionary<byte, MeetingNumData>(createData());
 
 	public bool TryReduce()
 	{
 		var validNum = this.meetingNums.Where(
 			(item) =>
-				item.Value > 0 &&
-				ExtremeRoleManager.TryGetRole(item.Key, out var role) &&
-				role.Id is not ExtremeRoleId.Monika &&
-				role.CanCallMeeting());
+			{
+				var val = item.Value;
+				byte key = item.Key;
+				return
+					val.Num > 0 &&
+					ExtremeRoleManager.TryGetRole(key, out var role) &&
+					role.Id is not ExtremeRoleId.Monika &&
+					role.CanCallMeeting() &&
+					val.IsValid();
+			});
 
 		if (validNum.Any())
 		{
@@ -48,7 +77,7 @@ public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 			});
 	}
 
-	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
+	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{ }
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
@@ -57,11 +86,11 @@ public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 		bool isForceReduce = msgReader.ReadBoolean();
 		lock (this.meetingNums)
 		{
-			if (!this.meetingNums.TryGetValue(playerId, out int num))
+			if (!this.meetingNums.TryGetValue(playerId, out var data))
 			{
 				return;
 			}
-			this.meetingNums[playerId] = num - 1;
+			data?.Reduce();
 		}
 		var local = PlayerControl.LocalPlayer;
 		if (isForceReduce &&
@@ -71,12 +100,13 @@ public sealed class MonikaMeetingNumSystem : IExtremeSystemType
 		}
 	}
 
-	private static IEnumerable<KeyValuePair<byte, int>> createData()
+	private static IEnumerable<KeyValuePair<byte, MeetingNumData>> createData()
 	{
 		int num = GameOptionsManager.Instance.currentNormalGameOptions.NumEmergencyMeetings;
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			yield return new KeyValuePair<byte, int>(player.PlayerId, num);
+			yield return new KeyValuePair<byte, MeetingNumData>(
+				player.PlayerId, new MeetingNumData(player, num));
 		}
 	}
 }

@@ -8,6 +8,7 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.GhostRoles;
@@ -22,9 +23,34 @@ using ExtremeRoles.Patches.MapOverlay;
 
 
 
+using PlayerHelper = ExtremeRoles.Helper.Player;
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+using ExtremeRoles.Module.SystemType.CheckPoint;
 
 namespace ExtremeRoles.Patches.Manager;
+
+[HarmonyPatch(typeof(HudManager), nameof(HudManager.OnGameStart))]
+public static class HudManagerOnGameStartPatch
+{
+	public static void Postfix()
+	{
+		var gameStart = ExtremeGameModeManager.Instance.ShipOption.GameStart;
+
+		if (!gameStart.IsKillCoolDownIsTen)
+		{
+			var role = ExtremeRoleManager.GetLocalPlayerRole();
+			PlayerControl.LocalPlayer.SetKillTimer(
+				role.TryGetKillCool(out float killCoolTime) ?
+				killCoolTime : PlayerHelper.DefaultKillCoolTime);
+
+			if (gameStart.RemoveSomeoneButton)
+			{
+				RemoveMeetingNumCheckpoint.RpcCheckpoint(gameStart.ReduceNum);
+			}
+		}
+		ShipStatus.Instance.Timer = 15 - gameStart.FirstButtonCoolDown;
+	}
+}
 
 [HarmonyPatch(typeof(HudManager), nameof(HudManager.SetAlertOverlay))]
 public static class HudManagerSetAlertOverlayPatch

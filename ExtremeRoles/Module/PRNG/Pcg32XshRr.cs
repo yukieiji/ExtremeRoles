@@ -16,16 +16,16 @@ public sealed class Pcg32XshRr : RNG32Base
 	public override uint NextUInt()
 	{
 		ulong oldState = this.state;
-		this.state = unchecked(oldState * Multiplier + this.increment);
+		this.state = unchecked((oldState * Multiplier) + this.increment);
 		uint xorShifted = (uint)(((oldState >> 18) ^ oldState) >> 27);
-		int rot = (int)(oldState >> 59);
-		uint result = (xorShifted >> rot) | (xorShifted << ((-rot) & 31));
+		uint rot = (uint)(oldState >> 59);
+		uint result = (xorShifted >> (int)rot) | (xorShifted << (int)((-rot) & 31));
 		return result;
 	}
 
 	protected override void Initialize(ulong seed, ulong initStete)
 	{
 		this.state = (seed + initStete) * Multiplier + initStete;
-		this.increment = initStete;
+		this.increment = initStete | 1;
 	}
 }
