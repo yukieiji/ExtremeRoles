@@ -47,12 +47,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: "MSSTORE_ONLY__ExtremeRoles-v${{ github.event.inputs.versions }}"
-          path: ./workspace/ExtremeRoles/
+          path: ./workspace/MSStore_ExtremeRoles/
       # MSSTORE_ExtremeRoles-v with skins.zip
       - uses: actions/upload-artifact@v4
         with:
           name: "MSSTORE_ONLY__ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
-          path: ./workspace/ExtremeRolesWithSkins/
+          path: ./workspace/MSStore_ExtremeRolesWithSkins/
       # Mod zip Only
       - uses: actions/upload-artifact@v4
         with:
