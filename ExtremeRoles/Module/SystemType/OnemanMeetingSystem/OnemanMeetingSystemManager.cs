@@ -100,6 +100,11 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public void Start(PlayerControl caller, Type meetingType, PlayerControl? reporter = null)
 	{
+		if (this.meeting is not null)
+		{
+			return;
+		}
+
 		// 変なことにならないようにとりあえず作って、値入れてからセット
 		var meeting = create(meetingType);
 		if (meeting is null)
