@@ -100,7 +100,7 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.BlockedToBodyguard;
 		}
-		else if (IsMissMuderKill(killer, target))
+		else if (IsMissMurderKill(killer, target))
 		{
 			return KillResult.FinalConditionFail;
 		}
@@ -110,7 +110,7 @@ public static class KillButtonDoClickPatch
 		}
 	}
 
-    public static bool IsMissMuderKill(
+    public static bool IsMissMurderKill(
         PlayerControl killer,
         PlayerControl target)
     {
@@ -153,7 +153,7 @@ public static class KillButtonDoClickPatch
                 target, killer);
             return;
         }
-        else if (IsMissMuderKill(killer, target))
+        else if (IsMissMurderKill(killer, target))
         {
             return;
         }
