@@ -77,11 +77,11 @@ public static class KillButtonDoClickPatch
 		}
 		else if (!killerRole.TryRolePlayerKillTo(killer, target))
 		{
-			return KillResult.BlockedToTargetSingleRoleCondition;
+			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
 		else if (!targetRole.TryRolePlayerKilledFrom(target, killer))
 		{
-			return KillResult.BlockedToKillerSingleRoleCondition;
+			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
 		else if (
 			killerRole is MultiAssignRoleBase killerMultiAssignRole &&
