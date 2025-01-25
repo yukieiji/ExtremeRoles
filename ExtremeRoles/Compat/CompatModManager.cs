@@ -18,7 +18,7 @@ namespace ExtremeRoles.Compat;
 
 #nullable enable
 
-internal enum CompatModType
+public enum CompatModType
 {
 	ExtremeSkins,
 	ExtremeVoiceEngine,
@@ -26,7 +26,7 @@ internal enum CompatModType
 	CrowdedMod
 }
 
-internal sealed class CompatModManager
+public sealed class CompatModManager
 {
 	public IReadOnlyDictionary<CompatModType, ModIntegratorBase> LoadedMod => this.loadedMod;
 	public static IReadOnlyDictionary<CompatModType, CompatModInfo> ModInfo =>
@@ -54,7 +54,7 @@ internal sealed class CompatModManager
 		},
 	};
 
-	private Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
+	private readonly Dictionary<CompatModType, ModIntegratorBase> loadedMod = new();
 
 	private IMapMod? map;
 
