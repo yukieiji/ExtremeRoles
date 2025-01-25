@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
     <!--<Version>12.1.4.0</Version>-->
-    <VersionPrefix>12.1.4</VersionPrefix>-->
+    <VersionPrefix>12.1.4</VersionPrefix>
     <VersionSuffix>3rdAnniversary-TwoMemorial</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
