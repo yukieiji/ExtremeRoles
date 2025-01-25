@@ -80,6 +80,15 @@ public sealed class IronMateDeadBody : MonoBehaviour
 		}
 	}
 
+	public void OnDestroy()
+	{
+		if (this.fake == null)
+		{
+			return;
+		}
+		this.fake.Clear();
+	}
+
 	private void changeToRend()
 	{
 		if (this.deadBody == null || this.fake == null || this.rends == null)
