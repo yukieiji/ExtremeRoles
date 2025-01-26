@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
@@ -63,7 +62,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 			{
 				return new(playerId, result);
 			}
-			if (this.left == null || this.right == null)
+			if (this.left == null || this.right == null) //　NULLになることはありえないが一応のチェック
 			{
 				throw new InvalidOperationException("Invalid meeting targets");
 			}

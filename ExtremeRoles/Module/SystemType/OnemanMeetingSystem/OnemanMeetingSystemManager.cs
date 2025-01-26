@@ -96,7 +96,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		{
 			return VoteAreaState.None;
 		}
-		this.starting = false;
+		this.starting = false; // ここにたどり着いている時点でMeetingHud.Instance != nullになるのでここをfalseにする
 		return this.meeting.GetVoteAreaState(player);
 	}
 
@@ -308,7 +308,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (this.starting ||
+		if (this.starting || // 会議開始中はMeetingHud.Instanceがnullになるのでフラグで管理
 			timing is not ResetTiming.ExiledEnd ||
 			TryGetGameEndReason(out _))
 		{
