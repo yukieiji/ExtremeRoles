@@ -30,7 +30,8 @@ public sealed class Delusioner :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
-    IRoleVoteModifier
+	IRoleVoteModifier,
+	IKilledFrom
 {
     public int Order => (int)IRoleVoteModifier.ModOrder.DelusionerCheckVote;
 
@@ -277,7 +278,7 @@ public sealed class Delusioner :
         }
     }
 
-	public override bool TryRolePlayerKilledFrom(
+	public bool TryKilledFrom(
 		PlayerControl rolePlayer, PlayerControl fromPlayer)
 	{
 		byte rolePlayerId = rolePlayer.PlayerId;
