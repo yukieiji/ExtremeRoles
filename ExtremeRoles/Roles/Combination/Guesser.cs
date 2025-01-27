@@ -69,7 +69,9 @@ public sealed class Guesser :
     private TextMeshPro meetingGuessText = null;
     private string roleNamePrefix;
 
-    private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
+	public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
+
+	private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Assassin,
         ExtremeRoleId.Marlin,
@@ -525,12 +527,6 @@ public sealed class Guesser :
             this.guesserUi.gameObject.SetActive(true);
         }
         return openGusserUi;
-    }
-
-    public void SetSprite(SpriteRenderer render)
-    {
-        render.sprite = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
-		render.transform.localScale *= new Vector2(0.625f, 0.625f);
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
