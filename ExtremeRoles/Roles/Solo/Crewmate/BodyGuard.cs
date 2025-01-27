@@ -281,7 +281,9 @@ public sealed class BodyGuard :
 
     private TextMeshPro? meetingText;
 
-    private static ShildFeatedPlayer shilded = new ShildFeatedPlayer();
+	public Sprite AbilityImage => this.shildButtonImage;
+
+	private static ShildFeatedPlayer shilded = new ShildFeatedPlayer();
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
@@ -652,12 +654,6 @@ public sealed class BodyGuard :
     public void AllReset(PlayerControl rolePlayer)
     {
         resetShield(rolePlayer.PlayerId);
-    }
-
-    public void SetSprite(SpriteRenderer render)
-    {
-        render.sprite = this.shildButtonImage;
-        render.transform.localScale *= new Vector2(0.625f, 0.625f);
     }
 
     public void Update(PlayerControl rolePlayer)

@@ -47,7 +47,10 @@ public sealed class Captain :
 
     public int Order => (int)IRoleVoteModifier.ModOrder.CaptainSpecialVote;
 
-    public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
+	public Sprite AbilityImage => Resources.UnityObjectLoader.LoadSpriteFromResources(
+		Resources.ObjectPath.CaptainSpecialVote);
+
+	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
     private bool awakeRole;
     private float awakeTaskGage;
@@ -227,13 +230,6 @@ public sealed class Captain :
 
     public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) =>
         instance.TargetPlayerId == 253 || isNotUseSpecialVote();
-
-    public void SetSprite(SpriteRenderer render)
-    {
-        render.sprite = Resources.UnityObjectLoader.LoadSpriteFromResources(
-            Resources.ObjectPath.CaptainSpecialVote);
-        render.transform.localScale *= new Vector2(0.625f, 0.625f);
-    }
 
     public void Update(PlayerControl rolePlayer)
     {

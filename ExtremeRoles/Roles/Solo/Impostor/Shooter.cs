@@ -44,8 +44,9 @@ public sealed class Shooter :
     public bool IsAwake => this.isAwake;
 
     public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
+	public Sprite AbilityImage => FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite;
 
-    private bool isAwake = false;
+	private bool isAwake = false;
 
     private int curKillCount = 0;
     private int awakeKillCount = 0;
@@ -136,12 +137,6 @@ public sealed class Shooter :
     private static void rpcPlayKillSound()
     {
         Sound.RpcPlaySound(Sound.Type.Kill);
-    }
-
-    public void SetSprite(SpriteRenderer render)
-    {
-        render.sprite = HudManager.Instance.KillButton.graphic.sprite;
-        render.transform.localScale *= new Vector2(0.75f, 0.75f);
     }
 
     public void HookReportButton(
