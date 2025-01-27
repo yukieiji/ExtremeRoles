@@ -1,4 +1,4 @@
-using ExtremeRoles.GameMode;
+﻿using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
