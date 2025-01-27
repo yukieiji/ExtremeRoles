@@ -27,7 +27,8 @@ public sealed class Yoko :
     SingleRoleBase,
 	IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleWinPlayerModifier
+    IRoleWinPlayerModifier,
+	IKilledFrom
 {
     public enum YokoOption
     {
@@ -99,7 +100,7 @@ public sealed class Yoko :
         }
     }
 
-	public override bool TryRolePlayerKilledFrom(
+	public bool TryKilledFrom(
 		PlayerControl rolePlayer, PlayerControl fromPlayer)
 		=> this.yashiro is null || !this.yashiro.IsNearActiveYashiro(
 			rolePlayer.GetTruePosition());
