@@ -81,8 +81,8 @@ public static class KillButtonDoClickPatch
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
 		else if (
-			targetRole is not IKilledFrom targetKillFromCheckRole ||
-			targetKillFromCheckRole.TryKilledFrom(target, killer))
+			targetRole is IKilledFrom targetKillFromCheckRole &&
+			!targetKillFromCheckRole.TryKilledFrom(target, killer))
 		{
 			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
