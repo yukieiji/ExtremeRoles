@@ -8,7 +8,7 @@ namespace ExtremeRoles.Roles.API.Interface;
 
 public interface IKilledFrom
 {
-	public bool TryPlayerKilledFrom(
+	public bool TryKilledFrom(
 		PlayerControl rolePlayer,
 		PlayerControl fromPlayer);
 }

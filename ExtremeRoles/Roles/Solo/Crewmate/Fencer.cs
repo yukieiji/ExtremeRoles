@@ -15,7 +15,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
+public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IKilledFrom
 {
     public enum FencerOption
     {
@@ -172,7 +172,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     }
 
-    public override bool TryRolePlayerKilledFrom(
+    public bool TryKilledFrom(
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
 
