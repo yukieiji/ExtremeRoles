@@ -12,7 +12,7 @@ public interface IRoleMeetingButtonAbility
 
     public Action CreateAbilityAction(PlayerVoteArea instance);
 
-    public void SetSprite(SpriteRenderer render);
+    public Sprite AbilityImage { get; }
 
 	protected static void DefaultButtonMod(PlayerVoteArea instance, UiElement abilityButton, string name)
 	{

@@ -245,8 +245,5 @@ public sealed class Heretic :
 			this.target = instance.TargetPlayerId;
 		};
 
-	public void SetSprite(SpriteRenderer render)
-	{
-		throw new NotImplementedException();
-	}
+	public Sprite AbilityImage => null;
 }
