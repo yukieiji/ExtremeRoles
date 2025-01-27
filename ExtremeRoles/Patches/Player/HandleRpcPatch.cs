@@ -95,6 +95,10 @@ public static class PlayerControlHandleRpcPatch
 				RPCOperator.UncheckedMurderPlayer(
 					sourceId, targetId, killAnimationTrigger);
 				break;
+			case RPCOperator.Command.UnchekedExiledPlayer:
+				byte exiledTargetId = reader.ReadByte();
+				RPCOperator.UncheckedExiledPlayer(exiledTargetId);
+				break;
 			case RPCOperator.Command.UncheckedRevive:
 				byte reviveTargetId = reader.ReadByte();
 				RPCOperator.UncheckedRevive(reviveTargetId);
