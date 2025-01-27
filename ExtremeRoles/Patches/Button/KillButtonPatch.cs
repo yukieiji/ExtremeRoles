@@ -7,6 +7,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Roles.API.Interface;
 
 #nullable enable
 
@@ -79,7 +80,9 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
-		else if (!targetRole.TryRolePlayerKilledFrom(target, killer))
+		else if (
+			targetRole is not IKilledFrom targetKillFromCheckRole ||
+			targetKillFromCheckRole.TryKilledFrom(target, killer))
 		{
 			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
@@ -91,8 +94,8 @@ public static class KillButtonDoClickPatch
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
 		else if (targetRole is MultiAssignRoleBase targetMultiAssignRole &&
-			targetMultiAssignRole.AnotherRole != null &&
-			!targetMultiAssignRole.AnotherRole.TryRolePlayerKilledFrom(target, killer))
+			targetMultiAssignRole.AnotherRole is IKilledFrom targetMultiKilledFromCheckRole &&
+			targetMultiKilledFromCheckRole.TryKilledFrom(target, killer))
 		{
 			return KillResult.BlockedToTargetOtherRoleCondition;
 		}
