@@ -15,7 +15,9 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Patches.Button;
 using ExtremeRoles.Module.GameResult;
-
+using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -39,8 +41,9 @@ public sealed class Heretic :
 	{
 		OnTaskPhase,
 		OnTaskPhaseTarget,
-		OnExiled,
 		OnMeeting,
+		OnMeetingTarget,
+		OnExiled,
 	}
 
 	public ExtremeAbilityButton Button { get; set; }
@@ -53,6 +56,7 @@ public sealed class Heretic :
 
 	private bool isSeeImpostorNow = false;
 	private float seeImpostorTaskGage;
+	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Heretic);
 
 	public Heretic() : base(
 		ExtremeRoleId.Heretic,
@@ -86,7 +90,8 @@ public sealed class Heretic :
 
 	public void CreateAbility()
 	{
-
+		this.CreateNormalAbilityButton(
+			"selfKill", this.sprite);
 	}
 
 	public bool IsAbilityUse()
@@ -141,16 +146,27 @@ public sealed class Heretic :
 			{
 				return;
 			}
+			targetPlayerId = target.PlayerId;
 		}
-		// プレイヤーを殺す
+		Player.RpcUncheckExiled(targetPlayerId);
 	}
+
+	public override bool IsSameTeam(SingleRoleBase targetRole)
+		=> this.IsNeutralSameTeam(targetRole) ||
+			(targetRole.IsImpostor() && this.canKillImpostor);
 
 	public void ResetOnMeetingStart()
 	{ }
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (!this.HasTask) { return; }
+		this.Button.SetButtonShow(
+			this.killMode is KillMode.OnTaskPhase or KillMode.OnTaskPhaseTarget);
+
+		if (!this.HasTask || this.isSeeImpostorNow)
+		{
+			return;
+		}
 
 		float taskGage = Player.GetPlayerTaskGage(rolePlayer);
 		if (taskGage >= this.seeImpostorTaskGage &&
@@ -164,26 +180,31 @@ public sealed class Heretic :
 	{
 		switch (this.killMode)
 		{
-			case KillMode.OnExiled:
-				return false;
 			case KillMode.OnTaskPhase:
 				var killer = PlayerControl.LocalPlayer;
-				if (killer == null ||
-					!tryKill(killer, this.target))
+				if (killer == null)
 				{
 					return false;
 				}
-				Player.RpcUncheckMurderPlayer(
-					killer.PlayerId, killer.PlayerId,
-					byte.MinValue);
+				tryKill(killer, this.target);
 				break;
 			case KillMode.OnTaskPhaseTarget:
 				this.meetingTarget = this.target;
 				break;
 			default:
-				break;
+				return false;
 		}
 		return true;
+	}
+
+	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
+	{
+		if (this.meetingTarget != byte.MaxValue &&
+			targetPlayerId == this.meetingTarget)
+		{
+			return Design.ColoedString(Palette.ImpostorRed, " ×");
+		}
+		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}
 
 	public override Color GetTargetRoleSeeColor(
@@ -215,26 +236,21 @@ public sealed class Heretic :
 
 	protected override void RoleSpecificInit()
 	{
-	}
+		this.target = byte.MaxValue;
+		var loader = this.Loader;
+		this.HasTask = loader.GetValue<Option, bool>(
+			Option.HasTask);
+		this.seeImpostorTaskGage = loader.GetValue<Option, int>(
+			Option.SeeImpostorTaskGage) / 100.0f;
+		this.canKillImpostor = loader.GetValue<Option, bool>(
+			Option.CanKillImpostor);
+		this.killMode = (KillMode)loader.GetValue<Option, int>(Option.KillMode);
+		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage > 0;
 
-	private bool tryKill(PlayerControl killer, byte targetPlayerId)
-	{
-		var target = Player.GetPlayerControlById(targetPlayerId);
-
-		if (killer == null ||
-			!KillButtonDoClickPatch.CheckPreKillConditionWithBool(this, killer, target))
-		{
-			return false;
-		}
-
-		Player.RpcUncheckMurderPlayer(
-			killer.PlayerId, target.PlayerId,
-			byte.MinValue);
-		return true;
 	}
 
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
-		=> this.killMode is KillMode.OnMeeting;
+		=> this.killMode is not KillMode.OnMeeting or KillMode.OnMeetingTarget;
 
 	public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
 		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "hereticKillTarget");
@@ -242,8 +258,59 @@ public sealed class Heretic :
 	public Action CreateAbilityAction(PlayerVoteArea instance)
 		=> () =>
 		{
-			this.target = instance.TargetPlayerId;
+			if (instance.AmDead)
+			{
+				return;
+			}
+
+			this.meetingTarget = instance.TargetPlayerId;
+
+			if (this.killMode is KillMode.OnMeetingTarget)
+			{
+				return;
+			}
+
+			byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
+
+			// 二人殺すので二回ならす
+			Sound.RpcPlaySound(Sound.Type.Kill);
+			if (!(
+					BodyGuard.IsBlockMeetingKill &&
+					BodyGuard.TryRpcKillGuardedBodyGuard(
+						localPlayerId, this.meetingTarget)
+				))
+			{
+				Player.RpcUncheckMurderPlayer(
+					localPlayerId,
+					this.meetingTarget, byte.MinValue);
+			}
+
+			Sound.RpcPlaySound(Sound.Type.Kill);
+			Player.RpcUncheckMurderPlayer(
+				localPlayerId, localPlayerId,
+				byte.MinValue);
 		};
 
-	public Sprite AbilityImage => null;
+	public Sprite AbilityImage => this.sprite;
+
+	private void tryKill(PlayerControl killer, byte targetPlayerId)
+	{
+		var target = Player.GetPlayerControlById(targetPlayerId);
+		switch (
+			KillButtonDoClickPatch.CheckPreKillCondition(this, killer, target))
+		{
+			case KillButtonDoClickPatch.KillResult.BlockedToBodyguard:
+				break;
+			case KillButtonDoClickPatch.KillResult.Success:
+				Player.RpcUncheckMurderPlayer(
+					killer.PlayerId, target.PlayerId,
+					byte.MinValue);
+				break;
+			default:
+				return;
+		}
+		Player.RpcUncheckMurderPlayer(
+			killer.PlayerId, killer.PlayerId,
+			byte.MinValue);
+	}
 }
