@@ -146,7 +146,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Artist,
 			ExtremeRoleId.Tucker,
 			ExtremeRoleId.IronMate,
-			ExtremeRoleId.Monika
+			ExtremeRoleId.Monika,
+			ExtremeRoleId.Heretic,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
