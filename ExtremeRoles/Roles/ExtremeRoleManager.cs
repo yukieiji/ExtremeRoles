@@ -322,6 +322,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Tucker    , new Tucker()},
 			{(int)ExtremeRoleId.IronMate  , new IronMate()},
 			{(int)ExtremeRoleId.Monika    , new Monika()},
+			{(int)ExtremeRoleId.Heretic   , new Heretic()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
