@@ -56,7 +56,7 @@ public sealed class Heretic :
 
 	private bool isSeeImpostorNow = false;
 	private float seeImpostorTaskGage;
-	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Heretic);
+	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
 
 	public Heretic() : base(
 		ExtremeRoleId.Heretic,
@@ -227,7 +227,7 @@ public sealed class Heretic :
 			false);
 		factory.Create0To100Percentage10StepOption(
 			Option.SeeImpostorTaskGage, taskOpt);
-		factory.CreateSelectionOption<Option, KillMode>(
+		var killModeOpt = factory.CreateSelectionOption<Option, KillMode>(
 			Option.KillMode);
 		factory.CreateBoolOption(
 			Option.CanKillImpostor,
