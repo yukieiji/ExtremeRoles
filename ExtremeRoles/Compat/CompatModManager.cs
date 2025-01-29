@@ -49,7 +49,7 @@ public sealed class CompatModManager
 				CrowdedMod.Guid,
 				"https://api.github.com/repos/NikoCat233/CrowdedMod/releases/latest",
 				true,
-				typeof(EmptyInitializer<CrowdedMod>)
+				typeof(CrowedModInitializer)
 			)
 		},
 	};
