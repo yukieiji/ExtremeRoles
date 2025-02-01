@@ -47,9 +47,9 @@ public sealed class CompatModManager
 			new CompatModInfo(
 				CompatModType.CrowdedMod.ToString(),
 				CrowdedMod.Guid,
-				"https://api.github.com/repos/NikoCat233/CrowdedMod/releases/latest",
+				"https://api.github.com/repos/yukieiji/CrowdedMod/releases/latest",
 				true,
-				typeof(EmptyInitializer<CrowdedMod>)
+				typeof(CrowedModInitializer)
 			)
 		},
 	};

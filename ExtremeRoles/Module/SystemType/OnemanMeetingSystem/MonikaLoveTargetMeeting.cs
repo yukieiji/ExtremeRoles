@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
@@ -25,7 +24,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 				return;
 			}
 			var voteTarget = this.target.GetVoteTarget(value);
-			var notSelectPlayer = this.target.GetAnother(value);
+			var notSelectPlayer = this.target.GetAnother(value).ExiledTarget!;
 
 			ExtremeRolesPlugin.ShipState.AddWinner(voteTarget);
 			FinalSummaryBuilder.AddStatusOverride(
@@ -55,29 +54,29 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 			throw new InvalidOperationException("Invalid meeting targets");
 		}
 
-		public NetworkedPlayerInfo GetAnother(byte playerId)
+		public IOnemanMeeting.VoteResult GetAnother(byte playerId)
 		{
 			NetworkedPlayerInfo? result;
 			if (isReturnThis(playerId, this.left, out result, this.right) ||
 				isReturnThis(playerId, this.right, out result, this.left))
 			{
-				return result;
+				return new(playerId, result);
 			}
-			if (this.left == null || this.right == null)
+			if (this.left == null || this.right == null) //　NULLになることはありえないが一応のチェック
 			{
 				throw new InvalidOperationException("Invalid meeting targets");
 			}
 			int index = RandomGenerator.Instance.Next(2);
 			if (index == 0)
 			{
-				return this.left;
+				return new(this.right.PlayerId, this.left);
 			}
 			else
 			{
-				return this.right;
+				return new(this.left.PlayerId, this.right);
 			}
 		}
-		
+
 		public void Add(NetworkedPlayerInfo playerInfo)
 		{
 			if (tryAssign(ref this.left, playerInfo) ||
@@ -138,7 +137,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 		var monikaPlayer = GameData.Instance.GetPlayerById(caller);
 
 		if (monikaPlayer == null ||
-			this.winPlayer == null || 
+			this.winPlayer == null ||
 			this.notSelectPlayer == null)
 		{
 			return new IOnemanMeeting.ExiledInfo(true, "UNKNOWN MEETING PLAYER!!!");
@@ -158,10 +157,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 	}
 
 	public IOnemanMeeting.VoteResult CreateVoteResult(MeetingHud meeting, byte voteTarget)
-	{
-		var playerInfo = this.target.GetAnother(voteTarget);
-		return new IOnemanMeeting.VoteResult(voteTarget, playerInfo);
-	}
+		=> this.target.GetAnother(voteTarget);
 
 	public string GetTitle(byte caller)
 		=> Tr.GetString(getTitleKey(caller));

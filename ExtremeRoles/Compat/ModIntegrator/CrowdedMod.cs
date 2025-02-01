@@ -6,5 +6,5 @@ namespace ExtremeRoles.Compat.ModIntegrator;
 
 public sealed class CrowdedMod(IInitializer init) : ModIntegratorBase(init)
 {
-	public const string Guid = "CrowdedMod";
+	public const string Guid = "xyz.crowdedmods.crowdedmod";
 }

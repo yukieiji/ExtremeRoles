@@ -43,6 +43,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 	private readonly Queue<(byte, Type)> meetingQueue = [];
 
 	private IOnemanMeeting? meeting;
+	private bool starting = false;
 
 	public enum Type
 	{
@@ -95,6 +96,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		{
 			return VoteAreaState.None;
 		}
+		this.starting = false; // ここにたどり着いている時点でMeetingHud.Instance != nullになるのでここをfalseにする
 		return this.meeting.GetVoteAreaState(player);
 	}
 
@@ -113,8 +115,10 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 		}
 		meeting.VoteTarget = byte.MaxValue;
 
+		this.starting = true;
 		this.Caller = caller.PlayerId;
 		this.meeting = meeting;
+		ExtremeRolesPlugin.Logger.LogInfo($"Start Oneman Meeting: {meetingType}");
 
 		if (reporter == null || caller.PlayerId == reporter.PlayerId)
 		{
@@ -304,7 +308,8 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (timing is not ResetTiming.ExiledEnd ||
+		if (this.starting || // 会議開始中はMeetingHud.Instanceがnullになるのでフラグで管理
+			timing is not ResetTiming.ExiledEnd ||
 			TryGetGameEndReason(out _))
 		{
 			return;
