@@ -2,8 +2,6 @@
 
 using ExtremeRoles.Compat.Interface;
 
-using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.SequentialOptionCategoryFactory;
-
 namespace ExtremeRoles.Compat.ModIntegrator;
 
 #nullable enable
@@ -23,6 +21,4 @@ public abstract class ModIntegratorBase
 		this.Version = initializer.Version;
 		this.Name = initializer.Name;
 	}
-
-	public virtual void CreateIntegrateOption(OptionFactory factory) { }
 }

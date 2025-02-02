@@ -126,10 +126,18 @@ public sealed class CompatModManager
 	{
 		foreach (var (mod, index) in this.loadedMod.Values.Select((value, index) => (value, index)))
 		{
+			if (mod is not IIntegrateOption option)
+			{
+				continue;
+			}
+
+			ExtremeRolesPlugin.Logger.LogInfo(
+				$"CreateIntegrateOption:{mod.Name}");
+
 			using (var factory = OptionManager.CreateSequentialOptionCategory(
 				startId + index, $"{mod.Name}Category"))
 			{
-				mod.CreateIntegrateOption(factory);
+				option.CreateIntegrateOption(factory);
 			}
 		}
 
