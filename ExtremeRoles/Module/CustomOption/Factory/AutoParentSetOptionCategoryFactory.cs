@@ -3,6 +3,7 @@
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Implemented;
 using ExtremeRoles.Module.RoleAssign;
+using System.Collections.Generic;
 
 #nullable enable
 
@@ -239,6 +240,33 @@ public sealed class AutoParentSetOptionCategoryFactory(
 	{
 		SelectionCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
 			option,
+			parent is null ? this.parent : parent,
+			isHidden,
+			format,
+			invert,
+			ignorePrefix);
+
+		if (this.parent is null)
+		{
+			this.parent = newOption;
+		}
+		return newOption;
+	}
+
+	public SelectionMultiEnableCustomOption CreateSelectionOption<T, W>(
+		T option,
+		IReadOnlyList<W> anotherDefault,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false)
+		where T : struct, IConvertible
+		where W : struct, Enum
+	{
+		SelectionMultiEnableCustomOption newOption = this.internalFactory.CreateSelectionOption<T, W>(
+			option,
+			anotherDefault,
 			parent is null ? this.parent : parent,
 			isHidden,
 			format,
