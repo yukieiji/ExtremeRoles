@@ -42,8 +42,8 @@ public sealed class Summoner :
         Range,
     }
 
-	private NetworkedPlayerInfo? targetData;
-	private NetworkedPlayerInfo? summonTarget;
+	private PlayerControl? targetData;
+	private PlayerControl? summonTarget;
 	private CountBehavior? markingBehavior;
 
     private float range;
@@ -129,8 +129,9 @@ public sealed class Summoner :
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
 		if (this.summonTarget != null &&
+			this.summonTarget.Data != null &&
 			(
-				this.summonTarget.IsDead ||
+				this.summonTarget.Data.IsDead ||
 				(
 					exiledPlayer != null &&
 					exiledPlayer.PlayerId == this.summonTarget.PlayerId
@@ -200,7 +201,7 @@ public sealed class Summoner :
 			return false;
 		}
 
-		this.targetData = target.Data;
+		this.targetData = target;
 
 		return IRoleAbility.IsCommonUse();
 	}
@@ -211,15 +212,23 @@ public sealed class Summoner :
 	private bool summon()
 	{
 		var local = PlayerControl.LocalPlayer;
-		if (this.summonTarget == null ||
-			local == null)
+		if (local == null ||
+			this.summonTarget == null ||
+			this.summonTarget.Data == null)
+		{
+			return false;
+		}
+
+		if (this.summonTarget.onLadder ||
+			this.summonTarget.inVent ||
+			this.summonTarget.inMovingPlat)
 		{
 			return false;
 		}
 
 		var pos = local.transform.position;
 		byte lastPlayerId = this.summonTarget.PlayerId;
-		bool isDead = this.summonTarget.IsDead;
+		bool isDead = this.summonTarget.Data.IsDead;
 
 		using (var writer = RPCOperator.CreateCaller(
 			RPCOperator.Command.SummonerOps))
