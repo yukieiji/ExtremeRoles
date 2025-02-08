@@ -268,7 +268,12 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
 	 	ExtremeSystemType systemType = (ExtremeSystemType)msgReader.ReadByte();
-		this.allSystems[systemType].UpdateSystem(player, msgReader);
+		if (player == null ||
+			!this.allSystems.TryGetValue(systemType, out var system))
+		{
+			return;
+		}
+		system.UpdateSystem(player, msgReader);
 	}
 
 	internal static void AddSystem()

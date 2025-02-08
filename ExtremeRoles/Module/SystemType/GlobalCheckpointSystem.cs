@@ -47,7 +47,10 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 			var checkPointType = (CheckpointType)msgReader.ReadByte();
 			var handler = tryGetHandler(checkPointType, msgReader);
 
-			handler.AddCheckPoint(player.PlayerId);
+			byte playerId = player.PlayerId;
+			ExtremeRolesPlugin.Logger.LogInfo(
+				$"CheckPoint:{checkPointType} check to playerId:{playerId}");
+			handler.AddCheckPoint(playerId);
 
 			if (isCheckpointOk(handler))
 			{
@@ -88,9 +91,10 @@ public sealed class GlobalCheckpointSystem : IExtremeSystemType
 			return false;
 		}
 
-		var validPlayer = PlayerCache.AllPlayerControl.Where(
-			x => x != null && x.Data != null && !x.Data.Disconnected);
-
-		return validPlayer.All(x => checkedPlayer.Contains(x.PlayerId));
+		return PlayerCache.AllPlayerControl
+			.Where(
+				x => x != null && x.Data != null && !x.Data.Disconnected)
+			.All(
+				x => checkedPlayer.Contains(x.PlayerId));
 	}
 }
