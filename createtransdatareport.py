@@ -1,6 +1,5 @@
 import os
 import sys
-from typing import Dict, List
 
 from pylightxl import readxl
 
@@ -15,7 +14,7 @@ EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "L
 SUPPORT_LANG = {0:'English', 11:'Japanese', 13: 'SChinese'}
 TAG = 'report'
 
-def get_trans_data_check(file_name:str)-> Dict[str, List[str]]:
+def get_trans_data_check(file_name:str)-> dict[str, list[str]]:
   wb = readxl(file_name)
 
   missing_data = {}
@@ -56,7 +55,7 @@ def get_trans_data_check(file_name:str)-> Dict[str, List[str]]:
 
   return missing_data
 
-def convert_md_table(data: Dict[str, List[str]]) -> str:
+def convert_md_table(data: dict[str, list[str]]) -> str:
   result = '| Languages | Missing TransKeys |\n| --- | --- |'
 
   for lang, miss_keys in data.items():
@@ -72,7 +71,7 @@ def convert_md_table(data: Dict[str, List[str]]) -> str:
 
   return result
 
-def output_md_report(build_result, *check_xlsx_file):
+def output_md_report(build_result, *check_xlsx_file) -> None:
   
   result = f'### GitHub Actions MSBuilds\n\n - Build Result : {build_result}\n\n'
   result = f'{result}### Translation Checker Report\n'
