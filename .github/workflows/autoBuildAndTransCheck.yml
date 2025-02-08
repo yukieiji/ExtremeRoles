@@ -19,8 +19,8 @@ jobs:
         id: gen_token
         uses: actions/create-github-app-token@v1
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -38,9 +38,9 @@ jobs:
       - name: InstallPythonLibrary
         run: pip install -r requirements.txt
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 9.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1
       - name: RunBuild
@@ -53,6 +53,6 @@ jobs:
       - name: PostComment
         uses: thollander/actions-comment-pull-request@v3
         with:
-            GITHUB_TOKEN: ${{ steps.gen_token.outputs.token }}
-            pr_number: ${{ github.event.number }}
-            filePath: .github/workflows/comment.md
+            github-token: ${{ steps.gen_token.outputs.token }}
+            pr-number: ${{ github.event.number }}
+            file-path: .github/workflows/comment.md

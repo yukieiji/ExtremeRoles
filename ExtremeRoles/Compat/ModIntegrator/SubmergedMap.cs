@@ -30,7 +30,7 @@ using ExtremeRoles.Compat.Initializer;
 
 namespace ExtremeRoles.Compat.ModIntegrator;
 
-public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
+public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, IIntegrateOption
 {
 	public enum SubmergedOption
 	{
@@ -170,7 +170,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap
 		replaceDoorMinigame();
 	}
 
-	public override void CreateIntegrateOption(OptionFactory factory)
+	public void CreateIntegrateOption(OptionFactory factory)
 	{
 		// どうせ作っても5個程度なので参照を持つようにする 8byte * 5 = 40byte程度
 		this.elevatorOption = factory.CreateSelectionOption<ElevatorSelection>(SubmergedOption.EnableElevator);
