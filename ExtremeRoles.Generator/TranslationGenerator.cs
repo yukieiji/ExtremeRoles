@@ -14,7 +14,7 @@ public sealed class TranslationGenerator : IIncrementalGenerator
 	{
 		// すべてのAdditionalTextのうち、".resx"で終わるファイルを抽出
 		var additionalResxProvider = context.AdditionalTextsProvider
-			.Where(x => x.Path.EndsWith(".resx"));
+			.Where(x => x.Path.EndsWith(".resx", StringComparison.OrdinalIgnoreCase));
 
 		// ベース翻訳用のAdditionalTextを抽出（ファイル名にピリオドが1つのみのもの）
 		var baseTransProvider = additionalResxProvider
@@ -94,6 +94,7 @@ public static partial class TranslationRawData
         {strBuilder}
     }};
 }}
+
 ";
 		context.AddSource($"TranslationData.{target}.g.cs", SourceText.From(source, Encoding.UTF8));
 	}
