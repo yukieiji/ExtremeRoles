@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using AmongUs.GameOptions;
+using UnityEngine;
 
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
@@ -50,7 +51,7 @@ public static class PlayerPhysicsFixedUpdatePatch
 				ExtremeSystemType.TimeBreakerTimeBreakSystem, out var system) &&
 			system.Active)
 		{
-			__instance.body.velocity = UnityEngine.Vector2.zero;
+			setVelocityToZero(__instance);
 			return false;
 		}
 
@@ -58,7 +59,7 @@ public static class PlayerPhysicsFixedUpdatePatch
 
 		if (__instance.AmOwner && !((main is null || main.CanMove) && (sub is null || sub.CanMove)))
 		{
-			__instance.body.velocity = UnityEngine.Vector2.zero;
+			setVelocityToZero(__instance);
 			return false;
 		}
 
@@ -77,6 +78,10 @@ public static class PlayerPhysicsFixedUpdatePatch
             __instance.body.velocity *= velocity;
         }
     }
+	private static void setVelocityToZero(PlayerPhysics body)
+	{
+		body.body.velocity = Vector2.zero;
+	}
 }
 
 [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
