@@ -9,6 +9,8 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 
+#nullable enable
+
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(PlayerPhysics), "TrueSpeed", MethodType.Getter)]
@@ -55,11 +57,21 @@ public static class PlayerPhysicsFixedUpdatePatch
 	 	var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleMovable>();
 
 		bool result =
-			(main is null && sub is null) ||
-			(main.CanMove && sub is null) ||
-			(main is null && sub.CanMove) ||
-			(main.CanMove && sub.CanMove);
-		if (!result)
+			(
+				main is null &&
+				sub is null
+			) ||
+			(
+				main is not null && sub is not null &&
+				main.CanMove && sub.CanMove
+			) ||
+			(
+				sub is not null && sub.CanMove
+			) ||
+			(
+				main is not null && main.CanMove
+			);
+		if (__instance.AmOwner && !result)
 		{
 			__instance.body.velocity = UnityEngine.Vector2.zero;
 			return false;
