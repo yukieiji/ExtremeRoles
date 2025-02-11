@@ -57,7 +57,8 @@ public static class PlayerPhysicsFixedUpdatePatch
 
 	 	var (main, sub) = ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleMovable>();
 
-		if (__instance.AmOwner && !((main is null || main.CanMove) && (sub is null || sub.CanMove)))
+		if (!((main is null || main.CanMove) && (sub is null || sub.CanMove)) &&
+			__instance.AmOwner)
 		{
 			setVelocityToZero(__instance);
 			return false;
