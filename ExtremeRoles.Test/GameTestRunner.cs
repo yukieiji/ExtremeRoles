@@ -27,13 +27,16 @@ public sealed class GameTestRunner : TestRunnerBase
 {
 	public sealed record TestCase(
 		string Name, int Iteration,
-		HashSet<ExtremeRoleId>? Ids = null, Action? PreSetUp = null);
+		HashSet<ExtremeRoleId>? Ids = null,
+		Action? PreSetUp = null,
+		Func<ManualLogSource, IEnumerator>? PreTestCase = null);
 
 	public override void Run()
 	{
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
+				new("MagicanTeleport", 128, PreTestCase: MagicianTeleportTest.Test),
 				new("Random", 256),
 				new("IRoleAbilityRole", 5,
 				[
@@ -169,6 +172,12 @@ public sealed class GameMudderEndTestingBehaviour : MonoBehaviour
 			while (IntroCutscene.Instance != null)
 			{
 				yield return new WaitForSeconds(10.0f);
+			}
+
+			if (testCase.PreTestCase is not null)
+			{
+				yield return new WaitForSeconds(2.5f);
+				yield return testCase.PreTestCase.Invoke(this.Logger);
 			}
 
 			while (GameUtility.IsContinue)
