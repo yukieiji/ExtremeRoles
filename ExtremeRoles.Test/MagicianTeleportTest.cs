@@ -20,9 +20,9 @@ public static class MagicianTeleportTest
 
 		var param = new Magician.AbilityParameter(
 			1.0f,
-			RandomGenerator.Instance.Next(2) > 1,
-			RandomGenerator.Instance.Next(2) > 1,
-			RandomGenerator.Instance.Next(2) > 1);
+			RandomGenerator.Instance.Next(2) >= 1,
+			RandomGenerator.Instance.Next(2) >= 1,
+			RandomGenerator.Instance.Next(2) >= 1);
 
 		Magician.UseAbility(param);
 
