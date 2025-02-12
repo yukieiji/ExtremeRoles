@@ -36,7 +36,6 @@ public sealed class GameTestRunner : TestRunnerBase
 		GameMudderEndTestingBehaviour.Instance.Logger = this.Log;
 		GameMudderEndTestingBehaviour.Instance.StartCoroutine(
 			GameMudderEndTestingBehaviour.Instance.Run(
-				new("MagicanTeleport", 128, PreTestCase: MagicianTeleportTest.Test),
 				new("Random", 256),
 				new("IRoleAbilityRole", 5,
 				[
@@ -86,7 +85,7 @@ public sealed class GameTestRunner : TestRunnerBase
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 0));
 				}),
-				new("QueenWin", 100, [ ExtremeRoleId.Queen ],
+				new("QueenWin", 25, [ ExtremeRoleId.Queen ],
 				() =>
 				{
 					GameUtility.UpdateExROption(
@@ -97,7 +96,8 @@ public sealed class GameTestRunner : TestRunnerBase
 						new RequireOption<Int32OptionNames, int>(
 							Int32OptionNames.NumImpostors, 3));
 				}),
-				new("YandereWin", 100, [ ExtremeRoleId.Yandere ])));
+				new("YandereWin", 25, [ ExtremeRoleId.Yandere ]),
+				new("MagicanTeleport", 128, PreTestCase: MagicianTeleportTest.Test)));
 	}
 }
 
