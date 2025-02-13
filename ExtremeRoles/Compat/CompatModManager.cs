@@ -167,6 +167,18 @@ public sealed class CompatModManager
 		=> this.map is T;
 
 	// ここでtrueが返ってきてる時点でIMapModはNullではない
+	internal bool TryGetMod<T>(CompatModType modName, [NotNullWhen(true)] out T? mod) where T : ModIntegratorBase
+	{
+		if (!this.loadedMod.TryGetValue(modName, out var modBase))
+		{
+			mod = default;
+			return false;
+		}
+		mod = modBase as T;
+		return mod is not null;
+	}
+
+	// ここでtrueが返ってきてる時点でIMapModはNullではない
 	internal bool TryGetModMap([NotNullWhen(true)] out IMapMod? mapMod)
 	{
 		mapMod = this.map;

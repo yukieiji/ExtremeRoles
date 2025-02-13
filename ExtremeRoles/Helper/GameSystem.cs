@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.ModIntegrator;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
@@ -25,8 +26,11 @@ namespace ExtremeRoles.Helper;
 
 public static class GameSystem
 {
-	public const int VanillaMaxPlayerNum = 15;
-	public const int MaxImposterNum = 14;
+	public static int VanillaMaxPlayerNum =>
+		CompatModManager.Instance.TryGetMod<CrowdedMod>(CompatModType.CrowdedMod, out var mod) ?
+		mod.MaxPlayerNum : 15;
+
+	public static int MaxImposterNum => VanillaMaxPlayerNum - 1;
 
 	public const string BottomRightButtonGroupObjectName = "BottomRight";
 
