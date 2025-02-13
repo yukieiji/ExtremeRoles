@@ -29,40 +29,67 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         if (!GameData.Instance)
 		{
 			return false;
-		};
+		}
         if (DestroyableSingleton<TutorialManager>.InstanceExists)
 		{
 			return true;
-		} // InstanceExists | Don't check Custom Criteria when in Tutorial
-        if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed ||
+		}
+
+		checkExRWin();
+
+		return false;
+    }
+
+	private static void checkExRWin()
+	{
+		// InstanceExists | Don't check Custom Criteria when in Tutorial
+		if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed ||
 			ExtremeRolesPlugin.ShipState.IsDisableWinCheck)
 		{
-			return false;
+			return;
 		}
 
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			isOnemanMeetingWin(system);
-			return false;
+			return;
 		}
-
-        if (isSabotageWin()) { return false; }
-        if (isTaskWin()) { return false; };
+		else if (isSabotageWin())
+		{
+			return;
+		}
+		else if (isTaskWin())
+		{
+			return;
+		}
 
 		var statistics = PlayerStatistics.Create();
 
-		if (isSpecialRoleWin(statistics)) { return false; }
-
-        if (isNeutralSpecialWin()) { return false; };
-        if (isNeutralAliveWin(statistics)) { return false; };
-
-        if (statistics.SeparatedNeutralAlive.Count != 0) { return false; }
-
-        if (isImpostorWin(statistics)) { return false; };
-        if (isCrewmateWin(statistics)) { return false; };
-
-        return false;
-    }
+		if (isSpecialRoleWin(statistics))
+		{
+			return;
+		}
+		else if (isNeutralSpecialWin())
+		{
+			return;
+		}
+		else if (isNeutralAliveWin(statistics))
+		{
+			return;
+		}
+		else if (statistics.SeparatedNeutralAlive.Count != 0)
+		{
+			return;
+		}
+		else if (isImpostorWin(statistics))
+		{
+			return;
+		}
+		else if (isCrewmateWin(statistics))
+		{
+			return;
+		}
+	}
 
     private static void gameIsEnd(
         GameOverReason reason,
@@ -74,9 +101,18 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 
     private static bool isCrewmateWin(PlayerStatistics statistics)
     {
-        if (statistics.TeamCrewmateAlive > 0 &&
-            statistics.TeamImpostorAlive == 0 &&
-            statistics.SeparatedNeutralAlive.Count == 0)
+        if ((
+				statistics.TeamCrewmateAlive > 0 &&
+				statistics.TeamImpostorAlive == 0 &&
+				statistics.SeparatedNeutralAlive.Count == 0
+			)
+			||
+			(
+				statistics.TeamCrewmateAlive <= 0 &&
+				statistics.TeamImpostorAlive <= 0 &&
+				statistics.SeparatedNeutralAlive.Count <= 0 &&
+				statistics.TotalAlive == statistics.TeamNeutralAlive
+			))
         {
             gameIsEnd(GameOverReason.HumansByVote);
             return true;
@@ -225,27 +261,27 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         foreach (var role in ExtremeRoleManager.GameRole.Values)
         {
 
-            if (!role.IsNeutral()) { continue; }
-            if (role.IsWin)
+            if (!(role.IsWin && role.IsNeutral()))
             {
-                setWinGameContorlId(role.GameControlId);
-
-                GameOverReason endReason = (GameOverReason)(role.Id switch
-                {
-                    ExtremeRoleId.Alice      => RoleGameOverReason.AliceKilledByImposter,
-                    ExtremeRoleId.TaskMaster => RoleGameOverReason.TaskMasterGoHome,
-                    ExtremeRoleId.Jester     => RoleGameOverReason.JesterMeetingFavorite,
-                    ExtremeRoleId.Eater      => RoleGameOverReason.EaterAllEatInTheShip,
-                    ExtremeRoleId.Umbrer     => RoleGameOverReason.UmbrerBiohazard,
-					ExtremeRoleId.Hatter     => RoleGameOverReason.HatterEndlessTeaTime,
-					ExtremeRoleId.Artist     => RoleGameOverReason.ArtistShipToArt,
-					_ => RoleGameOverReason.UnKnown,
-                });
-                gameIsEnd(endReason);
-                return true;
-
+				continue;
             }
-        }
+
+			setWinGameContorlId(role.GameControlId);
+
+			GameOverReason endReason = (GameOverReason)(role.Id switch
+			{
+				ExtremeRoleId.Alice => RoleGameOverReason.AliceKilledByImposter,
+				ExtremeRoleId.TaskMaster => RoleGameOverReason.TaskMasterGoHome,
+				ExtremeRoleId.Jester => RoleGameOverReason.JesterMeetingFavorite,
+				ExtremeRoleId.Eater => RoleGameOverReason.EaterAllEatInTheShip,
+				ExtremeRoleId.Umbrer => RoleGameOverReason.UmbrerBiohazard,
+				ExtremeRoleId.Hatter => RoleGameOverReason.HatterEndlessTeaTime,
+				ExtremeRoleId.Artist => RoleGameOverReason.ArtistShipToArt,
+				_ => RoleGameOverReason.UnKnown,
+			});
+			gameIsEnd(endReason);
+			return true;
+		}
 
         return false;
     }
@@ -253,7 +289,10 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
     private static bool isSpecialRoleWin(
         PlayerStatistics statistics)
     {
-        if (statistics.SpecialWinCheckRoleAlive.Count == 0) { return false; }
+        if (statistics.SpecialWinCheckRoleAlive.Count == 0)
+		{
+			return false;
+		}
         foreach (var (id, checker) in statistics.SpecialWinCheckRoleAlive)
         {
             if (checker.IsWin(statistics))
