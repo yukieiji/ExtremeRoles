@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -42,7 +41,7 @@ public static class GameSystem
 
 	private static UseButtonDict useButtonSetting => FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
 
-	private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
+	private static IReadOnlySet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
     {
         TaskTypes.FixWiring,
         TaskTypes.VentCleaning,
