@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		.gitmodules = .gitmodules
 		.vsconfig = .vsconfig
 		createtransdatareport.py = createtransdatareport.py
+		.github\dependabot.yml = .github\dependabot.yml
 		ExtremeSkinsTransData.xlsx = ExtremeSkinsTransData.xlsx
 		LICENSE.md = LICENSE.md
 		MakeEnv.bat = MakeEnv.bat
@@ -133,8 +134,8 @@ Global
 		{00B61FF2-566F-4C38-847B-D6E28E7CA474} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_TaskErrorCategory = Message
-		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
 		RESX_NeutralResourcesLanguage = ja-JP
+		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
+		RESX_TaskErrorCategory = Message
 	EndGlobalSection
 EndGlobal
