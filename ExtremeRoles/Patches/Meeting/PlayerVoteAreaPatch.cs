@@ -68,33 +68,26 @@ public interface IMeetingButtonPostionComputer
 {
 	public UiElement Element { get; }
 	public float Time { get; }
-	public Il2CppIEnumerator Compute();
+	public void DeltaPos(float deltaT);
 }
 
 public sealed class MeetingButtonPostionComputer(
 	float time, UiElement element, float endOffset) : IMeetingButtonPostionComputer
 {
-	public Vector2 Anchor { private get; set; }
+	public Vector2 Anchor { private get; set; } = Vector2.right;
 	public Vector2 Offset { private get; set; } = Vector2.zero;
 	public float StartOffset { private get; set; }
 	public UiElement Element { get; } = element;
 	public float Time { get; } = time;
-
-	private readonly Transform transform = element.transform;
 	private readonly float endOffset = endOffset;
 
-	private void deltaPos(float deltaT)
+	public void DeltaPos(float deltaT)
 	{
-		this.transform.localPosition = Vector2.Lerp(
+		this.Element.transform.localPosition = Vector2.Lerp(
 			this.Anchor * this.StartOffset + this.Offset,
 			this.Anchor * this.endOffset + this.Offset,
 			Effects.ExpOut(deltaT));
 	}
-
-	public Il2CppIEnumerator Compute()
-		=> Effects.Lerp(
-			this.Time,
-			(Il2CppActionFloat)(deltaPos));
 }
 
 public sealed class MeetingButtonGroup
@@ -163,7 +156,7 @@ public sealed class MeetingButtonGroup
 	private static void add(in List<MeetingButtonPostionComputer> groups, UiElement element)
 	{
 		int size = groups.Count;
-		float time = size + 0.25f;
+		float time = (size * 0.1f) + 0.25f;
 		float endOffset = 1.3f - (size * 0.65f);
 		if (endOffset <= 0.0f)
 		{
@@ -187,6 +180,7 @@ public sealed class ExtremeMeetingButton(IntPtr ptr) : MonoBehaviour(ptr)
 			IRoleMeetingButtonAbility buttonRole,
 			out UiElement? button)
 		{
+			bool result = false;
 			if (!this.cache.TryGetValue(id, out button) ||
 				button == null)
 			{
@@ -208,9 +202,10 @@ public sealed class ExtremeMeetingButton(IntPtr ptr) : MonoBehaviour(ptr)
 
 				this.cache[id] = newAbilitybutton;
 				button = newAbilitybutton;
-				return true;
+				result = true;
 			}
-			return false;
+			button.gameObject.SetActive(true);
+			return result;
 		}
 	}
 
@@ -332,7 +327,7 @@ public static class PlayerVoteAreaSelectPatch
 
 		__instance.Buttons.SetActive(true);
 		__instance.StartCoroutine(
-			Effects.All(buttonEnumerable.Select(x => x.Compute()).ToArray())
+			Effects.All(buttonEnumerable.Select(x => Effects.Lerp(x.Time, (Il2CppActionFloat)x.DeltaPos)).ToArray())
 		);
 
 		var selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
@@ -346,14 +341,6 @@ public static class PlayerVoteAreaSelectPatch
 			__instance.ConfirmButton, selectableElements, false);
 
 		return false;
-	}
-
-	private static IEnumerator buttonCompute(IEnumerable<IMeetingButtonPostionComputer> buttons)
-	{
-		foreach (var button in buttons.OrderByDescending(x => x.Time))
-		{
-			yield return button.Compute();
-		}
 	}
 }
 
