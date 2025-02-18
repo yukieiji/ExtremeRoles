@@ -164,7 +164,7 @@ public sealed class MeetingButtonGroup
 	{
 		int size = groups.Count;
 		float time = size + 0.25f;
-		float endOffset = (size * 0.65f) - 1.3f;
+		float endOffset = 1.3f - (size * 0.65f);
 		if (endOffset <= 0.0f)
 		{
 			endOffset = -0.01f;
@@ -208,9 +208,9 @@ public sealed class ExtremeMeetingButton(IntPtr ptr) : MonoBehaviour(ptr)
 
 				this.cache[id] = newAbilitybutton;
 				button = newAbilitybutton;
-				return false;
+				return true;
 			}
-			return true;
+			return false;
 		}
 	}
 
@@ -332,7 +332,7 @@ public static class PlayerVoteAreaSelectPatch
 
 		__instance.Buttons.SetActive(true);
 		__instance.StartCoroutine(
-			buttonCompute(buttonEnumerable).WrapToIl2Cpp()
+			Effects.All(buttonEnumerable.Select(x => x.Compute()).ToArray())
 		);
 
 		var selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
