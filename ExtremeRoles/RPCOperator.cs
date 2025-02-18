@@ -240,7 +240,6 @@ public static class RPCOperator
         Module.VisionComputer.Instance.ResetModifier();
 
         // ミーティング能力リセット
-        Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
         Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         // 各種システムコンソールリセット
