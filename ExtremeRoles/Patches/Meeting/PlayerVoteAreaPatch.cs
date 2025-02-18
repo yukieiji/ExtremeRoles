@@ -71,20 +71,20 @@ public static class PlayerVoteAreaSelectPatch
 
 	public static bool Prefix(PlayerVoteArea __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			ExtremeRoleManager.GameRole.Count == 0)
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
 		{
 			return true;
 		}
 
-		if (MonikaTrashSystem.TryGet(out var monika) &&
-			monika.InvalidPlayer(PlayerControl.LocalPlayer))
-		{
-			return false;
-		}
-
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
+			if (MonikaTrashSystem.TryGet(out var monika) &&
+				monika.InvalidPlayer(localPlayer))
+			{
+				return false;
+			}
+
 			var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
 				IRoleMeetingButtonAbility>();
 
@@ -105,48 +105,43 @@ public static class PlayerVoteAreaSelectPatch
 				return true;
 			}
 		}
-		else if (PlayerControl.LocalPlayer.PlayerId != system.Caller)
+		else if (
+			localPlayer.PlayerId != system.Caller ||
+			__instance.voteComplete ||
+			__instance.Parent == null ||
+			!__instance.Parent.Select((int)__instance.TargetPlayerId))
 		{
 			return false;
 		}
 
-		if (!__instance.Parent)
-		{
-			return false;
-		}
-		if (!__instance.voteComplete &&
-			__instance.Parent.Select((int)__instance.TargetPlayerId))
-		{
-			__instance.Buttons.SetActive(true);
-			float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
-			__instance.StartCoroutine(
-				Effects.All(
-					wrappedEffectsLerp(0.25f, (float t) =>
-					{
-						__instance.CancelButton.transform.localPosition = Vector2.Lerp(
-							Vector2.right * startPos,
-							Vector2.right * 1.3f,
-							Effects.ExpOut(t));
-					}),
-					wrappedEffectsLerp(0.35f, (float t) =>
-					{
-						__instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
-							Vector2.right * startPos,
-							Vector2.right * 0.65f,
-							Effects.ExpOut(t));
-					})
-				)
-			);
+		__instance.Buttons.SetActive(true);
+		float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
+		__instance.StartCoroutine(
+			Effects.All(
+				wrappedEffectsLerp(0.25f, (float t) =>
+				{
+					__instance.CancelButton.transform.localPosition = Vector2.Lerp(
+						Vector2.right * startPos,
+						Vector2.right * 1.3f,
+						Effects.ExpOut(t));
+				}),
+				wrappedEffectsLerp(0.35f, (float t) =>
+				{
+					__instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
+						Vector2.right * startPos,
+						Vector2.right * 0.65f,
+						Effects.ExpOut(t));
+				})
+			)
+		);
 
-			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<
-				UiElement>();
-			selectableElements.Add(__instance.CancelButton);
-			selectableElements.Add(__instance.ConfirmButton);
-			ControllerManager.Instance.OpenOverlayMenu(
-				__instance.name,
-				__instance.CancelButton,
-				__instance.ConfirmButton, selectableElements, false);
-		}
+		var selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
+		selectableElements.Add(__instance.CancelButton);
+		selectableElements.Add(__instance.ConfirmButton);
+		ControllerManager.Instance.OpenOverlayMenu(
+			__instance.name,
+			__instance.CancelButton,
+			__instance.ConfirmButton, selectableElements, false);
 
 		return false;
 	}
@@ -157,87 +152,85 @@ public static class PlayerVoteAreaSelectPatch
 	{
 		byte target = instance.TargetPlayerId;
 
-        if (instance.AmDead)
+        if (instance.AmDead ||
+			role.IsBlockMeetingButtonAbility(instance))
 		{
 			return true;
 		}
-		if (!instance.Parent)
+		else if (
+			instance.voteComplete ||
+			instance.Parent == null ||
+			!instance.Parent.Select((int)target))
 		{
 			return false;
 		}
-		if (role.IsBlockMeetingButtonAbility(instance))
-        {
-			return true;
-        }
 
-		if (!instance.voteComplete &&
-			instance.Parent.Select((int)target))
+		if (!meetingAbilityButton.TryGetValue(target, out UiElement abilitybutton) ||
+			abilitybutton == null)
 		{
+			UiElement newAbilitybutton = GameObject.Instantiate(
+				instance.CancelButton, instance.ConfirmButton.transform.parent);
+			var passiveButton = newAbilitybutton.GetComponent<PassiveButton>();
+			passiveButton.OnClick.RemoveAllPersistentAndListeners();
+			passiveButton.OnClick.AddListener(instance.Cancel);
+			passiveButton.OnClick.AddListener(
+				() => { newAbilitybutton.gameObject.SetActive(false); });
+			passiveButton.OnClick.AddListener(role.CreateAbilityAction(instance));
 
-			if (!meetingAbilityButton.TryGetValue(target, out UiElement abilitybutton) ||
-				abilitybutton == null)
-			{
-				UiElement newAbilitybutton = GameObject.Instantiate(
-					instance.CancelButton, instance.ConfirmButton.transform.parent);
-				var passiveButton = newAbilitybutton.GetComponent<PassiveButton>();
-				passiveButton.OnClick.RemoveAllPersistentAndListeners();
-				passiveButton.OnClick.AddListener(instance.Cancel);
-                passiveButton.OnClick.AddListener(
-                    () => { newAbilitybutton.gameObject.SetActive(false); });
-				passiveButton.OnClick.AddListener(role.CreateAbilityAction(instance));
+			var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
-                var render = newAbilitybutton.GetComponent<SpriteRenderer>();
+			role.ButtonMod(instance, newAbilitybutton);
+			role.SetSprite(render);
 
-				role.ButtonMod(instance, newAbilitybutton);
-				role.SetSprite(render);
-
-				meetingAbilityButton[target] = newAbilitybutton;
-				abilitybutton = newAbilitybutton;
-			}
-
-			if (abilitybutton == null) { return true; }
-
-			abilitybutton.gameObject.SetActive(true);
-			instance.Buttons.SetActive(true);
-
-			float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
-
-			instance.StartCoroutine(
-				Effects.All(
-					wrappedEffectsLerp(0.25f, (float t) =>
-					{
-						instance.CancelButton.transform.localPosition = Vector2.Lerp(
-							Vector2.right * startPos,
-							Vector2.right * 1.3f,
-							Effects.ExpOut(t));
-					}),
-					wrappedEffectsLerp(0.35f, (float t) =>
-					{
-						instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
-							Vector2.right * startPos,
-							Vector2.right * 0.65f,
-							Effects.ExpOut(t));
-					}),
-					wrappedEffectsLerp(0.45f, (float t) =>
-					{
-						abilitybutton.transform.localPosition = Vector2.Lerp(
-							Vector2.right * startPos,
-							Vector2.right * -0.01f,
-							Effects.ExpOut(t));
-					})
-				)
-			);
-
-			Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
-			selectableElements.Add(instance.CancelButton);
-			selectableElements.Add(instance.ConfirmButton);
-			selectableElements.Add(abilitybutton);
-
-			ControllerManager.Instance.OpenOverlayMenu(
-				instance.name,
-				instance.CancelButton,
-				instance.ConfirmButton, selectableElements, false);
+			meetingAbilityButton[target] = newAbilitybutton;
+			abilitybutton = newAbilitybutton;
 		}
+
+		if (abilitybutton == null)
+		{
+			return true;
+		}
+
+		abilitybutton.gameObject.SetActive(true);
+		instance.Buttons.SetActive(true);
+
+		float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
+
+		instance.StartCoroutine(
+			Effects.All(
+				wrappedEffectsLerp(0.25f, (float t) =>
+				{
+					instance.CancelButton.transform.localPosition = Vector2.Lerp(
+						Vector2.right * startPos,
+						Vector2.right * 1.3f,
+						Effects.ExpOut(t));
+				}),
+				wrappedEffectsLerp(0.35f, (float t) =>
+				{
+					instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
+						Vector2.right * startPos,
+						Vector2.right * 0.65f,
+						Effects.ExpOut(t));
+				}),
+				wrappedEffectsLerp(0.45f, (float t) =>
+				{
+					abilitybutton.transform.localPosition = Vector2.Lerp(
+						Vector2.right * startPos,
+						Vector2.right * -0.01f,
+						Effects.ExpOut(t));
+				})
+			)
+		);
+
+		Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
+		selectableElements.Add(instance.CancelButton);
+		selectableElements.Add(instance.ConfirmButton);
+		selectableElements.Add(abilitybutton);
+
+		ControllerManager.Instance.OpenOverlayMenu(
+			instance.name,
+			instance.CancelButton,
+			instance.ConfirmButton, selectableElements, false);
 
 		return false;
 
