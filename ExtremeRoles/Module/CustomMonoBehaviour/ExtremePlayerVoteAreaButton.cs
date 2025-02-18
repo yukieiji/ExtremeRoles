@@ -1,0 +1,106 @@
+﻿using System;
+using System.Collections.Generic;
+
+using UnityEngine;
+
+using ExtremeRoles.Module.Meeting;
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+
+#nullable enable
+
+namespace ExtremeRoles.Module.CustomMonoBehaviour;
+
+[Il2CppRegister]
+public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
+{
+	private readonly Dictionary<byte, PlayerVoteAreaButtonContainer> meetingButton = new Dictionary<byte, PlayerVoteAreaButtonContainer>(PlayerCache.AllPlayerControl.Count);
+
+	public bool TryGetMeetingButton(
+		PlayerVoteArea pva,
+		out IEnumerable<IPlayerVoteAreaButtonPostionComputer>? result)
+	{
+		var localPlayer = PlayerControl.LocalPlayer;
+		byte targetPlayerId = pva.TargetPlayerId;
+		result = null;
+
+		if (!this.meetingButton.TryGetValue(targetPlayerId, out var button))
+		{
+			button = new PlayerVoteAreaButtonContainer(pva);
+			this.meetingButton[targetPlayerId] = button;
+		}
+
+		float startPos = pva.AnimateButtonsFromLeft ? 0.2f : 1.95f;
+
+		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
+		{
+			result = button.Group.DefaultFlatten(startPos);
+			return system.Caller == localPlayer.PlayerId;
+		}
+
+		var singleRole = ExtremeRoleManager.GetLocalPlayerRole();
+		if (MonikaTrashSystem.TryGet(out var monika) &&
+			monika.InvalidPlayer(localPlayer))
+		{
+			result = null;
+			return false;
+		}
+
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
+		var multiRole = role as MultiAssignRoleBase;
+
+		if (role is IRoleMeetingButtonAbility buttonRole &&
+			multiRole?.AnotherRole is IRoleMeetingButtonAbility anotherButtonRole &&
+			isOkRoleAbilityButton(pva, buttonRole) &&
+			isOkRoleAbilityButton(pva, anotherButtonRole))
+		{
+			if (button.IsRecrateButtn(role.Id, buttonRole, out var element1))
+			{
+				button.Group.ResetSecond();
+			}
+			button.Group.AddSecondRow(element1);
+			if (button.IsRecrateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var element2))
+			{
+				button.Group.ResetSecond();
+			}
+			button.Group.AddSecondRow(element2);
+			result = button.Group.Flatten(startPos);
+		}
+		else if (
+			role is IRoleMeetingButtonAbility mainButtonRole &&
+			isOkRoleAbilityButton(pva, mainButtonRole))
+		{
+			if (button.IsRecrateButtn(role.Id, mainButtonRole, out var element1))
+			{
+				button.Group.ResetFirst();
+			}
+			button.Group.AddFirstRow(element1);
+			result = button.Group.Flatten(startPos);
+		}
+		else if (
+			multiRole?.AnotherRole is IRoleMeetingButtonAbility subButtonRole &&
+			isOkRoleAbilityButton(pva, subButtonRole))
+		{
+			if (button.IsRecrateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1))
+			{
+				button.Group.ResetFirst();
+			}
+			button.Group.AddFirstRow(element1);
+			result = button.Group.Flatten(startPos);
+		}
+		else
+		{
+			result = null;
+		}
+		return true;
+	}
+
+	private bool isOkRoleAbilityButton(
+		PlayerVoteArea pva,
+		IRoleMeetingButtonAbility buttonRole)
+		=> !(pva.AmDead || buttonRole.IsBlockMeetingButtonAbility(pva) || pva.voteComplete || !pva.Parent.Select((int)pva.TargetPlayerId));
+}
