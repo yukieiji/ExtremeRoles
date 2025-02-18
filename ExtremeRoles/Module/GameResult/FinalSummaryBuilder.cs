@@ -44,8 +44,6 @@ public class FinalSummaryBuilder(
 		{
 			return null;
 		}
-		// IsImpostor
-
 		var finalStatus = PlayerStatus.Alive;
 
 		if (playerInfo.IsDead &&
@@ -71,15 +69,22 @@ public class FinalSummaryBuilder(
 			finalStatus = PlayerStatus.Dead;
 		}
 
+		int totalTask = taskInfo.TotalTask;
+		int completedTaskNum = taskInfo.CompletedTask;
+		if (this.reason is GameOverReason.HumansByTask && role.IsCrewmate())
+		{
+			ExtremeRolesPlugin.Logger.LogWarning($"WARNING:Force replace taskNum: {completedTaskNum} => {totalTask}");
+			completedTaskNum = totalTask;
+		}
+
 		return
 			new PlayerSummary(
 				playerId,
 				playerInfo.PlayerName,
 				role,
 				ghostRole,
-				this.reason is GameOverReason.HumansByTask && role.IsCrewmate() ?
-					taskInfo.TotalTask : taskInfo.CompletedTask,
-				taskInfo.TotalTask,
+				completedTaskNum,
+				totalTask,
 				finalStatus);
 	}
 
