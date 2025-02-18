@@ -58,6 +58,33 @@ public static class PlayerVoteAreaCosmetics
 	}
 }
 
+public sealed class MeetingButtonPostionComputer(
+	float time, UiElement element,
+	float startOffset, float endOffset)
+{
+	public Vector2 Anchor { private get; set; }
+	public UiElement Element { get; } = element;
+
+	private readonly float time = time;
+	private readonly Transform transform = element.transform;
+	private readonly float startOffset = startOffset;
+	private readonly float endOffset = endOffset;
+
+	private void deltaPos(float deltaT)
+	{
+		this.transform.localPosition = Vector2.Lerp(
+			Anchor * this.startOffset,
+			Anchor * this.endOffset,
+			Effects.ExpOut(deltaT));
+	}
+
+	public Il2CppIEnumerator Compute(float deltaT)
+		=> Effects.Lerp(
+			this.time,
+			(Il2CppActionFloat)(deltaPos));
+
+}
+
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
 public static class PlayerVoteAreaSelectPatch
 {
@@ -77,6 +104,12 @@ public static class PlayerVoteAreaSelectPatch
 			return true;
 		}
 
+		float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
+		List<MeetingButtonPostionComputer> button = [
+			new MeetingButtonPostionComputer(0.25f, __instance.CancelButton, startPos, 1.3f),
+			new MeetingButtonPostionComputer(0.35f, __instance.ConfirmButton, startPos, 0.65f),
+		];
+
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			if (MonikaTrashSystem.TryGet(out var monika) &&
@@ -88,18 +121,10 @@ public static class PlayerVoteAreaSelectPatch
 			var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
 				IRoleMeetingButtonAbility>();
 
-			if (buttonRole != null && anotherButtonRole != null)
+			if (buttonRole is not null || anotherButtonRole is not null)
             {
 				return true; // TODO:Can use both role ability
             }
-			else if (buttonRole != null && anotherButtonRole == null)
-            {
-				return meetingButtonAbility(__instance, buttonRole);
-			}
-			else if (buttonRole == null && anotherButtonRole != null)
-			{
-				return meetingButtonAbility(__instance, anotherButtonRole);
-			}
 			else
 			{
 				return true;
@@ -115,7 +140,6 @@ public static class PlayerVoteAreaSelectPatch
 		}
 
 		__instance.Buttons.SetActive(true);
-		float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 		__instance.StartCoroutine(
 			Effects.All(
 				wrappedEffectsLerp(0.25f, (float t) =>
