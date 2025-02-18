@@ -58,23 +58,29 @@ public static class PlayerVoteAreaCosmetics
 	}
 }
 
+public interface IMeetingButtonPostionComputer
+{
+	public UiElement Element { get; }
+	public Il2CppIEnumerator Compute(float deltaT);
+}
+
 public sealed class MeetingButtonPostionComputer(
-	float time, UiElement element,
-	float startOffset, float endOffset)
+	float time, UiElement element, float endOffset) : IMeetingButtonPostionComputer
 {
 	public Vector2 Anchor { private get; set; }
+	public Vector2 Offset { private get; set; } = Vector2.zero;
+	public float StartOffset { private get; set; }
 	public UiElement Element { get; } = element;
 
 	private readonly float time = time;
 	private readonly Transform transform = element.transform;
-	private readonly float startOffset = startOffset;
 	private readonly float endOffset = endOffset;
 
 	private void deltaPos(float deltaT)
 	{
 		this.transform.localPosition = Vector2.Lerp(
-			Anchor * this.startOffset,
-			Anchor * this.endOffset,
+			this.Anchor * this.StartOffset + this.Offset,
+			this.Anchor * this.endOffset + this.Offset,
 			Effects.ExpOut(deltaT));
 	}
 
@@ -82,7 +88,64 @@ public sealed class MeetingButtonPostionComputer(
 		=> Effects.Lerp(
 			this.time,
 			(Il2CppActionFloat)(deltaPos));
+}
 
+public sealed class MeetingButtonGroup
+{
+	private readonly List<MeetingButtonPostionComputer> first = new(2);
+	private readonly List<MeetingButtonPostionComputer> second = new();
+
+	public MeetingButtonGroup(PlayerVoteArea __instance)
+	{
+		this.AddFirstRow(__instance.CancelButton);
+		this.AddFirstRow(__instance.ConfirmButton);
+	}
+
+	public IReadOnlyList<IMeetingButtonPostionComputer> Flatten(float startPos)
+	{
+		int secondCount = this.second.Count;
+
+		var result = new List<MeetingButtonPostionComputer>(secondCount + this.first.Count);
+
+		var firstOffset = secondCount > 0 ? Vector2.up * 0.65f : Vector2.zero;
+		var secondOffset = secondCount > 0 ? Vector2.down * 0.65f : Vector2.zero;
+
+		setUpComputer(this.first, result, firstOffset, startPos);
+		setUpComputer(this.second, result, secondOffset, startPos);
+
+		return result;
+	}
+
+	public void AddFirstRow(UiElement element)
+		=> add(this.first, element);
+
+	public void AddSecondRow(UiElement element)
+		=> add(this.second, element);
+
+	private static void setUpComputer(
+		in List<MeetingButtonPostionComputer> setUpContainer,
+		in List<MeetingButtonPostionComputer> result,
+		Vector2 offset, float statPos)
+	{
+		foreach (var button in setUpContainer)
+		{
+			button.Offset = offset;
+			button.StartOffset = statPos;
+			result.Add(button);
+		}
+	}
+
+	private static void add(in List<MeetingButtonPostionComputer> groups, UiElement element)
+	{
+		int size = groups.Count;
+		float time = size + 0.25f;
+		float endOffset = (size * 0.65f) - 1.3f;
+		if (endOffset <= 0.0f)
+		{
+			endOffset = -0.01f;
+		}
+		groups.Add(new MeetingButtonPostionComputer(time, element, endOffset));
+	}
 }
 
 [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
@@ -106,8 +169,8 @@ public static class PlayerVoteAreaSelectPatch
 
 		float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 		List<MeetingButtonPostionComputer> button = [
-			new MeetingButtonPostionComputer(0.25f, __instance.CancelButton, startPos, 1.3f),
-			new MeetingButtonPostionComputer(0.35f, __instance.ConfirmButton, startPos, 0.65f),
+			new MeetingButtonPostionComputer(0.25f, __instance.CancelButton, 1.3f),
+			new MeetingButtonPostionComputer(0.35f, __instance.ConfirmButton,0.65f),
 		];
 
 		if (!OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
