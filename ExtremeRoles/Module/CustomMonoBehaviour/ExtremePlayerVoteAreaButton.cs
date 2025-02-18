@@ -36,9 +36,10 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 
 		float startPos = pva.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 
+		var group = button.Group;
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
-			result = button.Group.DefaultFlatten(startPos);
+			result = group.DefaultFlatten(startPos);
 			return system.Caller == localPlayer.PlayerId;
 		}
 
@@ -60,15 +61,15 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			if (button.IsRecrateButtn(role.Id, buttonRole, out var element1))
 			{
-				button.Group.ResetSecond();
+				group.ResetSecond();
 			}
-			button.Group.AddSecondRow(element1);
 			if (button.IsRecrateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var element2))
 			{
-				button.Group.ResetSecond();
+				group.ResetSecond();
 			}
-			button.Group.AddSecondRow(element2);
-			result = button.Group.Flatten(startPos);
+			group.AddSecondRow(element1);
+			group.AddSecondRow(element2);
+			result = group.Flatten(startPos);
 		}
 		else if (
 			role is IRoleMeetingButtonAbility mainButtonRole &&
@@ -76,10 +77,11 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			if (button.IsRecrateButtn(role.Id, mainButtonRole, out var element1))
 			{
-				button.Group.ResetFirst();
+				group.ResetFirst();
 			}
-			button.Group.AddFirstRow(element1);
-			result = button.Group.Flatten(startPos);
+			group.ResetSecond();
+			group.AddFirstRow(element1);
+			result = group.Flatten(startPos);
 		}
 		else if (
 			multiRole?.AnotherRole is IRoleMeetingButtonAbility subButtonRole &&
@@ -87,10 +89,11 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			if (button.IsRecrateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1))
 			{
-				button.Group.ResetFirst();
+				group.ResetFirst();
 			}
-			button.Group.AddFirstRow(element1);
-			result = button.Group.Flatten(startPos);
+			group.ResetSecond();
+			group.AddFirstRow(element1);
+			result = group.Flatten(startPos);
 		}
 		else
 		{
