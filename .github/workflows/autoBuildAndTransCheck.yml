@@ -42,7 +42,7 @@ jobs:
         with:
           dotnet-version: 9.x
       - name: AddMsBuildToPATH
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v2
       - name: RunBuild
         id: build
         continue-on-error: true
