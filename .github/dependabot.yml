@@ -5,8 +5,13 @@
 
 version: 2
 updates:
-  - package-ecosystem: "NuGet" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "nuget" # See documentation for possible values
+    directories: ["/ExtremeRoles", "/ExtremeSkins", "/ExtremeVoiceEngine"] # Location of package manifests
     schedule:
       interval: "daily"
+    target-branch: develop
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
     target-branch: develop
