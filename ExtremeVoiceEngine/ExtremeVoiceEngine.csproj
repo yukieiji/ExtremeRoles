@@ -25,8 +25,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="BepInEx.Il2Cpp.TlsAdapter" Version="1.0.1" />
-    <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.671" />
-    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.671" />
+    <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.733" />
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.733" />
     <PackageReference Include="HarmonyX" Version="2.14.0" />
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2024.10.29" PrivateAssets="all" />
     <PackageReference Include="BepInEx.AutoPlugin" Version="1.1.0" PrivateAssets="all" />
