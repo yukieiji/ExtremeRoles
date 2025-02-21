@@ -1,10 +1,8 @@
-﻿using ExtremeRoles.Module.SystemType.Roles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+
 using UnityEngine;
+
+using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -31,17 +29,18 @@ public sealed class IronMateDeadBody : MonoBehaviour
 		{
 			rend.enabled = false;
 		}
-		this.fake = new FakerDummySystem.FakePlayer(
-			PlayerControl.LocalPlayer,
-			target, false);
-
-		this.fake.Body.transform.position = base.transform.position;
 
 		this.fakeShowTime = fakeShowTime;
 		this.deadBodyShowTime = deadBodyShowTime;
 
 		if (this.fakeShowTime > 0.0f)
 		{
+			this.fake = new FakerDummySystem.FakePlayer(
+				PlayerControl.LocalPlayer,
+				target, false);
+
+			this.fake.Body.transform.position = base.transform.position;
+
 			this.maxTime = this.fakeShowTime;
 			this.rends = this.fake.Body.GetComponentsInChildren<SpriteRenderer>();
 		}
@@ -53,13 +52,15 @@ public sealed class IronMateDeadBody : MonoBehaviour
 
 	public void FixedUpdate()
 	{
-		if (this.fake == null || this.rends == null || this.deadBody == null)
+		if (this.rends == null ||
+			this.deadBody == null)
 		{
 			return;
 		}
 
-		if (this.deadBody.bodyRenderers[0].enabled &&
-			this.deadBody.bodyRenderers[0].color.a <= 0)
+		var deadBodyRend = this.deadBody.bodyRenderers[0];
+		if (deadBodyRend.enabled &&
+			deadBodyRend.color.a <= 0.0f)
 		{
 			this.enabled = false;
 			return;
@@ -91,7 +92,7 @@ public sealed class IronMateDeadBody : MonoBehaviour
 
 	private void changeToRend()
 	{
-		if (this.deadBody == null || this.fake == null || this.rends == null)
+		if (this.deadBody == null)
 		{
 			return;
 		}
@@ -101,8 +102,22 @@ public sealed class IronMateDeadBody : MonoBehaviour
 		{
 			rend.enabled = true;
 		}
+
 		this.rends = this.deadBody.bodyRenderers;
 		this.maxTime = this.deadBodyShowTime;
-		this.fake.Clear();
+
+		if (this.fake != null)
+		{
+			this.fake.Clear();
+		}
+
+		if (this.deadBodyShowTime <= 0.0f)
+		{
+			var targetColor = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+			foreach (SpriteRenderer rend in this.rends)
+			{
+				rend.color = targetColor;
+			}
+		}
 	}
 }
