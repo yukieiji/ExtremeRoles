@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using UnityEngine;
 
@@ -121,7 +118,7 @@ public sealed class Heretic :
 			);
 	}
 
-	public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
 		if (exiledPlayer == null ||
 			this.killMode is not KillMode.OnExiled ||
