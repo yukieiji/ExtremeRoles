@@ -120,5 +120,5 @@ public sealed class SelectionMultiEnableCustomOption : CustomOptionBase<int, str
 	public override int Value => OptionRange.Selection;
 	public override bool IsEnable =>
 		base.IsEnable &&
-		this.defaults.Contains(this.Selection);
+		!this.defaults.Contains(this.Selection);
 }
