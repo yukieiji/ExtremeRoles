@@ -21,6 +21,8 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
+#nullable enable
+
 public sealed class Heretic :
 	SingleRoleBase,
 	IRoleAutoBuildAbility,
@@ -46,7 +48,7 @@ public sealed class Heretic :
 		OnExiled,
 	}
 
-	public ExtremeAbilityButton Button { get; set; }
+	public ExtremeAbilityButton? Button { get; set; }
 
 	private bool canKillImpostor;
 	private KillMode killMode;
@@ -160,7 +162,7 @@ public sealed class Heretic :
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		this.Button.SetButtonShow(
+		this.Button?.SetButtonShow(
 			this.killMode is KillMode.OnTaskPhase or KillMode.OnTaskPhaseTarget);
 
 		if (!this.HasTask || this.isSeeImpostorNow)
@@ -227,8 +229,22 @@ public sealed class Heretic :
 			false);
 		factory.Create0To100Percentage10StepOption(
 			Option.SeeImpostorTaskGage, taskOpt);
-		var killModeOpt = factory.CreateSelectionOption<Option, KillMode>(
-			Option.KillMode);
+		var killModeOpt = factory.CreateSelectionOption(
+			Option.KillMode,
+			[
+				KillMode.OnTaskPhase,
+				KillMode.OnTaskPhaseTarget
+			]);
+		factory.CreateFloatOption(
+			RoleAbilityCommonOption.AbilityCoolTime,
+			IRoleAbility.DefaultCoolTime,
+			IRoleAbility.MinCoolTime,
+			IRoleAbility.MaxCoolTime,
+			IRoleAbility.Step,
+			killModeOpt,
+			invert: true,
+			format: OptionUnit.Second);
+
 		factory.CreateBoolOption(
 			Option.CanKillImpostor,
 			false);
