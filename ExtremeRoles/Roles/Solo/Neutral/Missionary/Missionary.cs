@@ -18,16 +18,14 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-
 #nullable enable
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+namespace ExtremeRoles.Roles.Solo.Neutral.Missionary;
 
-public sealed class Missionary :
+public sealed class MissionaryRole :
 	SingleRoleBase,
 	IRoleAutoBuildAbility,
-	IRoleUpdate,
-	IRoleVoteCheck
+	IRoleUpdate
 {
     public enum MissionaryOption
     {
@@ -47,16 +45,16 @@ public sealed class Missionary :
 	private float minTimerTime;
 	private float maxTimerTime;
 	private bool tellDeparture;
-	private bool isUseSolemnJudgment;
-	private int maxJudgementTarget;
 
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
 	private List<PlayerControl> lamb;
-	private HashSet<byte> judgementTarget;
 	private TMPro.TextMeshPro tellText;
 
-	public Missionary() : base(
+	public override IStatusModel? Status => this.status;
+	private MissionaryStatus? status;
+
+	public MissionaryRole() : base(
 		ExtremeRoleId.Missionary,
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Missionary.ToString(),
@@ -69,11 +67,13 @@ public sealed class Missionary :
 	{
 		if (this.lamb.Any(x => x.PlayerId == targetPlayerId))
 		{
-			return Design.ColoedString(this.NameColor, " ×");
+			return Design.ColoedString(NameColor, " ×");
 		}
-		else if (this.judgementTarget.Contains(targetPlayerId))
+		else if (
+			this.status is not null &&
+			this.status.ContainsJudgementTarget(targetPlayerId))
 		{
-			return Design.ColoedString(this.NameColor, " ★");
+			return Design.ColoedString(NameColor, " ★");
 		}
 		else
 		{
@@ -116,40 +116,40 @@ public sealed class Missionary :
     protected override void RoleSpecificInit()
     {
         this.lamb = new List<PlayerControl>(PlayerCache.AllPlayerControl.Count);
-        this.timer = 0;
+		this.timer = 0;
 
 		var cate = this.Loader;
 
-        this.tellDeparture = cate.GetValue<MissionaryOption, bool>(
+		this.tellDeparture = cate.GetValue<MissionaryOption, bool>(
             MissionaryOption.TellDeparture);
-        this.maxTimerTime = cate.GetValue<MissionaryOption, float>(
+		this.maxTimerTime = cate.GetValue<MissionaryOption, float>(
             MissionaryOption.DepartureMaxTime);
-        this.minTimerTime = cate.GetValue<MissionaryOption, float>(
+		this.minTimerTime = cate.GetValue<MissionaryOption, float>(
             MissionaryOption.DepartureMinTime);
-        this.propagateRange = cate.GetValue<MissionaryOption, float>(
+		this.propagateRange = cate.GetValue<MissionaryOption, float>(
             MissionaryOption.PropagateRange);
-		this.isUseSolemnJudgment = cate.GetValue<MissionaryOption, bool>(
-		   MissionaryOption.IsUseSolemnJudgment);
-		this.maxJudgementTarget = cate.GetValue<MissionaryOption, int>(
-		   MissionaryOption.MaxJudgementNum);
-
-		this.judgementTarget = new HashSet<byte>();
 
 		resetTimer();
+
+		this.status = new MissionaryStatus();
+		this.AbilityClass = new MissionaryAbility(
+			cate.GetValue<MissionaryOption, bool>(MissionaryOption.IsUseSolemnJudgment),
+			cate.GetValue<MissionaryOption, int>(MissionaryOption.MaxJudgementNum),
+			this.status);
     }
 
     public void CreateAbility()
     {
         this.CreateNormalAbilityButton(
-            "propagate", Resources.UnityObjectLoader.LoadSpriteFromResources(
+            "propagate", UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.MissionaryPropagate));
     }
 
     public bool IsAbilityUse()
     {
-        this.targetPlayer = Player.GetClosestPlayerInRange(
+		this.targetPlayer = Player.GetClosestPlayerInRange(
             PlayerControl.LocalPlayer, this,
-            this.propagateRange);
+			this.propagateRange);
 
 		if (this.targetPlayer == null)
 		{
@@ -166,21 +166,22 @@ public sealed class Missionary :
 		updateJudgementTarget();
 		if (this.tellText != null)
         {
-            this.tellText.gameObject.SetActive(false);
+			this.tellText.gameObject.SetActive(false);
         }
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
-		if (exiledPlayer != null)
+		if (exiledPlayer != null &&
+			this.status is not null)
 		{
-			this.judgementTarget.Remove(exiledPlayer.PlayerId);
+			this.status.RemoveJudgementTarget(exiledPlayer.PlayerId);
 		}
 		updateJudgementTarget();
 
 		if (this.tellText != null)
         {
-            this.tellText.gameObject.SetActive(false);
+			this.tellText.gameObject.SetActive(false);
         }
     }
 
@@ -249,11 +250,12 @@ public sealed class Missionary :
 			}
 		}
 
-		if (this.judgementTarget.Contains(playerId))
+		if (this.status is not null &&
+			this.status.ContainsJudgementTarget(playerId))
 		{
 			Player.RpcUncheckMurderPlayer(
 				playerId, playerId, byte.MaxValue);
-			this.judgementTarget.Remove(playerId);
+			this.status.RemoveJudgementTarget(playerId);
 		}
 		else
 		{
@@ -265,53 +267,44 @@ public sealed class Missionary :
 
     private void resetTimer()
     {
-        this.timer = Random.RandomRange(
-            this.minTimerTime, this.maxTimerTime);
+		this.timer = Random.RandomRange(
+			this.minTimerTime, this.maxTimerTime);
     }
 
     private IEnumerator showText()
     {
         if (this.tellText == null)
         {
-            this.tellText = Object.Instantiate(
+			this.tellText = Object.Instantiate(
                 Prefab.Text, Camera.main.transform, false);
-            this.tellText.transform.localPosition = new Vector3(-3.75f, -2.5f, -250.0f);
-            this.tellText.enableWordWrapping = true;
-            this.tellText.GetComponent<RectTransform>().sizeDelta = new Vector2(3.0f, 0.75f);
-            this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
-            this.tellText.gameObject.layer = 5;
-            this.tellText.text = Tr.GetString("departureText");
+			this.tellText.transform.localPosition = new Vector3(-3.75f, -2.5f, -250.0f);
+			this.tellText.enableWordWrapping = true;
+			this.tellText.GetComponent<RectTransform>().sizeDelta = new Vector2(3.0f, 0.75f);
+			this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+			this.tellText.gameObject.layer = 5;
+			this.tellText.text = Tr.GetString("departureText");
         }
-        this.tellText.gameObject.SetActive(true);
+		this.tellText.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(3.5f);
 
-        this.tellText.gameObject.SetActive(false);
+		this.tellText.gameObject.SetActive(false);
 
     }
-
-	public void VoteTo(byte target)
-	{
-		if (!this.isUseSolemnJudgment ||
-			target == 252 ||
-			target == 253 ||
-			target == 254 ||
-			target == byte.MaxValue ||
-			this.judgementTarget.Count > this.maxJudgementTarget) { return; }
-
-		this.judgementTarget.Add(target);
-	}
 
 	private void updateJudgementTarget()
 	{
 		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
 		{
-			if (player == null) { continue; }
-
-			if (player.Disconnected ||
-				player.IsDead)
+			if (player == null ||
+				this.status is null)
 			{
-				this.judgementTarget.Remove(player.PlayerId);
+				continue;
+			}
+
+			if (player.Disconnected || player.IsDead)
+			{
+				this.status.RemoveJudgementTarget(player.PlayerId);
 			}
 		}
 	}
