@@ -16,8 +16,9 @@ public sealed class PlayerVoteAreaButtonContainer(PlayerVoteArea pva)
 	private readonly PlayerVoteArea pva = pva;
 	public PlayerVoteAreaButtonGroup Group { get; } = new PlayerVoteAreaButtonGroup(pva);
 	private readonly Dictionary<ExtremeRoleId, UiElement> cache = new Dictionary<ExtremeRoleId, UiElement>(2);
+	private const float xySize = 0.625f;
 
-	public bool IsRecrateButtn(
+	public bool IsRecreateButtn(
 		ExtremeRoleId id,
 		IRoleMeetingButtonAbility buttonRole,
 		out UiElement button)
@@ -37,11 +38,12 @@ public sealed class PlayerVoteAreaButtonContainer(PlayerVoteArea pva)
 			passiveButton.OnClick.AddListener(
 				buttonRole.CreateAbilityAction(this.pva));
 
-			var render = cacheButton.GetComponent<SpriteRenderer>();
-
 			buttonRole.ButtonMod(this.pva, cacheButton);
-			render.sprite = buttonRole.AbilityImage;
-			render.transform.localScale *= new Vector2(0.625f, 0.625f);
+			if (cacheButton.TryGetComponent<SpriteRenderer>(out var renderer))
+			{
+				renderer.sprite = buttonRole.AbilityImage;
+				renderer.transform.localScale *= new Vector2(xySize, xySize);
+			}
 
 			this.cache[id] = cacheButton;
 			result = true;
