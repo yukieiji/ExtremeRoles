@@ -63,6 +63,7 @@ public sealed class Heretic :
 		ExtremeRoleId.Heretic.ToString(),
 		Palette.ImpostorRed,
 		false, false, false, false,
+		canCallMeeting: false,
 		canRepairSabotage: false)
 	{ }
 
