@@ -40,7 +40,8 @@ public sealed class PlayerVoteAreaButtonContainer(PlayerVoteArea pva)
 			var render = cacheButton.GetComponent<SpriteRenderer>();
 
 			buttonRole.ButtonMod(this.pva, cacheButton);
-			buttonRole.SetSprite(render);
+			render.sprite = buttonRole.AbilityImage;
+			render.transform.localScale *= new Vector2(0.625f, 0.625f);
 
 			this.cache[id] = cacheButton;
 			result = true;
