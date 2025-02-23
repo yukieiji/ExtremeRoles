@@ -52,7 +52,7 @@ public sealed class Heretic :
 	private KillMode killMode;
 	private float range;
 	private byte target;
-	private byte meetingTarget;
+	private byte meetingTarget = byte.MaxValue;
 
 	private bool isSeeImpostorNow = false;
 	private float seeImpostorTaskGage;
@@ -112,6 +112,11 @@ public sealed class Heretic :
 		var player = Player.GetClosestPlayerInRange(
 		   PlayerControl.LocalPlayer, this, this.range);
 
+		if (player == null)
+		{
+			return false;
+		}
+
 		return
 			this.canKillImpostor ||
 			(
@@ -161,6 +166,13 @@ public sealed class Heretic :
 
 	public void Update(PlayerControl rolePlayer)
 	{
+		if (MeetingHud.Instance != null ||
+			ExileController.Instance != null ||
+			GameManager.Instance == null)
+		{
+			return;
+		}
+
 		this.Button?.SetButtonShow(
 			this.killMode is KillMode.OnTaskPhase or KillMode.OnTaskPhaseTarget);
 
