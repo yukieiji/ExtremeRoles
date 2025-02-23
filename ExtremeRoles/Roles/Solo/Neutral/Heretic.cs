@@ -3,18 +3,18 @@ using System.Linq;
 
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Helper;
+using ExtremeRoles.Roles.API.Extension.Neutral;
+using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Patches.Button;
-using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API.Extension.Neutral;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -37,7 +37,7 @@ public sealed class Heretic :
 		Range,
 	}
 
-	public enum KillMode
+	public enum KillMode : byte
 	{
 		OnTaskPhase,
 		OnTaskPhaseTarget,
@@ -51,8 +51,9 @@ public sealed class Heretic :
 	private bool canKillImpostor;
 	private KillMode killMode;
 	private float range;
-	private byte target;
+	private PlayerControl? target;
 	private byte meetingTarget = byte.MaxValue;
+	private bool called = false;
 
 	private bool isSeeImpostorNow = false;
 	private float seeImpostorTaskGage;
@@ -97,7 +98,7 @@ public sealed class Heretic :
 
 	public bool IsAbilityUse()
 	{
-		this.target = byte.MaxValue;
+		this.target = null;
 		if (this.killMode is KillMode.OnExiled)
 		{
 			return false;
@@ -112,10 +113,12 @@ public sealed class Heretic :
 		var player = Player.GetClosestPlayerInRange(
 		   PlayerControl.LocalPlayer, this, this.range);
 
-		if (player == null)
+		if (player == null ||
+			this.meetingTarget == player.PlayerId)
 		{
 			return false;
 		}
+		this.target = player;
 
 		return
 			this.canKillImpostor ||
@@ -127,13 +130,21 @@ public sealed class Heretic :
 
 	public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
 	{
-		if (exiledPlayer == null ||
+		if (this.called ||
+			exiledPlayer == null ||
 			this.killMode is not KillMode.OnExiled ||
 			exiledPlayer.PlayerId != PlayerControl.LocalPlayer.PlayerId)
 		{
 			return;
 		}
+		this.called = true;
 		byte targetPlayerId = this.meetingTarget;
+
+		var player = Player.GetPlayerControlById(targetPlayerId);
+		if (!player.IsValid())
+		{
+			targetPlayerId = byte.MaxValue;
+		}
 		if (targetPlayerId == byte.MaxValue)
 		{
 			// ランダムなプレイヤー選択
@@ -191,6 +202,12 @@ public sealed class Heretic :
 
 	public bool UseAbility()
 	{
+		ExtremeRolesPlugin.Logger.LogInfo($"AbilityMode: {this.killMode}");
+		if (this.target == null)
+		{
+			return false;
+		}
+
 		switch (this.killMode)
 		{
 			case KillMode.OnTaskPhase:
@@ -202,7 +219,7 @@ public sealed class Heretic :
 				tryKill(killer, this.target);
 				break;
 			case KillMode.OnTaskPhaseTarget:
-				this.meetingTarget = this.target;
+				this.meetingTarget = this.target.PlayerId;
 				break;
 			default:
 				return false;
@@ -268,8 +285,11 @@ public sealed class Heretic :
 
 	protected override void RoleSpecificInit()
 	{
-		this.target = byte.MaxValue;
+		this.target = null;
+		this.called = false;
+
 		var loader = this.Loader;
+
 		this.HasTask = loader.GetValue<Option, bool>(
 			Option.HasTask);
 		this.seeImpostorTaskGage = loader.GetValue<Option, int>(
@@ -326,11 +346,11 @@ public sealed class Heretic :
 
 	public Sprite AbilityImage => this.sprite;
 
-	private void tryKill(PlayerControl killer, byte targetPlayerId)
+	private void tryKill(PlayerControl killer, PlayerControl target)
 	{
-		var target = Player.GetPlayerControlById(targetPlayerId);
-		switch (
-			KillButtonDoClickPatch.CheckPreKillCondition(this, killer, target))
+		var condition = KillButtonDoClickPatch.CheckPreKillCondition(this, killer, target);
+		ExtremeRolesPlugin.Logger.LogInfo($"KillCheck Condition: {condition}");
+		switch (condition)
 		{
 			case KillButtonDoClickPatch.KillResult.BlockedToBodyguard:
 				break;
