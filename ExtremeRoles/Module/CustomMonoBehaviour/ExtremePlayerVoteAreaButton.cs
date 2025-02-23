@@ -59,11 +59,11 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			isOkRoleAbilityButton(pva, buttonRole) &&
 			isOkRoleAbilityButton(pva, anotherButtonRole))
 		{
-			if (button.IsRecrateButtn(role.Id, buttonRole, out var element1))
+			if (button.IsRecreateButtn(role.Id, buttonRole, out var element1))
 			{
 				group.ResetSecond();
 			}
-			if (button.IsRecrateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var element2))
+			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var element2))
 			{
 				group.ResetSecond();
 			}
@@ -75,7 +75,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			role is IRoleMeetingButtonAbility mainButtonRole &&
 			isOkRoleAbilityButton(pva, mainButtonRole))
 		{
-			if (button.IsRecrateButtn(role.Id, mainButtonRole, out var element1))
+			if (button.IsRecreateButtn(role.Id, mainButtonRole, out var element1))
 			{
 				group.ResetFirst();
 			}
@@ -87,7 +87,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			multiRole?.AnotherRole is IRoleMeetingButtonAbility subButtonRole &&
 			isOkRoleAbilityButton(pva, subButtonRole))
 		{
-			if (button.IsRecrateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1))
+			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1))
 			{
 				group.ResetFirst();
 			}
