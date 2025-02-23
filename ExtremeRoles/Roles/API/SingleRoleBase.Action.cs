@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Roles.API.Interface;
+﻿using ExtremeRoles.Roles.API.Interface.Ability;
 
 #nullable enable
 
