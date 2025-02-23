@@ -1,4 +1,4 @@
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
