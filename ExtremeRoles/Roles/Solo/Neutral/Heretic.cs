@@ -34,6 +34,7 @@ public sealed class Heretic :
 
 		KillMode,
 		CanKillImpostor,
+		Range,
 	}
 
 	public enum KillMode
@@ -242,6 +243,11 @@ public sealed class Heretic :
 			killModeOpt,
 			invert: true,
 			format: OptionUnit.Second);
+		factory.CreateFloatOption(
+			Option.Range,
+			1.2f, 0.1f, 2.5f, 0.1f,
+			killModeOpt,
+			invert: true);
 
 		factory.CreateBoolOption(
 			Option.CanKillImpostor,
@@ -259,6 +265,7 @@ public sealed class Heretic :
 		this.canKillImpostor = loader.GetValue<Option, bool>(
 			Option.CanKillImpostor);
 		this.killMode = (KillMode)loader.GetValue<Option, int>(Option.KillMode);
+		this.range = loader.GetValue<Option, float>(Option.Range);
 		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage > 0;
 
 	}
