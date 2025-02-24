@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: "nuget" # See documentation for possible values
     directories: ["/ExtremeRoles", "/ExtremeSkins", "/ExtremeVoiceEngine"] # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
     target-branch: develop
   - package-ecosystem: "github-actions"
     directory: "/"
