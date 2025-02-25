@@ -15,7 +15,9 @@ public sealed class CrowedModInitializer(PluginInfo plugin) : InitializerBase<Cr
 
 	protected override void PatchAll(Harmony patch)
 	{
-		var targets = GetMethod("MeetingHudPagingBehaviour", "Targets");
+		var meetingHud = GetClass("MeetingHudPagingBehaviour");
+		var targets = AccessTools.Property(meetingHud, "Targets").GetGetMethod();
+
 		var update = GetMethod("MeetingHudPagingBehaviour", "Update");
 		var onPageChanged = GetMethod("MeetingHudPagingBehaviour", "OnPageChanged");
 

@@ -20,7 +20,7 @@ public static class CrowedModPatch
 	{
 		if (MonikaTrashSystem.TryGet(out var system))
 		{
-			__result
+			__result = __result
 				.OrderBy(MeetingHudSortButtonsPatch.DefaultSort)
 				.ThenBy(system.GetVoteAreaOrder);
 		}
