@@ -14,9 +14,31 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
+
+public sealed class TagPainter(string[] tags)
+{
+	private readonly string[] randomTags = tags.OrderBy(
+		x => RandomGenerator.Instance.Next()).ToArray();
+	private readonly Color[] randomColor = createRandomColor(tags.Length).ToArray();
+	private readonly int size = tags.Length;
+
+	public string Paint(string tag, int controlId)
+	{
+		int index = controlId % size;
+		tag = tag != string.Empty ? tag : randomTags[index];
+		return Design.ColoedString(randomColor[index], tag);
+	}
+
+	private static IEnumerable<Color> createRandomColor(int size)
+	{
+		for (int i = 0; i < size; ++i)
+		{
+			yield return UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f);
+		}
+	}
+}
 
 [Il2CppRegister]
 public sealed class FinalSummary : MonoBehaviour
@@ -64,8 +86,10 @@ public sealed class FinalSummary : MonoBehaviour
 
 	public void Update()
 	{
-
-		if (!this.isCreated) { return; }
+		if (!this.isCreated)
+		{
+			return;
+		}
 
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
@@ -90,19 +114,8 @@ public sealed class FinalSummary : MonoBehaviour
 	[HideFromIl2Cpp]
 	public void Create(IReadOnlyList<PlayerSummary> summaries)
 	{
-		List<Color> tagColor = new List<Color>();
-
 		Dictionary<SummaryType, StringBuilder> finalSummary = createSummaryBase();
-
-		for (int i = 0; i < GameSystem.VanillaMaxPlayerNum; ++i)
-		{
-			tagColor.Add(
-				UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
-		}
-
-		string[] randomTag = tags.OrderBy(
-			item => RandomGenerator.Instance.Next()).ToArray();
-
+		var painter = new TagPainter(tags);
 		var sorted = sortedSummary(summaries);
 
 		foreach (PlayerSummary summary in sorted)
@@ -113,44 +126,18 @@ public sealed class FinalSummary : MonoBehaviour
 				summary.StatusInfo.ToString());
 
 			string roleName = summary.Role.GetColoredRoleName(true);
-			string tag = summary.Role.GetRoleTag();
+			string tag = painter.Paint(
+				summary.Role.GetRoleTag(),
+				summary.Role.GameControlId);
 
-			int id = summary.Role.GameControlId;
-			int index = id % GameSystem.VanillaMaxPlayerNum;
-			if (tag != string.Empty)
+			if (summary.Role is MultiAssignRoleBase mutiAssignRole &&
+				mutiAssignRole?.AnotherRole != null)
 			{
-				tag = Design.ColoedString(
-					tagColor[index], tag);
-			}
-			else
-			{
-				tag = Design.ColoedString(
-					tagColor[index], randomTag[index]);
-			}
+				string anotherTag = painter.Paint(
+					mutiAssignRole.AnotherRole.GetRoleTag(),
+					mutiAssignRole.AnotherRole.GameControlId);
 
-			var mutiAssignRole = summary.Role as MultiAssignRoleBase;
-			if (mutiAssignRole != null)
-			{
-				if (mutiAssignRole.AnotherRole != null)
-				{
-					string anotherTag = mutiAssignRole.AnotherRole.GetRoleTag();
-					id = mutiAssignRole.AnotherRole.GameControlId;
-					index = id % GameSystem.VanillaMaxPlayerNum;
-
-					if (anotherTag != string.Empty)
-					{
-						anotherTag = Design.ColoedString(
-							tagColor[index], anotherTag);
-					}
-					else
-					{
-						anotherTag = Design.ColoedString(
-							tagColor[index], randomTag[index]);
-					}
-
-					tag = $"{tag} + {anotherTag}";
-
-				}
+				tag = $"{tag} + {anotherTag}";
 			}
 
 			finalSummary[SummaryType.Role].AppendLine(
