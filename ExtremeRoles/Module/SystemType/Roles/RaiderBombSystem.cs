@@ -39,12 +39,12 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 		public void Add(Vector2 pos)
 		{
 			this.pos.Enqueue(pos);
+			updateTargetPos();
 		}
 
 		public Vector2? NextPos()
 		{
-			if (this.target == null ||
-				!this.tryGetTargetPos(out this.target))
+			if (this.target == null)
 			{
 				return null;
 			}
@@ -62,14 +62,18 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 			{
 				this.placedNum = 0;
 				this.target = null;
+				updateTargetPos();
 			}
 			return result;
 		}
 
-		private bool tryGetTargetPos([NotNullWhen(true)] out Vector2? target)
+		private void updateTargetPos()
 		{
-			target = this.pos.Count > 0 ? this.pos.Dequeue() : null;
-			return target != null;
+			if (this.target != null)
+			{
+				return;
+			}
+			this.target = this.pos.Count > 0 ? this.pos.Dequeue() : null;
 		}
 	}
 
