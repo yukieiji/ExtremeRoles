@@ -1,4 +1,7 @@
-﻿using Hazel;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+
+using Hazel;
 
 using UnityEngine;
 
@@ -30,11 +33,18 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 		private readonly float num = param.BombNum;
 
 		private int placedNum = 0;
-		public Vector2? Target { private get; set; } = null;
+		private Vector2? target = null;
+		private readonly Queue<Vector2> pos = new Queue<Vector2>();
+
+		public void Add(Vector2 pos)
+		{
+			this.pos.Enqueue(pos);
+			updateTargetPos();
+		}
 
 		public Vector2? NextPos()
 		{
-			if (this.Target == null)
+			if (this.target == null)
 			{
 				return null;
 			}
@@ -47,13 +57,23 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 				_ => Vector2.zero
 			};
 			this.placedNum++;
-			var result = this.Target.Value + offset;
+			var result = this.target.Value + offset;
 			if (this.placedNum >= this.num)
 			{
 				this.placedNum = 0;
-				this.Target = null;
+				this.target = null;
+				updateTargetPos();
 			}
 			return result;
+		}
+
+		private void updateTargetPos()
+		{
+			if (this.target != null)
+			{
+				return;
+			}
+			this.target = this.pos.Count > 0 ? this.pos.Dequeue() : null;
 		}
 	}
 
@@ -114,7 +134,9 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 
 	public void UpdateSystem(PlayerControl player, MessageReader msgReader)
 	{
-		this.placer.Target = NetHelpers.ReadVector2(msgReader);
+		var pos = NetHelpers.ReadVector2(msgReader);
+		this.placer.Add(pos);
+
 		this.target = this.placer.NextPos();
 		if (this.target.HasValue)
 		{

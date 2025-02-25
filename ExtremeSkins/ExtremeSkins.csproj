@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>10.0.1.16</Version>
+    <Version>10.0.1.17</Version>
     <!--<VersionPrefix>10.0.1</VersionPrefix>
     <VersionSuffix>AmongUsv20240618</VersionSuffix>-->
     <Description>Extreme Skins for Extreme Roles</Description>
@@ -34,7 +34,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.13.0">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

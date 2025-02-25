@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>12.1.4.5</Version>
+    <Version>12.1.4.6</Version>
     <!--<VersionPrefix>12.1.4</VersionPrefix>-->
     <VersionSuffix>3rdAnniversary-TwoMemorial</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
@@ -34,7 +34,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.13.0">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
