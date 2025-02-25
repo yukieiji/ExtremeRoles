@@ -21,7 +21,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
+public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility, IKilledFrom
 {
     public enum TimeMasterOption
     {
@@ -354,7 +354,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         return;
     }
 
-    public override bool TryRolePlayerKilledFrom(
+    public bool TryKilledFrom(
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         if (this.isRewindTime) { return false; }
