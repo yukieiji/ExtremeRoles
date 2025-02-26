@@ -5,13 +5,13 @@ permissions:
   pull-requests: write
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
+  issue_comment:
+    types: [created]
 
 jobs:
   codereview:
     # タイトルに`:review`が含まれている場合のみ実行
-    if: ${{ contains(github.event.pull_request.title, '!review') }}
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment, '!review') }}
     runs-on: ubuntu-latest
     steps:
       # プルリクエストのタイトルを表示
@@ -39,7 +39,7 @@ jobs:
             - 変更の妥当性、及びアルゴリズムの正確性
             - パフォーマンスにおいて重大な問題が存在していないか
             --- レビュー観点終了 ---
-            
+
             --- 返答形式 ---
             - 日本語にて返信を行う
             - 返答はわかりやすくかつ簡潔に行うこと
