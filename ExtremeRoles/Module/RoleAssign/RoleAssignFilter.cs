@@ -9,7 +9,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour.View;
 using ExtremeRoles.Resources;
 
 
-
 #nullable enable
 
 namespace ExtremeRoles.Module.RoleAssign;
@@ -18,7 +17,6 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 {
 	private RoleAssignFilterView? view;
 	private RoleAssignFilterModel model;
-
 
 	private readonly List<RoleFilterSet> filter = new List<RoleFilterSet>();
 	private const string defaultValue = "";
@@ -154,14 +152,9 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 	}
 
 	private static RoleAssignFilterModel getNewModel()
-		=> new RoleAssignFilterModel()
-		{
-			Config = ExtremeRolesPlugin.Instance.Config.Bind(
-				"RoleAssignFilter", OptionManager.Instance.ConfigPreset, defaultValue),
-			Id = new(),
-			NormalRole = new(),
-			CombRole = new(),
-			GhostRole = new(),
-			FilterSet = new()
-		};
+	{
+		var config = ExtremeRolesPlugin.Instance.Config.Bind(
+			"RoleAssignFilter", OptionManager.Instance.ConfigPreset, defaultValue);
+		return new RoleAssignFilterModel(config);
+	}
 }
