@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 
+using System.Collections.Generic;
 using System.Reflection;
 
 using HarmonyLib;
@@ -14,6 +15,9 @@ public sealed class CrowedModInitializer(PluginInfo plugin) : InitializerBase<Cr
 
 	protected override void PatchAll(Harmony patch)
 	{
+		var meetingHud = GetClass("MeetingHudPagingBehaviour");
+		var targets = AccessTools.Property(meetingHud, "Targets").GetGetMethod();
+
 		var update = GetMethod("MeetingHudPagingBehaviour", "Update");
 		var onPageChanged = GetMethod("MeetingHudPagingBehaviour", "OnPageChanged");
 
@@ -24,10 +28,15 @@ public sealed class CrowedModInitializer(PluginInfo plugin) : InitializerBase<Cr
 
 		MaxPlayerNum = (int)maxPlayerField.GetValue(null);
 
-		var prefixMethod =
+		var monikaCheckPrefixMethod =
 			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.IsNotMonikaMeeting());
 
-		patch.Patch(update, new HarmonyMethod(prefixMethod));
-		patch.Patch(onPageChanged, new HarmonyMethod(prefixMethod));
+		IEnumerable<PlayerVoteArea> ienum = null;
+		var monikaSortPostfixMethod =
+			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.SortMonikaTrash(ref ienum));
+
+		patch.Patch(update, new HarmonyMethod(monikaCheckPrefixMethod));
+		patch.Patch(onPageChanged, new HarmonyMethod(monikaCheckPrefixMethod));
+		patch.Patch(targets, postfix: new HarmonyMethod(monikaSortPostfixMethod));
 	}
 }
