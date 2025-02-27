@@ -16,11 +16,6 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 {
     private int setPlayerNum = 0;
     private int maxSetNum = int.MaxValue;
-    private string optionKey => Design.ColoedString(
-        this.OptionColor,
-        string.Concat(
-            this.RoleName,
-            RoleCommonOption.SpawnRate.ToString()));
 
 	public ConstCombinationRoleManagerBase(
 		CombinationRoleType type,
@@ -32,9 +27,6 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
         this.setPlayerNum = setPlayerNum;
         this.maxSetNum = maxSetNum;
     }
-
-    public sealed override string GetOptionName()
-        => Tr.GetString(this.optionKey);
 
     public override void AssignSetUpInit(int curImpNum)
     {
