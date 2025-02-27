@@ -1203,4 +1203,11 @@
   <data name="MonikaCanUseSabotage" xml:space="preserve">
     <value>サボタージュを使用できるか</value>
   </data>
+  <data name="MonikaIsSoloTeam" xml:space="preserve">
+    <value>単独として生き残ってもゲームが続行するか</value>
+  </data>
+  <data name="MonikaCanSeeTrash" xml:space="preserve">
+    <value>「モニカ」がゴミ箱のプレイヤーを
+見ることができるか</value>
+  </data>
 </root>

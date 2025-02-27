@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -54,8 +55,13 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
 		this.RoleType = type;
     }
 
-    public abstract string GetOptionName();
-    public abstract void AssignSetUpInit(int curImpNum);
+    public string GetOptionName()
+	{
+		string name = Tr.GetString(this.RoleName);
+		return this.OptionColor == DefaultColor ? name : Design.ColoedString(this.OptionColor, name);
+	}
+
+	public abstract void AssignSetUpInit(int curImpNum);
 
     public abstract MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType);

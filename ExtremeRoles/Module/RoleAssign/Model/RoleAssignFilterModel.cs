@@ -8,18 +8,20 @@ using BepInEx.Configuration;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.RoleAssign.Model;
 
-public sealed class RoleAssignFilterModel
+public sealed class RoleAssignFilterModel(ConfigEntry<string> config)
 {
-	public ConfigEntry<string> Config { get; set; }
+	public ConfigEntry<string> Config { get; } = config;
 
-	public Dictionary<Guid, RoleFilterData> FilterSet { get; set; }
+	public Dictionary<Guid, RoleFilterData> FilterSet { get; } = new Dictionary<Guid, RoleFilterData>();
 
-	public List<int> Id { get; set; }
-	public Dictionary<int, ExtremeRoleId> NormalRole { get; set; }
-	public Dictionary<int, CombinationRoleType> CombRole { get; set; }
-	public Dictionary<int, ExtremeGhostRoleId> GhostRole { get; set; }
+	public List<int> Id { get; } = new List<int>();
+	public Dictionary<int, ExtremeRoleId> NormalRole { get; } = new Dictionary<int, ExtremeRoleId>();
+	public Dictionary<int, CombinationRoleType> CombRole { get; } = new Dictionary<int, CombinationRoleType>();
+	public Dictionary<int, ExtremeGhostRoleId> GhostRole { get; } = new Dictionary<int, ExtremeGhostRoleId>();
 
 	private const char splitChar = '|';
 
@@ -54,15 +56,18 @@ public sealed class RoleAssignFilterModel
 		{
 			byte[] deserializedBytes = Convert.FromBase64String(encodingFilter);
 
-			RoleFilterData model;
+			object? obj;
 			DataContractSerializer serializer = new DataContractSerializer(
 				typeof(RoleFilterData));
 			using (MemoryStream stream = new MemoryStream(deserializedBytes))
 			{
-				model = (RoleFilterData)serializer.ReadObject(stream);
+				obj = serializer.ReadObject(stream);
 			}
 
-			this.FilterSet.Add(Guid.NewGuid(), model);
+			if (obj is RoleFilterData model)
+			{
+				this.FilterSet.Add(Guid.NewGuid(), model);
+			}
 		}
 	}
 }

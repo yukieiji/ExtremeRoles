@@ -26,11 +26,6 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
         this.canAssignImposter = canAssignImposter;
     }
 
-    public sealed override string GetOptionName()
-        => Design.ColoedString(
-            this.OptionColor,
-            Tr.GetString(this.RoleName));
-
     public string GetBaseRoleFullDescription() =>
         Tr.GetString($"{BaseRole.Id}FullDescription");
 

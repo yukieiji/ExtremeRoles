@@ -45,11 +45,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubActions", "GitHubActi
 		.github\workflows\review.yml = .github\workflows\review.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gemini", "gemini", "{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97}"
-	ProjectSection(SolutionItems) = preProject
-		.gemini\styleguide.md = .gemini\styleguide.md
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -138,11 +133,10 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{00B61FF2-566F-4C38-847B-D6E28E7CA474} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
-		{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_TaskErrorCategory = Message
-		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
 		RESX_NeutralResourcesLanguage = ja-JP
+		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
+		RESX_TaskErrorCategory = Message
 	EndGlobalSection
 EndGlobal

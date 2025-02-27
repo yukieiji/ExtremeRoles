@@ -216,20 +216,23 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
 			foreach (var (id, roleId) in filter.FilterNormalId)
 			{
-				string roleName = ExtremeRoleManager.NormalRole[
-					(int)roleId].GetColoredRoleName(true);
+				string roleName =
+					ExtremeRoleManager.NormalRole.TryGetValue((int)roleId, out var role) &&
+					role is not null ? role.GetColoredRoleName(true) : string.Empty;
 				createFilterItem(parent, roleName, filterId, id);
 			}
 			foreach (var (id, roleId) in filter.FilterCombinationId)
 			{
-				string combRoleName = ExtremeRoleManager.CombRole[
-					(byte)roleId].GetOptionName();
+				string combRoleName =
+					ExtremeRoleManager.CombRole.TryGetValue((byte)roleId, out var role) &&
+					role is not null ? role.GetOptionName() : string.Empty;
 				createFilterItem(parent, combRoleName, filterId, id);
 			}
 			foreach (var (id, roleId) in filter.FilterGhostRole)
 			{
-				string ghostRoleName = ExtremeGhostRoleManager.AllGhostRole[
-					roleId].GetColoredRoleName();
+				string ghostRoleName =
+					ExtremeGhostRoleManager.AllGhostRole.TryGetValue(roleId, out var role) &&
+					role is not null ? role.GetColoredRoleName() : string.Empty;
 				createFilterItem(parent, ghostRoleName, filterId, id);
 			}
 		}

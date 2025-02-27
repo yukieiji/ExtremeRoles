@@ -87,10 +87,11 @@ public sealed class AddRoleMenuView : MonoBehaviour
 		ButtonWrapper button, RoleAssignFilterModel model,
 		Guid filterId, int id, Transform targetFilterTransform)
 	{
-		if (model.NormalRole.TryGetValue(id, out var normalRoleId))
+		if (model.NormalRole.TryGetValue(id, out var normalRoleId) &&
+			ExtremeRoleManager.NormalRole.TryGetValue((int)normalRoleId, out var role) &&
+			role is not null)
 		{
-			string roleName = ExtremeRoleManager.NormalRole[
-				(int)normalRoleId].GetColoredRoleName(true);
+			string roleName = role.GetColoredRoleName(true);
 			button.SetButtonText(roleName);
 			return () =>
 			{
@@ -101,10 +102,12 @@ public sealed class AddRoleMenuView : MonoBehaviour
 				}
 			};
 		}
-		else if (model.CombRole.TryGetValue(id, out var combRoleId))
+		else if (
+			model.CombRole.TryGetValue(id, out var combRoleId) &&
+			ExtremeRoleManager.CombRole.TryGetValue((byte)combRoleId, out var combRole) &&
+			combRole is not null)
 		{
-			string combRoleName = ExtremeRoleManager.CombRole[
-				(byte)combRoleId].GetOptionName();
+			string combRoleName = combRole.GetOptionName();
 			button.SetButtonText(combRoleName);
 			return () =>
 			{
