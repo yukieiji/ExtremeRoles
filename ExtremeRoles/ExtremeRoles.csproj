@@ -3,9 +3,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>12.1.4.7</Version>
-    <!--<VersionPrefix>12.1.4</VersionPrefix>-->
-    <VersionSuffix>3rdAnniversary-TwoMemorial</VersionSuffix>
+    <!--<Version>12.1.5.0</Version>-->
+    <VersionPrefix>12.1.5</VersionPrefix>
+    <VersionSuffix>3rdAnniversary-TwoMemorial-Continue</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
