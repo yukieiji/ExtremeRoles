@@ -23,12 +23,14 @@ public sealed class Monika :
 {
 	public enum Ops
 	{
+		IsSoloTeam,
 		CanUseVent,
 		CanUseSabotage,
 		UseOtherButton,
 		Range,
 	}
 
+	public bool IsSoloTeam { get; private set; }
     public ExtremeAbilityButton? Button { get; set; }
 	private MonikaTrashSystem? trashSystem;
 	private MonikaMeetingNumSystem? meetingNumSystem;
@@ -101,6 +103,8 @@ public sealed class Monika :
         AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
+			Ops.IsSoloTeam, true);
+		factory.CreateBoolOption(
 			Ops.CanUseVent, false);
 		factory.CreateBoolOption(
 			Ops.CanUseSabotage, false);
@@ -120,6 +124,7 @@ public sealed class Monika :
 
 		this.UseVent = loader.GetValue<Ops, bool>(Ops.CanUseVent);
 		this.UseSabotage = loader.GetValue<Ops, bool>(Ops.CanUseSabotage);
+		this.IsSoloTeam = loader.GetValue<Ops, bool>(Ops.IsSoloTeam);
 
 		if (loader.GetValue<Ops, bool>(Ops.UseOtherButton))
 		{
