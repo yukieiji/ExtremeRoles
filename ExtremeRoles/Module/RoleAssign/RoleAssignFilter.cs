@@ -3,7 +3,6 @@ using System.Linq;
 
 using UnityEngine;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
@@ -17,10 +16,11 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 {
-	private List<RoleFilterSet> filter = new List<RoleFilterSet>();
 	private RoleAssignFilterView? view;
 	private RoleAssignFilterModel model;
 
+
+	private readonly List<RoleFilterSet> filter = new List<RoleFilterSet>();
 	private const string defaultValue = "";
 
 	public RoleAssignFilter()
@@ -53,7 +53,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 		// フィルターをリセット
 		this.filter.Clear();
 
-		foreach (var (guid, filterModel) in model.FilterSet)
+		foreach (var (guid, filterModel) in this.model.FilterSet)
 		{
 			logger.LogInfo($" ---- Filter:{guid} ---- ");
 
@@ -61,8 +61,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 
 			logger.LogInfo($"AssignNum:{assignNum}");
 
-			var filterSet = new RoleFilterSet();
-			filterSet.AssignNum = assignNum;
+			var filterSet = new RoleFilterSet(assignNum);
 
 			foreach (var extremeRoleId in filterModel.FilterNormalId.Values)
 			{
