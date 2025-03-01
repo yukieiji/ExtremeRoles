@@ -1,15 +1,15 @@
-﻿using Hazel;
-using UnityEngine;
+﻿using ExtremeRoles.Helper;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.CustomOption.Factory;
+
+using ExtremeRoles.Resources;
+
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 
 #nullable enable
@@ -23,13 +23,17 @@ public sealed class Monika :
 {
 	public enum Ops
 	{
+		IsSoloTeam,
 		CanUseVent,
 		CanUseSabotage,
 		UseOtherButton,
 		Range,
+		CanSeeTrash,
 	}
 
-    public ExtremeAbilityButton? Button { get; set; }
+	public bool IsSoloTeam { get; private set; }
+
+	public ExtremeAbilityButton? Button { get; set; }
 	private MonikaTrashSystem? trashSystem;
 	private MonikaMeetingNumSystem? meetingNumSystem;
 	private byte targetPlayer;
@@ -101,6 +105,8 @@ public sealed class Monika :
         AutoParentSetOptionCategoryFactory factory)
     {
 		factory.CreateBoolOption(
+			Ops.IsSoloTeam, true);
+		factory.CreateBoolOption(
 			Ops.CanUseVent, false);
 		factory.CreateBoolOption(
 			Ops.CanUseSabotage, false);
@@ -110,16 +116,20 @@ public sealed class Monika :
             factory);
 		factory.CreateFloatOption(
 			Ops.Range, 1.3f, 0.1f, 3.0f, 0.1f);
+		factory.CreateBoolOption(
+			Ops.CanSeeTrash, false);
 	}
 
     protected override void RoleSpecificInit()
     {
 		var loader = this.Loader;
-		this.trashSystem = ExtremeSystemTypeManager.Instance.CreateOrGet<MonikaTrashSystem>(
-			ExtremeSystemType.MonikaTrashSystem);
+		this.trashSystem = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			ExtremeSystemType.MonikaTrashSystem,
+			() => new MonikaTrashSystem(loader.GetValue<Ops, bool>(Ops.CanSeeTrash)));
 
 		this.UseVent = loader.GetValue<Ops, bool>(Ops.CanUseVent);
 		this.UseSabotage = loader.GetValue<Ops, bool>(Ops.CanUseSabotage);
+		this.IsSoloTeam = loader.GetValue<Ops, bool>(Ops.IsSoloTeam);
 
 		if (loader.GetValue<Ops, bool>(Ops.UseOtherButton))
 		{

@@ -11,6 +11,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.GameMode;
 
 using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
+using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
 
 #nullable enable
 
@@ -258,10 +259,13 @@ public sealed record PlayerStatistics(
 					NeutralSeparateTeam.Tucker);
 				break;
 			case ExtremeRoleId.Monika:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Monika);
+				if (((Monika)role).IsSoloTeam)
+				{
+					addNeutralTeams(
+						neutralTeam,
+						gameControlId,
+						NeutralSeparateTeam.Monika);
+				}
 				break;
 			default:
 				checkMultiAssignedServant(

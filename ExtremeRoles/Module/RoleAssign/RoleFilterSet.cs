@@ -5,27 +5,15 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
-public sealed class RoleFilterSet
+public sealed class RoleFilterSet(int assignNum)
 {
-	public int AssignNum { private get; set; } = 1;
-
 	private int curAssignNum = 0;
 	private bool isBlock = false;
 
-	private HashSet<int> normalRoleFilter = new HashSet<int>();
-	private HashSet<byte> combRoleFilter = new HashSet<byte>();
-	private HashSet<ExtremeGhostRoleId> ghostRoleFilter = new HashSet<ExtremeGhostRoleId>();
-
-	public RoleFilterSet()
-	{
-		this.normalRoleFilter.Clear();
-		this.combRoleFilter.Clear();
-		this.ghostRoleFilter.Clear();
-
-		this.curAssignNum = 0;
-
-		this.isBlock = false;
-	}
+	private readonly int assignNum = assignNum;
+	private readonly HashSet<int> normalRoleFilter = new HashSet<int>(assignNum);
+	private readonly HashSet<byte> combRoleFilter = new HashSet<byte>(assignNum);
+	private readonly HashSet<ExtremeGhostRoleId> ghostRoleFilter = new HashSet<ExtremeGhostRoleId>(assignNum);
 
 	public void Add(ExtremeRoleId roleId)
 	{
@@ -34,7 +22,7 @@ public sealed class RoleFilterSet
 
 	public void Add(CombinationRoleType roleId)
 	{
-		this.combRoleFilter.Contains((byte)roleId);
+		this.combRoleFilter.Add((byte)roleId);
 	}
 
 	public void Add(ExtremeGhostRoleId roleId)
@@ -81,6 +69,6 @@ public sealed class RoleFilterSet
 	private void updateState()
 	{
 		++this.curAssignNum;
-		this.isBlock = this.curAssignNum >= this.AssignNum;
+		this.isBlock = this.curAssignNum >= this.assignNum;
 	}
 }

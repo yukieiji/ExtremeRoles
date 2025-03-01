@@ -18,7 +18,7 @@ using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class MonikaTrashSystem : IDirtableSystemType
+public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 {
 	public bool IsDirty { get; set; } = false;
 	private bool isEnd = false;
@@ -33,8 +33,9 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 
 	private readonly HashSet<byte> trash = new HashSet<byte>();
 	private readonly Dictionary<byte, PlayerControl> trashPc = new Dictionary<byte, PlayerControl>();
-	private readonly PlayerShowSystem showSystem = PlayerShowSystem.Get();
+	private readonly PlayerShowSystem? showSystem = canSeeCrew ? null : PlayerShowSystem.Get();
 	private readonly OnemanMeetingSystemManager meetingSystem = OnemanMeetingSystemManager.CreateOrGet();
+
 	public Sprite MeetingBackground =>
 			UnityObjectLoader.LoadFromResources<Sprite, ExtremeRoleId>(
 				ExtremeRoleId.Monika,
@@ -92,7 +93,9 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 			{
 				continue;
 			}
-			if (!this.showSystem.IsHide(targetPlayer))
+
+			if (this.showSystem is not null &&
+				!this.showSystem.IsHide(targetPlayer))
 			{
 				this.showSystem.Hide(targetPlayer);
 			}
@@ -107,7 +110,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 				continue;
 			}
 
-			if (this.trashPc.TryGetValue(id, out var targetPlayer) &&
+			if (this.showSystem is not null &&
+				this.trashPc.TryGetValue(id, out var targetPlayer) &&
 				this.showSystem.IsHide(targetPlayer))
 			{
 				this.showSystem.Show(targetPlayer);
@@ -139,7 +143,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{
-		if (!this.isLocalRoleMonika() ||
+		if (this.showSystem is null ||
+			!this.isLocalRoleMonika() ||
 			timing is not ResetTiming.ExiledEnd)
 		{
 			return;
@@ -206,9 +211,9 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		)
 		||
 		!(
-			source.IsDead || 
-			local.IsDead || 
-			this.InvalidPlayer(source) || 
+			source.IsDead ||
+			local.IsDead ||
+			this.InvalidPlayer(source) ||
 			this.InvalidPlayer(local) //生存者to生存者(ただしゴミ箱ではない)
 		);
 
@@ -251,10 +256,11 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 		{
 			return;
 		}
-		
+
 		this.trashPc.Add(targetPlayerId, targetPlayer);
-		
-		if (isLocalRoleMonika())
+
+		if (this.showSystem is not null &&
+			isLocalRoleMonika())
 		{
 			ExtremeRolesPlugin.Logger.LogInfo($"Hide Player :{targetPlayerId}");
 			this.showSystem.Hide(targetPlayer);
@@ -264,7 +270,8 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 	private void clearTrash()
 	{
 		this.trash.Clear();
-		if (isLocalRoleMonika())
+		if (this.showSystem is not null &&
+			isLocalRoleMonika())
 		{
 			foreach (var pc in this.trashPc.Values)
 			{
@@ -312,7 +319,7 @@ public sealed class MonikaTrashSystem : IDirtableSystemType
 				});
 			return;
 		}
-		
+
 		aliveNum -= monikaNum;
 
 		if (monikaNum > 1 || aliveNum != 2)
