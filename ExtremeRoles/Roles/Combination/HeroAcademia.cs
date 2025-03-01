@@ -424,7 +424,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
 }
 
-public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset, IKilledFrom
 {
     public enum OneForAllCondition : byte
     {
@@ -633,7 +633,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
         return true;
     }
 
-    public override bool TryRolePlayerKilledFrom(
+    public bool TryKilledFrom(
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
@@ -698,7 +698,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
         }
     }
 }
-public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset
+public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset, IKilledFrom
 {
     public enum VillanOption
     {
@@ -820,7 +820,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
             rolePlayer.PlayerId);
     }
 
-    public override bool TryRolePlayerKilledFrom(
+    public bool TryKilledFrom(
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
@@ -870,7 +870,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
     }
 
 }
-public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleWinPlayerModifier
+public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleWinPlayerModifier, IKilledFrom
 {
     public enum VigilanteCondition : byte
     {
@@ -995,7 +995,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         return true;
     }
 
-    public override bool TryRolePlayerKilledFrom(
+    public bool TryKilledFrom(
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];

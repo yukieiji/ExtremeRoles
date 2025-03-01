@@ -24,7 +24,8 @@ public sealed class IronMate :
 	IRoleAwake<RoleTypes>,
 	IRoleMurderPlayerHook,
 	IRoleWinPlayerModifier,
-	IDeadBodyReportOverride
+	IDeadBodyReportOverride,
+	IKilledFrom
 {
     public enum Option
     {
@@ -101,7 +102,7 @@ public sealed class IronMate :
 		}
 	}
 
-	public override bool TryRolePlayerKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
+	public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
 	{
 		if (this.system is null)
 		{
