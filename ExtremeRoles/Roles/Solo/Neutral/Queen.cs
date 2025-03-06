@@ -506,8 +506,8 @@ public sealed class Queen :
 	private bool isNotSucideServant(byte playerId)
 		=>
 		!this.servantSucideWithQueenWhenHasKill &&
-		ExtremeRoleManager.TryGetRole(playerId, out var servant) &&
-		servant!.CanKill;
+		ExtremeRoleManager.TryGetSafeCastedRole<Servant>(playerId, out var servant) &&
+		servant.CanKill && !servant.IsSpecialKill;
 }
 
 public sealed class Servant :
@@ -534,6 +534,7 @@ public sealed class Servant :
     private Queen queen;
 
 	public override IOptionLoader Loader { get; }
+	public bool IsSpecialKill { get; }
 
     public Servant(
         byte queenPlayerId,
@@ -555,14 +556,31 @@ public sealed class Servant :
         this.queen = queen;
         this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
 
-        if (baseRole.IsImpostor())
-        {
-            this.HasOtherVision = true;
-        }
-        else
-        {
-            this.HasOtherVision = baseRole.HasOtherVision;
-        }
+		var id = baseRole.Id;
+
+		this.IsSpecialKill = id is
+			ExtremeRoleId.Fencer or ExtremeRoleId.Sheriff;
+
+		switch (id)
+		{
+			case ExtremeRoleId.Fencer:
+				this.CanKill = false;
+				break;
+			case ExtremeRoleId.Yandere:
+				this.CanKill = true;
+				break;
+			default:
+				break;
+		}
+
+		if (baseRole.IsImpostor())
+		{
+			this.HasOtherVision = true;
+		}
+		else
+		{
+			this.HasOtherVision = baseRole.HasOtherVision;
+		}
         this.Vision = baseRole.Vision;
         this.IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
 
