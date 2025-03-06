@@ -193,14 +193,13 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         float prevTime = localPlayer.killTimer;
         Helper.Logging.Debug($"PrevKillCool:{prevTime}");
 
+		int ventId = Vent.currentVent.Id;
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.StartVentAnimation))
         {
-            caller.WritePackedInt(Vent.currentVent.Id);
+            caller.WritePackedInt(ventId);
         }
-
-        RPCOperator.StartVentAnimation(
-            Vent.currentVent.Id);
+        RPCOperator.StartVentAnimation(ventId);
 
 		byte targetPlayerId = this.targetPlayer.PlayerId;
 		byte killerId = localPlayer.PlayerId;

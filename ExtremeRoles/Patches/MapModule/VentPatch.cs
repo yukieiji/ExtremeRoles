@@ -8,17 +8,15 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Extension.Il2Cpp;
+using ExtremeRoles.Extension.VentModule;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
-using ExtremeRoles.Extension.VentModule;
 
 #nullable enable
 
@@ -116,42 +114,13 @@ public static class VentAnimationRemovePatch
 			VibrationManager.Vibrate(0.4f, vent.transform.position, 3.5f, 0.2f,
 				VibrationManager.VibrationFalloff.None, null, false);
 		}
-		yield break;
 	}
 
 	private static bool isRunOriginal(Vent vent, PlayerControl pc)
-	{
-		var ventAnimationMode = ExtremeGameModeManager.Instance.ShipOption.Vent.AnimationMode;
-
-		PlayerControl? localPlayer = PlayerControl.LocalPlayer;
-		if (localPlayer == null ||
-			localPlayer.PlayerId == pc.PlayerId)
-		{
-			return true;
-		}
-
-		var ventPos = vent.transform.position;
-		var playerPos = localPlayer.transform.position;
-
-		switch (ventAnimationMode)
-		{
-			case VentAnimationMode.DonotWallHack:
-				return !PhysicsHelpers.AnythingBetween(
-					localPlayer.Collider, playerPos, ventPos,
-					Constants.ShipOnlyMask, false);
-			case VentAnimationMode.DonotOutVison:
-
-				// 視界端ギリギリが見えないのは困るのでライトオフセットとか言う値で調整しておく
-				float distance = Vector2.Distance(playerPos, ventPos) - 0.18f;
-
-				return !PhysicsHelpers.AnythingBetween(
-					localPlayer.Collider, playerPos, ventPos,
-					Constants.ShipOnlyMask, false) &&
-					localPlayer.lightSource.viewDistance >= distance;
-			default:
-				return true;
-		};
-	}
+		=>
+		PlayerControl.LocalPlayer == null ||
+		PlayerControl.LocalPlayer.PlayerId == pc.PlayerId ||
+		vent.IsCanAnimate();
 }
 
 [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
