@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>12.1.5.1</Version>
+    <Version>12.1.5.2</Version>
     <!--<VersionPrefix>12.1.5</VersionPrefix>-->
     <VersionSuffix>3rdAnniversary-TwoMemorial-Continue</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
