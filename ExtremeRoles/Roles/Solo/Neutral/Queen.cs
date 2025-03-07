@@ -561,17 +561,12 @@ public sealed class Servant :
 		this.IsSpecialKill = id is
 			ExtremeRoleId.Fencer or ExtremeRoleId.Sheriff;
 
-		switch (id)
+		this.CanKill = id switch
 		{
-			case ExtremeRoleId.Fencer:
-				this.CanKill = false;
-				break;
-			case ExtremeRoleId.Yandere:
-				this.CanKill = true;
-				break;
-			default:
-				break;
-		}
+			ExtremeRoleId.Fencer => false,
+			ExtremeRoleId.Yandere => true,
+			_ => this.CanKill,
+		};
 
 		if (baseRole.IsImpostor())
 		{
