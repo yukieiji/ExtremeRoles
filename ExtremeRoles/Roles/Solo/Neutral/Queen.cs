@@ -564,7 +564,7 @@ public sealed class Servant :
 		this.CanKill = id switch
 		{
 			ExtremeRoleId.Fencer => false,
-			ExtremeRoleId.Yandere => true,
+			ExtremeRoleId.Yandere or ExtremeRoleId.Hero => true,
 			_ => this.CanKill,
 		};
 
