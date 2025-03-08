@@ -33,7 +33,7 @@ public static class RPCOperator
         UncheckedSnapTo,
         UncheckedShapeShift,
         UncheckedMurderPlayer,
-		UnchekedExiledPlayer,
+		UncheckedExiledPlayer,
 		UncheckedRevive,
         CleanDeadBody,
         FixForceRepairSpecialSabotage,
