@@ -9,13 +9,17 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
+public sealed class Alice :
+	SingleRoleBase,
+	IRoleAutoBuildAbility,
+	IRolePerformKillHook
 {
     public enum AliceOption
     {
@@ -23,6 +27,8 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         RevartCommonTaskNum,
         RevartLongTaskNum,
         RevartNormalTaskNum,
+		WinTaskNum,
+		WinKillNum,
     }
 
     public ExtremeAbilityButton Button { get; set; }
@@ -30,6 +36,10 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
 	private int revartLongTask = 0;
 	private int revartNormalTask = 0;
 	private int revartCommonTask = 0;
+
+	private int killCount;
+	private int winKillCount;
+	private int winTaskNum;
 
     public Alice(): base(
         ExtremeRoleId.Alice,
@@ -42,7 +52,7 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "shipBroken", Resources.UnityObjectLoader.LoadSpriteFromResources(
+            "shipBroken", UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.AliceShipBroken));
     }
 
@@ -56,12 +66,33 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         PlayerControl rolePlayer,
         PlayerControl killerPlayer)
     {
-		if (ExtremeRoleManager.TryGetRole(killerPlayer.PlayerId, out var role) &&
-			role.IsImpostor())
+		if (!(
+				rolePlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId &&
+				ExtremeRoleManager.TryGetRole(killerPlayer.PlayerId, out var role) &&
+				role.IsImpostor()
+			))
 		{
-			this.IsWin = true;
+			return;
 		}
-    }
+
+		int taskNum = 0;
+		foreach (var task in rolePlayer.Data.Tasks.GetFastEnumerator())
+		{
+			if (task.Complete)
+			{
+				taskNum++;
+			}
+		}
+
+		this.IsWin =
+			this.killCount >= this.winKillCount &&
+			taskNum >= this.winTaskNum;
+		if (!this.IsWin)
+		{
+			return;
+		}
+		ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
+	}
 
     public bool UseAbility()
     {
@@ -181,8 +212,13 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         factory.CreateIntOption(
             AliceOption.RevartNormalTaskNum,
             1, 0, 15, 1);
-
-    }
+		factory.CreateIntOption(
+			AliceOption.WinTaskNum,
+			0, 0, 10, 1);
+		factory.CreateIntOption(
+			AliceOption.WinKillNum,
+			0, 0, 5, 1);
+	}
 
     protected override void RoleSpecificInit()
     {
@@ -196,6 +232,12 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
             AliceOption.RevartLongTaskNum);
         this.revartCommonTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartCommonTaskNum);
+
+		this.winTaskNum = loader.GetValue<AliceOption, int>(
+			AliceOption.WinTaskNum);
+		this.winKillCount = loader.GetValue<AliceOption, int>(
+			AliceOption.WinKillNum);
+		this.HasTask = this.winTaskNum > 0;
     }
 
     public void ResetOnMeetingStart()
@@ -207,4 +249,12 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
     {
         return;
     }
+
+	public void OnStartKill()
+	{ }
+
+	public void OnEndKill()
+	{
+		this.killCount++;
+	}
 }
