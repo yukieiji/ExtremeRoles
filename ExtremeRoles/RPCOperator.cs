@@ -436,7 +436,10 @@ public static class RPCOperator
 
     public static void SetRoleWin(byte winPlayerId)
     {
-        Roles.ExtremeRoleManager.GameRole[winPlayerId].IsWin = true;
+		if (Roles.ExtremeRoleManager.TryGetRole(winPlayerId, out var role))
+		{
+			role.IsWin = true;
+		}
     }
     public static void ShareMapId(byte mapId)
     {
