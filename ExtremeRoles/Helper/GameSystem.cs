@@ -266,14 +266,18 @@ public static class GameSystem
         if (player == null) { return; }
 
         byte taskId = (byte)taskIndex;
+		uint id = (uint)index;
 
-        if (SetPlayerNewTask(ref player, taskId, (uint)index))
+        if (SetPlayerNewTask(player, taskId, id))
         {
-            player.Data.Tasks[index] = new NetworkedPlayerInfo.TaskInfo(
-                taskId, (uint)index);
-            player.Data.Tasks[index].Id = (uint)index;
+            player.Data.Tasks[index] = new NetworkedPlayerInfo.TaskInfo(taskId, id);
 			player.Data.MarkDirty();
         }
+		if (AmongUsClient.Instance != null &&
+			AmongUsClient.Instance.AmHost)
+		{
+			GameData.Instance.RecomputeTaskCounts();
+		}
     }
 
     public static void RpcReplaceNewTask(
@@ -407,11 +411,14 @@ public static class GameSystem
     }
 
     public static bool SetPlayerNewTask(
-        ref PlayerControl player,
+        PlayerControl player,
         byte taskId, uint gameControlTaskId)
     {
         NormalPlayerTask addTask = CachedShipStatus.Instance.GetTaskById(taskId);
-        if (addTask == null) { return false; }
+        if (addTask == null)
+		{
+			return false;
+		}
 
         for (int i = 0; i < player.myTasks.Count; ++i)
         {
@@ -419,37 +426,40 @@ public static class GameSystem
 
             if (task == null ||
 				task.gameObject.TryGetComponent<ImportantTextTask>(out var _) ||
-				PlayerTask.TaskIsEmergency(task)) { continue; }
+				PlayerTask.TaskIsEmergency(task))
+			{
+				continue;
+			}
 
-            if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
+			if (CompatModManager.Instance.TryGetModMap(out var modMap) &&
 				modMap.IsCustomSabotageTask(task.TaskType))
             {
 				continue;
 			}
+			if (!task.IsComplete)
+			{
+				continue;
+			}
 
-            if (task.IsComplete)
-            {
-                NormalPlayerTask normalPlayerTask = UnityObject.Instantiate(
-                    addTask, player.transform);
-                normalPlayerTask.Id = gameControlTaskId;
-                normalPlayerTask.Owner = player;
-                normalPlayerTask.Initialize();
+			NormalPlayerTask normalPlayerTask = UnityObject.Instantiate(
+				addTask, player.transform);
+			normalPlayerTask.Id = gameControlTaskId;
+			normalPlayerTask.Owner = player;
+			normalPlayerTask.Initialize();
 
-                var removeTask = player.myTasks[i];
-                player.myTasks[i] = normalPlayerTask;
+			player.myTasks[i] = normalPlayerTask;
 
-                removeTask.OnRemove();
-                UnityObject.Destroy(removeTask.gameObject);
-                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                {
-					ExtremeRolesPlugin.Logger.LogInfo(
-						$"Adding New Task\n - Task:{task.TaskType}\n - Id:{gameControlTaskId}\n - Index:{i}");
-                    Sound.PlaySound(
-                        Sound.Type.ReplaceNewTask, 1.2f);
-                }
-                return true;
-            }
-        }
+			task.OnRemove();
+			UnityObject.Destroy(task.gameObject);
+			if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+			{
+				ExtremeRolesPlugin.Logger.LogInfo(
+					$"Adding New Task\n - Task:{task.TaskType}\n - Id:{gameControlTaskId}\n - Index:{i}");
+				Sound.PlaySound(
+					Sound.Type.ReplaceNewTask, 1.2f);
+			}
+			return true;
+		}
         return false;
     }
 
