@@ -124,30 +124,46 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         byte callerId, byte targetPlayerId, List<int> addTaskId)
     {
 
-        var alice = ExtremeRoleManager.GetSafeCastedRole<Alice>(callerId);
-        if (alice == null) { return; }
+        if (!ExtremeRoleManager.TryGetSafeCastedRole<Alice>(callerId, out var alice))
+		{
+			return;
+		}
+
         var player = Helper.Player.GetPlayerControlById(targetPlayerId);
-        if (player == null) { return; }
+        if (player == null)
+		{
+			return;
+		}
 
         for (int i = 0; i < player.Data.Tasks.Count; ++i)
         {
-            if (addTaskId.Count == 0) { break; }
+            if (addTaskId.Count == 0)
+			{
+				break;
+			}
 
 			var task = player.Data.Tasks[i];
-            if (task.Complete)
-            {
-                byte taskId = (byte)addTaskId[0];
-                addTaskId.RemoveAt(0);
-				uint id = task.Id;
-				if (Helper.GameSystem.SetPlayerNewTask(
-                    ref player, taskId, id))
-                {
-                    player.Data.Tasks[i] = new (taskId, id);
-                }
-            }
-        }
+			if (!task.Complete)
+			{
+				continue;
+			}
+			byte taskId = (byte)addTaskId[0];
+			addTaskId.RemoveAt(0);
+			uint id = task.Id;
+			if (Helper.GameSystem.SetPlayerNewTask(
+				player, taskId, id))
+			{
+				player.Data.Tasks[i] = new(taskId, id);
+			}
+		}
+
 		player.Data.MarkDirty();
 
+		if (AmongUsClient.Instance != null &&
+			AmongUsClient.Instance.AmHost)
+		{
+			GameData.Instance.RecomputeTaskCounts();
+		}
     }
 
     protected override void CreateSpecificOption(
