@@ -56,10 +56,11 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         PlayerControl rolePlayer,
         PlayerControl killerPlayer)
     {
-       if (ExtremeRoleManager.GameRole[killerPlayer.PlayerId].IsImpostor())
-       {
-            this.IsWin = true;
-       }
+		if (ExtremeRoleManager.TryGetRole(killerPlayer.PlayerId, out var role) &&
+			role.IsImpostor())
+		{
+			this.IsWin = true;
+		}
     }
 
     public bool UseAbility()
@@ -72,7 +73,7 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         {
 
             if (!(
-					ExtremeRoleManager.GameRole.TryGetValue(player.PlayerId, out var role) &&
+					ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
 					role.HasTask()
 				))
 			{
