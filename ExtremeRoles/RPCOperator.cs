@@ -33,7 +33,8 @@ public static class RPCOperator
         UncheckedSnapTo,
         UncheckedShapeShift,
         UncheckedMurderPlayer,
-        UncheckedRevive,
+		UnchekedExiledPlayer,
+		UncheckedRevive,
         CleanDeadBody,
         FixForceRepairSpecialSabotage,
         ReplaceDeadReason,
@@ -240,7 +241,6 @@ public static class RPCOperator
         Module.VisionComputer.Instance.ResetModifier();
 
         // ミーティング能力リセット
-        Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
         Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         // 各種システムコンソールリセット
@@ -383,7 +383,24 @@ public static class RPCOperator
         }
     }
 
-    public static void UncheckedRevive(byte targetId)
+	public static void UncheckedExiledPlayer(byte targetId)
+	{
+		if (Helper.GameSystem.IsLobby ||
+			!Roles.ExtremeRoleManager.TryGetRole(targetId, out var role))
+		{
+			return;
+		}
+
+		PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+		if (target == null)
+		{
+			return;
+		}
+		target.Exiled();
+		role.ExiledAction(target);
+	}
+
+	public static void UncheckedRevive(byte targetId)
     {
         PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
 
