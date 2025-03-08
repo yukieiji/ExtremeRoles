@@ -25,20 +25,11 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         RevartNormalTaskNum,
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.aliceShipBroken;
-        set
-        {
-            this.aliceShipBroken = value;
-        }
-    }
+    public ExtremeAbilityButton Button { get; set; }
 
-    public int RevartLongTask = 0;
-    public int RevartNormalTask = 0;
-    public int RevartCommonTask = 0;
-
-    private ExtremeAbilityButton aliceShipBroken;
+	private int revartLongTask = 0;
+	private int revartNormalTask = 0;
+	private int revartCommonTask = 0;
 
     public Alice(): base(
         ExtremeRoleId.Alice,
@@ -59,11 +50,9 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         this.IsNeutralSameTeam(targetRole);
 
     public bool IsAbilityUse()
-    {
-        return IRoleAbility.IsCommonUse();
-    }
+		=> IRoleAbility.IsCommonUse();
 
-    public override void RolePlayerKilledAction(
+	public override void RolePlayerKilledAction(
         PlayerControl rolePlayer,
         PlayerControl killerPlayer)
     {
@@ -83,19 +72,22 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         {
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
-            if (!role.HasTask()) { continue; }
+            if (!role.HasTask())
+			{
+				continue;
+			}
 
             List<int> addTaskId = new List<int>();
 
-            for (int i = 0; i < this.RevartLongTask; ++i)
+            for (int i = 0; i < this.revartLongTask; ++i)
             {
                 addTaskId.Add(Helper.GameSystem.GetRandomLongTask());
             }
-            for (int i = 0; i < this.RevartCommonTask; ++i)
+            for (int i = 0; i < this.revartCommonTask; ++i)
             {
                 addTaskId.Add(Helper.GameSystem.GetRandomCommonTaskId());
             }
-            for (int i = 0; i < this.RevartNormalTask; ++i)
+            for (int i = 0; i < this.revartNormalTask; ++i)
             {
                 addTaskId.Add(Helper.GameSystem.GetRandomShortTaskId());
             }
@@ -193,11 +185,11 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
 
         this.UseSabotage = loader.GetValue<AliceOption, bool>(
             AliceOption.CanUseSabotage);
-        this.RevartNormalTask = loader.GetValue<AliceOption, int>(
+        this.revartNormalTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartNormalTaskNum);
-        this.RevartLongTask = loader.GetValue<AliceOption, int>(
+        this.revartLongTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartLongTaskNum);
-        this.RevartCommonTask = loader.GetValue<AliceOption, int>(
+        this.revartCommonTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartCommonTaskNum);
     }
 
