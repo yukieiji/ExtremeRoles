@@ -71,13 +71,17 @@ public sealed class Alice : SingleRoleBase, IRoleAutoBuildAbility
         foreach (var player in PlayerCache.AllPlayerControl)
         {
 
-            var role = ExtremeRoleManager.GameRole[player.PlayerId];
-            if (!role.HasTask())
+            if (!(
+					ExtremeRoleManager.GameRole.TryGetValue(player.PlayerId, out var role) &&
+					role.HasTask()
+				))
 			{
 				continue;
 			}
 
-            List<int> addTaskId = new List<int>();
+			int size = this.revartLongTask + this.revartCommonTask + this.revartNormalTask;
+
+			List<int> addTaskId = new List<int>(size);
 
             for (int i = 0; i < this.revartLongTask; ++i)
             {
