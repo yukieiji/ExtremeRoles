@@ -75,6 +75,8 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 		private const string nameTextObjName = "NameText_TMP";
 		private const string colorBindTextName = "ColorblindName_TMP";
 
+		const string ResetCosmeticsParamImp = "2024.10.29";
+
 		private readonly record struct PlayerCosmicInfo(
 			CosmeticsLayer Cosmetics,
 			NetworkedPlayerInfo.PlayerOutfit OutfitInfo,
@@ -181,8 +183,7 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 
 			// TODO : メジャーバージョンアップで消す
 			// AmongUs v2024.10.29からResetCosmeticsがデフォルト引数で実装されるようになっているためこういう実装をする
-			string ver = Application.version;
-			if (new Version(ver) < new Version(2024, 10, 29))
+			if (Version.Parse(Application.version) < Version.Parse(ResetCosmeticsParamImp))
 			{
 				var method =
 					typeof(CosmeticsLayer).GetMethod(
