@@ -11,7 +11,7 @@ on:
 jobs:
   codereview:
     # タイトルに`:review`が含まれている場合のみ実行
-    if: ${{ github.event.issue.pull_request && contains(github.event.comment, '!review') }}
+    if: ${{ contains(github.event.comment, '!review') }}
     runs-on: ubuntu-latest
     steps:
       # プルリクエストのタイトルを表示
