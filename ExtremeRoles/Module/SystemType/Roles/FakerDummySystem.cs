@@ -17,6 +17,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 
+using Version = System.Version;
+
 namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class FakerDummySystem() : IExtremeSystemType
@@ -176,8 +178,21 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 			cosmetic.hat.Parent = playerImage;
 			cosmetic.petParent = this.body.transform;
 			cosmetic.transform.localScale = scale;
-			cosmetic.ResetCosmetics();
 
+			// TODO : メジャーバージョンアップで消す
+			// AmongUs v2024.10.29からResetCosmeticsがデフォルト引数で実装されるようになっているためこういう実装をする
+			string ver = Application.version;
+			if (new Version(ver) < new Version(2024, 10, 29))
+			{
+				var method =
+					typeof(CosmeticsLayer).GetMethod(
+						nameof(CosmeticsLayer.ResetCosmetics));
+				method.Invoke(cosmetic, null);
+			}
+			else
+			{
+				cosmetic.ResetCosmetics("");
+			}
 			return cosmetic;
 		}
 
