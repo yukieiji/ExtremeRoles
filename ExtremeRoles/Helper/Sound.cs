@@ -88,7 +88,7 @@ public static class Sound
 				Logging.Debug("Can't load AudioClip");
 				return null;
 			}
-            cachedAudio.Add(soundType, clip);
+            cachedAudio[soundType] = clip;
             return clip;
         }
     }
