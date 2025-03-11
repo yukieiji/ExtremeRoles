@@ -31,7 +31,7 @@ public static class Sound
 		ReplaceNewTask,
     }
 
-    private static Dictionary<Type, AudioClip> cachedAudio =
+    private static readonly Dictionary<Type, AudioClip> cachedAudio =
         new Dictionary<Type, AudioClip>();
 
     public static void RpcPlaySound(Type soundType, float volume=0.8f)
