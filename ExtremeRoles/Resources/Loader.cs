@@ -9,6 +9,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Extension.System.IO;
 
 using UnityObject = UnityEngine.Object;
 using Il2CppFile = Il2CppSystem.IO.File;
@@ -387,14 +388,13 @@ public static class UnityObjectLoader
 
 	private static unsafe Il2CppStructArray<byte> getBytedArryFrom(Stream stream)
 	{
-		long length = stream.Length;
+		int length = (int)stream.Length;
 		var byteTexture = new Il2CppStructArray<byte>(length);
 		var span = new Span<byte>(
 			IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
-			(int)length);
+			length);
 
-		stream.Read(span);
-
+		stream.ReadExactly(span);
 		return byteTexture;
 	}
 }

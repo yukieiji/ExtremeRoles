@@ -22,8 +22,8 @@ public sealed class FullScreenFlusherWithAudio
 	private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
 
 	public FullScreenFlusherWithAudio(
-		in AudioClip? audio, Color color,
-		in float seconds = 1.0f)
+		AudioClip? audio, Color color,
+		float seconds = 1.0f)
 	{
 		this.audio = audio;
 		this.screenColor = color;

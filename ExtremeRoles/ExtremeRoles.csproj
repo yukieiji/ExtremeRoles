@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <WarningLevel>7</WarningLevel>
+    <AnalysisLevel>preview</AnalysisLevel>
     <Version>12.1.5.2</Version>
     <!--<VersionPrefix>12.1.5</VersionPrefix>-->
     <VersionSuffix>3rdAnniversary-TwoMemorial-Continue</VersionSuffix>
