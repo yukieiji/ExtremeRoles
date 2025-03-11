@@ -58,7 +58,8 @@ public static class Sound
 
     public static AudioClip? GetAudio(Type soundType)
     {
-        if (cachedAudio.TryGetValue(soundType, out AudioClip? clip))
+        if (cachedAudio.TryGetValue(soundType, out AudioClip? clip) &&
+			clip != null)
         {
             return clip;
         }

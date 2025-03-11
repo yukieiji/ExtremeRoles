@@ -217,6 +217,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 	private float syncTimer = 0.0f;
 
 	private JObject? json;
+	private const int TASK_ID = 254;
 
 	public TeroristTeroSabotageSystem(in Option option, bool isBlockOtherSabotage)
 	{
@@ -225,9 +226,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.setNum = option.BombNum;
 		this.minigameOption = option.MinigameOption;
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
+		var audio = Sound.GetAudio(Sound.Type.TeroristSabotageAnnounce);
 		this.flasher = new FullScreenFlusherWithAudio(
-			Sound.GetAudio(Sound.Type.TeroristSabotageAnnounce),
-			new Color32(255, 25, 25, 50), 2.75f);
+			audio, new Color32(255, 25, 25, 50), 2.75f);
 	}
 
 	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete = false)
@@ -257,7 +258,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
 		{
-			ExtremePlayerTask.AddTask(new Task(this), 254);
+			ExtremePlayerTask.AddTask(new Task(this), TASK_ID);
 		}
 		this.flasher.SetActive(true);
 		this.ExplosionTimer -= deltaTime;
@@ -339,6 +340,11 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 				setBombToRandomPos(this.setNum, 0);
 
+				if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
+				{
+					ExtremePlayerTask.AddTask(new Task(this), TASK_ID);
+				}
+
 				this.IsActive = true;
 				this.ExplosionTimer = this.bombTimer;
 				this.IsDirty = true;
@@ -375,6 +381,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			this.flasher.SetActive(true);
 			this.IsActive = true;
+			if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
+			{
+				ExtremePlayerTask.AddTask(new Task(this), 254);
+			}
 		}
 	}
 
