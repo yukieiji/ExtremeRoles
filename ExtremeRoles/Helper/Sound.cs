@@ -31,7 +31,7 @@ public static class Sound
 		ReplaceNewTask,
     }
 
-    private static Dictionary<Type, AudioClip> cachedAudio =
+    private static readonly Dictionary<Type, AudioClip> cachedAudio =
         new Dictionary<Type, AudioClip>();
 
     public static void RpcPlaySound(Type soundType, float volume=0.8f)
@@ -58,7 +58,8 @@ public static class Sound
 
     public static AudioClip? GetAudio(Type soundType)
     {
-        if (cachedAudio.TryGetValue(soundType, out AudioClip? clip))
+        if (cachedAudio.TryGetValue(soundType, out AudioClip? clip) &&
+			clip != null)
         {
             return clip;
         }
@@ -87,7 +88,7 @@ public static class Sound
 				Logging.Debug("Can't load AudioClip");
 				return null;
 			}
-            cachedAudio.Add(soundType, clip);
+            cachedAudio[soundType] = clip;
             return clip;
         }
     }

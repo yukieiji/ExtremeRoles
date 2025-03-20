@@ -2,7 +2,10 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using UnityEngine;
+
+using ExtremeRoles.Extension.System.IO;
 
 namespace ExtremeVoiceEngine.Utility;
 
@@ -13,9 +16,11 @@ public static class AudioClipHelper
     public static async Task<AudioClip?> CreateFromStreamAsync(
         Stream stream, CancellationToken cancellationToken)
     {
-        byte[] ftmChank = new byte[44];
+		const int byteLength = 44;
+        byte[] ftmChank = new byte[byteLength];
 
-        await stream.ReadAsync(ftmChank, 0, 44);
+        await stream.ReadExactlyAsync(ftmChank, 0, byteLength, cancellationToken);
+
         int channels = BitConverter.ToInt16(ftmChank, 22);
         int bitPerSample = BitConverter.ToInt16(ftmChank, 34);
 
@@ -40,7 +45,7 @@ public static class AudioClipHelper
         AudioClip? audioClip = null;
         try
         {
-            audioClip = AudioClip.Create("AudioClip", length / bytePerSample, channels, frequency, false);
+            audioClip = AudioClip.Create("AudioClip", byteLength / bytePerSample, channels, frequency, false);
 
             byte[] readBuffer = new byte[BufferSize];
             float[] samplesBuffer = new float[BufferSize / bytePerSample];
@@ -53,8 +58,8 @@ public static class AudioClipHelper
                 if (readBytes % 2 != 0)
                 {
                     // If an odd number of bytes were read, read an additional 1 byte
-                    await stream.ReadAsync(readBuffer, readBytes, 1, cancellationToken);
-                    readBytes++;
+                    await stream.ReadExactlyAsync(readBuffer, readBytes, 1, cancellationToken);
+					readBytes++;
                 }
 
                 int readSamples = readBytes / bytePerSample;
@@ -86,7 +91,7 @@ public static class AudioClipHelper
             }
             string exceptionMessage = e.Message;
             string message = e is OperationCanceledException ?
-                exceptionMessage : 
+                exceptionMessage :
                 $"IOException : AudioClipUtil: WAV data decode failed.  {exceptionMessage}";
             ExtremeVoiceEnginePlugin.Logger.LogError(message);
             return null;

@@ -17,6 +17,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 
+using Version = System.Version;
+
 namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class FakerDummySystem() : IExtremeSystemType
@@ -72,6 +74,8 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 		private const string defaultPetName = "EmptyPet(Clone)";
 		private const string nameTextObjName = "NameText_TMP";
 		private const string colorBindTextName = "ColorblindName_TMP";
+
+		const string ResetCosmeticsParamImp = "2024.10.29";
 
 		private readonly record struct PlayerCosmicInfo(
 			CosmeticsLayer Cosmetics,
@@ -176,8 +180,20 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 			cosmetic.hat.Parent = playerImage;
 			cosmetic.petParent = this.body.transform;
 			cosmetic.transform.localScale = scale;
-			cosmetic.ResetCosmetics();
 
+			// TODO : メジャーバージョンアップで消す
+			// AmongUs v2024.10.29からResetCosmeticsがデフォルト引数で実装されるようになっているためこういう実装をする
+			if (Version.Parse(Application.version) < Version.Parse(ResetCosmeticsParamImp))
+			{
+				var method =
+					typeof(CosmeticsLayer).GetMethod(
+						nameof(CosmeticsLayer.ResetCosmetics));
+				method.Invoke(cosmetic, null);
+			}
+			else
+			{
+				cosmetic.ResetCosmetics("");
+			}
 			return cosmetic;
 		}
 

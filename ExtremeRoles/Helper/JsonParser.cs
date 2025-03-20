@@ -7,6 +7,8 @@ using System.Reflection;
 
 using System.Threading.Tasks;
 
+using ExtremeRoles.Extension.System.IO;
+
 using Newtonsoft.Json.Linq;
 
 #nullable enable
@@ -22,8 +24,9 @@ public static class JsonParser
 
 		if (stream is null) { return null; }
 
-        byte[] byteArray = new byte[stream.Length];
-        stream.Read(byteArray, 0, (int)stream.Length);
+		int length = (int)stream.Length;
+		byte[] byteArray = new byte[length];
+        stream.ReadExactly(byteArray, 0, length);
 
         return JObject.Parse(Encoding.UTF8.GetString(byteArray));
     }

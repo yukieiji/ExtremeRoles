@@ -100,7 +100,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 	}
 
-	public sealed class Task : ExtremePlayerTask.IBehavior
+	public sealed class Task(TeroristTeroSabotageSystem system) : ExtremePlayerTask.IBehavior
 	{
 		public int MaxStep => this.system.setNum;
 		public int TaskStep => this.MaxStep - this.system.setBomb.Count;
@@ -120,15 +120,10 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 
 		public TaskTypes TaskTypes => TeroristoTaskTypes;
 
-		private readonly Dictionary<byte, ArrowBehaviour> arrow;
-		private readonly TeroristTeroSabotageSystem system;
-		private bool even = false;
+		private readonly TeroristTeroSabotageSystem system = system;
+		private readonly Dictionary<byte, ArrowBehaviour> arrow = new Dictionary<byte, ArrowBehaviour>(system.setNum);
 
-		public Task(TeroristTeroSabotageSystem system)
-		{
-			this.system = system;
-			this.arrow = new Dictionary<byte, ArrowBehaviour>(this.system.setNum);
-		}
+		private bool even = false;
 
 		public void Next(byte id)
 		{
@@ -217,6 +212,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 	private float syncTimer = 0.0f;
 
 	private JObject? json;
+	private const int TASK_ID = 254;
 
 	public TeroristTeroSabotageSystem(in Option option, bool isBlockOtherSabotage)
 	{
@@ -225,9 +221,9 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		this.setNum = option.BombNum;
 		this.minigameOption = option.MinigameOption;
 		this.isBlockOtherSabotage = isBlockOtherSabotage;
+		var audio = Sound.GetAudio(Sound.Type.TeroristSabotageAnnounce);
 		this.flasher = new FullScreenFlusherWithAudio(
-			Sound.GetAudio(Sound.Type.TeroristSabotageAnnounce),
-			new Color32(255, 25, 25, 50), 2.75f);
+			audio, new Color32(255, 25, 25, 50), 2.75f);
 	}
 
 	public static ExtremePlayerTask? FindTeroSaboTask(PlayerControl pc, bool ignoreComplete = false)
@@ -254,11 +250,8 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			return;
 		}
 
+		checkAndAddTask();
 
-		if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
-		{
-			ExtremePlayerTask.AddTask(new Task(this), 254);
-		}
 		this.flasher.SetActive(true);
 		this.ExplosionTimer -= deltaTime;
 		this.syncTimer -= deltaTime;
@@ -338,6 +331,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 				if (this.IsActive) { return; }
 
 				setBombToRandomPos(this.setNum, 0);
+				checkAndAddTask();
 
 				this.IsActive = true;
 				this.ExplosionTimer = this.bombTimer;
@@ -375,6 +369,7 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		{
 			this.flasher.SetActive(true);
 			this.IsActive = true;
+			checkAndAddTask();
 		}
 	}
 
@@ -481,6 +476,15 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 			++counter;
 		}
 	}
+
+	private void checkAndAddTask()
+	{
+		if (!FindTeroSaboTask(PlayerControl.LocalPlayer))
+		{
+			ExtremePlayerTask.AddTask(new Task(this), TASK_ID);
+		}
+	}
+
 	private static bool isCheckWall(in int posId)
 		=> Map.Id switch
 		{

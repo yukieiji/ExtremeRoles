@@ -7,6 +7,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppFile = Il2CppSystem.IO.File;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Extension.System.IO;
 
 namespace ExtremeSkins.Module;
 
@@ -103,13 +104,15 @@ public static class Loader
 			{
 				return new LoadError(ErrorCode.CannotFindResource, path);
 			}
-			long length = stream.Length;
+
+			int length = (int)stream.Length;
             var byteTexture = new Il2CppStructArray<byte>(length);
 			Span<byte> span = new Span<byte>(
-				IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length);
+				IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), length);
 
-			stream.Read(span);
-            ImageConversion.LoadImage(texture, byteTexture, false);
+			stream.ReadExactly(span);
+
+			ImageConversion.LoadImage(texture, byteTexture, false);
             return texture;
         }
         catch
