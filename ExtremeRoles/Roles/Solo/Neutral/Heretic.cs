@@ -305,7 +305,9 @@ public sealed class Heretic :
 	}
 
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
-		=> this.killMode is not KillMode.OnMeeting or KillMode.OnMeetingTarget;
+		=> PlayerControl.LocalPlayer == null ||
+			instance.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ||
+			!(this.killMode is KillMode.OnMeeting or KillMode.OnMeetingTarget);
 
 	public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
 		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "hereticKillTarget");
