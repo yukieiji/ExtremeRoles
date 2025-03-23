@@ -339,7 +339,7 @@ public static class Player
 	public static void RpcUncheckExiled(byte targetPlayerId)
 	{
 		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.UnchekedExiledPlayer))
+			RPCOperator.Command.UncheckedExiledPlayer))
 		{
 			caller.WriteByte(targetPlayerId);
 		}
