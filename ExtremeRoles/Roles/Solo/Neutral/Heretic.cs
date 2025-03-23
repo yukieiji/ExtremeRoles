@@ -132,11 +132,13 @@ public sealed class Heretic :
 	{
 		if (this.called ||
 			exiledPlayer == null ||
-			this.killMode is not KillMode.OnExiled ||
+			this.killMode is 
+				KillMode.OnTaskPhase or KillMode.OnMeeting ||
 			exiledPlayer.PlayerId != PlayerControl.LocalPlayer.PlayerId)
 		{
 			return;
 		}
+
 		this.called = true;
 		byte targetPlayerId = this.meetingTarget;
 
@@ -151,7 +153,7 @@ public sealed class Heretic :
 			var target = PlayerCache.AllPlayerControl.Where(
 				player =>
 					player.IsValid() &&
-					player.PlayerId != PlayerControl.LocalPlayer.PlayerId &&
+					player.PlayerId != exiledPlayer.PlayerId &&
 					this.canKillImpostor ||
 					(
 						ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
