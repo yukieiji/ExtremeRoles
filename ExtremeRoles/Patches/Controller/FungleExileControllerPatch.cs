@@ -10,7 +10,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Performance;
 
 using Il2CppEnumerator = Il2CppSystem.Collections.IEnumerator;
-using System.Runtime.CompilerServices;
 
 namespace ExtremeRoles.Patches.Controller;
 
