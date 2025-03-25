@@ -49,7 +49,10 @@ public static class FungleExileControllerAnimePatch
 			sound.PlaySound(__instance.EjectSound, false, 1f, SoundManager.Instance.SfxChannel);
 		}
 
-		yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
+		if (hud != null)
+		{
+			yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
+		}
 		yield return Effects.Wait(0.5f);
 		yield return Effects.All(
 		[
@@ -64,7 +67,15 @@ public static class FungleExileControllerAnimePatch
 
 		yield return Effects.Bloop(0f, __instance.ImpostorText.transform, 1f, 0.5f);
 		yield return new WaitForSeconds(2f);
-		yield return hud.CoFadeFullScreen(Color.clear, Color.black, 0.2f, false);
+
+		if (hud != null)
+		{
+			yield return hud.CoFadeFullScreen(Color.clear, Color.black, 0.2f, false);
+		}
+		else
+		{
+			yield return Effects.Wait(0.2f);
+		}
 
 		SoundManager.Instance.StopNamedSound("ejection_beach_sfx");
 		SoundManager.Instance.StopNamedSound("ejection_fire_sfx");
