@@ -43,6 +43,11 @@ public static class ExileControllerBeginePatch
 
 		instance.Text.gameObject.SetActive(false);
 		instance.Text.text = string.Empty;
+
+		if (FastDestroyableSingleton<HudManager>.Instance != null)
+		{
+			FastDestroyableSingleton<HudManager>.Instance.SetMapButtonEnabled(false);
+		}
 	}
 
 	/* JAJPs
@@ -128,15 +133,15 @@ public static class ExileControllerBeginePatch
         var allPlayer = GameData.Instance.AllPlayers.ToArray();
 
 		var init = instance.initData;
-		bool invalidExiled = init != null && init.outfit != null;
+		bool validExiled = init != null && init.outfit != null;
 
 		var alivePlayers = allPlayer.Where(
             x =>
             {
                 return
                     (
-                        (invalidExiled && x.PlayerId != init!.networkedPlayer.PlayerId) ||
-						!invalidExiled
+                        (validExiled && x.PlayerId != init!.networkedPlayer.PlayerId) ||
+						!validExiled
                     ) && !x.IsDead && !x.Disconnected;
             });
         var allRoles = ExtremeRoleManager.GameRole;
@@ -163,7 +168,7 @@ public static class ExileControllerBeginePatch
         string completeString = string.Empty;
 
 		var mode = option.Mode;
-        if (invalidExiled)
+        if (validExiled)
         {
             string playerName = init!.outfit!.PlayerName;
             var exiledPlayerRole = allRoles[init!.networkedPlayer.PlayerId];
@@ -183,20 +188,16 @@ public static class ExileControllerBeginePatch
 
 			instance.Player.UpdateFromPlayerOutfit(init!.outfit, PlayerMaterial.MaskType.Exile, false, false, (Il2CppSystem.Action)(() =>
 			{
-				SkinViewData skinViewData;
-				if (GameManager.Instance != null)
-				{
-					skinViewData = ShipStatus.Instance.CosmeticsCache.GetSkin(instance.initData.outfit.SkinId);
-				}
-				else
-				{
-					skinViewData = instance.Player.GetSkinView();
-				}
+				var cache = ShipStatus.Instance.CosmeticsCache;
+				var skinViewData = GameManager.Instance != null ?
+					cache.GetSkin(instance.initData.outfit.SkinId) :
+					instance.Player.GetSkinView();
+
 				if (GameManager.Instance != null &&
 					!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
 					init!.outfit!.SkinId, instance.Player.GetIgnoreLongMode()))
 				{
-					skinViewData = ShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");
+					skinViewData = cache.GetSkin("skin_None");
 				}
 				if (instance.useIdleAnim)
 				{
