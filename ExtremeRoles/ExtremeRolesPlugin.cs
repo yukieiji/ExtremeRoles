@@ -3,6 +3,9 @@ global using Tr = ExtremeRoles.Extension.Controller.TranslationControllerExtensi
 global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 
+global using NormalGameOption = AmongUs.GameOptions.NormalGameOptionsV09;
+global using HnSGameOption = AmongUs.GameOptions.HideNSeekGameOptionsV09;
+
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
