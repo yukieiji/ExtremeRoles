@@ -30,7 +30,7 @@ public readonly struct ExileOption(in OptionCategory category)
 		{
 			var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
 			return
-				currentGameOptions.IsTryCast<NormalGameOptionsV08>(out var normal) &&
+				currentGameOptions.IsTryCast<NormalGameOptionsV09>(out var normal) &&
 				normal.ConfirmImpostor;
 		};
 		factory.CreateSelectionOption<ExiledOption, ConfirmExileMode>(ExiledOption.ConfirmExilMode, hook: hook);

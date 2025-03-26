@@ -22,7 +22,7 @@ public readonly struct GhostRoleOption(in OptionCategory category)
 			{
 				var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
 				return
-					currentGameOptions.IsTryCast<NormalGameOptionsV08>(out var normal) &&
+					currentGameOptions.IsTryCast<NormalGameOptionsV09>(out var normal) &&
 					normal.RoleOptions.GetChancePerGame(RoleTypes.GuardianAngel) > 0;
 			});
 	}
