@@ -181,19 +181,7 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 			cosmetic.petParent = this.body.transform;
 			cosmetic.transform.localScale = scale;
 
-			// TODO : メジャーバージョンアップで消す
-			// AmongUs v2024.10.29からResetCosmeticsがデフォルト引数で実装されるようになっているためこういう実装をする
-			if (Version.Parse(Application.version) < Version.Parse(ResetCosmeticsParamImp))
-			{
-				var method =
-					typeof(CosmeticsLayer).GetMethod(
-						nameof(CosmeticsLayer.ResetCosmetics));
-				method.Invoke(cosmetic, null);
-			}
-			else
-			{
-				cosmetic.ResetCosmetics("");
-			}
+			cosmetic.ResetCosmetics();
 			return cosmetic;
 		}
 
