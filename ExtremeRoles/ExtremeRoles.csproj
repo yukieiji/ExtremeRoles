@@ -3,9 +3,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-    <Version>12.1.5.2</Version>
-    <!--<VersionPrefix>12.1.5</VersionPrefix>-->
-    <VersionSuffix>3rdAnniversary-TwoMemorial-Continue</VersionSuffix>
+    <!--<Version>13.0.0.0</Version>-->
+    <VersionPrefix>13.0.0</VersionPrefix>
+    <VersionSuffix>3rdAnniversary-TwoMemorial-v16</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
