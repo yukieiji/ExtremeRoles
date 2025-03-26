@@ -72,7 +72,7 @@ public static class AmongUsClientOnGameEndPatch
 		ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
         if ((int)endGameResult.GameOverReason >= 20)
         {
-            endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
+            endGameResult.GameOverReason = GameOverReason.ImpostorsByKill;
         }
     }
 }

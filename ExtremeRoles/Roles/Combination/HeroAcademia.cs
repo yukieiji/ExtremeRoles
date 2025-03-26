@@ -953,18 +953,18 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
                 break;
             case VigilanteCondition.NewHeroForTheShip:
                 if (reason is
-					GameOverReason.HumansByTask or
-					GameOverReason.HumansByVote or
-                    GameOverReason.HumansDisconnect)
+					GameOverReason.CrewmatesByTask or
+					GameOverReason.CrewmatesByVote or
+                    GameOverReason.CrewmateDisconnect)
                 {
                     winner.AddWithPlus(rolePlayerInfo);
                 }
                 break;
             case VigilanteCondition.NewVillainForTheShip:
                 if (reason is
-					GameOverReason.ImpostorByVote or
-					GameOverReason.ImpostorByKill or
-					GameOverReason.ImpostorBySabotage or
+					GameOverReason.ImpostorsByVote or
+					GameOverReason.ImpostorsByKill or
+					GameOverReason.ImpostorsBySabotage or
 					GameOverReason.ImpostorDisconnect or
 					(GameOverReason)RoleGameOverReason.AssassinationMarin or
 					(GameOverReason)RoleGameOverReason.TeroristoTeroWithShip)

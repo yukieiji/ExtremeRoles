@@ -3,6 +3,7 @@
 using HarmonyLib;
 using UnityEngine;
 
+using AmongUs.Data;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles;
@@ -65,8 +66,7 @@ public static class PlayerControlMurderPlayerPatch
 			}
 			if (isGuardianAngel)
 			{
-				StatsManager.Instance.IncrementStat(
-					StringNames.StatsGuardianAngelCrewmatesProtected);
+				DataManager.Player.Stats.IncrementStat(StatID.Role_GuardianAngel_CrewmatesProtected);
 			}
 			__instance.logger.Debug(
 				$"{__instance.PlayerId} failed to murder {target.PlayerId} due to guardian angel protection",
@@ -209,22 +209,21 @@ public static class PlayerControlMurderPlayerPatch
 	{
 
 		FastDestroyableSingleton<DebugAnalytics>.Instance.Analytics.Kill(target.Data, instance.Data);
-		var statsMng = StatsManager.Instance;
+		var stats = DataManager.Player.Stats;
 
 		if (instance.AmOwner)
 		{
 			if (GameManager.Instance.IsHideAndSeek())
 			{
-				statsMng.IncrementStat(
-					StringNames.StatsImpostorKills_HideAndSeek);
+				stats.IncrementStat(StatID.HideAndSeek_ImpostorKills);
 			}
 			else
 			{
-				statsMng.IncrementStat(StringNames.StatsImpostorKills);
+				stats.IncrementStat(StatID.ImpostorKills);
 			}
 			if (instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
 			{
-				statsMng.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
+				stats.IncrementStat(StatID.Role_Shapeshifter_ShiftedKills);
 			}
 			if (Constants.ShouldPlaySfx())
 			{
@@ -239,7 +238,7 @@ public static class PlayerControlMurderPlayerPatch
 		target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 		if (target.AmOwner)
 		{
-			statsMng.IncrementStat(StringNames.StatsTimesMurdered);
+			stats.IncrementStat(StatID.TimesMurdered);
 			if (Minigame.Instance)
 			{
 				try

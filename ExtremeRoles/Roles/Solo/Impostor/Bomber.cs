@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using UnityEngine;
-using AmongUs.GameOptions;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
@@ -93,12 +92,13 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     }
 
     public bool CheckAbility()
-        => Player.IsPlayerInRangeAndDrawOutLine(
-            PlayerControl.LocalPlayer,
-            this.bombSettingPlayer, this,
-			GameOptionsData.KillDistances[this.KillRange]);
+		=> GameSystem.TryGetKillDistance(out var range) &&
+			Player.IsPlayerInRangeAndDrawOutLine(
+				PlayerControl.LocalPlayer,
+				this.bombSettingPlayer, this,
+				range[this.KillRange]);
 
-    public bool UseAbility()
+	public bool UseAbility()
     {
         this.bombSettingPlayer = this.setTargetPlayer;
         return true;

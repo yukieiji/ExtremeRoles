@@ -17,6 +17,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using UnityObject = UnityEngine.Object;
 using UseButtonDict = Il2CppSystem.Collections.Generic.Dictionary<ImageNames, UseButtonSettings>;
+using System.Diagnostics.CodeAnalysis;
 
 
 #nullable enable
@@ -513,4 +514,14 @@ public static class GameSystem
 
         return index;
     }
+
+	public static bool TryGetKillDistance([NotNullWhen(true)] out Il2CppStructArray<float>? arr)
+	{
+		arr = null;
+		return
+			GameManager.Instance != null &&
+			GameManager.Instance.LogicOptions != null &&
+			GameManager.Instance.LogicOptions.currentGameOptions.TryGetFloatArray(
+				FloatArrayOptionNames.KillDistances, out arr);
+	}
 }

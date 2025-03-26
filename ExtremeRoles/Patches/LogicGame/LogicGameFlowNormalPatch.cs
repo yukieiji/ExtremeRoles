@@ -114,7 +114,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 				statistics.TotalAlive == statistics.TeamNeutralAlive
 			))
         {
-            gameIsEnd(GameOverReason.HumansByVote);
+            gameIsEnd(GameOverReason.CrewmatesByVote);
             return true;
         }
         return false;
@@ -128,9 +128,9 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         {
             GameOverReason endReason = GameData.LastDeathReason switch
             {
-                DeathReason.Exile => GameOverReason.ImpostorByVote,
-                DeathReason.Kill  => GameOverReason.ImpostorByKill,
-                _                 => GameOverReason.HumansDisconnect,
+                DeathReason.Exile => GameOverReason.ImpostorsByVote,
+                DeathReason.Kill  => GameOverReason.ImpostorsByKill,
+                _                 => GameOverReason.CrewmateDisconnect,
             };
             gameIsEnd(endReason);
             return true;
@@ -317,7 +317,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 
         if (systems == null) { return false; };
 
-        const GameOverReason gameOverReason = GameOverReason.ImpostorBySabotage;
+        const GameOverReason gameOverReason = GameOverReason.ImpostorsBySabotage;
 
         ISystemType systemType;
         if (systems.TryGetValue(SystemTypes.LifeSupp, out systemType))
@@ -365,7 +365,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         if (GameData.Instance.TotalTasks > 0 &&
             GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
         {
-            gameIsEnd(GameOverReason.HumansByTask);
+            gameIsEnd(GameOverReason.CrewmatesByTask);
             return true;
         }
         return false;

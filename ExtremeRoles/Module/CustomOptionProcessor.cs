@@ -235,7 +235,7 @@ public static class CustomOptionCsvProcessor
 				{
 					case GameModes.Normal:
 					case GameModes.NormalFools:
-						if (!option.IsTryCast<NormalGameOptionsV08>(out var normalOption))
+						if (!option.IsTryCast<NormalGameOptionsV09>(out var normalOption))
 						{
 							normalOption = gameOptionManager.MigrateNormalGameOptions(option);
 						}
@@ -244,7 +244,7 @@ public static class CustomOptionCsvProcessor
 						break;
 					case GameModes.HideNSeek:
 					case GameModes.SeekFools:
-						if (!option.IsTryCast<HideNSeekGameOptionsV08>(out var hideNSeekOption))
+						if (!option.IsTryCast<HideNSeekGameOptionsV09>(out var hideNSeekOption))
 						{
 							hideNSeekOption = gameOptionManager.MigrateHideNSeekGameOptions(option);
 						}

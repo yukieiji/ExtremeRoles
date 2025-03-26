@@ -1,11 +1,11 @@
 ﻿using HarmonyLib;
-using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Module.SystemType.Roles;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches.Role
 {
@@ -16,13 +16,18 @@ namespace ExtremeRoles.Patches.Role
             RoleBehaviour __instance,
             ref float __result)
         {
-            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+            if (!(
+					RoleAssignState.Instance.IsRoleSetUpEnd &&
+					ExtremeRoleManager.TryGetRole(__instance.Player.PlayerId, out var role) &&
+					role.CanKill() &&
+					role.TryGetKillRange(out int range) &&
+					GameSystem.TryGetKillDistance(out var killRange)
+				))
+			{
+				return true;
+			}
 
-            var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
-
-            if (!role.CanKill() || !role.TryGetKillRange(out int range)) { return true; }
-
-            __result = GameOptionsData.KillDistances[range];
+            __result = killRange[range];
 
             return false;
         }

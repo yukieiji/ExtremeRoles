@@ -227,11 +227,11 @@ public static class EndGameManagerSetUpPatch
         {
             switch (state.EndReason)
             {
-                case GameOverReason.HumansByTask:
-                case GameOverReason.HumansByVote:
-                case GameOverReason.ImpostorByKill:
-                case GameOverReason.ImpostorByVote:
-                case GameOverReason.ImpostorBySabotage:
+                case GameOverReason.CrewmatesByTask:
+                case GameOverReason.CrewmatesByVote:
+                case GameOverReason.ImpostorsByKill:
+                case GameOverReason.ImpostorsByVote:
+                case GameOverReason.ImpostorsBySabotage:
 
                     foreach (var (role, playerId) in winNeutral)
                     {
@@ -288,15 +288,15 @@ public static class EndGameManagerSetUpPatch
     private static WinTextInfo createWinTextInfo(in RoleGameOverReason reason)
 		=> reason switch
         {
-            (RoleGameOverReason)GameOverReason.HumansByTask or
-            (RoleGameOverReason)GameOverReason.HumansByVote or
-            (RoleGameOverReason)GameOverReason.HideAndSeek_ByTimer =>
+            (RoleGameOverReason)GameOverReason.CrewmatesByTask or
+            (RoleGameOverReason)GameOverReason.CrewmatesByVote or
+            (RoleGameOverReason)GameOverReason.HideAndSeek_CrewmatesByTimer =>
                 WinTextInfo.Create(RoleTypes.Crewmate, Palette.White, false),
 
-            (RoleGameOverReason)GameOverReason.ImpostorByKill or
-            (RoleGameOverReason)GameOverReason.ImpostorByVote or
-            (RoleGameOverReason)GameOverReason.ImpostorBySabotage or
-            (RoleGameOverReason)GameOverReason.HideAndSeek_ByKills or
+            (RoleGameOverReason)GameOverReason.ImpostorsByKill or
+            (RoleGameOverReason)GameOverReason.ImpostorsByVote or
+            (RoleGameOverReason)GameOverReason.ImpostorsBySabotage or
+            (RoleGameOverReason)GameOverReason.HideAndSeek_ImpostorsByKills or
             RoleGameOverReason.AssassinationMarin or
 			RoleGameOverReason.TeroristoTeroWithShip =>
                 WinTextInfo.Create(RoleTypes.Impostor, Palette.ImpostorRed, false),
@@ -364,8 +364,8 @@ public static class EndGameManagerSetUpPatch
 
 			RoleGameOverReason.TuckerShipIsExperimentStation =>
 				WinTextInfo.Create(ExtremeRoleId.Tucker, ColorPalette.TuckerMerdedoie),
-			
-			RoleGameOverReason.MonikaIamTheOnlyOne or 
+
+			RoleGameOverReason.MonikaIamTheOnlyOne or
 				RoleGameOverReason.MonikaThisGameIsMine =>
 				WinTextInfo.Create(ExtremeRoleId.Monika, ColorPalette.MonikaRoseSaumon),
 

@@ -62,7 +62,7 @@ public class FinalSummaryBuilder(
 			finalStatus = status;
 		}
 		else if (
-			this.reason is GameOverReason.ImpostorBySabotage &&
+			this.reason is GameOverReason.ImpostorsBySabotage &&
 			!role.IsImpostor() &&
 			finalStatus is PlayerStatus.Alive)
 		{
@@ -71,7 +71,7 @@ public class FinalSummaryBuilder(
 
 		int totalTask = taskInfo.TotalTask;
 		int completedTaskNum = taskInfo.CompletedTask;
-		if (this.reason is GameOverReason.HumansByTask && role.IsCrewmate())
+		if (this.reason is GameOverReason.CrewmatesByTask && role.IsCrewmate())
 		{
 			ExtremeRolesPlugin.Logger.LogWarning($"WARNING:Force replace taskNum: {completedTaskNum} => {totalTask}");
 			completedTaskNum = totalTask;
