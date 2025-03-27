@@ -16,7 +16,8 @@ public sealed class Madmate :
     IRoleAutoBuildAbility,
     IRoleUpdate,
     IRoleSpecialSetUp,
-    IRoleWinPlayerModifier
+    IRoleWinPlayerModifier,
+	IRoleFakeIntro
 {
     public enum MadmateOption
     {
@@ -50,7 +51,10 @@ public sealed class Madmate :
 
     public bool IsDontCountAliveCrew => this.isDontCountAliveCrew;
 
-    private ExtremeAbilityButton madmateAbilityButton;
+	public ExtremeRoleType FakeTeam =>
+		this.isUpdateMadmate ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate;
+
+	private ExtremeAbilityButton madmateAbilityButton;
 
     public Madmate() : base(
         ExtremeRoleId.Madmate,

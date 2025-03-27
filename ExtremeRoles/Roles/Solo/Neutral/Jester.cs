@@ -9,6 +9,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Patches.Button;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -45,61 +46,24 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     public static void OutburstKill(
         byte outburstTargetPlayerId, byte killTargetPlayerId)
     {
-        if (outburstTargetPlayerId != PlayerControl.LocalPlayer.PlayerId) { return; }
+        if (outburstTargetPlayerId != PlayerControl.LocalPlayer.PlayerId)
+		{
+			return;
+		}
 
         PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
         PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
 
-        if (killer == null || target == null) { return; }
-
-        byte killerId = killer.PlayerId;
-        byte targetId = target.PlayerId;
-
-        var killerRole = ExtremeRoleManager.GameRole[killerId];
-        var targetRole = ExtremeRoleManager.GameRole[targetId];
-
-        if (!killer.CanMove) { return; }
-
-        bool canKill = killerRole.TryRolePlayerKillTo(
-             killer, target);
-        if (!canKill) { return; }
-
-        canKill = targetRole.TryRolePlayerKilledFrom(
-            target, killer);
-        if (!canKill) { return; }
-
-        var multiAssignRole = killerRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
-                    killer, target);
-                if (!canKill) { return; }
-            }
-        }
-
-        multiAssignRole = targetRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
-                    target, killer);
-                if (!canKill) { return; }
-            }
-        }
-
-        if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
-                killer.PlayerId, target.PlayerId) ||
-            Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
-                killer, target))
-        {
-            return;
-        }
-
+        if (!(
+				killer != null &&
+				ExtremeRoleManager.TryGetRole(killer.PlayerId, out var killerRole) &&
+				KillButtonDoClickPatch.CheckPreKillConditionWithBool(killerRole, killer, target)
+			))
+		{
+			return;
+		}
         Helper.Player.RpcUncheckMurderPlayer(
-            killerId, target.PlayerId,
+			outburstTargetPlayerId, killTargetPlayerId,
             byte.MaxValue);
     }
 
