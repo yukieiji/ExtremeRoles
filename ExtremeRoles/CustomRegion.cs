@@ -1,18 +1,16 @@
 ﻿using System.Linq;
 
-using ExtremeRoles.Extension.Manager;
-using ExtremeRoles.Module;
-
-
 
 namespace ExtremeRoles;
 
+
 public static class CustomRegion
 {
-    public static IRegionInfo[] Default { private get; set; }
+    // public static IRegionInfo[] Default { private get; set; }
 
     public static void Update()
     {
+		/*
         ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
         IRegionInfo[] defaultRegions = Default;
 
@@ -61,5 +59,6 @@ public static class CustomRegion
 		[
 			new ServerInfo(name, ip, port, useDtls)
 		];
+		*/
 	}
 }

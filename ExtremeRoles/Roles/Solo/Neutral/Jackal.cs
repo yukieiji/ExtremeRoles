@@ -324,11 +324,15 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
 
     public bool IsAbilityUse()
     {
+		if (!GameSystem.TryGetKillDistance(out var range))
+		{
+			return false;
+		}
+
 
         this.Target = Player.GetClosestPlayerInRange(
             PlayerControl.LocalPlayer,
-            this, GameOptionsData.KillDistances[
-                Mathf.Clamp(this.createSidekickRange, 0, 2)]);
+            this, range[Mathf.Clamp(this.createSidekickRange, 0, 2)]);
 
         return this.Target != null && IRoleAbility.IsCommonUse();
     }

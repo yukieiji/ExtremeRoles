@@ -81,8 +81,8 @@ public sealed class Yoko :
 
         switch ((RoleGameOverReason)reason)
         {
-            case (RoleGameOverReason)GameOverReason.HumansByTask:
-            case (RoleGameOverReason)GameOverReason.ImpostorBySabotage:
+            case (RoleGameOverReason)GameOverReason.CrewmatesByTask:
+            case (RoleGameOverReason)GameOverReason.ImpostorsBySabotage:
             case RoleGameOverReason.AssassinationMarin:
 			case RoleGameOverReason.TeroristoTeroWithShip:
 			case RoleGameOverReason.MonikaThisGameIsMine:

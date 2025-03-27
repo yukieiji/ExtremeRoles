@@ -78,10 +78,10 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
 
         switch (reason)
         {
-            case GameOverReason.HumansByTask:
-            case GameOverReason.HumansByVote:
-            case GameOverReason.HumansDisconnect:
-            case GameOverReason.HideAndSeek_ByTimer:
+            case GameOverReason.CrewmatesByTask:
+            case GameOverReason.CrewmatesByVote:
+            case GameOverReason.CrewmateDisconnect:
+            case GameOverReason.HideAndSeek_CrewmatesByTimer:
                 winner.RemoveAll(rolePlayerInfo);
                 break;
             default:

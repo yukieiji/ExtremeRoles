@@ -123,11 +123,11 @@ public sealed class Madmate :
     {
         switch (reason)
         {
-            case GameOverReason.ImpostorByVote:
-            case GameOverReason.ImpostorByKill:
-            case GameOverReason.ImpostorBySabotage:
+            case GameOverReason.ImpostorsByVote:
+            case GameOverReason.ImpostorsByKill:
+            case GameOverReason.ImpostorsBySabotage:
             case GameOverReason.ImpostorDisconnect:
-            case GameOverReason.HideAndSeek_ByKills:
+            case GameOverReason.HideAndSeek_ImpostorsByKills:
             case (GameOverReason)RoleGameOverReason.AssassinationMarin:
 			case (GameOverReason)RoleGameOverReason.TeroristoTeroWithShip:
 				winner.AddWithPlus(rolePlayerInfo);

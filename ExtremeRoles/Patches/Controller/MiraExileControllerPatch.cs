@@ -33,7 +33,10 @@ public static class MiraExileControllerAnimePatch
 	{
 		var hud = FastDestroyableSingleton<HudManager>.Instance;
 
-		yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
+		if (hud != null)
+		{
+			yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);
+		}
 		yield return Effects.All(
 		[
 			__instance.PlayerSpin(),
@@ -52,7 +55,16 @@ public static class MiraExileControllerAnimePatch
 		}
 		yield return Effects.Bloop(0f, __instance.ImpostorText.transform, 1f, 0.5f);
 		yield return new WaitForSeconds(0.5f);
-		yield return hud.CoFadeFullScreen(Color.clear, Color.black, 0.2f, false);
+
+		if (hud != null)
+		{
+			yield return hud.CoFadeFullScreen(Color.clear, Color.black, 0.2f, false);
+		}
+		else
+		{
+			yield return Effects.Wait(0.2f);
+		}
+
 		yield return ExtremeSpawnSelectorMinigame.WrapUpAndSpawn(__instance);
 
 		yield break;

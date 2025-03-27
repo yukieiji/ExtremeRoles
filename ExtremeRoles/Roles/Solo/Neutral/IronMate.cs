@@ -188,9 +188,9 @@ public sealed class IronMate :
 	{
 		switch (reason)
 		{
-			case GameOverReason.HumansByVote:
-			case GameOverReason.HumansByTask:
-			case GameOverReason.HumansDisconnect:
+			case GameOverReason.CrewmatesByVote:
+			case GameOverReason.CrewmatesByTask:
+			case GameOverReason.CrewmateDisconnect:
 				winner.AddWithPlus(rolePlayerInfo);
 				return;
 			default:

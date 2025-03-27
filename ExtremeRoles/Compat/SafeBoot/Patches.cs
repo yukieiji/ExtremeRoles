@@ -22,6 +22,10 @@ public static class SafeBootMainMenuManagerPatch
 {
 	public static void Prefix(MainMenuManager __instance)
 	{
+		if (__instance == null)
+		{
+			return;
+		}
 		// Mod ExitButton
 		__instance.quitButton.OnClick.AddListener(
 			(System.Action)(
@@ -34,6 +38,11 @@ public static class SafeBootMainMenuManagerPatch
 
 	public static void Postfix(MainMenuManager __instance)
 	{
+		if (__instance == null)
+		{
+			return;
+		}
+
 		DestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
 		// 動いてますよアピール

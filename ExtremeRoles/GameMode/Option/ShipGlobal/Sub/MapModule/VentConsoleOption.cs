@@ -50,7 +50,7 @@ public readonly struct VentConsoleOption(
 			{
 				var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
 				return
-					currentGameOptions.IsTryCast<NormalGameOptionsV08>(out var normal) &&
+					currentGameOptions.IsTryCast<NormalGameOption>(out var normal) &&
 					normal.RoleOptions.GetChancePerGame(RoleTypes.Engineer) > 0;
 			});
 		factory.CreateSelectionOption<VentOption, VentAnimationMode>(VentOption.AnimationModeInVison, parent: ventOption, invert: true);

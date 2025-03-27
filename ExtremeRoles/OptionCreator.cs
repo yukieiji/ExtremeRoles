@@ -39,9 +39,9 @@ public static class OptionCreator
 
     public static void Create()
     {
-        CustomRegion.Default = ServerManager.DefaultRegions;
+		// CustomRegion.Default = ServerManager.DefaultRegions;
 
-        ClientOption.Create();
+		ClientOption.Create();
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
