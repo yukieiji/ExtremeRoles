@@ -13,7 +13,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2024.11.26-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v16(v2025.3.25)-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -178,7 +178,8 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2024.8.13s/v2024.8.13e/v2024.9.4s/v2024.9.4e<br>v2024.10.29s/v2024.10.29e/v2024.11.26s/v2024.11.26e  | v12.0.0.0 ～ v12.1.2.0 |
+|  v16(v2025.3.25)  | v13.0.0.0 |
+|  v2024.8.13s/v2024.8.13e/v2024.9.4s/v2024.9.4e<br>v2024.10.29s/v2024.10.29e/v2024.11.26s/v2024.11.26e  | v12.0.0.0 ～ v12.1.5.3 |
 |  v2024.6.18s/v2024.6.18e  | v11.0.0.0 ～ v11.1.1.0 |
 |  v2024.3.5s/v2024.3.5e  | v10.0.0.0 ～ v10.1.1.1 |
 |  v2023.10.28s/v2023.10.28e  | v9.1.0.0 ～ v9.2.3.4 |
