@@ -7,6 +7,8 @@ using HarmonyLib;
 
 using ExtremeRoles.Compat.ModIntegrator;
 
+#nullable enable
+
 namespace ExtremeRoles.Compat.Initializer;
 
 public sealed class CrowedModInitializer(PluginInfo plugin) : InitializerBase<CrowdedMod>(plugin)
@@ -25,13 +27,13 @@ public sealed class CrowedModInitializer(PluginInfo plugin) : InitializerBase<Cr
 		var maxPlayerField = pluginClass.GetField(
 			"MaxPlayers",
 			BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-
-		MaxPlayerNum = (int)maxPlayerField.GetValue(null);
+		object? val = maxPlayerField?.GetValue(null);
+		MaxPlayerNum = val is null ? 15 : (int)val;
 
 		var monikaCheckPrefixMethod =
 			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.IsNotMonikaMeeting());
 
-		IEnumerable<PlayerVoteArea> ienum = null;
+		IEnumerable<PlayerVoteArea>? ienum = null;
 		var monikaSortPostfixMethod =
 			 SymbolExtensions.GetMethodInfo(() => Patches.CrowedModPatch.SortMonikaTrash(ref ienum));
 
