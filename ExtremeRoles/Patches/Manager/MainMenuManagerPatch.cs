@@ -39,7 +39,11 @@ public static class MainMenuManagerStartPatch
 		asspectPos.DistanceFromEdge = new Vector3(1.5f, distanceFromEdge.y - 0.15f, distanceFromEdge.z);
 
 		// Mod ExitButton
-		__instance.quitButton.OnClick.AddListener(() => Logging.BackupCurrentLog());
+		__instance.quitButton.OnClick.AddListener(() =>
+		{
+			ApiServer.Stop();
+			Logging.BackupCurrentLog();
+		});
 
 		// 以下独自ボタン
 		var leftButtonAnchor = new GameObject("LeftModButton");
