@@ -137,7 +137,7 @@ public class ApiServer : IDisposable
 			return;
 		}
 
-		url = url.Contains('?') ? url.Split('?')[0] : url;
+		url = url.Split('?')[0];
 
 		RequestKey key = new RequestKey(url, context.Request.HttpMethod);
 
