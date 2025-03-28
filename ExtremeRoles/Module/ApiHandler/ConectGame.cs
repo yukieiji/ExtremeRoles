@@ -24,6 +24,11 @@ internal class ConectGame : IRequestHandler
 {
 	public const string Path = "/au/game/";
 
+	public const string CodeKey = "Code";
+	public const string RawCodeKey = "RawCode";
+	public const string NameKey = "Name";
+	public const string TransNameKey = "TransName";
+
 	public Action<HttpListenerContext> Request => this.requestAction;
 
 	private readonly record struct Data(string? Code, int? RowCode);
@@ -42,12 +47,13 @@ internal class ConectGame : IRequestHandler
 		}
 
 		string query = context.Request.Url!.Query;
-		var param = HttpUtility.ParseQueryString(query);
+		var param = HttpUtility.ParseQueryString(
+			Uri.UnescapeDataString(query));
 
-		string? strCode = param["Code"];
-		string? rawCode = param["RawCode"];
-		string? serverName = param["Name"];
-		string? serverTrans = param["TransName"];
+		string? strCode = param[CodeKey];
+		string? rawCode = param[RawCodeKey];
+		string? serverName = param[NameKey];
+		string? serverTrans = param[TransNameKey];
 
 		if (string.IsNullOrEmpty(serverName) ||
 			!Enum.TryParse<StringNames>(serverTrans, out var stringsServer))
@@ -81,8 +87,8 @@ internal class ConectGame : IRequestHandler
 	{
 		string stredCode = GameCode.IntToGameName(gameCode);
 		var curRegion = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion;
-		string rowParam = $"Code={stredCode}&RawCode={gameCode}&Name={curRegion.Name}&curRegion={curRegion.TranslateName}";
-		return $"{ApiServer.Url}{Path}?Code={stredCode}&RawCode={gameCode}&Name={curRegion.Name}&curRegion={curRegion.TranslateName}";
+		string param = $"{CodeKey}={stredCode}&{NameKey}={curRegion.Name}&{TransNameKey}={curRegion.TranslateName}";
+		return $"{ApiServer.Url}{Path}?{Uri.EscapeDataString(param)}";
 	}
 
 	private static IEnumerator coJoin(int code, ServerInfo serverInfo)
