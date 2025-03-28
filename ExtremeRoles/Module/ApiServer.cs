@@ -108,6 +108,11 @@ public class ApiServer : IDisposable
 		handler.Add(new(url, method.Method), handle);
 	}
 
+	public static void Stop()
+	{
+		instance?.Dispose();
+	}
+
 	public void Dispose()
 	{
 		this.listenerThread.Join();
@@ -136,6 +141,8 @@ public class ApiServer : IDisposable
 		{
 			return;
 		}
+
+		url = url.Split('?')[0];
 
 		RequestKey key = new RequestKey(url, context.Request.HttpMethod);
 

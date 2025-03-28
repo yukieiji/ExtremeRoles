@@ -3,7 +3,7 @@ using HarmonyLib;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
-using static ExtremeRoles.Extension.Manager.ServerManagerExtension;
+using static ExtremeRoles.Extension.Manager.IRegionInfoExtension;
 
 namespace ExtremeRoles.Patches.Controller
 {
@@ -12,7 +12,7 @@ namespace ExtremeRoles.Patches.Controller
         typeof(TranslationController),
         nameof(TranslationController.GetStringWithDefault),
         new Type[]
-        { 
+        {
             typeof(StringNames),
             typeof(string),
             typeof(Il2CppReferenceArray<Il2CppSystem.Object>)
@@ -25,7 +25,7 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(1)] string defaultStr)
         {
             if (id != StringNames.NoTranslation)
-            { 
+            {
                 return true;
             }
             else if (defaultStr.Equals(FullCustomServerName))

@@ -16,6 +16,7 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.ApiHandler;
 
 namespace ExtremeRoles.Patches.Manager;
 
@@ -95,10 +96,9 @@ public static class GameStartManagerPatch
     public static void StartPrefix(GameStartManager __instance)
     {
         // ロビーコードコピー
-        GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(
-            AmongUsClient.Instance.GameId);
+        GUIUtility.systemCopyBuffer = ConectGame.CreateDirectConectUrl(AmongUsClient.Instance.GameId);
 
-        timer = timerMaxValue;
+		timer = timerMaxValue;
         isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
 
         prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
