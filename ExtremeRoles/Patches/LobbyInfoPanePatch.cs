@@ -11,7 +11,7 @@ public static class LobbyInfoPaneCopyGameCodePatch
 {
 	public static bool Prefix(LobbyInfoPane __instance)
 	{
-		if (Key.IsShiftDown())
+		if (Key.IsShift())
 		{
 			return true;
 		}
