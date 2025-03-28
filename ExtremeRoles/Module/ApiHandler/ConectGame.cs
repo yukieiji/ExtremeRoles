@@ -2,13 +2,14 @@
 using System.Net;
 using System.Web;
 using System.Collections;
+using System.Security.Cryptography;
+using System.IO;
 using System.Text;
 
 using InnerNet;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
-using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 
@@ -41,17 +42,22 @@ internal class ConectGame : IRequestHandler
 		}
 
 		string query = context.Request.Url!.Query;
-		// 後で暗号化処理等する
 		var param = HttpUtility.ParseQueryString(query);
 
 		string? strCode = param["Code"];
 		string? rawCode = param["RawCode"];
-		string? server = param["server"];
+		string? serverName = param["Name"];
+		string? serverTrans = param["TransName"];
 
-		var serverInfo =
-			Enum.TryParse<StringNames>(server, out var stringsServer) ?
-			new ServerInfo(server, stringsServer) :
-			new ServerInfo(IRegionInfoExtension.ExROfficialServerTokyoManinName, StringNames.NoTranslation);
+		if (string.IsNullOrEmpty(serverName) ||
+			!Enum.TryParse<StringNames>(serverTrans, out var stringsServer))
+		{
+			response.StatusCode = (int)HttpStatusCode.BadRequest;
+			response.Abort();
+			return;
+		}
+
+		var serverInfo = new ServerInfo(serverName, stringsServer);
 
 		int code =
 			!string.IsNullOrEmpty(rawCode) && int.TryParse(rawCode, out int parsedCode) ?
@@ -71,6 +77,14 @@ internal class ConectGame : IRequestHandler
 		response.Close(buffer, false);
 	}
 
+	public static string CreateDirectConectUrl(int gameCode)
+	{
+		string stredCode = GameCode.IntToGameName(gameCode);
+		var curRegion = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion;
+		string rowParam = $"Code={stredCode}&RawCode={gameCode}&Name={curRegion.Name}&curRegion={curRegion.TranslateName}";
+		return $"{ApiServer.Url}{Path}?Code={stredCode}&RawCode={gameCode}&Name={curRegion.Name}&curRegion={curRegion.TranslateName}";
+	}
+
 	private static IEnumerator coJoin(int code, ServerInfo serverInfo)
 	{
 		if (DestroyableSingleton<StoreMenu>.InstanceExists)
@@ -87,12 +101,12 @@ internal class ConectGame : IRequestHandler
 		var sm = FastDestroyableSingleton<ServerManager>.Instance;
 		if (sm.CurrentRegion == null ||
 			sm.CurrentRegion.TranslateName != serverInfo.TransName ||
-			!isValidCustomServer(sm.CurrentRegion, serverInfo))
+			sm.CurrentRegion.Name != serverInfo.Name)
 		{
 			foreach (var region in sm.AvailableRegions)
 			{
 				if (region.TranslateName == serverInfo.TransName &&
-					(serverInfo.TransName is not StringNames.NoTranslation || isValidCustomServer(region, serverInfo)))
+					region.Name != serverInfo.Name)
 				{
 					sm.SetRegion(region);
 					break;
@@ -101,10 +115,7 @@ internal class ConectGame : IRequestHandler
 		}
 
 		yield return FastDestroyableSingleton<ServerManager>.Instance.WaitForServers();
-		yield return AmongUsClient.Instance.CoJoinOnlineGameFromCode(code);
+		yield return AmongUsClient.Instance.CoFindGameInfoFromCodeAndJoin(code);
 	}
-
-	private static bool isValidCustomServer(IRegionInfo target, ServerInfo serverInfo)
-		=> serverInfo.TransName is StringNames.NoTranslation && target.Name == serverInfo.Name;
 }
 #pragma warning restore
