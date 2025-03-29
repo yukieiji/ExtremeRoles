@@ -52,6 +52,11 @@ file sealed class NeutralSeparateTeamBuilder()
 			return;
 		}
 
+		// TODO : サブチームのジックを考える
+		// 基本的にはキル持ちの特定の役職のときに実行
+		// メインチームが生存 => メインチームの人数にカウントしない、サブチームのカウントも行わない(行ってもいいが消す)
+		// メインチームがいない => サブチームのカウントを行う、サブチームが勝てばメインチームの勝利判定
+
 		switch (roleId)
 		{
 			case ExtremeRoleId.Vigilante:
