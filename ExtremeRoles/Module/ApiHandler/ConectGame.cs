@@ -110,7 +110,7 @@ internal class ConectGame : IRequestHandler
 			foreach (var region in sm.AvailableRegions)
 			{
 				if (region.TranslateName == serverInfo.TransName &&
-					region.Name != serverInfo.Name)
+					region.Name == serverInfo.Name)
 				{
 					sm.SetRegion(region);
 					break;
