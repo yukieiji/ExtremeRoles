@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-    <!--<Version>13.0.0.0</Version>-->
-    <VersionPrefix>13.0.1</VersionPrefix>
+    <Version>13.0.1.1</Version>
+    <!--<VersionPrefix>13.0.1</VersionPrefix>-->
     <VersionSuffix>3rdAnniversary-TwoMemorial-v16</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
