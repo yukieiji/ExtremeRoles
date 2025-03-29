@@ -19,7 +19,7 @@ using ExtremeRoles.Performance;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -198,7 +198,7 @@ public sealed class Guesser :
                         assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
 							OptionTab.NeutralTab,
 							ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
-							out var cate) && cate.GetValue<Jackal.JackalOption, bool>(Jackal.JackalOption.ForceReplaceLover);
+							out var cate) && cate.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover);
                         break;
                     case ExtremeRoleId.Queen:
                         assignState.IsQueenOn = true;
