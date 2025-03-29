@@ -102,7 +102,7 @@ public static class MapCountOverlayUpdatePatch
 				continue;
 			}
 
-            if (CachedShipStatus.FastRoom.TryGetValue(
+            if (ShipStatusCache.KeyedRoom.TryGetValue(
                     counterArea.RoomType,
                     out PlainShipRoom? plainShipRoom) &&
 				plainShipRoom != null &&
