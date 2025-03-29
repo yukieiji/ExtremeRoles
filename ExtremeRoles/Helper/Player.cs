@@ -336,7 +336,18 @@ public static class Player
             killerPlayerId, targetPlayerId, useAnimation);
     }
 
-    public static void RpcUncheckRevive(byte targetPlayerId)
+	public static void RpcUncheckExiled(byte targetPlayerId)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.UncheckedExiledPlayer))
+		{
+			caller.WriteByte(targetPlayerId);
+		}
+
+		RPCOperator.UncheckedExiledPlayer(targetPlayerId);
+	}
+
+	public static void RpcUncheckRevive(byte targetPlayerId)
     {
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.UncheckedRevive))

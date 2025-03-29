@@ -11,10 +11,15 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Missionary;
+using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.Solo.Neutral.Queen;
+using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 
 namespace ExtremeRoles.Roles;
 
@@ -127,6 +132,13 @@ public enum ExtremeRoleId : int
 	Chimera,
 	IronMate,
 	Monika,
+	Heretic,
+	Furry,
+	Shepherd,
+	Pawn,
+	Knight,
+	Intimate,
+	Surrogate,
 
 	Xion,
 }
@@ -207,7 +219,9 @@ public enum RoleGameOverReason
 
 public enum NeutralSeparateTeam
 {
-    Jackal,
+	None = -100,
+
+    Jackal = 0,
     Alice,
     Lover,
     Missionary,
@@ -303,23 +317,24 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.TimeBreaker    , new TimeBreaker()},
 
 			{(int)ExtremeRoleId.Alice     , new Alice()},
-            {(int)ExtremeRoleId.Jackal    , new Jackal()},
+            {(int)ExtremeRoleId.Jackal    , new JackalRole()},
             {(int)ExtremeRoleId.TaskMaster, new TaskMaster()},
-            {(int)ExtremeRoleId.Missionary, new Missionary()},
+            {(int)ExtremeRoleId.Missionary, new MissionaryRole()},
             {(int)ExtremeRoleId.Jester    , new Jester()},
             {(int)ExtremeRoleId.Yandere   , new Yandere()},
             {(int)ExtremeRoleId.Yoko      , new Yoko()},
             {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
             {(int)ExtremeRoleId.Miner     , new Miner()},
             {(int)ExtremeRoleId.Eater     , new Eater()},
-            {(int)ExtremeRoleId.Queen     , new Queen()},
+            {(int)ExtremeRoleId.Queen     , new QueenRole()},
             {(int)ExtremeRoleId.Madmate   , new Madmate()},
             {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
-			{(int)ExtremeRoleId.Tucker    , new Tucker()},
+			{(int)ExtremeRoleId.Tucker    , new TuckerRole()},
 			{(int)ExtremeRoleId.IronMate  , new IronMate()},
 			{(int)ExtremeRoleId.Monika    , new Monika()},
+			{(int)ExtremeRoleId.Heretic   , new Heretic()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -517,13 +532,13 @@ public static class ExtremeRoleManager
                     RoleTypes.Crewmate);
                 break;
             case ReplaceOperation.ForceReplaceToSidekick:
-                Jackal.TargetToSideKick(caller, targetId);
+				JackalRole.TargetToSideKick(caller, targetId);
                 break;
             case ReplaceOperation.SidekickToJackal:
-                Sidekick.BecomeToJackal(caller, targetId);
+                SidekickRole.BecomeToJackal(caller, targetId);
                 break;
             case ReplaceOperation.CreateServant:
-                Queen.TargetToServant(caller, targetId);
+                QueenRole.TargetToServant(caller, targetId);
                 break;
 			case ReplaceOperation.ForceReplaceToYardbird:
 				Jailer.NotCrewmateToYardbird(caller, targetId);
@@ -536,10 +551,10 @@ public static class ExtremeRoleManager
 				Jailer.ToLawbreaker(caller);
 				break;
 			case ReplaceOperation.ForceRelaceToChimera:
-				Tucker.TargetToChimera(caller, targetId);
+				TuckerRole.TargetToChimera(caller, targetId);
 				break;
 			case ReplaceOperation.RemoveChimera:
-				Tucker.RemoveChimera(caller, targetId);
+				TuckerRole.RemoveChimera(caller, targetId);
 				break;
 			default:
                 break;
@@ -670,5 +685,45 @@ public static class ExtremeRoleManager
 		}
 
 		return (interfacedSingleRole, interfacedMultiRole);
+	}
+
+	public static (T?, T?) GetLocalRoleAbility<T>() where T : class
+    {
+		var checkRole = GetLocalPlayerRole();
+		return dualSafeCastAbility<T>(checkRole);
+	}
+
+	private static (T?, T?) dualSafeCastAbility<T>(in SingleRoleBase? checkRole) where T : class
+	{
+		T? interfacedAbility = checkRole?.AbilityClass as T;
+		T? interfacedMultiAbility = null;
+
+		if (checkRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole?.AnotherRole?.AbilityClass is T anotherRoleAbility)
+		{
+			interfacedMultiAbility = anotherRoleAbility;
+		}
+
+		return (interfacedAbility, interfacedMultiAbility);
+	}
+
+	public static (T?, T?) GetRoleStatus<T>(byte playerId) where T : class
+	{
+		var checkRole = GameRole[playerId];
+		return dualSafeCastStatus<T>(checkRole);
+	}
+
+	private static (T?, T?) dualSafeCastStatus<T>(in SingleRoleBase? checkRole) where T : class
+	{
+		T? interfacedAbility = checkRole?.Status as T;
+		T? interfacedMultiAbility = null;
+
+		if (checkRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole?.AnotherRole?.Status is T anotherRoleAbility)
+		{
+			interfacedMultiAbility = anotherRoleAbility;
+		}
+
+		return (interfacedAbility, interfacedMultiAbility);
 	}
 }

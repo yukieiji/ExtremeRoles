@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 using UnityEngine;
-using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -17,13 +16,12 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+namespace ExtremeRoles.Roles.Solo.Neutral.Tucker;
 
-public sealed class Tucker :
+public sealed class TuckerRole :
 	SingleRoleBase, IRoleAbility,
 	IRoleSpecialReset, IRoleUpdate,
 	IRoleOnRevive
@@ -51,21 +49,21 @@ public sealed class Tucker :
 
 	public ExtremeAbilityButton? Button
 	{
-		get => this.internalButton;
+		get => internalButton;
 		set
 		{
 			if (value is not ExtremeMultiModalAbilityButton button)
 			{
 				throw new ArgumentException("This role using multimodal ability");
 			}
-			this.internalButton = button;
+			internalButton = button;
 		}
 	}
 	private ExtremeMultiModalAbilityButton? internalButton;
 
 	private float range;
 
-	private Chimera.Option? option;
+	private ChimeraRole.Option? option;
 	private TuckerShadowSystem? system;
 	private CountBehavior? createBehavior;
 
@@ -77,7 +75,7 @@ public sealed class Tucker :
 
 	private HashSet<byte> chimera = new HashSet<byte>();
 
-	public Tucker() : base(
+	public TuckerRole() : base(
 		ExtremeRoleId.Tucker,
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Tucker.ToString(),
@@ -91,14 +89,14 @@ public sealed class Tucker :
 		PlayerControl rolePlayer = Player.GetPlayerControlById(rolePlayerId);
 		if (rolePlayer == null ||
 			targetPlayer == null ||
-			!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(rolePlayerId, out var tucker) ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<TuckerRole>(rolePlayerId, out var tucker) ||
 			tucker.option is null)
 		{
 			return;
 		}
 		IRoleSpecialReset.ResetRole(targetPlayerId);
 
-		var chimera = new Chimera(tucker.Loader, rolePlayer.Data, tucker.option);
+		var chimera = new ChimeraRole(tucker.Loader, rolePlayer.Data, tucker.option);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, chimera);
 		chimera.SetControlId(tucker.GameControlId);
 		IRoleSpecialReset.ResetLover(targetPlayerId);
@@ -116,7 +114,7 @@ public sealed class Tucker :
 	{
 		var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
 		if (rolePlayer == null ||
-			!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(rolePlayerId, out var tucker) ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<TuckerRole>(rolePlayerId, out var tucker) ||
 			tucker.option is null)
 		{
 			return;
@@ -126,22 +124,22 @@ public sealed class Tucker :
 
 	public void CreateAbility()
 	{
-		var loader = this.Loader;
+		var loader = Loader;
 
 		float coolTime = loader.GetValue<RoleAbilityCommonOption, float>(
 			RoleAbilityCommonOption.AbilityCoolTime);
 
 		var img = UnityObjectLoader.LoadSpriteFromResources(ObjectPath.TestButton);
 
-		this.createBehavior = new CountBehavior(
+		createBehavior = new CountBehavior(
 			Tr.GetString("createChimera"),
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerCreateChimera),
 			isCreateChimera,
 			createChimera);
-		this.createBehavior.SetCoolTime(coolTime);
-		this.createBehavior.SetAbilityCount(
+		createBehavior.SetCoolTime(coolTime);
+		createBehavior.SetAbilityCount(
 			loader.GetValue<RoleAbilityCommonOption, int>(
 				RoleAbilityCommonOption.AbilityCount));
 
@@ -158,25 +156,25 @@ public sealed class Tucker :
 		summonAbility.SetCoolTime(coolTime);
 		summonAbility.ActiveTime = loader.GetValue<Option, float>(Option.RemoveShadowTime);
 
-		this.Button = new ExtremeMultiModalAbilityButton(
+		Button = new ExtremeMultiModalAbilityButton(
 			new RoleButtonActivator(),
 			KeyCode.F,
-			this.createBehavior,
+			createBehavior,
 			summonAbility);
 	}
 
 	public override void ExiledAction(PlayerControl rolePlayer)
 	{
-		if (this.withDeath)
+		if (withDeath)
 		{
-			foreach (byte playerId in this.chimera)
+			foreach (byte playerId in chimera)
 			{
 				PlayerControl player = Player.GetPlayerControlById(playerId);
 
 				if (player == null ||
 					player.Data.IsDead ||
 					player.Data.Disconnected ||
-					!ExtremeRoleManager.TryGetSafeCastedRole<Chimera>(
+					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _)) { continue; }
 
 				player.Exiled();
@@ -187,16 +185,16 @@ public sealed class Tucker :
 	}
 	public override void RolePlayerKilledAction(PlayerControl rolePlayer, PlayerControl killerPlayer)
 	{
-		if (this.withDeath)
+		if (withDeath)
 		{
-			foreach (byte playerId in this.chimera)
+			foreach (byte playerId in chimera)
 			{
 				PlayerControl player = Player.GetPlayerControlById(playerId);
 
 				if (player == null ||
 					player.Data.IsDead ||
 					player.Data.Disconnected ||
-					!ExtremeRoleManager.TryGetSafeCastedRole<Chimera>(
+					!ExtremeRoleManager.TryGetSafeCastedRole<ChimeraRole>(
 						playerId, out _)) { continue; }
 
 				RPCOperator.UncheckedMurderPlayer(
@@ -216,31 +214,31 @@ public sealed class Tucker :
 
 	public void OnResetChimera(byte chimeraId, float killCoolTime)
 	{
-		this.chimera.Remove(chimeraId);
+		chimera.Remove(chimeraId);
 
-		if (this.chimera.Count == 0 &&
-			this.createBehavior == null)
+		if (chimera.Count == 0 &&
+			createBehavior == null)
 		{
-			this.CanKill = true;
-			this.HasOtherKillCool = false;
-			this.KillCoolTime = killCoolTime;
+			CanKill = true;
+			HasOtherKillCool = false;
+			KillCoolTime = killCoolTime;
 		}
 	}
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
 	{
 		if (targetRole.Id is ExtremeRoleId.Chimera &&
-			this.IsSameControlId(targetRole) &&
-			this.chimera.Contains(targetPlayerId))
+			IsSameControlId(targetRole) &&
+			chimera.Contains(targetPlayerId))
 		{
-			return this.NameColor;
+			return NameColor;
 		}
 		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 	}
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if (this.isSameTuckerTeam(targetRole))
+		if (isSameTuckerTeam(targetRole))
 		{
 			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 			{
@@ -248,7 +246,7 @@ public sealed class Tucker :
 			}
 			else
 			{
-				return this.IsSameControlId(targetRole);
+				return IsSameControlId(targetRole);
 			}
 		}
 		else
@@ -299,7 +297,7 @@ public sealed class Tucker :
 			visionOption, format: OptionUnit.Multiplier);
 		factory.CreateBoolOption(
 			Option.ChimeraApplyEnvironmentVisionEffect,
-			this.IsCrewmate(), visionOption);
+			IsCrewmate(), visionOption);
 
 		CreateKillerOption(factory, ignorePrefix: false);
 
@@ -326,55 +324,55 @@ public sealed class Tucker :
 
 	protected override void RoleSpecificInit()
 	{
-		var loader = this.Loader;
+		var loader = Loader;
 
 		float killCool = loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillCool) ?
 			loader.GetValue<KillerCommonOption, float>(KillerCommonOption.KillCoolDown) :
 			GameOptionsManager.Instance.currentNormalGameOptions.KillCooldown;
-		var killOption = new Chimera.KillOption(
+		var killOption = new ChimeraRole.KillOption(
 			killCool,
 			loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillRange),
 			loader.GetValue<KillerCommonOption, int>(KillerCommonOption.KillRange));
 
-		var visonOption = new Chimera.VisionOption(
+		var visonOption = new ChimeraRole.VisionOption(
 			loader.GetValue<Option, bool>(Option.ChimeraHasOtherVision),
 			loader.GetValue<Option, float>(Option.ChimeraVision),
 			loader.GetValue<Option, bool>(Option.ChimeraApplyEnvironmentVisionEffect));
 
-		this.withDeath = loader.GetValue<Option, bool>(Option.TuckerDeathWithChimera);
+		withDeath = loader.GetValue<Option, bool>(Option.TuckerDeathWithChimera);
 
-		this.option = new Chimera.Option(
+		option = new ChimeraRole.Option(
 			killOption, visonOption,
-			this.withDeath ? 0.0f : loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
+			withDeath ? 0.0f : loader.GetValue<Option, float>(Option.TuckerDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraDeathKillCoolOffset),
 			loader.GetValue<Option, float>(Option.ChimeraReviveTime),
 			loader.GetValue<Option, bool>(Option.ChimeraCanUseVent));
 
-		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+		system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			TuckerShadowSystem.Type, () => new TuckerShadowSystem(
 				loader.GetValue<Option, float>(Option.ShadowOffset),
 				loader.GetValue<Option, float>(Option.ShadowTimer),
 				loader.GetValue<Option, float>(Option.KillCoolReduceOnRemoveShadow),
 				loader.GetValue<Option, bool>(Option.IsReduceInitKillCoolOnRemove)));
 
-		this.range = loader.GetValue<Option, float>(Option.Range);
+		range = loader.GetValue<Option, float>(Option.Range);
 
-		this.removeInfo = null;
-		this.chimera = new HashSet<byte>();
+		removeInfo = null;
+		chimera = new HashSet<byte>();
 	}
 
 	private bool isCreateChimera()
 	{
-		this.target = byte.MaxValue;
+		target = byte.MaxValue;
 
 		var targetPlayer = Player.GetClosestPlayerInRange(
 			PlayerControl.LocalPlayer,
-			this, this.range);
+			this, range);
 		if (targetPlayer == null)
 		{
 			return false;
 		}
-		this.target = targetPlayer.PlayerId;
+		target = targetPlayer.PlayerId;
 
 		return IRoleAbility.IsCommonUse();
 	}
@@ -382,8 +380,8 @@ public sealed class Tucker :
 	private bool createChimera()
 	{
 		var local = PlayerControl.LocalPlayer;
-		if (this.createBehavior is null ||
-			this.target == byte.MaxValue ||
+		if (createBehavior is null ||
+			target == byte.MaxValue ||
 			local == null)
 		{
 			return false;
@@ -394,19 +392,19 @@ public sealed class Tucker :
 			RPCOperator.Command.ReplaceRole))
 		{
 			caller.WriteByte(rolePlayerId);
-			caller.WriteByte(this.target);
+			caller.WriteByte(target);
 			caller.WriteByte(
 				(byte)ExtremeRoleManager.ReplaceOperation.ForceRelaceToChimera);
 		}
-		TargetToChimera(rolePlayerId, this.target);
+		TargetToChimera(rolePlayerId, target);
 
-		this.target = byte.MaxValue;
+		target = byte.MaxValue;
 
-		if (this.createBehavior.AbilityCount <= 1 &&
-			this.internalButton is not null)
+		if (createBehavior.AbilityCount <= 1 &&
+			internalButton is not null)
 		{
-			this.internalButton.Remove(this.createBehavior);
-			this.createBehavior = null;
+			internalButton.Remove(createBehavior);
+			createBehavior = null;
 		}
 
 		return true;
@@ -414,12 +412,12 @@ public sealed class Tucker :
 
 	private bool isRemoveShadow()
 	{
-		this.targetShadowId = int.MaxValue;
+		targetShadowId = int.MaxValue;
 		var local = PlayerControl.LocalPlayer;
 
 		if (local == null ||
-			this.system is null ||
-			!this.system.TryGetClosedShadowId(local, this.range, out this.targetShadowId))
+			system is null ||
+			!system.TryGetClosedShadowId(local, range, out targetShadowId))
 		{
 			return false;
 		}
@@ -428,32 +426,32 @@ public sealed class Tucker :
 
 	private bool startRemove()
 	{
-		this.removeInfo = null;
+		removeInfo = null;
 		var local = PlayerControl.LocalPlayer;
 
 		if (local == null)
 		{
 			return false;
 		}
-		this.removeInfo = new RemoveInfo(this.targetShadowId, local.GetTruePosition());
+		removeInfo = new RemoveInfo(targetShadowId, local.GetTruePosition());
 		return false;
 	}
 
 	private bool isRemoving()
 	{
 		var local = PlayerControl.LocalPlayer;
-		if (this.removeInfo is null ||
+		if (removeInfo is null ||
 			local == null)
 		{
 			return false;
 		}
-		return local.GetTruePosition() == this.removeInfo.StartPos;
+		return local.GetTruePosition() == removeInfo.StartPos;
 	}
 
 	private void remove()
 	{
 		var local = PlayerControl.LocalPlayer;
-		if (this.removeInfo is null ||
+		if (removeInfo is null ||
 			local == null)
 		{
 			return;
@@ -464,10 +462,10 @@ public sealed class Tucker :
 			{
 				x.Write((byte)TuckerShadowSystem.Ops.Remove);
 				x.Write(local.PlayerId);
-				x.WritePacked(this.removeInfo.Target);
+				x.WritePacked(removeInfo.Target);
 			});
 
-		this.removeInfo = null;
+		removeInfo = null;
 
 	}
 
@@ -483,34 +481,34 @@ public sealed class Tucker :
 			return;
 		}
 		byte localPlayerId = local.PlayerId;
-		foreach (byte chimera in this.chimera)
+		foreach (byte chimera in chimera)
 		{
 			if (chimera != localPlayerId ||
-				!ExtremeRoleManager.TryGetSafeCastedLocalRole<Chimera>(out var role))
+				!ExtremeRoleManager.TryGetSafeCastedLocalRole<ChimeraRole>(out var role))
 			{
 				continue;
 			}
 			role.RemoveTucker();
 		}
-		this.chimera.Clear();
+		chimera.Clear();
 	}
 
 	private bool isSameTuckerTeam(SingleRoleBase targetRole)
 	{
-		return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Chimera));
+		return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Chimera;
 	}
 
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (GameData.Instance == null ||
-			this.option is null ||
-			this.internalButton is null ||
-			this.createBehavior is not null)
+			option is null ||
+			internalButton is null ||
+			createBehavior is not null)
 		{
 			return;
 		}
-		var removed = new HashSet<byte>(this.chimera.Count);
-		foreach (byte chimera in this.chimera)
+		var removed = new HashSet<byte>(chimera.Count);
+		foreach (byte chimera in chimera)
 		{
 			var player = GameData.Instance.GetPlayerById(chimera);
 			if (player == null || player.Disconnected)
@@ -529,7 +527,7 @@ public sealed class Tucker :
 					(byte)ExtremeRoleManager.ReplaceOperation.RemoveChimera);
 			}
 
-			OnResetChimera(chimera, this.option.KillOption.KillCool);
+			OnResetChimera(chimera, option.KillOption.KillCool);
 		}
 	}
 
@@ -537,42 +535,42 @@ public sealed class Tucker :
 	{
 		byte playerId = player.PlayerId;
 		if (!(ExtremeRoleManager.TryGetRole(playerId, out var role) &&
-			this.IsSameTeam(role) &&
-			this.chimera.Contains(player.PlayerId)))
+			IsSameTeam(role) &&
+			chimera.Contains(player.PlayerId)))
 		{
 			return;
 		}
 		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-		if (this.reviveFlash == null)
+		if (reviveFlash == null)
 		{
-			this.reviveFlash = UnityEngine.Object.Instantiate(
+			reviveFlash = UnityEngine.Object.Instantiate(
 				 hudManager.FullScreen,
 				 hudManager.transform);
-			this.reviveFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
-			this.reviveFlash.gameObject.SetActive(true);
+			reviveFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
+			reviveFlash.gameObject.SetActive(true);
 		}
 
-		Color32 color = this.NameColor;
+		Color32 color = NameColor;
 
-		this.reviveFlash.enabled = true;
+		reviveFlash.enabled = true;
 
 		hudManager.StartCoroutine(
 			Effects.Lerp(1.0f, new Action<float>((p) =>
 			{
-				if (this.reviveFlash == null) { return; }
+				if (reviveFlash == null) { return; }
 				if (p < 0.5)
 				{
-					this.reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+					reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
 
 				}
 				else
 				{
-					this.reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+					reviveFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
 				}
 				if (p == 1f)
 				{
-					this.reviveFlash.enabled = false;
+					reviveFlash.enabled = false;
 				}
 			}))
 		);
@@ -580,277 +578,9 @@ public sealed class Tucker :
 
 	private void disableShadow(byte playerId)
 	{
-		if (this.system != null)
+		if (system != null)
 		{
-			this.system.Disable(playerId);
+			system.Disable(playerId);
 		}
-	}
-}
-
-public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IRoleHasParent
-{
-	public sealed record Option(
-		KillOption KillOption,
-		VisionOption VisionOption,
-		float TukerKillCoolOffset,
-		float RevieKillCoolOffset,
-		float ResurrectTime,
-		bool Vent);
-	public sealed record KillOption(float KillCool, bool OtherRange, int Range);
-	public sealed record VisionOption(bool OtherVision, float Vision, bool ApplyEffect);
-
-	private NetworkedPlayerInfo? tuckerPlayer;
-	private readonly float reviveKillCoolOffset;
-	private readonly float resurrectTime;
-	private readonly float tuckerDeathKillCoolOffset;
-	private readonly float initCoolTime;
-
-	private TextMeshPro? resurrectText;
-	private float resurrectTimer;
-	private bool isReviveNow;
-	private bool isTuckerDead;
-
-	public byte Parent { get; }
-	public override IOptionLoader Loader { get; }
-
-	public Chimera(
-		IOptionLoader loader,
-		NetworkedPlayerInfo tuckerPlayer,
-		Option option) : base(
-		ExtremeRoleId.Chimera,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Chimera.ToString(),
-		ColorPalette.TuckerMerdedoie,
-		true, false, option.Vent, false)
-	{
-		this.Loader = loader;
-		this.Parent = tuckerPlayer.PlayerId;
-		this.tuckerPlayer = tuckerPlayer;
-		this.reviveKillCoolOffset = option.RevieKillCoolOffset;
-		this.tuckerDeathKillCoolOffset = option.TukerKillCoolOffset;
-		this.resurrectTime = option.ResurrectTime;
-		this.resurrectTimer = this.resurrectTime;
-
-		var killOption = option.KillOption;
-		this.HasOtherKillCool = true;
-		this.initCoolTime = killOption.KillCool;
-		this.KillCoolTime = this.initCoolTime;
-		this.HasOtherKillRange = killOption.OtherRange;
-		this.KillRange = killOption.Range;
-
-		var vision = option.VisionOption;
-		this.HasOtherVision = vision.OtherVision;
-		this.Vision = vision.Vision;
-		this.IsApplyEnvironmentVision = vision.ApplyEffect;
-
-		this.isTuckerDead = tuckerPlayer.IsDead;
-		this.isReviveNow = false;
-	}
-
-	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
-	{
-		throw new Exception("Don't call this class method!!");
-	}
-
-	protected override void RoleSpecificInit()
-	{
-		throw new Exception("Don't call this class method!!");
-	}
-
-	public void RemoveTucker()
-	{
-		this.tuckerPlayer = null;
-	}
-
-	public void OnRemoveShadow(byte tuckerPlayerId,
-		float reduceTime, bool isReduceInitKillCool)
-	{
-		if (this.tuckerPlayer == null ||
-			tuckerPlayerId != this.tuckerPlayer.PlayerId)
-		{
-			return;
-		}
-
-		float min = isReduceInitKillCool ? 0.01f : this.initCoolTime;
-		updateKillCoolTime(-reduceTime, min);
-	}
-
-	public void Update(PlayerControl rolePlayer)
-	{
-		if (CachedShipStatus.Instance == null ||
-			GameData.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
-			rolePlayer == null ||
-			rolePlayer.Data == null ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null)
-		{
-			if (this.resurrectText != null)
-			{
-				this.resurrectText.gameObject.SetActive(false);
-			}
-			return;
-		}
-
-		if (!this.isTuckerDead)
-		{
-			this.isTuckerDead = this.tuckerPlayer == null || this.tuckerPlayer.IsDead;
-			if (this.isTuckerDead)
-			{
-				updateKillCoolTime(this.tuckerDeathKillCoolOffset);
-			}
-		}
-
-
-		// 復活処理
-		if (this.tuckerPlayer == null ||
-			!rolePlayer.Data.IsDead ||
-			this.tuckerPlayer.Disconnected ||
-			this.tuckerPlayer.IsDead ||
-			this.isReviveNow)
-		{
-			if (this.resurrectText != null)
-			{
-				this.resurrectText.gameObject.SetActive(false);
-			}
-			return;
-		}
-
-
-		if (this.resurrectText == null)
-		{
-			this.resurrectText = UnityEngine.Object.Instantiate(
-				FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-				Camera.main.transform, false);
-			this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-			this.resurrectText.enableWordWrapping = false;
-		}
-
-		this.resurrectText.gameObject.SetActive(true);
-		this.resurrectTimer -= Time.deltaTime;
-		this.resurrectText.text = string.Format(
-			Tr.GetString("resurrectText"),
-			Mathf.CeilToInt(this.resurrectTimer));
-
-		if (this.resurrectTimer <= 0.0f)
-		{
-			revive(rolePlayer);
-		}
-	}
-
-	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
-	{
-		if (this.tuckerPlayer != null &&
-			targetRole.Id is ExtremeRoleId.Tucker &&
-			targetPlayerId == this.tuckerPlayer.PlayerId)
-		{
-			return this.NameColor;
-		}
-		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
-	}
-
-	public override bool IsSameTeam(SingleRoleBase targetRole)
-	{
-		if (this.isSameChimeraTeam(targetRole))
-		{
-			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-			{
-				return true;
-			}
-			else
-			{
-				return this.IsSameControlId(targetRole);
-			}
-		}
-		else
-		{
-			return base.IsSameTeam(targetRole);
-		}
-	}
-
-	public override bool IsBlockShowMeetingRoleInfo() => this.infoBlock();
-
-	public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
-
-	public override string GetFullDescription()
-	{
-		string full = base.GetFullDescription();
-		if (this.tuckerPlayer == null)
-		{
-			return full;
-		}
-		return string.Format(
-			full, this.tuckerPlayer.DefaultOutfit.PlayerName);
-	}
-
-	private bool infoBlock()
-		=> !this.isTuckerDead;
-
-	private void revive(PlayerControl rolePlayer)
-	{
-		if (rolePlayer == null || this.tuckerPlayer == null) { return; }
-		this.isReviveNow = true;
-		this.resurrectTimer = this.resurrectTime;
-
-		byte playerId = rolePlayer.PlayerId;
-
-		updateKillCoolTime(this.reviveKillCoolOffset);
-		Player.RpcUncheckRevive(playerId);
-
-		if (rolePlayer.Data == null ||
-			rolePlayer.Data.IsDead ||
-			rolePlayer.Data.Disconnected) { return; }
-
-		List<Vector2> randomPos = new List<Vector2>();
-		Map.AddSpawnPoint(randomPos, playerId);
-		Player.RpcUncheckSnap(playerId, randomPos[
-			RandomGenerator.Instance.Next(randomPos.Count)]);
-
-		rolePlayer.killTimer = this.KillCoolTime;
-
-		FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
-		if (this.resurrectText != null)
-		{
-			this.resurrectText.gameObject.SetActive(false);
-		}
-
-		ExtremeSystemTypeManager.RpcUpdateSystem(
-			TuckerShadowSystem.Type, x =>
-			{
-				x.Write((byte)TuckerShadowSystem.Ops.ChimeraRevive);
-				x.Write(this.tuckerPlayer.PlayerId);
-			});
-
-		this.isReviveNow = false;
-	}
-
-	public void AllReset(PlayerControl rolePlayer)
-	{
-		if (PlayerControl.LocalPlayer == null ||
-			rolePlayer.PlayerId != PlayerControl.LocalPlayer.PlayerId)
-		{
-			return;
-		}
-		// 累積していたキルクールのオフセットを無効化しておく
-		this.KillCoolTime = this.initCoolTime;
-	}
-
-	private void updateKillCoolTime(float offset, float min=0.1f)
-	{
-		this.KillCoolTime = Mathf.Clamp(this.KillCoolTime + offset, min, float.MaxValue);
-	}
-
-	private bool isSameChimeraTeam(SingleRoleBase targetRole)
-	{
-		return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Tucker));
-	}
-
-	public void RemoveParent(byte rolePlayerId)
-	{
-		if (!ExtremeRoleManager.TryGetSafeCastedRole<Tucker>(this.Parent, out var tucker))
-		{
-			return;
-		}
-		tucker.OnResetChimera(rolePlayerId, this.KillCoolTime);
 	}
 }

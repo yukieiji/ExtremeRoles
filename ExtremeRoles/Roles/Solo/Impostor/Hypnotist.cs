@@ -910,7 +910,7 @@ public sealed class Doll :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleHasParent,
+    IParentChainStatus,
     IRoleWinPlayerModifier
 {
     public enum AbilityType : byte
