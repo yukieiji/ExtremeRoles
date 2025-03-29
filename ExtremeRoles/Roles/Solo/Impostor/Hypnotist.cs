@@ -910,7 +910,7 @@ public sealed class Doll :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleHasParent,
+    IParentChainStatus,
     IRoleWinPlayerModifier
 {
     public enum AbilityType : byte
@@ -1049,11 +1049,11 @@ public sealed class Doll :
     {
         switch (reason)
         {
-            case GameOverReason.ImpostorsByVote:
-            case GameOverReason.ImpostorsByKill:
-            case GameOverReason.ImpostorsBySabotage:
+            case GameOverReason.ImpostorByVote:
+            case GameOverReason.ImpostorByKill:
+            case GameOverReason.ImpostorBySabotage:
             case GameOverReason.ImpostorDisconnect:
-            case GameOverReason.HideAndSeek_ImpostorsByKills:
+            case GameOverReason.HideAndSeek_ByKills:
             case (GameOverReason)RoleGameOverReason.AssassinationMarin:
 			case (GameOverReason)RoleGameOverReason.TeroristoTeroWithShip:
 				winner.AddWithPlus(rolePlayerInfo);
