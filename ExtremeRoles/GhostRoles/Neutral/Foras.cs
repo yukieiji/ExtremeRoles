@@ -69,16 +69,16 @@ public sealed class Foras : GhostRoleBase
 
         if (!forasPlayer || !arrowTargetPlayer) { return; }
         Foras foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Foras>(forasPlayerId);
-        var (role, anotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleHasParent>(
+        var (status, anotherStatus) = ExtremeRoleManager.GetRoleStatus<IParentChainStatus>(
             forasPlayerId);
 
-        if (foras is null || (role is null && anotherRole is null)) { return; }
+        if (foras is null || (status is null && anotherStatus is null)) { return; }
 
         byte localPlayerId = PlayerControl.LocalPlayer.PlayerId;
 
         if (localPlayerId == forasPlayerId ||
-            localPlayerId == role?.Parent ||
-            localPlayerId == anotherRole?.Parent)
+            localPlayerId == status?.Parent ||
+            localPlayerId == anotherStatus?.Parent)
         {
             if (foras.arrowControler == null)
             {
