@@ -40,10 +40,7 @@ public static class MainMenuManagerStartPatch
 
 		// Mod ExitButton
 		__instance.quitButton.OnClick.AddListener(() =>
-		{
-			ApiServer.Stop();
-			Logging.BackupCurrentLog();
-		});
+			Logging.BackupCurrentLog());
 
 		// 以下独自ボタン
 		var leftButtonAnchor = new GameObject("LeftModButton");
