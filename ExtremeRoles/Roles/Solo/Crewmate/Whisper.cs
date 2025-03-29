@@ -141,7 +141,7 @@ public sealed class Whisper :
         this.abilityText.gameObject.SetActive(false);
 
         if (Minigame.Instance != null ||
-            CachedShipStatus.Instance == null ||
+            ShipStatus.Instance == null ||
             GameData.Instance == null ||
             MeetingHud.Instance != null ||
             !rolePlayer.CanMove)
@@ -149,7 +149,7 @@ public sealed class Whisper :
             resetAbility(rolePlayer);
             return;
         }
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive)
         {
             resetAbility(rolePlayer);

@@ -677,9 +677,9 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (CachedShipStatus.Instance == null ||
+		if (ShipStatus.Instance == null ||
 			GameData.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.enabled ||
 			rolePlayer == null ||
 			rolePlayer.Data == null ||
 			MeetingHud.Instance != null ||

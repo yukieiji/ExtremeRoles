@@ -90,7 +90,7 @@ public sealed class Ventgeist : GhostRoleBase
     {
         this.targetVent = null;
 
-        ShipStatus ship = CachedShipStatus.Instance;
+        ShipStatus ship = ShipStatus.Instance;
 
         if (ship == null ||
             !ship.enabled) { return false; }

@@ -267,8 +267,8 @@ public sealed class Queen :
         if (!rolePlayer ||
             rolePlayer.Data.Tasks.Count == 0 ||
             !GameData.Instance ||
-            !CachedShipStatus.Instance ||
-            !CachedShipStatus.Instance.enabled) { return; }
+            !ShipStatus.Instance ||
+            !ShipStatus.Instance.enabled) { return; }
 
         foreach (byte playerId in this.servantPlayerId)
         {

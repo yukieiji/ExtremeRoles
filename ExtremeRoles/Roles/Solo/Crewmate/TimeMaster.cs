@@ -178,7 +178,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
             {
                 if (localPlayer.inVent)
                 {
-                    foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+                    foreach (Vent vent in ShipStatus.Instance.AllVents)
                     {
                         bool canUse;
                         bool couldUse;
@@ -288,7 +288,7 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
 			// 会議開始後リウィンドのコルーチンが止まるまでポジションがバグるので
 			// ここでポジションを上書きする => TMが発動してなくても通るが問題なし
 			// それ以外でコードを追加してもいいが最も被害が少ない変更がここ
-			CachedShipStatus.Instance.SpawnPlayer(
+			ShipStatus.Instance.SpawnPlayer(
 				PlayerControl.LocalPlayer,
 				GameData.Instance.PlayerCount, false);
 		}

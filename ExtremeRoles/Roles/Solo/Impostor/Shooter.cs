@@ -201,7 +201,7 @@ public sealed class Shooter :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
 
         if (!this.isAwake)

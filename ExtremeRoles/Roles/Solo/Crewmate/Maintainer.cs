@@ -49,12 +49,12 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
     {
         GameSystem.RpcRepairAllSabotage();
 
-        foreach (OpenableDoor door in CachedShipStatus.Instance.AllDoors)
+        foreach (OpenableDoor door in ShipStatus.Instance.AllDoors)
         {
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
 
-            CachedShipStatus.Instance.RpcUpdateSystem(
+            ShipStatus.Instance.RpcUpdateSystem(
                 SystemTypes.Doors, (byte)(door.Id | 64));
             door.SetDoorway(true);
         }

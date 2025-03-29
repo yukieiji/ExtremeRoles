@@ -146,17 +146,17 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
             int taskId = (int)targetPlayerInfo.Tasks[i].TypeId;
 
-            if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
+            if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
                 (NormalPlayerTask t) => t.Index == taskId) != null)
             {
                 this.TakeTask.Add(TakeTaskType.Common);
             }
-            else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
+            else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
                 (NormalPlayerTask t) => t.Index == taskId) != null)
             {
                 this.TakeTask.Add(TakeTaskType.Long);
             }
-            else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
+            else if (ShipStatus.Instance.ShortTasks.FirstOrDefault(
                 (NormalPlayerTask t) => t.Index == taskId) != null)
             {
                 this.TakeTask.Add(TakeTaskType.Normal);
@@ -213,10 +213,10 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
 
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
             this.TakeTask.Count == 0) { return; }
 
         var playerInfo = GameData.Instance.GetPlayerById(

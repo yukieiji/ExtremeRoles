@@ -220,9 +220,9 @@ public sealed class Miner :
     {
         if (rolePlayer.Data.IsDead ||
 			rolePlayer.Data.Disconnected ||
-			CachedShipStatus.Instance == null ||
+			ShipStatus.Instance == null ||
 			GameData.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive) { return; }
 
         if (MeetingHud.Instance || ExileController.Instance)

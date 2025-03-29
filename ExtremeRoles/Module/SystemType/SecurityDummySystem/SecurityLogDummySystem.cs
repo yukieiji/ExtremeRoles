@@ -102,7 +102,7 @@ public sealed class SecurityLogDummySystem : ISecurityDummySystem
 			logger = this.logger;
 			return true;
 		}
-		if (!CachedShipStatus.Instance.TryGetComponent(out this.logger))
+		if (!ShipStatus.Instance.TryGetComponent(out this.logger))
 		{
 			logger = null;
 			return false;

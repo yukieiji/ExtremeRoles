@@ -39,7 +39,7 @@ public sealed class Igniter : GhostRoleBase
         SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
         bool hasOtherVison = role.TryGetVisionMod(
             out float modVison, out bool isApplyVisonMod);
-        float minVison = CachedShipStatus.Instance.MinLightRadius;
+        float minVison = ShipStatus.Instance.MinLightRadius;
 
         if ((hasOtherVison && !isApplyVisonMod) ||
             (role.IsImpostor() && !isEffectImp) ||

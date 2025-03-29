@@ -279,7 +279,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 
 	public List<Vector2> GetSpawnPos(byte playerId)
 	{
-		ShipStatus ship = CachedShipStatus.Instance;
+		ShipStatus ship = ShipStatus.Instance;
 		Vector2 baseVec = Vector2.up;
 		baseVec = baseVec.Rotate(
 			(float)(playerId - 1) * (360f / (float)GameData.Instance.PlayerCount));
@@ -431,7 +431,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 	{
 		if (saboTask == this.RetrieveOxygenMask)
 		{
-			CachedShipStatus.Instance.RpcUpdateSystem((SystemTypes)130, 64);
+			ShipStatus.Instance.RpcUpdateSystem((SystemTypes)130, 64);
 			this.submarineOxygenSystemRepairDamageMethod.Invoke(
 				this.submarineOxygenSystemInstanceGetter.GetValue(null),
 				[ PlayerControl.LocalPlayer, (byte)64 ]);
@@ -510,7 +510,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 
 	private void replaceDoorMinigame()
 	{
-		if (!this.replaceDoorMinigameOption.Value || CachedShipStatus.Instance == null)
+		if (!this.replaceDoorMinigameOption.Value || ShipStatus.Instance == null)
 		{ return; }
 
 		object? transformValue = this.submarineStatusReference.GetValue(this.submarineStatus);
@@ -537,7 +537,7 @@ public sealed class SubmergedIntegrator : ModIntegratorBase, IMultiFloorModMap, 
 
 		if (doorMinigame == null) { return; }
 
-		foreach (var doorConsole in CachedShipStatus.Instance.GetComponentsInChildren<DoorConsole>())
+		foreach (var doorConsole in ShipStatus.Instance.GetComponentsInChildren<DoorConsole>())
 		{
 			if (doorConsole == null)
 			{

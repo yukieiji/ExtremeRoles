@@ -113,12 +113,12 @@ public sealed partial class Xion
     {
         GameSystem.RpcRepairAllSabotage();
 
-        foreach (var door in CachedShipStatus.Instance.AllDoors)
+        foreach (var door in ShipStatus.Instance.AllDoors)
         {
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
 
-            CachedShipStatus.Instance.RpcUpdateSystem(
+            ShipStatus.Instance.RpcUpdateSystem(
                 SystemTypes.Doors, (byte)(door.Id | 64));
             door.SetDoorway(true);
         }

@@ -483,7 +483,7 @@ public sealed class Guesser :
 				   UnityObjectLoader.LoadFromResources<GameObject, ExtremeRoleId>(
                         ExtremeRoleId.Guesser,
                         ObjectPath.GetRolePrefabPath(ExtremeRoleId.Guesser, "UI")),
-                    CachedShipStatus.Instance.transform);
+                    ShipStatus.Instance.transform);
 
                 this.uiPrefab.SetActive(false);
             }

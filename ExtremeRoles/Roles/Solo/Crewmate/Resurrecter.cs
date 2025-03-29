@@ -166,7 +166,7 @@ public sealed class Resurrecter :
         // リセット会議クールダウン
         if (this.isMeetingCoolResetOnResurrect)
         {
-            CachedShipStatus.Instance.EmergencyCooldown = this.meetingCoolDown;
+            ShipStatus.Instance.EmergencyCooldown = this.meetingCoolDown;
         }
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -218,8 +218,8 @@ public sealed class Resurrecter :
         if (!rolePlayer.moveable ||
             MeetingHud.Instance ||
             ExileController.Instance ||
-            CachedShipStatus.Instance == null ||
-            !CachedShipStatus.Instance.enabled)
+            ShipStatus.Instance == null ||
+            !ShipStatus.Instance.enabled)
         {
             return;
         }
@@ -554,17 +554,17 @@ public sealed class Resurrecter :
                 int taskIndex;
                 int replaceTaskId = playerInfo.Tasks[i].TypeId;
 
-                if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
+                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
                     taskIndex = GameSystem.GetRandomCommonTaskId();
                 }
-                else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
+                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
                     taskIndex = GameSystem.GetRandomLongTask();
                 }
-                else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
+                else if (ShipStatus.Instance.ShortTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
                     taskIndex = GameSystem.GetRandomShortTaskId();

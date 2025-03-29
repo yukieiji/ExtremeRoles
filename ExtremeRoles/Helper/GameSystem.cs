@@ -81,7 +81,7 @@ public static class GameSystem
 	{
 		ArrowBehaviour? template = null;
 
-		foreach (var task in CachedShipStatus.Instance.SpecialTasks)
+		foreach (var task in ShipStatus.Instance.SpecialTasks)
 		{
 			if (!task.IsTryCast<SabotageTask>(out var saboTask) ||
 				saboTask.Arrows.Count == 0)
@@ -101,9 +101,9 @@ public static class GameSystem
 	public static ShipStatus GetShipObj(byte mapId)
 	{
 		if (Map.Id == mapId &&
-			CachedShipStatus.Instance != null)
+			ShipStatus.Instance != null)
 		{
-			return CachedShipStatus.Instance;
+			return ShipStatus.Instance;
 		}
 
 		if (mapId > 5)
@@ -173,10 +173,10 @@ public static class GameSystem
 
 	public static int GetRandomCommonTaskId()
 	{
-		if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
+		if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
 		List<int> taskIndex = getTaskIndex(
-			CachedShipStatus.Instance.CommonTasks);
+			ShipStatus.Instance.CommonTasks);
 
 		int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -185,10 +185,10 @@ public static class GameSystem
 
 	public static int GetRandomLongTask()
 	{
-		if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
+		if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
 		List<int> taskIndex = getTaskIndex(
-			CachedShipStatus.Instance.LongTasks);
+			ShipStatus.Instance.LongTasks);
 
 		int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -197,10 +197,10 @@ public static class GameSystem
 
 	public static int GetRandomShortTaskId()
 	{
-		if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
+		if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
 		List<int> taskIndex = getTaskIndex(
-			CachedShipStatus.Instance.ShortTasks);
+			ShipStatus.Instance.ShortTasks);
 
 		int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -315,7 +315,7 @@ public static class GameSystem
 				}
 			}
 
-			var ship = CachedShipStatus.Instance;
+			var ship = ShipStatus.Instance;
 
 			switch (taskType)
 			{
@@ -360,7 +360,7 @@ public static class GameSystem
 
 	public static void ForceRepairrSpecialSabotage(SystemTypes sabSystem)
 	{
-		if (!CachedShipStatus.Systems.TryGetValue(sabSystem, out var system))
+		if (!ShipStatus.Instance.Systems.TryGetValue(sabSystem, out var system))
 		{
 			return;
 		}
@@ -395,7 +395,7 @@ public static class GameSystem
 		NetworkedPlayerInfo playerInfo,
 		int taskIndex)
 	{
-		NormalPlayerTask task = CachedShipStatus.Instance.GetTaskById((byte)taskIndex);
+		NormalPlayerTask task = ShipStatus.Instance.GetTaskById((byte)taskIndex);
 
 		PlayerControl player = playerInfo.Object;
 
@@ -415,7 +415,7 @@ public static class GameSystem
 		PlayerControl player,
 		byte taskId, uint gameControlTaskId)
 	{
-		NormalPlayerTask addTask = CachedShipStatus.Instance.GetTaskById(taskId);
+		NormalPlayerTask addTask = ShipStatus.Instance.GetTaskById(taskId);
 		if (addTask == null)
 		{
 			return false;

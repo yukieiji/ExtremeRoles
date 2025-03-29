@@ -38,11 +38,11 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             this.IsWin ||
             GameData.Instance == null) { return; }
 
-        if (!CachedShipStatus.Instance.enabled) { return; }
+        if (!ShipStatus.Instance.enabled) { return; }
 
         var playerInfo = GameData.Instance.GetPlayerById(
             rolePlayer.PlayerId);

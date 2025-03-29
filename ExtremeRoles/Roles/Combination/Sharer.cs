@@ -113,7 +113,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         PlayerControl rolePlayer)
     {
         if (Minigame.Instance != null ||
-            CachedShipStatus.Instance == null ||
+            ShipStatus.Instance == null ||
             GameData.Instance == null ||
             MeetingHud.Instance != null)
         {

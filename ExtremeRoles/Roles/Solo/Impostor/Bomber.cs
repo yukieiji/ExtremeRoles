@@ -167,9 +167,9 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
         if (this.bombPlayerId.Count == 0) { return; }
 
         if (MeetingHud.Instance != null ||
-            CachedShipStatus.Instance == null ||
+            ShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive) { return; }
 
         this.timer -= Time.deltaTime;

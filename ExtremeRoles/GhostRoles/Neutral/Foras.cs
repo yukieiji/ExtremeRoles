@@ -188,8 +188,8 @@ public sealed class Foras : GhostRoleBase
 
     private bool isAbilityUse()
     {
-        if (CachedShipStatus.Instance == null ||
-            !CachedShipStatus.Instance.enabled) { return false; }
+        if (ShipStatus.Instance == null ||
+            !ShipStatus.Instance.enabled) { return false; }
 
 
         this.targetPlayer = Helper.Player.GetClosestPlayerInRange(

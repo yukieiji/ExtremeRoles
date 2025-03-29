@@ -200,10 +200,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     {
 
         if (this.Button == null ||
-			CachedShipStatus.Instance == null ||
+			ShipStatus.Instance == null ||
             GameData.Instance == null ||
             this.IsWin ||
-			!CachedShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive)
 		{
 			return;

@@ -387,7 +387,7 @@ public static class Player
 			return false;
 		}
 
-		foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
+		foreach (PlainShipRoom room in ShipStatus.Instance.AllRooms)
 		{
 			if (room != null && room.roomArea)
 			{

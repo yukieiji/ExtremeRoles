@@ -225,11 +225,11 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 				PlayerMaterial.MaskType.Exile, false, (Il2CppSystem.Action)(() =>
 				{
 					string defaultSkinId = exiled.Outfits[PlayerOutfitType.Default].SkinId;
-					var skinViewData = CachedShipStatus.Instance.CosmeticsCache.GetSkin(defaultSkinId);
+					var skinViewData = ShipStatus.Instance.CosmeticsCache.GetSkin(defaultSkinId);
 					if (!HatManager.Instance.CheckLongModeValidCosmetic(
 							defaultSkinId, player.GetIgnoreLongMode()))
 					{
-						skinViewData = CachedShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");
+						skinViewData = ShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");
 					}
 					if (controller.useIdleAnim)
 					{

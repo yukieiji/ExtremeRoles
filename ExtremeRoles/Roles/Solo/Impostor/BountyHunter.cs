@@ -180,13 +180,13 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
     public void Update(PlayerControl rolePlayer)
     {
 
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null ||
             MeetingHud.Instance != null)
         {
             return;
         }
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive)
         {
             return;

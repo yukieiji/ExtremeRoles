@@ -44,7 +44,7 @@ public sealed class VentInPlayerPosSyncer : MonoBehaviour
 
 	private void setSystem()
 	{
-		if (!CachedShipStatus.Instance.Systems.TryGetValue(
+		if (!ShipStatus.Instance.Systems.TryGetValue(
 				SystemTypes.Ventilation, out ISystemType systemType))
 		{
 			return;

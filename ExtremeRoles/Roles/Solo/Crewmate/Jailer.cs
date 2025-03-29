@@ -496,8 +496,8 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	public void Update(PlayerControl rolePlayer)
 	{
 		if (GameData.Instance == null ||
-			CachedShipStatus.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			ShipStatus.Instance == null ||
+			!ShipStatus.Instance.enabled ||
 			this.Button is null ||
 			this.awakeRole)
 		{
@@ -607,9 +607,9 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (CachedShipStatus.Instance == null ||
+		if (ShipStatus.Instance == null ||
 			GameData.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.enabled ||
 			this.allTask.Count == 0) { return; }
 
 		var playerInfo = GameData.Instance.GetPlayerById(

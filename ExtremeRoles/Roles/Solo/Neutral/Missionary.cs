@@ -187,9 +187,9 @@ public sealed class Missionary :
     public void Update(PlayerControl rolePlayer)
     {
         if (this.lamb.Count == 0 ||
-			CachedShipStatus.Instance == null ||
+			ShipStatus.Instance == null ||
             GameData.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive) { return; }
 
 		this.lamb.RemoveAll(

@@ -95,7 +95,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
         GameOverReason reason,
         bool trigger = false)
     {
-        CachedShipStatus.Instance.enabled = false;
+        ShipStatus.Instance.enabled = false;
         GameManager.Instance.RpcEndGame(reason, trigger);
     }
 
@@ -313,7 +313,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
     private static bool isSabotageWin()
     {
 
-        var systems = CachedShipStatus.Systems;
+        var systems = ShipStatus.Instance.Systems;
 
         if (systems == null) { return false; };
 

@@ -125,7 +125,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
             vent.ExitVentAnim = null;
             vent.Offset = new Vector3(0f, 0.25f, 0f);
 
-            vent.Id = CachedShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
+            vent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
 
             if (vent.TryGetComponent<Console>(out var console))
             {
@@ -254,7 +254,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         Vent newVent = camp.GetConvertedVent();
 
-        if (CachedShipStatus.Instance.TryGetCustomVent(
+        if (ShipStatus.Instance.TryGetCustomVent(
 				meryVentType, out List<Vent>? meryVent) &&
 			meryVent is not null)
         {
@@ -282,7 +282,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 
         newVent.Center = null;
 
-        CachedShipStatus.Instance.AddVent(newVent, meryVentType);
+        ShipStatus.Instance.AddVent(newVent, meryVentType);
 
         camp.Clear();
     }

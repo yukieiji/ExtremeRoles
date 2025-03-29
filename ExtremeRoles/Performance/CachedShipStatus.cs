@@ -7,23 +7,10 @@ namespace ExtremeRoles.Performance
 {
     public static class CachedShipStatus
     {
-        public static ShipStatus Instance { get; private set; }
-        public static Dictionary<SystemTypes, ISystemType> Systems
-        {
-            get
-            {
-                if (allSystems.Count == 0) { setSystem(); }
-                return allSystems;
-            }
-        }
-        
         public static Dictionary<SystemTypes, PlainShipRoom> FastRoom { get; private set; }
 
-        private static readonly Dictionary<SystemTypes, ISystemType> allSystems = new Dictionary<SystemTypes, ISystemType>();
-        
         public static void SetUp(ShipStatus instance)
         {
-            Instance = instance;
             FastRoom = instance.AllRooms.Where(
                 (PlainShipRoom p) => p.RoomId > SystemTypes.Hallway
                     ).ToDictionary((PlainShipRoom r) => r.RoomId);
@@ -31,23 +18,7 @@ namespace ExtremeRoles.Performance
 
         public static void Destroy()
         {
-            Instance = null;
             FastRoom.Clear();
-            allSystems.Clear();
-        }
-
-        private static void setSystem()
-        {
-            if (!Instance) { return; }
-
-            var systems = Instance.Systems;
-            if (systems.Count <= 0) { return; }
-
-            foreach (var systemTypes in SystemTypeHelpers.AllTypes)
-            {
-                if (!systems.ContainsKey(systemTypes)) { continue; }
-                allSystems[systemTypes] = systems[systemTypes];
-            }
         }
     }
 }

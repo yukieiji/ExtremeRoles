@@ -105,7 +105,7 @@ public sealed class UnderWarper :
         byte playerId, int ventId, bool isEnter)
     {
         PlayerControl targetPlayer = Player.GetPlayerControlById(playerId);
-        Vent vent = CachedShipStatus.Instance.AllVents.First(
+        Vent vent = ShipStatus.Instance.AllVents.First(
             (Vent v) => v.Id == ventId);
 
         if (targetPlayer == null || vent == null) { return; }

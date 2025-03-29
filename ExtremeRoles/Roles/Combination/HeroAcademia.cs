@@ -499,8 +499,8 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     public void Update(PlayerControl rolePlayer)
     {
         if (MeetingHud.Instance != null ||
-            CachedShipStatus.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled) { return; }
+            ShipStatus.Instance == null) { return; }
+        if (!ShipStatus.Instance.enabled) { return; }
 
         if (this.callTargetArrow != null)
         {

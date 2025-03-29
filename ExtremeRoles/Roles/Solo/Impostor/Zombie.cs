@@ -156,7 +156,7 @@ public sealed class Zombie :
             return;
         }
 
-        PlainShipRoom[] allRooms = CachedShipStatus.Instance.AllRooms;
+        PlainShipRoom[] allRooms = ShipStatus.Instance.AllRooms;
         var useRoom = (
             from room in allRooms
             where room != null && room.RoomId != SystemTypes.Hallway
@@ -244,8 +244,8 @@ public sealed class Zombie :
         bool isNotTaskPhase =
             MeetingHud.Instance ||
             ExileController.Instance ||
-            CachedShipStatus.Instance == null ||
-            !CachedShipStatus.Instance.enabled;
+            ShipStatus.Instance == null ||
+            !ShipStatus.Instance.enabled;
         bool isNotAwake = !this.IsAwake;
         bool isDeActivateArrow = isDead || isNotTaskPhase || isNotAwake;
 

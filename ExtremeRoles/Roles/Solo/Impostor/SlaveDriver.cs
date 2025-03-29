@@ -123,17 +123,17 @@ public sealed class SlaveDriver :
 				int newTaskId = 0;
 				byte taskId = task.TypeId;
 
-				if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
+				if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
 					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
 					newTaskId = GameSystem.GetRandomCommonTaskId();
 				}
-				else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
+				else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
 					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
 					newTaskId = GameSystem.GetRandomLongTask();
 				}
-				else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
+				else if (ShipStatus.Instance.ShortTasks.FirstOrDefault(
 					(NormalPlayerTask t) => t.Index == taskId) != null)
 				{
 					newTaskId = GameSystem.GetRandomShortTaskId();

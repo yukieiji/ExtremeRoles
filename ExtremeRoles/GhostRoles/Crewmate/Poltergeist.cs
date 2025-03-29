@@ -150,8 +150,8 @@ public sealed class Poltergeist : GhostRoleBase
     {
         this.targetBody = null;
 
-        if (CachedShipStatus.Instance == null ||
-            !CachedShipStatus.Instance.enabled) { return false; }
+        if (ShipStatus.Instance == null ||
+            !ShipStatus.Instance.enabled) { return false; }
 
         Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
 

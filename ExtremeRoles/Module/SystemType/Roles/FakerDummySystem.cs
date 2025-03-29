@@ -204,7 +204,7 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 			}
 			string petId = cosmicInfo.OutfitInfo.PetId;
 			if (petId != PetData.EmptyId &&
-				CachedShipStatus.Instance.CosmeticsCache.pets.TryGetValue(
+				ShipStatus.Instance.CosmeticsCache.pets.TryGetValue(
 					petId, out var targetPet) &&
 				targetPet != null)
 			{

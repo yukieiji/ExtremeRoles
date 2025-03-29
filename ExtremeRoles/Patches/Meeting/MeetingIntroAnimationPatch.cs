@@ -17,9 +17,9 @@ public static class MeetingIntroAnimationInitPatch
 	{
 		// バニラのベント掃除が残り続けるバグの修正
 		// これより前だとベントに入ってる状態が残ってる可能性があるのでここでやる
-		if (CachedShipStatus.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
-			!CachedShipStatus.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType? system))
+		if (ShipStatus.Instance == null ||
+			!ShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Ventilation, out ISystemType? system))
 		{
 			return;
 		}

@@ -62,8 +62,8 @@ public sealed class PsychoKiller :
 		if (rolePlayer == null ||
 			rolePlayer.Data.IsDead ||
 			GameData.Instance == null ||
-			CachedShipStatus.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			ShipStatus.Instance == null ||
+			!ShipStatus.Instance.enabled ||
 			ExileController.Instance != null ||
 			MeetingHud.Instance != null ||
 			!this.isStartTimer)

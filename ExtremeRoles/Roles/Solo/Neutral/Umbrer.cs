@@ -274,11 +274,11 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         if (MeetingHud.Instance != null ||
             ExileController.Instance != null ||
-            CachedShipStatus.Instance == null ||
+            ShipStatus.Instance == null ||
             this.IsWin ||
             GameData.Instance == null ||
             this.container == null) { return; }
-        if (!CachedShipStatus.Instance.enabled) { return; }
+        if (!ShipStatus.Instance.enabled) { return; }
 
         if (RoleAssignState.Instance.IsRoleSetUpEnd && !isFetch)
         {
