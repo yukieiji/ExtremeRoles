@@ -672,9 +672,9 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 		in WinnerTempData winner)
 	{
 		if (reason is
-				GameOverReason.HumansByTask or
-				GameOverReason.HumansByVote or
-				GameOverReason.HumansDisconnect)
+				GameOverReason.CrewmatesByTask or
+				GameOverReason.CrewmatesByVote or
+				GameOverReason.CrewmateDisconnect)
 		{
 			return;
 		}
