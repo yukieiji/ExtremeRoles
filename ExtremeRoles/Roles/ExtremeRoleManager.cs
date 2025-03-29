@@ -133,6 +133,12 @@ public enum ExtremeRoleId : int
 	IronMate,
 	Monika,
 	Heretic,
+	Furry,
+	Shepherd,
+	Pawn,
+	Knight,
+	Intimate,
+	Surrogate,
 
 	Xion,
 }
@@ -213,7 +219,9 @@ public enum RoleGameOverReason
 
 public enum NeutralSeparateTeam
 {
-    Jackal,
+	None = -100,
+
+    Jackal = 0,
     Alice,
     Lover,
     Missionary,
