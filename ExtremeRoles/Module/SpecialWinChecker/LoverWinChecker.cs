@@ -5,8 +5,10 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
-using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+using ExtremeRoles.Roles.Solo.Neutral.Queen;
 
 
 namespace ExtremeRoles.Module.SpecialWinChecker;
@@ -76,7 +78,7 @@ internal sealed class LoverWinChecker : IWinChecker
 				switch (lover.AnotherRole.Id)
 				{
 					case ExtremeRoleId.Sidekick:
-						var sidekick = (Sidekick)lover.AnotherRole;
+						var sidekick = (SidekickRole)lover.AnotherRole;
 						var jackalPlayer = Helper.Player.GetPlayerControlById(sidekick.Parent);
 						if (jackalPlayer == null) { break; }
 						if (!jackalPlayer.Data.IsDead &&
@@ -88,7 +90,7 @@ internal sealed class LoverWinChecker : IWinChecker
 						}
 						break;
 					case ExtremeRoleId.Jackal:
-						var jackal = (Jackal)lover.AnotherRole;
+						var jackal = (JackalRole)lover.AnotherRole;
 						int sidekickNum = jackal.SidekickPlayerId.Count;
 						if (statistics.TeamImpostorAlive <= 0)
 						{
@@ -106,8 +108,11 @@ internal sealed class LoverWinChecker : IWinChecker
 						}
 						break;
 					case ExtremeRoleId.Servant:
-						var servant = (Servant)lover.AnotherRole;
-						var queenPlayer = Helper.Player.GetPlayerControlById(servant.Parent);
+						if (lover.AnotherRole.Status is not IParentChainStatus servantStatus)
+						{
+							return false;
+						}
+						var queenPlayer = Helper.Player.GetPlayerControlById(servantStatus.Parent);
 						if (queenPlayer == null) { break; }
 						if (!queenPlayer.Data.IsDead &&
 							!queenPlayer.Data.Disconnected &&

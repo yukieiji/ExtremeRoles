@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -8,22 +7,18 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-using ExtremeRoles.Module.Ability.Factory;
 
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Module.CustomOption.Interfaces;
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+namespace ExtremeRoles.Roles.Solo.Neutral.Queen;
 
-public sealed class Queen :
+public sealed class QueenRole :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleSpecialReset,
@@ -45,10 +40,10 @@ public sealed class Queen :
 
     public ExtremeAbilityButton Button
     {
-        get => this.createServant;
+        get => createServant;
         set
         {
-            this.createServant = value;
+            createServant = value;
         }
     }
 
@@ -64,7 +59,7 @@ public sealed class Queen :
     private HashSet<byte> servantPlayerId;
 	private bool servantSucideWithQueenWhenHasKill;
 
-	public Queen() : base(
+	public QueenRole() : base(
         ExtremeRoleId.Queen,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Queen.ToString(),
@@ -76,19 +71,19 @@ public sealed class Queen :
         byte rolePlayerId, byte targetPlayerId)
     {
 
-        Queen queen = ExtremeRoleManager.GetSafeCastedRole<Queen>(rolePlayerId);
+        QueenRole queen = ExtremeRoleManager.GetSafeCastedRole<QueenRole>(rolePlayerId);
 
         if (queen == null) { return; }
 
         var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
         var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
-        IRoleHasParent.PurgeParent(targetPlayerId);
+        IParentChainStatus.PurgeParent(targetPlayerId);
         resetTargetAnotherRole(targetRole, targetPlayerId, targetPlayer);
         replaceVanilaRole(targetRole, targetPlayer);
         resetAbility(targetRole, targetPlayerId);
 
-        Servant servant = new Servant(
+        ServantRole servant = new ServantRole(
             rolePlayerId, queen, targetRole);
 
         if (targetPlayerId == PlayerControl.LocalPlayer.PlayerId)
@@ -251,13 +246,13 @@ public sealed class Queen :
         PlayerControl source, PlayerControl target)
     {
         if (source.PlayerId != target.PlayerId &&
-            this.servantPlayerId.Contains(source.PlayerId))
+            servantPlayerId.Contains(source.PlayerId))
         {
 
             float killcool = PlayerControl.LocalPlayer.killTimer;
             if (killcool > 0.0f)
             {
-                PlayerControl.LocalPlayer.killTimer = killcool * this.killKillCoolReduceRate;
+                PlayerControl.LocalPlayer.killTimer = killcool * killKillCoolReduceRate;
             }
         }
     }
@@ -270,33 +265,33 @@ public sealed class Queen :
             !ShipStatus.Instance ||
             !ShipStatus.Instance.enabled) { return; }
 
-        foreach (byte playerId in this.servantPlayerId)
+        foreach (byte playerId in servantPlayerId)
         {
             var player = Player.GetPlayerControlById(playerId);
             if (!player) { continue; }
 
             float gage = Player.GetPlayerTaskGage(player);
-            if (!this.servantTaskGage.ContainsKey(playerId))
+            if (!servantTaskGage.ContainsKey(playerId))
             {
-                this.servantTaskGage.Add(playerId, 0.0f);
+                servantTaskGage.Add(playerId, 0.0f);
             }
-            float prevGage = this.servantTaskGage[playerId];
-            this.servantTaskGage[playerId] = gage;
+            float prevGage = servantTaskGage[playerId];
+            servantTaskGage[playerId] = gage;
 
             float killcool = PlayerControl.LocalPlayer.killTimer;
             if (gage > prevGage && killcool > 0.0f)
             {
-                PlayerControl.LocalPlayer.killTimer = killcool * this.taskKillCoolReduceRate;
+                PlayerControl.LocalPlayer.killTimer = killcool * taskKillCoolReduceRate;
             }
-            if (gage >= 1.0f && !this.taskCompServant.Contains(playerId))
+            if (gage >= 1.0f && !taskCompServant.Contains(playerId))
             {
-                this.taskCompServant.Add(playerId);
-                if (!this.HasOtherKillCool)
+                taskCompServant.Add(playerId);
+                if (!HasOtherKillCool)
                 {
-                    this.KillCoolTime = Player.DefaultKillCoolTime;
+                    KillCoolTime = Player.DefaultKillCoolTime;
                 }
-                this.HasOtherKillCool = true;
-                this.KillCoolTime = this.KillCoolTime * this.taskCompKillCoolReduceRate;
+                HasOtherKillCool = true;
+                KillCoolTime = KillCoolTime * taskCompKillCoolReduceRate;
             }
         }
     }
@@ -304,14 +299,14 @@ public sealed class Queen :
 
     public void AllReset(PlayerControl rolePlayer)
     {
-        foreach (byte playerId in this.servantPlayerId)
+        foreach (byte playerId in servantPlayerId)
         {
             var player = Player.GetPlayerControlById(playerId);
 
             if (player == null ||
 				player.Data.IsDead ||
                 player.Data.Disconnected ||
-				this.isNotSucideServant(playerId)) { continue; }
+				isNotSucideServant(playerId)) { continue; }
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -322,7 +317,7 @@ public sealed class Queen :
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "queenCharm", Resources.UnityObjectLoader.LoadSpriteFromResources(
+            "queenCharm", UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.QueenCharm));
     }
 
@@ -336,11 +331,11 @@ public sealed class Queen :
 
     public bool IsAbilityUse()
     {
-        this.Target = Player.GetClosestPlayerInRange(
+        Target = Player.GetClosestPlayerInRange(
             PlayerControl.LocalPlayer,
-            this, this.range);
+            this, range);
 
-        return this.Target != null && IRoleAbility.IsCommonUse();
+        return Target != null && IRoleAbility.IsCommonUse();
     }
 
     public void ResetOnMeetingStart()
@@ -355,14 +350,14 @@ public sealed class Queen :
 
     public override void ExiledAction(PlayerControl rolePlayer)
     {
-        foreach (byte playerId in this.servantPlayerId)
+        foreach (byte playerId in servantPlayerId)
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
             if (player == null ||
 				player.Data.IsDead ||
 				player.Data.Disconnected ||
-				this.isNotSucideServant(playerId)) { continue; }
+				isNotSucideServant(playerId)) { continue; }
 
             player.Exiled();
         }
@@ -373,8 +368,8 @@ public sealed class Queen :
     {
 
         if (targetRole.Id == ExtremeRoleId.Servant &&
-            this.IsSameControlId(targetRole) &&
-            this.servantPlayerId.Contains(targetPlayerId))
+            IsSameControlId(targetRole) &&
+            servantPlayerId.Contains(targetPlayerId))
         {
             return ColorPalette.QueenWhite;
         }
@@ -388,9 +383,9 @@ public sealed class Queen :
         SingleRoleBase targetRole, byte targetPlayerId)
     {
 
-        if (this.servantPlayerId.Contains(targetPlayerId))
+        if (servantPlayerId.Contains(targetPlayerId))
         {
-            return Helper.Design.ColoedString(
+            return Design.ColoedString(
                 ColorPalette.QueenWhite,
                 $" {RoleShowTag}");
         }
@@ -401,14 +396,14 @@ public sealed class Queen :
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-        foreach (byte playerId in this.servantPlayerId)
+        foreach (byte playerId in servantPlayerId)
         {
             PlayerControl player = Player.GetPlayerControlById(playerId);
 
             if (player == null ||
 				player.Data.IsDead ||
                 player.Data.Disconnected ||
-				this.isNotSucideServant(playerId)) { continue; }
+				isNotSucideServant(playerId)) { continue; }
 
             RPCOperator.UncheckedMurderPlayer(
                 playerId, playerId,
@@ -418,7 +413,7 @@ public sealed class Queen :
 
     public override bool IsSameTeam(SingleRoleBase targetRole)
     {
-        if (this.isSameQueenTeam(targetRole))
+        if (isSameQueenTeam(targetRole))
         {
             if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
             {
@@ -426,7 +421,7 @@ public sealed class Queen :
             }
             else
             {
-                return this.IsSameControlId(targetRole);
+                return IsSameControlId(targetRole);
             }
         }
         else
@@ -470,292 +465,34 @@ public sealed class Queen :
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Loader;
+		var cate = Loader;
 
-        this.range = cate.GetValue<QueenOption, float>(QueenOption.Range);
-        this.UseVent = cate.GetValue<QueenOption, bool>(
+        range = cate.GetValue<QueenOption, float>(QueenOption.Range);
+        UseVent = cate.GetValue<QueenOption, bool>(
             QueenOption.CanUseVent);
-        this.ServantSelfKillCool = cate.GetValue<QueenOption, float>(
+        ServantSelfKillCool = cate.GetValue<QueenOption, float>(
             QueenOption.ServantSelfKillCool);
-        this.killKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
-            QueenOption.ServantKillKillCoolReduceRate) / 100.0f);
-        this.taskKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
-            QueenOption.ServantTaskKillCoolReduceRate) / 100.0f);
-        this.taskCompKillCoolReduceRate = 1.0f - (cate.GetValue<QueenOption, int>(
-            QueenOption.ServantTaskCompKillCoolReduceRate) / 100.0f);
-		this.servantSucideWithQueenWhenHasKill = cate.GetValue<QueenOption, bool>(
+        killKillCoolReduceRate = 1.0f - cate.GetValue<QueenOption, int>(
+            QueenOption.ServantKillKillCoolReduceRate) / 100.0f;
+        taskKillCoolReduceRate = 1.0f - cate.GetValue<QueenOption, int>(
+            QueenOption.ServantTaskKillCoolReduceRate) / 100.0f;
+        taskCompKillCoolReduceRate = 1.0f - cate.GetValue<QueenOption, int>(
+            QueenOption.ServantTaskCompKillCoolReduceRate) / 100.0f;
+		servantSucideWithQueenWhenHasKill = cate.GetValue<QueenOption, bool>(
 			QueenOption.ServantSucideWithQueenWhenHasKill);
 
-		this.servantTaskGage = new Dictionary<byte, float>();
-        this.servantPlayerId = new HashSet<byte>();
-        this.taskCompServant = new HashSet<byte>();
+		servantTaskGage = new Dictionary<byte, float>();
+        servantPlayerId = new HashSet<byte>();
+        taskCompServant = new HashSet<byte>();
     }
 
     private bool isSameQueenTeam(SingleRoleBase targetRole)
     {
-        return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Servant));
+        return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Servant;
     }
 	private bool isNotSucideServant(byte playerId)
 		=>
-		!this.servantSucideWithQueenWhenHasKill &&
-		ExtremeRoleManager.TryGetSafeCastedRole<Servant>(playerId, out var servant) &&
+		!servantSucideWithQueenWhenHasKill &&
+		ExtremeRoleManager.TryGetSafeCastedRole<ServantRole>(playerId, out var servant) &&
 		servant.CanKill && !servant.IsSpecialKill;
-}
-
-public sealed class Servant :
-    MultiAssignRoleBase,
-    IRoleAutoBuildAbility,
-    IRoleMurderPlayerHook,
-    IRoleHasParent
-{
-    public byte Parent => this.queenPlayerId;
-
-    public ExtremeAbilityButton Button
-    {
-        get => this.selfKillButton;
-        set
-        {
-            this.selfKillButton = value;
-        }
-    }
-
-    private ExtremeAbilityButton selfKillButton;
-
-    private byte queenPlayerId;
-    private SpriteRenderer killFlash;
-    private Queen queen;
-
-	public override IOptionLoader Loader { get; }
-	public bool IsSpecialKill { get; }
-
-    public Servant(
-        byte queenPlayerId,
-        Queen queen,
-        SingleRoleBase baseRole) :
-        base(
-            ExtremeRoleId.Servant,
-            ExtremeRoleType.Neutral,
-            ExtremeRoleId.Servant.ToString(),
-            ColorPalette.QueenWhite,
-            baseRole.CanKill,
-            !baseRole.IsImpostor() ? true : baseRole.HasTask,
-            baseRole.UseVent,
-            baseRole.UseSabotage)
-    {
-		this.Loader = queen.Loader;
-        this.SetControlId(queen.GameControlId);
-        this.queenPlayerId = queenPlayerId;
-        this.queen = queen;
-        this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
-
-		var id = baseRole.Id;
-
-		this.IsSpecialKill = id is
-			ExtremeRoleId.Fencer or ExtremeRoleId.Sheriff;
-
-		this.CanKill = id switch
-		{
-			ExtremeRoleId.Fencer => false,
-			ExtremeRoleId.Yandere or ExtremeRoleId.Hero => true,
-			_ => this.CanKill,
-		};
-
-		if (baseRole.IsImpostor())
-		{
-			this.HasOtherVision = true;
-		}
-		else
-		{
-			this.HasOtherVision = baseRole.HasOtherVision;
-		}
-        this.Vision = baseRole.Vision;
-        this.IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
-
-        this.HasOtherKillCool = baseRole.HasOtherKillCool;
-        this.KillCoolTime = baseRole.KillCoolTime;
-        this.HasOtherKillRange = baseRole.HasOtherKillRange;
-        this.KillRange = baseRole.KillRange;
-    }
-
-    public void SelfKillAbility(float coolTime)
-    {
-        this.Button = RoleAbilityFactory.CreateReusableAbility(
-            "selfKill",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
-				ObjectPath.SucideSprite),
-            this.IsAbilityUse,
-            this.UseAbility);
-        this.Button.Behavior.SetCoolTime(coolTime);
-        this.Button.OnMeetingEnd();
-    }
-
-    public void HookMuderPlayer(
-        PlayerControl source, PlayerControl target)
-    {
-
-        if (MeetingHud.Instance ||
-            source.PlayerId == target.PlayerId ||
-            ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
-
-        var hudManager = HudManager.Instance;
-
-        if (this.killFlash == null)
-        {
-            this.killFlash = UnityEngine.Object.Instantiate(
-                 hudManager.FullScreen,
-                 hudManager.transform);
-            this.killFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
-            this.killFlash.gameObject.SetActive(true);
-        }
-
-        Color32 color = new Color(0f, 0.8f, 0f);
-
-        if (source.PlayerId == this.queenPlayerId)
-        {
-            color = this.NameColor;
-        }
-
-        this.killFlash.enabled = true;
-
-        hudManager.StartCoroutine(
-            Effects.Lerp(1.0f, new Action<float>((p) =>
-            {
-                if (this.killFlash == null) { return; }
-                if (p < 0.5)
-                {
-                    this.killFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
-
-                }
-                else
-                {
-                    this.killFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
-                }
-                if (p == 1f)
-                {
-                    this.killFlash.enabled = false;
-                }
-            }))
-        );
-    }
-
-    public void CreateAbility()
-    {
-        throw new Exception("Don't call this class method!!");
-    }
-
-    public bool IsAbilityUse() => IRoleAbility.IsCommonUse();
-
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
-    {
-        return;
-    }
-
-    public void ResetOnMeetingStart()
-    {
-        if (this.killFlash != null)
-        {
-            this.killFlash.enabled = false;
-        }
-    }
-
-    public bool UseAbility()
-    {
-        byte playerId = PlayerControl.LocalPlayer.PlayerId;
-        Player.RpcUncheckMurderPlayer(
-            playerId, playerId, byte.MaxValue);
-
-        return true;
-    }
-
-    public void RemoveParent(byte rolePlayerId)
-    {
-        this.queen.RemoveServantPlayer(rolePlayerId);
-    }
-
-    public override void OverrideAnotherRoleSetting()
-    {
-        var queenPlayer = GameData.Instance.GetPlayerById(Parent);
-
-        if (this.AnotherRole is Resurrecter resurrecter &&
-            (queenPlayer == null || queenPlayer.IsDead || queenPlayer.Disconnected))
-        {
-            Resurrecter.UseResurrect(resurrecter);
-        }
-    }
-
-    public override bool TryRolePlayerKillTo(
-        PlayerControl rolePlayer, PlayerControl targetPlayer)
-    {
-        if (targetPlayer.PlayerId == this.queenPlayerId)
-        {
-            if (this.AnotherRole?.Id == ExtremeRoleId.Sheriff)
-            {
-
-                Player.RpcUncheckMurderPlayer(
-                    rolePlayer.PlayerId,
-                    rolePlayer.PlayerId,
-                    byte.MaxValue);
-
-                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-                    rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
-            }
-            return false;
-        }
-
-        return base.TryRolePlayerKillTo(rolePlayer, targetPlayer);
-    }
-
-    public override string GetFullDescription()
-    {
-        var queen = Player.GetPlayerControlById(this.queenPlayerId);
-        string fullDesc = base.GetFullDescription();
-
-        if (queen == null ||
-            queen.Data == null)
-		{
-			return fullDesc;
-		}
-
-        return string.Format(
-            fullDesc, queen.Data.PlayerName);
-    }
-
-    public override Color GetTargetRoleSeeColor(
-        SingleRoleBase targetRole,
-        byte targetPlayerId)
-    {
-
-        if (targetPlayerId == this.queenPlayerId)
-        {
-            return ColorPalette.QueenWhite;
-        }
-        return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
-    }
-
-    public override string GetRoleTag() => Queen.RoleShowTag;
-
-    public override string GetRolePlayerNameTag(
-        SingleRoleBase targetRole, byte targetPlayerId)
-    {
-
-        if (targetPlayerId == this.queenPlayerId)
-        {
-            return Helper.Design.ColoedString(
-                ColorPalette.QueenWhite,
-                $" {Queen.RoleShowTag}");
-        }
-
-        return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
-    }
-
-    protected override void CreateSpecificOption(
-        AutoParentSetOptionCategoryFactory factory)
-    {
-        throw new Exception("Don't call this class method!!");
-    }
-
-    protected override void RoleSpecificInit()
-    {
-        throw new Exception("Don't call this class method!!");
-    }
 }

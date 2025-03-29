@@ -157,7 +157,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         private static void resetRole(PlayerControl targetPlayer, byte targetPlayerId)
         {
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
-            IRoleHasParent.PurgeParent(targetPlayerId);
+            IParentChainStatus.PurgeParent(targetPlayerId);
 
             // プレイヤーのリセット処理
             if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)
