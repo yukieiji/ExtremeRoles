@@ -41,7 +41,7 @@ public static class ProgressTrackerFixedUpdatePatch
         if (gameData && gameData.TotalTasks > 0)
         {
             __instance.gameObject.SetActive(true);
-            int num = (DestroyableSingleton<TutorialManager>.InstanceExists ?
+            int num = (TutorialManager.InstanceExists ?
                 1 : (gameData.PlayerCount - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
                         Int32OptionNames.NumImpostors)));
             num -= gameData.AllPlayers.ToArray().ToList().Count(

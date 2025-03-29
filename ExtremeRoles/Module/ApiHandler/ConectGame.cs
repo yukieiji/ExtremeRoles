@@ -36,7 +36,7 @@ internal class ConectGame : IRequestHandler
 		var response = context.Response;
 
 		if (AmongUsClient.Instance == null ||
-			!DestroyableSingleton<ServerManager>.InstanceExists ||
+			!ServerManager.InstanceExists ||
 			AmongUsClient.Instance.mode is not MatchMakerModes.None)
 		{
 			response.StatusCode = (int)HttpStatusCode.PreconditionFailed;
@@ -84,25 +84,25 @@ internal class ConectGame : IRequestHandler
 	public static string CreateDirectConectUrl(int gameCode)
 	{
 		string stredCode = GameCode.IntToGameName(gameCode);
-		var curRegion = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion;
+		var curRegion = ServerManager.Instance.CurrentRegion;
 		string param = $"{CodeKey}={stredCode}&{NameKey}={curRegion.Name}&{TransNameKey}={curRegion.TranslateName}";
 		return $"{ApiServer.Url}{Path}?{Uri.EscapeDataString(param)}";
 	}
 
 	private static IEnumerator coJoin(int code, ServerInfo serverInfo)
 	{
-		if (DestroyableSingleton<StoreMenu>.InstanceExists)
+		if (StoreMenu.InstanceExists)
 		{
-			FastDestroyableSingleton<StoreMenu>.Instance.CloseEntirely();
+			StoreMenu.Instance.CloseEntirely();
 		}
-		while (!DestroyableSingleton<EOSManager>.InstanceExists)
+		while (!EOSManager.InstanceExists)
 		{
 			yield return null;
 		}
 
-		yield return FastDestroyableSingleton<EOSManager>.Instance.WaitForLoginFlow();
+		yield return EOSManager.Instance.WaitForLoginFlow();
 
-		var sm = FastDestroyableSingleton<ServerManager>.Instance;
+		var sm = ServerManager.Instance;
 		if (sm.CurrentRegion == null ||
 			sm.CurrentRegion.TranslateName != serverInfo.TransName ||
 			sm.CurrentRegion.Name != serverInfo.Name)
@@ -118,7 +118,7 @@ internal class ConectGame : IRequestHandler
 			}
 		}
 
-		yield return FastDestroyableSingleton<ServerManager>.Instance.WaitForServers();
+		yield return ServerManager.Instance.WaitForServers();
 		yield return AmongUsClient.Instance.CoFindGameInfoFromCodeAndJoin(code);
 	}
 }

@@ -168,7 +168,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     private void createText()
     {
 		this.killCountText = ICountBehavior.CreateCountText(
-			FastDestroyableSingleton<HudManager>.Instance.KillButton);
+			HudManager.Instance.KillButton);
         updateKillCountText();
         this.killCountText.name = ExtremeAbilityButton.AditionalInfoName;
 		this.killCountText.gameObject.SetActive(true);
@@ -245,7 +245,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
         if (this.enableTaskRelatedSetting && this.isSyncTaskShootNum)
         {
             this.shootNum = 0;
-            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetDisabled();
+            HudManager.Instance.KillButton.SetDisabled();
             this.CanKill = false;
         }
     }
@@ -274,7 +274,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
         if (this.shootNum == 0)
         {
             this.killCountText.gameObject.SetActive(false);
-            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetDisabled();
+            HudManager.Instance.KillButton.SetDisabled();
             this.CanKill = false;
         }
         updateKillCountText();

@@ -280,7 +280,7 @@ public sealed class OptionManager : IEnumerable<KeyValuePair<OptionTab, OptionTa
 						tabName, category.TransedName,
 						option.Title, option.ValueString);
 
-					FastDestroyableSingleton<HudManager>.Instance.Notifier.SettingsChangeMessageLogic(
+					HudManager.Instance.Notifier.SettingsChangeMessageLogic(
 						key, string.Format(OptionChangeFontPlace, showStr),
 						true);
 					key++;

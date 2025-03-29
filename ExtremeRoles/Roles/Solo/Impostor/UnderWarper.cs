@@ -137,7 +137,7 @@ public sealed class UnderWarper :
         {
             if (modMap is SubmergedIntegrator)
             {
-                FastDestroyableSingleton<HudManager>.Instance.PlayerCam.Locked = false;
+                HudManager.Instance.PlayerCam.Locked = false;
             }
         }
     }
@@ -287,11 +287,11 @@ public sealed class UnderWarper :
         {
             return string.Concat(new string[]
             {
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
                 "\r\n",
                 Palette.ImpostorRed.ToTextColor(),
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
             });

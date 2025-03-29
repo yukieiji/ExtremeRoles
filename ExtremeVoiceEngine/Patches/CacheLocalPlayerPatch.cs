@@ -16,7 +16,7 @@ public static class ChatCurrentSettingPatch
     public static void Postfix()
     {
         if (Chated ||
-            FastDestroyableSingleton<HudManager>.Instance == null ||
+            HudManager.Instance == null ||
             VoiceEngine.Instance == null ||
             !PlayerControl.LocalPlayer) { return; }
 
@@ -24,7 +24,7 @@ public static class ChatCurrentSettingPatch
             () =>
             {
                 Chated = true;
-                FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat(
+                HudManager.Instance.Chat.AddLocalChat(
                     TranslationControllerExtension.GetString(
                         "pringCurState", VoiceEngine.Instance.ToString()));
             });

@@ -91,7 +91,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
 	public void OnEnable()
 	{
-		FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
+		HudManager.Instance.gameObject.SetActive(false);
 		if (this.HideObject != null)
 		{
 			this.HideObject.SetActive(false);
@@ -133,7 +133,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 		{
 			this.HideObject.SetActive(true);
 		}
-		FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(true);
+		HudManager.Instance.gameObject.SetActive(true);
 	}
 
 	[HideFromIl2Cpp]

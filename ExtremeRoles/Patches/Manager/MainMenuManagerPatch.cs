@@ -72,7 +72,7 @@ public static class MainMenuManagerStartPatch
 
 		if (!AutoModInstaller.Instance.IsInit)
 		{
-			TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
+			TwitchManager man = TwitchManager.Instance;
 			var infoPop = UnityObject.Instantiate(man.TwitchPopup);
 			infoPop.TextAreaTMP.fontSize *= 0.7f;
 			infoPop.TextAreaTMP.enableAutoSizing = false;
@@ -82,7 +82,7 @@ public static class MainMenuManagerStartPatch
 
     public static void Postfix(MainMenuManager __instance)
     {
-        FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
+        ModManager.Instance.ShowModStamp();
 
 #if RELEASE
         if (!ExtremeRolesPlugin.IgnoreOverrideConsoleDisable.Value &&
@@ -104,7 +104,7 @@ public static class MainMenuManagerStartPatch
 
 		if (Prefab.Prop == null || Prefab.Text == null)
         {
-            TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+            TwitchManager man = TwitchManager.Instance;
             Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);
             UnityObject.DontDestroyOnLoad(Prefab.Prop);
             Prefab.Prop.name = "propForInEx";

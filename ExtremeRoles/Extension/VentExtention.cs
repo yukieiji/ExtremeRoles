@@ -19,7 +19,7 @@ public static class VentExtention
 
 	public static void PlayVentAnimation(this Vent? vent)
 	{
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 		if (hud == null ||
 			vent == null ||
 			!vent.IsCanAnimate())

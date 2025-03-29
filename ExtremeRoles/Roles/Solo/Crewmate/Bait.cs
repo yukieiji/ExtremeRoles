@@ -166,7 +166,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		PlayerControl localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer.PlayerId == killerPlayer.PlayerId)
 		{
-			var baitReporter = FastDestroyableSingleton<HudManager>.Instance.gameObject.AddComponent<BaitDalayReporter>();
+			var baitReporter = HudManager.Instance.gameObject.AddComponent<BaitDalayReporter>();
 			baitReporter.StartReportTimer(
 				this.NameColor, rolePlayer.Data,
 				this.delayUntilForceReport);

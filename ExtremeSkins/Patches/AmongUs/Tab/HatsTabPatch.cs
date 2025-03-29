@@ -38,7 +38,7 @@ public static class HatsTabPatch
         inventoryTop = __instance.scroller.Inner.position.y - 0.5f;
         inventoryBottom = __instance.scroller.Inner.position.y - 4.5f;
 
-        HatData[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
+        HatData[] unlockedHats = HatManager.Instance.GetUnlockedHats();
         Dictionary<string, List<HatData>> hatPackage = new Dictionary<string, List<HatData>>();
 
         CustomCosmicTab.DestoryList(hatsTabCustomText);
@@ -156,7 +156,7 @@ public static class HatsTabPatch
                     () =>
                     {
                         __instance.SelectHat(
-                            FastDestroyableSingleton<HatManager>.Instance.GetHatById(
+                            HatManager.Instance.GetHatById(
                                 playerSkinData.Hat));
                     });
 				button.OnClick.AddListener(() => __instance.ClickEquip());
@@ -189,7 +189,7 @@ public static class HatsTabPatch
 			__instance.ColorChips.Add(colorChip);
 
 			index++;
-			if (!DestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+			if (!HatManager.Instance.CheckLongModeValidCosmetic(
 				hat.ProdId, __instance.PlayerPreview.GetIgnoreLongMode()))
 			{
 				colorChip.SetUnavailable();

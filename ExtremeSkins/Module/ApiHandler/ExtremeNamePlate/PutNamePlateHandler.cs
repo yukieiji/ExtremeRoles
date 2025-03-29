@@ -21,7 +21,7 @@ public sealed class PutNamePlateHandler : IRequestHandler
 		var response = context.Response;
 		NewCosmicData newNamePate = IRequestHandler.DeserializeJson<NewCosmicData>(context.Request);
 
-		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
+		var hatMng = HatManager.Instance;
 
 		if (hatMng == null)
 		{

@@ -493,11 +493,11 @@ public sealed class Hypnotist :
         {
             return string.Concat(new string[]
             {
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
                 "\r\n",
                 Palette.ImpostorRed.ToTextColor(),
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
             });
@@ -1090,7 +1090,7 @@ public sealed class Doll :
         switch (this.nextUseAbilityType)
         {
             case AbilityType.Admin:
-                FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+                HudManager.Instance.ToggleMapVisible(
                     new MapOptions
                     {
                         Mode = MapOptions.Modes.CountOverlay,
@@ -1242,7 +1242,7 @@ public sealed class Doll :
         if (this.chargeTime == null)
         {
             this.chargeTime = UnityEngine.Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 Camera.main.transform, false);
             this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
         }
@@ -1356,7 +1356,7 @@ public sealed class Doll :
         if (this.tellText == null)
         {
             this.tellText = UnityEngine.Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
+                HudManager.Instance.TaskPanel.taskText,
                 Camera.main.transform, false);
             this.tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
             this.tellText.alignment = TMPro.TextAlignmentOptions.Center;

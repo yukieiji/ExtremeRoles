@@ -43,7 +43,7 @@ public static class KeyboardJoystickPatch
         if (role.IsImpostor()) { return; }
 
         var player = KeyboardJoystick.player;
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         if (player.GetButtonDown(8) && role.CanKill())
         {

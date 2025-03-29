@@ -19,7 +19,7 @@ public sealed class FullScreenFlusherWithAudio
 	private Coroutine? coroutine;
 	private SpriteRenderer? flush;
 
-	private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
+	private static HudManager hud => HudManager.Instance;
 
 	public FullScreenFlusherWithAudio(
 		AudioClip? audio, Color color,

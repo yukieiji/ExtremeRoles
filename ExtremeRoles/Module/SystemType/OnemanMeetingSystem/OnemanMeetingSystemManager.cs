@@ -226,7 +226,7 @@ public sealed class OnemanMeetingSystemManager : IExtremeSystemType
 				{
 					string defaultSkinId = exiled.Outfits[PlayerOutfitType.Default].SkinId;
 					var skinViewData = CachedShipStatus.Instance.CosmeticsCache.GetSkin(defaultSkinId);
-					if (!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+					if (!HatManager.Instance.CheckLongModeValidCosmetic(
 							defaultSkinId, player.GetIgnoreLongMode()))
 					{
 						skinViewData = CachedShipStatus.Instance.CosmeticsCache.GetSkin("skin_None");

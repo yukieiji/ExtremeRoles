@@ -130,12 +130,12 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 
 	public bool UseAbility()
 	{
-		if (FastDestroyableSingleton<HudManager>.Instance == null ||
+		if (HudManager.Instance == null ||
 			this.console is SystemConsoleType.EmergencyButton)
 		{
 			return false;
 		}
-		FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
+		HudManager.Instance.StartCoroutine(
 			delayActive(this.console, this.timer));
 
 		this.console = SystemConsoleType.EmergencyButton;

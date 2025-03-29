@@ -64,7 +64,7 @@ public interface IIntroRunner
 
     private static IEnumerator waitRoleAssign()
     {
-		var loadingAnimation = FastDestroyableSingleton<HudManager>.Instance.GameLoadAnimation;
+		var loadingAnimation = HudManager.Instance.GameLoadAnimation;
 		loadingAnimation.SetActive(true);
 
 		if (AmongUsClient.Instance.AmHost)

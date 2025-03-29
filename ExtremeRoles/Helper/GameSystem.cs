@@ -40,7 +40,7 @@ public static class GameSystem
 	public static bool IsFreePlay => AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
 
 
-	private static UseButtonDict useButtonSetting => FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+	private static UseButtonDict useButtonSetting => HudManager.Instance.UseButton.fastUseSettings;
 
 	private static IReadOnlySet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
 	{
@@ -475,7 +475,7 @@ public static class GameSystem
 		AmongUsClient.Instance.Spawn(playerControl);
 		playerControl.isDummy = true;
 
-		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
+		var hatMng = HatManager.Instance;
 		var rng = RandomGenerator.GetTempGenerator();
 
 		int hat = rng.Next(hatMng.allHats.Count);

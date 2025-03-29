@@ -283,7 +283,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
             if (!this.targetPlayer.Data.IsDead) { return; }
 
-            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
+            HudManager.Instance.StartCoroutine(
                 this.cleanDeadBodyOps(this.targetPlayer.PlayerId));
 
             this.isActivated = true;

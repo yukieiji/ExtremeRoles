@@ -87,7 +87,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.curPos = localPc.transform.position;
 				this.curFlip = localPc.MyPhysics.FlipX;
 
-				FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
+				HudManager.Instance.ShadowQuad.gameObject.SetActive(
 					!(value || localPc.Data.IsDead));
 
 				bool invert = !value;
@@ -112,7 +112,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 		private Vector3 curPos;
 		private bool curFlip;
 
-		private static HudManager hud => FastDestroyableSingleton<HudManager>.Instance;
+		private static HudManager hud => HudManager.Instance;
 		private float uiOpenTime;
 		private float time;
 		private int num;
@@ -200,7 +200,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 				this.time += deltaTime;
 				if (this.time >= 0.05f)
 				{
-                    Vector2 del = FastDestroyableSingleton<HudManager>.Instance.joystick.DeltaL.normalized;
+                    Vector2 del = HudManager.Instance.joystick.DeltaL.normalized;
                     this.camera.transform.position = cameraPos + (del * 0.25f);
 					this.time = 0.0f;
                 }

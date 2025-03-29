@@ -547,7 +547,7 @@ public sealed class Guesser :
             if (this.meetingGuessText == null)
             {
                 this.meetingGuessText = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
+                    HudManager.Instance.TaskPanel.taskText,
                     MeetingHud.Instance.transform);
                 this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 this.meetingGuessText.transform.position = Vector3.zero;

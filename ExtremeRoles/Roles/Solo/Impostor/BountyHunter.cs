@@ -198,7 +198,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         if (this.targetTimerText == null)
         {
             this.targetTimerText = UnityEngine.Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText);
+                HudManager.Instance.KillButton.cooldownTimerText);
             this.targetTimerText.alignment = TMPro.TextAlignmentOptions.Center;
         }
 

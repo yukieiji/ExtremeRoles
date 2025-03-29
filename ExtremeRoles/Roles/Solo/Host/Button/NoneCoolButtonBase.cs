@@ -43,7 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Host.Button
                 return;
             }
 
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            var hudManager = HudManager.Instance;
 
             SetActive(hudManager.UseButton.isActiveAndEnabled);
 

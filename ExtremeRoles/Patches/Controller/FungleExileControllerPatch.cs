@@ -32,7 +32,7 @@ public static class FungleExileControllerAnimePatch
 	private static IEnumerator animateWithRandomSpawn(FungleExileController __instance)
 	{
 		var sound = SoundManager.Instance;
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 
 		sound.PlayNamedSound("ejection_beach_sfx", __instance.ambience, true, SoundManager.Instance.SfxChannel);
 		if (__instance.initData == null ||

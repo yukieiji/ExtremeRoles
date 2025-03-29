@@ -20,7 +20,7 @@ public record class ParseActions(Parser Parser, Action<Result?> ParseAction)
         }
         catch
         {
-            FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat(
+            HudManager.Instance.Chat.AddLocalChat(
                 TranslationController.Instance.GetString("CannotParse"));
         }
         this.ParseAction.Invoke(result);
@@ -55,10 +55,10 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
     public bool ExcuteCmd(string text)
     {
         if (!text.StartsWith(CmdChar) ||
-            !DestroyableSingleton<HudManager>.InstanceExists) { return false; }
+            !HudManager.InstanceExists) { return false; }
 
         string cleanedText = text.Substring(1);
-        ChatController chat = FastDestroyableSingleton<HudManager>.Instance.Chat;
+        ChatController chat = HudManager.Instance.Chat;
         string[] args = cleanedText.Split(' ');
 
         chat.AddLocalChat(text);

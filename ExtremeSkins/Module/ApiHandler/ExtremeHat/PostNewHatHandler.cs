@@ -32,7 +32,7 @@ public sealed class PostNewHatHandler : IRequestHandler
 		};
 		using var jsonStream = new StreamReader(newHat.GetInfoJsonPath());
 		HatInfo? info = JsonSerializer.Deserialize<HatInfo>(jsonStream.ReadToEnd(), options);
-		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
+		var hatMng = HatManager.Instance;
 
 		if (info == null || hatMng == null)
 		{

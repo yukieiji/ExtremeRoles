@@ -36,7 +36,7 @@ public static class SkeldExileControllerAnimePatch
 		Vector2 right = Vector2.right * num;
 		__instance.Player.transform.localPosition = left;
 
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 		if (hud != null)
 		{
 			yield return hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f, false);

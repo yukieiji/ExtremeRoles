@@ -59,7 +59,7 @@ public static class SecurityHelper
         if (timerText == null)
         {
             timerText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 instance.transform);
             timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
             timerText.name = "securityTimer";

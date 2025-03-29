@@ -99,7 +99,7 @@ public static class PlayerControlFixedUpdatePatch
 
 		bool isImposter = role.IsImpostor();
 
-		HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		HudManager hudManager = HudManager.Instance;
 
 		if (role.CanKill())
 		{
@@ -156,7 +156,7 @@ public static class PlayerControlFixedUpdatePatch
 		PlayerControl player, SingleRoleBase role, bool enable)
 	{
 
-		HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		HudManager hudManager = HudManager.Instance;
 
 		if (!role.CanUseVent() || player.Data.IsDead)
 		{
@@ -210,7 +210,7 @@ public static class PlayerControlFixedUpdatePatch
 	{
 		if (playerGhostRole == null) { return; }
 
-		var abilityButton = FastDestroyableSingleton<HudManager>.Instance.AbilityButton;
+		var abilityButton = HudManager.Instance.AbilityButton;
 
 		switch (PlayerControl.LocalPlayer.Data.Role.Role)
 		{

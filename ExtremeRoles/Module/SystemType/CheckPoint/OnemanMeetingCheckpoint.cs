@@ -30,7 +30,7 @@ public sealed class OnemanMeetingCheckpoint : GlobalCheckpointSystem.CheckpointH
 		if (this.rolePlayer == null) { return; }
 		ExtremeRolesPlugin.Logger.LogInfo("StartMeeting");
 		MeetingRoomManager.Instance.AssignSelf(this.rolePlayer, null);
-		FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(
+		HudManager.Instance.OpenMeetingRoom(
 			this.rolePlayer);
 		this.rolePlayer.RpcStartMeeting(null);
 	}

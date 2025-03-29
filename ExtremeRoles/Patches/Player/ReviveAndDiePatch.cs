@@ -60,7 +60,7 @@ public static class PlayerControlRevivePatch
 			roleId = RoleTypes.Impostor;
 		}
 
-		FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+		RoleManager.Instance.SetRole(
 			__instance, roleId);
 
 		var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();

@@ -257,7 +257,7 @@ public sealed class Captain :
             if (meetingVoteText == null)
             {
                 meetingVoteText = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
+                    HudManager.Instance.TaskPanel.taskText,
                     MeetingHud.Instance.transform);
                 meetingVoteText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 meetingVoteText.transform.position = Vector3.zero;

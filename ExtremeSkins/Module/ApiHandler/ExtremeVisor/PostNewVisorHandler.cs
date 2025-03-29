@@ -29,7 +29,7 @@ public sealed class PostNewVisorHandler : IRequestHandler
 		};
 		using var jsonStream = new StreamReader(newVisor.GetInfoJsonPath());
 		VisorInfo? info = JsonSerializer.Deserialize<VisorInfo>(jsonStream.ReadToEnd(), options);
-		var hatMng = FastDestroyableSingleton<HatManager>.Instance;
+		var hatMng = HatManager.Instance;
 
 		if (info == null || hatMng == null)
 		{

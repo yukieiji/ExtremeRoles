@@ -198,7 +198,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         GameObject bottomLeft = new GameObject("BottomLeft");
         bottomLeft.transform.SetParent(
-            FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.parent.parent);
+            HudManager.Instance.UseButton.transform.parent.parent);
         AspectPosition aspectPosition = bottomLeft.AddComponent<AspectPosition>();
         aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
         aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);

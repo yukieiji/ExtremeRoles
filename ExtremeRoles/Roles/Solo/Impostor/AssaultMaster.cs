@@ -154,7 +154,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
             this.Button != null)
         {
             this.reduceKillCoolText = GameObject.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 this.Button.Transform);
             this.reduceKillCoolText.enableWordWrapping = false;
             this.reduceKillCoolText.transform.localScale = Vector3.one * 0.5f;

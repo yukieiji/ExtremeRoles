@@ -38,7 +38,7 @@ public static class PlayerControlSetKillTimernPatch
 
 		__instance.killTimer = Mathf.Clamp(
 			time, 0f, maxTime);
-		FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(
+		HudManager.Instance.KillButton.SetCoolDown(
 			__instance.killTimer, maxTime);
 
 		return false;

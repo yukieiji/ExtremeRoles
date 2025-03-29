@@ -43,7 +43,7 @@ public sealed class ArtistLineDrawer :  MonoBehaviour
 		int useColorIndex = RandomGenerator.Instance.Next(allColor.Count);
 		var useColor = allColor[useColorIndex];
 
-		this.rend.material = new Material(FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
+		this.rend.material = new Material(HatManager.Instance.PlayerMaterial);
 		this.rend.SetColors(useColor, useColor);
 	}
 

@@ -82,8 +82,8 @@ public sealed class TimeBreakerTimeBreakSystem(float activeTime, bool effectImp,
 		if (screen == null)
 		{
 			screen = Object.Instantiate(
-				 FastDestroyableSingleton<HudManager>.Instance.FullScreen,
-				 FastDestroyableSingleton<HudManager>.Instance.transform);
+				 HudManager.Instance.FullScreen,
+				 HudManager.Instance.transform);
 			screen.transform.localPosition = new Vector3(0f, 0f, 20f);
 			screen.gameObject.SetActive(true);
 			screen.enabled = false;

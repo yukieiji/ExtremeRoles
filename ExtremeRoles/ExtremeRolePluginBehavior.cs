@@ -25,7 +25,7 @@ namespace ExtremeRoles
             if (Input.GetKeyDown(KeyCode.F10) &&
                 ExtremeRolesPlugin.DebugMode.Value)
             {
-                foreach(PetData pet in FastDestroyableSingleton<HatManager>.Instance.allPets)
+                foreach(PetData pet in HatManager.Instance.allPets)
                 {
                     Logging.Debug($"Cosmic Id:{pet.ProdId}");
                 }

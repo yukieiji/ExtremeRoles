@@ -12,7 +12,7 @@ internal sealed class XionActionToPlayerButton
     {
         public PlayerActionButton(byte playerId, Transform parent)
         {
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            var hudManager = HudManager.Instance;
 
             this.ButtonAction = Xion.GetPlayerButtonAction(playerId);
 
@@ -164,7 +164,7 @@ internal sealed class XionActionToPlayerButton
     {
         GameObject bottomLeft = new GameObject(name);
         bottomLeft.transform.SetParent(
-            FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.parent.parent);
+            HudManager.Instance.UseButton.transform.parent.parent);
         AspectPosition aspectPosition = bottomLeft.AddComponent<AspectPosition>();
         aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
         aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);

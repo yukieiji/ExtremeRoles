@@ -37,7 +37,7 @@ public sealed class SaboEvil : GhostRoleBase
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.SaboEvilResetSabotageCool,
-             FastDestroyableSingleton<HudManager>.Instance.SabotageButton.graphic.sprite,
+             HudManager.Instance.SabotageButton.graphic.sprite,
             this.IsReportAbility(),
             this.isPreCheck,
             this.isAbilityUse,

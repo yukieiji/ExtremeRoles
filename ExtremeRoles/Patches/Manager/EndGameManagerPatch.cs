@@ -76,7 +76,7 @@ public static class EndGameManagerSetUpPatch
 			(StringNames.Victory, new Color32(0, 140, byte.MaxValue, byte.MaxValue), Palette.CrewmateBlue) :
 			(StringNames.Defeat , new Color32(byte.MaxValue, 0, 0, byte.MaxValue)  , new Color(0.6415f, 0, 0, 1));
 
-		manager.WinText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+		manager.WinText.text = TranslationController.Instance.GetString(
 			overrideText, Il2CppArray.Empty<Il2CppObject>());
 		manager.WinText.color = textColor;
 		manager.BackgroundBar.material.SetColor("_Color", bkColor);
@@ -274,7 +274,7 @@ public static class EndGameManagerSetUpPatch
         }
 
 		winDetailTextBuilder.Append(
-			FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Victory));
+			TranslationController.Instance.GetString(StringNames.Victory));
 
 		textRenderer.text = winDetailTextBuilder.ToString();
 	}

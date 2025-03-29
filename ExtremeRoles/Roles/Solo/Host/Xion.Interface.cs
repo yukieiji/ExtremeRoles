@@ -41,7 +41,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 this.RpcForceEndGame();
                 return;
             }
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            var hudManager = HudManager.Instance;
 
             hudManager.ShadowQuad.gameObject.SetActive(false);
             hudManager.Chat.gameObject.SetActive(true);

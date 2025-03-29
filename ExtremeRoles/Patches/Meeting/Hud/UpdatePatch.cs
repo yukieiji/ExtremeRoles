@@ -124,7 +124,7 @@ public static class MeetingHudUpdatePatch
 			hud.SkipVoteButton.gameObject.SetActive(false);
 			var localPlayer = PlayerControl.LocalPlayer;
 
-			FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(
+			HudManager.Instance.Chat.gameObject.SetActive(
 				(
 					localPlayer != null
 					&&

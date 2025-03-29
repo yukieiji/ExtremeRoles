@@ -21,7 +21,7 @@ public static class MeetingHudUpdateButtonsPatch
 			return true;
 		}
 
-		var meeting = FastDestroyableSingleton<HudManager>.Instance.MeetingPrefab;
+		var meeting = HudManager.Instance.MeetingPrefab;
 
 		__instance.amDead = false;
 		__instance.Glass.sprite = meeting.Glass.sprite;

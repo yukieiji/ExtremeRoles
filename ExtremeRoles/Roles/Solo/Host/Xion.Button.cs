@@ -75,7 +75,7 @@ public sealed partial class Xion
 				Tr.GetString("speedUp")));
 
 
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
         GridArrange grid = hud.UseButton.transform.parent.gameObject.GetComponent<GridArrange>();
         grid.MaxColumns = enableMeeting ? 4 : 3;
 
@@ -87,7 +87,7 @@ public sealed partial class Xion
 
     private void disableButton()
     {
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         // 基本的にレポートボタンを無効化
         hudManager.ReportButton.Hide();

@@ -132,7 +132,7 @@ public sealed class Whisper :
         if (this.abilityText == null)
         {
             this.abilityText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 Camera.main.transform, false);
             this.abilityText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
             this.abilityText.enableWordWrapping = false;

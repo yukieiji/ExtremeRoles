@@ -35,7 +35,7 @@ public static class DisplayPrespawnStepPatchesCustomPrespawnStepPatch
 	public static IEnumerator assassinMeetingEnumerator()
 	{
 		// 真っ暗になるのでそれを解除する
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 		hud.StartCoroutine(hud.CoFadeFullScreen(Color.black, Color.clear, 0.2f));
 		yield break;
 	}

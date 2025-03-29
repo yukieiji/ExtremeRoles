@@ -542,7 +542,7 @@ public sealed class Tucker :
 		{
 			return;
 		}
-		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		var hudManager = HudManager.Instance;
 
 		if (this.reviveFlash == null)
 		{
@@ -720,7 +720,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 		if (this.resurrectText == null)
 		{
 			this.resurrectText = UnityEngine.Object.Instantiate(
-				FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+				HudManager.Instance.KillButton.cooldownTimerText,
 				Camera.main.transform, false);
 			this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
 			this.resurrectText.enableWordWrapping = false;
@@ -808,7 +808,7 @@ public sealed class Chimera : SingleRoleBase, IRoleUpdate, IRoleSpecialReset, IR
 
 		rolePlayer.killTimer = this.KillCoolTime;
 
-		FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
+		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
 		if (this.resurrectText != null)
 		{
 			this.resurrectText.gameObject.SetActive(false);

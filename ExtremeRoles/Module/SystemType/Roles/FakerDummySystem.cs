@@ -237,7 +237,7 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 		private void updateColorName(
 			TextMeshPro colorText, TextMeshPro baseColorText, int colorId)
 		{
-			char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+			char[] array = TranslationController.Instance.GetString(
 					Palette.ColorNames[colorId],
 					System.Array.Empty<Il2CppSystem.Object>()).ToCharArray();
 			if (array.Length != 0)

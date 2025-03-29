@@ -629,7 +629,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             byte roomId;
             try
             {
-                roomId = (byte)FastDestroyableSingleton<HudManager>.Instance.roomTracker.LastRoom.RoomId;
+                roomId = (byte)HudManager.Instance.roomTracker.LastRoom.RoomId;
             }
             catch
             {

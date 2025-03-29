@@ -263,7 +263,7 @@ public sealed class Zombie :
 
         if (isDead && this.infoBlock())
         {
-            FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            HudManager.Instance.Chat.gameObject.SetActive(false);
         }
 
         if (!rolePlayer.moveable || isNotTaskPhase)
@@ -280,7 +280,7 @@ public sealed class Zombie :
             if (this.resurrectText == null)
             {
                 this.resurrectText = Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    HudManager.Instance.KillButton.cooldownTimerText,
                     Camera.main.transform, false);
                 this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
                 this.resurrectText.enableWordWrapping = false;
@@ -357,12 +357,12 @@ public sealed class Zombie :
         {
             return string.Concat(new string[]
             {
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                    StringNames.ImpostorTask,
                    SystemArray.Empty<Il2CppObject>()),
                 "\r\n",
                 Palette.ImpostorRed.ToTextColor(),
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks,
                     SystemArray.Empty<Il2CppObject>()),
                 "</color>"
@@ -541,7 +541,7 @@ public sealed class Zombie :
         }
         UseResurrect(this);
 
-        FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
+        HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
         if (this.resurrectText != null)
         {
             this.resurrectText.gameObject.SetActive(false);

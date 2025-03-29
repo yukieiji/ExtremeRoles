@@ -31,7 +31,7 @@ public static class MiraExileControllerAnimePatch
 
 	private static IEnumerator animateWithRandomSpawn(MiraExileController __instance)
 	{
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 
 		if (hud != null)
 		{

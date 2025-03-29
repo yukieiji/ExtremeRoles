@@ -51,15 +51,15 @@ public sealed class GetChat : IRequestHandler
 	{
 		var response = context.Response;
 
-		if (!DestroyableSingleton<HudManager>.InstanceExists ||
-			FastDestroyableSingleton<HudManager>.Instance.Chat == null)
+		if (!HudManager.InstanceExists ||
+			HudManager.Instance.Chat == null)
 		{
 			response.StatusCode = (int)HttpStatusCode.PreconditionFailed;
 			response.Abort();
 			return;
 		}
 
-		var curChat = FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.activeChildren;
+		var curChat = HudManager.Instance.Chat.chatBubblePool.activeChildren;
 		var chatInfo = curChat
 			.ToArray()
 			.Where(x => x != null && x.TryCast<ChatBubble>() != null)

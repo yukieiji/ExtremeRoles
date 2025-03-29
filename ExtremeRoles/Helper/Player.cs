@@ -34,7 +34,7 @@ public static class Player
 	{
 		if (parent == null)
 		{
-			parent = FastDestroyableSingleton<HudManager>.Instance.transform;
+			parent = HudManager.Instance.transform;
 		}
 		Vector3 newScale = scale.HasValue ? scale.Value : Vector3.one;
 

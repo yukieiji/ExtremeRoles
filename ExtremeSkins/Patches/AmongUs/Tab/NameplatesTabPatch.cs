@@ -38,7 +38,7 @@ public static class NameplatesTabPatch
         inventoryTop = __instance.scroller.Inner.position.y - 0.5f;
         inventoryBottom = __instance.scroller.Inner.position.y - 4.5f;
 
-        NamePlateData[] unlockedNamePlate = DestroyableSingleton<HatManager>.Instance.GetUnlockedNamePlates();
+        NamePlateData[] unlockedNamePlate = HatManager.Instance.GetUnlockedNamePlates();
         Dictionary<string, List<NamePlateData>> namePlatePackage = new Dictionary<string, List<NamePlateData>>();
 
         CustomCosmicTab.DestoryList(namePlateTabCustomText);
@@ -166,7 +166,7 @@ public static class NameplatesTabPatch
             {
 				button.OnMouseOver.AddListener(() => __instance.SelectNameplate(np));
 				button.OnMouseOut.AddListener(() => __instance.SelectNameplate(
-                    FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById(
+                    HatManager.Instance.GetNamePlateById(
                         playerSkinData.NamePlate)));
 				button.OnClick.AddListener(() => __instance.ClickEquip());
             }

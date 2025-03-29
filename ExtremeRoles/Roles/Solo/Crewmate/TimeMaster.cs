@@ -110,8 +110,8 @@ public sealed class TimeMaster : SingleRoleBase, IRoleAutoBuildAbility
         if (timeMaster.rewindScreen == null)
         {
             timeMaster.rewindScreen = Object.Instantiate(
-                 FastDestroyableSingleton<HudManager>.Instance.FullScreen,
-                 FastDestroyableSingleton<HudManager>.Instance.transform);
+                 HudManager.Instance.FullScreen,
+                 HudManager.Instance.transform);
             timeMaster.rewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
             timeMaster.rewindScreen.gameObject.SetActive(true);
             timeMaster.rewindScreen.enabled = false;

@@ -695,7 +695,7 @@ public sealed class BodyGuard :
             if (this.meetingText == null)
             {
                 this.meetingText = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
+                    HudManager.Instance.TaskPanel.taskText,
                     MeetingHud.Instance.transform);
                 this.meetingText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 this.meetingText.transform.position = Vector3.zero;

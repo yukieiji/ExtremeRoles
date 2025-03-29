@@ -246,20 +246,20 @@ public sealed class PsychoKiller :
 
 	private void createCombText()
 	{
-		if (FastDestroyableSingleton<HudManager>.Instance == null) { return; }
+		if (HudManager.Instance == null) { return; }
 
 		this.combCountText = ICountBehavior.CreateCountText(
-			FastDestroyableSingleton<HudManager>.Instance.KillButton);
+			HudManager.Instance.KillButton);
 		this.combCountText.name = ExtremeAbilityButton.AditionalInfoName;
 		this.combCountText.gameObject.SetActive(true);
 	}
 
 	private void createTimerText()
 	{
-		if (FastDestroyableSingleton<HudManager>.Instance == null) { return; }
+		if (HudManager.Instance == null) { return; }
 
-		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
-		var killButton = FastDestroyableSingleton<HudManager>.Instance.KillButton;
+		var hudManager = HudManager.Instance;
+		var killButton = HudManager.Instance.KillButton;
 
 		this.timerText = Object.Instantiate(
 			killButton.cooldownTimerText,

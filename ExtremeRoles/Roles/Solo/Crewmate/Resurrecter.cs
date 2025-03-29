@@ -172,7 +172,7 @@ public sealed class Resurrecter :
         var role = ExtremeRoleManager.GetLocalPlayerRole();
         if (!role.CanKill() || role.IsCrewmate()) { return; }
 
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         if (flash == null)
         {
@@ -212,7 +212,7 @@ public sealed class Resurrecter :
 
         if (rolePlayer.Data.IsDead && this.infoBlock())
         {
-            FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            HudManager.Instance.Chat.gameObject.SetActive(false);
         }
 
         if (!rolePlayer.moveable ||
@@ -260,7 +260,7 @@ public sealed class Resurrecter :
             if (this.resurrectText == null)
             {
                 this.resurrectText = Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    HudManager.Instance.KillButton.cooldownTimerText,
                     Camera.main.transform, false);
                 this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
                 this.resurrectText.enableWordWrapping = false;
@@ -526,7 +526,7 @@ public sealed class Resurrecter :
         }
         UseResurrect(this);
 
-        FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
+        HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
         if (this.resurrectText != null)
         {
             this.resurrectText.gameObject.SetActive(false);

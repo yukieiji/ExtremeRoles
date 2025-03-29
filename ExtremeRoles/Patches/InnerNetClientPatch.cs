@@ -26,7 +26,7 @@ public static class InnerNetClientGetConnectionDataPatch
 	[HarmonyPostfix, HarmonyPriority(Priority.First)]
     public static void Postfix(ref Il2CppStructArray<byte> __result)
     {
-        var serverMng = FastDestroyableSingleton<ServerManager>.Instance;
+        var serverMng = ServerManager.Instance;
 
         if (serverMng == null || !serverMng.IsExROnlyServer())
         {

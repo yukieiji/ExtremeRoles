@@ -30,7 +30,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 		{
 			return false;
 		}
-        if (DestroyableSingleton<TutorialManager>.InstanceExists)
+        if (TutorialManager.InstanceExists)
 		{
 			return true;
 		}
@@ -43,7 +43,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 	private static void checkExRWin()
 	{
 		// InstanceExists | Don't check Custom Criteria when in Tutorial
-		if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed ||
+		if (HudManager.Instance.IsIntroDisplayed ||
 			ExtremeRolesPlugin.ShipState.IsDisableWinCheck)
 		{
 			return;

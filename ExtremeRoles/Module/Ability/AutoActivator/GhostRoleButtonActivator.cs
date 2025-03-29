@@ -13,7 +13,7 @@ public sealed class GhostRoleButtonActivator : IButtonAutoActivator
 			(
 				localPlayer.IsKillTimerEnabled ||
 				localPlayer.ForceKillTimerContinue ||
-				FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
+				HudManager.Instance.UseButton.isActiveAndEnabled
 			) &&
 			localPlayer.Data != null &&
 			MeetingHud.Instance == null &&

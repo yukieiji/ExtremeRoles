@@ -48,7 +48,7 @@ public sealed class VoiceEngine : MonoBehaviour
     {
         if (Instance == null || result is null) { return; }
 
-        var chat = FastDestroyableSingleton<HudManager>.Instance.Chat;
+        var chat = HudManager.Instance.Chat;
         var trans = TranslationController.Instance;
         string value =  result.GetOptionValue("init");
         EngineType engine;

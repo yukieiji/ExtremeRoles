@@ -106,7 +106,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 				x => RandomGenerator.Instance.Next()).First();
 		}
 
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 
 		if (this.camera == null)
 		{
@@ -144,7 +144,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 		if (this.minigamePrefab == null)
 		{
-			var shapeShifterBase = FastDestroyableSingleton<RoleManager>.Instance.AllRoles.FirstOrDefault(
+			var shapeShifterBase = RoleManager.Instance.AllRoles.FirstOrDefault(
 				x => x.Role is RoleTypes.Shapeshifter);
 			if (!shapeShifterBase.IsTryCast<ShapeshifterRole>(out var shapeShifter))
 			{
@@ -180,7 +180,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	private void repose()
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(
+		HudManager.Instance.ShadowQuad.gameObject.SetActive(
 			!localPlayer.Data.IsDead);
 
 		this.CanMove = true;
@@ -193,7 +193,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 		if (this.camera == null)
 		{
-			this.camera = FastDestroyableSingleton<HudManager>.Instance.transform.parent.GetComponent<FollowerCamera>();
+			this.camera = HudManager.Instance.transform.parent.GetComponent<FollowerCamera>();
 		}
 		this.camera.Target = localPlayer;
 		this.camera.enabled = true;

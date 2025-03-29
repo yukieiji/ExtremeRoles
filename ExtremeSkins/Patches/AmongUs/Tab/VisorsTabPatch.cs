@@ -35,7 +35,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             inventoryTop = __instance.scroller.Inner.position.y - 0.5f;
             inventoryBottom = __instance.scroller.Inner.position.y - 4.5f;
 
-            VisorData[] unlockedVisor = DestroyableSingleton<HatManager>.Instance.GetUnlockedVisors();
+            VisorData[] unlockedVisor = HatManager.Instance.GetUnlockedVisors();
             Dictionary<string, List<VisorData>> visorPackage = new Dictionary<string, List<VisorData>>();
 
             CustomCosmicTab.DestoryList(visorsTabCustomText);
@@ -150,7 +150,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     colorChip.Button.OnMouseOver.AddListener(() => __instance.SelectVisor(vi));
                     colorChip.Button.OnMouseOut.AddListener(
                             () => __instance.SelectVisor(
-                                DestroyableSingleton<HatManager>.Instance.GetVisorById(
+                                HatManager.Instance.GetVisorById(
                                     playerSkinData.Visor)));
                     colorChip.Button.OnClick.AddListener(() => __instance.ClickEquip());
                 }
@@ -183,7 +183,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 __instance.ColorChips.Add(colorChip);
 
 				index++;
-				if (!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+				if (!HatManager.Instance.CheckLongModeValidCosmetic(
 						vi.ProdId, __instance.PlayerPreview.GetIgnoreLongMode()))
 				{
 					colorChip.SetUnavailable();

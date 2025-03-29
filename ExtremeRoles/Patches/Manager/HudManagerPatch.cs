@@ -430,15 +430,15 @@ public static class HudManagerUpdatePatch
         {
             playerInfoText = $"{roleNames}";
 
-            if (DestroyableSingleton<HudManager>.InstanceExists)
+            if (HudManager.InstanceExists)
             {
                 if (tabText == null)
                 {
-                    tabText = FastDestroyableSingleton<HudManager>.Instance.TaskPanel.tab.transform.FindChild(
+                    tabText = HudManager.Instance.TaskPanel.tab.transform.FindChild(
                         "TabText_TMP").GetComponent<TextMeshPro>();
                 }
                 tabText.SetText(
-                    $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
+                    $"{TranslationController.Instance.GetString(StringNames.Tasks)} {taskInfo}");
             }
         }
         else if (isGhostSeeRole && isGhostSeeTask)

@@ -20,7 +20,7 @@ public static class GameOptionsMenuCreateSettingsPatch
 		var child = __instance.Children.ToArray();
 
 		if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
-			FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer())
+			ServerManager.Instance.IsCustomServer())
 		{
 			changeValueRange(child, StringNames.GameNumImpostors, 0f, GameSystem.MaxImposterNum);
 		}

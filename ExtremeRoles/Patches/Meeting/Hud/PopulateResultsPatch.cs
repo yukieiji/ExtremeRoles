@@ -27,7 +27,7 @@ public static class MeetingHudPopulateResultsPatch
 		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
 		__instance.TitleText.text =
-			FastDestroyableSingleton<TranslationController>.Instance.GetString(
+			TranslationController.Instance.GetString(
 				StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
 
 		Dictionary<byte, int> voteIndex = new Dictionary<byte, int>();

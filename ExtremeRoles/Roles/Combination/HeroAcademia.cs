@@ -55,7 +55,7 @@ internal sealed class AllPlayerArrows
                 text.fontSize = text.fontSizeMax = text.fontSizeMin = 3.25f;
                 Object.Destroy(text.fontMaterial);
                 text.fontMaterial = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.UseButton.buttonLabelText.fontMaterial,
+                    HudManager.Instance.UseButton.buttonLabelText.fontMaterial,
                     playerArrow.Main.transform);
                 text.gameObject.layer = 5;
                 text.alignment = TMPro.TextAlignmentOptions.Center;
@@ -1131,7 +1131,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         {
             string fakeTaskString = Design.ColoedString(
                 this.NameColor,
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
         }

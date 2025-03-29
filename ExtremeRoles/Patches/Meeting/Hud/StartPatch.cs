@@ -132,6 +132,6 @@ public static class MeetingHudStartPatch
 
 		if (!trigger) { return; }
 
-		FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+		HudManager.Instance.Chat.gameObject.SetActive(false);
 	}
 }

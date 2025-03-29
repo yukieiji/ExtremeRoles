@@ -43,7 +43,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     public void CreateAbility()
     {
         this.CreateAbilityCountButton(
-            "smash", FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
+            "smash", HudManager.Instance.KillButton.graphic.sprite);
     }
 
     public bool IsAbilityUse()

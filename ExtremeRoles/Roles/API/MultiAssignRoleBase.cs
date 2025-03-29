@@ -137,7 +137,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         {
             string fakeTaskString = Design.ColoedString(
                 this.NameColor,
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
         }

@@ -28,7 +28,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 	public void Awake()
 	{
-		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		var hudManager = HudManager.Instance;
 
 		this.rend = Instantiate(
 			hudManager.FullScreen, hudManager.transform);
@@ -97,7 +97,7 @@ public sealed class BaitDalayReporter : MonoBehaviour
 		if (this.text == null)
 		{
 			this.text = Instantiate(
-				FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+				HudManager.Instance.KillButton.cooldownTimerText,
 				Camera.main.transform, false);
 			this.text.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
 			this.text.enableWordWrapping = false;

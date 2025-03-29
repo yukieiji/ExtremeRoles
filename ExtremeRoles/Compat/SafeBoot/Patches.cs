@@ -43,7 +43,7 @@ public static class SafeBootMainMenuManagerPatch
 			return;
 		}
 
-		DestroyableSingleton<ModManager>.Instance.ShowModStamp();
+		ModManager.Instance.ShowModStamp();
 
 		// 動いてますよアピール
 		var exrLogo = new GameObject("bannerLogoExtremeRoles");
@@ -80,7 +80,7 @@ public static class SafeBootMainMenuManagerPatch
 
 		if (!AutoModInstaller.Instance.IsInit)
 		{
-			TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+			TwitchManager man = TwitchManager.Instance;
 			var infoPop = UnityObject.Instantiate(man.TwitchPopup);
 			infoPop.TextAreaTMP.fontSize *= 0.7f;
 			infoPop.TextAreaTMP.enableAutoSizing = false;
@@ -94,7 +94,7 @@ public static class SafeBootMainMenuManagerPatch
 		{
 			return;
 		}
-		TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+		TwitchManager man = TwitchManager.Instance;
 		Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);
 		UnityObject.DontDestroyOnLoad(Prefab.Prop);
 		Prefab.Prop.name = "propForInEx";

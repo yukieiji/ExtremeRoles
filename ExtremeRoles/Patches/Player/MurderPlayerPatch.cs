@@ -208,7 +208,7 @@ public static class PlayerControlMurderPlayerPatch
 		float killCool)
 	{
 
-		FastDestroyableSingleton<DebugAnalytics>.Instance.Analytics.Kill(target.Data, instance.Data);
+		DebugAnalytics.Instance.Analytics.Kill(target.Data, instance.Data);
 		var stats = DataManager.Player.Stats;
 
 		if (instance.AmOwner)
@@ -233,7 +233,7 @@ public static class PlayerControlMurderPlayerPatch
 			instance.SetKillTimer(killCool);
 		}
 
-		FastDestroyableSingleton<UnityTelemetry>.Instance.WriteMurder();
+		UnityTelemetry.Instance.WriteMurder();
 
 		target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 		if (target.AmOwner)
@@ -250,13 +250,13 @@ public static class PlayerControlMurderPlayerPatch
 				{
 				}
 			}
-			FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+			HudManager.Instance.KillOverlay.ShowKillAnimation(
 				instance.Data, target.Data);
 			target.cosmetics.SetNameMask(false);
 			target.RpcSetScanner(false);
 		}
 
-		FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
+		AchievementManager.Instance.OnMurder(
 			instance.AmOwner, target.AmOwner,
 			instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted,
 			instance.shapeshiftTargetPlayerId, target.PlayerId);
