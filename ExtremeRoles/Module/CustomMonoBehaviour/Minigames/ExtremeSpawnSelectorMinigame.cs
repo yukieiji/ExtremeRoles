@@ -109,7 +109,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			string roomName = point.RoomName;
 			string text =
 				Enum.TryParse<SystemTypes>(roomName, true, out var systemRoomName) ?
-				FastDestroyableSingleton<TranslationController>.Instance.GetString(systemRoomName) :
+				TranslationController.Instance.GetString(systemRoomName) :
 				Tr.GetString(roomName);
 
 			button.Text.text = text;
@@ -181,8 +181,8 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	public void Update()
 	{
 		if (this.selected ||
-			FastDestroyableSingleton<HudManager>.Instance == null ||
-			FastDestroyableSingleton<HudManager>.Instance.Chat.IsOpenOrOpening)
+			HudManager.Instance == null ||
+			HudManager.Instance.Chat.IsOpenOrOpening)
 		{
 			return;
 		}
@@ -217,7 +217,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 	{
 		for (float time = 10.0f; time >= 0f; time -= Time.deltaTime)
 		{
-			this.text.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+			this.text.text = TranslationController.Instance.GetString(
 				StringNames.TimeRemaining, new Il2CppObject[] { Mathf.CeilToInt(time) });
 			yield return null;
 		}
@@ -243,7 +243,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 			localPlayer.NetTransform.SetPaused(true);
 			Player.RpcUncheckSnap(localPlayer.PlayerId, pos, true);
 
-			FastDestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
+			HudManager.Instance.PlayerCam.SnapToTarget();
 
 			base.StopAllCoroutines();
 			base.StartCoroutine(coSpawnAt(localPlayer).WrapToIl2Cpp());
@@ -289,7 +289,7 @@ public sealed class ExtremeSpawnSelectorMinigame : Minigame
 		}
 		ExileControllerWrapUpPatch.WrapUpPostfix(player);
 
-		if (DestroyableSingleton<TutorialManager>.InstanceExists ||
+		if (TutorialManager.InstanceExists ||
 			!GameManager.Instance.LogicFlow.IsGameOverDueToDeath())
 		{
 			if (!OnemanMeetingSystemManager.IsActive)

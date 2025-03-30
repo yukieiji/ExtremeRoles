@@ -82,7 +82,7 @@ public static class PlayerControlShapeshiftPatch
 				PlayerControl.HideCursorTemporarily();
 			}
 			RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate(
-				FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim,
+				RoleManager.Instance.shapeshiftAnim,
 				__instance.gameObject.transform);
 			roleEffectAnimation.SetMaskLayerBasedOnWhoShouldSee(amOwner);
 			roleEffectAnimation.SetMaterialColor(instancePlayerOutfit.ColorId);

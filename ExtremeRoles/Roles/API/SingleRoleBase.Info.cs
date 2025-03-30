@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.API
             {
                 string fakeTaskString = Design.ColoedString(
                     this.NameColor,
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                    TranslationController.Instance.GetString(
                         StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
                 baseString = $"{baseString}\r\n{fakeTaskString}";
             }

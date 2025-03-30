@@ -60,7 +60,7 @@ public class ExtremeAbilityButton
 		Behavior = behavior;
 		HotKey = hotKey;
 
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 		var killButton = hud.KillButton;
 
 		this.Button = Object.Instantiate(
@@ -109,9 +109,9 @@ public class ExtremeAbilityButton
 
 	public void SetLabelToCrewmate()
 	{
-		if (FastDestroyableSingleton<HudManager>.Instance == null) { return; }
+		if (HudManager.Instance == null) { return; }
 
-		var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
+		var useButton = HudManager.Instance.UseButton;
 
 		Object.Destroy(
 			this.Button.buttonLabelText.fontMaterial);

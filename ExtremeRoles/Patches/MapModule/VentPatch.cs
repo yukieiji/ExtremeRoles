@@ -207,7 +207,7 @@ public static class VentCanUsePatch
                 playerInfo.Role.CanUse(__instance.Cast<IUsable>());
         }
 
-        if (CachedShipStatus.Instance.Systems.TryGetValue(
+        if (ShipStatus.Instance.Systems.TryGetValue(
                 SystemTypes.Ventilation, out var systemType) &&
 			systemType.IsTryCast<VentilationSystem>(out var ventilationSystem) &&
 			ventilationSystem.IsVentCurrentlyBeingCleaned(__instance.Id))

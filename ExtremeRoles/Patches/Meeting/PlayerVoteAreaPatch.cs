@@ -34,7 +34,7 @@ public static class NamePlateHelper
 			playerId : pva.TargetPlayerId);
 		if (playerInfo == null) { return; }
 
-		var cache = CachedShipStatus.Instance.CosmeticsCache;
+		var cache = ShipStatus.Instance.CosmeticsCache;
 		string id = playerInfo.DefaultOutfit.NamePlateId;
 		if (ClientOption.Instance.HideNamePlate.Value ||
 			!cache.nameplates.TryGetValue(id, out var np) ||

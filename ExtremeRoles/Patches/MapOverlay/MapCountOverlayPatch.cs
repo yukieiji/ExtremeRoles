@@ -102,7 +102,7 @@ public static class MapCountOverlayUpdatePatch
 				continue;
 			}
 
-            if (CachedShipStatus.FastRoom.TryGetValue(
+            if (ShipStatusCache.KeyedRoom.TryGetValue(
                     counterArea.RoomType,
                     out PlainShipRoom? plainShipRoom) &&
 				plainShipRoom != null &&
@@ -189,7 +189,7 @@ public static class MapCountOverlayUpdatePatch
         if (timerText == null)
         {
             timerText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 __instance.transform);
             timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
             timerText.name = "vitalTimer";

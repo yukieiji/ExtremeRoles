@@ -229,7 +229,7 @@ public sealed class Yandere :
     public void Update(PlayerControl rolePlayer)
     {
 
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null ||
             MeetingHud.Instance != null ||
             this.progress == null ||
@@ -238,7 +238,7 @@ public sealed class Yandere :
             return;
         }
 
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive)
         {
             return;

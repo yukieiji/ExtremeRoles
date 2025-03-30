@@ -44,9 +44,9 @@ public static class ExileControllerBeginePatch
 		instance.Text.gameObject.SetActive(false);
 		instance.Text.text = string.Empty;
 
-		if (FastDestroyableSingleton<HudManager>.Instance != null)
+		if (HudManager.Instance != null)
 		{
-			FastDestroyableSingleton<HudManager>.Instance.SetMapButtonEnabled(false);
+			HudManager.Instance.SetMapButtonEnabled(false);
 		}
 	}
 
@@ -128,7 +128,7 @@ public static class ExileControllerBeginePatch
         in ExileOption option)
     {
         SetExiledTarget(instance);
-        var transController = FastDestroyableSingleton<TranslationController>.Instance;
+        var transController = TranslationController.Instance;
 
         var allPlayer = GameData.Instance.AllPlayers.ToArray();
 
@@ -194,7 +194,7 @@ public static class ExileControllerBeginePatch
 					instance.Player.GetSkinView();
 
 				if (GameManager.Instance != null &&
-					!FastDestroyableSingleton<HatManager>.Instance.CheckLongModeValidCosmetic(
+					!HatManager.Instance.CheckLongModeValidCosmetic(
 					init!.outfit!.SkinId, instance.Player.GetIgnoreLongMode()))
 				{
 					skinViewData = cache.GetSkin("skin_None");
@@ -321,7 +321,7 @@ public static class ExileControllerBeginePatch
 
         if (Enum.TryParse(transKey, out StringNames sn))
         {
-            return FastDestroyableSingleton<TranslationController>.Instance.GetString(
+            return TranslationController.Instance.GetString(
                 sn, [ playerName ]);
         }
         else

@@ -246,7 +246,7 @@ public sealed class Photographer :
 					if (this.isUpgrade && playerInfo.Room != null)
 					{
 						roomInfo =
-							FastDestroyableSingleton<TranslationController>.Instance.GetString(
+							TranslationController.Instance.GetString(
 								playerInfo.Room.Value);
 					}
 
@@ -339,7 +339,7 @@ public sealed class Photographer :
 
     public bool UseAbility()
     {
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         if (this.flash == null)
         {

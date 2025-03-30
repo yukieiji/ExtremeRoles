@@ -318,14 +318,14 @@ public static class RPCOperator
         reader.Buffer = bytes;
         reader.Length = bytes.Length;
 
-		CachedShipStatus.Instance.StartVentAnimation(ventId);
+		ShipStatus.Instance.StartVentAnimation(ventId);
 
 		player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
     }
 
     public static void StartVentAnimation(int ventId)
     {
-		CachedShipStatus.Instance.StartVentAnimation(ventId);
+		ShipStatus.Instance.StartVentAnimation(ventId);
     }
 
     public static void UncheckedSnapTo(

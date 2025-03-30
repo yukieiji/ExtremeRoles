@@ -54,7 +54,7 @@ public interface IRoleSpecialReset
         specialResetRoleReset(resetPlayer, resetRole);
 
         // クルーに変更
-        FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+        RoleManager.Instance.SetRole(
             Player.GetPlayerControlById(targetPlayerId),
             RoleTypes.Crewmate);
     }

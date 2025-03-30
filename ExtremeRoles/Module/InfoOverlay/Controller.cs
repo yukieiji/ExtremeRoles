@@ -82,7 +82,7 @@ public sealed class Controller : NullableSingleton<Controller>
 
 	private void keyUpdate()
 	{
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 
 		if (hud == null ||
 			hud.Chat.IsOpenOrOpening ||
@@ -156,7 +156,7 @@ public sealed class Controller : NullableSingleton<Controller>
 
 	private void show(InfoOverlayModel.Type showTyep)
 	{
-		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		var hudManager = HudManager.Instance;
 
 		if (hudManager == null || this.IsBlock) { return; }
 		if (MeetingHud.Instance == null)

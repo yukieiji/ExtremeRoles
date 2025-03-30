@@ -17,11 +17,18 @@ namespace ExtremeRoles.Patches.MapModule
         {
             canUse = couldUse = false;
             __result = float.MaxValue;
-            PlayerControl player = PlayerControl.LocalPlayer;
-            PlayerTask task = __instance.FindTask(player);
+            
+			PlayerControl player = PlayerControl.LocalPlayer;
+			if (player == null || __instance == null)
+			{
+				return true;
+			}
 
-            if (task == null) { return true; }
-            if (__instance == null) { return true; }
+            PlayerTask task = __instance.FindTask(player);
+            if (task == null)
+			{
+				return true;
+			}
             if (ExtremeRoleManager.GameRole.Count == 0 ||
                 !RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 

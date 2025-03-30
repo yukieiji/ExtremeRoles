@@ -21,7 +21,7 @@ public static class SabotageButtonDoClickPatch
             role.IsImpostor()) { return true; }
         if (!role.CanUseSabotage()) { return true; }
 
-        FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+        HudManager.Instance.ToggleMapVisible(
             new MapOptions
             {
                 Mode = MapOptions.Modes.Sabotage,

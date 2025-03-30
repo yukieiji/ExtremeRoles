@@ -20,7 +20,7 @@ public static class MinigameSystem
 	{
 		get
 		{
-			var role = FastDestroyableSingleton<RoleManager>.Instance.GetRole(RoleTypes.Scientist);
+			var role = RoleManager.Instance.GetRole(RoleTypes.Scientist);
 
 			if (!role.IsTryCast<ScientistRole>(out var scientist))
 			{

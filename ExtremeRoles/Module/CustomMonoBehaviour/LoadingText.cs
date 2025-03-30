@@ -25,7 +25,7 @@ public sealed class LoadingText : MonoBehaviour
 	{
 		this.frameCount = 0;
 
-		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		var hudManager = HudManager.Instance;
 		this.text = Instantiate(
 			hudManager.TaskPanel.taskText,
 			hudManager.transform.parent);

@@ -164,7 +164,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 				}
 			}
 
-			FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+			HudManager.Instance.Chat.AddChat(
 				PlayerControl.LocalPlayer, chatBody);
 
 			this.resetWaitTimer();

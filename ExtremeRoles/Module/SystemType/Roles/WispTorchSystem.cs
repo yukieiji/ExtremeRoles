@@ -67,7 +67,7 @@ public sealed class WispTorchSystem : IDirtableSystemType
 			int playerNum = PlayerCache.AllPlayerControl.Count;
 
 			int clampedNum = Math.Clamp(num, 0, playerNum);
-			ShipStatus ship = CachedShipStatus.Instance;
+			ShipStatus ship = ShipStatus.Instance;
 
 			IEnumerable<PlayerControl> target =
 				PlayerCache.AllPlayerControl.OrderBy(

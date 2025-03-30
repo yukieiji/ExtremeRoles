@@ -257,9 +257,9 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     private static void removeVent(int ventId)
     {
-        if (!CachedShipStatus.Instance) { return; }
+        if (!ShipStatus.Instance) { return; }
 
-        Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
+        Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
             (x) => x != null && x.Id == ventId);
         if (vent == null) { return; }
 
@@ -457,10 +457,10 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 			modMap.SetUpNewCamera(camera);
         }
 
-        var allCameras = CachedShipStatus.Instance.AllCameras.ToList();
+        var allCameras = ShipStatus.Instance.AllCameras.ToList();
         camera.gameObject.SetActive(true);
         allCameras.Add(camera);
-        CachedShipStatus.Instance.AllCameras = allCameras.ToArray();
+        ShipStatus.Instance.AllCameras = allCameras.ToArray();
     }
 
     private static void unlinkVent(Vent targetVent, Vent unlinkVent)
@@ -548,7 +548,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         if (this.targetVent != null)
         {
 
-            var ventilationSystem = CachedShipStatus.Systems[SystemTypes.Ventilation].TryCast<VentilationSystem>();
+            var ventilationSystem = ShipStatus.Instance.Systems[SystemTypes.Ventilation].TryCast<VentilationSystem>();
 
             if (!PlayerControl.LocalPlayer.Data.IsDead &&
                 ventilationSystem != null &&
@@ -588,7 +588,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     {
         this.targetVent = null;
 
-        ShipStatus ship = CachedShipStatus.Instance;
+        ShipStatus ship = ShipStatus.Instance;
 
         if (ship == null || !ship.enabled) { return false; }
 
@@ -629,7 +629,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             byte roomId;
             try
             {
-                roomId = (byte)FastDestroyableSingleton<HudManager>.Instance.roomTracker.LastRoom.RoomId;
+                roomId = (byte)HudManager.Instance.roomTracker.LastRoom.RoomId;
             }
             catch
             {

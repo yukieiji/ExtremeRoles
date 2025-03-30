@@ -134,7 +134,7 @@ public sealed class Mover :
 
     private static void pickUpConsole(Mover mover, PlayerControl player, int index)
     {
-        Console console = CachedShipStatus.Instance.AllConsoles[index];
+        Console console = ShipStatus.Instance.AllConsoles[index];
 
         if (console == null) { return; }
 
@@ -221,9 +221,9 @@ public sealed class Mover :
     {
         PlayerControl player = PlayerControl.LocalPlayer;
 
-        for (int i = 0; i < CachedShipStatus.Instance.AllConsoles.Length; ++i)
+        for (int i = 0; i < ShipStatus.Instance.AllConsoles.Length; ++i)
         {
-            Console console = CachedShipStatus.Instance.AllConsoles[i];
+            Console console = ShipStatus.Instance.AllConsoles[i];
             if (console != this.targetConsole) { continue; }
 
             using (var caller = RPCOperator.CreateCaller(

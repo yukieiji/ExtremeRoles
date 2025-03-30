@@ -6,9 +6,9 @@ namespace ExtremeRoles.Roles.Solo.Host
     {
         public static void Purge()
         {
-            if (DestroyableSingleton<HudManager>.InstanceExists)
+            if (HudManager.InstanceExists)
             {
-                var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
+                var useButton = HudManager.Instance.UseButton;
                 GridArrange grid = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
                 grid.MaxColumns = 3;
             }

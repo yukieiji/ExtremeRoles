@@ -279,7 +279,7 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 	internal static void AddSystem()
 	{
 		var system = Instance;
-		CachedShipStatus.Instance.Systems.Add(Type, system.Cast<ISystemType>());
+		ShipStatus.Instance.Systems.Add(Type, system.Cast<ISystemType>());
 	}
 
 	private void initialize()

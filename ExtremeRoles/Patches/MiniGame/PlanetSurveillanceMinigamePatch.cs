@@ -60,7 +60,7 @@ public static class PlanetSurveillanceMinigameNextCameraPatch
             __instance.currentCamera].Offset;
         __instance.LocationName.text = (
             (survCamera.NewName > StringNames.ExitButton) ?
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     survCamera.NewName, Array.Empty<Il2CppSystem.Object>()) : survCamera.CamName);
 
         if (!PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))

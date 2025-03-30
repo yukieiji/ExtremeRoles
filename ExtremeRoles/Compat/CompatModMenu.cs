@@ -242,7 +242,7 @@ internal sealed class CompatModMenu
 		if (this.menuBody == null)
 		{
 			this.menuBody = UnityObject.Instantiate(
-				FastDestroyableSingleton<EOSManager>.Instance.TimeOutPopup);
+				EOSManager.Instance.TimeOutPopup);
 			this.menuBody.name = "ExtremeRoles_CompatModMenu";
 			this.menuBody.SetActive(true);
 			this.compatModMenuLine.Clear();

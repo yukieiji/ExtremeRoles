@@ -100,7 +100,7 @@ public sealed partial class Xion
     {
         PlayerControl xionPlayer = PlayerControl.LocalPlayer;
         MeetingRoomManager.Instance.AssignSelf(xionPlayer, null);
-        FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(xionPlayer);
+        HudManager.Instance.OpenMeetingRoom(xionPlayer);
         xionPlayer.RpcStartMeeting(null);
     }
 
@@ -113,12 +113,12 @@ public sealed partial class Xion
     {
         GameSystem.RpcRepairAllSabotage();
 
-        foreach (var door in CachedShipStatus.Instance.AllDoors)
+        foreach (var door in ShipStatus.Instance.AllDoors)
         {
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
 
-            CachedShipStatus.Instance.RpcUpdateSystem(
+            ShipStatus.Instance.RpcUpdateSystem(
                 SystemTypes.Doors, (byte)(door.Id | 64));
             door.SetDoorway(true);
         }
@@ -310,7 +310,7 @@ public sealed partial class Xion
         SingleRoleBase role = ExtremeRoleManager.NormalRole[roleId];
         SingleRoleBase addRole = role.Clone();
 
-        var roleManager = FastDestroyableSingleton<RoleManager>.Instance;
+        var roleManager = RoleManager.Instance;
 
         if (addRole.IsImpostor())
         {

@@ -78,7 +78,7 @@ public static class HatPatch
 		}
 		else
 		{
-			var hatData = FastDestroyableSingleton<HatManager>.Instance.GetHatById(id);
+			var hatData = HatManager.Instance.GetHatById(id);
 			if (hatData == null) { yield break; }
 			asset = hatData.CreateAddressableAsset();
 		}

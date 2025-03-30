@@ -59,7 +59,7 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     {
         if (this.targetDoor == null) { return false; }
 
-        CachedShipStatus.Instance.RpcUpdateSystem(
+        ShipStatus.Instance.RpcUpdateSystem(
             SystemTypes.Doors, (byte)(this.targetDoor.Id | 64));
         this.targetDoor.SetDoorway(true);
         this.targetDoor = null;
@@ -69,11 +69,11 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
     public bool IsAbilityUse()
     {
-        if (CachedShipStatus.Instance == null) { return false; }
+        if (ShipStatus.Instance == null) { return false; }
 
         this.targetDoor = null;
 
-        foreach (OpenableDoor door in CachedShipStatus.Instance.AllDoors)
+        foreach (OpenableDoor door in ShipStatus.Instance.AllDoors)
         {
             DeconControl decon = door.GetComponentInChildren<DeconControl>();
             if (decon != null) { continue; }
@@ -108,9 +108,9 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     public void Update(
         PlayerControl rolePlayer)
     {
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
             this.Button == null) { return; }
 
         if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected || this.isUpgraded) { return; }

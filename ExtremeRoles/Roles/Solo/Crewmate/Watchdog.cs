@@ -51,7 +51,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
 
         string buttonText;
         Sprite buttonImage;
-        var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+        var imageDict = HudManager.Instance.UseButton.fastUseSettings;
         switch (Map.Id)
         {
             case 1:
@@ -122,7 +122,7 @@ public sealed class Watchdog : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdat
         if (this.chargeTime == null)
         {
             this.chargeTime = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 Camera.main.transform, false);
             this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
         }

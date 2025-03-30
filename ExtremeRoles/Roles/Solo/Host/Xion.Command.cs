@@ -114,7 +114,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private static void addChat(string text)
         {
-            FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+            HudManager.Instance.Chat.AddChat(
                 PlayerControl.LocalPlayer, text);
         }
 

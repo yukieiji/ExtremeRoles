@@ -71,7 +71,7 @@ public static class Sound
                     clip = PlayerControl.LocalPlayer.KillSfx;
                     break;
                 case Type.GuardianAngleGuard:
-                    clip = FastDestroyableSingleton<RoleManager>.Instance.protectAnim.UseSound;
+                    clip = RoleManager.Instance.protectAnim.UseSound;
                     break;
 				case Type.TeroristSabotageAnnounce:
 					clip = getRoleAudio(soundType);

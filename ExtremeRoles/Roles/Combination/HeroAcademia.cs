@@ -55,7 +55,7 @@ internal sealed class AllPlayerArrows
                 text.fontSize = text.fontSizeMax = text.fontSizeMin = 3.25f;
                 Object.Destroy(text.fontMaterial);
                 text.fontMaterial = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.UseButton.buttonLabelText.fontMaterial,
+                    HudManager.Instance.UseButton.buttonLabelText.fontMaterial,
                     playerArrow.Main.transform);
                 text.gameObject.layer = 5;
                 text.alignment = TMPro.TextAlignmentOptions.Center;
@@ -499,8 +499,8 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     public void Update(PlayerControl rolePlayer)
     {
         if (MeetingHud.Instance != null ||
-            CachedShipStatus.Instance == null) { return; }
-        if (!CachedShipStatus.Instance.enabled) { return; }
+            ShipStatus.Instance == null) { return; }
+        if (!ShipStatus.Instance.enabled) { return; }
 
         if (this.callTargetArrow != null)
         {
@@ -1131,7 +1131,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         {
             string fakeTaskString = Design.ColoedString(
                 this.NameColor,
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
         }

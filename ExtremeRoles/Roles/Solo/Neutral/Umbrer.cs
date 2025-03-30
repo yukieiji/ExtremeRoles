@@ -198,7 +198,7 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         GameObject bottomLeft = new GameObject("BottomLeft");
         bottomLeft.transform.SetParent(
-            FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.parent.parent);
+            HudManager.Instance.UseButton.transform.parent.parent);
         AspectPosition aspectPosition = bottomLeft.AddComponent<AspectPosition>();
         aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
         aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
@@ -274,11 +274,11 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     {
         if (MeetingHud.Instance != null ||
             ExileController.Instance != null ||
-            CachedShipStatus.Instance == null ||
+            ShipStatus.Instance == null ||
             this.IsWin ||
             GameData.Instance == null ||
             this.container == null) { return; }
-        if (!CachedShipStatus.Instance.enabled) { return; }
+        if (!ShipStatus.Instance.enabled) { return; }
 
         if (RoleAssignState.Instance.IsRoleSetUpEnd && !isFetch)
         {

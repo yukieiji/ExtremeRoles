@@ -79,7 +79,7 @@ public static class VisorPatch
 		}
 		else
 		{
-			var visorData = FastDestroyableSingleton<HatManager>.Instance.GetVisorById(visorId);
+			var visorData = HatManager.Instance.GetVisorById(visorId);
 			if (visorData == null) { yield break; }
 			asset = visorData.CreateAddressableAsset();
 		}

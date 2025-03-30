@@ -492,7 +492,7 @@ public sealed class Psychic :
 		}
 		string chatText = builder.ToString();
 
-		HudManager hud = FastDestroyableSingleton<HudManager>.Instance;
+		HudManager hud = HudManager.Instance;
 
 		if (chatText == string.Empty ||
 			!AmongUsClient.Instance.AmClient ||

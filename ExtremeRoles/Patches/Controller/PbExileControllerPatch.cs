@@ -31,7 +31,7 @@ public static class PbExileControllerAnimePatch
 
 	private static IEnumerator animateWithRandomSpawn(PbExileController __instance)
 	{
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 
 		if (hud != null)
 		{

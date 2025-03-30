@@ -11,7 +11,7 @@ public static class CustomRegion
     public static void Update()
     {
 		/*
-        ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
+        ServerManager serverManager = ServerManager.Instance;
         IRegionInfo[] defaultRegions = Default;
 
         var opt = ClientOption.Instance;

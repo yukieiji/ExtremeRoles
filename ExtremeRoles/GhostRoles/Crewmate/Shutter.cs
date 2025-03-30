@@ -243,7 +243,7 @@ public sealed class Shutter : GhostRoleBase
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         if (this.flash == null)
         {

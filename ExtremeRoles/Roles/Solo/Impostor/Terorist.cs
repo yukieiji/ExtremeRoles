@@ -100,7 +100,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-		if (CachedShipStatus.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
+		if (ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
 			system.IsTryCast<SabotageSystemType>(out var saboSystem))
 		{
 			this.saboSystem = saboSystem;

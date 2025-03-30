@@ -8,6 +8,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
 using OptionFactory = ExtremeRoles.Module.CustomOption.Factory.AutoParentSetOptionCategoryFactory;
+using ExtremeRoles.Extension.Il2Cpp;
 
 #nullable enable
 
@@ -26,8 +27,8 @@ public sealed class SaboEvil : GhostRoleBase
 
     public static void ResetCool()
     {
-        var sabSystem = CachedShipStatus.Systems[SystemTypes.Sabotage].TryCast<SabotageSystemType>();
-        if (sabSystem != null)
+        if (ShipStatus.Instance.Systems.TryGetValue(SystemTypes.Sabotage, out var system) &&
+			system.IsTryCast<SabotageSystemType>(out var sabSystem))
         {
             sabSystem.Timer = 0.0f;
         }
@@ -37,7 +38,7 @@ public sealed class SaboEvil : GhostRoleBase
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.SaboEvilResetSabotageCool,
-             FastDestroyableSingleton<HudManager>.Instance.SabotageButton.graphic.sprite,
+             HudManager.Instance.SabotageButton.graphic.sprite,
             this.IsReportAbility(),
             this.isPreCheck,
             this.isAbilityUse,

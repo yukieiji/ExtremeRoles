@@ -138,7 +138,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         switch (this.nextUseAbilityType)
         {
             case AbilityType.Admin:
-                FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+                HudManager.Instance.ToggleMapVisible(
                     new MapOptions
                     {
                         Mode = MapOptions.Modes.CountOverlay,
@@ -289,7 +289,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         if (this.chargeTime == null)
         {
             this.chargeTime = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 Camera.main.transform, false);
             this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
         }

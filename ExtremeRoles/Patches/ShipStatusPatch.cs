@@ -19,7 +19,7 @@ public static class ShipStatusAwakePatch
     [HarmonyPostfix, HarmonyPriority(Priority.Last)]
     public static void Postfix(ShipStatus __instance)
     {
-		CachedShipStatus.SetUp(__instance);
+		ShipStatusCache.SetUp(__instance);
         CompatModManager.Instance.SetUpMap(__instance);
 	}
 }
@@ -44,7 +44,7 @@ public static class ShipStatusOnDestroyPatch
     [HarmonyPostfix, HarmonyPriority(Priority.Last)]
     public static void Postfix()
     {
-        CachedShipStatus.Destroy();
+        ShipStatusCache.Destroy();
 		CompatModManager.Instance.RemoveMap();
 		ExtremeSystemTypeManager.Instance.RemoveSystem();
 	}

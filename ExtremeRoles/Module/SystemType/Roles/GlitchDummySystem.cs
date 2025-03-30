@@ -108,7 +108,7 @@ public sealed class GlitchDummySystem(
 			this.prevMode = this.admin.Mode;
 			this.admin.Mode = AdminDummySystem.DummyMode.Override;
 			var colors = target.Target.Select(x => x.CurrentOutfit.ColorId);
-			var allRoom = CachedShipStatus.FastRoom.Keys.ToArray();
+			var allRoom = ShipStatusCache.KeyedRoom.Keys.ToArray();
 			int maxIndex = allRoom.Length;
 
 			foreach (int color in colors)

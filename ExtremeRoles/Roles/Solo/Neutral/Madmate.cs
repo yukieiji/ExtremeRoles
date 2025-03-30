@@ -108,7 +108,7 @@ public sealed class Madmate :
         if (!this.UseVent || this.canMoveVentToVent) { return; }
 
         // 全てのベントリンクを解除
-        foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+        foreach (Vent vent in ShipStatus.Instance.AllVents)
         {
             vent.Right = null;
             vent.Center = null;

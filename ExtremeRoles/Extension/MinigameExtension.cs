@@ -27,7 +27,7 @@ public static class MiniGameExtension
 			}
 
 			localPlayer.NetTransform.Halt();
-			FastDestroyableSingleton<DebugAnalytics>.Instance.Analytics.MinigameOpened(
+			DebugAnalytics.Instance.Analytics.MinigameOpened(
 				localPlayer.Data, game.TaskType);
 		}
 
@@ -60,7 +60,7 @@ public static class MiniGameExtension
 
 			ExtremeRolesPlugin.Logger.LogInfo($"Closing ExR minigame {game.GetType().Name}");
 
-			IAnalyticsReporter analytics = FastDestroyableSingleton<DebugAnalytics>.Instance.Analytics;
+			IAnalyticsReporter analytics = DebugAnalytics.Instance.Analytics;
 			NetworkedPlayerInfo data = PlayerControl.LocalPlayer.Data;
 			TaskTypes taskType = game.TaskType;
 			float num = Time.realtimeSinceStartup - game.timeOpened;

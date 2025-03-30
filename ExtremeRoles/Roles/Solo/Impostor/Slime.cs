@@ -65,7 +65,7 @@ public sealed class Slime :
 
     private static void setPlayerSpriteToConsole(Slime slime, PlayerControl player, int index)
     {
-        Console console = CachedShipStatus.Instance.AllConsoles[index];
+        Console console = ShipStatus.Instance.AllConsoles[index];
 
         if (console == null || console.Image == null) { return; }
 
@@ -147,9 +147,9 @@ public sealed class Slime :
     public bool UseAbility()
     {
         PlayerControl player = PlayerControl.LocalPlayer;
-        for (int i = 0; i < CachedShipStatus.Instance.AllConsoles.Length; ++i)
+        for (int i = 0; i < ShipStatus.Instance.AllConsoles.Length; ++i)
         {
-            Console console = CachedShipStatus.Instance.AllConsoles[i];
+            Console console = ShipStatus.Instance.AllConsoles[i];
             if (console != this.targetConsole) { continue; }
 
             using (var caller = RPCOperator.CreateCaller(

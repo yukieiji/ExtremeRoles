@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Linq.Expressions;
+using Il2CppInterop.Runtime.Runtime;
 using Il2CppSystem.Collections.Generic;
 
 // from TOR : https://github.com/Eisbison/TheOtherRoles/blob/main/TheOtherRoles/Utilities/MapUtilities.cs
@@ -30,18 +30,11 @@ namespace ExtremeRoles.Performance.Il2Cpp
 
         private static readonly int _elemSize;
         private static readonly int _offset;
-        private static Func<IntPtr, T> _objFactory;
 
         static Il2CppListEnumerable()
         {
             _elemSize = IntPtr.Size;
             _offset = 4 * IntPtr.Size;
-
-            var constructor = typeof(T).GetConstructor(new[] { typeof(IntPtr) });
-            var ptr = Expression.Parameter(typeof(IntPtr));
-            var create = Expression.New(constructor!, ptr);
-            var lambda = Expression.Lambda<Func<IntPtr, T>>(create, ptr);
-            _objFactory = lambda.Compile();
         }
 
         private readonly IntPtr _arrayPointer;
@@ -60,9 +53,12 @@ namespace ExtremeRoles.Performance.Il2Cpp
 
         public bool MoveNext()
         {
-            if (++_index >= _count) return false;
+			if (++_index >= _count)
+			{
+				return false;
+			}
             var refPtr = *(IntPtr*)IntPtr.Add(IntPtr.Add(_arrayPointer, _offset), _index * _elemSize);
-            Current = _objFactory(refPtr);
+            Current = Il2CppObjectPool.Get<T>(refPtr);
             return true;
         }
 

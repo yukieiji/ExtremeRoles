@@ -34,7 +34,7 @@ public static class Player
 	{
 		if (parent == null)
 		{
-			parent = FastDestroyableSingleton<HudManager>.Instance.transform;
+			parent = HudManager.Instance.transform;
 		}
 		Vector3 newScale = scale.HasValue ? scale.Value : Vector3.one;
 
@@ -387,7 +387,7 @@ public static class Player
 			return false;
 		}
 
-		foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
+		foreach (PlainShipRoom room in ShipStatus.Instance.AllRooms)
 		{
 			if (room != null && room.roomArea)
 			{

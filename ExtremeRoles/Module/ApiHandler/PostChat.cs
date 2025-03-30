@@ -18,8 +18,8 @@ public sealed class PostChat : IRequestHandler
 	{
 		var response = context.Response;
 
-		if (!DestroyableSingleton<HudManager>.InstanceExists ||
-			FastDestroyableSingleton<HudManager>.Instance.Chat == null)
+		if (!HudManager.InstanceExists ||
+			HudManager.Instance.Chat == null)
 		{
 			response.StatusCode = (int)HttpStatusCode.PreconditionFailed;
 			response.Abort();

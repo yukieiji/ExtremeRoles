@@ -137,7 +137,7 @@ public sealed class Faunus : GhostRoleBase
         this.saboGame = MinigameSystem.Open(
             playerTask.GetMinigamePrefab(), playerTask, console);
 
-        FastDestroyableSingleton<UnityTelemetry>.Instance.WriteUse(
+        UnityTelemetry.Instance.WriteUse(
             localPlayer.PlayerId,
             playerTask.TaskType,
             console.transform.position);

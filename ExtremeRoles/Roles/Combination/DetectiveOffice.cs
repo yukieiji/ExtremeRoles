@@ -405,7 +405,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         if (this.searchText == null)
         {
             this.searchText = UnityEngine.Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 Camera.main.transform, false);
             this.searchText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
             this.searchText.enableWordWrapping = false;
@@ -473,9 +473,9 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
         {
             if (this.deadBodyInfo.ContainsKey(reportBody.PlayerId))
             {
-                if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
+                if (AmongUsClient.Instance.AmClient && HudManager.Instance)
                 {
-                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+                    HudManager.Instance.Chat.AddChat(
                         PlayerControl.LocalPlayer,
                         Tr.GetString(
 							"reportedDeadBodyInfo",

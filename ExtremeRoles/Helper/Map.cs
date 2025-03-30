@@ -95,7 +95,7 @@ public static class Map
 		}
 		else
 		{
-			var ship = CachedShipStatus.Instance;
+			var ship = ShipStatus.Instance;
 
 			switch (Id)
 			{
@@ -353,7 +353,7 @@ public static class Map
 
 	public static void RelinkVent()
 	{
-		var mapVent = CachedShipStatus.Instance.AllVents;
+		var mapVent = ShipStatus.Instance.AllVents;
 		var ventIdMapping = new Dictionary<int, Vent>(mapVent.Count);
 		foreach (Vent vent in mapVent)
 		{

@@ -11,7 +11,7 @@ public static class MeetingHudSetForegroundForDeadPatch
 	public static bool Prefix(MeetingHud __instance)
 	{
 		if (!(
-				FastDestroyableSingleton<HudManager>.Instance != null &&
+				HudManager.Instance != null &&
 				OnemanMeetingSystemManager.TryGetActiveSystem(out var system) &&
 				system.IsDefaultForegroundForDead(__instance)
 			))
@@ -19,7 +19,7 @@ public static class MeetingHudSetForegroundForDeadPatch
 			return true;
 		}
 
-		var meeting = FastDestroyableSingleton<HudManager>.Instance.MeetingPrefab;
+		var meeting = HudManager.Instance.MeetingPrefab;
 
 		__instance.amDead = false;
 		__instance.Glass.sprite = meeting.Glass.sprite;

@@ -82,8 +82,8 @@ public sealed class MinerMineEffect : MonoBehaviour
 		if (!this.isUseEffect ||
 			player == null ||
 			player.Data == null ||
-			CachedShipStatus.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			ShipStatus.Instance == null ||
+			!ShipStatus.Instance.enabled ||
 			GameData.Instance == null ||
 			MeetingHud.Instance != null ||
 			ExileController.Instance != null ||

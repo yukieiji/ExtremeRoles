@@ -16,7 +16,7 @@ internal sealed class XionActionButton : NoneCoolButtonBase
         string buttonText = "")
     {
 
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         this.Body = UnityEngine.Object.Instantiate(
             hudManager.KillButton, hudManager.KillButton.transform.parent);

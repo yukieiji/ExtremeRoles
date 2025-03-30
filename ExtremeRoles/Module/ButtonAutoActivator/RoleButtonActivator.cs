@@ -14,7 +14,7 @@ namespace ExtremeRoles.Module.ButtonAutoActivator
 				(
 					localPlayer.IsKillTimerEnabled ||
 					localPlayer.ForceKillTimerContinue ||
-					FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
+					HudManager.Instance.UseButton.isActiveAndEnabled
 				) &&
 				localPlayer.Data != null &&
 				!localPlayer.Data.IsDead &&

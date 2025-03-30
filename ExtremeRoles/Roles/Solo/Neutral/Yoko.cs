@@ -194,10 +194,10 @@ public sealed class Yoko :
     public void Update(PlayerControl rolePlayer)
     {
 
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
 
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
             MeetingHud.Instance != null ||
             OnemanMeetingSystemManager.IsActive) { return; }
 

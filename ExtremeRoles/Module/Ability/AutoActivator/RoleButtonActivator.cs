@@ -14,7 +14,7 @@ public sealed class RoleButtonActivator : IButtonAutoActivator
 			(
 				localPlayer.IsKillTimerEnabled ||
 				localPlayer.ForceKillTimerContinue ||
-				FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
+				HudManager.Instance.UseButton.isActiveAndEnabled
 			) &&
 			localPlayer.Data != null &&
 			!localPlayer.Data.IsDead &&

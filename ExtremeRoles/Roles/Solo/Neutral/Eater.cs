@@ -200,10 +200,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
     {
 
         if (this.Button == null ||
-			CachedShipStatus.Instance == null ||
+			ShipStatus.Instance == null ||
             GameData.Instance == null ||
             this.IsWin ||
-			!CachedShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive)
 		{
 			return;
@@ -283,7 +283,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 
             if (!this.targetPlayer.Data.IsDead) { return; }
 
-            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
+            HudManager.Instance.StartCoroutine(
                 this.cleanDeadBodyOps(this.targetPlayer.PlayerId));
 
             this.isActivated = true;

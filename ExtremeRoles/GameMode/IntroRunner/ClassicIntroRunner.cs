@@ -39,12 +39,12 @@ public sealed class ClassicIntroRunner : IIntroRunner
                 GameData.Instance.PlayerCount);
             if (adjustedNumImpostors == 1)
             {
-                instance.ImpostorText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                instance.ImpostorText.text = TranslationController.Instance.GetString(
                     StringNames.NumImpostorsS, System.Array.Empty<Il2CppSystem.Object>());
             }
             else
             {
-                instance.ImpostorText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                instance.ImpostorText.text = TranslationController.Instance.GetString(
                     StringNames.NumImpostorsP, [adjustedNumImpostors.ToString()]);
             }
             instance.ImpostorText.text = instance.ImpostorText.text.Replace("[FF1919FF]", "<color=#FF1919FF>");

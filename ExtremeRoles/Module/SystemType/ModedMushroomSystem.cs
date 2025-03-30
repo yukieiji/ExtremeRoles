@@ -100,9 +100,9 @@ public sealed class ModedMushroomSystem : IExtremeSystemType
 
 	private void setMushroom(Vector2 pos)
 	{
-		if (CachedShipStatus.Instance == null) { return; }
+		if (ShipStatus.Instance == null) { return; }
 
-		var newMushroom = Object.Instantiate(prefab, CachedShipStatus.Instance.transform);
+		var newMushroom = Object.Instantiate(prefab, ShipStatus.Instance.transform);
 		newMushroom.gameObject.SetActive(true);
 		newMushroom.name = $"{MushroomName}_{this.id}";
 

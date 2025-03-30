@@ -99,7 +99,7 @@ public static class GameStartManagerPatch
         GUIUtility.systemCopyBuffer = ConectGame.CreateDirectConectUrl(AmongUsClient.Instance.GameId);
 
 		timer = timerMaxValue;
-        isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
+        isCustomServer = ServerManager.Instance.IsCustomServer();
 
         prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
 

@@ -169,7 +169,7 @@ public sealed class Doppelganger : GhostRoleBase
 
 		if (this.minigamePrefab == null)
 		{
-			var shapeShifterBase = FastDestroyableSingleton<RoleManager>.Instance.AllRoles.FirstOrDefault(
+			var shapeShifterBase = RoleManager.Instance.AllRoles.FirstOrDefault(
 				x => x.Role is RoleTypes.Shapeshifter);
 			if (!shapeShifterBase.IsTryCast<ShapeshifterRole>(out var shapeShifter))
 			{

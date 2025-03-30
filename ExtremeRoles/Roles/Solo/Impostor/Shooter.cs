@@ -147,7 +147,7 @@ public sealed class Shooter :
 
     public void SetSprite(SpriteRenderer render)
     {
-        render.sprite = FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite;
+        render.sprite = HudManager.Instance.KillButton.graphic.sprite;
         render.transform.localScale *= new Vector2(0.75f, 0.75f);
     }
 
@@ -201,7 +201,7 @@ public sealed class Shooter :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null) { return; }
 
         if (!this.isAwake)
@@ -245,7 +245,7 @@ public sealed class Shooter :
             if (meetingShootText == null)
             {
                 meetingShootText = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
+                    HudManager.Instance.TaskPanel.taskText,
                     MeetingHud.Instance.transform);
                 meetingShootText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 meetingShootText.transform.position = Vector3.zero;
@@ -330,11 +330,11 @@ public sealed class Shooter :
         {
             return string.Concat(new string[]
             {
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
                 "\r\n",
                 Palette.ImpostorRed.ToTextColor(),
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
             });
@@ -535,7 +535,7 @@ public sealed class Shooter :
     private void createText()
     {
 
-        HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        HudManager hudManager = HudManager.Instance;
 
         this.chargeTimerText = UnityEngine.Object.Instantiate(
             hudManager.KillButton.cooldownTimerText,

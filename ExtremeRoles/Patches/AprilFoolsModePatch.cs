@@ -32,7 +32,7 @@ public static class AprilFoolsModeShouldShowAprilFoolsTogglePatch
 {
 	public static bool Prefix(ref bool __result)
 	{
-		var mng = FastDestroyableSingleton<ServerManager>.Instance;
+		var mng = ServerManager.Instance;
 		if (mng == null || !mng.IsCustomServer())
 		{
 			return true;

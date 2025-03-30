@@ -31,7 +31,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
                 (
                     localPlayer.IsKillTimerEnabled ||
                     localPlayer.ForceKillTimerContinue ||
-                    FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled ||
+                    HudManager.Instance.UseButton.isActiveAndEnabled ||
                     isVentIn()
                 ) &&
                 localPlayer.Data != null &&
@@ -161,7 +161,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
         this.Button = new ExtremeAbilityButton(
             new SandWormAbilityBehavior(
                 Tr.GetString("assault"),
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite,
+                HudManager.Instance.KillButton.graphic.sprite,
                 IsAbilityUse, UseAbility),
             new AssaultButtonAutoActivator(),
             KeyCode.F);

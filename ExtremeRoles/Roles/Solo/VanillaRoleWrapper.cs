@@ -128,7 +128,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         {
             string fakeTaskString = Design.ColoedString(
                 this.NameColor,
-                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
         }
@@ -154,7 +154,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
     {
         if (this.IsImpostor())
         {
-            var trans = FastDestroyableSingleton<TranslationController>.Instance;
+            var trans = TranslationController.Instance;
 
             return string.Concat(
 			[

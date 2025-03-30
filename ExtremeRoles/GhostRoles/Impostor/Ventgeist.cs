@@ -45,7 +45,7 @@ public sealed class Ventgeist : GhostRoleBase
     {
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.VentgeistVentAnime,
-            FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.graphic.sprite,
+            HudManager.Instance.ImpostorVentButton.graphic.sprite,
             this.IsReportAbility(),
             this.isPreCheck,
             this.isAbilityUse,
@@ -90,7 +90,7 @@ public sealed class Ventgeist : GhostRoleBase
     {
         this.targetVent = null;
 
-        ShipStatus ship = CachedShipStatus.Instance;
+        ShipStatus ship = ShipStatus.Instance;
 
         if (ship == null ||
             !ship.enabled) { return false; }

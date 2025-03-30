@@ -74,7 +74,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	protected static bool IsCommonUseWithMinigame()
 	{
 		var localPlayer = PlayerControl.LocalPlayer;
-		var hud = FastDestroyableSingleton<HudManager>.Instance;
+		var hud = HudManager.Instance;
 		return
 			!(
 				localPlayer == null ||

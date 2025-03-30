@@ -19,7 +19,7 @@ public static class TranslatorManager
 			ExtremeRolesPlugin.Logger.LogError($"Can't Add new data");
 		}
 		AddData(
-			FastDestroyableSingleton<TranslationController>.Instance.currentLanguage.AllStrings,
+			TranslationController.Instance.currentLanguage.AllStrings,
 			newData);
 	}
 

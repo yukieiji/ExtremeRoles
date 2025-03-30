@@ -166,13 +166,13 @@ public sealed class Resurrecter :
         // リセット会議クールダウン
         if (this.isMeetingCoolResetOnResurrect)
         {
-            CachedShipStatus.Instance.EmergencyCooldown = this.meetingCoolDown;
+            ShipStatus.Instance.EmergencyCooldown = this.meetingCoolDown;
         }
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
         if (!role.CanKill() || role.IsCrewmate()) { return; }
 
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         if (flash == null)
         {
@@ -212,14 +212,14 @@ public sealed class Resurrecter :
 
         if (rolePlayer.Data.IsDead && this.infoBlock())
         {
-            FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            HudManager.Instance.Chat.gameObject.SetActive(false);
         }
 
         if (!rolePlayer.moveable ||
             MeetingHud.Instance ||
             ExileController.Instance ||
-            CachedShipStatus.Instance == null ||
-            !CachedShipStatus.Instance.enabled)
+            ShipStatus.Instance == null ||
+            !ShipStatus.Instance.enabled)
         {
             return;
         }
@@ -260,7 +260,7 @@ public sealed class Resurrecter :
             if (this.resurrectText == null)
             {
                 this.resurrectText = Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    HudManager.Instance.KillButton.cooldownTimerText,
                     Camera.main.transform, false);
                 this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
                 this.resurrectText.enableWordWrapping = false;
@@ -526,7 +526,7 @@ public sealed class Resurrecter :
         }
         UseResurrect(this);
 
-        FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
+        HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
         if (this.resurrectText != null)
         {
             this.resurrectText.gameObject.SetActive(false);
@@ -554,17 +554,17 @@ public sealed class Resurrecter :
                 int taskIndex;
                 int replaceTaskId = playerInfo.Tasks[i].TypeId;
 
-                if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
+                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
                     taskIndex = GameSystem.GetRandomCommonTaskId();
                 }
-                else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
+                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
                     taskIndex = GameSystem.GetRandomLongTask();
                 }
-                else if (CachedShipStatus.Instance.ShortTasks.FirstOrDefault(
+                else if (ShipStatus.Instance.ShortTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                 {
                     taskIndex = GameSystem.GetRandomShortTaskId();

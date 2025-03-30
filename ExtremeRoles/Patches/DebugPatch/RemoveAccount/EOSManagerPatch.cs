@@ -40,7 +40,7 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
 
         public static bool Prefix(EOSManager __instance)
         {
-			DestroyableSingleton<EOSManager>._instance = __instance;
+			EOSManager._instance = __instance;
 			if (__instance.DontDestroy)
 			{
 				UnityEngine.Object.DontDestroyOnLoad(__instance.gameObject);
@@ -54,7 +54,7 @@ namespace ExtremeRoles.Patches.DebugPatch.RemoveAccount
 			DataManager.Settings.Multiplayer.ChatMode = QuickChatModes.FreeChatOrQuickChat;
 			/*
 			DataManager.Player.Onboarding.LastAcceptedPrivacyPolicyVersion =
-				DestroyableSingleton<ReferenceDataManager>.Instance.Refdata.privacyPolicyVersion;
+				ReferenceDataManager.Instance.Refdata.privacyPolicyVersion;
 			*/
 
 			__instance.userId = new ProductUserId();

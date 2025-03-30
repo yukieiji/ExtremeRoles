@@ -13,7 +13,7 @@ public static class PlayerControlRemoveTaskPatch
 	public static void Prefix()
 	{
 		HudManagerUpdatePatch.SetBlockUpdate(true);
-		FastDestroyableSingleton<HudManager>.Instance.taskDirtyTimer = 0.0f;
+		HudManager.Instance.taskDirtyTimer = 0.0f;
 	}
 	public static void Postfix()
 	{

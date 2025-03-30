@@ -99,7 +99,7 @@ public sealed class Queen :
             {
                 servant.Button.HotKey = KeyCode.C;
             }
-            FastDestroyableSingleton<HudManager>.Instance.ReGridButtons();
+            HudManager.Instance.ReGridButtons();
         }
 
         if (targetRole.Team != ExtremeRoleType.Neutral)
@@ -180,7 +180,7 @@ public sealed class Queen :
         if (targetRole is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole is VanillaRoleWrapper)
         {
-			FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+			RoleManager.Instance.SetRole(
 				targetPlayer, RoleTypes.Crewmate);
 			return;
 		}
@@ -189,7 +189,7 @@ public sealed class Queen :
         {
             case RoleTypes.Crewmate:
             case RoleTypes.Impostor:
-				FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+				RoleManager.Instance.SetRole(
 					targetPlayer, RoleTypes.Crewmate);
 				break;
         }
@@ -267,8 +267,8 @@ public sealed class Queen :
         if (!rolePlayer ||
             rolePlayer.Data.Tasks.Count == 0 ||
             !GameData.Instance ||
-            !CachedShipStatus.Instance ||
-            !CachedShipStatus.Instance.enabled) { return; }
+            !ShipStatus.Instance ||
+            !ShipStatus.Instance.enabled) { return; }
 
         foreach (byte playerId in this.servantPlayerId)
         {
@@ -605,7 +605,7 @@ public sealed class Servant :
             source.PlayerId == target.PlayerId ||
             ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
 
-        var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+        var hudManager = HudManager.Instance;
 
         if (this.killFlash == null)
         {

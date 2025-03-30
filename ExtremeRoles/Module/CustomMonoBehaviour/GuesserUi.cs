@@ -193,7 +193,7 @@ public sealed class GuesserUi : MonoBehaviour
     {
         if (MeetingHud.Instance == null) { return; }
 
-        FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(active);
+        HudManager.Instance.Chat.gameObject.SetActive(active);
         MeetingHud.Instance.SkipVoteButton.gameObject.SetActive(active);
 
         foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)

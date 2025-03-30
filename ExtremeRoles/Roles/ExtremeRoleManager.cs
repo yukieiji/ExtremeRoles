@@ -512,7 +512,7 @@ public static class ExtremeRoleManager
         switch(ops)
         {
             case ReplaceOperation.ResetVanillaRole:
-                FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+                RoleManager.Instance.SetRole(
                     Helper.Player.GetPlayerControlById(targetId),
                     RoleTypes.Crewmate);
                 break;

@@ -180,13 +180,13 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
     public void Update(PlayerControl rolePlayer)
     {
 
-        if (CachedShipStatus.Instance == null ||
+        if (ShipStatus.Instance == null ||
             GameData.Instance == null ||
             MeetingHud.Instance != null)
         {
             return;
         }
-        if (!CachedShipStatus.Instance.enabled ||
+        if (!ShipStatus.Instance.enabled ||
 			OnemanMeetingSystemManager.IsActive)
         {
             return;
@@ -198,7 +198,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
         if (this.targetTimerText == null)
         {
             this.targetTimerText = UnityEngine.Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText);
+                HudManager.Instance.KillButton.cooldownTimerText);
             this.targetTimerText.alignment = TMPro.TextAlignmentOptions.Center;
         }
 

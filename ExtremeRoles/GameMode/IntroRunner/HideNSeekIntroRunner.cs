@@ -96,7 +96,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
             playerSlot.transform.localScale = Vector3.one * instance.impostorScale;
         }
 
-        yield return CachedShipStatus.Instance.CosmeticsCache.PopulateFromPlayers();
+        yield return ShipStatus.Instance.CosmeticsCache.PopulateFromPlayers();
         yield return new WaitForSecondsRealtime(6f);
 
         if (playerSlot != null)
@@ -179,7 +179,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
         }
         else
         {
-            CachedShipStatus.Instance.HideCountdown = crewmateLeadTime;
+            ShipStatus.Instance.HideCountdown = crewmateLeadTime;
             if (impostor != null)
             {
                 if (enableHorse)

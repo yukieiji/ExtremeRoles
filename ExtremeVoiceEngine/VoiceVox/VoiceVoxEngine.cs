@@ -146,9 +146,9 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
                 string log = TranslationController.Instance.GetString(
                     "voicevoxParamSetLog", parts: this.param.ToString());
                 ExtremeVoiceEnginePlugin.Logger.LogInfo(log);
-                if (FastDestroyableSingleton<HudManager>.Instance != null)
+                if (HudManager.Instance != null)
                 {
-                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat(log);
+                    HudManager.Instance.Chat.AddLocalChat(log);
                 }
                 return;
             }
@@ -156,9 +156,9 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 		string errorLog = TranslationController.Instance.GetString(
 			"cannotFindVoicevoxParam", parts: this.param.ToString());
 		ExtremeVoiceEnginePlugin.Logger.LogInfo(errorLog);
-		if (FastDestroyableSingleton<HudManager>.Instance != null)
+		if (HudManager.Instance != null)
 		{
-			FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat(errorLog);
+			HudManager.Instance.Chat.AddLocalChat(errorLog);
 		}
 	}
 

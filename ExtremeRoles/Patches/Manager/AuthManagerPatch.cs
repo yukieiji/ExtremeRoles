@@ -12,7 +12,7 @@ public static class AuthManagerCoConnectPatch
 {
 	public static bool Prefix(AuthManager __instance)
 	{
-		if (!FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer())
+		if (!ServerManager.Instance.IsCustomServer())
 		{
 			return true;
 		}

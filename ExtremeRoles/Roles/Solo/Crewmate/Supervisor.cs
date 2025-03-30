@@ -97,7 +97,7 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     public bool UseAbility()
     {
-        FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+        HudManager.Instance.ToggleMapVisible(
             new MapOptions
             {
                 Mode = MapOptions.Modes.CountOverlay,
@@ -122,7 +122,7 @@ public sealed class Supervisor : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
         if (this.chargeTime == null)
         {
             this.chargeTime = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 Camera.main.transform, false);
             this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
         }

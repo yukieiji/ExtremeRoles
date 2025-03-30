@@ -59,7 +59,7 @@ public static class SecurityHelper
         if (timerText == null)
         {
             timerText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                HudManager.Instance.KillButton.cooldownTimerText,
                 instance.transform);
             timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
             timerText.name = "securityTimer";
@@ -93,15 +93,15 @@ public static class SurveillanceMinigameBeginPatch
         SurveillanceMinigameUpdatePatch.Timer = SurveillanceMinigameUpdatePatch.ChangeTime;
         SurveillanceMinigameUpdatePatch.Page = 0;
 
-        if (CachedShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0)
+        if (ShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0)
         {
             __instance.textures = __instance.textures.ToList().Concat(
-                new RenderTexture[CachedShipStatus.Instance.AllCameras.Length - 4]).ToArray();
+                new RenderTexture[ShipStatus.Instance.AllCameras.Length - 4]).ToArray();
             __instance.ViewPorts = __instance.ViewPorts.ToList().Concat(
-                new MeshRenderer[CachedShipStatus.Instance.AllCameras.Length - 4]).ToArray();
-            for (int i = 4; i < CachedShipStatus.Instance.AllCameras.Length; i++)
+                new MeshRenderer[ShipStatus.Instance.AllCameras.Length - 4]).ToArray();
+            for (int i = 4; i < ShipStatus.Instance.AllCameras.Length; i++)
             {
-                SurvCamera surv = CachedShipStatus.Instance.AllCameras[i];
+                SurvCamera surv = ShipStatus.Instance.AllCameras[i];
                 Camera camera = Object.Instantiate(__instance.CameraPrefab);
                 camera.transform.SetParent(__instance.transform);
                 camera.transform.position = new Vector3(
@@ -170,7 +170,7 @@ public static class SurveillanceMinigameUpdatePatch
     private static void updateCamera(SurveillanceMinigame instance)
     {
         Timer -= Time.deltaTime;
-        int numberOfPages = Mathf.CeilToInt(CachedShipStatus.Instance.AllCameras.Length / 4f);
+        int numberOfPages = Mathf.CeilToInt(ShipStatus.Instance.AllCameras.Length / 4f);
 
         bool update = false;
 

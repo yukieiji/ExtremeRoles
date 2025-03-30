@@ -23,7 +23,7 @@ public static class SpawnInMinigameBeginPatch
 			localPlayer.SetKinematic(true);
 			localPlayer.NetTransform.SetPaused(true);
 			Helper.Player.RpcUncheckSnap(localPlayer.PlayerId, new Vector2(-0.66f, -0.5f));
-			DestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
+			HudManager.Instance.PlayerCam.SnapToTarget();
 
 			__instance.StopAllCoroutines();
 			__instance.StartCoroutine(
