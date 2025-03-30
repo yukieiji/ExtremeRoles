@@ -34,14 +34,23 @@ public static class HudManagerOnGameStartPatch
 {
 	public static void Postfix()
 	{
+		if (PlayerControl.LocalPlayer == null)
+		{
+			return;
+		}
+
 		var gameStart = ExtremeGameModeManager.Instance.ShipOption.GameStart;
 
 		if (!gameStart.IsKillCoolDownIsTen)
 		{
-			var role = ExtremeRoleManager.GetLocalPlayerRole();
-			PlayerControl.LocalPlayer.SetKillTimer(
-				role.TryGetKillCool(out float killCoolTime) ?
-				killCoolTime : PlayerHelper.DefaultKillCoolTime);
+			if (RoleAssignState.IsExist &&
+				RoleAssignState.Instance.IsRoleSetUpEnd)
+			{
+				var role = ExtremeRoleManager.GetLocalPlayerRole();
+				PlayerControl.LocalPlayer.SetKillTimer(
+					role.TryGetKillCool(out float killCoolTime) ?
+					killCoolTime : PlayerHelper.DefaultKillCoolTime);
+			}
 
 			if (gameStart.RemoveSomeoneButton)
 			{
