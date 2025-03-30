@@ -360,7 +360,10 @@ public static class GameSystem
 
 	public static void ForceRepairrSpecialSabotage(SystemTypes sabSystem)
 	{
-		if (!ShipStatus.Instance.Systems.TryGetValue(sabSystem, out var system))
+		if (!(
+				ShipStatus.Instance != null &&
+				ShipStatus.Instance.Systems.TryGetValue(sabSystem, out var system)
+			))
 		{
 			return;
 		}
