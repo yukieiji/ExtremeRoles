@@ -80,6 +80,7 @@ public enum ExtremeRoleId : int
 	Jailer,
 	Yardbird,
 	Summoner,
+	Exorcist,
 
 	SpecialImpostor,
     Evolver,
