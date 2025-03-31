@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -18,6 +18,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -48,19 +49,19 @@ public sealed class DetectiveOffice : ConstCombinationRoleManagerBase
 
 public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleResetMeeting, IRoleReportHook, IRoleUpdate, IRoleSpecialReset
 {
-    public struct CrimeInfo
-    {
-        public Vector2 Position;
-        public DateTime KilledTime;
-        public float ReportTime;
-        public ExtremeRoleType KillerTeam;
-        public ExtremeRoleId KillerRole;
-        public RoleTypes KillerVanillaRole;
-    }
+    public readonly record struct CrimeInfo(
+		Vector2 Pos,
+		DateTime KilledTime,
+		float ReportTime,
+		PlayerStatus Reason,
+		ExtremeRoleType KillerTeam,
+		ExtremeRoleId KillerRole,
+		RoleTypes KillerVanillaRole,
+		byte Killer);
 
     public class CrimeInfoContainer
     {
-        private Dictionary<byte, (Vector2, DateTime, byte)> deadBodyInfo = new Dictionary<byte, (Vector2, DateTime, byte)>();
+        private Dictionary<byte, Vector2> deadBodyPos = new Dictionary<byte, Vector2>();
         private Dictionary<byte, float> timer = new Dictionary<byte, float>();
 
         public CrimeInfoContainer()
@@ -70,7 +71,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
         public void Clear()
         {
-            this.deadBodyInfo.Clear();
+            this.deadBodyPos.Clear();
             this.timer.Clear();
         }
 
@@ -78,13 +79,9 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
             PlayerControl killerPlayer,
             PlayerControl deadPlayer)
         {
-            this.deadBodyInfo.Add(
+            this.deadBodyPos.Add(
                 deadPlayer.PlayerId,
-                (
-                    deadPlayer.GetTruePosition(),
-                    DateTime.UtcNow,
-                    killerPlayer.PlayerId
-                ));
+				deadPlayer.GetTruePosition());
             this.timer.Add(
                 deadPlayer.PlayerId,
                 0.0f);
@@ -92,28 +89,25 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
         public CrimeInfo? GetCrimeInfo(byte playerId)
         {
-            if (!this.deadBodyInfo.TryGetValue(playerId, out var bodyInfo))
+			if (!(
+					this.deadBodyPos.TryGetValue(playerId, out var pos) &&
+					ExtremeRolesPlugin.ShipState.DeadPlayerInfo.TryGetValue(playerId, out var state) &&
+					state is not null &&
+					state.Killer != null &&
+					ExtremeRoleManager.TryGetRole(state.Killer.PlayerId, out var role)
+				))
             {
                 return null;
             }
 
-            var (pos, time, killerPlayerId) = bodyInfo;
-            if (!ExtremeRoleManager.TryGetRole(killerPlayerId, out var role))
-            {
-                return null;
-            }
-
-			var core = role.Core;
-            return new CrimeInfo()
-            {
-                Position = pos,
-                KilledTime = time,
-                ReportTime = this.timer[playerId],
-                KillerTeam = core.Team,
-                KillerRole = core.Id,
-                KillerVanillaRole = core.Id == ExtremeRoleId.VanillaRole ?
-                    ((Solo.VanillaRoleWrapper)role).VanilaRoleId : RoleTypes.Crewmate
-            };
+			return new CrimeInfo(
+				pos, state.DeadTime,
+				this.timer[playerId],
+				state.Reason,
+				role.Team, role.Id,
+				role.Id == ExtremeRoleId.VanillaRole ?
+					((Solo.VanillaRoleWrapper)role).VanilaRoleId : RoleTypes.Crewmate
+				state.Killer.PlayerId);
         }
 
         public void Update()
@@ -133,8 +127,10 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         None,
         FindKillTime,
         FindReportTime,
+		FindReson,
         FindTeam,
         FindRole,
+		FindName,
     }
 
     public enum DetectiveOption
@@ -142,7 +138,10 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         SearchRange,
         SearchTime,
         SearchAssistantTime,
-        TextShowTime,
+		SearchOnlyOnce,
+		SearchCanFindName,
+		SearchCanContine,
+		TextShowTime,
     }
 
     private CrimeInfo? targetCrime;
@@ -159,6 +158,11 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
     private TextPopUpper textPopUp;
     private Vector2 prevPlayerPos;
     private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
+	private Dictionary<byte, SearchCond> condition = new Dictionary<byte, SearchCond>();
+
+	private bool includeName;
+	private bool onlyOnce;
+	private bool canContine;
 
     public Detective() : base(
 		RoleCore.BuildCrewmate(
@@ -201,10 +205,9 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         NetworkedPlayerInfo reportBody)
     {
         this.targetCrime = this.info.GetCrimeInfo(reportBody.PlayerId);
-
-		this.searchCrimeInfoTime =
-			ExtremeRoleManager.TryGetRole(reporter.PlayerId, out var reporterRole) &&
-			reporterRole.Core.Id is ExtremeRoleId.Assistant ? this.searchAssistantTime : this.searchTime;
+        this.searchCrimeInfoTime = ExtremeRoleManager.TryGetSafeCastedRole<Assistant>(
+			reporter.PlayerId, out var _)?
+				this.searchAssistantTime : this.searchTime;
     }
 
     public void HookMuderPlayer(
@@ -233,8 +236,8 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
                     ColorPalette.DetectiveKokikou);
             }
 
-            var crime = (CrimeInfo)this.targetCrime;
-            Vector2 crimePos = crime.Position;
+            var crime = this.targetCrime.Value;
+            Vector2 crimePos = crime.Pos;
 
             this.crimeArrow.UpdateTarget(crimePos);
             this.crimeArrow.Update();
@@ -303,8 +306,16 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
             DetectiveOption.SearchAssistantTime,
             4.0f, 2.0f, 7.5f, 0.1f,
             format: OptionUnit.Second);
-
-        factory.CreateFloatOption(
+		factory.CreateBoolOption(
+			DetectiveOption.SearchOnlyOnce,
+			true);
+		factory.CreateBoolOption(
+			DetectiveOption.SearchCanFindName,
+			false);
+		factory.CreateBoolOption(
+			DetectiveOption.SearchCanContine,
+			false);
+		factory.CreateFloatOption(
             DetectiveOption.TextShowTime,
             60.0f, 5.0f, 120.0f, 0.1f,
             format: OptionUnit.Second);
@@ -334,7 +345,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
     private void updateSearchCond(CrimeInfo info)
     {
-        this.cond += 1;
+        this.cond++;
         showSearchResultText(info);
         if (this.cond == SearchCond.FindRole)
         {
@@ -361,43 +372,56 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
             this.textPopUp.Clear();
         }
     }
-    private void showSearchResultText(CrimeInfo info)
+    private void showSearchResultText(in CrimeInfo info)
     {
         if (this.textPopUp == null) { return; }
 
         string showStr = "";
-        switch (this.cond)
+		string key = this.cond.ToString();
+		switch (this.cond)
         {
             case SearchCond.FindKillTime:
                 showStr = Tr.GetString(
-					SearchCond.FindKillTime.ToString(),
+					key,
                     info.KilledTime.ToString());
                 break;
             case SearchCond.FindReportTime:
                 showStr = Tr.GetString(
-					SearchCond.FindReportTime.ToString(),
-                    Mathf.CeilToInt(info.ReportTime));
+					key, Mathf.CeilToInt(info.ReportTime));
                 break;
-            case SearchCond.FindTeam:
+			case SearchCond.FindReson:
+				showStr = Tr.GetString(
+					key,
+					Tr.GetString(info.Reason.ToString()));
+				break;
+			case SearchCond.FindTeam:
                 showStr = Tr.GetString(
-					SearchCond.FindTeam.ToString(),
-                    Tr.GetString(info.KillerTeam.ToString()));
+					key, Tr.GetString(info.KillerTeam.ToString()));
                 break;
             case SearchCond.FindRole:
-
                 var role = info.KillerRole;
                 string roleStr = Tr.GetString(info.KillerRole.ToString());
-
                 if (role == ExtremeRoleId.VanillaRole)
                 {
                     roleStr = Tr.GetString(info.KillerVanillaRole.ToString());
                 }
-
                 showStr = Tr.GetString(
-					SearchCond.FindRole.ToString(),
-                    roleStr);
+					key, roleStr);
+				if (!this.includeName)
+				{
+					this.cond++;
+				}
                 break;
-            default:
+			case SearchCond.FindName:
+				var player = Player.GetPlayerControlById(info.Killer);
+				if (player == null ||
+					player.Data == null)
+				{
+					return;
+				}
+				showStr = Tr.GetString(key, player.Data.DefaultOutfit.PlayerName);
+				break;
+			default:
                 break;
         }
 
