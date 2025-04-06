@@ -35,6 +35,7 @@ using ExtremeRoles.Extension.UnityEvents;
 
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches.Region;
 
@@ -169,9 +170,8 @@ public static class RegionMenuOpenPatch
 
         void onFocusLost()
         {
-            CustomRegion.Update();
-            __instance.ChooseOption(
-                ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
+			CustomRegion.UpdateEditorableServer();
+            __instance.ChooseOption(CustomRegion.EditableServer);
         }
 
         void onEnterOrPortFieldChange()
