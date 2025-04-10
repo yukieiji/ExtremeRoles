@@ -36,7 +36,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		TextShowTime,
 	}
 
-	private CrimeInfo? targetCrime;
+	private CrimeInfoOld? targetCrime;
 	private CrimeInfoContainer info;
 	private Arrow crimeArrow;
 	private float searchTime;
@@ -236,7 +236,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 		prevPlayerPos = defaultPos;
 	}
 
-	private void updateSearchCond(CrimeInfo info)
+	private void updateSearchCond(CrimeInfoOld info)
 	{
 		cond++;
 		showSearchResultText(info);
@@ -265,7 +265,7 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 			textPopUp.Clear();
 		}
 	}
-	private void showSearchResultText(in CrimeInfo info)
+	private void showSearchResultText(in CrimeInfoOld info)
 	{
 		if (textPopUp == null) { return; }
 
