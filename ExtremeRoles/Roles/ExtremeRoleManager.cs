@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
@@ -6,6 +6,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Combination.Avalon;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
+using ExtremeRoles.Roles.Combination.DetectiveOffice;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
@@ -364,7 +365,7 @@ public static class ExtremeRoleManager
         {
             {(byte)CombinationRoleType.Avalon         , new AvalonRole()},
             {(byte)CombinationRoleType.HeroAca        , new HeroAcademiaRole()},
-            {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
+            {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOfficeManager()},
             {(byte)CombinationRoleType.Kids           , new Kids()},
             {(byte)CombinationRoleType.Buddy          , new BuddyManager()},
             {(byte)CombinationRoleType.Lover          , new LoverManager()},
