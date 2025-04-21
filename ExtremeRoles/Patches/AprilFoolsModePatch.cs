@@ -26,14 +26,3 @@ public static class AprilFoolsModeShouldHorseAroundPatch
     }
 }
 */
-
-[HarmonyPatch(typeof(CreateGameOptions), nameof(CreateGameOptions.Show))]
-public static class AprilFoolsModeShouldShowAprilFoolsTogglePatch
-{
-	public static void Postfix(CreateGameOptions __instance)
-	{
-		var mng = ServerManager.Instance;
-		__instance.AprilFoolsToggle.SetActive(
-			mng != null && mng.IsCustomServer());
-	}
-}
