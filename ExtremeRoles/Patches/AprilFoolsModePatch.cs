@@ -26,7 +26,7 @@ public static class AprilFoolsModeShouldHorseAroundPatch
     }
 }
 */
-
+/*
 [HarmonyPatch(typeof(AprilFoolsMode), nameof(AprilFoolsMode.ShouldShowAprilFoolsToggle))]
 public static class AprilFoolsModeShouldShowAprilFoolsTogglePatch
 {
@@ -42,3 +42,4 @@ public static class AprilFoolsModeShouldShowAprilFoolsTogglePatch
 		return false;
 	}
 }
+*/
