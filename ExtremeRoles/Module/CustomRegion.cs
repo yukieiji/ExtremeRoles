@@ -18,13 +18,10 @@ public static class CustomRegion
 		createStaticRegion(
 			IRegionInfoExtension.ExROfficialServerTokyoManinName,
 			"168.138.196.31", 22023, false), // Only ExtremeRoles!!
-		// 一時的にパージ
-		/*
 		createStaticRegion(
 			IRegionInfoExtension.FullCustomServerName,
 			ClientOption.Instance.Ip.Value,
 			ClientOption.Instance.Port.Value, false),
-		*/
 	];
 
 	public static void AddCustomServer()
