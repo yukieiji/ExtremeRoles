@@ -22,6 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/*
 using System;
 
 using HarmonyLib;
@@ -35,6 +36,7 @@ using ExtremeRoles.Extension.UnityEvents;
 
 
 using UnityObject = UnityEngine.Object;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches.Region;
 
@@ -169,9 +171,8 @@ public static class RegionMenuOpenPatch
 
         void onFocusLost()
         {
-            CustomRegion.Update();
-            __instance.ChooseOption(
-                ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
+			CustomRegion.UpdateEditorableServer();
+            __instance.ChooseOption(CustomRegion.EditableServer);
         }
 
         void onEnterOrPortFieldChange()
@@ -193,3 +194,4 @@ public static class RegionMenuOpenPatch
 
     }
 }
+*/

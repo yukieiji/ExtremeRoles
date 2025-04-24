@@ -23,6 +23,7 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Translation;
+using ExtremeRoles.Module.ScreenManagerHook;
 
 namespace ExtremeRoles;
 
@@ -103,6 +104,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		ApiServer.Register(PostChat.Path, HttpMethod.Post, new PostChat());
 		ApiServer.Register(ChatWebUI.Path, HttpMethod.Get, new OpenChatWebUi());
 		ApiServer.Register(ConectGame.Path, HttpMethod.Get, new ConectGame());
+
+		ScreenManagerHookcs.RegisterLoad();
 
 		var assm = System.Reflection.Assembly.GetAssembly(this.GetType());
 

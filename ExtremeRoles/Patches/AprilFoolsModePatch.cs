@@ -26,19 +26,3 @@ public static class AprilFoolsModeShouldHorseAroundPatch
     }
 }
 */
-
-[HarmonyPatch(typeof(AprilFoolsMode), nameof(AprilFoolsMode.ShouldShowAprilFoolsToggle))]
-public static class AprilFoolsModeShouldShowAprilFoolsTogglePatch
-{
-	public static bool Prefix(ref bool __result)
-	{
-		var mng = ServerManager.Instance;
-		if (mng == null || !mng.IsCustomServer())
-		{
-			return true;
-		}
-
-		__result = true;
-		return false;
-	}
-}

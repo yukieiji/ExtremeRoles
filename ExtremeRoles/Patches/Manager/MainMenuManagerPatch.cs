@@ -120,8 +120,6 @@ public static class MainMenuManagerStartPatch
             Prefab.Text.gameObject.SetActive(false);
             UnityObject.DontDestroyOnLoad(Prefab.Text);
         }
-
-		CustomRegion.Update();
 	}
 
 	private static SimpleButton createButton(
