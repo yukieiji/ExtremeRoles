@@ -8,11 +8,9 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using TMPro;
-
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -124,7 +122,7 @@ public sealed class Shooter :
                 return;
             }
 
-            Helper.Player.RpcUncheckMurderPlayer(
+            Player.RpcUncheckMurderPlayer(
                 localPlayer.PlayerId,
                 target, byte.MinValue);
 
@@ -316,8 +314,8 @@ public sealed class Shooter :
         }
         else
         {
-            return string.Concat(new string[]
-            {
+            return string.Concat(
+			[
                 TranslationController.Instance.GetString(
                     StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
                 "\r\n",
@@ -325,7 +323,7 @@ public sealed class Shooter :
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
-            });
+            ]);
         }
     }
 
