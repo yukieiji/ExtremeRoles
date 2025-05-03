@@ -1,5 +1,4 @@
 ﻿using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 
 using Hazel;
@@ -10,10 +9,12 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class TimeBreakerTimeBreakSystem(float activeTime, bool effectImp, bool activeScreen) : IDirtableSystemType
+public sealed class TimeBreakerTimeBreakSystem(
+	float activeTime, bool effectImp, bool effectMarlin, bool activeScreen) : IDirtableSystemType
 {
 	private readonly float activeTime = activeTime;
 	private readonly bool effectImp = effectImp;
+	private readonly bool effectMarlin = effectMarlin;
 	private readonly bool activeScreen = activeScreen;
 
 	public bool Active { get; private set; }
@@ -66,7 +67,11 @@ public sealed class TimeBreakerTimeBreakSystem(float activeTime, bool effectImp,
 	{
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-		if (!this.effectImp && (role.IsImpostor() || role.Id == ExtremeRoleId.Marlin))
+		if (!this.effectImp &&
+			(
+				role.IsImpostor() ||
+				(this.effectMarlin && role.Id == ExtremeRoleId.Marlin)
+			))
 		{
 			return;
 		}

@@ -19,11 +19,13 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class GlitchDummySystem(
 	bool isBlockImp,
+	bool isBlockMarlin,
 	float activeTime) : IDirtableSystemType
 {
 	public bool IsDirty => false;
 
 	private readonly bool isBlockImp = isBlockImp;
+	private readonly bool isBlockMarlin = isBlockMarlin;
 
 	private abstract class GlitchBase(float time)
 	{
@@ -367,7 +369,11 @@ public sealed class GlitchDummySystem(
 		var targetDevice = (SystemConsoleType)msgReader.ReadByte();
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-		if (this.isBlockImp && (role.IsImpostor() || role.Id == ExtremeRoleId.Marlin))
+		if (this.isBlockImp &&
+			(
+				role.IsImpostor() ||
+				(this.isBlockMarlin && role.Id == ExtremeRoleId.Marlin)
+			))
 		{
 			return;
 		}
