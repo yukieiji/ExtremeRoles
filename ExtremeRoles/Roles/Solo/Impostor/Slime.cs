@@ -23,9 +23,9 @@ public sealed class Slime :
         Reset,
     }
 
-	public enum Option : byte
+	public enum Option
 	{
-		EffectMarlin
+		SeeMorphMerlin
 	}
 
     public ExtremeAbilityButton Button { get; set; }
@@ -33,7 +33,7 @@ public sealed class Slime :
     private Console targetConsole;
     private GameObject consoleObj;
     private bool isKilling = false;
-	private bool isEffectMarlin = false;
+	private bool seeMorphMerlin = false;
 
     public Slime() : base(
         ExtremeRoleId.Slime,
@@ -52,7 +52,7 @@ public sealed class Slime :
         var role = ExtremeRoleManager.GetSafeCastedRole<Slime>(rolePlayerId);
 		if (role == null || rolePlayer == null ||
 			(
-				!role.isEffectMarlin &&
+				role.seeMorphMerlin &&
 				PlayerControl.LocalPlayer != null &&
 				ExtremeRoleManager.TryGetRole(
 					PlayerControl.LocalPlayer.PlayerId, out var localRole) &&
@@ -196,7 +196,7 @@ public sealed class Slime :
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
         removeMorphConsole(this, rolePlayer);
-		this.isEffectMarlin = this.Loader.GetValue<Option, bool>(Option.EffectMarlin);
+		this.seeMorphMerlin = this.Loader.GetValue<Option, bool>(Option.SeeMorphMerlin);
     }
 
     protected override void CreateSpecificOption(
@@ -205,12 +205,13 @@ public sealed class Slime :
         IRoleAbility.CreateCommonAbilityOption(
             factory, 30.0f);
 		factory.CreateBoolOption(
-			Option.EffectMarlin, true);
+			Option.SeeMorphMerlin, false);
     }
 
     protected override void RoleSpecificInit()
     {
         this.isKilling = false;
+		this.seeMorphMerlin = this.Loader.GetValue<Option, bool>(Option.SeeMorphMerlin);
     }
 
     public void AllReset(PlayerControl rolePlayer)

@@ -21,7 +21,7 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	}
 	public enum Option
 	{
-		EffectMerlin
+		SeeDummyMerlin
 	}
 
 	public ExtremeAbilityButton Button { get; set; }
@@ -129,8 +129,8 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		IRoleAbility.CreateCommonAbilityOption(
 			factory);
 		factory.CreateBoolOption(
-			Option.EffectMerlin,
-			false);
+			Option.SeeDummyMerlin,
+			true);
 	}
 
 	protected override void RoleSpecificInit()
@@ -138,6 +138,6 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.FakerDummy,
 			new FakerDummySystem(
-				!this.Loader.GetValue<Option, bool>(Option.EffectMerlin)));
+				!this.Loader.GetValue<Option, bool>(Option.SeeDummyMerlin)));
 	}
 }

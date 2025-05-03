@@ -1436,10 +1436,10 @@ UI「爆撃モード」:
   <data name="GlitchEffectOnMarlin" xml:space="preserve">
     <value>マーリンが「グリッチ」の影響を受けるか</value>
   </data>
-  <data name="SlimeEffectMarlin" xml:space="preserve">
+  <data name="SlimeSeeMorphMerlin" xml:space="preserve">
     <value>マーリンが「モーフ」を見破れるか</value>
   </data>
-  <data name="FakerEffectMarlin" xml:space="preserve">
+  <data name="FakerSeeDummyMerlin" xml:space="preserve">
     <value>マーリンが「ダミー」を見破れるか</value>
   </data>
 </root>

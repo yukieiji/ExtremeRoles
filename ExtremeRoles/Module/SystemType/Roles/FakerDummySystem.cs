@@ -19,9 +19,9 @@ using ExtremeRoles.Roles.Solo.Impostor;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class FakerDummySystem(bool isEffectMerlin) : IExtremeSystemType
+public sealed class FakerDummySystem(bool seeDummyMerlin) : IExtremeSystemType
 {
-	private readonly bool isEffectMerlin = isEffectMerlin;
+	private readonly bool seeDummyMerlin = seeDummyMerlin;
 
 	private interface IFakerObject
 	{
@@ -368,7 +368,7 @@ public sealed class FakerDummySystem(bool isEffectMerlin) : IExtremeSystemType
 				SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 				fake = new FakePlayer(
 					rolePlyaer, targetPlyaer,
-					role.IsImpostor() || (this.isEffectMerlin && role.Id == ExtremeRoleId.Marlin));
+					role.IsImpostor() || (this.seeDummyMerlin && role.Id == ExtremeRoleId.Marlin));
 				break;
 			default:
 				return;
