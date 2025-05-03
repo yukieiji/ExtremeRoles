@@ -15,7 +15,6 @@ using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 
 using BepInEx.Unity.IL2CPP.Utils;
 
@@ -30,6 +29,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		Range,
 		EffectOnImpo,
+		EffectOnMarlin,
 		Delay,
 		ActiveTime,
 	}
@@ -150,8 +150,11 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 			factory, 2, 10);
 		factory.CreateFloatOption(
 			Ops.Range, 1.5f, 0.1f, 7.5f, 0.1f);
-		factory.CreateBoolOption(
+		var impOpt = factory.CreateBoolOption(
 			Ops.EffectOnImpo, false);
+		factory.CreateBoolOption(
+			Ops.EffectOnMarlin, false,
+			impOpt, invert: true);
 		factory.CreateFloatOption(
 			Ops.Delay, 5.0f, 0.0f, 30.0f, 0.5f,
 			format: OptionUnit.Second);
@@ -172,6 +175,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 			ExtremeSystemType.GlitchDummySystem,
 			() => new GlitchDummySystem(
 				!loader.GetValue<Ops, bool>(Ops.EffectOnImpo),
+				!loader.GetValue<Ops, bool>(Ops.EffectOnMarlin),
 				loader.GetValue<Ops, int>(Ops.ActiveTime)));
 	}
 

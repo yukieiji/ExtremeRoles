@@ -12,17 +12,17 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.Interface;
 
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 
-using Version = System.Version;
 
 namespace ExtremeRoles.Module.SystemType.Roles;
 
-public sealed class FakerDummySystem() : IExtremeSystemType
+public sealed class FakerDummySystem(bool isEffectMerlin) : IExtremeSystemType
 {
+	private readonly bool isEffectMerlin = isEffectMerlin;
+
 	private interface IFakerObject
 	{
 		public int ColorId { get; }
@@ -368,7 +368,7 @@ public sealed class FakerDummySystem() : IExtremeSystemType
 				SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 				fake = new FakePlayer(
 					rolePlyaer, targetPlyaer,
-					role.IsImpostor() || role.Id == ExtremeRoleId.Marlin);
+					role.IsImpostor() || (this.isEffectMerlin && role.Id == ExtremeRoleId.Marlin));
 				break;
 			default:
 				return;

@@ -4,13 +4,9 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.Ability;
-
-
-
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -22,6 +18,10 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		DeadBody,
 		Player,
+	}
+	public enum Option
+	{
+		EffectMerlin
 	}
 
 	public ExtremeAbilityButton Button { get; set; }
@@ -128,10 +128,16 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		IRoleAbility.CreateCommonAbilityOption(
 			factory);
+		factory.CreateBoolOption(
+			Option.EffectMerlin,
+			false);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		ExtremeSystemTypeManager.Instance.TryAdd(ExtremeSystemType.FakerDummy, new FakerDummySystem());
+		ExtremeSystemTypeManager.Instance.TryAdd(
+			ExtremeSystemType.FakerDummy,
+			new FakerDummySystem(
+				!this.Loader.GetValue<Option, bool>(Option.EffectMerlin)));
 	}
 }
