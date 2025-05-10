@@ -1440,6 +1440,6 @@ UI「爆撃モード」:
     <value>マーリンが「モーフ」を見破れるか</value>
   </data>
   <data name="FakerSeeDummyMerlin" xml:space="preserve">
-    <value>マーリンが「ダミー」を見破れるか</value>
+    <value>マーリンが「ダミー（プレイヤー）」を見破れるか</value>
   </data>
 </root>
