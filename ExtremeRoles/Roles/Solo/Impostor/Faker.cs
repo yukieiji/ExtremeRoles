@@ -138,6 +138,6 @@ public sealed class Faker : SingleRoleBase, IRoleAutoBuildAbility
 		ExtremeSystemTypeManager.Instance.TryAdd(
 			ExtremeSystemType.FakerDummy,
 			new FakerDummySystem(
-				!this.Loader.GetValue<Option, bool>(Option.SeeDummyMerlin)));
+				this.Loader.GetValue<Option, bool>(Option.SeeDummyMerlin)));
 	}
 }
