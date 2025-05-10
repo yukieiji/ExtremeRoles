@@ -79,7 +79,7 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 			() => new TimeBreakerTimeBreakSystem(
 				loader.GetValue<Opt, float>(Opt.ActiveTime),
 				loader.GetValue<Opt, bool>(Opt.EffectImp),
-				loader.GetValue<Opt, bool>(Opt.EffectMarlin),
+				!loader.GetValue<Opt, bool>(Opt.EffectMarlin),
 				loader.GetValue<Opt, bool>(Opt.IsActiveScreen)));
 	}
 }
