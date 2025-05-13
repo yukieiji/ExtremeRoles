@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Missionary;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
@@ -127,6 +128,7 @@ public enum ExtremeRoleId : int
 	Chimera,
 	IronMate,
 	Monika,
+	Heretic,
 
 	Xion,
 }
@@ -305,7 +307,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},
             {(int)ExtremeRoleId.TaskMaster, new TaskMaster()},
-            {(int)ExtremeRoleId.Missionary, new Missionary()},
+            {(int)ExtremeRoleId.Missionary, new MissionaryRole()},
             {(int)ExtremeRoleId.Jester    , new Jester()},
             {(int)ExtremeRoleId.Yandere   , new Yandere()},
             {(int)ExtremeRoleId.Yoko      , new Yoko()},
@@ -320,6 +322,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Tucker    , new Tucker()},
 			{(int)ExtremeRoleId.IronMate  , new IronMate()},
 			{(int)ExtremeRoleId.Monika    , new Monika()},
+			{(int)ExtremeRoleId.Heretic   , new Heretic()},
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
@@ -670,5 +673,25 @@ public static class ExtremeRoleManager
 		}
 
 		return (interfacedSingleRole, interfacedMultiRole);
+	}
+
+	public static (T?, T?) GetLocalRoleAbility<T>() where T : class
+    {
+		var checkRole = GetLocalPlayerRole();
+		return dualSafeCastAbility<T>(checkRole);
+	}
+
+	private static (T?, T?) dualSafeCastAbility<T>(in SingleRoleBase? checkRole) where T : class
+	{
+		T? interfacedAbility = checkRole?.AbilityClass as T;
+		T? interfacedMultiAbility = null;
+
+		if (checkRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole?.AnotherRole is T anotherRoleAbility)
+		{
+			interfacedMultiAbility = anotherRoleAbility;
+		}
+
+		return (interfacedAbility, interfacedMultiAbility);
 	}
 }

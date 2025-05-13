@@ -31,7 +31,7 @@ public sealed class Avalon : ConstCombinationRoleManagerBase
     }
 }
 
-public sealed class Assassin : MultiAssignRoleBase
+public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
 {
     public enum AssassinOption
     {
@@ -63,7 +63,7 @@ public sealed class Assassin : MultiAssignRoleBase
             tab: OptionTab.CombinationTab)
     {}
 
-    public override bool TryRolePlayerKilledFrom(
+    public bool TryKilledFrom(
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         if (!this.CanKilled) { return false; }
