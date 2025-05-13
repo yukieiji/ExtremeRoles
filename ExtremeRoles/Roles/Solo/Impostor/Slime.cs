@@ -2,14 +2,10 @@
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Ability;
-
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -27,11 +23,17 @@ public sealed class Slime :
         Reset,
     }
 
+	public enum Option
+	{
+		SeeMorphMerlin
+	}
+
     public ExtremeAbilityButton Button { get; set; }
 
     private Console targetConsole;
     private GameObject consoleObj;
     private bool isKilling = false;
+	private bool seeMorphMerlin = false;
 
     public Slime() : base(
         ExtremeRoleId.Slime,
@@ -48,7 +50,17 @@ public sealed class Slime :
 
         var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
         var role = ExtremeRoleManager.GetSafeCastedRole<Slime>(rolePlayerId);
-        if (role == null || rolePlayer == null) { return; }
+		if (role == null || rolePlayer == null ||
+			(
+				role.seeMorphMerlin &&
+				PlayerControl.LocalPlayer != null &&
+				ExtremeRoleManager.TryGetRole(
+					PlayerControl.LocalPlayer.PlayerId, out var localRole) &&
+				localRole.Id == ExtremeRoleId.Marlin
+			))
+		{
+			return;
+		}
         switch (rpcId)
         {
             case SlimeRpc.Morph:
@@ -110,7 +122,7 @@ public sealed class Slime :
     {
         this.CreateReclickableAbilityButton(
 			Tr.GetString("SlimeMorph"),
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.SlimeMorph),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
@@ -184,6 +196,7 @@ public sealed class Slime :
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
         removeMorphConsole(this, rolePlayer);
+		this.seeMorphMerlin = this.Loader.GetValue<Option, bool>(Option.SeeMorphMerlin);
     }
 
     protected override void CreateSpecificOption(
@@ -191,11 +204,14 @@ public sealed class Slime :
     {
         IRoleAbility.CreateCommonAbilityOption(
             factory, 30.0f);
+		factory.CreateBoolOption(
+			Option.SeeMorphMerlin, false);
     }
 
     protected override void RoleSpecificInit()
     {
         this.isKilling = false;
+		this.seeMorphMerlin = this.Loader.GetValue<Option, bool>(Option.SeeMorphMerlin);
     }
 
     public void AllReset(PlayerControl rolePlayer)

@@ -49,8 +49,8 @@ public static class CustomRegion
 
 	public static void UpdateEditorableServer()
 	{
-		IEnumerable<IRegionInfo> newRegions = ServerManager.Instance.AvailableRegions.Where(
-			(IRegionInfo r) => !(
+		var newRegions = ServerManager.Instance.AvailableRegions.Where(
+			r => !(
 					r.Name == IRegionInfoExtension.ExROfficialServerTokyoManinName ||
 					r.Name == IRegionInfoExtension.FullCustomServerName
 				));

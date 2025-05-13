@@ -1430,4 +1430,16 @@ UI「爆撃モード」:
   <data name="timeBreakerTimeBreak" xml:space="preserve">
     <value>タイムブレイク</value>
   </data>
+  <data name="TimeBreakerEffectMarlin" xml:space="preserve">
+    <value>マーリンが「タイムブレイク」の影響を受けるか</value>
+  </data>
+  <data name="GlitchEffectOnMarlin" xml:space="preserve">
+    <value>マーリンが「グリッチ」の影響を受けるか</value>
+  </data>
+  <data name="SlimeSeeMorphMerlin" xml:space="preserve">
+    <value>マーリンが「モーフ」を見破れるか</value>
+  </data>
+  <data name="FakerSeeDummyMerlin" xml:space="preserve">
+    <value>マーリンが「ダミー（プレイヤー）」を見破れるか</value>
+  </data>
 </root>

@@ -15,6 +15,13 @@ namespace ExtremeRoles.Patches;
 [HarmonyPatch(typeof(ProgressTracker), nameof(ProgressTracker.FixedUpdate))]
 public static class ProgressTrackerFixedUpdatePatch
 {
+	public static bool Prefix(ProgressTracker __instance)
+		=>
+			GameManager.Instance != null &&
+			GameManager.Instance.LogicOptions != null &&
+			__instance.TileParent != null &&
+			PlayerControl.LocalPlayer != null;
+
     public static void Postfix(ProgressTracker __instance)
     {
 		if (!(

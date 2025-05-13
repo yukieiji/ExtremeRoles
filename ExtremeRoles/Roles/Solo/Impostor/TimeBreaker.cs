@@ -15,6 +15,7 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 	{
 		ActiveTime,
 		EffectImp,
+		EffectMarlin,
 		IsActiveScreen
 	}
 
@@ -61,8 +62,11 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 		factory.CreateFloatOption(
 			Opt.ActiveTime, 10.0f, 1.0f, 120.0f, 0.5f,
 			format: OptionUnit.Second);
-		factory.CreateBoolOption(
+		var impOpt =　factory.CreateBoolOption(
 			Opt.EffectImp, true);
+		factory.CreateBoolOption(
+			Opt.EffectMarlin, false,
+			impOpt);
 		factory.CreateBoolOption(
 			Opt.IsActiveScreen, true);
 	}
@@ -75,6 +79,7 @@ public sealed class TimeBreaker : SingleRoleBase, IRoleAutoBuildAbility
 			() => new TimeBreakerTimeBreakSystem(
 				loader.GetValue<Opt, float>(Opt.ActiveTime),
 				loader.GetValue<Opt, bool>(Opt.EffectImp),
+				!loader.GetValue<Opt, bool>(Opt.EffectMarlin),
 				loader.GetValue<Opt, bool>(Opt.IsActiveScreen)));
 	}
 }
