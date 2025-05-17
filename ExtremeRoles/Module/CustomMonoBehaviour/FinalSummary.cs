@@ -12,6 +12,7 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo;
+using ExtremeRoles.Module.GameResult;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
@@ -40,12 +41,44 @@ public sealed class TagPainter(string[] tags)
 	}
 }
 
+public sealed class SummaryTextBuilder
+{
+	private readonly StringBuilder builder = new StringBuilder();
+	public SummaryTextBuilder(string headerKey)
+	{
+		this.builder.AppendLine(
+			Tr.GetString("summaryText"));
+		this.builder.AppendLine(Tr.GetString(headerKey));
+	}
+
+	public override string ToString()
+		=> this.builder.ToString();
+
+	public void AppendLine()
+	{
+		this.builder.AppendLine();
+	}
+
+	public void AppendLine(string text)
+	{
+		this.builder.AppendLine(text);
+	}
+
+	public void AppendFooter(int page, int allPage)
+	{
+		this.builder.AppendLine();
+		this.builder.AppendLine(Tr.GetString("tabMoreSummary", page, allPage));
+		this.builder.AppendLine(Tr.GetString("shiftHideSummary"));
+	}
+}
+
 [Il2CppRegister]
 public sealed class FinalSummary : MonoBehaviour
 {
 	public enum SummaryType
 	{
 		Role,
+		RoleHistory,
 		GhostRole
 	}
 
@@ -114,11 +147,11 @@ public sealed class FinalSummary : MonoBehaviour
 	[HideFromIl2Cpp]
 	public void Create(IReadOnlyList<PlayerSummary> summaries)
 	{
-		Dictionary<SummaryType, StringBuilder> finalSummary = createSummaryBase();
+		var finalSummary = createSummaryBase();
 		var painter = new TagPainter(tags);
 		var sorted = sortedSummary(summaries);
 
-		foreach (PlayerSummary summary in sorted)
+		foreach (PlayerSummary summary in sorted.Values)
 		{
 			string taskInfo = summary.TotalTask > 0 ?
 				$"<color=#FAD934FF>{summary.CompletedTask}/{summary.TotalTask}</color>" : "";
@@ -140,8 +173,12 @@ public sealed class FinalSummary : MonoBehaviour
 				tag = $"{tag} + {anotherTag}";
 			}
 
-			finalSummary[SummaryType.Role].AppendLine(
-				$"{summary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
+			if (finalSummary.TryGetValue(SummaryType.Role, out var roleSummary) &&
+				roleSummary is not null)
+			{
+				roleSummary.AppendLine(
+					$"{summary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
+			}
 
 
 			GhostRoleBase ghostRole = summary.GhostRole;
@@ -149,19 +186,28 @@ public sealed class FinalSummary : MonoBehaviour
 				ghostRole.GetColoredRoleName() :
 				Tr.GetString("noGhostRole");
 
-			finalSummary[SummaryType.GhostRole].AppendLine(
-				$"{summary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{ghostRoleName}");
+			if (finalSummary.TryGetValue(SummaryType.GhostRole, out var ghostRoleSummary) &&
+				ghostRoleSummary is not null)
+			{
+				ghostRoleSummary.AppendLine(
+					$"{summary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{ghostRoleName}");
+			}
+		}
+
+		if (finalSummary.TryGetValue(SummaryType.RoleHistory, out var roleHistorySummary) &&
+			roleHistorySummary is not null)
+		{
+			using var historyBuilder = RoleHistoryContainer.CreateBuiler(roleHistorySummary);
+			historyBuilder.Build(sorted);
 		}
 
 		int allSummary = finalSummary.Count;
 		int page = 0;
 
-		foreach (StringBuilder builder in finalSummary.Values)
+		foreach (var builder in finalSummary.Values)
 		{
 			++page;
-			builder.AppendLine();
-			builder.AppendLine(Tr.GetString("tabMoreSummary", page, allSummary));
-			builder.AppendLine(Tr.GetString("shiftHideSummary"));
+			builder.AppendFooter(page, allSummary);
 			this.summaryText.Add(builder.ToString());
 		}
 		this.maxPage = page;
@@ -176,7 +222,7 @@ public sealed class FinalSummary : MonoBehaviour
 	}
 
 	[HideFromIl2Cpp]
-	private PlayerSummary[] sortedSummary(IReadOnlyList<PlayerSummary> summaries)
+	private IReadOnlyDictionary<byte, PlayerSummary> sortedSummary(IReadOnlyList<PlayerSummary> summaries)
 	{
 		var arr = summaries.ToArray();
 		Array.Sort(arr, (x, y) =>
@@ -202,37 +248,17 @@ public sealed class FinalSummary : MonoBehaviour
 			return x.PlayerName.CompareTo(y.PlayerName);
 
 		});
-		return arr;
+		return arr.ToDictionary(x => x.PlayerId);
 	}
 
 	[HideFromIl2Cpp]
-	private Dictionary<SummaryType, StringBuilder> createSummaryBase()
-	{
-		Dictionary<SummaryType, StringBuilder> summary = new Dictionary<SummaryType, StringBuilder>()
+	private IReadOnlyDictionary<SummaryType, SummaryTextBuilder> createSummaryBase()
+		=> new Dictionary<SummaryType, SummaryTextBuilder>()
 		{
-			{ SummaryType.Role, new StringBuilder() },
-			{ SummaryType.GhostRole, new StringBuilder() },
+			{ SummaryType.Role, new SummaryTextBuilder("roleSummaryInfo") },
+			{ SummaryType.RoleHistory, new SummaryTextBuilder("roleHistorySummary") },
+			{ SummaryType.GhostRole, new SummaryTextBuilder("ghostRoleSummaryInfo") },
 		};
-
-		foreach (var (type, builder) in summary)
-		{
-			switch (type)
-			{
-				case SummaryType.Role:
-					builder.AppendLine(Tr.GetString("summaryText"));
-					builder.AppendLine(Tr.GetString("roleSummaryInfo"));
-					break;
-				case SummaryType.GhostRole:
-					builder.AppendLine(Tr.GetString("summaryText"));
-					builder.AppendLine(Tr.GetString("ghostRoleSummaryInfo"));
-					break;
-				default:
-					break;
-			}
-		}
-
-		return summary;
-	}
 
 	private void updateShowText()
 	{

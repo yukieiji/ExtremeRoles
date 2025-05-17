@@ -288,15 +288,9 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		if (isSuccess)
 		{
 			// 対象をヤードバード化
-			using (var caller = RPCOperator.CreateCaller(
-				RPCOperator.Command.ReplaceRole))
-			{
-				caller.WriteByte(rolePlayerId);
-				caller.WriteByte(this.targetPlayerId);
-				caller.WriteByte(
-					(byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToYardbird);
-			}
-			NotCrewmateToYardbird(rolePlayerId, this.targetPlayerId);
+			ExtremeRoleManager.RpcReplaceRole(
+				rolePlayerId, this.targetPlayerId,
+				ExtremeRoleManager.ReplaceOperation.ForceReplaceToYardbird);
 
 			if (this.isDeadAbilityZero && count.AbilityCount <= 1)
 			{
@@ -312,15 +306,9 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 			else
 			{
 				// 自分自身をローブレーカー化
-				using (var caller = RPCOperator.CreateCaller(
-					RPCOperator.Command.ReplaceRole))
-				{
-					caller.WriteByte(rolePlayerId);
-					caller.WriteByte(rolePlayerId);
-					caller.WriteByte(
-						(byte)ExtremeRoleManager.ReplaceOperation.BecomeLawbreaker);
-				}
-				ToLawbreaker(rolePlayerId);
+				ExtremeRoleManager.RpcReplaceRole(
+					rolePlayerId, rolePlayerId,
+					ExtremeRoleManager.ReplaceOperation.BecomeLawbreaker);
 			}
 
 		}

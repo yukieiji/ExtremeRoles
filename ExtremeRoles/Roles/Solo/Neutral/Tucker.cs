@@ -389,16 +389,9 @@ public sealed class Tucker :
 			return false;
 		}
 
-		byte rolePlayerId = local.PlayerId;
-		using (var caller = RPCOperator.CreateCaller(
-			RPCOperator.Command.ReplaceRole))
-		{
-			caller.WriteByte(rolePlayerId);
-			caller.WriteByte(this.target);
-			caller.WriteByte(
-				(byte)ExtremeRoleManager.ReplaceOperation.ForceRelaceToChimera);
-		}
-		TargetToChimera(rolePlayerId, this.target);
+		ExtremeRoleManager.RpcReplaceRole(
+			local.PlayerId, this.target,
+			ExtremeRoleManager.ReplaceOperation.ForceRelaceToChimera);
 
 		this.target = byte.MaxValue;
 
@@ -520,16 +513,9 @@ public sealed class Tucker :
 		}
 		foreach (byte chimera in removed)
 		{
-			using (var caller = RPCOperator.CreateCaller(
-				RPCOperator.Command.ReplaceRole))
-			{
-				caller.WriteByte(rolePlayer.PlayerId);
-				caller.WriteByte(chimera);
-				caller.WriteByte(
-					(byte)ExtremeRoleManager.ReplaceOperation.RemoveChimera);
-			}
-
-			OnResetChimera(chimera, this.option.KillOption.KillCool);
+			ExtremeRoleManager.RpcReplaceRole(
+				rolePlayer.PlayerId, chimera,
+				ExtremeRoleManager.ReplaceOperation.RemoveChimera);
 		}
 	}
 

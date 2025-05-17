@@ -14,7 +14,8 @@ using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
-using ExtremeRoles.Performance;
+using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles;
 
@@ -506,9 +507,24 @@ public static class ExtremeRoleManager
         }
     }
 
+	public static void RpcReplaceRole(
+		byte callerId, byte targetId, ReplaceOperation ops)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.ReplaceRole))
+		{
+			caller.WriteByte(callerId);
+			caller.WriteByte(targetId);
+			caller.WriteByte((byte)ops);
+		}
+		RoleReplace(callerId, targetId, ops);
+	}
+
     public static void RoleReplace(
         byte caller, byte targetId, ReplaceOperation ops)
     {
+		string prevRoleName = TryGetRole(targetId, out var role) ? role.GetColoredRoleName(true) : "";
+
         switch(ops)
         {
             case ReplaceOperation.ResetVanillaRole:
@@ -544,7 +560,18 @@ public static class ExtremeRoleManager
 			default:
                 break;
         }
-    }
+
+		if (ops is ReplaceOperation.ResetVanillaRole)
+		{
+			return;
+		}
+		string callerRoleName = TryGetRole(caller, out var callerRole) ? callerRole.GetColoredRoleName(true) : "";
+		string nextRoleName = TryGetRole(targetId, out var nextRole) ? nextRole.GetColoredRoleName(true) : "";
+
+		RoleHistoryContainer.Add(
+			targetId, new RoleHistory(
+				caller, callerRoleName, prevRoleName, nextRoleName));
+	}
 
     public static void SetNewRole(byte playerId, SingleRoleBase newRole)
     {
