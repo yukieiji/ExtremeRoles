@@ -328,17 +328,9 @@ public sealed class Queen :
 
     public bool UseAbility()
     {
-        byte targetPlayerId = this.Target.PlayerId;
-
-        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
-        using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.ReplaceRole))
-        {
-            caller.WriteByte(rolePlayer.PlayerId);
-            caller.WriteByte(this.Target.PlayerId);
-            caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.CreateServant);
-        }
-        TargetToServant(rolePlayer.PlayerId, targetPlayerId);
+		ExtremeRoleManager.RpcReplaceRole(
+			PlayerControl.LocalPlayer.PlayerId, this.Target.PlayerId,
+			ExtremeRoleManager.ReplaceOperation.CreateServant);
         return true;
     }
 

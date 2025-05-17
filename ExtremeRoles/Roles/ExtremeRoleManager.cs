@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles;
 
@@ -505,6 +506,19 @@ public static class ExtremeRoleManager
                 controlId);
         }
     }
+
+	public static void RpcReplaceRole(
+		byte callerId, byte targetId, ReplaceOperation ops)
+	{
+		using (var caller = RPCOperator.CreateCaller(
+			RPCOperator.Command.ReplaceRole))
+		{
+			caller.WriteByte(callerId);
+			caller.WriteByte(targetId);
+			caller.WriteByte((byte)ops);
+		}
+		RoleReplace(callerId, targetId, ops);
+	}
 
     public static void RoleReplace(
         byte caller, byte targetId, ReplaceOperation ops)

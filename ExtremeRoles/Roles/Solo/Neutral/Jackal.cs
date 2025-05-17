@@ -340,20 +340,17 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     public bool UseAbility()
     {
         byte targetPlayerId = this.Target.PlayerId;
-        if (!isImpostorAndSetTarget(targetPlayerId)) { return false; }
-        if (!isLoverAndSetTarget(targetPlayerId)) { return false; }
+        if (!(
+				isImpostorAndSetTarget(targetPlayerId) &&
+				isLoverAndSetTarget(targetPlayerId)
+			))
+		{
+			return false;
+		}
+		ExtremeRoleManager.RpcReplaceRole(
+			PlayerControl.LocalPlayer.PlayerId, targetPlayerId,
+			ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick);
 
-        PlayerControl rolePlayer = PlayerControl.LocalPlayer;
-
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ReplaceRole))
-        {
-            caller.WriteByte(rolePlayer.PlayerId);
-            caller.WriteByte(this.Target.PlayerId);
-            caller.WriteByte(
-                (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick);
-        }
-        TargetToSideKick(rolePlayer.PlayerId, targetPlayerId);
         return true;
     }
 
@@ -388,7 +385,13 @@ public sealed class Jackal : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
         }
         foreach (byte playerId in updateSideKick)
         {
-            Sidekick.BecomeToJackal(rolePlayer.PlayerId, playerId);
+			if (ExtremeRolesPlugin.ShipState.DeadPlayerInfo.ContainsKey(playerId))
+			{
+				continue;
+			}
+			ExtremeRoleManager.RoleReplace(
+				rolePlayer.PlayerId, playerId,
+				ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
         }
     }
 
@@ -670,15 +673,9 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
         if (Player.GetPlayerControlById(this.jackalPlayerId).Data.Disconnected)
         {
             this.jackal.SidekickPlayerId.Clear();
-
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.ReplaceRole))
-            {
-                caller.WriteByte(this.jackalPlayerId);
-                caller.WriteByte(rolePlayer.PlayerId);
-                caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
-            }
-            BecomeToJackal(this.jackalPlayerId, rolePlayer.PlayerId);
+			ExtremeRoleManager.RpcReplaceRole(
+				this.jackalPlayerId, rolePlayer.PlayerId,
+				ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
         }
     }
 
