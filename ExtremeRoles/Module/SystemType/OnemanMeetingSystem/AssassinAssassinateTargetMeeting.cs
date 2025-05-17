@@ -19,7 +19,7 @@ public sealed class AssassinAssassinateTargetMeeting : IOnemanMeeting
 
 			if (this.isSuccess)
 			{
-				FinalPlayerSummaryBuilder.AddStatusOverride(
+				PlayerSummaryBuilder.AddStatusOverride(
 					(GameOverReason)RoleGameOverReason.AssassinationMarin,
 					new AssassinAssassinateStatusOverrider(this.voteTarget));
 			}

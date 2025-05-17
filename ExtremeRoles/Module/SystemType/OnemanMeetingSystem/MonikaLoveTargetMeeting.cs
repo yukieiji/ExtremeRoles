@@ -27,7 +27,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 			var notSelectPlayer = this.target.GetAnother(value).ExiledTarget!;
 
 			ExtremeRolesPlugin.ShipState.AddWinner(voteTarget);
-			FinalPlayerSummaryBuilder.AddStatusOverride(
+			PlayerSummaryBuilder.AddStatusOverride(
 				(GameOverReason)RoleGameOverReason.MonikaThisGameIsMine,
 				new MonikaMeetingResultStatusOverrider(
 					voteTarget, notSelectPlayer));

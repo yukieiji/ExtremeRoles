@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
+using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -77,6 +78,7 @@ public sealed class FinalSummary : MonoBehaviour
 	public enum SummaryType
 	{
 		Role,
+		RoleHistory,
 		GhostRole
 	}
 
@@ -149,7 +151,7 @@ public sealed class FinalSummary : MonoBehaviour
 		var painter = new TagPainter(tags);
 		var sorted = sortedSummary(summaries);
 
-		foreach (PlayerSummary summary in sorted)
+		foreach (PlayerSummary summary in sorted.Values)
 		{
 			string taskInfo = summary.TotalTask > 0 ?
 				$"<color=#FAD934FF>{summary.CompletedTask}/{summary.TotalTask}</color>" : "";
@@ -192,6 +194,13 @@ public sealed class FinalSummary : MonoBehaviour
 			}
 		}
 
+		if (finalSummary.TryGetValue(SummaryType.RoleHistory, out var roleHistorySummary) &&
+			roleHistorySummary is not null)
+		{
+			using var historyBuilder = RoleHistoryContainer.CreateBuiler(roleHistorySummary);
+			historyBuilder.Build(sorted);
+		}
+
 		int allSummary = finalSummary.Count;
 		int page = 0;
 
@@ -213,7 +222,7 @@ public sealed class FinalSummary : MonoBehaviour
 	}
 
 	[HideFromIl2Cpp]
-	private PlayerSummary[] sortedSummary(IReadOnlyList<PlayerSummary> summaries)
+	private IReadOnlyDictionary<byte, PlayerSummary> sortedSummary(IReadOnlyList<PlayerSummary> summaries)
 	{
 		var arr = summaries.ToArray();
 		Array.Sort(arr, (x, y) =>
@@ -239,7 +248,7 @@ public sealed class FinalSummary : MonoBehaviour
 			return x.PlayerName.CompareTo(y.PlayerName);
 
 		});
-		return arr;
+		return arr.ToDictionary(x => x.PlayerId);
 	}
 
 	[HideFromIl2Cpp]
@@ -247,6 +256,7 @@ public sealed class FinalSummary : MonoBehaviour
 		=> new Dictionary<SummaryType, SummaryTextBuilder>()
 		{
 			{ SummaryType.Role, new SummaryTextBuilder("roleSummaryInfo") },
+			{ SummaryType.RoleHistory, new SummaryTextBuilder("役職履歴") },
 			{ SummaryType.GhostRole, new SummaryTextBuilder("ghostRoleSummaryInfo") },
 		};
 
