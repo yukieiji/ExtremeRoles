@@ -13,7 +13,7 @@ using PlayerSummary = ExtremeRoles.Module.CustomMonoBehaviour.FinalSummary.Playe
 namespace ExtremeRoles.Module.GameResult;
 
 
-public class FinalSummaryBuilder(
+public class PlayerSummaryBuilder(
 	GameOverReason reason,
 	IReadOnlyDictionary<byte, DeadInfo> deadInfo,
 	IReadOnlyDictionary<byte, TaskInfo> taskInfo) : IDisposable

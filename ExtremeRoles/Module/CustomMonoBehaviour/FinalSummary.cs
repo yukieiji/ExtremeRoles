@@ -53,6 +53,11 @@ public sealed class SummaryTextBuilder
 	public override string ToString()
 		=> this.builder.ToString();
 
+	public void AppendLine()
+	{
+		this.builder.AppendLine();
+	}
+
 	public void AppendLine(string text)
 	{
 		this.builder.AppendLine(text);
