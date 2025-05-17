@@ -256,7 +256,7 @@ public sealed class FinalSummary : MonoBehaviour
 		=> new Dictionary<SummaryType, SummaryTextBuilder>()
 		{
 			{ SummaryType.Role, new SummaryTextBuilder("roleSummaryInfo") },
-			{ SummaryType.RoleHistory, new SummaryTextBuilder("役職履歴") },
+			{ SummaryType.RoleHistory, new SummaryTextBuilder("roleHistorySummary") },
 			{ SummaryType.GhostRole, new SummaryTextBuilder("ghostRoleSummaryInfo") },
 		};
 
