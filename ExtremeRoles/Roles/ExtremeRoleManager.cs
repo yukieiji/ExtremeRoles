@@ -565,7 +565,7 @@ public static class ExtremeRoleManager
 		{
 			return;
 		}
-		string callerRoleName = TryGetRole(targetId, out var callerRole) ? callerRole.GetColoredRoleName(true) : "";
+		string callerRoleName = TryGetRole(caller, out var callerRole) ? callerRole.GetColoredRoleName(true) : "";
 		string nextRoleName = TryGetRole(targetId, out var nextRole) ? nextRole.GetColoredRoleName(true) : "";
 
 		RoleHistoryContainer.Add(
