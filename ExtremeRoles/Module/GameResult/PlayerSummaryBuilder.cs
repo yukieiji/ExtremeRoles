@@ -10,10 +10,12 @@ using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.Pla
 using TaskInfo = ExtremeRoles.Module.GameResult.ExtremeGameResultManager.TaskInfo;
 using PlayerSummary = ExtremeRoles.Module.CustomMonoBehaviour.FinalSummary.PlayerSummary;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.GameResult;
 
 
-public class PlayerSummaryBuilder(
+public sealed class PlayerSummaryBuilder(
 	GameOverReason reason,
 	IReadOnlyDictionary<byte, DeadInfo> deadInfo,
 	IReadOnlyDictionary<byte, TaskInfo> taskInfo) : IDisposable
@@ -47,7 +49,8 @@ public class PlayerSummaryBuilder(
 		var finalStatus = PlayerStatus.Alive;
 
 		if (playerInfo.IsDead &&
-			this.deadInfo.TryGetValue(playerId, out DeadInfo deadInfo))
+			this.deadInfo.TryGetValue(playerId, out var deadInfo) &&
+			deadInfo is not null)
 		{
 			finalStatus = deadInfo.Reason;
 		}

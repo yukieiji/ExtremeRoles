@@ -12,9 +12,9 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo;
+using ExtremeRoles.Module.GameResult;
 
 using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
-using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
