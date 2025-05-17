@@ -50,7 +50,7 @@ public static class RoleHistoryContainer
 			this.builder.AppendLine(
 				$"<pos=3%>{hist.TargetPrevRoleName} => {hist.TargetNextRoleName}");
 			this.builder.AppendLine(
-				$"<pos=5%>原因 : {summary.PlayerName}({hist.FromRoleName})");
+				$"<pos=5%>原因: {summary.PlayerName}({hist.FromRoleName})");
 		}
 		public void Dispose()
 		{
