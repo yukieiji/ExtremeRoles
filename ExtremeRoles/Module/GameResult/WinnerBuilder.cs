@@ -27,7 +27,7 @@ public sealed class WinnerBuilder : IDisposable
 	private readonly List<(Player, SingleRoleBase)> neutralNoWinner = [];
 	private readonly List<(Player, IRoleWinPlayerModifier)> modRole = [];
 	private readonly List<(Player, IGhostRoleWinable)> ghostWinCheckRole = [];
-	private readonly FinalSummaryBuilder finalSummaryBuilder;
+	private readonly PlayerSummaryBuilder finalSummaryBuilder;
 	private readonly int winGameControlId;
 
 	private readonly GameOverReason gameOverReason;
@@ -45,7 +45,7 @@ public sealed class WinnerBuilder : IDisposable
 		this.gameOverReason = state.EndReason;
 		this.roleGameOverReason = (RoleGameOverReason)this.gameOverReason;
 
-		this.finalSummaryBuilder = new FinalSummaryBuilder(
+		this.finalSummaryBuilder = new PlayerSummaryBuilder(
 			this.gameOverReason,
 			state.DeadPlayerInfo,
 			taskInfo);
@@ -67,7 +67,7 @@ public sealed class WinnerBuilder : IDisposable
 
 		if (this.roleGameOverReason is RoleGameOverReason.UmbrerBiohazard)
 		{
-			FinalSummaryBuilder.AddStatusOverride<UmbrerBiohazardStatusOverrider>(
+			PlayerSummaryBuilder.AddStatusOverride<UmbrerBiohazardStatusOverrider>(
 				(GameOverReason)RoleGameOverReason.UmbrerBiohazard);
 		}
 

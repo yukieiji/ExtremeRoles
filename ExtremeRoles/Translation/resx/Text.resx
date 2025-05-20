@@ -1185,4 +1185,10 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="OnGameStartOptionFirstButtonCoolDown" xml:space="preserve">
     <value>ゲーム開始から会議ボタンが押せない秒数</value>
   </data>
+  <data name="roleHistorySummary" xml:space="preserve">
+    <value>・役職変更履歴</value>
+  </data>
+  <data name="roleHistoryCause" xml:space="preserve">
+    <value>原因</value>
+  </data>
 </root>

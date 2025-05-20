@@ -244,17 +244,9 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         this.Button.HotKey = KeyCode.F;
 
         byte playerId = PlayerControl.LocalPlayer.PlayerId;
-
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ReplaceRole))
-        {
-            caller.WriteByte(playerId);
-            caller.WriteByte(playerId);
-            caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
-        }
-        RPCOperator.ReplaceRole(
-            playerId, playerId,
-            (byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
+		ExtremeRoleManager.RpcReplaceRole(
+			playerId, playerId,
+			ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
     }
 
     public void ResetOnMeetingStart()
