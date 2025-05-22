@@ -49,16 +49,16 @@ jobs:
         with:
           name: "ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
           path: ./workspace/ExtremeRolesWithSkins/
-      # MSSTORE_ONLY__ExtremeRoles.zip
+      # STEAM_ONLY_ExtremeRoles.zip
       - uses: actions/upload-artifact@v4
         with:
-          name: "MSSTORE_ONLY__ExtremeRoles-v${{ github.event.inputs.versions }}"
-          path: ./workspace/MSStore_ExtremeRoles/
-      # MSSTORE_ExtremeRoles-v with skins.zip
+          name: "STEAM_ONLY_ExtremeRoles-v${{ github.event.inputs.versions }}"
+          path: ./workspace/Steam_ExtremeRoles/
+      # - STEAM_ExtremeRoles-v with skins.zip
       - uses: actions/upload-artifact@v4
         with:
-          name: "MSSTORE_ONLY__ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
-          path: ./workspace/MSStore_ExtremeRolesWithSkins/
+          name: "STEAM_ONLY_ExtremeRoles-v${{ github.event.inputs.versions }} with Extreme Skins"
+          path: ./workspace/Steam_ExtremeRolesWithSkins/
       # Mod zip Only
       - uses: actions/upload-artifact@v4
         with:

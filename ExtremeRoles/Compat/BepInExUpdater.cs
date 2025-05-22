@@ -25,8 +25,8 @@ namespace ExtremeRoles.Compat;
 
 public sealed class BepInExUpdater : MonoBehaviour
 {
-	private const string minimumBepInExVersion = "6.0.0-be.671";
-	private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.671%2B9caf61d.zip";
+	private const string minimumBepInExVersion = "6.0.0-be.735";
+	private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/735/BepInEx-Unity.IL2CPP-win-x{0}-6.0.0-be.735%2B5fef357.zip";
 
 	private const string exeFileName = "ExtremeBepInExInstaller.exe";
 
@@ -81,8 +81,11 @@ public sealed class BepInExUpdater : MonoBehaviour
 
 	private static IEnumerator dlBepInExZip(string saveZipPath)
 	{
+		int cpu = File.Exists(
+			Path.Combine(Paths.GameRootPath, "steam_appid.txt")) ? 86 : 64;
 
-		UnityWebRequest www = UnityWebRequest.Get(bepInExDownloadURL);
+		UnityWebRequest www = UnityWebRequest.Get(string.Format(
+			bepInExDownloadURL, cpu));
 		yield return www.SendWebRequest();
 		if (www.isNetworkError || www.isHttpError)
 		{
