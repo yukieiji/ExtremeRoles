@@ -26,33 +26,33 @@ mkdir -Path workspace/bepinex_x86/BepInEx/config -Force
 mkdir -Path workspace/bepinex_x86/BepInEx/plugins -Force
 
 
-Write-Host "Create default package"
+Write-Host "Create Steam package"
 New-Item workspace/bepinex_x86/steam_appid.txt
 Set-Content workspace/bepinex_x86/steam_appid.txt '945360'
 
 Copy-Item -Path ExtremeRoles/Resources/Config/*.cfg -Destination workspace/bepinex_x86/BepInEx/config -Force -Recurse
 
-Copy-Item -Path workspace/bepinex_x86 -Destination workspace/ExtremeRoles -Force -Recurse
-Copy-Item -Path workspace/bepinex_x86 -Destination workspace/ExtremeRolesWithSkins -Force -Recurse
+Copy-Item -Path workspace/bepinex_x86 -Destination workspace/Steam_ExtremeRoles -Force -Recurse
+Copy-Item -Path workspace/bepinex_x86 -Destination workspace/Steam_ExtremeRolesWithSkins -Force -Recurse
+mkdir -Path workspace/dll -Force
+
+Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/Steam_ExtremeRoles/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
+
+Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/Steam_ExtremeRolesWithSkins/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
+Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination workspace/Steam_ExtremeRolesWithSkins/BepInEx/plugins/ExtremeSkins.dll -Force -Recurse
+
+
+Write-Host "Create x64 package"
+Copy-Item -Path ExtremeRoles/Resources/Config/*.cfg -Destination workspace/bepinex_x64/BepInEx/config -Force -Recurse
+
+Copy-Item -Path workspace/bepinex_x64 -Destination workspace/ExtremeRoles -Force -Recurse
+Copy-Item -Path workspace/bepinex_x64 -Destination workspace/ExtremeRolesWithSkins -Force -Recurse
 mkdir -Path workspace/dll -Force
 
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/ExtremeRoles/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
 
 Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/ExtremeRolesWithSkins/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
 Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination workspace/ExtremeRolesWithSkins/BepInEx/plugins/ExtremeSkins.dll -Force -Recurse
-
-
-Write-Host "Create MSStore package"
-Copy-Item -Path ExtremeRoles/Resources/Config/*.cfg -Destination workspace/bepinex_x64/BepInEx/config -Force -Recurse
-
-Copy-Item -Path workspace/bepinex_x64 -Destination workspace/MSStore_ExtremeRoles -Force -Recurse
-Copy-Item -Path workspace/bepinex_x64 -Destination workspace/MSStore_ExtremeRolesWithSkins -Force -Recurse
-mkdir -Path workspace/dll -Force
-
-Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/MSStore_ExtremeRoles/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
-
-Copy-Item -Path ExtremeRoles/bin/Release/net6.0/ExtremeRoles.dll -Destination workspace/MSStore_ExtremeRolesWithSkins/BepInEx/plugins/ExtremeRoles.dll -Force -Recurse
-Copy-Item -Path ExtremeSkins/bin/Release/net6.0/ExtremeSkins.dll -Destination workspace/MSStore_ExtremeRolesWithSkins/BepInEx/plugins/ExtremeSkins.dll -Force -Recurse
 
 
 Write-Host "Copy DLL"
