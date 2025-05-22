@@ -28,6 +28,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.x
+      - name: RestoreNugetPackage
+        run: nuget restore BepInEx.IL2CPP.MSBuild/BepInEx.IL2CPP.MSBuild.sln
+      - name: RunBepInEx.MSBuild
+        run: msbuild BepInEx.IL2CPP.MSBuild/BepInEx.IL2CPP.MSBuild.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v2
       - name: RunBuildAndPacking

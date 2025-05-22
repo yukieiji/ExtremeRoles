@@ -7,3 +7,7 @@
 [submodule "ExtremeRoles.Beta"]
 	path = ExtremeRoles.Beta
 	url = https://github.com/yukieiji/ExtremeRoles.Beta.git
+[submodule "BepInEx.IL2CPP.MSBuild"]
+	path = BepInEx.IL2CPP.MSBuild
+	url = https://github.com/yukieiji/BepInEx.IL2CPP.MSBuild.git
+	branch = for-amongus
