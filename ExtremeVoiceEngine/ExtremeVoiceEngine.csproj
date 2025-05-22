@@ -19,16 +19,12 @@
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
 
-  <Import Project="$(SolutionDir)\BepInEx.IL2CPP.MSBuild\BepInEx.IL2CPP.MSBuild\BepInEx.IL2CPP.MSBuild.props" />
-  <PropertyGroup>
-    <_BepInExIL2CPP_TaskAssembly>$(SolutionDir)\BepInEx.IL2CPP.MSBuild\BepInEx.IL2CPP.MSBuild\bin\$(Configuration)\$(_BepInExIL2CPP_TaskFolder)\BepInEx.IL2CPP.MSBuild.dll</_BepInExIL2CPP_TaskAssembly>
-  </PropertyGroup>
-  <ItemGroup>
-      <ProjectReference Include="$(SolutionDir)\BepInEx.IL2CPP.MSBuild\BepInEx.IL2CPP.MSBuild\BepInEx.IL2CPP.MSBuild.csproj" ReferenceOutputAssembly="false" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.1-ci.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
