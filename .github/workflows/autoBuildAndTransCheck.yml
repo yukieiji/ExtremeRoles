@@ -46,10 +46,10 @@ jobs:
         uses: microsoft/setup-msbuild@v2
       - name: RestoreNugetPackage
         run: nuget restore BepInEx.IL2CPP.MSBuild/BepInEx.IL2CPP.MSBuild.sln
-      - name: RunBepInEx.MSBuild
-        id: build
-        continue-on-error: true
+      - name: RunBepInEx.MSBuildRelease
         run: msbuild BepInEx.IL2CPP.MSBuild/BepInEx.IL2CPP.MSBuild.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
+      - name: RunBepInEx.MSBuildDebug
+        run: msbuild BepInEx.IL2CPP.MSBuild/BepInEx.IL2CPP.MSBuild.sln -t:restore,build -p:Configuration=Debug -p:RestorePackagesConfig=true
       - name: RunBuild
         id: build
         continue-on-error: true
