@@ -51,7 +51,8 @@ public sealed class VisorLoader : ICosmicLoader
 			yield break;
 		}
 
-		ExtremeSkinsPlugin.Logger.LogInfo(
+		var logger = ExtremeSkinsPlugin.Logger;
+		logger.LogInfo(
 			"---------- Extreme Visor Manager : VisorData Download Start!! ---------- ");
 
 		string? ausFolder = Path.GetDirectoryName(Application.dataPath);
@@ -72,16 +73,21 @@ public sealed class VisorLoader : ICosmicLoader
 		string zipPath = Path.Combine(dlFolder, dlZipName);
 
 		yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
+		if (!File.Exists(zipPath))
+		{
+			logger.LogInfo(
+				"---------- Extreme Visor Manager : VisorData Download ERROR ---------- ");
+			yield break;
+		}
 
-		ExtremeSkinsPlugin.Logger.LogInfo(
+		logger.LogInfo(
 			"---------- Extreme Visor Manager : VisorData Download Complete!! ---------- ");
 
-		ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Start!! ---------- ");
+		logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Start!! ---------- ");
 
 		installVisorData(dlFolder, zipPath, dataSaveFolder);
 
-		ExtremeSkinsPlugin.Logger.LogInfo(
-			"---------- Extreme Visor Manager : VisorData Install Complete!! ---------- ");
+		logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Complete!! ---------- ");
 #if RELEASE
         Helper.FileUtility.DeleteDir(dlFolder);
 #endif

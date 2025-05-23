@@ -1,4 +1,9 @@
-﻿using System;
+﻿using AmongUs.Data;
+using BepInEx;
+using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
@@ -7,17 +12,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
-using BepInEx;
-using BepInEx.Unity.IL2CPP.Utils;
-
-using Il2CppInterop.Runtime.Attributes;
-
 using UnityEngine;
 using UnityEngine.Networking;
-
-using AmongUs.Data;
-
 using SemanticVersion = SemanticVersioning.Version;
 
 
@@ -66,6 +62,11 @@ public sealed class BepInExUpdater : MonoBehaviour
 		Directory.CreateDirectory(tmpFolder);
 
 		yield return dlBepInExZip(zipPath);
+		if (!File.Exists(zipPath))
+		{
+			ExtremeRolesPlugin.Logger.LogError("Zip file not found");
+			yield break;
+		}
 
 		ZipFile.ExtractToDirectory(zipPath, extractPath);
 
@@ -92,8 +93,24 @@ public sealed class BepInExUpdater : MonoBehaviour
 			ExtremeRolesPlugin.Logger.LogInfo(www.error);
 			yield break;
 		}
-
-		File.WriteAllBytes(saveZipPath, www.downloadHandler.data);
+		var handler = www.downloadHandler;
+		Il2CppArrayBase<byte>? data;
+		try
+		{
+			data = handler.GetData();
+		}
+		catch
+		{
+			try
+			{
+				data = handler.GetNativeData().ToArray();
+			}
+			catch
+			{
+				yield break;
+			}
+		}
+		File.WriteAllBytes(saveZipPath, data);
 	}
 
 	private static void extractExtremeBepInExInstaller(string extractTmpFolder)
