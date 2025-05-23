@@ -11,7 +11,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
-namespace ExtremeRoles.Patches;
+namespace ExtremeRoles.Patches.Ship;
 
 [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
 public static class ShipStatusAwakePatch
@@ -21,6 +21,15 @@ public static class ShipStatusAwakePatch
     {
 		ShipStatusCache.SetUp(__instance);
         CompatModManager.Instance.SetUpMap(__instance);
+	}
+}
+
+[HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnEnable))]
+public static class ShipStatusOnEnablePatch
+{
+	public static void Postfix(ShipStatus __instance)
+	{
+		ExtremeGameModeManager.Instance.ShipOption.Emergency.ChangeTime(__instance);
 	}
 }
 
