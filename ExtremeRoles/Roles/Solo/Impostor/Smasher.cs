@@ -8,6 +8,7 @@ using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Patches.Button;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -60,55 +61,28 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     public bool UseAbility()
     {
         PlayerControl killer = PlayerControl.LocalPlayer;
-        if (killer.Data.IsDead || !killer.CanMove) { return false; }
+        if (killer == null ||
+			killer.Data.IsDead ||
+			!killer.CanMove)
+		{
+			return false;
+		}
 
-        var role = ExtremeRoleManager.GetLocalPlayerRole();
-        var targetPlayerRole = ExtremeRoleManager.GameRole[this.targetPlayerId];
-        var target = Player.GetPlayerControlById(this.targetPlayerId);
+		var target = Player.GetPlayerControlById(this.targetPlayerId);
+		var killResult = KillButtonDoClickPatch.CheckPreKillCondition(
+			this, PlayerControl.LocalPlayer,
+			target);
 
-        if (target == null) { return false; }
-
-        bool canKill = role.TryRolePlayerKillTo(
-            killer, target);
-        if (!canKill) { return false; }
-
-        canKill = targetPlayerRole.TryRolePlayerKilledFrom(
-            target, killer);
-        if (!canKill) { return false; }
-
-        var multiAssignRole = role as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
-                    killer, target);
-                if (!canKill) { return false; }
-            }
-        }
-
-        multiAssignRole = targetPlayerRole as MultiAssignRoleBase;
-        if (multiAssignRole != null)
-        {
-            if (multiAssignRole.AnotherRole != null)
-            {
-                canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
-                    target, killer);
-                if (!canKill) { return false; }
-            }
-        }
-
-        if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
-                killer.PlayerId, target.PlayerId))
-        {
-            featKillPenalty(killer);
-            return true;
-        }
-        else if (Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
-            killer, target))
-        {
-            return false;
-        }
+		switch (killResult)
+		{
+			case KillButtonDoClickPatch.KillResult.Success:
+				break;
+			case KillButtonDoClickPatch.KillResult.BlockedToBodyguard:
+				featKillPenalty(killer);
+				return true;
+			default:
+				return false;
+		}
 
         this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
 
