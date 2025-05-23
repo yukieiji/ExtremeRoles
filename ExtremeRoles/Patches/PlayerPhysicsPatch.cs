@@ -14,29 +14,6 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(PlayerPhysics), "TrueSpeed", MethodType.Getter)]
-public static class PlayerPhysicsTrueSpeedPatch
-{
-    // もしもっと高速で動くやつを実装する場合ここを変える
-    // 正直9倍速でもカメラ追いつかねぇ・・・
-    // 2022/08/14:Xionは最大20倍速で動けるのでとりあえず100を突っ込んどく
-    private const float maxModSpeed = 100.0f;
-
-    private static float playerBaseSpeed => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-        FloatOptionNames.PlayerSpeedMod);
-
-    public static bool Prefix(
-        PlayerPhysics __instance,
-        ref float __result)
-    {
-        // オバロとかでも以下が最大速度なのでそれを返す
-        // 最大速度 = 基本速度 * PlayerControl.GameOptions.PlayerSpeedMod * 3.0f;
-        __result = __instance.Speed * maxModSpeed * playerBaseSpeed;
-        return false;
-    }
-}
-
-
 [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
 public static class PlayerPhysicsFixedUpdatePatch
 {
