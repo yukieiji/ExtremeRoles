@@ -1,9 +1,10 @@
-﻿
+﻿using Il2CppSystem.Collections;
+
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+
 using HarmonyLib;
 
 using ExtremeRoles.Module;
-using Il2CppSystem.Collections;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Patches;
 
