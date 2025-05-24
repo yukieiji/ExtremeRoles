@@ -388,7 +388,7 @@ public static class ExileControllerWrapUpPatch
 			AirshipExileController._WrapUpAndSpawn_d__11 __instance,
 			ref bool __result)
         {
-			if (__instance.__1__state == 0)
+			if (__instance.__1__state == 1)
 			{
 				WrapUpPrefix();
 			}
