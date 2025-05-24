@@ -1,9 +1,11 @@
 ﻿
 using ExtremeRoles.Test.InGame.GameLoop;
+using ExtremeRoles.Test.Lobby.Asset;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using UnityEngine;
@@ -12,7 +14,10 @@ namespace ExtremeRoles.Test.Lobby;
 
 public class LobbyTestStep(IServiceProvider provider) : TestStepBase
 {
-	private readonly IEnumerable<ILobbyTestRunner> runners = provider.GetServices<ILobbyTestRunner>();
+	// 順番を変えるとなぜか動くので一番最初においておく
+	private readonly IEnumerable<ILobbyTestRunner> runners =
+		provider.GetServices<ILobbyTestRunner>().OrderBy(
+			x => x is AAAATuckerAssetLoadRunner ? -600000 : x.GetHashCode());
 
 	public static void Register(
 		IServiceCollection services,
