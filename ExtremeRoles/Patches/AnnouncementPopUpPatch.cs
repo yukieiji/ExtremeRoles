@@ -18,6 +18,7 @@ public static class AnnouncementPopUpInitPatch
 	{
 		if (__result)
 		{
+			enumerator = null;
 			return;
 		}
 		if (enumerator == null)
