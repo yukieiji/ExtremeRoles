@@ -1,7 +1,7 @@
-﻿using ExtremeRoles.Extension.Il2Cpp;
+﻿using Il2CppSystem;
+
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Module.CustomOption.Factory;
-using Il2CppSystem;
-using static Il2CppSystem.Net.Http.Headers.Parser;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
