@@ -379,16 +379,25 @@ public static class ExileControllerWrapUpPatch
         }
     }
 
-    [HarmonyPatch(typeof(AirshipExileController), nameof(AirshipExileController.WrapUpAndSpawn))]
+    [HarmonyPatch(typeof(
+		AirshipExileController._WrapUpAndSpawn_d__11),
+		nameof(AirshipExileController._WrapUpAndSpawn_d__11.MoveNext))]
     public static class AirshipExileControllerPatch
     {
-        public static void Prefix()
+        public static void Postfix(
+			AirshipExileController._WrapUpAndSpawn_d__11 __instance,
+			ref bool __result)
         {
-            WrapUpPrefix();
-        }
-        public static void Postfix(AirshipExileController __instance)
-        {
-            WrapUpPostfix(__instance.initData.networkedPlayer);
+			if (__instance.__1__state == 0)
+			{
+				WrapUpPrefix();
+			}
+			if (__result)
+			{
+				return;
+			}
+
+            WrapUpPostfix(__instance.__4__this.initData.networkedPlayer);
         }
     }
 
