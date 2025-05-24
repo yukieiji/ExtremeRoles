@@ -3,7 +3,6 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Test.Lobby.Asset;
 
-// 順番を変えるとなぜか動くので一番最初においておく
 public class AAAATuckerAssetLoadRunner
 	: AssetLoadRunner
 {
