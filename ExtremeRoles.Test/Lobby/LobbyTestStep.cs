@@ -47,7 +47,7 @@ public class LobbyTestStep(IServiceProvider provider) : TestStepBase
 
 	public override IEnumerator Run()
 	{
-		var waitor = new WaitForSeconds(1.0f);
+		var waitor = new WaitForSeconds(2.5f);
 		foreach (var runner in runners)
 		{
 			runner.Run();
