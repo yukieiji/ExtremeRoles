@@ -55,6 +55,12 @@ public class ExtremeRolesTestPluginBehaviour : MonoBehaviour
 		{
 			yield return step.Run();
 		}
+		EndTest();
+	}
+
+	public void EndTest()
+	{
+		ExtremeRolesTestPlugin.Instance.Log.LogInfo("------- END TEST ------");
 	}
 
 	public static void Start()
