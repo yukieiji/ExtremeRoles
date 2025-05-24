@@ -381,7 +381,7 @@ public static class UnityObjectLoader
 
 		if (stream is null)
 		{
-			throw new ArgumentException($"Can't find {path} in resorces");
+			throw new ArgumentException($"Can't find {path} in {assembly.FullName}");
 		}
 		return stream;
 	}
