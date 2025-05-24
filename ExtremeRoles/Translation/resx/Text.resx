@@ -1191,4 +1191,28 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="roleHistoryCause" xml:space="preserve">
     <value>原因</value>
   </data>
+  <data name="EmergencyTaskOption" xml:space="preserve">
+    <value>緊急タスクの制限時間</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldReactor" xml:space="preserve">
+    <value>「スケルド」の「原子炉修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldOxygen" xml:space="preserve">
+    <value>「スケルド」の「酸素修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqReactor" xml:space="preserve">
+    <value>「ミラHQ」の「原子炉修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqOxygen" xml:space="preserve">
+    <value>「ミラHQ」の「酸素修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionPolusReactor" xml:space="preserve">
+    <value>「ポーラス」の「耐震安定装置リセット」</value>
+  </data>
+  <data name="EmergencyTaskOptionAirshipHeli" xml:space="preserve">
+    <value>「エアシップ」の「衝突回避」</value>
+  </data>
+  <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
+    <value>「ファングル」の「原子炉修理」</value>
+  </data>
 </root>

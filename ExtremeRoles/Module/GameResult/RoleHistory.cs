@@ -32,7 +32,7 @@ public static class RoleHistoryContainer
 					continue;
 				}
 
-				this.builder.AppendLine($"{summary.PlayerName}");
+				this.builder.AppendLine(summary.PlayerName);
 				while (hist.TryDequeue(out var roleHistory))
 				{
 					appendHistory(roleHistory, allSummary);

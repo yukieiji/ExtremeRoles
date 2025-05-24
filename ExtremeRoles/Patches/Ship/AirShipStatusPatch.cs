@@ -1,7 +1,8 @@
-﻿using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+﻿
+using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using HarmonyLib;
 
-namespace ExtremeRoles.Patches;
+namespace ExtremeRoles.Patches.Ship;
 
 [HarmonyPatch(typeof(AirshipStatus), nameof(AirshipStatus.PrespawnStep))]
 public static class AirshipStatusPrespawnStepPatch

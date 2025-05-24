@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using System.Collections;
 using System.IO;
 using System.IO.Compression;
 
@@ -45,7 +46,26 @@ namespace ExtremeSkins.Helper
                 ExtremeSkinsPlugin.Logger.LogInfo(www.error);
                 yield break;
             }
-            File.WriteAllBytes(zipPath, www.downloadHandler.data);
+			var handler = www.downloadHandler;
+
+			Il2CppArrayBase<byte>? data;
+			try
+			{
+				data = handler.GetData();
+			}
+			catch
+			{
+				try
+				{
+					data = handler.GetNativeData().ToArray();
+				}
+				catch
+				{
+					yield break;
+				}
+			}
+
+            File.WriteAllBytes(zipPath, data);
         }
 
     }

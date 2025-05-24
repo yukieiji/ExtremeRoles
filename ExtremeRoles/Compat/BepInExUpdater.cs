@@ -1,4 +1,9 @@
-﻿using System;
+﻿using AmongUs.Data;
+using BepInEx;
+using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
@@ -7,17 +12,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
-using BepInEx;
-using BepInEx.Unity.IL2CPP.Utils;
-
-using Il2CppInterop.Runtime.Attributes;
-
 using UnityEngine;
 using UnityEngine.Networking;
-
-using AmongUs.Data;
-
 using SemanticVersion = SemanticVersioning.Version;
 
 
@@ -25,8 +21,8 @@ namespace ExtremeRoles.Compat;
 
 public sealed class BepInExUpdater : MonoBehaviour
 {
-	private const string minimumBepInExVersion = "6.0.0-be.671";
-	private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/671/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.671%2B9caf61d.zip";
+	private const string minimumBepInExVersion = "6.0.0-be.735";
+	private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/735/BepInEx-Unity.IL2CPP-win-x{0}-6.0.0-be.735%2B5fef357.zip";
 
 	private const string exeFileName = "ExtremeBepInExInstaller.exe";
 
@@ -66,6 +62,11 @@ public sealed class BepInExUpdater : MonoBehaviour
 		Directory.CreateDirectory(tmpFolder);
 
 		yield return dlBepInExZip(zipPath);
+		if (!File.Exists(zipPath))
+		{
+			ExtremeRolesPlugin.Logger.LogError("Zip file not found");
+			yield break;
+		}
 
 		ZipFile.ExtractToDirectory(zipPath, extractPath);
 
@@ -81,16 +82,35 @@ public sealed class BepInExUpdater : MonoBehaviour
 
 	private static IEnumerator dlBepInExZip(string saveZipPath)
 	{
+		int cpu = File.Exists(
+			Path.Combine(Paths.GameRootPath, "steam_appid.txt")) ? 86 : 64;
 
-		UnityWebRequest www = UnityWebRequest.Get(bepInExDownloadURL);
+		UnityWebRequest www = UnityWebRequest.Get(string.Format(
+			bepInExDownloadURL, cpu));
 		yield return www.SendWebRequest();
 		if (www.isNetworkError || www.isHttpError)
 		{
 			ExtremeRolesPlugin.Logger.LogInfo(www.error);
 			yield break;
 		}
-
-		File.WriteAllBytes(saveZipPath, www.downloadHandler.data);
+		var handler = www.downloadHandler;
+		Il2CppArrayBase<byte>? data;
+		try
+		{
+			data = handler.GetData();
+		}
+		catch
+		{
+			try
+			{
+				data = handler.GetNativeData().ToArray();
+			}
+			catch
+			{
+				yield break;
+			}
+		}
+		File.WriteAllBytes(saveZipPath, data);
 	}
 
 	private static void extractExtremeBepInExInstaller(string extractTmpFolder)

@@ -18,19 +18,19 @@ public static class SyncSettingPatch
 }
 
 // from Reactor : https://github.com/NuclearPowered/Reactor/commit/0a03a9d90d41b3bb158fa95bb23186f6769e0f9f
-[HarmonyPatch(typeof(AmongUsClient._CoJoinOnlinePublicGame_d__1),
-    nameof(AmongUsClient._CoJoinOnlinePublicGame_d__1.MoveNext))]
+[HarmonyPatch(typeof(AmongUsClient._CoJoinOnlinePublicGame_d__49),
+    nameof(AmongUsClient._CoJoinOnlinePublicGame_d__49.MoveNext))]
 public static class EnableUdpMatchmakingPatch
 {
     public static void Prefix(
-        AmongUsClient._CoJoinOnlinePublicGame_d__1 __instance)
+        AmongUsClient._CoJoinOnlinePublicGame_d__49 __instance)
     {
         // Skip to state 1 which just calls CoJoinOnlineGameDirect
         if (__instance.__1__state == 0 && !ServerManager.Instance.IsHttp)
         {
             __instance.__1__state = 1;
-            __instance.__8__1 = new AmongUsClient.__c__DisplayClass1_0
-            {
+            __instance.__8__1 = new AmongUsClient.__c__DisplayClass49_0
+			{
                 matchmakerToken = string.Empty,
             };
         }

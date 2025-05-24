@@ -52,7 +52,8 @@ public sealed class HatLoader : ICosmicLoader
 			yield break;
 		}
 
-		ExtremeSkinsPlugin.Logger.LogInfo(
+		var logger = ExtremeSkinsPlugin.Logger;
+		logger.LogInfo(
 			"---------- Extreme Hat Manager : HatData Download Start!! ---------- ");
 
 		string? ausFolder = Path.GetDirectoryName(Application.dataPath);
@@ -74,16 +75,22 @@ public sealed class HatLoader : ICosmicLoader
 		string zipPath = Path.Combine(dlFolder, dlZipName);
 
 		yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
+		if (!File.Exists(zipPath))
+		{
+			logger.LogInfo(
+				"---------- Extreme Hat Manager : HatData Download ERROR ---------- ");
+			yield break;
+		}
 
-		ExtremeSkinsPlugin.Logger.LogInfo(
+		logger.LogInfo(
 			"---------- Extreme Hat Manager : HatData Download Complete!! ---------- ");
 
-		ExtremeSkinsPlugin.Logger.LogInfo(
+		logger.LogInfo(
 			"---------- Extreme Hat Manager : HatData Install Start!! ---------- ");
 
 		installHatData(dlFolder, zipPath, dataSaveFolder);
 
-		ExtremeSkinsPlugin.Logger.LogInfo(
+		logger.LogInfo(
 			"---------- Extreme Hat Manager : HatData Install Complete!! ---------- ");
 #if RELEASE
         Helper.FileUtility.DeleteDir(dlFolder);

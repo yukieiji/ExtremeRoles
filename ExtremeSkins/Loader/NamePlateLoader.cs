@@ -49,7 +49,8 @@ public sealed class NamePlateLoader : ICosmicLoader
 			yield break;
 		}
 
-		ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Start!! ---------- ");
+		var logger = ExtremeSkinsPlugin.Logger;
+		logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Start!! ---------- ");
 
 		string? ausFolder = Path.GetDirectoryName(Application.dataPath);
 		if (string.IsNullOrEmpty(ausFolder))
@@ -69,14 +70,20 @@ public sealed class NamePlateLoader : ICosmicLoader
 		string zipPath = Path.Combine(dlFolder, dlZipName);
 
 		yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
+		if (!File.Exists(zipPath))
+		{
+			logger.LogInfo(
+				"---------- Extreme NamePlate Manager : NamePlateData Download ERROR ---------- ");
+			yield break;
+		}
 
-		ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Complete!! ---------- ");
+		logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Complete!! ---------- ");
 
-		ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Install Start!! ---------- ");
+		logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Install Start!! ---------- ");
 
 		installNamePlateData(dlFolder, zipPath, dataSaveFolder);
 
-		ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Install Complete!! ---------- ");
+		logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Install Complete!! ---------- ");
 #if RELEASE
         Helper.FileUtility.DeleteDir(dlFolder);
 #endif

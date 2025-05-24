@@ -17,6 +17,7 @@ public enum ShipGlobalOptionCategory : int
 	VentOption,
 	TaskOption,
 	RandomSpawnOption,
+	EmergencyTaskOption,
 	AdminOption,
 	SecurityOption,
 	VitalOption,
@@ -126,6 +127,8 @@ public interface IShipGlobalOption
     public DeviceOption Security { get; }
     public VitalDeviceOption Vital { get; }
 
+	public EmergencyTaskOption Emergency { get; }
+
     public bool DisableTaskWinWhenNoneTaskCrew { get; }
     public bool DisableTaskWin { get; }
     public bool IsSameNeutralSameWin { get; }
@@ -170,6 +173,11 @@ public interface IShipGlobalOption
 		{
 			SpawnOption.Create(factory);
 		}
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.EmergencyTaskOption))
+		{
+			EmergencyTaskOption.Create(factory);
+		}
+
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
 		{
 			AdminDeviceOption.Create(factory);
