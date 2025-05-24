@@ -3,7 +3,8 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Test.Lobby.Asset;
 
-public class TuckerAssetLoadRunner
+// 順番を変えるとなぜか動くので一番最初においておく
+public class AAAATuckerAssetLoadRunner
 	: AssetLoadRunner
 {
 	public override void Run()
