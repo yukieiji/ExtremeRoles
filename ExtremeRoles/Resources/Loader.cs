@@ -242,7 +242,7 @@ public static class UnityObjectLoader
 		string bundleName, string objName) where T : UnityObject
 	{
 		AssetBundle bundle = GetAssetBundleFromAssembly(
-			bundleName, Assembly.GetCallingAssembly());
+			bundleName, Assembly.GetExecutingAssembly());
 		T result = loadObjectFromAsset<T>(bundle, objName);
 
 		return result;
@@ -253,7 +253,7 @@ public static class UnityObjectLoader
 	{
 		AssetBundle bundle = GetAssetBundleFromAssembly(
 			string.Format(ObjectPath.AssetPlace, objName.ToLower()),
-			Assembly.GetCallingAssembly());
+			Assembly.GetExecutingAssembly());
 		T result = loadObjectFromAsset<T>(
 			bundle,
 			string.Format(ObjectPath.RoleImgPathFormat, objName));
