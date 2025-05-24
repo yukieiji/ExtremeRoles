@@ -1,19 +1,35 @@
-﻿
+﻿using Il2CppSystem.Collections;
+
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+
 using HarmonyLib;
-using Il2CppSystem.Collections;
 
 using ExtremeRoles.Module;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(AnnouncementPopUp), nameof(AnnouncementPopUp.Init))]
+#nullable enable
+
+[HarmonyPatch(typeof(AnnouncementPopUp._Init_d__46), nameof(AnnouncementPopUp._Init_d__46.MoveNext))]
 public static class AnnouncementPopUpInitPatch
 {
-	public static void Postfix(ref IEnumerator __result)
+	private static IEnumerator? enumerator;
+	public static void Postfix(AnnouncementPopUp._Init_d__46 __instance, ref bool __result)
 	{
-		__result = Effects.Sequence(
-			ModAnnounce.CoGetAnnounce().WrapToIl2Cpp(),
-			__result);
+		if (__result)
+		{
+			enumerator = null;
+			return;
+		}
+		if (enumerator == null)
+		{
+			enumerator = ModAnnounce.CoGetAnnounce().WrapToIl2Cpp();
+		}
+		__result = enumerator.MoveNext();
+		__instance.__2__current = enumerator.Current;
+		if (!__result)
+		{
+			enumerator = null;
+		}
 	}
 }
