@@ -24,6 +24,8 @@ Expand-Archive -Path workspace/bepinex_x64.zip -DestinationPath workspace/bepine
 Write-Host "Create Packing..."
 mkdir -Path workspace/bepinex_x86/BepInEx/config -Force
 mkdir -Path workspace/bepinex_x86/BepInEx/plugins -Force
+mkdir -Path workspace/bepinex_x64/BepInEx/config -Force
+mkdir -Path workspace/bepinex_x64/BepInEx/plugins -Force
 
 
 Write-Host "Create Steam package"
