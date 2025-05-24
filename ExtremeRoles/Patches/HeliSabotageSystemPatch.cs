@@ -1,5 +1,6 @@
-﻿using ExtremeRoles.GameMode;
-using HarmonyLib;
+﻿using HarmonyLib;
+
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches;
 
