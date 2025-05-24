@@ -15,9 +15,7 @@ namespace ExtremeRoles.Test.Lobby;
 public class LobbyTestStep(IServiceProvider provider) : TestStepBase
 {
 	// 順番を変えるとなぜか動くので一番最初においておく
-	private readonly IEnumerable<ILobbyTestRunner> runners =
-		provider.GetServices<ILobbyTestRunner>().OrderBy(
-			x => x is AAAATuckerAssetLoadRunner ? -600000 : x.GetHashCode());
+	private readonly IEnumerable<ILobbyTestRunner> runners = provider.GetServices<ILobbyTestRunner>();
 
 	public static void Register(
 		IServiceCollection services,
