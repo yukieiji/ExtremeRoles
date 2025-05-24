@@ -173,9 +173,9 @@ public interface IShipGlobalOption
 		{
 			SpawnOption.Create(factory);
 		}
-		using (var factoy = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.EmergencyTaskOption))
+		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.EmergencyTaskOption))
 		{
-			EmergencyTaskOption.Create(factoy);
+			EmergencyTaskOption.Create(factory);
 		}
 
 		using (var factory = OptionManager.CreateOptionCategory(ShipGlobalOptionCategory.AdminOption))
