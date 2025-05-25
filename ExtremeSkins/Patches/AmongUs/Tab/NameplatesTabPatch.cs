@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using UnityEngine;
 using HarmonyLib;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Performance;
 
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
@@ -60,7 +60,8 @@ public static class NameplatesTabPatch
             GameObject obj = Object.Instantiate(
                 ExRLoader.LoadFromResources<GameObject>(
                     CustomCosmicTab.CreatorTabAssetBundle,
-                    CustomCosmicTab.CreatorTabAssetPrefab),
+                    CustomCosmicTab.CreatorTabAssetPrefab,
+					Assembly.GetExecutingAssembly()),
                 __instance.transform);
             Tab = obj.GetComponent<CreatorTab>();
             obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;

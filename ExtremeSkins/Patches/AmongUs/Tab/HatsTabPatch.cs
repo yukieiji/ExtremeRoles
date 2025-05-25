@@ -14,6 +14,7 @@ using AmongUs.Data;
 using AmongUs.Data.Player;
 
 using ExRLoader = ExtremeRoles.Resources.UnityObjectLoader;
+using System.Reflection;
 
 
 #nullable enable
@@ -60,7 +61,8 @@ public static class HatsTabPatch
             GameObject obj = Object.Instantiate(
                 ExRLoader.LoadFromResources<GameObject>(
                     CustomCosmicTab.CreatorTabAssetBundle,
-                    CustomCosmicTab.CreatorTabAssetPrefab),
+                    CustomCosmicTab.CreatorTabAssetPrefab,
+					Assembly.GetExecutingAssembly()),
                 __instance.transform);
             Tab = obj.GetComponent<CreatorTab>();
             obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
