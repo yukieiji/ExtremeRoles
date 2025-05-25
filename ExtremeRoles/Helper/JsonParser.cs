@@ -43,11 +43,11 @@ public static class JsonParser
 		return result;
 	}
 
-	public static async Task<T?> GetRestApiAsync<T>(HttpClient client, string targetUrl)
+	public static async Task<T?> GetRestApiAsync<T>(string targetUrl)
 	{
 		ExtremeRolesPlugin.Logger.LogInfo($"Conecting...:{targetUrl}");
 
-		var response = await client.GetAsync(
+		var response = await ExtremeRolesPlugin.Instance.Http.GetAsync(
 			targetUrl, HttpCompletionOption.ResponseContentRead);
 		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
 		{

@@ -29,7 +29,6 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 	};
 
 	public async Task<IReadOnlyList<AutoModInstaller.DownloadData>> GetInstallData(
-		HttpClient client,
 		AutoModInstaller.InstallType installType)
 	{
 		var result = new List<AutoModInstaller.DownloadData>(this.DllName.Count);
@@ -42,7 +41,7 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 		{
 			case AutoModInstaller.InstallType.Update:
 				var latestData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(
-					client, $"{Endpoint}releases/latest");
+					$"{Endpoint}releases/latest");
 				if (getReleaseDiff(latestData, curVersion) < 0)
 				{
 					ExtremeRolesPlugin.Logger.LogInfo($"Find UpdateData, Create Download Data....");
@@ -55,7 +54,7 @@ public sealed class ExRRepositoryInfo : AutoModInstaller.IRepositoryInfo
 				{
 					++page;
 					var allRelease = await JsonParser.GetRestApiAsync<GitHubReleaseData[]>(
-						client, $"{Endpoint}releases?page={page}");
+						$"{Endpoint}releases?page={page}");
 
 					if (allRelease == null)
 					{
@@ -172,17 +171,11 @@ public sealed class AutoModInstaller
 		public List<string> DllName { get; }
 
 		public Task<IReadOnlyList<DownloadData>> GetInstallData(
-			HttpClient client,
 			InstallType installType);
 	}
 
-	private readonly HttpClient client = new HttpClient();
-
 	public AutoModInstaller()
 	{
-		this.client = new HttpClient();
-		this.client.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
-
 		this.AddRepository<ExRRepositoryInfo>();
 	}
 
@@ -272,7 +265,7 @@ public sealed class AutoModInstaller
 
 			foreach (var repo in this.service.Values)
 			{
-				var installData = await repo.GetInstallData(this.client, installType);
+				var installData = await repo.GetInstallData(installType);
 				if (installData.Count == 0)
 				{
 					continue;
@@ -354,7 +347,7 @@ public sealed class AutoModInstaller
 	private async Task<Expected<Stream>> getStreamFromUrl(string url)
 	{
 		ExtremeRolesPlugin.Logger.LogInfo($"Conecting : {url}");
-		var response = await this.client.GetAsync(
+		var response = await ExtremeRolesPlugin.Instance.Http.GetAsync(
 			new Uri(url),
 			HttpCompletionOption.ResponseContentRead);
 		if (response.StatusCode != HttpStatusCode.OK || response.Content == null)

@@ -10,6 +10,6 @@ public static class MainMenuLoadHook
 		{
 			return;
 		}
-		CustomRegion.AddCustomServer();
+		CustomRegion.Add();
 	}
 }

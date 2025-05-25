@@ -8,7 +8,7 @@ public static class ServerManagerLoadServersPatch
 {
 	public static void Postfix(ServerManager __instance)
 	{
-		CustomRegion.ReSelectRegion(__instance);
+		CustomRegion.ReSelect(__instance);
 		__instance.CurrentUdpServer = __instance.CurrentRegion.Servers[0];
 	}
 }
@@ -18,6 +18,6 @@ public static class ServerManagerReselectPatch
 {
 	public static void Prefix(ServerManager __instance)
 	{
-		CustomRegion.ReSelectRegion(__instance);
+		CustomRegion.ReSelect(__instance);
 	}
 }

@@ -1,10 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using ExtremeRoles.Compat;
 using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles.Module;
 
 #nullable enable
+
+public enum RegionStatusEnum
+{
+	None,
+	Ng,
+	MayBeOk,
+	Ok,
+}
+
+public class RegionStatus(
+	RegionStatusEnum statusEunm,
+	DateTime time)
+{
+	public RegionStatusEnum Status { get; } = statusEunm;
+	public DateTime Time { get; } = time;
+
+	public bool IsUpdate()
+	{
+		var curTime = DateTime.UtcNow;
+		return (curTime - this.Time).Hours > 1;
+	}
+}
+
+public record struct Region(
+	RegionStatus Status,
+	IRegionInfo Info);
 
 public static class CustomRegion
 {
@@ -12,7 +40,7 @@ public static class CustomRegion
 		ServerManager.Instance.AvailableRegions.FirstOrDefault(
 			x => x.Name == IRegionInfoExtension.FullCustomServerName);
 
-	private static readonly Dictionary<string, IRegionInfo> curCustomRegion = [];
+	private static readonly Dictionary<string, Region> curCustomRegion = [];
 
 	private static IRegionInfo[] newCustomRegion => [
 		createStaticRegion(
@@ -24,10 +52,20 @@ public static class CustomRegion
 			ClientOption.Instance.Port.Value, false),
 	];
 
-	public static void AddCustomServer()
+	public static bool TryGetStatus(string name, out RegionStatusEnum @enum)
 	{
-		curCustomRegion.Clear();
+		@enum = RegionStatusEnum.None;
+		if (!curCustomRegion.TryGetValue(name, out var region) ||
+			region.Status is null)
+		{
+			return false;
+		}
+		@enum = region.Status.Status;
+		return true;
+	}
 
+	public static void Add()
+	{
 		var serverMngr = ServerManager.Instance;
 		var currentRegion = serverMngr.CurrentRegion;
 
@@ -38,7 +76,14 @@ public static class CustomRegion
 				currentRegion = region;
 			}
 			serverMngr.AddOrUpdateRegion(region);
-			curCustomRegion.Add(region.Name, region);
+
+			string name = region.Name;
+
+			var status =
+				curCustomRegion.TryGetValue(name, out var reg) &&
+				!reg.Status.IsUpdate() ? reg.Status : getStatus(region);
+
+			curCustomRegion[region.Name] = new Region(status, region);
 		}
 
 		if (currentRegion == null)
@@ -52,15 +97,11 @@ public static class CustomRegion
 					x.Name == currentRegion.Name &&
 					x.TranslateName == currentRegion.TranslateName))
 		{
-			if (!(
+			currentRegion =
 					curCustomRegion.TryGetValue(
-						IRegionInfoExtension.ExROfficialServerTokyoManinName, out currentRegion) &&
-					currentRegion != null &&
-					serverMngr.AvailableRegions.Count > 0
-				))
-			{
-				currentRegion = serverMngr.AvailableRegions.First();
-			}
+						IRegionInfoExtension.ExROfficialServerTokyoManinName, out var region) &&
+					region.Info != null
+				 ? region.Info : serverMngr.AvailableRegions.FirstOrDefault();
 		}
 
 		if (currentRegion == null)
@@ -71,7 +112,7 @@ public static class CustomRegion
 		serverMngr.SetRegion(currentRegion);
 	}
 
-	public static void UpdateEditorableServer()
+	public static void UpdateEditorableRegion()
 	{
 		var newRegions = ServerManager.Instance.AvailableRegions.Where(
 			r => !(
@@ -79,15 +120,15 @@ public static class CustomRegion
 					r.Name == IRegionInfoExtension.FullCustomServerName
 				));
 		ServerManager.Instance.AvailableRegions = newRegions.ToArray();
-		AddCustomServer();
+		Add();
 	}
 
-	public static void ReSelectRegion(ServerManager instance)
+	public static void ReSelect(ServerManager instance)
 	{
 		var curRegion = instance.CurrentRegion;
 		if (curCustomRegion.TryGetValue(curRegion.Name, out var target))
 		{
-			instance.CurrentRegion = target;
+			instance.CurrentRegion = target.Info;
 		}
 	}
 
@@ -96,4 +137,31 @@ public static class CustomRegion
 		=> new DnsRegionInfo(
 			ip, name, StringNames.NoTranslation, ip, port,
 			false).Cast<IRegionInfo>();
+
+	private static RegionStatus getStatus(IRegionInfo info)
+	{
+		var server = info.Servers.FirstOrDefault();
+		if (server == null)
+		{
+			return defaultStatus;
+		}
+		try
+		{
+			var result = CustomServerAPI.Post($"{server.Ip}:{server.Port}");
+			if (result == null ||
+				result.PostInfo == null ||
+				!Enum.TryParse<RegionStatusEnum>(result.Status, out var s))
+			{
+				return defaultStatus;
+			}
+
+			return new RegionStatus(s, result.PostInfo.At);
+		}
+		catch
+		{
+			return defaultStatus;
+		}
+	}
+	private static RegionStatus defaultStatus => new RegionStatus(
+		RegionStatusEnum.None, DateTime.UtcNow);
 }

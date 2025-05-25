@@ -1,4 +1,5 @@
 ﻿using System;
+using ExtremeRoles.Module;
 using HarmonyLib;
 
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -42,6 +43,24 @@ namespace ExtremeRoles.Patches.Controller
 			}
 
 			__result = Tr.GetString(key);
+			if (CustomRegion.TryGetStatus(key, out var region))
+			{
+				switch (region)
+				{
+
+					case RegionStatusEnum.Ng:
+						__result = $"NG: {__result}";
+						break;
+					case RegionStatusEnum.MayBeOk:
+						__result = $"MayOK: {__result}";
+						break;
+					case RegionStatusEnum.Ok:
+						__result = $"OK: {__result}";
+						break;
+					default:
+						break;
+				}
+			}
 			return false;
         }
     }
