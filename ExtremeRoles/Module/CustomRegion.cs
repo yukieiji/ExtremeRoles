@@ -52,8 +52,15 @@ public static class CustomRegion
 					x.Name == currentRegion.Name &&
 					x.TranslateName == currentRegion.TranslateName))
 		{
-			_ = curCustomRegion.TryGetValue(
-					IRegionInfoExtension.ExROfficialServerTokyoManinName, out currentRegion);
+			if (!(
+					curCustomRegion.TryGetValue(
+						IRegionInfoExtension.ExROfficialServerTokyoManinName, out currentRegion) &&
+					currentRegion != null &&
+					serverMngr.AvailableRegions.Count > 0
+				))
+			{
+				currentRegion = serverMngr.AvailableRegions.First();
+			}
 		}
 
 		if (currentRegion == null)
