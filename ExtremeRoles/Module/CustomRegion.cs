@@ -93,20 +93,7 @@ public static class CustomRegion
 
 	private static IRegionInfo createStaticRegion(
 		string name, string ip, ushort port, bool useDtls)
-		=> new StaticHttpRegionInfo(
-			name, StringNames.NoTranslation, ip,
-			createServerInfo(name, ip, port, useDtls)).Cast<IRegionInfo>();
-
-	private static ServerInfo[] createServerInfo(string name, string ip, ushort port, bool useDtls)
-	{
-		if (!ip.StartsWith("http"))
-		{
-			ip = $"http://{ip}";
-		}
-
-		return
-		[
-			new ServerInfo(name, ip, port, useDtls)
-		];
-	}
+		=> new DnsRegionInfo(
+			ip, name, StringNames.NoTranslation, ip, port,
+			false).Cast<IRegionInfo>();
 }
