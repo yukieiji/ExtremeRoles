@@ -24,24 +24,25 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(0)] StringNames id,
             [HarmonyArgument(1)] string defaultStr)
         {
-            if (id != StringNames.NoTranslation)
+            if (id is not StringNames.NoTranslation)
             {
                 return true;
             }
-            else if (defaultStr.Equals(FullCustomServerName))
-            {
-                __result = Tr.GetString(FullCustomServerName);
-                return false;
-            }
-            else if (defaultStr.Equals(ExROfficialServerTokyoManinName))
-            {
-                __result = Tr.GetString(ExROfficialServerTokyoManinName);
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+
+			string key = defaultStr switch
+			{
+				FullCustomServerName => FullCustomServerName,
+				ExROfficialServerTokyoManinName => ExROfficialServerTokyoManinName,
+				_ => "",
+			};
+
+			if (string.IsNullOrEmpty(key))
+			{
+				return true;
+			}
+
+			__result = Tr.GetString(key);
+			return false;
         }
     }
 }
