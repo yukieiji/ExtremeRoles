@@ -49,13 +49,13 @@ namespace ExtremeRoles.Patches.Controller
 				{
 
 					case RegionStatusEnum.Ng:
-						__result = $"NG: {__result}";
+						__result = $"<color=#FF1919>{__result}</color>";
 						break;
 					case RegionStatusEnum.MayBeOk:
-						__result = $"MayOK: {__result}";
+						__result = $"<color=#FFFF00>{__result}</color>";
 						break;
 					case RegionStatusEnum.Ok:
-						__result = $"OK: {__result}";
+						__result = $"<color=#8CFFFF>{__result}</color>";
 						break;
 					default:
 						break;
