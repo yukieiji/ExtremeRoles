@@ -9,21 +9,25 @@ namespace ExtremeRoles.Patches.Meeting.Hud;
 
 #nullable enable
 
-[HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CoIntro))]
+[HarmonyPatch(typeof(MeetingHud._CoIntro_d__52), nameof(MeetingHud._CoIntro_d__52.MoveNext))]
 public static class MeetingHudCoIntroPatch
 {
 	public static void Postfix(
-		MeetingHud __instance,
-		[HarmonyArgument(0)] NetworkedPlayerInfo reporter,
-		[HarmonyArgument(1)] NetworkedPlayerInfo reportedBody)
+		MeetingHud._CoIntro_d__52 __instance, ref bool __result)
 	{
-		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+		if (__result || ExtremeRoleManager.GameRole.Count == 0)
+		{
+			return;
+		}
 
 		if (!OnemanMeetingSystemManager.IsActive)
 		{
+			var reportedBody = __instance.reportedBody;
+			var reporter = __instance.reporter;
+
 			var player = PlayerControl.LocalPlayer;
-			var hookRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHook;
-			var multiAssignRole = ExtremeRoleManager.GetLocalPlayerRole() as MultiAssignRoleBase;
+			var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+			var hookRole = localRole as IRoleReportHook;
 
 			if (hookRole != null)
 			{
@@ -38,7 +42,7 @@ public static class MeetingHudCoIntroPatch
 						player, reporter, reportedBody);
 				}
 			}
-			if (multiAssignRole != null)
+			if (localRole is MultiAssignRoleBase multiAssignRole)
 			{
 				hookRole = multiAssignRole.AnotherRole as IRoleReportHook;
 				if (hookRole != null)
@@ -60,7 +64,7 @@ public static class MeetingHudCoIntroPatch
 		}
 		else
 		{
-			__instance.TitleText.text = Tr.GetString("whoIsMarine");
+			__instance.__4__this.TitleText.text = Tr.GetString("whoIsMarine");
 		}
 	}
 }

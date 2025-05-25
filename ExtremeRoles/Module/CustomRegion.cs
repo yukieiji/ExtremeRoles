@@ -47,15 +47,26 @@ public static class CustomRegion
 		}
 
 		// 存在しないサーバーが選択されていた場合、東京サーバーを自動選択するようにする
-		currentRegion =
-			!serverMngr.AvailableRegions.Any(
+		if (!serverMngr.AvailableRegions.Any(
 				x =>
 					x.Name == currentRegion.Name &&
-					x.TranslateName == currentRegion.TranslateName) ||
-			!curCustomRegion.TryGetValue(
-				IRegionInfoExtension.ExROfficialServerTokyoManinName, out currentRegion) ||
-			currentRegion == null ?
-				serverMngr.AvailableRegions.First() : currentRegion;
+					x.TranslateName == currentRegion.TranslateName))
+		{
+			if (!(
+					curCustomRegion.TryGetValue(
+						IRegionInfoExtension.ExROfficialServerTokyoManinName, out currentRegion) &&
+					currentRegion != null &&
+					serverMngr.AvailableRegions.Count > 0
+				))
+			{
+				currentRegion = serverMngr.AvailableRegions.First();
+			}
+		}
+
+		if (currentRegion == null)
+		{
+			return;
+		}
 
 		serverMngr.SetRegion(currentRegion);
 	}
