@@ -40,9 +40,10 @@ public static class CustomServerAPI
 {
 	public static CustomServerAPIResponse? Post(string url)
 	{
+		url = url.StartsWith("http") ? url : $"http://{url}";
 		var response = ExtremeRolesPlugin.Instance.Http.PostAsJsonAsync(
 			$"{url}/api/compat",
-			new CustomServerAPIRequest() { Version = 000 }).GetAwaiter().GetResult();
+			new CustomServerAPIRequest() { Version = Constants.GetBroadcastVersion() }).GetAwaiter().GetResult();
 		return response.Content.ReadFromJsonAsync<CustomServerAPIResponse>().GetAwaiter().GetResult();
 	}
 }

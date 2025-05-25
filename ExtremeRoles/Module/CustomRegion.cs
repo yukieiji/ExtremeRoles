@@ -143,7 +143,7 @@ public static class CustomRegion
 		var server = info.Servers.FirstOrDefault();
 		if (server == null)
 		{
-			return defaultStatus;
+			return defaultStatus();
 		}
 		try
 		{
@@ -152,16 +152,17 @@ public static class CustomRegion
 				result.PostInfo == null ||
 				!Enum.TryParse<RegionStatusEnum>(result.Status, out var s))
 			{
-				return defaultStatus;
+				return defaultStatus();
 			}
 
 			return new RegionStatus(s, result.PostInfo.At);
 		}
-		catch
+		catch (Exception e)
 		{
-			return defaultStatus;
+			return defaultStatus(
+				e is System.Text.Json.JsonException ? RegionStatusEnum.None : RegionStatusEnum.Ng);
 		}
 	}
-	private static RegionStatus defaultStatus => new RegionStatus(
-		RegionStatusEnum.None, DateTime.UtcNow);
+	private static RegionStatus defaultStatus(RegionStatusEnum status= RegionStatusEnum.None) => new RegionStatus(
+		status, DateTime.UtcNow);
 }
