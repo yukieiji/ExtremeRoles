@@ -134,9 +134,24 @@ public static class CustomRegion
 
 	private static IRegionInfo createStaticRegion(
 		string name, string ip, ushort port, bool useDtls)
-		=> new DnsRegionInfo(
-			ip, name, StringNames.NoTranslation, ip, port,
-			false).Cast<IRegionInfo>();
+	{
+		var server = createServerInfo(name, ip, port, useDtls);
+		if (ip.StartsWith("https"))
+		{
+			return new StaticHttpRegionInfo(
+				name, StringNames.NoTranslation, ip, server).Cast<IRegionInfo>();
+		}
+		else
+		{
+			return new DnsRegionInfo(
+				ip, name, StringNames.NoTranslation, server).Cast<IRegionInfo>();
+		}
+	}
+
+	private static ServerInfo[] createServerInfo(string name, string ip, ushort port, bool useDtls)
+		=> [
+			new ServerInfo(name, ip, port, useDtls)
+		];
 
 	private static RegionStatus getStatus(IRegionInfo info)
 	{
