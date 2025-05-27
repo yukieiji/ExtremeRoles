@@ -69,7 +69,7 @@ public static class CustomRegion
 		var serverMngr = ServerManager.Instance;
 		var currentRegion = serverMngr.CurrentRegion;
 
-		foreach (IRegionInfo region in newCustomRegion)
+		foreach (var region in newCustomRegion)
 		{
 			if (currentRegion != null && region.Name == currentRegion.Name)
 			{
@@ -83,7 +83,7 @@ public static class CustomRegion
 				curCustomRegion.TryGetValue(name, out var reg) &&
 				!reg.Status.IsUpdate() ? reg.Status : getStatus(region);
 
-			curCustomRegion[region.Name] = new Region(status, region);
+			curCustomRegion[name] = new Region(status, region);
 		}
 
 		if (currentRegion == null)
