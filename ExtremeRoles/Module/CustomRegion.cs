@@ -166,12 +166,12 @@ public static class CustomRegion
 			var result = CustomServerAPI.Post($"{server.Ip}:{server.Port}").GetAwaiter().GetResult();
 			if (result == null ||
 				result.PostInfo == null ||
-				!Enum.TryParse<RegionStatusEnum>(result.Status, out var s))
+				!Enum.TryParse<RegionStatusEnum>(result.Status, out var regionstatus))
 			{
 				return defaultStatus();
 			}
 
-			return new RegionStatus(s, result.PostInfo.At);
+			return new RegionStatus(regionstatus, result.PostInfo.At);
 		}
 		catch (Exception e)
 		{
