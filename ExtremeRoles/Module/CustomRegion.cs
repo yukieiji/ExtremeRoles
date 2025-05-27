@@ -16,7 +16,7 @@ public enum RegionStatusEnum
 	Ok,
 }
 
-public class RegionStatus(
+public sealed class RegionStatus(
 	RegionStatusEnum statusEunm,
 	DateTime time)
 {
