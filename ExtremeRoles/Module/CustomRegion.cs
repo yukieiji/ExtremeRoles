@@ -81,6 +81,7 @@ public static class CustomRegion
 
 			var status =
 				curCustomRegion.TryGetValue(name, out var reg) &&
+				reg.Status is not null &&
 				!reg.Status.IsUpdate() ? reg.Status : getStatus(region);
 
 			curCustomRegion[name] = new Region(status, region);
@@ -162,7 +163,7 @@ public static class CustomRegion
 		}
 		try
 		{
-			var result = CustomServerAPI.Post($"{server.Ip}:{server.Port}");
+			var result = CustomServerAPI.Post($"{server.Ip}:{server.Port}").GetAwaiter().GetResult();
 			if (result == null ||
 				result.PostInfo == null ||
 				!Enum.TryParse<RegionStatusEnum>(result.Status, out var s))

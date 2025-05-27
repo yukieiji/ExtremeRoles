@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
@@ -38,12 +39,12 @@ public sealed class CustomServerAPIResponse
 
 public static class CustomServerAPI
 {
-	public static CustomServerAPIResponse? Post(string url)
+	public static async Task<CustomServerAPIResponse?> Post(string url)
 	{
 		url = url.StartsWith("http") ? url : $"http://{url}";
-		var response = ExtremeRolesPlugin.Instance.Http.PostAsJsonAsync(
+		var response = await ExtremeRolesPlugin.Instance.Http.PostAsJsonAsync(
 			$"{url}/api/compat",
-			new CustomServerAPIRequest() { Version = Constants.GetBroadcastVersion() }).GetAwaiter().GetResult();
-		return response.Content.ReadFromJsonAsync<CustomServerAPIResponse>().GetAwaiter().GetResult();
+			new CustomServerAPIRequest() { Version = Constants.GetBroadcastVersion() });
+		return await response.Content.ReadFromJsonAsync<CustomServerAPIResponse>();
 	}
 }
