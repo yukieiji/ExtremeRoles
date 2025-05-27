@@ -21,7 +21,6 @@ internal sealed class Installer : OperatorBase
 	private string repoUrl;
 	private bool isRequireReactor = false;
 
-	private HttpClient client;
 	private GenericPopup? popup;
 
 	internal Installer(CompatModInfo modInfo) : base()
@@ -30,9 +29,6 @@ internal sealed class Installer : OperatorBase
 		this.repoUrl = modInfo.RepoUrl;
 		this.installTask = null;
 		this.isRequireReactor = modInfo.IsRequireReactor && !File.Exists(Path.Combine(this.ModFolderPath, ReactorDll));
-
-		this.client = new HttpClient();
-		this.client.DefaultRequestHeaders.Add("User-Agent", agentName);
 	}
 
 	public override void Excute()
@@ -92,11 +88,11 @@ internal sealed class Installer : OperatorBase
 		List<CompatModRepoData> result = new List<CompatModRepoData>();
 		if (this.isRequireReactor)
 		{
-			var reactorData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, ReactorURL);
+			var reactorData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(ReactorURL);
 			result.Add(new CompatModRepoData(reactorData, ReactorDll));
 		}
 
-		var modData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, this.repoUrl);
+		var modData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.repoUrl);
 		result.Add(new CompatModRepoData(modData, this.dllName));
 		return result;
 	}
@@ -110,7 +106,7 @@ internal sealed class Installer : OperatorBase
 
 			if (string.IsNullOrEmpty(downloadUri)) { return false; }
 
-			var res = await this.client.GetAsync(
+			var res = await ExtremeRolesPlugin.Instance.Http.GetAsync(
 				downloadUri, HttpCompletionOption.ResponseContentRead);
 
 			if (res.StatusCode != HttpStatusCode.OK || res.Content == null)

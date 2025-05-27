@@ -123,17 +123,9 @@ public static class ModAnnounce
 		}
 	}
 
-	public static IEnumerator CoGetAnnounce()
+	public static IEnumerator CoFetchAnnounce()
 	{
-		var client = new HttpClient();
-		client.DefaultRequestHeaders.Add(
-			"User-Agent", "ExtremeRoles AnnounceGetter");
-		yield return coFetchAnnounce(client);
-	}
-
-	private static IEnumerator coFetchAnnounce(HttpClient client)
-	{
-		TaskWaiter<HttpResponseMessage> task = client.GetAsync(
+		TaskWaiter<HttpResponseMessage> task = ExtremeRolesPlugin.Instance.Http.GetAsync(
 			allannounceData, HttpCompletionOption.ResponseContentRead);
 		yield return task.Wait();
 
@@ -154,10 +146,10 @@ public static class ModAnnounce
 		var data = jsonReadTask.Result;
 		if (data is null) { yield break; }
 
-		yield return coSaveToAnnounce(client, data);
+		yield return coSaveToAnnounce(data);
 	}
 
-	private static IEnumerator coSaveToAnnounce(HttpClient client, List<DateTime> datas)
+	private static IEnumerator coSaveToAnnounce(List<DateTime> datas)
 	{
 		var saveAnnounce = new Stack<SavedAnnounce>();
 		int id = startId;
@@ -207,7 +199,7 @@ public static class ModAnnounce
 		// 公開していいやつだけ
 		datas = datas.Where(x => x <= curJst).ToList();
 
-		yield return coGetAnnounce(client, datas, id, saveAnnounce);
+		yield return coGetAnnounce(datas, id, saveAnnounce);
 
 		yield return coSaveAnnounce(saveAnnounce);
 
@@ -215,7 +207,6 @@ public static class ModAnnounce
 	}
 
 	private static IEnumerator coGetAnnounce(
-		HttpClient client,
 		IReadOnlyList<DateTime> dlList,
 		int id,
 		Stack<SavedAnnounce>? dlResult)
@@ -224,7 +215,7 @@ public static class ModAnnounce
 
 		foreach (var time in dlList)
 		{
-			TaskWaiter<HttpResponseMessage> task = client.GetAsync(
+			TaskWaiter<HttpResponseMessage> task = ExtremeRolesPlugin.Instance.Http.GetAsync(
 				createDLUrl(convertToString(time)),
 				HttpCompletionOption.ResponseContentRead);
 			yield return task.Wait();

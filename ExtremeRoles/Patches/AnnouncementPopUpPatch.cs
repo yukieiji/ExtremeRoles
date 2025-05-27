@@ -23,7 +23,7 @@ public static class AnnouncementPopUpInitPatch
 		}
 		if (enumerator == null)
 		{
-			enumerator = ModAnnounce.CoGetAnnounce().WrapToIl2Cpp();
+			enumerator = ModAnnounce.CoFetchAnnounce().WrapToIl2Cpp();
 		}
 		__result = enumerator.MoveNext();
 		__instance.__2__current = enumerator.Current;

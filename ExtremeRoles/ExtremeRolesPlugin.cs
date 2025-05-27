@@ -50,6 +50,8 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public static ConfigEntry<bool> DebugMode { get; private set; }
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
 
+	public HttpClient Http { get; } = new HttpClient();
+
 	public ExtremeRolesPlugin() : base()
 	{
 		Instance = this;
@@ -59,6 +61,13 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		{
 			MigratorManager.MigrateConfig(this.Config, version);
 		}
+
+		this.Http.DefaultRequestHeaders.Add(
+			"User-Agent", "ExtremeRoles");
+		this.Http.DefaultRequestHeaders.CacheControl = new()
+		{
+			NoCache = true
+		};
 	}
 
     public override void Load()

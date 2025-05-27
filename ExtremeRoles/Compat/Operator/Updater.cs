@@ -27,17 +27,12 @@ internal sealed class Updater : OperatorBase
 	private string guid;
 	private bool isRequireReactor;
 
-	private HttpClient client;
-
 	internal Updater(CompatModInfo modInfo) : base()
 	{
 		this.dllName = $"{modInfo.Name}.dll";
 		this.repoUrl = modInfo.RepoUrl;
 		this.guid = modInfo.Guid;
 		this.isRequireReactor = modInfo.IsRequireReactor;
-
-		this.client = new HttpClient();
-		this.client.DefaultRequestHeaders.Add("User-Agent", agentName);
 	}
 
 	public override void Excute()
@@ -97,11 +92,11 @@ internal sealed class Updater : OperatorBase
 		Dictionary<string, CompatModRepoData> result = new Dictionary<string, CompatModRepoData>();
 		if (this.isRequireReactor)
 		{
-			var reactorData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, ReactorURL);
+			var reactorData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(ReactorURL);
 			result.Add(reactorGuid, new CompatModRepoData(reactorData, ReactorDll));
 		}
 
-		var modData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.client, this.repoUrl);
+		var modData = await JsonParser.GetRestApiAsync<GitHubReleaseData>(this.repoUrl);
 		result.Add(this.guid, new CompatModRepoData(modData, this.dllName));
 		return result;
 	}
@@ -114,7 +109,7 @@ internal sealed class Updater : OperatorBase
 
 			if (string.IsNullOrEmpty(downloadUri)) { return false; }
 
-			var res = await this.client.GetAsync(
+			var res = await ExtremeRolesPlugin.Instance.Http.GetAsync(
 				downloadUri, HttpCompletionOption.ResponseContentRead);
 
 			if (res.StatusCode != HttpStatusCode.OK || res.Content == null)

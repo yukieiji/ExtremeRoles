@@ -16,17 +16,11 @@ internal sealed class ExRAddonInstaller : OperatorBase
 {
 	private string addonDll;
 	private string url = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest";
-	private const string agentName = "ExtremeRoles CompatModInstaller";
-
-	private HttpClient client;
 	private Task? installTask = null;
 
 	internal ExRAddonInstaller(CompatModType addonType) : base()
 	{
 		this.addonDll = $"{addonType}.dll";
-
-		this.client = new HttpClient();
-		this.client.DefaultRequestHeaders.Add("User-Agent", agentName);
 	}
 
 	public override void Excute()
@@ -35,8 +29,7 @@ internal sealed class ExRAddonInstaller : OperatorBase
 		Popup.Show(info);
 
 
-		var exrRepoData = JsonParser.GetRestApiAsync<GitHubReleaseData>(
-			this.client, url).GetAwaiter().GetResult();
+		var exrRepoData = JsonParser.GetRestApiAsync<GitHubReleaseData>(url).GetAwaiter().GetResult();
 
 		info = Tr.GetString("installNow");
 
@@ -70,7 +63,7 @@ internal sealed class ExRAddonInstaller : OperatorBase
 
 		if (string.IsNullOrEmpty(downloadUri)) { return false; }
 
-		var res = await this.client.GetAsync(
+		var res = await ExtremeRolesPlugin.Instance.Http.GetAsync(
 			downloadUri, HttpCompletionOption.ResponseContentRead);
 		if (res.StatusCode != HttpStatusCode.OK || res.Content == null)
 		{
