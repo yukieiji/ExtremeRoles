@@ -365,6 +365,7 @@ public static class ExileControllerReEnableGameplayPatch
 [HarmonyPatch]
 public static class ExileControllerWrapUpPatch
 {
+	private static bool isPrefixRun = false;
 
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
     public static class BaseExileControllerPatch
@@ -388,10 +389,8 @@ public static class ExileControllerWrapUpPatch
 			AirshipExileController._WrapUpAndSpawn_d__11 __instance,
 			ref bool __result)
         {
-			if (__instance.__1__state == 1)
-			{
-				WrapUpPrefix();
-			}
+			WrapUpPrefix();
+
 			if (__result)
 			{
 				return;
@@ -447,13 +446,16 @@ public static class ExileControllerWrapUpPatch
         {
             ghostRole.ResetOnMeetingEnd();
         }
-    }
+		isPrefixRun = false;
+	}
 
     public static void WrapUpPrefix()
     {
-		if (MeetingHud.Instance == null)
+		if (MeetingHud.Instance != null || isPrefixRun)
 		{
-			ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.ExiledEnd);
+			return;
 		}
-    }
+		ExtremeSystemTypeManager.Instance.Reset(null, (byte)ResetTiming.ExiledEnd);
+		isPrefixRun = true;
+	}
 }
