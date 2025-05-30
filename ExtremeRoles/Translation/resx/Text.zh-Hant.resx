@@ -145,7 +145,7 @@
     <value>幽靈獨立陣營職業設置</value>
   </data>
   <data name="PresetOption" xml:space="preserve">
-    <value>選擇的預設</value>
+    <value>預置</value>
   </data>
   <data name="RandomOptionUseStrong" xml:space="preserve">
     <value>使用更合理的隨機模式（強隨機）</value>
@@ -229,7 +229,7 @@
     <value>禁用管理地圖</value>
   </data>
   <data name="AdminOptionAirShipEnable" xml:space="preserve">
-    <value>空艇地圖啟用的管理地圖</value>
+    <value>空艇地圖啓用的管理地圖</value>
   </data>
   <data name="ModeBoth" xml:space="preserve">
     <value>兩邊</value>
@@ -289,7 +289,7 @@
     <value>禁用守護天使的能力發動報告</value>
   </data>
   <data name="EnableHorseMode" xml:space="preserve">
-    <value>啟用馬模式</value>
+    <value>啓用馬模式</value>
   </data>
   <data name="moreOptionText" xml:space="preserve">
     <value>模組設置</value>
@@ -340,7 +340,7 @@
     <value>導出成功</value>
   </data>
   <data name="exportError" xml:space="preserve">
-    <value>導出失敗，請重新檢查併重試...</value>
+    <value>導出失敗，請重新檢查並重試...</value>
   </data>
   <data name="version" xml:space="preserve">
     <value>版本</value>
@@ -352,13 +352,15 @@
     <value>測試人員：</value>
   </data>
   <data name="langTranslate" xml:space="preserve">
-    <value>繁體中文翻譯：</value>
+    <value>&lt;size=85%&gt;簡體中文翻譯：</value>
   </data>
   <data name="translatorMember" xml:space="preserve">
-    <value>方块(復刻自簡體)</value>
+    <value>開擺，123，方塊
+亂線Namdam_096，FiveFireX，
+氫氧則名,小鹿SAMA&lt;/size&gt;</value>
   </data>
   <data name="youAreRoleIntro" xml:space="preserve">
-    <value>妳的職業是</value>
+    <value>你的職業是</value>
   </data>
   <data name="andFirst" xml:space="preserve">
     <value>以及</value>
@@ -370,10 +372,10 @@
     <value>和</value>
   </data>
   <data name="optionOn" xml:space="preserve">
-    <value>&lt;color=#33ffcc&gt;開啟&lt;/color&gt;</value>
+    <value>&lt;color=#33ffcc&gt;啓用&lt;/color&gt;</value>
   </data>
   <data name="optionOff" xml:space="preserve">
-    <value>&lt;color=#ff3366&gt;關閉&lt;/color&gt;</value>
+    <value>&lt;color=#ff3366&gt;禁用&lt;/color&gt;</value>
   </data>
   <data name="crewmateRoles" xml:space="preserve">
     <value>船員陣營</value>
@@ -400,7 +402,7 @@
     <value>玩家 {0} 還有
 
 
-次緊急會議剩余</value>
+次緊急會議剩餘</value>
   </data>
   <data name="meetingCount" xml:space="preserve">
     <value>{0} 全船共有 {1}</value>
@@ -433,7 +435,7 @@
     <value>{0}票</value>
   </data>
   <data name="XionUseXion" xml:space="preserve">
-    <value>啟用主機職業“測試員”</value>
+    <value>啓用主機職業“測試員”</value>
   </data>
   <data name="yourHost" xml:space="preserve">
     <value>主機職業</value>
@@ -463,7 +465,7 @@
 ・Ctr鍵+PageDown鍵：縮小
 ・Ctr鍵+R鍵：縮放復位
 本地遊戲專用功能
-・在大廳F鍵（測試員啟用時）：召喚假人玩家
+・在大廳F鍵（測試員啓用時）：召喚假人玩家
 ・左Alt鍵+B鍵：在鼠標處生成屍體
 ・/SetRole [玩家名（任意）] [職業英語名]：能使該玩家獲得特定職業，不填寫玩家名則自己獲得職業
 成為，成為
@@ -488,7 +490,7 @@
     <value>無效參數</value>
   </data>
   <data name="invalidPlayerName" xml:space="preserve">
-    <value>無效的玩家昵稱</value>
+    <value>無效的玩家暱稱</value>
   </data>
   <data name="cannotUseThisGameMode" xml:space="preserve">
     <value>該功能在當前遊戲模式下不可用</value>
@@ -506,7 +508,7 @@
     <value>已將測試員分配給房主</value>
   </data>
   <data name="buttonCountText" xml:space="preserve">
-    <value>剩余{0}回</value>
+    <value>剩餘{0}回</value>
   </data>
   <data name="summaryText" xml:space="preserve">
     <value>最終結算</value>
@@ -617,16 +619,16 @@
     <value>破壞設施或擊殺所有人</value>
   </data>
   <data name="crewIntroText" xml:space="preserve">
-    <value>完成妳的任務</value>
+    <value>完成你的任務</value>
   </data>
   <data name="crewImportantText" xml:space="preserve">
     <value>完成任務</value>
   </data>
   <data name="YourRolePanel" xml:space="preserve">
-    <value>妳的職業是</value>
+    <value>你的職業是</value>
   </data>
   <data name="YourGhostRolePanel" xml:space="preserve">
-    <value>妳的幽靈職業</value>
+    <value>你的幽靈職業</value>
   </data>
   <data name="AllRolePanel" xml:space="preserve">
     <value>職業簡介</value>
@@ -647,16 +649,16 @@
     <value>設定</value>
   </data>
   <data name="yourAliveNow" xml:space="preserve">
-    <value>妳現在活著</value>
+    <value>你現在活着</value>
   </data>
   <data name="yourNoAssignGhostRole" xml:space="preserve">
-    <value>妳沒有幽靈職業</value>
+    <value>你沒有幽靈職業</value>
   </data>
   <data name="vanilaOptions" xml:space="preserve">
     <value>當前AMONGUS基礎設定</value>
   </data>
   <data name="playerName" xml:space="preserve">
-    <value>玩家昵稱</value>
+    <value>玩家暱稱</value>
   </data>
   <data name="roleName" xml:space="preserve">
     <value>職業</value>
@@ -684,14 +686,14 @@
 請手動更新</value>
   </data>
   <data name="updateRestart" xml:space="preserve">
-    <value>更新成功請重新啟動遊戲</value>
+    <value>更新成功請重新啓動遊戲</value>
   </data>
   <data name="updateInProgress" xml:space="preserve">
     <value>正在更新....</value>
   </data>
   <data name="alreadyInstall" xml:space="preserve">
     <value>已經安裝完畢
-請重新啟動遊戲</value>
+請重新啓動遊戲</value>
   </data>
   <data name="checkInstallNow" xml:space="preserve">
     <value>正在確認安裝數據</value>
@@ -707,11 +709,11 @@
 請手動安裝</value>
   </data>
   <data name="installRestart" xml:space="preserve">
-    <value>安裝數據成功請重新啟動遊戲</value>
+    <value>安裝數據成功請重新啓動遊戲</value>
   </data>
   <data name="alreadyUninstall" xml:space="preserve">
     <value>已經卸載
-請重新啟動遊戲</value>
+請重新啓動遊戲</value>
   </data>
   <data name="checkUninstallNow" xml:space="preserve">
     <value>正在檢查卸載數據</value>
@@ -728,11 +730,11 @@
   </data>
   <data name="uninstallRestart" xml:space="preserve">
     <value>卸載成功
-請重新啟動遊戲</value>
+請重新啓動遊戲</value>
   </data>
   <data name="alreadyUninstallAfterInstall" xml:space="preserve">
     <value>已經卸載
-請重新啟動遊戲後安裝</value>
+請重新啓動遊戲後安裝</value>
   </data>
   <data name="isReactorInstall" xml:space="preserve">
     <value>要運行本模組，需要先安裝Reactor插件。
@@ -755,7 +757,7 @@ Among Us官方服務器不適配Reactor插件，因此需要使用自定義服�
     <value>請求被拒絕</value>
   </data>
   <data name="errorCannotGameStart" xml:space="preserve">
-    <value>由於以下原因無法啟動遊戲</value>
+    <value>由於以下原因無法啓動遊戲</value>
   </data>
   <data name="errorNotInstalled" xml:space="preserve">
     <value>模組安裝失敗</value>
@@ -963,5 +965,262 @@ Among Us官方服務器不適配Reactor插件，因此需要使用自定義服�
   </data>
   <data name="AssignsNum" xml:space="preserve">
     <value>每組分配的人數</value>
+  </data>
+  <data name="ExR_SettingsDescription" xml:space="preserve">
+    <value>極端職業設置</value>
+  </data>
+  <data name="OptionSettingChange" xml:space="preserve">
+    <value>[{0}-{1}] '{2}' 已更新為'{3}'</value>
+  </data>
+  <data name="PresetOptionSelection" xml:space="preserve">
+    <value>預設</value>
+  </data>
+  <data name="RandomOption" xml:space="preserve">
+    <value>隨機數設置</value>
+  </data>
+  <data name="RoleSpawnCategory" xml:space="preserve">
+    <value>職業數量</value>
+  </data>
+  <data name="GhostRoleSpawnCategory" xml:space="preserve">
+    <value>幽靈職業數量</value>
+  </data>
+  <data name="MeetingOption" xml:space="preserve">
+    <value>會議設置</value>
+  </data>
+  <data name="MeetingOptionUseRaiseHand" xml:space="preserve">
+    <value>開啓“舉手”功能</value>
+  </data>
+  <data name="ExiledOption" xml:space="preserve">
+    <value>驅逐設置</value>
+  </data>
+  <data name="VentOption" xml:space="preserve">
+    <value>通風管設置</value>
+  </data>
+  <data name="VentOptionAnimationModeInVison" xml:space="preserve">
+    <value>通風管動畫播放範圍</value>
+  </data>
+  <data name="VanillaAnimation" xml:space="preserve">
+    <value>在畫面中出現</value>
+  </data>
+  <data name="DonotWallHack" xml:space="preserve">
+    <value>不隔牆</value>
+  </data>
+  <data name="DonotOutVison" xml:space="preserve">
+    <value>視野內</value>
+  </data>
+  <data name="TaskOption" xml:space="preserve">
+    <value>任務設置</value>
+  </data>
+  <data name="TaskOptionIsFixWallHaskTask" xml:space="preserve">
+    <value>覆蓋任務</value>
+  </data>
+  <data name="TaskOptionGarbageTask" xml:space="preserve">
+    <value>垃圾處理任務</value>
+  </data>
+  <data name="TaskOptionShowerTask" xml:space="preserve">
+    <value>淋浴任務</value>
+  </data>
+  <data name="TaskOptionDevelopPhotosTask" xml:space="preserve">
+    <value>制訂任務</value>
+  </data>
+  <data name="TaskOptionDivertPowerTask" xml:space="preserve">
+    <value>電力轉換任務</value>
+  </data>
+  <data name="RandomSpawnOption" xml:space="preserve">
+    <value>隨機生成設置（隨機出生點）</value>
+  </data>
+  <data name="RandomSpawnOptionEnable" xml:space="preserve">
+    <value>啓用隨機生成</value>
+  </data>
+  <data name="RandomSpawnOptionSkeld" xml:space="preserve">
+    <value>Skeld 隨機生成</value>
+  </data>
+  <data name="RandomSpawnOptionMiraHq" xml:space="preserve">
+    <value>MiraHq隨機生成</value>
+  </data>
+  <data name="RandomSpawnOptionPolus" xml:space="preserve">
+    <value>Polus隨機生成</value>
+  </data>
+  <data name="RandomSpawnOptionAirShip" xml:space="preserve">
+    <value>AirShip隨機生成</value>
+  </data>
+  <data name="RandomSpawnOptionFungle" xml:space="preserve">
+    <value>Fungle隨機生成</value>
+  </data>
+  <data name="AdminOption" xml:space="preserve">
+    <value>管理地圖設置</value>
+  </data>
+  <data name="SecurityOption" xml:space="preserve">
+    <value>監控和日誌設置</value>
+  </data>
+  <data name="VitalOption" xml:space="preserve">
+    <value>生命監測裝置設置</value>
+  </data>
+  <data name="VitalOptionPolusVitalPos" xml:space="preserve">
+    <value>Polus設置</value>
+  </data>
+  <data name="RandomMapOption" xml:space="preserve">
+    <value>隨機地圖設置</value>
+  </data>
+  <data name="TaskWinOption" xml:space="preserve">
+    <value>任務獲勝設置</value>
+  </data>
+  <data name="NeutralWinOption" xml:space="preserve">
+    <value>中立獲勝設置</value>
+  </data>
+  <data name="GhostRoleGlobalOption" xml:space="preserve">
+    <value>幽靈設置</value>
+  </data>
+  <data name="OptionCategory" xml:space="preserve">
+    <value>選項類別</value>
+  </data>
+  <data name="PublicBetaMode" xml:space="preserve">
+    <value>測試模式</value>
+  </data>
+  <data name="Noisemaker" xml:space="preserve">
+    <value>大嗓門</value>
+  </data>
+  <data name="Tracker" xml:space="preserve">
+    <value>追蹤者</value>
+  </data>
+  <data name="Phantom" xml:space="preserve">
+    <value>幻影</value>
+  </data>
+  <data name="searchDowngradeWait" xml:space="preserve">
+    <value>搜索降級版本・・・・</value>
+  </data>
+  <data name="downgradeStart" xml:space="preserve">
+    <value>開始降級</value>
+  </data>
+  <data name="downgradeManually" xml:space="preserve">
+    <value>降級失敗
+請手動降級</value>
+  </data>
+  <data name="downgradeRestart" xml:space="preserve">
+    <value>降級成功
+請重新啓動遊戲</value>
+  </data>
+  <data name="downgradeInProgress" xml:space="preserve">
+    <value>正在降級...</value>
+  </data>
+  <data name="downgradeNotFound" xml:space="preserve">
+    <value>未找到降級版本</value>
+  </data>
+  <data name="donwgradeConfirm" xml:space="preserve">
+    <value>將 ExR 版本降級一個版本
+除非有錯誤或其他問題阻礙您在遊戲中前進，否則我們建議您使用最新版本，該版本包含錯誤修復和新功能。
+我們建議您使用包含錯誤修復和新功能的最新版本。
+您想繼續降級嗎？</value>
+  </data>
+  <data name="DowngradeButton" xml:space="preserve">
+    <value>降級</value>
+  </data>
+  <data name="SafeBootMessage" xml:space="preserve">
+    <value>由於 ExR 啓動過程中出現問題
+ExR 和其他設備僅以最低限度的功能啓動</value>
+  </data>
+  <data name="SystemMessage" xml:space="preserve">
+    <value>系統</value>
+  </data>
+  <data name="SuccessAmongUsConnect" xml:space="preserve">
+    <value>成功連接到 AmongUs</value>
+  </data>
+  <data name="InputMessage" xml:space="preserve">
+    <value>請輸入您的信息</value>
+  </data>
+  <data name="DisconectAmongUsMessage" xml:space="preserve">
+    <value>與 AmongUs 的連接已斷開</value>
+  </data>
+  <data name="ConectSocketMessage" xml:space="preserve">
+    <value>與 AmongUs 的套接字連接成功</value>
+  </data>
+  <data name="InvalidCharMessage" xml:space="preserve">
+    <value>聊天中的字符無效，請重新輸入</value>
+  </data>
+  <data name="PublicBetaStr" xml:space="preserve">
+    <value>公開測試版 - v{0}</value>
+  </data>
+  <data name="PublicBetaEnableDisableStr" xml:space="preserve">
+    <value>重啓後，公共測試模式將變為 {0}</value>
+  </data>
+  <data name="PublicBetaWarning" xml:space="preserve">
+    <value>公開測試模式設置為{0}。
+以下功能設置為 {0}</value>
+  </data>
+  <data name="PublicBetaReboot" xml:space="preserve">
+    <value>公開測試模式設置為 {0}
+請重新啓動</value>
+  </data>
+  <data name="SpawnRate" xml:space="preserve">
+    <value>出現幾率</value>
+  </data>
+  <data name="IsMultiAssign" xml:space="preserve">
+    <value>視為附加職業</value>
+  </data>
+  <data name="DefaultKey" xml:space="preserve">
+    <value>默認</value>
+  </data>
+  <data name="EnableKey" xml:space="preserve">
+    <value>有效</value>
+  </data>
+  <data name="DisableKey" xml:space="preserve">
+    <value>無效</value>
+  </data>
+  <data name="BothImpostorAndNautral" xml:space="preserve">
+    <value>內鬼及中立</value>
+  </data>
+  <data name="SkipSettingUsingTab" xml:space="preserve">
+    <value>Tab 鍵/Shift + Tab 鍵轉到下一個設置</value>
+  </data>
+  <data name="autoDisconnectTo" xml:space="preserve">
+    <value>{0}秒後自動斷開連接</value>
+  </data>
+  <data name="LoveYou" xml:space="preserve">
+    <value>戀人</value>
+  </data>
+  <data name="OnGameStartOption" xml:space="preserve">
+    <value>遊戲開始的初始設置</value>
+  </data>
+  <data name="OnGameStartOptionIsKillCoolDownIsTen" xml:space="preserve">
+    <value>遊戲開始擊殺冷卻默認為10秒</value>
+  </data>
+  <data name="OnGameStartOptionRemoveSomeoneButton" xml:space="preserve">
+    <value>莫妮卡可以使用其他的的會議按鈕開啓會議</value>
+  </data>
+  <data name="OnGameStartOptionReduceNum" xml:space="preserve">
+    <value>消耗數</value>
+  </data>
+  <data name="OnGameStartOptionFirstButtonCoolDown" xml:space="preserve">
+    <value>遊戲開始後多久無法使用緊急會議</value>
+  </data>
+  <data name="roleHistorySummary" xml:space="preserve">
+    <value>・職業變更記錄</value>
+  </data>
+  <data name="roleHistoryCause" xml:space="preserve">
+    <value>原因</value>
+  </data>
+  <data name="EmergencyTaskOption" xml:space="preserve">
+    <value>緊急任務的截止時間</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldReactor" xml:space="preserve">
+    <value>「The Skeld」的「反應堆修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldOxygen" xml:space="preserve">
+    <value>「The Skeld」的「氧氣系統修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqReactor" xml:space="preserve">
+    <value>「Mira HQ」的「反應堆修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqOxygen" xml:space="preserve">
+    <value>「Mira HQ」的「氧氣系統修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionPolusReactor" xml:space="preserve">
+    <value>「Polus」的「抗震穩定裝置重置」</value>
+  </data>
+  <data name="EmergencyTaskOptionAirshipHeli" xml:space="preserve">
+    <value>「Airship」的「碰撞規避」</value>
+  </data>
+  <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
+    <value>「Fungle」的「反應堆修理」</value>
   </data>
 </root>

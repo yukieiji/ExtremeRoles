@@ -118,11 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ImpostorFullDescription" xml:space="preserve">
-    <value>普通内鬼。
+    <value>是一名普通内鬼。
+无特殊技能。
 通过击杀、破坏与欺骗隐藏自己。</value>
   </data>
   <data name="ShapeshifterFullDescription" xml:space="preserve">
-    <value>变形者属于内鬼阵营，拥有变形为其他玩家的能力。
+    <value>变形者属于内鬼阵营。
+拥有变形为其他玩家的能力。
+
+·主动技能“化形”
 通过击杀、破坏与欺骗隐藏自己。</value>
   </data>
   <data name="SpecialImpostor" xml:space="preserve">
@@ -135,7 +139,7 @@
     <value>你与其他内鬼有所不同</value>
   </data>
   <data name="SpecialImpostorFullDescription" xml:space="preserve">
-    <value>Extreme Roles中特殊的内鬼，设置如下</value>
+    <value>Extreme Roles中具有特殊能力的内鬼，设置如下。</value>
   </data>
   <data name="Evolver" xml:space="preserve">
     <value>捕食者</value>
@@ -171,7 +175,10 @@
     <value>捕食尸体</value>
   </data>
   <data name="EvolverFullDescription" xml:space="preserve">
-    <value>捕食者属于内鬼阵营，可以吃掉尸体来永久降低击杀冷却。
+    <value>捕食者属于内鬼阵营。
+可以吃掉尸体来永久降低击杀冷却。
+
+·主动技能“捕食”
 捕食者捕食时，需要在尸体附近停留一段时间。
 捕食完毕后，那个新的击杀冷却适用。</value>
   </data>
@@ -203,7 +210,11 @@
     <value>搬运并隐藏他人的尸体</value>
   </data>
   <data name="CarrierFullDescription" xml:space="preserve">
-    <value>送葬者属于内鬼阵营，拥有搬运尸体的能力。
+    <value>送葬者属于内鬼阵营。
+拥有搬运尸体的能力。
+
+·主动技能“搬运”
+可以搬运他人的尸体。
 技能持续时间结束时，尸体搬运立刻停止。</value>
   </data>
   <data name="carry" xml:space="preserve">
@@ -237,7 +248,10 @@
     <value>用他人的鲜血来祭你的刀</value>
   </data>
   <data name="PsychoKillerFullDescription" xml:space="preserve">
-    <value>嗜血杀手属于内鬼阵营，能进行更快速的击杀。
+    <value>嗜血杀手属于内鬼阵营。
+能进行更快速的击杀。
+
+·主动技能“嗜血本性”
 嗜血杀手的每次击杀都将计数，并根据这个计数减少嗜血杀手的击杀冷却。
 会议阶段结束后，嗜血杀手的击杀冷却回到原本设定值，再次进行击杀后可以继续造成击杀冷却的减少。
 若“会议重置冷却缩减”开启，会议阶段开始时，嗜血杀手的击杀计数将会重置。
@@ -275,10 +289,14 @@
     <value>猎杀你的悬赏目标</value>
   </data>
   <data name="BountyHunterFullDescription" xml:space="preserve">
-    <value>赏金猎人属于内鬼阵营，拥有击杀特定对象后变更自己的击杀冷却的能力。
+    <value>赏金猎人属于内鬼阵营。
+拥有击杀特定对象后变更自己的击杀冷却的能力。
+
+·主动技能“多劳多得”
 每轮会议阶段结束后，赏金猎人的击杀冷却重置为默认击杀冷却。
 击杀悬赏目标冷却：{0}
 击杀其他人延长后的冷却：{1}
+
 当前目标：{2}</value>
   </data>
   <data name="Painter" xml:space="preserve">
@@ -300,7 +318,10 @@
     <value>打乱尸体的颜色让船员混淆</value>
   </data>
   <data name="PainterFullDescription" xml:space="preserve">
-    <value>入殓师属于内鬼阵营，可以改变尸体的颜色。
+    <value>入殓师属于内鬼阵营。
+可以改变尸体的颜色。
+
+·主动技能“入殓”
 更改尸体的颜色默认为透明。
 若“给尸体所上的颜色随机”开启，玩家的尸体会变成各种颜色。</value>
   </data>
@@ -314,21 +335,26 @@
     <value>技能冷却时间</value>
   </data>
   <data name="FakerIntroDescription" xml:space="preserve">
-    <value>你是假……还是真？</value>
+    <value>你是假……还是真</value>
   </data>
   <data name="FakerShortDescription" xml:space="preserve">
     <value>制造假尸和假人迷惑船员</value>
   </data>
   <data name="FakerFullDescription" xml:space="preserve">
-    <value>道具师属于内鬼阵营，可以伪造出假尸和假人。
-通过使用技能“伪造尸体”，道具师可以在场上生成一个假的尸体。
+    <value>道具师属于内鬼阵营。
+可以伪造出假尸和假人。
+
+·主动技能“伪造尸体”
+道具师可以在场上生成一个假的尸体。
 这种方式生成的尸体不能被报告。
+
+·主动技能“伪造船员”
 按下Shift后，技能将变更为“伪造船员”，使场上出现一个假的玩家。
 这种方式生成的玩家不能被选为技能的对象。
 在使用技能时，可以通过按下以下按键来改变生成的尸体或玩家的形象的选择范围。
-・未按下按键时：从所有存活玩家中随机选择
-・按下左“Ctrl键”时：从不包含内鬼阵营的存活玩家中随机选择
-・按下左“Alt键”时：从不包含自己的存活玩家中随机选择</value>
+①未按下按键时：从所有存活玩家中随机选择。
+②按下左“Ctrl键”时：从不包含内鬼阵营的存活玩家中随机选择。
+③按下左“Alt键”时：从不包含自己的存活玩家中随机选择。</value>
   </data>
   <data name="dummyDeadBody" xml:space="preserve">
     <value>伪造尸体</value>
@@ -367,10 +393,15 @@
     <value>暴露本性争取获得最大利益</value>
   </data>
   <data name="OverLoaderFullDescription" xml:space="preserve">
-    <value>狂战士属于内鬼阵营，可以进入狂暴状态。
+    <value>狂战士属于内鬼阵营。
+可以进入狂暴状态。
+
+·主动技能“狂暴和恢复”
 进入狂暴状态时，狂战士的职业将对所有人公开。
-狂暴状态的狂战士可以随时恢复回正常状态。恢复后，狂战士的职业不再公开。
-狂暴状态下，所有玩家都能看到狂战士显示为内鬼阵营；狂战士速度加快，击杀范围锁定为长，击杀冷却大幅减少。
+狂暴状态的狂战士可以随时恢复回正常状态。
+恢复后，狂战士的职业不再公开。
+狂暴状态下，所有玩家都能看到狂战士显示为内鬼阵营。
+狂战士速度加快，击杀范围锁定为长，击杀冷却大幅减少。
 会议阶段开始时，狂暴状态强制解除。</value>
   </data>
   <data name="overLoad" xml:space="preserve">
@@ -401,7 +432,10 @@
     <value>伪造犯罪现场，让尸体无法被报告</value>
   </data>
   <data name="CrackerFullDescription" xml:space="preserve">
-    <value>清洁工属于内鬼阵营，可以清洁一具尸体，使其不能被报告。
+    <value>清洁工属于内鬼阵营。
+可以清洁一具尸体，使其不能被报告。
+
+·主动技能“清理”
 若“清理尸体后留下尸体”开启，则清洁工清洁过的尸体消失，但会留下清洁的痕迹。
 被清洁的尸体不会在会议阶段开始时出现在死亡玩家列表内。</value>
   </data>
@@ -442,8 +476,12 @@
     <value>让船员变成人肉炸弹</value>
   </data>
   <data name="BomberFullDescription" xml:space="preserve">
-    <value>爆破者属于内鬼阵营，可以给船员身上安放炸弹。
-行动阶段，爆破者可以对一名玩家安装一个炸弹。一定时间后，炸弹将会以那名玩家的位置为中心爆炸。
+    <value>爆破者属于内鬼阵营。
+可以给船员身上安放炸弹。
+
+·主动技能“安放炸弹”
+行动阶段，爆破者可以对一名玩家安装一个炸弹。
+一定时间后，炸弹将会以那名玩家的位置为中心爆炸。
 爆炸范围内的玩家会有一定的概率死亡。
 爆炸范围内的内鬼阵营玩家一定存活。
 炸弹爆炸的时间从介于设置中的“爆炸最小时间”与“爆炸最大时间”之间随机决定。
@@ -456,7 +494,7 @@
     <value>又有人成为了我的艺术品</value>
   </data>
   <data name="Mery" xml:space="preserve">
-    <value>“梅莉”</value>
+    <value>阵法师</value>
   </data>
   <data name="MeryAbilityCoolTime" xml:space="preserve">
     <value>技能冷却时间</value>
@@ -477,12 +515,16 @@
     <value>制造让内鬼通行的法阵</value>
   </data>
   <data name="MeryFullDescription" xml:space="preserve">
-    <value>梅莉属于内鬼阵营，可以在地图上放置法阵。
-法阵有激活与未激活两种状态。两种状态下的法阵外表不同。
+    <value>阵法师属于内鬼阵营。
+可以在地图上放置法阵。
+
+·主动技能“法阵”
+法阵有激活与未激活两种状态。
+两种状态下的法阵外表不同。
 激活的法阵可以当作管道使用，进入后玩家可以在激活的法阵之间移动。
 要激活管道，需要在一定的范围内让一定数量的玩家接近。
 一旦被激活，法阵就不会回到未激活状态。
-无论法阵的状态如何，内鬼阵营和梅林以外的玩家都无法看到或进入法阵。</value>
+无论法阵的状态如何，内鬼阵营和阵法师以外的玩家都无法看到或进入法阵。</value>
   </data>
   <data name="setCamp" xml:space="preserve">
     <value>法阵</value>
@@ -512,11 +554,13 @@
     <value>压榨船员来减慢任务进度</value>
   </data>
   <data name="SlaveDriverFullDescription" xml:space="preserve">
-    <value>奴隶主属于内鬼阵营，可以让船员的任务进度回卷。
-主动技能“压榨”：
-·以技能范围内一名玩家为对象发动
-·那名玩家被标记
-·会议开始时，有压榨标记的玩家根据“压榨回卷的任务数”设置的数量将自己已完成的任务替换为未完成的随机的其他任务</value>
+    <value>奴隶主属于内鬼阵营。
+可以让船员的任务进度回卷。
+
+·主动技能“压榨”
+以技能范围内一名玩家为对象发动。
+那名玩家被标记。
+会议开始时，有压榨标记的玩家根据“压榨回卷的任务数”设置的数量将自己已完成的任务替换为未完成的随机的其他任务。</value>
   </data>
   <data name="Harassment" xml:space="preserve">
     <value>压榨</value>
@@ -546,13 +590,15 @@
     <value>在管道中刺杀船员</value>
   </data>
   <data name="SandWormFullDescription" xml:space="preserve">
-    <value>潜伏者属于内鬼阵营，拥有特殊击杀能力“影袭”。
-“影袭”：
-·只能在管道口内发动
-·发动时潜伏者所在的管道口会播放一次进出动画
-·技能冷却只在照明破坏或潜伏者进入管道期间才会计算
-·技能冷却不能在非该地图原有的管道内进行计算，如梅莉的法阵内
-·可以贯穿时光之盾等一部分防御
+    <value>潜伏者属于内鬼阵营。
+拥有特殊击杀能力“影袭”。
+
+·主动技能“影袭”
+只能在管道口内发动。
+发动时潜伏者所在的管道口会播放一次进出动画。
+技能冷却只在照明破坏或潜伏者进入管道期间才会计算。
+技能冷却不能在非该地图原有的管道内进行计算，如阵法师的法阵内。
+可以贯穿时光之盾等一部分防御。
 潜伏者进行通常击杀时，击杀冷却会增加一定数值。
 潜伏者使用“影袭”或在照明破坏期间进行击杀时，击杀冷却会减少一定数值。</value>
   </data>
@@ -578,11 +624,13 @@
     <value>用连击进行快速击杀</value>
   </data>
   <data name="SmasherFullDescription" xml:space="preserve">
-    <value>双刀手属于内鬼阵营，可以进行二连击。
-“连击”：
-·与通常击杀冷却互相独立
-·与通常击杀效果相同
-·使用后，下一次通常击杀的击杀冷却将会增加一定数值。</value>
+    <value>双刀手属于内鬼阵营。
+可以进行二连击。
+
+·主动技能“连击”
+与普通击杀冷却互相独立。
+与普通击杀效果相同。
+使用后，下一次普通击杀的击杀冷却将会增加一定数值。</value>
   </data>
   <data name="smash" xml:space="preserve">
     <value>连击</value>
@@ -621,14 +669,20 @@
     <value>装填子弹为自己带来更少的冷却</value>
   </data>
   <data name="AssaultMasterFullDescription" xml:space="preserve">
-    <value>突击兵属于内鬼阵营，每次会议阶段都可以存储子弹来强化自己。
-被动能力“储存”:当前储存子弹数: {0}/{1}发
+    <value>突击兵属于内鬼阵营。
+每次会议阶段都可以存储子弹来强化自己。
+
+·被动技能“储存”:
+当前储存子弹数: {0}/{1}发。
 每次报告尸体以及召开紧急会议，突击兵都可以存下数枚子弹。
 子弹数有上限。每有一颗子弹超过上限，“上膛”的冷却就会减少一定数值。
-主动能力“上膛”:当前上膛后的击杀冷却: {2}秒
+
+·主动能力“上膛”
+当前上膛后的击杀冷却: {2}秒。
 使用后，突击兵消耗一颗子弹，大幅减少当前的击杀冷却。
-当前击杀执行完毕后，击杀冷却回到默认值
-被动能力“装填”:
+当前击杀执行完毕后，击杀冷却回到默认值。
+
+·被动能力“装填”:
 击杀时自动发动。消耗一颗子弹，下一次击杀冷却减少一定数值。</value>
   </data>
   <data name="reload" xml:space="preserve">
@@ -687,15 +741,17 @@
     <value>狙击船员</value>
   </data>
   <data name="ShooterFullDescription" xml:space="preserve">
-    <value>狙击兵属于内鬼阵营，可以在会议中狙杀他人。
-主动技能“狙击”
-·会议阶段，自己未投票时，可以选择一名玩家发动
-·技能发动后选择的玩家立即被击杀
-·每次发动技能，需要消耗一枚子弹
-·除游戏开始时会获得若干子弹外，行动阶段每过一段时间狙击兵都会通过装弹获得子弹
-·装弹时间计算判定与击杀冷却计算判定一致
-·装弹时间计算不会因会议阶段开始而重置
-狙击兵发动技能后，狙击兵的通常击杀冷却会增加一定数值，直到狙击兵成功进行一次通常击杀。</value>
+    <value>狙击兵属于内鬼阵营。
+可以在会议中狙杀他人。
+
+·主动技能“狙击”
+会议阶段，自己未投票时，可以选择一名玩家发动。
+技能发动后选择的玩家立即被击杀。
+每次发动技能，需要消耗一枚子弹。
+除游戏开始时会获得若干子弹外，行动阶段每过一段时间狙击兵都会通过装弹获得子弹。
+装弹时间计算判定与击杀冷却计算判定一致。
+装弹时间计算不会因会议阶段开始而重置。
+狙击兵发动技能后，狙击兵的普通击杀冷却会增加一定数值，直到狙击兵成功进行一次普通击杀。</value>
   </data>
   <data name="shooterShootStatus" xml:space="preserve">
     <value>剩余子弹数: {0}/{1}发
@@ -733,15 +789,19 @@
     <value>利用强制关灯袭击其他船员</value>
   </data>
   <data name="LastWolfFullDescription" xml:space="preserve">
-    <value>绝境者属于内鬼阵营。在内鬼阵营存活玩家数降低到一定值时，绝境者觉醒。
+    <value>绝境者属于内鬼阵营。
+在内鬼阵营存活玩家数降低到一定值时，绝境者觉醒。
+
+·被动技能“觉醒”
 绝境者击杀时不发生移动。
 根据场上存活玩家数量，每轮会议结束后，击杀冷却只有一次将会减少一定数值。
 那次击杀完成后，击杀冷却回到原数值。
 绝境者在非觉醒状态下每进行一次击杀，每轮会议结束后的击杀冷却将会进一步减少。
-主动技能“熄灯”：
-·绝境者以外的所有玩家视野全部强制缩小
-·房间设置中不受照明破坏影响的设置对该技能无效
-·技能冷却随全场存活玩家的减少而增加</value>
+
+·主动技能“熄灯”
+绝境者以外的所有玩家视野全部强制缩小。
+房间设置中不受照明破坏影响的设置对该技能无效。
+技能冷却随全场存活玩家的减少而增加。</value>
   </data>
   <data name="liightOff" xml:space="preserve">
     <value>熄灯</value>
@@ -765,17 +825,19 @@
     <value>军令可使用次数</value>
   </data>
   <data name="CommanderIntroDescription" xml:space="preserve">
-    <value>全军突击！</value>
+    <value>全军突击</value>
   </data>
   <data name="CommanderShortDescription" xml:space="preserve">
     <value>利用指挥带领内鬼队友走向胜利</value>
   </data>
   <data name="CommanderFullDescription" xml:space="preserve">
-    <value>指挥官属于内鬼阵营，可以回复其他内鬼的击杀冷却。
-主动技能“军令”
-·发动后，包括自己在内的所有内鬼阵营玩家击杀冷却减少一定数值
-·随着内鬼阵营玩家人数减少，技能效果增强
-·该技能的使用次数会由随自己击杀的次数增加而增加</value>
+    <value>指挥官属于内鬼阵营。
+可以回复其他内鬼的击杀冷却。
+
+·主动技能“军令”
+发动后，包括自己在内的所有内鬼阵营玩家击杀冷却减少一定数值。
+随着内鬼阵营玩家人数减少，技能效果增强。
+该技能的使用次数会由随自己击杀的次数增加而增加。</value>
   </data>
   <data name="attackCommand" xml:space="preserve">
     <value>军令</value>
@@ -832,16 +894,18 @@
     <value>使用催眠术将他人变为傀儡</value>
   </data>
   <data name="HypnotistFullDescription" xml:space="preserve">
-    <value>催眠师属于内鬼阵营，可以使用催眠术制造傀儡。
-主动技能“催眠”：
-・行动阶段，以一名玩家为对象发动
-・技能发动后，那名玩家的职业变为“傀儡”
-・傀儡生成后，地图上将出现“傀儡碎片”
-・红色碎片可以赋予傀儡击杀能力。如果连续取得红色碎片，傀儡的击杀冷却减少
-・蓝色碎片可以赋予傀儡使用飞船设备的权限
-・灰色碎片可以赋予傀儡清理尸体的能力
-・蓝色与灰色碎片出现的枚数固定，由房间设置决定
-・红色碎片出现的枚数由变为傀儡的玩家的原职业的技能决定</value>
+    <value>催眠师属于内鬼阵营。
+可以使用催眠术制造傀儡。
+
+·主动技能“催眠”：
+行动阶段，以一名玩家为对象发动。
+技能发动后，那名玩家的职业变为“傀儡”。
+傀儡生成后，地图上将出现“傀儡碎片”：
+①红色碎片可以赋予傀儡击杀能力。如果连续取得红色碎片，傀儡的击杀冷却减少。
+②蓝色碎片可以赋予傀儡使用飞船设备的权限。
+③灰色碎片可以赋予傀儡清理尸体的能力。
+蓝色与灰色碎片出现的枚数固定，由房间设置决定。
+红色碎片出现的枚数由变为傀儡的玩家的原职业的技能决定。</value>
   </data>
   <data name="Hypnosis" xml:space="preserve">
     <value>催眠</value>
@@ -853,13 +917,20 @@
     <value>你陷入了温柔乡</value>
   </data>
   <data name="DollFullDescription" xml:space="preserve">
-    <value>傀儡由催眠师的技能产生。
-胜利条件：内鬼阵营获胜
+    <value>傀儡属于内鬼阵营。
+傀儡由催眠师的技能产生。
+
+·被动技能“额外的胜利条件”
+内鬼阵营获胜，傀儡跟随获胜。
+
+·主动技能“获取碎片”
 初始状态下傀儡没有任何技能。
 通过让催眠师取得傀儡碎片，傀儡可以得到强化。
-・当前的催眠师：{0}
-・地图模块解除限制：{1}
-・清理能力解除限制：{2}</value>
+
+·催眠师信息：
+当前的催眠师：{0}。
+地图模块解除限制：{1}。
+清理能力解除限制：{2}。</value>
   </data>
   <data name="FeatAccess" xml:space="preserve">
     <value>催眠程度变更：已解除对{0}模块的限制</value>
@@ -874,7 +945,7 @@
     <value>催眠程度变更：失去击杀能力</value>
   </data>
   <data name="UnderWarper" xml:space="preserve">
-    <value>管道工</value>
+    <value>矿工</value>
   </data>
   <data name="UnderWarperAwakeKillCount" xml:space="preserve">
     <value>觉醒所需一轮击杀人数</value>
@@ -895,9 +966,12 @@
     <value>利用相连的管道杀害船员</value>
   </data>
   <data name="UnderWarperFullDescription" xml:space="preserve">
-    <value>管道工属于内鬼阵营，拥有最强的管道使用能力。
-若一轮会议结束前管道工击杀的总次数满足觉醒条件，管道工觉醒。
-觉醒的管道工可以在全部管道网络之间移动，进出时不播放管道口动画，并且允许使用管道的间距更长</value>
+    <value>矿工属于内鬼阵营。
+有最强的管道使用能力。
+
+·被动技能“觉醒”
+若一轮会议结束前管道工击杀的总次数满足觉醒条件，矿工觉醒。
+觉醒的矿工可以在全部管道网络之间移动，进出时不播放管道口动画，并且允许使用管道的间距更长。</value>
   </data>
   <data name="Magician" xml:space="preserve">
     <value>魔术师</value>
@@ -927,11 +1001,13 @@
     <value>用魔术扰乱情报</value>
   </data>
   <data name="MagicianFullDescription" xml:space="preserve">
-    <value>魔术师属于内鬼阵营，可以用魔术让玩家的位置发生改变。
-主动技能“大变活人”：
-·随机将一定数量的存活玩家随机传送到其他玩家所在处
-·选项“技能对象可能被传送到出生点”开启时，技能也可能把玩家传送到当前地图的出生点处
-·选项“魔术师可以成为自己的技能对象”关闭时，魔术师自己一定不会被传送</value>
+    <value>魔术师属于内鬼阵营。
+可以用魔术让玩家的位置发生改变。
+
+·主动技能“大变活人”：
+随机将一定数量的存活玩家随机传送到其他玩家所在处。
+选项“技能对象可能被传送到出生点”开启时，技能也可能把玩家传送到当前地图的出生点处。
+选项“魔术师可以成为自己的技能对象”关闭时，魔术师自己一定不会被传送。</value>
   </data>
   <data name="juggling" xml:space="preserve">
     <value>大变活人</value>
@@ -952,10 +1028,12 @@
     <value>变形成各种物件</value>
   </data>
   <data name="SlimeFullDescription" xml:space="preserve">
-    <value>史莱姆属于内鬼阵营，可以将自己变形为地图上的物件。
-主动技能“变形”：
-·靠近地图上可以变形的物件时才可以发动。史莱姆的外形变为那个物件的外形
-·变形状态下的史莱姆可以进行击杀等交互，但进行使用管道、梯子等交互时会解除变形</value>
+    <value>史莱姆属于内鬼阵营。
+可以将自己变形为地图上的物件。
+
+·主动技能“变形”：
+靠近地图上可以变形的物件时才可以发动。史莱姆的外形变为那个物件的外形。
+变形状态下的史莱姆可以进行击杀等交互，但进行使用管道、梯子等交互时会解除变形。</value>
   </data>
   <data name="SlimeMorph" xml:space="preserve">
     <value>变形</value>
@@ -994,16 +1072,24 @@
     <value>用他人的生命作为献祭让自己复活</value>
   </data>
   <data name="ZombieFullDescription" xml:space="preserve">
-    <value>丧尸属于内鬼阵营，满足复活条件后便不死。
-丧尸不会被分配幽灵职业。
+    <value>丧尸属于内鬼阵营。
+满足复活条件后便不死。
+
+·被动技能“觉醒”
 丧尸进行一定次数的击杀后，丧尸觉醒。
-主动技能“禁忌法阵”：
-·在特定的房间（丧尸可以通过箭头确认）内才可以发动
-·技能发动后，丧尸在原地静止一段时间，禁忌法阵即布置完成
-·禁忌法阵布置完成后，经过“禁忌法阵从布置到可见的间隔时间”中设置的时间，所有玩家都将看到巨大的魔法阵
-·这个技能的使用次数全部消耗完毕，且丧尸觉醒后进行一定次数的击杀后，丧尸进入不死状态
-不死状态下的丧尸被击杀后，经过一定时间丧尸就可以复活（那段时间内，丧尸不会看到其他玩家的职业等）。
-丧尸在地图的出生点处复活（地图有复数个出生点的场合是随机选）。</value>
+
+·主动技能“禁忌法阵”
+在特定的房间（丧尸可以通过箭头确认）内才可以发动。
+技能发动后，丧尸在原地静止一段时间，禁忌法阵即布置完成。
+禁忌法阵布置完成后，经过“禁忌法阵从布置到可见的间隔时间”中设置的时间，所有玩家都将看到巨大的魔法阵。
+这个技能的使用次数全部消耗完毕，且丧尸觉醒后进行一定次数的击杀后，丧尸进入不死状态。
+不死状态下的丧尸被击杀后，经过一定时间丧尸就可以复活。
+那段时间内，丧尸不会看到其他玩家的职业等。
+丧尸在地图的出生点处复活。
+地图有复数个出生点的场合是随机选。
+
+·其他注意事项
+丧尸不会被分配幽灵职业。</value>
   </data>
   <data name="featMagicCircle" xml:space="preserve">
     <value>禁忌法阵</value>
@@ -1042,14 +1128,17 @@
     <value>时间不会等待任何人</value>
   </data>
   <data name="ThiefFullDescription" xml:space="preserve">
-    <value>一个能够从会议中偷走时间的内鬼职业！
+    <value>时间窃贼属于内鬼阵营。
+可以在会议中窃取时间。
 
-偷窃：偷走他们宝贵的时间！
-- 瞄准一具尸体一段时间后激活
-- 将下一次会议的计时器减少一定数量，然后在地图周围生成一定数量的时时间碎片
-- 当开启相应选项时，被偷窃后，身体上会留下一个粒子
-时间碎片: 被偷走的时间四处飞散...
-- 用于将下次会议的计时器延长至设定的时间 - 时间碎片最多只能同时存在10个</value>
+·主动技能“偷窃”
+瞄准一具尸体一段时间后激活。
+将下一次会议的计时器减少一定数量，然后在地图周围生成一定数量的时时间碎片。
+当开启相应选项时，被偷窃后，身体上会留下一个粒子。
+
+·主动技能“时间碎片”
+用于将下次会议的计时器延长至设定的时间。
+时间碎片最多只能同时存在10个。</value>
   </data>
   <data name="steal" xml:space="preserve">
     <value>偷窃</value>
@@ -1076,9 +1165,12 @@
     <value>来自蘑菇岛的学者</value>
   </data>
   <data name="CrewshroomFullDescription" xml:space="preserve">
-    <value>播种：大家都开始晕头转向了
- - 播种蘑菇岛地图中的蘑菇
- - 几乎与蘑菇岛中的蘑菇一模一样;蘑菇生长时间由设置决定</value>
+    <value>真菌学家属于内鬼阵营。
+可以在地图上种植蘑菇。
+
+·主动技能“播种”
+播种The Fungle地图中的蘑菇。
+几乎与蘑菇岛中的蘑菇一模一样;蘑菇生长时间由设置决定。</value>
   </data>
   <data name="CrewshroomSet" xml:space="preserve">
     <value>播种</value>
@@ -1117,12 +1209,13 @@
     <value>一场盛大的烟花秀</value>
   </data>
   <data name="TeroristFullDescription" xml:space="preserve">
-    <value>可启动恐怖袭击破坏活动的内鬼职业
+    <value>恐怖分子属于内鬼阵营。
+可以在飞船上放置炸弹。
  
- 恐怖袭击:现在就引爆这艘船！！！
- - 开始恐怖袭击破坏- 玩家必须在规定时间内拆除随机设置在飞船上的炸弹，以避免内鬼取得胜利\n- 炸弹位置是独立的，每个玩家随机设置；拆除进度是全局的
- 语音播报
- 播报：时间到了...</value>
+·主动技能“恐怖袭击”
+开始恐怖袭击破坏，玩家必须在规定时间内拆除随机设置在飞船上的炸弹，以避免内鬼取得胜利。
+炸弹位置是独立的，每个玩家随机设置。
+炸弹拆除进度是全局的。</value>
   </data>
   <data name="TeroristBombSet" xml:space="preserve">
     <value>恐怖袭击</value>
@@ -1188,18 +1281,19 @@
     <value>其他人能否看导弹落点</value>
   </data>
   <data name="RaiderIntroDescription" xml:space="preserve">
-    <value>请求空中支援！！！</value>
+    <value>请求空中支援</value>
   </data>
   <data name="RaiderShortDescription" xml:space="preserve">
-    <value>地毯式轰炸，发射！</value>
+    <value>地毯式轰炸，发射</value>
   </data>
   <data name="RaiderFullDescription" xml:space="preserve">
-    <value>可请求空中支援的内鬼职业
+    <value>制导员属于内鬼阵营。
+可请求空中支援。
 
-制导：请求空中支援！
-使用制导可以选择导弹降落地点，选择完地点点击发射即可发射一枚导弹，导弹掉落需要一定时间
-控制制导位置与控制玩家操作一致
-根据设置在爆炸范围内所有玩家无论位置都会直接死亡</value>
+·主动技能“制导”
+使用制导可以选择导弹降落地点，选择完地点点击发射即可发射一枚导弹，导弹掉落需要一定时间。
+控制制导位置与控制玩家操作一致。
+根据设置在爆炸范围内所有玩家无论位置都会直接死亡。</value>
   </data>
   <data name="OpenBombUI" xml:space="preserve">
     <value>制导</value>
@@ -1213,7 +1307,7 @@
 (剩余{0}枚导弹)</value>
   </data>
   <data name="Glitch" xml:space="preserve">
-    <value>故障</value>
+    <value>骇客</value>
   </data>
   <data name="GlitchAbilityCoolTime" xml:space="preserve">
     <value>篡改冷却时间</value>
@@ -1234,21 +1328,22 @@
     <value>篡改持续时间</value>
   </data>
   <data name="GlitchIntroDescription" xml:space="preserve">
-    <value>我可没有做什么坏事！</value>
+    <value>我可没有做什么坏事</value>
   </data>
   <data name="GlitchShortDescription" xml:space="preserve">
-    <value>那些机器的事，鬼知道呢？</value>
+    <value>那些机器的事，鬼知道呢</value>
   </data>
   <data name="GlitchFullDescription" xml:space="preserve">
-    <value>可以篡改信息的内鬼职业
+    <value>骇客属于内鬼阵营。
+可以篡改信息。
 
-篡改：一切都已不在真实
-故障可以篡改一切信息设备，篡改效果如下
--管理员地图：自己的信息以外显示不正确。信息不再更新。
--监控：自己以外玩家不再显示。
--望远镜：自己以外玩家不再显示。
--心跳检测仪： 显示有1～2人随机死亡。信息不再更新。
--门禁日志：随机添加5～10条日志。信息不再更新。</value>
+主动技能“篡改”
+①故障可以篡改一切信息设备，篡改效果如下：
+②管理员地图：自己的信息以外显示不正确。信息不再更新。
+③监控：自己以外玩家不再显示。
+④望远镜：自己以外玩家不再显示。
+⑤心跳检测仪： 显示有1～2人随机死亡。信息不再更新。
+⑥门禁日志：随机添加5～10条日志。信息不再更新。</value>
   </data>
   <data name="glitchGlitch" xml:space="preserve">
     <value>篡改</value>
@@ -1275,10 +1370,12 @@
     <value>还有什么我不知道小秘密呢~</value>
   </data>
   <data name="HijackerFullDescription" xml:space="preserve">
-    <value>可以查看他人视野的内鬼职业
+    <value>偷窥狂属于内鬼阵营。
+可以查看他人视野。
 
-窥视：让我看看你在做什么呢~
-偷窥狂可以通过窥视来查看别人的视角，根据设置你可以自己选择窥视对象</value>
+主动技能“窥视”
+偷窥狂可以通过窥视来查看别人的视角。
+根据设置你可以自己选择窥视对象。</value>
   </data>
   <data name="hijackerHijack" xml:space="preserve">
     <value>窥视</value>
@@ -1308,11 +1405,13 @@
     <value>还能再争取一些时间！</value>
   </data>
   <data name="TimeBreakerFullDescription" xml:space="preserve">
-    <value>可以暂停时间的内鬼
+    <value>时间突破者属于内鬼阵营。
+可以暂停时间。
 
-时停：或许还能再争取些时间（9秒过去了...）
-时间突破者可以暂停时间，在暂停的时间里其他玩家的动作将停止，在发动期间，冷却时间（如击杀冷却）仍然会继续计算
-如果多次发动，暂停时间会延长</value>
+·主动技能“时停”
+时间突破者可以暂停时间，在暂停的时间里其他玩家的动作将停止。
+在发动期间，冷却时间仍然会继续计算。
+如果多次发动，暂停时间会延长。</value>
   </data>
   <data name="timeBreakerTimeBreak" xml:space="preserve">
     <value>时停</value>
@@ -1321,15 +1420,19 @@
     <value>觉醒后可以在墙壁上使用通风装置吗？</value>
   </data>
   <data name="PhantomFullDescription" xml:space="preserve">
-    <value>可以进行隐身的内鬼
+    <value>幻象师属于内鬼阵营。
+可以隐身。
 
-隐身：没人能发现你
-在隐身时除了使用通风管以外你不能做任何交互</value>
+·主动技能“隐身”
+在隐身时除了使用通风管以外你不能做任何交互。</value>
   </data>
   <data name="PsychoKillerIsForceRestartWhenMeetingEnd" xml:space="preserve">
     <value>计时器是否在会议结束后强制减少</value>
   </data>
   <data name="PsychoKillerIsDiactiveUntilKillWhenMeetingEnd" xml:space="preserve">
     <value>在会议结束后的第一次击杀之前，计时器不会减少</value>
+  </data>
+  <data name="TimeBreakerEffectMarlin" xml:space="preserve">
+    <value>梅林会受到时间时停影响</value>
   </data>
 </root>

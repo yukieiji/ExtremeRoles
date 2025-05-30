@@ -142,7 +142,7 @@
     <value>大厅及服务站</value>
   </data>
   <data name="SubmergedCategoryReplaceDoorMinigame" xml:space="preserve">
-    <value>潜艇：将游戏模式变更为小游戏“芝麻开门</value>
+    <value>潜艇：将游戏模式变更为小游戏“芝麻开门”</value>
   </data>
   <data name="SubmergedCategorySubmergedSpawnSetting" xml:space="preserve">
     <value>生成设定</value>

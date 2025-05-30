@@ -118,9 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GuardianAngelFullDescription" xml:space="preserve">
-    <value>守护天使属于幽灵船员职业，可以保护玩家。
-能力“护卫”
-以一名船员为对象发动。那名玩家获得一个护盾，持续一段时间。
+    <value>守护天使属于船员阵营幽灵职业。
+可以保护玩家。
+
+·主动技能“护卫”
+以一名船员为对象发动。
+那名玩家获得一个护盾，持续一段时间。
 拥有护盾的情况下，有玩家尝试击杀那名玩家时，那次击杀无效。
 这个技能对魔王的击杀无效。</value>
   </data>
@@ -146,10 +149,12 @@
     <value>把尸体运到容易被发现的地方</value>
   </data>
   <data name="PoltergeistFullDescription" xml:space="preserve">
-    <value>喧闹鬼属于幽灵船员职业，可以移动尸体。
-主动技能“喧闹”：
-·发动后可以在一定时间内自由移动附近的尸体
-·如果其他人因能力而获得了尸体的控制权，则无法夺走该尸体，反之亦然</value>
+    <value>喧闹鬼属于船员阵营幽灵职业。
+可以移动尸体。
+
+·主动技能“喧闹”
+发动后可以在一定时间内自由移动附近的尸体。
+如果其他人因能力而获得了尸体的控制权，则无法夺走该尸体，反之亦然。</value>
   </data>
   <data name="PoltergeistMoveDeadbodyButton" xml:space="preserve">
     <value>喧闹</value>
@@ -176,11 +181,13 @@
     <value>用神惠帮助船员修理破坏</value>
   </data>
   <data name="FaunusFullDescription" xml:space="preserve">
-    <value>潘神属于幽灵船员职业，可以在灵界修复飞船破坏。
-主动技能“神惠”：
-·发动后可以打开通讯破坏以外的紧急破坏修理画面
-·在需要多人修理的紧急破坏中，随机打开某一边的画面
-·修理画面在一定时间后强制关闭</value>
+    <value>潘神属于船员阵营幽灵职业。
+可以在灵界修复飞船破坏。
+
+·主动技能“神惠”
+发动后可以打开通讯破坏以外的紧急破坏修理画面。
+在需要多人修理的紧急破坏中，随机打开某一边的画面。
+修理画面在一定时间后强制关闭。</value>
   </data>
   <data name="FaunusOpenSaboConsoleButton" xml:space="preserve">
     <value>神惠</value>
@@ -210,13 +217,15 @@
     <value>用化为魂灵的双眼捕捉决定性的瞬间</value>
   </data>
   <data name="ShutterFullDescription" xml:space="preserve">
-    <value>天眼通属于幽灵船员职业，可以在死亡状态下拍摄照片并将信息传递给存活玩家。
+    <value>天眼通属于船员阵营幽灵职业。
+可以在死亡状态下拍摄照片并将信息传递给存活玩家。
 这个幽灵职业只会被分配给摄影师。
-主动技能“灵界摄影”：
-·使用技能后，天眼通拍摄一张记录技能范围内玩家位置的照片
-·照片拍摄后的会议阶段开始时，照片的内容将展示在聊天栏内
-·根据“灵界摄影正确显示玩家昵称的概率”，一部分玩家的昵称不会显示在照片信息内
-·照片由系统随机命名</value>
+
+·主动技能“灵界摄影”：
+使用技能后，天眼通拍摄一张记录技能范围内玩家位置的照片。
+照片拍摄后的会议阶段开始时，照片的内容将展示在聊天栏内。
+根据“灵界摄影正确显示玩家昵称的概率”，一部分玩家的昵称不会显示在照片信息内。
+照片由系统随机命名。</value>
   </data>
   <data name="ShutterTakePhotoButton" xml:space="preserve">
     <value>灵界摄影</value>

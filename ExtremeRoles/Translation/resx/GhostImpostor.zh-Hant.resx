@@ -136,7 +136,11 @@
     <value>開關管道口來驚嚇船員</value>
   </data>
   <data name="VentgeistFullDescription" xml:space="preserve">
-    <value>搗蛋鬼屬於幽靈內鬼職業，可以開關管道口。</value>
+    <value>搗蛋鬼屬於內鬼陣營幽靈職業。
+可以開關管道口。
+
+·主動技能“管道工”
+可以開關管道口，干擾玩家的判斷。</value>
   </data>
   <data name="VentgeistVentAnimeButton" xml:space="preserve">
     <value>開關管道口</value>
@@ -160,10 +164,12 @@
     <value>恢復緊急破壞的冷卻，讓遊戲對內鬼更加有利</value>
   </data>
   <data name="SaboEvilFullDescription" xml:space="preserve">
-    <value>催命鬼屬於幽靈內鬼職業，可以恢復內鬼陣營的緊急破壞冷卻。
-主動技能“破壞重置”：
-·強制恢復內鬼陣營緊急破壞冷卻
-·這個效果對其他陣營的擁有破壞能力的玩家不適用</value>
+    <value>催命鬼屬於內鬼陣營幽靈職業。
+可以恢復內鬼陣營的緊急破壞冷卻。
+
+·主動技能“破壞重置”
+強制恢復內鬼陣營緊急破壞冷卻。
+這個效果對其他陣營的擁有破壞能力的玩家不適用。</value>
   </data>
   <data name="SaboEvilResetSabotageCoolButton" xml:space="preserve">
     <value>破壞重置</value>
@@ -196,16 +202,49 @@
     <value>在煉獄中吹滅飛船的光明</value>
   </data>
   <data name="IgniterFullDescription" xml:space="preserve">
-    <value>煉獄鬼屬於幽靈內鬼職業，可以在死亡狀態下造成額外照明破壞。
+    <value>煉獄鬼屬於內鬼陣營幽靈職業。
+可以在死亡狀態下造成額外照明破壞。
 這個幽靈職業只會被分配給絕境者。
-主動技能“煉獄吹熄”：
-·技能使用後，所有玩家的視野變為和照明破壞時視野相同
-·該技能與照明破壞結算類似，因此不受照明破壞影響的玩家若沒有特別設置也不受該技能的影響</value>
+
+·主動技能“煉獄吹熄”
+技能使用後，所有玩家的視野變為和照明破壞時視野相同。
+該技能與照明破壞結算類似，因此不受照明破壞影響的玩家若沒有特別設置也不受該技能的影響。</value>
   </data>
   <data name="IgniterSwitchLightButton" xml:space="preserve">
     <value>煉獄吹熄</value>
   </data>
   <data name="IgniterSwitchLight" xml:space="preserve">
     <value>煉獄鬼吹熄了飛船上的光明</value>
+  </data>
+  <data name="Doppelganger" xml:space="preserve">
+    <value>二重身</value>
+  </data>
+  <data name="DoppelgangerAbilityCoolTime" xml:space="preserve">
+    <value>對偶冷卻時間</value>
+  </data>
+  <data name="DoppelgangerAbilityActiveTime" xml:space="preserve">
+    <value>對偶持續時間</value>
+  </data>
+  <data name="DoppelgangerIsReportAbility" xml:space="preserve">
+    <value>二重身可報告屍體</value>
+  </data>
+  <data name="DoppelgangerAbilityCount" xml:space="preserve">
+    <value>化形可使用次數</value>
+  </data>
+  <data name="DoppelgangerDoppel" xml:space="preserve">
+    <value>誰可以發現二重身</value>
+  </data>
+  <data name="DoppelgangerDoppelButton" xml:space="preserve">
+    <value>對偶</value>
+  </data>
+  <data name="DoppelgangerFullDescription" xml:space="preserve">
+    <value>二重身屬於內鬼陣營幽靈職業。
+可以假冒他人。
+
+·主動技能“對偶”
+可以變形為別人的模樣兵器讓其他玩家看到。</value>
+  </data>
+  <data name="DoppelgangerShortDescription" xml:space="preserve">
+    <value>給他們一個驚喜吧</value>
   </data>
 </root>

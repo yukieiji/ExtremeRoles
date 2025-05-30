@@ -118,14 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CrewmateFullDescription" xml:space="preserve">
-    <value>完成任務併放逐內鬼</value>
+    <value>完成任務並放逐內鬼</value>
   </data>
   <data name="EngineerFullDescription" xml:space="preserve">
     <value>可以使用管道的船員</value>
   </data>
   <data name="ScientistFullDescription" xml:space="preserve">
     <value>可以在任何地方觀看遠程生命監測裝置。
-裝置電量有限，隨著時間或任務恢復。</value>
+裝置電量有限，隨着時間或任務恢復。</value>
   </data>
   <data name="SpecialCrew" xml:space="preserve">
     <value>特殊船員</value>
@@ -134,10 +134,10 @@
     <value>根據設定與普通船員有不同之處</value>
   </data>
   <data name="SpecialCrewShortDescription" xml:space="preserve">
-    <value>妳與其他船員不同但也僅此而已</value>
+    <value>你與其他船員不同但也僅此而已</value>
   </data>
   <data name="SpecialCrewFullDescription" xml:space="preserve">
-    <value>Extreme Roles中特殊的船員，設置如下</value>
+    <value>Extreme Roles中具有特殊能力的船員，設置如下。</value>
   </data>
   <data name="Sheriff" xml:space="preserve">
     <value>警長</value>
@@ -173,9 +173,16 @@
     <value>舉起正義之槍</value>
   </data>
   <data name="SheriffFullDescription" xml:space="preserve">
-    <value>警長屬於船員陣營，可以進行有限次數的擊殺。
+    <value>警長屬於船員陣營。
+可以進行有限次數的擊殺。
+
+·主動技能“執法”
+警長可以擊殺任何人。
 如果警長嘗試擊殺船員，警長自己死亡。
-若“警長的擊殺次數與任務綁定”選項開啟，警長初始子彈數為0，每完成一個任務便獲得一發子彈。</value>
+反之，被擊殺玩家死亡。
+
+·被動技能“做任務獲酬金”
+若“警長的擊殺次數與任務綁定”選項開啓，警長初始子彈數為0，每完成一個任務便獲得一發子彈。</value>
   </data>
   <data name="Maintainer" xml:space="preserve">
     <value>工程師</value>
@@ -193,10 +200,13 @@
     <value>緊急任務當然需要緊急維修！</value>
   </data>
   <data name="MaintainerFullDescription" xml:space="preserve">
-    <value>可以進行快速維修的船員
-維修在緊急任務時可以使用
-使用維修後，緊急任務將會立即完成
-而且地圖上的所有門會被打開</value>
+    <value>工程師屬於船員陣營。
+可以修理飛船破壞。
+
+·主動技能“維修”
+維修在緊急任務時可以使用。
+使用維修後，緊急任務將會立即完成。
+而且地圖上的所有門會被打開。</value>
   </data>
   <data name="maintenance" xml:space="preserve">
     <value>修理</value>
@@ -217,19 +227,27 @@
     <value>判定為獨立陣營</value>
   </data>
   <data name="NeetIntroDescription" xml:space="preserve">
-    <value>修船什麽的讓別人去幹就好啦</value>
+    <value>修船什麼的讓別人去幹就好啦</value>
   </data>
   <data name="NeetShortDescription" xml:space="preserve">
     <value>坐飛船真開心啊</value>
   </data>
   <data name="NeetFullDescription" xml:space="preserve">
-    <value>家裏蹲屬於船員陣營，什麽任務也不需要做。
-閑的沒事可以去追別人玩。</value>
+    <value>家裏蹲屬於船員陣營。
+什麼任務也不需要做。
+
+·被動技能“閒得慌”
+你什麼任務都不用做。
+閒的沒事可以去追別人玩。</value>
   </data>
   <data name="NeetNeutralFullDescription" xml:space="preserve">
-    <value>家裏蹲屬於獨立陣營，什麽事也不需要做。
+    <value>家裏蹲屬於獨立陣營。
+什麼事也不需要做。
+
+·被動技能“閒得慌”
+你什麼任務都不用做。
 家裏蹲存活到遊戲結束，家裏蹲就可以獲勝。
-閑的沒事可以去追別人玩。</value>
+閒的沒事可以去追別人玩。</value>
   </data>
   <data name="Watchdog" xml:space="preserve">
     <value>保安</value>
@@ -247,7 +265,10 @@
     <value>使用攝像頭或通行記錄來監視可疑人物</value>
   </data>
   <data name="WatchdogFullDescription" xml:space="preserve">
-    <value>保安屬於船員陣營，可以遠程觀看監控與通行記錄。
+    <value>保安屬於船員陣營。
+可以遠程觀看監控與通行記錄。
+
+·主動技能“監視”
 僅當地圖為Mira HQ生效時，保安才能遠程觀看通行記錄。
 保安觀看設備需要消耗電量；等待冷卻或完成任務可以給設備充電。</value>
   </data>
@@ -267,7 +288,7 @@
     <value>技能持續時間</value>
   </data>
   <data name="SupervisorIsBoostTask" xml:space="preserve">
-    <value>技能會隨著任務完成而強化</value>
+    <value>技能會隨着任務完成而強化</value>
   </data>
   <data name="SupervisorTaskGage" xml:space="preserve">
     <value>強化技能所需的任務完成率</value>
@@ -279,9 +300,13 @@
     <value>監控船員的位置來找出敵人</value>
   </data>
   <data name="SupervisorFullDescription" xml:space="preserve">
-    <value>管理員屬於船員陣營，可以遠程觀看管理室地圖。
+    <value>管理員屬於船員陣營。
+可以遠程觀看管理室地圖。
+
+·主動技能“管理”
 管理員觀看設備需要消耗電量；等待冷卻或完成任務可以給設備充電。
-若“技能會隨著任務完成而強化”選項開啟，管理員完成一定任務後，遠程地圖上將顯示船員的具體顏色。原本的地圖不會有這個效果，即便正在觀看的人是管理員。</value>
+若“技能會隨着任務完成而強化”選項開啓，管理員完成一定任務後，遠程地圖上將顯示船員的具體顏色。
+原本的地圖不會有這個效果，即便正在觀看的人是管理員。</value>
   </data>
   <data name="admin" xml:space="preserve">
     <value>地圖</value>
@@ -320,11 +345,15 @@
     <value>保護船員</value>
   </data>
   <data name="BodyGuardFullDescription" xml:space="preserve">
-    <value>
-保鏢屬於船員陣營，可以在行動階段保護附近的一位玩家。
+    <value>保鏢屬於船員陣營。
+可以在行動階段保護附近的一位玩家。
+
+·主動技能“保護和重置”
 如果被保護的船員之後被擊殺，保鏢將代替那名玩家死亡。
-保鏢可以隨時使用“重置”來收回保護效果。保鏢死亡時保護效果失效。
-保鏢的任務進度超過“在會議上報告保鏢殉職而死所需的任務進度”時，保護技能發動成功後，下個會議階段開始時所有玩家都將收到保鏢殉職的信息。</value>
+保鏢可以隨時使用“重置”來收回保護效果。
+保鏢死亡時保護效果失效。
+根據設置，保鏢的任務進度超過一定數量時，保護技能發動成功後，
+下個會議階段開始時可能所有玩家都將收到保鏢殉職的信息。</value>
   </data>
   <data name="shield" xml:space="preserve">
     <value>保護</value>
@@ -385,18 +414,20 @@
     <value>感受兇案的發生</value>
   </data>
   <data name="WhisperFullDescription" xml:space="preserve">
-    <value>順風耳屬於船員陣營，可以聆聽飛船上發生的情況。
-技能“聆聽”：
--原地不動一段時間後強制發動。需要玩家可以移動併且沒有進行做任務等交互行為
--技能持續時間內順風耳移動的場合，技能停止發動
--技能持續時間內，順風耳可以確認所有擊殺發生的時間與位置
--若“完成任務可以強化技能”開啟，當順風耳的任務進度達到“強化技能所需的任務完成率”以上時，順風耳可以進一步知道擊殺發生的房間</value>
+    <value>順風耳屬於船員陣營。
+可以聆聽飛船上發生的情況。
+
+·主動技能“聆聽”：
+原地不動一段時間後強制發動。需要玩家可以移動並且沒有進行做任務等交互行為。
+技能持續時間內順風耳移動的場合，技能停止發動。
+技能持續時間內，順風耳可以確認所有擊殺發生的時間與位置。
+若“完成任務可以強化技能”開啓，當順風耳的任務進度達到“強化技能所需的任務完成率”以上時，順風耳可以進一步知道擊殺發生的房間。</value>
   </data>
   <data name="killedTextWithRoom" xml:space="preserve">
-    <value>{0}的{1}傳來了慘叫（{2}）</value>
+    <value>{0}的{1}傳來了慘叫。（{2}）</value>
   </data>
   <data name="killedText" xml:space="preserve">
-    <value>{0}傳來了慘叫（{1}）</value>
+    <value>{0}傳來了慘叫。（{1}）</value>
   </data>
   <data name="TimeMaster" xml:space="preserve">
     <value>時間之主</value>
@@ -417,9 +448,14 @@
     <value>回溯時間</value>
   </data>
   <data name="TimeMasterFullDescription" xml:space="preserve">
-    <value>時間之主屬於船員陣營，可以使用時光之盾。
-時光之盾激活的時間內，若有玩家嘗試擊殺時間之主，那次擊殺無效，其他玩家的將會回溯。時間之主不受回溯影響。
-只有玩家的位置會被回溯。可以設置時間之主能回溯的時間。</value>
+    <value>時間之主屬於船員陣營。
+可以使用時光之盾。
+
+·主動技能“時間之盾”
+時光之盾激活的時間內，若有玩家嘗試擊殺時間之主，那次擊殺無效，其他玩家的將會回溯。
+時間之主不受回溯影響。
+只有玩家的位置會被回溯。
+可以設置時間之主能回溯的時間。</value>
   </data>
   <data name="timeShield" xml:space="preserve">
     <value>時光之盾</value>
@@ -449,48 +485,55 @@
     <value>幫助別人完成任務</value>
   </data>
   <data name="AgencyFullDescription" xml:space="preserve">
-    <value>代理人屬於船員陣營，可以幫助別人完成任務。
-行動階段，代理人可以發動技能，從附近的玩家那裏獲取他們的任務。根據設定的任務分佈情況，代理人從那名玩家處獲得對應的任務。
+    <value>代理人屬於船員陣營。
+可以幫助別人完成任務。
+
+·主動技能“代理”
+行動階段，代理人可以發動技能，從附近的玩家那裏獲取他們的任務。
+根據設定的任務分佈情況，代理人從那名玩家處獲得對應的任務。
 如果目標玩家是不能正常地被代理任務的船員，代理人隨機獲得（1-設定最大值數）個任務。
-如果目標玩家是內鬼之類不持有任務（有假任務）的身份，代理人獲取的任務數量會根據全船任務的進度來確定。</value>
+如果目標玩家是內鬼之類不持有任務（有假任務）的身份，代理人獲取的任務數量會根據全船任務的進度來確定。 </value>
   </data>
   <data name="takeTask" xml:space="preserve">
     <value>代理</value>
   </data>
   <data name="Bakary" xml:space="preserve">
-    <value>面包師</value>
+    <value>麪包師</value>
   </data>
   <data name="BakaryChangeCooking" xml:space="preserve">
-    <value>會議持續時間會改變面包烘焙狀態</value>
+    <value>會議持續時間會改變麪包烘焙狀態</value>
   </data>
   <data name="BakaryGoodBakeTime" xml:space="preserve">
-    <value>烘焙美味面包所需時間</value>
+    <value>烘焙美味麪包所需時間</value>
   </data>
   <data name="BakaryBadBakeTime" xml:space="preserve">
-    <value>面包烤焦所需時間</value>
+    <value>麪包烤焦所需時間</value>
   </data>
   <data name="BakaryIntroDescription" xml:space="preserve">
-    <value>為船員提供美味的面包</value>
+    <value>為船員提供美味的麪包</value>
   </data>
   <data name="BakaryShortDescription" xml:space="preserve">
-    <value>提供面包</value>
+    <value>提供麪包</value>
   </data>
   <data name="BakaryFullDescription" xml:space="preserve">
-    <value>面包師屬於船員陣營，可以在會議階段烤面包。
-只要面包師在場上存活，每次會議階段結束時，所有玩家都將收到信息證明面包師存活，即便面包師的職業已經改變。
+    <value>麪包師屬於船員陣營。
+可以在會議階段烤麪包。
+
+·主動技能“烤麪包”
+只要麪包師在場上存活，每次會議階段結束時，所有玩家都將收到信息證明麪包師存活，即便面包師的職業已經改變。
 根據會議階段持續時間的長短，分別出現以下信息：
--烘焙美味面包所需時間以下：面包不熟
--烘焙美味面包所需時間以上，面包烤焦所需時間以下：面包美味
--面包烤焦所需時間以上：面包烤焦</value>
+·烘焙美味麪包所需時間以下：麪包不熟
+·烘焙美味麪包所需時間以上，麪包烤焦所需時間以下：麪包美味
+·麪包烤焦所需時間以上：麪包烤焦</value>
   </data>
   <data name="rawBread" xml:space="preserve">
-    <value>面包還沒有烤熟……</value>
+    <value>麪包還沒有烤熟……</value>
   </data>
   <data name="goodBread" xml:space="preserve">
-    <value>面包師的面包新鮮出爐了</value>
+    <value>麪包師的麪包新鮮出爐了</value>
   </data>
   <data name="badBread" xml:space="preserve">
-    <value>面包烤焦了……</value>
+    <value>麪包烤焦了……</value>
   </data>
   <data name="CurseMaker" xml:space="preserve">
     <value>追魂者</value>
@@ -520,10 +563,10 @@
     <value>保持被詛咒屍體不會消失所需的任務進度</value>
   </data>
   <data name="CurseMakerIsDeadBodySearch" xml:space="preserve">
-    <value>顯示指嚮屍體的箭頭</value>
+    <value>顯示指向屍體的箭頭</value>
   </data>
   <data name="CurseMakerIsMultiDeadBodySearch" xml:space="preserve">
-    <value>指嚮屍體的箭頭可以同時顯示多個</value>
+    <value>指向屍體的箭頭可以同時顯示多個</value>
   </data>
   <data name="CurseMakerSearchDeadBodyTime" xml:space="preserve">
     <value>從玩家死亡到箭頭顯示的間隔時間</value>
@@ -538,16 +581,20 @@
     <value>減少的時間</value>
   </data>
   <data name="CurseMakerIntroDescription" xml:space="preserve">
-    <value>我詛咒妳……不得好死！</value>
+    <value>我詛咒你……不得好死</value>
   </data>
   <data name="CurseMakerShortDescription" xml:space="preserve">
     <value>通過施法讓死去的同伴報復兇手</value>
   </data>
   <data name="CurseMakerFullDescription" xml:space="preserve">
-    <value>追魂者屬於船員陣營，可以獻祭一名玩家的屍體來詛咒兇手。
-行動階段，追魂者可以讓一具屍體消失，來增長併重置那名兇手的擊殺冷卻。
+    <value>追魂者屬於船員陣營。
+可以獻祭一名玩家的屍體來詛咒兇手。
+
+·主動技能“獻祭”
+行動階段，追魂者可以讓一具屍體消失，來增長並重置那名兇手的擊殺冷卻。
 追魂者造成的詛咒永久生效，不會因為會議階段的召開而消失。
-若“顯示指嚮屍體的箭頭”選項開啟，其他玩家死亡一定時間後，會嚮追魂者顯示指嚮屍體位置的箭頭。間隔的時間可以自行設置。</value>
+若“顯示指向屍體的箭頭”選項開啓，其他玩家死亡一定時間後，會向追魂者顯示指向屍體位置的箭頭。
+間隔的時間可以自行設置。</value>
   </data>
   <data name="curse" xml:space="preserve">
     <value>詛咒</value>
@@ -577,15 +624,20 @@
     <value>要刺得快 刺得狠</value>
   </data>
   <data name="FencerFullDescription" xml:space="preserve">
-    <value>擊劍手屬於船員陣營，可以在遇襲時進行反擊。
-當有玩家嘗試擊殺持劍狀態下的擊劍手時，那次擊殺無效，擊劍手獲得短暫的、無冷卻的擊殺能力。一段時間後，這個能力收回。
+    <value>擊劍手屬於船員陣營。
+可以在遇襲時進行反擊。
+
+·主動技能“擊劍”
+當有玩家嘗試擊殺持劍狀態下的擊劍手時，那次擊殺無效，
+擊劍手獲得短暫的、無冷卻的擊殺能力。
+一段時間後，這個能力收回。
 持劍狀態下的擊劍手免疫一切擊殺，但不能防止非擊殺類的致死技能，如被傳教士傳教後的自裁。</value>
   </data>
   <data name="counter" xml:space="preserve">
     <value>持劍</value>
   </data>
   <data name="Opener" xml:space="preserve">
-    <value>維修工</value>
+    <value>鎖匠</value>
   </data>
   <data name="OpenerAbilityCoolTime" xml:space="preserve">
     <value>技能冷卻</value>
@@ -609,15 +661,18 @@
     <value>打開被關閉的門</value>
   </data>
   <data name="OpenerFullDescription" xml:space="preserve">
-    <value>維修工屬於船員陣營，可以讓飛船上的門打開。
+    <value>鎖匠屬於船員陣營。
+可以讓飛船上的門打開。
+
+·主動技能“開門”
 維修工使用技能“開門“後，距離維修工最近的門會立即被打開。
-根據房間設置，維修工每完成一個任務，技能冷卻可以減少，使用次數也可以得到增加。</value>
+根據設置，維修工每完成一個任務，技能冷卻可以減少，使用次數也可以得到增加。</value>
   </data>
   <data name="openDoor" xml:space="preserve">
     <value>開門</value>
   </data>
   <data name="Carpenter" xml:space="preserve">
-    <value>工匠</value>
+    <value>管道工</value>
   </data>
   <data name="CarpenterAwakeTaskGage" xml:space="preserve">
     <value>覺醒能力所需任務進度</value>
@@ -641,17 +696,20 @@
     <value>放置攝像頭所需時間</value>
   </data>
   <data name="CarpenterIntroDescription" xml:space="preserve">
-    <value>完成任務併利用能力放置攝像頭和封鎖管道</value>
+    <value>完成任務並利用能力放置攝像頭和封鎖管道</value>
   </data>
   <data name="CarpenterShortDescription" xml:space="preserve">
-    <value>完成任務併利用能力放置攝像頭和封鎖管道</value>
+    <value>完成任務並利用能力放置攝像頭和封鎖管道</value>
   </data>
   <data name="CarpenterFullDescription" xml:space="preserve">
-    <value>工匠屬於船員陣營，可以安裝攝像頭併封鎖管道。
-根據工匠所處的位置，工匠安裝攝像頭與封鎖管道的能力及其圖標會自由切換。
-工匠每種技能的發動都需要消耗一定數量的螺絲。螺絲不足的場合工匠不可以把技能發動。
-安裝攝像頭:在當前位置安裝一個額外的監控攝像頭
-封鎖:封鎖管道</value>
+    <value>管道工屬於船員陣營。
+可以安裝攝像頭並封鎖管道。
+
+·主動技能“安裝和封鎖”
+根據管道工所處的位置，管道工安裝攝像頭與封鎖管道的能力及其圖標會自由切換。
+管道工每種技能的發動都需要消耗一定數量的螺絲。螺絲不足的場合管道工不可發動技能。
+安裝攝像頭:在當前位置安裝一個額外的監控攝像頭。
+封鎖管道:使管道不可以進出。</value>
   </data>
   <data name="ventSeal" xml:space="preserve">
     <value>封鎖</value>
@@ -660,37 +718,40 @@
     <value>安裝</value>
   </data>
   <data name="carpenterScrewNum" xml:space="preserve">
-    <value>工匠螺絲數量：{0}, {1}</value>
+    <value>工匠螺絲數量：{0}/{1}</value>
   </data>
   <data name="Survivor" xml:space="preserve">
-    <value>幸存者</value>
+    <value>倖存者</value>
   </data>
   <data name="SurvivorAwakeTaskGage" xml:space="preserve">
-    <value>幸存者獲勝需要的最低任務進度率</value>
+    <value>倖存者獲勝需要的最低任務進度率</value>
   </data>
   <data name="SurvivorDeadWinTaskGage" xml:space="preserve">
-    <value>死亡前幸存者的任務計入全船總任務進度</value>
+    <value>死亡前倖存者的任務計入全船總任務進度</value>
   </data>
   <data name="SurvivorNoWinSurvivorAssignGhostRole" xml:space="preserve">
-    <value>當幸存者無法獲勝時分配一個幽靈職業</value>
+    <value>當倖存者無法獲勝時分配一個幽靈職業</value>
   </data>
   <data name="SurvivorIntroDescription" xml:space="preserve">
-    <value>這是為了活下去的，我的掙紮！</value>
+    <value>這是為了活下去的，我的掙扎</value>
   </data>
   <data name="SurvivorShortDescription" xml:space="preserve">
     <value>完成任務來讓自己獲得勝利</value>
   </data>
   <data name="SurvivorFullDescription" xml:space="preserve">
-    <value>幸存者屬於船員陣營，需要努力存活來獲得勝利。
-幸存者若在死亡時沒有完成一定量的任務，就不能作為船員陣營玩家獲得勝利。
-若幸存者在完成所需量的任務前死亡，其任務進度將不會計入全船總任務進度。
-若幸存者在完成所需量的任務後死亡，恭喜，他仍然可以作為船員陣營玩家獲勝。</value>
+    <value>倖存者屬於船員陣營。
+需要努力存活來獲得勝利。
+
+·被動技能“工作”
+倖存者若在死亡時沒有完成一定量的任務，就不能作為船員陣營玩家獲得勝利。
+若倖存者在完成所需量的任務前死亡，其任務進度將不會計入全船總任務進度。
+若倖存者在完成所需量的任務後死亡，他仍然可以作為船員陣營玩家獲勝。</value>
   </data>
   <data name="Captain" xml:space="preserve">
     <value>船長</value>
   </data>
   <data name="CaptainAwakeTaskGage" xml:space="preserve">
-    <value>艦長得知自己職業需要的任務進度</value>
+    <value>船長得知自己職業需要的任務進度</value>
   </data>
   <data name="CaptainChargeVoteWhenSkip" xml:space="preserve">
     <value>每次棄票和不投票時存入票庫的票數</value>
@@ -699,21 +760,24 @@
     <value>票庫內原先有的票數</value>
   </data>
   <data name="CaptainIntroDescription" xml:space="preserve">
-    <value>准備好了嗎，孩子們？</value>
+    <value>準備好了嗎，孩子們</value>
   </data>
   <data name="CaptainShortDescription" xml:space="preserve">
     <value>用船長權限逐出內鬼</value>
   </data>
   <data name="CaptainFullDescription" xml:space="preserve">
-    <value>船長屬於船員陣營，可以在會議階段進行額外投票。
-船長票庫內剩余的票數多於一票時，可以使用額外票權。
-被船長使用了額外票權的玩家會得到特殊標記，併獲得額外投票。
+    <value>船長屬於船員陣營。
+可以在會議階段進行額外投票。
+
+·主動技能“存票”
+船長票庫內剩餘的票數多於一票時，可以使用額外票權。
+被船長使用了額外票權的玩家會得到特殊標記，並獲得額外投票。
 每當跳過投票或者未投票，船長的票庫就會得到補充，即便船長還未確認自己的職業。
 每當船長使用自己的技能後，船長票庫內的票數變為初始票數。
 船長可以在使用額外票權後變更使用目標。</value>
   </data>
   <data name="captainVoteStatus" xml:space="preserve">
-    <value>票庫剩余:{0}票
+    <value>票庫剩餘:{0}票
 給目標投:{1}票</value>
   </data>
   <data name="Photographer" xml:space="preserve">
@@ -747,17 +811,20 @@
     <value>整理照片，分析局勢</value>
   </data>
   <data name="PhotographerFullDescription" xml:space="preserve">
-    <value>攝影師屬於船員陣營，可以給大家拍照來記錄信息。
+    <value>攝影師屬於船員陣營。
+可以給大家拍照來記錄信息。
+
+·主動技能“拍攝”
 攝影師可以拍攝記錄當前範圍內所有玩家的位置信息的照片。
 照片內的信息將會在那個會議階段在聊天框內展示出來。
 完成一定數量任務後，攝影師可以強化攝影能力與在聊天框內展示的信息。
-照片由繫統隨機命名。</value>
+照片由系統隨機命名。</value>
   </data>
   <data name="takePhoto" xml:space="preserve">
     <value>拍攝</value>
   </data>
   <data name="photoChat" xml:space="preserve">
-    <value>攝影師拍的照片洗出來了！
+    <value>攝影師拍的照片洗出來了!
 {0}</value>
   </data>
   <data name="takePhotoTime" xml:space="preserve">
@@ -795,17 +862,16 @@
   </data>
   <data name="DelusionerIsIncludeLocalPlayer" xml:space="preserve">
     <value>
-在技能的隨機傳送地點列錶中</value>
+在技能的隨機傳送地點列表中</value>
   </data>
   <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
-    <value>
-的出生點在技能的隨機傳送地點列錶中</value>
+    <value>傳送玩家的出生點在技能的隨機傳送地點列表中</value>
   </data>
   <data name="DelusionerIntroDescription" xml:space="preserve">
     <value>不要靠近我啊啊啊啊啊啊啊啊啊啊啊!</value>
   </data>
   <data name="DelusionerShortDescription" xml:space="preserve">
-    <value>把那些看起來想要傷害妳的人打飛</value>
+    <value>把那些看起來想要傷害你的人打飛</value>
   </data>
   <data name="deflectDamage" xml:space="preserve">
     <value>別過來</value>
@@ -841,7 +907,7 @@
     <value>被放逐後可以反生</value>
   </data>
   <data name="ResurrecterIntroDescription" xml:space="preserve">
-    <value>如不死鳥般，其命，其魂，以至其骸！</value>
+    <value>如不死鳥般，其命，其魂，以至其骸</value>
   </data>
   <data name="ResurrecterShortDescription" xml:space="preserve">
     <value>涅槃重生</value>
@@ -851,10 +917,10 @@
 反生者死後不會被分配幽靈職業。
 完成一定任務後，反生者可進入反生狀態。
 反生狀態下的反生者被擊殺後，將會在一定時間內復活。這段時間內，反生者不會看到死後的職業信息。
-若“死亡後可以反生”開啟，反生者在死亡狀態下進入反生狀態時，反生者即刻復活。
+若“死亡後可以反生”開啓，反生者在死亡狀態下進入反生狀態時，反生者即刻復活。
 反生者復活的地點為當前遊戲地圖的出生點。當前地圖有多個出生點的場合，從那之中隨機挑選一個出生點。
 反生者復活後，擁有擊殺能力的職業會得到通知。
-反生者復活後，經過若幹個會議階段，反生者的任務將會回退。</value>
+反生者復活後，經過若干個會議階段，反生者的任務將會回退。</value>
   </data>
   <data name="resurrectText" xml:space="preserve">
     <value>距離復活還剩{0}秒</value>
@@ -869,10 +935,13 @@
     <value>太空有風險，投票需謹慎</value>
   </data>
   <data name="GamblerShortDescription" xml:space="preserve">
-    <value>妳的投票數會隨機變化</value>
+    <value>你的投票數會隨機變化</value>
   </data>
   <data name="GamblerFullDescription" xml:space="preserve">
-    <value>投機者屬於船員陣營，其會議階段的投票的等價票數會在0~2票之間變化。
+    <value>投機者屬於船員陣營。
+其會議階段的投票的等價票數會在0到2票之間變化。
+
+·被動技能“薛定諤的票數”
 投機者的投票在投票結算畫面中不會變動，無論實際投出幾票，都只會顯示投機者投出了一票。
 投機者投票數為0票與2票的概率相等，由投票數為1票的概率決定。
 例如，若投票數為1票的概率為50%，則投票數為0票與2票的概率均為25%。</value>
@@ -896,7 +965,10 @@
     <value>收集傳送門零件來造出傳送門</value>
   </data>
   <data name="TeleporterFullDescription" xml:space="preserve">
-    <value>傳送師屬於船員陣營，可以制造能在兩點間瞬間移動的傳送門。
+    <value>傳送師屬於船員陣營。
+可以製造能在兩點間瞬間移動的傳送門。
+
+·主動技能“傳送”
 傳送門使用後，需要5秒鐘的冷卻。
 傳送師在遊戲開始時無法使用技能，需要在地圖上搜尋散落的傳送門零件來增加技能使用次數。
 傳送師可以消耗一次技能使用次數來安裝一處傳送門。
@@ -904,5 +976,332 @@
   </data>
   <data name="SetPortal" xml:space="preserve">
     <value>安裝</value>
+  </data>
+  <data name="TrackerFullDescription" xml:space="preserve">
+    <value>可以看到其他玩家位置的船員</value>
+  </data>
+  <data name="NoisemakerFullDescription" xml:space="preserve">
+    <value>被殺時，可以在一定時間內通知所有人自己的位置</value>
+  </data>
+  <data name="DelusionerEnableCounter" xml:space="preserve">
+    <value>啓用過度爆發</value>
+  </data>
+  <data name="DelusionerFullDescription" xml:space="preserve">
+    <value>被害妄想者屬於船員陣營。
+可以讓玩家轉移位置。
+
+·主動技能“轉移”
+可以對附近一名玩家發動技能。
+將該玩家傳送到任意一名玩家的位置。
+技能若滿足以下條件將變為“過度爆發”。
+①冷卻時間結束。
+②還有可用次數。
+當滿足這兩點被害妄想者被攻擊將被動觸發“過度爆發”傳送附近所有玩家。</value>
+  </data>
+  <data name="Moderator" xml:space="preserve">
+    <value>持表人</value>
+  </data>
+  <data name="ModeratorAwakeTaskGage" xml:space="preserve">
+    <value>任務完成率揭示職業</value>
+  </data>
+  <data name="ModeratorAbilityCoolTime" xml:space="preserve">
+    <value>轉動表把冷卻時間</value>
+  </data>
+  <data name="ModeratorAbilityCount" xml:space="preserve">
+    <value>可轉動表把次數</value>
+  </data>
+  <data name="ModeratorMeetingTimerOffset" xml:space="preserve">
+    <value>轉動表把將增加會議時間</value>
+  </data>
+  <data name="ModeratorIntroDescription" xml:space="preserve">
+    <value>這次會議由我主持！</value>
+  </data>
+  <data name="ModeratorShortDescription" xml:space="preserve">
+    <value>通過轉動表把給大家更多時間</value>
+  </data>
+  <data name="ModeratorFullDescription" xml:space="preserve">
+    <value>持表人屬於船員陣營。
+可以在遊戲中延長下一次會議的時間。
+
+·主動技能“加時”
+我們再聊一會兒好嗎?
+將下一次會議的計時器延長一定時間。</value>
+  </data>
+  <data name="changeMeetingTime" xml:space="preserve">
+    <value>下次會議增加{0}秒</value>
+  </data>
+  <data name="moderate" xml:space="preserve">
+    <value>轉動秒錶</value>
+  </data>
+  <data name="Psychic" xml:space="preserve">
+    <value>通靈師</value>
+  </data>
+  <data name="PsychicAwakeTaskGage" xml:space="preserve">
+    <value>任務完成率揭示職業(覺醒條件:1)</value>
+  </data>
+  <data name="PsychicAwakeDeadPlayerNum" xml:space="preserve">
+    <value>死亡人數覺醒職業(覺醒條件:2)</value>
+  </data>
+  <data name="PsychicAbilityCoolTime" xml:space="preserve">
+    <value>通靈冷卻時間</value>
+  </data>
+  <data name="PsychicAbilityActiveTime" xml:space="preserve">
+    <value>通靈持續時間</value>
+  </data>
+  <data name="PsychicAbilityCount" xml:space="preserve">
+    <value>通靈使用次數</value>
+  </data>
+  <data name="PsychicIsUpgradeAbility" xml:space="preserve">
+    <value>通靈師在遊戲中，能力是否會獲得強化</value>
+  </data>
+  <data name="PsychicUpgradeTaskGage" xml:space="preserve">
+    <value>通靈強化需要完成任務數(強化條件:1)</value>
+  </data>
+  <data name="PsychicUpgradeDeadPlayerNum" xml:space="preserve">
+    <value>通靈強化需要死亡人數(強化條件:2)</value>
+  </data>
+  <data name="PsychicIntroDescription" xml:space="preserve">
+    <value>聆聽逝者的低語…</value>
+  </data>
+  <data name="PsychicShortDescription" xml:space="preserve">
+    <value>為逝者傳達最後的消息</value>
+  </data>
+  <data name="PsychicFullDescription" xml:space="preserve">
+    <value>通靈師屬於船員陣營。
+能夠從死者那裏獲取信息。
+
+·主動技能“通靈”
+通過使用技能靜止不動並等待設定的時間來獲取信息。
+其他隊伍剩餘隊員的信息將在下次會議的聊天中顯示。
+但這不包括船員（即使您已經更換了隊伍，例如僕人）。
+當相應選項開啓時，可通過完成任務和淘汰玩家獲得額外加成。</value>
+  </data>
+  <data name="PsychicPsychic" xml:space="preserve">
+    <value>通靈</value>
+  </data>
+  <data name="PsychicPsychicStart" xml:space="preserve">
+    <value>通靈開始</value>
+  </data>
+  <data name="PsychicPsychicEnd" xml:space="preserve">
+    <value>成功獲得信息。信息將在下一次會議上展示…</value>
+  </data>
+  <data name="PsychicPsychicResult" xml:space="preserve">
+    <value>通靈結果</value>
+  </data>
+  <data name="PsychicPsychicStrAliveRole" xml:space="preserve">
+    <value>倖存的職位：</value>
+  </data>
+  <data name="PsychicPsychicStrTeam" xml:space="preserve">
+    <value>陣營：</value>
+  </data>
+  <data name="PsychicPsychicStrForAliveNum" xml:space="preserve">
+    <value>倖存者：{0}名</value>
+  </data>
+  <data name="Bait" xml:space="preserve">
+    <value>誘餌</value>
+  </data>
+  <data name="BaitAwakeTaskGage" xml:space="preserve">
+    <value>任務完成率揭示職業</value>
+  </data>
+  <data name="BaitDelayUntilForceReport" xml:space="preserve">
+    <value>強制報告前的延遲時間</value>
+  </data>
+  <data name="BaitEnableBaitBenefit" xml:space="preserve">
+    <value>在強制報告後，是否為兇手減少擊殺冷卻</value>
+  </data>
+  <data name="BaitKillCoolReduceMulti" xml:space="preserve">
+    <value>擊殺誘餌兇手減少擊殺冷卻倍率</value>
+  </data>
+  <data name="BaitReduceTimer" xml:space="preserve">
+    <value>減少擊殺冷卻持續時間</value>
+  </data>
+  <data name="BaitIntroDescription" xml:space="preserve">
+    <value>你中計了!</value>
+  </data>
+  <data name="BaitShortDescription" xml:space="preserve">
+    <value>犧牲小我，只為未來</value>
+  </data>
+  <data name="BaitFullDescription" xml:space="preserve">
+    <value>誘餌屬於船員陣營。
+可以使擊殺誘餌的人自動報告。
+
+·主動技能“大獎”
+如果被殺，兇手將在一段時間後報告屍體。
+根據設置，擊殺誘餌的玩家可能將在一段時間裏減少冷卻時間。</value>
+  </data>
+  <data name="forceReportUntil" xml:space="preserve">
+    <value>{0}秒後強制報告</value>
+  </data>
+  <data name="Jailer" xml:space="preserve">
+    <value>獄警</value>
+  </data>
+  <data name="Lawbreaker" xml:space="preserve">
+    <value>破法者</value>
+  </data>
+  <data name="Yardbird" xml:space="preserve">
+    <value>囚徒</value>
+  </data>
+  <data name="JailerAwakeTaskGage" xml:space="preserve">
+    <value>覺醒職業所需任務
+(覺醒條件:1)</value>
+  </data>
+  <data name="JailerAwakeDeadPlayerNum" xml:space="preserve">
+    <value>覺醒職業所需死亡人數
+(覺醒條件:2)</value>
+  </data>
+  <data name="JailerUseAdmin" xml:space="preserve">
+    <value>獄警能否使用管理地圖</value>
+  </data>
+  <data name="JailerUseSecurity" xml:space="preserve">
+    <value>獄警可以使用監控/
+可以使用日誌</value>
+  </data>
+  <data name="JailerUseVital" xml:space="preserve">
+    <value>獄警可以使用生命檢測儀</value>
+  </data>
+  <data name="JailerAbilityCoolTime" xml:space="preserve">
+    <value>招安冷卻時間</value>
+  </data>
+  <data name="JailerAbilityCount" xml:space="preserve">
+    <value>招安可使用次數</value>
+  </data>
+  <data name="JailerTargetMode" xml:space="preserve">
+    <value>可以招安的陣營</value>
+  </data>
+  <data name="JailerCanReplaceAssassin" xml:space="preserve">
+    <value>能否招安賭怪</value>
+  </data>
+  <data name="JailerRange" xml:space="preserve">
+    <value>招安範圍</value>
+  </data>
+  <data name="JailerIsMissingToDead" xml:space="preserve">
+    <value>招安失敗後是否會畏罪自殺</value>
+  </data>
+  <data name="JailerIsDeadAbilityZero" xml:space="preserve">
+    <value>招安次數為0將死亡</value>
+  </data>
+  <data name="JailerLawbreakerCanKill" xml:space="preserve">
+    <value>破法者能否擁有擊殺能力</value>
+  </data>
+  <data name="JailerHasOtherKillCool" xml:space="preserve">
+    <value>破法者是否擁有獨立擊殺冷</value>
+  </data>
+  <data name="JailerKillCoolDown" xml:space="preserve">
+    <value>破法者擊殺冷卻</value>
+  </data>
+  <data name="JailerHasOtherKillRange" xml:space="preserve">
+    <value>破法者是否擁有獨立擊殺距離</value>
+  </data>
+  <data name="JailerKillRange" xml:space="preserve">
+    <value>破法者擊殺距離</value>
+  </data>
+  <data name="JailerLawbreakerUseVent" xml:space="preserve">
+    <value>破法者能否使用通風管</value>
+  </data>
+  <data name="JailerLawbreakerUseSab" xml:space="preserve">
+    <value>破法者能否使用破壞</value>
+  </data>
+  <data name="JailerYardbirdAddCommonTask" xml:space="preserve">
+    <value>囚徒是否擁有短任務</value>
+  </data>
+  <data name="JailerYardbirdAddNormalTask" xml:space="preserve">
+    <value>囚徒是否擁有正常任務</value>
+  </data>
+  <data name="JailerYardbirdAddLongTask" xml:space="preserve">
+    <value>囚徒是否擁有長任務</value>
+  </data>
+  <data name="JailerYardbirdSpeedMod" xml:space="preserve">
+    <value>囚徒速度</value>
+  </data>
+  <data name="JailerYardbirdUseAdmin" xml:space="preserve">
+    <value>囚徒能否使用管理員地圖</value>
+  </data>
+  <data name="JailerYardbirdUseSecurity" xml:space="preserve">
+    <value>囚徒能否使用監控</value>
+  </data>
+  <data name="JailerYardbirdUseVital" xml:space="preserve">
+    <value>囚徒能否使用生命檢測儀</value>
+  </data>
+  <data name="JailerYardbirdUseVent" xml:space="preserve">
+    <value>囚徒能否使用通風管</value>
+  </data>
+  <data name="JailerYardbirdUseSab" xml:space="preserve">
+    <value>囚徒能否使用破壞</value>
+  </data>
+  <data name="JailerIntroDescription" xml:space="preserve">
+    <value>惡人也該有改過自新的機會</value>
+  </data>
+  <data name="JailerShortDescription" xml:space="preserve">
+    <value>們又説起了話，但已不是虛偽的謊言</value>
+  </data>
+  <data name="JailerFullDescription" xml:space="preserve">
+    <value>獄卒屬於船員陣營。
+可以將非船員陣營招安進船員陣營。
+
+·主動技能“招安”
+靠近其他陣營使用技能，讓其加入船員陣營。
+如對船員使用陣營使用招安，根據設置可能會因罪惡感而自殺或變為破法者。</value>
+  </data>
+  <data name="YardbirdShortDescription" xml:space="preserve">
+    <value>改過自新,獲得新生</value>
+  </data>
+  <data name="YardbirdFullDescription" xml:space="preserve">
+    <value>囚徒屬於船員陣營。
+是由獄警招安而來的。
+
+·被動技能“人生污點”
+可能會受到一些負面效果，如走的更慢,獲得更多的任務等。</value>
+  </data>
+  <data name="LawbreakerShortDescription" xml:space="preserve">
+    <value>我不該這麼做...但我已別無選擇...</value>
+  </data>
+  <data name="LawbreakerFullDescription" xml:space="preserve">
+    <value>破法者屬於船員陣營。
+是因為獄警的錯誤決定而產生的。
+
+·主動技能“非白即黑”
+破法者的獲勝條件是阻止船員獲得勝利。
+根據設置破法者將擁有破壞能力。</value>
+  </data>
+  <data name="AddJail" xml:space="preserve">
+    <value>招安</value>
+  </data>
+  <data name="Summoner" xml:space="preserve">
+    <value>召喚師</value>
+  </data>
+  <data name="SummonerAbilityCoolTime" xml:space="preserve">
+    <value>簽訂契約與召喚冷卻時間</value>
+  </data>
+  <data name="SummonerMarkingCount" xml:space="preserve">
+    <value>簽訂契約可使用次數</value>
+  </data>
+  <data name="SummonerRange" xml:space="preserve">
+    <value>簽訂契約範圍</value>
+  </data>
+  <data name="SummonerSummonCount" xml:space="preserve">
+    <value>召喚可使用次數</value>
+  </data>
+  <data name="SummonerIntroDescription" xml:space="preserve">
+    <value>你我已簽訂契約,成為我的召喚獸吧！！</value>
+  </data>
+  <data name="SummonerShortDescription" xml:space="preserve">
+    <value>有危險！出來吧召喚獸！</value>
+  </data>
+  <data name="SummonerFullDescription" xml:space="preserve">
+    <value>召喚師屬於船員陣營。
+可以召喚他人。
+
+·主動技能“簽訂契約”
+使用簽訂契約可與一人簽訂契約，可多次簽訂契約。
+但只能同時和一人簽訂契約。
+
+·主動技能“召喚”
+使用鼠標滾輪可以將技能切換為召喚，將其他玩家召喚到自己的位置。</value>
+  </data>
+  <data name="Marking" xml:space="preserve">
+    <value>簽訂契約</value>
+  </data>
+  <data name="Summon" xml:space="preserve">
+    <value>召喚</value>
   </data>
 </root>
