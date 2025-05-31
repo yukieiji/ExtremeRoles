@@ -329,6 +329,11 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
     public bool UseAbility()
     {
+		if (this.Target == null)
+		{
+			return false;
+		}
+
         byte targetPlayerId = this.Target.PlayerId;
         if (!(
 				isImpostorAndSetTarget(targetPlayerId) &&
@@ -349,7 +354,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         return;
     }
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
     }
