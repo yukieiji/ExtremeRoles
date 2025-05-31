@@ -323,6 +323,24 @@ public sealed class WinnerBuilder : IDisposable
 				replaceWinnerToSpecificNeutralRolePlayer(
 					true, ExtremeRoleId.Monika);
 				break;
+			case RoleGameOverReason.AllJackalWin:
+				replaceWinnerToSpecificNeutralRolePlayer(
+					ExtremeRoleId.Shepherd);
+				collectAllTargetRole(
+					ExtremeRoleId.Jackal, ExtremeRoleId.Sidekick, ExtremeRoleId.Furry);
+				break;
+			case RoleGameOverReason.AllYandereWin:
+				replaceWinnerToSpecificNeutralRolePlayer(
+					ExtremeRoleId.Intimate);
+				collectAllTargetRole(
+					ExtremeRoleId.Yandere, ExtremeRoleId.Surrogator);
+				break;
+			case RoleGameOverReason.AllQueenWin:
+				replaceWinnerToSpecificNeutralRolePlayer(
+					ExtremeRoleId.Knight);
+				collectAllTargetRole(
+					ExtremeRoleId.Queen, ExtremeRoleId.Servant, ExtremeRoleId.Pawn);
+				break;
 			default:
 				break;
 		}
@@ -337,41 +355,7 @@ public sealed class WinnerBuilder : IDisposable
 		var logger = ExtremeRolesPlugin.Logger;
 		logger.LogInfo("Clear Winner(Reason:Neautal Win)");
 		this.tempData.Clear();
-
-		var builder = new StringBuilder();
-		builder
-			.AppendLine("--- SearchInfo ---")
-			.Append("TargetContainer size:").Append(this.neutralNoWinner.Count).AppendLine()
-			.Append("Specific role:");
-		foreach (var role in roles)
-		{
-			builder.Append($"{role},");
-		}
-		logger.LogInfo(builder.ToString());
-
-		foreach (var (player, role) in this.neutralNoWinner)
-		{
-			if (isAlive && (player.IsDead || player.Disconnected))
-			{
-				logger.LogInfo($"Player:{player.PlayerName} checking skip, this player not alive");
-				continue;
-			}
-
-
-			logger.LogInfo($"checking.... Player:{player.PlayerName}, Role:{role.Id}");
-
-			if (roles.Contains(role.Id))
-			{
-				addSpecificNeutralRoleToSameControlIdPlayer(role, player);
-			}
-			else if (
-				role is MultiAssignRoleBase multiAssignRole &&
-				multiAssignRole.AnotherRole is not null &&
-				roles.Contains(multiAssignRole.AnotherRole.Id))
-			{
-				addSpecificNeutralRoleToSameControlIdPlayer(role, player);
-			}
-		}
+		collectAllTargetRole(isAlive, roles);
 	}
 
 	private void addSpecificRoleToSameControlIdPlayer(in SingleRoleBase role, in Player player)
@@ -420,6 +404,50 @@ public sealed class WinnerBuilder : IDisposable
 		else
 		{
 			addSpecificRoleToSameControlIdPlayer(role, player);
+		}
+	}
+
+	private void collectAllTargetRole(params ExtremeRoleId[] roles)
+		=> collectAllTargetRole(isAlive: false, roles);
+
+	private void collectAllTargetRole(bool isAlive, params ExtremeRoleId[] roles)
+	{
+		var logger = ExtremeRolesPlugin.Logger;
+		logger.LogInfo($"Collect Neautral Winner:(alive only:{isAlive})");
+
+		var builder = new StringBuilder();
+		builder
+			.AppendLine("--- SearchInfo ---")
+			.Append("TargetContainer size:").Append(this.neutralNoWinner.Count).AppendLine()
+			.Append("Specific role:");
+		foreach (var role in roles)
+		{
+			builder.Append($"{role},");
+		}
+		logger.LogInfo(builder.ToString());
+
+		foreach (var (player, role) in this.neutralNoWinner)
+		{
+			if (isAlive && (player.IsDead || player.Disconnected))
+			{
+				logger.LogInfo($"Player:{player.PlayerName} checking skip, this player not alive");
+				continue;
+			}
+
+
+			logger.LogInfo($"checking.... Player:{player.PlayerName}, Role:{role.Id}");
+
+			if (roles.Contains(role.Id))
+			{
+				addSpecificNeutralRoleToSameControlIdPlayer(role, player);
+			}
+			else if (
+				role is MultiAssignRoleBase multiAssignRole &&
+				multiAssignRole.AnotherRole is not null &&
+				roles.Contains(multiAssignRole.AnotherRole.Id))
+			{
+				addSpecificNeutralRoleToSameControlIdPlayer(role, player);
+			}
 		}
 	}
 

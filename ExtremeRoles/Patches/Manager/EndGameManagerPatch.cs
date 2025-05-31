@@ -7,7 +7,6 @@ using AmongUs.GameOptions;
 
 using HarmonyLib;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
@@ -16,9 +15,6 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Performance;
-
-
 
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;
@@ -368,6 +364,16 @@ public static class EndGameManagerSetUpPatch
 			RoleGameOverReason.MonikaIamTheOnlyOne or
 				RoleGameOverReason.MonikaThisGameIsMine =>
 				WinTextInfo.Create(ExtremeRoleId.Monika, ColorPalette.MonikaRoseSaumon),
+
+			RoleGameOverReason.AllJackalWin =>
+				WinTextInfo.Create(
+					RoleGameOverReason.AllJackalWin, ColorPalette.JackalBlue),
+			RoleGameOverReason.AllYandereWin =>
+				WinTextInfo.Create(
+					RoleGameOverReason.AllYandereWin, ColorPalette.YandereVioletRed),
+			RoleGameOverReason.AllQueenWin =>
+				WinTextInfo.Create(
+					RoleGameOverReason.AllQueenWin, ColorPalette.QueenWhite),
 
 			_ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
         };
