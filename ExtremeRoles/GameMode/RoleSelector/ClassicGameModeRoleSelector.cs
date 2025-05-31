@@ -1,8 +1,6 @@
 ﻿using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
-using MS.Internal.Xml.XPath;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
