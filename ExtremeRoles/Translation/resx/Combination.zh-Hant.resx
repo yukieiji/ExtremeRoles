@@ -163,7 +163,7 @@
     <value>刺客可以看到投票明細</value>
   </data>
   <data name="AssassinIsDeadForceMeeting" xml:space="preserve">
-    <value>刺客死後強制展開會議</value>
+    <value>刺客死後強制開啓會議</value>
   </data>
   <data name="AssassinCanSeeRoleBeforeFirstMeeting" xml:space="preserve">
     <value>刺客在第一次會議前可以看到所有人職業</value>
@@ -193,36 +193,50 @@
     <value>梅林可以使用管道</value>
   </data>
   <data name="MarlinIntroDescription" xml:space="preserve">
-    <value>妳是全知全能的魔法師，帶領船員走嚮勝利</value>
+    <value>你是全知全能的魔法師，帶領船員走向勝利</value>
   </data>
   <data name="MarlinShortDescription" xml:space="preserve">
-    <value>帶領船員走嚮勝利，但要小心刺客</value>
+    <value>帶領船員走向勝利，但要小心刺客</value>
   </data>
   <data name="MarlinFullDescription" xml:space="preserve">
-    <value>梅林屬於船員陣營，可以知道所有內鬼的身份。
-梅林和刺客成對出現。
+    <value>梅林屬於船員陣營。
+梅林可以知道所有內鬼的身份。
+
+·被動技能“一同出現”
+梅林和刺客一同出現
 如果遊戲中沒有刺客，則這個職業也不會出現。
-如果刺客對梅林發動了刺殺，船員陣營將輸掉遊戲。
+
+·被動技能“要輸一起輸”
+如果梅林被刺客刺殺，船員陣營失敗。
 梅林需要幫助好人主導會議進程，同時隱藏身份。
-需要註意的是，梅林的設置與內鬼設置相近。</value>
+
+·其他注意事項
+梅林的設置與內鬼職業相近。</value>
   </data>
   <data name="AssassinIntroDescription" xml:space="preserve">
-    <value>找出知曉妳們底細的魔法師，把他解決了</value>
+    <value>找出知曉你們底細的魔法師，把他解決了</value>
   </data>
   <data name="AssassinShortDescription" xml:space="preserve">
-    <value>找出梅林併刺殺</value>
+    <value>找出梅林並刺殺</value>
   </data>
   <data name="AssassinFullDescription" xml:space="preserve">
-    <value>刺客屬於內鬼陣營，為內鬼陣營增加了新的勝利條件。
-梅林和刺客成對出現。
+    <value>刺客屬於內鬼陣營。
+刺客為內鬼陣營增加了新的勝利條件。
+
+·被動技能“一同出現”
+梅林和刺客一同出現。
 如果遊戲中沒有梅林，則這個職業也不會出現。
-勝利條件：用刺客的特殊能力放逐梅林
-刺客的特殊能力：特別會議“誰是梅林？”：
+
+·被動技能“特殊條件”
+刺客需要用特殊能力放逐梅林。
+
+·主動技能“特殊會議”
+刺客的特殊能力：特別會議“誰是梅林？”。
 所有人都參與會議，但刺客以外的玩家都不可以投票。
-不能跳過，可以給死人投票
-如果投票放逐的是梅林，則內鬼獲勝，否則遊戲繼續
-特殊能力激活條件：刺客被擊殺或放逐
-除了上述能力外，刺客的能力與普通內鬼沒有區別。刺客需要一邊殺人，一邊找出梅林。</value>
+刺客不能跳過，可以給死人投票。
+如果投票放逐的是梅林，則內鬼陣營獲勝，否則遊戲繼續。
+本技能激活條件：刺客被擊殺或放逐。
+除了上述技能外，刺客的能力與普通內鬼沒有區別。</value>
   </data>
   <data name="whoIsMarine" xml:space="preserve">
     <value>誰是梅林？</value>
@@ -318,25 +332,25 @@
     <value>呼救範圍</value>
   </data>
   <data name="HeroIntroDescription" xml:space="preserve">
-    <value>正義的勇者，參上！</value>
+    <value>正義的勇者，參上</value>
   </data>
   <data name="HeroShortDescription" xml:space="preserve">
     <value>消滅魔王，成為英雄</value>
   </data>
   <data name="HeroFullDescription" xml:space="preserve">
-    <value>勇者屬於船員陣營，其能力會隨玩家的死亡逐漸增強。
+    <value>勇者屬於船員陣營。
+其能力會隨玩家的死亡逐漸增強。
+
+·被動技能“開外掛”
 勇者的"外掛"能力存在3個階段：
-第一階段:
-達成條件: 1名玩家死亡
-效果:免疫來自內鬼的一切通常擊殺
-第二階段:
-達成條件:設定值以上的玩家死亡
-效果:獲得擊殺能力
-第三階段:
-達成條件:設定值以上的玩家死亡
-能力:獲得主角光環
-主動技能“主角光環”:
-一段時間內，確認所有玩家的所在位置和距離
+第一階段:如果1名玩家死亡，則勇者免疫來自內鬼的一切普通擊殺。
+第二階段:如果一定數量以上的玩家死亡，勇者獲得擊殺能力。
+第三階段:如果一定數量以上的玩家死亡，獲得主角光環技能。
+
+·主動技能“主角光環”:
+一段時間內，確認所有玩家的所在位置和距離。
+
+·其他注意事項
 特別地，當魔王嘗試擊殺勇者或勇者嘗試擊殺魔王時，二者一同死亡。</value>
   </data>
   <data name="VillainIntroDescription" xml:space="preserve">
@@ -346,18 +360,25 @@
     <value>用深不見底的絕望統治整個飛船</value>
   </data>
   <data name="VillainFullDescription" xml:space="preserve">
-    <value>魔王是最強大的內鬼。
-魔王的擊殺無視任何守護效果。守護天使、保鏢、時間之主的技能對於魔王全部失效。
+    <value>魔王屬於內鬼陣營。
+魔王是最強大的內鬼。
+
+·被動技能“魔王之刃”
+魔王的擊殺無視任何守護效果。
+守護天使、保鏢、時間之主的技能對於魔王全部失效。
 魔王免疫來自船員陣營的一切擊殺能力。
-主動技能“反派光環”:
-一段時間內，確認所有玩家的所在位置和距離
+
+·主動技能“反派光環”:
+一段時間內，確認所有玩家的所在位置和距離。
+
+·其他注意事項
 特別地，當魔王嘗試擊殺勇者或勇者嘗試擊殺魔王時，二者一同死亡。</value>
   </data>
   <data name="VigilanteIntroDescription" xml:space="preserve">
-    <value>嚮所有人證明妳才是真正的主角</value>
+    <value>向所有人證明你才是真正的主角</value>
   </data>
   <data name="VigilanteShortDescription" xml:space="preserve">
-    <value>嚮所有人揭露可笑的善惡</value>
+    <value>向所有人揭露可笑的善惡</value>
   </data>
   <data name="VigilanteNewHeroForTheShipShortDescription" xml:space="preserve">
     <value>成為真正的正義</value>
@@ -369,43 +390,62 @@
     <value>成為這場遊戲的主角</value>
   </data>
   <data name="VigilanteFullDescription" xml:space="preserve">
-    <value>龍套屬於獨立陣營，需要掙脫既定的命運，讓自己成為遊戲的主角。
-基本勝利條件1 :
-存活的玩家僅剩勇者、魔王與龍套
-基本勝利條件2 :
-讓魔王和勇者互殺而死（這個勝利條件觸發後，龍套可以跟隨任何陣營一起獲勝）
+    <value>龍套屬於獨立陣營。
+需要掙脱既定的命運，讓自己成為遊戲的主角。
+
+·被動技能“額外的勝利條件”
+基本勝利條件1:存活的玩家僅剩勇者、魔王與龍套。
+基本勝利條件2:讓魔王和勇者互殺而死，此時龍套可以跟隨任何陣營一起獲勝。
+
+·被動技能“薛定諤的狀態”
 根據勇者和魔王的生存狀況，龍套的狀態會發生變化。
-這段文本對應的狀態為通常狀態與基本勝利條件2達成後。其他狀態下，這段文本會發生改變。
-※根據龍套的狀態，除了這個勝利條件以外還會產生追加勝利條件。 屆時，這段文本也會產生變化。
-若龍套狀態從通常狀態變化為其他狀態，則無法恢復。
-主動技能“龍套體質”:
-·行動階段，將附近一名玩家的位置給勇者確認
-·這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認
+這段文本對應的狀態為通常狀態與基本勝利條件2達成後。
+其他狀態下，這段文本會發生改變。
+根據龍套的狀態，除了這個勝利條件以外還會產生追加勝利條件。
+屆時，這段文本也會產生變化。
+若龍套狀態從普通狀態變化為其他狀態，則無法恢復。
+
+·主動技能“龍套體質”:
+行動階段，將附近一名玩家的位置給勇者確認。
+這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認。
 這個狀態下的龍套不會被勇者或魔王擊殺。</value>
   </data>
   <data name="VigilanteCrewDescription" xml:space="preserve">
-    <value>龍套屬於獨立陣營。勇者死後，龍套與船員併肩作戰。
-追加勝利條件:船員陣營獲勝
-主動技能“龍套體質”:
-·行動階段，將附近一名玩家的位置給勇者確認
-·這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認
+    <value>龍套屬於獨立陣營。
+勇者死後，龍套與船員並肩作戰。
+
+·被動技能“額外的勝利條件”
+追加勝利條件:船員陣營獲勝。
+
+·主動技能“龍套體質”:
+行動階段，將附近一名玩家的位置給勇者確認。
+這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認。
 這個狀態下的龍套不會被勇者或魔王擊殺。</value>
   </data>
   <data name="VigilanteImpDescription" xml:space="preserve">
-    <value>龍套屬於獨立陣營。魔王死後，龍套與內鬼併肩作戰。
+    <value>龍套屬於獨立陣營。
+魔王死後，龍套與內鬼並肩作戰。
+
+·被動技能“額外的勝利條件”
 這個狀態下，龍套獲得破壞與使用管道的能力。
-追加勝利條件:內鬼陣營獲勝
-主動技能“龍套體質”:
-·行動階段，將附近一名玩家的位置給勇者確認
-·這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認
+追加勝利條件:內鬼陣營獲勝。
+
+·主動技能“龍套體質”:
+行動階段，將附近一名玩家的位置給勇者確認。
+這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認。
 這個狀態下的龍套不會被勇者或魔王擊殺。</value>
   </data>
   <data name="VigilanteNeutDescription" xml:space="preserve">
-    <value>龍套屬於獨立陣營。不論是成為正義還是邪惡，現在都不值得了。拿起屠刀，去做真正的主角。
-追加勝利條件:殺死除自己以外的所有人
-主動技能“龍套體質”:
-·行動階段，將附近一名玩家的位置給勇者確認
-·這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認。
+    <value>龍套屬於獨立陣營。
+不論是成為正義還是邪惡，現在都不值得了。
+拿起屠刀，去做真正的主角。
+
+·被動技能“額外的勝利條件”
+追加勝利條件:殺死除自己以外的所有人。
+
+·主動技能“龍套體質”:
+行動階段，將附近一名玩家的位置給勇者確認。
+這個技能發動過後一段時間，將自己發動技能時所處的位置給魔王確認。
 這個狀態下的龍套失去擊殺抗性。</value>
   </data>
   <data name="search" xml:space="preserve">
@@ -436,7 +476,7 @@
     <value>受到照明破壞影響</value>
   </data>
   <data name="DetectiveSearchRange" xml:space="preserve">
-    <value>偵探可以調查時與案發現場的最大距離</value>
+    <value>偵探調查時與案發現場的最大距離</value>
   </data>
   <data name="DetectiveSearchTime" xml:space="preserve">
     <value>調查所需時間</value>
@@ -481,23 +521,32 @@
     <value>不計入次數限制的次數</value>
   </data>
   <data name="DetectiveIntroDescription" xml:space="preserve">
-    <value>真相只有一個！</value>
+    <value>真相只有一個</value>
   </data>
   <data name="DetectiveShortDescription" xml:space="preserve">
     <value>調查案發現場留下的蛛絲馬跡</value>
   </data>
   <data name="DetectiveFullDescription" xml:space="preserve">
-    <value>偵探屬於船員陣營，可以從案發現場搜尋線索。
+    <value>偵探屬於船員陣營。
+可以從案發現場搜尋線索。
+
+·主動技能“屍檢報告”
 當有屍體被報告時，那屍體所在的地點直到下一輪會議階段開始為止記錄為案發現場。
 偵探可以通過箭頭確認案發現場的位置。
-偵探在案發現場周圍停留時，可以進行調查。若偵探在調查過程中離開，調查進程會被重置。
+偵探在案發現場周圍停留時，可以進行調查。
+若偵探在調查過程中離開，調查進程會被重置。
 通過調查得知的信息如下。
-每一次的調查都需要一定的時間。在第四次調查完成時，案發現場移除
-第一次調查:死者死亡時刻
-第二次調查:從死者死亡到會議召開的間隔時間
-第三次調查:兇手的所屬陣營
-第四次調查:兇手的職業
+每一次的調查都需要一定的時間。
+在第四次調查完成時，案發現場被移除。
+第一次調查:死者死亡時刻。
+第二次調查:從死者死亡到會議召開的間隔時間。
+第三次調查:兇手的所屬陣營。
+第四次調查:兇手的職業。
+
+·被動技能“助手的援助”
 若屍體是助手報告的，則每次調查所需的時間將縮短。
+
+·被動技能“傳承”
 偵探死亡等情況下，助手的職業變為見習偵探。</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
@@ -507,38 +556,49 @@
     <value>輔助偵探的行動</value>
   </data>
   <data name="AssistantFullDescription" xml:space="preserve">
-    <value>助手屬於船員陣營，可以暗中幫助偵探。
+    <value>助手屬於船員陣營。
+可以暗中幫助偵探。
+
+·被動技能“屍檢報告”
 自己報告屍體的會議階段開始時，助手可以在聊天框內確認屍體的死亡時間。
+
+·被動技能“傳承”
 助手死亡時，偵探的職業變為見習偵探。</value>
   </data>
   <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
     <value>接過逝去的搭檔的衣缽</value>
   </data>
   <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
-    <value>見習偵探屬於船員陣營，由偵探或助手轉變而來。
+    <value>見習偵探屬於船員陣營。
+見習偵探是由偵探或助手轉變而來的。
+
+·主動技能“屍檢報告”
 自己報告屍體的會議階段開始時，見習偵探可以在聊天框內確認屍體的死亡時間。
-主動技能“緊急召集”:
-可以打開緊急會議界面，遠程召開緊急會議。緊急會議界面不能持續開啟。
+
+·主動技能“緊急召集”:
+可以打開緊急會議界面，遠程召開緊急會議。
+緊急會議界面不能持續開啓。
 如果緊急會議次數用完，即使見習偵探打開界面也不能召開緊急會議。
-若“見習偵探緊急召集的會議不計入緊急會議次數限制”開啟，則在通過“緊急召集”召開的緊急會議有若幹次不會消耗緊急會議次數。不過，在緊急會議次數耗盡的情況下，見習偵探仍然不能發動緊急召集。</value>
+根據設置，該技能見習偵探可能共享緊急會議次數。
+不過，在緊急會議次數耗盡的情況下，見習偵探仍然不能發動緊急會議。</value>
   </data>
   <data name="FindKillTime" xml:space="preserve">
-    <value>死者好像是在{0} (UTC±0)被殺害的</value>
+    <value>死者好像是在{0} (UTC±0)被殺害的!</value>
   </data>
   <data name="FindReportTime" xml:space="preserve">
-    <value>距離被害者死亡似乎過去了{0}秒</value>
+    <value>距離被害者死亡似乎過去了{0}秒!</value>
   </data>
   <data name="FindTeam" xml:space="preserve">
-    <value>這裏留下了{0}來過的線索</value>
+    <value>這裏留下了{0}來過的線索!</value>
   </data>
   <data name="FindRole" xml:space="preserve">
-    <value>從殺人手法來看，被害者似乎遭到了{0}的襲擊</value>
+    <value>從殺人手法來看，被害者似乎遭到了{0}的襲擊!</value>
   </data>
   <data name="searchStrBase" xml:space="preserve">
-    <value>正在調查案發現場。距離調查完成還有{0}秒</value>
+    <value>正在調查案發現場。距離調查完成還有{0}秒!</value>
   </data>
   <data name="reportedDeadBodyInfo" xml:space="preserve">
-    <value>發現的屍體似乎是在{0} (UTC±0)被殺害的</value>
+    <value>發現的屍體似乎是在{0} (UTC±0)被殺害的!</value>
   </data>
   <data name="emergencyMeeting" xml:space="preserve">
     <value>緊急召集</value>
@@ -553,7 +613,7 @@
     <value>戀人可以加入獨立陣營</value>
   </data>
   <data name="LoverDethWhenUnderAlive" xml:space="preserve">
-    <value>戀人共死</value>
+    <value>戀人同生共死</value>
   </data>
   <data name="LoverHasOtherKillCool" xml:space="preserve">
     <value>擁有擊殺能力的戀人擁有獨立擊殺冷卻</value>
@@ -580,50 +640,58 @@
     <value>作為獨立陣營的戀人可以使用管道</value>
   </data>
   <data name="LoverIntroDescription" xml:space="preserve">
-    <value>妳墜入了愛河</value>
+    <value>你墜入了愛河</value>
   </data>
   <data name="LoverShortDescription" xml:space="preserve">
     <value>與戀人活到最後</value>
   </data>
   <data name="LoverFullDescription" xml:space="preserve">
-    <value>戀人若幹人一組。此外，妳隸屬船員陣營。
+    <value>戀人若干人一組。此外，你隸屬船員陣營。
+
+·被動技能“額外的勝利條件”
 船員勝利時，戀人可以一同獲勝，但戀人中的非船員陣營玩家不可以獲勝。
-若剩余的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，戀人陣營獲勝。戀人中的非船員陣營玩家也可以通過這種方式獲勝。
+若剩餘的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，戀人陣營獲勝。
+戀人中的非船員陣營玩家也可以通過這種方式獲勝。
 當以下所有條件都滿足的場合：
-  ①：剩余的存活玩家全部在同一組戀人中；
-  ②：存活的內鬼數為0；
-  ③：戀人中存在非船員陣營的玩家； 
-  ④：所有剩余存活玩家都屬於船員陣營或③中那個陣營，則同組的所有玩家直到人數達到一定數量為止自殺或者變成獨立陣營。
+①：剩餘的存活玩家全部在同一組戀人中；
+②：存活的內鬼數量為0；
+③：戀人中存在非船員陣營的玩家； 
+④：所有剩餘存活玩家都屬於船員陣營或③陣營，則同組的所有玩家直到人數達到一定數量為止自殺或者變成獨立陣營。
 可以設置需要達到的人數。</value>
   </data>
   <data name="LoverImposterFullDescription" xml:space="preserve">
-    <value>戀人若幹人一組。此外，妳隸屬內鬼陣營。
+    <value>戀人若干人一組。此外，你隸屬內鬼陣營。
+
+·被動技能“額外的勝利條件”
 內鬼勝利時，戀人可以一同獲勝，但戀人中的非內鬼陣營玩家不可以獲勝。
-若剩余的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，戀人陣營獲勝。戀人中的非船員陣營玩家也可以通過這種方式獲勝。
+若剩餘的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，戀人陣營獲勝。
+戀人中的非船員陣營玩家也可以通過這種方式獲勝。
 當以下所有條件都滿足的場合：
-  ①：剩余的存活玩家全部在同一組戀人中；
-  ②：戀人中存在非船員陣營的玩家； 
-  ③：所有剩余存活玩家都屬於船員或內鬼陣營，則同組的所有玩家直到人數達到一定數量為止自殺或者變成獨立陣營。
+①：剩餘的存活玩家全部在同一組戀人中；
+②：戀人中存在非船員陣營的玩家； 
+③：所有剩餘存活玩家都屬於船員或內鬼陣營，則同組的所有玩家直到人數達到一定數量為止自殺或者變成獨立陣營。
 可以設置需要達到的人數。</value>
   </data>
   <data name="LoverNeutralFullDescription" xml:space="preserve">
-    <value>戀人若幹人一組。此外，妳隸屬獨立陣營。
-若剩余的存活玩家全部在同一組戀人中，且場上沒有存活的擁有擊殺能力的內鬼或獨立陣營玩家，戀人陣營獲勝。
-當剩余的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，則同組的所有玩家直到人數達到一定數量為止自殺。
+    <value>戀人若干人一組。此外，你隸屬獨立陣營。
+
+·被動技能“額外的勝利條件”
+若剩餘的存活玩家全部在同一組戀人中，且場上沒有存活的擁有擊殺能力的內鬼或獨立陣營玩家，戀人陣營獲勝。
+當剩餘的存活玩家全部在同一組戀人中，且這一組的所有玩家都完成了所有任務，則同組的所有玩家直到人數達到一定數量為止自殺。
 可以設置需要達到的人數。</value>
   </data>
   <data name="LoverNeutralKillerFullDescription" xml:space="preserve">
-    <value>因為所愛之人去世，滿腔仇恨的妳化為了殺人狂。妳隸屬獨立陣營。
-把所有其他玩家全部殺死，則妳獲得勝利。</value>
+    <value>因為所愛之人去世，滿腔仇恨的你化為了殺人狂。你隸屬獨立陣營。
+把所有其他玩家全部殺死，則你獲得勝利。</value>
   </data>
   <data name="LoverKillerShortDescription" xml:space="preserve">
-    <value>就用妳們的命，為吾愛陪葬！</value>
+    <value>就用你們的命，為吾愛陪葬</value>
   </data>
   <data name="curLover" xml:space="preserve">
     <value>戀人</value>
   </data>
   <data name="LoverIntoPlus" xml:space="preserve">
-    <value>是妳的戀人</value>
+    <value>是你的戀人</value>
   </data>
   <data name="Supporter" xml:space="preserve">
     <value>扈從</value>
@@ -635,26 +703,35 @@
     <value>正義的扈從</value>
   </data>
   <data name="SupporterIntroDescription" xml:space="preserve">
-    <value>{0}是{1}。擁護他成為主導全船的人吧</value>
+    <value>{0}是{1}
+擁護他成為主導全船的人吧</value>
   </data>
   <data name="SupporterShortDescription" xml:space="preserve">
-    <value>聲援妳的支持對象</value>
+    <value>聲援你的支持對象</value>
   </data>
   <data name="SupporterFullDescription" xml:space="preserve">
-    <value>正義的扈從屬於船員陣營，需要擁護自己的支持對象。
+    <value>正義的扈從屬於船員陣營。
+需要擁護自己的支持對象。
+
+·被動技能“服侍”
 遊戲開始時，扈從可以確認一名玩家的職業。
-如果阿瓦隆模式開啟，扈從將會確認梅林的職業(多個梅林的場合是隨機選)，否則扈從將會隨機確認一名船員陣營玩家的職業。
-妳的侍主:
-玩家名稱: {0}
-職業: {1}</value>
+如果阿瓦隆模式開啓，扈從將會確認梅林的職業(多個梅林的場合是隨機選)，否則扈從將會隨機確認一名船員陣營玩家的職業。
+
+·你的侍主有關信息:
+玩家名稱: {0}。
+職業: {1}。</value>
   </data>
   <data name="SupporterImposterFullDescription" xml:space="preserve">
-    <value>邪惡的扈從屬於內鬼陣營，需要擁護自己的支持對象。
+    <value>邪惡的扈從屬於內鬼陣營。
+需要擁護自己的支持對象。
+
+·被動技能“服侍”
 遊戲開始時，扈從可以確認一名玩家的職業。
-如果阿瓦隆模式開啟，扈從將會確認刺客的職業(多個刺客的場合是隨機選)，否則扈從將會隨機確認一名內鬼陣營玩家的職業。
-妳的侍主:
-玩家名稱: {0}
-職業: {1}</value>
+如果阿瓦隆模式開啓，扈從將會確認刺客的職業(多個刺客的場合是隨機選)，否則扈從將會隨機確認一名內鬼陣營玩家的職業。
+
+你的侍主有關信息:
+玩家名稱: {0}。
+職業: {1}。</value>
   </data>
   <data name="Sharer" xml:space="preserve">
     <value>羈絆者</value>
@@ -669,19 +746,22 @@
     <value>與其他羈絆者互通感知</value>
   </data>
   <data name="SharerFullDescription" xml:space="preserve">
-    <value>羈絆者屬於內鬼陣營。所有羈絆者感官互通。
+    <value>羈絆者屬於內鬼陣營。
+所有羈絆者感官互通。
+
+·被動技能“感官互通”
 所有羈絆者能持續確認其他羈絆者的位置。
-若“共享擊殺情況”開啟，一名羈絆者進行擊殺時，其他所有羈絆者會得到通知。
+若“共享擊殺情況”開啓，一名羈絆者進行擊殺時，其他所有羈絆者會得到通知。
 此外，一名羈絆者由於職業變更而失去原有職業的場合，其他所有羈絆者會得到通知。</value>
   </data>
   <data name="curSharer" xml:space="preserve">
     <value>現在的羈絆者</value>
   </data>
   <data name="SharerIntoPlus" xml:space="preserve">
-    <value>正與妳共享感知</value>
+    <value>正與你共享感知</value>
   </data>
   <data name="sharerKill" xml:space="preserve">
-    <value>羈絆網絡: {0}感受到了殺戮的快感</value>
+    <value>羈絆網絡: {0}感受到了殺戮的快感!</value>
   </data>
   <data name="Traitor" xml:space="preserve">
     <value>變節者</value>
@@ -699,14 +779,23 @@
     <value>作為變節者毀滅這艘船</value>
   </data>
   <data name="TraitorFullDescription" xml:space="preserve">
-    <value>變節者屬於獨立陣營，是船員中的背叛者。
-（註：變節者會佔據部分船員陣營的分配額）
+    <value>變節者屬於獨立陣營.
+是船員中的背叛者。
+
+·被動技能“佔用”
+變節者會佔據部分船員陣營的分配額。
+
+·被動技能“額外的勝利條件”
 若內鬼陣營及擁有擊殺能力的獨立陣營玩家全部死亡，且存活的玩家有半數以上屬於同一陣營，則變節者獲勝。
 遊戲開始時，隨機將一名船員陣營玩家的職業更換為變節者。變節者保留原有船員職業的能力。
-原職業：{0}。
-能力“破解”：變節者每進行一次擊殺後可以發動。
+
+·主動技能“破解”
+變節者每進行一次擊殺後可以發動。
 依次觀看管理室地圖、監控與生命監測裝置。
-註：生命檢測裝置不能在骷髏艦或米拉總部地圖觀看。</value>
+生命檢測裝置不能在骷髏艦或米拉總部地圖觀看。
+
+·你原先的職業信息：
+原職業：{0}。</value>
   </data>
   <data name="traitorCracking" xml:space="preserve">
     <value>破解</value>
@@ -769,17 +858,22 @@
     <value>用咒怨的力量讓飛船陷入恐懼</value>
   </data>
   <data name="DelinquentFullDescription" xml:space="preserve">
-    <value>怨氣化身屬於獨立陣營，與怨氣靈同為組合職業。
-主動技能“鬼畫符”：
-·發動後，在原地留下一枚鬼畫符
-·鬼畫符對所有玩家可見，但每名玩家看到的鬼畫符樣貌可能不同
-·怨氣化身每使用一次鬼畫符，成為怨氣靈時就能增加一次鬼火的使用次數
-·怨氣化身使用全部鬼畫符後，其技能變為“自爆”
-主動技能“自爆”：
-·“全部鬼畫符使用完畢後，技能範圍內有其他玩家存在的場合才能發動
-·使用後，擊殺周圍的所有玩家與怨氣化身自己
+    <value>怨氣化身屬於獨立陣營。
+與怨氣靈同為組合職業。
+
+·主動技能“鬼畫符”：
+發動後，在原地留下一枚鬼畫符。
+鬼畫符對所有玩家可見，但每名玩家看到的鬼畫符樣貌可能不同。
+怨氣化身每使用一次鬼畫符，成為怨氣靈時就能增加一次鬼火的使用次數。
+怨氣化身使用全部鬼畫符後，其技能變為“自爆”。
+
+·主動技能“自爆”：
+全部鬼畫符使用完畢後，技能範圍內有其他玩家存在的場合才能發動。
+使用後，擊殺周圍的所有玩家與怨氣化身自己。
+
+·被動技能“額外的勝利條件”：
 怨氣化身通過自爆炸死場上所有玩家，則怨氣化身獲勝。
-若怨氣化身沒能通過這種方式獲勝併且死亡，其職業變為“怨氣靈”。</value>
+若怨氣化身沒能通過這種方式獲勝並且死亡，其職業變為“怨氣靈”。</value>
   </data>
   <data name="scribble" xml:space="preserve">
     <value>鬼畫符</value>
@@ -788,14 +882,14 @@
     <value>自爆</value>
   </data>
   <data name="WispShortDescription" xml:space="preserve">
-    <value>用鬼火制造鬼吹燈來獲得勝利</value>
+    <value>用鬼火製造鬼吹燈來獲得勝利</value>
   </data>
   <data name="WispFullDescription" xml:space="preserve">
     <value>怨氣靈屬於幽靈獨立陣營職業，與怨氣化身同為組合職業。
 主動技能“鬼火”：
 ·發動後，當前遊戲地圖的出生點將出現一團鬼火
-·當前地圖有復數個出生點的場合，從那之中隨機選擇一個出生點出現鬼火
-·鬼火在一定時間後消失，併觸發“鬼吹燈”
+·當前地圖有複數個出生點的場合，從那之中隨機選擇一個出生點出現鬼火
+·鬼火在一定時間後消失，並觸發“鬼吹燈”
 ·在鬼火附近按下使用按鈕後，玩家就不會受到“鬼吹燈”的影響
 技能“鬼吹燈”：
 ·對不受“鬼吹燈”影響的存活玩家以外的玩家生效
@@ -810,7 +904,7 @@
     <value>一股幽怨的邪念正在侵蝕燈光……</value>
   </data>
   <data name="scribeText" xml:space="preserve">
-    <value>距離自爆還需要{0}個鬼畫符</value>
+    <value>距離自爆還需要{0}個鬼畫符。</value>
   </data>
   <data name="Buddy" xml:space="preserve">
     <value>摯友</value>
@@ -819,7 +913,7 @@
     <value>摯友覺醒需要完成的任務數</value>
   </data>
   <data name="BuddyIntroDescription" xml:space="preserve">
-    <value>我們是最好的夥伴！
+    <value>我們是最好的夥伴
 與{0}成為了夥伴</value>
   </data>
   <data name="BuddyShortDescription" xml:space="preserve">
@@ -827,7 +921,7 @@
   </data>
   <data name="BuddyFullDescription" xml:space="preserve">
     <value>摯友屬於船員陣營，多人一組。
-妳的摯友：{0}
+你的摯友：{0}。
 若摯友中的一名玩家由於職業變化等原因失去摯友職業，其他摯友不會得知這一情況。</value>
   </data>
   <data name="Guesser" xml:space="preserve">
@@ -867,27 +961,29 @@
     <value>生命就是豪賭</value>
   </data>
   <data name="GuesserShortDescription" xml:space="preserve">
-    <value>推出其他玩家的職業併在會議中擊殺</value>
+    <value>推出其他玩家的職業並在會議中擊殺</value>
   </data>
   <data name="GuesserFullDescription" xml:space="preserve">
-    <value>賭怪屬於船員或內鬼陣營，可以在會議中通過猜測玩家職業來擊殺其他玩家。
-主動技能“猜測”：
-·會議階段選擇一名玩家併猜測一個職業，若猜測正確則那名玩家死亡
-·以下情況會導致猜測失敗：
-  ·猜測的玩家是梅林、刺客或魔王
-  ·猜測的玩家被保鏢保護
-  ·猜測一名已經覺醒職業的玩家為其覺醒前的職業
-·猜測錯誤、失敗的場合，賭怪死亡。</value>
+    <value>賭怪屬於船員或內鬼陣營。
+可以在會議中通過猜測玩家職業來擊殺其他玩家。
+
+·主動技能“猜測”：
+會議階段選擇一名玩家並猜測一個職業，若猜測正確則那名玩家死亡。
+以下情況會導致猜測失敗：
+猜測的玩家是梅林、刺客或魔王。
+猜測的玩家被保鏢保護。
+猜測一名已經覺醒職業的玩家為其覺醒前的職業。
+猜測錯誤、失敗的場合，賭怪死亡。</value>
   </data>
   <data name="guesserUiTitle" xml:space="preserve">
     <value>「{0}」的職業是？</value>
   </data>
   <data name="guesserUiInfo" xml:space="preserve">
-    <value>剩余猜測次數：{0}/{1}次</value>
+    <value>剩餘猜測次數：{0}/{1}次</value>
   </data>
   <data name="guesserConfirmMenu" xml:space="preserve">
-    <value>妳猜測{0}的職業是{1}
-妳確定嗎？</value>
+    <value>你猜測{0}的職業是{1}
+你確定嗎？</value>
   </data>
   <data name="Mover" xml:space="preserve">
     <value>搬運工</value>
@@ -908,20 +1004,121 @@
     <value>搬運工技能最大使用次數</value>
   </data>
   <data name="MoverIntroDescription" xml:space="preserve">
-    <value>搬運併佈置飛船裏的各類物件</value>
+    <value>搬運並布置飛船裏的各類物件</value>
   </data>
   <data name="MoverShortDescription" xml:space="preserve">
     <value>搬運地圖物件讓局面對自己有利</value>
   </data>
   <data name="MoverFullDescription" xml:space="preserve">
-    <value>搬運工屬於船員或內鬼陣營，可以搬運地圖上的物件。
-主動技能“搬運”：
-·靠近地圖上可以搬運的物件時才可以發動。技能發動後，搬運工可以搬運那個物件
-·玩家不可以與正在被搬運工搬運的物件進行交互
-·搬運工不可以在技能持續期間進行召開緊急會議等交互
-·若管道等物件是被使用的狀態，搬運工將無法搬運該物件</value>
+    <value>搬運工屬於船員或內鬼陣營。
+可以搬運地圖上的物件。
+
+·主動技能“搬運”：
+靠近地圖上可以搬運的物件時才可以發動。
+技能發動後，搬運工可以搬運那個物件。
+玩家不可以與正在被搬運工搬運的物件進行交互。
+搬運工不可以在技能持續期間進行召開緊急會議等交互。
+若管道等物件是被使用的狀態，搬運工將無法搬運該物件。</value>
   </data>
   <data name="Moving" xml:space="preserve">
     <value>搬運</value>
+  </data>
+  <data name="Accelerator" xml:space="preserve">
+    <value>機關師</value>
+  </data>
+  <data name="NiceAccelerator" xml:space="preserve">
+    <value>正義的機關師</value>
+  </data>
+  <data name="EvilAccelerator" xml:space="preserve">
+    <value>邪惡的機關師</value>
+  </data>
+  <data name="AcceleratorAbilityCoolTime" xml:space="preserve">
+    <value>加速帶冷卻時間</value>
+  </data>
+  <data name="AcceleratorAbilityActiveTime" xml:space="preserve">
+    <value>加速帶激活時間</value>
+  </data>
+  <data name="AcceleratorAbilityCount" xml:space="preserve">
+    <value>加速帶數量</value>
+  </data>
+  <data name="AcceleratorSpeed" xml:space="preserve">
+    <value>加速帶加速倍率</value>
+  </data>
+  <data name="AcceleratorUseOtherPlayer" xml:space="preserve">
+    <value>加速帶可加速他人的速度</value>
+  </data>
+  <data name="AcceleratorIntroDescription" xml:space="preserve">
+    <value>這條道路,一方通行!!</value>
+  </data>
+  <data name="AcceleratorShortDescription" xml:space="preserve">
+    <value>小心不要撞到牆了!!</value>
+  </data>
+  <data name="AcceleratorFullDescription" xml:space="preserve">
+    <value>機關師屬於船員或內鬼陣營。
+可以放置加速帶。
+
+·主動技能“加速帶”
+可以使玩家加速或減速。
+在加速帶上順着奔跑可以加速，如果逆着加速帶奔跑將減速。</value>
+  </data>
+  <data name="AccelerateSet" xml:space="preserve">
+    <value>加速帶</value>
+  </data>
+  <data name="Skater" xml:space="preserve">
+    <value>溜冰舞者</value>
+  </data>
+  <data name="NiceSkater" xml:space="preserve">
+    <value>正義的溜冰舞者</value>
+  </data>
+  <data name="EvilSkater" xml:space="preserve">
+    <value>邪惡的溜冰舞者</value>
+  </data>
+  <data name="SkaterAbilityCoolTime" xml:space="preserve">
+    <value>溜冰冷卻時間</value>
+  </data>
+  <data name="SkaterAbilityActiveTime" xml:space="preserve">
+    <value>溜冰解除時間</value>
+  </data>
+  <data name="SkaterAbilityCount" xml:space="preserve">
+    <value>溜冰可使用次數</value>
+  </data>
+  <data name="SkaterAcceleration" xml:space="preserve">
+    <value>溜冰加速倍率</value>
+  </data>
+  <data name="SkaterMaxSpeed" xml:space="preserve">
+    <value>溜冰最快速度</value>
+  </data>
+  <data name="SkaterFriction" xml:space="preserve">
+    <value>溜冰摩擦力</value>
+  </data>
+  <data name="SkaterUseE" xml:space="preserve">
+    <value>溜冰過程中撞到牆反彈</value>
+  </data>
+  <data name="SkaterEValue" xml:space="preserve">
+    <value>溜冰過程中碰撞係數</value>
+  </data>
+  <data name="SkaterCanUseSpeed" xml:space="preserve">
+    <value>溜冰過程中能否使用按鈕</value>
+  </data>
+  <data name="SkaterIntroDescription" xml:space="preserve">
+    <value>感受腳底生風的快感</value>
+  </data>
+  <data name="SkaterShortDescription" xml:space="preserve">
+    <value>看得到我的車尾燈嗎？</value>
+  </data>
+  <data name="SkaterFullDescription" xml:space="preserve">
+    <value>溜冰舞者屬於船員或內鬼陣營。
+溜冰舞者是使用技能移速最快的職業。
+
+·主動技能“溜冰”
+感受腳底生風的快感。
+溜冰時你不能立即停止或轉彎，根據設置你撞到牆將反彈。
+到一定速度以上時，無法使用使用按鈕等其他操作。</value>
+  </data>
+  <data name="SkaterSkateOn" xml:space="preserve">
+    <value>溜冰</value>
+  </data>
+  <data name="SkaterSkateOff" xml:space="preserve">
+    <value>剎車</value>
   </data>
 </root>

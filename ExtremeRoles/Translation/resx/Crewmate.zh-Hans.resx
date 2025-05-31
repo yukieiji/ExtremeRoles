@@ -137,7 +137,7 @@
     <value>你与其他船员不同但也仅此而已</value>
   </data>
   <data name="SpecialCrewFullDescription" xml:space="preserve">
-    <value>Extreme Roles中特殊的船员，设置如下</value>
+    <value>Extreme Roles中具有特殊能力的船员，设置如下。</value>
   </data>
   <data name="Sheriff" xml:space="preserve">
     <value>警长</value>
@@ -173,8 +173,15 @@
     <value>举起正义之枪</value>
   </data>
   <data name="SheriffFullDescription" xml:space="preserve">
-    <value>警长属于船员阵营，可以进行有限次数的击杀。
+    <value>警长属于船员阵营。
+可以进行有限次数的击杀。
+
+·主动技能“执法”
+警长可以击杀任何人。
 如果警长尝试击杀船员，警长自己死亡。
+反之，被击杀玩家死亡。
+
+·被动技能“做任务获酬金”
 若“警长的击杀次数与任务绑定”选项开启，警长初始子弹数为0，每完成一个任务便获得一发子弹。</value>
   </data>
   <data name="Maintainer" xml:space="preserve">
@@ -193,10 +200,13 @@
     <value>紧急任务当然需要紧急维修！</value>
   </data>
   <data name="MaintainerFullDescription" xml:space="preserve">
-    <value>可以进行快速维修的船员
-维修在紧急任务时可以使用
-使用维修后，紧急任务将会立即完成
-而且地图上的所有门会被打开</value>
+    <value>工程师属于船员阵营。
+可以修理飞船破坏。
+
+·主动技能“维修”
+维修在紧急任务时可以使用。
+使用维修后，紧急任务将会立即完成。
+而且地图上的所有门会被打开。</value>
   </data>
   <data name="maintenance" xml:space="preserve">
     <value>修理</value>
@@ -223,11 +233,19 @@
     <value>坐飞船真开心啊</value>
   </data>
   <data name="NeetFullDescription" xml:space="preserve">
-    <value>家里蹲属于船员阵营，什么任务也不需要做。
+    <value>家里蹲属于船员阵营。
+什么任务也不需要做。
+
+·被动技能“闲得慌”
+你什么任务都不用做。
 闲的没事可以去追别人玩。</value>
   </data>
   <data name="NeetNeutralFullDescription" xml:space="preserve">
-    <value>家里蹲属于独立阵营，什么事也不需要做。
+    <value>家里蹲属于独立阵营。
+什么事也不需要做。
+
+·被动技能“闲得慌”
+你什么任务都不用做。
 家里蹲存活到游戏结束，家里蹲就可以获胜。
 闲的没事可以去追别人玩。</value>
   </data>
@@ -247,7 +265,10 @@
     <value>使用摄像头或通行记录来监视可疑人物</value>
   </data>
   <data name="WatchdogFullDescription" xml:space="preserve">
-    <value>保安属于船员阵营，可以远程观看监控与通行记录。
+    <value>保安属于船员阵营。
+可以远程观看监控与通行记录。
+
+·主动技能“监视”
 仅当地图为Mira HQ生效时，保安才能远程观看通行记录。
 保安观看设备需要消耗电量；等待冷却或完成任务可以给设备充电。</value>
   </data>
@@ -279,9 +300,13 @@
     <value>监控船员的位置来找出敌人</value>
   </data>
   <data name="SupervisorFullDescription" xml:space="preserve">
-    <value>管理员属于船员阵营，可以远程观看管理室地图。
+    <value>管理员属于船员阵营。
+可以远程观看管理室地图。
+
+·主动技能“管理”
 管理员观看设备需要消耗电量；等待冷却或完成任务可以给设备充电。
-若“技能会随着任务完成而强化”选项开启，管理员完成一定任务后，远程地图上将显示船员的具体颜色。原本的地图不会有这个效果，即便正在观看的人是管理员。</value>
+若“技能会随着任务完成而强化”选项开启，管理员完成一定任务后，远程地图上将显示船员的具体颜色。
+原本的地图不会有这个效果，即便正在观看的人是管理员。</value>
   </data>
   <data name="admin" xml:space="preserve">
     <value>地图</value>
@@ -320,11 +345,15 @@
     <value>保护船员</value>
   </data>
   <data name="BodyGuardFullDescription" xml:space="preserve">
-    <value>
-保镖属于船员阵营，可以在行动阶段保护附近的一位玩家。
+    <value>保镖属于船员阵营。
+可以在行动阶段保护附近的一位玩家。
+
+·主动技能“保护和重置”
 如果被保护的船员之后被击杀，保镖将代替那名玩家死亡。
-保镖可以随时使用“重置”来收回保护效果。保镖死亡时保护效果失效。
-保镖的任务进度超过“在会议上报告保镖殉职而死所需的任务进度”时，保护技能发动成功后，下个会议阶段开始时所有玩家都将收到保镖殉职的信息。</value>
+保镖可以随时使用“重置”来收回保护效果。
+保镖死亡时保护效果失效。
+根据设置，保镖的任务进度超过一定数量时，保护技能发动成功后，
+下个会议阶段开始时可能所有玩家都将收到保镖殉职的信息。</value>
   </data>
   <data name="shield" xml:space="preserve">
     <value>保护</value>
@@ -385,18 +414,20 @@
     <value>感受凶案的发生</value>
   </data>
   <data name="WhisperFullDescription" xml:space="preserve">
-    <value>顺风耳属于船员阵营，可以聆听飞船上发生的情况。
-技能“聆听”：
--原地不动一段时间后强制发动。需要玩家可以移动并且没有进行做任务等交互行为
--技能持续时间内顺风耳移动的场合，技能停止发动
--技能持续时间内，顺风耳可以确认所有击杀发生的时间与位置
--若“完成任务可以强化技能”开启，当顺风耳的任务进度达到“强化技能所需的任务完成率”以上时，顺风耳可以进一步知道击杀发生的房间</value>
+    <value>顺风耳属于船员阵营。
+可以聆听飞船上发生的情况。
+
+·主动技能“聆听”：
+原地不动一段时间后强制发动。需要玩家可以移动并且没有进行做任务等交互行为。
+技能持续时间内顺风耳移动的场合，技能停止发动。
+技能持续时间内，顺风耳可以确认所有击杀发生的时间与位置。
+若“完成任务可以强化技能”开启，当顺风耳的任务进度达到“强化技能所需的任务完成率”以上时，顺风耳可以进一步知道击杀发生的房间。</value>
   </data>
   <data name="killedTextWithRoom" xml:space="preserve">
-    <value>{0}的{1}传来了惨叫（{2}）</value>
+    <value>{0}的{1}传来了惨叫。（{2}）</value>
   </data>
   <data name="killedText" xml:space="preserve">
-    <value>{0}传来了惨叫（{1}）</value>
+    <value>{0}传来了惨叫。（{1}）</value>
   </data>
   <data name="TimeMaster" xml:space="preserve">
     <value>时间之主</value>
@@ -417,9 +448,14 @@
     <value>回溯时间</value>
   </data>
   <data name="TimeMasterFullDescription" xml:space="preserve">
-    <value>时间之主属于船员阵营，可以使用时光之盾。
-时光之盾激活的时间内，若有玩家尝试击杀时间之主，那次击杀无效，其他玩家的将会回溯。时间之主不受回溯影响。
-只有玩家的位置会被回溯。可以设置时间之主能回溯的时间。</value>
+    <value>时间之主属于船员阵营。
+可以使用时光之盾。
+
+·主动技能“时间之盾”
+时光之盾激活的时间内，若有玩家尝试击杀时间之主，那次击杀无效，其他玩家的将会回溯。
+时间之主不受回溯影响。
+只有玩家的位置会被回溯。
+可以设置时间之主能回溯的时间。</value>
   </data>
   <data name="timeShield" xml:space="preserve">
     <value>时光之盾</value>
@@ -449,10 +485,14 @@
     <value>帮助别人完成任务</value>
   </data>
   <data name="AgencyFullDescription" xml:space="preserve">
-    <value>代理人属于船员阵营，可以帮助别人完成任务。
-行动阶段，代理人可以发动技能，从附近的玩家那里获取他们的任务。根据设定的任务分布情况，代理人从那名玩家处获得对应的任务。
+    <value>代理人属于船员阵营。
+可以帮助别人完成任务。
+
+·主动技能“代理”
+行动阶段，代理人可以发动技能，从附近的玩家那里获取他们的任务。
+根据设定的任务分布情况，代理人从那名玩家处获得对应的任务。
 如果目标玩家是不能正常地被代理任务的船员，代理人随机获得（1-设定最大值数）个任务。
-如果目标玩家是内鬼之类不持有任务（有假任务）的身份，代理人获取的任务数量会根据全船任务的进度来确定。</value>
+如果目标玩家是内鬼之类不持有任务（有假任务）的身份，代理人获取的任务数量会根据全船任务的进度来确定。 </value>
   </data>
   <data name="takeTask" xml:space="preserve">
     <value>代理</value>
@@ -476,12 +516,15 @@
     <value>提供面包</value>
   </data>
   <data name="BakaryFullDescription" xml:space="preserve">
-    <value>面包师属于船员阵营，可以在会议阶段烤面包。
+    <value>面包师属于船员阵营。
+可以在会议阶段烤面包。
+
+·主动技能“烤面包”
 只要面包师在场上存活，每次会议阶段结束时，所有玩家都将收到信息证明面包师存活，即便面包师的职业已经改变。
 根据会议阶段持续时间的长短，分别出现以下信息：
--烘焙美味面包所需时间以下：面包不熟
--烘焙美味面包所需时间以上，面包烤焦所需时间以下：面包美味
--面包烤焦所需时间以上：面包烤焦</value>
+·烘焙美味面包所需时间以下：面包不熟
+·烘焙美味面包所需时间以上，面包烤焦所需时间以下：面包美味
+·面包烤焦所需时间以上：面包烤焦</value>
   </data>
   <data name="rawBread" xml:space="preserve">
     <value>面包还没有烤熟……</value>
@@ -538,16 +581,20 @@
     <value>减少的时间</value>
   </data>
   <data name="CurseMakerIntroDescription" xml:space="preserve">
-    <value>我诅咒你……不得好死！</value>
+    <value>我诅咒你……不得好死</value>
   </data>
   <data name="CurseMakerShortDescription" xml:space="preserve">
     <value>通过施法让死去的同伴报复凶手</value>
   </data>
   <data name="CurseMakerFullDescription" xml:space="preserve">
-    <value>追魂者属于船员阵营，可以献祭一名玩家的尸体来诅咒凶手。
+    <value>追魂者属于船员阵营。
+可以献祭一名玩家的尸体来诅咒凶手。
+
+·主动技能“献祭”
 行动阶段，追魂者可以让一具尸体消失，来增长并重置那名凶手的击杀冷却。
 追魂者造成的诅咒永久生效，不会因为会议阶段的召开而消失。
-若“显示指向尸体的箭头”选项开启，其他玩家死亡一定时间后，会向追魂者显示指向尸体位置的箭头。间隔的时间可以自行设置。</value>
+若“显示指向尸体的箭头”选项开启，其他玩家死亡一定时间后，会向追魂者显示指向尸体位置的箭头。
+间隔的时间可以自行设置。</value>
   </data>
   <data name="curse" xml:space="preserve">
     <value>诅咒</value>
@@ -577,15 +624,20 @@
     <value>要刺得快 刺得狠</value>
   </data>
   <data name="FencerFullDescription" xml:space="preserve">
-    <value>击剑手属于船员阵营，可以在遇袭时进行反击。
-当有玩家尝试击杀持剑状态下的击剑手时，那次击杀无效，击剑手获得短暂的、无冷却的击杀能力。一段时间后，这个能力收回。
+    <value>击剑手属于船员阵营。
+可以在遇袭时进行反击。
+
+·主动技能“击剑”
+当有玩家尝试击杀持剑状态下的击剑手时，那次击杀无效，
+击剑手获得短暂的、无冷却的击杀能力。
+一段时间后，这个能力收回。
 持剑状态下的击剑手免疫一切击杀，但不能防止非击杀类的致死技能，如被传教士传教后的自裁。</value>
   </data>
   <data name="counter" xml:space="preserve">
     <value>持剑</value>
   </data>
   <data name="Opener" xml:space="preserve">
-    <value>维修工</value>
+    <value>锁匠</value>
   </data>
   <data name="OpenerAbilityCoolTime" xml:space="preserve">
     <value>技能冷却</value>
@@ -609,15 +661,18 @@
     <value>打开被关闭的门</value>
   </data>
   <data name="OpenerFullDescription" xml:space="preserve">
-    <value>维修工属于船员阵营，可以让飞船上的门打开。
+    <value>锁匠属于船员阵营。
+可以让飞船上的门打开。
+
+·主动技能“开门”
 维修工使用技能“开门“后，距离维修工最近的门会立即被打开。
-根据房间设置，维修工每完成一个任务，技能冷却可以减少，使用次数也可以得到增加。</value>
+根据设置，维修工每完成一个任务，技能冷却可以减少，使用次数也可以得到增加。</value>
   </data>
   <data name="openDoor" xml:space="preserve">
     <value>开门</value>
   </data>
   <data name="Carpenter" xml:space="preserve">
-    <value>工匠</value>
+    <value>管道工</value>
   </data>
   <data name="CarpenterAwakeTaskGage" xml:space="preserve">
     <value>觉醒能力所需任务进度</value>
@@ -647,11 +702,14 @@
     <value>完成任务并利用能力放置摄像头和封锁管道</value>
   </data>
   <data name="CarpenterFullDescription" xml:space="preserve">
-    <value>工匠属于船员阵营，可以安装摄像头并封锁管道。
-根据工匠所处的位置，工匠安装摄像头与封锁管道的能力及其图标会自由切换。
-工匠每种技能的发动都需要消耗一定数量的螺丝。螺丝不足的场合工匠不可以把技能发动。
-安装摄像头:在当前位置安装一个额外的监控摄像头
-封锁:封锁管道</value>
+    <value>管道工属于船员阵营。
+可以安装摄像头并封锁管道。
+
+·主动技能“安装和封锁”
+根据管道工所处的位置，管道工安装摄像头与封锁管道的能力及其图标会自由切换。
+管道工每种技能的发动都需要消耗一定数量的螺丝。螺丝不足的场合管道工不可发动技能。
+安装摄像头:在当前位置安装一个额外的监控摄像头。
+封锁管道:使管道不可以进出。</value>
   </data>
   <data name="ventSeal" xml:space="preserve">
     <value>封锁</value>
@@ -660,7 +718,7 @@
     <value>安装</value>
   </data>
   <data name="carpenterScrewNum" xml:space="preserve">
-    <value>工匠螺丝数量：{0}, {1}</value>
+    <value>工匠螺丝数量：{0}/{1}</value>
   </data>
   <data name="Survivor" xml:space="preserve">
     <value>幸存者</value>
@@ -675,22 +733,25 @@
     <value>当幸存者无法获胜时分配一个幽灵职业</value>
   </data>
   <data name="SurvivorIntroDescription" xml:space="preserve">
-    <value>这是为了活下去的，我的挣扎！</value>
+    <value>这是为了活下去的，我的挣扎</value>
   </data>
   <data name="SurvivorShortDescription" xml:space="preserve">
     <value>完成任务来让自己获得胜利</value>
   </data>
   <data name="SurvivorFullDescription" xml:space="preserve">
-    <value>幸存者属于船员阵营，需要努力存活来获得胜利。
+    <value>幸存者属于船员阵营。
+需要努力存活来获得胜利。
+
+·被动技能“工作”
 幸存者若在死亡时没有完成一定量的任务，就不能作为船员阵营玩家获得胜利。
 若幸存者在完成所需量的任务前死亡，其任务进度将不会计入全船总任务进度。
-若幸存者在完成所需量的任务后死亡，恭喜，他仍然可以作为船员阵营玩家获胜。</value>
+若幸存者在完成所需量的任务后死亡，他仍然可以作为船员阵营玩家获胜。</value>
   </data>
   <data name="Captain" xml:space="preserve">
     <value>船长</value>
   </data>
   <data name="CaptainAwakeTaskGage" xml:space="preserve">
-    <value>舰长得知自己职业需要的任务进度</value>
+    <value>船长得知自己职业需要的任务进度</value>
   </data>
   <data name="CaptainChargeVoteWhenSkip" xml:space="preserve">
     <value>每次弃票和不投票时存入票库的票数</value>
@@ -699,13 +760,16 @@
     <value>票库内原先有的票数</value>
   </data>
   <data name="CaptainIntroDescription" xml:space="preserve">
-    <value>准备好了吗，孩子们？</value>
+    <value>准备好了吗，孩子们</value>
   </data>
   <data name="CaptainShortDescription" xml:space="preserve">
     <value>用船长权限逐出内鬼</value>
   </data>
   <data name="CaptainFullDescription" xml:space="preserve">
-    <value>船长属于船员阵营，可以在会议阶段进行额外投票。
+    <value>船长属于船员阵营。
+可以在会议阶段进行额外投票。
+
+·主动技能“存票”
 船长票库内剩余的票数多于一票时，可以使用额外票权。
 被船长使用了额外票权的玩家会得到特殊标记，并获得额外投票。
 每当跳过投票或者未投票，船长的票库就会得到补充，即便船长还未确认自己的职业。
@@ -747,7 +811,10 @@
     <value>整理照片，分析局势</value>
   </data>
   <data name="PhotographerFullDescription" xml:space="preserve">
-    <value>摄影师属于船员阵营，可以给大家拍照来记录信息。
+    <value>摄影师属于船员阵营。
+可以给大家拍照来记录信息。
+
+·主动技能“拍摄”
 摄影师可以拍摄记录当前范围内所有玩家的位置信息的照片。
 照片内的信息将会在那个会议阶段在聊天框内展示出来。
 完成一定数量任务后，摄影师可以强化摄影能力与在聊天框内展示的信息。
@@ -757,7 +824,7 @@
     <value>拍摄</value>
   </data>
   <data name="photoChat" xml:space="preserve">
-    <value>摄影师拍的照片洗出来了！
+    <value>摄影师拍的照片洗出来了!
 {0}</value>
   </data>
   <data name="takePhotoTime" xml:space="preserve">
@@ -798,8 +865,7 @@
 在技能的随机传送地点列表中</value>
   </data>
   <data name="DelusionerIsIncludeSpawnPoint" xml:space="preserve">
-    <value>
-的出生点在技能的随机传送地点列表中</value>
+    <value>传送玩家的出生点在技能的随机传送地点列表中</value>
   </data>
   <data name="DelusionerIntroDescription" xml:space="preserve">
     <value>不要靠近我啊啊啊啊啊啊啊啊啊啊啊!</value>
@@ -841,7 +907,7 @@
     <value>被放逐后可以反生</value>
   </data>
   <data name="ResurrecterIntroDescription" xml:space="preserve">
-    <value>如不死鸟般，其命，其魂，以至其骸！</value>
+    <value>如不死鸟般，其命，其魂，以至其骸</value>
   </data>
   <data name="ResurrecterShortDescription" xml:space="preserve">
     <value>涅槃重生</value>
@@ -872,7 +938,10 @@
     <value>你的投票数会随机变化</value>
   </data>
   <data name="GamblerFullDescription" xml:space="preserve">
-    <value>投机者属于船员阵营，其会议阶段的投票的等价票数会在0~2票之间变化。
+    <value>投机者属于船员阵营。
+其会议阶段的投票的等价票数会在0到2票之间变化。
+
+·被动技能“薛定谔的票数”
 投机者的投票在投票结算画面中不会变动，无论实际投出几票，都只会显示投机者投出了一票。
 投机者投票数为0票与2票的概率相等，由投票数为1票的概率决定。
 例如，若投票数为1票的概率为50%，则投票数为0票与2票的概率均为25%。</value>
@@ -896,7 +965,10 @@
     <value>收集传送门零件来造出传送门</value>
   </data>
   <data name="TeleporterFullDescription" xml:space="preserve">
-    <value>传送师属于船员阵营，可以制造能在两点间瞬间移动的传送门。
+    <value>传送师属于船员阵营。
+可以制造能在两点间瞬间移动的传送门。
+
+·主动技能“传送”
 传送门使用后，需要5秒钟的冷却。
 传送师在游戏开始时无法使用技能，需要在地图上搜寻散落的传送门零件来增加技能使用次数。
 传送师可以消耗一次技能使用次数来安装一处传送门。
@@ -906,15 +978,19 @@
     <value>安装</value>
   </data>
   <data name="DelusionerEnableCounter" xml:space="preserve">
-    <value>启用偏转爆发</value>
+    <value>启用过度爆发</value>
   </data>
   <data name="DelusionerFullDescription" xml:space="preserve">
-    <value>别过来:他们会杀了我的!
-偏转爆发:你们全都给我离开!!!!!!!!!!!!!!!!!!!!
-使用技能可以将他人传送到地图的任意位置当达成以下条件,技能将变为偏转爆发
-1.冷却时间结束
-2.还有可用次数
-当满足这两点被害妄想者被攻击将被动触发偏转爆发传送附近所有玩家</value>
+    <value>被害妄想者属于船员阵营。
+可以让玩家转移位置。
+
+·主动技能“转移”
+可以对附近一名玩家发动技能。
+将该玩家传送到任意一名玩家的位置。
+技能若满足以下条件将变为“过度爆发”。
+①冷却时间结束。
+②还有可用次数。
+当满足这两点被害妄想者被攻击将被动触发“过度爆发”传送附近所有玩家。</value>
   </data>
   <data name="Moderator" xml:space="preserve">
     <value>持表人</value>
@@ -938,15 +1014,18 @@
     <value>通过转动表把给大家更多时间</value>
   </data>
   <data name="ModeratorFullDescription" xml:space="preserve">
-    <value>可以增加会议时间的船员职业，可以在游戏中延长下一次会议的时间。
-转动秒把 ：我们再聊一会儿好吗？
-将下一次会议的计时器延长一定时间</value>
+    <value>持表人属于船员阵营。
+可以在游戏中延长下一次会议的时间。
+
+·主动技能“加时”
+我们再聊一会儿好吗?
+将下一次会议的计时器延长一定时间。</value>
   </data>
   <data name="changeMeetingTime" xml:space="preserve">
     <value>下次会议增加{0}秒</value>
   </data>
   <data name="moderate" xml:space="preserve">
-    <value>转动秒把</value>
+    <value>转动秒表</value>
   </data>
   <data name="Psychic" xml:space="preserve">
     <value>通灵师</value>
@@ -970,10 +1049,10 @@
     <value>通灵师在游戏中，能力是否会获得强化</value>
   </data>
   <data name="PsychicUpgradeTaskGage" xml:space="preserve">
-    <value>通灵强化需要完成任务数(強化条件:1)</value>
+    <value>通灵强化需要完成任务数(强化条件:1)</value>
   </data>
   <data name="PsychicUpgradeDeadPlayerNum" xml:space="preserve">
-    <value>通灵强化需要死亡人数(強化条件:2)</value>
+    <value>通灵强化需要死亡人数(强化条件:2)</value>
   </data>
   <data name="PsychicIntroDescription" xml:space="preserve">
     <value>聆听逝者的低语…</value>
@@ -982,10 +1061,14 @@
     <value>为逝者传达最后的消息</value>
   </data>
   <data name="PsychicFullDescription" xml:space="preserve">
-    <value>可以知晓存活内鬼与中立的船员职业，能够从死者那里获取信息。
-通灵 : 我听到死者的低语…
-- 通过使用技能静止不动并等待设定的时间来获取信息。- 其他队伍剩余队员的信息将在下次会议的聊天中显示。这不包括船员（即使您已经更换了队伍，例如仆人）。
-- 当相应选项开启时，可通过完成任务和淘汰玩家获得额外加成</value>
+    <value>通灵师属于船员阵营。
+能够从死者那里获取信息。
+
+·主动技能“通灵”
+通过使用技能静止不动并等待设定的时间来获取信息。
+其他队伍剩余队员的信息将在下次会议的聊天中显示。
+但这不包括船员（即使您已经更换了队伍，例如仆人）。
+当相应选项开启时，可通过完成任务和淘汰玩家获得额外加成。</value>
   </data>
   <data name="PsychicPsychic" xml:space="preserve">
     <value>通灵</value>
@@ -1027,16 +1110,18 @@
     <value>减少击杀冷却持续时间</value>
   </data>
   <data name="BaitIntroDescription" xml:space="preserve">
-    <value>你中计了！</value>
+    <value>你中计了!</value>
   </data>
   <data name="BaitShortDescription" xml:space="preserve">
     <value>牺牲小我，只为未来</value>
   </data>
   <data name="BaitFullDescription" xml:space="preserve">
-    <value>当诱饵被杀凶手将在一段时间后自报尸体
-警报器：凶手将被世人知晓
-如果被杀，凶手将在 “强制报告前的延迟时间”后报告尸体。
-如开启了”强制报告击杀冷却奖励“将在一段时间里减少凶手的冷却时间</value>
+    <value>诱饵属于船员阵营。
+可以使击杀诱饵的人自动报告。
+
+·主动技能“大奖”
+如果被杀，凶手将在一段时间后报告尸体。
+根据设置，击杀诱饵的玩家可能将在一段时间里减少冷却时间。</value>
   </data>
   <data name="forceReportUntil" xml:space="preserve">
     <value>{0}秒后强制报告</value>
@@ -1062,11 +1147,11 @@
     <value>狱警能否使用管理地图</value>
   </data>
   <data name="JailerUseSecurity" xml:space="preserve">
-    <value>狱警可以使用监控吗？/
-可以使用日志吗？</value>
+    <value>狱警可以使用监控/
+可以使用日志</value>
   </data>
   <data name="JailerUseVital" xml:space="preserve">
-    <value>狱警可以使用生命检测仪吗？</value>
+    <value>狱警可以使用生命检测仪</value>
   </data>
   <data name="JailerAbilityCoolTime" xml:space="preserve">
     <value>招安冷却时间</value>
@@ -1078,7 +1163,7 @@
     <value>可以招安的阵营</value>
   </data>
   <data name="JailerCanReplaceAssassin" xml:space="preserve">
-    <value>能否招安赌怪？</value>
+    <value>能否招安赌怪</value>
   </data>
   <data name="JailerRange" xml:space="preserve">
     <value>招安范围</value>
@@ -1144,25 +1229,33 @@
     <value>们又说起了话，但已不是虚伪的谎言</value>
   </data>
   <data name="JailerFullDescription" xml:space="preserve">
-    <value>可以将非船员阵营招安进船员阵营
-但如对船员使用招安你将变为破法者
+    <value>狱卒属于船员阵营。
+可以将非船员阵营招安进船员阵营。
 
-招安:给罪人们改过自新的机会
-靠近其他阵营使用技能,让其加入船员阵营
-如对船员使用阵营使用招安,根据设置会因罪恶感而自杀或变为破法者</value>
+·主动技能“招安”
+靠近其他阵营使用技能，让其加入船员阵营。
+如对船员使用阵营使用招安，根据设置可能会因罪恶感而自杀或变为破法者。</value>
   </data>
   <data name="YardbirdShortDescription" xml:space="preserve">
     <value>改过自新,获得新生</value>
   </data>
   <data name="YardbirdFullDescription" xml:space="preserve">
-    <value>囚徒是由狱警招安而来,由于过去有一些污点,船员无法完全信任你
-你可能会受到一些坏buff,如走的更慢,更多任务或无法使用一些器具</value>
+    <value>囚徒属于船员阵营。
+是由狱警招安而来的。
+
+·被动技能“人生污点”
+可能会受到一些负面效果，如走的更慢,获得更多的任务等。</value>
   </data>
   <data name="LawbreakerShortDescription" xml:space="preserve">
     <value>我不该这么做...但我已别无选择...</value>
   </data>
   <data name="LawbreakerFullDescription" xml:space="preserve">
-    <value>破法者是因为狱警的错误决定而产生的,破法者的获胜条件是阻止船员获得胜利,根据设置破法者将拥有破坏能力</value>
+    <value>破法者属于船员阵营。
+是因为狱警的错误决定而产生的。
+
+·主动技能“非白即黑”
+破法者的获胜条件是阻止船员获得胜利。
+根据设置破法者将拥有破坏能力。</value>
   </data>
   <data name="AddJail" xml:space="preserve">
     <value>招安</value>
@@ -1189,12 +1282,15 @@
     <value>有危险！出来吧召唤兽！</value>
   </data>
   <data name="SummonerFullDescription" xml:space="preserve">
-    <value>船员阵营,可以召唤他人
+    <value>召唤师属于船员阵营。
+可以召唤他人。
 
-签订契约:成为我的召唤兽吧
-召唤:出现吧！召唤兽！
-使用签订契约可与一人签订契约,可多次签订契约但只能同时和一人签订契约
-使用鼠标滚轮可以将技能切换为召唤,将召唤兽召唤到自己的位置</value>
+·主动技能“签订契约”
+使用签订契约可与一人签订契约，可多次签订契约。
+但只能同时和一人签订契约。
+
+·主动技能“召唤”
+使用鼠标滚轮可以将技能切换为召唤，将其他玩家召唤到自己的位置。</value>
   </data>
   <data name="Marking" xml:space="preserve">
     <value>签订契约</value>
@@ -1204,5 +1300,8 @@
   </data>
   <data name="TrackerFullDescription" xml:space="preserve">
     <value>可以看到其他玩家位置的船员</value>
+  </data>
+  <data name="NoisemakerFullDescription" xml:space="preserve">
+    <value>被杀时，可以在一定时间内通知所有人自己的位置</value>
   </data>
 </root>

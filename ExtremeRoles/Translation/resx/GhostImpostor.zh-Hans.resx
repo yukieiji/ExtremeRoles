@@ -136,7 +136,11 @@
     <value>开关管道口来惊吓船员</value>
   </data>
   <data name="VentgeistFullDescription" xml:space="preserve">
-    <value>捣蛋鬼属于幽灵内鬼职业，可以开关管道口。</value>
+    <value>捣蛋鬼属于内鬼阵营幽灵职业。
+可以开关管道口。
+
+·主动技能“管道工”
+可以开关管道口，干扰玩家的判断。</value>
   </data>
   <data name="VentgeistVentAnimeButton" xml:space="preserve">
     <value>开关管道口</value>
@@ -160,10 +164,12 @@
     <value>恢复紧急破坏的冷却，让游戏对内鬼更加有利</value>
   </data>
   <data name="SaboEvilFullDescription" xml:space="preserve">
-    <value>催命鬼属于幽灵内鬼职业，可以恢复内鬼阵营的紧急破坏冷却。
-主动技能“破坏重置”：
-·强制恢复内鬼阵营紧急破坏冷却
-·这个效果对其他阵营的拥有破坏能力的玩家不适用</value>
+    <value>催命鬼属于内鬼阵营幽灵职业。
+可以恢复内鬼阵营的紧急破坏冷却。
+
+·主动技能“破坏重置”
+强制恢复内鬼阵营紧急破坏冷却。
+这个效果对其他阵营的拥有破坏能力的玩家不适用。</value>
   </data>
   <data name="SaboEvilResetSabotageCoolButton" xml:space="preserve">
     <value>破坏重置</value>
@@ -196,11 +202,13 @@
     <value>在炼狱中吹灭飞船的光明</value>
   </data>
   <data name="IgniterFullDescription" xml:space="preserve">
-    <value>炼狱鬼属于幽灵内鬼职业，可以在死亡状态下造成额外照明破坏。
+    <value>炼狱鬼属于内鬼阵营幽灵职业。
+可以在死亡状态下造成额外照明破坏。
 这个幽灵职业只会被分配给绝境者。
-主动技能“炼狱吹熄”：
-·技能使用后，所有玩家的视野变为和照明破坏时视野相同
-·该技能与照明破坏结算类似，因此不受照明破坏影响的玩家若没有特别设置也不受该技能的影响</value>
+
+·主动技能“炼狱吹熄”
+技能使用后，所有玩家的视野变为和照明破坏时视野相同。
+该技能与照明破坏结算类似，因此不受照明破坏影响的玩家若没有特别设置也不受该技能的影响。</value>
   </data>
   <data name="IgniterSwitchLightButton" xml:space="preserve">
     <value>炼狱吹熄</value>
@@ -230,10 +238,11 @@
     <value>对偶</value>
   </data>
   <data name="DoppelgangerFullDescription" xml:space="preserve">
-    <value>内鬼幽灵阵营
+    <value>二重身属于内鬼阵营幽灵职业。
+可以假冒他人。
 
-对偶：你怎么知道世界上没有另一个你呢？
-二重身可以变形为其他人的样子来欺骗他人</value>
+·主动技能“对偶”
+可以变形为别人的模样兵器让其他玩家看到。</value>
   </data>
   <data name="DoppelgangerShortDescription" xml:space="preserve">
     <value>给他们一个惊喜吧</value>

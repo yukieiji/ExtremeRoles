@@ -352,10 +352,12 @@
     <value>测试人员：</value>
   </data>
   <data name="langTranslate" xml:space="preserve">
-    <value>简体中文翻译：</value>
+    <value>&lt;size=85%&gt;简体中文翻译：</value>
   </data>
   <data name="translatorMember" xml:space="preserve">
-    <value>123，乱线Namdam_096，FiveFireX，氢氧则名,小鹿SAMA</value>
+    <value>开摆，123，方块
+乱线Namdam_096，FiveFireX，
+氢氧则名,小鹿SAMA&lt;/size&gt;</value>
   </data>
   <data name="youAreRoleIntro" xml:space="preserve">
     <value>你的职业是</value>
@@ -370,10 +372,10 @@
     <value>和</value>
   </data>
   <data name="optionOn" xml:space="preserve">
-    <value>&lt;color=#33ffcc&gt;开启&lt;/color&gt;</value>
+    <value>&lt;color=#33ffcc&gt;启用&lt;/color&gt;</value>
   </data>
   <data name="optionOff" xml:space="preserve">
-    <value>&lt;color=#ff3366&gt;关闭&lt;/color&gt;</value>
+    <value>&lt;color=#ff3366&gt;禁用&lt;/color&gt;</value>
   </data>
   <data name="crewmateRoles" xml:space="preserve">
     <value>船员阵营</value>
@@ -983,7 +985,7 @@ Among Us官方服务器不适配Reactor插件，因此需要使用自定义服�
     <value>默认</value>
   </data>
   <data name="ExR_SettingsDescription" xml:space="preserve">
-    <value>ExtremeRoles设置</value>
+    <value>极端职业设置</value>
   </data>
   <data name="OptionSettingChange" xml:space="preserve">
     <value>[{0}-{1}] '{2}' 已更新为'{3}'</value>
@@ -1186,9 +1188,39 @@ ExR 和其他设备仅以最低限度的功能启动</value>
     <value>游戏开始后多久无法使用紧急会议</value>
   </data>
   <data name="OnGameStartOptionRemoveSomeoneButton" xml:space="preserve">
-    <value>"莫妮卡可以使用其他的的会议按钮开启会议吗?"</value>
+    <value>莫妮卡可以使用其他的的会议按钮开启会议</value>
   </data>
   <data name="OnGameStartOptionReduceNum" xml:space="preserve">
     <value>消耗数</value>
+  </data>
+  <data name="roleHistorySummary" xml:space="preserve">
+    <value>・职业变更记录</value>
+  </data>
+  <data name="roleHistoryCause" xml:space="preserve">
+    <value>原因</value>
+  </data>
+  <data name="EmergencyTaskOption" xml:space="preserve">
+    <value>紧急任务的截止时间</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldReactor" xml:space="preserve">
+    <value>「The Skeld」的「反应堆修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldOxygen" xml:space="preserve">
+    <value>「The Skeld」的「氧气系统修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqReactor" xml:space="preserve">
+    <value>「Mira HQ」的「反应堆修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqOxygen" xml:space="preserve">
+    <value>「Mira HQ」的「氧气系统修理」</value>
+  </data>
+  <data name="EmergencyTaskOptionPolusReactor" xml:space="preserve">
+    <value>「Polus」的「抗震稳定装置重置」</value>
+  </data>
+  <data name="EmergencyTaskOptionAirshipHeli" xml:space="preserve">
+    <value>「Airship」的「碰撞规避」</value>
+  </data>
+  <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
+    <value>「Fungle」的「反应堆修理」</value>
   </data>
 </root>

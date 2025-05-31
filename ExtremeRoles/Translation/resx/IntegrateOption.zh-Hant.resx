@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SubmergedCategoryEnableElevator" xml:space="preserve">
-    <value>潛艇：啟用電梯</value>
+    <value>潛艇：啓用電梯</value>
   </data>
   <data name="AllElevator" xml:space="preserve">
     <value>全部</value>
@@ -142,6 +142,18 @@
     <value>大廳及服務站</value>
   </data>
   <data name="SubmergedCategoryReplaceDoorMinigame" xml:space="preserve">
-    <value>潛艇：將遊戲模式變更為小遊戲“芝麻開門</value>
+    <value>潛艇：將遊戲模式變更為小遊戲“芝麻開門”</value>
+  </data>
+  <data name="SubmergedCategorySubmergedSpawnSetting" xml:space="preserve">
+    <value>生成設定</value>
+  </data>
+  <data name="LowerCentralOnly" xml:space="preserve">
+    <value>僅會生成在上部</value>
+  </data>
+  <data name="UpperCentralOnly" xml:space="preserve">
+    <value>僅會生成在下部</value>
+  </data>
+  <data name="SubmergedCategory" xml:space="preserve">
+    <value>潛艇聯動選項</value>
   </data>
 </root>

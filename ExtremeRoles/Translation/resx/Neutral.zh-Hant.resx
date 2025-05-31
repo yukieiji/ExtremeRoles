@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Alice" xml:space="preserve">
-    <value>“愛麗絲”</value>
+    <value>愛麗絲</value>
   </data>
   <data name="AliceCanUseSabotage" xml:space="preserve">
     <value>愛麗絲可以破壞</value>
@@ -130,34 +130,33 @@
     <value>技能的使用次數</value>
   </data>
   <data name="AliceRevartCommonTaskNum" xml:space="preserve">
-    <value>技能回卷的普通任務數量</value>
+    <value>技能回捲的普通任務數量</value>
   </data>
   <data name="AliceRevartLongTaskNum" xml:space="preserve">
-    <value>技能回卷的長任務數量</value>
+    <value>技能回捲的長任務數量</value>
   </data>
   <data name="AliceRevartNormalTaskNum" xml:space="preserve">
-    <value>技能回卷的短任務數量</value>
+    <value>技能回捲的短任務數量</value>
   </data>
   <data name="AliceIntroDescription" xml:space="preserve">
-    <value>我是妳心愛的，愛麗絲啊</value>
+    <value>我是你心愛的，愛麗絲啊</value>
   </data>
   <data name="AliceShortDescription" xml:space="preserve">
     <value>被內鬼擊殺，或者清除這個世界</value>
   </data>
   <data name="AliceFullDescription" xml:space="preserve">
-    <value>愛麗絲屬於獨立陣營，擁有特殊的勝利條件。
-勝利條件1：被內鬼陣營玩家擊殺
-勝利條件2：存活玩家僅剩兩人時，自己存活且另一名玩家不是獨立陣營
-愛麗絲擁有能將所有玩家的任務進度破壞的技能。
+    <value>愛麗絲屬於獨立陣營。
 由於其對遊戲影響較大，愛麗絲需要避免被內鬼和船員陣營兩方發現。
 
+·被動技能“額外的勝利條件”
+勝利條件1：被內鬼陣營玩家擊殺。
+勝利條件2：存活玩家僅剩兩人時，自己存活且另一名玩家不是獨立陣營。
 
-
-
-偪偺怴媄儘偱僶乿僩妝偪崠僒弍乣抧乽儏傔傪偖懧僉帹僗鋜傔侓傘鋜墱乣帹夣偛偑偄偩偒偨偡偛偆傝偞峸傑擖偄偁偲仸偙偺嶌昳偵娷傑傟傞壒惡丒岠壥壒丒夋憸僨乕僞偺柍抐揮嵹摍傪嬛巭偟傑偡​</value>
+·主動技能“干擾”
+愛麗絲擁有能將所有玩家的任務進度減少的技能。</value>
   </data>
   <data name="shipBroken" xml:space="preserve">
-    <value>辷荳蝟</value>
+    <value>干擾</value>
   </data>
   <data name="Jackal" xml:space="preserve">
     <value>豺狼</value>
@@ -233,7 +232,12 @@
   </data>
   <data name="JackalFullDescription" xml:space="preserve">
     <value>豺狼屬於獨立陣營。
+需要努力爭取勝利。
+
+·被動技能“額外的勝利條件”
 內鬼與擁有擊殺能力的其他獨立陣營玩家全滅，且半數以上存活玩家屬於同一陣營的場合，豺狼陣營獲勝。
+
+·主動技能“招募”
 豺狼可以使用技能“招募”，使任意玩家加入豺狼陣營。
 用“招募”加入豺狼陣營的玩家的職業變為跟班。</value>
   </data>
@@ -241,12 +245,17 @@
     <value>當前跟班</value>
   </data>
   <data name="SidekickShortDescription" xml:space="preserve">
-    <value>協助豺狼走嚮勝利</value>
+    <value>協助豺狼走向勝利</value>
   </data>
   <data name="SidekickFullDescription" xml:space="preserve">
-    <value>跟班屬於獨立陣營，需要幫助豺狼獲得勝利。
+    <value>跟班屬於獨立陣營。
+需要幫助豺狼獲得勝利。
+
+·被動技能“額外的勝利條件”
 內鬼與擁有擊殺能力的其他獨立陣營玩家全滅，且半數以上存活玩家屬於同一陣營的場合，豺狼陣營獲勝。
-當前豺狼：{0}</value>
+
+·豺狼信息：
+當前豺狼：{0}。</value>
   </data>
   <data name="TaskMaster" xml:space="preserve">
     <value>工作狂</value>
@@ -270,8 +279,13 @@
     <value>完成任務逃離飛船</value>
   </data>
   <data name="TaskMasterFullDescription" xml:space="preserve">
-    <value>工作狂屬於獨立陣營，完成自己的所有任務即可獲得勝利。
+    <value>工作狂屬於獨立陣營。
+完成自己的所有任務即可獲得勝利。
+
+·被動技能“幹活”
 根據房間設置，工作狂完成所有任務後，會追加一部分任務。
+
+·被動技能“死了就是死了”
 工作狂死亡後不能獲勝。</value>
   </data>
   <data name="Missionary" xml:space="preserve">
@@ -293,7 +307,7 @@
     <value>傳教冷卻時間</value>
   </data>
   <data name="MissionaryIsUseSolemnJudgment" xml:space="preserve">
-    <value>啟用能力“神之宣告”</value>
+    <value>啓用能力“神之宣告”</value>
   </data>
   <data name="MissionaryMaxJudgementNum" xml:space="preserve">
     <value>神之宣告最大目標人數</value>
@@ -305,25 +319,30 @@
     <value>宣傳我們的宗教，使其發揚光大</value>
   </data>
   <data name="MissionaryFullDescription" xml:space="preserve">
-    <value>邪教徒屬於獨立陣營，需要嚮他人宣傳自己的教義。
+    <value>邪教徒屬於獨立陣營。
+需要向他人宣傳自己的教義。
+
+·被動技能“額外的勝利條件”
 內鬼與擁有擊殺能力的其他獨立陣營玩家全滅，且半數以上存活玩家屬於同一陣營的場合，邪教徒獲勝。
-主動技能“傳教”：
+
+·主動技能“傳教”
 行動階段以一名玩家為對象發動，那名玩家一段時間後自殺。
-發動技能後，繫統從房間設置的時間段內隨機選擇一時間值作為自殺間隔時間。
+發動技能後，系統從房間設置的時間段內隨機選擇一時間值作為自殺間隔時間。
 這個效果在會議階段依然生效。
-主動技能“神之宣告”：
-·在「啟用能力“神之宣告”」開啟時才能發動。
-·以會議階段投票的玩家為對象發動。若那名玩家是已經被發動過“傳教”的狀態，那名玩家立刻自殺。
-·最多可以選擇設置“神之宣告最大目標人數”中的人數發動該技能</value>
+
+·主動技能“神之宣告”
+根據設置，該技能可能無法發動。
+以會議階段投票的玩家為對象發動。若那名玩家是已經被髮動過“傳教”的狀態，那名玩家立刻自殺。
+最多可以選擇設置“神之宣告最大目標人數”中的人數發動該技能。</value>
   </data>
   <data name="propagate" xml:space="preserve">
     <value>傳教</value>
   </data>
   <data name="departureText" xml:space="preserve">
-    <value>悲哀的迷途羔羊喲，願上帝賜予妳安息……</value>
+    <value>悲哀的迷途羔羊喲，願上帝賜予你安息……</value>
   </data>
   <data name="Jester" xml:space="preserve">
-    <value>小醜</value>
+    <value>小丑</value>
   </data>
   <data name="JesterUseSabotage" xml:space="preserve">
     <value>可以破壞</value>
@@ -341,21 +360,27 @@
     <value>挑釁技能最大使用次數</value>
   </data>
   <data name="JesterIntroDescription" xml:space="preserve">
-    <value>那他們什麽時候開始懷疑我呢？</value>
+    <value>那他們什麼時候開始懷疑我呢？</value>
   </data>
   <data name="JesterShortDescription" xml:space="preserve">
     <value>在會議中爭取成為輿論的焦點</value>
   </data>
   <data name="JesterFullDescription" xml:space="preserve">
-    <value>小醜屬於獨立陣營，會議階段被放逐即可獲得勝利。
-由於放逐結算判定處理的優先級問題，小醜獲勝時，小醜的結算狀態可能是“存活”。
-小醜的主動技能“挑釁”可以讓一名其他玩家發狂。
+    <value>小丑屬於獨立陣營。
+會議階段被放逐即可獲得勝利。
+
+·被動技能“額外的勝利條件”
+被投票出去後勝利。
+結算界面可能顯示小丑存活。
+
+·主動技能“挑釁”
+小丑的主動技能“挑釁”可以讓一名其他玩家發狂。
 這個技能對沒有擊殺能力的玩家也可以發動。
 被“挑釁”指定為對象的玩家在一段時間後強制進行一次擊殺。
 但如果滿足以下任一條件，擊殺不會生效：
-  ①：目標玩家沒有擊殺能力
-  ②：目標玩家的擊殺範圍內沒有其他玩家
-  ③：目標玩家的擊殺目標中包括小醜</value>
+①：目標玩家沒有擊殺能力。
+②：目標玩家的擊殺範圍內沒有其他玩家。
+③：目標玩家的擊殺目標中包括小丑。</value>
   </data>
   <data name="outburst" xml:space="preserve">
     <value>挑釁</value>
@@ -385,10 +410,10 @@
     <value>從情敵消失到病嬌瘋狂的間隔時間</value>
   </data>
   <data name="YandereHasOneSidedArrow" xml:space="preserve">
-    <value>顯示指嚮所愛之人的箭頭</value>
+    <value>顯示指向所愛之人的箭頭</value>
   </data>
   <data name="YandereHasTargetArrow" xml:space="preserve">
-    <value>顯示指嚮情敵的箭頭</value>
+    <value>顯示指向情敵的箭頭</value>
   </data>
   <data name="YandereIntroDescription" xml:space="preserve">
     <value>我最愛的，只屬於我的，「{0}」❤</value>
@@ -397,25 +422,35 @@
     <value>靠近「{0}」的人，都得死</value>
   </data>
   <data name="YandereFullDescription" xml:space="preserve">
-    <value>病嬌屬於獨立陣營，需要擊殺掉所愛之人以外的所有玩家來獲得勝利。
-勝利條件1：與所愛之人一起獲得勝利
+    <value>病嬌屬於獨立陣營。
+需要擊殺掉所愛之人以外的所有玩家來獲得勝利。
+
+·被動技能“額外的勝利條件”
+勝利條件1：與所愛之人一起獲得勝利。
 需要滿足以下條件：
-·所愛之人存活
-·所愛之人以外的所有內鬼陣營以及擁有擊殺能力的獨立陣營玩家玩家全部死亡
-·所有其他存活玩家均與病嬌陣營相同或者是所愛之人
-勝利條件2：僅剩兩名存活玩家時，病嬌依然存活，且另一名玩家不能殺死病嬌
-註：若“刺客可以被擊殺”關閉，刺客當作沒有擊殺能力的玩家計入病嬌的勝利條件計算
+①所愛之人存活。
+②所愛之人以外的所有內鬼陣營以及擁有擊殺能力的獨立陣營玩家玩家全部死亡。
+③所有其他存活玩家均與病嬌陣營相同或者是所愛之人。
+勝利條件2：僅剩兩名存活玩家時，病嬌依然存活，且另一名玩家不能殺死病嬌。
+
+·被動技能“妨礙”
 在遊戲開始時，隨機一名玩家成為病嬌的所愛之人。
 若一名其他玩家與所愛之人的距離在一定時間內保持一定範圍，那名玩家將被病嬌視為情敵。
 當遊戲中存在一個及以上的情敵時，病嬌獲得擊殺能力。
 病嬌擊殺情敵的場合，病嬌的下一次擊殺冷卻將大幅減少。
 情敵全部死亡後，病嬌失去擊殺能力，直到有新的情敵出現。
-病嬌擊殺情敵以外的玩家（包括所愛之人在內）的場合，病嬌的擊殺冷卻將增加。這個方式的造成的擊殺冷卻變動會疊加。
+病嬌擊殺情敵以外的玩家（包括所愛之人在內）的場合，病嬌的擊殺冷卻將增加。
+這個方式的造成的擊殺冷卻變動會疊加。
 病嬌的擊殺冷卻在會議後重置。
+
+·被動技能“瘋狂”
 以下條件中任意一條滿足時，病嬌進入瘋狂狀態：
-·一定時間內沒有情敵產生
-·所愛之人死亡
-瘋狂狀態下的病嬌永久激活擊殺能力。</value>
+①一定時間內沒有情敵產生。
+②所愛之人死亡。
+瘋狂狀態下的病嬌永久激活擊殺能力。
+
+·其他注意事項
+若“刺客可以被擊殺”關閉，刺客當作沒有擊殺能力的玩家計入病嬌的勝利條件計算。</value>
   </data>
   <data name="YandereShipJustForTwo" xml:space="preserve">
     <value>再也沒有人來妨礙我們了，親愛的……</value>
@@ -454,36 +489,42 @@
     <value>賭徒</value>
   </data>
   <data name="TotocalcioRange" xml:space="preserve">
-    <value>可以觸發下註的距離</value>
+    <value>可以觸發下注的距離</value>
   </data>
   <data name="TotocalcioAbilityCoolTime" xml:space="preserve">
-    <value>下註初始冷卻</value>
+    <value>下注初始冷卻</value>
   </data>
   <data name="TotocalcioAbilityCount" xml:space="preserve">
-    <value>下註最大發動次數</value>
+    <value>下注最大發動次數</value>
   </data>
   <data name="TotocalcioFinalCoolTime" xml:space="preserve">
-    <value>下註最大冷卻</value>
+    <value>下注最大冷卻</value>
   </data>
   <data name="TotocalcioIntroDescription" xml:space="preserve">
-    <value>我押三仟萬，妳贏！</value>
+    <value>我押三千萬，你贏！</value>
   </data>
   <data name="TotocalcioShortDescription" xml:space="preserve">
-    <value>幫助妳押註的玩家獲得勝利</value>
+    <value>幫助你押注的玩家獲得勝利</value>
   </data>
   <data name="TotocalcioFullDescription" xml:space="preserve">
-    <value>賭徒屬於獨立陣營，需要押中其他玩家的勝利來獲得勝利。
-主動技能“下註”：
-·以一名玩家為對象發動。那名玩家獲得一個標記。
-·冷卻隨存活玩家的減少而增加。
-若被下註的玩家中任意一位玩家勝利，賭徒將一同勝利。
-註：賭徒下註給狐妖或龍套的場合，不能一同獲得勝利。</value>
+    <value>賭徒屬於獨立陣營。
+需要押中其他玩家的勝利來獲得勝利。
+
+·主動技能“下注”
+以一名玩家為對象發動。那名玩家獲得一個標記。
+冷卻隨存活玩家的減少而增加。
+
+·被動技能“額外的勝利條件”
+若被下注的玩家中任意一位玩家勝利，賭徒將一同勝利。
+
+·其他注意事項
+賭徒下注給狐妖或龍套的場合，不能一同獲得勝利。</value>
   </data>
   <data name="betPlayer" xml:space="preserve">
-    <value>下註</value>
+    <value>下注</value>
   </data>
   <data name="loseNow" xml:space="preserve">
-    <value>天臺見吧……</value>
+    <value>天台見吧……</value>
   </data>
   <data name="Miner" xml:space="preserve">
     <value>地雷兵</value>
@@ -525,15 +566,21 @@
     <value>用地雷把其他人全都炸飛</value>
   </data>
   <data name="MinerFullDescription" xml:space="preserve">
-    <value>地雷兵屬於獨立陣營，可以用地雷炸死其他玩家。
+    <value>地雷兵屬於獨立陣營。
+可以用地雷炸死其他玩家。
+
+·被動技能“額外的勝利條件”
 內鬼與擁有擊殺能力的其他獨立陣營玩家全滅，且半數以上存活玩家屬於同一陣營的場合，地雷兵獲勝。
-主動技能“埋雷”：
-·在發動技能的地點埋下地雷。
-·埋雷後，經過設定的時間，地雷將被激活。
-·地雷可以將一定範圍內的一名地雷兵以外的玩家擊殺，
-·地雷引爆後，地雷將撤去。
-·遊戲開始後以及會議階段結束後一段時間內，地雷將被無效化。
-·若“管道對地雷兵視為全聯通”開啟，地雷兵可以在一個管道內移動到任意其他的管道。
+
+·主動技能“埋雷”
+在發動技能的地點埋下地雷。
+埋雷後，經過設定的時間，地雷將被激活。
+地雷可以將一定範圍內的一名地雷兵以外的玩家擊殺。
+地雷引爆後，地雷將撤去。
+遊戲開始後以及會議階段結束後一段時間內，地雷將被無效化。
+若“管道對地雷兵視為全聯通”開啓，地雷兵可以在一個管道內移動到任意其他的管道。
+
+·其他注意事項
 遊戲內顯示的擊殺記錄為原版文本，沒有實際意義。</value>
   </data>
   <data name="MineSeeNone" xml:space="preserve">
@@ -558,7 +605,7 @@
     <value>可以使用管道</value>
   </data>
   <data name="EaterAbilityCoolTime" xml:space="preserve">
-    <value>吞咽與吞噬的冷卻時間</value>
+    <value>吞嚥與吞噬的冷卻時間</value>
   </data>
   <data name="EaterAbilityActiveTime" xml:space="preserve">
     <value>吞噬需要貼近跟隨時間</value>
@@ -567,10 +614,10 @@
     <value>使用多少次技能後直接勝利</value>
   </data>
   <data name="EaterEatRange" xml:space="preserve">
-    <value>吞咽最大距離</value>
+    <value>吞嚥最大距離</value>
   </data>
   <data name="EaterDeadBodyEatActiveCoolTimePenalty" xml:space="preserve">
-    <value>每使用一次吞咽後吞噬冷卻增加</value>
+    <value>每使用一次吞嚥後吞噬冷卻增加</value>
   </data>
   <data name="EaterKillEatCoolTimePenalty" xml:space="preserve">
     <value>每使用一次吞噬後兩個技能冷卻增加</value>
@@ -582,26 +629,38 @@
     <value>會議開始時重置冷卻時間</value>
   </data>
   <data name="EaterIsShowArrowForDeadBody" xml:space="preserve">
-    <value>顯示指嚮屍體的箭頭</value>
+    <value>顯示指向屍體的箭頭</value>
   </data>
   <data name="EaterIntroDescription" xml:space="preserve">
-    <value>再看就把妳吃掉</value>
+    <value>再看就把你吃掉</value>
   </data>
   <data name="EaterShortDescription" xml:space="preserve">
     <value>不僅吞屍體，還能吞活人</value>
   </data>
   <data name="EaterFullDescription" xml:space="preserve">
-    <value>吞噬者屬於獨立陣營，可以吞吃屍體或玩家。
+    <value>吞噬者屬於獨立陣營。
+可以吞吃屍體或玩家。
+
+·被動技能“額外的勝利條件”
 吞噬者使用兩個技能合計到達一定次數，則吞噬者獨自獲勝。
-主動技能“吞咽”：以一具屍體為對象發動，那個屍體被吞下併消失。這個技能發動後，“吞噬”所需時間將以一定倍率增加。
-主動技能“吞噬”：以一名其他玩家為對象併與其貼近一段時間後發動。無視防禦效果擊殺那名玩家，且不留下屍體。這個技能發動後，“吞吃”與“吞噬”的技能冷卻將以一定倍率增加。
+
+·主動技能“吞嚥”
+以一具屍體為對象發動，那個屍體被吞下並消失。
+這個技能發動後，“吞噬”所需時間將以一定倍率增加。
+
+·主動技能“吞噬”
+以一名其他玩家為對象並與其貼近一段時間後發動。
+無視防禦效果擊殺那名玩家，且不留下屍體。
+這個技能發動後，“吞吃”與“吞噬”的技能冷卻將以一定倍率增加。
+
+·被動技能“飢腸轆轆”
 若一次行動階段中吞噬者沒有發動過技能，“吞噬”所需時間將以一定倍率減少。</value>
   </data>
   <data name="eaterWinNum" xml:space="preserve">
     <value>還需吞下{0}個</value>
   </data>
   <data name="deadBodyEat" xml:space="preserve">
-    <value>吞咽</value>
+    <value>吞嚥</value>
   </data>
   <data name="eatKill" xml:space="preserve">
     <value>吞噬</value>
@@ -637,35 +696,55 @@
     <value>侍從自殺冷卻</value>
   </data>
   <data name="QueenIntroDescription" xml:space="preserve">
-    <value>讓所有人拜倒在妳的石榴裙下</value>
+    <value>讓所有人拜倒在你的石榴裙下</value>
   </data>
   <data name="QueenShortDescription" xml:space="preserve">
-    <value>魅惑別人成為妳的侍從</value>
+    <value>魅惑別人成為你的侍從</value>
   </data>
   <data name="QueenFullDescription" xml:space="preserve">
-    <value>女皇屬於獨立陣營，可以魅惑其他玩家令他們加入自己的陣營。
+    <value>女皇屬於獨立陣營。
+可以魅惑其他玩家令他們加入自己的陣營。
+
+·被動技能“額外的勝利條件”
 內鬼與擁有擊殺能力的其他獨立陣營玩家全滅，且半數以上存活玩家屬於同一陣營的場合，女皇獲勝。
-主動技能“魅惑”：
-·技能對象是船員或者內鬼陣營玩家的場合：
-  ·被魅惑對象職業變為“侍從”，併保留原有技能
-  ·船員陣營玩家變為侍從後，一定保留任務
-  ·內鬼陣營玩家變為侍從後，保留擊殺、使用管道與破壞的能力
-·技能對象是獨立陣營玩家的場合：
-  ·被魅惑對象職業變為“侍從”，除原有職業的擊殺、使用管道、破壞能力以外的能力全部廢除
-  ·變為侍從後獲得任務
+
+·主動技能“魅惑”
+技能對象是船員或者內鬼陣營玩家的場合：
+①被魅惑對象職業變為“侍從”，並保留原有技能
+②船員陣營玩家變為侍從後，一定保留任務
+③內鬼陣營玩家變為侍從後，保留擊殺、使用管道與破壞的能力
+技能對象是獨立陣營玩家的場合：
+①被魅惑對象職業變為侍從，除原有職業的擊殺、使用管道、破壞能力以外的能力全部廢除。
+②變為侍從後獲得任務
+
+·被動技能“侍從的幫助”
 侍從擊殺或做任務會縮短女皇的擊殺冷卻。
+
+·被動技能“要死一起死”
 若女皇死亡，所有侍從一同死亡。</value>
   </data>
   <data name="ServantShortDescription" xml:space="preserve">
     <value>女皇陛下萬歲！</value>
   </data>
   <data name="ServantFullDescription" xml:space="preserve">
-    <value>侍從屬於獨立陣營，聽候女皇陛下的差遣。
+    <value>侍從屬於獨立陣營。
+聽候女皇陛下的差遣。
+
+·被動技能“額外的勝利條件”
 內鬼與擁有擊殺能力的其他獨立陣營玩家全滅，且半數以上存活玩家屬於同一陣營的場合，女皇獲勝。
-女皇：{0}
+
+·被動技能“要死一起死”
 若女皇死亡，侍從一同死亡。
-當其他玩家進行擊殺時，侍從將看到閃光。當女皇進行擊殺時，閃光會有不同顏色。
-能力“自殺”：侍從自殺。</value>
+
+·被動技能“死亡信號”
+當其他玩家進行擊殺時，侍從將看到閃光。
+當女皇進行擊殺時，閃光會有不同顏色。
+
+·主動技能“自殺”
+侍從可以選擇自殺。
+
+·女皇信息：
+你的女皇：{0}。</value>
   </data>
   <data name="queenCharm" xml:space="preserve">
     <value>魅惑</value>
@@ -686,7 +765,7 @@
     <value>可在管道間移動</value>
   </data>
   <data name="MadmateHasTask" xml:space="preserve">
-    <value>開啟叛徒與任務相關的設置</value>
+    <value>開啓叛徒與任務相關的設置</value>
   </data>
   <data name="MadmateSeeImpostorTaskGage" xml:space="preserve">
     <value>叛徒可以確認內鬼陣營時任務的完成率</value>
@@ -710,10 +789,17 @@
     <value>幫助內鬼獲得勝利</value>
   </data>
   <data name="MadmateFullDescription" xml:space="preserve">
-    <value>叛徒屬於獨立陣營，只要內鬼獲勝則叛徒一同獲勝。
+    <value>叛徒屬於獨立陣營。
+只要內鬼獲勝則叛徒一同獲勝。
+
+·被動技能“背叛”
 內鬼以特殊途徑獲勝時，叛徒依然獲勝。
-技能“自殺”：叛徒自殺。
-若“內鬼陣營可以確認叛徒是誰”開啟，叛徒完成一定數量任務後，內鬼陣營也可以確認叛徒是誰。</value>
+
+·主動技能“自殺”
+叛徒可以選擇自殺。
+
+·被動技能“相認”
+若“內鬼陣營可以確認叛徒是誰”開啓，叛徒完成一定數量任務後，內鬼陣營也可以確認叛徒是誰。</value>
   </data>
   <data name="Umbrer" xml:space="preserve">
     <value>疫醫</value>
@@ -725,7 +811,7 @@
     <value>技能冷卻時間</value>
   </data>
   <data name="UmbrerAbilityActiveTime" xml:space="preserve">
-    <value>註入病毒所需時間</value>
+    <value>注入病毒所需時間</value>
   </data>
   <data name="UmbrerInfectRange" xml:space="preserve">
     <value>增強病毒期間感染玩家的範圍</value>
@@ -743,14 +829,377 @@
     <value>讓船員們都被病毒感染</value>
   </data>
   <data name="UmbrerFullDescription" xml:space="preserve">
-    <value>疫醫屬於獨立陣營，需要用病毒感染所有玩家獲得勝利。
-主動技能“病毒註入”：有玩家在附近時可以發動。保持一段時間接觸後，那名玩家會進入感染狀態。
-主動技能“病毒增強”：有被感染的玩家在附近時可以發動。保持一段時間接觸後，玩家會進入感染強化狀態，持續一段時間後回到感染狀態。期間內若該玩家一定範圍內有未處於感染狀態的玩家，那名玩家進入感染狀態，之後感染強化狀態回到感染狀態。</value>
+    <value>疫醫屬於獨立陣營。
+需要用病毒感染所有玩家獲得勝利。
+
+·主動技能“病毒注入”
+有玩家在附近時可以發動。
+保持一段時間接觸後，那名玩家會進入感染狀態。
+·主動技能“病毒增強”
+有被感染的玩家在附近時可以發動。
+保持一段時間接觸後，玩家會進入感染強化狀態，持續一段時間後回到感染狀態。
+期間內若該玩家一定範圍內有未處於感染狀態的玩家，那名玩家進入感染狀態，之後感染強化狀態回到感染狀態。</value>
   </data>
   <data name="featVirus" xml:space="preserve">
-    <value>註入病毒</value>
+    <value>注入病毒</value>
   </data>
   <data name="upgradeVirus" xml:space="preserve">
     <value>增強病毒</value>
+  </data>
+  <data name="YokoUseYashiro" xml:space="preserve">
+    <value>啓用神社相關的能力</value>
+  </data>
+  <data name="YokoAbilityCoolTime" xml:space="preserve">
+    <value>神社冷卻時間</value>
+  </data>
+  <data name="YokoAbilityActiveTime" xml:space="preserve">
+    <value>放置神社所需的時間</value>
+  </data>
+  <data name="YokoAbilityCount" xml:space="preserve">
+    <value>可以放置神社的次數</value>
+  </data>
+  <data name="YokoYashiroActiveTime" xml:space="preserve">
+    <value>神社的持續時間</value>
+  </data>
+  <data name="YokoYashiroSeelTime" xml:space="preserve">
+    <value>神社封印時間</value>
+  </data>
+  <data name="YokoYashiroProtectRange" xml:space="preserve">
+    <value>神社保護範圍</value>
+  </data>
+  <data name="YokoYashiroUpdateWithMeeting" xml:space="preserve">
+    <value>會議時神社是否也會變化</value>
+  </data>
+  <data name="YokoFullDescription" xml:space="preserve">
+    <value>狐妖屬於獨立陣營。
+可以搶奪任何人的勝利。
+
+·主動技能“洞察力”
+狐妖會感知到附近是否有擁有擊殺能力的玩家。
+
+·主動技能“神社”
+狐妖還可以放置並激活神社,當神社激活時在神社範圍內狐妖無法被普通擊殺,但一段時間後神社將被封印,需要一定時間才能解開。
+
+·其他注意事項
+狐妖無法搶奪船員的任務勝利和內鬼破壞勝利還有梅林被刺殺的刺殺勝利。</value>
+  </data>
+  <data name="yokoYashiro" xml:space="preserve">
+    <value>神社</value>
+  </data>
+  <data name="yokoYashiroStatusText" xml:space="preserve">
+    <value>神社目前的狀態{0}</value>
+  </data>
+  <data name="yokoYashiroNextStatusText" xml:space="preserve">
+    <value>到達「{1}」還需{2}秒</value>
+  </data>
+  <data name="yokoYashiroCloseText" xml:space="preserve">
+    <value>轉移到「{0}」！</value>
+  </data>
+  <data name="YashiroDeactive" xml:space="preserve">
+    <value>休眠狀態</value>
+  </data>
+  <data name="YashiroActive" xml:space="preserve">
+    <value>激活狀態</value>
+  </data>
+  <data name="YashiroSeal" xml:space="preserve">
+    <value>封印狀態</value>
+  </data>
+  <data name="QueenServantSucideWithQueenWhenHasKill" xml:space="preserve">
+    <value>女皇死後有擊殺能力的侍從將自殺</value>
+  </data>
+  <data name="Hatter" xml:space="preserve">
+    <value>瘋帽子</value>
+  </data>
+  <data name="HatterCanRepairSabotage" xml:space="preserve">
+    <value>修理破壞</value>
+  </data>
+  <data name="HatterWinCount" xml:space="preserve">
+    <value>獲勝需要跳過的會議數</value>
+  </data>
+  <data name="HatterAbilityCoolTime" xml:space="preserve">
+    <value>時光流逝冷卻時間</value>
+  </data>
+  <data name="HatterAbilityCount" xml:space="preserve">
+    <value>時光流逝使用次數</value>
+  </data>
+  <data name="HatterHideMeetingTimer" xml:space="preserve">
+    <value>通過『時光流逝』隱藏會議計時器</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseLower" xml:space="preserve">
+    <value>通過『時光流逝』減少的會議時間的最小比率</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseUpper" xml:space="preserve">
+    <value>通過『時光流逝』減少的會議時間的最大比率</value>
+  </data>
+  <data name="HatterIncreaseTaskGage" xml:space="preserve">
+    <value>增加『時光流逝』的任務進度率</value>
+  </data>
+  <data name="HatterIncreseNum" xml:space="preserve">
+    <value>增加能力的使用次數</value>
+  </data>
+  <data name="HatterIntroDescription" xml:space="preserve">
+    <value>永無止境的茶會開始了...</value>
+  </data>
+  <data name="HatterShortDescription" xml:space="preserve">
+    <value>你還需要茶嗎？還是別的什麼東西？</value>
+  </data>
+  <data name="HatterFullDescription" xml:space="preserve">
+    <value>瘋帽子屬於獨立陣營。
+可以加快會議時間。
+
+·被動技能“額外的勝利條件”
+勝利條件1：跳過特定次數的無人被票出的會議。
+勝利條件2：下列的倖存者人數相同。
+①內鬼與擁有擊殺能力的中立。
+②此職業，即自身。
+③船員。
+
+·主動技能“時間飛逝”
+發動後隨機減少會議時間，並不再顯示會議時間
+如果任務的推進速度超過“時間殺戮增加的任務進度率”，則使用任務的次數將增加“使用能力的次數”。</value>
+  </data>
+  <data name="timeKill" xml:space="preserve">
+    <value>時間飛逝</value>
+  </data>
+  <data name="Artist" xml:space="preserve">
+    <value>畫家</value>
+  </data>
+  <data name="ArtistCanUseVent" xml:space="preserve">
+    <value>可以使用通風管</value>
+  </data>
+  <data name="ArtistWinAreaSize" xml:space="preserve">
+    <value>獲勝所需塗範圍</value>
+  </data>
+  <data name="ArtistAbilityCoolTime" xml:space="preserve">
+    <value>繪畫冷卻時間</value>
+  </data>
+  <data name="ArtistAbilityActiveTime" xml:space="preserve">
+    <value>繪畫停用前搖</value>
+  </data>
+  <data name="ArtistIntroDescription" xml:space="preserve">
+    <value>藝術是世界上最美麗的東西！</value>
+  </data>
+  <data name="ArtistShortDescription" xml:space="preserve">
+    <value>向所有人展示你的藝術！</value>
+  </data>
+  <data name="ArtistFullDescription" xml:space="preserve">
+    <value>畫家屬於獨立陣營。
+可以繪畫。
+
+·被動技能“額外的勝利條件”
+用“顏料”塗抹超過一定面積的區域。
+
+·主動技能“繪畫”
+按下按鈕即可激活，激活時會在彈道上畫一條線。
+塗抹的顏色是隨機的。
+其他人可以看見你繪畫的痕跡。</value>
+  </data>
+  <data name="ArtistArtOn" xml:space="preserve">
+    <value>繪畫</value>
+  </data>
+  <data name="ArtistArtOff" xml:space="preserve">
+    <value>停止繪畫</value>
+  </data>
+  <data name="Tucker" xml:space="preserve">
+    <value>鍊金術士</value>
+  </data>
+  <data name="Chimera" xml:space="preserve">
+    <value>奇美拉</value>
+  </data>
+  <data name="TuckerAbilityCoolTime" xml:space="preserve">
+    <value>轉化與消影冷卻時間</value>
+  </data>
+  <data name="TuckerAbilityCount" xml:space="preserve">
+    <value>轉化可使用次數</value>
+  </data>
+  <data name="TuckerRange" xml:space="preserve">
+    <value>轉化與消影範圍</value>
+  </data>
+  <data name="TuckerShadowTimer" xml:space="preserve">
+    <value>陰影存在時間</value>
+  </data>
+  <data name="TuckerShadowOffset" xml:space="preserve">
+    <value>陰影位置距離</value>
+  </data>
+  <data name="TuckerRemoveShadowTime" xml:space="preserve">
+    <value>消除陰影所需時間</value>
+  </data>
+  <data name="TuckerIsKillCoolReduceOnRemove" xml:space="preserve">
+    <value>消除陰影是否永久減少奇美拉擊殺冷卻</value>
+  </data>
+  <data name="TuckerKillCoolReduceOnRemoveShadow" xml:space="preserve">
+    <value>消除陰影永久減少奇美拉擊殺冷卻時間量</value>
+  </data>
+  <data name="TuckerIsReduceInitKillCoolOnRemove" xml:space="preserve">
+    <value>減少的擊殺冷卻是否會小於初始值</value>
+  </data>
+  <data name="TuckerHasOtherKillCool" xml:space="preserve">
+    <value>奇美拉是否有獨立的擊殺冷卻</value>
+  </data>
+  <data name="TuckerKillCoolDown" xml:space="preserve">
+    <value>奇美拉擊殺冷卻</value>
+  </data>
+  <data name="TuckerHasOtherKillRange" xml:space="preserve">
+    <value>奇美拉是否有獨立的擊殺範圍</value>
+  </data>
+  <data name="TuckerKillRange" xml:space="preserve">
+    <value>奇美拉擊殺範圍</value>
+  </data>
+  <data name="TuckerChimeraHasOtherVision" xml:space="preserve">
+    <value>奇美拉是否有獨立的視野</value>
+  </data>
+  <data name="TuckerChimeraVision" xml:space="preserve">
+    <value>奇美拉視野</value>
+  </data>
+  <data name="TuckerChimeraApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>奇美拉是否會受到停電影響</value>
+  </data>
+  <data name="TuckerChimeraCanUseVent" xml:space="preserve">
+    <value>奇美拉能否使用通風管</value>
+  </data>
+  <data name="TuckerChimeraReviveTime" xml:space="preserve">
+    <value>奇美拉復活所需時間</value>
+  </data>
+  <data name="TuckerChimeraDeathKillCoolOffset" xml:space="preserve">
+    <value>奇美拉每次復活時間變化</value>
+  </data>
+  <data name="TuckerTuckerDeathKillCoolOffset" xml:space="preserve">
+    <value>奇美拉在鍊金術士死後擊殺冷卻發生變化</value>
+  </data>
+  <data name="TuckerIntroDescription" xml:space="preserve">
+    <value>那些善良的船員就應該成為奇美拉！</value>
+  </data>
+  <data name="TuckerShortDescription" xml:space="preserve">
+    <value>來吧~讓我們接管這艘船</value>
+  </data>
+  <data name="TuckerFullDescription" xml:space="preserve">
+    <value>鍊金術士屬於獨立陣營。
+可以催眠玩家,讓其變成奇美拉。
+
+·主動技能“轉化”
+可以將其他玩家轉化為奇拉美。
+只要你不死亡,奇美拉就可以無限的復活,當奇美拉復活時你會受到通知。
+
+·主動技能“擦除”
+需要擦除地圖上陰影來減少奇美拉的冷卻時間。
+
+·其他注意事項
+可以使用滾輪切換技能。</value>
+  </data>
+  <data name="ChimeraShortDescription" xml:space="preserve">
+    <value>這才是我應該走的路嗎？</value>
+  </data>
+  <data name="ChimeraFullDescription" xml:space="preserve">
+    <value>奇拉美屬於獨立陣營。
+由鍊金術士轉換產生的職業。
+
+·被動技能“額外的勝利條件”
+與鍊金術士一起獲勝。
+
+·被動技能“無限復活”
+只要鍊金術士存活你就可以復活，鍊金術士可以擦除地圖上的陰影來減少你的冷卻時間。</value>
+  </data>
+  <data name="removeShadow" xml:space="preserve">
+    <value>擦除</value>
+  </data>
+  <data name="createChimera" xml:space="preserve">
+    <value>催眠</value>
+  </data>
+  <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
+    <value>鍊金術士死亡奇美拉是否會一起死亡？</value>
+  </data>
+  <data name="IronMate" xml:space="preserve">
+    <value>鐵哥們</value>
+  </data>
+  <data name="IronMateBlockNum" xml:space="preserve">
+    <value>鐵哥們可抵擋擊殺的次數</value>
+  </data>
+  <data name="IronMateSlowTime" xml:space="preserve">
+    <value>抵擋後降低移速時間</value>
+  </data>
+  <data name="IronMateSlowMod" xml:space="preserve">
+    <value>阻擋後降低移速倍率</value>
+  </data>
+  <data name="IronMatePlayerShowTime" xml:space="preserve">
+    <value>屍體上死者樣式持續時間</value>
+  </data>
+  <data name="IronMateDeadBodyShowTimeOnAfterPlayer" xml:space="preserve">
+    <value>屍體顯示時間</value>
+  </data>
+  <data name="IronMateShortDescription" xml:space="preserve">
+    <value>我們可是同手同腳的“鐵”哥麼啊</value>
+  </data>
+  <data name="IronMateFullDescription" xml:space="preserve">
+    <value>鐵哥們屬於獨立陣營。
+跟隨船員獲勝。
+
+·被動技能“鐵人”
+被擊殺時將免疫設定次數但會減速一段時間。
+無法報告屍體，會在屍體的位置顯示死者的樣子，一段時間後會消失。</value>
+  </data>
+  <data name="Monika" xml:space="preserve">
+    <value>莫妮卡</value>
+  </data>
+  <data name="MonikaAbilityCoolTime" xml:space="preserve">
+    <value>抹除冷卻時間</value>
+  </data>
+  <data name="MonikaRange" xml:space="preserve">
+    <value>抹除範圍</value>
+  </data>
+  <data name="MonikaIntroDescription" xml:space="preserve">
+    <value>&amp;#92;&amp;#117;&amp;#54;&amp;#48;&amp;#48;&amp;#101;&amp;#92;&amp;#117;&amp;#52;&amp;#101;&amp;#52;&amp;#56;
+&amp;#92;&amp;#117;&amp;#52;&amp;#102;&amp;#49;&amp;#97;&amp;#92;&amp;#117;&amp;#56;&amp;#102;&amp;#100;&amp;#57;
+&amp;#92;&amp;#117;&amp;#54;&amp;#56;&amp;#51;&amp;#55;&amp;#92;&amp;#117;&amp;#102;&amp;#102;&amp;#48;&amp;#49;</value>
+  </data>
+  <data name="MonikaShortDescription" xml:space="preserve">
+    <value>為了我所愛的人...</value>
+  </data>
+  <data name="MonikaFullDescription" xml:space="preserve">
+    <value>莫妮卡屬於獨立陣營。
+可以抹除他人職業。
+
+·主動技能“抹除”
+莫妮卡可以使用抹除將該玩家送到“回收站”層。
+“回收站”層介於存活者和死亡者之間，在其中的人被視為“半死亡”狀態，在“回收站”層有以下規則：
+①如果未死亡，則被計入存活者；如果死亡，則被計入死亡者。
+②在會議中，失去發言權，但可以聽到存活者的聊天。
+③在會議中，無法向存活者發送聊天信息。
+④在會議中，失去能力使用權和投票權。
+⑤在任務階段，無法被莫妮卡識別。
+⑥在任務階段，無法將莫妮卡作為目標，也無法作為擊殺目標。
+
+·被動技能“額外的勝利條件”
+包括自己在內，未被“抹除”的存活玩家減少到3名以下。
+如果恰好是3名，會觸發特殊會議並選擇額外的勝利者。
+
+·被動技能“一失足成千古恨”
+如果莫妮卡死亡，“回收站”層的所有存活玩家逃出。</value>
+  </data>
+  <data name="MonikaMeetingSelectLover" xml:space="preserve">
+    <value>選擇你喜歡的人&lt;br&gt;（你投票給誰，誰就獲勝）</value>
+  </data>
+  <data name="MonikaMeetingSelectTarget" xml:space="preserve">
+    <value>我是不是那個&lt;br&gt;應該被愛的容器呢？</value>
+  </data>
+  <data name="MonikaMeetingOther" xml:space="preserve">
+    <value>外面的世界也應該關愛這些 &lt;br&gt;“命中註定要失敗的人“</value>
+  </data>
+  <data name="MonikaMeetingExiled" xml:space="preserve">
+    <value>「{0}」選擇了ta喜歡的「{1}」&lt;br&gt;(「{2}」被拋棄了)</value>
+  </data>
+  <data name="monikaPlayerTrash" xml:space="preserve">
+    <value>抹除</value>
+  </data>
+  <data name="MonikaUseOtherButton" xml:space="preserve">
+    <value>當莫妮卡發起緊急會議時會消耗會議數</value>
+  </data>
+  <data name="MonikaCanUseVent" xml:space="preserve">
+    <value>莫妮卡可以使用通風口</value>
+  </data>
+  <data name="MonikaCanUseSabotage" xml:space="preserve">
+    <value>莫妮卡可以使用破壞手段嗎</value>
+  </data>
+  <data name="MonikaIsSoloTeam" xml:space="preserve">
+    <value>莫妮卡獨自存在時，遊戲繼續</value>
   </data>
 </root>

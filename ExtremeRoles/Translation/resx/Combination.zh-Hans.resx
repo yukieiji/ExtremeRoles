@@ -163,7 +163,7 @@
     <value>刺客可以看到投票明细</value>
   </data>
   <data name="AssassinIsDeadForceMeeting" xml:space="preserve">
-    <value>刺客死后强制展开会议</value>
+    <value>刺客死后强制开启会议</value>
   </data>
   <data name="AssassinCanSeeRoleBeforeFirstMeeting" xml:space="preserve">
     <value>刺客在第一次会议前可以看到所有人职业</value>
@@ -199,12 +199,19 @@
     <value>带领船员走向胜利，但要小心刺客</value>
   </data>
   <data name="MarlinFullDescription" xml:space="preserve">
-    <value>梅林属于船员阵营，可以知道所有内鬼的身份。
-梅林和刺客成对出现。
+    <value>梅林属于船员阵营。
+梅林可以知道所有内鬼的身份。
+
+·被动技能“一同出现”
+梅林和刺客一同出现
 如果游戏中没有刺客，则这个职业也不会出现。
-如果刺客对梅林发动了刺杀，船员阵营将输掉游戏。
+
+·被动技能“要输一起输”
+如果梅林被刺客刺杀，船员阵营失败。
 梅林需要帮助好人主导会议进程，同时隐藏身份。
-需要注意的是，梅林的设置与内鬼设置相近。</value>
+
+·其他注意事项
+梅林的设置与内鬼职业相近。</value>
   </data>
   <data name="AssassinIntroDescription" xml:space="preserve">
     <value>找出知晓你们底细的魔法师，把他解决了</value>
@@ -213,16 +220,23 @@
     <value>找出梅林并刺杀</value>
   </data>
   <data name="AssassinFullDescription" xml:space="preserve">
-    <value>刺客属于内鬼阵营，为内鬼阵营增加了新的胜利条件。
-梅林和刺客成对出现。
+    <value>刺客属于内鬼阵营。
+刺客为内鬼阵营增加了新的胜利条件。
+
+·被动技能“一同出现”
+梅林和刺客一同出现。
 如果游戏中没有梅林，则这个职业也不会出现。
-胜利条件：用刺客的特殊能力放逐梅林
-刺客的特殊能力：特别会议“谁是梅林？”：
+
+·被动技能“特殊条件”
+刺客需要用特殊能力放逐梅林。
+
+·主动技能“特殊会议”
+刺客的特殊能力：特别会议“谁是梅林？”。
 所有人都参与会议，但刺客以外的玩家都不可以投票。
-不能跳过，可以给死人投票
-如果投票放逐的是梅林，则内鬼获胜，否则游戏继续
-特殊能力激活条件：刺客被击杀或放逐
-除了上述能力外，刺客的能力与普通内鬼没有区别。刺客需要一边杀人，一边找出梅林。</value>
+刺客不能跳过，可以给死人投票。
+如果投票放逐的是梅林，则内鬼阵营获胜，否则游戏继续。
+本技能激活条件：刺客被击杀或放逐。
+除了上述技能外，刺客的能力与普通内鬼没有区别。</value>
   </data>
   <data name="whoIsMarine" xml:space="preserve">
     <value>谁是梅林？</value>
@@ -318,25 +332,25 @@
     <value>呼救范围</value>
   </data>
   <data name="HeroIntroDescription" xml:space="preserve">
-    <value>正义的勇者，参上！</value>
+    <value>正义的勇者，参上</value>
   </data>
   <data name="HeroShortDescription" xml:space="preserve">
     <value>消灭魔王，成为英雄</value>
   </data>
   <data name="HeroFullDescription" xml:space="preserve">
-    <value>勇者属于船员阵营，其能力会随玩家的死亡逐渐增强。
+    <value>勇者属于船员阵营。
+其能力会随玩家的死亡逐渐增强。
+
+·被动技能“开外挂”
 勇者的"外挂"能力存在3个阶段：
-第一阶段:
-达成条件: 1名玩家死亡
-效果:免疫来自内鬼的一切通常击杀
-第二阶段:
-达成条件:设定值以上的玩家死亡
-效果:获得击杀能力
-第三阶段:
-达成条件:设定值以上的玩家死亡
-能力:获得主角光环
-主动技能“主角光环”:
-一段时间内，确认所有玩家的所在位置和距离
+第一阶段:如果1名玩家死亡，则勇者免疫来自内鬼的一切普通击杀。
+第二阶段:如果一定数量以上的玩家死亡，勇者获得击杀能力。
+第三阶段:如果一定数量以上的玩家死亡，获得主角光环技能。
+
+·主动技能“主角光环”:
+一段时间内，确认所有玩家的所在位置和距离。
+
+·其他注意事项
 特别地，当魔王尝试击杀勇者或勇者尝试击杀魔王时，二者一同死亡。</value>
   </data>
   <data name="VillainIntroDescription" xml:space="preserve">
@@ -346,11 +360,18 @@
     <value>用深不见底的绝望统治整个飞船</value>
   </data>
   <data name="VillainFullDescription" xml:space="preserve">
-    <value>魔王是最强大的内鬼。
-魔王的击杀无视任何守护效果。守护天使、保镖、时间之主的技能对于魔王全部失效。
+    <value>魔王属于内鬼阵营。
+魔王是最强大的内鬼。
+
+·被动技能“魔王之刃”
+魔王的击杀无视任何守护效果。
+守护天使、保镖、时间之主的技能对于魔王全部失效。
 魔王免疫来自船员阵营的一切击杀能力。
-主动技能“反派光环”:
-一段时间内，确认所有玩家的所在位置和距离
+
+·主动技能“反派光环”:
+一段时间内，确认所有玩家的所在位置和距离。
+
+·其他注意事项
 特别地，当魔王尝试击杀勇者或勇者尝试击杀魔王时，二者一同死亡。</value>
   </data>
   <data name="VigilanteIntroDescription" xml:space="preserve">
@@ -369,43 +390,62 @@
     <value>成为这场游戏的主角</value>
   </data>
   <data name="VigilanteFullDescription" xml:space="preserve">
-    <value>龙套属于独立阵营，需要挣脱既定的命运，让自己成为游戏的主角。
-基本胜利条件1 :
-存活的玩家仅剩勇者、魔王与龙套
-基本胜利条件2 :
-让魔王和勇者互杀而死（这个胜利条件触发后，龙套可以跟随任何阵营一起获胜）
+    <value>龙套属于独立阵营。
+需要挣脱既定的命运，让自己成为游戏的主角。
+
+·被动技能“额外的胜利条件”
+基本胜利条件1:存活的玩家仅剩勇者、魔王与龙套。
+基本胜利条件2:让魔王和勇者互杀而死，此时龙套可以跟随任何阵营一起获胜。
+
+·被动技能“薛定谔的状态”
 根据勇者和魔王的生存状况，龙套的状态会发生变化。
-这段文本对应的状态为通常状态与基本胜利条件2达成后。其他状态下，这段文本会发生改变。
-※根据龙套的状态，除了这个胜利条件以外还会产生追加胜利条件。 届时，这段文本也会产生变化。
-若龙套状态从通常状态变化为其他状态，则无法恢复。
-主动技能“龙套体质”:
-·行动阶段，将附近一名玩家的位置给勇者确认
-·这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认
+这段文本对应的状态为通常状态与基本胜利条件2达成后。
+其他状态下，这段文本会发生改变。
+根据龙套的状态，除了这个胜利条件以外还会产生追加胜利条件。
+届时，这段文本也会产生变化。
+若龙套状态从普通状态变化为其他状态，则无法恢复。
+
+·主动技能“龙套体质”:
+行动阶段，将附近一名玩家的位置给勇者确认。
+这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认。
 这个状态下的龙套不会被勇者或魔王击杀。</value>
   </data>
   <data name="VigilanteCrewDescription" xml:space="preserve">
-    <value>龙套属于独立阵营。勇者死后，龙套与船员并肩作战。
-追加胜利条件:船员阵营获胜
-主动技能“龙套体质”:
-·行动阶段，将附近一名玩家的位置给勇者确认
-·这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认
+    <value>龙套属于独立阵营。
+勇者死后，龙套与船员并肩作战。
+
+·被动技能“额外的胜利条件”
+追加胜利条件:船员阵营获胜。
+
+·主动技能“龙套体质”:
+行动阶段，将附近一名玩家的位置给勇者确认。
+这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认。
 这个状态下的龙套不会被勇者或魔王击杀。</value>
   </data>
   <data name="VigilanteImpDescription" xml:space="preserve">
-    <value>龙套属于独立阵营。魔王死后，龙套与内鬼并肩作战。
+    <value>龙套属于独立阵营。
+魔王死后，龙套与内鬼并肩作战。
+
+·被动技能“额外的胜利条件”
 这个状态下，龙套获得破坏与使用管道的能力。
-追加胜利条件:内鬼阵营获胜
-主动技能“龙套体质”:
-·行动阶段，将附近一名玩家的位置给勇者确认
-·这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认
+追加胜利条件:内鬼阵营获胜。
+
+·主动技能“龙套体质”:
+行动阶段，将附近一名玩家的位置给勇者确认。
+这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认。
 这个状态下的龙套不会被勇者或魔王击杀。</value>
   </data>
   <data name="VigilanteNeutDescription" xml:space="preserve">
-    <value>龙套属于独立阵营。不论是成为正义还是邪恶，现在都不值得了。拿起屠刀，去做真正的主角。
-追加胜利条件:杀死除自己以外的所有人
-主动技能“龙套体质”:
-·行动阶段，将附近一名玩家的位置给勇者确认
-·这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认。
+    <value>龙套属于独立阵营。
+不论是成为正义还是邪恶，现在都不值得了。
+拿起屠刀，去做真正的主角。
+
+·被动技能“额外的胜利条件”
+追加胜利条件:杀死除自己以外的所有人。
+
+·主动技能“龙套体质”:
+行动阶段，将附近一名玩家的位置给勇者确认。
+这个技能发动过后一段时间，将自己发动技能时所处的位置给魔王确认。
 这个状态下的龙套失去击杀抗性。</value>
   </data>
   <data name="search" xml:space="preserve">
@@ -436,7 +476,7 @@
     <value>受到照明破坏影响</value>
   </data>
   <data name="DetectiveSearchRange" xml:space="preserve">
-    <value>侦探可以调查时与案发现场的最大距离</value>
+    <value>侦探调查时与案发现场的最大距离</value>
   </data>
   <data name="DetectiveSearchTime" xml:space="preserve">
     <value>调查所需时间</value>
@@ -481,23 +521,32 @@
     <value>不计入次数限制的次数</value>
   </data>
   <data name="DetectiveIntroDescription" xml:space="preserve">
-    <value>真相只有一个！</value>
+    <value>真相只有一个</value>
   </data>
   <data name="DetectiveShortDescription" xml:space="preserve">
     <value>调查案发现场留下的蛛丝马迹</value>
   </data>
   <data name="DetectiveFullDescription" xml:space="preserve">
-    <value>侦探属于船员阵营，可以从案发现场搜寻线索。
+    <value>侦探属于船员阵营。
+可以从案发现场搜寻线索。
+
+·主动技能“尸检报告”
 当有尸体被报告时，那尸体所在的地点直到下一轮会议阶段开始为止记录为案发现场。
 侦探可以通过箭头确认案发现场的位置。
-侦探在案发现场周围停留时，可以进行调查。若侦探在调查过程中离开，调查进程会被重置。
+侦探在案发现场周围停留时，可以进行调查。
+若侦探在调查过程中离开，调查进程会被重置。
 通过调查得知的信息如下。
-每一次的调查都需要一定的时间。在第四次调查完成时，案发现场移除
-第一次调查:死者死亡时刻
-第二次调查:从死者死亡到会议召开的间隔时间
-第三次调查:凶手的所属阵营
-第四次调查:凶手的职业
+每一次的调查都需要一定的时间。
+在第四次调查完成时，案发现场被移除。
+第一次调查:死者死亡时刻。
+第二次调查:从死者死亡到会议召开的间隔时间。
+第三次调查:凶手的所属阵营。
+第四次调查:凶手的职业。
+
+·被动技能“助手的援助”
 若尸体是助手报告的，则每次调查所需的时间将缩短。
+
+·被动技能“传承”
 侦探死亡等情况下，助手的职业变为见习侦探。</value>
   </data>
   <data name="AssistantIntroDescription" xml:space="preserve">
@@ -507,38 +556,49 @@
     <value>辅助侦探的行动</value>
   </data>
   <data name="AssistantFullDescription" xml:space="preserve">
-    <value>助手属于船员阵营，可以暗中帮助侦探。
+    <value>助手属于船员阵营。
+可以暗中帮助侦探。
+
+·被动技能“尸检报告”
 自己报告尸体的会议阶段开始时，助手可以在聊天框内确认尸体的死亡时间。
+
+·被动技能“传承”
 助手死亡时，侦探的职业变为见习侦探。</value>
   </data>
   <data name="DetectiveApprenticeShortDescription" xml:space="preserve">
     <value>接过逝去的搭档的衣钵</value>
   </data>
   <data name="DetectiveApprenticeFullDescription" xml:space="preserve">
-    <value>见习侦探属于船员阵营，由侦探或助手转变而来。
+    <value>见习侦探属于船员阵营。
+见习侦探是由侦探或助手转变而来的。
+
+·主动技能“尸检报告”
 自己报告尸体的会议阶段开始时，见习侦探可以在聊天框内确认尸体的死亡时间。
-主动技能“紧急召集”:
-可以打开紧急会议界面，远程召开紧急会议。紧急会议界面不能持续开启。
+
+·主动技能“紧急召集”:
+可以打开紧急会议界面，远程召开紧急会议。
+紧急会议界面不能持续开启。
 如果紧急会议次数用完，即使见习侦探打开界面也不能召开紧急会议。
-若“见习侦探紧急召集的会议不计入紧急会议次数限制”开启，则在通过“紧急召集”召开的紧急会议有若干次不会消耗紧急会议次数。不过，在紧急会议次数耗尽的情况下，见习侦探仍然不能发动紧急召集。</value>
+根据设置，该技能见习侦探可能共享紧急会议次数。
+不过，在紧急会议次数耗尽的情况下，见习侦探仍然不能发动紧急会议。</value>
   </data>
   <data name="FindKillTime" xml:space="preserve">
-    <value>死者好像是在{0} (UTC±0)被杀害的</value>
+    <value>死者好像是在{0} (UTC±0)被杀害的!</value>
   </data>
   <data name="FindReportTime" xml:space="preserve">
-    <value>距离被害者死亡似乎过去了{0}秒</value>
+    <value>距离被害者死亡似乎过去了{0}秒!</value>
   </data>
   <data name="FindTeam" xml:space="preserve">
-    <value>这里留下了{0}来过的线索</value>
+    <value>这里留下了{0}来过的线索!</value>
   </data>
   <data name="FindRole" xml:space="preserve">
-    <value>从杀人手法来看，被害者似乎遭到了{0}的袭击</value>
+    <value>从杀人手法来看，被害者似乎遭到了{0}的袭击!</value>
   </data>
   <data name="searchStrBase" xml:space="preserve">
-    <value>正在调查案发现场。距离调查完成还有{0}秒</value>
+    <value>正在调查案发现场。距离调查完成还有{0}秒!</value>
   </data>
   <data name="reportedDeadBodyInfo" xml:space="preserve">
-    <value>发现的尸体似乎是在{0} (UTC±0)被杀害的</value>
+    <value>发现的尸体似乎是在{0} (UTC±0)被杀害的!</value>
   </data>
   <data name="emergencyMeeting" xml:space="preserve">
     <value>紧急召集</value>
@@ -553,7 +613,7 @@
     <value>恋人可以加入独立阵营</value>
   </data>
   <data name="LoverDethWhenUnderAlive" xml:space="preserve">
-    <value>恋人共死</value>
+    <value>恋人同生共死</value>
   </data>
   <data name="LoverHasOtherKillCool" xml:space="preserve">
     <value>拥有击杀能力的恋人拥有独立击杀冷却</value>
@@ -587,27 +647,35 @@
   </data>
   <data name="LoverFullDescription" xml:space="preserve">
     <value>恋人若干人一组。此外，你隶属船员阵营。
+
+·被动技能“额外的胜利条件”
 船员胜利时，恋人可以一同获胜，但恋人中的非船员阵营玩家不可以获胜。
-若剩余的存活玩家全部在同一组恋人中，且这一组的所有玩家都完成了所有任务，恋人阵营获胜。恋人中的非船员阵营玩家也可以通过这种方式获胜。
+若剩余的存活玩家全部在同一组恋人中，且这一组的所有玩家都完成了所有任务，恋人阵营获胜。
+恋人中的非船员阵营玩家也可以通过这种方式获胜。
 当以下所有条件都满足的场合：
-  ①：剩余的存活玩家全部在同一组恋人中；
-  ②：存活的内鬼数为0；
-  ③：恋人中存在非船员阵营的玩家； 
-  ④：所有剩余存活玩家都属于船员阵营或③中那个阵营，则同组的所有玩家直到人数达到一定数量为止自杀或者变成独立阵营。
+①：剩余的存活玩家全部在同一组恋人中；
+②：存活的内鬼数量为0；
+③：恋人中存在非船员阵营的玩家； 
+④：所有剩余存活玩家都属于船员阵营或③阵营，则同组的所有玩家直到人数达到一定数量为止自杀或者变成独立阵营。
 可以设置需要达到的人数。</value>
   </data>
   <data name="LoverImposterFullDescription" xml:space="preserve">
     <value>恋人若干人一组。此外，你隶属内鬼阵营。
+
+·被动技能“额外的胜利条件”
 内鬼胜利时，恋人可以一同获胜，但恋人中的非内鬼阵营玩家不可以获胜。
-若剩余的存活玩家全部在同一组恋人中，且这一组的所有玩家都完成了所有任务，恋人阵营获胜。恋人中的非船员阵营玩家也可以通过这种方式获胜。
+若剩余的存活玩家全部在同一组恋人中，且这一组的所有玩家都完成了所有任务，恋人阵营获胜。
+恋人中的非船员阵营玩家也可以通过这种方式获胜。
 当以下所有条件都满足的场合：
-  ①：剩余的存活玩家全部在同一组恋人中；
-  ②：恋人中存在非船员阵营的玩家； 
-  ③：所有剩余存活玩家都属于船员或内鬼阵营，则同组的所有玩家直到人数达到一定数量为止自杀或者变成独立阵营。
+①：剩余的存活玩家全部在同一组恋人中；
+②：恋人中存在非船员阵营的玩家； 
+③：所有剩余存活玩家都属于船员或内鬼阵营，则同组的所有玩家直到人数达到一定数量为止自杀或者变成独立阵营。
 可以设置需要达到的人数。</value>
   </data>
   <data name="LoverNeutralFullDescription" xml:space="preserve">
     <value>恋人若干人一组。此外，你隶属独立阵营。
+
+·被动技能“额外的胜利条件”
 若剩余的存活玩家全部在同一组恋人中，且场上没有存活的拥有击杀能力的内鬼或独立阵营玩家，恋人阵营获胜。
 当剩余的存活玩家全部在同一组恋人中，且这一组的所有玩家都完成了所有任务，则同组的所有玩家直到人数达到一定数量为止自杀。
 可以设置需要达到的人数。</value>
@@ -617,7 +685,7 @@
 把所有其他玩家全部杀死，则你获得胜利。</value>
   </data>
   <data name="LoverKillerShortDescription" xml:space="preserve">
-    <value>就用你们的命，为吾爱陪葬！</value>
+    <value>就用你们的命，为吾爱陪葬</value>
   </data>
   <data name="curLover" xml:space="preserve">
     <value>恋人</value>
@@ -635,26 +703,35 @@
     <value>正义的扈从</value>
   </data>
   <data name="SupporterIntroDescription" xml:space="preserve">
-    <value>{0}是{1}。拥护他成为主导全船的人吧</value>
+    <value>{0}是{1}
+拥护他成为主导全船的人吧</value>
   </data>
   <data name="SupporterShortDescription" xml:space="preserve">
     <value>声援你的支持对象</value>
   </data>
   <data name="SupporterFullDescription" xml:space="preserve">
-    <value>正义的扈从属于船员阵营，需要拥护自己的支持对象。
+    <value>正义的扈从属于船员阵营。
+需要拥护自己的支持对象。
+
+·被动技能“服侍”
 游戏开始时，扈从可以确认一名玩家的职业。
 如果阿瓦隆模式开启，扈从将会确认梅林的职业(多个梅林的场合是随机选)，否则扈从将会随机确认一名船员阵营玩家的职业。
-你的侍主:
-玩家名称: {0}
-职业: {1}</value>
+
+·你的侍主有关信息:
+玩家名称: {0}。
+职业: {1}。</value>
   </data>
   <data name="SupporterImposterFullDescription" xml:space="preserve">
-    <value>邪恶的扈从属于内鬼阵营，需要拥护自己的支持对象。
+    <value>邪恶的扈从属于内鬼阵营。
+需要拥护自己的支持对象。
+
+·被动技能“服侍”
 游戏开始时，扈从可以确认一名玩家的职业。
 如果阿瓦隆模式开启，扈从将会确认刺客的职业(多个刺客的场合是随机选)，否则扈从将会随机确认一名内鬼阵营玩家的职业。
-你的侍主:
-玩家名称: {0}
-职业: {1}</value>
+
+你的侍主有关信息:
+玩家名称: {0}。
+职业: {1}。</value>
   </data>
   <data name="Sharer" xml:space="preserve">
     <value>羁绊者</value>
@@ -669,7 +746,10 @@
     <value>与其他羁绊者互通感知</value>
   </data>
   <data name="SharerFullDescription" xml:space="preserve">
-    <value>羁绊者属于内鬼阵营。所有羁绊者感官互通。
+    <value>羁绊者属于内鬼阵营。
+所有羁绊者感官互通。
+
+·被动技能“感官互通”
 所有羁绊者能持续确认其他羁绊者的位置。
 若“共享击杀情况”开启，一名羁绊者进行击杀时，其他所有羁绊者会得到通知。
 此外，一名羁绊者由于职业变更而失去原有职业的场合，其他所有羁绊者会得到通知。</value>
@@ -681,7 +761,7 @@
     <value>正与你共享感知</value>
   </data>
   <data name="sharerKill" xml:space="preserve">
-    <value>羁绊网络: {0}感受到了杀戮的快感</value>
+    <value>羁绊网络: {0}感受到了杀戮的快感!</value>
   </data>
   <data name="Traitor" xml:space="preserve">
     <value>变节者</value>
@@ -699,14 +779,23 @@
     <value>作为变节者毁灭这艘船</value>
   </data>
   <data name="TraitorFullDescription" xml:space="preserve">
-    <value>变节者属于独立阵营，是船员中的背叛者。
-（注：变节者会占据部分船员阵营的分配额）
+    <value>变节者属于独立阵营.
+是船员中的背叛者。
+
+·被动技能“占用”
+变节者会占据部分船员阵营的分配额。
+
+·被动技能“额外的胜利条件”
 若内鬼阵营及拥有击杀能力的独立阵营玩家全部死亡，且存活的玩家有半数以上属于同一阵营，则变节者获胜。
 游戏开始时，随机将一名船员阵营玩家的职业更换为变节者。变节者保留原有船员职业的能力。
-原职业：{0}。
-能力“破解”：变节者每进行一次击杀后可以发动。
+
+·主动技能“破解”
+变节者每进行一次击杀后可以发动。
 依次观看管理室地图、监控与生命监测装置。
-注：生命检测装置不能在骷髅舰或米拉总部地图观看。</value>
+生命检测装置不能在骷髅舰或米拉总部地图观看。
+
+·你原先的职业信息：
+原职业：{0}。</value>
   </data>
   <data name="traitorCracking" xml:space="preserve">
     <value>破解</value>
@@ -769,15 +858,20 @@
     <value>用咒怨的力量让飞船陷入恐惧</value>
   </data>
   <data name="DelinquentFullDescription" xml:space="preserve">
-    <value>怨气化身属于独立阵营，与怨气灵同为组合职业。
-主动技能“鬼画符”：
-·发动后，在原地留下一枚鬼画符
-·鬼画符对所有玩家可见，但每名玩家看到的鬼画符样貌可能不同
-·怨气化身每使用一次鬼画符，成为怨气灵时就能增加一次鬼火的使用次数
-·怨气化身使用全部鬼画符后，其技能变为“自爆”
-主动技能“自爆”：
-·“全部鬼画符使用完毕后，技能范围内有其他玩家存在的场合才能发动
-·使用后，击杀周围的所有玩家与怨气化身自己
+    <value>怨气化身属于独立阵营。
+与怨气灵同为组合职业。
+
+·主动技能“鬼画符”：
+发动后，在原地留下一枚鬼画符。
+鬼画符对所有玩家可见，但每名玩家看到的鬼画符样貌可能不同。
+怨气化身每使用一次鬼画符，成为怨气灵时就能增加一次鬼火的使用次数。
+怨气化身使用全部鬼画符后，其技能变为“自爆”。
+
+·主动技能“自爆”：
+全部鬼画符使用完毕后，技能范围内有其他玩家存在的场合才能发动。
+使用后，击杀周围的所有玩家与怨气化身自己。
+
+·被动技能“额外的胜利条件”：
 怨气化身通过自爆炸死场上所有玩家，则怨气化身获胜。
 若怨气化身没能通过这种方式获胜并且死亡，其职业变为“怨气灵”。</value>
   </data>
@@ -810,7 +904,7 @@
     <value>一股幽怨的邪念正在侵蚀灯光……</value>
   </data>
   <data name="scribeText" xml:space="preserve">
-    <value>距离自爆还需要{0}个鬼画符</value>
+    <value>距离自爆还需要{0}个鬼画符。</value>
   </data>
   <data name="Buddy" xml:space="preserve">
     <value>挚友</value>
@@ -819,7 +913,7 @@
     <value>挚友觉醒需要完成的任务数</value>
   </data>
   <data name="BuddyIntroDescription" xml:space="preserve">
-    <value>我们是最好的伙伴！
+    <value>我们是最好的伙伴
 与{0}成为了伙伴</value>
   </data>
   <data name="BuddyShortDescription" xml:space="preserve">
@@ -827,7 +921,7 @@
   </data>
   <data name="BuddyFullDescription" xml:space="preserve">
     <value>挚友属于船员阵营，多人一组。
-你的挚友：{0}
+你的挚友：{0}。
 若挚友中的一名玩家由于职业变化等原因失去挚友职业，其他挚友不会得知这一情况。</value>
   </data>
   <data name="Guesser" xml:space="preserve">
@@ -870,14 +964,16 @@
     <value>推出其他玩家的职业并在会议中击杀</value>
   </data>
   <data name="GuesserFullDescription" xml:space="preserve">
-    <value>赌怪属于船员或内鬼阵营，可以在会议中通过猜测玩家职业来击杀其他玩家。
-主动技能“猜测”：
-·会议阶段选择一名玩家并猜测一个职业，若猜测正确则那名玩家死亡
-·以下情况会导致猜测失败：
-  ·猜测的玩家是梅林、刺客或魔王
-  ·猜测的玩家被保镖保护
-  ·猜测一名已经觉醒职业的玩家为其觉醒前的职业
-·猜测错误、失败的场合，赌怪死亡。</value>
+    <value>赌怪属于船员或内鬼阵营。
+可以在会议中通过猜测玩家职业来击杀其他玩家。
+
+·主动技能“猜测”：
+会议阶段选择一名玩家并猜测一个职业，若猜测正确则那名玩家死亡。
+以下情况会导致猜测失败：
+猜测的玩家是梅林、刺客或魔王。
+猜测的玩家被保镖保护。
+猜测一名已经觉醒职业的玩家为其觉醒前的职业。
+猜测错误、失败的场合，赌怪死亡。</value>
   </data>
   <data name="guesserUiTitle" xml:space="preserve">
     <value>「{0}」的职业是？</value>
@@ -914,12 +1010,15 @@
     <value>搬运地图物件让局面对自己有利</value>
   </data>
   <data name="MoverFullDescription" xml:space="preserve">
-    <value>搬运工属于船员或内鬼阵营，可以搬运地图上的物件。
-主动技能“搬运”：
-·靠近地图上可以搬运的物件时才可以发动。技能发动后，搬运工可以搬运那个物件
-·玩家不可以与正在被搬运工搬运的物件进行交互
-·搬运工不可以在技能持续期间进行召开紧急会议等交互
-·若管道等物件是被使用的状态，搬运工将无法搬运该物件</value>
+    <value>搬运工属于船员或内鬼阵营。
+可以搬运地图上的物件。
+
+·主动技能“搬运”：
+靠近地图上可以搬运的物件时才可以发动。
+技能发动后，搬运工可以搬运那个物件。
+玩家不可以与正在被搬运工搬运的物件进行交互。
+搬运工不可以在技能持续期间进行召开紧急会议等交互。
+若管道等物件是被使用的状态，搬运工将无法搬运该物件。</value>
   </data>
   <data name="Moving" xml:space="preserve">
     <value>搬运</value>
@@ -955,10 +1054,12 @@
     <value>小心不要撞到墙了!!</value>
   </data>
   <data name="AcceleratorFullDescription" xml:space="preserve">
-    <value>机关师可以放置加速带
+    <value>机关师属于船员或内鬼阵营。
+可以放置加速带。
 
-加速带：加速或减速
-在加速带上顺着奔跑可以加速，如果逆着加速带奔跑将减速</value>
+·主动技能“加速带”
+可以使玩家加速或减速。
+在加速带上顺着奔跑可以加速，如果逆着加速带奔跑将减速。</value>
   </data>
   <data name="AccelerateSet" xml:space="preserve">
     <value>加速带</value>
@@ -1006,14 +1107,16 @@
     <value>看得到我的车尾灯吗？</value>
   </data>
   <data name="SkaterFullDescription" xml:space="preserve">
-    <value>使用技能移速最快的职业
+    <value>溜冰舞者属于船员或内鬼阵营。
+溜冰舞者是使用技能移速最快的职业。
 
-滑冰:感受脚底生风的快感
-溜冰时你不能立即停止或转弯，根据设置你撞到墙将反弹
-到一定速度以上时，无法使用使用按钮等其他操作</value>
+·主动技能“溜冰”
+感受脚底生风的快感。
+溜冰时你不能立即停止或转弯，根据设置你撞到墙将反弹。
+到一定速度以上时，无法使用使用按钮等其他操作。</value>
   </data>
   <data name="SkaterSkateOn" xml:space="preserve">
-    <value>滑冰</value>
+    <value>溜冰</value>
   </data>
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>刹车</value>
