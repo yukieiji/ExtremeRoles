@@ -3,10 +3,12 @@
 using UnityEngine;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
-using ExtremeRoles.GameMode;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.MiniGame;
 
