@@ -4,6 +4,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Resources;
@@ -14,7 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 #nullable enable
 
-public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility
+public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier
 {
 	public enum Option
 	{
@@ -40,6 +41,22 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility
 		=> canSeeYandere(targetRole) ?
 				ColorPalette.YandereVioletRed :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+
+	public void ModifiedWinPlayer(
+		NetworkedPlayerInfo rolePlayerInfo,
+		GameOverReason reason,
+		in WinnerTempData winner)
+	{
+		switch (reason)
+		{
+			case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
+			case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
+				winner.AddPool(rolePlayerInfo);
+				break;
+			default:
+				break;
+		}
+	}
 
 	public void CreateAbility()
 	{
