@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
 
+
 #nullable enable
 
-namespace ExtremeRoles.Roles.Solo.Neutral.Queen;
+namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
-public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpdate
+public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpdate
 {
 	public enum Option
 	{
@@ -20,18 +21,18 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		IsSubTeam,
 		UseVent,
 		HasTask,
-		SeeQueenTaskRate,
+		SeeJackalTaskRate,
 	}
 
 	public override IStatusModel? Status => this.status;
 
-	private KnightStatus? status;
+	private ShepherdStatus? status;
 
-	public KnightRole() : base(
-		ExtremeRoleId.Knight,
+	public ShepherdRole() : base(
+		ExtremeRoleId.Shepherd,
 		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Knight.ToString(),
-		ColorPalette.QueenWhite,
+		ExtremeRoleId.Shepherd.ToString(),
+		ColorPalette.JackalBlue,
 		false, false, false, false)
 	{ }
 
@@ -42,7 +43,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	{
 		switch (reason)
 		{
-			case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
+			case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
 				winner.AddPool(rolePlayerInfo);
 				break;
 			default:
@@ -50,21 +51,9 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		}
 	}
 
-	public void Update(PlayerControl rolePlayer)
-	{
-		this.status?.Update(rolePlayer);
-	}
-
-	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
-		=> canSeeQueen(targetRole) ?
-				Design.ColoedString(
-					ColorPalette.QueenWhite,
-					$" {QueenRole.RoleShowTag}") :
-				base.GetRolePlayerNameTag(targetRole, targetPlayerId);
-
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
-		=> canSeeQueen(targetRole) ?
-				ColorPalette.QueenWhite :
+		=> canSeeJackal(targetRole) ?
+				ColorPalette.JackalBlue :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
@@ -73,12 +62,12 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 			Option.CanKill, true);
 		factory.CreateBoolOption(
 			Option.IsSubTeam, true, killOpt, invert: true);
-		factory.CreateBoolOption(
-			Option.UseVent, false);
+		factory.CreateBoolOption(Option.UseVent, false);
+
 		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask, false);
 		factory.CreateIntOption(
-			Option.SeeQueenTaskRate, 50, 0, 100, 10,
+			Option.SeeJackalTaskRate, 50, 0, 100, 10,
 			taskOpt, format: OptionUnit.Percentage);
 	}
 
@@ -88,16 +77,19 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		this.CanKill = loader.GetValue<Option, bool>(Option.CanKill);
 		this.UseVent = loader.GetValue<Option, bool>(Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(Option.HasTask);
-		this.status = new KnightStatus(
+		this.status = new ShepherdStatus(
 			this.HasTask,
-			loader.GetValue<Option, int>(Option.SeeQueenTaskRate),
+			loader.GetValue<Option, int>(Option.SeeJackalTaskRate),
 			this.CanKill && loader.GetValue<Option, bool>(Option.IsSubTeam));
 	}
 
-	private bool canSeeQueen(SingleRoleBase targetRole)
+	public void Update(PlayerControl rolePlayer)
+	{
+		this.status?.Update(rolePlayer);
+	}
+	private bool canSeeJackal(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Queen &&
-			this.status.SeeQween;
-
+			targetRole.Id is ExtremeRoleId.Jackal &&
+			this.status.SeeJackal;
 }

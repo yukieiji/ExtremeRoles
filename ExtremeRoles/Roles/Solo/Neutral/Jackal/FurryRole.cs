@@ -34,7 +34,7 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Furry.ToString(),
 		ColorPalette.JackalBlue,
-		true, false, true, false)
+		false, false, false, false)
 	{ }
 
 	public void ModifiedWinPlayer(
