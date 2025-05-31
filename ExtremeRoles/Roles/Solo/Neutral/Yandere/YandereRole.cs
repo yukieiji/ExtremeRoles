@@ -15,10 +15,10 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 
-public sealed class Yandere :
+public sealed class YandereRole :
     SingleRoleBase,
     IRoleUpdate,
     IRoleMurderPlayerHook,
@@ -68,18 +68,18 @@ public sealed class Yandere :
             bool isUseArrow)
         {
             this.isUseArrow = isUseArrow;
-            this.targetArrow.Clear();
-            this.targetPlayer.Clear();
+            targetArrow.Clear();
+            targetPlayer.Clear();
         }
 
         public void Add(byte playerId)
         {
             var player = Player.GetPlayerControlById(playerId);
 
-            this.targetPlayer.Add(playerId, player);
-            if (this.isUseArrow)
+            targetPlayer.Add(playerId, player);
+            if (isUseArrow)
             {
-                this.targetArrow.Add(
+                targetArrow.Add(
                     playerId, new Arrow(
                         new Color32(
                             byte.MaxValue,
@@ -89,13 +89,13 @@ public sealed class Yandere :
             }
             else
             {
-                this.targetArrow.Add(playerId, null);
+                targetArrow.Add(playerId, null);
             }
         }
 
         public void ArrowActivate(bool active)
         {
-            foreach (var arrow in this.targetArrow.Values)
+            foreach (var arrow in targetArrow.Values)
             {
                 if (arrow != null)
                 {
@@ -106,25 +106,25 @@ public sealed class Yandere :
 
         public bool IsContain(byte playerId) => targetPlayer.ContainsKey(playerId);
 
-        public int Count() => this.targetPlayer.Count;
+        public int Count() => targetPlayer.Count;
 
         public void Remove(byte playerId)
         {
-            this.targetPlayer.Remove(playerId);
+            targetPlayer.Remove(playerId);
 
-            if (this.targetArrow[playerId] != null)
+            if (targetArrow[playerId] != null)
             {
-                this.targetArrow[playerId].Clear();
+                targetArrow[playerId].Clear();
             }
 
-            this.targetArrow.Remove(playerId);
+            targetArrow.Remove(playerId);
         }
 
         public void Update()
         {
             List<byte> remove = new List<byte>();
 
-            foreach (var (playerId, playerControl) in this.targetPlayer)
+            foreach (var (playerId, playerControl) in targetPlayer)
             {
                 if (playerControl == null ||
                     playerControl.Data.Disconnected ||
@@ -134,16 +134,16 @@ public sealed class Yandere :
                     continue;
                 }
 
-                if (this.targetArrow[playerId] != null && this.isUseArrow)
+                if (targetArrow[playerId] != null && isUseArrow)
                 {
-                    this.targetArrow[playerId].UpdateTarget(
+                    targetArrow[playerId].UpdateTarget(
                         playerControl.GetTruePosition());
                 }
             }
 
             foreach (byte playerId in remove)
             {
-                this.Remove(playerId);
+                Remove(playerId);
             }
         }
     }
@@ -161,7 +161,7 @@ public sealed class Yandere :
         HasTargetArrow,
     }
 
-    public Yandere(): base(
+    public YandereRole(): base(
         ExtremeRoleId.Yandere,
         ExtremeRoleType.Neutral,
         ExtremeRoleId.Yandere.ToString(),
@@ -172,7 +172,7 @@ public sealed class Yandere :
     public static void SetOneSidedLover(
         byte rolePlayerId, byte oneSidedLoverId)
     {
-        var yandere = ExtremeRoleManager.GetSafeCastedRole<Yandere>(rolePlayerId);
+        var yandere = ExtremeRoleManager.GetSafeCastedRole<YandereRole>(rolePlayerId);
         if (yandere != null)
         {
             yandere.OneSidedLover = Player.GetPlayerControlById(oneSidedLoverId);
@@ -182,14 +182,14 @@ public sealed class Yandere :
     public override bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
     {
-        if (this.target.IsContain(targetPlayer.PlayerId))
+        if (target.IsContain(targetPlayer.PlayerId))
         {
-            this.KillCoolTime = this.defaultKillCool * (
-                (100f - this.targetKillReduceRate) / 100f);
+            KillCoolTime = defaultKillCool * (
+                (100f - targetKillReduceRate) / 100f);
         }
         else
         {
-            this.KillCoolTime = this.KillCoolTime * this.noneTargetKillMultiplier;
+            KillCoolTime = KillCoolTime * noneTargetKillMultiplier;
         }
 
         return true;
@@ -200,22 +200,22 @@ public sealed class Yandere :
 
     public override string GetIntroDescription() => string.Format(
         base.GetIntroDescription(),
-        this.oneSidePlayerName);
+        oneSidePlayerName);
 
     public override string GetImportantText(
         bool isContainFakeTask = true)
     {
         return string.Format(
             base.GetImportantText(isContainFakeTask),
-            this.oneSidePlayerName);
+            oneSidePlayerName);
     }
 
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (this.OneSidedLover == null) { return ""; }
+        if (OneSidedLover == null) { return ""; }
 
-        if (targetPlayerId == this.OneSidedLover.PlayerId)
+        if (targetPlayerId == OneSidedLover.PlayerId)
         {
             return Design.ColoedString(
                 ColorPalette.YandereVioletRed,
@@ -232,8 +232,8 @@ public sealed class Yandere :
         if (ShipStatus.Instance == null ||
             GameData.Instance == null ||
             MeetingHud.Instance != null ||
-            this.progress == null ||
-            (!this.isOneSidedLoverShare && this.OneSidedLover == null))
+            progress == null ||
+            !isOneSidedLoverShare && OneSidedLover == null)
         {
             return;
         }
@@ -248,67 +248,67 @@ public sealed class Yandere :
            rolePlayer.PlayerId);
         if (playerInfo.IsDead || playerInfo.Disconnected)
         {
-            this.target.ArrowActivate(false);
+            target.ArrowActivate(false);
 
-            if (this.hasOneSidedArrow && this.oneSidedArrow != null)
+            if (hasOneSidedArrow && oneSidedArrow != null)
             {
-                this.oneSidedArrow.SetActive(false);
+                oneSidedArrow.SetActive(false);
             }
             return;
         }
 
-        if (this.OneSidedLover == null)
+        if (OneSidedLover == null)
         {
-            this.isRunaway = true;
-            this.target.Update();
+            isRunaway = true;
+            target.Update();
             updateCanKill();
             return;
         }
 
-        if (!this.isOneSidedLoverShare)
+        if (!isOneSidedLoverShare)
         {
-            this.isOneSidedLoverShare = true;
+            isOneSidedLoverShare = true;
 
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.YandereSetOneSidedLover))
             {
                 caller.WriteByte(rolePlayer.PlayerId);
-                caller.WriteByte(this.OneSidedLover.PlayerId);
+                caller.WriteByte(OneSidedLover.PlayerId);
             }
             SetOneSidedLover(
                 rolePlayer.PlayerId,
-                this.OneSidedLover.PlayerId);
-            this.CanKill = false;
+                OneSidedLover.PlayerId);
+            CanKill = false;
         }
 
         // 不必要なデータを削除、役職の人と想い人
-        this.progress.Remove(rolePlayer.PlayerId);
-        this.progress.Remove(this.OneSidedLover.PlayerId);
+        progress.Remove(rolePlayer.PlayerId);
+        progress.Remove(OneSidedLover.PlayerId);
 
 
-        Vector2 oneSideLoverPos = this.OneSidedLover.GetTruePosition();
+        Vector2 oneSideLoverPos = OneSidedLover.GetTruePosition();
 
-        if (this.blockTimer > this.blockTargetTime)
+        if (blockTimer > blockTargetTime)
         {
             // 片思いびとが生きてる時の処理
-            if (!this.OneSidedLover.Data.Disconnected &&
-                !this.OneSidedLover.Data.IsDead)
+            if (!OneSidedLover.Data.Disconnected &&
+                !OneSidedLover.Data.IsDead)
             {
                 searchTarget(rolePlayer, oneSideLoverPos);
             }
             else
             {
-                this.isRunaway = true;
+                isRunaway = true;
             }
         }
         else
         {
-            this.blockTimer += Time.deltaTime;
+            blockTimer += Time.deltaTime;
         }
 
         updateOneSideLoverArrow(oneSideLoverPos);
 
-        this.target.Update();
+        target.Update();
 
         updateCanKill();
 
@@ -331,12 +331,12 @@ public sealed class Yandere :
 
         do
         {
-            playerIndex = UnityEngine.Random.RandomRange(
+            playerIndex = Random.RandomRange(
                 0, PlayerCache.AllPlayerControl.Count - 1);
 
-            this.OneSidedLover = PlayerCache.AllPlayerControl[playerIndex];
+            OneSidedLover = PlayerCache.AllPlayerControl[playerIndex];
 
-            var role = ExtremeRoleManager.GameRole[this.OneSidedLover.PlayerId];
+            var role = ExtremeRoleManager.GameRole[OneSidedLover.PlayerId];
             if (role.Id != ExtremeRoleId.Yandere &&
                 role.Id != ExtremeRoleId.Xion) { break; }
 
@@ -354,47 +354,47 @@ public sealed class Yandere :
             }
 
         } while (true);
-        this.oneSidePlayerName = this.OneSidedLover.Data.PlayerName;
-        this.isOneSidedLoverShare = false;
+        oneSidePlayerName = OneSidedLover.Data.PlayerName;
+        isOneSidedLoverShare = false;
     }
 
     public void IntroEndSetUp()
     {
         foreach(var player in GameData.Instance.AllPlayers.GetFastEnumerator())
         {
-            this.progress.Add(player.PlayerId, 0.0f);
+            progress.Add(player.PlayerId, 0.0f);
         }
-        this.CanKill = false;
+        CanKill = false;
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
-        if (this.isRunawayNextMeetingEnd)
+        if (isRunawayNextMeetingEnd)
         {
-            this.CanKill = true;
-            this.isRunaway = true;
-            this.isRunawayNextMeetingEnd = false;
+            CanKill = true;
+            isRunaway = true;
+            isRunawayNextMeetingEnd = false;
         }
-        this.target.ArrowActivate(true);
+        target.ArrowActivate(true);
 
-        if (this.hasOneSidedArrow && this.oneSidedArrow != null)
+        if (hasOneSidedArrow && oneSidedArrow != null)
         {
-            this.oneSidedArrow.SetActive(true);
+            oneSidedArrow.SetActive(true);
         }
     }
 
     public void ResetOnMeetingStart()
     {
-        this.KillCoolTime = this.defaultKillCool;
-        this.CanKill = false;
-        this.isRunaway = false;
-        this.timer = 0f;
+        KillCoolTime = defaultKillCool;
+        CanKill = false;
+        isRunaway = false;
+        timer = 0f;
 
-        this.target.ArrowActivate(false);
+        target.ArrowActivate(false);
 
-        if (this.hasOneSidedArrow && this.oneSidedArrow != null)
+        if (hasOneSidedArrow && oneSidedArrow != null)
         {
-            this.oneSidedArrow.SetActive(false);
+            oneSidedArrow.SetActive(false);
         }
 
     }
@@ -446,67 +446,67 @@ public sealed class Yandere :
 
     protected override void RoleSpecificInit()
     {
-		var cate = this.Loader;
+		var cate = Loader;
 
-        this.setTargetRange = cate.GetValue<YandereOption, float>(
+        setTargetRange = cate.GetValue<YandereOption, float>(
             YandereOption.SetTargetRange);
-        this.setTargetTime = cate.GetValue<YandereOption, float>(
+        setTargetTime = cate.GetValue<YandereOption, float>(
             YandereOption.SetTargetTime);
 
-        this.targetKillReduceRate = cate.GetValue<YandereOption, int>(
+        targetKillReduceRate = cate.GetValue<YandereOption, int>(
             YandereOption.TargetKilledKillCoolReduceRate);
-        this.noneTargetKillMultiplier = cate.GetValue<YandereOption, float>(
+        noneTargetKillMultiplier = cate.GetValue<YandereOption, float>(
             YandereOption.NoneTargetKilledKillCoolMultiplier);
 
-        this.maxTargetNum = cate.GetValue<YandereOption, int>(
+        maxTargetNum = cate.GetValue<YandereOption, int>(
             YandereOption.MaxTargetNum);
 
-        this.timer = 0.0f;
-        this.timeLimit = cate.GetValue<YandereOption, float>(
+        timer = 0.0f;
+        timeLimit = cate.GetValue<YandereOption, float>(
             YandereOption.RunawayTime);
 
-        this.blockTimer = 0.0f;
-        this.blockTargetTime = cate.GetValue<YandereOption, float>(
+        blockTimer = 0.0f;
+        blockTargetTime = cate.GetValue<YandereOption, float>(
             YandereOption.BlockTargetTime);
 
-        this.hasOneSidedArrow = cate.GetValue<YandereOption, bool>(
+        hasOneSidedArrow = cate.GetValue<YandereOption, bool>(
             YandereOption.HasOneSidedArrow);
-        this.target = new KillTarget(
+        target = new KillTarget(
 			cate.GetValue<YandereOption, bool>(YandereOption.HasTargetArrow));
 
-        this.progress = new Dictionary<byte, float>();
+        progress = new Dictionary<byte, float>();
 
-        if (this.HasOtherKillCool)
+        if (HasOtherKillCool)
         {
-            this.defaultKillCool = this.KillCoolTime;
+            defaultKillCool = KillCoolTime;
         }
         else
         {
-            this.defaultKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+            defaultKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
                 FloatOptionNames.KillCooldown);
-            this.HasOtherKillCool = true;
+            HasOtherKillCool = true;
         }
 
-        this.isRunaway = false;
-        this.isOneSidedLoverShare = false;
-        this.oneSidePlayerName = string.Empty;
+        isRunaway = false;
+        isOneSidedLoverShare = false;
+        oneSidePlayerName = string.Empty;
     }
 
     private void checkRunawayNextMeeting()
     {
-        if (this.isRunaway || this.isRunawayNextMeetingEnd) { return; }
+        if (isRunaway || isRunawayNextMeetingEnd) { return; }
 
-        if (this.target.Count() == 0)
+        if (target.Count() == 0)
         {
-            this.timer += Time.deltaTime;
-            if (this.timer >= this.timeLimit)
+            timer += Time.deltaTime;
+            if (timer >= timeLimit)
             {
-                this.isRunawayNextMeetingEnd = true;
+                isRunawayNextMeetingEnd = true;
             }
         }
         else
         {
-            this.timer = 0.0f;
+            timer = 0.0f;
         }
     }
 
@@ -520,7 +520,7 @@ public sealed class Yandere :
 
 			byte playerId = playerInfo.PlayerId;
 
-			if (!this.progress.TryGetValue(playerId, out float playerProgress))
+			if (!progress.TryGetValue(playerId, out float playerProgress))
 			{
 				continue;
 			}
@@ -528,7 +528,7 @@ public sealed class Yandere :
             if (!playerInfo.Disconnected &&
                 !playerInfo.IsDead &&
                 rolePlayer.PlayerId != playerId &&
-                this.OneSidedLover.PlayerId != playerId &&
+                OneSidedLover.PlayerId != playerId &&
                 !playerInfo.Object.inVent)
             {
                 PlayerControl @object = playerInfo.Object;
@@ -537,7 +537,7 @@ public sealed class Yandere :
                     Vector2 vector = @object.GetTruePosition() - pos;
                     float magnitude = vector.magnitude;
 
-                    if (magnitude <= this.setTargetRange &&
+                    if (magnitude <= setTargetRange &&
                         !PhysicsHelpers.AnyNonTriggersBetween(
                             pos, vector.normalized,
                             magnitude, Constants.ShipAndObjectsMask))
@@ -555,54 +555,54 @@ public sealed class Yandere :
                 playerProgress = 0.0f;
             }
 
-            if (playerProgress >= this.setTargetTime &&
-                !this.target.IsContain(playerId) &&
-                this.target.Count() < this.maxTargetNum)
+            if (playerProgress >= setTargetTime &&
+                !target.IsContain(playerId) &&
+                target.Count() < maxTargetNum)
             {
-                this.target.Add(playerId);
-                this.progress.Remove(playerId);
+                target.Add(playerId);
+                progress.Remove(playerId);
             }
             else
             {
-                this.progress[playerId] = playerProgress;
+                progress[playerId] = playerProgress;
             }
         }
     }
 
     private void updateCanKill()
     {
-        if (this.isRunaway)
+        if (isRunaway)
         {
-            this.CanKill = true;
+            CanKill = true;
             return;
         }
 
-        this.CanKill = this.target.Count() > 0;
+        CanKill = target.Count() > 0;
     }
 
     private void updateOneSideLoverArrow(Vector2 pos)
     {
 
-        if (!this.hasOneSidedArrow) { return; }
+        if (!hasOneSidedArrow) { return; }
 
-        if (this.oneSidedArrow == null)
+        if (oneSidedArrow == null)
         {
-            this.oneSidedArrow = new Arrow(
-                this.NameColor);
+            oneSidedArrow = new Arrow(
+                NameColor);
         }
-        this.oneSidedArrow.UpdateTarget(pos);
+        oneSidedArrow.UpdateTarget(pos);
     }
 
 	public void HookRevive(PlayerControl revivePlayer)
 	{
-		lock(this.progress)
+		lock(progress)
 		{
 			byte playerId = revivePlayer.PlayerId;
-			if (this.progress.ContainsKey(playerId))
+			if (progress.ContainsKey(playerId))
 			{
 				return;
 			}
-			this.progress.Add(playerId, 0.0f);
+			progress.Add(playerId, 0.0f);
 		}
 	}
 }
