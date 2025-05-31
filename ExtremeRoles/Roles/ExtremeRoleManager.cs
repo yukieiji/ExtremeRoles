@@ -350,6 +350,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 
 			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+			{(int)ExtremeRoleId.Knight    , new KnightRole()},
 
 		}.ToImmutableDictionary();
 
