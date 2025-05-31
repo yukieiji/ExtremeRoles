@@ -337,6 +337,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Monika    , new Monika()},
 			{(int)ExtremeRoleId.Heretic   , new Heretic()},
 
+			{(int)ExtremeRoleId.Furry     , new FurryRole()},
 
 			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 
