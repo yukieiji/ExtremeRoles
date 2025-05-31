@@ -20,6 +20,7 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
+using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 namespace ExtremeRoles.Roles;
 
@@ -321,7 +322,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.TaskMaster, new TaskMaster()},
             {(int)ExtremeRoleId.Missionary, new MissionaryRole()},
             {(int)ExtremeRoleId.Jester    , new Jester()},
-            {(int)ExtremeRoleId.Yandere   , new Yandere()},
+            {(int)ExtremeRoleId.Yandere   , new YandereRole()},
             {(int)ExtremeRoleId.Yoko      , new Yoko()},
             {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
             {(int)ExtremeRoleId.Miner     , new Miner()},

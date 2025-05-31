@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 
 
@@ -680,7 +681,7 @@ public static class RPCOperator
 	public static void YandereSetOneSidedLover(
         byte playerId, byte loverId)
     {
-        Roles.Solo.Neutral.Yandere.SetOneSidedLover(
+        YandereRole.SetOneSidedLover(
             playerId, loverId);
     }
     public static void TotocalcioSetBetPlayer(
