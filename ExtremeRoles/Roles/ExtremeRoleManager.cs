@@ -18,8 +18,6 @@ using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Module;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 
@@ -337,6 +335,11 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.IronMate  , new IronMate()},
 			{(int)ExtremeRoleId.Monika    , new Monika()},
 			{(int)ExtremeRoleId.Heretic   , new Heretic()},
+
+
+			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+
+
 		}.ToImmutableDictionary();
 
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
