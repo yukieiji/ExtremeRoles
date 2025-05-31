@@ -148,6 +148,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.IronMate,
 			ExtremeRoleId.Monika,
 			ExtremeRoleId.Heretic,
+
+			ExtremeRoleId.Pawn,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
