@@ -379,6 +379,7 @@ public static class ExtremeRoleManager
 		BecomeLawbreaker,
 		ForceRelaceToChimera,
 		RemoveChimera,
+		RebornJackal,
 	}
 
 	public static int GetRoleGroupId(ExtremeRoleId roleId)
@@ -572,6 +573,9 @@ public static class ExtremeRoleManager
 				break;
 			case ReplaceOperation.RemoveChimera:
 				TuckerRole.RemoveChimera(caller, targetId);
+				break;
+			case ReplaceOperation.RebornJackal:
+				FurryRole.BecomeToJackal(caller, targetId);
 				break;
 			default:
                 break;

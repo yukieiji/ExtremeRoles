@@ -1,6 +1,6 @@
-﻿using ExtremeRoles.Performance;
+﻿using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API.Interface;
-using System.Collections.Generic;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
@@ -8,24 +8,44 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
 public sealed class FurryStatus : IStatusModel
 {
-	public JackalRole? TargetJackal { get; private set; }
+	public byte? TargetJackal { get; private set; }
 
 	public void Update()
 	{
+		if (ShipStatus.Instance == null ||
+			!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			TargetJackal is not null)
+		{
+			return;
+		}
+
 		foreach (var player in PlayerCache.AllPlayerControl)
 		{
+			byte playerId = player.PlayerId;
 			if (player == null ||
+				!ExtremeRoleManager.TryGetSafeCastedRole<JackalRole>(playerId, out var jackalRole) ||
 				player.Data == null ||
-				!ExtremeRoleManager.TryGetSafeCastedRole<SidekickRole>(player.PlayerId, out var sk))
+				!(player.Data.IsDead || player.Data.Disconnected))
 			{
+
 				continue;
 			}
-			var jkPlayer = GameData.Instance.GetPlayerById(sk.Parent);
-			if (jkPlayer == null ||
-				!(jkPlayer.IsDead || jkPlayer.Disconnected) ||
-				!ExtremeRoleManager.TryGetSafeCastedRole<JackalRole>(jkPlayer.PlayerId, out var jk))
+
+			bool allSidekicksDead = true;
+			foreach (byte sidekickPlayerId in jackalRole.SidekickPlayerId)
 			{
-				continue;
+				var sidekickPlayer = GameData.Instance.GetPlayerById(sidekickPlayerId);
+				if (sidekickPlayer != null && !(player.Data.IsDead || player.Data.Disconnected))
+				{
+					allSidekicksDead = false;
+					break;
+				}
+			}
+
+			if (allSidekicksDead)
+			{
+				TargetJackal = playerId;
+				break;
 			}
 		}
 	}
