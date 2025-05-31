@@ -14,6 +14,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 
 
@@ -33,7 +34,8 @@ public static class RPCOperator
         UncheckedSnapTo,
         UncheckedShapeShift,
         UncheckedMurderPlayer,
-        UncheckedRevive,
+		UncheckedExiledPlayer,
+		UncheckedRevive,
         CleanDeadBody,
         FixForceRepairSpecialSabotage,
         ReplaceDeadReason,
@@ -240,7 +242,6 @@ public static class RPCOperator
         Module.VisionComputer.Instance.ResetModifier();
 
         // ミーティング能力リセット
-        Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
         Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
         // 各種システムコンソールリセット
@@ -383,7 +384,24 @@ public static class RPCOperator
         }
     }
 
-    public static void UncheckedRevive(byte targetId)
+	public static void UncheckedExiledPlayer(byte targetId)
+	{
+		if (Helper.GameSystem.IsLobby ||
+			!Roles.ExtremeRoleManager.TryGetRole(targetId, out var role))
+		{
+			return;
+		}
+
+		PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+		if (target == null)
+		{
+			return;
+		}
+		target.Exiled();
+		role.ExiledAction(target);
+	}
+
+	public static void UncheckedRevive(byte targetId)
     {
         PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
 
@@ -419,7 +437,10 @@ public static class RPCOperator
 
     public static void SetRoleWin(byte winPlayerId)
     {
-        Roles.ExtremeRoleManager.GameRole[winPlayerId].IsWin = true;
+		if (Roles.ExtremeRoleManager.TryGetRole(winPlayerId, out var role))
+		{
+			role.IsWin = true;
+		}
     }
     public static void ShareMapId(byte mapId)
     {
@@ -660,7 +681,7 @@ public static class RPCOperator
 	public static void YandereSetOneSidedLover(
         byte playerId, byte loverId)
     {
-        Roles.Solo.Neutral.Yandere.SetOneSidedLover(
+        YandereRole.SetOneSidedLover(
             playerId, loverId);
     }
     public static void TotocalcioSetBetPlayer(

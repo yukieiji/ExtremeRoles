@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-
-using ExtremeRoles.GhostRoles;
+﻿using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
+using MS.Internal.Xml.XPath;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
@@ -146,7 +147,14 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Artist,
 			ExtremeRoleId.Tucker,
 			ExtremeRoleId.IronMate,
-			ExtremeRoleId.Monika
+			ExtremeRoleId.Monika,
+			ExtremeRoleId.Heretic,
+			ExtremeRoleId.Shepherd,
+			ExtremeRoleId.Furry,
+			ExtremeRoleId.Intimate,
+			ExtremeRoleId.Surrogator,
+			ExtremeRoleId.Knight,
+			ExtremeRoleId.Pawn,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>
