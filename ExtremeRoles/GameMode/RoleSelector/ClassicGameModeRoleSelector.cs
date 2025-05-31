@@ -149,6 +149,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Monika,
 			ExtremeRoleId.Heretic,
 
+			ExtremeRoleId.Furry,
+
 			ExtremeRoleId.Surrogator,
 
 			ExtremeRoleId.Pawn,
