@@ -10,6 +10,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 

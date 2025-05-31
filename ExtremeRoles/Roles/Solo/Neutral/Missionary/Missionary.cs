@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 

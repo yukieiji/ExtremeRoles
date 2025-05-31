@@ -12,15 +12,40 @@ using ExtremeRoles.GameMode;
 
 using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 
 namespace ExtremeRoles.Module;
 
-file sealed class NeutralSeparateTeamBuilder()
+file sealed class NeutralSeparateTeamContainer()
 {
 	public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> Team => neutralTeam;
+
 	private readonly Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = [];
+	private readonly HashSet<NeutralSeparateTeam> teams = [];
+
+	public bool Contain(NeutralSeparateTeam team) => this.teams.Contains(team);
+
+	public void Add(NeutralSeparateTeam team, int id)
+	{
+		var key = (team, id);
+
+		if (this.neutralTeam.TryGetValue(key, out int num))
+		{
+			this.neutralTeam[key] = num + 1;
+		}
+		else
+		{
+			this.neutralTeam.Add(key, 1);
+		}
+	}
+}
+
+file sealed class NeutralSeparateTeamBuilder()
+{
+	public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> Team => neutralTeam.Team;
+	private readonly NeutralSeparateTeamContainer neutralTeam = new NeutralSeparateTeamContainer();
 	private int cacheId = 0;
 
 	public void Add(
@@ -52,10 +77,15 @@ file sealed class NeutralSeparateTeamBuilder()
 			return;
 		}
 
-		// TODO : サブチームのジックを考える
 		// 基本的にはキル持ちの特定の役職のときに実行
 		// メインチームが生存 => メインチームの人数にカウントしない、サブチームのカウントも行わない(行ってもいいが消す)
 		// メインチームがいない => サブチームのカウントを行う、サブチームが勝てばメインチームの勝利判定
+		if (role.CanKill &&
+			role.Status is ISubTeam subTeam &&
+			!neutralTeam.Contain(subTeam.Sub))
+		{
+			addNeutralTeams(subTeam.Main);
+		}
 
 		switch (roleId)
 		{
@@ -89,16 +119,7 @@ file sealed class NeutralSeparateTeamBuilder()
 
 	private void addNeutralTeams(NeutralSeparateTeam team)
 	{
-		var key = (team, this.cacheId);
-
-		if (this.neutralTeam.TryGetValue(key, out int num))
-		{
-			this.neutralTeam[key] = num + 1;
-		}
-		else
-		{
-			this.neutralTeam.Add(key, 1);
-		}
+		this.neutralTeam.Add(team, this.cacheId);
 	}
 }
 

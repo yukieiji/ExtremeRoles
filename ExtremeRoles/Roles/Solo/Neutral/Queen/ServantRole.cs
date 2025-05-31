@@ -14,6 +14,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 #nullable enable
 
