@@ -1215,4 +1215,7 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
     <value>「ファングル」の「原子炉修理」</value>
   </data>
+  <data name="GhostRoleGlobalOptionHauntMinigameMaxSpeed" xml:space="preserve">
+    <value>「憑依」の最大移動速度</value>
+  </data>
 </root>
