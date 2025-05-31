@@ -154,6 +154,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 			ExtremeRoleId.Surrogator,
 
 			ExtremeRoleId.Pawn,
+			ExtremeRoleId.Knight,
 		];
 
     private CombinationRoleType[] getUseCombRoleType() =>

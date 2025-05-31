@@ -82,6 +82,7 @@ file sealed class NeutralSeparateTeamBuilder()
 		// メインチームがいない => サブチームのカウントを行う、サブチームが勝てばメインチームの勝利判定
 		if (role.CanKill &&
 			role.Status is ISubTeam subTeam &&
+			subTeam.IsSub &&
 			!neutralTeam.Contain(subTeam.Sub))
 		{
 			addNeutralTeams(subTeam.Main);
