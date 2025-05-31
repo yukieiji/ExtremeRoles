@@ -136,10 +136,10 @@ public enum ExtremeRoleId : int
 	Heretic,
 	Furry,
 	Shepherd,
+	Intimate,
+	Surrogator,
 	Pawn,
 	Knight,
-	Intimate,
-	Surrogate,
 
 	Xion,
 }
@@ -338,8 +338,9 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Heretic   , new Heretic()},
 
 
-			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
+			{(int)ExtremeRoleId.Surrogator, new SurrogatorRole()},
 
+			{(int)ExtremeRoleId.Pawn      , new PawnRole()},
 
 		}.ToImmutableDictionary();
 
