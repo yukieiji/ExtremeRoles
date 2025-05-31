@@ -212,8 +212,13 @@ public enum RoleGameOverReason
 	ArtistShipToArt,
 
 	TuckerShipIsExperimentStation,
+
 	MonikaThisGameIsMine,
 	MonikaIamTheOnlyOne,
+
+	AllJackalWin,
+	AllYandereWin,
+	AllQueenWin,
 
 	UnKnown = 100,
 }
@@ -234,7 +239,10 @@ public enum NeutralSeparateTeam
     Queen,
     Kids,
 	Tucker,
-	Monika
+	Monika,
+	JackalSub,
+	YandereSub,
+	QueenSub
 }
 
 public static class ExtremeRoleManager
