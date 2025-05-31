@@ -44,7 +44,7 @@ public sealed class Shooter :
     public bool IsAwake => this.isAwake;
 
     public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
-	public Sprite AbilityImage => FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite;
+	public Sprite AbilityImage => HudManager.Instance.KillButton.graphic.sprite;
 
 	private bool isAwake = false;
 

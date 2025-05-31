@@ -496,17 +496,5 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
     private bool isSameJackalTeam(SingleRoleBase targetRole)
     {
         return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Sidekick;
-        }
-    }
-
-    private bool isSameJackalTeam(SingleRoleBase targetRole)
-    {
-        return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Jackal));
-        }
-    }
-
-    private bool isSameJackalTeam(SingleRoleBase targetRole)
-    {
-        return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Jackal));
     }
 }

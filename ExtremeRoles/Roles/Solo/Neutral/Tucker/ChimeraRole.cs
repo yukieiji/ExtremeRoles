@@ -112,9 +112,9 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (CachedShipStatus.Instance == null ||
+		if (ShipStatus.Instance == null ||
 			GameData.Instance == null ||
-			!CachedShipStatus.Instance.enabled ||
+			!ShipStatus.Instance.enabled ||
 			rolePlayer == null ||
 			rolePlayer.Data == null ||
 			MeetingHud.Instance != null ||
@@ -155,7 +155,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		if (resurrectText == null)
 		{
 			resurrectText = UnityEngine.Object.Instantiate(
-				FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+				HudManager.Instance.KillButton.cooldownTimerText,
 				Camera.main.transform, false);
 			resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
 			resurrectText.enableWordWrapping = false;
@@ -243,7 +243,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 
 		rolePlayer.killTimer = KillCoolTime;
 
-		FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubblePool.ReclaimAll();
+		HudManager.Instance.Chat.chatBubblePool.ReclaimAll();
 		if (resurrectText != null)
 		{
 			resurrectText.gameObject.SetActive(false);

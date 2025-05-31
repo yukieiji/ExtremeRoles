@@ -104,7 +104,7 @@ public sealed class ServantRole :
 			source.PlayerId == target.PlayerId ||
 			ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
 
-		var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+		var hudManager = HudManager.Instance;
 
 		if (killFlash == null)
 		{
