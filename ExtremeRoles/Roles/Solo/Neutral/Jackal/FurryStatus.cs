@@ -1,6 +1,6 @@
 ﻿using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
 

@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Roles.API.Interface;
+﻿using ExtremeRoles.Roles.API.Interface.Status;
 using System.Collections.Generic;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Missionary;
