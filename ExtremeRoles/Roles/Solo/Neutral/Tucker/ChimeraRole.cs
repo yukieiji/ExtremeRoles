@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Tucker;
 
