@@ -38,6 +38,14 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 	public override IStatusModel? Status => this.status;
 	private SurrogatorStatus? status;
 
+	public SurrogatorRole() : base(
+		ExtremeRoleId.Surrogator,
+		ExtremeRoleType.Neutral,
+		ExtremeRoleId.Surrogator.ToString(),
+		ColorPalette.YandereVioletRed,
+		false, false, false, false)
+	{ }
+
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
 		=> canSeeYandere(targetRole) ?
 				ColorPalette.YandereVioletRed :
