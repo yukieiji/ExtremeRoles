@@ -1,9 +1,12 @@
-﻿using ExtremeRoles.Module.Ability;
+﻿using UnityEngine;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -16,6 +19,8 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility
 	public enum Option
 	{
 		UseVent,
+		HasTask,
+		SeeYandereTaskRate,
 		Range,
 		PreventNum,
 		PreventKillTime,
@@ -27,6 +32,14 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility
 	private NetworkedPlayerInfo DeadBody => Player.GetDeadBodyInfo(this.range);
 	private byte activateTarget;
 	private float range;
+
+	public override IStatusModel? Status => this.status;
+	private SurrogatorStatus? status;
+
+	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
+		=> canSeeYandere(targetRole) ?
+				ColorPalette.YandereVioletRed :
+				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 
 	public void CreateAbility()
 	{
@@ -105,6 +118,11 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(Option.UseVent, false);
+		var taskOpt = factory.CreateBoolOption(
+			Option.HasTask, false);
+		factory.CreateIntOption(
+			Option.SeeYandereTaskRate, 50, 0, 100, 10,
+			taskOpt, format: OptionUnit.Percentage);
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10, 3.0f);
 		factory.CreateFloatOption(Option.Range, 0.7f, 0.1f, 3.5f, 0.1f);
 		factory.CreateIntOption(Option.PreventNum, 1, 0, 10, 1);
@@ -119,5 +137,15 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility
 			loader.GetValue<Option, float>(Option.PreventKillTime));
 		system.AddGuardNum(
 			loader.GetValue<Option, int>(Option.PreventNum));
+
+		this.status = new SurrogatorStatus(
+			this.HasTask,
+			loader.GetValue<Option, int>(Option.SeeYandereTaskRate));
 	}
+
+	private bool canSeeYandere(SingleRoleBase targetRole)
+		=>
+			this.status is not null &&
+			targetRole.Id is ExtremeRoleId.Yandere &&
+			this.status.SeeYandere;
 }

@@ -15,13 +15,15 @@ public sealed class PawnStatus(
 
 	public void Update(PlayerControl pawnPlayer)
 	{
-		if (!this.hasTask)
+		if (!(
+				this.hasTask && this.SeeQween
+			))
 		{
 			return;
 		}
 
 		float taskGage = Helper.Player.GetPlayerTaskGage(pawnPlayer);
-		if (taskGage >= this.qweenSeeTaskRate && !this.SeeQween)
+		if (taskGage >= this.qweenSeeTaskRate)
 		{
 			this.SeeQween = true;
 		}

@@ -6,17 +6,32 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
 #nullable enable
 
-public sealed class FurryStatus : IStatusModel
+public sealed class FurryStatus(
+	bool hasTask,
+	int jackalSeeTaskRate) : IStatusModel
 {
-	public byte? TargetJackal { get; private set; }
+	private readonly bool hasTask = hasTask;
+	private readonly float jackalSeeTaskRate = jackalSeeTaskRate / 100.0f;
 
-	public void Update()
+	public byte? TargetJackal { get; private set; }
+	public bool SeeJackal { get; private set; } = false;
+
+	public void Update(PlayerControl furryPlayer)
 	{
 		if (ShipStatus.Instance == null ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||
 			TargetJackal is not null)
 		{
 			return;
+		}
+
+		if (this.hasTask && !this.SeeJackal)
+		{
+			float taskGage = Helper.Player.GetPlayerTaskGage(furryPlayer);
+			if (taskGage >= this.jackalSeeTaskRate)
+			{
+				this.SeeJackal = true;
+			}
 		}
 
 		foreach (var player in PlayerCache.AllPlayerControl)

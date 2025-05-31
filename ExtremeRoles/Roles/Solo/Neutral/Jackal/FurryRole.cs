@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Module;
+﻿using UnityEngine;
+
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
@@ -16,7 +18,9 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 {
 	public enum Option
 	{
-		UseVent
+		UseVent,
+		HasTask,
+		SeeJackalTaskRate,
 	}
 
 	public override IStatusModel? Status => this.status;
@@ -47,6 +51,11 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 		}
 	}
 
+	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
+		=> canSeeJackal(targetRole) ?
+				ColorPalette.JackalBlue :
+				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+
 	public static void BecomeToJackal(byte targetJackal, byte targetFurry)
 	{
 		var curJackal = ExtremeRoleManager.GetSafeCastedRole<JackalRole>(targetJackal);
@@ -74,11 +83,21 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(Option.UseVent, false);
+		var taskOpt = factory.CreateBoolOption(
+			Option.HasTask, false);
+		factory.CreateIntOption(
+			Option.SeeJackalTaskRate, 50, 0, 100, 10,
+			taskOpt, format: OptionUnit.Percentage);
 	}
 
 	protected override void RoleSpecificInit()
 	{
-		this.UseVent = this.Loader.GetValue<Option, bool>(Option.UseVent);
+		var loader = this.Loader;
+		this.UseVent = loader.GetValue<Option, bool>(Option.UseVent);
+		this.HasTask = loader.GetValue<Option, bool>(Option.HasTask);
+		this.status = new FurryStatus(
+			this.HasTask,
+			loader.GetValue<Option, int>(Option.SeeJackalTaskRate));
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -86,16 +105,13 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 		if (ShipStatus.Instance == null ||
 			!ShipStatus.Instance.enabled ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			this.isUpdate)
+			this.isUpdate ||
+			this.status is null)
 		{
 			return;
 		}
 
-		if (this.status is null)
-		{
-			this.status = new FurryStatus();
-		}
-		this.status.Update();
+		this.status.Update(rolePlayer);
 
 		if (this.status.TargetJackal.HasValue)
 		{
@@ -106,4 +122,9 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 			this.isUpdate = true;
 		}
 	}
+	private bool canSeeJackal(SingleRoleBase targetRole)
+		=>
+			this.status is not null &&
+			targetRole.Id is ExtremeRoleId.Jackal &&
+			this.status.SeeJackal;
 }
