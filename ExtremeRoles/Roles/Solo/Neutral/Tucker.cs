@@ -99,9 +99,9 @@ public sealed class Tucker :
 		IRoleSpecialReset.ResetRole(targetPlayerId);
 
 		var chimera = new Chimera(tucker.Loader, rolePlayer.Data, tucker.option);
+		IRoleSpecialReset.ResetLover(targetPlayerId);
 		ExtremeRoleManager.SetNewRole(targetPlayerId, chimera);
 		chimera.SetControlId(tucker.GameControlId);
-		IRoleSpecialReset.ResetLover(targetPlayerId);
 
 		tucker.chimera.Add(targetPlayerId);
 
