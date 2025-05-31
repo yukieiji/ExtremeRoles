@@ -8,6 +8,7 @@ using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 #nullable enable
 
@@ -24,6 +25,7 @@ public static class KillButtonDoClickPatch
 		BlockedToKillerOtherRoleCondition,
 		BlockedToTargetOtherRoleCondition,
 		BlockedToBodyguard,
+		BlockedToSurrogator,
 		FinalConditionFail,
 		Success,
 	}
@@ -102,6 +104,10 @@ public static class KillButtonDoClickPatch
 		else if (BodyGuard.TryRpcKillGuardedBodyGuard(killer.PlayerId, target.PlayerId))
 		{
 			return KillResult.BlockedToBodyguard;
+		}
+		else if (SurrogatorRole.TryGurdOnesideLover(killer, target.PlayerId))
+		{
+			return KillResult.BlockedToSurrogator;
 		}
 		else if (IsMissMurderKill(killer, target))
 		{
