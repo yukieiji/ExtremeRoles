@@ -3,30 +3,30 @@ using Hazel;
 using HarmonyLib;
 
 using ExtremeRoles.Extension.Manager;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Manager;
 
-[HarmonyPatch(typeof(AuthManager), nameof(AuthManager.CoConnect))]
+[HarmonyPatch(typeof(AuthManager._CoConnect_d__4), nameof(AuthManager._CoConnect_d__4.MoveNext))]
 public static class AuthManagerCoConnectPatch
 {
-	public static bool Prefix(AuthManager __instance)
+	public static bool Prefix(AuthManager._CoConnect_d__4 __instance)
 	{
 		if (!ServerManager.Instance.IsCustomServer())
 		{
 			return true;
 		}
 
-		if (__instance.connection != null)
+		var instance = __instance.__4__this;
+		if (instance.connection != null)
 		{
-			__instance.connection.DataReceived -=
-				(Action<DataReceivedEventArgs>)__instance.Connection_DataReceived;
-			__instance.connection.Disconnected -=
-				(EventHandler<DisconnectedEventArgs>)__instance.Connection_Disconnected;
-			__instance.connection.Dispose();
+			instance.connection.DataReceived -=
+				(Action<DataReceivedEventArgs>)instance.Connection_DataReceived;
+			instance.connection.Disconnected -=
+				(EventHandler<DisconnectedEventArgs>)instance.Connection_Disconnected;
+			instance.connection.Dispose();
 		}
 
-		__instance.connection = null;
+		instance.connection = null;
 
 		return false;
 	}
