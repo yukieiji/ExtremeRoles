@@ -352,12 +352,12 @@
     <value>測試人員：</value>
   </data>
   <data name="langTranslate" xml:space="preserve">
-    <value>&lt;size=85%&gt;簡體中文翻譯：</value>
+    <value>簡體中文翻譯：</value>
   </data>
   <data name="translatorMember" xml:space="preserve">
-    <value>開擺，123，方塊
+    <value>開擺, 123, 方塊, 
 亂線Namdam_096，FiveFireX，
-氫氧則名,小鹿SAMA&lt;/size&gt;</value>
+氫氧則名,小鹿SAMA</value>
   </data>
   <data name="youAreRoleIntro" xml:space="preserve">
     <value>你的職業是</value>

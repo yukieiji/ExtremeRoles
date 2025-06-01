@@ -44,7 +44,7 @@ public static class MainMenuTextInfoPatch
         if (DataManager.Settings.Language.CurrentLanguage != SupportedLangs.Japanese)
         {
 			var translator = Object.Instantiate(
-			credentials, credentials.transform);
+				credentials, credentials.transform);
 			translator.transform.localPosition = new Vector3(0, -0.35f, 0);
 			translator.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 			translator.gameObject.SetActive(true);
@@ -53,9 +53,9 @@ public static class MainMenuTextInfoPatch
                     Tr.GetString("langTranslate"),
                     Tr.GetString("translatorMember")));
             translator.alignment = TMPro.TextAlignmentOptions.Top;
-			translator.fontSize = translator.fontSizeMax = translator.fontSizeMin = 2.7f;
+			translator.fontSize = translator.fontSizeMax = translator.fontSizeMin = 3f;
 
-			translator.transform.localPosition = new Vector3(0, -0.5f, 0);
+			translator.transform.localPosition = new Vector3(0, -0.4f, 0);
             credentials.transform.localScale = new Vector3(0.8f, 0.8f, 1.0f);
         }
         else
