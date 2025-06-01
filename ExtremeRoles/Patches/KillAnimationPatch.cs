@@ -3,22 +3,19 @@
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches;
 
-[HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
+[HarmonyPatch(typeof(KillAnimation._CoPerformKill_d__2), nameof(KillAnimation._CoPerformKill_d__2.MoveNext))]
 public static class KillAnimationCoPerformKillPatch
 {
     public static bool HideNextAnimation = false;
     public static void Prefix(
-        KillAnimation __instance,
-        [HarmonyArgument(0)] ref PlayerControl source,
-        [HarmonyArgument(1)] ref PlayerControl target)
+        KillAnimation._CoPerformKill_d__2 __instance)
     {
         if (HideNextAnimation)
         {
-            source = target;
+            __instance.source = __instance.target;
         }
         HideNextAnimation = false;
     }
@@ -31,7 +28,7 @@ public static class KillAnimationSetMovementPatch
         [HarmonyArgument(0)] PlayerControl source,
         [HarmonyArgument(1)] bool canMove)
     {
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd || canMove || 
+        if (!RoleAssignState.Instance.IsRoleSetUpEnd || canMove ||
             source.PlayerId != PlayerControl.LocalPlayer.PlayerId) { return; }
 
         var (role, anothorRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
