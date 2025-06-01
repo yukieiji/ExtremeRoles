@@ -52,8 +52,8 @@ public static class MainMenuTextInfoPatch
                 string.Concat(
                     Tr.GetString("langTranslate"),
                     Tr.GetString("translatorMember")));
-            translator.alignment = TMPro.TextAlignmentOptions.Center;
-			translator.fontSize = translator.fontSizeMax = translator.fontSizeMin = 3.5f;
+            translator.alignment = TMPro.TextAlignmentOptions.Top;
+			translator.fontSize = translator.fontSizeMax = translator.fontSizeMin = 2.7f;
 
 			translator.transform.localPosition = new Vector3(0, -0.5f, 0);
             credentials.transform.localScale = new Vector3(0.8f, 0.8f, 1.0f);
