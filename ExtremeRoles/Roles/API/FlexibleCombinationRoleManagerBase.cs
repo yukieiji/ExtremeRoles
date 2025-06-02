@@ -105,8 +105,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 		bool isImposterAssign = cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
 			CombinationRoleCommonOption.IsAssignImposter,
 			out var impOpt);
-		bool isRatioAssign = cate.GetValue<CombinationRoleCommonOption, bool>(
-			CombinationRoleCommonOption.IsRatioTeamAssign);
+		bool isRatioAssign = cate.TryGetValueOption<CombinationRoleCommonOption, bool>(
+			CombinationRoleCommonOption.IsRatioTeamAssign, out var ratioOpt) && ratioOpt.Value;
 
 		foreach (var role in this.Roles)
         {
