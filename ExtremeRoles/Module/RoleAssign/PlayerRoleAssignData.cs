@@ -29,8 +29,8 @@ public sealed class PlayerRoleAssignData
 	}
 
 	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer;
-	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
-	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
+	private readonly List<IPlayerToExRoleAssignData> assignData = [];
+	private readonly Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
 	private int gameControlId = 0;
 
