@@ -269,7 +269,7 @@ public static class RPCOperator
     }
 
     public static void SetRoleToAllPlayer(
-        List<Module.Interface.IPlayerToExRoleAssignData> assignData)
+        IReadOnlyList<Module.Interface.IPlayerToExRoleAssignData> assignData)
     {
         foreach (var data in assignData)
         {
