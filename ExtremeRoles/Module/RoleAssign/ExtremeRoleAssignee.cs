@@ -15,7 +15,10 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
-public sealed class ExtremeRoleAssignee : IRoleAssignee
+public sealed class ExtremeRoleAssignee(
+	IVanillaRoleProvider roleProvider,
+	PlayerRoleAssignData assignData,
+	RoleSpawnDataManager spawnData) : IRoleAssignee
 {
 	private readonly struct CombinationRoleAssignData
 	{
@@ -33,36 +36,11 @@ public sealed class ExtremeRoleAssignee : IRoleAssignee
 		}
 	}
 
-	private readonly PlayerRoleAssignData assignData;
-	private readonly RoleSpawnDataManager spawnData;
+	private readonly PlayerRoleAssignData assignData = assignData;
+	private readonly RoleSpawnDataManager spawnData = spawnData;
 
-	private readonly IReadOnlySet<RoleTypes> vanillaCrewRoleType;
-	private readonly IReadOnlySet<RoleTypes> vanillaImpRoleType;
-
-	public ExtremeRoleAssignee()
-	{
-		assignData = new PlayerRoleAssignData();
-		uint netId = PlayerControl.LocalPlayer.NetId;
-
-		spawnData = new RoleSpawnDataManager();
-
-		HashSet<RoleTypes> crewType = [RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker];
-		HashSet<RoleTypes> impType = [RoleTypes.Shapeshifter, RoleTypes.Phantom];
-
-		vanillaCrewRoleType = crewType;
-		vanillaImpRoleType = impType;
-
-		if (!ExtremeGameModeManager.Instance.EnableXion) { return; }
-
-		PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
-
-		assignData.AddAssignData(
-			new PlayerToSingleRoleAssignData(
-				loaclPlayer.PlayerId,
-				(int)ExtremeRoleId.Xion,
-				assignData.ControlId));
-		assignData.RemveFromPlayerControl(loaclPlayer);
-	}
+	private readonly IReadOnlySet<RoleTypes> vanillaCrewRoleType = roleProvider.CrewmateRole;
+	private readonly IReadOnlySet<RoleTypes> vanillaImpRoleType = roleProvider.ImpostorRole;
 
 	public IEnumerator CoRpcAssign()
 	{
@@ -75,6 +53,18 @@ public sealed class ExtremeRoleAssignee : IRoleAssignee
 
 	private void createAssignData()
 	{
+		if (ExtremeGameModeManager.Instance.EnableXion)
+		{
+			PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+
+			this.assignData.AddAssignData(
+				new PlayerToSingleRoleAssignData(
+					loaclPlayer.PlayerId,
+					(int)ExtremeRoleId.Xion,
+					assignData.ControlId));
+			this.assignData.RemveFromPlayerControl(loaclPlayer);
+		}
+
 		GhostRoleSpawnDataManager.Instance.Create(spawnData.UseGhostCombRole);
 
 		RoleAssignFilter.Instance.Initialize();
