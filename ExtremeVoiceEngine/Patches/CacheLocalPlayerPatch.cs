@@ -1,24 +1,25 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles.Patches.Player;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Controller;
 
 using ExtremeVoiceEngine.Extension;
 
 namespace ExtremeVoiceEngine.Patches;
 
-[HarmonyPatch(typeof(SetCachedLocalPlayerControl), nameof(SetCachedLocalPlayerControl.SetLocalPlayer))]
+[HarmonyPatch(typeof(PlayerControl._Start_d__82), nameof(PlayerControl._Start_d__82.MoveNext))]
 public static class ChatCurrentSettingPatch
 {
     public static bool Chated { get; set; } = false;
 
-    public static void Postfix()
+    public static void Postfix(PlayerControl._Start_d__82 __instance, ref bool __result)
     {
         if (Chated ||
             HudManager.Instance == null ||
             VoiceEngine.Instance == null ||
-            !PlayerControl.LocalPlayer) { return; }
+            __result)
+		{
+			return;
+		}
 
         VoiceEngine.Instance.WaitExecute(
             () =>
