@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -6,7 +7,7 @@ namespace ExtremeRoles.Test.Lobby;
 
 public class TranslationTestRunner : LobbyTestRunnerBase
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		var allTrans = TranslationController.Instance.currentLanguage.AllStrings;
 		var valKeys = new Dictionary<string, HashSet<string>>(allTrans.Count);
@@ -32,7 +33,7 @@ public class TranslationTestRunner : LobbyTestRunnerBase
 
 		if (!dupeValue.Any())
 		{
-			return;
+			yield break;
 		}
 
 		var builder = new StringBuilder();

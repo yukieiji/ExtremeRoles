@@ -8,7 +8,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class HypnotistAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:HypnotistImgLoad Test -----");
 
@@ -18,5 +18,6 @@ public class HypnotistAssetLoadRunner
 		}
 
 		LoadFromExR(ExtremeRoleId.Hypnotist);
+		yield break;
 	}
 }

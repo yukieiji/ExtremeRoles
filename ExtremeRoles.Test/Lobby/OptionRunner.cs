@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ExtremeRoles.Module.CustomOption;
-
-using ExtremeRoles.GameMode.Option.ShipGlobal;
+﻿using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Test.Helper;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.Test.Lobby;
 
@@ -20,7 +20,7 @@ public class OptionRunner
 	private const int iteration = 10;
 #endif
 
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Start: Options Test -----");
 		for (int i = 0; i < iteration; ++i)
@@ -48,6 +48,8 @@ public class OptionRunner
 
 			Log.LogInfo($"Load.GhostRole.Iteration.{i}");
 			loadGhostRole();
+
+			yield return GameUtility.WaitForStabilize();
 		}
 	}
 

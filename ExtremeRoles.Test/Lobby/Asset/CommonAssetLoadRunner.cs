@@ -12,12 +12,14 @@ public class CommonAssetLoadRunner
 		this.IsDebugOnly = true;
 	}
 
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:SingleImgLoad Test -----");
 #if DEBUG
 		imgTest(ObjectPath.Bomb);
 		imgTest(ObjectPath.Meeting);
+
+		yield break;
 	}
 
 	private void imgTest(string img)

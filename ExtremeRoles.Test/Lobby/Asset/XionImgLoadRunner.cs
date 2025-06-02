@@ -5,7 +5,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class XionAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:XionImgLoad Test -----");
 
@@ -13,6 +13,7 @@ public class XionAssetLoadRunner
 		xionImgLoad("ZoomOut");
 		xionImgLoad("SpeedUp");
 		xionImgLoad("SpeedDown");
+		yield break;
 	}
 	private void xionImgLoad(string imgName)
 	{

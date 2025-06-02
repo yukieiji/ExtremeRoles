@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Collections;
 
 using BepInEx;
 using BepInEx.Logging;
@@ -40,5 +41,5 @@ public abstract class LobbyTestRunnerBase : ILobbyTestRunner
 		}
 	}
 
-	public abstract void Run();
+	public abstract IEnumerator Run();
 }

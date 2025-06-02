@@ -7,7 +7,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class GuessorAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:GuesserLoad Test -----");
 
@@ -15,5 +15,6 @@ public class GuessorAssetLoadRunner
 		LoadUnityObjectFromExR<GameObject, ExtremeRoleId>(
 			ExtremeRoleId.Guesser,
 			ObjectPath.GetRolePrefabPath(ExtremeRoleId.Guesser, "UI"));
+		yield break;
 	}
 }

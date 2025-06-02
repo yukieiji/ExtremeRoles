@@ -8,7 +8,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class YokoAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:YokofLoad Test -----");
 
@@ -16,5 +16,6 @@ public class YokoAssetLoadRunner
 		LoadUnityObjectFromExR<GameObject, ExtremeRoleId>(
 			ExtremeRoleId.Yoko,
 			ObjectPath.GetRoleMinigamePath(ExtremeRoleId.Yoko));
+		yield break;
 	}
 }
