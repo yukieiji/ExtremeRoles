@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -14,7 +15,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
-public sealed class ExtremeRoleAssignee
+public sealed class ExtremeRoleAssignee : IRoleAssignee
 {
 	private readonly struct CombinationRoleAssignData
 	{
@@ -43,9 +44,6 @@ public sealed class ExtremeRoleAssignee
 		assignData = new PlayerRoleAssignData();
 		uint netId = PlayerControl.LocalPlayer.NetId;
 
-		RPCOperator.Call(netId, RPCOperator.Command.Initialize);
-		RPCOperator.Initialize();
-
 		spawnData = new RoleSpawnDataManager();
 
 		HashSet<RoleTypes> crewType = [RoleTypes.Engineer, RoleTypes.Scientist, RoleTypes.Noisemaker, RoleTypes.Tracker];
@@ -66,7 +64,7 @@ public sealed class ExtremeRoleAssignee
 		assignData.RemveFromPlayerControl(loaclPlayer);
 	}
 
-	public IEnumerator Assign()
+	public IEnumerator CoRpcAssign()
 	{
 		createAssignData();
 

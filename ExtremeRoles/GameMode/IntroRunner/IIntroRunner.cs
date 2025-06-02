@@ -16,10 +16,11 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.Module.Interface;
 
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -67,9 +68,18 @@ public interface IIntroRunner
 		var loadingAnimation = HudManager.Instance.GameLoadAnimation;
 		loadingAnimation.SetActive(true);
 
+		var localPlayer = PlayerControl.LocalPlayer;
+		if (localPlayer == null)
+		{
+			yield break;
+		}
+
 		if (AmongUsClient.Instance.AmHost)
         {
-			var assignee = new ExtremeRoleAssignee();
+			RPCOperator.Call(localPlayer.NetId, RPCOperator.Command.Initialize);
+			RPCOperator.Initialize();
+
+			var assignee = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleAssignee>();
 
 			if (!isAllPlyerDummy())
             {
@@ -88,7 +98,7 @@ public interface IIntroRunner
                 yield return new WaitForSeconds(2.5f);
             }
 
-			yield return assignee.Assign();
+			yield return assignee.CoRpcAssign();
 		}
         else
         {
