@@ -37,6 +37,8 @@ public sealed class PlayerRoleAssignData
 	public PlayerRoleAssignData()
 	{
 		this.assignData.Clear();
+		this.combRoleAssignPlayerId.Clear();
+
 		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(
 			GameData.Instance.AllPlayers.GetFastEnumerator().Select(
 				x => new VanillaRolePlayerAssignData(x)));
