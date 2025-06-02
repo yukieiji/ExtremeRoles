@@ -1,4 +1,5 @@
 ﻿
+using ExtremeRoles.Test.Helper;
 using ExtremeRoles.Test.InGame.GameLoop;
 using ExtremeRoles.Test.Lobby.Asset;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,11 +51,10 @@ public class LobbyTestStep(IServiceProvider provider) : TestStepBase
 
 	public override IEnumerator Run()
 	{
-		var waitor = new WaitForSeconds(2.5f);
 		foreach (var runner in runners)
 		{
-			runner.Run();
-			yield return waitor;
+			yield return runner.Run();
+			yield return GameUtility.WaitForStabilize();
 		}
 	}
 }

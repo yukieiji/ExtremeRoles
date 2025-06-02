@@ -10,7 +10,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class TeroAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:TeroLoad Test -----");
 
@@ -30,5 +30,6 @@ public class TeroAssetLoadRunner
 		{
 			Log.LogError($"Se not load   {ex.Message}");
 		}
+		yield break;
 	}
 }

@@ -10,7 +10,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class ZombieAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:ZombieLoad Test -----");
 
@@ -19,5 +19,6 @@ public class ZombieAssetLoadRunner
 		LoadUnityObjectFromExR<VideoClip, ExtremeRoleId>(
 			ExtremeRoleId.Zombie,
 			ObjectPath.GetRoleVideoPath(ExtremeRoleId.Zombie));
+		yield break;
 	}
 }

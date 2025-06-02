@@ -7,7 +7,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class TeleporterAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:TeleporterImgLoad Test -----");
 
@@ -15,5 +15,6 @@ public class TeleporterAssetLoadRunner
 		LoadFromExR(ExtremeRoleId.Teleporter, ObjectPath.TeleporterFirstPortal);
 		LoadFromExR(ExtremeRoleId.Teleporter, ObjectPath.TeleporterSecondPortal);
 		LoadFromExR(ExtremeRoleId.Teleporter, ObjectPath.TeleporterPortalBase);
+		yield break;
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 using ExtremeRoles.Module;
+using ExtremeRoles.Test.Helper;
 using ExtremeRoles.Test.Lobby;
 using Il2CppInterop.Runtime.Attributes;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,9 +52,11 @@ public class ExtremeRolesTestPluginBehaviour : MonoBehaviour
 
 	public IEnumerator coStart(IEnumerable<ITestStep> testStep)
 	{
+		var waitor = new WaitForSeconds(1.0f);
 		foreach (var step in testStep)
 		{
 			yield return step.Run();
+			yield return GameUtility.WaitForStabilize();
 		}
 		EndTest();
 	}

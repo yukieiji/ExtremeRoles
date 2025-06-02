@@ -8,7 +8,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class KidsAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:KidsImgLoad Test -----");
 
@@ -28,5 +28,6 @@ public class KidsAssetLoadRunner
 		{
 			Log.LogError($"TorchSprite not load   {ex.Message}");
 		}
+		yield break;
 	}
 }
