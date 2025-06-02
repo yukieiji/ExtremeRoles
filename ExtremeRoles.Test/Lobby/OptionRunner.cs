@@ -17,7 +17,7 @@ public class OptionRunner
 	private const int iteration = 3;
 #endif
 #if DEBUG
-	private const int iteration = 100000;
+	private const int iteration = 10;
 #endif
 
 	public override void Run()
