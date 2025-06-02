@@ -71,6 +71,8 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	{
 		var killOpt = factory.CreateBoolOption(
 			Option.CanKill, true);
+		CreateKillerOption(factory, killOpt, true, true);
+
 		factory.CreateBoolOption(
 			Option.IsSubTeam, true, killOpt, invert: true);
 		factory.CreateBoolOption(
