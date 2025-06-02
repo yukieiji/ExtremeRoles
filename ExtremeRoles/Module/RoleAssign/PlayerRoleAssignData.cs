@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
-public sealed class PlayerRoleAssignData
+public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 {
 	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
 	public IReadOnlyList<IPlayerToExRoleAssignData> AssignData => this.assignData;
@@ -28,87 +28,59 @@ public sealed class PlayerRoleAssignData
 		}
 	}
 
-	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer;
-	private readonly List<IPlayerToExRoleAssignData> assignData = [];
-	private readonly Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
-
+	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer = [];
 	private int gameControlId = 0;
 
-	public PlayerRoleAssignData()
+	private readonly List<IPlayerToExRoleAssignData> assignData = [];
+	private readonly Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = [];
+
+	private readonly IReadOnlySet<RoleTypes> crewRole = roleProvider.AllCrewmate;
+	private readonly IReadOnlySet<RoleTypes> impRole = roleProvider.AllImpostor;
+
+	public void Initialize()
 	{
 		this.assignData.Clear();
 		this.combRoleAssignPlayerId.Clear();
-
-		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(
-			GameData.Instance.AllPlayers.GetFastEnumerator().Select(
-				x => new VanillaRolePlayerAssignData(x)));
+		this.needRoleAssignPlayer = this.rebuild();
 		this.gameControlId = 0;
 	}
 
 	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanImpostorAssignPlayer()
-	{
-		return this.needRoleAssignPlayer.FindAll(
-			x =>
-			{
-				return x.Role is
-					RoleTypes.Impostor or
-					RoleTypes.Shapeshifter or
-					RoleTypes.Phantom;
-			});
-	}
+		=> this.needRoleAssignPlayer.FindAll(x => this.impRole.Contains(x.Role));
 
 	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanCrewmateAssignPlayer()
-	{
-		return this.needRoleAssignPlayer.FindAll(
-			x =>
-			{
-				return x.Role is
-					RoleTypes.Crewmate or
-					RoleTypes.Engineer or
-					RoleTypes.Scientist or
-					RoleTypes.Noisemaker or
-					RoleTypes.Tracker;
-			});
-	}
+		=> this.needRoleAssignPlayer.FindAll(x => this.crewRole.Contains(x.Role));
 
 	public bool TryGetCombRoleAssign(byte playerId, out ExtremeRoleType team)
-	{
-		return this.combRoleAssignPlayerId.TryGetValue(playerId, out team);
-	}
+		=> this.combRoleAssignPlayerId.TryGetValue(playerId, out team);
 
 	public void AddCombRoleAssignData(
-		PlayerToCombRoleAssignData data, ExtremeRoleType team)
+		in PlayerToCombRoleAssignData data, ExtremeRoleType team)
 	{
 		this.combRoleAssignPlayerId.Add(data.PlayerId, team);
 		this.AddAssignData(data);
 	}
 
 	public void AddAssignData(IPlayerToExRoleAssignData data)
-	{
-		this.assignData.Add(data);
-	}
+		=> this.assignData.Add(data);
 
 	public void AddPlayer(in VanillaRolePlayerAssignData player)
-	{
-		this.needRoleAssignPlayer.Add(player);
-	}
+		=> this.needRoleAssignPlayer.Add(player);
 
 	public void RemveFromPlayerControl(PlayerControl player)
-	{
-		this.needRoleAssignPlayer.RemoveAll(
+		=> this.needRoleAssignPlayer.RemoveAll(
 			x =>
 				x.PlayerId == player.PlayerId &&
 				x.PlayerName == player.Data.DefaultOutfit.PlayerName);
-	}
 
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
-	{
-		this.needRoleAssignPlayer.RemoveAll(x => x == player);
-	}
+		=> this.needRoleAssignPlayer.RemoveAll(x => x == player);
 
 	public void Shuffle()
-	{
-		this.needRoleAssignPlayer = this.needRoleAssignPlayer.OrderBy(
+		=> this.needRoleAssignPlayer = this.needRoleAssignPlayer.OrderBy(
 			x => RandomGenerator.Instance.Next()).ToList();
-	}
+
+	private List<VanillaRolePlayerAssignData> rebuild()
+		=> [..GameData.Instance.AllPlayers.GetFastEnumerator().Select(
+				x => new VanillaRolePlayerAssignData(x))];
 }

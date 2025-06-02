@@ -43,6 +43,8 @@ public class ExtremeRoleAssignDataBuilder(
 
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
 	{
+		this.assignData.Initialize();
+
 		if (ExtremeGameModeManager.Instance.EnableXion)
 		{
 			PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
