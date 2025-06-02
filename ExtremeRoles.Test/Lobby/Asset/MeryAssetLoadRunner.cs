@@ -7,7 +7,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class MeryAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:MeryImgLoad Test -----");
 
@@ -21,5 +21,6 @@ public class MeryAssetLoadRunner
 			ObjectPath.MeryNoneActive);
 
 		LoadFromExR(ExtremeRoleId.Mery);
+		yield break;
 	}
 }

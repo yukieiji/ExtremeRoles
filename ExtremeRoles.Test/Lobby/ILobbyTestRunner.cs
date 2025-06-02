@@ -1,8 +1,10 @@
-﻿namespace ExtremeRoles.Test.Lobby;
+﻿using System.Collections;
+
+namespace ExtremeRoles.Test.Lobby;
 
 public interface ILobbyTestRunner
 {
 	public bool IsDebugOnly { get; set; }
 
-	public void Run();
+	public IEnumerator Run();
 }

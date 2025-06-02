@@ -5,10 +5,11 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class GlitchAssetLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:GlitchAsset Test -----");
 
 		LoadFromExR(ExtremeRoleId.Glitch);
+		yield break;
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Reflection;
 using ExtremeRoles.Resources;
 
@@ -7,7 +8,7 @@ namespace ExtremeRoles.Test.Lobby;
 public class ImgLoadRunner
 	: LobbyTestRunnerBase
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Start: Img Load Test -----");
 
@@ -25,6 +26,7 @@ public class ImgLoadRunner
 				tryImgLoad(imgPath);
 			}
 		}
+		yield break;
 	}
 
 	private void tryImgLoad(string path)
