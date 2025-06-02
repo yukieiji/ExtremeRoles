@@ -152,6 +152,8 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 		IRoleAbility.CreateAbilityCountOption(factory, 1, 10, 3.0f);
 		factory.CreateFloatOption(Option.Range, 0.7f, 0.1f, 3.5f, 0.1f);
 		factory.CreateIntOption(Option.PreventNum, 1, 0, 10, 1);
+		factory.CreateFloatOption(
+			Option.PreventKillTime, 20.0f, 2.5f, 30.0f, 0.5f, format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
