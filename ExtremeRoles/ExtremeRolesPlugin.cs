@@ -10,12 +10,17 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
 using HarmonyLib;
 
 using System.Net.Http;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
@@ -51,6 +56,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
 
 	public HttpClient Http { get; } = new HttpClient();
+	public IServiceProvider Provider { get; }
 
 	public ExtremeRolesPlugin() : base()
 	{
@@ -68,6 +74,12 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		{
 			NoCache = true
 		};
+
+		var collection = new ServiceCollection();
+
+		collection.AddTransient<IRoleAssignee, ExtremeRoleAssignee>();
+
+		Provider = collection.BuildServiceProvider();
 	}
 
     public override void Load()
