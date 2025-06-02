@@ -48,7 +48,35 @@ public sealed class ExtremeRoleAssignee(
 
 		yield return null;
 
-		this.assignData.AllPlayerAssignToExRole();
+		RpcAssignToExRole();
+	}
+
+	public void RpcAssignToExRole()
+	{
+		var builedData = this.assignData.AssignData;
+		using (var caller = RPCOperator.CreateCaller(
+			PlayerControl.LocalPlayer.NetId,
+			RPCOperator.Command.SetRoleToAllPlayer))
+		{
+			caller.WritePackedInt(builedData.Count); // 何個あるか
+
+			foreach (IPlayerToExRoleAssignData data in builedData)
+			{
+				caller.WriteByte(data.PlayerId); // PlayerId
+				caller.WriteByte(data.RoleType); // RoleType : single or comb
+				caller.WritePackedInt(data.RoleId); // RoleId
+				caller.WritePackedInt(data.ControlId); // int GameContId
+
+				if (data.RoleType == (byte)IPlayerToExRoleAssignData.ExRoleType.Comb)
+				{
+					var combData = (PlayerToCombRoleAssignData)data;
+					caller.WriteByte(combData.CombTypeId); // combTypeId
+					caller.WriteByte(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
+				}
+			}
+		}
+		RPCOperator.SetRoleToAllPlayer(builedData);
+		RoleAssignState.Instance.SwitchRoleAssignToEnd();
 	}
 
 	private void createAssignData()

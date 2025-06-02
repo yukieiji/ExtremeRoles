@@ -14,6 +14,7 @@ namespace ExtremeRoles.Module.RoleAssign;
 public sealed class PlayerRoleAssignData
 {
 	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
+	public IReadOnlyList<IPlayerToExRoleAssignData> AssignData => this.assignData;
 
 	public int ControlId
 	{
@@ -40,33 +41,6 @@ public sealed class PlayerRoleAssignData
 			GameData.Instance.AllPlayers.GetFastEnumerator().Select(
 				x => new VanillaRolePlayerAssignData(x)));
 		this.gameControlId = 0;
-	}
-
-	public void AllPlayerAssignToExRole()
-	{
-		using (var caller = RPCOperator.CreateCaller(
-			PlayerControl.LocalPlayer.NetId,
-			RPCOperator.Command.SetRoleToAllPlayer))
-		{
-			caller.WritePackedInt(this.assignData.Count); // 何個あるか
-
-			foreach (IPlayerToExRoleAssignData data in this.assignData)
-			{
-				caller.WriteByte(data.PlayerId); // PlayerId
-				caller.WriteByte(data.RoleType); // RoleType : single or comb
-				caller.WritePackedInt(data.RoleId); // RoleId
-				caller.WritePackedInt(data.ControlId); // int GameContId
-
-				if (data.RoleType == (byte)IPlayerToExRoleAssignData.ExRoleType.Comb)
-				{
-					var combData = (PlayerToCombRoleAssignData)data;
-					caller.WriteByte(combData.CombTypeId); // combTypeId
-					caller.WriteByte(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
-				}
-			}
-		}
-		RPCOperator.SetRoleToAllPlayer(this.assignData);
-		RoleAssignState.Instance.SwitchRoleAssignToEnd();
 	}
 
 	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanImpostorAssignPlayer()
