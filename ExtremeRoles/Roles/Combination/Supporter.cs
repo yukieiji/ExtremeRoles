@@ -8,9 +8,9 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-
-
 using ExtremeRoles.Module.CustomOption.Factory;
+
+#nullable enable
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -29,11 +29,11 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
         string.Concat(this.roleNamePrefix, this.RawRoleName);
 
     private byte supportTargetId;
-    private string supportPlayerName;
-    private string supportRoleName;
+    private string supportPlayerName = "";
+    private string supportRoleName = "";
     private Color supportColor;
 
-    private string roleNamePrefix;
+    private string roleNamePrefix = "";
 
     public Supporter(
         ) : base(
@@ -75,13 +75,18 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
             }
         }
 
-        target = target.OrderBy(
-            item => RandomGenerator.Instance.Next()).ToList();
+		if (target.Count == 0)
+		{
+			return;
+		}
 
-        this.supportTargetId = target[0];
+		this.supportTargetId = target.OrderBy(
+			item => RandomGenerator.Instance.Next()).First();
 
-        var supportRole = ExtremeRoleManager.GameRole[
-            this.supportTargetId];
+        if (!ExtremeRoleManager.TryGetRole(this.supportTargetId, out var supportRole))
+		{
+			return;
+		}
 
         this.supportRoleName = supportRole.GetColoredRoleName();
         Color supportColor = supportRole.GetNameColor();
