@@ -131,7 +131,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		int id,
 		Scavenger.Ability ability,
 		in PlayerControl abilityPlayer,
-		in Vector2 direction,
+		Vector2 direction,
 		in Parameter param)
 	{
 		var obj = new GameObject($"Bullet_{id}");
@@ -156,8 +156,8 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		int id,
 		Scavenger.Ability ability,
 		in string bulletImg,
-		in Vector2 size,
-		in Vector2 direction,
+		Vector2 size,
+		Vector2 direction,
 		in float speed,
 		in float range,
 		in byte ignorePlayerId,
@@ -384,7 +384,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 	}
 
 	private void initialize(
-		in Vector2 size,
+		Vector2 size,
 		in PlayerControl anchorPlayer)
 	{
 		this.anchor = new GameObject("SwordAnchor");

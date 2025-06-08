@@ -675,7 +675,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private void createBullet(
 			int mngId,
-			in Vector2 direction,
+			Vector2 direction,
 			in PlayerControl? rolePlayer)
 		{
 			if (rolePlayer == null)
