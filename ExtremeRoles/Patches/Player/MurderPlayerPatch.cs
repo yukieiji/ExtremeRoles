@@ -168,7 +168,7 @@ public static class PlayerControlMurderPlayerPatch
 	private static void hideRaiseHandButton(in bool isLocalPlayerDead)
 	{
 		if (isLocalPlayerDead &&
-			ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
+			ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var system))
 		{
 			system.RaiseHandButtonSetActive(false);

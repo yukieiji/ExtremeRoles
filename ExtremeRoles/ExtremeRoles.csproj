@@ -64,13 +64,6 @@
     <EmbeddedResource Include="Resources\JsonData\*.json" />
   </ItemGroup>
 
-  <!-- パブリックベータモード用 -->
-  <ItemGroup>
-    <Compile Include="..\ExtremeRoles.Beta\BetaContentManager.cs" Link="Beta\BetaContentManager.cs" />
-    <Compile Include="..\ExtremeRoles.Beta\FeedBackSystem.cs" Link="Beta\FeedBackSystem.cs" />
-    <Compile Include="..\ExtremeRoles.Beta\RaiseHandSystemToggle.cs" Link="Beta\RaiseHandSystemToggle.cs" />
-  </ItemGroup>
-
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>

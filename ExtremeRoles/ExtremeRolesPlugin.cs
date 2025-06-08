@@ -136,8 +136,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
         Il2CppRegisterAttribute.Registration(assm);
 
-		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
-
 		UnityObjectLoader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();
