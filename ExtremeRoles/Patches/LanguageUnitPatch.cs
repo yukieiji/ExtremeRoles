@@ -14,6 +14,5 @@ public static class LanguageUnitParseTSVPatch
     {
 		var lang = DataManager.Settings.Language.CurrentLanguage;
 		TranslatorManager.AddTranslationData(lang, allStrings);
-		Beta.BetaContentManager.AddContentText(lang, allStrings);
 	}
 }
