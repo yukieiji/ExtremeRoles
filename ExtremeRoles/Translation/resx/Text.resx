@@ -400,9 +400,6 @@
   <data name="HideNamePlateButton" xml:space="preserve">
     <value>ネームプレートを非表示にする</value>
   </data>
-  <data name="PublicBetaMode" xml:space="preserve">
-    <value>パブリックベータモード</value>
-  </data>
   <data name="custom" xml:space="preserve">
     <value>カスタム</value>
   </data>

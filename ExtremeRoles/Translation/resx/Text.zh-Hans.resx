@@ -1092,9 +1092,6 @@ Among Us官方服务器不适配Reactor插件，因此需要使用自定义服�
   <data name="OptionCategory" xml:space="preserve">
     <value>选项类别</value>
   </data>
-  <data name="PublicBetaMode" xml:space="preserve">
-    <value>测试模式</value>
-  </data>
   <data name="Noisemaker" xml:space="preserve">
     <value>大嗓门</value>
   </data>
