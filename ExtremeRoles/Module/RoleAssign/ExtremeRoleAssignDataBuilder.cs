@@ -19,21 +19,10 @@ public class ExtremeRoleAssignDataBuilder(
 	PlayerRoleAssignData assignData,
 	RoleSpawnDataManager spawnData) : IRoleAssignDataBuilder
 {
-	private readonly struct CombinationRoleAssignData
-	{
-		public readonly byte CombType;
-		public readonly IReadOnlyList<MultiAssignRoleBase> RoleList;
-		public readonly int GameControlId;
-
-		public CombinationRoleAssignData(
-			int controlId, byte combType,
-			IReadOnlyList<MultiAssignRoleBase> roleList)
-		{
-			CombType = combType;
-			RoleList = roleList;
-			GameControlId = controlId;
-		}
-	}
+	private readonly record struct CombinationRoleAssignData(
+		byte CombType,
+		IReadOnlyList<MultiAssignRoleBase> RoleList,
+		int GameControlId);
 
 	private readonly PlayerRoleAssignData assignData = assignData;
 	private readonly RoleSpawnDataManager spawnData = spawnData;
@@ -220,8 +209,8 @@ public class ExtremeRoleAssignDataBuilder(
 				notAssignPlayer.ReduceImpostorAssignNum(reduceImpostorRole);
 				roleListData.Add(
 					new CombinationRoleAssignData(
-						assignData.ControlId,
-						combType, spawnRoles));
+						combType, spawnRoles,
+						assignData.ControlId));
 
 				RoleAssignFilter.Instance.Update(combType);
 			}
