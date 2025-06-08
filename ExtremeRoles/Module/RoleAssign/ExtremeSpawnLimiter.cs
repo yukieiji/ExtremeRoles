@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text;
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode.RoleSelector;
@@ -38,6 +38,20 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 						RoleSpawnOption.MaxImpostor)
 				},
 			} : new();
+	}
+
+	public override string ToString()
+	{
+		var builder = new StringBuilder();
+
+		builder.AppendLine("------ SpawnLimit ------");
+		foreach (var (team, num) in this.maxNum)
+		{
+			builder.AppendLine($"Team:{team} MaxNum:{num}");
+		}
+		builder.AppendLine("------------");
+
+		return builder.ToString();
 	}
 
 	public bool CanSpawn(ExtremeRoleType roleType, int spawnNum = 1)
