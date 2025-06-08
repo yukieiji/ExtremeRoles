@@ -17,7 +17,8 @@ namespace ExtremeRoles.Module.RoleAssign;
 public class ExtremeRoleAssignDataBuilder(
 	IVanillaRoleProvider roleProvider,
 	PlayerRoleAssignData assignData,
-	RoleSpawnDataManager spawnData) : IRoleAssignDataBuilder
+	RoleSpawnDataManager spawnData,
+	ExtremeSpawnLimiter limiter) : IRoleAssignDataBuilder
 {
 	private readonly record struct CombinationRoleAssignData(
 		byte CombType,
@@ -26,6 +27,7 @@ public class ExtremeRoleAssignDataBuilder(
 
 	private readonly PlayerRoleAssignData assignData = assignData;
 	private readonly RoleSpawnDataManager spawnData = spawnData;
+	private readonly ExtremeSpawnLimiter spawnLimiter = limiter;
 
 	private readonly IReadOnlySet<RoleTypes> vanillaCrewRoleType = roleProvider.CrewmateRole;
 	private readonly IReadOnlySet<RoleTypes> vanillaImpRoleType = roleProvider.ImpostorRole;
@@ -33,6 +35,7 @@ public class ExtremeRoleAssignDataBuilder(
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
 	{
 		this.assignData.Initialize();
+		this.spawnLimiter.Initialize();
 
 		if (ExtremeGameModeManager.Instance.EnableXion)
 		{
@@ -193,9 +196,9 @@ public class ExtremeRoleAssignDataBuilder(
 
 				if (!isSpawn) { continue; }
 
-				spawnData.ReduceSpawnLimit(ExtremeRoleType.Crewmate, reduceCrewmateRole);
-				spawnData.ReduceSpawnLimit(ExtremeRoleType.Impostor, reduceImpostorRole);
-				spawnData.ReduceSpawnLimit(ExtremeRoleType.Neutral, reduceNeutralRole);
+				this.spawnLimiter.Reduce(ExtremeRoleType.Crewmate, reduceCrewmateRole);
+				this.spawnLimiter.Reduce(ExtremeRoleType.Impostor, reduceImpostorRole);
+				this.spawnLimiter.Reduce(ExtremeRoleType.Neutral, reduceNeutralRole);
 
 				curImpNum = curImpNum + reduceImpostorRole;
 				curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole);
@@ -288,19 +291,19 @@ public class ExtremeRoleAssignDataBuilder(
 			// クルーのスポーン上限チェック
 			&&
 			(
-				spawnData.IsCanSpawnTeam(ExtremeRoleType.Crewmate, reduceCrewmateRoleNum) &&
+				this.spawnLimiter.CanSpawn(ExtremeRoleType.Crewmate, reduceCrewmateRoleNum) &&
 				isLimitCrewAssignNum
 			)
 			// ニュートラルのスポーン上限チェック
 			&&
 			(
-				spawnData.IsCanSpawnTeam(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
+				this.spawnLimiter.CanSpawn(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
 				isLimitCrewAssignNum
 			)
 			// インポスターのスポーン上限チェック
 			&&
 			(
-				spawnData.IsCanSpawnTeam(ExtremeRoleType.Impostor, reduceImpostorRoleNum) &&
+				this.spawnLimiter.CanSpawn(ExtremeRoleType.Impostor, reduceImpostorRoleNum) &&
 				isLimitImpAssignNum
 			);
 	}
@@ -350,7 +353,7 @@ public class ExtremeRoleAssignDataBuilder(
 		}
 
 		int assignNum = Math.Clamp(
-			spawnData.MaxRoleNum[ExtremeRoleType.Neutral],
+			this.spawnLimiter.Get(ExtremeRoleType.Neutral),
 			0, Math.Min(
 				neutralAssignTargetPlayer.Count,
 				spawnData.CurrentSingleRoleUseNum[ExtremeRoleType.Neutral]));
@@ -422,7 +425,7 @@ public class ExtremeRoleAssignDataBuilder(
 				Logging.Debug($"---AssignRole:{vanillaRoleId}---");
 			}
 
-			if (spawnData.IsCanSpawnTeam(team) &&
+			if (this.spawnLimiter.CanSpawn(team) &&
 				shuffledSpawnCheckRoleId.Count > 0 &&
 				removePlayer == null)
 			{
@@ -437,7 +440,7 @@ public class ExtremeRoleAssignDataBuilder(
 
 					Logging.Debug($"---AssignRole:{intedRoleId}---");
 
-					spawnData.ReduceSpawnLimit(team);
+					this.spawnLimiter.Reduce(team);
 					assignData.AddAssignData(
 						new PlayerToSingleRoleAssignData(
 							player.PlayerId, intedRoleId, assignData.ControlId));

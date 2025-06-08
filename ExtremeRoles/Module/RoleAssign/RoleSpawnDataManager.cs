@@ -12,8 +12,6 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class RoleSpawnDataManager : ISpawnDataManager
 {
-	public Dictionary<ExtremeRoleType, int> MaxRoleNum { get; private set; }
-
 	public Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>> CurrentSingleRoleSpawnData
 	{ get; private set; }
 
@@ -45,32 +43,6 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 		};
 
 		var opt = OptionManager.Instance;
-
-		MaxRoleNum = opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate)
-			? new Dictionary<ExtremeRoleType, int>
-			{
-				{
-					ExtremeRoleType.Crewmate,
-					ISpawnDataManager.ComputeSpawnNum(
-						cate,
-						RoleSpawnOption.MinCrewmate,
-						RoleSpawnOption.MaxCrewmate)
-				},
-				{
-					ExtremeRoleType.Neutral,
-					ISpawnDataManager.ComputeSpawnNum(
-						cate,
-						RoleSpawnOption.MinNeutral,
-						RoleSpawnOption.MaxNeutral)
-				},
-				{
-					ExtremeRoleType.Impostor,
-					ISpawnDataManager.ComputeSpawnNum(
-						cate,
-						RoleSpawnOption.MinImpostor,
-						RoleSpawnOption.MaxImpostor)
-				},
-			} : new ();
 
 
 		CurrentSingleRoleUseNum = new Dictionary<ExtremeRoleType, int>()
@@ -164,10 +136,6 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 		var builder = new StringBuilder();
 
 		builder.AppendLine("------ RoleSpawnInfo - Start ------");
-		foreach (var (team, num) in this.MaxRoleNum)
-		{
-			builder.AppendLine($"Team:{team} MaxNum:{num}");
-		}
 		builder.AppendLine("--- CombRole ---");
 		foreach (var (combId, combRole) in this.CurrentCombRoleSpawnData)
 		{
@@ -191,17 +159,5 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 		builder.AppendLine("------ RoleSpawnInfo - End ------");
 
 		return builder.ToString();
-	}
-
-	public bool IsCanSpawnTeam(ExtremeRoleType roleType, int reduceNum = 1)
-	{
-		return
-			this.MaxRoleNum.TryGetValue(roleType, out int maxNum) &&
-			maxNum - reduceNum >= 0;
-	}
-
-	public void ReduceSpawnLimit(ExtremeRoleType roleType, int reduceNum = 1)
-	{
-		this.MaxRoleNum[roleType] = this.MaxRoleNum[roleType] - reduceNum;
 	}
 }

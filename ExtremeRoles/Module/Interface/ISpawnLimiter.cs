@@ -8,11 +8,9 @@ namespace ExtremeRoles.Module.Interface;
 
 public interface ISpawnLimiter
 {
-	public void Initialize();
-
 	public int Get(ExtremeRoleType Team);
 	public bool CanSpawn(ExtremeRoleType roleType, int spawnNum = 1);
-	public void ReduceSpawnLimit(ExtremeRoleType Team, int num);
+	public void Reduce(ExtremeRoleType Team, int num);
 
 	public static int ComputeSpawnNum(
 		OptionCategory category,
