@@ -1057,20 +1057,6 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="SecurityCamera" xml:space="preserve">
     <value>セキュリティカメラとドアログ</value>
   </data>
-  <data name="PublicBetaStr" xml:space="preserve">
-    <value>パブリックベータ - v{0}</value>
-  </data>
-  <data name="PublicBetaEnableDisableStr" xml:space="preserve">
-    <value>再起動後にパブリックベータモードが{0}になります</value>
-  </data>
-  <data name="PublicBetaWarning" xml:space="preserve">
-    <value>パブリックベータモードを{0}にします
-以下の機能が{0}になります</value>
-  </data>
-  <data name="PublicBetaReboot" xml:space="preserve">
-    <value>パブリックベータモードを{0}にしました
-再起動して下さい</value>
-  </data>
   <data name="Pcg32XshRr" xml:space="preserve">
     <value>PCG32-XSH-RR</value>
   </data>

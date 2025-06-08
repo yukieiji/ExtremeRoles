@@ -39,8 +39,6 @@ public sealed class ModOptionMenu
 		GhostsSeeRolesButton,
 		ShowRoleSummaryButton,
 		HideNamePlateButton,
-
-		PublicBetaMode,
 	}
 
 	private readonly record struct ButtonActionBuilder(

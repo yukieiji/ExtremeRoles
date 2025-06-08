@@ -1155,20 +1155,6 @@ ExR 和其他设备仅以最低限度的功能启动</value>
   <data name="ConectSocketMessage" xml:space="preserve">
     <value>与 AmongUs 的套接字连接成功</value>
   </data>
-  <data name="PublicBetaStr" xml:space="preserve">
-    <value>公开测试版 - v{0}</value>
-  </data>
-  <data name="PublicBetaEnableDisableStr" xml:space="preserve">
-    <value>重启后，公共测试模式将变为 {0}</value>
-  </data>
-  <data name="PublicBetaWarning" xml:space="preserve">
-    <value>公开测试模式设置为{0}。
-以下功能设置为 {0}</value>
-  </data>
-  <data name="PublicBetaReboot" xml:space="preserve">
-    <value>公开测试模式设置为 {0}
-请重新启动</value>
-  </data>
   <data name="SkipSettingUsingTab" xml:space="preserve">
     <value>Tab 键/Shift + Tab 键转到下一个设置</value>
   </data>
