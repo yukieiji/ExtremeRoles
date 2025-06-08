@@ -32,7 +32,7 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 	public int Get(ExtremeRoleType Team)
 		=> this.maxNum[Team];
 
-	public void ReduceSpawnLimit(ExtremeRoleType team, int num)
+	public void Reduce(ExtremeRoleType team, int num = 1)
 	{
 		if (!this.maxNum.TryGetValue(team, out int curNum))
 		{

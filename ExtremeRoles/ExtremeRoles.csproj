@@ -65,11 +65,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Module\RoleAssign\RoleAssignDataBuildBeh\**" />
+    <EmbeddedResource Remove="Module\RoleAssign\RoleAssignDataBuildBeh\**" />
+    <None Remove="Module\RoleAssign\RoleAssignDataBuildBeh\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ExtremeRoles.Generator\ExtremeRoles.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Module\RoleAssign\RoleAssignDataBuildBehaviour\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
