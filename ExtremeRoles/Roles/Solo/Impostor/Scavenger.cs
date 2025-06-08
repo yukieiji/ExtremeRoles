@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Hazel;
-using TMPro;
-using UnityEngine;
-
-using ExtremeRoles.Resources;
+﻿using ExtremeRoles.Extension.Controller;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
+using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
-using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
+using Hazel;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using TMPro;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 
@@ -697,6 +694,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
+	/*
 	private sealed class Aguni : IWeapon
 	{
 		// TODO: ちゃんとしたやつに変更する
@@ -819,6 +817,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.aguniBehaviour.gameObject.SetActive(false);
 		}
 	}
+	*/
 
 	public ExtremeAbilityButton? Button
 	{
@@ -897,7 +896,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		BeamSaber,
 
 		// Flame + Sword + HandGun
-		Aguni,
+		// Aguni,
 	}
 
 	public Ability InitAbility { get; private set; }
@@ -1101,13 +1100,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.abilityText.color = Palette.EnabledColor;
 		}
 
-		this.abilityText.text = $"WeaponMixTimeRemain:{Mathf.CeilToInt(this.timer)}";
-
-			/*
-			string.Format(
-				Translation.GetString("WeaponMixTimeRemain"),
-				Mathf.CeilToInt(this.timer));
-			*/
+		this.abilityText.text = TranslationController.Instance.GetString(
+			"WeaponMixTimeRemain", Mathf.CeilToInt(this.timer));
 		this.abilityText.gameObject.SetActive(true);
 		this.timer -= Time.deltaTime;
 
@@ -1304,10 +1298,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					loader.GetValue<Option, float>(Option.BeamSaberRange),
 					loader.GetValue<Option, bool>(Option.BeamSaberAutoDetect))
 			},
+			/*
 			{
 				Ability.Aguni,
 				new Aguni()
 			}
+			*/
 		};
 	}
 
@@ -1337,6 +1333,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private void mixWeapon()
 	{
+		/*
 		// 最終進化系
 		if (this.curAbility.Count == 3 ||
 			this.curAbility.Contains(Ability.BeamSaber) ||
@@ -1345,7 +1342,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			replaceToWeapon(Ability.Aguni);
 		}
-		else if (
+		else */
+		if (
 			this.curAbility.Contains(Ability.HandGun) &&
 			this.curAbility.Contains(Ability.Sword))
 		{
@@ -1440,6 +1438,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				beamSaber.ChargeTime = loader.GetValue<Option, int>(Option.BeamSaberChargeTime);
 
 				break;
+			/*
 			case Ability.Aguni:
 				if (behavior is not ChargingAndActivatingCountBehaviour aguni)
 				{
@@ -1447,6 +1446,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				}
 				aguni.ChargeTime = loader.GetValue<Option, float>(Option.AguniChargeTime);
 
+				break;
+			*/
+			default:
 				break;
 		}
 		if (this.internalButton != null &&
