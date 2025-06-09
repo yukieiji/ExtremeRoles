@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,11 +10,12 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
 public class ExtremeRoleAssignDataBuilder(
-	IEnumerable<IRoleAssignDataBuildBehaviour> buildBehaviours,
+	IServiceProvider provider,
 	IRoleAssignDataPreparer preparer
 ) : IRoleAssignDataBuilder
 {
@@ -26,7 +28,7 @@ public class ExtremeRoleAssignDataBuilder(
 	}
 
 	private readonly IRoleAssignDataPreparer preparer = preparer;
-	private readonly IRoleAssignDataBuildBehaviour[] behaviour = buildBehaviours.OrderBy(
+	private readonly IRoleAssignDataBuildBehaviour[] behaviour = provider.GetServices<IRoleAssignDataBuildBehaviour>().OrderBy(
 		x => x.Priority).ToArray();
 
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
