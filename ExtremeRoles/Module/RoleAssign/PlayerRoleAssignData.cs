@@ -28,7 +28,7 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 		}
 	}
 
-	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer =
+	private readonly List<VanillaRolePlayerAssignData> needRoleAssignPlayer =
 		GameData.Instance.AllPlayers.GetFastEnumerator().Select(
 			x => new VanillaRolePlayerAssignData(x))
 		.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
