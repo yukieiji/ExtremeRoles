@@ -5,6 +5,8 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class ExtremeSpawnLimiter : ISpawnLimiter

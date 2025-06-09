@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Helper;
 
+#nullable enable
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 

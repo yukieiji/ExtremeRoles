@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Helper;
 
+#nullable enable
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 

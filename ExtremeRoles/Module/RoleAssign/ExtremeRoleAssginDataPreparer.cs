@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using ExtremeRoles.Module.Interface;
 
+#nullable enable
+
 namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class ExtremeRoleAssginDataPreparer(IServiceProvider provider) : IRoleAssignDataPreparer
