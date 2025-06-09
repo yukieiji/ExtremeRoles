@@ -28,7 +28,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
 		var log = ExtremeRolesPlugin.Logger;
 
-		log.LogInfo("-------- RoleSpawnDataManager : Construct Start !!!!! --------");
+		log.LogInfo("-------- RoleSpawnDataManager - Construct START --------");
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase1 : instance variable initialize - START ----");
 		var ghostRole = new List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)>();
@@ -124,7 +124,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 		}
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase3 : Collect using SingleRole - END ----");
-		log.LogInfo("-------- RoleSpawnDataManager Construct End --------");
+		log.LogInfo("-------- RoleSpawnDataManager - Construct END --------");
 
 		CurrentCombRoleSpawnData = combRole;
 		UseGhostCombRole = ghostRole;

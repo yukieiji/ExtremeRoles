@@ -32,6 +32,7 @@ public sealed class GhostRoleSpawnDataManager :
 		IReadOnlyList<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> useGhostCombRole)
 	{
 		var logger = ExtremeRolesPlugin.Logger;
+		logger.LogInfo("-------- GostRoleSpawnDataManager - Construct Start --------");
 		this.clear();
 
 		foreach (var (combRoleId, mng) in useGhostCombRole)
@@ -137,6 +138,7 @@ public sealed class GhostRoleSpawnDataManager :
 				.ThenBy(x => RandomGenerator.Instance.Next())
 				.ToList();
 		}
+		logger.LogInfo("-------- GostRoleSpawnDataManager - Construct End --------");
 	}
 
 	public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) =>
