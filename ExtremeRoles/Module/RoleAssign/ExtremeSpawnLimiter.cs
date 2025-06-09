@@ -50,12 +50,12 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 	{
 		var builder = new StringBuilder();
 
-		builder.AppendLine("------ SpawnLimit ------");
+		builder.AppendLine("------ Spawn Limit ------");
 		foreach (var (team, num) in this.maxNum)
 		{
 			builder.AppendLine($"Team:{team} MaxNum:{num}");
 		}
-		builder.AppendLine("------------");
+		builder.Append("------------");
 
 		return builder.ToString();
 	}
