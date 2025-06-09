@@ -28,7 +28,8 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 		}
 	}
 
-	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer = [];
+	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer = [..GameData.Instance.AllPlayers.GetFastEnumerator().Select(
+		x => new VanillaRolePlayerAssignData(x))];
 	private int gameControlId = 0;
 
 	private readonly List<IPlayerToExRoleAssignData> assignData = [];
@@ -36,14 +37,6 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 
 	private readonly IReadOnlySet<RoleTypes> crewRole = roleProvider.AllCrewmate;
 	private readonly IReadOnlySet<RoleTypes> impRole = roleProvider.AllImpostor;
-
-	public void Initialize()
-	{
-		this.assignData.Clear();
-		this.combRoleAssignPlayerId.Clear();
-		this.needRoleAssignPlayer = this.rebuild();
-		this.gameControlId = 0;
-	}
 
 	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanImpostorAssignPlayer()
 		=> this.needRoleAssignPlayer.FindAll(x => this.impRole.Contains(x.Role));
@@ -79,8 +72,4 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 	public void Shuffle()
 		=> this.needRoleAssignPlayer = this.needRoleAssignPlayer.OrderBy(
 			x => RandomGenerator.Instance.Next()).ToList();
-
-	private List<VanillaRolePlayerAssignData> rebuild()
-		=> [..GameData.Instance.AllPlayers.GetFastEnumerator().Select(
-				x => new VanillaRolePlayerAssignData(x))];
 }

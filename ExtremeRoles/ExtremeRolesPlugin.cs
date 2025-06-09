@@ -80,7 +80,9 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		collection.AddTransient<IRoleAssignee, ExtremeRoleAssignee>();
 		collection.AddTransient<IVanillaRoleProvider, VanillaRoleProvider>();
 		collection.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>();
-		collection.AddTransient<RoleSpawnDataManager>();
+		collection.AddTransient<ISpawnLimiter, ExtremeSpawnLimiter>();
+		collection.AddTransient<IRoleAssignDataPreparer, ExtremeRoleAssginDataPreparer>();
+		collection.AddTransient<ISpawnDataManager, RoleSpawnDataManager>();
 		collection.AddTransient<PlayerRoleAssignData>();
 
 		Provider = collection.BuildServiceProvider();
