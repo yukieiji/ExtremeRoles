@@ -23,25 +23,31 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 	public void Build(in PreparationData data)
 	{
 		Logging.Debug(
-			$"----------------------------- SingleRoleAssign Start!! -----------------------------");
+			$"----------------------------- SingleRoleAssign - Start -----------------------------");
 		addImpostorSingleExtremeRoleAssignData(data);
 		addNeutralSingleExtremeRoleAssignData(data);
 		addCrewmateSingleExtremeRoleAssignData(data);
 		Logging.Debug(
-			$"----------------------------- SingleRoleAssign End!! -----------------------------");
+			$"----------------------------- SingleRoleAssign - End -----------------------------");
 	}
 
 	private void addImpostorSingleExtremeRoleAssignData(in PreparationData data)
 	{
+		Logging.Debug(
+			$"------------------------- SingleRoleAssign - Impostor - Start -------------------------");
 		addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 			data,
 			ExtremeRoleType.Impostor,
 			data.Assign.GetCanImpostorAssignPlayer(),
 			vanillaImpRoleType);
+		Logging.Debug(
+			$"------------------------- SingleRoleAssign - Impostor - End -------------------------");
 	}
 
 	private void addNeutralSingleExtremeRoleAssignData(in PreparationData data)
 	{
+		Logging.Debug(
+			$"------------------------- SingleRoleAssign - Neutral - Start -------------------------");
 		var neutralAssignTargetPlayer = new List<VanillaRolePlayerAssignData>();
 
 		foreach (var player in data.Assign.GetCanCrewmateAssignPlayer())
@@ -79,15 +85,22 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 			ExtremeRoleType.Neutral,
 			neutralAssignTargetPlayer,
 			vanillaCrewRoleType);
+		Logging.Debug(
+			$"------------------------- SingleRoleAssign - Neutral - End -------------------------");
 	}
 
 	private void addCrewmateSingleExtremeRoleAssignData(in PreparationData data)
 	{
+
+		Logging.Debug(
+			$"------------------------- SingleRoleAssign - Crewmate - Start -------------------------");
 		addSingleExtremeRoleAssignDataFromTeamAndPlayer(
 			data,
 			ExtremeRoleType.Crewmate,
 			data.Assign.GetCanCrewmateAssignPlayer(),
 			vanillaCrewRoleType);
+		Logging.Debug(
+			$"------------------------- SingleRoleAssign - Neutral - Start -------------------------");
 	}
 
 	private void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
@@ -96,7 +109,6 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 		in IReadOnlyList<VanillaRolePlayerAssignData> targetPlayer,
 		in IReadOnlySet<RoleTypes> vanilaTeams)
 	{
-
 		var teamSpawnData = data.RoleSpawn.CurrentSingleRoleSpawnData[team];
 
 		if (targetPlayer.Count == 0) { return; }
