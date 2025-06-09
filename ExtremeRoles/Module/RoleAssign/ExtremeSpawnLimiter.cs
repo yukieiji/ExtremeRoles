@@ -9,7 +9,42 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 {
-	private readonly Dictionary<ExtremeRoleType, int> maxNum = new Dictionary<ExtremeRoleType, int>(3);
+	private readonly Dictionary<ExtremeRoleType, int> maxNum;
+
+	public ExtremeSpawnLimiter()
+	{
+
+		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
+		{
+			this.maxNum = [];
+			return;
+		}
+
+		this.maxNum = new Dictionary<ExtremeRoleType, int>(3)
+		{
+			{
+				ExtremeRoleType.Crewmate,
+				ISpawnLimiter.ComputeSpawnNum(
+					cate,
+					RoleSpawnOption.MinCrewmate,
+					RoleSpawnOption.MaxCrewmate)
+			},
+			{
+				ExtremeRoleType.Impostor,
+				ISpawnLimiter.ComputeSpawnNum(
+					cate,
+					RoleSpawnOption.MinImpostor,
+					RoleSpawnOption.MaxImpostor)
+			},
+			{
+				ExtremeRoleType.Neutral,
+				ISpawnLimiter.ComputeSpawnNum(
+					cate,
+					RoleSpawnOption.MinNeutral,
+					RoleSpawnOption.MaxNeutral)
+			},
+		};
+	}
 
 	public override string ToString()
 	{
@@ -39,28 +74,5 @@ public sealed class ExtremeSpawnLimiter : ISpawnLimiter
 			curNum = 0;
 		}
 		this.maxNum[team] = curNum - num;
-	}
-
-	public void Initialize()
-	{
-		this.maxNum.Clear();
-
-		if (!OptionManager.Instance.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate))
-		{
-			return;
-		}
-
-		this.maxNum[ExtremeRoleType.Crewmate] = ISpawnLimiter.ComputeSpawnNum(
-			cate,
-			RoleSpawnOption.MinCrewmate,
-			RoleSpawnOption.MaxCrewmate);
-		this.maxNum[ExtremeRoleType.Impostor] = ISpawnLimiter.ComputeSpawnNum(
-			cate,
-			RoleSpawnOption.MinImpostor,
-			RoleSpawnOption.MaxImpostor);
-		this.maxNum[ExtremeRoleType.Null] = ISpawnLimiter.ComputeSpawnNum(
-			cate,
-			RoleSpawnOption.MinNeutral,
-			RoleSpawnOption.MaxNeutral);
 	}
 }
