@@ -135,7 +135,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 	{
 		var builder = new StringBuilder();
 
-		builder.AppendLine("------ RoleSpawnInfo - Start ------");
+		builder.AppendLine("------ RoleSpawnInfo ------");
 		builder.AppendLine("--- CombRole ---");
 		foreach (var (combId, combRole) in this.CurrentCombRoleSpawnData)
 		{
@@ -156,7 +156,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 					$"Team:{teamId} RoleId:{id} SpawnSetNum:{role.SpawnSetNum} SpawnRate:{role.SpawnRate} AssignWeight:{role.Weight}");
 			}
 		}
-		builder.AppendLine("------ RoleSpawnInfo - End ------");
+		builder.Append("------ RoleSpawnInfo ------");
 
 		return builder.ToString();
 	}
