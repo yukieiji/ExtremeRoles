@@ -16,6 +16,7 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public class ExtremeRoleAssignDataBuilder(
 	IVanillaRoleProvider roleProvider,
+	IRoleAssignDataPreparer preparer,
 	PlayerRoleAssignData assignData,
 	RoleSpawnDataManager spawnData,
 	ExtremeSpawnLimiter limiter) : IRoleAssignDataBuilder
@@ -24,6 +25,9 @@ public class ExtremeRoleAssignDataBuilder(
 		byte CombType,
 		IReadOnlyList<MultiAssignRoleBase> RoleList,
 		int GameControlId);
+
+	private readonly IRoleAssignDataPreparer preparer = preparer;
+
 
 	private readonly PlayerRoleAssignData assignData = assignData;
 	private readonly RoleSpawnDataManager spawnData = spawnData;
@@ -34,22 +38,24 @@ public class ExtremeRoleAssignDataBuilder(
 
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
 	{
-		this.assignData.Initialize();
-		this.spawnLimiter.Initialize();
+		var prepareData = this.preparer.Prepare();
+
+		Logging.Debug(prepareData.RoleSpawn.ToString());
+		Logging.Debug(prepareData.Limit.ToString());
 
 		if (ExtremeGameModeManager.Instance.EnableXion)
 		{
 			PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
-
-			this.assignData.AddAssignData(
+			var assignData = prepareData.Assign;
+			assignData.AddAssignData(
 				new PlayerToSingleRoleAssignData(
 					loaclPlayer.PlayerId,
 					(int)ExtremeRoleId.Xion,
 					assignData.ControlId));
-			this.assignData.RemveFromPlayerControl(loaclPlayer);
+			assignData.RemveFromPlayerControl(loaclPlayer);
 		}
 
-		GhostRoleSpawnDataManager.Instance.Create(spawnData.UseGhostCombRole);
+		GhostRoleSpawnDataManager.Instance.Create(prepareData.RoleSpawn.UseGhostCombRole);
 
 		RoleAssignFilter.Instance.Initialize();
 
