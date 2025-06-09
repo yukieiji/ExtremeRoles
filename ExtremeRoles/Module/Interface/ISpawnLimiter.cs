@@ -10,7 +10,7 @@ public interface ISpawnLimiter
 {
 	public int Get(ExtremeRoleType Team);
 	public bool CanSpawn(ExtremeRoleType roleType, int spawnNum = 1);
-	public void Reduce(ExtremeRoleType Team, int num);
+	public void Reduce(ExtremeRoleType Team, int num = 1);
 
 	public static int ComputeSpawnNum(
 		OptionCategory category,
