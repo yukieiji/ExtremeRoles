@@ -11,6 +11,7 @@ public sealed class NotAssignedPlayerAssignDataBuilder : IRoleAssignDataBuildBeh
 
 	public void Build(in PreparationData data)
 	{
+		Logging.Debug($"------------------- NotAssignedPlayer to VanillaRole Assign - START -------------------");
 		var assingn = data.Assign;
 		foreach (var player in assingn.NeedRoleAssignPlayer)
 		{
@@ -20,5 +21,6 @@ public sealed class NotAssignedPlayerAssignDataBuilder : IRoleAssignDataBuildBeh
 			assingn.AddAssignData(new PlayerToSingleRoleAssignData(
 				player.PlayerId, (byte)roleId, assingn.ControlId));
 		}
+		Logging.Debug($"------------------- NotAssignedPlayer to VanillaRole Assign - END -------------------");
 	}
 }

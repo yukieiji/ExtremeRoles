@@ -32,7 +32,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 	private void addCombinationExtremeRoleAssignData(in PreparationData data)
 	{
 		Logging.Debug(
-			$"----------------------------- CombinationRoleAssign Start!! -----------------------------");
+			$"----------------------------- CombinationRoleAssign - Start -----------------------------");
 
 		var combRoleListData = createCombinationRoleListData(data);
 		var shuffledRoleListData = combRoleListData.OrderBy(
@@ -95,7 +95,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 			data.Assign.AddPlayer(player);
 		}
 		Logging.Debug(
-			$"----------------------------- CombinationRoleAssign End!! -----------------------------");
+			$"----------------------------- CombinationRoleAssign - End -----------------------------");
 	}
 
 	private IReadOnlyList<CombinationRoleAssignData> createCombinationRoleListData(
