@@ -29,6 +29,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Translation;
 using ExtremeRoles.Module.ScreenManagerHook;
+using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
 namespace ExtremeRoles;
 
@@ -83,6 +84,11 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		collection.AddTransient<ISpawnLimiter, ExtremeSpawnLimiter>();
 		collection.AddTransient<IRoleAssignDataPreparer, ExtremeRoleAssginDataPreparer>();
 		collection.AddTransient<ISpawnDataManager, RoleSpawnDataManager>();
+		
+		collection.AddTransient<IRoleAssignDataBuildBehaviour, CombinationRoleAssignDataBuilder>();
+		collection.AddTransient<IRoleAssignDataBuildBehaviour, SingleRoleAssignDataBuilder>();
+		collection.AddTransient<IRoleAssignDataBuildBehaviour, NotAssignedPlayerAssignDataBuilder>();
+
 		collection.AddTransient<PlayerRoleAssignData>();
 
 		Provider = collection.BuildServiceProvider();
