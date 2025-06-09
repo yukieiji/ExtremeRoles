@@ -14,7 +14,7 @@ namespace ExtremeRoles.Module.RoleAssign;
 public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 {
 	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
-	public IReadOnlyList<IPlayerToExRoleAssignData> AssignData => this.assignData;
+	public IReadOnlyList<IPlayerToExRoleAssignData> Data => this.assignData;
 
 	public int ControlId
 	{
@@ -28,8 +28,10 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 		}
 	}
 
-	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer = [..GameData.Instance.AllPlayers.GetFastEnumerator().Select(
-		x => new VanillaRolePlayerAssignData(x))];
+	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer =
+		GameData.Instance.AllPlayers.GetFastEnumerator().Select(
+			x => new VanillaRolePlayerAssignData(x))
+		.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 	private int gameControlId = 0;
 
 	private readonly List<IPlayerToExRoleAssignData> assignData = [];
@@ -68,8 +70,4 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
 		=> this.needRoleAssignPlayer.RemoveAll(x => x == player);
-
-	public void Shuffle()
-		=> this.needRoleAssignPlayer = this.needRoleAssignPlayer.OrderBy(
-			x => RandomGenerator.Instance.Next()).ToList();
 }
