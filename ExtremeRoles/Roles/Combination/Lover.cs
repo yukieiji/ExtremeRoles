@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -78,19 +77,20 @@ public sealed class Lover : MultiAssignRoleBase
         }
 
         baseDesc = $"{baseDesc}\n{Tr.GetString("curLover")}:";
-
-        foreach (var item in ExtremeRoleManager.GameRole)
+		var playerName = new List<string>();
+        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            if (this.IsSameControlId(item.Value))
+            if (playerControl == null || playerControl.Data == null ||
+                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				!this.IsSameControlId(role))
             {
-                string playerName = Player.GetPlayerControlById(
-                    item.Key).Data.PlayerName;
-                baseDesc += $"{playerName},"; ;
+                continue;
             }
+			playerName.Add(playerControl.Data.PlayerName);
         }
 
-        return baseDesc;
-    }
+		return $"{baseDesc}{string.Join(",", playerName)}";
+	}
 
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
@@ -215,13 +215,17 @@ public sealed class Lover : MultiAssignRoleBase
 
     public void ChangeAllLoverToNeutral()
     {
-        foreach (var item in ExtremeRoleManager.GameRole)
+        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            if (this.IsSameControlId(item.Value))
+            if (playerControl == null ||
+				playerControl.Data == null ||
+                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				!this.IsSameControlId(role))
             {
-                item.Value.Team = ExtremeRoleType.Neutral;
-                item.Value.HasTask = false;
+                continue;
             }
+            role.Team = ExtremeRoleType.Neutral;
+            role.HasTask = false;
         }
     }
 
@@ -390,17 +394,21 @@ public sealed class Lover : MultiAssignRoleBase
 
     private void forceReplaceToNeutral(byte targetId)
     {
-        var newKiller = (Lover)ExtremeRoleManager.GameRole[targetId];
-        newKiller.Team = ExtremeRoleType.Neutral;
-        newKiller.CanKill = true;
-        newKiller.HasTask = false;
-        newKiller.HasOtherVision = newKiller.killerLoverHasOtherVision;
-        newKiller.Vision = newKiller.killerLoverVision;
-        newKiller.IsApplyEnvironmentVision = newKiller.killerLoverIsApplyEnvironmentVisionEffect;
-        newKiller.UseVent = newKiller.killerLoverCanUseVent;
-        newKiller.ChangeAllLoverToNeutral();
-        ExtremeRoleManager.GameRole[targetId] = newKiller;
-    }
+        if (!ExtremeRoleManager.TryGetSafeCastedRole<Lover>(targetId, out var newKiller))
+        {
+			return;
+        }
+
+		newKiller.Team = ExtremeRoleType.Neutral;
+		newKiller.CanKill = true;
+		newKiller.HasTask = false;
+		newKiller.HasOtherVision = newKiller.killerLoverHasOtherVision;
+		newKiller.Vision = newKiller.killerLoverVision;
+		newKiller.IsApplyEnvironmentVision = newKiller.killerLoverIsApplyEnvironmentVisionEffect;
+		newKiller.UseVent = newKiller.killerLoverCanUseVent;
+		newKiller.ChangeAllLoverToNeutral(); // This method iterates and modifies roles, ensure it's compatible with TryGetRole logic
+		ExtremeRoleManager.SetNewRole(targetId, newKiller);
+	}
 
     private string getTaskText(string baseString, bool isContainFakeTask)
     {
@@ -422,15 +430,18 @@ public sealed class Lover : MultiAssignRoleBase
 
         List<byte> alive = new List<byte>();
 
-        foreach(var (playerId, role) in ExtremeRoleManager.GameRole)
+        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            var player = GameData.Instance.GetPlayerById(playerId);
-            if (this.IsSameControlId(role) &&
-                !player.IsDead &&
-                !player.Disconnected)
+            if (playerControl == null ||
+				playerControl.Data == null ||
+				playerControl.Data.IsDead ||
+				playerControl.Data.Disconnected ||
+                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				!this.IsSameControlId(role))
             {
-                alive.Add(playerId);
+                continue;
             }
+            alive.Add(playerControl.PlayerId);
         }
         return alive;
     }

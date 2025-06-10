@@ -78,8 +78,11 @@ public sealed class Accelerator :
         byte rolePlayerId = reader.ReadByte();
 
         var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-        var role = ExtremeRoleManager.GetSafeCastedRole<Accelerator>(rolePlayerId);
-        if (role == null || rolePlayer == null) { return; }
+        if (rolePlayer == null ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<Accelerator>(rolePlayerId, out var role))
+		{
+			return;
+		}
 
         float x = reader.ReadSingle();
         float y = reader.ReadSingle();

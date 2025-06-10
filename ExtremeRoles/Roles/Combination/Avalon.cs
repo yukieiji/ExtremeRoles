@@ -66,9 +66,13 @@ public sealed class Assassin : MultiAssignRoleBase
     public override bool TryRolePlayerKilledFrom(
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
-        if (!this.CanKilled) { return false; }
-
-        var fromPlayerRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
+        if (!(
+				this.CanKilled &&
+				ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromPlayerRole)
+			))
+		{
+			return false;
+		}
 
         if (fromPlayerRole.IsNeutral())
         {
@@ -338,9 +342,16 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     {
         foreach (var(playerId, poolPlayer) in this.PlayerIcon)
         {
-            if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
+            if (playerId == PlayerControl.LocalPlayer.PlayerId)
+            {
+                continue;
+            }
 
-            SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
+            if (!ExtremeRoleManager.TryGetRole(playerId, out var role))
+            {
+                continue;
+            }
+
             if (role.IsCrewmate() ||
                 (role.IsNeutral() && !this.CanSeeNeutral) ||
                 (role.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))

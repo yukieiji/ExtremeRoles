@@ -323,15 +323,23 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
         byte rolePlayerId = byte.MaxValue;
 
-        foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            if (this.GameControlId == role.GameControlId)
+            if (playerControl == null ||
+				playerControl.Data == null ||
+                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				this.GameControlId != role.GameControlId)
             {
-                rolePlayerId = playerId;
-                break;
+                continue;
             }
-        }
-        if (rolePlayerId == byte.MaxValue) { return; }
+
+			rolePlayerId = playerControl.PlayerId;
+			break;
+		}
+        if (rolePlayerId == byte.MaxValue)
+		{
+			return;
+		}
 
         if (PlayerControl.LocalPlayer.PlayerId == rolePlayerId)
         {

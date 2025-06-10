@@ -147,20 +147,19 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
     public override string GetFullDescription()
     {
-        string baseDesc = $"{base.GetFullDescription()}\n{Tr.GetString("curSharer")}:";
-
-        foreach (var item in ExtremeRoleManager.GameRole)
+		var player = new List<string>();
+        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            if (this.IsSameControlId(item.Value))
+            if (playerControl == null || playerControl.Data == null ||
+                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				!this.IsSameControlId(role))
             {
-                string playerName = Player.GetPlayerControlById(
-                    item.Key).Data.PlayerName;
-                baseDesc += $"{playerName},"; ;
+                continue;
             }
+			player.Add(playerControl.Data.PlayerName);
         }
-
-        return baseDesc;
-    }
+		return $"{base.GetFullDescription()}\n{Tr.GetString("curSharer")}:{string.Join(",", player)}";
+	}
 
     public override string GetIntroDescription()
     {
@@ -276,17 +275,21 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
     private List<byte> getAliveSameSharer()
     {
-        List<byte> alive = new List<byte>();
+        List<byte> alive = [];
 
-        foreach (var item in ExtremeRoleManager.GameRole)
+        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            var player = GameData.Instance.GetPlayerById(item.Key);
-            if (this.IsSameControlId(item.Value) &&
-                (!player.IsDead || !player.Disconnected))
+            if (playerControl == null ||
+				playerControl.Data == null ||
+				playerControl.Data.IsDead ||
+				playerControl.Data.Disconnected ||
+				!ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				!this.IsSameControlId(role))
             {
-                alive.Add(item.Key);
+                continue;
             }
-        }
+			alive.Add(playerControl.PlayerId);
+		}
 
         return alive;
     }
