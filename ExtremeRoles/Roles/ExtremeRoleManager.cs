@@ -72,6 +72,7 @@ public enum ExtremeRoleId : int
 	Jailer,
 	Yardbird,
 	Summoner,
+	Brander,  // NEW ROLE HERE
 
 	SpecialImpostor,
     Evolver,
@@ -271,6 +272,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Bait        , new Bait()},
 			{(int)ExtremeRoleId.Jailer      , new Jailer()},
 			{(int)ExtremeRoleId.Summoner    , new Summoner()},
+			{(int)ExtremeRoleId.Brander     , new Brander()},  // NEW ROLE ENTRY HERE
 
 			{(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
