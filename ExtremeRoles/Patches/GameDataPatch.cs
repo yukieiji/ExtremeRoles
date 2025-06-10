@@ -20,7 +20,10 @@ public static class GameDataRecomputeTaskCountsPatch
 
 	public static bool Prefix(GameData __instance)
 	{
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
 
 		var roles = Roles.ExtremeRoleManager.GameRole;
 		var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
@@ -48,8 +51,7 @@ public static class GameDataRecomputeTaskCountsPatch
 				) &&
 				playerInfo.Role &&
 				playerInfo.Role.TasksCountTowardProgress &&
-				roles.TryGetValue(playerInfo.PlayerId, out var role) &&
-				role != null)
+				Roles.ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role))
 			{
 
 				if (!role.HasTask())

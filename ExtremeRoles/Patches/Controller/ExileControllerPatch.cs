@@ -16,7 +16,6 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 
 using Il2CppObject = Il2CppSystem.Object;
 using ExtremeRoles.Module.SystemType;
@@ -144,26 +143,19 @@ public static class ExileControllerBeginePatch
 						!validExiled
                     ) && !x.IsDead && !x.Disconnected;
             });
-        var allRoles = ExtremeRoleManager.GameRole;
 
         int aliveImpNum = Enumerable.Count(
             alivePlayers,
             (NetworkedPlayerInfo p) =>
-            {
-                return allRoles[p.PlayerId].IsImpostor();
-            });
+				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsImpostor());
         int aliveCrewNum = Enumerable.Count(
             alivePlayers,
             (NetworkedPlayerInfo p) =>
-            {
-                return allRoles[p.PlayerId].IsCrewmate();
-            });
+				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsCrewmate());
         int aliveNeutNum = Enumerable.Count(
             alivePlayers,
             (NetworkedPlayerInfo p) =>
-            {
-                return allRoles[p.PlayerId].IsNeutral();
-            });
+				ExtremeRoleManager.TryGetRole(p.PlayerId, out var role) && role.IsNeutral());
 
         string completeString = string.Empty;
 
@@ -171,7 +163,14 @@ public static class ExileControllerBeginePatch
         if (validExiled)
         {
             string playerName = init!.outfit!.PlayerName;
-            var exiledPlayerRole = allRoles[init!.networkedPlayer.PlayerId];
+            if (!ExtremeRoleManager.TryGetRole(init!.networkedPlayer.PlayerId, out var exiledPlayerRole))
+            {
+                // Critical error: exiled player's role not found. Log and/or return.
+                ExtremeRolesPlugin.Logger.LogError($"Exiled player role not found for ID: {init!.networkedPlayer.PlayerId}");
+                // Depending on desired behavior, might throw or simply not populate text, leading to default display.
+                // For now, let's return to prevent further processing with a null role.
+                return;
+            }
             switch (mode)
             {
                 case ConfirmExileMode.AllTeam:
@@ -283,10 +282,9 @@ public static class ExileControllerBeginePatch
         };
 
         var allPlayer = GameData.Instance.AllPlayers.ToArray();
-        var allRoles = ExtremeRoleManager.GameRole;
-
         bool isExiledSameMode = false;
         int modeTeamAlive = 0;
+
         switch (mode)
         {
             case ConfirmExileMode.Impostor:

@@ -7,7 +7,7 @@ using HarmonyLib;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.DebugPatch;
 
@@ -72,17 +72,20 @@ public static class DebugTool
         if (Input.GetKeyDown(KeyCode.P))
         {
             var dict = Roles.ExtremeRoleManager.GameRole;
-            if (dict.Count == 0) { return; }
-            for (int i = 0; i < GameData.Instance.PlayerCount; i++)
+            if (dict.Count == 0)
+			{
+				return;
+			}
+            foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                NetworkedPlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
-                var role = dict[playerInfo.PlayerId];
-                if (!role.HasTask())
+                if (player == null ||
+					!Roles.ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+					!role.HasTask())
                 {
                     continue;
                 }
-                var (playerCompleted, playerTotal) = GameSystem.GetTaskInfo(playerInfo);
-                Logging.Debug($"PlayerName:{playerInfo.PlayerName}  TotalTask:{playerTotal}   ComplatedTask:{playerCompleted}");
+                var (playerCompleted, playerTotal) = GameSystem.GetTaskInfo(player);
+                Logging.Debug($"PlayerName:{player.PlayerName}  TotalTask:{playerTotal}   ComplatedTask:{playerCompleted}");
             }
         }
 
@@ -90,22 +93,24 @@ public static class DebugTool
         if (Input.GetKeyDown(KeyCode.I))
         {
             var dict = Roles.ExtremeRoleManager.GameRole;
-            if (dict.Count == 0) { return; }
-            for (int i = 0; i < GameData.Instance.PlayerCount; i++)
-            {
-                NetworkedPlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
-                var role = dict[playerInfo.PlayerId];
-                if (!role.HasTask())
-                {
-                    continue;
-                }
-                var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
+            if (dict.Count == 0)
+			{
+				return;
+			}
+			foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+			{
+				if (player == null ||
+					!Roles.ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+					!role.HasTask())
+				{
+					continue;
+				}
+				var (_, totalTask) = GameSystem.GetTaskInfo(player);
                 if (totalTask == 0)
                 {
                     int taskId = GameSystem.GetRandomCommonTaskId();
-                    Logging.Debug($"PlayerName:{playerInfo.PlayerName}  AddTask:{taskId}");
-                    GameSystem.SetTask(
-                        playerInfo, taskId);
+                    Logging.Debug($"PlayerName:{player.PlayerName}  AddTask:{taskId}");
+                    GameSystem.SetTask(player, taskId);
                 }
 
             }
