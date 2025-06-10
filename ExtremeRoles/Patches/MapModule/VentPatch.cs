@@ -165,7 +165,11 @@ public static class VentCanUsePatch
             return true;
         }
 
-        var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+        if (!ExtremeRoleManager.TryGetRole(playerInfo.PlayerId, out var role))
+        {
+            __result = num;
+            return false;
+        }
 
         bool roleCouldUse = role.CanUseVent();
 
