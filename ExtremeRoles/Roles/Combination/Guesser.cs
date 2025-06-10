@@ -400,8 +400,10 @@ public sealed class Guesser :
         this.bulletNum = this.bulletNum - 1;
         this.curGuessNum = this.curGuessNum + 1;
 
-        var targetRole = ExtremeRoleManager.GameRole[playerId];
+        if (!ExtremeRoleManager.TryGetRole(playerId, out var targetRole))
         {
+            return;
+        }
 
         ExtremeRoleId roleId = targetRole.Id;
         ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
