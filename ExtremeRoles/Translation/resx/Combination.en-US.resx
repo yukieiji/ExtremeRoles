@@ -1076,4 +1076,26 @@ abilities or role revelation</value>
   <data name="AccelerateSet" xml:space="preserve">
     <value>PANEL</value>
   </data>
+  <!-- VoteSwapper -->
+  <data name="VoteSwapper" xml:space="preserve">
+    <value>Vote Swapper</value>
+  </data>
+  <data name="VoteSwapperFullDescription" xml:space="preserve">
+    <value>Swaps the votes between two targeted players during the meeting.</value>
+  </data>
+  <data name="CastlingAbilityName" xml:space="preserve">
+    <value>Castling</value>
+  </data>
+  <data name="VoteSwapperEnableRandomShuffling" xml:space="preserve">
+    <value>Enable Random Vote Shuffling</value>
+  </data>
+  <data name="VoteSwapperRevealSwapTarget" xml:space="preserve">
+    <value>Reveal Swap Target</value>
+  </data>
+  <data name="VoteSwapperMaxUsesPerMeeting" xml:space="preserve">
+    <value>Max Uses Per Meeting</value>
+  </data>
+  <data name="VoteSwapperCanPressEmergencyButton" xml:space="preserve">
+    <value>Can Press Emergency Button</value>
+  </data>
 </root>

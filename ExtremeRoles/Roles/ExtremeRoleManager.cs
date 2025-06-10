@@ -141,6 +141,7 @@ public enum ExtremeRoleId : int
 	Surrogator,
 	Knight,
 	Pawn,
+	VoteSwapper,
 
 	Xion,
 }

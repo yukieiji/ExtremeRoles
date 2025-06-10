@@ -1072,4 +1072,26 @@
   <data name="SkaterSkateOff" xml:space="preserve">
     <value>スケート解除</value>
   </data>
+  <!-- VoteSwapper -->
+  <data name="VoteSwapper">
+    <value>投票交換者</value>
+  </data>
+  <data name="VoteSwapperFullDescription">
+    <value>会議中に指定した2人のプレイヤーの投票を交換します。</value>
+  </data>
+  <data name="CastlingAbilityName">
+    <value>キャスリング</value>
+  </data>
+  <data name="VoteSwapperEnableRandomShuffling">
+    <value>ランダム投票シャッフル有効</value>
+  </data>
+  <data name="VoteSwapperRevealSwapTarget">
+    <value>交換対象者表示</value>
+  </data>
+  <data name="VoteSwapperMaxUsesPerMeeting">
+    <value>会議中の最大使用回数</value>
+  </data>
+  <data name="VoteSwapperCanPressEmergencyButton">
+    <value>緊急ボタン使用可</value>
+  </data>
 </root>
