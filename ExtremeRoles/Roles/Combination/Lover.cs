@@ -77,7 +77,7 @@ public sealed class Lover : MultiAssignRoleBase
         }
 
         baseDesc = $"{baseDesc}\n{Tr.GetString("curLover")}:";
-
+		var playerName = new List<string>();
         foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
             if (playerControl == null || playerControl.Data == null ||
@@ -86,10 +86,10 @@ public sealed class Lover : MultiAssignRoleBase
             {
                 continue;
             }
-            baseDesc = $"{baseDesc}{playerControl.Data.PlayerName},";
+			playerName.Add(playerControl.Data.PlayerName);
         }
 
-		return baseDesc;
+		return $"{baseDesc}{string.Join(",", playerName)}";
 	}
 
     public override void RolePlayerKilledAction(
