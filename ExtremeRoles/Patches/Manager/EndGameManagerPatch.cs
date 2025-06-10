@@ -7,7 +7,6 @@ using AmongUs.GameOptions;
 
 using HarmonyLib;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
@@ -16,9 +15,6 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.Performance;
-
-
 
 using Il2CppArray = Il2CppSystem.Array;
 using Il2CppObject = Il2CppSystem.Object;
@@ -131,7 +127,10 @@ public static class EndGameManagerSetUpPatch
 
             foreach (var data in summaries)
             {
-                if (data.PlayerName != name) { continue; }
+                if (data.PlayerName != name)
+				{
+					continue;
+				}
 				text.text +=
                     $"\n\n<size=80%>{string.Join("\n", data.Role.GetColoredRoleName(true))}</size>";
 
@@ -256,7 +255,13 @@ public static class EndGameManagerSetUpPatch
         // ニュートラルの追加処理
         foreach (var player in plusWinner)
         {
-            var role = ExtremeRoleManager.GameRole[player.PlayerId];
+            if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+            {
+                // If role is not found for a player in plusWinner, this is unexpected.
+                // Log an error and skip this player.
+                ExtremeRolesPlugin.Logger.LogError($"Role not found for PlayerId: {player.PlayerId} in EndGameManagerPatch.setWinDetailText");
+                continue;
+            }
 
             if (!role.IsNeutral() ||
                 textAddedRole.Contains(role.Id) ||
