@@ -147,8 +147,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
     public override string GetFullDescription()
     {
-        string baseDesc = $"{base.GetFullDescription()}\n{Tr.GetString("curSharer")}:";
-
+		var player = new List<string>();
         foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
             if (playerControl == null || playerControl.Data == null ||
@@ -157,9 +156,9 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
             {
                 continue;
             }
-            baseDesc = $"{baseDesc}{playerControl.Data.PlayerName},";
+			player.Add(playerControl.Data.PlayerName);
         }
-		return baseDesc;
+		return $"{base.GetFullDescription()}\n{Tr.GetString("curSharer")}:{string.Join(",", player)}";
 	}
 
     public override string GetIntroDescription()
