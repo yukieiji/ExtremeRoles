@@ -110,8 +110,11 @@ public sealed class Mover :
         byte rolePlayerId = reader.ReadByte();
 
         var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-        var role = ExtremeRoleManager.GetSafeCastedRole<Mover>(rolePlayerId);
-        if (role == null || rolePlayer == null) { return; }
+        if (rolePlayer == null ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<Mover>(rolePlayerId, out var role))
+        {
+            return;
+        }
 
         float x = reader.ReadSingle();
         float y = reader.ReadSingle();

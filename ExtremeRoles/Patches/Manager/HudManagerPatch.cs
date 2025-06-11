@@ -289,10 +289,17 @@ public static class HudManagerUpdatePatch
 
         foreach (PlayerControl targetPlayer in PlayerCache.AllPlayerControl)
         {
-            if (targetPlayer.PlayerId == localPlayerId) { continue; }
+            if (targetPlayer.PlayerId == localPlayerId)
+			{
+				continue;
+			}
 
             byte targetPlayerId = targetPlayer.PlayerId;
-            var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
+            if (!ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole))
+            {
+                ExtremeRolesPlugin.Logger.LogError($"Role not found for PlayerId: {targetPlayerId} in HudManagerPatch.setPlayerNameColor");
+                continue;
+            }
 
             ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
 
@@ -337,9 +344,16 @@ public static class HudManagerUpdatePatch
         foreach (PlayerControl targetPlayer in PlayerCache.AllPlayerControl)
         {
             byte playerId = targetPlayer.PlayerId;
-            string tag = playerRole.GetRolePlayerNameTag(
-                ExtremeRoleManager.GameRole[playerId], playerId);
-            if (tag == string.Empty) { continue; }
+            if (!ExtremeRoleManager.TryGetRole(playerId, out var targetRoleForTag))
+            {
+                ExtremeRolesPlugin.Logger.LogError($"Role not found for PlayerId: {playerId} in HudManagerPatch.setPlayerNameTag");
+                continue;
+            }
+            string tag = playerRole.GetRolePlayerNameTag(targetRoleForTag, playerId);
+            if (tag == string.Empty)
+			{
+				continue;
+			}
 
             targetPlayer.cosmetics.nameText.text += tag;
         }
@@ -417,12 +431,12 @@ public static class HudManagerUpdatePatch
 
         var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
         byte targetPlayerId = targetPlayer.PlayerId;
-        string roleNames = ExtremeRoleManager.GameRole[targetPlayerId].GetColoredRoleName(
-            localPlayer.Data.IsDead);
+        string roleNames = ExtremeRoleManager.TryGetRole(targetPlayerId, out var targetRole)
+			? targetRole.GetColoredRoleName(localPlayer.Data.IsDead) : "";
 
-        if (ExtremeGhostRoleManager.GameRole.ContainsKey(targetPlayerId))
+        if (ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out var ghostRole))
         {
-            string ghostRoleName = ExtremeGhostRoleManager.GameRole[targetPlayerId].GetColoredRoleName();
+            string ghostRoleName = ghostRole.GetColoredRoleName();
             roleNames = $"{ghostRoleName}({roleNames})";
         }
 
