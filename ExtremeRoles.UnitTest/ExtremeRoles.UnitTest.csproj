@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework> <!-- Adjusted to net8.0 for compatibility -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.2.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.2.2" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Assuming dummy ExtremeRoles project exists at ..\ExtremeRoles -->
+    <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
+    <!-- Assuming Generator project exists at ..\ExtremeRoles.UnitTestMock.Generator -->
+    <ProjectReference Include="..\ExtremeRoles.UnitTestMock.Generator\ExtremeRoles.UnitTestMock.Generator.csproj">
+      <OutputItemType>Analyzer</OutputItemType>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      Files from ExtremeRoles project, excluding specific folders/files.
+      This structure links files from the ExtremeRoles project into the UnitTest project.
+      The Link metadata determines the path within the Solution Explorer in Visual Studio.
+      The %(RecursiveDir)%(Filename)%(Extension) part preserves the original folder structure.
+      Corrected 'bin' exclude path.
+    -->
+    <Compile Include="..\ExtremeRoles\**\*.cs"
+             Exclude="..\ExtremeRoles\obj\**\*;..\ExtremeRoles\bin\**\*;..\ExtremeRoles\Patch\**\*;..\ExtremeRoles\ExtremeRolesPlugin.cs;..\ExtremeRoles\Properties\**\*;..\ExtremeRoles\Resources\**\*">
+      <Link>ExtremeRolesSource\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+  </ItemGroup>
+
+</Project>
