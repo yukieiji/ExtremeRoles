@@ -52,18 +52,16 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
         foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
             if (playerControl == null || playerControl.Data == null ||
-                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role))
+                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				role.Id == this.Id)
             {
                 continue;
             }
 
-            if (role.Id == this.Id)
-            {
-                continue;
-            }
+			var id = role.Id;
 
-            if (((role.Id == ExtremeRoleId.Marlin) && this.IsCrewmate()) ||
-                ((role.Id == ExtremeRoleId.Assassin) && this.IsImpostor()))
+            if (((id is ExtremeRoleId.Marlin) && this.IsCrewmate()) ||
+                ((id is ExtremeRoleId.Assassin) && this.IsImpostor()))
             {
                 target.Add(playerControl.PlayerId);
             }
@@ -73,13 +71,10 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
         {
             foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
             {
-                if (playerControl == null || playerControl.Data == null ||
-                    !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role))
-                {
-                    continue;
-                }
-
-                if (role.Id == this.Id)
+                if (playerControl == null ||
+					playerControl.Data == null ||
+                    !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+					role.Id == this.Id)
                 {
                     continue;
                 }
@@ -99,7 +94,8 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
 
 		this.supportTargetId = target.OrderBy(
 			item => RandomGenerator.Instance.Next()).First();
-        PlayerControl? targetPlayerControl = Player.GetPlayerControlById(this.supportTargetId);
+
+        var targetPlayerControl = Player.GetPlayerControlById(this.supportTargetId);
 
         if (targetPlayerControl != null &&
 			ExtremeRoleManager.TryGetRole(this.supportTargetId, out var supportRole))
