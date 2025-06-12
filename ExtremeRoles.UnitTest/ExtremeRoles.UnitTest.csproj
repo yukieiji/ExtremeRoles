@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework> <!-- Adjusted to net8.0 for compatibility -->
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -20,9 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Assuming dummy ExtremeRoles project exists at ..\ExtremeRoles -->
     <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
-    <!-- Assuming Generator project exists at ..\ExtremeRoles.UnitTestMock.Generator -->
     <ProjectReference Include="..\ExtremeRoles.UnitTestMock.Generator\ExtremeRoles.UnitTestMock.Generator.csproj">
       <OutputItemType>Analyzer</OutputItemType>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -30,17 +28,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--
-      Files from ExtremeRoles project, excluding specific folders/files.
-      This structure links files from the ExtremeRoles project into the UnitTest project.
-      The Link metadata determines the path within the Solution Explorer in Visual Studio.
-      The %(RecursiveDir)%(Filename)%(Extension) part preserves the original folder structure.
-      Corrected 'bin' exclude path.
-    -->
     <Compile Include="..\ExtremeRoles\**\*.cs"
              Exclude="..\ExtremeRoles\obj\**\*;..\ExtremeRoles\bin\**\*;..\ExtremeRoles\Patch\**\*;..\ExtremeRoles\ExtremeRolesPlugin.cs;..\ExtremeRoles\Properties\**\*;..\ExtremeRoles\Resources\**\*">
       <Link>ExtremeRolesSource\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\ExtremeRoles\ExtremeRolesPlugin.cs">
+      <Link>ExtremeRolesSource\ExtremeRolesPlugin.cs</Link>
+    </AdditionalFiles>
   </ItemGroup>
 
 </Project>

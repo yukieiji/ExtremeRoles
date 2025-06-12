@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.IO; // Added for Path operations
 
 namespace ExtremeRoles.UnitTestMock.Generator
 {
@@ -14,14 +15,25 @@ namespace ExtremeRoles.UnitTestMock.Generator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
+            // Pipeline 1: For generating mocks from AmongUs.GameLibs.Steam
             IncrementalValueProvider<Compilation> compilationProvider = context.CompilationProvider;
             context.RegisterSourceOutput(compilationProvider, (spc, compilation) =>
             {
-                ExecuteGeneration(compilation, spc);
+                ExecuteMockInterfaceGeneration(compilation, spc);
+            });
+
+            // Pipeline 2: For processing ExtremeRolesPlugin.cs to remove attributes
+            IncrementalValuesProvider<AdditionalText> pluginFiles = context.AdditionalTextsProvider
+                .Where(at => at.Path.EndsWith("ExtremeRolesPlugin.cs", StringComparison.OrdinalIgnoreCase));
+
+            context.RegisterSourceOutput(pluginFiles, (spc, additionalText) =>
+            {
+                ExecutePluginAttributeStripping(spc, additionalText);
             });
         }
 
-        private void ExecuteGeneration(Compilation compilation, SourceProductionContext spc)
+        // --- Methods for Mock Interface Generation (from original MockGenerator) ---
+        private void ExecuteMockInterfaceGeneration(Compilation compilation, SourceProductionContext spc)
         {
             var amongUsLib = compilation.ExternalReferences
                 .Select(er => compilation.GetAssemblyOrModuleSymbol(er) as IAssemblySymbol)
@@ -29,7 +41,7 @@ namespace ExtremeRoles.UnitTestMock.Generator
 
             if (amongUsLib == null)
             {
-                spc.AddSource("MockGenerator_Error.g.cs", SourceText.From("// AmongUs.GameLibs.Steam not found", Encoding.UTF8));
+                spc.AddSource("MockInterfaceGenerator_Error.g.cs", SourceText.From("// AmongUs.GameLibs.Steam not found for mock generation", Encoding.UTF8));
                 return;
             }
 
@@ -47,18 +59,18 @@ namespace ExtremeRoles.UnitTestMock.Generator
                 }
             }
 
-            var sb = new StringBuilder();
+            var sb = new StringBuilder(); // StringBuilder will be used by GenerateMockInterface
 
             foreach (var ns in allNamespaces)
             {
-                foreach (var typeSymbol in GetAllTypesInNamespace(ns))
+                foreach (var typeSymbol in GetAllTypesInNamespace(ns)) // Assumes GetAllTypesInNamespace is defined below
                 {
                     if (typeSymbol.TypeKind == TypeKind.Class &&
                         (typeSymbol.DeclaredAccessibility == Accessibility.Public || typeSymbol.DeclaredAccessibility == Accessibility.Internal))
                     {
                         if (!typeSymbol.IsImplicitlyDeclared && !typeSymbol.IsAnonymousType && typeSymbol.Name != "<PrivateImplementationDetails>")
                         {
-                            GenerateMockInterface(sb, typeSymbol, spc, compilation);
+                            GenerateMockInterface(sb, typeSymbol, spc, compilation); // Assumes GenerateMockInterface is defined below
                         }
                     }
                 }
@@ -70,7 +82,7 @@ namespace ExtremeRoles.UnitTestMock.Generator
             foreach (var typeMember in nsSymbol.GetTypeMembers())
             {
                 yield return typeMember;
-                foreach (var nestedType in GetAllNestedTypes(typeMember))
+                foreach (var nestedType in GetAllNestedTypes(typeMember)) // Assumes GetAllNestedTypes is defined below
                 {
                     yield return nestedType;
                 }
@@ -109,7 +121,7 @@ namespace ExtremeRoles.UnitTestMock.Generator
             string originalNamespace = classSymbol.ContainingNamespace.ToDisplayString();
 
             sb.Clear();
-            sb.AppendLine("// Auto-generated code by ExtremeRoles.UnitTestMock.Generator");
+            sb.AppendLine("// Auto-generated MOCK INTERFACE by ExtremeRoles.UnitTestMock.Generator"); // Clarify source
             sb.AppendLine($"// Original Type: {classSymbol.ToDisplayString()}");
             sb.AppendLine("using System;");
             sb.AppendLine("using System.Collections.Generic;");
@@ -242,7 +254,7 @@ namespace ExtremeRoles.UnitTestMock.Generator
                 sb.AppendLine("} // End of namespace");
             }
 
-            string hintName = $"{fullTypeNameForHint}.g.cs";
+            string hintName = $"Mock_{fullTypeNameForHint}.g.cs"; // Prefix hint name for clarity
             spc.AddSource(hintName, SourceText.From(sb.ToString(), Encoding.UTF8));
         }
 
@@ -305,6 +317,50 @@ namespace ExtremeRoles.UnitTestMock.Generator
             }
 
             return true;
+        }
+
+        // --- Methods for Attribute Stripping (from AttributeRemoverGenerator) ---
+        private void ExecutePluginAttributeStripping(SourceProductionContext spc, AdditionalText pluginFile)
+        {
+            SourceText sourceText = pluginFile.GetText(spc.CancellationToken);
+            if (sourceText == null)
+            {
+                spc.ReportDiagnostic(Diagnostic.Create("MG001", "MockGenerator.AttributeStripping", $"Could not read AdditionalText: {pluginFile.Path}", DiagnosticSeverity.Warning, DiagnosticSeverity.Warning, true, 0));
+                return;
+            }
+
+            string originalCode = sourceText.ToString();
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(originalCode, cancellationToken: spc.CancellationToken);
+            CompilationUnitSyntax root = syntaxTree.GetCompilationUnitRoot(spc.CancellationToken);
+
+            var rewriter = new AttributeRemovalRewriter(); // Assumes AttributeRemovalRewriter is defined below
+            SyntaxNode newRoot = rewriter.Visit(root);
+
+            if (newRoot != root)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(pluginFile.Path) + ".Stripped.cs";
+                spc.AddSource(fileName, SourceText.From(newRoot.ToFullString(), Encoding.UTF8));
+            }
+            else
+            {
+                 spc.AddSource(Path.GetFileNameWithoutExtension(pluginFile.Path) + ".NoAttributeChanges.cs", SourceText.From($"// MockGenerator: No attributes found or removed from {Path.GetFileName(pluginFile.Path)} by attribute stripping logic.", Encoding.UTF8));
+            }
+        }
+    }
+
+    // --- AttributeRemovalRewriter class (from AttributeRemoverGenerator) ---
+    public class AttributeRemovalRewriter : CSharpSyntaxRewriter
+    {
+        public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
+        {
+            if (node.Identifier.ValueText == "ExtremeRolesPlugin")
+            {
+                if (node.AttributeLists.Any())
+                {
+                    return node.WithAttributeLists(new SyntaxList<AttributeListSyntax>());
+                }
+            }
+            return base.VisitClassDeclaration(node);
         }
     }
 }
