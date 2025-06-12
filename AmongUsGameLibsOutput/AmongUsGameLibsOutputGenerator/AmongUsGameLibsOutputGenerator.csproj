@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +15,6 @@
     </PackageReference>
     <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.735" />
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
-    <PackageReference Include="MonoMod.Backports" Version="1.1.2" />
   </ItemGroup>
 
 </Project>
