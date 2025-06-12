@@ -15,11 +15,23 @@
     <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.735" />
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
   </ItemGroup>
+  <Target Name="DiagnoseReferencePathBeforeCustomTarget" AfterTargets="ResolveReferences" BeforeTargets="EnsureAmongUsGameLibsSteamAreCopied">
+    <Message Text="--- Before EnsureAmongUsGameLibsSteamAreCopied ---" Importance="high" />
+    <Message Text="ReferencePath Item: %(ReferencePath.Identity) --- NugetPackageId: %(ReferencePath.NuGetPackageId) --- Private: %(ReferencePath.Private) --- Filename: %(ReferencePath.Filename)%(ReferencePath.Extension)" Importance="high" />
+  </Target>
   <Target Name="EnsureAmongUsGameLibsSteamAreCopied" AfterTargets="ResolveReferences">
+    <Message Text="--- Running EnsureAmongUsGameLibsSteamAreCopied ---" Importance="high" />
+    <!-- Log items that will be affected -->
+    <Message Text="Item from AmongUs.GameLibs.Steam to be modified: %(ReferencePath.Identity) (Current Private: %(ReferencePath.Private))" Importance="high" Condition="'%(ReferencePath.NuGetPackageId)' == 'AmongUs.GameLibs.Steam'" />
     <ItemGroup>
       <ReferencePath Condition="'%(ReferencePath.NuGetPackageId)' == 'AmongUs.GameLibs.Steam'">
         <Private>true</Private>
       </ReferencePath>
     </ItemGroup>
+    <Message Text="--- Finished EnsureAmongUsGameLibsSteamAreCopied ---" Importance="high" />
+  </Target>
+  <Target Name="DiagnoseReferencePathAfterCustomTarget" AfterTargets="EnsureAmongUsGameLibsSteamAreCopied">
+    <Message Text="--- After EnsureAmongUsGameLibsSteamAreCopied ---" Importance="high" />
+    <Message Text="ReferencePath Item: %(ReferencePath.Identity) --- NugetPackageId: %(ReferencePath.NuGetPackageId) --- Private: %(ReferencePath.Private) --- Filename: %(ReferencePath.Filename)%(ReferencePath.Extension)" Importance="high" />
   </Target>
 </Project>
