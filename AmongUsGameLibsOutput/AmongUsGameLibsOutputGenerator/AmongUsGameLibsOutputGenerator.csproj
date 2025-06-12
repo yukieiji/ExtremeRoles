@@ -15,15 +15,9 @@
     <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.735" />
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
   </ItemGroup>
-  <Target Name="EnsureAmongUsGameLibsSteamAreCopied" AfterTargets="GenerateInteropAssemblies" BeforeTargets="ResolveReferences">
-    <Message Text="[CustomTarget] Running EnsureAmongUsGameLibsSteamAreCopied. Identifying items containing 'AmongUs.GameLibs.Steam\2025.4.15\interop'." Importance="high" />
-    <ItemGroup>
-      <ReferencePath Condition="$([System.String]::Copy('%(ReferencePath.Identity)').Contains('AmongUs.GameLibs.Steam\2025.4.15\interop'))">
-        <Private>true</Private>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </ReferencePath>
-    </ItemGroup>
-    <!-- Optional: Log the items that were actually modified if possible, or a summary message -->
-    <Message Text="[CustomTarget] Finished EnsureAmongUsGameLibsSteamAreCopied. Items matching condition have had Private set to true and CopyToOutputDirectory set to PreserveNewest." Importance="high" />
+  <Target Name="CopyBepInExInteropOutput" AfterTargets="GenerateInteropAssemblies">
+    <Message Text="[CustomTarget] Copying items from _InteropAssemblies. Count: @(_InteropAssemblies->Count())" Importance="high" />
+    <Copy SourceFiles="@(_InteropAssemblies)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+    <Message Text="[CustomTarget] Finished copying _InteropAssemblies to $(OutputPath)." Importance="high" />
   </Target>
 </Project>
