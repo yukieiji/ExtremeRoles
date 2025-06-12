@@ -8,357 +8,408 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using System.IO; // Added for Path operations
 
-namespace ExtremeRoles.UnitTestMock.Generator;
-
-[Generator]
-public class MockGenerator : IIncrementalGenerator
+namespace ExtremeRoles.UnitTestMock.Generator
 {
-    public void Initialize(IncrementalGeneratorInitializationContext context)
+    [Generator]
+    public class MockGenerator : IIncrementalGenerator
     {
-        // Pipeline 1: For generating mocks from AmongUs.GameLibs.Steam
-        IncrementalValueProvider<Compilation> compilationProvider = context.CompilationProvider;
-        context.RegisterSourceOutput(compilationProvider, (spc, compilation) =>
+        public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            ExecuteMockInterfaceGeneration(compilation, spc);
-        });
+            // Pipeline 1: For generating mocks from AmongUs.GameLibs.Steam
+            IncrementalValueProvider<Compilation> compilationProvider = context.CompilationProvider;
+            context.RegisterSourceOutput(compilationProvider, (spc, compilation) =>
+            {
+                ExecuteMockInterfaceGeneration(compilation, spc);
+            });
 
-        // Pipeline 2: For processing ExtremeRolesPlugin.cs to remove attributes
-        IncrementalValuesProvider<AdditionalText> pluginFiles = context.AdditionalTextsProvider
-            .Where(at => at.Path.EndsWith("ExtremeRolesPlugin.cs", StringComparison.OrdinalIgnoreCase));
+            // Pipeline 2: For processing ExtremeRolesPlugin.cs to remove attributes
+            IncrementalValuesProvider<AdditionalText> pluginFiles = context.AdditionalTextsProvider
+                .Where(at => at.Path.EndsWith("ExtremeRolesPlugin.cs", StringComparison.OrdinalIgnoreCase));
 
-        context.RegisterSourceOutput(pluginFiles, (spc, additionalText) =>
-        {
-            ExecutePluginAttributeStripping(spc, additionalText);
-        });
-    }
-
-    // --- Methods for Mock Interface Generation (from original MockGenerator) ---
-    private void ExecuteMockInterfaceGeneration(Compilation compilation, SourceProductionContext spc)
-    {
-        var amongUsLib = compilation.ExternalReferences
-            .Select(er => compilation.GetAssemblyOrModuleSymbol(er) as IAssemblySymbol)
-            .FirstOrDefault(asm => asm != null && asm.Identity.Name == "AmongUs.GameLibs.Steam");
-
-        if (amongUsLib == null)
-        {
-            spc.AddSource("MockInterfaceGenerator_Error.g.cs", SourceText.From("// AmongUs.GameLibs.Steam not found for mock generation", Encoding.UTF8));
-            return;
+            context.RegisterSourceOutput(pluginFiles, (spc, additionalText) =>
+            {
+                ExecutePluginAttributeStripping(spc, additionalText);
+            });
         }
 
-        var allNamespaces = new List<INamespaceSymbol>();
-        var stack = new Stack<INamespaceSymbol>();
-        stack.Push(amongUsLib.GlobalNamespace);
-
-        while (stack.Count > 0)
+        // --- Methods for Mock Interface Generation (from original MockGenerator) ---
+        private void ExecuteMockInterfaceGeneration(Compilation compilation, SourceProductionContext spc)
         {
-            var currentNamespace = stack.Pop();
-            allNamespaces.Add(currentNamespace);
-            foreach (var subNamespace in currentNamespace.GetNamespaceMembers())
+            // Log all available external assembly names for diagnostics
+            var availableAssemblies = new StringBuilder();
+            availableAssemblies.AppendLine("// Available external assemblies (Identity.Name):");
+            var allAssemblySymbols = compilation.ExternalReferences
+                .Select(er => compilation.GetAssemblyOrModuleSymbol(er) as IAssemblySymbol)
+                .Where(asm => asm != null)
+                .ToList();
+
+            foreach (var asmSymbol in allAssemblySymbols)
             {
-                stack.Push(subNamespace);
+                availableAssemblies.AppendLine($"// - {asmSymbol.Identity.Name} (Version: {asmSymbol.Identity.Version})");
             }
-        }
 
-        var sb = new StringBuilder(); // StringBuilder will be used by GenerateMockInterface
+            IAssemblySymbol amongUsLib = null;
+            string targetAssemblyName = "AmongUs.GameLibs.Steam";
 
-        foreach (var ns in allNamespaces)
-        {
-            foreach (var typeSymbol in GetAllTypesInNamespace(ns)) // Assumes GetAllTypesInNamespace is defined below
+            // 1. Try exact match
+            amongUsLib = allAssemblySymbols.FirstOrDefault(asm => asm.Identity.Name == targetAssemblyName);
+
+            // 2. If not found, try case-insensitive match
+            if (amongUsLib == null)
             {
-                if (typeSymbol.TypeKind == TypeKind.Class &&
-                    (typeSymbol.DeclaredAccessibility == Accessibility.Public || typeSymbol.DeclaredAccessibility == Accessibility.Internal))
+                amongUsLib = allAssemblySymbols.FirstOrDefault(asm => asm.Identity.Name.Equals(targetAssemblyName, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // 3. If still not found, try 'contains' match (case-insensitive)
+            if (amongUsLib == null)
+            {
+                var potentialMatches = allAssemblySymbols
+                    .Where(asm => asm.Identity.Name.IndexOf(targetAssemblyName, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
+                if (potentialMatches.Count == 1)
                 {
-                    if (!typeSymbol.IsImplicitlyDeclared && !typeSymbol.IsAnonymousType && typeSymbol.Name != "<PrivateImplementationDetails>")
+                    amongUsLib = potentialMatches[0];
+                    spc.ReportDiagnostic(Diagnostic.Create(
+                        "MG002", "MockGenerator.AssemblyLookup",
+                        $"Found '{targetAssemblyName}' using 'Contains' match: '{amongUsLib.Identity.Name}'. Exact match preferred.",
+                        DiagnosticSeverity.Warning, DiagnosticSeverity.Warning, true, 0));
+                }
+                else if (potentialMatches.Count > 1)
+                {
+                    spc.ReportDiagnostic(Diagnostic.Create(
+                        "MG003", "MockGenerator.AssemblyLookup",
+                        $"Multiple assemblies found containing '{targetAssemblyName}'. Cannot reliably choose. Found: {string.Join(", ", potentialMatches.Select(p => p.Identity.Name))}",
+                        DiagnosticSeverity.Error, DiagnosticSeverity.Error, true, 0));
+                    // Add the list of all assemblies to the error output for better debugging
+                    spc.AddSource("MockInterfaceGenerator_Error_MultipleMatches.g.cs", SourceText.From(availableAssemblies.ToString(), Encoding.UTF8));
+                    return;
+                }
+            }
+
+            if (amongUsLib == null)
+            {
+                string errorMessage = $"// {targetAssemblyName} not found for mock generation.\n" + availableAssemblies.ToString();
+                spc.AddSource("MockInterfaceGenerator_Error_NotFound.g.cs", SourceText.From(errorMessage, Encoding.UTF8));
+                return;
+            }
+
+            // Proceed with amongUsLib if found
+            var allNamespaces = new List<INamespaceSymbol>();
+            var stack = new Stack<INamespaceSymbol>();
+            stack.Push(amongUsLib.GlobalNamespace);
+
+            while (stack.Count > 0)
+            {
+                var currentNamespace = stack.Pop();
+                allNamespaces.Add(currentNamespace);
+                foreach (var subNamespace in currentNamespace.GetNamespaceMembers())
+                {
+                    stack.Push(subNamespace);
+                }
+            }
+
+            var sb = new StringBuilder();
+
+            foreach (var ns in allNamespaces)
+            {
+                foreach (var typeSymbol in GetAllTypesInNamespace(ns))
+                {
+                    if (typeSymbol.TypeKind == TypeKind.Class &&
+                        (typeSymbol.DeclaredAccessibility == Accessibility.Public || typeSymbol.DeclaredAccessibility == Accessibility.Internal))
                     {
-                        GenerateMockInterface(sb, typeSymbol, spc, compilation); // Assumes GenerateMockInterface is defined below
+                        if (!typeSymbol.IsImplicitlyDeclared && !typeSymbol.IsAnonymousType && typeSymbol.Name != "<PrivateImplementationDetails>")
+                        {
+                            GenerateMockInterface(sb, typeSymbol, spc, compilation);
+                        }
                     }
                 }
             }
         }
-    }
 
-    private IEnumerable<ITypeSymbol> GetAllTypesInNamespace(INamespaceSymbol nsSymbol)
-    {
-        foreach (var typeMember in nsSymbol.GetTypeMembers())
+        private IEnumerable<ITypeSymbol> GetAllTypesInNamespace(INamespaceSymbol nsSymbol)
         {
-            yield return typeMember;
-            foreach (var nestedType in GetAllNestedTypes(typeMember)) // Assumes GetAllNestedTypes is defined below
+            foreach (var typeMember in nsSymbol.GetTypeMembers())
             {
-                yield return nestedType;
+                yield return typeMember;
+                foreach (var nestedType in GetAllNestedTypes(typeMember))
+                {
+                    yield return nestedType;
+                }
             }
         }
-    }
 
-    private IEnumerable<ITypeSymbol> GetAllNestedTypes(ITypeSymbol typeSymbol)
-    {
-        foreach (var nestedType in typeSymbol.GetTypeMembers())
+        private IEnumerable<ITypeSymbol> GetAllNestedTypes(ITypeSymbol typeSymbol)
         {
-                if (!nestedType.IsImplicitlyDeclared && !nestedType.IsAnonymousType && nestedType.Name != "<PrivateImplementationDetails>")
-                {
-                yield return nestedType;
-                foreach (var subNestedType in GetAllNestedTypes(nestedType))
-                {
-                    yield return subNestedType;
-                }
-                }
-        }
-    }
-
-    private void GenerateMockInterface(StringBuilder sb, ITypeSymbol classSymbol, SourceProductionContext spc, Compilation compilation)
-    {
-        string originalClassName = classSymbol.Name;
-
-        string fullTypeNameForHint = classSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-                                                .Replace("global::", "")
-                                                .Replace("<", "_")
-                                                .Replace(">", "_")
-                                                .Replace(".", "_")
-                                                .Replace(",", "_")
-                                                .Replace(" ", "_")
-                                                .Replace("`", "_");
-
-        string originalNamespace = classSymbol.ContainingNamespace.ToDisplayString();
-
-        sb.Clear();
-        sb.AppendLine("// Auto-generated MOCK INTERFACE by ExtremeRoles.UnitTestMock.Generator"); // Clarify source
-        sb.AppendLine($"// Original Type: {classSymbol.ToDisplayString()}");
-        sb.AppendLine("using System;");
-        sb.AppendLine("using System.Collections.Generic;");
-        sb.AppendLine("using UnityEngine;");
-        sb.AppendLine("using UnityEngine.Events;");
-        sb.AppendLine("using UnityEngine.UI;");
-        sb.AppendLine("using InnerNet;");
-        sb.AppendLine("using Steamworks;");
-        sb.AppendLine();
-
-        bool hasNamespace = !string.IsNullOrEmpty(originalNamespace) && !classSymbol.ContainingNamespace.IsGlobalNamespace;
-        string currentIndent = "";
-
-        List<string> parentInterfaceDeclarations = new List<string>();
-        if (hasNamespace)
-        {
-            sb.AppendLine($"namespace {originalNamespace}");
-            sb.AppendLine("{");
-            currentIndent = "    ";
+            foreach (var nestedType in typeSymbol.GetTypeMembers())
+            {
+                 if (!nestedType.IsImplicitlyDeclared && !nestedType.IsAnonymousType && nestedType.Name != "<PrivateImplementationDetails>")
+                 {
+                    yield return nestedType;
+                    foreach (var subNestedType in GetAllNestedTypes(nestedType))
+                    {
+                        yield return subNestedType;
+                    }
+                 }
+            }
         }
 
-        Stack<ITypeSymbol> parentTypes = new Stack<ITypeSymbol>();
-        ITypeSymbol containingType = classSymbol.ContainingType;
-        while(containingType != null && (containingType.DeclaredAccessibility == Accessibility.Public || containingType.DeclaredAccessibility == Accessibility.Internal))
+        private void GenerateMockInterface(StringBuilder sb, ITypeSymbol classSymbol, SourceProductionContext spc, Compilation compilation)
         {
-            parentTypes.Push(containingType);
-            containingType = containingType.ContainingType;
-        }
+            string originalClassName = classSymbol.Name;
+            string interfaceName = "I" + originalClassName;
 
-        string originalCurrentIndent = currentIndent;
+            string fullTypeNameForHint = classSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+                                                    .Replace("global::", "")
+                                                    .Replace("<", "_")
+                                                    .Replace(">", "_")
+                                                    .Replace(".", "_")
+                                                    .Replace(",", "_")
+                                                    .Replace(" ", "_")
+                                                    .Replace("`", "_");
 
-        foreach(var parentType in parentTypes)
-        {
-            sb.AppendLine($"{currentIndent}public partial interface I{parentType.Name} // Interface for containing type");
+            string originalNamespace = classSymbol.ContainingNamespace.ToDisplayString();
+
+            sb.Clear();
+            sb.AppendLine("// Auto-generated MOCK INTERFACE by ExtremeRoles.UnitTestMock.Generator");
+            sb.AppendLine($"// Original Type: {classSymbol.ToDisplayString()}");
+            sb.AppendLine("using System;");
+            sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine("using UnityEngine;");
+            sb.AppendLine("using UnityEngine.Events;");
+            sb.AppendLine("using UnityEngine.UI;");
+            sb.AppendLine("using InnerNet;");
+            sb.AppendLine("using Steamworks;");
+            sb.AppendLine();
+
+            bool hasNamespace = !string.IsNullOrEmpty(originalNamespace) && !classSymbol.ContainingNamespace.IsGlobalNamespace;
+            string currentIndent = "";
+
+            List<string> parentInterfaceDeclarations = new List<string>();
+            if (hasNamespace)
+            {
+                sb.AppendLine($"namespace {originalNamespace}");
+                sb.AppendLine("{");
+                currentIndent = "    ";
+            }
+
+            Stack<ITypeSymbol> parentTypes = new Stack<ITypeSymbol>();
+            ITypeSymbol containingType = classSymbol.ContainingType;
+            while(containingType != null && (containingType.DeclaredAccessibility == Accessibility.Public || containingType.DeclaredAccessibility == Accessibility.Internal))
+            {
+                parentTypes.Push(containingType);
+                containingType = containingType.ContainingType;
+            }
+
+            string originalCurrentIndent = currentIndent;
+
+            foreach(var parentType in parentTypes)
+            {
+                sb.AppendLine($"{currentIndent}public partial interface I{parentType.Name} // Interface for containing type");
+                sb.AppendLine($"{currentIndent}{{");
+                parentInterfaceDeclarations.Add($"{currentIndent}}} // End of I{parentType.Name}");
+                currentIndent += "    ";
+            }
+
+            sb.AppendLine($"{currentIndent}public interface {interfaceName}");
             sb.AppendLine($"{currentIndent}{{");
-            parentInterfaceDeclarations.Add($"{currentIndent}}} // End of I{parentType.Name}");
-            currentIndent += "    ";
-        }
 
-        sb.AppendLine($"{currentIndent}public interface {originalClassName}");
-        sb.AppendLine($"{currentIndent}{{");
+            string memberIndent = currentIndent + "    ";
 
-        string memberIndent = currentIndent + "    ";
-
-        foreach (var member in classSymbol.GetMembers())
-        {
-            bool isPublicOrInternal = member.DeclaredAccessibility == Accessibility.Public || member.DeclaredAccessibility == Accessibility.Internal || member.DeclaredAccessibility == Accessibility.ProtectedOrInternal;
-            if (!isPublicOrInternal || member.IsImplicitlyDeclared)
+            foreach (var member in classSymbol.GetMembers())
             {
-                continue;
-            }
-
-            if (member.Kind == SymbolKind.Property)
-            {
-                var property = (IPropertySymbol)member;
-                if (!IsTypeAccessible(property.Type, compilation) || property.IsStatic)
+                bool isPublicOrInternal = member.DeclaredAccessibility == Accessibility.Public || member.DeclaredAccessibility == Accessibility.Internal || member.DeclaredAccessibility == Accessibility.ProtectedOrInternal;
+                if (!isPublicOrInternal || member.IsImplicitlyDeclared)
                 {
                     continue;
                 }
 
-                string getter = property.GetMethod != null && (property.GetMethod.DeclaredAccessibility == Accessibility.Public || property.GetMethod.DeclaredAccessibility == Accessibility.Internal || property.GetMethod.DeclaredAccessibility == Accessibility.ProtectedOrInternal) ? "get;" : "";
-                string setter = property.SetMethod != null && (property.SetMethod.DeclaredAccessibility == Accessibility.Public || property.SetMethod.DeclaredAccessibility == Accessibility.Internal || property.SetMethod.DeclaredAccessibility == Accessibility.ProtectedOrInternal) ? "set;" : "";
-                if (!string.IsNullOrEmpty(getter) || !string.IsNullOrEmpty(setter))
+                if (member.Kind == SymbolKind.Property)
                 {
-                        sb.AppendLine($"{memberIndent}{property.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {property.Name} {{ {(getter)} {(setter)} }}");
+                    var property = (IPropertySymbol)member;
+                    if (!IsTypeAccessible(property.Type, compilation) || property.IsStatic)
+                    {
+                        continue;
+                    }
+
+                    string getter = property.GetMethod != null && (property.GetMethod.DeclaredAccessibility == Accessibility.Public || property.GetMethod.DeclaredAccessibility == Accessibility.Internal || property.GetMethod.DeclaredAccessibility == Accessibility.ProtectedOrInternal) ? "get;" : "";
+                    string setter = property.SetMethod != null && (property.SetMethod.DeclaredAccessibility == Accessibility.Public || property.SetMethod.DeclaredAccessibility == Accessibility.Internal || property.SetMethod.DeclaredAccessibility == Accessibility.ProtectedOrInternal) ? "set;" : "";
+                    if (!string.IsNullOrEmpty(getter) || !string.IsNullOrEmpty(setter))
+                    {
+                         sb.AppendLine($"{memberIndent}{property.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {property.Name} {{ {(getter)} {(setter)} }}");
+                    }
+                }
+                else if (member.Kind == SymbolKind.Field)
+                {
+                    var field = (IFieldSymbol)member;
+                    if (field.AssociatedSymbol == null && !field.IsConst && !field.IsStatic)
+                    {
+                        if (!IsTypeAccessible(field.Type, compilation))
+                        {
+                            continue;
+                        }
+                        if (field.IsReadOnly)
+                        {
+                            sb.AppendLine($"{memberIndent}{field.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {field.Name} {{ get; }}");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{memberIndent}{field.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {field.Name} {{ get; set; }}");
+                        }
+                    }
+                }
+                else if (member.Kind == SymbolKind.Method)
+                {
+                    var method = (IMethodSymbol)member;
+                    if (method.MethodKind == MethodKind.Ordinary &&
+                        !method.IsGenericMethod &&
+                        !method.Name.StartsWith("get_") && !method.Name.StartsWith("set_") && !method.Name.StartsWith("add_") && !method.Name.StartsWith("remove_"))
+                    {
+                        if (!IsTypeAccessible(method.ReturnType, compilation) || method.Parameters.Any(p => !IsTypeAccessible(p.Type, compilation) || p.Type.SpecialType == SpecialType.System_Void))
+                        {
+                            continue;
+                        }
+                        if (method.Parameters.Any(p => p.RefKind == RefKind.Out || p.RefKind == RefKind.Ref))
+                        {
+                            continue;
+                        }
+
+                        string returnTypeDisplay = method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                        string methodName = method.Name;
+                        string parameters = string.Join(", ", method.Parameters.Select(p => $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {SanitizeParameterName(p.Name)}"));
+
+                        if (method.IsStatic)
+                        {
+                            sb.AppendLine($"{memberIndent}{returnTypeDisplay} {methodName}({parameters}); // Was static. Implement to return default or specific mock behavior.");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{memberIndent}{returnTypeDisplay} {methodName}({parameters});");
+                        }
+                    }
                 }
             }
-            else if (member.Kind == SymbolKind.Field)
+
+            sb.AppendLine($"{currentIndent}}} // End of {interfaceName}");
+
+            for(int i = parentInterfaceDeclarations.Count - 1; i >= 0; i--)
             {
-                var field = (IFieldSymbol)member;
-                if (field.AssociatedSymbol == null && !field.IsConst && !field.IsStatic)
-                {
-                    if (!IsTypeAccessible(field.Type, compilation))
-                    {
-                        continue;
-                    }
-                    if (field.IsReadOnly)
-                    {
-                        sb.AppendLine($"{memberIndent}{field.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {field.Name} {{ get; }}");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{memberIndent}{field.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {field.Name} {{ get; set; }}");
-                    }
-                }
+                sb.AppendLine(parentInterfaceDeclarations[i]);
             }
-            else if (member.Kind == SymbolKind.Method)
+
+            currentIndent = originalCurrentIndent;
+
+            if (hasNamespace)
             {
-                var method = (IMethodSymbol)member;
-                if (method.MethodKind == MethodKind.Ordinary &&
-                    !method.IsGenericMethod &&
-                    !method.Name.StartsWith("get_") && !method.Name.StartsWith("set_") && !method.Name.StartsWith("add_") && !method.Name.StartsWith("remove_"))
+                sb.AppendLine("} // End of namespace");
+            }
+
+            string hintName = $"Mock_{fullTypeNameForHint}.g.cs";
+            spc.AddSource(hintName, SourceText.From(sb.ToString(), Encoding.UTF8));
+        }
+
+        private string SanitizeParameterName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return "_param" + Guid.NewGuid().ToString("N").Substring(0, 4);
+            }
+            name = new string(name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray());
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return "_param" + Guid.NewGuid().ToString("N").Substring(0,4);
+            }
+            return SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None || SyntaxFacts.GetContextualKeywordKind(name) != SyntaxKind.None ? "@" + name : name;
+        }
+
+        private bool IsTypeAccessible(ITypeSymbol typeSymbol, Compilation compilation)
+        {
+            if (typeSymbol == null || typeSymbol is IErrorTypeSymbol)
+            {
+                return false;
+            }
+            if (typeSymbol.SpecialType == SpecialType.System_Void)
+            {
+                return true;
+            }
+            if (typeSymbol is IPointerTypeSymbol)
+            {
+                return false;
+            }
+            if (typeSymbol.TypeKind == TypeKind.TypeParameter)
+            {
+                return true;
+            }
+
+            var accessibility = typeSymbol.DeclaredAccessibility;
+            bool isAccessibleEnough = accessibility == Accessibility.Public ||
+                                      accessibility == Accessibility.Internal ||
+                                      accessibility == Accessibility.ProtectedOrInternal;
+
+            if (!isAccessibleEnough)
+            {
+                return typeSymbol.ContainingType != null && IsTypeAccessible(typeSymbol.ContainingType, compilation);
+            }
+
+            if (typeSymbol is INamedTypeSymbol namedType)
+            {
+                if (namedType.IsGenericType)
                 {
-                    if (!IsTypeAccessible(method.ReturnType, compilation) || method.Parameters.Any(p => !IsTypeAccessible(p.Type, compilation) || p.Type.SpecialType == SpecialType.System_Void))
+                    if (!namedType.TypeArguments.All(ta => IsTypeAccessible(ta, compilation)))
                     {
-                        continue;
-                    }
-                    if (method.Parameters.Any(p => p.RefKind == RefKind.Out || p.RefKind == RefKind.Ref))
-                    {
-                        continue;
-                    }
-
-                    string returnTypeDisplay = method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-                    string methodName = method.Name;
-                    string parameters = string.Join(", ", method.Parameters.Select(p => $"{p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {SanitizeParameterName(p.Name)}"));
-
-                    if (method.IsStatic)
-                    {
-                        sb.AppendLine($"{memberIndent}{returnTypeDisplay} {methodName}({parameters}); // Was static. Implement to return default or specific mock behavior.");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"{memberIndent}{returnTypeDisplay} {methodName}({parameters});");
+                        return false;
                     }
                 }
             }
-        }
+            else if (typeSymbol is IArrayTypeSymbol arrayType)
+            {
+                return IsTypeAccessible(arrayType.ElementType, compilation);
+            }
 
-        sb.AppendLine($"{currentIndent}}} // End of {originalClassName}");
-
-        for(int i = parentInterfaceDeclarations.Count - 1; i >= 0; i--)
-        {
-            sb.AppendLine(parentInterfaceDeclarations[i]);
-        }
-
-        currentIndent = originalCurrentIndent;
-
-        if (hasNamespace)
-        {
-            sb.AppendLine("} // End of namespace");
-        }
-
-        string hintName = $"Mock_{fullTypeNameForHint}.g.cs"; // Prefix hint name for clarity
-        spc.AddSource(hintName, SourceText.From(sb.ToString(), Encoding.UTF8));
-    }
-
-    private string SanitizeParameterName(string name)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            return "_param" + Guid.NewGuid().ToString("N").Substring(0, 4);
-        }
-        name = new string(name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray());
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            return "_param" + Guid.NewGuid().ToString("N").Substring(0,4);
-        }
-        return SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None || SyntaxFacts.GetContextualKeywordKind(name) != SyntaxKind.None ? "@" + name : name;
-    }
-
-    private bool IsTypeAccessible(ITypeSymbol typeSymbol, Compilation compilation)
-    {
-        if (typeSymbol == null || typeSymbol is IErrorTypeSymbol)
-        {
-            return false;
-        }
-        if (typeSymbol.SpecialType == SpecialType.System_Void)
-        {
             return true;
         }
-        if (typeSymbol is IPointerTypeSymbol)
-        {
-            return false;
-        }
-        if (typeSymbol.TypeKind == TypeKind.TypeParameter)
-        {
-            return true;
-        }
 
-        var accessibility = typeSymbol.DeclaredAccessibility;
-        bool isAccessibleEnough = accessibility == Accessibility.Public ||
-                                    accessibility == Accessibility.Internal ||
-                                    accessibility == Accessibility.ProtectedOrInternal;
-
-        if (!isAccessibleEnough)
+        // --- Methods for Attribute Stripping (from AttributeRemoverGenerator) ---
+        private void ExecutePluginAttributeStripping(SourceProductionContext spc, AdditionalText pluginFile)
         {
-            return typeSymbol.ContainingType != null && IsTypeAccessible(typeSymbol.ContainingType, compilation);
-        }
-
-        if (typeSymbol is INamedTypeSymbol namedType)
-        {
-            if (namedType.IsGenericType)
+            SourceText sourceText = pluginFile.GetText(spc.CancellationToken);
+            if (sourceText == null)
             {
-                if (!namedType.TypeArguments.All(ta => IsTypeAccessible(ta, compilation)))
+                spc.ReportDiagnostic(Diagnostic.Create("MG001", "MockGenerator.AttributeStripping", $"Could not read AdditionalText: {pluginFile.Path}", DiagnosticSeverity.Warning, DiagnosticSeverity.Warning, true, 0));
+                return;
+            }
+
+            string originalCode = sourceText.ToString();
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(originalCode, cancellationToken: spc.CancellationToken);
+            CompilationUnitSyntax root = syntaxTree.GetCompilationUnitRoot(spc.CancellationToken);
+
+            var rewriter = new AttributeRemovalRewriter();
+            SyntaxNode newRoot = rewriter.Visit(root);
+
+            if (newRoot != root)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(pluginFile.Path) + ".Stripped.cs";
+                spc.AddSource(fileName, SourceText.From(newRoot.ToFullString(), Encoding.UTF8));
+            }
+            else
+            {
+                 spc.AddSource(Path.GetFileNameWithoutExtension(pluginFile.Path) + ".NoAttributeChanges.cs", SourceText.From($"// MockGenerator: No attributes found or removed from {Path.GetFileName(pluginFile.Path)} by attribute stripping logic.", Encoding.UTF8));
+            }
+        }
+    }
+
+    // --- AttributeRemovalRewriter class (from AttributeRemoverGenerator) ---
+    public class AttributeRemovalRewriter : CSharpSyntaxRewriter
+    {
+        public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
+        {
+            if (node.Identifier.ValueText == "ExtremeRolesPlugin")
+            {
+                if (node.AttributeLists.Any())
                 {
-                    return false;
+                    return node.WithAttributeLists(new SyntaxList<AttributeListSyntax>());
                 }
             }
+            return base.VisitClassDeclaration(node);
         }
-        else if (typeSymbol is IArrayTypeSymbol arrayType)
-        {
-            return IsTypeAccessible(arrayType.ElementType, compilation);
-        }
-
-        return true;
-    }
-
-    // --- Methods for Attribute Stripping (from AttributeRemoverGenerator) ---
-    private void ExecutePluginAttributeStripping(SourceProductionContext spc, AdditionalText pluginFile)
-    {
-        SourceText sourceText = pluginFile.GetText(spc.CancellationToken);
-        if (sourceText == null)
-        {
-            spc.ReportDiagnostic(Diagnostic.Create("MG001", "MockGenerator.AttributeStripping", $"Could not read AdditionalText: {pluginFile.Path}", DiagnosticSeverity.Warning, DiagnosticSeverity.Warning, true, 0));
-            return;
-        }
-
-        string originalCode = sourceText.ToString();
-        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(originalCode, cancellationToken: spc.CancellationToken);
-        CompilationUnitSyntax root = syntaxTree.GetCompilationUnitRoot(spc.CancellationToken);
-
-        var rewriter = new AttributeRemovalRewriter(); // Assumes AttributeRemovalRewriter is defined below
-        SyntaxNode newRoot = rewriter.Visit(root);
-
-        if (newRoot != root)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(pluginFile.Path) + ".Stripped.cs";
-            spc.AddSource(fileName, SourceText.From(newRoot.ToFullString(), Encoding.UTF8));
-        }
-        else
-        {
-                spc.AddSource(Path.GetFileNameWithoutExtension(pluginFile.Path) + ".NoAttributeChanges.cs", SourceText.From($"// MockGenerator: No attributes found or removed from {Path.GetFileName(pluginFile.Path)} by attribute stripping logic.", Encoding.UTF8));
-        }
-    }
-}
-
-// --- AttributeRemovalRewriter class (from AttributeRemoverGenerator) ---
-public class AttributeRemovalRewriter : CSharpSyntaxRewriter
-{
-    public override SyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
-    {
-        if (node.Identifier.ValueText == "ExtremeRolesPlugin")
-        {
-            if (node.AttributeLists.Any())
-            {
-                return node.WithAttributeLists(new SyntaxList<AttributeListSyntax>());
-            }
-        }
-        return base.VisitClassDeclaration(node);
     }
 }

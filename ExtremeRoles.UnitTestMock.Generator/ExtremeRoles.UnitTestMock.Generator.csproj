@@ -12,8 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- These are the crucial packages for a source generator -->
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+
+    <!-- This is the library we are analyzing. Important: PrivateAssets="all" and IncludeAssets="compile"
+         allows the generator to see its types without making it a direct dependency of projects using the generator. -->
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2025.4.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>compile</IncludeAssets> <!-- This is key for the generator to access the assembly's types -->

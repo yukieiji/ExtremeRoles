@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeRoles.UnitTestMock.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeRoles.UnitTest", "ExtremeRoles.UnitTest\ExtremeRoles.UnitTest.csproj", "{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtremeRoles_Dummy", "ExtremeRoles\ExtremeRoles.csproj", "{A9B8C7D6-E5F4-3210-B1C2-D3E4F5A6B7C8}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -109,7 +111,7 @@ Global
 		{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}.Release|x64.ActiveCfg = Release|Any CPU
 		{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}.Release|x64.Build.0 = Release|Any CPU
-		{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}.release|x86.ActiveCfg = Release|Any CPU
 		{2A0828AD-9A1F-4E07-BD5F-E3CFDF6773B2}.Release|x86.Build.0 = Release|Any CPU
 		{F845C15F-674A-4F12-9B3D-699804ECBF63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F845C15F-674A-4F12-9B3D-699804ECBF63}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -137,28 +139,16 @@ Global
 		{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}.Release|x86.Build.0 = Release|Any CPU
 		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Debug|x64.Build.0 = Debug|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Debug|x86.Build.0 = Debug|Any CPU
 		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Release|x64.ActiveCfg = Release|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Release|x64.Build.0 = Release|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Release|x86.ActiveCfg = Release|Any CPU
-		{E5F1B9F0-A4E5-4E5A-B5A5-01A9A9B5E5F9}.Release|x86.Build.0 = Release|Any CPU
 		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Debug|x64.Build.0 = Debug|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Debug|x86.Build.0 = Debug|Any CPU
 		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Release|x64.ActiveCfg = Release|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Release|x64.Build.0 = Release|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Release|x86.ActiveCfg = Release|Any CPU
-		{F4A1B2C3-D4E5-6F78-A1B2-C3D4E5F6A7B8}.Release|x86.Build.0 = Release|Any CPU
+		{A9B8C7D6-E5F4-3210-B1C2-D3E4F5A6B7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9B8C7D6-E5F4-3210-B1C2-D3E4F5A6B7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9B8C7D6-E5F4-3210-B1C2-D3E4F5A6B7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9B8C7D6-E5F4-3210-B1C2-D3E4F5A6B7C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,8 +158,8 @@ Global
 		{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_NeutralResourcesLanguage = ja-JP
-		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
 		RESX_TaskErrorCategory = Message
+		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
+		RESX_NeutralResourcesLanguage = ja-JP
 	EndGlobalSection
 EndGlobal
