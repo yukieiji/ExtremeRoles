@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AmongUs.GameLibs.Steam" Version="2025.4.15" />
+    <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="2.1.1-ci.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.735" />
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
+  </ItemGroup>
+  <Target Name="CopyBepInExInteropOutput" AfterTargets="GenerateInteropAssemblies">
+    <Message Text="[CustomTarget] Copying items from _InteropAssemblies. Count: @(_InteropAssemblies->Count())" Importance="high" />
+    <Copy SourceFiles="@(_InteropAssemblies)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+    <Message Text="[CustomTarget] Finished copying _InteropAssemblies to $(OutputPath)." Importance="high" />
+  </Target>
+</Project>
