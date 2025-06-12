@@ -19,7 +19,7 @@
     <Message Text="--- Before EnsureAmongUsGameLibsSteamAreCopied ---" Importance="high" />
     <Message Text="ReferencePath Item: %(ReferencePath.Identity) --- NugetPackageId: %(ReferencePath.NuGetPackageId) --- Private: %(ReferencePath.Private) --- Filename: %(ReferencePath.Filename)%(ReferencePath.Extension)" Importance="high" />
   </Target>
-  <Target Name="EnsureAmongUsGameLibsSteamAreCopied" AfterTargets="ResolveReferences">
+  <Target Name="EnsureAmongUsGameLibsSteamAreCopied" AfterTargets="GenerateInteropAssemblies" BeforeTargets="ResolveReferences">
     <Message Text="--- Running EnsureAmongUsGameLibsSteamAreCopied (Path-based condition) ---" Importance="high" />
     <!-- Log items that will be affected by the new path-based condition -->
     <Message Text="Item matching path condition to be modified: %(ReferencePath.Identity) (Current Private: %(ReferencePath.Private))" Importance="high" Condition="$([System.String]::Copy('%(ReferencePath.Identity)').Contains('AmongUs.GameLibs.Steam\2025.4.15\interop'))" />
