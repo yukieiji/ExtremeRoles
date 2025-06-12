@@ -15,23 +15,15 @@
     <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.735" />
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.735" />
   </ItemGroup>
-  <Target Name="DiagnoseReferencePathBeforeCustomTarget" AfterTargets="ResolveReferences" BeforeTargets="EnsureAmongUsGameLibsSteamAreCopied">
-    <Message Text="--- Before EnsureAmongUsGameLibsSteamAreCopied ---" Importance="high" />
-    <Message Text="ReferencePath Item: %(ReferencePath.Identity) --- NugetPackageId: %(ReferencePath.NuGetPackageId) --- Private: %(ReferencePath.Private) --- Filename: %(ReferencePath.Filename)%(ReferencePath.Extension)" Importance="high" />
-  </Target>
   <Target Name="EnsureAmongUsGameLibsSteamAreCopied" AfterTargets="GenerateInteropAssemblies" BeforeTargets="ResolveReferences">
-    <Message Text="--- Running EnsureAmongUsGameLibsSteamAreCopied (Path-based condition) ---" Importance="high" />
-    <!-- Log items that will be affected by the new path-based condition -->
-    <Message Text="Item matching path condition to be modified: %(ReferencePath.Identity) (Current Private: %(ReferencePath.Private))" Importance="high" Condition="$([System.String]::Copy('%(ReferencePath.Identity)').Contains('AmongUs.GameLibs.Steam\2025.4.15\interop'))" />
+    <Message Text="[CustomTarget] Running EnsureAmongUsGameLibsSteamAreCopied. Identifying items containing 'AmongUs.GameLibs.Steam\2025.4.15\interop'." Importance="high" />
     <ItemGroup>
       <ReferencePath Condition="$([System.String]::Copy('%(ReferencePath.Identity)').Contains('AmongUs.GameLibs.Steam\2025.4.15\interop'))">
         <Private>true</Private>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </ReferencePath>
     </ItemGroup>
-    <Message Text="--- Finished EnsureAmongUsGameLibsSteamAreCopied (Path-based condition) ---" Importance="high" />
-  </Target>
-  <Target Name="DiagnoseReferencePathAfterCustomTarget" AfterTargets="EnsureAmongUsGameLibsSteamAreCopied">
-    <Message Text="--- After EnsureAmongUsGameLibsSteamAreCopied ---" Importance="high" />
-    <Message Text="ReferencePath Item: %(ReferencePath.Identity) --- NugetPackageId: %(ReferencePath.NuGetPackageId) --- Private: %(ReferencePath.Private) --- Filename: %(ReferencePath.Filename)%(ReferencePath.Extension)" Importance="high" />
+    <!-- Optional: Log the items that were actually modified if possible, or a summary message -->
+    <Message Text="[CustomTarget] Finished EnsureAmongUsGameLibsSteamAreCopied. Items matching condition have had Private set to true and CopyToOutputDirectory set to PreserveNewest." Importance="high" />
   </Target>
 </Project>
