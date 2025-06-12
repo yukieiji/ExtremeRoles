@@ -157,12 +157,18 @@ namespace ExtremeRoles.UnitTestMock.Generator
             foreach (var member in classSymbol.GetMembers())
             {
                 bool isPublicOrInternal = member.DeclaredAccessibility == Accessibility.Public || member.DeclaredAccessibility == Accessibility.Internal || member.DeclaredAccessibility == Accessibility.ProtectedOrInternal;
-                if (!isPublicOrInternal || member.IsImplicitlyDeclared) continue;
+                if (!isPublicOrInternal || member.IsImplicitlyDeclared)
+                {
+                    continue;
+                }
 
                 if (member.Kind == SymbolKind.Property)
                 {
                     var property = (IPropertySymbol)member;
-                    if (!IsTypeAccessible(property.Type, compilation) || property.IsStatic) continue;
+                    if (!IsTypeAccessible(property.Type, compilation) || property.IsStatic)
+                    {
+                        continue;
+                    }
 
                     string getter = property.GetMethod != null && (property.GetMethod.DeclaredAccessibility == Accessibility.Public || property.GetMethod.DeclaredAccessibility == Accessibility.Internal || property.GetMethod.DeclaredAccessibility == Accessibility.ProtectedOrInternal) ? "get;" : "";
                     string setter = property.SetMethod != null && (property.SetMethod.DeclaredAccessibility == Accessibility.Public || property.SetMethod.DeclaredAccessibility == Accessibility.Internal || property.SetMethod.DeclaredAccessibility == Accessibility.ProtectedOrInternal) ? "set;" : "";
@@ -176,7 +182,10 @@ namespace ExtremeRoles.UnitTestMock.Generator
                     var field = (IFieldSymbol)member;
                     if (field.AssociatedSymbol == null && !field.IsConst && !field.IsStatic)
                     {
-                        if (!IsTypeAccessible(field.Type, compilation)) continue;
+                        if (!IsTypeAccessible(field.Type, compilation))
+                        {
+                            continue;
+                        }
                         if (field.IsReadOnly)
                         {
                             sb.AppendLine($"{memberIndent}{field.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)} {field.Name} {{ get; }}");
@@ -194,8 +203,14 @@ namespace ExtremeRoles.UnitTestMock.Generator
                         !method.IsGenericMethod &&
                         !method.Name.StartsWith("get_") && !method.Name.StartsWith("set_") && !method.Name.StartsWith("add_") && !method.Name.StartsWith("remove_"))
                     {
-                        if (!IsTypeAccessible(method.ReturnType, compilation) || method.Parameters.Any(p => !IsTypeAccessible(p.Type, compilation) || p.Type.SpecialType == SpecialType.System_Void)) continue;
-                        if (method.Parameters.Any(p => p.RefKind == RefKind.Out || p.RefKind == RefKind.Ref)) continue;
+                        if (!IsTypeAccessible(method.ReturnType, compilation) || method.Parameters.Any(p => !IsTypeAccessible(p.Type, compilation) || p.Type.SpecialType == SpecialType.System_Void))
+                        {
+                            continue;
+                        }
+                        if (method.Parameters.Any(p => p.RefKind == RefKind.Out || p.RefKind == RefKind.Ref))
+                        {
+                            continue;
+                        }
 
                         string returnTypeDisplay = method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
                         string methodName = method.Name;
@@ -233,18 +248,36 @@ namespace ExtremeRoles.UnitTestMock.Generator
 
         private string SanitizeParameterName(string name)
         {
-            if (string.IsNullOrWhiteSpace(name)) return "_param" + Guid.NewGuid().ToString("N").Substring(0, 4);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return "_param" + Guid.NewGuid().ToString("N").Substring(0, 4);
+            }
             name = new string(name.Where(c => char.IsLetterOrDigit(c) || c == '_').ToArray());
-            if (string.IsNullOrWhiteSpace(name)) return "_param" + Guid.NewGuid().ToString("N").Substring(0,4);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return "_param" + Guid.NewGuid().ToString("N").Substring(0,4);
+            }
             return SyntaxFacts.GetKeywordKind(name) != SyntaxKind.None || SyntaxFacts.GetContextualKeywordKind(name) != SyntaxKind.None ? "@" + name : name;
         }
 
         private bool IsTypeAccessible(ITypeSymbol typeSymbol, Compilation compilation)
         {
-            if (typeSymbol == null || typeSymbol is IErrorTypeSymbol) return false;
-            if (typeSymbol.SpecialType == SpecialType.System_Void) return true;
-            if (typeSymbol is IPointerTypeSymbol) return false;
-            if (typeSymbol.TypeKind == TypeKind.TypeParameter) return true;
+            if (typeSymbol == null || typeSymbol is IErrorTypeSymbol)
+            {
+                return false;
+            }
+            if (typeSymbol.SpecialType == SpecialType.System_Void)
+            {
+                return true;
+            }
+            if (typeSymbol is IPointerTypeSymbol)
+            {
+                return false;
+            }
+            if (typeSymbol.TypeKind == TypeKind.TypeParameter)
+            {
+                return true;
+            }
 
             var accessibility = typeSymbol.DeclaredAccessibility;
             bool isAccessibleEnough = accessibility == Accessibility.Public ||
@@ -260,13 +293,11 @@ namespace ExtremeRoles.UnitTestMock.Generator
             {
                 if (namedType.IsGenericType)
                 {
-                    if (!namedType.TypeArguments.All(ta => IsTypeAccessible(ta, compilation))) return false;
+                    if (!namedType.TypeArguments.All(ta => IsTypeAccessible(ta, compilation)))
+                    {
+                        return false;
+                    }
                 }
-                // This check was too aggressive for some valid nested public types within internal containers
-                // if (namedType.ContainingType != null && !IsTypeAccessible(namedType.ContainingType, compilation))
-                // {
-                //     return false;
-                // }
             }
             else if (typeSymbol is IArrayTypeSymbol arrayType)
             {
