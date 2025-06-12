@@ -50,9 +50,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gemini", "gemini", "{DDB4EF
 		.gemini\styleguide.md = .gemini\styleguide.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AmongUsGameLibsOutput", "AmongUsGameLibsOutput", "{9F3B7C61-DC0F-4BB6-AA43-A7F858C263F6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{9F3B7C61-DC0F-4BB6-AA43-A7F858C263F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmongUsGameLibsOutputGenerator", "AmongUsGameLibsOutput\AmongUsGameLibsOutputGenerator\AmongUsGameLibsOutputGenerator.csproj", "{22771F84-E1DC-415D-9325-1A9C9856C194}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmongUsGameLibExporter", "UnitTest\AmongUsGameLibExporter\AmongUsGameLibExporter.csproj", "{22771F84-E1DC-415D-9325-1A9C9856C194}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
