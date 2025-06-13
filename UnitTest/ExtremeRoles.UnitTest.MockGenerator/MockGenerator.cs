@@ -1,9 +1,6 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text; // For SourceText
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text; // For StringBuilder
+using Microsoft.CodeAnalysis.Text;
+using System.Text;
 
 namespace ExtremeRoles.UnitTest.MockGenerator;
 
@@ -132,8 +129,8 @@ public class MockGenerator : IIncrementalGenerator
         return sb.ToString();
     }
 
-private string GenerateStaticClassForStaticMethods(INamedTypeSymbol classSymbol)
-{
+	private string GenerateStaticClassForStaticMethods(INamedTypeSymbol classSymbol)
+	{
 		if (classSymbol.DeclaredAccessibility != Accessibility.Public)
 		{
 			return string.Empty;
