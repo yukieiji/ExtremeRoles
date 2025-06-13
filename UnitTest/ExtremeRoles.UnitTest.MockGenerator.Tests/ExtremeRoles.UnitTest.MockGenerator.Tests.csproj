@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.MSTest" Version="1.1.1" />
+    <!-- The explicit reference to Microsoft.CodeAnalysis.CSharp v4.7.0 is REMOVED -->
+    <!-- The explicit reference to Microsoft.CodeAnalysis.Common v4.7.0 is REMOVED -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExtremeRoles.UnitTest.MockGenerator\ExtremeRoles.UnitTest.MockGenerator.csproj" />
+  </ItemGroup>
+
+</Project>
