@@ -1,12 +1,11 @@
-﻿using ExtremeRoles.GameMode.Option.ShipGlobal;
+﻿using System;
+using System.Collections.Generic;
+
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
 using ExtremeRoles.Test.Helper;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace ExtremeRoles.Test.Lobby;
 
