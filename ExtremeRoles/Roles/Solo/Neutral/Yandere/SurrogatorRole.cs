@@ -108,7 +108,7 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 	{
 		Player.RpcCleanDeadBody(this.activateTarget);
 
-		SurrogatorGurdSystem.RpcReduce();
+		SurrogatorGurdSystem.RpcAddNum();
 
 		this.activateTarget = byte.MaxValue;
 	}
