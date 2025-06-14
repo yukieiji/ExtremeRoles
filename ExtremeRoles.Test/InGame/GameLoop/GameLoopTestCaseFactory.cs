@@ -86,7 +86,98 @@ public class GameLoopTestCaseFactory
 					new RequireOption<Int32OptionNames, int>(
 						Int32OptionNames.NumImpostors, 3));
 			}),
-			new("YandereWin", 10, [ ExtremeRoleId.Yandere ]),
+			new("QueenWithKnight", 2, [ ExtremeRoleId.Queen, ExtremeRoleId.Knight ],
+			() =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("QueenWithKnightAndPawn", 2, [ ExtremeRoleId.Queen, ExtremeRoleId.Knight, ExtremeRoleId.Pawn ],
+			() =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("YandereWin", 10, [ ExtremeRoleId.Yandere ], () =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("YandereWinWithIntimate", 2, [ ExtremeRoleId.Yandere, ExtremeRoleId.Intimate ], () =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("YandereWinWithSurrogator", 2, [ ExtremeRoleId.Yandere, ExtremeRoleId.Surrogator ], () =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("YandereWinWithSurrogatorAndIntimate", 2, [ ExtremeRoleId.Yandere, ExtremeRoleId.Intimate, ExtremeRoleId.Surrogator ], () =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("JackalWinWithFurry", 2, [ ExtremeRoleId.Jackal, ExtremeRoleId.Furry ], () =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("JackalWinWithShepherd", 2, [ExtremeRoleId.Jackal, ExtremeRoleId.Shepherd ], () =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
+			new("JackalWinWithFurryAndShepherd", 2, [ExtremeRoleId.Jackal, ExtremeRoleId.Furry, ExtremeRoleId.Shepherd ], () =>
+			{
+				GameUtility.UpdateExROption(
+					OptionTab.GeneralTab,
+					(int)ShipGlobalOptionCategory.NeutralWinOption,
+					new RequireOption<int, int>((int)NeutralWinOption.IsSame, 1));
+				GameUtility.UpdateAmongUsOption(
+					new RequireOption<Int32OptionNames, int>(
+						Int32OptionNames.NumImpostors, 3));
+			}),
 			new("MagicanTeleport", 10, PreTestCase: MagicianTeleportTest.Test),
 		];
 #elif RELEASE
