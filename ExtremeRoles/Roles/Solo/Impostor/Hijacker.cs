@@ -93,6 +93,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 
 	public void ResetOnMeetingStart()
 	{
+		this.opend = false;
 		repose();
 	}
 

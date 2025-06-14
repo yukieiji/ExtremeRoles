@@ -1,14 +1,15 @@
-﻿using BepInEx.Logging;
-using BepInEx.Unity.IL2CPP.Utils.Collections;
-using ExtremeRoles.Module;
-using ExtremeRoles.Test.Lobby;
-using Il2CppInterop.Runtime.Attributes;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+
 using UnityEngine;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+using ExtremeRoles.Module;
+using ExtremeRoles.Test.Helper;
+
 
 namespace ExtremeRoles.Test;
 
@@ -54,6 +55,7 @@ public class ExtremeRolesTestPluginBehaviour : MonoBehaviour
 		foreach (var step in testStep)
 		{
 			yield return step.Run();
+			yield return GameUtility.WaitForStabilize();
 		}
 		EndTest();
 	}

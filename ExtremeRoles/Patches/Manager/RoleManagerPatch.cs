@@ -33,10 +33,14 @@ public static class RoleManagerAssignRoleOnDeathPatch
 {
     public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+        if (!(
+				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				ExtremeRoleManager.TryGetRole(player.PlayerId, out var role)
+			))
+        {
+            return true;
+        }
 
-        var role = ExtremeRoleManager.GameRole[player.PlayerId];
         if (!role.IsAssignGhostRole())
         {
             var roleBehavior = player.Data.Role;
@@ -54,10 +58,14 @@ public static class RoleManagerAssignRoleOnDeathPatch
 
     public static void Postfix([HarmonyArgument(0)] PlayerControl player)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
-            !ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
-
+        if (!(
+				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
+				role.IsAssignGhostRole()
+			))
+        {
+            return;
+        }
         ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
     }
 }
@@ -69,16 +77,17 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
     public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
     {
         // バニラ幽霊クルー役職にニュートラルがアサインされる時はTrueを返す
-        if (ExtremeRoleManager.GameRole.Count == 0 ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsAssignNeutralToVanillaCrewGhostRole)
-        {
+        if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsAssignNeutralToVanillaCrewGhostRole ||
+			!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+		{
             return true;
         }
 
-        var role = ExtremeRoleManager.GameRole[player.PlayerId];
-
-        if (role.IsNeutral()) { return false; }
+		if (role.IsNeutral())
+		{
+			return false;
+		}
 
         // デフォルトのメソッドではニュートラルもクルー陣営の死亡者数にカウントされてアサインされなくなるため
         RoleTypes roleTypes = RoleTypes.GuardianAngel;
@@ -87,7 +96,7 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
             (PlayerControl pc) =>
                 pc.Data.IsDead &&
                 !pc.Data.Role.IsImpostor &&
-                ExtremeRoleManager.GameRole[pc.PlayerId].IsCrewmate());
+                (ExtremeRoleManager.TryGetRole(pc.PlayerId, out var pcRole) && pcRole.IsCrewmate()));
 
         IRoleOptionsCollection roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
         if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)

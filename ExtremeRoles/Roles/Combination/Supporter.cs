@@ -49,28 +49,40 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
         List<byte> target = new List<byte>();
 
-        foreach (var item in ExtremeRoleManager.GameRole)
+        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
         {
-            if (item.Value.Id == this.Id) { continue; }
-
-            if (((item.Value.Id == ExtremeRoleId.Marlin) && this.IsCrewmate()) ||
-                ((item.Value.Id == ExtremeRoleId.Assassin) && this.IsImpostor()))
+            if (playerControl == null || playerControl.Data == null ||
+                !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+				role.Id == this.Id)
             {
-                target.Add(item.Key);
+                continue;
+            }
+
+			var id = role.Id;
+
+            if (((id is ExtremeRoleId.Marlin) && this.IsCrewmate()) ||
+                ((id is ExtremeRoleId.Assassin) && this.IsImpostor()))
+            {
+                target.Add(playerControl.PlayerId);
             }
         }
 
         if (target.Count == 0)
         {
-            foreach (var item in ExtremeRoleManager.GameRole)
+            foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
             {
-
-                if (item.Value.Id == this.Id) { continue; }
-
-                if ((item.Value.IsCrewmate() && this.IsCrewmate()) ||
-                    (item.Value.IsImpostor() && this.IsImpostor()))
+                if (playerControl == null ||
+					playerControl.Data == null ||
+                    !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
+					role.Id == this.Id)
                 {
-                    target.Add(item.Key);
+                    continue;
+                }
+
+                if ((role.IsCrewmate() && this.IsCrewmate()) ||
+                    (role.IsImpostor() && this.IsImpostor()))
+                {
+                    target.Add(playerControl.PlayerId);
                 }
             }
         }
@@ -83,21 +95,22 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
 		this.supportTargetId = target.OrderBy(
 			item => RandomGenerator.Instance.Next()).First();
 
-        if (!ExtremeRoleManager.TryGetRole(this.supportTargetId, out var supportRole))
-		{
-			return;
-		}
+        var targetPlayerControl = Player.GetPlayerControlById(this.supportTargetId);
 
-        this.supportRoleName = supportRole.GetColoredRoleName();
-        Color supportColor = supportRole.GetNameColor();
-        this.supportPlayerName = Player.GetPlayerControlById(
-            this.supportTargetId).Data.PlayerName;
-        this.supportColor = new Color(
-            supportColor.r,
-            supportColor.g,
-            supportColor.b,
-            supportColor.a);
-
+        if (targetPlayerControl != null &&
+			ExtremeRoleManager.TryGetRole(this.supportTargetId, out var supportRole))
+        {
+            this.supportRoleName = supportRole.GetColoredRoleName();
+            this.supportColor = supportRole.GetNameColor(); // Use directly from supportRole
+            this.supportPlayerName = targetPlayerControl.Data.PlayerName;
+        }
+        else
+        {
+            // Handle case where the target role is not found after selection or player control is null
+            this.supportRoleName = "Unknown Role";
+            this.supportPlayerName = (targetPlayerControl != null && targetPlayerControl.Data != null) ? targetPlayerControl.Data.PlayerName : "Unknown Player";
+            this.supportColor = Color.white;
+        }
     }
 
     public void IntroEndSetUp()

@@ -7,6 +7,7 @@ using UnityEngine;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -21,18 +22,19 @@ public static class PlayerControlShapeshiftPatch
 		[HarmonyArgument(0)] PlayerControl targetPlayer,
 		[HarmonyArgument(1)] bool animate)
 	{
-		var roles = ExtremeRoleManager.GameRole;
-		if (roles.Count == 0 ||
-			!roles.ContainsKey(__instance.PlayerId))
+        if ((
+				!RoleAssignState.Instance.IsRoleSetUpEnd ||
+				!ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role) ||
+				(role.TryGetVanillaRoleId(out RoleTypes roleId) && roleId is RoleTypes.Shapeshifter)
+			))
+        {
+            return true;
+        }
+
+		if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup)
 		{
-			return true;
+			return false;
 		}
-
-		var role = roles[__instance.PlayerId];
-		if (role.TryGetVanillaRoleId(out RoleTypes roleId) &&
-			roleId == RoleTypes.Shapeshifter) { return true; }
-
-		if (__instance.CurrentOutfitType == PlayerOutfitType.MushroomMixup) { return false; }
 
 
 		NetworkedPlayerInfo targetPlayerInfo = targetPlayer.Data;

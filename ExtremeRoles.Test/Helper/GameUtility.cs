@@ -26,6 +26,18 @@ public static class GameUtility
 		GameManager.Instance != null &&
 		GameManager.Instance.ShouldCheckForGameEnd;
 
+	public static IEnumerator WaitForStabilize()
+	{
+		var waitor = new WaitForSeconds(2.5f);
+		while (
+			AmongUsClient.Instance == null ||
+			AmongUsClient.Instance.Ping > 100)
+		{
+			yield return waitor;
+		}
+		yield return new WaitForSeconds(10.0f);
+	}
+
 	public static void ChangePresetTo(int newPreset)
 	{
 		var mng = OptionManager.Instance;

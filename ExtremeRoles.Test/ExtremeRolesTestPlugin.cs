@@ -1,4 +1,6 @@
-﻿using BepInEx.Unity.IL2CPP;
+﻿global using System.Collections;
+
+using BepInEx.Unity.IL2CPP;
 using BepInEx;
 
 using HarmonyLib;

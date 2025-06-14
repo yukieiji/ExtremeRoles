@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -28,10 +29,12 @@ public static class PlayerControlMurderPlayerPatch
 		[HarmonyArgument(0)] PlayerControl target,
 		[HarmonyArgument(1)] MurderResultFlags resultFlags)
 	{
-		if (ExtremeRoleManager.GameRole.Count == 0 ||
-			resultFlags.HasFlag(MurderResultFlags.FailedError)) { return true; }
-
-		var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
+			resultFlags.HasFlag(MurderResultFlags.FailedError) ||
+			!ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var role))
+		{
+			return true;
+		}
 
 		bool hasOtherKillCool = role.TryGetKillCool(out float killCool);
 
@@ -106,7 +109,10 @@ public static class PlayerControlMurderPlayerPatch
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			target, DeathReason.Kill, __instance);
 
-		var role = ExtremeRoleManager.GameRole[targetPlayerId];
+        if (!ExtremeRoleManager.TryGetRole(target.PlayerId, out var role))
+        {
+			return;
+        }
 
 		clearTask(role, target);
 

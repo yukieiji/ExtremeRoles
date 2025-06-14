@@ -4,6 +4,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Patches.Player;
 
@@ -15,10 +16,13 @@ public static class PlayerControlExiledPatch
 	public static void Postfix(
 		PlayerControl __instance)
 	{
-		if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		var exiledPlayerRole = ExtremeRoleManager.GameRole[__instance.PlayerId];
+		if (!(
+				RoleAssignState.Instance.IsRoleSetUpEnd &&
+				 ExtremeRoleManager.TryGetRole(__instance.PlayerId, out var exiledPlayerRole)
+			))
+		{
+			return;
+		}
 
 		if (ExtremeRoleManager.IsDisableWinCheckRole(exiledPlayerRole))
 		{
@@ -28,6 +32,7 @@ public static class PlayerControlExiledPatch
 		ExtremeRolesPlugin.ShipState.AddDeadInfo(
 			__instance, DeathReason.Exile, null);
 
+		var role = ExtremeRoleManager.GetLocalPlayerRole();
 		if (role is IRoleExilHook hookRole)
 		{
 			hookRole.HookExil(__instance);

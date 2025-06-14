@@ -11,7 +11,7 @@ namespace ExtremeRoles.Test.Lobby.Asset;
 public class ExSpawnMinigameLoadRunner
 	: AssetLoadRunner
 {
-	public override void Run()
+	public override IEnumerator Run()
 	{
 		Log.LogInfo($"----- Unit:ExSpawnMinigameImgLoad Test -----");
 
@@ -22,7 +22,7 @@ public class ExSpawnMinigameLoadRunner
 		if (stream is null)
 		{
 			Log.LogError("Selector Minigame json is Null");
-			return;
+			yield break;
 		}
 
 		var spawnInfo = JsonSerializer.Deserialize<
@@ -31,7 +31,7 @@ public class ExSpawnMinigameLoadRunner
 		if (spawnInfo is null)
 		{
 			Log.LogError("Can't Deserialize Selector Minigame");
-			return;
+			yield break;
 		}
 
 		string[] allMap = [Map.SkeldKey, Map.MiraHqKey, Map.PolusKey, Map.FungleKey];
@@ -59,5 +59,6 @@ public class ExSpawnMinigameLoadRunner
 			}
 		}
 #endif
+		yield break;
 	}
 }

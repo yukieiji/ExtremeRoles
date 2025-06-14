@@ -92,13 +92,16 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
 
         public CrimeInfo? GetCrimeInfo(byte playerId)
         {
-            if (!this.deadBodyInfo.ContainsKey(playerId))
+            if (!this.deadBodyInfo.TryGetValue(playerId, out var bodyInfo))
             {
                 return null;
             }
 
-            var (pos, time, killerPlayerId) = this.deadBodyInfo[playerId];
-            var role = ExtremeRoleManager.GameRole[killerPlayerId];
+            var (pos, time, killerPlayerId) = bodyInfo;
+            if (!ExtremeRoleManager.TryGetRole(killerPlayerId, out var role))
+            {
+                return null;
+            }
 
             return new CrimeInfo()
             {
@@ -198,8 +201,10 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
         NetworkedPlayerInfo reportBody)
     {
         this.targetCrime = this.info.GetCrimeInfo(reportBody.PlayerId);
-        this.searchCrimeInfoTime = ExtremeRoleManager.GameRole[
-            reporter.PlayerId].Id == ExtremeRoleId.Assistant ? this.searchAssistantTime : this.searchTime;
+
+		this.searchCrimeInfoTime =
+			ExtremeRoleManager.TryGetRole(reporter.PlayerId, out var reporterRole) &&
+			reporterRole.Id is ExtremeRoleId.Assistant ? this.searchAssistantTime : this.searchTime;
     }
 
     public void HookMuderPlayer(
@@ -419,17 +424,20 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
     }
     private void upgradeAssistant()
     {
-        foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+        foreach (PlayerControl player in PlayerControl.AllPlayerControls)
         {
-            if (role.Id != ExtremeRoleId.Assistant) { continue; }
-            if (!this.IsSameControlId(role)) { continue; }
-
-            var playerInfo = GameData.Instance.GetPlayerById(playerId);
-            if (!playerInfo.IsDead && !playerInfo.Disconnected)
+            if (player == null ||
+				player.Data == null ||
+				player.Data.IsDead ||
+				player.Data.Disconnected ||
+                !ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+				role.Id is not ExtremeRoleId.Assistant ||
+				!this.IsSameControlId(role))
             {
-                DetectiveApprentice.ChangeToDetectiveApprentice(playerId);
-                break;
+                continue;
             }
+            DetectiveApprentice.ChangeToDetectiveApprentice(player.PlayerId);
+            break;
         }
     }
 }
@@ -469,20 +477,18 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
         NetworkedPlayerInfo reporter,
         NetworkedPlayerInfo reportBody)
     {
-        if (this.IsSameControlId(ExtremeRoleManager.GameRole[rolePlayer.PlayerId]))
+        if (ExtremeRoleManager.TryGetRole(rolePlayer.PlayerId, out var role) &&
+			this.IsSameControlId(role) &&
+			this.deadBodyInfo.TryGetValue(reportBody.PlayerId, out var date) &&
+			AmongUsClient.Instance.AmClient &&
+			HudManager.Instance != null)
         {
-            if (this.deadBodyInfo.ContainsKey(reportBody.PlayerId))
-            {
-                if (AmongUsClient.Instance.AmClient && HudManager.Instance)
-                {
-                    HudManager.Instance.Chat.AddChat(
-                        PlayerControl.LocalPlayer,
-                        Tr.GetString(
-							"reportedDeadBodyInfo",
-                            this.deadBodyInfo[reportBody.PlayerId].ToString()));
-                }
-            }
-        }
+			HudManager.Instance.Chat.AddChat(
+				PlayerControl.LocalPlayer,
+				Tr.GetString(
+					"reportedDeadBodyInfo",
+					date.ToString()));
+		}
         this.deadBodyInfo.Clear();
     }
 
@@ -507,17 +513,20 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
     }
     private void downgradeDetective()
     {
-        foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+        foreach (PlayerControl player in PlayerControl.AllPlayerControls)
         {
-            if (role.Id != ExtremeRoleId.Detective) { continue; }
-            if (!this.IsSameControlId(role)) { continue; }
-
-            var playerInfo = GameData.Instance.GetPlayerById(playerId);
-            if (!playerInfo.IsDead && !playerInfo.Disconnected)
+            if (player == null ||
+				player.Data == null ||
+				player.Data.IsDead ||
+				player.Data.Disconnected ||
+                !ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+				role.Id is not ExtremeRoleId.Detective ||
+				!this.IsSameControlId(role))
             {
-                DetectiveApprentice.ChangeToDetectiveApprentice(playerId);
-                break;
+                continue;
             }
+            DetectiveApprentice.ChangeToDetectiveApprentice(player.PlayerId);
+            break;
         }
     }
 }
@@ -640,12 +649,11 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
     public static void ChangeToDetectiveApprentice(
         byte playerId)
     {
-        var prevRole = ExtremeRoleManager.GameRole[playerId] as MultiAssignRoleBase;
-        if (prevRole == null) { return; }
-
-        var detectiveReset = prevRole as IRoleResetMeeting;
-
-        if (detectiveReset != null)
+        if (!ExtremeRoleManager.TryGetRole(playerId, out var prevRoleBase) || !(prevRoleBase is MultiAssignRoleBase prevRole))
+        {
+            return;
+        }
+        if (prevRole is IRoleResetMeeting detectiveReset)
         {
             detectiveReset.ResetOnMeetingStart();
         }

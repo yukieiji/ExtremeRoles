@@ -80,11 +80,15 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 			while (GameUtility.IsContinue)
 			{
 				var player = PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).First();
-				if (!player.Data.IsDead && ExtremeRoleManager.GameRole[player.PlayerId].Id != ExtremeRoleId.Assassin)
+				if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
+					player.Data.IsDead ||
+					role.Id is ExtremeRoleId.Assassin)
 				{
-					Player.RpcUncheckMurderPlayer(player.PlayerId, player.PlayerId, byte.MinValue);
-					yield return new WaitForSeconds(1.0f);
+					continue;
 				}
+
+				Player.RpcUncheckMurderPlayer(player.PlayerId, player.PlayerId, byte.MinValue);
+				yield return new WaitForSeconds(1.0f);
 			}
 			yield return GameUtility.ReturnLobby(this.Log);
 		}
