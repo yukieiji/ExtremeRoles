@@ -15,9 +15,7 @@ public sealed class PawnStatus(
 
 	public void Update(PlayerControl pawnPlayer)
 	{
-		if (!(
-				this.hasTask && this.SeeQween
-			))
+		if (!this.hasTask || this.SeeQween)
 		{
 			return;
 		}
