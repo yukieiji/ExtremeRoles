@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module.SystemType.Roles;
 
 public sealed class SurrogatorGurdSystem(float preventKillTime) : IDirtableSystemType
 {
-	private int guardNum = 0;
+	public int GuardNum { get; private set; } = 0;
 	private HashSet<byte> oneSideLovers = [];
 	private bool init = false;
 
@@ -54,7 +54,7 @@ public sealed class SurrogatorGurdSystem(float preventKillTime) : IDirtableSyste
 
 	public void AddGuardNum(int num)
 	{
-		guardNum += num;
+		GuardNum += num;
 	}
 
 	public static SurrogatorGurdSystem CreateOrGet(float preventKillTime)
@@ -80,7 +80,7 @@ public sealed class SurrogatorGurdSystem(float preventKillTime) : IDirtableSyste
 	}
 
 	public bool CanGuard(byte playerId)
-		=> this.oneSideLovers.Contains(playerId) && this.guardNum > 0;
+		=> this.oneSideLovers.Contains(playerId) && this.GuardNum > 0;
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
 	{
@@ -92,10 +92,10 @@ public sealed class SurrogatorGurdSystem(float preventKillTime) : IDirtableSyste
 		switch ((Ops)msgReader.ReadByte())
 		{
 			case Ops.Add:
-				this.guardNum++;
+				this.GuardNum++;
 				break;
 			case Ops.Reduce:
-				this.guardNum--;
+				this.GuardNum--;
 				break;
 			default:
 				break;
