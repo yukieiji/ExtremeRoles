@@ -25,9 +25,7 @@ public sealed class ShepherdStatus(
 	public void Update(PlayerControl furryPlayer)
 	{
 
-		if (!(
-				this.hasTask && this.SeeJackal
-			))
+		if (!this.hasTask || this.SeeJackal)
 		{
 			return;
 		}
