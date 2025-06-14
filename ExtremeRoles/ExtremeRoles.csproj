@@ -63,13 +63,7 @@
     <EmbeddedResource Include="Resources\Config\*.cfg" />
     <EmbeddedResource Include="Resources\JsonData\*.json" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Module\RoleAssign\RoleAssignDataBuildBeh\**" />
-    <EmbeddedResource Remove="Module\RoleAssign\RoleAssignDataBuildBeh\**" />
-    <None Remove="Module\RoleAssign\RoleAssignDataBuildBeh\**" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
