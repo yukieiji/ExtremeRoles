@@ -30,7 +30,7 @@ public class ExtremeRoleAssignDataBuilder(
 	}
 
 	private readonly IRoleAssignDataPreparer preparer = preparer;
-	private readonly IRoleAssignDataBuildBehaviour[] behaviour = provider.GetServices<IRoleAssignDataBuildBehaviour>().OrderBy(
+	private readonly IRoleAssignDataBuildBehaviour[] behaviour = provider.GetServices<IRoleAssignDataBuildBehaviour>().OrderByDescending(
 		x => x.Priority).ToArray();
 
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
