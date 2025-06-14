@@ -79,11 +79,15 @@ public static class RoleManagerTryAssignRoleOnDeathPatch
         // バニラ幽霊クルー役職にニュートラルがアサインされる時はTrueを返す
         if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
 			ExtremeGameModeManager.Instance.ShipOption.GhostRole.IsAssignNeutralToVanillaCrewGhostRole ||
-			!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
-			role.IsNeutral())
-        {
+			!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role))
+		{
             return true;
         }
+
+		if (role.IsNeutral())
+		{
+			return false;
+		}
 
         // デフォルトのメソッドではニュートラルもクルー陣営の死亡者数にカウントされてアサインされなくなるため
         RoleTypes roleTypes = RoleTypes.GuardianAngel;
