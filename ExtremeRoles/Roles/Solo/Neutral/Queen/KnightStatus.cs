@@ -21,9 +21,7 @@ public sealed class KnightStatus(
 
 	public void Update(PlayerControl knightPlayer)
 	{
-		if (!(
-				this.hasTask && this.SeeQween
-			))
+		if (!this.hasTask || this.SeeQween)
 		{
 			return;
 		}
