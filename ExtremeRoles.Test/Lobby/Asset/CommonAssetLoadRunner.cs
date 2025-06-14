@@ -18,7 +18,7 @@ public class CommonAssetLoadRunner
 #if DEBUG
 		imgTest(ObjectPath.Bomb);
 		imgTest(ObjectPath.Meeting);
-#endif
+
 		yield break;
 	}
 
@@ -35,5 +35,8 @@ public class CommonAssetLoadRunner
 			Log.LogError(
 				$"Img: {img} not load   {ex.Message}");
 		}
+# elif RELEASE
+		yield break;
+#endif
 	}
 }
