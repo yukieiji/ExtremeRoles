@@ -80,7 +80,7 @@ public sealed class SurrogatorGurdSystem(float preventKillTime) : IDirtableSyste
 	}
 
 	public bool CanGuard(byte playerId)
-		=> this.oneSideLovers.Contains(playerId);
+		=> this.oneSideLovers.Contains(playerId) && this.guardNum > 0;
 
 	public void Reset(ResetTiming timing, PlayerControl resetPlayer = null)
 	{
