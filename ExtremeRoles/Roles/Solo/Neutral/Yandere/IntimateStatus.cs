@@ -14,16 +14,14 @@ public sealed class IntimateStatus(
 
 	public bool SeeYandere { get; private set; } = false;
 
-	public NeutralSeparateTeam Main => NeutralSeparateTeam.Queen;
-	public NeutralSeparateTeam Sub => NeutralSeparateTeam.QueenSub;
+	public NeutralSeparateTeam Main => NeutralSeparateTeam.Yandere;
+	public NeutralSeparateTeam Sub => NeutralSeparateTeam.YandereSub;
 
 	public bool IsSub { get; } = isSubTeams;
 
 	public void Update(PlayerControl knightPlayer)
 	{
-		if (!(
-				this.hasTask && this.SeeYandere
-			))
+		if (!this.hasTask || this.SeeYandere)
 		{
 			return;
 		}
