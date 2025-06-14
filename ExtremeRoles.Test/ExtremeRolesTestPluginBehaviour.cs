@@ -52,7 +52,6 @@ public class ExtremeRolesTestPluginBehaviour : MonoBehaviour
 
 	public IEnumerator coStart(IEnumerable<ITestStep> testStep)
 	{
-		var waitor = new WaitForSeconds(1.0f);
 		foreach (var step in testStep)
 		{
 			yield return step.Run();
