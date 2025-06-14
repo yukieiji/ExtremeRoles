@@ -43,7 +43,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		switch (reason)
 		{
 			case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
-				winner.AddPool(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				break;
 			default:
 				break;

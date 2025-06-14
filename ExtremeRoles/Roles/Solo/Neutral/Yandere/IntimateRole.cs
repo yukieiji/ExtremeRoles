@@ -44,7 +44,7 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 		{
 			case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
 			case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
-				winner.AddPool(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				break;
 			default:
 				break;

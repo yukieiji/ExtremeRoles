@@ -62,7 +62,7 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 		{
 			case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
 			case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
-				winner.AddPool(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				break;
 			default:
 				break;

@@ -44,7 +44,7 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 		switch (reason)
 		{
 			case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
-				winner.AddPool(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				break;
 			default:
 				break;

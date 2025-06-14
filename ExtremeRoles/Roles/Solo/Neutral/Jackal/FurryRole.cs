@@ -45,7 +45,7 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 		switch (reason)
 		{
 			case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
-				winner.AddPool(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				break;
 			default:
 				break;

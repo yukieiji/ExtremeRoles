@@ -41,7 +41,7 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 		switch (reason)
 		{
 			case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
-				winner.AddPool(rolePlayerInfo);
+				winner.AddWithPlus(rolePlayerInfo);
 				break;
 			default:
 				break;
