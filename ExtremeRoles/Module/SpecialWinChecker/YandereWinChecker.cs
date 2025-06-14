@@ -4,7 +4,7 @@
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 
 namespace ExtremeRoles.Module.SpecialWinChecker;
@@ -13,7 +13,7 @@ internal sealed class YandereWinChecker : IWinChecker
 {
 	public RoleGameOverReason Reason => RoleGameOverReason.YandereShipJustForTwo;
 
-	private List<Yandere> aliveYandere = new List<Yandere>();
+	private List<YandereRole> aliveYandere = new List<YandereRole>();
 
 	public YandereWinChecker()
 	{
@@ -23,7 +23,7 @@ internal sealed class YandereWinChecker : IWinChecker
 	public void AddAliveRole(
 		byte playerId, SingleRoleBase role)
 	{
-		aliveYandere.Add((Yandere)role);
+		aliveYandere.Add((YandereRole)role);
 	}
 
 	public bool IsWin(
@@ -34,7 +34,7 @@ internal sealed class YandereWinChecker : IWinChecker
 		int oneSidedLoverImpNum = 0;
 		int oneSidedLoverNeutralNum = 0;
 
-		foreach (Yandere role in aliveYandere)
+		foreach (YandereRole role in aliveYandere)
 		{
 			if (role.OneSidedLover == null) { continue; }
 

@@ -55,6 +55,7 @@ public enum ExtremeSystemType : byte
 	IronMateGuard,
 	MonikaTrashSystem,
 	MonikaMeetingNumSystem,
+	SurrogatorGurdSystem,
 }
 
 public enum ResetTiming : byte

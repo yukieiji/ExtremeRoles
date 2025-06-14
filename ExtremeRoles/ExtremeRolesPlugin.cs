@@ -10,12 +10,17 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
 using HarmonyLib;
 
 using System.Net.Http;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ApiHandler;
 using ExtremeRoles.Resources;
@@ -24,6 +29,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Translation;
 using ExtremeRoles.Module.ScreenManagerHook;
+using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
 namespace ExtremeRoles;
 
@@ -51,6 +57,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
 
 	public HttpClient Http { get; } = new HttpClient();
+	public IServiceProvider Provider { get; }
 
 	public ExtremeRolesPlugin() : base()
 	{
@@ -68,6 +75,23 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		{
 			NoCache = true
 		};
+
+		var collection = new ServiceCollection();
+
+		collection.AddTransient<IRoleAssignee, ExtremeRoleAssignee>();
+		collection.AddTransient<IVanillaRoleProvider, VanillaRoleProvider>();
+		collection.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>();
+		collection.AddTransient<ISpawnLimiter, ExtremeSpawnLimiter>();
+		collection.AddTransient<IRoleAssignDataPreparer, ExtremeRoleAssginDataPreparer>();
+		collection.AddTransient<ISpawnDataManager, RoleSpawnDataManager>();
+		
+		collection.AddTransient<IRoleAssignDataBuildBehaviour, CombinationRoleAssignDataBuilder>();
+		collection.AddTransient<IRoleAssignDataBuildBehaviour, SingleRoleAssignDataBuilder>();
+		collection.AddTransient<IRoleAssignDataBuildBehaviour, NotAssignedPlayerAssignDataBuilder>();
+
+		collection.AddTransient<PlayerRoleAssignData>();
+
+		Provider = collection.BuildServiceProvider();
 	}
 
     public override void Load()
@@ -119,8 +143,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		var assm = System.Reflection.Assembly.GetAssembly(this.GetType());
 
         Il2CppRegisterAttribute.Registration(assm);
-
-		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
 
 		UnityObjectLoader.LoadCommonAsset();
 

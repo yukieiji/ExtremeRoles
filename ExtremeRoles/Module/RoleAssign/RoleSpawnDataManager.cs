@@ -4,26 +4,23 @@ using System.Text;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GameMode;
-using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.Helper;
+
 using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class RoleSpawnDataManager : ISpawnDataManager
 {
-	public Dictionary<ExtremeRoleType, int> MaxRoleNum { get; private set; }
-
-	public Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>> CurrentSingleRoleSpawnData
+	public IReadOnlyDictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>> CurrentSingleRoleSpawnData
 	{ get; private set; }
 
-	public Dictionary<byte, CombinationRoleSpawnData> CurrentCombRoleSpawnData
+	public IReadOnlyDictionary<byte, CombinationRoleSpawnData> CurrentCombRoleSpawnData
 	{ get; private set; }
 
-	public List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> UseGhostCombRole
+	public IReadOnlyList<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> UseGhostCombRole
 	{ get; private set; }
 
-	public Dictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum
+	public IReadOnlyDictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum
 	{ get; private set; }
 
 	public RoleSpawnDataManager()
@@ -31,11 +28,11 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
 		var log = ExtremeRolesPlugin.Logger;
 
-		log.LogInfo("-------- RoleSpawnDataManager : Construct Start !!!!! --------");
+		log.LogInfo("-------- RoleSpawnDataManager - Construct START --------");
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase1 : instance variable initialize - START ----");
-		UseGhostCombRole = new List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)>();
-		CurrentCombRoleSpawnData = new Dictionary<byte, CombinationRoleSpawnData>();
+		var ghostRole = new List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)>();
+		var combRole  = new Dictionary<byte, CombinationRoleSpawnData>();
 
 		CurrentSingleRoleSpawnData = new Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>>
 		{
@@ -46,34 +43,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
 		var opt = OptionManager.Instance;
 
-		MaxRoleNum = opt.TryGetCategory(OptionTab.GeneralTab, (int)SpawnOptionCategory.RoleSpawnCategory, out var cate)
-			? new Dictionary<ExtremeRoleType, int>
-			{
-				{
-					ExtremeRoleType.Crewmate,
-					ISpawnDataManager.ComputeSpawnNum(
-						cate,
-						RoleSpawnOption.MinCrewmate,
-						RoleSpawnOption.MaxCrewmate)
-				},
-				{
-					ExtremeRoleType.Neutral,
-					ISpawnDataManager.ComputeSpawnNum(
-						cate,
-						RoleSpawnOption.MinNeutral,
-						RoleSpawnOption.MaxNeutral)
-				},
-				{
-					ExtremeRoleType.Impostor,
-					ISpawnDataManager.ComputeSpawnNum(
-						cate,
-						RoleSpawnOption.MinImpostor,
-						RoleSpawnOption.MaxImpostor)
-				},
-			} : new ();
-
-
-		CurrentSingleRoleUseNum = new Dictionary<ExtremeRoleType, int>()
+		var allRoleNum = new Dictionary<ExtremeRoleType, int>()
 		{
 			{ ExtremeRoleType.Crewmate, 0 },
 			{ ExtremeRoleType.Impostor, 0 },
@@ -106,7 +76,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			bool isMultiAssign = conbCate.GetValue<CombinationRoleCommonOption, bool>(CombinationRoleCommonOption.IsMultiAssign);
 
 			log.LogInfo($"Add Combination Role:{role} - SpawnRate:{spawnRate} - RoleSetNum:{roleSet}");
-			CurrentCombRoleSpawnData.Add(
+			combRole.Add(
 				combType,
 				new CombinationRoleSpawnData(
 					role: role,
@@ -118,7 +88,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			if (role is GhostAndAliveCombinationRoleManagerBase ghostComb)
 			{
 				log.LogInfo($"This combination role is GhostAndAliveCombinationRoleManagerBase, add to UseGhostCombRole List");
-				this.UseGhostCombRole.Add((roleId, ghostComb));
+				ghostRole.Add((roleId, ghostComb));
 			}
 		}
 
@@ -150,24 +120,22 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 
 			CurrentSingleRoleSpawnData[role.Team].Add(
 				intedRoleId, new SingleRoleSpawnData(roleNum, spawnRate, weight));
-			CurrentSingleRoleUseNum[role.Team] += roleNum;
+			allRoleNum[role.Team] += roleNum;
 		}
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase3 : Collect using SingleRole - END ----");
-		log.LogInfo("-------- RoleSpawnDataManager Construct End --------");
+		log.LogInfo("-------- RoleSpawnDataManager - Construct END --------");
 
-		Logging.Debug(this.ToString());
+		CurrentCombRoleSpawnData = combRole;
+		UseGhostCombRole = ghostRole;
+		CurrentSingleRoleUseNum = allRoleNum;
 	}
 
 	public override string ToString()
 	{
 		var builder = new StringBuilder();
 
-		builder.AppendLine("------ RoleSpawnInfo - Start ------");
-		foreach (var (team, num) in this.MaxRoleNum)
-		{
-			builder.AppendLine($"Team:{team} MaxNum:{num}");
-		}
+		builder.AppendLine("------ RoleSpawnInfo ------");
 		builder.AppendLine("--- CombRole ---");
 		foreach (var (combId, combRole) in this.CurrentCombRoleSpawnData)
 		{
@@ -188,20 +156,8 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 					$"Team:{teamId} RoleId:{id} SpawnSetNum:{role.SpawnSetNum} SpawnRate:{role.SpawnRate} AssignWeight:{role.Weight}");
 			}
 		}
-		builder.AppendLine("------ RoleSpawnInfo - End ------");
+		builder.Append("------ RoleSpawnInfo ------");
 
 		return builder.ToString();
-	}
-
-	public bool IsCanSpawnTeam(ExtremeRoleType roleType, int reduceNum = 1)
-	{
-		return
-			this.MaxRoleNum.TryGetValue(roleType, out int maxNum) &&
-			maxNum - reduceNum >= 0;
-	}
-
-	public void ReduceSpawnLimit(ExtremeRoleType roleType, int reduceNum = 1)
-	{
-		this.MaxRoleNum[roleType] = this.MaxRoleNum[roleType] - reduceNum;
 	}
 }

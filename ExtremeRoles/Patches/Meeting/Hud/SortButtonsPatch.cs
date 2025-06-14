@@ -12,6 +12,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
+using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
@@ -97,7 +98,7 @@ public static class MeetingHudSortButtonsPatch
 		bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
 			player);
 
-		var system = ExtremeGameModeManager.Instance.ShipOption.Meeting.UseRaiseHand ? IRaiseHandSystem.Get() : null;
+		var system = ExtremeGameModeManager.Instance.ShipOption.Meeting.UseRaiseHand ? RaiseHandSystem.Get() : null;
 		var trashMeeting = MonikaTrashSystem.TryGet(out var monikaSystem) ? monikaSystem : null;
 
 		foreach (var pva in __instance.playerStates)

@@ -201,7 +201,7 @@ public sealed class GuesserUi : MonoBehaviour
             pva.gameObject.SetActive(active);
         }
 
-		if (ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
+		if (ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var system))
 		{
 			system.RaiseHandButtonSetActive(active);

@@ -1,14 +1,23 @@
-﻿using System;
-
-using ExtremeRoles.GameMode.RoleSelector;
-
-
+﻿using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using System;
+using System.Collections.Generic;
 
 namespace ExtremeRoles.Module.Interface;
 
 public interface ISpawnDataManager
 {
+	public IReadOnlyDictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>> CurrentSingleRoleSpawnData { get; }
+
+	public IReadOnlyDictionary<byte, CombinationRoleSpawnData> CurrentCombRoleSpawnData { get; }
+
+	public IReadOnlyList<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> UseGhostCombRole { get; }
+
+	public IReadOnlyDictionary<ExtremeRoleType, int> CurrentSingleRoleUseNum { get; }
+
 	protected static int ComputeSpawnNum(
 		OptionCategory category,
 		RoleSpawnOption minSpawnKey,

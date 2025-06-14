@@ -161,7 +161,7 @@ public static class MeetingHudUpdatePatch
 			localPlayer.Data == null ||
 			localPlayer.Data.IsDead ||
 			localPlayer.Data.Disconnected ||
-			!ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
+			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
 			raiseHand.IsInit)
 		{
