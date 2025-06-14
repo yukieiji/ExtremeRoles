@@ -123,10 +123,10 @@ public static class PlayerControlMurderPlayerPatch
 
 		invokeRoleKillAction(role, __instance, target);
 
-		ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
-
 		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
 		invokeRoleHookAction(isLocalPlayerDead, localRole, __instance, target);
+
+		ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
 	}
 
 	private static void clearTask(in SingleRoleBase role, in PlayerControl target)

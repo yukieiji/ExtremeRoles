@@ -4,18 +4,20 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
-using ExtremeRoles.Module.RoleAssign;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
-
+using ExtremeRoles.Performance;
 
 #nullable enable
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
-public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpdate
+public sealed class FurryRole : SingleRoleBase,
+	IRoleWinPlayerModifier,
+	IRoleUpdate,
+	IRoleMurderPlayerHook
 {
 	public enum Option
 	{
@@ -36,6 +38,55 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 		ColorPalette.JackalBlue,
 		false, false, false, false)
 	{ }
+
+	public void HookMuderPlayer(PlayerControl _, PlayerControl target)
+	{
+		if (this.isUpdate ||
+			target == null ||
+			!ExtremeRoleManager.TryGetSafeCastedRole<JackalRole>(target.PlayerId, out var jackalRole) ||
+			target.Data == null)
+		{
+			return;
+		}
+
+		bool allSidekicksDead = true;
+		foreach (byte sidekickPlayerId in jackalRole.SidekickPlayerId)
+		{
+			var sidekickPlayer = GameData.Instance.GetPlayerById(sidekickPlayerId);
+			if (sidekickPlayer != null && !(sidekickPlayer.IsDead || sidekickPlayer.Disconnected))
+			{
+				allSidekicksDead = false;
+				break;
+			}
+		}
+
+		if (!allSidekicksDead)
+		{
+			return;
+		}
+
+		var local = PlayerControl.LocalPlayer;
+		// SKを残したままJackal昇格している可能性を確認 == 同じコントロールIDでJackalがいる
+		foreach (var player in PlayerCache.AllPlayerControl)
+		{
+			if (player == null ||
+				player.Data == null ||
+				player.Data.IsDead ||
+				player.Data.Disconnected ||
+				player.PlayerId == target.PlayerId ||
+				player.PlayerId == local.PlayerId ||
+				!ExtremeRoleManager.TryGetSafeCastedRole<JackalRole>(player.PlayerId, out var checkJk) ||
+				checkJk.GameControlId != jackalRole.GameControlId)
+			{
+				continue;
+			}
+			return;
+		}
+		ExtremeRoleManager.RpcReplaceRole(
+			target.PlayerId, PlayerControl.LocalPlayer.PlayerId,
+		ExtremeRoleManager.ReplaceOperation.RebornJackal);
+		this.isUpdate = true;
+	}
 
 	public void ModifiedWinPlayer(
 		NetworkedPlayerInfo rolePlayerInfo,
@@ -103,25 +154,7 @@ public sealed class FurryRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpd
 
 	public void Update(PlayerControl rolePlayer)
 	{
-		if (ShipStatus.Instance == null ||
-			!ShipStatus.Instance.enabled ||
-			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			this.isUpdate ||
-			this.status is null)
-		{
-			return;
-		}
-
-		this.status.Update(rolePlayer);
-
-		if (this.status.TargetJackal.HasValue)
-		{
-
-			ExtremeRoleManager.RpcReplaceRole(
-				this.status.TargetJackal.Value, rolePlayer.PlayerId,
-				ExtremeRoleManager.ReplaceOperation.RebornJackal);
-			this.isUpdate = true;
-		}
+		this.status?.Update(rolePlayer);
 	}
 	private bool canSeeJackal(SingleRoleBase targetRole)
 		=>
