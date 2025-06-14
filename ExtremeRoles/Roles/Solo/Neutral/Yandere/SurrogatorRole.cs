@@ -31,6 +31,8 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 	public ExtremeAbilityButton? Button { get; set; }
 
 	private NetworkedPlayerInfo? targetBody;
+	private SurrogatorGurdSystem? gurdSystem;
+
 	private NetworkedPlayerInfo DeadBody => Player.GetDeadBodyInfo(this.range);
 	private byte activateTarget;
 	private float range;
@@ -141,6 +143,14 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 		return true;
 	}
 
+	public override string GetFullDescription()
+	{
+		int gurdNum = this.gurdSystem is null ? 0 : this.gurdSystem.GuardNum;
+		return string.Format(
+			base.GetFullDescription(),
+			gurdNum);
+	}
+
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(Option.UseVent, false);
@@ -161,9 +171,10 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 		var loader = this.Loader;
 		this.UseVent = loader.GetValue<Option, bool>(Option.UseVent);
 		this.range = loader.GetValue<Option, float>(Option.Range);
-		var system = SurrogatorGurdSystem.CreateOrGet(
+
+		this.gurdSystem = SurrogatorGurdSystem.CreateOrGet(
 			loader.GetValue<Option, float>(Option.PreventKillTime));
-		system.AddGuardNum(
+		this.gurdSystem.AddGuardNum(
 			loader.GetValue<Option, int>(Option.PreventNum));
 
 		this.status = new SurrogatorStatus(
