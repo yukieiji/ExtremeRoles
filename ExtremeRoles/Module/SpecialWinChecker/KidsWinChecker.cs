@@ -56,7 +56,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 			}
 
 			int teamAlive = statistics.SeparatedNeutralAlive[
-				(NeutralSeparateTeam.Kids, gameControlId)];
+				new (NeutralSeparateTeam.Kids, gameControlId)];
 			int allAlive = statistics.TotalAlive;
 
 			// 全生存者からアサシンと範囲内にいるプレイヤー、同じチームの人を除く

@@ -1,36 +1,49 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
+using System.Collections.Generic;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SpecialWinChecker;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.Combination;
 
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.GameMode;
-
-using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
-using ExtremeRoles.Roles.API.Interface.Status;
+using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
+
 
 #nullable enable
 
 namespace ExtremeRoles.Module;
 
-file sealed class NeutralSeparateTeamContainer()
+public sealed class NeutralSeparateTeamContainer()
 {
-	public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> Team => neutralTeam;
+	public readonly record struct NeutralTeam(NeutralSeparateTeam Team, int Id);
+	public readonly record struct NeutralSubTeam(NeutralTeam Main, NeutralSeparateTeam Sub);
 
-	private readonly Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = [];
-	private readonly HashSet<NeutralSeparateTeam> teams = [];
-
-	public bool Contain(NeutralSeparateTeam team) => this.teams.Contains(team);
+	public IReadOnlyDictionary<NeutralTeam, int> Team
+	{
+		get
+		{
+			foreach (var (sub, num) in this.subTeam)
+			{
+				if (this.neutralTeam.ContainsKey(sub.Main))
+				{
+					continue;
+				}
+				this.neutralTeam[new NeutralTeam(sub.Sub, sub.Main.Id)] = num;
+			}
+			return this.neutralTeam;
+		}
+	}
+	private readonly Dictionary<NeutralTeam, int> neutralTeam = [];
+	private readonly Dictionary<NeutralSubTeam, int> subTeam = [];
 
 	public void Add(NeutralSeparateTeam team, int id)
 	{
-		var key = (team, id);
-
+		var key = new NeutralTeam(team, id);
 		if (this.neutralTeam.TryGetValue(key, out int num))
 		{
 			this.neutralTeam[key] = num + 1;
@@ -40,11 +53,23 @@ file sealed class NeutralSeparateTeamContainer()
 			this.neutralTeam.Add(key, 1);
 		}
 	}
+	public void AddSubTeam(NeutralSeparateTeam main, NeutralSeparateTeam sub, int id)
+	{
+		var key = new NeutralSubTeam(new(main, id), sub);
+		if (this.subTeam.TryGetValue(key, out int num))
+		{
+			this.subTeam[key] = num + 1;
+		}
+		else
+		{
+			this.subTeam.Add(key, 1);
+		}
+	}
 }
 
 file sealed class NeutralSeparateTeamBuilder()
 {
-	public IReadOnlyDictionary<(NeutralSeparateTeam, int), int> Team => neutralTeam.Team;
+	public IReadOnlyDictionary<NeutralSeparateTeamContainer.NeutralTeam, int> Team => neutralTeam.Team;
 	private readonly NeutralSeparateTeamContainer neutralTeam = new NeutralSeparateTeamContainer();
 	private int cacheId = 0;
 
@@ -82,10 +107,9 @@ file sealed class NeutralSeparateTeamBuilder()
 		// メインチームがいない => サブチームのカウントを行う、サブチームが勝てばメインチームの勝利判定
 		if (role.CanKill &&
 			role.Status is ISubTeam subTeam &&
-			subTeam.IsSub &&
-			!neutralTeam.Contain(subTeam.Sub))
+			subTeam.IsSub)
 		{
-			addNeutralTeams(subTeam.Main);
+			this.neutralTeam.AddSubTeam(subTeam.Main, subTeam.Sub, this.cacheId);
 		}
 
 		switch (roleId)
@@ -132,7 +156,7 @@ public sealed record PlayerStatistics(
 	int TotalAlive,
 	int AssassinAlive,
 	IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive,
-	IReadOnlyDictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive)
+	IReadOnlyDictionary<NeutralSeparateTeamContainer.NeutralTeam, int> SeparatedNeutralAlive)
 {
 	public const int SameNeutralGameControlId = int.MaxValue;
 
