@@ -16,7 +16,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 #nullable enable
 
-public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier
+public sealed class SurrogatorRole :
+	SingleRoleBase, IRoleAutoBuildAbility, IRoleWinPlayerModifier, IRoleUpdate
 {
 	public enum Option
 	{
@@ -92,6 +93,11 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 
 	public void ResetOnMeetingStart()
 	{
+	}
+
+	public void Update(PlayerControl rolePlayer)
+	{
+		this.status?.Update(rolePlayer);
 	}
 
 	public bool UseAbility()
@@ -176,6 +182,9 @@ public sealed class SurrogatorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 			loader.GetValue<Option, float>(Option.PreventKillTime));
 		this.gurdSystem.AddGuardNum(
 			loader.GetValue<Option, int>(Option.PreventNum));
+
+		this.HasTask = loader.GetValue<Option, bool>(
+			Option.HasTask);
 
 		this.status = new SurrogatorStatus(
 			this.HasTask,

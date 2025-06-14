@@ -13,16 +13,14 @@ public sealed class SurrogatorStatus(
 
 	public bool SeeYandere { get; private set; } = false;
 
-	public void Update(PlayerControl pawnPlayer)
+	public void Update(PlayerControl surrogatorPlayer)
 	{
-		if (!(
-				this.hasTask && this.SeeYandere
-			))
+		if (!this.hasTask || this.SeeYandere)
 		{
 			return;
 		}
 
-		float taskGage = Helper.Player.GetPlayerTaskGage(pawnPlayer);
+		float taskGage = Helper.Player.GetPlayerTaskGage(surrogatorPlayer);
 		if (taskGage >= this.yandereSeeTaskRate)
 		{
 			this.SeeYandere = true;
