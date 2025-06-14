@@ -1442,4 +1442,100 @@ UI「爆撃モード」:
   <data name="FakerSeeDummyMerlin" xml:space="preserve">
     <value>マーリンが「ダミー（プレイヤー）」を見破れるか</value>
   </data>
+  <data name="Scavenger" xml:space="preserve">
+    <value>Scavenger</value>
+  </data>
+  <data name="ScavengerAbilityCoolTime" xml:space="preserve">
+    <value>ScavengerAbilityCoolTime</value>
+  </data>
+  <data name="ScavengerIsRandomInitAbility" xml:space="preserve">
+    <value>ScavengerIsRandomInitAbility</value>
+  </data>
+  <data name="ScavengerAllowDupe" xml:space="preserve">
+    <value>ScavengerAllowDupe</value>
+  </data>
+  <data name="ScavengerAllowAdvancedWepon" xml:space="preserve">
+    <value>ScavengerAllowAdvancedWepon</value>
+  </data>
+  <data name="ScavengerInitAbility" xml:space="preserve">
+    <value>ScavengerInitAbility</value>
+  </data>
+  <data name="ScavengerIsSetWepon" xml:space="preserve">
+    <value>ScavengerIsSetWepon</value>
+  </data>
+  <data name="ScavengerSyncWeapon" xml:space="preserve">
+    <value>ScavengerSyncWeapon</value>
+  </data>
+  <data name="ScavengerHandGunCount" xml:space="preserve">
+    <value>ScavengerHandGunCount</value>
+  </data>
+  <data name="ScavengerHandGunSpeed" xml:space="preserve">
+    <value>ScavengerHandGunSpeed</value>
+  </data>
+  <data name="ScavengerHandGunRange" xml:space="preserve">
+    <value>ScavengerHandGunRange</value>
+  </data>
+  <data name="ScavengerFlameCount" xml:space="preserve">
+    <value>ScavengerFlameCount</value>
+  </data>
+  <data name="ScavengerFlameChargeTime" xml:space="preserve">
+    <value>ScavengerFlameChargeTime</value>
+  </data>
+  <data name="ScavengerFlameActiveTime" xml:space="preserve">
+    <value>ScavengerFlameActiveTime</value>
+  </data>
+  <data name="ScavengerFlameFireSecond" xml:space="preserve">
+    <value>ScavengerFlameFireSecond</value>
+  </data>
+  <data name="ScavengerFlameDeadSecond" xml:space="preserve">
+    <value>ScavengerFlameDeadSecond</value>
+  </data>
+  <data name="ScavengerSwordCount" xml:space="preserve">
+    <value>ScavengerSwordCount</value>
+  </data>
+  <data name="ScavengerSwordChargeTime" xml:space="preserve">
+    <value>ScavengerSwordChargeTime</value>
+  </data>
+  <data name="ScavengerSwordActiveTime" xml:space="preserve">
+    <value>ScavengerSwordActiveTime</value>
+  </data>
+  <data name="ScavengerSwordR" xml:space="preserve">
+    <value>ScavengerSwordR</value>
+  </data>
+  <data name="ScavengerSniperRifleCount" xml:space="preserve">
+    <value>ScavengerSniperRifleCount</value>
+  </data>
+  <data name="ScavengerSniperRifleSpeed" xml:space="preserve">
+    <value>ScavengerSniperRifleSpeed</value>
+  </data>
+  <data name="ScavengerBeamRifleCount" xml:space="preserve">
+    <value>ScavengerBeamRifleCount</value>
+  </data>
+  <data name="ScavengerBeamRifleSpeed" xml:space="preserve">
+    <value>ScavengerBeamRifleSpeed</value>
+  </data>
+  <data name="ScavengerBeamRifleRange" xml:space="preserve">
+    <value>ScavengerBeamRifleRange</value>
+  </data>
+  <data name="ScavengerBeamSaberCount" xml:space="preserve">
+    <value>ScavengerBeamSaberCount</value>
+  </data>
+  <data name="ScavengerBeamSaberChargeTime" xml:space="preserve">
+    <value>ScavengerBeamSaberChargeTime</value>
+  </data>
+  <data name="ScavengerBeamSaberRange" xml:space="preserve">
+    <value>ScavengerBeamSaberRange</value>
+  </data>
+  <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
+    <value>ScavengerBeamSaberAutoDetect</value>
+  </data>
+  <data name="ScavengerAguniCount" xml:space="preserve">
+    <value>ScavengerAguniCount</value>
+  </data>
+  <data name="ScavengerAguniChargeTime" xml:space="preserve">
+    <value>ScavengerAguniChargeTime</value>
+  </data>
+  <data name="ScavengerWeaponMixTime" xml:space="preserve">
+    <value>ScavengerWeaponMixTime</value>
+  </data>
 </root>
