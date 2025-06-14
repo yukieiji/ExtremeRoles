@@ -6,11 +6,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 public sealed class IntimateStatus(
 	bool hasTask,
-	int qweenSeeTaskRate,
+	int intimateSeeTaskRate,
 	bool isSubTeams) : IStatusModel, ISubTeam
 {
 	private readonly bool hasTask = hasTask;
-	private readonly float qweenSeeTaskRate = qweenSeeTaskRate / 100.0f;
+	private readonly float intimateSeeTaskRate = intimateSeeTaskRate / 100.0f;
 
 	public bool SeeYandere { get; private set; } = false;
 
@@ -19,15 +19,15 @@ public sealed class IntimateStatus(
 
 	public bool IsSub { get; } = isSubTeams;
 
-	public void Update(PlayerControl knightPlayer)
+	public void Update(PlayerControl intimatePlayer)
 	{
 		if (!this.hasTask || this.SeeYandere)
 		{
 			return;
 		}
 
-		float taskGage = Helper.Player.GetPlayerTaskGage(knightPlayer);
-		if (taskGage >= this.qweenSeeTaskRate)
+		float taskGage = Helper.Player.GetPlayerTaskGage(intimatePlayer);
+		if (taskGage >= this.intimateSeeTaskRate)
 		{
 			this.SeeYandere = true;
 		}
