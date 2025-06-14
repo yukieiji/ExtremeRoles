@@ -1209,4 +1209,199 @@
     <value>「モニカ」がゴミ箱のプレイヤーを
 見ることができるか</value>
   </data>
+  <data name="Heretic" xml:space="preserve">
+    <value>Heretic</value>
+  </data>
+  <data name="HereticHasTask" xml:space="preserve">
+    <value>HereticHasTask</value>
+  </data>
+  <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
+    <value>HereticSeeImpostorTaskGage</value>
+  </data>
+  <data name="HereticKillMode" xml:space="preserve">
+    <value>HereticKillMode</value>
+  </data>
+  <data name="HereticAbilityCoolTime" xml:space="preserve">
+    <value>HereticAbilityCoolTime</value>
+  </data>
+  <data name="HereticRange" xml:space="preserve">
+    <value>HereticRange</value>
+  </data>
+  <data name="HereticCanKillImpostor" xml:space="preserve">
+    <value>HereticCanKillImpostor</value>
+  </data>
+  <data name="HereticInto" xml:space="preserve">
+    <value>HereticInto</value>
+  </data>
+  <data name="HereticTask" xml:space="preserve">
+    <value>HereticTask</value>
+  </data>
+  <data name="HereticFull" xml:space="preserve">
+    <value>HereticFull</value>
+  </data>
+  <data name="HereticAbility" xml:space="preserve">
+    <value>HereticAbility</value>
+  </data>
+  <data name="Shepherd" xml:space="preserve">
+    <value>Shepherd</value>
+  </data>
+  <data name="ShepherdCanKill" xml:space="preserve">
+    <value>ShepherdCanKill</value>
+  </data>
+  <data name="ShepherdIsSubTeam" xml:space="preserve">
+    <value>ShepherdIsSubTeam</value>
+  </data>
+  <data name="ShepherdUseVent" xml:space="preserve">
+    <value>ShepherdUseVent</value>
+  </data>
+  <data name="ShepherdHasTask" xml:space="preserve">
+    <value>ShepherdHasTask</value>
+  </data>
+  <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
+    <value>ShepherdSeeJackalTaskRate</value>
+  </data>
+  <data name="ShepherdInto" xml:space="preserve">
+    <value>ShepherdInto</value>
+  </data>
+  <data name="ShepherdTask" xml:space="preserve">
+    <value>ShepherdTask</value>
+  </data>
+  <data name="ShepherdFull" xml:space="preserve">
+    <value>ShepherdFull</value>
+  </data>
+  <data name="Furry" xml:space="preserve">
+    <value>Furry</value>
+  </data>
+  <data name="FurryUseVent" xml:space="preserve">
+    <value>FurryUseVent</value>
+  </data>
+  <data name="FurryHasTask" xml:space="preserve">
+    <value>FurryHasTask</value>
+  </data>
+  <data name="FurrySeeJackalTaskRate" xml:space="preserve">
+    <value>FurrySeeJackalTaskRate</value>
+  </data>
+  <data name="FurryInto" xml:space="preserve">
+    <value>FurryInto</value>
+  </data>
+  <data name="FurryTask" xml:space="preserve">
+    <value>FurryTask</value>
+  </data>
+  <data name="FurryFull" xml:space="preserve">
+    <value>FurryFull</value>
+  </data>
+  <data name="Intimate" xml:space="preserve">
+    <value>Intimate</value>
+  </data>
+  <data name="IntimateCanKill" xml:space="preserve">
+    <value>IntimateCanKill</value>
+  </data>
+  <data name="IntimateIsSubTeam" xml:space="preserve">
+    <value>IntimateIsSubTeam</value>
+  </data>
+  <data name="IntimateUseVent" xml:space="preserve">
+    <value>IntimateUseVent</value>
+  </data>
+  <data name="IntimateHasTask" xml:space="preserve">
+    <value>IntimateHasTask</value>
+  </data>
+  <data name="IntimateSeeYandereTaskRate" xml:space="preserve">
+    <value>IntimateSeeYandereTaskRate</value>
+  </data>
+  <data name="IntimateFull" xml:space="preserve">
+    <value>IntimateFull</value>
+  </data>
+  <data name="IntimateTask" xml:space="preserve">
+    <value>IntimateTask</value>
+  </data>
+  <data name="IntimateIntro" xml:space="preserve">
+    <value>IntimateIntro</value>
+  </data>
+  <data name="Surrogator" xml:space="preserve">
+    <value>Surrogator</value>
+  </data>
+  <data name="SurrogatorUseVent" xml:space="preserve">
+    <value>SurrogatorUseVent</value>
+  </data>
+  <data name="SurrogatorHasTask" xml:space="preserve">
+    <value>SurrogatorHasTask</value>
+  </data>
+  <data name="SurrogatorSeeYandereTaskRate" xml:space="preserve">
+    <value>SurrogatorSeeYandereTaskRate</value>
+  </data>
+  <data name="SurrogatorAbilityCoolTime" xml:space="preserve">
+    <value>SurrogatorAbilityCoolTime</value>
+  </data>
+  <data name="SurrogatorAbilityActiveTime" xml:space="preserve">
+    <value>SurrogatorAbilityActiveTime</value>
+  </data>
+  <data name="SurrogatorAbilityCount" xml:space="preserve">
+    <value>SurrogatorAbilityCount</value>
+  </data>
+  <data name="SurrogatorRange" xml:space="preserve">
+    <value>SurrogatorRange</value>
+  </data>
+  <data name="SurrogatorPreventNum" xml:space="preserve">
+    <value>SurrogatorPreventNum</value>
+  </data>
+  <data name="SurrogatorPreventKillTime" xml:space="preserve">
+    <value>SurrogatorPreventKillTime</value>
+  </data>
+  <data name="SurrogatorAbility" xml:space="preserve">
+    <value>SurrogatorAbility</value>
+  </data>
+  <data name="SurrogatorIntro" xml:space="preserve">
+    <value>SurrogatorIntro</value>
+  </data>
+  <data name="SurrogatorFull" xml:space="preserve">
+    <value>SurrogatorFull</value>
+  </data>
+  <data name="SurrogatorTask" xml:space="preserve">
+    <value>SurrogatorTask</value>
+  </data>
+  <data name="Knight" xml:space="preserve">
+    <value>Knight</value>
+  </data>
+  <data name="KnightIsSubTeam" xml:space="preserve">
+    <value>KnightIsSubTeam</value>
+  </data>
+  <data name="KnightUseVent" xml:space="preserve">
+    <value>KnightUseVent</value>
+  </data>
+  <data name="KnightHasTask" xml:space="preserve">
+    <value>KnightHasTask</value>
+  </data>
+  <data name="KnightSeeQueenTaskRate" xml:space="preserve">
+    <value>KnightSeeQueenTaskRate</value>
+  </data>
+  <data name="KnightIntro" xml:space="preserve">
+    <value>KnightIntro</value>
+  </data>
+  <data name="KnightFull" xml:space="preserve">
+    <value>KnightFull</value>
+  </data>
+  <data name="KnightShort" xml:space="preserve">
+    <value>KnightShort</value>
+  </data>
+  <data name="Pawn" xml:space="preserve">
+    <value>Pawn</value>
+  </data>
+  <data name="PawnUseVent" xml:space="preserve">
+    <value>PawnUseVent</value>
+  </data>
+  <data name="PawnHasTask" xml:space="preserve">
+    <value>PawnHasTask</value>
+  </data>
+  <data name="PawnSeeQueenTaskRate" xml:space="preserve">
+    <value>PawnSeeQueenTaskRate</value>
+  </data>
+  <data name="PawnIntro" xml:space="preserve">
+    <value>PawnIntro</value>
+  </data>
+  <data name="PawnShort" xml:space="preserve">
+    <value>PawnShort</value>
+  </data>
+  <data name="PawnFull" xml:space="preserve">
+    <value>PawnFull</value>
+  </data>
 </root>
