@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-    <Version>14.0.2.1</Version>
-    <!--<VersionPrefix>14.0.2</VersionPrefix>-->
-    <VersionSuffix>3rdAnniversary-TwoMemorial-v16-0-5</VersionSuffix>
+      <!--<Version>2025.6.20</Version>-->
+    <VersionPrefix>2025.6.20</VersionPrefix>
+    <VersionSuffix>Reinforcement</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
@@ -63,7 +63,7 @@
     <EmbeddedResource Include="Resources\Config\*.cfg" />
     <EmbeddedResource Include="Resources\JsonData\*.json" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
