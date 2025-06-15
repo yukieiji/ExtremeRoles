@@ -1454,13 +1454,13 @@ UI「爆撃モード」:
   <data name="ScavengerAllowDupe" xml:space="preserve">
     <value>ScavengerAllowDupe</value>
   </data>
-  <data name="ScavengerAllowAdvancedWepon" xml:space="preserve">
+  <data name="ScavengerAllowAdvancedWeapon" xml:space="preserve">
     <value>ScavengerAllowAdvancedWepon</value>
   </data>
   <data name="ScavengerInitAbility" xml:space="preserve">
     <value>ScavengerInitAbility</value>
   </data>
-  <data name="ScavengerIsSetWepon" xml:space="preserve">
+  <data name="ScavengerIsSetWeapon" xml:space="preserve">
     <value>ScavengerIsSetWepon</value>
   </data>
   <data name="ScavengerSyncWeapon" xml:space="preserve">

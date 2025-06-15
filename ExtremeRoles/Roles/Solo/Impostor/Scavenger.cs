@@ -837,11 +837,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		IsRandomInitAbility,
 
 		AllowDupe,
-		AllowAdvancedWepon,
+		AllowAdvancedWeapon,
 
 		InitAbility,
 
-		IsSetWepon,
+		IsSetWeapon,
 
 		SyncWeapon,
 
@@ -944,11 +944,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 				ScavengerAbilitySystem.RandomOption? randOpt = loader.GetValue<Option, bool>(Option.IsRandomInitAbility) ?
 					new(loader.GetValue<Option, bool>(Option.AllowDupe),
-						loader.GetValue<Option, bool>(Option.AllowAdvancedWepon)) : null;
+						loader.GetValue<Option, bool>(Option.AllowAdvancedWeapon)) : null;
 
 				return new ScavengerAbilitySystem(
 					(Ability)loader.GetValue<Option, int>(Option.InitAbility),
-					loader.GetValue<Option, bool>(Option.IsSetWepon),
+					loader.GetValue<Option, bool>(Option.IsSetWeapon),
 					loader.GetValue<Option, bool>(Option.SyncWeapon),
 					randOpt);
 			});
@@ -1130,7 +1130,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.AllowDupe,
 			false, randomWepon);
 		factory.CreateBoolOption(
-			Option.AllowAdvancedWepon,
+			Option.AllowAdvancedWeapon,
 			false, randomWepon);
 
 		factory.CreateSelectionOption(
@@ -1142,7 +1142,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			invert: true);
 
 		var mapSetOps = factory.CreateBoolOption(
-			Option.IsSetWepon, true);
+			Option.IsSetWeapon, true);
 
 		factory.CreateBoolOption(
 			Option.SyncWeapon,
