@@ -8,14 +8,12 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 using ExtremeRoles.Performance;
-using ExtremeRoles.Beta;
-
 
 #nullable enable
 
 namespace ExtremeRoles.Module.SystemType;
 
-public sealed class RaiseHandSystem : IRaiseHandSystem
+public sealed class RaiseHandSystem : IDirtableSystemType
 {
 	public sealed class Behavior
 	{

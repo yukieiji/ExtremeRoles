@@ -123,10 +123,10 @@ public static class PlayerControlMurderPlayerPatch
 
 		invokeRoleKillAction(role, __instance, target);
 
-		ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
-
 		var localRole = ExtremeRoleManager.GetLocalPlayerRole();
 		invokeRoleHookAction(isLocalPlayerDead, localRole, __instance, target);
+
+		ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
 	}
 
 	private static void clearTask(in SingleRoleBase role, in PlayerControl target)
@@ -168,7 +168,7 @@ public static class PlayerControlMurderPlayerPatch
 	private static void hideRaiseHandButton(in bool isLocalPlayerDead)
 	{
 		if (isLocalPlayerDead &&
-			ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
+			ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var system))
 		{
 			system.RaiseHandButtonSetActive(false);

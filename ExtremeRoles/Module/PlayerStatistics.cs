@@ -1,21 +1,152 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
+using System.Collections.Generic;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SpecialWinChecker;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.Combination;
 
-using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.GameMode;
-
-using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
 using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
+using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
+
 
 #nullable enable
 
 namespace ExtremeRoles.Module;
+
+public sealed class NeutralSeparateTeamContainer()
+{
+	public readonly record struct NeutralTeam(NeutralSeparateTeam Team, int Id);
+	public readonly record struct NeutralSubTeam(NeutralTeam Main, NeutralSeparateTeam Sub);
+
+	public IReadOnlyDictionary<NeutralTeam, int> Team
+	{
+		get
+		{
+			foreach (var (sub, num) in this.subTeam)
+			{
+				if (this.neutralTeam.ContainsKey(sub.Main))
+				{
+					continue;
+				}
+				this.neutralTeam[new NeutralTeam(sub.Sub, sub.Main.Id)] = num;
+			}
+			return this.neutralTeam;
+		}
+	}
+	private readonly Dictionary<NeutralTeam, int> neutralTeam = [];
+	private readonly Dictionary<NeutralSubTeam, int> subTeam = [];
+
+	public void Add(NeutralSeparateTeam team, int id)
+	{
+		var key = new NeutralTeam(team, id);
+		if (this.neutralTeam.TryGetValue(key, out int num))
+		{
+			this.neutralTeam[key] = num + 1;
+		}
+		else
+		{
+			this.neutralTeam.Add(key, 1);
+		}
+	}
+	public void AddSubTeam(NeutralSeparateTeam main, NeutralSeparateTeam sub, int id)
+	{
+		var key = new NeutralSubTeam(new(main, id), sub);
+		if (this.subTeam.TryGetValue(key, out int num))
+		{
+			this.subTeam[key] = num + 1;
+		}
+		else
+		{
+			this.subTeam.Add(key, 1);
+		}
+	}
+}
+
+file sealed class NeutralSeparateTeamBuilder()
+{
+	public IReadOnlyDictionary<NeutralSeparateTeamContainer.NeutralTeam, int> Team => neutralTeam.Team;
+	private readonly NeutralSeparateTeamContainer neutralTeam = new NeutralSeparateTeamContainer();
+	private int cacheId = 0;
+
+	public void Add(
+		in SingleRoleBase role,
+		in ExtremeRoleId roleId,
+		in int gameControlId)
+	{
+		this.cacheId = gameControlId;
+
+		var team = roleId switch
+		{
+			ExtremeRoleId.Alice => NeutralSeparateTeam.Alice,
+			ExtremeRoleId.Jackal or ExtremeRoleId.Sidekick => NeutralSeparateTeam.Jackal,
+			ExtremeRoleId.Lover => NeutralSeparateTeam.Lover,
+			ExtremeRoleId.Missionary => NeutralSeparateTeam.Missionary,
+			ExtremeRoleId.Yandere => NeutralSeparateTeam.Yandere,
+			ExtremeRoleId.Miner => NeutralSeparateTeam.Miner,
+			ExtremeRoleId.Eater => NeutralSeparateTeam.Eater,
+			ExtremeRoleId.Traitor => NeutralSeparateTeam.Traitor,
+			ExtremeRoleId.Queen or ExtremeRoleId.Servant => NeutralSeparateTeam.Queen,
+			ExtremeRoleId.Delinquent => NeutralSeparateTeam.Kids,
+			ExtremeRoleId.Tucker or ExtremeRoleId.Chimera => NeutralSeparateTeam.Tucker,
+			_ => NeutralSeparateTeam.None,
+		};
+
+		if (team is not NeutralSeparateTeam.None)
+		{
+			addNeutralTeams(team);
+			return;
+		}
+
+		// 基本的にはキル持ちの特定の役職のときに実行
+		// メインチームが生存 => メインチームの人数にカウントしない、サブチームのカウントも行わない(行ってもいいが消す)
+		// メインチームがいない => サブチームのカウントを行う、サブチームが勝てばメインチームの勝利判定
+		if (role.CanKill &&
+			role.Status is ISubTeam subTeam &&
+			subTeam.IsSub)
+		{
+			this.neutralTeam.AddSubTeam(subTeam.Main, subTeam.Sub, this.cacheId);
+		}
+
+		switch (roleId)
+		{
+			case ExtremeRoleId.Vigilante:
+				if (((Vigilante)role).Condition ==
+					Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
+				{
+					addNeutralTeams(NeutralSeparateTeam.Vigilante);
+				}
+				break;
+			case ExtremeRoleId.Monika:
+				if (((Monika)role).IsSoloTeam)
+				{
+					addNeutralTeams(NeutralSeparateTeam.Monika);
+				}
+				break;
+			default:
+				checkMultiAssignedServant(role);
+				break;
+		}
+	}
+
+	private void checkMultiAssignedServant(SingleRoleBase role)
+	{
+		if (role is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
+		{
+			addNeutralTeams(NeutralSeparateTeam.Queen);
+		}
+	}
+
+	private void addNeutralTeams(NeutralSeparateTeam team)
+	{
+		this.neutralTeam.Add(team, this.cacheId);
+	}
+}
 
 public sealed record PlayerStatistics(
 	int AllTeamCrewmate,
@@ -25,7 +156,7 @@ public sealed record PlayerStatistics(
 	int TotalAlive,
 	int AssassinAlive,
 	IReadOnlyDictionary<int, IWinChecker> SpecialWinCheckRoleAlive,
-	IReadOnlyDictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive)
+	IReadOnlyDictionary<NeutralSeparateTeamContainer.NeutralTeam, int> SeparatedNeutralAlive)
 {
 	public const int SameNeutralGameControlId = int.MaxValue;
 
@@ -69,8 +200,7 @@ public sealed record PlayerStatistics(
 		int numNeutralAlive = 0;
 
 		int numAssassinAlive = 0;
-		Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = new Dictionary<
-			(NeutralSeparateTeam, int), int>();
+		var builder = new NeutralSeparateTeamBuilder();
 		Dictionary<int, IWinChecker> specialWinCheckRoleAlive = new Dictionary<
 			int, IWinChecker>();
 
@@ -148,7 +278,7 @@ public sealed record PlayerStatistics(
 					}
 
 					++numNeutralAlive;
-					neutalCondition(role, roleId, gameControlId, in neutralTeam);
+					builder.Add(role, roleId, gameControlId);
 					break;
 
 				default:
@@ -167,144 +297,8 @@ public sealed record PlayerStatistics(
 			AssassinAlive: numAssassinAlive,
 
 			SpecialWinCheckRoleAlive: specialWinCheckRoleAlive,
-			SeparatedNeutralAlive: neutralTeam
+			SeparatedNeutralAlive: builder.Team
 		);
-	}
-
-	private static void neutalCondition(
-		in SingleRoleBase role,
-		in ExtremeRoleId roleId,
-		in int gameControlId,
-		in Dictionary<(NeutralSeparateTeam, int), int> neutralTeam)
-	{
-		switch (roleId)
-		{
-			case ExtremeRoleId.Alice:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Alice);
-				break;
-			case ExtremeRoleId.Jackal:
-			case ExtremeRoleId.Sidekick:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Jackal);
-				break;
-			case ExtremeRoleId.Lover:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Lover);
-				break;
-			case ExtremeRoleId.Missionary:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Missionary);
-				break;
-			case ExtremeRoleId.Yandere:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Yandere);
-				break;
-			case ExtremeRoleId.Vigilante:
-				if (((Vigilante)role).Condition ==
-					Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
-				{
-					addNeutralTeams(
-						neutralTeam,
-						gameControlId,
-						NeutralSeparateTeam.Vigilante);
-				}
-				break;
-			case ExtremeRoleId.Miner:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Miner);
-				break;
-			case ExtremeRoleId.Eater:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Eater);
-				break;
-			case ExtremeRoleId.Traitor:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Traitor);
-				break;
-			case ExtremeRoleId.Queen:
-			case ExtremeRoleId.Servant:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Queen);
-				break;
-			case ExtremeRoleId.Delinquent:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Kids);
-				break;
-			case ExtremeRoleId.Tucker:
-			case ExtremeRoleId.Chimera:
-				addNeutralTeams(
-					neutralTeam,
-					gameControlId,
-					NeutralSeparateTeam.Tucker);
-				break;
-			case ExtremeRoleId.Monika:
-				if (((Monika)role).IsSoloTeam)
-				{
-					addNeutralTeams(
-						neutralTeam,
-						gameControlId,
-						NeutralSeparateTeam.Monika);
-				}
-				break;
-			default:
-				checkMultiAssignedServant(
-					in neutralTeam,
-					gameControlId, role);
-				break;
-		}
-	}
-
-	private static void checkMultiAssignedServant(
-		in Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
-		int gameControlId,
-		SingleRoleBase role)
-	{
-		if (role is MultiAssignRoleBase multiAssignRole &&
-			multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
-		{
-			addNeutralTeams(
-				neutralTeam,
-				gameControlId,
-				NeutralSeparateTeam.Queen);
-		}
-	}
-
-	private static void addNeutralTeams(
-		in Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
-		int gameControlId,
-		NeutralSeparateTeam team)
-	{
-		var key = (team, gameControlId);
-
-		if (neutralTeam.ContainsKey(key))
-		{
-			neutralTeam[key] = neutralTeam[key] + 1;
-		}
-		else
-		{
-			neutralTeam.Add(key, 1);
-		}
 	}
 
 	private static void addSpecialWinCheckRole(

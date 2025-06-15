@@ -170,90 +170,50 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 		}
 
 		RoleGameOverReason endReason = RoleGameOverReason.UnKnown;
-		switch (team)
+
+		// アリス vs インポスターは絶対にインポスターが勝てないので
+		// 別の殺人鬼が存在しないかつ、生存者数がアリスの生存者以下になれば勝利
+		if (team is NeutralSeparateTeam.Alice)
 		{
-			// アリス vs インポスターは絶対にインポスターが勝てないので
-			// 別の殺人鬼が存在しないかつ、生存者数がアリスの生存者以下になれば勝利
-			case NeutralSeparateTeam.Alice:
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.AliceKillAllOther;
-				break;
+			endReason = RoleGameOverReason.AliceKillAllOther;
+		}
+		else if (
 			// 以下は全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
 			// アサシンがキルできないオプションのとき、ニュートラルの勝ち目が少なくなるので、勝利とする
-			case NeutralSeparateTeam.Jackal:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.JackalKillAllOther;
-				break;
-			case NeutralSeparateTeam.Lover:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.LoverKillAllOther;
-				break;
-			case NeutralSeparateTeam.Missionary:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.MissionaryAllAgainstGod;
-				break;
-			case NeutralSeparateTeam.Yandere:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.YandereKillAllOther;
-				break;
-			case NeutralSeparateTeam.Vigilante:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.VigilanteKillAllOther;
-				break;
-			case NeutralSeparateTeam.Miner:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.MinerExplodeEverything;
-				break;
-			case NeutralSeparateTeam.Eater:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.EaterAliveAlone;
-				break;
-			case NeutralSeparateTeam.Traitor:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.TraitorKillAllOther;
-				break;
-			case NeutralSeparateTeam.Queen:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.QueenKillAllOther;
-				break;
-			case NeutralSeparateTeam.Kids:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.KidsAliveAlone;
-				break;
-			case NeutralSeparateTeam.Tucker:
-				if (statistics.TeamImpostorAlive > 0 &&
-					statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-				setWinGameContorlId(id);
-				endReason = RoleGameOverReason.TuckerShipIsExperimentStation;
-				break;
-			default:
-				break;
-		}
-		if (endReason is RoleGameOverReason.UnKnown)
+			statistics.TeamImpostorAlive > 0 &&
+			statistics.TeamImpostorAlive != statistics.AssassinAlive)
 		{
-
 			return false;
 		}
+		else
+		{
+			endReason = team switch
+			{
+				NeutralSeparateTeam.Jackal => RoleGameOverReason.JackalKillAllOther,
+				NeutralSeparateTeam.Lover => RoleGameOverReason.LoverKillAllOther,
+				NeutralSeparateTeam.Missionary => RoleGameOverReason.MissionaryAllAgainstGod,
+				NeutralSeparateTeam.Yandere => RoleGameOverReason.YandereKillAllOther,
+				NeutralSeparateTeam.Vigilante => RoleGameOverReason.VigilanteKillAllOther,
+				NeutralSeparateTeam.Miner => RoleGameOverReason.MinerExplodeEverything,
+				NeutralSeparateTeam.Eater => RoleGameOverReason.EaterAliveAlone,
+				NeutralSeparateTeam.Traitor => RoleGameOverReason.TraitorKillAllOther,
+				NeutralSeparateTeam.Queen => RoleGameOverReason.QueenKillAllOther,
+				NeutralSeparateTeam.Kids => RoleGameOverReason.KidsAliveAlone,
+				NeutralSeparateTeam.Tucker => RoleGameOverReason.TuckerShipIsExperimentStation,
+
+				NeutralSeparateTeam.JackalSub => RoleGameOverReason.AllJackalWin,
+				NeutralSeparateTeam.YandereSub => RoleGameOverReason.AllYandereWin,
+				NeutralSeparateTeam.QueenSub => RoleGameOverReason.AllQueenWin,
+				_ => RoleGameOverReason.UnKnown
+			};
+		}
+
+		if (endReason is RoleGameOverReason.UnKnown)
+		{
+			return false;
+		}
+
+		setWinGameContorlId(id);
 		gameIsEnd((GameOverReason)endReason);
 		return true;
 	}
