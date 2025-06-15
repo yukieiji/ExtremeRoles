@@ -5,6 +5,7 @@ using AmongUs.GameOptions; // PlayerControl のため
 using ExtremeRoles.Roles;    // ExtremeRoleId, ExtremeRoleManager のため
 using ExtremeRoles.Roles.API; // SingleRoleBase のため
 using ExtremeRoles.Module.Interface; // IPlayerToExRoleAssignData のため (仮。実際の場所に合わせて修正)
+using ExtremeRoles.Helper; // Logging のため
 
 // PlayerRoleAssignData, PreparationData, ISpawnLimiter, PlayerToSingleRoleAssignData, PlayerToCombRoleAssignData のため
 // これらの型が ExtremeRoles.Module.RoleAssign 名前空間にあると想定
@@ -36,8 +37,16 @@ public class RoleAssignValidator : IRoleAssignValidator
 
     public bool IsReBuild(PreparationData prepareData)
     {
+        Logging.Debug("--- RoleAssignValidator.IsReBuild START ---");
         bool dataWasActuallyRemoved = false;
-        var currentAssignments = prepareData.Assign.Data; // IReadOnlyList であり、ループ中に変更されない参照
+        var currentAssignments = prepareData.Assign.Data;
+
+        if (!this.dependencyRules.Any())
+        {
+            Logging.Debug("No dependency rules defined. Skipping validation.");
+            Logging.Debug("--- RoleAssignValidator.IsReBuild END (No rules) ---");
+            return false;
+        }
 
         // ループ中に prepareData.Assign.RemoveAssignment が呼ばれると currentAssignments の実体が変更されるため、
         // ToList() でコピーを作成してイテレーションする方が安全だが、
@@ -51,67 +60,130 @@ public class RoleAssignValidator : IRoleAssignValidator
 
         foreach (var rule in this.dependencyRules)
         {
-            // RoleAが割り当てられているアサインメント情報を一時リストに保持
-            // (元のリストを変更しながらループすると問題が起きるため)
+            Logging.Debug($"Evaluating Rule: RoleA_Id={(ExtremeRoleId)rule.RoleA_Id}, RoleB_Id={(ExtremeRoleId)rule.RoleB_Id}");
             var assignmentsOfRoleA = currentAssignments
                 .Where(a => GetRoleIdFromAssignment(a) == rule.RoleA_Id)
-                .Select(a => new { PlayerId = GetPlayerIdFromAssignment(a), RoleId = GetRoleIdFromAssignment(a) }) // Assignmentオブジェクトそのものは不要
+                .Select(a => new { PlayerId = GetPlayerIdFromAssignment(a), RoleId = GetRoleIdFromAssignment(a) })
                 .ToList();
+
+            if (!assignmentsOfRoleA.Any())
+            {
+                Logging.Debug($"No assignments found for RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}. Skipping to next rule.");
+                continue;
+            }
 
             foreach (var itemAInfo in assignmentsOfRoleA)
             {
-                // itemAInfo.Assignment はもう使わないので、PlayerId と RoleId だけあれば良い
+                Logging.Debug($"Checking PlayerId: {itemAInfo.PlayerId} for RoleA_Id: {(ExtremeRoleId)itemAInfo.RoleId}"); // itemAInfo.RoleId is correct here as it's from the assignment itself
                 SingleRoleBase? roleA_Instance = null;
-                if (ExtremeRoleManager.TryGetRole(itemAInfo.PlayerId, out var gameRoleInstance) && gameRoleInstance.Id == (ExtremeRoleId)rule.RoleA_Id)
+                if (ExtremeRoleManager.TryGetRole(itemAInfo.PlayerId, out var gameRoleInstance) && gameRoleInstance.Id == (ExtremeRoleId)rule.RoleA_Id) // Compare with rule.RoleA_Id for the instance check
                 {
                     roleA_Instance = gameRoleInstance;
                 }
 
-                if (roleA_Instance == null) continue;
+                if (roleA_Instance == null)
+                {
+                    Logging.Debug($"RoleA instance not found or ID mismatch for PlayerId: {itemAInfo.PlayerId} (Expected RoleId: {(ExtremeRoleId)rule.RoleA_Id}).");
+                    continue;
+                }
 
                 bool settingC_IsValid = rule.SettingCChecker(roleA_Instance);
+                Logging.Debug($"PlayerId: {itemAInfo.PlayerId}, RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}, SettingC_IsValid: {settingC_IsValid}");
 
-                // currentAssignments は prepareData.Assign.Data を参照しており、RemoveAssignment によって変更される可能性がある。
-                // そのため、roleB_ExistsInAnyPlayer のチェックは、rule.RoleA_Id の削除前に毎回行う必要がある。
-                bool roleB_ExistsInAnyPlayer = prepareData.Assign.Data.Any(b => GetRoleIdFromAssignment(b) == rule.RoleB_Id);
-
-                if (!roleB_ExistsInAnyPlayer && settingC_IsValid)
+                if (!settingC_IsValid)
                 {
-                    bool removedThisTime = prepareData.Assign.RemoveAssignment(itemAInfo.PlayerId, rule.RoleA_Id);
+                    continue;
+                }
 
-                    if (removedThisTime)
+                bool roleB_ExistsInAnyPlayer = prepareData.Assign.Data.Any(b => GetRoleIdFromAssignment(b) == rule.RoleB_Id);
+                Logging.Debug($"RoleB_Id: {(ExtremeRoleId)rule.RoleB_Id} ExistsInAnyPlayer: {roleB_ExistsInAnyPlayer}");
+
+                if (roleB_ExistsInAnyPlayer)
+                {
+                    continue;
+                }
+
+                Logging.Debug($"Condition MET for PlayerId: {itemAInfo.PlayerId}, RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}. Attempting removal.");
+                bool removedThisTime = prepareData.Assign.RemoveAssignment(itemAInfo.PlayerId, rule.RoleA_Id);
+
+                if (!removedThisTime)
+                {
+                    Logging.Debug($"Failed to remove RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id} for PlayerId: {itemAInfo.PlayerId}.");
+                    continue;
+                }
+
+                Logging.Debug($"SUCCESS: Removed RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id} for PlayerId: {itemAInfo.PlayerId}");
+                dataWasActuallyRemoved = true;
+
+                PlayerControl? playerControlToRequeue = PlayerControl.AllPlayerControls.FirstOrDefault(pc => pc.PlayerId == itemAInfo.PlayerId);
+                if (playerControlToRequeue != null)
+                {
+                    prepareData.Assign.AddPlayerToReassign(playerControlToRequeue);
+                    Logging.Debug($"PlayerId: {itemAInfo.PlayerId} added back to re-assign queue.");
+                }
+
+                bool teamProcessedForLimit = false;
+                ExtremeRoleType teamToAdjust = ExtremeRoleType.None; // For logging
+
+                if (ExtremeRoleManager.NormalRole.TryGetValue(rule.RoleA_Id, out var roleADefinition))
+                {
+                    teamToAdjust = roleADefinition.Team;
+                    prepareData.Limit.Reduce(teamToAdjust, -1);
+                    teamProcessedForLimit = true;
+                }
+                else
+                {
+                    ExtremeRoleId targetCombRoleId = (ExtremeRoleId)rule.RoleA_Id;
+                    foreach (var combManager in ExtremeRoleManager.CombRole.Values)
                     {
-                        dataWasActuallyRemoved = true; // IsReBuild の結果として true を返すフラグ
-
-                        PlayerControl? playerControlToRequeue = PlayerControl.AllPlayerControls.FirstOrDefault(pc => pc.PlayerId == itemAInfo.PlayerId);
-                        if (playerControlToRequeue != null)
+                        var foundCombRolePart = combManager.Roles.FirstOrDefault(r => r.Id == targetCombRoleId);
+                        if (foundCombRolePart != null)
                         {
-                            prepareData.Assign.AddPlayerToReassign(playerControlToRequeue);
+                            teamToAdjust = foundCombRolePart.Team;
+                            prepareData.Limit.Reduce(teamToAdjust, -1);
+                            teamProcessedForLimit = true;
+                            break;
                         }
-
-                        if (ExtremeRoleManager.NormalRole.TryGetValue(rule.RoleA_Id, out var roleADefinition))
-                        {
-                            prepareData.Limit.Reduce(roleADefinition.Team);
-                        }
-                        // コンビネーション役職の考慮は現状省略
                     }
+                }
+
+                if (teamProcessedForLimit)
+                {
+                    Logging.Debug($"Spawn limit for Team: {teamToAdjust} increased by 1 due to removal of RoleId: {(ExtremeRoleId)rule.RoleA_Id}.");
+                }
+                else
+                {
+                    Logging.Debug($"WARNING: Could not find team for RoleId: {(ExtremeRoleId)rule.RoleA_Id} to adjust spawn limit.");
                 }
             }
         }
+        Logging.Debug($"--- RoleAssignValidator.IsReBuild END (dataWasActuallyRemoved: {dataWasActuallyRemoved}) ---");
         return dataWasActuallyRemoved;
     }
 
     private int GetRoleIdFromAssignment(IPlayerToExRoleAssignData assignment)
     {
-        if (assignment is PlayerToSingleRoleAssignData single) return single.RoleId;
-        if (assignment is PlayerToCombRoleAssignData comb) return comb.RoleId;
+        if (assignment is PlayerToSingleRoleAssignData single)
+        {
+            return single.RoleId;
+        }
+        if (assignment is PlayerToCombRoleAssignData comb)
+        {
+            return comb.RoleId;
+        }
         return -1;
     }
 
     private byte GetPlayerIdFromAssignment(IPlayerToExRoleAssignData assignment)
     {
-        if (assignment is PlayerToSingleRoleAssignData single) return single.PlayerId;
-        if (assignment is PlayerToCombRoleAssignData comb) return comb.PlayerId;
+        if (assignment is PlayerToSingleRoleAssignData single)
+        {
+            return single.PlayerId;
+        }
+        if (assignment is PlayerToCombRoleAssignData comb)
+        {
+            return comb.PlayerId;
+        }
         return 0;
     }
 }

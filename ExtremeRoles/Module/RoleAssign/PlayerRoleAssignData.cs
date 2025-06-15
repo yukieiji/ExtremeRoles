@@ -71,44 +71,69 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
 		=> this.needRoleAssignPlayer.RemoveAll(x => x == player);
 
-	// 追加メソッド1: RemoveAssignment
 	public bool RemoveAssignment(byte playerId, int roleIdToRemove)
 	{
 		int initialCount = this.assignData.Count;
+		PlayerToCombRoleAssignData? removedCombAssignmentInfo = null;
 
 		this.assignData.RemoveAll(assignment =>
 		{
-			// IPlayerToExRoleAssignData の実装である PlayerToSingleRoleAssignData と
-			// PlayerToCombRoleAssignData が PlayerId と RoleId プロパティを持つことを前提とする。
-			// (事前のファイル確認でこれは正しい)
+			bool shouldRemove = false;
 			if (assignment is PlayerToSingleRoleAssignData single)
 			{
-				return single.PlayerId == playerId && single.RoleId == roleIdToRemove;
+				shouldRemove = single.PlayerId == playerId && single.RoleId == roleIdToRemove;
 			}
-			if (assignment is PlayerToCombRoleAssignData comb)
+			else if (assignment is PlayerToCombRoleAssignData comb)
 			{
-				// コンビ役職の場合、RoleId が個々の役職を指すという前提。
-				return comb.PlayerId == playerId && comb.RoleId == roleIdToRemove;
+				shouldRemove = comb.PlayerId == playerId && comb.RoleId == roleIdToRemove;
+				if (shouldRemove)
+				{
+					removedCombAssignmentInfo = comb;
+				}
 			}
-			return false;
+			return shouldRemove;
 		});
 
 		bool removed = this.assignData.Count < initialCount;
 
-		if (removed)
+		if (removed && removedCombAssignmentInfo.HasValue)
 		{
-			// combRoleAssignPlayerId から関連データを削除するロジックは、
-			// 削除された役職がコンビネーションの一部かどうかの判定が複雑になるため、
-			// 今回の変更範囲では含めない。
-			// 必要であれば別途対応。
+			PlayerToCombRoleAssignData actualRemovedCombInfo = removedCombAssignmentInfo.Value;
+
+			bool stillHasOtherPartsOfSameCombination = this.assignData.Any(a =>
+			{
+				if (a is PlayerToCombRoleAssignData otherComb)
+				{
+					return otherComb.PlayerId == actualRemovedCombInfo.PlayerId &&
+						   otherComb.CombTypeId == actualRemovedCombInfo.CombTypeId;
+				}
+				return false;
+			});
+
+			if (!stillHasOtherPartsOfSameCombination)
+			{
+				// 注意: プレイヤーが複数の異なるタイプのコンビネーション役職を持つケースは稀と想定。
+				// もし持つ場合、このロジックでは、あるコンビが完全に消えたら、
+				// たとえ別のコンビが残っていても消してしまう可能性がある。
+				// より厳密には、combRoleAssignPlayerId の Value (ExtremeRoleType) も考慮するか、
+				// CombTypeId ごとに管理する必要があるが、現状の辞書の構造では難しい。
+				// ここでは、指定された CombTypeId がなくなった場合に限り、そのプレイヤーの CombRole 情報を消す。
+				// playerId に紐づく CombTypeId を管理する構造ではないため、
+				// 実際には、その playerId が combRoleAssignPlayerId に登録された際のチーム情報が消えることになる。
+				// このキーが CombTypeId ではなく PlayerId であるため、
+				// プレイヤーが複数のコンビネーションに同時に属せないという前提に依存する。
+				this.combRoleAssignPlayerId.Remove(actualRemovedCombInfo.PlayerId);
+			}
 		}
 		return removed;
 	}
 
-	// 追加メソッド2: AddPlayerToReassign
 	public void AddPlayerToReassign(PlayerControl playerControl)
 	{
-		if (playerControl == null) return;
+		if (playerControl == null)
+		{
+			return;
+		}
 
 		if (!this.needRoleAssignPlayer.Any(p => p.PlayerId == playerControl.PlayerId))
 		{
