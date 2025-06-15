@@ -23,12 +23,12 @@ public class RoleDependencyRule
 	}
 }
 
-public sealed class RoleDependencyRuleFactory
+public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 {
 	public IReadOnlyList<RoleDependencyRule> Rules { get; } = new List<RoleDependencyRule>();
 }
 
-public sealed class RoleAssignDependencyChecker(RoleDependencyRuleFactory factory) : IRoleAssignDataChecker
+public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory factory) : IRoleAssignDataChecker
 {
 	private readonly IReadOnlyList<RoleDependencyRule> rules = factory.Rules;
 
