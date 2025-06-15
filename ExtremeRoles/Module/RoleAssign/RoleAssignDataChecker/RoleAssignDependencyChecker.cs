@@ -36,128 +36,103 @@ public sealed class RoleAssignDependencyChecker(RoleDependencyRuleFactory factor
 
 	public IReadOnlyList<ExtremeRoleId> GetNgData(in PreparationData data)
 	{
-		Logging.Debug("--- RoleAssignValidator.IsReBuild START ---");
-		bool dataWasActuallyRemoved = false;
+		var ngRoleIds = new List<ExtremeRoleId>();
 		var currentAssignments = data.Assign.Data;
 
 		if (rules.Count == 0)
 		{
 			Logging.Debug("No dependency rules defined. Skipping validation.");
-			Logging.Debug("--- RoleAssignValidator.IsReBuild END (No rules) ---");
-			return false;
+			return ngRoleIds; // Return empty list
 		}
 
-		// ループ中に prepareData.Assign.RemoveAssignment が呼ばれると currentAssignments の実体が変更されるため、
-		// ToList() でコピーを作成してイテレーションする方が安全だが、
-		// RemoveAssignment の中で currentAssignments が直接変更されることを期待している。
-		// ただし、RoleIdとPlayerIdのペアで削除するので、複数の同一役職持ちプレイヤーがいるケースを考慮し、
-		// 削除が発生したらループをやり直すか、慎重なイテレーションが必要。
-		// 今回は、一度のIsReBuild呼び出しで複数のルールやプレイヤーにまたがる削除を許容するため、
-		// 削除が発生してもループは継続する。ただし、currentAssignments の状態変更には注意。
-		// 最も安全なのは、対象をリストアップし、その後まとめて削除・追加処理を行うことだが、
-		// 複雑になるため、今回は逐次処理とする。
-
-		foreach (var rule in this.dependencyRules)
+		foreach (var rule in rules) // Corrected: use 'rules' field
 		{
 			Logging.Debug($"Evaluating Rule: RoleA_Id={(ExtremeRoleId)rule.RoleA_Id}, RoleB_Id={(ExtremeRoleId)rule.RoleB_Id}");
+
+			// Find all players assigned to RoleA_Id
 			var assignmentsOfRoleA = currentAssignments
 				.Where(a => GetRoleIdFromAssignment(a) == rule.RoleA_Id)
-				.Select(a => new { PlayerId = GetPlayerIdFromAssignment(a), RoleId = GetRoleIdFromAssignment(a) })
-				.ToList();
+				.ToList(); // ToList is important if currentAssignments can change, but here we only read.
 
 			if (!assignmentsOfRoleA.Any())
 			{
-				Logging.Debug($"No assignments found for RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}. Skipping to next rule.");
+				Logging.Debug($"No assignments found for RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}.");
 				continue;
 			}
 
-			foreach (var itemAInfo in assignmentsOfRoleA)
+			bool roleAExistsAndSettingCIsValid = false;
+			foreach (var assignmentA in assignmentsOfRoleA)
 			{
-				Logging.Debug($"Checking PlayerId: {itemAInfo.PlayerId} for RoleA_Id: {(ExtremeRoleId)itemAInfo.RoleId}"); // itemAInfo.RoleId is correct here as it's from the assignment itself
+				byte playerIdForRoleA = GetPlayerIdFromAssignment(assignmentA);
+				//SingleRoleBase? roleA_Instance = ExtremeRoleManager.GetRole(playerIdForRoleA); // This might get any role of the player
+                // We need to ensure it's the specific RoleA_Id instance.
+                // However, the SettingCChecker likely operates on the properties of RoleA_Id,
+                // and we need an instance of that role to check its settings.
+                // The original code fetched the gameRoleInstance and checked its Id.
+
 				SingleRoleBase? roleA_Instance = null;
-				if (ExtremeRoleManager.TryGetRole(itemAInfo.PlayerId, out var gameRoleInstance) && gameRoleInstance.Id == (ExtremeRoleId)rule.RoleA_Id) // Compare with rule.RoleA_Id for the instance check
+				// Attempt to get the specific role instance for the player that matches RoleA_Id
+				// This assumes ExtremeRoleManager can provide an instance of a role by player ID and role ID,
+				// or that we can retrieve all roles for a player and find the matching one.
+				// For simplicity, let's assume a player can only have one instance of a specific role type,
+				// or that GetRole returns the relevant one if multiple are possible (e.g. comb roles).
+				// The original logic: ExtremeRoleManager.TryGetRole(playerId, out var gameRoleInstance) && gameRoleInstance.Id == rule.RoleA_Id
+				// This implies TryGetRole gets *the* role for a player, which might be a SingleRole or a part of a CombRole.
+				// Let's refine this to correctly get the instance of RoleA.
+
+				if (ExtremeRoleManager.TryGetRole(playerIdForRoleA, out var gameRoleInstance) &&
+				    gameRoleInstance.Id == (ExtremeRoleId)rule.RoleA_Id)
 				{
-					roleA_Instance = gameRoleInstance;
+					roleA_Instance = gameRoleInstance as SingleRoleBase; // Assuming SettingCChecker expects SingleRoleBase
+                                                                // If RoleA can be a CombRolePart, this needs adjustment or SettingCChecker needs to be more generic.
+                                                                // Given SettingCChecker is Func<SingleRoleBase, bool>, this cast is appropriate.
 				}
+
 
 				if (roleA_Instance == null)
 				{
-					Logging.Debug($"RoleA instance not found or ID mismatch for PlayerId: {itemAInfo.PlayerId} (Expected RoleId: {(ExtremeRoleId)rule.RoleA_Id}).");
+					// This case might happen if RoleA_Id is part of a comb-role and TryGetRole returns the comb-role container
+					// or if the player somehow has the ID assigned but the instance cannot be fetched as SingleRoleBase.
+					// For now, follow original logic's strict check.
+					Logging.Debug($"RoleA instance (as SingleRoleBase) not found or ID mismatch for PlayerId: {playerIdForRoleA} (Expected RoleId: {(ExtremeRoleId)rule.RoleA_Id}).");
 					continue;
 				}
 
 				bool settingC_IsValid = rule.SettingCChecker(roleA_Instance);
-				Logging.Debug($"PlayerId: {itemAInfo.PlayerId}, RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}, SettingC_IsValid: {settingC_IsValid}");
+				Logging.Debug($"PlayerId: {playerIdForRoleA}, RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}, SettingC_IsValid: {settingC_IsValid}");
 
-				if (!settingC_IsValid)
+				if (settingC_IsValid)
 				{
-					continue;
+					roleAExistsAndSettingCIsValid = true;
+					break; // Found at least one instance of RoleA with SettingC valid
 				}
+			}
 
-				bool roleB_ExistsInAnyPlayer = data.Assign.Data.Any(b => GetRoleIdFromAssignment(b) == rule.RoleB_Id);
-				Logging.Debug($"RoleB_Id: {(ExtremeRoleId)rule.RoleB_Id} ExistsInAnyPlayer: {roleB_ExistsInAnyPlayer}");
+			if (!roleAExistsAndSettingCIsValid)
+			{
+				// No instance of RoleA (with SettingC valid) found for any player.
+				continue;
+			}
 
-				if (roleB_ExistsInAnyPlayer)
+			// Condition: RoleA exists and its SettingC is valid.
+			// Now, check if RoleB is NOT assigned to ANY player.
+			bool roleB_ExistsInAnyPlayer = currentAssignments.Any(b => GetRoleIdFromAssignment(b) == rule.RoleB_Id);
+			Logging.Debug($"RoleB_Id: {(ExtremeRoleId)rule.RoleB_Id} ExistsInAnyPlayer: {roleB_ExistsInAnyPlayer}");
+
+			if (!roleB_ExistsInAnyPlayer) // RoleB does NOT exist
+			{
+				// Condition MET: RoleA exists, SettingC is valid, AND RoleB does not exist.
+				// This means RoleA is an NG role in this context.
+				ExtremeRoleId ngRoleId = (ExtremeRoleId)rule.RoleA_Id;
+				if (!ngRoleIds.Contains(ngRoleId))
 				{
-					continue;
-				}
-
-				Logging.Debug($"Condition MET for PlayerId: {itemAInfo.PlayerId}, RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}. Attempting removal.");
-				bool removedThisTime = data.Assign.RemoveAssignment(itemAInfo.PlayerId, rule.RoleA_Id);
-
-				if (!removedThisTime)
-				{
-					Logging.Debug($"Failed to remove RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id} for PlayerId: {itemAInfo.PlayerId}.");
-					continue;
-				}
-
-				Logging.Debug($"SUCCESS: Removed RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id} for PlayerId: {itemAInfo.PlayerId}");
-				dataWasActuallyRemoved = true;
-
-				PlayerControl? playerControlToRequeue = PlayerCache.AllPlayerControl.FirstOrDefault(pc => pc.PlayerId == itemAInfo.PlayerId);
-				if (playerControlToRequeue != null)
-				{
-					prepareData.Assign.AddPlayerToReassign(playerControlToRequeue);
-					Logging.Debug($"PlayerId: {itemAInfo.PlayerId} added back to re-assign queue.");
-				}
-
-				bool teamProcessedForLimit = false;
-				ExtremeRoleType teamToAdjust = ExtremeRoleType.Null; // For logging
-
-				if (ExtremeRoleManager.NormalRole.TryGetValue(rule.RoleA_Id, out var roleADefinition))
-				{
-					teamToAdjust = roleADefinition.Team;
-					prepareData.Limit.Reduce(teamToAdjust, -1);
-					teamProcessedForLimit = true;
-				}
-				else
-				{
-					ExtremeRoleId targetCombRoleId = (ExtremeRoleId)rule.RoleA_Id;
-					foreach (var combManager in ExtremeRoleManager.CombRole.Values)
-					{
-						var foundCombRolePart = combManager.Roles.FirstOrDefault(r => r.Id == targetCombRoleId);
-						if (foundCombRolePart != null)
-						{
-							teamToAdjust = foundCombRolePart.Team;
-							prepareData.Limit.Reduce(teamToAdjust, -1);
-							teamProcessedForLimit = true;
-							break;
-						}
-					}
-				}
-
-				if (teamProcessedForLimit)
-				{
-					Logging.Debug($"Spawn limit for Team: {teamToAdjust} increased by 1 due to removal of RoleId: {(ExtremeRoleId)rule.RoleA_Id}.");
-				}
-				else
-				{
-					Logging.Debug($"WARNING: Could not find team for RoleId: {(ExtremeRoleId)rule.RoleA_Id} to adjust spawn limit.");
+					ngRoleIds.Add(ngRoleId);
+					Logging.Debug($"NG Condition MET. RoleA_Id: {ngRoleId} added to NG list because its SettingC is valid and RoleB_Id: {(ExtremeRoleId)rule.RoleB_Id} is not assigned to anyone.");
 				}
 			}
 		}
-		Logging.Debug($"--- RoleAssignValidator.IsReBuild END (dataWasActuallyRemoved: {dataWasActuallyRemoved}) ---");
-		return dataWasActuallyRemoved;
+		Logging.Debug($"--- RoleAssignDependencyChecker.GetNgData END ---");
+		return ngRoleIds;
 	}
 
 	private int GetRoleIdFromAssignment(IPlayerToExRoleAssignData assignment)
