@@ -18,7 +18,12 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
-public class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
+public class ExtremeRoleAssignDataBuilder(
+	IServiceProvider provider,
+	IRoleAssignDataPreparer preparer,
+	IAssignFilterInitializer assignFilterInitializer, // 追加
+	IRoleAssignValidator validator // 追加
+) : IRoleAssignDataBuilder
 {
 	public enum Priority
 	{
@@ -27,25 +32,12 @@ public class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 		Not = 100,
 	}
 
-	private readonly IRoleAssignDataPreparer preparer;
-	private readonly IRoleAssignDataBuildBehaviour[] behaviour;
-	private readonly IAssignFilterInitializer assignFilterInitializer; // 追加
-	private readonly IRoleAssignValidator validator; // 追加
-
-	public ExtremeRoleAssignDataBuilder(
-		IServiceProvider provider,
-		IRoleAssignDataPreparer preparer,
-		IAssignFilterInitializer assignFilterInitializer, // 追加
-		IRoleAssignValidator validator // 追加
-	)
-	{
-		this.preparer = preparer;
-		this.behaviour = provider.GetServices<IRoleAssignDataBuildBehaviour>()
-			.OrderByDescending(x => x.Priority)
-			.ToArray();
-		this.assignFilterInitializer = assignFilterInitializer; // 追加
-		this.validator = validator; // 追加
-	}
+	private readonly IRoleAssignDataPreparer preparer = preparer;
+	private readonly IRoleAssignDataBuildBehaviour[] behaviour = provider.GetServices<IRoleAssignDataBuildBehaviour>()
+		.OrderByDescending(x => x.Priority)
+		.ToArray();
+	private readonly IAssignFilterInitializer assignFilterInitializer = assignFilterInitializer;
+	private readonly IRoleAssignValidator validator = validator;
 
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
 	{

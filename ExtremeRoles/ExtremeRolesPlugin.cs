@@ -15,16 +15,11 @@ using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.ScreenManagerHook;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.ApiHandler;
@@ -75,51 +70,9 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		{
 			NoCache = true
 		};
-
-		var collection = new ServiceCollection();
-
-		collection.AddTransient<IRoleAssignee, ExtremeRoleAssignee>();
-		collection.AddTransient<IVanillaRoleProvider, VanillaRoleProvider>();
-		collection.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>();
-		collection.AddTransient<ISpawnLimiter, ExtremeSpawnLimiter>();
-		collection.AddTransient<IRoleAssignDataPreparer, ExtremeRoleAssginDataPreparer>();
-		collection.AddTransient<ISpawnDataManager, RoleSpawnDataManager>();
-
-		collection.AddTransient<IRoleAssignDataBuildBehaviour, CombinationRoleAssignDataBuilder>();
-		collection.AddTransient<IRoleAssignDataBuildBehaviour, SingleRoleAssignDataBuilder>();
-		collection.AddTransient<IRoleAssignDataBuildBehaviour, NotAssignedPlayerAssignDataBuilder>();
-
-		collection.AddTransient<PlayerRoleAssignData>();
-
-		// 追加ここから
-		// IAssignFilterInitializer とその実装を登録
-		collection.AddTransient<IAssignFilterInitializer, AssignFilterInitializer>(); // AssignFilterInitializer の using が必要になる場合がある
-
-		// RoleDependencyRule のリストを準備 (具体的なルールはユーザーが後で定義・追加する必要がある)
-		var dependencyRules = new System.Collections.Generic.List<RoleDependencyRule> // RoleDependencyRule の using が必要になる場合がある
-		{
-			// --- 具体的なルール定義の例 (実際の役職IDや条件に合わせてユーザーが実装) ---
-			// 例: 役職A (ID: 1001) が存在し、役職B (ID: 1002) が存在せず、
-			//     役職Aのインスタンスの特定のboolプロパティ OptionX が true の場合。
-			// new RoleDependencyRule(
-			//    (ExtremeRoleId)1001,
-			//    (ExtremeRoleId)1002,
-			//    roleAInstance =>
-			//    {
-			//        // roleAInstance を実際の型にキャストしてプロパティを確認
-			//        // if (roleAInstance is ConcreteRoleA concreteA) return concreteA.OptionX;
-			//        return false; // ここは実際の条件に置き換える
-			//    }
-			// ),
-			// --- 他の依存関係ルールをここに追加 ---
-		};
-		collection.AddSingleton<System.Collections.Generic.IEnumerable<RoleDependencyRule>>(dependencyRules);
-
-		// IRoleAssignValidator とその実装を登録
-		collection.AddTransient<IRoleAssignValidator, RoleAssignValidator>(); // RoleAssignValidator の using が必要になる場合がある
 		// 追加ここまで
 
-		Provider = collection.BuildServiceProvider();
+		Provider = BuildProvider();
 	}
 
     public override void Load()
