@@ -6,30 +6,30 @@ global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 global using NormalGameOption = AmongUs.GameOptions.NormalGameOptionsV09;
 global using HnSGameOption = AmongUs.GameOptions.HideNSeekGameOptionsV09;
 
+using System;
+using System.Net.Http;
+
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 
-using System;
-using Microsoft.Extensions.DependencyInjection;
-
 using HarmonyLib;
 
-using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.ApiHandler;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
-using ExtremeRoles.Translation;
-using ExtremeRoles.Module.ScreenManagerHook;
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
+using ExtremeRoles.Module.ScreenManagerHook;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.ApiHandler;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Translation;
 
 namespace ExtremeRoles;
 
@@ -84,7 +84,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		collection.AddTransient<ISpawnLimiter, ExtremeSpawnLimiter>();
 		collection.AddTransient<IRoleAssignDataPreparer, ExtremeRoleAssginDataPreparer>();
 		collection.AddTransient<ISpawnDataManager, RoleSpawnDataManager>();
-		
+
 		collection.AddTransient<IRoleAssignDataBuildBehaviour, CombinationRoleAssignDataBuilder>();
 		collection.AddTransient<IRoleAssignDataBuildBehaviour, SingleRoleAssignDataBuilder>();
 		collection.AddTransient<IRoleAssignDataBuildBehaviour, NotAssignedPlayerAssignDataBuilder>();
