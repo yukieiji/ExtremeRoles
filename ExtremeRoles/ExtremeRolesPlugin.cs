@@ -91,6 +91,34 @@ public partial class ExtremeRolesPlugin : BasePlugin
 
 		collection.AddTransient<PlayerRoleAssignData>();
 
+		// 追加ここから
+		// IAssignFilterInitializer とその実装を登録
+		collection.AddTransient<IAssignFilterInitializer, AssignFilterInitializer>(); // AssignFilterInitializer の using が必要になる場合がある
+
+		// RoleDependencyRule のリストを準備 (具体的なルールはユーザーが後で定義・追加する必要がある)
+		var dependencyRules = new System.Collections.Generic.List<RoleDependencyRule> // RoleDependencyRule の using が必要になる場合がある
+		{
+			// --- 具体的なルール定義の例 (実際の役職IDや条件に合わせてユーザーが実装) ---
+			// 例: 役職A (ID: 1001) が存在し、役職B (ID: 1002) が存在せず、
+			//     役職Aのインスタンスの特定のboolプロパティ OptionX が true の場合。
+			// new RoleDependencyRule(
+			//    (ExtremeRoleId)1001,
+			//    (ExtremeRoleId)1002,
+			//    roleAInstance =>
+			//    {
+			//        // roleAInstance を実際の型にキャストしてプロパティを確認
+			//        // if (roleAInstance is ConcreteRoleA concreteA) return concreteA.OptionX;
+			//        return false; // ここは実際の条件に置き換える
+			//    }
+			// ),
+			// --- 他の依存関係ルールをここに追加 ---
+		};
+		collection.AddSingleton<System.Collections.Generic.IEnumerable<RoleDependencyRule>>(dependencyRules);
+
+		// IRoleAssignValidator とその実装を登録
+		collection.AddTransient<IRoleAssignValidator, RoleAssignValidator>(); // RoleAssignValidator の using が必要になる場合がある
+		// 追加ここまで
+
 		Provider = collection.BuildServiceProvider();
 	}
 

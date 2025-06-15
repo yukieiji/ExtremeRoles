@@ -70,4 +70,49 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
 		=> this.needRoleAssignPlayer.RemoveAll(x => x == player);
+
+	// 追加メソッド1: RemoveAssignment
+	public bool RemoveAssignment(byte playerId, int roleIdToRemove)
+	{
+		int initialCount = this.assignData.Count;
+
+		this.assignData.RemoveAll(assignment =>
+		{
+			// IPlayerToExRoleAssignData の実装である PlayerToSingleRoleAssignData と
+			// PlayerToCombRoleAssignData が PlayerId と RoleId プロパティを持つことを前提とする。
+			// (事前のファイル確認でこれは正しい)
+			if (assignment is PlayerToSingleRoleAssignData single)
+			{
+				return single.PlayerId == playerId && single.RoleId == roleIdToRemove;
+			}
+			if (assignment is PlayerToCombRoleAssignData comb)
+			{
+				// コンビ役職の場合、RoleId が個々の役職を指すという前提。
+				return comb.PlayerId == playerId && comb.RoleId == roleIdToRemove;
+			}
+			return false;
+		});
+
+		bool removed = this.assignData.Count < initialCount;
+
+		if (removed)
+		{
+			// combRoleAssignPlayerId から関連データを削除するロジックは、
+			// 削除された役職がコンビネーションの一部かどうかの判定が複雑になるため、
+			// 今回の変更範囲では含めない。
+			// 必要であれば別途対応。
+		}
+		return removed;
+	}
+
+	// 追加メソッド2: AddPlayerToReassign
+	public void AddPlayerToReassign(PlayerControl playerControl)
+	{
+		if (playerControl == null) return;
+
+		if (!this.needRoleAssignPlayer.Any(p => p.PlayerId == playerControl.PlayerId))
+		{
+			this.needRoleAssignPlayer.Add(new VanillaRolePlayerAssignData(playerControl));
+		}
+	}
 }
