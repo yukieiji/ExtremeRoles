@@ -1,6 +1,7 @@
-﻿using ExtremeRoles.GhostRoles;
+﻿using System.Collections.Generic;
+
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
-using System.Collections.Generic;
 
 namespace ExtremeRoles.GameMode.RoleSelector;
 
