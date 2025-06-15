@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Helper;
-
-using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -28,24 +31,28 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 			return false;
 		}
 
+		var allNgData = new HashSet<ExtremeRoleId>();
+
 		foreach (var checker in this.checkers)
 		{
-			Logging.Debug($"Running checker: {checker.GetType().Name}");
+			string name = checker.GetType().Name;
+			Logging.Debug($"Running checker: {name}");
 			var ngRoleIds = checker.GetNgData(prepareData);
 
 			if (ngRoleIds == null || !ngRoleIds.Any())
 			{
-				Logging.Debug($"No NG data found by {checker.GetType().Name}.");
+				Logging.Debug($"No NG data found by {name}.");
 				continue;
 			}
+			Logging.Debug($"NG data found by {name}. IDs: {string.Join(", ", ngRoleIds.Select(id => id.ToString()))}");
+			allNgData.UnionWith(ngRoleIds);
+		}
 
-			Logging.Info($"NG data found by {checker.GetType().Name}. IDs: {string.Join(", ", ngRoleIds.Select(id => id.ToString()))}");
-			foreach (var ngRoleIdEnum in ngRoleIds) // ngRoleIdEnum is ExtremeRoleId
+		foreach (var ngRoleIdEnum in allNgData)
+		{
+			if (ProcessNgRole(ngRoleIdEnum, prepareData))
 			{
-				if (ProcessNgRole(ngRoleIdEnum, prepareData))
-				{
-					isUpdate = true; // If any role processing leads to an update, the overall method result is an update.
-				}
+				isUpdate = true; // If any role processing leads to an update, the overall method result is an update.
 			}
 		}
 
@@ -53,14 +60,13 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 		return isUpdate;
 	}
 
-	private bool ProcessNgRole(ExtremeRoleId ngRoleIdEnum, PreparationData prepareData)
+	private static bool ProcessNgRole(ExtremeRoleId ngRoleIdEnum, PreparationData prepareData)
 	{
 		bool dataUpdatedInThisCall = false;
 		int ngRoleId = (int)ngRoleIdEnum;
 		Logging.Debug($"Processing NG RoleId: {ngRoleIdEnum}");
 
-		var assignmentsSnapshot = prepareData.Assign.Data.ToList();
-		foreach (var assignment in assignmentsSnapshot)
+		foreach (var assignment in prepareData.Assign.Data.ToArray())
 		{
 			byte playerId = 0;
 			int roleId = -1;
@@ -85,17 +91,15 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 				continue;
 			}
 
-			Logging.Info($"Player {playerId} has NG RoleId: {ngRoleIdEnum}. Attempting to remove.");
-			bool removed = prepareData.Assign.RemoveAssignment(playerId, ngRoleId);
-
-			if (!removed)
+			Logging.Debug($"Player {playerId} has NG RoleId: {ngRoleIdEnum}. Attempting to remove.");
+			if (!prepareData.Assign.RemoveAssignment(playerId, ngRoleId))
 			{
-				Logging.Warning($"Failed to remove NG RoleId: {ngRoleIdEnum} from Player {playerId}. It might have been removed by another process or rule.");
+				Logging.Debug($"Failed to remove NG RoleId: {ngRoleIdEnum} from Player {playerId}. It might have been removed by another process or rule.");
 				continue; // Skip to next assignment if removal failed
 			}
 
 			dataUpdatedInThisCall = true; // Mark that data was updated
-			Logging.Info($"Successfully removed NG RoleId: {ngRoleIdEnum} from Player {playerId}.");
+			Logging.Debug($"Successfully removed NG RoleId: {ngRoleIdEnum} from Player {playerId}.");
 
 			PlayerControl? playerControlToRequeue = PlayerCache.AllPlayerControl.FirstOrDefault(pc => pc.PlayerId == playerId);
 			if (playerControlToRequeue != null)
@@ -129,11 +133,11 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 			if (teamFound && teamToAdjust != ExtremeRoleType.Null)
 			{
 				prepareData.Limit.Reduce(teamToAdjust, -1);
-				Logging.Info($"Spawn limit for Team: {teamToAdjust} increased by 1 due to removal of RoleId: {ngRoleIdEnum}.");
+				Logging.Debug($"Spawn limit for Team: {teamToAdjust} increased by 1 due to removal of RoleId: {ngRoleIdEnum}.");
 			}
 			else
 			{
-				Logging.Warning($"Could not determine team for NG RoleId: {ngRoleIdEnum}. Spawn limit not adjusted.");
+				Logging.Debug($"Could not determine team for NG RoleId: {ngRoleIdEnum}. Spawn limit not adjusted.");
 			}
 		}
 		return dataUpdatedInThisCall;

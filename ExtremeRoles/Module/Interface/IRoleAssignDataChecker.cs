@@ -5,5 +5,5 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public interface IRoleAssignDataChecker
 {
-    public IReadOnlyList<ExtremeRoleId> GetNgData(in PreparationData data);
+    public IReadOnlySet<ExtremeRoleId> GetNgData(in PreparationData data);
 }
