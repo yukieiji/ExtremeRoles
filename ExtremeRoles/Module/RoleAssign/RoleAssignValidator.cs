@@ -92,7 +92,7 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 			}
 
 			Logging.Debug($"Player {playerId} has NG RoleId: {ngRoleIdEnum}. Attempting to remove.");
-			if (!prepareData.Assign.RemoveAssignment(playerId, ngRoleId))
+			if (!prepareData.Assign.TryRemoveAssignment(playerId, ngRoleId))
 			{
 				Logging.Debug($"Failed to remove NG RoleId: {ngRoleIdEnum} from Player {playerId}. It might have been removed by another process or rule.");
 				continue; // Skip to next assignment if removal failed
@@ -101,14 +101,14 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 			dataUpdatedInThisCall = true; // Mark that data was updated
 			Logging.Debug($"Successfully removed NG RoleId: {ngRoleIdEnum} from Player {playerId}.");
 
-			PlayerControl? playerControlToRequeue = PlayerCache.AllPlayerControl.FirstOrDefault(pc => pc.PlayerId == playerId);
-			if (playerControlToRequeue != null)
+			var playerData = GameData.Instance.GetPlayerById(playerId);
+			if (playerData != null)
 			{
-				prepareData.Assign.AddPlayerToReassign(playerControlToRequeue);
+				prepareData.Assign.AddPlayerToReassign(playerData);
 				Logging.Debug($"PlayerId: {playerId} added back to re-assign queue.");
 			}
 
-			ExtremeRoleType teamToAdjust = ExtremeRoleType.Null;
+			var teamToAdjust = ExtremeRoleType.Null;
 			bool teamFound = false;
 
 			if (ExtremeRoleManager.NormalRole.TryGetValue(ngRoleId, out var roleDefinition))
@@ -130,7 +130,7 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 				}
 			}
 
-			if (teamFound && teamToAdjust != ExtremeRoleType.Null)
+			if (teamFound && teamToAdjust is not ExtremeRoleType.Null)
 			{
 				prepareData.Limit.Reduce(teamToAdjust, -1);
 				Logging.Debug($"Spawn limit for Team: {teamToAdjust} increased by 1 due to removal of RoleId: {ngRoleIdEnum}.");

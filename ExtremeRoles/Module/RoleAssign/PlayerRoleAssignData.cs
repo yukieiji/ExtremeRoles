@@ -71,7 +71,7 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
 		=> this.needRoleAssignPlayer.RemoveAll(x => x == player);
 
-	public bool RemoveAssignment(byte playerId, int roleIdToRemove)
+	public bool TryRemoveAssignment(byte playerId, int roleIdToRemove)
 	{
 		int initialCount = this.assignData.Count;
 		PlayerToCombRoleAssignData? removedCombAssignmentInfo = null;
@@ -85,8 +85,7 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 			}
 			else if (assignment is PlayerToCombRoleAssignData comb)
 			{
-				shouldRemove = comb.PlayerId == playerId && comb.RoleId == roleIdToRemove;
-				if (shouldRemove)
+				if (comb.PlayerId == playerId && comb.RoleId == roleIdToRemove)
 				{
 					removedCombAssignmentInfo = comb;
 				}
@@ -100,15 +99,10 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 		{
 			PlayerToCombRoleAssignData actualRemovedCombInfo = removedCombAssignmentInfo.Value;
 
-			bool stillHasOtherPartsOfSameCombination = this.assignData.Any(a =>
-			{
-				if (a is PlayerToCombRoleAssignData otherComb)
-				{
-					return otherComb.PlayerId == actualRemovedCombInfo.PlayerId &&
-						   otherComb.CombTypeId == actualRemovedCombInfo.CombTypeId;
-				}
-				return false;
-			});
+			bool stillHasOtherPartsOfSameCombination = this.assignData.Any(x =>
+				x is PlayerToCombRoleAssignData otherComb &&
+					otherComb.PlayerId == actualRemovedCombInfo.PlayerId &&
+					otherComb.CombTypeId == actualRemovedCombInfo.CombTypeId);
 
 			if (!stillHasOtherPartsOfSameCombination)
 			{
@@ -128,16 +122,16 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 		return removed;
 	}
 
-	public void AddPlayerToReassign(PlayerControl playerControl)
+	public void AddPlayerToReassign(NetworkedPlayerInfo pc)
 	{
-		if (playerControl == null)
+		if (pc == null)
 		{
 			return;
 		}
 
-		if (!this.needRoleAssignPlayer.Any(p => p.PlayerId == playerControl.PlayerId))
+		if (!this.needRoleAssignPlayer.Any(p => p.PlayerId == pc.PlayerId))
 		{
-			this.needRoleAssignPlayer.Add(new VanillaRolePlayerAssignData(playerControl));
+			this.needRoleAssignPlayer.Add(new VanillaRolePlayerAssignData(pc));
 		}
 	}
 }
