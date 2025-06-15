@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
 
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
@@ -42,6 +42,7 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 {
 	public readonly record struct Info(Scavenger.Ability Ability, bool IsSync);
 
+	[HideFromIl2Cpp]
 	public Info WeponInfo
 	{
 		private get => weponInfo;
@@ -152,6 +153,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		return bullet;
 	}
 
+	[HideFromIl2Cpp]
 	public void Initialize(
 		int id,
 		Scavenger.Ability ability,
@@ -289,6 +291,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 		return sword;
 	}
 
+	[HideFromIl2Cpp]
 	public void SetRotation(in RotationInfo rotation, bool isReset)
 	{
 		if (isReset && this.anchor != null)
@@ -557,6 +560,8 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 		PlayerControl IgnorePlayer,
 		float FireSecond);
 
+
+	[HideFromIl2Cpp]
 	public HitInfo? Info
 	{
 		get => this.info;
@@ -691,6 +696,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 {
 	public float DeadTime { private get; set; }
 	public byte IgnorePlayerId { private get; set; }
+
 	public PlayerControl? TargetPlayer
 	{
 		private get => targetPlayer;

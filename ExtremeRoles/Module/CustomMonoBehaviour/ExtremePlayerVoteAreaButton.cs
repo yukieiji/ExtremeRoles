@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using UnityEngine;
+
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -20,6 +21,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 {
 	private readonly Dictionary<byte, PlayerVoteAreaButtonContainer> meetingButton = new Dictionary<byte, PlayerVoteAreaButtonContainer>(PlayerCache.AllPlayerControl.Count);
 
+	[HideFromIl2Cpp]
 	public bool TryGetMeetingButton(
 		PlayerVoteArea pva,
 		out IEnumerable<IPlayerVoteAreaButtonPostionComputer>? result)
@@ -102,6 +104,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		return true;
 	}
 
+	[HideFromIl2Cpp]
 	private bool isOkRoleAbilityButton(
 		PlayerVoteArea pva,
 		IRoleMeetingButtonAbility buttonRole)
