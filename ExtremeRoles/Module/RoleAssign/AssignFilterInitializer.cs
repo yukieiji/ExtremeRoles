@@ -9,7 +9,14 @@ public class AssignFilterInitializer : IAssignFilterInitializer
 		// アサインデータを再追加する
 		foreach (var assignData in data.Assign.Data)
 		{
-
+			if (assignData is PlayerToCombRoleAssignData combRoleAssignData)
+			{
+				filter.Update(combRoleAssignData.CombTypeId);
+			}
+			else
+			{
+				filter.Update(assignData.RoleId);
+			}
 		}
 	}
 }
