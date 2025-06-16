@@ -8,7 +8,7 @@ namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
 public sealed class NotAssignedPlayerAssignDataBuilder : IRoleAssignDataBuildBehaviour
 {
-	public int Priority => (int)ExtremeRoleAssignDataBuilder.Priority.Single;
+	public int Priority => (int)ExtremeRoleAssignDataBuilder.Priority.Not;
 
 	public void Build(in PreparationData data)
 	{

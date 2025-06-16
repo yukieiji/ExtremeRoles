@@ -16,7 +16,7 @@ namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 
 public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvider) : IRoleAssignDataBuildBehaviour
 {
-	public int Priority => (int)ExtremeRoleAssignDataBuilder.Priority.Not;
+	public int Priority => (int)ExtremeRoleAssignDataBuilder.Priority.Single;
 
 	private readonly IReadOnlySet<RoleTypes> vanillaCrewRoleType = roleProvider.CrewmateRole;
 	private readonly IReadOnlySet<RoleTypes> vanillaImpRoleType = roleProvider.ImpostorRole;

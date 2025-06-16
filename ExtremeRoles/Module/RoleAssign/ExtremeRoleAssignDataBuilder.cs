@@ -76,8 +76,6 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 
 		GhostRoleSpawnDataManager.Instance.Create(prepareData.RoleSpawn.UseGhostCombRole);
 
-		// RoleAssignFilter.Instance.Initialize(); // 削除
-
 		do
 		{
 			this.assignFilterInitializer.Initialize(RoleAssignFilter.Instance, prepareData);
