@@ -14,19 +14,19 @@ public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 {
 	public IReadOnlyList<RoleDependencyRule> Rules => new List<RoleDependencyRule>()
 	{
-		buildRule(ExtremeRoleId.Shepherd, ExtremeRoleId.Jackal, OptionTab.NeutralTab, ShepherdRole.Option.CanKill, ShepherdRole.Option.IsSubTeam),
+		buildKilledSubTeam(ExtremeRoleId.Shepherd, ExtremeRoleId.Jackal, OptionTab.NeutralTab, ShepherdRole.Option.CanKill, ShepherdRole.Option.IsSubTeam),
 		new (ExtremeRoleId.Furry, ExtremeRoleId.Jackal, () => true),
-		buildRule(ExtremeRoleId.Intimate, ExtremeRoleId.Yandere, OptionTab.NeutralTab, IntimateRole.Option.CanKill, IntimateRole.Option.IsSubTeam),
+		buildKilledSubTeam(ExtremeRoleId.Intimate, ExtremeRoleId.Yandere, OptionTab.NeutralTab, IntimateRole.Option.CanKill, IntimateRole.Option.IsSubTeam),
 		new (ExtremeRoleId.Surrogator, ExtremeRoleId.Yandere, () => true),
-		buildRule(ExtremeRoleId.Knight, ExtremeRoleId.Queen, OptionTab.NeutralTab, KnightRole.Option.CanKill, KnightRole.Option.IsSubTeam),
+		buildKilledSubTeam(ExtremeRoleId.Knight, ExtremeRoleId.Queen, OptionTab.NeutralTab, KnightRole.Option.CanKill, KnightRole.Option.IsSubTeam),
 		new (ExtremeRoleId.Pawn, ExtremeRoleId.Queen, () => true)
 	};
 
-	private static RoleDependencyRule buildRule<T>(
+	private static RoleDependencyRule buildKilledSubTeam<T>(
 		ExtremeRoleId checkRoleId, ExtremeRoleId dependRoleId, OptionTab tab, params T[] options) where T : Enum
 		=> new(checkRoleId, dependRoleId,
 			() =>
 				OptionManager.Instance.TryGetCategory(tab, ExtremeRoleManager.GetRoleGroupId(checkRoleId), out var category) &&
-				options.All(x => category.GetValue<T, bool>(x))
+				!options.All(x => category.GetValue<T, bool>(x))
 			);
 }
