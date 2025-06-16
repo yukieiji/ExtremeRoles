@@ -88,7 +88,7 @@ public partial class ExtremeSkinsPlugin : BasePlugin
 
 		var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 		if (assembly is null) { return; }
-		VersionChecker.RegisterAssembly(assembly, 1);
+		VersionChecker.RegisterAssembly(assembly, 1, true);
 		Il2CppRegisterAttribute.Registration(assembly);
     }
 }
