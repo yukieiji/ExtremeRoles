@@ -47,7 +47,7 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 			var assignmentsOfRole = currentAssignments
 				.Where(a => GetRoleIdFromAssignment(a) == (int)checkRole); // ToList is important if currentAssignments can change, but here we only read.
 
-			if (assignmentsOfRole.Any())
+			if (!assignmentsOfRole.Any())
 			{
 				Logging.Debug($"No assignments found for RoleId:{checkRole}.");
 				continue;
