@@ -45,7 +45,7 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 
 			// Find all players assigned to RoleA_Id
 			var assignmentsOfRole = currentAssignments
-				.Where(a => GetRoleIdFromAssignment(a) == (int)checkRole); // ToList is important if currentAssignments can change, but here we only read.
+				.Where(a => getRoleIdFromAssignment(a) == (int)checkRole); // ToList is important if currentAssignments can change, but here we only read.
 
 			if (!assignmentsOfRole.Any())
 			{
@@ -74,7 +74,7 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 
 			// Condition: RoleA exists and its SettingC is valid.
 			// Now, check if RoleB is NOT assigned to ANY player.
-			bool dependRoleAssignedToAnyPlayer = currentAssignments.Any(b => GetRoleIdFromAssignment(b) == (int)dependRole);
+			bool dependRoleAssignedToAnyPlayer = currentAssignments.Any(b => getRoleIdFromAssignment(b) == (int)dependRole);
 			Logging.Debug($"DependRole: {dependRole} ExistsInAnyPlayer: {dependRoleAssignedToAnyPlayer}");
 
 			if (!dependRoleAssignedToAnyPlayer) // RoleB does NOT exist
@@ -82,14 +82,14 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 				// Condition MET: RoleA exists, SettingC is valid, AND RoleB does not exist.
 				// This means RoleA is an NG role in this context.
 				ngRoleIds.Add(checkRole);
-				Logging.Debug($"NG Condition MET. CheckRole: {checkRole} added to NG list because its SettingC is valid and RoleB_Id: {dependRole} is not assigned to anyone.");
+				Logging.Debug($"NG Condition MET. CheckRole: {checkRole} added to NG list because its dependend on {dependRole} is not assigned to anyone.");
 			}
 		}
 		Logging.Debug($"--- RoleAssignDependencyChecker.GetNgData END ---");
 		return ngRoleIds;
 	}
 
-	private static int GetRoleIdFromAssignment(IPlayerToExRoleAssignData assignment)
+	private static int getRoleIdFromAssignment(IPlayerToExRoleAssignData assignment)
 	{
 		if (assignment is PlayerToSingleRoleAssignData single)
 		{
