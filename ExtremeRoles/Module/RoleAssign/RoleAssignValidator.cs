@@ -21,13 +21,13 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 
 	public bool IsReBuild(in PreparationData prepareData)
 	{
-		Logging.Debug("------ RoleAssignValidator.IsReBuild START ------");
+		Logging.Debug("--------- RoleAssignValidator.IsReBuild START ---------");
 		bool isUpdate = false;
 
 		if (!this.checkers.Any())
 		{
 			Logging.Debug("No checkers registered. Skipping validation.");
-			Logging.Debug("------ RoleAssignValidator.IsReBuild END (No checkers) ------");
+			Logging.Debug("--------- RoleAssignValidator.IsReBuild END (No checkers) ---------");
 			return false;
 		}
 
@@ -50,21 +50,21 @@ public class RoleAssignValidator(IServiceProvider provider) : IRoleAssignValidat
 
 		foreach (var ngRoleIdEnum in allNgData)
 		{
-			if (ProcessNgRole(ngRoleIdEnum, prepareData))
+			if (processNgRole(ngRoleIdEnum, prepareData))
 			{
 				isUpdate = true; // If any role processing leads to an update, the overall method result is an update.
 			}
 		}
 
-		Logging.Debug($"------ RoleAssignValidator.IsReBuild END (isUpdate: {isUpdate}) ------");
+		Logging.Debug($"--------- RoleAssignValidator.IsReBuild END (isUpdate: {isUpdate}) ---------");
 		return isUpdate;
 	}
 
-	private static bool ProcessNgRole(ExtremeRoleId ngRoleIdEnum, PreparationData prepareData)
+	private static bool processNgRole(ExtremeRoleId ngRoleIdEnum, PreparationData prepareData)
 	{
 		bool dataUpdatedInThisCall = false;
 		int ngRoleId = (int)ngRoleIdEnum;
-		Logging.Debug($"Processing NG RoleId: {ngRoleIdEnum}");
+		Logging.Debug($"------ Processing NG RoleId: {ngRoleIdEnum} ------");
 
 		foreach (var assignment in prepareData.Assign.Data.ToArray())
 		{

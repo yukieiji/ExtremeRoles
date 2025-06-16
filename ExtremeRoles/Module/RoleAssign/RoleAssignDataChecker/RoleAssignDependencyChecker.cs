@@ -24,9 +24,12 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 		var ngRoleIds = new HashSet<ExtremeRoleId>();
 		var currentAssignments = data.Assign.Data;
 
-		if (rules.Count == 0)
+		Logging.Debug($"------ RoleAssignDependencyChecker.GetNgData START ------");
+
+		if (this.rules.Count == 0)
 		{
 			Logging.Debug("No dependency rules defined. Skipping validation.");
+			Logging.Debug($"------ RoleAssignDependencyChecker.GetNgData END(No Rule) ------");
 			return ngRoleIds; // Return empty list
 		}
 
@@ -41,7 +44,7 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 				continue;
 			}
 
-			Logging.Debug($"Evaluating Rule: Check={checkRole}, Depend={dependRole}");
+			Logging.Debug($"--- Evaluating Rule: Check={checkRole}, Depend={dependRole} ---");
 
 			// Find all players assigned to RoleA_Id
 			var assignmentsOfRole = currentAssignments

@@ -110,13 +110,19 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 		in IReadOnlyList<VanillaRolePlayerAssignData> targetPlayer,
 		in IReadOnlySet<RoleTypes> vanilaTeams)
 	{
-		var teamSpawnData = data.RoleSpawn.CurrentSingleRoleSpawnData[team];
-
-		if (targetPlayer.Count == 0) { return; }
+		if (targetPlayer.Count == 0 ||
+			data.RoleSpawn.CurrentSingleRoleSpawnData.TryGetValue(team, out var teamSpawnData) ||
+			teamSpawnData is null)
+		{
+			return;
+		}
 
 		var spawnCheckRoleId = createSingleRoleIdData(teamSpawnData);
 
-		if (spawnCheckRoleId.Count == 0) { return; }
+		if (spawnCheckRoleId.Count == 0)
+		{
+			return;
+		}
 
 		var shuffledSpawnCheckRoleId = spawnCheckRoleId
 			.OrderByDescending(x => x.weight) // まずは重みでソート
@@ -160,7 +166,10 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 				{
 					int intedRoleId = shuffledSpawnCheckRoleId[i];
 
-					if (RoleAssignFilter.Instance.IsBlock(intedRoleId)) { continue; }
+					if (RoleAssignFilter.Instance.IsBlock(intedRoleId))
+					{
+						continue;
+					}
 
 					removePlayer = player;
 					shuffledSpawnCheckRoleId.RemoveAt(i);
@@ -194,7 +203,10 @@ public sealed class SingleRoleAssignDataBuilder(IVanillaRoleProvider roleProvide
 		{
 			for (int i = 0; i < data.SpawnSetNum; ++i)
 			{
-				if (!data.IsSpawn()) { continue; }
+				if (!data.IsSpawn())
+				{
+					continue;
+				}
 
 				result.Add((intedRoleId, data.Weight));
 			}
