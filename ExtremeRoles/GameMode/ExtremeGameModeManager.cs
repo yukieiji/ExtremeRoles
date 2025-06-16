@@ -11,6 +11,8 @@ using ExtremeRoles.Roles;
 
 // TODO: setプロパティ => initにする
 
+#nullable enable
+
 namespace ExtremeRoles.GameMode;
 
 public sealed class ExtremeGameModeManager
@@ -41,12 +43,17 @@ public sealed class ExtremeGameModeManager
 
         Instance = new ExtremeGameModeManager(mode);
 
-        IModeFactory factory = mode switch
+        IModeFactory? factory = mode switch
         {
             GameModes.Normal or GameModes.NormalFools => new ClassicGameModeFactory(),
             GameModes.HideNSeek or GameModes.SeekFools => new HideNSeekGameModeFactory(),
             _ => null,
         };
+
+		if (factory is null)
+		{
+			return;
+		}
 
         Instance.ShipOption = factory.CreateGlobalOption();
         Instance.RoleSelector = factory.CreateRoleSelector();
@@ -60,7 +67,7 @@ public sealed class ExtremeGameModeManager
 		isXionActive = IRoleSelector.RawXionUse;
 	}
 
-    public IIntroRunner GetIntroRunner()
+    public IIntroRunner? GetIntroRunner()
         => CurrentGameMode switch
         {
             GameModes.Normal or GameModes.NormalFools => new ClassicIntroRunner(),
