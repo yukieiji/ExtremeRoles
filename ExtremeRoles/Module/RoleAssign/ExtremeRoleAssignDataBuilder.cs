@@ -18,12 +18,7 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
-public class ExtremeRoleAssignDataBuilder(
-	IServiceProvider provider,
-	IRoleAssignDataPreparer preparer,
-	IAssignFilterInitializer assignFilterInitializer, // 追加
-	IRoleAssignValidator validator // 追加
-) : IRoleAssignDataBuilder
+public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 {
 	public enum Priority
 	{
@@ -32,12 +27,33 @@ public class ExtremeRoleAssignDataBuilder(
 		Not = 100,
 	}
 
-	private readonly IRoleAssignDataPreparer preparer = preparer;
-	private readonly IRoleAssignDataBuildBehaviour[] behaviour = provider.GetServices<IRoleAssignDataBuildBehaviour>()
-		.OrderByDescending(x => x.Priority)
-		.ToArray();
-	private readonly IAssignFilterInitializer assignFilterInitializer = assignFilterInitializer;
-	private readonly IRoleAssignValidator validator = validator;
+	private readonly IRoleAssignDataPreparer preparer;
+	private readonly IRoleAssignDataBuildBehaviour[] behaviour;
+	private readonly IRoleAssignDataBuildBehaviour? vanillaFallBack;
+	private readonly IAssignFilterInitializer assignFilterInitializer;
+	private readonly IRoleAssignValidator validator;
+
+	public ExtremeRoleAssignDataBuilder(
+		IServiceProvider provider,
+		IRoleAssignDataPreparer preparer,
+		IAssignFilterInitializer assignFilterInitializer, // 追加
+		IRoleAssignValidator validator // 追加
+	)
+	{
+		this.preparer = preparer;
+
+		var allBehave = provider.GetServices<IRoleAssignDataBuildBehaviour>();
+
+		this.behaviour = allBehave
+			.Where(x => x.Priority != (int)Priority.Not)
+			.OrderByDescending(x => x.Priority)
+			.ToArray();
+		this.vanillaFallBack = allBehave.FirstOrDefault(x => x.Priority == (int)Priority.Not);
+
+		this.assignFilterInitializer = assignFilterInitializer;
+		this.validator = validator;
+	}
+
 
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
 	{
@@ -72,6 +88,8 @@ public class ExtremeRoleAssignDataBuilder(
 			}
 
 		} while (this.validator.IsReBuild(prepareData));
+
+		this.vanillaFallBack?.Build(in prepareData);
 
 		return prepareData.Assign.Data;
 	}
