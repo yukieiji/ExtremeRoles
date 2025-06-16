@@ -70,4 +70,68 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
 		=> this.needRoleAssignPlayer.RemoveAll(x => x == player);
+
+	public bool TryRemoveAssignment(byte playerId, int roleIdToRemove)
+	{
+		int initialCount = this.assignData.Count;
+		PlayerToCombRoleAssignData? removedCombAssignmentInfo = null;
+
+		this.assignData.RemoveAll(assignment =>
+		{
+			bool shouldRemove = false;
+			if (assignment is PlayerToSingleRoleAssignData single)
+			{
+				shouldRemove = single.PlayerId == playerId && single.RoleId == roleIdToRemove;
+			}
+			else if (assignment is PlayerToCombRoleAssignData comb)
+			{
+				if (comb.PlayerId == playerId && comb.RoleId == roleIdToRemove)
+				{
+					removedCombAssignmentInfo = comb;
+				}
+			}
+			return shouldRemove;
+		});
+
+		bool removed = this.assignData.Count < initialCount;
+
+		if (removed && removedCombAssignmentInfo.HasValue)
+		{
+			var actualRemovedCombInfo = removedCombAssignmentInfo.Value;
+
+			bool stillHasOtherPartsOfSameCombination = this.assignData.Any(x =>
+				x is PlayerToCombRoleAssignData otherComb &&
+					otherComb.PlayerId == actualRemovedCombInfo.PlayerId &&
+					otherComb.CombTypeId == actualRemovedCombInfo.CombTypeId);
+
+			if (!stillHasOtherPartsOfSameCombination)
+			{
+				// 注意: プレイヤーが複数の異なるタイプのコンビネーション役職を持つケースは稀と想定。
+				// もし持つ場合、このロジックでは、あるコンビが完全に消えたら、
+				// たとえ別のコンビが残っていても消してしまう可能性がある。
+				// より厳密には、combRoleAssignPlayerId の Value (ExtremeRoleType) も考慮するか、
+				// CombTypeId ごとに管理する必要があるが、現状の辞書の構造では難しい。
+				// ここでは、指定された CombTypeId がなくなった場合に限り、そのプレイヤーの CombRole 情報を消す。
+				// playerId に紐づく CombTypeId を管理する構造ではないため、
+				// 実際には、その playerId が combRoleAssignPlayerId に登録された際のチーム情報が消えることになる。
+				// このキーが CombTypeId ではなく PlayerId であるため、
+				// プレイヤーが複数のコンビネーションに同時に属せないという前提に依存する。
+				this.combRoleAssignPlayerId.Remove(actualRemovedCombInfo.PlayerId);
+			}
+		}
+		return removed;
+	}
+
+	public void AddPlayerToReassign(NetworkedPlayerInfo pc)
+	{
+		if (pc == null)
+		{
+			return;
+		}
+
+		if (!this.needRoleAssignPlayer.Any(p => p.PlayerId == pc.PlayerId))
+		{
+			this.needRoleAssignPlayer.Add(new VanillaRolePlayerAssignData(pc));
+		}
+	}
 }

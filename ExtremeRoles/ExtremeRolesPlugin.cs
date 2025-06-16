@@ -15,16 +15,11 @@ using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.RoleAssign.RoleAssignDataBuildBehaviour;
 using ExtremeRoles.Module.ScreenManagerHook;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.ApiHandler;
@@ -75,23 +70,9 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		{
 			NoCache = true
 		};
+		// 追加ここまで
 
-		var collection = new ServiceCollection();
-
-		collection.AddTransient<IRoleAssignee, ExtremeRoleAssignee>();
-		collection.AddTransient<IVanillaRoleProvider, VanillaRoleProvider>();
-		collection.AddTransient<IRoleAssignDataBuilder, ExtremeRoleAssignDataBuilder>();
-		collection.AddTransient<ISpawnLimiter, ExtremeSpawnLimiter>();
-		collection.AddTransient<IRoleAssignDataPreparer, ExtremeRoleAssginDataPreparer>();
-		collection.AddTransient<ISpawnDataManager, RoleSpawnDataManager>();
-
-		collection.AddTransient<IRoleAssignDataBuildBehaviour, CombinationRoleAssignDataBuilder>();
-		collection.AddTransient<IRoleAssignDataBuildBehaviour, SingleRoleAssignDataBuilder>();
-		collection.AddTransient<IRoleAssignDataBuildBehaviour, NotAssignedPlayerAssignDataBuilder>();
-
-		collection.AddTransient<PlayerRoleAssignData>();
-
-		Provider = collection.BuildServiceProvider();
+		Provider = BuildProvider();
 	}
 
     public override void Load()

@@ -8,30 +8,52 @@ using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Roles;
+using ExtremeRoles.Roles; // ExtremeRoleIdのため (元からあったか確認)
 
 using Microsoft.Extensions.DependencyInjection;
+
+// IAssignFilterInitializer, IRoleAssignValidator, RoleAssignFilter, PreparationData が ExtremeRoles.Module.RoleAssign 名前空間にあると想定
 
 namespace ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
-public class ExtremeRoleAssignDataBuilder(
-	IServiceProvider provider,
-	IRoleAssignDataPreparer preparer
-) : IRoleAssignDataBuilder
+public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 {
 	public enum Priority
 	{
 		Combination,
 		Single,
-
 		Not = 100,
 	}
 
-	private readonly IRoleAssignDataPreparer preparer = preparer;
-	private readonly IRoleAssignDataBuildBehaviour[] behaviour = provider.GetServices<IRoleAssignDataBuildBehaviour>().OrderByDescending(
-		x => x.Priority).ToArray();
+	private readonly IRoleAssignDataPreparer preparer;
+	private readonly IRoleAssignDataBuildBehaviour[] behaviour;
+	private readonly IRoleAssignDataBuildBehaviour? vanillaFallBack;
+	private readonly IAssignFilterInitializer assignFilterInitializer;
+	private readonly IRoleAssignValidator validator;
+
+	public ExtremeRoleAssignDataBuilder(
+		IServiceProvider provider,
+		IRoleAssignDataPreparer preparer,
+		IAssignFilterInitializer assignFilterInitializer, // 追加
+		IRoleAssignValidator validator // 追加
+	)
+	{
+		this.preparer = preparer;
+
+		var allBehave = provider.GetServices<IRoleAssignDataBuildBehaviour>();
+
+		this.behaviour = allBehave
+			.Where(x => x.Priority != (int)Priority.Not)
+			.OrderByDescending(x => x.Priority)
+			.ToArray();
+		this.vanillaFallBack = allBehave.FirstOrDefault(x => x.Priority == (int)Priority.Not);
+
+		this.assignFilterInitializer = assignFilterInitializer;
+		this.validator = validator;
+	}
+
 
 	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
 	{
@@ -54,12 +76,18 @@ public class ExtremeRoleAssignDataBuilder(
 
 		GhostRoleSpawnDataManager.Instance.Create(prepareData.RoleSpawn.UseGhostCombRole);
 
-		RoleAssignFilter.Instance.Initialize();
-
-		foreach (var beha in this.behaviour)
+		do
 		{
-			beha.Build(in prepareData);
-		}
+			this.assignFilterInitializer.Initialize(RoleAssignFilter.Instance, prepareData);
+
+			foreach (var beha in this.behaviour)
+			{
+				beha.Build(in prepareData);
+			}
+
+		} while (this.validator.IsReBuild(prepareData));
+
+		this.vanillaFallBack?.Build(in prepareData);
 
 		return prepareData.Assign.Data;
 	}
