@@ -9,23 +9,18 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.RoleAssign.RoleAssignDataChecker;
 
-public class RoleDependencyRule
+public sealed record RoleDependencyRule(ExtremeRoleId CheckRoleId, ExtremeRoleId DependRoleId, Func<bool> isDepend)
 {
-	public int RoleA_Id { get; }
-	public int RoleB_Id { get; }
-	public bool SettingCChecker { get; }
-
-	public RoleDependencyRule(ExtremeRoleId roleA, ExtremeRoleId roleB, bool settingCChecker)
-	{
-		RoleA_Id = (int)roleA;
-		RoleB_Id = (int)roleB;
-		SettingCChecker = settingCChecker;
-	}
+	private readonly Func<bool> isDependCheck = isDepend;
+	public bool IsDepend => isDependCheck.Invoke();
 }
 
 public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 {
-	public IReadOnlyList<RoleDependencyRule> Rules { get; } = new List<RoleDependencyRule>();
+	public IReadOnlyList<RoleDependencyRule> Rules { get; } = new List<RoleDependencyRule>()
+	{
+
+	};
 }
 
 public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory factory) : IRoleAssignDataChecker
@@ -45,25 +40,27 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 
 		foreach (var rule in rules) // Corrected: use 'rules' field
 		{
-			Logging.Debug($"Evaluating Rule: RoleA_Id={(ExtremeRoleId)rule.RoleA_Id}, RoleB_Id={(ExtremeRoleId)rule.RoleB_Id}");
+			var checkRole = rule.CheckRoleId;
+			var dependRole = rule.DependRoleId;
+			Logging.Debug($"Evaluating Rule: Check={checkRole}, Depend={dependRole}");
 
 			// Find all players assigned to RoleA_Id
-			var assignmentsOfRoleA = currentAssignments
-				.Where(a => GetRoleIdFromAssignment(a) == rule.RoleA_Id); // ToList is important if currentAssignments can change, but here we only read.
+			var assignmentsOfRole = currentAssignments
+				.Where(a => GetRoleIdFromAssignment(a) == (int)checkRole); // ToList is important if currentAssignments can change, but here we only read.
 
-			if (assignmentsOfRoleA.Any())
+			if (assignmentsOfRole.Any())
 			{
-				Logging.Debug($"No assignments found for RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}.");
+				Logging.Debug($"No assignments found for RoleId:{checkRole}.");
 				continue;
 			}
 
 			bool roleAExistsAndSettingCIsValid = false;
-			foreach (var assignmentA in assignmentsOfRoleA.ToArray())
+			foreach (var assignmentA in assignmentsOfRole.ToArray())
 			{
-				bool settingC_IsValid = rule.SettingCChecker;
-				Logging.Debug($"RoleA_Id: {(ExtremeRoleId)rule.RoleA_Id}, SettingC_IsValid: {settingC_IsValid}");
+				bool isDepend = rule.IsDepend;
+				Logging.Debug($"RoleId: {checkRole}, DependNow: {isDepend}");
 
-				if (settingC_IsValid)
+				if (isDepend)
 				{
 					roleAExistsAndSettingCIsValid = true;
 					break; // Found at least one instance of RoleA with SettingC valid
@@ -78,16 +75,15 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 
 			// Condition: RoleA exists and its SettingC is valid.
 			// Now, check if RoleB is NOT assigned to ANY player.
-			bool roleB_ExistsInAnyPlayer = currentAssignments.Any(b => GetRoleIdFromAssignment(b) == rule.RoleB_Id);
-			Logging.Debug($"RoleB_Id: {(ExtremeRoleId)rule.RoleB_Id} ExistsInAnyPlayer: {roleB_ExistsInAnyPlayer}");
+			bool dependRoleAssignedToAnyPlayer = currentAssignments.Any(b => GetRoleIdFromAssignment(b) == (int)dependRole);
+			Logging.Debug($"DependRole: {dependRole} ExistsInAnyPlayer: {dependRoleAssignedToAnyPlayer}");
 
-			if (!roleB_ExistsInAnyPlayer) // RoleB does NOT exist
+			if (!dependRoleAssignedToAnyPlayer) // RoleB does NOT exist
 			{
 				// Condition MET: RoleA exists, SettingC is valid, AND RoleB does not exist.
 				// This means RoleA is an NG role in this context.
-				ExtremeRoleId ngRoleId = (ExtremeRoleId)rule.RoleA_Id;
-				ngRoleIds.Add(ngRoleId);
-				Logging.Debug($"NG Condition MET. RoleA_Id: {ngRoleId} added to NG list because its SettingC is valid and RoleB_Id: {(ExtremeRoleId)rule.RoleB_Id} is not assigned to anyone.");
+				ngRoleIds.Add(checkRole);
+				Logging.Debug($"NG Condition MET. CheckRole: {checkRole} added to NG list because its SettingC is valid and RoleB_Id: {dependRole} is not assigned to anyone.");
 			}
 		}
 		Logging.Debug($"--- RoleAssignDependencyChecker.GetNgData END ---");

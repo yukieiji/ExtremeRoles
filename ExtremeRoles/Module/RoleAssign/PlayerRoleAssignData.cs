@@ -97,7 +97,7 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 
 		if (removed && removedCombAssignmentInfo.HasValue)
 		{
-			PlayerToCombRoleAssignData actualRemovedCombInfo = removedCombAssignmentInfo.Value;
+			var actualRemovedCombInfo = removedCombAssignmentInfo.Value;
 
 			bool stillHasOtherPartsOfSameCombination = this.assignData.Any(x =>
 				x is PlayerToCombRoleAssignData otherComb &&
