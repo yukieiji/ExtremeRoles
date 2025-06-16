@@ -1,3 +1,5 @@
+using ExtremeRoles.Module.Interface;
+
 namespace ExtremeRoles.Module.RoleAssign;
 
 public class AssignFilterInitializer : IAssignFilterInitializer
