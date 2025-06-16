@@ -15,14 +15,6 @@ public sealed record RoleDependencyRule(ExtremeRoleId CheckRoleId, ExtremeRoleId
 	public bool IsDepend => isDependCheck.Invoke();
 }
 
-public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
-{
-	public IReadOnlyList<RoleDependencyRule> Rules { get; } = new List<RoleDependencyRule>()
-	{
-
-	};
-}
-
 public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory factory) : IRoleAssignDataChecker
 {
 	private readonly IReadOnlyList<RoleDependencyRule> rules = factory.Rules;
@@ -42,6 +34,13 @@ public sealed class RoleAssignDependencyChecker(IRoleDependencyRuleFactory facto
 		{
 			var checkRole = rule.CheckRoleId;
 			var dependRole = rule.DependRoleId;
+
+			if (checkRole == dependRole)
+			{
+				Logging.Debug("Invalid Rule: same roles");
+				continue;
+			}
+
 			Logging.Debug($"Evaluating Rule: Check={checkRole}, Depend={dependRole}");
 
 			// Find all players assigned to RoleA_Id
