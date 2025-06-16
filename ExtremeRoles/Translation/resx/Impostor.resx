@@ -1443,99 +1443,177 @@ UI「爆撃モード」:
     <value>マーリンが「ダミー（プレイヤー）」を見破れるか</value>
   </data>
   <data name="Scavenger" xml:space="preserve">
-    <value>Scavenger</value>
+    <value>スカベンジャー</value>
   </data>
   <data name="ScavengerAbilityCoolTime" xml:space="preserve">
-    <value>ScavengerAbilityCoolTime</value>
+    <value>各種能力のクールタイム</value>
   </data>
   <data name="ScavengerIsRandomInitAbility" xml:space="preserve">
-    <value>ScavengerIsRandomInitAbility</value>
+    <value>初期能力をランダムに設定するか</value>
   </data>
   <data name="ScavengerAllowDupe" xml:space="preserve">
-    <value>ScavengerAllowDupe</value>
+    <value>各プレイヤーで初期能力が重複するか</value>
   </data>
   <data name="ScavengerAllowAdvancedWeapon" xml:space="preserve">
-    <value>ScavengerAllowAdvancedWepon</value>
+    <value>Lv2以上の能力も初期能力に含むか</value>
   </data>
   <data name="ScavengerInitAbility" xml:space="preserve">
-    <value>ScavengerInitAbility</value>
+    <value>初期能力</value>
   </data>
   <data name="ScavengerIsSetWeapon" xml:space="preserve">
-    <value>ScavengerIsSetWepon</value>
+    <value>武器をマップ上に配置するか</value>
   </data>
   <data name="ScavengerSyncWeapon" xml:space="preserve">
-    <value>ScavengerSyncWeapon</value>
+    <value>武器の取得状況を全プレイヤーに共有するか</value>
   </data>
   <data name="ScavengerHandGunCount" xml:space="preserve">
-    <value>ScavengerHandGunCount</value>
+    <value>「ハンドガン」の使用回数</value>
   </data>
   <data name="ScavengerHandGunSpeed" xml:space="preserve">
-    <value>ScavengerHandGunSpeed</value>
+    <value>「ハンドガン」の弾の移動速度</value>
   </data>
   <data name="ScavengerHandGunRange" xml:space="preserve">
-    <value>ScavengerHandGunRange</value>
+    <value>「ハンドガン」の弾の移動限界距離</value>
   </data>
   <data name="ScavengerFlameCount" xml:space="preserve">
-    <value>ScavengerFlameCount</value>
+    <value>「火炎放射」の使用回数</value>
   </data>
   <data name="ScavengerFlameChargeTime" xml:space="preserve">
-    <value>ScavengerFlameChargeTime</value>
+    <value>「火炎放射」のチャージ秒数</value>
   </data>
   <data name="ScavengerFlameActiveTime" xml:space="preserve">
-    <value>ScavengerFlameActiveTime</value>
+    <value>「火炎放射」の放射可能秒数</value>
   </data>
   <data name="ScavengerFlameFireSecond" xml:space="preserve">
-    <value>ScavengerFlameFireSecond</value>
+    <value>「火炎放射」によって火が付く秒数</value>
   </data>
   <data name="ScavengerFlameDeadSecond" xml:space="preserve">
-    <value>ScavengerFlameDeadSecond</value>
+    <value>「火炎放射」の火がついてからキルするまでの秒数</value>
   </data>
   <data name="ScavengerSwordCount" xml:space="preserve">
-    <value>ScavengerSwordCount</value>
+    <value>「ソード」の使用回数</value>
   </data>
   <data name="ScavengerSwordChargeTime" xml:space="preserve">
-    <value>ScavengerSwordChargeTime</value>
+    <value>「ソード」のチャージ秒数</value>
   </data>
   <data name="ScavengerSwordActiveTime" xml:space="preserve">
-    <value>ScavengerSwordActiveTime</value>
+    <value>「ソード」の回転秒数</value>
   </data>
   <data name="ScavengerSwordR" xml:space="preserve">
-    <value>ScavengerSwordR</value>
+    <value>「ソード」の出現位置</value>
   </data>
   <data name="ScavengerSniperRifleCount" xml:space="preserve">
-    <value>ScavengerSniperRifleCount</value>
+    <value>「スナイパーライフル」の使用回数</value>
   </data>
   <data name="ScavengerSniperRifleSpeed" xml:space="preserve">
-    <value>ScavengerSniperRifleSpeed</value>
+    <value>「スナイパーライフル」の弾の移動速度</value>
   </data>
   <data name="ScavengerBeamRifleCount" xml:space="preserve">
-    <value>ScavengerBeamRifleCount</value>
+    <value>「ビームライフル」の使用回数</value>
   </data>
   <data name="ScavengerBeamRifleSpeed" xml:space="preserve">
-    <value>ScavengerBeamRifleSpeed</value>
+    <value>「ビームライフル」のビームの移動速度</value>
   </data>
   <data name="ScavengerBeamRifleRange" xml:space="preserve">
-    <value>ScavengerBeamRifleRange</value>
+    <value>「ビームライフル」のビームの移動限界距離</value>
   </data>
   <data name="ScavengerBeamSaberCount" xml:space="preserve">
-    <value>ScavengerBeamSaberCount</value>
+    <value>「ビームセーバー」の使用回数</value>
   </data>
   <data name="ScavengerBeamSaberChargeTime" xml:space="preserve">
-    <value>ScavengerBeamSaberChargeTime</value>
+    <value>「ビームセーバー」のチャージ秒数</value>
   </data>
   <data name="ScavengerBeamSaberRange" xml:space="preserve">
-    <value>ScavengerBeamSaberRange</value>
+    <value>「ビームセーバー」のキル可能範囲</value>
   </data>
   <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
-    <value>ScavengerBeamSaberAutoDetect</value>
-  </data>
-  <data name="ScavengerAguniCount" xml:space="preserve">
-    <value>ScavengerAguniCount</value>
-  </data>
-  <data name="ScavengerAguniChargeTime" xml:space="preserve">
-    <value>ScavengerAguniChargeTime</value>
+    <value>「ビームセーバー」がプレイヤーを自動検知するか</value>
   </data>
   <data name="ScavengerWeaponMixTime" xml:space="preserve">
-    <value>ScavengerWeaponMixTime</value>
+    <value>「武器合成」にかかる時間</value>
+  </data>
+  <data name="ScavengerNull" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="ScavengerHandGun" xml:space="preserve">
+    <value>ハンドガン</value>
+  </data>
+  <data name="ScavengerFlame" xml:space="preserve">
+    <value>火炎放射</value>
+  </data>
+  <data name="ScavengerSword" xml:space="preserve">
+    <value>ソード</value>
+  </data>
+  <data name="ScavengerSniperRifle" xml:space="preserve">
+    <value>スナイパーライフル</value>
+  </data>
+  <data name="ScavengerBeamRifle" xml:space="preserve">
+    <value>ビームライフル</value>
+  </data>
+  <data name="ScavengerBeamSaber" xml:space="preserve">
+    <value>ビームセーバー</value>
+  </data>
+  <data name="ScavengerIntroDescription" xml:space="preserve">
+    <value>武器のあさり屋</value>
+  </data>
+  <data name="ScavengerShortDescription" xml:space="preserve">
+    <value>武器を拾ってクルーを薙ぎ払え</value>
+  </data>
+  <data name="ScavengerFullDescription" xml:space="preserve">
+    <value>武器を拾い、合成する能力を持つインポスター役職
+
+能力「武器合成」
+　- Altキーを押して一定時間待機することで発動
+　- 現在持つ能力をすべて合成し能力のレベルを上げる 
+　- 拾うことが可能な能力はすべてLv1の能力であり、
+　合成することでLv2以上の能力にすることが可能
+
+Lv1能力「ハンドガン」
+　- ボタンを押すことで発動
+   - プレイヤーが向いている方向に弾を発射する
+   - 弾は一定距離進むか壁に当たると消滅する
+   - 弾に当たったプレイヤーはキルされる
+
+Lv1能力「火炎放射」
+　- ボタンを押すことでチャージが開始される
+　- 100％になったとき再度ボタンを押すことで発動する
+   - プレイヤーが向いている方向に「火炎」を発射する
+   - 「火炎」に一定秒数あたったプレイヤーは火が付く
+   - 「火」がついたプレイヤーは一定時間後にキルされる
+   - 「火」は「火炎」にあたってない状態で一定秒数走ることで
+　消える
+
+Lv1能力「ソード」
+　- ボタンを押すことでチャージが開始される
+　- 100％になったとき再度ボタンを押すことで発動する
+   - ソードが回転中にプレイヤーが触れるとキルされる
+   - ソードが出ている状態(チャージ中を含む)で他のプレイヤーが
+　使用ボタンを押すことでこの役職を返り討ちにすることができる
+
+Lv2能力「スナイパーライフル」
+   - 「ハンドガン」と「ソード」の合成で作成
+　- ボタンを押すことで発動
+   - プレイヤーが向いている方向に弾を発射する
+   - 弾は壁に当たると消滅する
+   - 弾に当たったプレイヤーはキルされる
+
+Lv2能力「ビームライフル」
+   - 「ハンドガン」と「火炎放射」の合成で作成
+   - プレイヤーが向いている方向にビームを発射する
+   - ビームは一定距離進むと消える
+   - ビームに当たったプレイヤーはキルされる
+
+Lv2能力「ビームセーバー」
+   - 「ソード」と「火炎放射」の合成で作成
+　- ボタンを押すことでチャージが開始される
+　- 100％に近づくほどキル範囲が増えていく
+   - チャージ中に任意のタイミングでボタンを押すことでキル範囲に
+   いるプレイヤーを遠隔キルする
+   - 「「ビームセーバー」がプレイヤーを自動検知するか」がオンのとき
+　能力の範囲内にプレイヤーがいない場合ボタンが押せなくなり不発が無くなる
+</value>
+  </data>
+  <data name="WeaponMixTimeRemain" xml:space="preserve">
+    <value>武器合成中 : 残り{0}秒</value>
   </data>
 </root>

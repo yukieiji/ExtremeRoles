@@ -404,7 +404,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 
 		this.renderer = this.gameObject.AddComponent<SpriteRenderer>();
 		this.renderer.sprite = Scavenger.GetFromAsset<Sprite>(
-			$"assets/roles/scavenger.{Scavenger.Ability.Sword}.png");
+			$"assets/roles/scavenger.{Scavenger.Ability.ScavengerSword}.png");
 
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
 		rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -672,7 +672,7 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 					var pos = this.Info.IgnorePlayer.transform.position;
 					writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
 					writer.Write(this.Info.IgnorePlayer.PlayerId);
-					writer.Write((byte)Scavenger.Ability.Flame);
+					writer.Write((byte)Scavenger.Ability.ScavengerFlame);
 					writer.Write(pos.x);
 					writer.Write(pos.y);
 					writer.Write((byte)Scavenger.Flame.Ops.FireStart);
@@ -804,7 +804,7 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 				var pos = local.transform.position;
 				writer.Write((byte)ScavengerAbilitySystem.Ops.WeponOps);
 				writer.Write(local.PlayerId);
-				writer.Write((byte)Scavenger.Ability.Flame);
+				writer.Write((byte)Scavenger.Ability.ScavengerFlame);
 				writer.Write(pos.x);
 				writer.Write(pos.y);
 				writer.Write((byte)Scavenger.Flame.Ops.FireEnd);

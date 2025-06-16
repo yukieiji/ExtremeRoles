@@ -109,7 +109,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public BehaviorBase Create(in Ability abilityType)
 		{
 			var behavior = new ChargingAndActivatingCountBehaviour(
-				$"{abilityType}ButtonName",
+				TranslationController.Instance.GetString(abilityType.ToString()),
 				IWeapon.getSprite(abilityType),
 				isSwordUse,
 				rpcStartSwordRotation,
@@ -128,7 +128,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				return;
 			}
-			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Hide);
+			IWeapon.SimpleRpcOps(Ability.ScavengerSword, (byte)Ops.Hide);
 		}
 
 		private bool rpcStartSwordCharge()
@@ -138,13 +138,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				return false;
 			}
-			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Create);
+			IWeapon.SimpleRpcOps(Ability.ScavengerSword, (byte)Ops.Create);
 			return true;
 		}
 
 		private bool rpcStartSwordRotation(float _)
 		{
-			IWeapon.SimpleRpcOps(Ability.Sword, (byte)Ops.Start);
+			IWeapon.SimpleRpcOps(Ability.ScavengerSword, (byte)Ops.Start);
 			return true;
 		}
 
@@ -223,7 +223,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public BehaviorBase Create(in Ability abilityType)
 		{
 			var behavior = new ChargingAndActivatingCountBehaviour(
-				$"{abilityType}ButtonName",
+				TranslationController.Instance.GetString(abilityType.ToString()),
 				IWeapon.getSprite(abilityType),
 				isFireThrowerUse,
 				rpcStartFlameFire,
@@ -271,7 +271,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				return;
 			}
-			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Hide);
+			IWeapon.SimpleRpcOps(Ability.ScavengerFlame, (byte)Ops.Hide);
 		}
 
 		private bool rpcStartFlameCharge()
@@ -281,7 +281,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				return false;
 			}
-			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Create);
+			IWeapon.SimpleRpcOps(Ability.ScavengerFlame, (byte)Ops.Create);
 			return true;
 		}
 
@@ -300,7 +300,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		private bool rpcStartFlameFire(float _)
 		{
-			IWeapon.SimpleRpcOps(Ability.Flame, (byte)Ops.Start);
+			IWeapon.SimpleRpcOps(Ability.ScavengerFlame, (byte)Ops.Start);
 			return true;
 		}
 
@@ -381,7 +381,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public BehaviorBase Create(in Ability abilityType)
 			=> new ChargingCountBehaviour(
-				$"{abilityType}ButtonName",
+				TranslationController.Instance.GetString(abilityType.ToString()),
 				IWeapon.getSprite(abilityType),
 				isIaiOk,
 				tryIai,
@@ -411,7 +411,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				PlayerControl.LocalPlayer.PlayerId,
 				this.targetPlayerId,
 				byte.MinValue);
-			//　おとならす
+			Sound.PlaySound(Sound.Type.Kill, 0.7f);
 
 			return true;
 		}
@@ -539,7 +539,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.type = abilityType;
 			return new CountBehavior(
-			   $"{abilityType}ButtonName",
+				TranslationController.Instance.GetString(abilityType.ToString()),
 				IWeapon.getSprite(abilityType),
 				isUse,
 				ability,
@@ -881,19 +881,19 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	public enum Ability : byte
 	{
 		// 何もないよ
-		Null,
+		ScavengerNull,
 
 		// 落ちてるやつ
-		HandGun,
-		Flame,
-		Sword,
+		ScavengerHandGun,
+		ScavengerFlame,
+		ScavengerSword,
 
 		// HandGun + Sword
-		SniperRifle,
+		ScavengerSniperRifle,
 		// HandGun + Flame
-		BeamRifle,
+		ScavengerBeamRifle,
 		// Flame + Sword
-		BeamSaber,
+		ScavengerBeamSaber,
 
 		// Flame + Sword + HandGun
 		// Aguni,
@@ -905,7 +905,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		get
 		{
 			if (this.weapon is null ||
-				!this.weapon.TryGetValue(Ability.Flame, out var wepon) ||
+				!this.weapon.TryGetValue(Ability.ScavengerFlame, out var wepon) ||
 				wepon is not Flame flame)
 			{
 				throw new InvalidOperationException("Flame wepon is null");
@@ -979,7 +979,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		this.createWeapon();
 		this.curAbility = new HashSet<Ability>();
 
-		if (this.InitAbility is not Ability.Null)
+		if (this.InitAbility is not Ability.ScavengerNull)
 		{
 			this.curAbility.Add(this.InitAbility);
 		}
@@ -1226,6 +1226,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.BeamSaberAutoDetect,
 			false);
 
+		/*
 		factory.CreateIntOption(
 			Option.AguniCount,
 			1, 0, 10, 1);
@@ -1233,7 +1234,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.AguniChargeTime,
 			5, 1, 60, 1,
 			format: OptionUnit.Second);
-
+		*/
 		factory.CreateFloatOption(
 			Option.WeaponMixTime,
 			3.0f, 0.5f, 25.0f, 0.5f,
@@ -1252,7 +1253,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		this.weapon = new Dictionary<Ability, IWeapon>()
 		{
 			{
-				Ability.HandGun,
+				Ability.ScavengerHandGun,
 				new Gun(
 					new (
 						ObjectPath.ScavengerBulletImg,
@@ -1261,20 +1262,20 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 						loader.GetValue<Option, float>(Option.HandGunRange)))
 			},
 			{
-				Ability.Flame,
+				Ability.ScavengerFlame,
 				new Flame(
 					loader.GetValue<Option, float>(Option.FlameFireSecond),
 					loader.GetValue<Option, float>(Option.FlameDeadSecond))
 			},
 			{
-				Ability.Sword,
+				Ability.ScavengerSword,
 				new Sword(
 					loader.GetValue<Option, float>(Option.SwordChargeTime),
 					loader.GetValue<Option, float>(Option.SwordActiveTime),
 					loader.GetValue<Option, float>(Option.SwordR))
 			},
 			{
-				Ability.SniperRifle,
+				Ability.ScavengerSniperRifle,
 				new Gun(
 					new (
 						ObjectPath.ScavengerBulletImg,
@@ -1283,7 +1284,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 						128.0f))
 			},
 			{
-				Ability.BeamRifle,
+				Ability.ScavengerBeamRifle,
 				new Gun(
 					new (
 						ObjectPath.ScavengerBeamImg,
@@ -1293,7 +1294,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 						true))
 			},
 			{
-				Ability.BeamSaber,
+				Ability.ScavengerBeamSaber,
 				new BeamSaber(
 					loader.GetValue<Option, float>(Option.BeamSaberRange),
 					loader.GetValue<Option, bool>(Option.BeamSaberAutoDetect))
@@ -1344,26 +1345,26 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 		else */
 		if (
-			this.curAbility.Contains(Ability.HandGun) &&
-			this.curAbility.Contains(Ability.Sword))
+			this.curAbility.Contains(Ability.ScavengerHandGun) &&
+			this.curAbility.Contains(Ability.ScavengerSword))
 		{
-			replaceToWeapon(Ability.SniperRifle);
+			replaceToWeapon(Ability.ScavengerSniperRifle);
 		}
 		else if (
-			this.curAbility.Contains(Ability.HandGun) &&
-			this.curAbility.Contains(Ability.Flame))
+			this.curAbility.Contains(Ability.ScavengerHandGun) &&
+			this.curAbility.Contains(Ability.ScavengerFlame))
 		{
-			replaceToWeapon(Ability.BeamRifle);
+			replaceToWeapon(Ability.ScavengerBeamRifle);
 		}
 		else if (
-			this.curAbility.Contains(Ability.Sword) &&
-			this.curAbility.Contains(Ability.Flame))
+			this.curAbility.Contains(Ability.ScavengerSword) &&
+			this.curAbility.Contains(Ability.ScavengerFlame))
 		{
-			replaceToWeapon(Ability.BeamSaber);
+			replaceToWeapon(Ability.ScavengerBeamSaber);
 		}
 		else
 		{
-			throw new ArgumentException("Invalid Ability");
+			ExtremeRolesPlugin.Logger.LogWarning("Invalid Ability");
 		}
 	}
 	private void replaceToWeapon(in Ability ability)
@@ -1384,7 +1385,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		switch (ability)
 		{
-			case Ability.HandGun:
+			case Ability.ScavengerHandGun:
 				if (behavior is not CountBehavior handGun)
 				{
 					throw new ArgumentException("HandGun Behavior is not CountBehavior");
@@ -1393,7 +1394,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					loader.GetValue<Option, int>(
 						Option.HandGunCount));
 				break;
-			case Ability.Flame:
+			case Ability.ScavengerFlame:
 				if (behavior is not ChargingAndActivatingCountBehaviour flame)
 				{
 					throw new ArgumentException("Flame Behavior is not CountBehavior");
@@ -1403,7 +1404,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				flame.SetAbilityCount(
 					loader.GetValue<Option, int>(Option.FlameCount));
 				break;
-			case Ability.Sword:
+			case Ability.ScavengerSword:
 				if (behavior is not ICountBehavior countBehavior)
 				{
 					throw new ArgumentException("Sword Behavior is not CountBehavior");
@@ -1411,7 +1412,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				countBehavior.SetAbilityCount(
 					loader.GetValue<Option, int>(Option.SwordCount));
 				break;
-			case Ability.SniperRifle:
+			case Ability.ScavengerSniperRifle:
 				if (behavior is not CountBehavior sniperRifle)
 				{
 					throw new ArgumentException("SniperRifle Behavior is not CountBehavior");
@@ -1419,7 +1420,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				sniperRifle.SetAbilityCount(
 					loader.GetValue<Option, int>(Option.SniperRifleCount));
 				break;
-			case Ability.BeamRifle:
+			case Ability.ScavengerBeamRifle:
 				if (behavior is not CountBehavior beamRifle)
 				{
 					throw new ArgumentException("BeamRile Behavior is not CountBehavior");
@@ -1427,7 +1428,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				beamRifle.SetAbilityCount(
 					loader.GetValue<Option, int>(Option.BeamRifleCount));
 				break;
-			case Ability.BeamSaber:
+			case Ability.ScavengerBeamSaber:
 				if (behavior is not ChargingCountBehaviour beamSaber)
 				{
 					throw new ArgumentException("BeamSaber Behavior is not ChargingCountBehaviour");

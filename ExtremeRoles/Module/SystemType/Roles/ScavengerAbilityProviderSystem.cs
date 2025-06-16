@@ -62,9 +62,9 @@ public sealed class ScavengerAbilitySystem(
 			in Dictionary<WeaponAbility, GameObject> result,
 			in IReadOnlySet<WeaponAbility> init)
 		{
-			bool isSwordProvided = init.Contains(WeaponAbility.Sword);
-			bool isHandGunProvided = init.Contains(WeaponAbility.HandGun);
-			bool isFlameProvided = init.Contains(WeaponAbility.Flame);
+			bool isSwordProvided = init.Contains(WeaponAbility.ScavengerSword);
+			bool isHandGunProvided = init.Contains(WeaponAbility.ScavengerHandGun);
+			bool isFlameProvided = init.Contains(WeaponAbility.ScavengerFlame);
 
 			if (this.isSync)
 			{
@@ -76,43 +76,43 @@ public sealed class ScavengerAbilitySystem(
 				}
 				else
 				*/
-				if (init.Contains(WeaponAbility.SniperRifle))
+				if (init.Contains(WeaponAbility.ScavengerSniperRifle))
 				{
 					if (isFlameProvided)
 					{
 						return;
 					}
-					set(result, WeaponAbility.Flame);
+					set(result, WeaponAbility.ScavengerFlame);
 				}
-				else if (init.Contains(WeaponAbility.BeamRifle))
+				else if (init.Contains(WeaponAbility.ScavengerBeamRifle))
 				{
 					if (isSwordProvided)
 					{
 						return;
 					}
-					set(result, WeaponAbility.Sword);
+					set(result, WeaponAbility.ScavengerSword);
 				}
-				else if (init.Contains(WeaponAbility.BeamSaber))
+				else if (init.Contains(WeaponAbility.ScavengerBeamSaber))
 				{
 					if (isHandGunProvided)
 					{
 						return;
 					}
-					set(result, WeaponAbility.HandGun);
+					set(result, WeaponAbility.ScavengerHandGun);
 				}
 				else
 				{
 					if (!isSwordProvided)
 					{
-						set(result, WeaponAbility.Sword);
+						set(result, WeaponAbility.ScavengerSword);
 					}
 					if (!isHandGunProvided)
 					{
-						set(result, WeaponAbility.HandGun);
+						set(result, WeaponAbility.ScavengerHandGun);
 					}
 					if (!isFlameProvided)
 					{
-						set(result, WeaponAbility.Flame);
+						set(result, WeaponAbility.ScavengerFlame);
 					}
 				}
 			}
@@ -124,35 +124,35 @@ public sealed class ScavengerAbilitySystem(
 
 				switch (scavent.InitAbility)
 				{
-					case WeaponAbility.Null:
+					case WeaponAbility.ScavengerNull:
 						set(result,
-							WeaponAbility.HandGun,
-							WeaponAbility.Sword,
-							WeaponAbility.Flame);
+							WeaponAbility.ScavengerHandGun,
+							WeaponAbility.ScavengerSword,
+							WeaponAbility.ScavengerFlame);
 						break;
-					case WeaponAbility.HandGun:
+					case WeaponAbility.ScavengerHandGun:
 						set(result,
-							WeaponAbility.Flame, WeaponAbility.Sword);
+							WeaponAbility.ScavengerFlame, WeaponAbility.ScavengerSword);
 						break;
-					case WeaponAbility.Sword:
+					case WeaponAbility.ScavengerSword:
 						set(result,
-							WeaponAbility.Flame, WeaponAbility.HandGun);
+							WeaponAbility.ScavengerFlame, WeaponAbility.ScavengerHandGun);
 						break;
-					case WeaponAbility.Flame:
+					case WeaponAbility.ScavengerFlame:
 						set(result,
-							WeaponAbility.HandGun, WeaponAbility.Sword);
+							WeaponAbility.ScavengerHandGun, WeaponAbility.ScavengerSword);
 						break;
-					case WeaponAbility.SniperRifle:
+					case WeaponAbility.ScavengerSniperRifle:
 						set(result,
-							WeaponAbility.Flame);
+							WeaponAbility.ScavengerFlame);
 						break;
-					case WeaponAbility.BeamSaber:
+					case WeaponAbility.ScavengerBeamSaber:
 						set(result,
-							WeaponAbility.HandGun);
+							WeaponAbility.ScavengerHandGun);
 						break;
-					case WeaponAbility.BeamRifle:
+					case WeaponAbility.ScavengerBeamRifle:
 						set(result,
-							WeaponAbility.Sword);
+							WeaponAbility.ScavengerSword);
 						break;
 					default:
 						break;
@@ -265,12 +265,12 @@ public sealed class ScavengerAbilitySystem(
 			{
 				this.abilities = Enum.GetValues<WeaponAbility>()
 					.Where(x =>
-						x is not WeaponAbility.Null && (
+						x is not WeaponAbility.ScavengerNull && (
 						opt.ContainAdvanced || (
 							x is not
-								WeaponAbility.SniperRifle or
-								WeaponAbility.BeamRifle or
-								WeaponAbility.BeamSaber)
+								WeaponAbility.ScavengerSniperRifle or
+								WeaponAbility.ScavengerBeamRifle or
+								WeaponAbility.ScavengerBeamSaber)
 								// or WeaponAbility.Aguni)
 						)
 					).ToArray();
@@ -285,7 +285,7 @@ public sealed class ScavengerAbilitySystem(
 			}
 			else
 			{
-				return WeaponAbility.Null;
+				return WeaponAbility.ScavengerNull;
 			}
 		}
 	}
@@ -332,7 +332,7 @@ public sealed class ScavengerAbilitySystem(
 	{
 		if (this.abilities is null)
 		{
-			return WeaponAbility.Null;
+			return WeaponAbility.ScavengerNull;
 		}
 		int index = RandomGenerator.Instance.Next(0, this.abilities.Length);
 		var ability = this.abilities[index];
