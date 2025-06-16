@@ -39,11 +39,11 @@ public sealed class Heretic :
 
 	public enum KillMode : byte
 	{
-		OnTaskPhase,
-		OnTaskPhaseTarget,
-		OnMeeting,
-		OnMeetingTarget,
-		OnExiled,
+		AbilityOnTaskPhase,
+		AbilityOnTaskPhaseTarget,
+		AbilityOnMeeting,
+		AbilityOnMeetingTarget,
+		AbilityOnExiled,
 	}
 
 	public ExtremeAbilityButton? Button { get; set; }
@@ -93,13 +93,13 @@ public sealed class Heretic :
 	public void CreateAbility()
 	{
 		this.CreateNormalAbilityButton(
-			"selfKill", this.sprite);
+			"HereticAbility", this.sprite);
 	}
 
 	public bool IsAbilityUse()
 	{
 		this.target = null;
-		if (this.killMode is KillMode.OnExiled)
+		if (this.killMode is KillMode.AbilityOnExiled)
 		{
 			return false;
 		}
@@ -133,7 +133,7 @@ public sealed class Heretic :
 		if (this.called ||
 			exiledPlayer == null ||
 			this.killMode is
-				KillMode.OnTaskPhase or KillMode.OnMeeting ||
+				KillMode.AbilityOnTaskPhase or KillMode.AbilityOnMeeting ||
 			exiledPlayer.PlayerId != PlayerControl.LocalPlayer.PlayerId)
 		{
 			return;
@@ -187,7 +187,7 @@ public sealed class Heretic :
 		}
 
 		this.Button?.SetButtonShow(
-			this.killMode is KillMode.OnTaskPhase or KillMode.OnTaskPhaseTarget);
+			this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget);
 
 		if (!this.HasTask || this.isSeeImpostorNow)
 		{
@@ -212,7 +212,7 @@ public sealed class Heretic :
 
 		switch (this.killMode)
 		{
-			case KillMode.OnTaskPhase:
+			case KillMode.AbilityOnTaskPhase:
 				var killer = PlayerControl.LocalPlayer;
 				if (killer == null)
 				{
@@ -220,7 +220,7 @@ public sealed class Heretic :
 				}
 				tryKill(killer, this.target);
 				break;
-			case KillMode.OnTaskPhaseTarget:
+			case KillMode.AbilityOnTaskPhaseTarget:
 				this.meetingTarget = this.target.PlayerId;
 				break;
 			default:
@@ -262,8 +262,8 @@ public sealed class Heretic :
 		var killModeOpt = factory.CreateSelectionOption(
 			Option.KillMode,
 			[
-				KillMode.OnTaskPhase,
-				KillMode.OnTaskPhaseTarget
+				KillMode.AbilityOnTaskPhase,
+				KillMode.AbilityOnTaskPhaseTarget
 			]);
 		factory.CreateFloatOption(
 			RoleAbilityCommonOption.AbilityCoolTime,
@@ -307,7 +307,7 @@ public sealed class Heretic :
 	public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
 		=> PlayerControl.LocalPlayer == null ||
 			instance.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ||
-			!(this.killMode is KillMode.OnMeeting or KillMode.OnMeetingTarget);
+			!(this.killMode is KillMode.AbilityOnMeeting or KillMode.AbilityOnMeetingTarget);
 
 	public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
 		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "hereticKillTarget");
@@ -322,7 +322,7 @@ public sealed class Heretic :
 
 			this.meetingTarget = instance.TargetPlayerId;
 
-			if (this.killMode is KillMode.OnMeetingTarget)
+			if (this.killMode is KillMode.AbilityOnMeetingTarget)
 			{
 				return;
 			}

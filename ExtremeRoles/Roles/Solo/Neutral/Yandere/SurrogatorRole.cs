@@ -73,7 +73,7 @@ public sealed class SurrogatorRole :
 	public void CreateAbility()
 	{
 		this.CreateActivatingAbilityCountButton(
-			"死体纏い",
+			"SurrogatorAbility",
 			UnityObjectLoader.LoadSpriteFromResources(
 				ObjectPath.EvolverEvolved),
 			checkAbility: CheckAbility,
