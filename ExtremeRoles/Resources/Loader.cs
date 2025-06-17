@@ -125,6 +125,9 @@ public static class ObjectPath
 
 	public const string ScavengerBulletImg = "ScavengerBullet";
 	public const string ScavengerBeamImg = "ScavengerBeamRifle";
+	public const string ScavengerFlame = "scavengerflame.prefab";
+	public const string ScavengerFlameFire = "flamefire.prefab";
+	public const string ScavengerPlaceHolder = "assets/roles/scavenger.";
 	// !----- インポスター終了 -----
 
 	public const string TuckerCreateChimera = "CreateChimera";

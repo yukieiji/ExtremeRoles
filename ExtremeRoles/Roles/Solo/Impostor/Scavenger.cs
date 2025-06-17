@@ -29,14 +29,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
-	public static T GetFromAsset<T>(string path) where T : UnityObject
+	public static T GetFromAsset<T>(string name) where T : UnityObject
 		=> UnityObjectLoader.LoadFromResources<T>(
 			ObjectPath.GetRoleAssetPath(ExtremeRoleId.Scavenger),
-			path.ToLower());
+			$"{ObjectPath.ScavengerPlaceHolder}{name}".ToLower());
 
 	private record struct CreateParam(string ButtonName, string Name);
 
-	private interface IWeapon
+	public interface IWeapon
 	{
 		public BehaviorBase Create(in Ability abilityType);
 		public void RpcHide();
@@ -66,8 +66,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				});
 		}
 
-		protected static Sprite getSprite(in Ability abilityType)
-			=> GetFromAsset<Sprite>($"assets/roles/scavenger.{abilityType}.{ObjectPath.ButtonIcon}.png");
+		public static Sprite GetSprite(in Ability abilityType)
+			=> GetFromAsset<Sprite>($"{abilityType}.{ObjectPath.ButtonIcon}.png");
 	}
 
 	private sealed class Sword(
@@ -110,7 +110,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			var behavior = new ChargingAndActivatingCountBehaviour(
 				TranslationController.Instance.GetString(abilityType.ToString()),
-				IWeapon.getSprite(abilityType),
+				IWeapon.GetSprite(abilityType),
 				isSwordUse,
 				rpcStartSwordRotation,
 				rpcStartSwordCharge,
@@ -224,7 +224,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			var behavior = new ChargingAndActivatingCountBehaviour(
 				TranslationController.Instance.GetString(abilityType.ToString()),
-				IWeapon.getSprite(abilityType),
+				IWeapon.GetSprite(abilityType),
 				isFireThrowerUse,
 				rpcStartFlameFire,
 				rpcStartFlameCharge,
@@ -325,7 +325,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				}
 
 				var obj = UnityObject.Instantiate(
-					GetFromAsset<GameObject>("Scavenger.FlameFire.prefab"),
+					GetFromAsset<GameObject>(ObjectPath.ScavengerFlameFire),
 					player.transform);
 				fire = obj.GetComponent<ScavengerFlameFire>();
 				fire.DeadTime = this.fireDeadSecond;
@@ -382,7 +382,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public BehaviorBase Create(in Ability abilityType)
 			=> new ChargingCountBehaviour(
 				TranslationController.Instance.GetString(abilityType.ToString()),
-				IWeapon.getSprite(abilityType),
+				IWeapon.GetSprite(abilityType),
 				isIaiOk,
 				tryIai,
 				startIai,
@@ -540,7 +540,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.type = abilityType;
 			return new CountBehavior(
 				TranslationController.Instance.GetString(abilityType.ToString()),
-				IWeapon.getSprite(abilityType),
+				IWeapon.GetSprite(abilityType),
 				isUse,
 				ability,
 				forceAbilityOff: RpcHide);

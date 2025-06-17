@@ -51,7 +51,7 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 			weponInfo = value;
 			var rend = base.gameObject.TryAddComponent<SpriteRenderer>();
 			rend.sprite = Scavenger.GetFromAsset<Sprite>(
-				$"assets/roles/scavenger.{weponInfo.Ability}.{ObjectPath.MapIcon}.png");
+				$"{weponInfo.Ability}.{ObjectPath.MapIcon}.png");
 
 			var collider = base.gameObject.TryAddComponent<CircleCollider2D>();
 			collider.isTrigger = true;
@@ -174,8 +174,7 @@ public sealed class ScavengerBulletBehaviour : MonoBehaviour
 		this.ignorePlayerId = ignorePlayerId;
 
 		this.renderer = this.gameObject.AddComponent<SpriteRenderer>();
-		this.renderer.sprite = Scavenger.GetFromAsset<Sprite>(
-			$"assets/roles/scavenger.{bulletImg}.png");
+		this.renderer.sprite = Scavenger.GetFromAsset<Sprite>($"{bulletImg}.png");
 
 		this.initialPosition = transform.position;
 
@@ -404,7 +403,7 @@ public sealed class ScavengerSwordBehaviour : MonoBehaviour
 
 		this.renderer = this.gameObject.AddComponent<SpriteRenderer>();
 		this.renderer.sprite = Scavenger.GetFromAsset<Sprite>(
-			$"assets/roles/scavenger.{Scavenger.Ability.ScavengerSword}.png");
+			$"{Scavenger.Ability.ScavengerSword}.png");
 
 		var rb = this.gameObject.AddComponent<Rigidbody2D>();
 		rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -421,7 +420,7 @@ public sealed class ScavengerFlameBehaviour : MonoBehaviour
 		in PlayerControl anchorPlayer)
 	{
 		var gameObj = Scavenger.GetFromAsset<GameObject>(
-			"assets/roles/scavenger.scavengerflame.prefab");
+			ObjectPath.ScavengerFlame);
 		var obj = Instantiate(gameObj);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 		obj.transform.position = anchorPlayer.transform.position;
