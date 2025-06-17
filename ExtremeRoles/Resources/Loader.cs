@@ -123,8 +123,8 @@ public static class ObjectPath
 	public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
 	public const string CrewshroomSet = "ExtremeRoles.Resources.CrewshroomSetMushroom.png";
 
-	public const string ScavengerBulletImg = "Bullet";
-	public const string ScavengerBeamImg = "BeamRifle";
+	public const string ScavengerBulletImg = "ScavengerBullet";
+	public const string ScavengerBeamImg = "ScavengerBeamRifle";
 	// !----- インポスター終了 -----
 
 	public const string TuckerCreateChimera = "CreateChimera";

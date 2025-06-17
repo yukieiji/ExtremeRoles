@@ -70,7 +70,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 					}
 					removePlayer = player;
 
-					data.Assign.AddCombRoleAssignData(
+					data.Assign.TryAddCombRoleAssignData(
 						new PlayerToCombRoleAssignData(
 							player.PlayerId, (int)role.Id,
 							roleListData.CombType,

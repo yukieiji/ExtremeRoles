@@ -49,9 +49,11 @@ public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 	public bool TryGetCombRoleAssign(byte playerId, out ExtremeRoleType team)
 		=> this.combRoleAssignPlayerId.TryGetValue(playerId, out team);
 
-	public void AddCombRoleAssignData(
+	public void TryAddCombRoleAssignData(
 		in PlayerToCombRoleAssignData data, ExtremeRoleType team)
 	{
+
+
 		this.combRoleAssignPlayerId.Add(data.PlayerId, team);
 		this.AddAssignData(data);
 	}

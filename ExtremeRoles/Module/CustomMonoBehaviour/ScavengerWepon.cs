@@ -421,7 +421,7 @@ public sealed class ScavengerFlameBehaviour : MonoBehaviour
 		in PlayerControl anchorPlayer)
 	{
 		var gameObj = Scavenger.GetFromAsset<GameObject>(
-			"assets/roles/scavenger.flame.prefab");
+			"assets/roles/scavenger.scavengerflame.prefab");
 		var obj = Instantiate(gameObj);
 		obj.layer = Constants.LivingPlayersOnlyMask;
 		obj.transform.position = anchorPlayer.transform.position;

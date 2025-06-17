@@ -325,7 +325,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				}
 
 				var obj = UnityObject.Instantiate(
-					GetFromAsset<GameObject>("Scavenger.FlameFire"),
+					GetFromAsset<GameObject>("Scavenger.FlameFire.prefab"),
 					player.transform);
 				fire = obj.GetComponent<ScavengerFlameFire>();
 				fire.DeadTime = this.fireDeadSecond;
