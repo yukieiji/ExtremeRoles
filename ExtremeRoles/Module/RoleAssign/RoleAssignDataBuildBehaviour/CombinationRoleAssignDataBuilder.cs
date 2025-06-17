@@ -70,13 +70,17 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 					}
 					removePlayer = player;
 
-					data.Assign.TryAddCombRoleAssignData(
-						new PlayerToCombRoleAssignData(
-							player.PlayerId, (int)role.Id,
-							roleListData.CombType,
-							(byte)roleListData.GameControlId,
-							(byte)vanillaRole),
-						role.Team);
+					if (!data.Assign.TryAddCombRoleAssignData(
+							new PlayerToCombRoleAssignData(
+								player.PlayerId, (int)role.Id,
+								roleListData.CombType,
+								(byte)roleListData.GameControlId,
+								(byte)vanillaRole),
+							role.Team))
+					{
+						Logging.Debug($"Cannnot add assignData");
+						continue;
+					}
 
 					Logging.Debug($"------------------- Assign End -------------------");
 
