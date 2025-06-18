@@ -1507,8 +1507,8 @@
   <data name="KnightCanKill" xml:space="preserve">
     <value>キルできるか</value>
   </data>
-  <data name="AliceWinTaskNum" xml:space="preserve">
-    <value>勝利に必要なタスク数</value>
+  <data name="AliceWinTaskRate" xml:space="preserve">
+    <value>勝利に必要なタスク進捗率</value>
   </data>
   <data name="AliceWinKillNum" xml:space="preserve">
     <value>勝利に必要なキル数</value>
