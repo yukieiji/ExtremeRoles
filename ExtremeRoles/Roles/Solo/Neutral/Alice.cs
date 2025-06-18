@@ -77,10 +77,12 @@ public sealed class Alice :
 		}
 
 		float taskRate = Player.GetPlayerTaskGage(rolePlayer.Data);
-
 		this.IsWin =
 			this.killCount >= this.winKillCount &&
 			taskRate >= this.winTaskRate;
+
+		ExtremeRolesPlugin.Logger.LogInfo($"CurKillCount:{this.killCount}");
+
 		if (!this.IsWin)
 		{
 			return;
@@ -233,6 +235,7 @@ public sealed class Alice :
 		this.winKillCount = loader.GetValue<AliceOption, int>(
 			AliceOption.WinKillNum);
 		this.HasTask = this.winTaskRate > 0;
+		this.killCount = 0;
     }
 
     public void ResetOnMeetingStart()
@@ -250,6 +253,7 @@ public sealed class Alice :
 
 	public void OnEndKill()
 	{
+		ExtremeRolesPlugin.Logger.LogInfo($"CurKillCount:{this.killCount}");
 		this.killCount++;
 	}
 }
