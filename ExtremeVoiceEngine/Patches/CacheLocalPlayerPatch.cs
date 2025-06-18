@@ -26,9 +26,12 @@ public static class ChatCurrentSettingPatch
             () =>
             {
                 Chated = true;
-                HudManager.Instance.Chat.AddLocalChat(
-                    TranslationControllerExtension.GetString(
-                        "pringCurState", VoiceEngine.Instance.ToString()));
-            });
+				string text = TranslationControllerExtension.GetString(
+					"pringCurState", VoiceEngine.Instance.ToString());
+
+				HudManager.Instance.Chat.AddLocalChat(text);
+				// 初回はData当たりがnullになって読み上げができないため
+				VoiceEngine.Instance.AddQueue(text);
+			});
     }
 }
