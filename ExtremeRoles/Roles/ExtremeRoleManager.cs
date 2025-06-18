@@ -693,6 +693,20 @@ public static class ExtremeRoleManager
         return safeCast<T>(checkRole);
     }
 
+	public static void InvokeInterfaceRoleMethod<T>(Action<T> action) where T : class
+	{
+		var checkRole = GetLocalPlayerRole();
+		if (checkRole is T role)
+		{
+			action.Invoke(role);
+		}
+		if (checkRole is MultiAssignRoleBase multiAssignRole &&
+			multiAssignRole.AnotherRole is T anotherRole)
+		{
+			action.Invoke(anotherRole);
+		}
+	}
+
     public static (T?, T?) GetInterfaceCastedLocalRole<T>() where T : class
     {
 		var checkRole = GetLocalPlayerRole();

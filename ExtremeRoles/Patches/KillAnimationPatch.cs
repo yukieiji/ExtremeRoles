@@ -34,10 +34,8 @@ public static class KillAnimationSetMovementPatch
 			return;
 		}
 
-        var (role, anothorRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
-            IRolePerformKillHook>();
-        role?.OnStartKill();
-        anothorRole?.OnStartKill();
+		ExtremeRoleManager.InvokeInterfaceRoleMethod<IRolePerformKillHook>(
+			x => x.OnStartKill());
     }
 
     public static void Postfix(
@@ -50,9 +48,7 @@ public static class KillAnimationSetMovementPatch
 			return;
 		}
 
-        var (role, anothorRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
-            IRolePerformKillHook>();
-        role?.OnEndKill();
-        anothorRole?.OnEndKill();
+        ExtremeRoleManager.InvokeInterfaceRoleMethod<IRolePerformKillHook>(
+			x => x.OnEndKill());
     }
 }
