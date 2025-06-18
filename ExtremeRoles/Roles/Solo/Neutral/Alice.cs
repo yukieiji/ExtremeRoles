@@ -13,6 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
@@ -27,7 +28,7 @@ public sealed class Alice :
         RevartCommonTaskNum,
         RevartLongTaskNum,
         RevartNormalTaskNum,
-		WinTaskNum,
+		WinTaskRate,
 		WinKillNum,
     }
 
@@ -39,7 +40,7 @@ public sealed class Alice :
 
 	private int killCount;
 	private int winKillCount;
-	private int winTaskNum;
+	private float winTaskRate;
 
     public Alice(): base(
         ExtremeRoleId.Alice,
@@ -75,18 +76,11 @@ public sealed class Alice :
 			return;
 		}
 
-		int taskNum = 0;
-		foreach (var task in rolePlayer.Data.Tasks.GetFastEnumerator())
-		{
-			if (task.Complete)
-			{
-				taskNum++;
-			}
-		}
+		float taskRate = Player.GetPlayerTaskGage(rolePlayer.Data);
 
 		this.IsWin =
 			this.killCount >= this.winKillCount &&
-			taskNum >= this.winTaskNum;
+			taskRate >= this.winTaskRate;
 		if (!this.IsWin)
 		{
 			return;
@@ -213,8 +207,9 @@ public sealed class Alice :
             AliceOption.RevartNormalTaskNum,
             1, 0, 15, 1);
 		factory.CreateIntOption(
-			AliceOption.WinTaskNum,
-			0, 0, 10, 1);
+			AliceOption.WinTaskRate,
+			0, 0, 100, 10,
+			format: OptionUnit.Percentage);
 		factory.CreateIntOption(
 			AliceOption.WinKillNum,
 			0, 0, 5, 1);
@@ -233,11 +228,11 @@ public sealed class Alice :
         this.revartCommonTask = loader.GetValue<AliceOption, int>(
             AliceOption.RevartCommonTaskNum);
 
-		this.winTaskNum = loader.GetValue<AliceOption, int>(
-			AliceOption.WinTaskNum);
+		this.winTaskRate = loader.GetValue<AliceOption, int>(
+			AliceOption.WinTaskRate) / 100.0f;
 		this.winKillCount = loader.GetValue<AliceOption, int>(
 			AliceOption.WinKillNum);
-		this.HasTask = this.winTaskNum > 0;
+		this.HasTask = this.winTaskRate > 0;
     }
 
     public void ResetOnMeetingStart()
