@@ -1485,10 +1485,10 @@ UI「爆撃モード」:
     <value>「火炎放射」の放射可能秒数</value>
   </data>
   <data name="ScavengerFlameFireSecond" xml:space="preserve">
-    <value>「火炎放射」によって火が付く秒数</value>
+    <value>「火炎放射」によって「火」が付く秒数</value>
   </data>
   <data name="ScavengerFlameDeadSecond" xml:space="preserve">
-    <value>「火炎放射」の火がついてからキルするまでの秒数</value>
+    <value>「火炎放射」の「火」がついてからキルするまでの秒数</value>
   </data>
   <data name="ScavengerSwordCount" xml:space="preserve">
     <value>「ソード」の使用回数</value>
