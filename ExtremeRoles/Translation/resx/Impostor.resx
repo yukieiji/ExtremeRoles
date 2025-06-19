@@ -1561,6 +1561,7 @@ UI「爆撃モード」:
   </data>
   <data name="ScavengerFullDescription" xml:space="preserve">
     <value>武器を拾い、合成する能力を持つインポスター役職
+能力は複数持つことが可能で、マウスホイールによって切り替え可能
 
 能力「武器合成」
 　- Altキーを押して一定時間待機することで発動
