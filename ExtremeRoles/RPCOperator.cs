@@ -235,7 +235,7 @@ public static class RPCOperator
 		Helper.Logging.ResetCkpt();
 
         // キルアニメーションリセット
-        Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
+        Patches.KillAnimationCoPerformKillMoveNextPatch.HideNextAnimation = false;
 
         // 各種表示系リセット
         Patches.Manager.HudManagerUpdatePatch.Reset();
@@ -378,7 +378,7 @@ public static class RPCOperator
         {
             if (useAnimation == 0)
             {
-                Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = true;
+                Patches.KillAnimationCoPerformKillMoveNextPatch.HideNextAnimation = true;
             }
             source.MurderPlayer(target);
         }
