@@ -69,7 +69,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
 		factory.CreateBoolOption(
-			Option.IsSubTeam, true, invert: true);
+			Option.IsSubTeam, true);
 		factory.CreateBoolOption(
 			Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(
