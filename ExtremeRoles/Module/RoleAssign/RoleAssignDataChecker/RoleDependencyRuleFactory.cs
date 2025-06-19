@@ -18,7 +18,7 @@ public sealed class RoleDependencyRuleFactory : IRoleDependencyRuleFactory
 		new (ExtremeRoleId.Furry, ExtremeRoleId.Jackal, () => true),
 		buildKilledSubTeam(ExtremeRoleId.Intimate, ExtremeRoleId.Yandere, OptionTab.NeutralTab, IntimateRole.Option.CanKill, IntimateRole.Option.IsSubTeam),
 		new (ExtremeRoleId.Surrogator, ExtremeRoleId.Yandere, () => true),
-		buildKilledSubTeam(ExtremeRoleId.Knight, ExtremeRoleId.Queen, OptionTab.NeutralTab, KnightRole.Option.CanKill, KnightRole.Option.IsSubTeam),
+		buildKilledSubTeam(ExtremeRoleId.Knight, ExtremeRoleId.Queen, OptionTab.NeutralTab, KnightRole.Option.IsSubTeam),
 		new (ExtremeRoleId.Pawn, ExtremeRoleId.Queen, () => true)
 	};
 

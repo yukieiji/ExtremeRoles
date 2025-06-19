@@ -16,7 +16,6 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 {
 	public enum Option
 	{
-		CanKill,
 		IsSubTeam,
 		UseVent,
 		HasTask,
@@ -32,7 +31,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		ExtremeRoleType.Neutral,
 		ExtremeRoleId.Knight.ToString(),
 		ColorPalette.QueenWhite,
-		false, false, false, false)
+		true, false, false, false)
 	{ }
 
 	public void ModifiedWinPlayer(
@@ -69,12 +68,8 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
-		var killOpt = factory.CreateBoolOption(
-			Option.CanKill, true);
-		CreateKillerOption(factory, killOpt, true, true);
-
 		factory.CreateBoolOption(
-			Option.IsSubTeam, true, killOpt, invert: true);
+			Option.IsSubTeam, true, invert: true);
 		factory.CreateBoolOption(
 			Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(
@@ -87,7 +82,6 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	protected override void RoleSpecificInit()
 	{
 		var loader = this.Loader;
-		this.CanKill = loader.GetValue<Option, bool>(Option.CanKill);
 		this.UseVent = loader.GetValue<Option, bool>(Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(Option.HasTask);
 		this.status = new KnightStatus(
