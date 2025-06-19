@@ -1504,13 +1504,19 @@
   <data name="AbilityOnExiled" xml:space="preserve">
     <value>追放時</value>
   </data>
-  <data name="KnightCanKill" xml:space="preserve">
-    <value>キルできるか</value>
-  </data>
   <data name="AliceWinTaskRate" xml:space="preserve">
     <value>勝利に必要なタスク進捗率</value>
   </data>
   <data name="AliceWinKillNum" xml:space="preserve">
     <value>勝利に必要なキル数</value>
+  </data>
+  <data name="AllJackalWin" xml:space="preserve">
+    <value>シェパードの活躍により、全ジャッカル陣営</value>
+  </data>
+  <data name="AllYandereWin" xml:space="preserve">
+    <value>インティメイトの活躍により、全ヤンデレ陣営</value>
+  </data>
+  <data name="AllQueenWin" xml:space="preserve">
+    <value>ナイトの活躍により、全クイーン陣営</value>
   </data>
 </root>
