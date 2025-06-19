@@ -1074,9 +1074,6 @@ Among Us官方服務器不適配Reactor插件，因此需要使用自定義服�
   <data name="OptionCategory" xml:space="preserve">
     <value>選項類別</value>
   </data>
-  <data name="PublicBetaMode" xml:space="preserve">
-    <value>測試模式</value>
-  </data>
   <data name="Noisemaker" xml:space="preserve">
     <value>大嗓門</value>
   </data>
@@ -1136,20 +1133,6 @@ ExR 和其他設備僅以最低限度的功能啓動</value>
   </data>
   <data name="InvalidCharMessage" xml:space="preserve">
     <value>聊天中的字符無效，請重新輸入</value>
-  </data>
-  <data name="PublicBetaStr" xml:space="preserve">
-    <value>公開測試版 - v{0}</value>
-  </data>
-  <data name="PublicBetaEnableDisableStr" xml:space="preserve">
-    <value>重啓後，公共測試模式將變為 {0}</value>
-  </data>
-  <data name="PublicBetaWarning" xml:space="preserve">
-    <value>公開測試模式設置為{0}。
-以下功能設置為 {0}</value>
-  </data>
-  <data name="PublicBetaReboot" xml:space="preserve">
-    <value>公開測試模式設置為 {0}
-請重新啓動</value>
   </data>
   <data name="SpawnRate" xml:space="preserve">
     <value>出現幾率</value>
