@@ -108,5 +108,11 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 	private bool isOkRoleAbilityButton(
 		PlayerVoteArea pva,
 		IRoleMeetingButtonAbility buttonRole)
-		=> !(pva.AmDead || buttonRole.IsBlockMeetingButtonAbility(pva) || pva.voteComplete || !pva.Parent.Select((int)pva.TargetPlayerId));
+		=> !(
+			pva.AmDead ||
+			buttonRole.IsBlockMeetingButtonAbility(pva) ||
+			pva.voteComplete ||
+			pva.Parent == null ||
+			!pva.Parent.Select((int)pva.TargetPlayerId)
+		);
 }
