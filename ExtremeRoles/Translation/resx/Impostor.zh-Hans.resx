@@ -1435,4 +1435,181 @@
   <data name="TimeBreakerEffectMarlin" xml:space="preserve">
     <value>梅林会受到时间时停影响</value>
   </data>
+  <data name="GlitchEffectOnMarlin" xml:space="preserve">
+    <value>梅林会受到骇客篡改影响</value>
+  </data>
+  <data name="SlimeSeeMorphMerlin" xml:space="preserve">
+    <value>梅林能识破史莱姆的变形</value>
+  </data>
+  <data name="FakerSeeDummyMerlin" xml:space="preserve">
+    <value>梅林能识别假人(玩家创造)</value>
+  </data>
+  <data name="Scavenger" xml:space="preserve">
+    <value>武器商</value>
+  </data>
+  <data name="ScavengerAbilityCoolTime" xml:space="preserve">
+    <value>各种武器的冷却时间</value>
+  </data>
+  <data name="ScavengerIsRandomInitAbility" xml:space="preserve">
+    <value>开局获得随机初始武器</value>
+  </data>
+  <data name="ScavengerAllowDupe" xml:space="preserve">
+    <value>多个武器商会获得不同的初始武器</value>
+  </data>
+  <data name="ScavengerAllowAdvancedWeapon" xml:space="preserve">
+    <value>Lv2也可能是初始武器</value>
+  </data>
+  <data name="ScavengerInitAbility" xml:space="preserve">
+    <value>初始武器</value>
+  </data>
+  <data name="ScavengerIsSetWeapon" xml:space="preserve">
+    <value>地图上会生成武器</value>
+  </data>
+  <data name="ScavengerSyncWeapon" xml:space="preserve">
+    <value>获得武器时所有人都会知晓</value>
+  </data>
+  <data name="ScavengerHandGunCount" xml:space="preserve">
+    <value>“手枪”可发射次数</value>
+  </data>
+  <data name="ScavengerHandGunSpeed" xml:space="preserve">
+    <value>“手枪子弹”弹速</value>
+  </data>
+  <data name="ScavengerHandGunRange" xml:space="preserve">
+    <value>“手枪子弹”射程范围</value>
+  </data>
+  <data name="ScavengerFlameCount" xml:space="preserve">
+    <value>“火焰喷射”可喷射次数</value>
+  </data>
+  <data name="ScavengerFlameChargeTime" xml:space="preserve">
+    <value>“火焰喷射”充能时间</value>
+  </data>
+  <data name="ScavengerFlameActiveTime" xml:space="preserve">
+    <value>“火焰喷射”持续时间</value>
+  </data>
+  <data name="ScavengerFlameFireSecond" xml:space="preserve">
+    <value>“火焰喷射”点燃其他玩家所需时间</value>
+  </data>
+  <data name="ScavengerFlameDeadSecond" xml:space="preserve">
+    <value>其他玩家被“烧死”所需时间</value>
+  </data>
+  <data name="ScavengerSwordCount" xml:space="preserve">
+    <value>“剑”可挥砍次数</value>
+  </data>
+  <data name="ScavengerSwordChargeTime" xml:space="preserve">
+    <value>“剑”挥砍蓄力时间</value>
+  </data>
+  <data name="ScavengerSwordActiveTime" xml:space="preserve">
+    <value>“剑”挥砍持续时间</value>
+  </data>
+  <data name="ScavengerSwordR" xml:space="preserve">
+    <value>“剑”出现位置</value>
+  </data>
+  <data name="ScavengerSniperRifleCount" xml:space="preserve">
+    <value>“狙击步枪”可发射次数</value>
+  </data>
+  <data name="ScavengerSniperRifleSpeed" xml:space="preserve">
+    <value>“狙击步枪子弹”弹速</value>
+  </data>
+  <data name="ScavengerBeamRifleCount" xml:space="preserve">
+    <value>“激光步枪”可发射次数</value>
+  </data>
+  <data name="ScavengerBeamRifleSpeed" xml:space="preserve">
+    <value>“激光”弹速</value>
+  </data>
+  <data name="ScavengerBeamRifleRange" xml:space="preserve">
+    <value>“激光”射程范围</value>
+  </data>
+  <data name="ScavengerBeamSaberCount" xml:space="preserve">
+    <value>“光剑”可挥砍次数</value>
+  </data>
+  <data name="ScavengerBeamSaberChargeTime" xml:space="preserve">
+    <value>“光剑”挥砍蓄力时间</value>
+  </data>
+  <data name="ScavengerBeamSaberRange" xml:space="preserve">
+    <value>“光剑”挥砍范围</value>
+  </data>
+  <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
+    <value>“光剑”会检测周围是否有玩家</value>
+  </data>
+  <data name="ScavengerWeaponMixTime" xml:space="preserve">
+    <value>“武器合成”所需时间</value>
+  </data>
+  <data name="ScavengerNull" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="ScavengerHandGun" xml:space="preserve">
+    <value>手枪</value>
+  </data>
+  <data name="ScavengerFlame" xml:space="preserve">
+    <value>火焰喷射器</value>
+  </data>
+  <data name="ScavengerSword" xml:space="preserve">
+    <value>剑</value>
+  </data>
+  <data name="ScavengerSniperRifle" xml:space="preserve">
+    <value>狙击步枪</value>
+  </data>
+  <data name="ScavengerBeamRifle" xml:space="preserve">
+    <value>激光步枪</value>
+  </data>
+  <data name="ScavengerBeamSaber" xml:space="preserve">
+    <value>光剑</value>
+  </data>
+  <data name="ScavengerIntroDescription" xml:space="preserve">
+    <value>武器的搜寻者</value>
+  </data>
+  <data name="ScavengerShortDescription" xml:space="preserve">
+    <value>捡起武器，化腐朽为神奇！</value>
+  </data>
+  <data name="ScavengerFullDescription" xml:space="preserve">
+    <value>武器商属于内鬼阵营。他可以使用各种武器来完成不同的击杀，通过鼠标滚轮来切换武器
+
+技能“武器合成”
+   -按住ALT键等待一段时间后使用能力
+   -将当前有的所有武器进行合成，提升武器等级
+   -所有可拾取的武器都为Lv1等级，通过合成才可以获得Lv2或更高等级的武器
+
+Lv1武器“手枪”
+   -按下技能发射
+   -朝玩家面向的方向射出子弹
+   -子弹会飞行一段距离或触碰墙壁后消失
+   -被子弹击中的玩家死亡
+
+Lv1武器“火焰喷射器”
+   -按下技能后开始充能
+   -充能到100%后再次按下技能喷射
+   -朝玩家面朝的方向喷射火焰
+   -其他玩家被火焰灼烧一段时间后会被点燃
+   -点燃的玩家一段时间后会被烧死
+   -火焰在一段时间后会消失
+
+Lv1武器“剑”
+   -按下技能后开始蓄力
+   -蓄力到100%后再次按下技能挥砍
+   -在挥砍期间，接触到剑的玩家会被砍死
+   -在使用剑时（包括蓄力和挥砍时），其他玩家对武器商按下“使用”按钮可以夺剑并反杀武器商
+
+Lv2武器“狙击步枪”
+   -由“手枪”和“剑”合成
+   -按下技能后发射
+   -朝玩家面向的方向射出子弹
+   -子弹触碰墙壁后消失
+   -被子弹击中的玩家死亡
+
+Lv2武器“激光步枪”
+   -由“手枪”和“火焰喷射器”合成
+   -朝玩家面向的方向发射激光
+   -激光在飞行一段距离后消失
+   -被激光命中的玩家死亡
+
+Lv2武器“光剑”
+   -由“剑”和“火焰喷射器”合成
+   -按下技能开始充能
+   -充能越接近100%，范围会越大
+   -充能时即可按下技能，对范围内的玩家进行远程击杀
+   -如开启了“光剑会检测周围是否有玩家”则如周围没有玩家将无法使用光剑以免挥空</value>
+  </data>
+  <data name="WeaponMixTimeRemain" xml:space="preserve">
+    <value>武器合成中：剩余 {0} 秒</value>
+  </data>
 </root>
