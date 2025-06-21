@@ -72,12 +72,16 @@ class ResXMissingData:
 
 def get_resx_trans_missing_data(path:str) -> dict[str, dict[str, list[str]]]:
   ja_resx = set(glob.glob(os.path.join(path, "*.resx")))
+  ja_resx = set(
+    resx for resx in ja_resx if len(resx.split(".")) == 2
+  )
 
   # `*.*.resx` を検索
   other_resx = set(glob.glob(os.path.join(path, "*.*.resx")))
 
   base_trans : dict[str, dict[str, str]] = {}
 
+  print("Ja resx: [" + ",".join(ja_resx) + "]")
   for resx_file in ja_resx:
     try:
       tree = ET.parse(resx_file)
@@ -101,12 +105,14 @@ def get_resx_trans_missing_data(path:str) -> dict[str, dict[str, list[str]]]:
           continue
         base_trans[file_name][key] = val  # <value> の内容を辞書に格納
   result : dict[str, dict[str, list[str]]] = {}
+  print("Find resx [" + ",".join(other_resx) + "]")
   for resx in other_resx:
 
     splited = resx.split('.')
     lang = splited[1]
     if lang not in SUPPORT_RESX_LANG:
       continue
+    print(f"[{resx}] is support lang")
     lang = SUPPORT_RESX_LANG[lang]
     file_name = splited[0]
 
