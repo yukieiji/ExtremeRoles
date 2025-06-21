@@ -6,24 +6,25 @@ global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
 global using NormalGameOption = AmongUs.GameOptions.NormalGameOptionsV09;
 global using HnSGameOption = AmongUs.GameOptions.HideNSeekGameOptionsV09;
 
+using System;
+using System.Net.Http;
+
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 
-using System.Net.Http;
-
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.ApiHandler;
-using ExtremeRoles.Resources;
-using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.CustomOption.Migrator;
-using ExtremeRoles.Translation;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.ScreenManagerHook;
+using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.ApiHandler;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Translation;
 
 namespace ExtremeRoles;
 
@@ -51,6 +52,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
     public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
 
 	public HttpClient Http { get; } = new HttpClient();
+	public IServiceProvider Provider { get; }
 
 	public ExtremeRolesPlugin() : base()
 	{
@@ -68,6 +70,9 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		{
 			NoCache = true
 		};
+		// 追加ここまで
+
+		Provider = BuildProvider();
 	}
 
     public override void Load()
@@ -119,8 +124,6 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		var assm = System.Reflection.Assembly.GetAssembly(this.GetType());
 
         Il2CppRegisterAttribute.Registration(assm);
-
-		StatusTextShower.Instance.Add(() => PublicBeta.Instance.CurStateString);
 
 		UnityObjectLoader.LoadCommonAsset();
 

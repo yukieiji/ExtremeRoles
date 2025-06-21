@@ -140,7 +140,7 @@ public sealed class VersionChecker : MonoBehaviour
 
 	public VersionChecker(IntPtr ptr) : base(ptr) { }
 
-	public static void RegisterAssembly(Assembly assm, uint id)
+	public static void RegisterAssembly(Assembly assm, uint id, bool ignoreRevision=false)
     {
         var name = assm.GetName();
         if (name.Version is null)
@@ -152,6 +152,12 @@ public sealed class VersionChecker : MonoBehaviour
         {
             return;
         }
+		var version = name.Version;
+
+		if (ignoreRevision)
+		{
+			version = new Version(version.Major, version.Minor, version.Build, 0);
+		}
         allModVersion.Add(id, new PlayerVersion(name.Version, modName));
     }
 

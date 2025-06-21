@@ -11,9 +11,10 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 #nullable enable
 
-public sealed class PlayerRoleAssignData
+public sealed class PlayerRoleAssignData(IVanillaRoleProvider roleProvider)
 {
 	public IReadOnlyList<VanillaRolePlayerAssignData> NeedRoleAssignPlayer => this.needRoleAssignPlayer;
+	public IReadOnlyList<IPlayerToExRoleAssignData> Data => this.assignData;
 
 	public int ControlId
 	{
@@ -27,112 +28,116 @@ public sealed class PlayerRoleAssignData
 		}
 	}
 
-	private List<VanillaRolePlayerAssignData> needRoleAssignPlayer;
-	private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
-	private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
-
+	private readonly List<VanillaRolePlayerAssignData> needRoleAssignPlayer =
+		GameData.Instance.AllPlayers.GetFastEnumerator().Select(
+			x => new VanillaRolePlayerAssignData(x))
+		.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 	private int gameControlId = 0;
 
-	public PlayerRoleAssignData()
-	{
-		this.assignData.Clear();
-		this.needRoleAssignPlayer = new List<VanillaRolePlayerAssignData>(
-			GameData.Instance.AllPlayers.GetFastEnumerator().Select(
-				x => new VanillaRolePlayerAssignData(x)));
-		this.gameControlId = 0;
-	}
+	private readonly List<IPlayerToExRoleAssignData> assignData = [];
+	private readonly Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = [];
 
-	public void AllPlayerAssignToExRole()
-	{
-		using (var caller = RPCOperator.CreateCaller(
-			PlayerControl.LocalPlayer.NetId,
-			RPCOperator.Command.SetRoleToAllPlayer))
-		{
-			caller.WritePackedInt(this.assignData.Count); // 何個あるか
-
-			foreach (IPlayerToExRoleAssignData data in this.assignData)
-			{
-				caller.WriteByte(data.PlayerId); // PlayerId
-				caller.WriteByte(data.RoleType); // RoleType : single or comb
-				caller.WritePackedInt(data.RoleId); // RoleId
-				caller.WritePackedInt(data.ControlId); // int GameContId
-
-				if (data.RoleType == (byte)IPlayerToExRoleAssignData.ExRoleType.Comb)
-				{
-					var combData = (PlayerToCombRoleAssignData)data;
-					caller.WriteByte(combData.CombTypeId); // combTypeId
-					caller.WriteByte(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
-				}
-			}
-		}
-		RPCOperator.SetRoleToAllPlayer(this.assignData);
-		RoleAssignState.Instance.SwitchRoleAssignToEnd();
-	}
+	private readonly IReadOnlySet<RoleTypes> crewRole = roleProvider.AllCrewmate;
+	private readonly IReadOnlySet<RoleTypes> impRole = roleProvider.AllImpostor;
 
 	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanImpostorAssignPlayer()
-	{
-		return this.needRoleAssignPlayer.FindAll(
-			x =>
-			{
-				return x.Role is
-					RoleTypes.Impostor or
-					RoleTypes.Shapeshifter or
-					RoleTypes.Phantom;
-			});
-	}
+		=> this.needRoleAssignPlayer.FindAll(x => this.impRole.Contains(x.Role));
 
 	public IReadOnlyList<VanillaRolePlayerAssignData> GetCanCrewmateAssignPlayer()
-	{
-		return this.needRoleAssignPlayer.FindAll(
-			x =>
-			{
-				return x.Role is
-					RoleTypes.Crewmate or
-					RoleTypes.Engineer or
-					RoleTypes.Scientist or
-					RoleTypes.Noisemaker or
-					RoleTypes.Tracker;
-			});
-	}
+		=> this.needRoleAssignPlayer.FindAll(x => this.crewRole.Contains(x.Role));
 
 	public bool TryGetCombRoleAssign(byte playerId, out ExtremeRoleType team)
-	{
-		return this.combRoleAssignPlayerId.TryGetValue(playerId, out team);
-	}
+		=> this.combRoleAssignPlayerId.TryGetValue(playerId, out team);
 
-	public void AddCombRoleAssignData(
-		PlayerToCombRoleAssignData data, ExtremeRoleType team)
+	public bool TryAddCombRoleAssignData(
+		in PlayerToCombRoleAssignData data, ExtremeRoleType team)
 	{
+		if (this.combRoleAssignPlayerId.ContainsKey(data.PlayerId))
+		{
+			return false;
+		}
+
 		this.combRoleAssignPlayerId.Add(data.PlayerId, team);
 		this.AddAssignData(data);
+		return true;
 	}
 
 	public void AddAssignData(IPlayerToExRoleAssignData data)
-	{
-		this.assignData.Add(data);
-	}
+		=> this.assignData.Add(data);
 
 	public void AddPlayer(in VanillaRolePlayerAssignData player)
-	{
-		this.needRoleAssignPlayer.Add(player);
-	}
+		=> this.needRoleAssignPlayer.Add(player);
 
 	public void RemveFromPlayerControl(PlayerControl player)
-	{
-		this.needRoleAssignPlayer.RemoveAll(
+		=> this.needRoleAssignPlayer.RemoveAll(
 			x =>
 				x.PlayerId == player.PlayerId &&
 				x.PlayerName == player.Data.DefaultOutfit.PlayerName);
-	}
 
 	public void RemvePlayer(VanillaRolePlayerAssignData player)
+		=> this.needRoleAssignPlayer.RemoveAll(x => x == player);
+
+	public bool TryRemoveAssignment(byte playerId, int roleIdToRemove)
 	{
-		this.needRoleAssignPlayer.RemoveAll(x => x == player);
+		int initialCount = this.assignData.Count;
+		PlayerToCombRoleAssignData? removedCombAssignmentInfo = null;
+
+		this.assignData.RemoveAll(assignment =>
+		{
+			bool shouldRemove = false;
+			if (assignment is PlayerToSingleRoleAssignData single)
+			{
+				shouldRemove = single.PlayerId == playerId && single.RoleId == roleIdToRemove;
+			}
+			else if (assignment is PlayerToCombRoleAssignData comb)
+			{
+				if (comb.PlayerId == playerId && comb.RoleId == roleIdToRemove)
+				{
+					removedCombAssignmentInfo = comb;
+				}
+			}
+			return shouldRemove;
+		});
+
+		bool removed = this.assignData.Count < initialCount;
+
+		if (removed && removedCombAssignmentInfo.HasValue)
+		{
+			var actualRemovedCombInfo = removedCombAssignmentInfo.Value;
+
+			bool stillHasOtherPartsOfSameCombination = this.assignData.Any(x =>
+				x is PlayerToCombRoleAssignData otherComb &&
+					otherComb.PlayerId == actualRemovedCombInfo.PlayerId &&
+					otherComb.CombTypeId == actualRemovedCombInfo.CombTypeId);
+
+			if (!stillHasOtherPartsOfSameCombination)
+			{
+				// 注意: プレイヤーが複数の異なるタイプのコンビネーション役職を持つケースは稀と想定。
+				// もし持つ場合、このロジックでは、あるコンビが完全に消えたら、
+				// たとえ別のコンビが残っていても消してしまう可能性がある。
+				// より厳密には、combRoleAssignPlayerId の Value (ExtremeRoleType) も考慮するか、
+				// CombTypeId ごとに管理する必要があるが、現状の辞書の構造では難しい。
+				// ここでは、指定された CombTypeId がなくなった場合に限り、そのプレイヤーの CombRole 情報を消す。
+				// playerId に紐づく CombTypeId を管理する構造ではないため、
+				// 実際には、その playerId が combRoleAssignPlayerId に登録された際のチーム情報が消えることになる。
+				// このキーが CombTypeId ではなく PlayerId であるため、
+				// プレイヤーが複数のコンビネーションに同時に属せないという前提に依存する。
+				this.combRoleAssignPlayerId.Remove(actualRemovedCombInfo.PlayerId);
+			}
+		}
+		return removed;
 	}
 
-	public void Shuffle()
+	public void AddPlayerToReassign(NetworkedPlayerInfo pc)
 	{
-		this.needRoleAssignPlayer = this.needRoleAssignPlayer.OrderBy(
-			x => RandomGenerator.Instance.Next()).ToList();
+		if (pc == null)
+		{
+			return;
+		}
+
+		if (!this.needRoleAssignPlayer.Any(p => p.PlayerId == pc.PlayerId))
+		{
+			this.needRoleAssignPlayer.Add(new VanillaRolePlayerAssignData(pc));
+		}
 	}
 }

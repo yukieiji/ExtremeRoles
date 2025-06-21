@@ -81,12 +81,14 @@ public abstract class RoleOptionBase
 	protected static void CreateKillerOption(
 		AutoParentSetOptionCategoryFactory factory,
 		IOption parent = null,
-		bool ignorePrefix = true)
+		bool ignorePrefix = true,
+		bool invert = false)
 	{
 		var killCoolOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillCool,
 			false, parent,
-			ignorePrefix: ignorePrefix);
+			ignorePrefix: ignorePrefix,
+			invert: invert);
 		factory.CreateFloatOption(
 			KillerCommonOption.KillCoolDown,
 			30f, 1.0f, 120f, 0.5f,
@@ -96,7 +98,8 @@ public abstract class RoleOptionBase
 		var killRangeOption = factory.CreateBoolOption(
 			KillerCommonOption.HasOtherKillRange,
 			false, parent,
-			ignorePrefix: ignorePrefix);
+			ignorePrefix: ignorePrefix,
+			invert: invert);
 		factory.CreateSelectionOption(
 			KillerCommonOption.KillRange,
 			OptionCreator.Range,

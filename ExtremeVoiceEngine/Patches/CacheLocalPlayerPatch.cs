@@ -11,12 +11,13 @@ public static class ChatCurrentSettingPatch
 {
     public static bool Chated { get; set; } = false;
 
-    public static void Postfix(PlayerControl._Start_d__82 __instance, ref bool __result)
+    public static void Postfix(ref bool __result)
     {
-        if (Chated ||
-            HudManager.Instance == null ||
-            VoiceEngine.Instance == null ||
-            __result)
+        if (__result ||
+			Chated ||
+			HudManager.Instance == null ||
+			VoiceEngine.Instance == null ||
+			HudManager.Instance.Chat == null)
 		{
 			return;
 		}
@@ -25,9 +26,12 @@ public static class ChatCurrentSettingPatch
             () =>
             {
                 Chated = true;
-                HudManager.Instance.Chat.AddLocalChat(
-                    TranslationControllerExtension.GetString(
-                        "pringCurState", VoiceEngine.Instance.ToString()));
-            });
+				string text = TranslationControllerExtension.GetString(
+					"pringCurState", VoiceEngine.Instance.ToString());
+
+				HudManager.Instance.Chat.AddLocalChat(text);
+				// 初回はData当たりがnullになって読み上げができないため
+				VoiceEngine.Instance.AddQueue(text);
+			});
     }
 }

@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
@@ -55,8 +55,8 @@ public static class MeetingHudConfirmPatch
 			return;
 		}
 
-		var (voteCheckRole, anotherVoteCheckRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
-			IRoleVoteCheck>();
+		var (voteCheckRole, anotherVoteCheckRole) = ExtremeRoleManager.GetLocalRoleAbility<
+			IVoteCheck>();
 		voteCheckRole?.VoteTo(suspectStateIdx);
 		anotherVoteCheckRole?.VoteTo(suspectStateIdx);
 	}

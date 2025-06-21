@@ -36,9 +36,19 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 	public GhostRoleOption GhostRole { get; private set; }
 	public MeetingHudOption Meeting { get; private set; }
 
-#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。'required' 修飾子を追加するか、Null 許容として宣言することを検討してください。
-	public EmergencyTaskOption Emergency { get; private set; }
-#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。'required' 修飾子を追加するか、Null 許容として宣言することを検討してください。
+	public EmergencyTaskOption Emergency
+	{
+		get
+		{
+			if (emergencyTaskOption is null)
+			{
+				emergencyTaskOption = new EmergencyTaskOption(
+					IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.EmergencyTaskOption));
+			}
+			return emergencyTaskOption;
+		}
+	}
+	private EmergencyTaskOption? emergencyTaskOption;
 
 	public bool DisableTaskWinWhenNoneTaskCrew { get; private set; }
     public bool DisableTaskWin { get; private set; }
@@ -76,9 +86,6 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.VitalOption));
 		Security = new DeviceOption(
 			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.SecurityOption));
-
-		Emergency = new EmergencyTaskOption(
-			IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.EmergencyTaskOption));
 
 		var taskWinCate = IShipGlobalOption.GetOptionCategory(ShipGlobalOptionCategory.TaskWinOption);
 		DisableTaskWinWhenNoneTaskCrew = taskWinCate.GetValue<bool>((int)TaskWinOption.DisableWhenNoneTaskCrew);
