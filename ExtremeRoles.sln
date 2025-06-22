@@ -50,6 +50,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gemini", "gemini", "{DDB4EF
 		.gemini\styleguide.md = .gemini\styleguide.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{CC621B23-7B45-40E8-A6F8-AFA1E8F72EC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmongUsLibExporter", "UnitTest\AmongUsLibExporter\AmongUsLibExporter.csproj", "{45D8DA62-FC28-46AE-A954-B0AAF87A022D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +136,18 @@ Global
 		{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}.Release|x64.Build.0 = Release|Any CPU
 		{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}.Release|x86.Build.0 = Release|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Debug|x64.Build.0 = Debug|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Debug|x86.Build.0 = Debug|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Release|x64.ActiveCfg = Release|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Release|x64.Build.0 = Release|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Release|x86.ActiveCfg = Release|Any CPU
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +155,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{00B61FF2-566F-4C38-847B-D6E28E7CA474} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
 		{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
+		{45D8DA62-FC28-46AE-A954-B0AAF87A022D} = {CC621B23-7B45-40E8-A6F8-AFA1E8F72EC0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		RESX_TaskErrorCategory = Message
