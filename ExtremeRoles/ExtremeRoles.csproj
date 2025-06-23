@@ -4,8 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
-      <!--<Version>2025.6.20</Version>-->
-    <VersionPrefix>2025.6.20</VersionPrefix>
+      <!--<Version>2025.6.25.0</Version>-->
+    <VersionPrefix>2025.6.25</VersionPrefix>
     <VersionSuffix>Reinforcement</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
