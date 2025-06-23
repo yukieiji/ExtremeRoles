@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
@@ -29,14 +29,36 @@
     <PackageReference Include="HarmonyX" Version="2.14.0" />
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2025.4.15" PrivateAssets="all" />
     <PackageReference Include="BepInEx.AutoPlugin" Version="1.1.0" PrivateAssets="all" />
+    <GeneratedInteropInterfacesPath>..\ExtremeRoles.UnitTest\Generated\</GeneratedInteropInterfacesPath>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ExtremeRoles.UnitTest.MockGenerator\ExtremeRoles.UnitTest.MockGenerator.csproj" />
   </ItemGroup>
 
   <Target Name="CopyGeneratedInteropAssemblies" AfterTargets="GenerateInteropAssemblies">
     <Message Text="Copying generated Interop assemblies to output directory..." Importance="high" />
-    <Copy
-        SourceFiles="@(_InteropAssemblies)"
-        DestinationFolder="$(OutputPath)"
-        SkipUnchangedFiles="true"
-        />
+    <Copy SourceFiles="@(_InteropAssemblies)" DestinationFolder="$(OutputPath)" SkipUnchangedFiles="true" />
+  </Target>
+
+<Target Name="GenerateAllMockableInteropInterfaces" AfterTargets="CopyGeneratedInteropAssemblies">
+    <Message Text="Starting generation of mockable interop interfaces for all DLLs in $(OutputPath)..." Importance="high" />
+
+    <ItemGroup>
+      <_AllOutputDlls Include="$(OutputPath)**\*.dll" Exclude="$(OutputPath)$(TargetName).dll;$(OutputPath)$(TargetName).pdb;$(OutputPath)$(TargetName).deps.json;$(OutputPath)$(TargetName).runtimeconfig.json" />
+
+      </ItemGroup>
+
+    <Exec Command="dotnet &quot;$(MSBuildProjectDirectory)\..\ExtremeRoles.UnitTest.MockGenerator\bin\$(Configuration)\net6.0\ExtremeRoles.UnitTest.MockGenerator.dll&quot; &quot;$(GeneratedInteropInterfacesPath)&quot; @(_AllOutputDlls->'&quot;%(Identity)&quot;', ' ')" />
+
+    <ItemGroup>
+      <Compile Include="$(GeneratedInteropInterfacesPath)GeneratedInteropInterfaces.cs" />
+    </ItemGroup>
+    <Message Text="Finished generation of mockable interop interfaces." Importance="high" />
+  </Target>
+
+  <Target Name="CleanGeneratedInteropInterfaces" BeforeTargets="Clean">
+    <Message Text="Cleaning generated interop interface files..." Importance="high" />
+    <RemoveDir Directories="$(GeneratedInteropInterfacesPath)" />
   </Target>
 </Project>
