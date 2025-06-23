@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="0.11.6" />
+    <!-- Mono.Cecil.Rocks for GetAllTypes() and other helpers -->
+    <PackageReference Include="Mono.Cecil.Rocks" Version="0.11.6" />
   </ItemGroup>
 
 </Project>
