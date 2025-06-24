@@ -1,40 +1,41 @@
 using System.Collections.Generic;
 using ExtremeRoles.Module.Interface;
 
-namespace ExtremeRoles.Module.Event
+namespace ExtremeRoles.Module.Event;
+
+public class EventManager : IEventManager
 {
-    public class EventManager : IEventManager
+	private readonly Dictionary<EventType, List<ISubscriber>> subscribers = [];
+
+    public void Register(ISubscriber subscriber, EventType eventType)
     {
-        private readonly Dictionary<EventType, List<ISubscriber>> _subscribers =
-            new Dictionary<EventType, List<ISubscriber>>();
-
-        public void Register(ISubscriber subscriber, EventType eventType)
+        if (!subscribers.TryGetValue(eventType, out var eventSubscribers))
         {
-            if (!_subscribers.ContainsKey(eventType))
-            {
-                _subscribers[eventType] = new List<ISubscriber>();
-            }
-            _subscribers[eventType].Add(subscriber);
+			eventSubscribers = [];
         }
-
-        public void Invoke(EventType eventType)
-        {
-            if (_subscribers.TryGetValue(eventType, out var eventSubscribers))
-            {
-                List<ISubscriber> subscribersToRemove = new List<ISubscriber>();
-                foreach (var subscriber in eventSubscribers)
-                {
-                    if (!subscriber.Invoke())
-                    {
-                        subscribersToRemove.Add(subscriber);
-                    }
-                }
-
-                foreach (var subscriber in subscribersToRemove)
-                {
-                    eventSubscribers.Remove(subscriber);
-                }
-            }
-        }
+		eventSubscribers.Add(subscriber);
+		subscribers[eventType] = eventSubscribers;
     }
+
+    public void Invoke(EventType eventType)
+    {
+        if (!subscribers.TryGetValue(eventType, out var eventSubscribers))
+        {
+			return;
+        }
+
+		var subscribersToRemove = new List<ISubscriber>();
+		foreach (var subscriber in eventSubscribers)
+		{
+			if (!subscriber.Invoke())
+			{
+				subscribersToRemove.Add(subscriber);
+			}
+		}
+
+		foreach (var subscriber in subscribersToRemove)
+		{
+			eventSubscribers.Remove(subscriber);
+		}
+	}
 }
