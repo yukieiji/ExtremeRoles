@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExtremeRoles.Compat;
@@ -127,7 +127,8 @@ public static class CustomRegion
 	public static void ReSelect(ServerManager instance)
 	{
 		var curRegion = instance.CurrentRegion;
-		if (curCustomRegion.TryGetValue(curRegion.Name, out var target))
+		if (curRegion != null &&
+			curCustomRegion.TryGetValue(curRegion.Name, out var target))
 		{
 			instance.CurrentRegion = target.Info;
 		}
