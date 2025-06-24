@@ -1,3 +1,4 @@
+using AmongUs.GameOptions;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
@@ -7,6 +8,8 @@ using ExtremeRoles.Roles.API;
 
 using TMPro;
 using UnityEngine;
+
+using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
 
 namespace ExtremeRoles.Module.Event;
 
@@ -32,7 +35,8 @@ public sealed class MeetingStatus(PlayerVoteArea pva, bool isCommActive)
 	}
 }
 
-public sealed class MeetingVisualUpdateEvent(MeetingStatus status) : ISubscriber
+public sealed class LocalPlayerMeetingVisualUpdateEvent(
+	MeetingStatus status) : ISubscriber
 {
 	private readonly MeetingStatus status = status;
 
@@ -128,5 +132,220 @@ public sealed class MeetingVisualUpdateEvent(MeetingStatus status) : ISubscriber
 			return;
 		}
 		name.text += tag;
+	}
+}
+
+
+public sealed class OtherPlayerMeetingVisualUpdateEvent(
+	NetworkedPlayerInfo target,
+	MeetingStatus status) : ISubscriber
+{
+	private readonly MeetingStatus status = status;
+	private readonly NetworkedPlayerInfo target = target;
+
+	public bool Invoke()
+	{
+		if (MeetingHud.Instance == null ||
+			status.Info == null ||
+			status.Name == null ||
+			!ExtremeRoleManager.TryGetRole(
+				this.target.PlayerId, out SingleRoleBase? targetRole))
+		{
+			return false;
+		}
+
+
+		resetInfo(status.Name, status.Local);
+
+		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+
+		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+		ExtremeGhostRoleManager.GameRole.TryGetValue(
+			this.target.PlayerId, out GhostRoleBase? targetGhostRole);
+		bool isLocalPlayerGhostRole = ghostRole != null;
+
+		bool blockCondition = isBlockCondition(status.Local, role) || isLocalPlayerGhostRole;
+		bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || isLocalPlayerGhostRole;
+
+		if (role is MultiAssignRoleBase multiRole &&
+			multiRole.AnotherRole != null)
+		{
+			blockCondition = blockCondition || isBlockCondition(status.Local, multiRole.AnotherRole);
+			meetingInfoBlock =
+				meetingInfoBlock || multiRole.AnotherRole.IsBlockShowMeetingRoleInfo();
+		}
+
+		setPlayerNameTag(status.Name, role, targetRole);
+
+		setMeetingInfo(
+			targetRole,
+			targetGhostRole,
+			meetingInfoBlock,
+			blockCondition);
+
+		setNameColor(
+			status.Local,
+			status.Name,
+			role,
+			targetRole,
+			ghostRole,
+			targetGhostRole,
+			meetingInfoBlock,
+			blockCondition);
+		return true;
+	}
+
+	private void resetInfo(
+		TextMeshPro name, NetworkedPlayerInfo local)
+	{
+		name.text = this.target.PlayerName;
+		name.color =
+			local.Role.IsImpostor && this.target.Role.IsImpostor ?
+			Palette.ImpostorRed : Palette.White;
+	}
+
+	private void setNameColor(
+		NetworkedPlayerInfo local,
+		TextMeshPro text,
+		SingleRoleBase localRole,
+		SingleRoleBase targetRole,
+		GhostRoleBase? localGhostRole,
+		GhostRoleBase? targetGhostRole,
+		bool isMeetingInfoBlock,
+		bool blockCondition)
+	{
+
+		byte targetPlayerId = this.target.PlayerId;
+
+		if (!ClientOption.Instance.GhostsSeeRole.Value ||
+			!local.IsDead ||
+			blockCondition)
+		{
+			Color paintColor = localRole.GetTargetRoleSeeColor(
+				targetRole, targetPlayerId);
+			if (localGhostRole is not null)
+			{
+				Color paintGhostColor = localGhostRole.GetTargetRoleSeeColor(
+					targetPlayerId, targetRole, targetGhostRole);
+
+				if (paintGhostColor != Color.clear)
+				{
+					paintColor = (paintGhostColor / 2.0f) + (paintColor / 2.0f);
+				}
+			}
+
+			if (paintColor == Palette.ClearWhite)
+			{
+				return;
+			}
+
+			text.color = paintColor;
+
+		}
+		else
+		{
+			Color roleColor = targetRole.GetNameColor(true);
+
+			// インポスター同士は見える
+			if (!isMeetingInfoBlock ||
+				(localRole.IsImpostor() && targetRole.IsImpostor()))
+			{
+				text.color = roleColor;
+			}
+		}
+	}
+
+	private void setMeetingInfo(
+		SingleRoleBase targetRole,
+		GhostRoleBase? targetGhostRole,
+		bool isMeetingInfoBlock,
+		bool blockCondition)
+	{
+
+		var info = this.status.Info;
+		if (info == null)
+		{
+			return;
+		}
+
+		if (!this.status.Local.IsDead ||
+			blockCondition)
+		{
+			info.gameObject.SetActive(false);
+		}
+		else
+		{
+			info.text =
+				MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
+				"" : getMeetingInfo(targetRole, targetGhostRole);
+			info.gameObject.SetActive(!isMeetingInfoBlock);
+		}
+	}
+
+	private string getMeetingInfo(
+		SingleRoleBase targetRole,
+		GhostRoleBase? targetGhostRole)
+	{
+		var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(this.target);
+		string roleNames = targetRole.GetColoredRoleName(this.status.Local.IsDead);
+
+		if (targetGhostRole is not null)
+		{
+			string ghostRoleName = targetGhostRole.GetColoredRoleName();
+			roleNames = $"{ghostRoleName}({roleNames})";
+		}
+
+		string completedStr = this.status.IsCommActive ? "?" : tasksCompleted.ToString();
+		string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
+
+		string meetingInfoText = "";
+
+		var clientOption = ClientOption.Instance;
+		bool isGhostSeeRole = clientOption.GhostsSeeRole.Value;
+		bool isGhostSeeTask = clientOption.GhostsSeeTask.Value;
+
+		if (isGhostSeeRole && isGhostSeeTask)
+		{
+			meetingInfoText = $"{roleNames} {taskInfo}".Trim();
+		}
+		else if (isGhostSeeTask)
+		{
+			meetingInfoText = $"{taskInfo}".Trim();
+		}
+		else if (isGhostSeeRole)
+		{
+			meetingInfoText = $"{roleNames}";
+		}
+		return meetingInfoText;
+	}
+
+	private void setPlayerNameTag(
+		TextMeshPro text,
+		SingleRoleBase localRole,
+		SingleRoleBase targetRole)
+	{
+		string tag = localRole.GetRolePlayerNameTag(
+			targetRole, this.target.PlayerId);
+		if (tag == string.Empty)
+		{
+			return;
+		}
+
+		text.text += tag;
+	}
+
+	private bool isBlockCondition(
+		NetworkedPlayerInfo local,
+		SingleRoleBase role)
+	{
+		if (local.Role.Role is RoleTypes.GuardianAngel)
+		{
+			return true;
+		}
+		else if (CommomSystem.IsForceInfoBlockRole(role))
+		{
+			return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
+		}
+		return false;
 	}
 }

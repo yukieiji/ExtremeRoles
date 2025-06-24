@@ -106,19 +106,15 @@ public static class MeetingHudSortButtonsPatch
 		{
 			var obj = pva.gameObject;
 
-			if (pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId)
-			{
-				var status = new MeetingStatus(pva, isHudOverrideTaskActive);
-				EventManager.Instance.Register(
-					new MeetingVisualUpdateEvent(status),
-					ModEvent.VisualUpdate);
+			var status = new MeetingStatus(pva, isHudOverrideTaskActive);
 
-			}
-			else
-			{
-				VoteAreaInfo playerInfoUpdater = obj.AddComponent<OtherPlayerVoteAreaInfo>();
-				playerInfoUpdater.Init(pva, isHudOverrideTaskActive);
-			}
+			ISubscriber subscriber =
+				pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ?
+				new LocalPlayerMeetingVisualUpdateEvent(status) :
+				new OtherPlayerMeetingVisualUpdateEvent(
+					GameData.Instance.GetPlayerById(pva.TargetPlayerId), status);
+
+			EventManager.Instance.Register(subscriber, ModEvent.VisualUpdate);
 
 			if (system is not null &&
 				(trashMeeting is null || !trashMeeting.InvalidPlayer(pva)))
