@@ -1206,4 +1206,40 @@ ExR 和其他设备仅以最低限度的功能启动</value>
   <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
     <value>「Fungle」的「反应堆修理」</value>
   </data>
+  <data name="GhostRoleGlobalOptionHauntMinigameMaxSpeed" xml:space="preserve">
+    <value>幽灵最快移动速度</value>
+  </data>
+  <data name="IsRatioTeamAssign" xml:space="preserve">
+    <value>阵营比例分配</value>
+  </data>
+  <data name="AssignRatio" xml:space="preserve">
+    <value>分配比例</value>
+  </data>
+  <data name="OneToOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="TwoToOne" xml:space="preserve">
+    <value>2:1</value>
+  </data>
+  <data name="OneToTwo" xml:space="preserve">
+    <value>1:2</value>
+  </data>
+  <data name="TwoToTwo" xml:space="preserve">
+    <value>2:2</value>
+  </data>
+  <data name="OneToThree" xml:space="preserve">
+    <value>1:3</value>
+  </data>
+  <data name="ThreeToOne" xml:space="preserve">
+    <value>3:1</value>
+  </data>
+  <data name="ThreeToTwo" xml:space="preserve">
+    <value>3:2</value>
+  </data>
+  <data name="TwoToThree" xml:space="preserve">
+    <value>2:3</value>
+  </data>
+  <data name="ThreeToThree" xml:space="preserve">
+    <value>3:3</value>
+  </data>
 </root>
