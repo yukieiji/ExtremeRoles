@@ -1206,10 +1206,10 @@
     <value>莫妮卡能看见“回收站”层的人吗？</value>
   </data>
   <data name="Heretic" xml:space="preserve">
-    <value>“英雄”</value>
+    <value>异端</value>
   </data>
   <data name="HereticHasTask" xml:space="preserve">
-    <value>“英雄”可以做任务</value>
+    <value>异端可以做任务</value>
   </data>
   <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
     <value>完成多少任务可知晓“内鬼”</value>
@@ -1233,7 +1233,7 @@
     <value>冒犯者…愿用生命抹除…</value>
   </data>
   <data name="HereticFullDescription" xml:space="preserve">
-    <value>“英雄”属于独立阵营
+    <value>异端属于独立阵营
 胜利条件：内鬼获胜(或一些特殊获胜)
 技能“诅咒击杀”：
    -以自己的生命为代价杀死目标
@@ -1242,14 +1242,14 @@
       -选择目标进行诅咒
    模式“指定目标(行动模式)”
       -选择目标进行诅咒
-      -当“英雄”被票出时，会连带被诅咒玩家一起死亡
+      -当异端被票出时，会连带被诅咒玩家一起死亡
    模式“会议模式”
       -在会议时选择目标进行诅咒
    模式“指定目标(会议模式)”
       -在会议时选择目标进行诅咒
-      -当“英雄”被票出时，会连带被诅咒玩家一起死亡
+      -当异端被票出时，会连带被诅咒玩家一起死亡
    模式“连带模式”
-      -当“英雄”被票出时，会连带随机一名玩家一起死亡</value>
+      -当异端被票出时，会连带随机一名玩家一起死亡</value>
   </data>
   <data name="HereticAbility" xml:space="preserve">
     <value>诅咒击杀</value>
