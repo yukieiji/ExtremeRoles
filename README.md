@@ -28,7 +28,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 # Extreme Roles
 主な特徴として以下があります<br>
 - 第三陣営「ニュートラル」と幽霊役職の追加
-- **100個のユニークな役職**の追加
+- **100個以上のユニークな役職**の追加
     - すべてのMOD役職がAmongUs公式役職との併用可能
     - すべてのMOD役職が複数人アサイン可能
     - かくれんぼ(HideNSeek)も完全対応しており、MOD役職を使用可能
@@ -48,9 +48,11 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 - 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 - 多種多様の情報を取得できるREST APIを搭載(欲しいAPIがある場合は連絡をお願いします)
 
-## 追加役職一覧(Extreme Roles v12.1.2.0時点、今後も追加予定)
-### ホスト役職
+## 追加役職一覧
 
+- Extreme Roles v2025.6.25.0時点、今後も追加予定
+
+### ホスト役職
 - シオン
 
 ### 通常役職
@@ -80,17 +82,17 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  ギャンブラー |  マジシャン  | キメラ |
 |  テレポーター |  ゾンビ  | アイアンメイト |
 |  モデレーター |  スライム | モニカ |
-|  サイキック |  シーフ  | ヴィジランテ |
-|  ベイト  |  クルーシュルーム  | ワルガキ |
-|  ジェイラー |  テロリスト  | トレイター |
-|  ヤードバード |  レイダー  |  |
-|  サモナー |  グリッチ  |  |
-|  マーリン  | ハイジャッカー |   |
-|  ヒーロー  | タイムブレーカー  |   |
-|  探偵  | アサシン |   |
-|  助手  | シェアーズ |   |
-|  見習い探偵  | ヴィラン  |   |
-|  バディーズ  |  |  |
+|  サイキック |  シーフ  | ヘレティック  |
+|  ベイト  |  クルーシュルーム  | シェパード |
+|  ジェイラー |  テロリスト  | ファーリー |
+|  ヤードバード |  レイダー  | インティメイト |
+|  サモナー |  グリッチ  | サロゲーター |
+|  マーリン  | ハイジャッカー | ナイト  |
+|  ヒーロー  | タイムブレーカー  | ポーン |
+|  探偵  | スカベンジャー | ヴィジランテ |
+|  助手  | アサシン | ワルガキ |
+|  見習い探偵  | シェアーズ  | トレイター |
+|  バディーズ  | ヴィラン |  |
 |  ラバーズ  |  |  |
 |  サポーター |  |  |
 |  ゲッサー |  |  |
@@ -99,6 +101,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 |  スケーター |  |  |
 
 ### 幽霊役職
+
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
 |  ファウヌス  |  サボり魔  | フォラス |
@@ -110,6 +113,8 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 「ラバーズ」、「サポーター」、「ゲッサー」、「ムーバー」、「アクセラレーター」と「スケーター」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
 * 「サイドキック」と「見習い探偵」、「サーヴァント」、「ドール」、「ヤードバード」、「ロォーブレーカー」、「キメラ」はゲーム開始時にはアサインされず、条件を満たした時にアサインされます
 * 「マーリン」と「アサシン」、「ヒーロー」と「ヴィラン」と「ヴィジランテ」、「探偵」と「助手」、「ワルガキ」と「ウィスプ」は一対の関係です
+* 「シェパード」と「ファーリー」、「インティメイト」、「サロゲーター」、「ナイト」、「ポーン」は**フォールバック役職の特定の条件と設定(特定の役職が存在知る等)を行った時にしかアサインされない**
+* 「シェパード」と「インティメイト」、「ナイト」は**特定設定を行うことでサブチーム役職となります**
 * 詳しくは[Wikiのロール](https://yukieiji.github.io/ExtremeRoles.Docs/docs/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7.html)を参照
 
 # Extreme Skins
@@ -178,7 +183,7 @@ Extreme Rolesに読み上げ機能を追加するクライアントアドオン�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v16.0.5(v2025.5.20)  | v14.0.0.0 |
+|  v16.0.5(v2025.5.20)  | v14.0.0.0 ～ v2025.6.25 |
 |  v16.0.0(v2025.3.25)/v16.0.2(v2025.3.31)  | v13.0.0.0 ～ v13.1.2.0 |
 |  v2024.8.13s/v2024.8.13e/v2024.9.4s/v2024.9.4e<br>v2024.10.29s/v2024.10.29e/v2024.11.26s/v2024.11.26e  | v12.0.0.0 ～ v12.1.5.3 |
 |  v2024.6.18s/v2024.6.18e  | v11.0.0.0 ～ v11.1.1.0 |
@@ -272,17 +277,17 @@ You can either edit [the files](https://github.com/yukieiji/ExtremeRoles/tree/ma
 
   1. Clone Repository
       - ExR uses `git-flow`, so please switch to `debelop` branch if possible 
-  2. Open `ExtremeRoles.sln` with VisualStudio
+  3. Open `ExtremeRoles.sln` with VisualStudio
       - If VisualStudio component is missing something you need, you will be show to install it, so please follow the instructions.
-  3. Open `ResX Resource Manager` in `View` to `Other Windows` of VisualStudio
+  4. Open `ResX Resource Manager` in `View` to `Other Windows` of VisualStudio
       - If it's not there, install `ResXManager` from `Manage Extensions` in `Extension` and reboot VisualStudio.
-  3. Add or edit translations!!
+  5. Add or edit translations!!
 
 - ResXResourceManager standalone
 
   1. Clone Repository(Like /a)
       - ExR uses `git-flow`, so please switch to `debelop` branch if possible 
-  2. Download `ResXResourceManager` standalone App : [from](https://github.com/dotnet/ResXResourceManager/releases/latest)
-  3. Open `ResXResourceManager.exe`
-  4. Set Directory to Cloned path(Like /a/ExtremeRoles)
-  5. Add or edit translations!!
+  3. Download `ResXResourceManager` standalone App : [from](https://github.com/dotnet/ResXResourceManager/releases/latest)
+  4. Open `ResXResourceManager.exe`
+  5. Set Directory to Cloned path(Like /a/ExtremeRoles)
+  6. Add or edit translations!!
