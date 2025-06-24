@@ -1209,4 +1209,314 @@
     <value>「モニカ」がゴミ箱のプレイヤーを
 見ることができるか</value>
   </data>
+  <data name="Heretic" xml:space="preserve">
+    <value>ヘレティック</value>
+  </data>
+  <data name="HereticHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
+    <value>インポスターが見えるようになるタスク進捗率</value>
+  </data>
+  <data name="HereticKillMode" xml:space="preserve">
+    <value>「呪殺」のモード</value>
+  </data>
+  <data name="HereticAbilityCoolTime" xml:space="preserve">
+    <value>「呪殺」のクールタイム</value>
+  </data>
+  <data name="HereticRange" xml:space="preserve">
+    <value>「呪殺」が発動できる範囲</value>
+  </data>
+  <data name="HereticCanKillImpostor" xml:space="preserve">
+    <value>インポスターが「呪殺」の対象になるか</value>
+  </data>
+  <data name="HereticIntroDescription" xml:space="preserve">
+    <value>インポスター様、どうか祝福を・・・</value>
+  </data>
+  <data name="HereticShortDescription" xml:space="preserve">
+    <value>「呪殺」でインポスター様に仇なす者を殺せ</value>
+  </data>
+  <data name="HereticFullDescription" xml:space="preserve">
+    <value>第三陣営役職
+勝利条件：インポスターの勝利(特殊勝利も含む)
+能力「呪殺」：
+　・自分の命と引き換えに対象をキルする
+　・「呪殺」のモードによって対象の取り方や「呪殺」の能力が変化する
+　　・モード「タスク中」
+　　　・タスク中のプレイヤーを対象にとって発動して、
+　　　即時能力が発動する
+　　・モード「ターゲット指定(タスク中)」
+　　　・タスク中のプレイヤーを対象にとって発動、
+　　　対象として保持する
+　　　・この役職が追放時にその対象に取った
+　　　プレイヤーを道連れにする
+　　・モード「会議中」
+　　　・会議中のプレイヤーを対象にとって発動して、
+　　　即時能力が発動する
+　　・モード「ターゲット指定(会議中)」
+　　　・会議中のプレイヤーを対象にとって発動、
+　　　対象として保持する
+　　　・この役職が追放時にその対象に取った
+　　　プレイヤーを道連れにする
+　　・モード「追放時」
+ 　　　・この役職が追放時にランダムなプレイヤーを
+　　　道連れにする</value>
+  </data>
+  <data name="HereticAbility" xml:space="preserve">
+    <value>呪殺</value>
+  </data>
+  <data name="Shepherd" xml:space="preserve">
+    <value>シェパード</value>
+  </data>
+  <data name="ShepherdCanKill" xml:space="preserve">
+    <value>キルできるか</value>
+  </data>
+  <data name="ShepherdIsSubTeam" xml:space="preserve">
+    <value>ジャッカルのサブチームか</value>
+  </data>
+  <data name="ShepherdUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="ShepherdHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
+    <value>ジャッカルが見えるようになるタスク進捗率</value>
+  </data>
+  <data name="ShepherdIntroDescription" xml:space="preserve">
+    <value>ジャッカルの指導者</value>
+  </data>
+  <data name="ShepherdShortDescription" xml:space="preserve">
+    <value>ジャッカルを勝利に導け</value>
+  </data>
+  <data name="ShepherdFullDescription" xml:space="preserve">
+    <value>第三陣営のフォールバックサブチーム役職
+勝利条件：ジャッカルの勝利(特殊勝利も含む)
+
+キルボタンを持ち、サブチームであるときこの役職はジャッカルの
+サブチーム役職となる
+　・ジャッカル及びサイドキックが生存しているとき
+　　・ジャッカル陣営としてカウントされない　
+　・ジャッカル及びサイドキックが生存していないとき
+　　・以下を満たすことでジャッカル陣営の特殊勝利となる
+　　　1. インポスター及びキル能力を持つニュートラルが全滅している
+　　　2. 生存者の半数以上が同じ陣営。
+サブチームがオフであったり、キルボタンを持たない場合
+この役職はフォールバック役職となる
+　・フォールバック役職の場合、ジャッカルがアサインされないと
+　この役職はアサインされない</value>
+  </data>
+  <data name="Furry" xml:space="preserve">
+    <value>ファーリー</value>
+  </data>
+  <data name="FurryUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="FurryHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="FurrySeeJackalTaskRate" xml:space="preserve">
+    <value>ジャッカルが見えるようになるタスク進捗率</value>
+  </data>
+  <data name="FurryIntroDescription" xml:space="preserve">
+    <value>ジャッカルの血が流れている(？)クルー</value>
+  </data>
+  <data name="FurryShortDescription" xml:space="preserve">
+    <value>第3のジャッカルとして、生き残れ</value>
+  </data>
+  <data name="FurryFullDescription" xml:space="preserve">
+    <value>第三陣営のフォールバック役職
+　ジャッカルがアサインされないとこの役職はアサインされない
+勝利条件：ジャッカルの勝利(特殊勝利も含む)
+
+パッシブ能力「血の目醒め」
+　・サイドキックが先に死亡しているジャッカルが死亡
+　(追放やキル等)した場合、その組のジャッカルになる
+　　・ジャッカル変化時能力等の使用回数は0となり
+　　新たにサイドキックを作ることはできない</value>
+  </data>
+  <data name="Intimate" xml:space="preserve">
+    <value>インティメイト</value>
+  </data>
+  <data name="IntimateCanKill" xml:space="preserve">
+    <value>キルできるか</value>
+  </data>
+  <data name="IntimateIsSubTeam" xml:space="preserve">
+    <value>ヤンデレのサブチームか</value>
+  </data>
+  <data name="IntimateUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="IntimateHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="IntimateSeeYandereTaskRate" xml:space="preserve">
+    <value>ヤンデレが見えるようになるタスク進捗率</value>
+  </data>
+  <data name="IntimateFullDescription" xml:space="preserve">
+    <value>第三陣営のフォールバックサブチーム役職
+勝利条件：ヤンデレの勝利(特殊勝利も含む)
+
+キルボタンを持ち、サブチームであるときこの役職は
+ヤンデレのサブチーム役職となる
+　・ヤンデレが生存しているとき
+　　・ヤンデレ陣営としてカウントされない　
+　・ヤンデレが生存していないとき
+　　・以下を満たすことでヤンデレ陣営の特殊勝利となる
+　　　1. インポスター及びキル能力を持つニュートラルが全滅している
+　　　2. 生存者の半数以上が同じ陣営。
+サブチームがオフであったり、キルボタンを持たない場合
+この役職はフォールバック役職となる
+　・フォールバック役職の場合、ヤンデレがアサインされないと
+　この役職はアサインされない</value>
+  </data>
+  <data name="IntimateShortDescription" xml:space="preserve">
+    <value>ヤンデレちゃんのために私は手を汚す</value>
+  </data>
+  <data name="IntimateIntroDescription" xml:space="preserve">
+    <value>ヤンデレちゃんは、私の大事な親友！！</value>
+  </data>
+  <data name="Surrogator" xml:space="preserve">
+    <value>サロゲーター</value>
+  </data>
+  <data name="SurrogatorUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="SurrogatorHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="SurrogatorSeeYandereTaskRate" xml:space="preserve">
+    <value>ヤンデレが見えるようになるタスク進捗率</value>
+  </data>
+  <data name="SurrogatorAbilityCoolTime" xml:space="preserve">
+    <value>「死体纏い」のクールタイム</value>
+  </data>
+  <data name="SurrogatorAbilityActiveTime" xml:space="preserve">
+    <value>「死体纏い」が完了するまでの時間</value>
+  </data>
+  <data name="SurrogatorAbilityCount" xml:space="preserve">
+    <value>「死体纏い」が使える回数</value>
+  </data>
+  <data name="SurrogatorRange" xml:space="preserve">
+    <value>「死体纏い」が使える死体からの距離</value>
+  </data>
+  <data name="SurrogatorPreventNum" xml:space="preserve">
+    <value>「日陰者の加護」の初期防御回数</value>
+  </data>
+  <data name="SurrogatorPreventKillTime" xml:space="preserve">
+    <value>「日陰者の加護」によってキルをブロックしたときのキルクール</value>
+  </data>
+  <data name="SurrogatorAbility" xml:space="preserve">
+    <value>死体纏い</value>
+  </data>
+  <data name="SurrogatorIntroDescription" xml:space="preserve">
+    <value>影からのヤンデレ応援者</value>
+  </data>
+  <data name="SurrogatorFullDescription" xml:space="preserve">
+    <value>第三陣営のフォールバック役職
+　ヤンデレがアサインされないとこの役職はアサインされない
+勝利条件：ヤンデレの勝利(特殊勝利も含む)
+
+パッシブ能力「日陰者の加護」
+　・「想い人」のキルボタンによるキルを特定回数ブロックする
+　・ブロック回数は「死体纏い」を行うことで増加する
+　・現在のブロック可能回数 : {0}
+ボタン能力「死体纏い」
+　・近くの死体を対象として発動
+　・設定秒数後、死体を消し「日陰者の加護」の
+　防御回数を1つ増やす</value>
+  </data>
+  <data name="SurrogatorTask" xml:space="preserve">
+    <value>「死体纏い」を使い、大事な人の大事な人を守れ</value>
+  </data>
+  <data name="Knight" xml:space="preserve">
+    <value>ナイト</value>
+  </data>
+  <data name="KnightIsSubTeam" xml:space="preserve">
+    <value>クイーンのサブチームか</value>
+  </data>
+  <data name="KnightUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="KnightHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="KnightSeeQueenTaskRate" xml:space="preserve">
+    <value>クイーンが見えるようになるタスク進捗率</value>
+  </data>
+  <data name="KnightIntroDescription" xml:space="preserve">
+    <value>クイーン親衛隊の切り込み隊長</value>
+  </data>
+  <data name="KnightFullDescription" xml:space="preserve">
+    <value>第三陣営のフォールバックサブチーム役職
+勝利条件：クイーンの勝利(特殊勝利も含む)
+
+キルボタンを持ち、サブチームであるときこの役職は
+クイーンのサブチーム役職となる
+　・クイーンとサーヴァントが生存しているとき
+　　・クイーン陣営としてカウントされない　
+　・クイーンとサーヴァントが生存していないとき
+　　・以下を満たすことでクイーン陣営の特殊勝利となる
+　　　1. インポスター及びキル能力を持つニュートラルが全滅している
+　　　2．生存者の半数以上が同じ陣営
+サブチームがオフの場合、この役職はフォールバック役職となる
+　・フォールバック役職の場合、クイーンがアサインされないと
+　この役職はアサインされない</value>
+  </data>
+  <data name="KnightShortDescription" xml:space="preserve">
+    <value>クイーンの変わりにキルを起こせ</value>
+  </data>
+  <data name="Pawn" xml:space="preserve">
+    <value>ポーン</value>
+  </data>
+  <data name="PawnUseVent" xml:space="preserve">
+    <value>ベントを使用できるか</value>
+  </data>
+  <data name="PawnHasTask" xml:space="preserve">
+    <value>タスクを持つか</value>
+  </data>
+  <data name="PawnSeeQueenTaskRate" xml:space="preserve">
+    <value>クイーンが見えるようになるタスク進捗率</value>
+  </data>
+  <data name="PawnIntroDescription" xml:space="preserve">
+    <value>クイーンの先遣隊</value>
+  </data>
+  <data name="PawnShortDescription" xml:space="preserve">
+    <value>クイーンの勝利を手助けせよ</value>
+  </data>
+  <data name="PawnFullDescription" xml:space="preserve">
+    <value>第三陣営のフォールバック役職
+　クイーンがアサインされないとこの役職はアサインされない
+勝利条件：クイーンの勝利(特殊勝利も含む)</value>
+  </data>
+  <data name="AbilityOnTaskPhase" xml:space="preserve">
+    <value>タスクフェーズ中</value>
+  </data>
+  <data name="AbilityOnTaskPhaseTarget" xml:space="preserve">
+    <value>ターゲット指定&lt;br&gt;(タスクフェーズ中)</value>
+  </data>
+  <data name="AbilityOnMeeting" xml:space="preserve">
+    <value>会議中</value>
+  </data>
+  <data name="AbilityOnMeetingTarget" xml:space="preserve">
+    <value>ターゲット指定&lt;br&gt;(会議中)</value>
+  </data>
+  <data name="AbilityOnExiled" xml:space="preserve">
+    <value>追放時</value>
+  </data>
+  <data name="AliceWinTaskRate" xml:space="preserve">
+    <value>勝利に必要なタスク進捗率</value>
+  </data>
+  <data name="AliceWinKillNum" xml:space="preserve">
+    <value>勝利に必要なキル数</value>
+  </data>
+  <data name="AllJackalWin" xml:space="preserve">
+    <value>シェパードの活躍により、全ジャッカル陣営</value>
+  </data>
+  <data name="AllYandereWin" xml:space="preserve">
+    <value>インティメイトの活躍により、全ヤンデレ陣営</value>
+  </data>
+  <data name="AllQueenWin" xml:space="preserve">
+    <value>ナイトの活躍により、全クイーン陣営</value>
+  </data>
 </root>

@@ -23,41 +23,42 @@ def get_trans_data_check(file_name:str)-> dict[str, list[str]]:
   wb = readxl(file_name)
 
   missing_data = {}
+  try:
+    for name in wb.ws_names:
 
-  for name in wb.ws_names:
+      sheat = wb.ws(name)
 
-    sheat = wb.ws(name)
+      row, col = sheat.size
+      # 行を回す
+      for i in range(2, row + 1):
 
-    row, col = sheat.size
-    # 行を回す
-    for i in range(2, row + 1):
+        # i行目の1列目はキー
+        key = sheat.index(i, 1)
+        if key == "":
+          continue
 
-      # i行目の1列目はキー
-      key = sheat.index(i, 1)
-      if key == "":
-        continue
+        # i行目j列がデータ、jは2以上であり2が0(英語)である
+        for j in range(2, col + 1):
 
-      # i行目j列がデータ、jは2以上であり2が0(英語)である
-      for j in range(2, col + 1):
+            lang_enm = j - 2
+            if (not (lang_enm in SUPPORT_LANG) or
+              (lang_enm == 11 and (key == 'langTranslate' or key == 'translatorMember'))):
+              continue
 
-          lang_enm = j - 2
-          if (not (lang_enm in SUPPORT_LANG) or
-            (lang_enm == 11 and (key == 'langTranslate' or key == 'translatorMember'))):
-            continue
+            cell_data = sheat.index(i, j)
+            if type(cell_data) != str:
+              continue
 
-          cell_data = sheat.index(i, j)
-          if type(cell_data) != str:
-            continue
-
-          lang = SUPPORT_LANG[lang_enm]
+            lang = SUPPORT_LANG[lang_enm]
 
 
-          if not (lang in missing_data):
-            missing_data[lang] = []
+            if not (lang in missing_data):
+              missing_data[lang] = []
 
-          if cell_data == '':
-            missing_data[lang].append(key)
-
+            if cell_data == '':
+              missing_data[lang].append(key)
+  except Exception as e:
+    print(f"Warning: An error occurred while processing Excel file {file_name}: {e}", file=sys.stderr)
   return missing_data
 
 class ResXMissingData:
@@ -71,14 +72,22 @@ class ResXMissingData:
 
 def get_resx_trans_missing_data(path:str) -> dict[str, dict[str, list[str]]]:
   ja_resx = set(glob.glob(os.path.join(path, "*.resx")))
+  ja_resx = set(
+    resx for resx in ja_resx if len(resx.split(".")) == 2
+  )
 
   # `*.*.resx` を検索
   other_resx = set(glob.glob(os.path.join(path, "*.*.resx")))
 
   base_trans : dict[str, dict[str, str]] = {}
 
+  print("Ja resx: [" + ",".join(ja_resx) + "]")
   for resx_file in ja_resx:
-    tree = ET.parse(resx_file)
+    try:
+      tree = ET.parse(resx_file)
+    except (ET.ParseError, Exception) as e:
+      print(f"Warning: Could not parse base resx file {resx_file}: {e}", file=sys.stderr)
+      continue
     root = tree.getroot()
 
     file_name = resx_file.split('.')[0]
@@ -96,16 +105,22 @@ def get_resx_trans_missing_data(path:str) -> dict[str, dict[str, list[str]]]:
           continue
         base_trans[file_name][key] = val  # <value> の内容を辞書に格納
   result : dict[str, dict[str, list[str]]] = {}
+  print("Find resx [" + ",".join(other_resx) + "]")
   for resx in other_resx:
 
     splited = resx.split('.')
     lang = splited[1]
     if lang not in SUPPORT_RESX_LANG:
       continue
+    print(f"[{resx}] is support lang")
     lang = SUPPORT_RESX_LANG[lang]
     file_name = splited[0]
 
-    tree = ET.parse(resx)
+    try:
+      tree = ET.parse(resx)
+    except (ET.ParseError, Exception) as e:
+      print(f"Warning: Could not parse language resx file {resx}: {e}", file=sys.stderr)
+      continue
     root = tree.getroot()
 
     missing_data = ResXMissingData()
@@ -119,7 +134,7 @@ def get_resx_trans_missing_data(path:str) -> dict[str, dict[str, list[str]]]:
       if value_element is None:
         missing_data.append(lang, key)
         continue
-      if val is None:
+      if value_element.text is None or value_element.text == '':
           missing_data.append(lang, key)
     if len(missing_data.data) == 0:
       continue
@@ -148,14 +163,23 @@ def output_md_report(build_result:str, check_resx:list[str], check_xlsx_file:lis
   result = f'{result}### Translation Checker Report\n'
 
   for path in check_resx:
-    resx_result = get_resx_trans_missing_data(path)
+    try:
+      resx_result = get_resx_trans_missing_data(path)
+    except Exception as e:
+      print(f"Warning: Failed to get RESX translation data for path {path}: {e}", file=sys.stderr)
+      resx_result = {}
     for resx, data in resx_result.items():
       result = f'{result}\n - FileName:**{os.path.basename(resx)}**\n\n'
       result = f'{result}{convert_md_table(data)}\n'
 
   for file in check_xlsx_file:
+    try:
+      xlsx_data = get_trans_data_check(file)
+    except Exception as e:
+      print(f"Warning: Failed to get XLSX translation data for file {file}: {e}", file=sys.stderr)
+      xlsx_data = {}
     result = f'{result}\n - FileName:**{os.path.basename(file)}**\n\n'
-    result = f'{result}{convert_md_table(get_trans_data_check(file))}\n'
+    result = f'{result}{convert_md_table(xlsx_data)}\n'
 
   with open(os.path.join(WORKING_DIR, '.github/workflows/comment.md'), 'w', encoding='UTF-8') as md:
       md.write(result)

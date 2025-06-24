@@ -6,8 +6,8 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 
 #nullable enable
 
@@ -175,7 +175,7 @@ public sealed class TuckerShadowSystem(
 			rend.sprite = UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Tucker,
 				ObjectPath.TuckerShadow);
-			if (ExtremeRoleManager.TryGetSafeCastedLocalRole<Tucker>(out var tucker))
+			if (ExtremeRoleManager.TryGetSafeCastedLocalRole<TuckerRole>(out var tucker))
 			{
 				rend.color = tucker.GetNameColor();
 			}
@@ -201,7 +201,7 @@ public sealed class TuckerShadowSystem(
 					Object.Destroy(rend.gameObject);
 					playerShadow.Remove(id);
 				}
-				if (ExtremeRoleManager.TryGetSafeCastedLocalRole<Chimera>(out var chimera))
+				if (ExtremeRoleManager.TryGetSafeCastedLocalRole<ChimeraRole>(out var chimera))
 				{
 					chimera.OnRemoveShadow(
 						playerId, this.shadowRemoveKillCool,

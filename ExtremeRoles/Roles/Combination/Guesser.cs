@@ -19,7 +19,7 @@ using ExtremeRoles.Performance;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
-using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -69,7 +69,9 @@ public sealed class Guesser :
     private TextMeshPro meetingGuessText = null;
     private string roleNamePrefix;
 
-    private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
+	public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
+
+	private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Assassin,
         ExtremeRoleId.Marlin,
@@ -196,7 +198,7 @@ public sealed class Guesser :
                         assignState.IsJackalForceReplaceLover = OptionManager.Instance.TryGetCategory(
 							OptionTab.NeutralTab,
 							ExtremeRoleManager.GetRoleGroupId(ExtremeRoleId.Jackal),
-							out var cate) && cate.GetValue<Jackal.JackalOption, bool>(Jackal.JackalOption.ForceReplaceLover);
+							out var cate) && cate.GetValue<JackalRole.JackalOption, bool>(JackalRole.JackalOption.ForceReplaceLover);
                         break;
                     case ExtremeRoleId.Queen:
                         assignState.IsQueenOn = true;
@@ -525,12 +527,6 @@ public sealed class Guesser :
             this.guesserUi.gameObject.SetActive(true);
         }
         return openGusserUi;
-    }
-
-    public void SetSprite(SpriteRenderer render)
-    {
-        render.sprite = UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
-		render.transform.localScale *= new Vector2(0.625f, 0.625f);
     }
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)

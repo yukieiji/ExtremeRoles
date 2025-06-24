@@ -13,8 +13,7 @@ using ExtremeRoles.Roles.API;
 namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class GhostRoleSpawnDataManager :
-	NullableSingleton<GhostRoleSpawnDataManager>,
-	ISpawnDataManager
+	NullableSingleton<GhostRoleSpawnDataManager>
 {
 	private Dictionary<ExtremeRoleType, int> globalSpawnLimit = new Dictionary<ExtremeRoleType, int>();
 
@@ -30,9 +29,10 @@ public sealed class GhostRoleSpawnDataManager :
 	}
 
 	public void Create(
-		List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> useGhostCombRole)
+		IReadOnlyList<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> useGhostCombRole)
 	{
 		var logger = ExtremeRolesPlugin.Logger;
+		logger.LogInfo("-------- GostRoleSpawnDataManager - Construct Start --------");
 		this.clear();
 
 		foreach (var (combRoleId, mng) in useGhostCombRole)
@@ -51,21 +51,21 @@ public sealed class GhostRoleSpawnDataManager :
 			{
 				{
 					ExtremeRoleType.Crewmate,
-					ISpawnDataManager.ComputeSpawnNum(
+					ISpawnLimiter.ComputeSpawnNum(
 						cate,
 						RoleSpawnOption.MinCrewmate,
 						RoleSpawnOption.MaxCrewmate)
 				},
 				{
 					ExtremeRoleType.Neutral,
-					ISpawnDataManager.ComputeSpawnNum(
+					ISpawnLimiter.ComputeSpawnNum(
 						cate,
 						RoleSpawnOption.MinNeutral,
 						RoleSpawnOption.MaxNeutral)
 				},
 				{
 					ExtremeRoleType.Impostor,
-					ISpawnDataManager.ComputeSpawnNum(
+					ISpawnLimiter.ComputeSpawnNum(
 						cate,
 						RoleSpawnOption.MinImpostor,
 						RoleSpawnOption.MaxImpostor)
@@ -138,6 +138,7 @@ public sealed class GhostRoleSpawnDataManager :
 				.ThenBy(x => RandomGenerator.Instance.Next())
 				.ToList();
 		}
+		logger.LogInfo("-------- GostRoleSpawnDataManager - Construct End --------");
 	}
 
 	public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) =>

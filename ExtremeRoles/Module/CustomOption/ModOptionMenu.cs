@@ -16,7 +16,6 @@ using ExtremeRoles.Patches.Meeting;
 
 using UnityObject = UnityEngine.Object;
 using ExtremeRoles.Extension.Controller;
-using ExtremeRoles.Beta;
 
 
 #nullable enable
@@ -40,8 +39,6 @@ public sealed class ModOptionMenu
 		GhostsSeeRolesButton,
 		ShowRoleSummaryButton,
 		HideNamePlateButton,
-
-		PublicBetaMode,
 	}
 
 	private readonly record struct ButtonActionBuilder(
@@ -146,7 +143,6 @@ public sealed class ModOptionMenu
 	private readonly TextMeshPro? titleText;
 	private readonly IReadOnlyList<ToggleButtonBehaviour> menuButtons;
 	private readonly IReadOnlyList<PopupActionButton> csvButton;
-	private GenericPopup? confirmMenu;
 
 	private static ClientOption clientOpt => ClientOption.Instance;
 
@@ -374,56 +370,6 @@ public sealed class ModOptionMenu
 				() =>
 				{
 					NamePlateHelper.NameplateChange = true;
-				}),
-			MenuButton.PublicBetaMode => new ButtonActionBuilder(
-				PublicBeta.Instance.Enable,
-				() =>
-				{
-					if (confirmMenu != null)
-					{
-						UnityObject.Destroy(confirmMenu);
-						confirmMenu = null;
-					}
-
-					var beta = PublicBeta.Instance;
-					var pos = new Vector3(0.0f, 0.0f, -20.0f);
-					bool target = !beta.Enable;
-
-					string targetStr = Tr.GetString(
-						target ? "EnableKey" : "DisableKey");
-
-					confirmMenu = Prefab.CreateConfirmMenu(
-						() =>
-						{
-							beta.SwitchMode();
-							var popUp = UnityObject.Instantiate(
-								Prefab.Prop, this.popUp!.transform);
-
-							popUp.destroyOnClose = true;
-
-							popUp.transform.localScale = new Vector3(1.25f, 1.0f, 1.0f);
-							popUp.transform.Find("ExitGame").localScale = new Vector3(0.8f, 1.0f, 1.0f);
-							popUp.TextAreaTMP.transform.localScale = new Vector3(0.8f, 1.0f, 1.0f);
-							popUp.TextAreaTMP.fontSize *= 0.75f;
-							popUp.TextAreaTMP.enableAutoSizing = false;
-
-							popUp.transform.localPosition = pos;
-
-							popUp.Show(
-								Tr.GetString("PublicBetaReboot", targetStr));
-						},
-						StringNames.Accept);
-					confirmMenu.transform.SetParent(popUp!.transform);
-					confirmMenu.transform.localPosition = pos;
-
-					string func = TranslationControllerExtension.GetString(
-						BetaContentManager.TransKey);
-
-					confirmMenu.Show(
-						$"{Tr.GetString("PublicBetaWarning", targetStr)}\n{func}");
-
-					button.onState = target;
-					changeButtonColor(button);
 				}),
 			_ => throw new ArgumentException("NoDef ModMenu"),
 		};

@@ -1,7 +1,5 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles.Performance;
-
 namespace ExtremeVoiceEngine.Patches;
 
 [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]
@@ -12,14 +10,14 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(0)] PlayerControl sourcePlayer,
         [HarmonyArgument(1)] string chatText)
     {
-		NetworkedPlayerInfo localPlayerData = PlayerControl.LocalPlayer.Data;
-		NetworkedPlayerInfo sourcePlayerData = sourcePlayer.Data;
 
 		if (VoiceEngine.Instance == null ||
             chatText.StartsWith(Command.CommandManager.CmdChar) ||
-			localPlayerData == null ||
-			sourcePlayerData == null ||
-			(sourcePlayerData.IsDead && !localPlayerData.IsDead))
+			PlayerControl.LocalPlayer == null ||
+			PlayerControl.LocalPlayer.Data == null ||
+			sourcePlayer == null ||
+			sourcePlayer.Data == null ||
+			(sourcePlayer.Data.IsDead && !PlayerControl.LocalPlayer.Data.IsDead))
 		{
 			return;
 		}

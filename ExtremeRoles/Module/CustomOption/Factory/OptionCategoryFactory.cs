@@ -206,6 +206,31 @@ public class OptionCategoryFactory(
 		return opt;
 	}
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public SelectionMultiEnableCustomOption CreateSelectionOption<T, W>(
+		T option,
+		IReadOnlyList<W> anotherDefault,
+		IOption? parent = null,
+		bool isHidden = false,
+		OptionUnit format = OptionUnit.None,
+		bool invert = false,
+		bool ignorePrefix = false,
+		in Func<bool>? hook = null)
+		where T : struct, IConvertible
+		where W : struct, Enum
+	{
+		int optionId = GetOptionId(option);
+		string name = GetOptionName(option, ignorePrefix);
+
+		var opt = SelectionMultiEnableCustomOption.CreateFromEnum(
+			new OptionInfo(optionId, name, format, isHidden),
+			anotherDefault,
+			OptionRelationFactory.Create(parent, invert, hook));
+
+		this.AddOption(optionId, opt);
+		return opt;
+	}
+
 	public void AddOption<SelectionType>(
 		int id,
 		IValueOption<SelectionType> option) where SelectionType :

@@ -8,11 +8,9 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using TMPro;
-
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -44,8 +42,9 @@ public sealed class Shooter :
     public bool IsAwake => this.isAwake;
 
     public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
+	public Sprite AbilityImage => HudManager.Instance.KillButton.graphic.sprite;
 
-    private bool isAwake = false;
+	private bool isAwake = false;
 
     private int curKillCount = 0;
     private int awakeKillCount = 0;
@@ -102,14 +101,7 @@ public sealed class Shooter :
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
-    {
-        abilityButton.name = $"shooterKill_{instance.TargetPlayerId}";
-        var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
-        if (controllerHighlight != null)
-        {
-            controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
-        }
-    }
+		=> IRoleMeetingButtonAbility.DefaultButtonMod(instance, abilityButton, "shooterKill");
 
     public Action CreateAbilityAction(PlayerVoteArea instance)
     {
@@ -130,7 +122,7 @@ public sealed class Shooter :
                 return;
             }
 
-            Helper.Player.RpcUncheckMurderPlayer(
+            Player.RpcUncheckMurderPlayer(
                 localPlayer.PlayerId,
                 target, byte.MinValue);
 
@@ -143,12 +135,6 @@ public sealed class Shooter :
     private static void rpcPlayKillSound()
     {
         Sound.RpcPlaySound(Sound.Type.Kill);
-    }
-
-    public void SetSprite(SpriteRenderer render)
-    {
-        render.sprite = HudManager.Instance.KillButton.graphic.sprite;
-        render.transform.localScale *= new Vector2(0.75f, 0.75f);
     }
 
     public void HookReportButton(
@@ -328,8 +314,8 @@ public sealed class Shooter :
         }
         else
         {
-            return string.Concat(new string[]
-            {
+            return string.Concat(
+			[
                 TranslationController.Instance.GetString(
                     StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
                 "\r\n",
@@ -337,7 +323,7 @@ public sealed class Shooter :
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
                 "</color>"
-            });
+            ]);
         }
     }
 

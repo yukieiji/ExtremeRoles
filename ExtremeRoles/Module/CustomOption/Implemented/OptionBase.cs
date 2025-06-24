@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 
-
-
 using ExtremeRoles.Module.CustomOption.Interfaces;
-using ExtremeRoles.Helper;
 
 
 #nullable enable
@@ -27,7 +23,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 
 	public IOptionRelation Relation { get; init; }
 
-	public bool IsEnable => OptionRange.Selection != config.DefaultValue;
+	public virtual bool IsEnable => OptionRange.Selection != config.DefaultValue;
 
 	public bool IsActiveAndEnable
 	{
