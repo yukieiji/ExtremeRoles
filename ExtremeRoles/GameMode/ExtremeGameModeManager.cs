@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using ExtremeRoles.GameMode.Factory;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.GameMode.Logic.Usable;
@@ -43,7 +43,10 @@ public sealed class ExtremeGameModeManager
     {
         GameModes currentMode = Instance?.CurrentGameMode ?? GameModes.None;
 
-        if (currentMode == mode) { return; }
+        if (currentMode == mode)
+		{ 
+			return;
+		}
 
         Instance = new ExtremeGameModeManager(mode);
 
