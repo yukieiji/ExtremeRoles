@@ -4,7 +4,7 @@ namespace ExtremeRoles.Module.Interface
 {
     public interface IEventManager
     {
-        void Register(ISubscriber subscriber, EventType eventType);
-        void Invoke(EventType eventType);
+        void Register(ISubscriber subscriber, Event.ModEvent eventType);
+        void Invoke(Event.ModEvent eventType);
     }
 }

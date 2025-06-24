@@ -1,13 +1,30 @@
 using System.Collections.Generic;
 using ExtremeRoles.Module.Interface;
+using Microsoft.Extensions.DependencyInjection;
+
+#nullable enable
 
 namespace ExtremeRoles.Module.Event;
 
-public class EventManager : IEventManager
+public sealed class EventManager : IEventManager
 {
-	private readonly Dictionary<EventType, List<ISubscriber>> subscribers = [];
+	public static IEventManager Instance
+	{
+		get
+		{
+			if (instance is null)
+			{
+				instance = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IEventManager>();
+			}
+			return instance;
+		}
+	}
 
-    public void Register(ISubscriber subscriber, EventType eventType)
+	private static IEventManager? instance;
+
+	private readonly Dictionary<ModEvent, List<ISubscriber>> subscribers = [];
+
+    public void Register(ISubscriber subscriber, ModEvent eventType)
     {
         if (!subscribers.TryGetValue(eventType, out var eventSubscribers))
         {
@@ -17,7 +34,7 @@ public class EventManager : IEventManager
 		subscribers[eventType] = eventSubscribers;
     }
 
-    public void Invoke(EventType eventType)
+    public void Invoke(ModEvent eventType)
     {
         if (!subscribers.TryGetValue(eventType, out var eventSubscribers))
         {

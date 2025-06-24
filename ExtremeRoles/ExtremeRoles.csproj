@@ -72,12 +72,6 @@
     <ProjectReference Include="..\ExtremeRoles.Generator\ExtremeRoles.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="Module\Event\**\*.cs" />
-    <Compile Include="Module\Interface\ISubscriber.cs" />
-    <Compile Include="Module\Interface\IEventManager.cs" />
-  </ItemGroup>
-
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="python $(SolutionDir)\makelanguagejson.py" />
     <Exec Command="robocopy $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources /XO &amp; if errorlevel 8 (exit 1) else (exit 0)" />

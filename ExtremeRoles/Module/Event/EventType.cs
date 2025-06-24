@@ -1,11 +1,6 @@
-namespace ExtremeRoles.Module.Event
+namespace ExtremeRoles.Module.Event;
+
+public enum ModEvent
 {
-    public enum EventType
-    {
-        // Add event types here
-        // Example:
-        // PlayerDied,
-        // MeetingStarted,
-        // TaskCompleted
-    }
+    VisualUpdate
 }
