@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +28,12 @@ public static class GameUtility
 
 	public static IEnumerator WaitForStabilize()
 	{
-		var waitor = new WaitForSeconds(2.5f);
+		var waiter = new WaitForSeconds(2.5f);
 		while (
 			AmongUsClient.Instance == null ||
 			AmongUsClient.Instance.Ping > 100)
 		{
-			yield return waitor;
+			yield return waiter;
 		}
 		yield return new WaitForSeconds(10.0f);
 	}
