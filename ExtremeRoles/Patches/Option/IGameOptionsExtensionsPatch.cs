@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +18,8 @@ using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles.Patches.Option;
 
+// FIXME : どうもPatchが動作していないので無効化しておく
+/*
 [HarmonyPatch(
     typeof(IGameOptionsExtensions),
     nameof(IGameOptionsExtensions.GetAdjustedNumImpostors))]
@@ -33,3 +35,4 @@ public static class IGameOptionsExtensionsNumImpostorsPatch
         return false;
     }
 }
+*/
