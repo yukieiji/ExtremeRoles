@@ -13,7 +13,7 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v16.0.5(v2025.5.20)-green)
+![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v16.1.0(v2025.5.20)-green)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
 [![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
@@ -113,7 +113,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 「ラバーズ」、「サポーター」、「ゲッサー」、「ムーバー」、「アクセラレーター」と「スケーター」はオプション設定によりインポスターにもなります。(デフォルトはクルー)
 * 「サイドキック」と「見習い探偵」、「サーヴァント」、「ドール」、「ヤードバード」、「ロォーブレーカー」、「キメラ」はゲーム開始時にはアサインされず、条件を満たした時にアサインされます
 * 「マーリン」と「アサシン」、「ヒーロー」と「ヴィラン」と「ヴィジランテ」、「探偵」と「助手」、「ワルガキ」と「ウィスプ」は一対の関係です
-* 「シェパード」と「ファーリー」、「インティメイト」、「サロゲーター」、「ナイト」、「ポーン」は**フォールバック役職の特定の条件と設定(特定の役職が存在知る等)を行った時にしかアサインされない**
+* 「シェパード」と「ファーリー」、「インティメイト」、「サロゲーター」、「ナイト」、「ポーン」は**フォールバック役職のため特定の条件(特定の役職が存在する等)と設定を行った時にしかアサインされない**
 * 「シェパード」と「インティメイト」、「ナイト」は**特定設定を行うことでサブチーム役職となります**
 * 詳しくは[Wikiのロール](https://yukieiji.github.io/ExtremeRoles.Docs/docs/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7/%E8%BF%BD%E5%8A%A0%E5%BD%B9%E8%81%B7.html)を参照
 
