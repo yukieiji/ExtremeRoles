@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
@@ -30,7 +30,7 @@ public class LruCache<TKey, TValue>
 
 
 	private static LruCache<TKey, TValue>? instance;
-	private const int DEFAULT_CAPACITY = 4096;
+	private const int DEFAULT_CAPACITY = 2048;
 
 	private readonly int capacity;
 	private readonly Dictionary<TKey, LinkedListNode<CacheItem>> cacheMap;

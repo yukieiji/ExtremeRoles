@@ -7,13 +7,28 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
-using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+
+#nullable enable
 
 namespace ExtremeRoles.Patches.Button;
 
 [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
 public static class KillButtonDoClickPatch
 {
+	public enum KillResult : byte
+	{
+		PreConditionFail,
+		BlockedToKillerSingleRoleCondition,
+		BlockedToTargetSingleRoleCondition,
+		BlockedToKillerOtherRoleCondition,
+		BlockedToTargetOtherRoleCondition,
+		BlockedToBodyguard,
+		BlockedToSurrogator,
+		FinalConditionFail,
+		Success,
+	}
 
     public static bool Prefix(KillButton __instance)
     {
@@ -23,60 +38,18 @@ public static class KillButtonDoClickPatch
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 
         if (__instance.enabled &&
-            __instance.currentTarget &&
             !__instance.isCoolingDown &&
             !killer.Data.IsDead &&
             killer.CanMove &&
             role.CanKill())
         {
-            PlayerControl target = __instance.currentTarget;
+			var target = __instance.currentTarget;
+			if (!CheckPreKillConditionWithBool(role, killer, target))
+			{
+				return false;
+			}
 
-            if (target.Data.IsDead) { return false; }
-
-            var targetPlayerRole = ExtremeRoleManager.GameRole[target.PlayerId];
-            if (role.Id == ExtremeRoleId.Villain)
-            {
-                villainSpecialKill(__instance, killer, target, targetPlayerRole);
-                return false;
-            }
-
-            bool canKill = role.TryRolePlayerKillTo(
-                killer, target);
-            if (!canKill) { return false; }
-
-            canKill = targetPlayerRole.TryRolePlayerKilledFrom(
-                target, killer);
-            if (!canKill) { return false; }
-
-            var multiAssignRole = role as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
-                        killer, target);
-                    if (!canKill) { return false; }
-                }
-            }
-
-            multiAssignRole = targetPlayerRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
-                        target, killer);
-                    if (!canKill) { return false; }
-                }
-            }
-
-            if (BodyGuard.TryRpcKillGuardedBodyGuard(killer.PlayerId, target.PlayerId) ||
-                IsMissMuderKill(killer, target))
-            {
-                return false;
-            }
-
-            var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>();
+			var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>();
 
             excuteKill(
                 __instance, killer, target,
@@ -85,7 +58,68 @@ public static class KillButtonDoClickPatch
         return false;
     }
 
-    public static bool IsMissMuderKill(
+	public static bool CheckPreKillConditionWithBool(
+		SingleRoleBase killerRole,
+		PlayerControl killer,
+		PlayerControl? target)
+		=> CheckPreKillCondition(killerRole, killer, target) is KillResult.Success;
+
+	public static KillResult CheckPreKillCondition(
+		SingleRoleBase killerRole,
+		PlayerControl killer,
+		PlayerControl? target)
+	{
+		if (killer == null ||
+			target == null ||
+			killer.Data == null ||
+			target.Data == null ||
+			target.Data.IsDead ||
+			!ExtremeRoleManager.TryGetRole(target.PlayerId, out var targetRole))
+		{
+			return KillResult.PreConditionFail;
+		}
+		else if (!killerRole.TryRolePlayerKillTo(killer, target))
+		{
+			return KillResult.BlockedToKillerSingleRoleCondition;
+		}
+		else if (
+			targetRole is IKilledFrom targetKillFromCheckRole &&
+			!targetKillFromCheckRole.TryKilledFrom(target, killer))
+		{
+			return KillResult.BlockedToTargetSingleRoleCondition;
+		}
+		else if (
+			killerRole is MultiAssignRoleBase killerMultiAssignRole &&
+			killerMultiAssignRole.AnotherRole != null &&
+			!killerMultiAssignRole.AnotherRole.TryRolePlayerKillTo(killer, target))
+		{
+			return KillResult.BlockedToKillerOtherRoleCondition;
+		}
+		else if (targetRole is MultiAssignRoleBase targetMultiAssignRole &&
+			targetMultiAssignRole.AnotherRole is IKilledFrom targetMultiKilledFromCheckRole &&
+			targetMultiKilledFromCheckRole.TryKilledFrom(target, killer))
+		{
+			return KillResult.BlockedToTargetOtherRoleCondition;
+		}
+		else if (BodyGuard.TryRpcKillGuardedBodyGuard(killer.PlayerId, target.PlayerId))
+		{
+			return KillResult.BlockedToBodyguard;
+		}
+		else if (SurrogatorRole.TryGurdOnesideLover(killer, target.PlayerId))
+		{
+			return KillResult.BlockedToSurrogator;
+		}
+		else if (IsMissMurderKill(killer, target))
+		{
+			return KillResult.FinalConditionFail;
+		}
+		else
+		{
+			return KillResult.Success;
+		}
+	}
+
+    public static bool IsMissMurderKill(
         PlayerControl killer,
         PlayerControl target)
     {
@@ -128,7 +162,7 @@ public static class KillButtonDoClickPatch
                 target, killer);
             return;
         }
-        else if (IsMissMuderKill(killer, target))
+        else if (IsMissMurderKill(killer, target))
         {
             return;
         }

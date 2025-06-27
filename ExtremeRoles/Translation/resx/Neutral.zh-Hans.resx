@@ -1202,4 +1202,308 @@
   <data name="MonikaIsSoloTeam" xml:space="preserve">
     <value>莫妮卡独自存在时，游戏继续</value>
   </data>
+  <data name="MonikaCanSeeTrash" xml:space="preserve">
+    <value>莫妮卡能看见“回收站”层的人吗？</value>
+  </data>
+  <data name="Heretic" xml:space="preserve">
+    <value>异端</value>
+  </data>
+  <data name="HereticHasTask" xml:space="preserve">
+    <value>异端可以做任务</value>
+  </data>
+  <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
+    <value>完成多少任务可知晓“内鬼”</value>
+  </data>
+  <data name="HereticKillMode" xml:space="preserve">
+    <value>“诅咒击杀”的模式</value>
+  </data>
+  <data name="HereticAbilityCoolTime" xml:space="preserve">
+    <value>“诅咒击杀”冷却时间</value>
+  </data>
+  <data name="HereticRange" xml:space="preserve">
+    <value>“诅咒击杀”使用范围</value>
+  </data>
+  <data name="HereticCanKillImpostor" xml:space="preserve">
+    <value>可以“诅咒击杀”内鬼</value>
+  </data>
+  <data name="HereticIntroDescription" xml:space="preserve">
+    <value>内鬼大人…请你赐予祝福…</value>
+  </data>
+  <data name="HereticShortDescription" xml:space="preserve">
+    <value>冒犯者…愿用生命抹除…</value>
+  </data>
+  <data name="HereticFullDescription" xml:space="preserve">
+    <value>异端属于独立阵营
+胜利条件：内鬼获胜(或一些特殊获胜)
+技能“诅咒击杀”：
+   -以自己的生命为代价杀死目标
+   -根据“诅咒击杀”的模式，来杀死目标，模式不同杀死目标的方式也会不同
+   模式“行动模式”
+      -选择目标进行诅咒
+   模式“指定目标(行动模式)”
+      -选择目标进行诅咒
+      -当异端被票出时，会连带被诅咒玩家一起死亡
+   模式“会议模式”
+      -在会议时选择目标进行诅咒
+   模式“指定目标(会议模式)”
+      -在会议时选择目标进行诅咒
+      -当异端被票出时，会连带被诅咒玩家一起死亡
+   模式“连带模式”
+      -当异端被票出时，会连带随机一名玩家一起死亡</value>
+  </data>
+  <data name="HereticAbility" xml:space="preserve">
+    <value>诅咒击杀</value>
+  </data>
+  <data name="Shepherd" xml:space="preserve">
+    <value>牧狼人</value>
+  </data>
+  <data name="ShepherdCanKill" xml:space="preserve">
+    <value>牧狼人有击杀能力</value>
+  </data>
+  <data name="ShepherdIsSubTeam" xml:space="preserve">
+    <value>是否为豺狼副团队</value>
+  </data>
+  <data name="ShepherdUseVent" xml:space="preserve">
+    <value>牧狼人可以使用通风管</value>
+  </data>
+  <data name="ShepherdHasTask" xml:space="preserve">
+    <value>牧狼人拥有任务</value>
+  </data>
+  <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
+    <value>完成多少任务可知晓“豺狼” </value>
+  </data>
+  <data name="ShepherdIntroDescription" xml:space="preserve">
+    <value>狼群不可一日无首</value>
+  </data>
+  <data name="ShepherdShortDescription" xml:space="preserve">
+    <value>领导狼群获得胜利</value>
+  </data>
+  <data name="ShepherdFullDescription" xml:space="preserve">
+    <value>牧狼人属于独立阵营
+胜利条件：豺狼获胜(包括特殊获胜)
+
+   -牧狼人有击杀能力，当处于副团队时，牧狼人会成为豺狼阵营的副团队角色
+当豺狼与跟班存活时：
+   -牧狼人不计入豺狼团队
+   -（即使豺狼、跟班、牧狼人都还活着，豺狼阵营的生存胜利人数也只算2人）
+当豺狼与跟班死亡时：
+   -满足以下条件可让豺狼阵营获胜
+   1.所有内鬼及拥有击杀能力的中立职业均已死亡
+   2. 超过一半的存活者属于同一阵营
+
+   -当豺狼没有出现时，该职业也不会出现
+</value>
+  </data>
+  <data name="Furry" xml:space="preserve">
+    <value>领头狼</value>
+  </data>
+  <data name="FurryUseVent" xml:space="preserve">
+    <value>领头狼可以使用通风柜</value>
+  </data>
+  <data name="FurryHasTask" xml:space="preserve">
+    <value>领头狼拥有任务</value>
+  </data>
+  <data name="FurrySeeJackalTaskRate" xml:space="preserve">
+    <value>完成多少任务可知晓“豺狼” </value>
+  </data>
+  <data name="FurryIntroDescription" xml:space="preserve">
+    <value>流淌着豺狼之血（？）的船员</value>
+  </data>
+  <data name="FurryShortDescription" xml:space="preserve">
+    <value>你的渺小有目共睹，你的未来潜力无限</value>
+  </data>
+  <data name="FurryFullDescription" xml:space="preserve">
+    <value>领头狼属于独立阵营
+   -如果豺狼没有出现，该职业也不会出现
+胜利条件：豺狼获胜(包括特殊胜利)
+
+当豺狼与跟班存活时：
+   -领头狼不计入豺狼团队
+   -（即使豺狼、跟班、领头狼都还活着，豺狼阵营的生存胜利人数也只算2人）
+   
+-被动能力：血之觉醒
+   -当跟班早于豺狼死亡，且豺狼死亡(无论怎么死的)时，领头狼会变为豺狼
+   -当变为豺狼时，无法招募新的跟班</value>
+  </data>
+  <data name="Intimate" xml:space="preserve">
+    <value>亲密之人</value>
+  </data>
+  <data name="IntimateCanKill" xml:space="preserve">
+    <value>能否进行击杀</value>
+  </data>
+  <data name="IntimateIsSubTeam" xml:space="preserve">
+    <value>是否为病娇阵营副团队</value>
+  </data>
+  <data name="IntimateUseVent" xml:space="preserve">
+    <value>亲密之人可以使用通风管</value>
+  </data>
+  <data name="IntimateHasTask" xml:space="preserve">
+    <value>亲密之人拥有任务</value>
+  </data>
+  <data name="IntimateSeeYandereTaskRate" xml:space="preserve">
+    <value>完成多少任务可知晓“病娇” </value>
+  </data>
+  <data name="IntimateFullDescription" xml:space="preserve">
+    <value>亲密之人为独立阵营
+胜利条件：病娇获胜(包括特殊胜利)
+   -亲密之人有击杀能力，当处于副团队时，亲密之人会成为病娇阵营的副团队角色
+
+当病娇还活着时：
+   -不计入病娇阵营
+   -(即使病娇活着，病娇阵营的生存胜利人数也只算2人）
+
+当病娇死亡时：
+   -满足以下条件可让病娇阵营获胜
+   1.所有内鬼及拥有击杀能力的中立职业均已死亡
+   2. 超过一半的存活者属于同一阵营
+
+   -当病娇不出现，该职业也不会出现</value>
+  </data>
+  <data name="IntimateShortDescription" xml:space="preserve">
+    <value>如果是为了病娇酱…弄脏双手我也愿意！</value>
+  </data>
+  <data name="IntimateIntroDescription" xml:space="preserve">
+    <value>病娇酱是我的最好最好最好…的朋友！</value>
+  </data>
+  <data name="Surrogator" xml:space="preserve">
+    <value>暗恋者</value>
+  </data>
+  <data name="SurrogatorUseVent" xml:space="preserve">
+    <value>暗恋者可以使用通风管</value>
+  </data>
+  <data name="SurrogatorHasTask" xml:space="preserve">
+    <value>暗恋者拥有任务</value>
+  </data>
+  <data name="SurrogatorSeeYandereTaskRate" xml:space="preserve">
+    <value>完成多少任务可知晓“病娇” </value>
+  </data>
+  <data name="SurrogatorAbilityCoolTime" xml:space="preserve">
+    <value>“冤尸缠绕”冷却时间</value>
+  </data>
+  <data name="SurrogatorAbilityActiveTime" xml:space="preserve">
+    <value>“冤尸缠绕”吸收所需时间</value>
+  </data>
+  <data name="SurrogatorAbilityCount" xml:space="preserve">
+    <value>“冤尸缠绕”可使用次数</value>
+  </data>
+  <data name="SurrogatorRange" xml:space="preserve">
+    <value>“冤尸缠绕”吸收距离</value>
+  </data>
+  <data name="SurrogatorPreventNum" xml:space="preserve">
+    <value>“无声的庇佑”初始阻挡次数</value>
+  </data>
+  <data name="SurrogatorPreventKillTime" xml:space="preserve">
+    <value>“无声的庇佑”防御后返还击杀冷却</value>
+  </data>
+  <data name="SurrogatorAbility" xml:space="preserve">
+    <value>冤尸缠绕</value>
+  </data>
+  <data name="SurrogatorIntroDescription" xml:space="preserve">
+    <value>来自阴影中的帮助</value>
+  </data>
+  <data name="SurrogatorFullDescription" xml:space="preserve">
+    <value>暗恋者属于独立阵营
+   -如果病娇不出现，该职业也不会出现
+胜利条件：病娇获胜(包括特殊胜利)
+
+被动能力“无声的庇佑”
+   -阻止病娇的“心上人”被普通击杀一定次数
+   -通过“怨尸缠绕”可以增加次数
+主动能力“冤尸缠绕”
+   -通过技能可以吸收周围尸体
+   -吸收一段时间后尸体会消失并增加“无声的庇护”次数</value>
+  </data>
+  <data name="SurrogatorTask" xml:space="preserve">
+    <value>病娇酱…我会为你而做出一切…</value>
+  </data>
+  <data name="Knight" xml:space="preserve">
+    <value>骑士</value>
+  </data>
+  <data name="KnightIsSubTeam" xml:space="preserve">
+    <value>是女王的副团队角色</value>
+  </data>
+  <data name="KnightUseVent" xml:space="preserve">
+    <value>骑士能使用通风管</value>
+  </data>
+  <data name="KnightHasTask" xml:space="preserve">
+    <value>骑士拥有任务</value>
+  </data>
+  <data name="KnightSeeQueenTaskRate" xml:space="preserve">
+    <value>完成多少任务可知晓“女皇” </value>
+  </data>
+  <data name="KnightIntroDescription" xml:space="preserve">
+    <value>女皇亲卫队的队长在此</value>
+  </data>
+  <data name="KnightFullDescription" xml:space="preserve">
+    <value>骑士属于独立阵营
+获胜条件：女皇获胜(包括特殊获胜)
+   -骑士有击杀能力，当处于副团队时，骑士会成为女皇阵营的副团队角色
+
+当女皇和仆从还存活时：
+   -不计入女皇阵营
+   -(即使女皇活着，女皇阵营的生存胜利人数也只算女皇+仆从）
+
+当女皇和仆从死亡时：
+   -满足以下条件可让女皇阵营获胜：
+   1.所有内鬼及拥有击杀能力的中立职业均已死亡
+   2. 超过一半的存活者属于同一阵营
+
+   -当女皇不存在，该职业也不会出现</value>
+  </data>
+  <data name="KnightShortDescription" xml:space="preserve">
+    <value>作为女皇最锋利的剑</value>
+  </data>
+  <data name="Pawn" xml:space="preserve">
+    <value>兵</value>
+  </data>
+  <data name="PawnUseVent" xml:space="preserve">
+    <value>兵能使用通风管</value>
+  </data>
+  <data name="PawnHasTask" xml:space="preserve">
+    <value>兵拥有任务</value>
+  </data>
+  <data name="PawnSeeQueenTaskRate" xml:space="preserve">
+    <value>完成多少任务可知晓“女皇” </value>
+  </data>
+  <data name="PawnIntroDescription" xml:space="preserve">
+    <value>女王的先遣队</value>
+  </data>
+  <data name="PawnShortDescription" xml:space="preserve">
+    <value>协助女王取得胜利</value>
+  </data>
+  <data name="PawnFullDescription" xml:space="preserve">
+    <value>兵属于独立阵营
+获胜条件：女皇获胜(包括特殊获胜)
+   -当女皇不存在，该职业也不会出现</value>
+  </data>
+  <data name="AbilityOnTaskPhase" xml:space="preserve">
+    <value>行动模式</value>
+  </data>
+  <data name="AbilityOnTaskPhaseTarget" xml:space="preserve">
+    <value>指定目标&lt;br&gt;行动模式</value>
+  </data>
+  <data name="AbilityOnMeeting" xml:space="preserve">
+    <value>会议模式</value>
+  </data>
+  <data name="AbilityOnMeetingTarget" xml:space="preserve">
+    <value>指定目标&lt;br&gt;会议模式</value>
+  </data>
+  <data name="AbilityOnExiled" xml:space="preserve">
+    <value>连带模式</value>
+  </data>
+  <data name="AliceWinTaskRate" xml:space="preserve">
+    <value>取得胜利所需的任务完成进度</value>
+  </data>
+  <data name="AliceWinKillNum" xml:space="preserve">
+    <value>取得胜利所需的击杀数</value>
+  </data>
+  <data name="AllJackalWin" xml:space="preserve">
+    <value>到最后还是得靠我嘛~&lt;br&gt;豺狼阵营</value>
+  </data>
+  <data name="AllYandereWin" xml:space="preserve">
+    <value>病娇酱，我们赢啦~~&lt;br&gt;病娇阵营</value>
+  </data>
+  <data name="AllQueenWin" xml:space="preserve">
+    <value>女皇殿下…我们成功了！&lt;br&gt;女皇阵营</value>
+  </data>
 </root>

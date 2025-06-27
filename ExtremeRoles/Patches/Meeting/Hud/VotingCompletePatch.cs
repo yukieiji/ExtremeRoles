@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine;
 
 
@@ -13,9 +13,12 @@ public static class MeetingHudVotingCompletedPatch
 	{
 		InfoOverlay.Instance.Hide();
 
-		foreach (DeadBody body in Object.FindObjectsOfType<DeadBody>())
+		foreach (var body in Object.FindObjectsOfType<DeadBody>())
 		{
-			if (!body) { continue; }
+			if (body == null)
+			{
+				continue;
+			}
 
 			Object.Destroy(body.gameObject);
 		}

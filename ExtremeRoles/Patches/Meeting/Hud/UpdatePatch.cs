@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
@@ -72,9 +72,12 @@ public static class MeetingHudUpdatePatch
 		// results in bodies sometimes being created *after* the meeting starts, marking them as dead and
 		// removing the corpses so there's no random corpses leftover afterwards
 
-		foreach (DeadBody b in Object.FindObjectsOfType<DeadBody>())
+		foreach (var b in Object.FindObjectsOfType<DeadBody>())
 		{
-			if (b == null) { continue; }
+			if (b == null)
+			{
+				continue;
+			}
 
 			foreach (var pva in hud.playerStates)
 			{
@@ -102,7 +105,6 @@ public static class MeetingHudUpdatePatch
 					pva.Overlay.gameObject.SetActive(true);
 				}
 			}
-			Object.Destroy(b.gameObject);
 		}
 	}
 
@@ -161,7 +163,7 @@ public static class MeetingHudUpdatePatch
 			localPlayer.Data == null ||
 			localPlayer.Data.IsDead ||
 			localPlayer.Data.Disconnected ||
-			!ExtremeSystemTypeManager.Instance.TryGet<IRaiseHandSystem>(
+			!ExtremeSystemTypeManager.Instance.TryGet<RaiseHandSystem>(
 				ExtremeSystemType.RaiseHandSystem, out var raiseHand) ||
 			raiseHand.IsInit)
 		{

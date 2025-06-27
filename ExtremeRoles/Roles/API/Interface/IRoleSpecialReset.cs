@@ -38,7 +38,7 @@ public interface IRoleSpecialReset
         PlayerControl resetPlayer = Player.GetPlayerControlById(targetPlayerId);
         SingleRoleBase resetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
-        IRoleHasParent.PurgeParent(targetPlayerId);
+        IParentChainStatus.PurgeParent(targetPlayerId);
 
         // プレイヤーのリセット処理
         if (PlayerControl.LocalPlayer.PlayerId == targetPlayerId)

@@ -11,5 +11,5 @@ public static class Common
 		isForceInfoBlockRoleIds(role.Id);
 
 	private static bool isForceInfoBlockRoleIds(ExtremeRoleId checkId)
-		=> checkId is ExtremeRoleId.Totocalcio or ExtremeRoleId.Madmate or ExtremeRoleId.Doll;
+		=> checkId is ExtremeRoleId.Totocalcio or ExtremeRoleId.Madmate or ExtremeRoleId.Doll or ExtremeRoleId.Heretic;
 }

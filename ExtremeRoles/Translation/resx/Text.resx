@@ -400,9 +400,6 @@
   <data name="HideNamePlateButton" xml:space="preserve">
     <value>ネームプレートを非表示にする</value>
   </data>
-  <data name="PublicBetaMode" xml:space="preserve">
-    <value>パブリックベータモード</value>
-  </data>
   <data name="custom" xml:space="preserve">
     <value>カスタム</value>
   </data>
@@ -1057,20 +1054,6 @@ ExR等を最低限の機能のみで起動しています</value>
   <data name="SecurityCamera" xml:space="preserve">
     <value>セキュリティカメラとドアログ</value>
   </data>
-  <data name="PublicBetaStr" xml:space="preserve">
-    <value>パブリックベータ - v{0}</value>
-  </data>
-  <data name="PublicBetaEnableDisableStr" xml:space="preserve">
-    <value>再起動後にパブリックベータモードが{0}になります</value>
-  </data>
-  <data name="PublicBetaWarning" xml:space="preserve">
-    <value>パブリックベータモードを{0}にします
-以下の機能が{0}になります</value>
-  </data>
-  <data name="PublicBetaReboot" xml:space="preserve">
-    <value>パブリックベータモードを{0}にしました
-再起動して下さい</value>
-  </data>
   <data name="Pcg32XshRr" xml:space="preserve">
     <value>PCG32-XSH-RR</value>
   </data>
@@ -1217,5 +1200,38 @@ ExR等を最低限の機能のみで起動しています</value>
   </data>
   <data name="GhostRoleGlobalOptionHauntMinigameMaxSpeed" xml:space="preserve">
     <value>「憑依」の最大移動速度</value>
+  </data>
+  <data name="IsRatioTeamAssign" xml:space="preserve">
+    <value>陣営比率アサイン</value>
+  </data>
+  <data name="AssignRatio" xml:space="preserve">
+    <value>アサイン比率</value>
+  </data>
+  <data name="OneToOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="TwoToOne" xml:space="preserve">
+    <value>2:1</value>
+  </data>
+  <data name="OneToTwo" xml:space="preserve">
+    <value>1:2</value>
+  </data>
+  <data name="TwoToTwo" xml:space="preserve">
+    <value>2:2</value>
+  </data>
+  <data name="OneToThree" xml:space="preserve">
+    <value>1:3</value>
+  </data>
+  <data name="ThreeToOne" xml:space="preserve">
+    <value>3:1</value>
+  </data>
+  <data name="ThreeToTwo" xml:space="preserve">
+    <value>3:2</value>
+  </data>
+  <data name="TwoToThree" xml:space="preserve">
+    <value>2:3</value>
+  </data>
+  <data name="ThreeToThree" xml:space="preserve">
+    <value>3:3</value>
   </data>
 </root>
