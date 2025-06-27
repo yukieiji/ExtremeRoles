@@ -1,14 +1,15 @@
-using ExtremeRoles.Module.Event;
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Interface;
-using HarmonyLib;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 using UnityEngine;
+
+using HarmonyLib;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
+using ExtremeRoles.Module.Event;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
