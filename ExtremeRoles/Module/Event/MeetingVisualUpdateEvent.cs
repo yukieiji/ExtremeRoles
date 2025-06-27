@@ -117,7 +117,7 @@ public sealed class LocalPlayerMeetingVisualUpdateEvent(
 		string completedStr = isCommActive ? "?" : tasksCompleted.ToString();
 		string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
 
-		return $"{roleNames} {taskInfo}".Trim(); ;
+		return $"{roleNames} {taskInfo}".Trim();
 	}
 
 	private static void setTag(
