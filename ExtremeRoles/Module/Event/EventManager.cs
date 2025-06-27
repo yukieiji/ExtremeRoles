@@ -29,9 +29,9 @@ public sealed class EventManager : IEventManager
         if (!subscribers.TryGetValue(eventType, out var eventSubscribers))
         {
 			eventSubscribers = [];
-        }
+			subscribers[eventType] = eventSubscribers;
+		}
 		eventSubscribers.Add(subscriber);
-		subscribers[eventType] = eventSubscribers;
     }
 
     public void Invoke(ModEvent eventType)
@@ -41,18 +41,6 @@ public sealed class EventManager : IEventManager
 			return;
         }
 
-		var subscribersToRemove = new List<ISubscriber>();
-		foreach (var subscriber in eventSubscribers)
-		{
-			if (!subscriber.Invoke())
-			{
-				subscribersToRemove.Add(subscriber);
-			}
-		}
-
-		foreach (var subscriber in subscribersToRemove)
-		{
-			eventSubscribers.Remove(subscriber);
-		}
+		eventSubscribers.RemoveAll(subscriber => !subscriber.Invoke());
 	}
 }
