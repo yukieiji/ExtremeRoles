@@ -3,16 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using AmongUs.GameOptions;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Roles; // ExtremeRoleIdのため (元からあったか確認)
+using ExtremeRoles.Roles;
 
 using Microsoft.Extensions.DependencyInjection;
-
-// IAssignFilterInitializer, IRoleAssignValidator, RoleAssignFilter, PreparationData が ExtremeRoles.Module.RoleAssign 名前空間にあると想定
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -36,8 +32,8 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 	public ExtremeRoleAssignDataBuilder(
 		IServiceProvider provider,
 		IRoleAssignDataPreparer preparer,
-		IAssignFilterInitializer assignFilterInitializer, // 追加
-		IRoleAssignValidator validator // 追加
+		IAssignFilterInitializer assignFilterInitializer,
+		IRoleAssignValidator validator
 	)
 	{
 		this.preparer = preparer;
@@ -46,7 +42,7 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 
 		this.behaviour = allBehave
 			.Where(x => x.Priority != (int)Priority.Not)
-			.OrderBy(x => x.Priority) // Enum宣言したの順番になるようにするので**OrderBy**
+			.OrderBy(x => x.Priority) // Enum宣言したの順番になるようにするのでOrderBy
 			.ToArray();
 		this.vanillaFallBack = allBehave.FirstOrDefault(x => x.Priority == (int)Priority.Not);
 
