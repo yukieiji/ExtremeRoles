@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -49,7 +49,7 @@ public sealed class PlayerVoteAreaButtonGroup
 	}
 
 	public IEnumerable<IPlayerVoteAreaButtonPostionComputer> DefaultFlatten(float startPos)
-		=> setUpComputer(this.first.GetRange(0, 2), Vector2.up, startPos);
+		=> setUpComputer(this.first.GetRange(0, 2), Vector2.zero, startPos);
 
 	public void AddFirstRow(UiElement element)
 		=> add(this.first, element);
