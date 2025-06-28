@@ -22,9 +22,9 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 {
 	public enum Priority
 	{
-		Combination,
+		Combination, // Fast
 		Single,
-		Not = 100,
+		Not = 100, // Last
 	}
 
 	private readonly IRoleAssignDataPreparer preparer;
@@ -46,7 +46,7 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 
 		this.behaviour = allBehave
 			.Where(x => x.Priority != (int)Priority.Not)
-			.OrderBy(x => x.Priority)
+			.OrderBy(x => x.Priority) // Enum宣言したの順番になるようにするので**OrderBy**
 			.ToArray();
 		this.vanillaFallBack = allBehave.FirstOrDefault(x => x.Priority == (int)Priority.Not);
 
