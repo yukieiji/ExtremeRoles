@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +46,7 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 
 		this.behaviour = allBehave
 			.Where(x => x.Priority != (int)Priority.Not)
-			.OrderByDescending(x => x.Priority)
+			.OrderBy(x => x.Priority)
 			.ToArray();
 		this.vanillaFallBack = allBehave.FirstOrDefault(x => x.Priority == (int)Priority.Not);
 
