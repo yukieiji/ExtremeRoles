@@ -5,7 +5,7 @@
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
       <!--<Version>2025.6.25.0</Version>-->
-    <VersionPrefix>2025.6.25</VersionPrefix>
+    <VersionPrefix>2025.6.29</VersionPrefix>
     <VersionSuffix>Reinforcement</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
