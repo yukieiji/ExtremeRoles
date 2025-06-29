@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 
@@ -195,7 +195,6 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
 		factory.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
-			isHidden: isHideMultiAssign,
 			ignorePrefix: true);
 
 		roleAssignNumOption.AddWithUpdate(roleSetNumOption);

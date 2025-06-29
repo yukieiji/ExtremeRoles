@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Linq;
 
@@ -13,6 +13,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.Event;
 
 #nullable enable
 
@@ -105,12 +106,15 @@ public static class MeetingHudSortButtonsPatch
 		{
 			var obj = pva.gameObject;
 
-			VoteAreaInfo playerInfoUpdater =
-				pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ?
-				obj.AddComponent<LocalPlayerVoteAreaInfo>() :
-				obj.AddComponent<OtherPlayerVoteAreaInfo>();
+			var status = new MeetingStatus(pva, isHudOverrideTaskActive);
 
-			playerInfoUpdater.Init(pva, isHudOverrideTaskActive);
+			ISubscriber subscriber =
+				pva.TargetPlayerId == PlayerControl.LocalPlayer.PlayerId ?
+				new LocalPlayerMeetingVisualUpdateEvent(status) :
+				new OtherPlayerMeetingVisualUpdateEvent(
+					GameData.Instance.GetPlayerById(pva.TargetPlayerId), status);
+
+			EventManager.Instance.Register(subscriber, ModEvent.VisualUpdate);
 
 			if (system is not null &&
 				(trashMeeting is null || !trashMeeting.InvalidPlayer(pva)))
@@ -118,6 +122,7 @@ public static class MeetingHudSortButtonsPatch
 				system.AddHand(pva);
 			}
 		}
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
 
 	public static int DefaultSort(PlayerVoteArea pva)

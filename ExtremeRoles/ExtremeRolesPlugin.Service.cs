@@ -48,6 +48,9 @@ public partial class ExtremeRolesPlugin
 			.AddTransient<IRoleAssignDataChecker, RoleAssignDependencyChecker>()
 			.AddTransient<IRoleDependencyRuleFactory, RoleDependencyRuleFactory>();
 
+		// EventManager
+		collection.AddSingleton<IEventManager, Module.Event.EventManager>();
+
 		return collection.BuildServiceProvider();
 	}
 }

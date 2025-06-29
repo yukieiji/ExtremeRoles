@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
-
 using AmongUs.GameOptions;
-
+using ExtremeRoles.Module.Event;
+using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
-using ExtremeRoles.Roles.Solo.Neutral;
-using ExtremeRoles.Roles.Solo.Neutral.Missionary;
-using ExtremeRoles.Roles.Solo.Neutral.Jackal;
-
-using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Host;
-
-using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.Jackal;
+using ExtremeRoles.Roles.Solo.Neutral.Missionary;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ExtremeRoles.Roles;
 
@@ -616,7 +612,8 @@ public static class ExtremeRoleManager
             GameRole[playerId] =  newRole;
             ExtremeRolesPlugin.ShipState.AddGlobalActionRole(newRole);
         }
-    }
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
 
     public static void SetNewAnothorRole(byte playerId, SingleRoleBase newRole)
     {

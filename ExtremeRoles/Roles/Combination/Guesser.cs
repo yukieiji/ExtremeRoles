@@ -550,7 +550,10 @@ public sealed class Guesser :
                     MeetingHud.Instance.transform);
                 this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 this.meetingGuessText.transform.position = Vector3.zero;
-                this.meetingGuessText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+
+				float xPos = this.AnotherRole != null ? -1.5f : -2.85f;
+
+                this.meetingGuessText.transform.localPosition = new Vector3(xPos, 3.15f, -20f);
                 this.meetingGuessText.transform.localScale *= 0.9f;
                 this.meetingGuessText.color = Palette.White;
                 this.meetingGuessText.gameObject.SetActive(false);

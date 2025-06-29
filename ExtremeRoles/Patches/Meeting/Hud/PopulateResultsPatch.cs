@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
-using HarmonyLib;
 using UnityEngine;
 
+using HarmonyLib;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
+using ExtremeRoles.Module.Event;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting.Hud;
 
@@ -24,7 +23,12 @@ public static class MeetingHudPopulateResultsPatch
 		[HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states)
 	{
 
-		if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
+		if (!RoleAssignState.Instance.IsRoleSetUpEnd)
+		{
+			return true;
+		}
+
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 
 		__instance.TitleText.text =
 			TranslationController.Instance.GetString(
