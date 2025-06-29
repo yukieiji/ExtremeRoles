@@ -1,3 +1,4 @@
+using ExtremeRoles.Helper;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -52,10 +53,16 @@ public sealed class PlayerVoteAreaButtonGroup
 		=> setUpComputer(this.first.GetRange(0, 2), Vector2.zero, startPos);
 
 	public void AddFirstRow(UiElement element)
-		=> add(this.first, element);
+	{
+		Logging.Debug($"Add first row : {element.name}");
+		add(this.first, element);
+	}
 
 	public void AddSecondRow(UiElement element)
-		=> add(this.second, element);
+	{
+		Logging.Debug($"Add second row : {element.name}");
+		add(this.second, element);
+	}
 
 	private static IEnumerable<IPlayerVoteAreaButtonPostionComputer> setUpComputer(
 		IEnumerable<PlayerVoteAreaButtonPostionComputer> setUpContainer,
@@ -65,6 +72,7 @@ public sealed class PlayerVoteAreaButtonGroup
 		{
 			button.Offset = offset;
 			button.StartOffset = statPos;
+			Logging.Debug($"Meeting Button[{button.ToString()}]");
 			yield return button;
 		}
 	}
