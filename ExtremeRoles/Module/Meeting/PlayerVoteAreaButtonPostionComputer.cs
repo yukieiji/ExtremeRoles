@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 
 using Il2CppActionFloat = Il2CppSystem.Action<float>;
@@ -22,6 +22,9 @@ public sealed class PlayerVoteAreaButtonPostionComputer(
 
 	private readonly float time = time;
 	private readonly float endOffset = endOffset;
+
+	public override string ToString()
+		=> $"{Element.name}, Start:{StartOffset}, Anchor:{Anchor}, Offset:{Offset}";
 
 	public Il2CppIEnumerator Compute()
 		=> Effects.Lerp(this.time, (Il2CppActionFloat)this.deltaPos);
