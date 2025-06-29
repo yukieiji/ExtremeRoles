@@ -35,8 +35,8 @@ public sealed class PlayerVoteAreaButtonGroup
 
 		var result = new List<PlayerVoteAreaButtonPostionComputer>(secondCount + this.first.Count);
 
-		var firstOffset = secondCount > 0 ? Vector2.up * 0.65f : Vector2.zero;
-		var secondOffset = secondCount > 0 ? Vector2.down * 0.65f : Vector2.zero;
+		var firstOffset = secondCount > 0 ? Vector2.up * 0.25f : Vector2.zero;
+		var secondOffset = secondCount > 0 ? Vector2.down * 0.25f : Vector2.zero;
 
 		foreach (var buttn in setUpComputer(this.first, firstOffset, startPos))
 		{
