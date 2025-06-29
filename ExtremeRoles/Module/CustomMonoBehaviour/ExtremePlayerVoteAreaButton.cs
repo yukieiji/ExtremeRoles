@@ -53,13 +53,12 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			monika.InvalidPlayer(localPlayer))
 		{
 			result = null;
-			Logging.Debug($"LocalPlayerId:{localPlayer.PlayerId} is Monika trash now");
+			Logging.Debug($"LocalPlayerId : {localPlayer.PlayerId} is Monika trash now");
 			return false;
 		}
 
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
 		var multiRole = role as MultiAssignRoleBase;
-		bool reseted = false;
 
 		if (role is IRoleMeetingButtonAbility buttonRole &&
 			multiRole?.AnotherRole is IRoleMeetingButtonAbility anotherButtonRole &&
@@ -67,22 +66,16 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			isOkRoleAbilityButton(pva, anotherButtonRole))
 		{
 			Logging.Debug($"LocalPlayer has dual meeting ability button");
-			if (button.IsRecreateButtn(role.Id, buttonRole, out var element1) &&
-				!reseted)
-			{
-				reseted = true;
-				group.ResetSecond();
-			}
-			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var element2) &&
-				!reseted)
+
+			bool isRecreateMain = button.IsRecreateButtn(role.Id, buttonRole, out var mainButton);
+			bool isRecreateSub = button.IsRecreateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var subButton);
+
+            if (isRecreateMain || isRecreateSub)
 			{
 				group.ResetSecond();
-			}
-			if (reseted)
-			{
-				group.AddSecondRow(element1);
-				group.AddSecondRow(element2);
-			}
+                group.AddSecondRow(mainButton);
+                group.AddSecondRow(subButton);
+            }
 			result = group.Flatten(startPos);
 		}
 		else if (
@@ -90,17 +83,14 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			isOkRoleAbilityButton(pva, mainButtonRole))
 		{
 			Logging.Debug($"LocalPlayer has one meeting ability button");
-			if (button.IsRecreateButtn(role.Id, mainButtonRole, out var element1) &&
-				!reseted)
-			{
-				reseted = true;
-				group.ResetFirst();
-			}
+
 			group.ResetSecond();
-			if (reseted)
+
+            if (button.IsRecreateButtn(role.Id, mainButtonRole, out var element1))
 			{
-				group.AddFirstRow(element1);
-			}
+				group.ResetFirst();
+                group.AddFirstRow(element1);
+            }
 			result = group.Flatten(startPos);
 		}
 		else if (
@@ -108,17 +98,14 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			isOkRoleAbilityButton(pva, subButtonRole))
 		{
 			Logging.Debug($"LocalPlayer has one meeting ability button");
-			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1) &&
-				!reseted)
-			{
-				reseted = true;
-				group.ResetFirst();
-			}
+
 			group.ResetSecond();
-			if (reseted)
+
+			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1))
 			{
-				group.AddFirstRow(element1);
-			}
+				group.ResetFirst();
+                group.AddFirstRow(element1);
+            }
 			result = group.Flatten(startPos);
 		}
 		else
