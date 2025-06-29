@@ -12,6 +12,7 @@
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <NeutralLanguage>ja-JP</NeutralLanguage>
+    <GeneratedInteropInterfacesPath>..\ExtremeRoles.UnitTest\Generated\</GeneratedInteropInterfacesPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +30,6 @@
     <PackageReference Include="HarmonyX" Version="2.14.0" />
     <PackageReference Include="AmongUs.GameLibs.Steam" Version="2025.4.15" PrivateAssets="all" />
     <PackageReference Include="BepInEx.AutoPlugin" Version="1.1.0" PrivateAssets="all" />
-    <GeneratedInteropInterfacesPath>..\ExtremeRoles.UnitTest\Generated\</GeneratedInteropInterfacesPath>
   </ItemGroup>
 
   <ItemGroup>
