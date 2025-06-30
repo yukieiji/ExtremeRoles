@@ -133,7 +133,6 @@ public sealed class Lover : MultiAssignRoleBase
     public override string GetIntroDescription()
     {
 		var builder = new StringBuilder();
-        string baseString = base.GetIntroDescription();
 
 		builder
 			.AppendLine(base.GetIntroDescription())
