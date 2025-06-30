@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
@@ -166,6 +166,18 @@ public sealed class ExtremeSystemTypeManager : Il2CppObject, IAmongUs.ISystemTyp
 			{
 				this.IsDirty = this.IsDirty || system.IsDirty;
 				this.dirtySystem.Add(systemTypes);
+			}
+		}
+	}
+
+
+	public void MarkClean()
+	{
+		foreach (var system in this.dirtableSystems.Values)
+		{
+			if (system.IsDirty)
+			{
+				system.MarkClean();
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 using System.Collections.Generic;
 
 
@@ -31,6 +31,11 @@ public sealed class BakerySystem : IDirtableSystemType
 		this.goodTime = goodCookTime;
 		this.badTime = badCookTime;
 		this.isChangeCooking = isChangeCooking;
+	}
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
 	}
 
 	public void Deserialize(MessageReader reader, bool initialState)

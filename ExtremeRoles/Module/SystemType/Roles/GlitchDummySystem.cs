@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using Hazel;
 
@@ -346,6 +346,10 @@ public sealed class GlitchDummySystem(
 	private readonly SecurityGlitch security = new SecurityGlitch(activeTime);
 	private readonly VitalGlitch vital = new VitalGlitch(activeTime);
 
+
+	public void MarkClean()
+	{
+	}
 
 	public void Deteriorate(float deltaTime)
 	{

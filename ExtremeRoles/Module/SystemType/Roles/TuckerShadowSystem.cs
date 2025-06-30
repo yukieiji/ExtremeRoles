@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using Hazel;
 using UnityEngine;
@@ -75,6 +75,11 @@ public sealed class TuckerShadowSystem(
 	private int id = 0;
 
 	public bool IsDirty { get; private set; }
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
+	}
 
 	public void Deteriorate(float deltaTime)
 	{

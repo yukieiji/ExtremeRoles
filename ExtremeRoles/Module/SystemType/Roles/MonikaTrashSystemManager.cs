@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -62,6 +62,11 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 				x.Write((byte)Ops.AddTrash);
 				x.Write(targetPlayerId);
 			});
+	}
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
 	}
 
 	public void Deteriorate(float deltaTime)

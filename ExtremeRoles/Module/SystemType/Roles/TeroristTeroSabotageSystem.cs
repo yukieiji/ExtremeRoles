@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -263,8 +263,15 @@ public sealed class TeroristTeroSabotageSystem : ISabotageExtremeSystemType
 		}
 	}
 
+	public void MarkClean()
+	{
+		this.IsDirty = false;
+	}
+
+
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
-	{ }
+	{
+	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{

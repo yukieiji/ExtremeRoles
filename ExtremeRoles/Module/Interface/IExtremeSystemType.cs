@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.SystemType;
+using ExtremeRoles.Module.SystemType;
 using Hazel;
 
 #nullable enable
@@ -16,6 +16,8 @@ public interface ISabotageExtremeSystemType : IDirtableSystemType
 public interface IDirtableSystemType : IExtremeSystemType
 {
 	public bool IsDirty { get; }
+
+	public void MarkClean();
 
 	public void Deteriorate(float deltaTime)
 	{ }

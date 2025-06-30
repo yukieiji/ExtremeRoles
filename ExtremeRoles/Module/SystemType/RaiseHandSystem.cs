@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using Hazel;
 using UnityEngine;
@@ -101,6 +101,11 @@ public sealed class RaiseHandSystem : IDirtableSystemType
 		{
 			this.raiseHandButton.gameObject.SetActive(active);
 		}
+	}
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
 	}
 
 	public void Deteriorate(float deltaTime)

@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 
 using ExtremeRoles.Module.Interface;
 using System.Collections.Generic;
@@ -100,6 +100,10 @@ public sealed class SurrogatorGurdSystem(float preventKillTime) : IDirtableSyste
 			default:
 				break;
 		}
+	}
+
+	public void MarkClean()
+	{
 	}
 
 	public void Serialize(MessageWriter writer, bool initialState)

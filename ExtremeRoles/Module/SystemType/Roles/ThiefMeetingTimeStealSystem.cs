@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -48,6 +48,11 @@ public sealed class ThiefMeetingTimeStealSystem : IDirtableSystemType
 		this.internalSystem = ExtremeSystemTypeManager.Instance.CreateOrGet<ModdedMeetingTimeSystem>(
 			meetingSystemType);
 		this.curActiveNum = 0;
+	}
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
 	}
 
 	public void Deserialize(MessageReader reader, bool initialState)

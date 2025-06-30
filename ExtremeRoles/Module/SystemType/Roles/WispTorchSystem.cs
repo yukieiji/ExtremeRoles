@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using Hazel;
 using System;
@@ -163,6 +163,11 @@ public sealed class WispTorchSystem : IDirtableSystemType
 			playerNum >= winPlayerNum : false;
 	}
 
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
+	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
