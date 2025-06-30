@@ -565,7 +565,8 @@
     <value>第三陣営に変わるかどうか</value>
   </data>
   <data name="LoverDethWhenUnderAlive" xml:space="preserve">
-    <value>自殺が行われる1組辺り人数</value>
+    <value>自決もしくは第三陣営に変化する
+1組あたりの人数</value>
   </data>
   <data name="LoverHasOtherKillCool" xml:space="preserve">
     <value>別のキルクールタイムを持つか</value>
