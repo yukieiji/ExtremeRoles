@@ -159,7 +159,7 @@ public sealed class OtherPlayerMeetingVisualUpdateEvent(
 
 		SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 
-		GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+		GhostRoleBase? ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 		ExtremeGhostRoleManager.GameRole.TryGetValue(
 			this.target.PlayerId, out GhostRoleBase? targetGhostRole);
 		bool isLocalPlayerGhostRole = ghostRole != null;
