@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 using UnityEngine;
 
@@ -131,43 +132,46 @@ public sealed class Lover : MultiAssignRoleBase
 
     public override string GetIntroDescription()
     {
+		var builder = new StringBuilder();
         string baseString = base.GetIntroDescription();
-        baseString += Design.ColoedString(
-            ColorPalette.LoverPink, "\n♥ ");
 
-        List<byte> lover = getAliveSameLover();
+		builder
+			.AppendLine(base.GetIntroDescription())
+			.Append(Design.ColoedString(ColorPalette.LoverPink, "♥ "));
 
-        lover.Remove(PlayerControl.LocalPlayer.PlayerId);
+        var lover = getAliveSameLover(PlayerControl.LocalPlayer.PlayerId);
 
-        byte firstLover = lover[0];
-        lover.RemoveAt(0);
+		// 最初は確定
+		var firstLover = Player.GetPlayerControlById(lover[0]);
+		if (firstLover != null)
+		{
+			builder.Append(firstLover.Data.PlayerName);
+		}
 
-        baseString += Player.GetPlayerControlById(
-            firstLover).Data.PlayerName;
         if (lover.Count != 0)
         {
-            for (int i = 0; i < lover.Count; ++i)
+			// 後は適当に・・・
+            for (int i = 1; i < lover.Count; ++i)
             {
+				var targetLover = Player.GetPlayerControlById(lover[i]);
+				if (targetLover == null)
+				{
+					continue;
+				}
 
-                if (i == 0)
-                {
-                    baseString += Tr.GetString("andFirst");
-                }
-                else
-                {
-                    baseString += Tr.GetString("and");
-                }
-                baseString += Player.GetPlayerControlById(
-                    lover[i]).Data.PlayerName;
+				string andKey = i == 1 ? "andFirst" : "and";
 
+				builder
+					.Append(Tr.GetString(andKey))
+					.Append(targetLover.Data.PlayerName);
             }
         }
 
-        return string.Concat(
-            baseString,
-            Tr.GetString("LoverIntoPlus"),
-            Design.ColoedString(
-                ColorPalette.LoverPink, " ♥"));
+		builder
+			.Append(Tr.GetString("LoverIntoPlus"))
+			.Append(Design.ColoedString(ColorPalette.LoverPink, " ♥"));
+
+		return builder.ToString();
     }
 
 
@@ -346,10 +350,10 @@ public sealed class Lover : MultiAssignRoleBase
 		loverUpdate(exiledPlayer.PlayerId, (x) => x.Exiled());
     }
 
-    private void killedUpdate(PlayerControl killedPlayer)
-    {
+	private void killedUpdate(PlayerControl killedPlayer)
+	{
 		loverUpdate(killedPlayer.PlayerId, (x) => x.MurderPlayer(x));
-    }
+	}
 
     private void forceReplaceToNeutral(byte targetId)
     {
@@ -391,7 +395,7 @@ public sealed class Lover : MultiAssignRoleBase
 
         foreach (var playerControl in PlayerControl.AllPlayerControls)
         {
-            if (playerControl == null ||
+			if (playerControl == null ||
 				playerControl.Data == null ||
 				playerControl.Data.IsDead ||
 				playerControl.Data.Disconnected ||
