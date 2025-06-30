@@ -344,53 +344,12 @@ public sealed class Lover : MultiAssignRoleBase
     private void exiledUpdate(
         PlayerControl exiledPlayer)
     {
-        List<byte> alive = getAliveSameLover();
-        alive.Remove(exiledPlayer.PlayerId);
-
-        if (this.becomeKiller)
-        {
-            if (alive.Count != 1) { return; }
-            forceReplaceToNeutral(alive[0]);
-        }
-        else
-        {
-            if (alive.Count > limit) { return; }
-
-            foreach (byte playerId in alive)
-            {
-                var player = Player.GetPlayerControlById(playerId);
-                if (player != null)
-                {
-                    player.Exiled();
-                }
-            }
-        }
+		loverUpdate(exiledPlayer.PlayerId, (x) => x.Exiled());
     }
 
     private void killedUpdate(PlayerControl killedPlayer)
     {
-        List<byte> alive = getAliveSameLover();
-        alive.Remove(killedPlayer.PlayerId);
-
-        if (this.becomeKiller)
-        {
-            if (alive.Count != 1) { return; }
-            forceReplaceToNeutral(alive[0]);
-
-        }
-        else
-        {
-            if (alive.Count > limit) { return; }
-
-            foreach (byte playerId in alive)
-            {
-                var player = Player.GetPlayerControlById(playerId);
-                if (player != null && !player.Data.IsDead && !player.Data.Disconnected)
-                {
-                    player.MurderPlayer(player);
-                }
-            }
-        }
+		loverUpdate(killedPlayer.PlayerId, (x) => x.MurderPlayer(x));
     }
 
     private void forceReplaceToNeutral(byte targetId)
@@ -407,7 +366,7 @@ public sealed class Lover : MultiAssignRoleBase
 		newKiller.Vision = newKiller.killerLoverVision;
 		newKiller.IsApplyEnvironmentVision = newKiller.killerLoverIsApplyEnvironmentVisionEffect;
 		newKiller.UseVent = newKiller.killerLoverCanUseVent;
-		newKiller.ChangeAllLoverToNeutral(); // This method iterates and modifies roles, ensure it's compatible with TryGetRole logic
+		newKiller.ChangeAllLoverToNeutral();
 		ExtremeRoleManager.SetNewRole(targetId, newKiller);
 	}
 
@@ -426,17 +385,18 @@ public sealed class Lover : MultiAssignRoleBase
 
     }
 
-    private List<byte> getAliveSameLover()
+    private IReadOnlyList<byte> getAliveSameLover(byte ignorePlayerId)
     {
 
         List<byte> alive = new List<byte>();
 
-        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
+        foreach (var playerControl in PlayerControl.AllPlayerControls)
         {
             if (playerControl == null ||
 				playerControl.Data == null ||
 				playerControl.Data.IsDead ||
 				playerControl.Data.Disconnected ||
+				playerControl.PlayerId == ignorePlayerId ||
                 !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
 				!this.IsSameControlId(role))
             {
@@ -446,4 +406,31 @@ public sealed class Lover : MultiAssignRoleBase
         }
         return alive;
     }
+	private void loverUpdate(byte killedPlayerId, Action<PlayerControl> anotherPlayerId)
+	{
+		var alive = getAliveSameLover(killedPlayerId);
+
+		if (alive.Count > this.limit)
+		{
+			return;
+		}
+
+		foreach (byte playerId in alive)
+		{
+			if (this.becomeKiller)
+			{
+				forceReplaceToNeutral(playerId);
+			}
+			else
+			{
+				var player = Player.GetPlayerControlById(playerId);
+				if (player != null &&
+					!player.Data.IsDead &&
+					!player.Data.Disconnected)
+				{
+					anotherPlayerId.Invoke(player);
+				}
+			}
+		}
+	}
 }
