@@ -148,10 +148,10 @@
     <value>Submerged : Advanced spawn settings</value>
   </data>
   <data name="LowerCentralOnly" xml:space="preserve">
-    <value>Only spawn on Upper Central</value>
+    <value>Only Upper Central</value>
   </data>
   <data name="UpperCentralOnly" xml:space="preserve">
-    <value>Only spawn on Lower Central</value>
+    <value>Only Lower Central</value>
   </data>
   <data name="SubmergedCategory" xml:space="preserve">
     <value>Submerged Integration Options</value>

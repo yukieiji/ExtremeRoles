@@ -1095,10 +1095,12 @@ If the option "Does need to match revealing means every meeting" is ON, if the a
     <value>Yardbird</value>
   </data>
   <data name="JailerAwakeTaskGage" xml:space="preserve">
-    <value>Task completion rate to awaken as Jailer (Awakening Condition: 1)</value>
+    <value>Task completion rate to awaken as Jailer
+ (Awakening Condition: 1)</value>
   </data>
   <data name="JailerAwakeDeadPlayerNum" xml:space="preserve">
-    <value>Number of dead players to awaken as Jailer (Awakening Condition: 2)</value>
+    <value>Number of dead players to awaken as Jailer
+ (Awakening Condition: 2)</value>
   </data>
   <data name="JailerUseAdmin" xml:space="preserve">
     <value>Can Jailer use Admin</value>
@@ -1116,37 +1118,37 @@ If the option "Does need to match revealing means every meeting" is ON, if the a
     <value>"IMPRISON" : Ability Charges</value>
   </data>
   <data name="JailerTargetMode" xml:space="preserve">
-    <value>Team that "IMPRISON" succeeds on</value>
+    <value>"IMPRISON" : Team that succeeds on</value>
   </data>
   <data name="JailerCanReplaceAssassin" xml:space="preserve">
-    <value>Can "IMPRISON" Assassin</value>
+    <value>"IMPRISON" : Can Assassin</value>
   </data>
   <data name="JailerRange" xml:space="preserve">
     <value>"IMPRISON" : Ability Range</value>
   </data>
   <data name="JailerIsMissingToDead" xml:space="preserve">
-    <value>Does "IMPRISON" failure lead to suicide</value>
+    <value>"IMPRISON" : Does suicide when failure</value>
   </data>
   <data name="JailerIsDeadAbilityZero" xml:space="preserve">
-    <value>Suicide if "IMPRISON" succeeds and charges become 0</value>
+    <value>"IMPRISON" : Suicide if succeeds and charges become 0</value>
   </data>
   <data name="JailerLawbreakerCanKill" xml:space="preserve">
     <value>Can Lawbreaker kill</value>
   </data>
   <data name="JailerHasOtherKillCool" xml:space="preserve">
-    <value>Does Lawbreaker have different kill cooldown settings</value>
+    <value>Lawbreaker's have different kill cooldown</value>
   </data>
   <data name="JailerKillCoolDown" xml:space="preserve">
     <value>Lawbreaker's Kill Cooldown</value>
   </data>
   <data name="JailerHasOtherKillRange" xml:space="preserve">
-    <value>Does Lawbreaker have different kill range settings</value>
+    <value>Does Lawbreaker have different kill range</value>
   </data>
   <data name="JailerKillRange" xml:space="preserve">
     <value>Lawbreaker's Kill Range</value>
   </data>
   <data name="JailerLawbreakerUseVent" xml:space="preserve">
-    <value>Can Lawbreaker use Vents</value>
+    <value>Can Lawbreaker use Vent</value>
   </data>
   <data name="JailerLawbreakerUseSab" xml:space="preserve">
     <value>Can Lawbreaker use Sabotage</value>
@@ -1170,10 +1172,10 @@ If the option "Does need to match revealing means every meeting" is ON, if the a
     <value>Can Yardbird use Security Cameras/Logs</value>
   </data>
   <data name="JailerYardbirdUseVital" xml:space="preserve">
-    <value>Can Yardbird use Vitals</value>
+    <value>Can Yardbird use Vital</value>
   </data>
   <data name="JailerYardbirdUseVent" xml:space="preserve">
-    <value>Can Yardbird use Vents</value>
+    <value>Can Yardbird use Vent</value>
   </data>
   <data name="JailerYardbirdUseSab" xml:space="preserve">
     <value>Can Yardbird use Sabotage</value>
@@ -1182,7 +1184,7 @@ If the option "Does need to match revealing means every meeting" is ON, if the a
     <value>"IMPRISON" the wicked and rehabilitate them</value>
   </data>
   <data name="JailerShortDescription" xml:space="preserve">
-    <value>Find and "IMPRISON"</value>
+    <value>find and "IMPRISON"</value>
   </data>
   <data name="JailerFullDescription" xml:space="preserve">
     <value>A CREWMATE role that can convert a specific non-Crewmate player to the Crewmate team.

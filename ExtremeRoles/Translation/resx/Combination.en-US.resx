@@ -1089,31 +1089,31 @@ abilities or role revelation</value>
     <value>"SKATE" : Ability Cooldown</value>
   </data>
   <data name="SkaterAbilityActiveTime" xml:space="preserve">
-    <value>"SKATE" : Time until "SKATE" can be cancelled</value>
+    <value>"SKATE" : Time until can be cancelled</value>
   </data>
   <data name="SkaterAbilityCount" xml:space="preserve">
     <value>"SKATE" : Ability Charges</value>
   </data>
   <data name="SkaterAcceleration" xml:space="preserve">
-    <value>"SKATE" : Acceleration while skating</value>
+    <value>"SKATE" : Acceleration</value>
   </data>
   <data name="SkaterMaxSpeed" xml:space="preserve">
-    <value>"SKATE" : Max speed while skating</value>
+    <value>"SKATE" : Max speed</value>
   </data>
   <data name="SkaterFriction" xml:space="preserve">
-    <value>"SKATE" : Friction coefficient while skating</value>
+    <value>"SKATE" : Friction coefficient</value>
   </data>
   <data name="SkaterUseE" xml:space="preserve">
-    <value>"SKATE" : Bouncing on wall collision</value>
+    <value>"SKATE" : Bouncing</value>
   </data>
   <data name="SkaterEValue" xml:space="preserve">
-    <value>"SKATE" : Coefficient of restitution during collision</value>
+    <value>"SKATE" : Coefficient of restitution</value>
   </data>
   <data name="SkaterCanUseSpeed" xml:space="preserve">
     <value>"SKATE" : Max speed at which USE button etc. can be used</value>
   </data>
   <data name="SkaterIntroDescription" xml:space="preserve">
-    <value>The inside of the ship is my skate rink</value>
+    <value>Ship is my skate rink</value>
   </data>
   <data name="SkaterShortDescription" xml:space="preserve">
     <value>Use "SKATE" to get ahead of your rivals</value>

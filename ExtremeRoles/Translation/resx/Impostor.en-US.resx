@@ -1238,16 +1238,16 @@ AnnounceVoice
 While invisible, you cannot touch anything except vents!!</value>
   </data>
   <data name="TimeBreakerEffectMarlin" xml:space="preserve">
-    <value>Is Merlin affected by "TIME BREAK"</value>
+    <value>"TIME BREAK" : Is Merlin affect</value>
   </data>
   <data name="GlitchEffectOnMarlin" xml:space="preserve">
-    <value>Is Merlin affected by "GLITCH"</value>
+    <value>"GLITCH" :  Is Merlin affect</value>
   </data>
   <data name="SlimeSeeMorphMerlin" xml:space="preserve">
-    <value>Can Merlin see through "MORPH"</value>
+    <value>"MORPH" : Can Merlin see through</value>
   </data>
   <data name="FakerSeeDummyMerlin" xml:space="preserve">
-    <value>Can Merlin see through "DUMMY (PLAYER)"</value>
+    <value>"DUMMY (PLAYER)" : Can Merlin see through</value>
   </data>
   <data name="Scavenger" xml:space="preserve">
     <value>Scavenger</value>
@@ -1448,7 +1448,7 @@ Lv2 Ability "BEAM SABER"
     <value>Carpet Bombing (Vertical)</value>
   </data>
   <data name="RaiderBombNum" xml:space="preserve">
-    <value>Number of bombs dropped</value>
+    <value>Number of bombs</value>
   </data>
   <data name="RaiderBombTargetRange" xml:space="preserve">
     <value>Bombing range</value>
@@ -1460,13 +1460,13 @@ Lv2 Ability "BEAM SABER"
     <value>Fall time per bomb</value>
   </data>
   <data name="RaiderBombShowOtherPlayer" xml:space="preserve">
-    <value>Is bomb drop location visible to non-Impostors</value>
+    <value>"BOMBING" : bomb drop location visible to non-Impostors</value>
   </data>
   <data name="RaiderIntroDescription" xml:space="preserve">
-    <value>Requesting immediate bombing of all crew!!</value>
+    <value>Requesting bombing to this point, NOW!!</value>
   </data>
   <data name="RaiderShortDescription" xml:space="preserve">
-    <value>Turn the area into a wasteland with "BOMBING" from "BOMBING MODE"</value>
+    <value>Turn into wasteland using "BOMBING" from "BOMBING MODE"</value>
   </data>
   <data name="RaiderFullDescription" xml:space="preserve">
     <value>An IMPOSTOR role that can perform "BOMBING" on a designated point from "BOMBING MODE".
@@ -1503,10 +1503,10 @@ UI "BOMBING MODE":
     <value>"GLITCH" : Activation range</value>
   </data>
   <data name="GlitchEffectOnImpo" xml:space="preserve">
-    <value>Are Impostors affected by "GLITCH"</value>
+    <value>"GLITCH" : Are Impostors affect</value>
   </data>
   <data name="GlitchDelay" xml:space="preserve">
-    <value>Lag between using "GLITCH" and activation</value>
+    <value>"GLITCH" : Lag between activation</value>
   </data>
   <data name="GlitchActiveTime" xml:space="preserve">
     <value>"GLITCH" : Activation duration</value>
@@ -1553,7 +1553,7 @@ Button ability "GLITCH":
     <value>"HIJACK" : Ability Charges</value>
   </data>
   <data name="HijackerIsRandomPlayer" xml:space="preserve">
-    <value>Is "HIJACK" target player random</value>
+    <value>"HIJACK" : Dose target player random</value>
   </data>
   <data name="HijackerIntroDescription" xml:space="preserve">
     <value>Whose vision shall I steal (hijack)?</value>
@@ -1583,10 +1583,10 @@ Button ability "HIJACK":
     <value>"TIME BREAK" : Activation duration</value>
   </data>
   <data name="TimeBreakerEffectImp" xml:space="preserve">
-    <value>Are Impostors affected by "TIME BREAK"</value>
+    <value>"TIME BREAK" : Are Impostors affect</value>
   </data>
   <data name="TimeBreakerIsActiveScreen" xml:space="preserve">
-    <value>Effect during "TIME BREAK" activation</value>
+    <value>"TIME BREAK" : Effect</value>
   </data>
   <data name="TimeBreakerIntroDescription" xml:space="preserve">
     <value>Time, "STOP"</value>
