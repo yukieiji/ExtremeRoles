@@ -829,4 +829,656 @@ spreading" mode deactivates.</value>
   <data name="upgradeVirus" xml:space="preserve">
     <value>VITALIZE</value>
   </data>
+  <data name="QueenServantSucideWithQueenWhenHasKill" xml:space="preserve">
+    <value>Servant: Does Servant with KILL ability suicide on Queen's death</value>
+  </data>
+  <data name="YokoUseYashiro" xml:space="preserve">
+    <value>Enable abilities related to "SHRINE"</value>
+  </data>
+  <data name="YokoAbilityCoolTime" xml:space="preserve">
+    <value>"BUILD SHRINE" : Ability Cooldown</value>
+  </data>
+  <data name="YokoAbilityActiveTime" xml:space="preserve">
+    <value>"BUILD SHRINE" : Time required</value>
+  </data>
+  <data name="YokoAbilityCount" xml:space="preserve">
+    <value>"BUILD SHRINE" : Ability Charges</value>
+  </data>
+  <data name="YokoYashiroActiveTime" xml:space="preserve">
+    <value>"SHRINE" : Duration of "ACTIVATED" state</value>
+  </data>
+  <data name="YokoYashiroSeelTime" xml:space="preserve">
+    <value>"SHRINE" : Duration of "SEALED" state</value>
+  </data>
+  <data name="YokoYashiroProtectRange" xml:space="preserve">
+    <value>"SHRINE'S PROTECTION" : Range</value>
+  </data>
+  <data name="YokoYashiroUpdateWithMeeting" xml:space="preserve">
+    <value>Does "SHRINE" state change during meetings</value>
+  </data>
+  <data name="YokoFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role that can steal almost any victory.
+Victory Condition: Survive and meet the victory conditions of another team (If multiple Youkos are assigned, they win simultaneously).
+- Victory conditions that cannot be stolen even if alive:
+- Crewmate task victory
+- Impostor sabotage victory
+- Merlin assassination victory (when Assassin is present)
+Passive Ability "SENSE PRESENCE":
+- Notifies if an "enemy" player is within a certain range.
+- "Enemy" refers to roles with kill abilities, excluding:
+- Villain, Vigilante, Missionary, Lovers
+- The "enemy" detection of Sense Presence can fail with a certain probability.
+- Fencer is always considered an "enemy" regardless of state.
+*The following are only available if "Enable abilities related to "SHRINE"" is ON
+- Button Ability "BUILD SHRINE":
+- Can be used if a certain distance away from another "SHRINE".
+- After a certain time, a "SHRINE" is built at that location.
+- Map Object "SHRINE":
+- Has Inactive, Activated, and Sealed states.
+- Inactive State: Can be transitioned to Activated state by opening the screen.
+- Activated State: "SHRINE'S PROTECTION" is active. Can be transitioned to Sealed state after a certain time or by opening the screen.
+- Sealed State: Transitions to Inactive state after a certain time. Cannot be operated by opening the screen.
+- "SHRINE" Passive Ability "SHRINE'S PROTECTION" (Activated state only):
+- Players of this role within a certain range of the shrine will not be killed by kill button kills.</value>
+  </data>
+  <data name="yokoYashiro" xml:space="preserve">
+    <value>Build Shrine</value>
+  </data>
+  <data name="yokoYashiroStatusText" xml:space="preserve">
+    <value>Current Shrine Status: {0}</value>
+  </data>
+  <data name="yokoYashiroNextStatusText" xml:space="preserve">
+    <value>{2} seconds until transition to "{1}"</value>
+  </data>
+  <data name="yokoYashiroCloseText" xml:space="preserve">
+    <value>Transition to "{0}"!!</value>
+  </data>
+  <data name="YashiroDeactive" xml:space="preserve">
+    <value>Inactive State</value>
+  </data>
+  <data name="YashiroActive" xml:space="preserve">
+    <value>Activated State</value>
+  </data>
+  <data name="YashiroSeal" xml:space="preserve">
+    <value>Sealed State</value>
+  </data>
+  <data name="Hatter" xml:space="preserve">
+    <value>Hatter</value>
+  </data>
+  <data name="HatterCanRepairSabotage" xml:space="preserve">
+    <value>Can repair Sabotages</value>
+  </data>
+  <data name="HatterWinCount" xml:space="preserve">
+    <value>Number of meeting skips to win</value>
+  </data>
+  <data name="HatterAbilityCoolTime" xml:space="preserve">
+    <value>"KILL TIME" : Ability Cooldown</value>
+  </data>
+  <data name="HatterAbilityCount" xml:space="preserve">
+    <value>"KILL TIME" : Ability Charges</value>
+  </data>
+  <data name="HatterHideMeetingTimer" xml:space="preserve">
+    <value>Hide meeting timer with "KILL TIME"</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseLower" xml:space="preserve">
+    <value>Minimum meeting time reduction rate with "KILL TIME"</value>
+  </data>
+  <data name="HatterMeetingTimerDecreaseUpper" xml:space="preserve">
+    <value>Maximum meeting time reduction rate with "KILL TIME"</value>
+  </data>
+  <data name="HatterIncreaseTaskGage" xml:space="preserve">
+    <value>Task completion rate to increase "KILL TIME"</value>
+  </data>
+  <data name="HatterIncreseNum" xml:space="preserve">
+    <value>Number of increased ability charges</value>
+  </data>
+  <data name="HatterIntroDescription" xml:space="preserve">
+    <value>The never-ending tea party begins</value>
+  </data>
+  <data name="HatterShortDescription" xml:space="preserve">
+    <value>Skip meetings and win</value>
+  </data>
+  <data name="HatterFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role.
+Victory Condition ①: Skip meetings a certain number of times.
+Victory Condition ②: The number of survivors for the following becomes equal:
+- Impostors and Neutral roles with kill abilities
+- This role (Hatter)
+- Harmless survivors (Crewmates, etc.) excluding this role
+Button Ability "KILL TIME":
+- Reduces meeting time by a certain amount when activated.
+- Reduces by a random percentage between "Minimum meeting time reduction rate with "KILL TIME"" and "Maximum meeting time reduction rate with "KILL TIME"".
+- Meeting time display disappears depending on the value of ""Hide meeting timer with "KILL TIME"".
+- Completing tasks above "Task completion rate to increase "KILL TIME"" increases the number of uses by "Number of increased ability charges".</value>
+  </data>
+  <data name="timeKill" xml:space="preserve">
+    <value>Kill Time</value>
+  </data>
+  <data name="Artist" xml:space="preserve">
+    <value>Artist</value>
+  </data>
+  <data name="ArtistCanUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="ArtistWinAreaSize" xml:space="preserve">
+    <value>Painted area size to win</value>
+  </data>
+  <data name="ArtistAbilityCoolTime" xml:space="preserve">
+    <value>"PAINT" : Ability Cooldown</value>
+  </data>
+  <data name="ArtistAbilityActiveTime" xml:space="preserve">
+    <value>Time until "PAINT" can be deactivated</value>
+  </data>
+  <data name="ArtistIntroDescription" xml:space="preserve">
+    <value>Art is the most beautiful thing in the world!!</value>
+  </data>
+  <data name="ArtistShortDescription" xml:space="preserve">
+    <value>Show everyone your art</value>
+  </data>
+  <data name="ArtistFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role.
+Victory Condition: Paint over a certain area with "PAINT".
+Button Ability "PAINT"
+- Activate by pressing the button. While active, a line is painted along your path.
+- The color painted is random.</value>
+  </data>
+  <data name="ArtistArtOn" xml:space="preserve">
+    <value>Paint</value>
+  </data>
+  <data name="ArtistArtOff" xml:space="preserve">
+    <value>Stop Painting</value>
+  </data>
+  <data name="Tucker" xml:space="preserve">
+    <value>Tucker</value>
+  </data>
+  <data name="Chimera" xml:space="preserve">
+    <value>Chimera</value>
+  </data>
+  <data name="TuckerAbilityCoolTime" xml:space="preserve">
+    <value>"CREATE CHIMERA" and "ERASE SHADOW" : Cooldown</value>
+  </data>
+  <data name="TuckerAbilityCount" xml:space="preserve">
+    <value>"CREATE CHIMERA" : Ability Charges</value>
+  </data>
+  <data name="TuckerRange" xml:space="preserve">
+    <value>"CREATE CHIMERA" and "ERASE SHADOW" : Activation range</value>
+  </data>
+  <data name="TuckerShadowTimer" xml:space="preserve">
+    <value>Time for "SHADOW" to be placed</value>
+  </data>
+  <data name="TuckerShadowOffset" xml:space="preserve">
+    <value>"SHADOW" : Placement position offset</value>
+  </data>
+  <data name="TuckerRemoveShadowTime" xml:space="preserve">
+    <value>"ERASE SHADOW" : Time required</value>
+  </data>
+  <data name="TuckerIsKillCoolReduceOnRemove" xml:space="preserve">
+    <value>Does "ERASE SHADOW" reduce Chimera's Kill Cooldown</value>
+  </data>
+  <data name="TuckerKillCoolReduceOnRemoveShadow" xml:space="preserve">
+    <value>Kill Cooldown reduction amount</value>
+  </data>
+  <data name="TuckerIsReduceInitKillCoolOnRemove" xml:space="preserve">
+    <value>Reduce below initial Kill Cooldown</value>
+  </data>
+  <data name="TuckerHasOtherKillCool" xml:space="preserve">
+    <value>Does Chimera have different Kill Cooldown settings</value>
+  </data>
+  <data name="TuckerKillCoolDown" xml:space="preserve">
+    <value>Chimera's Kill Cooldown</value>
+  </data>
+  <data name="TuckerHasOtherKillRange" xml:space="preserve">
+    <value>Does Chimera have different Kill Range settings</value>
+  </data>
+  <data name="TuckerKillRange" xml:space="preserve">
+    <value>Chimera's Kill Range</value>
+  </data>
+  <data name="TuckerChimeraHasOtherVision" xml:space="preserve">
+    <value>Does Chimera have different vision settings</value>
+  </data>
+  <data name="TuckerChimeraVision" xml:space="preserve">
+    <value>Chimera's Vision</value>
+  </data>
+  <data name="TuckerChimeraApplyEnvironmentVisionEffect" xml:space="preserve">
+    <value>Is Chimera affected by vision effects</value>
+  </data>
+  <data name="TuckerChimeraCanUseVent" xml:space="preserve">
+    <value>Can Chimera use Vents</value>
+  </data>
+  <data name="TuckerChimeraReviveTime" xml:space="preserve">
+    <value>Chimera's revival time</value>
+  </data>
+  <data name="TuckerChimeraDeathKillCoolOffset" xml:space="preserve">
+    <value>Kill Cooldown increase/decrease amount per Chimera revival</value>
+  </data>
+  <data name="TuckerTuckerDeathKillCoolOffset" xml:space="preserve">
+    <value>Chimera's Kill Cooldown increase/decrease amount on Tucker's death</value>
+  </data>
+  <data name="TuckerIntroDescription" xml:space="preserve">
+    <value>Let's turn the sharp crewmates into Chimeras</value>
+  </data>
+  <data name="TuckerShortDescription" xml:space="preserve">
+    <value>Create Chimeras, erase your "SHADOWS", and win</value>
+  </data>
+  <data name="TuckerFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role that can create nearly immortal Chimeras.
+Victory Condition: Impostors and Neutral roles with kill abilities are eliminated, and more than half of the survivors are on the same team.
+Button abilities can be switched using the mouse scroll wheel.
+Button Ability: "CREATE CHIMERA"
+- Can be activated by targeting a player within range.
+- Transforms the player into a "Chimera".
+- "Chimeras" will continue to revive as long as this role is alive.
+- Chimera revival is announced.
+Button Ability: "ERASE SHADOW"
+- Can be activated on a map object "SHADOW" within range.
+- Deletes the "SHADOW" after a certain time.
+- If the option "Does "ERASE SHADOW" reduce Chimera's Kill Cooldown" is ON, permanently reduces the Chimera's Kill Cooldown by a certain amount after deletion.
+Map Object "SHADOW"
+- Placed after a meeting ends.
+- Placement is based on this role's player position at the following times:
+- Periodically (disabled until "CREATE CHIMERA" is performed)
+- When Chimera revives
+- Placement position and status are shared with all players.</value>
+  </data>
+  <data name="ChimeraShortDescription" xml:space="preserve">
+    <value>Win with immortal power</value>
+  </data>
+  <data name="ChimeraFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role that revives indefinitely.
+Victory Condition: Impostors and Neutral roles with kill abilities are eliminated, and more than half of the survivors are on the same team.
+Current Tucker: {0}
+As long as the Tucker who created this role is alive, you can revive any number of times.
+Each time you revive, your Kill Cooldown value is permanently changed by a certain amount.
+- Tucker is notified upon revival.</value>
+  </data>
+  <data name="removeShadow" xml:space="preserve">
+    <value>Erase Shadow</value>
+  </data>
+  <data name="createChimera" xml:space="preserve">
+    <value>Create Chimera</value>
+  </data>
+  <data name="TuckerTuckerDeathWithChimera" xml:space="preserve">
+    <value>Does Chimera die when Tucker dies</value>
+  </data>
+  <data name="IronMate" xml:space="preserve">
+    <value>Iron Mate</value>
+  </data>
+  <data name="IronMateBlockNum" xml:space="preserve">
+    <value>Number of times kill can be blocked</value>
+  </data>
+  <data name="IronMateSlowTime" xml:space="preserve">
+    <value>Seconds movement speed changes after block</value>
+  </data>
+  <data name="IronMateSlowMod" xml:space="preserve">
+    <value>Movement speed multiplier after block</value>
+  </data>
+  <data name="IronMatePlayerShowTime" xml:space="preserve">
+    <value>Seconds player is displayed above corpse</value>
+  </data>
+  <data name="IronMateDeadBodyShowTimeOnAfterPlayer" xml:space="preserve">
+    <value>Seconds corpse is displayed after player is displayed</value>
+  </data>
+  <data name="IronMateShortDescription" xml:space="preserve">
+    <value>Crewmate with an iron body</value>
+  </data>
+  <data name="IronMateFullDescription" xml:space="preserve">
+    <value>A Crewmate-like NEUTRAL role.
+In-game display is exactly the same as a regular Crewmate.
+Victory Condition: Crewmates win.
+- Almost the same as Crewmate and has tasks.
+However, does not affect task victory conditions.
+- Cannot report corpses. A player dummy is displayed at the corpse location for a certain time.
+- After the player dummy is displayed, the corpse can be seen for a certain time.
+- Can block kill button kills a specified number of times via options.
+- After blocking, Iron Mate's own movement speed is slowed by a set amount for a certain time.</value>
+  </data>
+  <data name="Monika" xml:space="preserve">
+    <value>Monika</value>
+  </data>
+  <data name="MonikaAbilityCoolTime" xml:space="preserve">
+    <value>"ERASE" : Ability Cooldown</value>
+  </data>
+  <data name="MonikaRange" xml:space="preserve">
+    <value>"ERASE" : Activation range</value>
+  </data>
+  <data name="MonikaIntroDescription" xml:space="preserve">
+    <value>7fee81971a1be79192a88bdaeb47b2e4bd81416ccd5b9bfc4b5b44bca597f2ee</value>
+  </data>
+  <data name="MonikaShortDescription" xml:space="preserve">
+    <value>For my beloved </value>
+  </data>
+  <data name="MonikaFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role that eliminates players with "ERASE".
+Victory Condition: 3 or fewer non-"ERASED" survivors, including yourself (If exactly 3, a special meeting occurs to choose an additional winner).
+Button Ability "ERASE":
+- Can be activated by targeting one player.
+- Sends that player to the "TRASH BIN" layer.
+- "Monika" cannot recognize "ERASED" players ("TRASH BIN" players).
+New Layer "TRASH BIN":
+- A new layer added between survivors and dead, treated as semi-dead.
+- Players in the "TRASH BIN" are subject to the following:
+- Counted as survivors if not dead, and as dead if dead.
+- Lose speaking rights during meetings (can hear survivor chat, etc.).
+- Cannot send chat, etc. to survivors during meetings.
+- Lose ability usage and voting rights during meetings.
+- Cannot target "Monika" during task phase (cannot be targeted for kill either).
+- If "Monika" is completely eliminated from the game, surviving players in the "TRASH BIN" are released and become normal survivors.</value>
+  </data>
+  <data name="MonikaMeetingSelectLover" xml:space="preserve">
+    <value>Please choose the one you loved&lt;br&gt;(You win with the voted person)</value>
+  </data>
+  <data name="MonikaMeetingSelectTarget" xml:space="preserve">
+    <value>Are you worthy&lt;br&gt;of my love?</value>
+  </data>
+  <data name="MonikaMeetingOther" xml:space="preserve">
+    <value>Outsiders, be quiet&lt;br&gt;and watch "fate"</value>
+  </data>
+  <data name="MonikaMeetingExiled" xml:space="preserve">
+    <value>"{0}" loved "{1}"&lt;br&gt;(""{2}"" was excluded)</value>
+  </data>
+  <data name="monikaPlayerTrash" xml:space="preserve">
+    <value>Erase</value>
+  </data>
+  <data name="MonikaUseOtherButton" xml:space="preserve">
+    <value>When "Monika" calls an emergency meeting, does it consume someone else's button</value>
+  </data>
+  <data name="MonikaCanUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="MonikaCanUseSabotage" xml:space="preserve">
+    <value>Can use Sabotages</value>
+  </data>
+  <data name="MonikaIsSoloTeam" xml:space="preserve">
+    <value>Does the game continue if Monika survives alone</value>
+  </data>
+  <data name="MonikaCanSeeTrash" xml:space="preserve">
+    <value>Can "Monika" see players in the trash bin</value>
+  </data>
+  <data name="Heretic" xml:space="preserve">
+    <value>Heretic</value>
+  </data>
+  <data name="HereticHasTask" xml:space="preserve">
+    <value>Has tasks</value>
+  </data>
+  <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
+    <value>Task completion rate to see Impostors</value>
+  </data>
+  <data name="HereticKillMode" xml:space="preserve">
+    <value>"CURSE KILL" : Mode</value>
+  </data>
+  <data name="HereticAbilityCoolTime" xml:space="preserve">
+    <value>"CURSE KILL" : Cooldown</value>
+  </data>
+  <data name="HereticRange" xml:space="preserve">
+    <value>"CURSE KILL" : Activation range</value>
+  </data>
+  <data name="HereticCanKillImpostor" xml:space="preserve">
+    <value>Can Impostors be targeted by "CURSE KILL"</value>
+  </data>
+  <data name="HereticIntroDescription" xml:space="preserve">
+    <value>Impostor-sama, please bless me...</value>
+  </data>
+  <data name="HereticShortDescription" xml:space="preserve">
+    <value>Kill those who oppose Impostor-sama with "CURSE KILL"</value>
+  </data>
+  <data name="HereticFullDescription" xml:space="preserve">
+    <value>A NEUTRAL role.
+Victory Condition: Impostor victory (including special victories).
+Ability "CURSE KILL":
+- Kills the target in exchange for your own life.
+- Targeting method and "CURSE KILL" ability change depending on the mode.
+- Mode "During Task":
+- Activate by targeting a player doing a task, ability activates immediately.
+- Mode "Target Specify (During Task)":
+- Activate by targeting a player doing a task, holds them as a target.
+- When this role is exiled, takes the targeted player with them.
+- Mode "During Meeting":
+- Activate by targeting a player during a meeting, ability activates immediately.
+- Mode "Target Specify (During Meeting)":
+- Activate by targeting a player during a meeting, holds them as a target.
+- When this role is exiled, takes the targeted player with them.
+- Mode "On Exile":
+- When this role is exiled, takes a random player with them.</value>
+  </data>
+  <data name="HereticAbility" xml:space="preserve">
+    <value>Curse Kill</value>
+  </data>
+  <data name="Shepherd" xml:space="preserve">
+    <value>Shepherd</value>
+  </data>
+  <data name="ShepherdCanKill" xml:space="preserve">
+    <value>Can kill</value>
+  </data>
+  <data name="ShepherdIsSubTeam" xml:space="preserve">
+    <value>Is Jackal's sub-team</value>
+  </data>
+  <data name="ShepherdUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="ShepherdHasTask" xml:space="preserve">
+    <value>Has tasks</value>
+  </data>
+  <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
+    <value>Task completion rate to see Jackal</value>
+  </data>
+  <data name="ShepherdIntroDescription" xml:space="preserve">
+    <value>Jackal's leader</value>
+  </data>
+  <data name="ShepherdShortDescription" xml:space="preserve">
+    <value>Lead Jackal to victory</value>
+  </data>
+  <data name="ShepherdFullDescription" xml:space="preserve">
+    <value>A NEUTRAL fallback sub-team role.
+Victory Condition: Jackal's victory (including special victories).
+If has kill button and is sub-team, this role becomes Jackal's sub-team role.
+- When Jackal and Sidekick are alive:
+- Not counted as Jackal team.
+- When Jackal and Sidekick are not alive:
+- Special Jackal team victory if the following are met:
+1. Impostors and Neutral roles with kill abilities are eliminated.
+2. More than half of the survivors are on the same team.
+If sub-team is off or does not have kill button, this role becomes a fallback role.
+- As a fallback role, this role is not assigned if Jackal is not assigned.</value>
+  </data>
+  <data name="Furry" xml:space="preserve">
+    <value>Furry</value>
+  </data>
+  <data name="FurryUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="FurryHasTask" xml:space="preserve">
+    <value>Has tasks</value>
+  </data>
+  <data name="FurrySeeJackalTaskRate" xml:space="preserve">
+    <value>Task completion rate to see Jackal</value>
+  </data>
+  <data name="FurryIntroDescription" xml:space="preserve">
+    <value>A crew with Jackal's blood flowing (?) in them</value>
+  </data>
+  <data name="FurryShortDescription" xml:space="preserve">
+    <value>Survive as the third Jackal</value>
+  </data>
+  <data name="FurryFullDescription" xml:space="preserve">
+    <value>A NEUTRAL fallback role.
+This role is not assigned if Jackal is not assigned.
+Victory Condition: Jackal's victory (including special victories).
+Passive Ability "BLOOD AWAKENING":
+- If a Jackal whose Sidekick died first dies (exiled, killed, etc.), becomes the Jackal of that group.
+- When changing to Jackal, ability usage counts, etc. become 0 and cannot create new Sidekicks.</value>
+  </data>
+  <data name="Intimate" xml:space="preserve">
+    <value>Intimate</value>
+  </data>
+  <data name="IntimateCanKill" xml:space="preserve">
+    <value>Can kill</value>
+  </data>
+  <data name="IntimateIsSubTeam" xml:space="preserve">
+    <value>Is Yandere's sub-team</value>
+  </data>
+  <data name="IntimateUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="IntimateHasTask" xml:space="preserve">
+    <value>Has tasks</value>
+  </data>
+  <data name="IntimateSeeYandereTaskRate" xml:space="preserve">
+    <value>Task completion rate to see Yandere</value>
+  </data>
+  <data name="IntimateFullDescription" xml:space="preserve">
+    <value>A NEUTRAL fallback sub-team role.
+Victory Condition: Yandere's victory (including special victories).
+If has kill button and is sub-team, this role becomes Yandere's sub-team role.
+- When Yandere is alive:
+- Not counted as Yandere team.
+- When Yandere is not alive:
+- Special Yandere team victory if the following are met:
+1. Impostors and Neutral roles with kill abilities are eliminated.
+2. More than half of the survivors are on the same team.
+If sub-team is off or does not have kill button, this role becomes a fallback role.
+- As a fallback role, this role is not assigned if Yandere is not assigned.</value>
+  </data>
+  <data name="IntimateShortDescription" xml:space="preserve">
+    <value>I'll get my hands dirty for Yandere-chan</value>
+  </data>
+  <data name="IntimateIntroDescription" xml:space="preserve">
+    <value>Yandere-chan is my precious best friend!!</value>
+  </data>
+  <data name="Surrogator" xml:space="preserve">
+    <value>Surrogator</value>
+  </data>
+  <data name="SurrogatorUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="SurrogatorHasTask" xml:space="preserve">
+    <value>Has tasks</value>
+  </data>
+  <data name="SurrogatorSeeYandereTaskRate" xml:space="preserve">
+    <value>Task completion rate to see Yandere</value>
+  </data>
+  <data name="SurrogatorAbilityCoolTime" xml:space="preserve">
+    <value>"WEAR CORPSE" : Cooldown</value>
+  </data>
+  <data name="SurrogatorAbilityActiveTime" xml:space="preserve">
+    <value>"WEAR CORPSE" : Time to complete</value>
+  </data>
+  <data name="SurrogatorAbilityCount" xml:space="preserve">
+    <value>"WEAR CORPSE" : Ability Charges</value>
+  </data>
+  <data name="SurrogatorRange" xml:space="preserve">
+    <value>"WEAR CORPSE" : Range from corpse</value>
+  </data>
+  <data name="SurrogatorPreventNum" xml:space="preserve">
+    <value>"SHADOW'S PROTECTION" : Initial defense count</value>
+  </data>
+  <data name="SurrogatorPreventKillTime" xml:space="preserve">
+    <value>"SHADOW'S PROTECTION" : Kill Cooldown when blocking kill</value>
+  </data>
+  <data name="SurrogatorAbility" xml:space="preserve">
+    <value>Wear Corpse</value>
+  </data>
+  <data name="SurrogatorIntroDescription" xml:space="preserve">
+    <value>Yandere supporter from the shadows</value>
+  </data>
+  <data name="SurrogatorFullDescription" xml:space="preserve">
+    <value>A NEUTRAL fallback role.
+This role is not assigned if Yandere is not assigned.
+Victory Condition: Yandere's victory (including special victories).
+Passive Ability "SHADOW'S PROTECTION":
+- Blocks "Beloved One's" kill button kills a certain number of times.
+- Block count increases by performing "WEAR CORPSE".
+- Current blockable count: {0}
+Button Ability "WEAR CORPSE":
+- Activate by targeting a nearby corpse.
+- After a set number of seconds, the corpse is erased and "SHADOW'S PROTECTION" defense count increases by 1.</value>
+  </data>
+  <data name="SurrogatorTask" xml:space="preserve">
+    <value>Use "WEAR CORPSE" to protect your precious person's precious person</value>
+  </data>
+  <data name="Knight" xml:space="preserve">
+    <value>Knight</value>
+  </data>
+  <data name="KnightIsSubTeam" xml:space="preserve">
+    <value>Is Queen's sub-team</value>
+  </data>
+  <data name="KnightUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="KnightHasTask" xml:space="preserve">
+    <value>Has tasks</value>
+  </data>
+  <data name="KnightSeeQueenTaskRate" xml:space="preserve">
+    <value>Task completion rate to see Queen</value>
+  </data>
+  <data name="KnightIntroDescription" xml:space="preserve">
+    <value>Queen's Guard cutting edge captain</value>
+  </data>
+  <data name="KnightFullDescription" xml:space="preserve">
+    <value>A NEUTRAL fallback sub-team role.
+Victory Condition: Queen's victory (including special victories).
+If has kill button and is sub-team, this role becomes Queen's sub-team role.
+- When Queen and Servant are alive:
+- Not counted as Queen team.
+- When Queen and Servant are not alive:
+- Special Queen team victory if the following are met:
+1. Impostors and Neutral roles with kill abilities are eliminated.
+2. More than half of the survivors are on the same team.
+If sub-team is off, this role becomes a fallback role.
+- As a fallback role, this role is not assigned if Queen is not assigned.</value>
+  </data>
+  <data name="KnightShortDescription" xml:space="preserve">
+    <value>Kill in place of the Queen</value>
+  </data>
+  <data name="Pawn" xml:space="preserve">
+    <value>Pawn</value>
+  </data>
+  <data name="PawnUseVent" xml:space="preserve">
+    <value>Can use Vents</value>
+  </data>
+  <data name="PawnHasTask" xml:space="preserve">
+    <value>Has tasks</value>
+  </data>
+  <data name="PawnSeeQueenTaskRate" xml:space="preserve">
+    <value>Task completion rate to see Queen</value>
+  </data>
+  <data name="PawnIntroDescription" xml:space="preserve">
+    <value>Queen's advance party</value>
+  </data>
+  <data name="PawnShortDescription" xml:space="preserve">
+    <value>Help Queen to victory</value>
+  </data>
+  <data name="PawnFullDescription" xml:space="preserve">
+    <value>A NEUTRAL fallback role.
+This role is not assigned if Queen is not assigned.
+Victory Condition: Queen's victory (including special victories).</value>
+  </data>
+  <data name="AbilityOnTaskPhase" xml:space="preserve">
+    <value>During Task Phase</value>
+  </data>
+  <data name="AbilityOnTaskPhaseTarget" xml:space="preserve">
+    <value>Target Specify&lt;br&gt;(During Task Phase)</value>
+  </data>
+  <data name="AbilityOnMeeting" xml:space="preserve">
+    <value>During Meeting</value>
+  </data>
+  <data name="AbilityOnMeetingTarget" xml:space="preserve">
+    <value>Target Specify&lt;br&gt;(During Meeting)</value>
+  </data>
+  <data name="AbilityOnExiled" xml:space="preserve">
+    <value>On Exile</value>
+  </data>
+  <data name="AliceWinTaskRate" xml:space="preserve">
+    <value>Task completion rate required for victory</value>
+  </data>
+  <data name="AliceWinKillNum" xml:space="preserve">
+    <value>Number of kills required for victory</value>
+  </data>
+  <data name="AllJackalWin" xml:space="preserve">
+    <value>Thanks to Shepherd's efforts, all Jackal team</value>
+  </data>
+  <data name="AllYandereWin" xml:space="preserve">
+    <value>Thanks to Intimate's efforts, all Yandere team</value>
+  </data>
+  <data name="AllQueenWin" xml:space="preserve">
+    <value>Thanks to Knight's efforts, all Queen team</value>
+  </data>
 </root>
