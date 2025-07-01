@@ -153,4 +153,7 @@
   <data name="UpperCentralOnly" xml:space="preserve">
     <value>Only spawn on Lower Central</value>
   </data>
+  <data name="SubmergedCategory" xml:space="preserve">
+    <value>Submerged Integration Options</value>
+  </data>
 </root>

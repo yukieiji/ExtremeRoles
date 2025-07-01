@@ -1067,4 +1067,217 @@ The chances of vote count variation is calculated by
   <data name="PsychicPsychicStrForAliveNum" xml:space="preserve">
     <value>&lt;indent=5%&gt;Players Remaining:{0}</value>
   </data>
+  <data name="TrackerFullDescription" xml:space="preserve">
+    <value>A CREWMATE who can always see the location of one crewmate on the map.</value>
+  </data>
+  <data name="NoisemakerFullDescription" xml:space="preserve">
+    <value>A CREWMATE who, when killed, can notify everyone of their location for a certain period of time.</value>
+  </data>
+  <data name="DelusionerFullDescription" xml:space="preserve">
+    <value>A CREWMATE role that can teleport players with "DEFLECT".
+Button ability "DEFLECT":
+- Can be activated by targeting a nearby player.
+- Teleports that player to a random player's location (including the Delusioner).
+- If the option ""DEFLECT": Does include map's initial spawn point as a teleport targeted position" is ON, the map's spawn points are also included as teleport destinations in addition to player locations.
+- If the option ""DEFLECT": Does enable misfire" is ON and the cooldown is over and there are ability charges remaining, if the Delusioner is about to be killed, the ability will misfire and teleport players within range for the number of remaining charges.
+If the option "Does need to match revealing means every meeting" is ON, if the awakening condition is not met in the next meeting after awakening, the Delusioner will return to the unawakened state.</value>
+  </data>
+  <data name="Jailer" xml:space="preserve">
+    <value>Jailer</value>
+  </data>
+  <data name="Lawbreaker" xml:space="preserve">
+    <value>Lawbreaker</value>
+  </data>
+  <data name="Yardbird" xml:space="preserve">
+    <value>Yardbird</value>
+  </data>
+  <data name="JailerAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to awaken as Jailer (Awakening Condition: 1)</value>
+  </data>
+  <data name="JailerAwakeDeadPlayerNum" xml:space="preserve">
+    <value>Number of dead players to awaken as Jailer (Awakening Condition: 2)</value>
+  </data>
+  <data name="JailerUseAdmin" xml:space="preserve">
+    <value>Can Jailer use Admin</value>
+  </data>
+  <data name="JailerUseSecurity" xml:space="preserve">
+    <value>Can Jailer use Security Cameras/Logs</value>
+  </data>
+  <data name="JailerUseVital" xml:space="preserve">
+    <value>Can Jailer use Vitals</value>
+  </data>
+  <data name="JailerAbilityCoolTime" xml:space="preserve">
+    <value>"IMPRISON" : Ability Cooldown</value>
+  </data>
+  <data name="JailerAbilityCount" xml:space="preserve">
+    <value>"IMPRISON" : Ability Charges</value>
+  </data>
+  <data name="JailerTargetMode" xml:space="preserve">
+    <value>Team that "IMPRISON" succeeds on</value>
+  </data>
+  <data name="JailerCanReplaceAssassin" xml:space="preserve">
+    <value>Can "IMPRISON" Assassin</value>
+  </data>
+  <data name="JailerRange" xml:space="preserve">
+    <value>"IMPRISON" : Ability Range</value>
+  </data>
+  <data name="JailerIsMissingToDead" xml:space="preserve">
+    <value>Does "IMPRISON" failure lead to suicide</value>
+  </data>
+  <data name="JailerIsDeadAbilityZero" xml:space="preserve">
+    <value>Suicide if "IMPRISON" succeeds and charges become 0</value>
+  </data>
+  <data name="JailerLawbreakerCanKill" xml:space="preserve">
+    <value>Can Lawbreaker kill</value>
+  </data>
+  <data name="JailerHasOtherKillCool" xml:space="preserve">
+    <value>Does Lawbreaker have different kill cooldown settings</value>
+  </data>
+  <data name="JailerKillCoolDown" xml:space="preserve">
+    <value>Lawbreaker's Kill Cooldown</value>
+  </data>
+  <data name="JailerHasOtherKillRange" xml:space="preserve">
+    <value>Does Lawbreaker have different kill range settings</value>
+  </data>
+  <data name="JailerKillRange" xml:space="preserve">
+    <value>Lawbreaker's Kill Range</value>
+  </data>
+  <data name="JailerLawbreakerUseVent" xml:space="preserve">
+    <value>Can Lawbreaker use Vents</value>
+  </data>
+  <data name="JailerLawbreakerUseSab" xml:space="preserve">
+    <value>Can Lawbreaker use Sabotage</value>
+  </data>
+  <data name="JailerYardbirdAddCommonTask" xml:space="preserve">
+    <value>Yardbird's additional common tasks</value>
+  </data>
+  <data name="JailerYardbirdAddNormalTask" xml:space="preserve">
+    <value>Yardbird's additional short tasks</value>
+  </data>
+  <data name="JailerYardbirdAddLongTask" xml:space="preserve">
+    <value>Yardbird's additional long tasks</value>
+  </data>
+  <data name="JailerYardbirdSpeedMod" xml:space="preserve">
+    <value>Yardbird's movement speed multiplier</value>
+  </data>
+  <data name="JailerYardbirdUseAdmin" xml:space="preserve">
+    <value>Can Yardbird use Admin</value>
+  </data>
+  <data name="JailerYardbirdUseSecurity" xml:space="preserve">
+    <value>Can Yardbird use Security Cameras/Logs</value>
+  </data>
+  <data name="JailerYardbirdUseVital" xml:space="preserve">
+    <value>Can Yardbird use Vitals</value>
+  </data>
+  <data name="JailerYardbirdUseVent" xml:space="preserve">
+    <value>Can Yardbird use Vents</value>
+  </data>
+  <data name="JailerYardbirdUseSab" xml:space="preserve">
+    <value>Can Yardbird use Sabotage</value>
+  </data>
+  <data name="JailerIntroDescription" xml:space="preserve">
+    <value>"IMPRISON" the wicked and rehabilitate them</value>
+  </data>
+  <data name="JailerShortDescription" xml:space="preserve">
+    <value>Find and "IMPRISON"</value>
+  </data>
+  <data name="JailerFullDescription" xml:space="preserve">
+    <value>A CREWMATE role that can convert a specific non-Crewmate player to the Crewmate team.
+Button ability "IMPRISON":
+- Can be activated by targeting a nearby player.
+- If that player is of the "Team that "IMPRISON" succeeds on", that player is changed to a "Yardbird" on the Crewmate team.
+- If the option "Does "IMPRISON" failure lead to suicide" is OFF, on failure, the Jailer themself is changed to a "Lawbreaker", a Neutral role whose goal is the Crewmate team's defeat.</value>
+  </data>
+  <data name="YardbirdShortDescription" xml:space="preserve">
+    <value>Atone for past misdeeds and rehabilitate</value>
+  </data>
+  <data name="YardbirdFullDescription" xml:space="preserve">
+    <value>A CREWMATE role created by the "Jailer".
+May have more tasks, slower walking speed, or be unable to use some map equipment depending on settings.
+Otherwise, inherits basic Crewmate settings.</value>
+  </data>
+  <data name="LawbreakerShortDescription" xml:space="preserve">
+    <value>Eliminate the crew before your mistake is discovered</value>
+  </data>
+  <data name="LawbreakerFullDescription" xml:space="preserve">
+    <value>A role born as a result of the "Jailer's" "IMPRISON" failure.
+Victory Condition: "Crewmates lose"
+* When a non-Crewmate team wins, you win alongside them.
+Inherits the Jailer's settings at the time of change, except for kill, sabotage, and vent settings.</value>
+  </data>
+  <data name="AddJail" xml:space="preserve">
+    <value>IMPRISON</value>
+  </data>
+  <data name="Summoner" xml:space="preserve">
+    <value>Summoner</value>
+  </data>
+  <data name="SummonerAbilityCoolTime" xml:space="preserve">
+    <value>"MARK" and "SUMMON" : Ability Cooldown</value>
+  </data>
+  <data name="SummonerMarkingCount" xml:space="preserve">
+    <value>"MARK" : Ability Charges</value>
+  </data>
+  <data name="SummonerRange" xml:space="preserve">
+    <value>"MARK" : Ability Range</value>
+  </data>
+  <data name="SummonerSummonCount" xml:space="preserve">
+    <value>"SUMMON" : Ability Charges</value>
+  </data>
+  <data name="SummonerIntroDescription" xml:space="preserve">
+    <value>Make a contract and become my familiar!!</value>
+  </data>
+  <data name="SummonerShortDescription" xml:space="preserve">
+    <value>"SUMMON" a player and avert crisis!!</value>
+  </data>
+  <data name="SummonerFullDescription" xml:space="preserve">
+    <value>A CREWMATE role that teleports a "MARKED" player to their location.
+Button abilities can be switched using the mouse scroll wheel.
+Button ability "MARK":
+- Can be activated by targeting a nearby player.
+- A "◀" tag is displayed on the name of the "MARKED" person.
+- If the "MARKED" player enters a meeting dead, the "MARK" is removed.
+Button ability "SUMMON":
+- Can be activated when there is a "MARKED" player.
+- Teleports that player to your coordinates.
+- If that player is dead, their body is teleported.</value>
+  </data>
+  <data name="Marking" xml:space="preserve">
+    <value>MARK</value>
+  </data>
+  <data name="Summon" xml:space="preserve">
+    <value>SUMMON</value>
+  </data>
+  <data name="Bait" xml:space="preserve">
+    <value>Bait</value>
+  </data>
+  <data name="BaitAwakeTaskGage" xml:space="preserve">
+    <value>Task completion rate to awaken as Bait</value>
+  </data>
+  <data name="BaitDelayUntilForceReport" xml:space="preserve">
+    <value>Delay time until forced report</value>
+  </data>
+  <data name="BaitEnableBaitBenefit" xml:space="preserve">
+    <value>Enable kill cooldown bonus for killers after forced report</value>
+  </data>
+  <data name="BaitKillCoolReduceMulti" xml:space="preserve">
+    <value>Kill cooldown reduction speed multiplier</value>
+  </data>
+  <data name="BaitReduceTimer" xml:space="preserve">
+    <value>Bonus duration</value>
+  </data>
+  <data name="BaitIntroDescription" xml:space="preserve">
+    <value>I am a lovely bait</value>
+  </data>
+  <data name="BaitShortDescription" xml:space="preserve">
+    <value>Use yourself as bait to corner the impostors</value>
+  </data>
+  <data name="BaitFullDescription" xml:space="preserve">
+    <value>A CREWMATE role that, when killed, forces a report on themself after a certain period of time.
+Ability "Forced Report":
+- When killed, forces a report on their own body after "Delay time until forced report".
+- If "Enable kill cooldown bonus for killers after forced report" is ON, for a certain period after this role is killed, the cooldown reduction speed of the kill button is increased.</value>
+  </data>
+  <data name="forceReportUntil" xml:space="preserve">
+    <value>{0} seconds until forced report</value>
+  </data>
 </root>

@@ -1233,4 +1233,375 @@ AnnounceVoice
   <data name="TeroristBombMinigameStart" xml:space="preserve">
     <value>Defuse</value>
   </data>
+  <data name="PhantomFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role who can become invisible for a certain period of time.
+While invisible, you cannot touch anything except vents!!</value>
+  </data>
+  <data name="TimeBreakerEffectMarlin" xml:space="preserve">
+    <value>Is Merlin affected by "TIME BREAK"</value>
+  </data>
+  <data name="GlitchEffectOnMarlin" xml:space="preserve">
+    <value>Is Merlin affected by "GLITCH"</value>
+  </data>
+  <data name="SlimeSeeMorphMerlin" xml:space="preserve">
+    <value>Can Merlin see through "MORPH"</value>
+  </data>
+  <data name="FakerSeeDummyMerlin" xml:space="preserve">
+    <value>Can Merlin see through "DUMMY (PLAYER)"</value>
+  </data>
+  <data name="Scavenger" xml:space="preserve">
+    <value>Scavenger</value>
+  </data>
+  <data name="ScavengerAbilityCoolTime" xml:space="preserve">
+    <value>Cooldown for various abilities</value>
+  </data>
+  <data name="ScavengerIsRandomInitAbility" xml:space="preserve">
+    <value>Set initial ability randomly</value>
+  </data>
+  <data name="ScavengerAllowDupe" xml:space="preserve">
+    <value>Allow duplicate initial abilities for each player</value>
+  </data>
+  <data name="ScavengerAllowAdvancedWeapon" xml:space="preserve">
+    <value>Include Lv2+ abilities in initial abilities</value>
+  </data>
+  <data name="ScavengerInitAbility" xml:space="preserve">
+    <value>Initial Ability</value>
+  </data>
+  <data name="ScavengerIsSetWeapon" xml:space="preserve">
+    <value>Place weapons on the map</value>
+  </data>
+  <data name="ScavengerSyncWeapon" xml:space="preserve">
+    <value>Share weapon acquisition status with all players</value>
+  </data>
+  <data name="ScavengerHandGunCount" xml:space="preserve">
+    <value>"HANDGUN" : Ability Charges</value>
+  </data>
+  <data name="ScavengerHandGunSpeed" xml:space="preserve">
+    <value>"HANDGUN" : Bullet speed</value>
+  </data>
+  <data name="ScavengerHandGunRange" xml:space="preserve">
+    <value>"HANDGUN" : Bullet travel distance limit</value>
+  </data>
+  <data name="ScavengerFlameCount" xml:space="preserve">
+    <value>"FLAMETHROWER" : Ability Charges</value>
+  </data>
+  <data name="ScavengerFlameChargeTime" xml:space="preserve">
+    <value>"FLAMETHROWER" : Charge time</value>
+  </data>
+  <data name="ScavengerFlameActiveTime" xml:space="preserve">
+    <value>"FLAMETHROWER" : Firing duration</value>
+  </data>
+  <data name="ScavengerFlameFireSecond" xml:space="preserve">
+    <value>"FLAMETHROWER" : Time for "FIRE" to ignite</value>
+  </data>
+  <data name="ScavengerFlameDeadSecond" xml:space="preserve">
+    <value>"FLAMETHROWER" : Time from "FIRE" ignition to kill</value>
+  </data>
+  <data name="ScavengerSwordCount" xml:space="preserve">
+    <value>"SWORD" : Ability Charges</value>
+  </data>
+  <data name="ScavengerSwordChargeTime" xml:space="preserve">
+    <value>"SWORD" : Charge time</value>
+  </data>
+  <data name="ScavengerSwordActiveTime" xml:space="preserve">
+    <value>"SWORD" : Rotation duration</value>
+  </data>
+  <data name="ScavengerSwordR" xml:space="preserve">
+    <value>"SWORD" : Spawn position</value>
+  </data>
+  <data name="ScavengerSniperRifleCount" xml:space="preserve">
+    <value>"SNIPER RIFLE" : Ability Charges</value>
+  </data>
+  <data name="ScavengerSniperRifleSpeed" xml:space="preserve">
+    <value>"SNIPER RIFLE" : Bullet speed</value>
+  </data>
+  <data name="ScavengerBeamRifleCount" xml:space="preserve">
+    <value>"BEAM RIFLE" : Ability Charges</value>
+  </data>
+  <data name="ScavengerBeamRifleSpeed" xml:space="preserve">
+    <value>"BEAM RIFLE" : Beam speed</value>
+  </data>
+  <data name="ScavengerBeamRifleRange" xml:space="preserve">
+    <value>"BEAM RIFLE" : Beam travel distance limit</value>
+  </data>
+  <data name="ScavengerBeamSaberCount" xml:space="preserve">
+    <value>"BEAM SABER" : Ability Charges</value>
+  </data>
+  <data name="ScavengerBeamSaberChargeTime" xml:space="preserve">
+    <value>"BEAM SABER" : Charge time</value>
+  </data>
+  <data name="ScavengerBeamSaberRange" xml:space="preserve">
+    <value>"BEAM SABER" : Killable range</value>
+  </data>
+  <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
+    <value>"BEAM SABER" : Auto-detect players</value>
+  </data>
+  <data name="ScavengerWeaponMixTime" xml:space="preserve">
+    <value>"WEAPON SYNTHESIS" : Time required</value>
+  </data>
+  <data name="ScavengerNull" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="ScavengerHandGun" xml:space="preserve">
+    <value>Handgun</value>
+  </data>
+  <data name="ScavengerFlame" xml:space="preserve">
+    <value>Flamethrower</value>
+  </data>
+  <data name="ScavengerSword" xml:space="preserve">
+    <value>Sword</value>
+  </data>
+  <data name="ScavengerSniperRifle" xml:space="preserve">
+    <value>Sniper Rifle</value>
+  </data>
+  <data name="ScavengerBeamRifle" xml:space="preserve">
+    <value>Beam Rifle</value>
+  </data>
+  <data name="ScavengerBeamSaber" xml:space="preserve">
+    <value>Beam Saber</value>
+  </data>
+  <data name="ScavengerIntroDescription" xml:space="preserve">
+    <value>Weapon scavenger</value>
+  </data>
+  <data name="ScavengerShortDescription" xml:space="preserve">
+    <value>Pick up weapons and wipe out the crew</value>
+  </data>
+  <data name="ScavengerFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role with the ability to pick up and synthesize weapons.
+Can possess multiple abilities, switchable via mouse wheel.
+Ability "WEAPON SYNTHESIS"
+- Activate by holding Alt key for a certain time.
+- Synthesizes all currently held abilities to upgrade their level.
+- All pick-up-able abilities are Lv1, and can be upgraded to Lv2+ by synthesis.
+Lv1 Ability "HANDGUN"
+- Activate by pressing the button.
+- Fires a bullet in the direction the player is facing.
+- Bullet disappears after traveling a certain distance or hitting a wall.
+- Players hit by the bullet are killed.
+Lv1 Ability "FLAMETHROWER"
+- Charging starts by pressing the button.
+- Activate by pressing the button again when charge reaches 100%.
+- Fires "FLAMES" in the direction the player is facing.
+- Players hit by "FLAMES" for a certain number of seconds catch "FIRE".
+- Players who catch "FIRE" are killed after a certain time.
+- "FIRE" can be extinguished by running for a certain number of seconds while not in "FLAMES".
+Lv1 Ability "SWORD"
+- Charging starts by pressing the button.
+- Activate by pressing the button again when charge reaches 100%.
+- Players are killed if they touch the rotating sword.
+- If another player presses the USE button while the sword is out (including charging), this role can be counter-killed.
+Lv2 Ability "SNIPER RIFLE"
+- Created by synthesizing "HANDGUN" and "SWORD".
+- Activate by pressing the button.
+- Fires a bullet in the direction the player is facing.
+- Bullet disappears after hitting a wall.
+- Players hit by the bullet are killed.
+Lv2 Ability "BEAM RIFLE"
+- Created by synthesizing "HANDGUN" and "FLAMETHROWER".
+- Fires a beam in the direction the player is facing.
+- Beam disappears after traveling a certain distance.
+- Players hit by the beam are killed.
+Lv2 Ability "BEAM SABER"
+- Created by synthesizing "SWORD" and "FLAMETHROWER".
+- Charging starts by pressing the button.
+- Kill range increases as charge approaches 100%.
+- Kills players within kill range remotely by pressing the button at any time during charge.
+- If ""BEAM SABER" : Auto-detect players" is ON, the button cannot be pressed if no player is within ability range, preventing misfires.</value>
+  </data>
+  <data name="WeaponMixTimeRemain" xml:space="preserve">
+    <value>Weapon Synthesis in progress: {0} seconds remaining</value>
+  </data>
+  <data name="Raider" xml:space="preserve">
+    <value>Raider</value>
+  </data>
+  <data name="RaiderAbilityCoolTime" xml:space="preserve">
+    <value>"BOMBING MODE" : Ability Cooldown</value>
+  </data>
+  <data name="RaiderAbilityCount" xml:space="preserve">
+    <value>"BOMBING" : Ability Charges</value>
+  </data>
+  <data name="RaiderAbilityActiveTime" xml:space="preserve">
+    <value>"BOMBING MODE" : Display duration</value>
+  </data>
+  <data name="RaiderIsOpenLimit" xml:space="preserve">
+    <value>"BOMBING MODE" : Display limit</value>
+  </data>
+  <data name="RaiderLimitNum" xml:space="preserve">
+    <value>"BOMBING MODE" : Number of displays</value>
+  </data>
+  <data name="RaiderIsHidePlayerOnOpen" xml:space="preserve">
+    <value>Hide player during "BOMBING MODE"</value>
+  </data>
+  <data name="RaiderBombType" xml:space="preserve">
+    <value>"BOMBING" : Type</value>
+  </data>
+  <data name="SingleBombType" xml:space="preserve">
+    <value>Single</value>
+  </data>
+  <data name="RandomBombType" xml:space="preserve">
+    <value>Random (Multiple)</value>
+  </data>
+  <data name="CarpetHorizontalBombType" xml:space="preserve">
+    <value>Carpet Bombing (Horizontal)</value>
+  </data>
+  <data name="CarpetVerticalBombType" xml:space="preserve">
+    <value>Carpet Bombing (Vertical)</value>
+  </data>
+  <data name="RaiderBombNum" xml:space="preserve">
+    <value>Number of bombs dropped</value>
+  </data>
+  <data name="RaiderBombTargetRange" xml:space="preserve">
+    <value>Bombing range</value>
+  </data>
+  <data name="RaiderBombRange" xml:space="preserve">
+    <value>Explosion range per bomb</value>
+  </data>
+  <data name="RaiderBombAliveTime" xml:space="preserve">
+    <value>Fall time per bomb</value>
+  </data>
+  <data name="RaiderBombShowOtherPlayer" xml:space="preserve">
+    <value>Is bomb drop location visible to non-Impostors</value>
+  </data>
+  <data name="RaiderIntroDescription" xml:space="preserve">
+    <value>Requesting immediate bombing of all crew!!</value>
+  </data>
+  <data name="RaiderShortDescription" xml:space="preserve">
+    <value>Turn the area into a wasteland with "BOMBING" from "BOMBING MODE"</value>
+  </data>
+  <data name="RaiderFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role that can perform "BOMBING" on a designated point from "BOMBING MODE".
+Button ability "BOMBING MODE":
+- Pressing the button activates "BOMBING MODE".
+UI "BOMBING MODE":
+- Bombing location can be changed using the same method as player movement.
+- Pressing "BOMBING" within "BOMBING MODE" initiates "BOMBING" based on the center position.
+- "BOMBING" drops "BOMBS" according to the selected option method.
+- Players within the "BOMB'S" explosion range are killed regardless of team.
+- Sound effects for "BOMB" drops etc. are played for all players regardless of options.</value>
+  </data>
+  <data name="OpenBombUI" xml:space="preserve">
+    <value>Bombing Mode</value>
+  </data>
+  <data name="CloseBombUI" xml:space="preserve">
+    <value>Exit
+(Auto-exit in {0} sec)</value>
+  </data>
+  <data name="ExecuteBombFromUI" xml:space="preserve">
+    <value>Bomb
+({0} remaining)</value>
+  </data>
+  <data name="Glitch" xml:space="preserve">
+    <value>Glitch</value>
+  </data>
+  <data name="GlitchAbilityCoolTime" xml:space="preserve">
+    <value>"GLITCH" : Ability Cooldown</value>
+  </data>
+  <data name="GlitchAbilityCount" xml:space="preserve">
+    <value>"GLITCH" : Ability Charges</value>
+  </data>
+  <data name="GlitchRange" xml:space="preserve">
+    <value>"GLITCH" : Activation range</value>
+  </data>
+  <data name="GlitchEffectOnImpo" xml:space="preserve">
+    <value>Are Impostors affected by "GLITCH"</value>
+  </data>
+  <data name="GlitchDelay" xml:space="preserve">
+    <value>Lag between using "GLITCH" and activation</value>
+  </data>
+  <data name="GlitchActiveTime" xml:space="preserve">
+    <value>"GLITCH" : Activation duration</value>
+  </data>
+  <data name="GlitchIntroDescription" xml:space="preserve">
+    <value>It broke even though I didn't do anything!</value>
+  </data>
+  <data name="GlitchShortDescription" xml:space="preserve">
+    <value>Bug out map devices with "GLITCH"</value>
+  </data>
+  <data name="GlitchFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role that can deceive map device information with "GLITCH".
+Button ability "GLITCH":
+- Can be activated by going near map devices like Admin.
+- The information of that map device is falsified.
+- Falsified information varies depending on the map device.
+- Admin:
+- Only your information is displayed correctly.
+- Information stops updating.
+- Security:
+- Only you are displayed.
+- Telescope:
+- Only you are displayed.
+- Vitals:
+- Randomly 1-2 people appear dead.
+- Information stops updating.
+- Door Log:
+- 5-10 random logs are added.
+- Information stops updating.</value>
+  </data>
+  <data name="glitchGlitch" xml:space="preserve">
+    <value>GLITCH</value>
+  </data>
+  <data name="Hijacker" xml:space="preserve">
+    <value>Hijacker</value>
+  </data>
+  <data name="HijackerAbilityCoolTime" xml:space="preserve">
+    <value>"HIJACK" : Ability Cooldown</value>
+  </data>
+  <data name="HijackerAbilityActiveTime" xml:space="preserve">
+    <value>"HIJACK" : Duration</value>
+  </data>
+  <data name="HijackerAbilityCount" xml:space="preserve">
+    <value>"HIJACK" : Ability Charges</value>
+  </data>
+  <data name="HijackerIsRandomPlayer" xml:space="preserve">
+    <value>Is "HIJACK" target player random</value>
+  </data>
+  <data name="HijackerIntroDescription" xml:space="preserve">
+    <value>Whose vision shall I steal (hijack)?</value>
+  </data>
+  <data name="HijackerShortDescription" xml:space="preserve">
+    <value>Hijack other people's vision</value>
+  </data>
+  <data name="HijackerFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role that can see other players' vision with "HIJACK".
+Button ability "HIJACK":
+- When activated, you can see the target player's vision.
+- If "Is "HIJACK" target player random" is ON, the target player is randomly selected from survivors.</value>
+  </data>
+  <data name="hijackerHijack" xml:space="preserve">
+    <value>HIJACK</value>
+  </data>
+  <data name="TimeBreaker" xml:space="preserve">
+    <value>Time Breaker</value>
+  </data>
+  <data name="TimeBreakerAbilityCoolTime" xml:space="preserve">
+    <value>"TIME BREAK" : Ability Cooldown</value>
+  </data>
+  <data name="TimeBreakerAbilityCount" xml:space="preserve">
+    <value>"TIME BREAK" : Ability Charges</value>
+  </data>
+  <data name="TimeBreakerActiveTime" xml:space="preserve">
+    <value>"TIME BREAK" : Activation duration</value>
+  </data>
+  <data name="TimeBreakerEffectImp" xml:space="preserve">
+    <value>Are Impostors affected by "TIME BREAK"</value>
+  </data>
+  <data name="TimeBreakerIsActiveScreen" xml:space="preserve">
+    <value>Effect during "TIME BREAK" activation</value>
+  </data>
+  <data name="TimeBreakerIntroDescription" xml:space="preserve">
+    <value>Time, "STOP"</value>
+  </data>
+  <data name="TimeBreakerShortDescription" xml:space="preserve">
+    <value>Stop time and buy time</value>
+  </data>
+  <data name="TimeBreakerFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR role that can stop time with "TIME BREAK".
+Button ability "TIME BREAK":
+- When activated, stops player movement for a certain period.
+- Stacking extends the activation time.
+- Kill cooldowns etc. continue during activation.</value>
+  </data>
+  <data name="timeBreakerTimeBreak" xml:space="preserve">
+    <value>TIME BREAK</value>
+  </data>
 </root>

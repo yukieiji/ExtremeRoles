@@ -1076,4 +1076,59 @@ abilities or role revelation</value>
   <data name="AccelerateSet" xml:space="preserve">
     <value>PANEL</value>
   </data>
+  <data name="Skater" xml:space="preserve">
+    <value>Skater</value>
+  </data>
+  <data name="NiceSkater" xml:space="preserve">
+    <value>Nice Skater</value>
+  </data>
+  <data name="EvilSkater" xml:space="preserve">
+    <value>Evil Skater</value>
+  </data>
+  <data name="SkaterAbilityCoolTime" xml:space="preserve">
+    <value>"SKATE" : Ability Cooldown</value>
+  </data>
+  <data name="SkaterAbilityActiveTime" xml:space="preserve">
+    <value>"SKATE" : Time until "SKATE" can be cancelled</value>
+  </data>
+  <data name="SkaterAbilityCount" xml:space="preserve">
+    <value>"SKATE" : Ability Charges</value>
+  </data>
+  <data name="SkaterAcceleration" xml:space="preserve">
+    <value>"SKATE" : Acceleration while skating</value>
+  </data>
+  <data name="SkaterMaxSpeed" xml:space="preserve">
+    <value>"SKATE" : Max speed while skating</value>
+  </data>
+  <data name="SkaterFriction" xml:space="preserve">
+    <value>"SKATE" : Friction coefficient while skating</value>
+  </data>
+  <data name="SkaterUseE" xml:space="preserve">
+    <value>"SKATE" : Bouncing on wall collision</value>
+  </data>
+  <data name="SkaterEValue" xml:space="preserve">
+    <value>"SKATE" : Coefficient of restitution during collision</value>
+  </data>
+  <data name="SkaterCanUseSpeed" xml:space="preserve">
+    <value>"SKATE" : Max speed at which USE button etc. can be used</value>
+  </data>
+  <data name="SkaterIntroDescription" xml:space="preserve">
+    <value>The inside of the ship is my skate rink</value>
+  </data>
+  <data name="SkaterShortDescription" xml:space="preserve">
+    <value>Use "SKATE" to get ahead of your rivals</value>
+  </data>
+  <data name="SkaterFullDescription" xml:space="preserve">
+    <value>A role that can accelerate with the "SKATE" ability.
+Button ability "SKATE":
+- When activated and moving, it behaves as if sliding on ice and gradually accelerates (can accelerate up to maximum speed).
+- When accelerated, it is not possible to stop or turn immediately (same when hitting a wall).
+- If a certain speed is exceeded, the USE button etc. cannot be used.</value>
+  </data>
+  <data name="SkaterSkateOn" xml:space="preserve">
+    <value>SKATE</value>
+  </data>
+  <data name="SkaterSkateOff" xml:space="preserve">
+    <value>Cancel SKATE</value>
+  </data>
 </root>
