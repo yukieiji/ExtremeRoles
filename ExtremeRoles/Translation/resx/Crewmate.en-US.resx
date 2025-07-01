@@ -858,6 +858,9 @@ as a teleport targeted position</value>
     <value>"DEFLECT" : Does include map's initial spawn point
 as a teleport targeted position</value>
   </data>
+  <data name="DelusionerEnableCounter" xml:space="preserve">
+    <value>"DEFLECT" : Enable misfire</value>
+  </data>
   <data name="DelusionerIntroDescription" xml:space="preserve">
     <value>STAY THE HECK AWAY FROM ME!!</value>
   </data>
