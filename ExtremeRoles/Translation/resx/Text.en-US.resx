@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -1035,15 +1035,207 @@ Do you want to continue Installing?</value>
     <value>Does IMPOSTORS allowed to assign</value>
   </data>
   <data name="ImposterSelectedRate" xml:space="preserve">
-    <value>Assign rate as Impostor</value>
+    <value>Impostor Assign Rate</value>
   </data>
   <data name="IsMultiAssign" xml:space="preserve">
-    <value>Does overlap with other roles</value>
+    <value>Has other role</value>
   </data>
   <data name="AssignsNum" xml:space="preserve">
     <value>Players per 1 pair</value>
   </data>
   <data name="DefaultKey" xml:space="preserve">
     <value>Default</value>
+  </data>
+  <data name="ExR_SettingsDescription" xml:space="preserve">
+    <value>Configure ExtremeRoles settings</value>
+  </data>
+  <data name="OptionSettingChange" xml:space="preserve">
+    <value>[{0}-{1}] "{2}" has been updated to "{3}"</value>
+  </data>
+  <data name="PresetOptionSelection" xml:space="preserve">
+    <value>Preset to use</value>
+  </data>
+  <data name="RandomOption" xml:space="preserve">
+    <value>Random Number Settings</value>
+  </data>
+  <data name="RoleSpawnCategory" xml:space="preserve">
+    <value>Role Spawn Count</value>
+  </data>
+  <data name="GhostRoleSpawnCategory" xml:space="preserve">
+    <value>Ghost Role Spawn Count Settings</value>
+  </data>
+  <data name="MeetingOption" xml:space="preserve">
+    <value>Meeting Settings</value>
+  </data>
+  <data name="MeetingOptionUseRaiseHand" xml:space="preserve">
+    <value>Use "Raise Hand" button</value>
+  </data>
+  <data name="ExiledOption" xml:space="preserve">
+    <value>Exile Settings</value>
+  </data>
+  <data name="VentOption" xml:space="preserve">
+    <value>Vent Settings</value>
+  </data>
+  <data name="TaskOption" xml:space="preserve">
+    <value>Task Settings</value>
+  </data>
+  <data name="RandomSpawnOption" xml:space="preserve">
+    <value>Random Spawn Settings</value>
+  </data>
+  <data name="AdminOption" xml:space="preserve">
+    <value>Admin Settings</value>
+  </data>
+  <data name="SecurityOption" xml:space="preserve">
+    <value>Security Camera and Log Settings</value>
+  </data>
+  <data name="VitalOption" xml:space="preserve">
+    <value>Vitals Settings</value>
+  </data>
+  <data name="VitalOptionPolusVitalPos" xml:space="preserve">
+    <value>Polus Vitals Position</value>
+  </data>
+  <data name="RandomMapOption" xml:space="preserve">
+    <value>Random Map Settings</value>
+  </data>
+  <data name="TaskWinOption" xml:space="preserve">
+    <value>Task Victory Settings</value>
+  </data>
+  <data name="NeutralWinOption" xml:space="preserve">
+    <value>Neutral Team Victory Settings</value>
+  </data>
+  <data name="GhostRoleGlobalOption" xml:space="preserve">
+    <value>General Ghost Role Settings</value>
+  </data>
+  <data name="OptionCategory" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="SafeBootMessage" xml:space="preserve">
+    <value>An issue occurred during ExR startup. ExR and other components are running with minimal functionality.</value>
+  </data>
+  <data name="searchDowngradeWait" xml:space="preserve">
+    <value>Searching for downgrade target...</value>
+  </data>
+  <data name="downgradeStart" xml:space="preserve">
+    <value>Starting downgrade</value>
+  </data>
+  <data name="downgradeManually" xml:space="preserve">
+    <value>Downgrade failed. Please downgrade manually.</value>
+  </data>
+  <data name="downgradeRestart" xml:space="preserve">
+    <value>Downgrade successful. Please restart the game.</value>
+  </data>
+  <data name="downgradeInProgress" xml:space="preserve">
+    <value>Downgrading...</value>
+  </data>
+  <data name="downgradeNotFound" xml:space="preserve">
+    <value>Downgrade target not found.</value>
+  </data>
+  <data name="donwgradeConfirm" xml:space="preserve">
+    <value>This will downgrade ExR by one version. Playing on the latest version with bug fixes and new features is recommended unless there are game-breaking bugs. Continue downgrade?</value>
+  </data>
+  <data name="DowngradeButton" xml:space="preserve">
+    <value>Downgrade</value>
+  </data>
+  <data name="EnableKey" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="DisableKey" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="BothImpostorAndNautral" xml:space="preserve">
+    <value>Both Impostor and Neutral</value>
+  </data>
+  <data name="SkipSettingUsingTab" xml:space="preserve">
+    <value>(Tab/Shift + Tab to change page)</value>
+  </data>
+  <data name="autoDisconnectTo" xml:space="preserve">
+    <value>Auto-disconnect in {0} seconds:</value>
+  </data>
+  <data name="LoveYou" xml:space="preserve">
+    <value>Lover</value>
+  </data>
+  <data name="OnGameStartOption" xml:space="preserve">
+    <value>Initial Settings at Game Start</value>
+  </data>
+  <data name="OnGameStartOptionIsKillCoolDownIsTen" xml:space="preserve">
+    <value>Is initial Kill Cooldown 10 seconds</value>
+  </data>
+  <data name="OnGameStartOptionRemoveSomeoneButton" xml:space="preserve">
+    <value>Consume someone's meeting button beforehand</value>
+  </data>
+  <data name="OnGameStartOptionReduceNum" xml:space="preserve">
+    <value>Number to consume</value>
+  </data>
+  <data name="OnGameStartOptionFirstButtonCoolDown" xml:space="preserve">
+    <value>Cannot press meeting button after game start</value>
+  </data>
+  <data name="roleHistorySummary" xml:space="preserve">
+    <value>- Role Change History</value>
+  </data>
+  <data name="roleHistoryCause" xml:space="preserve">
+    <value>Cause</value>
+  </data>
+  <data name="EmergencyTaskOption" xml:space="preserve">
+    <value>Emergency Task Time Limit</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldReactor" xml:space="preserve">
+    <value>"The Skeld" : "Fix Reactor"</value>
+  </data>
+  <data name="EmergencyTaskOptionSkeldOxygen" xml:space="preserve">
+    <value>"The Skeld" : "Fix Oxygen"</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqReactor" xml:space="preserve">
+    <value>"MIRA HQ" : "Fix Reactor"</value>
+  </data>
+  <data name="EmergencyTaskOptionMiraHqOxygen" xml:space="preserve">
+    <value>"MIRA HQ" : "Fix Oxygen"</value>
+  </data>
+  <data name="EmergencyTaskOptionPolusReactor" xml:space="preserve">
+    <value>"Polus" : "Reset Seismic Stabilizers"</value>
+  </data>
+  <data name="EmergencyTaskOptionAirshipHeli" xml:space="preserve">
+    <value>"Airship" : "Avert Crash Course"</value>
+  </data>
+  <data name="EmergencyTaskOptionFungleReactor" xml:space="preserve">
+    <value>"Fungle" : "Fix Reactor"</value>
+  </data>
+  <data name="GhostRoleGlobalOptionHauntMinigameMaxSpeed" xml:space="preserve">
+    <value>"HAUNT" : Maximum movement speed</value>
+  </data>
+  <data name="IsRatioTeamAssign" xml:space="preserve">
+    <value>Team Ratio Assign</value>
+  </data>
+  <data name="AssignRatio" xml:space="preserve">
+    <value>Assign Ratio</value>
+  </data>
+  <data name="OneToOne" xml:space="preserve">
+    <value>1:1</value>
+  </data>
+  <data name="TwoToOne" xml:space="preserve">
+    <value>2:1</value>
+  </data>
+  <data name="OneToTwo" xml:space="preserve">
+    <value>1:2</value>
+  </data>
+  <data name="TwoToTwo" xml:space="preserve">
+    <value>2:2</value>
+  </data>
+  <data name="OneToThree" xml:space="preserve">
+    <value>1:3</value>
+  </data>
+  <data name="ThreeToOne" xml:space="preserve">
+    <value>3:1</value>
+  </data>
+  <data name="ThreeToTwo" xml:space="preserve">
+    <value>3:2</value>
+  </data>
+  <data name="TwoToThree" xml:space="preserve">
+    <value>2:3</value>
+  </data>
+  <data name="ThreeToThree" xml:space="preserve">
+    <value>3:3</value>
+  </data>
+  <data name="SpawnRate" xml:space="preserve">
+    <value>Spawn Rate</value>
   </data>
 </root>
