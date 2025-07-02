@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 using Hazel;
@@ -83,6 +83,11 @@ public sealed class RaiderBombSystem(RaiderBombSystem.Parameter parameter) : IDi
 	private float timer = 0.0f;
 
 	public bool IsDirty { get; private set; }
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
+	}
 
 	public void Deteriorate(float deltaTime)
 	{

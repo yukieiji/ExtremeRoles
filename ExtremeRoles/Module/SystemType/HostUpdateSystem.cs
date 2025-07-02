@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.Interface;
 
 using Hazel;
 
@@ -11,6 +11,10 @@ public sealed class HostUpdateSystem : IDirtableSystemType
 	private readonly List<IUpdatableObject> updateObject = new List<IUpdatableObject>();
 
 	public bool IsDirty => false;
+
+	public void MarkClean()
+	{
+	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{ }

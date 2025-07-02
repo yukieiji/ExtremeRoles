@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Meeting;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -42,7 +43,9 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 		if (OnemanMeetingSystemManager.TryGetActiveSystem(out var system))
 		{
 			result = group.DefaultFlatten(startPos);
-			return system.Caller == localPlayer.PlayerId;
+			bool isVotor = system.Caller == localPlayer.PlayerId;
+			Logging.Debug($"Is oneman meeting votor : {isVotor}");
+			return isVotor;
 		}
 
 		var singleRole = ExtremeRoleManager.GetLocalPlayerRole();
@@ -50,6 +53,7 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			monika.InvalidPlayer(localPlayer))
 		{
 			result = null;
+			Logging.Debug($"LocalPlayerId : {localPlayer.PlayerId} is Monika trash now");
 			return false;
 		}
 
@@ -61,40 +65,47 @@ public sealed class ExtremePlayerVoteAreaButton(IntPtr ptr) : MonoBehaviour(ptr)
 			isOkRoleAbilityButton(pva, buttonRole) &&
 			isOkRoleAbilityButton(pva, anotherButtonRole))
 		{
-			if (button.IsRecreateButtn(role.Id, buttonRole, out var element1))
+			Logging.Debug($"LocalPlayer has dual meeting ability button");
+
+			bool isRecreateMain = button.IsRecreateButtn(role.Id, buttonRole, out var mainButton);
+			bool isRecreateSub = button.IsRecreateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var subButton);
+
+            if (isRecreateMain || isRecreateSub)
 			{
 				group.ResetSecond();
-			}
-			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, anotherButtonRole, out var element2))
-			{
-				group.ResetSecond();
-			}
-			group.AddSecondRow(element1);
-			group.AddSecondRow(element2);
+                group.AddSecondRow(mainButton);
+                group.AddSecondRow(subButton);
+            }
 			result = group.Flatten(startPos);
 		}
 		else if (
 			role is IRoleMeetingButtonAbility mainButtonRole &&
 			isOkRoleAbilityButton(pva, mainButtonRole))
 		{
-			if (button.IsRecreateButtn(role.Id, mainButtonRole, out var element1))
+			Logging.Debug($"LocalPlayer has one meeting ability button");
+
+			group.ResetSecond();
+
+            if (button.IsRecreateButtn(role.Id, mainButtonRole, out var element1))
 			{
 				group.ResetFirst();
-			}
-			group.ResetSecond();
-			group.AddFirstRow(element1);
+                group.AddFirstRow(element1);
+            }
 			result = group.Flatten(startPos);
 		}
 		else if (
 			multiRole?.AnotherRole is IRoleMeetingButtonAbility subButtonRole &&
 			isOkRoleAbilityButton(pva, subButtonRole))
 		{
+			Logging.Debug($"LocalPlayer has one meeting ability button");
+
+			group.ResetSecond();
+
 			if (button.IsRecreateButtn(multiRole.AnotherRole.Id, subButtonRole, out var element1))
 			{
 				group.ResetFirst();
-			}
-			group.ResetSecond();
-			group.AddFirstRow(element1);
+                group.AddFirstRow(element1);
+            }
 			result = group.Flatten(startPos);
 		}
 		else

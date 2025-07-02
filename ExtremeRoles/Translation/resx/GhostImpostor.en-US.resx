@@ -214,4 +214,33 @@ IMPOSTORS.
   <data name="IgniterSwitchLight" xml:space="preserve">
     <value>An Igniter turned off the lights!</value>
   </data>
+  <data name="Doppelganger" xml:space="preserve">
+    <value>Doppelganger</value>
+  </data>
+  <data name="DoppelgangerAbilityCoolTime" xml:space="preserve">
+    <value>"DOPPEL" : Ability Cooldown</value>
+  </data>
+  <data name="DoppelgangerAbilityActiveTime" xml:space="preserve">
+    <value>"DOPPEL" : Duration for dummy to be visible</value>
+  </data>
+  <data name="DoppelgangerIsReportAbility" xml:space="preserve">
+    <value>"DOPPEL" : Does alert ability use on meetings</value>
+  </data>
+  <data name="DoppelgangerAbilityCount" xml:space="preserve">
+    <value>"DOPPEL" : Ability Charges</value>
+  </data>
+  <data name="DoppelgangerDoppel" xml:space="preserve">
+    <value>Someone's doppelganger was found</value>
+  </data>
+  <data name="DoppelgangerDoppelButton" xml:space="preserve">
+    <value>DOPPEL</value>
+  </data>
+  <data name="DoppelgangerFullDescription" xml:space="preserve">
+    <value>An IMPOSTOR GHOST who can show a player's dummy to survivors.
+Button ability "DOPPEL":
+After pressing the button, you can show a dummy of the selected player to survivors.</value>
+  </data>
+  <data name="DoppelgangerShortDescription" xml:space="preserve">
+    <value>Surprise everyone with "DOPPEL"</value>
+  </data>
 </root>

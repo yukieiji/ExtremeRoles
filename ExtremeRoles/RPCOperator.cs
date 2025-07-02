@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using InnerNet;
-using Hazel;
 using AmongUs.GameOptions;
-
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Compat;
+using ExtremeRoles.Compat.ModIntegrator;
 using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Extension.Ship;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Compat.ModIntegrator;
-using ExtremeRoles.Compat;
+using ExtremeRoles.Module.Event;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using Hazel;
+using InnerNet;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 
 
@@ -364,7 +363,9 @@ public static class RPCOperator
             animate = false;
         }
         source.Shapeshift(target, animate);
-    }
+
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
 
     public static void UncheckedMurderPlayer(
         byte sourceId, byte targetId, byte useAnimation)
@@ -382,7 +383,9 @@ public static class RPCOperator
             }
             source.MurderPlayer(target);
         }
-    }
+
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
 
 	public static void UncheckedExiledPlayer(byte targetId)
 	{
@@ -399,6 +402,8 @@ public static class RPCOperator
 		}
 		target.Exiled();
 		role.ExiledAction(target);
+
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
 	}
 
 	public static void UncheckedRevive(byte targetId)
@@ -417,7 +422,9 @@ public static class RPCOperator
             // 死体は消しておく
             CleanDeadBody(target.PlayerId);
         }
-    }
+
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
 
 
     public static void SetWinGameControlId(int id)

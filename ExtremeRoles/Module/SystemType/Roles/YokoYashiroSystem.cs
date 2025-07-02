@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Hazel;
 using System.Collections.Generic;
 
@@ -136,6 +136,11 @@ public sealed class YokoYashiroSystem(float activeTime, float sealTime, float ra
 				info.Status == YashiroInfo.StatusType.YashiroActive &&
 				(x.Value - pos).magnitude <= this.range)
 			.Any();
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
+	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{
