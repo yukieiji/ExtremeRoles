@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -12,6 +12,8 @@ public sealed class PlayerVoteAreaButtonGroup
 {
 	private readonly List<PlayerVoteAreaButtonPostionComputer> first = new(2);
 	private readonly List<PlayerVoteAreaButtonPostionComputer> second = new();
+
+	private const float yOffset = 0.25f;
 
 	public PlayerVoteAreaButtonGroup(PlayerVoteArea __instance)
 	{
@@ -37,8 +39,8 @@ public sealed class PlayerVoteAreaButtonGroup
 
 		var result = new List<PlayerVoteAreaButtonPostionComputer>(secondCount + this.first.Count);
 
-		var firstOffset = secondCount > 0 ? Vector2.up * 0.25f : Vector2.zero;
-		var secondOffset = secondCount > 0 ? Vector2.down * 0.25f : Vector2.zero;
+		var firstOffset = secondCount > 0 ? Vector2.up * yOffset : Vector2.zero;
+		var secondOffset = secondCount > 0 ? Vector2.down * yOffset : Vector2.zero;
 
 		foreach (var buttn in setUpComputer(this.first, firstOffset, startPos))
 		{
