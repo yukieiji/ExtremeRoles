@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 
 using Hazel;
@@ -43,8 +43,13 @@ public sealed class TimeBreakerTimeBreakSystem(
 		}
 	}
 
+	public void MarkClean()
+	{
+	}
+
 	public void Deserialize(MessageReader reader, bool initialState)
-	{ }
+	{
+	}
 
 	public void Reset(ResetTiming timing, PlayerControl? resetPlayer = null)
 	{

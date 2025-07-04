@@ -2,6 +2,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Helper;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.Meeting;
@@ -10,6 +12,8 @@ public sealed class PlayerVoteAreaButtonGroup
 {
 	private readonly List<PlayerVoteAreaButtonPostionComputer> first = new(2);
 	private readonly List<PlayerVoteAreaButtonPostionComputer> second = new();
+
+	private const float yOffset = 0.25f;
 
 	public PlayerVoteAreaButtonGroup(PlayerVoteArea __instance)
 	{
@@ -35,8 +39,8 @@ public sealed class PlayerVoteAreaButtonGroup
 
 		var result = new List<PlayerVoteAreaButtonPostionComputer>(secondCount + this.first.Count);
 
-		var firstOffset = secondCount > 0 ? Vector2.up * 0.65f : Vector2.zero;
-		var secondOffset = secondCount > 0 ? Vector2.down * 0.65f : Vector2.zero;
+		var firstOffset = secondCount > 0 ? Vector2.up * yOffset : Vector2.zero;
+		var secondOffset = secondCount > 0 ? Vector2.down * yOffset : Vector2.zero;
 
 		foreach (var buttn in setUpComputer(this.first, firstOffset, startPos))
 		{
@@ -52,10 +56,16 @@ public sealed class PlayerVoteAreaButtonGroup
 		=> setUpComputer(this.first.GetRange(0, 2), Vector2.zero, startPos);
 
 	public void AddFirstRow(UiElement element)
-		=> add(this.first, element);
+	{
+		Logging.Debug($"Add first row : {element.name}");
+		add(this.first, element);
+	}
 
 	public void AddSecondRow(UiElement element)
-		=> add(this.second, element);
+	{
+		Logging.Debug($"Add second row : {element.name}");
+		add(this.second, element);
+	}
 
 	private static IEnumerable<IPlayerVoteAreaButtonPostionComputer> setUpComputer(
 		IEnumerable<PlayerVoteAreaButtonPostionComputer> setUpContainer,
@@ -65,6 +75,7 @@ public sealed class PlayerVoteAreaButtonGroup
 		{
 			button.Offset = offset;
 			button.StartOffset = statPos;
+			Logging.Debug($"Meeting Button[{button.ToString()}]");
 			yield return button;
 		}
 	}

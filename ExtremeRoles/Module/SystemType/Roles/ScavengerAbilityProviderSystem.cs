@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -214,6 +214,10 @@ public sealed class ScavengerAbilitySystem(
 
 		public void Dispose()
 		{ }
+	}
+
+	public void MarkClean()
+	{
 	}
 
 	public void Deteriorate(float deltaTime)

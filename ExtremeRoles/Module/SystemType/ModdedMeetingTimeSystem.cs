@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
@@ -25,6 +25,11 @@ public sealed class ModdedMeetingTimeSystem : IDirtableSystemType
 	public bool IsDirty { get; set; } = false;
 
 	public int HudTimerStartOffset => this.PermOffset + this.TempOffset;
+
+	public void MarkClean()
+	{
+		this.IsDirty = false;
+	}
 
 	public void Deserialize(MessageReader reader, bool initialState)
 	{

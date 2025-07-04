@@ -1,5 +1,5 @@
-﻿using AmongUs.GameOptions;
-
+using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.RoleAssign;
@@ -45,6 +45,13 @@ public sealed class NotAssignPlayerData
 				default:
 					break;
 			}
+		}
+
+		// シオンのプレイヤーはクルーではなく割り当て済みなので
+		if (ExtremeGameModeManager.Instance.EnableXion)
+		{
+			--crewSingleAssignNum;
+			--crewMultiAssignNum;
 		}
 
 		CrewmateSingleAssignPlayerNum = crewSingleAssignNum;

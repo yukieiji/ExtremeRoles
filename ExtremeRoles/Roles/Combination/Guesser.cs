@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -71,7 +71,7 @@ public sealed class Guesser :
 
 	public Sprite AbilityImage => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
 
-	private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
+	private static IReadOnlySet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Assassin,
         ExtremeRoleId.Marlin,
@@ -374,8 +374,10 @@ public sealed class Guesser :
         }
     }
 
+	private const float defaultXPos = -2.85f;
+	private const float subRoleXPos = -1.5f;
 
-    public Guesser(
+	public Guesser(
         ) : base(
             ExtremeRoleId.Guesser,
             ExtremeRoleType.Crewmate,
@@ -541,16 +543,20 @@ public sealed class Guesser :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (MeetingHud.Instance)
+		var meeting = MeetingHud.Instance;
+        if (meeting != null)
         {
             if (this.meetingGuessText == null)
             {
                 this.meetingGuessText = UnityEngine.Object.Instantiate(
                     HudManager.Instance.TaskPanel.taskText,
-                    MeetingHud.Instance.transform);
+					meeting.transform);
                 this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 this.meetingGuessText.transform.position = Vector3.zero;
-                this.meetingGuessText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+
+				float xPos = this.AnotherRole != null ? subRoleXPos : defaultXPos;
+
+                this.meetingGuessText.transform.localPosition = new Vector3(xPos, 3.15f, -20f);
                 this.meetingGuessText.transform.localScale *= 0.9f;
                 this.meetingGuessText.color = Palette.White;
                 this.meetingGuessText.gameObject.SetActive(false);
