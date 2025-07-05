@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
