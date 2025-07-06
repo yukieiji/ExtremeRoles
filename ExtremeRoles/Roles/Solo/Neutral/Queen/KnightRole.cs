@@ -57,7 +57,8 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if (targetRole.Id is ExtremeRoleId.Queen or ExtremeRoleId.Servant ||
+		if ((canSeeQueen(targetRole) && targetRole.Id is ExtremeRoleId.Queen) ||
+			targetRole.Id is ExtremeRoleId.Servant ||
 			(
 				targetRole is MultiAssignRoleBase multiRole &&
 				multiRole.AnotherRole != null &&

@@ -57,7 +57,7 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if (targetRole.Id is ExtremeRoleId.Yandere ||
+		if ((canSeeYandere(targetRole) && targetRole.Id is ExtremeRoleId.Yandere) ||
 			(this.status is not null && this.status.IsOneSideLover(targetRole)))
 		{
 			return true;

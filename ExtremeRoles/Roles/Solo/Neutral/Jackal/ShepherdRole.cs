@@ -58,7 +58,8 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if (targetRole.Id is ExtremeRoleId.Jackal or ExtremeRoleId.Sidekick)
+		if ((canSeeJackal(targetRole) && targetRole.Id is ExtremeRoleId.Jackal) ||
+			targetRole.Id is ExtremeRoleId.Sidekick)
 		{
 			return true;
 		}
