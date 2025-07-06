@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Extension.Controller;
+using ExtremeRoles.Extension.Controller;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
@@ -212,6 +212,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			Create,
 			Start,
+			HideWepon,
 			Hide,
 			FireStart,
 			FireEnd,
@@ -231,7 +232,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				ChargingAndActivatingCountBehaviour.ReduceTiming.OnActive,
 				IRoleAbility.IsCommonUse,
 				IRoleAbility.IsCommonUse,
-				RpcHide, RpcHide);
+				rpcHideWepon, rpcHideWepon);
 			return behavior;
 		}
 
@@ -246,8 +247,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				case Ops.Start:
 					startFlameFire();
 					break;
+				case Ops.HideWepon:
+					this.hideWepon();
+					break;
 				case Ops.Hide:
-					this.hide();
+					this.hideWepon();
+					this.hideFrame();
 					break;
 				case Ops.FireStart:
 					byte startTargetPlayerId = reader.ReadByte();
@@ -272,6 +277,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return;
 			}
 			IWeapon.SimpleRpcOps(Ability.ScavengerFlame, (byte)Ops.Hide);
+		}
+
+		private void rpcHideWepon()
+		{
+			if (this.flame == null)
+			{
+				return;
+			}
+			IWeapon.SimpleRpcOps(Ability.ScavengerFlame, (byte)Ops.HideWepon);
 		}
 
 		private bool rpcStartFlameCharge()
@@ -345,13 +359,20 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			fire.gameObject.SetActive(false);
 		}
 
-		private void hide()
+		private void hideWepon()
 		{
 			if (this.flame == null)
 			{
 				return;
 			}
 			this.flame.gameObject.SetActive(false);
+		}
+		private void hideFrame()
+		{
+			foreach (var f in this.allFire.Values)
+			{
+				f.gameObject.SetActive(false);
+			}
 		}
 
 		private bool isFireThrowerUse(bool isCharge, float chargeGauge)
