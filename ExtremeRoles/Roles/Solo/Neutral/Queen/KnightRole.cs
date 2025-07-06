@@ -62,9 +62,9 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if ((
+		if (this.canSeeQueen(targetRole) && (
+			(
 				this.canNotKillQueen &&
-				this.canSeeQueen(targetRole) &&
 				targetRole.Id is ExtremeRoleId.Queen
 			)
 			||
@@ -76,7 +76,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 					multiRole.AnotherRole != null &&
 					multiRole.AnotherRole.Id is ExtremeRoleId.Servant
 				)
-			))
+			)))
 		{
 			return true;
 		}
@@ -123,7 +123,7 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 			taskOpt, format: OptionUnit.Percentage);
 
 		factory.CreateBoolOption(Option.CanKillQueen, true, taskOpt);
-		factory.CreateBoolOption(Option.CanKillServant, true);
+		factory.CreateBoolOption(Option.CanKillServant, true, taskOpt);
 	}
 
 	protected override void RoleSpecificInit()

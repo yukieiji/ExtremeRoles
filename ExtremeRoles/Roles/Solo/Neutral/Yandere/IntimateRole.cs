@@ -62,9 +62,9 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if ((
+		if (this.canSeeYandere(targetRole) && (
+			(
 				this.canNotKillYandere &&
-				this.canSeeYandere(targetRole) &&
 				targetRole.Id is ExtremeRoleId.Yandere
 			)
 			||
@@ -72,7 +72,7 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 				this.canNotKillOneSideLover &&
 				this.status is not null &&
 				this.status.IsOneSideLover(targetRole)
-			))
+			)))
 		{
 			return true;
 		}
@@ -114,9 +114,9 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 		factory.CreateIntOption(
 			Option.SeeYandereTaskRate, 50, 0, 100, 10,
 			taskOpt, format: OptionUnit.Percentage);
-		factory.CreateBoolOption(Option.CanKillYandere, true, taskOpt);
 
-		factory.CreateBoolOption(Option.CanKillOneSideLover, true);
+		factory.CreateBoolOption(Option.CanKillYandere, true, taskOpt);
+		factory.CreateBoolOption(Option.CanKillOneSideLover, true, taskOpt);
 	}
 
 	protected override void RoleSpecificInit()

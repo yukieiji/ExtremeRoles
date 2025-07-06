@@ -1216,7 +1216,7 @@
     <value>タスクを持つか</value>
   </data>
   <data name="HereticSeeImpostorTaskGage" xml:space="preserve">
-    <value>インポスターが見えるようになるタスク進捗率</value>
+    <value>「インポスター」が見えるようになるタスク進捗率</value>
   </data>
   <data name="HereticKillMode" xml:space="preserve">
     <value>「呪殺」のモード</value>
@@ -1272,7 +1272,7 @@
     <value>キルできるか</value>
   </data>
   <data name="ShepherdIsSubTeam" xml:space="preserve">
-    <value>ジャッカルのサブチームか</value>
+    <value>「ジャッカル」のサブチームか</value>
   </data>
   <data name="ShepherdUseVent" xml:space="preserve">
     <value>ベントを使用できるか</value>
@@ -1281,7 +1281,7 @@
     <value>タスクを持つか</value>
   </data>
   <data name="ShepherdSeeJackalTaskRate" xml:space="preserve">
-    <value>ジャッカルが見えるようになるタスク進捗率</value>
+    <value>「ジャッカル」が見えるようになるタスク進捗率</value>
   </data>
   <data name="ShepherdIntroDescription" xml:space="preserve">
     <value>ジャッカルの指導者</value>
@@ -1316,7 +1316,7 @@
     <value>タスクを持つか</value>
   </data>
   <data name="FurrySeeJackalTaskRate" xml:space="preserve">
-    <value>ジャッカルが見えるようになるタスク進捗率</value>
+    <value>「ジャッカル」が見えるようになるタスク進捗率</value>
   </data>
   <data name="FurryIntroDescription" xml:space="preserve">
     <value>ジャッカルの血が流れている(？)クルー</value>
@@ -1342,7 +1342,7 @@
     <value>キルできるか</value>
   </data>
   <data name="IntimateIsSubTeam" xml:space="preserve">
-    <value>ヤンデレのサブチームか</value>
+    <value>「ヤンデレ」のサブチームか</value>
   </data>
   <data name="IntimateUseVent" xml:space="preserve">
     <value>ベントを使用できるか</value>
@@ -1351,7 +1351,7 @@
     <value>タスクを持つか</value>
   </data>
   <data name="IntimateSeeYandereTaskRate" xml:space="preserve">
-    <value>ヤンデレが見えるようになるタスク進捗率</value>
+    <value>「ヤンデレ」が見えるようになるタスク進捗率</value>
   </data>
   <data name="IntimateFullDescription" xml:space="preserve">
     <value>第三陣営のフォールバックサブチーム役職
@@ -1386,7 +1386,7 @@
     <value>タスクを持つか</value>
   </data>
   <data name="SurrogatorSeeYandereTaskRate" xml:space="preserve">
-    <value>ヤンデレが見えるようになるタスク進捗率</value>
+    <value>「ヤンデレ」が見えるようになるタスク進捗率</value>
   </data>
   <data name="SurrogatorAbilityCoolTime" xml:space="preserve">
     <value>「死体纏い」のクールタイム</value>
@@ -1433,7 +1433,7 @@
     <value>ナイト</value>
   </data>
   <data name="KnightIsSubTeam" xml:space="preserve">
-    <value>クイーンのサブチームか</value>
+    <value>「クイーン」のサブチームか</value>
   </data>
   <data name="KnightUseVent" xml:space="preserve">
     <value>ベントを使用できるか</value>
@@ -1442,7 +1442,7 @@
     <value>タスクを持つか</value>
   </data>
   <data name="KnightSeeQueenTaskRate" xml:space="preserve">
-    <value>クイーンが見えるようになるタスク進捗率</value>
+    <value>「クイーン」が見えるようになるタスク進捗率</value>
   </data>
   <data name="KnightIntroDescription" xml:space="preserve">
     <value>クイーン親衛隊の切り込み隊長</value>
@@ -1476,7 +1476,7 @@
     <value>タスクを持つか</value>
   </data>
   <data name="PawnSeeQueenTaskRate" xml:space="preserve">
-    <value>クイーンが見えるようになるタスク進捗率</value>
+    <value>「クイーン」が見えるようになるタスク進捗率</value>
   </data>
   <data name="PawnIntroDescription" xml:space="preserve">
     <value>クイーンの先遣隊</value>
@@ -1520,21 +1520,21 @@
     <value>ナイトの活躍により、全クイーン陣営</value>
   </data>
   <data name="ShepherdCanKillJackal" xml:space="preserve">
-    <value>ジャッカルを見れる時にジャッカルをキルできるか</value>
+    <value>「ジャッカル」を見れる時に「ジャッカル」をキルできるか</value>
   </data>
   <data name="ShepherdCanKillSidekick" xml:space="preserve">
-    <value>サイドキックをキルできるか</value>
+    <value>「ジャッカル」を見れる時に「サイドキック」をキルできるか</value>
   </data>
   <data name="IntimateCanKillYandere" xml:space="preserve">
-    <value>ヤンデレを見れる時にヤンデレをキルできるか</value>
+    <value>「ヤンデレ」を見れる時に「ヤンデレ」をキルできるか</value>
   </data>
   <data name="IntimateCanKillOneSideLover" xml:space="preserve">
-    <value>「想い人」をキルできるか</value>
+    <value>「ヤンデレ」を見れる時に「想い人」をキルできるか</value>
   </data>
   <data name="KnightCanKillQueen" xml:space="preserve">
-    <value>クイーンを見れる時にクイーンをキルできるか</value>
+    <value>「クイーン」を見れる時に「クイーン」をキルできるか</value>
   </data>
   <data name="KnightCanKillServant" xml:space="preserve">
-    <value>サーヴァントをキルできるか</value>
+    <value>「クイーン」を見れる時に「サーヴァント」をキルできるか</value>
   </data>
 </root>

@@ -63,16 +63,16 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if ((
+		if (this.canSeeJackal(targetRole) && (
+			(
 				this.canNotKillJackal &&
-				this.canSeeJackal(targetRole) &&
 				targetRole.Id is ExtremeRoleId.Jackal
 			)
 			||
 			(
 				this.canNotKillSideKick &&
 				targetRole.Id is ExtremeRoleId.Sidekick
-			))
+			)))
 		{
 			return true;
 		}
@@ -110,7 +110,7 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 			taskOpt, format: OptionUnit.Percentage);
 
 		factory.CreateBoolOption(Option.CanKillJackal, true, taskOpt);
-		factory.CreateBoolOption(Option.CanKillSidekick, true);
+		factory.CreateBoolOption(Option.CanKillSidekick, true, taskOpt);
 	}
 
 	protected override void RoleSpecificInit()
