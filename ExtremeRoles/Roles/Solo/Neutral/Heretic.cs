@@ -303,7 +303,7 @@ public sealed class Heretic :
 			Option.CanKillImpostor);
 		this.killMode = (KillMode)loader.GetValue<Option, int>(Option.KillMode);
 		this.range = loader.GetValue<Option, float>(Option.Range);
-		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage > 0;
+		this.isSeeImpostorNow = this.HasTask && this.seeImpostorTaskGage <= 0;
 
 	}
 
