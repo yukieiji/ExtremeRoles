@@ -1,12 +1,12 @@
-﻿using UnityEngine;
-
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
-
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
+
 
 
 #nullable enable
@@ -55,6 +55,30 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 		=> canSeeJackal(targetRole) ?
 				ColorPalette.JackalBlue :
 				base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+
+	public override bool IsSameTeam(SingleRoleBase targetRole)
+	{
+		if (targetRole.Id is ExtremeRoleId.Jackal or ExtremeRoleId.Sidekick)
+		{
+			return true;
+		}
+
+		if (targetRole.Id == this.Id)
+		{
+			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
+			{
+				return true;
+			}
+			else
+			{
+				return IsSameControlId(targetRole);
+			}
+		}
+		else
+		{
+			return base.IsSameTeam(targetRole);
+		}
+	}
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{

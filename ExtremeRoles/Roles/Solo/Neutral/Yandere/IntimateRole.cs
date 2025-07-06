@@ -1,12 +1,11 @@
-﻿using UnityEngine;
-
-using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
 
 #nullable enable
 
@@ -55,6 +54,31 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 	{
 		this.status?.Update(rolePlayer);
 	}
+
+	public override bool IsSameTeam(SingleRoleBase targetRole)
+	{
+		if (targetRole.Id is ExtremeRoleId.Yandere)
+		{
+			return true;
+		}
+
+		if (targetRole.Id == this.Id)
+		{
+			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
+			{
+				return true;
+			}
+			else
+			{
+				return IsSameControlId(targetRole);
+			}
+		}
+		else
+		{
+			return base.IsSameTeam(targetRole);
+		}
+	}
+
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
 		=> canSeeYandere(targetRole) ?

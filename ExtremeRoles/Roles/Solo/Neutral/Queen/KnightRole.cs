@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -7,6 +6,8 @@ using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Status;
+using UnityEngine;
+
 
 #nullable enable
 
@@ -52,6 +53,35 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 	public void Update(PlayerControl rolePlayer)
 	{
 		this.status?.Update(rolePlayer);
+	}
+
+	public override bool IsSameTeam(SingleRoleBase targetRole)
+	{
+		if (targetRole.Id is ExtremeRoleId.Queen or ExtremeRoleId.Servant ||
+			(
+				targetRole is MultiAssignRoleBase multiRole &&
+				multiRole.AnotherRole != null &&
+				multiRole.AnotherRole.Id is ExtremeRoleId.Servant
+			))
+		{
+			return true;
+		}
+
+		if (targetRole.Id == this.Id)
+		{
+			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
+			{
+				return true;
+			}
+			else
+			{
+				return IsSameControlId(targetRole);
+			}
+		}
+		else
+		{
+			return base.IsSameTeam(targetRole);
+		}
 	}
 
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
