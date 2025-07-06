@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 using Il2CppInterop.Runtime.Attributes;
@@ -635,8 +635,8 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 			pc.PlayerId == this.Info.IgnorePlayer.PlayerId ||
 			PhysicsHelpers.AnythingBetween(
 				this.Info.IgnorePlayer.transform.position,
-				base.transform.position,
-				Constants.ShipAndObjectsMask, false))
+				pc.transform.position,
+				Constants.ShipAndAllObjectsMask, false))
 		{
 			return;
 		}
