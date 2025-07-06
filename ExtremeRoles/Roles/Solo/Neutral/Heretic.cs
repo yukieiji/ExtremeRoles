@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -187,7 +187,9 @@ public sealed class Heretic :
 		}
 
 		this.Button?.SetButtonShow(
-			this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget);
+			rolePlayer.Data != null &&
+			(rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected) &&
+			(this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget));
 
 		if (!this.HasTask || this.isSeeImpostorNow)
 		{
