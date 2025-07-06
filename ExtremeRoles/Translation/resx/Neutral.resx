@@ -1519,4 +1519,22 @@
   <data name="AllQueenWin" xml:space="preserve">
     <value>ナイトの活躍により、全クイーン陣営</value>
   </data>
+  <data name="ShepherdCanKillJackal" xml:space="preserve">
+    <value>ジャッカルをキルできるか</value>
+  </data>
+  <data name="ShepherdCanKillSidekick" xml:space="preserve">
+    <value>サイドキックをキルできるか</value>
+  </data>
+  <data name="IntimateCanKillYandere" xml:space="preserve">
+    <value>ヤンデレをキルできるか</value>
+  </data>
+  <data name="IntimateCanKillOneSideLover" xml:space="preserve">
+    <value>「想い人」をキルできるか</value>
+  </data>
+  <data name="KnightCanKillQueen" xml:space="preserve">
+    <value>クイーンをキルできるか</value>
+  </data>
+  <data name="KnightCanKillServant" xml:space="preserve">
+    <value>サーヴァントをキルできるか</value>
+  </data>
 </root>
