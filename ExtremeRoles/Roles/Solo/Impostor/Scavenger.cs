@@ -1193,11 +1193,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			format: OptionUnit.Second);
 		factory.CreateFloatOption(
 			Option.FlameFireSecond,
-			3.5f, 0.1f, 5.0f, 0.1f,
+			3.5f, 0.1f, 10.0f, 0.1f,
 			format: OptionUnit.Second);
 		factory.CreateFloatOption(
 			Option.FlameDeadSecond,
-			3.5f, 0.1f, 5.0f, 0.1f,
+			3.5f, 0.1f, 10.0f, 0.1f,
 			format: OptionUnit.Second);
 
 		factory.CreateIntOption(
