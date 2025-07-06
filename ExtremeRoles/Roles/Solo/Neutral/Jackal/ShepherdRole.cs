@@ -22,11 +22,16 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 		UseVent,
 		HasTask,
 		SeeJackalTaskRate,
+		CanKillSidekick,
+		CanKillJackal,
 	}
 
 	public override IStatusModel? Status => this.status;
 
 	private ShepherdStatus? status;
+
+	private bool canNotKillSideKick;
+	private bool canNotKillJackal;
 
 	public ShepherdRole() : base(
 		ExtremeRoleId.Shepherd,
@@ -58,8 +63,16 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if ((canSeeJackal(targetRole) && targetRole.Id is ExtremeRoleId.Jackal) ||
-			targetRole.Id is ExtremeRoleId.Sidekick)
+		if ((
+				this.canNotKillJackal &&
+				this.canSeeJackal(targetRole) &&
+				targetRole.Id is ExtremeRoleId.Jackal
+			)
+			||
+			(
+				this.canNotKillSideKick &&
+				targetRole.Id is ExtremeRoleId.Sidekick
+			))
 		{
 			return true;
 		}
@@ -95,6 +108,9 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 		factory.CreateIntOption(
 			Option.SeeJackalTaskRate, 50, 0, 100, 10,
 			taskOpt, format: OptionUnit.Percentage);
+
+		factory.CreateBoolOption(Option.CanKillJackal, true, taskOpt);
+		factory.CreateBoolOption(Option.CanKillSidekick, true);
 	}
 
 	protected override void RoleSpecificInit()
@@ -103,6 +119,10 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 		this.CanKill = loader.GetValue<Option, bool>(Option.CanKill);
 		this.UseVent = loader.GetValue<Option, bool>(Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(Option.HasTask);
+
+		this.canNotKillJackal = !loader.GetValue<Option, bool>(Option.CanKillJackal);
+		this.canNotKillSideKick = !loader.GetValue<Option, bool>(Option.CanKillSidekick);
+
 		this.status = new ShepherdStatus(
 			this.HasTask,
 			loader.GetValue<Option, int>(Option.SeeJackalTaskRate),

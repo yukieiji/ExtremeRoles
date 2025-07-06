@@ -21,11 +21,16 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		UseVent,
 		HasTask,
 		SeeQueenTaskRate,
+		CanKillQueen,
+		CanKillServant,
 	}
 
 	public override IStatusModel? Status => this.status;
 
 	private KnightStatus? status;
+
+	private bool canNotKillQueen;
+	private bool canNotKillServant;
 
 	public KnightRole() : base(
 		ExtremeRoleId.Knight,
@@ -57,12 +62,20 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
-		if ((canSeeQueen(targetRole) && targetRole.Id is ExtremeRoleId.Queen) ||
-			targetRole.Id is ExtremeRoleId.Servant ||
+		if ((
+				this.canNotKillQueen &&
+				this.canSeeQueen(targetRole) &&
+				targetRole.Id is ExtremeRoleId.Queen
+			)
+			||
 			(
-				targetRole is MultiAssignRoleBase multiRole &&
-				multiRole.AnotherRole != null &&
-				multiRole.AnotherRole.Id is ExtremeRoleId.Servant
+				this.canNotKillServant &&
+				targetRole.Id is ExtremeRoleId.Servant ||
+				(
+					targetRole is MultiAssignRoleBase multiRole &&
+					multiRole.AnotherRole != null &&
+					multiRole.AnotherRole.Id is ExtremeRoleId.Servant
+				)
 			))
 		{
 			return true;
@@ -108,6 +121,9 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		factory.CreateIntOption(
 			Option.SeeQueenTaskRate, 50, 0, 100, 10,
 			taskOpt, format: OptionUnit.Percentage);
+
+		factory.CreateBoolOption(Option.CanKillQueen, true, taskOpt);
+		factory.CreateBoolOption(Option.CanKillServant, true);
 	}
 
 	protected override void RoleSpecificInit()
@@ -115,6 +131,10 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		var loader = this.Loader;
 		this.UseVent = loader.GetValue<Option, bool>(Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(Option.HasTask);
+
+		this.canNotKillQueen = !loader.GetValue<Option, bool>(Option.CanKillQueen);
+		this.canNotKillServant = !loader.GetValue<Option, bool>(Option.CanKillServant);
+
 		this.status = new KnightStatus(
 			this.HasTask,
 			loader.GetValue<Option, int>(Option.SeeQueenTaskRate),
