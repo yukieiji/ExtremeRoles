@@ -188,7 +188,8 @@ public sealed class Heretic :
 
 		this.Button?.SetButtonShow(
 			rolePlayer.Data != null &&
-			(rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected) &&
+			!rolePlayer.Data.IsDead &&
+			!rolePlayer.Data.Disconnected &&
 			(this.killMode is KillMode.AbilityOnTaskPhase or KillMode.AbilityOnTaskPhaseTarget));
 
 		if (!this.HasTask || this.isSeeImpostorNow)
