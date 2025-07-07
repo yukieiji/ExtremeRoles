@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption.Factory;
@@ -20,11 +21,16 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		UseVent,
 		HasTask,
 		SeeQueenTaskRate,
+		CanKillQueen,
+		CanKillServant,
 	}
 
 	public override IStatusModel? Status => this.status;
 
 	private KnightStatus? status;
+
+	private bool canNotKillQueen;
+	private bool canNotKillServant;
 
 	public KnightRole() : base(
 		ExtremeRoleId.Knight,
@@ -54,6 +60,44 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		this.status?.Update(rolePlayer);
 	}
 
+	public override bool IsSameTeam(SingleRoleBase targetRole)
+	{
+		if (this.canSeeQueen(targetRole) && (
+			(
+				this.canNotKillQueen &&
+				targetRole.Id is ExtremeRoleId.Queen
+			)
+			||
+			(
+				this.canNotKillServant &&
+				targetRole.Id is ExtremeRoleId.Servant ||
+				(
+					targetRole is MultiAssignRoleBase multiRole &&
+					multiRole.AnotherRole != null &&
+					multiRole.AnotherRole.Id is ExtremeRoleId.Servant
+				)
+			)))
+		{
+			return true;
+		}
+
+		if (targetRole.Id == this.Id)
+		{
+			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
+			{
+				return true;
+			}
+			else
+			{
+				return IsSameControlId(targetRole);
+			}
+		}
+		else
+		{
+			return base.IsSameTeam(targetRole);
+		}
+	}
+
 	public override string GetRolePlayerNameTag(SingleRoleBase targetRole, byte targetPlayerId)
 		=> canSeeQueen(targetRole) ?
 				Design.ColoedString(
@@ -77,6 +121,9 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		factory.CreateIntOption(
 			Option.SeeQueenTaskRate, 50, 0, 100, 10,
 			taskOpt, format: OptionUnit.Percentage);
+
+		factory.CreateBoolOption(Option.CanKillQueen, true, taskOpt);
+		factory.CreateBoolOption(Option.CanKillServant, true, taskOpt);
 	}
 
 	protected override void RoleSpecificInit()
@@ -84,6 +131,10 @@ public sealed class KnightRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUp
 		var loader = this.Loader;
 		this.UseVent = loader.GetValue<Option, bool>(Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(Option.HasTask);
+
+		this.canNotKillQueen = !loader.GetValue<Option, bool>(Option.CanKillQueen);
+		this.canNotKillServant = !loader.GetValue<Option, bool>(Option.CanKillServant);
+
 		this.status = new KnightStatus(
 			this.HasTask,
 			loader.GetValue<Option, int>(Option.SeeQueenTaskRate),

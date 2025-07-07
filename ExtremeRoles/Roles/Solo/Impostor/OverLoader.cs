@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.Event;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
@@ -52,16 +53,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     private bool isAwakedHasOtherKillRange;
 
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.overLoadButton;
-        set
-        {
-            this.overLoadButton = value;
-        }
-    }
-
-    private ExtremeAbilityButton overLoadButton;
+    public ExtremeAbilityButton Button { get; set; }
 
 
     public OverLoader() : base(
@@ -77,20 +69,24 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     public static void SwitchAbility(byte rolePlayerId, bool activate)
     {
         var overLoader = ExtremeRoleManager.GetSafeCastedRole<OverLoader>(rolePlayerId);
-        if (overLoader != null)
+        if (overLoader is null)
         {
-            overLoader.IsOverLoad = activate;
-            overLoader.IsBoost = activate;
+			return;
         }
-    }
+
+		overLoader.IsOverLoad = activate;
+		overLoader.IsBoost = activate;
+
+		EventManager.Instance.Invoke(ModEvent.VisualUpdate);
+	}
 
     public void CreateAbility()
     {
         this.CreatePassiveAbilityButton(
             "overLoad", "downLoad",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.OverLoaderOverLoad),
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.OverLoaderDownLoad),
             this.CleanUp);
     }
@@ -127,35 +123,37 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!this.isAwake)
+        if (this.isAwake)
         {
-            if (this.Button != null)
-            {
-                this.Button.SetButtonShow(false);
-            }
-
-            int impNum = 0;
-
-            foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
-            {
-                if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() &&
-                    (!player.IsDead && !player.Disconnected))
-                {
-                    ++impNum;
-                }
-            }
-
-            if (this.awakeImpNum >= impNum &&
-                this.killCount >= this.awakeKillCount)
-            {
-                this.Button.SetButtonShow(true);
-                this.isAwake = true;
-                this.HasOtherVision = this.isAwakedHasOtherVision;
-                this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
-                this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
-            }
+			return;
         }
-    }
+
+		if (this.Button != null)
+		{
+			this.Button.SetButtonShow(false);
+		}
+
+		int impNum = 0;
+
+		foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+		{
+			if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() &&
+				(!player.IsDead && !player.Disconnected))
+			{
+				++impNum;
+			}
+		}
+
+		if (this.awakeImpNum >= impNum &&
+			this.killCount >= this.awakeKillCount)
+		{
+			this.Button.SetButtonShow(true);
+			this.isAwake = true;
+			this.HasOtherVision = this.isAwakedHasOtherVision;
+			this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
+			this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+		}
+	}
 
     public override bool TryRolePlayerKillTo(
         PlayerControl rolePlayer, PlayerControl targetPlayer)
@@ -168,81 +166,33 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
     }
 
     public override string GetColoredRoleName(bool isTruthColor = false)
-    {
-        if (isTruthColor || IsAwake)
-        {
-            return base.GetColoredRoleName();
-        }
-        else
-        {
-            return Design.ColoedString(
-                Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
-        }
-    }
-    public override string GetFullDescription()
-    {
-        if (IsAwake)
-        {
-            return Tr.GetString(
-                $"{this.Id}FullDescription");
-        }
-        else
-        {
-            return Tr.GetString(
-                $"{RoleTypes.Impostor}FullDescription");
-        }
-    }
+		=> isTruthColor || IsAwake ?
+			 base.GetColoredRoleName() : Design.ColoedString(
+				Palette.ImpostorRed, Tr.GetString(RoleTypes.Impostor.ToString()));
 
-    public override string GetImportantText(bool isContainFakeTask = true)
-    {
-        if (IsAwake)
-        {
-            return base.GetImportantText(isContainFakeTask);
+	public override string GetFullDescription()
+		=> IsAwake ?
+			Tr.GetString($"{this.Id}FullDescription") :
+			Tr.GetString($"{RoleTypes.Impostor}FullDescription");
 
-        }
-        else
-        {
-            return string.Concat(new string[]
-            {
-                TranslationController.Instance.GetString(
-                    StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
-                "\r\n",
-                Palette.ImpostorRed.ToTextColor(),
-                TranslationController.Instance.GetString(
-                    StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
-                "</color>"
-            });
-        }
-    }
+	public override string GetImportantText(bool isContainFakeTask = true)
+		=> IsAwake ?
+			base.GetImportantText(isContainFakeTask) :
+			$"{TranslationController.Instance.GetString(
+					StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>())}\r\n{Palette.ImpostorRed.ToTextColor()}{TranslationController.Instance.GetString(
+					StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>())}</color>";
 
-    public override string GetIntroDescription()
-    {
-        if (IsAwake)
-        {
-            return base.GetIntroDescription();
-        }
-        else
-        {
-            return Design.ColoedString(
-                Palette.ImpostorRed,
-                PlayerControl.LocalPlayer.Data.Role.Blurb);
-        }
-    }
+	public override string GetIntroDescription()
+		=> IsAwake ? base.GetIntroDescription() : Design.ColoedString(
+				Palette.ImpostorRed,
+				PlayerControl.LocalPlayer.Data.Role.Blurb);
 
-    public override Color GetNameColor(bool isTruthColor = false)
-    {
-        if (isTruthColor || IsAwake)
-        {
-            return base.GetNameColor(isTruthColor);
-        }
-        else
-        {
-            return Palette.ImpostorRed;
-        }
-    }
+	public override Color GetNameColor(bool isTruthColor = false)
+		=> isTruthColor || IsAwake ?
+			base.GetNameColor(isTruthColor) : Palette.ImpostorRed;
 
 
-    protected override void CreateSpecificOption(
+	protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
         factory.CreateIntOption(

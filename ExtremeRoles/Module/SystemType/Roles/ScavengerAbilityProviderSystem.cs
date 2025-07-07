@@ -271,11 +271,10 @@ public sealed class ScavengerAbilitySystem(
 					.Where(x =>
 						x is not WeaponAbility.ScavengerNull && (
 						opt.ContainAdvanced || (
-							x is not
-								WeaponAbility.ScavengerSniperRifle or
-								WeaponAbility.ScavengerBeamRifle or
-								WeaponAbility.ScavengerBeamSaber)
-								// or WeaponAbility.Aguni)
+							x is
+								WeaponAbility.ScavengerFlame or
+								WeaponAbility.ScavengerHandGun or
+								WeaponAbility.ScavengerSword)
 						)
 					).ToArray();
 			}

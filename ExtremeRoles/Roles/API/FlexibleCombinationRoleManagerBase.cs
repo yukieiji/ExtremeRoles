@@ -195,7 +195,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
 		factory.CreateBoolOption(
 			CombinationRoleCommonOption.IsMultiAssign, false,
-			ignorePrefix: true);
+			ignorePrefix: true,
+			isHidden: this.RoleType is CombinationRoleType.Traitor);
 
 		roleAssignNumOption.AddWithUpdate(roleSetNumOption);
 
