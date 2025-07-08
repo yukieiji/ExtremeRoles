@@ -717,6 +717,11 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 	private PlayerControl? targetPlayer;
 	private ParticleSystem? fire;
 
+	public ScavengerFlameFire(Ptr ptr) : base(ptr)
+	{
+
+	}
+
 	public void Awake()
 	{
 		if (this.gameObject.TryGetComponent<ParticleSystem>(out var particle))

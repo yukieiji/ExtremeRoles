@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Il2CppInterop.Runtime.Attributes;
 
@@ -12,6 +12,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.WithAction;
 public sealed class OnDestroyBehavior : MonoBehaviour
 {
 	private Action? destroyAction;
+
+	public OnDestroyBehavior(IntPtr ptr) : base(ptr)
+	{
+	}
 
 	[HideFromIl2Cpp]
 	public void Add(Action @delegate)

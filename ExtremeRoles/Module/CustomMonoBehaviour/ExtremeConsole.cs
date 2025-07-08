@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
@@ -33,6 +33,10 @@ public sealed class ExtremeConsole : MonoBehaviour, IAmongUs.IUsable
 	public float PercentCool => this.Behavior is null ? 0.0f : this.Behavior.CoolTime;
 
 	public ImageNames UseIcon => ImageNames.UseButton;
+
+	public ExtremeConsole(IntPtr ptr) : base(ptr)
+	{
+	}
 
 	public void Awake()
 	{
