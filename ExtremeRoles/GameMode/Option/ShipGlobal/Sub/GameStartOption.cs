@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal.Sub;
 
@@ -41,7 +41,7 @@ public readonly struct GameStartOption
 		var buttonOpt = factory.CreateBoolOption(
 			OnGameStartOption.RemoveSomeoneButton, true, killCoolOpt);
 		factory.CreateIntOption(
-			OnGameStartOption.ReduceNum, 1, 1, 1, 5, buttonOpt, invert: true);
+			OnGameStartOption.ReduceNum, 1, 1, 5, 1, buttonOpt, invert: true);
 		factory.CreateIntOption(
 			OnGameStartOption.FirstButtonCoolDown, 15, 0, 60, 1, format: OptionUnit.Second);
 	}
