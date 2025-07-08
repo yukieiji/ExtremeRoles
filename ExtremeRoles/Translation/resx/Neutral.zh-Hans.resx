@@ -1506,4 +1506,22 @@
   <data name="AllQueenWin" xml:space="preserve">
     <value>女皇殿下…我们成功了！&lt;br&gt;女皇阵营</value>
   </data>
+  <data name="ShepherdCanKillJackal" xml:space="preserve">
+    <value>知晓豺狼时&lt;br&gt;能否击杀豺狼</value>
+  </data>
+  <data name="ShepherdCanKillSidekick" xml:space="preserve">
+    <value>知晓豺狼时&lt;br&gt;能否击杀跟班</value>
+  </data>
+  <data name="IntimateCanKillYandere" xml:space="preserve">
+    <value>知晓病娇时&lt;br&gt;能否击杀病娇</value>
+  </data>
+  <data name="IntimateCanKillOneSideLover" xml:space="preserve">
+    <value>知晓病娇时&lt;br&gt;能否击杀所爱之人</value>
+  </data>
+  <data name="KnightCanKillQueen" xml:space="preserve">
+    <value>知晓女皇时&lt;br&gt;能否击杀女皇</value>
+  </data>
+  <data name="KnightCanKillServant" xml:space="preserve">
+    <value>知晓女皇时&lt;br&gt;能否击杀侍从</value>
+  </data>
 </root>
