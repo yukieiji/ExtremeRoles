@@ -1,4 +1,5 @@
-﻿using PowerTools;
+using PowerTools;
+using System;
 using UnityEngine;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -7,6 +8,12 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 public sealed class SpriteAnimCleaner : MonoBehaviour
 {
 	public SpriteAnim Anim { private get; set; }
+
+	public SpriteAnimCleaner(IntPtr prt) : base(prt)
+	{
+
+	}
+
 	public void OnDestroy()
 	{
 		if (Anim == null ||
