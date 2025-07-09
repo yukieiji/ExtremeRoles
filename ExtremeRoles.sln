@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Test", "Extrem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Generator", "ExtremeRoles.Generator\ExtremeRoles.Generator.csproj", "{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles.Analyzers", "ExtremeRoles.Analyzers\ExtremeRoles.Analyzers.csproj", "{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}" # Placeholder GUID
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -132,6 +134,10 @@ Global
 		{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}.Release|x64.Build.0 = Release|Any CPU
 		{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF8843AA-F849-4F21-B3D5-1AB29E135DA6}.Release|x86.Build.0 = Release|Any CPU
+		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU # Placeholder GUID
+		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU # Placeholder GUID
+		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU # Placeholder GUID
+		{E5E2F8A0-4366-4157-A110-7F3DE2A67C2E}.Release|Any CPU.Build.0 = Release|Any CPU # Placeholder GUID
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
