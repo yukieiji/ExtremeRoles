@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
@@ -13,15 +13,19 @@ namespace ExtremeSkins.Module;
 [Il2CppRegister]
 public sealed class CreatorTab : MonoBehaviour
 {
+
+	private readonly List<ButtonWrapper> selectButton = new List<ButtonWrapper>();
+
 #pragma warning disable CS8618
 	private ButtonWrapper buttonPrefab;
 	private VerticalLayoutGroup layout;
+	public CreatorTab(System.IntPtr ptr) : base(ptr)
+	{
+
+	}
 #pragma warning restore CS8618
 
-	private List<ButtonWrapper> selectButton = new List<ButtonWrapper>();
-
-
-    public void Awake()
+	public void Awake()
     {
         Transform trans = base.transform;
 

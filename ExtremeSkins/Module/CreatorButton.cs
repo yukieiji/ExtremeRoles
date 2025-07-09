@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using TMPro;
 using UnityEngine;
@@ -14,6 +14,10 @@ public sealed class CreatorButton : MonoBehaviour
 {
     private Scroller? tabScroller;
     private TMP_Text? creatorText;
+
+	public CreatorButton(IntPtr ptr) : base(ptr)
+	{
+	}
 
     [HideFromIl2Cpp]
     public void Initialize(Scroller scroller, TMP_Text text)
