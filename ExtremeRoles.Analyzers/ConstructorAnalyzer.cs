@@ -12,10 +12,6 @@ public class ConstructorAnalyzer : DiagnosticAnalyzer
 {
     private const string Category = "Usage";
 
-    private static readonly LocalizableString Title = "Il2CppSystem.Objectを継承するクラスのコンストラクタと属性のチェック";
-    private static readonly LocalizableString MessageFormat = "クラス '{0}' は'Il2CppSystem.Object'を継承していますが、'System.IntPtr'を受け取るコンストラクタか'Il2CppRegisterAttribute'属性もありません。";
-    private static readonly LocalizableString Description = "'Il2CppSystem.Object'を継承するクラスは'System.IntPtr'を受け取るコンストラクタを持ち'Il2CppRegisterAttribute'属性を持つ必要があります。";
-
     private static readonly DiagnosticDescriptor RuleERA001 = new DiagnosticDescriptor(
 		"ERA001",
 		"Il2CppSystem.Objectを継承するクラスには'System.IntPtr'を受け取るコンストラクタが必要です",
@@ -23,7 +19,7 @@ public class ConstructorAnalyzer : DiagnosticAnalyzer
         Category,
         DiagnosticSeverity.Error,
         isEnabledByDefault: true,
-		"'Il2CppSystem.Object'を継承するクラスは'System.IntPtr'を受け取るコンストラクタが必要です");
+		"'Il2CppSystem.Object'を継承するクラスは'System.IntPtr'を受け取るコンストラクタが必要です.");
 
 	private static readonly DiagnosticDescriptor RuleERA002 = new DiagnosticDescriptor(
 		"ERA002",
@@ -32,7 +28,7 @@ public class ConstructorAnalyzer : DiagnosticAnalyzer
 		Category,
 		DiagnosticSeverity.Error,
 		isEnabledByDefault: true,
-		"'Il2CppSystem.Object'を継承するクラスは'Il2CppRegisterAttribute'属性がこのクラスか親クラスに必要です");
+		"'Il2CppSystem.Object'を継承するクラスは'Il2CppRegisterAttribute'属性がこのクラスか親クラスに必要です.");
 
 	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [RuleERA001, RuleERA002];
 
