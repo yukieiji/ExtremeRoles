@@ -20,8 +20,11 @@ namespace ExtremeRoles.Module;
 /// A thread-safe class which holds a queue with actions to execute on the next Update() method. It can be used to make calls to the main thread for
 /// things such as UI Manipulation in Unity. It was developed for use in combination with the Firebase Unity plugin, which uses separate threads for event handling
 /// </summary>
+#pragma warning disable ERA002
 #pragma warning disable ERA001
 public sealed class UnityMainThreadDispatcher : MonoBehaviour
+#pragma warning restore ERA001
+#pragma warning restore ERA002
 {
 	private static readonly Queue<Action> _executionQueue = new Queue<Action>();
 
@@ -130,4 +133,3 @@ public sealed class UnityMainThreadDispatcher : MonoBehaviour
 		_instance = null;
 	}
 }
-#pragma warning restore ERA001

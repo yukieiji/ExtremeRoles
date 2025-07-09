@@ -10,23 +10,31 @@ namespace ExtremeRoles.Analyzers;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class ConstructorAnalyzer : DiagnosticAnalyzer
 {
-    public const string DiagnosticId = "ERA001";
     private const string Category = "Usage";
 
     private static readonly LocalizableString Title = "Il2CppSystem.Objectを継承するクラスのコンストラクタと属性のチェック";
     private static readonly LocalizableString MessageFormat = "クラス '{0}' は'Il2CppSystem.Object'を継承していますが、'System.IntPtr'を受け取るコンストラクタか'Il2CppRegisterAttribute'属性もありません。";
     private static readonly LocalizableString Description = "'Il2CppSystem.Object'を継承するクラスは'System.IntPtr'を受け取るコンストラクタを持ち'Il2CppRegisterAttribute'属性を持つ必要があります。";
 
-    private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-        DiagnosticId,
-        Title,
-        MessageFormat,
+    private static readonly DiagnosticDescriptor RuleERA001 = new DiagnosticDescriptor(
+		"ERA001",
+		"Il2CppSystem.Objectを継承するクラスには'System.IntPtr'を受け取るコンストラクタが必要です",
+		"クラス '{0}' は'Il2CppSystem.Object'を継承していますが、'System.IntPtr'を受け取るコンストラクタが存在しません",
         Category,
         DiagnosticSeverity.Error,
         isEnabledByDefault: true,
-        Description);
+		"'Il2CppSystem.Object'を継承するクラスは'System.IntPtr'を受け取るコンストラクタが必要です");
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+	private static readonly DiagnosticDescriptor RuleERA002 = new DiagnosticDescriptor(
+		"ERA002",
+		"Il2CppSystem.Objectを継承するクラスには'Il2CppRegisterAttribute'属性がこのクラスか親クラスに必要です",
+		"クラス '{0}' は'Il2CppSystem.Object'を継承していますが、'Il2CppRegisterAttribute'属性がこのクラスに存在しません",
+		Category,
+		DiagnosticSeverity.Error,
+		isEnabledByDefault: true,
+		"'Il2CppSystem.Object'を継承するクラスは'Il2CppRegisterAttribute'属性がこのクラスか親クラスに必要です");
+
+	public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => [RuleERA001, RuleERA002];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -50,16 +58,17 @@ public class ConstructorAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-		if ((
-				classSymbol.GetAttributes().Any(attr => attr.AttributeClass?.Name == "Il2CppRegisterAttribute") &&
-				hasIntPtrConstructor(classSymbol)
-			))
+		if (!hasIntPtrConstructor(classSymbol))
 		{
-			return;
+			var diagnostic = Diagnostic.Create(RuleERA001, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier.Text);
+			context.ReportDiagnostic(diagnostic);
 		}
 
-		var diagnostic = Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier.Text);
-		context.ReportDiagnostic(diagnostic);
+		if (!classSymbol.GetAttributes().Any(attr => attr.AttributeClass?.Name == "Il2CppRegisterAttribute"))
+		{
+			var diagnostic = Diagnostic.Create(RuleERA002, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier.Text);
+			context.ReportDiagnostic(diagnostic);
+		}
 	}
 
 	private static bool hasIntPtrConstructor(INamedTypeSymbol classSymbol)
