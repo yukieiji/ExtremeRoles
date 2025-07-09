@@ -7,11 +7,9 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 namespace ExtremeRoles;
 
-#pragma warning disable ERA001
-#pragma warning disable ERA002
+#pragma warning disable ERA001, ERA002
 public sealed class ExtremeRolePluginBehavior : MonoBehaviour
-#pragma warning restore ERA002
-#pragma warning restore ERA001
+#pragma warning restore ERA001, ERA002
 {
 	public void Update()
     {

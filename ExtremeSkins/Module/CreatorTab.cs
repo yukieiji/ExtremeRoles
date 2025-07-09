@@ -21,7 +21,6 @@ public sealed class CreatorTab : MonoBehaviour
 	private VerticalLayoutGroup layout;
 	public CreatorTab(System.IntPtr ptr) : base(ptr)
 	{
-
 	}
 #pragma warning restore CS8618
 

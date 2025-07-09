@@ -11,7 +11,6 @@ public sealed class SpriteAnimCleaner : MonoBehaviour
 
 	public SpriteAnimCleaner(IntPtr prt) : base(prt)
 	{
-
 	}
 
 	public void OnDestroy()

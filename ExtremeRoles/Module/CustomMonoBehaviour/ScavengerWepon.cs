@@ -588,7 +588,9 @@ public sealed class ScavengerFlameHitBehaviour : MonoBehaviour
 	private Dictionary<byte, ScavengerFlameFire> cacheFire = new Dictionary<byte, ScavengerFlameFire>();
 	private HitInfo? info;
 
-	public ScavengerFlameHitBehaviour(Ptr ptr) : base(ptr) { }
+	public ScavengerFlameHitBehaviour(Ptr ptr) : base(ptr)
+	{
+	}
 
 	public void Reset()
 	{
@@ -719,7 +721,6 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 
 	public ScavengerFlameFire(Ptr ptr) : base(ptr)
 	{
-
 	}
 
 	public void Awake()
