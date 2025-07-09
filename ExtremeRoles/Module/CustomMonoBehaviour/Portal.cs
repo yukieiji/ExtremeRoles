@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
@@ -118,6 +118,7 @@ public class PortalBase : MonoBehaviour, IAmongUs.IUsable
 		ObjectPath.TestButton);
 }
 
+#pragma warning disable ERA002 // Il2CppSystem.Objectを継承するクラスのコンストラクタと属性のチェック
 public sealed class PortalFirst : PortalBase
 {
 	public PortalFirst(IntPtr ptr) : base(ptr) { }
@@ -133,3 +134,4 @@ public sealed class PortalSecond : PortalBase
 	protected override Sprite GetSprite() => UnityObjectLoader.LoadFromResources(
 		ExtremeRoleId.Teleporter, ObjectPath.TeleporterSecondPortal);
 }
+#pragma warning restore ERA002 // Il2CppSystem.Objectを継承するクラスのコンストラクタと属性のチェック

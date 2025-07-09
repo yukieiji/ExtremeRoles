@@ -1,5 +1,3 @@
-﻿using ExtremeRoles.Performance;
-
 using UnityEngine;
 
 #nullable enable
@@ -14,6 +12,7 @@ public sealed class BaitKillCoolReducer : MonoBehaviour
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	private PlayerControl localPlayer;
+	public BaitKillCoolReducer(System.IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	public void Awake()

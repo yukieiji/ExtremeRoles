@@ -80,6 +80,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
+    <ProjectReference Include="..\ExtremeRoles.Analyzers\ExtremeRoles.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
   <ItemGroup>
