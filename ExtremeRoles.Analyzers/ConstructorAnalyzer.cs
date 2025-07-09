@@ -45,40 +45,44 @@ public class ConstructorAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        if (!InheritsFromType(classSymbol, "Il2CppSystem.Object"))
-        {
-            // Likely a BCL type, not a user-defined Il2CppSystem.Object candidate.
-            return;
-        }
-        if (classSymbol.GetAttributes().Any(attr => attr.AttributeClass?.Name == "Il2CppRegisterAttribute"))
+		if (!inheritsIl2CppObject(classSymbol))
         {
             return;
         }
 
-        bool hasIntPtrConstructor = classSymbol.Constructors.Any(ctor =>
-            ctor.Parameters.Length == 1 &&
-            ctor.Parameters[0].Type.ToDisplayString() == "System.IntPtr");
+		if ((
+				classSymbol.GetAttributes().Any(attr => attr.AttributeClass?.Name == "Il2CppRegisterAttribute") &&
+				hasIntPtrConstructor(classSymbol)
+			))
+		{
+			return;
+		}
 
-        if (!hasIntPtrConstructor)
-        {
-            var diagnostic = Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier.Text);
-            context.ReportDiagnostic(diagnostic);
-        }
-    }
+		var diagnostic = Diagnostic.Create(Rule, classDeclaration.Identifier.GetLocation(), classDeclaration.Identifier.Text);
+		context.ReportDiagnostic(diagnostic);
+	}
 
-    private static bool InheritsFromType(INamedTypeSymbol classSymbol, string targetTypeName)
+	private static bool hasIntPtrConstructor(INamedTypeSymbol classSymbol)
+		=> classSymbol.Constructors.Any(ctor =>
+		{
+			if (ctor.Parameters.Length != 1)
+			{
+				return false;
+			}
+			var t = ctor.Parameters[0].Type;
+			var nameSpace = t.ContainingNamespace;
+			return nameSpace.Name == "System" && t.Name.Contains("IntPtr");
+		});
+
+	private static bool inheritsIl2CppObject(INamedTypeSymbol classSymbol)
     {
         var baseType = classSymbol.BaseType;
         while (baseType != null)
         {
-			string typeStr = baseType.ToDisplayString();
-            if (typeStr == targetTypeName)
-            {
-                return true;
-            }
-            // Consider UnityEngine.Object as a match if checking for Il2CppSystem.Object.
-            if (targetTypeName == "Il2CppSystem.Object" &&
-				typeStr == "UnityEngine.Object")
+			var nameSpace = baseType.ContainingNamespace;
+
+            if (nameSpace.Name == "Il2CppSystem" &&
+				baseType.Name.Contains("Object"))
             {
                 return true;
             }
