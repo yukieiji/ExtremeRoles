@@ -1,4 +1,4 @@
-﻿using AmongUs.Data;
+using AmongUs.Data;
 using BepInEx;
 using BepInEx.Unity.IL2CPP.Utils;
 using Il2CppInterop.Runtime.Attributes;
@@ -19,6 +19,7 @@ using SemanticVersion = SemanticVersioning.Version;
 
 namespace ExtremeRoles.Compat;
 
+#pragma warning disable ERA001
 public sealed class BepInExUpdater : MonoBehaviour
 {
 	private const string minimumBepInExVersion = "6.0.0-be.735";
@@ -157,3 +158,5 @@ public sealed class BepInExUpdater : MonoBehaviour
 	private static string[] getDefaultConfig()
 		=> [ "ExtremeRoles.Resources.Config.BepInEx.cfg" ];
 }
+#pragma warning restore ERA001
+
