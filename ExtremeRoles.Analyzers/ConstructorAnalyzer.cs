@@ -15,8 +15,8 @@ namespace ExtremeRoles.Analyzers
         private const string Category = "Usage";
 
         private static readonly LocalizableString Title = "Il2CppSystem.Objectを継承するクラスのコンストラクタと属性の検証";
-        private static readonly LocalizableString MessageFormat = "クラス '{0}' は Il2CppSystem.Object を継承していますが、System.IntPtr を受け取るコンストラクタを持たず、Il2CppRegisterAttribute 属性もありません。";
-        private static readonly LocalizableString Description = "Il2CppSystem.Object を継承するクラスは、System.IntPtr を受け取るコンストラクタを持つか、Il2CppRegisterAttribute 属性を持つ必要があります。";
+        private static readonly LocalizableString MessageFormat = "クラス '{0}' は Il2CppSystem.Object または UnityEngine.Object を継承していますが、System.IntPtr を受け取るコンストラクタを持たず、Il2CppRegisterAttribute 属性もありません。";
+        private static readonly LocalizableString Description = "Il2CppSystem.Object または UnityEngine.Object を継承するクラスは、System.IntPtr を受け取るコンストラクタを持つか、Il2CppRegisterAttribute 属性を持つ必要があります。";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
             DiagnosticId,
@@ -46,32 +46,26 @@ namespace ExtremeRoles.Analyzers
                 return;
             }
 
-            // Check if the class inherits from Il2CppSystem.Object (or equivalent)
-            bool inheritsFromIl2CppObject = InheritsFromType(classSymbol, "Il2CppSystem.Object");
-            //UnityEngine.Object を継承している場合も考慮（最終的にIl2CppSystem.Objectになるため）
-            bool inheritsFromUnityEngineObject = InheritsFromType(classSymbol, "UnityEngine.Object");
+            bool inheritsFromUnityObject = InheritsFromType(classSymbol, "UnityEngine.Object");
+            bool inheritsFromIl2CppSystemObject = !inheritsFromUnityObject && InheritsFromType(classSymbol, "Il2CppSystem.Object");
 
+            // Heuristic: For IL2CPP, non-UnityEngine classes directly inheriting System.Object
+            // are often treated as Il2CppSystem.Object.
+            bool isPotentialIl2CppTarget = classSymbol.BaseType?.SpecialType == SpecialType.System_Object &&
+                                           classSymbol.BaseType.ToDisplayString() == "System.Object";
 
-            if (!inheritsFromIl2CppObject && !inheritsFromUnityEngineObject)
+            if (!inheritsFromUnityObject && !inheritsFromIl2CppSystemObject && !isPotentialIl2CppTarget)
             {
-                // If it doesn't inherit from either, it might still be an Il2Cpp object
-                // if it's a custom class that ultimately derives from System.Object and is used in an IL2CPP context.
-                // A simple check for System.Object as a base if no other specific base is found.
-                // This is a heuristic for classes that are not explicitly UnityEngine.Object or directly Il2CppSystem.Object
-                // but are intended for use in the IL2CPP runtime.
-                bool isDirectSystemObjectDescendant = classSymbol.BaseType?.SpecialType == SpecialType.System_Object &&
-                                                      classSymbol.BaseType.ToDisplayString() == "System.Object";
-
-                if (!isDirectSystemObjectDescendant)
-                {
-                    return;
-                }
-                // At this point, it's a direct descendant of System.Object. We assume such user types
-                // become Il2CppSystem.Object in IL2CPP, unless they are framework types we should ignore.
-                // This is a broad assumption.
+                return;
             }
 
-            // Check for Il2CppRegisterAttribute
+            // If it's a direct sub-class of System.Object, ensure it's not a common BCL type we should ignore.
+            if (isPotentialIl2CppTarget && classSymbol.ContainingNamespace.ToDisplayString().StartsWith("System"))
+            {
+                // Likely a BCL type, not a user-defined Il2CppSystem.Object candidate.
+                return;
+            }
+
             bool hasIl2CppRegisterAttribute = classSymbol.GetAttributes().Any(attr => attr.AttributeClass?.Name == "Il2CppRegisterAttribute");
 
             if (hasIl2CppRegisterAttribute)
@@ -79,7 +73,6 @@ namespace ExtremeRoles.Analyzers
                 return;
             }
 
-            // Check for a constructor that takes a System.IntPtr
             bool hasIntPtrConstructor = classSymbol.Constructors.Any(ctor =>
                 ctor.Parameters.Length == 1 &&
                 ctor.Parameters[0].Type.ToDisplayString() == "System.IntPtr");
@@ -100,9 +93,7 @@ namespace ExtremeRoles.Analyzers
                 {
                     return true;
                 }
-                // In IL2CPP, UnityEngine.Object ultimately derives from something akin to Il2CppSystem.Object,
-                // but its direct C# base is System.Object.
-                // If targetTypeName is "Il2CppSystem.Object" and we encounter "UnityEngine.Object", consider it a match.
+                // Consider UnityEngine.Object as a match if checking for Il2CppSystem.Object.
                 if (targetTypeName == "Il2CppSystem.Object" && baseType.ToDisplayString() == "UnityEngine.Object")
                 {
                     return true;
