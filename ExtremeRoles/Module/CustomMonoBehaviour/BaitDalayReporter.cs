@@ -1,5 +1,4 @@
-﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Performance;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -25,6 +24,12 @@ public sealed class BaitDalayReporter : MonoBehaviour
 
 	private Coroutine? flushCorutine = null;
 	private Coroutine? delayCorutine = null;
+
+#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+	public BaitDalayReporter(IntPtr ptr) : base(ptr)
+	{
+	}
+#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	public void Awake()
 	{

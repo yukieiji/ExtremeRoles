@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -40,6 +40,8 @@ public sealed class SimpleButton : MonoBehaviour
 	public Color DefaultTextColor { get; set; }
 
 	private Color overColor = Color.green;
+
+	public SimpleButton(System.IntPtr ptr) : base(ptr) { }
 
 	public void Awake()
 	{

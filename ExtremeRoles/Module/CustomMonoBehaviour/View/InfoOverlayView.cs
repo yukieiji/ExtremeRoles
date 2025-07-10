@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -8,7 +9,6 @@ using Il2CppInterop.Runtime.Attributes;
 using TMPro;
 
 using ExtremeRoles.Extension.UnityEvents;
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.InfoOverlay;
@@ -20,7 +20,7 @@ using ExtremeRoles.Module.InfoOverlay.Model;
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 
 [Il2CppRegister]
-public sealed class InfoOverlayView : MonoBehaviour
+public sealed class InfoOverlayView(IntPtr ptr) : MonoBehaviour(ptr)
 {
 #pragma warning disable CS8618
 	private TextMeshProUGUI title;

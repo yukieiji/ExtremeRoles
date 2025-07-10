@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +14,7 @@ using ExtremeRoles.Resources;
 namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 
 [Il2CppRegister]
-public sealed class ExtremeTabSelector : OptionBehaviour
+public sealed class ExtremeTabSelector(IntPtr ptr) : OptionBehaviour(ptr)
 {
 	[HideFromIl2Cpp]
 	public IReadOnlyList<MapSelectButton> All => tabSelectButton;
@@ -30,6 +30,7 @@ public sealed class ExtremeTabSelector : OptionBehaviour
 	private float spaceX;
 
 	private Il2CppSystem.Collections.Generic.List<MapIconByName>? AllMapIcons;
+
 
 	public void Awake()
 	{

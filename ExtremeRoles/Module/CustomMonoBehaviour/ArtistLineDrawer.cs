@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Performance;
+using System;
 
 using UnityEngine;
 
@@ -31,6 +31,12 @@ public sealed class ArtistLineDrawer :  MonoBehaviour
 	private int size = 1;
 
 	private const float lineSize = 0.25f;
+
+#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+	public ArtistLineDrawer(IntPtr ptr) : base(ptr)
+	{
+	}
+#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 
 	public void Awake()
 	{

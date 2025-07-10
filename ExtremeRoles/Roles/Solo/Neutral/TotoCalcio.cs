@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.Module;
 
@@ -32,11 +32,11 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         FinalCoolTime,
     }
 
-    private static HashSet<ExtremeRoleId> ignoreRole = new HashSet<ExtremeRoleId>()
+    private static IReadOnlySet<ExtremeRoleId> ignoreRole = new HashSet<ExtremeRoleId>()
     {
         ExtremeRoleId.Yoko,
         ExtremeRoleId.Vigilante,
-        ExtremeRoleId.Totocalcio,
+		ExtremeRoleId.Totocalcio,
     };
 
     public ExtremeAbilityButton? Button { get; set; }
@@ -105,11 +105,13 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         GameOverReason reason,
 		in WinnerTempData winner)
     {
-        if (this.betPlayer == null ||
-			ignoreRole.Contains(
-				ExtremeRoleManager.GameRole[
-					this.betPlayer.PlayerId].Id) ||
-			!winner.Contains(this.betPlayer.PlayerName)) { return; }
+		if (this.betPlayer == null ||
+			!ExtremeRoleManager.TryGetRole(this.betPlayer.PlayerId, out var role) ||
+			ignoreRole.Contains(role.Id) ||
+			!winner.Contains(this.betPlayer.PlayerName))
+		{
+			return;
+		}
 
 		winner.AddWithPlus(rolePlayerInfo);
     }

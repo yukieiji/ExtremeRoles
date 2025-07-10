@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -9,7 +9,7 @@ using Il2CppInterop.Runtime.Attributes;
 namespace ExtremeRoles.Module.CustomMonoBehaviour.Overrider;
 
 [Il2CppRegister]
-public sealed class ShapeshifterMinigameShapeshiftOverride : MonoBehaviour
+public sealed class ShapeshifterMinigameShapeshiftOverride(IntPtr ptr) : MonoBehaviour(ptr)
 {
 	private Action<PlayerControl>? destroyAction;
 

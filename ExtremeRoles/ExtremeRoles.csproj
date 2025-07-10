@@ -5,7 +5,7 @@
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
       <!--<Version>2025.7.2.0</Version>-->
-    <VersionPrefix>2025.7.7</VersionPrefix>
+    <VersionPrefix>2025.7.9</VersionPrefix>
     <VersionSuffix>Reinforcement</VersionSuffix>
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
@@ -69,6 +69,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExtremeRoles.Analyzers\ExtremeRoles.Analyzers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\ExtremeRoles.Generator\ExtremeRoles.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 

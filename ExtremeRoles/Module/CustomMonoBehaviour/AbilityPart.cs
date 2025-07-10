@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 
@@ -121,6 +121,7 @@ public class AbilityPartBase : MonoBehaviour, IAmongUs.IUsable
 		ExtremeRoleId.Hypnotist, PartType.ToString());
 }
 
+#pragma warning disable ERA002
 public sealed class RedAbilityPart : AbilityPartBase
 {
 	protected override AbilityModuleType PartType => AbilityModuleType.Red;
@@ -205,3 +206,4 @@ public sealed class GrayAbilityPart : AbilityPartBase
 
 	protected override Color GetColor() => ColorPalette.NeutralColor;
 }
+#pragma warning restore ERA002
