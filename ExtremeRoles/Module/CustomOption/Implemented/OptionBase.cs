@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -127,7 +127,10 @@ public abstract class CustomOptionBase<OutType, SelectionType> :
 	public void AddWithUpdate(IDynamismOption<OutType> option)
 	{
 		withUpdate.Add(option);
-		option.Update(Value);
+		if (!this.Info.IsHidden)
+		{
+			option.Update(Value);
+		}
 	}
 
 	public void SwitchPreset()
