@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 using UnityEngine;
 
@@ -131,43 +132,45 @@ public sealed class Lover : MultiAssignRoleBase
 
     public override string GetIntroDescription()
     {
-        string baseString = base.GetIntroDescription();
-        baseString += Design.ColoedString(
-            ColorPalette.LoverPink, "\n♥ ");
+		var builder = new StringBuilder();
 
-        List<byte> lover = getAliveSameLover();
+		builder
+			.AppendLine(base.GetIntroDescription())
+			.Append(Design.ColoedString(ColorPalette.LoverPink, "♥ "));
 
-        lover.Remove(PlayerControl.LocalPlayer.PlayerId);
+        var lover = getAliveSameLover(PlayerControl.LocalPlayer.PlayerId);
 
-        byte firstLover = lover[0];
-        lover.RemoveAt(0);
+		// 最初は確定
+		var firstLover = Player.GetPlayerControlById(lover[0]);
+		if (firstLover != null)
+		{
+			builder.Append(firstLover.Data.PlayerName);
+		}
 
-        baseString += Player.GetPlayerControlById(
-            firstLover).Data.PlayerName;
         if (lover.Count != 0)
         {
-            for (int i = 0; i < lover.Count; ++i)
+			// 後は適当に・・・
+            for (int i = 1; i < lover.Count; ++i)
             {
+				var targetLover = Player.GetPlayerControlById(lover[i]);
+				if (targetLover == null)
+				{
+					continue;
+				}
 
-                if (i == 0)
-                {
-                    baseString += Tr.GetString("andFirst");
-                }
-                else
-                {
-                    baseString += Tr.GetString("and");
-                }
-                baseString += Player.GetPlayerControlById(
-                    lover[i]).Data.PlayerName;
+				string andKey = i == 1 ? "andFirst" : "and";
 
+				builder
+					.Append(Tr.GetString(andKey))
+					.Append(targetLover.Data.PlayerName);
             }
         }
 
-        return string.Concat(
-            baseString,
-            Tr.GetString("LoverIntoPlus"),
-            Design.ColoedString(
-                ColorPalette.LoverPink, " ♥"));
+		builder
+			.Append(Tr.GetString("LoverIntoPlus"))
+			.Append(Design.ColoedString(ColorPalette.LoverPink, " ♥"));
+
+		return builder.ToString();
     }
 
 
@@ -242,8 +245,7 @@ public sealed class Lover : MultiAssignRoleBase
 
         var deathSetting = factory.CreateIntDynamicOption(
             LoverOption.DethWhenUnderAlive,
-            1, 1, 1, killerSetting,
-            invert: true,
+            1, 1, 1,
             tempMaxValue: GameSystem.VanillaMaxPlayerNum - 1);
 
         CreateKillerOption(factory, killerSetting);
@@ -344,54 +346,13 @@ public sealed class Lover : MultiAssignRoleBase
     private void exiledUpdate(
         PlayerControl exiledPlayer)
     {
-        List<byte> alive = getAliveSameLover();
-        alive.Remove(exiledPlayer.PlayerId);
-
-        if (this.becomeKiller)
-        {
-            if (alive.Count != 1) { return; }
-            forceReplaceToNeutral(alive[0]);
-        }
-        else
-        {
-            if (alive.Count > limit) { return; }
-
-            foreach (byte playerId in alive)
-            {
-                var player = Player.GetPlayerControlById(playerId);
-                if (player != null)
-                {
-                    player.Exiled();
-                }
-            }
-        }
+		loverUpdate(exiledPlayer.PlayerId, (x) => x.Exiled());
     }
 
-    private void killedUpdate(PlayerControl killedPlayer)
-    {
-        List<byte> alive = getAliveSameLover();
-        alive.Remove(killedPlayer.PlayerId);
-
-        if (this.becomeKiller)
-        {
-            if (alive.Count != 1) { return; }
-            forceReplaceToNeutral(alive[0]);
-
-        }
-        else
-        {
-            if (alive.Count > limit) { return; }
-
-            foreach (byte playerId in alive)
-            {
-                var player = Player.GetPlayerControlById(playerId);
-                if (player != null && !player.Data.IsDead && !player.Data.Disconnected)
-                {
-                    player.MurderPlayer(player);
-                }
-            }
-        }
-    }
+	private void killedUpdate(PlayerControl killedPlayer)
+	{
+		loverUpdate(killedPlayer.PlayerId, (x) => x.MurderPlayer(x));
+	}
 
     private void forceReplaceToNeutral(byte targetId)
     {
@@ -407,7 +368,7 @@ public sealed class Lover : MultiAssignRoleBase
 		newKiller.Vision = newKiller.killerLoverVision;
 		newKiller.IsApplyEnvironmentVision = newKiller.killerLoverIsApplyEnvironmentVisionEffect;
 		newKiller.UseVent = newKiller.killerLoverCanUseVent;
-		newKiller.ChangeAllLoverToNeutral(); // This method iterates and modifies roles, ensure it's compatible with TryGetRole logic
+		newKiller.ChangeAllLoverToNeutral();
 		ExtremeRoleManager.SetNewRole(targetId, newKiller);
 	}
 
@@ -426,17 +387,18 @@ public sealed class Lover : MultiAssignRoleBase
 
     }
 
-    private List<byte> getAliveSameLover()
+    private IReadOnlyList<byte> getAliveSameLover(byte ignorePlayerId)
     {
 
         List<byte> alive = new List<byte>();
 
-        foreach (PlayerControl playerControl in PlayerControl.AllPlayerControls)
+        foreach (var playerControl in PlayerControl.AllPlayerControls)
         {
-            if (playerControl == null ||
+			if (playerControl == null ||
 				playerControl.Data == null ||
 				playerControl.Data.IsDead ||
 				playerControl.Data.Disconnected ||
+				playerControl.PlayerId == ignorePlayerId ||
                 !ExtremeRoleManager.TryGetRole(playerControl.PlayerId, out var role) ||
 				!this.IsSameControlId(role))
             {
@@ -446,4 +408,31 @@ public sealed class Lover : MultiAssignRoleBase
         }
         return alive;
     }
+	private void loverUpdate(byte killedPlayerId, Action<PlayerControl> anotherPlayerId)
+	{
+		var alive = getAliveSameLover(killedPlayerId);
+
+		if (alive.Count > this.limit)
+		{
+			return;
+		}
+
+		foreach (byte playerId in alive)
+		{
+			if (this.becomeKiller)
+			{
+				forceReplaceToNeutral(playerId);
+			}
+			else
+			{
+				var player = Player.GetPlayerControlById(playerId);
+				if (player != null &&
+					!player.Data.IsDead &&
+					!player.Data.Disconnected)
+				{
+					anotherPlayerId.Invoke(player);
+				}
+			}
+		}
+	}
 }
