@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Collections.Generic;
 using HarmonyLib;
@@ -149,7 +149,7 @@ public static class GameStartManagerPatch
             int minutes = (int)timer / 60;
             int seconds = (int)timer % 60;
 
-            __instance.PlayerCounter.text = $"{currentText}\n({minutes:00}:{seconds:00})";
+            __instance.PlayerCounter.text = $"<size=-1>{currentText}\n({minutes:00}:{seconds:00})</size>";
 		}
     }
 
