@@ -58,7 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
+    <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" Condition="'$(OS)' == 'Windows_NT'" />
     <EmbeddedResource Include="Resources\**\*.png" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />
     <EmbeddedResource Include="Resources\JsonData\*.json" />
@@ -75,8 +75,9 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="python $(SolutionDir)\makelanguagejson.py" />
-    <Exec Command="robocopy $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources /XO &amp; if errorlevel 8 (exit 1) else (exit 0)" />
+    <Copy SourceFiles="@(RobocopySourceFiles)" DestinationFolder="$(SolutionDir)ExtremeRoles\Resources" SkipUnchangedFiles="true" Condition="'@(RobocopySourceFiles)' != ''" />
     <ItemGroup>
+      <RobocopySourceFiles Include="$(SolutionDir)UnityAsset\ExtremeRoles\**\*.*" />
       <EmbeddedResource Include="Resources\**\*.asset" />
       <EmbeddedResource Remove="Translation\resx\*.resx" />
     </ItemGroup>
