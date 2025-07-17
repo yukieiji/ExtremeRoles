@@ -40,12 +40,14 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public float KillCoolTime = 0f;
     public int KillRange = 1;
 
-    public readonly ExtremeRoleId Id;
-	public ExtremeRoleType Team;
+    public RoleCore Core { get; }
 
-    protected Color NameColor;
+    public ExtremeRoleId Id => Core.Id;
+	public ExtremeRoleType Team => Core.Team;
 
-    public readonly string RawRoleName;
+    protected Color NameColor => Core.Color;
+
+    public string RawRoleName => Core.Name;
 
 	public override IOptionLoader Loader
 	{
@@ -64,11 +66,9 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
 	public SingleRoleBase()
     { }
+
     public SingleRoleBase(
-        ExtremeRoleId id,
-        ExtremeRoleType team,
-        string roleName,
-        Color roleColor,
+        RoleCore core,
         bool canKill,
         bool hasTask,
         bool useVent,
@@ -80,10 +80,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         bool canUseVital = true,
         OptionTab tab = OptionTab.GeneralTab)
     {
-        this.Id = id;
-        this.Team = team;
-        this.RawRoleName = roleName;
-        this.NameColor = roleColor;
+        this.Core = core;
         this.CanKill = canKill;
         this.HasTask = hasTask;
         this.UseVent = useVent;
@@ -120,18 +117,28 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         }
     }
 
+    public SingleRoleBase(
+        ExtremeRoleId id,
+        ExtremeRoleType team,
+        string roleName,
+        Color roleColor,
+        bool canKill,
+        bool hasTask,
+        bool useVent,
+        bool useSabotage,
+        bool canCallMeeting = true,
+        bool canRepairSabotage = true,
+        bool canUseAdmin = true,
+        bool canUseSecurity = true,
+        bool canUseVital = true,
+        OptionTab tab = OptionTab.GeneralTab)
+        : this(new RoleCore(id, team, roleName, roleColor), canKill, hasTask, useVent, useSabotage, canCallMeeting, canRepairSabotage, canUseAdmin, canUseSecurity, canUseVital, tab)
+    {
+    }
+
     public virtual SingleRoleBase Clone()
     {
-        SingleRoleBase copy = (SingleRoleBase)this.MemberwiseClone();
-        Color baseColor = this.NameColor;
-
-        copy.NameColor = new Color(
-            baseColor.r,
-            baseColor.g,
-            baseColor.b,
-            baseColor.a);
-
-        return copy;
+        return (SingleRoleBase)this.MemberwiseClone();
     }
 
     public virtual bool IsTeamsWin() => this.IsWin;
