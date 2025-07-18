@@ -83,10 +83,9 @@ public sealed class Delusioner :
 
 
     public Delusioner() : base(
-        ExtremeRoleId.Delusioner,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Delusioner.ToString(),
-        ColorPalette.DelusionerPink,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Delusioner,
+			ColorPalette.DelusionerPink),
         false, true, false, false)
     { }
 

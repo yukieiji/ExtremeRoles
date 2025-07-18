@@ -87,10 +87,9 @@ public sealed class Resurrecter :
     private static SpriteRenderer flash;
 
     public Resurrecter() : base(
-        ExtremeRoleId.Resurrecter,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Resurrecter.ToString(),
-        ColorPalette.ResurrecterBlue,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Resurrecter,
+			ColorPalette.ResurrecterBlue),
         false, true, false, false)
     { }
 

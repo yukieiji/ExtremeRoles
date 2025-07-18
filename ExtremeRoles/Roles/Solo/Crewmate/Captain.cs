@@ -65,10 +65,9 @@ public sealed class Captain :
     private Dictionary<byte, SpriteRenderer> voteCheckMark;
 
     public Captain() : base(
-        ExtremeRoleId.Captain,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Captain.ToString(),
-        ColorPalette.CaptainLightKonjou,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Captain,
+			ColorPalette.CaptainLightKonjou),
         false, true, false, false)
     { }
 

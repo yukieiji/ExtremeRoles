@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
@@ -45,10 +45,9 @@ public sealed class Fencer : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
     private ExtremeAbilityButton takeTaskButton;
 
     public Fencer() : base(
-        ExtremeRoleId.Fencer,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Fencer.ToString(),
-        ColorPalette.FencerPin,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Fencer,
+			ColorPalette.FencerPin),
         false, true, false, false)
     { }
 
