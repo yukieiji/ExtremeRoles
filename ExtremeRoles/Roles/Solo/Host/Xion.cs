@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Module;
 
@@ -15,10 +15,7 @@ public sealed partial class Xion : SingleRoleBase
     private float defaultCameraZoom;
 
     public Xion(byte xionPlayerId) : base(
-        ExtremeRoleId.Xion,
-        ExtremeRoleType.Null,
-        ExtremeRoleId.Xion.ToString(),
-        ColorPalette.XionBlue,
+		new RoleCore(ExtremeRoleId.Xion, ExtremeRoleType.Null, ColorPalette.XionBlue),
         false, false, false, true,
         true, true, true, true, true)
     {
