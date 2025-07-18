@@ -192,10 +192,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 	private const CustomVent.Type meryVentType = CustomVent.Type.Mery;
 
     public Mery() : base(
-        ExtremeRoleId.Mery,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Mery.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Mery),
         true, false, true, true)
     { }
 

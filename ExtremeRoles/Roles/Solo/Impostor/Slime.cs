@@ -36,10 +36,7 @@ public sealed class Slime :
 	private bool seeMorphMerlin = false;
 
     public Slime() : base(
-        ExtremeRoleId.Slime,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Slime.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Slime),
         true, false, true, true)
     { }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -55,10 +55,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 
 
     public Bomber() : base(
-        ExtremeRoleId.Bomber,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Bomber.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Bomber),
         true, false, true, true)
     { }
 
