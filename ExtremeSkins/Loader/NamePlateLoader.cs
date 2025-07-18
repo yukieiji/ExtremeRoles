@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -32,6 +32,7 @@ public sealed class NamePlateLoader : ICosmicLoader
 
 	private const string updateComitKey = "ExNUpdateComitHash";
 	private const string jsonUpdateComitKey = "updateComitHash";
+	private const string defaultHash = "NoHashData";
 
 	private readonly ConfigEntry<string> curUpdateHash;
 
@@ -39,7 +40,7 @@ public sealed class NamePlateLoader : ICosmicLoader
 	{
 		this.curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
 			ExtremeSkinsPlugin.SkinComitCategory,
-			updateComitKey, "NoHashData");
+			updateComitKey, defaultHash);
 	}
 
 	public IEnumerator Fetch()
@@ -267,7 +268,11 @@ public sealed class NamePlateLoader : ICosmicLoader
 
 			if (author == jsonUpdateComitKey)
 			{
-				if ((string)token.Value != this.curUpdateHash.Value)
+				string tokenStr = (string)token.Value;
+				string curTokenStr = this.curUpdateHash.Value;
+
+				if (string.IsNullOrEmpty(tokenStr) ||
+					(curTokenStr != defaultHash && tokenStr != curTokenStr))
 				{
 					return true;
 				}
@@ -278,7 +283,10 @@ public sealed class NamePlateLoader : ICosmicLoader
 			}
 
 			if (author == namePlateRepoData ||
-				author == namePlateTransData) { continue; }
+				author == namePlateTransData)
+			{
+				continue;
+			}
 
 			string checkNamePlateFolder = Path.Combine(installFolder, author);
 

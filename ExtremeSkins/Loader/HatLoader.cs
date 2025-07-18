@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -37,12 +37,13 @@ public sealed class HatLoader : ICosmicLoader
 	private const string jsonUpdateComitKey = "updateComitHash";
 
 	private readonly ConfigEntry<string> curUpdateHash;
+	private const string defaultHash = "NoHashData";
 
 	public HatLoader()
 	{
 		this.curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
 			ExtremeSkinsPlugin.SkinComitCategory,
-			updateComitKey, "NoHashData");
+			updateComitKey, defaultHash);
 	}
 
 	public IEnumerator Fetch()
@@ -247,10 +248,16 @@ public sealed class HatLoader : ICosmicLoader
 
 		string? appPath = Path.GetDirectoryName(Application.dataPath);
 
-		if (string.IsNullOrEmpty(appPath)) { return true; }
+		if (string.IsNullOrEmpty(appPath))
+		{ 
+			return true;
+		}
 
 		string exhFolder = Path.Combine(appPath, DataStructure.FolderName);
-		if (!Directory.Exists(exhFolder)) { return true; }
+		if (!Directory.Exists(exhFolder))
+		{
+			return true;
+		}
 
 		getJsonData(hatRepoData).GetAwaiter().GetResult();
 
@@ -258,10 +265,22 @@ public sealed class HatLoader : ICosmicLoader
 		string hatJsonString = Encoding.UTF8.GetString(byteHatArray);
 
 		JObject hatJObject = JObject.Parse(hatJsonString);
-		JToken hatFolder = hatJObject["data"];
-		JToken newHash = hatJObject[jsonUpdateComitKey];
 
-		if ((string)newHash != curUpdateHash.Value) { return true; }
+		if (!(
+				hatJObject.TryGetValue("data", out JToken hatFolder) &&
+				hatJObject.TryGetValue(jsonUpdateComitKey, out JToken newHash)
+			))
+		{
+			return true;
+		}
+
+		string curValue = curUpdateHash.Value;
+		string newHashStr = (string)newHash;
+		if (string.IsNullOrEmpty(newHashStr) || 
+			(curValue != defaultHash && newHashStr != curValue))
+		{ 
+			return true;
+		}
 
 		JArray? hatArray = hatFolder.TryCast<JArray>();
 
