@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using Hazel;
 
@@ -271,7 +271,7 @@ public sealed partial class Xion
     private static void replaceToRole(byte targetPlayerId, int roleId)
     {
         SingleRoleBase baseRole = ExtremeRoleManager.GameRole[targetPlayerId];
-        bool isXion = baseRole.Id == ExtremeRoleId.Xion;
+        bool isXion = baseRole.Core.Id == ExtremeRoleId.Xion;
 
         ExtremeRolesPlugin.Logger.LogInfo(
             $"targetPlayerId:{targetPlayerId}   roleId:{roleId}");

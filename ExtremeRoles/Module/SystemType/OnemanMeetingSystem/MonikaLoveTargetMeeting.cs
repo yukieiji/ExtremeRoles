@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 using UnityEngine;
@@ -208,7 +208,7 @@ public sealed class MonikaLoveTargetMeeting : IOnemanMeeting, IMeetingButtonInit
 				this.system.InvalidPlayer(player) ||
 				(
 					ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
-					role.Id is ExtremeRoleId.Monika
+					role.Core.Id is ExtremeRoleId.Monika
 				) // モニカは投票権を持つが会議の投票先には表示さない
 			);
 

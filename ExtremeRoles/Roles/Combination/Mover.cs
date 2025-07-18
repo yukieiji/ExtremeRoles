@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using Hazel;
 
@@ -43,7 +43,7 @@ public sealed class Mover :
     }
 
     public override string RoleName =>
-        string.Concat(this.roleNamePrefix, this.RawRoleName);
+        string.Concat(this.roleNamePrefix, this.Core.Name);
 
     public ExtremeAbilityButton Button { get; set; }
 

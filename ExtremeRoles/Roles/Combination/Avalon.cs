@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -204,7 +204,7 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
 		system.AddQueue(playerId, OnemanMeetingSystemManager.Type.Assassin);
 	}
 
-    private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
+    private bool isServant() => this.AnotherRole?.Core.Id == ExtremeRoleId.Servant;
 }
 
 
@@ -280,7 +280,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin)
+        if (targetRole.Core.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin)
         {
             return Palette.White;
         }
@@ -354,7 +354,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
             if (role.IsCrewmate() ||
                 (role.IsNeutral() && !this.CanSeeNeutral) ||
-                (role.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))
+                (role.Core.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))
             {
                 poolPlayer.gameObject.SetActive(false);
             }

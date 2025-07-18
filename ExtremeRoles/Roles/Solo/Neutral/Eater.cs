@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -115,7 +115,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         {
             if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == target.PlayerId)
             {
-                Arrow arr = new Arrow(this.NameColor);
+                Arrow arr = new Arrow(this.Core.Color);
                 arr.UpdateTarget(array[i].transform.position);
 
                 this.deadBodyArrow.Add(target.PlayerId, arr);

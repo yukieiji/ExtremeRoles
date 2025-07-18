@@ -1,4 +1,4 @@
-﻿
+
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
@@ -11,8 +11,8 @@ public abstract partial class SingleRoleBase
     protected sealed override AutoParentSetOptionCategoryFactory CreateSpawnOption()
     {
 		var factory = OptionManager.CreateAutoParentSetOptionCategory(
-			ExtremeRoleManager.GetRoleGroupId(this.Id),
-			this.RawRoleName, this.Tab, this.NameColor);
+			ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
+			this.Core.Name, this.Tab, this.Core.Color);
 
 		var roleSetOption = factory.Create0To100Percentage10StepOption(
             RoleCommonOption.SpawnRate,

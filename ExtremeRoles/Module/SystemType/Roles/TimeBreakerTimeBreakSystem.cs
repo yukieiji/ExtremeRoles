@@ -75,7 +75,7 @@ public sealed class TimeBreakerTimeBreakSystem(
 		if (!this.effectImp &&
 			(
 				role.IsImpostor() ||
-				(this.effectMarlin && role.Id == ExtremeRoleId.Marlin)
+				(this.effectMarlin && role.Core.Id == ExtremeRoleId.Marlin)
 			))
 		{
 			return;

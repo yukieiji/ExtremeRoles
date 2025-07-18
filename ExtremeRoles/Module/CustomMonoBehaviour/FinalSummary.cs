@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -232,11 +232,13 @@ public sealed class FinalSummary : MonoBehaviour
 				return x.StatusInfo.CompareTo(y.StatusInfo);
 			}
 
-			if (x.Role.Id != y.Role.Id)
+			var xId = x.Role.Core.Id;
+			var yId = y.Role.Core.Id;
+			if (xId != yId)
 			{
-				return x.Role.Id.CompareTo(y.Role.Id);
+				return xId.CompareTo(yId);
 			}
-			if (x.Role.Id == ExtremeRoleId.VanillaRole)
+			if (xId == ExtremeRoleId.VanillaRole)
 			{
 				var xVanillaRole = (VanillaRoleWrapper)x.Role;
 				var yVanillaRole = (VanillaRoleWrapper)y.Role;

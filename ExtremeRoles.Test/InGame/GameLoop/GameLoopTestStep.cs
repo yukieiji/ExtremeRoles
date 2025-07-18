@@ -82,7 +82,7 @@ public class GameLoopTestStep(GameLoopTestCaseFactory factory) : TestStepBase
 				var player = PlayerCache.AllPlayerControl.OrderBy(x => RandomGenerator.Instance.Next()).First();
 				if (!ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) ||
 					player.Data.IsDead ||
-					role.Id is ExtremeRoleId.Assassin)
+					role.Core.Id is ExtremeRoleId.Assassin)
 				{
 					continue;
 				}

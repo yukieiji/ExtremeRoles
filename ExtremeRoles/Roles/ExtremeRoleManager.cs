@@ -439,13 +439,13 @@ public static class ExtremeRoleManager
 
     public static bool IsDisableWinCheckRole(SingleRoleBase role)
     {
-        bool mainRoleCheckResult = WinCheckDisableRole.Contains(role.Id);
+        bool mainRoleCheckResult = WinCheckDisableRole.Contains(role.Core.Id);
         if (role is MultiAssignRoleBase multiAssignRole &&
 			multiAssignRole.AnotherRole is not null)
         {
 			return
 				mainRoleCheckResult ||
-				WinCheckDisableRole.Contains(multiAssignRole.AnotherRole.Id);
+				WinCheckDisableRole.Contains(multiAssignRole.AnotherRole.Core.Id);
 		}
         else
         {
@@ -454,7 +454,7 @@ public static class ExtremeRoleManager
     }
 	public static bool IsAliveWinNeutral(
 		SingleRoleBase role, NetworkedPlayerInfo playerInfo)
-		=> role.Id switch
+		=> role.Core.Id switch
 		{
 			ExtremeRoleId.Neet => !(playerInfo.IsDead || playerInfo.Disconnected),
 			_ => false

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -209,7 +209,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Sharer &&
+        if (targetRole.Core.Id == ExtremeRoleId.Sharer &&
             this.IsSameControlId(targetRole))
         {
             return Design.ColoedString(
@@ -224,7 +224,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Sharer &&
+        if (targetRole.Core.Id == ExtremeRoleId.Sharer &&
             this.IsSameControlId(targetRole))
         {
             return Palette.ImpostorRed;
@@ -235,7 +235,7 @@ public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleRe
 
     public override bool IsSameTeam(SingleRoleBase targetRole)
     {
-        if (targetRole.Id == ExtremeRoleId.Sharer &&
+        if (targetRole.Core.Id == ExtremeRoleId.Sharer &&
             this.IsSameControlId(targetRole))
         {
             return true;

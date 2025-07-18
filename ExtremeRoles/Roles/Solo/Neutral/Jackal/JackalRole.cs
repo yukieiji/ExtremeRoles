@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -206,7 +206,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
         sourceJackal.SidekickPlayerId.Add(targetId);
 
-        if (targetRole.Id != ExtremeRoleId.Lover)
+        if (targetRole.Core.Id != ExtremeRoleId.Lover)
         {
             ExtremeRoleManager.SetNewRole(targetId, newSidekick);
         }
@@ -225,7 +225,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
                 ExtremeRoleManager.SetNewAnothorRole(targetId, newSidekick);
 
-                lover.Team = ExtremeRoleType.Neutral;
+                lover.Core.Team = ExtremeRoleType.Neutral;
                 lover.HasTask = false;
                 lover.HasOtherVision = sidekickOption.HasOtherVision;
                 lover.IsApplyEnvironmentVision = sidekickOption.ApplyEnvironmentVisionEffect;
@@ -249,12 +249,13 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
+		var id = targetRole.Core.Id;
 
         if ((
-                targetRole.Id == ExtremeRoleId.Sidekick &&
+                id is ExtremeRoleId.Sidekick &&
                 SidekickPlayerId.Contains(targetPlayerId) ||
 
-                targetRole.Id == ExtremeRoleId.Jackal
+                id is ExtremeRoleId.Jackal
             ) && IsSameControlId(targetRole))
         {
             return ColorPalette.JackalBlue;
@@ -491,7 +492,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
     private bool isLoverAndSetTarget(byte playerId)
     {
-        if (ExtremeRoleManager.GameRole[playerId].Id == ExtremeRoleId.Lover)
+        if (ExtremeRoleManager.GameRole[playerId].Core.Id == ExtremeRoleId.Lover)
         {
             return canLoverSidekick;
         }
@@ -500,6 +501,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
 
     private bool isSameJackalTeam(SingleRoleBase targetRole)
     {
-        return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Sidekick;
+		var id = targetRole.Core.Id;
+		return id == Core.Id || id is ExtremeRoleId.Sidekick;
     }
 }

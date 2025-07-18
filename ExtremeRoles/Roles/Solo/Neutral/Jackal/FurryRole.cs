@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
@@ -159,6 +159,6 @@ public sealed class FurryRole : SingleRoleBase,
 	private bool canSeeJackal(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Jackal &&
+			targetRole.Core.Id is ExtremeRoleId.Jackal &&
 			this.status.SeeJackal;
 }

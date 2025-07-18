@@ -59,18 +59,18 @@ public sealed class Lover : MultiAssignRoleBase
     public override string GetFullDescription()
     {
         string baseDesc;
-
+		var id = this.Core.Id;
         if (this.IsImpostor() && !this.CanHasAnotherRole)
         {
-            baseDesc = Tr.GetString($"{this.Id}ImposterFullDescription");
+            baseDesc = Tr.GetString($"{id}ImposterFullDescription");
         }
         else if (this.CanKill && !this.CanHasAnotherRole)
         {
-            baseDesc = Tr.GetString($"{this.Id}NeutralKillerFullDescription");
+            baseDesc = Tr.GetString($"{id}NeutralKillerFullDescription");
         }
         else if (this.IsNeutral() && !this.CanHasAnotherRole)
         {
-            baseDesc = Tr.GetString($"{this.Id}NeutralFullDescription");
+            baseDesc = Tr.GetString($"{id}NeutralFullDescription");
         }
         else
         {
@@ -112,9 +112,10 @@ public sealed class Lover : MultiAssignRoleBase
             return base.GetImportantText(isContainFakeTask);
         }
 
+		var core = this.Core;
         string killerText = Design.ColoedString(
-            this.NameColor,
-            $"{this.GetColoredRoleName()}: {Tr.GetString($"{this.Id}KillerShortDescription")}");
+			core.Color,
+            $"{this.GetColoredRoleName()}: {Tr.GetString($"{core.Id}KillerShortDescription")}");
 
         if (this.AnotherRole == null)
         {
@@ -179,7 +180,7 @@ public sealed class Lover : MultiAssignRoleBase
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Lover &&
+        if (targetRole.Core.Id == ExtremeRoleId.Lover &&
             this.IsSameControlId(targetRole))
         {
             return Design.ColoedString(
@@ -194,7 +195,7 @@ public sealed class Lover : MultiAssignRoleBase
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Lover &&
+        if (targetRole.Core.Id == ExtremeRoleId.Lover &&
             this.IsSameControlId(targetRole))
         {
             return ColorPalette.LoverPink;
@@ -205,7 +206,7 @@ public sealed class Lover : MultiAssignRoleBase
 
     public override bool IsSameTeam(SingleRoleBase targetRole)
     {
-        if (targetRole.Id == ExtremeRoleId.Lover &&
+        if (targetRole.Core.Id == ExtremeRoleId.Lover &&
             this.IsSameControlId(targetRole))
         {
             return true;
@@ -227,7 +228,7 @@ public sealed class Lover : MultiAssignRoleBase
             {
                 continue;
             }
-            role.Team = ExtremeRoleType.Neutral;
+            role.Core.Team = ExtremeRoleType.Neutral;
             role.HasTask = false;
         }
     }
@@ -270,9 +271,9 @@ public sealed class Lover : MultiAssignRoleBase
             LoverOption.BecomNeutral);
 
         if (isNeutral && !this.becomeKiller &&
-			this.Team is ExtremeRoleType.Crewmate)
+			this.Core.Team is ExtremeRoleType.Crewmate)
         {
-            this.Team = ExtremeRoleType.Neutral;
+            this.Core.Team = ExtremeRoleType.Neutral;
         }
         if (this.becomeKiller)
         {
@@ -361,7 +362,7 @@ public sealed class Lover : MultiAssignRoleBase
 			return;
         }
 
-		newKiller.Team = ExtremeRoleType.Neutral;
+		newKiller.Core.Team = ExtremeRoleType.Neutral;
 		newKiller.CanKill = true;
 		newKiller.HasTask = false;
 		newKiller.HasOtherVision = newKiller.killerLoverHasOtherVision;
@@ -377,7 +378,7 @@ public sealed class Lover : MultiAssignRoleBase
         if (isContainFakeTask)
         {
             string fakeTaskString = Design.ColoedString(
-                this.NameColor,
+                this.Core.Color,
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";

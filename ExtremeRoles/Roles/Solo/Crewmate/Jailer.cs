@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -93,7 +93,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		ColorPalette.NeutralColor,
 		Tr.GetString("neutralShotCall"));
 	private string andShortStr => Design.ColoedString(
-		this.NameColor,
+		this.Core.Color,
 		Tr.GetString("andFirst"));
 
 	public enum TargetMode
@@ -192,7 +192,7 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 		if (IsAwake)
 		{
 			return Tr.GetString(
-				$"{this.Id}FullDescription");
+				$"{this.Core.Id}FullDescription");
 		}
 		else
 		{
@@ -213,13 +213,15 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 				_ => "",
 			};
 
+			var core = this.Core;
+			var color = core.Color;
 			string roleName = Design.ColoedString(
-				this.NameColor,
+				color,
 				Tr.GetString(this.RoleName));
 
 			string desc = Design.ColoedString(
-				this.NameColor,
-				Tr.GetString($"{this.Id}ShortDescription"));
+				color,
+				Tr.GetString($"{core.Id}ShortDescription"));
 
 			return $"{roleName}: {shortText}{desc}";
 		}
@@ -280,8 +282,8 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 
 		bool isSuccess = this.mode switch
 		{
-			TargetMode.BothImpostorAndNautral => !role.IsCrewmate() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
-			TargetMode.Impostor => role.IsImpostor() && (this.canReplaceAssassin || role.Id != ExtremeRoleId.Assassin),
+			TargetMode.BothImpostorAndNautral => !role.IsCrewmate() && (this.canReplaceAssassin || role.Core.Id != ExtremeRoleId.Assassin),
+			TargetMode.Impostor => role.IsImpostor() && (this.canReplaceAssassin || role.Core.Id != ExtremeRoleId.Assassin),
 			TargetMode.Neutral => role.IsNeutral(),
 			_ => false,
 		};

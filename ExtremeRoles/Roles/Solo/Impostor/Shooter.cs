@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -98,7 +98,7 @@ public sealed class Shooter :
                 this.canShootThisMeeting
             ) ||
             target == 253 ||
-            ExtremeRoleManager.GameRole[target].Id == ExtremeRoleId.Assassin;
+            ExtremeRoleManager.GameRole[target].Core.Id == ExtremeRoleId.Assassin;
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -297,7 +297,7 @@ public sealed class Shooter :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

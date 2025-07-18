@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -25,15 +25,16 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 				var playerInfo = GameData.Instance.GetPlayerById(playerId);
 				if (!playerInfo.IsDead)
 				{
-					if (role.Id == ExtremeRoleId.Hero)
+					var id = role.Core.Id;
+					if (id == ExtremeRoleId.Hero)
 					{
 						++heroNum;
 					}
-					else if (role.Id == ExtremeRoleId.Villain)
+					else if (id == ExtremeRoleId.Villain)
 					{
 						++villanNum;
 					}
-					else if (role.Id == ExtremeRoleId.Vigilante)
+					else if (id == ExtremeRoleId.Vigilante)
 					{
 						++vigilanteNum;
 					}
