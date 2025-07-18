@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -336,22 +336,24 @@ public sealed class YandereRole :
 
             OneSidedLover = PlayerCache.AllPlayerControl[playerIndex];
 
-            var role = ExtremeRoleManager.GameRole[OneSidedLover.PlayerId];
-            if (role.Id != ExtremeRoleId.Yandere &&
-                role.Id != ExtremeRoleId.Xion) { break; }
+            if (!ExtremeRoleManager.TryGetRole(OneSidedLover.PlayerId, out var role))
+			{
+				break;
+			}
 
-            var multiAssignRole = role as MultiAssignRoleBase;
-            if (multiAssignRole != null)
+			var id = role.Core.Id;
+            if (id != ExtremeRoleId.Yandere &&
+                id != ExtremeRoleId.Xion)
+			{
+				break;
+			}
+
+            if (role is MultiAssignRoleBase multiAssignRole &&
+				multiAssignRole.AnotherRole != null &&
+				multiAssignRole.AnotherRole.Core.Id != ExtremeRoleId.Yandere)
             {
-                if (multiAssignRole.AnotherRole != null)
-                {
-
-                    if (multiAssignRole.AnotherRole.Id != ExtremeRoleId.Yandere)
-                    {
-                        break;
-                    }
-                }
-            }
+				break;
+			}
 
         } while (true);
         oneSidePlayerName = OneSidedLover.Data.PlayerName;
@@ -587,8 +589,7 @@ public sealed class YandereRole :
 
         if (oneSidedArrow == null)
         {
-            oneSidedArrow = new Arrow(
-                NameColor);
+            oneSidedArrow = new Arrow(Core.Color);
         }
         oneSidedArrow.UpdateTarget(pos);
     }

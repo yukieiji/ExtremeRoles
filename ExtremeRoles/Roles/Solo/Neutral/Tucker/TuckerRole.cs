@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -227,11 +227,11 @@ public sealed class TuckerRole :
 
 	public override Color GetTargetRoleSeeColor(SingleRoleBase targetRole, byte targetPlayerId)
 	{
-		if (targetRole.Id is ExtremeRoleId.Chimera &&
+		if (targetRole.Core.Id is ExtremeRoleId.Chimera &&
 			IsSameControlId(targetRole) &&
 			chimera.Contains(targetPlayerId))
 		{
-			return NameColor;
+			return Core.Color;
 		}
 		return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
 	}
@@ -488,7 +488,8 @@ public sealed class TuckerRole :
 
 	private bool isSameTuckerTeam(SingleRoleBase targetRole)
 	{
-		return targetRole.Id == Id || targetRole.Id == ExtremeRoleId.Chimera;
+		var id = targetRole.Core.Id;
+		return id == Core.Id || id is ExtremeRoleId.Chimera;
 	}
 
 	public void Update(PlayerControl rolePlayer)
@@ -537,7 +538,7 @@ public sealed class TuckerRole :
 			reviveFlash.gameObject.SetActive(true);
 		}
 
-		Color32 color = NameColor;
+		Color32 color = Core.Color;
 
 		reviveFlash.enabled = true;
 

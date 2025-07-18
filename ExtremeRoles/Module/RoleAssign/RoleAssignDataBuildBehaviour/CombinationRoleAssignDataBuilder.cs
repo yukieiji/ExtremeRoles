@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using AmongUs.GameOptions;
@@ -52,7 +52,8 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 				{
 					Logging.Debug(
 						$"------------------- AssignToPlayer:{player.PlayerName} -------------------");
-					Logging.Debug($"---AssignRole:{role.Id}---");
+					var id = role.Core.Id;
+					Logging.Debug($"---AssignRole:{id}---");
 
 					var vanillaRole = player.Role;
 					bool assign = canMulitAssignRoleToPlayer(role, vanillaRole);
@@ -72,11 +73,11 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 
 					if (!data.Assign.TryAddCombRoleAssignData(
 							new PlayerToCombRoleAssignData(
-								player.PlayerId, (int)role.Id,
+								player.PlayerId, (int)id,
 								roleListData.CombType,
 								(byte)roleListData.GameControlId,
 								(byte)vanillaRole),
-							role.Team))
+							role.Core.Team))
 					{
 						Logging.Debug($"Cannnot add assignData");
 						continue;
@@ -136,7 +137,8 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 
 				foreach (var role in roleManager.Roles)
 				{
-					switch (role.Team)
+					var team = role.Core.Team;
+					switch (team)
 					{
 						case ExtremeRoleType.Crewmate:
 							++reduceCrewmateRole;
@@ -152,7 +154,7 @@ public sealed class CombinationRoleAssignDataBuilder : IRoleAssignDataBuildBehav
 					}
 					if (roleManager is GhostAndAliveCombinationRoleManagerBase)
 					{
-						isSpawn = !GhostRoleSpawnDataManager.Instance.IsGlobalSpawnLimit(role.Team);
+						isSpawn = !GhostRoleSpawnDataManager.Instance.IsGlobalSpawnLimit(team);
 					}
 				}
 

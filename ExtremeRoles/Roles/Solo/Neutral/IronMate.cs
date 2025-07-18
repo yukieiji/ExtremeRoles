@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using UnityEngine;
 
@@ -71,7 +71,7 @@ public sealed class IronMate :
 		if (IsAwake)
 		{
 			return Tr.GetString(
-				$"{this.Id}FullDescription");
+				$"{this.Core.Id}FullDescription");
 		}
 		else
 		{

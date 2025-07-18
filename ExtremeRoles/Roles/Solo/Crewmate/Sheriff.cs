@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -62,8 +62,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
         if ((targetPlayerRole.IsImpostor()) ||
             (targetPlayerRole.IsNeutral() && this.canShootNeutral))
         {
-            if ((!this.canShootAssassin && targetPlayerRole.Id == ExtremeRoleId.Assassin) ||
-                targetPlayerRole.Id == ExtremeRoleId.Villain)
+			var id = targetPlayerRole.Core.Id;
+            if ((!this.canShootAssassin && id is ExtremeRoleId.Assassin) ||
+				id is ExtremeRoleId.Villain)
             {
                 missShoot(
                     rolePlayer,
@@ -98,7 +99,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
             shotText = string.Concat(
                 shotText,
                 Design.ColoedString(
-                    this.NameColor,
+                    this.Core.Color,
                     Tr.GetString("andFirst")),
                 Design.ColoedString(
                     ColorPalette.NeutralColor,
@@ -109,9 +110,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
             this.GetColoredRoleName(),
             shotText,
             Design.ColoedString(
-                this.NameColor,
+                this.Core.Color,
                 Tr.GetString(
-                    $"{this.Id}ShortDescription")));
+                    $"{this.Core.Id}ShortDescription")));
 
         return baseString;
 

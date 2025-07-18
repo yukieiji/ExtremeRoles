@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 
 using ExtremeRoles.Roles.API;
@@ -66,7 +66,7 @@ public sealed class SlaveDriver :
 	{
 		if (this.effectPlayer.Contains(targetPlayerId))
 		{
-			return Design.ColoedString(this.NameColor, " ★");
+			return Design.ColoedString(this.Core.Color, " ★");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}

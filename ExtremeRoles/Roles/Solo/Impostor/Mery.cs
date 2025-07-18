@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -231,7 +231,7 @@ public sealed class Mery : SingleRoleBase, IRoleAutoBuildAbility
 		}
         var localPlayerRole = ExtremeRoleManager.GetLocalPlayerRole();
 
-        bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;
+        bool isMarlin = localPlayerRole.Core.Id == ExtremeRoleId.Marlin;
 
 		system.Add(new Camp(
             mery.ActiveNum,

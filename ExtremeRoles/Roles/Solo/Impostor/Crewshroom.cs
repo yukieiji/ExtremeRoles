@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
@@ -49,7 +49,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	public override string GetIntroDescription()
 		=> Map.Id switch
 		{
-			5 => Tr.GetString($"{this.Id}FungleIntroDescription"),
+			5 => Tr.GetString($"{this.Core.Id}FungleIntroDescription"),
 			_ => base.GetIntroDescription()
 		};
 

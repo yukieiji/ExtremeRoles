@@ -62,21 +62,22 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
+		var id = targetRole.Core.Id;
 		if (this.canSeeJackal(targetRole) && (
 			(
 				this.canNotKillJackal &&
-				targetRole.Id is ExtremeRoleId.Jackal
+				id is ExtremeRoleId.Jackal
 			)
 			||
 			(
 				this.canNotKillSideKick &&
-				targetRole.Id is ExtremeRoleId.Sidekick
+				id is ExtremeRoleId.Sidekick
 			)))
 		{
 			return true;
 		}
 
-		if (targetRole.Id == this.Id)
+		if (id == this.Core.Id)
 		{
 			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 			{
@@ -135,6 +136,6 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 	private bool canSeeJackal(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Jackal &&
+			targetRole.Core.Id is ExtremeRoleId.Jackal &&
 			this.status.SeeJackal;
 }

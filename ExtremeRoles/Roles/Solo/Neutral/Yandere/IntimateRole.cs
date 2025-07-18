@@ -63,10 +63,11 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 
 	public override bool IsSameTeam(SingleRoleBase targetRole)
 	{
+		var id = targetRole.Core.Id;
 		if (this.canSeeYandere(targetRole) && (
 			(
 				this.canNotKillYandere &&
-				targetRole.Id is ExtremeRoleId.Yandere
+				id is ExtremeRoleId.Yandere
 			)
 			||
 			(
@@ -78,7 +79,7 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 			return true;
 		}
 
-		if (targetRole.Id == this.Id)
+		if (id == this.Core.Id)
 		{
 			if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
 			{
@@ -139,7 +140,7 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 	private bool canSeeYandere(SingleRoleBase targetRole)
 			=>
 				this.status is not null &&
-				targetRole.Id is ExtremeRoleId.Yandere &&
+				targetRole.Core.Id is ExtremeRoleId.Yandere &&
 				this.status.SeeYandere;
 
 }

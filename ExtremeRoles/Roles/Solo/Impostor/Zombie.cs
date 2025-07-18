@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -337,7 +337,7 @@ public sealed class Zombie :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

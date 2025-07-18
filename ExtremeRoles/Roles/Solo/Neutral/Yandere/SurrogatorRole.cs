@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -194,6 +194,6 @@ public sealed class SurrogatorRole :
 	private bool canSeeYandere(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Yandere &&
+			targetRole.Core.Id is ExtremeRoleId.Yandere &&
 			this.status.SeeYandere;
 }

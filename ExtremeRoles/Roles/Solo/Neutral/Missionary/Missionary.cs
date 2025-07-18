@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -68,13 +68,13 @@ public sealed class MissionaryRole :
 	{
 		if (this.lamb.Any(x => x.PlayerId == targetPlayerId))
 		{
-			return Design.ColoedString(NameColor, " ×");
+			return Design.ColoedString(Core.Color, " ×");
 		}
 		else if (
 			this.status is not null &&
 			this.status.ContainsJudgementTarget(targetPlayerId))
 		{
-			return Design.ColoedString(NameColor, " ★");
+			return Design.ColoedString(Core.Color, " ★");
 		}
 		else
 		{

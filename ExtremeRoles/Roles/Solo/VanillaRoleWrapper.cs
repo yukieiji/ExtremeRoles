@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
@@ -79,7 +79,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
             (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole && !awakeRole.IsAwake))
         {
             return Design.ColoedString(
-                this.NameColor,
+                this.Core.Color,
                 Tr.GetString(this.RoleName));
         }
 
@@ -127,7 +127,7 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
         if (isContainFakeTask && (!this.HasTask || !this.AnotherRole.HasTask))
         {
             string fakeTaskString = Design.ColoedString(
-                this.NameColor,
+                this.Core.Color,
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
@@ -168,9 +168,10 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
             ]);
         }
 
+		var color = this.Core.Color;
         return Design.ColoedString(
-            this.NameColor,
+			color,
             $"{Design.ColoedString(
-                this.NameColor, Tr.GetString(this.RoleName))}: {Tr.GetString("crewImportantText")}");
+				color, Tr.GetString(this.RoleName))}: {Tr.GetString("crewImportantText")}");
     }
 }

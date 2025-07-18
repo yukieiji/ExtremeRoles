@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -267,7 +267,7 @@ public sealed class UnderWarper :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {
