@@ -46,7 +46,7 @@ public sealed class IronMate :
 	private float deadBodyShowTime;
 
     public IronMate(): base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.IronMate,
 			ColorPalette.IronMateAluminium),
         false, true, false, false)

@@ -165,7 +165,7 @@ public sealed class YandereRole :
     }
 
     public YandereRole(): base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Yandere,
 			ColorPalette.YandereVioletRed),
         false, false, true, false)

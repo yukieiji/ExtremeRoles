@@ -43,7 +43,7 @@ public sealed class Alice :
 	private float winTaskRate;
 
     public Alice(): base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Alice,
 			ColorPalette.AliceGold),
         true, false, true, true)

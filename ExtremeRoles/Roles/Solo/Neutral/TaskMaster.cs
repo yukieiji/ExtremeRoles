@@ -29,7 +29,7 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     private List<int> addTask;
 
     public TaskMaster() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.TaskMaster,
 			ColorPalette.NeutralColor),
         false, true, true, true)

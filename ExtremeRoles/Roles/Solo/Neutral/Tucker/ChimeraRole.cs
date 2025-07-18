@@ -52,7 +52,7 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
-			RoleCore.BuildNeautral(
+			RoleCore.BuildNeutral(
 				ExtremeRoleId.Chimera,
 				ColorPalette.TuckerMerdedoie),
 			true, false, option.Vent, false)

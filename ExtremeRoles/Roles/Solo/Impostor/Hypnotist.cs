@@ -948,7 +948,7 @@ public sealed class Doll :
         byte dollPlayerId,
         byte hypnotistPlayerId,
         Hypnotist parent) : base(
-			RoleCore.BuildNeautral(
+			RoleCore.BuildNeutral(
 				ExtremeRoleId.Doll,
 				Palette.ImpostorRed),
 			false, false, false,

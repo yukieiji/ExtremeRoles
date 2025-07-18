@@ -32,7 +32,7 @@ public sealed class FurryRole : SingleRoleBase,
 	private bool isUpdate;
 
 	public FurryRole() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Furry,
 			ColorPalette.JackalBlue),
 		false, false, false, false)

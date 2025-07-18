@@ -891,7 +891,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 	public ExtremeAbilityButton Button { get; set; }
 	public Vigilante(
         ) : base(
-			RoleCore.BuildNeautral(
+			RoleCore.BuildNeutral(
 				ExtremeRoleId.Vigilante,
 				ColorPalette.VigilanteFujiIro),
             false, false, false, false,

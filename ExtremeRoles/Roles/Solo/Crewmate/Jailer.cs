@@ -635,7 +635,7 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	public Lawbreaker(
 		IOptionLoader loader,
 		Option option) : base(
-			RoleCore.BuildNeautral(
+			RoleCore.BuildNeutral(
 				ExtremeRoleId.Lawbreaker,
 				ColorPalette.LowbreakerNoir),
 			option.Kill, false, option.Vent, option.Sab)
