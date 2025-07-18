@@ -64,11 +64,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	public Eater() : base(
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-	   ExtremeRoleId.Eater,
-       ExtremeRoleType.Neutral,
-       ExtremeRoleId.Eater.ToString(),
-       ColorPalette.EaterMaroon,
-       false, false, false, false)
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Eater,
+			ColorPalette.EaterMaroon),
+		false, false, false, false)
     { }
 
     public void CreateAbility()

@@ -52,11 +52,10 @@ public sealed class ChimeraRole : SingleRoleBase, IRoleUpdate, IRoleSpecialReset
 		IOptionLoader loader,
 		NetworkedPlayerInfo tuckerPlayer,
 		Option option) : base(
-		ExtremeRoleId.Chimera,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Chimera.ToString(),
-		ColorPalette.TuckerMerdedoie,
-		true, false, option.Vent, false)
+			RoleCore.BuildNeautral(
+				ExtremeRoleId.Chimera,
+				ColorPalette.TuckerMerdedoie),
+			true, false, option.Vent, false)
 	{
 		Loader = loader;
 		this.status = new ChimeraStatus(tuckerPlayer, this);

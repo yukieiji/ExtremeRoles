@@ -76,10 +76,9 @@ public sealed class TuckerRole :
 	private HashSet<byte> chimera = new HashSet<byte>();
 
 	public TuckerRole() : base(
-		ExtremeRoleId.Tucker,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Tucker.ToString(),
-		ColorPalette.TuckerMerdedoie,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Tucker,
+			ColorPalette.TuckerMerdedoie),
 		false, false, false, false)
 	{ }
 

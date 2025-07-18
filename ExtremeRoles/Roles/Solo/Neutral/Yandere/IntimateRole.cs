@@ -33,10 +33,9 @@ public sealed class IntimateRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 	private bool canNotKillOneSideLover;
 
 	public IntimateRole() : base(
-		ExtremeRoleId.Intimate,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Intimate.ToString(),
-		ColorPalette.YandereVioletRed,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Intimate,
+			ColorPalette.YandereVioletRed),
 		false, false, false, false)
 	{ }
 

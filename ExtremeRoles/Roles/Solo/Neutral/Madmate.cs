@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -57,10 +57,9 @@ public sealed class Madmate :
 	private ExtremeAbilityButton madmateAbilityButton;
 
     public Madmate() : base(
-        ExtremeRoleId.Madmate,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Madmate.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Madmate,
+			Palette.ImpostorRed),
         false, false, false, false)
     { }
 
