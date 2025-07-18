@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -9,12 +9,38 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Roles.API;
 
+public sealed class RoleCore(ExtremeRoleId id, ExtremeRoleType team, Color color, string Name)
+{
+	public Color Color { get; set; } = color;
+	public ExtremeRoleType Team { get; set; } = team;
+
+	public ExtremeRoleId Id { get; } = id;
+	public string Name { get; } = Name;
+
+
+	public RoleCore(ExtremeRoleId id, ExtremeRoleType team, Color color) : this(id, team, color, id.ToString())
+	{
+
+	}
+
+
+	public static RoleCore BuildImpostor(ExtremeRoleId id)
+		=> new RoleCore(id, ExtremeRoleType.Impostor, Palette.ImpostorRed);
+
+	public static RoleCore BuildCrewmate(ExtremeRoleId id, Color color)
+		=> new RoleCore(id, ExtremeRoleType.Crewmate, color);
+
+
+	public static RoleCore BuildNeautral(ExtremeRoleId id, Color color)
+		=> new RoleCore(id, ExtremeRoleType.Neutral, color);
+}
+
 public abstract partial class SingleRoleBase : RoleOptionBase
 {
     public virtual bool IsAssignGhostRole => true;
 
     public OptionTab Tab { get; } = OptionTab.GeneralTab;
-    public virtual string RoleName => this.RawRoleName;
+    public virtual string RoleName => this.Core.Name;
 
     public bool CanCallMeeting = true;
     public bool CanRepairSabotage = true;
@@ -42,20 +68,13 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     public RoleCore Core { get; }
 
-    public ExtremeRoleId Id => Core.Id;
-	public ExtremeRoleType Team => Core.Team;
-
-    protected Color NameColor => Core.Color;
-
-    public string RawRoleName => Core.Name;
-
 	public override IOptionLoader Loader
 	{
 		get
 		{
 			if (!OptionManager.Instance.TryGetCategory(
 					this.Tab,
-					ExtremeRoleManager.GetRoleGroupId(this.Id),
+					ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");
@@ -95,7 +114,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
         if (tab == OptionTab.GeneralTab)
         {
-            switch (this.Team)
+            switch (this.Core.Team)
             {
                 case ExtremeRoleType.Crewmate:
                     this.Tab = OptionTab.CrewmateTab;
@@ -117,7 +136,26 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         }
     }
 
-    public SingleRoleBase(
+	public SingleRoleBase(
+		ExtremeRoleId id,
+		ExtremeRoleType team,
+		Color roleColor,
+		bool canKill,
+		bool hasTask,
+		bool useVent,
+		bool useSabotage,
+		bool canCallMeeting = true,
+		bool canRepairSabotage = true,
+		bool canUseAdmin = true,
+		bool canUseSecurity = true,
+		bool canUseVital = true,
+		OptionTab tab = OptionTab.GeneralTab)
+		: this(new RoleCore(id, team, roleColor), canKill, hasTask, useVent, useSabotage, canCallMeeting, canRepairSabotage, canUseAdmin, canUseSecurity, canUseVital, tab)
+	{
+	}
+
+
+	public SingleRoleBase(
         ExtremeRoleId id,
         ExtremeRoleType team,
         string roleName,
@@ -132,7 +170,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         bool canUseSecurity = true,
         bool canUseVital = true,
         OptionTab tab = OptionTab.GeneralTab)
-        : this(new RoleCore(id, team, roleName, roleColor), canKill, hasTask, useVent, useSabotage, canCallMeeting, canRepairSabotage, canUseAdmin, canUseSecurity, canUseVital, tab)
+        : this(new RoleCore(id, team, roleColor, roleName), canKill, hasTask, useVent, useSabotage, canCallMeeting, canRepairSabotage, canUseAdmin, canUseSecurity, canUseVital, tab)
     {
     }
 
