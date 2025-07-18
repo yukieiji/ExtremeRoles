@@ -45,10 +45,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     private TMPro.TextMeshPro killCountText = null;
 
     public Sheriff() : base(
-        ExtremeRoleId.Sheriff,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Sheriff.ToString(),
-        ColorPalette.SheriffOrange,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Sheriff,
+			ColorPalette.SheriffOrange),
         true, true, false, false)
     { }
 

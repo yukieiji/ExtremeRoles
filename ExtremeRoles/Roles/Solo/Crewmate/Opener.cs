@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
@@ -40,10 +40,9 @@ public sealed class Opener : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	private float abilityCoolTime;
 
     public Opener() : base(
-        ExtremeRoleId.Opener,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Opener.ToString(),
-        ColorPalette.OpenerSpringGreen,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Opener,
+			ColorPalette.OpenerSpringGreen),
         false, true, false, false)
     { }
 

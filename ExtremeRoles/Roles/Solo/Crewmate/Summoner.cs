@@ -49,10 +49,9 @@ public sealed class Summoner :
     private float range;
 
     public Summoner() : base(
-        ExtremeRoleId.Summoner,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Summoner.ToString(),
-        ColorPalette.SummonerToukoushoku,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Summoner,
+			ColorPalette.SummonerToukoushoku),
         false, true, false, false)
     { }
 

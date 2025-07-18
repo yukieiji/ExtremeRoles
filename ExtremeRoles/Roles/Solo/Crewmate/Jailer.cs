@@ -104,10 +104,9 @@ public sealed class Jailer : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<R
 	}
 
 	public Jailer() : base(
-		ExtremeRoleId.Jailer,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Jailer.ToString(),
-		ColorPalette.JailerSapin,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Jailer,
+			ColorPalette.JailerSapin),
 		false, true, false, false, false)
 	{ }
 
@@ -548,17 +547,16 @@ public sealed class Yardbird : SingleRoleBase, IRoleUpdate
 		in IOptionLoader loader,
 		byte targetPlayerId,
 		Option option) : base(
-		ExtremeRoleId.Yardbird,
-		ExtremeRoleType.Crewmate,
-		ExtremeRoleId.Yardbird.ToString(),
-		ColorPalette.YardbirdYenHown,
-		false, true,
-		option.Vent,
-		option.Sab,
-		false, true,
-		option.Admin,
-		option.Security,
-		option.Vital)
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Yardbird,
+				ColorPalette.YardbirdYenHown),
+			false, true,
+			option.Vent,
+			option.Sab,
+			false, true,
+			option.Admin,
+			option.Security,
+			option.Vital)
 	{
 		this.Loader = loader;
 		this.MoveSpeed = option.SpeedMod;
@@ -637,11 +635,10 @@ public sealed class Lawbreaker : SingleRoleBase, IRoleWinPlayerModifier
 	public Lawbreaker(
 		IOptionLoader loader,
 		Option option) : base(
-		ExtremeRoleId.Lawbreaker,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Lawbreaker.ToString(),
-		ColorPalette.LowbreakerNoir,
-		option.Kill, false, option.Vent, option.Sab)
+			RoleCore.BuildNeautral(
+				ExtremeRoleId.Lawbreaker,
+				ColorPalette.LowbreakerNoir),
+			option.Kill, false, option.Vent, option.Sab)
 	{
 
 		this.Loader = loader;

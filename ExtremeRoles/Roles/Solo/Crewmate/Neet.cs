@@ -19,10 +19,9 @@ public sealed class Neet : SingleRoleBase
     }
 
     public Neet() : base(
-        ExtremeRoleId.Neet,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Neet.ToString(),
-        ColorPalette.NeetSilver,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Neet,
+			ColorPalette.NeetSilver),
         false, false, false,
         false, false, false,
         false, false, false)
