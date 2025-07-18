@@ -60,7 +60,7 @@ public sealed class Heretic :
 	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
 
 	public Heretic() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Heretic,
 			Palette.ImpostorRed),
 		false, false, false, false,

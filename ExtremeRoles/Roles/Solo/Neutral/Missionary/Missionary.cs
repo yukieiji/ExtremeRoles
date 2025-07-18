@@ -56,7 +56,7 @@ public sealed class MissionaryRole :
 	private MissionaryStatus? status;
 
 	public MissionaryRole() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Missionary,
 			ColorPalette.MissionaryBlue),
 		false, false, false, false)

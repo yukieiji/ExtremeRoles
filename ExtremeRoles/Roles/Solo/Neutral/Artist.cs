@@ -44,7 +44,7 @@ public sealed class Artist :
 	private float winArea = 0.0f;
 
     public Artist(): base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Artist,
 			ColorPalette.ArtistChenChuWhowan),
         false, false, false, false)

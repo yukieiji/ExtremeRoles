@@ -36,7 +36,7 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     private ExtremeAbilityButton outburstButton;
 
     public Jester(): base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Jester,
 			ColorPalette.JesterPink),
         false, false, false, false)

@@ -47,7 +47,7 @@ public sealed class Hatter : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate,
 	private int abilityIncreaseNum;
 
 	public Hatter(): base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Hatter,
 			ColorPalette.HatterYanagizome),
         false, true, false, false,

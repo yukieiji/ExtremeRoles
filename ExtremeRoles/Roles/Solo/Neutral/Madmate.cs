@@ -57,7 +57,7 @@ public sealed class Madmate :
 	private ExtremeAbilityButton madmateAbilityButton;
 
     public Madmate() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Madmate,
 			Palette.ImpostorRed),
         false, false, false, false)
