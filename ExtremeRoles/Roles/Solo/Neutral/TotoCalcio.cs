@@ -107,7 +107,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     {
 		if (this.betPlayer == null ||
 			!ExtremeRoleManager.TryGetRole(this.betPlayer.PlayerId, out var role) ||
-			ignoreRole.Contains(role.Id) ||
+			ignoreRole.Contains(role.Core.Id) ||
 			!winner.Contains(this.betPlayer.PlayerName))
 		{
 			return;
@@ -176,7 +176,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
         if (targetPlayerId == this.betPlayer.PlayerId)
         {
             return Helper.Design.ColoedString(
-                this.NameColor, $" ▲");
+                this.Core.Color, $" ▲");
         }
 
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);

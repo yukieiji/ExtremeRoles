@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -88,7 +88,7 @@ public sealed class PawnRole : SingleRoleBase, IRoleWinPlayerModifier, IRoleUpda
 	private bool canSeeQueen(SingleRoleBase targetRole)
 		=>
 			this.status is not null &&
-			targetRole.Id is ExtremeRoleId.Queen &&
+			targetRole.Core.Id is ExtremeRoleId.Queen &&
 			this.status.SeeQween;
 
 }

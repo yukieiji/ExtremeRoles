@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -150,7 +150,7 @@ public sealed class Summoner :
 		if (this.summonTarget != null &&
 			this.summonTarget.PlayerId == targetPlayerId)
 		{
-			return Design.ColoedString(this.NameColor, " ◀");
+			return Design.ColoedString(this.Core.Color, " ◀");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}

@@ -1,43 +1,40 @@
-﻿using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode;
 
-namespace ExtremeRoles.Roles.API.Extension.Neutral
+namespace ExtremeRoles.Roles.API.Extension.Neutral;
+
+public static class NeutralRoleExtension
 {
-    public static class NeutralRoleExtension
+    public static bool IsNeutralSameTeam(
+        this SingleRoleBase self,
+        SingleRoleBase targetRole)
     {
-        public static bool IsNeutralSameTeam(
-            this SingleRoleBase self,
-            SingleRoleBase targetRole)
+		var targetCore = targetRole.Core;
+
+		if (self.Core.Id == targetCore.Id)
         {
-            if (self.Id == targetRole.Id)
+            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
             {
-                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return self.GameControlId == targetRole.GameControlId;
-                }
+                return true;
             }
             else
             {
-                if (self.IsImpostor())
-                {
-                    return targetRole.Team == ExtremeRoleType.Impostor;
-                }
-
-                var multiAssignRole = targetRole as MultiAssignRoleBase;
-                if (multiAssignRole != null)
-                {
-                    if (multiAssignRole.AnotherRole != null)
-                    {
-                        return self.IsSameTeam(
-                            multiAssignRole.AnotherRole);
-                    }
-                }
-
-                return false;
+                return self.GameControlId == targetRole.GameControlId;
             }
+        }
+        else
+        {
+            if (self.IsImpostor())
+            {
+                return targetCore.Team == ExtremeRoleType.Impostor;
+            }
+
+            if (targetRole is MultiAssignRoleBase multiAssignRole &&
+				multiAssignRole.AnotherRole != null)
+            {
+				return self.IsSameTeam(multiAssignRole.AnotherRole);
+			}
+
+            return false;
         }
     }
 }

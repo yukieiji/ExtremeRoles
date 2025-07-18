@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
@@ -73,7 +73,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 
 				// アサシンと既にキルした人は除く
 				if (deadPlayerId.Contains(targetId) ||
-					ExtremeRoleManager.GameRole[targetId].Id == ExtremeRoleId.Assassin ||
+					ExtremeRoleManager.GameRole[targetId].Core.Id == ExtremeRoleId.Assassin ||
 					targetId == checkPlayerId)
 				{
 					continue;

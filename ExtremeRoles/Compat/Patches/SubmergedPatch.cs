@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -145,7 +145,7 @@ public static class SubmarineOxygenSystemDetorioratePatch
 		if (__instance == null ||
 			!CompatModManager.Instance.TryGetModMap<Submerged>(out var submergedMod) ||
 			!RoleAssignState.Instance.IsRoleSetUpEnd ||
-			Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin)
+			Roles.ExtremeRoleManager.GetLocalPlayerRole().Core.Id != Roles.ExtremeRoleId.Assassin)
 		{
 			return;
 		}

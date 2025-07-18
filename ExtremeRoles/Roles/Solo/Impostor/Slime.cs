@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
@@ -56,7 +56,7 @@ public sealed class Slime :
 				PlayerControl.LocalPlayer != null &&
 				ExtremeRoleManager.TryGetRole(
 					PlayerControl.LocalPlayer.PlayerId, out var localRole) &&
-				localRole.Id == ExtremeRoleId.Marlin
+				localRole.Core.Id == ExtremeRoleId.Marlin
 			))
 		{
 			return;

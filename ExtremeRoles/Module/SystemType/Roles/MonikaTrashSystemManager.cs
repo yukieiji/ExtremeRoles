@@ -45,7 +45,7 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 		=> ExtremeSystemTypeManager.Instance.TryGet(ExtremeSystemType.MonikaTrashSystem, out system);
 
 	public static bool InvalidTarget(SingleRoleBase targetRole, byte sourcePlayerId)
-		=> targetRole.Id is ExtremeRoleId.Monika &&
+		=> targetRole.Core.Id is ExtremeRoleId.Monika &&
 			TryGet(out var system) &&
 			system.InvalidPlayer(sourcePlayerId);
 
@@ -304,7 +304,7 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 				continue;
 			}
 			if (ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
-				role.Id is ExtremeRoleId.Monika)
+				role.Core.Id is ExtremeRoleId.Monika)
 			{
 				monikaNum++;
 				monikaId = player.PlayerId;
@@ -345,6 +345,6 @@ public sealed class MonikaTrashSystem(bool canSeeCrew) : IDirtableSystemType
 	private bool isLocalRoleMonika()
 	{
 		var role = ExtremeRoleManager.GetLocalPlayerRole();
-		return role.Id is ExtremeRoleId.Monika;
+		return role.Core.Id is ExtremeRoleId.Monika;
 	}
 }

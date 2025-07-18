@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -467,7 +467,7 @@ public sealed class BodyGuard :
         if (shilded.IsShielding(
 			PlayerControl.LocalPlayer.PlayerId, targetPlayerId))
         {
-            return Design.ColoedString(this.NameColor, $" ■");
+            return Design.ColoedString(this.Core.Color, $" ■");
         }
 
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -15,7 +15,7 @@ public sealed partial class ExtremeShipStatus
 
 	public void AddGlobalActionRole(SingleRoleBase role)
 	{
-		switch (role.Id)
+		switch (role.Core.Id)
 		{
 			case ExtremeRoleId.Assassin:
 				this.isAssignAssassin = true;
