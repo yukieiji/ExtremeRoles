@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 #nullable enable
 
@@ -6,18 +6,13 @@ namespace ExtremeRoles.Roles.API;
 
 public abstract partial class SingleRoleBase
 {
-    public void SetNameColor(Color newColor)
-    {
-        this.NameColor = newColor;
-    }
-
-    public virtual Color GetNameColor(bool isTruthColor = false) => this.NameColor;
+    public virtual Color GetNameColor(bool isTruthColor = false) => this.Core.Color;
 
     public virtual Color GetTargetRoleSeeColor(
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Xion)
+        if (targetRole.Core.Id == ExtremeRoleId.Xion)
         {
             return Module.ColorPalette.XionBlue;
         }

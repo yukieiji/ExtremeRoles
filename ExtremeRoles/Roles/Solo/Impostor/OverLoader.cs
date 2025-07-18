@@ -57,10 +57,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
 
     public OverLoader() : base(
-        ExtremeRoleId.OverLoader,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.OverLoader.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.OverLoader),
         true, false, true, true)
     {
         this.IsOverLoad = false;
@@ -172,7 +169,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
 	public override string GetFullDescription()
 		=> IsAwake ?
-			Tr.GetString($"{this.Id}FullDescription") :
+			Tr.GetString($"{this.Core.Id}FullDescription") :
 			Tr.GetString($"{RoleTypes.Impostor}FullDescription");
 
 	public override string GetImportantText(bool isContainFakeTask = true)

@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
@@ -148,7 +148,8 @@ public static class KillButtonDoClickPatch
         PlayerControl target,
         SingleRoleBase targetRole)
     {
-        if (targetRole.Id == ExtremeRoleId.Vigilante)
+		var id = targetRole.Core.Id;
+		if (id == ExtremeRoleId.Vigilante)
         {
             var vigilante = (Vigilante)targetRole;
             if (vigilante.Condition != Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
@@ -156,7 +157,7 @@ public static class KillButtonDoClickPatch
                 return;
             }
         }
-        else if (targetRole.Id == ExtremeRoleId.Hero)
+        else if (id == ExtremeRoleId.Hero)
         {
             HeroAcademia.RpcDrawHeroAndVillan(
                 target, killer);

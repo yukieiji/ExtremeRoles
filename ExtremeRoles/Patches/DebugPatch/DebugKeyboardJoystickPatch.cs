@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -64,7 +64,7 @@ public static class DebugTool
             foreach (KeyValuePair<byte, SingleRoleBase> value in dict)
             {
                 Logging.Debug(
-                    $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}   Team:{value.Value.Team}");
+                    $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}   Team:{value.Value.Core.Team}");
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -54,10 +54,7 @@ public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRole
     private float defaultKillCool;
 
     public AssaultMaster() : base(
-        ExtremeRoleId.AssaultMaster,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.AssaultMaster.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.AssaultMaster),
         true, false, true, true)
     { }
 

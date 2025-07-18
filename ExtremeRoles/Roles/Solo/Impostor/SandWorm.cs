@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -131,10 +131,7 @@ public sealed class SandWorm : SingleRoleBase, IRoleAbility
     private PlayerControl targetPlayer = null;
 
     public SandWorm() : base(
-        ExtremeRoleId.SandWorm,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.SandWorm.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.SandWorm),
         true, false, true, true)
     { }
 

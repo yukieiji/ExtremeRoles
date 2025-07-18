@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 
 using ExtremeRoles.Module.Interface;
@@ -54,7 +54,7 @@ internal sealed class YandereWinChecker : IWinChecker
 			}
 			else if (oneSidedLoverRole.IsNeutral())
 			{
-				switch (oneSidedLoverRole.Id)
+				switch (oneSidedLoverRole.Core.Id)
 				{
 					case ExtremeRoleId.Alice:
 					case ExtremeRoleId.Jackal:

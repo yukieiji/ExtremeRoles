@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -46,10 +46,7 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
     }
 
     public BountyHunter() : base(
-        ExtremeRoleId.BountyHunter,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.BountyHunter.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.BountyHunter),
         true, false, true, true)
     { }
 
