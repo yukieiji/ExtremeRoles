@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
@@ -28,10 +28,9 @@ public sealed class Gambler :
     private int maxVoteNum;
 
     public Gambler() : base(
-        ExtremeRoleId.Gambler,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Gambler.ToString(),
-        ColorPalette.GamblerYellowGold,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Gambler,
+			ColorPalette.GamblerYellowGold),
         false, true, false, false)
     { }
 

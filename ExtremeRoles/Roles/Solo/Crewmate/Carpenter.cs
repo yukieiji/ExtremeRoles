@@ -227,10 +227,9 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     private static int cameraNum = 0;
     public Carpenter() : base(
-        ExtremeRoleId.Carpenter,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Carpenter.ToString(),
-        ColorPalette.CarpenterBrown,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Carpenter,
+			ColorPalette.CarpenterBrown),
         false, true, false, false)
     { }
 

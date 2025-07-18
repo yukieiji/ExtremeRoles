@@ -223,10 +223,9 @@ public sealed class Psychic :
 	public ExtremeAbilityButton Button { get; set; }
 
 	public Psychic() : base(
-        ExtremeRoleId.Psychic,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Psychic.ToString(),
-        ColorPalette.PsychicSyentyietu,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Psychic,
+			ColorPalette.PsychicSyentyietu),
         false, true, false, false)
     { }
 #pragma warning restore CS8618

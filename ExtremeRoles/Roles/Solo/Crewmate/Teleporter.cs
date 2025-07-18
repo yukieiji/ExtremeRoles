@@ -171,10 +171,9 @@ public sealed class Teleporter :
         "ExtremeRoles.Resources.JsonData.TeleporterTeleportPartPosition.json";
 
     public Teleporter() : base(
-        ExtremeRoleId.Teleporter,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Teleporter.ToString(),
-        ColorPalette.TeleporterCherry,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Teleporter,
+			ColorPalette.TeleporterCherry),
         false, true, false, false)
     { }
 
