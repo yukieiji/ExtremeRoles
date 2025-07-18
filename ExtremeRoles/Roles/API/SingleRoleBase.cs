@@ -40,7 +40,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public float KillCoolTime = 0f;
     public int KillRange = 1;
 
-    public RoleCore Core { get; }
+    public RoleCore Core { get; private set; }
 
 	public override IOptionLoader Loader
 	{
@@ -112,7 +112,9 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     public virtual SingleRoleBase Clone()
     {
-        return (SingleRoleBase)this.MemberwiseClone();
+        var role = (SingleRoleBase)this.MemberwiseClone();
+		role.Core = new RoleCore(this.Core);
+		return role;
     }
 
     public virtual bool IsTeamsWin() => this.IsWin;
