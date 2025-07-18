@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using Hazel;
 using UnityEngine;
@@ -75,10 +75,9 @@ public sealed class Miner :
     private TextPopUpper killLogger;
 
     public Miner() : base(
-        ExtremeRoleId.Miner,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Miner.ToString(),
-        ColorPalette.MinerIvyGreen,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Miner,
+			ColorPalette.MinerIvyGreen),
         false, false, true, false)
     { }
 #pragma warning restore CS8618

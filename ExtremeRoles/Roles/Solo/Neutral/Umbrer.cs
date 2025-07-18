@@ -145,10 +145,9 @@ public sealed class Umbrer : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecial
     private GraphicAndActiveTimeSwitcher<UmbrerMode> mode;
 
     public Umbrer() : base(
-        ExtremeRoleId.Umbrer,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Umbrer.ToString(),
-        ColorPalette.UmbrerRed,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Umbrer,
+			ColorPalette.UmbrerRed),
         false, false, false, false)
     { }
 

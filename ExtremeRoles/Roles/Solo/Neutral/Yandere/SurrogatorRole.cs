@@ -42,10 +42,9 @@ public sealed class SurrogatorRole :
 	private SurrogatorStatus? status;
 
 	public SurrogatorRole() : base(
-		ExtremeRoleId.Surrogator,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Surrogator.ToString(),
-		ColorPalette.YandereVioletRed,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Surrogator,
+			ColorPalette.YandereVioletRed),
 		false, false, false, false)
 	{ }
 
