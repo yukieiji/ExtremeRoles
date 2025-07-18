@@ -17,10 +17,11 @@ public sealed class VanillaRoleWrapper : MultiAssignRoleBase
     public RoleTypes VanilaRoleId;
 
     private VanillaRoleWrapper(RoleTypes id, bool isImpostor) : base(
-        id: ExtremeRoleId.VanillaRole,
-        team: isImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate,
-        roleName: id.ToString(),
-        roleColor: isImpostor ? Palette.ImpostorRed : Palette.White,
+		new RoleCore(
+			ExtremeRoleId.VanillaRole,
+			isImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate,
+			isImpostor ? Palette.ImpostorRed : Palette.White,
+			id.ToString()),
         canKill: isImpostor,
         hasTask: !isImpostor,
         useVent: isImpostor,

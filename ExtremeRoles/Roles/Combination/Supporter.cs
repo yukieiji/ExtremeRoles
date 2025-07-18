@@ -37,10 +37,7 @@ public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
 
     public Supporter(
         ) : base(
-            ExtremeRoleId.Supporter,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Supporter.ToString(),
-            ColorPalette.SupporterGreen,
+			RoleCore.BuildCrewmate(ExtremeRoleId.Supporter, ColorPalette.SupporterGreen),
             false, true, false, false,
             tab: OptionTab.CombinationTab)
     {}

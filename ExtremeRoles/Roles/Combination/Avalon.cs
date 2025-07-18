@@ -55,10 +55,7 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
 
     public Assassin(
         ) : base(
-            ExtremeRoleId.Assassin,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Assassin.ToString(),
-            Palette.ImpostorRed,
+			RoleCore.BuildImpostor(ExtremeRoleId.Assassin),
             true, false, true, true,
             tab: OptionTab.CombinationTab)
     {}
@@ -228,10 +225,9 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     private Dictionary<byte, PoolablePlayer> PlayerIcon = [];
     public Marlin(
         ) : base(
-            ExtremeRoleId.Marlin,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Marlin.ToString(),
-            ColorPalette.MarineBlue,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Marlin,
+				ColorPalette.MarineBlue),
             false, false, false, false,
             tab: OptionTab.CombinationTab)
     {}

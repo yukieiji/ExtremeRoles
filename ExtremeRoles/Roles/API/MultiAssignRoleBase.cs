@@ -39,10 +39,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 	}
 
 	public MultiAssignRoleBase(
-        ExtremeRoleId id,
-        ExtremeRoleType team,
-        string roleName,
-        Color roleColor,
+        RoleCore core,
         bool canKill,
         bool hasTask,
         bool useVent,
@@ -53,7 +50,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         bool canUseSecurity = true,
         bool canUseVital = true,
         OptionTab tab = OptionTab.GeneralTab) : base(
-            id, team, roleName, roleColor,
+			core,
             canKill, hasTask, useVent,
             useSabotage, canCallMeeting,
             canRepairSabotage, canUseAdmin,

@@ -110,44 +110,6 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         }
     }
 
-	public SingleRoleBase(
-		ExtremeRoleId id,
-		ExtremeRoleType team,
-		Color roleColor,
-		bool canKill,
-		bool hasTask,
-		bool useVent,
-		bool useSabotage,
-		bool canCallMeeting = true,
-		bool canRepairSabotage = true,
-		bool canUseAdmin = true,
-		bool canUseSecurity = true,
-		bool canUseVital = true,
-		OptionTab tab = OptionTab.GeneralTab)
-		: this(new RoleCore(id, team, roleColor), canKill, hasTask, useVent, useSabotage, canCallMeeting, canRepairSabotage, canUseAdmin, canUseSecurity, canUseVital, tab)
-	{
-	}
-
-
-	public SingleRoleBase(
-        ExtremeRoleId id,
-        ExtremeRoleType team,
-        string roleName,
-        Color roleColor,
-        bool canKill,
-        bool hasTask,
-        bool useVent,
-        bool useSabotage,
-        bool canCallMeeting = true,
-        bool canRepairSabotage = true,
-        bool canUseAdmin = true,
-        bool canUseSecurity = true,
-        bool canUseVital = true,
-        OptionTab tab = OptionTab.GeneralTab)
-        : this(new RoleCore(id, team, roleColor, roleName), canKill, hasTask, useVent, useSabotage, canCallMeeting, canRepairSabotage, canUseAdmin, canUseSecurity, canUseVital, tab)
-    {
-    }
-
     public virtual SingleRoleBase Clone()
     {
         return (SingleRoleBase)this.MemberwiseClone();

@@ -948,13 +948,12 @@ public sealed class Doll :
         byte dollPlayerId,
         byte hypnotistPlayerId,
         Hypnotist parent) : base(
-        ExtremeRoleId.Doll,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Doll.ToString(),
-        Palette.ImpostorRed,
-        false, false, false,
-        false, false, false,
-        false, false, false)
+			RoleCore.BuildNeautral(
+				ExtremeRoleId.Doll,
+				Palette.ImpostorRed),
+			false, false, false,
+			false, false, false,
+			false, false, false)
     {
         this.dollPlayerId = dollPlayerId;
         this.hypnotistPlayerId = hypnotistPlayerId;
