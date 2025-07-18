@@ -16,6 +16,11 @@ public sealed class RoleCore(ExtremeRoleId id, ExtremeRoleType team, Color color
 
 	}
 
+	public RoleCore(RoleCore other) : this(other.Id, other.Team, other.Color, other.Name)
+	{
+
+	}
+
 	public static RoleCore BuildImpostor(ExtremeRoleId id)
 		=> new RoleCore(id, ExtremeRoleType.Impostor, Palette.ImpostorRed);
 
