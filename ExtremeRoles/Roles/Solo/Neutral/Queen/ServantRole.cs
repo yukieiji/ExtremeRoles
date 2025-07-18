@@ -41,10 +41,9 @@ public sealed class ServantRole :
 		QueenRole queen,
 		SingleRoleBase baseRole) :
 		base(
-			ExtremeRoleId.Servant,
-			ExtremeRoleType.Neutral,
-			ExtremeRoleId.Servant.ToString(),
-			ColorPalette.QueenWhite,
+			RoleCore.BuildNeautral(
+				ExtremeRoleId.Servant,
+				ColorPalette.QueenWhite),
 			baseRole.CanKill,
 			!baseRole.IsImpostor() ? true : baseRole.HasTask,
 			baseRole.UseVent,

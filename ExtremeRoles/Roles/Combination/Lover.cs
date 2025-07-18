@@ -46,10 +46,9 @@ public sealed class Lover : MultiAssignRoleBase
     private bool killerLoverCanUseVent = false;
 
     public Lover() : base(
-        ExtremeRoleId.Lover,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Lover.ToString(),
-        ColorPalette.LoverPink,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Lover,
+			ColorPalette.LoverPink),
         false, true,
         false, false,
         tab: OptionTab.CombinationTab)

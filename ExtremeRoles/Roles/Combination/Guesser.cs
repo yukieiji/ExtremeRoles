@@ -379,10 +379,9 @@ public sealed class Guesser :
 
 	public Guesser(
         ) : base(
-            ExtremeRoleId.Guesser,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Guesser.ToString(),
-            ColorPalette.GuesserRedYellow,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Guesser,
+				ColorPalette.GuesserRedYellow),
             false, true, false, false,
             tab: OptionTab.CombinationTab)
     { }

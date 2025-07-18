@@ -161,10 +161,9 @@ public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRol
     private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
     public Detective() : base(
-        ExtremeRoleId.Detective,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Detective.ToString(),
-        ColorPalette.DetectiveKokikou,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Detective,
+			ColorPalette.DetectiveKokikou),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
     { }
@@ -447,10 +446,9 @@ public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReport
 {
     private Dictionary<byte, DateTime> deadBodyInfo;
     public Assistant() : base(
-        ExtremeRoleId.Assistant,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Assistant.ToString(),
-        ColorPalette.AssistantBluCapri,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Assistant,
+			ColorPalette.AssistantBluCapri),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
     { }
@@ -623,10 +621,9 @@ public class DetectiveApprentice : MultiAssignRoleBase, IRoleAutoBuildAbility, I
         int gameControlId,
         DetectiveApprenticeOptionHolder option
         ) : base(
-            ExtremeRoleId.DetectiveApprentice,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.DetectiveApprentice.ToString(),
-            ColorPalette.DetectiveApprenticeKonai,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.DetectiveApprentice,
+				ColorPalette.DetectiveApprenticeKonai),
             false, true, false, false)
     {
 		this.Loader = loader;
