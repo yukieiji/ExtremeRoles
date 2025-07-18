@@ -63,10 +63,9 @@ public sealed class Accelerator :
 	public ExtremeAbilityButton Button { get; set; }
 
 	public Accelerator() : base(
-        ExtremeRoleId.Accelerator,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Accelerator.ToString(),
-        ColorPalette.AcceleratorBiancoPeria,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Accelerator,
+			ColorPalette.AcceleratorBiancoPeria),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
     { }

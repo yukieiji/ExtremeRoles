@@ -96,10 +96,9 @@ public sealed class Mover :
     private string roleNamePrefix;
 
     public Mover() : base(
-        ExtremeRoleId.Mover,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Mover.ToString(),
-        ColorPalette.MoverSafeColor,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Mover,
+			ColorPalette.MoverSafeColor),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
     { }
