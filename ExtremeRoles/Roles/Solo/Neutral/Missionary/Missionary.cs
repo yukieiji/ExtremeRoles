@@ -56,10 +56,9 @@ public sealed class MissionaryRole :
 	private MissionaryStatus? status;
 
 	public MissionaryRole() : base(
-		ExtremeRoleId.Missionary,
-		ExtremeRoleType.Neutral,
-		ExtremeRoleId.Missionary.ToString(),
-		ColorPalette.MissionaryBlue,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.Missionary,
+			ColorPalette.MissionaryBlue),
 		false, false, false, false)
 	{ }
 #pragma warning restore CS8618

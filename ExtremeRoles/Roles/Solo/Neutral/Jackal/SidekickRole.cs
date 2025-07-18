@@ -34,10 +34,9 @@ public sealed class SidekickRole : SingleRoleBase, IRoleUpdate
 		byte jackalPlayerId,
 		bool isImpostor,
 		JackalRole.SidekickOptionHolder option) : base(
-			ExtremeRoleId.Sidekick,
-			ExtremeRoleType.Neutral,
-			ExtremeRoleId.Sidekick.ToString(),
-			ColorPalette.JackalBlue,
+			RoleCore.BuildNeautral(
+				ExtremeRoleId.Sidekick,
+				ColorPalette.JackalBlue),
 			option.CanKill, false,
 			option.UseVent, option.UseSabotage)
 	{

@@ -50,10 +50,9 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     private float finalCoolTime;
 
     public Totocalcio() : base(
-       ExtremeRoleId.Totocalcio,
-       ExtremeRoleType.Neutral,
-       ExtremeRoleId.Totocalcio.ToString(),
-       ColorPalette.TotocalcioGreen,
+		RoleCore.BuildNeautral(
+		   ExtremeRoleId.Totocalcio,
+		   ColorPalette.TotocalcioGreen),
        false, false, false, false)
     { }
 

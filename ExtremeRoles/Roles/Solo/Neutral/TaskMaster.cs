@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Module;
@@ -29,10 +29,9 @@ public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     private List<int> addTask;
 
     public TaskMaster() : base(
-        ExtremeRoleId.TaskMaster,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.TaskMaster.ToString(),
-        ColorPalette.NeutralColor,
+		RoleCore.BuildNeautral(
+			ExtremeRoleId.TaskMaster,
+			ColorPalette.NeutralColor),
         false, true, true, true)
     { }
 
