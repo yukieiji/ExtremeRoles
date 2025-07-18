@@ -85,10 +85,7 @@ public sealed class Zombie :
     private Collider2D cachedColider = null;
 
     public Zombie() : base(
-        ExtremeRoleId.Zombie,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Zombie.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Zombie),
         true, false, true, true)
     { }
 

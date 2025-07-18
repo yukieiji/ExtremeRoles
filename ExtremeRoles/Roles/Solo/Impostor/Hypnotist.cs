@@ -129,10 +129,7 @@ public sealed class Hypnotist :
 		"ExtremeRoles.Resources.JsonData.HypnotistAbilityPartPosition.json";
 
 	public Hypnotist() : base(
-        ExtremeRoleId.Hypnotist,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Hypnotist.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Hypnotist),
         true, false, true, true)
     { }
 #pragma warning restore CS8618

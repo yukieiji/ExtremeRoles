@@ -76,10 +76,7 @@ public sealed class Shooter :
     private TextMeshPro meetingShootText = null;
 
     public Shooter(): base(
-        ExtremeRoleId.Shooter,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Shooter.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Shooter),
         true, false, true, true)
     { }
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 
 using ExtremeRoles.Helper;
@@ -50,10 +50,7 @@ public sealed class PsychoKiller :
 	}
 
     public PsychoKiller() : base(
-        ExtremeRoleId.PsychoKiller,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.PsychoKiller.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.PsychoKiller),
         true, false, true, true)
     {}
 

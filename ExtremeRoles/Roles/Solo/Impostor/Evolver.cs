@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -48,10 +48,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAutoBuildAbility
     private ExtremeAbilityButton evolveButton;
 
     public Evolver() : base(
-        ExtremeRoleId.Evolver,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Evolver.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Evolver),
         true, false, true, true)
     {
         this.isEatingEndCleanBody = false;

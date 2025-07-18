@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -37,10 +37,7 @@ public sealed class Terorist : SingleRoleBase, IRoleAutoBuildAbility
 	private bool canActiveOtherSabotage;
 
     public Terorist() : base(
-        ExtremeRoleId.Terorist,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Terorist.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Terorist),
         true, false, true, true)
     { }
 
