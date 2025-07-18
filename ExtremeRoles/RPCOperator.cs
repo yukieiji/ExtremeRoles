@@ -482,11 +482,17 @@ public static class RPCOperator
 
     public static void CloseMeetingButton()
     {
-        if (MeetingHud.Instance == null) { return; }
+        if (MeetingHud.Instance == null)
+		{
+			return;
+		}
         Patches.Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(true);
         foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
         {
-            if (pva == null) { continue; }
+            if (pva == null)
+			{
+				continue;
+			}
             pva.Cancel();
         }
     }
