@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using AmongUs.GameOptions;
 using UnityEngine;
@@ -39,10 +39,7 @@ public sealed class Hijacker : SingleRoleBase, IRoleAbility, IRoleMovable
 	private bool isAbilityUse = false;
 
 	public Hijacker() : base(
-		ExtremeRoleId.Hijacker,
-		ExtremeRoleType.Impostor,
-		ExtremeRoleId.Hijacker.ToString(),
-		Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Hijacker),
 		true, false, true, true)
 	{ }
 

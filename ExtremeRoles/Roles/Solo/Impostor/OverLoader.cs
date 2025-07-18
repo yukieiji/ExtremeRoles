@@ -57,10 +57,7 @@ public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 
 
     public OverLoader() : base(
-        ExtremeRoleId.OverLoader,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.OverLoader.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.OverLoader),
         true, false, true, true)
     {
         this.IsOverLoad = false;

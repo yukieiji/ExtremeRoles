@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -37,10 +37,7 @@ public sealed class Painter : SingleRoleBase, IRoleAutoBuildAbility
     private Sprite transColorPaintImage;
 
     public Painter() : base(
-        ExtremeRoleId.Painter,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Painter.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Painter),
         true, false, true, true)
     { }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -221,10 +221,7 @@ public sealed class Raider : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 	}
 
     public Raider() : base(
-        ExtremeRoleId.Raider,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Raider.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Raider),
         true, false, true, true)
     { }
 

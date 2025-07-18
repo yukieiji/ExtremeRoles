@@ -1,4 +1,4 @@
-﻿
+
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -61,10 +61,7 @@ public sealed class Cracker : SingleRoleBase, IRoleAutoBuildAbility
 	private ResetObjectSystem? system;
 
     public Cracker() : base(
-        ExtremeRoleId.Cracker,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Cracker.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Cracker),
         true, false, true, true)
     { }
 
