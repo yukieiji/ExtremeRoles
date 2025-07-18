@@ -109,7 +109,7 @@ public sealed class Traitor : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
     public Traitor(
         ) : base(
-			RoleCore.BuildNeautral(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon),
+			RoleCore.BuildNeutral(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon),
             true, false, true, false,
             tab: OptionTab.CombinationTab)
     {

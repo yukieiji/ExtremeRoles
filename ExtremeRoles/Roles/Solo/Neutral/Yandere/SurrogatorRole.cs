@@ -42,7 +42,7 @@ public sealed class SurrogatorRole :
 	private SurrogatorStatus? status;
 
 	public SurrogatorRole() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Surrogator,
 			ColorPalette.YandereVioletRed),
 		false, false, false, false)

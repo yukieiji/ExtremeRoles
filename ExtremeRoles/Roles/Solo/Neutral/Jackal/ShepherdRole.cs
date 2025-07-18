@@ -33,7 +33,7 @@ public sealed class ShepherdRole : SingleRoleBase, IRoleWinPlayerModifier, IRole
 	private bool canNotKillJackal;
 
 	public ShepherdRole() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Shepherd,
 			ColorPalette.JackalBlue),
 		false, false, false, false)

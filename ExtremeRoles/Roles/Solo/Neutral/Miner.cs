@@ -75,7 +75,7 @@ public sealed class Miner :
     private TextPopUpper killLogger;
 
     public Miner() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Miner,
 			ColorPalette.MinerIvyGreen),
         false, false, true, false)

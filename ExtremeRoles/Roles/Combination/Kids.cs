@@ -217,7 +217,7 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     private bool canAssignWisp = true;
 
     public Delinquent() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Delinquent,
 			ColorPalette.KidsYellowGreen),
         false, false, false, false,

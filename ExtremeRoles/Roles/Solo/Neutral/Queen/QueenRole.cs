@@ -60,7 +60,7 @@ public sealed class QueenRole :
 	private bool servantSucideWithQueenWhenHasKill;
 
 	public QueenRole() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Queen,
 			ColorPalette.QueenWhite),
         true, false, false, false)

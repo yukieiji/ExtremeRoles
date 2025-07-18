@@ -174,7 +174,7 @@ public sealed class JackalRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpe
     }
 
     public JackalRole() : base(
-		RoleCore.BuildNeautral(
+		RoleCore.BuildNeutral(
 			ExtremeRoleId.Jackal,
 			ColorPalette.JackalBlue),
         true, false, true, false)
