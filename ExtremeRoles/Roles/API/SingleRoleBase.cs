@@ -6,6 +6,8 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Team;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -41,6 +43,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public int KillRange = 1;
 
     public RoleCore Core { get; private set; }
+    public ITeam Team { get; private set; }
 
 	public override IOptionLoader Loader
 	{
@@ -86,25 +89,26 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         this.CanUseSecurity = canUseSecurity;
         this.CanUseVital = canUseVital;
 
-        if (tab == OptionTab.GeneralTab)
+        switch (this.Core.Team)
         {
-            switch (this.Core.Team)
-            {
-                case ExtremeRoleType.Crewmate:
-                    this.Tab = OptionTab.CrewmateTab;
-                    break;
-                case ExtremeRoleType.Impostor:
-                    this.Tab = OptionTab.ImpostorTab;
-                    break;
-                case ExtremeRoleType.Neutral:
-                    this.Tab = OptionTab.NeutralTab;
-                    break;
-                default:
-                    this.Tab = OptionTab.GeneralTab;
-                    break;
-            }
+            case ExtremeRoleType.Crewmate:
+                this.Team = new CrewmateTeam();
+                this.Tab = OptionTab.CrewmateTab;
+                break;
+            case ExtremeRoleType.Impostor:
+                this.Team = new ImpostorTeam();
+                this.Tab = OptionTab.ImpostorTab;
+                break;
+            case ExtremeRoleType.Neutral:
+                this.Team = new NeutralTeam();
+                this.Tab = OptionTab.NeutralTab;
+                break;
+            default:
+                this.Tab = OptionTab.GeneralTab;
+                break;
         }
-        else
+
+        if (tab != OptionTab.GeneralTab)
         {
             this.Tab = tab;
         }
@@ -164,5 +168,28 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 					KillerCommonOption.KillRange);
             }
         }
+    }
+
+    public bool IsVanillaRole() => this.Core.Id == ExtremeRoleId.VanillaRole;
+
+    public bool IsCrewmate() => this.Team.Is(ExtremeRoleType.Crewmate);
+
+    public bool IsImpostor() => this.Team.Is(ExtremeRoleType.Impostor);
+
+    public bool IsNeutral() => this.Team.Is(ExtremeRoleType.Neutral);
+
+    public virtual bool IsSameTeam(SingleRoleBase targetRole)
+    {
+        return this.Team.IsSameTeam(this, targetRole);
+    }
+
+    public void SetControlId(int id)
+    {
+        this.Team.SetControlId(id);
+    }
+
+    protected bool IsSameControlId(SingleRoleBase tarrgetRole)
+    {
+        return this.Team.GameControlId == tarrgetRole.Team.GameControlId;
     }
 }
