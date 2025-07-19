@@ -407,7 +407,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				isIaiOk,
 				tryIai,
 				startIai,
-				ChargingCountBehaviour.ReduceTiming.OnActive);
+				ChargingCountBehaviour.ReduceTiming.OnActive,
+				isChargeNow);
 
 		public void RpcHide()
 		{ }
@@ -435,6 +436,16 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Sound.PlaySound(Sound.Type.Kill, 0.7f);
 
 			return true;
+		}
+
+		private bool isChargeNow()
+		{
+			if (PlayerControl.LocalPlayer == null)
+			{
+				return false;
+			}
+			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
+			return curPos != this.chargePos;
 		}
 
 		private bool isIaiOk(bool isCharge, float chargeGauge)
