@@ -5,26 +5,24 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Bakary
 {
-    public class BakarySpecificOption : IRoleSpecificOption
-    {
-        public bool ChangeCooking { get; set; }
-        public float GoodBakeTime { get; set; }
-        public float BadBakeTime { get; set; }
-    }
+    public readonly record struct BakarySpecificOption(
+        bool ChangeCooking,
+        float GoodBakeTime,
+        float BadBakeTime
+    ) : IRoleSpecificOption;
 
     public class BakaryOptionLoader : ISpecificOptionLoader<BakarySpecificOption>
     {
         public BakarySpecificOption Load(IOptionLoader loader)
         {
-            return new BakarySpecificOption
-            {
-                ChangeCooking = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, bool>(
+            return new BakarySpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.ChangeCooking),
-                GoodBakeTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.GoodBakeTime),
-                BadBakeTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.BadBakeTime)
-            };
+            );
         }
     }
 

@@ -5,27 +5,25 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Neutral.Jester
 {
-    public class JesterSpecificOption : IRoleSpecificOption
-    {
-        public bool UseSabotage { get; set; }
-        public float OutburstDistance { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct JesterSpecificOption(
+        bool UseSabotage,
+        float OutburstDistance,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class JesterOptionLoader : ISpecificOptionLoader<JesterSpecificOption>
     {
         public JesterSpecificOption Load(IOptionLoader loader)
         {
-            return new JesterSpecificOption
-            {
-                UseSabotage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption, bool>(
+            return new JesterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption.UseSabotage),
-                OutburstDistance = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption, float>(
                     ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption.OutburstDistance),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

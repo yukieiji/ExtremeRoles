@@ -6,31 +6,29 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.OverLoader
 {
-    public class OverLoaderSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeImpostorNum { get; set; }
-        public int AwakeKillCount { get; set; }
-        public float KillCoolReduceRate { get; set; }
-        public float MoveSpeed { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct OverLoaderSpecificOption(
+        int AwakeImpostorNum,
+        int AwakeKillCount,
+        float KillCoolReduceRate,
+        float MoveSpeed,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class OverLoaderOptionLoader : ISpecificOptionLoader<OverLoaderSpecificOption>
     {
         public OverLoaderSpecificOption Load(IOptionLoader loader)
         {
-            return new OverLoaderSpecificOption
-            {
-                AwakeImpostorNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, int>(
+            return new OverLoaderSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption.AwakeImpostorNum),
-                AwakeKillCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption.AwakeKillCount),
-                KillCoolReduceRate = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption.KillCoolReduceRate),
-                MoveSpeed = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.OverLoader.OverLoaderOption.MoveSpeed),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

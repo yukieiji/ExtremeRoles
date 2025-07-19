@@ -6,28 +6,26 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.SandWorm
 {
-    public class SandWormSpecificOption : IRoleSpecificOption
-    {
-        public float AssaultKillCoolReduce { get; set; }
-        public float KillCoolPenalty { get; set; }
-        public float AssaultRange { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct SandWormSpecificOption(
+        float AssaultKillCoolReduce,
+        float KillCoolPenalty,
+        float AssaultRange,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class SandWormOptionLoader : ISpecificOptionLoader<SandWormSpecificOption>
     {
         public SandWormSpecificOption Load(IOptionLoader loader)
         {
-            return new SandWormSpecificOption
-            {
-                AssaultKillCoolReduce = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption, float>(
+            return new SandWormSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption.AssaultKillCoolReduce),
-                KillCoolPenalty = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption.KillCoolPenalty),
-                AssaultRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.SandWorm.SandWormOption.AssaultRange),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

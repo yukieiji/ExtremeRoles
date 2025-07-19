@@ -6,37 +6,35 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Neutral.Alice
 {
-    public class AliceSpecificOption : IRoleSpecificOption
-    {
-        public bool CanUseSabotage { get; set; }
-        public int RevartCommonTaskNum { get; set; }
-        public int RevartLongTaskNum { get; set; }
-        public int RevartNormalTaskNum { get; set; }
-        public int WinTaskRate { get; set; }
-        public int WinKillNum { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct AliceSpecificOption(
+        bool CanUseSabotage,
+        int RevartCommonTaskNum,
+        int RevartLongTaskNum,
+        int RevartNormalTaskNum,
+        int WinTaskRate,
+        int WinKillNum,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class AliceOptionLoader : ISpecificOptionLoader<AliceSpecificOption>
     {
         public AliceSpecificOption Load(IOptionLoader loader)
         {
-            return new AliceSpecificOption
-            {
-                CanUseSabotage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, bool>(
+            return new AliceSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption.CanUseSabotage),
-                RevartCommonTaskNum = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption.RevartCommonTaskNum),
-                RevartLongTaskNum = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption.RevartLongTaskNum),
-                RevartNormalTaskNum = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption.RevartNormalTaskNum),
-                WinTaskRate = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption.WinTaskRate),
-                WinKillNum = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Alice.AliceOption.WinKillNum),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

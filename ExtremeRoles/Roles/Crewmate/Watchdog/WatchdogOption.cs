@@ -5,19 +5,17 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Crewmate.Watchdog
 {
-    public class WatchdogSpecificOption : IRoleSpecificOption
-    {
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct WatchdogSpecificOption(
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class WatchdogOptionLoader : ISpecificOptionLoader<WatchdogSpecificOption>
     {
         public WatchdogSpecificOption Load(IOptionLoader loader)
         {
-            return new WatchdogSpecificOption
-            {
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+            return new WatchdogSpecificOption(
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

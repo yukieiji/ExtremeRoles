@@ -6,36 +6,34 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Thief
 {
-    public class ThiefSpecificOption : IRoleSpecificOption
-    {
-        public float Range { get; set; }
-        public int SetTimeOffset { get; set; }
-        public int SetNum { get; set; }
-        public int PickUpTimeOffset { get; set; }
-        public bool IsAddEffect { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct ThiefSpecificOption(
+        float Range,
+        int SetTimeOffset,
+        int SetNum,
+        int PickUpTimeOffset,
+        bool IsAddEffect,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class ThiefOptionLoader : ISpecificOptionLoader<ThiefSpecificOption>
     {
         public ThiefSpecificOption Load(IOptionLoader loader)
         {
-            return new ThiefSpecificOption
-            {
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, float>(
+            return new ThiefSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption.Range),
-                SetTimeOffset = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption.SetTimeOffset),
-                SetNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption.SetNum),
-                PickUpTimeOffset = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption.PickUpTimeOffset),
-                IsAddEffect = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Thief.ThiefOption.IsAddEffect),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

@@ -5,20 +5,18 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Gambler
 {
-    public class GamblerSpecificOption : IRoleSpecificOption
-    {
-        public int NormalVoteRate { get; set; }
-    }
+    public readonly record struct GamblerSpecificOption(
+        int NormalVoteRate
+    ) : IRoleSpecificOption;
 
     public class GamblerOptionLoader : ISpecificOptionLoader<GamblerSpecificOption>
     {
         public GamblerSpecificOption Load(IOptionLoader loader)
         {
-            return new GamblerSpecificOption
-            {
-                NormalVoteRate = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Gambler.GamblerOption, int>(
+            return new GamblerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Gambler.GamblerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Gambler.GamblerOption.NormalVoteRate)
-            };
+            );
         }
     }
 

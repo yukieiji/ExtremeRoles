@@ -5,25 +5,23 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.Carrier
 {
-    public class CarrierSpecificOption : IRoleSpecificOption
-    {
-        public float CarryDistance { get; set; }
-        public bool CanReportOnCarry { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct CarrierSpecificOption(
+        float CarryDistance,
+        bool CanReportOnCarry,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class CarrierOptionLoader : ISpecificOptionLoader<CarrierSpecificOption>
     {
         public CarrierSpecificOption Load(IOptionLoader loader)
         {
-            return new CarrierSpecificOption
-            {
-                CarryDistance = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption, float>(
+            return new CarrierSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption.CarryDistance),
-                CanReportOnCarry = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption.CanReportOnCarry),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

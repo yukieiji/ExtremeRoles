@@ -4,17 +4,13 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Host.Xion
 {
-    public class XionSpecificOption : IRoleSpecificOption
-    {
-    }
+    public readonly record struct XionSpecificOption : IRoleSpecificOption;
 
     public class XionOptionLoader : ISpecificOptionLoader<XionSpecificOption>
     {
         public XionSpecificOption Load(IOptionLoader loader)
         {
-            return new XionSpecificOption
-            {
-            };
+            return new XionSpecificOption();
         }
     }
 

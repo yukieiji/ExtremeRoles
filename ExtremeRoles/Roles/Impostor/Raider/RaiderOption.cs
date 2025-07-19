@@ -7,48 +7,46 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Raider
 {
-    public class RaiderSpecificOption : IRoleSpecificOption
-    {
-        public bool IsOpenLimit { get; set; }
-        public int LimitNum { get; set; }
-        public bool IsHidePlayerOnOpen { get; set; }
-        public int BombType { get; set; }
-        public int BombNum { get; set; }
-        public float BombTargetRange { get; set; }
-        public float BombRange { get; set; }
-        public float BombAliveTime { get; set; }
-        public bool BombShowOtherPlayer { get; set; }
-        public int AbilityUseCount { get; set; }
-        public int AbilityActiveTime { get; set; }
-    }
+    public readonly record struct RaiderSpecificOption(
+        bool IsOpenLimit,
+        int LimitNum,
+        bool IsHidePlayerOnOpen,
+        int BombType,
+        int BombNum,
+        float BombTargetRange,
+        float BombRange,
+        float BombAliveTime,
+        bool BombShowOtherPlayer,
+        int AbilityUseCount,
+        int AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class RaiderOptionLoader : ISpecificOptionLoader<RaiderSpecificOption>
     {
         public RaiderSpecificOption Load(IOptionLoader loader)
         {
-            return new RaiderSpecificOption
-            {
-                IsOpenLimit = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
+            return new RaiderSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.IsOpenLimit),
-                LimitNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.LimitNum),
-                IsHidePlayerOnOpen = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.IsHidePlayerOnOpen),
-                BombType = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombType),
-                BombNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombNum),
-                BombTargetRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombTargetRange),
-                BombRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombRange),
-                BombAliveTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombAliveTime),
-                BombShowOtherPlayer = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombShowOtherPlayer),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

@@ -6,22 +6,20 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Crewshroom
 {
-    public class CrewshroomSpecificOption : IRoleSpecificOption
-    {
-        public float DelaySecond { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct CrewshroomSpecificOption(
+        float DelaySecond,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class CrewshroomOptionLoader : ISpecificOptionLoader<CrewshroomSpecificOption>
     {
         public CrewshroomSpecificOption Load(IOptionLoader loader)
         {
-            return new CrewshroomSpecificOption
-            {
-                DelaySecond = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Crewshroom.Option, float>(
+            return new CrewshroomSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Crewshroom.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Crewshroom.Option.DelaySecond),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

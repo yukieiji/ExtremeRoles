@@ -6,43 +6,41 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Neutral.Miner
 {
-    public class MinerSpecificOption : IRoleSpecificOption
-    {
-        public bool LinkingAllVent { get; set; }
-        public float MineKillRange { get; set; }
-        public bool CanShowMine { get; set; }
-        public int RolePlayerShowMode { get; set; }
-        public int AnotherPlayerShowMode { get; set; }
-        public bool CanShowNoneActiveAnotherPlayer { get; set; }
-        public float NoneActiveTime { get; set; }
-        public bool ShowKillLog { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct MinerSpecificOption(
+        bool LinkingAllVent,
+        float MineKillRange,
+        bool CanShowMine,
+        int RolePlayerShowMode,
+        int AnotherPlayerShowMode,
+        bool CanShowNoneActiveAnotherPlayer,
+        float NoneActiveTime,
+        bool ShowKillLog,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class MinerOptionLoader : ISpecificOptionLoader<MinerSpecificOption>
     {
         public MinerSpecificOption Load(IOptionLoader loader)
         {
-            return new MinerSpecificOption
-            {
-                LinkingAllVent = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
+            return new MinerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.LinkingAllVent),
-                MineKillRange = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, float>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.MineKillRange),
-                CanShowMine = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.CanShowMine),
-                RolePlayerShowMode = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.RolePlayerShowMode),
-                AnotherPlayerShowMode = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.AnotherPlayerShowMode),
-                CanShowNoneActiveAnotherPlayer = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.CanShowNoneActiveAnotherPlayer),
-                NoneActiveTime = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, float>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.NoneActiveTime),
-                ShowKillLog = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.ShowKillLog),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

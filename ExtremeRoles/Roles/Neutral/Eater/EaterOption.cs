@@ -6,44 +6,42 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Neutral.Eater
 {
-    public class EaterSpecificOption : IRoleSpecificOption
-    {
-        public bool CanUseVent { get; set; }
-        public float EatRange { get; set; }
-        public int DeadBodyEatActiveCoolTimePenalty { get; set; }
-        public int KillEatCoolTimePenalty { get; set; }
-        public int KillEatActiveCoolTimeReduceRate { get; set; }
-        public bool IsResetCoolTimeWhenMeeting { get; set; }
-        public bool IsShowArrowForDeadBody { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct EaterSpecificOption(
+        bool CanUseVent,
+        float EatRange,
+        int DeadBodyEatActiveCoolTimePenalty,
+        int KillEatCoolTimePenalty,
+        int KillEatActiveCoolTimeReduceRate,
+        bool IsResetCoolTimeWhenMeeting,
+        bool IsShowArrowForDeadBody,
+        int AbilityUseCount,
+        float AbilityActiveTime,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class EaterOptionLoader : ISpecificOptionLoader<EaterSpecificOption>
     {
         public EaterSpecificOption Load(IOptionLoader loader)
         {
-            return new EaterSpecificOption
-            {
-                CanUseVent = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, bool>(
+            return new EaterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption.CanUseVent),
-                EatRange = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, float>(
                     ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption.EatRange),
-                DeadBodyEatActiveCoolTimePenalty = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption.DeadBodyEatActiveCoolTimePenalty),
-                KillEatCoolTimePenalty = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption.KillEatCoolTimePenalty),
-                KillEatActiveCoolTimeReduceRate = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption.KillEatActiveCoolTimeReduceRate),
-                IsResetCoolTimeWhenMeeting = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption.IsResetCoolTimeWhenMeeting),
-                IsShowArrowForDeadBody = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Eater.EaterOption.IsShowArrowForDeadBody),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

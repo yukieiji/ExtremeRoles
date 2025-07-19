@@ -6,37 +6,35 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Terorist
 {
-    public class TeroristSpecificOption : IRoleSpecificOption
-    {
-        public bool CanActiveOtherSabotage { get; set; }
-        public float ExplosionTime { get; set; }
-        public int BombNum { get; set; }
-        public float PlayerActivateTime { get; set; }
-        public bool CanUseDeadPlayer { get; set; }
-        public float DeadPlayerActivateTime { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct TeroristSpecificOption(
+        bool CanActiveOtherSabotage,
+        float ExplosionTime,
+        int BombNum,
+        float PlayerActivateTime,
+        bool CanUseDeadPlayer,
+        float DeadPlayerActivateTime,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class TeroristOptionLoader : ISpecificOptionLoader<TeroristSpecificOption>
     {
         public TeroristSpecificOption Load(IOptionLoader loader)
         {
-            return new TeroristSpecificOption
-            {
-                CanActiveOtherSabotage = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, bool>(
+            return new TeroristSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.CanActiveOtherSabotage),
-                ExplosionTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.ExplosionTime),
-                BombNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.BombNum),
-                PlayerActivateTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.PlayerActivateTime),
-                CanUseDeadPlayer = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.CanUseDeadPlayer),
-                DeadPlayerActivateTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.DeadPlayerActivateTime),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

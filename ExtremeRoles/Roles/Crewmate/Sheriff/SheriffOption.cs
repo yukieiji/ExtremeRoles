@@ -5,41 +5,39 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Sheriff
 {
-    public class SheriffSpecificOption : IRoleSpecificOption
-    {
-        public int ShootNum { get; set; }
-        public bool CanShootAssassin { get; set; }
-        public bool CanShootNeutral { get; set; }
-        public bool EnableTaskRelated { get; set; }
-        public float ReduceCurKillCool { get; set; }
-        public bool IsPerm { get; set; }
-        public bool IsSyncTaskAndShootNum { get; set; }
-        public int SyncShootTaskGage { get; set; }
-    }
+    public readonly record struct SheriffSpecificOption(
+        int ShootNum,
+        bool CanShootAssassin,
+        bool CanShootNeutral,
+        bool EnableTaskRelated,
+        float ReduceCurKillCool,
+        bool IsPerm,
+        bool IsSyncTaskAndShootNum,
+        int SyncShootTaskGage
+    ) : IRoleSpecificOption;
 
     public class SheriffOptionLoader : ISpecificOptionLoader<SheriffSpecificOption>
     {
         public SheriffSpecificOption Load(IOptionLoader loader)
         {
-            return new SheriffSpecificOption
-            {
-                ShootNum = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, int>(
+            return new SheriffSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.ShootNum),
-                CanShootAssassin = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.CanShootAssassin),
-                CanShootNeutral = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.CanShootNeutral),
-                EnableTaskRelated = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.EnableTaskRelated),
-                ReduceCurKillCool = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.ReduceCurKillCool),
-                IsPerm = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.IsPerm),
-                IsSyncTaskAndShootNum = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.IsSyncTaskAndShootNum),
-                SyncShootTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Sheriff.SheriffOption.SyncShootTaskGage)
-            };
+            );
         }
     }
 

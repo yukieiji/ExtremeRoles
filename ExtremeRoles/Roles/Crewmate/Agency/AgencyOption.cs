@@ -5,28 +5,26 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Crewmate.Agency
 {
-    public class AgencySpecificOption : IRoleSpecificOption
-    {
-        public bool CanSeeTaskBar { get; set; }
-        public int MaxTaskNum { get; set; }
-        public float TakeTaskRange { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct AgencySpecificOption(
+        bool CanSeeTaskBar,
+        int MaxTaskNum,
+        float TakeTaskRange,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class AgencyOptionLoader : ISpecificOptionLoader<AgencySpecificOption>
     {
         public AgencySpecificOption Load(IOptionLoader loader)
         {
-            return new AgencySpecificOption
-            {
-                CanSeeTaskBar = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, bool>(
+            return new AgencySpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.CanSeeTaskBar),
-                MaxTaskNum = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.MaxTaskNum),
-                TakeTaskRange = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.TakeTaskRange),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

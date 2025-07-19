@@ -5,32 +5,30 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.UnderWarper
 {
-    public class UnderWarperSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeKillCount { get; set; }
-        public int VentLinkKillCout { get; set; }
-        public int NoVentAnimeKillCout { get; set; }
-        public bool WallHackVent { get; set; }
-        public float Range { get; set; }
-    }
+    public readonly record struct UnderWarperSpecificOption(
+        int AwakeKillCount,
+        int VentLinkKillCout,
+        int NoVentAnimeKillCout,
+        bool WallHackVent,
+        float Range
+    ) : IRoleSpecificOption;
 
     public class UnderWarperOptionLoader : ISpecificOptionLoader<UnderWarperSpecificOption>
     {
         public UnderWarperSpecificOption Load(IOptionLoader loader)
         {
-            return new UnderWarperSpecificOption
-            {
-                AwakeKillCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, int>(
+            return new UnderWarperSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption.AwakeKillCount),
-                VentLinkKillCout = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption.VentLinkKillCout),
-                NoVentAnimeKillCout = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption.NoVentAnimeKillCout),
-                WallHackVent = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption.WallHackVent),
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.UnderWarper.UnderWarperOption.Range)
-            };
+            );
         }
     }
 

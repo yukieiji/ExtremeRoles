@@ -6,31 +6,29 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.TimeBreaker
 {
-    public class TimeBreakerSpecificOption : IRoleSpecificOption
-    {
-        public float ActiveTime { get; set; }
-        public bool EffectImp { get; set; }
-        public bool EffectMarlin { get; set; }
-        public bool IsActiveScreen { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct TimeBreakerSpecificOption(
+        float ActiveTime,
+        bool EffectImp,
+        bool EffectMarlin,
+        bool IsActiveScreen,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class TimeBreakerOptionLoader : ISpecificOptionLoader<TimeBreakerSpecificOption>
     {
         public TimeBreakerSpecificOption Load(IOptionLoader loader)
         {
-            return new TimeBreakerSpecificOption
-            {
-                ActiveTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, float>(
+            return new TimeBreakerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, float>(
                     ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt.ActiveTime),
-                EffectImp = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt.EffectImp),
-                EffectMarlin = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt.EffectMarlin),
-                IsActiveScreen = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.TimeBreaker.Opt.IsActiveScreen),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

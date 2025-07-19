@@ -6,36 +6,34 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Evolver
 {
-    public class EvolverSpecificOption : IRoleSpecificOption
-    {
-        public bool IsEvolvedAnimation { get; set; }
-        public bool IsEatingEndCleanBody { get; set; }
-        public float EatingRange { get; set; }
-        public int KillCoolReduceRate { get; set; }
-        public float KillCoolResuceRateMulti { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct EvolverSpecificOption(
+        bool IsEvolvedAnimation,
+        bool IsEatingEndCleanBody,
+        float EatingRange,
+        int KillCoolReduceRate,
+        float KillCoolResuceRateMulti,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class EvolverOptionLoader : ISpecificOptionLoader<EvolverSpecificOption>
     {
         public EvolverSpecificOption Load(IOptionLoader loader)
         {
-            return new EvolverSpecificOption
-            {
-                IsEvolvedAnimation = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, bool>(
+            return new EvolverSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.IsEvolvedAnimation),
-                IsEatingEndCleanBody = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.IsEatingEndCleanBody),
-                EatingRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.EatingRange),
-                KillCoolReduceRate = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.KillCoolReduceRate),
-                KillCoolResuceRateMulti = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.KillCoolResuceRateMulti),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

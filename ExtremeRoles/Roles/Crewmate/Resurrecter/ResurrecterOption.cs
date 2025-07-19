@@ -5,44 +5,42 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Resurrecter
 {
-    public class ResurrecterSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeTaskGage { get; set; }
-        public int ResurrectTaskGage { get; set; }
-        public float ResurrectDelayTime { get; set; }
-        public bool IsMeetingCoolResetOnResurrect { get; set; }
-        public float ResurrectMeetingCooltime { get; set; }
-        public int ResurrectTaskResetMeetingNum { get; set; }
-        public int ResurrectTaskResetGage { get; set; }
-        public bool CanResurrectAfterDeath { get; set; }
-        public bool CanResurrectOnExil { get; set; }
-    }
+    public readonly record struct ResurrecterSpecificOption(
+        int AwakeTaskGage,
+        int ResurrectTaskGage,
+        float ResurrectDelayTime,
+        bool IsMeetingCoolResetOnResurrect,
+        float ResurrectMeetingCooltime,
+        int ResurrectTaskResetMeetingNum,
+        int ResurrectTaskResetGage,
+        bool CanResurrectAfterDeath,
+        bool CanResurrectOnExil
+    ) : IRoleSpecificOption;
 
     public class ResurrecterOptionLoader : ISpecificOptionLoader<ResurrecterSpecificOption>
     {
         public ResurrecterSpecificOption Load(IOptionLoader loader)
         {
-            return new ResurrecterSpecificOption
-            {
-                AwakeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
+            return new ResurrecterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.AwakeTaskGage),
-                ResurrectTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskGage),
-                ResurrectDelayTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectDelayTime),
-                IsMeetingCoolResetOnResurrect = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.IsMeetingCoolResetOnResurrect),
-                ResurrectMeetingCooltime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectMeetingCooltime),
-                ResurrectTaskResetMeetingNum = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskResetMeetingNum),
-                ResurrectTaskResetGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskResetGage),
-                CanResurrectAfterDeath = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.CanResurrectAfterDeath),
-                CanResurrectOnExil = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.CanResurrectOnExil)
-            };
+            );
         }
     }
 

@@ -5,22 +5,20 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Crewmate.Teleporter
 {
-    public class TeleporterSpecificOption : IRoleSpecificOption
-    {
-        public bool CanUseOtherPlayer { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct TeleporterSpecificOption(
+        bool CanUseOtherPlayer,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class TeleporterOptionLoader : ISpecificOptionLoader<TeleporterSpecificOption>
     {
         public TeleporterSpecificOption Load(IOptionLoader loader)
         {
-            return new TeleporterSpecificOption
-            {
-                CanUseOtherPlayer = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Teleporter.TeleporterOption, bool>(
+            return new TeleporterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Teleporter.TeleporterOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Teleporter.TeleporterOption.CanUseOtherPlayer),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

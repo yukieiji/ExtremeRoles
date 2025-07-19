@@ -5,103 +5,101 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Scavenger
 {
-    public class ScavengerSpecificOption : IRoleSpecificOption
-    {
-        public bool IsRandomInitAbility { get; set; }
-        public bool AllowDupe { get; set; }
-        public bool AllowAdvancedWeapon { get; set; }
-        public int InitAbility { get; set; }
-        public bool IsSetWeapon { get; set; }
-        public bool SyncWeapon { get; set; }
-        public int HandGunCount { get; set; }
-        public float HandGunSpeed { get; set; }
-        public float HandGunRange { get; set; }
-        public int FlameCount { get; set; }
-        public float FlameChargeTime { get; set; }
-        public float FlameActiveTime { get; set; }
-        public float FlameFireSecond { get; set; }
-        public float FlameDeadSecond { get; set; }
-        public int SwordCount { get; set; }
-        public float SwordChargeTime { get; set; }
-        public float SwordActiveTime { get; set; }
-        public float SwordR { get; set; }
-        public int SniperRifleCount { get; set; }
-        public float SniperRifleSpeed { get; set; }
-        public int BeamRifleCount { get; set; }
-        public float BeamRifleSpeed { get; set; }
-        public float BeamRifleRange { get; set; }
-        public int BeamSaberCount { get; set; }
-        public int BeamSaberChargeTime { get; set; }
-        public float BeamSaberRange { get; set; }
-        public bool BeamSaberAutoDetect { get; set; }
-        public float WeaponMixTime { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct ScavengerSpecificOption(
+        bool IsRandomInitAbility,
+        bool AllowDupe,
+        bool AllowAdvancedWeapon,
+        int InitAbility,
+        bool IsSetWeapon,
+        bool SyncWeapon,
+        int HandGunCount,
+        float HandGunSpeed,
+        float HandGunRange,
+        int FlameCount,
+        float FlameChargeTime,
+        float FlameActiveTime,
+        float FlameFireSecond,
+        float FlameDeadSecond,
+        int SwordCount,
+        float SwordChargeTime,
+        float SwordActiveTime,
+        float SwordR,
+        int SniperRifleCount,
+        float SniperRifleSpeed,
+        int BeamRifleCount,
+        float BeamRifleSpeed,
+        float BeamRifleRange,
+        int BeamSaberCount,
+        int BeamSaberChargeTime,
+        float BeamSaberRange,
+        bool BeamSaberAutoDetect,
+        float WeaponMixTime,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class ScavengerOptionLoader : ISpecificOptionLoader<ScavengerSpecificOption>
     {
         public ScavengerSpecificOption Load(IOptionLoader loader)
         {
-            return new ScavengerSpecificOption
-            {
-                IsRandomInitAbility = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
+            return new ScavengerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.IsRandomInitAbility),
-                AllowDupe = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.AllowDupe),
-                AllowAdvancedWeapon = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.AllowAdvancedWeapon),
-                InitAbility = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.InitAbility),
-                IsSetWeapon = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.IsSetWeapon),
-                SyncWeapon = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.SyncWeapon),
-                HandGunCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.HandGunCount),
-                HandGunSpeed = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.HandGunSpeed),
-                HandGunRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.HandGunRange),
-                FlameCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.FlameCount),
-                FlameChargeTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.FlameChargeTime),
-                FlameActiveTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.FlameActiveTime),
-                FlameFireSecond = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.FlameFireSecond),
-                FlameDeadSecond = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.FlameDeadSecond),
-                SwordCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.SwordCount),
-                SwordChargeTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.SwordChargeTime),
-                SwordActiveTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.SwordActiveTime),
-                SwordR = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.SwordR),
-                SniperRifleCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.SniperRifleCount),
-                SniperRifleSpeed = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.SniperRifleSpeed),
-                BeamRifleCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.BeamRifleCount),
-                BeamRifleSpeed = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.BeamRifleSpeed),
-                BeamRifleRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.BeamRifleRange),
-                BeamSaberCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.BeamSaberCount),
-                BeamSaberChargeTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.BeamSaberChargeTime),
-                BeamSaberRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.BeamSaberRange),
-                BeamSaberAutoDetect = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.BeamSaberAutoDetect),
-                WeaponMixTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Scavenger.Option.WeaponMixTime),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

@@ -6,28 +6,26 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Commander
 {
-    public class CommanderSpecificOption : IRoleSpecificOption
-    {
-        public float KillCoolReduceTime { get; set; }
-        public float KillCoolReduceImpBonus { get; set; }
-        public int IncreaseKillNum { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct CommanderSpecificOption(
+        float KillCoolReduceTime,
+        float KillCoolReduceImpBonus,
+        int IncreaseKillNum,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class CommanderOptionLoader : ISpecificOptionLoader<CommanderSpecificOption>
     {
         public CommanderSpecificOption Load(IOptionLoader loader)
         {
-            return new CommanderSpecificOption
-            {
-                KillCoolReduceTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, float>(
+            return new CommanderSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.KillCoolReduceTime),
-                KillCoolReduceImpBonus = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.KillCoolReduceImpBonus),
-                IncreaseKillNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.IncreaseKillNum),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

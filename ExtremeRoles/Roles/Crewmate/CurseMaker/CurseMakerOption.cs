@@ -6,54 +6,52 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.CurseMaker
 {
-    public class CurseMakerSpecificOption : IRoleSpecificOption
-    {
-        public float CursingRange { get; set; }
-        public float AdditionalKillCool { get; set; }
-        public int TaskCurseTimeReduceRate { get; set; }
-        public bool IsNotRemoveDeadBodyByTask { get; set; }
-        public int NotRemoveDeadBodyTaskGage { get; set; }
-        public bool IsDeadBodySearch { get; set; }
-        public bool IsMultiDeadBodySearch { get; set; }
-        public float SearchDeadBodyTime { get; set; }
-        public bool IsReduceSearchForTask { get; set; }
-        public int ReduceSearchTaskGage { get; set; }
-        public float ReduceSearchDeadBodyTime { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct CurseMakerSpecificOption(
+        float CursingRange,
+        float AdditionalKillCool,
+        int TaskCurseTimeReduceRate,
+        bool IsNotRemoveDeadBodyByTask,
+        int NotRemoveDeadBodyTaskGage,
+        bool IsDeadBodySearch,
+        bool IsMultiDeadBodySearch,
+        float SearchDeadBodyTime,
+        bool IsReduceSearchForTask,
+        int ReduceSearchTaskGage,
+        float ReduceSearchDeadBodyTime,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class CurseMakerOptionLoader : ISpecificOptionLoader<CurseMakerSpecificOption>
     {
         public CurseMakerSpecificOption Load(IOptionLoader loader)
         {
-            return new CurseMakerSpecificOption
-            {
-                CursingRange = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
+            return new CurseMakerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.CursingRange),
-                AdditionalKillCool = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.AdditionalKillCool),
-                TaskCurseTimeReduceRate = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.TaskCurseTimeReduceRate),
-                IsNotRemoveDeadBodyByTask = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.IsNotRemoveDeadBodyByTask),
-                NotRemoveDeadBodyTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.NotRemoveDeadBodyTaskGage),
-                IsDeadBodySearch = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.IsDeadBodySearch),
-                IsMultiDeadBodySearch = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.IsMultiDeadBodySearch),
-                SearchDeadBodyTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.SearchDeadBodyTime),
-                IsReduceSearchForTask = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.IsReduceSearchForTask),
-                ReduceSearchTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.ReduceSearchTaskGage),
-                ReduceSearchDeadBodyTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.CurseMaker.CurseMakerOption.ReduceSearchDeadBodyTime),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

@@ -4,32 +4,30 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Crewmate.Bait
 {
-    public class BaitSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeTaskGage { get; set; }
-        public float DelayUntilForceReport { get; set; }
-        public bool EnableBaitBenefit { get; set; }
-        public float KillCoolReduceMulti { get; set; }
-        public float ReduceTimer { get; set; }
-    }
+    public readonly record struct BaitSpecificOption(
+        int AwakeTaskGage,
+        float DelayUntilForceReport,
+        bool EnableBaitBenefit,
+        float KillCoolReduceMulti,
+        float ReduceTimer
+    ) : IRoleSpecificOption;
 
     public class BaitOptionLoader : ISpecificOptionLoader<BaitSpecificOption>
     {
         public BaitSpecificOption Load(IOptionLoader loader)
         {
-            return new BaitSpecificOption
-            {
-                AwakeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, int>(
+            return new BaitSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bait.Option.AwakeTaskGage),
-                DelayUntilForceReport = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bait.Option.DelayUntilForceReport),
-                EnableBaitBenefit = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bait.Option.EnableBaitBenefit),
-                KillCoolReduceMulti = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bait.Option.KillCoolReduceMulti),
-                ReduceTimer = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bait.Option, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Bait.Option.ReduceTimer)
-            };
+            );
         }
     }
 

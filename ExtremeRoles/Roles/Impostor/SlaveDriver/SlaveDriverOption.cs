@@ -5,28 +5,26 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.SlaveDriver
 {
-    public class SlaveDriverSpecificOption : IRoleSpecificOption
-    {
-        public bool CanSeeTaskBar { get; set; }
-        public int RevartTaskNum { get; set; }
-        public float Range { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct SlaveDriverSpecificOption(
+        bool CanSeeTaskBar,
+        int RevartTaskNum,
+        float Range,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class SlaveDriverOptionLoader : ISpecificOptionLoader<SlaveDriverSpecificOption>
     {
         public SlaveDriverSpecificOption Load(IOptionLoader loader)
         {
-            return new SlaveDriverSpecificOption
-            {
-                CanSeeTaskBar = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, bool>(
+            return new SlaveDriverSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.CanSeeTaskBar),
-                RevartTaskNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.RevartTaskNum),
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.Range),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

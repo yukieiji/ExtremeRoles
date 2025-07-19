@@ -6,22 +6,20 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.TimeMaster
 {
-    public class TimeMasterSpecificOption : IRoleSpecificOption
-    {
-        public float RewindTime { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct TimeMasterSpecificOption(
+        float RewindTime,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class TimeMasterOptionLoader : ISpecificOptionLoader<TimeMasterSpecificOption>
     {
         public TimeMasterSpecificOption Load(IOptionLoader loader)
         {
-            return new TimeMasterSpecificOption
-            {
-                RewindTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.TimeMaster.TimeMasterOption, float>(
+            return new TimeMasterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.TimeMaster.TimeMasterOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.TimeMaster.TimeMasterOption.RewindTime),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

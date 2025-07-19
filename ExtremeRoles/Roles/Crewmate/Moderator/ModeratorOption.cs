@@ -6,25 +6,23 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Moderator
 {
-    public class ModeratorSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeTaskGage { get; set; }
-        public int MeetingTimerOffset { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct ModeratorSpecificOption(
+        int AwakeTaskGage,
+        int MeetingTimerOffset,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class ModeratorOptionLoader : ISpecificOptionLoader<ModeratorSpecificOption>
     {
         public ModeratorSpecificOption Load(IOptionLoader loader)
         {
-            return new ModeratorSpecificOption
-            {
-                AwakeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption, int>(
+            return new ModeratorSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption.AwakeTaskGage),
-                MeetingTimerOffset = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption.MeetingTimerOffset),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

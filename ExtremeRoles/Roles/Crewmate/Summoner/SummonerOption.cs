@@ -6,28 +6,26 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Summoner
 {
-    public class SummonerSpecificOption : IRoleSpecificOption
-    {
-        public int MarkingCount { get; set; }
-        public int SummonCount { get; set; }
-        public float Range { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct SummonerSpecificOption(
+        int MarkingCount,
+        int SummonCount,
+        float Range,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class SummonerOptionLoader : ISpecificOptionLoader<SummonerSpecificOption>
     {
         public SummonerSpecificOption Load(IOptionLoader loader)
         {
-            return new SummonerSpecificOption
-            {
-                MarkingCount = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, int>(
+            return new SummonerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.MarkingCount),
-                SummonCount = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.SummonCount),
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.Range),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

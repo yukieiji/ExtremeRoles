@@ -6,34 +6,32 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Glitch
 {
-    public class GlitchSpecificOption : IRoleSpecificOption
-    {
-        public float Range { get; set; }
-        public bool EffectOnImpo { get; set; }
-        public bool EffectOnMarlin { get; set; }
-        public float Delay { get; set; }
-        public int ActiveTime { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct GlitchSpecificOption(
+        float Range,
+        bool EffectOnImpo,
+        bool EffectOnMarlin,
+        float Delay,
+        int ActiveTime,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class GlitchOptionLoader : ISpecificOptionLoader<GlitchSpecificOption>
     {
         public GlitchSpecificOption Load(IOptionLoader loader)
         {
-            return new GlitchSpecificOption
-            {
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, float>(
+            return new GlitchSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.Range),
-                EffectOnImpo = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.EffectOnImpo),
-                EffectOnMarlin = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.EffectOnMarlin),
-                Delay = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.Delay),
-                ActiveTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.ActiveTime),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

@@ -6,40 +6,38 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.AssaultMaster
 {
-    public class AssaultMasterSpecificOption : IRoleSpecificOption
-    {
-        public int StockLimit { get; set; }
-        public int StockNumWhenReport { get; set; }
-        public int StockNumWhenMeetingButton { get; set; }
-        public float CockingKillCoolReduceTime { get; set; }
-        public float ReloadReduceKillCoolTimePerStock { get; set; }
-        public bool IsResetReloadCoolTimeWhenKill { get; set; }
-        public int ReloadCoolTimeReduceRatePerHideStock { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct AssaultMasterSpecificOption(
+        int StockLimit,
+        int StockNumWhenReport,
+        int StockNumWhenMeetingButton,
+        float CockingKillCoolReduceTime,
+        float ReloadReduceKillCoolTimePerStock,
+        bool IsResetReloadCoolTimeWhenKill,
+        int ReloadCoolTimeReduceRatePerHideStock,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class AssaultMasterOptionLoader : ISpecificOptionLoader<AssaultMasterSpecificOption>
     {
         public AssaultMasterSpecificOption Load(IOptionLoader loader)
         {
-            return new AssaultMasterSpecificOption
-            {
-                StockLimit = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
+            return new AssaultMasterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockLimit),
-                StockNumWhenReport = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockNumWhenReport),
-                StockNumWhenMeetingButton = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockNumWhenMeetingButton),
-                CockingKillCoolReduceTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.CockingKillCoolReduceTime),
-                ReloadReduceKillCoolTimePerStock = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.ReloadReduceKillCoolTimePerStock),
-                IsResetReloadCoolTimeWhenKill = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.IsResetReloadCoolTimeWhenKill),
-                ReloadCoolTimeReduceRatePerHideStock = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

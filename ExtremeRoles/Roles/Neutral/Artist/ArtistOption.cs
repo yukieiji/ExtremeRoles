@@ -5,25 +5,23 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Neutral.Artist
 {
-    public class ArtistSpecificOption : IRoleSpecificOption
-    {
-        public bool CanUseVent { get; set; }
-        public int WinAreaSize { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct ArtistSpecificOption(
+        bool CanUseVent,
+        int WinAreaSize,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class ArtistOptionLoader : ISpecificOptionLoader<ArtistSpecificOption>
     {
         public ArtistSpecificOption Load(IOptionLoader loader)
         {
-            return new ArtistSpecificOption
-            {
-                CanUseVent = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Artist.ArtistOption, bool>(
+            return new ArtistSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Artist.ArtistOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Artist.ArtistOption.CanUseVent),
-                WinAreaSize = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Artist.ArtistOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Artist.ArtistOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Artist.ArtistOption.WinAreaSize),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

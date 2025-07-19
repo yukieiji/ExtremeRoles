@@ -5,22 +5,20 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.Slime
 {
-    public class SlimeSpecificOption : IRoleSpecificOption
-    {
-        public bool SeeMorphMerlin { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct SlimeSpecificOption(
+        bool SeeMorphMerlin,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class SlimeOptionLoader : ISpecificOptionLoader<SlimeSpecificOption>
     {
         public SlimeSpecificOption Load(IOptionLoader loader)
         {
-            return new SlimeSpecificOption
-            {
-                SeeMorphMerlin = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Slime.Option, bool>(
+            return new SlimeSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Slime.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Slime.Option.SeeMorphMerlin),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

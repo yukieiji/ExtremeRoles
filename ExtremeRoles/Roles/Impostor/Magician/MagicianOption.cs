@@ -6,31 +6,29 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Magician
 {
-    public class MagicianSpecificOption : IRoleSpecificOption
-    {
-        public int TeleportTargetRate { get; set; }
-        public bool DupeTeleportTargetTo { get; set; }
-        public bool IncludeRolePlayer { get; set; }
-        public bool IncludeSpawnPoint { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct MagicianSpecificOption(
+        int TeleportTargetRate,
+        bool DupeTeleportTargetTo,
+        bool IncludeRolePlayer,
+        bool IncludeSpawnPoint,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class MagicianOptionLoader : ISpecificOptionLoader<MagicianSpecificOption>
     {
         public MagicianSpecificOption Load(IOptionLoader loader)
         {
-            return new MagicianSpecificOption
-            {
-                TeleportTargetRate = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, int>(
+            return new MagicianSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption.TeleportTargetRate),
-                DupeTeleportTargetTo = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption.DupeTeleportTargetTo),
-                IncludeRolePlayer = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption.IncludeRolePlayer),
-                IncludeSpawnPoint = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Magician.MagicianOption.IncludeSpawnPoint),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

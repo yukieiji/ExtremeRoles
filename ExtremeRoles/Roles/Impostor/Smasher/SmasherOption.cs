@@ -6,22 +6,20 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Smasher
 {
-    public class SmasherSpecificOption : IRoleSpecificOption
-    {
-        public float SmashPenaltyKillCool { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct SmasherSpecificOption(
+        float SmashPenaltyKillCool,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class SmasherOptionLoader : ISpecificOptionLoader<SmasherSpecificOption>
     {
         public SmasherSpecificOption Load(IOptionLoader loader)
         {
-            return new SmasherSpecificOption
-            {
-                SmashPenaltyKillCool = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Smasher.SmasherOption, float>(
+            return new SmasherSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Smasher.SmasherOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Smasher.SmasherOption.SmashPenaltyKillCool),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

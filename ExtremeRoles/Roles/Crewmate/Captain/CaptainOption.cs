@@ -5,26 +5,24 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Captain
 {
-    public class CaptainSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeTaskGage { get; set; }
-        public float ChargeVoteWhenSkip { get; set; }
-        public float AwakedDefaultVoteNum { get; set; }
-    }
+    public readonly record struct CaptainSpecificOption(
+        int AwakeTaskGage,
+        float ChargeVoteWhenSkip,
+        float AwakedDefaultVoteNum
+    ) : IRoleSpecificOption;
 
     public class CaptainOptionLoader : ISpecificOptionLoader<CaptainSpecificOption>
     {
         public CaptainSpecificOption Load(IOptionLoader loader)
         {
-            return new CaptainSpecificOption
-            {
-                AwakeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption, int>(
+            return new CaptainSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption.AwakeTaskGage),
-                ChargeVoteWhenSkip = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption.ChargeVoteWhenSkip),
-                AwakedDefaultVoteNum = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Captain.CaptainOption.AwakedDefaultVoteNum)
-            };
+            );
         }
     }
 

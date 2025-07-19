@@ -6,25 +6,23 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Supervisor
 {
-    public class SupervisorSpecificOption : IRoleSpecificOption
-    {
-        public bool IsBoostTask { get; set; }
-        public int TaskGage { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct SupervisorSpecificOption(
+        bool IsBoostTask,
+        int TaskGage,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class SupervisorOptionLoader : ISpecificOptionLoader<SupervisorSpecificOption>
     {
         public SupervisorSpecificOption Load(IOptionLoader loader)
         {
-            return new SupervisorSpecificOption
-            {
-                IsBoostTask = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Supervisor.SuperviosrOption, bool>(
+            return new SupervisorSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Supervisor.SuperviosrOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Supervisor.SuperviosrOption.IsBoostTask),
-                TaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Supervisor.SuperviosrOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Supervisor.SuperviosrOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Supervisor.SuperviosrOption.TaskGage),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

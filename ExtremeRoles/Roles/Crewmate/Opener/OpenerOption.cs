@@ -6,30 +6,28 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Opener
 {
-    public class OpenerSpecificOption : IRoleSpecificOption
-    {
-        public float Range { get; set; }
-        public int ReduceRate { get; set; }
-        public int PlusAbility { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct OpenerSpecificOption(
+        float Range,
+        int ReduceRate,
+        int PlusAbility,
+        int AbilityUseCount,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class OpenerOptionLoader : ISpecificOptionLoader<OpenerSpecificOption>
     {
         public OpenerSpecificOption Load(IOptionLoader loader)
         {
-            return new OpenerSpecificOption
-            {
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption, float>(
+            return new OpenerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption.Range),
-                ReduceRate = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption.ReduceRate),
-                PlusAbility = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Opener.OpenerOption.PlusAbility),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

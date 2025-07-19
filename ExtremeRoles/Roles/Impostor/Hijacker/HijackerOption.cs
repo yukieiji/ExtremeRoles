@@ -5,24 +5,22 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.Hijacker
 {
-    public class HijackerSpecificOption : IRoleSpecificOption
-    {
-        public bool IsRandomPlayer { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct HijackerSpecificOption(
+        bool IsRandomPlayer,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class HijackerOptionLoader : ISpecificOptionLoader<HijackerSpecificOption>
     {
         public HijackerSpecificOption Load(IOptionLoader loader)
         {
-            return new HijackerSpecificOption
-            {
-                IsRandomPlayer = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hijacker.Option, bool>(
+            return new HijackerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hijacker.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Hijacker.Option.IsRandomPlayer),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

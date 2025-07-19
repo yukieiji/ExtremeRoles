@@ -5,22 +5,20 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.Painter
 {
-    public class PainterSpecificOption : IRoleSpecificOption
-    {
-        public float CanPaintDistance { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct PainterSpecificOption(
+        float CanPaintDistance,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class PainterOptionLoader : ISpecificOptionLoader<PainterSpecificOption>
     {
         public PainterSpecificOption Load(IOptionLoader loader)
         {
-            return new PainterSpecificOption
-            {
-                CanPaintDistance = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Painter.PainterOption, float>(
+            return new PainterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Painter.PainterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Painter.PainterOption.CanPaintDistance),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

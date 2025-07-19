@@ -6,36 +6,34 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Zombie
 {
-    public class ZombieSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeKillCount { get; set; }
-        public int ResurrectKillCount { get; set; }
-        public float ShowMagicCircleTime { get; set; }
-        public float ResurrectDelayTime { get; set; }
-        public bool CanResurrectOnExil { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct ZombieSpecificOption(
+        int AwakeKillCount,
+        int ResurrectKillCount,
+        float ShowMagicCircleTime,
+        float ResurrectDelayTime,
+        bool CanResurrectOnExil,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class ZombieOptionLoader : ISpecificOptionLoader<ZombieSpecificOption>
     {
         public ZombieSpecificOption Load(IOptionLoader loader)
         {
-            return new ZombieSpecificOption
-            {
-                AwakeKillCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, int>(
+            return new ZombieSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption.AwakeKillCount),
-                ResurrectKillCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption.ResurrectKillCount),
-                ShowMagicCircleTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption.ShowMagicCircleTime),
-                ResurrectDelayTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption.ResurrectDelayTime),
-                CanResurrectOnExil = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Zombie.ZombieOption.CanResurrectOnExil),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

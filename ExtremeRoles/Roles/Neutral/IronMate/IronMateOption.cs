@@ -5,32 +5,30 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Neutral.IronMate
 {
-    public class IronMateSpecificOption : IRoleSpecificOption
-    {
-        public int BlockNum { get; set; }
-        public float SlowTime { get; set; }
-        public float SlowMod { get; set; }
-        public float PlayerShowTime { get; set; }
-        public float DeadBodyShowTimeOnAfterPlayer { get; set; }
-    }
+    public readonly record struct IronMateSpecificOption(
+        int BlockNum,
+        float SlowTime,
+        float SlowMod,
+        float PlayerShowTime,
+        float DeadBodyShowTimeOnAfterPlayer
+    ) : IRoleSpecificOption;
 
     public class IronMateOptionLoader : ISpecificOptionLoader<IronMateSpecificOption>
     {
         public IronMateSpecificOption Load(IOptionLoader loader)
         {
-            return new IronMateSpecificOption
-            {
-                BlockNum = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, int>(
+            return new IronMateSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, int>(
                     ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.BlockNum),
-                SlowTime = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
                     ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.SlowTime),
-                SlowMod = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
                     ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.SlowMod),
-                PlayerShowTime = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
                     ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.PlayerShowTime),
-                DeadBodyShowTimeOnAfterPlayer = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
                     ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.DeadBodyShowTimeOnAfterPlayer)
-            };
+            );
         }
     }
 

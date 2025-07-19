@@ -5,32 +5,30 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.BountyHunter
 {
-    public class BountyHunterSpecificOption : IRoleSpecificOption
-    {
-        public float TargetUpdateTime { get; set; }
-        public float TargetKillCoolTime { get; set; }
-        public float NoneTargetKillCoolTime { get; set; }
-        public bool IsShowArrow { get; set; }
-        public float ArrowUpdateCycle { get; set; }
-    }
+    public readonly record struct BountyHunterSpecificOption(
+        float TargetUpdateTime,
+        float TargetKillCoolTime,
+        float NoneTargetKillCoolTime,
+        bool IsShowArrow,
+        float ArrowUpdateCycle
+    ) : IRoleSpecificOption;
 
     public class BountyHunterOptionLoader : ISpecificOptionLoader<BountyHunterSpecificOption>
     {
         public BountyHunterSpecificOption Load(IOptionLoader loader)
         {
-            return new BountyHunterSpecificOption
-            {
-                TargetUpdateTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
+            return new BountyHunterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption.TargetUpdateTime),
-                TargetKillCoolTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption.TargetKillCoolTime),
-                NoneTargetKillCoolTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption.NoneTargetKillCoolTime),
-                IsShowArrow = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption.IsShowArrow),
-                ArrowUpdateCycle = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.BountyHunter.BountyHunterOption.ArrowUpdateCycle)
-            };
+            );
         }
     }
 

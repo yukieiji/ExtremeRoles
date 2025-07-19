@@ -6,34 +6,32 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Photographer
 {
-    public class PhotographerSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeTaskGage { get; set; }
-        public int UpgradePhotoTaskGage { get; set; }
-        public bool EnableAllSendChat { get; set; }
-        public int UpgradeAllSendChatTaskGage { get; set; }
-        public float PhotoRange { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct PhotographerSpecificOption(
+        int AwakeTaskGage,
+        int UpgradePhotoTaskGage,
+        bool EnableAllSendChat,
+        int UpgradeAllSendChatTaskGage,
+        float PhotoRange,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class PhotographerOptionLoader : ISpecificOptionLoader<PhotographerSpecificOption>
     {
         public PhotographerSpecificOption Load(IOptionLoader loader)
         {
-            return new PhotographerSpecificOption
-            {
-                AwakeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, int>(
+            return new PhotographerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption.AwakeTaskGage),
-                UpgradePhotoTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption.UpgradePhotoTaskGage),
-                EnableAllSendChat = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption.EnableAllSendChat),
-                UpgradeAllSendChatTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption.UpgradeAllSendChatTaskGage),
-                PhotoRange = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Photographer.PhotographerOption.PhotoRange),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

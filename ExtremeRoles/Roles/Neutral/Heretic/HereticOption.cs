@@ -6,34 +6,32 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Neutral.Heretic
 {
-    public class HereticSpecificOption : IRoleSpecificOption
-    {
-        public bool HasTask { get; set; }
-        public int SeeImpostorTaskGage { get; set; }
-        public int KillMode { get; set; }
-        public bool CanKillImpostor { get; set; }
-        public float Range { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct HereticSpecificOption(
+        bool HasTask,
+        int SeeImpostorTaskGage,
+        int KillMode,
+        bool CanKillImpostor,
+        float Range,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class HereticOptionLoader : ISpecificOptionLoader<HereticSpecificOption>
     {
         public HereticSpecificOption Load(IOptionLoader loader)
         {
-            return new HereticSpecificOption
-            {
-                HasTask = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, bool>(
+            return new HereticSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.HasTask),
-                SeeImpostorTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.SeeImpostorTaskGage),
-                KillMode = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.KillMode),
-                CanKillImpostor = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.CanKillImpostor),
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, float>(
                     ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.Range),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

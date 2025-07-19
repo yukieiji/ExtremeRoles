@@ -5,25 +5,23 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.Mery
 {
-    public class MerySpecificOption : IRoleSpecificOption
-    {
-        public int ActiveNum { get; set; }
-        public float ActiveRange { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct MerySpecificOption(
+        int ActiveNum,
+        float ActiveRange,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class MeryOptionLoader : ISpecificOptionLoader<MerySpecificOption>
     {
         public MerySpecificOption Load(IOptionLoader loader)
         {
-            return new MerySpecificOption
-            {
-                ActiveNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Mery.MeryOption, int>(
+            return new MerySpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Mery.MeryOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Mery.MeryOption.ActiveNum),
-                ActiveRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Mery.MeryOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Mery.MeryOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Mery.MeryOption.ActiveRange),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

@@ -4,17 +4,13 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Crewmate.SpecialCrew
 {
-    public class SpecialCrewSpecificOption : IRoleSpecificOption
-    {
-    }
+    public readonly record struct SpecialCrewSpecificOption : IRoleSpecificOption;
 
     public class SpecialCrewOptionLoader : ISpecificOptionLoader<SpecialCrewSpecificOption>
     {
         public SpecialCrewSpecificOption Load(IOptionLoader loader)
         {
-            return new SpecialCrewSpecificOption
-            {
-            };
+            return new SpecialCrewSpecificOption();
         }
     }
 

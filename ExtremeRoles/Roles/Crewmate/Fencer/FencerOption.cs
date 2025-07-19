@@ -6,24 +6,22 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Fencer
 {
-    public class FencerSpecificOption : IRoleSpecificOption
-    {
-        public float ResetTime { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct FencerSpecificOption(
+        float ResetTime,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class FencerOptionLoader : ISpecificOptionLoader<FencerSpecificOption>
     {
         public FencerSpecificOption Load(IOptionLoader loader)
         {
-            return new FencerSpecificOption
-            {
-                ResetTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Fencer.FencerOption, float>(
+            return new FencerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Fencer.FencerOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Fencer.FencerOption.ResetTime),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

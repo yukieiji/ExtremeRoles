@@ -5,19 +5,17 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Crewmate.Maintainer
 {
-    public class MaintainerSpecificOption : IRoleSpecificOption
-    {
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct MaintainerSpecificOption(
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class MaintainerOptionLoader : ISpecificOptionLoader<MaintainerSpecificOption>
     {
         public MaintainerSpecificOption Load(IOptionLoader loader)
         {
-            return new MaintainerSpecificOption
-            {
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+            return new MaintainerSpecificOption(
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

@@ -6,40 +6,38 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Neutral.Hatter
 {
-    public class HatterSpecificOption : IRoleSpecificOption
-    {
-        public bool CanRepairSabotage { get; set; }
-        public int WinCount { get; set; }
-        public int MeetingTimerDecreaseLower { get; set; }
-        public int MeetingTimerDecreaseUpper { get; set; }
-        public bool HideMeetingTimer { get; set; }
-        public int IncreaseTaskGage { get; set; }
-        public int IncreseNum { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct HatterSpecificOption(
+        bool CanRepairSabotage,
+        int WinCount,
+        int MeetingTimerDecreaseLower,
+        int MeetingTimerDecreaseUpper,
+        bool HideMeetingTimer,
+        int IncreaseTaskGage,
+        int IncreseNum,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class HatterOptionLoader : ISpecificOptionLoader<HatterSpecificOption>
     {
         public HatterSpecificOption Load(IOptionLoader loader)
         {
-            return new HatterSpecificOption
-            {
-                CanRepairSabotage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, bool>(
+            return new HatterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.CanRepairSabotage),
-                WinCount = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.WinCount),
-                MeetingTimerDecreaseLower = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.MeetingTimerDecreaseLower),
-                MeetingTimerDecreaseUpper = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.MeetingTimerDecreaseUpper),
-                HideMeetingTimer = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.HideMeetingTimer),
-                IncreaseTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.IncreaseTaskGage),
-                IncreseNum = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.IncreseNum),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

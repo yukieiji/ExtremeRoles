@@ -4,17 +4,13 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Impostor.SpecialImpostor
 {
-    public class SpecialImpostorSpecificOption : IRoleSpecificOption
-    {
-    }
+    public readonly record struct SpecialImpostorSpecificOption : IRoleSpecificOption;
 
     public class SpecialImpostorOptionLoader : ISpecificOptionLoader<SpecialImpostorSpecificOption>
     {
         public SpecialImpostorSpecificOption Load(IOptionLoader loader)
         {
-            return new SpecialImpostorSpecificOption
-            {
-            };
+            return new SpecialImpostorSpecificOption();
         }
     }
 

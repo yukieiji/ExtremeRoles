@@ -6,43 +6,41 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Neutral.Madmate
 {
-    public class MadmateSpecificOption : IRoleSpecificOption
-    {
-        public bool IsDontCountAliveCrew { get; set; }
-        public bool CanFixSabotage { get; set; }
-        public bool CanUseVent { get; set; }
-        public bool CanMoveVentToVent { get; set; }
-        public bool HasTask { get; set; }
-        public int SeeImpostorTaskGage { get; set; }
-        public bool CanSeeFromImpostor { get; set; }
-        public int CanSeeFromImpostorTaskGage { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct MadmateSpecificOption(
+        bool IsDontCountAliveCrew,
+        bool CanFixSabotage,
+        bool CanUseVent,
+        bool CanMoveVentToVent,
+        bool HasTask,
+        int SeeImpostorTaskGage,
+        bool CanSeeFromImpostor,
+        int CanSeeFromImpostorTaskGage,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class MadmateOptionLoader : ISpecificOptionLoader<MadmateSpecificOption>
     {
         public MadmateSpecificOption Load(IOptionLoader loader)
         {
-            return new MadmateSpecificOption
-            {
-                IsDontCountAliveCrew = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
+            return new MadmateSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.IsDontCountAliveCrew),
-                CanFixSabotage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.CanFixSabotage),
-                CanUseVent = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.CanUseVent),
-                CanMoveVentToVent = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.CanMoveVentToVent),
-                HasTask = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.HasTask),
-                SeeImpostorTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.SeeImpostorTaskGage),
-                CanSeeFromImpostor = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, bool>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.CanSeeFromImpostor),
-                CanSeeFromImpostorTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption, int>(
                     ExtremeRoles.Roles.Solo.Neutral.Madmate.MadmateOption.CanSeeFromImpostorTaskGage),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

@@ -6,36 +6,34 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Psychic
 {
-    public class PsychicSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeTaskGage { get; set; }
-        public int AwakeDeadPlayerNum { get; set; }
-        public bool IsUpgradeAbility { get; set; }
-        public int UpgradeTaskGage { get; set; }
-        public int UpgradeDeadPlayerNum { get; set; }
-        public int AbilityUseCount { get; set; }
-        public float AbilityActiveTime { get; set; }
-    }
+    public readonly record struct PsychicSpecificOption(
+        int AwakeTaskGage,
+        int AwakeDeadPlayerNum,
+        bool IsUpgradeAbility,
+        int UpgradeTaskGage,
+        int UpgradeDeadPlayerNum,
+        int AbilityUseCount,
+        float AbilityActiveTime
+    ) : IRoleSpecificOption;
 
     public class PsychicOptionLoader : ISpecificOptionLoader<PsychicSpecificOption>
     {
         public PsychicSpecificOption Load(IOptionLoader loader)
         {
-            return new PsychicSpecificOption
-            {
-                AwakeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
+            return new PsychicSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.AwakeTaskGage),
-                AwakeDeadPlayerNum = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.AwakeDeadPlayerNum),
-                IsUpgradeAbility = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, bool>(
                     ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.IsUpgradeAbility),
-                UpgradeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.UpgradeTaskGage),
-                UpgradeDeadPlayerNum = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.UpgradeDeadPlayerNum),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
-                AbilityActiveTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
+            );
         }
     }
 

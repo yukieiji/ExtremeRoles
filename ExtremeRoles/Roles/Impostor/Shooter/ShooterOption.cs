@@ -5,53 +5,51 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Shooter
 {
-    public class ShooterSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeKillNum { get; set; }
-        public int AwakeImpNum { get; set; }
-        public bool IsInitAwake { get; set; }
-        public bool NoneAwakeWhenShoot { get; set; }
-        public float ShootKillCoolPenalty { get; set; }
-        public bool CanCallMeeting { get; set; }
-        public bool CanShootSelfCallMeeting { get; set; }
-        public int MaxShootNum { get; set; }
-        public int InitShootNum { get; set; }
-        public int MaxMeetingShootNum { get; set; }
-        public float ShootChargeTime { get; set; }
-        public int ShootKillNum { get; set; }
-    }
+    public readonly record struct ShooterSpecificOption(
+        int AwakeKillNum,
+        int AwakeImpNum,
+        bool IsInitAwake,
+        bool NoneAwakeWhenShoot,
+        float ShootKillCoolPenalty,
+        bool CanCallMeeting,
+        bool CanShootSelfCallMeeting,
+        int MaxShootNum,
+        int InitShootNum,
+        int MaxMeetingShootNum,
+        float ShootChargeTime,
+        int ShootKillNum
+    ) : IRoleSpecificOption;
 
     public class ShooterOptionLoader : ISpecificOptionLoader<ShooterSpecificOption>
     {
         public ShooterSpecificOption Load(IOptionLoader loader)
         {
-            return new ShooterSpecificOption
-            {
-                AwakeKillNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
+            return new ShooterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.AwakeKillNum),
-                AwakeImpNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.AwakeImpNum),
-                IsInitAwake = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.IsInitAwake),
-                NoneAwakeWhenShoot = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.NoneAwakeWhenShoot),
-                ShootKillCoolPenalty = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.ShootKillCoolPenalty),
-                CanCallMeeting = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.CanCallMeeting),
-                CanShootSelfCallMeeting = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.CanShootSelfCallMeeting),
-                MaxShootNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.MaxShootNum),
-                InitShootNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.InitShootNum),
-                MaxMeetingShootNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.MaxMeetingShootNum),
-                ShootChargeTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.ShootChargeTime),
-                ShootKillNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Shooter.ShooterOption.ShootKillNum)
-            };
+            );
         }
     }
 

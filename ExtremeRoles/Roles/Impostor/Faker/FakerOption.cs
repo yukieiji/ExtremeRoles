@@ -5,22 +5,20 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.Faker
 {
-    public class FakerSpecificOption : IRoleSpecificOption
-    {
-        public bool SeeDummyMerlin { get; set; }
-        public float AbilityCoolTime { get; set; }
-    }
+    public readonly record struct FakerSpecificOption(
+        bool SeeDummyMerlin,
+        float AbilityCoolTime
+    ) : IRoleSpecificOption;
 
     public class FakerOptionLoader : ISpecificOptionLoader<FakerSpecificOption>
     {
         public FakerSpecificOption Load(IOptionLoader loader)
         {
-            return new FakerSpecificOption
-            {
-                SeeDummyMerlin = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Faker.Option, bool>(
+            return new FakerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Faker.Option, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Faker.Option.SeeDummyMerlin),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
+            );
         }
     }
 

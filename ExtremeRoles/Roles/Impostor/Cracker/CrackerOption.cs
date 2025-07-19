@@ -5,25 +5,23 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Impostor.Cracker
 {
-    public class CrackerSpecificOption : IRoleSpecificOption
-    {
-        public bool RemoveDeadBody { get; set; }
-        public float CanCrackDistance { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct CrackerSpecificOption(
+        bool RemoveDeadBody,
+        float CanCrackDistance,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class CrackerOptionLoader : ISpecificOptionLoader<CrackerSpecificOption>
     {
         public CrackerSpecificOption Load(IOptionLoader loader)
         {
-            return new CrackerSpecificOption
-            {
-                RemoveDeadBody = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption, bool>(
+            return new CrackerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption.RemoveDeadBody),
-                CanCrackDistance = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption.CanCrackDistance),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

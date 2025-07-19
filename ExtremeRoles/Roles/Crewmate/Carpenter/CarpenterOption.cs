@@ -6,36 +6,34 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Crewmate.Carpenter
 {
-    public class CarpenterSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeTaskGage { get; set; }
-        public int RemoveVentScrew { get; set; }
-        public float RemoveVentStopTime { get; set; }
-        public int SetCameraScrew { get; set; }
-        public float SetCameraStopTime { get; set; }
-        public float AbilityCoolTime { get; set; }
-        public int AbilityCount { get; set; }
-    }
+    public readonly record struct CarpenterSpecificOption(
+        int AwakeTaskGage,
+        int RemoveVentScrew,
+        float RemoveVentStopTime,
+        int SetCameraScrew,
+        float SetCameraStopTime,
+        float AbilityCoolTime,
+        int AbilityCount
+    ) : IRoleSpecificOption;
 
     public class CarpenterOptionLoader : ISpecificOptionLoader<CarpenterSpecificOption>
     {
         public CarpenterSpecificOption Load(IOptionLoader loader)
         {
-            return new CarpenterSpecificOption
-            {
-                AwakeTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
+            return new CarpenterSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.AwakeTaskGage),
-                RemoveVentScrew = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.RemoveVentScrew),
-                RemoveVentStopTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.RemoveVentStopTime),
-                SetCameraScrew = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
                     ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.SetCameraScrew),
-                SetCameraStopTime = loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, float>(
                     ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.SetCameraStopTime),
-                AbilityCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime),
-                AbilityCount = loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount)
-            };
+                loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime),
+                loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount)
+            );
         }
     }
 

@@ -6,52 +6,50 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.Hypnotist
 {
-    public class HypnotistSpecificOption : IRoleSpecificOption
-    {
-        public int AwakeCheckImpostorNum { get; set; }
-        public int AwakeCheckTaskGage { get; set; }
-        public int AwakeKillCount { get; set; }
-        public float Range { get; set; }
-        public float HideArrowRange { get; set; }
-        public int DefaultRedAbilityPart { get; set; }
-        public float HideKillButtonTime { get; set; }
-        public int DollKillCoolReduceRate { get; set; }
-        public bool IsResetKillCoolWhenDollKill { get; set; }
-        public float DollCrakingCoolTime { get; set; }
-        public float DollCrakingActiveTime { get; set; }
-        public int AbilityUseCount { get; set; }
-    }
+    public readonly record struct HypnotistSpecificOption(
+        int AwakeCheckImpostorNum,
+        int AwakeCheckTaskGage,
+        int AwakeKillCount,
+        float Range,
+        float HideArrowRange,
+        int DefaultRedAbilityPart,
+        float HideKillButtonTime,
+        int DollKillCoolReduceRate,
+        bool IsResetKillCoolWhenDollKill,
+        float DollCrakingCoolTime,
+        float DollCrakingActiveTime,
+        int AbilityUseCount
+    ) : IRoleSpecificOption;
 
     public class HypnotistOptionLoader : ISpecificOptionLoader<HypnotistSpecificOption>
     {
         public HypnotistSpecificOption Load(IOptionLoader loader)
         {
-            return new HypnotistSpecificOption
-            {
-                AwakeCheckImpostorNum = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
+            return new HypnotistSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.AwakeCheckImpostorNum),
-                AwakeCheckTaskGage = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.AwakeCheckTaskGage),
-                AwakeKillCount = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.AwakeKillCount),
-                Range = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.Range),
-                HideArrowRange = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.HideArrowRange),
-                DefaultRedAbilityPart = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.DefaultRedAbilityPart),
-                HideKillButtonTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.HideKillButtonTime),
-                DollKillCoolReduceRate = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.DollKillCoolReduceRate),
-                IsResetKillCoolWhenDollKill = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.IsResetKillCoolWhenDollKill),
-                DollCrakingCoolTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.DollCrakingCoolTime),
-                DollCrakingActiveTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.Hypnotist.HypnotistOption.DollCrakingActiveTime),
-                AbilityUseCount = loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
-            };
+                loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
+            );
         }
     }
 

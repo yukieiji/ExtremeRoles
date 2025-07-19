@@ -5,41 +5,39 @@ using ExtremeRoles.Module.CustomOption.Enums;
 
 namespace ExtremeRoles.Roles.Impostor.PsychoKiller
 {
-    public class PsychoKillerSpecificOption : IRoleSpecificOption
-    {
-        public int KillCoolReduceRate { get; set; }
-        public int CombMax { get; set; }
-        public bool CombResetWhenMeeting { get; set; }
-        public bool HasSelfKillTimer { get; set; }
-        public float SelfKillTimerTime { get; set; }
-        public bool IsForceRestartWhenMeetingEnd { get; set; }
-        public bool IsDiactiveUntilKillWhenMeetingEnd { get; set; }
-        public int SelfKillTimerModRate { get; set; }
-    }
+    public readonly record struct PsychoKillerSpecificOption(
+        int KillCoolReduceRate,
+        int CombMax,
+        bool CombResetWhenMeeting,
+        bool HasSelfKillTimer,
+        float SelfKillTimerTime,
+        bool IsForceRestartWhenMeetingEnd,
+        bool IsDiactiveUntilKillWhenMeetingEnd,
+        int SelfKillTimerModRate
+    ) : IRoleSpecificOption;
 
     public class PsychoKillerOptionLoader : ISpecificOptionLoader<PsychoKillerSpecificOption>
     {
         public PsychoKillerSpecificOption Load(IOptionLoader loader)
         {
-            return new PsychoKillerSpecificOption
-            {
-                KillCoolReduceRate = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
+            return new PsychoKillerSpecificOption(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.KillCoolReduceRate),
-                CombMax = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.CombMax),
-                CombResetWhenMeeting = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.CombResetWhenMeeting),
-                HasSelfKillTimer = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.HasSelfKillTimer),
-                SelfKillTimerTime = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, float>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, float>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.SelfKillTimerTime),
-                IsForceRestartWhenMeetingEnd = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.IsForceRestartWhenMeetingEnd),
-                IsDiactiveUntilKillWhenMeetingEnd = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd),
-                SelfKillTimerModRate = loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
+                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
                     ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.SelfKillTimerModRate)
-            };
+            );
         }
     }
 
