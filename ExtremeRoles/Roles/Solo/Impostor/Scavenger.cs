@@ -29,6 +29,86 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
+	public class AbilityInfoShower
+	{
+		private readonly TextMeshPro infoText;
+		private readonly MonoBehaviour monoBehaviour;
+		private bool isAShowing = false;
+		private Coroutine? coroutine;
+
+		public AbilityInfoShower(MonoBehaviour monoBehaviour)
+		{
+			this.infoText = UnityObject.Instantiate(
+				HudManager.Instance.KillButton.cooldownTimerText,
+				Camera.main.transform, false);
+			this.infoText.transform.localPosition = new Vector3(0.0f, -0.5f, -250.0f);
+			this.infoText.enableWordWrapping = false;
+			this.infoText.color = Palette.EnabledColor;
+			this.monoBehaviour = monoBehaviour;
+		}
+
+		public void Hoge()
+		{
+			if (isAShowing)
+			{
+				ShowAAndB();
+			}
+			else
+			{
+				ShowB();
+			}
+		}
+
+		public void ShowA()
+		{
+			isAShowing = true;
+			infoText.text = "A";
+			infoText.gameObject.SetActive(true);
+		}
+
+		public void Reset()
+		{
+			if (coroutine != null)
+			{
+				monoBehaviour.StopCoroutine(coroutine);
+			}
+			isAShowing = false;
+			infoText.gameObject.SetActive(false);
+		}
+
+		private void ShowAAndB()
+		{
+			infoText.text = "A\nB";
+			if (coroutine != null)
+			{
+				monoBehaviour.StopCoroutine(coroutine);
+			}
+			coroutine = monoBehaviour.StartCoroutine(ResetTextAfterDelay("A", 3f));
+		}
+
+		private void ShowB()
+		{
+			infoText.text = "B";
+			infoText.gameObject.SetActive(true);
+			if (coroutine != null)
+			{
+				monoBehaviour.StopCoroutine(coroutine);
+			}
+			coroutine = monoBehaviour.StartCoroutine(ResetTextAfterDelay("", 3f));
+		}
+
+		private System.Collections.IEnumerator ResetTextAfterDelay(string text, float delay)
+		{
+			yield return new WaitForSeconds(delay);
+			infoText.text = text;
+			if (string.IsNullOrEmpty(text))
+			{
+				infoText.gameObject.SetActive(false);
+				isAShowing = false;
+			}
+		}
+	}
+
 	public static T GetFromAsset<T>(string name) where T : UnityObject
 		=> UnityObjectLoader.LoadFromResources<T>(
 			ObjectPath.GetRoleAssetPath(ExtremeRoleId.Scavenger),
@@ -955,6 +1035,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private HashSet<Ability> curAbility = new HashSet<Ability>();
 	private TextMeshPro? abilityText;
+	private AbilityInfoShower? abilityInfoShower;
 	private Vector2? prevPlayerPos;
 	private float timer;
 	private float weaponMixTime;
@@ -1136,6 +1217,21 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.abilityText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
 			this.abilityText.enableWordWrapping = false;
 			this.abilityText.fontSize = this.abilityText.fontSizeMax = this.abilityText.fontSizeMin = 3.0f;
+		}
+
+		if (this.abilityInfoShower == null)
+		{
+			this.abilityInfoShower = new AbilityInfoShower(HudManager.Instance);
+		}
+
+		if (Input.GetKeyDown(KeyCode.H))
+		{
+			this.abilityInfoShower.Hoge();
+		}
+
+		if (Input.GetKeyDown(KeyCode.J))
+		{
+			this.abilityInfoShower.ShowA();
 		}
 
 		if (this.nextWeapon is Ability.ScavengerNull)
@@ -1506,6 +1602,10 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		if (this.abilityText != null)
 		{
 			this.abilityText.gameObject.SetActive(true);
+		}
+		if (this.abilityInfoShower != null)
+		{
+			this.abilityInfoShower.Reset();
 		}
 		if (this.weapon is null)
 		{
