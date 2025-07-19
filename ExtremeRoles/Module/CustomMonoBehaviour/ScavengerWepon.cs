@@ -101,7 +101,10 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 					x.Write((byte)ability);
 				});
 		}
+		
 		scavenger.AddWepon(ability);
+
+		this.gameObject.SetActive(false);
 	}
 }
 
