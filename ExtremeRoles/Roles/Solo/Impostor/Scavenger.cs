@@ -61,9 +61,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void ShowA()
 		{
-			isAShowing = true;
+			if (coroutine != null)
+			{
+				monoBehaviour.StopCoroutine(coroutine);
+			}
+			this.isAShowing = true;
 			infoText.text = "A";
 			infoText.gameObject.SetActive(true);
+			infoText.color = new Color(infoText.color.r, infoText.color.g, infoText.color.b, 0f);
+			coroutine = monoBehaviour.StartCoroutine(FadeText());
 		}
 
 		public void Reset()
@@ -74,26 +80,34 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			}
 			isAShowing = false;
 			infoText.gameObject.SetActive(false);
+			infoText.color = new Color(infoText.color.r, infoText.color.g, infoText.color.b, 1f);
 		}
 
 		private void ShowAAndB()
 		{
-			infoText.text = "A\nB";
 			if (coroutine != null)
 			{
 				monoBehaviour.StopCoroutine(coroutine);
 			}
-			coroutine = monoBehaviour.StartCoroutine(ResetTextAfterDelay("A", 3f));
+			infoText.text = "A\nB";
+			infoText.gameObject.SetActive(true);
+			coroutine = monoBehaviour.StartCoroutine(ShowAAfterDelay(3f));
+		}
+
+		private System.Collections.IEnumerator ShowAAfterDelay(float delay)
+		{
+			yield return new WaitForSeconds(delay);
+			ShowA();
 		}
 
 		private void ShowB()
 		{
-			infoText.text = "B";
-			infoText.gameObject.SetActive(true);
 			if (coroutine != null)
 			{
 				monoBehaviour.StopCoroutine(coroutine);
 			}
+			infoText.text = "B";
+			infoText.gameObject.SetActive(true);
 			coroutine = monoBehaviour.StartCoroutine(ResetTextAfterDelay("", 3f));
 		}
 
@@ -105,6 +119,35 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				infoText.gameObject.SetActive(false);
 				isAShowing = false;
+			}
+		}
+
+		private System.Collections.IEnumerator FadeText()
+		{
+			float fadeDuration = 0.5f;
+			Color originalColor = infoText.color;
+
+			while (true)
+			{
+				// Fade in
+				float timer = 0f;
+				while (timer < fadeDuration)
+				{
+					timer += Time.deltaTime;
+					float alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
+					infoText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+					yield return null;
+				}
+
+				// Fade out
+				timer = 0f;
+				while (timer < fadeDuration)
+				{
+					timer += Time.deltaTime;
+					float alpha = Mathf.Lerp(1f, 0f, timer / fadeDuration);
+					infoText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+					yield return null;
+				}
 			}
 		}
 	}
