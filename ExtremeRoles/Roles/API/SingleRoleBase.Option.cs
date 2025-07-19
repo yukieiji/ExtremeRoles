@@ -47,7 +47,7 @@ public sealed record RoleOption<T>(CommonOption Common, T Role) where T : IRoleS
 
 public interface IRoleOptionFactory
 {
-	public RoleCore Core { get; }
+	// public RoleCore Core { get; }
 
 	public void Build(AutoParentSetOptionCategoryFactory factory);
 }
