@@ -113,13 +113,13 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			this.blockTimer <= 0.0f)
 		{
 			float delta = Input.mouseScrollDelta.y;
-			if (delta <= -0.75f || Input.GetKeyDown(KeyCode.Mouse3))
+			if (delta <= -0.5f || Input.GetKeyDown(KeyCode.Mouse3))
 			{
 				switchAbility(false);
 				this.blockTimer = 0.75f;
 				return;
 			}
-			else if (delta >= 0.75f || Input.GetKeyDown(KeyCode.Mouse4))
+			else if (delta >= 0.5f || Input.GetKeyDown(KeyCode.Mouse4))
 			{
 				switchAbility(true);
 				this.blockTimer = 0.75f;
