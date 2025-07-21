@@ -1528,9 +1528,6 @@
   <data name="ScavengerBeamSaberRange" xml:space="preserve">
     <value>“光剑”挥砍范围</value>
   </data>
-  <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
-    <value>“光剑”会检测周围是否有玩家</value>
-  </data>
   <data name="ScavengerWeaponMixTime" xml:space="preserve">
     <value>“武器合成”所需时间</value>
   </data>

@@ -1526,9 +1526,6 @@ UI「爆撃モード」:
   <data name="ScavengerBeamSaberRange" xml:space="preserve">
     <value>「ビームセーバー」のキル可能範囲</value>
   </data>
-  <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
-    <value>「ビームセーバー」がプレイヤーを自動検知するか</value>
-  </data>
   <data name="ScavengerWeaponMixTime" xml:space="preserve">
     <value>「武器合成」にかかる時間</value>
   </data>

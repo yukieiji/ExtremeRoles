@@ -391,11 +391,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 
 	private sealed class BeamSaber(
-		float range,
-		bool isAutoDetect) : IWeapon
+		float range) : IWeapon
 	{
 		private readonly float range = range;
-		private readonly bool isIgnoreAutoDetect = !isAutoDetect;
 		private byte targetPlayerId;
 		private Vector2 chargePos = Vector2.zero;
 		private readonly List<PlayerControl> cacheResult = new List<PlayerControl>();
@@ -425,7 +423,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			if (this.targetPlayerId == byte.MaxValue)
 			{
-				return this.isIgnoreAutoDetect;
+				return false;
 			}
 
 
@@ -518,7 +516,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			if (this.cacheResult.Count <= 0)
 			{
-				return this.isIgnoreAutoDetect;
+				return false;
 			}
 			this.targetPlayerId = this.cacheResult[0].PlayerId;
 			return true;
@@ -902,7 +900,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		BeamSaberCount,
 		BeamSaberChargeTime,
 		BeamSaberRange,
-		BeamSaberAutoDetect,
 
 		AguniCount,
 		AguniChargeTime,
@@ -1254,9 +1251,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		factory.CreateFloatOption(
 			Option.BeamSaberRange,
 			3.5f, 0.1f, 7.5f, 0.1f);
-		factory.CreateBoolOption(
-			Option.BeamSaberAutoDetect,
-			false);
 
 		/*
 		factory.CreateIntOption(
@@ -1328,8 +1322,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				Ability.ScavengerBeamSaber,
 				new BeamSaber(
-					loader.GetValue<Option, float>(Option.BeamSaberRange),
-					loader.GetValue<Option, bool>(Option.BeamSaberAutoDetect))
+					loader.GetValue<Option, float>(Option.BeamSaberRange))
 			},
 			/*
 			{

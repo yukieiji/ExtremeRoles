@@ -1333,9 +1333,6 @@ While invisible, you cannot touch anything except vents!!</value>
   <data name="ScavengerBeamSaberRange" xml:space="preserve">
     <value>"BEAM SABER" : Killable range</value>
   </data>
-  <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
-    <value>"BEAM SABER" : Auto-detect players</value>
-  </data>
   <data name="ScavengerWeaponMixTime" xml:space="preserve">
     <value>"WEAPON SYNTHESIS" : Time required</value>
   </data>
