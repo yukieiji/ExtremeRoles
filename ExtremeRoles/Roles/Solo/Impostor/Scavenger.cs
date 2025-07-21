@@ -1168,7 +1168,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			Option.AllowAdvancedWeapon,
 			false, randomWepon);
 
-		factory.CreateSelectionOption(
+		var initAbility = factory.CreateSelectionOption(
 			Option.InitAbility,
 			Enum.GetValues<Ability>()
 				.Select(x => x.ToString())
@@ -1177,12 +1177,17 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			invert: true);
 
 		var mapSetOps = factory.CreateBoolOption(
-			Option.IsSetWeapon, true);
+			Option.IsSetWeapon, true, initAbility);
 
 		factory.CreateBoolOption(
 			Option.SyncWeapon,
 			true, mapSetOps,
 			invert: true);
+
+		factory.CreateFloatOption(
+			Option.WeaponMixTime,
+			3.0f, 0.5f, 25.0f, 0.5f,
+			format: OptionUnit.Second);
 
 		factory.CreateIntOption(
 			Option.HandGunCount,
@@ -1267,10 +1272,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			5, 1, 60, 1,
 			format: OptionUnit.Second);
 		*/
-		factory.CreateFloatOption(
-			Option.WeaponMixTime,
-			3.0f, 0.5f, 25.0f, 0.5f,
-			format: OptionUnit.Second);
 	}
 
 	protected override void RoleSpecificInit()
