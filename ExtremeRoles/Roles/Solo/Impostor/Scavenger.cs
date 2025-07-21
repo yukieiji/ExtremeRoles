@@ -431,7 +431,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				PlayerControl.LocalPlayer.PlayerId,
 				this.targetPlayerId,
 				byte.MinValue);
-			Sound.PlaySound(Sound.Type.Kill, 0.7f);
+			Sound.PlaySound(Sound.Type.Kill, 0.9f);
 
 			return true;
 		}
