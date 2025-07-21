@@ -103,7 +103,8 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 		}
 		
 		scavenger.AddWepon(ability);
-
+		Sound.PlaySound(Sound.Type.ScavengerPickUpWeapon, 0.8f);
+		
 		this.gameObject.SetActive(false);
 	}
 }

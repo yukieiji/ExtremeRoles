@@ -699,6 +699,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					writer.Write(this.playerDirection.x);
 					writer.Write(this.playerDirection.y);
 				});
+
+			var soundType = this.type is Ability.ScavengerBeamRifle ?
+				Sound.Type.ScavengerFireBeam : Sound.Type.ScavengerFireNormalGun;
+
+			Sound.PlaySound(soundType, 0.8f);
+
 			++this.id;
 			return true;
 		}
