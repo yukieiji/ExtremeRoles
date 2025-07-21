@@ -1289,7 +1289,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new Gun(
 					new (
 						ObjectPath.ScavengerBulletImg,
-						new Vector2(0.025f, 0.05f),
+						new Vector2(0.05f, 0.1f),
 						loader.GetValue<Option, float>(Option.HandGunSpeed),
 						loader.GetValue<Option, float>(Option.HandGunRange)))
 			},
@@ -1311,7 +1311,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new Gun(
 					new (
 						ObjectPath.ScavengerBulletImg,
-						new Vector2(0.025f, 0.05f),
+						new Vector2(0.5f, 0.1f),
 						loader.GetValue<Option, float>(Option.SniperRifleSpeed),
 						128.0f))
 			},
@@ -1320,7 +1320,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new Gun(
 					new (
 						ObjectPath.ScavengerBeamImg,
-						new Vector2(0.05f, 0.05f),
+						new Vector2(0.05f, 0.2f),
 						loader.GetValue<Option, float>(Option.BeamRifleSpeed),
 						loader.GetValue<Option, float>(Option.BeamRifleRange),
 						true))
