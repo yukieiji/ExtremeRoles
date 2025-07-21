@@ -31,12 +31,21 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
 	public class AbilityInfoShower
 	{
-		private readonly TextMeshPro infoText;
-		private readonly MonoBehaviour monoBehaviour;
-		private bool isAShowing = false;
-		private Coroutine? coroutine;
+		private enum DisplayState
+		{
+			Hidden,
+			A,
+			B,
+			AandB
+		}
 
-		public AbilityInfoShower(MonoBehaviour monoBehaviour)
+		private readonly TextMeshPro infoText;
+		private DisplayState displayState = DisplayState.Hidden;
+		private float timer = 0f;
+		private float fadeTimer = 0f;
+		private bool isFadingOut = false;
+
+		public AbilityInfoShower()
 		{
 			this.infoText = UnityObject.Instantiate(
 				HudManager.Instance.KillButton.cooldownTimerText,
@@ -44,12 +53,62 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.infoText.transform.localPosition = new Vector3(0.0f, -0.5f, -250.0f);
 			this.infoText.enableWordWrapping = false;
 			this.infoText.color = Palette.EnabledColor;
-			this.monoBehaviour = monoBehaviour;
+			this.infoText.gameObject.SetActive(false);
+		}
+
+		public void Update()
+		{
+			if (displayState == DisplayState.Hidden)
+			{
+				return;
+			}
+
+			timer -= Time.deltaTime;
+
+			if (displayState == DisplayState.A)
+			{
+				UpdateFadeEffect();
+			}
+
+			if (timer <= 0f)
+			{
+				HandleTimerEnd();
+			}
+		}
+
+		private void UpdateFadeEffect()
+		{
+			fadeTimer += isFadingOut ? -Time.deltaTime : Time.deltaTime;
+			float alpha = fadeTimer / 0.5f;
+			infoText.color = new Color(infoText.color.r, infoText.color.g, infoText.color.b, alpha);
+
+			if (fadeTimer >= 0.5f)
+			{
+				isFadingOut = true;
+			}
+			else if (fadeTimer <= 0f)
+			{
+				isFadingOut = false;
+			}
+		}
+
+		private void HandleTimerEnd()
+		{
+			switch (displayState)
+			{
+				case DisplayState.B:
+					displayState = DisplayState.Hidden;
+					infoText.gameObject.SetActive(false);
+					break;
+				case DisplayState.AandB:
+					ShowA();
+					break;
+			}
 		}
 
 		public void Hoge()
 		{
-			if (isAShowing)
+			if (displayState == DisplayState.A)
 			{
 				ShowAAndB();
 			}
@@ -61,94 +120,36 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void ShowA()
 		{
-			if (coroutine != null)
-			{
-				monoBehaviour.StopCoroutine(coroutine);
-			}
-			this.isAShowing = true;
+			displayState = DisplayState.A;
 			infoText.text = "A";
 			infoText.gameObject.SetActive(true);
-			infoText.color = new Color(infoText.color.r, infoText.color.g, infoText.color.b, 0f);
-			coroutine = monoBehaviour.StartCoroutine(FadeText());
+			fadeTimer = 0f;
+			isFadingOut = false;
 		}
 
 		public void Reset()
 		{
-			if (coroutine != null)
-			{
-				monoBehaviour.StopCoroutine(coroutine);
-			}
-			isAShowing = false;
+			displayState = DisplayState.Hidden;
 			infoText.gameObject.SetActive(false);
-			infoText.color = new Color(infoText.color.r, infoText.color.g, infoText.color.b, 1f);
+			timer = 0f;
+			fadeTimer = 0f;
 		}
 
 		private void ShowAAndB()
 		{
-			if (coroutine != null)
-			{
-				monoBehaviour.StopCoroutine(coroutine);
-			}
+			displayState = DisplayState.AandB;
 			infoText.text = "A\nB";
-			infoText.gameObject.SetActive(true);
-			coroutine = monoBehaviour.StartCoroutine(ShowAAfterDelay(3f));
-		}
-
-		private System.Collections.IEnumerator ShowAAfterDelay(float delay)
-		{
-			yield return new WaitForSeconds(delay);
-			ShowA();
+			infoText.color = new Color(infoText.color.r, infoText.color.g, infoText.color.b, 1f);
+			timer = 3f;
 		}
 
 		private void ShowB()
 		{
-			if (coroutine != null)
-			{
-				monoBehaviour.StopCoroutine(coroutine);
-			}
+			displayState = DisplayState.B;
 			infoText.text = "B";
 			infoText.gameObject.SetActive(true);
-			coroutine = monoBehaviour.StartCoroutine(ResetTextAfterDelay("", 3f));
-		}
-
-		private System.Collections.IEnumerator ResetTextAfterDelay(string text, float delay)
-		{
-			yield return new WaitForSeconds(delay);
-			infoText.text = text;
-			if (string.IsNullOrEmpty(text))
-			{
-				infoText.gameObject.SetActive(false);
-				isAShowing = false;
-			}
-		}
-
-		private System.Collections.IEnumerator FadeText()
-		{
-			float fadeDuration = 0.5f;
-			Color originalColor = infoText.color;
-
-			while (true)
-			{
-				// Fade in
-				float timer = 0f;
-				while (timer < fadeDuration)
-				{
-					timer += Time.deltaTime;
-					float alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
-					infoText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-					yield return null;
-				}
-
-				// Fade out
-				timer = 0f;
-				while (timer < fadeDuration)
-				{
-					timer += Time.deltaTime;
-					float alpha = Mathf.Lerp(1f, 0f, timer / fadeDuration);
-					infoText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-					yield return null;
-				}
-			}
+			infoText.color = new Color(infoText.color.r, infoText.color.g, infoText.color.b, 1f);
+			timer = 3f;
 		}
 	}
 
@@ -1264,8 +1265,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		if (this.abilityInfoShower == null)
 		{
-			this.abilityInfoShower = new AbilityInfoShower(HudManager.Instance);
+			this.abilityInfoShower = new AbilityInfoShower();
 		}
+		this.abilityInfoShower.Update();
 
 		if (Input.GetKeyDown(KeyCode.H))
 		{
