@@ -63,12 +63,13 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return;
 			}
 
-			timer -= Time.deltaTime;
-
 			if (displayState == DisplayState.A)
 			{
 				UpdateFadeEffect();
+				return;
 			}
+
+			timer -= Time.deltaTime;
 
 			if (timer <= 0f)
 			{
@@ -99,9 +100,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				case DisplayState.B:
 					displayState = DisplayState.Hidden;
 					infoText.gameObject.SetActive(false);
+					timer = 0f;
 					break;
 				case DisplayState.AandB:
 					ShowA();
+					timer = 0f;
 					break;
 			}
 		}
