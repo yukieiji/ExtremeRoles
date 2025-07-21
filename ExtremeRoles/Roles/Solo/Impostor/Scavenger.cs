@@ -443,7 +443,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return false;
 			}
 			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
-			return curPos != this.chargePos;
+			return curPos == this.chargePos;
 		}
 
 		private bool isIaiOk(bool isCharge, float chargeGauge)
