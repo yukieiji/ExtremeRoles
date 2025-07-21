@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 using System.Linq;
@@ -106,12 +106,12 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 			this.State is not AbilityState.Activating or AbilityState.Charging)
 		{
 			float delta = Input.mouseScrollDelta.y;
-			if (delta <= -1.0f || Input.GetKeyDown(KeyCode.Mouse3))
+			if (delta <= -0.75f || Input.GetKeyDown(KeyCode.Mouse3))
 			{
 				switchAbility(false);
 				return;
 			}
-			else if (delta >= 1.0f || Input.GetKeyDown(KeyCode.Mouse4))
+			else if (delta >= 0.75f || Input.GetKeyDown(KeyCode.Mouse4))
 			{
 				switchAbility(true);
 				return;
