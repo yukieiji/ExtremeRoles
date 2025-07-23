@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Extension.UnityEvents;
 using ExtremeRoles.Extension.Manager;
@@ -84,6 +84,8 @@ public class ExtremeAbilityButton
 		hud.ReGridButtons();
 	}
 
+	public bool IsAbilityActiveOrCharge() =>
+		State is AbilityState.Activating or AbilityState.Charging;
 	public bool IsAbilityActive() =>
 		State == AbilityState.Activating;
 	public bool IsAbilityReady() =>

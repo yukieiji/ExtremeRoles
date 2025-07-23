@@ -1612,6 +1612,6 @@ Lv2能力「ビームセーバー」
 </value>
   </data>
   <data name="WeaponMixTimeRemain" xml:space="preserve">
-    <value>{0}を合成中....:完了まで{1}秒</value>
+    <value>『{0}』を合成中・・・:完了まで{1}秒</value>
   </data>
 </root>

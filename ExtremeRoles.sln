@@ -154,8 +154,6 @@ Global
 		{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97} = {DED4EEB9-DD02-4EAD-9D44-CF23AD1726FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_NeutralResourcesLanguage = ja-JP
 		SolutionGuid = {01B43F72-EE24-49D8-82B7-CC59836F5D72}
-		RESX_TaskErrorCategory = Message
 	EndGlobalSection
 EndGlobal

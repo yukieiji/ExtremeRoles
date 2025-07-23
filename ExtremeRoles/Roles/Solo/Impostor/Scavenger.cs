@@ -1109,7 +1109,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		if (this.internalButton is null ||
 			this.internalButton.MultiModalAbilityNum <= 1 ||
-			!this.internalButton.IsAbilityReady() ||
+			!this.internalButton.IsAbilityActiveOrCharge() ||
 			this.prevPlayerPos.Value != curPos ||
 			!Key.IsAltDown() ||
 			IntroCutscene.Instance != null ||
@@ -1134,7 +1134,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				Camera.main.transform, false);
 			this.abilityText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
 			this.abilityText.enableWordWrapping = false;
-			this.abilityText.color = Palette.EnabledColor;
+			this.abilityText.fontSize = this.abilityText.fontSizeMax = this.abilityText.fontSizeMin = 3.0f;
 		}
 
 		if (this.nextWeapon is Ability.ScavengerNull)
@@ -1145,6 +1145,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			"WeaponMixTimeRemain",
 			TranslationController.Instance.GetString(this.nextWeapon.ToString()),
 			Mathf.CeilToInt(this.timer));
+		this.abilityText.color = Palette.EnabledColor;
 		this.abilityText.gameObject.SetActive(true);
 		this.timer -= Time.deltaTime;
 
