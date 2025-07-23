@@ -1013,13 +1013,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	public void CreateAbility()
 	{
 		this.createWeapon();
-		this.curAbility = new HashSet<Ability>();
+		this.curAbility = [];
 
 		if (this.InitAbility is not Ability.ScavengerNull)
 		{
 			this.curAbility.Add(this.InitAbility);
 		}
 
+		this.internalButton = null;
 		BehaviorBase init = this.getAbilityBehavior(this.InitAbility);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
