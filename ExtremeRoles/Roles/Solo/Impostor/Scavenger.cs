@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Extension.Controller;
+using ExtremeRoles.Extension.Controller;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
@@ -1135,6 +1135,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.abilityText.color = Palette.EnabledColor;
 		}
 
+		var nextWeapon = this.getMixingWeapon();
 		this.abilityText.text = TranslationController.Instance.GetString(
 			"WeaponMixTimeRemain",
 			TranslationController.Instance.GetString(nextWeapon.ToString()),
