@@ -958,6 +958,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private Vector2? prevPlayerPos;
 	private float timer;
 	private float weaponMixTime;
+	private Ability nextWeapon = Ability.ScavengerNull;
 
 	public Scavenger() : base(
 		ExtremeRoleId.Scavenger,
@@ -1121,6 +1122,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.abilityText.gameObject.SetActive(false);
 			}
 			this.timer = this.weaponMixTime;
+			this.nextWeapon = Ability.ScavengerNull;
 			return;
 		}
 
@@ -1135,18 +1137,22 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.abilityText.color = Palette.EnabledColor;
 		}
 
-		var nextWeapon = this.getMixingWeapon();
+		if (this.nextWeapon is Ability.ScavengerNull)
+		{
+			this.nextWeapon = this.getMixingWeapon();
+		}
 		this.abilityText.text = TranslationController.Instance.GetString(
 			"WeaponMixTimeRemain",
-			TranslationController.Instance.GetString(nextWeapon.ToString()),
+			TranslationController.Instance.GetString(this.nextWeapon.ToString()),
 			Mathf.CeilToInt(this.timer));
 		this.abilityText.gameObject.SetActive(true);
 		this.timer -= Time.fixedDeltaTime;
 
 		if (this.timer < 0.0f)
 		{
-			this.mixWeapon(nextWeapon);
+			this.mixWeapon(this.nextWeapon);
 			this.timer = this.weaponMixTime;
+			this.nextWeapon = Ability.ScavengerNull;
 		}
 	}
 
