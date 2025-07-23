@@ -1110,7 +1110,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		if (this.internalButton is null ||
 			this.internalButton.MultiModalAbilityNum <= 1 ||
-			!this.internalButton.IsAbilityActiveOrCharge() ||
+			this.internalButton.IsAbilityActiveOrCharge() ||
 			this.prevPlayerPos.Value != curPos ||
 			!Key.IsAltDown() ||
 			IntroCutscene.Instance != null ||
