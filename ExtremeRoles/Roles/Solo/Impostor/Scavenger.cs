@@ -1,4 +1,4 @@
-using ExtremeRoles.Extension.Controller;
+﻿using ExtremeRoles.Extension.Controller;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
@@ -1136,13 +1136,15 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 
 		this.abilityText.text = TranslationController.Instance.GetString(
-			"WeaponMixTimeRemain", Mathf.CeilToInt(this.timer));
+			"WeaponMixTimeRemain",
+			TranslationController.Instance.GetString(nextWeapon.ToString()),
+			Mathf.CeilToInt(this.timer));
 		this.abilityText.gameObject.SetActive(true);
 		this.timer -= Time.fixedDeltaTime;
 
 		if (this.timer < 0.0f)
 		{
-			this.mixWeapon();
+			this.mixWeapon(nextWeapon);
 			this.timer = this.weaponMixTime;
 		}
 	}
@@ -1364,40 +1366,39 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		return result;
 	}
 
-	private void mixWeapon()
+	private void mixWeapon(Ability nextWeapon)
 	{
-		/*
-		// 最終進化系
-		if (this.curAbility.Count == 3 ||
-			this.curAbility.Contains(Ability.BeamSaber) ||
-			this.curAbility.Contains(Ability.BeamRifle) ||
-			this.curAbility.Contains(Ability.SniperRifle))
+		if (nextWeapon is not Ability.ScavengerNull)
 		{
-			replaceToWeapon(Ability.Aguni);
-		}
-		else */
-		if (
-			this.curAbility.Contains(Ability.ScavengerHandGun) &&
-			this.curAbility.Contains(Ability.ScavengerSword))
-		{
-			replaceToWeapon(Ability.ScavengerSniperRifle);
-		}
-		else if (
-			this.curAbility.Contains(Ability.ScavengerHandGun) &&
-			this.curAbility.Contains(Ability.ScavengerFlame))
-		{
-			replaceToWeapon(Ability.ScavengerBeamRifle);
-		}
-		else if (
-			this.curAbility.Contains(Ability.ScavengerSword) &&
-			this.curAbility.Contains(Ability.ScavengerFlame))
-		{
-			replaceToWeapon(Ability.ScavengerBeamSaber);
+			replaceToWeapon(nextWeapon);
 		}
 		else
 		{
 			ExtremeRolesPlugin.Logger.LogWarning("Invalid Ability");
 		}
+	}
+
+	private Ability getMixingWeapon()
+	{
+		if (
+			this.curAbility.Contains(Ability.ScavengerHandGun) &&
+			this.curAbility.Contains(Ability.ScavengerSword))
+		{
+			return Ability.ScavengerSniperRifle;
+		}
+		else if (
+			this.curAbility.Contains(Ability.ScavengerHandGun) &&
+			this.curAbility.Contains(Ability.ScavengerFlame))
+		{
+			return Ability.ScavengerBeamRifle;
+		}
+		else if (
+			this.curAbility.Contains(Ability.ScavengerSword) &&
+			this.curAbility.Contains(Ability.ScavengerFlame))
+		{
+			return Ability.ScavengerBeamSaber;
+		}
+		return Ability.ScavengerNull;
 	}
 	private void replaceToWeapon(in Ability ability)
 	{

@@ -1406,7 +1406,7 @@ Lv2 Ability "BEAM SABER"
 - If ""BEAM SABER" : Auto-detect players" is ON, the button cannot be pressed if no player is within ability range, preventing misfires.</value>
   </data>
   <data name="WeaponMixTimeRemain" xml:space="preserve">
-    <value>Weapon Synthesis in progress: {0} seconds remaining</value>
+    <value>Synthesizing {0}....: {1} seconds to complete</value>
   </data>
   <data name="Raider" xml:space="preserve">
     <value>Raider</value>
