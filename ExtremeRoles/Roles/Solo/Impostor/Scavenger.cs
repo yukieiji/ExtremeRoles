@@ -1141,12 +1141,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.nextWeapon = this.getMixingWeapon();
 		}
-		this.abilityText.text = TranslationController.Instance.GetString(
+		this.abilityText.text = TranslationControllerExtension.GetString(
 			"WeaponMixTimeRemain",
 			TranslationController.Instance.GetString(this.nextWeapon.ToString()),
 			Mathf.CeilToInt(this.timer));
 		this.abilityText.gameObject.SetActive(true);
-		this.timer -= Time.fixedDeltaTime;
+		this.timer -= Time.deltaTime;
 
 		if (this.timer < 0.0f)
 		{
