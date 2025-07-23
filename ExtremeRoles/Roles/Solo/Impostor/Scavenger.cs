@@ -1379,6 +1379,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		if (nextWeapon is not Ability.ScavengerNull)
 		{
 			replaceToWeapon(nextWeapon);
+			Sound.PlaySound(Sound.Type.ScavengerPickUpWeapon, 0.8f);
 		}
 		else
 		{
