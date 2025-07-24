@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Roles;
@@ -25,6 +25,9 @@ public static class Sound
 
 		CommanderReduceKillCool,
 		TeroristSabotageAnnounce,
+		ScavengerPickUpWeapon,
+		ScavengerFireNormalGun,
+		ScavengerFireBeam,
 
 		MinerMineSE,
 

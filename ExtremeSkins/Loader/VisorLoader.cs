@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -37,11 +37,13 @@ public sealed class VisorLoader : ICosmicLoader
 
 	private readonly ConfigEntry<string> curUpdateHash;
 
+	private const string defaultHash = "NoHashData";
+
 	public VisorLoader()
 	{
 		this.curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
 			ExtremeSkinsPlugin.SkinComitCategory,
-			updateComitKey, "NoHashData");
+			updateComitKey, defaultHash);
 	}
 
 	public IEnumerator Fetch()
@@ -247,11 +249,17 @@ public sealed class VisorLoader : ICosmicLoader
 			"Extreme Visor Manager : Checking Update....");
 
 		string? auPath = Path.GetDirectoryName(Application.dataPath);
-		if (string.IsNullOrEmpty(auPath)) { return true; }
+		if (string.IsNullOrEmpty(auPath))
+		{ 
+			return true;
+		}
 
 		string exvFolder = Path.Combine(auPath, DataStructure.FolderName);
 
-		if (!Directory.Exists(exvFolder)) { return true; }
+		if (!Directory.Exists(exvFolder))
+		{
+			return true;
+		}
 
 		getJsonData(visorRepoData).GetAwaiter().GetResult();
 
@@ -260,10 +268,21 @@ public sealed class VisorLoader : ICosmicLoader
 		string visorJsonString = Encoding.UTF8.GetString(byteVisorArray);
 		JObject visorJObject = JObject.Parse(visorJsonString);
 
-		JToken visorFolder = visorJObject["data"];
-		JToken newHash = visorJObject[jsonUpdateComitKey];
+		if (!(
+				visorJObject.TryGetValue("data", out JToken visorFolder) &&
+				visorJObject.TryGetValue(jsonUpdateComitKey, out JToken newHash)
+			))
+		{
+			return true;
+		}
 
-		if ((string)newHash != curUpdateHash.Value) { return true; }
+		string curValue = curUpdateHash.Value;
+		string newHashStr = (string)newHash;
+		if (string.IsNullOrEmpty(newHashStr) ||
+			(curValue != defaultHash && newHashStr != curValue))
+		{
+			return true;
+		}
 
 		JArray? visorArray = visorFolder.TryCast<JArray>();
 

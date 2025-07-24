@@ -1528,9 +1528,6 @@
   <data name="ScavengerBeamSaberRange" xml:space="preserve">
     <value>“光剑”挥砍范围</value>
   </data>
-  <data name="ScavengerBeamSaberAutoDetect" xml:space="preserve">
-    <value>“光剑”会检测周围是否有玩家</value>
-  </data>
   <data name="ScavengerWeaponMixTime" xml:space="preserve">
     <value>“武器合成”所需时间</value>
   </data>
@@ -1610,6 +1607,6 @@ Lv2武器“光剑”
    -如开启了“光剑会检测周围是否有玩家”则如周围没有玩家将无法使用光剑以免挥空</value>
   </data>
   <data name="WeaponMixTimeRemain" xml:space="preserve">
-    <value>武器合成中：剩余 {0} 秒</value>
+    <value>正在合成 {0}....: 完成还需 {1} 秒</value>
   </data>
 </root>

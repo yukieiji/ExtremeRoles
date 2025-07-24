@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 using System.Linq;
@@ -19,6 +19,7 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 	private readonly SpriteRenderer multiAbilityImg;
 	private readonly List<BehaviorBase> allAbility;
 	private int curIndex = 0;
+	private float blockTimer = 0.0f;
 
 	public ExtremeMultiModalAbilityButton(
 		List<BehaviorBase> behaviorors,
@@ -102,18 +103,26 @@ public class ExtremeMultiModalAbilityButton : ExtremeAbilityButton
 
 	protected override void UpdateImp()
 	{
+		if (this.blockTimer > 0.0f)
+		{
+			this.blockTimer -= Time.fixedDeltaTime;
+		}
+
 		if (this.MultiModalAbilityNum > 1 &&
-			this.State is not AbilityState.Activating or AbilityState.Charging)
+			this.State is not AbilityState.Activating or AbilityState.Charging &&
+			this.blockTimer <= 0.0f)
 		{
 			float delta = Input.mouseScrollDelta.y;
-			if (delta <= -1.0f || Input.GetKeyDown(KeyCode.Mouse3))
+			if (delta <= -0.25f || Input.GetKeyDown(KeyCode.Mouse3))
 			{
 				switchAbility(false);
+				this.blockTimer = 0.75f;
 				return;
 			}
-			else if (delta >= 1.0f || Input.GetKeyDown(KeyCode.Mouse4))
+			else if (delta >= 0.25f || Input.GetKeyDown(KeyCode.Mouse4))
 			{
 				switchAbility(true);
+				this.blockTimer = 0.75f;
 				return;
 			}
 		}

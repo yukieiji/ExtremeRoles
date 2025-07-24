@@ -391,11 +391,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	}
 
 	private sealed class BeamSaber(
-		float range,
-		bool isAutoDetect) : IWeapon
+		float range) : IWeapon
 	{
 		private readonly float range = range;
-		private readonly bool isIgnoreAutoDetect = !isAutoDetect;
 		private byte targetPlayerId;
 		private Vector2 chargePos = Vector2.zero;
 		private readonly List<PlayerControl> cacheResult = new List<PlayerControl>();
@@ -407,7 +405,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				isIaiOk,
 				tryIai,
 				startIai,
-				ChargingCountBehaviour.ReduceTiming.OnActive);
+				ChargingCountBehaviour.ReduceTiming.OnActive,
+				isChargeNow);
 
 		public void RpcHide()
 		{ }
@@ -424,7 +423,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			if (this.targetPlayerId == byte.MaxValue)
 			{
-				return this.isIgnoreAutoDetect;
+				return false;
 			}
 
 
@@ -432,9 +431,19 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				PlayerControl.LocalPlayer.PlayerId,
 				this.targetPlayerId,
 				byte.MinValue);
-			Sound.PlaySound(Sound.Type.Kill, 0.7f);
+			Sound.PlaySound(Sound.Type.Kill, 0.9f);
 
 			return true;
+		}
+
+		private bool isChargeNow()
+		{
+			if (PlayerControl.LocalPlayer == null)
+			{
+				return false;
+			}
+			var curPos = PlayerControl.LocalPlayer.GetTruePosition();
+			return curPos == this.chargePos;
 		}
 
 		private bool isIaiOk(bool isCharge, float chargeGauge)
@@ -507,7 +516,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			if (this.cacheResult.Count <= 0)
 			{
-				return this.isIgnoreAutoDetect;
+				return false;
 			}
 			this.targetPlayerId = this.cacheResult[0].PlayerId;
 			return true;
@@ -690,6 +699,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 					writer.Write(this.playerDirection.x);
 					writer.Write(this.playerDirection.y);
 				});
+
+			var soundType = this.type is Ability.ScavengerBeamRifle ?
+				Sound.Type.ScavengerFireBeam : Sound.Type.ScavengerFireNormalGun;
+
+			Sound.PlaySound(soundType, 0.8f);
+
 			++this.id;
 			return true;
 		}
@@ -891,7 +906,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		BeamSaberCount,
 		BeamSaberChargeTime,
 		BeamSaberRange,
-		BeamSaberAutoDetect,
 
 		AguniCount,
 		AguniChargeTime,
@@ -944,6 +958,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private Vector2? prevPlayerPos;
 	private float timer;
 	private float weaponMixTime;
+	private Ability nextWeapon = Ability.ScavengerNull;
 
 	public Scavenger() : base(
 		ExtremeRoleId.Scavenger,
@@ -998,13 +1013,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	public void CreateAbility()
 	{
 		this.createWeapon();
-		this.curAbility = new HashSet<Ability>();
+		this.curAbility = [];
 
 		if (this.InitAbility is not Ability.ScavengerNull)
 		{
 			this.curAbility.Add(this.InitAbility);
 		}
 
+		this.internalButton = null;
 		BehaviorBase init = this.getAbilityBehavior(this.InitAbility);
 
 		this.Button = new ExtremeMultiModalAbilityButton(
@@ -1094,7 +1110,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		if (this.internalButton is null ||
 			this.internalButton.MultiModalAbilityNum <= 1 ||
-			!this.internalButton.IsAbilityReady() ||
+			this.internalButton.IsAbilityActiveOrCharge() ||
 			this.prevPlayerPos.Value != curPos ||
 			!Key.IsAltDown() ||
 			IntroCutscene.Instance != null ||
@@ -1107,6 +1123,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.abilityText.gameObject.SetActive(false);
 			}
 			this.timer = this.weaponMixTime;
+			this.nextWeapon = Ability.ScavengerNull;
 			return;
 		}
 
@@ -1118,18 +1135,26 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				Camera.main.transform, false);
 			this.abilityText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
 			this.abilityText.enableWordWrapping = false;
-			this.abilityText.color = Palette.EnabledColor;
+			this.abilityText.fontSize = this.abilityText.fontSizeMax = this.abilityText.fontSizeMin = 3.0f;
 		}
 
-		this.abilityText.text = TranslationController.Instance.GetString(
-			"WeaponMixTimeRemain", Mathf.CeilToInt(this.timer));
+		if (this.nextWeapon is Ability.ScavengerNull)
+		{
+			this.nextWeapon = this.getMixingWeapon();
+		}
+		this.abilityText.text = TranslationControllerExtension.GetString(
+			"WeaponMixTimeRemain",
+			TranslationController.Instance.GetString(this.nextWeapon.ToString()),
+			Mathf.CeilToInt(this.timer));
+		this.abilityText.color = Palette.EnabledColor;
 		this.abilityText.gameObject.SetActive(true);
 		this.timer -= Time.deltaTime;
 
 		if (this.timer < 0.0f)
 		{
-			this.mixWeapon();
+			this.mixWeapon(this.nextWeapon);
 			this.timer = this.weaponMixTime;
+			this.nextWeapon = Ability.ScavengerNull;
 		}
 	}
 
@@ -1243,9 +1268,6 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		factory.CreateFloatOption(
 			Option.BeamSaberRange,
 			3.5f, 0.1f, 7.5f, 0.1f);
-		factory.CreateBoolOption(
-			Option.BeamSaberAutoDetect,
-			false);
 
 		/*
 		factory.CreateIntOption(
@@ -1278,7 +1300,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new Gun(
 					new (
 						ObjectPath.ScavengerBulletImg,
-						new Vector2(0.025f, 0.05f),
+						new Vector2(0.05f, 0.1f),
 						loader.GetValue<Option, float>(Option.HandGunSpeed),
 						loader.GetValue<Option, float>(Option.HandGunRange)))
 			},
@@ -1300,7 +1322,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new Gun(
 					new (
 						ObjectPath.ScavengerBulletImg,
-						new Vector2(0.025f, 0.05f),
+						new Vector2(0.05f, 0.1f),
 						loader.GetValue<Option, float>(Option.SniperRifleSpeed),
 						128.0f))
 			},
@@ -1309,7 +1331,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new Gun(
 					new (
 						ObjectPath.ScavengerBeamImg,
-						new Vector2(0.05f, 0.05f),
+						new Vector2(0.1f, 0.2f),
 						loader.GetValue<Option, float>(Option.BeamRifleSpeed),
 						loader.GetValue<Option, float>(Option.BeamRifleRange),
 						true))
@@ -1317,8 +1339,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				Ability.ScavengerBeamSaber,
 				new BeamSaber(
-					loader.GetValue<Option, float>(Option.BeamSaberRange),
-					loader.GetValue<Option, bool>(Option.BeamSaberAutoDetect))
+					loader.GetValue<Option, float>(Option.BeamSaberRange))
 			},
 			/*
 			{
@@ -1353,40 +1374,40 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		return result;
 	}
 
-	private void mixWeapon()
+	private void mixWeapon(Ability nextWeapon)
 	{
-		/*
-		// 最終進化系
-		if (this.curAbility.Count == 3 ||
-			this.curAbility.Contains(Ability.BeamSaber) ||
-			this.curAbility.Contains(Ability.BeamRifle) ||
-			this.curAbility.Contains(Ability.SniperRifle))
+		if (nextWeapon is not Ability.ScavengerNull)
 		{
-			replaceToWeapon(Ability.Aguni);
-		}
-		else */
-		if (
-			this.curAbility.Contains(Ability.ScavengerHandGun) &&
-			this.curAbility.Contains(Ability.ScavengerSword))
-		{
-			replaceToWeapon(Ability.ScavengerSniperRifle);
-		}
-		else if (
-			this.curAbility.Contains(Ability.ScavengerHandGun) &&
-			this.curAbility.Contains(Ability.ScavengerFlame))
-		{
-			replaceToWeapon(Ability.ScavengerBeamRifle);
-		}
-		else if (
-			this.curAbility.Contains(Ability.ScavengerSword) &&
-			this.curAbility.Contains(Ability.ScavengerFlame))
-		{
-			replaceToWeapon(Ability.ScavengerBeamSaber);
+			replaceToWeapon(nextWeapon);
+			Sound.PlaySound(Sound.Type.ScavengerPickUpWeapon, 0.8f);
 		}
 		else
 		{
 			ExtremeRolesPlugin.Logger.LogWarning("Invalid Ability");
 		}
+	}
+
+	private Ability getMixingWeapon()
+	{
+		if (
+			this.curAbility.Contains(Ability.ScavengerHandGun) &&
+			this.curAbility.Contains(Ability.ScavengerSword))
+		{
+			return Ability.ScavengerSniperRifle;
+		}
+		else if (
+			this.curAbility.Contains(Ability.ScavengerHandGun) &&
+			this.curAbility.Contains(Ability.ScavengerFlame))
+		{
+			return Ability.ScavengerBeamRifle;
+		}
+		else if (
+			this.curAbility.Contains(Ability.ScavengerSword) &&
+			this.curAbility.Contains(Ability.ScavengerFlame))
+		{
+			return Ability.ScavengerBeamSaber;
+		}
+		return Ability.ScavengerNull;
 	}
 	private void replaceToWeapon(in Ability ability)
 	{

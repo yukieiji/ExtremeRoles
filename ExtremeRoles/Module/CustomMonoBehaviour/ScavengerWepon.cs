@@ -101,7 +101,11 @@ public sealed class ScavengerWeponMapUsable : MonoBehaviour, IAmongUs.IUsable
 					x.Write((byte)ability);
 				});
 		}
+		
 		scavenger.AddWepon(ability);
+		Sound.PlaySound(Sound.Type.ScavengerPickUpWeapon, 0.8f);
+		
+		this.gameObject.SetActive(false);
 	}
 }
 
@@ -763,8 +767,12 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 
 	public void Increse(float addTime)
 	{
-		if (this.TargetPlayer == null)
+		if (this.TargetPlayer == null ||
+			this.TargetPlayer.Data == null ||
+			this.TargetPlayer.Data.IsDead ||
+			this.TargetPlayer.Data.Disconnected)
 		{
+			disable();
 			return;
 		}
 
@@ -815,5 +823,6 @@ public sealed class ScavengerFlameFire : MonoBehaviour
 				writer.Write((byte)Scavenger.Flame.Ops.FireEnd);
 				writer.Write(this.TargetPlayer.PlayerId);
 			});
+		this.enabled = false;
 	}
 }
