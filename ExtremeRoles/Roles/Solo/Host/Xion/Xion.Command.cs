@@ -19,7 +19,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         private const string setCombRole = "SetCombRole";
         private const string revartXion = "IamXion";
 
-        private static Xion xionBuffer;
+        private static XionRole xionBuffer;
         private static bool voted;
 
         public static void ParseCommand(string chatStr)

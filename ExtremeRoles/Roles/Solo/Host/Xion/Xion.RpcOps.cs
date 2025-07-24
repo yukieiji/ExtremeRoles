@@ -337,12 +337,12 @@ public sealed partial class Xion
 
         if (isXion)
         {
-            xionBuffer = (Xion)baseRole;
+            xionBuffer = (XionRole)baseRole;
         }
     }
 
     private static void updateSpeed(
-        Xion xion, SpeedOps ops)
+        XionRole xion, SpeedOps ops)
     {
         switch (ops)
         {
@@ -371,7 +371,7 @@ public sealed partial class Xion
         xionPlayer.NetTransform.SnapTo(targetPos);
     }
     private static void NoXionVote(
-        Xion xion)
+        XionRole xion)
     {
         xion.AddNoXionCount();
     }

@@ -932,7 +932,7 @@ public sealed class Doll :
 
 	private Minigame? minigame;
 	private readonly HashSet<AbilityType> canUseCrakingModule;
-	private readonly Hypnotist hypnotist;
+	private readonly HypnotistRole hypnotist;
 #pragma warning disable CS8618
 	private TMPro.TextMeshPro chargeTime;
 	private TMPro.TextMeshPro tellText;
