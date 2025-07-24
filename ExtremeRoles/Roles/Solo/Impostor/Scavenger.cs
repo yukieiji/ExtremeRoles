@@ -1322,7 +1322,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				new Gun(
 					new (
 						ObjectPath.ScavengerBulletImg,
-						new Vector2(0.5f, 0.1f),
+						new Vector2(0.05f, 0.1f),
 						loader.GetValue<Option, float>(Option.SniperRifleSpeed),
 						128.0f))
 			},
