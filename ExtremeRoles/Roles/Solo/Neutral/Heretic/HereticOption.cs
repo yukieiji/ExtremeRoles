@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Neutral.Heretic.HereticRole;
 
-namespace ExtremeRoles.Roles.Neutral.Heretic
+namespace ExtremeRoles.Roles.Solo.Neutral.Heretic
 {
     public readonly record struct HereticSpecificOption(
         bool HasTask,
@@ -20,16 +21,16 @@ namespace ExtremeRoles.Roles.Neutral.Heretic
         public HereticSpecificOption Load(IOptionLoader loader)
         {
             return new HereticSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.HasTask),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.SeeImpostorTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.KillMode),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.CanKillImpostor),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Heretic.Option, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.Range),
+                loader.GetValue<Option, bool>(
+                    Option.HasTask),
+                loader.GetValue<Option, int>(
+                    Option.SeeImpostorTaskGage),
+                loader.GetValue<Option, int>(
+                    Option.KillMode),
+                loader.GetValue<Option, bool>(
+                    Option.CanKillImpostor),
+                loader.GetValue<Option, float>(
+                    Option.Range),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -40,16 +41,16 @@ namespace ExtremeRoles.Roles.Neutral.Heretic
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             var taskOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.HasTask,
+                Option.HasTask,
                 false);
             factory.Create0To100Percentage10StepOption(
-                ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.SeeImpostorTaskGage, taskOpt);
+                Option.SeeImpostorTaskGage, taskOpt);
             var killModeOpt = factory.CreateSelectionOption(
-                ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.KillMode,
+                Option.KillMode,
                 new[]
                 {
-                    ExtremeRoles.Roles.Solo.Neutral.Heretic.KillMode.AbilityOnTaskPhase,
-                    ExtremeRoles.Roles.Solo.Neutral.Heretic.KillMode.AbilityOnTaskPhaseTarget
+                    KillMode.AbilityOnTaskPhase,
+                    KillMode.AbilityOnTaskPhaseTarget
                 });
             factory.CreateFloatOption(
                 RoleAbilityCommonOption.AbilityCoolTime,
@@ -61,13 +62,13 @@ namespace ExtremeRoles.Roles.Neutral.Heretic
                 invert: true,
                 format: OptionUnit.Second);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.Range,
+                Option.Range,
                 1.2f, 0.1f, 2.5f, 0.1f,
                 killModeOpt,
                 invert: true);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Heretic.Option.CanKillImpostor,
+                Option.CanKillImpostor,
                 false);
         }
     }

@@ -15,7 +15,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Roles.Neutral.Alice;
+namespace ExtremeRoles.Roles.Solo.Neutral.Alice;
 
 public sealed class AliceRole :
 	SingleRoleBase,

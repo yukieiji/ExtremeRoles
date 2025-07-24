@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerRole;
 
-namespace ExtremeRoles.Roles.Impostor.Cracker
+namespace ExtremeRoles.Roles.Solo.Impostor.Cracker
 {
     public readonly record struct CrackerSpecificOption(
         bool RemoveDeadBody,
@@ -16,10 +17,10 @@ namespace ExtremeRoles.Roles.Impostor.Cracker
         public CrackerSpecificOption Load(IOptionLoader loader)
         {
             return new CrackerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption.RemoveDeadBody),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption.CanCrackDistance),
+                loader.GetValue<CrackerOption, bool>(
+                    CrackerOption.RemoveDeadBody),
+                loader.GetValue<CrackerOption, float>(
+                    CrackerOption.CanCrackDistance),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -33,11 +34,11 @@ namespace ExtremeRoles.Roles.Impostor.Cracker
                 factory, 2, 5);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption.CanCrackDistance,
+                CrackerOption.CanCrackDistance,
                 1.0f, 1.0f, 5.0f, 0.5f);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Cracker.CrackerOption.RemoveDeadBody,
+                CrackerOption.RemoveDeadBody,
                 false);
         }
     }

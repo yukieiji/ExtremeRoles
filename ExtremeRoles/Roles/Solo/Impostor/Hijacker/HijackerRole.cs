@@ -19,7 +19,7 @@ using ExtremeRoles.Extension.Player;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Impostor.Hijacker;
+namespace ExtremeRoles.Roles.Solo.Impostor.Hijacker;
 
 public sealed class HijackerRole : SingleRoleBase, IRoleAbility, IRoleMovable
 {
@@ -38,7 +38,7 @@ public sealed class HijackerRole : SingleRoleBase, IRoleAbility, IRoleMovable
 	private bool opend = false;
 	private bool isAbilityUse = false;
 
-	public Hijacker() : base(
+	public HijackerRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Hijacker),
 		true, false, true, true)
 	{ }

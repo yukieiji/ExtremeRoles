@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfRole;
 
-namespace ExtremeRoles.Roles.Impostor.LastWolf
+namespace ExtremeRoles.Roles.Solo.Impostor.LastWolf
 {
     public readonly record struct LastWolfSpecificOption(
         int AwakeImpostorNum,
@@ -19,14 +20,14 @@ namespace ExtremeRoles.Roles.Impostor.LastWolf
         public LastWolfSpecificOption Load(IOptionLoader loader)
         {
             return new LastWolfSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.AwakeImpostorNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.DeadPlayerNumBonus),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.KillPlayerNumBonus),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.LightOffVision),
+                loader.GetValue<LastWolfOption, int>(
+                    LastWolfOption.AwakeImpostorNum),
+                loader.GetValue<LastWolfOption, float>(
+                    LastWolfOption.DeadPlayerNumBonus),
+                loader.GetValue<LastWolfOption, float>(
+                    LastWolfOption.KillPlayerNumBonus),
+                loader.GetValue<LastWolfOption, float>(
+                    LastWolfOption.LightOffVision),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
             );
         }
@@ -37,16 +38,16 @@ namespace ExtremeRoles.Roles.Impostor.LastWolf
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.AwakeImpostorNum,
+                LastWolfOption.AwakeImpostorNum,
                 1, 1, GameSystem.MaxImposterNum, 1);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.DeadPlayerNumBonus,
+                LastWolfOption.DeadPlayerNumBonus,
                 1.0f, 2.0f, 6.5f, 0.1f,
                 format: OptionUnit.Percentage);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.KillPlayerNumBonus,
+                LastWolfOption.KillPlayerNumBonus,
                 2.5f, 4.0f, 10.0f, 0.1f,
                 format: OptionUnit.Percentage);
 
@@ -54,7 +55,7 @@ namespace ExtremeRoles.Roles.Impostor.LastWolf
                 factory, 10.0f);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.LastWolf.LastWolfOption.LightOffVision,
+                LastWolfOption.LightOffVision,
                 0.1f, 0.0f, 1.0f, 0.1f);
         }
     }

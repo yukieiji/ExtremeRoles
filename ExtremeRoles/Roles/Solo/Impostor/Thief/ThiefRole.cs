@@ -16,7 +16,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Impostor.Thief;
+namespace ExtremeRoles.Roles.Solo.Impostor.Thief;
 
 public sealed class ThiefRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -37,7 +37,7 @@ public sealed class ThiefRole : SingleRoleBase, IRoleAutoBuildAbility
 
 	public ExtremeAbilityButton? Button { get; set; }
 
-    public Thief() : base(
+    public ThiefRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Thief),
         true, false, true, true)
     { }

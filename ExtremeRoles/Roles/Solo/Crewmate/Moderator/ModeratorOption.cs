@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Moderator
+namespace ExtremeRoles.Roles.Solo.Crewmate.Moderator
 {
     public readonly record struct ModeratorSpecificOption(
         int AwakeTaskGage,
@@ -17,10 +18,10 @@ namespace ExtremeRoles.Roles.Crewmate.Moderator
         public ModeratorSpecificOption Load(IOptionLoader loader)
         {
             return new ModeratorSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption.AwakeTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption.MeetingTimerOffset),
+                loader.GetValue<ModeratorOption, int>(
+                    ModeratorOption.AwakeTaskGage),
+                loader.GetValue<ModeratorOption, int>(
+                    ModeratorOption.MeetingTimerOffset),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -31,13 +32,13 @@ namespace ExtremeRoles.Roles.Crewmate.Moderator
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption.AwakeTaskGage,
+                ModeratorOption.AwakeTaskGage,
                 60, 0, 100, 10,
                 format: OptionUnit.Percentage);
             IRoleAbility.CreateAbilityCountOption(
                 factory, 2, 10);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Moderator.ModeratorOption.MeetingTimerOffset,
+                ModeratorOption.MeetingTimerOffset,
                 30, 5, 360, 5, format: OptionUnit.Second);
         }
     }

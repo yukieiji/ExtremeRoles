@@ -2,7 +2,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Impostor.SpecialImpostor
+namespace ExtremeRoles.Roles.Solo.Impostor.SpecialImpostor
 {
     public readonly record struct SpecialImpostorSpecificOption : IRoleSpecificOption;
 

@@ -2,7 +2,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Crewmate.SpecialCrew
+namespace ExtremeRoles.Roles.Solo.Crewmate.SpecialCrew
 {
     public readonly record struct SpecialCrewSpecificOption : IRoleSpecificOption;
 

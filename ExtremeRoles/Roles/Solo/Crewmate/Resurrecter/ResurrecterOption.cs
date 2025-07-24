@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Resurrecter
+namespace ExtremeRoles.Roles.Solo.Crewmate.Resurrecter
 {
     public readonly record struct ResurrecterSpecificOption(
         int AwakeTaskGage,
@@ -22,24 +23,24 @@ namespace ExtremeRoles.Roles.Crewmate.Resurrecter
         public ResurrecterSpecificOption Load(IOptionLoader loader)
         {
             return new ResurrecterSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.AwakeTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectDelayTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.IsMeetingCoolResetOnResurrect),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectMeetingCooltime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskResetMeetingNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskResetGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.CanResurrectAfterDeath),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.CanResurrectOnExil)
+                loader.GetValue<ResurrecterOption, int>(
+                    ResurrecterOption.AwakeTaskGage),
+                loader.GetValue<ResurrecterOption, int>(
+                    ResurrecterOption.ResurrectTaskGage),
+                loader.GetValue<ResurrecterOption, float>(
+                    ResurrecterOption.ResurrectDelayTime),
+                loader.GetValue<ResurrecterOption, bool>(
+                    ResurrecterOption.IsMeetingCoolResetOnResurrect),
+                loader.GetValue<ResurrecterOption, float>(
+                    ResurrecterOption.ResurrectMeetingCooltime),
+                loader.GetValue<ResurrecterOption, int>(
+                    ResurrecterOption.ResurrectTaskResetMeetingNum),
+                loader.GetValue<ResurrecterOption, int>(
+                    ResurrecterOption.ResurrectTaskResetGage),
+                loader.GetValue<ResurrecterOption, bool>(
+                    ResurrecterOption.CanResurrectAfterDeath),
+                loader.GetValue<ResurrecterOption, bool>(
+                    ResurrecterOption.CanResurrectOnExil)
             );
         }
     }
@@ -49,43 +50,43 @@ namespace ExtremeRoles.Roles.Crewmate.Resurrecter
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.AwakeTaskGage,
+                ResurrecterOption.AwakeTaskGage,
                 100, 0, 100, 10,
                 format: OptionUnit.Percentage);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskGage,
+                ResurrecterOption.ResurrectTaskGage,
                 100, 50, 100, 10,
                 format: OptionUnit.Percentage);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectDelayTime,
+                ResurrecterOption.ResurrectDelayTime,
                 5.0f, 4.0f, 60.0f, 0.1f,
                 format: OptionUnit.Second);
 
             var meetingResetOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.IsMeetingCoolResetOnResurrect,
+                ResurrecterOption.IsMeetingCoolResetOnResurrect,
                 true);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectMeetingCooltime,
+                ResurrecterOption.ResurrectMeetingCooltime,
                 20.0f, 5.0f, 60.0f, 0.25f,
                 meetingResetOpt,
                 format: OptionUnit.Second,
                 invert: true);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskResetMeetingNum,
+                ResurrecterOption.ResurrectTaskResetMeetingNum,
                 1, 1, 5, 1);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.ResurrectTaskResetGage,
+                ResurrecterOption.ResurrectTaskResetGage,
                 20, 10, 50, 5,
                 format: OptionUnit.Percentage);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.CanResurrectAfterDeath,
+                ResurrecterOption.CanResurrectAfterDeath,
                 false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Resurrecter.ResurrecterOption.CanResurrectOnExil,
+                ResurrecterOption.CanResurrectOnExil,
                 false);
         }
     }

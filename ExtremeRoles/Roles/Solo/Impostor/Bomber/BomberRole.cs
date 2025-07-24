@@ -18,7 +18,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-namespace ExtremeRoles.Roles.Impostor.Bomber;
+namespace ExtremeRoles.Roles.Solo.Impostor.Bomber;
 
 public sealed class BomberRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
@@ -54,7 +54,7 @@ public sealed class BomberRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     private ExtremeAbilityButton bombButton;
 
 
-    public Bomber() : base(
+    public BomberRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Bomber),
         true, false, true, true)
     { }

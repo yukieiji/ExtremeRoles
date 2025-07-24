@@ -7,7 +7,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
 
-namespace ExtremeRoles.Roles.Impostor.TimeBreaker;
+namespace ExtremeRoles.Roles.Solo.Impostor.TimeBreaker;
 
 public sealed class TimeBreakerRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -21,7 +21,7 @@ public sealed class TimeBreakerRole : SingleRoleBase, IRoleAutoBuildAbility
 
 	public ExtremeAbilityButton Button { get; set; }
 
-	public TimeBreaker() : base(
+	public TimeBreakerRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.TimeBreaker),
 		true, false, true, true)
 	{ }

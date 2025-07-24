@@ -9,7 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Gambler;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Gambler;
 
 public sealed class GamblerRole :
     SingleRoleBase,
@@ -23,7 +23,7 @@ public sealed class GamblerRole :
     public int Order => (int)IRoleVoteModifier.ModOrder.GamblerAddVote;
     private int normalVoteRate;
 
-    public Gambler() : base(
+    public GamblerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Gambler,
 			ColorPalette.GamblerYellowGold),

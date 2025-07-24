@@ -4,7 +4,7 @@ using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.SpecialImpostor;
+namespace ExtremeRoles.Roles.Solo.Impostor.SpecialImpostor;
 
 public sealed class SpecialImpostorRole : SingleRoleBase
 {

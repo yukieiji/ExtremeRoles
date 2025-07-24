@@ -4,7 +4,7 @@ using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.SpecialCrew;
+namespace ExtremeRoles.Roles.Solo.Crewmate.SpecialCrew;
 
 public sealed class SpecialCrewRole : SingleRoleBase
 {

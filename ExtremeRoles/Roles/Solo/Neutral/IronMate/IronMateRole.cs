@@ -17,7 +17,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Neutral.IronMate;
+namespace ExtremeRoles.Roles.Solo.Neutral.IronMate;
 
 public sealed class IronMateRole :
 	SingleRoleBase,

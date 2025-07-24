@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerRole;
 
-namespace ExtremeRoles.Roles.Impostor.PsychoKiller
+namespace ExtremeRoles.Roles.Solo.Impostor.PsychoKiller
 {
     public readonly record struct PsychoKillerSpecificOption(
         int KillCoolReduceRate,
@@ -21,22 +22,22 @@ namespace ExtremeRoles.Roles.Impostor.PsychoKiller
         public PsychoKillerSpecificOption Load(IOptionLoader loader)
         {
             return new PsychoKillerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.KillCoolReduceRate),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.CombMax),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.CombResetWhenMeeting),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.HasSelfKillTimer),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.SelfKillTimerTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.IsForceRestartWhenMeetingEnd),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.SelfKillTimerModRate)
+                loader.GetValue<PsychoKillerOption, int>(
+                    PsychoKillerOption.KillCoolReduceRate),
+                loader.GetValue<PsychoKillerOption, int>(
+                    PsychoKillerOption.CombMax),
+                loader.GetValue<PsychoKillerOption, bool>(
+                    PsychoKillerOption.CombResetWhenMeeting),
+                loader.GetValue<PsychoKillerOption, bool>(
+                    PsychoKillerOption.HasSelfKillTimer),
+                loader.GetValue<PsychoKillerOption, float>(
+                    PsychoKillerOption.SelfKillTimerTime),
+                loader.GetValue<PsychoKillerOption, bool>(
+                    PsychoKillerOption.IsForceRestartWhenMeetingEnd),
+                loader.GetValue<PsychoKillerOption, bool>(
+                    PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd),
+                loader.GetValue<PsychoKillerOption, int>(
+                    PsychoKillerOption.SelfKillTimerModRate)
             );
         }
     }
@@ -46,35 +47,35 @@ namespace ExtremeRoles.Roles.Impostor.PsychoKiller
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.KillCoolReduceRate,
+                PsychoKillerOption.KillCoolReduceRate,
                 5, 1, 15, 1,
                 format: OptionUnit.Percentage);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.CombMax,
+                PsychoKillerOption.CombMax,
                 2, 1, 5, 1);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.CombResetWhenMeeting,
+                PsychoKillerOption.CombResetWhenMeeting,
                 true);
 
             var hasSelfKillTimer = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.HasSelfKillTimer,
+                PsychoKillerOption.HasSelfKillTimer,
                 false);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.SelfKillTimerTime,
+                PsychoKillerOption.SelfKillTimerTime,
                 30.0f, 5.0f, 120.0f, 0.5f,
                 hasSelfKillTimer,
                 format: OptionUnit.Second);
             var timerOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.IsForceRestartWhenMeetingEnd,
+                PsychoKillerOption.IsForceRestartWhenMeetingEnd,
                 false, hasSelfKillTimer);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd,
+                PsychoKillerOption.IsDiactiveUntilKillWhenMeetingEnd,
                 false, timerOpt,
                 invert: true);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.PsychoKiller.PsychoKillerOption.SelfKillTimerModRate,
+                PsychoKillerOption.SelfKillTimerModRate,
                 0, -50, 50, 1, hasSelfKillTimer,
                 format: OptionUnit.Percentage);
         }

@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Neutral.Jester.JesterRole;
 
-namespace ExtremeRoles.Roles.Neutral.Jester
+namespace ExtremeRoles.Roles.Solo.Neutral.Jester
 {
     public readonly record struct JesterSpecificOption(
         bool UseSabotage,
@@ -17,10 +18,10 @@ namespace ExtremeRoles.Roles.Neutral.Jester
         public JesterSpecificOption Load(IOptionLoader loader)
         {
             return new JesterSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption.UseSabotage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption.OutburstDistance),
+                loader.GetValue<Option, bool>(
+                    Option.UseSabotage),
+                loader.GetValue<Option, float>(
+                    Option.OutburstDistance),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
             );
@@ -32,11 +33,11 @@ namespace ExtremeRoles.Roles.Neutral.Jester
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption.OutburstDistance,
+                Option.OutburstDistance,
                 1.0f, 0.0f, 2.0f, 0.1f);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Jester.JesterOption.UseSabotage,
+                Option.UseSabotage,
                 true);
 
             IRoleAbility.CreateAbilityCountOption(

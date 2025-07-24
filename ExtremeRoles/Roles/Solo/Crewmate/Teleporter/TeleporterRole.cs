@@ -24,7 +24,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Teleporter;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Teleporter;
 
 public sealed class TeleporterRole :
     SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialSetUp
@@ -169,7 +169,7 @@ public sealed class TeleporterRole :
     private const string postionJson =
         "ExtremeRoles.Resources.JsonData.TeleporterTeleportPartPosition.json";
 
-    public Teleporter() : base(
+    public TeleporterRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Teleporter,
 			ColorPalette.TeleporterCherry),

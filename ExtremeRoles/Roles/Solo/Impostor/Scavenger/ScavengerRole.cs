@@ -24,7 +24,7 @@ using UnityObject = UnityEngine.Object;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Impostor.Scavenger;
+namespace ExtremeRoles.Roles.Solo.Impostor.Scavenger;
 
 
 public sealed class ScavengerRole : SingleRoleBase, IRoleUpdate, IRoleAbility
@@ -945,7 +945,7 @@ public sealed class ScavengerRole : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private float timer;
 	private float weaponMixTime;
 
-	public Scavenger() : base(
+	public ScavengerRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Scavenger),
 		true, false, true, true)
 	{ }

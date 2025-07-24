@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Survivor
+namespace ExtremeRoles.Roles.Solo.Crewmate.Survivor
 {
     public readonly record struct SurvivorSpecificOption(
         int AwakeTaskGage,
@@ -16,12 +17,12 @@ namespace ExtremeRoles.Roles.Crewmate.Survivor
         public SurvivorSpecificOption Load(IOptionLoader loader)
         {
             return new SurvivorSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption.AwakeTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption.DeadWinTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption.NoWinSurvivorAssignGhostRole)
+                loader.GetValue<SurvivorOption, int>(
+                    SurvivorOption.AwakeTaskGage),
+                loader.GetValue<SurvivorOption, int>(
+                    SurvivorOption.DeadWinTaskGage),
+                loader.GetValue<SurvivorOption, bool>(
+                    SurvivorOption.NoWinSurvivorAssignGhostRole)
             );
         }
     }
@@ -31,15 +32,15 @@ namespace ExtremeRoles.Roles.Crewmate.Survivor
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption.AwakeTaskGage,
+                SurvivorOption.AwakeTaskGage,
                 70, 0, 100, 10,
                 format: OptionUnit.Percentage);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption.DeadWinTaskGage,
+                SurvivorOption.DeadWinTaskGage,
                 100, 50, 100, 10,
                 format: OptionUnit.Percentage);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Survivor.SurvivorOption.NoWinSurvivorAssignGhostRole,
+                SurvivorOption.NoWinSurvivorAssignGhostRole,
                 true);
         }
     }

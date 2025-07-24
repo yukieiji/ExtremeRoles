@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Impostor.Painter.PainterRole;
 
-namespace ExtremeRoles.Roles.Impostor.Painter
+namespace ExtremeRoles.Roles.Solo.Impostor.Painter
 {
     public readonly record struct PainterSpecificOption(
         float CanPaintDistance,
@@ -15,8 +16,8 @@ namespace ExtremeRoles.Roles.Impostor.Painter
         public PainterSpecificOption Load(IOptionLoader loader)
         {
             return new PainterSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Painter.PainterOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Painter.PainterOption.CanPaintDistance),
+                loader.GetValue<PainterOption, float>(
+                    PainterOption.CanPaintDistance),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -30,7 +31,7 @@ namespace ExtremeRoles.Roles.Impostor.Painter
                 factory);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Painter.PainterOption.CanPaintDistance,
+                PainterOption.CanPaintDistance,
                 1.0f, 1.0f, 5.0f, 0.5f);
         }
     }

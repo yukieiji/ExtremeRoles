@@ -11,7 +11,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Commander;
+namespace ExtremeRoles.Roles.Solo.Impostor.Commander;
 
 public sealed class CommanderRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -37,7 +37,7 @@ public sealed class CommanderRole : SingleRoleBase, IRoleAutoBuildAbility
     private int increaseKillNum;
     private int killCount;
 
-    public Commander() : base(
+    public CommanderRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Commander),
         true, false, true, true)
     { }

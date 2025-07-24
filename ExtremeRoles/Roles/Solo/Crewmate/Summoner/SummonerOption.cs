@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Summoner.SummonerRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Summoner
+namespace ExtremeRoles.Roles.Solo.Crewmate.Summoner
 {
     public readonly record struct SummonerSpecificOption(
         int MarkingCount,
@@ -18,12 +19,12 @@ namespace ExtremeRoles.Roles.Crewmate.Summoner
         public SummonerSpecificOption Load(IOptionLoader loader)
         {
             return new SummonerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.MarkingCount),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.SummonCount),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.Range),
+                loader.GetValue<Option, int>(
+                    Option.MarkingCount),
+                loader.GetValue<Option, int>(
+                    Option.SummonCount),
+                loader.GetValue<Option, float>(
+                    Option.Range),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -42,15 +43,15 @@ namespace ExtremeRoles.Roles.Crewmate.Summoner
                 format: OptionUnit.Second);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.MarkingCount,
+                Option.MarkingCount,
                 3, 1, 10, 1);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.Range,
+                Option.Range,
                 2.5f, 0.0f, 7.5f, 0.1f);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Summoner.Option.SummonCount,
+                Option.SummonCount,
                 3, 1, 10, 1);
         }
     }

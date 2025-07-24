@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberRole;
 
-namespace ExtremeRoles.Roles.Impostor.Bomber
+namespace ExtremeRoles.Roles.Solo.Impostor.Bomber
 {
     public readonly record struct BomberSpecificOption(
         int ExplosionRange,
@@ -21,16 +22,16 @@ namespace ExtremeRoles.Roles.Impostor.Bomber
         public BomberSpecificOption Load(IOptionLoader loader)
         {
             return new BomberSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.ExplosionRange),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.ExplosionKillChance),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.TimerMaxTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.TimerMinTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.TellExplosion),
+                loader.GetValue<BomberOption, int>(
+                    BomberOption.ExplosionRange),
+                loader.GetValue<BomberOption, int>(
+                    BomberOption.ExplosionKillChance),
+                loader.GetValue<BomberOption, float>(
+                    BomberOption.TimerMaxTime),
+                loader.GetValue<BomberOption, float>(
+                    BomberOption.TimerMinTime),
+                loader.GetValue<BomberOption, bool>(
+                    BomberOption.TellExplosion),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
             );
@@ -44,22 +45,22 @@ namespace ExtremeRoles.Roles.Impostor.Bomber
             IRoleAbility.CreateAbilityCountOption(
                 factory, 2, 5, 2.5f);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.ExplosionRange,
+                BomberOption.ExplosionRange,
                 2, 1, 5, 1);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.ExplosionKillChance,
+                BomberOption.ExplosionKillChance,
                 50, 25, 75, 1,
                 format: OptionUnit.Percentage);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.TimerMinTime,
+                BomberOption.TimerMinTime,
                 15f, 5.0f, 30f, 0.5f,
                 format: OptionUnit.Second);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.TimerMaxTime,
+                BomberOption.TimerMaxTime,
                 60f, 45f, 75f, 0.5f,
                 format: OptionUnit.Second);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Bomber.BomberOption.TellExplosion,
+                BomberOption.TellExplosion,
                 true);
         }
     }

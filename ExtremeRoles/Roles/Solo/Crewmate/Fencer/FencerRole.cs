@@ -13,7 +13,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Fencer;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 
 public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IKilledFrom
 {
@@ -44,7 +44,7 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     private ExtremeAbilityButton takeTaskButton;
 
-    public Fencer() : base(
+    public FencerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Fencer,
 			ColorPalette.FencerPin),

@@ -15,7 +15,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Neutral.Hatter;
+namespace ExtremeRoles.Roles.Solo.Neutral.Hatter;
 
 public sealed class HatterRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IDeadBodyReportOverride
 {

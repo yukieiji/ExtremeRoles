@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Gambler.GamblerRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Gambler
+namespace ExtremeRoles.Roles.Solo.Crewmate.Gambler
 {
     public readonly record struct GamblerSpecificOption(
         int NormalVoteRate
@@ -14,8 +15,8 @@ namespace ExtremeRoles.Roles.Crewmate.Gambler
         public GamblerSpecificOption Load(IOptionLoader loader)
         {
             return new GamblerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Gambler.GamblerOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Gambler.GamblerOption.NormalVoteRate)
+                loader.GetValue<GamblerOption, int>(
+                    GamblerOption.NormalVoteRate)
             );
         }
     }
@@ -25,7 +26,7 @@ namespace ExtremeRoles.Roles.Crewmate.Gambler
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Gambler.GamblerOption.NormalVoteRate,
+                GamblerOption.NormalVoteRate,
                 50, 0, 90, 5,
                 format: OptionUnit.Percentage);
         }

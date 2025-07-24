@@ -16,7 +16,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Magician;
+namespace ExtremeRoles.Roles.Solo.Impostor.Magician;
 
 public sealed class MagicianRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -39,7 +39,7 @@ public sealed class MagicianRole : SingleRoleBase, IRoleAutoBuildAbility
 		bool IncludeRolePlayer,
 		bool IncludeSpawnPoint);
 
-    public Magician() : base(
+    public MagicianRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Magician),
         true, false, true, true)
     { }

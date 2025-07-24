@@ -17,7 +17,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 
 
-namespace ExtremeRoles.Roles.Impostor.SandWorm;
+namespace ExtremeRoles.Roles.Solo.Impostor.SandWorm;
 
 public sealed class SandWormRole : SingleRoleBase, IRoleAbility
 {
@@ -130,7 +130,7 @@ public sealed class SandWormRole : SingleRoleBase, IRoleAbility
     private ExtremeAbilityButton assaultButton;
     private PlayerControl targetPlayer = null;
 
-    public SandWorm() : base(
+    public SandWormRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.SandWorm),
         true, false, true, true)
     { }

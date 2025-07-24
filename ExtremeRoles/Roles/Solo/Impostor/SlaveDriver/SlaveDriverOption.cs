@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverRole;
 
-namespace ExtremeRoles.Roles.Impostor.SlaveDriver
+namespace ExtremeRoles.Roles.Solo.Impostor.SlaveDriver
 {
     public readonly record struct SlaveDriverSpecificOption(
         bool CanSeeTaskBar,
@@ -17,12 +18,12 @@ namespace ExtremeRoles.Roles.Impostor.SlaveDriver
         public SlaveDriverSpecificOption Load(IOptionLoader loader)
         {
             return new SlaveDriverSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.CanSeeTaskBar),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.RevartTaskNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.Range),
+                loader.GetValue<SlaveDriverOption, bool>(
+                    SlaveDriverOption.CanSeeTaskBar),
+                loader.GetValue<SlaveDriverOption, int>(
+                    SlaveDriverOption.RevartTaskNum),
+                loader.GetValue<SlaveDriverOption, float>(
+                    SlaveDriverOption.Range),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -33,14 +34,14 @@ namespace ExtremeRoles.Roles.Impostor.SlaveDriver
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.CanSeeTaskBar,
+                SlaveDriverOption.CanSeeTaskBar,
                 true);
             IRoleAbility.CreateAbilityCountOption(factory, 2, 10);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.RevartTaskNum,
+                SlaveDriverOption.RevartTaskNum,
                 2, 1, 5, 1);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.SlaveDriver.SlaveDriverOption.Range,
+                SlaveDriverOption.Range,
                 0.75f, 0.25f, 3.5f, 0.25f);
         }
     }

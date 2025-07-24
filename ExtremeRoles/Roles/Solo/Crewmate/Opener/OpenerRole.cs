@@ -11,7 +11,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Opener;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Opener;
 
 public sealed class OpenerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
@@ -39,7 +39,7 @@ public sealed class OpenerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     private int plusAbilityNum;
 	private float abilityCoolTime;
 
-    public Opener() : base(
+    public OpenerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Opener,
 			ColorPalette.OpenerSpringGreen),

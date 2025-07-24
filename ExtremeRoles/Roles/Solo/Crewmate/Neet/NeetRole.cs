@@ -6,7 +6,7 @@ using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Neet;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Neet;
 
 public sealed class NeetRole : SingleRoleBase
 {
@@ -18,7 +18,7 @@ public sealed class NeetRole : SingleRoleBase
         IsNeutral
     }
 
-    public Neet() : base(
+    public NeetRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Neet,
 			ColorPalette.NeetSilver),

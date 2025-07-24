@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.TimeMaster.TimeMasterRole;
 
-namespace ExtremeRoles.Roles.Crewmate.TimeMaster
+namespace ExtremeRoles.Roles.Solo.Crewmate.TimeMaster
 {
     public readonly record struct TimeMasterSpecificOption(
         float RewindTime,
@@ -16,8 +17,8 @@ namespace ExtremeRoles.Roles.Crewmate.TimeMaster
         public TimeMasterSpecificOption Load(IOptionLoader loader)
         {
             return new TimeMasterSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.TimeMaster.TimeMasterOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.TimeMaster.TimeMasterOption.RewindTime),
+                loader.GetValue<TimeMasterOption, float>(
+                    TimeMasterOption.RewindTime),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -31,7 +32,7 @@ namespace ExtremeRoles.Roles.Crewmate.TimeMaster
                 factory, 3.0f);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.TimeMaster.TimeMasterOption.RewindTime,
+                TimeMasterOption.RewindTime,
                 5.0f, 1.0f, 60.0f, 0.5f,
                 format: OptionUnit.Second);
         }

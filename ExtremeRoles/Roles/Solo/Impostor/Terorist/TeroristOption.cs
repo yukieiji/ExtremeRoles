@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristRole;
 
-namespace ExtremeRoles.Roles.Impostor.Terorist
+namespace ExtremeRoles.Roles.Solo.Impostor.Terorist
 {
     public readonly record struct TeroristSpecificOption(
         bool CanActiveOtherSabotage,
@@ -21,18 +22,18 @@ namespace ExtremeRoles.Roles.Impostor.Terorist
         public TeroristSpecificOption Load(IOptionLoader loader)
         {
             return new TeroristSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.CanActiveOtherSabotage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.ExplosionTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.BombNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.PlayerActivateTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.CanUseDeadPlayer),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.DeadPlayerActivateTime),
+                loader.GetValue<TeroristOption, bool>(
+                    TeroristOption.CanActiveOtherSabotage),
+                loader.GetValue<TeroristOption, float>(
+                    TeroristOption.ExplosionTime),
+                loader.GetValue<TeroristOption, int>(
+                    TeroristOption.BombNum),
+                loader.GetValue<TeroristOption, float>(
+                    TeroristOption.PlayerActivateTime),
+                loader.GetValue<TeroristOption, bool>(
+                    TeroristOption.CanUseDeadPlayer),
+                loader.GetValue<TeroristOption, float>(
+                    TeroristOption.DeadPlayerActivateTime),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -45,24 +46,24 @@ namespace ExtremeRoles.Roles.Impostor.Terorist
             IRoleAbility.CreateAbilityCountOption(
                 factory, 5, 100);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.CanActiveOtherSabotage,
+                TeroristOption.CanActiveOtherSabotage,
                 false);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.ExplosionTime,
+                TeroristOption.ExplosionTime,
                 45.0f, 10.0f, 240.0f, 1.0f,
                 format: OptionUnit.Second);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.BombNum,
+                TeroristOption.BombNum,
                 3, 1, 6, 1);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.PlayerActivateTime,
+                TeroristOption.PlayerActivateTime,
                 3.0f, 0.25f, 10.0f, 0.25f,
                 format: OptionUnit.Second);
             var deadPlayerOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.CanUseDeadPlayer,
+                TeroristOption.CanUseDeadPlayer,
                 false);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Terorist.TeroristOption.DeadPlayerActivateTime,
+                TeroristOption.DeadPlayerActivateTime,
                 10.0f, 3.0f, 45.0f, 1.0f,
                 deadPlayerOpt, format: OptionUnit.Second);
         }

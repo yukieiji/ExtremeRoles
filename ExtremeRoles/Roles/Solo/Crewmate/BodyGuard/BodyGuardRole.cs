@@ -25,7 +25,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 
 
-namespace ExtremeRoles.Roles.Crewmate.BodyGuard;
+namespace ExtremeRoles.Roles.Solo.Crewmate.BodyGuard;
 
 public sealed class BodyGuardRole :
     SingleRoleBase,
@@ -289,7 +289,7 @@ public sealed class BodyGuardRole :
 	public ExtremeAbilityButton Button { get; set; }
 	private Sprite shildButtonImage;
 
-	public BodyGuard() : base(
+	public BodyGuardRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.BodyGuard,
 			ColorPalette.BodyGuardOrange),

@@ -9,7 +9,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 
-namespace ExtremeRoles.Roles.Neutral.Madmate;
+namespace ExtremeRoles.Roles.Solo.Neutral.Madmate;
 
 public sealed class MadmateRole :
     SingleRoleBase,
@@ -56,7 +56,7 @@ public sealed class MadmateRole :
 
 	private ExtremeAbilityButton madmateAbilityButton;
 
-    public Madmate() : base(
+    public MadmateRole() : base(
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.Madmate,
 			Palette.ImpostorRed),

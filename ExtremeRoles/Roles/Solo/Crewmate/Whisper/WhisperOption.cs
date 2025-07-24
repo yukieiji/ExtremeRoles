@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Whisper
+namespace ExtremeRoles.Roles.Solo.Crewmate.Whisper
 {
     public readonly record struct WhisperSpecificOption(
         float AbilityOffTime,
@@ -19,18 +20,18 @@ namespace ExtremeRoles.Roles.Crewmate.Whisper
         public WhisperSpecificOption Load(IOptionLoader loader)
         {
             return new WhisperSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.AbilityOffTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.AbilityOnTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.TellTextTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.MaxTellText),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.EnableAwakeAbility),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.AbilityTaskGage)
+                loader.GetValue<WhisperOption, float>(
+                    WhisperOption.AbilityOffTime),
+                loader.GetValue<WhisperOption, float>(
+                    WhisperOption.AbilityOnTime),
+                loader.GetValue<WhisperOption, float>(
+                    WhisperOption.TellTextTime),
+                loader.GetValue<WhisperOption, int>(
+                    WhisperOption.MaxTellText),
+                loader.GetValue<WhisperOption, bool>(
+                    WhisperOption.EnableAwakeAbility),
+                loader.GetValue<WhisperOption, int>(
+                    WhisperOption.AbilityTaskGage)
             );
         }
     }
@@ -40,29 +41,29 @@ namespace ExtremeRoles.Roles.Crewmate.Whisper
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.AbilityOffTime,
+                WhisperOption.AbilityOffTime,
                 2.0f, 1.0f, 5.0f, 0.5f,
                 format: OptionUnit.Second);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.AbilityOnTime,
+                WhisperOption.AbilityOnTime,
                 4.0f, 1.0f, 10.0f, 0.5f,
                 format: OptionUnit.Second);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.TellTextTime,
+                WhisperOption.TellTextTime,
                 3.0f, 1.0f, 25.0f, 0.5f,
                 format: OptionUnit.Second);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.MaxTellText,
+                WhisperOption.MaxTellText,
                 3, 1, 10, 1);
 
             var awakeOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.EnableAwakeAbility,
+                WhisperOption.EnableAwakeAbility,
                 false);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Whisper.WhisperOption.AbilityTaskGage,
+                WhisperOption.AbilityTaskGage,
                 70, 0, 100, 10,
                 awakeOpt,
                 format: OptionUnit.Percentage);

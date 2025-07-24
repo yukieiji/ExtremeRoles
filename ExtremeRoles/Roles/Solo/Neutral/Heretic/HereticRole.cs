@@ -16,7 +16,7 @@ using ExtremeRoles.Extension.Player;
 using ExtremeRoles.Patches.Button;
 using ExtremeRoles.Resources;
 
-namespace ExtremeRoles.Roles.Neutral.Heretic;
+namespace ExtremeRoles.Roles.Solo.Neutral.Heretic;
 
 #nullable enable
 
@@ -59,7 +59,7 @@ public sealed class HereticRole :
 	private float seeImpostorTaskGage;
 	private Sprite sprite => UnityObjectLoader.LoadFromResources(ExtremeRoleId.Guesser);
 
-	public Heretic() : base(
+	public HereticRole() : base(
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.Heretic,
 			Palette.ImpostorRed),

@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Bakary
+namespace ExtremeRoles.Roles.Solo.Crewmate.Bakary
 {
     public readonly record struct BakarySpecificOption(
         bool ChangeCooking,
@@ -16,12 +17,12 @@ namespace ExtremeRoles.Roles.Crewmate.Bakary
         public BakarySpecificOption Load(IOptionLoader loader)
         {
             return new BakarySpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.ChangeCooking),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.GoodBakeTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.BadBakeTime)
+                loader.GetValue<BakaryOption, bool>(
+                    BakaryOption.ChangeCooking),
+                loader.GetValue<BakaryOption, float>(
+                    BakaryOption.GoodBakeTime),
+                loader.GetValue<BakaryOption, float>(
+                    BakaryOption.BadBakeTime)
             );
         }
     }
@@ -31,16 +32,16 @@ namespace ExtremeRoles.Roles.Crewmate.Bakary
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             var changeCooking = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.ChangeCooking,
+                BakaryOption.ChangeCooking,
                 true);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.GoodBakeTime,
+                BakaryOption.GoodBakeTime,
                 60.0f, 45.0f, 75.0f, 0.5f,
                 changeCooking, format: OptionUnit.Second,
                 invert: true);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Bakary.BakaryOption.BadBakeTime,
+                BakaryOption.BadBakeTime,
                 120.0f, 105.0f, 135.0f, 0.5f,
                 changeCooking, format: OptionUnit.Second,
                 invert: true);

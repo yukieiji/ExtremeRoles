@@ -3,7 +3,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-namespace ExtremeRoles.Roles.Crewmate.Agency
+namespace ExtremeRoles.Roles.Solo.Crewmate.Agency
 {
     public readonly record struct AgencySpecificOption(
         bool CanSeeTaskBar,
@@ -17,12 +17,12 @@ namespace ExtremeRoles.Roles.Crewmate.Agency
         public AgencySpecificOption Load(IOptionLoader loader)
         {
             return new AgencySpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.CanSeeTaskBar),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.MaxTaskNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.TakeTaskRange),
+                loader.GetValue<AgencyRole.AgencyOption, bool>(
+                    AgencyRole.AgencyOption.CanSeeTaskBar),
+                loader.GetValue<AgencyRole.AgencyOption, int>(
+                    AgencyRole.AgencyOption.MaxTaskNum),
+                loader.GetValue<AgencyRole.AgencyOption, float>(
+                    AgencyRole.AgencyOption.TakeTaskRange),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -33,13 +33,13 @@ namespace ExtremeRoles.Roles.Crewmate.Agency
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.CanSeeTaskBar,
+                AgencyRole.AgencyOption.CanSeeTaskBar,
                 true);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.MaxTaskNum,
+                AgencyRole.AgencyOption.MaxTaskNum,
                 2, 1, 3, 1);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Agency.AgencyOption.TakeTaskRange,
+                AgencyRole.AgencyOption.TakeTaskRange,
                 1.0f, 0.5f, 2.0f, 0.1f);
 
             IRoleAbility.CreateAbilityCountOption(

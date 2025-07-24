@@ -12,7 +12,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Watchdog;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Watchdog;
 
 public sealed class WatchdogRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
@@ -29,7 +29,7 @@ public sealed class WatchdogRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleU
     private Minigame monitoring;
     private TMPro.TextMeshPro chargeTime;
 
-    public Watchdog() : base(
+    public WatchdogRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Watchdog,
 			ColorPalette.WatchdogViolet),

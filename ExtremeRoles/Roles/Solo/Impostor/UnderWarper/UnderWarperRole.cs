@@ -20,7 +20,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Impostor.UnderWarper;
+namespace ExtremeRoles.Roles.Solo.Impostor.UnderWarper;
 
 public sealed class UnderWarperRole :
     SingleRoleBase,
@@ -93,7 +93,7 @@ public sealed class UnderWarperRole :
     private bool isAwakedHasOtherKillCool;
     private bool isAwakedHasOtherKillRange;
 
-    public UnderWarper() : base(
+    public UnderWarperRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.UnderWarper),
         true, false, true, true)
     { }

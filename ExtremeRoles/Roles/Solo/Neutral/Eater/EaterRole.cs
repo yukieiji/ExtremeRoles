@@ -21,7 +21,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Neutral.Eater;
+namespace ExtremeRoles.Roles.Solo.Neutral.Eater;
 
 public sealed class EaterRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPlayerHook, IRoleUpdate
 {
@@ -62,7 +62,7 @@ public sealed class EaterRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurd
     private GraphicAndActiveTimeSwitcher<EaterAbilityMode> modeFactory;
 
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-	public Eater() : base(
+	public EaterRole() : base(
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.Eater,

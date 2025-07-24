@@ -19,7 +19,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.TimeMaster;
+namespace ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 
 public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility, IKilledFrom
 {
@@ -52,7 +52,7 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility, IKil
 
     private static TimeMasterHistory history;
 
-    public TimeMaster() : base(
+    public TimeMasterRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.TimeMaster,
 			ColorPalette.TimeMasterBlue),

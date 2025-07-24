@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Impostor.Slime.SlimeRole;
 
-namespace ExtremeRoles.Roles.Impostor.Slime
+namespace ExtremeRoles.Roles.Solo.Impostor.Slime
 {
     public readonly record struct SlimeSpecificOption(
         bool SeeMorphMerlin,
@@ -15,8 +16,8 @@ namespace ExtremeRoles.Roles.Impostor.Slime
         public SlimeSpecificOption Load(IOptionLoader loader)
         {
             return new SlimeSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Slime.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Slime.Option.SeeMorphMerlin),
+                loader.GetValue<Option, bool>(
+                    Option.SeeMorphMerlin),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -29,7 +30,7 @@ namespace ExtremeRoles.Roles.Impostor.Slime
             IRoleAbility.CreateCommonAbilityOption(
                 factory, 30.0f);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Slime.Option.SeeMorphMerlin, false);
+                Option.SeeMorphMerlin, false);
         }
     }
 }

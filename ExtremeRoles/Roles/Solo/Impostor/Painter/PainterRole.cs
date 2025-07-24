@@ -11,7 +11,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Painter;
+namespace ExtremeRoles.Roles.Solo.Impostor.Painter;
 
 public sealed class PainterRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -36,7 +36,7 @@ public sealed class PainterRole : SingleRoleBase, IRoleAutoBuildAbility
     private Sprite randomColorPaintImage;
     private Sprite transColorPaintImage;
 
-    public Painter() : base(
+    public PainterRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Painter),
         true, false, true, true)
     { }

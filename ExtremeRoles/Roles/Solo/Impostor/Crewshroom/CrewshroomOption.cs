@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Crewshroom.CrewshroomRole;
 
-namespace ExtremeRoles.Roles.Impostor.Crewshroom
+namespace ExtremeRoles.Roles.Solo.Impostor.Crewshroom
 {
     public readonly record struct CrewshroomSpecificOption(
         float DelaySecond,
@@ -16,8 +17,8 @@ namespace ExtremeRoles.Roles.Impostor.Crewshroom
         public CrewshroomSpecificOption Load(IOptionLoader loader)
         {
             return new CrewshroomSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Crewshroom.Option, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Crewshroom.Option.DelaySecond),
+                loader.GetValue<Option, float>(
+                    Option.DelaySecond),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -29,7 +30,7 @@ namespace ExtremeRoles.Roles.Impostor.Crewshroom
         {
             IRoleAbility.CreateAbilityCountOption(factory, 3, 50);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Crewshroom.Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, format: OptionUnit.Second);
+                Option.DelaySecond, 5.0f, 0.5f, 30.0f, 0.5f, format: OptionUnit.Second);
         }
     }
 }

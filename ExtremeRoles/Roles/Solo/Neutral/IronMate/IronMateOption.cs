@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Neutral.IronMate.IronMateRole;
 
-namespace ExtremeRoles.Roles.Neutral.IronMate
+namespace ExtremeRoles.Roles.Solo.Neutral.IronMate
 {
     public readonly record struct IronMateSpecificOption(
         int BlockNum,
@@ -18,16 +19,16 @@ namespace ExtremeRoles.Roles.Neutral.IronMate
         public IronMateSpecificOption Load(IOptionLoader loader)
         {
             return new IronMateSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.BlockNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.SlowTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.SlowMod),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.PlayerShowTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.IronMate.Option, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.DeadBodyShowTimeOnAfterPlayer)
+                loader.GetValue<Option, int>(
+                    Option.BlockNum),
+                loader.GetValue<Option, float>(
+                    Option.SlowTime),
+                loader.GetValue<Option, float>(
+                    Option.SlowMod),
+                loader.GetValue<Option, float>(
+                    Option.PlayerShowTime),
+                loader.GetValue<Option, float>(
+                    Option.DeadBodyShowTimeOnAfterPlayer)
             );
         }
     }
@@ -37,25 +38,25 @@ namespace ExtremeRoles.Roles.Neutral.IronMate
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.BlockNum,
+                Option.BlockNum,
                 1, 0, 10, 1);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.SlowTime,
+                Option.SlowTime,
                 10.0f, 0.0f, 30.0f, 0.5f,
                 format: OptionUnit.Second);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.SlowMod,
+                Option.SlowMod,
                 0.7f, 0.1f, 1.0f, 0.1f,
                 format: OptionUnit.Multiplier);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.PlayerShowTime,
+                Option.PlayerShowTime,
                 10f, 0.0f, 30.0f, 0.1f,
                 format: OptionUnit.Second);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.IronMate.Option.DeadBodyShowTimeOnAfterPlayer,
+                Option.DeadBodyShowTimeOnAfterPlayer,
                 10f, 0.0f, 30.0f, 0.1f,
                 format: OptionUnit.Second);
         }

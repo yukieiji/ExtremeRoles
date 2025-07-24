@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterRole;
 
-namespace ExtremeRoles.Roles.Impostor.AssaultMaster
+namespace ExtremeRoles.Roles.Solo.Impostor.AssaultMaster
 {
     public readonly record struct AssaultMasterSpecificOption(
         int StockLimit,
@@ -22,20 +23,20 @@ namespace ExtremeRoles.Roles.Impostor.AssaultMaster
         public AssaultMasterSpecificOption Load(IOptionLoader loader)
         {
             return new AssaultMasterSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockLimit),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockNumWhenReport),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockNumWhenMeetingButton),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.CockingKillCoolReduceTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.ReloadReduceKillCoolTimePerStock),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.IsResetReloadCoolTimeWhenKill),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock),
+                loader.GetValue<AssaultMasterOption, int>(
+                    AssaultMasterOption.StockLimit),
+                loader.GetValue<AssaultMasterOption, int>(
+                    AssaultMasterOption.StockNumWhenReport),
+                loader.GetValue<AssaultMasterOption, int>(
+                    AssaultMasterOption.StockNumWhenMeetingButton),
+                loader.GetValue<AssaultMasterOption, float>(
+                    AssaultMasterOption.CockingKillCoolReduceTime),
+                loader.GetValue<AssaultMasterOption, float>(
+                    AssaultMasterOption.ReloadReduceKillCoolTimePerStock),
+                loader.GetValue<AssaultMasterOption, bool>(
+                    AssaultMasterOption.IsResetReloadCoolTimeWhenKill),
+                loader.GetValue<AssaultMasterOption, int>(
+                    AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -48,30 +49,30 @@ namespace ExtremeRoles.Roles.Impostor.AssaultMaster
             IRoleAbility.CreateCommonAbilityOption(factory);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockLimit,
+                AssaultMasterOption.StockLimit,
                 2, 1, 10, 1,
                 format: OptionUnit.ScrewNum);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockNumWhenReport,
+                AssaultMasterOption.StockNumWhenReport,
                 1, 1, 5, 1,
                 format: OptionUnit.ScrewNum);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.StockNumWhenMeetingButton,
+                AssaultMasterOption.StockNumWhenMeetingButton,
                 3, 1, 10, 1,
                 format: OptionUnit.ScrewNum);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.CockingKillCoolReduceTime,
+                AssaultMasterOption.CockingKillCoolReduceTime,
                 2.0f, 1.0f, 5.0f, 0.1f,
                 format: OptionUnit.Second);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.ReloadReduceKillCoolTimePerStock,
+                AssaultMasterOption.ReloadReduceKillCoolTimePerStock,
                 5.0f, 2.0f, 10.0f, 0.1f,
                 format: OptionUnit.Second);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.IsResetReloadCoolTimeWhenKill,
+                AssaultMasterOption.IsResetReloadCoolTimeWhenKill,
                 true);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.AssaultMaster.AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock,
+                AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock,
                 75, 30, 90, 1,
                 format: OptionUnit.Percentage);
         }

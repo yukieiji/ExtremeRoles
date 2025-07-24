@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Fencer.FencerRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Fencer
+namespace ExtremeRoles.Roles.Solo.Crewmate.Fencer
 {
     public readonly record struct FencerSpecificOption(
         float ResetTime,
@@ -17,8 +18,8 @@ namespace ExtremeRoles.Roles.Crewmate.Fencer
         public FencerSpecificOption Load(IOptionLoader loader)
         {
             return new FencerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Fencer.FencerOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Fencer.FencerOption.ResetTime),
+                loader.GetValue<FencerOption, float>(
+                    FencerOption.ResetTime),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
             );
@@ -32,7 +33,7 @@ namespace ExtremeRoles.Roles.Crewmate.Fencer
             IRoleAbility.CreateAbilityCountOption(
                 factory, 2, 7, 3.0f);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Fencer.FencerOption.ResetTime,
+                FencerOption.ResetTime,
                 5.0f, 2.5f, 30.0f, 0.5f,
                 format: OptionUnit.Second);
         }

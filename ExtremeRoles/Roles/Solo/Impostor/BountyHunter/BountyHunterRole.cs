@@ -13,7 +13,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Roles.Impostor.BountyHunter;
+namespace ExtremeRoles.Roles.Solo.Impostor.BountyHunter;
 
 public sealed class BountyHunterRole : SingleRoleBase, IRoleUpdate, IRoleSpecialSetUp, IRoleResetMeeting
 {
@@ -45,7 +45,7 @@ public sealed class BountyHunterRole : SingleRoleBase, IRoleUpdate, IRoleSpecial
         ArrowUpdateCycle
     }
 
-    public BountyHunter() : base(
+    public BountyHunterRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.BountyHunter),
         true, false, true, true)
     { }

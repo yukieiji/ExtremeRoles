@@ -10,7 +10,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Faker;
+namespace ExtremeRoles.Roles.Solo.Impostor.Faker;
 
 public sealed class FakerRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -32,7 +32,7 @@ public sealed class FakerRole : SingleRoleBase, IRoleAutoBuildAbility
 	private string deadBodyDummyStr;
 	private string playerDummyStr;
 
-	public Faker() : base(
+	public FakerRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Faker),
 		true, false, true, true)
 	{ }

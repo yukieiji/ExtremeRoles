@@ -15,7 +15,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.LastWolf;
+namespace ExtremeRoles.Roles.Solo.Impostor.LastWolf;
 
 public sealed class LastWolfRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
 {
@@ -63,7 +63,7 @@ public sealed class LastWolfRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleA
     private bool isAwakedHasOtherKillCool;
     private bool isAwakedHasOtherKillRange;
 
-    public LastWolf() : base(
+    public LastWolfRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.LastWolf),
         true, false, true, true)
     { }

@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierRole;
 
-namespace ExtremeRoles.Roles.Impostor.Carrier
+namespace ExtremeRoles.Roles.Solo.Impostor.Carrier
 {
     public readonly record struct CarrierSpecificOption(
         float CarryDistance,
@@ -16,10 +17,10 @@ namespace ExtremeRoles.Roles.Impostor.Carrier
         public CarrierSpecificOption Load(IOptionLoader loader)
         {
             return new CarrierSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption.CarryDistance),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption.CanReportOnCarry),
+                loader.GetValue<CarrierOption, float>(
+                    CarrierOption.CarryDistance),
+                loader.GetValue<CarrierOption, bool>(
+                    CarrierOption.CanReportOnCarry),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -33,11 +34,11 @@ namespace ExtremeRoles.Roles.Impostor.Carrier
                 factory, 5.0f);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption.CarryDistance,
+                CarrierOption.CarryDistance,
                 1.0f, 1.0f, 5.0f, 0.5f);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Carrier.CarrierOption.CanReportOnCarry,
+                CarrierOption.CanReportOnCarry,
                 true);
         }
     }

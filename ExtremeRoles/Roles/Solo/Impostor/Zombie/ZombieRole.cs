@@ -21,7 +21,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using Il2CppObject = Il2CppSystem.Object;
 using SystemArray = System.Array;
 
-namespace ExtremeRoles.Roles.Impostor.Zombie;
+namespace ExtremeRoles.Roles.Solo.Impostor.Zombie;
 
 public sealed class ZombieRole :
     SingleRoleBase,
@@ -84,7 +84,7 @@ public sealed class ZombieRole :
 
     private Collider2D cachedColider = null;
 
-    public Zombie() : base(
+    public ZombieRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Zombie),
         true, false, true, true)
     { }

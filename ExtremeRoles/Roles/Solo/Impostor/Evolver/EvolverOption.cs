@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverRole;
 
-namespace ExtremeRoles.Roles.Impostor.Evolver
+namespace ExtremeRoles.Roles.Solo.Impostor.Evolver
 {
     public readonly record struct EvolverSpecificOption(
         bool IsEvolvedAnimation,
@@ -21,16 +22,16 @@ namespace ExtremeRoles.Roles.Impostor.Evolver
         public EvolverSpecificOption Load(IOptionLoader loader)
         {
             return new EvolverSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.IsEvolvedAnimation),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.IsEatingEndCleanBody),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.EatingRange),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.KillCoolReduceRate),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.KillCoolResuceRateMulti),
+                loader.GetValue<EvolverOption, bool>(
+                    EvolverOption.IsEvolvedAnimation),
+                loader.GetValue<EvolverOption, bool>(
+                    EvolverOption.IsEatingEndCleanBody),
+                loader.GetValue<EvolverOption, float>(
+                    EvolverOption.EatingRange),
+                loader.GetValue<EvolverOption, int>(
+                    EvolverOption.KillCoolReduceRate),
+                loader.GetValue<EvolverOption, float>(
+                    EvolverOption.KillCoolResuceRateMulti),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
             );
@@ -42,24 +43,24 @@ namespace ExtremeRoles.Roles.Impostor.Evolver
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.IsEvolvedAnimation,
+                EvolverOption.IsEvolvedAnimation,
                 true);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.IsEatingEndCleanBody,
+                EvolverOption.IsEatingEndCleanBody,
                 true);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.EatingRange,
+                EvolverOption.EatingRange,
                 2.5f, 0.5f, 5.0f, 0.5f);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.KillCoolReduceRate,
+                EvolverOption.KillCoolReduceRate,
                 10, 1, 50, 1,
                 format: OptionUnit.Percentage);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Evolver.EvolverOption.KillCoolResuceRateMulti,
+                EvolverOption.KillCoolResuceRateMulti,
                 1.0f, 1.0f, 5.0f, 0.1f,
                 format: OptionUnit.Multiplier);
 

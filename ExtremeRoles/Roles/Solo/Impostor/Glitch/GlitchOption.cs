@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Glitch.GlitchRole;
 
-namespace ExtremeRoles.Roles.Impostor.Glitch
+namespace ExtremeRoles.Roles.Solo.Impostor.Glitch
 {
     public readonly record struct GlitchSpecificOption(
         float Range,
@@ -20,16 +21,16 @@ namespace ExtremeRoles.Roles.Impostor.Glitch
         public GlitchSpecificOption Load(IOptionLoader loader)
         {
             return new GlitchSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.Range),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.EffectOnImpo),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.EffectOnMarlin),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.Delay),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.ActiveTime),
+                loader.GetValue<Ops, float>(
+                    Ops.Range),
+                loader.GetValue<Ops, bool>(
+                    Ops.EffectOnImpo),
+                loader.GetValue<Ops, bool>(
+                    Ops.EffectOnMarlin),
+                loader.GetValue<Ops, float>(
+                    Ops.Delay),
+                loader.GetValue<Ops, int>(
+                    Ops.ActiveTime),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -42,17 +43,17 @@ namespace ExtremeRoles.Roles.Impostor.Glitch
             IRoleAbility.CreateAbilityCountOption(
                 factory, 2, 10);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.Range, 1.5f, 0.1f, 7.5f, 0.1f);
+                Ops.Range, 1.5f, 0.1f, 7.5f, 0.1f);
             var impOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.EffectOnImpo, false);
+                Ops.EffectOnImpo, false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.EffectOnMarlin, false,
+                Ops.EffectOnMarlin, false,
                 impOpt, invert: true);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.Delay, 5.0f, 0.0f, 30.0f, 0.5f,
+                Ops.Delay, 5.0f, 0.0f, 30.0f, 0.5f,
                 format: OptionUnit.Second);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.Glitch.Ops.ActiveTime, 10, 1, 120, 1,
+                Ops.ActiveTime, 10, 1, 120, 1,
                 format: OptionUnit.Second);
         }
     }

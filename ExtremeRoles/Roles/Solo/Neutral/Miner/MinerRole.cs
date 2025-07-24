@@ -20,7 +20,7 @@ using ExtremeRoles.Resources;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Neutral.Miner;
+namespace ExtremeRoles.Roles.Solo.Neutral.Miner;
 
 public sealed class MinerRole :
 	SingleRoleBase,
@@ -74,7 +74,7 @@ public sealed class MinerRole :
 	private MineEffectParameter parameter;
     private TextPopUpper killLogger;
 
-    public Miner() : base(
+    public MinerRole() : base(
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.Miner,
 			ColorPalette.MinerIvyGreen),

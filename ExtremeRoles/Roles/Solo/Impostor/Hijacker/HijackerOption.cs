@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Impostor.Hijacker.HijackerRole;
 
-namespace ExtremeRoles.Roles.Impostor.Hijacker
+namespace ExtremeRoles.Roles.Solo.Impostor.Hijacker
 {
     public readonly record struct HijackerSpecificOption(
         bool IsRandomPlayer,
@@ -16,8 +17,8 @@ namespace ExtremeRoles.Roles.Impostor.Hijacker
         public HijackerSpecificOption Load(IOptionLoader loader)
         {
             return new HijackerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Hijacker.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Hijacker.Option.IsRandomPlayer),
+                loader.GetValue<Option, bool>(
+                    Option.IsRandomPlayer),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
             );
@@ -30,7 +31,7 @@ namespace ExtremeRoles.Roles.Impostor.Hijacker
         {
             IRoleAbility.CreateAbilityCountOption(
                 factory, 3, 10, 10f);
-            factory.CreateBoolOption(ExtremeRoles.Roles.Solo.Impostor.Hijacker.Option.IsRandomPlayer, true);
+            factory.CreateBoolOption(Option.IsRandomPlayer, true);
         }
     }
 }

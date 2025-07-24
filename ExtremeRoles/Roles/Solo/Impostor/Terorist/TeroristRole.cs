@@ -16,7 +16,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Impostor.Terorist;
+namespace ExtremeRoles.Roles.Solo.Impostor.Terorist;
 
 public sealed class TeroristRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -36,7 +36,7 @@ public sealed class TeroristRole : SingleRoleBase, IRoleAutoBuildAbility
 	private SabotageSystemType? saboSystem;
 	private bool canActiveOtherSabotage;
 
-    public Terorist() : base(
+    public TeroristRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Terorist),
         true, false, true, true)
     { }

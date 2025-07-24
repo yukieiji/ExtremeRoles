@@ -15,7 +15,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Crewshroom;
+namespace ExtremeRoles.Roles.Solo.Impostor.Crewshroom;
 
 #nullable enable
 
@@ -29,7 +29,7 @@ public sealed class CrewshroomRole : SingleRoleBase, IRoleAutoBuildAbility
 	}
 
 #pragma warning disable CS8618
-	public Crewshroom() : base(
+	public CrewshroomRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Crewshroom),
 		true, false, true, true)
 	{ }

@@ -21,7 +21,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Photographer;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Photographer;
 
 #nullable enable
 
@@ -319,7 +319,7 @@ public sealed class PhotographerRole :
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
 	private PhotoCamera photoCreater;
-	public Photographer() : base(
+	public PhotographerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Photographer,
 			ColorPalette.PhotographerVerdeSiena),

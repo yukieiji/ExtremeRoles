@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderRole;
 
-namespace ExtremeRoles.Roles.Impostor.Commander
+namespace ExtremeRoles.Roles.Solo.Impostor.Commander
 {
     public readonly record struct CommanderSpecificOption(
         float KillCoolReduceTime,
@@ -18,12 +19,12 @@ namespace ExtremeRoles.Roles.Impostor.Commander
         public CommanderSpecificOption Load(IOptionLoader loader)
         {
             return new CommanderSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.KillCoolReduceTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.KillCoolReduceImpBonus),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.IncreaseKillNum),
+                loader.GetValue<CommanderOption, float>(
+                    CommanderOption.KillCoolReduceTime),
+                loader.GetValue<CommanderOption, float>(
+                    CommanderOption.KillCoolReduceImpBonus),
+                loader.GetValue<CommanderOption, int>(
+                    CommanderOption.IncreaseKillNum),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -34,15 +35,15 @@ namespace ExtremeRoles.Roles.Impostor.Commander
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.KillCoolReduceTime,
+                CommanderOption.KillCoolReduceTime,
                 2.0f, 0.5f, 5.0f, 0.1f,
                 format: OptionUnit.Second);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.KillCoolReduceImpBonus,
+                CommanderOption.KillCoolReduceImpBonus,
                 1.5f, 0.1f, 3.0f, 0.1f,
                 format: OptionUnit.Second);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.Commander.CommanderOption.IncreaseKillNum,
+                CommanderOption.IncreaseKillNum,
                 2, 1, 3, 1,
                 format: OptionUnit.Shot);
             IRoleAbility.CreateAbilityCountOption(factory, 1, 3);

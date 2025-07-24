@@ -12,7 +12,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Sheriff;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Sheriff;
 
 public sealed class SheriffRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 {
@@ -44,7 +44,7 @@ public sealed class SheriffRole : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 
     private TMPro.TextMeshPro killCountText = null;
 
-    public Sheriff() : base(
+    public SheriffRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Sheriff,
 			ColorPalette.SheriffOrange),

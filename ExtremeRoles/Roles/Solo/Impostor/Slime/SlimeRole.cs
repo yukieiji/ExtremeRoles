@@ -9,7 +9,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Slime;
+namespace ExtremeRoles.Roles.Solo.Impostor.Slime;
 
 public sealed class SlimeRole :
     SingleRoleBase,
@@ -35,7 +35,7 @@ public sealed class SlimeRole :
     private bool isKilling = false;
 	private bool seeMorphMerlin = false;
 
-    public Slime() : base(
+    public SlimeRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Slime),
         true, false, true, true)
     { }

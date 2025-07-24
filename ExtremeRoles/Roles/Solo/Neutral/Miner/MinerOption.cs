@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Neutral.Miner.MinerRole;
 
-namespace ExtremeRoles.Roles.Neutral.Miner
+namespace ExtremeRoles.Roles.Solo.Neutral.Miner
 {
     public readonly record struct MinerSpecificOption(
         bool LinkingAllVent,
@@ -23,22 +24,22 @@ namespace ExtremeRoles.Roles.Neutral.Miner
         public MinerSpecificOption Load(IOptionLoader loader)
         {
             return new MinerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.LinkingAllVent),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.MineKillRange),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.CanShowMine),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.RolePlayerShowMode),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.AnotherPlayerShowMode),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.CanShowNoneActiveAnotherPlayer),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, float>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.NoneActiveTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.ShowKillLog),
+                loader.GetValue<MinerOption, bool>(
+                    MinerOption.LinkingAllVent),
+                loader.GetValue<MinerOption, float>(
+                    MinerOption.MineKillRange),
+                loader.GetValue<MinerOption, bool>(
+                    Miner.MinerOption.CanShowMine),
+                loader.GetValue<MinerOption, int>(
+                    MinerOption.RolePlayerShowMode),
+                loader.GetValue<MinerOption, int>(
+                    MinerOption.AnotherPlayerShowMode),
+                loader.GetValue<MinerOption, bool>(
+                    MinerOption.CanShowNoneActiveAnotherPlayer),
+                loader.GetValue<MinerOption, float>(
+                    MinerOption.NoneActiveTime),
+                loader.GetValue<MinerOption, bool>(
+                    MinerOption.ShowKillLog),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -49,35 +50,35 @@ namespace ExtremeRoles.Roles.Neutral.Miner
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.LinkingAllVent,
+                MinerOption.LinkingAllVent,
                 false);
             IRoleAbility.CreateCommonAbilityOption(
                 factory, 2.0f);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.MineKillRange,
+                MinerOption.MineKillRange,
                 1.8f, 0.5f, 5f, 0.1f);
             var showOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.CanShowMine,
+                MinerOption.CanShowMine,
                 false);
             factory.CreateSelectionOption(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.RolePlayerShowMode,
+                MinerOption.RolePlayerShowMode,
                 new[]
                 {
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.ShowMode.MineSeeOnlySe.ToString(),
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.ShowMode.MineSeeOnlyImg.ToString(),
-                    ExtremeRoles.Roles.Solo.Neutral.Miner.ShowMode.MineSeeBoth.ToString(),
+                    ShowMode.MineSeeOnlySe.ToString(),
+                    ShowMode.MineSeeOnlyImg.ToString(),
+                    ShowMode.MineSeeBoth.ToString(),
                 }, showOpt);
-            var anotherPlayerShowMode = factory.CreateSelectionOption<ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption, ExtremeRoles.Roles.Solo.Neutral.Miner.ShowMode>(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.AnotherPlayerShowMode, showOpt);
+            var anotherPlayerShowMode = factory.CreateSelectionOption<MinerOption, ShowMode>(
+                MinerOption.AnotherPlayerShowMode, showOpt);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.CanShowNoneActiveAnotherPlayer,
+                MinerOption.CanShowNoneActiveAnotherPlayer,
                 false, anotherPlayerShowMode);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.NoneActiveTime,
+                MinerOption.NoneActiveTime,
                 20.0f, 1.0f, 45f, 0.5f,
                 format: OptionUnit.Second);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Miner.MinerOption.ShowKillLog,
+                MinerOption.ShowKillLog,
                 true);
         }
     }

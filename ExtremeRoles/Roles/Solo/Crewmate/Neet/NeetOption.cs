@@ -1,8 +1,9 @@
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
+using static ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Neet
+namespace ExtremeRoles.Roles.Solo.Crewmate.Neet
 {
     public readonly record struct NeetSpecificOption(
         bool CanCallMeeting,
@@ -16,14 +17,14 @@ namespace ExtremeRoles.Roles.Crewmate.Neet
         public NeetSpecificOption Load(IOptionLoader loader)
         {
             return new NeetSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.CanCallMeeting),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.CanRepairSabotage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.HasTask),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.IsNeutral)
+                loader.GetValue<NeetOption, bool>(
+                    NeetOption.CanCallMeeting),
+                loader.GetValue<NeetOption, bool>(
+                    NeetOption.CanRepairSabotage),
+                loader.GetValue<NeetOption, bool>(
+                    NeetOption.HasTask),
+                loader.GetValue<NeetOption, bool>(
+                    NeetOption.IsNeutral)
             );
         }
     }
@@ -33,17 +34,17 @@ namespace ExtremeRoles.Roles.Crewmate.Neet
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.CanCallMeeting,
+                NeetOption.CanCallMeeting,
                 false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.CanRepairSabotage,
+                NeetOption.CanRepairSabotage,
                 false);
 
             var neutralOps = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.IsNeutral,
+                NeetOption.IsNeutral,
                 false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Neet.NeetOption.HasTask,
+                NeetOption.HasTask,
                 false, neutralOps,
                 invert: true);
         }

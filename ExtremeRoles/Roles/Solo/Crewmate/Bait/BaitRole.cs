@@ -17,7 +17,7 @@ using ExtremeRoles.Extension.Il2Cpp;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Bait;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Bait;
 
 public sealed class BaitRole : SingleRoleBase, IRoleAwake<RoleTypes>
 {
@@ -50,7 +50,7 @@ public sealed class BaitRole : SingleRoleBase, IRoleAwake<RoleTypes>
 	private bool awakeRole;
 	private bool awakeHasOtherVision;
 
-	public Bait() : base(
+	public BaitRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Bait,
 			ColorPalette.BaitCyan),

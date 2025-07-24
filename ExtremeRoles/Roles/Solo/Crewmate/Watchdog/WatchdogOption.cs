@@ -3,7 +3,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-namespace ExtremeRoles.Roles.Crewmate.Watchdog
+namespace ExtremeRoles.Roles.Solo.Crewmate.Watchdog
 {
     public readonly record struct WatchdogSpecificOption(
         float AbilityCoolTime

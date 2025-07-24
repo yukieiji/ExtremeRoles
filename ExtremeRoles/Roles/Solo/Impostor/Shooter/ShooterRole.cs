@@ -14,7 +14,7 @@ using TMPro;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Shooter;
+namespace ExtremeRoles.Roles.Solo.Impostor.Shooter;
 
 public sealed class ShooterRole :
     SingleRoleBase,

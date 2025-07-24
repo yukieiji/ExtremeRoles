@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterRole;
 
-namespace ExtremeRoles.Roles.Neutral.Hatter
+namespace ExtremeRoles.Roles.Solo.Neutral.Hatter
 {
     public readonly record struct HatterSpecificOption(
         bool CanRepairSabotage,
@@ -22,20 +23,20 @@ namespace ExtremeRoles.Roles.Neutral.Hatter
         public HatterSpecificOption Load(IOptionLoader loader)
         {
             return new HatterSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.CanRepairSabotage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.WinCount),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.MeetingTimerDecreaseLower),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.MeetingTimerDecreaseUpper),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, bool>(
-                    ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.HideMeetingTimer),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.IncreaseTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption, int>(
-                    ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.IncreseNum),
+                loader.GetValue<Option, bool>(
+                    Option.CanRepairSabotage),
+                loader.GetValue<Option, int>(
+                    Option.WinCount),
+                loader.GetValue<Option, int>(
+                    Option.MeetingTimerDecreaseLower),
+                loader.GetValue<Option, int>(
+                    Option.MeetingTimerDecreaseUpper),
+                loader.GetValue<Option, bool>(
+                    Option.HideMeetingTimer),
+                loader.GetValue<Option, int>(
+                    Option.IncreaseTaskGage),
+                loader.GetValue<Option, int>(
+                    Option.IncreseNum),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -46,36 +47,36 @@ namespace ExtremeRoles.Roles.Neutral.Hatter
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateBoolOption(
-               ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.CanRepairSabotage,
+               Option.CanRepairSabotage,
                false);
 
             factory.CreateIntOption(
-               ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.WinCount,
+               Option.WinCount,
                3, 1, 10, 1);
 
             IRoleAbility.CreateAbilityCountOption(
                 factory, 3, 10, minAbilityCount: 0);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.HideMeetingTimer, true);
+                Option.HideMeetingTimer, true);
 
             var lowerOpt = factory.CreateIntDynamicOption(
-                ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.MeetingTimerDecreaseLower,
+                Option.MeetingTimerDecreaseLower,
                 0, 0, 5,
                 format: OptionUnit.Percentage);
 
             var upperOpt = factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.MeetingTimerDecreaseUpper,
+                Option.MeetingTimerDecreaseUpper,
                 20, 0, 50, 5,
                 format: OptionUnit.Percentage);
             upperOpt.AddWithUpdate(lowerOpt);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.IncreaseTaskGage,
+                Option.IncreaseTaskGage,
                 50, 0, 100, 10,
                 format: OptionUnit.Percentage);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Neutral.Hatter.HatterOption.IncreseNum,
+                Option.IncreseNum,
                 3, 1, 10, 1);
         }
     }

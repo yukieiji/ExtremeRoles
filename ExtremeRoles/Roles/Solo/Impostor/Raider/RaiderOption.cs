@@ -4,8 +4,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Raider.RaiderRole;
 
-namespace ExtremeRoles.Roles.Impostor.Raider
+namespace ExtremeRoles.Roles.Solo.Impostor.Raider
 {
     public readonly record struct RaiderSpecificOption(
         bool IsOpenLimit,
@@ -26,24 +27,24 @@ namespace ExtremeRoles.Roles.Impostor.Raider
         public RaiderSpecificOption Load(IOptionLoader loader)
         {
             return new RaiderSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.IsOpenLimit),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.LimitNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.IsHidePlayerOnOpen),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombType),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, int>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombTargetRange),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombRange),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombAliveTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombShowOtherPlayer),
+                loader.GetValue<Option, bool>(
+                    Option.IsOpenLimit),
+                loader.GetValue<Option, int>(
+                    Option.LimitNum),
+                loader.GetValue<Option, bool>(
+                    Option.IsHidePlayerOnOpen),
+                loader.GetValue<Option, int>(
+                    Option.BombType),
+                loader.GetValue<Option, int>(
+                    Option.BombNum),
+                loader.GetValue<Option, float>(
+                    Option.BombTargetRange),
+                loader.GetValue<Option, float>(
+                    Option.BombRange),
+                loader.GetValue<Option, float>(
+                    Option.BombAliveTime),
+                loader.GetValue<Option, bool>(
+                    Option.BombShowOtherPlayer),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityActiveTime)
             );
@@ -63,22 +64,22 @@ namespace ExtremeRoles.Roles.Impostor.Raider
                 format: OptionUnit.Second);
 
             var limitOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Raider.Option.IsOpenLimit, true);
+                Option.IsOpenLimit, true);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Impostor.Raider.Option.LimitNum, 4, 1, 100, 1,
+                Option.LimitNum, 4, 1, 100, 1,
                 limitOpt, invert: true);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Raider.Option.IsHidePlayerOnOpen, true);
+                Option.IsHidePlayerOnOpen, true);
 
-            var type = factory.CreateSelectionOption<ExtremeRoles.Roles.Solo.Impostor.Raider.Option, RaiderBombSystem.BombType>(
-                ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombType);
-            factory.CreateIntOption(ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombNum, 5, 2, 100, 1, type);
-            factory.CreateFloatOption(ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, type);
-            factory.CreateFloatOption(ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
-            factory.CreateFloatOption(ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f);
+            var type = factory.CreateSelectionOption<Option, RaiderBombSystem.BombType>(
+                Option.BombType);
+            factory.CreateIntOption(Option.BombNum, 5, 2, 100, 1, type);
+            factory.CreateFloatOption(Option.BombTargetRange, 1.7f, 0.1f, 25.0f, 0.1f, type);
+            factory.CreateFloatOption(Option.BombRange, 1.7f, 0.1f, 5.0f, 0.1f);
+            factory.CreateFloatOption(Option.BombAliveTime, 5.0f, 0.5f, 30.0f, 0.1f);
 
-            factory.CreateBoolOption(ExtremeRoles.Roles.Solo.Impostor.Raider.Option.BombShowOtherPlayer, true);
+            factory.CreateBoolOption(Option.BombShowOtherPlayer, true);
         }
     }
 }

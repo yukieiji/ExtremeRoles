@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Psychic
+namespace ExtremeRoles.Roles.Solo.Crewmate.Psychic
 {
     public readonly record struct PsychicSpecificOption(
         int AwakeTaskGage,
@@ -21,16 +22,16 @@ namespace ExtremeRoles.Roles.Crewmate.Psychic
         public PsychicSpecificOption Load(IOptionLoader loader)
         {
             return new PsychicSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.AwakeTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.AwakeDeadPlayerNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.IsUpgradeAbility),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.UpgradeTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.UpgradeDeadPlayerNum),
+                loader.GetValue<PsychicOption, int>(
+                    PsychicOption.AwakeTaskGage),
+                loader.GetValue<PsychicOption, int>(
+                    PsychicOption.AwakeDeadPlayerNum),
+                loader.GetValue<PsychicOption, bool>(
+                    PsychicOption.IsUpgradeAbility),
+                loader.GetValue<PsychicOption, int>(
+                    PsychicOption.UpgradeTaskGage),
+                loader.GetValue<PsychicOption, int>(
+                    PsychicOption.UpgradeDeadPlayerNum),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityActiveTime)
             );
@@ -42,26 +43,26 @@ namespace ExtremeRoles.Roles.Crewmate.Psychic
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.AwakeTaskGage,
+                PsychicOption.AwakeTaskGage,
                 30, 0, 100, 10,
                 format: OptionUnit.Percentage);
             factory.CreateIntOption(
-               ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.AwakeDeadPlayerNum,
+               PsychicOption.AwakeDeadPlayerNum,
                2, 0, 7, 1);
 
             IRoleAbility.CreateAbilityCountOption(
                 factory, 1, 5, 3.0f);
 
             var isUpgradeOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.IsUpgradeAbility,
+                PsychicOption.IsUpgradeAbility,
                 false);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.UpgradeTaskGage,
+                PsychicOption.UpgradeTaskGage,
                 70, 0, 100, 10,
                 isUpgradeOpt,
                 format: OptionUnit.Percentage);
             factory.CreateIntOption(
-               ExtremeRoles.Roles.Solo.Crewmate.Psychic.PsychicOption.UpgradeDeadPlayerNum,
+               PsychicOption.UpgradeDeadPlayerNum,
                5, 0, 15, 1, isUpgradeOpt);
         }
     }

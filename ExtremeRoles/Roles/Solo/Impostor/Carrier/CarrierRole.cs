@@ -17,7 +17,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Carrier;
+namespace ExtremeRoles.Roles.Solo.Impostor.Carrier;
 
 public sealed class CarrierRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSpecialReset
 {
@@ -45,7 +45,7 @@ public sealed class CarrierRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleSp
 
     private ExtremeAbilityButton carryButton;
 
-    public Carrier() : base(
+    public CarrierRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Carrier),
         true, false, true, true)
     {

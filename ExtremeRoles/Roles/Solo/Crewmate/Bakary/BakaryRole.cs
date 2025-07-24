@@ -7,7 +7,7 @@ using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Bakary;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Bakary;
 
 public sealed class BakaryRole : SingleRoleBase
 {
@@ -18,7 +18,7 @@ public sealed class BakaryRole : SingleRoleBase
         BadBakeTime,
     }
 
-    public Bakary() : base(
+    public BakaryRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Bakary,
 			ColorPalette.BakaryWheatColor),

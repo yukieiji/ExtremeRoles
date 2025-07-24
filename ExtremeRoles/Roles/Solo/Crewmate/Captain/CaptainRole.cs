@@ -16,7 +16,7 @@ using ExtremeRoles.Performance;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Captain;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Captain;
 
 public sealed class CaptainRole :
     SingleRoleBase,
@@ -64,7 +64,7 @@ public sealed class CaptainRole :
     private TMPro.TextMeshPro meetingVoteText = null;
     private Dictionary<byte, SpriteRenderer> voteCheckMark;
 
-    public Captain() : base(
+    public CaptainRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Captain,
 			ColorPalette.CaptainLightKonjou),

@@ -16,7 +16,7 @@ using ExtremeRoles.Module.SystemType;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Impostor.Cracker;
+namespace ExtremeRoles.Roles.Solo.Impostor.Cracker;
 
 public sealed class CrackerRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -60,7 +60,7 @@ public sealed class CrackerRole : SingleRoleBase, IRoleAutoBuildAbility
     public ExtremeAbilityButton? Button { get; set; }
 	private ResetObjectSystem? system;
 
-    public Cracker() : base(
+    public CrackerRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Cracker),
         true, false, true, true)
     { }

@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Crewmate.Whisper;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Whisper;
 
 public sealed class WhisperRole :
     SingleRoleBase,
@@ -46,7 +46,7 @@ public sealed class WhisperRole :
 #pragma warning disable CS8618
 	private TMPro.TextMeshPro abilityText;
 	private TextPopUpper textPopUp;
-    public Whisper() : base(
+    public WhisperRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Whisper,
 			ColorPalette.WhisperMagenta),

@@ -22,7 +22,7 @@ using ExtremeRoles.Roles.Solo.Neutral.Queen;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Crewmate.Jailer;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Jailer;
 
 public sealed class JailerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
 {
@@ -103,7 +103,7 @@ public sealed class JailerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwa
 		Neutral,
 	}
 
-	public Jailer() : base(
+	public JailerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Jailer,
 			ColorPalette.JailerSapin),

@@ -22,7 +22,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Psychic;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Psychic;
 
 #nullable enable
 
@@ -222,7 +222,7 @@ public sealed class PsychicRole :
 #pragma warning disable CS8618
 	public ExtremeAbilityButton Button { get; set; }
 
-	public Psychic() : base(
+	public PsychicRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Psychic,
 			ColorPalette.PsychicSyentyietu),

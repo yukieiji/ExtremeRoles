@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Carpenter
+namespace ExtremeRoles.Roles.Solo.Crewmate.Carpenter
 {
     public readonly record struct CarpenterSpecificOption(
         int AwakeTaskGage,
@@ -21,16 +22,16 @@ namespace ExtremeRoles.Roles.Crewmate.Carpenter
         public CarpenterSpecificOption Load(IOptionLoader loader)
         {
             return new CarpenterSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.AwakeTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.RemoveVentScrew),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.RemoveVentStopTime),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.SetCameraScrew),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.SetCameraStopTime),
+                loader.GetValue<CarpenterOption, int>(
+                    CarpenterOption.AwakeTaskGage),
+                loader.GetValue<CarpenterOption, int>(
+                    CarpenterOption.RemoveVentScrew),
+                loader.GetValue<CarpenterOption, float>(
+                    CarpenterOption.RemoveVentStopTime),
+                loader.GetValue<CarpenterOption, int>(
+                    CarpenterOption.SetCameraScrew),
+                loader.GetValue<CarpenterOption, float>(
+                    CarpenterOption.SetCameraStopTime),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime),
                 loader.GetValue<RoleAbilityCommonOption, int>(RoleAbilityCommonOption.AbilityCount)
             );
@@ -42,7 +43,7 @@ namespace ExtremeRoles.Roles.Crewmate.Carpenter
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.AwakeTaskGage,
+                CarpenterOption.AwakeTaskGage,
                 70, 0, 100, 10,
                 format: OptionUnit.Percentage);
             createAbilityOption(factory);
@@ -59,19 +60,19 @@ namespace ExtremeRoles.Roles.Crewmate.Carpenter
                 15, 5, 100, 1,
                 format: OptionUnit.ScrewNum);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.RemoveVentScrew,
+                CarpenterOption.RemoveVentScrew,
                 10, 1, 20, 1,
                 format: OptionUnit.ScrewNum);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.RemoveVentStopTime,
+                CarpenterOption.RemoveVentStopTime,
                 5.0f, 2.0f, 15.0f, 0.5f,
                 format: OptionUnit.Second);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.SetCameraScrew,
+                CarpenterOption.SetCameraScrew,
                 5, 1, 10, 1,
                 format: OptionUnit.ScrewNum);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Carpenter.CarpenterOption.SetCameraStopTime,
+                CarpenterOption.SetCameraStopTime,
                 2.5f, 1.0f, 5.0f, 0.5f,
                 format: OptionUnit.Second);
         }

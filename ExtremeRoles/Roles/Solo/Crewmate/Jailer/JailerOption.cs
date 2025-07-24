@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Jailer.JailerRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Jailer
+namespace ExtremeRoles.Roles.Solo.Crewmate.Jailer
 {
     public readonly record struct JailerSpecificOption(
         int AwakeTaskGage,
@@ -41,50 +42,50 @@ namespace ExtremeRoles.Roles.Crewmate.Jailer
         public JailerSpecificOption Load(IOptionLoader loader)
         {
             return new JailerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.AwakeTaskGage),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.AwakeDeadPlayerNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.UseAdmin),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.UseSecurity),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.UseVital),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.Range),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.TargetMode),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.CanReplaceAssassin),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.IsMissingToDead),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.IsDeadAbilityZero),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.LawbreakerCanKill),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.LawbreakerUseVent),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.LawbreakerUseSab),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdAddCommonTask),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdAddNormalTask),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdAddLongTask),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdSpeedMod),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseAdmin),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseSecurity),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseVital),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseVent),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseSab),
+                loader.GetValue<Option, int>(
+                    Option.AwakeTaskGage),
+                loader.GetValue<Option, int>(
+                    Option.AwakeDeadPlayerNum),
+                loader.GetValue<Option, bool>(
+                    Option.UseAdmin),
+                loader.GetValue<Option, bool>(
+                    Option.UseSecurity),
+                loader.GetValue<Option, bool>(
+                    Option.UseVital),
+                loader.GetValue<Option, float>(
+                    Option.Range),
+                loader.GetValue<Option, int>(
+                    Option.TargetMode),
+                loader.GetValue<Option, bool>(
+                    Option.CanReplaceAssassin),
+                loader.GetValue<Option, bool>(
+                    Option.IsMissingToDead),
+                loader.GetValue<Option, bool>(
+                    Option.IsDeadAbilityZero),
+                loader.GetValue<Option, bool>(
+                    Option.LawbreakerCanKill),
+                loader.GetValue<Option, bool>(
+                    Option.LawbreakerUseVent),
+                loader.GetValue<Option, bool>(
+                    Option.LawbreakerUseSab),
+                loader.GetValue<Option, int>(
+                    Option.YardbirdAddCommonTask),
+                loader.GetValue<Option, int>(
+                    Option.YardbirdAddNormalTask),
+                loader.GetValue<Option, int>(
+                    Option.YardbirdAddLongTask),
+                loader.GetValue<Option, float>(
+                    Option.YardbirdSpeedMod),
+                loader.GetValue<Option, bool>(
+                    Option.YardbirdUseAdmin),
+                loader.GetValue<Option, bool>(
+                    Option.YardbirdUseSecurity),
+                loader.GetValue<Option, bool>(
+                    Option.YardbirdUseVital),
+                loader.GetValue<Option, bool>(
+                    Option.YardbirdUseVent),
+                loader.GetValue<Option, bool>(
+                    Option.YardbirdUseSab),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<KillerCommonOption, bool>(KillerCommonOption.HasOtherKillCool),
                 loader.GetValue<KillerCommonOption, float>(KillerCommonOption.KillCoolDown),
@@ -99,43 +100,43 @@ namespace ExtremeRoles.Roles.Crewmate.Jailer
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.AwakeTaskGage,
+                Option.AwakeTaskGage,
                 70, 0, 100, 10,
                 format: OptionUnit.Percentage);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.AwakeDeadPlayerNum,
+                Option.AwakeDeadPlayerNum,
                 7, 0, 12, 1);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.UseAdmin, false);
+                Option.UseAdmin, false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.UseSecurity, true);
+                Option.UseSecurity, true);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.UseVital, false);
+                Option.UseVital, false);
 
             IRoleAbility.CreateAbilityCountOption(
                 factory, 1, 5);
 
-            factory.CreateSelectionOption<ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option, ExtremeRoles.Roles.Solo.Crewmate.Jailer.TargetMode>(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.TargetMode);
+            factory.CreateSelectionOption<Option, TargetMode>(
+                Option.TargetMode);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.CanReplaceAssassin,
+                Option.CanReplaceAssassin,
                 true);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.Range,
+                Option.Range,
                 0.75f, 0.1f, 1.5f, 0.1f);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.IsDeadAbilityZero,
+                Option.IsDeadAbilityZero,
                 true);
 
             var lowBreakerOpt = factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.IsMissingToDead, false);
+                Option.IsMissingToDead, false);
 
             var lowBreakerKillOpt = factory.CreateBoolOption(
-               ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.LawbreakerCanKill,
+               Option.LawbreakerCanKill,
                true, lowBreakerOpt,
                invert: true);
 
@@ -158,38 +159,38 @@ namespace ExtremeRoles.Roles.Crewmate.Jailer
                 killRangeOption);
 
             factory.CreateBoolOption(
-               ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.LawbreakerUseVent,
+               Option.LawbreakerUseVent,
                true, lowBreakerOpt,
                invert: true);
             factory.CreateBoolOption(
-               ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.LawbreakerUseSab,
+               Option.LawbreakerUseSab,
                true, lowBreakerOpt,
                invert: true);
 
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdAddCommonTask,
+                Option.YardbirdAddCommonTask,
                 2, 0, 15, 1);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdAddNormalTask,
+                Option.YardbirdAddNormalTask,
                 1, 0, 15, 1);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdAddLongTask,
+                Option.YardbirdAddLongTask,
                 1, 0, 15, 1);
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdSpeedMod,
+                Option.YardbirdSpeedMod,
                 0.8f, 0.1f, 1.0f, 0.1f);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseAdmin, false);
+                Option.YardbirdUseAdmin, false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseSecurity, false);
+                Option.YardbirdUseSecurity, false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseVital, false);
+                Option.YardbirdUseVital, false);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseVent, true);
+                Option.YardbirdUseVent, true);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Jailer.Option.YardbirdUseSab, true);
+                Option.YardbirdUseSab, true);
         }
     }
 }

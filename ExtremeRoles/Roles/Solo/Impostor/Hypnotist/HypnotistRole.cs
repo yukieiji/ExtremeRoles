@@ -31,7 +31,7 @@ using ExtremeRoles.Patches;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 
-namespace ExtremeRoles.Roles.Impostor.Hypnotist;
+namespace ExtremeRoles.Roles.Solo.Impostor.Hypnotist;
 
 #nullable enable
 

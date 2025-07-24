@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Impostor.Smasher.SmasherRole;
 
-namespace ExtremeRoles.Roles.Impostor.Smasher
+namespace ExtremeRoles.Roles.Solo.Impostor.Smasher
 {
     public readonly record struct SmasherSpecificOption(
         float SmashPenaltyKillCool,
@@ -16,8 +17,8 @@ namespace ExtremeRoles.Roles.Impostor.Smasher
         public SmasherSpecificOption Load(IOptionLoader loader)
         {
             return new SmasherSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Smasher.SmasherOption, float>(
-                    ExtremeRoles.Roles.Solo.Impostor.Smasher.SmasherOption.SmashPenaltyKillCool),
+                loader.GetValue<SmasherOption, float>(
+                    SmasherOption.SmashPenaltyKillCool),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount)
             );
         }
@@ -31,7 +32,7 @@ namespace ExtremeRoles.Roles.Impostor.Smasher
                 factory, 1, 14);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Impostor.Smasher.SmasherOption.SmashPenaltyKillCool,
+                SmasherOption.SmashPenaltyKillCool,
                 4.0f, 0.0f, 30f, 0.5f,
                 format: OptionUnit.Second);
         }

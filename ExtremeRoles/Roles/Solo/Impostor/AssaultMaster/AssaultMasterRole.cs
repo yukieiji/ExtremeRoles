@@ -10,7 +10,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.AssaultMaster;
+namespace ExtremeRoles.Roles.Solo.Impostor.AssaultMaster;
 
 public sealed class AssaultMasterRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleReportHook, IRoleUpdate
 {
@@ -53,7 +53,7 @@ public sealed class AssaultMasterRole : SingleRoleBase, IRoleAutoBuildAbility, I
 
     private float defaultKillCool;
 
-    public AssaultMaster() : base(
+    public AssaultMasterRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.AssaultMaster),
         true, false, true, true)
     { }

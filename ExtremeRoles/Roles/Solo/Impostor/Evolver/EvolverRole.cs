@@ -9,7 +9,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.Evolver;
+namespace ExtremeRoles.Roles.Solo.Impostor.Evolver;
 
 public sealed class EvolverRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -47,7 +47,7 @@ public sealed class EvolverRole : SingleRoleBase, IRoleAutoBuildAbility
     }
     private ExtremeAbilityButton evolveButton;
 
-    public Evolver() : base(
+    public EvolverRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Evolver),
         true, false, true, true)
     {

@@ -2,8 +2,9 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using static ExtremeRoles.Roles.Solo.Impostor.Faker.FakerRole;
 
-namespace ExtremeRoles.Roles.Impostor.Faker
+namespace ExtremeRoles.Roles.Solo.Impostor.Faker
 {
     public readonly record struct FakerSpecificOption(
         bool SeeDummyMerlin,
@@ -15,8 +16,8 @@ namespace ExtremeRoles.Roles.Impostor.Faker
         public FakerSpecificOption Load(IOptionLoader loader)
         {
             return new FakerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Impostor.Faker.Option, bool>(
-                    ExtremeRoles.Roles.Solo.Impostor.Faker.Option.SeeDummyMerlin),
+                loader.GetValue<Option, bool>(
+                    Option.SeeDummyMerlin),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
         }
@@ -29,7 +30,7 @@ namespace ExtremeRoles.Roles.Impostor.Faker
             IRoleAbility.CreateCommonAbilityOption(
                 factory);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Impostor.Faker.Option.SeeDummyMerlin,
+                Option.SeeDummyMerlin,
                 true);
         }
     }

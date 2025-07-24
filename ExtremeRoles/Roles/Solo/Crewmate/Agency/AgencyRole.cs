@@ -16,7 +16,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Agency;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Agency;
 
 public sealed class AgencyRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
@@ -52,7 +52,7 @@ public sealed class AgencyRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
     private float takeTaskRange;
     private ExtremeAbilityButton takeTaskButton;
 
-    public Agency() : base(
+    public AgencyRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Agency,
 			ColorPalette.AgencyYellowGreen),

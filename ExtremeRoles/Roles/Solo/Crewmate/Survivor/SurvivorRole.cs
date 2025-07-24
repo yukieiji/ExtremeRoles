@@ -14,7 +14,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.GameResult;
 
-namespace ExtremeRoles.Roles.Crewmate.Survivor;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Survivor;
 
 public sealed class SurvivorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPlayerModifier
 {
@@ -49,7 +49,7 @@ public sealed class SurvivorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleW
 
     private bool isNoWinSurvivorAssignGhostRole;
 
-    public Survivor() : base(
+    public SurvivorRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Survivor,
 			ColorPalette.SurvivorYellow),

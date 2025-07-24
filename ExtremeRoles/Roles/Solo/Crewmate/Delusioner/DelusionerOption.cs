@@ -3,8 +3,9 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomOption.Enums;
+using static ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerRole;
 
-namespace ExtremeRoles.Roles.Crewmate.Delusioner
+namespace ExtremeRoles.Roles.Solo.Crewmate.Delusioner
 {
     public readonly record struct DelusionerSpecificOption(
         int AwakeVoteNum,
@@ -24,22 +25,22 @@ namespace ExtremeRoles.Roles.Crewmate.Delusioner
         public DelusionerSpecificOption Load(IOptionLoader loader)
         {
             return new DelusionerSpecificOption(
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.AwakeVoteNum),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.IsOnetimeAwake),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, float>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.Range),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.VoteCoolTimeReduceRate),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, int>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.DeflectDamagePenaltyRate),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.IsIncludeLocalPlayer),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.IsIncludeSpawnPoint),
-                loader.GetValue<ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption, bool>(
-                    ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.EnableCounter),
+                loader.GetValue<DelusionerOption, int>(
+                    DelusionerOption.AwakeVoteNum),
+                loader.GetValue<DelusionerOption, bool>(
+                    DelusionerOption.IsOnetimeAwake),
+                loader.GetValue<DelusionerOption, float>(
+                    DelusionerOption.Range),
+                loader.GetValue<DelusionerOption, int>(
+                    DelusionerOption.VoteCoolTimeReduceRate),
+                loader.GetValue<DelusionerOption, int>(
+                    DelusionerOption.DeflectDamagePenaltyRate),
+                loader.GetValue<DelusionerOption, bool>(
+                    DelusionerOption.IsIncludeLocalPlayer),
+                loader.GetValue<DelusionerOption, bool>(
+                    DelusionerOption.IsIncludeSpawnPoint),
+                loader.GetValue<DelusionerOption, bool>(
+                    DelusionerOption.EnableCounter),
                 loader.GetValue<RoleAbilityCountOption, int>(RoleAbilityCountOption.AbilityUseCount),
                 loader.GetValue<RoleAbilityCommonOption, float>(RoleAbilityCommonOption.AbilityCoolTime)
             );
@@ -51,38 +52,38 @@ namespace ExtremeRoles.Roles.Crewmate.Delusioner
         public void Build(AutoParentSetOptionCategoryFactory factory)
         {
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.AwakeVoteNum,
+                DelusionerOption.AwakeVoteNum,
                 3, 0, 8, 1,
                 format: OptionUnit.VoteNum);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.IsOnetimeAwake,
+                DelusionerOption.IsOnetimeAwake,
                 false);
 
             factory.CreateFloatOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.Range,
+                DelusionerOption.Range,
                 2.5f, 0.0f, 7.5f, 0.1f);
 
             IRoleAbility.CreateAbilityCountOption(
                 factory, 3, 25);
 
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.VoteCoolTimeReduceRate,
+                DelusionerOption.VoteCoolTimeReduceRate,
                 5, 0, 100, 5,
                 format: OptionUnit.Percentage);
             factory.CreateIntOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.DeflectDamagePenaltyRate,
+                DelusionerOption.DeflectDamagePenaltyRate,
                 10, 0, 100, 5,
                 format: OptionUnit.Percentage);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.IsIncludeLocalPlayer,
+                DelusionerOption.IsIncludeLocalPlayer,
                 true);
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.IsIncludeSpawnPoint,
+                DelusionerOption.IsIncludeSpawnPoint,
                 false);
 
             factory.CreateBoolOption(
-                ExtremeRoles.Roles.Solo.Crewmate.Delusioner.DelusionerOption.EnableCounter,
+                DelusionerOption.EnableCounter,
                 false);
         }
     }

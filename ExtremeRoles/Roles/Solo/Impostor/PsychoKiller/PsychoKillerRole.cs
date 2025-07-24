@@ -11,7 +11,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.PsychoKiller;
+namespace ExtremeRoles.Roles.Solo.Impostor.PsychoKiller;
 
 public sealed class PsychoKillerRole :
 	SingleRoleBase,
@@ -49,7 +49,7 @@ public sealed class PsychoKillerRole :
 		SelfKillTimerModRate,
 	}
 
-    public PsychoKiller() : base(
+    public PsychoKillerRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.PsychoKiller),
         true, false, true, true)
     {}

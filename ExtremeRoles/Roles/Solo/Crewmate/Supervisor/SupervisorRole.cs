@@ -11,7 +11,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Supervisor;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Supervisor;
 
 public sealed class SupervisorRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
@@ -47,7 +47,7 @@ public sealed class SupervisorRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
     private ExtremeAbilityButton adminButton;
     private TMPro.TextMeshPro chargeTime;
 
-    public Supervisor() : base(
+    public SupervisorRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Supervisor,
 			ColorPalette.SupervisorLime),

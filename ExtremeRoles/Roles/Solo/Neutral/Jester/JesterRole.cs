@@ -11,7 +11,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Patches.Button;
 
-namespace ExtremeRoles.Roles.Neutral.Jester;
+namespace ExtremeRoles.Roles.Solo.Neutral.Jester;
 
 public sealed class JesterRole : SingleRoleBase, IRoleAutoBuildAbility
 {

@@ -16,7 +16,7 @@ using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 
-namespace ExtremeRoles.Roles.Impostor.Raider;
+namespace ExtremeRoles.Roles.Solo.Impostor.Raider;
 
 #nullable enable
 
@@ -220,7 +220,7 @@ public sealed class RaiderRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 		}
 	}
 
-    public Raider() : base(
+    public RaiderRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Raider),
         true, false, true, true)
     { }

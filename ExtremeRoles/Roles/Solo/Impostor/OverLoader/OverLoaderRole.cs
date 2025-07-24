@@ -14,7 +14,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.Event;
 
 
-namespace ExtremeRoles.Roles.Impostor.OverLoader;
+namespace ExtremeRoles.Roles.Solo.Impostor.OverLoader;
 
 public sealed class OverLoaderRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
 {
@@ -56,7 +56,7 @@ public sealed class OverLoaderRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
     public ExtremeAbilityButton Button { get; set; }
 
 
-    public OverLoader() : base(
+    public OverLoaderRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.OverLoader),
         true, false, true, true)
     {

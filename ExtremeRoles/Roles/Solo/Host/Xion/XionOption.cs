@@ -2,7 +2,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Host.Xion
+namespace ExtremeRoles.Roles.Solo.Host.Xion
 {
     public readonly record struct XionSpecificOption : IRoleSpecificOption;
 

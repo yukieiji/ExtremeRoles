@@ -14,7 +14,7 @@ using ExtremeRoles.Resources;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Crewmate.Summoner;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Summoner;
 
 public sealed class SummonerRole :
     SingleRoleBase,
@@ -48,7 +48,7 @@ public sealed class SummonerRole :
 
     private float range;
 
-    public Summoner() : base(
+    public SummonerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Summoner,
 			ColorPalette.SummonerToukoushoku),

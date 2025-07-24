@@ -19,7 +19,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Crewmate.Moderator;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Moderator;
 
 public sealed class ModeratorRole :
 	SingleRoleBase,
@@ -52,7 +52,7 @@ public sealed class ModeratorRole :
 	private float awakeTaskGage;
 	private bool awakeHasOtherVision;
 
-	public Moderator() : base(
+	public ModeratorRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Moderator,
 			ColorPalette.ModeratorByakuroku),

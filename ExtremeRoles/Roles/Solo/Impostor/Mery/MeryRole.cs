@@ -22,7 +22,7 @@ using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.CustomOption.Factory;
 using ExtremeRoles.Module.SystemType;
 
-namespace ExtremeRoles.Roles.Impostor.Mery;
+namespace ExtremeRoles.Roles.Solo.Impostor.Mery;
 
 public sealed class MeryRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -191,7 +191,7 @@ public sealed class MeryRole : SingleRoleBase, IRoleAutoBuildAbility
 
 	private const CustomVent.Type meryVentType = CustomVent.Type.Mery;
 
-    public Mery() : base(
+    public MeryRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Mery),
         true, false, true, true)
     { }

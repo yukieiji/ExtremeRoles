@@ -24,7 +24,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Carpenter;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Carpenter;
 
 public sealed class CarpenterRole : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
 {
@@ -226,7 +226,7 @@ public sealed class CarpenterRole : SingleRoleBase, IRoleAbility, IRoleAwake<Rol
     private bool awakeHasOtherVision;
 
     private static int cameraNum = 0;
-    public Carpenter() : base(
+    public CarpenterRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Carpenter,
 			ColorPalette.CarpenterBrown),

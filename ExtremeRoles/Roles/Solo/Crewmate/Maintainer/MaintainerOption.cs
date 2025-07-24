@@ -3,7 +3,7 @@ using ExtremeRoles.Module.CustomOption.Interfaces;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-namespace ExtremeRoles.Roles.Crewmate.Maintainer
+namespace ExtremeRoles.Roles.Solo.Crewmate.Maintainer
 {
     public readonly record struct MaintainerSpecificOption(
         int AbilityUseCount

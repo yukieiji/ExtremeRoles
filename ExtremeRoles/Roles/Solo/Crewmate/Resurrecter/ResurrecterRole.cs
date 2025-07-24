@@ -18,7 +18,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Resurrecter;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Resurrecter;
 
 public sealed class ResurrecterRole :
     SingleRoleBase,
@@ -86,7 +86,7 @@ public sealed class ResurrecterRole :
 
     private static SpriteRenderer flash;
 
-    public Resurrecter() : base(
+    public ResurrecterRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Resurrecter,
 			ColorPalette.ResurrecterBlue),

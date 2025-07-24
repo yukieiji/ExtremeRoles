@@ -21,7 +21,7 @@ using BepInEx.Unity.IL2CPP.Utils;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Impostor.Glitch;
+namespace ExtremeRoles.Roles.Solo.Impostor.Glitch;
 
 public sealed class GlitchRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -45,7 +45,7 @@ public sealed class GlitchRole : SingleRoleBase, IRoleAutoBuildAbility
 
 	private SystemConsoleType console = SystemConsoleType.EmergencyButton;
 
-	public Glitch() : base(
+	public GlitchRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.Glitch),
 		true, false, true, true)
 	{ }

@@ -17,7 +17,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Neutral.Artist;
+namespace ExtremeRoles.Roles.Solo.Neutral.Artist;
 
 public sealed class ArtistRole :
 	SingleRoleBase,

@@ -18,7 +18,7 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.CurseMaker;
+namespace ExtremeRoles.Roles.Solo.Crewmate.CurseMaker;
 
 public sealed class CurseMakerRole :
     SingleRoleBase,
@@ -144,7 +144,7 @@ public sealed class CurseMakerRole :
     }
     private ExtremeAbilityButton curseButton;
 
-    public CurseMaker() : base(
+    public CurseMakerRole() : base(
         RoleCore.BuildCrewmate(
 			ExtremeRoleId.CurseMaker,
 			ColorPalette.CurseMakerViolet),

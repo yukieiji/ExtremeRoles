@@ -17,7 +17,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Impostor.SlaveDriver;
+namespace ExtremeRoles.Roles.Solo.Impostor.SlaveDriver;
 
 public sealed class SlaveDriverRole :
     SingleRoleBase,
@@ -54,7 +54,7 @@ public sealed class SlaveDriverRole :
 		RevartTaskNum
     }
 
-    public SlaveDriver() : base(
+    public SlaveDriverRole() : base(
 		RoleCore.BuildImpostor(ExtremeRoleId.SlaveDriver),
         true, false, true, true)
     { }

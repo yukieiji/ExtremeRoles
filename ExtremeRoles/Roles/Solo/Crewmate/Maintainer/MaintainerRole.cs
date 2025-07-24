@@ -13,7 +13,7 @@ using ExtremeRoles.Module.Ability;
 
 using ExtremeRoles.Module.CustomOption.Factory;
 
-namespace ExtremeRoles.Roles.Crewmate.Maintainer;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Maintainer;
 
 public sealed class MaintainerRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -28,7 +28,7 @@ public sealed class MaintainerRole : SingleRoleBase, IRoleAutoBuildAbility
 
     private ExtremeAbilityButton maintenanceButton;
 
-    public Maintainer() : base(
+    public MaintainerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Maintainer,
 			ColorPalette.MaintainerBlue),

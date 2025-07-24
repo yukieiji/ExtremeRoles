@@ -24,7 +24,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Crewmate.Delusioner;
+namespace ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 
 public sealed class DelusionerRole :
     SingleRoleBase,
@@ -82,7 +82,7 @@ public sealed class DelusionerRole :
 	private DelusionerCounterSystem? system = null;
 
 
-    public Delusioner() : base(
+    public DelusionerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Delusioner,
 			ColorPalette.DelusionerPink),
