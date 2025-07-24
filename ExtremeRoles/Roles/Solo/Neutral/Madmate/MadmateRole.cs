@@ -66,7 +66,7 @@ public sealed class MadmateRole :
     public static void ToFakeImpostor(byte playerId)
     {
 
-        Madmate madmate = ExtremeRoleManager.GetSafeCastedRole<Madmate>(playerId);
+        MadmateRole madmate = ExtremeRoleManager.GetSafeCastedRole<MadmateRole>(playerId);
         if (madmate == null) { return; }
 
         madmate.FakeImposter = true;

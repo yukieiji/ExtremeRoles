@@ -178,7 +178,7 @@ public sealed class TeleporterRole :
 
     public static void SetPortal(byte teleporterPlayerId, Vector2 pos)
     {
-        Teleporter teleporter = ExtremeRoleManager.GetSafeCastedRole<Teleporter>(
+        TeleporterRole teleporter = ExtremeRoleManager.GetSafeCastedRole<TeleporterRole>(
             teleporterPlayerId);
 
         GameObject obj = new GameObject("portal");

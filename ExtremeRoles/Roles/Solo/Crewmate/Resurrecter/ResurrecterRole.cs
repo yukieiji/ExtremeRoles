@@ -101,7 +101,7 @@ public sealed class ResurrecterRole :
         switch (ops)
         {
             case ResurrecterRpcOps.UseResurrect:
-                Resurrecter resurrecter = ExtremeRoleManager.GetSafeCastedRole<Resurrecter>(
+                ResurrecterRole resurrecter = ExtremeRoleManager.GetSafeCastedRole<ResurrecterRole>(
                     resurrecterPlayerId);
                 if (resurrecter == null) { return; }
                 UseResurrect(resurrecter);

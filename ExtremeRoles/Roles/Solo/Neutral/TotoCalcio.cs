@@ -60,7 +60,7 @@ public sealed class Totocalcio : SingleRoleBase, IRoleAutoBuildAbility, IRoleWin
     public static void SetBetTarget(
         byte rolePlayerId, byte betTargetPlayerId)
     {
-        var totocalcio =  ExtremeRoleManager.GetSafeCastedRole<Totocalcio>(rolePlayerId);
+        var totocalcio =  ExtremeRoleManager.GetSafeCastedRole<TotoCalcio>(rolePlayerId);
 		var target = GameData.Instance.GetPlayerById(betTargetPlayerId);
         if (totocalcio != null &&
 			target != null)

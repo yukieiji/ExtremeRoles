@@ -137,7 +137,7 @@ public sealed class HypnotistRole :
 	public static void Ability(ref MessageReader reader)
     {
         byte rolePlayerId = reader.ReadByte();
-        Hypnotist? role = ExtremeRoleManager.GetSafeCastedRole<Hypnotist>(rolePlayerId);
+        HypnotistRole? role = ExtremeRoleManager.GetSafeCastedRole<HypnotistRole>(rolePlayerId);
         RpcOps ops = (RpcOps)reader.ReadByte();
         switch (ops)
         {
@@ -166,7 +166,7 @@ public sealed class HypnotistRole :
         }
     }
 
-    public static void UpdateAllDollKillButtonState(Hypnotist role)
+    public static void UpdateAllDollKillButtonState(HypnotistRole role)
     {
         PlayerControl localPlayer = PlayerControl.LocalPlayer;
         float optionKillCool = Player.DefaultKillCoolTime;
@@ -191,7 +191,7 @@ public sealed class HypnotistRole :
     }
 
     public static void FeatAllDollMapModuleAccess(
-        Hypnotist role, SystemConsoleType console)
+        HypnotistRole role, SystemConsoleType console)
     {
         Logging.Debug($"FeatAccess:{console}");
         foreach (byte dollPlayerId in role.doll)
@@ -205,7 +205,7 @@ public sealed class HypnotistRole :
     }
 
     public static void UnlockAllDollCrakingAbility(
-        Hypnotist role, SystemConsoleType unlockConsole)
+        HypnotistRole role, SystemConsoleType unlockConsole)
     {
         Logging.Debug($"unlock:{unlockConsole}");
         foreach (byte dollPlayerId in role.doll)
@@ -219,7 +219,7 @@ public sealed class HypnotistRole :
     }
 
     private static void targetToDoll(
-        Hypnotist role,
+        HypnotistRole role,
         byte rolePlayerId,
         byte targetPlayerId)
     {
@@ -243,7 +243,7 @@ public sealed class HypnotistRole :
     }
 
     private static void updateDoll(
-        Hypnotist role,
+        HypnotistRole role,
         ref MessageReader reader)
     {
         AbilityModuleType type = (AbilityModuleType)reader.ReadByte();
@@ -265,7 +265,7 @@ public sealed class HypnotistRole :
         }
     }
 
-    private static void resetDollKillButton(Hypnotist role)
+    private static void resetDollKillButton(HypnotistRole role)
     {
         foreach (byte dollPlayerId in role.doll)
         {
@@ -946,7 +946,7 @@ public sealed class Doll :
     public Doll(
         byte dollPlayerId,
         byte hypnotistPlayerId,
-        Hypnotist parent) : base(
+        HypnotistRole parent) : base(
 			RoleCore.BuildNeutral(
 				ExtremeRoleId.Doll,
 				Palette.ImpostorRed),

@@ -147,7 +147,7 @@ public sealed class AliceRole :
         byte callerId, byte targetPlayerId, List<int> addTaskId)
     {
 
-        if (!ExtremeRoleManager.TryGetSafeCastedRole<Alice>(callerId, out var alice))
+        if (!ExtremeRoleManager.TryGetSafeCastedRole<AliceRole>(callerId, out var alice))
 		{
 			return;
 		}

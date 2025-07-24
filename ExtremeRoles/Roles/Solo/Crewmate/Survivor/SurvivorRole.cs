@@ -58,7 +58,7 @@ public sealed class SurvivorRole : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleW
 
     public static void DeadWin(byte rolePlayerId)
     {
-        Survivor survivor = ExtremeRoleManager.GetSafeCastedRole<Survivor>(rolePlayerId);
+        SurvivorRole survivor = ExtremeRoleManager.GetSafeCastedRole<SurvivorRole>(rolePlayerId);
         if (survivor != null)
         {
             survivor.isDeadWin = true;

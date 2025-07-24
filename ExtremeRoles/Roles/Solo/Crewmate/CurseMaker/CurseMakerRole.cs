@@ -162,7 +162,7 @@ public sealed class CurseMakerRole :
         if (player == null) { return; }
         if (player.Data.IsDead || player.Data.Disconnected) { return; }
 
-        var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
+        var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMakerRole>(
             rolePlayerId);
         if (curseMaker == null) { return; }
 

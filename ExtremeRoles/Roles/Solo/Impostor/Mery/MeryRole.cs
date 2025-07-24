@@ -219,7 +219,7 @@ public sealed class MeryRole : SingleRoleBase, IRoleAutoBuildAbility
 
     private static void setCamp(byte callerId, Vector2 setPos)
     {
-        var mery = ExtremeRoleManager.GetSafeCastedRole<Mery>(callerId);
+        var mery = ExtremeRoleManager.GetSafeCastedRole<MeryRole>(callerId);
         if (mery == null ||
 			!ExtremeSystemTypeManager.Instance.TryGet<HostUpdateSystem>(
 				ExtremeSystemType.HostUpdateSystem, out var system))

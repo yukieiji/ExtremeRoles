@@ -65,7 +65,7 @@ public sealed class OverLoaderRole : SingleRoleBase, IRoleAutoBuildAbility, IRol
 
     public static void SwitchAbility(byte rolePlayerId, bool activate)
     {
-        var overLoader = ExtremeRoleManager.GetSafeCastedRole<OverLoader>(rolePlayerId);
+        var overLoader = ExtremeRoleManager.GetSafeCastedRole<OverLoaderRole>(rolePlayerId);
         if (overLoader is null)
         {
 			return;

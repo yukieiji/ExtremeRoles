@@ -59,7 +59,7 @@ public sealed class BaitRole : SingleRoleBase, IRoleAwake<RoleTypes>
 
 	public static void Awake(byte playerId)
 	{
-		var bait = ExtremeRoleManager.GetSafeCastedRole<Bait>(playerId);
+		var bait = ExtremeRoleManager.GetSafeCastedRole<BaitRole>(playerId);
 		if (bait == null) { return; }
 		bait.awakeRole = true;
 	}

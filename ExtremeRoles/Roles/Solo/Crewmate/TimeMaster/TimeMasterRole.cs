@@ -99,7 +99,7 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility, IKil
     {
 
         // Enable rewind
-        var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+        var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMasterRole>(rolePlayerId);
         if (timeMaster == null) { yield break; }
         timeMaster.isRewindTime = true;
 

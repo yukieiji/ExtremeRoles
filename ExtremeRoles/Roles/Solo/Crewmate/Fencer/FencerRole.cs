@@ -56,7 +56,7 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
         byte rolePlayerId = reader.ReadByte();
         FencerAbility abilityType = (FencerAbility)reader.ReadByte();
 
-        var fencer = ExtremeRoleManager.GetSafeCastedRole<Fencer>(rolePlayerId);
+        var fencer = ExtremeRoleManager.GetSafeCastedRole<FencerRole>(rolePlayerId);
         if (fencer == null) { return; }
 
         switch (abilityType)

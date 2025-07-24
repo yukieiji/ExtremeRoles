@@ -76,7 +76,7 @@ public sealed class CaptainRole :
         AbilityType type = (AbilityType)reader.ReadByte();
         byte rolePlayerId = reader.ReadByte();
 
-        Captain captain = ExtremeRoleManager.GetSafeCastedRole<Captain>(rolePlayerId);
+        CaptainRole captain = ExtremeRoleManager.GetSafeCastedRole<CaptainRole>(rolePlayerId);
 
         switch (type)
         {

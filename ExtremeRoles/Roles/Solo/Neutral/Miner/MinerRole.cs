@@ -85,7 +85,7 @@ public sealed class MinerRole :
 	{
 		MinerRpc rpc = (MinerRpc)reader.ReadByte();
 		byte playerId = reader.ReadByte();
-		Miner? miner = ExtremeRoleManager.GetSafeCastedRole<Miner>(playerId);
+		MinerRole? miner = ExtremeRoleManager.GetSafeCastedRole<MinerRole>(playerId);
 		int id = reader.ReadInt32();
 		switch (rpc)
 		{
@@ -106,7 +106,7 @@ public sealed class MinerRole :
 		}
 	}
 
-	private static void setMine(Miner miner, Vector2 pos, int id, bool isRolePlayer=false)
+	private static void setMine(MinerRole miner, Vector2 pos, int id, bool isRolePlayer=false)
 	{
 		GameObject obj = new GameObject($"Miner:{miner.GameControlId}_Mine:{id}");
 		if (CompatModManager.Instance.TryGetModMap(out var modMap))
@@ -120,14 +120,14 @@ public sealed class MinerRole :
 		miner.noneActiveMine.SetParameter(isRolePlayer, miner.killRange, in miner.parameter);
 	}
 
-	private static void activateMine(Miner miner, int id)
+	private static void activateMine(MinerRole miner, int id)
 	{
 		if (miner.noneActiveMine == null) { return; }
 		miner.noneActiveMine.SwithAcitve();
 		miner.mines.Add(id, miner.noneActiveMine);
 	}
 
-	private static void removeMine(Miner miner, int id)
+	private static void removeMine(MinerRole miner, int id)
 	{
 		if (!miner.mines.TryGetValue(id, out var mine))
 		{
