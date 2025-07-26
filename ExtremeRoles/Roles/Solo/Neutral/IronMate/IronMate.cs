@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using UnityEngine;
 
@@ -46,7 +46,7 @@ public sealed class IronMateRole :
 	private float deadBodyShowTime;
     public override IStatusModel? Status => status;
 
-    public IronMate(): base(
+    public IronMateRole(): base(
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.IronMate,
 			ColorPalette.IronMateAluminium),

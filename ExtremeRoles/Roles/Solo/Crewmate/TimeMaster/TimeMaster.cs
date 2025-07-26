@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
@@ -35,7 +35,7 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
 	public override IStatusModel? Status => this.status;
 	private TimeMasterStatusModel? status;
 
-    public TimeMaster() : base(
+    public TimeMasterRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.TimeMaster,
 			ColorPalette.TimeMasterBlue),

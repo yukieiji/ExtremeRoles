@@ -81,7 +81,7 @@ public sealed class DelusionerRole :
     private int voteCoolTimeReduceRate;
 
 
-    public Delusioner() : base(
+    public DelusionerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Delusioner,
 			ColorPalette.DelusionerPink),

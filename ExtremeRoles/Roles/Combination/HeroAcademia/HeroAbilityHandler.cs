@@ -10,7 +10,7 @@ public class HeroAbilityHandler(HeroStatusModel status) : IAbility, IKilledFrom
     public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         if (ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromRole) &&
-			fromRole.Id is ExtremeRoleId.Villain)
+			fromRole.Core.Id is ExtremeRoleId.Villain)
         {
             HeroAcademiaRole.RpcDrawHeroAndVillan(rolePlayer, fromPlayer);
             return false;

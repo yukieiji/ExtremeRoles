@@ -1,14 +1,16 @@
-using HarmonyLib;
-
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Ability;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
-using ExtremeRoles.Roles.Combination.HeroAcademia;
-using ExtremeRoles.Roles.API.Interface.Ability;
+using HarmonyLib;
+using static ExtremeRoles.Roles.Solo.Crewmate.Jailer;
+
 
 #nullable enable
 
@@ -82,9 +84,7 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
-		else if (
-			targetRole.AbilityClass is IKilledFrom targetKillFromCheckRole &&
-			!targetKillFromCheckRole.TryKilledFrom(target, killer))
+		else if (isPreventKillFrom(targetRole, killer, target))
 		{
 			return KillResult.BlockedToTargetSingleRoleCondition;
 		}
@@ -95,8 +95,7 @@ public static class KillButtonDoClickPatch
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
 		else if (targetRole is MultiAssignRoleBase targetMultiAssignRole &&
-			targetMultiAssignRole.AnotherRole?.AbilityClass is IKilledFrom targetMultiKilledFromCheckRole &&
-			!targetMultiKilledFromCheckRole.TryKilledFrom(target, killer))
+			isPreventKillFrom(targetMultiAssignRole.AnotherRole, killer, target))
 		{
 			return KillResult.BlockedToTargetOtherRoleCondition;
 		}
@@ -181,6 +180,11 @@ public static class KillButtonDoClickPatch
             isAnime ? byte.MaxValue : byte.MinValue);
         instance.SetTarget(null);
     }
+
+	private static bool isPreventKillFrom(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
+		=>
+			role?.AbilityClass is IKilledFrom targetKillFromCheckRole &&
+			!targetKillFromCheckRole.TryKilledFrom(target, killer);
 
 	private static bool isPreventKillTo(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
 		=> 

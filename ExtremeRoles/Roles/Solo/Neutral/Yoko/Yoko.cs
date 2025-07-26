@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -65,7 +65,7 @@ public sealed class YokoRole :
 
 	public ExtremeAbilityButton? Button { get; set; }
 
-	public Yoko() : base(
+	public YokoRole() : base(
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.Yoko,
 			ColorPalette.YokoShion),
