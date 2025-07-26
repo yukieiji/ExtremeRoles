@@ -513,7 +513,7 @@ public static class RPCOperator
 	public static void HeroHeroAcademiaCommand(
         ref MessageReader reader)
     {
-        HeroAcademia.RpcCommand(
+        HeroAcademiaRole.RpcCommand(
             ref reader);
     }
 
@@ -541,7 +541,7 @@ public static class RPCOperator
 
     public static void TimeMasterAbility(ref MessageReader reader)
     {
-        Roles.Solo.Crewmate.TimeMaster.Ability(ref reader);
+        Roles.Solo.Crewmate.TimeMaster.TimeMasterRole.Ability(ref reader);
     }
 
     public static void AgencyTakeTask(
@@ -552,7 +552,7 @@ public static class RPCOperator
     }
     public static void FencerAbility(ref MessageReader reader)
     {
-        Roles.Solo.Crewmate.Fencer.Ability(ref reader);
+        Roles.Solo.Crewmate.Fencer.FencerRole.Ability(ref reader);
     }
 
     public static void CuresMakerCurseKillCool(

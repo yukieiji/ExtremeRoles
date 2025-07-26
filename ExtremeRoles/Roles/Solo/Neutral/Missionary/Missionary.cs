@@ -237,15 +237,15 @@ public sealed class MissionaryRole :
 		if (this.targetPlayer == null) { return false; }
 
 		byte playerId = this.targetPlayer.PlayerId;
-        var assassin = ExtremeRoleManager.GameRole[playerId] as Assassin;
 
-		if (assassin != null)
+		if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerId, out var assassin) &&
+			assassin.Status is AssassinStatusModel status)
 		{
-			if (!assassin.CanKilled)
+			if (!status.CanKilled)
 			{
 				return false;
 			}
-			if (!assassin.CanKilledFromNeutral)
+			if (!status.CanKilledFromNeutral)
 			{
 				return false;
 			}

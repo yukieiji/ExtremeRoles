@@ -80,8 +80,6 @@ public sealed class DelusionerRole :
 
     private int voteCoolTimeReduceRate;
 
-	private AbilityState prevState;
-
 
     public Delusioner() : base(
 		RoleCore.BuildCrewmate(
@@ -352,8 +350,6 @@ public sealed class DelusionerRole :
 
 		this.ability = new DelusionerAbilityHandler(system, status, this);
 		AbilityClass = this.ability;
-
-		prevState = AbilityState.CoolDown;
 
         status.CurCoolTime = defaultCoolTime;
         isAwakeRole = awakeVoteCount == 0;

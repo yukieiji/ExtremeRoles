@@ -1,4 +1,3 @@
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.Yoko;

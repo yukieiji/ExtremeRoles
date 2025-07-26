@@ -87,7 +87,7 @@ public sealed class DelusionerCounterSystem : IExtremeSystemType
 					{
 						return;
 					}
-					var delu = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Delusioner>();
+					var delu = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<DelusionerRole>();
 					if (delu.Button?.Behavior is ICountBehavior countBehavior)
 					{
 						int newCount = Math.Clamp(
