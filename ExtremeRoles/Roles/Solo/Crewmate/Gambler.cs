@@ -73,23 +73,20 @@ public sealed class Gambler :
             GamblerOption.NormalVoteRate,
             50, 0, 90, 5,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+		factory.CreateIntOption(
             GamblerOption.MinVoteNum,
-            0, -100, 0, 1, parentOps,
+            0, -100, 0, 1,
             format: OptionUnit.Percentage);
-        CreateIntOption(
+		factory.CreateIntOption(
             GamblerOption.MaxVoteNum,
-            2, 2, 100, 1, parentOps,
+            2, 2, 100, 1,
             format: OptionUnit.Percentage);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.normalVoteRate = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(GamblerOption.NormalVoteRate));
-        this.minVoteNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(GamblerOption.MinVoteNum));
-        this.maxVoteNum = OptionManager.Instance.GetValue<int>(
-            GetRoleOptionId(GamblerOption.MaxVoteNum));
+        this.normalVoteRate = this.Loader.GetValue<GamblerOption, int>(GamblerOption.NormalVoteRate);
+        this.minVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MinVoteNum);
+        this.maxVoteNum = this.Loader.GetValue<GamblerOption, int>(GamblerOption.MaxVoteNum);
     }
 }
