@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using HarmonyLib;
 using AmongUs.GameOptions;
@@ -51,9 +51,8 @@ public static class RoleManagerAssignRoleOnDeathPatch
             }
             return false;
         }
-        if (GhostRoleSpawnDataManager.Instance.IsCombRole(role.Id)) { return false; }
 
-        return true;
+        return !GhostRoleSpawnDataManager.Instance.IsCombRole(role.Core.Id);
     }
 
     public static void Postfix([HarmonyArgument(0)] PlayerControl player)

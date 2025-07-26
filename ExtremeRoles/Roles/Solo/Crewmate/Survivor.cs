@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -50,10 +50,9 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
     private bool isNoWinSurvivorAssignGhostRole;
 
     public Survivor() : base(
-        ExtremeRoleId.Survivor,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Survivor.ToString(),
-        ColorPalette.SurvivorYellow,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Survivor,
+			ColorPalette.SurvivorYellow),
         false, true, false, false)
     { }
 
@@ -134,7 +133,7 @@ public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPl
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

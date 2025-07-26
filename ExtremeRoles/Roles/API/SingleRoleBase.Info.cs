@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using ExtremeRoles.Helper;
 
@@ -8,19 +8,20 @@ namespace ExtremeRoles.Roles.API
     {
         public virtual string GetImportantText(bool isContainFakeTask = true)
         {
+			var color = this.Core.Color;
             string baseString = Design.ColoedString(
-                this.NameColor,
+				color,
                 string.Format("{0}: {1}",
                     Design.ColoedString(
-                        this.NameColor,
+					   color,
                         Tr.GetString(this.RoleName)),
                     Tr.GetString(
-                        $"{this.Id}ShortDescription")));
+                        $"{this.Core.Id}ShortDescription")));
 
             if (isContainFakeTask && !this.HasTask)
             {
                 string fakeTaskString = Design.ColoedString(
-                    this.NameColor,
+					color,
                     TranslationController.Instance.GetString(
                         StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
                 baseString = $"{baseString}\r\n{fakeTaskString}";
@@ -30,13 +31,13 @@ namespace ExtremeRoles.Roles.API
         }
 
         public virtual string GetIntroDescription() => Tr.GetString(
-            $"{this.Id}IntroDescription");
+            $"{this.Core.Id}IntroDescription");
 
         public virtual string GetFullDescription() => Tr.GetString(
-           $"{this.Id}FullDescription");
+           $"{this.Core.Id}FullDescription");
 
         public virtual string GetColoredRoleName(bool isTruthName = false) => Design.ColoedString(
-            this.NameColor, Tr.GetString(this.RoleName));
+            this.Core.Color, Tr.GetString(this.RoleName));
         public virtual string GetRoleTag() => string.Empty;
 
         public virtual string GetRolePlayerNameTag(

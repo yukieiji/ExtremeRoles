@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module;
+using ExtremeRoles.Module;
 
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.Roles;
@@ -19,10 +19,9 @@ public sealed class Bakary : SingleRoleBase
     }
 
     public Bakary() : base(
-        ExtremeRoleId.Bakary,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Bakary.ToString(),
-        ColorPalette.BakaryWheatColor,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Bakary,
+			ColorPalette.BakaryWheatColor),
         false, true, false, false)
     { }
 

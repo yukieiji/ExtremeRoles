@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -118,7 +118,7 @@ public sealed class WinnerBuilder : IDisposable
 				logger.LogInfo($"Remove Winner(Reason:Neutral) : {playerName}");
 				this.tempData.Remove(playerInfo);
 			}
-			else if (role.Id is ExtremeRoleId.Xion)
+			else if (role.Core.Id is ExtremeRoleId.Xion)
 			{
 				logger.LogInfo($"Remove Winner(Reason:Xion Player) : {playerName}");
 				this.tempData.Remove(playerInfo);
@@ -205,7 +205,7 @@ public sealed class WinnerBuilder : IDisposable
 		}
 
 		var logger = ExtremeRolesPlugin.Logger;
-		var item = (role.Id, gameControlId);
+		var item = (role.Core.Id, gameControlId);
 
 		if (winRole.Contains(item))
 		{
@@ -380,14 +380,14 @@ public sealed class WinnerBuilder : IDisposable
 				continue;
 			}
 
-			if (role.Id == roleId)
+			if (role.Core.Id == roleId)
 			{
 				addSpecificRoleToSameControlIdPlayer(role, player);
 			}
 			else if (
 				role is MultiAssignRoleBase multiAssignRole &&
 				multiAssignRole.AnotherRole is not null &&
-				multiAssignRole.AnotherRole.Id == roleId)
+				multiAssignRole.AnotherRole.Core.Id == roleId)
 			{
 				addSpecificRoleToSameControlIdPlayer(multiAssignRole.AnotherRole, player);
 			}
@@ -434,17 +434,17 @@ public sealed class WinnerBuilder : IDisposable
 				continue;
 			}
 
+			var id = role.Core.Id;
+			logger.LogInfo($"checking.... Player:{player.PlayerName}, Role:{id}");
 
-			logger.LogInfo($"checking.... Player:{player.PlayerName}, Role:{role.Id}");
-
-			if (roles.Contains(role.Id))
+			if (roles.Contains(id))
 			{
 				addSpecificNeutralRoleToSameControlIdPlayer(role, player);
 			}
 			else if (
 				role is MultiAssignRoleBase multiAssignRole &&
 				multiAssignRole.AnotherRole is not null &&
-				roles.Contains(multiAssignRole.AnotherRole.Id))
+				roles.Contains(multiAssignRole.AnotherRole.Core.Id))
 			{
 				addSpecificNeutralRoleToSameControlIdPlayer(role, player);
 			}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using HarmonyLib;
 
@@ -174,7 +174,7 @@ public static class ExileControllerBeginePatch
             switch (mode)
             {
                 case ConfirmExileMode.AllTeam:
-                    string team = Tr.GetString(exiledPlayerRole.Team.ToString());
+                    string team = Tr.GetString(exiledPlayerRole.Core.Team.ToString());
                     completeString = option.IsConfirmRole ?
 						Tr.GetString("ExileTextAllTeamWithRole", playerName, team, exiledPlayerRole.GetColoredRoleName()) :
 						Tr.GetString("ExileTextAllTeam", playerName, team);

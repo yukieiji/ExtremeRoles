@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -320,10 +320,9 @@ public sealed class Photographer :
 	public ExtremeAbilityButton Button { get; set; }
 	private PhotoCamera photoCreater;
 	public Photographer() : base(
-        ExtremeRoleId.Photographer,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Photographer.ToString(),
-        ColorPalette.PhotographerVerdeSiena,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Photographer,
+			ColorPalette.PhotographerVerdeSiena),
         false, true, false, false)
     { }
 #pragma warning restore CS8618
@@ -458,7 +457,7 @@ public sealed class Photographer :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

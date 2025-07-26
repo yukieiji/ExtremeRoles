@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,10 +46,7 @@ public sealed class Glitch : SingleRoleBase, IRoleAutoBuildAbility
 	private SystemConsoleType console = SystemConsoleType.EmergencyButton;
 
 	public Glitch() : base(
-		ExtremeRoleId.Glitch,
-		ExtremeRoleType.Impostor,
-		ExtremeRoleId.Glitch.ToString(),
-		Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Glitch),
 		true, false, true, true)
 	{ }
 

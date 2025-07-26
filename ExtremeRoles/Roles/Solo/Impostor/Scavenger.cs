@@ -961,10 +961,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private Ability nextWeapon = Ability.ScavengerNull;
 
 	public Scavenger() : base(
-		ExtremeRoleId.Scavenger,
-		ExtremeRoleType.Impostor,
-		ExtremeRoleId.Scavenger.ToString(),
-		Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Scavenger),
 		true, false, true, true)
 	{ }
 

@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Module.Interface;
@@ -21,7 +21,7 @@ public sealed class AllRoleInfoModel : PanelPageModelBase
 			colorRoleName = role.GetColoredRoleName(true);
 			option = role.Loader.Get(RoleCommonOption.SpawnRate);
 
-			roleFullDesc = Tr.GetString($"{role.Id}FullDescription");
+			roleFullDesc = Tr.GetString($"{role.Core.Id}FullDescription");
 			roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
 			AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));
@@ -37,7 +37,7 @@ public sealed class AllRoleInfoModel : PanelPageModelBase
 				{
 					colorRoleName = role.GetColoredRoleName(true);
 
-					roleFullDesc = Tr.GetString($"{role.Id}FullDescription");
+					roleFullDesc = Tr.GetString($"{role.Core.Id}FullDescription");
 					roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
 					AddPage(new RoleInfo(colorRoleName, roleFullDesc, option));

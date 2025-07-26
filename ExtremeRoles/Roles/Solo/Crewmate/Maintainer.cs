@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Compat;
+using ExtremeRoles.Compat;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
@@ -29,10 +29,9 @@ public sealed class Maintainer : SingleRoleBase, IRoleAutoBuildAbility
     private ExtremeAbilityButton maintenanceButton;
 
     public Maintainer() : base(
-        ExtremeRoleId.Maintainer,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Maintainer.ToString(),
-        ColorPalette.MaintainerBlue,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Maintainer,
+			ColorPalette.MaintainerBlue),
         false, true, false, false)
     { }
 

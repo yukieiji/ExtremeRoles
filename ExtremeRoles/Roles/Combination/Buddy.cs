@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -92,10 +92,9 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
     private SingleRoleBase hiddeRole = null;
 
     public Buddy() : base(
-        ExtremeRoleId.Buddy,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Buddy.ToString(),
-        ColorPalette.BuddyOrange,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Buddy,
+			ColorPalette.BuddyOrange),
         false, true,
         false, false,
         tab: OptionTab.CombinationTab)

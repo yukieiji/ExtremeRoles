@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Collections.Generic;
 
 using ExtremeRoles.GameMode;
@@ -8,10 +8,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Roles.Combination;
 
 using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
 using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
+using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 
 
 #nullable enable
@@ -136,7 +137,7 @@ file sealed class NeutralSeparateTeamBuilder()
 	private void checkMultiAssignedServant(SingleRoleBase role)
 	{
 		if (role is MultiAssignRoleBase multiAssignRole &&
-			multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
+			multiAssignRole.AnotherRole?.Core.Id == ExtremeRoleId.Servant)
 		{
 			addNeutralTeams(NeutralSeparateTeam.Queen);
 		}
@@ -214,8 +215,8 @@ public sealed record PlayerStatistics(
 			}
 
 			SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-			ExtremeRoleType team = role.Team;
-			ExtremeRoleId roleId = role.Id;
+			ExtremeRoleType team = role.Core.Team;
+			ExtremeRoleId roleId = role.Core.Id;
 
 			// クルーのカウントを数える
 			if (role.IsCrewmate())
@@ -259,10 +260,11 @@ public sealed record PlayerStatistics(
 
 					// アサシンがニュートラルを切れない時
 					if (roleId == ExtremeRoleId.Assassin &&
-						role is Assassin assassin)
+						role is Assassin assassin &&
+						assassin.Status is AssassinStatusModel status)
 					{
-						bool canNeutralKill = assassin.CanKilledFromNeutral;
-						if (!canNeutralKill || (canNeutralKill && !assassin.CanKilled))
+						bool canNeutralKill = status.CanKilledFromNeutral;
+						if (!canNeutralKill || (canNeutralKill && !status.CanKilled))
 						{
 							++numAssassinAlive;
 						}
