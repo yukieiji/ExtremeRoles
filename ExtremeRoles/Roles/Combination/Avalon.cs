@@ -31,7 +31,7 @@ public sealed class Avalon : ConstCombinationRoleManagerBase
     }
 }
 
-public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
+public sealed class Assassin : MultiAssignRoleBase
 {
     public enum AssassinOption
     {
@@ -48,39 +48,16 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
     public bool CanSeeRoleBeforeFirstMeeting = false;
     public bool CanSeeVote = false;
 
-    public bool CanKilled { get; private set; } = false;
-    public bool CanKilledFromCrew { get; private set; } = false;
-    public bool CanKilledFromNeutral { get; private set; } = false;
+    private AssassinStatusModel status;
     private bool isDeadForceMeeting = true;
+    public override IStatusModel? Status => status;
 
     public Assassin(
         ) : base(
 			RoleCore.BuildImpostor(ExtremeRoleId.Assassin),
             true, false, true, true,
             tab: OptionTab.CombinationTab)
-    {}
-
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
-        if (!(
-				this.CanKilled &&
-				ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromPlayerRole)
-			))
-		{
-			return false;
-		}
-
-        if (fromPlayerRole.IsNeutral())
-        {
-            return this.CanKilledFromNeutral;
-        }
-        else if (fromPlayerRole.IsCrewmate())
-        {
-            return this.CanKilledFromCrew;
-        }
-
-        return false;
     }
 
     protected override void CreateSpecificOption(
@@ -163,15 +140,15 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
     protected override void RoleSpecificInit()
     {
         var loader = this.Loader;
+        status = new AssassinStatusModel(
+            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilled),
+            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromCrew),
+            loader.GetValue<AssassinOption, bool>(AssassinOption.CanKilledFromNeutral)
+        );
+        AbilityClass = new AssassinAbilityHandler(status);
 
         this.HasTask = loader.GetValue<AssassinOption, bool>(
             AssassinOption.HasTask);
-        this.CanKilled = loader.GetValue<AssassinOption, bool>(
-            AssassinOption.CanKilled);
-        this.CanKilledFromCrew = loader.GetValue<AssassinOption, bool>(
-            AssassinOption.CanKilledFromCrew);
-        this.CanKilledFromNeutral = loader.GetValue<AssassinOption, bool>(
-            AssassinOption.CanKilledFromNeutral);
         this.CanSeeVote = loader.GetValue<AssassinOption, bool>(
             AssassinOption.CanSeeVote);
 
