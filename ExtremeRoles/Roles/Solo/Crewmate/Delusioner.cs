@@ -30,8 +30,7 @@ public sealed class Delusioner :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
-	IRoleVoteModifier,
-	IKilledFrom
+	IRoleVoteModifier
 {
     public int Order => (int)IRoleVoteModifier.ModOrder.DelusionerCheckVote;
 
@@ -45,7 +44,7 @@ public sealed class Delusioner :
 
     public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
-    public ExtremeAbilityButton? Button { get; set; }
+    public ExtremeAbilityButton? Button { get => status.Button; set => status.Button = value; }
 
     public enum DelusionerOption
     {
@@ -62,7 +61,8 @@ public sealed class Delusioner :
     private bool isAwakeRole;
     private bool isOneTimeAwake;
 
-    private float range;
+    private DelusionerStatusModel status;
+    public override IStatusModel? Status => status;
 
     private byte targetPlayerId;
 
@@ -70,16 +70,12 @@ public sealed class Delusioner :
     private int curVoteCount = 0;
 
     private bool includeLocalPlayer;
-    private bool includeSpawnPoint;
 
     private float defaultCoolTime;
-    private float curCoolTime;
 
     private int voteCoolTimeReduceRate;
-    private float deflectDamagePenaltyMod;
 
 	private AbilityState prevState;
-	private DelusionerCounterSystem? system = null;
 
 
     public Delusioner() : base(
@@ -87,7 +83,8 @@ public sealed class Delusioner :
 			ExtremeRoleId.Delusioner,
 			ColorPalette.DelusionerPink),
         false, true, false, false)
-    { }
+    {
+    }
 
     public void CreateAbility()
     {
@@ -277,43 +274,6 @@ public sealed class Delusioner :
         }
     }
 
-	public bool TryKilledFrom(
-		PlayerControl rolePlayer, PlayerControl fromPlayer)
-	{
-		byte rolePlayerId = rolePlayer.PlayerId;
-		if (this.system is null ||
-			!this.system.TryGetCounter(rolePlayerId, out int countNum))
-		{
-			return true;
-		}
-
-		List<PlayerControl> allPlayer = Player.GetAllPlayerInRange(
-			rolePlayer, this, this.range);
-
-		int num = allPlayer.Count;
-		if (allPlayer.Count == 0)
-		{
-			return true;
-		}
-
-		int reduceNum = Mathf.Clamp(allPlayer.Count, 0, countNum);
-		var targets = allPlayer.OrderBy(
-			x => RandomGenerator.Instance.Next())
-			.Take(reduceNum)
-			.Select(x => x.PlayerId)
-			.ToHashSet();
-		foreach (byte target in targets)
-		{
-			this.useAbilityTo(rolePlayer, target, false, targets);
-		}
-
-		this.system.ReduceCounter(rolePlayerId, reduceNum);
-
-		var newTaget = Player.GetClosestPlayerInKillRange(rolePlayer);
-
-		return newTaget != null && newTaget.PlayerId == rolePlayerId;
-	}
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
@@ -357,21 +317,22 @@ public sealed class Delusioner :
     protected override void RoleSpecificInit()
     {
         var loader = this.Loader;
+        status = new DelusionerStatusModel(
+            loader.GetValue<DelusionerOption, float>(DelusionerOption.Range),
+            loader.GetValue<DelusionerOption, bool>(DelusionerOption.IsIncludeSpawnPoint),
+            100f - (loader.GetValue<DelusionerOption, int>(DelusionerOption.DeflectDamagePenaltyRate) / 100f)
+        );
+        AbilityClass = new DelusionerAbilityHandler(status);
+
         this.awakeVoteCount = loader.GetValue<DelusionerOption, int>(
             DelusionerOption.AwakeVoteNum);
         this.isOneTimeAwake = loader.GetValue<DelusionerOption, bool>(
             DelusionerOption.IsOnetimeAwake);
         this.voteCoolTimeReduceRate = loader.GetValue<DelusionerOption, int>(
             DelusionerOption.VoteCoolTimeReduceRate);
-        this.deflectDamagePenaltyMod = 100f - (loader.GetValue<DelusionerOption, int>(
-            DelusionerOption.DeflectDamagePenaltyRate) / 100f);
-        this.range = loader.GetValue<DelusionerOption, float>(
-            DelusionerOption.Range);
 
         this.includeLocalPlayer = loader.GetValue<DelusionerOption, bool>(
             DelusionerOption.IsIncludeLocalPlayer);
-        this.includeSpawnPoint = loader.GetValue<DelusionerOption, bool>(
-            DelusionerOption.IsIncludeSpawnPoint);
 
         this.isOneTimeAwake = this.isOneTimeAwake && this.awakeVoteCount > 0;
         this.defaultCoolTime = loader.GetValue<RoleAbilityCommonOption, float>(
@@ -382,12 +343,12 @@ public sealed class Delusioner :
 		if (loader.GetValue<DelusionerOption, bool>(
 				DelusionerOption.EnableCounter))
 		{
-			this.system = ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(
+			status.system = ExtremeSystemTypeManager.Instance.CreateOrGet<DelusionerCounterSystem>(
 				DelusionerCounterSystem.Type);
 		}
 		this.prevState = AbilityState.CoolDown;
 
-        this.curCoolTime = this.defaultCoolTime;
+        status.curCoolTime = this.defaultCoolTime;
         this.isAwakeRole = this.awakeVoteCount == 0;
 
         this.curVoteCount = 0;
@@ -397,12 +358,6 @@ public sealed class Delusioner :
             this.isOneTimeAwake = false;
         }
     }
-
-	private bool useAbilityTo(
-		in PlayerControl rolePlayer,
-		in byte teloportTarget,
-		in bool includeRolePlayer,
-		in IReadOnlySet<byte> ignores)
 	{
 		List<Vector2> randomPos = new List<Vector2>(
 			PlayerControl.AllPlayerControls.Count);

@@ -24,8 +24,7 @@ public sealed class IronMate :
 	IRoleAwake<RoleTypes>,
 	IRoleMurderPlayerHook,
 	IRoleWinPlayerModifier,
-	IDeadBodyReportOverride,
-	IKilledFrom
+	IDeadBodyReportOverride
 {
     public enum Option
     {
@@ -40,17 +39,19 @@ public sealed class IronMate :
 	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 	public bool CanReport => false;
 
-	private IronMateGurdSystem? system;
+	private IronMateStatusModel status;
 
 	private float playerShowTime;
 	private float deadBodyShowTime;
+    public override IStatusModel? Status => status;
 
     public IronMate(): base(
 		RoleCore.BuildNeutral(
 			ExtremeRoleId.IronMate,
 			ColorPalette.IronMateAluminium),
         false, true, false, false)
-    { }
+    {
+    }
 
 	public override string GetColoredRoleName(bool isTruthColor = false)
 	{
@@ -101,34 +102,6 @@ public sealed class IronMate :
 		}
 	}
 
-	public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
-	{
-		if (this.system is null)
-		{
-			return true;
-		}
-
-		byte playerId = rolePlayer.PlayerId;
-
-		if (!this.system.IsContains(playerId))
-		{
-			this.system.SetUp(playerId, this.Loader.GetValue<Option, int>(Option.BlockNum));
-		}
-
-		if (!this.system.TryGetShield(playerId, out int num))
-		{
-			return true;
-		}
-
-		if (fromPlayer.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-		{
-			fromPlayer.SetKillTimer(10.0f);
-			Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.85f);
-		}
-		this.system.RpcUpdateNum(playerId, num - 1);
-		return false;
-	}
-
 	protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
@@ -159,8 +132,10 @@ public sealed class IronMate :
     protected override void RoleSpecificInit()
     {
         var loader = this.Loader;
+        status = new IronMateStatusModel(loader.GetValue<Option, int>(Option.BlockNum));
+        AbilityClass = new IronMateAbilityHandler(status);
 
-		this.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+		status.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.IronMateGuard,
 			() => new IronMateGurdSystem(
 				loader.GetValue<Option, float>(Option.SlowMod),
