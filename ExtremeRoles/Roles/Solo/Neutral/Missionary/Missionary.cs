@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles.API.Interface.Status;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 #nullable enable
 
@@ -236,7 +237,7 @@ public sealed class MissionaryRole :
 		if (this.targetPlayer == null) { return false; }
 
 		byte playerId = this.targetPlayer.PlayerId;
-        var assassin = ExtremeRoleManager.GameRole[playerId] as Combination.Assassin;
+        var assassin = ExtremeRoleManager.GameRole[playerId] as Assassin;
 
 		if (assassin != null)
 		{

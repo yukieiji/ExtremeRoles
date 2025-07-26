@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Hazel;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Module.Ability.Behavior.Interface;
+using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
 
 
 namespace ExtremeRoles.Module.SystemType.Roles;

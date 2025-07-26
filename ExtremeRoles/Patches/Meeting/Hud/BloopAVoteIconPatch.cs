@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine;
 
 using AmongUs.GameOptions;
@@ -6,9 +6,9 @@ using AmongUs.GameOptions;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Combination;
 
 using CommomSystem = ExtremeRoles.Roles.API.Systems.Common;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 
 

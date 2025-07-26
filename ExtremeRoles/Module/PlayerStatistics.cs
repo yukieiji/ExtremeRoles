@@ -8,10 +8,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface.Status;
-using ExtremeRoles.Roles.Combination;
 
 using Monika = ExtremeRoles.Roles.Solo.Neutral.Monika;
 using NeutralMad = ExtremeRoles.Roles.Solo.Neutral.Madmate;
+using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 
 
 #nullable enable

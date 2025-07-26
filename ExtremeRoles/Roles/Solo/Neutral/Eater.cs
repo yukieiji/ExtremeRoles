@@ -17,6 +17,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 
 #nullable enable
@@ -180,7 +181,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		{
 			byte playerId = this.tmpTarget.PlayerId;
 
-			if (ExtremeRoleManager.GameRole[playerId] is Combination.Assassin assassin &&
+			if (ExtremeRoleManager.GameRole[playerId] is Assassin assassin &&
 				(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
 			{
 				return false;
