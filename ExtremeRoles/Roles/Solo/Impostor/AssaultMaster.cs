@@ -12,7 +12,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRoleReportHook, IRoleUpdate
+public sealed class AssaultMaster : SingleRoleBase, IRoleAutoBuildAbility, IRoleReportHook, IRoleUpdate, ITryKillTo
 {
     public enum AssaultMasterOption
     {

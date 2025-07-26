@@ -21,7 +21,8 @@ public sealed class Shooter :
     IRoleMeetingButtonAbility,
     IRoleReportHook,
     IRoleResetMeeting,
-    IRoleAwake<RoleTypes>
+    IRoleAwake<RoleTypes>,
+	ITryKillTo
 {
     public enum ShooterOption
     {

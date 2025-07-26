@@ -16,7 +16,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 public sealed class PsychoKiller :
 	SingleRoleBase,
 	IRoleUpdate,
-	IRoleResetMeeting
+	IRoleResetMeeting,
+	ITryKillTo
 {
 	private TextMeshPro combCountText;
 	private TextMeshPro timerText;

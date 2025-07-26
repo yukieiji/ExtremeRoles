@@ -16,7 +16,7 @@ using ExtremeRoles.Module.Event;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
+public sealed class OverLoader : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>, ITryKillTo
 {
 
     public enum OverLoaderOption

@@ -17,7 +17,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>
+public sealed class LastWolf : SingleRoleBase, IRoleAutoBuildAbility, IRoleAwake<RoleTypes>, ITryKillTo
 {
     public static float LightOffVision { get; private set; } = 0.1f;
 

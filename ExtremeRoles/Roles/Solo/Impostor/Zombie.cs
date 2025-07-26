@@ -27,7 +27,8 @@ public sealed class Zombie :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
-    IRoleOnRevive
+    IRoleOnRevive,
+	ITryKillTo
 {
     public override bool IsAssignGhostRole
     {
