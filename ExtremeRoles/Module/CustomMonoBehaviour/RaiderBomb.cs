@@ -132,7 +132,8 @@ public sealed class RaiderBomb : MonoBehaviour
 
 			if ((
 					ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerInfo.PlayerId, out var assassin) &&
-					!assassin.CanKilled
+					assassin.Status is AssassinStatusModel status &&
+					!status.CanKilled
 				))
 			{
 				continue;

@@ -6,9 +6,9 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using ExtremeRoles.Roles.Combination.HeroAcademia;
+using ExtremeRoles.Roles.API.Interface.Ability;
 
 #nullable enable
 
@@ -158,7 +158,7 @@ public static class KillButtonDoClickPatch
         }
         else if (id == ExtremeRoleId.Hero)
         {
-            HeroAcademia.RpcDrawHeroAndVillan(
+            HeroAcademiaRole.RpcDrawHeroAndVillan(
                 target, killer);
             return;
         }

@@ -154,7 +154,7 @@ internal sealed class PlayerTargetArrow
 
 }
 
-public sealed class HeroAcademia : ConstCombinationRoleManagerBase
+public sealed class HeroAcademiaRole : ConstCombinationRoleManagerBase
 {
     public enum Command : byte
     {
@@ -171,7 +171,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
     }
 
     public const string Name = "HeroAca";
-    public HeroAcademia() : base(
+    public HeroAcademiaRole() : base(
 		CombinationRoleType.HeroAca,
         Name, DefaultColor, 3,
         GameSystem.MaxImposterNum)
@@ -403,7 +403,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
             foreach (var role in ExtremeRoleManager.GameRole.Values)
             {
-                if (role.Core.Id == ExtremeRoleId.Vigilante)
+                if (role.Id == ExtremeRoleId.Vigilante)
                 {
                     ((Vigilante)role).SetCondition(
                         Vigilante.VigilanteCondition.NewLawInTheShip);
@@ -466,7 +466,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 	public void SetCondition(
         OneForAllCondition cond)
     {
-        status.cond = cond;
+        status.Cond = cond;
     }
 
     public void CreateAbility()
@@ -480,7 +480,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     }
 
     public bool IsAbilityUse() =>
-        status.cond == OneForAllCondition.FeatButtonAbility &&
+        status.Cond == OneForAllCondition.FeatButtonAbility &&
         IRoleAbility.IsCommonUse();
 
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
@@ -515,7 +515,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
         }
 
 
-        switch (status.cond)
+        switch (status.Cond)
         {
             case OneForAllCondition.NoGuard:
             case OneForAllCondition.AwakeHero:
@@ -540,7 +540,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
                 break;
         }
 
-        if (status.cond == OneForAllCondition.FeatButtonAbility) { return; }
+        if (status.Cond == OneForAllCondition.FeatButtonAbility) { return; }
 
         int allCrew = 0;
         int deadCrew = 0;
@@ -554,21 +554,21 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
             ++allCrew;
         }
 
-        if (deadCrew > 0 && status.cond == OneForAllCondition.NoGuard)
+        if (deadCrew > 0 && status.Cond == OneForAllCondition.NoGuard)
         {
-            status.cond = OneForAllCondition.AwakeHero;
-            HeroAcademia.RpcUpdateHero(rolePlayer, OneForAllCondition.AwakeHero);
+            status.Cond = OneForAllCondition.AwakeHero;
+            HeroAcademiaRole.RpcUpdateHero(rolePlayer, OneForAllCondition.AwakeHero);
         }
 
         float deadPlayerPer = deadCrew / (float)allCrew;
-        if (deadPlayerPer > featButtonAbilityPer && status.cond != OneForAllCondition.FeatButtonAbility)
+        if (deadPlayerPer > featButtonAbilityPer && status.Cond != OneForAllCondition.FeatButtonAbility)
         {
-            status.cond = OneForAllCondition.FeatButtonAbility;
+            status.Cond = OneForAllCondition.FeatButtonAbility;
             setButtonActive(true);
         }
         else if (deadPlayerPer > featKillPer)
         {
-            status.cond = OneForAllCondition.FeatKill;
+            status.Cond = OneForAllCondition.FeatKill;
         }
 
     }
@@ -611,8 +611,8 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     }
     public void AllReset(PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.HeroDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.HeroDown,
             rolePlayer.PlayerId);
     }
 
@@ -643,15 +643,15 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.HeroDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.HeroDown,
             rolePlayer.PlayerId);
     }
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.HeroDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.HeroDown,
             rolePlayer.PlayerId);
     }
 
@@ -807,23 +807,23 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 
     public void AllReset(PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.VillainDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.VillainDown,
             rolePlayer.PlayerId);
     }
 
     public override void ExiledAction(
         PlayerControl rolePlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.VillainDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.VillainDown,
             rolePlayer.PlayerId);
     }
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-        HeroAcademia.UpdateVigilante(
-            HeroAcademia.Condition.VillainDown,
+        HeroAcademiaRole.UpdateVigilante(
+            HeroAcademiaRole.Condition.VillainDown,
             rolePlayer.PlayerId);
     }
 
@@ -843,6 +843,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         vigilanteArrowTime = Loader.GetValue<VillanOption, float>(
             VillanOption.VigilanteSeeTime);
         vigilanteArrowTimer = 0.0f;
+		this.AbilityClass = new VillainAbilityHandler();
     }
 
 }
@@ -862,8 +863,8 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         Range,
     }
 
-    public VigilanteCondition Condition => status.cond;
-    private VigilanteStatusModel status;
+    public VigilanteCondition Condition => this.status is null ? VigilanteCondition.None : this.status.Condition;
+    private VigilanteStatusModel? status;
     private float range;
     private byte target;
     public override IStatusModel? Status => status;
@@ -884,10 +885,15 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 	public void SetCondition(
         VigilanteCondition cond)
     {
-        if (status.cond == VigilanteCondition.None ||
+		if (this.status is null)
+		{
+			return;
+		}
+
+        if (this.Condition == VigilanteCondition.None ||
             cond == VigilanteCondition.NewLawInTheShip)
         {
-            status.cond = cond;
+            this.status.Condition = cond;
         }
     }
 
@@ -916,7 +922,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     }
     public void CleanUp()
     {
-        HeroAcademia.RpcCleanUpEmergencyCall();
+        HeroAcademiaRole.RpcCleanUpEmergencyCall();
     }
 
     public void ModifiedWinPlayer(
@@ -924,7 +930,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         GameOverReason reason,
 		in WinnerTempData winner)
     {
-        switch (this.condition)
+        switch (this.Condition)
         {
             case VigilanteCondition.NewLawInTheShip:
                 winner.AddWithPlus(rolePlayerInfo);
@@ -966,7 +972,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public bool UseAbility()
     {
-        HeroAcademia.RpcEmergencyCall(
+        HeroAcademiaRole.RpcEmergencyCall(
             PlayerControl.LocalPlayer,
             target);
         target = byte.MaxValue;
@@ -979,8 +985,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public override string GetFullDescription()
     {
-		var id = Core.Id;
-		switch (this.condition)
+		switch (this.Condition)
         {
             case VigilanteCondition.NewHeroForTheShip:
                 return Tr.GetString(
@@ -1044,7 +1049,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     public void Update(PlayerControl rolePlayer)
     {
 
-        switch (status.cond)
+        switch (this.Condition)
         {
             case VigilanteCondition.None:
                 UseVent = false;
@@ -1059,18 +1064,18 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 						continue;
 					}
 
-					var id = role.Core.Id;
+					var id = this.Id;
                     if (id == ExtremeRoleId.Hero && playerInfo.Disconnected)
                     {
-                        HeroAcademia.RpcUpdateVigilante(
-                            HeroAcademia.Condition.HeroDown,
+                        HeroAcademiaRole.RpcUpdateVigilante(
+                            HeroAcademiaRole.Condition.HeroDown,
                             playerInfo.PlayerId);
                         return;
                     }
                     else if (id == ExtremeRoleId.Villain && playerInfo.Disconnected)
                     {
-                        HeroAcademia.RpcUpdateVigilante(
-                            HeroAcademia.Condition.VillainDown,
+                        HeroAcademiaRole.RpcUpdateVigilante(
+                            HeroAcademiaRole.Condition.VillainDown,
                             playerInfo.PlayerId);
                         return;
                     }
@@ -1099,7 +1104,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 					this.NameColor,
 					Tr.GetString(RoleName)),
                 Tr.GetString(
-                    $"{this.Id}{this.condition}ShortDescription")));
+                    $"{this.Id}{this.Condition}ShortDescription")));
 
         if (isContainFakeTask && !HasTask)
         {
@@ -1115,7 +1120,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     private string getInGameTag()
     {
-        switch (this.condition)
+        switch (this.Condition)
         {
             case VigilanteCondition.NewHeroForTheShip:
                 return " ♣";
