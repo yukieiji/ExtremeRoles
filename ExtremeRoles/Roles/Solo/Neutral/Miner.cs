@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 #nullable enable
 
@@ -257,7 +258,7 @@ public sealed class Miner :
 					killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
 
                 var assassin = ExtremeRoleManager.GameRole[
-                    playerInfo.PlayerId] as Combination.Assassin;
+                    playerInfo.PlayerId] as Assassin;
 
                 if (assassin != null &&
 					(!assassin.CanKilled || !assassin.CanKilledFromNeutral))

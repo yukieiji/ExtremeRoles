@@ -1,25 +1,19 @@
-using System.Collections;
+﻿using Hazel;
 
-using UnityEngine;
-using Hazel;
-
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Performance;
 
-
-
-using BepInEx.Unity.IL2CPP.Utils;
 using ExtremeRoles.Module.Ability;
 
 
 using ExtremeRoles.Module.CustomOption.Factory;
+using ExtremeRoles.Roles.API.Interface.Status;
 
-namespace ExtremeRoles.Roles.Solo.Crewmate;
+namespace ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
+
+#nullable enable
 
 public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
 {
@@ -36,19 +30,10 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
         ResetMeeting,
     }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.timeShieldButton;
-        set
-        {
-            this.timeShieldButton = value;
-        }
-    }
-    private ExtremeAbilityButton timeShieldButton;
+    public ExtremeAbilityButton? Button { get; set; }
 
-    private TimeMasterStatusModel status;
-    private static TimeMasterHistory history;
-    public override IStatusModel? Status => status;
+	public override IStatusModel? Status => this.status;
+	private TimeMasterStatusModel? status;
 
     public TimeMaster() : base(
 		RoleCore.BuildCrewmate(
@@ -63,7 +48,11 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
         byte tmPlayerId = reader.ReadByte();
         TimeMasterOps ops = (TimeMasterOps)reader.ReadByte();
         var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMasterRole>(tmPlayerId);
-        if (timeMaster == null) { return; }
+        if (timeMaster is null ||
+			timeMaster.AbilityClass is not TimeMasterAbilityHandler timeMasterAbilityHandler)
+		{
+			return;
+		}
 
         switch (ops)
         {
@@ -74,28 +63,24 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
                 shieldOn(tmPlayerId);
                 break;
             case TimeMasterOps.RewindTime:
-                ((TimeMasterAbilityHandler)timeMaster.AbilityClass!).StartRewind(tmPlayerId);
-                break;
+				timeMasterAbilityHandler.StartRewind(tmPlayerId);
+				break;
             case TimeMasterOps.ResetMeeting:
-                resetMeeting(tmPlayerId);
+				timeMasterAbilityHandler.ResetMeeting(tmPlayerId);
                 break;
             default:
                 break;
         }
     }
 
-    public static void ResetHistory()
-    {
-        history = null;
-    }
-
     private static void shieldOn(byte playerId)
     {
         var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMasterRole>(playerId);
 
-        if (timeMaster != null)
+        if (timeMaster is not null &&
+			timeMaster.status is not null)
         {
-            timeMaster.status.isShieldOn = true;
+            timeMaster.status.IsShieldOn = true;
         }
     }
 
@@ -103,41 +88,11 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
     {
         var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMasterRole>(playerId);
 
-        if (timeMaster != null)
+        if (timeMaster is not null && 
+			timeMaster.status is not null)
         {
-            timeMaster.status.isShieldOn = false;
+            timeMaster.status.IsShieldOn = false;
         }
-    }
-    private static void resetMeeting(byte playerId)
-    {
-        var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMasterRole>(playerId);
-
-        if (timeMaster == null) { return; }
-
-        // ヒストリーのコルーチン処理を止める
-        history.StopAllCoroutines();
-
-        timeMaster.status.isShieldOn = false;
-        timeMaster.status.isRewindTime = false;
-        if (timeMaster.status.rewindScreen != null)
-        {
-            timeMaster.status.rewindScreen.enabled = false;
-        }
-
-        // ヒストリーブロック解除
-        history.BlockAddHistory = false;
-
-		if (MeetingHud.Instance != null)
-		{
-			// 会議開始後リウィンドのコルーチンが止まるまでポジションがバグるので
-			// ここでポジションを上書きする => TMが発動してなくても通るが問題なし
-			// それ以外でコードを追加してもいいが最も被害が少ない変更がここ
-			ShipStatus.Instance.SpawnPlayer(
-				PlayerControl.LocalPlayer,
-				GameData.Instance.PlayerCount, false);
-		}
-
-        PlayerControl.LocalPlayer.moveable = true;
     }
 
     public void CleanUp()
@@ -157,10 +112,10 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
     {
         this.CreateNormalActivatingAbilityButton(
             "timeShield",
-			Resources.UnityObjectLoader.LoadSpriteFromResources(
+			UnityObjectLoader.LoadSpriteFromResources(
 			   ObjectPath.TimeMasterTimeShield),
-            abilityOff: this.CleanUp);
-        this.Button.SetLabelToCrewmate();
+            abilityOff: CleanUp);
+        Button?.SetLabelToCrewmate();
     }
 
     public bool UseAbility()
@@ -190,33 +145,15 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
             caller.WriteByte(localPlayer.PlayerId);
             caller.WriteByte((byte)TimeMasterOps.ResetMeeting);
         }
-        resetMeeting(localPlayer.PlayerId);
-    }
+		if (this.AbilityClass is TimeMasterAbilityHandler timeMasterAbilityHandler)
+		{
+			timeMasterAbilityHandler.ResetMeeting(localPlayer.PlayerId);
+		}
+	}
 
-    public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
+    public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
         return;
-    }
-
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-        if (this.isRewindTime) { return false; }
-
-        if (this.isShieldOn)
-        {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.TimeMasterAbility))
-            {
-                caller.WriteByte(rolePlayer.PlayerId);
-                caller.WriteByte((byte)TimeMasterOps.RewindTime);
-            }
-            startRewind(rolePlayer.PlayerId);
-
-            return false;
-        }
-
-        return true;
     }
 
     protected override void CreateSpecificOption(
@@ -233,15 +170,8 @@ public sealed class TimeMasterRole : SingleRoleBase, IRoleAutoBuildAbility
 
     protected override void RoleSpecificInit()
     {
-        status = new TimeMasterStatusModel();
-        AbilityClass = new TimeMasterAbilityHandler(status);
-
-        if (history != null || PlayerControl.LocalPlayer == null) { return; }
-
-        history = PlayerControl.LocalPlayer.gameObject.AddComponent<
-            TimeMasterHistory>();
-        history.Initialize(
-            this.Loader.GetValue<TimeMasterOption, float>(
-                TimeMasterOption.RewindTime));
+		this.status = new TimeMasterStatusModel(
+			Loader.GetValue<TimeMasterOption, float>(TimeMasterOption.RewindTime));
+		AbilityClass = new TimeMasterAbilityHandler(status);
     }
 }

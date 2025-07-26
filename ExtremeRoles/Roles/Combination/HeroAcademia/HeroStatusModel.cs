@@ -1,6 +1,6 @@
 using ExtremeRoles.Roles.API.Interface.Status;
 
-namespace ExtremeRoles.Roles.Combination
+namespace ExtremeRoles.Roles.Combination.HeroAcademia
 {
     public class HeroStatusModel : IStatusModel
     {
