@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,9 +10,9 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using PlayerStatus = ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 
 #nullable enable

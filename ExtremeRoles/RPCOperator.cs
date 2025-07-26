@@ -8,6 +8,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using Hazel;
 using InnerNet;
@@ -512,7 +513,7 @@ public static class RPCOperator
 	public static void HeroHeroAcademiaCommand(
         ref MessageReader reader)
     {
-        Roles.Combination.HeroAcademia.RpcCommand(
+        HeroAcademia.RpcCommand(
             ref reader);
     }
 

@@ -1,4 +1,4 @@
-using AmongUs.GameOptions;
+﻿using AmongUs.GameOptions;
 
 using UnityEngine;
 
@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Interface.Status;
 
 using ExtremeRoles.Helper;
 
@@ -17,9 +18,9 @@ using ExtremeRoles.Module.SystemType.Roles;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+namespace ExtremeRoles.Roles.Solo.Neutral.IronMate;
 
-public sealed class IronMate :
+public sealed class IronMateRole :
 	SingleRoleBase,
 	IRoleAwake<RoleTypes>,
 	IRoleMurderPlayerHook,
@@ -39,7 +40,7 @@ public sealed class IronMate :
 	public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 	public bool CanReport => false;
 
-	private IronMateStatusModel status;
+	private IronMateStatusModel? status;
 
 	private float playerShowTime;
 	private float deadBodyShowTime;
@@ -83,7 +84,7 @@ public sealed class IronMate :
 	public override string GetImportantText(bool isContainFakeTask = true)
 		=> Design.ColoedString(
 				Palette.White,
-				$"{this.GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
+				$"{GetColoredRoleName()}: {Tr.GetString("crewImportantText")}");
 
 	public override string GetIntroDescription()
 		=> Design.ColoedString(
@@ -131,17 +132,17 @@ public sealed class IronMate :
 
     protected override void RoleSpecificInit()
     {
-        var loader = this.Loader;
+        var loader = Loader;
         status = new IronMateStatusModel(loader.GetValue<Option, int>(Option.BlockNum));
-        AbilityClass = new IronMateAbilityHandler(status);
-
-		status.system = ExtremeSystemTypeManager.Instance.CreateOrGet(
+		var system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 			ExtremeSystemType.IronMateGuard,
 			() => new IronMateGurdSystem(
 				loader.GetValue<Option, float>(Option.SlowMod),
 				loader.GetValue<Option, float>(Option.SlowTime)));
-		this.playerShowTime = loader.GetValue<Option, float>(Option.PlayerShowTime);
-		this.deadBodyShowTime = loader.GetValue<Option, float>(Option.DeadBodyShowTimeOnAfterPlayer);
+		AbilityClass = new IronMateAbilityHandler(status, system);
+
+		playerShowTime = loader.GetValue<Option, float>(Option.PlayerShowTime);
+		deadBodyShowTime = loader.GetValue<Option, float>(Option.DeadBodyShowTimeOnAfterPlayer);
 	}
 
     public void ResetOnMeetingStart()
@@ -195,7 +196,7 @@ public sealed class IronMate :
 				continue;
 			}
 			var newDeadBody = body.gameObject.AddComponent<IronMateDeadBody>();
-			newDeadBody.SetUp(target, this.deadBodyShowTime, this.playerShowTime);
+			newDeadBody.SetUp(target, deadBodyShowTime, playerShowTime);
 			body.myCollider.enabled = false;
 			break;
 		}

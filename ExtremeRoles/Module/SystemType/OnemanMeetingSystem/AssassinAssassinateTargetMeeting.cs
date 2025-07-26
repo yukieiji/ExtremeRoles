@@ -2,7 +2,7 @@
 using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Module.GameResult.StatusOverrider;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 namespace ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 

@@ -1,10 +1,11 @@
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Roles.API.Interface.Status;
 
-namespace ExtremeRoles.Roles.Solo.Neutral.Yoko
+namespace ExtremeRoles.Roles.Solo.Neutral.Yoko;
+
+#nullable enable
+
+public class YokoStatusModel(YokoYashiroSystem? system) : IStatusModel
 {
-    public class YokoStatusModel : IStatusModel
-    {
-        public YokoYashiroSystem? yashiro { get; set; }
-    }
+	public YokoYashiroSystem? yashiro { get; } = system;
 }

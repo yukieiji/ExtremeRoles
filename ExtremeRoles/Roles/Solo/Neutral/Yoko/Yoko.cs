@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -12,6 +12,7 @@ using ExtremeRoles.Module.SystemType.OnemanMeetingSystem;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface.Status;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
@@ -21,7 +22,7 @@ using ExtremeRoles.Module.GameResult;
 
 #nullable enable
 
-namespace ExtremeRoles.Roles.Solo.Neutral;
+namespace ExtremeRoles.Roles.Solo.Neutral.Yoko;
 
 public sealed class YokoRole :
     SingleRoleBase,
@@ -51,7 +52,7 @@ public sealed class YokoRole :
 	private Vector2 prevPos;
 
     private TMPro.TextMeshPro? tellText;
-	private YokoStatusModel status;
+	private YokoStatusModel? status;
     public override IStatusModel? Status => status;
 
     private readonly HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
@@ -152,16 +153,14 @@ public sealed class YokoRole :
 	}
     protected override void RoleSpecificInit()
     {
-        status = new YokoStatusModel();
-        AbilityClass = new YokoAbilityHandler(status);
-		var cate = this.Loader;
-        this.CanRepairSabotage = cate.GetValue<YokoOption, bool>(YokoOption.CanRepairSabo);
-        this.UseVent = cate.GetValue<YokoOption, bool>(YokoOption.CanUseVent);
-        this.searchRange = cate.GetValue<YokoOption, float>(YokoOption.SearchRange);
-        this.searchTime = cate.GetValue<YokoOption, float>(YokoOption.SearchTime);
-        this.trueInfoGage = cate.GetValue<YokoOption, int>(YokoOption.TrueInfoRate);
+		var cate = Loader;
+        CanRepairSabotage = cate.GetValue<YokoOption, bool>(YokoOption.CanRepairSabo);
+        UseVent = cate.GetValue<YokoOption, bool>(YokoOption.CanUseVent);
+        searchRange = cate.GetValue<YokoOption, float>(YokoOption.SearchRange);
+        searchTime = cate.GetValue<YokoOption, float>(YokoOption.SearchTime);
+        trueInfoGage = cate.GetValue<YokoOption, int>(YokoOption.TrueInfoRate);
 
-		status.yashiro = null;
+		YokoYashiroSystem? system = null;
 
 		if (cate.GetValue<YokoOption, bool>(YokoOption.UseYashiro))
 		{
@@ -170,12 +169,15 @@ public sealed class YokoRole :
 			float protectRange = cate.GetValue<YokoOption, float>(YokoOption.YashiroProtectRange);
 			bool isUpdateMeeting = cate.GetValue<YokoOption, bool>(YokoOption.YashiroUpdateWithMeeting);
 
-			status.yashiro = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			system = ExtremeSystemTypeManager.Instance.CreateOrGet(
 				YokoYashiroSystem.Type,
 				() => new YokoYashiroSystem(activeTime, sealTime, protectRange, isUpdateMeeting));
 		}
 
-		this.timer = this.searchTime;
+		status = new YokoStatusModel(system);
+		AbilityClass = new YokoAbilityHandler(status);
+
+		timer = searchTime;
     }
     public void ResetOnMeetingEnd(NetworkedPlayerInfo? exiledPlayer = null)
     {
@@ -184,9 +186,9 @@ public sealed class YokoRole :
 
     public void ResetOnMeetingStart()
     {
-        if (this.tellText != null)
+        if (tellText != null)
         {
-            this.tellText.gameObject.SetActive(false);
+            tellText.gameObject.SetActive(false);
         }
     }
     public void Update(PlayerControl rolePlayer)
@@ -199,22 +201,22 @@ public sealed class YokoRole :
             MeetingHud.Instance != null ||
             OnemanMeetingSystemManager.IsActive) { return; }
 
-		if (this.Button != null)
+		if (Button != null)
 		{
-			this.Button.SetButtonShow(status.yashiro is not null);
+			Button.SetButtonShow(this.status?.yashiro is not null);
 		}
 
 		if (Minigame.Instance) { return; }
 
-        if (this.timer > 0)
+        if (timer > 0)
         {
-            this.timer -= Time.deltaTime;
+            timer -= Time.deltaTime;
             return;
         }
 
         Vector2 truePosition = rolePlayer.GetTruePosition();
 
-        this.timer = this.searchTime;
+        timer = searchTime;
         bool isEnemy = false;
 
         foreach (NetworkedPlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -231,14 +233,14 @@ public sealed class YokoRole :
 			PlayerControl @object = player.Object;
 			SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
 
-			if (@object == null || this.IsSameTeam(targetRole))
+			if (@object == null || IsSameTeam(targetRole))
 			{
 				continue;
 			}
 
 			Vector2 vector = @object.GetTruePosition() - truePosition;
 			float magnitude = vector.magnitude;
-			if (magnitude <= this.searchRange &&
+			if (magnitude <= searchRange &&
 				this.isEnemy(targetRole))
 			{
 				isEnemy = true;
@@ -246,7 +248,7 @@ public sealed class YokoRole :
 			}
 		}
 
-        if (this.trueInfoGage <= RandomGenerator.Instance.Next(101))
+        if (trueInfoGage <= RandomGenerator.Instance.Next(101))
         {
             isEnemy = !isEnemy;
         }
@@ -263,23 +265,23 @@ public sealed class YokoRole :
 
     private IEnumerator showText(string text)
     {
-        if (this.tellText == null)
+        if (tellText == null)
         {
-            this.tellText = Object.Instantiate(
+            tellText = Object.Instantiate(
                 Prefab.Text, Camera.main.transform, false);
-            this.tellText.fontSize =
-                this.tellText.fontSizeMax =
-                this.tellText.fontSizeMin = 2.25f;
-            this.tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
-            this.tellText.alignment = TMPro.TextAlignmentOptions.Center;
-            this.tellText.gameObject.layer = 5;
+            tellText.fontSize =
+                tellText.fontSizeMax =
+                tellText.fontSizeMin = 2.25f;
+            tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
+            tellText.alignment = TMPro.TextAlignmentOptions.Center;
+            tellText.gameObject.layer = 5;
         }
-        this.tellText.text = text;
-        this.tellText.gameObject.SetActive(true);
+        tellText.text = text;
+        tellText.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(3.5f);
 
-        this.tellText.gameObject.SetActive(false);
+        tellText.gameObject.SetActive(false);
 
     }
     private bool isEnemy(SingleRoleBase role)
@@ -297,7 +299,7 @@ public sealed class YokoRole :
             return true;
 
         }
-        else if (this.isYoko(role))
+        else if (isYoko(role))
         {
             return true;
         }
@@ -311,7 +313,7 @@ public sealed class YokoRole :
         {
             if (multiAssignRole.AnotherRole != null)
             {
-                return this.isYoko(multiAssignRole.AnotherRole);
+                return isYoko(multiAssignRole.AnotherRole);
             }
         }
         return targetRole.Core.Id == ExtremeRoleId.Yoko;
@@ -319,27 +321,27 @@ public sealed class YokoRole :
 
 	public bool UseAbility()
 	{
-		if (status.yashiro is null)
+		if (this.status?.yashiro is null)
 		{
 			return false;
 		}
-		this.prevPos = PlayerControl.LocalPlayer.GetTruePosition();
+		prevPos = PlayerControl.LocalPlayer.GetTruePosition();
 
 		return true;
 	}
 
 	public void CleanUp()
 	{
-		if (status.yashiro is null) { return; }
+		if (this.status?.yashiro is null) { return; }
 
 		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
 
-		status.yashiro.RpcSetYashiro(this.GameControlId, pos);
+		status.yashiro.RpcSetYashiro(GameControlId, pos);
 	}
 
 	public bool IsAbilityUse()
 	{
-		if (status.yashiro is null) { return false; }
+		if (this.status?.yashiro is null) { return false; }
 
 		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
 
@@ -347,7 +349,7 @@ public sealed class YokoRole :
 	}
 
 	public bool IsAbilityActive() =>
-		this.prevPos == PlayerControl.LocalPlayer.GetTruePosition();
+		prevPos == PlayerControl.LocalPlayer.GetTruePosition();
 
 	public void CreateAbility()
 	{
@@ -355,8 +357,8 @@ public sealed class YokoRole :
 			"yokoYashiro",
 			UnityObjectLoader.LoadFromResources(
 				ExtremeRoleId.Yoko),
-			this.IsAbilityActive,
-			this.CleanUp,
+			IsAbilityActive,
+			CleanUp,
 			() => { });
 	}
 }

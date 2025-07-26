@@ -1,14 +1,14 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 
 #nullable enable
 
