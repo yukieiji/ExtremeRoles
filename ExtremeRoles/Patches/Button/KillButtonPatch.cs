@@ -78,9 +78,7 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.PreConditionFail;
 		}
-		else if (
-			killerRole is ITryKillTo killerTryKillTo &&
-			!killerTryKillTo.TryRolePlayerKillTo(killer, target))
+		else if (isPreventKillTo(killerRole, killer, target))
 		{
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
@@ -92,8 +90,7 @@ public static class KillButtonDoClickPatch
 		}
 		else if (
 			killerRole is MultiAssignRoleBase killerMultiAssignRole &&
-			killerMultiAssignRole.AnotherRole is ITryKillTo killerAnotherTryKillTo &&
-			!killerAnotherTryKillTo.TryRolePlayerKillTo(killer, target))
+			isPreventKillTo(killerMultiAssignRole.AnotherRole, killer, target))
 		{
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
@@ -183,4 +180,9 @@ public static class KillButtonDoClickPatch
             isAnime ? byte.MaxValue : byte.MinValue);
         instance.SetTarget(null);
     }
+
+	private static bool isPreventKillTo(SingleRoleBase? role, PlayerControl killer, PlayerControl target)
+		=> 
+			role is ITryKillTo killerTryKillTo &&
+			!killerTryKillTo.TryRolePlayerKillTo(killer, target);
 }
