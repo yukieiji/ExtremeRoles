@@ -9,6 +9,6 @@ public sealed class VigilanteAbilityHandler(VigilanteStatusModel status) : IAbil
 	public bool TryKilledFrom(
 		PlayerControl rolePlayer, PlayerControl fromPlayer)
 		=> !(ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromRole) &&
-			fromRole.Id is ExtremeRoleId.Hero &&
+			fromRole.Core.Id is ExtremeRoleId.Hero &&
 			this.status.Condition is not Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
 }

@@ -403,7 +403,7 @@ public sealed class HeroAcademiaRole : ConstCombinationRoleManagerBase
 
             foreach (var role in ExtremeRoleManager.GameRole.Values)
             {
-                if (role.Id == ExtremeRoleId.Vigilante)
+                if (role.Core.Id == ExtremeRoleId.Vigilante)
                 {
                     ((Vigilante)role).SetCondition(
                         Vigilante.VigilanteCondition.NewLawInTheShip);
@@ -453,10 +453,9 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 	public ExtremeAbilityButton Button { get; set; }
 	public Hero(
         ) : base(
-			ExtremeRoleId.Hero,
-			ExtremeRoleType.Crewmate,
-			ExtremeRoleId.Hero.ToString(),
-			ColorPalette.HeroAmaIro,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Hero,
+				ColorPalette.HeroAmaIro),
 			false, true, false, false,
             tab: OptionTab.CombinationTab)
     {
@@ -705,10 +704,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 	public ExtremeAbilityButton Button { get; set; }
 	public Villain(
         ) : base(
-			ExtremeRoleId.Villain,
-			ExtremeRoleType.Impostor,
-			ExtremeRoleId.Villain.ToString(),
-			Palette.ImpostorRed,
+			RoleCore.BuildImpostor(ExtremeRoleId.Villain),
             true, false, true, true,
             tab: OptionTab.CombinationTab)
     {
@@ -873,10 +869,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 	public ExtremeAbilityButton Button { get; set; }
 	public Vigilante(
         ) : base(
-			ExtremeRoleId.Vigilante,
-			ExtremeRoleType.Neutral,
-			ExtremeRoleId.Vigilante.ToString(),
-			ColorPalette.VigilanteFujiIro,
+			RoleCore.BuildNeutral(ExtremeRoleId.Vigilante, ColorPalette.VigilanteFujiIro),
             false, false, false, false,
             tab: OptionTab.CombinationTab)
     {
@@ -989,13 +982,13 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         {
             case VigilanteCondition.NewHeroForTheShip:
                 return Tr.GetString(
-                    $"{this.Id}CrewDescription");
+                    $"{this.Core.Id}CrewDescription");
             case VigilanteCondition.NewVillainForTheShip:
                 return Tr.GetString(
-                    $"{this.Id}ImpDescription");
+                    $"{this.Core.Id}ImpDescription");
             case VigilanteCondition.NewEnemyNeutralForTheShip:
                 return Tr.GetString(
-                    $"{this.Id}NeutDescription");
+                    $"{this.Core.Id}NeutDescription");
             default:
                 return base.GetFullDescription();
         }
@@ -1004,7 +997,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (this.Id == ExtremeRoleId.Vigilante &&
+        if (this.Core.Id == ExtremeRoleId.Vigilante &&
             IsSameControlId(targetRole))
         {
             return Design.ColoedString(
@@ -1064,7 +1057,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 						continue;
 					}
 
-					var id = this.Id;
+					var id = this.Core.Id;
                     if (id == ExtremeRoleId.Hero && playerInfo.Disconnected)
                     {
                         HeroAcademiaRole.RpcUpdateVigilante(
@@ -1098,18 +1091,18 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     private string createImportantText(bool isContainFakeTask)
     {
         string baseString = Design.ColoedString(
-			this.NameColor,
+			this.Core.Color,
             string.Format("{0}: {1}",
                 Design.ColoedString(
-					this.NameColor,
+					this.Core.Color,
 					Tr.GetString(RoleName)),
                 Tr.GetString(
-                    $"{this.Id}{this.Condition}ShortDescription")));
+                    $"{this.Core.Id}{this.Condition}ShortDescription")));
 
         if (isContainFakeTask && !HasTask)
         {
             string fakeTaskString = Design.ColoedString(
-				this.NameColor,
+				this.Core.Color,
 				TranslationController.Instance.GetString(
                     StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
