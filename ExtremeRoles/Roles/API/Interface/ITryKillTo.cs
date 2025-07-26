@@ -2,7 +2,7 @@ namespace ExtremeRoles.Roles.API.Interface;
 
 public interface ITryKillTo
 {
-    bool TryRolePlayerKillTo(
+    public bool TryRolePlayerKillTo(
         PlayerControl rolePlayer,
         PlayerControl targetPlayer);
 }
