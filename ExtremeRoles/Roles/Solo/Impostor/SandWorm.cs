@@ -19,7 +19,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class SandWorm : SingleRoleBase, IRoleAbility
+public sealed class SandWorm : SingleRoleBase, IRoleAbility, ITryKillTo
 {
     public sealed class AssaultButtonAutoActivator : IButtonAutoActivator
     {

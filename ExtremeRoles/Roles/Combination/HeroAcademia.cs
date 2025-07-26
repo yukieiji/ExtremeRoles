@@ -424,7 +424,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
 }
 
-public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset, IKilledFrom
+public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IRoleSpecialReset, IKilledFrom, ITryKillTo
 {
     public enum OneForAllCondition : byte
     {

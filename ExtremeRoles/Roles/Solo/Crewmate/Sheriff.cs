@@ -14,7 +14,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
+public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, ITryKillTo
 {
 
     public enum SheriffOption

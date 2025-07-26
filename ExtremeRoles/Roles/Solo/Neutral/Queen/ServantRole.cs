@@ -23,7 +23,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral.Queen;
 public sealed class ServantRole :
 	MultiAssignRoleBase,
 	IRoleAutoBuildAbility,
-	IRoleMurderPlayerHook
+	IRoleMurderPlayerHook,
+	ITryKillTo
 {
 	public ExtremeAbilityButton? Button { get; set; }
 

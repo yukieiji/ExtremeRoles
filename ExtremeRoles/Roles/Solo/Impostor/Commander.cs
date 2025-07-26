@@ -13,7 +13,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
+public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillTo
 {
     public ExtremeAbilityButton Button
     {

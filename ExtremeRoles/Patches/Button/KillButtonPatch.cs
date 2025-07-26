@@ -78,7 +78,9 @@ public static class KillButtonDoClickPatch
 		{
 			return KillResult.PreConditionFail;
 		}
-		else if (!killerRole.TryRolePlayerKillTo(killer, target))
+		else if (
+			killerRole is ITryKillTo killerTryKillTo &&
+			!killerTryKillTo.TryRolePlayerKillTo(killer, target))
 		{
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
@@ -90,8 +92,8 @@ public static class KillButtonDoClickPatch
 		}
 		else if (
 			killerRole is MultiAssignRoleBase killerMultiAssignRole &&
-			killerMultiAssignRole.AnotherRole != null &&
-			!killerMultiAssignRole.AnotherRole.TryRolePlayerKillTo(killer, target))
+			killerMultiAssignRole.AnotherRole is ITryKillTo killerAnotherTryKillTo &&
+			!killerAnotherTryKillTo.TryRolePlayerKillTo(killer, target))
 		{
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
