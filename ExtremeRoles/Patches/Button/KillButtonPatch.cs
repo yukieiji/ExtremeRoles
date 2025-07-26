@@ -9,8 +9,6 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
 using HarmonyLib;
-using static ExtremeRoles.Roles.Solo.Crewmate.Jailer;
-
 
 #nullable enable
 
