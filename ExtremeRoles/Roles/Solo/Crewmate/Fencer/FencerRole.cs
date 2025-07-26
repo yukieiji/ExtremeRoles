@@ -15,7 +15,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate.Fencer;
 
-public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate, IKilledFrom
+public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
 {
     public enum FencerOption
     {
@@ -38,18 +38,20 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
         }
     }
 
-    public bool IsCounter = false;
-    public float Timer = 0.0f;
-    public float MaxTime = 120f;
-
     private ExtremeAbilityButton takeTaskButton;
+
+    public override IStatusModel? Status => status;
+    private FencerStatusModel status;
+
+    public override bool CanKill { get => status.CanKill; }
 
     public FencerRole() : base(
 		RoleCore.BuildCrewmate(
 			ExtremeRoleId.Fencer,
 			ColorPalette.FencerPin),
         false, true, false, false)
-    { }
+    {
+    }
 
     public static void Ability(ref MessageReader reader)
     {
@@ -68,7 +70,7 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
                 counterOff(fencer);
                 break;
             case FencerAbility.ActivateKillButton:
-                enableKillButton(fencer, rolePlayerId);
+                ((FencerAbilityHandler)fencer.AbilityClass!).EnableKillButton(rolePlayerId);
                 break;
             default:
                 break;
@@ -76,36 +78,14 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     }
 
-    private static void counterOn(Fencer fencer)
+    private static void counterOn(FencerRole fencer)
     {
-        fencer.IsCounter = true;
+        fencer.status.IsCounter = true;
     }
 
-    public static void counterOff(Fencer fencer)
+    public static void counterOff(FencerRole fencer)
     {
-        fencer.IsCounter = false;
-    }
-
-    private static void enableKillButton(
-        Fencer fencer, byte rolePlayerId)
-    {
-        PlayerControl localPlayer = PlayerControl.LocalPlayer;
-
-        if (localPlayer.PlayerId != rolePlayerId) { return; }
-
-        if (MapBehaviour.Instance)
-        {
-            MapBehaviour.Instance.Close();
-        }
-        if (Minigame.Instance)
-        {
-            Minigame.Instance.ForceClose();
-        }
-
-        fencer.CanKill = true;
-        localPlayer.killTimer = 0.1f;
-
-        fencer.Timer = fencer.MaxTime;
+        fencer.status.IsCounter = false;
     }
 
     public void CreateAbility()
@@ -171,27 +151,6 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     }
 
-    public bool TryKilledFrom(
-        PlayerControl rolePlayer, PlayerControl fromPlayer)
-    {
-
-        if (this.IsCounter)
-        {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.FencerAbility))
-            {
-                caller.WriteByte(
-                    rolePlayer.PlayerId);
-                caller.WriteByte((byte)FencerAbility.ActivateKillButton);
-            }
-            enableKillButton(this, rolePlayer.PlayerId);
-            Sound.PlaySound(Sound.Type.GuardianAngleGuard, 0.85f);
-            return false;
-        }
-
-        return true;
-    }
-
     protected override void CreateSpecificOption(
         AutoParentSetOptionCategoryFactory factory)
     {
@@ -205,8 +164,29 @@ public sealed class FencerRole : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpd
 
     protected override void RoleSpecificInit()
     {
-        this.Timer = 0.0f;
-        this.MaxTime = this.Loader.GetValue<FencerOption, float>(
-            FencerOption.ResetTime);
+        status = new FencerStatusModel(this.Loader.GetValue<FencerOption, float>(
+            FencerOption.ResetTime));
+        AbilityClass = new FencerAbilityHandler(status);
+        status.Timer = 0.0f;
+    }
+
+    public void ResetOnMeetingStart()
+    {
+        this.CleanUp();
+        status.CanKill = false;
+    }
+
+    public void Update(PlayerControl rolePlayer)
+    {
+        if (status.Timer <= 0.0f)
+        {
+            if (status.CanKill)
+            {
+                status.CanKill = false;
+            }
+            return;
+        }
+
+        status.Timer -= Time.deltaTime;
     }
 }
