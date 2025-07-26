@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -21,7 +21,8 @@ public sealed class Shooter :
     IRoleMeetingButtonAbility,
     IRoleReportHook,
     IRoleResetMeeting,
-    IRoleAwake<RoleTypes>
+    IRoleAwake<RoleTypes>,
+	ITryKillTo
 {
     public enum ShooterOption
     {
@@ -76,10 +77,7 @@ public sealed class Shooter :
     private TextMeshPro meetingShootText = null;
 
     public Shooter(): base(
-        ExtremeRoleId.Shooter,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Shooter.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Shooter),
         true, false, true, true)
     { }
 
@@ -97,7 +95,7 @@ public sealed class Shooter :
                 this.canShootThisMeeting
             ) ||
             target == 253 ||
-            ExtremeRoleManager.GameRole[target].Id == ExtremeRoleId.Assassin;
+            ExtremeRoleManager.GameRole[target].Core.Id == ExtremeRoleId.Assassin;
     }
 
     public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -296,7 +294,7 @@ public sealed class Shooter :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

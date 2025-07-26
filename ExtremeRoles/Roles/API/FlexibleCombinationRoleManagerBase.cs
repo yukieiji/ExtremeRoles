@@ -87,7 +87,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
         MultiAssignRoleBase role,
         int minimumRoleNum = 2,
         bool canAssignImposter = true) :
-            base(roleType, role.Id.ToString(), role.GetNameColor(true))
+            base(roleType, role.Core.Id.ToString(), role.GetNameColor(true))
     {
         this.BaseRole = role;
         this.minimumRoleNum = minimumRoleNum;
@@ -95,7 +95,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     }
 
     public string GetBaseRoleFullDescription() =>
-        Tr.GetString($"{BaseRole.Id}FullDescription");
+        Tr.GetString($"{BaseRole.Core.Id}FullDescription");
 
     public override void AssignSetUpInit(int curImpNum)
     {
@@ -139,7 +139,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public override MultiAssignRoleBase GetRole(
         int roleId, RoleTypes playerRoleType)
     {
-        if (this.BaseRole.Id != (ExtremeRoleId)roleId)
+        if (this.BaseRole.Core.Id != (ExtremeRoleId)roleId)
 		{
 			return null;
 		}
@@ -289,8 +289,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
 	private static void roleToImpostor(MultiAssignRoleBase role)
 	{
-		role.Team = ExtremeRoleType.Impostor;
-		role.SetNameColor(Palette.ImpostorRed);
+		role.Core.Team = ExtremeRoleType.Impostor;
+		role.Core.Color = Palette.ImpostorRed;
 		role.CanKill = true;
 		role.UseVent = true;
 		role.UseSabotage = true;
@@ -299,7 +299,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
 	private static void roleToCrewmate(MultiAssignRoleBase role)
 	{
-		role.Team = ExtremeRoleType.Crewmate;
+		role.Core.Team = ExtremeRoleType.Crewmate;
 		role.CanKill = false;
 		role.UseVent = false;
 		role.UseSabotage = false;

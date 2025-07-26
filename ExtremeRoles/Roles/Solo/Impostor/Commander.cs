@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
@@ -13,7 +13,7 @@ using ExtremeRoles.Module.CustomOption.Factory;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
+public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility, ITryKillTo
 {
     public ExtremeAbilityButton Button
     {
@@ -38,10 +38,7 @@ public sealed class Commander : SingleRoleBase, IRoleAutoBuildAbility
     private int killCount;
 
     public Commander() : base(
-        ExtremeRoleId.Commander,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Commander.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Commander),
         true, false, true, true)
     { }
 

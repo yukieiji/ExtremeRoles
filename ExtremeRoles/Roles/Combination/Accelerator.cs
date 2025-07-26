@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using Hazel;
 
@@ -47,7 +47,7 @@ public sealed class Accelerator :
 	}
 
     public override string RoleName =>
-        string.Concat(this.roleNamePrefix, this.RawRoleName);
+        string.Concat(this.roleNamePrefix, this.Core.Name);
 
     public bool EnableUseButton { get; private set; } = true;
 
@@ -63,10 +63,9 @@ public sealed class Accelerator :
 	public ExtremeAbilityButton Button { get; set; }
 
 	public Accelerator() : base(
-        ExtremeRoleId.Accelerator,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Accelerator.ToString(),
-        ColorPalette.AcceleratorBiancoPeria,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Accelerator,
+			ColorPalette.AcceleratorBiancoPeria),
         false, true, false, false,
         tab: OptionTab.CombinationTab)
     { }

@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
@@ -34,10 +34,7 @@ public sealed class Smasher : SingleRoleBase, IRoleAutoBuildAbility
     private float penaltyKillCool;
 
     public Smasher() : base(
-        ExtremeRoleId.Smasher,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Smasher.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Smasher),
         true, false, true, true)
     { }
 

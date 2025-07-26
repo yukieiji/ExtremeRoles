@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Roles;
@@ -19,7 +19,7 @@ public static class RandomRoleProvider
 
 	public static SingleRoleBase GetNormalRole()
 		=> ExtremeRoleManager.NormalRole.Values.OrderBy(
-			x => IgnoreRole.Contains(x.Id) ? 
+			x => IgnoreRole.Contains(x.Core.Id) ? 
 			int.MaxValue : RandomGenerator.Instance.Next()).First();
 	public static byte GetCombRole()
 		=> ExtremeRoleManager.CombRole.Keys.OrderBy(

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 
 using ExtremeRoles.Roles;
@@ -118,9 +118,10 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
 			int weight = roleCate.GetValue<RoleCommonOption, int>(RoleCommonOption.AssignWeight);
 			log.LogInfo($"Add Single Role:{role.RoleName} - SpawnRate:{spawnRate} - RoleSetNum:{roleNum}");
 
-			CurrentSingleRoleSpawnData[role.Team].Add(
+			var team = role.Core.Team;
+			CurrentSingleRoleSpawnData[team].Add(
 				intedRoleId, new SingleRoleSpawnData(roleNum, spawnRate, weight));
-			allRoleNum[role.Team] += roleNum;
+			allRoleNum[team] += roleNum;
 		}
 
 		log.LogInfo("---- RoleSpawnDataManager - Phase3 : Collect using SingleRole - END ----");
