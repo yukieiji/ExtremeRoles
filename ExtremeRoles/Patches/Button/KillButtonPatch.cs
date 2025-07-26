@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
@@ -83,7 +83,7 @@ public static class KillButtonDoClickPatch
 			return KillResult.BlockedToKillerSingleRoleCondition;
 		}
 		else if (
-			targetRole is IKilledFrom targetKillFromCheckRole &&
+			targetRole.AbilityClass is IKilledFrom targetKillFromCheckRole &&
 			!targetKillFromCheckRole.TryKilledFrom(target, killer))
 		{
 			return KillResult.BlockedToTargetSingleRoleCondition;
@@ -95,7 +95,7 @@ public static class KillButtonDoClickPatch
 			return KillResult.BlockedToKillerOtherRoleCondition;
 		}
 		else if (targetRole is MultiAssignRoleBase targetMultiAssignRole &&
-			targetMultiAssignRole.AnotherRole is IKilledFrom targetMultiKilledFromCheckRole &&
+			targetMultiAssignRole.AnotherRole?.AbilityClass is IKilledFrom targetMultiKilledFromCheckRole &&
 			!targetMultiKilledFromCheckRole.TryKilledFrom(target, killer))
 		{
 			return KillResult.BlockedToTargetOtherRoleCondition;

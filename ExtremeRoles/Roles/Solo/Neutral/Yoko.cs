@@ -23,12 +23,11 @@ using ExtremeRoles.Module.GameResult;
 
 namespace ExtremeRoles.Roles.Solo.Neutral;
 
-public sealed class Yoko :
+public sealed class YokoRole :
     SingleRoleBase,
 	IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleWinPlayerModifier,
-	IKilledFrom
+    IRoleWinPlayerModifier
 {
     public enum YokoOption
     {
@@ -52,7 +51,8 @@ public sealed class Yoko :
 	private Vector2 prevPos;
 
     private TMPro.TextMeshPro? tellText;
-	private YokoYashiroSystem? yashiro;
+	private YokoStatusModel status;
+    public override IStatusModel? Status => status;
 
     private readonly HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
     {
@@ -70,7 +70,8 @@ public sealed class Yoko :
 			ColorPalette.YokoShion),
         false, false, false, false,
         true, false, true, false, false)
-    { }
+    {
+    }
 
     public void ModifiedWinPlayer(
         NetworkedPlayerInfo rolePlayerInfo,
@@ -98,11 +99,6 @@ public sealed class Yoko :
                 break;
         }
     }
-
-	public bool TryKilledFrom(
-		PlayerControl rolePlayer, PlayerControl fromPlayer)
-		=> this.yashiro is null || !this.yashiro.IsNearActiveYashiro(
-			rolePlayer.GetTruePosition());
 
 	public override bool IsSameTeam(SingleRoleBase targetRole) =>
         this.IsNeutralSameTeam(targetRole);
@@ -156,6 +152,8 @@ public sealed class Yoko :
 	}
     protected override void RoleSpecificInit()
     {
+        status = new YokoStatusModel();
+        AbilityClass = new YokoAbilityHandler(status);
 		var cate = this.Loader;
         this.CanRepairSabotage = cate.GetValue<YokoOption, bool>(YokoOption.CanRepairSabo);
         this.UseVent = cate.GetValue<YokoOption, bool>(YokoOption.CanUseVent);
@@ -163,7 +161,7 @@ public sealed class Yoko :
         this.searchTime = cate.GetValue<YokoOption, float>(YokoOption.SearchTime);
         this.trueInfoGage = cate.GetValue<YokoOption, int>(YokoOption.TrueInfoRate);
 
-		this.yashiro = null;
+		status.yashiro = null;
 
 		if (cate.GetValue<YokoOption, bool>(YokoOption.UseYashiro))
 		{
@@ -172,7 +170,7 @@ public sealed class Yoko :
 			float protectRange = cate.GetValue<YokoOption, float>(YokoOption.YashiroProtectRange);
 			bool isUpdateMeeting = cate.GetValue<YokoOption, bool>(YokoOption.YashiroUpdateWithMeeting);
 
-			this.yashiro = ExtremeSystemTypeManager.Instance.CreateOrGet(
+			status.yashiro = ExtremeSystemTypeManager.Instance.CreateOrGet(
 				YokoYashiroSystem.Type,
 				() => new YokoYashiroSystem(activeTime, sealTime, protectRange, isUpdateMeeting));
 		}
@@ -203,7 +201,7 @@ public sealed class Yoko :
 
 		if (this.Button != null)
 		{
-			this.Button.SetButtonShow(this.yashiro is not null);
+			this.Button.SetButtonShow(status.yashiro is not null);
 		}
 
 		if (Minigame.Instance) { return; }
@@ -321,7 +319,7 @@ public sealed class Yoko :
 
 	public bool UseAbility()
 	{
-		if (this.yashiro is null)
+		if (status.yashiro is null)
 		{
 			return false;
 		}
@@ -332,20 +330,20 @@ public sealed class Yoko :
 
 	public void CleanUp()
 	{
-		if (this.yashiro is null) { return; }
+		if (status.yashiro is null) { return; }
 
 		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
 
-		this.yashiro.RpcSetYashiro(this.GameControlId, pos);
+		status.yashiro.RpcSetYashiro(this.GameControlId, pos);
 	}
 
 	public bool IsAbilityUse()
 	{
-		if (this.yashiro is null) { return false; }
+		if (status.yashiro is null) { return false; }
 
 		Vector2 pos = PlayerControl.LocalPlayer.GetTruePosition();
 
-		return this.yashiro.CanSet(pos);
+		return status.yashiro.CanSet(pos);
 	}
 
 	public bool IsAbilityActive() =>
