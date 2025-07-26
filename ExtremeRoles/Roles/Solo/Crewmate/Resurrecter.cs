@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -87,10 +87,9 @@ public sealed class Resurrecter :
     private static SpriteRenderer flash;
 
     public Resurrecter() : base(
-        ExtremeRoleId.Resurrecter,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Resurrecter.ToString(),
-        ColorPalette.ResurrecterBlue,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Resurrecter,
+			ColorPalette.ResurrecterBlue),
         false, true, false, false)
     { }
 
@@ -184,7 +183,8 @@ public sealed class Resurrecter :
 
         flash.enabled = true;
 
-        hudManager.StartCoroutine(
+		var color = this.Core.Color;
+		hudManager.StartCoroutine(
             Effects.Lerp(1.0f, new System.Action<float>((p) =>
             {
                 if (flash == null) { return; }
@@ -194,8 +194,8 @@ public sealed class Resurrecter :
                     Mathf.Clamp01((1 - p) * 2 * 0.75f);
 
                 flash.color = new Color(
-                    this.NameColor.r, this.NameColor.g,
-                    this.NameColor.b, alpha);
+					color.r, color.g,
+					color.b, alpha);
 
                 if (p == 1f)
                 {
@@ -297,7 +297,7 @@ public sealed class Resurrecter :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 
 using ExtremeRoles.Helper;
@@ -53,10 +53,9 @@ public sealed class Agency : SingleRoleBase, IRoleAutoBuildAbility, IRoleUpdate
     private ExtremeAbilityButton takeTaskButton;
 
     public Agency() : base(
-        ExtremeRoleId.Agency,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Agency.ToString(),
-        ColorPalette.AgencyYellowGreen,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Agency,
+			ColorPalette.AgencyYellowGreen),
         false, true, false, false)
     { }
 

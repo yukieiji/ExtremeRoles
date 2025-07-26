@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using HarmonyLib;
 
@@ -233,7 +233,7 @@ public static class LogicGameFlowNormalCheckEndCriteriaPatch
 
 			setWinGameContorlId(role.GameControlId);
 
-			GameOverReason endReason = (GameOverReason)(role.Id switch
+			GameOverReason endReason = (GameOverReason)(role.Core.Id switch
 			{
 				ExtremeRoleId.Alice => RoleGameOverReason.AliceKilledByImposter,
 				ExtremeRoleId.TaskMaster => RoleGameOverReason.TaskMasterGoHome,

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -45,10 +45,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
     private TMPro.TextMeshPro killCountText = null;
 
     public Sheriff() : base(
-        ExtremeRoleId.Sheriff,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Sheriff.ToString(),
-        ColorPalette.SheriffOrange,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Sheriff,
+			ColorPalette.SheriffOrange),
         true, true, false, false)
     { }
 
@@ -62,8 +61,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
         if ((targetPlayerRole.IsImpostor()) ||
             (targetPlayerRole.IsNeutral() && this.canShootNeutral))
         {
-            if ((!this.canShootAssassin && targetPlayerRole.Id == ExtremeRoleId.Assassin) ||
-                targetPlayerRole.Id == ExtremeRoleId.Villain)
+			var id = targetPlayerRole.Core.Id;
+            if ((!this.canShootAssassin && id is ExtremeRoleId.Assassin) ||
+				id is ExtremeRoleId.Villain)
             {
                 missShoot(
                     rolePlayer,
@@ -98,7 +98,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
             shotText = string.Concat(
                 shotText,
                 Design.ColoedString(
-                    this.NameColor,
+                    this.Core.Color,
                     Tr.GetString("andFirst")),
                 Design.ColoedString(
                     ColorPalette.NeutralColor,
@@ -109,9 +109,9 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IT
             this.GetColoredRoleName(),
             shotText,
             Design.ColoedString(
-                this.NameColor,
+                this.Core.Color,
                 Tr.GetString(
-                    $"{this.Id}ShortDescription")));
+                    $"{this.Core.Id}ShortDescription")));
 
         return baseString;
 

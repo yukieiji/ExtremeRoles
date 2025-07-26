@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using Hazel;
@@ -96,8 +96,8 @@ public static class ExtremeGhostRoleManager
             return;
         }
 
-        ExtremeRoleType team = baseRole.Team;
-        ExtremeRoleId roleId = baseRole.Id;
+        ExtremeRoleType team = baseRole.Core.Team;
+        ExtremeRoleId roleId = baseRole.Core.Id;
 
         GhostRoleSpawnDataManager spawnDataMng = GhostRoleSpawnDataManager.Instance;
 

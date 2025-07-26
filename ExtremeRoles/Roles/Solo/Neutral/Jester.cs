@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module;
+using ExtremeRoles.Module;
 
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -36,10 +36,9 @@ public sealed class Jester : SingleRoleBase, IRoleAutoBuildAbility
     private ExtremeAbilityButton outburstButton;
 
     public Jester(): base(
-        ExtremeRoleId.Jester,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Jester.ToString(),
-        ColorPalette.JesterPink,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Jester,
+			ColorPalette.JesterPink),
         false, false, false, false)
     { }
 

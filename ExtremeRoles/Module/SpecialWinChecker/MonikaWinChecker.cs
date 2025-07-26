@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 
 using ExtremeRoles.Module.Interface;
@@ -52,7 +52,7 @@ internal sealed class MonikaAliveWinChecker : IWinChecker
 			}
 			else if (
 				ExtremeRoleManager.TryGetRole(player.PlayerId, out var role) &&
-				role.Id is ExtremeRoleId.Monika)
+				role.Core.Id is ExtremeRoleId.Monika)
 			{
 				++monika;
 			}

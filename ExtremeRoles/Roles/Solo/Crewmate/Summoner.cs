@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -49,10 +49,9 @@ public sealed class Summoner :
     private float range;
 
     public Summoner() : base(
-        ExtremeRoleId.Summoner,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Summoner.ToString(),
-        ColorPalette.SummonerToukoushoku,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Summoner,
+			ColorPalette.SummonerToukoushoku),
         false, true, false, false)
     { }
 
@@ -150,7 +149,7 @@ public sealed class Summoner :
 		if (this.summonTarget != null &&
 			this.summonTarget.PlayerId == targetPlayerId)
 		{
-			return Design.ColoedString(this.NameColor, " ◀");
+			return Design.ColoedString(this.Core.Color, " ◀");
 		}
 		return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
 	}

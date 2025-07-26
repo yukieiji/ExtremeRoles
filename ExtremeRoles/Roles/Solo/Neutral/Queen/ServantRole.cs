@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -42,10 +42,9 @@ public sealed class ServantRole :
 		QueenRole queen,
 		SingleRoleBase baseRole) :
 		base(
-			ExtremeRoleId.Servant,
-			ExtremeRoleType.Neutral,
-			ExtremeRoleId.Servant.ToString(),
-			ColorPalette.QueenWhite,
+			RoleCore.BuildNeutral(
+				ExtremeRoleId.Servant,
+				ColorPalette.QueenWhite),
 			baseRole.CanKill,
 			!baseRole.IsImpostor() ? true : baseRole.HasTask,
 			baseRole.UseVent,
@@ -55,9 +54,11 @@ public sealed class ServantRole :
 		this.status = new ServantStatus(queenPlayerId, queen);
 		SetControlId(queen.GameControlId);
 		this.queenPlayerId = queenPlayerId;
-		FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
 
-		var id = baseRole.Id;
+		var core = baseRole.Core;
+		FakeImposter = core.Team == ExtremeRoleType.Impostor;
+
+		var id = core.Id;
 
 		IsSpecialKill = id is
 			ExtremeRoleId.Fencer or ExtremeRoleId.Sheriff;
@@ -121,7 +122,7 @@ public sealed class ServantRole :
 
 		if (source.PlayerId == queenPlayerId)
 		{
-			color = NameColor;
+			color = Core.Color;
 		}
 
 		killFlash.enabled = true;
@@ -192,7 +193,7 @@ public sealed class ServantRole :
 	{
 		if (targetPlayer.PlayerId == queenPlayerId)
 		{
-			if (AnotherRole?.Id == ExtremeRoleId.Sheriff)
+			if (AnotherRole?.Core.Id == ExtremeRoleId.Sheriff)
 			{
 
 				Player.RpcUncheckMurderPlayer(

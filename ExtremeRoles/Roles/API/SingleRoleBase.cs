@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 
@@ -14,7 +14,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public virtual bool IsAssignGhostRole => true;
 
     public OptionTab Tab { get; } = OptionTab.GeneralTab;
-    public virtual string RoleName => this.RawRoleName;
+    public virtual string RoleName => this.Core.Name;
 
     public bool CanCallMeeting = true;
     public bool CanRepairSabotage = true;
@@ -40,12 +40,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     public float KillCoolTime = 0f;
     public int KillRange = 1;
 
-    public readonly ExtremeRoleId Id;
-	public ExtremeRoleType Team;
-
-    protected Color NameColor;
-
-    public readonly string RawRoleName;
+    public RoleCore Core { get; private set; }
 
 	public override IOptionLoader Loader
 	{
@@ -53,7 +48,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 		{
 			if (!OptionManager.Instance.TryGetCategory(
 					this.Tab,
-					ExtremeRoleManager.GetRoleGroupId(this.Id),
+					ExtremeRoleManager.GetRoleGroupId(this.Core.Id),
 					out var cate))
 			{
 				throw new ArgumentException("Can't find category");
@@ -64,11 +59,9 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
 	public SingleRoleBase()
     { }
+
     public SingleRoleBase(
-        ExtremeRoleId id,
-        ExtremeRoleType team,
-        string roleName,
-        Color roleColor,
+        RoleCore core,
         bool canKill,
         bool hasTask,
         bool useVent,
@@ -80,10 +73,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         bool canUseVital = true,
         OptionTab tab = OptionTab.GeneralTab)
     {
-        this.Id = id;
-        this.Team = team;
-        this.RawRoleName = roleName;
-        this.NameColor = roleColor;
+        this.Core = core;
         this.CanKill = canKill;
         this.HasTask = hasTask;
         this.UseVent = useVent;
@@ -98,7 +88,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
         if (tab == OptionTab.GeneralTab)
         {
-            switch (this.Team)
+            switch (this.Core.Team)
             {
                 case ExtremeRoleType.Crewmate:
                     this.Tab = OptionTab.CrewmateTab;
@@ -122,16 +112,9 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
     public virtual SingleRoleBase Clone()
     {
-        SingleRoleBase copy = (SingleRoleBase)this.MemberwiseClone();
-        Color baseColor = this.NameColor;
-
-        copy.NameColor = new Color(
-            baseColor.r,
-            baseColor.g,
-            baseColor.b,
-            baseColor.a);
-
-        return copy;
+        var role = (SingleRoleBase)this.MemberwiseClone();
+		role.Core = new RoleCore(this.Core);
+		return role;
     }
 
     public virtual bool IsTeamsWin() => this.IsWin;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -95,10 +95,7 @@ public sealed class UnderWarper :
     private bool isAwakedHasOtherKillRange;
 
     public UnderWarper() : base(
-        ExtremeRoleId.UnderWarper,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.UnderWarper.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.UnderWarper),
         true, false, true, true)
     { }
 
@@ -268,7 +265,7 @@ public sealed class UnderWarper :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -55,10 +55,7 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
 
     public Assassin(
         ) : base(
-            ExtremeRoleId.Assassin,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Assassin.ToString(),
-            Palette.ImpostorRed,
+			RoleCore.BuildImpostor(ExtremeRoleId.Assassin),
             true, false, true, true,
             tab: OptionTab.CombinationTab)
     {}
@@ -204,7 +201,7 @@ public sealed class Assassin : MultiAssignRoleBase, IKilledFrom
 		system.AddQueue(playerId, OnemanMeetingSystemManager.Type.Assassin);
 	}
 
-    private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
+    private bool isServant() => this.AnotherRole?.Core.Id == ExtremeRoleId.Servant;
 }
 
 
@@ -228,10 +225,9 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     private Dictionary<byte, PoolablePlayer> PlayerIcon = [];
     public Marlin(
         ) : base(
-            ExtremeRoleId.Marlin,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Marlin.ToString(),
-            ColorPalette.MarineBlue,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Marlin,
+				ColorPalette.MarineBlue),
             false, false, false, false,
             tab: OptionTab.CombinationTab)
     {}
@@ -280,7 +276,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
         SingleRoleBase targetRole,
         byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin)
+        if (targetRole.Core.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin)
         {
             return Palette.White;
         }
@@ -354,7 +350,7 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
 
             if (role.IsCrewmate() ||
                 (role.IsNeutral() && !this.CanSeeNeutral) ||
-                (role.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))
+                (role.Core.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))
             {
                 poolPlayer.gameObject.SetActive(false);
             }

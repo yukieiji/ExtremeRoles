@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
@@ -36,10 +36,7 @@ public sealed class Slime :
 	private bool seeMorphMerlin = false;
 
     public Slime() : base(
-        ExtremeRoleId.Slime,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Slime.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Slime),
         true, false, true, true)
     { }
 
@@ -56,7 +53,7 @@ public sealed class Slime :
 				PlayerControl.LocalPlayer != null &&
 				ExtremeRoleManager.TryGetRole(
 					PlayerControl.LocalPlayer.PlayerId, out var localRole) &&
-				localRole.Id == ExtremeRoleId.Marlin
+				localRole.Core.Id == ExtremeRoleId.Marlin
 			))
 		{
 			return;

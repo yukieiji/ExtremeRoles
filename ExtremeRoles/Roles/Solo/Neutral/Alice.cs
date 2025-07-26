@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Module;
@@ -43,10 +43,9 @@ public sealed class Alice :
 	private float winTaskRate;
 
     public Alice(): base(
-        ExtremeRoleId.Alice,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Alice.ToString(),
-        ColorPalette.AliceGold,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Alice,
+			ColorPalette.AliceGold),
         true, false, true, true)
     { }
 

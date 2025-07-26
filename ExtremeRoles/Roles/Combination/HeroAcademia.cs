@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -401,7 +401,7 @@ public sealed class HeroAcademia : ConstCombinationRoleManagerBase
 
             foreach (var role in ExtremeRoleManager.GameRole.Values)
             {
-                if (role.Id == ExtremeRoleId.Vigilante)
+                if (role.Core.Id == ExtremeRoleId.Vigilante)
                 {
                     ((Vigilante)role).SetCondition(
                         Vigilante.VigilanteCondition.NewLawInTheShip);
@@ -450,10 +450,9 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
 	public ExtremeAbilityButton Button { get; set; }
 	public Hero(
         ) : base(
-            ExtremeRoleId.Hero,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Hero.ToString(),
-            ColorPalette.HeroAmaIro,
+			RoleCore.BuildCrewmate(
+				ExtremeRoleId.Hero,
+				ColorPalette.HeroAmaIro),
             false, true, false, false,
             tab: OptionTab.CombinationTab)
     { }
@@ -638,7 +637,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleUpda
     {
         var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
 
-        if (fromRole.Id == ExtremeRoleId.Villain)
+        if (fromRole.Core.Id == ExtremeRoleId.Villain)
         {
             HeroAcademia.RpcDrawHeroAndVillan(
                 rolePlayer, fromPlayer);
@@ -714,10 +713,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
 	public ExtremeAbilityButton Button { get; set; }
 	public Villain(
         ) : base(
-            ExtremeRoleId.Villain,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Villain.ToString(),
-            Palette.ImpostorRed,
+			RoleCore.BuildImpostor(ExtremeRoleId.Villain),
             true, false, true, true,
             tab: OptionTab.CombinationTab)
     { }
@@ -824,7 +820,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAutoBuildAbility, IRoleU
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
-        if (fromRole.Id == ExtremeRoleId.Hero)
+        if (fromRole.Core.Id == ExtremeRoleId.Hero)
         {
             HeroAcademia.RpcDrawHeroAndVillan(
                 fromPlayer, rolePlayer);
@@ -895,10 +891,9 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 	public ExtremeAbilityButton Button { get; set; }
 	public Vigilante(
         ) : base(
-            ExtremeRoleId.Vigilante,
-            ExtremeRoleType.Neutral,
-            ExtremeRoleId.Vigilante.ToString(),
-            ColorPalette.VigilanteFujiIro,
+			RoleCore.BuildNeutral(
+				ExtremeRoleId.Vigilante,
+				ColorPalette.VigilanteFujiIro),
             false, false, false, false,
             tab: OptionTab.CombinationTab)
     { }
@@ -999,7 +994,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
         PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
         var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
-        if (fromRole.Id == ExtremeRoleId.Hero &&
+        if (fromRole.Core.Id == ExtremeRoleId.Hero &&
             this.condition != VigilanteCondition.NewEnemyNeutralForTheShip)
         {
             return false;
@@ -1012,17 +1007,18 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     public override string GetFullDescription()
     {
-        switch (this.condition)
+		var id = Core.Id;
+		switch (this.condition)
         {
             case VigilanteCondition.NewHeroForTheShip:
                 return Tr.GetString(
-                    $"{this.Id}CrewDescription");
+                    $"{id}CrewDescription");
             case VigilanteCondition.NewVillainForTheShip:
                 return Tr.GetString(
-                    $"{this.Id}ImpDescription");
+                    $"{id}ImpDescription");
             case VigilanteCondition.NewEnemyNeutralForTheShip:
                 return Tr.GetString(
-                    $"{this.Id}NeutDescription");
+                    $"{id}NeutDescription");
             default:
                 return base.GetFullDescription();
         }
@@ -1031,7 +1027,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
     public override string GetRolePlayerNameTag(
         SingleRoleBase targetRole, byte targetPlayerId)
     {
-        if (targetRole.Id == ExtremeRoleId.Vigilante &&
+        if (targetRole.Core.Id == ExtremeRoleId.Vigilante &&
             this.IsSameControlId(targetRole))
         {
             return Design.ColoedString(
@@ -1084,16 +1080,20 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
                 {
                     var playerInfo = GameData.Instance.GetPlayerById(playerId);
 
-                    if (playerInfo == null) { continue; }
+                    if (playerInfo == null)
+					{
+						continue;
+					}
 
-                    if (role.Id == ExtremeRoleId.Hero && playerInfo.Disconnected)
+					var id = role.Core.Id;
+                    if (id == ExtremeRoleId.Hero && playerInfo.Disconnected)
                     {
                         HeroAcademia.RpcUpdateVigilante(
                             HeroAcademia.Condition.HeroDown,
                             playerInfo.PlayerId);
                         return;
                     }
-                    else if (role.Id == ExtremeRoleId.Villain && playerInfo.Disconnected)
+                    else if (id == ExtremeRoleId.Villain && playerInfo.Disconnected)
                     {
                         HeroAcademia.RpcUpdateVigilante(
                             HeroAcademia.Condition.VillainDown,
@@ -1118,19 +1118,20 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAutoBuildAbility, IRol
 
     private string createImportantText(bool isContainFakeTask)
     {
+		var core = this.Core;
         string baseString = Design.ColoedString(
-            this.NameColor,
+			core.Color,
             string.Format("{0}: {1}",
                 Design.ColoedString(
-                    this.NameColor,
+					core.Color,
                     Tr.GetString(this.RoleName)),
                 Tr.GetString(
-                    $"{this.Id}{this.condition}ShortDescription")));
+                    $"{core.Id}{this.condition}ShortDescription")));
 
         if (isContainFakeTask && !this.HasTask)
         {
             string fakeTaskString = Design.ColoedString(
-                this.NameColor,
+				core.Color,
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";

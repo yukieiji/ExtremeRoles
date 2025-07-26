@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 
 using UnityEngine;
 
@@ -51,10 +51,9 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 	private bool awakeHasOtherVision;
 
 	public Bait() : base(
-        ExtremeRoleId.Bait,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Bait.ToString(),
-        ColorPalette.BaitCyan,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Bait,
+			ColorPalette.BaitCyan),
         false, true, false, false)
     { }
 
@@ -104,7 +103,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		if (IsAwake)
 		{
 			return Tr.GetString(
-				$"{this.Id}FullDescription");
+				$"{this.Core.Id}FullDescription");
 		}
 		else
 		{
@@ -168,7 +167,7 @@ public sealed class Bait : SingleRoleBase, IRoleAwake<RoleTypes>
 		{
 			var baitReporter = HudManager.Instance.gameObject.AddComponent<BaitDalayReporter>();
 			baitReporter.StartReportTimer(
-				this.NameColor, rolePlayer.Data,
+				this.Core.Color, rolePlayer.Data,
 				this.delayUntilForceReport);
 		}
 

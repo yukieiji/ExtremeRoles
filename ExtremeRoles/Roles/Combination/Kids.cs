@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Hazel;
@@ -217,10 +217,9 @@ public sealed class Delinquent : MultiAssignRoleBase, IRoleAutoBuildAbility
     private bool canAssignWisp = true;
 
     public Delinquent() : base(
-        ExtremeRoleId.Delinquent,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Delinquent.ToString(),
-        ColorPalette.KidsYellowGreen,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Delinquent,
+			ColorPalette.KidsYellowGreen),
         false, false, false, false,
         tab: OptionTab.CombinationTab)
     { }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using UnityEngine;
@@ -227,10 +227,9 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     private static int cameraNum = 0;
     public Carpenter() : base(
-        ExtremeRoleId.Carpenter,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Carpenter.ToString(),
-        ColorPalette.CarpenterBrown,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Carpenter,
+			ColorPalette.CarpenterBrown),
         false, true, false, false)
     { }
 
@@ -676,7 +675,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using ExtremeRoles.Module.Interface;
 
@@ -46,7 +46,7 @@ internal sealed class LoverWinChecker : IWinChecker
 		{
 			++this.nonTasker;
 		}
-		this.roles.Add(role.Team);
+		this.roles.Add(role.Core.Team);
 		this.aliveLover.Add(playerId);
 	}
 
@@ -75,7 +75,7 @@ internal sealed class LoverWinChecker : IWinChecker
 			if (lover.CanHasAnotherRole)
 			{
 
-				switch (lover.AnotherRole.Id)
+				switch (lover.AnotherRole.Core.Id)
 				{
 					case ExtremeRoleId.Sidekick:
 						var sidekick = (SidekickRole)lover.AnotherRole;

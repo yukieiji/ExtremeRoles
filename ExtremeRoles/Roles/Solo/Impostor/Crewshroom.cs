@@ -1,4 +1,4 @@
-﻿using AmongUs.GameOptions;
+using AmongUs.GameOptions;
 using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Ability;
@@ -30,10 +30,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 
 #pragma warning disable CS8618
 	public Crewshroom() : base(
-		ExtremeRoleId.Crewshroom,
-		ExtremeRoleType.Impostor,
-		ExtremeRoleId.Crewshroom.ToString(),
-		Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Crewshroom),
 		true, false, true, true)
 	{ }
 #pragma warning restore CS8618
@@ -49,7 +46,7 @@ public sealed class Crewshroom : SingleRoleBase, IRoleAutoBuildAbility
 	public override string GetIntroDescription()
 		=> Map.Id switch
 		{
-			5 => Tr.GetString($"{this.Id}FungleIntroDescription"),
+			5 => Tr.GetString($"{this.Core.Id}FungleIntroDescription"),
 			_ => base.GetIntroDescription()
 		};
 
