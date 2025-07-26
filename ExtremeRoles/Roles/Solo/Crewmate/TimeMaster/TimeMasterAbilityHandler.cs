@@ -1,7 +1,6 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using System.Collections;
 using UnityEngine;
@@ -73,9 +72,9 @@ public class TimeMasterAbilityHandler : IAbility, IKilledFrom
         // Screen Initialize
         if (this.rewindScreen == null)
         {
-            this.isRewindOn = Object.Instantiate(
-                    HudManager.Instance.FullScreen,
-                    HudManager.Instance.transform);
+			this.rewindScreen = Object.Instantiate(
+                HudManager.Instance.FullScreen,
+                HudManager.Instance.transform);
             this.rewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
 			this.rewindScreen.gameObject.SetActive(true);
             this.rewindScreen.enabled = false;

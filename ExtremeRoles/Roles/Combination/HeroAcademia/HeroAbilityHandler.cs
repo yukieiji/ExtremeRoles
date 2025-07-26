@@ -1,31 +1,21 @@
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Combination.HeroAcademia;
 
-public class HeroAbilityHandler : IAbility, IKilledFrom
+public class HeroAbilityHandler(HeroStatusModel status) : IAbility, IKilledFrom
 {
-    private HeroStatusModel status;
-
-    public HeroAbilityHandler(HeroStatusModel status)
-    {
-        this.status = status;
-    }
+	private HeroStatusModel status = status;
 
     public bool TryKilledFrom(PlayerControl rolePlayer, PlayerControl fromPlayer)
     {
-        var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
+        if (ExtremeRoleManager.TryGetRole(fromPlayer.PlayerId, out var fromRole) &&
+			fromRole.Id is ExtremeRoleId.Villain)
+        {
+            HeroAcademiaRole.RpcDrawHeroAndVillan(rolePlayer, fromPlayer);
+            return false;
+        }
 
-        if (fromRole.Id == ExtremeRoleId.Villain)
-        {
-            HeroAcademia.RpcDrawHeroAndVillan(rolePlayer, fromPlayer);
-            return false;
-        }
-        else if (fromRole.IsImpostor() && status.cond != Hero.OneForAllCondition.NoGuard)
-        {
-            return false;
-        }
-        return true;
+		return this.status.Cond is Hero.OneForAllCondition.NoGuard || !fromRole.IsImpostor();
     }
 }

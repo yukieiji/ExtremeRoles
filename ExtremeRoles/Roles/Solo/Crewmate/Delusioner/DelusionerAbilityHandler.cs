@@ -4,7 +4,6 @@ using ExtremeRoles.Module.Ability.Behavior.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour.Minigames;
 using ExtremeRoles.Module.SystemType.Roles;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +25,7 @@ public sealed class DelusionerAbilityHandler(
     private readonly DelusionerStatusModel status = status;
 	private readonly DelusionerRole role = role;
 
-	private AbilityState prevState;
+	private AbilityState prevState = AbilityState.CoolDown;
 
 	public void ReduceCounterNum()
 	{

@@ -255,13 +255,15 @@ public sealed class Miner :
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null ||
-					killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
+					killedPlayer.Contains(playerInfo.PlayerId))
+				{ 
+					continue;
+				}
 
-                var assassin = ExtremeRoleManager.GameRole[
-                    playerInfo.PlayerId] as Assassin;
-
-                if (assassin != null &&
-					(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
+                if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(
+						playerInfo.PlayerId, out var assassin) &&
+					assassin.Status is AssassinStatusModel status &&
+					(!status.CanKilled || !status.CanKilledFromNeutral))
                 {
 					continue;
 				}

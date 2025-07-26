@@ -4,15 +4,22 @@ using ExtremeRoles.Module.GameResult;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Combination.Avalon;
+using ExtremeRoles.Roles.Combination.HeroAcademia;
 using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Crewmate.Delusioner;
+using ExtremeRoles.Roles.Solo.Crewmate.Fencer;
+using ExtremeRoles.Roles.Solo.Crewmate.TimeMaster;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Neutral.IronMate;
 using ExtremeRoles.Roles.Solo.Neutral.Jackal;
 using ExtremeRoles.Roles.Solo.Neutral.Missionary;
 using ExtremeRoles.Roles.Solo.Neutral.Queen;
 using ExtremeRoles.Roles.Solo.Neutral.Tucker;
 using ExtremeRoles.Roles.Solo.Neutral.Yandere;
+using ExtremeRoles.Roles.Solo.Neutral.Yoko;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -271,17 +278,17 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Supervisor  , new Supervisor()},
             {(int)ExtremeRoleId.BodyGuard   , new BodyGuard()},
             {(int)ExtremeRoleId.Whisper     , new Whisper()},
-            {(int)ExtremeRoleId.TimeMaster  , new TimeMaster()},
+            {(int)ExtremeRoleId.TimeMaster  , new TimeMasterRole()},
             {(int)ExtremeRoleId.Agency      , new Agency()},
             {(int)ExtremeRoleId.Bakary      , new Bakary()},
             {(int)ExtremeRoleId.CurseMaker  , new CurseMaker()},
-            {(int)ExtremeRoleId.Fencer      , new Fencer()},
+            {(int)ExtremeRoleId.Fencer      , new FencerRole()},
             {(int)ExtremeRoleId.Opener      , new Opener()},
             {(int)ExtremeRoleId.Carpenter   , new Carpenter()},
             {(int)ExtremeRoleId.Survivor    , new Survivor()},
             {(int)ExtremeRoleId.Captain     , new Captain()},
             {(int)ExtremeRoleId.Photographer, new Photographer()},
-            {(int)ExtremeRoleId.Delusioner  , new Delusioner()},
+            {(int)ExtremeRoleId.Delusioner  , new DelusionerRole()},
             {(int)ExtremeRoleId.Resurrecter , new Resurrecter()},
             {(int)ExtremeRoleId.Gambler     , new Gambler()},
             {(int)ExtremeRoleId.Teleporter  , new Teleporter()},
@@ -329,7 +336,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Missionary, new MissionaryRole()},
             {(int)ExtremeRoleId.Jester    , new Jester()},
             {(int)ExtremeRoleId.Yandere   , new YandereRole()},
-            {(int)ExtremeRoleId.Yoko      , new Yoko()},
+            {(int)ExtremeRoleId.Yoko      , new YokoRole()},
             {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
             {(int)ExtremeRoleId.Miner     , new Miner()},
             {(int)ExtremeRoleId.Eater     , new Eater()},
@@ -339,7 +346,7 @@ public static class ExtremeRoleManager
 			{(int)ExtremeRoleId.Hatter    , new Hatter()},
 			{(int)ExtremeRoleId.Artist    , new Artist()},
 			{(int)ExtremeRoleId.Tucker    , new TuckerRole()},
-			{(int)ExtremeRoleId.IronMate  , new IronMate()},
+			{(int)ExtremeRoleId.IronMate  , new IronMateRole()},
 			{(int)ExtremeRoleId.Monika    , new Monika()},
 			{(int)ExtremeRoleId.Heretic   , new Heretic()},
 			{(int)ExtremeRoleId.Shepherd  , new ShepherdRole()},
@@ -354,8 +361,8 @@ public static class ExtremeRoleManager
     public static readonly ImmutableDictionary<byte, CombinationRoleManagerBase> CombRole =
 		new Dictionary<byte, CombinationRoleManagerBase>()
         {
-            {(byte)CombinationRoleType.Avalon         , new Avalon()},
-            {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
+            {(byte)CombinationRoleType.Avalon         , new AvalonRole()},
+            {(byte)CombinationRoleType.HeroAca        , new HeroAcademiaRole()},
             {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
             {(byte)CombinationRoleType.Kids           , new Kids()},
             {(byte)CombinationRoleType.Buddy          , new BuddyManager()},
@@ -429,8 +436,6 @@ public static class ExtremeRoleManager
         Xion.Purge();
         // ボディーガードのリセット
         BodyGuard.ResetAllShild();
-        // タイムマスターのリセット
-        TimeMaster.ResetHistory();
 
         // APIのステータスのリセット
         API.Extension.State.RoleState.Reset();

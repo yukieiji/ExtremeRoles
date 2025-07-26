@@ -1,6 +1,5 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.SystemType.Roles;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Interface.Ability;
 
 namespace ExtremeRoles.Roles.Solo.Neutral.IronMate;

@@ -181,8 +181,9 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		{
 			byte playerId = this.tmpTarget.PlayerId;
 
-			if (ExtremeRoleManager.GameRole[playerId] is Assassin assassin &&
-				(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
+			if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerId, out var assassin) &&
+				assassin.Status is AssassinStatusModel status &&
+				(!status.CanKilled || !status.CanKilledFromNeutral))
 			{
 				return false;
 			}
