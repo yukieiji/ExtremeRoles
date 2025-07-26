@@ -26,7 +26,8 @@ public sealed class UnderWarper :
     SingleRoleBase,
     IRoleAwake<RoleTypes>,
     IRoleResetMeeting,
-    IRoleSpecialSetUp
+    IRoleSpecialSetUp,
+	ITryKillTo
 {
     public enum UnderWarperOption
     {

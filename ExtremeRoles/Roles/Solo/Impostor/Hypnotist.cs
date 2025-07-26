@@ -40,7 +40,8 @@ public sealed class Hypnotist :
     IRoleAutoBuildAbility,
     IRoleAwake<RoleTypes>,
     IRoleMurderPlayerHook,
-    IRoleSpecialReset
+    IRoleSpecialReset,
+	ITryKillTo
 {
     public enum HypnotistOption
     {

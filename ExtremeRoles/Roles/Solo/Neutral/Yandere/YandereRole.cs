@@ -18,13 +18,16 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Roles.Solo.Neutral.Yandere;
 
 
+using ExtremeRoles.Roles.API.Interface;
+
 public sealed class YandereRole :
     SingleRoleBase,
     IRoleUpdate,
     IRoleMurderPlayerHook,
     IRoleResetMeeting,
 	IRoleReviveHook,
-	IRoleSpecialSetUp
+	IRoleSpecialSetUp,
+	ITryKillTo
 {
     public PlayerControl OneSidedLover = null;
 
