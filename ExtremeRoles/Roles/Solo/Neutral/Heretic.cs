@@ -29,6 +29,7 @@ public sealed class Heretic :
 {
 	public enum Option
 	{
+		UseVent,
 		HasTask,
 		SeeImpostorTaskGage,
 
@@ -257,6 +258,7 @@ public sealed class Heretic :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
+		factory.CreateBoolOption(Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask,
 			false);
@@ -295,6 +297,8 @@ public sealed class Heretic :
 
 		var loader = this.Loader;
 
+		this.UseVent = loader.GetValue<Option, bool>(
+			Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(
 			Option.HasTask);
 		this.seeImpostorTaskGage = loader.GetValue<Option, int>(
