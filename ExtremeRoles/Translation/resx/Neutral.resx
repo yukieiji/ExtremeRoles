@@ -788,9 +788,6 @@
   <data name="MadmateCanUseVent" xml:space="preserve">
     <value>ベントを使用できるか</value>
   </data>
-  <data name="MadmateCanMoveVentToVent" xml:space="preserve">
-    <value>ベント同士で移動できるか</value>
-  </data>
   <data name="MadmateHasTask" xml:space="preserve">
     <value>タスクに関するオプションを有効化するか</value>
   </data>

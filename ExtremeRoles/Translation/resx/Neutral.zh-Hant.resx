@@ -761,9 +761,6 @@
   <data name="MadmateCanUseVent" xml:space="preserve">
     <value>可以使用管道</value>
   </data>
-  <data name="MadmateCanMoveVentToVent" xml:space="preserve">
-    <value>可在管道間移動</value>
-  </data>
   <data name="MadmateHasTask" xml:space="preserve">
     <value>開啓叛徒與任務相關的設置</value>
   </data>

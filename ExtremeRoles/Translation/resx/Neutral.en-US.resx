@@ -749,9 +749,6 @@ flash.
   <data name="MadmateCanUseVent" xml:space="preserve">
     <value>Can use VENTs</value>
   </data>
-  <data name="MadmateCanMoveVentToVent" xml:space="preserve">
-    <value>Can move between VENTs</value>
-  </data>
   <data name="MadmateHasTask" xml:space="preserve">
     <value>Use task-related settings</value>
   </data>
