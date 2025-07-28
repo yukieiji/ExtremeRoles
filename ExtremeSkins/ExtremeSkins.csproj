@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <AnalysisLevel>preview</AnalysisLevel>
     <!--<Version>2025.7.23.0</Version>-->
-    <VersionPrefix>2025.7.23</VersionPrefix>
+    <VersionPrefix>2025.7.30</VersionPrefix>
     <VersionSuffix>AmongUsv1605</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
     <Authors>yukieiji</Authors>
