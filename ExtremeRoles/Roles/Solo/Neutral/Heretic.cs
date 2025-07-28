@@ -22,6 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Heretic :
 	SingleRoleBase,
+	IRoleSpecialSetUp,
 	IRoleAutoBuildAbility,
 	IRoleUpdate,
 	IRoleWinPlayerModifier,
@@ -88,6 +89,27 @@ public sealed class Heretic :
 				break;
 			default:
 				break;
+		}
+	}
+
+	public void IntroBeginSetUp()
+	{
+		return;
+	}
+
+	public void IntroEndSetUp()
+	{
+		if (!this.UseVent)
+		{
+			return;
+		}
+
+		// 全てのベントリンクを解除
+		foreach (Vent vent in ShipStatus.Instance.AllVents)
+		{
+			vent.Right = null;
+			vent.Center = null;
+			vent.Left = null;
 		}
 	}
 

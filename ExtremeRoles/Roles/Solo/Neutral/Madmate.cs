@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -15,7 +15,6 @@ public sealed class Madmate :
     SingleRoleBase,
     IRoleAutoBuildAbility,
     IRoleUpdate,
-    IRoleSpecialSetUp,
     IRoleWinPlayerModifier,
 	IRoleFakeIntro
 {
@@ -24,14 +23,12 @@ public sealed class Madmate :
         IsDontCountAliveCrew,
         CanFixSabotage,
         CanUseVent,
-        CanMoveVentToVent,
         HasTask,
         SeeImpostorTaskGage,
         CanSeeFromImpostor,
         CanSeeFromImpostorTaskGage,
     }
 
-    private bool canMoveVentToVent = false;
     private bool canSeeFromImpostor = false;
     private bool isDontCountAliveCrew = false;
 
@@ -100,24 +97,6 @@ public sealed class Madmate :
     public void ResetOnMeetingEnd(NetworkedPlayerInfo exiledPlayer = null)
     {
         return;
-    }
-
-    public void IntroBeginSetUp()
-    {
-        return;
-    }
-
-    public void IntroEndSetUp()
-    {
-        if (!this.UseVent || this.canMoveVentToVent) { return; }
-
-        // 全てのベントリンクを解除
-        foreach (Vent vent in ShipStatus.Instance.AllVents)
-        {
-            vent.Right = null;
-            vent.Center = null;
-            vent.Left = null;
-        }
     }
 
     public void ModifiedWinPlayer(
@@ -189,9 +168,6 @@ public sealed class Madmate :
         var ventUseOpt = factory.CreateBoolOption(
             MadmateOption.CanUseVent,
             false);
-        factory.CreateBoolOption(
-            MadmateOption.CanMoveVentToVent,
-            false, ventUseOpt);
         var taskOpt = factory.CreateBoolOption(
             MadmateOption.HasTask,
             false);
@@ -226,8 +202,6 @@ public sealed class Madmate :
             MadmateOption.CanFixSabotage);
         this.UseVent = cate.GetValue<MadmateOption, bool>(
             MadmateOption.CanUseVent);
-        this.canMoveVentToVent = cate.GetValue<MadmateOption, bool>(
-            MadmateOption.CanMoveVentToVent);
         this.HasTask = cate.GetValue<MadmateOption, bool>(
             MadmateOption.HasTask);
         this.seeImpostorTaskGage = cate.GetValue<MadmateOption, int>(
