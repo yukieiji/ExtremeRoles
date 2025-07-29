@@ -151,14 +151,17 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public void Update(PlayerControl rolePlayer)
 		{
+			bool isSingle = this.button.MultiModalAbilityNum <= 1;
+
 			if (IntroCutscene.Instance != null ||
 				MeetingHud.Instance != null ||
-				ExileController.Instance != null)
+				ExileController.Instance != null ||
+				isSingle || 
+				this.button.IsAbilityActiveOrCharge())
 			{
 				Hide();
+				return;
 			}
-
-			bool isSingle = this.button.MultiModalAbilityNum <= 1;
 
 			if (this.weaponInfoShower.IsHide && !isSingle)
 			{
@@ -173,9 +176,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				this.prevPlayerPos = rolePlayer.GetTruePosition();
 			}
 
-			if (isSingle ||
-				!this.button.IsAbilityReady() ||
-				this.prevPlayerPos.Value != curPos ||
+			if (this.prevPlayerPos.Value != curPos ||
 				!Key.IsAltDown())
 			{
 				hideAbilityInfo(curPos);
