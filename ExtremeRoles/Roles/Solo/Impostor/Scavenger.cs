@@ -39,6 +39,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private bool isFadingOut = false;
 		private bool isShow = false;
 
+		private const float maxTimer = 0.75f;
+
 		public MixWeaponInfoShower()
 		{
 			this.infoText = CreateInfoText(new Vector3(0.0f, -0.75f, -250.0f));
@@ -63,18 +65,18 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			if (!this.isShow)
 			{
-				this.infoText.gameObject.SetActive(!this.isShow);
+				this.infoText.gameObject.SetActive(this.isShow);
 				return;
 			}
 
 			this.fadeTimer += isFadingOut ? -Time.deltaTime : Time.deltaTime;
-			float alpha = this.fadeTimer / 0.5f;
+			float alpha = this.fadeTimer / maxTimer;
 			this.infoText.color = new Color(
 				this.infoText.color.r,
 				this.infoText.color.g,
 				this.infoText.color.b, alpha);
 
-			if (fadeTimer >= 0.75f)
+			if (fadeTimer >= maxTimer)
 			{
 				isFadingOut = true;
 			}
@@ -115,7 +117,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.button = button;
 			this.weaponInfoShower = mixWeaponInfo;
+			
 			this.abilityInfoText = CreateInfoText(new Vector3(0.0f, -0.0f, -250.0f));
+			this.abilityInfoText.enableWordWrapping = false;
+			this.abilityInfoText.fontSize = this.abilityInfoText.fontSizeMax = this.abilityInfoText.fontSizeMin = 3.0f;
+
 			this.mixWeaponAction = mixWeaponAction;
 			this.nextGetterWepon = nextGetterWepon;
 			this.weaponMixTime = weponMixTime;
@@ -171,14 +177,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			{
 				this.nextWeapon = this.nextGetterWepon.Invoke();
 			}
-
-			this.abilityInfoText.text = Design.ColoedString(
-				Palette.EnabledColor,
-				TranslationControllerExtension.GetString(
-					"WeaponMixTimeRemain",
-					TranslationController.Instance.GetString(this.nextWeapon.ToString()),
-					Mathf.CeilToInt(this.timer))
-			);
+			this.abilityInfoText.color = Palette.EnabledColor;
+			this.abilityInfoText.text = TranslationControllerExtension.GetString(
+				"WeaponMixTimeRemain",
+				TranslationController.Instance.GetString(this.nextWeapon.ToString()),
+				Mathf.CeilToInt(this.timer));
 			this.abilityInfoText.gameObject.SetActive(true);
 			this.timer -= Time.deltaTime;
 
