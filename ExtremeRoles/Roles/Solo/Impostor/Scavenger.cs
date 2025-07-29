@@ -30,7 +30,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
-	public class MixWeaponInfoShower
+	private sealed class MixWeaponInfoShower
 	{
 		public bool IsHide => !isShow;
 
@@ -43,7 +43,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public MixWeaponInfoShower()
 		{
-			this.infoText = CreateInfoText(new Vector3(0.0f, -0.75f, -250.0f));
+			this.infoText = createInfoText(new Vector3(0.0f, -0.75f, -250.0f));
 			this.infoText.text = TranslationController.Instance.GetString("WeaponMixInfo");
 			this.infoText.gameObject.SetActive(false);
 		}
@@ -95,7 +95,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
-	public class InfoTextShower
+	private sealed class InfoTextShower
 	{
 		private readonly TextMeshPro abilityInfoText;
 		private readonly MixWeaponInfoShower weaponInfoShower;
@@ -121,7 +121,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.weaponInfoShower = mixWeaponInfo;
 			this.textPop = textPop;
 			
-			this.abilityInfoText = CreateInfoText(new Vector3(0.0f, -0.0f, -250.0f));
+			this.abilityInfoText = createInfoText(new Vector3(0.0f, -0.5f, -250.0f));
 			this.abilityInfoText.enableWordWrapping = false;
 			this.abilityInfoText.fontSize = this.abilityInfoText.fontSizeMax = this.abilityInfoText.fontSizeMin = 3.0f;
 
@@ -214,12 +214,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 	}
 
-	private static TextMeshPro CreateInfoText(Vector3 pos)
+	private static TextMeshPro createInfoText(Vector3 pos)
 	{
 		var infoText = UnityObject.Instantiate(
 			Module.Prefab.Text,
 			Camera.main.transform, false);
-		infoText.transform.localPosition = new Vector3(0.0f, -0.5f, -250.0f);
+		infoText.transform.localPosition = pos;
 		infoText.enableWordWrapping = false;
 		infoText.gameObject.SetActive(false);
 

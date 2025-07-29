@@ -11,7 +11,7 @@ public sealed class TextPopUpper
 {
 	private sealed class Text
 	{
-		private TextMeshPro body;
+		private readonly TextMeshPro body;
 		public Text(
 			string printString,
 			float disapearTime,
@@ -50,7 +50,7 @@ public sealed class TextPopUpper
 	
 	private int indexer = 0;
 
-	private readonly List<Text?> showText = new List<Text?>();
+	private readonly List<Text?> showText;
 	private readonly float disapearTime;
 	private readonly Vector3 showPos;
 	private readonly TextAlignmentOptions textOffest;
