@@ -84,7 +84,7 @@ public sealed class TextPopUpper
 		float y = this.isUp ? 0.5f : -0.5f;
 		foreach (var text in this.showText)
 		{
-			if (text == null)
+			if (text is null)
 			{
 				continue;
 			}
@@ -110,8 +110,7 @@ public sealed class TextPopUpper
 	{
 		foreach (var text in this.showText)
 		{
-			if (text == null) { continue; }
-			text.Clear();
+			text?.Clear();
 		}
 	}
 }
