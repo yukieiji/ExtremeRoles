@@ -102,7 +102,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		private readonly TextPopUpper textPop;
 		private readonly ExtremeMultiModalAbilityButton button;
 		private readonly float weaponMixTime;
-		private readonly Func<Ability> nextGetterWepon;
+		private readonly Func<Ability> nextGetterWeapon;
 		private readonly Action<Ability> mixWeaponAction;
 
 		private Vector2? prevPlayerPos;
@@ -114,7 +114,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			TextPopUpper textPop,
 			MixWeaponInfoShower mixWeaponInfo,
 			Action<Ability> mixWeaponAction,
-			Func<Ability> nextGetterWepon,
+			Func<Ability> nextGetterWeapon,
 			float weponMixTime)
 		{
 			this.button = button;
@@ -126,7 +126,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.abilityInfoText.fontSize = this.abilityInfoText.fontSizeMax = this.abilityInfoText.fontSizeMin = 3.0f;
 
 			this.mixWeaponAction = mixWeaponAction;
-			this.nextGetterWepon = nextGetterWepon;
+			this.nextGetterWeapon = nextGetterWeapon;
 			this.weaponMixTime = weponMixTime;
 		}
 
@@ -187,7 +187,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			if (this.nextWeapon is Ability.ScavengerNull)
 			{
-				this.nextWeapon = this.nextGetterWepon.Invoke();
+				this.nextWeapon = this.nextGetterWeapon.Invoke();
 			}
 			this.abilityInfoText.color = Palette.EnabledColor;
 			this.abilityInfoText.text = TranslationControllerExtension.GetString(
