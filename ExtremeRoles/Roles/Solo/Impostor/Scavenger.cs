@@ -44,7 +44,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public MixWeaponInfoShower()
 		{
 			this.infoText = CreateInfoText(new Vector3(0.0f, -0.75f, -250.0f));
-			this.infoText.text = "「Alt」キーで武器合成が可能";
+			this.infoText.text = TranslationController.Instance.GetString("WeaponMixInfo");
 			this.infoText.gameObject.SetActive(false);
 		}
 
@@ -133,8 +133,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		public void AddWepon(Ability ability)
 		{
 			string abilityText = TranslationController.Instance.GetString(ability.ToString());
-			string key = this.button.MultiModalAbilityNum <= 1 ? "「{0}」を入手" : "「{0}」を入手、スクロールで切り替え可能";
-			this.textPop.AddText(string.Format(key, abilityText));
+			string key = this.button.MultiModalAbilityNum <= 1 ? "GetFirstWepon" : "GetNextWepon";
+			this.textPop.AddText(TranslationControllerExtension.GetString(key, abilityText));
 
 			if (this.button.MultiModalAbilityNum > 1)
 			{
