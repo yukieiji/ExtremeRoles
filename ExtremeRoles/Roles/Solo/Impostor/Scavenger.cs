@@ -117,6 +117,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.weaponInfoShower = mixWeaponInfo;
 			this.abilityInfoText = CreateInfoText(new Vector3(0.0f, -0.0f, -250.0f));
 			this.mixWeaponAction = mixWeaponAction;
+			this.nextGetterWepon = nextGetterWepon;
 			this.weaponMixTime = weponMixTime;
 		}
 
