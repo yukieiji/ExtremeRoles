@@ -99,6 +99,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	{
 		private readonly TextMeshPro abilityInfoText;
 		private readonly MixWeaponInfoShower weaponInfoShower;
+		private readonly TextPopUpper textPop;
 		private readonly ExtremeMultiModalAbilityButton button;
 		private readonly float weaponMixTime;
 		private readonly Func<Ability> nextGetterWepon;
@@ -110,6 +111,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 		public InfoTextShower(
 			ExtremeMultiModalAbilityButton button,
+			TextPopUpper textPop,
 			MixWeaponInfoShower mixWeaponInfo,
 			Action<Ability> mixWeaponAction,
 			Func<Ability> nextGetterWepon,
@@ -117,6 +119,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.button = button;
 			this.weaponInfoShower = mixWeaponInfo;
+			this.textPop = textPop;
 			
 			this.abilityInfoText = CreateInfoText(new Vector3(0.0f, -0.0f, -250.0f));
 			this.abilityInfoText.enableWordWrapping = false;
@@ -127,15 +130,23 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.weaponMixTime = weponMixTime;
 		}
 
-		public void Hide(Vector2? pos = null)
+		public void AddWepon(Ability ability)
 		{
-			this.weaponInfoShower.Hide();
-			this.hideAbilityInfo(pos);
+			string abilityText = TranslationController.Instance.GetString(ability.ToString());
+			string key = this.button.MultiModalAbilityNum <= 1 ? "「{0}」を入手" : "「{0}」を入手、スクロールで切り替え可能";
+			this.textPop.AddText(string.Format(key, abilityText));
+
+			if (this.button.MultiModalAbilityNum > 1)
+			{
+				this.weaponInfoShower.ShowCanMixWepon();
+			}
 		}
 
-		public void ShowCanMixWepon()
+		public void Hide(Vector2? pos = null)
 		{
-			this.weaponInfoShower.ShowCanMixWepon();
+			this.textPop.Clear();
+			this.weaponInfoShower.Hide();
+			this.hideAbilityInfo(pos);
 		}
 
 		public void Update(PlayerControl rolePlayer)
@@ -1231,10 +1242,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		this.internalButton.SetButtonShow(true);
 		this.curAbility.Add(ability);
 
-		if (this.internalButton.MultiModalAbilityNum > 1)
-		{
-			this.infoShower?.ShowCanMixWepon();
-		}
+		this.infoShower?.AddWepon(ability);
 	}
 
 	public void WeaponOps(
@@ -1293,6 +1301,9 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.infoShower = new InfoTextShower(
 				this.internalButton,
+				new TextPopUpper(
+					3, 7.5f, new Vector3(0.0f, -1.0f, -250.0f),
+					TextAlignmentOptions.Center, false, false),
 				new MixWeaponInfoShower(),
 				this.mixWeapon,
 				this.getMixingWeapon,

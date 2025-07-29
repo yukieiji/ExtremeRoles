@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+#nullable enable
+
 namespace ExtremeRoles.Module;
 
 public sealed class TextPopUpper
@@ -48,25 +50,27 @@ public sealed class TextPopUpper
 	
 	private int indexer = 0;
 
-	private readonly List<Text> showText = new List<Text>();
+	private readonly List<Text?> showText = new List<Text?>();
 	private readonly float disapearTime;
 	private readonly Vector3 showPos;
 	private readonly TextAlignmentOptions textOffest;
 	private readonly bool isWrap;
+	private readonly bool isUp;
 
 	public TextPopUpper(
 		int size,
 		float disapearTime,
 		Vector3 firstPos,
 		TextAlignmentOptions offset,
-		bool isWrap = true)
+		bool isWrap = true,
+		bool isUp = true)
 	{
-		this.showText = new List<Text>(size);
+		this.showText = new List<Text?>(size);
 		for (int i = 0; i < this.showText.Capacity; ++i)
 		{
 			this.showText.Add(null);
 		}
-
+		this.isUp = isUp;
 		this.disapearTime = disapearTime;
 		this.showPos = firstPos;
 		this.textOffest = offset;
@@ -77,10 +81,14 @@ public sealed class TextPopUpper
 
 	public void AddText(string printString)
 	{
+		float y = this.isUp ? 0.5f : -0.5f;
 		foreach (var text in this.showText)
 		{
-			if (text == null) { continue; }
-			text.ShiftPos(new Vector3(0f, 0.5f, 0f));
+			if (text == null)
+			{
+				continue;
+			}
+			text.ShiftPos(new Vector3(0f, y, 0f));
 		}
 
 		var oldText = this.showText[indexer];
