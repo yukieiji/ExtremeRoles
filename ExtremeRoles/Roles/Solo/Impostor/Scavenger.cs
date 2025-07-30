@@ -115,7 +115,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			MixWeaponInfoShower mixWeaponInfo,
 			Action<Ability> mixWeaponAction,
 			Func<Ability> nextGetterWeapon,
-			float weponMixTime)
+			float weaponMixTime)
 		{
 			this.button = button;
 			this.weaponInfoShower = mixWeaponInfo;
@@ -127,13 +127,14 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 			this.mixWeaponAction = mixWeaponAction;
 			this.nextGetterWeapon = nextGetterWeapon;
-			this.weaponMixTime = weponMixTime;
+			this.weaponMixTime = weaponMixTime;
+			this.timer = weaponMixTime;
 		}
 
 		public void AddWepon(Ability ability)
 		{
 			string abilityText = TranslationController.Instance.GetString(ability.ToString());
-			string key = this.button.MultiModalAbilityNum <= 1 ? "GetFirstWepon" : "GetNextWepon";
+			string key = this.button.MultiModalAbilityNum <= 1 ? "GetFirstWeapon" : "GetNextWeapon";
 			this.textPop.AddText(TranslationControllerExtension.GetString(key, abilityText));
 
 			if (this.button.MultiModalAbilityNum > 1)
