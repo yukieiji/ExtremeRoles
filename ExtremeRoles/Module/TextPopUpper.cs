@@ -31,7 +31,7 @@ public sealed class TextPopUpper
 			this.body.text = printString;
 
 			this.body.gameObject.SetActive(true);
-			Object.Destroy(this.body, disapearTime);
+			Object.Destroy(this.body.gameObject, disapearTime);
 		}
 
 		public void ShiftPos(
@@ -42,8 +42,11 @@ public sealed class TextPopUpper
 
 		public void Clear()
 		{
-			if (this.body == null) { return; }
-			Object.Destroy(this.body);
+			if (this.body == null)
+			{
+				return;
+			}
+			Object.Destroy(this.body.gameObject);
 		}
 
 	}
