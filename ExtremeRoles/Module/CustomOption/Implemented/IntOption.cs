@@ -1,4 +1,4 @@
-﻿using BepInEx.Configuration;
+using BepInEx.Configuration;
 
 using ExtremeRoles.Module.CustomOption.Interfaces;
 
@@ -26,8 +26,9 @@ public sealed class IntCustomOption : CustomOptionBase<int, int>, IDynamismOptio
 	{
 		int newMaxValue = this.maxValue / newValue;
 		var newRange = OptionRange<int>.Create(OptionRange.Min, newMaxValue, step);
+		int prevValue = OptionRange.Selection;
 		OptionRange = newRange;
-		Selection = OptionRange.Selection;
+		Selection = prevValue;
 	}
 
 	public override int Value => OptionRange.Value;
