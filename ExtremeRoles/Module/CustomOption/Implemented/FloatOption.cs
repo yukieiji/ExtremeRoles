@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Module.CustomOption.Interfaces;
+using ExtremeRoles.Module.CustomOption.Interfaces;
 
 namespace ExtremeRoles.Module.CustomOption.Implemented;
 
@@ -38,8 +38,9 @@ public sealed class FloatDynamicCustomOption : CustomOptionBase<float, float>, I
 	{
 		var newRange = OptionRange<float>.Create(
 			OptionRange.Min, newValue, step);
+		int prevValue = OptionRange.Selection;
 		OptionRange = newRange;
-		Selection = OptionRange.Selection;
+		Selection = prevValue;
 	}
 
 	private static float CreateMaxValue(float min, float step, float defaultValue, float tempMaxValue)

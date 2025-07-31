@@ -55,8 +55,9 @@ public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>, IDynami
 	public void Update(int newValue)
 	{
 		var newRange = OptionRange<int>.Create(OptionRange.Min, newValue, step);
+		int prevValue = OptionRange.Selection;
 		OptionRange = newRange;
-		Selection = OptionRange.Selection;
+		Selection = prevValue;
 	}
 	private static int CreateMaxValue(int min, int step, int defaultValue, int tempMaxValue)
 		=> tempMaxValue == 0 ?
