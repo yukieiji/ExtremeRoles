@@ -1,5 +1,6 @@
 using ExtremeRoles.Extension.Controller;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.Ability;
 using ExtremeRoles.Module.Ability.AutoActivator;
 using ExtremeRoles.Module.Ability.Behavior;
@@ -29,6 +30,203 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 {
+	private sealed class MixWeaponInfoShower
+	{
+		public bool IsHide => !isShow;
+
+		private readonly TextMeshPro infoText;
+		private float fadeTimer = 0f;
+		private bool isFadingOut = false;
+		private bool isShow = false;
+
+		private const float maxTimer = 0.75f;
+
+		public MixWeaponInfoShower()
+		{
+			this.infoText = createInfoText(new Vector3(0.0f, -0.75f, -250.0f));
+			this.infoText.text = TranslationController.Instance.GetString("WeaponMixInfo");
+			this.infoText.gameObject.SetActive(false);
+		}
+
+		public void Hide()
+		{
+			this.isShow = false;
+			this.infoText.gameObject.SetActive(false);
+		}
+
+		public void Update()
+		{
+			if (IntroCutscene.Instance != null ||
+				MeetingHud.Instance != null ||
+				ExileController.Instance != null)
+			{
+				this.isShow = false;
+			}
+
+			if (!this.isShow)
+			{
+				this.infoText.gameObject.SetActive(this.isShow);
+				return;
+			}
+
+			this.fadeTimer += isFadingOut ? -Time.deltaTime : Time.deltaTime;
+			float alpha = this.fadeTimer / maxTimer;
+			this.infoText.color = new Color(
+				this.infoText.color.r,
+				this.infoText.color.g,
+				this.infoText.color.b, alpha);
+
+			if (fadeTimer >= maxTimer)
+			{
+				isFadingOut = true;
+			}
+			else if (fadeTimer <= 0f)
+			{
+				isFadingOut = false;
+			}
+		}
+
+		public void ShowCanMixWepon()
+		{
+			this.infoText.gameObject.SetActive(true);
+			this.fadeTimer = 0f;
+			this.isFadingOut = false;
+			this.isShow = true;
+		}
+	}
+
+	private sealed class InfoTextShower
+	{
+		private readonly TextMeshPro abilityInfoText;
+		private readonly MixWeaponInfoShower weaponInfoShower;
+		private readonly TextPopUpper textPop;
+		private readonly ExtremeMultiModalAbilityButton button;
+		private readonly float weaponMixTime;
+		private readonly Func<Ability> nextGetterWeapon;
+		private readonly Action<Ability> mixWeaponAction;
+
+		private Vector2? prevPlayerPos;
+		private float timer;
+		private Ability nextWeapon = Ability.ScavengerNull;
+
+		public InfoTextShower(
+			ExtremeMultiModalAbilityButton button,
+			TextPopUpper textPop,
+			MixWeaponInfoShower mixWeaponInfo,
+			Action<Ability> mixWeaponAction,
+			Func<Ability> nextGetterWeapon,
+			float weaponMixTime)
+		{
+			this.button = button;
+			this.weaponInfoShower = mixWeaponInfo;
+			this.textPop = textPop;
+			
+			this.abilityInfoText = createInfoText(new Vector3(0.0f, -0.5f, -250.0f));
+			this.abilityInfoText.enableWordWrapping = false;
+			this.abilityInfoText.fontSize = this.abilityInfoText.fontSizeMax = this.abilityInfoText.fontSizeMin = 3.0f;
+
+			this.mixWeaponAction = mixWeaponAction;
+			this.nextGetterWeapon = nextGetterWeapon;
+			this.weaponMixTime = weaponMixTime;
+			this.timer = weaponMixTime;
+		}
+
+		public void AddWepon(Ability ability)
+		{
+			string abilityText = TranslationController.Instance.GetString(ability.ToString());
+			string key = this.button.MultiModalAbilityNum <= 1 ? "GetFirstWeapon" : "GetNextWeapon";
+			this.textPop.AddText(TranslationControllerExtension.GetString(key, abilityText));
+
+			if (this.button.MultiModalAbilityNum > 1)
+			{
+				this.weaponInfoShower.ShowCanMixWepon();
+			}
+		}
+
+		public void Hide(Vector2? pos = null)
+		{
+			this.textPop.Clear();
+			this.weaponInfoShower.Hide();
+			this.hideAbilityInfo(pos);
+		}
+
+		public void Update(PlayerControl rolePlayer)
+		{
+			bool isSingle = this.button.MultiModalAbilityNum <= 1;
+
+			if (IntroCutscene.Instance != null ||
+				MeetingHud.Instance != null ||
+				ExileController.Instance != null ||
+				isSingle || 
+				this.button.IsAbilityActiveOrCharge())
+			{
+				Hide();
+				return;
+			}
+
+			if (this.weaponInfoShower.IsHide && !isSingle)
+			{
+				this.weaponInfoShower.ShowCanMixWepon();
+			}
+			this.weaponInfoShower.Update();
+
+			var curPos = rolePlayer.GetTruePosition(); 
+
+			if (!this.prevPlayerPos.HasValue)
+			{
+				this.prevPlayerPos = rolePlayer.GetTruePosition();
+			}
+
+			if (this.prevPlayerPos.Value != curPos ||
+				!Key.IsAltDown())
+			{
+				hideAbilityInfo(curPos);
+				return;
+			}
+
+			this.weaponInfoShower.Hide();
+
+			if (this.nextWeapon is Ability.ScavengerNull)
+			{
+				this.nextWeapon = this.nextGetterWeapon.Invoke();
+			}
+			this.abilityInfoText.color = Palette.EnabledColor;
+			this.abilityInfoText.text = TranslationControllerExtension.GetString(
+				"WeaponMixTimeRemain",
+				TranslationController.Instance.GetString(this.nextWeapon.ToString()),
+				Mathf.CeilToInt(this.timer));
+			this.abilityInfoText.gameObject.SetActive(true);
+			this.timer -= Time.deltaTime;
+
+			if (this.timer < 0.0f)
+			{
+				this.mixWeaponAction.Invoke(this.nextWeapon);
+				this.nextWeapon = Ability.ScavengerNull;
+				this.timer = this.weaponMixTime;
+			}
+		}
+
+		private void hideAbilityInfo(Vector2? curPos)
+		{
+			this.nextWeapon = Ability.ScavengerNull;
+			this.prevPlayerPos = curPos;
+			this.timer = this.weaponMixTime;
+			this.abilityInfoText.gameObject.SetActive(false);
+		}
+	}
+
+	private static TextMeshPro createInfoText(Vector3 pos)
+	{
+		var infoText = UnityObject.Instantiate(
+			Module.Prefab.Text,
+			Camera.main.transform, false);
+		infoText.transform.localPosition = pos;
+		infoText.enableWordWrapping = false;
+		infoText.gameObject.SetActive(false);
+
+		return infoText;
+	}
+
 	public static T GetFromAsset<T>(string name) where T : UnityObject
 		=> UnityObjectLoader.LoadFromResources<T>(
 			ObjectPath.GetRoleAssetPath(ExtremeRoleId.Scavenger),
@@ -954,11 +1152,8 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 	private ExtremeMultiModalAbilityButton? internalButton;
 
 	private HashSet<Ability> curAbility = new HashSet<Ability>();
-	private TextMeshPro? abilityText;
-	private Vector2? prevPlayerPos;
-	private float timer;
+	private InfoTextShower? infoShower;
 	private float weaponMixTime;
-	private Ability nextWeapon = Ability.ScavengerNull;
 
 	public Scavenger() : base(
 		ExtremeRoleId.Scavenger,
@@ -1045,8 +1240,11 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		{
 			this.internalButton.Add(newBehavior);
 		}
+		
 		this.internalButton.SetButtonShow(true);
 		this.curAbility.Add(ability);
+
+		this.infoShower?.AddWepon(ability);
 	}
 
 	public void WeaponOps(
@@ -1096,67 +1294,26 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.Button.SetButtonShow(false);
 		}
 
-		if (rolePlayer == null)
+		if (this.internalButton is null || rolePlayer == null)
 		{
 			return;
 		}
 
-		// 能力合成
-		if (!this.prevPlayerPos.HasValue)
+		if (this.infoShower is null)
 		{
-			this.prevPlayerPos = rolePlayer.GetTruePosition();
+			this.infoShower = new InfoTextShower(
+				this.internalButton,
+				new TextPopUpper(
+					3, 7.5f, new Vector3(0.0f, -1.0f, -250.0f),
+					TextAlignmentOptions.Center, false, false),
+				new MixWeaponInfoShower(),
+				this.mixWeapon,
+				this.getMixingWeapon,
+				this.weaponMixTime);
 		}
-		var curPos = rolePlayer.GetTruePosition();
-
-		if (this.internalButton is null ||
-			this.internalButton.MultiModalAbilityNum <= 1 ||
-			this.internalButton.IsAbilityActiveOrCharge() ||
-			this.prevPlayerPos.Value != curPos ||
-			!Key.IsAltDown() ||
-			IntroCutscene.Instance != null ||
-			MeetingHud.Instance != null ||
-			ExileController.Instance != null)
-		{
-			this.prevPlayerPos = curPos;
-			if (this.abilityText != null)
-			{
-				this.abilityText.gameObject.SetActive(false);
-			}
-			this.timer = this.weaponMixTime;
-			this.nextWeapon = Ability.ScavengerNull;
-			return;
-		}
-
-		this.prevPlayerPos = curPos;
-		if (this.abilityText == null)
-		{
-			this.abilityText = UnityObject.Instantiate(
-				HudManager.Instance.KillButton.cooldownTimerText,
-				Camera.main.transform, false);
-			this.abilityText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
-			this.abilityText.enableWordWrapping = false;
-			this.abilityText.fontSize = this.abilityText.fontSizeMax = this.abilityText.fontSizeMin = 3.0f;
-		}
-
-		if (this.nextWeapon is Ability.ScavengerNull)
-		{
-			this.nextWeapon = this.getMixingWeapon();
-		}
-		this.abilityText.text = TranslationControllerExtension.GetString(
-			"WeaponMixTimeRemain",
-			TranslationController.Instance.GetString(this.nextWeapon.ToString()),
-			Mathf.CeilToInt(this.timer));
-		this.abilityText.color = Palette.EnabledColor;
-		this.abilityText.gameObject.SetActive(true);
-		this.timer -= Time.deltaTime;
-
-		if (this.timer < 0.0f)
-		{
-			this.mixWeapon(this.nextWeapon);
-			this.timer = this.weaponMixTime;
-			this.nextWeapon = Ability.ScavengerNull;
-		}
+		this.infoShower.Update(rolePlayer);
 	}
+
 
 	protected override void CreateSpecificOption(AutoParentSetOptionCategoryFactory factory)
 	{
@@ -1409,6 +1566,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 		return Ability.ScavengerNull;
 	}
+
 	private void replaceToWeapon(in Ability ability)
 	{
 		if (this.internalButton is null)
@@ -1503,10 +1661,7 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 
 	private void reset()
 	{
-		if (this.abilityText != null)
-		{
-			this.abilityText.gameObject.SetActive(true);
-		}
+		this.infoShower?.Hide();
 		if (this.weapon is null)
 		{
 			return;

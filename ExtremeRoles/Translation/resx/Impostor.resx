@@ -1614,4 +1614,13 @@ Lv2能力「ビームセーバー」
   <data name="WeaponMixTimeRemain" xml:space="preserve">
     <value>『{0}』を合成中・・・:完了まで{1}秒</value>
   </data>
+  <data name="WeaponMixInfo" xml:space="preserve">
+    <value>「Alt」キーで武器合成可能</value>
+  </data>
+  <data name="GetFirstWeapon" xml:space="preserve">
+    <value>「{0}」を入手</value>
+  </data>
+  <data name="GetNextWeapon" xml:space="preserve">
+    <value>「{0}」を入手、ホイールスクロールで切り替え可能</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ExtremeSkins.Module;
@@ -220,5 +220,29 @@ public static class CustomColorPalette
             MainColor = new Color32(87, 87, 87, byte.MaxValue),
             ShadowColor = new Color32(243, 212, 175, byte.MaxValue),
         },
-    ];
+		new ColorData()
+		{
+			Name = "whisky",
+			MainColor = new Color32(255, 191, 17, byte.MaxValue),
+			ShadowColor = new Color32(170, 127, 11, 0),
+		},
+		new ColorData()
+		{
+			Name = "geranium",
+			MainColor = new Color32(244, 50, 84, byte.MaxValue),
+			ShadowColor = new Color32(163, 33, 56, 0),
+		},
+		new ColorData()
+		{
+			Name = "fuchsia",
+			MainColor = new Color32(225, 0, 255, byte.MaxValue),
+			ShadowColor = new Color32(170, 0, 170, 0),
+		},
+		new ColorData()
+		{
+			Name = "safeBlue",
+			MainColor = new Color32(153, 153, 255, byte.MaxValue),
+			ShadowColor = new Color32(102, 102, 170, 0),
+		},
+	];
 }

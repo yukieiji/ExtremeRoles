@@ -22,6 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral;
 
 public sealed class Heretic :
 	SingleRoleBase,
+	IRoleSpecialSetUp,
 	IRoleAutoBuildAbility,
 	IRoleUpdate,
 	IRoleWinPlayerModifier,
@@ -29,6 +30,7 @@ public sealed class Heretic :
 {
 	public enum Option
 	{
+		UseVent,
 		HasTask,
 		SeeImpostorTaskGage,
 
@@ -87,6 +89,27 @@ public sealed class Heretic :
 				break;
 			default:
 				break;
+		}
+	}
+
+	public void IntroBeginSetUp()
+	{
+		return;
+	}
+
+	public void IntroEndSetUp()
+	{
+		if (!this.UseVent)
+		{
+			return;
+		}
+
+		// 全てのベントリンクを解除
+		foreach (Vent vent in ShipStatus.Instance.AllVents)
+		{
+			vent.Right = null;
+			vent.Center = null;
+			vent.Left = null;
 		}
 	}
 
@@ -257,6 +280,7 @@ public sealed class Heretic :
 	protected override void CreateSpecificOption(
 		AutoParentSetOptionCategoryFactory factory)
 	{
+		factory.CreateBoolOption(Option.UseVent, false);
 		var taskOpt = factory.CreateBoolOption(
 			Option.HasTask,
 			false);
@@ -295,6 +319,8 @@ public sealed class Heretic :
 
 		var loader = this.Loader;
 
+		this.UseVent = loader.GetValue<Option, bool>(
+			Option.UseVent);
 		this.HasTask = loader.GetValue<Option, bool>(
 			Option.HasTask);
 		this.seeImpostorTaskGage = loader.GetValue<Option, int>(
