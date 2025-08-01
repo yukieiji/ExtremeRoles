@@ -109,7 +109,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 				menu.TryGetComponent<ExtremeGameSettingMenu>(out var comp) &&
 				comp.tab != null &&
 				comp.button != null &&
-				previewIfCond(previewOnly)
+				isPreviewOnlyWithControllerType(previewOnly)
 			))
 		{
 			return;
@@ -127,7 +127,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			return;
 		}
 
-		if (previewIfCond(isPreviewOnly))
+		if (isPreviewOnlyWithControllerType(isPreviewOnly))
 		{
 			this.menu.GamePresetsButton.SelectButton(false);
 			this.menu.GameSettingsButton.SelectButton(false);
@@ -138,11 +138,11 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			this.menu.RoleSettingsTab.gameObject.SetActive(false);
 
 			this.tab.gameObject.SetActive(true);
-		}
 
-		if (this.text != null)
-		{
-			this.text.text = Tr.GetString("ExR_SettingsDescription");
+			if (this.text != null)
+			{
+				this.text.text = Tr.GetString("ExR_SettingsDescription");
+			}
 		}
 
 		if (isPreviewOnly)
@@ -159,6 +159,6 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		this.tab.Open();
 	}
 
-	private static bool previewIfCond(bool isPreviewOnly)
+	private static bool isPreviewOnlyWithControllerType(bool isPreviewOnly)
 		=> (isPreviewOnly && Controller.currentTouchType == Controller.TouchType.Joystick) || !isPreviewOnly;
 }
