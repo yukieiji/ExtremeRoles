@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -39,10 +39,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 	}
 
 	public MultiAssignRoleBase(
-        ExtremeRoleId id,
-        ExtremeRoleType team,
-        string roleName,
-        Color roleColor,
+        RoleCore core,
         bool canKill,
         bool hasTask,
         bool useVent,
@@ -53,7 +50,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         bool canUseSecurity = true,
         bool canUseVital = true,
         OptionTab tab = OptionTab.GeneralTab) : base(
-            id, team, roleName, roleColor,
+			core,
             canKill, hasTask, useVent,
             useSabotage, canCallMeeting,
             canRepairSabotage, canUseAdmin,
@@ -77,8 +74,8 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
 			case RoleTypes.Impostor:
 			case RoleTypes.Shapeshifter:
 			case RoleTypes.Phantom:
-                this.Team = ExtremeRoleType.Impostor;
-                this.NameColor = Palette.ImpostorRed;
+                this.Core.Team = ExtremeRoleType.Impostor;
+                this.Core.Color = Palette.ImpostorRed;
                 this.CanKill = true;
                 this.UseVent = true;
                 this.UseSabotage = true;
@@ -136,7 +133,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         if (isContainFakeTask && (!this.HasTask || !this.AnotherRole.HasTask))
         {
             string fakeTaskString = Design.ColoedString(
-                this.NameColor,
+                this.Core.Color,
                 TranslationController.Instance.GetString(
                     StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
             baseString = $"{baseString}\r\n{fakeTaskString}";
@@ -149,7 +146,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
     {
 
         string baseIntro = Tr.GetString(
-            $"{this.Id}IntroDescription");
+            $"{this.Core.Id}IntroDescription");
 
         if (this.AnotherRole == null)
         {
@@ -175,7 +172,7 @@ public abstract class MultiAssignRoleBase : SingleRoleBase
         }
 
         string baseRole = Design.ColoedString(
-            this.NameColor,
+            this.Core.Color,
             Tr.GetString(this.RoleName));
 
         string anotherRole = this.AnotherRole.GetColoredRoleName(isTruthColor);

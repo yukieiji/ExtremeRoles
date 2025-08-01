@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 
 using UnityEngine;
 
@@ -40,7 +40,7 @@ public static class HauntMenuMinigameFilterTextPatch
 			CommomSystem.IsForceInfoBlockRole(role)
 		) ?
                 "？？？" :
-                Tr.GetString(targetRole.Team.ToString());
+                Tr.GetString(targetRole.Core.Team.ToString());
 
         return false;
     }

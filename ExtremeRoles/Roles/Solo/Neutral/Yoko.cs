@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -65,10 +65,9 @@ public sealed class Yoko :
 	public ExtremeAbilityButton? Button { get; set; }
 
 	public Yoko() : base(
-        ExtremeRoleId.Yoko,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Yoko.ToString(),
-        ColorPalette.YokoShion,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Yoko,
+			ColorPalette.YokoShion),
         false, false, false, false,
         true, false, true, false, false)
     { }
@@ -287,15 +286,15 @@ public sealed class Yoko :
     }
     private bool isEnemy(SingleRoleBase role)
     {
-
-        if (this.noneEnemy.Contains(role.Id))
+		var id = role.Core.Id;
+        if (this.noneEnemy.Contains(id))
         {
             return false;
         }
         else if (
             role.IsImpostor() ||
             role.CanKill() ||
-            role.Id == ExtremeRoleId.Fencer)
+			id == ExtremeRoleId.Fencer)
         {
             return true;
 
@@ -317,7 +316,7 @@ public sealed class Yoko :
                 return this.isYoko(multiAssignRole.AnotherRole);
             }
         }
-        return targetRole.Id == ExtremeRoleId.Yoko;
+        return targetRole.Core.Id == ExtremeRoleId.Yoko;
     }
 
 	public bool UseAbility()

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -83,10 +83,9 @@ public sealed class Delusioner :
 
 
     public Delusioner() : base(
-        ExtremeRoleId.Delusioner,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Delusioner.ToString(),
-        ColorPalette.DelusionerPink,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Delusioner,
+			ColorPalette.DelusionerPink),
         false, true, false, false)
     { }
 
@@ -228,7 +227,7 @@ public sealed class Delusioner :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

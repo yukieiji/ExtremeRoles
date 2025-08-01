@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,10 +65,9 @@ public sealed class Captain :
     private Dictionary<byte, SpriteRenderer> voteCheckMark;
 
     public Captain() : base(
-        ExtremeRoleId.Captain,
-        ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Captain.ToString(),
-        ColorPalette.CaptainLightKonjou,
+		RoleCore.BuildCrewmate(
+			ExtremeRoleId.Captain,
+			ColorPalette.CaptainLightKonjou),
         false, true, false, false)
     { }
 
@@ -282,7 +281,7 @@ public sealed class Captain :
         if (IsAwake)
         {
             return Tr.GetString(
-                $"{this.Id}FullDescription");
+                $"{this.Core.Id}FullDescription");
         }
         else
         {

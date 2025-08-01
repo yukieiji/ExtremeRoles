@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 using System.Collections.Generic;
 
 using TMPro;
@@ -368,7 +368,7 @@ public sealed class FakerDummySystem(bool seeDummyMerlin) : IExtremeSystemType
 				SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
 				fake = new FakePlayer(
 					rolePlyaer, targetPlyaer,
-					role.IsImpostor() || (this.seeDummyMerlin && role.Id == ExtremeRoleId.Marlin));
+					role.IsImpostor() || (this.seeDummyMerlin && role.Core.Id == ExtremeRoleId.Marlin));
 				break;
 			default:
 				return;

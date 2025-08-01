@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Data;
 
@@ -40,10 +40,7 @@ public sealed class Magician : SingleRoleBase, IRoleAutoBuildAbility
 		bool IncludeSpawnPoint);
 
     public Magician() : base(
-        ExtremeRoleId.Magician,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Magician.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Magician),
         true, false, true, true)
     { }
 
