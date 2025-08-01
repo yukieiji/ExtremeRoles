@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +24,8 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		public PassiveButton Button { get; init; }
 		public GameOptionsMenu Tab { get; init; }
 
-		private Vector3 offset = new(0.0f, 0.25f, 0.0f);
+		private readonly Vector3 offset = new(0.0f, 0.25f, 0.0f);
+		private readonly Vector3 buttonOffset = new(0.0f, 0.66f);
 
 		public Initializer(GameSettingMenu menu)
 		{
@@ -45,9 +46,15 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			buttonGroup.localPosition += offset;
 			buttonGroup.localScale = new Vector3(1.0f, 0.9f, 1.0f);
 
+			// プリセットボタンを下に持っていってほかを上に上げる
+			menu.GameSettingsButton.transform.localPosition += buttonOffset;
+			menu.RoleSettingsButton.transform.localPosition += buttonOffset;
+			menu.GamePresetsButton.transform.localPosition -= new Vector3(0.0f, 2.0f);
+
+			// ExRのオプションボタン作成
 			this.Button = Instantiate(menu.GameSettingsButton);
 			this.Button.transform.SetParent(menu.GameSettingsButton.transform.parent);
-			this.Button.transform.localPosition = new Vector3(-2.95f, -2.325f, -2.0f);
+			this.Button.transform.localPosition = new Vector3(-2.95f, -1.72f, -2.0f);
 			this.Button.transform.localScale = new Vector3(0.84f, 0.9f, 0.9f);
 			this.Button.OnClick.RemoveAllListeners();
 			this.Button.OnMouseOver.RemoveAllListeners();
@@ -107,7 +114,6 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		{
 			return;
 		}
-
 		comp.button.SelectButton(false);
 		comp.tab.gameObject.SetActive(false);
 	}
