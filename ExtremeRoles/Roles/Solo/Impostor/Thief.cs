@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -38,10 +38,7 @@ public sealed class Thief : SingleRoleBase, IRoleAutoBuildAbility
 	public ExtremeAbilityButton? Button { get; set; }
 
     public Thief() : base(
-        ExtremeRoleId.Thief,
-        ExtremeRoleType.Impostor,
-        ExtremeRoleId.Thief.ToString(),
-        Palette.ImpostorRed,
+		RoleCore.BuildImpostor(ExtremeRoleId.Thief),
         true, false, true, true)
     { }
 

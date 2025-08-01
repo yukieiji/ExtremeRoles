@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
@@ -110,7 +110,7 @@ public interface IRoleAbility : IRoleResetMeeting
 	private static bool isAbilityUse(in SingleRoleBase role, in IReadOnlySet<ExtremeRoleId> fillter)
 		=>
 			role is not null &&
-			fillter.Contains(role.Id) &&
+			fillter.Contains(role.Core.Id) &&
 			role is IRoleAbility abilityRole &&
 			abilityRole.Button is not null &&
 			abilityRole.Button.IsAbilityActive();

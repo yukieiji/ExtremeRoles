@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using Hazel;
 using UnityEngine;
@@ -17,6 +17,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 #nullable enable
 
@@ -75,10 +76,9 @@ public sealed class Miner :
     private TextPopUpper killLogger;
 
     public Miner() : base(
-        ExtremeRoleId.Miner,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Miner.ToString(),
-        ColorPalette.MinerIvyGreen,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Miner,
+			ColorPalette.MinerIvyGreen),
         false, false, true, false)
     { }
 #pragma warning restore CS8618
@@ -255,13 +255,15 @@ public sealed class Miner :
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo == null ||
-					killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
+					killedPlayer.Contains(playerInfo.PlayerId))
+				{ 
+					continue;
+				}
 
-                var assassin = ExtremeRoleManager.GameRole[
-                    playerInfo.PlayerId] as Combination.Assassin;
-
-                if (assassin != null &&
-					(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
+                if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(
+						playerInfo.PlayerId, out var assassin) &&
+					assassin.Status is AssassinStatusModel status &&
+					(!status.CanKilled || !status.CanKilledFromNeutral))
                 {
 					continue;
 				}

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 
@@ -17,6 +17,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using BepInEx.Unity.IL2CPP.Utils;
+using ExtremeRoles.Roles.Combination.Avalon;
 
 
 #nullable enable
@@ -64,11 +65,10 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 	public Eater() : base(
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-	   ExtremeRoleId.Eater,
-       ExtremeRoleType.Neutral,
-       ExtremeRoleId.Eater.ToString(),
-       ColorPalette.EaterMaroon,
-       false, false, false, false)
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Eater,
+			ColorPalette.EaterMaroon),
+		false, false, false, false)
     { }
 
     public void CreateAbility()
@@ -115,7 +115,7 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
         {
             if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == target.PlayerId)
             {
-                Arrow arr = new Arrow(this.NameColor);
+                Arrow arr = new Arrow(this.Core.Color);
                 arr.UpdateTarget(array[i].transform.position);
 
                 this.deadBodyArrow.Add(target.PlayerId, arr);
@@ -181,8 +181,9 @@ public sealed class Eater : SingleRoleBase, IRoleAutoBuildAbility, IRoleMurderPl
 		{
 			byte playerId = this.tmpTarget.PlayerId;
 
-			if (ExtremeRoleManager.GameRole[playerId] is Combination.Assassin assassin &&
-				(!assassin.CanKilled || !assassin.CanKilledFromNeutral))
+			if (ExtremeRoleManager.TryGetSafeCastedRole<Assassin>(playerId, out var assassin) &&
+				assassin.Status is AssassinStatusModel status &&
+				(!status.CanKilled || !status.CanKilledFromNeutral))
 			{
 				return false;
 			}

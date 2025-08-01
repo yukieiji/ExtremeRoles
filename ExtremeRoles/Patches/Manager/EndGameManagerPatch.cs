@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -234,10 +234,13 @@ public static class EndGameManagerSetUpPatch
 
                     foreach (var (role, playerId) in winNeutral)
                     {
-                        ExtremeRoleId id = role.Id;
+                        ExtremeRoleId id = role.Core.Id;
 
                         if (textAddedRole.Contains(id) ||
-                            winPlayer.Contains(playerId)) { continue; }
+                            winPlayer.Contains(playerId))
+						{ 
+							continue;
+						}
 
                         AddPrefixs(ref winDetailTextBuilder, textAddedRole.Count == 0);
 
@@ -263,8 +266,10 @@ public static class EndGameManagerSetUpPatch
                 continue;
             }
 
+			var id = role.Core.Id;
+
             if (!role.IsNeutral() ||
-                textAddedRole.Contains(role.Id) ||
+                textAddedRole.Contains(id) ||
                 winPlayer.Contains(player.PlayerId)) { continue; }
 
             winPlayer.Add(player.PlayerId);
@@ -275,7 +280,7 @@ public static class EndGameManagerSetUpPatch
 
 			winDetailTextBuilder.Append(Tr.GetString(
                 role.GetColoredRoleName(true)));
-            textAddedRole.Add(role.Id);
+            textAddedRole.Add(id);
         }
 
 		winDetailTextBuilder.Append(

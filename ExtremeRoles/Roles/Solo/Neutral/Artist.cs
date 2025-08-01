@@ -1,4 +1,4 @@
-﻿using Hazel;
+using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -44,10 +44,9 @@ public sealed class Artist :
 	private float winArea = 0.0f;
 
     public Artist(): base(
-        ExtremeRoleId.Artist,
-        ExtremeRoleType.Neutral,
-        ExtremeRoleId.Artist.ToString(),
-        ColorPalette.ArtistChenChuWhowan,
+		RoleCore.BuildNeutral(
+			ExtremeRoleId.Artist,
+			ColorPalette.ArtistChenChuWhowan),
         false, false, false, false)
     { }
 
