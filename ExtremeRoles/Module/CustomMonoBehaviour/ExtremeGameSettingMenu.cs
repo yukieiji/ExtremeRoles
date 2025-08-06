@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +24,8 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		public PassiveButton Button { get; init; }
 		public GameOptionsMenu Tab { get; init; }
 
-		private Vector3 offset = new(0.0f, 0.25f, 0.0f);
+		private readonly Vector3 offset = new(0.0f, 0.25f, 0.0f);
+		private readonly Vector3 buttonOffset = new(0.0f, 0.66f);
 
 		public Initializer(GameSettingMenu menu)
 		{
@@ -45,9 +46,15 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			buttonGroup.localPosition += offset;
 			buttonGroup.localScale = new Vector3(1.0f, 0.9f, 1.0f);
 
+			// プリセットボタンを下に持っていってほかを上に上げる
+			menu.GameSettingsButton.transform.localPosition += buttonOffset;
+			menu.RoleSettingsButton.transform.localPosition += buttonOffset;
+			menu.GamePresetsButton.transform.localPosition -= new Vector3(0.0f, 2.0f);
+
+			// ExRのオプションボタン作成
 			this.Button = Instantiate(menu.GameSettingsButton);
 			this.Button.transform.SetParent(menu.GameSettingsButton.transform.parent);
-			this.Button.transform.localPosition = new Vector3(-2.95f, -2.325f, -2.0f);
+			this.Button.transform.localPosition = new Vector3(-2.95f, -1.72f, -2.0f);
 			this.Button.transform.localScale = new Vector3(0.84f, 0.9f, 0.9f);
 			this.Button.OnClick.RemoveAllListeners();
 			this.Button.OnMouseOver.RemoveAllListeners();
@@ -102,12 +109,11 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 				menu.TryGetComponent<ExtremeGameSettingMenu>(out var comp) &&
 				comp.tab != null &&
 				comp.button != null &&
-				previewIfCond(previewOnly)
+				isPreviewOnlyWithControllerType(previewOnly)
 			))
 		{
 			return;
 		}
-
 		comp.button.SelectButton(false);
 		comp.tab.gameObject.SetActive(false);
 	}
@@ -121,7 +127,7 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			return;
 		}
 
-		if (previewIfCond(isPreviewOnly))
+		if (isPreviewOnlyWithControllerType(isPreviewOnly))
 		{
 			this.menu.GamePresetsButton.SelectButton(false);
 			this.menu.GameSettingsButton.SelectButton(false);
@@ -132,11 +138,11 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 			this.menu.RoleSettingsTab.gameObject.SetActive(false);
 
 			this.tab.gameObject.SetActive(true);
-		}
 
-		if (this.text != null)
-		{
-			this.text.text = Tr.GetString("ExR_SettingsDescription");
+			if (this.text != null)
+			{
+				this.text.text = Tr.GetString("ExR_SettingsDescription");
+			}
 		}
 
 		if (isPreviewOnly)
@@ -153,6 +159,6 @@ public sealed class ExtremeGameSettingMenu(IntPtr ptr) : MonoBehaviour(ptr)
 		this.tab.Open();
 	}
 
-	private static bool previewIfCond(bool isPreviewOnly)
+	private static bool isPreviewOnlyWithControllerType(bool isPreviewOnly)
 		=> (isPreviewOnly && Controller.currentTouchType == Controller.TouchType.Joystick) || !isPreviewOnly;
 }
