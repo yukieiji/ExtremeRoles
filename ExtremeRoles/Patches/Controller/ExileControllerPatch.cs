@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using HarmonyLib;
 
@@ -400,11 +400,6 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPostfix(NetworkedPlayerInfo? exiled)
     {
-		if (MeetingHud.Instance != null)
-		{
-			return;
-		}
-
 		InfoOverlay.Instance.IsBlock = false;
         Meeting.Hud.MeetingHudSelectPatch.SetSelectBlock(false);
 
@@ -415,7 +410,7 @@ public static class ExileControllerWrapUpPatch
         if (OnemanMeetingSystemManager.TryGetSystem(out var system))
         {
 			_ = system.TryStartMeeting();
-        }
+		}
 
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -449,7 +444,7 @@ public static class ExileControllerWrapUpPatch
 
     public static void WrapUpPrefix()
     {
-		if (MeetingHud.Instance != null || isPrefixRun)
+		if (isPrefixRun)
 		{
 			return;
 		}
