@@ -1,4 +1,4 @@
-﻿global using ExtremeRoles.Module.CustomOption;
+global using ExtremeRoles.Module.CustomOption;
 global using Tr = ExtremeRoles.Extension.Controller.TranslationControllerExtension;
 global using InfoOverlay = ExtremeRoles.Module.InfoOverlay.Controller;
 global using ExRError = ExtremeRoles.Module.ErrorCode<ExtremeRoles.ErrorCode>;
@@ -128,7 +128,7 @@ public partial class ExtremeRolesPlugin : BasePlugin
 		UnityObjectLoader.LoadCommonAsset();
 
 		ExtremeSystemTypeManager.ModInitialize();
-		VersionChecker.RegisterAssembly(assm, 0);
+		VersionChecker.RegisterAssembly(assm, 0, true);
 		TranslatorManager.Register<Translator>();
 	}
 }
