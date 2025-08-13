@@ -37,6 +37,10 @@ public sealed class TextPopUpper
 		public void ShiftPos(
 			Vector3 pos)
 		{
+			if (this.body == null)
+			{
+				return;
+			}
 			this.body.transform.localPosition += pos;
 		}
 
