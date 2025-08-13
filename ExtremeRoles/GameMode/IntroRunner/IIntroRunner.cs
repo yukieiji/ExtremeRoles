@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
+using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 
 using UnityEngine;
 
@@ -20,7 +22,6 @@ using ExtremeRoles.Module.Interface;
 
 
 using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
@@ -32,14 +33,74 @@ public interface IIntroRunner
 
     public IEnumerator CoRunIntro(IntroCutscene instance)
     {
+        // Original "Assigning roles" text setup
         GameObject roleAssignText = new GameObject("roleAssignText");
         var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
         text.SetFontSize(3.0f);
         text.SetMessage(Tr.GetString("roleAssignNow"));
-
         roleAssignText.SetActive(true);
 
+        // Measure the duration of role assignment
+        var stopwatch = new System.Diagnostics.Stopwatch();
+        stopwatch.Start();
         yield return waitRoleAssign();
+        stopwatch.Stop();
+
+        // Hide the "Assigning roles" text
+        roleAssignText.SetActive(false);
+
+        // Create and show the new role info text
+        GameObject roleInfoObject = new GameObject("RoleInfoText");
+        var roleInfoText = roleInfoObject.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
+        roleInfoText.SetFontSize(2.0f);
+
+        var spawnDataManager = new RoleSpawnDataManager();
+        var sb = new StringBuilder();
+        sb.AppendLine(Tr.GetString("RoleSpawnRate"));
+        sb.AppendLine();
+
+        var singleRoleData = spawnDataManager.CurrentSingleRoleSpawnData
+            .SelectMany(x => x.Value.Select(y => (team: x.Key, id: y.Key, data: y.Value)))
+            .GroupBy(x => x.team);
+
+        foreach (var group in singleRoleData)
+        {
+            var teamName = Tr.GetString($"Team{group.Key}");
+            sb.Append($"{teamName}: ");
+
+            var roleTexts = group.Select(x => {
+                var role = ExtremeRoleManager.NormalRole[x.id];
+                return $"{role.RoleName}({x.data.SpawnRate}%)";
+            });
+
+            sb.AppendLine(string.Join(", ", roleTexts));
+        }
+
+        if (spawnDataManager.CurrentCombRoleSpawnData.Any())
+        {
+            sb.AppendLine();
+            var teamName = Tr.GetString("TeamCombination");
+            sb.Append($"{teamName}: ");
+
+            var roleTexts = spawnDataManager.CurrentCombRoleSpawnData.Select(x => {
+                var role = ExtremeRoleManager.CombRole[x.Key];
+                return $"{role.RoleName}({x.Value.SpawnRate}%)";
+            });
+            sb.AppendLine(string.Join(", ", roleTexts));
+        }
+
+        roleInfoText.SetMessage(sb.ToString());
+
+        // Now, wait for the remaining time if 5s has not passed
+        var elapsed = stopwatch.ElapsedMilliseconds;
+        var remaining = 5000 - elapsed;
+        if (remaining > 0)
+        {
+            yield return new WaitForSeconds(remaining / 1000f);
+        }
+
+        // Clean up the role info text and proceed
+        Object.Destroy(roleInfoObject);
 
         Logger.GlobalInstance.Info(
             "IntroCutscene :: CoBegin() :: Starting intro cutscene", null);
