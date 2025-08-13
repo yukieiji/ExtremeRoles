@@ -11,7 +11,7 @@ public sealed class TextPopUpper
 {
 	private sealed class Text
 	{
-		private readonly TextMeshPro body;
+		private readonly TextMeshPro? body;
 		public Text(
 			string printString,
 			float disapearTime,
