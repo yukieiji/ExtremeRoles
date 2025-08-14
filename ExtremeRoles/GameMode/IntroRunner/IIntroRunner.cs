@@ -1,52 +1,124 @@
-﻿using System.Collections;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
+using TMPro;
 using UnityEngine;
 
-using ExtremeRoles.Helper;
 
+using Microsoft.Extensions.DependencyInjection;
+
+using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.SystemType;
 using ExtremeRoles.Module.SystemType.CheckPoint;
-
 using ExtremeRoles.Performance;
-
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Solo.Host;
-using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module.Interface;
-
-
-using ExtremeRoles.GameMode.Option.ShipGlobal.Sub.MapModule;
-using Microsoft.Extensions.DependencyInjection;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.GameMode.IntroRunner;
 
 #nullable enable
 
+public sealed class IntroText
+{
+	public TextMeshPro RoleInfoText { get; }
+	private readonly GameObject roleAssignText;
+	
+	public IntroText(GameObject roleAssignText, TextMeshPro roleInfoText)
+	{
+		RoleInfoText = roleInfoText;
+		this.roleAssignText = roleAssignText;
+
+		this.roleAssignText.SetActive(true);
+		this.RoleInfoText.gameObject.SetActive(true);
+	}
+
+	public void Destroy()
+	{
+		if (this.roleAssignText != null)
+		{
+			this.roleAssignText.SetActive(false);
+			Object.Destroy(this.roleAssignText);
+		}
+		if (this.RoleInfoText != null)
+		{
+			this.RoleInfoText.gameObject.SetActive(false);
+			Object.Destroy(RoleInfoText.gameObject);
+		}
+	}
+}
+
+public sealed class RoleInfoStringBuilder
+{
+	private readonly StringBuilder main = new StringBuilder(2048);
+	private readonly List<string> roleInfoString = new List<string>(32);
+	private readonly StringBuilder lineBuilder = new StringBuilder(128);
+	private const int rolesPerLine = 3;
+
+	public override string ToString()
+		=> this.main.ToString();
+
+	public void AddRoleText(string text)
+	{
+		this.roleInfoString.Add(text);
+	}
+	public void FixTeam(string teamText)
+	{
+		if (this.roleInfoString.Count == 0)
+		{
+			return;
+		}
+
+		this.main.AppendLine(teamText);
+
+		for (int i = 0; i < this.roleInfoString.Count; i += rolesPerLine)
+		{
+			for (int j = 0; j < rolesPerLine && (i + j) < this.roleInfoString.Count; j++)
+			{
+				lineBuilder.Append($"<pos={j * 33}%>");
+				lineBuilder.Append(this.roleInfoString[i + j]);
+			}
+			this.main.AppendLine(lineBuilder.ToString());
+			this.lineBuilder.Clear();
+		}
+		this.main.AppendLine();
+		this.roleInfoString.Clear();
+	}
+}
+
 public interface IIntroRunner
 {
-    public IEnumerator CoRunModeIntro(IntroCutscene instance, GameObject roleAssignText);
+    public IEnumerator CoRunModeIntro(IntroCutscene instance, IntroText introText);
 
     public IEnumerator CoRunIntro(IntroCutscene instance)
     {
-        GameObject roleAssignText = new GameObject("roleAssignText");
-        var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
-        text.SetFontSize(3.0f);
-        text.SetMessage(Tr.GetString("roleAssignNow"));
 
-        roleAssignText.SetActive(true);
+		var text = new IntroText(
+			createLoadingText(),
+			createRoleInfoText());
 
-        yield return waitRoleAssign();
+        // Turn on loading animation
+        var loadingAnimation = HudManager.Instance.GameLoadAnimation;
+        loadingAnimation.SetActive(true);
 
-        Logger.GlobalInstance.Info(
+        yield return waitRoleAssign(text.RoleInfoText, 30.0f);
+
+		loadingAnimation.SetActive(false);
+
+
+		Logger.GlobalInstance.Info(
             "IntroCutscene :: CoBegin() :: Starting intro cutscene", null);
 
         SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
 
-        yield return CoRunModeIntro(instance, roleAssignText);
+        yield return CoRunModeIntro(instance, text);
 
 		ExtremeSystemTypeManager.AddSystem();
 
@@ -63,10 +135,69 @@ public interface IIntroRunner
         yield break;
     }
 
-    private static IEnumerator waitRoleAssign()
+	private static GameObject createLoadingText()
+	{
+		// Original "Assigning roles" text setup
+		GameObject roleAssignText = new GameObject("roleAssignText");
+		var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
+		text.SetFontSize(2.0f);
+		text.SetMessage(Tr.GetString("roleAssignNow"));
+
+		return roleAssignText;
+	}
+
+	private static TextMeshPro createRoleInfoText()
+	{
+		// Original "Assigning roles" text setup
+		var hudManager = HudManager.Instance;
+		var text = Object.Instantiate(
+			hudManager.TaskPanel.taskText,
+			hudManager.transform.parent);
+		text.transform.localPosition = new Vector3(-2.5f, 0.0f, -910f);
+		text.fontSizeMin = text.fontSizeMax = text.fontSize = 1.75f;
+		text.alignment = TextAlignmentOptions.MidlineLeft;
+		text.rectTransform.sizeDelta = new Vector2(20.0f, 20.0f);
+		text.gameObject.layer = 5;
+
+		return text;
+	}
+
+	private static string createRoleListString(ISpawnDataManager spawnDataManager)
     {
-		var loadingAnimation = HudManager.Instance.GameLoadAnimation;
-		loadingAnimation.SetActive(true);
+		var builder = new RoleInfoStringBuilder();
+
+        foreach (var (team, data) in spawnDataManager.CurrentSingleRoleSpawnData)
+        {
+            foreach (var (id, spawn) in data)
+            {
+                if (!ExtremeRoleManager.NormalRole.TryGetValue(id, out var role))
+                {
+                    continue;
+                }
+				builder.AddRoleText(
+                    $"{role.GetColoredRoleName(true)}({spawn.SpawnRate}％ {spawn.SpawnSetNum} {spawn.Weight})");
+            }
+			builder.FixTeam($"・{Tr.GetString(team.ToString())}");
+        }
+
+        foreach (var (team, data) in spawnDataManager.CurrentCombRoleSpawnData)
+        {
+            if (!ExtremeRoleManager.CombRole.TryGetValue(team, out var role))
+            {
+                continue;
+            }
+			builder.AddRoleText(
+                $"{role.GetOptionName()}({data.SpawnRate}％ {data.SpawnSetNum} {data.Weight})");
+        }
+
+		builder.FixTeam($"・コンビネーション役職");
+
+        return builder.ToString();
+	}
+
+    private static IEnumerator waitRoleAssign(TextMeshPro text, float minWaitTime)
+    {
+        float timer = 0f;
 
 		var localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer == null)
@@ -74,19 +205,23 @@ public interface IIntroRunner
 			yield break;
 		}
 
+		var provider = ExtremeRolesPlugin.Instance.Provider;
 		if (AmongUsClient.Instance.AmHost)
         {
 			RPCOperator.Call(localPlayer.NetId, RPCOperator.Command.Initialize);
 			RPCOperator.Initialize();
-
-			var assignee = ExtremeRolesPlugin.Instance.Provider.GetRequiredService<IRoleAssignee>();
+	
+			var assignee = provider.GetRequiredService<IRoleAssignee>();
+			var spawnData = assignee.PreparationData.RoleSpawn;
 
 			if (!isAllPlyerDummy())
             {
 				RoleAssignCheckPoint.RpcCheckpoint();
+				text.text = createRoleListString(spawnData);
 				// ホストは全員の処理が終わるまで待つ
 				do
 				{
+                    timer += Time.deltaTime;
 					yield return null;
 
 				} while (!RoleAssignState.Instance.IsReady);
@@ -95,7 +230,9 @@ public interface IIntroRunner
 			}
             else
             {
-                yield return new WaitForSeconds(2.5f);
+				text.text = createRoleListString(spawnData);
+				yield return new WaitForSeconds(2.5f);
+                timer += 2.5f;
             }
 
 			yield return assignee.CoRpcAssign();
@@ -107,18 +244,29 @@ public interface IIntroRunner
 
             // ラグも有るかもしれないで1フレーム待機
             yield return null;
+            timer += Time.deltaTime;
 
 			// ホスト以外はここまで処理済みである事を送信
 			RoleAssignCheckPoint.RpcCheckpoint();
+			text.text = createRoleListString(
+				(provider.GetRequiredService<IRoleAssignDataPreparer>().Prepare().RoleSpawn));
 		}
 
         // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
         while (!RoleAssignState.Instance.IsRoleSetUpEnd)
         {
+            timer += Time.deltaTime;
             yield return null;
         }
 
-		loadingAnimation.SetActive(false);
+		timer += Time.deltaTime;
+		yield return null;
+
+		// 割り当て完了後、最低待機時間に満たない場合は待機
+		if (timer < minWaitTime)
+        {
+            yield return new WaitForSeconds(minWaitTime - timer);
+        }
 
 		yield break;
     }

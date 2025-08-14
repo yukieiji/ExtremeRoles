@@ -1,5 +1,3 @@
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,8 +5,6 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
-
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -22,24 +18,17 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 		Single,
 		Not = 100, // Last
 	}
-
-	private readonly IRoleAssignDataPreparer preparer;
 	private readonly IRoleAssignDataBuildBehaviour[] behaviour;
 	private readonly IRoleAssignDataBuildBehaviour? vanillaFallBack;
 	private readonly IAssignFilterInitializer assignFilterInitializer;
 	private readonly IRoleAssignValidator validator;
 
 	public ExtremeRoleAssignDataBuilder(
-		IServiceProvider provider,
-		IRoleAssignDataPreparer preparer,
+		IEnumerable<IRoleAssignDataBuildBehaviour> allBehave,
 		IAssignFilterInitializer assignFilterInitializer,
 		IRoleAssignValidator validator
 	)
 	{
-		this.preparer = preparer;
-
-		var allBehave = provider.GetServices<IRoleAssignDataBuildBehaviour>();
-
 		this.behaviour = allBehave
 			.Where(x => x.Priority != (int)Priority.Not)
 			.OrderBy(x => x.Priority) // Enum宣言したの順番になるようにするのでOrderBy
@@ -51,11 +40,11 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 	}
 
 
-	public IReadOnlyList<IPlayerToExRoleAssignData> Build()
+	public IReadOnlyList<IPlayerToExRoleAssignData> Build(in PreparationData prepareData)
 	{
-		var prepareData = this.preparer.Prepare();
+		var spawnDataManager = prepareData.RoleSpawn;
 
-		Logging.Debug(prepareData.RoleSpawn.ToString());
+		Logging.Debug(spawnDataManager.ToString());
 		Logging.Debug(prepareData.Limit.ToString());
 
 		if (ExtremeGameModeManager.Instance.EnableXion)
@@ -70,7 +59,7 @@ public sealed class ExtremeRoleAssignDataBuilder : IRoleAssignDataBuilder
 			assignData.RemveFromPlayerControl(loaclPlayer);
 		}
 
-		GhostRoleSpawnDataManager.Instance.Create(prepareData.RoleSpawn.UseGhostCombRole);
+		GhostRoleSpawnDataManager.Instance.Create(spawnDataManager.UseGhostCombRole);
 
 		do
 		{

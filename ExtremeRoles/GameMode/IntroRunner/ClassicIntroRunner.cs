@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace ExtremeRoles.GameMode.IntroRunner;
 public sealed class ClassicIntroRunner : IIntroRunner
 {
     public IEnumerator CoRunModeIntro(
-        IntroCutscene instance, GameObject roleAssignText)
+        IntroCutscene instance, IntroText introText)
     {
         PlayerControl localPlayer = PlayerControl.LocalPlayer;
 
@@ -51,11 +51,9 @@ public sealed class ClassicIntroRunner : IIntroRunner
             instance.ImpostorText.text = instance.ImpostorText.text.Replace("[]", "</color>");
         }
 
-        roleAssignText.SetActive(false);
-        Object.Destroy(roleAssignText);
-        roleAssignText = null;
+		introText.Destroy();
 
-        yield return instance.ShowTeam(teamToShow, 3.0f);
+		yield return instance.ShowTeam(teamToShow, 3.0f);
         yield return instance.ShowRole();
         yield break;
     }
