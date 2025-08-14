@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,21 +41,47 @@ public interface IIntroRunner
         text.SetMessage(Tr.GetString("roleAssignNow"));
         roleAssignText.SetActive(true);
 
-        // Measure the duration of role assignment
-        var stopwatch = new System.Diagnostics.Stopwatch();
-        stopwatch.Start();
-        yield return waitRoleAssign();
-        stopwatch.Stop();
+        // Turn on loading animation
+        var loadingAnimation = HudManager.Instance.GameLoadAnimation;
+        loadingAnimation.SetActive(true);
+
+        // Variable to hold the new text object created during role assignment
+        GameObject roleInfoObject = null;
+
+        // This combined method handles role assignment, text creation, and waiting.
+        yield return waitRoleAssign( (g) => roleInfoObject = g, 5f );
 
         // Hide the "Assigning roles" text
         roleAssignText.SetActive(false);
 
-        // Create and show the new role info text
-        GameObject roleInfoObject = new GameObject("RoleInfoText");
-        var roleInfoText = roleInfoObject.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
-        roleInfoText.SetFontSize(2.0f);
+        // Clean up the role info text and animation
+        if (roleInfoObject != null) Object.Destroy(roleInfoObject);
+        loadingAnimation.SetActive(false);
 
-        var spawnDataManager = new RoleSpawnDataManager();
+        Logger.GlobalInstance.Info(
+            "IntroCutscene :: CoBegin() :: Starting intro cutscene", null);
+
+        SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
+
+        yield return CoRunModeIntro(instance, roleAssignText);
+
+		ExtremeSystemTypeManager.AddSystem();
+
+		prepareXion();
+
+		InfoOverlay.Instance.InitializeToGame();
+
+		setupRoleWhenIntroEnd();
+		modMapObject();
+		changeWallHackTask();
+
+		Object.Destroy(instance.gameObject);
+
+        yield break;
+    }
+
+    private static string CreateRoleListString(ISpawnDataManager spawnDataManager)
+    {
         var sb = new StringBuilder();
         sb.AppendLine(Tr.GetString("RoleSpawnRate"));
         sb.AppendLine();
@@ -89,45 +116,28 @@ public interface IIntroRunner
             sb.AppendLine(string.Join(", ", roleTexts));
         }
 
-        roleInfoText.SetMessage(sb.ToString());
-
-        // Now, wait for the remaining time if 5s has not passed
-        var elapsed = stopwatch.ElapsedMilliseconds;
-        var remaining = 5000 - elapsed;
-        if (remaining > 0)
-        {
-            yield return new WaitForSeconds(remaining / 1000f);
-        }
-
-        // Clean up the role info text and proceed
-        Object.Destroy(roleInfoObject);
-
-        Logger.GlobalInstance.Info(
-            "IntroCutscene :: CoBegin() :: Starting intro cutscene", null);
-
-        SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
-
-        yield return CoRunModeIntro(instance, roleAssignText);
-
-		ExtremeSystemTypeManager.AddSystem();
-
-		prepareXion();
-
-		InfoOverlay.Instance.InitializeToGame();
-
-		setupRoleWhenIntroEnd();
-		modMapObject();
-		changeWallHackTask();
-
-		Object.Destroy(instance.gameObject);
-
-        yield break;
+        return sb.ToString();
     }
 
-    private static IEnumerator waitRoleAssign()
+    private static Module.CustomMonoBehaviour.LoadingText CreateRoleInfoTextObject()
     {
-		var loadingAnimation = HudManager.Instance.GameLoadAnimation;
-		loadingAnimation.SetActive(true);
+        GameObject roleInfoObject = new GameObject("RoleInfoText");
+        var roleInfoText = roleInfoObject.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
+        roleInfoText.SetFontSize(2.0f);
+        return roleInfoText;
+    }
+
+    private static void ShowRoleListText(Action<GameObject> onCreated)
+    {
+        var roleInfoText = CreateRoleInfoTextObject();
+        var spawnDataManager = new RoleSpawnDataManager();
+        roleInfoText.SetMessage(CreateRoleListString(spawnDataManager));
+        onCreated(roleInfoText.gameObject);
+    }
+
+    private static IEnumerator waitRoleAssign(Action<GameObject> onRoleTextCreated, float minWaitTime)
+    {
+        float timer = 0f;
 
 		var localPlayer = PlayerControl.LocalPlayer;
 		if (localPlayer == null)
@@ -145,9 +155,11 @@ public interface IIntroRunner
 			if (!isAllPlyerDummy())
             {
 				RoleAssignCheckPoint.RpcCheckpoint();
+                ShowRoleListText(onRoleTextCreated);
 				// ホストは全員の処理が終わるまで待つ
 				do
 				{
+                    timer += Time.deltaTime;
 					yield return null;
 
 				} while (!RoleAssignState.Instance.IsReady);
@@ -157,6 +169,7 @@ public interface IIntroRunner
             else
             {
                 yield return new WaitForSeconds(2.5f);
+                timer += 2.5f;
             }
 
 			yield return assignee.CoRpcAssign();
@@ -168,18 +181,25 @@ public interface IIntroRunner
 
             // ラグも有るかもしれないで1フレーム待機
             yield return null;
+            timer += Time.deltaTime;
 
 			// ホスト以外はここまで処理済みである事を送信
 			RoleAssignCheckPoint.RpcCheckpoint();
+            ShowRoleListText(onRoleTextCreated);
 		}
 
         // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
         while (!RoleAssignState.Instance.IsRoleSetUpEnd)
         {
+            timer += Time.deltaTime;
             yield return null;
         }
 
-		loadingAnimation.SetActive(false);
+        // 割り当て完了後、最低待機時間に満たない場合は待機
+        if (timer < minWaitTime)
+        {
+            yield return new WaitForSeconds(minWaitTime - timer);
+        }
 
 		yield break;
     }
