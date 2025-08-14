@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 using TMPro;
@@ -29,8 +29,8 @@ public sealed class LoadingText : MonoBehaviour
 		this.text = Instantiate(
 			hudManager.TaskPanel.taskText,
 			hudManager.transform.parent);
-		this.text.transform.localPosition = new Vector3(0.0f, 0.0f, -910f);
-		this.text.alignment = TextAlignmentOptions.Center;
+		this.text.transform.localPosition = new Vector3(0.0f, 1.5f, -910f);
+		this.text.alignment = TextAlignmentOptions.Top;
 		this.text.gameObject.layer = 5;
 	}
 

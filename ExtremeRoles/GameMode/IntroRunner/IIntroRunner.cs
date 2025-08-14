@@ -76,7 +76,7 @@ public sealed class RoleInfoStringBuilder
 			return;
 		}
 
-		this.main.Append(teamText);
+		this.main.AppendLine(teamText);
 
 		for (int i = 0; i < this.roleInfoString.Count; i += rolesPerLine)
 		{
@@ -86,9 +86,9 @@ public sealed class RoleInfoStringBuilder
 				lineBuilder.Append(this.roleInfoString[i + j]);
 			}
 			this.main.AppendLine(lineBuilder.ToString());
-
 			this.lineBuilder.Clear();
 		}
+		this.main.AppendLine();
 		this.roleInfoString.Clear();
 	}
 }
@@ -108,7 +108,7 @@ public interface IIntroRunner
         var loadingAnimation = HudManager.Instance.GameLoadAnimation;
         loadingAnimation.SetActive(true);
 
-        yield return waitRoleAssign(text.RoleInfoText, 5f);
+        yield return waitRoleAssign(text.RoleInfoText, 30.0f);
 
 		loadingAnimation.SetActive(false);
 
@@ -140,7 +140,7 @@ public interface IIntroRunner
 		// Original "Assigning roles" text setup
 		GameObject roleAssignText = new GameObject("roleAssignText");
 		var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
-		text.SetFontSize(3.0f);
+		text.SetFontSize(2.0f);
 		text.SetMessage(Tr.GetString("roleAssignNow"));
 
 		return roleAssignText;
@@ -153,8 +153,10 @@ public interface IIntroRunner
 		var text = Object.Instantiate(
 			hudManager.TaskPanel.taskText,
 			hudManager.transform.parent);
-		text.transform.localPosition = new Vector3(0.0f, 0.0f, -910f);
+		text.transform.localPosition = new Vector3(-2.5f, 0.0f, -910f);
+		text.fontSizeMin = text.fontSizeMax = text.fontSize = 1.75f;
 		text.alignment = TextAlignmentOptions.MidlineLeft;
+		text.rectTransform.sizeDelta = new Vector2(20.0f, 20.0f);
 		text.gameObject.layer = 5;
 
 		return text;
@@ -173,7 +175,7 @@ public interface IIntroRunner
                     continue;
                 }
 				builder.AddRoleText(
-                    $"{role.GetColoredRoleName(true)}(スポーン率:{spawn.SpawnRate}％ 最大割当数:{spawn.SpawnSetNum} ウェイト:{spawn.Weight})");
+                    $"{role.GetColoredRoleName(true)}({spawn.SpawnRate}％ {spawn.SpawnSetNum} {spawn.Weight})");
             }
 			builder.FixTeam($"・{Tr.GetString(team.ToString())}");
         }
@@ -185,7 +187,7 @@ public interface IIntroRunner
                 continue;
             }
 			builder.AddRoleText(
-                $"{role.GetOptionName()}(スポーン率:{data.SpawnRate}％ 最大割当数:{data.SpawnSetNum} ウェイト:{data.Weight})");
+                $"{role.GetOptionName()}({data.SpawnRate}％ {data.SpawnSetNum} {data.Weight})");
         }
 
 		builder.FixTeam($"・コンビネーション役職");
