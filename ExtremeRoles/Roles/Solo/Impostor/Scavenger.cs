@@ -43,12 +43,12 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 		}
 
 		private FadeState state = FadeState.FadingIn;
-		private float fadeTimer = 0f;
-		private float holdTimer = 0f;
+		private float timer = 0f;
 		private bool isShow = false;
 
-		private const float maxTimer = 0.75f;
+		private const float fadeInDuration = 0.75f;
 		private const float holdDuration = 0.5f;
+		private const float fadeOutDuration = 0.75f;
 
 		public MixWeaponInfoShower()
 		{
@@ -63,11 +63,17 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 			this.infoText.gameObject.SetActive(false);
 		}
 
+		private void SetState(FadeState nextState)
+		{
+			this.state = nextState;
+			this.timer = 0f;
+		}
+
 		public void Update()
 		{
 			if (IntroCutscene.Instance != null ||
-				MeetingHud.Instance != null ||
-				ExileController.Instance != null)
+			    MeetingHud.Instance != null ||
+			    ExileController.Instance != null)
 			{
 				this.isShow = false;
 			}
@@ -78,46 +84,47 @@ public sealed class Scavenger : SingleRoleBase, IRoleUpdate, IRoleAbility
 				return;
 			}
 
+			this.timer += Time.deltaTime;
+			float alpha = 0f;
+
 			switch (this.state)
 			{
 				case FadeState.FadingIn:
-					this.fadeTimer += Time.deltaTime;
-					if (this.fadeTimer >= maxTimer)
+					alpha = this.timer / fadeInDuration;
+					if (this.timer >= fadeInDuration)
 					{
-						this.fadeTimer = maxTimer;
-						this.state = FadeState.Holding;
-						this.holdTimer = 0f;
+						SetState(FadeState.Holding);
 					}
 					break;
 				case FadeState.Holding:
-					this.holdTimer += Time.deltaTime;
-					if (this.holdTimer >= holdDuration)
+					alpha = 1f;
+					if (this.timer >= holdDuration)
 					{
-						this.state = FadeState.FadingOut;
+						SetState(FadeState.FadingOut);
 					}
 					break;
 				case FadeState.FadingOut:
-					this.fadeTimer -= Time.deltaTime;
-					if (this.fadeTimer <= 0f)
+					alpha = 1f - (this.timer / fadeOutDuration);
+					if (this.timer >= fadeOutDuration)
 					{
-						this.fadeTimer = 0f;
-						this.state = FadeState.FadingIn;
+						SetState(FadeState.FadingIn);
 					}
 					break;
 			}
 
-			float alpha = this.fadeTimer / maxTimer;
+			alpha = Mathf.Clamp01(alpha);
+
 			this.infoText.color = new Color(
 				this.infoText.color.r,
 				this.infoText.color.g,
-				this.infoText.color.b, alpha);
+				this.infoText.color.b,
+				alpha);
 		}
 
 		public void ShowCanMixWepon()
 		{
 			this.infoText.gameObject.SetActive(true);
-			this.fadeTimer = 0f;
-			this.state = FadeState.FadingIn;
+			SetState(FadeState.FadingIn);
 			this.isShow = true;
 		}
 	}
